@@ -2,96 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B93F11D43E2
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 05:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0ED1D43E7
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 05:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727982AbgEODKj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 23:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726192AbgEODKi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 23:10:38 -0400
-X-Greylist: delayed 84969 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 May 2020 20:10:38 PDT
-Received: from smtp.gentoo.org (smtp.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDEDC061A0C
-        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 20:10:38 -0700 (PDT)
-Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
-To:     "Maciej W. Rozycki" <macro@wdc.com>
-Cc:     linux-mips@vger.kernel.org,
+        id S1727819AbgEODNO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 23:13:14 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:42068 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726316AbgEODNO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 May 2020 23:13:14 -0400
+Received: by mail-oi1-f193.google.com with SMTP id i13so988852oie.9;
+        Thu, 14 May 2020 20:13:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=n6818GMr2n+GYZP/OuGBE+slZY1zUjDWJMT4ZWn99jo=;
+        b=Ch7uOWYzuPjG9vZIdRAO+XLIgBjKaanQKTByXfhgFbnkV0MSAuf4ZU8+kd4QKQdui0
+         j8xnl8gRuVRNlQ1QMSeMKLDBa7yxyNPS3Vh2qVN+y+NT6a1x1vKGVZrz8Tmu2ACLrl0/
+         x8UP0+zfOYoX5UIMULJQA5tQA0MuHBCunPdgkUadu/dbG5euWgp0/8C3UVx+8B0FcNUn
+         OdzHj50s4steItMjln045YPyDuPf3IBXflAzi7e4nzGHC2ACrKZox6wapCaVjYY4n5kM
+         rC+tWna75be1J4uJ4TRN72EKnLRw3i/TS0b/TdzjUtWXKU3dDZie8KDyQZQxpRRhac9B
+         gHwg==
+X-Gm-Message-State: AOAM530sXbr3/Xec5TX6s5ZF+xJGVWeWRwy9Q7LjgooPMxyeyPRE8NES
+        3iLcT0/aeIpbyD0Kd0iv5g==
+X-Google-Smtp-Source: ABdhPJyh5gk9eC0CJO0ytuiro5+mPeYwPAJ2nx3OBw53xSgCkPxSAdUhuH5e7ARdnllvCUh3mBrqBg==
+X-Received: by 2002:aca:d696:: with SMTP id n144mr741298oig.136.1589512393508;
+        Thu, 14 May 2020 20:13:13 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id a7sm259449otr.15.2020.05.14.20.13.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2020 20:13:12 -0700 (PDT)
+Received: (nullmailer pid 29993 invoked by uid 1000);
+        Fri, 15 May 2020 03:13:11 -0000
+Date:   Thu, 14 May 2020 22:13:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Olof Johansson <olof@lixom.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        devicetree@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+        Tero Kristo <t-kristo@ti.com>, Arnd Bergmann <arnd@arndb.de>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
- <alpine.LFD.2.21.2005140251480.6492@redsun52.ssa.fujisawa.hgst.com>
- <78b68917-ec7e-7434-2a80-5fabbd5247a8@gentoo.org>
- <alpine.LFD.2.21.2005142233430.6492@redsun52.ssa.fujisawa.hgst.com>
-From:   Joshua Kinard <kumba@gentoo.org>
-Openpgp: preference=signencrypt
-Message-ID: <18995238-ed16-411c-79ef-071897ee8a1b@gentoo.org>
-Date:   Thu, 14 May 2020 23:10:20 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        soc@kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: bus: Add Baikal-T1 AXI-bus binding
+Message-ID: <20200515031311.GA29918@bogus>
+References: <20200306130731.938808030702@mail.baikalelectronics.ru>
+ <20200507224116.1523-1-Sergey.Semin@baikalelectronics.ru>
+ <20200507224116.1523-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LFD.2.21.2005142233430.6492@redsun52.ssa.fujisawa.hgst.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200507224116.1523-2-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/14/2020 17:42, Maciej W. Rozycki wrote:
-> On Wed, 13 May 2020, Joshua Kinard wrote:
+On Fri, 8 May 2020 01:41:13 +0300, Serge Semin wrote:
+> AXI3-bus is the main communication bus connecting all high-speed
+> peripheral IP-cores with RAM controller and with MIPS P5600 cores on
+> Baikal-T1 SoC. This binding describes the DW AMBA 3 AXI Inteconnect
+> and Errors Handler Block synthesized on top of it, which are
+> responsible for the AXI-bus traffic arbitration and errors reporting
+> upstream to CPU. Baikal-T1 AXI-bus DT node is supposed to be compatible
+> with "be,bt1-axi" and "simple-bus" drivers, should have reg property with
+> AXI-bus QOS registers space, syscon phandle reference to the Baikal-T1
+> System Controller, IRQ line declared, AXI Interconnect reference clock and
+> reset line.
 > 
->>>  I think it would be good not to reorder the macros (even though there's
->>> preexisting breakage in <asm/mach-ip30/war.h>) so that all the files have
->>> them in the same order.
->>
->> They don't appear to be in any logical order to begin with.  That, and I
->> wanted to keep conditional defines separate from the fixed defines, hence
->> moving the first in those files down to its own block.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Tero Kristo <t-kristo@ti.com>
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Cc: Jeffrey Hugo <jhugo@codeaurora.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Olof Johansson <olof@lixom.net>
+> Cc: linux-mips@vger.kernel.org
+> Cc: soc@kernel.org
 > 
->  I suppose they have just come up in the order they were added.  Whatever 
-> the order is however as long as it is consistent you can `diff' a pair of 
-> files against each other to spot differences easily without the need to 
-> rely on your perceptiveness.  And <asm/mach-sibyte/war.h> already has 
-> conditionals in the middle.
-
-I think then putting the conditional block below the section of fixed
-defines achieves that, then.  diff's (and git diff's) algorithm will show
-that as a clean addition and not require a lot of surrounding context lines.
- It'll also avoid the need to submit a separate patch to fix IP30's "war.h".
-
-I took a look at asm/mach-sibyte/war.h, but it looks kind of....messy?  None
-of the other "war.h" files use conditionals outside of IP27's, IP30's, and
-SiByte's, so there's not a whole lot of precedent to base off of.
-
-
->> Is there some subtlety w/r to the existing ordering that I don't know about,
->> or would it make sense to have two patches, one which reorders the defines
->> to be alphabetical, then the second being the R10K split patch?
+> ---
 > 
->  I wouldn't strongly mind reordering alphabetically, but it would disturb 
-> `git blame' and would add little value I'm afraid.  I'm fine if new ones 
-> keep being added at the end, though OTOH it's not the best way to avoid 
-> conflicts.
+> Rob, I had to remove your Reviewed-by tag, since new changes had been
+> introduced.
+> 
+> Changelog v2:
+> - Move driver to the bus subsystem.
+> - Use dual GPL/BSD license.
+> - Use single lined copyright header.
+> - Lowercase the unit-address.
+> - Convert a simple EHB block binding to the Baikal-T1 AXI-bus one with
+>   interconnect capabilities support.
+> - Replace "additionalProperties: false" property with
+>   "unevaluatedProperties: false".
+> - Add AXI reference clock and reset support.
+> - Add syscon phandle reference to the Baikal-T1 System Controller node.
+> ---
+>  .../bindings/bus/baikal,bt1-axi.yaml          | 95 +++++++++++++++++++
+>  1 file changed, 95 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/baikal,bt1-axi.yaml
+> 
 
-Agreed on not re-sorting.  Adding comments to delineate might help, but then
-all of the war.h files would need to be touched, and I want to limit my
-edits strictly to the platforms I have knowledge of and can actually test
-on.  Nobody, including myself, noticed the bit in IP30's war.h getting
-mainlined, so I don't think a lot of harm would be done by doing the same to
-IP27.h.
-
--- 
-Joshua Kinard
-Gentoo/MIPS
-kumba@gentoo.org
-rsa6144/5C63F4E3F5C6C943 2015-04-27
-177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
-
-"The past tempts us, the present confuses us, the future frightens us.  And
-our lives slip away, moment by moment, lost in that vast, terrible in-between."
-
---Emperor Turhan, Centauri Republic
+Reviewed-by: Rob Herring <robh@kernel.org>
