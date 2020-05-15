@@ -2,116 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 997161D4445
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 06:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD361D4599
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 08:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726194AbgEOEKc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 May 2020 00:10:32 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:54198 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726023AbgEOEKc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 May 2020 00:10:32 -0400
-Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT98hFr5eHPU0AA--.1S4;
-        Fri, 15 May 2020 12:10:10 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S1726295AbgEOGJT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 May 2020 02:09:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34670 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726137AbgEOGJS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 May 2020 02:09:18 -0400
+Received: from localhost (unknown [122.178.196.30])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 62AAE2065F;
+        Fri, 15 May 2020 06:09:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589522958;
+        bh=kgLtAKAfE9tPkcpQWYFZxlQ+PomFFTOqOI8Aot+uWlI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HpXT4he0xdWcmrcjS/VNjmglDEDWEmj7Vq5dRgrt8nABPbVNpJdj7fQGxuf5pbFTW
+         sX6vt6Rt6SyZc0kmQsycfvi27XzW5xB1arzxtopdHNvrEf5B9Wf36v7BA7aq9ErklA
+         M3tNNI2EvAsesfJnoomkv6nPDwSLn/APVqdO7Cgo=
+Date:   Fri, 15 May 2020 11:39:11 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
-        Dmitry Korotin <dkorotin@wavecomp.com>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org
-Subject: [PATCH 3/3] mm/memory.c: Add memory read privilege before filling PTE entry
-Date:   Fri, 15 May 2020 12:10:09 +0800
-Message-Id: <1589515809-32422-3-git-send-email-maobibo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1589515809-32422-1-git-send-email-maobibo@loongson.cn>
-References: <1589515809-32422-1-git-send-email-maobibo@loongson.cn>
-X-CM-TRANSID: AQAAf9DxT98hFr5eHPU0AA--.1S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJry3WrWUGFyDtw4rCF4UJwb_yoW8CrWDpF
-        Z3Cw1j9rs3Xw1DAF4xG3Z3Ar15ua1FgayrZF95C3W5Zwnxtr4Y9rWxJFWFvF97AFykGw1r
-        AF4jyw4UZa18uF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPab7Iv0xC_tr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280
-        aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxw
-        CY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-        x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-        W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxV
-        WUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU
-        2asjUUUUU
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] dt-bindings: dma: dw: Add max burst transaction
+ length property
+Message-ID: <20200515060911.GF333670@vkoul-mobl>
+References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
+ <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508105304.14065-3-Sergey.Semin@baikalelectronics.ru>
+ <20200508111242.GH185537@smile.fi.intel.com>
+ <20200511200528.nfkc2zkh3bvupn7l@mobilestation>
+ <20200511210138.GN185537@smile.fi.intel.com>
+ <20200511213531.wnywlljiulvndx6s@mobilestation>
+ <20200512090804.GR185537@smile.fi.intel.com>
+ <20200512114946.x777yb6bhe22ccn5@mobilestation>
+ <20200512123840.GY185537@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200512123840.GY185537@smile.fi.intel.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On mips platform, hw PTE entry valid bit is set in pte_mkyoung
-function, it is used to set physical page with readable privilege.
+On 12-05-20, 15:38, Andy Shevchenko wrote:
+> On Tue, May 12, 2020 at 02:49:46PM +0300, Serge Semin wrote:
+> > On Tue, May 12, 2020 at 12:08:04PM +0300, Andy Shevchenko wrote:
+> > > On Tue, May 12, 2020 at 12:35:31AM +0300, Serge Semin wrote:
+> > > > On Tue, May 12, 2020 at 12:01:38AM +0300, Andy Shevchenko wrote:
+> > > > > On Mon, May 11, 2020 at 11:05:28PM +0300, Serge Semin wrote:
+> > > > > > On Fri, May 08, 2020 at 02:12:42PM +0300, Andy Shevchenko wrote:
+> > > > > > > On Fri, May 08, 2020 at 01:53:00PM +0300, Serge Semin wrote:
+> 
+> ...
+> 
+> I leave it to Rob and Vinod.
+> It won't break our case, so, feel free with your approach.
 
-Here add pte_mkyoung function to make page readable on mips platform
-during page fault handling.
+I agree the DT is about describing the hardware and looks like value of
+1 is not allowed. If allowed it should be added..
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- mm/memory.c   | 3 +++
- mm/mprotect.c | 2 ++
- 2 files changed, 5 insertions(+)
+> P.S. Perhaps at some point we need to
+> 1) convert properties to be u32 (it will simplify things);
+> 2) convert legacy ones to proper format ('-' instead of '_', vendor prefix added);
+> 3) parse them in core with device property API.
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 57748de..26e0b8e 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2704,6 +2704,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 		}
- 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
- 		entry = mk_pte(new_page, vma->vm_page_prot);
-+		entry = pte_mkyoung(entry);
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 		/*
- 		 * Clear the pte entry and flush it first, before updating the
-@@ -3378,6 +3379,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	__SetPageUptodate(page);
- 
- 	entry = mk_pte(page, vma->vm_page_prot);
-+	entry = pte_mkyoung(entry);
- 	if (vma->vm_flags & VM_WRITE)
- 		entry = pte_mkwrite(pte_mkdirty(entry));
- 
-@@ -3660,6 +3662,7 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
- 
- 	flush_icache_page(vma, page);
- 	entry = mk_pte(page, vma->vm_page_prot);
-+	entry = pte_mkyoung(entry);
- 	if (write)
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 	/* copy-on-write page */
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 494192ca..673f1cd 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -131,6 +131,8 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 				ptent = pte_clear_uffd_wp(ptent);
- 			}
- 
-+			if (vma->vm_flags & VM_READ)
-+				ptent = pte_mkyoung(ptent);
- 			/* Avoid taking write faults for known dirty pages */
- 			if (dirty_accountable && pte_dirty(ptent) &&
- 					(pte_soft_dirty(ptent) ||
+These suggestions are good and should be done.
+
 -- 
-1.8.3.1
-
+~Vinod
