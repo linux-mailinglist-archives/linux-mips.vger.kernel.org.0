@@ -2,117 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 572A01D5553
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 17:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2039E1D5657
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 18:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726438AbgEOP6y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 May 2020 11:58:54 -0400
-Received: from mga11.intel.com ([192.55.52.93]:23856 "EHLO mga11.intel.com"
+        id S1726170AbgEOQmH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 May 2020 12:42:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56436 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726407AbgEOP6x (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 May 2020 11:58:53 -0400
-IronPort-SDR: 2mHQnDI+cDVuxPl4+6x4XzYcU9BCzxzHCrj7+4wEp8s+/sre3qQeA2EMi46obvskbTsdfHECEA
- YPKufeby6AzA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 08:58:53 -0700
-IronPort-SDR: HirYw8rAPztdjIA+/NI+F9pTHI7jr2RVdgGVqpP6A1KNTRdCnoAGKJuyB90njmSwKQdRaaUe4r
- 3Fk2+H3/lEUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,395,1583222400"; 
-   d="scan'208";a="263229930"
-Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.131.101]) ([10.249.131.101])
-  by orsmga003.jf.intel.com with ESMTP; 15 May 2020 08:58:48 -0700
-Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw
- setting
-To:     Sergey.Semin@baikalelectronics.ru,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>
+        id S1726144AbgEOQmH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 May 2020 12:42:07 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 67314206C0;
+        Fri, 15 May 2020 16:42:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589560926;
+        bh=wP6rN+0fcyq9AqNL4mJfVYCMurnxEiNZYbbiBjX71PU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MB7fP4O+o4JDp6I9/D4xpNZ6udvmMRewLpl1ChMf7/zBU/GPuKsrl8ZKkHfAXglfM
+         sOvN9Q9uzqwmnnn890ATCTtg9mN5JeR2MK+xIYNWsU0Yx8X7k98dWRrKjvuP7wz9pC
+         +u3dLgL5MD1B8AKF9x0BoULoQpPL3/aKCaRK8v68=
+Date:   Fri, 15 May 2020 17:42:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
+        Allison Randal <allison@lohutok.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-21-Sergey.Semin@baikalelectronics.ru>
-From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
- 173, 80-298 Gdansk
-Message-ID: <c5109483-4c14-1a0c-efa9-51edf01c12de@intel.com>
-Date:   Fri, 15 May 2020 17:58:47 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/19] spi: dw: Clear DMAC register when done or
+ stopped
+Message-ID: <20200515164203.GJ5066@sirena.org.uk>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-4-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <20200506174238.15385-21-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/0U0QBNx7JIUZLHm"
+Content-Disposition: inline
+In-Reply-To: <20200515104758.6934-4-Sergey.Semin@baikalelectronics.ru>
+X-Cookie: Avoid contact with eyes.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/6/2020 7:42 PM, Sergey.Semin@baikalelectronics.ru wrote:
-> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
->
-> Recent commit e61a41256edf ("cpufreq: dev_pm_qos_update_request() can
-> return 1 on success") fixed a problem when active policies traverse
-> was falsely stopped due to invalidly treating the non-zero return value
-> from freq_qos_update_request() method as an error. Yes, that function
-> can return positive values if the requested update actually took place.
-> The current problem is that the returned value is then passed to the
-> return cell of the cpufreq_boost_set_sw() (set_boost callback) method.
-> This value is then also analyzed for being non-zero, which is also
-> treated as having an error. As a result during the boost activation
-> we'll get an error returned while having the QOS frequency update
-> successfully performed. Fix this by returning a negative value from the
-> cpufreq_boost_set_sw() if actual error was encountered and zero
-> otherwise treating any positive values as the successful operations
-> completion.
->
-> Fixes: 18c49926c4bf ("cpufreq: Add QoS requests for userspace constraints")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> ---
->   drivers/cpufreq/cpufreq.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 045f9fe157ce..5870cdca88cf 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -2554,7 +2554,7 @@ static int cpufreq_boost_set_sw(int state)
->   			break;
->   	}
->   
-> -	return ret;
-> +	return ret < 0 ? ret : 0;
->   }
->   
->   int cpufreq_boost_trigger_state(int state)
 
-IMO it is better to update the caller of this function to handle the 
-positive value possibly returned by it correctly.
+--/0U0QBNx7JIUZLHm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks!
+On Fri, May 15, 2020 at 01:47:42PM +0300, Serge Semin wrote:
+> If DMAC register is left uncleared any further DMAless transfers
+> may cause the DMAC hardware handshaking interface getting activated.
+
+This and patch 4 look good as is but they don't apply against for-5.7
+due to context changes in -next, unfortunately everyone seems to have
+decided that now is the time to start working on this driver which makes
+combinations of new work and fixes awkward.  I'm going to apply these
+for 5.8 but it'd be good if you could send versions based on for-5.7 as
+well so I can apply there - I can sort out the conflicts with 5.8.
 
 
+--/0U0QBNx7JIUZLHm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6+xloACgkQJNaLcl1U
+h9ABrwf/WQm+mOxb45Hxt0ho5+NLAIHIGJtDEbVnzaKIAHrJ76Kzbfpw1etZeWdL
+NFMGaUa7GJED/7kuBofBOtVn34ZIuNrtS0ljxoxka2Ajcz3nmXxshzzgC8PkiDMG
+sCDtGqBikWu9Yy/GqD7y5BfrZ279aadvlln4JTM0PCAILyQ39kps+aliMjXeHsdc
+UrSJjBUuMePJ9LDjKQ8vzzTmQkrxQ5rKYL7vvIFA6shq3Yn21unkO0UqFfNVRgSQ
+jdwUSiSYndO+lwk2aHH2jHmrwpZMsdiDGCtNX9VAn6D2lYdYmhNKmWPUF0BqeIp9
+5Zvi4BlaUwxZS+41vq5pOJaIEhH4BA==
+=rfwh
+-----END PGP SIGNATURE-----
+
+--/0U0QBNx7JIUZLHm--
