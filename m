@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A14E71D4404
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 05:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FEFB1D4403
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 05:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728103AbgEODXL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1727847AbgEODXL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Thu, 14 May 2020 23:23:11 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:46358 "EHLO loongson.cn"
+Received: from mail.loongson.cn ([114.242.206.163]:46354 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727819AbgEODXL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1727117AbgEODXL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Thu, 14 May 2020 23:23:11 -0400
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx32gaC75ehPA0AA--.47S2;
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx32gaC75ehPA0AA--.47S3;
         Fri, 15 May 2020 11:23:06 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -20,69 +20,85 @@ To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v2 1/2] MIPS: Loongson: Build ATI Radeon GPU driver as module
-Date:   Fri, 15 May 2020 11:23:04 +0800
-Message-Id: <1589512985-27419-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v2 2/2] MIPS: Fix build errors under CONFIG_HAVE_STD_PC_SERIAL_PORT
+Date:   Fri, 15 May 2020 11:23:05 +0800
+Message-Id: <1589512985-27419-2-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dx32gaC75ehPA0AA--.47S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFWUWr4kKrW7tFW5JF4ruFg_yoW8Xw1xpr
-        45Gan3JFWkGrnYkrZ7CrZ7WrWYvFs5JFW3ur40kry7Crs3Za40vry5tr1UJr4UXrZ8ta1S
-        9r93Gr1SkanrCa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUg_-PUUUU
-        U==
+In-Reply-To: <1589512985-27419-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1589512985-27419-1-git-send-email-yangtiezhu@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dx32gaC75ehPA0AA--.47S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7KryUGryUWr4UKw4kAr1DZFb_yoW8uF18pr
+        yDC3WkGr4j9r4Dta9Fy34v9rWUZw15W3yjvasrCws7Aas0qryDAFs7XFn0vryIgrWjk3WY
+        gF12qr429w4kZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
+        8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxd
+        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
+        v20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
+        F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8GwCF04
+        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr4
+        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
+        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4
+        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUY-eOUUUUU=
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When ATI Radeon GPU driver has been compiled directly into the kernel
-instead of as a module, we should make sure the firmware for the model
-(check available ones in /lib/firmware/radeon) is built-in to the kernel
-as well, otherwise there exists the following fatal error during GPU init,
-change CONFIG_DRM_RADEON=y to CONFIG_DRM_RADEON=m to fix it.
+When CONFIG_HAVE_STD_PC_SERIAL_PORT is set, include linux/module.h to fix
+the following build errors:
 
-[    1.900997] [drm] Loading RS780 Microcode
-[    1.905077] radeon 0000:01:05.0: Direct firmware load for radeon/RS780_pfp.bin failed with error -2
-[    1.914140] r600_cp: Failed to load firmware "radeon/RS780_pfp.bin"
-[    1.920405] [drm:r600_init] *ERROR* Failed to load firmware!
-[    1.926069] radeon 0000:01:05.0: Fatal error during GPU init
-[    1.931729] [drm] radeon: finishing device.
+  CC      arch/mips/kernel/8250-platform.o
+arch/mips/kernel/8250-platform.c:42:1: error: data definition has no type or storage class [-Werror]
+ module_init(uart8250_init);
+ ^
+arch/mips/kernel/8250-platform.c:42:1: error: type defaults to ‘int’ in declaration of ‘module_init’ [-Werror=implicit-int]
+arch/mips/kernel/8250-platform.c:42:1: error: parameter names (without types) in function declaration [-Werror]
+arch/mips/kernel/8250-platform.c:44:15: error: expected declaration specifiers or ‘...’ before string constant
+ MODULE_AUTHOR("Ralf Baechle <ralf@linux-mips.org>");
+               ^
+arch/mips/kernel/8250-platform.c:45:16: error: expected declaration specifiers or ‘...’ before string constant
+ MODULE_LICENSE("GPL");
+                ^
+arch/mips/kernel/8250-platform.c:46:20: error: expected declaration specifiers or ‘...’ before string constant
+ MODULE_DESCRIPTION("Generic 8250 UART probe driver");
+                    ^
+arch/mips/kernel/8250-platform.c:37:81: error: ‘uart8250_init’ defined but not used [-Werror=unused-function]
+ static int __init uart8250_init(void)
+                                                                                 ^
+cc1: all warnings being treated as errors
+scripts/Makefile.build:267: recipe for target 'arch/mips/kernel/8250-platform.o' failed
+make[2]: *** [arch/mips/kernel/8250-platform.o] Error 1
 
-Fixes: 024e6a8b5bb1 ("MIPS: Loongson: Add a Loongson-3 default config file")
+Fixes: 848484e2c412 ("mips: remove needless include of module.h from core kernel files.")
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
 
 v2:
-  - Modify the patch subject and update the commit message
+  - No changes
 
- arch/mips/configs/loongson3_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/kernel/8250-platform.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 6768c16..4df2434 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -230,7 +230,7 @@ CONFIG_MEDIA_CAMERA_SUPPORT=y
- CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_DRM=y
--CONFIG_DRM_RADEON=y
-+CONFIG_DRM_RADEON=m
- CONFIG_FB_RADEON=y
- CONFIG_LCD_CLASS_DEVICE=y
- CONFIG_LCD_PLATFORM=m
+diff --git a/arch/mips/kernel/8250-platform.c b/arch/mips/kernel/8250-platform.c
+index 5c6b2ab..cbf3fe2 100644
+--- a/arch/mips/kernel/8250-platform.c
++++ b/arch/mips/kernel/8250-platform.c
+@@ -5,6 +5,7 @@
+  *
+  * Copyright (C) 2007 Ralf Baechle (ralf@linux-mips.org)
+  */
++#include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/serial_8250.h>
+ 
 -- 
 2.1.0
 
