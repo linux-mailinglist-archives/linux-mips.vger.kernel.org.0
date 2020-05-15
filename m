@@ -2,87 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A931D4056
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 23:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16EB1D433D
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 03:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727970AbgENVmu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 17:42:50 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:32873 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727029AbgENVmu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 May 2020 17:42:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1589492570; x=1621028570;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=q63yo8bVkhWRaBDZ9S11RZ3fzbC5L5nmu6paGVut25U=;
-  b=ZlxXGgPtjDl+sLTYCXITfar8O9PBYjO2SmTvRxFOumlYYP4QSl6h4vpy
-   juyVq505OX9DuQWd04bi1Un1J54K6gK9/Cr49RDrxBEVFU8gCz5tfEaKE
-   /LlGCDjl35pbh4EmPYeN25SIWfEeEgaTRgchOP3o7eKW/KXvJGAvvUkw6
-   kswpExyeAWj/WCUXqN9nngVnroZDH3OrBYr4IziuN2t8gKweNMYZEA9nT
-   c0GexpCYIeR1zQRebfHb6GR4t35n2TcOpLuJ2VD04x1Hc6jP5VvJZKmjn
-   j311ACH9eHsvTYb3fXQeAMYeyYTFRbo3Quk8td69ubAmwi09EXBfPtay2
-   A==;
-IronPort-SDR: xu2fZKc7lVqAsRfwL150U2e2/v/lNqG8ZZqPav8lxgOaYqSeuqKZXmoFvaaC2Hajbx3RblL0XI
- B+ppVCzCsJHvcVHUtPuMshvAaYOfqgNeN4ek6qbqWsq0orxM55PqTZ8638jiEMFHCPvqnW5Orm
- Pfdxnhpw/eDL2gRuqt67To5+qFWAf/V5QyZ8gHbNMAtPsWl5XsnhH6KJf2PrVyjnpC2R1qg+Tn
- tTLG1nVr359cET+GTSg6sncxy8xNaM192ZIQOQXE0I0vJ0K/Op97K/AZY36ZNhJofynpXSPXTc
- YzE=
-X-IronPort-AV: E=Sophos;i="5.73,392,1583164800"; 
-   d="scan'208";a="246679804"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 15 May 2020 05:42:49 +0800
-IronPort-SDR: gnn2ZM3rxJUC3jsHKisciG4MFzLOytt/BxInFE48ZFgWWBXMArPZIvr9r6vwJgkps/nJ5EKLtt
- nAvotnOJun/gO76nGxW2ODGggyIKqZMpU=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 14:33:02 -0700
-IronPort-SDR: ME9DiOneFyXMDgjyx7UX1+pqI4UwemYTPq1HyZfiEgpAkVnHWi1t960L7Y+DU9yvpgBEPZTjZC
- Fq+nSvhf+XWA==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 14:42:48 -0700
-Date:   Thu, 14 May 2020 22:42:45 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@wdc.com>
-To:     Joshua Kinard <kumba@gentoo.org>
-cc:     linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
-In-Reply-To: <78b68917-ec7e-7434-2a80-5fabbd5247a8@gentoo.org>
-Message-ID: <alpine.LFD.2.21.2005142233430.6492@redsun52.ssa.fujisawa.hgst.com>
-References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org> <alpine.LFD.2.21.2005140251480.6492@redsun52.ssa.fujisawa.hgst.com> <78b68917-ec7e-7434-2a80-5fabbd5247a8@gentoo.org>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1726192AbgEOBuP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 14 May 2020 21:50:15 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:40174 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbgEOBuP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 May 2020 21:50:15 -0400
+Received: by mail-il1-f195.google.com with SMTP id e8so904965ilm.7;
+        Thu, 14 May 2020 18:50:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JfcJwOjz9RXRUQpkXkIR/GLlPPGXPrK7BjAdsObVwTI=;
+        b=kOeBzGiw38s+/xbvuJQhkC89Sn3z7JWPiI20Ihr+1KUoeu79D9puSsc71Lbyvs5rpA
+         50UQg2k+bNDAL42VArdzXMWdy1pFNWb+cn+GPPFzqYVWVB4zif5iUeCoOUi3+UVIE2XG
+         ICJRD2CvdLcS9d1zDKlOaYiPKdIE85X9lntpsPG21qhHq312ppuH6IMhjTFh10lKGjfe
+         zWQVJQLpJkkFEbvzGCB5oDZBLTP+CcIAdnwFTveDkjUa9McA9SsAK6J6Uxlo+fJSiIYR
+         53jXZdU6NTUq5mHOs8036bsJzqG2/bLws/Nm50ZkVv+Crgwe64nuYjNXY7ynVe5+iyEc
+         i+xw==
+X-Gm-Message-State: AOAM533eeltJX9s2WBivuke0J0+1uJsaLN3EQKpkC3nM17puHUkgDAxf
+        GKWHrlBexova1lyzsVZusAROcg18luL/mJpaQEs=
+X-Google-Smtp-Source: ABdhPJxyoyUCvceLnDefUyOdxb19iWJfJ5neAUdgZAsqOBEqFn7CWztNlWMjq4WJZvLRRQgNGHenz+sw5ASBLceoSzs=
+X-Received: by 2002:a92:980f:: with SMTP id l15mr1040218ili.251.1589507414350;
+ Thu, 14 May 2020 18:50:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <1589359366-1669-1-git-send-email-chenhc@lemote.com>
+ <1589359366-1669-16-git-send-email-chenhc@lemote.com> <AC9338A0-F449-4DCA-A294-248C86D57877@flygoat.com>
+In-Reply-To: <AC9338A0-F449-4DCA-A294-248C86D57877@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Fri, 15 May 2020 09:50:04 +0800
+Message-ID: <CAAhV-H7OTeMy2Yp2PunD+2KVzzPDT+-xGGgbpRNzhb8C-p8-7g@mail.gmail.com>
+Subject: Re: [PATCH V5 15/15] MAINTAINERS: Update KVM/MIPS maintainers
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        kvm <kvm@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 13 May 2020, Joshua Kinard wrote:
+Hi, Jiaxun,
 
-> >  I think it would be good not to reorder the macros (even though there's
-> > preexisting breakage in <asm/mach-ip30/war.h>) so that all the files have
-> > them in the same order.
-> 
-> They don't appear to be in any logical order to begin with.  That, and I
-> wanted to keep conditional defines separate from the fixed defines, hence
-> moving the first in those files down to its own block.
+On Thu, May 14, 2020 at 9:34 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+>
+>
+> 于 2020年5月13日 GMT+08:00 下午4:42:46, Huacai Chen <chenhc@lemote.com> 写到:
+> >James Hogan has become inactive for a long time and leaves KVM for MIPS
+> >orphan. I'm working on KVM/Loongson and attempt to make it upstream both
+> >in kernel and QEMU, while Aleksandar Markovic is already a maintainer of
+> >QEMU/MIPS. We are both interested in QEMU/KVM/MIPS, and we have already
+> >made some contributions in kernel and QEMU. If possible, we want to take
+> >the KVM/MIPS maintainership.
+> >
+> >Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> >---
+>
+> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>
+> Huacai is extremely experienced on virtualization,
+> his PhD thesis is about virtualization too.
+> He had been working on Loongson kernel for a long period.
+>
+> Alexander maintained QEMU/MIPS for some years, he is a expert on
+> QEMU and MIPS architecture.
+>
+> I believe these guys can effectively bring MIPS/KVM support back to sea level again.
+Thank you very much, and I think you won't be disappointed in us.
 
- I suppose they have just come up in the order they were added.  Whatever 
-the order is however as long as it is consistent you can `diff' a pair of 
-files against each other to spot differences easily without the need to 
-rely on your perceptiveness.  And <asm/mach-sibyte/war.h> already has 
-conditionals in the middle.
-
-> Is there some subtlety w/r to the existing ordering that I don't know about,
-> or would it make sense to have two patches, one which reorders the defines
-> to be alphabetical, then the second being the R10K split patch?
-
- I wouldn't strongly mind reordering alphabetically, but it would disturb 
-`git blame' and would add little value I'm afraid.  I'm fine if new ones 
-keep being added at the end, though OTOH it's not the best way to avoid 
-conflicts.
-
-  Maciej
+>
+> Best wishes!
+> --
+> Jiaxun Yang
+Regards,
+Huacai
