@@ -2,155 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B60F81D5DD8
-	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2020 04:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08781D5EFF
+	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2020 08:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727904AbgEPCQB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 May 2020 22:16:01 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:39076 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726290AbgEPCQA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 May 2020 22:16:00 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX93WTL9e81M1AA--.61S3;
-        Sat, 16 May 2020 10:15:51 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v3 2/2] MIPS: Remove not used 8250-platform.c
-Date:   Sat, 16 May 2020 10:15:49 +0800
-Message-Id: <1589595349-31656-2-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1589595349-31656-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1589595349-31656-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxX93WTL9e81M1AA--.61S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw1UXF1rGrWUXr4kuF1UGFg_yoW5AFW3pw
-        nIkan7GrW8WF4Ut395JrWv9ry5AanFqrWj9F1DCw18Jas8ZrykXrn7t3Z3tryqqryqya40
-        gryfWr12yFs5ZwUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gr1l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUYSdyUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1725803AbgEPGQ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 May 2020 02:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725275AbgEPGQ5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 16 May 2020 02:16:57 -0400
+Received: from smtp.gentoo.org (smtp.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A2EC061A0C
+        for <linux-mips@vger.kernel.org>; Fri, 15 May 2020 23:16:57 -0700 (PDT)
+From:   Joshua Kinard <kumba@gentoo.org>
+Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
+To:     "Maciej W. Rozycki" <macro@wdc.com>
+Cc:     linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
+ <alpine.LFD.2.21.2005140251480.6492@redsun52.ssa.fujisawa.hgst.com>
+ <78b68917-ec7e-7434-2a80-5fabbd5247a8@gentoo.org>
+ <alpine.LFD.2.21.2005142233430.6492@redsun52.ssa.fujisawa.hgst.com>
+ <18995238-ed16-411c-79ef-071897ee8a1b@gentoo.org>
+ <alpine.LFD.2.21.2005151216570.6492@redsun52.ssa.fujisawa.hgst.com>
+Message-ID: <6db89a43-372b-ed92-af5d-9a95543554c2@gentoo.org>
+Date:   Sat, 16 May 2020 02:16:52 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <alpine.LFD.2.21.2005151216570.6492@redsun52.ssa.fujisawa.hgst.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When CONFIG_HAVE_STD_PC_SERIAL_PORT is set, there exists build errors
-of 8250-platform.c due to linux/module.h is not included.
+On 5/15/2020 07:20, Maciej W. Rozycki wrote:
+> On Thu, 14 May 2020, Joshua Kinard wrote:
+> 
+>>>  I suppose they have just come up in the order they were added.  Whatever 
+>>> the order is however as long as it is consistent you can `diff' a pair of 
+>>> files against each other to spot differences easily without the need to 
+>>> rely on your perceptiveness.  And <asm/mach-sibyte/war.h> already has 
+>>> conditionals in the middle.
+>>
+>> I think then putting the conditional block below the section of fixed
+>> defines achieves that, then.  diff's (and git diff's) algorithm will show
+>> that as a clean addition and not require a lot of surrounding context lines.
+>>  It'll also avoid the need to submit a separate patch to fix IP30's "war.h".
+>>
+>> I took a look at asm/mach-sibyte/war.h, but it looks kind of....messy?  None
+>> of the other "war.h" files use conditionals outside of IP27's, IP30's, and
+>> SiByte's, so there's not a whole lot of precedent to base off of.
+> 
+>  Well, there's <asm/mach-rc32434/war.h> too, to be exact.
+> 
+>  I have no further arguments nor other input, so I'll be leaving it for 
+> Thomas to decide.
+> 
+>   Maciej
 
-CONFIG_HAVE_STD_PC_SERIAL_PORT is not used in arch/mips for many years,
-8250-platform.c is also not built and used, so it is not necessary to
-fix the build errors, just remove the not used file 8250-platform.c and
-the related code in Kconfig and Makefile.
+Focusing on just one hunk for asm/mach-ip27/war.h, how does this look if I
+keep the conditional inside the block?
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-
-v2:
-  - No changes
-
-v3:
-  - Remove not used 8250-platform.c
-
- arch/mips/Kconfig                |  3 ---
- arch/mips/kernel/8250-platform.c | 46 ----------------------------------------
- arch/mips/kernel/Makefile        |  2 --
- 3 files changed, 51 deletions(-)
- delete mode 100644 arch/mips/kernel/8250-platform.c
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index bfa9cd9..b2ff77f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -1358,9 +1358,6 @@ config MIPS_L1_CACHE_SHIFT
- 	default "4" if MIPS_L1_CACHE_SHIFT_4
- 	default "5"
+diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/mach-ip27/war.h
+index ef3efce0094a..f041e7357620 100644
+--- a/arch/mips/include/asm/mach-ip27/war.h
++++ b/arch/mips/include/asm/mach-ip27/war.h
+@@ -17,7 +17,11 @@
+ #define MIPS_CACHE_SYNC_WAR		0
+ #define TX49XX_ICACHE_INDEX_INV_WAR	0
+ #define ICACHE_REFILLS_WORKAROUND_WAR	0
++#ifdef CONFIG_CPU_R10000
+ #define R10000_LLSC_WAR			1
++#else
++#define R10000_LLSC_WAR			0
++#endif
+ #define MIPS34K_MISSED_ITLB_WAR		0
  
--config HAVE_STD_PC_SERIAL_PORT
--	bool
--
- config ARC_CMDLINE_ONLY
- 	bool
- 
-diff --git a/arch/mips/kernel/8250-platform.c b/arch/mips/kernel/8250-platform.c
-deleted file mode 100644
-index 5c6b2ab..0000000
---- a/arch/mips/kernel/8250-platform.c
-+++ /dev/null
-@@ -1,46 +0,0 @@
--/*
-- * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file "COPYING" in the main directory of this archive
-- * for more details.
-- *
-- * Copyright (C) 2007 Ralf Baechle (ralf@linux-mips.org)
-- */
--#include <linux/init.h>
--#include <linux/serial_8250.h>
--
--#define PORT(base, int)							\
--{									\
--	.iobase		= base,						\
--	.irq		= int,						\
--	.uartclk	= 1843200,					\
--	.iotype		= UPIO_PORT,					\
--	.flags		= UPF_BOOT_AUTOCONF | UPF_SKIP_TEST,		\
--	.regshift	= 0,						\
--}
--
--static struct plat_serial8250_port uart8250_data[] = {
--	PORT(0x3F8, 4),
--	PORT(0x2F8, 3),
--	PORT(0x3E8, 4),
--	PORT(0x2E8, 3),
--	{ },
--};
--
--static struct platform_device uart8250_device = {
--	.name			= "serial8250",
--	.id			= PLAT8250_DEV_PLATFORM,
--	.dev			= {
--		.platform_data	= uart8250_data,
--	},
--};
--
--static int __init uart8250_init(void)
--{
--	return platform_device_register(&uart8250_device);
--}
--
--module_init(uart8250_init);
--
--MODULE_AUTHOR("Ralf Baechle <ralf@linux-mips.org>");
--MODULE_LICENSE("GPL");
--MODULE_DESCRIPTION("Generic 8250 UART probe driver");
-diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index d6e97df..8c7a043 100644
---- a/arch/mips/kernel/Makefile
-+++ b/arch/mips/kernel/Makefile
-@@ -98,8 +98,6 @@ obj-$(CONFIG_MIPSR2_TO_R6_EMULATOR)	+= mips-r2-to-r6-emul.o
- 
- CFLAGS_cpu-bugs64.o	= $(shell if $(CC) $(KBUILD_CFLAGS) -Wa,-mdaddi -c -o /dev/null -x c /dev/null >/dev/null 2>&1; then echo "-DHAVE_AS_SET_DADDI"; fi)
- 
--obj-$(CONFIG_HAVE_STD_PC_SERIAL_PORT)	+= 8250-platform.o
--
- obj-$(CONFIG_PERF_EVENTS)	+= perf_event.o
- obj-$(CONFIG_HW_PERF_EVENTS)	+= perf_event_mipsxx.o
- 
+ #endif /* __ASM_MIPS_MACH_IP27_WAR_H */
+
+If this works for you, I'll spin a v3 later and also send along a
+separate patch to fix the IP30 case in war.h.
+
 -- 
-2.1.0
+Joshua Kinard
+Gentoo/MIPS
+kumba@gentoo.org
+rsa6144/5C63F4E3F5C6C943 2015-04-27
+177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
 
+"The past tempts us, the present confuses us, the future frightens us.  And
+our lives slip away, moment by moment, lost in that vast, terrible in-between."
+
+--Emperor Turhan, Centauri Republic
