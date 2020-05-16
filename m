@@ -2,101 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D08781D5EFF
-	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2020 08:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3591D5F4F
+	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2020 09:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725803AbgEPGQ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 May 2020 02:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725275AbgEPGQ5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 16 May 2020 02:16:57 -0400
-Received: from smtp.gentoo.org (smtp.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A2EC061A0C
-        for <linux-mips@vger.kernel.org>; Fri, 15 May 2020 23:16:57 -0700 (PDT)
-From:   Joshua Kinard <kumba@gentoo.org>
-Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
-To:     "Maciej W. Rozycki" <macro@wdc.com>
-Cc:     linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
- <alpine.LFD.2.21.2005140251480.6492@redsun52.ssa.fujisawa.hgst.com>
- <78b68917-ec7e-7434-2a80-5fabbd5247a8@gentoo.org>
- <alpine.LFD.2.21.2005142233430.6492@redsun52.ssa.fujisawa.hgst.com>
- <18995238-ed16-411c-79ef-071897ee8a1b@gentoo.org>
- <alpine.LFD.2.21.2005151216570.6492@redsun52.ssa.fujisawa.hgst.com>
-Message-ID: <6db89a43-372b-ed92-af5d-9a95543554c2@gentoo.org>
-Date:   Sat, 16 May 2020 02:16:52 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <alpine.LFD.2.21.2005151216570.6492@redsun52.ssa.fujisawa.hgst.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1725934AbgEPHDW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 May 2020 03:03:22 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:40162 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725275AbgEPHDW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 16 May 2020 03:03:22 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxFuoxkL9eqmM1AA--.11S2;
+        Sat, 16 May 2020 15:03:14 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] MIPS: Loongson: Add support for serial console
+Date:   Sat, 16 May 2020 15:03:08 +0800
+Message-Id: <1589612588-29196-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxFuoxkL9eqmM1AA--.11S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1DuFWkXrWxXF47WrWDCFg_yoW8XF45pa
+        15Aa1DJFWkWFn5trW8GFyDurWFyFnxAFW2gF17Jr15ua98t34jvr1Sy34Utr47XFWkt3yF
+        vr93KF9FyF47C3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        GF4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjX_-PUUUU
+        U==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/15/2020 07:20, Maciej W. Rozycki wrote:
-> On Thu, 14 May 2020, Joshua Kinard wrote:
-> 
->>>  I suppose they have just come up in the order they were added.  Whatever 
->>> the order is however as long as it is consistent you can `diff' a pair of 
->>> files against each other to spot differences easily without the need to 
->>> rely on your perceptiveness.  And <asm/mach-sibyte/war.h> already has 
->>> conditionals in the middle.
->>
->> I think then putting the conditional block below the section of fixed
->> defines achieves that, then.  diff's (and git diff's) algorithm will show
->> that as a clean addition and not require a lot of surrounding context lines.
->>  It'll also avoid the need to submit a separate patch to fix IP30's "war.h".
->>
->> I took a look at asm/mach-sibyte/war.h, but it looks kind of....messy?  None
->> of the other "war.h" files use conditionals outside of IP27's, IP30's, and
->> SiByte's, so there's not a whole lot of precedent to base off of.
-> 
->  Well, there's <asm/mach-rc32434/war.h> too, to be exact.
-> 
->  I have no further arguments nor other input, so I'll be leaving it for 
-> Thomas to decide.
-> 
->   Maciej
+After commit 87fcfa7b7fe6 ("MIPS: Loongson64: Add generic dts"),
+there already exists the node and property of Loongson CPU UART0
+in loongson3-package.dtsi:
 
-Focusing on just one hunk for asm/mach-ip27/war.h, how does this look if I
-keep the conditional inside the block?
+cpu_uart0: serial@1fe001e0 {
+        compatible = "ns16550a";
+        reg = <0 0x1fe001e0 0x8>;
+        clock-frequency = <33000000>;
+        interrupt-parent = <&liointc>;
+        interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
+        no-loopback-test;
+};
 
-diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/mach-ip27/war.h
-index ef3efce0094a..f041e7357620 100644
---- a/arch/mips/include/asm/mach-ip27/war.h
-+++ b/arch/mips/include/asm/mach-ip27/war.h
-@@ -17,7 +17,11 @@
- #define MIPS_CACHE_SYNC_WAR		0
- #define TX49XX_ICACHE_INDEX_INV_WAR	0
- #define ICACHE_REFILLS_WORKAROUND_WAR	0
-+#ifdef CONFIG_CPU_R10000
- #define R10000_LLSC_WAR			1
-+#else
-+#define R10000_LLSC_WAR			0
-+#endif
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
- #endif /* __ASM_MIPS_MACH_IP27_WAR_H */
+In order to support for serial console on the Loongson platform,
+add CONFIG_SERIAL_OF_PLATFORM=y to loongson3_defconfig.
 
-If this works for you, I'll spin a v3 later and also send along a
-separate patch to fix the IP30 case in war.h.
+With this patch, we can see the following boot message:
 
+[    1.877745] printk: console [ttyS0] disabled
+[    1.881979] 1fe001e0.serial: ttyS0 at MMIO 0x1fe001e0 (irq = 16, base_baud = 2062500) is a 16550A
+[    1.890838] printk: console [ttyS0] enabled
+
+And also, we can login normally from the serial console.
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+
+Hi Jiaxun,
+
+Thank you very much for your suggestion.
+
+ arch/mips/configs/loongson3_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 6768c16..cd95f08 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -217,6 +217,7 @@ CONFIG_SERIAL_8250_EXTENDED=y
+ CONFIG_SERIAL_8250_MANY_PORTS=y
+ CONFIG_SERIAL_8250_SHARE_IRQ=y
+ CONFIG_SERIAL_8250_RSA=y
++CONFIG_SERIAL_OF_PLATFORM=y
+ CONFIG_HW_RANDOM=y
+ CONFIG_RAW_DRIVER=m
+ CONFIG_I2C_CHARDEV=y
 -- 
-Joshua Kinard
-Gentoo/MIPS
-kumba@gentoo.org
-rsa6144/5C63F4E3F5C6C943 2015-04-27
-177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
+2.1.0
 
-"The past tempts us, the present confuses us, the future frightens us.  And
-our lives slip away, moment by moment, lost in that vast, terrible in-between."
-
---Emperor Turhan, Centauri Republic
