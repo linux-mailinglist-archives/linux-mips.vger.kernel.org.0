@@ -2,92 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C21681D5B45
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 23:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650C71D5DD5
+	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2020 04:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbgEOVOJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 May 2020 17:14:09 -0400
-Received: from elvis.franken.de ([193.175.24.41]:54593 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726223AbgEOVOJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 May 2020 17:14:09 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jZheg-000560-01; Fri, 15 May 2020 23:14:06 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id A4250C04C5; Fri, 15 May 2020 23:13:53 +0200 (CEST)
-Date:   Fri, 15 May 2020 23:13:53 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        kvm <kvm@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>
-Subject: Re: [PATCH V5 15/15] MAINTAINERS: Update KVM/MIPS maintainers
-Message-ID: <20200515211353.GB22922@alpha.franken.de>
-References: <1589359366-1669-1-git-send-email-chenhc@lemote.com>
- <1589359366-1669-16-git-send-email-chenhc@lemote.com>
- <AC9338A0-F449-4DCA-A294-248C86D57877@flygoat.com>
- <CAAhV-H7OTeMy2Yp2PunD+2KVzzPDT+-xGGgbpRNzhb8C-p8-7g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H7OTeMy2Yp2PunD+2KVzzPDT+-xGGgbpRNzhb8C-p8-7g@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        id S1726550AbgEPCQA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 May 2020 22:16:00 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:39078 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726541AbgEPCQA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 May 2020 22:16:00 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX93WTL9e81M1AA--.61S2;
+        Sat, 16 May 2020 10:15:50 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH v3 1/2] MIPS: Loongson: Build ATI Radeon GPU driver as module
+Date:   Sat, 16 May 2020 10:15:48 +0800
+Message-Id: <1589595349-31656-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxX93WTL9e81M1AA--.61S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFWUWr4kKrW7tFW5JF4ruFg_yoW8Xw4Dpr
+        45Gan3JFWkGrnYkFZ7CrZ7WrWYvFs5JFW3uF40kry7Crs3ua40vry5tr1UJr4UXrZxta1S
+        9F93Gr1fCanrCa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
+        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4U
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbxpnPUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 15, 2020 at 09:50:04AM +0800, Huacai Chen wrote:
-> On Thu, May 14, 2020 at 9:34 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> > 于 2020年5月13日 GMT+08:00 下午4:42:46, Huacai Chen <chenhc@lemote.com> 写到:
-> > >James Hogan has become inactive for a long time and leaves KVM for MIPS
-> > >orphan. I'm working on KVM/Loongson and attempt to make it upstream both
-> > >in kernel and QEMU, while Aleksandar Markovic is already a maintainer of
-> > >QEMU/MIPS. We are both interested in QEMU/KVM/MIPS, and we have already
-> > >made some contributions in kernel and QEMU. If possible, we want to take
-> > >the KVM/MIPS maintainership.
-> > >
-> > >Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> > >---
-> >
-> > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >
-> > Huacai is extremely experienced on virtualization,
-> > his PhD thesis is about virtualization too.
-> > He had been working on Loongson kernel for a long period.
-> >
-> > Alexander maintained QEMU/MIPS for some years, he is a expert on
-> > QEMU and MIPS architecture.
-> >
-> > I believe these guys can effectively bring MIPS/KVM support back to sea level again.
-> Thank you very much, and I think you won't be disappointed in us.
+When ATI Radeon GPU driver has been compiled directly into the kernel
+instead of as a module, we should make sure the firmware for the model
+(check available ones in /lib/firmware/radeon) is built-in to the kernel
+as well, otherwise there exists the following fatal error during GPU init,
+change CONFIG_DRM_RADEON=y to CONFIG_DRM_RADEON=m to fix it.
 
-I'm happy to see you taking care of the KVM part. So how is your plan
-to handle patches ? Do want to collect them and send pull requests to
-me ? Or should I just pick them up with your Acked-by ?
+[    1.900997] [drm] Loading RS780 Microcode
+[    1.905077] radeon 0000:01:05.0: Direct firmware load for radeon/RS780_pfp.bin failed with error -2
+[    1.914140] r600_cp: Failed to load firmware "radeon/RS780_pfp.bin"
+[    1.920405] [drm:r600_init] *ERROR* Failed to load firmware!
+[    1.926069] radeon 0000:01:05.0: Fatal error during GPU init
+[    1.931729] [drm] radeon: finishing device.
 
-And could you do me a favour and check your mail setup. I always
-get failed deliveries:
+Fixes: 024e6a8b5bb1 ("MIPS: Loongson: Add a Loongson-3 default config file")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
-  chenhc@lemote.com
-    SMTP error from remote mailer after end of data:
-    host mxbiz1.qq.com [203.205.232.191]: 550 Mail content denied. http://servic
-e.exmail.qq.com/cgi-bin/help?subtype=1&&id=20022&&no=1000726
+v2:
+  - Modify the patch subject and update the commit message
 
-or
+v3:
+  - No changes
 
-  chenhc@lemote.com
-    SMTP error from remote mailer after end of data:
-    host mxbiz1.qq.com [203.205.232.191]: 550 Ip frequency limited. http://servi
-ce.exmail.qq.com/cgi-bin/help?subtype=1&&id=20022&&no=1000725
+ arch/mips/configs/loongson3_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas.
-
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 6768c16..4df2434 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -230,7 +230,7 @@ CONFIG_MEDIA_CAMERA_SUPPORT=y
+ CONFIG_MEDIA_USB_SUPPORT=y
+ CONFIG_USB_VIDEO_CLASS=m
+ CONFIG_DRM=y
+-CONFIG_DRM_RADEON=y
++CONFIG_DRM_RADEON=m
+ CONFIG_FB_RADEON=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_PLATFORM=m
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.1.0
+
