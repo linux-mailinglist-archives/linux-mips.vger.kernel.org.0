@@ -2,90 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0AD1D614B
-	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2020 15:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2C41D617F
+	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2020 16:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726494AbgEPN0M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 May 2020 09:26:12 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40142 "EHLO
+        id S1726302AbgEPOGd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 May 2020 10:06:33 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40236 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726302AbgEPN0M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 May 2020 09:26:12 -0400
+        with ESMTP id S1726298AbgEPOGd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 May 2020 10:06:33 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 33EAE8030791;
-        Sat, 16 May 2020 13:26:04 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id B8B9C8030809;
+        Sat, 16 May 2020 14:06:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dj6AGkqSPpUY; Sat, 16 May 2020 16:26:01 +0300 (MSK)
-Date:   Sat, 16 May 2020 16:26:00 +0300
+        with ESMTP id kzvn8ktOIz_p; Sat, 16 May 2020 17:06:28 +0300 (MSK)
+Date:   Sat, 16 May 2020 17:06:27 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        <linux-mips@vger.kernel.org>, Allison Randal <allison@lohutok.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Paul Burton <paulburton@kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Richard Fontana <rfontana@redhat.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allison Randal <allison@lohutok.net>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Subject: Re: [PATCH v2 2/3] dt-bindings: power: reset: Unrequire regmap
- property in syscon-reboot node
-Message-ID: <20200516132600.aloxet3n4373nz6e@mobilestation>
-References: <20200306130356.6ABDD8030703@mail.baikalelectronics.ru>
- <20200507233846.11548-1-Sergey.Semin@baikalelectronics.ru>
- <20200507233846.11548-3-Sergey.Semin@baikalelectronics.ru>
- <20200515031449.GA32456@bogus>
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 05/19] spi: dw: Enable interrupts in accordance with
+ DMA xfer mode
+Message-ID: <20200516140627.zwigqoz335lhkxns@mobilestation>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-6-Sergey.Semin@baikalelectronics.ru>
+ <20200515122700.GY185537@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200515031449.GA32456@bogus>
+In-Reply-To: <20200515122700.GY185537@smile.fi.intel.com>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 14, 2020 at 10:14:49PM -0500, Rob Herring wrote:
-> On Fri, 8 May 2020 02:38:45 +0300, Serge Semin wrote:
-> > Since normally syscon-reboot block is supposed to be a part of a system
-> > controller, lets mark the regmap property as deprecated and recommend the
-> > syscon-reboot node to be a sub-node of SYSCON.
-> > 
+On Fri, May 15, 2020 at 03:27:00PM +0300, Andy Shevchenko wrote:
+> On Fri, May 15, 2020 at 01:47:44PM +0300, Serge Semin wrote:
+> > It's pointless to track the Tx overrun interrupts if Rx-only SPI
+> > transfer is issued. Similarly there is no need in handling the Rx
+> > overrun/underrun interrupts if Tx-only SPI transfer is executed.
+> > So lets unmask the interrupts only if corresponding SPI
+> > transactions are implied.
+> 
+> My comments below.
+> 
+> > Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> > Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
 > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
 > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 > > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > > Cc: Paul Burton <paulburton@kernel.org>
 > > Cc: Ralf Baechle <ralf@linux-mips.org>
 > > Cc: Arnd Bergmann <arnd@arndb.de>
 > > Cc: Allison Randal <allison@lohutok.net>
-> > Cc: Richard Fontana <rfontana@redhat.com>
-> > Cc: Kate Stewart <kstewart@linuxfoundation.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Cc: Gareth Williams <gareth.williams.jx@renesas.com>
+> > Cc: Rob Herring <robh+dt@kernel.org>
 > > Cc: linux-mips@vger.kernel.org
-> > 
-> > ---
-> > 
-> > Changelog v2:
-> > - This is a new patch created as a result of the discussion:
-> >   https://lore.kernel.org/linux-pm/20200306130402.1F4F0803079F@mail.baikalelectronics.ru/
-> > ---
-> >  .../bindings/power/reset/syscon-reboot.yaml       | 15 ++++++++++-----
-> >  1 file changed, 10 insertions(+), 5 deletions(-)
-> > 
+> > Cc: devicetree@vger.kernel.org
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> I think you really need to revisit Cc list in all patches (DT people hardly
+> interested in this one, though ones where properties are being used might be
+> point of interest).
+> 
+> ...
+> 
+> >  	/* Set the interrupt mask */
+> > -	spi_umask_intr(dws, SPI_INT_TXOI | SPI_INT_RXUI | SPI_INT_RXOI);
+> > +	spi_umask_intr(dws, imr);
+> 
 
-Great. Thanks!
+> Can we rather do like this
+> 
+> 	/* Set the interrupt mask */
+> 	if (xfer->tx_buf)
+> 		imr |= SPI_INT_TXOI;
+> 	if (xfer->rx_buf)
+> 		imr |= SPI_INT_RXUI | SPI_INT_RXOI;
+> 	spi_umask_intr(dws, imr);
+> 
+> ?
+> 
+> (First block sets DMA, second one IRQ)
 
-Sebastian, Rob is ok with the change. Could you take a look at the next patch?
+I'd rather leave it as is.
 
 -Sergey
+
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
