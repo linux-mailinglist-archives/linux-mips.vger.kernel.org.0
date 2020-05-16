@@ -2,123 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3C31D6019
-	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2020 11:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7231D607D
+	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2020 13:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbgEPJne (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 May 2020 05:43:34 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:56674 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727006AbgEPJne (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 16 May 2020 05:43:34 -0400
-Received: from [10.20.42.25] (unknown [10.20.42.25])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf9+ftb9eyGs1AA--.4S3;
-        Sat, 16 May 2020 17:42:56 +0800 (CST)
-Subject: Re: [PATCH 2/3] mm/memory.c: Update local TLB if PTE entry exists
-To:     Andrew Morton <akpm@linux-foundation.org>
-References: <1589515809-32422-1-git-send-email-maobibo@loongson.cn>
- <1589515809-32422-2-git-send-email-maobibo@loongson.cn>
- <20200515134046.cf107c6a13b9604c46ad71b8@linux-foundation.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        id S1726202AbgEPLJT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 May 2020 07:09:19 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:54554 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1726191AbgEPLJS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 16 May 2020 07:09:18 -0400
+Received: from [192.168.9.172] (unknown [220.196.60.58])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 982B16012C;
+        Sat, 16 May 2020 19:09:15 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1589627355; bh=4gI8QTkfc0FypidOlx2nl9vtLB55CUSTqHLnKI7O0BI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=c4WrpXhn0qomU+aO//sTSR5tEdSRCqhWqzkdz6EliV8P8+CTm71FAaU347s07W91k
+         pQMm9IOQ4CFz9pyahA5ezOyWFwKYuiAfhnEaWbj5NidCAhJ/AweKNKZPidbg55Qnel
+         YnmzcsDvGHqLUPCMHo/UjpeVGsJR6qJvR1a5zsao=
+Subject: Re: [PATCH] MIPS: Loongson: Add support for serial console
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Huacai Chen <chenhc@lemote.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Dmitry Korotin <dkorotin@wavecomp.com>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org
-From:   maobibo <maobibo@loongson.cn>
-Message-ID: <61ebeb0a-89cf-834f-1d20-765a2ab43161@loongson.cn>
-Date:   Sat, 16 May 2020 17:42:55 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+References: <1589612588-29196-1-git-send-email-yangtiezhu@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+Message-ID: <5aadf1a7-51c7-453e-beaa-3df6ceca5354@xen0n.name>
+Date:   Sat, 16 May 2020 19:09:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.0a1
 MIME-Version: 1.0
-In-Reply-To: <20200515134046.cf107c6a13b9604c46ad71b8@linux-foundation.org>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <1589612588-29196-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxf9+ftb9eyGs1AA--.4S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJryxGry5Ww47Cr1xXr4DCFg_yoW8CFy7pr
-        9aka9FqFs7tw18Wr4xXr1qqr18Z342qFy5C34fta4Yk3sFqrs5tFWrGw4F9rW5Zr1fuF4q
-        ya1jgr17Zan7ZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9mb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xK
-        xwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxV
-        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-        6r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
-        6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07b0NVkUUUUU=
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 5/16/20 3:03 PM, Tiezhu Yang wrote:
 
+> After commit 87fcfa7b7fe6 ("MIPS: Loongson64: Add generic dts"),
+> there already exists the node and property of Loongson CPU UART0
+> in loongson3-package.dtsi:
+>
+> cpu_uart0: serial@1fe001e0 {
+>          compatible = "ns16550a";
+>          reg = <0 0x1fe001e0 0x8>;
+>          clock-frequency = <33000000>;
+>          interrupt-parent = <&liointc>;
+>          interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
+>          no-loopback-test;
+> };
+>
+> In order to support for serial console on the Loongson platform,
+> add CONFIG_SERIAL_OF_PLATFORM=y to loongson3_defconfig.
+>
+> With this patch, we can see the following boot message:
+>
+> [    1.877745] printk: console [ttyS0] disabled
+> [    1.881979] 1fe001e0.serial: ttyS0 at MMIO 0x1fe001e0 (irq = 16, base_baud = 2062500) is a 16550A
+> [    1.890838] printk: console [ttyS0] enabled
+>
+> And also, we can login normally from the serial console.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>
+> Hi Jiaxun,
+>
+> Thank you very much for your suggestion.
+>
+>   arch/mips/configs/loongson3_defconfig | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+> index 6768c16..cd95f08 100644
+> --- a/arch/mips/configs/loongson3_defconfig
+> +++ b/arch/mips/configs/loongson3_defconfig
+> @@ -217,6 +217,7 @@ CONFIG_SERIAL_8250_EXTENDED=y
+>   CONFIG_SERIAL_8250_MANY_PORTS=y
+>   CONFIG_SERIAL_8250_SHARE_IRQ=y
+>   CONFIG_SERIAL_8250_RSA=y
+> +CONFIG_SERIAL_OF_PLATFORM=y
+>   CONFIG_HW_RANDOM=y
+>   CONFIG_RAW_DRIVER=m
+>   CONFIG_I2C_CHARDEV=y
 
-On 05/16/2020 04:40 AM, Andrew Morton wrote:
-> On Fri, 15 May 2020 12:10:08 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
-> 
->> If there are two threads hitting page fault at the same page,
->> one thread updates PTE entry and local TLB, the other can
->> update local tlb also, rather than give up and do page fault
->> again.
->>
->> ...
->>
->> --- a/mm/memory.c
->> +++ b/mm/memory.c
->> @@ -1770,8 +1770,8 @@ static vm_fault_t insert_pfn(struct vm_area_struct *vma, unsigned long addr,
->>  			}
->>  			entry = pte_mkyoung(*pte);
->>  			entry = maybe_mkwrite(pte_mkdirty(entry), vma);
->> -			if (ptep_set_access_flags(vma, addr, pte, entry, 1))
->> -				update_mmu_cache(vma, addr, pte);
->> +			ptep_set_access_flags(vma, addr, pte, entry, 1);
->> +			update_mmu_cache(vma, addr, pte);
-> 
-> Presumably these changes mean that other architectures will run
-> update_mmu_cache() more frequently than they used to.  How much more
-> frequently, and what will be the impact of this change?  (Please fully
-> explain all this in the changelog).
-> 
-It is only useful for those architects where software can update tlb, if the  function update_mmu_cache is used for other reason, it will bring out somewhat impact, and I will explain it in the changelog.
+Hi,
 
->>  		}
->>  		goto out_unlock;
->>  	}
->>
->> ...
->>
->> @@ -2463,7 +2462,8 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
->>  		vmf->pte = pte_offset_map_lock(mm, vmf->pmd, addr, &vmf->ptl);
->>  		locked = true;
->>  		if (!likely(pte_same(*vmf->pte, vmf->orig_pte))) {
->> -			/* The PTE changed under us. Retry page fault. */
->> +			/* The PTE changed under us, update local tlb */
->> +			pdate_mmu_cache(vma, addr, vmf->pte);
-> 
-> Missing a 'u' there.  Which tells me this patch isn't the one which you
-> tested!
-> 
-Sorry about it, I will refresh the patch and add modification about this obvious typo
-
-regards
-bibo, mao
->>  			ret = false;
->>  			goto pte_unlock;
->>  		}
->>
->> ...
->>
+The patch title is again exaggerating things. This is a defconfig 
+change, so please refer to `git log` output of `arch/mips/configs` and 
+use something like "MIPS: Loongson: loongson3_defconfig: enable serial 
+console" or "MIPS: Loongson: enable serial console in defconfig". The 
+current title reads as if Loongson kernels never were able to use a 
+serial console in the past.
 
