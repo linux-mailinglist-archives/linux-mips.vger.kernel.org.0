@@ -2,166 +2,222 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F40E1D6C6C
-	for <lists+linux-mips@lfdr.de>; Sun, 17 May 2020 21:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524671D6DFF
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 01:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbgEQTiX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 May 2020 15:38:23 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:42970 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726269AbgEQTiX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 May 2020 15:38:23 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 1DB718030808;
-        Sun, 17 May 2020 19:38:20 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fJXvaHVVcPHl; Sun, 17 May 2020 22:38:19 +0300 (MSK)
-Date:   Sun, 17 May 2020 22:38:18 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/6] dmaengine: dw: Introduce max burst length hw
- config
-Message-ID: <20200517193818.jaiwgzgz7tutj4mk@mobilestation>
-References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
- <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
- <20200508105304.14065-6-Sergey.Semin@baikalelectronics.ru>
- <20200508114153.GK185537@smile.fi.intel.com>
- <20200512140820.ssjv6pl7busqqi3t@mobilestation>
- <20200512191208.GG185537@smile.fi.intel.com>
- <20200515063950.GI333670@vkoul-mobl>
+        id S1726656AbgEQXYv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 May 2020 19:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726537AbgEQXYv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 May 2020 19:24:51 -0400
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D73C061A0C
+        for <linux-mips@vger.kernel.org>; Sun, 17 May 2020 16:24:50 -0700 (PDT)
+From:   Joshua Kinard <kumba@gentoo.org>
+To:     linux-mips@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH v3 1/3] MIPS: Split R10000 to allow for R12K+ optimizations
+Date:   Sun, 17 May 2020 19:24:37 -0400
+Message-Id: <677e22b32c5beb082885ba41f3dd1006660ee69f.1589753297.git.kumba@gentoo.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200515063950.GI333670@vkoul-mobl>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 15, 2020 at 12:09:50PM +0530, Vinod Koul wrote:
-> On 12-05-20, 22:12, Andy Shevchenko wrote:
-> > On Tue, May 12, 2020 at 05:08:20PM +0300, Serge Semin wrote:
-> > > On Fri, May 08, 2020 at 02:41:53PM +0300, Andy Shevchenko wrote:
-> > > > On Fri, May 08, 2020 at 01:53:03PM +0300, Serge Semin wrote:
-> > > > > IP core of the DW DMA controller may be synthesized with different
-> > > > > max burst length of the transfers per each channel. According to Synopsis
-> > > > > having the fixed maximum burst transactions length may provide some
-> > > > > performance gain. At the same time setting up the source and destination
-> > > > > multi size exceeding the max burst length limitation may cause a serious
-> > > > > problems. In our case the system just hangs up. In order to fix this
-> > > > > lets introduce the max burst length platform config of the DW DMA
-> > > > > controller device and don't let the DMA channels configuration code
-> > > > > exceed the burst length hardware limitation. Depending on the IP core
-> > > > > configuration the maximum value can vary from channel to channel.
-> > > > > It can be detected either in runtime from the DWC parameter registers
-> > > > > or from the dedicated dts property.
-> > > > 
-> > > > I'm wondering what can be the scenario when your peripheral will ask something
-> > > > which is not supported by DMA controller?
-> > > 
-> > > I may misunderstood your statement, because seeing your activity around my
-> > > patchsets including the SPI patchset and sometimes very helpful comments,
-> > > this question answer seems too obvious to see you asking it.
-> > > 
-> > > No need to go far for an example. See the DW APB SSI driver. Its DMA module
-> > > specifies the burst length to be 16, while not all of ours channels supports it.
-> > > Yes, originally it has been developed for the Intel Midfield SPI, but since I
-> > > converted the driver into a generic code we can't use a fixed value. For instance
-> > > in our hardware only two DMA channels of total 16 are capable of bursting up to
-> > > 16 bytes (data items) at a time, the rest of them are limited with up to 4 bytes
-> > > burst length. While there are two SPI interfaces, each of which need to have two
-> > > DMA channels for communications. So I need four channels in total to allocate to
-> > > provide the DMA capability for all interfaces. In order to set the SPI controller
-> > > up with valid optimized parameters the max-burst-length is required. Otherwise we
-> > > can end up with buffers overrun/underrun.
-> > 
-> > Right, and we come to the question which channel better to be used by SPI and
-> > the rest devices. Without specific filter function you can easily get into a
-> > case of inverted optimizations, when SPI got channels with burst = 4, while
-> > it's needed 16, and other hardware otherwise. Performance wise it's worse
-> > scenario which we may avoid in the first place, right?
-> 
-> If one has channels which are different and described as such in DT,
-> then I think it does make sense to specify in your board-dt about the
-> specific channels you would require...
+From: Joshua Kinard <kumba@gentoo.org>
 
-Well, we do have such hardware. Our DW DMA controller has got different max
-burst lengths assigned to first two and the rest of the channels. But creating
-a functionality of the individual channels assignment is a matter of different
-patchset. Sorry. It's not one of my task at the moment.
+Add more-specific support for R12000 and higher CPUs by splitting the
+R10000 logic at several places.  This avoids the workarounds enabled
+by R10000_LLSC_WAR and passes -mno-fix-r10000 to gcc during the kernel
+compile.
 
-My primary task is to integrate the Baikal-T1 SoC support into the kernel. I've
-refactored a lot of code found in the Baikal-T1 SDK and currently under a pressure
-of a lot of review. Alas there is no time to create new functionality as you
-suggest. In future I may provide such, but not in the framework of this patchset.
+Signed-off-by: Joshua Kinard <kumba@gentoo.org>
+---
+Changes in v2:
+- Refactor against mips-next after the platform file fix was added.
+- Omitted changes to the IP27/IP30/IP32 Platform files to pass
+  -mno-fix-r10000, since that is done via arch/mips/Makefile.
+    
+Changes in v3:
+- Keep the R10000_LLSC_WAR macro inside the block and add the
+  conditionals around it.
 
-> > 
-> > > > Peripheral needs to supply a lot of configuration parameters specific to the
-> > > > DMA controller in use (that's why we have struct dw_dma_slave).
-> > > > So, seems to me the feasible approach is supply correct data in the first place.
-> > > 
-> > > How to supply a valid data if clients don't know the DMA controller limitations
-> > > in general?
-> > 
-> > This is a good question. DMA controllers are quite different and having unified
-> > capabilities structure for all is almost impossible task to fulfil. That's why
-> > custom filter function(s) can help here. Based on compatible string you can
-> > implement whatever customized quirks like two functions, for example, to try 16
-> > burst size first and fallback to 4 if none was previously found.
-> > 
-> > > > If you have specific channels to acquire then you probably need to provide a
-> > > > custom xlate / filter functions. Because above seems a bit hackish workaround
-> > > > of dynamic channel allocation mechanism.
-> > > 
-> > > No, I don't have a specific channel to acquire and in general you may use any
-> > > returned from the DMA subsystem (though some platforms may need a dedicated
-> > > channels to use, in this case xlate / filter is required). In our SoC any DW DMAC
-> > > channel can be used for any DMA-capable peripherals like SPI, I2C, UART. But the
-> > > their DMA settings must properly and optimally configured. It can be only done
-> > > if you know the DMA controller parameters like max burst length, max block-size,
-> > > etc.
-> > > 
-> > > So no. The change proposed by this patch isn't workaround, but a useful feature,
-> > > moreover expected to be supported by the generic DMA subsystem.
-> > 
-> > See above.
-> > 
-> > > > But let's see what we can do better. Since maximum is defined on the slave side
-> > > > device, it probably needs to define minimum as well, otherwise it's possible
-> > > > that some hardware can't cope underrun bursts.
-> > > 
-> > > There is no need to define minimum if such limit doesn't exists except a
-> > > natural 1. Moreover it doesn't exist for all DMA controllers seeing noone has
-> > > added such capability into the generic DMA subsystem so far.
-> > 
-> > There is a contract between provider and consumer about DMA resource. That's
-> > why both sides should participate in fulfilling it. Theoretically it may be a
-> > hardware that doesn't support minimum burst available in DMA by a reason. For
-> > such we would need minimum to be provided as well.
-> 
-> Agreed and if required caps should be extended to tell consumer the
-> minimum values supported.
+ arch/mips/Kconfig                     | 21 +++++++++++++++++++--
+ arch/mips/Makefile                    |  3 +++
+ arch/mips/include/asm/cpu-type.h      |  2 ++
+ arch/mips/include/asm/hazards.h       |  3 ++-
+ arch/mips/include/asm/mach-ip27/war.h |  4 ++++
+ arch/mips/include/asm/module.h        |  2 ++
+ arch/mips/oprofile/Makefile           |  1 +
+ drivers/video/fbdev/gbefb.c           |  2 +-
+ 8 files changed, 34 insertions(+), 4 deletions(-)
 
-Sorry, it's not required by our hardware. Is there any, which actually has such
-limitation? (minimum burst length)
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index b2ff77f8366f..8a13d55d9523 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -673,6 +673,7 @@ config SGI_IP27
+ 	select PCI_DRIVERS_GENERIC
+ 	select PCI_XTALK_BRIDGE
+ 	select SYS_HAS_CPU_R10000
++	select SYS_HAS_CPU_R12K_R14K_R16K
+ 	select SYS_SUPPORTS_64BIT_KERNEL
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+ 	select SYS_SUPPORTS_NUMA
+@@ -734,6 +735,7 @@ config SGI_IP30
+ 	select PCI_XTALK_BRIDGE
+ 	select SYS_HAS_EARLY_PRINTK
+ 	select SYS_HAS_CPU_R10000
++	select SYS_HAS_CPU_R12K_R14K_R16K
+ 	select SYS_SUPPORTS_64BIT_KERNEL
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+ 	select SYS_SUPPORTS_SMP
+@@ -760,6 +762,7 @@ config SGI_IP32
+ 	select RM7000_CPU_SCACHE
+ 	select SYS_HAS_CPU_R5000
+ 	select SYS_HAS_CPU_R10000 if BROKEN
++	select SYS_HAS_CPU_R12K_R14K_R16K if BROKEN
+ 	select SYS_HAS_CPU_RM7000
+ 	select SYS_HAS_CPU_NEVADA
+ 	select SYS_SUPPORTS_64BIT_KERNEL
+@@ -1673,7 +1676,18 @@ config CPU_R10000
+ 	select CPU_SUPPORTS_HIGHMEM
+ 	select CPU_SUPPORTS_HUGEPAGES
+ 	help
+-	  MIPS Technologies R10000-series processors.
++	  MIPS Technologies R10000 processor.
++
++config CPU_R12K_R14K_R16K
++	bool "R12k/R14k/R16k"
++	depends on SYS_HAS_CPU_R12K_R14K_R16K
++	select CPU_HAS_PREFETCH
++	select CPU_SUPPORTS_32BIT_KERNEL
++	select CPU_SUPPORTS_64BIT_KERNEL
++	select CPU_SUPPORTS_HIGHMEM
++	select CPU_SUPPORTS_HUGEPAGES
++	help
++	  MIPS Technologies R12000, R14000, & R16000 processors.
+ 
+ config CPU_RM7000
+ 	bool "RM7000"
+@@ -1965,6 +1979,9 @@ config SYS_HAS_CPU_R10000
+ 	bool
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
+ 
++config SYS_HAS_CPU_R12K_R14K_R16K
++	bool
++
+ config SYS_HAS_CPU_RM7000
+ 	bool
+ 
+@@ -2703,7 +2720,7 @@ config NODES_SHIFT
+ 
+ config HW_PERF_EVENTS
+ 	bool "Enable hardware performance counter support for perf events"
+-	depends on PERF_EVENTS && !OPROFILE && (CPU_MIPS32 || CPU_MIPS64 || CPU_R10000 || CPU_SB1 || CPU_CAVIUM_OCTEON || CPU_XLP || CPU_LOONGSON64)
++	depends on PERF_EVENTS && !OPROFILE && (CPU_MIPS32 || CPU_MIPS64 || CPU_R10000 || CPU_R12K_R14K_R16K || CPU_SB1 || CPU_CAVIUM_OCTEON || CPU_XLP || CPU_LOONGSON64)
+ 	default y
+ 	help
+ 	  Enable hardware performance counter support for perf events. If
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index b50377ec3ab5..33572d347f47 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -163,6 +163,9 @@ cflags-$(CONFIG_CPU_SB1)	+= $(call cc-option,-mno-mdmx)
+ cflags-$(CONFIG_CPU_SB1)	+= $(call cc-option,-mno-mips3d)
+ cflags-$(CONFIG_CPU_R10000)	+= $(call cc-option,-march=r10000,-march=r8000) \
+ 			-Wa,--trap
++cflags-$(CONFIG_CPU_R12K_R14K_R16K)	+= $(call cc-option,-march=r12000,-march=r10000) \
++			$(call cc-option,-mno-fix-r10000,) \
++			-Wa,--trap
+ cflags-$(CONFIG_CPU_CAVIUM_OCTEON) += $(call cc-option,-march=octeon) -Wa,--trap
+ ifeq (,$(findstring march=octeon, $(cflags-$(CONFIG_CPU_CAVIUM_OCTEON))))
+ cflags-$(CONFIG_CPU_CAVIUM_OCTEON) += -Wa,-march=octeon
+diff --git a/arch/mips/include/asm/cpu-type.h b/arch/mips/include/asm/cpu-type.h
+index 49f0061a6051..833694782d05 100644
+--- a/arch/mips/include/asm/cpu-type.h
++++ b/arch/mips/include/asm/cpu-type.h
+@@ -148,6 +148,8 @@ static inline int __pure __get_cpu_type(const int cpu_type)
+ 
+ #ifdef CONFIG_SYS_HAS_CPU_R10000
+ 	case CPU_R10000:
++#endif
++#ifdef CONFIG_SYS_HAS_CPU_R12K_R14K_R16K
+ 	case CPU_R12000:
+ 	case CPU_R14000:
+ 	case CPU_R16000:
+diff --git a/arch/mips/include/asm/hazards.h b/arch/mips/include/asm/hazards.h
+index a0b92205f933..190ad53091ea 100644
+--- a/arch/mips/include/asm/hazards.h
++++ b/arch/mips/include/asm/hazards.h
+@@ -159,7 +159,8 @@ do {									\
+ 
+ #elif defined(CONFIG_MIPS_ALCHEMY) || defined(CONFIG_CPU_CAVIUM_OCTEON) || \
+ 	defined(CONFIG_CPU_LOONGSON2EF) || defined(CONFIG_CPU_LOONGSON64) || \
+-	defined(CONFIG_CPU_R10000) || defined(CONFIG_CPU_R5500) || defined(CONFIG_CPU_XLR)
++	defined(CONFIG_CPU_R10000) || defined(CONFIG_CPU_R12K_R14K_R16K) || \
++	defined(CONFIG_CPU_R5500) || defined(CONFIG_CPU_XLR)
+ 
+ /*
+  * R10000 rocks - all hazards handled in hardware, so this becomes a nobrainer.
+diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/mach-ip27/war.h
+index ef3efce0094a..f041e7357620 100644
+--- a/arch/mips/include/asm/mach-ip27/war.h
++++ b/arch/mips/include/asm/mach-ip27/war.h
+@@ -17,7 +17,11 @@
+ #define MIPS_CACHE_SYNC_WAR		0
+ #define TX49XX_ICACHE_INDEX_INV_WAR	0
+ #define ICACHE_REFILLS_WORKAROUND_WAR	0
++#ifdef CONFIG_CPU_R10000
+ #define R10000_LLSC_WAR			1
++#else
++#define R10000_LLSC_WAR			0
++#endif
+ #define MIPS34K_MISSED_ITLB_WAR		0
+ 
+ #endif /* __ASM_MIPS_MACH_IP27_WAR_H */
+diff --git a/arch/mips/include/asm/module.h b/arch/mips/include/asm/module.h
+index 9846047b3d3d..9697414af51c 100644
+--- a/arch/mips/include/asm/module.h
++++ b/arch/mips/include/asm/module.h
+@@ -115,6 +115,8 @@ search_module_dbetables(unsigned long addr)
+ #define MODULE_PROC_FAMILY "NEVADA "
+ #elif defined CONFIG_CPU_R10000
+ #define MODULE_PROC_FAMILY "R10000 "
++#elif defined CONFIG_CPU_R12K_R14K_R16K
++#define MODULE_PROC_FAMILY "R12K/R14K/R16K "
+ #elif defined CONFIG_CPU_RM7000
+ #define MODULE_PROC_FAMILY "RM7000 "
+ #elif defined CONFIG_CPU_SB1
+diff --git a/arch/mips/oprofile/Makefile b/arch/mips/oprofile/Makefile
+index e10f216d0422..60dfffdb32a0 100644
+--- a/arch/mips/oprofile/Makefile
++++ b/arch/mips/oprofile/Makefile
+@@ -12,6 +12,7 @@ oprofile-y				:= $(DRIVER_OBJS) common.o backtrace.o
+ oprofile-$(CONFIG_CPU_MIPS32)		+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_MIPS64)		+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_R10000)		+= op_model_mipsxx.o
++oprofile-$(CONFIG_CPU_R12K_R14K_R16K)	+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_SB1)		+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_XLR)		+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_LOONGSON2EF)	+= op_model_loongson2.o
+diff --git a/drivers/video/fbdev/gbefb.c b/drivers/video/fbdev/gbefb.c
+index 31270a8986e8..9d62246b0b42 100644
+--- a/drivers/video/fbdev/gbefb.c
++++ b/drivers/video/fbdev/gbefb.c
+@@ -43,7 +43,7 @@ struct gbefb_par {
+ 
+ /* macro for fastest write-though access to the framebuffer */
+ #ifdef CONFIG_MIPS
+-#ifdef CONFIG_CPU_R10000
++#if defined(CONFIG_CPU_R10000) || defined(CONFIG_CPU_R12K_R14K_R16K)
+ #define pgprot_fb(_prot) (((_prot) & (~_CACHE_MASK)) | _CACHE_UNCACHED_ACCELERATED)
+ #else
+ #define pgprot_fb(_prot) (((_prot) & (~_CACHE_MASK)) | _CACHE_CACHABLE_NO_WA)
+-- 
+2.26.2
 
--Sergey
-
-> 
-> -- 
-> ~Vinod
