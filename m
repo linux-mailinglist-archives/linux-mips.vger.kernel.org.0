@@ -2,54 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34751D66B0
-	for <lists+linux-mips@lfdr.de>; Sun, 17 May 2020 10:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777F21D678B
+	for <lists+linux-mips@lfdr.de>; Sun, 17 May 2020 13:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727812AbgEQIzt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 May 2020 04:55:49 -0400
-Received: from elvis.franken.de ([193.175.24.41]:56357 "EHLO elvis.franken.de"
+        id S1727845AbgEQLBW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 May 2020 07:01:22 -0400
+Received: from elvis.franken.de ([193.175.24.41]:56509 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727799AbgEQIzs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 17 May 2020 04:55:48 -0400
+        id S1727832AbgEQLBW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 17 May 2020 07:01:22 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jaF5B-0003F8-05; Sun, 17 May 2020 10:55:41 +0200
+        id 1jaH2m-000449-01; Sun, 17 May 2020 13:01:20 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 7AA8AC04D6; Sun, 17 May 2020 10:43:00 +0200 (CEST)
-Date:   Sun, 17 May 2020 10:43:00 +0200
+        id ED5A2C04EC; Sun, 17 May 2020 12:59:55 +0200 (CEST)
+Date:   Sun, 17 May 2020 12:59:55 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Guoyun Sun <sunguoyun@loongson.cn>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Daniel Silsby <dansilsby@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mips/mm: Add page soft dirty tracking
-Message-ID: <20200517084300.GF3939@alpha.franken.de>
-References: <1588149872-9780-1-git-send-email-sunguoyun@loongson.cn>
+To:     Joshua Kinard <kumba@gentoo.org>
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
+Message-ID: <20200517105955.GB5508@alpha.franken.de>
+References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1588149872-9780-1-git-send-email-sunguoyun@loongson.cn>
+In-Reply-To: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 29, 2020 at 04:44:32PM +0800, Guoyun Sun wrote:
-> User space checkpoint and restart tool (CRIU) needs the page's change
-> to be soft tracked. This allows to do a pre checkpoint and then dump
-> only touched pages.
+On Wed, May 13, 2020 at 08:55:27PM -0400, Joshua Kinard wrote:
+> From: Joshua Kinard <kumba@gentoo.org>
 > 
-> Signed-off-by: Guoyun Sun <sunguoyun@loongson.cn>
-> ---
->  arch/mips/include/asm/pgtable-bits.h | 20 +++++++++++++--
->  arch/mips/include/asm/pgtable.h      | 48 ++++++++++++++++++++++++++++++++++--
->  2 files changed, 64 insertions(+), 4 deletions(-)
+> The attached patch adds more-specific support for R12000 and higher
+> CPUs by splitting the R10000 logic at several places.  This avoids
+> the workarounds enabled by R10000_LLSC_WAR and passes -mno-fix-r10000
+> to gcc during the kernel compile.
 
-applied to mips-next.
+I've seen this patch multiple times already and I always think there
+is something wrong with it. So we want to allow a way to disable
+bug workarounds for old R10k (rev < 3.0), why not call it that way ?
+Something like CONFIG_R10000_WORKAROUNDS, which defaults to y.
+The only thing we would be missing is the -march=r12000 not sure,
+if this makes much difference. Do I miss something else ?
 
 Thomas.
 
