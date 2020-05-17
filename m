@@ -2,93 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC361D6BB4
-	for <lists+linux-mips@lfdr.de>; Sun, 17 May 2020 20:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596081D6BC9
+	for <lists+linux-mips@lfdr.de>; Sun, 17 May 2020 20:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726278AbgEQSWP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 May 2020 14:22:15 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:42716 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726259AbgEQSWP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 May 2020 14:22:15 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 03DFB8030802;
-        Sun, 17 May 2020 18:22:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xlnnS2shJqbh; Sun, 17 May 2020 21:22:11 +0300 (MSK)
-Date:   Sun, 17 May 2020 21:22:10 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/6] dmaengine: dw: Set DMA device max segment size
- parameter
-Message-ID: <20200517182210.jxtsqbtf3pjogxpc@mobilestation>
-References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
- <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
- <20200508105304.14065-4-Sergey.Semin@baikalelectronics.ru>
- <20200508112152.GI185537@smile.fi.intel.com>
- <20200511211622.yuh3ls2ay76yaxrf@mobilestation>
- <20200512123551.GX185537@smile.fi.intel.com>
- <20200515061601.GG333670@vkoul-mobl>
- <20200515105313.GL185537@smile.fi.intel.com>
+        id S1726349AbgEQSmo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 May 2020 14:42:44 -0400
+Received: from smtp.gentoo.org ([140.211.166.183]:53476 "EHLO smtp.gentoo.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726269AbgEQSml (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 17 May 2020 14:42:41 -0400
+Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org
+References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
+ <20200517105955.GB5508@alpha.franken.de>
+From:   Joshua Kinard <kumba@gentoo.org>
+Openpgp: preference=signencrypt
+Message-ID: <866edd5a-dfb2-8a90-06ef-831bd7efc255@gentoo.org>
+Date:   Sun, 17 May 2020 14:42:35 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200515105313.GL185537@smile.fi.intel.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200517105955.GB5508@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 15, 2020 at 01:53:13PM +0300, Andy Shevchenko wrote:
-> On Fri, May 15, 2020 at 11:46:01AM +0530, Vinod Koul wrote:
-> > On 12-05-20, 15:35, Andy Shevchenko wrote:
-> > > On Tue, May 12, 2020 at 12:16:22AM +0300, Serge Semin wrote:
-> > > > On Fri, May 08, 2020 at 02:21:52PM +0300, Andy Shevchenko wrote:
-> > > > > On Fri, May 08, 2020 at 01:53:01PM +0300, Serge Semin wrote:
+On 5/17/2020 06:59, Thomas Bogendoerfer wrote:
+> On Wed, May 13, 2020 at 08:55:27PM -0400, Joshua Kinard wrote:
+>> From: Joshua Kinard <kumba@gentoo.org>
+>>
+>> The attached patch adds more-specific support for R12000 and higher
+>> CPUs by splitting the R10000 logic at several places.  This avoids
+>> the workarounds enabled by R10000_LLSC_WAR and passes -mno-fix-r10000
+>> to gcc during the kernel compile.
 > 
-> ...
-> 
-> > > My point here that we probably can avoid complications till we have real
-> > > hardware where it's different. As I said I don't remember a such, except
-> > > *maybe* Intel Medfield, which is quite outdated and not supported for wider
-> > > audience anyway.
-> > 
-> > IIRC Intel Medfield has couple of dma controller instances each one with
-> > different parameters *but* each instance has same channel configuration.
-> 
-> That's my memory too.
-> 
-> > I do not recall seeing that we have synthesis parameters per channel
-> > basis... But I maybe wrong, it's been a while.
-> 
-> Exactly, that's why I think we better simplify things till we will have real
-> issue with it. I.o.w. no need to solve the problem which doesn't exist.
+> I've seen this patch multiple times already and I always think there
+> is something wrong with it. So we want to allow a way to disable
+> bug workarounds for old R10k (rev < 3.0), why not call it that way ?
+> Something like CONFIG_R10000_WORKAROUNDS, which defaults to y.
+> The only thing we would be missing is the -march=r12000 not sure,
+> if this makes much difference. Do I miss something else ?
 
-Ok then. My hardware is also synthesized with uniform max block size
-parameter. I'll remove that maximum of maximum search pattern and use the block
-size found for the very first channel to set the maximum segment size parameter.
+I've submitted it a few times before, but I think most of the times, it
+simply got missed due to Ralf just being busy.  The one time he did look at
+it, I don't think he saw too much of a benefit as the only SGI system that
+could run R12K+ at the time was IP27, which had its own issues.  I figured
+I'd give it another go-around now that IP30 is mainlined, as R12K is more
+common on that platform.  Adding framework to further optimize based on CPU
+type seems like a good thing, even if those aren't used yet?
 
--Sergey
+Internally to gcc, there is no functional difference, yet, between 'r10000'
+and 'r12000' or later.  I *think* on -march=r12000, -mno-fix-r10000 might be
+implied, but I would have to go look at gcc's source again.  Specific to the
+R12000, there is a bit in the CONFIG register (I think) called Delay
+Speculative Dirty (DSD) that can be used on the IP32 to mitigate the
+speculative execution issues on that platform, just no one's coded for it yet.
 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+My hope was also that at some point, documentation for the R14000 and R16000
+might find its way to the internet and maybe there were additional
+optimizations that could be added to gcc for those, to make -march=r14000 or
+-march=r16000 viable.  Thus far, that hasn't happened.  Both of those CPUs
+really seem to just be clock speed increases and die shrinkages.
+
+Though I do know that the R14000 uses DDR for the L2 cache, but I don't
+think that is something that can be taken advantage of by the compiler or
+kernel in terms of instruction scheduling.  R16000 also seems to have an
+additional undocumented bit in the STATUS register, based on IRIX headers,
+but no other documentation exists on that.  Really, as far as R14000/R16000
+go, they're black boxes, as neither SGI, HP, nor NEC has ever released
+documentation or errata for those two CPUs.
+
+-- 
+Joshua Kinard
+Gentoo/MIPS
+kumba@gentoo.org
+rsa6144/5C63F4E3F5C6C943 2015-04-27
+177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
+
+"The past tempts us, the present confuses us, the future frightens us.  And
+our lives slip away, moment by moment, lost in that vast, terrible in-between."
+
+--Emperor Turhan, Centauri Republic
