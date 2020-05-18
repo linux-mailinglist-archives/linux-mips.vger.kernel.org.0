@@ -2,177 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDDB1D89AC
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 22:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583891D89EA
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 23:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727873AbgERU57 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 16:57:59 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:50090 "EHLO
+        id S1728087AbgERVRf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 17:17:35 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:50230 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbgERU57 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 16:57:59 -0400
+        with ESMTP id S1727944AbgERVRe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 17:17:34 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8593C8030779;
-        Mon, 18 May 2020 20:57:54 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2EBCD8030807;
+        Mon, 18 May 2020 21:17:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ztp9O0FMjJ7Y; Mon, 18 May 2020 23:57:53 +0300 (MSK)
-Date:   Mon, 18 May 2020 23:57:52 +0300
+        with ESMTP id i3GN_NL9uKnD; Tue, 19 May 2020 00:17:29 +0300 (MSK)
+Date:   Tue, 19 May 2020 00:17:27 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Mark Brown <broonie@kernel.org>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
- if CPU_FREQ enabled
-Message-ID: <20200518205752.txbylbjt2zkwdwwe@mobilestation>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
- <20200508154150.GB22247@alpha.franken.de>
- <20200511133121.cz5axbwynhmqkx7x@mobilestation>
- <20200515074827.6p5zx4sb3bmavjih@mobilestation>
- <20200515210647.GA22922@alpha.franken.de>
- <20200518134820.wedoumgbsllvhem6@mobilestation>
- <20200518163206.GA17800@alpha.franken.de>
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Message-ID: <20200518211727.jrzo6tn7slqzxoyl@mobilestation>
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
+ <20200508113751.GD4820@sirena.org.uk>
+ <20200510002039.hwahqasnnceowskz@mobilestation>
+ <20200511212506.GA23852@sirena.org.uk>
+ <20200518000542.ohtpem3lo2pbixbu@mobilestation>
+ <20200518151946.GH8699@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200518163206.GA17800@alpha.franken.de>
+In-Reply-To: <20200518151946.GH8699@sirena.org.uk>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 18, 2020 at 06:32:06PM +0200, Thomas Bogendoerfer wrote:
-> On Mon, May 18, 2020 at 04:48:20PM +0300, Serge Semin wrote:
-> > On Fri, May 15, 2020 at 11:06:47PM +0200, Thomas Bogendoerfer wrote:
-> > > On Fri, May 15, 2020 at 10:48:27AM +0300, Serge Semin wrote:
-> > > > Thomas,
-> > > > Could you take a look at my comment below so I could proceed with the
-> > > > patchset v3 development?
-> > > 
-> > > I can't help, but using r4k clocksource with changing frequency is
-> > > probaly only usefull as a random generator. So IMHO the only two
-> > > options are disabling it or implement what arch/x86/kernel/tsc.c does.
-> > > 
-> > > Thomas.
+On Mon, May 18, 2020 at 04:19:47PM +0100, Mark Brown wrote:
+> On Mon, May 18, 2020 at 03:05:42AM +0300, Serge Semin wrote:
+> > On Mon, May 11, 2020 at 10:25:06PM +0100, Mark Brown wrote:
+> 
+> > > Yes, some flags should work here - the issue was that at least some
+> > > controllers may end up trying to do multiple SPI operations for one
+> > > spi-mem thing which will break if the chip select doesn't get changed to
+> > > correspond with what's going on.
+> 
+> > Ok. New SPI flag it is then. It will be something like this:
+> > + #define SPI_CONTROLLER_FLASH_SS		BIT(6)
+> 
+> I'd rather use CS than SS (it's more common in the code).
+
+Ok.
+
+> 
+> > So, what do you think?
+> 
+> Should be fine, controllers that have an issue implementing just
+> shouldn't set the flag.
+
+Yes, exactly what I intended.
+
+> 
+> > > > > It's not clear to me that this hardware actually supports spi_mem in
+> > > > > hardware?
+> 
+> > > > SPI-mem operations are implemented by means of the EEPROM-read and Tx-only
+> > > > modes of the controller.
+> 
+> > > Sure, but those seem like normal SPI-level things rather than cases
+> > > where the hardware understands that it has a flash attached and is doing
+> > > flash specific things.
+> 
+> > No, hardware can't detect whether the flash is attached. This must be defined by
+> > the platform, like based on the DT sub-nodes.
+> 
+> This isn't about autodetection, it's about the abstraction level the
+> hardware is operating on - some hardware is able to generate flash
+> operations by itself (possibly with some help programming the opcodes
+> that are needed by a given flash), some hardware just works at the
+> bytestream level.
+> 
+> > > A very common case for this stuff is that
+> > > controllers have acceleration blocks for read and fall back on normal
+> > > SPI for writes and erases, that sounds like what's going on here.
 > > 
-> > Thomas, could you proceed with the rest of the patches review?
-> > ├─>[PATCH v2 16/20] bus: cdmm: Add MIPS R5 arch support
-> > ├─>[PATCH v2 15/20] mips: cdmm: Add mti,mips-cdmm dtb node support
+> > Well, yeah, they do provide some acceleration. EEPROM-read provides automatic
+> > write-cmd-dummy-data-then-read operations. But in this case the only thing we
+> > have to push into the SPI Tx FIFO is command and dummy bytes. The read operation
 > 
-> both are not my call, but look ok to me.
+> So it's a write then read but you have to program the write each time?
 
-Can I add your Reviewed-by tag there then?
+Here is what we need to do to perform the EEPROM-read operation:
+1) Enable EEPROM-read mode.
+2) Initialize a corresponding registers with a number of SPI transfer words
+   (with bits-per-word taken into account) to read.
+3) Push opcode + address + dummy bytes into the Tx FIFO. When it's done and
+   the Tx FIFO is empty, the controller will proceed with read operations by
+   pushing zeros (or ones, don't remember what level it's by default) to MOSI
+   and pulling data from MISO into the RX FIFO.
+4) Keep up with getting data from the Rx FIFO so one wouldn't get overflown.
 
-> 
-> > ├─>[PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
-> 
-> that's broken. A reg shift of 2 doesn't mean we could use 32bit access
-> to the registers on other platforms. As I don't think adding some ifdefery
-> makes things nicer, just implement the your prom_putchar in board code.
-
-I thought about that initially, but then I decided to alter the generic
-early_printk_8250 code instead. My version of prom_putchar() would be almost
-the same as one implemented in the early_printk_8250 module except minor
-modification of replacing readb/writeb methods with readl/writel. So I didn't
-want to duplicate the code, but wanted to provide a general way to fix the
-problem potentially also for another platforms.
-
-Since you don't like this fix alternatively I'd suggest to add the reg_width
-parameter passed to the setup_8250_early_printk_port() method like this:
--setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
--                             unsigned int timeout)
-+setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
-+                             unsigned int reg_width, unsigned int timeout)
-
-By reg_width parameter we could determine the actual width of the register:
- static inline u8 serial_in(int offset)
- {
--       return readb(serial8250_base + (offset << serial8250_reg_shift));
-+       u8 ret = 0xFF;
-+
-+       offset <<= serial8250_reg_shift;
-+       switch (serial8250_reg_width) {
-+       case 1:
-+               ret = readb(serial8250_base + offset);
-+               break;
-+       case 2:
-+               ret = readw(serial8250_base + offset);
-+               break;
-+       case 4:
-+               ret = readl(serial8250_base + offset);
-+               break;
-+       default:
-+               break;
-+       }
-+
-+       return ret;
- }
-
-The similar modification will be implemented for serial_out(). I'll also modify
-the currently available setup_8250_early_printk_port() calls so they would pass
-the reg_with as 1 to activate the normal readb/writeb IO methods.
-
-What do you think about this?
-
-> 
-> > ├─>[PATCH v2 12/20] mips: MAAR: Add XPA mode support
-> 
-> looks ok so far.
-
-Can I add your Reviewed-by tag there then?
-
-> 
-> > ├─>[PATCH v2 10/20] mips: Add CONFIG/CONFIG6/Cause reg fields macro
-> 
-> that is fine
-
-Can I add your Reviewed-by tag there then?
-
-> 
-> > └─>[PATCH v2 09/20] mips: Add CP0 Write Merge config support
-> 
-> this is IMHO a dangerous change. Enabling write merging for any
-> CPU supporting it might triggers bugs. Do it in your board bringup
-> code and at the moment I don't see a reason for the rest of that
-> patch.
-
-Let's at least leave the mm_config() implementation but without the write-merge
-enabling by default. Providing features availability macro
-cpu_has_mm_sysad/cpu_has_mm_full and c0 config fields
-MIPS_CPU_MM_SYSAD/MIPS_CPU_MM_FULL defined will be useful in the platform-specific
-Write-Merge enable/disable procedure. For instance, in the my prom_init() method
-I could use them to implement a code pattern like:
-
-+	if (cpu_has_mm_full) {
-+		unsigned int config0 = read_c0_config();
-+               config0 = (config0 & ~MIPS_CONF_MM) | MIPS_CONF_MM_FULL;
-+               write_c0_config(config0);
-+	}
-
-By doing so I can manually enable/disable the MM feature in the
-cpu-feature-overrides.h. Without that I'd have to locally define these macro,
-which isn't good seeing they are in fact generic and can be useful for other
-platforms with SYSAD and FULL MM feature available. What do you think?
+Regarding programming write each time. Well, it's up to the driver implementation.
+If opcode, address, dummy bytes and number of words to read are the same as before,
+then re-programming isn't required.
 
 -Sergey
-
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
