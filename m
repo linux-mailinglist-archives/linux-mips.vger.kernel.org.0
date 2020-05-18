@@ -2,112 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAD61D7BD8
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 16:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F121D7C15
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 17:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727954AbgEROvS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 10:51:18 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:48492 "EHLO
+        id S1727803AbgERPAG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 11:00:06 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:48704 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726918AbgEROvS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 10:51:18 -0400
+        with ESMTP id S1726958AbgERPAF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 11:00:05 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 127628030875;
-        Mon, 18 May 2020 14:51:15 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id B6998803080B;
+        Mon, 18 May 2020 15:00:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id h93v5wIYCrJM; Mon, 18 May 2020 17:51:14 +0300 (MSK)
-Date:   Mon, 18 May 2020 17:51:13 +0300
+        with ESMTP id IRxMeP9Dze5J; Mon, 18 May 2020 18:00:00 +0300 (MSK)
+Date:   Mon, 18 May 2020 17:59:58 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <linux-rtc@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        <linux-kernel@vger.kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Paul Burton <paulburton@kernel.org>
-Subject: Re: [PATCH v3 3/7] dt-bindings: interrupt-controller: Convert
- mti,gic to DT schema
-Message-ID: <20200518145113.2ndiinqkjculiqmx@mobilestation>
-References: <20200324174325.14213-1-Sergey.Semin@baikalelectronics.ru>
- <20200506214107.25956-1-Sergey.Semin@baikalelectronics.ru>
- <20200506214107.25956-4-Sergey.Semin@baikalelectronics.ru>
- <20200514190632.GA9943@bogus>
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allison Randal <allison@lohutok.net>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Clement Leger <cleger@kalray.eu>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 10/19] spi: dw: Use DMA max burst to set the request
+ thresholds
+Message-ID: <20200518145958.gb55qtrc6gdpq2d4@mobilestation>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-11-Sergey.Semin@baikalelectronics.ru>
+ <20200515143842.GG1634618@smile.fi.intel.com>
+ <20200516200133.wmaqnfjbr7234fzo@mobilestation>
+ <20200518110343.GY1634618@smile.fi.intel.com>
+ <20200518125253.r4fpr4mjflclqpym@mobilestation>
+ <CAHp75VeMcv-hQViCANQARiNh0LwmugsDWk=MF1c5E3t7z5h02Q@mail.gmail.com>
+ <20200518134306.7rvydoasv7pmxwxl@mobilestation>
+ <20200518144834.GD1634618@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200514190632.GA9943@bogus>
+In-Reply-To: <20200518144834.GD1634618@smile.fi.intel.com>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Thomas, Jason, Marc
-Could you take a look at this patch and merge it in if you are ok with its
-content. We've got Rob's Reviewed-by tag here, so it's only waiting for your
-acceptance.
+On Mon, May 18, 2020 at 05:48:34PM +0300, Andy Shevchenko wrote:
+> On Mon, May 18, 2020 at 04:43:06PM +0300, Serge Semin wrote:
+> > On Mon, May 18, 2020 at 04:25:20PM +0300, Andy Shevchenko wrote:
+> > > On Mon, May 18, 2020 at 3:53 PM Serge Semin
+> > > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > > > On Mon, May 18, 2020 at 02:03:43PM +0300, Andy Shevchenko wrote:
+> > > > > On Sat, May 16, 2020 at 11:01:33PM +0300, Serge Semin wrote:
+> > > > > > On Fri, May 15, 2020 at 05:38:42PM +0300, Andy Shevchenko wrote:
+> > > > > > > On Fri, May 15, 2020 at 01:47:49PM +0300, Serge Semin wrote:
+> 
+> ...
+> 
+> > > > > > It's not like anyone cared about padding in this structure in the first place)
+> > > > >
+> > > > > I think I have been caring (to some extend).
+> > > >
+> > > > Well, If you have then instead of asking to rearrange just two members (which
+> > > > by the way finely grouped by the Tx-Rx affiliation) why not sending a
+> > > > patch, which would refactor the whole structure so to be optimal for the x64
+> > > > platforms? I don't really see why this gets very important for you seeing
+> > > > Mark is Ok with this. My current commit follows the common driver design
+> > > > including the DW SSI data members grouping. On the second thought I'll leave
+> > > > it as is then.
+> > > 
+> > > Again same issue here. What is really easy to do for you here, will
+> > > become a burden and additional churn to anybody else.
+> > > So, why not to minimize it in the first place? Same with comma in
+> > > another patch. Sorry, I really don't get it.
+> > 
+> > If comma is more or less understandable (though adding it is absolutely
+> > redundant there and doesn't worth even a bit of time spending for the
+> > discussion), here you consider the patch from padding point of view.
+> > The driver developer didn't care about it, but did care about grouping the
+> > members in a corresponding way. The padding burden will be there anyway and
+> > should be fixed for the whole structure in an additional patch. Until then
+> > the way of grouping should be preserved.
+> 
+> Like you said, we spent already much more time than that simple change can be
+> satisfied. And like you said, "deleloper ... did care about groupping members
+> in a corresponding way". So, if we look at this in the original code, my
+> suggestion, besides padding benefit, is consistent with existing pattern in
+> that data structure.
+
+What pattern do you mean? As I see it, my implementation is consistent with
+current structure structure, while yours is not.
 
 -Sergey
 
-On Thu, May 14, 2020 at 02:06:32PM -0500, Rob Herring wrote:
-> On Thu, 7 May 2020 00:41:03 +0300, Serge Semin wrote:
-> > Modern device tree bindings are supposed to be created as YAML-files
-> > in accordance with DT schema. This commit replaces MIPS GIC legacy bare
-> > text binding with YAML file. As before the binding file states that the
-> > corresponding dts node is supposed to be compatible with MIPS Global
-> > Interrupt Controller indicated by the "mti,gic" compatible string and
-> > to provide a mandatory interrupt-controller and '#interrupt-cells'
-> > properties. There might be optional registers memory range,
-> > "mti,reserved-cpu-vectors" and "mti,reserved-ipi-vectors" properties
-> > specified.
-> > 
-> > MIPS GIC also includes a free-running global timer, per-CPU count/compare
-> > timers, and a watchdog. Since currently the GIC Timer is only supported the
-> > DT schema expects an IRQ and clock-phandler charged timer sub-node with
-> > "mti,mips-gic-timer" compatible string.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Alessandro Zummo <a.zummo@towertech.it>
-> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: linux-rtc@vger.kernel.org
-> > 
-> > ---
-> > 
-> > I don't really know who is the corresponding driver maintainer, so I
-> > added Paul to the maintainers property since he used to be looking for the
-> > MIPS arch and Thomas looking after it now. Any idea what email should be
-> > specified there instead?
-> > 
-> > Changelog v3:
-> > - Since timer sub-node has no unit-address, the node shouldn't be named
-> >   with one. So alter the MIPS GIC bindings to have a pure "timer"
-> >   sub-node.
-> > - Discard allOf: [ $ref: /schemas/interrupt-controller.yaml# ].
-> > - Since it's a conversion patch use GPL-2.0-only SPDX header.
-> > ---
-> >  .../interrupt-controller/mips-gic.txt         |  67 --------
-> >  .../interrupt-controller/mti,gic.yaml         | 148 ++++++++++++++++++
-> >  2 files changed, 148 insertions(+), 67 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mips-gic.txt
-> >  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
-> > 
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Note, I agree on extern keyword change can be postponed (it was in the original
+> code), but here you introduce a new code...
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
