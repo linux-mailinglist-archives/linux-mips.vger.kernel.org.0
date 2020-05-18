@@ -2,135 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B87771D8A21
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 23:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1C81D8A2E
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 23:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbgERVkE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 17:40:04 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:50314 "EHLO
+        id S1726925AbgERVmJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 17:42:09 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:50344 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726502AbgERVkE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 17:40:04 -0400
+        with ESMTP id S1726443AbgERVmJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 17:42:09 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 5B9488030875;
-        Mon, 18 May 2020 21:40:01 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 65401803080B;
+        Mon, 18 May 2020 21:42:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id KgkFFm6deoXq; Tue, 19 May 2020 00:39:56 +0300 (MSK)
-Date:   Tue, 19 May 2020 00:39:55 +0300
+        with ESMTP id 5IrPr8Pw3O58; Tue, 19 May 2020 00:42:01 +0300 (MSK)
+Date:   Tue, 19 May 2020 00:42:00 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Rob Herring <robh@kernel.org>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <linux-mips@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-mips@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 03/12] dt-bindings: i2c: dw: Add Baikal-T1 SoC I2C
- controller
-Message-ID: <20200518213955.wzw26wnvcr3qpnok@mobilestation>
-References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
- <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
- <20200510095019.20981-4-Sergey.Semin@baikalelectronics.ru>
- <20200518203319.GA14243@bogus>
+Subject: Re: [PATCH v2 3/7] dt-bindings: watchdog: dw-wdt: Add watchdog TOPs
+ array property
+Message-ID: <20200518214200.cmkzyzzwxm4kotte@mobilestation>
+References: <20200306132758.703FC8030704@mail.baikalelectronics.ru>
+ <20200510105807.880-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510105807.880-4-Sergey.Semin@baikalelectronics.ru>
+ <20200518204037.GA4909@bogus>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200518203319.GA14243@bogus>
+In-Reply-To: <20200518204037.GA4909@bogus>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 18, 2020 at 02:33:19PM -0600, Rob Herring wrote:
-> On Sun, May 10, 2020 at 12:50:09PM +0300, Serge Semin wrote:
-> > Add the "baikal,bt1-sys-i2c" compatible string to the DW I2C binding and
-> > make sure the reg property isn't required in this case because the
-> > controller is embedded into the Baikal-T1 System Controller. The rest of
-> > the DW APB I2C properties are compatible and can be freely used to describe
-> > the Baikal-T1 I2C controller dts-node.
-> 
-> Is there not a sub-range of the system controller with the I2C 
-> registers? I'd assume there is, so you can still have 'reg' even if 
-> Linux doesn't use it (currently).
-
-Yes, there is a range. It's just three access registers. Is it wrong to make the
-reg property being optional in this case since it can be accessed over syscon
-regmap? Do you suggest to get back the reg property being required for our
-device?
-
--Sergey
-
-> 
+On Mon, May 18, 2020 at 02:40:37PM -0600, Rob Herring wrote:
+> On Sun, May 10, 2020 at 01:58:03PM +0300, Serge Semin wrote:
+> > In case if DW Watchdog IP core is built with WDT_USE_FIX_TOP == false,
+> > a custom timeout periods are used to preset the timer counter. In
+> > this case that periods should be specified in a new "snps,watchdog-tops"
+> > property of the DW watchdog dts node.
 > > 
 > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 > > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > > Cc: Paul Burton <paulburton@kernel.org>
 > > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Cc: Wolfram Sang <wsa@the-dreams.de>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
 > > Cc: linux-mips@vger.kernel.org
 > > 
 > > ---
 > > 
-> > Rob, I had to remove your acked-by tag because of the changes introduced
-> > in v2 of the patch.
+> > Rob, I had to remove your Reviewed-by tag, since the patch needed
+> > to be updated a bit (see changelog).
 > > 
 > > Changelog v2:
-> > - Make the reg property being optional if it's Baikal-T1 System I2C DT
-> >   node.
+> > - Rearrange SoBs.
+> > - Move $ref to the root level of the "snps,watchdog-tops" property
+> >   so does the constraints.
+> > - Add default TOP values array.
+> > - Discard the label definition from the new bindings example.
 > > ---
-> >  .../devicetree/bindings/i2c/snps,designware-i2c.yaml | 12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> >  .../bindings/watchdog/snps,dw-wdt.yaml        | 33 +++++++++++++++++++
+> >  1 file changed, 33 insertions(+)
 > > 
-> > diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> > index 8d4e5fccbd1c..579964098eb9 100644
-> > --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> > +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> > @@ -21,6 +21,15 @@ allOf:
-> >        properties:
-> >          reg:
-> >            maxItems: 1
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          not:
-> > +            contains:
-> > +              const: baikal,bt1-sys-i2c
-> > +    then:
-> > +      required:
-> > +        - reg
+> > diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> > index 5bf6dc6377f3..cc741fb5a685 100644
+> > --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> > +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> > @@ -39,6 +39,24 @@ properties:
+> >      description: Phandle to the DW Watchdog reset lane
+> >      maxItems: 1
 > >  
-> >  properties:
-> >    compatible:
-> > @@ -31,6 +40,8 @@ properties:
-> >          items:
-> >            - const: mscc,ocelot-i2c
-> >            - const: snps,designware-i2c
-> > +      - description: Baikal-T1 SoC System I2C controller
-> > +        const: baikal,bt1-sys-i2c
-> >  
-> >    reg:
-> >      minItems: 1
-> > @@ -98,7 +109,6 @@ unevaluatedProperties: false
-> >  
-> >  required:
-> >    - compatible
-> > -  - reg
-> >    - "#address-cells"
-> >    - "#size-cells"
-> >    - interrupts
-> > -- 
-> > 2.25.1
-> > 
+> > +  snps,watchdog-tops:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    description: |
+> > +      DW APB Watchdog custom timer intervals - Timeout Period ranges (TOPs).
+> > +      Each TOP is a number loaded into the watchdog counter at the moment of
+> > +      the timer restart. The counter decrementing happens each tick of the
+> > +      reference clock. Therefore the TOPs array is equivalent to an array of
+> > +      the timer expiration intervals supported by the DW APB Watchdog. Note
+> > +      DW APB Watchdog IP-core might be synthesized with fixed TOP values,
+> > +      in which case this property is unnecessary with default TOPs utilized.
+> > +    default: [0x0001000 0x0002000 0x0004000 0x0008000
+> > +      0x0010000 0x0020000 0x0040000 0x0080000
+> > +      0x0100000 0x0200000 0x0400000 0x0800000
+> > +      0x1000000 0x2000000 0x4000000 0x8000000]
+> > +    items:
+> > +      minItems: 16
+> > +      maxItems: 16
+> 
+> Drop 'items' and move these up a level. That may have given you some 
+> issues, but I made some fixes recently.
+
+Ok. Thanks.
+
+-Sergey
+
+> 
+> With that,
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> Rob
