@@ -2,72 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F121D8717
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 20:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5741D8783
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 20:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729266AbgERS3u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 14:29:50 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:38676 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728709AbgERS3l (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 14:29:41 -0400
-Received: by mail-il1-f194.google.com with SMTP id j2so10878121ilr.5;
-        Mon, 18 May 2020 11:29:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=H9QUmqRboTMq2btI6W1PlOxGwrrB/TVm3hT9RDAxdio=;
-        b=dv/RyRgTjIqZKFw4/wVffVjI4wcgG6Tee3JUpGSOClDB8QnVwGVR8NqYWLlhLtwjEb
-         Gu9nqMn2IXRrLq0M3Ol9/b0DQq1JuqwA7BWDu8nEW617EA2/kuIF4VW1631VzpFLN/15
-         x86g7/YZFNyvLil9lx5mpbP7rGqKqmm4uDczvdtiW08XqOebfPOTD8tyCX3NHBCAA5lS
-         ENe3BLYLrPCQfMWDAleQ3vThc09IokJaXhUa0bmFUUTDgAhr4sQ28T8mAFI4gXqpDa7p
-         sK8w05oqVMwOFkBw1lq6ccLD68+4Q773TN/cIl1G/9Ep4EsCNxA3gsn8IcM5noRUNKW3
-         WFxQ==
-X-Gm-Message-State: AOAM530c4M2mGZb/S6AGqYDJoADu1tehptIOHdVLHW9w6z/0kZhQTXyc
-        LS7cK5qoZHgvkn1jx+mKqQ==
-X-Google-Smtp-Source: ABdhPJzxd7rr3zApzsbN80hNAQP6arGxepHH572CYOWpC/bwGTqxizgZRmX7IJW1q0n5+KM61tXsVA==
-X-Received: by 2002:a92:b743:: with SMTP id c3mr14630153ilm.92.1589826579249;
-        Mon, 18 May 2020 11:29:39 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id l9sm4203595iop.22.2020.05.18.11.29.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2020 11:29:38 -0700 (PDT)
-Received: (nullmailer pid 7054 invoked by uid 1000);
-        Mon, 18 May 2020 18:29:37 -0000
-Date:   Mon, 18 May 2020 12:29:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v1] dt-bindings: serial: qca,ar9330-uart: Convert to
- json-schema
-Message-ID: <20200518182937.GA6974@bogus>
-References: <20200510051522.6191-1-o.rempel@pengutronix.de>
+        id S1729366AbgERSsr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 14:48:47 -0400
+Received: from mga18.intel.com ([134.134.136.126]:27176 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728954AbgERSsq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 18 May 2020 14:48:46 -0400
+IronPort-SDR: hH7GOhgOu/8BxW1LJsBrficmOhzK65UIieCBFQq8/WeTR/38m4PUk1i759mDO26+cxJc+FNrh7
+ bMcC2yUF2vlA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 11:48:45 -0700
+IronPort-SDR: A0dNOJcp3XVBRer+3SvVGXusda3bUk5OmiTTHwwN4BXAPX4zWgYa/kiDwvCtGSiDC+7pgbW2fC
+ b75hGkYrg3kw==
+X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
+   d="scan'208";a="253140387"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 11:48:45 -0700
+From:   ira.weiny@intel.com
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable pagefault/preempt twice
+Date:   Mon, 18 May 2020 11:48:43 -0700
+Message-Id: <20200518184843.3029640-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200507150004.1423069-8-ira.weiny@intel.com>
+References: <20200507150004.1423069-8-ira.weiny@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200510051522.6191-1-o.rempel@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 10 May 2020 07:15:22 +0200, Oleksij Rempel wrote:
-> Convert the Qualcomm Atheros AR9330 High-Speed UART
-> Device Tree binding documentation to json-schema.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  .../bindings/serial/qca,ar9330-uart.txt       | 31 ------------
->  .../bindings/serial/qca,ar9330-uart.yaml      | 50 +++++++++++++++++++
->  2 files changed, 50 insertions(+), 31 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/serial/qca,ar9330-uart.txt
->  create mode 100644 Documentation/devicetree/bindings/serial/qca,ar9330-uart.yaml
-> 
+From: Ira Weiny <ira.weiny@intel.com>
 
-Applied, thanks!
+The kunmap_atomic clean up failed to remove one set of pagefault/preempt
+enables when vaddr is not in the fixmap.
+
+Fixes: bee2128a09e6 ("arch/kunmap_atomic: consolidate duplicate code")
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+---
+ arch/microblaze/mm/highmem.c | 5 +----
+ arch/mips/mm/highmem.c       | 5 +----
+ arch/powerpc/mm/highmem.c    | 5 +----
+ arch/sparc/mm/highmem.c      | 5 +----
+ 4 files changed, 4 insertions(+), 16 deletions(-)
+
+diff --git a/arch/microblaze/mm/highmem.c b/arch/microblaze/mm/highmem.c
+index ee8a422b2b76..92e0890416c9 100644
+--- a/arch/microblaze/mm/highmem.c
++++ b/arch/microblaze/mm/highmem.c
+@@ -57,11 +57,8 @@ void kunmap_atomic_high(void *kvaddr)
+ 	int type;
+ 	unsigned int idx;
+ 
+-	if (vaddr < __fix_to_virt(FIX_KMAP_END)) {
+-		pagefault_enable();
+-		preempt_enable();
++	if (vaddr < __fix_to_virt(FIX_KMAP_END))
+ 		return;
+-	}
+ 
+ 	type = kmap_atomic_idx();
+ 
+diff --git a/arch/mips/mm/highmem.c b/arch/mips/mm/highmem.c
+index 37e244cdb14e..8e8726992720 100644
+--- a/arch/mips/mm/highmem.c
++++ b/arch/mips/mm/highmem.c
+@@ -41,11 +41,8 @@ void kunmap_atomic_high(void *kvaddr)
+ 	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
+ 	int type __maybe_unused;
+ 
+-	if (vaddr < FIXADDR_START) { // FIXME
+-		pagefault_enable();
+-		preempt_enable();
++	if (vaddr < FIXADDR_START)
+ 		return;
+-	}
+ 
+ 	type = kmap_atomic_idx();
+ #ifdef CONFIG_DEBUG_HIGHMEM
+diff --git a/arch/powerpc/mm/highmem.c b/arch/powerpc/mm/highmem.c
+index 35071c2913f1..624b4438aff9 100644
+--- a/arch/powerpc/mm/highmem.c
++++ b/arch/powerpc/mm/highmem.c
+@@ -44,11 +44,8 @@ void kunmap_atomic_high(void *kvaddr)
+ {
+ 	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
+ 
+-	if (vaddr < __fix_to_virt(FIX_KMAP_END)) {
+-		pagefault_enable();
+-		preempt_enable();
++	if (vaddr < __fix_to_virt(FIX_KMAP_END))
+ 		return;
+-	}
+ 
+ 	if (IS_ENABLED(CONFIG_DEBUG_HIGHMEM)) {
+ 		int type = kmap_atomic_idx();
+diff --git a/arch/sparc/mm/highmem.c b/arch/sparc/mm/highmem.c
+index d237d902f9c3..6ff6e2a9f9b3 100644
+--- a/arch/sparc/mm/highmem.c
++++ b/arch/sparc/mm/highmem.c
+@@ -86,11 +86,8 @@ void kunmap_atomic_high(void *kvaddr)
+ 	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
+ 	int type;
+ 
+-	if (vaddr < FIXADDR_START) { // FIXME
+-		pagefault_enable();
+-		preempt_enable();
++	if (vaddr < FIXADDR_START)
+ 		return;
+-	}
+ 
+ 	type = kmap_atomic_idx();
+ 
+-- 
+2.25.1
+
