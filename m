@@ -2,74 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1041D7947
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 15:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD9D1D79A6
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 15:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727772AbgERNEx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 09:04:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47346 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726872AbgERNEw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 09:04:52 -0400
-Received: from linux-8ccs.fritz.box (p57a239f2.dip0.t-ipconnect.de [87.162.57.242])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD592207D3;
-        Mon, 18 May 2020 13:04:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589807091;
-        bh=bQOel0Owh5Jsy7D7It/KRrP7k71oDOZIFpOrOzQ9AhA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YqZBNW7MWDqiTSCxmly8oMsUsg4WN7C2JY9aDcakJBGzWq/UP00eyjCdLpfBridZ5
-         yEWjvi7dzrZTtKaXjd/2d6IuYc59csAsUVZSfRs5jq7Rr7rdKAsQZJF1Mc/s+At7dk
-         CA/eN9nd7O70bEOB0H0VqgRfIrUmH9kT0XamFLi8=
-Date:   Mon, 18 May 2020 15:04:44 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Roman Zippel <zippel@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, linux-fsdevel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH 29/29] module: move the set_fs hack for
- flush_icache_range to m68k
-Message-ID: <20200518130444.GA21096@linux-8ccs.fritz.box>
-References: <20200515143646.3857579-1-hch@lst.de>
- <20200515143646.3857579-30-hch@lst.de>
+        id S1726958AbgERNWP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 09:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726854AbgERNWP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 09:22:15 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B892C061A0C;
+        Mon, 18 May 2020 06:22:15 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id t7so4227869plr.0;
+        Mon, 18 May 2020 06:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9JqlTBOeFxsYXY8yGPgTaYilQ1ARPOh44vrjZNdkGyE=;
+        b=HszmquuAQ6p2kVYYydKaErfRawcJaiRS/7CbxuLC9KhmSnKtCqI4+G6vWNB4rgUfFh
+         aZ4VVrQKqwlOO7VBS6OcpnkTtp5dr0WvO+zaTbzgOh2OJZ4mFvIK9nh7yaS0eLQqBvEy
+         4JVyfAZTY8iDycXtAS/+2DGDMOApCrtXCh6tWcduRRy7YZ2sC1i2pb710vwLyYUIBUUQ
+         2tboclUUdVPR8YKqMcfDvt4FNYyNxrlofjhUe0WBT7nA6UxhdXhOQNbWrve8yFwQt/EX
+         mQPFEPm0UHqYhoJ+4DX5F/V4outXYRxdT1+lsmsP16S8SaFo+tMmQWPxIOC+3fx3jJX0
+         TUCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9JqlTBOeFxsYXY8yGPgTaYilQ1ARPOh44vrjZNdkGyE=;
+        b=VfxQVgjAqxbBRNvgYUauj7X1LCN2bWE55F4Hyj2GYkKpqrNzNi8Lu2WI12kurv83CR
+         BRiIxvp+oF/6CeT2WpdJb8S2YfqYfXARCxGulNkKR/BAp0wbRHeWZqrJ1Q2cgUgMkwiq
+         xYP8ptsdb1cPfpP2yUQuIcB2ZESfTMwzLpAcxiKeFQSCF92s1XfjPWO/WdM0iK3LrpHN
+         BKlzUusRGRkNXOPDQzWM1923YKo9Dbrjfhgeql3GF7giYRJCwa4JD8167JsPyvVC3SGB
+         a7W8nNZWk2J68MqzEmwjA7NvfhPAGlCKZbbZDvTeLE3AqtQGDBzv31JigR55eszUKo+2
+         VOrw==
+X-Gm-Message-State: AOAM533/bsdGcJTEMtTt0MP4au1YWdSRG34B2ycVIrGkewc9usALUPU8
+        iuKsJ1seAvP67nyZcwaeSGOTKuo6psTyOzSVFVk=
+X-Google-Smtp-Source: ABdhPJyQuof7a7R82aHDECbaNCZA+hGhIGZx2TejPySxbPfh5Al8aPTl9+HdTVytT7Yz0G/ynv4siiDFJUHd2c5xzPU=
+X-Received: by 2002:a17:902:930c:: with SMTP id bc12mr16440827plb.255.1589808134848;
+ Mon, 18 May 2020 06:22:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200515143646.3857579-30-hch@lst.de>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru> <20200515104758.6934-7-Sergey.Semin@baikalelectronics.ru>
+ <20200515123422.GZ185537@smile.fi.intel.com> <20200516142030.kburieaxjg4n7c42@mobilestation>
+ <20200518110004.GW1634618@smile.fi.intel.com> <CAHp75Vf268nfwJ4Bm+A+-CsqjBSHgKVmiiON=ffUd79DCOcE8Q@mail.gmail.com>
+ <20200518123242.xoosc4pcj7heo4he@mobilestation>
+In-Reply-To: <20200518123242.xoosc4pcj7heo4he@mobilestation>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 18 May 2020 16:22:03 +0300
+Message-ID: <CAHp75Vd3RUYw45i+TZ+R1wJquYJvjR+P3-qWe=v+QBk46C_zRQ@mail.gmail.com>
+Subject: Re: [PATCH v2 06/19] spi: dw: Discard static DW DMA slave structures
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Allison Randal <allison@lohutok.net>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+++ Christoph Hellwig [15/05/20 16:36 +0200]:
->flush_icache_range generally operates on kernel addresses, but for some
->reason m68k needed a set_fs override.  Move that into the m68k code
->insted of keeping it in the module loader.
+On Mon, May 18, 2020 at 3:32 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+> On Mon, May 18, 2020 at 02:38:13PM +0300, Andy Shevchenko wrote:
+> > On Mon, May 18, 2020 at 2:01 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Sat, May 16, 2020 at 05:20:30PM +0300, Serge Semin wrote:
+
+...
+
+> > > I'm not talking about stack, it's fine for me, what I'm talking about is *how*
+> > > they are being initialized. Read my message again carefully, please.
+> >
+> > And to avoid additional churn around this, the purpose is to show what
+> > Dreq number is in use actually for these transfers (that's why 0
+> > assignment is explicitly there and no counterpart Dreq filled).
 >
->Signed-off-by: Christoph Hellwig <hch@lst.de>
->Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
->Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
->---
-> arch/m68k/mm/cache.c | 4 ++++
-> kernel/module.c      | 8 --------
-> 2 files changed, 4 insertions(+), 8 deletions(-)
+> Sorry, but nothing persuasive so far. We still can remove their static definition
+> and explicitly assign zero or one to the src and dst request IDs on stack. I'll do
+> this in v3, since I have to send one anyway.
 
-Thanks for cleaning this up. For module.c:
+Right, I'm completely fine with it, thanks!
 
-Acked-by: Jessica Yu <jeyu@kernel.org>
-
+-- 
+With Best Regards,
+Andy Shevchenko
