@@ -2,112 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254621D7A3F
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 15:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F871D7A55
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 15:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgERNnM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 09:43:12 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:47766 "EHLO
+        id S1727840AbgERNsZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 09:48:25 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:47810 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726726AbgERNnM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 09:43:12 -0400
+        with ESMTP id S1726800AbgERNsZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 09:48:25 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id A21AA8030807;
-        Mon, 18 May 2020 13:43:08 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 354B1803080B;
+        Mon, 18 May 2020 13:48:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id P0oDyOYnwCBc; Mon, 18 May 2020 16:43:08 +0300 (MSK)
-Date:   Mon, 18 May 2020 16:43:06 +0300
+        with ESMTP id 1EWyMC3tE5jO; Mon, 18 May 2020 16:48:21 +0300 (MSK)
+Date:   Mon, 18 May 2020 16:48:20 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Clement Leger <cleger@kalray.eu>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 10/19] spi: dw: Use DMA max burst to set the request
- thresholds
-Message-ID: <20200518134306.7rvydoasv7pmxwxl@mobilestation>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-11-Sergey.Semin@baikalelectronics.ru>
- <20200515143842.GG1634618@smile.fi.intel.com>
- <20200516200133.wmaqnfjbr7234fzo@mobilestation>
- <20200518110343.GY1634618@smile.fi.intel.com>
- <20200518125253.r4fpr4mjflclqpym@mobilestation>
- <CAHp75VeMcv-hQViCANQARiNh0LwmugsDWk=MF1c5E3t7z5h02Q@mail.gmail.com>
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
+ if CPU_FREQ enabled
+Message-ID: <20200518134820.wedoumgbsllvhem6@mobilestation>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
+ <20200508154150.GB22247@alpha.franken.de>
+ <20200511133121.cz5axbwynhmqkx7x@mobilestation>
+ <20200515074827.6p5zx4sb3bmavjih@mobilestation>
+ <20200515210647.GA22922@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <CAHp75VeMcv-hQViCANQARiNh0LwmugsDWk=MF1c5E3t7z5h02Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200515210647.GA22922@alpha.franken.de>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 18, 2020 at 04:25:20PM +0300, Andy Shevchenko wrote:
-> On Mon, May 18, 2020 at 3:53 PM Serge Semin
-> <Sergey.Semin@baikalelectronics.ru> wrote:
-> > On Mon, May 18, 2020 at 02:03:43PM +0300, Andy Shevchenko wrote:
-> > > On Sat, May 16, 2020 at 11:01:33PM +0300, Serge Semin wrote:
-> > > > On Fri, May 15, 2020 at 05:38:42PM +0300, Andy Shevchenko wrote:
-> > > > > On Fri, May 15, 2020 at 01:47:49PM +0300, Serge Semin wrote:
+On Fri, May 15, 2020 at 11:06:47PM +0200, Thomas Bogendoerfer wrote:
+> On Fri, May 15, 2020 at 10:48:27AM +0300, Serge Semin wrote:
+> > Thomas,
+> > Could you take a look at my comment below so I could proceed with the
+> > patchset v3 development?
 > 
-> ...
+> I can't help, but using r4k clocksource with changing frequency is
+> probaly only usefull as a random generator. So IMHO the only two
+> options are disabling it or implement what arch/x86/kernel/tsc.c does.
 > 
-> > > > > >         struct dma_chan         *txchan;
-> > > > > > +       u32                     txburst;
-> > > > > >         struct dma_chan         *rxchan;
-> > > > > > +       u32                     rxburst;
-> > > > >
-> > > > > Leave u32 together, it may be optimal on 64-bit architectures where ABIs require padding.
-> > > >
-> > > > It's not like anyone cared about padding in this structure in the first place)
-> > >
-> > > I think I have been caring (to some extend).
-> >
-> > Well, If you have then instead of asking to rearrange just two members (which
-> > by the way finely grouped by the Tx-Rx affiliation) why not sending a
-> > patch, which would refactor the whole structure so to be optimal for the x64
-> > platforms? I don't really see why this gets very important for you seeing
-> > Mark is Ok with this. My current commit follows the common driver design
-> > including the DW SSI data members grouping. On the second thought I'll leave
-> > it as is then.
-> 
-> Again same issue here. What is really easy to do for you here, will
-> become a burden and additional churn to anybody else.
-> So, why not to minimize it in the first place? Same with comma in
-> another patch. Sorry, I really don't get it.
+> Thomas.
 
-If comma is more or less understandable (though adding it is absolutely
-redundant there and doesn't worth even a bit of time spending for the
-discussion), here you consider the patch from padding point of view.
-The driver developer didn't care about it, but did care about grouping the
-members in a corresponding way. The padding burden will be there anyway and
-should be fixed for the whole structure in an additional patch. Until then
-the way of grouping should be preserved.
+Thomas, could you proceed with the rest of the patches review?
+├─>[PATCH v2 16/20] bus: cdmm: Add MIPS R5 arch support
+├─>[PATCH v2 15/20] mips: cdmm: Add mti,mips-cdmm dtb node support
+├─>[PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
+├─>[PATCH v2 12/20] mips: MAAR: Add XPA mode support
+├─>[PATCH v2 10/20] mips: Add CONFIG/CONFIG6/Cause reg fields macro
+└─>[PATCH v2 09/20] mips: Add CP0 Write Merge config support
+
+It would be great if I fixed more comments in the next patchset version.
 
 -Sergey
 
 > 
 > -- 
-> With Best Regards,
-> Andy Shevchenko
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
