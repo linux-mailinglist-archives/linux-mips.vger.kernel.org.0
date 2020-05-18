@@ -2,123 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED28C1D85C8
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 20:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE3E1D8688
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 20:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731080AbgERSVE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 14:21:04 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:28552 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387786AbgERSU7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 14:20:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589826057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bgUgYOhXHVrOhAbBYxlnYyhMzdekwGrXn9fI5GzJacU=;
-        b=LHpMJHvTqR4bS7BOLhElvkKPeYOYcOnKdUDWTIN1DiiFEuBj1Wfpg5VAxD8lGTo7Xqpq6m
-        fzJDo8yH9BGRHSZPsnBWeWIc47ShwX3Uy5323Khj9iu9hDqS3kxwPZvxz9cZKg/557JR6C
-        Mcl3BWeu/IUouc77fUatFePTVcQ61I0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-266-kVRrudnWNEOZ64966nyy_Q-1; Mon, 18 May 2020 14:20:52 -0400
-X-MC-Unique: kVRrudnWNEOZ64966nyy_Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1731884AbgERSYp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 14:24:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46456 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729955AbgERSYo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 18 May 2020 14:24:44 -0400
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 428731005510;
-        Mon, 18 May 2020 18:20:48 +0000 (UTC)
-Received: from ovpn-115-234.rdu2.redhat.com (ovpn-115-234.rdu2.redhat.com [10.10.115.234])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6AF23398;
-        Mon, 18 May 2020 18:20:43 +0000 (UTC)
-Message-ID: <5260142047d0339e00d4a74865c2f0b7511c89f6.camel@redhat.com>
-Subject: Re: [PATCH 10/29] c6x: use asm-generic/cacheflush.h
-From:   Mark Salter <msalter@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Roman Zippel <zippel@linux-m68k.org>
-Cc:     linux-arch@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        Michal Simek <monstr@monstr.eu>, Jessica Yu <jeyu@kernel.org>,
-        linux-ia64@vger.kernel.org, linux-c6x-dev@linux-c6x.org,
-        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        x86@kernel.org, linux-um@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
-        openrisc@lists.librecores.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Mon, 18 May 2020 14:20:42 -0400
-In-Reply-To: <20200515143646.3857579-11-hch@lst.de>
-References: <20200515143646.3857579-1-hch@lst.de>
-         <20200515143646.3857579-11-hch@lst.de>
-Organization: Red Hat, Inc
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.2 (3.36.2-1.fc32) 
+        by mail.kernel.org (Postfix) with ESMTPSA id 0777B2083E;
+        Mon, 18 May 2020 18:24:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589826284;
+        bh=4enFI36R6diBkb+gKGhwExmrDx+XcgPAs342xvS1tyA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qMgzXTpgzcX/Oit85pI4z9hKpzqyrwpwUWnordtNIqxN+h2HwZo7eoTNmFui5ft58
+         zblAZ4ImaByNw4dTzjObfyDNCtWPKdoT9C8zO6JjO3XUcynjG32dAXQqfA62cnZZk8
+         UExxla2pZzcwYCkbGBzpUj46i9Ff4k84yCSJ6mv8=
+Received: by mail-oo1-f51.google.com with SMTP id c83so2261330oob.6;
+        Mon, 18 May 2020 11:24:44 -0700 (PDT)
+X-Gm-Message-State: AOAM530QYl6rZNmSik5fwpEROj2dz7/yPTx7RRjfDLaLqOlZ2nKS3vT/
+        2UHtk/h3zMuyyTq8HCmkNmGlgPUyskqEsbZKCA==
+X-Google-Smtp-Source: ABdhPJysCAF2m01NkslVAsSntTiUS/xi7dJDbBIKhlzFQaR4jWhennVyt0j+R7miFuq23VHXoO29v9QPs/K2DAV/BxA=
+X-Received: by 2002:a4a:9285:: with SMTP id i5mr13579789ooh.50.1589826283325;
+ Mon, 18 May 2020 11:24:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+References: <20200513104615.7905-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200513104615.7905-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200514130321.GB8436@bogus> <3248d380-1d08-3088-8d18-0373a8a5aef9@linux.intel.com>
+In-Reply-To: <3248d380-1d08-3088-8d18-0373a8a5aef9@linux.intel.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 18 May 2020 12:24:31 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL3g-QYMF0PMSuHeoaZ5x88fg4TbzVbDUO6=ugxEZRpbQ@mail.gmail.com>
+Message-ID: <CAL_JsqL3g-QYMF0PMSuHeoaZ5x88fg4TbzVbDUO6=ugxEZRpbQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: mtd: Add Nand Flash Controller
+ support for Intel LGM SoC
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh R <vigneshr@ti.com>, Arnd Bergmann <arnd@arndb.de>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "hauke.mehrtens" <hauke.mehrtens@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 2020-05-15 at 16:36 +0200, Christoph Hellwig wrote:
-> C6x needs almost no cache flushing routines of its own.  Rely on
-> asm-generic/cacheflush.h for the defaults.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/c6x/include/asm/cacheflush.h | 19 +------------------
->  1 file changed, 1 insertion(+), 18 deletions(-)
-> 
-> diff --git a/arch/c6x/include/asm/cacheflush.h b/arch/c6x/include/asm/cacheflush.h
-> index 4540b40475e6c..10922d528de6d 100644
-> --- a/arch/c6x/include/asm/cacheflush.h
-> +++ b/arch/c6x/include/asm/cacheflush.h
-> @@ -16,21 +16,6 @@
->  #include <asm/page.h>
->  #include <asm/string.h>
->  
-> -/*
-> - * virtually-indexed cache management (our cache is physically indexed)
-> - */
-> -#define flush_cache_all()			do {} while (0)
-> -#define flush_cache_mm(mm)			do {} while (0)
-> -#define flush_cache_dup_mm(mm)			do {} while (0)
-> -#define flush_cache_range(mm, start, end)	do {} while (0)
-> -#define flush_cache_page(vma, vmaddr, pfn)	do {} while (0)
-> -#define flush_cache_vmap(start, end)		do {} while (0)
-> -#define flush_cache_vunmap(start, end)		do {} while (0)
-> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-> -#define flush_dcache_page(page)			do {} while (0)
-> -#define flush_dcache_mmap_lock(mapping)		do {} while (0)
-> -#define flush_dcache_mmap_unlock(mapping)	do {} while (0)
-> -
->  /*
->   * physically-indexed cache management
->   */
-> @@ -49,14 +34,12 @@ do {								  \
->  			(unsigned long) page_address(page) + PAGE_SIZE)); \
->  } while (0)
->  
-> -
->  #define copy_to_user_page(vma, page, vaddr, dst, src, len) \
->  do {						     \
->  	memcpy(dst, src, len);			     \
->  	flush_icache_range((unsigned) (dst), (unsigned) (dst) + (len)); \
->  } while (0)
->  
-> -#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
-> -	memcpy(dst, src, len)
-> +#include <asm-generic/cacheflush.h>
->  
->  #endif /* _ASM_C6X_CACHEFLUSH_H */
+On Thu, May 14, 2020 at 8:06 PM Ramuthevar, Vadivel MuruganX
+<vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
+>
+> Hi Rob,
+>
+>     Thank you for the review comments...
+>
+> On 14/5/2020 9:03 pm, Rob Herring wrote:
+> > On Wed, May 13, 2020 at 06:46:14PM +0800, Ramuthevar,Vadivel MuruganX wrote:
+> >> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> >>
+> >> Add YAML file for dt-bindings to support NAND Flash Controller
+> >> on Intel's Lightning Mountain SoC.
+> >>
+> >> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> >> ---
+> >>   .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 83 ++++++++++++++++++++++
+> >>   1 file changed, 83 insertions(+)
+> >>   create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
 
-Acked-by: Mark Salter <msalter@redhat.com>
+> >> +      clocks = <&cgu0 125>;
+> >> +      dma-names = "tx", "rx";
+> >> +      #address-cells = <1>;
+> >> +      #size-cells = <0>;
+> >> +      #clock-cells = <1>;
+> >
+> > This is a clock provider too?
+> Yes, it is getting clock from CGU for nand-controller.
 
+That is a clock client (e.g. 'clocks' property), not a provider. The
+CGU is the provider.
 
+Rob
