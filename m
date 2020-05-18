@@ -2,150 +2,164 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5741D8783
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 20:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F191D883B
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 21:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729366AbgERSsr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 14:48:47 -0400
-Received: from mga18.intel.com ([134.134.136.126]:27176 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728954AbgERSsq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 14:48:46 -0400
-IronPort-SDR: hH7GOhgOu/8BxW1LJsBrficmOhzK65UIieCBFQq8/WeTR/38m4PUk1i759mDO26+cxJc+FNrh7
- bMcC2yUF2vlA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 11:48:45 -0700
-IronPort-SDR: A0dNOJcp3XVBRer+3SvVGXusda3bUk5OmiTTHwwN4BXAPX4zWgYa/kiDwvCtGSiDC+7pgbW2fC
- b75hGkYrg3kw==
-X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
-   d="scan'208";a="253140387"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 11:48:45 -0700
-From:   ira.weiny@intel.com
-To:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
+        id S1728165AbgERTaz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 15:30:55 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:49884 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728131AbgERTaz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 15:30:55 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 24F10803080B;
+        Mon, 18 May 2020 19:30:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Er_X0I5c0BGq; Mon, 18 May 2020 22:30:47 +0300 (MSK)
+Date:   Mon, 18 May 2020 22:30:46 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Rob Herring <robh@kernel.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Dan Williams <dan.j.williams@intel.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
-        Christian Koenig <christian.koenig@amd.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable pagefault/preempt twice
-Date:   Mon, 18 May 2020 11:48:43 -0700
-Message-Id: <20200518184843.3029640-1-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200507150004.1423069-8-ira.weiny@intel.com>
-References: <20200507150004.1423069-8-ira.weiny@intel.com>
+        <linux-mips@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] dt-bindings: dma: dw: Add max burst transaction
+ length property
+Message-ID: <20200518193046.tud4x7i3mv44rejy@mobilestation>
+References: <20200511213531.wnywlljiulvndx6s@mobilestation>
+ <20200512090804.GR185537@smile.fi.intel.com>
+ <20200512114946.x777yb6bhe22ccn5@mobilestation>
+ <20200512123840.GY185537@smile.fi.intel.com>
+ <20200515060911.GF333670@vkoul-mobl>
+ <20200515105137.GK185537@smile.fi.intel.com>
+ <20200515105658.GR333670@vkoul-mobl>
+ <20200515111112.4umynrpgzjnca223@mobilestation>
+ <20200517174739.uis3wfievdcmtsxj@mobilestation>
+ <20200518173003.GA13764@bogus>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200518173003.GA13764@bogus>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+On Mon, May 18, 2020 at 11:30:03AM -0600, Rob Herring wrote:
+> On Sun, May 17, 2020 at 08:47:39PM +0300, Serge Semin wrote:
+> > On Fri, May 15, 2020 at 02:11:13PM +0300, Serge Semin wrote:
+> > > On Fri, May 15, 2020 at 04:26:58PM +0530, Vinod Koul wrote:
+> > > > On 15-05-20, 13:51, Andy Shevchenko wrote:
+> > > > > On Fri, May 15, 2020 at 11:39:11AM +0530, Vinod Koul wrote:
+> > > > > > On 12-05-20, 15:38, Andy Shevchenko wrote:
+> > > > > > > On Tue, May 12, 2020 at 02:49:46PM +0300, Serge Semin wrote:
+> > > > > > > > On Tue, May 12, 2020 at 12:08:04PM +0300, Andy Shevchenko wrote:
+> > > > > > > > > On Tue, May 12, 2020 at 12:35:31AM +0300, Serge Semin wrote:
+> > > > > > > > > > On Tue, May 12, 2020 at 12:01:38AM +0300, Andy Shevchenko wrote:
+> > > > > > > > > > > On Mon, May 11, 2020 at 11:05:28PM +0300, Serge Semin wrote:
+> > > > > > > > > > > > On Fri, May 08, 2020 at 02:12:42PM +0300, Andy Shevchenko wrote:
+> > > > > > > > > > > > > On Fri, May 08, 2020 at 01:53:00PM +0300, Serge Semin wrote:
+> > > > > 
+> > > > > ...
+> > > > > 
+> > > > > > > I leave it to Rob and Vinod.
+> > > > > > > It won't break our case, so, feel free with your approach.
+> > > > > > 
+> > > > > > I agree the DT is about describing the hardware and looks like value of
+> > > > > > 1 is not allowed. If allowed it should be added..
+> > > > > 
+> > > > > It's allowed at *run time*, it's illegal in *pre-silicon stage* when
+> > > > > synthesizing the IP.
+> > > > 
+> > > > Then it should be added ..
+> > > 
+> > > Vinod, max-burst-len is "MAXimum" burst length not "run-time or current or any
+> > > other" burst length. It's a constant defined at the IP-core synthesis stage and
+> > > according to the Data Book, MAX burst length can't be 1. The allowed values are
+> > > exactly as I described in the binding [4, 8, 16, 32, ...]. MAX burst length
+> > > defines the upper limit of the run-time burst length. So setting it to 1 isn't
+> > > about describing a hardware, but using DT for the software convenience.
+> > > 
+> > > -Sergey
+> > 
+> > Vinod, to make this completely clear. According to the DW DMAC data book:
+> > - In general, run-time parameter of the DMA transaction burst length (set in
+> >   the SRC_MSIZE/DST_MSIZE fields of the channel control register) may belong
+> >   to the set [1, 4, 8, 16, 32, 64, 128, 256].
+> > - Actual upper limit of the burst length run-time parameter is limited by a
+> >   constant defined at the IP-synthesize stage (it's called DMAH_CHx_MAX_MULT_SIZE)
+> >   and this constant belongs to the set [4, 8, 16, 32, 64, 128, 256]. (See, no 1
+> >   in this set).
+> > 
+> > So the run-time burst length in a case of particular DW DMA controller belongs
+> > to the range:
+> > 1 <= SRC_MSIZE <= DMAH_CHx_MAX_MULT_SIZE
+> > and
+> > 1 <= DST_MSIZE <= DMAH_CHx_MAX_MULT_SIZE
+> > 
+> > See. No mater which DW DMA controller we get each of them will at least support
+> > the burst length of 1 and 4 transfer words. This is determined by design of the
+> > DW DMA controller IP since DMAH_CHx_MAX_MULT_SIZE constant set starts with 4.
+> > 
+> > In this patch I suggest to add the max-burst-len property, which specifies
+> > the upper limit for the run-time burst length. Since the maximum burst length
+> > capable to be set to the SRC_MSIZE/DST_MSIZE fields of the DMA channel control
+> > register is determined by the DMAH_CHx_MAX_MULT_SIZE constant (which can't be 1
+> > by the DW DMA IP design), max-burst-len property as being also responsible for
+> > the maximum burst length setting should be associated with DMAH_CHx_MAX_MULT_SIZE
+> > thus should belong to the same set [4, 8, 16, 32, 64, 128, 256].
+> > 
+> > So 1 shouldn't be in the enum of the max-burst-len property constraint, because
+> > hardware doesn't support such limitation by design, while setting 1 as
+> > max-burst-len would mean incorrect description of the DMA controller.
+> > 
+> > Vinod, could you take a look at the info I provided above and say your final word
+> > whether 1 should be really allowed to be in the max-burst-len enum constraints?
+> > I'll do as you say in the next version of the patchset.
+> 
+> I generally think the synthesis time IP configuration should be implied 
+> by the compatible string which is why we have SoC specific compatible 
+> strings (Of course I dream for IP vendors to make all that discoverable 
+> which is only occasionally the case). There are exceptions to this. If 
+> one SoC has the same IP configured in different ways, then we'd probably 
+> have properties for the differences.
 
-The kunmap_atomic clean up failed to remove one set of pagefault/preempt
-enables when vaddr is not in the fixmap.
+Hm, AFAIU from what you said the IP configuration specific to a particular
+SoC must be determined by the compatible string and that configuration parameters
+should be hidden somewhere in the driver internals for instance in the platform
+data structure. In case if there are several versions of the same IP are embedded
+into the SoC, then the differences can be described by the DT properties. Right?
+If I am right, then that's weird. A lot of the currently available platforms (and
+drivers) don't follow that rule and just specify the generic IP compatible string
+and describe their IP synthesis parameters by the DT properties.
 
-Fixes: bee2128a09e6 ("arch/kunmap_atomic: consolidate duplicate code")
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
----
- arch/microblaze/mm/highmem.c | 5 +----
- arch/mips/mm/highmem.c       | 5 +----
- arch/powerpc/mm/highmem.c    | 5 +----
- arch/sparc/mm/highmem.c      | 5 +----
- 4 files changed, 4 insertions(+), 16 deletions(-)
+> 
+> As to whether h/w configuration is okay in DT, the answer is yes. The 
+> question is whether it is determined by SoC, board, OS and also who 
+> would set it and how often. Something tuned per board and independent of 
+> the OS/user is the ideal example.
 
-diff --git a/arch/microblaze/mm/highmem.c b/arch/microblaze/mm/highmem.c
-index ee8a422b2b76..92e0890416c9 100644
---- a/arch/microblaze/mm/highmem.c
-+++ b/arch/microblaze/mm/highmem.c
-@@ -57,11 +57,8 @@ void kunmap_atomic_high(void *kvaddr)
- 	int type;
- 	unsigned int idx;
- 
--	if (vaddr < __fix_to_virt(FIX_KMAP_END)) {
--		pagefault_enable();
--		preempt_enable();
-+	if (vaddr < __fix_to_virt(FIX_KMAP_END))
- 		return;
--	}
- 
- 	type = kmap_atomic_idx();
- 
-diff --git a/arch/mips/mm/highmem.c b/arch/mips/mm/highmem.c
-index 37e244cdb14e..8e8726992720 100644
---- a/arch/mips/mm/highmem.c
-+++ b/arch/mips/mm/highmem.c
-@@ -41,11 +41,8 @@ void kunmap_atomic_high(void *kvaddr)
- 	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
- 	int type __maybe_unused;
- 
--	if (vaddr < FIXADDR_START) { // FIXME
--		pagefault_enable();
--		preempt_enable();
-+	if (vaddr < FIXADDR_START)
- 		return;
--	}
- 
- 	type = kmap_atomic_idx();
- #ifdef CONFIG_DEBUG_HIGHMEM
-diff --git a/arch/powerpc/mm/highmem.c b/arch/powerpc/mm/highmem.c
-index 35071c2913f1..624b4438aff9 100644
---- a/arch/powerpc/mm/highmem.c
-+++ b/arch/powerpc/mm/highmem.c
-@@ -44,11 +44,8 @@ void kunmap_atomic_high(void *kvaddr)
- {
- 	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
- 
--	if (vaddr < __fix_to_virt(FIX_KMAP_END)) {
--		pagefault_enable();
--		preempt_enable();
-+	if (vaddr < __fix_to_virt(FIX_KMAP_END))
- 		return;
--	}
- 
- 	if (IS_ENABLED(CONFIG_DEBUG_HIGHMEM)) {
- 		int type = kmap_atomic_idx();
-diff --git a/arch/sparc/mm/highmem.c b/arch/sparc/mm/highmem.c
-index d237d902f9c3..6ff6e2a9f9b3 100644
---- a/arch/sparc/mm/highmem.c
-+++ b/arch/sparc/mm/highmem.c
-@@ -86,11 +86,8 @@ void kunmap_atomic_high(void *kvaddr)
- 	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
- 	int type;
- 
--	if (vaddr < FIXADDR_START) { // FIXME
--		pagefault_enable();
--		preempt_enable();
-+	if (vaddr < FIXADDR_START)
- 		return;
--	}
- 
- 	type = kmap_atomic_idx();
- 
--- 
-2.25.1
+So does this mean that I have to allow the max-burst-len property to be 1 even
+though in accordance with the DW DMA Data Book the upper limit of the
+burst-length will never be 1, but will always start with 4? By allowing the
+upper limit to be 1 we wouldn't provide the h/w configuration (hardware has
+already been configured with maximum burst length parameter DMAH_CHx_MAX_MULT_SIZE
+on the IP synthesis stage), but would setup an artificial constraints on the
+maximum allowed burst length. Are you ok with this and 1 should be permitted
+anyway?
 
+-Sergey
+
+> 
+> Rob
