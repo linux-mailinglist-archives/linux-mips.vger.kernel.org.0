@@ -2,108 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2DF1D7914
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 15:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1041D7947
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 15:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726895AbgERNAn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 09:00:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45268 "EHLO mail.kernel.org"
+        id S1727772AbgERNEx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 09:04:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47346 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726726AbgERNAn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 09:00:43 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        id S1726872AbgERNEw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 18 May 2020 09:04:52 -0400
+Received: from linux-8ccs.fritz.box (p57a239f2.dip0.t-ipconnect.de [87.162.57.242])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 31E71207D3;
-        Mon, 18 May 2020 13:00:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AD592207D3;
+        Mon, 18 May 2020 13:04:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589806842;
-        bh=ptRx364m99gLe8b4PaIDcBg1wnlIqZ8QZv5aW8MUiz8=;
+        s=default; t=1589807091;
+        bh=bQOel0Owh5Jsy7D7It/KRrP7k71oDOZIFpOrOzQ9AhA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uQzpbw6R9xMhb5YxMbk+I5cOwk4cKSqiUvPIAPk2g2tn7hxb6qM7jfsQuxZssQb1a
-         hfZSCeSH6jLbjicpFxDTPaELYYSymjlg9sBJW17riIRjSiRtzxwlF/6Ft5xZ2+UF5A
-         mM01N8gkmEJ73LftdVnTgDRKvrQao8c184wQabzQ=
-Date:   Mon, 18 May 2020 14:00:40 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        b=YqZBNW7MWDqiTSCxmly8oMsUsg4WN7C2JY9aDcakJBGzWq/UP00eyjCdLpfBridZ5
+         yEWjvi7dzrZTtKaXjd/2d6IuYc59csAsUVZSfRs5jq7Rr7rdKAsQZJF1Mc/s+At7dk
+         CA/eN9nd7O70bEOB0H0VqgRfIrUmH9kT0XamFLi8=
+Date:   Mon, 18 May 2020 15:04:44 +0200
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Eddie James <eajames@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Raymond Tan <raymond.tan@intel.com>,
-        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 13/19] spi: dw: Move Non-DMA code to the DW PCIe-SPI
- driver
-Message-ID: <20200518130039.GG8699@sirena.org.uk>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-14-Sergey.Semin@baikalelectronics.ru>
- <20200515145153.GJ1634618@smile.fi.intel.com>
- <20200516201724.7q5uhxmzpr6xjooj@mobilestation>
- <20200518125850.jnhaqlr2ticu3ivs@mobilestation>
+        Roman Zippel <zippel@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linux-fsdevel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH 29/29] module: move the set_fs hack for
+ flush_icache_range to m68k
+Message-ID: <20200518130444.GA21096@linux-8ccs.fritz.box>
+References: <20200515143646.3857579-1-hch@lst.de>
+ <20200515143646.3857579-30-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vSsTm1kUtxIHoa7M"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20200518125850.jnhaqlr2ticu3ivs@mobilestation>
-X-Cookie: If in doubt, mumble.
+In-Reply-To: <20200515143646.3857579-30-hch@lst.de>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
++++ Christoph Hellwig [15/05/20 16:36 +0200]:
+>flush_icache_range generally operates on kernel addresses, but for some
+>reason m68k needed a set_fs override.  Move that into the m68k code
+>insted of keeping it in the module loader.
+>
+>Signed-off-by: Christoph Hellwig <hch@lst.de>
+>Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>---
+> arch/m68k/mm/cache.c | 4 ++++
+> kernel/module.c      | 8 --------
+> 2 files changed, 4 insertions(+), 8 deletions(-)
 
---vSsTm1kUtxIHoa7M
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for cleaning this up. For module.c:
 
-On Mon, May 18, 2020 at 03:58:50PM +0300, Serge Semin wrote:
-> On Sat, May 16, 2020 at 11:17:25PM +0300, Serge Semin wrote:
+Acked-by: Jessica Yu <jeyu@kernel.org>
 
-> > Only if we rename the spi-dw.c to spi-dw-core.c. Such modification will break all
-> > the pending patches merging. Mark, are you ok with this?
-
-> Mark, could give me your comment regarding this renaming? Are you ok with this?
-
-Either way is fine for me.
-
---vSsTm1kUtxIHoa7M
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7ChvcACgkQJNaLcl1U
-h9AEsAf+Mvi0DahdPQXvlc5p6J2WfVIC/Nfkr+2hZJdtns7zXQVZpaIxk+465AR5
-6GHgGMkKnqIjRRx3MuoHR4CHa8+JX9F0yfxl53XICxtFoCbT7gjOmHEtwylQf7pY
-hx3jpxE58Eeu8QhelS7udCNBSOq+wHu250YLde1MzGEoHUUdsYCIvmDCfsY3/2bU
-REDvwVOdRHapxoBbg9TXAVww9Py7J++EBbYW9SLwqUGz1r8rZN4Hu9MasIDTzt4w
-+aBUrl9JoIRjL/ll6uIgj87+vkl2qelmTQVKEl/dbkhMCfjCii60gucyjvMi0Dte
-yrd7rPguLhaezc9A+kHaMjJua6jW0w==
-=TYaY
------END PGP SIGNATURE-----
-
---vSsTm1kUtxIHoa7M--
