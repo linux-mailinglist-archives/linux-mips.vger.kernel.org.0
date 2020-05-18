@@ -2,86 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E461D7184
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 09:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0671D720E
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 09:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbgERHIM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 03:08:12 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:50554 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726676AbgERHIM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 03:08:12 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx391YNMJevgA2AA--.0S2;
-        Mon, 18 May 2020 15:08:09 +0800 (CST)
-From:   Zhi Li <lizhi01@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] MIPS: Remove useless parameter of bootcmdline_init()
-Date:   Mon, 18 May 2020 15:08:08 +0800
-Message-Id: <1589785688-10426-1-git-send-email-lizhi01@loongson.cn>
-X-Mailer: git-send-email 2.1.0
+        id S1726872AbgERHlr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 03:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726573AbgERHlr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 03:41:47 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA413C05BD09
+        for <linux-mips@vger.kernel.org>; Mon, 18 May 2020 00:41:45 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id n18so4582661pfa.2
+        for <linux-mips@vger.kernel.org>; Mon, 18 May 2020 00:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vl/yNZjcMD1c/8w4IMtaECL/pvXnUWzfoZmc+ar026A=;
+        b=TmBG6giWbwVIC9tUDSKwKQOc4eTIGJj/0THBrYvUXtbMCfasbOJRefuXD05s/PdWbG
+         vcdMKoExWaqNYfmgWV50I9uKpVjT42WbvR4GsvbfEZTXY5nklrevHHtWcgls9BoAbaj3
+         S2YXt5PljMFoycc63XMFNy1sYf4C4nNR1YYvllTLMQU8L5JMqUhApGllKocQU5ia74Ct
+         fx5k+HIRPX5cvfeAQ0x2tnZhQF1Hyly1PCjR/CydVJMBKsKKWpMiIw9KaWzbNpXVzcAs
+         0bVI27oGcFakKTl26QXyJKfFsBy0yK8FwdKsrf0g3e4Dji9QGEQ/KGIKK7D+hFlBnubC
+         8aZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vl/yNZjcMD1c/8w4IMtaECL/pvXnUWzfoZmc+ar026A=;
+        b=apipC7SQvO7oD+GYsbKoJiM0UlEOWjv70flNz5aLwe18LwSa9/UVed5kP5hRFijTEX
+         K1g6bAg6ItsjQvMD4a2zCPs0LQHzW6G7bMCNYXF3II5V50oSIWlf1V/jWFh5Y57alo8+
+         fi38Sg9j2bdsbVeYCArvVbsujzUqC1Q7EHI5CVO8hb9v3coM3Bv8+IHDsO+uWK03egQh
+         EPYfLmW8I9DdXcz7RpkqFndetL18QCZXvCmqvp7xNpaccuIMwOdxqzoCxpD36YQ4o/jl
+         o1VDcaEJb//mAJwU5ABEmNbIhKPNOVbnkz07rLA0qhNxRSJQHulW4DxxFWmk0hKPomsi
+         kCcA==
+X-Gm-Message-State: AOAM530ziot81kFFdghj0XH1YzPvZONSQH2KAbkhn71wSrev/MSjgaUg
+        mjRcVPYrRB5xw0pIrJceits4iQ==
+X-Google-Smtp-Source: ABdhPJxzGzk9dwqPrwn0vS7w9SSlMvWCIUihqqEg7nXaXOZHfOXoO1dVlbeIPRntGnTxGam1CoQggA==
+X-Received: by 2002:a63:de0c:: with SMTP id f12mr13551773pgg.172.1589787705397;
+        Mon, 18 May 2020 00:41:45 -0700 (PDT)
+Received: from localhost ([122.167.130.103])
+        by smtp.gmail.com with ESMTPSA id p62sm7994891pfb.93.2020.05.18.00.41.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 18 May 2020 00:41:44 -0700 (PDT)
+Date:   Mon, 18 May 2020 13:11:42 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw
+ setting
+Message-ID: <20200518074142.c6kbofpdlxro2pjz@vireshk-i7>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-21-Sergey.Semin@baikalelectronics.ru>
+ <c5109483-4c14-1a0c-efa9-51edf01c12de@intel.com>
+ <20200516125203.et5gkv6ullkerjyd@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dx391YNMJevgA2AA--.0S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jr1rGr48try7Gr4rXw4UXFb_yoWDZrXEqr
-        17Jw4kC3y293WY9rW7Z343GrWFywsav3ZIqF1fKw4Yya4fAw1UArZ5Xa4Svrn8ur4ayFWa
-        kFZayF40grZrWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
-        648v4I1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUcZ2-UUUUU=
-X-CM-SenderInfo: xol2xxqqr6z05rqj20fqof0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200516125203.et5gkv6ullkerjyd@mobilestation>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The parameter "cmdline_p" is useless in bootcmdline_init()，remove it.
+On 16-05-20, 15:52, Serge Semin wrote:
+> On Fri, May 15, 2020 at 05:58:47PM +0200, Rafael J. Wysocki wrote:
+> > > @@ -2554,7 +2554,7 @@ static int cpufreq_boost_set_sw(int state)
+> > >   			break;
+> > >   	}
+> > > -	return ret;
+> > > +	return ret < 0 ? ret : 0;
+> > >   }
+> > >   int cpufreq_boost_trigger_state(int state)
+> > 
+> > IMO it is better to update the caller of this function to handle the
+> > positive value possibly returned by it correctly.
+> 
+> Could you elaborate why? Viresh seems to be ok with this solution.
 
-Signed-off-by: Zhi Li <lizhi01@loongson.cn>
----
+And it is absolutely fine for Rafael to not agree with it :)
 
-v2:
-   - Remove "the" before "bootcmdline_init()" in the patch subject.
+> As I see it the caller doesn't expect the positive value returned by the
+> original freq_qos_update_request(). It just doesn't need to know whether the
+> effective policy has been updated or not, it only needs to make sure the
+> operations has been successful. Moreover the positive value is related only
+> to the !last! active policy, which doesn't give the caller a full picture
+> of the policy change anyway. So taking all of these into account I'd leave the
+> fix as is.
 
- arch/mips/kernel/setup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Rafael: This function is called via a function pointer, which can call
+this or a platform dependent routine (like in acpi-cpufreq.c), and it
+would be reasonable IMO for the return of that callback to only look
+for 0 or negative values, as is generally done in the kernel. And so
+this solution looked okay to me as the positive return is coming from
+the implementation detail here.
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 8db533c..7b537fa 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -575,7 +575,7 @@ static int __init bootcmdline_scan_chosen(unsigned long node, const char *uname,
- 
- #endif /* CONFIG_OF_EARLY_FLATTREE */
- 
--static void __init bootcmdline_init(char **cmdline_p)
-+static void __init bootcmdline_init(void)
- {
- 	bool dt_bootargs = false;
- 
-@@ -658,7 +658,7 @@ static void __init arch_mem_init(char **cmdline_p)
- 	plat_mem_setup();
- 	memblock_set_bottom_up(true);
- 
--	bootcmdline_init(cmdline_p);
-+	bootcmdline_init();
- 	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
- 	*cmdline_p = command_line;
- 
 -- 
-2.1.0
-
+viresh
