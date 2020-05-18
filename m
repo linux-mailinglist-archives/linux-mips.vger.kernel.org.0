@@ -2,106 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CECE1D894A
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 22:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847701D8953
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 22:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbgERUew (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 16:34:52 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:35910 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726367AbgERUew (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 16:34:52 -0400
-Received: by mail-io1-f67.google.com with SMTP id k6so12201697iob.3;
-        Mon, 18 May 2020 13:34:51 -0700 (PDT)
+        id S1726367AbgERUfq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 16:35:46 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:43242 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726358AbgERUfq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 16:35:46 -0400
+Received: by mail-io1-f68.google.com with SMTP id h10so12150358iob.10;
+        Mon, 18 May 2020 13:35:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FPMBwfiZVk3j4Ctqnv2H9eGRXj7eNBfK/u6YKzz2+rM=;
-        b=JDj+W0mErdE2JQeolvKrKmQqHPG50OfY7u+9jdrW9MZf5JpO849iCmz0GVUpxsB9xx
-         VxHIKX0shWIfWx06Iw1JxboLoB/Nya4+GqaiOUqKsBOoCqx3YWtyCGEwQjZtNOGeyUwq
-         9pSLsdAZ/xQVS/D9W2XgeitLjCPhPi9PdpDoGAuCFgsiDQPKTIMcX1kqXYKe5dm3NNQl
-         0vT5vJoxmK8jNb1QaRgB54E0qqTIvjOnTXu6VFjPhwGW2KCPIDS25n3pI1AtJo7iDQc+
-         M7kUhQNOgzDIMqqAalgY5GzlgHEZ2V0+Ez/7YDtR+7nX6yN8AsOdDz/eO9SyLIZB0ojS
-         maRw==
-X-Gm-Message-State: AOAM532Hc5/xAsf5ZNOit3shQQjOntDO8Y+BAL78CfrKqUlYJxtdlv2m
-        yMJswSqkdMyXRxNNbFi5gw==
-X-Google-Smtp-Source: ABdhPJxPAQ/6uPUZ1zru5yJ1OYVX0KAbu5hmv/CV4Yru4mW2940N2L7A/OQbxrTC3KlWuB7X6GzEYg==
-X-Received: by 2002:a6b:d219:: with SMTP id q25mr14825078iob.202.1589834091409;
-        Mon, 18 May 2020 13:34:51 -0700 (PDT)
+        bh=JjYSpin899Gjim3f+QGoxZ4qTSeE2J/qf7iPbcWzPDE=;
+        b=DbucJSVz/4utqvp0B/5RNXmetr0hh1ZPSXUzoteNtDDFY7S+RpD6PGwORIdeuAuKXB
+         8EBLZ+uJ/IWlACHel13d9gScuv/ODr13F769KKcPO7loQcr1r4n1j5IQLtB3F0rcZo4z
+         Ixe2nYAZzN41Lgw3DV4/Bp5zf3eptPVOWC2y6jTHzKMFxDT8UMU22JO8X6FRPBdHZAPD
+         kmUDmL6g8ftfjWO6MYe5lyaFLNF4SCGi8xIMhgJoKhAfDFzHZ++neRrhuJanjOLrcHyv
+         HDca5vZEr02V2CDItuWTbLzq/l3QSYp7zYaZ9nbTKYgv746qTlRuEu8PBz2DM68C+o4h
+         VMCg==
+X-Gm-Message-State: AOAM530s9j6omPBt+gd6WWwR0bDKIbpwvWeI5JRH0fTk9bNbUoI293Tu
+        qc0HPQ+ttD0vGf1H2ihBPg==
+X-Google-Smtp-Source: ABdhPJy+XxeBOrpK4uX07ks+Fl38Z36Sl0DOE11M4s2qvytoWNII6l9sRNIAJb9dbzonRTzVBICiJg==
+X-Received: by 2002:a5e:8705:: with SMTP id y5mr16376190ioj.142.1589834145037;
+        Mon, 18 May 2020 13:35:45 -0700 (PDT)
 Received: from rob-hp-laptop ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id i78sm5194353ile.87.2020.05.18.13.34.50
+        by smtp.gmail.com with ESMTPSA id u25sm4187718iob.19.2020.05.18.13.35.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2020 13:34:50 -0700 (PDT)
-Received: (nullmailer pid 1050 invoked by uid 1000);
-        Mon, 18 May 2020 20:34:49 -0000
-Date:   Mon, 18 May 2020 14:34:49 -0600
+        Mon, 18 May 2020 13:35:44 -0700 (PDT)
+Received: (nullmailer pid 2414 invoked by uid 1000);
+        Mon, 18 May 2020 20:35:42 -0000
+Date:   Mon, 18 May 2020 14:35:42 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Burton <paulburton@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>,
-        linux-hwmon@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
-        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        linux-mips@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add Baikal-T1 PVT sensor
- binding
-Message-ID: <20200518203449.GA989@bogus>
-References: <20200306132611.103408030701@mail.baikalelectronics.ru>
- <20200510103211.27905-1-Sergey.Semin@baikalelectronics.ru>
- <20200510103211.27905-2-Sergey.Semin@baikalelectronics.ru>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v2 1/7] dt-bindings: watchdog: Convert DW WDT binding to
+ DT schema
+Message-ID: <20200518203542.GA2375@bogus>
+References: <20200306132758.703FC8030704@mail.baikalelectronics.ru>
+ <20200510105807.880-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510105807.880-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200510103211.27905-2-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200510105807.880-2-Sergey.Semin@baikalelectronics.ru>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 10 May 2020 13:32:10 +0300, Serge Semin wrote:
-> Baikal-T1 SoC is equipped with an embedded process, voltage and
-> temperature sensor to monitor the chip internal environment like
-> temperature, supply voltage and transistors performance.
+On Sun, 10 May 2020 13:58:01 +0300, Serge Semin wrote:
+> Modern device tree bindings are supposed to be created as YAML-files
+> in accordance with dt-schema. This commit replaces the DW Watchdog
+> legacy bare text bindings with YAML file. As before the binding states
+> that the corresponding dts node is supposed to have a registers
+> range, a watchdog timer references clock source, optional reset line and
+> pre-timeout interrupt.
 > 
-> This bindings describes the external Baikal-T1 PVT control interfaces
-> like MMIO registers space, interrupt request number and clocks source.
-> These are then used by the corresponding hwmon device driver to
-> implement the sysfs files-based access to the sensors functionality.
-> 
-> Co-developed-by: Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>
-> Signed-off-by: Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > Cc: Paul Burton <paulburton@kernel.org>
 > Cc: Ralf Baechle <ralf@linux-mips.org>
 > Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
 > Cc: linux-mips@vger.kernel.org
 > 
 > ---
 > 
 > Changelog v2:
-> - Lowercase the node-name in the example.
-> - Add dual-license header.
-> - Don't use a multi-arg clock phandle reference in the examples dt-binding
->   property. Thus reundant include pre-processor statement can be removed.
-> - Replace "additionalProperties: false" property with
->   "unevaluatedProperties: false".
-> - Discard label definition from the example.
-> - Align settings of the "#thermal-sensor-cells" property with two spaces
->   ahead of the property line start.
+> - Rearrange SoBs.
+> - Discard BE copyright header.
+> - Replace "additionalProperties: false" with "unevaluatedProperties: false"
+>   property.
+> - Discard interrupts property from the required properties list.
+> - Remove a label definition from the binding example.
+> - Move the asynchronous APB3 clock support into a dedicated patch.
 > ---
->  .../bindings/hwmon/baikal,bt1-pvt.yaml        | 95 +++++++++++++++++++
->  1 file changed, 95 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
+>  .../devicetree/bindings/watchdog/dw_wdt.txt   | 24 ---------
+>  .../bindings/watchdog/snps,dw-wdt.yaml        | 50 +++++++++++++++++++
+>  2 files changed, 50 insertions(+), 24 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/dw_wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
