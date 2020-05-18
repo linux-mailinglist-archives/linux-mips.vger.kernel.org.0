@@ -2,107 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C421D75A8
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 12:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205F41D75B3
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 12:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgERKzi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 06:55:38 -0400
-Received: from mga09.intel.com ([134.134.136.24]:21892 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726270AbgERKzi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 06:55:38 -0400
-IronPort-SDR: K13+FudpfalAMFTt62ltW9V4ubV8w4HVMD3YbgU5vtW5ncUglRmGTYNT1oyC2PaF3RAZg3HKSO
- dbyqLJDx22mw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 03:55:37 -0700
-IronPort-SDR: ZWkvv5rIoMMdGMczjut4UFbGCFFISGf09rzuZ7YZgjzvIoAJhJ4lCyTMmTR89WPzkPmscxkms7
- gf+URf9GPTvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
-   d="scan'208";a="342758814"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001.jf.intel.com with ESMTP; 18 May 2020 03:55:32 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jadQk-007PJ3-Qm; Mon, 18 May 2020 13:55:34 +0300
-Date:   Mon, 18 May 2020 13:55:34 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S1726557AbgERK47 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 06:56:59 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:46332 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726362AbgERK47 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 06:56:59 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id B18DC8030875;
+        Mon, 18 May 2020 10:56:54 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 50YAqZGe6GZM; Mon, 18 May 2020 13:56:53 +0300 (MSK)
+Date:   Mon, 18 May 2020 13:56:49 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/19] spi: dw: Add Tx/Rx finish wait methods to the
- MID DMA
-Message-ID: <20200518105534.GV1634618@smile.fi.intel.com>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-3-Sergey.Semin@baikalelectronics.ru>
- <20200515120111.GV185537@smile.fi.intel.com>
- <20200515194058.pmpd4wa7lw2dle3g@mobilestation>
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw
+ setting
+Message-ID: <20200518105649.gcv22l253lsuje7y@mobilestation>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200518102415.k4c5qglodij5ac6h@vireshk-i7>
+ <20200518103102.t3a3g4uxeeuwsnix@mobilestation>
+ <5284478.EF2IWm2iUs@kreacher>
+ <20200518104602.mjh2p5iltf2x4wmq@mobilestation>
+ <CAJZ5v0imYcL3M80S1snJAqXQ=GsqbChij-6aWx=4L02TKVvrQg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200515194058.pmpd4wa7lw2dle3g@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAJZ5v0imYcL3M80S1snJAqXQ=GsqbChij-6aWx=4L02TKVvrQg@mail.gmail.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 15, 2020 at 10:40:58PM +0300, Serge Semin wrote:
-> On Fri, May 15, 2020 at 03:01:11PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 15, 2020 at 01:47:41PM +0300, Serge Semin wrote:
-> > > Since DMA transfers are performed asynchronously with actual SPI
-> > > transaction, then even if DMA transfers are finished it doesn't mean
-> > > all data is actually pushed to the SPI bus. Some data might still be
-> > > in the controller FIFO. This is specifically true for Tx-only
-> > > transfers. In this case if the next SPI transfer is recharged while
-> > > a tail of the previous one is still in FIFO, we'll loose that tail
-> > > data. In order to fix this lets add the wait procedure of the Tx/Rx
-> > > SPI transfers completion after the corresponding DMA transactions
-> > > are finished.
-
-...
-
-> > You forgot a Fixes tag.
+On Mon, May 18, 2020 at 12:51:15PM +0200, Rafael J. Wysocki wrote:
+> On Mon, May 18, 2020 at 12:46 PM Serge Semin
+> <Sergey.Semin@baikalelectronics.ru> wrote:
+> >
+> > On Mon, May 18, 2020 at 12:41:19PM +0200, Rafael J. Wysocki wrote:
+> > > On Monday, May 18, 2020 12:31:02 PM CEST Serge Semin wrote:
+> > > > On Mon, May 18, 2020 at 03:54:15PM +0530, Viresh Kumar wrote:
+> > > > > On 18-05-20, 12:22, Rafael J. Wysocki wrote:
+> > > > > > On Monday, May 18, 2020 12:11:09 PM CEST Viresh Kumar wrote:
+> > > > > > > On 18-05-20, 11:53, Rafael J. Wysocki wrote:
+> > > > > > > > That said if you really only want it to return 0 on success, you may as well
+> > > > > > > > add a ret = 0; statement (with a comment explaining why it is needed) after
+> > > > > > > > the last break in the loop.
+> > > > > > >
+> > > > > > > That can be done as well, but will be a bit less efficient as the loop
+> > > > > > > will execute once for each policy, and so the statement will run
+> > > > > > > multiple times. Though it isn't going to add any significant latency
+> > > > > > > in the code.
+> > > > > >
+> > > > > > Right.
+> > > > > >
+> > > > > > However, the logic in this entire function looks somewhat less than
+> > > > > > straightforward to me, because it looks like it should return an
+> > > > > > error on the first policy without a frequency table (having a frequency
+> > > > > > table depends on the driver and that is the same for all policies, so it
+> > > > > > is pointless to iterate any further in that case).
+> > > > > >
+> > > > > > Also, the error should not be -EINVAL, because that means "invalid
+> > > > > > argument" which would be the state value.
+> > > > > >
+> > > > > > So I would do something like this:
+> > > > > >
+> > > > > > ---
+> > > > > >  drivers/cpufreq/cpufreq.c |   11 ++++++-----
+> > > > > >  1 file changed, 6 insertions(+), 5 deletions(-)
+> > > > > >
+> > > > > > Index: linux-pm/drivers/cpufreq/cpufreq.c
+> > > > > > ===================================================================
+> > > > > > --- linux-pm.orig/drivers/cpufreq/cpufreq.c
+> > > > > > +++ linux-pm/drivers/cpufreq/cpufreq.c
+> > > > > > @@ -2535,26 +2535,27 @@ EXPORT_SYMBOL_GPL(cpufreq_update_limits)
+> > > > > >  static int cpufreq_boost_set_sw(int state)
+> > > > > >  {
+> > > > > >         struct cpufreq_policy *policy;
+> > > > > > -       int ret = -EINVAL;
+> > > > > >
+> > > > > >         for_each_active_policy(policy) {
+> > > > > > +               int ret;
+> > > > > > +
+> > > > > >                 if (!policy->freq_table)
+> > > > > > -                       continue;
+> > > > > > +                       return -ENXIO;
+> > > > > >
+> > > > > >                 ret = cpufreq_frequency_table_cpuinfo(policy,
+> > > > > >                                                       policy->freq_table);
+> > > > > >                 if (ret) {
+> > > > > >                         pr_err("%s: Policy frequency update failed\n",
+> > > > > >                                __func__);
+> > > > > > -                       break;
+> > > > > > +                       return ret;
+> > > > > >                 }
+> > > > > >
+> > > > > >                 ret = freq_qos_update_request(policy->max_freq_req, policy->max);
+> > > > > >                 if (ret < 0)
+> > > > > > -                       break;
+> > > > > > +                       return ret;
+> > > > > >         }
+> > > > > >
+> > > > > > -       return ret;
+> > > > > > +       return 0;
+> > > > > >  }
+> > > > > >
+> > > > > >  int cpufreq_boost_trigger_state(int state)
+> > > > >
+> > > > > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > > >
+> > > > Ok. Thanks for the comments. Shall I resend the patch with update Rafael
+> > > > suggests or you'll merge the Rafael's fix in yourself?
+> > >
+> > > I'll apply the fix directly, thanks!
+> >
+> > Great. Is it going to be available in the repo:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
+> > ?
 > 
-> If you find a commit this patch fixes I'd be glad to add the tag.)
+> Yes, it is.  Please see the bleeding-edge branch in there, thanks!
 
-I believe you can do it, but I will help you here, what about
+No credits with at least Reported-by tag? That's sad.(
 
-7063c0d942a1 ("spi/dw_spi: add DMA support")
-
-or may be more closer to the reality
-
-30c8eb52cc4a ("spi: dw-mid: split rx and tx callbacks when DMA")
-
-?
-
-...
-
-> I will if v3 is needed.
-
-I guess it will be due to Fixes tag.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+-Sergey
