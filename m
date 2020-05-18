@@ -2,132 +2,217 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 583891D89EA
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 23:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E341D8A05
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 23:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728087AbgERVRf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 17:17:35 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:50230 "EHLO
+        id S1726502AbgERV1O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 17:27:14 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:50274 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727944AbgERVRe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 17:17:34 -0400
+        with ESMTP id S1726250AbgERV1O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 17:27:14 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2EBCD8030807;
-        Mon, 18 May 2020 21:17:30 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 17AE4803080B;
+        Mon, 18 May 2020 21:27:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id i3GN_NL9uKnD; Tue, 19 May 2020 00:17:29 +0300 (MSK)
-Date:   Tue, 19 May 2020 00:17:27 +0300
+        with ESMTP id bfiR3SaEIdOo; Tue, 19 May 2020 00:27:04 +0300 (MSK)
+Date:   Tue, 19 May 2020 00:27:03 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
+        John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-Message-ID: <20200518211727.jrzo6tn7slqzxoyl@mobilestation>
+        Arnd Bergmann <arnd@arndb.de>, <linux-mips@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: spi: Add Baikal-T1 System Boot SPI
+ Controller binding
+Message-ID: <20200518212703.vju456kd3telctux@mobilestation>
 References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
- <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
- <20200508113751.GD4820@sirena.org.uk>
- <20200510002039.hwahqasnnceowskz@mobilestation>
- <20200511212506.GA23852@sirena.org.uk>
- <20200518000542.ohtpem3lo2pbixbu@mobilestation>
- <20200518151946.GH8699@sirena.org.uk>
+ <20200508093621.31619-2-Sergey.Semin@baikalelectronics.ru>
+ <20200518152659.GA2525@bogus>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200518151946.GH8699@sirena.org.uk>
+In-Reply-To: <20200518152659.GA2525@bogus>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 18, 2020 at 04:19:47PM +0100, Mark Brown wrote:
-> On Mon, May 18, 2020 at 03:05:42AM +0300, Serge Semin wrote:
-> > On Mon, May 11, 2020 at 10:25:06PM +0100, Mark Brown wrote:
+On Mon, May 18, 2020 at 09:26:59AM -0600, Rob Herring wrote:
+> On Fri, May 08, 2020 at 12:36:20PM +0300, Serge Semin wrote:
+> > Baikal-T1 Boot SPI is a part of the SoC System Controller and is
+> > responsible for the system bootup from an external SPI flash. It's a DW
+> > APB SSI-based SPI-controller with no interrupts, no DMA, with just one
+> > native chip-select available and a single reference clock. Since Baikal-T1
+> > SoC is normally booted up from an external SPI flash this SPI controller
+> > in most of the cases is supposed to be connected to a single SPI-nor
+> > flash. Additionally in order to provide a transparent from CPU point of
+> > view initial code execution procedure the system designers created an IP
+> > block which physically maps the SPI flash found at CS0 to a memory region.
+> > 
+> > Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> > Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Paul Burton <paulburton@kernel.org>
+> > Cc: Ralf Baechle <ralf@linux-mips.org>
+> > Cc: John Garry <john.garry@huawei.com>
+> > Cc: Chuanhong Guo <gch981213@gmail.com>
+> > Cc: Tomer Maimon <tmaimon77@gmail.com>
+> > Cc: Lee Jones <lee.jones@linaro.org>
+> > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: linux-spi@vger.kernel.org
+> > ---
+> >  .../bindings/spi/baikal,bt1-sys-ssi.yaml      | 100 ++++++++++++++++++
+> >  1 file changed, 100 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml b/Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
+> > new file mode 100644
+> > index 000000000000..d9d3257d78f4
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
+> > @@ -0,0 +1,100 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/spi/baikal,bt1-sys-ssi.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Baikal-T1 System Boot SSI Controller
+> > +
+> > +description: |
+> > +  Baikal-T1 System Controller includes a Boot SPI Controller, which is
+> > +  responsible for loading chip bootup code from an external SPI flash. In order
+> > +  to do this transparently from CPU point of view there is a dedicated IP block
+> > +  mapping the 16MB flash to a dedicated MMIO range. The controller is based on
+> > +  the DW APB SSI IP-core but equipped with very limited resources: no IRQ,
+> > +  no DMA, a single native CS being necessarily connected to a 16MB SPI flash
+> > +  (otherwise the system won't bootup from the flash), internal Tx/Rx FIFO of
+> > +  just 8 bytes depth. Access to DW APB SSI controller registers is mutually
+> > +  exclusive from normal MMIO interface and from physically mapped SPI Flash
+> > +  memory. So either one or another way of using the controller functionality
+> > +  can be enabled at a time.
+> > +
+> > +maintainers:
+> > +  - Serge Semin <fancer.lancer@gmail.com>
+> > +
+> > +allOf:
+> > +  - $ref: spi-controller.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: baikal,bt1-sys-ssi
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: Baikal-T1 Boot Controller configuration registers
+> > +      - description: Physically mapped SPI flash ROM found at CS0
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: config
+> > +      - const: map
+> > +
+> > +  clocks:
+> > +    description: SPI Controller reference clock source
 > 
-> > > Yes, some flags should work here - the issue was that at least some
-> > > controllers may end up trying to do multiple SPI operations for one
-> > > spi-mem thing which will break if the chip select doesn't get changed to
-> > > correspond with what's going on.
-> 
-> > Ok. New SPI flag it is then. It will be something like this:
-> > + #define SPI_CONTROLLER_FLASH_SS		BIT(6)
-> 
-> I'd rather use CS than SS (it's more common in the code).
+> Can drop this.
 
 Ok.
+ 
+> 
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: ssi_clk
+> > +
+> > +  num-cs:
+> > +    const: 1
+> > +
+> > +patternProperties:
+> > +  "^.*@[0-9a-f]+":
+> > +    type: object
+> > +    properties:
+> > +      reg:
+> > +        minimum: 0
+> > +        maximum: 0
+> > +
+> > +      spi-rx-bus-width:
+> > +        const: 1
+> > +
+> > +      spi-tx-bus-width:
+> > +        const: 1
+> 
+> What's the point of these 2 properties if they aren't required?
+
+Yes, they are optional, but this is a constraint on the bus-width parameters.
+DW APB SSI provides a single laned Tx and Rx.
 
 > 
-> > So, what do you think?
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - reg-names
 > 
-> Should be fine, controllers that have an issue implementing just
-> shouldn't set the flag.
+> > +  - "#address-cells"
+> > +  - "#size-cells"
+> 
+> These 2 are required by spi-controller.yaml, so you can drop here.
 
-Yes, exactly what I intended.
-
-> 
-> > > > > It's not clear to me that this hardware actually supports spi_mem in
-> > > > > hardware?
-> 
-> > > > SPI-mem operations are implemented by means of the EEPROM-read and Tx-only
-> > > > modes of the controller.
-> 
-> > > Sure, but those seem like normal SPI-level things rather than cases
-> > > where the hardware understands that it has a flash attached and is doing
-> > > flash specific things.
-> 
-> > No, hardware can't detect whether the flash is attached. This must be defined by
-> > the platform, like based on the DT sub-nodes.
-> 
-> This isn't about autodetection, it's about the abstraction level the
-> hardware is operating on - some hardware is able to generate flash
-> operations by itself (possibly with some help programming the opcodes
-> that are needed by a given flash), some hardware just works at the
-> bytestream level.
-> 
-> > > A very common case for this stuff is that
-> > > controllers have acceleration blocks for read and fall back on normal
-> > > SPI for writes and erases, that sounds like what's going on here.
-> > 
-> > Well, yeah, they do provide some acceleration. EEPROM-read provides automatic
-> > write-cmd-dummy-data-then-read operations. But in this case the only thing we
-> > have to push into the SPI Tx FIFO is command and dummy bytes. The read operation
-> 
-> So it's a write then read but you have to program the write each time?
-
-Here is what we need to do to perform the EEPROM-read operation:
-1) Enable EEPROM-read mode.
-2) Initialize a corresponding registers with a number of SPI transfer words
-   (with bits-per-word taken into account) to read.
-3) Push opcode + address + dummy bytes into the Tx FIFO. When it's done and
-   the Tx FIFO is empty, the controller will proceed with read operations by
-   pushing zeros (or ones, don't remember what level it's by default) to MOSI
-   and pulling data from MISO into the RX FIFO.
-4) Keep up with getting data from the Rx FIFO so one wouldn't get overflown.
-
-Regarding programming write each time. Well, it's up to the driver implementation.
-If opcode, address, dummy bytes and number of words to read are the same as before,
-then re-programming isn't required.
+Yes, "#address-cells" is required, but "#size-cells" isn't. Is this supposed to
+be like that?
 
 -Sergey
+
+> 
+> > +  - clocks
+> > +
+> > +examples:
+> > +  - |
+> > +    spi@1f040000 {
+> > +      compatible = "baikal,bt1-sys-ssi";
+> > +      reg = <0x1f040000 0x1000>,
+> > +            <0x1c000000 0x1000000>;
+> > +      reg-names = "config", "map";
+> > +      #address-cells = <1>;
+> > +      #size-cells = <0>;
+> > +
+> > +      clocks = <&ccu_sys>;
+> > +      clock-names = "ssi_clk";
+> > +
+> > +      boot_flash: flash@0 {
+> > +        compatible = "jedec,spi-nor";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> > +        reg = <0>;
+> > +
+> > +        spi-max-frequency = <25000000>;
+> > +      };
+> > +    };
+> > +...
+> > -- 
+> > 2.25.1
+> > 
