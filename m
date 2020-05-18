@@ -2,164 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F191D883B
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 21:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D2E1D8936
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 22:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728165AbgERTaz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 15:30:55 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:49884 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728131AbgERTaz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 15:30:55 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 24F10803080B;
-        Mon, 18 May 2020 19:30:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Er_X0I5c0BGq; Mon, 18 May 2020 22:30:47 +0300 (MSK)
-Date:   Mon, 18 May 2020 22:30:46 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Viresh Kumar <vireshk@kernel.org>,
+        id S1726270AbgERUdX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 16:33:23 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:46978 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726250AbgERUdW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 16:33:22 -0400
+Received: by mail-il1-f193.google.com with SMTP id w18so11204998ilm.13;
+        Mon, 18 May 2020 13:33:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=aCdfZ7ueYmEHhf27ECx3pl3zz6CbgFMjwskwT2kCHRE=;
+        b=c6ccFKzM1au209IPK3k0fg/V6jXBqQly2G7SGHEigdfijov6p9AxSAgmZ1vKZvraxq
+         KrhYd/ZpEzqzwYmEdJ/o+Y/unOnCl5oXBsYD+P47TIAN6sa+1lea+vpmKA5GsCRxoqfj
+         0XCZxssUrFZlxYCRKDoYGH7N5+zTdBV53mt0Dz5wuWvwRKx+6i68SoF1Y/wSRZS0MKvo
+         rBnGLTtxY4FfMsLgIJGOYS1JkWYsKs87kUBt/4zj1c+z6wL+nkg3AbQ7lpmf+x5uqhPX
+         IH+jnW2bD1EUSwbF5MPgseWFU8J22UWjX22Z3NPsKa3SyEtBwiTQqbOSb/E9uV5u3jKO
+         Rq9Q==
+X-Gm-Message-State: AOAM533+/Y9oRLw4ii58lWK+ZF0BtQ6dagcNe/X5kGn1yWI8CBAWjDpp
+        xnPjIwnqsIUYc4ZjlP772Q==
+X-Google-Smtp-Source: ABdhPJwGNhQsjXHbVcG/RCJvvyF1a7+gc39oF1lqupbQlZeHsmLopWJZSzTWyAp5EdP5nZruQOvORg==
+X-Received: by 2002:a92:4909:: with SMTP id w9mr18358517ila.302.1589834001709;
+        Mon, 18 May 2020 13:33:21 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id e19sm4266220iob.1.2020.05.18.13.33.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2020 13:33:21 -0700 (PDT)
+Received: (nullmailer pid 31386 invoked by uid 1000);
+        Mon, 18 May 2020 20:33:19 -0000
+Date:   Mon, 18 May 2020 14:33:19 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        <linux-mips@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] dt-bindings: dma: dw: Add max burst transaction
- length property
-Message-ID: <20200518193046.tud4x7i3mv44rejy@mobilestation>
-References: <20200511213531.wnywlljiulvndx6s@mobilestation>
- <20200512090804.GR185537@smile.fi.intel.com>
- <20200512114946.x777yb6bhe22ccn5@mobilestation>
- <20200512123840.GY185537@smile.fi.intel.com>
- <20200515060911.GF333670@vkoul-mobl>
- <20200515105137.GK185537@smile.fi.intel.com>
- <20200515105658.GR333670@vkoul-mobl>
- <20200515111112.4umynrpgzjnca223@mobilestation>
- <20200517174739.uis3wfievdcmtsxj@mobilestation>
- <20200518173003.GA13764@bogus>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/12] dt-bindings: i2c: dw: Add Baikal-T1 SoC I2C
+ controller
+Message-ID: <20200518203319.GA14243@bogus>
+References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
+ <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510095019.20981-4-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200518173003.GA13764@bogus>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200510095019.20981-4-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 18, 2020 at 11:30:03AM -0600, Rob Herring wrote:
-> On Sun, May 17, 2020 at 08:47:39PM +0300, Serge Semin wrote:
-> > On Fri, May 15, 2020 at 02:11:13PM +0300, Serge Semin wrote:
-> > > On Fri, May 15, 2020 at 04:26:58PM +0530, Vinod Koul wrote:
-> > > > On 15-05-20, 13:51, Andy Shevchenko wrote:
-> > > > > On Fri, May 15, 2020 at 11:39:11AM +0530, Vinod Koul wrote:
-> > > > > > On 12-05-20, 15:38, Andy Shevchenko wrote:
-> > > > > > > On Tue, May 12, 2020 at 02:49:46PM +0300, Serge Semin wrote:
-> > > > > > > > On Tue, May 12, 2020 at 12:08:04PM +0300, Andy Shevchenko wrote:
-> > > > > > > > > On Tue, May 12, 2020 at 12:35:31AM +0300, Serge Semin wrote:
-> > > > > > > > > > On Tue, May 12, 2020 at 12:01:38AM +0300, Andy Shevchenko wrote:
-> > > > > > > > > > > On Mon, May 11, 2020 at 11:05:28PM +0300, Serge Semin wrote:
-> > > > > > > > > > > > On Fri, May 08, 2020 at 02:12:42PM +0300, Andy Shevchenko wrote:
-> > > > > > > > > > > > > On Fri, May 08, 2020 at 01:53:00PM +0300, Serge Semin wrote:
-> > > > > 
-> > > > > ...
-> > > > > 
-> > > > > > > I leave it to Rob and Vinod.
-> > > > > > > It won't break our case, so, feel free with your approach.
-> > > > > > 
-> > > > > > I agree the DT is about describing the hardware and looks like value of
-> > > > > > 1 is not allowed. If allowed it should be added..
-> > > > > 
-> > > > > It's allowed at *run time*, it's illegal in *pre-silicon stage* when
-> > > > > synthesizing the IP.
-> > > > 
-> > > > Then it should be added ..
-> > > 
-> > > Vinod, max-burst-len is "MAXimum" burst length not "run-time or current or any
-> > > other" burst length. It's a constant defined at the IP-core synthesis stage and
-> > > according to the Data Book, MAX burst length can't be 1. The allowed values are
-> > > exactly as I described in the binding [4, 8, 16, 32, ...]. MAX burst length
-> > > defines the upper limit of the run-time burst length. So setting it to 1 isn't
-> > > about describing a hardware, but using DT for the software convenience.
-> > > 
-> > > -Sergey
-> > 
-> > Vinod, to make this completely clear. According to the DW DMAC data book:
-> > - In general, run-time parameter of the DMA transaction burst length (set in
-> >   the SRC_MSIZE/DST_MSIZE fields of the channel control register) may belong
-> >   to the set [1, 4, 8, 16, 32, 64, 128, 256].
-> > - Actual upper limit of the burst length run-time parameter is limited by a
-> >   constant defined at the IP-synthesize stage (it's called DMAH_CHx_MAX_MULT_SIZE)
-> >   and this constant belongs to the set [4, 8, 16, 32, 64, 128, 256]. (See, no 1
-> >   in this set).
-> > 
-> > So the run-time burst length in a case of particular DW DMA controller belongs
-> > to the range:
-> > 1 <= SRC_MSIZE <= DMAH_CHx_MAX_MULT_SIZE
-> > and
-> > 1 <= DST_MSIZE <= DMAH_CHx_MAX_MULT_SIZE
-> > 
-> > See. No mater which DW DMA controller we get each of them will at least support
-> > the burst length of 1 and 4 transfer words. This is determined by design of the
-> > DW DMA controller IP since DMAH_CHx_MAX_MULT_SIZE constant set starts with 4.
-> > 
-> > In this patch I suggest to add the max-burst-len property, which specifies
-> > the upper limit for the run-time burst length. Since the maximum burst length
-> > capable to be set to the SRC_MSIZE/DST_MSIZE fields of the DMA channel control
-> > register is determined by the DMAH_CHx_MAX_MULT_SIZE constant (which can't be 1
-> > by the DW DMA IP design), max-burst-len property as being also responsible for
-> > the maximum burst length setting should be associated with DMAH_CHx_MAX_MULT_SIZE
-> > thus should belong to the same set [4, 8, 16, 32, 64, 128, 256].
-> > 
-> > So 1 shouldn't be in the enum of the max-burst-len property constraint, because
-> > hardware doesn't support such limitation by design, while setting 1 as
-> > max-burst-len would mean incorrect description of the DMA controller.
-> > 
-> > Vinod, could you take a look at the info I provided above and say your final word
-> > whether 1 should be really allowed to be in the max-burst-len enum constraints?
-> > I'll do as you say in the next version of the patchset.
-> 
-> I generally think the synthesis time IP configuration should be implied 
-> by the compatible string which is why we have SoC specific compatible 
-> strings (Of course I dream for IP vendors to make all that discoverable 
-> which is only occasionally the case). There are exceptions to this. If 
-> one SoC has the same IP configured in different ways, then we'd probably 
-> have properties for the differences.
+On Sun, May 10, 2020 at 12:50:09PM +0300, Serge Semin wrote:
+> Add the "baikal,bt1-sys-i2c" compatible string to the DW I2C binding and
+> make sure the reg property isn't required in this case because the
+> controller is embedded into the Baikal-T1 System Controller. The rest of
+> the DW APB I2C properties are compatible and can be freely used to describe
+> the Baikal-T1 I2C controller dts-node.
 
-Hm, AFAIU from what you said the IP configuration specific to a particular
-SoC must be determined by the compatible string and that configuration parameters
-should be hidden somewhere in the driver internals for instance in the platform
-data structure. In case if there are several versions of the same IP are embedded
-into the SoC, then the differences can be described by the DT properties. Right?
-If I am right, then that's weird. A lot of the currently available platforms (and
-drivers) don't follow that rule and just specify the generic IP compatible string
-and describe their IP synthesis parameters by the DT properties.
+Is there not a sub-range of the system controller with the I2C 
+registers? I'd assume there is, so you can still have 'reg' even if 
+Linux doesn't use it (currently).
 
 > 
-> As to whether h/w configuration is okay in DT, the answer is yes. The 
-> question is whether it is determined by SoC, board, OS and also who 
-> would set it and how often. Something tuned per board and independent of 
-> the OS/user is the ideal example.
-
-So does this mean that I have to allow the max-burst-len property to be 1 even
-though in accordance with the DW DMA Data Book the upper limit of the
-burst-length will never be 1, but will always start with 4? By allowing the
-upper limit to be 1 we wouldn't provide the h/w configuration (hardware has
-already been configured with maximum burst length parameter DMAH_CHx_MAX_MULT_SIZE
-on the IP synthesis stage), but would setup an artificial constraints on the
-maximum allowed burst length. Are you ok with this and 1 should be permitted
-anyway?
-
--Sergey
-
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Wolfram Sang <wsa@the-dreams.de>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: linux-mips@vger.kernel.org
 > 
-> Rob
+> ---
+> 
+> Rob, I had to remove your acked-by tag because of the changes introduced
+> in v2 of the patch.
+> 
+> Changelog v2:
+> - Make the reg property being optional if it's Baikal-T1 System I2C DT
+>   node.
+> ---
+>  .../devicetree/bindings/i2c/snps,designware-i2c.yaml | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> index 8d4e5fccbd1c..579964098eb9 100644
+> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> @@ -21,6 +21,15 @@ allOf:
+>        properties:
+>          reg:
+>            maxItems: 1
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          not:
+> +            contains:
+> +              const: baikal,bt1-sys-i2c
+> +    then:
+> +      required:
+> +        - reg
+>  
+>  properties:
+>    compatible:
+> @@ -31,6 +40,8 @@ properties:
+>          items:
+>            - const: mscc,ocelot-i2c
+>            - const: snps,designware-i2c
+> +      - description: Baikal-T1 SoC System I2C controller
+> +        const: baikal,bt1-sys-i2c
+>  
+>    reg:
+>      minItems: 1
+> @@ -98,7 +109,6 @@ unevaluatedProperties: false
+>  
+>  required:
+>    - compatible
+> -  - reg
+>    - "#address-cells"
+>    - "#size-cells"
+>    - interrupts
+> -- 
+> 2.25.1
+> 
