@@ -2,105 +2,162 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1431F1D75D2
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 13:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A451D75DD
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 13:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726448AbgERLDr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 07:03:47 -0400
-Received: from mga17.intel.com ([192.55.52.151]:12977 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726339AbgERLDq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 07:03:46 -0400
-IronPort-SDR: 9TSYjEt67+QUw0ueG1L3426g17RjLRkaZiJL9SeOzzl4KYLJUJ5iXvVtEnWtNAWFgs2qFtMAtX
- W3xzd7GZYtTw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 04:03:46 -0700
-IronPort-SDR: HbTz9zcJkSb0DzYvjUnRf/8uNTcofb415CYOQdzbXVrPhucsQz8+aRcbIkkTKXQ51OlDTC5wGC
- O+lk9RMAE6yQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
-   d="scan'208";a="252855275"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007.jf.intel.com with ESMTP; 18 May 2020 04:03:41 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jadYd-007PNL-7D; Mon, 18 May 2020 14:03:43 +0300
-Date:   Mon, 18 May 2020 14:03:43 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1726511AbgERLGE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 07:06:04 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40711 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726279AbgERLGE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 07:06:04 -0400
+Received: by mail-oi1-f196.google.com with SMTP id v128so8596347oia.7;
+        Mon, 18 May 2020 04:06:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wmpjxGQuy4tiYJkt2jocarW0R5KqJW68O4d9EnN2j3I=;
+        b=G55yI1py8Mr9nC3KibGyzpC56Rbsg4jJEvADlhXYQyZdwyF0KwBFrJmtatKh9Si4AF
+         0cVgt8yJ/S3Of/m1aNZkqaPcYnBCTFVkIpxeUT/q2hP+u3ieTGcGmPySnAi5c3FsKOaD
+         BmQJWdN8eeztomd9Vs6KbVKnr5Cj/RTxIVaFrsXTbq/YdOLLweG3PRw3ohhdcuMDKR2H
+         k/1FjJ2NNb1bxSLVpCM3RMx1dSogTAGqzTanoDMHATl4U0SG6YLPhkVvwI7yUk0S8Qrd
+         //306H5r92Yv/rP+9/N6ScakqdHV1uDE1PgTw/HGoxpDs6xeKkMfnlbuivqCCGRtqC59
+         YsTg==
+X-Gm-Message-State: AOAM530vz9dquQzhLJngEQxGCQ4D9Rt7vs2aP2WjkErptqhDJryNhZrp
+        6icsRbGpK2/QqWZjBoyLTtz9ybto/8+xBV+7i/sEbA==
+X-Google-Smtp-Source: ABdhPJznA+rHvhTX3YqvDWpLbINkDwCYfOSH6G0S7yviZXUhwGP7FykmSuPBMIvirGe61CZUgklItlvyABYwUvMg6rY=
+X-Received: by 2002:a05:6808:486:: with SMTP id z6mr573511oid.103.1589799962685;
+ Mon, 18 May 2020 04:06:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200518102415.k4c5qglodij5ac6h@vireshk-i7> <20200518103102.t3a3g4uxeeuwsnix@mobilestation>
+ <5284478.EF2IWm2iUs@kreacher> <20200518104602.mjh2p5iltf2x4wmq@mobilestation>
+ <CAJZ5v0imYcL3M80S1snJAqXQ=GsqbChij-6aWx=4L02TKVvrQg@mail.gmail.com> <20200518105649.gcv22l253lsuje7y@mobilestation>
+In-Reply-To: <20200518105649.gcv22l253lsuje7y@mobilestation>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 18 May 2020 13:05:51 +0200
+Message-ID: <CAJZ5v0juP6bsB9TRcned4nTQ=yFEOU5J2M7tt2bokYSYgoPPEg@mail.gmail.com>
+Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw setting
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Clement Leger <cleger@kalray.eu>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 10/19] spi: dw: Use DMA max burst to set the request
- thresholds
-Message-ID: <20200518110343.GY1634618@smile.fi.intel.com>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-11-Sergey.Semin@baikalelectronics.ru>
- <20200515143842.GG1634618@smile.fi.intel.com>
- <20200516200133.wmaqnfjbr7234fzo@mobilestation>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200516200133.wmaqnfjbr7234fzo@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, May 16, 2020 at 11:01:33PM +0300, Serge Semin wrote:
-> On Fri, May 15, 2020 at 05:38:42PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 15, 2020 at 01:47:49PM +0300, Serge Semin wrote:
-> > > Each channel of DMA controller may have a limited length of burst
-> > > transaction (number of IO operations performed at ones in a single
-> > > DMA client request). This parameter can be used to setup the most
-> > > optimal DMA Tx/Rx data level values. In order to avoid the Tx buffer
-> > > overrun we can set the DMA Tx level to be of FIFO depth minus the
-> > > maximum burst transactions length. To prevent the Rx buffer underflow
-> > > the DMA Rx level should be set to the maximum burst transactions length.
-> > > This commit setups the DMA channels and the DW SPI DMA Tx/Rx levels
-> > > in accordance with these rules.
+On Mon, May 18, 2020 at 12:56 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+>
+> On Mon, May 18, 2020 at 12:51:15PM +0200, Rafael J. Wysocki wrote:
+> > On Mon, May 18, 2020 at 12:46 PM Serge Semin
+> > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > >
+> > > On Mon, May 18, 2020 at 12:41:19PM +0200, Rafael J. Wysocki wrote:
+> > > > On Monday, May 18, 2020 12:31:02 PM CEST Serge Semin wrote:
+> > > > > On Mon, May 18, 2020 at 03:54:15PM +0530, Viresh Kumar wrote:
+> > > > > > On 18-05-20, 12:22, Rafael J. Wysocki wrote:
+> > > > > > > On Monday, May 18, 2020 12:11:09 PM CEST Viresh Kumar wrote:
+> > > > > > > > On 18-05-20, 11:53, Rafael J. Wysocki wrote:
+> > > > > > > > > That said if you really only want it to return 0 on success, you may as well
+> > > > > > > > > add a ret = 0; statement (with a comment explaining why it is needed) after
+> > > > > > > > > the last break in the loop.
+> > > > > > > >
+> > > > > > > > That can be done as well, but will be a bit less efficient as the loop
+> > > > > > > > will execute once for each policy, and so the statement will run
+> > > > > > > > multiple times. Though it isn't going to add any significant latency
+> > > > > > > > in the code.
+> > > > > > >
+> > > > > > > Right.
+> > > > > > >
+> > > > > > > However, the logic in this entire function looks somewhat less than
+> > > > > > > straightforward to me, because it looks like it should return an
+> > > > > > > error on the first policy without a frequency table (having a frequency
+> > > > > > > table depends on the driver and that is the same for all policies, so it
+> > > > > > > is pointless to iterate any further in that case).
+> > > > > > >
+> > > > > > > Also, the error should not be -EINVAL, because that means "invalid
+> > > > > > > argument" which would be the state value.
+> > > > > > >
+> > > > > > > So I would do something like this:
+> > > > > > >
+> > > > > > > ---
+> > > > > > >  drivers/cpufreq/cpufreq.c |   11 ++++++-----
+> > > > > > >  1 file changed, 6 insertions(+), 5 deletions(-)
+> > > > > > >
+> > > > > > > Index: linux-pm/drivers/cpufreq/cpufreq.c
+> > > > > > > ===================================================================
+> > > > > > > --- linux-pm.orig/drivers/cpufreq/cpufreq.c
+> > > > > > > +++ linux-pm/drivers/cpufreq/cpufreq.c
+> > > > > > > @@ -2535,26 +2535,27 @@ EXPORT_SYMBOL_GPL(cpufreq_update_limits)
+> > > > > > >  static int cpufreq_boost_set_sw(int state)
+> > > > > > >  {
+> > > > > > >         struct cpufreq_policy *policy;
+> > > > > > > -       int ret = -EINVAL;
+> > > > > > >
+> > > > > > >         for_each_active_policy(policy) {
+> > > > > > > +               int ret;
+> > > > > > > +
+> > > > > > >                 if (!policy->freq_table)
+> > > > > > > -                       continue;
+> > > > > > > +                       return -ENXIO;
+> > > > > > >
+> > > > > > >                 ret = cpufreq_frequency_table_cpuinfo(policy,
+> > > > > > >                                                       policy->freq_table);
+> > > > > > >                 if (ret) {
+> > > > > > >                         pr_err("%s: Policy frequency update failed\n",
+> > > > > > >                                __func__);
+> > > > > > > -                       break;
+> > > > > > > +                       return ret;
+> > > > > > >                 }
+> > > > > > >
+> > > > > > >                 ret = freq_qos_update_request(policy->max_freq_req, policy->max);
+> > > > > > >                 if (ret < 0)
+> > > > > > > -                       break;
+> > > > > > > +                       return ret;
+> > > > > > >         }
+> > > > > > >
+> > > > > > > -       return ret;
+> > > > > > > +       return 0;
+> > > > > > >  }
+> > > > > > >
+> > > > > > >  int cpufreq_boost_trigger_state(int state)
+> > > > > >
+> > > > > > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > >
+> > > > > Ok. Thanks for the comments. Shall I resend the patch with update Rafael
+> > > > > suggests or you'll merge the Rafael's fix in yourself?
+> > > >
+> > > > I'll apply the fix directly, thanks!
+> > >
+> > > Great. Is it going to be available in the repo:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
+> > > ?
+> >
+> > Yes, it is.  Please see the bleeding-edge branch in there, thanks!
+>
+> No credits with at least Reported-by tag? That's sad.(
 
-...
+OK, done now, but you are not the only reported of it, so I've added
+the other reporter too.
 
-> > >  	/* DMA info */
-> > >  	struct dma_chan		*txchan;
-> > > +	u32			txburst;
-> > >  	struct dma_chan		*rxchan;
-> > > +	u32			rxburst;
-> > 
-> > Leave u32 together, it may be optimal on 64-bit architectures where ABIs require padding.
-> 
-> It's not like anyone cared about padding in this structure in the first place)
-
-I think I have been caring (to some extend).
-
-> Though if v3 is required I'll group these members together.
-
-From what I see v3 is what Mark and me are waiting for. Mark, are we on the
-same page here?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks!
