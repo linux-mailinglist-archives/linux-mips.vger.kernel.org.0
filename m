@@ -2,140 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B91ED1D6F05
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 04:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58FE1D6F13
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 04:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726639AbgERCg7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 May 2020 22:36:59 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:47348 "EHLO
+        id S1726696AbgERCog (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 May 2020 22:44:36 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:47424 "EHLO
         mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1726675AbgERCg6 (ORCPT
+        by vger.kernel.org with ESMTP id S1726680AbgERCog (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 17 May 2020 22:36:58 -0400
+        Sun, 17 May 2020 22:44:36 -0400
 Received: from hanazono.local (unknown [116.236.177.50])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 84462600B4;
-        Mon, 18 May 2020 10:36:55 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 10826600B4;
+        Mon, 18 May 2020 10:44:34 +0800 (CST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1589769415; bh=454XuQiZGJz74cqtV7Y1qbVoNSIrGmbj8yrfjhw0qtA=;
+        t=1589769874; bh=1M4ZzKGiGH3FAlVo4yl3asYIfIGTFIcmE/xKPCnMBXk=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=r3dnNW0elBCA4uWOORwzxVfGu+MZYQZY5rf9WnjOjHMW4w1ENP0tmK2bxFzTxCRQF
-         buFI2C018iaYYJtrMtnOZhcE/N9aAjs/MHQGNu9umix9eCXGTfLUj7JjhV+ZYvPQ1L
-         AIIpkezGmUSwdws1Ks2PmJ0jy3WxMR2ieZIiU+Es=
-Subject: Re: [PATCH] MIPS: Loongson: Add support for serial console
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        b=IHMIUWXGZ6ZxmnZlGoIoVvK26rS6kLAZ+G9sgqDxgGZ9QDUZ/HYK7MLRNoX4Kknb/
+         5mwpwHl097wGnPA2CnQZHj5S7Lw0d0M94GOBO37ORAqEXMdpjGySV8XwP+j41i0SKa
+         UiEKz8FkNghA6/N5ewH4CGe3r9z4hk7wWpKhP2L4=
+Subject: Re: [PATCH v2 RESEND 4/4] MIPS: emulate CPUCFG instruction on older
+ Loongson64 cores
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-References: <1589612588-29196-1-git-send-email-yangtiezhu@loongson.cn>
- <5aadf1a7-51c7-453e-beaa-3df6ceca5354@xen0n.name>
- <d5fde4bc-69a9-c9c0-70de-106968ecc7c4@loongson.cn>
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+References: <20200503103304.40678-5-git@xen0n.name>
+ <20200503105012.43246-1-git@xen0n.name>
+ <20200517083754.GB3939@alpha.franken.de>
+ <2982d83e-bcf2-2515-bcd2-b80bd1f20223@xen0n.name>
+ <20200517151735.GA8048@alpha.franken.de>
 From:   WANG Xuerui <kernel@xen0n.name>
-Message-ID: <b9317e89-24e6-8ed1-96c2-12f82b8a7049@xen0n.name>
-Date:   Mon, 18 May 2020 10:36:55 +0800
+Message-ID: <574fa5af-709d-1f52-af8e-7af815a4ab7e@xen0n.name>
+Date:   Mon, 18 May 2020 10:44:33 +0800
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
  Gecko/20100101 Thunderbird/78.0a1
 MIME-Version: 1.0
-In-Reply-To: <d5fde4bc-69a9-c9c0-70de-106968ecc7c4@loongson.cn>
+In-Reply-To: <20200517151735.GA8048@alpha.franken.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020/5/18 09:08, Tiezhu Yang wrote:
+On 2020/5/17 23:17, Thomas Bogendoerfer wrote:
 
-> On 05/16/2020 07:09 PM, WANG Xuerui wrote:
->> On 5/16/20 3:03 PM, Tiezhu Yang wrote:
+> On Sun, May 17, 2020 at 07:39:44PM +0800, WANG Xuerui wrote:
+>> On 5/17/20 4:37 PM, Thomas Bogendoerfer wrote:
 >>
->>> After commit 87fcfa7b7fe6 ("MIPS: Loongson64: Add generic dts"),
->>> there already exists the node and property of Loongson CPU UART0
->>> in loongson3-package.dtsi:
+>>> On Sun, May 03, 2020 at 06:50:13PM +0800, WANG Xuerui wrote:
+>>>> +#endif
+>>>> +
+>>>> +#endif /* _ASM_MACH_LOONGSON64_CPUCFG_EMUL_H_ */
+>>>> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+>>>> index ca2e6f1af4fe..907e31ff562f 100644
+>>>> --- a/arch/mips/kernel/cpu-probe.c
+>>>> +++ b/arch/mips/kernel/cpu-probe.c
+>>>> @@ -28,6 +28,8 @@
+>>>>   #include <asm/spram.h>
+>>>>   #include <linux/uaccess.h>
+>>>> +#include <asm/mach-loongson64/cpucfg-emul.h>
+>>>> +
+>>> this doesn't fly:
 >>>
->>> cpu_uart0: serial@1fe001e0 {
->>>          compatible = "ns16550a";
->>>          reg = <0 0x1fe001e0 0x8>;
->>>          clock-frequency = <33000000>;
->>>          interrupt-parent = <&liointc>;
->>>          interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
->>>          no-loopback-test;
->>> };
+>>> In file included from /local/tbogendoerfer/korg/linux/arch/mips/kernel/cpu-probe.c:31:0:
+>>> /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mach-loongson64/cpucfg-emul.h:7:27: fatal error: loongson_regs.h: No such file or directory
+>>>   #include <loongson_regs.h>
+>>>                             ^
+>>> compilation terminated.
 >>>
->>> In order to support for serial console on the Loongson platform,
->>> add CONFIG_SERIAL_OF_PLATFORM=y to loongson3_defconfig.
->>>
->>> With this patch, we can see the following boot message:
->>>
->>> [    1.877745] printk: console [ttyS0] disabled
->>> [    1.881979] 1fe001e0.serial: ttyS0 at MMIO 0x1fe001e0 (irq = 16, 
->>> base_baud = 2062500) is a 16550A
->>> [    1.890838] printk: console [ttyS0] enabled
->>>
->>> And also, we can login normally from the serial console.
->>>
->>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>> ---
->>>
->>> Hi Jiaxun,
->>>
->>> Thank you very much for your suggestion.
->>>
->>>   arch/mips/configs/loongson3_defconfig | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/arch/mips/configs/loongson3_defconfig 
->>> b/arch/mips/configs/loongson3_defconfig
->>> index 6768c16..cd95f08 100644
->>> --- a/arch/mips/configs/loongson3_defconfig
->>> +++ b/arch/mips/configs/loongson3_defconfig
->>> @@ -217,6 +217,7 @@ CONFIG_SERIAL_8250_EXTENDED=y
->>>   CONFIG_SERIAL_8250_MANY_PORTS=y
->>>   CONFIG_SERIAL_8250_SHARE_IRQ=y
->>>   CONFIG_SERIAL_8250_RSA=y
->>> +CONFIG_SERIAL_OF_PLATFORM=y
->>>   CONFIG_HW_RANDOM=y
->>>   CONFIG_RAW_DRIVER=m
->>>   CONFIG_I2C_CHARDEV=y
->>
->> Hi,
->>
->> The patch title is again exaggerating things. This is a defconfig 
->> change, so please refer to `git log` output of `arch/mips/configs` 
->> and use something like "MIPS: Loongson: loongson3_defconfig: enable 
->> serial console" or "MIPS: Loongson: enable serial console in 
->> defconfig". The current title reads as if Loongson kernels never were 
->> able to use a serial console in the past.
->
-> Hi Xuerui,
->
-> Thanks for your suggestion.
->
-> We can not use the serial console without this patch,
-> so I use the current patch subject.
+>>> Is there a chance to put this code in a loongsoon specific file ?
+>> Oops... I'll rebase tonight to fix this. Might be caused by the build system
+>> changes merged in the meantime.
+> just to make it clear, the failing config is a RALINK config, but looking
+> at the failure probaly everything but loongson64 fails.
+Thanks for the clarification; I've found out the mistake last night. The 
+include of loongson_regs.h needs to go inside the config guard to 
+prevent inclusion on other platforms where the include path is not set 
+up for it.
+>> As for the logic separation, I'm 100% in agreement with this, but I don't
+>> know of any way to invoke mach-specific bits from inside cpu-probe.
+> implement your code in a new/fitting file, provide a header file,
+> which has prototypes for this functions if CONFIG_xxx option is enabled
+> or empty stubs, if not. Then call these functions from cpu-probe.c.
 
-One can always use their own config to build in whatever support they 
-want. Only people blindly following defconfig are affected. That's why I 
-think the original patch title is exaggerating.
+Sure. I'll move these into cpucfg-emul.c to minimize intrusion to 
+cpu-probe.c.
 
->
-> Anyway, let me modify the patch subject to make it more accurate,
-> I think the following is better:
-> "MIPS: Loongson: Enable devicetree based probing for 8250 ports"
->
-> drivers/tty/serial/8250/Kconfig:
-> config SERIAL_OF_PLATFORM
->         tristate "Devicetree based probing for 8250 ports"
->
-> I will send v2 later.
->
-No problem. Just make it clear that these are defconfig changes so 
-people don't misunderstand, even if they're otherwise unfamiliar with 
-the current state of things.
-> Thanks,
-> Tiezhu Yang
+I'll send v3 later today (in my timezone) after I go home.
+
+And thanks for your instruction!
+
+> Thomas.
 >
