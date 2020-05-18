@@ -2,253 +2,180 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4D51D6F57
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 05:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAF91D6F6D
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 05:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726726AbgERDdg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 May 2020 23:33:36 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:44026 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726696AbgERDdg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 17 May 2020 23:33:36 -0400
-Received: from [10.20.42.25] (unknown [10.20.42.25])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn2oFAsJeS+81AA--.22S3;
-        Mon, 18 May 2020 11:33:26 +0800 (CST)
-Subject: Re: mm/memory.c: Add update local tlb for smp race
-To:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <1589439021-17005-1-git-send-email-maobibo@loongson.cn>
- <c86a9a0d-3975-adbe-d97b-deceb566786e@redhat.com>
- <df1ab51c-810a-f7ce-e591-d4fbbed95dab@loongson.cn>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-From:   maobibo <maobibo@loongson.cn>
-Message-ID: <c5cec2be-c6ae-3c1f-d3b5-2e5e68e2dc2b@loongson.cn>
-Date:   Mon, 18 May 2020 11:33:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726803AbgERDto (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 May 2020 23:49:44 -0400
+Received: from mga17.intel.com ([192.55.52.151]:38483 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726675AbgERDto (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 17 May 2020 23:49:44 -0400
+IronPort-SDR: myw4OUHI1hydnBVozDLhq+vA6rSrK4H3sK4TJFaBMH1kg3jiRiDsL0dPZJ9b5GGg6Ir4oa0s1B
+ hZwuqE507jAg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2020 20:49:40 -0700
+IronPort-SDR: QZjHgmmyJD5wcejwNXYudRxBmBXktkRK66clSGT09vVfYOCh2mQO0TRV8oDbLvZwqQC7nEa8om
+ xW1Fi6/1MBPA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,405,1583222400"; 
+   d="scan'208";a="263820256"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by orsmga003.jf.intel.com with ESMTP; 17 May 2020 20:49:39 -0700
+Date:   Sun, 17 May 2020 20:49:39 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH V3 07/15] arch/kunmap_atomic: Consolidate duplicate code
+Message-ID: <20200518034938.GA3023182@iweiny-DESK2.sc.intel.com>
+References: <20200507150004.1423069-1-ira.weiny@intel.com>
+ <20200507150004.1423069-8-ira.weiny@intel.com>
+ <20200516223306.GA161252@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <df1ab51c-810a-f7ce-e591-d4fbbed95dab@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxn2oFAsJeS+81AA--.22S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxKw4xKFW8AFW7ur1xWFWktFb_yoWxurW7pF
-        93GanFqFs7Xr1UCr4Iqw1qvr1Sva4rKFyUJry3K3WFy3srtr1fKay5G3yF9FWkArn3Gwsr
-        JF4jgF43uayrZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkmb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
-        8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUgg_TUUUUU
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200516223306.GA161252@roeck-us.net>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Sat, May 16, 2020 at 03:33:06PM -0700, Guenter Roeck wrote:
+> On Thu, May 07, 2020 at 07:59:55AM -0700, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > Every single architecture (including !CONFIG_HIGHMEM) calls...
+> > 
+> > 	pagefault_enable();
+> > 	preempt_enable();
+> > 
+> > ... before returning from __kunmap_atomic().  Lift this code into the
+> > kunmap_atomic() macro.
+> > 
+> > While we are at it rename __kunmap_atomic() to kunmap_atomic_high() to
+> > be consistent.
+> > 
+> > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> 
+> This patch results in:
+> 
+> Starting init: /bin/sh exists but couldn't execute it (error -14)
+> 
+> when trying to boot microblazeel:petalogix-ml605 in qemu.
+
+Thanks for the report.  I'm not readily seeing the issue.
+
+Do you have a kernel config?  Specifically is CONFIG_HIGHMEM set?
+
+> 
+> Bisect log attached.
+> 
+> Guenter
+> 
+> ---
+> # bad: [bdecf38f228bcca73b31ada98b5b7ba1215eb9c9] Add linux-next specific files for 20200515
+> # good: [2ef96a5bb12be62ef75b5828c0aab838ebb29cb8] Linux 5.7-rc5
+> git bisect start 'HEAD' 'v5.7-rc5'
+> # good: [3674d7aa7a8e61d993886c2fb7c896c5ef85e988] Merge remote-tracking branch 'crypto/master'
+> git bisect good 3674d7aa7a8e61d993886c2fb7c896c5ef85e988
+> # good: [87f6f21783522e6d62127cf33ae5e95f50874beb] Merge remote-tracking branch 'spi/for-next'
+> git bisect good 87f6f21783522e6d62127cf33ae5e95f50874beb
+> # good: [5c428e8277d5d97c85126387d4e00aa5adde4400] Merge remote-tracking branch 'staging/staging-next'
+> git bisect good 5c428e8277d5d97c85126387d4e00aa5adde4400
+> # good: [f68de67ed934e7bdef4799fd7777c86f33f14982] Merge remote-tracking branch 'hyperv/hyperv-next'
+> git bisect good f68de67ed934e7bdef4799fd7777c86f33f14982
+> # bad: [54acd2dc52b069da59639eea0d0c92726f32fb01] mm/memblock: fix a typo in comment "implict"->"implicit"
+> git bisect bad 54acd2dc52b069da59639eea0d0c92726f32fb01
+> # good: [784a17aa58a529b84f7cc50f351ed4acf3bd11f3] mm: remove the pgprot argument to __vmalloc
+> git bisect good 784a17aa58a529b84f7cc50f351ed4acf3bd11f3
+> # good: [6cd8137ff37e9a37aee2d2a8889c8beb8eab192f] khugepaged: replace the usage of system(3) in the test
+> git bisect good 6cd8137ff37e9a37aee2d2a8889c8beb8eab192f
+> # bad: [6987da379826ed01b8a1cf046b67cc8cc10117cc] sparc: remove unnecessary includes
+> git bisect bad 6987da379826ed01b8a1cf046b67cc8cc10117cc
+> # good: [bc17b545388f64c09e83e367898e28f60277c584] mm/hugetlb: define a generic fallback for is_hugepage_only_range()
+> git bisect good bc17b545388f64c09e83e367898e28f60277c584
+> # bad: [9b5aa5b43f957f03a1f4a9aff5f7924e2ebbc011] arch-kmap_atomic-consolidate-duplicate-code-checkpatch-fixes
+> git bisect bad 9b5aa5b43f957f03a1f4a9aff5f7924e2ebbc011
+> # good: [0941a38ff0790c1004270f952067a5918a4ba32d] arch/kmap: remove redundant arch specific kmaps
+> git bisect good 0941a38ff0790c1004270f952067a5918a4ba32d
+> # good: [56e635a64c2cbfa815c851af10e0f811e809977b] arch-kunmap-remove-duplicate-kunmap-implementations-fix
+> git bisect good 56e635a64c2cbfa815c851af10e0f811e809977b
+> # bad: [60f96b2233c790d4f1c49317643051f1670bcb29] arch/kmap_atomic: consolidate duplicate code
+> git bisect bad 60f96b2233c790d4f1c49317643051f1670bcb29
+> # good: [7b3708dc3bf72a647243064fe7ddf9a76248ddfd] {x86,powerpc,microblaze}/kmap: move preempt disable
+> git bisect good 7b3708dc3bf72a647243064fe7ddf9a76248ddfd
+> # first bad commit: [60f96b2233c790d4f1c49317643051f1670bcb29] arch/kmap_atomic: consolidate duplicate code
+
+I'm confused by this.  This points to an earlier commit being bad?
+
+commit 60f96b2233c790d4f1c49317643051f1670bcb29                                 
+Author: Ira Weiny <ira.weiny@intel.com>                                         
+Date:   Thu May 14 13:39:54 2020 +1000                                          
+                                                                                
+    arch/kmap_atomic: consolidate duplicate code                                
+                                                                                
+    Every arch has the same code to ensure atomic operations and a check for    
+    !HIGHMEM page.                                                              
+                                                                                
+    Remove the duplicate code by defining a core kmap_atomic() which only       
+    calls the arch specific kmap_atomic_high() when the page is high memory.    
+                                                                                
+    Link: http://lkml.kernel.org/r/20200507150004.1423069-7-ira.weiny@intel.com 
+    Signed-off-by: Ira Weiny <ira.weiny@intel.com>                              
+    Reviewed-by: Christoph Hellwig <hch@lst.de>                                 
+    Cc: Al Viro <viro@zeniv.linux.org.uk>                                       
+    Cc: Andy Lutomirski <luto@kernel.org>                                       
+    Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>                       
+    Cc: Borislav Petkov <bp@alien8.de>                                          
+    Cc: Christian König <christian.koenig@amd.com>                              
+    Cc: Chris Zankel <chris@zankel.net>                                         
+    Cc: Daniel Vetter <daniel.vetter@ffwll.ch>                                  
+    Cc: Dan Williams <dan.j.williams@intel.com>                                 
+    Cc: Dave Hansen <dave.hansen@linux.intel.com>                               
+    Cc: "David S. Miller" <davem@davemloft.net>                                 
+    Cc: Helge Deller <deller@gmx.de>                                            
+    Cc: "H. Peter Anvin" <hpa@zytor.com>                                        
+    Cc: Ingo Molnar <mingo@redhat.com>                                          
+    Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>          
+    Cc: Max Filippov <jcmvbkbc@gmail.com>                                       
+    Cc: Paul Mackerras <paulus@samba.org>                                       
+    Cc: Peter Zijlstra <peterz@infradead.org>                                   
+    Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>                         
+    Cc: Thomas Gleixner <tglx@linutronix.de>                                             
+    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>                    
+    Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>                      
 
 
-On 05/16/2020 05:34 PM, maobibo wrote:
-> 
-> 
-> On 05/15/2020 09:50 PM, David Hildenbrand wrote:
->> On 14.05.20 08:50, Bibo Mao wrote:
->>> If there are two threads hitting page fault at the address, one
->>> thread updates pte entry and local tlb, the other thread can update
->>> local tlb also, rather than give up and let page fault happening
->>> again.
->>
->> Let me suggest
->>
->> "mm/memory: optimize concurrent page faults at same address
->>
->> If two threads concurrently fault at the same address, the thread that
->> won the race updates the PTE and its local TLB. For now, the other
->> thread gives up, simply does nothing, and continues.
->>
->> It could happen that this second thread triggers another fault, whereby
->> it only updates its local TLB while handling the fault. Instead of
->> triggering another fault, let's directly update the local TLB of the
->> second thread.
->> "
->>
->> If I got the intention of this patch correctly.
->>
->> Are there any performance numbers to support this patch?
->>
->> (I can't say too much about the correctness and/or usefulness of this patch)
-> 
-> yes, that is the situation. On MIPS platform software can update TLB,
-> so update_mmu_cache is used here. This does not happen frequently, and with the three series patches in later mail. I test lat_pagefault in lmbench, here is is result:
-> 
-> with these three series patches, 
-> # ./lat_pagefault  -N 10  /tmp/1 
-> Pagefaults on /tmp/1: 1.4973 microseconds
-> # ./lat_pagefault -P 4 -N 10  /tmp/1 
-> Pagefaults on /tmp/1: 1.5716 microseconds
-> 
-> original version, without these three series patch
-> #  ./lat_pagefault  -N 10  /tmp/1 
-> Pagefaults on /tmp/1: 1.6489 microseconds
-> # ./lat_pagefault -P 4 -N 10  /tmp/1
-> Pagefaults on /tmp/1: 1.7214 microseconds
-> 
+Any idea which one it is?
 
-I tested the three patches one by one, there is no obvious improvement with
-lat_pagefault case, I guess that it happens seldom where multiple threads access
-the same page at the same time. 
-
-The improvement is because of another modification where pte_mkyoung is added
-to get readable privilege on MIPS system.
-
-regards
-bibo, mao
-
->>>
->>> 	modified:   mm/memory.c
->>
->> This does not belong into a patch description.
-> 
-> well, I will modify the patch description.
-> 
-> regards
-> bibo,mao
-> 
-> 
->>
->>
->>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->>> ---
->>>  mm/memory.c | 30 ++++++++++++++++++++++--------
->>>  1 file changed, 22 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/mm/memory.c b/mm/memory.c
->>> index f703fe8..3a741ce 100644
->>> --- a/mm/memory.c
->>> +++ b/mm/memory.c
->>> @@ -2436,11 +2436,10 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
->>>  		if (!likely(pte_same(*vmf->pte, vmf->orig_pte))) {
->>>  			/*
->>>  			 * Other thread has already handled the fault
->>> -			 * and we don't need to do anything. If it's
->>> -			 * not the case, the fault will be triggered
->>> -			 * again on the same address.
->>> +			 * and update local tlb only
->>>  			 */
->>>  			ret = false;
->>> +			update_mmu_cache(vma, addr, vmf->pte);
->>>  			goto pte_unlock;
->>>  		}
->>>  
->>> @@ -2463,8 +2462,9 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
->>>  		vmf->pte = pte_offset_map_lock(mm, vmf->pmd, addr, &vmf->ptl);
->>>  		locked = true;
->>>  		if (!likely(pte_same(*vmf->pte, vmf->orig_pte))) {
->>> -			/* The PTE changed under us. Retry page fault. */
->>> +			/* The PTE changed under us. update local tlb */
->>>  			ret = false;
->>> +			update_mmu_cache(vma, addr, vmf->pte);
->>>  			goto pte_unlock;
->>>  		}
->>>  
->>> @@ -2704,6 +2704,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
->>>  		}
->>>  		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
->>>  		entry = mk_pte(new_page, vma->vm_page_prot);
->>> +		entry = pte_mkyoung(entry);
->>>  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
->>>  		/*
->>>  		 * Clear the pte entry and flush it first, before updating the
->>> @@ -2752,6 +2753,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
->>>  		new_page = old_page;
->>>  		page_copied = 1;
->>>  	} else {
->>> +		update_mmu_cache(vma, vmf->address, vmf->pte);
->>>  		mem_cgroup_cancel_charge(new_page, memcg, false);
->>>  	}
->>>  
->>> @@ -2812,6 +2814,7 @@ vm_fault_t finish_mkwrite_fault(struct vm_fault *vmf)
->>>  	 * pte_offset_map_lock.
->>>  	 */
->>>  	if (!pte_same(*vmf->pte, vmf->orig_pte)) {
->>> +		update_mmu_cache(vmf->vma, vmf->address, vmf->pte);
->>>  		pte_unmap_unlock(vmf->pte, vmf->ptl);
->>>  		return VM_FAULT_NOPAGE;
->>>  	}
->>> @@ -2936,6 +2939,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->>>  			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
->>>  					vmf->address, &vmf->ptl);
->>>  			if (!pte_same(*vmf->pte, vmf->orig_pte)) {
->>> +				update_mmu_cache(vma, vmf->address, vmf->pte);
->>>  				unlock_page(vmf->page);
->>>  				pte_unmap_unlock(vmf->pte, vmf->ptl);
->>>  				put_page(vmf->page);
->>> @@ -3341,8 +3345,10 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->>>  						vma->vm_page_prot));
->>>  		vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
->>>  				vmf->address, &vmf->ptl);
->>> -		if (!pte_none(*vmf->pte))
->>> +		if (!pte_none(*vmf->pte)) {
->>> +			update_mmu_cache(vma, vmf->address, vmf->pte);
->>>  			goto unlock;
->>> +		}
->>>  		ret = check_stable_address_space(vma->vm_mm);
->>>  		if (ret)
->>>  			goto unlock;
->>> @@ -3373,13 +3379,16 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->>>  	__SetPageUptodate(page);
->>>  
->>>  	entry = mk_pte(page, vma->vm_page_prot);
->>> +	entry = pte_mkyoung(entry);
->>>  	if (vma->vm_flags & VM_WRITE)
->>>  		entry = pte_mkwrite(pte_mkdirty(entry));
->>>  
->>>  	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
->>>  			&vmf->ptl);
->>> -	if (!pte_none(*vmf->pte))
->>> +	if (!pte_none(*vmf->pte)) {
->>> +		update_mmu_cache(vma, vmf->address, vmf->pte);
->>>  		goto release;
->>> +	}
->>>  
->>>  	ret = check_stable_address_space(vma->vm_mm);
->>>  	if (ret)
->>> @@ -3646,11 +3655,14 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
->>>  	}
->>>  
->>>  	/* Re-check under ptl */
->>> -	if (unlikely(!pte_none(*vmf->pte)))
->>> +	if (unlikely(!pte_none(*vmf->pte))) {
->>> +		update_mmu_cache(vma, vmf->address, vmf->pte);
->>>  		return VM_FAULT_NOPAGE;
->>> +	}
->>>  
->>>  	flush_icache_page(vma, page);
->>>  	entry = mk_pte(page, vma->vm_page_prot);
->>> +	entry = pte_mkyoung(entry);
->>>  	if (write)
->>>  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
->>>  	/* copy-on-write page */
->>> @@ -4224,8 +4236,10 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
->>>  	vmf->ptl = pte_lockptr(vmf->vma->vm_mm, vmf->pmd);
->>>  	spin_lock(vmf->ptl);
->>>  	entry = vmf->orig_pte;
->>> -	if (unlikely(!pte_same(*vmf->pte, entry)))
->>> +	if (unlikely(!pte_same(*vmf->pte, entry))) {
->>> +		update_mmu_cache(vmf->vma, vmf->address, vmf->pte);
->>>  		goto unlock;
->>> +	}
->>>  	if (vmf->flags & FAULT_FLAG_WRITE) {
->>>  		if (!pte_write(entry))
->>>  			return do_wp_page(vmf);
->>>
->>
->>
+Ira
 
