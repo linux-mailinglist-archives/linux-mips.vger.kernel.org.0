@@ -2,137 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6351D7C55
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 17:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775171D7C9F
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 17:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbgERPHF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 11:07:05 -0400
-Received: from mga03.intel.com ([134.134.136.65]:56823 "EHLO mga03.intel.com"
+        id S1728281AbgERPTu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 11:19:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57206 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727006AbgERPHF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 11:07:05 -0400
-IronPort-SDR: bq4hgVFZ8dchReh2T46aaLSVBB1aS1v9bGHvXs4JzRDhS4+yBdUoC+Uh0i3zUhiJJ0HYkvPSQQ
- glYfCn1jb8FQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 08:07:04 -0700
-IronPort-SDR: xijzf8j5EImrpdafZMqoJlWby9gfaCzai1/z9TN7sPPodRGqYM7lscEXvdeyWCKAmX4lgathKu
- aI5M8PY+D/PA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
-   d="scan'208";a="254465282"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008.fm.intel.com with ESMTP; 18 May 2020 08:06:54 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jahM0-007Ry1-EZ; Mon, 18 May 2020 18:06:56 +0300
-Date:   Mon, 18 May 2020 18:06:56 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1727035AbgERPTu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 18 May 2020 11:19:50 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1018B206D4;
+        Mon, 18 May 2020 15:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589815189;
+        bh=i/uWrEbUQkMdJDqHKyqNBwxmclbKqwRE5K2Wh7sf3lw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t//bgbOQF9M1/ae3klRD3yxL1s9QbAkBG0BDAyMMgG8u0T7F6ku9A3ZPEPbEbnHUn
+         dQkx7u0efp+QbCYfjXcwyNKBkgEPCNdwAtHe7bPX5Fybgy1OVDEVN3HweiXKgjaTHk
+         zSqjweZIDonDMPVvJ9OsrFxSO+0zupzkCzFfuWGc=
+Date:   Mon, 18 May 2020 16:19:47 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Clement Leger <cleger@kalray.eu>,
-        "wuxu.wu" <wuxu.wu@huawei.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 18/19] spi: dw: Use regset32 DebugFS method to create
- regdump file
-Message-ID: <20200518150656.GE1634618@smile.fi.intel.com>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-19-Sergey.Semin@baikalelectronics.ru>
- <20200515151056.GQ1634618@smile.fi.intel.com>
- <20200516204634.td52orxfnh7iewg6@mobilestation>
- <20200518111822.GZ1634618@smile.fi.intel.com>
- <20200518140825.jnkfpybxnwq7fx2m@mobilestation>
+        devicetree@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Message-ID: <20200518151946.GH8699@sirena.org.uk>
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
+ <20200508113751.GD4820@sirena.org.uk>
+ <20200510002039.hwahqasnnceowskz@mobilestation>
+ <20200511212506.GA23852@sirena.org.uk>
+ <20200518000542.ohtpem3lo2pbixbu@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RwGu8mu1E+uYXPWP"
 Content-Disposition: inline
-In-Reply-To: <20200518140825.jnkfpybxnwq7fx2m@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200518000542.ohtpem3lo2pbixbu@mobilestation>
+X-Cookie: If in doubt, mumble.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 18, 2020 at 05:08:25PM +0300, Serge Semin wrote:
-> On Mon, May 18, 2020 at 02:18:22PM +0300, Andy Shevchenko wrote:
-> > On Sat, May 16, 2020 at 11:46:34PM +0300, Serge Semin wrote:
-> > > On Fri, May 15, 2020 at 06:10:56PM +0300, Andy Shevchenko wrote:
-> > > > On Fri, May 15, 2020 at 01:47:57PM +0300, Serge Semin wrote:
-> > > > > DebugFS kernel interface provides a dedicated method to create the
-> > > > > registers dump file. Use it instead of creating a generic DebugFS
-> > > > > file with manually written read callback function.
 
-> > > > With below nit addressed,
-> > > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > > > > +#define DW_SPI_DBGFS_REG(_name, _off)	\
-> > > > > +{					\
-> > > > > +	.name = _name,			\
-> > > > 
-> > > > > +	.offset = _off			\
-> > > > 
-> > > > As previously discussed (did I miss your answer?) the comma at the end leaves
-> > > > better pattern for maintenance prospective.
-> > > 
-> > > Ah, sorry. Missed that. This comma is hardly needed seeing the structure
-> > > consists of just two elements. So I'd rather leave it as is.
-> > 
-> > While it's a really small thing, I consider that it's not good to make
-> > someone's else problem what can be done here. So, please, consider to add a
-> > comma. Look at the other drivers and code in the kernel. This is at least
-> > defacto preferred style.
-> 
-> Andy, you never give up, don't you? =)
+--RwGu8mu1E+uYXPWP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-First of all, I really appreciate work you have done so far (I mean it).
-Now to the point.
+On Mon, May 18, 2020 at 03:05:42AM +0300, Serge Semin wrote:
+> On Mon, May 11, 2020 at 10:25:06PM +0100, Mark Brown wrote:
 
-You see, I always try to have a rationale behind any proposed comment. I agree,
-that some of them can be considered as a bikeshedding for a certain developer,
-but on big picture with this scale of project even small change (being made or
-being rejected to be made) can provoke additional churn with a good magnitude,
-if we consider all possible cases where somebody, e.g., can take into account
-existing code to copy'n'paste from). So, I would easy give up on something if
-there will be a stronger (than mine) argument why the proposed thing is not
-good to be done (at least as a part of the discussed patch set). I also want
-to and will learn from the developers as a reviewer.
+> > Yes, some flags should work here - the issue was that at least some
+> > controllers may end up trying to do multiple SPI operations for one
+> > spi-mem thing which will break if the chip select doesn't get changed to
+> > correspond with what's going on.
 
-Hope that above will clarify my reviewer's point of view to the code.
+> Ok. New SPI flag it is then. It will be something like this:
+> + #define SPI_CONTROLLER_FLASH_SS		BIT(6)
 
-> Agreed then. I'll add comma to the
-> initializer and also after the last member here:
->         DW_SPI_DBGFS_REG("ISR", DW_SPI_ISR),
->         DW_SPI_DBGFS_REG("DMACR", DW_SPI_DMACR),
->         DW_SPI_DBGFS_REG("DMATDLR", DW_SPI_DMATDLR),
-> -       DW_SPI_DBGFS_REG("DMARDLR", DW_SPI_DMARDLR)
-> +       DW_SPI_DBGFS_REG("DMARDLR", DW_SPI_DMARDLR),
+I'd rather use CS than SS (it's more common in the code).
 
-Good catch, thanks for taking it into consideration as well.
+> So, what do you think?
 
->  };
->  
->  static int dw_spi_debugfs_init(struct dw_spi *dws)
+Should be fine, controllers that have an issue implementing just
+shouldn't set the flag.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > > > It's not clear to me that this hardware actually supports spi_mem in
+> > > > hardware?
 
+> > > SPI-mem operations are implemented by means of the EEPROM-read and Tx=
+-only
+> > > modes of the controller.
 
+> > Sure, but those seem like normal SPI-level things rather than cases
+> > where the hardware understands that it has a flash attached and is doing
+> > flash specific things.
+
+> No, hardware can't detect whether the flash is attached. This must be def=
+ined by
+> the platform, like based on the DT sub-nodes.
+
+This isn't about autodetection, it's about the abstraction level the
+hardware is operating on - some hardware is able to generate flash
+operations by itself (possibly with some help programming the opcodes
+that are needed by a given flash), some hardware just works at the
+bytestream level.
+
+> > A very common case for this stuff is that
+> > controllers have acceleration blocks for read and fall back on normal
+> > SPI for writes and erases, that sounds like what's going on here.
+>=20
+> Well, yeah, they do provide some acceleration. EEPROM-read provides autom=
+atic
+> write-cmd-dummy-data-then-read operations. But in this case the only thin=
+g we
+> have to push into the SPI Tx FIFO is command and dummy bytes. The read op=
+eration
+
+So it's a write then read but you have to program the write each time?
+
+--RwGu8mu1E+uYXPWP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7Cp5IACgkQJNaLcl1U
+h9CR+Qf9Ev6BSwOliLPeSLEND0J+GE/EF79DjdkufAO8e0ZfgAdIei5Jv7llRtTz
+ncbHQRBfSbB688/lo5AxDfB8StOMxBbCSLjxss4hLNNyaJio4JsaMLR0HwVKlUFz
+xg0KSY2wlhn4sveDiMldv69WVXzQMWI+Lq7Anjvjjaqb4IFU9JPNJtnJl5HOsUZE
+XrflFyIycmMwS21PAHWlDoG6NLnQ3P6Ko2BkwlbsJZh8dhcxUc8tdQGcTd2OoeeE
+BLXSqaEMqBrEFf3p9vJ7iDOy33fH6iNwVF05Z3E/Zz5080k9bLzqJtpViHS9NDp2
+hfwjgB8qPJdtkJIagGX/nSbXgACk0Q==
+=Vs/w
+-----END PGP SIGNATURE-----
+
+--RwGu8mu1E+uYXPWP--
