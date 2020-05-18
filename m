@@ -2,130 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 345F51D896F
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 22:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102761D89A8
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 22:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727799AbgERUkl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 16:40:41 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:35507 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726502AbgERUkk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 16:40:40 -0400
-Received: by mail-il1-f195.google.com with SMTP id a14so5912010ilk.2;
-        Mon, 18 May 2020 13:40:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3XIblm8zUqQuuY/X/TRE5azM2syRVCTbnkaQ5PvYeqQ=;
-        b=CgOIpOr7aRmEtY+sNfPRku4mULjelQH08nxiiyd4/Iz2V1Ku2AyCQHLPeB5Bv9HYtD
-         AXDvsnpaq9RC9UijbJX3yQEktMazTO0URsa+n4IVulCEaD1Dz3X6LwNrPd99w+zetvfm
-         8uXzhhlKZ0pczIvsV/ISXIykptgyK70F6npju3iRdqhnq2lYC3e6oM29HJqf6HKrTmb5
-         zzmBUzpPUe9bo+mhTIi6fKTTjWDfVMadTy2va/Y66mxgKPy2+3AITm2J+FT7CRenYaAz
-         K0aEtgQ8Ib/pyDvteiZ3/BVpZX9U0agX51oL2bnYJHG48akHuqFTwjk1C1Jy5Ww99DxA
-         BREw==
-X-Gm-Message-State: AOAM531/dIFwBdFgqimkhwJjnlj3xeNrC/0hKIszL0egb+k6uuULKSKl
-        JtfX7wgr4PBSXLS3wx/pMQ==
-X-Google-Smtp-Source: ABdhPJzP6946xepHNazaOLD4ewVhDy31f9QxjZeD/1Q0ypDixwfmV7lyLnzYrKfUH8Jo45fkyUMnUg==
-X-Received: by 2002:a92:5acb:: with SMTP id b72mr18300906ilg.76.1589834439429;
-        Mon, 18 May 2020 13:40:39 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id r9sm5157600ilm.10.2020.05.18.13.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2020 13:40:38 -0700 (PDT)
-Received: (nullmailer pid 9739 invoked by uid 1000);
-        Mon, 18 May 2020 20:40:37 -0000
-Date:   Mon, 18 May 2020 14:40:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S1726275AbgERU5t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 16:57:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36556 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726270AbgERU5t (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 18 May 2020 16:57:49 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EEF9420756;
+        Mon, 18 May 2020 20:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589835468;
+        bh=yFKL6q0Ss/A6Efr5StLQDz3hK+V4GQL8fArvDWrB8Iw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LrMMimDmiD2wKcJAwj8KJkVTOLP7zSYVhM0nSgkv2dxAoziNsQtUCrv+e6Ygu2g7v
+         HTQD6cDF7KorRQxy+qKJWsPpx7dcdp/nanguSzYFJgrd4P/bJxRDyBCGFgNp0xWmrJ
+         ajuEkib91P8ef9WiGs4TMRVcr84hLgRV9Z4IN3Iw=
+Date:   Mon, 18 May 2020 13:57:47 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Bibo Mao <maobibo@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
         Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/7] dt-bindings: watchdog: dw-wdt: Add watchdog TOPs
- array property
-Message-ID: <20200518204037.GA4909@bogus>
-References: <20200306132758.703FC8030704@mail.baikalelectronics.ru>
- <20200510105807.880-1-Sergey.Semin@baikalelectronics.ru>
- <20200510105807.880-4-Sergey.Semin@baikalelectronics.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200510105807.880-4-Sergey.Semin@baikalelectronics.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        Philippe =?ISO-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v3 3/3] mm/memory.c: Add memory read privilege before
+ filling PTE entry
+Message-Id: <20200518135747.d8837ba6742b2d193e14fbb0@linux-foundation.org>
+In-Reply-To: <1589778529-25627-3-git-send-email-maobibo@loongson.cn>
+References: <1589778529-25627-1-git-send-email-maobibo@loongson.cn>
+        <1589778529-25627-3-git-send-email-maobibo@loongson.cn>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, May 10, 2020 at 01:58:03PM +0300, Serge Semin wrote:
-> In case if DW Watchdog IP core is built with WDT_USE_FIX_TOP == false,
-> a custom timeout periods are used to preset the timer counter. In
-> this case that periods should be specified in a new "snps,watchdog-tops"
-> property of the DW watchdog dts node.
+On Mon, 18 May 2020 13:08:49 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
+
+> On mips platform, hw PTE entry valid bit is set in pte_mkyoung
+> function, it is used to set physical page with readable privilege.
+
+pte_mkyoung() seems to be a strange place to set the pte's valid bit. 
+Why is it done there?  Can it be done within mips's mk_pte()?
+
+> Here add pte_mkyoung function to make page readable on MIPS platform
+> during page fault handling. This patch improves page fault latency
+> about 10% on my MIPS machine with lmbench lat_pagefault case.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: linux-mips@vger.kernel.org
-> 
-> ---
-> 
-> Rob, I had to remove your Reviewed-by tag, since the patch needed
-> to be updated a bit (see changelog).
-> 
-> Changelog v2:
-> - Rearrange SoBs.
-> - Move $ref to the root level of the "snps,watchdog-tops" property
->   so does the constraints.
-> - Add default TOP values array.
-> - Discard the label definition from the new bindings example.
-> ---
->  .../bindings/watchdog/snps,dw-wdt.yaml        | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> index 5bf6dc6377f3..cc741fb5a685 100644
-> --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> @@ -39,6 +39,24 @@ properties:
->      description: Phandle to the DW Watchdog reset lane
->      maxItems: 1
+> ...
+>
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -2704,6 +2704,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+>  		}
+>  		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+>  		entry = mk_pte(new_page, vma->vm_page_prot);
+> +		entry = pte_mkyoung(entry);
+>  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+
+What is the effect on non-mips machines?  If it's only "additional
+overhead" then it would be better to add a new pte_mkvalid() (or
+whatever) and arrange for it to be a no-op on all but mips?
+
+>  		/*
+>  		 * Clear the pte entry and flush it first, before updating the
+> @@ -3378,6 +3379,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+>  	__SetPageUptodate(page);
 >  
-> +  snps,watchdog-tops:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description: |
-> +      DW APB Watchdog custom timer intervals - Timeout Period ranges (TOPs).
-> +      Each TOP is a number loaded into the watchdog counter at the moment of
-> +      the timer restart. The counter decrementing happens each tick of the
-> +      reference clock. Therefore the TOPs array is equivalent to an array of
-> +      the timer expiration intervals supported by the DW APB Watchdog. Note
-> +      DW APB Watchdog IP-core might be synthesized with fixed TOP values,
-> +      in which case this property is unnecessary with default TOPs utilized.
-> +    default: [0x0001000 0x0002000 0x0004000 0x0008000
-> +      0x0010000 0x0020000 0x0040000 0x0080000
-> +      0x0100000 0x0200000 0x0400000 0x0800000
-> +      0x1000000 0x2000000 0x4000000 0x8000000]
-> +    items:
-> +      minItems: 16
-> +      maxItems: 16
+>  	entry = mk_pte(page, vma->vm_page_prot);
+> +	entry = pte_mkyoung(entry);
+>  	if (vma->vm_flags & VM_WRITE)
+>  		entry = pte_mkwrite(pte_mkdirty(entry));
+>  
+> @@ -3660,6 +3662,7 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
+>  
+>  	flush_icache_page(vma, page);
+>  	entry = mk_pte(page, vma->vm_page_prot);
+> +	entry = pte_mkyoung(entry);
+>  	if (write)
+>  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+>  	/* copy-on-write page */
+> diff --git a/mm/mprotect.c b/mm/mprotect.c
+> index 494192ca..673f1cd 100644
+> --- a/mm/mprotect.c
+> +++ b/mm/mprotect.c
+> @@ -131,6 +131,8 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+>  				ptent = pte_clear_uffd_wp(ptent);
+>  			}
+>  
+> +			if (vma->vm_flags & VM_READ)
+> +				ptent = pte_mkyoung(ptent);
+>  			/* Avoid taking write faults for known dirty pages */
+>  			if (dirty_accountable && pte_dirty(ptent) &&
+>  					(pte_soft_dirty(ptent) ||
 
-Drop 'items' and move these up a level. That may have given you some 
-issues, but I made some fixes recently.
-
-With that,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
-Rob
