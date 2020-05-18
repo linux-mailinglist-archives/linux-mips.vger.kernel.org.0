@@ -2,115 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 102761D89A8
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 22:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDDB1D89AC
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 22:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgERU5t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 16:57:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36556 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726270AbgERU5t (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 16:57:49 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EEF9420756;
-        Mon, 18 May 2020 20:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589835468;
-        bh=yFKL6q0Ss/A6Efr5StLQDz3hK+V4GQL8fArvDWrB8Iw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LrMMimDmiD2wKcJAwj8KJkVTOLP7zSYVhM0nSgkv2dxAoziNsQtUCrv+e6Ygu2g7v
-         HTQD6cDF7KorRQxy+qKJWsPpx7dcdp/nanguSzYFJgrd4P/bJxRDyBCGFgNp0xWmrJ
-         ajuEkib91P8ef9WiGs4TMRVcr84hLgRV9Z4IN3Iw=
-Date:   Mon, 18 May 2020 13:57:47 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Bibo Mao <maobibo@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
+        id S1727873AbgERU57 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 16:57:59 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:50090 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726270AbgERU57 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 16:57:59 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8593C8030779;
+        Mon, 18 May 2020 20:57:54 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ztp9O0FMjJ7Y; Mon, 18 May 2020 23:57:53 +0300 (MSK)
+Date:   Mon, 18 May 2020 23:57:52 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
-        Dmitry Korotin <dkorotin@wavecomp.com>,
-        Philippe =?ISO-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v3 3/3] mm/memory.c: Add memory read privilege before
- filling PTE entry
-Message-Id: <20200518135747.d8837ba6742b2d193e14fbb0@linux-foundation.org>
-In-Reply-To: <1589778529-25627-3-git-send-email-maobibo@loongson.cn>
-References: <1589778529-25627-1-git-send-email-maobibo@loongson.cn>
-        <1589778529-25627-3-git-send-email-maobibo@loongson.cn>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Ralf Baechle <ralf@linux-mips.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
+ if CPU_FREQ enabled
+Message-ID: <20200518205752.txbylbjt2zkwdwwe@mobilestation>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
+ <20200508154150.GB22247@alpha.franken.de>
+ <20200511133121.cz5axbwynhmqkx7x@mobilestation>
+ <20200515074827.6p5zx4sb3bmavjih@mobilestation>
+ <20200515210647.GA22922@alpha.franken.de>
+ <20200518134820.wedoumgbsllvhem6@mobilestation>
+ <20200518163206.GA17800@alpha.franken.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200518163206.GA17800@alpha.franken.de>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 18 May 2020 13:08:49 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
-
-> On mips platform, hw PTE entry valid bit is set in pte_mkyoung
-> function, it is used to set physical page with readable privilege.
-
-pte_mkyoung() seems to be a strange place to set the pte's valid bit. 
-Why is it done there?  Can it be done within mips's mk_pte()?
-
-> Here add pte_mkyoung function to make page readable on MIPS platform
-> during page fault handling. This patch improves page fault latency
-> about 10% on my MIPS machine with lmbench lat_pagefault case.
+On Mon, May 18, 2020 at 06:32:06PM +0200, Thomas Bogendoerfer wrote:
+> On Mon, May 18, 2020 at 04:48:20PM +0300, Serge Semin wrote:
+> > On Fri, May 15, 2020 at 11:06:47PM +0200, Thomas Bogendoerfer wrote:
+> > > On Fri, May 15, 2020 at 10:48:27AM +0300, Serge Semin wrote:
+> > > > Thomas,
+> > > > Could you take a look at my comment below so I could proceed with the
+> > > > patchset v3 development?
+> > > 
+> > > I can't help, but using r4k clocksource with changing frequency is
+> > > probaly only usefull as a random generator. So IMHO the only two
+> > > options are disabling it or implement what arch/x86/kernel/tsc.c does.
+> > > 
+> > > Thomas.
+> > 
+> > Thomas, could you proceed with the rest of the patches review?
+> > ├─>[PATCH v2 16/20] bus: cdmm: Add MIPS R5 arch support
+> > ├─>[PATCH v2 15/20] mips: cdmm: Add mti,mips-cdmm dtb node support
 > 
-> ...
->
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -2704,6 +2704,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
->  		}
->  		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
->  		entry = mk_pte(new_page, vma->vm_page_prot);
-> +		entry = pte_mkyoung(entry);
->  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+> both are not my call, but look ok to me.
 
-What is the effect on non-mips machines?  If it's only "additional
-overhead" then it would be better to add a new pte_mkvalid() (or
-whatever) and arrange for it to be a no-op on all but mips?
+Can I add your Reviewed-by tag there then?
 
->  		/*
->  		 * Clear the pte entry and flush it first, before updating the
-> @@ -3378,6 +3379,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->  	__SetPageUptodate(page);
->  
->  	entry = mk_pte(page, vma->vm_page_prot);
-> +	entry = pte_mkyoung(entry);
->  	if (vma->vm_flags & VM_WRITE)
->  		entry = pte_mkwrite(pte_mkdirty(entry));
->  
-> @@ -3660,6 +3662,7 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
->  
->  	flush_icache_page(vma, page);
->  	entry = mk_pte(page, vma->vm_page_prot);
-> +	entry = pte_mkyoung(entry);
->  	if (write)
->  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
->  	/* copy-on-write page */
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index 494192ca..673f1cd 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -131,6 +131,8 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
->  				ptent = pte_clear_uffd_wp(ptent);
->  			}
->  
-> +			if (vma->vm_flags & VM_READ)
-> +				ptent = pte_mkyoung(ptent);
->  			/* Avoid taking write faults for known dirty pages */
->  			if (dirty_accountable && pte_dirty(ptent) &&
->  					(pte_soft_dirty(ptent) ||
+> 
+> > ├─>[PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
+> 
+> that's broken. A reg shift of 2 doesn't mean we could use 32bit access
+> to the registers on other platforms. As I don't think adding some ifdefery
+> makes things nicer, just implement the your prom_putchar in board code.
 
+I thought about that initially, but then I decided to alter the generic
+early_printk_8250 code instead. My version of prom_putchar() would be almost
+the same as one implemented in the early_printk_8250 module except minor
+modification of replacing readb/writeb methods with readl/writel. So I didn't
+want to duplicate the code, but wanted to provide a general way to fix the
+problem potentially also for another platforms.
+
+Since you don't like this fix alternatively I'd suggest to add the reg_width
+parameter passed to the setup_8250_early_printk_port() method like this:
+-setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
+-                             unsigned int timeout)
++setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
++                             unsigned int reg_width, unsigned int timeout)
+
+By reg_width parameter we could determine the actual width of the register:
+ static inline u8 serial_in(int offset)
+ {
+-       return readb(serial8250_base + (offset << serial8250_reg_shift));
++       u8 ret = 0xFF;
++
++       offset <<= serial8250_reg_shift;
++       switch (serial8250_reg_width) {
++       case 1:
++               ret = readb(serial8250_base + offset);
++               break;
++       case 2:
++               ret = readw(serial8250_base + offset);
++               break;
++       case 4:
++               ret = readl(serial8250_base + offset);
++               break;
++       default:
++               break;
++       }
++
++       return ret;
+ }
+
+The similar modification will be implemented for serial_out(). I'll also modify
+the currently available setup_8250_early_printk_port() calls so they would pass
+the reg_with as 1 to activate the normal readb/writeb IO methods.
+
+What do you think about this?
+
+> 
+> > ├─>[PATCH v2 12/20] mips: MAAR: Add XPA mode support
+> 
+> looks ok so far.
+
+Can I add your Reviewed-by tag there then?
+
+> 
+> > ├─>[PATCH v2 10/20] mips: Add CONFIG/CONFIG6/Cause reg fields macro
+> 
+> that is fine
+
+Can I add your Reviewed-by tag there then?
+
+> 
+> > └─>[PATCH v2 09/20] mips: Add CP0 Write Merge config support
+> 
+> this is IMHO a dangerous change. Enabling write merging for any
+> CPU supporting it might triggers bugs. Do it in your board bringup
+> code and at the moment I don't see a reason for the rest of that
+> patch.
+
+Let's at least leave the mm_config() implementation but without the write-merge
+enabling by default. Providing features availability macro
+cpu_has_mm_sysad/cpu_has_mm_full and c0 config fields
+MIPS_CPU_MM_SYSAD/MIPS_CPU_MM_FULL defined will be useful in the platform-specific
+Write-Merge enable/disable procedure. For instance, in the my prom_init() method
+I could use them to implement a code pattern like:
+
++	if (cpu_has_mm_full) {
++		unsigned int config0 = read_c0_config();
++               config0 = (config0 & ~MIPS_CONF_MM) | MIPS_CONF_MM_FULL;
++               write_c0_config(config0);
++	}
+
+By doing so I can manually enable/disable the MM feature in the
+cpu-feature-overrides.h. Without that I'd have to locally define these macro,
+which isn't good seeing they are in fact generic and can be useful for other
+platforms with SYSAD and FULL MM feature available. What do you think?
+
+-Sergey
+
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
