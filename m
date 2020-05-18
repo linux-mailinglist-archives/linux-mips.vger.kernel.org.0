@@ -2,149 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 205F41D75B3
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 12:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBE91D75BE
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2020 13:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbgERK47 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 06:56:59 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:46332 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726362AbgERK47 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 06:56:59 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id B18DC8030875;
-        Mon, 18 May 2020 10:56:54 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 50YAqZGe6GZM; Mon, 18 May 2020 13:56:53 +0300 (MSK)
-Date:   Mon, 18 May 2020 13:56:49 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        id S1726526AbgERLAI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 07:00:08 -0400
+Received: from mga12.intel.com ([192.55.52.136]:2258 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726499AbgERLAH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 18 May 2020 07:00:07 -0400
+IronPort-SDR: D7O++Fu3RnV3NEH+9Wam9rpicUSEOjobnARVNMOq7FokPj5qEp2u+pudJVqj3oGmWfgoxbZSrq
+ 8u2L+IqtKFoQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 04:00:07 -0700
+IronPort-SDR: aKcaZ1vbO9Y+Pw38A4DR+r+cMf54BrnU9FSzgbihFrsRh7ZSK3XynoJGRv7/lzlWh9TxWwR5Vp
+ ReoEmWfYeYmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
+   d="scan'208";a="254413961"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008.fm.intel.com with ESMTP; 18 May 2020 04:00:02 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jadV6-007PLQ-Tv; Mon, 18 May 2020 14:00:04 +0300
+Date:   Mon, 18 May 2020 14:00:04 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
+        Allison Randal <allison@lohutok.net>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw
- setting
-Message-ID: <20200518105649.gcv22l253lsuje7y@mobilestation>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200518102415.k4c5qglodij5ac6h@vireshk-i7>
- <20200518103102.t3a3g4uxeeuwsnix@mobilestation>
- <5284478.EF2IWm2iUs@kreacher>
- <20200518104602.mjh2p5iltf2x4wmq@mobilestation>
- <CAJZ5v0imYcL3M80S1snJAqXQ=GsqbChij-6aWx=4L02TKVvrQg@mail.gmail.com>
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 06/19] spi: dw: Discard static DW DMA slave structures
+Message-ID: <20200518110004.GW1634618@smile.fi.intel.com>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-7-Sergey.Semin@baikalelectronics.ru>
+ <20200515123422.GZ185537@smile.fi.intel.com>
+ <20200516142030.kburieaxjg4n7c42@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0imYcL3M80S1snJAqXQ=GsqbChij-6aWx=4L02TKVvrQg@mail.gmail.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200516142030.kburieaxjg4n7c42@mobilestation>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 18, 2020 at 12:51:15PM +0200, Rafael J. Wysocki wrote:
-> On Mon, May 18, 2020 at 12:46 PM Serge Semin
-> <Sergey.Semin@baikalelectronics.ru> wrote:
-> >
-> > On Mon, May 18, 2020 at 12:41:19PM +0200, Rafael J. Wysocki wrote:
-> > > On Monday, May 18, 2020 12:31:02 PM CEST Serge Semin wrote:
-> > > > On Mon, May 18, 2020 at 03:54:15PM +0530, Viresh Kumar wrote:
-> > > > > On 18-05-20, 12:22, Rafael J. Wysocki wrote:
-> > > > > > On Monday, May 18, 2020 12:11:09 PM CEST Viresh Kumar wrote:
-> > > > > > > On 18-05-20, 11:53, Rafael J. Wysocki wrote:
-> > > > > > > > That said if you really only want it to return 0 on success, you may as well
-> > > > > > > > add a ret = 0; statement (with a comment explaining why it is needed) after
-> > > > > > > > the last break in the loop.
-> > > > > > >
-> > > > > > > That can be done as well, but will be a bit less efficient as the loop
-> > > > > > > will execute once for each policy, and so the statement will run
-> > > > > > > multiple times. Though it isn't going to add any significant latency
-> > > > > > > in the code.
-> > > > > >
-> > > > > > Right.
-> > > > > >
-> > > > > > However, the logic in this entire function looks somewhat less than
-> > > > > > straightforward to me, because it looks like it should return an
-> > > > > > error on the first policy without a frequency table (having a frequency
-> > > > > > table depends on the driver and that is the same for all policies, so it
-> > > > > > is pointless to iterate any further in that case).
-> > > > > >
-> > > > > > Also, the error should not be -EINVAL, because that means "invalid
-> > > > > > argument" which would be the state value.
-> > > > > >
-> > > > > > So I would do something like this:
-> > > > > >
-> > > > > > ---
-> > > > > >  drivers/cpufreq/cpufreq.c |   11 ++++++-----
-> > > > > >  1 file changed, 6 insertions(+), 5 deletions(-)
-> > > > > >
-> > > > > > Index: linux-pm/drivers/cpufreq/cpufreq.c
-> > > > > > ===================================================================
-> > > > > > --- linux-pm.orig/drivers/cpufreq/cpufreq.c
-> > > > > > +++ linux-pm/drivers/cpufreq/cpufreq.c
-> > > > > > @@ -2535,26 +2535,27 @@ EXPORT_SYMBOL_GPL(cpufreq_update_limits)
-> > > > > >  static int cpufreq_boost_set_sw(int state)
-> > > > > >  {
-> > > > > >         struct cpufreq_policy *policy;
-> > > > > > -       int ret = -EINVAL;
-> > > > > >
-> > > > > >         for_each_active_policy(policy) {
-> > > > > > +               int ret;
-> > > > > > +
-> > > > > >                 if (!policy->freq_table)
-> > > > > > -                       continue;
-> > > > > > +                       return -ENXIO;
-> > > > > >
-> > > > > >                 ret = cpufreq_frequency_table_cpuinfo(policy,
-> > > > > >                                                       policy->freq_table);
-> > > > > >                 if (ret) {
-> > > > > >                         pr_err("%s: Policy frequency update failed\n",
-> > > > > >                                __func__);
-> > > > > > -                       break;
-> > > > > > +                       return ret;
-> > > > > >                 }
-> > > > > >
-> > > > > >                 ret = freq_qos_update_request(policy->max_freq_req, policy->max);
-> > > > > >                 if (ret < 0)
-> > > > > > -                       break;
-> > > > > > +                       return ret;
-> > > > > >         }
-> > > > > >
-> > > > > > -       return ret;
-> > > > > > +       return 0;
-> > > > > >  }
-> > > > > >
-> > > > > >  int cpufreq_boost_trigger_state(int state)
-> > > > >
-> > > > > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > >
-> > > > Ok. Thanks for the comments. Shall I resend the patch with update Rafael
-> > > > suggests or you'll merge the Rafael's fix in yourself?
-> > >
-> > > I'll apply the fix directly, thanks!
-> >
-> > Great. Is it going to be available in the repo:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
-> > ?
+On Sat, May 16, 2020 at 05:20:30PM +0300, Serge Semin wrote:
+> On Fri, May 15, 2020 at 03:34:22PM +0300, Andy Shevchenko wrote:
+> > On Fri, May 15, 2020 at 01:47:45PM +0300, Serge Semin wrote:
+> > > Having them declared is redundant since each struct dw_dma_chan has
+> > > the same structure embedded and the structure from the passed dma_chan
+> > > private pointer will be copied there as a result of the next calls
+> > > chain:
+> > > dma_request_channel() -> find_candidate() -> dma_chan_get() ->
+> > > device_alloc_chan_resources() = dwc_alloc_chan_resources() ->
+> > > dw_dma_filter().
+> > > So just remove the static dw_dma_chan structures and use a locally
+> > > declared data instance with dst_id/src_id set to the same values as
+> > > the static copies used to have.
+> > 
+> > ...
+> > 
+> > > -static struct dw_dma_slave mid_dma_tx = { .dst_id = 1 };
+> > > -static struct dw_dma_slave mid_dma_rx = { .src_id = 0 };
+> > 
+> > > +	struct dw_dma_slave slave = {0};
+> > 
+> > I really would like to leave them separated and as in the original form, i.e.
+> > 
+> > 	struct dw_dma_slave tx = { .dst_id = 1 };
+> > 	struct dw_dma_slave rx = { .src_id = 0 };
+> > 
+> > those src and dst IDs are put in that form on purpose...
 > 
-> Yes, it is.  Please see the bleeding-edge branch in there, thanks!
+> As long as you don't tell us what purpose it is, my position won't change.
 
-No credits with at least Reported-by tag? That's sad.(
+It's not the way when your changes makes this the older (upstreamed) stuff's
+issue, it's an opposite. But I will help you here...
 
--Sergey
+> These structures declared here just hold the static memory and nothing
+> else. Allocating them on stack is better.
+
+I'm not talking about stack, it's fine for me, what I'm talking about is *how*
+they are being initialized. Read my message again carefully, please.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
