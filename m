@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B901D93F1
-	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2020 12:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EF71D93F5
+	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2020 12:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728612AbgESKEH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 May 2020 06:04:07 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:42526 "EHLO loongson.cn"
+        id S1728483AbgESKED (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 May 2020 06:04:03 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:42500 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728286AbgESKEE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 19 May 2020 06:04:04 -0400
+        id S1726121AbgESKED (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 19 May 2020 06:04:03 -0400
 Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz97yrsNeDoM2AA--.42S2;
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz97yrsNeDoM2AA--.42S3;
         Tue, 19 May 2020 18:03:31 +0800 (CST)
 From:   Bibo Mao <maobibo@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -30,67 +30,203 @@ Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
         "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH v4 1/4] MIPS: Do not flush tlb page when updating PTE entry
-Date:   Tue, 19 May 2020 18:03:27 +0800
-Message-Id: <1589882610-7291-1-git-send-email-maobibo@loongson.cn>
+Subject: [PATCH v4 2/4] mm/memory.c: Update local TLB if PTE entry exists
+Date:   Tue, 19 May 2020 18:03:28 +0800
+Message-Id: <1589882610-7291-2-git-send-email-maobibo@loongson.cn>
 X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9Dxz97yrsNeDoM2AA--.42S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFW3ZryxtF1UJrWUGr1xZrb_yoW8JFW5pF
-        srAryvg3ykG3y0yFy8ArnY9r43J3ykGrZ8KryDCrZ0v3ZrXF18Krs3Ka42yry8ZFWak3W8
-        Kr4YqF4DZa12y37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkCb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY
-        04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2vPfDU
-        UUU
+In-Reply-To: <1589882610-7291-1-git-send-email-maobibo@loongson.cn>
+References: <1589882610-7291-1-git-send-email-maobibo@loongson.cn>
+X-CM-TRANSID: AQAAf9Dxz97yrsNeDoM2AA--.42S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxuFW5Cr43Cr1rWr4ruF1rWFg_yoWxGw43pr
+        yfCa1DXF4xXr18Zr4xXw4qvF15Za4rJa4kJry3Kw1Fv39xXr4fuay5G3yFvFZ5Gr95Xwsr
+        Jr4jgF4UZay7uw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+        8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
+        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
+        CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280
+        aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
+        Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
+        6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
+        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwI
+        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWx
+        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
+        C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5tgA7UUUUU==
 X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-It is not necessary to flush tlb page on all CPUs if suitable PTE
-entry exists already during page fault handling, just updating
-TLB is fine.
+If two threads concurrently fault at the same address, the thread that
+won the race updates the PTE and its local TLB. For now, the other
+thread gives up, simply does nothing, and continues.
 
-Here redefine flush_tlb_fix_spurious_fault as empty on MIPS system.
-V4:
-- add pte_sw_mkyoung function to implement readable privilege, and
-  this function is  only in effect on MIPS system.
-- add page valid bit judgement in function pte_modify
-V3:
-- add detailed changelog, modify typo issue in patch V2
-v2:
-- split flush_tlb_fix_spurious_fault and tlb update into two patches
-- comments typo modification
-- separate tlb update and add pte readable privilege into two patches
+It could happen that this second thread triggers another fault, whereby
+it only updates its local TLB while handling the fault. Instead of
+triggering another fault, let's directly update the local TLB of the
+second thread.
+
+It is only useful to architectures where software can update TLB, it may
+bring out some negative effect if update_mmu_cache is used for other
+purpose also. It seldom happens where multiple threads access the same
+page at the same time, so the negative effect is limited on other arches.
 
 Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 ---
- arch/mips/include/asm/pgtable.h | 2 ++
- 1 file changed, 2 insertions(+)
+ mm/memory.c | 44 +++++++++++++++++++++++++++-----------------
+ 1 file changed, 27 insertions(+), 17 deletions(-)
 
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 9b01d2d..0d625c2 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -478,6 +478,8 @@ static inline pgprot_t pgprot_writecombine(pgprot_t _prot)
- 	return __pgprot(prot);
+diff --git a/mm/memory.c b/mm/memory.c
+index f703fe8..2eb59a9 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1770,8 +1770,8 @@ static vm_fault_t insert_pfn(struct vm_area_struct *vma, unsigned long addr,
+ 			}
+ 			entry = pte_mkyoung(*pte);
+ 			entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+-			if (ptep_set_access_flags(vma, addr, pte, entry, 1))
+-				update_mmu_cache(vma, addr, pte);
++			ptep_set_access_flags(vma, addr, pte, entry, 1);
++			update_mmu_cache(vma, addr, pte);
+ 		}
+ 		goto out_unlock;
+ 	}
+@@ -2436,17 +2436,16 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
+ 		if (!likely(pte_same(*vmf->pte, vmf->orig_pte))) {
+ 			/*
+ 			 * Other thread has already handled the fault
+-			 * and we don't need to do anything. If it's
+-			 * not the case, the fault will be triggered
+-			 * again on the same address.
++			 * and update local tlb only
+ 			 */
++			update_mmu_cache(vma, addr, vmf->pte);
+ 			ret = false;
+ 			goto pte_unlock;
+ 		}
+ 
+ 		entry = pte_mkyoung(vmf->orig_pte);
+-		if (ptep_set_access_flags(vma, addr, vmf->pte, entry, 0))
+-			update_mmu_cache(vma, addr, vmf->pte);
++		ptep_set_access_flags(vma, addr, vmf->pte, entry, 0);
++		update_mmu_cache(vma, addr, vmf->pte);
+ 	}
+ 
+ 	/*
+@@ -2463,7 +2462,8 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
+ 		vmf->pte = pte_offset_map_lock(mm, vmf->pmd, addr, &vmf->ptl);
+ 		locked = true;
+ 		if (!likely(pte_same(*vmf->pte, vmf->orig_pte))) {
+-			/* The PTE changed under us. Retry page fault. */
++			/* The PTE changed under us, update local tlb */
++			update_mmu_cache(vma, addr, vmf->pte);
+ 			ret = false;
+ 			goto pte_unlock;
+ 		}
+@@ -2618,8 +2618,8 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
+ 	flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+ 	entry = pte_mkyoung(vmf->orig_pte);
+ 	entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+-	if (ptep_set_access_flags(vma, vmf->address, vmf->pte, entry, 1))
+-		update_mmu_cache(vma, vmf->address, vmf->pte);
++	ptep_set_access_flags(vma, vmf->address, vmf->pte, entry, 1);
++	update_mmu_cache(vma, vmf->address, vmf->pte);
+ 	pte_unmap_unlock(vmf->pte, vmf->ptl);
  }
  
-+#define flush_tlb_fix_spurious_fault(vma, address) do { } while (0)
-+
- /*
-  * Conversion functions: convert a page and protection to a page entry,
-  * and a page entry and page directory to the page they refer to.
+@@ -2752,6 +2752,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		new_page = old_page;
+ 		page_copied = 1;
+ 	} else {
++		update_mmu_cache(vma, vmf->address, vmf->pte);
+ 		mem_cgroup_cancel_charge(new_page, memcg, false);
+ 	}
+ 
+@@ -2812,6 +2813,7 @@ vm_fault_t finish_mkwrite_fault(struct vm_fault *vmf)
+ 	 * pte_offset_map_lock.
+ 	 */
+ 	if (!pte_same(*vmf->pte, vmf->orig_pte)) {
++		update_mmu_cache(vmf->vma, vmf->address, vmf->pte);
+ 		pte_unmap_unlock(vmf->pte, vmf->ptl);
+ 		return VM_FAULT_NOPAGE;
+ 	}
+@@ -2936,6 +2938,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+ 					vmf->address, &vmf->ptl);
+ 			if (!pte_same(*vmf->pte, vmf->orig_pte)) {
++				update_mmu_cache(vma, vmf->address, vmf->pte);
+ 				unlock_page(vmf->page);
+ 				pte_unmap_unlock(vmf->pte, vmf->ptl);
+ 				put_page(vmf->page);
+@@ -3341,8 +3344,10 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+ 						vma->vm_page_prot));
+ 		vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+ 				vmf->address, &vmf->ptl);
+-		if (!pte_none(*vmf->pte))
++		if (!pte_none(*vmf->pte)) {
++			update_mmu_cache(vma, vmf->address, vmf->pte);
+ 			goto unlock;
++		}
+ 		ret = check_stable_address_space(vma->vm_mm);
+ 		if (ret)
+ 			goto unlock;
+@@ -3378,8 +3383,10 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+ 
+ 	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
+ 			&vmf->ptl);
+-	if (!pte_none(*vmf->pte))
++	if (!pte_none(*vmf->pte)) {
++		update_mmu_cache(vma, vmf->address, vmf->pte);
+ 		goto release;
++	}
+ 
+ 	ret = check_stable_address_space(vma->vm_mm);
+ 	if (ret)
+@@ -3646,8 +3653,10 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
+ 	}
+ 
+ 	/* Re-check under ptl */
+-	if (unlikely(!pte_none(*vmf->pte)))
++	if (unlikely(!pte_none(*vmf->pte))) {
++		update_mmu_cache(vma, vmf->address, vmf->pte);
+ 		return VM_FAULT_NOPAGE;
++	}
+ 
+ 	flush_icache_page(vma, page);
+ 	entry = mk_pte(page, vma->vm_page_prot);
+@@ -4224,18 +4233,18 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+ 	vmf->ptl = pte_lockptr(vmf->vma->vm_mm, vmf->pmd);
+ 	spin_lock(vmf->ptl);
+ 	entry = vmf->orig_pte;
+-	if (unlikely(!pte_same(*vmf->pte, entry)))
++	if (unlikely(!pte_same(*vmf->pte, entry))) {
++		update_mmu_cache(vmf->vma, vmf->address, vmf->pte);
+ 		goto unlock;
++	}
+ 	if (vmf->flags & FAULT_FLAG_WRITE) {
+ 		if (!pte_write(entry))
+ 			return do_wp_page(vmf);
+ 		entry = pte_mkdirty(entry);
+ 	}
+ 	entry = pte_mkyoung(entry);
+-	if (ptep_set_access_flags(vmf->vma, vmf->address, vmf->pte, entry,
++	if (!ptep_set_access_flags(vmf->vma, vmf->address, vmf->pte, entry,
+ 				vmf->flags & FAULT_FLAG_WRITE)) {
+-		update_mmu_cache(vmf->vma, vmf->address, vmf->pte);
+-	} else {
+ 		/*
+ 		 * This is needed only for protection faults but the arch code
+ 		 * is not yet telling us if this is a protection fault or not.
+@@ -4245,6 +4254,7 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+ 		if (vmf->flags & FAULT_FLAG_WRITE)
+ 			flush_tlb_fix_spurious_fault(vmf->vma, vmf->address);
+ 	}
++	update_mmu_cache(vmf->vma, vmf->address, vmf->pte);
+ unlock:
+ 	pte_unmap_unlock(vmf->pte, vmf->ptl);
+ 	return 0;
 -- 
 1.8.3.1
 
