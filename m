@@ -2,172 +2,293 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32F31D8D44
-	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2020 03:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08EE1D8DC1
+	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2020 04:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgESBuL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 May 2020 21:50:11 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:49988 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726285AbgESBuL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 May 2020 21:50:11 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 8ECD523AA1AC6E274294;
-        Tue, 19 May 2020 09:50:08 +0800 (CST)
-Received: from [127.0.0.1] (10.166.215.101) by DGGEMS408-HUB.china.huawei.com
- (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Tue, 19 May 2020
- 09:50:04 +0800
-Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw
- setting
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        id S1726658AbgESCum (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 May 2020 22:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726292AbgESCum (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 May 2020 22:50:42 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A877C061A0C;
+        Mon, 18 May 2020 19:50:42 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id m7so5027558plt.5;
+        Mon, 18 May 2020 19:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Um0MqAkT2AlqVBUz0LYl439Zam1W4yGyACS/84j23pE=;
+        b=VlxgfkqFfgs2apfaHWWzr3g6t+6/wCR2VJC7ihA4e0l96IgCbjQktpnPgecT+Sv7vY
+         R6EhRJvVj9HRsZsqdfzbSQDoj0FxQyENTy1PaQ3jfbPF9Anj2c/e7w3YFCiNWHWEG7AE
+         IQWB+ljTEmCh/JbiDhP8pITX8gCTE13vaQI5fC68J/0nzbwlh/s50UdehSHjgYt79Km4
+         C3Un28P8iJkovjp8wkEcJqyuskbdRYyIEqCo0IqMt5udz8lUnEkPIDEUo5BRNZ/xNRwb
+         GVnrRl5jt+QVlTqsEfqDY9c6anPu+OnsYBU32yOshZI4hLBu17zheYIb0ag81v/WjxIh
+         ooFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Um0MqAkT2AlqVBUz0LYl439Zam1W4yGyACS/84j23pE=;
+        b=PO+lBkJcYBwknMv1tW9jhBzn+xSmuhHb7VrWKuWopcnIvSW8vg3jIg/ODQ7tkc8+nt
+         FPgHjW4kkZoXnjP31aWE0g28CEcO+MEtRrhU5glG9N4bsCfDFR7zrC3K3w+uZjMuGgjw
+         PSziVKKPE/KquIGJLjvFK+RJl8CSqDfNUtzD+kYM1T1wvf8m+kiOT0p/wuh12AKLUdtx
+         gcf271bZPjwuHoyCx5rPH9mYv51hVqAyyBBI05k0ZEKQmp0lk4FQT82ecR/vTdqxEaCt
+         7QMn2vNpwJglYja+2/qoDrI7IXLE+f9JedmqVcYj7aLC5sUmOK7fveb5IMq3/ogdUqVS
+         08aw==
+X-Gm-Message-State: AOAM530BAFDKN7KO5AqvLfjOjcx1bkH3PSFNV3xYFGozSHO9F9HgOGsj
+        aEQrJiOdpoZzX7QOcegdwYc=
+X-Google-Smtp-Source: ABdhPJxUEb40eUAEJc/TR1ypP/gVIih2peaEeOHrNggdWNiZOeiW6/A7lE1LV83bcEZdcDNdsiy/5g==
+X-Received: by 2002:a17:902:b712:: with SMTP id d18mr18073790pls.143.1589856641522;
+        Mon, 18 May 2020 19:50:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w23sm18485pgc.78.2020.05.18.19.50.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 May 2020 19:50:39 -0700 (PDT)
+Subject: Re: [PATCH V3 07/15] arch/kunmap_atomic: Consolidate duplicate code
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rob Herring" <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Ingo Molnar" <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200518102415.k4c5qglodij5ac6h@vireshk-i7>
- <20200518103102.t3a3g4uxeeuwsnix@mobilestation> <5284478.EF2IWm2iUs@kreacher>
- <20200518104602.mjh2p5iltf2x4wmq@mobilestation>
- <CAJZ5v0imYcL3M80S1snJAqXQ=GsqbChij-6aWx=4L02TKVvrQg@mail.gmail.com>
- <20200518105649.gcv22l253lsuje7y@mobilestation>
- <CAJZ5v0juP6bsB9TRcned4nTQ=yFEOU5J2M7tt2bokYSYgoPPEg@mail.gmail.com>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <ecd64955-6d76-d50e-f589-45ab51d10e4b@huawei.com>
-Date:   Tue, 19 May 2020 09:50:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20200507150004.1423069-1-ira.weiny@intel.com>
+ <20200507150004.1423069-8-ira.weiny@intel.com>
+ <20200516223306.GA161252@roeck-us.net>
+ <20200518034938.GA3023182@iweiny-DESK2.sc.intel.com>
+ <20200518042932.GA59205@roeck-us.net>
+ <20200519000352.GF3025231@iweiny-DESK2.sc.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <47757f51-15f2-3abe-9035-abdb3ba5816e@roeck-us.net>
+Date:   Mon, 18 May 2020 19:50:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0juP6bsB9TRcned4nTQ=yFEOU5J2M7tt2bokYSYgoPPEg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.166.215.101]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20200519000352.GF3025231@iweiny-DESK2.sc.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rafael,
+Hi Ira,
 
-On 2020/5/18 19:05, Rafael J. Wysocki wrote:
-> On Mon, May 18, 2020 at 12:56 PM Serge Semin
-> <Sergey.Semin@baikalelectronics.ru> wrote:
->>
->> On Mon, May 18, 2020 at 12:51:15PM +0200, Rafael J. Wysocki wrote:
->>> On Mon, May 18, 2020 at 12:46 PM Serge Semin
->>> <Sergey.Semin@baikalelectronics.ru> wrote:
->>>>
->>>> On Mon, May 18, 2020 at 12:41:19PM +0200, Rafael J. Wysocki wrote:
->>>>> On Monday, May 18, 2020 12:31:02 PM CEST Serge Semin wrote:
->>>>>> On Mon, May 18, 2020 at 03:54:15PM +0530, Viresh Kumar wrote:
->>>>>>> On 18-05-20, 12:22, Rafael J. Wysocki wrote:
->>>>>>>> On Monday, May 18, 2020 12:11:09 PM CEST Viresh Kumar wrote:
->>>>>>>>> On 18-05-20, 11:53, Rafael J. Wysocki wrote:
->>>>>>>>>> That said if you really only want it to return 0 on success, you may as well
->>>>>>>>>> add a ret = 0; statement (with a comment explaining why it is needed) after
->>>>>>>>>> the last break in the loop.
->>>>>>>>>
->>>>>>>>> That can be done as well, but will be a bit less efficient as the loop
->>>>>>>>> will execute once for each policy, and so the statement will run
->>>>>>>>> multiple times. Though it isn't going to add any significant latency
->>>>>>>>> in the code.
->>>>>>>>
->>>>>>>> Right.
->>>>>>>>
->>>>>>>> However, the logic in this entire function looks somewhat less than
->>>>>>>> straightforward to me, because it looks like it should return an
->>>>>>>> error on the first policy without a frequency table (having a frequency
->>>>>>>> table depends on the driver and that is the same for all policies, so it
->>>>>>>> is pointless to iterate any further in that case).
->>>>>>>>
->>>>>>>> Also, the error should not be -EINVAL, because that means "invalid
->>>>>>>> argument" which would be the state value.
->>>>>>>>
->>>>>>>> So I would do something like this:
->>>>>>>>
->>>>>>>> ---
->>>>>>>>  drivers/cpufreq/cpufreq.c |   11 ++++++-----
->>>>>>>>  1 file changed, 6 insertions(+), 5 deletions(-)
->>>>>>>>
->>>>>>>> Index: linux-pm/drivers/cpufreq/cpufreq.c
->>>>>>>> ===================================================================
->>>>>>>> --- linux-pm.orig/drivers/cpufreq/cpufreq.c
->>>>>>>> +++ linux-pm/drivers/cpufreq/cpufreq.c
->>>>>>>> @@ -2535,26 +2535,27 @@ EXPORT_SYMBOL_GPL(cpufreq_update_limits)
->>>>>>>>  static int cpufreq_boost_set_sw(int state)
->>>>>>>>  {
->>>>>>>>         struct cpufreq_policy *policy;
->>>>>>>> -       int ret = -EINVAL;
->>>>>>>>
->>>>>>>>         for_each_active_policy(policy) {
->>>>>>>> +               int ret;
->>>>>>>> +
->>>>>>>>                 if (!policy->freq_table)
->>>>>>>> -                       continue;
->>>>>>>> +                       return -ENXIO;
->>>>>>>>
->>>>>>>>                 ret = cpufreq_frequency_table_cpuinfo(policy,
->>>>>>>>                                                       policy->freq_table);
->>>>>>>>                 if (ret) {
->>>>>>>>                         pr_err("%s: Policy frequency update failed\n",
->>>>>>>>                                __func__);
->>>>>>>> -                       break;
->>>>>>>> +                       return ret;
->>>>>>>>                 }
->>>>>>>>
->>>>>>>>                 ret = freq_qos_update_request(policy->max_freq_req, policy->max);
->>>>>>>>                 if (ret < 0)
->>>>>>>> -                       break;
->>>>>>>> +                       return ret;
->>>>>>>>         }
->>>>>>>>
->>>>>>>> -       return ret;
->>>>>>>> +       return 0;
->>>>>>>>  }
->>>>>>>>
->>>>>>>>  int cpufreq_boost_trigger_state(int state)
->>>>>>>
->>>>>>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->>>>>>
->>>>>> Ok. Thanks for the comments. Shall I resend the patch with update Rafael
->>>>>> suggests or you'll merge the Rafael's fix in yourself?
+On 5/18/20 5:03 PM, Ira Weiny wrote:
+> On Sun, May 17, 2020 at 09:29:32PM -0700, Guenter Roeck wrote:
+>> On Sun, May 17, 2020 at 08:49:39PM -0700, Ira Weiny wrote:
+>>> On Sat, May 16, 2020 at 03:33:06PM -0700, Guenter Roeck wrote:
+>>>> On Thu, May 07, 2020 at 07:59:55AM -0700, ira.weiny@intel.com wrote:
+>>>>> From: Ira Weiny <ira.weiny@intel.com>
 >>>>>
->>>>> I'll apply the fix directly, thanks!
+>>>>> Every single architecture (including !CONFIG_HIGHMEM) calls...
+>>>>>
+>>>>> 	pagefault_enable();
+>>>>> 	preempt_enable();
+>>>>>
+>>>>> ... before returning from __kunmap_atomic().  Lift this code into the
+>>>>> kunmap_atomic() macro.
+>>>>>
+>>>>> While we are at it rename __kunmap_atomic() to kunmap_atomic_high() to
+>>>>> be consistent.
+>>>>>
+>>>>> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>>>>> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 >>>>
->>>> Great. Is it going to be available in the repo:
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
->>>> ?
+>>>> This patch results in:
+>>>>
+>>>> Starting init: /bin/sh exists but couldn't execute it (error -14)
+>>>>
+>>>> when trying to boot microblazeel:petalogix-ml605 in qemu.
 >>>
->>> Yes, it is.  Please see the bleeding-edge branch in there, thanks!
-
-Thanks for CCing me. I will write my next version based on this branch.
-
-Thanks,
-Xiongfeng
-
+>>> Thanks for the report.  I'm not readily seeing the issue.
+>>>
+>>> Do you have a kernel config?  Specifically is CONFIG_HIGHMEM set?
+>>>
+>> See below. Yes, CONFIG_HIGHMEM is set.
 >>
->> No credits with at least Reported-by tag? That's sad.(
+>> The scripts used to build and boot the image are at:
+>>
+>> https://github.com/groeck/linux-build-test/tree/master/rootfs/microblazeel
 > 
-> OK, done now, but you are not the only reported of it, so I've added
-> the other reporter too.
+> Despite finding the obvious error earlier today I've still been trying to get
+> this to work.
 > 
-> Thanks!
+> I had to make some slight modifications to use the 0-day cross compile build
+> and my local qemu build.  But those were pretty minor modifications.  I'm
+> running on x86_64 host.
 > 
-> .
+> With those slight mods to the scripts I get the following error even without my
+> patch set on 5.7-rc4.  I have 1 cpu pegged at 100% while it is running...  Is
+> there anything I can do to get more debug output?  Perhaps I just need to let
+> it run longer?
+> 
+
+I don't think so. Try running it with "-d" parameter (run-qemu-microblazeel.sh
+-d petalogix-s3adsp1800); that gives you the qemu command line. Once it says
+"running", abort the script and execute qemu directly. Oh, and please update
+the repository; turns out I didn't push for a while and made a number of
+changes.
+
+My compiler was compiled with buildroot (a long time ago). I don't recall if
+it needed something special in the configuration, unfortunately.
+
+Guenter
+
+> Thanks,
+> Ira
+> 
+> 16:46:54 > ../linux-build-test/rootfs/microblazeel/run-qemu-microblazeel.sh 
+> Build reference: v5.7-rc4-2-g7c2411d7fb6a
+> 
+> Building microblaze:petalogix-s3adsp1800:qemu_microblazeel_defconfig ...
+> running ................ failed (silent)
+> ------------
+> qemu log:
+> qemu-system-microblazeel: terminating on signal 15 from pid 3277686 (/bin/bash)
+> ------------
+> Building microblaze:petalogix-ml605:qemu_microblazeel_ml605_defconfig ...
+> running ................ failed (silent)
+> ------------
+> qemu log:
+> qemu-system-microblazeel: terminating on signal 15 from pid 3277686 (/bin/bash)
+> ------------
+> 
+> <env changes>
+> 16:47:23 > git di
+> diff --git a/rootfs/microblazeel/run-qemu-microblazeel.sh b/rootfs/microblazeel/run-qemu-microblazeel.sh
+> index 68d4de39ab50..0d6a4f85308f 100755
+> --- a/rootfs/microblazeel/run-qemu-microblazeel.sh
+> +++ b/rootfs/microblazeel/run-qemu-microblazeel.sh
+> @@ -3,7 +3,8 @@
+>  dir=$(cd $(dirname $0); pwd)
+>  . ${dir}/../scripts/common.sh
+>  
+> -QEMU=${QEMU:-${QEMU_BIN}/qemu-system-microblazeel}
+> +#QEMU=${QEMU:-${QEMU_BIN}/qemu-system-microblazeel}
+> +QEMU=/home/iweiny/dev/qemu/microblazeel-softmmu/qemu-system-microblazeel
+>  PREFIX=microblazeel-linux-
+>  ARCH=microblaze
+>  PATH_MICROBLAZE=/opt/kernel/microblazeel/gcc-4.9.1/usr/bin
+> diff --git a/rootfs/scripts/common.sh b/rootfs/scripts/common.sh
+> index 8fa6a9be2b2f..c4550a27beaa 100644
+> --- a/rootfs/scripts/common.sh
+> +++ b/rootfs/scripts/common.sh
+> @@ -1,5 +1,9 @@
+>  #!/bin/bash
+>  
+> +# Set up make.cross
+> +export COMPILER_INSTALL_PATH=$HOME/0day
+> +export GCC_VERSION=6.5.0
+> +
+>  # Set the following variable to true to skip DC395/AM53C97 build tests
+>  __skip_dc395=0
+>  
+> @@ -569,7 +573,7 @@ doclean()
+>         then
+>                 git clean -x -d -f -q
+>         else
+> -               make ARCH=${ARCH} mrproper >/dev/null 2>&1
+> +               make.cross ARCH=${ARCH} mrproper >/dev/null 2>&1
+>         fi
+>  }
+>  
+> @@ -669,7 +673,7 @@ __setup_config()
+>         cp ${__progdir}/${defconfig} arch/${arch}/configs
+>      fi
+>  
+> -    if ! make ARCH=${ARCH} CROSS_COMPILE=${PREFIX} ${defconfig} >/dev/null 2>&1 </dev/null; then
+> +    if ! make.cross ARCH=${ARCH} ${defconfig} >/dev/null 2>&1 </dev/null; then
+>         return 2
+>      fi
+>  
+> @@ -687,7 +691,7 @@ __setup_config()
+>         if [[ "${rel}" = "v3.16" ]]; then
+>             target="oldconfig"
+>         fi
+> -       if ! make ARCH=${ARCH} CROSS_COMPILE=${PREFIX} ${target} >/dev/null 2>&1 </dev/null; then
+> +       if ! make.cross ARCH=${ARCH} ${target} >/dev/null 2>&1 </dev/null; then
+>             return 1
+>         fi
+>      fi
+> @@ -1038,7 +1042,7 @@ dosetup()
+>      rootfs="$(setup_rootfs ${dynamic} ${rootfs})"
+>      __common_fixups "${fixups}" "${rootfs}"
+>  
+> -    make -j${maxload} ARCH=${ARCH} CROSS_COMPILE=${PREFIX} ${EXTRAS} </dev/null >/dev/null 2>${logfile}
+> +    make.cross -j${maxload} ARCH=${ARCH} ${EXTRAS} </dev/null >/dev/null 2>${logfile}
+>      rv=$?
+>      if [ ${rv} -ne 0 ]
+>      then
+> 
+> </env changes>
 > 
 
