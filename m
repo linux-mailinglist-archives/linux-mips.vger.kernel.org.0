@@ -2,112 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD89F1D9465
-	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2020 12:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F921D959A
+	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2020 13:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728626AbgESKcv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 May 2020 06:32:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43650 "EHLO mail.kernel.org"
+        id S1728686AbgESLtM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 May 2020 07:49:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57688 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726412AbgESKcu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 19 May 2020 06:32:50 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        id S1728626AbgESLtL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 19 May 2020 07:49:11 -0400
+Received: from localhost (unknown [137.135.114.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34D6E206BE;
-        Tue, 19 May 2020 10:32:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6AF7320758;
+        Tue, 19 May 2020 11:49:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589884369;
-        bh=APWdI/sKggcPUHM2EoqZ+F9oniCqmilI7u/Eu8rmUKo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bb28hbkXTcnwyAr3AkQbQd7zAtdLWJXiwF/dtuByEyX/N6X+HswiTH+JVTDGBxke9
-         PRaBWt7ep0OcLP0hk1XvvEZBbrGuzZtn0CFZ5SqDVCMU8CkMuKgVJvzlMPWmK1ng2s
-         mB1xyHCzSfVJvy6NpiLF0vKH/DThsK16CNtbWd+U=
-Date:   Tue, 19 May 2020 11:32:47 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-Message-ID: <20200519103247.GA4611@sirena.org.uk>
-References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
- <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
- <20200508113751.GD4820@sirena.org.uk>
- <20200510002039.hwahqasnnceowskz@mobilestation>
- <20200511212506.GA23852@sirena.org.uk>
- <20200518000542.ohtpem3lo2pbixbu@mobilestation>
- <20200518151946.GH8699@sirena.org.uk>
- <20200518211727.jrzo6tn7slqzxoyl@mobilestation>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
-Content-Disposition: inline
-In-Reply-To: <20200518211727.jrzo6tn7slqzxoyl@mobilestation>
-X-Cookie: Do not write below this line.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        s=default; t=1589888951;
+        bh=yEh+r5LMBWDn147exCmKd4fPSIN/zEvg174HOnJ3QjM=;
+        h=Date:From:To:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:
+         From;
+        b=BXm20zg23LqsaU8aVIuzLhyUoU99HkaFc5TiWi1fHBTm3cukUmHThiNSZxhouAt+f
+         tj6HyS3kzT9+215t6c6rjBC9RGvM4mh8Smz4VyAuJpz/+mhQvsiGGHqP2EIuL0VYLS
+         uPyDO7UUOxZxVhc46ioVxU4C2kx3TKvT6LfnU4PI=
+Date:   Tue, 19 May 2020 11:49:10 +0000
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+To:     Huacai Chen <chenhc@lemote.com>
+To:     Xing Li <lixing@loongson.cn>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH V6 01/15] KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
+In-Reply-To: <1589688372-3098-2-git-send-email-chenhc@lemote.com>
+References: <1589688372-3098-2-git-send-email-chenhc@lemote.com>
+Message-Id: <20200519114911.6AF7320758@mail.kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi
 
---KsGdsel6WgEHnImy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+[This is an automated email]
 
-On Tue, May 19, 2020 at 12:17:27AM +0300, Serge Semin wrote:
+This commit has been processed because it contains a -stable tag.
+The stable tag indicates that it's relevant for the following trees: all
 
-> Here is what we need to do to perform the EEPROM-read operation:
-> 1) Enable EEPROM-read mode.
-> 2) Initialize a corresponding registers with a number of SPI transfer words
->    (with bits-per-word taken into account) to read.
-> 3) Push opcode + address + dummy bytes into the Tx FIFO. When it's done and
->    the Tx FIFO is empty, the controller will proceed with read operations by
->    pushing zeros (or ones, don't remember what level it's by default) to MOSI
->    and pulling data from MISO into the RX FIFO.
-> 4) Keep up with getting data from the Rx FIFO so one wouldn't get overflown.
+The bot has tested the following trees: v5.6.13, v5.4.41, v4.19.123, v4.14.180, v4.9.223, v4.4.223.
 
-> Regarding programming write each time. Well, it's up to the driver implementation.
-> If opcode, address, dummy bytes and number of words to read are the same as before,
-> then re-programming isn't required.
+v5.6.13: Build OK!
+v5.4.41: Build OK!
+v4.19.123: Build OK!
+v4.14.180: Build OK!
+v4.9.223: Build OK!
+v4.4.223: Failed to apply! Possible dependencies:
+    029499b47738 ("KVM: x86: MMU: Make mmu_set_spte() return emulate value")
+    19d194c62b25 ("MIPS: KVM: Simplify TLB_* macros")
+    403015b323a2 ("MIPS: KVM: Move non-TLB handling code out of tlb.c")
+    7ee0e5b29d27 ("KVM: x86: MMU: Remove unused parameter of __direct_map()")
+    9fbfb06a4065 ("MIPS: KVM: Arrayify struct kvm_mips_tlb::tlb_lo*")
+    ba049e93aef7 ("kvm: rename pfn_t to kvm_pfn_t")
+    bdb7ed8608f8 ("MIPS: KVM: Convert headers to kernel sized types")
+    ca64c2beecd4 ("MIPS: KVM: Abstract guest ASID mask")
+    caa1faa7aba6 ("MIPS: KVM: Trivial whitespace and style fixes")
+    e6207bbea16c ("MIPS: KVM: Use MIPS_ENTRYLO_* defs from mipsregs.h")
 
-Ah, nice.  This should be useful for far more than just flash - most
-register reads will also be able to take advantage of this, they follow
-a similar write then read pattern.
 
---KsGdsel6WgEHnImy
-Content-Type: application/pgp-signature; name="signature.asc"
+NOTE: The patch will not be queued to stable trees until it is upstream.
 
------BEGIN PGP SIGNATURE-----
+How should we proceed with this patch?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7DtcwACgkQJNaLcl1U
-h9BprQf/X3CrvqOEDZw4gFuSifMWeN7xtcsAEMLPFliUUq9vUY170vk9WBvEWXcU
-8+KvebwsMCXWGekf3ySdQN5xQlLrIZ86/mMpntqTMg2Gsvxm7TsoCyW+K0JO/6Ef
-2I+nIT+t92zUZhPbyzk7kmeKmC/Jsgg9zwHQpyN0+XjQlCUy0lCYhdR/P1y/5qsV
-By+n3t6C5Vi6Dnz2wrYL+gqoH6quWA/wGQe3o0xtFyZuQIVgKogTOrgFOFW8fSBK
-NUFEEZjIMctowJ27+FDhh5NXoJXqDUUkbzKOYGEf2Nja+Kk47clbgF/tDwfMlX/3
-2duleovaghp6/F5OsQSe05zjfEutIg==
-=0tWj
------END PGP SIGNATURE-----
-
---KsGdsel6WgEHnImy--
+-- 
+Thanks
+Sasha
