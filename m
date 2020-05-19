@@ -2,118 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76DFD1D8EE1
-	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2020 06:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B901D93F1
+	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2020 12:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgESEva (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 May 2020 00:51:30 -0400
-Received: from mga14.intel.com ([192.55.52.115]:37406 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726307AbgESEva (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 19 May 2020 00:51:30 -0400
-IronPort-SDR: T3vl6pmU4SsMxwHPCtYuo7UlzeHJlnX0avAIwBBjFHUbG6erKfMh9Sv7duxT9TUCR0+ZE8L/+x
- xBxsxVjcpj6Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 21:51:30 -0700
-IronPort-SDR: sDHDPLv0Zq2i/WryGB8ccV16p9q6KiAsv59U/AzhorfKCPdIZhdApcc3OowqzcDABrgj7mbV8E
- MD2I0g/K96kg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,409,1583222400"; 
-   d="scan'208";a="282205960"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 18 May 2020 21:51:28 -0700
-Received: from [10.213.130.44] (vramuthx-mobl1.gar.corp.intel.com [10.213.130.44])
-        by linux.intel.com (Postfix) with ESMTP id C523E580613;
-        Mon, 18 May 2020 21:51:23 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v6 1/2] dt-bindings: mtd: Add Nand Flash Controller
- support for Intel LGM SoC
-To:     Rob Herring <robh@kernel.org>
-Cc:     Mason Yang <masonccyang@mxic.com.tw>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        =?UTF-8?Q?Miqu=c3=a8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Vignesh R <vigneshr@ti.com>,
-        "hauke.mehrtens" <hauke.mehrtens@intel.com>,
-        devicetree@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        cheol.yong.kim@intel.com,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        qi-ming.wu@intel.com
-References: <20200513104615.7905-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200513104615.7905-2-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200514125709.GA8436@bogus>
- <dc51e6af-bda8-d8b9-1782-f5c4d5d3fed7@linux.intel.com>
- <CAL_JsqJxqdi2MmyHZteMOpx5yy_o+ZxaqGHMUV7aCknWWQ0ptg@mail.gmail.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <bed51658-68a7-605b-ebdb-f471690e226f@linux.intel.com>
-Date:   Tue, 19 May 2020 12:51:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <CAL_JsqJxqdi2MmyHZteMOpx5yy_o+ZxaqGHMUV7aCknWWQ0ptg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1728612AbgESKEH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 May 2020 06:04:07 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:42526 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728286AbgESKEE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 19 May 2020 06:04:04 -0400
+Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz97yrsNeDoM2AA--.42S2;
+        Tue, 19 May 2020 18:03:31 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>
+Subject: [PATCH v4 1/4] MIPS: Do not flush tlb page when updating PTE entry
+Date:   Tue, 19 May 2020 18:03:27 +0800
+Message-Id: <1589882610-7291-1-git-send-email-maobibo@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9Dxz97yrsNeDoM2AA--.42S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFW3ZryxtF1UJrWUGr1xZrb_yoW8JFW5pF
+        srAryvg3ykG3y0yFy8ArnY9r43J3ykGrZ8KryDCrZ0v3ZrXF18Krs3Ka42yry8ZFWak3W8
+        Kr4YqF4DZa12y37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkCb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY
+        04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2vPfDU
+        UUU
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
+It is not necessary to flush tlb page on all CPUs if suitable PTE
+entry exists already during page fault handling, just updating
+TLB is fine.
 
-On 19/5/2020 2:27 am, Rob Herring wrote:
-> On Thu, May 14, 2020 at 8:08 PM Ramuthevar, Vadivel MuruganX
-> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
->>
->> Hi Rob,
->>
->> On 14/5/2020 8:57 pm, Rob Herring wrote:
->>> On Wed, 13 May 2020 18:46:14 +0800, Ramuthevar,Vadivel MuruganX wrote:
->>>> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->>>>
->>>> Add YAML file for dt-bindings to support NAND Flash Controller
->>>> on Intel's Lightning Mountain SoC.
->>>>
->>>> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->>>> ---
->>>>    .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 83 ++++++++++++++++++++++
->>>>    1 file changed, 83 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
->>>>
->>>
->>>
->>> My bot found errors running 'make dt_binding_check' on your patch:
->>>
->>> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/intel,lgm-nand.example.dt.yaml: nand-controller@e0f00000: 'dmas' is a dependency of 'dma-names'
->>>
->>> See https://patchwork.ozlabs.org/patch/1289160
->>>
->>> If you already ran 'make dt_binding_check' and didn't see the above
->>> error(s), then make sure dt-schema is up to date:
->>>
->>> pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
->>>
->>> Please check and re-submit.
->> Thank you very much for review comments...
->> I didn't find build errors, successfully built.
-> 
-> You need to build without DT_SCHEMA_FILES set or be on 5.7-rc (you
-> should be on a current -rcX at least for any patch submission). This
-> comes from the core schema.
-Yes, reproduced the issue as above mentioned and fixed it. Thanks!
+Here redefine flush_tlb_fix_spurious_fault as empty on MIPS system.
+V4:
+- add pte_sw_mkyoung function to implement readable privilege, and
+  this function is  only in effect on MIPS system.
+- add page valid bit judgement in function pte_modify
+V3:
+- add detailed changelog, modify typo issue in patch V2
+v2:
+- split flush_tlb_fix_spurious_fault and tlb update into two patches
+- comments typo modification
+- separate tlb update and add pte readable privilege into two patches
 
-Regards
-Vadivel
-> 
-> Rob
-> 
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ arch/mips/include/asm/pgtable.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 9b01d2d..0d625c2 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -478,6 +478,8 @@ static inline pgprot_t pgprot_writecombine(pgprot_t _prot)
+ 	return __pgprot(prot);
+ }
+ 
++#define flush_tlb_fix_spurious_fault(vma, address) do { } while (0)
++
+ /*
+  * Conversion functions: convert a page and protection to a page entry,
+  * and a page entry and page directory to the page they refer to.
+-- 
+1.8.3.1
+
