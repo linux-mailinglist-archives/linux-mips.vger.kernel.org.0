@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF861DABE2
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 09:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CF11DABF5
+	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 09:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726369AbgETHX0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 03:23:26 -0400
-Received: from out28-173.mail.aliyun.com ([115.124.28.173]:39165 "EHLO
-        out28-173.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgETHXZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 03:23:25 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.198518-0.00665581-0.794827;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03301;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=20;RT=20;SR=0;TI=SMTPD_---.Hb3Ji8G_1589959392;
-Received: from 192.168.10.244(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Hb3Ji8G_1589959392)
-          by smtp.aliyun-inc.com(10.147.43.230);
-          Wed, 20 May 2020 15:23:14 +0800
+        id S1726463AbgETHY4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 03:24:56 -0400
+Received: from out28-122.mail.aliyun.com ([115.124.28.122]:40646 "EHLO
+        out28-122.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726224AbgETHYz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 03:24:55 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.198518-0.00665581-0.794827;FP=0|0|0|0|0|-1|-1|-1;HT=e01l07447;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=20;RT=20;SR=0;TI=SMTPD_---.Hb3Bm8r_1589959477;
+Received: from 192.168.10.244(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Hb3Bm8r_1589959477)
+          by smtp.aliyun-inc.com(10.147.42.198);
+          Wed, 20 May 2020 15:24:40 +0800
 Subject: Re: [PATCH v8 1/6] MIPS: JZ4780: Introduce SMP support.
 To:     Paul Cercueil <paul@crapouillou.net>
 References: <1589898923-60048-1-git-send-email-zhouyanjie@wanyeetech.com>
  <1589898923-60048-3-git-send-email-zhouyanjie@wanyeetech.com>
- <M1GLAQ.UK9S5G64TOOO3@crapouillou.net>
+ <C86LAQ.3VY09SMOY9R23@crapouillou.net>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, tsbogend@alpha.franken.de,
         paulburton@kernel.org, jiaxun.yang@flygoat.com, chenhc@lemote.com,
@@ -29,12 +29,12 @@ Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         yanfei.li@ingenic.com, rick.tyliu@ingenic.com,
         sernia.zhou@foxmail.com, zhenwenjin@gmail.com
 From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <5EC4DADD.1000801@wanyeetech.com>
-Date:   Wed, 20 May 2020 15:23:09 +0800
+Message-ID: <5EC4DB33.8010704@wanyeetech.com>
+Date:   Wed, 20 May 2020 15:24:35 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
  Thunderbird/38.8.0
 MIME-Version: 1.0
-In-Reply-To: <M1GLAQ.UK9S5G64TOOO3@crapouillou.net>
+In-Reply-To: <C86LAQ.3VY09SMOY9R23@crapouillou.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -42,9 +42,9 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
 
-On 2020年05月20日 03:41, Paul Cercueil wrote:
+
+On 2020年05月20日 00:09, Paul Cercueil wrote:
 > Hi Zhou,
 >
 > Le mar. 19 mai 2020 à 22:35, 周琰杰 (Zhou Yanjie) 
@@ -234,6 +234,16 @@ On 2020年05月20日 03:41, Paul Cercueil wrote:
 >> index ff4555c..4acf5c2c 100644
 >> --- a/arch/mips/jz4740/prom.c
 >> +++ b/arch/mips/jz4740/prom.c
+>
+> That file is gone in mips-next. You should rebase your patchset on top 
+> of mips-next.
+>
+
+OK, I will fix it in the next version.
+
+> Cheers,
+> -Paul
+>
 >> @@ -8,10 +8,14 @@
 >>
 >>  #include <asm/bootinfo.h>
@@ -341,13 +351,6 @@ On 2020年05月20日 03:41, Paul Cercueil wrote:
 >> +u32 jz4780_cpu_entry_gp;
 >> +
 >> +static struct cpumask cpu_running;
->
-> This cpumask is written, but never read anywhere. Since it's static, I 
-> believe it's dead code.
->
-
-Sure, I will remove it.
-
 >> +
 >> +static DEFINE_SPINLOCK(smp_lock);
 >> +
@@ -405,17 +408,6 @@ Sure, I will remove it.
 >> +        __cpu_number_map[cpu] = cpu;
 >> +        __cpu_logical_map[cpu] = cpu;
 >> +        set_cpu_possible(cpu, true);
->
-> I assume if you do that, you will have num_possible_cpus() == NR_CPUS, 
-> which is not what you want.
->
-> Correct me if I'm wrong, but I think you would need to call 
-> set_cpu_possible() for each CPU node found.
->
-
-Yes, the current way is indeed a little problem, it will cause 
-num_possible_cpus() == NR_CPUS, I will try to find a better way.
-
 >> +    }
 >> +
 >> +    /* mask mailbox interrupts for this core */
@@ -425,15 +417,6 @@ num_possible_cpus() == NR_CPUS, I will try to find a better way.
 >> +    /* clear mailboxes & pending mailbox IRQs */
 >> +    write_c0_mailbox0(0);
 >> +    write_c0_mailbox1(0);
->
-> Write mailbox2/3 too.
->
-
-Although the XBurst1 architecture can have up to four cores, but JZ4780 
-only has two. If we need to write all four mailboxes here, do we need 
-change the function name to "xburst1_smp_setup" or other similar names? 
-This seems more appropriate.
-
 >> +    write_c0_corestatus(0);
 >> +
 >> +    /* set reset entry point */
@@ -460,13 +443,6 @@ This seems more appropriate.
 >> +    /* setup the mailbox IRQ */
 >> +    err = request_irq(MIPS_CPU_IRQ_BASE + 3, mbox_handler,
 >> +            IRQF_PERCPU | IRQF_NO_THREAD, "core mailbox", NULL);
->
-> Please don't hardcode the IRQ number. Instead, it should be read from 
-> devicetree, maybe from the 'cpus' node (not sure).
->
-
-OK, I'll try to figure it out.
-
 >> +    if (err)
 >> +        pr_err("request_irq() on core mailbox failed\n");
 >> +
@@ -492,15 +468,6 @@ OK, I'll try to figure it out.
 >> +        err = clk_prepare(cpu_clock_gates[cpu]);
 >> +        if (err)
 >> +            pr_err("Failed to prepare CPU clock gate\n");
->
-> I'd suggest to call clk_prepare() in jz4780_boot_secondary(), since 
-> you can't handle errors here. That would also avoid the static 
-> cpu_clock_gates[] array which can grow quite big since its size is 
-> given by NR_CPUS.
->
-
-Sure, I will move it to jz4780_boot_secondary().
-
 >> +    }
 >> +
 >> +    write_c0_corectrl(ctrl);
@@ -521,13 +488,6 @@ Sure, I will move it to jz4780_boot_secondary().
 >> +    /* ungate core clock */
 >> +    if (cpu_clock_gates[cpu])
 >> +        clk_enable(cpu_clock_gates[cpu]);
->
-> You should check the return value of clk_enable().
->
-> +        break;
-
-Sure.
-
 >> +
 >> +    /* set entry sp/gp register values */
 >> +    jz4780_cpu_entry_sp = __KSTK_TOS(idle);
@@ -583,13 +543,7 @@ Sure.
 >> +    case 1:
 >> +        mbox = read_c0_mailbox1();
 >> +        write_c0_mailbox1(mbox | action);
->
-> Handle mailboxes 2/3 too here.
->
-
-Same to the above, do we need to change the function to a more 
-appropriate name?
-
+>> +        break;
 >> +    default:
 >> +        panic("unhandled cpu %d!", cpu);
 >> +    }
@@ -668,22 +622,6 @@ appropriate name?
 >> +     * try to avoid it if we'll immediately be woken again due to an 
 >> IRQ.
 >> +     */
->
-> You could add a fast path here where you just call r4k_wait() if 
-> num_online_cpus() < 2.
->
-
-Please correct me if I'm wrong, if we add it here, when the number of 
-CPU cores is greater than 1 (which should be the case on most 
-occasions), each call to "jz4780_smp_wait_irqoff" will generate 
-additional overhead (judging the number of CPUs), is it better to change 
-"if (IS_ENABLED(CONFIG_SMP))" in "case CPU_XBURST" below to "if 
-(IS_ENABLED(CONFIG_SMP) && (num_possible_cpus() > 1))"?
-
-Thanks and best regards!
-
-> -Paul
->
 >> +    if (!need_resched() && !pending) {
 >> +        r4k_blast_dcache();
 >> +
