@@ -2,86 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 770F21DAF8D
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 12:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED91A1DB1C7
+	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 13:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726525AbgETKBx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 20 May 2020 06:01:53 -0400
-Received: from mail-ej1-f65.google.com ([209.85.218.65]:33174 "EHLO
-        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgETKBx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 06:01:53 -0400
-Received: by mail-ej1-f65.google.com with SMTP id n24so3029234ejd.0;
-        Wed, 20 May 2020 03:01:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=v8EDRqZtXtnh/hEmyxqDkZdYj8yN54lWYsJ0qEqpF+c=;
-        b=q3Av2KcQKLfM8FcPKMb1krPXMRzDrxZyeSl/fuSlyfFu0TEc84+XdQ/5YzwnJb1+zB
-         Y8jw433zvAYHxFU59htqTNd5Puy13H1oKfPvb393N8RLd96EGiSsCsySzQSgJWSGM8bB
-         LzJPBUwy0TfjcpZKq+6JyhaFF4/WTzqgfWlr+hMrZffxa6KJEqeCJZE8uPxJWQcEJ3a3
-         YjK52l6rQ4Vy3JcRQZjNQ/+6A3qu2vHV/2u2TtT6p7vvtcFxDz77yuFuSPwxX5zxInk+
-         Ego2NOdtr5miCEIlqWTrVjH7kvKHPl1PkhIczKcaGhSlQcEb/aMO6YRNDd2vAg313Hbv
-         k+2w==
-X-Gm-Message-State: AOAM532mjR0UOtV2rczK6u5jpiPZfTNoS404LQqNjV0qiIXEgAz8vtU/
-        BmrzIGfp3JxHVfnxrXHSGM/tbJAS/p+A8KUnLBwrST2b
-X-Google-Smtp-Source: ABdhPJyNMixBtXdsQ4k57fw3AEyBZlSv9U9g0emO85Y2ome8aOFC6N6r+KX70ZONLl/mh44PO3rHaqf1AN3ao0AZz7s=
-X-Received: by 2002:a17:907:9492:: with SMTP id dm18mr3116869ejc.328.1589968911424;
- Wed, 20 May 2020 03:01:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200519212230.313365-1-paul@crapouillou.net> <20200520064520.GB7630@alpha.franken.de>
- <CAAdtpL4cZ4==07=kNJf6Xkhnzy6jiqgMc1XzG0NV6RZi1KqgXA@mail.gmail.com> <20200520092757.GA12701@alpha.franken.de>
-In-Reply-To: <20200520092757.GA12701@alpha.franken.de>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Wed, 20 May 2020 12:01:39 +0200
-Message-ID: <CAAdtpL76AOoc+cLOP+khtLGOx6j81Ss3uqDKkuZXjeoqsdE72g@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: ingenic: Add missing include
+        id S1726546AbgETLbI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 07:31:08 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:57970 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726224AbgETLbH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 07:31:07 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2D97180307C1;
+        Wed, 20 May 2020 11:31:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yGC09t4w11r0; Wed, 20 May 2020 14:31:00 +0300 (MSK)
+Date:   Wed, 20 May 2020 14:30:58 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Cercueil <paul@crapouillou.net>, od@zcrc.me,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        kbuild test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 12/20] mips: MAAR: Add XPA mode support
+Message-ID: <20200520113058.nd7fsafrbhdcp2c7@mobilestation>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-13-Sergey.Semin@baikalelectronics.ru>
+ <20200519154213.GA15797@alpha.franken.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200519154213.GA15797@alpha.franken.de>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 20, 2020 at 11:28 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Wed, May 20, 2020 at 11:19:49AM +0200, Philippe Mathieu-Daudé wrote:
-> > Hi Thomas,
-> >
-> > On Wed, May 20, 2020 at 8:50 AM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > >
-> > > On Tue, May 19, 2020 at 11:22:30PM +0200, Paul Cercueil wrote:
-> > > > Add missing include which adds the prototype to plat_time_init().
-> > > >
-> > > > Fixes: f932449c11da ("MIPS: ingenic: Drop obsolete code, merge the rest in setup.c")
-> > > > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > > > Reported-by: kbuild test robot <lkp@intel.com>
-> > > > ---
-> > > >  arch/mips/jz4740/setup.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > >
-> > > applied to mips-next.
-> >
-> > Since mips-next is not merged, can you simply squash the fix to the
-> > incomplete f932449c11da please?
->
-> no, I don't rebase mips-next.
+On Tue, May 19, 2020 at 05:42:13PM +0200, Thomas Bogendoerfer wrote:
+> On Wed, May 06, 2020 at 08:42:30PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > When XPA mode is enabled the normally 32-bits MAAR pair registers
+> > are extended to be of 64-bits width as in pure 64-bits MIPS
+> > architecture. In this case the MAAR registers can enable the
+> > speculative loads/stores for addresses of up to 39-bits width.
+> > But in this case the process of the MAAR initialization changes a bit.
+> > The upper 32-bits of the registers are supposed to be accessed by mean
+> > of the dedicated instructions mfhc0/mthc0 and there is a CP0.MAAR.VH
+> > bit which should be set together with CP0.MAAR.VL as indication
+> > of the boundary validity. All of these peculiarities were taken into
+> > account in this commit so the speculative loads/stores would work
+> > when XPA mode is enabled.
+> > 
+> > Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Paul Burton <paulburton@kernel.org>
+> > Cc: Ralf Baechle <ralf@linux-mips.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > ---
+> >  arch/mips/include/asm/maar.h     | 17 +++++++++++++++--
+> >  arch/mips/include/asm/mipsregs.h | 10 ++++++++++
+> >  arch/mips/mm/init.c              |  8 +++++++-
+> >  3 files changed, 32 insertions(+), 3 deletions(-)
+> 
+> applied to mips-next.
 
-OK. I had the understanding that mips-fixes was the stable branch not rebased,
-and mips-next was not considered stable until merged in mainstream.
-I took note of the changes, thanks.
+Great! Thanks.
 
->
+-Sergey
+
+> 
 > Thomas.
->
-> --
+> 
+> -- 
 > Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
 > good idea.                                                [ RFC1925, 2.3 ]
