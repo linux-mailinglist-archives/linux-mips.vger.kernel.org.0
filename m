@@ -2,144 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAE31DB316
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 14:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84521DB35D
+	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 14:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbgETMVa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 08:21:30 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58416 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgETMVa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 08:21:30 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 7033F8030875;
-        Wed, 20 May 2020 12:21:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HpXx65hG0gh0; Wed, 20 May 2020 15:21:26 +0300 (MSK)
-Date:   Wed, 20 May 2020 15:21:25 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
- if CPU_FREQ enabled
-Message-ID: <20200520122125.opn53q5wxvcc4ath@mobilestation>
-References: <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
- <20200508154150.GB22247@alpha.franken.de>
- <20200511133121.cz5axbwynhmqkx7x@mobilestation>
- <20200515074827.6p5zx4sb3bmavjih@mobilestation>
- <20200515210647.GA22922@alpha.franken.de>
- <20200518134820.wedoumgbsllvhem6@mobilestation>
- <20200518163206.GA17800@alpha.franken.de>
- <20200518205752.txbylbjt2zkwdwwe@mobilestation>
- <20200519155053.GB15797@alpha.franken.de>
- <20200520121201.wohv6u646rx5otkf@mobilestation>
+        id S1726790AbgETMda (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 08:33:30 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17708 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726868AbgETMd3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 20 May 2020 08:33:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1589977932; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=Ik0Yigs8kImtKhjXZnlMAInonF7b/WsWonJh+gODoNZXScAlhj+leFUpuOQGOFU2QVL9m0hstajj9njFXh7BeEZaD+0c4rMG0bmZ1bVV4eYTYBdiYHVXXU+dbZpfnZMHhqZzKu+IH4SW6Yfa6ycINAoyAeAUkFgTsG7I36u/mbc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1589977932; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=TJqmWfeUuN5LE75nul3wH3FZ6nQ1yQSdQfK6PtOHOHs=; 
+        b=O2Au6E6yKNllX40+daihOylvmzJCdZenyqgJHZaYbeCGZvSlQ5nEjMfUDwDKkZjsYDs8M70ZoKeYOuT4P0dGYpi2Pgv0TRAPtO714bx/bs3nFrIbvdEwcTjNi5Xhvz8Lz0dmIyfboL2mB4nLD+YDyMnSmmGYKXW3n9gpM22f3ik=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=flygoat.com;
+        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
+        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1589977932;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=TJqmWfeUuN5LE75nul3wH3FZ6nQ1yQSdQfK6PtOHOHs=;
+        b=FPh8G8GY+zJnnKuDxur7rUuF/DurU4V4e9Wx3Za4T0yrgFvXXKgl8Q/MJRyK+zby
+        5p529MSsXY5b722bnTsLlU5d6PaW5DfyXR+SCdodNEMEmHQY5Ntpxo1uvU3c+Uo+1jj
+        M5MLJ7GLWH66SmoY4v3+X+wGHp0Sz5Tasa2+cKw8=
+Received: from [127.0.0.1] (223.104.210.187 [223.104.210.187]) by mx.zoho.com.cn
+        with SMTPS id 1589977929817309.0615537915593; Wed, 20 May 2020 20:32:09 +0800 (CST)
+Date:   Wed, 20 May 2020 20:32:01 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Zhou Yanjie <zhouyanjie@wanyeetech.com>
+CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, tsbogend@alpha.franken.de,
+        paulburton@kernel.org, chenhc@lemote.com, tglx@linutronix.de,
+        robh+dt@kernel.org, daniel.lezcano@linaro.org,
+        keescook@chromium.org, krzk@kernel.org, hns@goldelico.com,
+        ebiederm@xmission.com, dongsheng.qiu@ingenic.com,
+        yanfei.li@ingenic.com, rick.tyliu@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: Re: [PATCH v8 1/6] MIPS: JZ4780: Introduce SMP support.
+User-Agent: K-9 Mail for Android
+Reply-to: jiaxun.yang@flygoat.com
+In-Reply-To: <M3OMAQ.GEVVI159THK33@crapouillou.net>
+References: <1589898923-60048-1-git-send-email-zhouyanjie@wanyeetech.com> <1589898923-60048-3-git-send-email-zhouyanjie@wanyeetech.com> <M1GLAQ.UK9S5G64TOOO3@crapouillou.net> <5EC4DADD.1000801@wanyeetech.com> <M3OMAQ.GEVVI159THK33@crapouillou.net>
+Message-ID: <13934660-2138-489A-A87E-A6AA222F6218@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200520121201.wohv6u646rx5otkf@mobilestation>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 20, 2020 at 03:12:02PM +0300, Serge Semin wrote:
-> On Tue, May 19, 2020 at 05:50:53PM +0200, Thomas Bogendoerfer wrote:
-> > On Mon, May 18, 2020 at 11:57:52PM +0300, Serge Semin wrote:
-> > > On Mon, May 18, 2020 at 06:32:06PM +0200, Thomas Bogendoerfer wrote:
-> > > > On Mon, May 18, 2020 at 04:48:20PM +0300, Serge Semin wrote:
 
-[nip]
 
-> > > > > ├─>[PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
-> > > > 
-> > > > that's broken. A reg shift of 2 doesn't mean we could use 32bit access
-> > > > to the registers on other platforms. As I don't think adding some ifdefery
-> > > > makes things nicer, just implement the your prom_putchar in board code.
-> > > 
-> > > I thought about that initially, but then I decided to alter the generic
-> > > early_printk_8250 code instead. My version of prom_putchar() would be almost
-> > > the same as one implemented in the early_printk_8250 module except minor
-> > > modification of replacing readb/writeb methods with readl/writel. So I didn't
-> > > want to duplicate the code, but wanted to provide a general way to fix the
-> > > problem potentially also for another platforms.
-> > > 
-> > > Since you don't like this fix alternatively I'd suggest to add the reg_width
-> > > parameter passed to the setup_8250_early_printk_port() method like this:
-> > > -setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
-> > > -                             unsigned int timeout)
-> > > +setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
-> > > +                             unsigned int reg_width, unsigned int timeout)
-> > > 
-> > > By reg_width parameter we could determine the actual width of the register:
-> > >  static inline u8 serial_in(int offset)
-> > >  {
-> > > -       return readb(serial8250_base + (offset << serial8250_reg_shift));
-> > > +       u8 ret = 0xFF;
-> > > +
-> > > +       offset <<= serial8250_reg_shift;
-> > > +       switch (serial8250_reg_width) {
-> > > +       case 1:
-> > > +               ret = readb(serial8250_base + offset);
-> > > +               break;
-> > > +       case 2:
-> > > +               ret = readw(serial8250_base + offset);
-> > > +               break;
-> > > +       case 4:
-> > > +               ret = readl(serial8250_base + offset);
-> > > +               break;
-> > > +       default:
-> > > +               break;
-> > > +       }
-> > > +
-> > > +       return ret;
-> > >  }
-> > > 
-> > > The similar modification will be implemented for serial_out(). I'll also modify
-> > 
-> > look at the lines of code you are adding. Doing your own prom_putchar will
-> > probably have less lines.
-> > 
-> > > What do you think about this?
-> > 
-> > please do your own prom_putchar.
-> 
-> One more time regarding this problem but in appliance to another part of the
-> MIPS code. I've missed the patch to draw your attention to:
-> [PATCH v2 14/20] mips: Use offset-sized IO-mem accessors in CPS debug printout
-> 
-> There I've applied the same fix as in the patch:
-> [PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
-> 
-> Since you don't like the way I initially fixed it, suppose there we don't have
-> another way but to introduce something like CONFIG_MIPS_CPS_NS16550_WIDTH
-> parameter to select a proper accessors, like sw in our case, and sb by defaul).
-> Right?
-> 
+=E4=BA=8E 2020=E5=B9=B45=E6=9C=8820=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=887=
+:33:22, Paul Cercueil <paul@crapouillou=2Enet> =E5=86=99=E5=88=B0:
+>>=20
+>> Yes, the current way is indeed a little problem, it will cause=20
+>> num_possible_cpus() =3D=3D NR_CPUS, I will try to find a better way=2E
+>
+>You can do:
+>
+>for_each_of_cpu_node(cpu_node) {
+>       cpu =3D of_cpu_node_to_id(cpu_node);
+>       __cpu_number_map[cpu] =3D cpu;
+>       __cpu_logical_map[cpu] =3D cpu;
+>       set_cpu_possible(cpu, true);
+>}
+>
 
-> (Note UART_L is incorrectly created in that patch, I'll remove that macro in
-> v3.)
+FYI: There is a abandoned DeviceTree[1], parser=2E You can take it=2E
 
-Hm, actually no. The macro is correct. According to the code _mips_cps_putc()
-always perform lw from the UART MMIO registers. This must be a bug. Don't you
-think?
+I'm going to submit this topology clean-up for next release cycle
+but you can pick it for now=2E
 
--Sergey
+[=2E=2E=2E]
 
-> 
-> -Sergey
-> 
-
+[1]: https://lkml=2Eorg/lkml/2020/4/11/1088
+--=20
+Jiaxun Yang
