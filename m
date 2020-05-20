@@ -2,89 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E84521DB35D
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 14:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FB91DB407
+	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 14:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726790AbgETMda (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 08:33:30 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17708 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726868AbgETMd3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 20 May 2020 08:33:29 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1589977932; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=Ik0Yigs8kImtKhjXZnlMAInonF7b/WsWonJh+gODoNZXScAlhj+leFUpuOQGOFU2QVL9m0hstajj9njFXh7BeEZaD+0c4rMG0bmZ1bVV4eYTYBdiYHVXXU+dbZpfnZMHhqZzKu+IH4SW6Yfa6ycINAoyAeAUkFgTsG7I36u/mbc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1589977932; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=TJqmWfeUuN5LE75nul3wH3FZ6nQ1yQSdQfK6PtOHOHs=; 
-        b=O2Au6E6yKNllX40+daihOylvmzJCdZenyqgJHZaYbeCGZvSlQ5nEjMfUDwDKkZjsYDs8M70ZoKeYOuT4P0dGYpi2Pgv0TRAPtO714bx/bs3nFrIbvdEwcTjNi5Xhvz8Lz0dmIyfboL2mB4nLD+YDyMnSmmGYKXW3n9gpM22f3ik=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1589977932;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=TJqmWfeUuN5LE75nul3wH3FZ6nQ1yQSdQfK6PtOHOHs=;
-        b=FPh8G8GY+zJnnKuDxur7rUuF/DurU4V4e9Wx3Za4T0yrgFvXXKgl8Q/MJRyK+zby
-        5p529MSsXY5b722bnTsLlU5d6PaW5DfyXR+SCdodNEMEmHQY5Ntpxo1uvU3c+Uo+1jj
-        M5MLJ7GLWH66SmoY4v3+X+wGHp0Sz5Tasa2+cKw8=
-Received: from [127.0.0.1] (223.104.210.187 [223.104.210.187]) by mx.zoho.com.cn
-        with SMTPS id 1589977929817309.0615537915593; Wed, 20 May 2020 20:32:09 +0800 (CST)
-Date:   Wed, 20 May 2020 20:32:01 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Zhou Yanjie <zhouyanjie@wanyeetech.com>
-CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, tsbogend@alpha.franken.de,
-        paulburton@kernel.org, chenhc@lemote.com, tglx@linutronix.de,
-        robh+dt@kernel.org, daniel.lezcano@linaro.org,
-        keescook@chromium.org, krzk@kernel.org, hns@goldelico.com,
-        ebiederm@xmission.com, dongsheng.qiu@ingenic.com,
-        yanfei.li@ingenic.com, rick.tyliu@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Subject: Re: [PATCH v8 1/6] MIPS: JZ4780: Introduce SMP support.
-User-Agent: K-9 Mail for Android
-Reply-to: jiaxun.yang@flygoat.com
-In-Reply-To: <M3OMAQ.GEVVI159THK33@crapouillou.net>
-References: <1589898923-60048-1-git-send-email-zhouyanjie@wanyeetech.com> <1589898923-60048-3-git-send-email-zhouyanjie@wanyeetech.com> <M1GLAQ.UK9S5G64TOOO3@crapouillou.net> <5EC4DADD.1000801@wanyeetech.com> <M3OMAQ.GEVVI159THK33@crapouillou.net>
-Message-ID: <13934660-2138-489A-A87E-A6AA222F6218@flygoat.com>
+        id S1726443AbgETMqV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 08:46:21 -0400
+Received: from mga14.intel.com ([192.55.52.115]:15615 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726435AbgETMqU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 20 May 2020 08:46:20 -0400
+IronPort-SDR: Eu2VlE2GRbcpXYVXmEuRhA+bOmmeTMOpzOtSTH6faSKoXPkPQuPEtLABpnhZHzIusBO1BxXltE
+ Kh7+Zj1g2+Lg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 05:46:16 -0700
+IronPort-SDR: V6E/Ng3sk5KplKOJ4ojalPDdqw5sr7/ivO8RmkZKGAyG8bBoS9rBKNudLOOSWl9jP9CFatvZ/G
+ 33VvxL6a2tcQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,414,1583222400"; 
+   d="scan'208";a="289337876"
+Received: from mylly.fi.intel.com (HELO [10.237.72.161]) ([10.237.72.161])
+  by fmsmga004.fm.intel.com with ESMTP; 20 May 2020 05:46:12 -0700
+Subject: Re: [PATCH v2 08/12] i2c: designware: Introduce platform drivers glue
+ layer interface
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
+ <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510095019.20981-9-Sergey.Semin@baikalelectronics.ru>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <4950bb1e-302f-947e-1924-452a8169b504@linux.intel.com>
+Date:   Wed, 20 May 2020 15:46:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
+In-Reply-To: <20200510095019.20981-9-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi
 
+On 5/10/20 12:50 PM, Serge Semin wrote:
+> Seeing the DW I2C platform driver is getting overcomplicated with a lot of
+> vendor-specific configs let's introduce a glue-layer interface so new
+> platforms which equipped with Synopsys Designware APB I2C IP-core would
+> be able to handle their peculiarities in the dedicated objects.
+> 
+Comment to this patch and patches 9/12 and 12/12:
 
-=E4=BA=8E 2020=E5=B9=B45=E6=9C=8820=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=887=
-:33:22, Paul Cercueil <paul@crapouillou=2Enet> =E5=86=99=E5=88=B0:
->>=20
->> Yes, the current way is indeed a little problem, it will cause=20
->> num_possible_cpus() =3D=3D NR_CPUS, I will try to find a better way=2E
->
->You can do:
->
->for_each_of_cpu_node(cpu_node) {
->       cpu =3D of_cpu_node_to_id(cpu_node);
->       __cpu_number_map[cpu] =3D cpu;
->       __cpu_logical_map[cpu] =3D cpu;
->       set_cpu_possible(cpu, true);
->}
->
+Currently i2c-designware-platdrv.c is about 500 lines of code so I don't 
+think it's too overcomplicated. But I feel we have already too many 
+Kconfig options and source modules for i2c-designware and obviously 
+would like to push back a little from adding more.
 
-FYI: There is a abandoned DeviceTree[1], parser=2E You can take it=2E
+I don't think i2c-designware-platdrv.c becomes yet too complicated if 
+Baikal related code is added there, perhaps under #ifdef CONFIG_OF like 
+MSCC Ocelot code is currently.
 
-I'm going to submit this topology clean-up for next release cycle
-but you can pick it for now=2E
-
-[=2E=2E=2E]
-
-[1]: https://lkml=2Eorg/lkml/2020/4/11/1088
---=20
-Jiaxun Yang
+-- 
+Jarkko
