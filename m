@@ -2,213 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A6B1DB2CD
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 14:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8781DB2DE
+	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 14:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgETMMJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 08:12:09 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58300 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbgETMMI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 08:12:08 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 0FADA80307C1;
-        Wed, 20 May 2020 12:12:03 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id c8BOnlAs7pZK; Wed, 20 May 2020 15:12:02 +0300 (MSK)
-Date:   Wed, 20 May 2020 15:12:01 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
+        id S1726737AbgETMPv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 08:15:51 -0400
+Received: from mga07.intel.com ([134.134.136.100]:64783 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726224AbgETMPv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 20 May 2020 08:15:51 -0400
+IronPort-SDR: /nXgpn10MYs4R/z6EUM8pnBhYJc7hZn3D4lZaeUyTp3oiItL1hDbd9frUNxrxjdxQZ5I2clLxE
+ y3wB91N5kKvA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 05:15:50 -0700
+IronPort-SDR: YFW5zYdTb9SmJtp6AwGARWsB5kwLAa6+TBdQoaOHSuXDDLRPzNxh8Tgl1rJEtgAeTiXxfWCtSQ
+ XcrpaXraMkeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,413,1583222400"; 
+   d="scan'208";a="289330800"
+Received: from mylly.fi.intel.com (HELO [10.237.72.161]) ([10.237.72.161])
+  by fmsmga004.fm.intel.com with ESMTP; 20 May 2020 05:15:45 -0700
+Subject: Re: [PATCH v2 06/12] i2c: designware: slave: Set DW I2C core module
+ dependency
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
- if CPU_FREQ enabled
-Message-ID: <20200520121201.wohv6u646rx5otkf@mobilestation>
-References: <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
- <20200508154150.GB22247@alpha.franken.de>
- <20200511133121.cz5axbwynhmqkx7x@mobilestation>
- <20200515074827.6p5zx4sb3bmavjih@mobilestation>
- <20200515210647.GA22922@alpha.franken.de>
- <20200518134820.wedoumgbsllvhem6@mobilestation>
- <20200518163206.GA17800@alpha.franken.de>
- <20200518205752.txbylbjt2zkwdwwe@mobilestation>
- <20200519155053.GB15797@alpha.franken.de>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Max Staudt <max@enpas.org>, Stefan Roese <sr@denx.de>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
+ <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510095019.20981-7-Sergey.Semin@baikalelectronics.ru>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <67c8f943-37fb-70a2-60b2-eb3c80d2502e@linux.intel.com>
+Date:   Wed, 20 May 2020 15:15:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200519155053.GB15797@alpha.franken.de>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200510095019.20981-7-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 19, 2020 at 05:50:53PM +0200, Thomas Bogendoerfer wrote:
-> On Mon, May 18, 2020 at 11:57:52PM +0300, Serge Semin wrote:
-> > On Mon, May 18, 2020 at 06:32:06PM +0200, Thomas Bogendoerfer wrote:
-> > > On Mon, May 18, 2020 at 04:48:20PM +0300, Serge Semin wrote:
-> > > > On Fri, May 15, 2020 at 11:06:47PM +0200, Thomas Bogendoerfer wrote:
-> > > > > On Fri, May 15, 2020 at 10:48:27AM +0300, Serge Semin wrote:
-> > > > > > Thomas,
-> > > > > > Could you take a look at my comment below so I could proceed with the
-> > > > > > patchset v3 development?
-> > > > > 
-> > > > > I can't help, but using r4k clocksource with changing frequency is
-> > > > > probaly only usefull as a random generator. So IMHO the only two
-> > > > > options are disabling it or implement what arch/x86/kernel/tsc.c does.
-> > > > > 
-> > > > > Thomas.
-> > > > 
-> > > > Thomas, could you proceed with the rest of the patches review?
-> > > > ├─>[PATCH v2 16/20] bus: cdmm: Add MIPS R5 arch support
-> > > > ├─>[PATCH v2 15/20] mips: cdmm: Add mti,mips-cdmm dtb node support
-> > > 
-> > > both are not my call, but look ok to me.
-> > 
-> > Can I add your Reviewed-by tag there then?
+On 5/10/20 12:50 PM, Serge Semin wrote:
+> DW APB I2C slave code in fact depends on the DW I2C driver core, but not
+> on the platform code. Yes, the I2C slave interface is currently supported
+> by the platform version of the IP core, but it doesn't make it dependent
+> on it. So make sure the DW APB I2C slave config is only available if the
+> I2C_DESIGNWARE_CORE config is enabled.
 > 
-> only for 16/20. 15/20 looks ok to me, but I have not enough insides
-> on the hardware to say this is good.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Wolfram Sang <wsa@the-dreams.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: linux-mips@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> ---
+>   drivers/i2c/busses/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > > > ├─>[PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
-> > > 
-> > > that's broken. A reg shift of 2 doesn't mean we could use 32bit access
-> > > to the registers on other platforms. As I don't think adding some ifdefery
-> > > makes things nicer, just implement the your prom_putchar in board code.
-> > 
-> > I thought about that initially, but then I decided to alter the generic
-> > early_printk_8250 code instead. My version of prom_putchar() would be almost
-> > the same as one implemented in the early_printk_8250 module except minor
-> > modification of replacing readb/writeb methods with readl/writel. So I didn't
-> > want to duplicate the code, but wanted to provide a general way to fix the
-> > problem potentially also for another platforms.
-> > 
-> > Since you don't like this fix alternatively I'd suggest to add the reg_width
-> > parameter passed to the setup_8250_early_printk_port() method like this:
-> > -setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
-> > -                             unsigned int timeout)
-> > +setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
-> > +                             unsigned int reg_width, unsigned int timeout)
-> > 
-> > By reg_width parameter we could determine the actual width of the register:
-> >  static inline u8 serial_in(int offset)
-> >  {
-> > -       return readb(serial8250_base + (offset << serial8250_reg_shift));
-> > +       u8 ret = 0xFF;
-> > +
-> > +       offset <<= serial8250_reg_shift;
-> > +       switch (serial8250_reg_width) {
-> > +       case 1:
-> > +               ret = readb(serial8250_base + offset);
-> > +               break;
-> > +       case 2:
-> > +               ret = readw(serial8250_base + offset);
-> > +               break;
-> > +       case 4:
-> > +               ret = readl(serial8250_base + offset);
-> > +               break;
-> > +       default:
-> > +               break;
-> > +       }
-> > +
-> > +       return ret;
-> >  }
-> > 
-> > The similar modification will be implemented for serial_out(). I'll also modify
-> 
-> look at the lines of code you are adding. Doing your own prom_putchar will
-> probably have less lines.
-> 
-> > What do you think about this?
-> 
-> please do your own prom_putchar.
-
-One more time regarding this problem but in appliance to another part of the
-MIPS code. I've missed the patch to draw your attention to:
-[PATCH v2 14/20] mips: Use offset-sized IO-mem accessors in CPS debug printout
-
-There I've applied the same fix as in the patch:
-[PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
-
-Since you don't like the way I initially fixed it, suppose there we don't have
-another way but to introduce something like CONFIG_MIPS_CPS_NS16550_WIDTH
-parameter to select a proper accessors, like sw in our case, and sb by defaul).
-Right?
-
-(Note UART_L is incorrectly created in that patch, I'll remove that macro in
-v3.)
-
--Sergey
-
-> 
-> 
-> > > 
-> > > > ├─>[PATCH v2 12/20] mips: MAAR: Add XPA mode support
-> > > 
-> > > looks ok so far.
-> > 
-> > Can I add your Reviewed-by tag there then?
-> 
-> As I'm the maintainer of the part, I've simply applied it.
-> 
-> > > 
-> > > > ├─>[PATCH v2 10/20] mips: Add CONFIG/CONFIG6/Cause reg fields macro
-> > > 
-> > > that is fine
-> > 
-> > Can I add your Reviewed-by tag there then?
-> 
-> As this didn't apply cleanly, I'll apply it after you've resent it.
-> IMHO no need for a Reviewed-by.
-> 
-> > > > └─>[PATCH v2 09/20] mips: Add CP0 Write Merge config support
-> > > 
-> > > this is IMHO a dangerous change. Enabling write merging for any
-> > > CPU supporting it might triggers bugs. Do it in your board bringup
-> > > code and at the moment I don't see a reason for the rest of that
-> > > patch.
-> > 
-> > Let's at least leave the mm_config() implementation but without the write-merge
-> > enabling by default. Providing features availability macro
-> > cpu_has_mm_sysad/cpu_has_mm_full and c0 config fields
-> 
-> do you have a user of that ? I'm not introducing code nobody uses.
-> 
-> > I could use them to implement a code pattern like:
-> > 
-> > +	if (cpu_has_mm_full) {
-> > +		unsigned int config0 = read_c0_config();
-> > +               config0 = (config0 & ~MIPS_CONF_MM) | MIPS_CONF_MM_FULL;
-> > +               write_c0_config(config0);
-> > +	}
-> 
-> you know you are running on a R5 core, so you know you have MM_FULL.
-> No need to check this.
-> 
-> > By doing so I can manually enable/disable the MM feature in the
-> > cpu-feature-overrides.h. Without that I'd have to locally define these macro,
-> > which isn't good seeing they are in fact generic and can be useful for other
-> > platforms with SYSAD and FULL MM feature available. What do you think?
-> 
-> To me this is a hardware feature I expect to be done by firmware and
-> Linux shouldn't care about it, if it doesn't have any software
-> implications.
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
