@@ -2,84 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5EA1DC103
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 23:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026301DC28D
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 00:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgETVNO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 17:13:14 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:60824 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727018AbgETVNO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 17:13:14 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id DFFF580307C1;
-        Wed, 20 May 2020 21:13:10 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vhE8g358omkw; Thu, 21 May 2020 00:13:10 +0300 (MSK)
-Date:   Thu, 21 May 2020 00:13:09 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
- if CPU_FREQ enabled
-Message-ID: <20200520211309.y4phl4unnkbvztfe@mobilestation>
-References: <20200508154150.GB22247@alpha.franken.de>
- <20200511133121.cz5axbwynhmqkx7x@mobilestation>
- <20200515074827.6p5zx4sb3bmavjih@mobilestation>
- <20200515210647.GA22922@alpha.franken.de>
- <20200518134820.wedoumgbsllvhem6@mobilestation>
- <20200518163206.GA17800@alpha.franken.de>
- <20200518205752.txbylbjt2zkwdwwe@mobilestation>
- <20200519155053.GB15797@alpha.franken.de>
- <20200520115926.lk6ycke75flwzcd2@mobilestation>
- <20200520184024.GB23855@alpha.franken.de>
+        id S1728615AbgETW7p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 18:59:45 -0400
+Received: from mailrelay4.webfaction.com ([185.20.51.6]:38208 "EHLO
+        mailrelay4.webfaction.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728494AbgETW7p (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 18:59:45 -0400
+Received: from mailrelay3.webfaction.com (mailrelay3.webfaction.com [207.38.93.110])
+        by mailrelay4.webfaction.com (Postfix) with ESMTPS id 24267A296F
+        for <linux-mips@vger.kernel.org>; Wed, 20 May 2020 22:59:43 +0000 (UTC)
+Received: from mailrelay1.webfaction.com (mailrelay1.webfaction.com [207.38.86.46])
+        by mailrelay3.webfaction.com (Postfix) with ESMTPS id 777C32A1900
+        for <linux-mips@vger.kernel.org>; Wed, 20 May 2020 22:59:41 +0000 (UTC)
+Received: from smtp.webfaction.com (mail6.webfaction.com [31.170.123.134])
+        by mailrelay1.webfaction.com (Postfix) with ESMTPS id 905E11A0DA2
+        for <linux-mips@vger.kernel.org>; Wed, 20 May 2020 22:59:40 +0000 (UTC)
+Received: from jeremy.localnet (host-37-191-188-128.lynet.no [37.191.188.128])
+        by smtp.webfaction.com (Postfix) with ESMTPSA id 307E8600407E2;
+        Wed, 20 May 2020 22:59:51 +0000 (UTC)
+From:   Paul Boddie <paul@boddie.org.uk>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        "H . Nikolaus Schaller" <hns@goldelico.com>
+Cc:     =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        linux-mips <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH] clocksource: Ingenic: Add high resolution timer support for SMP.
+Date:   Thu, 21 May 2020 00:14:22 +0200
+Message-ID: <3077290.R152QTsmsV@jeremy>
+User-Agent: KMail/4.14.1 (Linux/3.16.0-10-586; KDE/4.14.2; i686; ; )
+In-Reply-To: <20200519201110.286501-1-paul@crapouillou.net>
+References: <1589898923-60048-5-git-send-email-zhouyanjie@wanyeetech.com> <20200519201110.286501-1-paul@crapouillou.net>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200520184024.GB23855@alpha.franken.de>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 20, 2020 at 08:40:24PM +0200, Thomas Bogendoerfer wrote:
-> On Wed, May 20, 2020 at 02:59:26PM +0300, Serge Semin wrote:
-> > I think there is a misunderstanding here. In this patch I am not enabling
+On Tuesday 19. May 2020 22.11.10 Paul Cercueil wrote:
 > 
-> you are right, I've missed the fact, that this also needs to be enabled
-> in TLB entries. Strange that MIPS added the enable bit while R10k simply
-> do uncached acclerated, whenever TLB entry selects it.
+> I took the liberty to clean your patch so that it doesn't create a
+> struct ingenic_tcu per CPU timer.
 > 
-> > If there is no misunderstanding and you said what you said, that even enabling
-> > the feature for utilization might be dangerous, let's at least leave the
-> > MIPS_CONF_MM, MIPS_CONF_MM_FULL and MIPS_CONF_MM_SYS_SYSAD fields
-> > definition in the "arch/mips/include/asm/mipsregs.h" header. I'll use
-> > them to enable the write-merge in my platform code.
-> > 
-> > What do you think?
-> 
-> I withdraw my concerns and will apply the patch as is.
+> Tested, and fully working on the JZ4770 with CONFIG_SMP disabled, and
+> also with CONFIG_SMP enabled (even though JZ4770 has only one CPU) with
+> a fixed smp.c and USB disabled (otherwise it crashes at boot).
 
-Great! Thanks.
+Thanks for looking at this and also your continuing work with the DRM driver. 
+I'll try and look a bit more at the DRM driver for the JZ4780 and see what I 
+am doing wrong with regard to JZ4780-specific configuration. In principle, 
+there should not be any, but I don't really have the full picture (literally 
+and also in terms of documentation or understanding).
 
--Sergey
+One thing that seems to be done with the Imagination/Ingenic drivers is dual 
+DMA channel initialisation. Usually, this seems to be necessary only for dual-
+panel configurations, and I wonder whether there is some kind of requirement 
+for the same arrangement when using the HDMI output.
 
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+Another thing that is done involves setting a foreground, which might be 
+relevant to your more recent contributions adding IPU support. Again, I don't 
+really understand why this seems necessary, but the documentation hardly 
+provides any details that might explain it.
+
+Paul
