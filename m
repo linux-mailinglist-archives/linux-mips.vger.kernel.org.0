@@ -2,76 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9BB1DBD0A
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 20:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF8A1DC0A6
+	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 22:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726566AbgETSkg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 14:40:36 -0400
-Received: from elvis.franken.de ([193.175.24.41]:60592 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726510AbgETSkg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 20 May 2020 14:40:36 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jbTdq-0005JR-01; Wed, 20 May 2020 20:40:34 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 952F1C0155; Wed, 20 May 2020 20:40:24 +0200 (CEST)
-Date:   Wed, 20 May 2020 20:40:24 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S1728003AbgETUzy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 16:55:54 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:38191 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727018AbgETUzx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 16:55:53 -0400
+Received: by mail-io1-f66.google.com with SMTP id d7so4925179ioq.5;
+        Wed, 20 May 2020 13:55:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4A/urJgTNEik3nS9K/zxpMsr2xy3JDn7D0tTt4UYL6Q=;
+        b=Rur735Aji85VKw1WifgT+44gMYMVhme71U7nNDI+g1QcQbAsjB5UCwZak639jEMrf0
+         yLxSKLvJfJ6keAXvq6L8g15o1vlSqyKjbpk9xop3LW1rSW3XEDxfw3GYw0V6lgqteKdm
+         od21vI3xYJCX5Az5f5moP83JhPgJGOCUR9FkTILW9h3VTcmrXcme9mJltsiBBRmlGIYY
+         kb1Kwt0OO5jQ0O6SJcesX7jd6g0nU3djNZpvvvsjPo9E2ApfQs9PW8xjNEF6U8tEoJ+r
+         +wSZLSOjYr7cYQhgfMBfFrUtquVKJz57z+Dhz9I+s/Acqux0QyquTGGGGjkcmE34/3Ab
+         y3qA==
+X-Gm-Message-State: AOAM532tpw0Ev3h0Qlpu1zLA6aej1yUTQRPjXil9loGo0pEH7XavniNQ
+        +6uEpKG0zVKj1GOQSLD16w==
+X-Google-Smtp-Source: ABdhPJwigL7tJ5oCpu3QdChue1KmFStUm7ZG2QUpfZDltiWiLyWIOcTfTB38/xTVoi9tfZr5b8RGhg==
+X-Received: by 2002:a05:6638:224d:: with SMTP id m13mr942236jas.100.1590008151814;
+        Wed, 20 May 2020 13:55:51 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id k5sm1912408ilg.55.2020.05.20.13.55.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2020 13:55:51 -0700 (PDT)
+Received: (nullmailer pid 558817 invoked by uid 1000);
+        Wed, 20 May 2020 20:55:50 -0000
+Date:   Wed, 20 May 2020 14:55:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-pci@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
- if CPU_FREQ enabled
-Message-ID: <20200520184024.GB23855@alpha.franken.de>
-References: <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
- <20200508154150.GB22247@alpha.franken.de>
- <20200511133121.cz5axbwynhmqkx7x@mobilestation>
- <20200515074827.6p5zx4sb3bmavjih@mobilestation>
- <20200515210647.GA22922@alpha.franken.de>
- <20200518134820.wedoumgbsllvhem6@mobilestation>
- <20200518163206.GA17800@alpha.franken.de>
- <20200518205752.txbylbjt2zkwdwwe@mobilestation>
- <20200519155053.GB15797@alpha.franken.de>
- <20200520115926.lk6ycke75flwzcd2@mobilestation>
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v7 1/5] PCI: Don't disable decoding when mmio_always_on
+ is set
+Message-ID: <20200520205550.GA558730@bogus>
+References: <20200428011429.1852081-1-jiaxun.yang@flygoat.com>
+ <20200428011429.1852081-2-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200520115926.lk6ycke75flwzcd2@mobilestation>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200428011429.1852081-2-jiaxun.yang@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 20, 2020 at 02:59:26PM +0300, Serge Semin wrote:
-> I think there is a misunderstanding here. In this patch I am not enabling
-
-you are right, I've missed the fact, that this also needs to be enabled
-in TLB entries. Strange that MIPS added the enable bit while R10k simply
-do uncached acclerated, whenever TLB entry selects it.
-
-> If there is no misunderstanding and you said what you said, that even enabling
-> the feature for utilization might be dangerous, let's at least leave the
-> MIPS_CONF_MM, MIPS_CONF_MM_FULL and MIPS_CONF_MM_SYS_SYSAD fields
-> definition in the "arch/mips/include/asm/mipsregs.h" header. I'll use
-> them to enable the write-merge in my platform code.
+On Tue, 28 Apr 2020 09:14:16 +0800, Jiaxun Yang wrote:
+> Don't disable MEM/IO decoding when a device have both non_compliant_bars
+> and mmio_always_on.
 > 
-> What do you think?
+> That would allow us quirk devices with junk in BARs but can't disable
+> their decoding.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  drivers/pci/probe.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-I withdraw my concerns and will apply the patch as is.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Acked-by: Rob Herring <robh@kernel.org>
