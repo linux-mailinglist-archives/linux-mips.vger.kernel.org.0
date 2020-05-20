@@ -2,74 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF8A1DC0A6
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 22:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19911DC0FD
+	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 23:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728003AbgETUzy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 16:55:54 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:38191 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727018AbgETUzx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 16:55:53 -0400
-Received: by mail-io1-f66.google.com with SMTP id d7so4925179ioq.5;
-        Wed, 20 May 2020 13:55:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4A/urJgTNEik3nS9K/zxpMsr2xy3JDn7D0tTt4UYL6Q=;
-        b=Rur735Aji85VKw1WifgT+44gMYMVhme71U7nNDI+g1QcQbAsjB5UCwZak639jEMrf0
-         yLxSKLvJfJ6keAXvq6L8g15o1vlSqyKjbpk9xop3LW1rSW3XEDxfw3GYw0V6lgqteKdm
-         od21vI3xYJCX5Az5f5moP83JhPgJGOCUR9FkTILW9h3VTcmrXcme9mJltsiBBRmlGIYY
-         kb1Kwt0OO5jQ0O6SJcesX7jd6g0nU3djNZpvvvsjPo9E2ApfQs9PW8xjNEF6U8tEoJ+r
-         +wSZLSOjYr7cYQhgfMBfFrUtquVKJz57z+Dhz9I+s/Acqux0QyquTGGGGjkcmE34/3Ab
-         y3qA==
-X-Gm-Message-State: AOAM532tpw0Ev3h0Qlpu1zLA6aej1yUTQRPjXil9loGo0pEH7XavniNQ
-        +6uEpKG0zVKj1GOQSLD16w==
-X-Google-Smtp-Source: ABdhPJwigL7tJ5oCpu3QdChue1KmFStUm7ZG2QUpfZDltiWiLyWIOcTfTB38/xTVoi9tfZr5b8RGhg==
-X-Received: by 2002:a05:6638:224d:: with SMTP id m13mr942236jas.100.1590008151814;
-        Wed, 20 May 2020 13:55:51 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id k5sm1912408ilg.55.2020.05.20.13.55.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2020 13:55:51 -0700 (PDT)
-Received: (nullmailer pid 558817 invoked by uid 1000);
-        Wed, 20 May 2020 20:55:50 -0000
-Date:   Wed, 20 May 2020 14:55:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-pci@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        id S1727983AbgETVMG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 17:12:06 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:60792 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727018AbgETVMF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 17:12:05 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id BD7CB803087B;
+        Wed, 20 May 2020 21:12:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id rm8xPnTOIoPd; Thu, 21 May 2020 00:12:02 +0300 (MSK)
+Date:   Thu, 21 May 2020 00:12:00 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v7 1/5] PCI: Don't disable decoding when mmio_always_on
- is set
-Message-ID: <20200520205550.GA558730@bogus>
-References: <20200428011429.1852081-1-jiaxun.yang@flygoat.com>
- <20200428011429.1852081-2-jiaxun.yang@flygoat.com>
+        Ralf Baechle <ralf@linux-mips.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
+ if CPU_FREQ enabled
+Message-ID: <20200520211200.qhfgdz4qnatyloob@mobilestation>
+References: <20200515074827.6p5zx4sb3bmavjih@mobilestation>
+ <20200515210647.GA22922@alpha.franken.de>
+ <20200518134820.wedoumgbsllvhem6@mobilestation>
+ <20200518163206.GA17800@alpha.franken.de>
+ <20200518205752.txbylbjt2zkwdwwe@mobilestation>
+ <20200519155053.GB15797@alpha.franken.de>
+ <20200520121201.wohv6u646rx5otkf@mobilestation>
+ <20200520133827.GA17714@alpha.franken.de>
+ <20200520134826.pc6si3k6boaexp4i@mobilestation>
+ <20200520183057.GA23855@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200428011429.1852081-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20200520183057.GA23855@alpha.franken.de>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 28 Apr 2020 09:14:16 +0800, Jiaxun Yang wrote:
-> Don't disable MEM/IO decoding when a device have both non_compliant_bars
-> and mmio_always_on.
+On Wed, May 20, 2020 at 08:30:57PM +0200, Thomas Bogendoerfer wrote:
+> On Wed, May 20, 2020 at 04:48:26PM +0300, Serge Semin wrote:
+> > On Wed, May 20, 2020 at 03:38:27PM +0200, Thomas Bogendoerfer wrote:
+> > > On Wed, May 20, 2020 at 03:12:01PM +0300, Serge Semin wrote:
+> > > > Since you don't like the way I initially fixed it, suppose there we don't have
+> > > > another way but to introduce something like CONFIG_MIPS_CPS_NS16550_WIDTH
+> > > > parameter to select a proper accessors, like sw in our case, and sb by defaul).
+> > > > Right?
+> > > 
+> > > to be on the safe side it's probably the best thing. But I don't know
+> > > enough about CPS_NS16550 to judge whether shift value correlates with
+> > > possible access width.
+> > 
+> > The base address passed to the _mips_cps_putc() leaf is UART-base address. It
+> > has nothing to do with CPS. See:
 > 
-> That would allow us quirk devices with junk in BARs but can't disable
-> their decoding.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  drivers/pci/probe.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+> ok, I'm confused. So this isn't an uart inside CPS hardware, but an uart used
+> by CPS code for debug output, right ? 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Right. It's not CPS, but just UART available on the system. See a comment in the
+arch/mips/kernel/cps-vec-ns16550.S:
+/**
+ * mips_cps_bev_dump() - dump relevant exception state to UART
+ * @a0: pointer to NULL-terminated ASCII string naming the exception
+ *
+ * Write information that may be useful in debugging an exception to the
+ * UART configured by CONFIG_MIPS_CPS_NS16550_*.
+ *...
+ */
+LEAF(mips_cps_bev_dump)
+        move            s0, ra
+        move            s1, a0
+
+        li              t9, CKSEG1ADDR(CONFIG_MIPS_CPS_NS16550_BASE)
+        ...
+
+See the base is just loaded to the t9 register.
+
+> 
+> To solve the issued please add CONFIG_MIPS_CPS_NS16550_WIDTH to select the
+> correct access width.
+
+Ok. Thanks.
+
+-Sergey
+
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
