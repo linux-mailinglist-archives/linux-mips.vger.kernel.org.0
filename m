@@ -2,82 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FB91DB407
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 14:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44DC1DB533
+	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 15:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726443AbgETMqV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 08:46:21 -0400
-Received: from mga14.intel.com ([192.55.52.115]:15615 "EHLO mga14.intel.com"
+        id S1726805AbgETNij (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 09:38:39 -0400
+Received: from elvis.franken.de ([193.175.24.41]:60382 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726435AbgETMqU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 20 May 2020 08:46:20 -0400
-IronPort-SDR: Eu2VlE2GRbcpXYVXmEuRhA+bOmmeTMOpzOtSTH6faSKoXPkPQuPEtLABpnhZHzIusBO1BxXltE
- Kh7+Zj1g2+Lg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 05:46:16 -0700
-IronPort-SDR: V6E/Ng3sk5KplKOJ4ojalPDdqw5sr7/ivO8RmkZKGAyG8bBoS9rBKNudLOOSWl9jP9CFatvZ/G
- 33VvxL6a2tcQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,414,1583222400"; 
-   d="scan'208";a="289337876"
-Received: from mylly.fi.intel.com (HELO [10.237.72.161]) ([10.237.72.161])
-  by fmsmga004.fm.intel.com with ESMTP; 20 May 2020 05:46:12 -0700
-Subject: Re: [PATCH v2 08/12] i2c: designware: Introduce platform drivers glue
- layer interface
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
+        id S1726436AbgETNij (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 20 May 2020 09:38:39 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jbOvd-0002ik-00; Wed, 20 May 2020 15:38:37 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id D8600C014D; Wed, 20 May 2020 15:38:27 +0200 (CEST)
+Date:   Wed, 20 May 2020 15:38:27 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
- <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
- <20200510095019.20981-9-Sergey.Semin@baikalelectronics.ru>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <4950bb1e-302f-947e-1924-452a8169b504@linux.intel.com>
-Date:   Wed, 20 May 2020 15:46:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
+ if CPU_FREQ enabled
+Message-ID: <20200520133827.GA17714@alpha.franken.de>
+References: <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
+ <20200508154150.GB22247@alpha.franken.de>
+ <20200511133121.cz5axbwynhmqkx7x@mobilestation>
+ <20200515074827.6p5zx4sb3bmavjih@mobilestation>
+ <20200515210647.GA22922@alpha.franken.de>
+ <20200518134820.wedoumgbsllvhem6@mobilestation>
+ <20200518163206.GA17800@alpha.franken.de>
+ <20200518205752.txbylbjt2zkwdwwe@mobilestation>
+ <20200519155053.GB15797@alpha.franken.de>
+ <20200520121201.wohv6u646rx5otkf@mobilestation>
 MIME-Version: 1.0
-In-Reply-To: <20200510095019.20981-9-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200520121201.wohv6u646rx5otkf@mobilestation>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi
+On Wed, May 20, 2020 at 03:12:01PM +0300, Serge Semin wrote:
+> Since you don't like the way I initially fixed it, suppose there we don't have
+> another way but to introduce something like CONFIG_MIPS_CPS_NS16550_WIDTH
+> parameter to select a proper accessors, like sw in our case, and sb by defaul).
+> Right?
 
-On 5/10/20 12:50 PM, Serge Semin wrote:
-> Seeing the DW I2C platform driver is getting overcomplicated with a lot of
-> vendor-specific configs let's introduce a glue-layer interface so new
-> platforms which equipped with Synopsys Designware APB I2C IP-core would
-> be able to handle their peculiarities in the dedicated objects.
-> 
-Comment to this patch and patches 9/12 and 12/12:
+to be on the safe side it's probably the best thing. But I don't know
+enough about CPS_NS16550 to judge whether shift value correlates with
+possible access width.
 
-Currently i2c-designware-platdrv.c is about 500 lines of code so I don't 
-think it's too overcomplicated. But I feel we have already too many 
-Kconfig options and source modules for i2c-designware and obviously 
-would like to push back a little from adding more.
-
-I don't think i2c-designware-platdrv.c becomes yet too complicated if 
-Baikal related code is added there, perhaps under #ifdef CONFIG_OF like 
-MSCC Ocelot code is currently.
+Thomas.
 
 -- 
-Jarkko
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
