@@ -2,82 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBC41DAF79
-	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 11:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770F21DAF8D
+	for <lists+linux-mips@lfdr.de>; Wed, 20 May 2020 12:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726818AbgETJzX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 05:55:23 -0400
-Received: from cmccmta2.chinamobile.com ([221.176.66.80]:3521 "EHLO
-        cmccmta2.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgETJzW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 05:55:22 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.11]) by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee55ec4fe6c984-67feb; Wed, 20 May 2020 17:54:52 +0800 (CST)
-X-RM-TRANSID: 2ee55ec4fe6c984-67feb
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[117.136.67.50])
-        by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee65ec4fe6835b-f17be;
-        Wed, 20 May 2020 17:54:52 +0800 (CST)
-X-RM-TRANSID: 2ee65ec4fe6835b-f17be
-From:   Tang Bin <tangbin@cmss.chinamobile.com>
-To:     davem@davemloft.net, ralf@linux-mips.org, paulburton@kernel.org,
-        tbogendoerfer@suse.de
-Cc:     linux-mips@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tang Bin <tangbin@cmss.chinamobile.com>,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Subject: [PATCH] net: sgi: ioc3-eth: Fix return value check in ioc3eth_probe()
-Date:   Wed, 20 May 2020 17:55:32 +0800
-Message-Id: <20200520095532.20780-1-tangbin@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.20.1.windows.1
+        id S1726525AbgETKBx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 20 May 2020 06:01:53 -0400
+Received: from mail-ej1-f65.google.com ([209.85.218.65]:33174 "EHLO
+        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726224AbgETKBx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 06:01:53 -0400
+Received: by mail-ej1-f65.google.com with SMTP id n24so3029234ejd.0;
+        Wed, 20 May 2020 03:01:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=v8EDRqZtXtnh/hEmyxqDkZdYj8yN54lWYsJ0qEqpF+c=;
+        b=q3Av2KcQKLfM8FcPKMb1krPXMRzDrxZyeSl/fuSlyfFu0TEc84+XdQ/5YzwnJb1+zB
+         Y8jw433zvAYHxFU59htqTNd5Puy13H1oKfPvb393N8RLd96EGiSsCsySzQSgJWSGM8bB
+         LzJPBUwy0TfjcpZKq+6JyhaFF4/WTzqgfWlr+hMrZffxa6KJEqeCJZE8uPxJWQcEJ3a3
+         YjK52l6rQ4Vy3JcRQZjNQ/+6A3qu2vHV/2u2TtT6p7vvtcFxDz77yuFuSPwxX5zxInk+
+         Ego2NOdtr5miCEIlqWTrVjH7kvKHPl1PkhIczKcaGhSlQcEb/aMO6YRNDd2vAg313Hbv
+         k+2w==
+X-Gm-Message-State: AOAM532mjR0UOtV2rczK6u5jpiPZfTNoS404LQqNjV0qiIXEgAz8vtU/
+        BmrzIGfp3JxHVfnxrXHSGM/tbJAS/p+A8KUnLBwrST2b
+X-Google-Smtp-Source: ABdhPJyNMixBtXdsQ4k57fw3AEyBZlSv9U9g0emO85Y2ome8aOFC6N6r+KX70ZONLl/mh44PO3rHaqf1AN3ao0AZz7s=
+X-Received: by 2002:a17:907:9492:: with SMTP id dm18mr3116869ejc.328.1589968911424;
+ Wed, 20 May 2020 03:01:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200519212230.313365-1-paul@crapouillou.net> <20200520064520.GB7630@alpha.franken.de>
+ <CAAdtpL4cZ4==07=kNJf6Xkhnzy6jiqgMc1XzG0NV6RZi1KqgXA@mail.gmail.com> <20200520092757.GA12701@alpha.franken.de>
+In-Reply-To: <20200520092757.GA12701@alpha.franken.de>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Wed, 20 May 2020 12:01:39 +0200
+Message-ID: <CAAdtpL76AOoc+cLOP+khtLGOx6j81Ss3uqDKkuZXjeoqsdE72g@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: ingenic: Add missing include
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Paul Cercueil <paul@crapouillou.net>, od@zcrc.me,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        kbuild test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In the function devm_platform_ioremap_resource(), if get resource
-failed, the return value is ERR_PTR() not NULL. Thus it must be
-replaced by IS_ERR(), or else it may result in crashes if a critical
-error path is encountered.
+On Wed, May 20, 2020 at 11:28 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Wed, May 20, 2020 at 11:19:49AM +0200, Philippe Mathieu-Daudé wrote:
+> > Hi Thomas,
+> >
+> > On Wed, May 20, 2020 at 8:50 AM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > >
+> > > On Tue, May 19, 2020 at 11:22:30PM +0200, Paul Cercueil wrote:
+> > > > Add missing include which adds the prototype to plat_time_init().
+> > > >
+> > > > Fixes: f932449c11da ("MIPS: ingenic: Drop obsolete code, merge the rest in setup.c")
+> > > > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> > > > Reported-by: kbuild test robot <lkp@intel.com>
+> > > > ---
+> > > >  arch/mips/jz4740/setup.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > >
+> > > applied to mips-next.
+> >
+> > Since mips-next is not merged, can you simply squash the fix to the
+> > incomplete f932449c11da please?
+>
+> no, I don't rebase mips-next.
 
-Fixes: 0ce5ebd24d25 ("mfd: ioc3: Add driver for SGI IOC3 chip")
-Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
----
- drivers/net/ethernet/sgi/ioc3-eth.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+OK. I had the understanding that mips-fixes was the stable branch not rebased,
+and mips-next was not considered stable until merged in mainstream.
+I took note of the changes, thanks.
 
-diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
-index db6b2988e..8021a3d34 100644
---- a/drivers/net/ethernet/sgi/ioc3-eth.c
-+++ b/drivers/net/ethernet/sgi/ioc3-eth.c
-@@ -865,17 +865,17 @@ static int ioc3eth_probe(struct platform_device *pdev)
- 	ip = netdev_priv(dev);
- 	ip->dma_dev = pdev->dev.parent;
- 	ip->regs = devm_platform_ioremap_resource(pdev, 0);
--	if (!ip->regs) {
--		err = -ENOMEM;
-+	if (IS_ERR(ip->regs)) {
-+		err = PTR_ERR(ip->regs);
- 		goto out_free;
- 	}
- 
- 	ip->ssram = devm_platform_ioremap_resource(pdev, 1);
--	if (!ip->ssram) {
--		err = -ENOMEM;
-+	if (IS_ERR(ip->ssram)) {
-+		err = PTR_ERR(ip->ssram);
- 		goto out_free;
- 	}
--
-+
- 	dev->irq = platform_get_irq(pdev, 0);
- 	if (dev->irq < 0) {
- 		err = dev->irq;
--- 
-2.20.1.windows.1
-
-
-
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
