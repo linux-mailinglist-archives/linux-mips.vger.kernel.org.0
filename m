@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D24871DD8C0
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 22:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3E71DD8C4
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 22:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730120AbgEUUtN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 16:49:13 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40492 "EHLO
+        id S1730325AbgEUUtO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 16:49:14 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40534 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730104AbgEUUtM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 16:49:12 -0400
+        with ESMTP id S1730130AbgEUUtN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 16:49:13 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 97C218029EB7;
-        Thu, 21 May 2020 20:49:06 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2C9D880005EE;
+        Thu, 21 May 2020 20:49:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id eqm94qBrncaw; Thu, 21 May 2020 23:49:05 +0300 (MSK)
+        with ESMTP id V3W7VpCXuOqi; Thu, 21 May 2020 23:49:07 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -32,13 +32,13 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
         <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
         Allison Randal <allison@lohutok.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexios Zavras <alexios.zavras@intel.com>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 4/8] clocksource: dw_apb_timer: Make CPU-affiliation being optional
-Date:   Thu, 21 May 2020 23:48:13 +0300
-Message-ID: <20200521204818.25436-5-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v5 5/8] clocksource: dw_apb_timer: Affiliate of-based timer with any CPU
+Date:   Thu, 21 May 2020 23:48:14 +0300
+Message-ID: <20200521204818.25436-6-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200521204818.25436-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200521204818.25436-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -50,28 +50,18 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Currently the DW APB Timer driver binds each clockevent timers to a
-particular CPU. This isn't good for multiple reasons. First of all seeing
-the device is placed on APB bus (which makes it accessible from any CPU
-core), accessible over MMIO and having the DYNIRQ flag set we can be sure
-that manually binding the timer to any CPU just isn't correct. By doing
-so we just set an extra limitation on device usage. This also doesn't
-reflect the device actual capability, since by setting the IRQ affinity
-we can make it virtually local to any CPU. Secondly imagine if you had a
-real CPU-local timer with the same rating and the same CPU-affinity.
-In this case if DW APB timer was registered first, then due to the
-clockevent framework tick-timer selection procedure we'll end up with the
-real CPU-local timer being left unselected for clock-events tracking. But
-on most of the platforms (MIPS/ARM/etc) such timers are normally embedded
-into the CPU core and are accessible with much better performance then
-devices placed on APB. For instance in MIPS architectures there is
-r4k-timer, which is CPU-local, assigned with the same rating, and normally
-its clockevent device is registered after the platform-specific one.
+Currently any DW APB Timer device detected in OF is bound to CPU #0.
+Doing so is redundant since DW APB Timer isn't CPU-local timer, but as
+having APB interface is normally accessible from any CPU in the system. By
+artificially affiliating the DW timer to the very first CPU we may and in
+our case will make the clockevent subsystem to decline the more performant
+real CPU-local timers selection in favor of in fact non-local and
+accessible over a slow bus - DW APB Timers.
 
-So in order to fix all of these issues let's make the DW APB Timer CPU
-affinity being optional and deactivated by passing a negative CPU id,
-which will effectively set the DW APB clockevent timer cpumask to
-'cpu_possible_mask'.
+Let's not affiliate the of-detected DW APB Timers to any CPU. By doing so
+the clockevent framework would prefer to select the real CPU-local timer
+instead of DW APB one. Otherwise if there is no other than DW APB device
+for clockevents tracking then it will be selected.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
@@ -89,38 +79,25 @@ Cc: devicetree@vger.kernel.org
 ---
 
 Changelog v5:
-- Don't discard CPU affiliation functionality, but allow it being optional.
-  If CPU id passed to the clockevent registration method is negative, then
-  don't assign the timer events to any particular CPU.
-- Discard the OF-based DW APB Timer CPU-affiliation setting change. It'll
-  be moved to a dedicated patch.
+- This is a new patch created after reconsidering the solution of the DW
+  APB Timer CPU-affiliation problem.
 ---
- drivers/clocksource/dw_apb_timer.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/clocksource/dw_apb_timer_of.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/dw_apb_timer.c b/drivers/clocksource/dw_apb_timer.c
-index b207a77b0831..f5f24a95ee82 100644
---- a/drivers/clocksource/dw_apb_timer.c
-+++ b/drivers/clocksource/dw_apb_timer.c
-@@ -222,7 +222,8 @@ static int apbt_next_event(unsigned long delta,
- /**
-  * dw_apb_clockevent_init() - use an APB timer as a clock_event_device
-  *
-- * @cpu:	The CPU the events will be targeted at.
-+ * @cpu:	The CPU the events will be targeted at or -1 if CPU affiliation
-+ *		isn't required.
-  * @name:	The name used for the timer and the IRQ for it.
-  * @rating:	The rating to give the timer.
-  * @base:	I/O base for the timer registers.
-@@ -257,7 +258,7 @@ dw_apb_clockevent_init(int cpu, const char *name, unsigned rating,
- 	dw_ced->ced.max_delta_ticks = 0x7fffffff;
- 	dw_ced->ced.min_delta_ns = clockevent_delta2ns(5000, &dw_ced->ced);
- 	dw_ced->ced.min_delta_ticks = 5000;
--	dw_ced->ced.cpumask = cpumask_of(cpu);
-+	dw_ced->ced.cpumask = cpu < 0 ? cpu_possible_mask : cpumask_of(cpu);
- 	dw_ced->ced.features = CLOCK_EVT_FEAT_PERIODIC |
- 				CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_DYNIRQ;
- 	dw_ced->ced.set_state_shutdown = apbt_shutdown;
+diff --git a/drivers/clocksource/dw_apb_timer_of.c b/drivers/clocksource/dw_apb_timer_of.c
+index 8c28b127759f..2db490f35c20 100644
+--- a/drivers/clocksource/dw_apb_timer_of.c
++++ b/drivers/clocksource/dw_apb_timer_of.c
+@@ -73,7 +73,7 @@ static void __init add_clockevent(struct device_node *event_timer)
+ 
+ 	timer_get_base_and_rate(event_timer, &iobase, &rate);
+ 
+-	ced = dw_apb_clockevent_init(0, event_timer->name, 300, iobase, irq,
++	ced = dw_apb_clockevent_init(-1, event_timer->name, 300, iobase, irq,
+ 				     rate);
+ 	if (!ced)
+ 		panic("Unable to initialise clockevent device");
 -- 
 2.25.1
 
