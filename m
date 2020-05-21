@@ -2,136 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 133D51DCF27
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 16:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0FD1DCF9A
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 16:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbgEUOJK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 10:09:10 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:38652 "EHLO
+        id S1729532AbgEUOW3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 10:22:29 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:38780 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729919AbgEUOJG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 10:09:06 -0400
+        with ESMTP id S1728207AbgEUOW1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 10:22:27 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 9D76880005EE;
-        Thu, 21 May 2020 14:09:02 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 376CF8030776;
+        Thu, 21 May 2020 14:22:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id M1UySfoXILvC; Thu, 21 May 2020 17:09:02 +0300 (MSK)
+        with ESMTP id 8PSENPxDhIuf; Thu, 21 May 2020 17:22:21 +0300 (MSK)
+Date:   Thu, 21 May 2020 17:22:19 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 13/13] mips: cevt-r4k: Update the r4k-clockevent frequency in sync with CPU
-Date:   Thu, 21 May 2020 17:07:24 +0300
-Message-ID: <20200521140725.29571-14-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200521140725.29571-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200521140725.29571-1-Sergey.Semin@baikalelectronics.ru>
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Paul Cercueil <paul@crapouillou.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Maarten ter Huurne <maarten@treewalker.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 7/7] clocksource: mips-gic-timer: Mark GIC timer as
+ unstable if ref clock changes
+Message-ID: <20200521142219.ejsl4y5eaqqfsp5k@mobilestation>
+References: <20200521005321.12129-1-Sergey.Semin@baikalelectronics.ru>
+ <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
+ <CAMuHMdW5TqfDTZZCscXCK-Fkd7Gq1Ciyu1_sDzzR0B+_W-2hfg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdW5TqfDTZZCscXCK-Fkd7Gq1Ciyu1_sDzzR0B+_W-2hfg@mail.gmail.com>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Due to being embedded into the CPU cores MIPS count/compare timer
-frequency is changed together with the CPU clocks alteration.
-In case if frequency really changes the kernel clockevent framework
-must be notified, otherwise the kernel timers won't work correctly.
-Fix this by calling clockevents_update_freq() for each r4k clockevent
-handlers registered per available CPUs.
+On Thu, May 21, 2020 at 11:09:50AM +0200, Geert Uytterhoeven wrote:
+> Hi Serge,
+> 
+> On Thu, May 21, 2020 at 2:54 AM Serge Semin
+> <Sergey.Semin@baikalelectronics.ru> wrote:
+> > Currently clocksource framework doesn't support the clocks with variable
+> > frequency. Since MIPS GIC timer ticks rate might be unstable on some
+> > platforms, we must make sure that it justifies the clocksource
+> > requirements. MIPS GIC timer is incremented with the CPU cluster reference
+> > clocks rate. So in case if CPU frequency changes, the MIPS GIC tick rate
+> > changes synchronously. Due to this the clocksource subsystem can't rely on
+> > the timer to measure system clocks anymore. This commit marks the MIPS GIC
+> > based clocksource as unstable if reference clock (normally it's a CPU
+> > reference clocks) rate changes. The clocksource will execute a watchdog
+> > thread, which lowers the MIPS GIC timer rating to zero and fallbacks to a
+> > new stable one.
+> >
+> > Note we don't need to set the CLOCK_SOURCE_MUST_VERIFY flag to the MIPS
+> > GIC clocksource since normally the timer is stable. The only reason why
+> > it gets unstable is due to the ref clock rate change, which event we
+> > detect here in the driver by means of the clocks event notifier.
+> >
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> Thanks for your patch!
+> 
+> > --- a/drivers/clocksource/mips-gic-timer.c
+> > +++ b/drivers/clocksource/mips-gic-timer.c
+> > @@ -24,6 +24,9 @@
+> >  static DEFINE_PER_CPU(struct clock_event_device, gic_clockevent_device);
+> >  static int gic_timer_irq;
+> >  static unsigned int gic_frequency;
+> > +static bool __read_mostly gic_clock_unstable;
+> > +
+> > +static void git_clocksource_unstable(char *reason);
+> 
+> gic_clocksource_unstable? (everywhere)
 
-Traditionally MIPS r4k-clock are clocked with CPU frequency divided by 2.
-But this isn't true for some of the platforms. Due to this we have to save
-the basic CPU frequency, so then use it to scale the initial timer
-frequency (mips_hpt_frequency) and pass the updated value further to the
-clockevent framework.
+This is the most used word lately. So my hands write git everywhere by itself.)
+Thanks for noticing this.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: devicetree@vger.kernel.org
----
- arch/mips/kernel/cevt-r4k.c | 44 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+-Sergey
 
-diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
-index 17a9cbb8b3df..995ad9e69ded 100644
---- a/arch/mips/kernel/cevt-r4k.c
-+++ b/arch/mips/kernel/cevt-r4k.c
-@@ -8,6 +8,7 @@
-  */
- #include <linux/clockchips.h>
- #include <linux/interrupt.h>
-+#include <linux/cpufreq.h>
- #include <linux/percpu.h>
- #include <linux/smp.h>
- #include <linux/irq.h>
-@@ -250,6 +251,49 @@ unsigned int __weak get_c0_compare_int(void)
- 	return MIPS_CPU_IRQ_BASE + cp0_compare_irq;
- }
- 
-+#ifdef CONFIG_CPU_FREQ
-+
-+static unsigned long mips_ref_freq;
-+
-+static int r4k_cpufreq_callback(struct notifier_block *nb,
-+				unsigned long val, void *data)
-+{
-+	struct cpufreq_freqs *freq = data;
-+	struct clock_event_device *cd;
-+	unsigned long rate;
-+	int cpu;
-+
-+	if (!mips_ref_freq)
-+		mips_ref_freq = freq->old;
-+
-+	if (val == CPUFREQ_POSTCHANGE) {
-+		rate = cpufreq_scale(mips_hpt_frequency, mips_ref_freq,
-+				     freq->new);
-+
-+		for_each_cpu(cpu, freq->policy->cpus) {
-+			cd = &per_cpu(mips_clockevent_device, cpu);
-+
-+			clockevents_update_freq(cd, rate);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static struct notifier_block r4k_cpufreq_notifier = {
-+	.notifier_call  = r4k_cpufreq_callback,
-+};
-+
-+static int __init r4k_register_cpufreq_notifier(void)
-+{
-+	return cpufreq_register_notifier(&r4k_cpufreq_notifier,
-+					 CPUFREQ_TRANSITION_NOTIFIER);
-+
-+}
-+core_initcall(r4k_register_cpufreq_notifier);
-+
-+#endif /* !CONFIG_CPU_FREQ */
-+
- int r4k_clockevent_init(void)
- {
- 	unsigned long flags = IRQF_PERCPU | IRQF_TIMER | IRQF_SHARED;
--- 
-2.25.1
-
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
