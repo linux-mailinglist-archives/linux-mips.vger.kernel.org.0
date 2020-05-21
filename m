@@ -2,103 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9571DC7B3
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 09:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61A31DC97B
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 11:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728329AbgEUHa2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 03:30:28 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:34467 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728316AbgEUHa2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 03:30:28 -0400
-Received: from mail-qt1-f176.google.com ([209.85.160.176]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MEmpp-1jqlgo3dFL-00GHJO; Thu, 21 May 2020 09:30:26 +0200
-Received: by mail-qt1-f176.google.com with SMTP id c24so4757765qtw.7;
-        Thu, 21 May 2020 00:30:25 -0700 (PDT)
-X-Gm-Message-State: AOAM531XMZgv+q3ZN8K+wb5hpUxL54KCDewzxB5xuzM2b+Ys4b3tla6R
-        Us46VOP8APtHPTHr25tuLn0y1tBiRMxa9/Mb6hg=
-X-Google-Smtp-Source: ABdhPJxb5MQ8kuEO75fNExBq52zxkwucWqTuaAehdsr7lKk/Qfg8lylkr0b4j+C/p9or/isfYY2zvvtfKGWgdvJXJ4w=
-X-Received: by 2002:aed:2441:: with SMTP id s1mr9376585qtc.304.1590046224526;
- Thu, 21 May 2020 00:30:24 -0700 (PDT)
+        id S1728635AbgEUJKC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 05:10:02 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:41068 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728545AbgEUJKC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 05:10:02 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 63so4957827oto.8;
+        Thu, 21 May 2020 02:10:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zsv1Lh0K7M59VV4w388XD6WcsG+ryCs8PrcoBNRfD4M=;
+        b=X7r2YGNSu7W81D5sXhBazL0VT8ZKFlbTBI5lYTFrUHKc4adJZt52e+hI8ctQE+4pvT
+         dWsZl4gfDgcDFBbm5m6YzDrZEQa50dyzmPxJi2cQFG+61Aaw0hBGvuCejr2EYYSCAhct
+         Fa9ZC/mDu21gz0w+C1KOI7PjAtG0ZeVh8TdJ+baD0yxUT2Nzcqo//qxCKcVzDTGYLqFl
+         CSI/OfvaVweBgHmxg6n0iwwj/k/h+oFwVjHIX85Oucl8Ew5B5IyALgmOeKh9j4DmY4DN
+         JAji6Cy8EPa6MJ0YPtO9J+YYmuk+2G5NkBMLa+DMG24gFUvk/AFGqJ2XTTWxm7/ubdUs
+         4jbQ==
+X-Gm-Message-State: AOAM5313VpUr7UzPdLeZeFzBexmmGL7Gusbj9yngE+omFoPRnyKnNkt9
+        jeqi1wU/RYyHpOBC9WUZFErG+4h/0cUR1rGKWWQ=
+X-Google-Smtp-Source: ABdhPJwm5hpnt7eWP1EGK7Mtgxjgzq8Xk87gNuPRLtNpSmjQNXuMv1lV/nvEbiXSLKYWEk/r7B5rKl5rIAchj2hnwqo=
+X-Received: by 2002:a9d:7e92:: with SMTP id m18mr6210653otp.145.1590052201359;
+ Thu, 21 May 2020 02:10:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200521003443.11385-1-Sergey.Semin@baikalelectronics.ru>
- <20200521004217.6gdcpboxaqizreky@mobilestation> <20200521071457.GC7309@alpha.franken.de>
-In-Reply-To: <20200521071457.GC7309@alpha.franken.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 21 May 2020 09:30:08 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2OYtd9Fa44ufbnpFoW3=G+NUtuueAoAV9CGVRBgOhSGw@mail.gmail.com>
-Message-ID: <CAK8P3a2OYtd9Fa44ufbnpFoW3=G+NUtuueAoAV9CGVRBgOhSGw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] mips: Prepare MIPS-arch code for Baikal-T1 SoC support
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+References: <20200521005321.12129-1-Sergey.Semin@baikalelectronics.ru> <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 May 2020 11:09:50 +0200
+Message-ID: <CAMuHMdW5TqfDTZZCscXCK-Fkd7Gq1Ciyu1_sDzzR0B+_W-2hfg@mail.gmail.com>
+Subject: Re: [PATCH v4 7/7] clocksource: mips-gic-timer: Mark GIC timer as
+ unstable if ref clock changes
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
-        Paul Burton <paul.burton@imgtec.com>,
+        Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Olof Johansson <olof@lixom.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        linux-rtc@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Paul Cercueil <paul@crapouillou.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Maarten ter Huurne <maarten@treewalker.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:BcLrKcPnWA60MbUrQ9m1/wEg+zlclLnUt4s6jdc55n5PTkhjbZL
- JgQ+jIrAuUH53tQy6AJVWAapHq4JN24cYVd4zHakTRcWD2GUalJiJFHV0IQeSOoXJuykKVA
- 4yuy5miOgwEYcUL+r5fAMgv7geU6XWtbNupIwZkFXsgKNfDTko3DxnUs1VpJ4EYSMbBxOlj
- PCAXJ5y7tFUan4YQu+3Gg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0WZ1TGQ04lQ=:NuCiqnLBLVWV/H5RW2GeWA
- 1ZrTFLJQOaNa5ZB0mqoCscEAJdsouplyCjNs621j8hdRt3+qXYKmFIIaWUmht2sPppbJpVwPA
- D8LZG3lJdGpboNIW3etKekHbZH8q9FTljTCMP+tbJCJ4A/3vQVvA6Z8tmpdMcQhqKMK0xBXBb
- YuE94Z5LmdeY7mAVavfDskJGVf2UELX42Q5ogBIXNNx5CHrAKstrWfCMoaVdPh4rzjYjrVe4N
- 6gunuZFFlrsk45oDqhKP1RXgVTQUObgmG+Xnv7N82bEF1ee/46guE3fQfFe62IpWr8gWnakMA
- 7y8tHyCD8eBJKGGk6Y8YPVqghhsqX7rMEhiz1PYdRVxEbeYeE5L5NoVRIrYtvcZuju6QmtBga
- hpzst3ekEVJJubacjpkJHPkN1MeaQjVkinXdOQldPciD55vSZSX4j/XOhlnfkTJWbKtJHZjRp
- vjmJz3NCGf5hcnBXONr6F9z4hqu3duHufBeGMdZ00IgJ8X823ml5ajiZ0JIfxXZqDlHetEZvc
- VnzKEiWC+q90HME8tonwPYZR+g/2ASM1doSwHHXC0gs86XXDbdKZHSJWk157z5+9rWVbh5/pz
- bVKX/02JaMoNMpza0JiKAtTTra7T3q/KAwwZfHAlQ19xrdycVrKm7Yw28Lk84PUdfHyObCt7m
- /ZipSQ9zkScUf1OmSUc9XXEdUPq4MMcuflC+QGXakePevPu+Zr2FSTsqQxJviIE0TqrnUuQyu
- oGImf5AEAuQmq/nP8jNpTCNVvWdCFaVGLR+oxZQZNijxPcy2TQaRSGyGnzC0ehiv7IXdCI4BY
- GN+GGb2Nw8HOAWvPIiynoEnNJIqnh32f8+1JEht32H1WSSPMKs=
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 21, 2020 at 9:18 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
-> On Thu, May 21, 2020 at 03:42:17AM +0300, Serge Semin wrote:
-> > On Thu, May 21, 2020 at 03:34:29AM +0300, Serge Semin wrote:
-> > >
-> > > This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
-> > > base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
-> > > tag: v5.7-rc4
-> >
-> > Thomas,
-> > Please note that this patchset is based on the Linux 5.7-rc4 tree (it most likely
-> > will get cleanly applied on rc6 as well), while mips-next is still at rc1. Due
-> > to that the patchset fails to be applied on mips-next. I think it would be
-> > better first to merge the last Linux tree into the mips-next, then try to merge
-> > this patchset in. Should you have any problem after that, please let me know.
-> > I'll resend the patchset being rebased on top of the new mips-next tree.
+Hi Serge,
+
+On Thu, May 21, 2020 at 2:54 AM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+> Currently clocksource framework doesn't support the clocks with variable
+> frequency. Since MIPS GIC timer ticks rate might be unstable on some
+> platforms, we must make sure that it justifies the clocksource
+> requirements. MIPS GIC timer is incremented with the CPU cluster reference
+> clocks rate. So in case if CPU frequency changes, the MIPS GIC tick rate
+> changes synchronously. Due to this the clocksource subsystem can't rely on
+> the timer to measure system clocks anymore. This commit marks the MIPS GIC
+> based clocksource as unstable if reference clock (normally it's a CPU
+> reference clocks) rate changes. The clocksource will execute a watchdog
+> thread, which lowers the MIPS GIC timer rating to zero and fallbacks to a
+> new stable one.
 >
-> no, that's not how it works. Please rebase your patches on top of
-> mips-next. Thank you.
+> Note we don't need to set the CLOCK_SOURCE_MUST_VERIFY flag to the MIPS
+> GIC clocksource since normally the timer is stable. The only reason why
+> it gets unstable is due to the ref clock rate change, which event we
+> detect here in the driver by means of the clocks event notifier.
+>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Right, backmerges should generally be avoided. However if something
-between rc1 and rc4 is required to make Baikal-T1 work, rebasing it to
-rc1 would make it non-bisectable, which is also bad.
+Thanks for your patch!
 
-Serge, are you aware of something in -rc4 that is needed as a dependency?
+> --- a/drivers/clocksource/mips-gic-timer.c
+> +++ b/drivers/clocksource/mips-gic-timer.c
+> @@ -24,6 +24,9 @@
+>  static DEFINE_PER_CPU(struct clock_event_device, gic_clockevent_device);
+>  static int gic_timer_irq;
+>  static unsigned int gic_frequency;
+> +static bool __read_mostly gic_clock_unstable;
+> +
+> +static void git_clocksource_unstable(char *reason);
 
-       Arnd
+gic_clocksource_unstable? (everywhere)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
