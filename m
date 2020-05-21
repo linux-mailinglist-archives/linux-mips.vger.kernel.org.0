@@ -2,144 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F10541DCAF5
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 12:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8601DCB02
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 12:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728764AbgEUKXy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 06:23:54 -0400
-Received: from mga18.intel.com ([134.134.136.126]:59106 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727009AbgEUKXx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 21 May 2020 06:23:53 -0400
-IronPort-SDR: o3ib3vPecimzU9mzkF8RO4jFtd59f+xTHP+EWWDa2DoX+pySusRFDc2aEQ1mN8qFwzk1VqSRWw
- 1UFIptqrYtzA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 03:23:52 -0700
-IronPort-SDR: OvzjCwo1pOHa2LToFMqHaLpR0vxt0elBvEJ28LPE3rKa36dgGkVkUIcCQE9n08O0NgqzFXJ3BW
- mNj7DHy6gyEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,417,1583222400"; 
-   d="scan'208";a="283003271"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002.jf.intel.com with ESMTP; 21 May 2020 03:23:48 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jbiMh-0080w2-1A; Thu, 21 May 2020 13:23:51 +0300
-Date:   Thu, 21 May 2020 13:23:51 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        id S1726977AbgEUKZq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 06:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727040AbgEUKZi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 06:25:38 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B66AC061A0E
+        for <linux-mips@vger.kernel.org>; Thu, 21 May 2020 03:25:38 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id c12so4141891lfc.10
+        for <linux-mips@vger.kernel.org>; Thu, 21 May 2020 03:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=w+ByA/OU5zd2HMXcW33Jii/680uEnjVLKLXSM+qMuT0=;
+        b=1jUzGc+YDrJFcyLWByQXrO3ofl3UrpgyKZhhQxlXT+meY1I/UarNoNTc89o/tNMBwY
+         jUa01vrHcm0mY2fVTltFtMtx7PkXE4Jr1joD2n0lEo47DbSUegwOoUo8nZdbd9+ueovb
+         IbL556guwW3C51r6g0+pNvoLDytfto4LKFK+GgVwpSLEnfspEr0Rpzf3mR837pjBF7yi
+         mOgdcvvHofBpHizmBRMYxa7UT4bXM9SJfW0NvlcDqbQg+dUlbIYEEYulOtafXHs9rQrE
+         +PgbljBTD5yikV97HjcGOaQ6G2YtaCerXWRXWwQSDv0FQzXVqCGG307OYR+TTRNRDm+x
+         8V+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=w+ByA/OU5zd2HMXcW33Jii/680uEnjVLKLXSM+qMuT0=;
+        b=plruBe3vwscUPrKhVY4A2FVDtmn1zEYowgqQbEbZjBewAxU1Yfd0sxiC9LiINq0l90
+         uRdSKscJ9eeDMnFysgErSKyAL6I8ZxEbKUOxk7oBqYLMkCHPs0T5mpki3sD+NCZLJPD/
+         9IdxfLKONIzjmHrCr3TaBTzYs8M4sRHewO5LBj+NFNSUnolmjJI5ot1fSt3m5HSzMZmI
+         zaV8UnCsutltA0dvJbVaQcK+9byINnT4ftS0etshauZwVdFbEkAKK+dGeVo34ENTxgwl
+         GNRg18km95/MZBAvo96+uypsLXicDSkQuSrckBJZGW2dBauI1rm4varL6RQtmARYouWe
+         I/BQ==
+X-Gm-Message-State: AOAM5321TYO2aaJTdnUyf4PRFPUH4DjfHrc7RPPhAVoWOND9jPl48zFw
+        GCXVJ0n3QSN8KUDeqV+x790S1w==
+X-Google-Smtp-Source: ABdhPJw/oUYhrJ3sVEgOUQmz+s8MlpdJbN3BdtwCOCxaIzqwQAuJWpVMJjEsrbgCWpgWVlimG3X4Pw==
+X-Received: by 2002:ac2:4295:: with SMTP id m21mr4687225lfh.164.1590056735286;
+        Thu, 21 May 2020 03:25:35 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:2e7:f767:fc67:94af:6414:5968? ([2a00:1fa0:2e7:f767:fc67:94af:6414:5968])
+        by smtp.gmail.com with ESMTPSA id i4sm1637149ljn.8.2020.05.21.03.25.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 May 2020 03:25:34 -0700 (PDT)
+Subject: Re: [PATCH v3 11/14] bus: cdmm: Add MIPS R5 arch support
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 06/16] spi: dw: Parameterize the DMA Rx/Tx burst length
-Message-ID: <20200521102351.GI1634618@smile.fi.intel.com>
-References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
- <20200521012206.14472-7-Sergey.Semin@baikalelectronics.ru>
+        devicetree@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        David Lechner <david@lechnology.com>,
+        John Garry <john.garry@huawei.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <marek.behun@nic.cz>,
+        Sameer Pujar <spujar@nvidia.com>, linux-kernel@vger.kernel.org
+References: <20200521003443.11385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200521003443.11385-12-Sergey.Semin@baikalelectronics.ru>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <9ad8383b-8199-1006-cf91-d760bace705e@cogentembedded.com>
+Date:   Thu, 21 May 2020 13:25:21 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200521012206.14472-7-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200521003443.11385-12-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 21, 2020 at 04:21:56AM +0300, Serge Semin wrote:
-> It isn't good to have numeric literals in the code especially if there
-> are multiple of them and they are related. Let's replace the Tx and Rx
-> burst level literals with the corresponding constants.
+Hello!
 
-Thanks!
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 21.05.2020 3:34, Serge Semin wrote:
 
+> CDMM may be available not only MIPS R2 architectures, but also in
+                                 ^ on              -re, it's singular
+
+> newer MIPS R5 chips. For instance our P5600 chip has one. Lets mark
+> the CDMM bus being supported for that MIPS arch too.
 > 
-> Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Reviewed-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > Cc: Paul Burton <paulburton@kernel.org>
 > Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Olof Johansson <olof@lixom.net>
 > Cc: Rob Herring <robh+dt@kernel.org>
 > Cc: linux-mips@vger.kernel.org
 > Cc: devicetree@vger.kernel.org
-> 
-> ---
-> 
-> Changelog v3:
-> - Discard the dws->fifo_len utilization in the Tx FIFO DMA threshold
->   setting.
-> ---
->  drivers/spi/spi-dw-mid.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
-> index 7bba774885cd..be02fedd87cb 100644
-> --- a/drivers/spi/spi-dw-mid.c
-> +++ b/drivers/spi/spi-dw-mid.c
-> @@ -19,7 +19,9 @@
->  
->  #define WAIT_RETRIES	5
->  #define RX_BUSY		0
-> +#define RX_BURST_LEVEL	16
->  #define TX_BUSY		1
-> +#define TX_BURST_LEVEL	16
->  
->  static bool mid_spi_dma_chan_filter(struct dma_chan *chan, void *param)
->  {
-> @@ -214,7 +216,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_tx(struct dw_spi *dws,
->  	memset(&txconf, 0, sizeof(txconf));
->  	txconf.direction = DMA_MEM_TO_DEV;
->  	txconf.dst_addr = dws->dma_addr;
-> -	txconf.dst_maxburst = 16;
-> +	txconf.dst_maxburst = TX_BURST_LEVEL;
->  	txconf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
->  	txconf.dst_addr_width = convert_dma_width(dws->n_bytes);
->  	txconf.device_fc = false;
-> @@ -288,7 +290,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
->  	memset(&rxconf, 0, sizeof(rxconf));
->  	rxconf.direction = DMA_DEV_TO_MEM;
->  	rxconf.src_addr = dws->dma_addr;
-> -	rxconf.src_maxburst = 16;
-> +	rxconf.src_maxburst = RX_BURST_LEVEL;
->  	rxconf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
->  	rxconf.src_addr_width = convert_dma_width(dws->n_bytes);
->  	rxconf.device_fc = false;
-> @@ -313,8 +315,8 @@ static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
->  {
->  	u16 imr = 0, dma_ctrl = 0;
->  
-> -	dw_writel(dws, DW_SPI_DMARDLR, 0xf);
-> -	dw_writel(dws, DW_SPI_DMATDLR, 0x10);
-> +	dw_writel(dws, DW_SPI_DMARDLR, RX_BURST_LEVEL - 1);
-> +	dw_writel(dws, DW_SPI_DMATDLR, TX_BURST_LEVEL);
->  
->  	if (xfer->tx_buf) {
->  		dma_ctrl |= SPI_DMA_TDMAE;
-> -- 
-> 2.25.1
-> 
+[...]
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+MBR, Sergei
