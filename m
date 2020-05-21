@@ -2,205 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2419B1DCB5B
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 12:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185C81DCB9B
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 13:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727912AbgEUKtH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 06:49:07 -0400
-Received: from mga17.intel.com ([192.55.52.151]:48336 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727034AbgEUKtG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 21 May 2020 06:49:06 -0400
-IronPort-SDR: ubYYU07HwqI7YVj7lwR9jUnoduzOyvfO4T0rhvQVngXRkCu1WnIyTWs0+RyDq78JCdeRu5ZO6s
- 4QASHYGjI/ow==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 03:49:06 -0700
-IronPort-SDR: j54tVNWAMKZQp/4fVJ75sZHIhe48xnM00KcoMaDyIP50TxlVD/PYD+y0lwjG06H3ynBd1zGGQv
- u2uXTKzu5nvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,417,1583222400"; 
-   d="scan'208";a="268592021"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006.jf.intel.com with ESMTP; 21 May 2020 03:49:01 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jbil6-00819S-9w; Thu, 21 May 2020 13:49:04 +0300
-Date:   Thu, 21 May 2020 13:49:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Clement Leger <cleger@kalray.eu>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/16] spi: dw: Use DMA max burst to set the request
- thresholds
-Message-ID: <20200521104904.GK1634618@smile.fi.intel.com>
-References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
- <20200521012206.14472-8-Sergey.Semin@baikalelectronics.ru>
+        id S1728442AbgEULFM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 07:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728348AbgEULFL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 07:05:11 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34019C061A0E;
+        Thu, 21 May 2020 04:05:10 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id l18so6247294wrn.6;
+        Thu, 21 May 2020 04:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0kOWfagYaxm33AGZcA1CpvfNn7HWE5+JvpuvxfP/z54=;
+        b=eoqCHD/0uMiOw3qgaN7N4QZPdhvb/P2BiPUskhLmWsGZK66FilVFjjUhf0q3VF0dY8
+         aS+Xg9hy81A6LfdW207F3V9eDhFWayFXbWSLKyEk1B+5mzPDMUe0RverKiLSTvsvUPKy
+         hECRT0UhKwWWATTnX26xGHqY/k+iO0Jn8wnfgqDTzMlxN23FHuJQzJ48dp8zh1mkXEmy
+         oekBNs5wSPrtaQBQiaNwjE66lRczYOzGNqrtN8dhfoXhOVqRjJmhREd7reCw/o5HLU7l
+         a2ypqQuGrwZAN3RIg9oOyiW4cUurSxmg/+FX4JPEWc7VY0L1fxRlISQu16UREduYbu96
+         /r2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0kOWfagYaxm33AGZcA1CpvfNn7HWE5+JvpuvxfP/z54=;
+        b=bQFAQjKOhfJcaWJPBIyXCjjI0Bu98Doqp0MNaKMrXliC5SfjdT6jsNpoE6nF5BMwrA
+         /UY5BDzGICyb348h4b4whbw/rTQOfFIK2hXSaCzRBknll+LcoL064vzlnTXpLNB5Qd1Y
+         DoEPo8/EqiJv5wWJInWrva3KFtlJDorLhc5XbSgvKuOagy2lW7dQhWdhP8HsHYQAT9ex
+         0y8SPUzpFSK4AsDo478YQ4BWkk0u8hNgG3Drt/eQH1ettdxyZ6hhysrSRCXQadPgMi9u
+         hqEiNFB6APXSttj1KDWIa3UQPrPFRaG+5KoyIIim+1V0Sys+3JzkFeNRg5ebKgB1knfI
+         h7mQ==
+X-Gm-Message-State: AOAM5321dOunzO/c9Rjyfjp1DRrYX3LIAXLCUy5Nns7sR8P4m+gxpwlz
+        Xnfs24Yy296/wCdfHuZ3VNJEmpRWU84HvuI8Wck=
+X-Google-Smtp-Source: ABdhPJxmDJFt2wt5d0VyfLFJJKwwRxN/ZxsaG5OeRNUHphLk+LjBf5oyUeS2ljeHjl50kWsRDkXvvFetScmDdEqT+J0=
+X-Received: by 2002:adf:dc50:: with SMTP id m16mr8092867wrj.329.1590059108830;
+ Thu, 21 May 2020 04:05:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200521012206.14472-8-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <1589688372-3098-1-git-send-email-chenhc@lemote.com>
+ <1589688372-3098-16-git-send-email-chenhc@lemote.com> <20200517082242.GA3939@alpha.franken.de>
+ <CAHiYmc5m+UhWv__F_FKqhiTkJxgqErmFn5K_DAW2y5Pp6_4dyA@mail.gmail.com>
+ <CAHiYmc4m7uxYU0coRGJS8ou=KyjC=DYs506NyXyw_-eKmPVJRQ@mail.gmail.com> <CAAhV-H4SspEUMLDTSZH3YmNbd+cRx3JK+mtsGo6cJ2NLKHPkKQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H4SspEUMLDTSZH3YmNbd+cRx3JK+mtsGo6cJ2NLKHPkKQ@mail.gmail.com>
+From:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Date:   Thu, 21 May 2020 13:04:54 +0200
+Message-ID: <CAHiYmc7ykeeF_w25785yiDjJf3AwOzfJybiS=LxfjYizn_2zEQ@mail.gmail.com>
+Subject: Re: [PATCH V6 15/15] MAINTAINERS: Update KVM/MIPS maintainers
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 21, 2020 at 04:21:57AM +0300, Serge Semin wrote:
-> Each channel of DMA controller may have a limited length of burst
-> transaction (number of IO operations performed at ones in a single
-> DMA client request). This parameter can be used to setup the most
-> optimal DMA Tx/Rx data level values. In order to avoid the Tx buffer
-> overrun we can set the DMA Tx level to be of FIFO depth minus the
-> maximum burst transactions length. To prevent the Rx buffer underflow
-> the DMA Rx level should be set to the maximum burst transactions length.
-> This commit setups the DMA channels and the DW SPI DMA Tx/Rx levels
-> in accordance with these rules.
+> I'm sorry for the late response. These days I'm attempting to collect
+> some maintainers' PGP signatures, in order to get a kernel.org
+> account. So, I think we can keep the lemote.com address in MAINTAINERS
+> now, and update to the kernel.org address when I succeed.
+>
 
-Besides one bikeshedding point, looks good to me.
-Feel free to add
+I agree. E-mail address can be easily changed later.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+I think it is reasonable that minor email tech problems should not stop
+this series.
 
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> 
-> ---
-> 
-> Changelog v3:
-> - Use min() method to calculate the optimal burst values.
-> ---
->  drivers/spi/spi-dw-mid.c | 37 +++++++++++++++++++++++++++++++++----
->  drivers/spi/spi-dw.h     |  2 ++
->  2 files changed, 35 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
-> index be02fedd87cb..0e95d8bc85c5 100644
-> --- a/drivers/spi/spi-dw-mid.c
-> +++ b/drivers/spi/spi-dw-mid.c
-> @@ -34,6 +34,31 @@ static bool mid_spi_dma_chan_filter(struct dma_chan *chan, void *param)
->  	return true;
->  }
->  
-> +static void mid_spi_maxburst_init(struct dw_spi *dws)
-> +{
-> +	struct dma_slave_caps caps;
-> +	u32 max_burst, def_burst;
-> +	int ret;
-> +
-> +	def_burst = dws->fifo_len / 2;
-> +
-> +	ret = dma_get_slave_caps(dws->rxchan, &caps);
-> +	if (!ret && caps.max_burst)
-> +		max_burst = caps.max_burst;
-> +	else
-> +		max_burst = RX_BURST_LEVEL;
-> +
-> +	dws->rxburst = min(max_burst, def_burst);
-> +
-> +	ret = dma_get_slave_caps(dws->txchan, &caps);
-> +	if (!ret && caps.max_burst)
-> +		max_burst = caps.max_burst;
-> +	else
-> +		max_burst = TX_BURST_LEVEL;
-> +
-> +	dws->txburst = min(max_burst, def_burst);
-> +}
-> +
->  static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
->  {
->  	struct dw_dma_slave slave = {
-> @@ -69,6 +94,8 @@ static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
->  	dws->master->dma_rx = dws->rxchan;
->  	dws->master->dma_tx = dws->txchan;
->  
-> +	mid_spi_maxburst_init(dws);
-> +
->  	return 0;
->  
->  free_rxchan:
-> @@ -94,6 +121,8 @@ static int mid_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
->  	dws->master->dma_rx = dws->rxchan;
->  	dws->master->dma_tx = dws->txchan;
->  
-> +	mid_spi_maxburst_init(dws);
-> +
->  	return 0;
->  }
->  
-> @@ -216,7 +245,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_tx(struct dw_spi *dws,
->  	memset(&txconf, 0, sizeof(txconf));
->  	txconf.direction = DMA_MEM_TO_DEV;
->  	txconf.dst_addr = dws->dma_addr;
-> -	txconf.dst_maxburst = TX_BURST_LEVEL;
-> +	txconf.dst_maxburst = dws->txburst;
->  	txconf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
->  	txconf.dst_addr_width = convert_dma_width(dws->n_bytes);
->  	txconf.device_fc = false;
-> @@ -290,7 +319,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
->  	memset(&rxconf, 0, sizeof(rxconf));
->  	rxconf.direction = DMA_DEV_TO_MEM;
->  	rxconf.src_addr = dws->dma_addr;
-> -	rxconf.src_maxburst = RX_BURST_LEVEL;
-> +	rxconf.src_maxburst = dws->rxburst;
->  	rxconf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
->  	rxconf.src_addr_width = convert_dma_width(dws->n_bytes);
->  	rxconf.device_fc = false;
-> @@ -315,8 +344,8 @@ static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
->  {
->  	u16 imr = 0, dma_ctrl = 0;
->  
-> -	dw_writel(dws, DW_SPI_DMARDLR, RX_BURST_LEVEL - 1);
-> -	dw_writel(dws, DW_SPI_DMATDLR, TX_BURST_LEVEL);
-> +	dw_writel(dws, DW_SPI_DMARDLR, dws->rxburst - 1);
-> +	dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len - dws->txburst);
->  
->  	if (xfer->tx_buf) {
->  		dma_ctrl |= SPI_DMA_TDMAE;
-> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index 4902f937c3d7..d0c8b7d3a5d2 100644
-> --- a/drivers/spi/spi-dw.h
-> +++ b/drivers/spi/spi-dw.h
-> @@ -141,7 +141,9 @@ struct dw_spi {
->  
->  	/* DMA info */
->  	struct dma_chan		*txchan;
-> +	u32			txburst;
->  	struct dma_chan		*rxchan;
-> +	u32			rxburst;
->  	unsigned long		dma_chan_busy;
->  	dma_addr_t		dma_addr; /* phy address of the Data register */
->  	const struct dw_spi_dma_ops *dma_ops;
-> -- 
-> 2.25.1
-> 
+I gather that at least approximate consensus is that v6 is "good to go".
 
--- 
-With Best Regards,
-Andy Shevchenko
+While I am at this series, I just want to let everybody that there is a
+long-standing practice in QEMU for MIPS that we don't upstream
+changes that depend on kernel support that is not yet upstreamed
+in kernel - and I want to keep that practice in future (and not limited
+to KVM, but for all kernel/QEMU interdependant code).
+
+In other words, corresponding Huacai's changes in QEMU will be
+kept on hold as long as this series is still not upstreamed in kernel.
+But, that was the original Huacai's plan anyway.
+
+Many thanks to everyone involved!
+
+Aleksandar
 
 
+
+> Regards,
+> Huacai
