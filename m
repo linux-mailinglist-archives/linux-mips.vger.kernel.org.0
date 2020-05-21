@@ -2,114 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0FD1DCF9A
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 16:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8251DD08C
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 16:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729532AbgEUOW3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 10:22:29 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:38780 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728207AbgEUOW1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 10:22:27 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 376CF8030776;
-        Thu, 21 May 2020 14:22:22 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8PSENPxDhIuf; Thu, 21 May 2020 17:22:21 +0300 (MSK)
-Date:   Thu, 21 May 2020 17:22:19 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S1729790AbgEUOz1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 10:55:27 -0400
+Received: from mga02.intel.com ([134.134.136.20]:36814 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728136AbgEUOz1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 21 May 2020 10:55:27 -0400
+IronPort-SDR: KeQBo5ddq7tmHR+Bu0sF68gs3R0Qz7BpnNtTXMyyAJoYuRrA4DzO82kRS+oAFgfiezgqFSb2QN
+ GMavpcNbqGTQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 07:55:26 -0700
+IronPort-SDR: 0N8BDIYEnX5ZztnT6R70YHVdLDe21Txo+hJEhXPPOnQ2+q7jm0oFvzcmzpB1z+oZUds0ho+fJr
+ j8sCh6ohBjGg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,418,1583222400"; 
+   d="scan'208";a="440474678"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.107])
+  by orsmga005.jf.intel.com with ESMTP; 21 May 2020 07:55:21 -0700
+Date:   Thu, 21 May 2020 22:55:20 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Vinod Koul <vkoul@kernel.org>, Alan Cox <alan@linux.intel.com>,
+        Linus Walleij <linus.walleij@stericsson.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Paul Cercueil <paul@crapouillou.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Maarten ter Huurne <maarten@treewalker.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 7/7] clocksource: mips-gic-timer: Mark GIC timer as
- unstable if ref clock changes
-Message-ID: <20200521142219.ejsl4y5eaqqfsp5k@mobilestation>
-References: <20200521005321.12129-1-Sergey.Semin@baikalelectronics.ru>
- <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
- <CAMuHMdW5TqfDTZZCscXCK-Fkd7Gq1Ciyu1_sDzzR0B+_W-2hfg@mail.gmail.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Clement Leger <cleger@kalray.eu>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 01/16] spi: dw: Add Tx/Rx finish wait methods to the
+ MID DMA
+Message-ID: <20200521145520.GB12568@shbuild999.sh.intel.com>
+References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
+ <20200521012206.14472-2-Sergey.Semin@baikalelectronics.ru>
+ <20200521030924.GA12568@shbuild999.sh.intel.com>
+ <20200521114736.b2azyfvym372vkdl@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdW5TqfDTZZCscXCK-Fkd7Gq1Ciyu1_sDzzR0B+_W-2hfg@mail.gmail.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200521114736.b2azyfvym372vkdl@mobilestation>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 21, 2020 at 11:09:50AM +0200, Geert Uytterhoeven wrote:
-> Hi Serge,
-> 
-> On Thu, May 21, 2020 at 2:54 AM Serge Semin
-> <Sergey.Semin@baikalelectronics.ru> wrote:
-> > Currently clocksource framework doesn't support the clocks with variable
-> > frequency. Since MIPS GIC timer ticks rate might be unstable on some
-> > platforms, we must make sure that it justifies the clocksource
-> > requirements. MIPS GIC timer is incremented with the CPU cluster reference
-> > clocks rate. So in case if CPU frequency changes, the MIPS GIC tick rate
-> > changes synchronously. Due to this the clocksource subsystem can't rely on
-> > the timer to measure system clocks anymore. This commit marks the MIPS GIC
-> > based clocksource as unstable if reference clock (normally it's a CPU
-> > reference clocks) rate changes. The clocksource will execute a watchdog
-> > thread, which lowers the MIPS GIC timer rating to zero and fallbacks to a
-> > new stable one.
-> >
-> > Note we don't need to set the CLOCK_SOURCE_MUST_VERIFY flag to the MIPS
-> > GIC clocksource since normally the timer is stable. The only reason why
-> > it gets unstable is due to the ref clock rate change, which event we
-> > detect here in the driver by means of the clocks event notifier.
-> >
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> Thanks for your patch!
-> 
-> > --- a/drivers/clocksource/mips-gic-timer.c
-> > +++ b/drivers/clocksource/mips-gic-timer.c
-> > @@ -24,6 +24,9 @@
-> >  static DEFINE_PER_CPU(struct clock_event_device, gic_clockevent_device);
-> >  static int gic_timer_irq;
-> >  static unsigned int gic_frequency;
-> > +static bool __read_mostly gic_clock_unstable;
-> > +
-> > +static void git_clocksource_unstable(char *reason);
-> 
-> gic_clocksource_unstable? (everywhere)
+Hi Serge,
 
-This is the most used word lately. So my hands write git everywhere by itself.)
-Thanks for noticing this.
+On Thu, May 21, 2020 at 02:47:36PM +0300, Serge Semin wrote:
+> Hello Feng,
+> 
+> On Thu, May 21, 2020 at 11:09:24AM +0800, Feng Tang wrote:
+> > Hi Serge,
+> > 
+> > On Thu, May 21, 2020 at 04:21:51AM +0300, Serge Semin wrote:
+> 
+> [nip]
+> 
+> > >  /*
+> > >   * dws->dma_chan_busy is set before the dma transfer starts, callback for rx
+> > >   * channel will clear a corresponding bit.
+> > > @@ -200,6 +267,8 @@ static void dw_spi_dma_rx_done(void *arg)
+> > >  {
+> > >  	struct dw_spi *dws = arg;
+> > >  
+> > > +	dw_spi_dma_wait_rx_done(dws);
+> > 
+> > I can understand the problem about TX, but I don't see how RX
+> > will get hurt, can you elaborate more? thanks
+> > 
+> > - Feng
+> 
+> Your question is correct. You are right with your hypothesis. Ideally upon the
+> dw_spi_dma_rx_done() execution Rx FIFO must be already empty. That's why the
+> commit log signifies the error being mostly related with Tx FIFO. But
+> practically there are many reasons why Rx FIFO might be left with data:
+> DMA engine failures, incorrect DMA configuration (if DW SPI or DW DMA driver
+> messed something up), controller hanging up, and so on. It's better to catch
+> an error at this stage while propagating it up to the SPI device drivers.
+> Especially seeing the wait-check implementation doesn't gives us much of the
+> execution overhead in normal conditions. So by calling dw_spi_dma_wait_rx_done()
+> we make sure that all the data has been fetched and we may freely get the
+> buffers back to the client driver.
 
--Sergey
+I see your point about checking RX. But I still don't think checking
+RX FIFO level is the right way to detect error. Some data left in
+RX FIFO doesn't always mean a error, say for some case if there is
+20 words in RX FIFO, and the driver starts a DMA request for 16
+words, then after a sucessful DMA transaction, there are 4 words
+left without any error.
+
+Thanks,
+Feng
 
 > 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+> -Sergey
