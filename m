@@ -2,154 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0952C1DC452
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 02:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F221DC45A
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 02:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgEUAyV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 20:54:21 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:33612 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727936AbgEUAyQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 20:54:16 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2E08C80005E8;
-        Thu, 21 May 2020 00:54:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id B5585joA7vdh; Thu, 21 May 2020 03:54:10 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S1727819AbgEUAyt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 20:54:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40210 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727063AbgEUAys (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 20 May 2020 20:54:48 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56C0E20756;
+        Thu, 21 May 2020 00:54:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590022488;
+        bh=nUC6IS5B+HO4x1xRb90GxHXMHv01xodZ56chdUvxpR4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dpHKgFJ9WM3DHwB8NU0iO7BVqjA8bVDD3gzbTkCQSA7m1X3gZUioDgTvR4I2hAVCw
+         qVNIo3rEDD9eMNWYQrhXT60ZDlDUUJVidIvr8MDzhgcuss+dmx1b1dCC29i+xBAAhM
+         BaEuTTJYbLoLx6aYIYOwGE3VJz6Wm2BQHABSju10=
+Date:   Wed, 20 May 2020 17:54:46 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     maobibo <maobibo@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
         Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Maarten ter Huurne <maarten@treewalker.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 7/7] clocksource: mips-gic-timer: Mark GIC timer as unstable if ref clock changes
-Date:   Thu, 21 May 2020 03:53:20 +0300
-Message-ID: <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200521005321.12129-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200521005321.12129-1-Sergey.Semin@baikalelectronics.ru>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        Philippe =?ISO-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v4 2/4] mm/memory.c: Update local TLB if PTE entry
+ exists
+Message-Id: <20200520175446.11068e9e81da493a8e120601@linux-foundation.org>
+In-Reply-To: <e9cd1d61-c475-9b13-fd48-3ff886c74797@loongson.cn>
+References: <1589882610-7291-1-git-send-email-maobibo@loongson.cn>
+        <1589882610-7291-2-git-send-email-maobibo@loongson.cn>
+        <20200519182619.2c5e76d3f6b25d71702abbe0@linux-foundation.org>
+        <e9cd1d61-c475-9b13-fd48-3ff886c74797@loongson.cn>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Currently clocksource framework doesn't support the clocks with variable
-frequency. Since MIPS GIC timer ticks rate might be unstable on some
-platforms, we must make sure that it justifies the clocksource
-requirements. MIPS GIC timer is incremented with the CPU cluster reference
-clocks rate. So in case if CPU frequency changes, the MIPS GIC tick rate
-changes synchronously. Due to this the clocksource subsystem can't rely on
-the timer to measure system clocks anymore. This commit marks the MIPS GIC
-based clocksource as unstable if reference clock (normally it's a CPU
-reference clocks) rate changes. The clocksource will execute a watchdog
-thread, which lowers the MIPS GIC timer rating to zero and fallbacks to a
-new stable one.
+On Wed, 20 May 2020 14:39:13 +0800 maobibo <maobibo@loongson.cn> wrote:
 
-Note we don't need to set the CLOCK_SOURCE_MUST_VERIFY flag to the MIPS
-GIC clocksource since normally the timer is stable. The only reason why
-it gets unstable is due to the ref clock rate change, which event we
-detect here in the driver by means of the clocks event notifier.
+> > I'm still worried about the impact on other architectures.  The
+> > additional update_mmu_cache() calls won't occur only when multiple
+> > threads are racing against the same page, I think?  For example,
+> > insert_pfn() will do this when making a read-only page a writable one.
+> How about defining ptep_set_access_flags function like this on mips system?
+> which is the same on riscv platform.
+> 
+> static inline int ptep_set_access_flags(struct vm_area_struct *vma,
+> 					unsigned long address, pte_t *ptep,
+> 					pte_t entry, int dirty)
+> {
+> 	if (!pte_same(*ptep, entry))
+> 		set_pte_at(vma->vm_mm, address, ptep, entry);
+> 	/*
+> 	 * update_mmu_cache will unconditionally execute, handling both
+> 	 * the case that the PTE changed and the spurious fault case.
+> 	 */
+> 	return true;
+> }
+> 
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: devicetree@vger.kernel.org
+hm, it seems a bit abusive - ptep_set_access_flags() is supposed to
+return true if the pte changed, and that isn't the case here.
 
----
+I suppose we could run update_mmu_cache() directly from
+ptep_set_access_flags() if we're about to return false, but that
+doesn't seem a lot nicer?
 
-Changelog v3:
-- Mark clocksource as unstable instead of lowering its rating.
----
- drivers/clocksource/Kconfig          |  1 +
- drivers/clocksource/mips-gic-timer.c | 19 ++++++++++++++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+> > Would you have time to add some instrumentation into update_mmu_cache()
+> > (maybe a tracepoint) and see what effect this change has upon the
+> > frequency at which update_mmu_cache() is called for a selection of
+> > workloads?  And add this info to the changelog to set minds at ease?
+>
+> OK, I will add some instrumentation data in the changelog.
 
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index f2142e6bbea3..37a745f3ca91 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -572,6 +572,7 @@ config CLKSRC_VERSATILE
- config CLKSRC_MIPS_GIC
- 	bool
- 	depends on MIPS_GIC
-+	select CLOCKSOURCE_WATCHDOG
- 	select TIMER_OF
- 
- config CLKSRC_TANGO_XTAL
-diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
-index ef12c12c2432..d78ad7b60cdc 100644
---- a/drivers/clocksource/mips-gic-timer.c
-+++ b/drivers/clocksource/mips-gic-timer.c
-@@ -24,6 +24,9 @@
- static DEFINE_PER_CPU(struct clock_event_device, gic_clockevent_device);
- static int gic_timer_irq;
- static unsigned int gic_frequency;
-+static bool __read_mostly gic_clock_unstable;
-+
-+static void git_clocksource_unstable(char *reason);
- 
- static u64 notrace gic_read_count_2x32(void)
- {
-@@ -125,8 +128,10 @@ static int gic_clk_notifier(struct notifier_block *nb, unsigned long action,
- {
- 	struct clk_notifier_data *cnd = data;
- 
--	if (action == POST_RATE_CHANGE)
-+	if (action == POST_RATE_CHANGE) {
-+		git_clocksource_unstable("ref clock rate change");
- 		on_each_cpu(gic_update_frequency, (void *)cnd->new_rate, 1);
-+	}
- 
- 	return NOTIFY_OK;
- }
-@@ -172,6 +177,18 @@ static struct clocksource gic_clocksource = {
- 	.vdso_clock_mode	= VDSO_CLOCKMODE_GIC,
- };
- 
-+static void git_clocksource_unstable(char *reason)
-+{
-+	if (gic_clock_unstable)
-+		return;
-+
-+	gic_clock_unstable = true;
-+
-+	pr_info("GIC timer is unstable due to %s\n", reason);
-+
-+	clocksource_mark_unstable(&gic_clocksource);
-+}
-+
- static int __init __gic_clocksource_init(void)
- {
- 	unsigned int count_width;
--- 
-2.25.1
-
+Well, if this testing shows no effect as you expect, perhaps we can
+leave the code as-is.
