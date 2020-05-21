@@ -2,97 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F221DC45A
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 02:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDCF1DC48C
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 03:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727819AbgEUAyt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 20:54:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40210 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727063AbgEUAys (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 20 May 2020 20:54:48 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 56C0E20756;
-        Thu, 21 May 2020 00:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590022488;
-        bh=nUC6IS5B+HO4x1xRb90GxHXMHv01xodZ56chdUvxpR4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dpHKgFJ9WM3DHwB8NU0iO7BVqjA8bVDD3gzbTkCQSA7m1X3gZUioDgTvR4I2hAVCw
-         qVNIo3rEDD9eMNWYQrhXT60ZDlDUUJVidIvr8MDzhgcuss+dmx1b1dCC29i+xBAAhM
-         BaEuTTJYbLoLx6aYIYOwGE3VJz6Wm2BQHABSju10=
-Date:   Wed, 20 May 2020 17:54:46 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     maobibo <maobibo@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
+        id S1727900AbgEUBWq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 21:22:46 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:33746 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726839AbgEUBWq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 21:22:46 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id D7A988030776;
+        Thu, 21 May 2020 01:22:40 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lBzGuyoY5SXC; Thu, 21 May 2020 04:22:39 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
-        Dmitry Korotin <dkorotin@wavecomp.com>,
-        Philippe =?ISO-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4 2/4] mm/memory.c: Update local TLB if PTE entry
- exists
-Message-Id: <20200520175446.11068e9e81da493a8e120601@linux-foundation.org>
-In-Reply-To: <e9cd1d61-c475-9b13-fd48-3ff886c74797@loongson.cn>
-References: <1589882610-7291-1-git-send-email-maobibo@loongson.cn>
-        <1589882610-7291-2-git-send-email-maobibo@loongson.cn>
-        <20200519182619.2c5e76d3f6b25d71702abbe0@linux-foundation.org>
-        <e9cd1d61-c475-9b13-fd48-3ff886c74797@loongson.cn>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 00/16] spi: dw: Add generic DW DMA controller support
+Date:   Thu, 21 May 2020 04:21:50 +0300
+Message-ID: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 20 May 2020 14:39:13 +0800 maobibo <maobibo@loongson.cn> wrote:
+Baikal-T1 SoC provides a DW DMA controller to perform low-speed peripherals
+Mem-to-Dev and Dev-to-Mem transaction. This is also applicable to the DW
+APB SSI devices embedded into the SoC. Currently the DMA-based transfers
+are supported by the DW APB SPI driver only as a middle layer code for
+Intel MID/Elkhart PCI devices. Seeing the same code can be used for normal
+platform DMAC device we introduced a set of patches to fix it within this
+series.
 
-> > I'm still worried about the impact on other architectures.  The
-> > additional update_mmu_cache() calls won't occur only when multiple
-> > threads are racing against the same page, I think?  For example,
-> > insert_pfn() will do this when making a read-only page a writable one.
-> How about defining ptep_set_access_flags function like this on mips system?
-> which is the same on riscv platform.
-> 
-> static inline int ptep_set_access_flags(struct vm_area_struct *vma,
-> 					unsigned long address, pte_t *ptep,
-> 					pte_t entry, int dirty)
-> {
-> 	if (!pte_same(*ptep, entry))
-> 		set_pte_at(vma->vm_mm, address, ptep, entry);
-> 	/*
-> 	 * update_mmu_cache will unconditionally execute, handling both
-> 	 * the case that the PTE changed and the spurious fault case.
-> 	 */
-> 	return true;
-> }
-> 
+First of all we need to add the Tx and Rx DMA channels support into the DW
+APB SSI binding. Then there are several fixes and cleanups provided as a
+initial preparation for the Generic DMA support integration: add Tx/Rx
+finish wait methods, clear DMAC register when done or stopped, Fix native
+CS being unset, enable interrupts in accordance with DMA xfer mode,
+discard static DW DMA slave structures, discard unused void priv pointer
+and dma_width member of the dw_spi structure, provide the DMA Tx/Rx burst
+length parametrisation and make sure it's optionally set in accordance
+with the DMA max-burst capability.
 
-hm, it seems a bit abusive - ptep_set_access_flags() is supposed to
-return true if the pte changed, and that isn't the case here.
+In order to have the DW APB SSI MMIO driver working with DMA we need to
+initialize the paddr field with the physical base address of the DW APB SSI
+registers space. Then we unpin the Intel MID specific code from the
+generic DMA one and placed it into the spi-dw-pci.c driver, which is a
+better place for it anyway. After that the naming cleanups are performed
+since the code is going to be used for a generic DMAC device. Finally the
+Generic DMA initialization can be added to the generic version of the
+DW APB SSI IP.
 
-I suppose we could run update_mmu_cache() directly from
-ptep_set_access_flags() if we're about to return false, but that
-doesn't seem a lot nicer?
+Last but not least we traditionally convert the legacy plain text-based
+dt-binding file with yaml-based one and as a cherry on a cake replace
+the manually written DebugFS registers read method with a ready-to-use
+for the same purpose regset32 DebugFS interface usage.
 
-> > Would you have time to add some instrumentation into update_mmu_cache()
-> > (maybe a tracepoint) and see what effect this change has upon the
-> > frequency at which update_mmu_cache() is called for a selection of
-> > workloads?  And add this info to the changelog to set minds at ease?
->
-> OK, I will add some instrumentation data in the changelog.
+This patchset is rebased and tested on the spi/for-next (5.7-rc5):
+base-commit: fe9fce6b2cf3 ("Merge remote-tracking branch 'spi/for-5.8' into spi-next")
 
-Well, if this testing shows no effect as you expect, perhaps we can
-leave the code as-is.
+Link: https://lore.kernel.org/linux-spi/20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Rebase on top of the spi repository for-next branch.
+- Move bindings conversion patch to the tail of the series.
+- Move fixes to the head of the series.
+- Apply as many changes as possible to be applied the Generic DMA
+  functionality support is added and the spi-dw-mid is moved to the
+  spi-dw-dma driver.
+- Discard patch "spi: dw: Fix dma_slave_config used partly uninitialized"
+  since the problem has already been fixed.
+- Add new patch "spi: dw: Discard unused void priv pointer".
+- Add new patch "spi: dw: Discard dma_width member of the dw_spi structure".
+  n_bytes member of the DW SPI data can be used instead.
+- Build the DMA functionality into the DW APB SSI core if required instead
+  of creating a separate kernel module.
+- Use conditional statement instead of the ternary operator in the ref
+  clock getter.
+
+Link: https://lore.kernel.org/linux-spi/20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Use spi_delay_exec() method to wait for the DMA operation completion.
+- Explicitly initialize the dw_dma_slave members on stack.
+- Discard the dws->fifo_len utilization in the Tx FIFO DMA threshold
+  setting from the patch where we just add the default burst length
+  constants.
+- Use min() method to calculate the optimal burst values.
+- Add new patch which moves the spi-dw.c source file to spi-dw-core.c in
+  order to preserve the DW APB SSI core driver name.
+- Add commas in the debugfs_reg32 structure initializer and after the last
+  entry of the dw_spi_dbgfs_regs array.
+
+Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (16):
+  spi: dw: Add Tx/Rx finish wait methods to the MID DMA
+  spi: dw: Enable interrupts in accordance with DMA xfer mode
+  spi: dw: Discard static DW DMA slave structures
+  spi: dw: Discard unused void priv pointer
+  spi: dw: Discard dma_width member of the dw_spi structure
+  spi: dw: Parameterize the DMA Rx/Tx burst length
+  spi: dw: Use DMA max burst to set the request thresholds
+  spi: dw: Fix Rx-only DMA transfers
+  spi: dw: Add core suffix to the DW APB SSI core source file
+  spi: dw: Move Non-DMA code to the DW PCIe-SPI driver
+  spi: dw: Remove DW DMA code dependency from DW_DMAC_PCI
+  spi: dw: Add DW SPI DMA/PCI/MMIO dependency on the DW SPI core
+  spi: dw: Cleanup generic DW DMA code namings
+  spi: dw: Add DMA support to the DW SPI MMIO driver
+  spi: dw: Use regset32 DebugFS method to create regdump file
+  dt-bindings: spi: Convert DW SPI binding to DT schema
+
+ .../bindings/spi/snps,dw-apb-ssi.txt          |  44 ---
+ .../bindings/spi/snps,dw-apb-ssi.yaml         | 127 ++++++++
+ .../devicetree/bindings/spi/spi-dw.txt        |  24 --
+ drivers/spi/Kconfig                           |  15 +-
+ drivers/spi/Makefile                          |   5 +-
+ drivers/spi/{spi-dw.c => spi-dw-core.c}       |  88 ++----
+ drivers/spi/{spi-dw-mid.c => spi-dw-dma.c}    | 276 +++++++++++-------
+ drivers/spi/spi-dw-mmio.c                     |   4 +
+ drivers/spi/spi-dw-pci.c                      |  50 +++-
+ drivers/spi/spi-dw.h                          |  33 ++-
+ 10 files changed, 407 insertions(+), 259 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-dw.txt
+ rename drivers/spi/{spi-dw.c => spi-dw-core.c} (82%)
+ rename drivers/spi/{spi-dw-mid.c => spi-dw-dma.c} (53%)
+
+-- 
+2.25.1
+
