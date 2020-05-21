@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6F21DCF25
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 16:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133D51DCF27
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 16:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729944AbgEUOJG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 10:09:06 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:38616 "EHLO
+        id S1726903AbgEUOJK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 10:09:10 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:38652 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729926AbgEUOJD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 10:09:03 -0400
+        with ESMTP id S1729919AbgEUOJG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 10:09:06 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 777FD8029EC9;
-        Thu, 21 May 2020 14:09:00 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 9D76880005EE;
+        Thu, 21 May 2020 14:09:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id DztnQ5E9A5B6; Thu, 21 May 2020 17:08:59 +0300 (MSK)
+        with ESMTP id M1UySfoXILvC; Thu, 21 May 2020 17:09:02 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -28,15 +28,11 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alexander Lobakin <alobakin@dlink.ru>,
-        Huacai Chen <chenhc@lemote.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        afzal mohammed <afzal.mohd.ma@gmail.com>,
         <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 12/13] mips: csrc-r4k: Mark R4K timer as unstable if CPU freq changes
-Date:   Thu, 21 May 2020 17:07:23 +0300
-Message-ID: <20200521140725.29571-13-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v4 13/13] mips: cevt-r4k: Update the r4k-clockevent frequency in sync with CPU
+Date:   Thu, 21 May 2020 17:07:24 +0300
+Message-ID: <20200521140725.29571-14-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200521140725.29571-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200521140725.29571-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -48,14 +44,18 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit 07d69579e7fe ("MIPS: Don't register r4k sched clock when CPUFREQ
-enabled") disabled the r4k-clock usage for scheduler ticks counting due
-to the scheduler being non-tolerant for unstable clocks sources. For the
-same reason the clock should be used in the system clocksource framework
-with care. As soon as CPU frequency changes the clocksource framework
-should be notified about this by marking the R4K timer being unstable
-(which it really is, since the ticks rate has been changed synchronously
-with the CPU frequency).
+Due to being embedded into the CPU cores MIPS count/compare timer
+frequency is changed together with the CPU clocks alteration.
+In case if frequency really changes the kernel clockevent framework
+must be notified, otherwise the kernel timers won't work correctly.
+Fix this by calling clockevents_update_freq() for each r4k clockevent
+handlers registered per available CPUs.
+
+Traditionally MIPS r4k-clock are clocked with CPU frequency divided by 2.
+But this isn't true for some of the platforms. Due to this we have to save
+the basic CPU frequency, so then use it to scale the initial timer
+frequency (mips_hpt_frequency) and pass the updated value further to the
+clockevent framework.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
@@ -67,59 +67,50 @@ Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: devicetree@vger.kernel.org
 ---
- arch/mips/Kconfig           |  1 +
- arch/mips/kernel/csrc-r4k.c | 40 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 41 insertions(+)
+ arch/mips/kernel/cevt-r4k.c | 44 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 2747b1b2d435..f347312ecd74 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -1108,6 +1108,7 @@ config CSRC_IOASIC
- 	bool
- 
- config CSRC_R4K
-+	select CLOCKSOURCE_WATCHDOG if CPU_FREQ
- 	bool
- 
- config CSRC_SB1250
-diff --git a/arch/mips/kernel/csrc-r4k.c b/arch/mips/kernel/csrc-r4k.c
-index 437dda64fd7a..edc4afc080fa 100644
---- a/arch/mips/kernel/csrc-r4k.c
-+++ b/arch/mips/kernel/csrc-r4k.c
-@@ -6,6 +6,7 @@
-  * Copyright (C) 2007 by Ralf Baechle
+diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
+index 17a9cbb8b3df..995ad9e69ded 100644
+--- a/arch/mips/kernel/cevt-r4k.c
++++ b/arch/mips/kernel/cevt-r4k.c
+@@ -8,6 +8,7 @@
   */
- #include <linux/clocksource.h>
+ #include <linux/clockchips.h>
+ #include <linux/interrupt.h>
 +#include <linux/cpufreq.h>
- #include <linux/init.h>
- #include <linux/sched_clock.h>
- 
-@@ -65,6 +66,45 @@ static bool rdhwr_count_usable(void)
- 	return false;
+ #include <linux/percpu.h>
+ #include <linux/smp.h>
+ #include <linux/irq.h>
+@@ -250,6 +251,49 @@ unsigned int __weak get_c0_compare_int(void)
+ 	return MIPS_CPU_IRQ_BASE + cp0_compare_irq;
  }
  
 +#ifdef CONFIG_CPU_FREQ
 +
-+static bool __read_mostly r4k_clock_unstable;
-+
-+static void r4k_clocksource_unstable(char *reason)
-+{
-+	if (r4k_clock_unstable)
-+		return;
-+
-+	r4k_clock_unstable = true;
-+
-+	pr_info("R4K timer is unstable due to %s\n", reason);
-+
-+	clocksource_mark_unstable(&clocksource_mips);
-+}
++static unsigned long mips_ref_freq;
 +
 +static int r4k_cpufreq_callback(struct notifier_block *nb,
 +				unsigned long val, void *data)
 +{
-+	if (val == CPUFREQ_POSTCHANGE)
-+		r4k_clocksource_unstable("CPU frequency change");
++	struct cpufreq_freqs *freq = data;
++	struct clock_event_device *cd;
++	unsigned long rate;
++	int cpu;
++
++	if (!mips_ref_freq)
++		mips_ref_freq = freq->old;
++
++	if (val == CPUFREQ_POSTCHANGE) {
++		rate = cpufreq_scale(mips_hpt_frequency, mips_ref_freq,
++				     freq->new);
++
++		for_each_cpu(cpu, freq->policy->cpus) {
++			cd = &per_cpu(mips_clockevent_device, cpu);
++
++			clockevents_update_freq(cd, rate);
++		}
++	}
 +
 +	return 0;
 +}
@@ -138,9 +129,9 @@ index 437dda64fd7a..edc4afc080fa 100644
 +
 +#endif /* !CONFIG_CPU_FREQ */
 +
- int __init init_r4k_clocksource(void)
+ int r4k_clockevent_init(void)
  {
- 	if (!cpu_has_counter || !mips_hpt_frequency)
+ 	unsigned long flags = IRQF_PERCPU | IRQF_TIMER | IRQF_SHARED;
 -- 
 2.25.1
 
