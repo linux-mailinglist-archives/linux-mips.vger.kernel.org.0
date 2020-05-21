@@ -2,95 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E06AC1DCC5D
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 13:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F7A1DCD3C
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 14:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729134AbgEULrs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 07:47:48 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:37058 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729077AbgEULrr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 07:47:47 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3D2D4803087B;
-        Thu, 21 May 2020 11:47:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jNgJJc_VL4Gx; Thu, 21 May 2020 14:47:38 +0300 (MSK)
-Date:   Thu, 21 May 2020 14:47:36 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Feng Tang <feng.tang@intel.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
+        id S1729310AbgEUMt2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 08:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729077AbgEUMt2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 08:49:28 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C01C061A0E;
+        Thu, 21 May 2020 05:49:27 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id 5so2983613pjd.0;
+        Thu, 21 May 2020 05:49:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=afUW27qJQI6L1BqqdvJMIc66fON07qLZGi9GUZOv8ik=;
+        b=Iebxwsjrefxk79lRwX2J8Ay+BytWYfinZA9yX5UhwQZEbYU7Qxx4WRoyHsGy0Zam9T
+         d1hqJX5b37L0aONdsg5eNcpcjTiDB9yvzk8hzfLKjyD1TbKIA/5sAJBa5CNneKY6zTWQ
+         MfzQwEKJQdFIdx9F7wGcfcXmk9tYB7uoNFDDhzRjrgBo51hnh4IwxVBia7ria/pUETWu
+         1LVBitiSJJH4KxVa9wwLGxqibX8OfMimyCgbbq2qDdknYOMMXjBiT1BTRf9e/ZzBzrOM
+         vxqmP+bVfhOtUdCQlJabhyac9/yyb98T1O7zkoSBhs49u/mAebeIBAtHWmu+2L7r5OAX
+         Ocsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=afUW27qJQI6L1BqqdvJMIc66fON07qLZGi9GUZOv8ik=;
+        b=KccRzhN7GulWQNsSI6Bn5lnQaFDjykZPc+kNocmCj5QSfMA50szCkIzVCAxTXg87V6
+         CYjb2oa899WxSKop3rpej4VgrQ1etDrwNUW76e0KIFaWfmj57jBRyYYDdSVlbwutf15h
+         cWkJlK4YBZlnbSJ+yP/NMg7S2ma3K5PBWFu7S1kSklBCIaComnde2+UvkMmeP5qmTRZX
+         7S19tzUpCs1k3dLFJhzdz4aRzkt6HdFpGW3b32BNmdEW3+Iu7Jgwt2uYc7+1MmX4eHfy
+         iWCKP/ON7Y3ug+I+0WCCWn8lJ8uM2dNocVu7l1peQ/cHRaZt8awXaTiRuxqf+KbbVzfB
+         OALQ==
+X-Gm-Message-State: AOAM532cydcsbtUnf3FSQJyTDZ78pzAmLKpRI3MNtQ97xsx5V+RtvFPG
+        SRWnxk9CiywaRf09TPgXQTT0aMmaaqkGW+S0/zg=
+X-Google-Smtp-Source: ABdhPJy1auqg02ic06nl0aIxcRQqYxvrGRv1Zyix0E5OxAP2IKGL2uJlyU/UaGEVw0y4+EwNAKMzkE5a4FyiOsuTpD0=
+X-Received: by 2002:a17:90a:1704:: with SMTP id z4mr10976564pjd.181.1590065367229;
+ Thu, 21 May 2020 05:49:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
+ <20200521012206.14472-4-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75VcOX-hZSxHqro_W2X=KzSShg1V=jAsxdz8L5TZpW0kBYA@mail.gmail.com> <20200521121228.aqplh6eftylnys3p@mobilestation>
+In-Reply-To: <20200521121228.aqplh6eftylnys3p@mobilestation>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 21 May 2020 15:49:10 +0300
+Message-ID: <CAHp75VcPSBBZu+bhnpojry3SFK7-qF7Tuif2MnsPEfbMf72_JA@mail.gmail.com>
+Subject: Re: [PATCH v3 03/16] spi: dw: Discard static DW DMA slave structures
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Vinod Koul <vkoul@kernel.org>, Alan Cox <alan@linux.intel.com>,
-        Linus Walleij <linus.walleij@stericsson.com>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Clement Leger <cleger@kalray.eu>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 01/16] spi: dw: Add Tx/Rx finish wait methods to the
- MID DMA
-Message-ID: <20200521114736.b2azyfvym372vkdl@mobilestation>
-References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
- <20200521012206.14472-2-Sergey.Semin@baikalelectronics.ru>
- <20200521030924.GA12568@shbuild999.sh.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200521030924.GA12568@shbuild999.sh.intel.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Clement Leger <cleger@kalray.eu>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Feng,
+On Thu, May 21, 2020 at 3:12 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+> On Thu, May 21, 2020 at 12:57:17PM +0300, Andy Shevchenko wrote:
+> > On Thu, May 21, 2020 at 4:23 AM Serge Semin
+> > <Sergey.Semin@baikalelectronics.ru> wrote:
 
-On Thu, May 21, 2020 at 11:09:24AM +0800, Feng Tang wrote:
-> Hi Serge,
-> 
-> On Thu, May 21, 2020 at 04:21:51AM +0300, Serge Semin wrote:
+...
 
-[nip]
+> > Thanks for an update, but that's not what I asked for...
+> >
+> > > -static struct dw_dma_slave mid_dma_tx = { .dst_id = 1 };
+> > > -static struct dw_dma_slave mid_dma_rx = { .src_id = 0 };
+> >
+> > >  static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+> > >  {
+> > > +       struct dw_dma_slave slave = {
+> > > +               .src_id = 0,
+> > > +               .dst_id = 0
+> > > +       };
 
-> >  /*
-> >   * dws->dma_chan_busy is set before the dma transfer starts, callback for rx
-> >   * channel will clear a corresponding bit.
-> > @@ -200,6 +267,8 @@ static void dw_spi_dma_rx_done(void *arg)
-> >  {
-> >  	struct dw_spi *dws = arg;
-> >  
-> > +	dw_spi_dma_wait_rx_done(dws);
-> 
-> I can understand the problem about TX, but I don't see how RX
-> will get hurt, can you elaborate more? thanks
-> 
-> - Feng
+> > > -       struct dw_dma_slave *tx = dws->dma_tx;
+> > > -       struct dw_dma_slave *rx = dws->dma_rx;
+> >
+> > May we simple do
+> >
+> > struct dw_dma_slave tx = { .dst_id = 1 };
+> > struct dw_dma_slave rx = { .src_id = 0 };
+> >
+> > please?
+>
+> Well, for me both solutions are equal
 
-Your question is correct. You are right with your hypothesis. Ideally upon the
-dw_spi_dma_rx_done() execution Rx FIFO must be already empty. That's why the
-commit log signifies the error being mostly related with Tx FIFO. But
-practically there are many reasons why Rx FIFO might be left with data:
-DMA engine failures, incorrect DMA configuration (if DW SPI or DW DMA driver
-messed something up), controller hanging up, and so on. It's better to catch
-an error at this stage while propagating it up to the SPI device drivers.
-Especially seeing the wait-check implementation doesn't gives us much of the
-execution overhead in normal conditions. So by calling dw_spi_dma_wait_rx_done()
-we make sure that all the data has been fetched and we may freely get the
-buffers back to the client driver.
+I don't think so.
 
--Sergey
+> except mine consumes less stack memory.
+
+And brought confusion and less readability. :-(
+
+> The only reason why your solution might be better is that if DW DMA driver or
+> the DMA engine subsystem changed the dw_dma_slave structure instance passed to
+> the dma_request_channel() method, which non of them do. So I'll leave this for
+> Mark to decide. Mark, could you give us your final word about this?
+
+I explained already why I prefer to see them in that form. Reader can
+easily understand what request line is used for what channel.
+In your code it's hidden somewhere and on top of that that _one_
+structure on the stack adds more confusion.
+
+-- 
+With Best Regards,
+Andy Shevchenko
