@@ -2,228 +2,163 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A03B31DD98A
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 23:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A8B1DDA1A
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 00:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730017AbgEUVff (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 17:35:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35330 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726814AbgEUVfe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 21 May 2020 17:35:34 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6BE6C20826;
-        Thu, 21 May 2020 21:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590096933;
-        bh=SexIEVzhPM+o2J3Hyy9A7sjZikLXSjJ1/GI1Ounq8I4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=u7UW4xMunhci41NGpRkOEkPP7jlaPxbwmH0DOFLYmgI/hAZ+gD3HP4XKWoaFwLwyw
-         OGxB1dIYhzFC6ZpARjRDrTBPyZ5eJ2ikj6MpxGJaqzVEVbYW7y6owhO+X9lDncEVmL
-         4AYM5fpOFZldrmG6AbnBp/+XMkbdfFkwDPgo5dEQ=
-Received: by mail-ot1-f51.google.com with SMTP id v17so6756370ote.0;
-        Thu, 21 May 2020 14:35:33 -0700 (PDT)
-X-Gm-Message-State: AOAM533Goh+gVnqwRUimhGe2kKFYVtIeTY2IRrRlJFJwFagnwocrTpBW
-        o9of2OPwBQLuc5ypapPs2nTmZNIx470a3E8mFA==
-X-Google-Smtp-Source: ABdhPJyewFEtLsXwajbAZnGKLJCXc3XPDv2N92c2IAt76V4mPip3t5mPoKVH6cVBWaKim8yFmyOD4ZvtbP1IVJpiK6o=
-X-Received: by 2002:a05:6830:18d9:: with SMTP id v25mr8215322ote.107.1590096932640;
- Thu, 21 May 2020 14:35:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
- <20200508093621.31619-2-Sergey.Semin@baikalelectronics.ru>
- <20200518152659.GA2525@bogus> <20200518212703.vju456kd3telctux@mobilestation>
- <CAL_JsqLLMh1LAvVXccyjLc4SqTAaPQ5LC7Nb6Q5ib8_3a0q6Ow@mail.gmail.com> <20200521151158.f3izg2svbn5dh6hy@mobilestation>
-In-Reply-To: <20200521151158.f3izg2svbn5dh6hy@mobilestation>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 21 May 2020 15:35:20 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLP_kz+Om0UOSez_LEP1Mi6sZ5GGuGKStHtJaXEzY7PPg@mail.gmail.com>
-Message-ID: <CAL_JsqLP_kz+Om0UOSez_LEP1Mi6sZ5GGuGKStHtJaXEzY7PPg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: spi: Add Baikal-T1 System Boot SPI
- Controller binding
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S1730558AbgEUWUv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 18:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728701AbgEUWUu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 18:20:50 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8A5C061A0E;
+        Thu, 21 May 2020 15:20:50 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id d10so3986587pgn.4;
+        Thu, 21 May 2020 15:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=o7s0xnYhCkFQyhSka6PkHzLmWdZ5DE6Fr3QJ+0v/GmQ=;
+        b=LoGrEjHYmEADeaInMc7AthBcky+H1BDIGPpZDct9+ACmj1uPRDgVtvqdrPo4n785VL
+         KrvycmzuRF8mogDrjwfeZgeW3xzhHahMnBup92w40z/bi2ivhGE0y1xt63Q+h+MtsJ0d
+         ADtEnwx4CIniaBjPDcpkCCXn5FOKY3gl9uQN8DtzPWpXwmOzAD66XbH6Qv3QpBmBiTGC
+         qhzGUMFT0GbkaIRaOp8Nq7g4F34ECIrUh/o1xUwtCpYvmrcLwOP6xREfZz/927KX0yL3
+         JtgNLrN1y5Ifkihi4K60TwsQivtzZoQg9t/knvtK7lZqLQtyiaYxKVTQ/e6Ndga8EGRj
+         7ZcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=o7s0xnYhCkFQyhSka6PkHzLmWdZ5DE6Fr3QJ+0v/GmQ=;
+        b=WaODFVmdrp8TzfALExfDNY2X/PWPS5J89o3vOJeMMC+HXwFwkp0pnduJINA2IZz2RU
+         YlqxekSMtw3+iAossQbCjxoT/1cYLrO8JCdSUi9AfkNHW9hva1Z8nqmPFfsfdfN1fLjZ
+         wb0we99AqczaKXYgrQ0BM29T6HrpOO49IziwiLO92hDrWDv2T9kGcj3WEtTq8b5+VsO+
+         boFMQATu29JovmMcJUDLlthb82/sBmbNavHt4gL2ahKox7aL3Pao0KrMw4KHFxPIBNeQ
+         SmRXHAxnWgJ7VDGljGB63kpz4mXsbg3Odhh4BmkuIHXte7YkZhSgYT+cGS69KX5uggi2
+         TyOQ==
+X-Gm-Message-State: AOAM5317snp7pGlTt/zZfKFjrmrFqfccQpx0/lBJy9gdw8sOzO5gh4HA
+        cVq9YZVAVczHwii5LYqnSwk=
+X-Google-Smtp-Source: ABdhPJyJtYw+hhTaMwcf2I/G2CqfR+XSye2CNZXg9yH3CXb/PdM18i1UfYTSd0zXHEP4mkaV3GQOWw==
+X-Received: by 2002:a63:5d19:: with SMTP id r25mr7883042pgb.360.1590099649941;
+        Thu, 21 May 2020 15:20:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 192sm5064919pfu.182.2020.05.21.15.20.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 May 2020 15:20:49 -0700 (PDT)
+Subject: Re: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable
+ pagefault/preempt twice
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     ira.weiny@intel.com, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <20200507150004.1423069-8-ira.weiny@intel.com>
+ <20200518184843.3029640-1-ira.weiny@intel.com>
+ <20200519165422.GA5838@roeck-us.net>
+ <20200521172704.GF23230@ZenIV.linux.org.uk>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <bdc8dc64-622c-3b0d-1ae1-48222cf34358@roeck-us.net>
+Date:   Thu, 21 May 2020 15:20:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <20200521172704.GF23230@ZenIV.linux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 21, 2020 at 9:12 AM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
-> On Thu, May 21, 2020 at 08:57:10AM -0600, Rob Herring wrote:
-> > On Mon, May 18, 2020 at 3:27 PM Serge Semin
-> > <Sergey.Semin@baikalelectronics.ru> wrote:
-> > >
-> > > On Mon, May 18, 2020 at 09:26:59AM -0600, Rob Herring wrote:
-> > > > On Fri, May 08, 2020 at 12:36:20PM +0300, Serge Semin wrote:
-> > > > > Baikal-T1 Boot SPI is a part of the SoC System Controller and is
-> > > > > responsible for the system bootup from an external SPI flash. It's a DW
-> > > > > APB SSI-based SPI-controller with no interrupts, no DMA, with just one
-> > > > > native chip-select available and a single reference clock. Since Baikal-T1
-> > > > > SoC is normally booted up from an external SPI flash this SPI controller
-> > > > > in most of the cases is supposed to be connected to a single SPI-nor
-> > > > > flash. Additionally in order to provide a transparent from CPU point of
-> > > > > view initial code execution procedure the system designers created an IP
-> > > > > block which physically maps the SPI flash found at CS0 to a memory region.
-> > > > >
-> > > > > Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> > > > > Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> > > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > > > > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > > > > Cc: Paul Burton <paulburton@kernel.org>
-> > > > > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > > > > Cc: John Garry <john.garry@huawei.com>
-> > > > > Cc: Chuanhong Guo <gch981213@gmail.com>
-> > > > > Cc: Tomer Maimon <tmaimon77@gmail.com>
-> > > > > Cc: Lee Jones <lee.jones@linaro.org>
-> > > > > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> > > > > Cc: Arnd Bergmann <arnd@arndb.de>
-> > > > > Cc: linux-mips@vger.kernel.org
-> > > > > Cc: linux-spi@vger.kernel.org
-> > > > > ---
-> > > > >  .../bindings/spi/baikal,bt1-sys-ssi.yaml      | 100 ++++++++++++++++++
-> > > > >  1 file changed, 100 insertions(+)
-> > > > >  create mode 100644 Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml b/Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
-> > > > > new file mode 100644
-> > > > > index 000000000000..d9d3257d78f4
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
-> > > > > @@ -0,0 +1,100 @@
-> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > > +# Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id: http://devicetree.org/schemas/spi/baikal,bt1-sys-ssi.yaml#
-> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > +
-> > > > > +title: Baikal-T1 System Boot SSI Controller
-> > > > > +
-> > > > > +description: |
-> > > > > +  Baikal-T1 System Controller includes a Boot SPI Controller, which is
-> > > > > +  responsible for loading chip bootup code from an external SPI flash. In order
-> > > > > +  to do this transparently from CPU point of view there is a dedicated IP block
-> > > > > +  mapping the 16MB flash to a dedicated MMIO range. The controller is based on
-> > > > > +  the DW APB SSI IP-core but equipped with very limited resources: no IRQ,
-> > > > > +  no DMA, a single native CS being necessarily connected to a 16MB SPI flash
-> > > > > +  (otherwise the system won't bootup from the flash), internal Tx/Rx FIFO of
-> > > > > +  just 8 bytes depth. Access to DW APB SSI controller registers is mutually
-> > > > > +  exclusive from normal MMIO interface and from physically mapped SPI Flash
-> > > > > +  memory. So either one or another way of using the controller functionality
-> > > > > +  can be enabled at a time.
-> > > > > +
-> > > > > +maintainers:
-> > > > > +  - Serge Semin <fancer.lancer@gmail.com>
-> > > > > +
-> > > > > +allOf:
-> > > > > +  - $ref: spi-controller.yaml#
-> > > > > +
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    const: baikal,bt1-sys-ssi
-> > > > > +
-> > > > > +  reg:
-> > > > > +    items:
-> > > > > +      - description: Baikal-T1 Boot Controller configuration registers
-> > > > > +      - description: Physically mapped SPI flash ROM found at CS0
-> > > > > +
-> > > > > +  reg-names:
-> > > > > +    items:
-> > > > > +      - const: config
-> > > > > +      - const: map
-> > > > > +
-> > > > > +  clocks:
-> > > > > +    description: SPI Controller reference clock source
-> > > >
-> > > > Can drop this.
-> > >
-> > > Ok.
-> > >
-> > > >
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +  clock-names:
-> > > > > +    items:
-> > > > > +      - const: ssi_clk
-> > > > > +
-> > > > > +  num-cs:
-> > > > > +    const: 1
-> > > > > +
-> > > > > +patternProperties:
-> > > > > +  "^.*@[0-9a-f]+":
-> > > > > +    type: object
-> > > > > +    properties:
-> > > > > +      reg:
-> > > > > +        minimum: 0
-> > > > > +        maximum: 0
-> > > > > +
-> > > > > +      spi-rx-bus-width:
-> > > > > +        const: 1
-> > > > > +
-> > > > > +      spi-tx-bus-width:
-> > > > > +        const: 1
-> > > >
-> > > > What's the point of these 2 properties if they aren't required?
-> > >
-> > > Yes, they are optional, but this is a constraint on the bus-width parameters.
-> > > DW APB SSI provides a single laned Tx and Rx.
-> >
-> > Are you just trying to keep someone from saying 'spi-tx-bus-width: 2'
-> > for example?
->
-> Right.
->
-> >
-> > You could also say 'spi-tx-bus-width: false' here to disallow the
-> > property. I guess the above is fine.
->
-> Ok. If it's fine I'll leave them as is then. Right?
+On 5/21/20 10:27 AM, Al Viro wrote:
+> On Tue, May 19, 2020 at 09:54:22AM -0700, Guenter Roeck wrote:
+>> On Mon, May 18, 2020 at 11:48:43AM -0700, ira.weiny@intel.com wrote:
+>>> From: Ira Weiny <ira.weiny@intel.com>
+>>>
+>>> The kunmap_atomic clean up failed to remove one set of pagefault/preempt
+>>> enables when vaddr is not in the fixmap.
+>>>
+>>> Fixes: bee2128a09e6 ("arch/kunmap_atomic: consolidate duplicate code")
+>>> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+>>
+>> microblazeel works with this patch, as do the nosmp sparc32 boot tests,
+>> but sparc32 boot tests with SMP enabled still fail with lots of messages
+>> such as:
+> 
+> BTW, what's your setup for sparc32 boot tests?  IOW, how do you manage to
+> shrink the damn thing enough to have the loader cope with it?  I hadn't
+> been able to do that for the current mainline ;-/
+> 
 
-Yes.
+defconfig seems to work just fine, even after enabling various debug
+and file system options.
 
-> > > > +unevaluatedProperties: false
-> > > > +
-> > > > +required:
-> > > > +  - compatible
-> > > > +  - reg
-> > > > +  - reg-names
-> > >
-> > > > +  - "#address-cells"
-> > > > +  - "#size-cells"
-> > >
-> > > These 2 are required by spi-controller.yaml, so you can drop here.
-> >
-> > Yes, "#address-cells" is required, but "#size-cells" isn't. Is this supposed to
-> > be like that?
->
-> As far as I can see in spi-controller.yaml, "#address-cells" is required, but
-> "#size-cells" isn't. Is this intentional?
-
-Humm, I guess we didn't have either one because you can have no child
-node defined, but then added #address-cells for the spi-slave case.
-
-In any case, it's all pretty well covered already because the core
-schema checks that both are present and dtc has some checking too.
-
-Rob
+Guenter
