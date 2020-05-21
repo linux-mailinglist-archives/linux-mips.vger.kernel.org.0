@@ -2,129 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FC31DC510
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 04:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE231DC51D
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 04:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbgEUCPX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 22:15:23 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:46672 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726833AbgEUCPW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 20 May 2020 22:15:22 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP94s5MVeMjc3AA--.590S2;
-        Thu, 21 May 2020 10:15:08 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH] MIPS: DTS: Only build subdir of current platform
-Date:   Thu, 21 May 2020 10:15:06 +0800
-Message-Id: <1590027306-2137-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9DxP94s5MVeMjc3AA--.590S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAF45ZryUuw48KF18GF1UAwb_yoW5ZF1Dp3
-        y3Aa1DWFWxWF1Syr1fAryDWr93Aw45CFZ7uFs8Gr1UAFZ29a4jyr1ftrsayr1UZr9Yya1S
-        grWfWrW7AF1vyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUseOJUUU
-        UU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1726840AbgEUCWW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 22:22:22 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:34440 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726833AbgEUCWV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 22:22:21 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3A85680307C7;
+        Thu, 21 May 2020 02:22:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2We2BNJXsG6w; Thu, 21 May 2020 05:22:16 +0300 (MSK)
+Date:   Thu, 21 May 2020 05:22:15 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Max Staudt <max@enpas.org>, Stefan Roese <sr@denx.de>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/12] i2c: designware: Move Baytrail sem config to
+ the platform if-clause
+Message-ID: <20200521022215.ubvhuop47aflqkkb@mobilestation>
+References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
+ <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510095019.20981-8-Sergey.Semin@baikalelectronics.ru>
+ <da6d8b18-b808-fd86-bbd2-13e7a90b2a5e@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <da6d8b18-b808-fd86-bbd2-13e7a90b2a5e@linux.intel.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add config check in Makefile to only build the subdir of current platform.
+On Wed, May 20, 2020 at 03:16:14PM +0300, Jarkko Nikula wrote:
+> On 5/10/20 12:50 PM, Serge Semin wrote:
+> > Currently Intel Baytrail I2C semaphore is a feature of the DW APB I2C
+> > platform driver. It's a bit confusing to see it's config in the menu at
+> > some separated place with no reference to the platform code. Lets move the
+> > config definition under the if-I2C_DESIGNWARE_PLATFORM clause. By doing so
+> > the config menu will display the feature right below the DW I2C platform
+> > driver item and will indent it to the right so signifying its belonging.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Paul Burton <paulburton@kernel.org>
+> > Cc: Ralf Baechle <ralf@linux-mips.org>
+> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Cc: Wolfram Sang <wsa@the-dreams.de>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Frank Rowand <frowand.list@gmail.com>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > ---
+> >   drivers/i2c/busses/Kconfig | 30 +++++++++++++++++-------------
+> >   1 file changed, 17 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> > index 368aa64e9266..ed6927c4c540 100644
+> > --- a/drivers/i2c/busses/Kconfig
+> > +++ b/drivers/i2c/busses/Kconfig
+> > @@ -530,8 +530,8 @@ config I2C_DESIGNWARE_CORE
+> >   config I2C_DESIGNWARE_PLATFORM
+> >   	tristate "Synopsys DesignWare Platform"
+> > -	select I2C_DESIGNWARE_CORE
+> >   	depends on (ACPI && COMMON_CLK) || !ACPI
+> > +	select I2C_DESIGNWARE_CORE
+> >   	help
+> >   	  If you say yes to this option, support will be included for the
+> >   	  Synopsys DesignWare I2C adapter.
+> > @@ -539,6 +539,22 @@ config I2C_DESIGNWARE_PLATFORM
+> >   	  This driver can also be built as a module.  If so, the module
+> >   	  will be called i2c-designware-platform.
+> > +if I2C_DESIGNWARE_PLATFORM
+> > +
+> > +config I2C_DESIGNWARE_BAYTRAIL
+> > +	bool "Intel Baytrail I2C semaphore support"
+> > +	depends on ACPI
+> > +	depends on (I2C_DESIGNWARE_PLATFORM=m && IOSF_MBI) || \
+> > +		   (I2C_DESIGNWARE_PLATFORM=y && IOSF_MBI=y)
+> > +	help
+> > +	  This driver enables managed host access to the PMIC I2C bus on select
+> > +	  Intel BayTrail platforms using the X-Powers AXP288 PMIC. It allows
+> > +	  the host to request uninterrupted access to the PMIC's I2C bus from
+> > +	  the platform firmware controlling it. You should say Y if running on
+> > +	  a BayTrail system using the AXP288.
+> > +
+> > +endif # I2C_DESIGNWARE_PLATFORM
+> > +
+> 
+> Is the added "if I2C_DESIGNWARE_PLATFORM" needed here? Should the "depends
+> on" be enough?
 
-E.g. without this patch:
+The idea was to add if-endif clause here for features possibly added sometime
+in future. But using normal "depends on I2C_DESIGNWARE_PLATFORM" shall make
+the config depicted as an indented sub-config as well. Would you like me to
+remove the if-clause and use the depends on operator instead?
 
-  AR      arch/mips/built-in.a
-  AR      arch/mips/boot/dts/brcm/built-in.a
-  AR      arch/mips/boot/dts/cavium-octeon/built-in.a
-  AR      arch/mips/boot/dts/img/built-in.a
-  AR      arch/mips/boot/dts/ingenic/built-in.a
-  AR      arch/mips/boot/dts/lantiq/built-in.a
-  DTC     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb
-  DTB     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.S
-  AS      arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.o
-  DTC     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb
-  DTB     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.S
-  AS      arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.o
-  AR      arch/mips/boot/dts/loongson/built-in.a
-  AR      arch/mips/boot/dts/mscc/built-in.a
-  AR      arch/mips/boot/dts/mti/built-in.a
-  AR      arch/mips/boot/dts/netlogic/built-in.a
-  AR      arch/mips/boot/dts/ni/built-in.a
-  AR      arch/mips/boot/dts/pic32/built-in.a
-  AR      arch/mips/boot/dts/qca/built-in.a
-  AR      arch/mips/boot/dts/ralink/built-in.a
-  AR      arch/mips/boot/dts/xilfpga/built-in.a
-  AR      arch/mips/boot/dts/built-in.a
+-Sergey
 
-With this patch:
-
-  AR      arch/mips/built-in.a
-  DTC     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb
-  DTB     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.S
-  AS      arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.o
-  DTC     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb
-  DTB     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.S
-  AS      arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.o
-  AR      arch/mips/boot/dts/loongson/built-in.a
-  AR      arch/mips/boot/dts/built-in.a
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/boot/dts/Makefile | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
-index d429a69..dce32d1 100644
---- a/arch/mips/boot/dts/Makefile
-+++ b/arch/mips/boot/dts/Makefile
-@@ -1,17 +1,17 @@
- # SPDX-License-Identifier: GPL-2.0
--subdir-y	+= brcm
--subdir-y	+= cavium-octeon
--subdir-y	+= img
--subdir-y	+= ingenic
--subdir-y	+= lantiq
--subdir-y	+= loongson
--subdir-y	+= mscc
--subdir-y	+= mti
--subdir-y	+= netlogic
--subdir-y	+= ni
--subdir-y	+= pic32
--subdir-y	+= qca
--subdir-y	+= ralink
--subdir-y	+= xilfpga
-+subdir-$(CONFIG_BMIPS_GENERIC)		+= brcm
-+subdir-$(CONFIG_CAVIUM_OCTEON_SOC)	+= cavium-octeon
-+subdir-$(CONFIG_MACH_PISTACHIO)		+= img
-+subdir-$(CONFIG_MACH_INGENIC)		+= ingenic
-+subdir-$(CONFIG_LANTIQ)			+= lantiq
-+subdir-$(CONFIG_MACH_LOONGSON64)	+= loongson
-+subdir-$(CONFIG_MSCC_OCELOT)		+= mscc
-+subdir-$(CONFIG_MIPS_MALTA)		+= mti
-+subdir-$(CONFIG_NLM_XLP_BOARD)		+= netlogic
-+subdir-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= ni
-+subdir-$(CONFIG_MACH_PIC32)		+= pic32
-+subdir-$(CONFIG_ATH79)			+= qca
-+subdir-$(CONFIG_RALINK)			+= ralink
-+subdir-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+= xilfpga
- 
- obj-$(CONFIG_BUILTIN_DTB)	:= $(addsuffix /, $(subdir-y))
--- 
-2.1.0
-
+> 
+> Jarkko
