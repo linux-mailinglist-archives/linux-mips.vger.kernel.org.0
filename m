@@ -2,113 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B70821DC505
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 04:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FC31DC510
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 04:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727825AbgEUCDD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 May 2020 22:03:03 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34392 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726833AbgEUCDC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 May 2020 22:03:02 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 22B0C803087B;
-        Thu, 21 May 2020 02:02:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id V8qhQs_h6n-P; Thu, 21 May 2020 05:02:58 +0300 (MSK)
-Date:   Thu, 21 May 2020 05:02:56 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Max Staudt <max@enpas.org>, Stefan Roese <sr@denx.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 04/12] i2c: designware: Convert driver to using regmap
- API
-Message-ID: <20200521020256.mfdark6vzinuktf7@mobilestation>
-References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
- <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
- <20200510095019.20981-5-Sergey.Semin@baikalelectronics.ru>
- <a0d4c6d8-c2c0-b7ea-d77b-e1fe610fd966@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <a0d4c6d8-c2c0-b7ea-d77b-e1fe610fd966@linux.intel.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+        id S1726840AbgEUCPX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 May 2020 22:15:23 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:46672 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726833AbgEUCPW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 20 May 2020 22:15:22 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP94s5MVeMjc3AA--.590S2;
+        Thu, 21 May 2020 10:15:08 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] MIPS: DTS: Only build subdir of current platform
+Date:   Thu, 21 May 2020 10:15:06 +0800
+Message-Id: <1590027306-2137-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxP94s5MVeMjc3AA--.590S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF45ZryUuw48KF18GF1UAwb_yoW5ZF1Dp3
+        y3Aa1DWFWxWF1Syr1fAryDWr93Aw45CFZ7uFs8Gr1UAFZ29a4jyr1ftrsayr1UZr9Yya1S
+        grWfWrW7AF1vyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUseOJUUU
+        UU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 20, 2020 at 03:16:07PM +0300, Jarkko Nikula wrote:
-> On 5/10/20 12:50 PM, Serge Semin wrote:
-> > Seeing the DW I2C driver is using flags-based accessors with two
-> > conditional clauses it would be better to replace them with the regmap
-> > API IO methods and to initialize the regmap object with read/write
-> > callbacks specific to the controller registers map implementation. This
-> > will be also handy for the drivers with non-standard registers mapping
-> > (like an embedded into the Baikal-T1 System Controller DW I2C block, which
-> > glue-driver is a part of this series).
-> > 
-> > As before the driver tries to detect the mapping setup at probe stage and
-> > creates a regmap object accordingly, which will be used by the rest of the
-> > code to correctly access the controller registers. In two places it was
-> > appropriate to convert the hand-written read-modify-write and
-> > read-poll-loop design patterns to the corresponding regmap API
-> > ready-to-use methods.
-> > 
-> > Note the regmap IO methods return value is checked only at the probe
-> > stage. The rest of the code won't do this because basically we have
-> > MMIO-based regmap so non of the read/write methods can fail (this also
-> > won't be needed for the Baikal-T1-specific I2C controller).
-> > 
-> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Wolfram Sang <wsa@the-dreams.de>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
-> > Cc: devicetree@vger.kernel.org
-> > Cc: linux-mips@vger.kernel.org
-> > ---
-> >   drivers/i2c/busses/Kconfig                 |   1 +
-> >   drivers/i2c/busses/i2c-designware-common.c | 171 +++++++++++++++------
-> >   drivers/i2c/busses/i2c-designware-core.h   |  18 +--
-> >   drivers/i2c/busses/i2c-designware-master.c | 125 ++++++++-------
-> >   drivers/i2c/busses/i2c-designware-slave.c  |  77 +++++-----
-> >   5 files changed, 239 insertions(+), 153 deletions(-)
-> > 
-> Looking at patches 4/12-12/12 I think it would be good to move fixes and
-> less invasive patches before this. Like
-> 
-> i2c: designware: slave: Set DW I2C core module dependency
-> i2c: designware: Use `-y` to build multi-object modules
-> i2c: designware: Move Baytrail sem config to the platform if-clause
-> 
-> That said, you may add:
-> 
-> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Add config check in Makefile to only build the subdir of current platform.
 
-Ok. I'll move those three patches to be before this one in v3. Thanks.
+E.g. without this patch:
 
--Sergey
+  AR      arch/mips/built-in.a
+  AR      arch/mips/boot/dts/brcm/built-in.a
+  AR      arch/mips/boot/dts/cavium-octeon/built-in.a
+  AR      arch/mips/boot/dts/img/built-in.a
+  AR      arch/mips/boot/dts/ingenic/built-in.a
+  AR      arch/mips/boot/dts/lantiq/built-in.a
+  DTC     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb
+  DTB     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.S
+  AS      arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.o
+  DTC     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb
+  DTB     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.S
+  AS      arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.o
+  AR      arch/mips/boot/dts/loongson/built-in.a
+  AR      arch/mips/boot/dts/mscc/built-in.a
+  AR      arch/mips/boot/dts/mti/built-in.a
+  AR      arch/mips/boot/dts/netlogic/built-in.a
+  AR      arch/mips/boot/dts/ni/built-in.a
+  AR      arch/mips/boot/dts/pic32/built-in.a
+  AR      arch/mips/boot/dts/qca/built-in.a
+  AR      arch/mips/boot/dts/ralink/built-in.a
+  AR      arch/mips/boot/dts/xilfpga/built-in.a
+  AR      arch/mips/boot/dts/built-in.a
+
+With this patch:
+
+  AR      arch/mips/built-in.a
+  DTC     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb
+  DTB     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.S
+  AS      arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.o
+  DTC     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb
+  DTB     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.S
+  AS      arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.o
+  AR      arch/mips/boot/dts/loongson/built-in.a
+  AR      arch/mips/boot/dts/built-in.a
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/boot/dts/Makefile | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
+index d429a69..dce32d1 100644
+--- a/arch/mips/boot/dts/Makefile
++++ b/arch/mips/boot/dts/Makefile
+@@ -1,17 +1,17 @@
+ # SPDX-License-Identifier: GPL-2.0
+-subdir-y	+= brcm
+-subdir-y	+= cavium-octeon
+-subdir-y	+= img
+-subdir-y	+= ingenic
+-subdir-y	+= lantiq
+-subdir-y	+= loongson
+-subdir-y	+= mscc
+-subdir-y	+= mti
+-subdir-y	+= netlogic
+-subdir-y	+= ni
+-subdir-y	+= pic32
+-subdir-y	+= qca
+-subdir-y	+= ralink
+-subdir-y	+= xilfpga
++subdir-$(CONFIG_BMIPS_GENERIC)		+= brcm
++subdir-$(CONFIG_CAVIUM_OCTEON_SOC)	+= cavium-octeon
++subdir-$(CONFIG_MACH_PISTACHIO)		+= img
++subdir-$(CONFIG_MACH_INGENIC)		+= ingenic
++subdir-$(CONFIG_LANTIQ)			+= lantiq
++subdir-$(CONFIG_MACH_LOONGSON64)	+= loongson
++subdir-$(CONFIG_MSCC_OCELOT)		+= mscc
++subdir-$(CONFIG_MIPS_MALTA)		+= mti
++subdir-$(CONFIG_NLM_XLP_BOARD)		+= netlogic
++subdir-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= ni
++subdir-$(CONFIG_MACH_PIC32)		+= pic32
++subdir-$(CONFIG_ATH79)			+= qca
++subdir-$(CONFIG_RALINK)			+= ralink
++subdir-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+= xilfpga
+ 
+ obj-$(CONFIG_BUILTIN_DTB)	:= $(addsuffix /, $(subdir-y))
+-- 
+2.1.0
+
