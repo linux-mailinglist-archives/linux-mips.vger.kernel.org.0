@@ -2,114 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E61A31DC97B
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 11:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46861DC9EC
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2020 11:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728635AbgEUJKC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 05:10:02 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:41068 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728545AbgEUJKC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 05:10:02 -0400
-Received: by mail-ot1-f68.google.com with SMTP id 63so4957827oto.8;
-        Thu, 21 May 2020 02:10:01 -0700 (PDT)
+        id S1728700AbgEUJXf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 05:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728686AbgEUJXf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 05:23:35 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589DFC061A0E;
+        Thu, 21 May 2020 02:23:35 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id u1so4966552wmn.3;
+        Thu, 21 May 2020 02:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nb1hlmK7omNNMZYAiEDIg6npl1yviZIWjJhPEVqfSF4=;
+        b=FMp+gzETHTA6uRPBpZJKGgwQ+qV2zMo/PxOJl+65kcDY9UD97NAwRlYLGT1dwZJcUn
+         fLBTJwuU8Cr++m69vzDL53shf5yZl6aAKHnLEVe+quOvKXZnb+tg0jChuGHhC2p2nfoI
+         fPoX1mbwTAQjIJKzMwp+QOCfPoIw9NHDjiV6zuZel/GE8qXayxjIB7pSSkgFjzSZohia
+         +LQ+V6PVgfUqiAnHuYiribHzlcD7kSBIpTODgX73Hdqb8KbcR5vSvfnRP9+GWEQ4onlR
+         /BMuK2lKMwFRj1VsOjSPrY6SS1UQ/rd/xqHKdvjZpNFf06r2vYlPgsdG2mU4wu5OR88a
+         aT4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zsv1Lh0K7M59VV4w388XD6WcsG+ryCs8PrcoBNRfD4M=;
-        b=X7r2YGNSu7W81D5sXhBazL0VT8ZKFlbTBI5lYTFrUHKc4adJZt52e+hI8ctQE+4pvT
-         dWsZl4gfDgcDFBbm5m6YzDrZEQa50dyzmPxJi2cQFG+61Aaw0hBGvuCejr2EYYSCAhct
-         Fa9ZC/mDu21gz0w+C1KOI7PjAtG0ZeVh8TdJ+baD0yxUT2Nzcqo//qxCKcVzDTGYLqFl
-         CSI/OfvaVweBgHmxg6n0iwwj/k/h+oFwVjHIX85Oucl8Ew5B5IyALgmOeKh9j4DmY4DN
-         JAji6Cy8EPa6MJ0YPtO9J+YYmuk+2G5NkBMLa+DMG24gFUvk/AFGqJ2XTTWxm7/ubdUs
-         4jbQ==
-X-Gm-Message-State: AOAM5313VpUr7UzPdLeZeFzBexmmGL7Gusbj9yngE+omFoPRnyKnNkt9
-        jeqi1wU/RYyHpOBC9WUZFErG+4h/0cUR1rGKWWQ=
-X-Google-Smtp-Source: ABdhPJwm5hpnt7eWP1EGK7Mtgxjgzq8Xk87gNuPRLtNpSmjQNXuMv1lV/nvEbiXSLKYWEk/r7B5rKl5rIAchj2hnwqo=
-X-Received: by 2002:a9d:7e92:: with SMTP id m18mr6210653otp.145.1590052201359;
- Thu, 21 May 2020 02:10:01 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nb1hlmK7omNNMZYAiEDIg6npl1yviZIWjJhPEVqfSF4=;
+        b=RzqMyOyAEebYFEk2lOMVQvVVyg2CLC0TVOQ/IwpuFXwPs60L8aJPpCt+v6JgKmPH+j
+         IYvVi9+2hni4wRTq6i6EWAl5OcFst+EWWgWkx6BZ17zry+622aAwbkus4DDWvLjV1uFQ
+         Dbm2qVwajW3mbLxTDQbOfOQgt3GFJ+LimsGKsAV0XnsztX9dmZPVyFm8qIdw81jVatqu
+         ZMOQ5GKsiSjM+0dilAZimdJagUrIGLrLpT1WS0e6BzVUV9rkGPkqaXTEHHxBrwp8fT0D
+         g8jUaQFqXv1O8hvtus2TFKEntD59FwHIFYcLj04Gxij1Q8J6pdg75YmPjTFf/SoPUSol
+         NP+A==
+X-Gm-Message-State: AOAM532d1y1LSXV+amT5/kNNgALFvIauUFBxPRmjYrGP+kLGl2FVvM0C
+        Ph9xeNIGoCkyokJ2I7yzDx0lOqYzlV+LON+fbNM=
+X-Google-Smtp-Source: ABdhPJzSD0FxBMdBQ/hMqkk/0NsgDQJoqu2dLGtH90pERY1JKF/h47QFmnDdJc/stJtomPJmQ733sM7sWHp6AQJlF8w=
+X-Received: by 2002:a1c:2e16:: with SMTP id u22mr6864407wmu.168.1590053014083;
+ Thu, 21 May 2020 02:23:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200521005321.12129-1-Sergey.Semin@baikalelectronics.ru> <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 May 2020 11:09:50 +0200
-Message-ID: <CAMuHMdW5TqfDTZZCscXCK-Fkd7Gq1Ciyu1_sDzzR0B+_W-2hfg@mail.gmail.com>
-Subject: Re: [PATCH v4 7/7] clocksource: mips-gic-timer: Mark GIC timer as
- unstable if ref clock changes
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-rtc@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Paul Cercueil <paul@crapouillou.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Maarten ter Huurne <maarten@treewalker.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1589688372-3098-1-git-send-email-chenhc@lemote.com>
+ <1589688372-3098-16-git-send-email-chenhc@lemote.com> <20200517082242.GA3939@alpha.franken.de>
+ <CAHiYmc5m+UhWv__F_FKqhiTkJxgqErmFn5K_DAW2y5Pp6_4dyA@mail.gmail.com>
+In-Reply-To: <CAHiYmc5m+UhWv__F_FKqhiTkJxgqErmFn5K_DAW2y5Pp6_4dyA@mail.gmail.com>
+From:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Date:   Thu, 21 May 2020 11:22:14 +0200
+Message-ID: <CAHiYmc4m7uxYU0coRGJS8ou=KyjC=DYs506NyXyw_-eKmPVJRQ@mail.gmail.com>
+Subject: Re: [PATCH V6 15/15] MAINTAINERS: Update KVM/MIPS maintainers
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Huacai Chen <chenhc@lemote.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Serge,
-
-On Thu, May 21, 2020 at 2:54 AM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
-> Currently clocksource framework doesn't support the clocks with variable
-> frequency. Since MIPS GIC timer ticks rate might be unstable on some
-> platforms, we must make sure that it justifies the clocksource
-> requirements. MIPS GIC timer is incremented with the CPU cluster reference
-> clocks rate. So in case if CPU frequency changes, the MIPS GIC tick rate
-> changes synchronously. Due to this the clocksource subsystem can't rely on
-> the timer to measure system clocks anymore. This commit marks the MIPS GIC
-> based clocksource as unstable if reference clock (normally it's a CPU
-> reference clocks) rate changes. The clocksource will execute a watchdog
-> thread, which lowers the MIPS GIC timer rating to zero and fallbacks to a
-> new stable one.
+=D0=BF=D0=BE=D0=BD, 18. =D0=BC=D0=B0=D1=98 2020. =D1=83 10:23 Aleksandar Ma=
+rkovic
+<aleksandar.qemu.devel@gmail.com> =D1=98=D0=B5 =D0=BD=D0=B0=D0=BF=D0=B8=D1=
+=81=D0=B0=D0=BE/=D0=BB=D0=B0:
 >
-> Note we don't need to set the CLOCK_SOURCE_MUST_VERIFY flag to the MIPS
-> GIC clocksource since normally the timer is stable. The only reason why
-> it gets unstable is due to the ref clock rate change, which event we
-> detect here in the driver by means of the clocks event notifier.
+> =D0=BD=D0=B5=D0=B4, 17. =D0=BC=D0=B0=D1=98 2020. =D1=83 10:55 Thomas Boge=
+ndoerfer
+> <tsbogend@alpha.franken.de> =D1=98=D0=B5 =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=
+=D0=B0=D0=BE/=D0=BB=D0=B0:
+> >
+> > On Sun, May 17, 2020 at 12:06:12PM +0800, Huacai Chen wrote:
+> > > James Hogan has become inactive for a long time and leaves KVM for MI=
+PS
+> > > orphan. I'm working on KVM/Loongson and attempt to make it upstream b=
+oth
+> > > in kernel and QEMU, while Aleksandar Markovic is already a maintainer=
+ of
+> > > QEMU/MIPS. We are both interested in QEMU/KVM/MIPS, and we have alrea=
+dy
+> > > made some contributions in kernel and QEMU. If possible, we want to t=
+ake
+> > > the KVM/MIPS maintainership.
+> > >
+> > > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > > Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+> > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > > ---
+> > >  MAINTAINERS | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index e64e5db..59b3f43 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -9302,9 +9302,11 @@ F:     include/kvm/arm_*
+> > >  F:   virt/kvm/arm/
+> > >
+> > >  KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
+> > > +M:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+> > > +M:   Huacai Chen <chenhc@lemote.com>
+> >
+> > not sure, if other people see the same problem with this email address,
+> > but wouldn't it be better to use your gmail address here ?
+> >
 >
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Huacai, Thomas,
+>
+> I personally and surprisingly do not have any technical difficulties
+> communicating with Huacai using his lemote.com address.
+>
+> However, I think Thomas observation makes sense. I was personally
+> a victim of various corporate decisions regarding emails, policies
+> around them, and similar. And - as you can see - I ended up switching
+> to gmail.com account, getting really sick and tired of repeated
+> unexpected and distracting problems using corporate email adresses.
+> Sounds strange, but it is true.
+>
+> Huacei, my honest advice and recommendation to you is to accept
+> Thomas' suggestion, and change your email address here to gmail.
+> We all now you work for Lemote, and that your using gmail is just a
+> matter of practicality. :)
+>
+> Please Huacei, do send v7 with such change, and perhaps some
+> other minor changes that you may or may noticed in the last minutes.
+>
 
-Thanks for your patch!
+But, Huacai, please do not misunderstand me. I am perfectly fine with
+your lemote.com address, and do not have even the slightest technical
+problem using (sending/receiving messages) it.
 
-> --- a/drivers/clocksource/mips-gic-timer.c
-> +++ b/drivers/clocksource/mips-gic-timer.c
-> @@ -24,6 +24,9 @@
->  static DEFINE_PER_CPU(struct clock_event_device, gic_clockevent_device);
->  static int gic_timer_irq;
->  static unsigned int gic_frequency;
-> +static bool __read_mostly gic_clock_unstable;
-> +
-> +static void git_clocksource_unstable(char *reason);
+So, I was not requesting v7 - I just wanted to help eliminate that ridiculo=
+us
+technical detail stopping this patch series, I am absolutely fine and even
+strongly support v6 in its entire intact form.
 
-gic_clocksource_unstable? (everywhere)
+Best Regards,
+Aleksandar
 
-Gr{oetje,eeting}s,
 
-                        Geert
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Many thanks to Thomas to noticing this that may save us from many
+> really unnecessary troubles in future.
+>
+> Yours,
+> Aleksandar
+>
+>
+> > Thomas.
+> >
+> > --
+> > Crap can work. Given enough thrust pigs will fly, but it's not necessar=
+ily a
+> > good idea.                                                [ RFC1925, 2.=
+3 ]
