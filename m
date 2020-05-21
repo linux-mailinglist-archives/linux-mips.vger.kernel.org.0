@@ -2,87 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F921DDA72
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 00:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 214E71DDB0C
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 01:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730690AbgEUWqh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 May 2020 18:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730329AbgEUWqh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 18:46:37 -0400
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7896C061A0E;
-        Thu, 21 May 2020 15:46:36 -0700 (PDT)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.93 #3 (Red Hat Linux))
-        id 1jbtx6-00DBBY-7g; Thu, 21 May 2020 22:46:12 +0000
-Date:   Thu, 21 May 2020 23:46:12 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     ira.weiny@intel.com, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S1729211AbgEUXdd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 May 2020 19:33:33 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:41044 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728554AbgEUXdd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 May 2020 19:33:33 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id C74088030809;
+        Thu, 21 May 2020 23:33:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mzndbVe0uaYh; Fri, 22 May 2020 02:33:29 +0300 (MSK)
+Date:   Fri, 22 May 2020 02:33:27 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mark Brown <broonie@kernel.org>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Vinod Koul <vkoul@kernel.org>, Feng Tang <feng.tang@intel.com>,
+        Alan Cox <alan@linux.intel.com>,
+        Linus Walleij <linus.walleij@stericsson.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
-        Christian Koenig <christian.koenig@amd.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable
- pagefault/preempt twice
-Message-ID: <20200521224612.GJ23230@ZenIV.linux.org.uk>
-References: <20200507150004.1423069-8-ira.weiny@intel.com>
- <20200518184843.3029640-1-ira.weiny@intel.com>
- <20200519165422.GA5838@roeck-us.net>
- <20200521172704.GF23230@ZenIV.linux.org.uk>
- <bdc8dc64-622c-3b0d-1ae1-48222cf34358@roeck-us.net>
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Clement Leger <cleger@kalray.eu>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 01/16] spi: dw: Add Tx/Rx finish wait methods to the
+ MID DMA
+Message-ID: <20200521233327.o5siot6dyftgz7gu@mobilestation>
+References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
+ <20200521012206.14472-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <bdc8dc64-622c-3b0d-1ae1-48222cf34358@roeck-us.net>
+In-Reply-To: <20200521012206.14472-2-Sergey.Semin@baikalelectronics.ru>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 21, 2020 at 03:20:46PM -0700, Guenter Roeck wrote:
-> On 5/21/20 10:27 AM, Al Viro wrote:
-> > On Tue, May 19, 2020 at 09:54:22AM -0700, Guenter Roeck wrote:
-> >> On Mon, May 18, 2020 at 11:48:43AM -0700, ira.weiny@intel.com wrote:
-> >>> From: Ira Weiny <ira.weiny@intel.com>
-> >>>
-> >>> The kunmap_atomic clean up failed to remove one set of pagefault/preempt
-> >>> enables when vaddr is not in the fixmap.
-> >>>
-> >>> Fixes: bee2128a09e6 ("arch/kunmap_atomic: consolidate duplicate code")
-> >>> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> >>
-> >> microblazeel works with this patch, as do the nosmp sparc32 boot tests,
-> >> but sparc32 boot tests with SMP enabled still fail with lots of messages
-> >> such as:
-> > 
-> > BTW, what's your setup for sparc32 boot tests?  IOW, how do you manage to
-> > shrink the damn thing enough to have the loader cope with it?  I hadn't
-> > been able to do that for the current mainline ;-/
-> > 
-> 
-> defconfig seems to work just fine, even after enabling various debug
-> and file system options.
+Mark, Andy,
 
-The hell?  How do you manage to get the kernel in?  sparc32_defconfig
-ends up with 5316876 bytes unpacked...
+On Thu, May 21, 2020 at 04:21:51AM +0300, Serge Semin wrote:
+>  
+
+[nip]
+
+> +static void dw_spi_dma_calc_delay(struct dw_spi *dws, u32 nents,
+> +				  struct spi_delay *delay)
+> +{
+> +	unsigned long ns, us;
+> +
+> +	ns = (NSEC_PER_SEC / spi_get_clk(dws)) * nents * dws->n_bytes *
+> +	     BITS_PER_BYTE;
+> +
+> +	if (ns <= NSEC_PER_USEC) {
+> +		delay->unit = SPI_DELAY_UNIT_NSECS;
+> +		delay->value = ns;
+> +	} else {
+> +		us = DIV_ROUND_UP(ns, NSEC_PER_USEC);
+> +		delay->unit = SPI_DELAY_UNIT_USECS;
+> +		delay->value = clamp_val(us, 0, USHRT_MAX);
+> +	}
+> +}
+> +
+> +static inline bool dw_spi_dma_tx_busy(struct dw_spi *dws)
+> +{
+> +	return !(dw_readl(dws, DW_SPI_SR) & SR_TF_EMPT);
+> +}
+> +
+> +static void dw_spi_dma_wait_tx_done(struct dw_spi *dws)
+> +{
+> +	int retry = WAIT_RETRIES;
+> +	struct spi_delay delay;
+> +	u32 nents;
+> +
+> +	nents = dw_readl(dws, DW_SPI_TXFLR);
+> +	dw_spi_dma_calc_delay(dws, nents, &delay);
+> +
+> +	while (dw_spi_dma_tx_busy(dws) && retry--)
+
+> +		spi_delay_exec(&delay, NULL);
+
+I've just discovered using spi_delay_exec() wasn't a good idea here. Look at the
+call stack:
+dw_dma_tasklet() -> dwc_scan_descriptors() -> dwc_descriptor_complete() ->
+dw_spi_dma_tx_done() -> spi_delay_exec() -> usleep_range() -> ...
+
+So tasklet is calling a sleeping function.((( I've absolutely forgotten to check
+the context the DMA completion function is called with. We'll have to manually
+select either ndelay or udelay here and nothing else. Since basically both
+functions represent an atomic context and most of the platforms ndelay fallsback to
+udelay, I'll get the ndelay back to the wait functions. I'll resend a patchset
+shortly.
+
+-Sergey
