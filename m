@@ -2,122 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A20FA1DE66C
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 14:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FF71DE68E
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 14:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728495AbgEVMM0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 May 2020 08:12:26 -0400
-Received: from mga07.intel.com ([134.134.136.100]:42518 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728409AbgEVMM0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 22 May 2020 08:12:26 -0400
-IronPort-SDR: 1cr9hibZolPQMwM8ouNXnbF/OYczOHxxYHvVMRq5NTYWYlCIVQSlqJQEZhhlb5gW6g+1NNNfRN
- fNyjPnhEejGg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 05:12:25 -0700
-IronPort-SDR: gCTg5O++p2llZr3yD+aZxedjxBKcYhvzPF8SXNhINmwkdpWVoijtM9TDSppQuSFXedW+58udM6
- pEML2Pps+o7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,421,1583222400"; 
-   d="scan'208";a="300651143"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002.fm.intel.com with ESMTP; 22 May 2020 05:12:19 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jc6XF-008E5C-Vu; Fri, 22 May 2020 15:12:21 +0300
-Date:   Fri, 22 May 2020 15:12:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@stericsson.com>,
-        Vinod Koul <vkoul@kernel.org>, Feng Tang <feng.tang@intel.com>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Alan Cox <alan@linux.intel.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 01/16] spi: dw: Add Tx/Rx finish wait methods to the
- MID DMA
-Message-ID: <20200522121221.GA1634618@smile.fi.intel.com>
-References: <20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru>
- <20200522000806.7381-2-Sergey.Semin@baikalelectronics.ru>
- <20200522111340.GX1634618@smile.fi.intel.com>
- <20200522115235.rt3ay7lveimrgooa@mobilestation>
+        id S1728783AbgEVMQo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 May 2020 08:16:44 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:53530 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728475AbgEVMQo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 22 May 2020 08:16:44 -0400
+Received: by ajax-webmail-mail.loongson.cn (Coremail) ; Fri, 22 May 2020
+ 20:16:33 +0800 (GMT+08:00)
+X-Originating-IP: [106.39.149.52]
+Date:   Fri, 22 May 2020 20:16:33 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5q+b56Kn5rOi?= <maobibo@loongson.cn>
+To:     "Paolo Bonzini" <pbonzini@redhat.com>
+Cc:     "Huacai Chen" <chenhuacai@gmail.com>,
+        "Aleksandar Markovic" <aleksandar.qemu.devel@gmail.com>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        kvm <kvm@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "Fuxin Zhang" <zhangfx@lemote.com>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+Subject: Re: Re: [PATCH V6 15/15] MAINTAINERS: Update KVM/MIPS maintainers
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.10a build 20191018(4c4f6d15)
+ Copyright (c) 2002-2020 www.mailtech.cn .loongson.cn
+In-Reply-To: <3269366b-7239-bb06-0bc6-cb661b9e5206@redhat.com>
+References: <1589688372-3098-1-git-send-email-chenhc@lemote.com>
+ <1589688372-3098-16-git-send-email-chenhc@lemote.com>
+ <20200517082242.GA3939@alpha.franken.de>
+ <CAHiYmc5m+UhWv__F_FKqhiTkJxgqErmFn5K_DAW2y5Pp6_4dyA@mail.gmail.com>
+ <CAHiYmc4m7uxYU0coRGJS8ou=KyjC=DYs506NyXyw_-eKmPVJRQ@mail.gmail.com>
+ <CAAhV-H4SspEUMLDTSZH3YmNbd+cRx3JK+mtsGo6cJ2NLKHPkKQ@mail.gmail.com>
+ <CAHiYmc7ykeeF_w25785yiDjJf3AwOzfJybiS=LxfjYizn_2zEQ@mail.gmail.com>
+ <23cbe8a9-21a9-93a3-79aa-8ab17818a585@redhat.com>
+ <CAAhV-H6aGkxV41ymu+HPxiSBq9uw-QhmaxFxnZYJTfUay946cg@mail.gmail.com>
+ <3269366b-7239-bb06-0bc6-cb661b9e5206@redhat.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200522115235.rt3ay7lveimrgooa@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Message-ID: <36c31c9.f74c.1723c504640.Coremail.maobibo@loongson.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAf9Axtumiwsde3dc3AA--.15581W
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/1tbiAQAECV3QvLuL-QAAsw
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 22, 2020 at 02:52:35PM +0300, Serge Semin wrote:
-> On Fri, May 22, 2020 at 02:13:40PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 22, 2020 at 03:07:50AM +0300, Serge Semin wrote:
-> > > Since DMA transfers are performed asynchronously with actual SPI
-> > > transaction, then even if DMA transfers are finished it doesn't mean
-> > > all data is actually pushed to the SPI bus. Some data might still be
-> > > in the controller FIFO. This is specifically true for Tx-only
-> > > transfers. In this case if the next SPI transfer is recharged while
-> > > a tail of the previous one is still in FIFO, we'll loose that tail
-> > > data. In order to fix this lets add the wait procedure of the Tx/Rx
-> > > SPI transfers completion after the corresponding DMA transactions
-> > > are finished.
-
-...
-
-> > > Changelog v4:
-> > > - Get back ndelay() method to wait for an SPI transfer completion.
-> > >   spi_delay_exec() isn't suitable for the atomic context.
-> > 
-> > OTOH we may teach spi_delay_exec() to perform atomic sleeps.
-> 
-> Please, see it's implementation. It does atomic delay when the delay value
-> is less than 10us. But selectively gets to the usleep_range() if value is
-> greater than that.
-
-Oh, than it means we may do a very long busy loop here which is not good at
-all. If we have 10Hz clock, it might take seconds of doing nothing!
-
-...
-
-> > > +	while (dw_spi_dma_tx_busy(dws) && retry--)
-> > > +		ndelay(ns);
-> > 
-> > I might be mistaken, but I think I told that this one misses to keep power
-> > management in mind.
-> 
-> Here we already in nearly atomic context due to the callback executed in the
-> tasklet. What power management could be during a tasklet execution? Again we
-> can't call sleeping methods in here. What do you suggest in substitution?
-> 
-> > Have you read Documentation/process/volatile-considered-harmful.rst ?
-> 
-> That's mentoring tone is redundant. Please, stop it.
-
-I simple gave you pointers to where you may read about power management in busy
-loops. Yes, I admit that documentation title and the relation to busy loops is
-not obvious.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+dGhhbmsgaHVhY2FpIGZvciB0aGUgZWZmb3J0cywga3ZtIG1pcHMgaXMgY29taW5nIGJhY2sgOikK
+CgomZ3Q7IC0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0KJmd0OyDlj5Hku7bkuro6ICJQYW9sbyBCb256
+aW5pIiA8cGJvbnppbmlAcmVkaGF0LmNvbT4KJmd0OyDlj5HpgIHml7bpl7Q6IDIwMjAtMDUtMjIg
+MTU6MjQ6NDIgKOaYn+acn+S6lCkKJmd0OyDmlLbku7bkuro6ICJIdWFjYWkgQ2hlbiIgPGNoZW5o
+dWFjYWlAZ21haWwuY29tPgomZ3Q7IOaKhOmAgTogIkFsZWtzYW5kYXIgTWFya292aWMiIDxhbGVr
+c2FuZGFyLnFlbXUuZGV2ZWxAZ21haWwuY29tPiwgIlRob21hcyBCb2dlbmRvZXJmZXIiIDx0c2Jv
+Z2VuZEBhbHBoYS5mcmFua2VuLmRlPiwga3ZtIDxrdm1Admdlci5rZXJuZWwub3JnPiwgIm9wZW4g
+bGlzdDpNSVBTIiA8bGludXgtbWlwc0B2Z2VyLmtlcm5lbC5vcmc+LCAiRnV4aW4gWmhhbmciIDx6
+aGFuZ2Z4QGxlbW90ZS5jb20+LCAiSmlheHVuIFlhbmciIDxqaWF4dW4ueWFuZ0BmbHlnb2F0LmNv
+bT4KJmd0OyDkuLvpopg6IFJlOiBbUEFUQ0ggVjYgMTUvMTVdIE1BSU5UQUlORVJTOiBVcGRhdGUg
+S1ZNL01JUFMgbWFpbnRhaW5lcnMKJmd0OyAKJmd0OyBPbiAyMi8wNS8yMCAwNzozNCwgSHVhY2Fp
+IENoZW4gd3JvdGU6CiZndDsgJmd0OyZndDsgSSBhbSBnb2luZyB0byBxdWV1ZSB0aGVtIGZvciA1
+LjguCiZndDsgJmd0OyBUaGFuayB5b3UgZm9yIHlvdXIgaGVscC4gQnV0IHRoaXMgc2VyaWVzIGRl
+cGVuZHMgb24gYW4gZWFybHkgcGF0Y2gKJmd0OyAmZ3Q7IGZyb20gSmlheHVuIFlhbmcgKCJNSVBT
+OiBMb29uZ3NvbjY0OiBQcm9iZSBDUFUgZmVhdHVyZXMgdmlhIENQVUNGRyIpCiZndDsgJmd0OyB3
+aGljaCBzZWVtcyBvbmx5IGluIE1JUFMgdHJlZSBub3cuIFNvLCBtYXliZSB0aGlzIHNlcmllcyBp
+cyBiZXR0ZXIgYmUKJmd0OyAmZ3Q7IHF1ZXVlZCBpbiBUaG9tYXMncyB0cmVlPwomZ3Q7ICZndDsg
+CiZndDsgCiZndDsgVGhhdCdzIG5vdCBhIHByb2JsZW0sIEkgY2FuIGhhbmRsZSBpdCBkdXJpbmcg
+dGhlIG1lcmdlIHdpbmRvdy4gIEluIHRoZQomZ3Q7IGZ1dHVyZSBJJ2QgYXNrIGZvciBhIHRvcGlj
+IGJyYW5jaCBvciBzb21ldGhpbmcgbGlrZSB0aGF0LgomZ3Q7IAomZ3Q7IFRoYW5rcyBmb3IgYnJp
+bmdpbmcgS1ZNL01JUFMgYmFjayB0byBsaWZlLiA6KQomZ3Q7IAomZ3Q7IFBhb2xvCjwvamlheHVu
+LnlhbmdAZmx5Z29hdC5jb20+PC96aGFuZ2Z4QGxlbW90ZS5jb20+PC9saW51eC1taXBzQHZnZXIu
+a2VybmVsLm9yZz48L2t2bUB2Z2VyLmtlcm5lbC5vcmc+PC90c2JvZ2VuZEBhbHBoYS5mcmFua2Vu
+LmRlPjwvYWxla3NhbmRhci5xZW11LmRldmVsQGdtYWlsLmNvbT48L2NoZW5odWFjYWlAZ21haWwu
+Y29tPjwvcGJvbnppbmlAcmVkaGF0LmNvbT4=
