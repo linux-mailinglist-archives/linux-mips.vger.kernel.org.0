@@ -2,94 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F9A1DE6D3
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 14:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D118F1DE6FD
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 14:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728853AbgEVM01 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 May 2020 08:26:27 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:53590 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728809AbgEVM01 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 May 2020 08:26:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1590150385; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MRKS9fqXzGzQMKHN8PdUSNujYDogHAul97G0jJgVbv0=;
-        b=f7NFFBWRYPcg+MQZpHOet66JdhhlaTDMa2UOgvwwKlF9bqfTxB911zvnh18E7/7fhkD51X
-        DnIl5uPJQB46X8Pev/MjqZ7q6kMiqIeMB3zo96LtEJ7n6LpTtsfkwcI3SO7XG+FVyWA4a1
-        sfN+0zpaFNxnKJTjEjbxyxVmzLuMhhg=
-Date:   Fri, 22 May 2020 14:26:15 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] clocksource: Ingenic: Add high resolution timer support
- for SMP.
-To:     Paul Boddie <paul@boddie.org.uk>
-Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
-        =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        linux-mips <linux-mips@vger.kernel.org>
-Message-Id: <RVFQAQ.7WL51YCH3VE1@crapouillou.net>
-In-Reply-To: <3077290.R152QTsmsV@jeremy>
-References: <1589898923-60048-5-git-send-email-zhouyanjie@wanyeetech.com>
-        <20200519201110.286501-1-paul@crapouillou.net> <3077290.R152QTsmsV@jeremy>
+        id S1729676AbgEVMec (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 May 2020 08:34:32 -0400
+Received: from mga14.intel.com ([192.55.52.115]:13814 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728495AbgEVMec (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 22 May 2020 08:34:32 -0400
+IronPort-SDR: Oe1m4sbpjZDoODj/9r1ak+ASjqO2TZLU0JtUcoAQllzC4fd4bORjNRseYu0RJuZaKcFkjXgow/
+ tSZAK53/yXAQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 05:34:30 -0700
+IronPort-SDR: whq9lJbDeCB6C/JwWqiv1Tp+i4S6K+d96mtgVT7fTnrcVC1bP62MThrNxmR9SkVKGz5T7AeVCA
+ vXS+M7GHyzUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,421,1583222400"; 
+   d="scan'208";a="265417271"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga003.jf.intel.com with ESMTP; 22 May 2020 05:34:25 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jc6sd-008EJi-Ae; Fri, 22 May 2020 15:34:27 +0300
+Date:   Fri, 22 May 2020 15:34:27 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Linus Walleij <linus.walleij@stericsson.com>,
+        Vinod Koul <vkoul@kernel.org>, Feng Tang <feng.tang@intel.com>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Alan Cox <alan@linux.intel.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 01/16] spi: dw: Add Tx/Rx finish wait methods to the
+ MID DMA
+Message-ID: <20200522123427.GD1634618@smile.fi.intel.com>
+References: <20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru>
+ <20200522000806.7381-2-Sergey.Semin@baikalelectronics.ru>
+ <20200522111340.GX1634618@smile.fi.intel.com>
+ <20200522115235.rt3ay7lveimrgooa@mobilestation>
+ <20200522121221.GA1634618@smile.fi.intel.com>
+ <20200522121820.GG5801@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200522121820.GG5801@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Fri, May 22, 2020 at 01:18:20PM +0100, Mark Brown wrote:
+> On Fri, May 22, 2020 at 03:12:21PM +0300, Andy Shevchenko wrote:
+> > On Fri, May 22, 2020 at 02:52:35PM +0300, Serge Semin wrote:
+> 
+> > > Please, see it's implementation. It does atomic delay when the delay value
+> > > is less than 10us. But selectively gets to the usleep_range() if value is
+> > > greater than that.
+> 
+> > Oh, than it means we may do a very long busy loop here which is not good at
+> > all. If we have 10Hz clock, it might take seconds of doing nothing!
+> 
+> Realistically it seems unlikely that the clock will be even as slow as
+> double digit kHz though, and if we do I'd not be surprised to see other
+> problems kicking in.  It's definitely good to handle such things if we
+> can but so long as everything is OK for realistic use cases I'm not sure
+> it should be a blocker.
 
-I think the ingenic-drm driver is fine, even though the old 3.8 kernel=20
-worked differently, the IP is backwards-compatible so it should work no=20
-problem. I think the problem is somewhere in the Synopsis HDMI code or=20
-the glue code. Because the LCDC does seem to send data, which is not=20
-encoded properly by the HDMI chip.
+Perhaps some kind of warning? Funny that using spi_delay_exec() will issue such
+a warning as a side effect of its implementation.
 
--Paul
-
-
-Le jeu. 21 mai 2020 =E0 0:14, Paul Boddie <paul@boddie.org.uk> a =E9crit :
-> On Tuesday 19. May 2020 22.11.10 Paul Cercueil wrote:
->>=20
->>  I took the liberty to clean your patch so that it doesn't create a
->>  struct ingenic_tcu per CPU timer.
->>=20
->>  Tested, and fully working on the JZ4770 with CONFIG_SMP disabled,=20
->> and
->>  also with CONFIG_SMP enabled (even though JZ4770 has only one CPU)=20
->> with
->>  a fixed smp.c and USB disabled (otherwise it crashes at boot).
->=20
-> Thanks for looking at this and also your continuing work with the DRM=20
-> driver.
-> I'll try and look a bit more at the DRM driver for the JZ4780 and see=20
-> what I
-> am doing wrong with regard to JZ4780-specific configuration. In=20
-> principle,
-> there should not be any, but I don't really have the full picture=20
-> (literally
-> and also in terms of documentation or understanding).
->=20
-> One thing that seems to be done with the Imagination/Ingenic drivers=20
-> is dual
-> DMA channel initialisation. Usually, this seems to be necessary only=20
-> for dual-
-> panel configurations, and I wonder whether there is some kind of=20
-> requirement
-> for the same arrangement when using the HDMI output.
->=20
-> Another thing that is done involves setting a foreground, which might=20
-> be
-> relevant to your more recent contributions adding IPU support. Again,=20
-> I don't
-> really understand why this seems necessary, but the documentation=20
-> hardly
-> provides any details that might explain it.
->=20
-> Paul
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
