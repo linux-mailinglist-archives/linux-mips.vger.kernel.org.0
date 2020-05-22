@@ -2,151 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B62B1DE16E
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 09:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3260E1DE266
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 10:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728827AbgEVH6w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 May 2020 03:58:52 -0400
-Received: from mga14.intel.com ([192.55.52.115]:23088 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728371AbgEVH6w (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 22 May 2020 03:58:52 -0400
-IronPort-SDR: SSDT+KjdkyIGtrErUb5qURx8xKoNW2Eyp0nYskeHTKGn8Ot7YtU/3IJ62fDfGz4KBWUfvYerrZ
- sPKpR87SZMlA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 00:58:49 -0700
-IronPort-SDR: Ba1UgqVNnQbJe3HN+feIC07RravYuDuHBXYUUY3XENWN37smKU3h68nyJO90j0LbE41qZLmeIu
- exY7CO5KlG5w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,420,1583222400"; 
-   d="scan'208";a="467102644"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.107])
-  by fmsmga005.fm.intel.com with ESMTP; 22 May 2020 00:58:44 -0700
-Date:   Fri, 22 May 2020 15:58:44 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Vinod Koul <vkoul@kernel.org>, Alan Cox <alan@linux.intel.com>,
-        Linus Walleij <linus.walleij@stericsson.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S1729090AbgEVItS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 May 2020 04:49:18 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:47412 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728152AbgEVItS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 22 May 2020 04:49:18 -0400
+Received: from [10.20.42.25] (unknown [10.20.42.25])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf2nskcdex8U3AA--.97S3;
+        Fri, 22 May 2020 16:48:45 +0800 (CST)
+Subject: Re: [PATCH v5 2/4] mm/memory.c: Update local TLB if PTE entry exists
+To:     Andrew Morton <akpm@linux-foundation.org>
+References: <1590031837-9582-1-git-send-email-maobibo@loongson.cn>
+ <1590031837-9582-2-git-send-email-maobibo@loongson.cn>
+ <20200521122211.7450025a41865a67df6a7303@linux-foundation.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
         Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Clement Leger <cleger@kalray.eu>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/16] spi: dw: Add Tx/Rx finish wait methods to the
- MID DMA
-Message-ID: <20200522075844.GC12568@shbuild999.sh.intel.com>
-References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
- <20200521012206.14472-2-Sergey.Semin@baikalelectronics.ru>
- <20200521030924.GA12568@shbuild999.sh.intel.com>
- <20200521114736.b2azyfvym372vkdl@mobilestation>
- <20200521145520.GB12568@shbuild999.sh.intel.com>
- <20200521153317.7wjp2r47q75fm6ge@mobilestation>
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>
+From:   maobibo <maobibo@loongson.cn>
+Message-ID: <a04b7a67-6e1c-9568-a23e-f033191b5d32@loongson.cn>
+Date:   Fri, 22 May 2020 16:48:44 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200521153317.7wjp2r47q75fm6ge@mobilestation>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20200521122211.7450025a41865a67df6a7303@linux-foundation.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxf2nskcdex8U3AA--.97S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxWryfKr1rGrWUGF4kCF13twb_yoW5GrWDpF
+        W2ka1fJF4vgryxCF4xXw1jvF4fZ34rKF4DJryFkr90k390gw4SyryUJ3y8Zry5Cwn3ta12
+        vF4jgFZ5WayDZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvKb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
+        Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x07b5sjbUUUUU=
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Serge,
 
-On Thu, May 21, 2020 at 06:33:17PM +0300, Serge Semin wrote:
-> > > > > +	dw_spi_dma_wait_rx_done(dws);
-> > > > 
-> > > > I can understand the problem about TX, but I don't see how RX
-> > > > will get hurt, can you elaborate more? thanks
-> > > > 
-> > > > - Feng
-> > > 
-> > > Your question is correct. You are right with your hypothesis. Ideally upon the
-> > > dw_spi_dma_rx_done() execution Rx FIFO must be already empty. That's why the
-> > > commit log signifies the error being mostly related with Tx FIFO. But
-> > > practically there are many reasons why Rx FIFO might be left with data:
-> > > DMA engine failures, incorrect DMA configuration (if DW SPI or DW DMA driver
-> > > messed something up), controller hanging up, and so on. It's better to catch
-> > > an error at this stage while propagating it up to the SPI device drivers.
-> > > Especially seeing the wait-check implementation doesn't gives us much of the
-> > > execution overhead in normal conditions. So by calling dw_spi_dma_wait_rx_done()
-> > > we make sure that all the data has been fetched and we may freely get the
-> > > buffers back to the client driver.
-> > 
-> > I see your point about checking RX. But I still don't think checking
-> > RX FIFO level is the right way to detect error. Some data left in
-> > RX FIFO doesn't always mean a error, say for some case if there is
-> > 20 words in RX FIFO, and the driver starts a DMA request for 16
-> > words, then after a sucessful DMA transaction, there are 4 words
-> > left without any error.
+
+On 05/22/2020 03:22 AM, Andrew Morton wrote:
+> On Thu, 21 May 2020 11:30:35 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
 > 
-> Neither Tx nor Rx FIFO should be left with any data after transaction is
-> finished. If they are then something has been wrong.
+>> If two threads concurrently fault at the same address, the thread that
+>> won the race updates the PTE and its local TLB. For now, the other
+>> thread gives up, simply does nothing, and continues.
+>>
+>> It could happen that this second thread triggers another fault, whereby
+>> it only updates its local TLB while handling the fault. Instead of
+>> triggering another fault, let's directly update the local TLB of the
+>> second thread.
+>>
+>> It is only useful to architectures where software can update TLB, it may
+>> bring out some negative effect if update_mmu_cache is used for other
+>> purpose also. It seldom happens where multiple threads access the same
+>> page at the same time, so the negative effect is limited on other arches.
+>>
+>> With specjvm2008 workload, smp-race pgfault counts is about 3% to 4%
+>> of the total pgfault counts by watching /proc/vmstats information
+>>
 > 
-> See, every SPI transfer starts with FIFO clearance since we disable/enable the
-> SPI controller by means of the SSIENR (spi_enable_chip(dws, 0) and
-> spi_enable_chip(dws, 1) called in the dw_spi_transfer_one() callback). Here is the
-> SSIENR register description: "It enables and disables all SPI Controller operations.
-> When disabled, all serial transfers are halted immediately. Transmit and receive
-> FIFO buffers are cleared when the device is disabled. It is impossible to program
-> some of the SPI Controller control registers when enabled"
+> I'm sorry to keep thrashing this for so long, but I'd really prefer not
+> to add any overhead to architectures which don't need it.  However,
+> we're getting somewhere!
 > 
-> No mater whether we start DMA request or perform the normal IRQ-based PIO, we
-> request as much data as we need and neither Tx nor Rx FIFO are supposed to
-> be left with any data after the request is finished. If data is left, then
-> either we didn't push all of the necessary data to the SPI bus, or we didn't
-> pull all the data from the FIFO, and this could have happened only due to some
-> component mulfunction (drivers, DMA engine, SPI device). In any case the SPI
-> device driver should be notified about the problem.
-
-Data left in TX FIFO and Data left in RX FIFO are 2 different stories. The
-former in dma case means the dma hw/driver has done its job, and spi hw/driver
-hasn't done its job of pushing out the data to spi slave devices, while the
-latter means the spi hw/driver has done its job, while the dma hw/driver hasn't. 
-
-And the code is called inside the dma rx channel callback, which means the
-dma driver is saying "hey, I've done my job", but apparently it hasn't if
-there is data left.
-
-As for the wait time
-
-+	nents = dw_readl(dws, DW_SPI_RXFLR);
-+	ns = (NSEC_PER_SEC / spi_get_clk(dws)) * nents * dws->n_bytes *
-+	     BITS_PER_BYTE;
-
-Using this formula for checking TX makes sense, but it doesn't for RX.
-Because the time of pushing data in TX FIFO to spi device depends on
-the clk, but the time of transferring RX FIFO to memory is up to
-the DMA controller and peripheral bus. 
-
-Also for the
-
-+	while (dw_spi_dma_rx_busy(dws) && retry--)
-+		ndelay(ns);
-+
-
-the rx busy bit is cleared after this rx/tx checking, and it should
-be always true at this point. Am I mis-reading the code?
-
-Thanks,
-Feng
-
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -2436,10 +2436,9 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
+>>  		if (!likely(pte_same(*vmf->pte, vmf->orig_pte))) {
+>>  			/*
+>>  			 * Other thread has already handled the fault
+>> -			 * and we don't need to do anything. If it's
+>> -			 * not the case, the fault will be triggered
+>> -			 * again on the same address.
+>> +			 * and update local tlb only
+>>  			 */
+>> +			update_mmu_cache(vma, addr, vmf->pte);
 > 
-> -Sergey
+> Now, all the patch does is to add new calls to update_mmu_cache().
 > 
+> So can we replace all these with a call to a new
+> update_mmu_cache_sw_tlb() (or whatever) which is a no-op on
+> architectures which don't need the additional call?
+> 
+> Also, I wonder about the long-term maintainability.  People who
+> regularly work on this code won't be thinking of this MIPS peculiarity
+> and it's likely that any new calls to update_mmu_cache_sw_tlb() won't
+> be added where they should have been.  Hopefully copy-and-paste from
+> the existing code will serve us well.  Please do ensure that the
+> update_mmu_cache_sw_tlb() implementation is carefully commented so
+> that people can understand where they should (and shouldn't) include
+> this call.
+Well, I will do that. MIPS is actually somewhat different with generic
+architectures, and old MIPS system does not support hardware page walk,
+it requires software to update TLB entry.
+
+regards
+bibo, mao
+
+ 
+
