@@ -2,129 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3260E1DE266
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 10:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5EA1DE507
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 13:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729090AbgEVItS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 May 2020 04:49:18 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:47412 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728152AbgEVItS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 22 May 2020 04:49:18 -0400
-Received: from [10.20.42.25] (unknown [10.20.42.25])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf2nskcdex8U3AA--.97S3;
-        Fri, 22 May 2020 16:48:45 +0800 (CST)
-Subject: Re: [PATCH v5 2/4] mm/memory.c: Update local TLB if PTE entry exists
-To:     Andrew Morton <akpm@linux-foundation.org>
-References: <1590031837-9582-1-git-send-email-maobibo@loongson.cn>
- <1590031837-9582-2-git-send-email-maobibo@loongson.cn>
- <20200521122211.7450025a41865a67df6a7303@linux-foundation.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
+        id S1729366AbgEVLGX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 May 2020 07:06:23 -0400
+Received: from mga14.intel.com ([192.55.52.115]:9263 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728371AbgEVLGX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 22 May 2020 07:06:23 -0400
+IronPort-SDR: XRs3O2dpSFvkbXL0Pd3as093n7g/NEeNuiImE1ocoCbeHtvh2kEHhFUmssjjdMejRIdb420BbF
+ wpHHuVsfih9A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 04:06:21 -0700
+IronPort-SDR: 2aBPZ7H7oP4wUrAMiWnRuOvpa8vghN3jUDyQ6zUOMncD+XFaAfDtEf6mmt9TEPtwcIymDAPGEZ
+ VEfD0y5fpMbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,421,1583222400"; 
+   d="scan'208";a="283367982"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002.jf.intel.com with ESMTP; 22 May 2020 04:06:16 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jc5VL-008DYB-IO; Fri, 22 May 2020 14:06:19 +0300
+Date:   Fri, 22 May 2020 14:06:19 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
-        Dmitry Korotin <dkorotin@wavecomp.com>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>
-From:   maobibo <maobibo@loongson.cn>
-Message-ID: <a04b7a67-6e1c-9568-a23e-f033191b5d32@loongson.cn>
-Date:   Fri, 22 May 2020 16:48:44 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 06/16] spi: dw: Parameterize the DMA Rx/Tx burst length
+Message-ID: <20200522110619.GU1634618@smile.fi.intel.com>
+References: <20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru>
+ <20200522000806.7381-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <20200521122211.7450025a41865a67df6a7303@linux-foundation.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxf2nskcdex8U3AA--.97S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWryfKr1rGrWUGF4kCF13twb_yoW5GrWDpF
-        W2ka1fJF4vgryxCF4xXw1jvF4fZ34rKF4DJryFkr90k390gw4SyryUJ3y8Zry5Cwn3ta12
-        vF4jgFZ5WayDZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvKb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
-        Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x07b5sjbUUUUU=
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200522000806.7381-7-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Fri, May 22, 2020 at 03:07:55AM +0300, Serge Semin wrote:
+> It isn't good to have numeric literals in the code especially if there
+> are multiple of them and they are related. Let's replace the Tx and Rx
+> burst level literals with the corresponding constants.
 
 
-On 05/22/2020 03:22 AM, Andrew Morton wrote:
-> On Thu, 21 May 2020 11:30:35 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
-> 
->> If two threads concurrently fault at the same address, the thread that
->> won the race updates the PTE and its local TLB. For now, the other
->> thread gives up, simply does nothing, and continues.
->>
->> It could happen that this second thread triggers another fault, whereby
->> it only updates its local TLB while handling the fault. Instead of
->> triggering another fault, let's directly update the local TLB of the
->> second thread.
->>
->> It is only useful to architectures where software can update TLB, it may
->> bring out some negative effect if update_mmu_cache is used for other
->> purpose also. It seldom happens where multiple threads access the same
->> page at the same time, so the negative effect is limited on other arches.
->>
->> With specjvm2008 workload, smp-race pgfault counts is about 3% to 4%
->> of the total pgfault counts by watching /proc/vmstats information
->>
-> 
-> I'm sorry to keep thrashing this for so long, but I'd really prefer not
-> to add any overhead to architectures which don't need it.  However,
-> we're getting somewhere!
-> 
->> --- a/mm/memory.c
->> +++ b/mm/memory.c
->> @@ -2436,10 +2436,9 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
->>  		if (!likely(pte_same(*vmf->pte, vmf->orig_pte))) {
->>  			/*
->>  			 * Other thread has already handled the fault
->> -			 * and we don't need to do anything. If it's
->> -			 * not the case, the fault will be triggered
->> -			 * again on the same address.
->> +			 * and update local tlb only
->>  			 */
->> +			update_mmu_cache(vma, addr, vmf->pte);
-> 
-> Now, all the patch does is to add new calls to update_mmu_cache().
-> 
-> So can we replace all these with a call to a new
-> update_mmu_cache_sw_tlb() (or whatever) which is a no-op on
-> architectures which don't need the additional call?
-> 
-> Also, I wonder about the long-term maintainability.  People who
-> regularly work on this code won't be thinking of this MIPS peculiarity
-> and it's likely that any new calls to update_mmu_cache_sw_tlb() won't
-> be added where they should have been.  Hopefully copy-and-paste from
-> the existing code will serve us well.  Please do ensure that the
-> update_mmu_cache_sw_tlb() implementation is carefully commented so
-> that people can understand where they should (and shouldn't) include
-> this call.
-Well, I will do that. MIPS is actually somewhat different with generic
-architectures, and old MIPS system does not support hardware page walk,
-it requires software to update TLB entry.
+You missed my tag.
 
-regards
-bibo, mao
+> Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> 
+> ---
+> 
+> Changelog v3:
+> - Discard the dws->fifo_len utilization in the Tx FIFO DMA threshold
+>   setting.
+> ---
+>  drivers/spi/spi-dw-mid.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
+> index c39bc8758339..1598c36c905f 100644
+> --- a/drivers/spi/spi-dw-mid.c
+> +++ b/drivers/spi/spi-dw-mid.c
+> @@ -20,7 +20,9 @@
+>  
+>  #define WAIT_RETRIES	5
+>  #define RX_BUSY		0
+> +#define RX_BURST_LEVEL	16
+>  #define TX_BUSY		1
+> +#define TX_BURST_LEVEL	16
+>  
+>  static bool mid_spi_dma_chan_filter(struct dma_chan *chan, void *param)
+>  {
+> @@ -198,7 +200,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_tx(struct dw_spi *dws,
+>  	memset(&txconf, 0, sizeof(txconf));
+>  	txconf.direction = DMA_MEM_TO_DEV;
+>  	txconf.dst_addr = dws->dma_addr;
+> -	txconf.dst_maxburst = 16;
+> +	txconf.dst_maxburst = TX_BURST_LEVEL;
+>  	txconf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+>  	txconf.dst_addr_width = convert_dma_width(dws->n_bytes);
+>  	txconf.device_fc = false;
+> @@ -273,7 +275,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
+>  	memset(&rxconf, 0, sizeof(rxconf));
+>  	rxconf.direction = DMA_DEV_TO_MEM;
+>  	rxconf.src_addr = dws->dma_addr;
+> -	rxconf.src_maxburst = 16;
+> +	rxconf.src_maxburst = RX_BURST_LEVEL;
+>  	rxconf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+>  	rxconf.src_addr_width = convert_dma_width(dws->n_bytes);
+>  	rxconf.device_fc = false;
+> @@ -298,8 +300,8 @@ static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
+>  {
+>  	u16 imr = 0, dma_ctrl = 0;
+>  
+> -	dw_writel(dws, DW_SPI_DMARDLR, 0xf);
+> -	dw_writel(dws, DW_SPI_DMATDLR, 0x10);
+> +	dw_writel(dws, DW_SPI_DMARDLR, RX_BURST_LEVEL - 1);
+> +	dw_writel(dws, DW_SPI_DMATDLR, TX_BURST_LEVEL);
+>  
+>  	if (xfer->tx_buf) {
+>  		dma_ctrl |= SPI_DMA_TDMAE;
+> -- 
+> 2.25.1
+> 
 
- 
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
