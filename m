@@ -2,63 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 458671DEFD5
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 21:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7681DF1EC
+	for <lists+linux-mips@lfdr.de>; Sat, 23 May 2020 00:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730795AbgEVTQb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 May 2020 15:16:31 -0400
-Received: from mail6.webfaction.com ([31.170.123.134]:38080 "EHLO
-        smtp.webfaction.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730689AbgEVTQb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 May 2020 15:16:31 -0400
-X-Greylist: delayed 159412 seconds by postgrey-1.27 at vger.kernel.org; Fri, 22 May 2020 15:16:31 EDT
-Received: from jeremy.localnet (host-37-191-188-128.lynet.no [37.191.188.128])
-        by smtp.webfaction.com (Postfix) with ESMTPSA id 26962600A884E;
-        Fri, 22 May 2020 19:16:44 +0000 (UTC)
-From:   Paul Boddie <paul@boddie.org.uk>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
-        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        linux-mips <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] clocksource: Ingenic: Add high resolution timer support for SMP.
-Date:   Fri, 22 May 2020 21:16:10 +0200
-Message-ID: <1902082.ZKqtjM8ATQ@jeremy>
-User-Agent: KMail/4.14.1 (Linux/3.16.0-10-586; KDE/4.14.2; i686; ; )
-In-Reply-To: <RVFQAQ.7WL51YCH3VE1@crapouillou.net>
-References: <1589898923-60048-5-git-send-email-zhouyanjie@wanyeetech.com> <3077290.R152QTsmsV@jeremy> <RVFQAQ.7WL51YCH3VE1@crapouillou.net>
+        id S1731209AbgEVWh1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 May 2020 18:37:27 -0400
+Received: from elvis.franken.de ([193.175.24.41]:34928 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731029AbgEVWh1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 22 May 2020 18:37:27 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jcGI0-00019h-00; Sat, 23 May 2020 00:37:16 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9BF9CC0183; Sat, 23 May 2020 00:36:56 +0200 (CEST)
+Date:   Sat, 23 May 2020 00:36:56 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Huacai Chen <chenhc@lemote.com>,
+        Paul Burton <paulburton@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v10 5/5] MIPS: Loongson64: Switch to generic PCI driver
+Message-ID: <20200522223656.GA22313@alpha.franken.de>
+References: <20200427060551.1372591-1-jiaxun.yang@flygoat.com>
+ <20200514131650.3587281-1-jiaxun.yang@flygoat.com>
+ <20200514131650.3587281-5-jiaxun.yang@flygoat.com>
+ <20200522142550.GB15261@alpha.franken.de>
+ <20200522152210.GA15567@e121166-lin.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200522152210.GA15567@e121166-lin.cambridge.arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Friday 22. May 2020 14.26.15 Paul Cercueil wrote:
-> Hi Paul,
+On Fri, May 22, 2020 at 04:22:11PM +0100, Lorenzo Pieralisi wrote:
+> On Fri, May 22, 2020 at 04:25:50PM +0200, Thomas Bogendoerfer wrote:
+> > On Thu, May 14, 2020 at 09:16:41PM +0800, Jiaxun Yang wrote:
+> > > We can now enable generic PCI driver in Kconfig, and remove legacy
+> > > PCI driver code.
+> > > 
+> > > Radeon vbios quirk is moved to the platform folder to fit the
+> > > new structure.
+> > > 
+> > > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > > --
+> > > v9: Fix licenses tag
+> > > ---
+> > >  arch/mips/Kconfig                  |   1 +
+> > >  arch/mips/loongson64/Makefile      |   2 +-
+> > >  arch/mips/loongson64/vbios_quirk.c |  29 ++++++++
+> > >  arch/mips/pci/Makefile             |   1 -
+> > >  arch/mips/pci/fixup-loongson3.c    |  71 ------------------
+> > >  arch/mips/pci/ops-loongson3.c      | 116 -----------------------------
+> > >  6 files changed, 31 insertions(+), 189 deletions(-)
+> > >  create mode 100644 arch/mips/loongson64/vbios_quirk.c
+> > >  delete mode 100644 arch/mips/pci/fixup-loongson3.c
+> > >  delete mode 100644 arch/mips/pci/ops-loongson3.c
+> > 
+> > Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > 
-> I think the ingenic-drm driver is fine, even though the old 3.8 kernel
-> worked differently, the IP is backwards-compatible so it should work no
-> problem. I think the problem is somewhere in the Synopsis HDMI code or
-> the glue code. Because the LCDC does seem to send data, which is not
-> encoded properly by the HDMI chip.
+> This patch (so the series) does not apply to v5.7-rc1 which is our
+> baseline. I reiterate the point, isn't it better to take the whole
+> series through the MIPS tree ?
 
-There was one interesting insight related to vertical blank interrupts, where 
-it would appear that the end-of-frame condition does not occur, with this 
-failure then obstructing driver initialisation. I aim to look into that 
-further.
+sounds better then
 
-Indeed, to approach this from another angle, I started to experiment with the 
-HDMI peripheral in the L4 Runtime Environment, which has been helpful when 
-investigating things like the RTC chip on the CI20 and its interaction with 
-the power management system. I have previously demonstrated the LCD controller 
-initialisation in this environment for other Ingenic devices, so I should have 
-a chance of building on that success without too many added complications.
+> Failing that, the series has to
+> be rebased (or split differently so that it can be taken through
+> different trees), just let me know.
 
-So far, I have managed to reproduce EDID retrieval using the HDMI peripheral's 
-own I2C support, and I plan to reproduce the HDMI peripheral initialisation 
-itself. However, it is perhaps more interesting to get the LCD controller 
-working first and potentially delivering end-of-frame interrupts: this might 
-help me understand whether this problem is a serious obstacle or not.
+so let's take via mips-next. So can I add your Acked-by to the
+first three patches ?
 
-Paul
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
