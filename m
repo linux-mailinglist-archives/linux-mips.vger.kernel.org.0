@@ -2,112 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5151DEBB3
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 17:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1E51DEBD0
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 17:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730312AbgEVPWp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 May 2020 11:22:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44148 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729931AbgEVPWo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 22 May 2020 11:22:44 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5A6712054F;
-        Fri, 22 May 2020 15:22:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590160963;
-        bh=MMSmt+qYR9drLnxHce8Ry8LIx3FSk/xxE5Ta8UzagXs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c8g53iNeyEdE0ohX81JBwKeBzrW0/TjYPXRhZSTk7ZHd7SkhtyxYzOBTXh69PaKF+
-         QCt1TeKaDnRF/Lm5Og6NPRiq0Rdk5Wb7q2QSbzUcKcX2NK7lYEL/pccNoxvrzOoX45
-         /P+hqn92r16BozLUp1h9Egi63kCkKFXfr2lPPFYw=
-Date:   Fri, 22 May 2020 16:22:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Linus Walleij <linus.walleij@stericsson.com>,
-        Vinod Koul <vkoul@kernel.org>, Feng Tang <feng.tang@intel.com>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Alan Cox <alan@linux.intel.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        id S1730471AbgEVP2r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 May 2020 11:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730016AbgEVP2q (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 May 2020 11:28:46 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955E1C08C5C1
+        for <linux-mips@vger.kernel.org>; Fri, 22 May 2020 08:28:46 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id e16so10541572wra.7
+        for <linux-mips@vger.kernel.org>; Fri, 22 May 2020 08:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=RE02VevKPga5GawhGamW95ZE1kXVYxGQzWhCIbMIzNY=;
+        b=MMWImdE/2ZE9LDYQnaGCIARyM962IGLuiw6eGA/jljxOaR7yh5pCQt+3wfvYRSnfOp
+         k5JKNPBeS69Vv4hi1byp7pnaA42f2saUD3rcNGfywZnGGpjwbapkrf/6bKIN53qVqNEO
+         rhdXGWgY4e93wR/0RmGUPVlIalsuTe6sMQE1MZS0cu5t5Qc8ZNM/VRySlOhxfKB+2Gkb
+         wJ4Nf4RndEct8/FO2q4BKzMAbtrRS1/9TtSOs0WiR0qB5mcwBixid/P0ECqitXmzRmOP
+         tkkkcU98mmsZgoNL7ljU3e7uujxzyRprCWUfqgC1FsPs9fl0G122XUrDsBGIZdWSkmqd
+         nT/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RE02VevKPga5GawhGamW95ZE1kXVYxGQzWhCIbMIzNY=;
+        b=NEW/TznF62ul6R2DmvnWBpokcM+wuyHjKmg8zzYd53BeflVhikofIKvAqERYhaYA+H
+         vadXZNVpSqtUz17Ye8FDT0XczXNyu9FVpQRxTzK+eMq/W31cmwA9jHpMez9dXspFcaeS
+         iNlWBAEELkodSTwPRPZhWbZhQ9FB1B2NBpdXHnlM0Yf7IWa5uADYaoX3r9ibCaq/ybgP
+         ItNNvUOrMqQGEkZmpkixI5tvPY2dnKa7H37gY0CTHpeKLKoWf4ZXYgNMNjVK8/7hyzOo
+         dSUOLBWEq/NRwldDppQiy55J/X6u8XGmUfSlWWsH6ixVfkQ/z/ZqU8cyKEVL819Dnt1C
+         VWnQ==
+X-Gm-Message-State: AOAM531IA0lBICDPSqPdZ87YiRzGvB+0hiZ6Wr5px/I7l88no5GurGLT
+        p0tKamh3V3jOj1HDnkgsvn9+CA==
+X-Google-Smtp-Source: ABdhPJxdCf7sw2JHdZ8XQZwe1iL/1ihyu6MfIaO/x8mio0kAv1N7GEStdaiFyyQDolFStnz3Rqs/ew==
+X-Received: by 2002:adf:a3c9:: with SMTP id m9mr1159741wrb.405.1590161325014;
+        Fri, 22 May 2020 08:28:45 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:a82f:eaec:3c49:875a? ([2a01:e34:ed2f:f020:a82f:eaec:3c49:875a])
+        by smtp.googlemail.com with ESMTPSA id s19sm6092584wmj.21.2020.05.22.08.28.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 May 2020 08:28:44 -0700 (PDT)
+Subject: Re: [PATCH v5 0/8] clocksource: Fix MIPS GIC and DW APB Timer for
+ Baikal-T1 SoC support
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 01/16] spi: dw: Add Tx/Rx finish wait methods to the
- MID DMA
-Message-ID: <20200522152241.GK5801@sirena.org.uk>
-References: <20200522115235.rt3ay7lveimrgooa@mobilestation>
- <20200522121221.GA1634618@smile.fi.intel.com>
- <20200522121820.GG5801@sirena.org.uk>
- <20200522123427.GD1634618@smile.fi.intel.com>
- <20200522124406.co7gmteojfsooerc@mobilestation>
- <20200522131013.GH5801@sirena.org.uk>
- <20200522132742.taf2ixfjpyd5u3dt@mobilestation>
- <20200522140025.bmd6bhpjjk5msvsm@mobilestation>
- <20200522143639.GG1634618@smile.fi.intel.com>
- <20200522144542.brhibh453wid2d6v@mobilestation>
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200521204818.25436-1-Sergey.Semin@baikalelectronics.ru>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <211ab91d-6085-3073-1cbc-2300abade1b7@linaro.org>
+Date:   Fri, 22 May 2020 17:28:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BFVE2HhgxTpCzM8t"
-Content-Disposition: inline
-In-Reply-To: <20200522144542.brhibh453wid2d6v@mobilestation>
-X-Cookie: C for yourself.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200521204818.25436-1-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 21/05/2020 22:48, Serge Semin wrote:
+> As for all Baikal-T1 SoC related patchsets, which need this, we replaced
+> the DW APB Timer legacy plain text-based dt-binding file with DT schema.
+> Similarly the MIPS GIC bindings file is also converted to DT schema seeing
+> it also defines the MIPS GIC Timer binding.
+> 
+> Aside from MIPS-specific r4k timer Baikal-T1 chip also provides a
+> functionality of two another timers: embedded into the MIPS GIC timer and
+> three external DW timers available over APB bus. But we can't use them
+> before the corresponding drivers are properly fixed. First of all DW APB
+> Timer shouldn't be bound to a single CPU, since as being accessible over
+> APB they are external with respect to all possible CPUs. Secondly there
+> might be more than just two DW APB Timers in the system (Baikal-T1 has
+> three of them), so permit the driver to use one of them as a clocksource
+> and the rest - for clockevents. Thirdly it's possible to use MIPS GIC
+> timer as a clocksource so register it in the corresponding subsystem
+> (the patch has been found in the Paul Burton MIPS repo so I left the
+> original Signed-off-by attribute). Finally in the same way as r4k timer
+> the MIPS GIC timer should be used with care when CPUFREQ config is enabled
+> since in case of CM2 the timer counting depends on the CPU reference clock
+> frequency while the clocksource subsystem currently doesn't support the
+> timers with non-stable clock.
+> 
+> This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
+> base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+> tag: v5.7-rc4
 
---BFVE2HhgxTpCzM8t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied patch 1,2,4,5,6,7,8
 
-On Fri, May 22, 2020 at 05:45:42PM +0300, Serge Semin wrote:
-> On Fri, May 22, 2020 at 05:36:39PM +0300, Andy Shevchenko wrote:
+Thanks!
 
-> > My point is: let's warn and see if anybody comes with a bug report. We will
-> > solve an issue when it appears.
+  -- Daniel
 
-> In my environment the stack trace happened (strictly speaking it has been a
-> BUG() invoked due to the sleep_range() called within the tasklet) when SPI bus
-> had been enabled to work with !8MHz! clock. It's quite normal bus speed.
-> So we'll get the bug report pretty soon.)
 
-Right, that definitely needs to be fixed then - 8MHz is indeed a totally
-normal clock rate for SPI so people will hit it.  I guess if there's a
-noticable performance hit to defer to thread then we could implement
-both and look at how long the delay is going to be to decide which to
-use, that's annoyingly complicated though so if the overhead is small
-enough we could just not bother.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
---BFVE2HhgxTpCzM8t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7H7kAACgkQJNaLcl1U
-h9B6Kgf/QkMYmBdVYxKlZ5TKL+hL0E4I7igNofk1QV1k9b5qAbVEpBw0bQOyDb0c
-XGkJFC+Ow7XjhFaGyTc7Ay4BXbUQdO3+Oi+OG11yN6x0YdRBcds5qJPEj2uuWQZV
-1+qhlWYx8xJHNzuMo3MYi3ylIpi7jFe8Wrk2p9EBk5RvNP0LUv1nfRaPKiEToZm0
-w6R+gPOW8mFWniwmXgd0fUiDWsaStPuYl8Nf2h1yqgrwUW/1/xH9Wey+1ImpOxqU
-Jxy4BMrcYvZpxRvOlDt3NmgZhavC7/COFrnnlEOjAaN4B0iFhHPCElbQhj8AkQ/M
-GmH3wFqGIB8Lydgs9cBhaouUI0sVrA==
-=Bjdn
------END PGP SIGNATURE-----
-
---BFVE2HhgxTpCzM8t--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
