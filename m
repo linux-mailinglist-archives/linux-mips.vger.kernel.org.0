@@ -2,103 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7971DDF67
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 07:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFBE1DE0C7
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2020 09:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726421AbgEVFeO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 May 2020 01:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725894AbgEVFeO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 May 2020 01:34:14 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76736C061A0E;
-        Thu, 21 May 2020 22:34:13 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id n11so9594080ilj.4;
-        Thu, 21 May 2020 22:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QVPd+V02lgzjKws7NT4xHmcTymSXtHJ7wzEyWcOO8YE=;
-        b=PKaMBQNM9SpJ/HstjpcQRIL/YaYHjj6X5IeZtF4DdYph5WZPAP0CC0oXUNUGQr+svX
-         JSGJS/UWUQgjQ4Khun2Nc5EaDyHTxNIcfc6+dMAlrZKXd5reVTe8AtQ9QDJeEYoeLP/N
-         roI3U+RS7SsBXSm0gJI84zx0nuze4hMfl3mvAhXxLcjBZSroZS1hL4vYEovNhFyqvfhl
-         Wa8v3gzl9FW4FUmGov46/cVZR1qo+qgI56Liz6rhpjWeEiGwnisL+fu862ThW6Y1EVWG
-         27/vHr7ttHTDCiaBq+z1j9+zJwjaiwzb6cYUZaoNdo2XJ40j/VxGYSauXr+7j3JKccbt
-         eSiw==
+        id S1728402AbgEVHYs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 May 2020 03:24:48 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:32110 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728369AbgEVHYr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 May 2020 03:24:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590132285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CiOMvxe2jHNY+2yIWreiVBjH4fPgrug0GPoTBvnau78=;
+        b=RJ1Zh9FEA3ozzMAN8RTUNoOROlLACHBdphsjwj8vS1nb2wBKJowclKORglTHF/6t8smmJm
+        MSVDKsdzsnwXdHWjfqO2dnSbULVZYIv3M5ScW/Izyzjqw5mfLtZydt2+ZIVHNv+Rm2kG3t
+        fZoZhAskDXsqcgJqH2EKifptr5PzYJg=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-503-HY_zvNEFPOGdHWvKPxMHhA-1; Fri, 22 May 2020 03:24:44 -0400
+X-MC-Unique: HY_zvNEFPOGdHWvKPxMHhA-1
+Received: by mail-ej1-f70.google.com with SMTP id bo19so638451ejb.0
+        for <linux-mips@vger.kernel.org>; Fri, 22 May 2020 00:24:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QVPd+V02lgzjKws7NT4xHmcTymSXtHJ7wzEyWcOO8YE=;
-        b=Pym8Wtgm1k/IMPxZmVbZEU5kBPOuEyPEraJA4aRPFw1A1cQsB84CcJYeFk/Rd1ET25
-         Cko4JEYbqk0QQ2i8itKfRBf9dZulBUGt0Jf+TIc8HJ4SfRykhnHQa231Fx4DZ5Bsdw0k
-         xXPWmVWbDIxuVlGJCXe6C8VrnAtxNWIN0j9sbtst0Sxh5oHUZRBp23/o3rc0Du3SKdjA
-         IHn/XO9waOlvrwnpB/hsMEpm0nOKREZ9k9ACAeomvvGZzf+PARE8f06fSuVRzIuy14rK
-         ba8fD1Sa5bWsfjpYxer9bdHgZlxrk5EYZr0zYKv1lO85GcgFCgI7IGEM2FJz78+c+6CW
-         9+ig==
-X-Gm-Message-State: AOAM530Eqo4sSKr6r/Hbib51p1pw9rvBW9nLG0yphVSH//afRDdk7vVC
-        u2Hl9zWefzlbJbad7JIrq2nlA7pJ+yL7escbxEA=
-X-Google-Smtp-Source: ABdhPJwCegLUC/45CNBdiF9mtDb1KtgsONcIHPS4z+kPELIlNxqLzCfHHCDrZD0S1oFsV89R2S/ivLYKoZgpsZqbwfk=
-X-Received: by 2002:a92:980f:: with SMTP id l15mr11614373ili.251.1590125652851;
- Thu, 21 May 2020 22:34:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <1589688372-3098-1-git-send-email-chenhc@lemote.com>
- <1589688372-3098-16-git-send-email-chenhc@lemote.com> <20200517082242.GA3939@alpha.franken.de>
- <CAHiYmc5m+UhWv__F_FKqhiTkJxgqErmFn5K_DAW2y5Pp6_4dyA@mail.gmail.com>
- <CAHiYmc4m7uxYU0coRGJS8ou=KyjC=DYs506NyXyw_-eKmPVJRQ@mail.gmail.com>
- <CAAhV-H4SspEUMLDTSZH3YmNbd+cRx3JK+mtsGo6cJ2NLKHPkKQ@mail.gmail.com>
- <CAHiYmc7ykeeF_w25785yiDjJf3AwOzfJybiS=LxfjYizn_2zEQ@mail.gmail.com> <23cbe8a9-21a9-93a3-79aa-8ab17818a585@redhat.com>
-In-Reply-To: <23cbe8a9-21a9-93a3-79aa-8ab17818a585@redhat.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 22 May 2020 13:34:01 +0800
-Message-ID: <CAAhV-H6aGkxV41ymu+HPxiSBq9uw-QhmaxFxnZYJTfUay946cg@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CiOMvxe2jHNY+2yIWreiVBjH4fPgrug0GPoTBvnau78=;
+        b=lbF+7tCfaEytObpd5xIjPSqWBZPCmcTKpeAdfEpvx3RL4XCtIXXw6ulIOEZqIGRDhO
+         sDbASMpVxb8bqTnWUPOvIV2A4CDHvI0blEHH7JqtLXPedG89meBCGkbHE8Zwh9ANTccg
+         B9KH0XkNJfMAcIua7OnasOK8a4D6tDZ/GYTPzV+1S3hvk3x1l6FafLzAUtiZJLwl9Hby
+         nJJrI0FK2yyQchStkCAxe66aToj9Dh/cTyITUKMBaWcZF2P1yv4Z827WKsV3iuAQBNx1
+         vBRtxPD3pit8ySQHtVgr5QMxCfca9wdRGTLo+XQ5NaFx9UXi6RPiBrW+sEcjnnWvsL6j
+         Q/gQ==
+X-Gm-Message-State: AOAM531/yr++BGJrHwbsbLas3w/8nSdj5d8/KTw4uY28Uv2Cgq5/LqvH
+        BQbIsVRipq3c3SngApzLpnoWGcxOrRacl44/K9nVEGS4OCWGnv1wrHSOzoeT1dXnanBVorZKYiF
+        8y0CoKADiDLXdBoVUUMkMgA==
+X-Received: by 2002:a50:98a2:: with SMTP id j31mr1896934edb.79.1590132283078;
+        Fri, 22 May 2020 00:24:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy2/7Lzq8aatk5F6PWyc98BYOgmkn0sJpKH2YvkgO4wyo00NuLPnQnbwFDtC82RVMWBjWDDzw==
+X-Received: by 2002:a50:98a2:: with SMTP id j31mr1896925edb.79.1590132282901;
+        Fri, 22 May 2020 00:24:42 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:71e6:9616:7fe3:7a17? ([2001:b07:6468:f312:71e6:9616:7fe3:7a17])
+        by smtp.gmail.com with ESMTPSA id m11sm7116234ejq.49.2020.05.22.00.24.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 May 2020 00:24:42 -0700 (PDT)
 Subject: Re: [PATCH V6 15/15] MAINTAINERS: Update KVM/MIPS maintainers
-To:     Paolo Bonzini <pbonzini@redhat.com>
+To:     Huacai Chen <chenhuacai@gmail.com>
 Cc:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         kvm <kvm@vger.kernel.org>,
         "open list:MIPS" <linux-mips@vger.kernel.org>,
         Fuxin Zhang <zhangfx@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <1589688372-3098-1-git-send-email-chenhc@lemote.com>
+ <1589688372-3098-16-git-send-email-chenhc@lemote.com>
+ <20200517082242.GA3939@alpha.franken.de>
+ <CAHiYmc5m+UhWv__F_FKqhiTkJxgqErmFn5K_DAW2y5Pp6_4dyA@mail.gmail.com>
+ <CAHiYmc4m7uxYU0coRGJS8ou=KyjC=DYs506NyXyw_-eKmPVJRQ@mail.gmail.com>
+ <CAAhV-H4SspEUMLDTSZH3YmNbd+cRx3JK+mtsGo6cJ2NLKHPkKQ@mail.gmail.com>
+ <CAHiYmc7ykeeF_w25785yiDjJf3AwOzfJybiS=LxfjYizn_2zEQ@mail.gmail.com>
+ <23cbe8a9-21a9-93a3-79aa-8ab17818a585@redhat.com>
+ <CAAhV-H6aGkxV41ymu+HPxiSBq9uw-QhmaxFxnZYJTfUay946cg@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <3269366b-7239-bb06-0bc6-cb661b9e5206@redhat.com>
+Date:   Fri, 22 May 2020 09:24:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAAhV-H6aGkxV41ymu+HPxiSBq9uw-QhmaxFxnZYJTfUay946cg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Paolo,
+On 22/05/20 07:34, Huacai Chen wrote:
+>> I am going to queue them for 5.8.
+> Thank you for your help. But this series depends on an early patch
+> from Jiaxun Yang ("MIPS: Loongson64: Probe CPU features via CPUCFG")
+> which seems only in MIPS tree now. So, maybe this series is better be
+> queued in Thomas's tree?
+> 
 
-On Thu, May 21, 2020 at 10:05 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 21/05/20 13:04, Aleksandar Markovic wrote:
-> > I agree. E-mail address can be easily changed later.
-> >
-> > I think it is reasonable that minor email tech problems should not stop
-> > this series.
-> >
-> > I gather that at least approximate consensus is that v6 is "good to go".
-> >
-> > While I am at this series, I just want to let everybody that there is a
-> > long-standing practice in QEMU for MIPS that we don't upstream
-> > changes that depend on kernel support that is not yet upstreamed
-> > in kernel - and I want to keep that practice in future (and not limited
-> > to KVM, but for all kernel/QEMU interdependant code).
-> >
-> > In other words, corresponding Huacai's changes in QEMU will be
-> > kept on hold as long as this series is still not upstreamed in kernel.
-> > But, that was the original Huacai's plan anyway.
->
-> I am going to queue them for 5.8.
-Thank you for your help. But this series depends on an early patch
-from Jiaxun Yang ("MIPS: Loongson64: Probe CPU features via CPUCFG")
-which seems only in MIPS tree now. So, maybe this series is better be
-queued in Thomas's tree?
+That's not a problem, I can handle it during the merge window.  In the
+future I'd ask for a topic branch or something like that.
 
->
-> Thanks,
->
-> Paolo
->
-Huacai
+Thanks for bringing KVM/MIPS back to life. :)
+
+Paolo
+
