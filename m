@@ -2,197 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B8F1DF5C4
-	for <lists+linux-mips@lfdr.de>; Sat, 23 May 2020 09:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27961DF5C5
+	for <lists+linux-mips@lfdr.de>; Sat, 23 May 2020 09:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387498AbgEWHvL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 May 2020 03:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S2387498AbgEWH4N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 May 2020 03:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387489AbgEWHvL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 May 2020 03:51:11 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F0FC061A0E
-        for <linux-mips@vger.kernel.org>; Sat, 23 May 2020 00:51:11 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id 5so6051279pjd.0
-        for <linux-mips@vger.kernel.org>; Sat, 23 May 2020 00:51:11 -0700 (PDT)
+        with ESMTP id S2387489AbgEWH4M (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 May 2020 03:56:12 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F563C061A0E;
+        Sat, 23 May 2020 00:56:12 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id s69so5990639pjb.4;
+        Sat, 23 May 2020 00:56:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id;
-        bh=6+VGZJG5yF13WyiYdAovFdSjxs9bFfUwJaMhAk4QrAA=;
-        b=nmzjON6Z1k2QEgUjdlS4ITqvGKkMMi/B4vRua0QqujnF26kbTKH5fQk7nxBG1MvSuw
-         qC/hSuoO/hoyBwTEyZmtg/X8KTV5HXZQ3v5jt+pEVGNIwdBafPFNsjpx5RiDy5BRS2N+
-         cMjjV4/ZCIsubGq+S9099c6M86lyEfrNetm5kQ5Jl886224H+hy65lp4bofVFtayVECc
-         hpv+hJkukposQQL3Y7WxQkxQ4u53sK4pYaWon3M3HsEU+IEp4a9vpMNhXhjiPO12bx4l
-         JOcQXtihwUoAscNF6r5yzzh15WxB/xxMdiyN5IA1DRhZiWkl4oz9iK+1+n0LV20FkVcP
-         iTqg==
+        bh=0roxkuOLFvs3XP03ejCnMAL4pHcaibNzZ6qxSZTCf50=;
+        b=Vm6wmNZhRPhoZj/g4YSCwqAu+CkLu9VAT6W42wFWfxUlc08KDk92Olkt07olfA3ebz
+         g15IEJ4ZND1gCfLwQJvPLNRyCtMENFE9dhlenekK2rt46kwFdcCntSUgoENKhvl3xegq
+         2fkL4ZiPfIu1m0G/k4eG8IPHHK4flVq6wGdIOvJxyqJHyE/OCpBQmDyDLm07kWa3Z0Fr
+         7Yyndozzh6qlM2mVSnq+DhMmmoXEucv4T/1adIOq3kwbzFL0vQKmcUs2phPOmY6ofq9+
+         Cfzcg8p46XGsLsnr7jW8KkW+gZrKeTWsuHt59I19LWuoTyGAzayGmhicBRWAcAk76Ufc
+         rWrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=6+VGZJG5yF13WyiYdAovFdSjxs9bFfUwJaMhAk4QrAA=;
-        b=ZzBgzZPUlE0iZ1mDiam3T73jcu1XwrWCsj383cByYhkulnro00Rn+vPLN9U1ihux3/
-         KXX0N1NofdWcXngUXY/S4Ctk8eqdq1oUQI+/ejDnCt7Vw7oMNIZBA7sY210VK6Ce8xWa
-         XiHV3dBrqpSG+wYYEIqXN3qPQArteTNPeozrOtjDGNE6b5q7YWG1sYuUuzyhlJ699TgD
-         5MC2sOe8chprQF19dQuFWnkc+Y/MN1teXX1EcKdjIeiVEYvmIDPbVvZGTY8tiCajgdvG
-         YBB5eoiIr8LNKAE/B8ULOvVbh7YiavpxGt7bQ4nvU39orKMMbiYqSRhDrfTQigC6CwHs
-         ywJA==
-X-Gm-Message-State: AOAM532SPtgO+ftCTUg5T+qWShUmXR/YvVAzHq5mnTViETt5QtEyCZUt
-        Xum/grTxZllJol3psRB/zk6MVG5e8j2Wvw==
-X-Google-Smtp-Source: ABdhPJwzcTCNpM14KfxKiN4+4uLEaqAE1c4YNbKGYabWVL+/khEqLKD7VVReCvSQzfcvV4l1nNBbHw==
-X-Received: by 2002:a17:90a:34cc:: with SMTP id m12mr9107425pjf.123.1590220270644;
-        Sat, 23 May 2020 00:51:10 -0700 (PDT)
+        bh=0roxkuOLFvs3XP03ejCnMAL4pHcaibNzZ6qxSZTCf50=;
+        b=cJ5jmvXkPb/XhKiZFKGBCIymMEW6E6cfHZMseel/OM23zkb9ZXPk7GpPnGNd/wKWmf
+         xhuowmg11sMs6J9R9Eof8B32J0Yh4doVmOlYxnCiiuZ/tMtbJOukCGH4xMf3nq5j6AE8
+         CKkOYsfcTsPbN5r4PLshQF0xojV3b0/hJ3dZP+GiIwWnc9xiTvM9k5yy61CcYJzUCKkP
+         +qfbTRtVy4SMo2bJ0YwP+cB1Mz7j8ADcvwX8LeLrYv2f5Oj0cBoM6QHlj4JPZO4b0TTd
+         eweCehGC9tf0zliSN48ubCIMdU8JCkdXuBU4Y+y+6bKcFOnC5TRGKfqnizEbInjjN9qI
+         RLGA==
+X-Gm-Message-State: AOAM531/UN84l+FLrTBvOpLEcYY+rdwx3F6B0uUXvpuJfNe4ZOmWrnSZ
+        dRE5Z7xNF1K/E8tFhtYfJ+I=
+X-Google-Smtp-Source: ABdhPJwMuVAm7C30eqGSsS7Ge/poym48K0RP9Fev40gIcsMb6RcotlD8ywWnyMIxlfqanCHHGqxTTQ==
+X-Received: by 2002:a17:902:6b07:: with SMTP id o7mr17968039plk.74.1590220571413;
+        Sat, 23 May 2020 00:56:11 -0700 (PDT)
 Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id d9sm3774376pfn.72.2020.05.23.00.51.08
+        by smtp.gmail.com with ESMTPSA id w7sm678491pfu.117.2020.05.23.00.56.08
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 23 May 2020 00:51:10 -0700 (PDT)
+        Sat, 23 May 2020 00:56:10 -0700 (PDT)
 From:   Huacai Chen <chenhc@lemote.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>, WANG Xuerui <git@xen0n.name>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: [PATCH V2] MIPS: Tidy up CP0.Config6 bits definition
-Date:   Sat, 23 May 2020 15:51:45 +0800
-Message-Id: <1590220305-29176-1-git-send-email-chenhc@lemote.com>
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH V7 00/15] KVM: MIPS: Add Loongson-3 support (Host Side)
+Date:   Sat, 23 May 2020 15:56:27 +0800
+Message-Id: <1590220602-3547-1-git-send-email-chenhc@lemote.com>
 X-Mailer: git-send-email 2.7.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CP0.Config6 is a Vendor-defined register whose bits definitions are
-different from one to another. Recently, Xuerui's Loongson-3 patch and
-Serge's P5600 patch make the definitions inconsistency and unclear.
+We are preparing to add KVM support for Loongson-3. VZ extension is
+fully supported in Loongson-3A R4+, and we will not care about old CPUs
+(at least now). We already have a full functional Linux kernel (based
+on Linux-5.4.x LTS) and QEMU (based on 5.0.0) and their git repositories
+are here:
 
-To make life easy, this patch tidy the definition up:
-1, Add a _MTI_ infix for proAptiv/P5600 feature bits;
-2, Add a _LOONGSON_ infix for Loongson-3 feature bits;
-3, Add bit6/bit7 definition for Loongson-3 which will be used later.
+QEMU: https://github.com/chenhuacai/qemu
+Kernel: https://github.com/chenhuacai/linux
 
-All existing users of these macros are updated.
+Of course these two repositories need to be rework and not suitable for
+upstream (especially the commits need to be splitted). We show them here
+is just to tell others what we have done, and how KVM/Loongson will look
+like.
 
-Cc: WANG Xuerui <git@xen0n.name>
-Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Our plan is make the KVM host side be upstream first, and after that,
+we will make the KVM guest side and QEMU emulator be upstream.
+
+V1 -> V2:
+1, Remove "mips: define pud_index() regardless of page table folding"
+   because it has been applied.
+2, Make Loongson-specific code be guarded by CONFIG_CPU_LOONGSON64.
+
+V2 -> V3:
+1, Emulate a reduced feature list of CPUCFG.
+2, Fix all possible checkpatch.pl errors and warnings.
+
+V3 -> V4:
+1, Emulate LOONGSON_CFG0/LOONGSON_CFG3 in CPUCFG correctly.
+2, Update commit messages to explain Loongson-3 Virtual IPI.
+3, Add Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>.
+
+V4 -> V5:
+1, Fix a typo.
+2, Update MAINTAINERS.
+
+V5 -> V6:
+1, Fix a mismatch during rebasing.
+2, Add Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>.
+
+V6 -> V7:
+1, Rebase on latest mips-next (Config6 feature bits definition updated).
+
+Xing Li(2):
+ KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
+ KVM: MIPS: Fix VPN2_MASK definition for variable cpu_vmbits
+
+Huacai Chen(13):
+ KVM: MIPS: Increase KVM_MAX_VCPUS and KVM_USER_MEM_SLOTS to 16
+ KVM: MIPS: Add EVENTFD support which is needed by VHOST
+ KVM: MIPS: Use lddir/ldpte instructions to lookup gpa_mm.pgd
+ KVM: MIPS: Introduce and use cpu_guest_has_ldpte
+ KVM: MIPS: Use root tlb to control guest's CCA for Loongson-3
+ KVM: MIPS: Let indexed cacheops cause guest exit on Loongson-3
+ KVM: MIPS: Add more types of virtual interrupts
+ KVM: MIPS: Add Loongson-3 Virtual IPI interrupt support
+ KVM: MIPS: Add CPUCFG emulation for Loongson-3
+ KVM: MIPS: Add CONFIG6 and DIAG registers emulation
+ KVM: MIPS: Add more MMIO load/store instructions emulation
+ KVM: MIPS: Enable KVM support for Loongson-3
+ MAINTAINERS: Update KVM/MIPS maintainers
+
 Signed-off-by: Huacai Chen <chenhc@lemote.com>
 ---
- arch/mips/include/asm/mipsregs.h | 37 ++++++++++++++++++++++++-------------
- arch/mips/kernel/cpu-probe.c     | 12 ++++++------
- arch/mips/mm/c-r4k.c             |  4 ++--
- 3 files changed, 32 insertions(+), 21 deletions(-)
-
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index fe6293f..796dbb8 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -686,27 +686,38 @@
- #define MIPS_CONF5_CV		(_ULCAST_(1) << 29)
- #define MIPS_CONF5_K		(_ULCAST_(1) << 30)
- 
-+/* Config6 feature bits for proAptiv/P5600 */
-+
- /* Jump register cache prediction disable */
--#define MIPS_CONF6_JRCD		(_ULCAST_(1) << 0)
-+#define MIPS_CONF6_MTI_JRCD		(_ULCAST_(1) << 0)
- /* MIPSr6 extensions enable */
--#define MIPS_CONF6_R6		(_ULCAST_(1) << 2)
-+#define MIPS_CONF6_MTI_R6		(_ULCAST_(1) << 2)
- /* IFU Performance Control */
--#define MIPS_CONF6_IFUPERFCTL	(_ULCAST_(3) << 10)
--#define MIPS_CONF6_SYND		(_ULCAST_(1) << 13)
-+#define MIPS_CONF6_MTI_IFUPERFCTL	(_ULCAST_(3) << 10)
-+#define MIPS_CONF6_MTI_SYND		(_ULCAST_(1) << 13)
- /* Sleep state performance counter disable */
--#define MIPS_CONF6_SPCD		(_ULCAST_(1) << 14)
-+#define MIPS_CONF6_MTI_SPCD		(_ULCAST_(1) << 14)
- /* proAptiv FTLB on/off bit */
--#define MIPS_CONF6_FTLBEN	(_ULCAST_(1) << 15)
-+#define MIPS_CONF6_MTI_FTLBEN		(_ULCAST_(1) << 15)
- /* Disable load/store bonding */
--#define MIPS_CONF6_DLSB		(_ULCAST_(1) << 21)
--/* Loongson-3 FTLB on/off bit */
--#define MIPS_CONF6_FTLBDIS	(_ULCAST_(1) << 22)
-+#define MIPS_CONF6_MTI_DLSB		(_ULCAST_(1) << 21)
- /* FTLB probability bits */
--#define MIPS_CONF6_FTLBP_SHIFT	(16)
--/* Loongson-3 feature bits */
--#define MIPS_CONF6_LOONGSON_SCRAND	(_ULCAST_(1) << 17)
-+#define MIPS_CONF6_MTI_FTLBP_SHIFT	(16)
-+
-+/* Config6 feature bits for Loongson-3 */
-+
-+/* Loongson-3 internal timer bit */
-+#define MIPS_CONF6_LOONGSON_INTIMER	(_ULCAST_(1) << 6)
-+/* Loongson-3 external timer bit */
-+#define MIPS_CONF6_LOONGSON_EXTIMER	(_ULCAST_(1) << 7)
-+/* Loongson-3 SFB on/off bit, STFill in manual */
-+#define MIPS_CONF6_LOONGSON_SFBEN	(_ULCAST_(1) << 8)
-+/* Loongson-3's LL on exclusive cacheline */
- #define MIPS_CONF6_LOONGSON_LLEXC	(_ULCAST_(1) << 16)
--#define MIPS_CONF6_LOONGSON_STFILL	(_ULCAST_(1) << 8)
-+/* Loongson-3's SC has a random delay */
-+#define MIPS_CONF6_LOONGSON_SCRAND	(_ULCAST_(1) << 17)
-+/* Loongson-3 FTLB on/off bit, VTLBOnly in manual */
-+#define MIPS_CONF6_LOONGSON_FTLBDIS	(_ULCAST_(1) << 22)
- 
- #define MIPS_CONF7_WII		(_ULCAST_(1) << 31)
- 
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index b8ec357..f7c4b1d 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -633,14 +633,14 @@ static int set_ftlb_enable(struct cpuinfo_mips *c, enum ftlb_flags flags)
- 		config = read_c0_config6();
- 
- 		if (flags & FTLB_EN)
--			config |= MIPS_CONF6_FTLBEN;
-+			config |= MIPS_CONF6_MTI_FTLBEN;
- 		else
--			config &= ~MIPS_CONF6_FTLBEN;
-+			config &= ~MIPS_CONF6_MTI_FTLBEN;
- 
- 		if (flags & FTLB_SET_PROB) {
--			config &= ~(3 << MIPS_CONF6_FTLBP_SHIFT);
-+			config &= ~(3 << MIPS_CONF6_MTI_FTLBP_SHIFT);
- 			config |= calculate_ftlb_probability(c)
--				  << MIPS_CONF6_FTLBP_SHIFT;
-+				  << MIPS_CONF6_MTI_FTLBP_SHIFT;
- 		}
- 
- 		write_c0_config6(config);
-@@ -660,10 +660,10 @@ static int set_ftlb_enable(struct cpuinfo_mips *c, enum ftlb_flags flags)
- 		config = read_c0_config6();
- 		if (flags & FTLB_EN)
- 			/* Enable FTLB */
--			write_c0_config6(config & ~MIPS_CONF6_FTLBDIS);
-+			write_c0_config6(config & ~MIPS_CONF6_LOONGSON_FTLBDIS);
- 		else
- 			/* Disable FTLB */
--			write_c0_config6(config | MIPS_CONF6_FTLBDIS);
-+			write_c0_config6(config | MIPS_CONF6_LOONGSON_FTLBDIS);
- 		break;
- 	default:
- 		return 1;
-diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
-index a9f55bf..6fb83ac 100644
---- a/arch/mips/mm/c-r4k.c
-+++ b/arch/mips/mm/c-r4k.c
-@@ -1073,12 +1073,12 @@ static inline int alias_74k_erratum(struct cpuinfo_mips *c)
- 		if (rev <= PRID_REV_ENCODE_332(2, 4, 0))
- 			present = 1;
- 		if (rev == PRID_REV_ENCODE_332(2, 4, 0))
--			write_c0_config6(read_c0_config6() | MIPS_CONF6_SYND);
-+			write_c0_config6(read_c0_config6() | MIPS_CONF6_MTI_SYND);
- 		break;
- 	case PRID_IMP_1074K:
- 		if (rev <= PRID_REV_ENCODE_332(1, 1, 0)) {
- 			present = 1;
--			write_c0_config6(read_c0_config6() | MIPS_CONF6_SYND);
-+			write_c0_config6(read_c0_config6() | MIPS_CONF6_MTI_SYND);
- 		}
- 		break;
- 	default:
--- 
+ MAINTAINERS                          |   4 +-
+ arch/mips/Kconfig                    |   1 +
+ arch/mips/include/asm/cpu-features.h |   3 +
+ arch/mips/include/asm/kvm_host.h     |  52 +++-
+ arch/mips/include/asm/mipsregs.h     |   7 +
+ arch/mips/include/uapi/asm/inst.h    |  11 +
+ arch/mips/kernel/cpu-probe.c         |   2 +
+ arch/mips/kvm/Kconfig                |   1 +
+ arch/mips/kvm/Makefile               |   5 +-
+ arch/mips/kvm/emulate.c              | 503 ++++++++++++++++++++++++++++++++++-
+ arch/mips/kvm/entry.c                |  19 +-
+ arch/mips/kvm/interrupt.c            |  93 +------
+ arch/mips/kvm/interrupt.h            |  14 +-
+ arch/mips/kvm/loongson_ipi.c         | 214 +++++++++++++++
+ arch/mips/kvm/mips.c                 |  49 +++-
+ arch/mips/kvm/tlb.c                  |  41 +++
+ arch/mips/kvm/trap_emul.c            |   3 +
+ arch/mips/kvm/vz.c                   | 237 ++++++++++++-----
+ 18 files changed, 1092 insertions(+), 167 deletions(-)
+ create mode 100644 arch/mips/kvm/loongson_ipi.c
+--
 2.7.0
-
