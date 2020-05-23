@@ -2,95 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FA61DF455
-	for <lists+linux-mips@lfdr.de>; Sat, 23 May 2020 05:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D00D1DF47B
+	for <lists+linux-mips@lfdr.de>; Sat, 23 May 2020 06:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387509AbgEWDKQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 May 2020 23:10:16 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:55094 "EHLO
+        id S1725768AbgEWEHi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 May 2020 00:07:38 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:55602 "EHLO
         mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S2387492AbgEWDKP (ORCPT
+        by vger.kernel.org with ESMTP id S1725294AbgEWEHi (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 22 May 2020 23:10:15 -0400
+        Sat, 23 May 2020 00:07:38 -0400
 Received: from [192.168.9.172] (unknown [112.65.48.98])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id DFD236006D;
-        Sat, 23 May 2020 11:10:00 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 988B76006D;
+        Sat, 23 May 2020 12:07:33 +0800 (CST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1590203401; bh=dXIuR4GvghqLfh+VpO11e76Rpw5OrYtwXCk9lSqrVwE=;
-        h=From:Subject:To:Cc:References:Date:In-Reply-To:From;
-        b=QQWt4b01ahogis/4BfiUPbPlyI9zylJlfO4ffyUfJKoksmgAA72o0/4cZ3bpXcYIV
-         NxnZlx2vVgmeBOxR0Ef/BOOxZ9MRpnxCXrc1+oxB4PxMgCOd+92tQCqCFxEy3bYphz
-         /vq5rod45Qyqdbam5EFCwwU49V6YznvGGpZKcDEg=
-From:   WANG Xuerui <kernel@xen0n.name>
-Subject: Re: [PATCH v3 0/1] CPUCFG emulation on older Loongson64 cores
-To:     =?UTF-8?B?5q+b56Kn5rOi?= <maobibo@loongson.cn>
-Cc:     linux-mips@vger.kernel.org
+        t=1590206853; bh=o623EvxXbUrx1HnraR0LAnOcneclVm69c4B8tUC+nGU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=sJ9ALxlUMqkoy4udFWRhxnhtPWf7e8eIP+9I7/nzfKP620PsLb61Ft/f2PjV3fpF/
+         DT8VdpXcP255tDe9Srq+Gfh4zfcn2Zmb+UHlh9PK7WcL9W5l6HyFzEUVb+90etQDcT
+         lh59WJ7Lk7DgDRfS55tPdumhIq0HU8/Ydo/hKVQc=
+Subject: Re: [PATCH v3 1/1] MIPS: emulate CPUCFG instruction on older
+ Loongson64 cores
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
 References: <20200521181403.6078-1-git@xen0n.name>
- <4701b93c.f740.1723c46a295.Coremail.maobibo@loongson.cn>
-Message-ID: <3a0306fa-cf76-d0b0-416f-0095f9fd2ea0@xen0n.name>
-Date:   Sat, 23 May 2020 11:10:00 +0800
+ <20200521181403.6078-2-git@xen0n.name>
+ <CAAhV-H6e5EjKGtRuedjg6C8m42YfEYeGu-Lcr=o=G3X8FOggiw@mail.gmail.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+Message-ID: <28226e7e-071d-db8d-158a-faf3110eac28@xen0n.name>
+Date:   Sat, 23 May 2020 12:07:33 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.0a1
 MIME-Version: 1.0
-In-Reply-To: <4701b93c.f740.1723c46a295.Coremail.maobibo@loongson.cn>
+In-Reply-To: <CAAhV-H6e5EjKGtRuedjg6C8m42YfEYeGu-Lcr=o=G3X8FOggiw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020/5/22 20:06, 毛碧波 wrote:
+On 5/22/20 12:39 PM, Huacai Chen wrote:
 
-> Sorry for late reponse.
-> I just want to know how to solve compatibility on older kernel.
-> It is ok to run user application with cpucfg instr on new kernel with this
-> patch, however what if the application is running on older kernel without
-> cpucfg simulation?
+> Hi, Xuerui,
+>
+> On Fri, May 22, 2020 at 2:15 AM WANG Xuerui <git@xen0n.name> wrote:
+>> (snipped)
+>>
+>> +
+>> +static inline u32 loongson3_cpucfg_read_synthesized(
+>> +       struct cpuinfo_mips *c,
+>> +       __u64 sel)
+> This seems not the coding-style of kernel. We don't need a new line
+> unless there is more than 80 characters.
+Sure; although from grepping both styles are found in at least 
+arch/mips, I'll send v4 with this tidbit fixed.
+>> +static int simulate_loongson3_cpucfg(struct pt_regs *regs,
+>> +                                    unsigned int opcode)
+>> +{
+>> +       int op = opcode & OPCODE;
+>> +       int op2 = opcode & CSR_OPCODE2_MASK;
+>> +       int csr_func = (opcode & CSR_FUNC_MASK) >> 16;
+> Maybe we can reuse loongson3_lscsr_format in
+> arch/mips/include/uapi/asm/inst.h here.
 
-Hi Bibo,
+The declaration doesn't exist in mips-next. It seems to come from your 
+KVM patch series but that is not merged for now, so let's keep things as 
+it is.
 
-A bit of detailed analysis is always good, so here we go:
+All other emulation logic is currently structured like this, by the way; 
+we can clean up this after everything gets merged.
 
-1. Application targeting old kernels.
-
-These applications never have guaranteed CPUCFG availability to begin 
-with, nor will they ever have. So they simply parse /proc/cpuinfo or do 
-CPUCFG while handling SIGILL. This will work on all kernels, so no problem.
-
-2. Application targeting upstream kernel.
-
-First, let's pretend Loongson-1 and Loongson-2EF do not exist. Then 
-*all* Loongson have CPUCFG. It's basically like going back in time and 
-retro-fitting all legacy chips sold with the new instruction, but only 
-with newer kernels. Then we have:
-
-2a. Applications that still want to run on old kernels;
-2b. Applications that simply don't care and just go ahead to invoke CPUCFG.
-
-For case 2a, the developers always realize they actually belong to case 
-1, sooner or later. Typically after seeing the first customer bug report 
-and deciding that the compatibility is required.
-
-For case 2b, indeed such applications will break on the moment they 
-encounter a legacy kernel, but it does not matter. Very likely there is 
-no such possibility to begin with; but even if such a situation does 
-happen, it is the *downstream developers* making the decision to rely on 
-newer kernels to "blame".
-
-
-It is not acceptable to stagnate development, just because someone 
-decides to not update their software. All legacy hardware and software 
-die eventually, and those that remain probably do not receive updates, 
-so they are irrelevant to this discussion either.
-
-
-P.S.: please kindly fix your email client, it is mangling the block 
-quotes, apparently HTML-escaping the characters. And please don't 
-top-post while you're at it...
-
-> regards
-> bibo,mao
