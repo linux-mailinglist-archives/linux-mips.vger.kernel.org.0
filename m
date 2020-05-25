@@ -2,99 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B26E1E0459
-	for <lists+linux-mips@lfdr.de>; Mon, 25 May 2020 03:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6841E04F8
+	for <lists+linux-mips@lfdr.de>; Mon, 25 May 2020 04:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388136AbgEYBX4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 24 May 2020 21:23:56 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:33127 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388104AbgEYBXz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 24 May 2020 21:23:55 -0400
-Received: by mail-io1-f66.google.com with SMTP id k18so17289463ion.0;
-        Sun, 24 May 2020 18:23:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zCFEPEQJSVR+2frxcrHLzNcELHQb8FtRYHK8V6RTIVw=;
-        b=ogAIPpZEzfhTyhN+DEzwjF6FzubL7cKNOOtDy9PLBjy3E6Bb48/ksU+9TZ94wvv0LO
-         OrQalTPBj3IA5rtd6d1mcDgC+/M838wwlQz9Em6hqyTBUqHOHh8wLcQqGVUcjq6NUMdY
-         tyaJoyt3vqFW+YohpiqpDIuKAfOzrXKPpk0+qhLZVSn1d3GZrhSBd+DBshdSVkaTC9GO
-         AR+zeIp8jCMueZcc0r0C8nQXbZdnc1W9wxmf1b/kpEym2C+8hPDPolp1ZplrZPX+3OLE
-         oLp2jbKo3PWKfR5b6tC+S09898F1Vo5DAtTz7NmnSzTs1iAv9xYngT3rBojrUNzmjFqm
-         ZmhA==
-X-Gm-Message-State: AOAM533/dODWw8OtIVp/J+GRoN0pbs2H8mCOAOFXVWAv9gRKlnCwNfUk
-        gDlQHh2+tj67Az13KR/QXW9u/HXwvaT+QbKwmiU=
-X-Google-Smtp-Source: ABdhPJwWIU91/gftTyHKWrKsP3bcniFoxRfxoCmW6g9p0EIkrMLlFvDwQG3k8xB9cAEYu99NvX0aRnM3iL3u/kMhPxE=
-X-Received: by 2002:a02:942a:: with SMTP id a39mr17334476jai.50.1590369833541;
- Sun, 24 May 2020 18:23:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <1590318819-24520-1-git-send-email-chenhc@lemote.com> <CAHiYmc7sBuG8p2cZ_28UH8kSPpBLe5dj9fDWo45NZWLGcBvhpg@mail.gmail.com>
-In-Reply-To: <CAHiYmc7sBuG8p2cZ_28UH8kSPpBLe5dj9fDWo45NZWLGcBvhpg@mail.gmail.com>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Mon, 25 May 2020 09:23:41 +0800
-Message-ID: <CAAhV-H56E2LLHM-0UPLeR0vKDw=qJaRU9QYbxzNc=St_QK9oOA@mail.gmail.com>
-Subject: Re: [PATCH V8 00/15] KVM: MIPS: Add Loongson-3 support (Host Side)
-To:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        kvm <kvm@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S2388398AbgEYCxc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 24 May 2020 22:53:32 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:40798 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388471AbgEYCxX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 24 May 2020 22:53:23 -0400
+Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj974MsteoL84AA--.426S2;
+        Mon, 25 May 2020 10:52:40 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>
+Subject: [PATCH v6 1/4] MIPS: Do not flush tlb page when updating PTE entry
+Date:   Mon, 25 May 2020 10:52:37 +0800
+Message-Id: <1590375160-6997-1-git-send-email-maobibo@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9Dxj974MsteoL84AA--.426S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFW3ZryxtrWkKr4DAF43Wrg_yoW8Xw1kpF
+        ZrArykKw4DG3y0yFy8Ar1v9r43J3yDKrWUKryDAryDZanrXF1kKrs3t3WIyry8XFyak3W0
+        gF4jqr4DZw42v3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvmb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7IU5q385UUUUU==
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Aleksandar,
+It is not necessary to flush tlb page on all CPUs if suitable PTE
+entry exists already during page fault handling, just updating
+TLB is fine.
 
-On Mon, May 25, 2020 at 8:26 AM Aleksandar Markovic
-<aleksandar.qemu.devel@gmail.com> wrote:
->
-> > V7 -> V8:
-> > 1, Rebase to be applied on kvm tree, i.e., the linux-next branch of
-> >    https://git.kernel.org/pub/scm/virt/kvm/kvm.git/. Building KVM/MIPS
-> >    need commit 3fbfb4585bfd4ff34e ("mips: define pud_index() regardless
-> >    of page table folding"), which has already been in mips tree but not
-> >    in kvm tree.
-> >
->
-> Huacai,
->
-> I do support and salute the series (as I always did), as I see it as a
-> giant step forward for KVM for MIPS.
->
-> However, in general, I think any series should not depend on "pick
-> that patch from another tree", and should be a stand-alone unit that
-> yields to successful build and desired functionality. If there is a
-> dependency like you described, the patch in question, in my opinion,
-> should be integrated into the series in question. Git is even smart
-> enough that it recognizes the same patch has been applied before, so
-> integration of another tree would not be exposed to problems.
->
-> From the point of view of synchronizing with QEMU part, and the timing
-> issues wrt kernel and QEMU releases, I want to stress that it is
-> better that this series is integrated sooner rather than later. In
-> other words, I think that potential Paolo's KVM pull request should
-> happen before Thomas' mips-next pull request (Paolo could include
-> "mips: define pud_index() regardless of page table folding", and
-> Thomas could simply omit it).
->
-> But, that said, I don't feel I should impose my opinion to others
-> here. Take my statements just as advises. I defer the decision on how
-> to proceed with the integration of this series entirely to Paolo and
-> Thomas.
-I think I lack some experience of cross-subsystem development, so in
-V8 I only adjust the context of my own patches to let the series be
-applied on kvm tree, but didn't consider patches already in other
-trees (Moreover, that patch is not mine). So, should I send a V9 that
-take commit 3fbfb4585bfd4ff3 together?
+Here redefine flush_tlb_fix_spurious_fault as empty on MIPS system.
+V6:
+- Add update_mmu_tlb function as empty on all platform except mips
+  system, we use this function to update local tlb for page fault
+  smp-race handling
+V5:
+- define update_mmu_cache function specified on MIPS platform, and
+  add page fault smp-race stats info
+V4:
+- add pte_sw_mkyoung function to implement readable privilege, and
+  this function is  only in effect on MIPS system.
+- add page valid bit judgement in function pte_modify
+V3:
+- add detailed changelog, modify typo issue in patch V2
+v2:
+- split flush_tlb_fix_spurious_fault and tlb update into two patches
+- comments typo modification
+- separate tlb update and add pte readable privilege into two patches
 
-Thanks,
-Huacai
->
-> Yours,
-> Aleksandar
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ arch/mips/include/asm/pgtable.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 9b01d2d..0d625c2 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -478,6 +478,8 @@ static inline pgprot_t pgprot_writecombine(pgprot_t _prot)
+ 	return __pgprot(prot);
+ }
+ 
++#define flush_tlb_fix_spurious_fault(vma, address) do { } while (0)
++
+ /*
+  * Conversion functions: convert a page and protection to a page entry,
+  * and a page entry and page directory to the page they refer to.
+-- 
+1.8.3.1
+
