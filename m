@@ -2,125 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C371E071E
-	for <lists+linux-mips@lfdr.de>; Mon, 25 May 2020 08:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C92D1E0881
+	for <lists+linux-mips@lfdr.de>; Mon, 25 May 2020 10:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726572AbgEYGhS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 May 2020 02:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
+        id S1729566AbgEYIMg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 May 2020 04:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbgEYGhS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 May 2020 02:37:18 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3669DC061A0E;
-        Sun, 24 May 2020 23:37:17 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id q11so3868575wrp.3;
-        Sun, 24 May 2020 23:37:17 -0700 (PDT)
+        with ESMTP id S1725834AbgEYIMf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 May 2020 04:12:35 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3716CC05BD43
+        for <linux-mips@vger.kernel.org>; Mon, 25 May 2020 01:12:35 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id m18so19770964ljo.5
+        for <linux-mips@vger.kernel.org>; Mon, 25 May 2020 01:12:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tN7L4x9NdCc3VlnaCxMN2sDPYAVx+Gt9VEFulGrwwt8=;
-        b=goF2tvGX1ugX80VobzSI4g9KPGLk+dKmegtwEQ7SfragTt8l9gpvWZjLjulGoCCCwZ
-         7Yp1ZndP67gHDaanqPGt9tliJst02NfsigND7z691hOk34toCHIORadaFnY1aZ2vh1Cn
-         J7NV+HA2WP2HazU/Zt6jpYEi82ZakdkwU3pbZH8vENn5dsNJhei4McPIJIFzLGTYrvC5
-         cjP3iDjZ7sRSrBW9UWWsKJKz9O1q3FDcdRRYaqBgf8M8No+OhQYgXPcFegbVi65z6drq
-         nVDJsJE4gZoqb7LvITSPEmlITBWByLKyMi4TCLjWmRI1JooYq22r1t+n5bSDWMvK5gQD
-         CMpA==
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mQlv94/UsIcWqqoQiFz4Gmt5TSCy0PaSYRGYfGZ8ASE=;
+        b=uC/DUKVPr4AEHq5tZ0tk/8BJui59Ip+3Hv4adGb5DQ14R3VOvZPglrknK3jEuEDUri
+         0d/s8L/nPTs2TjywXIwDlAjAl0pbo1y4d4KL36xuI94CirTpSML2vZQUsvsl4pKnfCT/
+         N1Dr1x0yKT+NPvdkJagD16frkkV4x2sD0QXMuT8oRsZpcVs7WIynSnod8WL8W7zEpzVp
+         9VYGC1iie7CLhJuFTjwO+eudzrsEauJNzNODWYn+/OMtBZijYLasRQSg6Mccp6nvsS7K
+         yPzPRVs3STK0Cn+lL+DaqTkrNgfUs+i/dYHTpAqH/NTlrp/7vli8ofSqHDlLR/MYqwVQ
+         KVrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tN7L4x9NdCc3VlnaCxMN2sDPYAVx+Gt9VEFulGrwwt8=;
-        b=tPlFDXkTiqODc/Zi8zsz1eElnG3u3Ygvc4q0q1a385VegSvpH2vjLdufVNjxMlFKTN
-         F4frICA8bP5COrwXFc8KHR0LsRqttIElyO8C1b7Y6ncEIRbj8BcCUedW0mo3vYbLb4aZ
-         0ebdEgMMko6dCmknYHQBx4dEO7wun2F+2HRF5mzXrT6LEAQlPyzOjttatnHO8foQp3nE
-         +RO1ah3PBldcHBoCvh7RGptrIXK5zbtvg00JFMLNww492DKr3yClcv5WvlKCDxQHo9yi
-         pp95mA20M7nNoXyPMVrR9O8qSLX3mR97x5hjoJbLIW7W4qR4SbgsFEcECfF9kmHxqy4t
-         +Bpw==
-X-Gm-Message-State: AOAM533nRdv/CfUjpTUfattdELd5c4yUvxOe2pH9TtGZekka87sfAtVl
-        aZ9KWlrw8Dj6IPqwEBC1sAX9FrseAQxyVbri+x4=
-X-Google-Smtp-Source: ABdhPJwKGRIymwcsF2V1eRxJ6VNCk8Zvtmp4E4R61B4L8iVjh9OWecLwGgkvkOLA6dA6agLqnlTzi5pBVHDuWUrVEOc=
-X-Received: by 2002:a5d:4385:: with SMTP id i5mr7184752wrq.420.1590388635862;
- Sun, 24 May 2020 23:37:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <1590318819-24520-1-git-send-email-chenhc@lemote.com>
- <CAHiYmc7sBuG8p2cZ_28UH8kSPpBLe5dj9fDWo45NZWLGcBvhpg@mail.gmail.com> <CAAhV-H56E2LLHM-0UPLeR0vKDw=qJaRU9QYbxzNc=St_QK9oOA@mail.gmail.com>
-In-Reply-To: <CAAhV-H56E2LLHM-0UPLeR0vKDw=qJaRU9QYbxzNc=St_QK9oOA@mail.gmail.com>
-From:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Date:   Mon, 25 May 2020 08:37:03 +0200
-Message-ID: <CAHiYmc5m9if5fraMumTTikdO=xLit1w-_FK6pR9ejpYYrimvyQ@mail.gmail.com>
-Subject: Re: [PATCH V8 00/15] KVM: MIPS: Add Loongson-3 support (Host Side)
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mQlv94/UsIcWqqoQiFz4Gmt5TSCy0PaSYRGYfGZ8ASE=;
+        b=OCGhxB1kScBEc5ofAGIi+VBD+cP71m5pYZkMYeOQS3tRTCHfKk1FnIOrDwVMduWFgI
+         HQ8iub/YCQ8eBkNnwFidrurPpINZsMYXWUK6arZ31KWeLuO5X3xHxL8tOjZqa5Js+h4y
+         WF+ABFZIS72J7QKUstwRrT8EWluIT3zAFF1/gt3Wlgb2Kd13fppwnfP6rBd5OFsc5l+K
+         ax4tAeZAtQ4hgBrD8ALujhx66KY3fffgPbGYwXl1Hi/amgQVF9EfiHipy2NnLfT+PPIw
+         ZdijF7e33Q6lfDXKSlgQdwaLr6p6wz0R0XXOQrjtiGGUa3DFZoQHzIaeT0Img/PRrsnJ
+         r8+g==
+X-Gm-Message-State: AOAM531rFT7vYBqe0jDrowzJ77/p/3Vl4hy0BZe9KhdmwgctNEoyoXgT
+        Zf3kEGdxkeQ7wcUzjppEXyonTg==
+X-Google-Smtp-Source: ABdhPJyJtREc8uUJDAMfpETQ8xnMzoK/Y5+TXrGnZ2HOaSMhu/3tzdRc4VuGqCS4FTW3P1QcfIskmw==
+X-Received: by 2002:a2e:2a02:: with SMTP id q2mr11637583ljq.311.1590394353496;
+        Mon, 25 May 2020 01:12:33 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:425b:15e7:251c:5b3:d625:2d43? ([2a00:1fa0:425b:15e7:251c:5b3:d625:2d43])
+        by smtp.gmail.com with ESMTPSA id m10sm4627606lfd.15.2020.05.25.01.12.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 May 2020 01:12:32 -0700 (PDT)
+Subject: Re: [PATCH v6 1/4] MIPS: Do not flush tlb page when updating PTE
+ entry
+To:     Bibo Mao <maobibo@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        kvm <kvm@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>
+References: <1590375160-6997-1-git-send-email-maobibo@loongson.cn>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <79778fc3-c029-272b-358e-4f8f8e5772d3@cogentembedded.com>
+Date:   Mon, 25 May 2020 11:12:25 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
+MIME-Version: 1.0
+In-Reply-To: <1590375160-6997-1-git-send-email-maobibo@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-=D0=BF=D0=BE=D0=BD, 25. =D0=BC=D0=B0=D1=98 2020. =D1=83 03:23 Huacai Chen <=
-chenhc@lemote.com> =D1=98=D0=B5 =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=D0=BE/=
-=D0=BB=D0=B0:
->
-> Hi, Aleksandar,
->
-> On Mon, May 25, 2020 at 8:26 AM Aleksandar Markovic
-> <aleksandar.qemu.devel@gmail.com> wrote:
-> >
-> > > V7 -> V8:
-> > > 1, Rebase to be applied on kvm tree, i.e., the linux-next branch of
-> > >    https://git.kernel.org/pub/scm/virt/kvm/kvm.git/. Building KVM/MIP=
-S
-> > >    need commit 3fbfb4585bfd4ff34e ("mips: define pud_index() regardle=
-ss
-> > >    of page table folding"), which has already been in mips tree but n=
-ot
-> > >    in kvm tree.
-> > >
-> >
-> > Huacai,
-> >
-> > I do support and salute the series (as I always did), as I see it as a
-> > giant step forward for KVM for MIPS.
-> >
-> > However, in general, I think any series should not depend on "pick
-> > that patch from another tree", and should be a stand-alone unit that
-> > yields to successful build and desired functionality. If there is a
-> > dependency like you described, the patch in question, in my opinion,
-> > should be integrated into the series in question. Git is even smart
-> > enough that it recognizes the same patch has been applied before, so
-> > integration of another tree would not be exposed to problems.
-> >
-> > From the point of view of synchronizing with QEMU part, and the timing
-> > issues wrt kernel and QEMU releases, I want to stress that it is
-> > better that this series is integrated sooner rather than later. In
-> > other words, I think that potential Paolo's KVM pull request should
-> > happen before Thomas' mips-next pull request (Paolo could include
-> > "mips: define pud_index() regardless of page table folding", and
-> > Thomas could simply omit it).
-> >
-> > But, that said, I don't feel I should impose my opinion to others
-> > here. Take my statements just as advises. I defer the decision on how
-> > to proceed with the integration of this series entirely to Paolo and
-> > Thomas.
-> I think I lack some experience of cross-subsystem development, so in
-> V8 I only adjust the context of my own patches to let the series be
-> applied on kvm tree, but didn't consider patches already in other
-> trees (Moreover, that patch is not mine). So, should I send a V9 that
-> take commit 3fbfb4585bfd4ff3 together?
->
+Hello!
 
-No, I think we should wait for Paolo's feedback.
+On 25.05.2020 5:52, Bibo Mao wrote:
 
-> Thanks,
-> Huacai
-> >
-> > Yours,
-> > Aleksandar
+> It is not necessary to flush tlb page on all CPUs if suitable PTE
+> entry exists already during page fault handling, just updating
+> TLB is fine.
+> 
+> Here redefine flush_tlb_fix_spurious_fault as empty on MIPS system.
+
+    Need empty line here.
+
+> V6:
+> - Add update_mmu_tlb function as empty on all platform except mips
+>    system, we use this function to update local tlb for page fault
+>    smp-race handling
+> V5:
+> - define update_mmu_cache function specified on MIPS platform, and
+>    add page fault smp-race stats info
+> V4:
+> - add pte_sw_mkyoung function to implement readable privilege, and
+>    this function is  only in effect on MIPS system.
+> - add page valid bit judgement in function pte_modify
+> V3:
+> - add detailed changelog, modify typo issue in patch V2
+> v2:
+> - split flush_tlb_fix_spurious_fault and tlb update into two patches
+> - comments typo modification
+> - separate tlb update and add pte readable privilege into two patches
+
+   It was a bad idea to keep the version change log in the 1st patch only,
+we have either cover letter for that, or all the individual patches...
+
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+[...]
+
+MBR, Sergei
