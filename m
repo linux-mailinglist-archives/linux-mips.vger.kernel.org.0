@@ -2,101 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D07001E0194
-	for <lists+linux-mips@lfdr.de>; Sun, 24 May 2020 21:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240F11E0427
+	for <lists+linux-mips@lfdr.de>; Mon, 25 May 2020 02:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387951AbgEXTAk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 24 May 2020 15:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S2388300AbgEYA06 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 24 May 2020 20:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387823AbgEXTAj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 24 May 2020 15:00:39 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738F3C061A0E
-        for <linux-mips@vger.kernel.org>; Sun, 24 May 2020 12:00:39 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id l11so15284136wru.0
-        for <linux-mips@vger.kernel.org>; Sun, 24 May 2020 12:00:39 -0700 (PDT)
+        with ESMTP id S2388014AbgEYA05 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 24 May 2020 20:26:57 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7B0C061A0E;
+        Sun, 24 May 2020 17:26:57 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id e1so15591936wrt.5;
+        Sun, 24 May 2020 17:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8ZA2/h8zEph3FDQWtHx/9lkBheVX//yyexZs5ql0uy0=;
-        b=N6WNVQlFbNbDgZm8jRHCNWNq4UPnJWxCE72/5CiWreqMD3XpHIHOrs19pvpY8mRd4t
-         syD+RZT3OIikTjovki4SVFjBcHXBQMgyBprTtw2/em7Xe98JCbBBBAeSaJT3GSn/Zete
-         6n811DVKTopwrRCBipXVT2cOFPfC1CvVD28eebB9E/dSGB+zNRXaYVDKZ4kp48W/teZ6
-         inEVDhEpDCDgKKjMs0n2ob9TgnTMWbJlOjUe1A0APl9IbO1mA/qSF109GSe9gWpTY5fE
-         7Zba5gw6QYBvUFpVTC87dW81gzFTn9cQ0KcaXPAlJfWN0RvqTd7LhLj0CwUHP3WYFO32
-         QfRw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vo+PEr3ThFugXAxWUKbQS6Sgo7Ct30K9zT/l1PQSZzY=;
+        b=MNuTohxdsNrs+I2lcPknVdqhPu3Niw7DMSTSIdwxqelIoBKu5E2XQJuQpHOppji+Ku
+         cFBMlyivTNfbhi/TGP+0fWvQf8wJpFFa6YjCz2Jl4MiljckpxoT4qXAoMUNXvc4VUKXt
+         fTT6/ZKmn1WyjWGjj0HgNYDXpURzzaPDOeqWe4WH7SRFMNylehCpk8GUB1++aKj9dvdW
+         RxbG//xeHqYQWLJ0uGevZRo0iLoviA4v7Ah1x/tG1Vme6GfwF4run0IAUEKWni10uxxg
+         u+ZLdMGmj5PU5Mi3IgFXpqVVb/2ZNgUJ/rzdkjZcksyPEydDOoch3LzBO0cBztgNJj4j
+         ZPLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8ZA2/h8zEph3FDQWtHx/9lkBheVX//yyexZs5ql0uy0=;
-        b=Ocx/nNxgt5579cOhtzOwf6ja6fBvgDPElfPfxfIkXes8n7LNrlcZR8QU2SsAkz8LAS
-         kfCc5xOQ4X2o6ou8fBdYIhFd1BAoy+gMR2QJedCq/hjCQxx4UrvgwsLXbXfmQvGgOT3K
-         6wGG+u659alHCjbH43FL31IJhgMM9GzYreyYhXGrHm5Hec9efWKhwOoNk+xbP8O1ZiQt
-         t0macRfRJtY6VASkQ0h3Vuvk98bSimn2cLKLtqsRmik8ABbXogosVSceVYIxXWLPhOSx
-         B31srbqtTJSLyqR5BgjEiSgUOvyvswbmLfafGX8BrJC6eSbM9lca18EgpYUn9CjYzU9q
-         Gv1A==
-X-Gm-Message-State: AOAM5309aRrMpnOqynCZXC0ONdgck0y7PsYCvAj9BSjqwiTF9fUpIRvK
-        JhDYEtdjRLpBvnSbcGpWU80=
-X-Google-Smtp-Source: ABdhPJyrQMAqv22b8dbdTW1uEHnbRZDTalsBnoT/Hq/+12uD4QhrLOuc8iCnHb2FH8Y4YnpdrVDMAQ==
-X-Received: by 2002:a05:6000:128b:: with SMTP id f11mr11985765wrx.227.1590346838157;
-        Sun, 24 May 2020 12:00:38 -0700 (PDT)
-Received: from tool.localnet ([213.177.197.81])
-        by smtp.googlemail.com with ESMTPSA id l204sm5885894wmf.19.2020.05.24.12.00.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 May 2020 12:00:37 -0700 (PDT)
-From:   Daniel =?ISO-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
-To:     tsbogend@alpha.franken.de
-Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: BCM63XX: fix BCM6358 GPIO count
-Date:   Sun, 24 May 2020 20:59:53 +0200
-Message-ID: <4452917.ZOZUicq8Ig@tool>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vo+PEr3ThFugXAxWUKbQS6Sgo7Ct30K9zT/l1PQSZzY=;
+        b=eXh6jy5FMXcbL2IA+5drMz+Ztt5M8Ji35vRJ7SiaLcodz1IiFFn+uOCSqBy8Re8cvi
+         HOTBdNdcFvkfoJk9OIOY8eJ7JGVG2foqMjCo9WK3yEP4E6u+Rc2YJWYlXTbuoFYoJFBJ
+         3D88jlN0/T1sY4eHyEM0pheK0gV9IDwuya/Ed5+tvwB08DPyOgOc/XBAixD1l5Ii9PUB
+         iPoP/ZO/uxTucE5CqH30u++syEVao70jbMDUYSUz0ciyT84j/ZGpwVl7s9Hy5ZhnZJuj
+         mrX4DHvbmkiTjaEy4T+slBH3VcM+GGGOCDWpHJW8xy3dvPKVplA7ASujgiW6sDz9iV1J
+         Vauw==
+X-Gm-Message-State: AOAM532f2CZXGN0cA3mjY33u0Sqw0w/maNjUWVowEdyrWLIIuq6zwvSN
+        m4uIoTkfb/wTTnlNYO31YG/LG4NiLUdmECDqOFw=
+X-Google-Smtp-Source: ABdhPJzQc0lI/qGMzcqdCCUpCUHxAjDZSQGq2RYrZZpKUbnDevc2RxM4cL4KS4u+V9WlhLgzzeROsty+zKa9EXjhyT8=
+X-Received: by 2002:adf:ab4e:: with SMTP id r14mr2553160wrc.147.1590366416154;
+ Sun, 24 May 2020 17:26:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <1590318819-24520-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1590318819-24520-1-git-send-email-chenhc@lemote.com>
+From:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Date:   Mon, 25 May 2020 02:26:42 +0200
+Message-ID: <CAHiYmc7sBuG8p2cZ_28UH8kSPpBLe5dj9fDWo45NZWLGcBvhpg@mail.gmail.com>
+Subject: Re: [PATCH V8 00/15] KVM: MIPS: Add Loongson-3 support (Host Side)
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        kvm <kvm@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The BCM6358 SoC has only 38 available GPIOs. Fix it.
+> V7 -> V8:
+> 1, Rebase to be applied on kvm tree, i.e., the linux-next branch of
+>    https://git.kernel.org/pub/scm/virt/kvm/kvm.git/. Building KVM/MIPS
+>    need commit 3fbfb4585bfd4ff34e ("mips: define pud_index() regardless
+>    of page table folding"), which has already been in mips tree but not
+>    in kvm tree.
+>
 
-Signed-off-by: Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.com>
-=2D--
- arch/mips/include/asm/mach-bcm63xx/bcm63xx_gpio.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Huacai,
 
-diff --git a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_gpio.h b/arch/mips/=
-include/asm/mach-bcm63xx/bcm63xx_gpio.h
-index 8fe88c2251..9212429d5e 100644
-=2D-- a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_gpio.h
-+++ b/arch/mips/include/asm/mach-bcm63xx/bcm63xx_gpio.h
-@@ -13,16 +13,16 @@ static inline unsigned long bcm63xx_gpio_count(void)
- 	case BCM6328_CPU_ID:
- 		return 32;
- 	case BCM3368_CPU_ID:
-=2D	case BCM6358_CPU_ID:
- 		return 40;
- 	case BCM6338_CPU_ID:
- 		return 8;
- 	case BCM6345_CPU_ID:
- 		return 16;
-=2D	case BCM6362_CPU_ID:
-=2D		return 48;
-+	case BCM6358_CPU_ID:
- 	case BCM6368_CPU_ID:
- 		return 38;
-+	case BCM6362_CPU_ID:
-+		return 48;
- 	case BCM6348_CPU_ID:
- 	default:
- 		return 37;
-=2D-=20
-2.26.2
+I do support and salute the series (as I always did), as I see it as a
+giant step forward for KVM for MIPS.
 
+However, in general, I think any series should not depend on "pick
+that patch from another tree", and should be a stand-alone unit that
+yields to successful build and desired functionality. If there is a
+dependency like you described, the patch in question, in my opinion,
+should be integrated into the series in question. Git is even smart
+enough that it recognizes the same patch has been applied before, so
+integration of another tree would not be exposed to problems.
 
+From the point of view of synchronizing with QEMU part, and the timing
+issues wrt kernel and QEMU releases, I want to stress that it is
+better that this series is integrated sooner rather than later. In
+other words, I think that potential Paolo's KVM pull request should
+happen before Thomas' mips-next pull request (Paolo could include
+"mips: define pud_index() regardless of page table folding", and
+Thomas could simply omit it).
 
+But, that said, I don't feel I should impose my opinion to others
+here. Take my statements just as advises. I defer the decision on how
+to proceed with the integration of this series entirely to Paolo and
+Thomas.
 
+Yours,
+Aleksandar
