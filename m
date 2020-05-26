@@ -2,106 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D10311E26A2
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 18:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C61C1E26A6
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 18:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728570AbgEZQP5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 12:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728361AbgEZQP4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 12:15:56 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC87FC03E96D;
-        Tue, 26 May 2020 09:15:56 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id cx22so40207pjb.1;
-        Tue, 26 May 2020 09:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=YqEvDdm+2FRvK2g2dpbk2MAAMjjDOpk7CCKnCxddFow=;
-        b=Qew9FHZ/T8F9VE7WbLHFYxT7UZdYTNQA1StkBFBnUWe/aEao547r51+4K9HjuOWMDJ
-         uyCLXXgnU8/K41YEQ0ozdihpsj8AG+vvYL/V7Isreq6H38Ebx0wAo252XIElvjDe8k77
-         kxbElRRST9MgTd7WifEdoXPi5GDuKDUrUdFBiw5StcJpTK65HhtsBwK4u2aTjRrQCPQu
-         5krB6Lh07i9ke7UbGhRu0tp7XruxzEso6VrHBgQ1ycIK+iv7suEyn3gSrlWnT4ITaris
-         qXvkTrtVdO/4QyM1KFDX0D59dX7sZN2GZu+xXrHaPksNflayJr0eKacetY5b4L1ho7W/
-         OlMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YqEvDdm+2FRvK2g2dpbk2MAAMjjDOpk7CCKnCxddFow=;
-        b=dqD5MgiwRWqHaInCeaWY1TCnc/DfR0tR3TfRgDpkn/waT1GJB3E9ZSEJ4Yj5HF+ICD
-         tugPdeBooCYBJA55n0XTsfyg/5ReiHaPbuIXh52tqTxZcJPsWn9rR1gdrBTav5dgCq8s
-         5TNaG74wt5lTHBroHJKOXKXw8r14cJEA7e0psccECHgRWCAEvPc7cC5zMHrQq2hi4oz3
-         ekAnUVIdZ8XjB4HJ8hTYPK481SelIlWP2vwZJHbDZdkD2Bd0MYi9B17l5u1vr8CZ7x8J
-         jCD0KeCfX89psVe44dYbmeWPvP6QzBrYWux5YFadSQJBMweEiNAos4QVS4HJSOu9FRx4
-         CxjA==
-X-Gm-Message-State: AOAM532nl/1uwg9rGCabz5iBh8s6P0vaVDx2qgD8wf65Eq7DnVwY3CY8
-        nh4oTCg2SalhEFiqXKBGLXW8x7m5
-X-Google-Smtp-Source: ABdhPJwMfbhWKQlvyzpNKVQ/t1vHhePAK9yYVH82BhLbp+pJptxgzrRKgEUNfCwhaHG2qRmc9lWuBw==
-X-Received: by 2002:a17:90a:4149:: with SMTP id m9mr11944pjg.200.1590509755882;
-        Tue, 26 May 2020 09:15:55 -0700 (PDT)
-Received: from [10.230.188.43] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id u1sm33375pfu.151.2020.05.26.09.15.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2020 09:15:55 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: BCM63xx: fix 6328 boot selection bit
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        tsbogend@alpha.franken.de, jonas.gorski@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20200526110324.1324754-1-noltari@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <862863b2-d73e-0c48-6503-c912c60c1b94@gmail.com>
-Date:   Tue, 26 May 2020 09:15:54 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.8.1
+        id S1729316AbgEZQQX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 12:16:23 -0400
+Received: from elvis.franken.de ([193.175.24.41]:40098 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728351AbgEZQQX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 May 2020 12:16:23 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jdcFV-0001AE-01; Tue, 26 May 2020 18:16:17 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 5FDB5C0457; Tue, 26 May 2020 18:16:07 +0200 (CEST)
+Date:   Tue, 26 May 2020 18:16:07 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Lichao Liu <liulichao@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Max Filippov <jcmvbkbc@gmail.com>, yuanjunqing@loongson.cn,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH] MIPS: CPU_LOONGSON2EF need software to maintain cache
+ consistency
+Message-ID: <20200526161607.GA12387@alpha.franken.de>
+References: <20200526111438.3788-1-liulichao@loongson.cn>
+ <20200526193859.0adaea3b@halation.net.flygoat.com>
+ <e9c015c2-b979-27c8-5f43-7af8d43174c5@loongson.cn>
+ <20200526130128.GA8487@alpha.franken.de>
+ <1d594568-e457-533e-122a-c7e449c0f05d@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200526110324.1324754-1-noltari@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d594568-e457-533e-122a-c7e449c0f05d@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 5/26/2020 4:03 AM, Álvaro Fernández Rojas wrote:
-> MISC_STRAP_BUS_BOOT_SEL_SHIFT is 18 according to Broadcom's GPL source code.
+On Tue, May 26, 2020 at 02:29:50PM +0100, Robin Murphy wrote:
+> On 2020-05-26 14:01, Thomas Bogendoerfer wrote:
+> >On Tue, May 26, 2020 at 08:40:28PM +0800, Lichao Liu wrote:
+> >>Loongson-2EF need software maintain cache consistency, So when using
+> >>streaming DMA, software needs to maintain consistency.
+> >>
+> >>dma_map_single() is correct, but dma_unmap_single is wrong.
+> >>
+> >>The function call path:
+> >>'dma_unmap_single->dma_unmap_page_attrs->dma_direct_unmap_page->
+> >>  dma_direct_sync_single_for_cpu->arch_sync_dma_for_cpu->
+> >>  cpu_needs_post_dma_flush'
+> >>
+> >>In current version, 'cpu_needs_post_dma_flush' will return false
+> >>at Loongon-2EF platform, and dma_unmap_single will not invalidate cache,
+> >>driver may access wrong dma data.
+> >
+> >why should it ? CPU must not touch data while it's mapped for DMA.
+> >
+> >>I don't know what's the exact meaning of "fill random cachelines with
+> >>stale data at any time". I always think 'cpu_needs_post_dma_flush()'
+> >>means whether this platform needs software to maintain cache consistency.
+> >
+> >this will only happen, if cpu speculates creates dirty cache lines
+> >by speculation as R10k type of CPUs do.
 > 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> Will it? The usual pattern for this problem is that the CPU speculatively
+> fills a (clean) cache line after a DMA_FROM_DEVICE operation has begun, but
 
-This is correct:
+you are right, it will already happen on speculative read accesses.
+And that's taken care by the cache flush after dma_umap.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+R10ks have the additional problem that they will sepculate writes to the
+cache, which will leave the cache line dirty even when the speculation was
+wrong. So there is race that the cache line is written back to memory
+after DMA transfer and before the cache flush in dma_unmap. Solution
+to this is either cache coherence in hardware or the special gcc option,
+which generates speculation barriers before memory writes.
 
-Fixes: e5766aea5b9b ("MIPS: BCM63XX: Add basic BCM6328 support")
-
-> ---
->  arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h b/arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h
-> index bc3444cd4ef2..9ceb5e72889f 100644
-> --- a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h
-> +++ b/arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h
-> @@ -1367,8 +1367,8 @@
->  #define MISC_STRAPBUS_6328_REG		0x240
->  #define STRAPBUS_6328_FCVO_SHIFT	7
->  #define STRAPBUS_6328_FCVO_MASK		(0x1f << STRAPBUS_6328_FCVO_SHIFT)
-> -#define STRAPBUS_6328_BOOT_SEL_SERIAL	(1 << 28)
-> -#define STRAPBUS_6328_BOOT_SEL_NAND	(0 << 28)
-> +#define STRAPBUS_6328_BOOT_SEL_SERIAL	(1 << 18)
-> +#define STRAPBUS_6328_BOOT_SEL_NAND	(0 << 18)
->  
->  /*************************************************************************
->   * _REG relative to RSET_PCIE
-> 
+Thomas.
 
 -- 
-Florian
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
