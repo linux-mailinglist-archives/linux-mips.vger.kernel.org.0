@@ -2,126 +2,172 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5346F1E2750
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 18:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EB21E27C7
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 18:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728561AbgEZQnB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 12:43:01 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17798 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728350AbgEZQnB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 May 2020 12:43:01 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1590511335; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=KTBxlxzjzYnUXVI/RULLuufyZgrV/EDUPIW/xP1xEljlxKqGtl3BGyUkRRioj6BF16yR11LafKW5eFp0Mv4w5C4IJziasa7cOKzB3UsWC93452+Md66mAD+R/G2q7X6mhooDlAA+4Bm22oFYnaRzl04WZHi6Hhyk4aZ8CJ+b6Z4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1590511335; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=z07e3ZVvSUxeTOaOOf4CjWtLYzMxmG81l7EZZP4sZc0=; 
-        b=DxfqyEUZkvpyQn4DHvBkFLpwtqdNIjblf4x8lhknnEoBrA522vFf+/ROjMQJMqjwvBinNUX1jy8JNfiEOXC2hJTHJipbpHouwbzGwOxx1+6fqTFo9sPK5tJO60PXziKli2nr+U9n5sz1ucNfo+67rqVhYTZvqBqhg1nSyVArdnc=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1590511335;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=z07e3ZVvSUxeTOaOOf4CjWtLYzMxmG81l7EZZP4sZc0=;
-        b=fS0cQBE+b6uEhcuOZjojqDAw/hiiwOeTaQeeGRrt+aQlXh32ooZRT384ue5cGq4D
-        HRM8oQnkewjgQ40BcBqnu4OdbOnWN1WDVzFn04uYGtIKF+pL0JIVl4puB0tKMIXCJWC
-        ff8md8e4YsZf8nfTc29gLRLaibflHqwrJ15JgVqI=
-Received: from [127.0.0.1] (60.177.188.90 [60.177.188.90]) by mx.zoho.com.cn
-        with SMTPS id 1590511334420243.9202782836336; Wed, 27 May 2020 00:42:14 +0800 (CST)
-Date:   Wed, 27 May 2020 00:42:12 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Lichao Liu <liulichao@loongson.cn>,
-        Paul Burton <paulburton@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, yuanjunqing@loongson.cn,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: CPU_LOONGSON2EF need software to maintain cache consistency
-User-Agent: K-9 Mail for Android
-Reply-to: jiaxun.yang@flygoat.com
-In-Reply-To: <20200526160045.GA12325@alpha.franken.de>
-References: <20200526111438.3788-1-liulichao@loongson.cn> <20200526193859.0adaea3b@halation.net.flygoat.com> <e9c015c2-b979-27c8-5f43-7af8d43174c5@loongson.cn> <20200526130128.GA8487@alpha.franken.de> <1d594568-e457-533e-122a-c7e449c0f05d@arm.com> <20200526232556.14a40f6c@halation.net.flygoat.com> <20200526160045.GA12325@alpha.franken.de>
-Message-ID: <42B7DD7E-4B77-4874-B932-95236D304CFB@flygoat.com>
+        id S1728731AbgEZQ5D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 12:57:03 -0400
+Received: from mga12.intel.com ([192.55.52.136]:58729 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726930AbgEZQ5C (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 May 2020 12:57:02 -0400
+IronPort-SDR: oIHRVtthYxI7JBehFK1KuCLOzFT0WArfgLts5cZ+1vAxwaffI70j2ojBuRXsAZbUpiGZYz/GRP
+ R6opfkIno4GA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2020 09:57:02 -0700
+IronPort-SDR: Er2zNXmgAzjRa4OAXcIq2b/xKyApj7yAEdoa4+gewOIBv7hNZ1+ASgdTNPQGRDP2fUT7g6IaUD
+ cmfxEw6lq4OA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,437,1583222400"; 
+   d="scan'208";a="301780640"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002.fm.intel.com with ESMTP; 26 May 2020 09:56:59 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jdcsv-0092P9-QH; Tue, 26 May 2020 19:57:01 +0300
+Date:   Tue, 26 May 2020 19:57:01 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] serial: 8250_dw: Fix common clocks usage race
+ condition
+Message-ID: <20200526165701.GX1634618@smile.fi.intel.com>
+References: <20200526160316.26136-1-Sergey.Semin@baikalelectronics.ru>
+ <20200526160316.26136-4-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200526160316.26136-4-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, May 26, 2020 at 07:03:16PM +0300, Serge Semin wrote:
+> The race condition may happen if the UART reference clock is shared with
+> some other device (on Baikal-T1 SoC it's another DW UART port). In this
+> case if that device changes the clock rate while serial console is using
+> it the DW 8250 UART port might not only end up with an invalid uartclk
+> value saved, but may also experience a distorted output data since
+> baud-clock could have been changed. In order to fix this lets at least
+> try to adjust the 8250 port setting like UART clock rate in case if the
+> reference clock rate change is discovered. The driver will call the new
+> method to update 8250 UART port clock rate settings. It's done by means of
+> the clock event notifier registered at the port startup and unregistered
+> in the shutdown callback method.
+> 
+> Note 1. In order to avoid deadlocks we had to execute the UART port update
+> method in a dedicated deferred work. This is due to (in my opinion
+> redundant) the clock update implemented in the dw8250_set_termios()
+> method.
+> Note 2. Before the ref clock is manually changed by the custom
+> set_termios() function we swap the port uartclk value with new rate
+> adjusted to be suitable for the requested baud. It is necessary in
+> order to effectively disable a functionality of the ref clock events
+> handler for the current UART port, since uartclk update will be done
+> a bit further in the generic serial8250_do_set_termios() function.
+
+...
+
+> +static void dw8250_clk_work_cb(struct work_struct *work)
+> +{
+> +	struct dw8250_data *d = work_to_dw8250_data(work);
+> +	struct uart_8250_port *up;
+> +	unsigned long rate;
+> +
+> +	rate = clk_get_rate(d->clk);
+
+> +	if (rate) {
+
+	if (rate <= 0)
+		return;
+
+?
+
+> +		up = serial8250_get_port(d->data.line);
+> +
+> +		serial8250_update_uartclk(&up->port, rate);
+> +	}
+> +}
+
+...
+
+> +static int dw8250_startup(struct uart_port *p)
+> +{
+> +	struct dw8250_data *d = to_dw8250_data(p->private_data);
+> +	int ret;
+> +
+> +	/*
+> +	 * Some platforms may provide a reference clock shared between several
+> +	 * devices. In this case before using the serial port first we have to
+> +	 * make sure that any clock state change is known to the UART port at
+> +	 * least post factum.
+> +	 */
+
+> +	if (d->clk) {
+
+Do you need this?
+
+> +		ret = clk_notifier_register(d->clk, &d->clk_notifier);
+
+Okay, seems clk_notifier_register() and its counterpart should be fixed for
+optional clocks.
+
+> +		if (ret)
+> +			dev_warn(p->dev, "Failed to set the clock notifier\n");
+
+So, what does this warning mean on the platforms which does not need notifier
+at all (i.o.w. all but baikal)?
+
+> +		/*
+> +		 * Get current reference clock rate to make sure the UART port
+> +		 * is equipped with an up-to-date value before it's started up.
+> +		 */
+
+Why? We call ->set_termios() for it, no?
+
+> +		p->uartclk = clk_get_rate(d->clk);
+> +		if (!p->uartclk) {
+> +			dev_err(p->dev, "Clock rate not defined\n");
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return serial8250_do_startup(p);
+> +}
+> +
+> +static void dw8250_shutdown(struct uart_port *p)
+> +{
+> +	struct dw8250_data *d = to_dw8250_data(p->private_data);
+> +
+> +	serial8250_do_shutdown(p);
+> +
+
+> +	if (d->clk) {
+
+Ditto.
+
+> +		clk_notifier_unregister(d->clk, &d->clk_notifier);
+> +
+> +		flush_work(&d->clk_work);
+> +	}
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-=E4=BA=8E 2020=E5=B9=B45=E6=9C=8827=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=881=
-2:00:45, Thomas Bogendoerfer <tsbogend@alpha=2Efranken=2Ede> =E5=86=99=E5=
-=88=B0:
->On Tue, May 26, 2020 at 11:25:56PM +0800, Jiaxun Yang wrote:
->> On Tue, 26 May 2020 14:29:50 +0100
->> Robin Murphy <robin=2Emurphy@arm=2Ecom> wrote:
->>=20
->> > On 2020-05-26 14:01, Thomas Bogendoerfer wrote:
->> > > On Tue, May 26, 2020 at 08:40:28PM +0800, Lichao Liu wrote: =20
->> > >> Loongson-2EF need software maintain cache consistency, So when
->> > >> using streaming DMA, software needs to maintain consistency=2E
->> > >>
->> > >> dma_map_single() is correct, but dma_unmap_single is wrong=2E
->> > >>
->> > >> The function call path:
->> > >> 'dma_unmap_single->dma_unmap_page_attrs->dma_direct_unmap_page->
->> > >>   dma_direct_sync_single_for_cpu->arch_sync_dma_for_cpu->
->> > >>   cpu_needs_post_dma_flush'
->> > >>
->> > >> In current version, 'cpu_needs_post_dma_flush' will return false
->> > >> at Loongon-2EF platform, and dma_unmap_single will not invalidate
->> > >> cache, driver may access wrong dma data=2E =20
->> > >=20
->> > > why should it ? CPU must not touch data while it's mapped for DMA=
-=2E
->> > >  =20
->> > >> I don't know what's the exact meaning of "fill random cachelines
->> > >> with stale data at any time"=2E I always think
->> > >> 'cpu_needs_post_dma_flush()' means whether this platform needs
->> > >> software to maintain cache consistency=2E =20
->> > >=20
->> > > this will only happen, if cpu speculates creates dirty cache lines
->> > > by speculation as R10k type of CPUs do=2E =20
->> >=20
->> > Will it? The usual pattern for this problem is that the CPU=20
->> > speculatively fills a (clean) cache line after a DMA_FROM_DEVICE=20
->> > operation has begun, but before the device has actually written to
->> > that part of the buffer=2E Thus a subsequent CPU read after the
->> > operation is complete can hit in the cache and return the previous
->> > data rather than the updated data that the device wrote=2E I don't kn=
-ow
->> > about MIPS specifically, but that can certainly happen on Arm=2E
->>=20
->> Checked the manual of Loongson-2F again and I must admit the case may
->> happen on Loongson-2EF processor=2E
->
->so the patch is correct ?
-
-I'm not sure=2E If we only have to care the case raised by Robin
-then we just need to care DMA_FROM_DEVICE=2E
-
-But sync unconditionally seems much more safer=2E
-
-Thanks=2E
-
->>=20
->> R4k manual didn't show the details of speculative policy but I think
->> that should be applied to all R4k like processors?
->
->R4k doesn't speculate at all=2E
->
->Thomas=2E
->
-
---=20
-Jiaxun Yang
