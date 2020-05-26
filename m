@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD481E2286
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 15:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294AF1E2284
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 14:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729079AbgEZM7l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 08:59:41 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:57336 "EHLO
+        id S2388899AbgEZM7r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 08:59:47 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:57374 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731781AbgEZM7k (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 08:59:40 -0400
+        with ESMTP id S1731856AbgEZM7q (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 08:59:46 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id A74078030869;
-        Tue, 26 May 2020 12:59:37 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id BB6B18030877;
+        Tue, 26 May 2020 12:59:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id iRqTKHYwckN4; Tue, 26 May 2020 15:59:36 +0300 (MSK)
+        with ESMTP id WP9cU4Oilj4X; Tue, 26 May 2020 15:59:37 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,9 +30,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
         <soc@kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 4/6] bus: Add Baikal-T1 AXI-bus driver
-Date:   Tue, 26 May 2020 15:59:26 +0300
-Message-ID: <20200526125928.17096-5-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v3 5/6] bus: Add Baikal-T1 APB-bus driver
+Date:   Tue, 26 May 2020 15:59:27 +0300
+Message-ID: <20200526125928.17096-6-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200526125928.17096-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200526125928.17096-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -44,17 +44,16 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-AXI3-bus is the main communication bus connecting all high-speed
-peripheral IP-cores with RAM controller and MIPS P5600 cores on Baikal-T1
-SoC. Bus traffic arbitration is done by means of DW AMBA 3 AXI
-Interconnect (so called AXI Main Interconnect) routing IO requests from
-one SoC block to another. This driver provides a way to detect any bus
-protocol errors and device not responding situations by means of an
-embedded on top of the interconnect errors handler block (EHB). AXI
-Interconnect QoS arbitration tuning is currently unsupported.
-The bus doesn't provide a way to detect the interconnected devices,
-so they are supposed to be statically defined like by means of the
-simple-bus sub-nodes.
+Baikal-T1 AXI-APB bridge is used to access the SoC subsystem CSRs.
+IO requests are routed to this bus by means of the DW AMBA 3 AXI
+Interconnect. In case if an attempted APB transaction stays with no
+response for a pre-defined time an interrupt occurs and the bus gets
+freed for a next operation. This driver provides the interrupt handler
+to detect the erroneous address, prints an error message about the
+address fault, updates an errors counter. The counter and the APB-bus
+operations timeout can be accessed via corresponding sysfs nodes.
+A dedicated sysfs-node can be also used to artificially cause the
+bus errors described above.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
@@ -71,69 +70,66 @@ Changelog v2:
 - Fix commit message and Kconfig help text spelling.
 - Move driver from soc to the bus subsystem.
 - Convert a simple EHB driver to the Baikal-T1 AXI-bus one.
-- Use syscon regmap to access the AXI-bus erroneous address.
-- Add interconnect reset line support.
+- Convert registers MMIO to the regmap.
+- Add reset line support.
 - Remove probe-status info string printout.
-- Use generic FIELD_{GET,PREP} macros instead of handwritten ones.
 - Since the driver depends on the OF config we can remove of_match_ptr()
   macro utilization.
 - Don't print error-message if no platform IRQ found. Just return an error.
-- Select MFD_SYSCON config.
 
 Changelog v3:
-- Retrieve QoS registers by resource name "qos".
 - Discard CONFIG_OF dependency since there is none at compile-time.
 ---
  drivers/bus/Kconfig   |  15 ++
  drivers/bus/Makefile  |   1 +
- drivers/bus/bt1-axi.c | 318 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 334 insertions(+)
- create mode 100644 drivers/bus/bt1-axi.c
+ drivers/bus/bt1-apb.c | 421 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 437 insertions(+)
+ create mode 100644 drivers/bus/bt1-apb.c
 
 diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-index 6d4e4497b59b..1080dd26e268 100644
+index 1080dd26e268..030f0e59f193 100644
 --- a/drivers/bus/Kconfig
 +++ b/drivers/bus/Kconfig
 @@ -29,6 +29,21 @@ config BRCMSTB_GISB_ARB
  	  arbiter. This driver provides timeout and target abort error handling
  	  and internal bus master decoding.
  
-+config BT1_AXI
-+	tristate "Baikal-T1 AXI-bus driver"
++config BT1_APB
++	tristate "Baikal-T1 APB-bus driver"
 +	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-+	select MFD_SYSCON
++	select REGMAP_MMIO
 +	help
-+	  AXI3-bus is the main communication bus connecting all high-speed
-+	  peripheral IP-cores with RAM controller and with MIPS P5600 cores on
-+	  Baikal-T1 SoC. Traffic arbitration is done by means of DW AMBA 3 AXI
-+	  Interconnect (so called AXI Main Interconnect) routing IO requests
-+	  from one SoC block to another. This driver provides a way to detect
-+	  any bus protocol errors and device not responding situations by
-+	  means of an embedded on top of the interconnect errors handler
-+	  block (EHB). AXI Interconnect QoS arbitration tuning is currently
-+	  unsupported.
++	  Baikal-T1 AXI-APB bridge is used to access the SoC subsystem CSRs.
++	  IO requests are routed to this bus by means of the DW AMBA 3 AXI
++	  Interconnect. In case of any APB protocol collisions, slave device
++	  not responding on timeout an IRQ is raised with an erroneous address
++	  reported to the APB terminator (APB Errors Handler Block). This
++	  driver provides the interrupt handler to detect the erroneous
++	  address, prints an error message about the address fault, updates an
++	  errors counter. The counter and the APB-bus operations timeout can be
++	  accessed via corresponding sysfs nodes.
 +
- config MOXTET
- 	tristate "CZ.NIC Turris Mox module configuration bus"
- 	depends on SPI_MASTER && OF
+ config BT1_AXI
+ 	tristate "Baikal-T1 AXI-bus driver"
+ 	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
 diff --git a/drivers/bus/Makefile b/drivers/bus/Makefile
-index 05f32cd694a4..eaa25d171ebd 100644
+index eaa25d171ebd..08ccbfaf7705 100644
 --- a/drivers/bus/Makefile
 +++ b/drivers/bus/Makefile
 @@ -13,6 +13,7 @@ obj-$(CONFIG_MOXTET)		+= moxtet.o
  # DPAA2 fsl-mc bus
  obj-$(CONFIG_FSL_MC_BUS)	+= fsl-mc/
  
-+obj-$(CONFIG_BT1_AXI)		+= bt1-axi.o
++obj-$(CONFIG_BT1_APB)		+= bt1-apb.o
+ obj-$(CONFIG_BT1_AXI)		+= bt1-axi.o
  obj-$(CONFIG_IMX_WEIM)		+= imx-weim.o
  obj-$(CONFIG_MIPS_CDMM)		+= mips_cdmm.o
- obj-$(CONFIG_MVEBU_MBUS) 	+= mvebu-mbus.o
-diff --git a/drivers/bus/bt1-axi.c b/drivers/bus/bt1-axi.c
+diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
 new file mode 100644
-index 000000000000..a52a5b9bbaf5
+index 000000000000..295cfa83aa23
 --- /dev/null
-+++ b/drivers/bus/bt1-axi.c
-@@ -0,0 +1,318 @@
++++ b/drivers/bus/bt1-apb.c
+@@ -0,0 +1,421 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
@@ -141,67 +137,99 @@ index 000000000000..a52a5b9bbaf5
 + * Authors:
 + *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 + *
-+ * Baikal-T1 AXI-bus driver
++ * Baikal-T1 APB-bus driver
 + */
 +
 +#include <linux/kernel.h>
 +#include <linux/module.h>
 +#include <linux/types.h>
-+#include <linux/bitfield.h>
 +#include <linux/device.h>
 +#include <linux/atomic.h>
-+#include <linux/regmap.h>
 +#include <linux/platform_device.h>
-+#include <linux/mfd/syscon.h>
 +#include <linux/interrupt.h>
 +#include <linux/nmi.h>
++#include <linux/regmap.h>
 +#include <linux/clk.h>
 +#include <linux/reset.h>
++#include <linux/time64.h>
++#include <linux/clk.h>
 +#include <linux/sysfs.h>
 +
-+#define BT1_AXI_WERRL			0x110
-+#define BT1_AXI_WERRH			0x114
-+#define BT1_AXI_WERRH_TYPE		BIT(23)
-+#define BT1_AXI_WERRH_ADDR_FLD		24
-+#define BT1_AXI_WERRH_ADDR_MASK		GENMASK(31, BT1_AXI_WERRH_ADDR_FLD)
++#define APB_EHB_ISR			0x00
++#define APB_EHB_ISR_PENDING		BIT(0)
++#define APB_EHB_ISR_MASK		BIT(1)
++#define APB_EHB_ADDR			0x04
++#define APB_EHB_TIMEOUT			0x08
++
++#define APB_EHB_TIMEOUT_MIN		0x000003FFU
++#define APB_EHB_TIMEOUT_MAX		0xFFFFFFFFU
 +
 +/*
-+ * struct bt1_axi - Baikal-T1 AXI-bus private data
++ * struct bt1_apb - Baikal-T1 APB EHB private data
 + * @dev: Pointer to the device structure.
-+ * @qos_regs: AXI Interconnect QoS tuning registers.
-+ * @sys_regs: Baikal-T1 System Controller registers map.
++ * @regs: APB EHB registers map.
++ * @res: No-device error injection memory region.
 + * @irq: Errors IRQ number.
-+ * @aclk: AXI reference clock.
-+ * @arst: AXI Interconnect reset line.
++ * @rate: APB-bus reference clock rate.
++ * @pclk: APB-reference clock.
++ * @prst: APB domain reset line.
 + * @count: Number of errors detected.
 + */
-+struct bt1_axi {
++struct bt1_apb {
 +	struct device *dev;
 +
-+	void __iomem *qos_regs;
-+	struct regmap *sys_regs;
++	struct regmap *regs;
++	void __iomem *res;
 +	int irq;
 +
-+	struct clk *aclk;
++	unsigned long rate;
++	struct clk *pclk;
 +
-+	struct reset_control *arst;
++	struct reset_control *prst;
 +
 +	atomic_t count;
 +};
 +
-+static irqreturn_t bt1_axi_isr(int irq, void *data)
++static const struct regmap_config bt1_apb_regmap_cfg = {
++	.reg_bits = 32,
++	.val_bits = 32,
++	.reg_stride = 4,
++	.max_register = APB_EHB_TIMEOUT,
++	.fast_io = true
++};
++
++static inline unsigned long bt1_apb_n_to_timeout_us(struct bt1_apb *apb, u32 n)
 +{
-+	struct bt1_axi *axi = data;
-+	u32 low = 0, high = 0;
++	u64 timeout = (u64)n * USEC_PER_SEC;
 +
-+	regmap_read(axi->sys_regs, BT1_AXI_WERRL, &low);
-+	regmap_read(axi->sys_regs, BT1_AXI_WERRH, &high);
++	do_div(timeout, apb->rate);
 +
-+	dev_crit_ratelimited(axi->dev,
-+		"AXI-bus fault %d: %s at 0x%x%08x\n",
-+		atomic_inc_return(&axi->count),
-+		high & BT1_AXI_WERRH_TYPE ? "no slave" : "slave protocol error",
-+		high, low);
++	return timeout;
++
++}
++
++static inline unsigned long bt1_apb_timeout_to_n_us(struct bt1_apb *apb,
++						    unsigned long timeout)
++{
++	u64 n = (u64)timeout * apb->rate;
++
++	do_div(n, USEC_PER_SEC);
++
++	return n;
++
++}
++
++static irqreturn_t bt1_apb_isr(int irq, void *data)
++{
++	struct bt1_apb *apb = data;
++	u32 addr = 0;
++
++	regmap_read(apb->regs, APB_EHB_ADDR, &addr);
++
++	dev_crit_ratelimited(apb->dev,
++		"APB-bus fault %d: Slave access timeout at 0x%08x\n",
++		atomic_inc_return(&apb->count),
++		addr);
 +
 +	/*
 +	 * Print backtrace on each CPU. This might be pointless if the fault
@@ -212,158 +240,228 @@ index 000000000000..a52a5b9bbaf5
 +	 */
 +	trigger_all_cpu_backtrace();
 +
++	regmap_update_bits(apb->regs, APB_EHB_ISR, APB_EHB_ISR_PENDING, 0);
++
 +	return IRQ_HANDLED;
 +}
 +
-+static void bt1_axi_clear_data(void *data)
++static void bt1_apb_clear_data(void *data)
 +{
-+	struct bt1_axi *axi = data;
-+	struct platform_device *pdev = to_platform_device(axi->dev);
++	struct bt1_apb *apb = data;
++	struct platform_device *pdev = to_platform_device(apb->dev);
 +
 +	platform_set_drvdata(pdev, NULL);
 +}
 +
-+static struct bt1_axi *bt1_axi_create_data(struct platform_device *pdev)
++static struct bt1_apb *bt1_apb_create_data(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
-+	struct bt1_axi *axi;
++	struct bt1_apb *apb;
 +	int ret;
 +
-+	axi = devm_kzalloc(dev, sizeof(*axi), GFP_KERNEL);
-+	if (!axi)
++	apb = devm_kzalloc(dev, sizeof(*apb), GFP_KERNEL);
++	if (!apb)
 +		return ERR_PTR(-ENOMEM);
 +
-+	ret = devm_add_action(dev, bt1_axi_clear_data, axi);
++	ret = devm_add_action(dev, bt1_apb_clear_data, apb);
 +	if (ret) {
-+		dev_err(dev, "Can't add AXI EHB data clear action\n");
++		dev_err(dev, "Can't add APB EHB data clear action\n");
 +		return ERR_PTR(ret);
 +	}
 +
-+	axi->dev = dev;
-+	atomic_set(&axi->count, 0);
-+	platform_set_drvdata(pdev, axi);
++	apb->dev = dev;
++	atomic_set(&apb->count, 0);
++	platform_set_drvdata(pdev, apb);
 +
-+	return axi;
++	return apb;
 +}
 +
-+static int bt1_axi_request_regs(struct bt1_axi *axi)
++static int bt1_apb_request_regs(struct bt1_apb *apb)
 +{
-+	struct platform_device *pdev = to_platform_device(axi->dev);
-+	struct device *dev = axi->dev;
++	struct platform_device *pdev = to_platform_device(apb->dev);
++	void __iomem *regs;
 +
-+	axi->sys_regs = syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
-+	if (IS_ERR(axi->sys_regs)) {
-+		dev_err(dev, "Couldn't find syscon registers\n");
-+		return PTR_ERR(axi->sys_regs);
++	regs = devm_platform_ioremap_resource_byname(pdev, "ehb");
++	if (IS_ERR(regs)) {
++		dev_err(apb->dev, "Couldn't map APB EHB registers\n");
++		return PTR_ERR(regs);
 +	}
 +
-+	axi->qos_regs = devm_platform_ioremap_resource_byname(pdev, "qos");
-+	if (IS_ERR(axi->qos_regs)) {
-+		dev_err(dev, "Couldn't map AXI-bus QoS registers\n");
-+		return PTR_ERR(axi->qos_regs);
++	apb->regs = devm_regmap_init_mmio(apb->dev, regs, &bt1_apb_regmap_cfg);
++	if (IS_ERR(apb->regs)) {
++		dev_err(apb->dev, "Couldn't create APB EHB regmap\n");
++		return PTR_ERR(apb->regs);
++	}
++
++	apb->res = devm_platform_ioremap_resource_byname(pdev, "nodev");
++	if (IS_ERR(apb->res)) {
++		dev_err(apb->dev, "Couldn't map reserved region\n");
++		return PTR_ERR(apb->res);
 +	}
 +
 +	return 0;
 +}
 +
-+static int bt1_axi_request_rst(struct bt1_axi *axi)
++static int bt1_apb_request_rst(struct bt1_apb *apb)
 +{
 +	int ret;
 +
-+	axi->arst = devm_reset_control_get_optional_exclusive(axi->dev, "arst");
-+	if (IS_ERR(axi->arst)) {
-+		dev_warn(axi->dev, "Couldn't get reset control line\n");
-+		return PTR_ERR(axi->arst);
++	apb->prst = devm_reset_control_get_optional_exclusive(apb->dev, "prst");
++	if (IS_ERR(apb->prst)) {
++		dev_warn(apb->dev, "Couldn't get reset control line\n");
++		return PTR_ERR(apb->prst);
 +	}
 +
-+	ret = reset_control_deassert(axi->arst);
++	ret = reset_control_deassert(apb->prst);
 +	if (ret)
-+		dev_err(axi->dev, "Failed to deassert the reset line\n");
++		dev_err(apb->dev, "Failed to deassert the reset line\n");
 +
 +	return ret;
 +}
 +
-+static void bt1_axi_disable_clk(void *data)
++static void bt1_apb_disable_clk(void *data)
 +{
-+	struct bt1_axi *axi = data;
++	struct bt1_apb *apb = data;
 +
-+	clk_disable_unprepare(axi->aclk);
++	clk_disable_unprepare(apb->pclk);
 +}
 +
-+static int bt1_axi_request_clk(struct bt1_axi *axi)
++static int bt1_apb_request_clk(struct bt1_apb *apb)
 +{
 +	int ret;
 +
-+	axi->aclk = devm_clk_get(axi->dev, "aclk");
-+	if (IS_ERR(axi->aclk)) {
-+		dev_err(axi->dev, "Couldn't get AXI Interconnect clock\n");
-+		return PTR_ERR(axi->aclk);
++	apb->pclk = devm_clk_get(apb->dev, "pclk");
++	if (IS_ERR(apb->pclk)) {
++		dev_err(apb->dev, "Couldn't get APB clock descriptor\n");
++		return PTR_ERR(apb->pclk);
 +	}
 +
-+	ret = clk_prepare_enable(axi->aclk);
++	ret = clk_prepare_enable(apb->pclk);
 +	if (ret) {
-+		dev_err(axi->dev, "Couldn't enable the AXI clock\n");
++		dev_err(apb->dev, "Couldn't enable the APB clock\n");
 +		return ret;
 +	}
 +
-+	ret = devm_add_action_or_reset(axi->dev, bt1_axi_disable_clk, axi);
++	ret = devm_add_action_or_reset(apb->dev, bt1_apb_disable_clk, apb);
 +	if (ret) {
-+		dev_err(axi->dev, "Can't add AXI clock disable action\n");
++		dev_err(apb->dev, "Can't add APB EHB clocks disable action\n");
 +		return ret;
++	}
++
++	apb->rate = clk_get_rate(apb->pclk);
++	if (!apb->rate) {
++		dev_err(apb->dev, "Invalid clock rate\n");
++		return -EINVAL;
 +	}
 +
 +	return 0;
 +}
 +
-+static int bt1_axi_request_irq(struct bt1_axi *axi)
++static void bt1_apb_clear_irq(void *data)
 +{
-+	struct platform_device *pdev = to_platform_device(axi->dev);
++	struct bt1_apb *apb = data;
++
++	regmap_update_bits(apb->regs, APB_EHB_ISR, APB_EHB_ISR_MASK, 0);
++}
++
++static int bt1_apb_request_irq(struct bt1_apb *apb)
++{
++	struct platform_device *pdev = to_platform_device(apb->dev);
 +	int ret;
 +
-+	axi->irq = platform_get_irq(pdev, 0);
-+	if (axi->irq < 0)
-+		return axi->irq;
++	apb->irq = platform_get_irq(pdev, 0);
++	if (apb->irq < 0)
++		return apb->irq;
 +
-+	ret = devm_request_irq(axi->dev, axi->irq, bt1_axi_isr, IRQF_SHARED,
-+			       "bt1-axi", axi);
++	ret = devm_request_irq(apb->dev, apb->irq, bt1_apb_isr, IRQF_SHARED,
++			       "bt1-apb", apb);
 +	if (ret) {
-+		dev_err(axi->dev, "Couldn't request AXI EHB IRQ\n");
++		dev_err(apb->dev, "Couldn't request APB EHB IRQ\n");
 +		return ret;
 +	}
++
++	ret = devm_add_action(apb->dev, bt1_apb_clear_irq, apb);
++	if (ret) {
++		dev_err(apb->dev, "Can't add APB EHB IRQs clear action\n");
++		return ret;
++	}
++
++	/* Unmask IRQ and clear it' pending flag. */
++	regmap_update_bits(apb->regs, APB_EHB_ISR,
++			   APB_EHB_ISR_PENDING | APB_EHB_ISR_MASK,
++			   APB_EHB_ISR_MASK);
 +
 +	return 0;
 +}
 +
-+static ssize_t count_show(struct device *dev,
-+			  struct device_attribute *attr, char *buf)
++static ssize_t count_show(struct device *dev, struct device_attribute *attr,
++			  char *buf)
 +{
-+	struct bt1_axi *axi = dev_get_drvdata(dev);
++	struct bt1_apb *apb = dev_get_drvdata(dev);
 +
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", atomic_read(&axi->count));
++	return scnprintf(buf, PAGE_SIZE, "%d\n", atomic_read(&apb->count));
 +}
 +static DEVICE_ATTR_RO(count);
++
++static ssize_t timeout_show(struct device *dev, struct device_attribute *attr,
++			    char *buf)
++{
++	struct bt1_apb *apb = dev_get_drvdata(dev);
++	unsigned long timeout;
++	int ret;
++	u32 n;
++
++	ret = regmap_read(apb->regs, APB_EHB_TIMEOUT, &n);
++	if (ret)
++		return ret;
++
++	timeout = bt1_apb_n_to_timeout_us(apb, n);
++
++	return scnprintf(buf, PAGE_SIZE, "%lu\n", timeout);
++}
++
++static ssize_t timeout_store(struct device *dev,
++			     struct device_attribute *attr,
++			     const char *buf, size_t count)
++{
++	struct bt1_apb *apb = dev_get_drvdata(dev);
++	unsigned long timeout;
++	int ret;
++	u32 n;
++
++	if (kstrtoul(buf, 0, &timeout) < 0)
++		return -EINVAL;
++
++	n = bt1_apb_timeout_to_n_us(apb, timeout);
++	n = clamp(n, APB_EHB_TIMEOUT_MIN, APB_EHB_TIMEOUT_MAX);
++
++	ret = regmap_write(apb->regs, APB_EHB_TIMEOUT, n);
++
++	return ret ?: count;
++}
++static DEVICE_ATTR_RW(timeout);
 +
 +static int inject_error_show(struct device *dev, struct device_attribute *attr,
 +			     char *buf)
 +{
-+	return scnprintf(buf, PAGE_SIZE, "Error injection: bus unaligned\n");
++	return scnprintf(buf, PAGE_SIZE, "Error injection: nodev irq\n");
 +}
 +
 +static int inject_error_store(struct device *dev,
 +			      struct device_attribute *attr,
 +			      const char *data, size_t count)
 +{
-+	struct bt1_axi *axi = dev_get_drvdata(dev);
++	struct bt1_apb *apb = dev_get_drvdata(dev);
 +
 +	/*
-+	 * Performing unaligned read from the memory will cause the CM2 bus
-+	 * error while unaligned writing - the AXI bus write error handled
-+	 * by this driver.
++	 * Either dummy read from the unmapped address in the APB IO area
++	 * or manually set the IRQ status.
 +	 */
-+	if (!strncmp(data, "bus", 3))
-+		readb(axi->qos_regs);
-+	else if (!strncmp(data, "unaligned", 9))
-+		writeb(0, axi->qos_regs);
++	if (!strncmp(data, "nodev", 5))
++		readl(apb->res);
++	else if (!strncmp(data, "irq", 3))
++		regmap_update_bits(apb->regs, APB_EHB_ISR, APB_EHB_ISR_PENDING,
++				   APB_EHB_ISR_PENDING);
 +	else
 +		return -EINVAL;
 +
@@ -371,86 +469,87 @@ index 000000000000..a52a5b9bbaf5
 +}
 +static DEVICE_ATTR_RW(inject_error);
 +
-+static struct attribute *bt1_axi_sysfs_attrs[] = {
++static struct attribute *bt1_apb_sysfs_attrs[] = {
 +	&dev_attr_count.attr,
++	&dev_attr_timeout.attr,
 +	&dev_attr_inject_error.attr,
 +	NULL
 +};
-+ATTRIBUTE_GROUPS(bt1_axi_sysfs);
++ATTRIBUTE_GROUPS(bt1_apb_sysfs);
 +
-+static void bt1_axi_remove_sysfs(void *data)
++static void bt1_apb_remove_sysfs(void *data)
 +{
-+	struct bt1_axi *axi = data;
++	struct bt1_apb *apb = data;
 +
-+	device_remove_groups(axi->dev, bt1_axi_sysfs_groups);
++	device_remove_groups(apb->dev, bt1_apb_sysfs_groups);
 +}
 +
-+static int bt1_axi_init_sysfs(struct bt1_axi *axi)
++static int bt1_apb_init_sysfs(struct bt1_apb *apb)
 +{
 +	int ret;
 +
-+	ret = device_add_groups(axi->dev, bt1_axi_sysfs_groups);
++	ret = device_add_groups(apb->dev, bt1_apb_sysfs_groups);
 +	if (ret) {
-+		dev_err(axi->dev, "Failed to add sysfs files group\n");
++		dev_err(apb->dev, "Failed to create EHB APB sysfs nodes\n");
 +		return ret;
 +	}
 +
-+	ret = devm_add_action_or_reset(axi->dev, bt1_axi_remove_sysfs, axi);
++	ret = devm_add_action_or_reset(apb->dev, bt1_apb_remove_sysfs, apb);
 +	if (ret)
-+		dev_err(axi->dev, "Can't add AXI EHB sysfs remove action\n");
++		dev_err(apb->dev, "Can't add APB EHB sysfs remove action\n");
 +
 +	return ret;
 +}
 +
-+static int bt1_axi_probe(struct platform_device *pdev)
++static int bt1_apb_probe(struct platform_device *pdev)
 +{
-+	struct bt1_axi *axi;
++	struct bt1_apb *apb;
 +	int ret;
 +
-+	axi = bt1_axi_create_data(pdev);
-+	if (IS_ERR(axi))
-+		return PTR_ERR(axi);
++	apb = bt1_apb_create_data(pdev);
++	if (IS_ERR(apb))
++		return PTR_ERR(apb);
 +
-+	ret = bt1_axi_request_regs(axi);
++	ret = bt1_apb_request_regs(apb);
 +	if (ret)
 +		return ret;
 +
-+	ret = bt1_axi_request_rst(axi);
++	ret = bt1_apb_request_rst(apb);
 +	if (ret)
 +		return ret;
 +
-+	ret = bt1_axi_request_clk(axi);
++	ret = bt1_apb_request_clk(apb);
 +	if (ret)
 +		return ret;
 +
-+	ret = bt1_axi_request_irq(axi);
++	ret = bt1_apb_request_irq(apb);
 +	if (ret)
 +		return ret;
 +
-+	ret = bt1_axi_init_sysfs(axi);
++	ret = bt1_apb_init_sysfs(apb);
 +	if (ret)
 +		return ret;
 +
 +	return 0;
 +}
 +
-+static const struct of_device_id bt1_axi_of_match[] = {
-+	{ .compatible = "baikal,bt1-axi" },
++static const struct of_device_id bt1_apb_of_match[] = {
++	{ .compatible = "baikal,bt1-apb" },
 +	{ }
 +};
-+MODULE_DEVICE_TABLE(of, bt1_axi_of_match);
++MODULE_DEVICE_TABLE(of, bt1_apb_of_match);
 +
-+static struct platform_driver bt1_axi_driver = {
-+	.probe = bt1_axi_probe,
++static struct platform_driver bt1_apb_driver = {
++	.probe = bt1_apb_probe,
 +	.driver = {
-+		.name = "bt1-axi",
-+		.of_match_table = bt1_axi_of_match
++		.name = "bt1-apb",
++		.of_match_table = bt1_apb_of_match
 +	}
 +};
-+module_platform_driver(bt1_axi_driver);
++module_platform_driver(bt1_apb_driver);
 +
 +MODULE_AUTHOR("Serge Semin <Sergey.Semin@baikalelectronics.ru>");
-+MODULE_DESCRIPTION("Baikal-T1 AXI-bus driver");
++MODULE_DESCRIPTION("Baikal-T1 APB-bus driver");
 +MODULE_LICENSE("GPL v2");
 -- 
 2.26.2
