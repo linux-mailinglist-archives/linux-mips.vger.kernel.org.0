@@ -2,129 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B12E1E1AE4
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 07:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E211E1C1A
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 09:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbgEZF7c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 01:59:32 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:60013 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725771AbgEZF7c (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 May 2020 01:59:32 -0400
-Received: by ozlabs.org (Postfix, from userid 1003)
-        id 49WNZn04xgz9sSs; Tue, 26 May 2020 15:59:28 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ozlabs.org; s=201707;
-        t=1590472769; bh=4zTMjLxiP7At/YtrE7MFZ9lR12F6gL3vS4op93NKqcw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=khGxIciPhO0Sfk2SnU/0Ae673wU3qJd++HDVCdDXw0crK8Ypm2/n9l62eVF831yOi
-         qSlxMK1kVwrGk5Ie4AuHOGiyMVvCJOwjYXSbzPDmsHvR8Rc6dTcCW4fUqTmnv2FFC3
-         IC6DoGsAZ7Lz1lXXrlNfXZL/2bFCAo2dtE/thks2LK2v0to3aW5buJZfJX1GsIWfGN
-         AgMpuG9PWO3XTyuFrjqeVqtJHgB3BOMn3n4bxBUe7RXQfa23LEupF1Ywt0g5DVnF/1
-         IVVxPvpB947tg6+DMLQ0rMbIi1mYImwuRTcOzmoU9yY9DUZ2d3cWMG3nlOTWEdkC0S
-         nbtLhygWbPVew==
-Date:   Tue, 26 May 2020 15:59:24 +1000
-From:   Paul Mackerras <paulus@ozlabs.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     pbonzini@redhat.com, tsbogend@alpha.franken.de, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com,
-        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        sean.j.christopherson@intel.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, maz@kernel.org, james.morse@arm.com,
-        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
-        christoffer.dall@arm.com, peterx@redhat.com, thuth@redhat.com,
-        chenhuacai@gmail.com, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 5/7] KVM: PPC: clean up redundant kvm_run parameters
- in assembly
-Message-ID: <20200526055924.GD282305@thinks.paulus.ozlabs.org>
-References: <20200427043514.16144-1-tianjia.zhang@linux.alibaba.com>
- <20200427043514.16144-6-tianjia.zhang@linux.alibaba.com>
+        id S1726928AbgEZHWv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 03:22:51 -0400
+Received: from mail-m972.mail.163.com ([123.126.97.2]:33580 "EHLO
+        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726768AbgEZHWu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 03:22:50 -0400
+X-Greylist: delayed 910 seconds by postgrey-1.27 at vger.kernel.org; Tue, 26 May 2020 03:22:50 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=bkSJj
+        PRUKYUDwFkyPzThVgbKD1YuAi6I43MZcpH/s8I=; b=Vqh+9szHVRs6SKbD3K4o3
+        O11U5YVtsRU8DxAs4N+AHZvRZvG2y1XxuOnULRU5qi0Hh82c2ESl7Ke/DZHYQZfu
+        FInuwilB9rNwQOy1wgQcSWsRei6YoZcY3V6bEcPcRqEKjUGGy3oKyWO6kapcfqT3
+        Rg4E0uJQYY3VZSNlFFFBoc=
+Received: from [172.20.10.2] (unknown [124.64.17.235])
+        by smtp2 (Coremail) with SMTP id GtxpCgAXauInwMxeX977Bg--.54S2;
+        Tue, 26 May 2020 15:07:28 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Fix IRQ tracing when call handle_fpe()
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     paulburton@kernel.org, chenhc@lemote.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liulichao@loongson.cn
+References: <20200525033123.13114-1-yuanjunqing66@163.com>
+ <20200525084234.GA5057@alpha.franken.de>
+From:   yuanjunqing <yuanjunqing66@163.com>
+Message-ID: <76f2c756-0ae4-83f5-becf-6f1b3319f6fd@163.com>
+Date:   Tue, 26 May 2020 15:07:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200427043514.16144-6-tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <20200525084234.GA5057@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: GtxpCgAXauInwMxeX977Bg--.54S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KF1ruF4rtw4rJrWkXw4Utwb_yoW8Jw47p3
+        y8C3Z5KF4qgrWjvrW7Cwn5GrW5Kw4kArWY9Fs5tay5X3WrXF4ktF4IqwsIgryq9r1kua1f
+        KFyqg34j9FsxA3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jN739UUUUU=
+X-Originating-IP: [124.64.17.235]
+X-CM-SenderInfo: h1xd0ypxqtx0rjwwqiywtou0bp/xtbBUQowXFaD7O3HBgABsj
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 27, 2020 at 12:35:12PM +0800, Tianjia Zhang wrote:
-> In the current kvm version, 'kvm_run' has been included in the 'kvm_vcpu'
-> structure. For historical reasons, many kvm-related function parameters
-> retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time. This
-> patch does a unified cleanup of these remaining redundant parameters.
 
-Some of these changes don't look completely correct to me, see below.
-If you're expecting these patches to go through my tree, I can fix up
-the patch and commit it (with you as author), noting the changes I
-made in the commit message.  Do you want me to do that?
+在 2020/5/25 下午4:42, Thomas Bogendoerfer 写道:
+> On Mon, May 25, 2020 at 11:31:23AM +0800, YuanJunQing wrote:
+>>  Register "a1" is unsaved in this function,
+>>  when CONFIG_TRACE_IRQFLAGS is enabled,
+>>  the TRACE_IRQS_OFF macro will call trace_hardirqs_off(),
+>>  and this may change register "a1".
+>>  The variment of register "a1" may send SIGFPE signal
+>>  to task when call do_fpe(),and this may kill the task.
+>>
+>> Signed-off-by: YuanJunQing <yuanjunqing66@163.com>
+>> ---
+>>  arch/mips/kernel/genex.S | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+>> index 8236fb291e3f..956a76429773 100644
+>> --- a/arch/mips/kernel/genex.S
+>> +++ b/arch/mips/kernel/genex.S
+>> @@ -480,16 +480,18 @@ NESTED(nmi_handler, PT_SIZE, sp)
+>>  	/* gas fails to assemble cfc1 for some archs (octeon).*/ \
+>>  	.set	mips1
+>>  	SET_HARDFLOAT
+>> -	cfc1	a1, fcr31
+>> +	cfc1	s0, fcr31
+>>  	.set	pop
+>>  	CLI
+>>  	TRACE_IRQS_OFF
+>> +	move    a1,s0
+>>  	.endm
+> do we realy need to read fcr31 that early ? Wouldn't it work to
+> just move the cfc1 below TRACE_IRQS_OFF ?
+>
+> Thomas.
 
-> diff --git a/arch/powerpc/kvm/book3s_interrupts.S b/arch/powerpc/kvm/book3s_interrupts.S
-> index f7ad99d972ce..0eff749d8027 100644
-> --- a/arch/powerpc/kvm/book3s_interrupts.S
-> +++ b/arch/powerpc/kvm/book3s_interrupts.S
-> @@ -55,8 +55,7 @@
->   ****************************************************************************/
->  
->  /* Registers:
-> - *  r3: kvm_run pointer
-> - *  r4: vcpu pointer
-> + *  r3: vcpu pointer
->   */
->  _GLOBAL(__kvmppc_vcpu_run)
->  
-> @@ -68,8 +67,8 @@ kvm_start_entry:
->  	/* Save host state to the stack */
->  	PPC_STLU r1, -SWITCH_FRAME_SIZE(r1)
->  
-> -	/* Save r3 (kvm_run) and r4 (vcpu) */
-> -	SAVE_2GPRS(3, r1)
-> +	/* Save r3 (vcpu) */
-> +	SAVE_GPR(3, r1)
->  
->  	/* Save non-volatile registers (r14 - r31) */
->  	SAVE_NVGPRS(r1)
-> @@ -82,11 +81,11 @@ kvm_start_entry:
->  	PPC_STL	r0, _LINK(r1)
->  
->  	/* Load non-volatile guest state from the vcpu */
-> -	VCPU_LOAD_NVGPRS(r4)
-> +	VCPU_LOAD_NVGPRS(r3)
->  
->  kvm_start_lightweight:
->  	/* Copy registers into shadow vcpu so we can access them in real mode */
-> -	mr	r3, r4
-> +	mr	r4, r3
 
-This mr doesn't seem necessary.
+ yes, it can work when we just move the cfc1 below TRACE_IRQS_OFF,
+ and the code is written as follows.
 
->  	bl	FUNC(kvmppc_copy_to_svcpu)
->  	nop
->  	REST_GPR(4, r1)
+ 	CLI
+ 	TRACE_IRQS_OFF
+ 	.set	mips1
+ 	SET_HARDFLOAT
+	cfc1	a1, fcr31
+ 	.set	pop
+       .endm
 
-This should be loading r4 from GPR3(r1), not GPR4(r1) - which is what
-REST_GPR(4, r1) will do.
 
-Then, in the file but not in the patch context, there is this line:
-
-	PPC_LL	r3, GPR4(r1)		/* vcpu pointer */
-
-where once again GPR4 needs to be GPR3.
-
-> @@ -191,10 +190,10 @@ after_sprg3_load:
->  	PPC_STL	r31, VCPU_GPR(R31)(r7)
->  
->  	/* Pass the exit number as 3rd argument to kvmppc_handle_exit */
-
-The comment should be modified to say "2nd" instead of "3rd",
-otherwise it is confusing.
-
-The rest of the patch looks OK.
-
-Paul.
