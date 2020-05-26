@@ -2,129 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE83F1E2562
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 17:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F2E1E25C3
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 17:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728279AbgEZP0c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 11:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727921AbgEZP0b (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 11:26:31 -0400
-Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0E6C03E96D
-        for <linux-mips@vger.kernel.org>; Tue, 26 May 2020 08:26:27 -0700 (PDT)
-Received: from halation.net.flygoat.com (unknown [IPv6:240e:390:49e:d1a0::d68])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id B40CC204CB;
-        Tue, 26 May 2020 15:26:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1590506787; bh=Cy4sJrybsIIcV0DWfPR1iSRhV3HmC6oZr85GVbuQKHc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QriFjjUjEbxCamfVI222A95SCxdrESTok7B6brsd4DFOdGXCkpdRrY07edZolKa0G
-         gAmt/IfQBbft3KcHukLfGZtNpseV2FjjAziHBuqkEepYcgD5YWQszE+CdBQyQIebzM
-         cPV/hIw/ArkTiBsw/AEIRswn7GTMR+YSWe/8bBm6/2hxrAn0Y34vhuPdvuQiySVfnv
-         ABfJB62j4cMXLcR0SvkUazsJk3tvQM8ZtH2EDVgullpOTvQSqrKzAUNGyoKpF9x/RL
-         VSZi/0eWuREhgCc0cpqiusVdLiLGbK4RYY9neQ8pSFUXkk8fCwiOraSKquc8ZKriaQ
-         qdLRRzlgAesIw==
-Date:   Tue, 26 May 2020 23:25:56 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lichao Liu <liulichao@loongson.cn>,
-        Paul Burton <paulburton@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, yuanjunqing@loongson.cn,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: CPU_LOONGSON2EF need software to maintain cache
- consistency
-Message-ID: <20200526232556.14a40f6c@halation.net.flygoat.com>
-In-Reply-To: <1d594568-e457-533e-122a-c7e449c0f05d@arm.com>
-References: <20200526111438.3788-1-liulichao@loongson.cn>
-        <20200526193859.0adaea3b@halation.net.flygoat.com>
-        <e9c015c2-b979-27c8-5f43-7af8d43174c5@loongson.cn>
-        <20200526130128.GA8487@alpha.franken.de>
-        <1d594568-e457-533e-122a-c7e449c0f05d@arm.com>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1728166AbgEZPmC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 11:42:02 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:58492 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728297AbgEZPlf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 11:41:35 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id CE9DC803086C;
+        Tue, 26 May 2020 15:41:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lrA8Y0ZfdvuY; Tue, 26 May 2020 18:41:29 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/7] watchdog: dw_wdt: Take Baikal-T1 DW WDT peculiarities into account
+Date:   Tue, 26 May 2020 18:41:16 +0300
+Message-ID: <20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 26 May 2020 14:29:50 +0100
-Robin Murphy <robin.murphy@arm.com> wrote:
+Merge window is upon us. Please review/merge in/whatever the rest of the
+patches.
 
-> On 2020-05-26 14:01, Thomas Bogendoerfer wrote:
-> > On Tue, May 26, 2020 at 08:40:28PM +0800, Lichao Liu wrote:  
-> >> Loongson-2EF need software maintain cache consistency, So when
-> >> using streaming DMA, software needs to maintain consistency.
-> >>
-> >> dma_map_single() is correct, but dma_unmap_single is wrong.
-> >>
-> >> The function call path:
-> >> 'dma_unmap_single->dma_unmap_page_attrs->dma_direct_unmap_page->
-> >>   dma_direct_sync_single_for_cpu->arch_sync_dma_for_cpu->
-> >>   cpu_needs_post_dma_flush'
-> >>
-> >> In current version, 'cpu_needs_post_dma_flush' will return false
-> >> at Loongon-2EF platform, and dma_unmap_single will not invalidate
-> >> cache, driver may access wrong dma data.  
-> > 
-> > why should it ? CPU must not touch data while it's mapped for DMA.
-> >   
-> >> I don't know what's the exact meaning of "fill random cachelines
-> >> with stale data at any time". I always think
-> >> 'cpu_needs_post_dma_flush()' means whether this platform needs
-> >> software to maintain cache consistency.  
-> > 
-> > this will only happen, if cpu speculates creates dirty cache lines
-> > by speculation as R10k type of CPUs do.  
-> 
-> Will it? The usual pattern for this problem is that the CPU 
-> speculatively fills a (clean) cache line after a DMA_FROM_DEVICE 
-> operation has begun, but before the device has actually written to
-> that part of the buffer. Thus a subsequent CPU read after the
-> operation is complete can hit in the cache and return the previous
-> data rather than the updated data that the device wrote. I don't know
-> about MIPS specifically, but that can certainly happen on Arm.
+There were a few features enabled at the time of the Baikal-T1 SoC DW WDT
+IP synthesis, which weren't taken into account in the DW WDT driver available
+in the kernel. First of all the SoC engineers synthesized the watchdog core
+with WDT_USE_FIX_TOP set to false (don't really know why, but they did).
+Due to this the timer reset values weren't fixed as the driver expected
+but were initialized with a pre-defined values selected by the engineers.
+Secondly the driver expected that the watchdog APB bus and the timer had
+synchronous reference clocks, while Baikal-T1 SoC DW WDT was created with
+asynchronous ones. So the driver should enable two clock devices: APB bus
+clocks and a separate timer reference clock. Finally DW Watchdog Timer is
+capable of generating a pre-timeout interrupt if corresponding config is
+enabled. The problem was that the pre-timeout IRQ happens when the set
+timeout elapses, while the actual WDT expiration and subsequent reboot take
+place in the next timeout. This makes the pre-timeout functionality
+implementation a bit tricky, since in this case we would have to find a
+WDT timeout twice smaller the requested timeout. All of the changes described
+above are provided by the patches in this patchset.
 
-Checked the manual of Loongson-2F again and I must admit the case may
-happen on Loongson-2EF processor.
+In addition traditionally we replaced the legacy plain text-based dt-binding
+file with yaml-based one and added the controller registers dump DebugFS node
+to ease the driver debug procedure.
 
-R4k manual didn't show the details of speculative policy but I think
-that should be applied to all R4k like processors?
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
 
-So what we need is a post Invalidate after DMA_FROM_DEVICE?
-DMA to device should not affected at all.
+Changelog v2:
+- Rearrange SoBs.
+- Discard BE copyright header from the binding file.
+- Replace "additionalProperties: false" with "unevaluatedProperties: false"
+  property in the binding.
+- Move the APB3 clocks support declared in the dt binding file into a
+  dedicated patch.
+- Move $ref to the root level of the "snps,watchdog-tops" property
+  so does the constraints.
+- Make Pre-timeout IRQs support being optional.
+- Add "ms" suffix to the methods returning msec and convert the methods
+  with no "ms" suffix to return a timeout in sec.
+- Make sure minimum timeout is at least 1 sec.
+- Refactor the timeouts calculation procedure to to retain the timeouts in
+  the ascending order.
+- Make sure there is no integer overflow in milliseconds calculation. It
+  is saved in a dedicated uint field of the timeout structure.
+- Discard timeout/pretimeout/ping/enable DebugFS nodes. Registers state
+  dump node is only left.
 
-The origin R10k errata looks like a different story. Both from and to
-device is affected because cache line was incorrectly marked as dirty
-and it may writeback old data to memory already modified by uncached
-write even CPU doesn't perform any cached write to that line. 
+Link: https://lore.kernel.org/linux-watchdog/20200510105807.880-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Add Rob's Reviewed-by tag to the DT-related patches.
+- Remove items from the "snps,watchdog-tops" property and move the
+  minItems and maxItems constraints to the root level of it.
 
-See details at Page 22 of R10k UM[1].
-Not sure if BMIPS here is the same case. 
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-watchdog@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-Thanks.
+Serge Semin (7):
+  dt-bindings: watchdog: Convert DW WDT binding to DT schema
+  dt-bindings: watchdog: dw-wdt: Support devices with asynch clocks
+  dt-bindings: watchdog: dw-wdt: Add watchdog TOPs array property
+  watchdog: dw_wdt: Support devices with non-fixed TOP values
+  watchdog: dw_wdt: Support devices with asynch clocks
+  watchdog: dw_wdt: Add pre-timeouts support
+  watchdog: dw_wdt: Add DebugFS files
 
-[1]:http://www.ece.mtu.edu/faculty/rmkieckh/cla/4173/REFERENCES/MIPS-R10K-uman1.pdf
+ .../devicetree/bindings/watchdog/dw_wdt.txt   |  24 -
+ .../bindings/watchdog/snps,dw-wdt.yaml        |  90 ++++
+ drivers/watchdog/dw_wdt.c                     | 437 ++++++++++++++++--
+ 3 files changed, 494 insertions(+), 57 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/dw_wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
 
-- Jiaxun
-
-> 
-> >> I found this problem in 4.19.90 kernel's ethernet driver,
-> >> and this patch can fix this problem.  
-> > 
-> > if CPU isn't affected by the R10k speculation problem, it sounds
-> > more like wrong usage of DMA api.  
-> 
-> Sure, explicit accesses to the mapped buffer would be a software
-> error, but if legitimate non-overlapping accesses to other data
-> nearby can trigger the CPU to speculatively fetch lines from the
-> DMA-mapped region, that's generally beyond software's control.
-> 
-> Robin.
-
+-- 
+2.26.2
 
