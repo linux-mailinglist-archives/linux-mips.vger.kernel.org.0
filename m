@@ -2,113 +2,235 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2B41E1F9B
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 12:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373071E2061
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 13:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731881AbgEZK1B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 06:27:01 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31442 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731815AbgEZK1A (ORCPT
+        id S2388918AbgEZLD7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 07:03:59 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:58044 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388781AbgEZLDs (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 May 2020 06:27:00 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04QA5xxx057571;
-        Tue, 26 May 2020 06:25:20 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 316wyrpry4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 May 2020 06:25:20 -0400
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04QALbLM089259;
-        Tue, 26 May 2020 06:25:20 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 316wyrprxg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 May 2020 06:25:19 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04QALwVn011238;
-        Tue, 26 May 2020 10:25:18 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 316uf8a9qn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 May 2020 10:25:17 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04QAPFY2000510
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 May 2020 10:25:15 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9FB46A404D;
-        Tue, 26 May 2020 10:25:15 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C2F65A4051;
-        Tue, 26 May 2020 10:25:11 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue, 26 May 2020 10:25:11 +0000 (GMT)
-Date:   Tue, 26 May 2020 15:55:11 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     john mathew <john.mathew@unikie.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
-        lukas.bulwahn@gmail.com, x86@kernel.org,
-        linux-mips@vger.kernel.org, tglx@linutronix.de,
-        mostafa.chamanara@gmail.com, willy@infradead.org,
-        valentin.schneider@arm.com, rdunlap@infradead.org,
-        Mostafa Chamanara <mostafa.chamanara@basemark.com>,
-        Oleg Tsymbal <oleg.tsymbal@unikie.com>
-Subject: Re: [RFC PATCH v5 3/3] docs: scheduler: Add introduction to
- scheduler context-switch
-Message-ID: <20200526102511.GA5681@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20200514092637.15684-1-John.Mathew@unikie.com>
- <20200514092637.15684-4-John.Mathew@unikie.com>
+        Tue, 26 May 2020 07:03:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590491025;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YiHC1jSZ9odIhljl+OEk0Z9XTPo94KqwVQ3mMvdqhCY=;
+        b=I1fjp5XgQW6FPaTls6PoNGs5V/mqK5DkHd2jHkW810kDdtPBYBylY+wB+LPqvzs565HYHR
+        r4Be4nWecOeR8kjnxVzClG2ieZLrbdx0DgwgSZqp/U8gqKOrbmE+q5jLEmFct6lPKhrWTN
+        e9WbXX/ovxy5eunR6qh1/eWk+RdQFWQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-251-ggAMuLHoOnOxVU5b-5ysow-1; Tue, 26 May 2020 07:03:44 -0400
+X-MC-Unique: ggAMuLHoOnOxVU5b-5ysow-1
+Received: by mail-wm1-f69.google.com with SMTP id t62so951652wmt.7
+        for <linux-mips@vger.kernel.org>; Tue, 26 May 2020 04:03:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YiHC1jSZ9odIhljl+OEk0Z9XTPo94KqwVQ3mMvdqhCY=;
+        b=SxTZH1+MkWSPwIiFHNefIFZwCH109VBuRsiSiOt5HGGHThxfqPwMdCp+d6w3rwFq8e
+         LhDTFVxUFMfSFDZkck/FFtjYrWBUQKbq5+Xdj3gJpv0Oa2aCLkRaRFwvFe1Vhwy+ctrg
+         tf8ZHrBNSH/NMwa+vSREvqi+IO1JWh6XVB0o3ecju8FSI+8eP7OdDl+qHa15LOk6QXRZ
+         J7gLtEt03DUYacfwMz08UG6mbVxxDmreCVIx9/eyUt73XbfrIkIaCR6vZvdfCtF69w3H
+         h5i5y02x60ADrcMKjKXqaFOm1qkqYFAjsN1kbIbD5wtmLgciL5dOUbQdrJr9TUgt8YOW
+         nRaQ==
+X-Gm-Message-State: AOAM533D58qFyBBaFDzUbY5Yvo0ZwVDoRVxm5NMgubqFMxscKP7JFRtY
+        XwZonKwirNQDmJr9285syUGSeCmAF6Pqc1LR/Ihk+w2FSeYPvh3w30pwbPreBPCsFPOUlpz7s2f
+        cj+qSiDbFDT1hncWD2O940w==
+X-Received: by 2002:a7b:c8d6:: with SMTP id f22mr867257wml.108.1590491022801;
+        Tue, 26 May 2020 04:03:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy+r1rjVk/6TMhaP3IgReV3uZsywmdIrm1MH7nDDpPZhbJkQGL0WqDauUTDI+FV3ViYCaqhZA==
+X-Received: by 2002:a7b:c8d6:: with SMTP id f22mr867213wml.108.1590491022381;
+        Tue, 26 May 2020 04:03:42 -0700 (PDT)
+Received: from localhost.localdomain.com ([194.230.155.118])
+        by smtp.gmail.com with ESMTPSA id d6sm22928240wrj.90.2020.05.26.04.03.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 04:03:31 -0700 (PDT)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        Jonathan Adams <jwadams@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Subject: [PATCH v3 0/7] Statsfs: a new ram-based file system for Linux kernel statistics
+Date:   Tue, 26 May 2020 13:03:10 +0200
+Message-Id: <20200526110318.69006-1-eesposit@redhat.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20200514092637.15684-4-John.Mathew@unikie.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-05-26_01:2020-05-26,2020-05-26 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 phishscore=0 adultscore=0 clxscore=1011 malwarescore=0
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 spamscore=0
- mlxscore=0 bulkscore=0 cotscore=-2147483648 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005260073
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-* john mathew <john.mathew@unikie.com> [2020-05-14 12:26:37]:
+There is currently no common way for Linux kernel subsystems to expose
+statistics to userspace shared throughout the Linux kernel; subsystems have
+to take care of gathering and displaying statistics by themselves, for
+example in the form of files in debugfs. For example KVM has its own code
+section that takes care of this in virt/kvm/kvm_main.c, where it sets up
+debugfs handlers for displaying values and aggregating them from various
+subfolders to obtain information about the system state (i.e. displaying
+the total number of exits, calculated by summing all exits of all cpus of
+all running virtual machines).
 
-> +
-> +Context Switching
-> +-----------------
-> +
-> +Context switching, the switching from a running task to another,
-> +is done by the context_switch() function defined in kernel/sched.c.
+Allowing each section of the kernel to do so has two disadvantages. First,
+it will introduce redundant code. Second, debugfs is anyway not the right
+place for statistics (for example it is affected by lockdown)
 
-context_switch is defined in kernel/sched/core.c 
+In this patch series I introduce statsfs, a synthetic ram-based virtual
+filesystem that takes care of gathering and displaying statistics for the
+Linux kernel subsystems.
 
-> +It is called by __schedule() when a new process has been selected to run.
-> +The execution flow is as follows:
-> +
-> +
-> +  For a kernel task switching to a user task, switch_mm_irqs_off()
-> +  replaces the address space of prev kernel task with the next from the user
-> +  task. Same as for exiting process in this case, the context_switch()
+The file system is mounted on /sys/kernel/stats and would be already used
+by kvm. Statsfs was initially introduced by Paolo Bonzini [1].
 
-Did you mean existing instead of exiting?
+Statsfs offers a generic and stable API, allowing any kind of
+directory/file organization and supporting multiple kind of aggregations
+(not only sum, but also average, max, min and count_zero) and data types
+(boolean, unsigned/signed and custom types). The implementation, which is
+a generalization of KVM’s debugfs statistics code, takes care of gathering
+and displaying information at run time; users only need to specify the
+values to be included in each source.
 
-> +  function saves the pointer to the memory descriptor used by prev in the
-> +  runqueue???s prev_mm field and resets prev task active address space.
-> +
+Statsfs would also be a different mountpoint from debugfs, and would not
+suffer from limited access due to the security lock down patches. Its main
+function is to display each statistics as a file in the desired folder
+hierarchy defined through the API. Statsfs files can be read, and possibly
+cleared if their file mode allows it.
+
+Statsfs has two main components: the public API defined by
+include/linux/statsfs.h, and the virtual file system which should end up in
+/sys/kernel/stats.
+
+The API has two main elements, values and sources. Kernel subsystems like
+KVM can use the API to create a source, add child sources/values/aggregates
+and register it to the root source (that on the virtual fs would be
+/sys/kernel/statsfs).
+
+Sources are created via statsfs_source_create(), and each source becomes a
+directory in the file system. Sources form a parent-child relationship;
+root sources are added to the file system via statsfs_source_register().
+Every other source is added to or removed from a parent through the
+statsfs_source_add_subordinate and statsfs_source_remote_subordinate APIs.
+Once a source is created and added to the tree (via add_subordinate), it
+will be used to compute aggregate values in the parent source.
+A source can optionally be hidden from the filesystem
+but still considered in the aggregation operations if the corresponding
+flag is set during initialization.
+
+Values represent quantites that are gathered by the statsfs user. Examples
+of values include the number of vm exits of a given kind, the amount of
+memory used by some data structure, the length of the longest hash table
+chain, or anything like that. Values are defined with the
+statsfs_source_add_values function. Each value is defined by a struct
+statsfs_value; the same statsfs_value can be added to many different
+sources. A value can be considered "simple" if it fetches data from a
+user-provided location, or "aggregate" if it groups all values in the
+subordinates sources that include the same statsfs_value.
+Each value has a stats_fs_type pointer in order to allow the user to
+provide custom get and clear functions. The library, however, also
+exports default stats_fs_type structs for the standard types
+(all unsigned and signed types plus boolean).
+A value can also provide a show function, that takes care
+of displaying the value in a custom string format. This can be especially
+useful when displaying enums.
+
+For more information, please consult the kerneldoc documentation in patch 2
+and the sample uses in the kunit tests, KVM and networking.
+
+This series of patches is based on my previous series "libfs: group and
+simplify linux fs code" and the single patch sent to kvm "kvm_host: unify
+VM_STAT and VCPU_STAT definitions in a single place". The former simplifies
+code duplicated in debugfs and tracefs (from which statsfs is based on),
+the latter groups all macros definition for statistics in kvm in a single
+common file shared by all architectures.
+
+Patch 1 adds a new refcount and kref destructor wrappers that take a
+semaphore, as those are used later by statsfs. Patch 2 introduces the
+statsfs API, patch 3 provides extensive tests that can also be used as
+example on how to use the API and patch 4 adds the file system support.
+Finally, patch 5 provides a real-life example of statsfs usage in KVM,
+with patch 6 providing a concrete example of the show function and
+patch 7 another real-life example in the networking subsystem.
+
+[1] https://lore.kernel.org/kvm/5d6cdcb1-d8ad-7ae6-7351-3544e2fa366d@redhat.com/?fbclid=IwAR18LHJ0PBcXcDaLzILFhHsl3qpT3z2vlG60RnqgbpGYhDv7L43n0ZXJY8M
+
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+
+v2 -> v3 move kconfig entry in the pseudo filesystem menu, add
+documentation, get/clear function for value types, show function,
+floating/cumulative and hidden flags. Also added the netstat
+example
+
+Emanuele Giuseppe Esposito (7):
+  stats_fs API: create, add and remove stats_fs sources and values
+  documentation for stats_fs
+  kunit: tests for stats_fs API
+  stats_fs fs: virtual fs to show stats to the end-user
+  kvm_main: replace debugfs with stats_fs
+  [not for merge] kvm: example of stats_fs_value show function
+  [not for merge] netstats: example use of stats_fs API
+
+ Documentation/filesystems/index.rst    |    1 +
+ Documentation/filesystems/stats_fs.rst |  222 +++++
+ MAINTAINERS                            |    7 +
+ arch/arm64/kvm/Kconfig                 |    1 +
+ arch/arm64/kvm/guest.c                 |    2 +-
+ arch/mips/kvm/Kconfig                  |    1 +
+ arch/mips/kvm/mips.c                   |    2 +-
+ arch/powerpc/kvm/Kconfig               |    1 +
+ arch/powerpc/kvm/book3s.c              |   12 +-
+ arch/powerpc/kvm/booke.c               |    8 +-
+ arch/s390/kvm/Kconfig                  |    1 +
+ arch/s390/kvm/kvm-s390.c               |   16 +-
+ arch/x86/include/asm/kvm_host.h        |    2 +-
+ arch/x86/kvm/Kconfig                   |    1 +
+ arch/x86/kvm/Makefile                  |    2 +-
+ arch/x86/kvm/debugfs.c                 |   64 --
+ arch/x86/kvm/stats_fs.c                |  114 +++
+ arch/x86/kvm/x86.c                     |   11 +-
+ fs/Kconfig                             |   20 +
+ fs/Makefile                            |    1 +
+ fs/stats_fs/Makefile                   |    7 +
+ fs/stats_fs/inode.c                    |  461 ++++++++++
+ fs/stats_fs/internal.h                 |   34 +
+ fs/stats_fs/stats_fs-tests.c           | 1097 ++++++++++++++++++++++++
+ fs/stats_fs/stats_fs.c                 |  642 ++++++++++++++
+ fs/stats_fs/stub.c                     |   13 +
+ include/linux/kvm_host.h               |   45 +-
+ include/linux/netdevice.h              |    2 +
+ include/linux/stats_fs.h               |  381 ++++++++
+ include/uapi/linux/magic.h             |    1 +
+ net/Kconfig                            |    1 +
+ net/core/dev.c                         |   68 ++
+ tools/lib/api/fs/fs.c                  |   21 +
+ virt/kvm/arm/arm.c                     |    2 +-
+ virt/kvm/kvm_main.c                    |  317 +------
+ 35 files changed, 3193 insertions(+), 388 deletions(-)
+ create mode 100644 Documentation/filesystems/stats_fs.rst
+ delete mode 100644 arch/x86/kvm/debugfs.c
+ create mode 100644 arch/x86/kvm/stats_fs.c
+ create mode 100644 fs/stats_fs/Makefile
+ create mode 100644 fs/stats_fs/inode.c
+ create mode 100644 fs/stats_fs/internal.h
+ create mode 100644 fs/stats_fs/stats_fs-tests.c
+ create mode 100644 fs/stats_fs/stats_fs.c
+ create mode 100644 fs/stats_fs/stub.c
+ create mode 100644 include/linux/stats_fs.h
+
 -- 
-Thanks and Regards
-Srikar Dronamraju
+2.25.4
+
