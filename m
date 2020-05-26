@@ -2,94 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A99D31E1F27
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 11:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2B41E1F9B
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 12:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728750AbgEZJxS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 05:53:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40898 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728746AbgEZJxR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 May 2020 05:53:17 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 25B0D2073B;
-        Tue, 26 May 2020 09:53:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590486797;
-        bh=+nbXCDci9c5Fz3kvlyGeacA/q0QA+E4niOgPuLj7CM4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=zeXlre+g6yaA77szQ0hvBkF7z6OsT8VwbAuS1QToye0TIqurfgSCSdDnhEPa9b9uG
-         fvmCTu4aq2KMiiO+XbrjB67fD8bFYolR5+XfaBSI46cJtxMRCNqjuQisWzpRthLVsH
-         4G1Tyed8n9fqS73Jtzz9lFCd+X2Sq04ea173yB4I=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1jdWGp-00FLr4-Hr; Tue, 26 May 2020 10:53:15 +0100
+        id S1731881AbgEZK1B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 06:27:01 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31442 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731815AbgEZK1A (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 May 2020 06:27:00 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04QA5xxx057571;
+        Tue, 26 May 2020 06:25:20 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 316wyrpry4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 May 2020 06:25:20 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04QALbLM089259;
+        Tue, 26 May 2020 06:25:20 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 316wyrprxg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 May 2020 06:25:19 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04QALwVn011238;
+        Tue, 26 May 2020 10:25:18 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 316uf8a9qn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 May 2020 10:25:17 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04QAPFY2000510
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 May 2020 10:25:15 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9FB46A404D;
+        Tue, 26 May 2020 10:25:15 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C2F65A4051;
+        Tue, 26 May 2020 10:25:11 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue, 26 May 2020 10:25:11 +0000 (GMT)
+Date:   Tue, 26 May 2020 15:55:11 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     john mathew <john.mathew@unikie.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
+        lukas.bulwahn@gmail.com, x86@kernel.org,
+        linux-mips@vger.kernel.org, tglx@linutronix.de,
+        mostafa.chamanara@gmail.com, willy@infradead.org,
+        valentin.schneider@arm.com, rdunlap@infradead.org,
+        Mostafa Chamanara <mostafa.chamanara@basemark.com>,
+        Oleg Tsymbal <oleg.tsymbal@unikie.com>
+Subject: Re: [RFC PATCH v5 3/3] docs: scheduler: Add introduction to
+ scheduler context-switch
+Message-ID: <20200526102511.GA5681@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <20200514092637.15684-1-John.Mathew@unikie.com>
+ <20200514092637.15684-4-John.Mathew@unikie.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 26 May 2020 10:53:15 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Huacai Chen <chenhc@lemote.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 2/6] dt-bindings: interrupt-controller: Add Loongson
- HTVEC
-In-Reply-To: <20200526172653.0a19f375@halation.net.flygoat.com>
-References: <20200427060551.1372591-1-jiaxun.yang@flygoat.com>
- <20200516082912.3673033-1-jiaxun.yang@flygoat.com>
- <20200516082912.3673033-2-jiaxun.yang@flygoat.com>
- <87v9kkz5kl.wl-maz@kernel.org>
- <20200526172653.0a19f375@halation.net.flygoat.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <98643a72747e4896b78cd4d583d2d3f9@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, robh+dt@kernel.org, tglx@linutronix.de, jason@lakedaemon.net, chenhc@lemote.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20200514092637.15684-4-John.Mathew@unikie.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-05-26_01:2020-05-26,2020-05-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 phishscore=0 adultscore=0 clxscore=1011 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ mlxscore=0 bulkscore=0 cotscore=-2147483648 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005260073
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020-05-26 10:26, Jiaxun Yang wrote:
-> On Mon, 25 May 2020 11:12:26 +0100
-> Marc Zyngier <maz@kernel.org> wrote:
-> 
->> On Sat, 16 May 2020 09:29:02 +0100,
->> Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->> >
->> > Add binding for Loongson-3 HyperTransport Interrupt Vector
->> > Controller.
->> >
->> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> > --
->> > v4: Drop ref, '|', add additionalProperties, fix example
->> 
->> Rob, do you have any input on this?
-> 
-> Oops, looks like I was in-reply into wrong patch topic for this patch,
-> should I resend this series into correct thread?
+* john mathew <john.mathew@unikie.com> [2020-05-14 12:26:37]:
 
-No, this series is fine as it is. TBH, your practice of sending
-a series in reply to the previous version is not that useful
-(I personally find it very annoying).
+> +
+> +Context Switching
+> +-----------------
+> +
+> +Context switching, the switching from a running task to another,
+> +is done by the context_switch() function defined in kernel/sched.c.
 
-It would also be a big improvement if you sent a cover letter
-with your patches (using --cover-letter when generating the patches).
+context_switch is defined in kernel/sched/core.c 
 
-I'll wait for Rob to comment on this patch as well as patch #4.
+> +It is called by __schedule() when a new process has been selected to run.
+> +The execution flow is as follows:
+> +
+> +
+> +  For a kernel task switching to a user task, switch_mm_irqs_off()
+> +  replaces the address space of prev kernel task with the next from the user
+> +  task. Same as for exiting process in this case, the context_switch()
 
-Thanks,
+Did you mean existing instead of exiting?
 
-         M.
+> +  function saves the pointer to the memory descriptor used by prev in the
+> +  runqueue???s prev_mm field and resets prev task active address space.
+> +
 -- 
-Jazz is not dead. It just smells funny...
+Thanks and Regards
+Srikar Dronamraju
