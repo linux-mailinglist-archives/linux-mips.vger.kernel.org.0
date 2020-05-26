@@ -2,185 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EB31E25B3
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 17:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465571E25DD
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 17:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729631AbgEZPln (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 11:41:43 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58606 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730135AbgEZPlj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 11:41:39 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C3E1E8030878;
-        Tue, 26 May 2020 15:41:34 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 499XuFg3cxQM; Tue, 26 May 2020 18:41:34 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 7/7] watchdog: dw_wdt: Add DebugFS files
-Date:   Tue, 26 May 2020 18:41:23 +0300
-Message-ID: <20200526154123.24402-8-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru>
+        id S1728492AbgEZPpZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 11:45:25 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:23636 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728201AbgEZPpY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 May 2020 11:45:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590507922;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dt6LQHnd8XQKjoczzuKu5+J73yx/PTFTJmXrE029Qj0=;
+        b=MuDE1EeNGCQ7ZtyasjHIeRquVoyGlw4ms/cF48n+wazvpvZJXtfMaHWohfbEpb6eu/b5pd
+        cagcXwYz82p5Nr22SwvYHKapCY9bDujsdyxeL5jbNE0kD6wB2awofKGhTvYwW4Qc8IF3qm
+        sR+IEuKfj/j1E+CuQh5LmGbRLqBM3+E=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-330-sPA2QOaTPLOkRSk93i4cvw-1; Tue, 26 May 2020 11:45:20 -0400
+X-MC-Unique: sPA2QOaTPLOkRSk93i4cvw-1
+Received: by mail-wr1-f70.google.com with SMTP id j8so3203243wrb.9
+        for <linux-mips@vger.kernel.org>; Tue, 26 May 2020 08:45:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Dt6LQHnd8XQKjoczzuKu5+J73yx/PTFTJmXrE029Qj0=;
+        b=BtNgBSVVQ57W2+T9pfQDI2HDIuMdWMOVPGHbYxMRjMOM3bP2OmpugxfkUc9HEDojg8
+         Eb4kEKntypRbM+3duQ5I5KApRhivhTuEHUdwfY9Knjtn/oVWOsqtl9w7BX3z9ZNeysir
+         qXE9WVOVtr7bH7TFi5QwttaJ7ol9m+ODrB/mQV+olB6CIids9x0mE5LhPI9tAG0xSrNI
+         ITcmEiVc6TMbZigHtl0DohPhX7b751YNpDN3sdehOWY6OCiQYosysjAJ/E4Mnd1jm/R2
+         g4OeGl3rY0qK1akHuxvFLmfwlHPqXBbVYv/5Bx5TqJ7Im38gbrvYSss9v9iIyR73Kdmu
+         0Fpg==
+X-Gm-Message-State: AOAM531YnwlAxfzWodWrw+BqZRFsVg4AHCrLgyPAD7mfoeeNCbV2tloY
+        HieqNbBlDY2PYNTvQ7me2VqCyd0HpY/aZNVFY82/sKzBWOKNa/qfsBf6Zhl+tC0dLU+9895qDCk
+        e+L3yA2du24ulZoRCd8SnBA==
+X-Received: by 2002:a05:6000:1202:: with SMTP id e2mr2590856wrx.231.1590507919724;
+        Tue, 26 May 2020 08:45:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw5If1uNgTKWEisUAJowYTPwcuzMOOow4nahat1ESbDjPkHGjhZwTTbQrIPi02UQ5LtAAq4hw==
+X-Received: by 2002:a05:6000:1202:: with SMTP id e2mr2590848wrx.231.1590507919516;
+        Tue, 26 May 2020 08:45:19 -0700 (PDT)
+Received: from localhost.localdomain ([194.230.155.118])
+        by smtp.gmail.com with ESMTPSA id u10sm32544wmc.31.2020.05.26.08.45.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2020 08:45:18 -0700 (PDT)
+Subject: Re: [PATCH v3 7/7] [not for merge] netstats: example use of stats_fs
+ API
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        Jonathan Adams <jwadams@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org
+References: <20200526110318.69006-1-eesposit@redhat.com>
+ <20200526110318.69006-8-eesposit@redhat.com>
+ <20200526141605.GJ768009@lunn.ch>
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Message-ID: <99217496-929f-ed3b-8e9e-bbd26d06e234@redhat.com>
+Date:   Tue, 26 May 2020 17:45:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200526141605.GJ768009@lunn.ch>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-For the sake of the easier device-driver debug procedure, we added a
-DebugFS file with the controller registers state. It's available only if
-kernel is configured with DebugFS support.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: devicetree@vger.kernel.org
+Hi Andrew
 
----
+> How do you atomically get and display a group of statistics?
+> 
+> If you look at how the netlink socket works, you will see code like:
+> 
+>                  do {
+>                          start = u64_stats_fetch_begin_irq(&cpu_stats->syncp);
+>                          rx_packets = cpu_stats->rx_packets;
+>                          rx_bytes = cpu_stats->rx_bytes;
+> 			....
+>                  } while (u64_stats_fetch_retry_irq(&cpu_stats->syncp, start));
+> 
+> It will ensure that rx_packets and rx_bytes are consistent with each
+> other. If the value of the sequence counter changes while inside the
+> loop, the loop so repeated until it does not change.
+> 
+> In general, hardware counters in NICs are the same.  You tell it to
+> take a snapshot of the statistics counters, and then read them all
+> back, to give a consistent view across all the statistics.
+> 
+> I've not looked at this new code in detail, but it looks like you have
+> one file per statistic, and assume each statistic is independent of
+> every other statistic. This independence can limit how you use the
+> values, particularly when debugging. The netlink interface we use does
+> not have this limitation.
 
-Changelog v2:
-- Rearrange SoBs.
-- Discard timeout/pretimeout/ping/enable DebugFS nodes. Registers state
-  dump node is only left.
----
- drivers/watchdog/dw_wdt.c | 68 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+You're right, statistics are treated independently so what you describe 
+is currently not supported.
 
-diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-index 3cd7c485cd70..012681baaa6d 100644
---- a/drivers/watchdog/dw_wdt.c
-+++ b/drivers/watchdog/dw_wdt.c
-@@ -28,6 +28,7 @@
- #include <linux/platform_device.h>
- #include <linux/reset.h>
- #include <linux/watchdog.h>
-+#include <linux/debugfs.h>
- 
- #define WDOG_CONTROL_REG_OFFSET		    0x00
- #define WDOG_CONTROL_REG_WDT_EN_MASK	    0x01
-@@ -39,8 +40,14 @@
- #define WDOG_COUNTER_RESTART_KICK_VALUE	    0x76
- #define WDOG_INTERRUPT_STATUS_REG_OFFSET    0x10
- #define WDOG_INTERRUPT_CLEAR_REG_OFFSET     0x14
-+#define WDOG_COMP_PARAMS_5_REG_OFFSET       0xe4
-+#define WDOG_COMP_PARAMS_4_REG_OFFSET       0xe8
-+#define WDOG_COMP_PARAMS_3_REG_OFFSET       0xec
-+#define WDOG_COMP_PARAMS_2_REG_OFFSET       0xf0
- #define WDOG_COMP_PARAMS_1_REG_OFFSET       0xf4
- #define WDOG_COMP_PARAMS_1_USE_FIX_TOP      BIT(6)
-+#define WDOG_COMP_VERSION_REG_OFFSET        0xf8
-+#define WDOG_COMP_TYPE_REG_OFFSET           0xfc
- 
- /* There are sixteen TOPs (timeout periods) that can be set in the watchdog. */
- #define DW_WDT_NUM_TOPS		16
-@@ -85,6 +92,10 @@ struct dw_wdt {
- 	/* Save/restore */
- 	u32			control;
- 	u32			timeout;
-+
-+#ifdef CONFIG_DEBUG_FS
-+	struct dentry		*dbgfs_dir;
-+#endif
- };
- 
- #define to_dw_wdt(wdd)	container_of(wdd, struct dw_wdt, wdd)
-@@ -484,6 +495,59 @@ static int dw_wdt_init_timeouts(struct dw_wdt *dw_wdt, struct device *dev)
- 	return 0;
- }
- 
-+#ifdef CONFIG_DEBUG_FS
-+
-+#define DW_WDT_DBGFS_REG(_name, _off) \
-+{				      \
-+	.name = _name,		      \
-+	.offset = _off		      \
-+}
-+
-+static const struct debugfs_reg32 dw_wdt_dbgfs_regs[] = {
-+	DW_WDT_DBGFS_REG("cr", WDOG_CONTROL_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("torr", WDOG_TIMEOUT_RANGE_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("ccvr", WDOG_CURRENT_COUNT_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("crr", WDOG_COUNTER_RESTART_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("stat", WDOG_INTERRUPT_STATUS_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param5", WDOG_COMP_PARAMS_5_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param4", WDOG_COMP_PARAMS_4_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param3", WDOG_COMP_PARAMS_3_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param2", WDOG_COMP_PARAMS_2_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param1", WDOG_COMP_PARAMS_1_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("version", WDOG_COMP_VERSION_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("type", WDOG_COMP_TYPE_REG_OFFSET)
-+};
-+
-+static void dw_wdt_dbgfs_init(struct dw_wdt *dw_wdt)
-+{
-+	struct device *dev = dw_wdt->wdd.parent;
-+	struct debugfs_regset32 *regset;
-+
-+	regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
-+	if (!regset)
-+		return;
-+
-+	regset->regs = dw_wdt_dbgfs_regs;
-+	regset->nregs = ARRAY_SIZE(dw_wdt_dbgfs_regs);
-+	regset->base = dw_wdt->regs;
-+
-+	dw_wdt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
-+
-+	debugfs_create_regset32("registers", 0444, dw_wdt->dbgfs_dir, regset);
-+}
-+
-+static void dw_wdt_dbgfs_clear(struct dw_wdt *dw_wdt)
-+{
-+	debugfs_remove_recursive(dw_wdt->dbgfs_dir);
-+}
-+
-+#else /* !CONFIG_DEBUG_FS */
-+
-+static void dw_wdt_dbgfs_init(struct dw_wdt *dw_wdt) {}
-+static void dw_wdt_dbgfs_clear(struct dw_wdt *dw_wdt) {}
-+
-+#endif /* !CONFIG_DEBUG_FS */
-+
- static int dw_wdt_drv_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -607,6 +671,8 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto out_disable_pclk;
- 
-+	dw_wdt_dbgfs_init(dw_wdt);
-+
- 	return 0;
- 
- out_disable_pclk:
-@@ -621,6 +687,8 @@ static int dw_wdt_drv_remove(struct platform_device *pdev)
- {
- 	struct dw_wdt *dw_wdt = platform_get_drvdata(pdev);
- 
-+	dw_wdt_dbgfs_clear(dw_wdt);
-+
- 	watchdog_unregister_device(&dw_wdt->wdd);
- 	reset_control_assert(dw_wdt->rst);
- 	clk_disable_unprepare(dw_wdt->pclk);
--- 
-2.26.2
+In KVM the utilization is more qualitative, so there isn't such problem.
+But as long as the interface is based on file access, the possibility of 
+snapshotting might not be useful; however, it could still be considered 
+to be added later together with the binary access.
+
+Jonathan, how is your metricfs handling this case?
+
+Thank you,
+Emanuele
 
