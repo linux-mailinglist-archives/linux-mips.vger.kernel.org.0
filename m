@@ -2,91 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F267C1E22EB
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 15:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5A71E2312
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 15:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727821AbgEZN3y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 09:29:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:50770 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726437AbgEZN3y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 May 2020 09:29:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1D8801FB;
-        Tue, 26 May 2020 06:29:53 -0700 (PDT)
-Received: from [10.57.2.168] (unknown [10.57.2.168])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B41BB3F6C4;
-        Tue, 26 May 2020 06:29:51 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: CPU_LOONGSON2EF need software to maintain cache
- consistency
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lichao Liu <liulichao@loongson.cn>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, yuanjunqing@loongson.cn,
-        linux-mips@vger.kernel.org
-References: <20200526111438.3788-1-liulichao@loongson.cn>
- <20200526193859.0adaea3b@halation.net.flygoat.com>
- <e9c015c2-b979-27c8-5f43-7af8d43174c5@loongson.cn>
- <20200526130128.GA8487@alpha.franken.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <1d594568-e457-533e-122a-c7e449c0f05d@arm.com>
-Date:   Tue, 26 May 2020 14:29:50 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1731442AbgEZNie (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 09:38:34 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:57610 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729117AbgEZNic (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 09:38:32 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 71D85803086B;
+        Tue, 26 May 2020 13:38:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id vb9wVfh2Lywg; Tue, 26 May 2020 16:38:27 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/3] hwmon: Add Baikal-T1 SoC Process, Voltage and Temp sensor support
+Date:   Tue, 26 May 2020 16:38:20 +0300
+Message-ID: <20200526133823.20466-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <20200526130128.GA8487@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020-05-26 14:01, Thomas Bogendoerfer wrote:
-> On Tue, May 26, 2020 at 08:40:28PM +0800, Lichao Liu wrote:
->> Loongson-2EF need software maintain cache consistency, So when using
->> streaming DMA, software needs to maintain consistency.
->>
->> dma_map_single() is correct, but dma_unmap_single is wrong.
->>
->> The function call path:
->> 'dma_unmap_single->dma_unmap_page_attrs->dma_direct_unmap_page->
->>   dma_direct_sync_single_for_cpu->arch_sync_dma_for_cpu->
->>   cpu_needs_post_dma_flush'
->>
->> In current version, 'cpu_needs_post_dma_flush' will return false
->> at Loongon-2EF platform, and dma_unmap_single will not invalidate cache,
->> driver may access wrong dma data.
-> 
-> why should it ? CPU must not touch data while it's mapped for DMA.
-> 
->> I don't know what's the exact meaning of "fill random cachelines with
->> stale data at any time". I always think 'cpu_needs_post_dma_flush()'
->> means whether this platform needs software to maintain cache consistency.
-> 
-> this will only happen, if cpu speculates creates dirty cache lines
-> by speculation as R10k type of CPUs do.
+In order to keep track of Baikal-T1 SoC power consumption and make sure
+the chip heating is within the normal temperature limits, there is
+a dedicated hardware monitor sensor embedded into the SoC. It is based
+on the Analog Bits PVT sensor but equipped with a vendor-specific control
+wrapper, which ease an access to the sensors functionality. Fist of all it
+provides an accessed to the sampled Temperature, Voltage and
+Low/Standard/High Voltage thresholds. In addition the wrapper generates
+an interrupt in case if one enabled for alarm thresholds or data ready
+event. All of these functionality is implemented in the Baikal-T1 PVT
+driver submitted within this patchset. Naturally there is also a patch,
+which creates a corresponding yaml-based dt-binding file for the sensor.
 
-Will it? The usual pattern for this problem is that the CPU 
-speculatively fills a (clean) cache line after a DMA_FROM_DEVICE 
-operation has begun, but before the device has actually written to that 
-part of the buffer. Thus a subsequent CPU read after the operation is 
-complete can hit in the cache and return the previous data rather than 
-the updated data that the device wrote. I don't know about MIPS 
-specifically, but that can certainly happen on Arm.
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
 
->> I found this problem in 4.19.90 kernel's ethernet driver,
->> and this patch can fix this problem.
-> 
-> if CPU isn't affected by the R10k speculation problem, it sounds more
-> like wrong usage of DMA api.
+Note new vendor prefix for Baikal-T1 PVT device will be added in the
+framework of the next patchset:
+https://lkml.org/lkml/2020/5/6/1047
 
-Sure, explicit accesses to the mapped buffer would be a software error, 
-but if legitimate non-overlapping accesses to other data nearby can 
-trigger the CPU to speculatively fetch lines from the DMA-mapped region, 
-that's generally beyond software's control.
+Changelog v2:
+- Don't use a multi-arg clock phandle reference in the examples dt-bindings
+  property. Thus reundant include pre-processor statement can be removed.
+- Rearrange the SoBs with adding Maxim' co-development tag.
+- Lowercase the node-name in the dt-schema example.
+- Add dual license header to the dt-bindings file.
+- Replace "additionalProperties: false" property with
+  "unevaluatedProperties: false".
+- Discard label definition from the binding example.
+- Discard handwritten IO-access wrappers. Use normal readl/writel instead.
+- Use generic FIELD_{GET,PREP} macros instead of handwritten ones.
+- Since the driver depends on the OF config we can remove of_match_ptr()
+  macro utilization.
+- Don't print error-message if no platform IRQ found. Just return an error.
+- Remove probe-status info string printout.
+- Our corporate email server doesn't change Message-Id anymore, so the patchset
+  is resubmitted being in the cover-letter-threaded format.
 
-Robin.
+Link: https://lore.kernel.org/linux-hwmon/20200510103211.27905-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Add bt1-pvt into the Documentation/hwmon/index.rst file.
+- Discard explicit "default n" from the SENSORS_BT1_PVT_ALARMS config.
+- Use "depends on SENSORS_BT1_PVT" statement instead of if-endif kbuild
+  config clause.
+- Alphabetically order the include macro operators.
+- Discard unneeded include macro in the header file.
+- Use new generic interface of the hwmon alarms notifications introduced
+  in the first patch (based on hwmon_notify_event()).
+- Add more descriptive information regarding the temp1_trim attribute.
+- Discard setting the platforms device private data by using
+  platform_set_drvdata(). It's redundant since unused in the driver.
+- Pass "pvt" hwmon name instead of dev_name(dev) to
+  devm_hwmon_device_register_with_info().
+- Add "baikal,pvt-temp-trim-millicelsius" temperature trim DT property
+  support.
+- Discard kernel log warnings printed from the ISR when either min or
+  max threshold levels are crossed.
+- Discard CONFIG_OF dependency since there is non at compile-time.
+
+Co-developed-by: Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>
+Signed-off-by: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Guenter Roeck (1):
+  hwmon: Add notification support
+
+Serge Semin (2):
+  dt-bindings: hwmon: Add Baikal-T1 PVT sensor binding
+  hwmon: Add Baikal-T1 PVT sensor driver
+
+ .../bindings/hwmon/baikal,bt1-pvt.yaml        |  107 ++
+ Documentation/hwmon/bt1-pvt.rst               |  116 ++
+ Documentation/hwmon/index.rst                 |    1 +
+ drivers/hwmon/Kconfig                         |   25 +
+ drivers/hwmon/Makefile                        |    1 +
+ drivers/hwmon/bt1-pvt.c                       | 1155 +++++++++++++++++
+ drivers/hwmon/bt1-pvt.h                       |  244 ++++
+ drivers/hwmon/hwmon.c                         |   69 +-
+ include/linux/hwmon.h                         |    3 +
+ 9 files changed, 1718 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
+ create mode 100644 Documentation/hwmon/bt1-pvt.rst
+ create mode 100644 drivers/hwmon/bt1-pvt.c
+ create mode 100644 drivers/hwmon/bt1-pvt.h
+
+-- 
+2.26.2
+
