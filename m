@@ -2,98 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0478A1E26A7
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 18:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2E51E2652
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 18:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728351AbgEZQQY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 12:16:24 -0400
-Received: from elvis.franken.de ([193.175.24.41]:40101 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728361AbgEZQQX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 May 2020 12:16:23 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jdcFV-0001AE-00; Tue, 26 May 2020 18:16:17 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 2AB1EC041A; Tue, 26 May 2020 18:00:45 +0200 (CEST)
-Date:   Tue, 26 May 2020 18:00:45 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Lichao Liu <liulichao@loongson.cn>,
-        Paul Burton <paulburton@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, yuanjunqing@loongson.cn,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: CPU_LOONGSON2EF need software to maintain cache
- consistency
-Message-ID: <20200526160045.GA12325@alpha.franken.de>
-References: <20200526111438.3788-1-liulichao@loongson.cn>
- <20200526193859.0adaea3b@halation.net.flygoat.com>
- <e9c015c2-b979-27c8-5f43-7af8d43174c5@loongson.cn>
- <20200526130128.GA8487@alpha.franken.de>
- <1d594568-e457-533e-122a-c7e449c0f05d@arm.com>
- <20200526232556.14a40f6c@halation.net.flygoat.com>
+        id S1729372AbgEZQDb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 12:03:31 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:58778 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727968AbgEZQDa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 12:03:30 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id A24E6803086C;
+        Tue, 26 May 2020 16:03:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7suZ00NLWgSb; Tue, 26 May 2020 19:03:23 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        <linux-mips@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/3] serial: 8250_dw: Fix ref clock usage
+Date:   Tue, 26 May 2020 19:03:13 +0300
+Message-ID: <20200526160316.26136-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200526232556.14a40f6c@halation.net.flygoat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 26, 2020 at 11:25:56PM +0800, Jiaxun Yang wrote:
-> On Tue, 26 May 2020 14:29:50 +0100
-> Robin Murphy <robin.murphy@arm.com> wrote:
-> 
-> > On 2020-05-26 14:01, Thomas Bogendoerfer wrote:
-> > > On Tue, May 26, 2020 at 08:40:28PM +0800, Lichao Liu wrote:  
-> > >> Loongson-2EF need software maintain cache consistency, So when
-> > >> using streaming DMA, software needs to maintain consistency.
-> > >>
-> > >> dma_map_single() is correct, but dma_unmap_single is wrong.
-> > >>
-> > >> The function call path:
-> > >> 'dma_unmap_single->dma_unmap_page_attrs->dma_direct_unmap_page->
-> > >>   dma_direct_sync_single_for_cpu->arch_sync_dma_for_cpu->
-> > >>   cpu_needs_post_dma_flush'
-> > >>
-> > >> In current version, 'cpu_needs_post_dma_flush' will return false
-> > >> at Loongon-2EF platform, and dma_unmap_single will not invalidate
-> > >> cache, driver may access wrong dma data.  
-> > > 
-> > > why should it ? CPU must not touch data while it's mapped for DMA.
-> > >   
-> > >> I don't know what's the exact meaning of "fill random cachelines
-> > >> with stale data at any time". I always think
-> > >> 'cpu_needs_post_dma_flush()' means whether this platform needs
-> > >> software to maintain cache consistency.  
-> > > 
-> > > this will only happen, if cpu speculates creates dirty cache lines
-> > > by speculation as R10k type of CPUs do.  
-> > 
-> > Will it? The usual pattern for this problem is that the CPU 
-> > speculatively fills a (clean) cache line after a DMA_FROM_DEVICE 
-> > operation has begun, but before the device has actually written to
-> > that part of the buffer. Thus a subsequent CPU read after the
-> > operation is complete can hit in the cache and return the previous
-> > data rather than the updated data that the device wrote. I don't know
-> > about MIPS specifically, but that can certainly happen on Arm.
-> 
-> Checked the manual of Loongson-2F again and I must admit the case may
-> happen on Loongson-2EF processor.
+Greg, Jiri, the merge window is upon us, please review/merge in/whatever
+the rest of the patches.
 
-so the patch is correct ?
-> 
-> R4k manual didn't show the details of speculative policy but I think
-> that should be applied to all R4k like processors?
+It might be dangerous if an UART port reference clock rate is suddenly
+changed. In particular the 8250 port drivers (and AFAICS most of the tty
+drivers using common clock framework clocks) rely either on the
+exclusive reference clock utilization or on the ref clock rate being
+always constant. Needless to say that it turns out not true and if some
+other service suddenly changes the clock rate behind an UART port driver
+back it's no good. So the port might not only end up with an invalid
+uartclk value saved, but may also experience a distorted output/input
+data since such action will effectively update the programmed baud-clock.
+We discovered such problem on Baikal-T1 SoC where two DW 8250 ports have
+got a shared reference clock. Allwinner SoC is equipped with an UART,
+which clock is derived from the CPU PLL clock source, so the CPU frequency
+change might be propagated down up to the serial port reference clock.
+This patchset provides a way to fix the problem to the 8250 serial port
+controllers and mostly fixes it for the DW 8250-compatible UART. I say
+mostly because due to not having a facility to pause/stop and resume/
+restart on-going transfers we implemented the UART clock rate update
+procedure executed post factum of the actual reference clock rate change.
 
-R4k doesn't speculate at all.
+In addition the patchset includes a few fixes we discovered when were
+working the issue. First one concerns the maximum baud rate setting used
+to determine a serial port baud based on the current UART port clock rate.
+Another one simplifies the ref clock rate setting procedure a bit.
 
-Thomas.
+This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
+0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
+
+Changelog v3:
+- Refactor the original patch to adjust the UART port divisor instead of
+  requesting an exclusive ref clock utilization.
+
+Changelog v4:
+- Discard commit b426bf0fb085 ("serial: 8250: Fix max baud limit in generic
+  8250 port") since Greg has already merged it into the tty-next branch.
+- Use EXPORT_SYMBOL_GPL() for the serial8250_update_uartclk() method.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-serial@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (3):
+  serial: 8250: Add 8250 port clock update method
+  serial: 8250_dw: Simplify the ref clock rate setting procedure
+  serial: 8250_dw: Fix common clocks usage race condition
+
+ drivers/tty/serial/8250/8250_dw.c   | 125 +++++++++++++++++++++++++---
+ drivers/tty/serial/8250/8250_port.c |  38 +++++++++
+ include/linux/serial_8250.h         |   2 +
+ 3 files changed, 153 insertions(+), 12 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.26.2
+
