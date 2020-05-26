@@ -2,69 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5586D1E2D93
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 21:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1552B1E2E88
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 21:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391841AbgEZTWB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 15:22:01 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:38202 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391941AbgEZTKp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 15:10:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1590520241; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p9jm//+Z7Q5hm03MZeLwX34SXNnp8zZEFN+1T4rYbdM=;
-        b=PxJFdkDes4KukZbPwS5mMveTS9QphjYgDvbxZ7NKMoj6+38ulMiSySkxN1YXLQc7ZPi0Sn
-        +UpgL7qaS37Izf1cqqD7PdTi4j2eAdyiAkWC1ByRQ8BMkKUKru3O0BetJgCPNmO46Xq5et
-        cW+Zc/BXGPka2lWC4YReEAiLuQxRZSk=
-Date:   Tue, 26 May 2020 21:10:29 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/1] dt-bindings: MIPS: Document Ingenic SoCs binding.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+        id S2404079AbgEZT3x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 15:29:53 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:43207 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403856AbgEZT3v (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 15:29:51 -0400
+Received: by mail-io1-f65.google.com with SMTP id h10so23334523iob.10;
+        Tue, 26 May 2020 12:29:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1udivP7wbmjRGQdrVG+bvSIgJ6k6K6sg5R0YTrdV/ZI=;
+        b=t4kC1jI7UiO4MZhJGkDRBUWQHV+9KoeFICr9vrDYhQOaoCuIv1xL9MybaaNyj/hY74
+         slBKtgm+RhZroQTHDrEgfRaJrzlhu0vMeW6j4FT/ld0ZSl3deXO6mHpQT94rXXvJaHt8
+         wG8MSmqWHrl84DeKLkzevdIPtfVfXxON0er/gpV7Zj1RknVLoplOQUx6OWH3h9D6YMYa
+         eMBhdd4JTxUNCdBs5Uxi8yfTVUdjxEGKkV3F0hgusWxPCdqTMuQbeCgf6jgPg/sG0i0k
+         hiR3us/Gq1Gad7DEG+1cQsBeEj+QX6rC+CRANcosBlTmwXthckUewY8Vo0cl4y9It/wR
+         QAKw==
+X-Gm-Message-State: AOAM533VX0b6tEowLTOYYjmVyWNQAgPAEuTdHj0KUOekpDGLMcaOErPq
+        l14RVi5xRDLv7WRbeL3Bs5Z2j3U=
+X-Google-Smtp-Source: ABdhPJyZBBk1sBbHouc7difwqpQlE+8v91JyFKG3/W2+MNks24BN0vbpZp7iptfxgr4ZzF78fd0cYA==
+X-Received: by 2002:a02:dc8:: with SMTP id 191mr2522550jax.95.1590521389948;
+        Tue, 26 May 2020 12:29:49 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id r9sm420424ilm.10.2020.05.26.12.29.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 12:29:49 -0700 (PDT)
+Received: (nullmailer pid 224310 invoked by uid 1000);
+        Tue, 26 May 2020 19:29:47 -0000
+Date:   Tue, 26 May 2020 13:29:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        tsbogend@alpha.franken.de, hns@goldelico.com, paul@boddie.org.uk,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Message-Id: <H9DYAQ.4YAB8VVZPLZO@crapouillou.net>
-In-Reply-To: <20200526170722.17206-2-zhouyanjie@wanyeetech.com>
-References: <20200526170722.17206-1-zhouyanjie@wanyeetech.com>
-        <20200526170722.17206-2-zhouyanjie@wanyeetech.com>
+        devicetree@vger.kernel.org, tsbogend@alpha.franken.de,
+        paulburton@kernel.org, jiaxun.yang@flygoat.com, chenhc@lemote.com,
+        tglx@linutronix.de, daniel.lezcano@linaro.org,
+        keescook@chromium.org, paul@crapouillou.net, krzk@kernel.org,
+        hns@goldelico.com, ebiederm@xmission.com,
+        dongsheng.qiu@ingenic.com, yanfei.li@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+Subject: Re: [PATCH v8 4/6] dt-bindings: MIPS: Document Ingenic SoCs binding.
+Message-ID: <20200526192947.GA140311@bogus>
+References: <1589898923-60048-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1589898923-60048-6-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1589898923-60048-6-git-send-email-zhouyanjie@wanyeetech.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Zhou,
-
-Le mer. 27 mai 2020 =C3=A0 1:07, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)=20
-<zhouyanjie@wanyeetech.com> a =C3=A9crit :
+On Tue, May 19, 2020 at 10:35:21PM +0800, 周琰杰 (Zhou Yanjie) wrote:
 > Document the available properties for the SoC root node and the
 > CPU nodes of the devicetree for the Ingenic XBurst SoCs.
->=20
+> 
 > Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
 > Tested-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech.com>
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 > ---
->  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 57=20
-> ++++++++++++++++++++++
+> 
+> Notes:
+>     v1->v2:
+>     Change the two Document from txt to yaml.
+>     
+>     v2->v3:
+>     Fix formatting errors.
+>     
+>     v3->v4:
+>     Fix bugs in the two yaml files.
+>     
+>     v4->v5:
+>     No change.
+>     
+>     v5->v6:
+>     Rewrite the two yaml files.
+>     
+>     v6->v7:
+>     1.Update compatible strings in "ingenic,cpu.yaml".
+>     2.Fix formatting errors, and enum for compatible strings.
+>     3.Remove unnecessary "ingenic,soc.yaml".
+>     
+>     v7->v8:
+>     No change.
+> 
+>  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 57 ++++++++++++++++++++++
 >  1 file changed, 57 insertions(+)
->  create mode 100644=20
-> Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
->=20
-> diff --git=20
-> a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml=20
-> b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
 > new file mode 100644
-> index 000000000000..afb02071a756
+> index 00000000..afb0207
 > --- /dev/null
 > +++ b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
 > @@ -0,0 +1,57 @@
@@ -77,8 +115,7 @@ eetech.com>
 > +title: Bindings for Ingenic XBurst family CPUs
 > +
 > +maintainers:
-> +  - =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wanyeetech.com=
->
+> +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 > +
 > +description:
 > +  Ingenic XBurst family CPUs shall have the following properties.
@@ -87,23 +124,27 @@ eetech.com>
 > +  compatible:
 > +    oneOf:
 > +
-> +      - description: Ingenic XBurst=C2=AE1 CPU Cores
+> +      - description: Ingenic XBurst®1 CPU Cores
 > +        items:
 
-Strip the 'items', put the enum directly.
+This is a single compatible string, right? If so, drop items. 
 
 > +          enum:
 > +            - ingenic,xburst-mxu1.0
 > +            - ingenic,xburst-fpu1.0-mxu1.1
 > +            - ingenic,xburst-fpu2.0-mxu2.0
 > +
-> +      - description: Ingenic XBurst=C2=AE2 CPU Cores
+> +      - description: Ingenic XBurst®2 CPU Cores
 > +        items:
-
-Same here.
-
 > +          enum:
 > +            - ingenic,xburst2-fpu2.1-mxu2.1-smt
+
+Just: const: ingenic,xburst2-fpu2.1-mxu2.1-smt
+
+Continuing to append CPU features isn't going to scale well. Does 
+'xburst2' imply certain features? If so, not really any need to have 
+them be explicit.
+
 > +
 > +  reg:
 > +    maxItems: 1
@@ -112,35 +153,26 @@ Same here.
 > +  - device_type
 > +  - compatible
 > +  - reg
-
-device_type is not in the list of your properties.
-
-Also, I think you need a clock in there.
-
--Paul
-
 > +
 > +examples:
 > +  - |
 > +    cpus {
-> +    	#address-cells =3D <1>;
-> +    	#size-cells =3D <0>;
+> +    	#address-cells = <1>;
+> +    	#size-cells = <0>;
 > +
 > +    	cpu0: cpu@0 {
-> +    		device_type =3D "cpu";
-> +    		compatible =3D "ingenic,xburst-fpu1.0-mxu1.1";
-> +    		reg =3D <0>;
+> +    		device_type = "cpu";
+> +    		compatible = "ingenic,xburst-fpu1.0-mxu1.1";
+> +    		reg = <0>;
 > +    	};
 > +
 > +    	cpu1: cpu@1 {
-> +    		device_type =3D "cpu";
-> +    		compatible =3D "ingenic,xburst-fpu1.0-mxu1.1";
-> +    		reg =3D <1>;
+> +    		device_type = "cpu";
+> +    		compatible = "ingenic,xburst-fpu1.0-mxu1.1";
+> +    		reg = <1>;
 > +    	};
 > +    };
 > +...
-> --
-> 2.11.0
->=20
-
-
+> -- 
+> 2.7.4
+> 
