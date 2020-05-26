@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2E51E2652
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 18:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F841E2654
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 18:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729372AbgEZQDb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1728830AbgEZQDb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Tue, 26 May 2020 12:03:31 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58778 "EHLO
+Received: from mail.baikalelectronics.com ([87.245.175.226]:58754 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727968AbgEZQDa (ORCPT
+        with ESMTP id S1727862AbgEZQDa (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 12:03:30 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id A24E6803086C;
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 859CB803086D;
         Tue, 26 May 2020 16:03:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7suZ00NLWgSb; Tue, 26 May 2020 19:03:23 +0300 (MSK)
+        with ESMTP id hKunuLm8sZ5L; Tue, 26 May 2020 19:03:23 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -25,23 +25,19 @@ To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         Will Deacon <will@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
         <linux-mips@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 0/3] serial: 8250_dw: Fix ref clock usage
-Date:   Tue, 26 May 2020 19:03:13 +0300
-Message-ID: <20200526160316.26136-1-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v4 1/3] serial: 8250: Add 8250 port clock update method
+Date:   Tue, 26 May 2020 19:03:14 +0300
+Message-ID: <20200526160316.26136-2-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200526160316.26136-1-Sergey.Semin@baikalelectronics.ru>
+References: <20200526160316.26136-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -51,55 +47,23 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Greg, Jiri, the merge window is upon us, please review/merge in/whatever
-the rest of the patches.
-
-It might be dangerous if an UART port reference clock rate is suddenly
-changed. In particular the 8250 port drivers (and AFAICS most of the tty
-drivers using common clock framework clocks) rely either on the
-exclusive reference clock utilization or on the ref clock rate being
-always constant. Needless to say that it turns out not true and if some
-other service suddenly changes the clock rate behind an UART port driver
-back it's no good. So the port might not only end up with an invalid
-uartclk value saved, but may also experience a distorted output/input
-data since such action will effectively update the programmed baud-clock.
-We discovered such problem on Baikal-T1 SoC where two DW 8250 ports have
-got a shared reference clock. Allwinner SoC is equipped with an UART,
-which clock is derived from the CPU PLL clock source, so the CPU frequency
-change might be propagated down up to the serial port reference clock.
-This patchset provides a way to fix the problem to the 8250 serial port
-controllers and mostly fixes it for the DW 8250-compatible UART. I say
-mostly because due to not having a facility to pause/stop and resume/
-restart on-going transfers we implemented the UART clock rate update
-procedure executed post factum of the actual reference clock rate change.
-
-In addition the patchset includes a few fixes we discovered when were
-working the issue. First one concerns the maximum baud rate setting used
-to determine a serial port baud based on the current UART port clock rate.
-Another one simplifies the ref clock rate setting procedure a bit.
-
-This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
-0e698dfa2822 ("Linux 5.7-rc4")
-tag: v5.7-rc4
-
-Changelog v3:
-- Refactor the original patch to adjust the UART port divisor instead of
-  requesting an exclusive ref clock utilization.
-
-Changelog v4:
-- Discard commit b426bf0fb085 ("serial: 8250: Fix max baud limit in generic
-  8250 port") since Greg has already merged it into the tty-next branch.
-- Use EXPORT_SYMBOL_GPL() for the serial8250_update_uartclk() method.
+Some platforms can be designed in a way so the UART port reference clock
+might be asynchronously changed at some point. In Baikal-T1 SoC this may
+happen due to the reference clock being shared between two UART ports, on
+the Allwinner SoC the reference clock is derived from the CPU clock, so
+any CPU frequency change should get to be known/reflected by/in the UART
+controller as well. But it's not enough to just update the
+uart_port->uartclk field of the corresponding UART port, the 8250
+controller reference clock divisor should be altered so to preserve
+current baud rate setting. All of these things is done in a coherent
+way by calling the serial8250_update_uartclk() method provided in this
+patch. Though note that it isn't supposed to be called from within the
+UART port callbacks because the locks using to the protect the UART port
+data are already taken in there.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
-Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
-Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
-Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Maxime Ripard <mripard@kernel.org>
@@ -107,19 +71,78 @@ Cc: Will Deacon <will@kernel.org>
 Cc: Russell King <linux@armlinux.org.uk>
 Cc: linux-mips@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-serial@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
 
-Serge Semin (3):
-  serial: 8250: Add 8250 port clock update method
-  serial: 8250_dw: Simplify the ref clock rate setting procedure
-  serial: 8250_dw: Fix common clocks usage race condition
+---
 
- drivers/tty/serial/8250/8250_dw.c   | 125 +++++++++++++++++++++++++---
- drivers/tty/serial/8250/8250_port.c |  38 +++++++++
- include/linux/serial_8250.h         |   2 +
- 3 files changed, 153 insertions(+), 12 deletions(-)
+Changelog v4:
+- Export serial8250_update_uartclk() symbol for GPL modules only.
+---
+ drivers/tty/serial/8250/8250_port.c | 38 +++++++++++++++++++++++++++++
+ include/linux/serial_8250.h         |  2 ++
+ 2 files changed, 40 insertions(+)
 
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 4d83c85a7389..5596868c8832 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2628,6 +2628,44 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+ 				  (port->uartclk + tolerance) / 16);
+ }
+ 
++/*
++ * Note in order to avoid the tty port mutex deadlock don't use the next method
++ * within the uart port callbacks. Primarily it's supposed to be utilized to
++ * handle a sudden reference clock rate change.
++ */
++void serial8250_update_uartclk(struct uart_port *port, unsigned int uartclk)
++{
++	struct uart_8250_port *up = up_to_u8250p(port);
++	unsigned int baud, quot, frac = 0;
++	struct ktermios *termios;
++	unsigned long flags;
++
++	mutex_lock(&port->state->port.mutex);
++
++	if (port->uartclk == uartclk)
++		goto out_lock;
++
++	port->uartclk = uartclk;
++	termios = &port->state->port.tty->termios;
++
++	baud = serial8250_get_baud_rate(port, termios, NULL);
++	quot = serial8250_get_divisor(port, baud, &frac);
++
++	spin_lock_irqsave(&port->lock, flags);
++
++	uart_update_timeout(port, termios->c_cflag, baud);
++
++	serial8250_set_divisor(port, baud, quot, frac);
++	serial_port_out(port, UART_LCR, up->lcr);
++	serial8250_out_MCR(up, UART_MCR_DTR | UART_MCR_RTS);
++
++	spin_unlock_irqrestore(&port->lock, flags);
++
++out_lock:
++	mutex_unlock(&port->state->port.mutex);
++}
++EXPORT_SYMBOL_GPL(serial8250_update_uartclk);
++
+ void
+ serial8250_do_set_termios(struct uart_port *port, struct ktermios *termios,
+ 			  struct ktermios *old)
+diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
+index 6545f8cfc8fa..2b70f736b091 100644
+--- a/include/linux/serial_8250.h
++++ b/include/linux/serial_8250.h
+@@ -155,6 +155,8 @@ extern int early_serial_setup(struct uart_port *port);
+ 
+ extern int early_serial8250_setup(struct earlycon_device *device,
+ 					 const char *options);
++extern void serial8250_update_uartclk(struct uart_port *port,
++				      unsigned int uartclk);
+ extern void serial8250_do_set_termios(struct uart_port *port,
+ 		struct ktermios *termios, struct ktermios *old);
+ extern void serial8250_do_set_ldisc(struct uart_port *port,
 -- 
 2.26.2
 
