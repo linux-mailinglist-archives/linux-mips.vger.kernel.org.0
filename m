@@ -2,88 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB4B1E3299
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 00:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7051E32D7
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 00:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392104AbgEZWbd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 18:31:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54538 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389482AbgEZWbd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 May 2020 18:31:33 -0400
-Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (unknown [163.114.132.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9454F20899;
-        Tue, 26 May 2020 22:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590532292;
-        bh=i/LsJ/7HDxl1uraGohIpTv1UEEpLZgqDBmcvFSkYrRs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=L1hQtRDvn7ylGIClnE51U8xDbKeptk9RRRcxjD8KvV0vnGtqXOx6okqH3wGQU2F4s
-         AMxHim9tkh3trTRi+/Dihhe2jPHiIQ7YHpjVMePw/F7mtxQxe5ipm41gvPbE0O1/f+
-         WqWQhzzVJGfznE1VeNIwnVlo+h9/gVYBJXg1JpOk=
-Date:   Tue, 26 May 2020 15:31:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        Jonathan Adams <jwadams@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 0/7] Statsfs: a new ram-based file system for Linux
- kernel statistics
-Message-ID: <20200526153128.448bfb43@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20200526110318.69006-1-eesposit@redhat.com>
-References: <20200526110318.69006-1-eesposit@redhat.com>
+        id S2391320AbgEZWoh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 18:44:37 -0400
+Received: from mail6.webfaction.com ([31.170.123.134]:52732 "EHLO
+        smtp.webfaction.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389755AbgEZWoh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 18:44:37 -0400
+Received: from jeremy.localnet (host-37-191-188-128.lynet.no [37.191.188.128])
+        by smtp.webfaction.com (Postfix) with ESMTPSA id B75CC600BB8DE;
+        Tue, 26 May 2020 22:44:35 +0000 (UTC)
+From:   Paul Boddie <paul@boddie.org.uk>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
+        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        linux-mips <linux-mips@vger.kernel.org>
+Subject: Re: JZ4780 LCD controller initialisation (was Re: [PATCH] clocksource: Ingenic: Add high resolution timer support for SMP.)
+Date:   Wed, 27 May 2020 00:44:17 +0200
+Message-ID: <6095840.Tg7rQzGjE8@jeremy>
+User-Agent: KMail/4.14.1 (Linux/3.16.0-10-586; KDE/4.14.2; i686; ; )
+In-Reply-To: <4T1YAQ.877BANO14QDY2@crapouillou.net>
+References: <1589898923-60048-5-git-send-email-zhouyanjie@wanyeetech.com> <2002785.O4FZc3DvTp@jeremy> <4T1YAQ.877BANO14QDY2@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 26 May 2020 13:03:10 +0200 Emanuele Giuseppe Esposito wrote:
-> There is currently no common way for Linux kernel subsystems to expose
-> statistics to userspace shared throughout the Linux kernel; subsystems have
-> to take care of gathering and displaying statistics by themselves, for
-> example in the form of files in debugfs. For example KVM has its own code
-> section that takes care of this in virt/kvm/kvm_main.c, where it sets up
-> debugfs handlers for displaying values and aggregating them from various
-> subfolders to obtain information about the system state (i.e. displaying
-> the total number of exits, calculated by summing all exits of all cpus of
-> all running virtual machines).
+Paul,
+
+Thanks for the reply!
+
+On Tuesday 26. May 2020 17.03.04 Paul Cercueil wrote:
 > 
-> Allowing each section of the kernel to do so has two disadvantages. First,
-> it will introduce redundant code. Second, debugfs is anyway not the right
-> place for statistics (for example it is affected by lockdown)
+> "lcd0pixclk" and "tve" are for LCD0, "lcd1pixclk" and "lcd" are for
+> LCD1.
+
+The 3.0.8 kernel actually uses LCD0 for what the documentation and 3.18 kernel 
+call TVE, and it uses LCD1 for what the others call LCD. That earlier kernel 
+indicates that LCD1 is the parent clock of LCD0.
+
+I actually found that you can enable LCD0 and not LCD1 and the LCD controller 
+(LCDC0) still operates to an extent, but without LCD1 enabled I didn't see a 
+DMA command value in the appropriate register, discussed below.
+
+[...]
+
+> OK, indeed the BPP and OSD config is read-only, and it's not a doc
+> typo. How annoying.
 > 
-> In this patch series I introduce statsfs, a synthetic ram-based virtual
-> filesystem that takes care of gathering and displaying statistics for the
-> Linux kernel subsystems.
-> 
-> The file system is mounted on /sys/kernel/stats and would be already used
-> by kvm. Statsfs was initially introduced by Paolo Bonzini [1].
+> I tried to configure the LCD controller for a 8-byte descriptor without
+> much success. No IRQs here either.
 
-What's the direct motivation for this work? Moving KVM stats out of
-debugfs?
+I had a look at the interrupt controller registers to see whether I was 
+missing anything obvious, but the mask was correctly configured to unmask LCD 
+interrupts (bit 31 of ICMR0). I did wonder whether the PDMA interrupts might 
+need unmasking, just in case there is some interaction between the peripherals 
+and that part of the hardware, but unmasking LCD interrupts there (bit 31 of 
+DMR0) didn't make any difference.
 
-In my experience stats belong in the API used for creating/enumerating
-objects, statsfs sounds like going in the exact opposite direction -
-creating a parallel structure / hierarchy for exposing stats. I know
-nothing about KVM but are you sure all the info that has to be exposed
-will be stats?
+One observation I can make is that the length or size field of the LCD command 
+register (LCDCMD0) does get initialised to the appropriate value as set in a 
+descriptor. Since I don't set this register explicitly myself (unlike, I 
+think, the current Ingenic DRM driver in the Linux kernel), the value must 
+have been set up appropriately by a DMA transfer, as configured using the 
+descriptor address register (LCDDA0). However, the command flags I also set in 
+the descriptor are not reflected in the register. So, 0x44140000 becomes 
+0x00140000.
 
-In case of networking we have the basic stats in sysfs, under the
-netdevice's kobject. But since we're not using sysfs much any more 
-for config, new stats are added in netlink APIs. Again - same APIs
-used for enumeration and config.
+I thought I should check the interrupt ID register (LCDIID) to see what it 
+reveals. Despite setting a value in the appropriate descriptor field, the 
+register contains only zero.
 
+I think I must probably tackle the job of initialising the HDMI controller to 
+see if that makes a difference. If the interrupts are not working but are also 
+not necessary, then maybe I get a visual indication of success.
+
+Thanks for the feedback!
+
+Paul
