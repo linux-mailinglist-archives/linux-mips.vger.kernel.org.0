@@ -2,177 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1552B1E2E88
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 21:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030A01E301E
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 22:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404079AbgEZT3x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 15:29:53 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:43207 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403856AbgEZT3v (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 15:29:51 -0400
-Received: by mail-io1-f65.google.com with SMTP id h10so23334523iob.10;
-        Tue, 26 May 2020 12:29:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1udivP7wbmjRGQdrVG+bvSIgJ6k6K6sg5R0YTrdV/ZI=;
-        b=t4kC1jI7UiO4MZhJGkDRBUWQHV+9KoeFICr9vrDYhQOaoCuIv1xL9MybaaNyj/hY74
-         slBKtgm+RhZroQTHDrEgfRaJrzlhu0vMeW6j4FT/ld0ZSl3deXO6mHpQT94rXXvJaHt8
-         wG8MSmqWHrl84DeKLkzevdIPtfVfXxON0er/gpV7Zj1RknVLoplOQUx6OWH3h9D6YMYa
-         eMBhdd4JTxUNCdBs5Uxi8yfTVUdjxEGKkV3F0hgusWxPCdqTMuQbeCgf6jgPg/sG0i0k
-         hiR3us/Gq1Gad7DEG+1cQsBeEj+QX6rC+CRANcosBlTmwXthckUewY8Vo0cl4y9It/wR
-         QAKw==
-X-Gm-Message-State: AOAM533VX0b6tEowLTOYYjmVyWNQAgPAEuTdHj0KUOekpDGLMcaOErPq
-        l14RVi5xRDLv7WRbeL3Bs5Z2j3U=
-X-Google-Smtp-Source: ABdhPJyZBBk1sBbHouc7difwqpQlE+8v91JyFKG3/W2+MNks24BN0vbpZp7iptfxgr4ZzF78fd0cYA==
-X-Received: by 2002:a02:dc8:: with SMTP id 191mr2522550jax.95.1590521389948;
-        Tue, 26 May 2020 12:29:49 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id r9sm420424ilm.10.2020.05.26.12.29.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 12:29:49 -0700 (PDT)
-Received: (nullmailer pid 224310 invoked by uid 1000);
-        Tue, 26 May 2020 19:29:47 -0000
-Date:   Tue, 26 May 2020 13:29:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, tsbogend@alpha.franken.de,
-        paulburton@kernel.org, jiaxun.yang@flygoat.com, chenhc@lemote.com,
-        tglx@linutronix.de, daniel.lezcano@linaro.org,
-        keescook@chromium.org, paul@crapouillou.net, krzk@kernel.org,
-        hns@goldelico.com, ebiederm@xmission.com,
-        dongsheng.qiu@ingenic.com, yanfei.li@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
-Subject: Re: [PATCH v8 4/6] dt-bindings: MIPS: Document Ingenic SoCs binding.
-Message-ID: <20200526192947.GA140311@bogus>
-References: <1589898923-60048-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1589898923-60048-6-git-send-email-zhouyanjie@wanyeetech.com>
+        id S2390057AbgEZUi7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 16:38:59 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:59716 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389796AbgEZUi6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 16:38:58 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id A1EA3803086D;
+        Tue, 26 May 2020 20:38:55 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id PLU6O22MkyEn; Tue, 26 May 2020 23:38:54 +0300 (MSK)
+Date:   Tue, 26 May 2020 23:38:52 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH v2 08/12] i2c: designware: Introduce platform drivers
+ glue layer interface
+Message-ID: <20200526203852.bxgibrqb7lrumfnh@mobilestation>
+References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
+ <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510095019.20981-9-Sergey.Semin@baikalelectronics.ru>
+ <4950bb1e-302f-947e-1924-452a8169b504@linux.intel.com>
+ <20200521023735.mja62ujmxebgwyef@mobilestation>
+ <80cf1d67-5de1-f3f1-27a0-b88cc105b228@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1589898923-60048-6-git-send-email-zhouyanjie@wanyeetech.com>
+In-Reply-To: <80cf1d67-5de1-f3f1-27a0-b88cc105b228@linux.intel.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 19, 2020 at 10:35:21PM +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Document the available properties for the SoC root node and the
-> CPU nodes of the devicetree for the Ingenic XBurst SoCs.
+On Mon, May 25, 2020 at 04:16:05PM +0300, Jarkko Nikula wrote:
+> Hi
 > 
-> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Tested-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
+> On 5/21/20 5:37 AM, Serge Semin wrote:
+> > On Wed, May 20, 2020 at 03:46:11PM +0300, Jarkko Nikula wrote:
+> > > Hi
+> > > 
+> > > On 5/10/20 12:50 PM, Serge Semin wrote:
+> > > > Seeing the DW I2C platform driver is getting overcomplicated with a lot of
+> > > > vendor-specific configs let's introduce a glue-layer interface so new
+> > > > platforms which equipped with Synopsys Designware APB I2C IP-core would
+> > > > be able to handle their peculiarities in the dedicated objects.
+> > > > 
+> > > Comment to this patch and patches 9/12 and 12/12:
+> > > 
+> > > Currently i2c-designware-platdrv.c is about 500 lines of code so I don't
+> > > think it's too overcomplicated. But I feel we have already too many Kconfig
+> > > options and source modules for i2c-designware and obviously would like to
+> > > push back a little from adding more.
+> > > 
+> > > I don't think i2c-designware-platdrv.c becomes yet too complicated if Baikal
+> > > related code is added there, perhaps under #ifdef CONFIG_OF like MSCC Ocelot
+> > > code is currently.
+> > 
+> > Well, it's up to you to decide, what solution is more suitable for you to
+> > maintain. My idea of detaching the MSCC and Baikal-T1 code to the dedicated
+> > source files was to eventually move the whole i2c-designware-* set of files
+> > into a dedicated directory drivers/i2c/buses/dw as it's done for some others
+> > Synopsys DesignWare controllers: drivers/pci/controller/dwc/, drivers/usb/dwc2,
+> > drivers/usb/dwc3, drivers/net/ethernet/synopsys/ . If you think, that it's too
+> > early for Dw I2C code to live in a dedicated directory, fine with me. I can
+> > merge the MSCC and Baikal-T1 code back into the i2c-designware-platdrv.c .
+> > So what's your final word in this matter?
+> > 
+> I think sub directory decision under each subsystem is more subsystem rather
+> than vendor/driver specific. Good point anyway.
 > 
-> Notes:
->     v1->v2:
->     Change the two Document from txt to yaml.
->     
->     v2->v3:
->     Fix formatting errors.
->     
->     v3->v4:
->     Fix bugs in the two yaml files.
->     
->     v4->v5:
->     No change.
->     
->     v5->v6:
->     Rewrite the two yaml files.
->     
->     v6->v7:
->     1.Update compatible strings in "ingenic,cpu.yaml".
->     2.Fix formatting errors, and enum for compatible strings.
->     3.Remove unnecessary "ingenic,soc.yaml".
->     
->     v7->v8:
->     No change.
+> For this patchset I'd like more if changes are done to
+> i2c-designware-platdrv.c since it's not too complicated yet :-)
 > 
->  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 57 ++++++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+> If it starts to look too messy in the future then it's time split I think.
+
+Ok. I'll merge the MSCC back and add Baikal-T1 System I2C support into the
+DW I2C platform driver.
+
+-Sergey
+
 > 
-> diff --git a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-> new file mode 100644
-> index 00000000..afb0207
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-> @@ -0,0 +1,57 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mips/ingenic/ingenic,cpu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for Ingenic XBurst family CPUs
-> +
-> +maintainers:
-> +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> +
-> +description:
-> +  Ingenic XBurst family CPUs shall have the following properties.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +
-> +      - description: Ingenic XBurst®1 CPU Cores
-> +        items:
-
-This is a single compatible string, right? If so, drop items. 
-
-> +          enum:
-> +            - ingenic,xburst-mxu1.0
-> +            - ingenic,xburst-fpu1.0-mxu1.1
-> +            - ingenic,xburst-fpu2.0-mxu2.0
-> +
-> +      - description: Ingenic XBurst®2 CPU Cores
-> +        items:
-> +          enum:
-> +            - ingenic,xburst2-fpu2.1-mxu2.1-smt
-
-Just: const: ingenic,xburst2-fpu2.1-mxu2.1-smt
-
-Continuing to append CPU features isn't going to scale well. Does 
-'xburst2' imply certain features? If so, not really any need to have 
-them be explicit.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - device_type
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    cpus {
-> +    	#address-cells = <1>;
-> +    	#size-cells = <0>;
-> +
-> +    	cpu0: cpu@0 {
-> +    		device_type = "cpu";
-> +    		compatible = "ingenic,xburst-fpu1.0-mxu1.1";
-> +    		reg = <0>;
-> +    	};
-> +
-> +    	cpu1: cpu@1 {
-> +    		device_type = "cpu";
-> +    		compatible = "ingenic,xburst-fpu1.0-mxu1.1";
-> +    		reg = <1>;
-> +    	};
-> +    };
-> +...
-> -- 
-> 2.7.4
-> 
+> Jarkko
