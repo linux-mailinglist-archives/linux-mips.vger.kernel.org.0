@@ -2,275 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD951E29D5
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 20:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3BF1E2A3B
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 20:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388622AbgEZSM6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 14:12:58 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:59440 "EHLO
+        id S2388761AbgEZSkS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 14:40:18 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:59486 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729049AbgEZSM5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 14:12:57 -0400
+        with ESMTP id S2387399AbgEZSkS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 14:40:18 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 5EA46803086B;
-        Tue, 26 May 2020 18:12:53 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id F347F8030869;
+        Tue, 26 May 2020 18:40:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id E_0CESn5Z1k4; Tue, 26 May 2020 21:12:52 +0300 (MSK)
+        with ESMTP id 2o6nlMTIy_Dv; Tue, 26 May 2020 21:40:13 +0300 (MSK)
+Date:   Tue, 26 May 2020 21:40:11 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        <linux-mips@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 3/3] serial: 8250_dw: Fix common clocks usage race condition
-Date:   Tue, 26 May 2020 21:12:26 +0300
-Message-ID: <20200526181227.1889-4-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200526181227.1889-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200526181227.1889-1-Sergey.Semin@baikalelectronics.ru>
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Max Staudt <max@enpas.org>, Stefan Roese <sr@denx.de>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/12] i2c: designware: Move Baytrail sem config to
+ the platform if-clause
+Message-ID: <20200526184011.rjpkpuk6nxuksyct@mobilestation>
+References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
+ <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510095019.20981-8-Sergey.Semin@baikalelectronics.ru>
+ <da6d8b18-b808-fd86-bbd2-13e7a90b2a5e@linux.intel.com>
+ <20200521022215.ubvhuop47aflqkkb@mobilestation>
+ <f01b3082-082c-8ce9-d0f7-f9ff952a37bf@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f01b3082-082c-8ce9-d0f7-f9ff952a37bf@linux.intel.com>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The race condition may happen if the UART reference clock is shared with
-some other device (on Baikal-T1 SoC it's another DW UART port). In this
-case if that device changes the clock rate while serial console is using
-it the DW 8250 UART port might not only end up with an invalid uartclk
-value saved, but may also experience a distorted output data since
-baud-clock could have been changed. In order to fix this lets at least
-try to adjust the 8250 port setting like UART clock rate in case if the
-reference clock rate change is discovered. The driver will call the new
-method to update 8250 UART port clock rate settings. It's done by means of
-the clock event notifier registered at the port startup and unregistered
-in the shutdown callback method.
+On Mon, May 25, 2020 at 04:01:26PM +0300, Jarkko Nikula wrote:
+> On 5/21/20 5:22 AM, Serge Semin wrote:
+> > On Wed, May 20, 2020 at 03:16:14PM +0300, Jarkko Nikula wrote:
+> > > On 5/10/20 12:50 PM, Serge Semin wrote:
+> > > > Currently Intel Baytrail I2C semaphore is a feature of the DW APB I2C
+> > > > platform driver. It's a bit confusing to see it's config in the menu at
+> > > > some separated place with no reference to the platform code. Lets move the
+> > > > config definition under the if-I2C_DESIGNWARE_PLATFORM clause. By doing so
+> > > > the config menu will display the feature right below the DW I2C platform
+> > > > driver item and will indent it to the right so signifying its belonging.
+> > > > 
+> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > > > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > > > Cc: Paul Burton <paulburton@kernel.org>
+> > > > Cc: Ralf Baechle <ralf@linux-mips.org>
+> > > > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > > Cc: Wolfram Sang <wsa@the-dreams.de>
+> > > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > > Cc: Frank Rowand <frowand.list@gmail.com>
+> > > > Cc: linux-mips@vger.kernel.org
+> > > > Cc: devicetree@vger.kernel.org
+> > > > ---
+> > > >    drivers/i2c/busses/Kconfig | 30 +++++++++++++++++-------------
+> > > >    1 file changed, 17 insertions(+), 13 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> > > > index 368aa64e9266..ed6927c4c540 100644
+> > > > --- a/drivers/i2c/busses/Kconfig
+> > > > +++ b/drivers/i2c/busses/Kconfig
+> > > > @@ -530,8 +530,8 @@ config I2C_DESIGNWARE_CORE
+> > > >    config I2C_DESIGNWARE_PLATFORM
+> > > >    	tristate "Synopsys DesignWare Platform"
+> > > > -	select I2C_DESIGNWARE_CORE
+> > > >    	depends on (ACPI && COMMON_CLK) || !ACPI
+> > > > +	select I2C_DESIGNWARE_CORE
+> > > >    	help
+> > > >    	  If you say yes to this option, support will be included for the
+> > > >    	  Synopsys DesignWare I2C adapter.
+> > > > @@ -539,6 +539,22 @@ config I2C_DESIGNWARE_PLATFORM
+> > > >    	  This driver can also be built as a module.  If so, the module
+> > > >    	  will be called i2c-designware-platform.
+> > > > +if I2C_DESIGNWARE_PLATFORM
+> > > > +
+> > > > +config I2C_DESIGNWARE_BAYTRAIL
+> > > > +	bool "Intel Baytrail I2C semaphore support"
+> > > > +	depends on ACPI
+> > > > +	depends on (I2C_DESIGNWARE_PLATFORM=m && IOSF_MBI) || \
+> > > > +		   (I2C_DESIGNWARE_PLATFORM=y && IOSF_MBI=y)
+> > > > +	help
+> > > > +	  This driver enables managed host access to the PMIC I2C bus on select
+> > > > +	  Intel BayTrail platforms using the X-Powers AXP288 PMIC. It allows
+> > > > +	  the host to request uninterrupted access to the PMIC's I2C bus from
+> > > > +	  the platform firmware controlling it. You should say Y if running on
+> > > > +	  a BayTrail system using the AXP288.
+> > > > +
+> > > > +endif # I2C_DESIGNWARE_PLATFORM
+> > > > +
+> > > 
+> > > Is the added "if I2C_DESIGNWARE_PLATFORM" needed here? Should the "depends
+> > > on" be enough?
+> > 
+> > The idea was to add if-endif clause here for features possibly added sometime
+> > in future. But using normal "depends on I2C_DESIGNWARE_PLATFORM" shall make
+> > the config depicted as an indented sub-config as well. Would you like me to
+> > remove the if-clause and use the depends on operator instead?
+> > 
+> Yes, please remove it from this patch. Keeps this patch simpler and if some
+> future feature needs it then that patch(set) is the right place to add it.
 
-Note 1. In order to avoid deadlocks we had to execute the UART port update
-method in a dedicated deferred work. This is due to (in my opinion
-redundant) the clock update implemented in the dw8250_set_termios()
-method.
-Note 2. Before the ref clock is manually changed by the custom
-set_termios() function we swap the port uartclk value with new rate
-adjusted to be suitable for the requested baud. It is necessary in
-order to effectively disable a functionality of the ref clock events
-handler for the current UART port, since uartclk update will be done
-a bit further in the generic serial8250_do_set_termios() function.
+Agreed. I'll do this in v3.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
+-Sergey
 
----
-
-Changelog v2:
-- Move exclusive ref clock lock/unlock precudures to the 8250 port
-  startup/shutdown methods.
-- The changelog message has also been slightly modified due to the
-  alteration.
-- Remove Alexey' SoB tag.
-- Cc someone from ARM who might be concerned regarding this change.
-- Cc someone from Clocks Framework to get their comments on this patch.
-
-Changelog v3:
-- Refactor the original patch to adjust the UART port divisor instead of
-  requesting an exclusive ref clock utilization.
-
-Changelog v5:
-- Refactor dw8250_clk_work_cb() function cheking the clk_get_rate()
-  return value for being erroneous and exit if it is.
-- Don't update p->uartclk on the port startup. It will be updated later in
-  the same procedure at the set_termios() function being invoked by the
-  serial_core anyway.
----
- drivers/tty/serial/8250/8250_dw.c | 105 +++++++++++++++++++++++++++++-
- 1 file changed, 102 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 12866083731d..fa59c026270f 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -19,6 +19,8 @@
- #include <linux/of_irq.h>
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
-+#include <linux/workqueue.h>
-+#include <linux/notifier.h>
- #include <linux/slab.h>
- #include <linux/acpi.h>
- #include <linux/clk.h>
-@@ -43,6 +45,8 @@ struct dw8250_data {
- 	int			msr_mask_off;
- 	struct clk		*clk;
- 	struct clk		*pclk;
-+	struct notifier_block	clk_notifier;
-+	struct work_struct	clk_work;
- 	struct reset_control	*rst;
- 
- 	unsigned int		skip_autocfg:1;
-@@ -54,6 +58,16 @@ static inline struct dw8250_data *to_dw8250_data(struct dw8250_port_data *data)
- 	return container_of(data, struct dw8250_data, data);
- }
- 
-+static inline struct dw8250_data *clk_to_dw8250_data(struct notifier_block *nb)
-+{
-+	return container_of(nb, struct dw8250_data, clk_notifier);
-+}
-+
-+static inline struct dw8250_data *work_to_dw8250_data(struct work_struct *work)
-+{
-+	return container_of(work, struct dw8250_data, clk_work);
-+}
-+
- static inline int dw8250_modify_msr(struct uart_port *p, int offset, int value)
- {
- 	struct dw8250_data *d = to_dw8250_data(p->private_data);
-@@ -260,6 +274,46 @@ static int dw8250_handle_irq(struct uart_port *p)
- 	return 0;
- }
- 
-+static void dw8250_clk_work_cb(struct work_struct *work)
-+{
-+	struct dw8250_data *d = work_to_dw8250_data(work);
-+	struct uart_8250_port *up;
-+	unsigned long rate;
-+
-+	rate = clk_get_rate(d->clk);
-+	if (rate <= 0)
-+		return;
-+
-+	up = serial8250_get_port(d->data.line);
-+
-+	serial8250_update_uartclk(&up->port, rate);
-+}
-+
-+static int dw8250_clk_notifier_cb(struct notifier_block *nb,
-+				  unsigned long event, void *data)
-+{
-+	struct dw8250_data *d = clk_to_dw8250_data(nb);
-+
-+	/*
-+	 * We have no choice but to defer the uartclk update due to two
-+	 * deadlocks. First one is caused by a recursive mutex lock which
-+	 * happens when clk_set_rate() is called from dw8250_set_termios().
-+	 * Second deadlock is more tricky and is caused by an inverted order of
-+	 * the clk and tty-port mutexes lock. It happens if clock rate change
-+	 * is requested asynchronously while set_termios() is executed between
-+	 * tty-port mutex lock and clk_set_rate() function invocation and
-+	 * vise-versa. Anyway if we didn't have the reference clock alteration
-+	 * in the dw8250_set_termios() method we wouldn't have needed this
-+	 * deferred event handling complication.
-+	 */
-+	if (event == POST_RATE_CHANGE) {
-+		queue_work(system_unbound_wq, &d->clk_work);
-+		return NOTIFY_OK;
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
- static void
- dw8250_do_pm(struct uart_port *port, unsigned int state, unsigned int old)
- {
-@@ -283,9 +337,16 @@ static void dw8250_set_termios(struct uart_port *p, struct ktermios *termios,
- 	clk_disable_unprepare(d->clk);
- 	rate = clk_round_rate(d->clk, baud * 16);
- 	if (rate > 0) {
--		ret = clk_set_rate(d->clk, rate);
--		if (!ret)
--			p->uartclk = rate;
-+		/*
-+		 * Premilinary set the uartclk to the new clock rate so the
-+		 * clock update event handler caused by the clk_set_rate()
-+		 * calling wouldn't actually update the UART divisor since
-+		 * we about to do this anyway.
-+		 */
-+		swap(p->uartclk, rate);
-+		ret = clk_set_rate(d->clk, p->uartclk);
-+		if (ret)
-+			swap(p->uartclk, rate);
- 	}
- 	clk_prepare_enable(d->clk);
- 
-@@ -312,6 +373,39 @@ static void dw8250_set_ldisc(struct uart_port *p, struct ktermios *termios)
- 	serial8250_do_set_ldisc(p, termios);
- }
- 
-+static int dw8250_startup(struct uart_port *p)
-+{
-+	struct dw8250_data *d = to_dw8250_data(p->private_data);
-+	int ret;
-+
-+	/*
-+	 * Some platforms may provide a reference clock shared between several
-+	 * devices. In this case before using the serial port first we have to
-+	 * make sure that any clock state change is known to the UART port at
-+	 * least post factum.
-+	 */
-+	if (d->clk) {
-+		ret = clk_notifier_register(d->clk, &d->clk_notifier);
-+		if (ret)
-+			dev_warn(p->dev, "Failed to set the clock notifier\n");
-+	}
-+
-+	return serial8250_do_startup(p);
-+}
-+
-+static void dw8250_shutdown(struct uart_port *p)
-+{
-+	struct dw8250_data *d = to_dw8250_data(p->private_data);
-+
-+	serial8250_do_shutdown(p);
-+
-+	if (d->clk) {
-+		clk_notifier_unregister(d->clk, &d->clk_notifier);
-+
-+		flush_work(&d->clk_work);
-+	}
-+}
-+
- /*
-  * dw8250_fallback_dma_filter will prevent the UART from getting just any free
-  * channel on platforms that have DMA engines, but don't have any channels
-@@ -407,6 +501,8 @@ static int dw8250_probe(struct platform_device *pdev)
- 	p->serial_out	= dw8250_serial_out;
- 	p->set_ldisc	= dw8250_set_ldisc;
- 	p->set_termios	= dw8250_set_termios;
-+	p->startup	= dw8250_startup;
-+	p->shutdown	= dw8250_shutdown;
- 
- 	p->membase = devm_ioremap(dev, regs->start, resource_size(regs));
- 	if (!p->membase)
-@@ -468,6 +564,9 @@ static int dw8250_probe(struct platform_device *pdev)
- 	if (IS_ERR(data->clk))
- 		return PTR_ERR(data->clk);
- 
-+	INIT_WORK(&data->clk_work, dw8250_clk_work_cb);
-+	data->clk_notifier.notifier_call = dw8250_clk_notifier_cb;
-+
- 	err = clk_prepare_enable(data->clk);
- 	if (err)
- 		dev_warn(dev, "could not enable optional baudclk: %d\n", err);
--- 
-2.26.2
-
+> 
+> Jarkko
