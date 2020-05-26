@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C741E238F
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 16:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A7E1E2393
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 16:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731934AbgEZODF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 10:03:05 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58016 "EHLO
+        id S1731978AbgEZODP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 10:03:15 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:58024 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731846AbgEZODE (ORCPT
+        with ESMTP id S1731887AbgEZODE (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 10:03:04 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 857098030875;
-        Tue, 26 May 2020 14:03:01 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 262E8803086C;
+        Tue, 26 May 2020 14:03:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id E62VF2Uq7rJr; Tue, 26 May 2020 17:03:01 +0300 (MSK)
+        with ESMTP id sv-Ah8IKs_Cd; Tue, 26 May 2020 17:03:01 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -34,9 +34,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         James Hogan <jhogan@kernel.org>, <linux-mips@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 5/6] bus: cdmm: Add MIPS R5 arch support
-Date:   Tue, 26 May 2020 17:02:42 +0300
-Message-ID: <20200526140243.21946-6-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH 6/6] MAINTAINERS: Add maintainers for MIPS core drivers
+Date:   Tue, 26 May 2020 17:02:43 +0300
+Message-ID: <20200526140243.21946-7-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200526140243.21946-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200526140243.21946-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -48,29 +48,35 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CDMM may be available not only on MIPS R2 architectures, but also on
-newer MIPS R5 chips. For instance our P5600 chip has one. Let's mark
-the CDMM bus being supported for that MIPS arch too.
+Add myself as a maintainer of MIPS CPU and GIC IRQchip, MIPS GIC timer
+and MIPS CPS CPUidle drivers.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- drivers/bus/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-index 6d4e4497b59b..971c07bc92d4 100644
---- a/drivers/bus/Kconfig
-+++ b/drivers/bus/Kconfig
-@@ -58,7 +58,7 @@ config IMX_WEIM
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2926327e4976..f21e51c4a0d5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11278,6 +11278,16 @@ F:	arch/mips/configs/generic/board-boston.config
+ F:	drivers/clk/imgtec/clk-boston.c
+ F:	include/dt-bindings/clock/boston-clock.h
  
- config MIPS_CDMM
- 	bool "MIPS Common Device Memory Map (CDMM) Driver"
--	depends on CPU_MIPSR2
-+	depends on CPU_MIPSR2 || CPU_MIPSR5
- 	help
- 	  Driver needed for the MIPS Common Device Memory Map bus in MIPS
- 	  cores. This bus is for per-CPU tightly coupled devices such as the
++MIPS CORE DRIVERS
++M:	Serge Semin <fancer.lancer@gmail.com>
++L:	linux-mips@vger.kernel.org
++S:	Supported
++F:	drivers/bus/mips_cdmm.c
++F:	drivers/irqchip/irq-mips-cpu.c
++F:	drivers/irqchip/irq-mips-gic.c
++F:	drivers/clocksource/mips-gic-timer.c
++F:	drivers/cpuidle/cpuidle-cps.c
++
+ MIPS GENERIC PLATFORM
+ M:	Paul Burton <paulburton@kernel.org>
+ L:	linux-mips@vger.kernel.org
 -- 
 2.26.2
 
