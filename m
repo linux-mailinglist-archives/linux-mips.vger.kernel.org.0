@@ -2,105 +2,192 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 030A01E301E
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 22:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0641E302E
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2020 22:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390057AbgEZUi7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 16:38:59 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:59716 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389796AbgEZUi6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 16:38:58 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id A1EA3803086D;
-        Tue, 26 May 2020 20:38:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PLU6O22MkyEn; Tue, 26 May 2020 23:38:54 +0300 (MSK)
-Date:   Tue, 26 May 2020 23:38:52 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2 08/12] i2c: designware: Introduce platform drivers
- glue layer interface
-Message-ID: <20200526203852.bxgibrqb7lrumfnh@mobilestation>
-References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
- <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
- <20200510095019.20981-9-Sergey.Semin@baikalelectronics.ru>
- <4950bb1e-302f-947e-1924-452a8169b504@linux.intel.com>
- <20200521023735.mja62ujmxebgwyef@mobilestation>
- <80cf1d67-5de1-f3f1-27a0-b88cc105b228@linux.intel.com>
+        id S2391347AbgEZUnK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 16:43:10 -0400
+Received: from mail-io1-f41.google.com ([209.85.166.41]:33808 "EHLO
+        mail-io1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391281AbgEZUnK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 16:43:10 -0400
+Received: by mail-io1-f41.google.com with SMTP id f3so23617541ioj.1;
+        Tue, 26 May 2020 13:43:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=05fRtb3l7CU2Nk1q80iQghWcohiFEtAdOdLPDPtrgQM=;
+        b=qe5a6g64rKfhWzhUtZ/h+lzbK8r9y3y3cBCFres0n/N1k7FyMRcF+FKbxM9LB4T6Kf
+         7wgFzFvRv/gKdoHMGt5vfmNHiTB7kFJCjFJI7Vh/rstyXiFk1tu4wpr0FVIjv6N6nKRr
+         vg6lUkjQhBkP+RkOKZ+3sx6xjREhXnMkfEkIUetq+DROT4VeORggbbo2AChJimxgspmm
+         3yprItnoz62s4oroPQyd/aJpHnEeG+3vMSPVCy5GZJ8XU/J1tR0v9PljTUU1qzODkK+U
+         gDjk+rE3rVw7fHc0vtFWvfER3IBUMjbh1/PioDjOsjxzOQcBRCo12qdeP/v6E/4nQ/+/
+         0XRw==
+X-Gm-Message-State: AOAM533GjFSQ0IemsEEnvTPEJ8IeU29gymzte6sGKD9fAF96ovSAdb/e
+        0cgw0uFxqLt2u/gpx8Cc2g==
+X-Google-Smtp-Source: ABdhPJxxQMajEHw93bHjLSQCqQRRc4712FyKVp3vy1T0XvKvvTb5ijKU9eVHfPZ2tLAlUqaZQiKdzg==
+X-Received: by 2002:a02:c4c8:: with SMTP id h8mr2848837jaj.64.1590525789124;
+        Tue, 26 May 2020 13:43:09 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id w70sm531218ili.78.2020.05.26.13.43.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 13:43:08 -0700 (PDT)
+Received: (nullmailer pid 335891 invoked by uid 1000);
+        Tue, 26 May 2020 20:43:06 -0000
+Date:   Tue, 26 May 2020 14:43:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
+        brendanhiggins@google.com, tglx@linutronix.de,
+        boris.brezillon@collabora.com, anders.roxell@linaro.org,
+        masonccyang@mxic.com.tw, linux-mips@vger.kernel.org,
+        hauke.mehrtens@intel.com, andriy.shevchenko@intel.com,
+        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
+Subject: Re: [RESENDPATCH v8 1/2] dt-bindings: mtd: Add Nand Flash Controller
+ support for Intel LGM SoC
+Message-ID: <20200526204306.GA224630@bogus>
+References: <20200520000621.49152-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200520000621.49152-2-vadivel.muruganx.ramuthevar@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <80cf1d67-5de1-f3f1-27a0-b88cc105b228@linux.intel.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200520000621.49152-2-vadivel.muruganx.ramuthevar@linux.intel.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 25, 2020 at 04:16:05PM +0300, Jarkko Nikula wrote:
-> Hi
+On Wed, May 20, 2020 at 08:06:20AM +0800, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 > 
-> On 5/21/20 5:37 AM, Serge Semin wrote:
-> > On Wed, May 20, 2020 at 03:46:11PM +0300, Jarkko Nikula wrote:
-> > > Hi
-> > > 
-> > > On 5/10/20 12:50 PM, Serge Semin wrote:
-> > > > Seeing the DW I2C platform driver is getting overcomplicated with a lot of
-> > > > vendor-specific configs let's introduce a glue-layer interface so new
-> > > > platforms which equipped with Synopsys Designware APB I2C IP-core would
-> > > > be able to handle their peculiarities in the dedicated objects.
-> > > > 
-> > > Comment to this patch and patches 9/12 and 12/12:
-> > > 
-> > > Currently i2c-designware-platdrv.c is about 500 lines of code so I don't
-> > > think it's too overcomplicated. But I feel we have already too many Kconfig
-> > > options and source modules for i2c-designware and obviously would like to
-> > > push back a little from adding more.
-> > > 
-> > > I don't think i2c-designware-platdrv.c becomes yet too complicated if Baikal
-> > > related code is added there, perhaps under #ifdef CONFIG_OF like MSCC Ocelot
-> > > code is currently.
-> > 
-> > Well, it's up to you to decide, what solution is more suitable for you to
-> > maintain. My idea of detaching the MSCC and Baikal-T1 code to the dedicated
-> > source files was to eventually move the whole i2c-designware-* set of files
-> > into a dedicated directory drivers/i2c/buses/dw as it's done for some others
-> > Synopsys DesignWare controllers: drivers/pci/controller/dwc/, drivers/usb/dwc2,
-> > drivers/usb/dwc3, drivers/net/ethernet/synopsys/ . If you think, that it's too
-> > early for Dw I2C code to live in a dedicated directory, fine with me. I can
-> > merge the MSCC and Baikal-T1 code back into the i2c-designware-platdrv.c .
-> > So what's your final word in this matter?
-> > 
-> I think sub directory decision under each subsystem is more subsystem rather
-> than vendor/driver specific. Good point anyway.
+> Add YAML file for dt-bindings to support NAND Flash Controller
+> on Intel's Lightning Mountain SoC.
 > 
-> For this patchset I'd like more if changes are done to
-> i2c-designware-platdrv.c since it's not too complicated yet :-)
+> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> ---
+>  .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 91 ++++++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
 > 
-> If it starts to look too messy in the future then it's time split I think.
+> diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+> new file mode 100644
+> index 000000000000..cd4e983a449e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+> @@ -0,0 +1,91 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
-Ok. I'll merge the MSCC back and add Baikal-T1 System I2C support into the
-DW I2C platform driver.
+Still not dual licensed.
 
--Sergey
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/intel,lgm-nand.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Intel LGM SoC NAND Controller Device Tree Bindings
+> +
+> +allOf:
+> +  - $ref: "nand-controller.yaml"
+> +
+> +maintainers:
+> +  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: intel,lgm-nand-controller
 
+Still doesn't match the example. And the example will fail when it does.
+
+> +
+> +  reg:
+> +    items:
+> +       - description: ebunand registers
+> +       - description: hsnand registers
+> +       - description: nand_cs0 external flash access
+> +       - description: nand_cs1 external flash access
+> +       - description: addr_sel0 memory region enable and access
+> +       - description: addr_sel1 memory region enable and access
+
+reg-names?
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  dmas:
+> +    maxItems: 2
+> +
+> +  dma-names:
+> +    items:
+> +      - const: tx
+> +      - const: rx
+> +
+> +patternProperties:
+> +  "^nand@[a-f0-9]+$":
+> +    type: object
+> +    properties:
+> +      reg:
+> +        minimum: 0
+> +        maximum: 7
+> +
+> +      nand-ecc-mode: true
+> +
+> +      nand-ecc-algo:
+> +        const: hw
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+
+Not documented or should be dropped.
+
+> +  - dmas
+> +  - dma-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    nand-controller@e0f00000 {
+> +      compatible = "intel,lgm-nand";
+> +      reg = <0xe0f00000 0x100>,
+> +            <0xe1000000 0x300>,
+> +            <0xe1400000 0x8000>,
+> +            <0xe1c00000 0x1000>,
+> +            <0x17400000 0x4>,
+> +            <0x17c00000 0x4>;
+> +      reg-names = "ebunand", "hsnand", "nand_cs0", "nand_cs1",
+> +        "addr_sel0","addr_sel1";
+
+Not documented. And needs a space after the ','.
+
+> +      clocks = <&cgu0 125>;
+> +      dmas = <&dma0 8>, <&dma0 9>;
+> +      dma-names = "tx", "rx";
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      #clock-cells = <1>;
+
+Should be removed?
+
+> +
+> +      nand@0 {
+> +        reg = <0>;
+> +        nand-on-flash-bbt;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +      };
+> +    };
+> +
+> +...
+> -- 
+> 2.11.0
 > 
-> Jarkko
