@@ -2,76 +2,225 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB67A1E40DE
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 13:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC0E1E4191
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 14:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729478AbgE0LzK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 07:55:10 -0400
-Received: from elvis.franken.de ([193.175.24.41]:41116 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729415AbgE0LzJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 May 2020 07:55:09 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jdueJ-00019x-02; Wed, 27 May 2020 13:55:07 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 646EDC059B; Wed, 27 May 2020 13:53:54 +0200 (CEST)
-Date:   Wed, 27 May 2020 13:53:54 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Borislav Petkov <bp@suse.de>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Fangrui Song <maskray@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] MIPS: Move kernel head into a standalone section
-Message-ID: <20200527115354.GC13965@alpha.franken.de>
-References: <20200527063438.391949-1-jiaxun.yang@flygoat.com>
- <20200527063438.391949-3-jiaxun.yang@flygoat.com>
+        id S1727895AbgE0MI3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 08:08:29 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:34874 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725801AbgE0MH3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 08:07:29 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id D1F298030834;
+        Wed, 27 May 2020 12:07:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id HB7s39rAxbNg; Wed, 27 May 2020 15:07:22 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 00/11] i2c: designeware: Add Baikal-T1 System I2C support
+Date:   Wed, 27 May 2020 15:01:00 +0300
+Message-ID: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200527063438.391949-3-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 27, 2020 at 02:34:33PM +0800, Jiaxun Yang wrote:
-> That's what already done by Arm64 and other architectures.
-> That would allow us put more things like PE headers safely into
-> the header.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  arch/mips/kernel/head.S        | 4 ++--
->  arch/mips/kernel/vmlinux.lds.S | 8 ++++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/head.S b/arch/mips/kernel/head.S
-> index c7c2795837e7..8081a905a71c 100644
-> --- a/arch/mips/kernel/head.S
-> +++ b/arch/mips/kernel/head.S
-> @@ -59,6 +59,8 @@
->  #endif
->  	.endm
->  
-> +	__HEAD
-> +_head:
->  #ifndef CONFIG_NO_EXCEPT_FILL
->  	/*
->  	 * Reserved space for exception handlers.
+Jarkko, Wolfram, the merge window is upon us, please review/merge in/whatever
+the patchset.
 
-I'm adding the missing piece, why this change ist broken:
+Initially this has been a small patchset which embedded the Baikal-T1
+System I2C support into the DW APB I2C driver as is by using a simplest
+way. After a short discussion with Andy we decided to implement what he
+suggested (introduce regmap-based accessors and create a glue driver) and
+even more than that to provide some cleanups of the code. So here is what
+this patchset consists of.
 
-         * Necessary for machines which link their kernels at KSEG0.
+First of all we've found out that current implementation of scripts/dtc
+didn't support i2c dt nodes with 10bit and slave flags set in the
+reg property. You'll see an error if you try to dt_binding_check it.
+So the very first patch fixes the problem by adding these flags support
+into the check_i2c_bus_reg() method.
 
-by putting something in front of that will probably break platforms making
-use of "feature". If we can make sure, we don't need it anymore, we should
-first remove this and then add __HEAD part.
+Traditionally we converted the plain text-based DT binding to the DT schema
+and added Baikal-T1 System I2C device support there. This required to mark
+the reg property redundant for Baikal-T1 I2C since its reg-space is
+indirectly accessed by means of the System Controller cmd/read/write
+registers.
 
-Thomas.
+Then as Andy suggested we replaced the Synopsys DW APB I2C common driver
+registers IO accessors into the regmap API methods. This doesn't change
+the code logic much, though in two places we managed to replace some bulky
+peaces of code with a ready-to-use regmap methods.
+
+Additionally before adding the glue layer API we initiated a set of cleanups:
+- Define components of the multi-object drivers (like i2c-designware-core.o
+  and i2c-designware-paltform.o) with using `-y` suffixed makefile
+  variables instead of `-objs` suffixed one. This is encouraged by
+  Documentation/kbuild/makefiles.rst text since `-objs` is supposed to be used
+  to build host programs.
+- Make DW I2C slave driver depended on the DW I2C core code instead of the
+  platform one, which it really is.
+- Move Intel Baytrail semaphore feature to the platform if-clause of the
+  kernel config.
+
+After this we finally can introduce the glue layer API for the DW APB I2C
+platform driver. So there are three methods exported from the driver:
+i2c_dw_plat_setup(), i2c_dw_plat_clear(), &i2c_dw_plat_dev_pm_ops to
+setup, cleanup and add PM operations to the glue driven I2C device. Before
+setting the platform DW I2C device up the glue probe code is supposed to
+create an instance of DW I2C device generic object and pre-initialize
+its `struct device` pointer together with optional platform-specific
+flags. In addition to that we converted the MSCC Ocelot SoC I2C specific
+code into the glue layer seeing it's really too specific and, which is more
+important, isn't that complicated so we could unpin it without much of
+worrying to break something.
+
+Meanwhile we discovered that MODEL_CHERRYTRAIL and MODEL_MASK actually
+were no longer used in the code. MODEL_MSCC flag has been discarded since
+the MSCC Ocelot I2C code conversion to the glue driver. So now we can get
+rid of all the MODEL-specific flags.
+
+Finally we introduced a glue driver with Baikal-T1 System I2C device
+support. The driver probe tries to find a syscon regmap, creates the DW
+APB I2C regmap based on it and passes it further to the DW I2C device
+descriptor. Then it does normal DW APB I2C platform setup by calling a
+generic setup method. Cleanup is straightforward. It's just calling a
+generic DW APB I2C clean method.
+
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
+
+Note new vendor prefix for Baikal-T1 System I2C device will be added in
+the framework of the next patchset:
+https://lkml.org/lkml/2020/5/6/1047
+
+Changelog v2:
+- Fix the SoB tags.
+- Use a shorter summary describing the bindings convertion patch.
+- Patch "i2c: designware: Detect the FIFO size in the common code" has
+  been acked by Jarkko and applied by Wolfram to for-next so drop it from
+  the set.
+- Patch "i2c: designware: Discard i2c_dw_read_comp_param() function" has
+  been acked by Jarkko and applied by Wolfram to for-next so drop it from
+  the set.
+- Make sure that "mscc,ocelot-i2c" compatible node may have up to two
+  registers space defined in the DT node, while normal DW I2C controller
+  will have only one registers space.
+- Add "mscc,ocelot-i2c" DT schema example to test the previous fix.
+- Declare "unevaluatedProperties" property instead of
+  "additionalProperties" one in the DT schema.
+- Due to the previous fix we can now discard the dummy boolean properties
+  declaration, since the proper type evaluation will be performed by the
+  generic i2c-controller.yaml schema.
+- Refactor the DW I2C APB driver related series to address the Andies
+  notes.
+- Convert DW APB I2C driver to using regmap instead of handwritten
+  accessors.
+- Use `-y` to build multi-object DW APB drivers.
+- Fix DW APB I2C slave code dependency. It should depend on
+  I2C_DESIGNWARE_CORE instead I2C_DESIGNWARE_PLATFORM.
+- Move Baytrail semaphore config to the platform if-clause.
+- Introduce a glue-layer platform driver API.
+- Unpin Microsemi Ocelot I2C code into a glue driver.
+- Remove MODEL_CHERRYTRAIL and MODEL_MASK as no longer needed.
+- Add support for custom regmap passed from glue driver.
+- Add Baikal-T1 System I2C support in a dedicated glue layer driver.
+
+Link: https://lore.kernel.org/linux-i2c/20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Move fixes and less invasive patches to the head of the series.
+- Add patch "dt-bindings: i2c: Discard i2c-slave flag from the DW I2C
+  example" since Rob says the flag can be discarded until dtc is fixed.
+- Add patch "i2c: designware: Retrieve quirk flags as early as possible"
+  as a first preparation before adding Baikal-T1 System I2C support.
+- Add patch "i2c: designware: Move reg-space remapping into a dedicated
+  function" as a second preparation before adding Baikal-T1 System I2C
+  support.
+- Add patch "i2c: designware: Add Baikal-T1 System I2C support", which
+  integrates the Baikal-T1 I2C support into the DW I2C platform driver.
+- Get back the reg property being mandatory even if it's Baikal-T1 System
+  I2C DT node. Rob says it has to be in the DT node if there is a
+  dedicated registers range in the System Controller registers space.
+- Replace if-endif clause around the I2C_DESIGNWARE_BAYTRAIL config
+  with "depends on" operator.
+
+Link: https://lore.kernel.org/linux-i2c/20200526215528.16417-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v4:
+- Rebase on top of the i2c/for-next branch.
+- Use PTR_ERR_OR_ZERO() helper in the bt1_i2c_request_regs() and
+  in the dw_i2c_plat_request_regs() methods.
+- Discard devm_platform_get_and_ioremap_resource() utilization.
+- Discard patch "scripts/dtc: check: Add 10bit/slave i2c reg flags
+  support" since it must be merged in to the dtc upstream repository.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (11):
+  dt-bindings: i2c: Convert DW I2C binding to DT schema
+  dt-bindings: i2c: Discard i2c-slave flag from the DW I2C example
+  dt-bindings: i2c: dw: Add Baikal-T1 SoC I2C controller
+  i2c: designware: Use `-y` to build multi-object modules
+  i2c: designware: slave: Set DW I2C core module dependency
+  i2c: designware: Add Baytrail sem config DW I2C platform dependency
+  i2c: designware: Discard Cherry Trail model flag
+  i2c: designware: Convert driver to using regmap API
+  i2c: designware: Retrieve quirk flags as early as possible
+  i2c: designware: Move reg-space remapping into a dedicated function
+  i2c: designware: Add Baikal-T1 System I2C support
+
+ .../bindings/i2c/i2c-designware.txt           |  73 -------
+ .../bindings/i2c/snps,designware-i2c.yaml     | 156 +++++++++++++++
+ drivers/i2c/busses/Kconfig                    |  28 +--
+ drivers/i2c/busses/Makefile                   |  18 +-
+ drivers/i2c/busses/i2c-designware-common.c    | 178 +++++++++++++-----
+ drivers/i2c/busses/i2c-designware-core.h      |  28 +--
+ drivers/i2c/busses/i2c-designware-master.c    | 125 ++++++------
+ drivers/i2c/busses/i2c-designware-pcidrv.c    |   1 -
+ drivers/i2c/busses/i2c-designware-platdrv.c   |  96 +++++++++-
+ drivers/i2c/busses/i2c-designware-slave.c     |  77 ++++----
+ 10 files changed, 520 insertions(+), 260 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-designware.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.26.2
+
