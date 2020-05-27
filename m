@@ -2,144 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B64D01E4350
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 15:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187271E4391
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 15:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730210AbgE0NR6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 09:17:58 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:34470 "EHLO
-        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725267AbgE0NR6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 09:17:58 -0400
-Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 904A020CF5;
-        Wed, 27 May 2020 13:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1590585477; bh=TyCh2oo8yxVUWVWyl+bhaPPjK8SpeLsyRuP1msgd7cg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cBI5XsnIeyj7lwzzV2iYA3chZAGVzVdgsI3q3zj55bLXmvU1dJXEsAuWBBv0kXdiM
-         Z+7cZW/8C2h6qx2gQYLsk8yG1yjq7AYvugaFjkmSBcS8QdEduwoBzxMA5Y9Vpz92Sl
-         VYkfD9f3FWYTUn/TPLBWfKacpXz66C+6oREpqd1gv4JiiVKFrzmeS0TsopE65OVD8/
-         bzVQoGSVeHaUBwizx/XisXpjZkrHtUthjpIAnwQ4unLZVgGQzySw0iY1ObUqYZDkxL
-         FvU5xMMGdO2uTMOZozYYIL+xs77q33uw82gGsxw4GyFxOJRxo0jTtuClC0Qi2YqqK+
-         JIPkMuHwlXZKw==
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Loongson64: Define PCI_IOBASE
-Date:   Wed, 27 May 2020 21:17:21 +0800
-Message-Id: <20200527131721.646926-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.27.0.rc0
+        id S2387902AbgE0N1G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 09:27:06 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:53931 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2387650AbgE0N1E (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 09:27:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590586022;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rO0Xmu3kpwaS+spo70btHKk/n/bl2TDfOUNRISjvedY=;
+        b=Zwtz3KVNBkXkOAz7DJgnrvHQF910iCD0DumL8CXrwm+AxuidxSFfM0RhTeC+ggATVChFy3
+        VFlVuy7lUS8/hAoKFNgHbMJzej25iaW6narm54BNj/1QRjgpaSt4P4s83CDeu0S6YKgIOL
+        Fvydh9KyOOeBFinUXN8p0rU7UmSj9po=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-450-raBkZfr_MzyG8c3sVUA-Ug-1; Wed, 27 May 2020 09:26:59 -0400
+X-MC-Unique: raBkZfr_MzyG8c3sVUA-Ug-1
+Received: by mail-wr1-f69.google.com with SMTP id j16so379911wre.22
+        for <linux-mips@vger.kernel.org>; Wed, 27 May 2020 06:26:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rO0Xmu3kpwaS+spo70btHKk/n/bl2TDfOUNRISjvedY=;
+        b=DbP+v4LvcvJTHRRRc3uwrrEs6xL1yBwObZcvd8JepstkyzA7VUeSACVxFTnDk6PgRS
+         /xPrLXyg+dXqGTwsSHOam1Da0HJtc+B91qH4V8cIVCHpfk8xhos/3PDKDhfEjrJ9nx4S
+         lCVSESfgfnwQlkEigIUEEk10t8dXs4GaD996GeSPqkE5evbY1A6QWSoqj9czJ2dmHM/e
+         njMZz2kgqySnyBEJjvjSGJsNW4TtdT0gJ8zUkmWQcpvx++e9GoNg54x2cogtwhb98JmL
+         b0lukMOOZhUrXZQGjXZfrZ5jXS6C8HbP9uGYFexBJFCiDWNAYsdy9EgZ1IVXcLjVEzA9
+         vybQ==
+X-Gm-Message-State: AOAM530gB+lW+nwqt5bO47WG5TzjXEcDA1M5bNEOMVmkjq5u8M/ZqMBq
+        F4gXLrvMYpdRLNvG0sf3F0VWp/EnQuHMqaeZd8moI6V36PoGkUdVWHcrckF0Aw6mqILj/DCZxdf
+        YYQ3q5KBKDQ6SAx+PzIemcg==
+X-Received: by 2002:adf:f582:: with SMTP id f2mr23080017wro.204.1590586018589;
+        Wed, 27 May 2020 06:26:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzksEVrGsPk/xGJQnD5AtcYNTpqAooqkuvHIUr1bqlDBm3LvIU1wHX3ffnsooF7m2BY4wdfbQ==
+X-Received: by 2002:adf:f582:: with SMTP id f2mr23079984wro.204.1590586018345;
+        Wed, 27 May 2020 06:26:58 -0700 (PDT)
+Received: from localhost.localdomain ([194.230.155.225])
+        by smtp.gmail.com with ESMTPSA id c25sm2844600wmb.44.2020.05.27.06.26.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 May 2020 06:26:57 -0700 (PDT)
+Subject: Re: [PATCH v3 3/7] kunit: tests for stats_fs API
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        Jonathan Adams <jwadams@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
+        brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+References: <20200526110318.69006-1-eesposit@redhat.com>
+ <20200526110318.69006-4-eesposit@redhat.com>
+ <alpine.LRH.2.21.2005271054360.24819@localhost>
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Message-ID: <7178ea00-cee5-d5e9-a7aa-58aa46ee416a@redhat.com>
+Date:   Wed, 27 May 2020 15:26:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <alpine.LRH.2.21.2005271054360.24819@localhost>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
-required by generic PCI drivers to make memory mapped I/O range
-work.
 
-To deal with legacy drivers that have fixed I/O ports range we
-reserved 0x10000 in PCI_IOBASE, should be enough for i8259 i8042
-stuff.
+>> In order to run them, the kernel .config must set CONFIG_KUNIT=y
+>> and a new .kunitconfig file must be created with CONFIG_STATS_FS=y
+>> and CONFIG_STATS_FS_TEST=y
+>>
+> 
+> It looks like CONFIG_STATS_FS is built-in, but it exports
+> much of the functionality you are testing.  However could the
+> tests also be built as a module (i.e. make CONFIG_STATS_FS_TEST
+> a tristate variable)? To test this you'd need to specify
+> CONFIG_KUNIT=m and CONFIG_STATS_FS_TEST=m, and testing would
+> simply be a case of "modprobe"ing the stats fs module and collecting
+> results in /sys/kernel/debug/kunit/<module_name> (rather
+> than running kunit.py). Are you relying on unexported internals in
+> the the tests that would prevent building them as a module?
+> 
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- .../mips/include/asm/mach-loongson64/spaces.h |  8 ++++
- arch/mips/loongson64/init.c                   | 42 ++++++++++++++++++-
- 2 files changed, 48 insertions(+), 2 deletions(-)
+I haven't checked it yet, but tests should work as separate module.
+I will look into it, thanks.
 
-diff --git a/arch/mips/include/asm/mach-loongson64/spaces.h b/arch/mips/include/asm/mach-loongson64/spaces.h
-index e85bc1d9c4f2..3de0ac9d8829 100644
---- a/arch/mips/include/asm/mach-loongson64/spaces.h
-+++ b/arch/mips/include/asm/mach-loongson64/spaces.h
-@@ -6,5 +6,13 @@
- #define CAC_BASE        _AC(0x9800000000000000, UL)
- #endif /* CONFIG_64BIT */
- 
-+/* Skip 128k to trap NULL pointer dereferences */
-+#define PCI_IOBASE	_AC(0xc000000000000000 + SZ_128K, UL)
-+#define PCI_IOSIZE	SZ_16M
-+#define MAP_BASE	(PCI_IOBASE + PCI_IOSIZE)
-+
-+/* Reserved at the start of PCI_IOBASE for legacy drivers */
-+#define MMIO_LOWER_RESERVED	0x10000
-+
- #include <asm/mach-generic/spaces.h>
- #endif
-diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-index 23eeb85b1abf..59ddadace83f 100644
---- a/arch/mips/loongson64/init.c
-+++ b/arch/mips/loongson64/init.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/irqchip.h>
-+#include <linux/logic_pio.h>
- #include <linux/memblock.h>
- #include <asm/bootinfo.h>
- #include <asm/traps.h>
-@@ -45,8 +46,7 @@ void __init prom_init(void)
- 	prom_init_env();
- 
- 	/* init base address of io space */
--	set_io_port_base((unsigned long)
--		ioremap(LOONGSON_PCIIO_BASE, LOONGSON_PCIIO_SIZE));
-+	set_io_port_base(PCI_IOBASE);
- 
- 	loongson_sysconf.early_config();
- 
-@@ -63,7 +63,45 @@ void __init prom_free_prom_memory(void)
- {
- }
- 
-+static __init void reserve_pio_range(void)
-+{
-+	struct logic_pio_hwaddr *range;
-+
-+	range = kzalloc(sizeof(*range), GFP_ATOMIC);
-+	if (!range)
-+		return;
-+
-+	range->fwnode = &of_root->fwnode;
-+	range->size = MMIO_LOWER_RESERVED;
-+	range->hw_start = LOONGSON_PCIIO_BASE;
-+	range->flags = LOGIC_PIO_CPU_MMIO;
-+
-+	if (logic_pio_register_range(range)) {
-+		pr_err("Failed to reserve PIO range for legacy ISA\n");
-+		goto free_range;
-+	}
-+
-+	if (WARN(range->io_start != 0,
-+			"Reserved PIO range does not start from 0\n"))
-+		goto unregister;
-+
-+	/*
-+	 * i8259 would access I/O space, so mapping must be done here.
-+	 * Please remove it when all drivers can be managed by logic_pio.
-+	 */
-+	ioremap_page_range(PCI_IOBASE, PCI_IOBASE + MMIO_LOWER_RESERVED,
-+				LOONGSON_PCIIO_BASE,
-+				pgprot_device(PAGE_KERNEL));
-+
-+	return;
-+unregister:
-+	logic_pio_unregister_range(range);
-+free_range:
-+	kfree(range);
-+}
-+
- void __init arch_init_irq(void)
- {
-+	reserve_pio_range();
- 	irqchip_init();
- }
--- 
-2.27.0.rc0
+Emanuele
 
