@@ -2,108 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C161E4B62
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 19:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADED71E4B90
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 19:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731119AbgE0RFa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 13:05:30 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:37414 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726978AbgE0RFa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 13:05:30 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2A6F58030809;
-        Wed, 27 May 2020 17:05:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QBkDe7aTVI8O; Wed, 27 May 2020 20:05:25 +0300 (MSK)
-Date:   Wed, 27 May 2020 20:05:24 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>,
+        id S1731199AbgE0RMI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 13:12:08 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:46449 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731164AbgE0RMH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 13:12:07 -0400
+Received: by mail-io1-f68.google.com with SMTP id j8so26805282iog.13;
+        Wed, 27 May 2020 10:12:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lH1rJnnAmu6mmVD9f+LiVA8Cp9GhZ/wNWYkFw3lVpLM=;
+        b=tWQZpIrBlsFv9F0gdZR8caqSGN4QrY4bxPuwr8m3TRTuWL+FxxaAmE7N0mBZtuwelX
+         raUSsu9Brnqsww1NiDzsMoiFR9pLhaGtY+vpWaHCpJq0xmM2qiCEI+0u1uD0qDF2Qyj/
+         8kTQB3Kj9vkiK3uwjJWVnbDxKV0VkVdxcnVb6OXmhDdM/rXGMh39diKA6rviRQK41Dbh
+         SRp4g3Mx4yGJBy4kU5FSQDyboq7B1+IkGv1XzUUuUoLM+kesLTjL8AWYKuQo2Prhxx/1
+         FmFUQYThX2RI2x7DAawNmKXcwYrH88GnE+QqwjfH5meSRudTa+8KCHhy85sU/jzg64Zj
+         nYWg==
+X-Gm-Message-State: AOAM530FxKDSE1z7or7uXHfp7OKsukcBR4cSEkU8JXq6QT5qgQ1aIiO1
+        twdePx5pAmpSMk1RIKXT0Q==
+X-Google-Smtp-Source: ABdhPJy6mZmSjT4GnETlDIhT4c/i6cpi2dbaYN20yoQHKee1l9OtKky3c0rbR9VKGY7uzGPRH/rQMg==
+X-Received: by 2002:a5e:970a:: with SMTP id w10mr11183277ioj.114.1590599526064;
+        Wed, 27 May 2020 10:12:06 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id j15sm1832662ilk.0.2020.05.27.10.12.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2020 10:12:05 -0700 (PDT)
+Received: (nullmailer pid 2353199 invoked by uid 1000);
+        Wed, 27 May 2020 17:12:04 -0000
+Date:   Wed, 27 May 2020 11:12:04 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 3/3] hwmon: Add Baikal-T1 PVT sensor driver
-Message-ID: <20200527170524.hbjbikp5b6e5nw5l@mobilestation>
-References: <20200526133823.20466-1-Sergey.Semin@baikalelectronics.ru>
- <20200526133823.20466-4-Sergey.Semin@baikalelectronics.ru>
- <20200527162549.GA225240@roeck-us.net>
- <20200527165205.5krrdahiup3i2oq3@mobilestation>
- <14256f0f-2977-4a54-cf01-ae7e684d10c2@roeck-us.net>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 02/11] dt-bindings: i2c: Discard i2c-slave flag from
+ the DW I2C example
+Message-ID: <20200527171204.GA2348490@bogus>
+References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
+ <20200527120111.5781-3-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <14256f0f-2977-4a54-cf01-ae7e684d10c2@roeck-us.net>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200527120111.5781-3-Sergey.Semin@baikalelectronics.ru>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 27, 2020 at 09:58:00AM -0700, Guenter Roeck wrote:
-> On 5/27/20 9:52 AM, Serge Semin wrote:
-> > On Wed, May 27, 2020 at 09:25:49AM -0700, Guenter Roeck wrote:
-> >> On Tue, May 26, 2020 at 04:38:23PM +0300, Serge Semin wrote:
-> > 
-> > [nip]
-> > 
-> >>> +
-> >>> +=============================== ======= =======================================
-> >>> +Name				Perm	Description
-> >>> +=============================== ======= =======================================
-> >>> +update_interval			RW	Measurements update interval per
-> >>> +					sensor.
-> >>> +temp1_type			RO	Sensor type (always 1 as CPU embedded
-> >>> +					diode).
-> >>> +temp1_label			RO	CPU Core Temperature sensor.
-> >>> +temp1_input			RO	Measured temperature in millidegree
-> >>> +					Celsius.
-> >>> +temp1_min			RW	Low limit for temp input.
-> >>> +temp1_max			RW	High limit for temp input.
-> >>> +temp1_min_alarm			RO	Temperature input alarm. Returns 1 if
-> >>> +					temperature input went below min limit,
-> >>> +					0 otherwise.
-> >>> +temp1_max_alarm			RO	Temperature input alarm. Returns 1 if
-> >>> +					temperature input went above max limit,
-> >>> +					0 otherwise.
-> >>> +temp1_trim			RW	Temperature sensor trimming factor in
-> >>> +					millidegree Celsius. It can be used to
-> >>> +					manually adjust the temperature
-> >>> +					measurements within 7.130 degrees
-> >>> +					Celsius.
-> >>
-> >> vs. standard ABI:
-> >>
-> >> temp[1-*]_offset`
-> >>                 Temperature offset which is added to the temperature reading
-> >>                 by the chip.
-> >>
-> >>                 Unit: millidegree Celsius
-> >>
-> >> If you really think this is necessary, why not use the standard ABI ?
-> > 
-> > That would have made much more sense.) I'll replace the handwritten temp1_trim
-> > with the standard temp1_offset attribute in v4 shortly today. Thanks for pointing
-> > this out.
-> > 
+On Wed, May 27, 2020 at 03:01:02PM +0300, Serge Semin wrote:
+> dtc currently doesn't support I2C_OWN_SLAVE_ADDRESS flag set in the
+> i2c "reg" property. If it is the compiler will print a warning:
 > 
-> Sorry for not realizing this earlier. The added explanation
-> made all the difference.
-
-No worries. I'll fix it in v4. What about the clk_get_rate() part of the code?
-You had a comment regarding it in v2. I responded with justification that we can
-leave it as is. If you still disagree, then I create the clock rate caching in the
-private data at the probe() stage.
-
--Sergey
-
+> Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64: I2C bus unit address format error, expected "40000064"
+> Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64:reg: I2C address must be less than 10-bits, got "0x40000064"
 > 
-> Guenter
+> In order to silence dtc up let's discard the flag from the DW I2C DT
+> binding example for now. Just revert this commit when dtc is fixed.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: linux-mips@vger.kernel.org
+> 
+> ---
+> 
+> Changelog v3:
+> - This is a new patch created as a result of the Rob request to remove
+>   the EEPROM-slave bit setting in the DT binndings example until the dtc
+>   is fixed.
+> ---
+>  Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> index 4bd430b2b41d..101d78e8f19d 100644
+> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> @@ -137,7 +137,7 @@ examples:
+>  
+>        eeprom@64 {
+>          compatible = "linux,slave-24c02";
+> -        reg = <0x40000064>;
+> +        reg = <0x64>;
+
+But the compatible is a slave, so you need an example with a different 
+device.
+
+>        };
+>      };
+>    - |
+> -- 
+> 2.26.2
+> 
