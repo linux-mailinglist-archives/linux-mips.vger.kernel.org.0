@@ -2,107 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFD51E3E9E
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 12:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EF51E3ED1
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 12:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387486AbgE0KIB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 06:08:01 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:55268 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727888AbgE0KIB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 06:08:01 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04RA7bN9029643;
-        Wed, 27 May 2020 10:07:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2020-01-29;
- bh=Jgk+aa3gaSbaEJGRzqmUB4J/D3RcAW2mzmSgXwtDYpI=;
- b=I++iBdw/d6EbbsVc0QonMYtP9GdH7G9gqk7JTiB94+7WbFWe/ILrE7Z3/1Xou2AA/fj0
- XfiW1ia3B13QNes64K8EvFxGTdek2n1b1W/CZkKh0BNspXqu5WHk3CdXeMTM9mLZJxGW
- HOtff/B6xDcXoVujMkSWvLLR+R8xcPpBHqJLZ0kEdQhnfyRw8J6J6VCNosFSIaEu0thm
- Xz1cn4ch5LgZ1tUZIBA3t8NTvbbgSWEt29tV/Ak2G+yNA1HvzCz/bBs7k698p7fC90vO
- 0n/SEPzLJEx2JmH8cX0h5LZ95k2fkDoJBgdt9g4Ud68tggcn37DEw46UAI4yWToBi71J Lg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 316u8qxjjc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 27 May 2020 10:07:37 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04R9vY3D160684;
-        Wed, 27 May 2020 10:05:35 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 317j5rcya4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 May 2020 10:05:35 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04RA5XM3005085;
-        Wed, 27 May 2020 10:05:33 GMT
-Received: from dhcp-10-175-217-36.vpn.oracle.com (/10.175.217.36)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 27 May 2020 03:05:33 -0700
-Date:   Wed, 27 May 2020 11:05:23 +0100 (BST)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@localhost
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
-cc:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        Jonathan Adams <jwadams@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
-        brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH v3 3/7] kunit: tests for stats_fs API
-In-Reply-To: <20200526110318.69006-4-eesposit@redhat.com>
-Message-ID: <alpine.LRH.2.21.2005271054360.24819@localhost>
-References: <20200526110318.69006-1-eesposit@redhat.com> <20200526110318.69006-4-eesposit@redhat.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        id S1725852AbgE0KSj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 06:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725294AbgE0KSi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 06:18:38 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EE9C061A0F;
+        Wed, 27 May 2020 03:18:38 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id c75so11581804pga.3;
+        Wed, 27 May 2020 03:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EhwhFw1tES4LZGvoxz/NosIDfmflP0OU91r5bFTkb98=;
+        b=SIzpvkEuQFsOG8bNh7PbCXcg58+f7d7hDswJsuYf1mwFQoAVPLwpPBYwLB5Kld98aL
+         zk4hubJqwcCvwoo2mDJ8ugJ3EZwPABifi80PkNZbhxG29ap6Lv4Zc2PMfqnLqT5JuwBH
+         uceu/KM2j/2mOACBpCFROhRD5Za2JFPFLzgcem3EU/CsY0GOEKH/6yKIegmaVCsdlA8b
+         ELvAfKdkbO+Pyapj0EXPZdV1ByF7FFqzT+G1SBcGj0bXhV2rghRgnSO6m33MBvG1wPRj
+         e4SnFHR3jGzUqRJp9E4PsaYI7eLMNoy8KnNDCF0zFlITkp5AMZTA28g179rYNQFVHZvy
+         WG3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EhwhFw1tES4LZGvoxz/NosIDfmflP0OU91r5bFTkb98=;
+        b=pE0ASEHLHNIMy96p44mHXl7/zyvkvWSnu4xIusIrESLmZsD87HLDkFKwnxhTAYqK7N
+         SleSS4wEN2qz8jZ++RI5zQC3BU29iTazFbX7MT0avBtdnlmhJoWBctIbobqD1zKkio5u
+         f8mIn/I9AS9xXi5MPHYo9TeKP+jgsE3jaLjiIQvjVVkmwqXGQpYeiwK0CL7SpmqNQtdq
+         FFk/3CkeFsD2VL1xtalcB6RdRi9nnKqoCteSZaI60CCFs+FGSv1RJBNMyuPhGohwGSlq
+         tTRwIcZkhzpM4b8/+ELGdyFjXspOFGQpwkUA6jhlEAydd/PJChQ34RMSx992NwAKhHlG
+         r1CA==
+X-Gm-Message-State: AOAM530zmaFJuMjpkNluKLa4GawwUnNLUWyigFSornJrquPDp9jrbSVY
+        FGMgx3imrw1d4ePC+lW6slmsHiXg8MRX8dskiPk=
+X-Google-Smtp-Source: ABdhPJyCHpozKeoHK85XTSqAWyu+N2lpBygYqk3zDE/5YtgW+awwVfP/5OgHvoazlKjrN+diVc6lN3DBQ6FUKqoKPc0=
+X-Received: by 2002:a63:545a:: with SMTP id e26mr1830343pgm.4.1590574718152;
+ Wed, 27 May 2020 03:18:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9633 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 suspectscore=4
- mlxlogscore=999 mlxscore=0 adultscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005270072
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9633 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- priorityscore=1501 spamscore=0 cotscore=-2147483648 suspectscore=4
- phishscore=0 clxscore=1011 mlxlogscore=999 bulkscore=0 adultscore=0
- lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005270073
+References: <20200526215528.16417-1-Sergey.Semin@baikalelectronics.ru>
+ <20200526215528.16417-12-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75Veygd2y8Tp28p+ZX8Hm_u975QdqatKbsNOG9tNz6HOCAg@mail.gmail.com> <20200527095034.xd52qv45nzcnkbnz@mobilestation>
+In-Reply-To: <20200527095034.xd52qv45nzcnkbnz@mobilestation>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 27 May 2020 13:18:26 +0300
+Message-ID: <CAHp75Vdv10g5Fsxp+P49SR79yzePss-2=ACTdbAD-3BGHeHAmg@mail.gmail.com>
+Subject: Re: [PATCH v3 11/12] i2c: designware: Move reg-space remapping into a
+ dedicated function
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 26 May 2020, Emanuele Giuseppe Esposito wrote:
+On Wed, May 27, 2020 at 12:50 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+> On Wed, May 27, 2020 at 12:26:09PM +0300, Andy Shevchenko wrote:
+> > On Wed, May 27, 2020 at 4:03 AM Serge Semin
+> > <Sergey.Semin@baikalelectronics.ru> wrote:
 
-> Add kunit tests to extensively test the stats_fs API functionality.
+...
+
+> > Wolfram, did my last series make your tree? I think there was a patch
+> > that touched this part...
 >
+> Right. It is there. I'll rebase the series on top of the i2c/for-next branch.
 
-I've added in the kunit-related folks.
- 
-> In order to run them, the kernel .config must set CONFIG_KUNIT=y
-> and a new .kunitconfig file must be created with CONFIG_STATS_FS=y
-> and CONFIG_STATS_FS_TEST=y
->
+Ah, my memory did a trick. Thank you!
 
-It looks like CONFIG_STATS_FS is built-in, but it exports
-much of the functionality you are testing.  However could the
-tests also be built as a module (i.e. make CONFIG_STATS_FS_TEST
-a tristate variable)? To test this you'd need to specify
-CONFIG_KUNIT=m and CONFIG_STATS_FS_TEST=m, and testing would
-simply be a case of "modprobe"ing the stats fs module and collecting
-results in /sys/kernel/debug/kunit/<module_name> (rather 
-than running kunit.py). Are you relying on unexported internals in
-the the tests that would prevent building them as a module?
-
-Thanks!
-
-Alan
+-- 
+With Best Regards,
+Andy Shevchenko
