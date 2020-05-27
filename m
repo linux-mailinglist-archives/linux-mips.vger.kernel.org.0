@@ -2,85 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C5A1E38D7
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 08:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC371E3911
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 08:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725819AbgE0GL5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 02:11:57 -0400
-Received: from mail-m972.mail.163.com ([123.126.97.2]:53212 "EHLO
-        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725267AbgE0GL5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 02:11:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=tqB8gk4cBM9ljJdG5y
-        YuMl1Lq4aOSsx4vGFhMHDPSCM=; b=JYYvv2FHiyXbBl2zRz27cDg1T9B0d67055
-        57h1Ealri5jEf+A76U2T3FTGDzM5R3mcT8MVmhvIHMP6F9n0qo12BEsFBbaLAHT+
-        0kGX0aKYpXnIWkLGJSfA1mDrah7S63XRhTi6q/GAVJJDmgX300AoyE8h22cZqfNB
-        8PH7H4fWY=
-Received: from localhost.localdomain (unknown [124.64.17.235])
-        by smtp2 (Coremail) with SMTP id GtxpCgB3nwiUBM5e1byuBw--.253S4;
-        Wed, 27 May 2020 14:11:37 +0800 (CST)
-From:   YuanJunQing <yuanjunqing66@163.com>
-To:     tsbogend@alpha.franken.de
-Cc:     paulburton@kernel.org, chenhc@lemote.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liulichao@loongson.cn, YuanJunQing <yuanjunqing66@163.com>
-Subject: [PATCH] MIPS: Fix IRQ tracing when call handle_fpe() and handle_msa_fpe()
-Date:   Wed, 27 May 2020 14:11:30 +0800
-Message-Id: <20200527061130.15618-1-yuanjunqing66@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: GtxpCgB3nwiUBM5e1byuBw--.253S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7XrWUurykKF4kZryxur4xXrb_yoWDWrc_Kr
-        42v3yUKr15CwnxWr17tw4rW34Ivw4SgF9IyFyvvw1ayr45Wrs0krWvg3WkXwn3Wr4SkFWI
-        y398G3Z2kF1xtjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUjwvKUUUUUU==
-X-Originating-IP: [124.64.17.235]
-X-CM-SenderInfo: h1xd0ypxqtx0rjwwqiywtou0bp/xtbBURoxXFaD7Pj41wAAsI
+        id S1728139AbgE0GYT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 02:24:19 -0400
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:52965 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726337AbgE0GYT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 27 May 2020 02:24:19 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07425;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=37;SR=0;TI=SMTPD_---0TzmW8ts_1590560648;
+Received: from 30.27.118.64(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0TzmW8ts_1590560648)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 27 May 2020 14:24:10 +0800
+Subject: Re: [PATCH v4 6/7] KVM: MIPS: clean up redundant 'kvm_run' parameters
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        paulus@ozlabs.org, mpe@ellerman.id.au,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        cohuck@redhat.com, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        sean.j.christopherson@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org, hpa@zytor.com,
+        Marc Zyngier <maz@kernel.org>, james.morse@arm.com,
+        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
+        christoffer.dall@arm.com, Peter Xu <peterx@redhat.com>,
+        thuth@redhat.com, kvm@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <20200427043514.16144-1-tianjia.zhang@linux.alibaba.com>
+ <20200427043514.16144-7-tianjia.zhang@linux.alibaba.com>
+ <CAAhV-H7kpKUfQoWid6GSNL5+4hTTroGyL83EaW6yZwS2+Ti9kA@mail.gmail.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <37246a25-c4dc-7757-3f5c-d46870a4f186@linux.alibaba.com>
+Date:   Wed, 27 May 2020 14:24:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <CAAhV-H7kpKUfQoWid6GSNL5+4hTTroGyL83EaW6yZwS2+Ti9kA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
- Register "a1" is unsaved in this function,
- when CONFIG_TRACE_IRQFLAGS is enabled,
- the TRACE_IRQS_OFF macro will call trace_hardirqs_off(),
- and this may change register "a1".
- The changed register "a1" as argument will be send
- to do_fpe() and do_msa_fpe().
 
-Signed-off-by: YuanJunQing <yuanjunqing66@163.com>
----
- arch/mips/kernel/genex.S | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-index 8236fb291e3f..a1b966f3578e 100644
---- a/arch/mips/kernel/genex.S
-+++ b/arch/mips/kernel/genex.S
-@@ -476,20 +476,20 @@ NESTED(nmi_handler, PT_SIZE, sp)
- 	.endm
- 
- 	.macro	__build_clear_fpe
-+	CLI
-+	TRACE_IRQS_OFF
- 	.set	push
- 	/* gas fails to assemble cfc1 for some archs (octeon).*/ \
- 	.set	mips1
- 	SET_HARDFLOAT
- 	cfc1	a1, fcr31
- 	.set	pop
--	CLI
--	TRACE_IRQS_OFF
- 	.endm
- 
- 	.macro	__build_clear_msa_fpe
--	_cfcmsa	a1, MSA_CSR
- 	CLI
- 	TRACE_IRQS_OFF
-+	_cfcmsa	a1, MSA_CSR
- 	.endm
- 
- 	.macro	__build_clear_ade
--- 
-2.17.1
+On 2020/4/27 13:40, Huacai Chen wrote:
+> Reviewed-by: Huacai Chen <chenhc@lemote.com>
+> 
+> On Mon, Apr 27, 2020 at 12:35 PM Tianjia Zhang
+> <tianjia.zhang@linux.alibaba.com> wrote:
+>>
+>> In the current kvm version, 'kvm_run' has been included in the 'kvm_vcpu'
+>> structure. For historical reasons, many kvm-related function parameters
+>> retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time. This
+>> patch does a unified cleanup of these remaining redundant parameters.
+>>
+>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>> ---
+>>   arch/mips/include/asm/kvm_host.h |  28 +-------
+>>   arch/mips/kvm/emulate.c          |  59 ++++++----------
+>>   arch/mips/kvm/mips.c             |  11 ++-
+>>   arch/mips/kvm/trap_emul.c        | 114 ++++++++++++++-----------------
+>>   arch/mips/kvm/vz.c               |  26 +++----
+>>   5 files changed, 87 insertions(+), 151 deletions(-)
+>>
 
+Hi Huacai,
+
+These two patches(6/7 and 7/7) should be merged into the tree of the 
+mips architecture separately. At present, there seems to be no good way 
+to merge the whole architecture patchs.
+
+For this series of patches, some architectures have been merged, some 
+need to update the patch.
+
+Thanks and best,
+Tianjia
