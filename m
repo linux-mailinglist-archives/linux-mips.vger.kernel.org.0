@@ -2,74 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A16571E4417
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 15:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E1A1E4430
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 15:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388330AbgE0Nnk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 09:43:40 -0400
-Received: from mga18.intel.com ([134.134.136.126]:11202 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387581AbgE0Nnk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 May 2020 09:43:40 -0400
-IronPort-SDR: b9ZxhJGH4GUhn0jve4kaJr13cJxWbR+w+zBRdmPiuH/lXDtdCao3rSW3ezwMaBy2OTFE4SbIxk
- rPQI0VyczK3w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 06:43:39 -0700
-IronPort-SDR: dY6u9OQowCN3pIUwRqJi5VniyqdUtAkl4F8EPNniYD9miuGF/kA9RMEDzs7GXuacsiL5SBpssc
- rzqqjOL/sWZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,441,1583222400"; 
-   d="scan'208";a="468745133"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga006.fm.intel.com with ESMTP; 27 May 2020 06:43:36 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jdwLL-009EkK-MI; Wed, 27 May 2020 16:43:39 +0300
-Date:   Wed, 27 May 2020 16:43:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/11] i2c: designware: Discard Cherry Trail model flag
-Message-ID: <20200527134339.GY1634618@smile.fi.intel.com>
-References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
- <20200527120111.5781-8-Sergey.Semin@baikalelectronics.ru>
+        id S2388670AbgE0Npq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 09:45:46 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:36630 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388603AbgE0Npp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 09:45:45 -0400
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18CCF5B4;
+        Wed, 27 May 2020 15:45:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1590587141;
+        bh=FOT36A7X8Hk3Rh2sgJfgv1jk67oSyBWaXMLvby3ZVn0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K8tyyqP2+EBqMtHIXAixv68AVoyRavwX2+DntbLh2vrjNKUdhw1kPp5L8v8XcEQke
+         5hoxdGk3u1oikaekAvVN79PzMi7aqfwFJI9F8IdAk1sxTLb8aiHOOnYPs49h177hrO
+         RBBxk1jZGiThAgDTQMwbMwsU3yghDgrHe9UIOuIk=
+Date:   Wed, 27 May 2020 16:45:27 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Roman Zippel <zippel@linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-riscv@lists.infradead.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-c6x-dev@linux-c6x.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Arnd Bergmann <arnd@arndb.de>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: omap3isp: Shuffle cacheflush.h and include mm.h
+Message-ID: <20200527134527.GD6171@pendragon.ideasonboard.com>
+References: <20200515143646.3857579-7-hch@lst.de>
+ <20200527043426.3242439-1-natechancellor@gmail.com>
+ <CAMuHMdVSduTOi5bUgF9sLQdGADwyL1+qALWsKgin1TeOLGhAKQ@mail.gmail.com>
+ <20200527081337.GA3506499@ubuntu-s3-xlarge-x86>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200527120111.5781-8-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200527081337.GA3506499@ubuntu-s3-xlarge-x86>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 27, 2020 at 03:01:07PM +0300, Serge Semin wrote:
-> A PM workaround activated by the flag MODEL_CHERRYTRAIL has been removed
-> since commit 9cbeeca05049 ("i2c: designware: Remove Cherry Trail PMIC I2C
-> bus pm_disabled workaround"), but the flag most likely by mistake has been
-> left in the Dw I2C drivers. Let's remove it.
+Hi Nathan,
 
-...
+(CC'ing Sakari Ailus and the linux-media mailing list)
 
-> -#define MODEL_MSCC_OCELOT	0x00000200
-> +#define MODEL_MSCC_OCELOT	0x00000100
+On Wed, May 27, 2020 at 01:13:37AM -0700, Nathan Chancellor wrote:
+> On Wed, May 27, 2020 at 09:02:51AM +0200, Geert Uytterhoeven wrote:
+> > On Wed, May 27, 2020 at 6:37 AM Nathan Chancellor wrote:
+> > > After mm.h was removed from the asm-generic version of cacheflush.h,
+> > > s390 allyesconfig shows several warnings of the following nature:
+> > >
+> > > In file included from ./arch/s390/include/generated/asm/cacheflush.h:1,
+> > >                  from drivers/media/platform/omap3isp/isp.c:42:
+> > > ./include/asm-generic/cacheflush.h:16:42: warning: 'struct mm_struct'
+> > > declared inside parameter list will not be visible outside of this
+> > > definition or declaration
+> > >
+> > > cacheflush.h does not include mm.h nor does it include any forward
+> > > declaration of these structures hence the warning. To avoid this,
+> > > include mm.h explicitly in this file and shuffle cacheflush.h below it.
+> > >
+> > > Fixes: 19c0054597a0 ("asm-generic: don't include <linux/mm.h> in cacheflush.h")
+> > > Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> > 
+> > Thanks for your patch!
+> > 
+> > > I am aware the fixes tag is kind of irrelevant because that SHA will
+> > > change in the next linux-next revision and this will probably get folded
+> > > into the original patch anyways but still.
+> > >
+> > > The other solution would be to add forward declarations of these structs
+> > > to the top of cacheflush.h, I just chose to do what Christoph did in the
+> > > original patch. I am happy to do that instead if you all feel that is
+> > > better.
+> > 
+> > That actually looks like a better solution to me, as it would address the
+> > problem for all users.
 
-But why?
+Headers should be self-contained, so that would be the best fix in my
+opinion.
 
-Does 0x200 work or not? I didn't see this in commit message.
+This being said, as cacheflush.h isn't needed in isp.c, I think we
+should also drop it. It seems to have been included there since the
+first driver version, and was likely a left-over from the out-of-tree
+development. Manual cache handling was part of
+drivers/media/platform/omap3isp/ispqueue.c and has been removed in
+commit fbac1400bd1a ("[media] omap3isp: Move to videobuf2").
+
+cacheflush.h can also be dropped from ispvideo.c which suffers from the
+same issue.
+
+> > >  drivers/media/platform/omap3isp/isp.c | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+> > > index a4ee6b86663e..54106a768e54 100644
+> > > --- a/drivers/media/platform/omap3isp/isp.c
+> > > +++ b/drivers/media/platform/omap3isp/isp.c
+> > > @@ -39,8 +39,6 @@
+> > >   *     Troy Laramy <t-laramy@ti.com>
+> > >   */
+> > >
+> > > -#include <asm/cacheflush.h>
+> > > -
+> > >  #include <linux/clk.h>
+> > >  #include <linux/clkdev.h>
+> > >  #include <linux/delay.h>
+> > > @@ -49,6 +47,7 @@
+> > >  #include <linux/i2c.h>
+> > >  #include <linux/interrupt.h>
+> > >  #include <linux/mfd/syscon.h>
+> > > +#include <linux/mm.h>
+> > >  #include <linux/module.h>
+> > >  #include <linux/omap-iommu.h>
+> > >  #include <linux/platform_device.h>
+> > > @@ -58,6 +57,8 @@
+> > >  #include <linux/sched.h>
+> > >  #include <linux/vmalloc.h>
+> > >
+> > > +#include <asm/cacheflush.h>
+> > > +
+> > >  #ifdef CONFIG_ARM_DMA_USE_IOMMU
+> > >  #include <asm/dma-iommu.h>
+> > >  #endif
+> > 
+> > Why does this file need <asm/cacheflush.h> at all?
+> > It doesn't call any of the flush_*() functions, and seems to compile fine
+> > without (on arm32).
+> > 
+> > Perhaps it was included at the top intentionally, to override the definitions
+> > of copy_{to,from}_user_page()? Fortunately that doesn't seem to be the
+> > case, from a quick look at the assembler output.
+> > 
+> > So let's just remove the #include instead?
+> 
+> Sounds good to me. I can send a patch if needed or I suppose Andrew can
+> just make a small fixup patch for it. Let me know what I should do.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards,
 
-
+Laurent Pinchart
