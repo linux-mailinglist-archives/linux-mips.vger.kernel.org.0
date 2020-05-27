@@ -2,93 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD6F1E43CC
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 15:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E91E1E440D
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 15:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388035AbgE0NeK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 09:34:10 -0400
-Received: from elvis.franken.de ([193.175.24.41]:41218 "EHLO elvis.franken.de"
+        id S2388471AbgE0NmV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 09:42:21 -0400
+Received: from mga18.intel.com ([134.134.136.126]:11080 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387901AbgE0NeK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 May 2020 09:34:10 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jdwC8-0001yv-00; Wed, 27 May 2020 15:34:08 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 88D52C059B; Wed, 27 May 2020 15:33:56 +0200 (CEST)
-Date:   Wed, 27 May 2020 15:33:56 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Borislav Petkov <bp@suse.de>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Fangrui Song <maskray@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] MIPS: Move kernel head into a standalone section
-Message-ID: <20200527133356.GA16622@alpha.franken.de>
-References: <20200527063438.391949-1-jiaxun.yang@flygoat.com>
- <20200527063438.391949-3-jiaxun.yang@flygoat.com>
- <20200527115354.GC13965@alpha.franken.de>
- <20200527200522.23c4e86f@halation.net.flygoat.com>
+        id S2387771AbgE0NmV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 27 May 2020 09:42:21 -0400
+IronPort-SDR: VUoUA6ge9QyNZ8FD+D8CgPPlFR6AeYRY2fzHKkm1HDxaNEEN0jHkVk4mNoilXbTdqCno1r/AFD
+ XgU6ONkAtvCg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 06:42:20 -0700
+IronPort-SDR: vW6e7s7Gzf/CPGZx6t4D/RIeBm/4YAK4Hjp3JykGkTjQ4CRqBvxRYnXV0wkC/DVCr2S9XXN+QK
+ Mqw3x+haU+5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,441,1583222400"; 
+   d="scan'208";a="442523669"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga005.jf.intel.com with ESMTP; 27 May 2020 06:42:17 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jdwK4-009EjZ-2S; Wed, 27 May 2020 16:42:20 +0300
+Date:   Wed, 27 May 2020 16:42:20 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 06/11] i2c: designware: Add Baytrail sem config DW I2C
+ platform dependency
+Message-ID: <20200527134220.GX1634618@smile.fi.intel.com>
+References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
+ <20200527120111.5781-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200527200522.23c4e86f@halation.net.flygoat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200527120111.5781-7-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 27, 2020 at 08:05:22PM +0800, Jiaxun Yang wrote:
-> On Wed, 27 May 2020 13:53:54 +0200
-> Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
-> 
-> > On Wed, May 27, 2020 at 02:34:33PM +0800, Jiaxun Yang wrote:
-> > > That's what already done by Arm64 and other architectures.
-> > > That would allow us put more things like PE headers safely into
-> > > the header.
-> > > 
-> > > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > > ---
-> > >  arch/mips/kernel/head.S        | 4 ++--
-> > >  arch/mips/kernel/vmlinux.lds.S | 8 ++++++--
-> > >  2 files changed, 8 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/arch/mips/kernel/head.S b/arch/mips/kernel/head.S
-> > > index c7c2795837e7..8081a905a71c 100644
-> > > --- a/arch/mips/kernel/head.S
-> > > +++ b/arch/mips/kernel/head.S
-> > > @@ -59,6 +59,8 @@
-> > >  #endif
-> > >  	.endm
-> > >  
-> > > +	__HEAD
-> > > +_head:
-> > >  #ifndef CONFIG_NO_EXCEPT_FILL
-> > >  	/*
-> > >  	 * Reserved space for exception handlers.  
-> > 
-> > I'm adding the missing piece, why this change ist broken:
-> > 
-> >          * Necessary for machines which link their kernels at KSEG0.
-> > 
-> > by putting something in front of that will probably break platforms
-> > making use of "feature". If we can make sure, we don't need it
-> > anymore, we should first remove this and then add __HEAD part.
-> 
-> __HEAD is just marking the section of code.
-> It will not add anything to the binary.
+On Wed, May 27, 2020 at 03:01:06PM +0300, Serge Semin wrote:
+> Currently Intel Baytrail I2C semaphore is a feature of the DW APB I2C
+> platform driver. It's a bit confusing to see it's config in the menu at
+> some separated place with no reference to the platform code. Let's move the
+> config definition to be below the I2C_DESIGNWARE_PLATFORM config and mark
+> it with "depends on I2C_DESIGNWARE_PLATFORM" statement. By doing so the
+> config menu will display the feature right below the DW I2C platform
+> driver item and will indent it to the right so signifying its belonging.
 
-oops, should have looked it up first. You mentioned PE headers and
-I thought it will be added this way.
+...
 
-> Btw: I just noticed this patch may break relocatable kernel. I'll delay
-> it for next merge window.
+>  config I2C_DESIGNWARE_BAYTRAIL
+>  	bool "Intel Baytrail I2C semaphore support"
+>  	depends on ACPI
+> +	depends on I2C_DESIGNWARE_PLATFORM
+>  	depends on (I2C_DESIGNWARE_PLATFORM=m && IOSF_MBI) || \
+>  		   (I2C_DESIGNWARE_PLATFORM=y && IOSF_MBI=y)
 
-ok.
+I didn't get this. What is broken now with existing dependencies?
 
-Thomas.
+(The move of the PCI part is fine)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+With Best Regards,
+Andy Shevchenko
+
+
