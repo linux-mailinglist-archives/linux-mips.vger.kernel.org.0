@@ -2,104 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E381E35D7
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 04:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5470A1E3711
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 06:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbgE0Cqu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 22:46:50 -0400
-Received: from mail-m975.mail.163.com ([123.126.97.5]:37164 "EHLO
-        mail-m975.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725893AbgE0Cqu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 22:46:50 -0400
-X-Greylist: delayed 906 seconds by postgrey-1.27 at vger.kernel.org; Tue, 26 May 2020 22:46:48 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=BNEza
-        90c9rHb4GPPlGnzAcd3ROqRnWYmmv4MpZD8lx0=; b=mgUTrkfi2X/SeH3LH+hyj
-        e6vrWkhVxadSh3GyZEmyJjYmm4bxrBTKrdwUkfKwXjbh+pOBauGIkNobgv2UsBk7
-        EosmrrVZ2tpCUipJ6IYPLKBHOIjHld+m9rMbzEpRChP/saw6oRPopkbk59EGcwjD
-        bO7VuKsp68IcmVrVhg+mmA=
-Received: from [172.20.10.2] (unknown [124.64.17.235])
-        by smtp5 (Coremail) with SMTP id HdxpCgA3SlDz0M1esmokAQ--.63S2;
-        Wed, 27 May 2020 10:31:29 +0800 (CST)
-Subject: Re: [PATCH] MIPS: Fix IRQ tracing when call handle_fpe()
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     paulburton@kernel.org, chenhc@lemote.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liulichao@loongson.cn
-References: <20200525033123.13114-1-yuanjunqing66@163.com>
- <20200525084234.GA5057@alpha.franken.de>
- <76f2c756-0ae4-83f5-becf-6f1b3319f6fd@163.com>
- <20200526130441.GB8487@alpha.franken.de>
-From:   yuanjunqing <yuanjunqing66@163.com>
-Message-ID: <802d9731-9ac9-6f97-fe6d-c815bdcc0684@163.com>
-Date:   Wed, 27 May 2020 10:31:14 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728811AbgE0EVN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 00:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728770AbgE0EVD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 00:21:03 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483AEC061A0F;
+        Tue, 26 May 2020 21:21:03 -0700 (PDT)
+Received: by ozlabs.org (Postfix, from userid 1003)
+        id 49WyLj24ZLz9sSk; Wed, 27 May 2020 14:21:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ozlabs.org; s=201707;
+        t=1590553261; bh=G+QgS0qcNXOLEKAmCyU//vqicLF4pKGtu1284W9SPQ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HacLDlq4cEW9mRq5Epu7LBXDTYHh562uIVB4NcCHS72K7f+p0nPG30FusxcRsi/rP
+         ZrpLNbsFpBUoa5fBK/q9q1Ph+3l+diJxt7YNSN9ZO5kEStK1cOex/aVl+63iIAnAV6
+         81zfOTK5liGI/8ROoI1BoWkHGtFBDjekFaoiCBAiBA/TOT8TPmMStZdjmsocz8M+z1
+         e7G3jn4kiPnysiktau650QdENmiy7zwC0Om0O6Uxzi7dWPY38pc1wIJDU0++O+x2xz
+         jrq1yr6CfwonY8LwvuxPRV7SME6th0pqavPWBDnyBf57CggTButADyikorWWJ4GTDt
+         HaCvipkquX5yw==
+Date:   Wed, 27 May 2020 14:20:55 +1000
+From:   Paul Mackerras <paulus@ozlabs.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     pbonzini@redhat.com, tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, borntraeger@de.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com,
+        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        sean.j.christopherson@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, maz@kernel.org, james.morse@arm.com,
+        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
+        christoffer.dall@arm.com, peterx@redhat.com, thuth@redhat.com,
+        chenhuacai@gmail.com, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/7] KVM: PPC: Remove redundant kvm_run from vcpu_arch
+Message-ID: <20200527042055.GG293451@thinks.paulus.ozlabs.org>
+References: <20200427043514.16144-1-tianjia.zhang@linux.alibaba.com>
+ <20200427043514.16144-4-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <20200526130441.GB8487@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: HdxpCgA3SlDz0M1esmokAQ--.63S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CFy3AFy5tFy7CrWrWryfWFg_yoW8WFyxp3
-        yUC3Z5KF4qgFWjyr429wn5JrW5Kw4ktrW5uFs5tay3Xas8WFs3tF4Iqw4Y9F929r48GF4f
-        KF1jqa4a9F43AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jGGQDUUUUU=
-X-Originating-IP: [124.64.17.235]
-X-CM-SenderInfo: h1xd0ypxqtx0rjwwqiywtou0bp/xtbBUQExXFaD7PbL0QAAso
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200427043514.16144-4-tianjia.zhang@linux.alibaba.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-yes, I will re-send email for this patch.
+On Mon, Apr 27, 2020 at 12:35:10PM +0800, Tianjia Zhang wrote:
+> The 'kvm_run' field already exists in the 'vcpu' structure, which
+> is the same structure as the 'kvm_run' in the 'vcpu_arch' and
+> should be deleted.
+> 
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 
-在 2020/5/26 下午9:04, Thomas Bogendoerfer 写道:
-> On Tue, May 26, 2020 at 03:07:16PM +0800, yuanjunqing wrote:
->> 在 2020/5/25 下午4:42, Thomas Bogendoerfer 写道:
->>> On Mon, May 25, 2020 at 11:31:23AM +0800, YuanJunQing wrote:
->>>>  Register "a1" is unsaved in this function,
->>>>  when CONFIG_TRACE_IRQFLAGS is enabled,
->>>>  the TRACE_IRQS_OFF macro will call trace_hardirqs_off(),
->>>>  and this may change register "a1".
->>>>  The variment of register "a1" may send SIGFPE signal
->>>>  to task when call do_fpe(),and this may kill the task.
->>>>
->>>> Signed-off-by: YuanJunQing <yuanjunqing66@163.com>
->>>> ---
->>>>  arch/mips/kernel/genex.S | 6 ++++--
->>>>  1 file changed, 4 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
->>>> index 8236fb291e3f..956a76429773 100644
->>>> --- a/arch/mips/kernel/genex.S
->>>> +++ b/arch/mips/kernel/genex.S
->>>> @@ -480,16 +480,18 @@ NESTED(nmi_handler, PT_SIZE, sp)
->>>>  	/* gas fails to assemble cfc1 for some archs (octeon).*/ \
->>>>  	.set	mips1
->>>>  	SET_HARDFLOAT
->>>> -	cfc1	a1, fcr31
->>>> +	cfc1	s0, fcr31
->>>>  	.set	pop
->>>>  	CLI
->>>>  	TRACE_IRQS_OFF
->>>> +	move    a1,s0
->>>>  	.endm
->>> do we realy need to read fcr31 that early ? Wouldn't it work to
->>> just move the cfc1 below TRACE_IRQS_OFF ?
->>>
->>  yes, it can work when we just move the cfc1 below TRACE_IRQS_OFF,
->>  and the code is written as follows.
->>
->>  	CLI
->>  	TRACE_IRQS_OFF
->>  	.set	mips1
->>  	SET_HARDFLOAT
->> 	cfc1	a1, fcr31
->>  	.set	pop
->>        .endm
-> good, could we do the same with _cfcmsa	a1, MSA_CSR in the msa case ?
->
-> Thomas.
->
+Thanks, patches 3 and 4 of this series applied to my kvm-ppc-next branch.
 
+Paul.
