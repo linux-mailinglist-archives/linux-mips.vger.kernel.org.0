@@ -2,245 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D3B1E415A
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 14:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DCB1E4139
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 14:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729431AbgE0MHj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 08:07:39 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34938 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728978AbgE0MHg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 08:07:36 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id F267080307C0;
-        Wed, 27 May 2020 12:07:31 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tYT1CraX181T; Wed, 27 May 2020 15:07:31 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 11/11] i2c: designware: Add Baikal-T1 System I2C support
-Date:   Wed, 27 May 2020 15:01:11 +0300
-Message-ID: <20200527120111.5781-12-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
+        id S1726759AbgE0MFd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 08:05:33 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:34460 "EHLO
+        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725859AbgE0MFc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 08:05:32 -0400
+Received: from halation.net.flygoat.com (unknown [IPv6:240e:390:496:b320::d68])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 1B0E720CF4;
+        Wed, 27 May 2020 12:05:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1590581132; bh=pAfGmsVIfAgalNnpMcQ/Iz794j/8TOn7DIg2APlLWd0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OVUwsCEe81/Ckpt6f7xlL2qIHkQO7BJ/3MI75tt+dEEvxi8Fnh6TYZLjJIxOXJGm+
+         UGJZapFMZ1s9SVzsU0MdHvac21Cnv4GNb4MBcS2MbNS4+TV4rYmeM7XFhzT+6NyLIO
+         KxI6R2U7Q3SiiQN5nWZgC+H6CaQSf2XZtLwMp8/UZQpWOAYjAQKaP1XM9sh9U9PuBS
+         QFaf5QWc9XI3fbJB0jvbGiglwpIFj+eVuJ3Dh9RRDDO+TKVMNJas41pIjzvHG1p6T4
+         7lHio5JQrbZ5tdk9TpAgpgaxdbf1zC9OjbTHHG2QE8NUprWSswis9ShG2vezLSgkmm
+         47JskCb/cQToQ==
+Date:   Wed, 27 May 2020 20:05:22 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Borislav Petkov <bp@suse.de>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Fangrui Song <maskray@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] MIPS: Move kernel head into a standalone section
+Message-ID: <20200527200522.23c4e86f@halation.net.flygoat.com>
+In-Reply-To: <20200527115354.GC13965@alpha.franken.de>
+References: <20200527063438.391949-1-jiaxun.yang@flygoat.com>
+        <20200527063438.391949-3-jiaxun.yang@flygoat.com>
+        <20200527115354.GC13965@alpha.franken.de>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Baikal-T1 System Controller is equipped with a dedicated I2C Controller
-which functionality is based on the DW APB I2C IP-core, the only
-difference in a way it' registers are accessed. There are three access
-register provided in the System Controller registers map, which indirectly
-address the normal DW APB I2C registers space. So in order to have the
-Baikal-T1 System I2C Controller supported by the common DW APB I2C driver
-we created a dedicated Dw I2C controller model quirk, which retrieves the
-syscon regmap from the parental dt node and creates a new regmap based on
-it.
+On Wed, 27 May 2020 13:53:54 +0200
+Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: devicetree@vger.kernel.org
+> On Wed, May 27, 2020 at 02:34:33PM +0800, Jiaxun Yang wrote:
+> > That's what already done by Arm64 and other architectures.
+> > That would allow us put more things like PE headers safely into
+> > the header.
+> > 
+> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > ---
+> >  arch/mips/kernel/head.S        | 4 ++--
+> >  arch/mips/kernel/vmlinux.lds.S | 8 ++++++--
+> >  2 files changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/mips/kernel/head.S b/arch/mips/kernel/head.S
+> > index c7c2795837e7..8081a905a71c 100644
+> > --- a/arch/mips/kernel/head.S
+> > +++ b/arch/mips/kernel/head.S
+> > @@ -59,6 +59,8 @@
+> >  #endif
+> >  	.endm
+> >  
+> > +	__HEAD
+> > +_head:
+> >  #ifndef CONFIG_NO_EXCEPT_FILL
+> >  	/*
+> >  	 * Reserved space for exception handlers.  
+> 
+> I'm adding the missing piece, why this change ist broken:
+> 
+>          * Necessary for machines which link their kernels at KSEG0.
+> 
+> by putting something in front of that will probably break platforms
+> making use of "feature". If we can make sure, we don't need it
+> anymore, we should first remove this and then add __HEAD part.
 
----
+__HEAD is just marking the section of code.
+It will not add anything to the binary.
 
-Changelog v3:
-- This is a new patch, which has been created due to declining the
-  glue-layer approach.
+Btw: I just noticed this patch may break relocatable kernel. I'll delay
+it for next merge window.
 
-Changelog v4:
-- Use PTR_ERR_OR_ZERO() helper in the bt1_i2c_request_regs() method.
----
- drivers/i2c/busses/Kconfig                  |  3 +-
- drivers/i2c/busses/i2c-designware-core.h    |  3 +
- drivers/i2c/busses/i2c-designware-platdrv.c | 78 ++++++++++++++++++++-
- 3 files changed, 81 insertions(+), 3 deletions(-)
+Thanks.
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 259e2325712a..0cf7aea30138 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -541,8 +541,9 @@ config I2C_DESIGNWARE_SLAVE
- 
- config I2C_DESIGNWARE_PLATFORM
- 	tristate "Synopsys DesignWare Platform"
--	select I2C_DESIGNWARE_CORE
- 	depends on (ACPI && COMMON_CLK) || !ACPI
-+	select I2C_DESIGNWARE_CORE
-+	select MFD_SYSCON if MIPS_BAIKAL_T1
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  Synopsys DesignWare I2C adapter.
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index f5bbe3d6bcf8..556673a1f61b 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -183,6 +183,7 @@ struct reset_control;
-  * struct dw_i2c_dev - private i2c-designware data
-  * @dev: driver model device node
-  * @map: IO registers map
-+ * @sysmap: System controller registers map
-  * @base: IO registers pointer
-  * @ext: Extended IO registers pointer
-  * @cmd_complete: tx completion indicator
-@@ -235,6 +236,7 @@ struct reset_control;
- struct dw_i2c_dev {
- 	struct device		*dev;
- 	struct regmap		*map;
-+	struct regmap		*sysmap;
- 	void __iomem		*base;
- 	void __iomem		*ext;
- 	struct completion	cmd_complete;
-@@ -290,6 +292,7 @@ struct dw_i2c_dev {
- #define ACCESS_NO_IRQ_SUSPEND	0x00000002
- 
- #define MODEL_MSCC_OCELOT	0x00000100
-+#define MODEL_BAIKAL_BT1	0x00000200
- #define MODEL_MASK		0x00000f00
- 
- int i2c_dw_init_regmap(struct dw_i2c_dev *dev);
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 061c8d506c7c..d9c5337bb22b 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -18,6 +18,7 @@
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_data/i2c-designware.h>
-@@ -25,6 +26,7 @@
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
- #include <linux/property.h>
-+#include <linux/regmap.h>
- #include <linux/reset.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-@@ -58,6 +60,63 @@ MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
- #endif
- 
- #ifdef CONFIG_OF
-+#define BT1_I2C_CTL			0x100
-+#define BT1_I2C_CTL_ADDR_MASK		GENMASK(7, 0)
-+#define BT1_I2C_CTL_WR			BIT(8)
-+#define BT1_I2C_CTL_GO			BIT(31)
-+#define BT1_I2C_DI			0x104
-+#define BT1_I2C_DO			0x108
-+
-+static int bt1_i2c_read(void *context, unsigned int reg, unsigned int *val)
-+{
-+	struct dw_i2c_dev *dev = context;
-+	int ret;
-+
-+	/*
-+	 * Note these methods shouldn't ever fail because the system controller
-+	 * registers are memory mapped. We check the return value just in case.
-+	 */
-+	ret = regmap_write(dev->sysmap, BT1_I2C_CTL,
-+			   BT1_I2C_CTL_GO | (reg & BT1_I2C_CTL_ADDR_MASK));
-+	if (ret)
-+		return ret;
-+
-+	return regmap_read(dev->sysmap, BT1_I2C_DO, val);
-+}
-+
-+static int bt1_i2c_write(void *context, unsigned int reg, unsigned int val)
-+{
-+	struct dw_i2c_dev *dev = context;
-+	int ret;
-+
-+	ret = regmap_write(dev->sysmap, BT1_I2C_DI, val);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(dev->sysmap, BT1_I2C_CTL,
-+		BT1_I2C_CTL_GO | BT1_I2C_CTL_WR | (reg & BT1_I2C_CTL_ADDR_MASK));
-+}
-+
-+static struct regmap_config bt1_i2c_cfg = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	.reg_stride = 4,
-+	.fast_io = true,
-+	.reg_read = bt1_i2c_read,
-+	.reg_write = bt1_i2c_write,
-+	.max_register = DW_IC_COMP_TYPE
-+};
-+
-+static int bt1_i2c_request_regs(struct dw_i2c_dev *dev)
-+{
-+	dev->sysmap = syscon_node_to_regmap(dev->dev->of_node->parent);
-+	if (IS_ERR(dev->sysmap))
-+		return PTR_ERR(dev->sysmap);
-+
-+	dev->map = devm_regmap_init(dev->dev, NULL, dev, &bt1_i2c_cfg);
-+	return PTR_ERR_OR_ZERO(dev->map);
-+}
-+
- #define MSCC_ICPU_CFG_TWI_DELAY		0x0
- #define MSCC_ICPU_CFG_TWI_DELAY_ENABLE	BIT(0)
- #define MSCC_ICPU_CFG_TWI_SPIKE_FILTER	0x4
-@@ -90,10 +149,16 @@ static int dw_i2c_of_configure(struct platform_device *pdev)
- static const struct of_device_id dw_i2c_of_match[] = {
- 	{ .compatible = "snps,designware-i2c", },
- 	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
-+	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, dw_i2c_of_match);
- #else
-+static int bt1_i2c_request_regs(struct dw_i2c_dev *dev)
-+{
-+	return -ENODEV;
-+}
-+
- static inline int dw_i2c_of_configure(struct platform_device *pdev)
- {
- 	return -ENODEV;
-@@ -111,10 +176,19 @@ static void dw_i2c_plat_pm_cleanup(struct dw_i2c_dev *dev)
- static int dw_i2c_plat_request_regs(struct dw_i2c_dev *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev->dev);
-+	int ret;
- 
--	dev->base = devm_platform_ioremap_resource(pdev, 0);
-+	switch (dev->flags & MODEL_MASK) {
-+	case MODEL_BAIKAL_BT1:
-+		ret = bt1_i2c_request_regs(dev);
-+		break;
-+	default:
-+		dev->base = devm_platform_ioremap_resource(pdev, 0);
-+		ret = PTR_ERR_OR_ZERO(dev->base);
-+		break;
-+	}
- 
--	return PTR_ERR_OR_ZERO(dev->base);
-+	return ret;
- }
- 
- static int dw_i2c_plat_probe(struct platform_device *pdev)
--- 
-2.26.2
+> 
+> Thomas.
+> 
 
+--
+Jiaxun Yang
