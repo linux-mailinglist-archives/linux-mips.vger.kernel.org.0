@@ -2,108 +2,264 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BE51E46B4
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 17:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DD11E46E2
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 17:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389492AbgE0PAw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 11:00:52 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:42881 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2389423AbgE0PAv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 11:00:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590591649;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S79dLGaDC34U88k/muBN2/cWWvIJSeZD2zX/jWO3DQQ=;
-        b=g2rrPUM75riI+DtvHnoF2WAwoBSONDpP+AtLrZcuUs1JNfZcqfBFhxH72/4KJowcc3Fq9d
-        HiWYmmiLxY94abgy4EmKJnTOqWMO3kX8KAQSHdZNsilBFmB848B/7rOZU2d+FIh9CD2UlQ
-        QU0UQbHwvwsJXnc0RWrjisGI+J75pk0=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-403-og9c6UUOMcy6AQklfQICyA-1; Wed, 27 May 2020 11:00:48 -0400
-X-MC-Unique: og9c6UUOMcy6AQklfQICyA-1
-Received: by mail-ej1-f71.google.com with SMTP id ng1so9004070ejb.22
-        for <linux-mips@vger.kernel.org>; Wed, 27 May 2020 08:00:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=S79dLGaDC34U88k/muBN2/cWWvIJSeZD2zX/jWO3DQQ=;
-        b=ZhJGEGxFWTcesYu0FN3FzYoAHPHCN0TBgABg7sBMovOkg1rkEkyxCJ0ESDzZpPMukR
-         1qtfoTZieDi2SiOnO5wLhtnGaZ1v6CKDOF9aR1S04h3mzOYtbRRj80f++ykrYIyOPzBi
-         2xehBcC74wVlyrV+3LiAuiIgKe1qctaZofeQza0B9l41EClDuAEy4olh+6qAisX4125w
-         h+fZS8A12JxCgIX2kaMNejsYu0N/wBRD0Jy4vPQA5CuvcpnCg5GBR8XtLfRj9gLimk+1
-         861r0x37w2HUs0GrpmKiITZ6yZwzzv8buBcv9GLUo+MjAd01uySIPWZzmxO/I8Hqy0//
-         M1dg==
-X-Gm-Message-State: AOAM532R5NJMjwtF5RvWvdxZ1TGfIZqhJACGetSYgtM3s3FvzrkMaHRh
-        kTO8OUAfHTNCr4ay74jBJzdZfME3eRv6DSyRwBYPEOaJfPuw1GtugvZX47BvmEuoNMliRaeQScz
-        xoyl00uuF0suLL87HOZNUYQ==
-X-Received: by 2002:a17:906:1442:: with SMTP id q2mr3491296ejc.33.1590591646041;
-        Wed, 27 May 2020 08:00:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzxzNY5UhO1mssuYEm2F2UYGESNfuhTc2d/FaV+VoTyW39e+803AKyGa34dCi6Lxc3HyJGruA==
-X-Received: by 2002:a17:906:1442:: with SMTP id q2mr3491234ejc.33.1590591645542;
-        Wed, 27 May 2020 08:00:45 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:3c1c:ffba:c624:29b8? ([2001:b07:6468:f312:3c1c:ffba:c624:29b8])
-        by smtp.gmail.com with ESMTPSA id l1sm3053400ejd.114.2020.05.27.08.00.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2020 08:00:45 -0700 (PDT)
-Subject: Re: [PATCH v3 0/7] Statsfs: a new ram-based file system for Linux
- kernel statistics
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Jim Mattson <jmattson@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        Jonathan Adams <jwadams@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org
-References: <20200526110318.69006-1-eesposit@redhat.com>
- <20200526153128.448bfb43@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <6a754b40-b148-867d-071d-8f31c5c0d172@redhat.com>
- <20200527133309.GC793752@lunn.ch>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <b0d11337-3ea4-d874-6013-ff8c3e9d6f26@redhat.com>
-Date:   Wed, 27 May 2020 17:00:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S2389571AbgE0PEj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 11:04:39 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:36440 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389378AbgE0PEh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 11:04:37 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 822708030835;
+        Wed, 27 May 2020 15:04:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id auVNNqHAyh0V; Wed, 27 May 2020 18:04:32 +0300 (MSK)
+Date:   Wed, 27 May 2020 18:04:31 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 11/11] i2c: designware: Add Baikal-T1 System I2C
+ support
+Message-ID: <20200527150431.z25aibkn6edplneh@mobilestation>
+References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
+ <20200527120111.5781-12-Sergey.Semin@baikalelectronics.ru>
+ <20200527140303.GC1634618@smile.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20200527133309.GC793752@lunn.ch>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200527140303.GC1634618@smile.fi.intel.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 27/05/20 15:33, Andrew Lunn wrote:
->> I don't really know a lot about the networking subsystem, and as it was
->> pointed out in another email on patch 7 by Andrew, networking needs to
->> atomically gather and display statistics in order to make them consistent,
->> and currently this is not supported by stats_fs but could be added in
->> future.
+On Wed, May 27, 2020 at 05:03:03PM +0300, Andy Shevchenko wrote:
+> On Wed, May 27, 2020 at 03:01:11PM +0300, Serge Semin wrote:
+> > Baikal-T1 System Controller is equipped with a dedicated I2C Controller
+> > which functionality is based on the DW APB I2C IP-core, the only
+> > difference in a way it' registers are accessed. There are three access
+> > register provided in the System Controller registers map, which indirectly
+> > address the normal DW APB I2C registers space. So in order to have the
+> > Baikal-T1 System I2C Controller supported by the common DW APB I2C driver
+> > we created a dedicated Dw I2C controller model quirk, which retrieves the
+> > syscon regmap from the parental dt node and creates a new regmap based on
+> > it.
 > 
-> Do you have any idea how you will support atomic access? It does not
-> seem easy to implement in a filesystem based model.
+> Yes, you see how cool it is now! FWIW,
 
-Hi Andrew,
+Well, solution with glue-layers I liked more than this one. If your were
+talking regarding the regmap conversion itself. I admit, it's neater.)
 
-there are plans to support binary access.  Emanuele and I don't really
-have a plan for how to implement it, but there are developers from
-Google that have ideas (because Google has a similar "metricfs" thing
-in-house).
+-Sergey
 
-I think atomic access would use some kind of "source_ops" struct
-containing create_snapshot and release_snapshot function pointers.
-
-Paolo
-
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > 
+> > ---
+> > 
+> > Changelog v3:
+> > - This is a new patch, which has been created due to declining the
+> >   glue-layer approach.
+> > 
+> > Changelog v4:
+> > - Use PTR_ERR_OR_ZERO() helper in the bt1_i2c_request_regs() method.
+> > ---
+> >  drivers/i2c/busses/Kconfig                  |  3 +-
+> >  drivers/i2c/busses/i2c-designware-core.h    |  3 +
+> >  drivers/i2c/busses/i2c-designware-platdrv.c | 78 ++++++++++++++++++++-
+> >  3 files changed, 81 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> > index 259e2325712a..0cf7aea30138 100644
+> > --- a/drivers/i2c/busses/Kconfig
+> > +++ b/drivers/i2c/busses/Kconfig
+> > @@ -541,8 +541,9 @@ config I2C_DESIGNWARE_SLAVE
+> >  
+> >  config I2C_DESIGNWARE_PLATFORM
+> >  	tristate "Synopsys DesignWare Platform"
+> > -	select I2C_DESIGNWARE_CORE
+> >  	depends on (ACPI && COMMON_CLK) || !ACPI
+> > +	select I2C_DESIGNWARE_CORE
+> > +	select MFD_SYSCON if MIPS_BAIKAL_T1
+> >  	help
+> >  	  If you say yes to this option, support will be included for the
+> >  	  Synopsys DesignWare I2C adapter.
+> > diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+> > index f5bbe3d6bcf8..556673a1f61b 100644
+> > --- a/drivers/i2c/busses/i2c-designware-core.h
+> > +++ b/drivers/i2c/busses/i2c-designware-core.h
+> > @@ -183,6 +183,7 @@ struct reset_control;
+> >   * struct dw_i2c_dev - private i2c-designware data
+> >   * @dev: driver model device node
+> >   * @map: IO registers map
+> > + * @sysmap: System controller registers map
+> >   * @base: IO registers pointer
+> >   * @ext: Extended IO registers pointer
+> >   * @cmd_complete: tx completion indicator
+> > @@ -235,6 +236,7 @@ struct reset_control;
+> >  struct dw_i2c_dev {
+> >  	struct device		*dev;
+> >  	struct regmap		*map;
+> > +	struct regmap		*sysmap;
+> >  	void __iomem		*base;
+> >  	void __iomem		*ext;
+> >  	struct completion	cmd_complete;
+> > @@ -290,6 +292,7 @@ struct dw_i2c_dev {
+> >  #define ACCESS_NO_IRQ_SUSPEND	0x00000002
+> >  
+> >  #define MODEL_MSCC_OCELOT	0x00000100
+> > +#define MODEL_BAIKAL_BT1	0x00000200
+> >  #define MODEL_MASK		0x00000f00
+> >  
+> >  int i2c_dw_init_regmap(struct dw_i2c_dev *dev);
+> > diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> > index 061c8d506c7c..d9c5337bb22b 100644
+> > --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> > +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> > @@ -18,6 +18,7 @@
+> >  #include <linux/interrupt.h>
+> >  #include <linux/io.h>
+> >  #include <linux/kernel.h>
+> > +#include <linux/mfd/syscon.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/platform_data/i2c-designware.h>
+> > @@ -25,6 +26,7 @@
+> >  #include <linux/pm.h>
+> >  #include <linux/pm_runtime.h>
+> >  #include <linux/property.h>
+> > +#include <linux/regmap.h>
+> >  #include <linux/reset.h>
+> >  #include <linux/sched.h>
+> >  #include <linux/slab.h>
+> > @@ -58,6 +60,63 @@ MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
+> >  #endif
+> >  
+> >  #ifdef CONFIG_OF
+> > +#define BT1_I2C_CTL			0x100
+> > +#define BT1_I2C_CTL_ADDR_MASK		GENMASK(7, 0)
+> > +#define BT1_I2C_CTL_WR			BIT(8)
+> > +#define BT1_I2C_CTL_GO			BIT(31)
+> > +#define BT1_I2C_DI			0x104
+> > +#define BT1_I2C_DO			0x108
+> > +
+> > +static int bt1_i2c_read(void *context, unsigned int reg, unsigned int *val)
+> > +{
+> > +	struct dw_i2c_dev *dev = context;
+> > +	int ret;
+> > +
+> > +	/*
+> > +	 * Note these methods shouldn't ever fail because the system controller
+> > +	 * registers are memory mapped. We check the return value just in case.
+> > +	 */
+> > +	ret = regmap_write(dev->sysmap, BT1_I2C_CTL,
+> > +			   BT1_I2C_CTL_GO | (reg & BT1_I2C_CTL_ADDR_MASK));
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	return regmap_read(dev->sysmap, BT1_I2C_DO, val);
+> > +}
+> > +
+> > +static int bt1_i2c_write(void *context, unsigned int reg, unsigned int val)
+> > +{
+> > +	struct dw_i2c_dev *dev = context;
+> > +	int ret;
+> > +
+> > +	ret = regmap_write(dev->sysmap, BT1_I2C_DI, val);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	return regmap_write(dev->sysmap, BT1_I2C_CTL,
+> > +		BT1_I2C_CTL_GO | BT1_I2C_CTL_WR | (reg & BT1_I2C_CTL_ADDR_MASK));
+> > +}
+> > +
+> > +static struct regmap_config bt1_i2c_cfg = {
+> > +	.reg_bits = 32,
+> > +	.val_bits = 32,
+> > +	.reg_stride = 4,
+> > +	.fast_io = true,
+> > +	.reg_read = bt1_i2c_read,
+> > +	.reg_write = bt1_i2c_write,
+> > +	.max_register = DW_IC_COMP_TYPE
+> > +};
+> > +
+> > +static int bt1_i2c_request_regs(struct dw_i2c_dev *dev)
+> > +{
+> > +	dev->sysmap = syscon_node_to_regmap(dev->dev->of_node->parent);
+> > +	if (IS_ERR(dev->sysmap))
+> > +		return PTR_ERR(dev->sysmap);
+> > +
+> > +	dev->map = devm_regmap_init(dev->dev, NULL, dev, &bt1_i2c_cfg);
+> > +	return PTR_ERR_OR_ZERO(dev->map);
+> > +}
+> > +
+> >  #define MSCC_ICPU_CFG_TWI_DELAY		0x0
+> >  #define MSCC_ICPU_CFG_TWI_DELAY_ENABLE	BIT(0)
+> >  #define MSCC_ICPU_CFG_TWI_SPIKE_FILTER	0x4
+> > @@ -90,10 +149,16 @@ static int dw_i2c_of_configure(struct platform_device *pdev)
+> >  static const struct of_device_id dw_i2c_of_match[] = {
+> >  	{ .compatible = "snps,designware-i2c", },
+> >  	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
+> > +	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
+> >  	{},
+> >  };
+> >  MODULE_DEVICE_TABLE(of, dw_i2c_of_match);
+> >  #else
+> > +static int bt1_i2c_request_regs(struct dw_i2c_dev *dev)
+> > +{
+> > +	return -ENODEV;
+> > +}
+> > +
+> >  static inline int dw_i2c_of_configure(struct platform_device *pdev)
+> >  {
+> >  	return -ENODEV;
+> > @@ -111,10 +176,19 @@ static void dw_i2c_plat_pm_cleanup(struct dw_i2c_dev *dev)
+> >  static int dw_i2c_plat_request_regs(struct dw_i2c_dev *dev)
+> >  {
+> >  	struct platform_device *pdev = to_platform_device(dev->dev);
+> > +	int ret;
+> >  
+> > -	dev->base = devm_platform_ioremap_resource(pdev, 0);
+> > +	switch (dev->flags & MODEL_MASK) {
+> > +	case MODEL_BAIKAL_BT1:
+> > +		ret = bt1_i2c_request_regs(dev);
+> > +		break;
+> > +	default:
+> > +		dev->base = devm_platform_ioremap_resource(pdev, 0);
+> > +		ret = PTR_ERR_OR_ZERO(dev->base);
+> > +		break;
+> > +	}
+> >  
+> > -	return PTR_ERR_OR_ZERO(dev->base);
+> > +	return ret;
+> >  }
+> >  
+> >  static int dw_i2c_plat_probe(struct platform_device *pdev)
+> > -- 
+> > 2.26.2
+> > 
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
