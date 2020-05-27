@@ -2,131 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A1F1E3371
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 01:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBC61E3464
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2020 03:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404605AbgEZXHy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 May 2020 19:07:54 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:49502 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404604AbgEZXHy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 May 2020 19:07:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1590534471; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DsVrgiSXVHSzcvOifzmpRU8SGUElZ845kNp1oYzac54=;
-        b=waIeLlm7GWkzc/Ypg2pPybTh7rbuWaiu9k0ShTLJYs0DneDUZoCN2vbhefLwwrF3nKAP7m
-        +TPNRwfcr4YIaGbmd9SRSB4+z2UBo2rytPBkXzIswGereTE8ENpDyFREfqOzcsz9HXiRvY
-        fBfcCG/5rmZMLe5UOvKbn+FDDJQ+zvM=
-Date:   Wed, 27 May 2020 01:07:41 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: JZ4780 LCD controller initialisation (was Re: [PATCH]
- clocksource: Ingenic: Add high resolution timer support for SMP.)
-To:     Paul Boddie <paul@boddie.org.uk>
-Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
-        =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        linux-mips <linux-mips@vger.kernel.org>
-Message-Id: <T8OYAQ.3TE69K2DB79Z2@crapouillou.net>
-In-Reply-To: <6095840.Tg7rQzGjE8@jeremy>
-References: <1589898923-60048-5-git-send-email-zhouyanjie@wanyeetech.com>
-        <2002785.O4FZc3DvTp@jeremy> <4T1YAQ.877BANO14QDY2@crapouillou.net>
-        <6095840.Tg7rQzGjE8@jeremy>
+        id S1728066AbgE0BG1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 May 2020 21:06:27 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:53104 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727852AbgE0BG0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 May 2020 21:06:26 -0400
+Received: from [10.20.42.25] (unknown [10.20.42.25])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr2vlvM1eQnI5AA--.327S3;
+        Wed, 27 May 2020 09:05:41 +0800 (CST)
+Subject: Re: [PATCH v6 3/4] mm/memory.c: Add memory read privilege on page
+ fault handling
+To:     Andrew Morton <akpm@linux-foundation.org>
+References: <1590375160-6997-1-git-send-email-maobibo@loongson.cn>
+ <1590375160-6997-3-git-send-email-maobibo@loongson.cn>
+ <20200525144413.8c13559ec87616aa2c77af41@linux-foundation.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>
+From:   maobibo <maobibo@loongson.cn>
+Message-ID: <4ca3c5b8-f695-c011-7e00-ef884a1c3d84@loongson.cn>
+Date:   Wed, 27 May 2020 09:05:41 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200525144413.8c13559ec87616aa2c77af41@linux-foundation.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxr2vlvM1eQnI5AA--.327S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7XF1fWFykAF1kWFy7Cr1rJFb_yoW3JrbE9F
+        43Ca93Can5Kr97XayrKw4aqF4fGFyFyw1vqrWUX3ZFyFy8t3yDWa1jkrZxCF18tr9Yyry7
+        Arn0qa13Cr4avjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbaAYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z2
+        80aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY
+        jI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+        IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+        MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+        WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3
+        Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU5q385UUUUU==
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
 
-Le mer. 27 mai 2020 =E0 0:44, Paul Boddie <paul@boddie.org.uk> a =E9crit :
-> Paul,
->=20
-> Thanks for the reply!
->=20
-> On Tuesday 26. May 2020 17.03.04 Paul Cercueil wrote:
->>=20
->>  "lcd0pixclk" and "tve" are for LCD0, "lcd1pixclk" and "lcd" are for
->>  LCD1.
->=20
-> The 3.0.8 kernel actually uses LCD0 for what the documentation and=20
-> 3.18 kernel
-> call TVE, and it uses LCD1 for what the others call LCD. That earlier=20
-> kernel
-> indicates that LCD1 is the parent clock of LCD0.
->=20
-> I actually found that you can enable LCD0 and not LCD1 and the LCD=20
-> controller
-> (LCDC0) still operates to an extent, but without LCD1 enabled I=20
-> didn't see a
-> DMA command value in the appropriate register, discussed below.
 
-Yes, I was preparing a patch for the clock driver, then I noticed that=20
-too.
-
-> [...]
->=20
->>  OK, indeed the BPP and OSD config is read-only, and it's not a doc
->>  typo. How annoying.
->>=20
->>  I tried to configure the LCD controller for a 8-byte descriptor=20
->> without
->>  much success. No IRQs here either.
->=20
-> I had a look at the interrupt controller registers to see whether I=20
-> was
-> missing anything obvious, but the mask was correctly configured to=20
-> unmask LCD
-> interrupts (bit 31 of ICMR0). I did wonder whether the PDMA=20
-> interrupts might
-> need unmasking, just in case there is some interaction between the=20
-> peripherals
-> and that part of the hardware, but unmasking LCD interrupts there=20
-> (bit 31 of
-> DMR0) didn't make any difference.
->=20
-> One observation I can make is that the length or size field of the=20
-> LCD command
-> register (LCDCMD0) does get initialised to the appropriate value as=20
-> set in a
-> descriptor. Since I don't set this register explicitly myself=20
-> (unlike, I
-> think, the current Ingenic DRM driver in the Linux kernel), the value=20
-> must
-> have been set up appropriately by a DMA transfer, as configured using=20
-> the
-> descriptor address register (LCDDA0). However, the command flags I=20
-> also set in
-> the descriptor are not reflected in the register. So, 0x44140000=20
-> becomes
-> 0x00140000.
->=20
-> I thought I should check the interrupt ID register (LCDIID) to see=20
-> what it
-> reveals. Despite setting a value in the appropriate descriptor field,=20
-> the
-> register contains only zero.
->=20
-> I think I must probably tackle the job of initialising the HDMI=20
-> controller to
-> see if that makes a difference. If the interrupts are not working but=20
-> are also
-> not necessary, then maybe I get a visual indication of success.
-
-Don't focus too much on interrupts right now. You don't get interrupts=20
-because the data is not flowing. Which in turns is caused either by the=20
-LCDC not being correctly configured, or the HDMI not sending=20
-hsync/vsync signals.
-
-For now, what seems to be the problem is that the DMA descriptors=20
-aren't loaded properly. Whatever I do, the debug registers=20
-(LCDSAx/LCDIDx/etc) are still zero here.
-
--Paul
-
+On 05/26/2020 05:44 AM, Andrew Morton wrote:
+> On Mon, 25 May 2020 10:52:39 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
+> 
+>> Here add pte_sw_mkyoung function to make page readable on MIPS
+>> platform during page fault handling. This patch improves page
+>> fault latency about 10% on my MIPS machine with lmbench
+>> lat_pagefault case.
+>>
+>> It is noop function on other arches, there is no negative
+>> influence on those architectures.
+> 
+> Acked-by: Andrew Morton <akpm@linux-foundation.org>
+> 
+> Should I take these, or would the mips tree be preferred?  I'm OK
+> either way, but probably the MIPS tree would be better?
+Thanks for reviewing again and again.
+This patch is based on mips-next, maybe MIPS tree will be better.
 
