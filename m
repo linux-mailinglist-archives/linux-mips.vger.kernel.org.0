@@ -2,120 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC55D1E618F
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 15:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586571E61E6
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 15:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390053AbgE1NAy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 09:00:54 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:41840 "EHLO
+        id S2390244AbgE1NNM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 09:13:12 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:41922 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389878AbgE1NAx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 09:00:53 -0400
+        with ESMTP id S2390241AbgE1NNL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 09:13:11 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 1155C80307C7;
-        Thu, 28 May 2020 13:00:52 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 94FCE80307C0;
+        Thu, 28 May 2020 13:13:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QOYHV0u7-PkZ; Thu, 28 May 2020 16:00:51 +0300 (MSK)
-Date:   Thu, 28 May 2020 16:00:50 +0300
+        with ESMTP id U40uSsS2PPMI; Thu, 28 May 2020 16:13:08 +0300 (MSK)
+Date:   Thu, 28 May 2020 16:13:07 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Arnd Bergmann <arnd@arndb.de>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Olof Johansson <olof@lixom.net>,
         Rob Herring <robh+dt@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "soc@kernel.org" <soc@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        SoC Team <soc@kernel.org>, DTML <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/6] bus: Add Baikal-T1 AXI-bus driver
-Message-ID: <20200528130050.f7mmznwpbvvasf2w@mobilestation>
+Subject: Re: [PATCH v3 5/6] bus: Add Baikal-T1 APB-bus driver
+Message-ID: <20200528131307.phopcjymtqhl2jyr@mobilestation>
 References: <20200526125928.17096-1-Sergey.Semin@baikalelectronics.ru>
- <20200526125928.17096-5-Sergey.Semin@baikalelectronics.ru>
- <CAHp75VcfkPPy5YjNrcv8c6doyQz5C47QyREE0v6tfQjXYrBijQ@mail.gmail.com>
- <CAK8P3a2WMqTRitUU86hSV3HSK12-hF_RDoFg51PRGTLmXwznvA@mail.gmail.com>
- <20200528122738.rbl2dkgep4ipr2je@mobilestation>
- <CAK8P3a1ctV8Lj4PGJyzZ_eRMcXxoW1T7Wbk_2wkT4HUcFUTqdQ@mail.gmail.com>
+ <20200526125928.17096-6-Sergey.Semin@baikalelectronics.ru>
+ <CAK8P3a1KT6G0pcLt56spm2O_Q5m_s+cdHfUrp2YUStS0wGigwQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a1ctV8Lj4PGJyzZ_eRMcXxoW1T7Wbk_2wkT4HUcFUTqdQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a1KT6G0pcLt56spm2O_Q5m_s+cdHfUrp2YUStS0wGigwQ@mail.gmail.com>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 28, 2020 at 02:44:32PM +0200, Arnd Bergmann wrote:
-> On Thu, May 28, 2020 at 2:27 PM Serge Semin
+On Thu, May 28, 2020 at 02:17:17PM +0200, Arnd Bergmann wrote:
+> On Tue, May 26, 2020 at 2:59 PM Serge Semin
 > <Sergey.Semin@baikalelectronics.ru> wrote:
 > >
-> > On Thu, May 28, 2020 at 02:14:58PM +0200, Arnd Bergmann wrote:
-> > > On Thu, May 28, 2020 at 12:01 AM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Tuesday, May 26, 2020, Serge Semin <Sergey.Semin@baikalelectronics.ru> wrote:
-> > > >>
-> > > >> AXI3-bus is the main communication bus connecting all high-speed
-> > > >> peripheral IP-cores with RAM controller and MIPS P5600 cores on Baikal-T1
-> > > >> SoC. Bus traffic arbitration is done by means of DW AMBA 3 AXI
-> > > >> Interconnect (so called AXI Main Interconnect) routing IO requests from
-> > > >> one SoC block to another. This driver provides a way to detect any bus
-> > > >> protocol errors and device not responding situations by means of an
-> > > >> embedded on top of the interconnect errors handler block (EHB). AXI
-> > > >> Interconnect QoS arbitration tuning is currently unsupported.
-> > > >> The bus doesn't provide a way to detect the interconnected devices,
-> > > >> so they are supposed to be statically defined like by means of the
-> > > >> simple-bus sub-nodes.
-> > > >
-> > > >
-> > > >
-> > > > Few comments in case if you need a new version. Main point is about sysfs_streq().
-> > >
-> > > I've applied the patch now and folded in fixes for the build warnings and
-> > > errors pointed out by the test robot, but I did not include the changes you
-> > > suggested.
+> > Baikal-T1 AXI-APB bridge is used to access the SoC subsystem CSRs.
+> > IO requests are routed to this bus by means of the DW AMBA 3 AXI
+> > Interconnect. In case if an attempted APB transaction stays with no
+> > response for a pre-defined time an interrupt occurs and the bus gets
+> > freed for a next operation. This driver provides the interrupt handler
+> > to detect the erroneous address, prints an error message about the
+> > address fault, updates an errors counter. The counter and the APB-bus
+> > operations timeout can be accessed via corresponding sysfs nodes.
+> > A dedicated sysfs-node can be also used to artificially cause the
+> > bus errors described above.
 > >
-> > Are you saying that the build-errors and warnings have already been fixed by
-> > you, right? If so could you please give me a link to the repo with those
-> > commits, so I'd work with the up-to-date code?
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Paul Burton <paulburton@kernel.org>
+> > Cc: Olof Johansson <olof@lixom.net>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: soc@kernel.org
+> > Cc: devicetree@vger.kernel.org
+> >
+> > ---
 > 
+> Applied with this fixup:
 
-> I've pushed it to https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/,
-> 
-> I made a local "baikal/drivers" branch with just your patches, updated
-> to address the build reports. This is merged into the "arm/drivers"
-> branch that contains all driver specific changes across all SoCs and
-> this is what I'll send to Linus next week.
-> 
-> There is also the "for-next" branch that contains all arm/* branches,
-> and this is what gets pulled into linux-next, so your patches will show
-> up there tomorrow as well.
+I'm afraid linux/io.h is also needed here.(
 
-I see. Thanks for explanation. I've monitored the soc/soc.git a few minutes
-ago, but the gitolite web-interface showed me that the last update was made
-9 hours ago. So I thought you could be using some another repo. Now I see
-the fresh updates and the drivers being merges.
-
-I'll address the Andy's comments and send a follow-up patches with fixes shortly
-today.
-
-BTW I don't see the next commit:
-[PATCH v3 3/6] dt-bindings: memory: Add Baikal-T1 L2-cache Control Block binding
-in the baikal/drivers, so the l2-ctl binding hasn't been merged into the
-arm/drivers and for-next branches. You must have missed that patch. Could you
-please make sure it's also merged in?
-
-Thanks
 -Sergey
 
 > 
-> You can normally check the status of any submission to soc@kernel.org
-> at https://patchwork.kernel.org/project/linux-soc/list/, but it seems that
-> has not picked up the status yet, and I'll have to update it manually.
+> --- a/drivers/bus/bt1-apb.c
+> +++ b/drivers/bus/bt1-apb.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/nmi.h>
+> +#include <linux/of.h>
+>  #include <linux/regmap.h>
+>  #include <linux/clk.h>
+>  #include <linux/reset.h>
+> @@ -309,13 +310,13 @@ static ssize_t timeout_store(struct device *dev,
+>  }
+>  static DEVICE_ATTR_RW(timeout);
 > 
->        Arnd
+> -static int inject_error_show(struct device *dev, struct device_attribute *attr,
+> +static ssize_t inject_error_show(struct device *dev, struct
+> device_attribute *attr,
+>                              char *buf)
+>  {
+>         return scnprintf(buf, PAGE_SIZE, "Error injection: nodev irq\n");
+>  }
+> 
+> -static int inject_error_store(struct device *dev,
+> +static ssize_t inject_error_store(struct device *dev,
+>                               struct device_attribute *attr,
+>                               const char *data, size_t count)
+>  {
