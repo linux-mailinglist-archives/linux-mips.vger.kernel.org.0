@@ -2,55 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8B91E598C
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 09:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4341E599A
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 09:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725779AbgE1HqS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 03:46:18 -0400
-Received: from elvis.franken.de ([193.175.24.41]:42134 "EHLO elvis.franken.de"
+        id S1725971AbgE1HqW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 03:46:22 -0400
+Received: from elvis.franken.de ([193.175.24.41]:42145 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725747AbgE1HqR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 May 2020 03:46:17 -0400
+        id S1725747AbgE1HqW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 May 2020 03:46:22 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jeDF0-0000aG-01; Thu, 28 May 2020 09:46:14 +0200
+        id 1jeDF0-0000aG-02; Thu, 28 May 2020 09:46:14 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D3155C05A4; Thu, 28 May 2020 09:44:48 +0200 (CEST)
-Date:   Thu, 28 May 2020 09:44:48 +0200
+        id 173BFC05A4; Thu, 28 May 2020 09:45:39 +0200 (CEST)
+Date:   Thu, 28 May 2020 09:45:39 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Lichao Liu <liulichao@loongson.cn>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, jiaxun.yang@flygoat.com,
-        yuanjunqing@loongson.cn, linux-mips@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: CPU_LOONGSON2EF need software to maintain cache
- consistency
-Message-ID: <20200528074448.GB10708@alpha.franken.de>
-References: <20200528011031.30472-1-liulichao@loongson.cn>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Loongson64: Define PCI_IOBASE
+Message-ID: <20200528074539.GC10708@alpha.franken.de>
+References: <20200527131721.646926-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200528011031.30472-1-liulichao@loongson.cn>
+In-Reply-To: <20200527131721.646926-1-jiaxun.yang@flygoat.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 28, 2020 at 09:10:31AM +0800, Lichao Liu wrote:
-> CPU_LOONGSON2EF need software to maintain cache consistency,
-> so modify the 'cpu_needs_post_dma_flush' function to return true
-> when the cpu type is CPU_LOONGSON2EF.
+On Wed, May 27, 2020 at 09:17:21PM +0800, Jiaxun Yang wrote:
+> PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
+> required by generic PCI drivers to make memory mapped I/O range
+> work.
 > 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lichao Liu <liulichao@loongson.cn>
+> To deal with legacy drivers that have fixed I/O ports range we
+> reserved 0x10000 in PCI_IOBASE, should be enough for i8259 i8042
+> stuff.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  arch/mips/mm/dma-noncoherent.c | 1 +
->  1 file changed, 1 insertion(+)
+>  .../mips/include/asm/mach-loongson64/spaces.h |  8 ++++
+>  arch/mips/loongson64/init.c                   | 42 ++++++++++++++++++-
+>  2 files changed, 48 insertions(+), 2 deletions(-)
 
-applied to mips-next.
+that looks so much nicer, thank you for doing this. Applied to mips-next.
 
 Thomas.
 
