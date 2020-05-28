@@ -2,205 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 995831E701C
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 01:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26EBF1E70FC
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 01:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391586AbgE1XQi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 19:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
+        id S2437850AbgE1X5m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 19:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391508AbgE1XQh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 19:16:37 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D62CC08C5C6
-        for <linux-mips@vger.kernel.org>; Thu, 28 May 2020 16:16:37 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id x11so205798plv.9
-        for <linux-mips@vger.kernel.org>; Thu, 28 May 2020 16:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PRQrEWyLBsWy9WDUklC8lMWXefh4ZtlZOY28H4mSYsg=;
-        b=QoNqFqVw8n1Vo/vHRzvubFPzEJve0aiWJH7E56ZMW28d/+oNTY9Xkt91MrABWvfdLO
-         +XfsZ446V/LlTk1EbBjjQzVt+0MTHDk4cwuvpYXlhmQBJJse66FHRgCgfCZoc6ygUa1t
-         NJ3pNgmGFfo7rGVDF2Zni33I/OFsRlqAwbOEvP0LDwXdu35U+F5QXQT87v4MsINfuOeH
-         N0XzzfCDJQik58GyVUOFn+tfzn0mN37CXwqylfhjLyCsCfwB8/yXWIMYeYTVsP1dSZbr
-         aLVLDja9SaYFGyddzjVnoxWA59vsYGtbgAKmoCCE556kPktZYdLZYmRgn/GsvTHY0x3L
-         Bxhg==
+        with ESMTP id S2437807AbgE1X5j (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 19:57:39 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D04C08C5C6;
+        Thu, 28 May 2020 16:28:13 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id p20so359268iop.11;
+        Thu, 28 May 2020 16:28:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=PRQrEWyLBsWy9WDUklC8lMWXefh4ZtlZOY28H4mSYsg=;
-        b=qtGndMxmG8xa85CsxWlIuBdh7LQvIWh86I7huQt+CZLeJSuKhqx2KhDm8KURtQXHx7
-         ju8KFAWmQOxcfASMRuSGhM5GOFZY9TDHLV/7Ro5jjIHdPN6wnmUY4HPbV9QCnIe+00YA
-         18spWIGWe6jKgmfg6pV4TpxGkIMflMKTk8Z4dbfxTk4tPiGPJgosQnp1zC8pCRa39/9u
-         YLiLnpTF0XWnI+ZIYOfjFpwpbRzLRgGS2PC4wiUlRZ9f2iv4vC73ebOHu7BwkkOF/ofY
-         CVGnLhgay8vG1jslwUpjlW4PN9wAChi2wsEd6xrwHeL57q6L7RPfMDOUec16XTnab26r
-         lEBg==
-X-Gm-Message-State: AOAM5333xAbl8LDdlB5Eiw9EuBvB89KcVBIEugquhkp+APH4yswSH758
-        3gJMlswHXZ00JSwZPMHPHj4=
-X-Google-Smtp-Source: ABdhPJz3C/gE7gNVCN2gFTOBSSyHOe+uX+276whyatyn63EAxZwEf6t2cjkIxQCehTb6mac7mRdl3w==
-X-Received: by 2002:a17:902:5988:: with SMTP id p8mr6095329pli.146.1590707796617;
-        Thu, 28 May 2020 16:16:36 -0700 (PDT)
-Received: from 192.168.1.13 ([142.147.94.151])
-        by smtp.gmail.com with ESMTPSA id w190sm5468431pfw.35.2020.05.28.16.16.33
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TyiQfJD3hL2bx61mfoIKfduMebYmrhxlynjYDT9d88c=;
+        b=fRSTGJBTMBF5GN7OzR7s8m65l6lActjAnbcMSKFaXnAo0WZUdBH99yw6nCi60ahaOj
+         KEnNay58BxuIqc5PVm4dsmu47meqO+X+lOvTFl3+3BM4x9oGFLEeapzNSjBTmTd87I9u
+         9jd88QNuNHMeajPIofkd0vutDcWjEIdqnthSZ4XegK6xUXLz+Qxb3z1big4T0nAE99SG
+         12jWitgrlhwLcErp4YPj4ibuRV+o+sL9jp+Yw3Dq06X1Bpc4L53FoJnk086FvLHhIMzi
+         EIATGHwVwgIoRuZi+kVdOrjr9XTcfezxxDvxhzzoCZjNK+wp0swvrO4zGaRovp3rG3fA
+         g1Dg==
+X-Gm-Message-State: AOAM533GHq/bJoetDC8ZxCq6JoS09QQB75RywIlxMZCRhgJBN7dkXmzW
+        L0zEhtDQBasWww6MqGZ0dg==
+X-Google-Smtp-Source: ABdhPJzwZW2EhMkkbIXtdNTMdB0TlTz41GM4zNjP0y8P8k5r4zwMXjiSzqqL6GY48s44vD79gjqgtg==
+X-Received: by 2002:a5e:970a:: with SMTP id w10mr4276081ioj.114.1590708492723;
+        Thu, 28 May 2020 16:28:12 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id b26sm1585795ilg.84.2020.05.28.16.28.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 16:16:35 -0700 (PDT)
-From:   YunQiang Su <syq@debian.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>, YunQiang Su <syq@debian.org>
-Subject: [PATCH] mips: add o32_fp64 boot param to disable FP64 support
-Date:   Fri, 29 May 2020 07:16:28 +0800
-Message-Id: <20200528231628.120171-1-syq@debian.org>
-X-Mailer: git-send-email 2.26.2
+        Thu, 28 May 2020 16:28:11 -0700 (PDT)
+Received: (nullmailer pid 875402 invoked by uid 1000);
+        Thu, 28 May 2020 23:28:10 -0000
+Date:   Thu, 28 May 2020 17:28:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-spi@vger.kernel.org,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Subject: Re: [PATCH v4 16/16] dt-bindings: spi: Convert DW SPI binding to DT
+ schema
+Message-ID: <20200528232810.GA875356@bogus>
+References: <20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru>
+ <20200522000806.7381-17-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200522000806.7381-17-Sergey.Semin@baikalelectronics.ru>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When build with CONFIG_O32_FP64_SUPPORTS, even all of the userland
-is FPXX, we cannot run any FP32 binary.
+On Fri, 22 May 2020 03:08:05 +0300, Serge Semin wrote:
+> Modern device tree bindings are supposed to be created as YAML-files
+> in accordance with dt-schema. This commit replaces two DW SPI legacy
+> bare text bindings with YAML file. As before the bindings file states
+> that the corresponding dts node is supposed to be compatible either
+> with generic DW APB SSI controller or with Microsemi/Amazon/Renesas/Intel
+> vendors-specific controllers, to have registers, interrupts and clocks
+> properties. Though in case of Microsemi version of the controller
+> there must be two registers resources specified. Properties like
+> clock-names, reg-io-width, cs-gpio, num-cs, DMA and slave device
+> sub-nodes are optional.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: linux-mips@vger.kernel.org
+> ---
+>  .../bindings/spi/snps,dw-apb-ssi.txt          |  44 ------
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 127 ++++++++++++++++++
+>  .../devicetree/bindings/spi/spi-dw.txt        |  24 ----
+>  3 files changed, 127 insertions(+), 68 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-dw.txt
+> 
 
-Then we need to disable FP64 support temporarily with a boot param:
-   o32_fp64=no/disable
-
-Signed-off-by: YunQiang Su <syq@debian.org>
----
- arch/mips/include/asm/abi.h |  2 ++
- arch/mips/include/asm/elf.h |  4 +++-
- arch/mips/kernel/elf.c      |  5 +++--
- arch/mips/kernel/process.c  |  2 +-
- arch/mips/kernel/setup.c    | 15 +++++++++++++++
- arch/mips/math-emu/cp1emu.c |  3 ++-
- 6 files changed, 26 insertions(+), 5 deletions(-)
-
-diff --git a/arch/mips/include/asm/abi.h b/arch/mips/include/asm/abi.h
-index dba7f4b6bebf..c5d297c67a9c 100644
---- a/arch/mips/include/asm/abi.h
-+++ b/arch/mips/include/asm/abi.h
-@@ -29,4 +29,6 @@ struct mips_abi {
- 	struct mips_vdso_image *vdso;
- };
- 
-+extern bool o32_fp64_support;
-+
- #endif /* _ASM_ABI_H */
-diff --git a/arch/mips/include/asm/elf.h b/arch/mips/include/asm/elf.h
-index 5aa29ced6970..dc55815923b5 100644
---- a/arch/mips/include/asm/elf.h
-+++ b/arch/mips/include/asm/elf.h
-@@ -15,6 +15,7 @@
- #include <uapi/linux/elf.h>
- 
- #include <asm/current.h>
-+#include <asm/abi.h>
- 
- /* ELF header e_flags defines. */
- /* MIPS architecture level. */
-@@ -293,7 +294,8 @@ void mips_dump_regs64(u64 *uregs, const struct pt_regs *regs);
- 	if (((__h->e_flags & EF_MIPS_ABI) != 0) &&			\
- 	    ((__h->e_flags & EF_MIPS_ABI) != EF_MIPS_ABI_O32))		\
- 		__res = 0;						\
--	if (__h->e_flags & __MIPS_O32_FP64_MUST_BE_ZERO)		\
-+	if ((__h->e_flags & __MIPS_O32_FP64_MUST_BE_ZERO) &&		\
-+	    !o32_fp64_support)						\
- 		__res = 0;						\
- 									\
- 	__res;								\
-diff --git a/arch/mips/kernel/elf.c b/arch/mips/kernel/elf.c
-index 7b045d2a0b51..3de15308971c 100644
---- a/arch/mips/kernel/elf.c
-+++ b/arch/mips/kernel/elf.c
-@@ -11,6 +11,7 @@
- 
- #include <asm/cpu-features.h>
- #include <asm/cpu-info.h>
-+#include <asm/abi.h>
- 
- #ifdef CONFIG_MIPS_FP_SUPPORT
- 
-@@ -176,7 +177,7 @@ int arch_check_elf(void *_ehdr, bool has_interpreter, void *_interp_ehdr,
- 			return -ELIBBAD;
- 	}
- 
--	if (!IS_ENABLED(CONFIG_MIPS_O32_FP64_SUPPORT))
-+	if (!o32_fp64_support)
- 		return 0;
- 
- 	fp_abi = state->fp_abi;
-@@ -282,7 +283,7 @@ void mips_set_personality_fp(struct arch_elf_state *state)
- 	 * not be worried about N32/N64 binaries.
- 	 */
- 
--	if (!IS_ENABLED(CONFIG_MIPS_O32_FP64_SUPPORT))
-+	if (!o32_fp64_support)
- 		return;
- 
- 	switch (state->overall_fp_mode) {
-diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-index ff5320b79100..1bb93941c4c1 100644
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -760,7 +760,7 @@ int mips_set_process_fp_mode(struct task_struct *task, unsigned int value)
- 		return 0;
- 
- 	/* Only accept a mode change if 64-bit FP enabled for o32.  */
--	if (!IS_ENABLED(CONFIG_MIPS_O32_FP64_SUPPORT))
-+	if (!o32_fp64_support)
- 		return -EOPNOTSUPP;
- 
- 	/* And only for o32 tasks.  */
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 7b537fa2035d..2475843487aa 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -484,6 +484,21 @@ static int __init early_parse_elfcorehdr(char *p)
- early_param("elfcorehdr", early_parse_elfcorehdr);
- #endif
- 
-+#ifdef CONFIG_MIPS_O32_FP64_SUPPORT
-+bool o32_fp64_support __read_mostly = true;
-+static int __init early_parse_o32_fp64(char *p)
-+{
-+	if (strncmp(p, "no", 2) == 0 ||
-+	    strncmp(p, "disable", 7) == 0
-+	    strncmp(p, "off", 3) == 0)
-+		o32_fp64_support = false;
-+	return 0;
-+}
-+early_param("o32_fp64", early_parse_o32_fp64);
-+#else
-+bool o32_fp64_support __read_mostly;
-+#endif
-+
- #ifdef CONFIG_KEXEC
- static void __init mips_parse_crashkernel(void)
- {
-diff --git a/arch/mips/math-emu/cp1emu.c b/arch/mips/math-emu/cp1emu.c
-index 587cf1d115e8..54d7a5122137 100644
---- a/arch/mips/math-emu/cp1emu.c
-+++ b/arch/mips/math-emu/cp1emu.c
-@@ -33,6 +33,7 @@
- #include <linux/uaccess.h>
- 
- #include <asm/cpu-info.h>
-+#include <asm/abi.h>
- #include <asm/processor.h>
- #include <asm/fpu_emulator.h>
- #include <asm/fpu.h>
-@@ -784,7 +785,7 @@ static inline int cop1_64bit(struct pt_regs *xcp)
- 	if (IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_MIPS32_O32))
- 		return 1;
- 	else if (IS_ENABLED(CONFIG_32BIT) &&
--		 !IS_ENABLED(CONFIG_MIPS_O32_FP64_SUPPORT))
-+		 !o32_fp64_support)
- 		return 0;
- 
- 	return !test_thread_flag(TIF_32BIT_FPREGS);
--- 
-2.26.2
-
+Reviewed-by: Rob Herring <robh@kernel.org>
