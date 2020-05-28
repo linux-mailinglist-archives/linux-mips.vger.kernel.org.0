@@ -2,168 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B90CE1E63C9
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 16:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4884D1E63EA
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 16:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391053AbgE1OXa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 10:23:30 -0400
-Received: from mga17.intel.com ([192.55.52.151]:16004 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391124AbgE1OXU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 May 2020 10:23:20 -0400
-IronPort-SDR: lxxeuY1xtGBc8ReuYBabQ3YbmTCLgKOBZVaZBGat8znseOXQbEf8t8xzcrkTXY/ihdAGvjqkkk
- LmyFF2JpMlsA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2020 07:22:21 -0700
-IronPort-SDR: gNo5fESEi88ICadxnRas20uQR259e56xhdit7Lv5R8UYFfHWazi64BmuzHavftCD2mQZeNAS9d
- d118Lf7jKUyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,444,1583222400"; 
-   d="scan'208";a="267231578"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga003.jf.intel.com with ESMTP; 28 May 2020 07:22:18 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jeJQL-009RLS-03; Thu, 28 May 2020 17:22:21 +0300
-Date:   Thu, 28 May 2020 17:22:20 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
+        id S2391156AbgE1O2S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 10:28:18 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:42320 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391025AbgE1O2R (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 10:28:17 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 7F4BA8030839;
+        Thu, 28 May 2020 14:28:11 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pSrX6G4b6fWC; Thu, 28 May 2020 17:28:09 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
+        Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/10] dmaengine: Introduce max SG list entries
- capability
-Message-ID: <20200528142220.GR1634618@smile.fi.intel.com>
-References: <20200526225022.20405-1-Sergey.Semin@baikalelectronics.ru>
- <20200526225022.20405-5-Sergey.Semin@baikalelectronics.ru>
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/3] hwmon: Add Baikal-T1 SoC Process, Voltage and Temp sensor support
+Date:   Thu, 28 May 2020 17:28:02 +0300
+Message-ID: <20200528142805.29115-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200526225022.20405-5-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 27, 2020 at 01:50:15AM +0300, Serge Semin wrote:
-> Some devices may lack the support of the hardware accelerated SG list
-> entries automatic walking through and execution. In this case a burden of
-> the SG list traversal and DMA engine re-initialization lies on the
-> DMA engine driver (normally implemented by using a DMA transfer completion
-> IRQ to recharge the DMA device with a next SG list entry). But such
-> solution may not be suitable for some DMA consumers. In particular SPI
-> devices need both Tx and Rx DMA channels work synchronously in order
-> to avoid the Rx FIFO overflow. In case if Rx DMA channel is paused for
-> some time while the Tx DMA channel works implicitly pulling data into the
-> Rx FIFO, the later will be eventually overflown, which will cause the data
-> loss. So if SG list entries aren't automatically fetched by the DMA
-> engine, but are one-by-one manually selected for execution in the
-> ISRs/deferred work/etc., such problem will eventually happen due to the
-> non-deterministic latencies of the service execution.
-> 
-> In order to let the DMA consumer know about the DMA device capabilities
-> regarding the hardware accelerated SG list traversal we introduce the
-> max_sg_list capability. It is supposed to be initialized by the DMA engine
-> driver with 0 if there is no limitation for the number of SG entries
-> atomically executed and with non-zero value if there is such constraints,
-> so the upper limit is determined by the number set to the property.
+In order to keep track of Baikal-T1 SoC power consumption and make sure
+the chip heating is within the normal temperature limits, there is
+a dedicated hardware monitor sensor embedded into the SoC. It is based
+on the Analog Bits PVT sensor but equipped with a vendor-specific control
+wrapper, which ease an access to the sensors functionality. Fist of all it
+provides an accessed to the sampled Temperature, Voltage and
+Low/Standard/High Voltage thresholds. In addition the wrapper generates
+an interrupt in case if one enabled for alarm thresholds or data ready
+event. All of these functionality is implemented in the Baikal-T1 PVT
+driver submitted within this patchset. Naturally there is also a patch,
+which creates a corresponding yaml-based dt-binding file for the sensor.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
 
-But see below.
+Note new vendor prefix for Baikal-T1 PVT device will be added in the
+framework of the next patchset:
+https://lkml.org/lkml/2020/5/6/1047
 
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> 
-> ---
-> 
-> Changelog v3:
-> - This is a new patch created as a result of the discussion with Vinud and
->   Andy in the framework of DW DMA burst and LLP capabilities.
-> ---
->  drivers/dma/dmaengine.c   | 1 +
->  include/linux/dmaengine.h | 8 ++++++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
-> index b332ffe52780..ad56ad58932c 100644
-> --- a/drivers/dma/dmaengine.c
-> +++ b/drivers/dma/dmaengine.c
-> @@ -592,6 +592,7 @@ int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps)
->  	caps->directions = device->directions;
->  	caps->min_burst = device->min_burst;
->  	caps->max_burst = device->max_burst;
-> +	caps->max_sg_nents = device->max_sg_nents;
->  	caps->residue_granularity = device->residue_granularity;
->  	caps->descriptor_reuse = device->descriptor_reuse;
->  	caps->cmd_pause = !!device->device_pause;
-> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-> index 0c7403b27133..6801200c76b6 100644
-> --- a/include/linux/dmaengine.h
-> +++ b/include/linux/dmaengine.h
-> @@ -467,6 +467,9 @@ enum dma_residue_granularity {
->   *	should be checked by controller as well
->   * @min_burst: min burst capability per-transfer
->   * @max_burst: max burst capability per-transfer
-> + * @max_sg_nents: max number of SG list entries executed in a single atomic
-> + *	DMA tansaction with no intermediate IRQ for reinitialization. Zero
-> + *	value means unlimited number if entries.
+Changelog v2:
+- Don't use a multi-arg clock phandle reference in the examples dt-bindings
+  property. Thus reundant include pre-processor statement can be removed.
+- Rearrange the SoBs with adding Maxim' co-development tag.
+- Lowercase the node-name in the dt-schema example.
+- Add dual license header to the dt-bindings file.
+- Replace "additionalProperties: false" property with
+  "unevaluatedProperties: false".
+- Discard label definition from the binding example.
+- Discard handwritten IO-access wrappers. Use normal readl/writel instead.
+- Use generic FIELD_{GET,PREP} macros instead of handwritten ones.
+- Since the driver depends on the OF config we can remove of_match_ptr()
+  macro utilization.
+- Don't print error-message if no platform IRQ found. Just return an error.
+- Remove probe-status info string printout.
+- Our corporate email server doesn't change Message-Id anymore, so the patchset
+  is resubmitted being in the cover-letter-threaded format.
 
-if -> of ?
+Link: https://lore.kernel.org/linux-hwmon/20200510103211.27905-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Add bt1-pvt into the Documentation/hwmon/index.rst file.
+- Discard explicit "default n" from the SENSORS_BT1_PVT_ALARMS config.
+- Use "depends on SENSORS_BT1_PVT" statement instead of if-endif kbuild
+  config clause.
+- Alphabetically order the include macro operators.
+- Discard unneeded include macro in the header file.
+- Use new generic interface of the hwmon alarms notifications introduced
+  in the first patch (based on hwmon_notify_event()).
+- Add more descriptive information regarding the temp1_trim attribute.
+- Discard setting the platforms device private data by using
+  platform_set_drvdata(). It's redundant since unused in the driver.
+- Pass "pvt" hwmon name instead of dev_name(dev) to
+  devm_hwmon_device_register_with_info().
+- Add "baikal,pvt-temp-trim-millicelsius" temperature trim DT property
+  support.
+- Discard kernel log warnings printed from the ISR when either min or
+  max threshold levels are crossed.
+- Discard CONFIG_OF dependency since there is non at compile-time.
 
->   * @cmd_pause: true, if pause is supported (i.e. for reading residue or
->   *	       for resume later)
->   * @cmd_resume: true, if resume is supported
-> @@ -481,6 +484,7 @@ struct dma_slave_caps {
->  	u32 directions;
->  	u32 min_burst;
->  	u32 max_burst;
-> +	u32 max_sg_nents;
->  	bool cmd_pause;
->  	bool cmd_resume;
->  	bool cmd_terminate;
-> @@ -773,6 +777,9 @@ struct dma_filter {
->   *	should be checked by controller as well
->   * @min_burst: min burst capability per-transfer
->   * @max_burst: max burst capability per-transfer
-> + * @max_sg_nents: max number of SG list entries executed in a single atomic
-> + *	DMA tansaction with no intermediate IRQ for reinitialization. Zero
-> + *	value means unlimited number if entries.
+Link: https://lore.kernel.org/linux-hwmon/20200526133823.20466-1-Sergey.Semin@baikalelectronics.ru
+Changelog v4:
+- Rename temp1_trim to the temp1_offset and use the standard API to
+  expose the attribute.
+- Rename "baikal,pvt-temp-trim-millicelsius" DT property to
+  "baikal,pvt-temp-offset-millicelsius".
+- Switch "const static" order to be "static const" where it's applicable.
+- Add missing headers "linux/io.h" and "linux/of.h".
+- Add static qualifier to the pvt_hwmon_write() method, which has been
+  missed there by mistake.
 
-Ditto.
+Co-developed-by: Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>
+Signed-off-by: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
->   * @residue_granularity: granularity of the transfer residue reported
->   *	by tx_status
->   * @device_alloc_chan_resources: allocate resources and return the
-> @@ -844,6 +851,7 @@ struct dma_device {
->  	u32 directions;
->  	u32 min_burst;
->  	u32 max_burst;
-> +	u32 max_sg_nents;
->  	bool descriptor_reuse;
->  	enum dma_residue_granularity residue_granularity;
->  
-> -- 
-> 2.26.2
-> 
+Guenter Roeck (1):
+  hwmon: Add notification support
+
+Serge Semin (2):
+  dt-bindings: hwmon: Add Baikal-T1 PVT sensor binding
+  hwmon: Add Baikal-T1 PVT sensor driver
+
+ .../bindings/hwmon/baikal,bt1-pvt.yaml        |  107 ++
+ Documentation/hwmon/bt1-pvt.rst               |  117 ++
+ Documentation/hwmon/index.rst                 |    1 +
+ drivers/hwmon/Kconfig                         |   25 +
+ drivers/hwmon/Makefile                        |    1 +
+ drivers/hwmon/bt1-pvt.c                       | 1146 +++++++++++++++++
+ drivers/hwmon/bt1-pvt.h                       |  244 ++++
+ drivers/hwmon/hwmon.c                         |   69 +-
+ include/linux/hwmon.h                         |    3 +
+ 9 files changed, 1710 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
+ create mode 100644 Documentation/hwmon/bt1-pvt.rst
+ create mode 100644 drivers/hwmon/bt1-pvt.c
+ create mode 100644 drivers/hwmon/bt1-pvt.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.26.2
 
