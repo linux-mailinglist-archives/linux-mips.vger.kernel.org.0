@@ -2,130 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BF01E630C
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 15:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250D81E633B
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 16:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390725AbgE1N4M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 09:56:12 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:42164 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390608AbgE1N4L (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 09:56:11 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C94A9803083A;
-        Thu, 28 May 2020 13:56:07 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id rjgT4CY67bg7; Thu, 28 May 2020 16:56:07 +0300 (MSK)
-Date:   Thu, 28 May 2020 16:56:06 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "soc@kernel.org" <soc@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/6] bus: Add Baikal-T1 AXI-bus driver
-Message-ID: <20200528135606.n67gty2ddjhin2fo@mobilestation>
-References: <20200526125928.17096-1-Sergey.Semin@baikalelectronics.ru>
- <20200526125928.17096-5-Sergey.Semin@baikalelectronics.ru>
- <CAHp75VcfkPPy5YjNrcv8c6doyQz5C47QyREE0v6tfQjXYrBijQ@mail.gmail.com>
- <20200528134046.scxig3she3wyjyko@mobilestation>
- <CAHp75VfqnLTK-fT-KdzN-3=u=dLTJjo=9+b=oKXUoUOsbeg00Q@mail.gmail.com>
+        id S2390596AbgE1OGL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 10:06:11 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:35129 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390656AbgE1OGK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 10:06:10 -0400
+Received: by mail-il1-f194.google.com with SMTP id a14so244167ilk.2;
+        Thu, 28 May 2020 07:06:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1jidT3xKZRKULWJIwqa2tys07NIrxI3mybLQC/9d/ko=;
+        b=DWsO/F1eL9DjP82NBsLsNPxie0SlEjScD8II2Cq1DIL2kaGCxCaT4PgBl5Ww8CONba
+         3xepZq1DflZNleeydwg501TlttgPCp9bq2FQkw4TIWbHuzx21fgApSgNE218racIV0ek
+         gtVDO72sc0Wtz+soNCEEWh+8Xm2iVCvVryTP8H9FkSpnde/I7IRXh2dr1IusZyK1nX4/
+         DflFeoJ5bqSR8nFPNkC8PKTyqWaWcC9M6HlS5gdwLUBUQNVph7jEaD4Y2fbbEp+nqIrj
+         3+emczmaZD4HFc8B0ukE4wk1yi/JPUnRBr82oif9g/oZrIGs2zdkhEzIudA24C5NQncN
+         Ss7A==
+X-Gm-Message-State: AOAM532cSysK1aLb8yvlk2lsV8G4K58IQUR+VzyjoGMTYhF3wsX/22VC
+        AkOCxjc+gvGHpndH6GtVOQ==
+X-Google-Smtp-Source: ABdhPJwgyTHzsDhxjiIb8r+RbEwXO/nh2hiq7xZNTxCVYzX32CAooeVLqphtOftt4LjRzbfcNOdExw==
+X-Received: by 2002:a92:d40a:: with SMTP id q10mr3051355ilm.87.1590674768954;
+        Thu, 28 May 2020 07:06:08 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id n25sm2574334ioa.29.2020.05.28.07.06.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2020 07:06:08 -0700 (PDT)
+Received: (nullmailer pid 4174426 invoked by uid 1000);
+        Thu, 28 May 2020 14:06:06 -0000
+Date:   Thu, 28 May 2020 08:06:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     vigneshr@ti.com, linux-kernel@vger.kernel.org, arnd@arndb.de,
+        hauke.mehrtens@intel.com, linux-mips@vger.kernel.org,
+        richard@nod.at, qi-ming.wu@intel.com, tglx@linutronix.de,
+        brendanhiggins@google.com, linux-mtd@lists.infradead.org,
+        boris.brezillon@collabora.com, anders.roxell@linaro.org,
+        cheol.yong.kim@intel.com, devicetree@vger.kernel.org,
+        miquel.raynal@bootlin.com, andriy.shevchenko@intel.com,
+        robh+dt@kernel.org, masonccyang@mxic.com.tw
+Subject: Re: [PATCH v9 1/2] dt-bindings: mtd: Add Nand Flash Controller
+ support for Intel LGM SoC
+Message-ID: <20200528140606.GA4173978@bogus>
+References: <20200528051211.3063-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200528051211.3063-2-vadivel.muruganx.ramuthevar@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75VfqnLTK-fT-KdzN-3=u=dLTJjo=9+b=oKXUoUOsbeg00Q@mail.gmail.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200528051211.3063-2-vadivel.muruganx.ramuthevar@linux.intel.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 28, 2020 at 04:51:03PM +0300, Andy Shevchenko wrote:
-> On Thu, May 28, 2020 at 4:40 PM Serge Semin
-> <Sergey.Semin@baikalelectronics.ru> wrote:
-> >
-> > On Thu, May 28, 2020 at 01:00:57AM +0300, Andy Shevchenko wrote:
-> > > On Tuesday, May 26, 2020, Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > wrote:
-> > >
-> > > > AXI3-bus is the main communication bus connecting all high-speed
-> > > > peripheral IP-cores with RAM controller and MIPS P5600 cores on Baikal-T1
-> > > > SoC. Bus traffic arbitration is done by means of DW AMBA 3 AXI
-> > > > Interconnect (so called AXI Main Interconnect) routing IO requests from
-> > > > one SoC block to another. This driver provides a way to detect any bus
-> > > > protocol errors and device not responding situations by means of an
-> > > > embedded on top of the interconnect errors handler block (EHB). AXI
-> > > > Interconnect QoS arbitration tuning is currently unsupported.
-> > > > The bus doesn't provide a way to detect the interconnected devices,
-> > > > so they are supposed to be statically defined like by means of the
-> > > > simple-bus sub-nodes.
-> > >
-> > >
-> > >
-> > > Few comments in case if you need a new version. Main point is about
-> > > sysfs_streq().
-> >
-> > Hello, Andy. Thanks for your comments. I'll address most of them in a follow-up
-> > patches. See just one note below.
-> >
-> > >
-> > >
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > > > Cc: Paul Burton <paulburton@kernel.org>
-> > > > Cc: Olof Johansson <olof@lixom.net>
-> > > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > > Cc: linux-mips@vger.kernel.org
-> > > > Cc: soc@kernel.org
-> > > > Cc: devicetree@vger.kernel.org
-> > > >
-> >
-> > [nip]
-> >
-> > > > +
-> > > > +static void bt1_axi_clear_data(void *data)
-> > > > +{
-> > > > +       struct bt1_axi *axi = data;
-> > > > +       struct platform_device *pdev = to_platform_device(axi->dev);
-> > > > +
-> > > > +       platform_set_drvdata(pdev, NULL);
-> > >
-> > >
-> >
-> > > Doesn't device driver core do this already?
-> >
-> > It doesn't on remove.
+On Thu, 28 May 2020 13:12:10 +0800, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> 
+> Add YAML file for dt-bindings to support NAND Flash Controller
+> on Intel's Lightning Mountain SoC.
+> 
+> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> ---
+>  .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 93 ++++++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
 > 
 
-> __device_release_driver() calls dev_set_drvdata(dev, NULL);
-> What did I miss?
-> 
-> > This cleanups the drvdata pointer when the driver is
-> > unloaded at the moment of remove() callback calling. This is a good
-> > practice to leave the device the same as it has been before usage including
-> > the pointer value. In this case if theoretically someone (though very
-> > unlikely, but anyway) would try to use the pointer without having it
-> > initialized, the NULL-dereference would pop up, otherwise we may
-> > corrupt someones memory, which is very nasty.
-> 
-> The above is right and I agree with.
 
-Hm, good point. I missed that part of __device_release_driver(). So do you
-suggest to remove that cleanup?
+My bot found errors running 'make dt_binding_check' on your patch:
 
--Sergey
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/intel,lgm-nand.example.dt.yaml: nand-controller@e0f00000: '#address-cells', '#size-cells' do not match any of the regexes: '^nand@[a-f0-9]+$', 'pinctrl-[0-9]+'
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/intel,lgm-nand.example.dt.yaml: nand-controller@e0f00000: nand@0: '#address-cells', '#size-cells', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+See https://patchwork.ozlabs.org/patch/1299399
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
