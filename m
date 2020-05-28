@@ -2,101 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E839E1E6BC1
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 21:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916511E6C1A
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 22:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406850AbgE1Txn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 15:53:43 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:44018 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406687AbgE1Txm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 15:53:42 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6A6A38030839;
-        Thu, 28 May 2020 19:53:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NGsEWW3ofFNe; Thu, 28 May 2020 22:53:38 +0300 (MSK)
-Date:   Thu, 28 May 2020 22:53:38 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 09/10] dmaengine: dw: Introduce max burst length hw
- config
-Message-ID: <20200528195338.yzl35nhogmyikv43@mobilestation>
-References: <20200526225022.20405-1-Sergey.Semin@baikalelectronics.ru>
- <20200526225022.20405-10-Sergey.Semin@baikalelectronics.ru>
- <20200528145224.GT1634618@smile.fi.intel.com>
- <20200528154022.3reghhjcd4dnsr3g@mobilestation>
+        id S2406975AbgE1UOJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 16:14:09 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:36542 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406973AbgE1UOG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 16:14:06 -0400
+Received: by mail-io1-f67.google.com with SMTP id y18so11137569iow.3;
+        Thu, 28 May 2020 13:14:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ordAPfbXh0vTNSOfZvda6IBNsIk8jcPKfQPA59PO4to=;
+        b=rNOJyA3UV9c8t5pVI3h0GYZ+nFv8Ug+cM91taFhqyuZSxgHfQfDRRIy0wjCrWWCmC3
+         65TqCwK2qDg3sRTVI+WTIrtnqpjqMemGxQQnETYHu1aP6sKr4xUPUbZ7GEdi9jG8Xd4g
+         GmY1r3s89pp8LWVusysSVpA2TlNi01kqYPEWRdSRpYwQCuMh9VNNSUjhzJsO363ssG0H
+         DB5cKf4fK036sjFip2vLFmG7+MqxnDao7tc5DHyJprclxfIURysxXx/MaW8mfA0FJEs4
+         CbRqZ1U1aNvZIKVsg3dg8s4vNRZbJF0fUTYhmSqi5NznNJB5UcJ0HAhSoCFZEapSfw7c
+         KenQ==
+X-Gm-Message-State: AOAM531C7Fa+TvE2B/lC0Bv/2ig3N6cbj+WphU8ATjOn+z91XMjc43Fm
+        0Q0wPUwMphXiC6udWX6/yxMm/B8=
+X-Google-Smtp-Source: ABdhPJxh7MERH4GHV2KajE30fu7LTfYiwUY/qTaDCstjWq7UDy4hWBP06+bJtHaPjrz4TakTgO7OaQ==
+X-Received: by 2002:a6b:e215:: with SMTP id z21mr3836350ioc.115.1590696844953;
+        Thu, 28 May 2020 13:14:04 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id y23sm956109ior.38.2020.05.28.13.14.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2020 13:14:04 -0700 (PDT)
+Received: (nullmailer pid 603972 invoked by uid 1000);
+        Thu, 28 May 2020 20:14:03 -0000
+Date:   Thu, 28 May 2020 14:14:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jason Cooper <jason@lakedaemon.net>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        maz@kernel.org
+Subject: Re: [PATCH v4 2/6] dt-bindings: interrupt-controller: Add Loongson
+ HTVEC
+Message-ID: <20200528201403.GA603926@bogus>
+References: <20200427060551.1372591-1-jiaxun.yang@flygoat.com>
+ <20200516082912.3673033-1-jiaxun.yang@flygoat.com>
+ <20200516082912.3673033-2-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200528154022.3reghhjcd4dnsr3g@mobilestation>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200516082912.3673033-2-jiaxun.yang@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 28, 2020 at 06:40:22PM +0300, Serge Semin wrote:
-> On Thu, May 28, 2020 at 05:52:24PM +0300, Andy Shevchenko wrote:
-> > On Wed, May 27, 2020 at 01:50:20AM +0300, Serge Semin wrote:
-> > > IP core of the DW DMA controller may be synthesized with different
-> > > max burst length of the transfers per each channel. According to Synopsis
-> > > having the fixed maximum burst transactions length may provide some
-> > > performance gain. At the same time setting up the source and destination
-> > > multi size exceeding the max burst length limitation may cause a serious
-> > > problems. In our case the DMA transaction just hangs up. In order to fix
-> > > this lets introduce the max burst length platform config of the DW DMA
-> > > controller device and don't let the DMA channels configuration code
-> > > exceed the burst length hardware limitation.
-> > > 
-> > > Note the maximum burst length parameter can be detected either in runtime
-> > > from the DWC parameter registers or from the dedicated DT property.
-> > > Depending on the IP core configuration the maximum value can vary from
-> > > channel to channel so by overriding the channel slave max_burst capability
-> > > we make sure a DMA consumer will get the channel-specific max burst
-> > > length.
-> > 
-> > ...
-> > 
-> > >  static void dwc_caps(struct dma_chan *chan, struct dma_slave_caps *caps)
-> > >  {
-> > > +	struct dw_dma_chan *dwc = to_dw_dma_chan(chan);
-> > >  
-> > 
+On Sat, 16 May 2020 16:29:02 +0800, Jiaxun Yang wrote:
+> Add binding for Loongson-3 HyperTransport Interrupt Vector Controller.
 > 
-> > Perhaps,
-> > 
-> > 	/* DesignWare DMA supports burst value from 0 */
-> > 	caps->min_burst = 0;
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> --
+> v4: Drop ref, '|', add additionalProperties, fix example
+> ---
+>  .../interrupt-controller/loongson,htvec.yaml  | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,htvec.yaml
 > 
-> Regarding min_burst being zero. I don't fully understand what it means.
-> It means no burst or burst with minimum length or what?
-> In fact DW DMA burst length starts from 1. Remember the burst-length run-time
-> parameter we were arguing about? Anyway the driver makes sure that both
-> 0 and 1 requested burst length are setup as burst length of 1 in the
-> CTLx.SRC_MSIZE, CTLx.DST_MSIZE fields.
-> 
-> I agree with the rest of your comments below.
-> 
-> -Sergey
-> 
-> > 
 
-It would be also better to initialize the dw->dma.min_burst field instead
-of setting caps->min_burst in the dwc_caps callback, since the min burst length
-can't vary from channel to channel and it will be copied to the caps->min_burst
-field anyway in the dma_get_slave_caps() method.
-
--Sergey
+Reviewed-by: Rob Herring <robh@kernel.org>
