@@ -2,118 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA981E5AD6
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 10:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76801E5B00
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 10:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727037AbgE1Ib4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 04:31:56 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40166 "EHLO
+        id S1727863AbgE1Ij2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 04:39:28 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40208 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgE1Ib4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 04:31:56 -0400
+        with ESMTP id S1726955AbgE1Ij2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 04:39:28 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 262EF80307C0;
-        Thu, 28 May 2020 08:31:47 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6C2CF80307C0;
+        Thu, 28 May 2020 08:39:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mso_D6x-Sr2v; Thu, 28 May 2020 11:31:46 +0300 (MSK)
-Date:   Thu, 28 May 2020 11:31:44 +0300
+        with ESMTP id ionmEv71tfBL; Thu, 28 May 2020 11:39:24 +0300 (MSK)
+Date:   Thu, 28 May 2020 11:39:23 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RESEND v3 0/2] syscon: Alter syscon and reboot drivers
-Message-ID: <20200528083144.5r2qn3mule4dvvgf@mobilestation>
-References: <20200526135102.21236-1-Sergey.Semin@baikalelectronics.ru>
- <20200528070311.uj6bxlplxe2bths5@earth.universe>
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        <linux-mips@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 02/11] dt-bindings: i2c: Discard i2c-slave flag from
+ the DW I2C example
+Message-ID: <20200528083923.yjlm5ur7cslgxdau@mobilestation>
+References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
+ <20200527120111.5781-3-Sergey.Semin@baikalelectronics.ru>
+ <20200527171204.GA2348490@bogus>
+ <20200527171841.am2iaynff243xoep@mobilestation>
+ <20200527175624.GT1634618@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <20200528070311.uj6bxlplxe2bths5@earth.universe>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200527175624.GT1634618@smile.fi.intel.com>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 28, 2020 at 09:03:11AM +0200, Sebastian Reichel wrote:
-> Hi,
+On Wed, May 27, 2020 at 08:56:24PM +0300, Andy Shevchenko wrote:
+> On Wed, May 27, 2020 at 08:18:41PM +0300, Serge Semin wrote:
+> > On Wed, May 27, 2020 at 11:12:04AM -0600, Rob Herring wrote:
+> > > On Wed, May 27, 2020 at 03:01:02PM +0300, Serge Semin wrote:
+> > > > dtc currently doesn't support I2C_OWN_SLAVE_ADDRESS flag set in the
+> > > > i2c "reg" property. If it is the compiler will print a warning:
+> > > > 
+> > > > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64: I2C bus unit address format error, expected "40000064"
+> > > > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64:reg: I2C address must be less than 10-bits, got "0x40000064"
+> > > > 
+> > > > In order to silence dtc up let's discard the flag from the DW I2C DT
+> > > > binding example for now. Just revert this commit when dtc is fixed.
 > 
-> On Tue, May 26, 2020 at 04:50:59PM +0300, Serge Semin wrote:
-> > This is a small patchset about tuning the syscon infrastructure a bit.
-> > As it's going to be general in the framework of the Baikal-T1 SoC support
-> > integration into the kernel, we suggest to replace the legacy text-based
-> > syscon-reboot-mode dts-bindings file with yaml-based one. Then seeing a
-> > syscon reboot block is normally expected to be a part of a system
-> > controller and based on the discussion
-> > https://lore.kernel.org/linux-pm/20200306130402.1F4F0803079F@mail.baikalelectronics.ru/
-> > we decided to alter the syscon reboot driver so one would also try to fetch
-> > the syscon registers map from a parental DT node. regmap property is left
-> > supported although it's marked as deprecated from now.
+> > > >        eeprom@64 {
+> > > >          compatible = "linux,slave-24c02";
+> > > > -        reg = <0x40000064>;
+> > > > +        reg = <0x64>;
+> > > 
+> > > But the compatible is a slave, so you need an example with a different 
+> > > device.
 > > 
-> > This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
-> > 0e698dfa2822 ("Linux 5.7-rc4")
-> > tag: v5.7-rc4
-> > 
-> > Changelog v2:
-> > - Add Sebastian' Acked-by tag to patch 1.
-> > - Use a shorter summary describing the bindings modification patches.
-> > - Our corporate email server doesn't change Message-Id anymore, so the patchset
-> >   is resubmitted being in the cover-letter-threaded format.
-> > - Discard patch with syscon "-endian" property support. As Rob said It shall be
-> >   in the common dt-schema.
-> > - Replace patches of adding a regmap property support to the syscon-reboot-mode
-> >   with patches making syscon-reboot a sub-node of a system controller node.
-> > - Mark regmap property as deprecated from now.
-> > 
-> > Link: https://lore.kernel.org/linux-pm/20200507233846.11548-1-Sergey.Semin@baikalelectronics.ru/
-> > Changelog v3:
-> > - Discard the commit 6acd3ecd88ff ("dt-bindings: power: reset: Convert
-> >   syscon-reboot-mode to DT schema") since it has been merged in by Sebatian.
-> > - Add Rob's Reviewed-by tag to the patch "dt-bindings: power: reset: Unrequire
-> >   regmap property in syscon-reboot node"
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> > Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> > Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
-> > Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
-> > Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: devicetree@vger.kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > 
-> > Serge Semin (2):
-> >   dt-bindings: power: reset: Unrequire regmap property in syscon-reboot
-> >     node
-> >   power: reset: syscon-reboot: Add parental syscon support
-> > 
-> >  .../bindings/power/reset/syscon-reboot.yaml       | 15 ++++++++++-----
-> >  drivers/power/reset/syscon-reboot.c               |  7 +++++--
-> >  2 files changed, 15 insertions(+), 7 deletions(-)
 > 
-> Thanks, I queued both patches to power-supply's for-next branch.
+> > Ok. I'll replace the sub-node with just "atmel,24c02" compatible string then.
 > 
-> -- Sebastian
+> But how it will be different to the another slave connected to the master?
+> 
+> This example is specifically to show that DesingWare I²C controller may be
+> switched to slave mode.
 
-Great! Thanks.
+Well, dtc doesn't support it and prints warning that the address is invalid.
+Though I do understand you concern and is mostly agree with it. Let's do this in
+the next way. I'll resend the series with eeprom@64 sub-node replaced with just
+a normal eeprom-device. The message log will have an info why this has been
+done. In the non-mergeable section of the patch I'll suggest to Rob reconsider
+the patch acking, since we can leave the slave-marked sub-node and just live
+with the dtc warning until it's fixed in there.
 
 -Sergey
+
+> 
+> > > >        };
+> > > >      };
+> > > >    - |
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
