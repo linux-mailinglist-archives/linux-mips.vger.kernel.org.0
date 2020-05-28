@@ -2,96 +2,189 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C42C11E6CB9
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 22:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB371E6F00
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 00:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407274AbgE1Uiq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 16:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407218AbgE1Uip (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 16:38:45 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9010CC08C5C6;
-        Thu, 28 May 2020 13:38:45 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id d10so143813pgn.4;
-        Thu, 28 May 2020 13:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uUmAHxoLCci70CIyQKHJVkgQVBujsUNyRL0aI0R0aqo=;
-        b=I1cMDUG4Wbl6ZX/z5HWJTm2du5yh0gMU/JPmyLOA29gjDIaqZCuFlq1Akwl3x2elMt
-         ocKJz6UFSs9RV8uUTGDo6qDUWd3ujnAqcC0wVQzxSf5C4KAdnYFrC2ux/mp9wHzQoU3I
-         8sxF6hLFmWwdrvdGrJQR23vCVeXjvY3uf4ee+i0j7VVO7ldGgG6UHkEwvEs7NSJvucXr
-         u/HX7g9A/JHwTmtNm/pizzgaEFtaHRhTXL/OSQZU6alHCgQkzALi5i6A9EqjaPivx4Ho
-         YuugbZTUH2NeinzeiTFXp2XiO++0eeSonK5SMIVAiaoA3IMaWw/M6AJvPgZqSbvhlFLk
-         lFIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uUmAHxoLCci70CIyQKHJVkgQVBujsUNyRL0aI0R0aqo=;
-        b=IxfjS8uS3RD4gupLgRT3aQi0J1qxkiIQW8burB1ym+nuF6AbCWIJwtbFL5h1xsBNH+
-         eU7ycey3at/NcmDQMpKsMYM9IRqMz0hdNjD2ZioW6pdWdPIA3I9jWc6o6jDHcJKOjWBS
-         rt53vx1V3BJy53ODlDc/PZI5jwN/5xYVVY4OgnGjTZrceKGGDQr57eVXaUhc7qvxCcll
-         M00oitiocwwMAQo3gs4HvIiLoLzLlBElYDyG0JBOa2tbxZPs2WrJkKYREhUp3yC/s0Zv
-         hLGh0bJwK5Ja+mUXQQCrhqZqCXS1WaIxjKFmYc8VQDwqaXqKGvolOWD4C6BS6uWG1ec1
-         A1nA==
-X-Gm-Message-State: AOAM531wGp0ZtG3xBvNfUpzdu9rBHP+Pd5VibI6KiUHzhzTmvCl5wPr5
-        bgzA1RdRMbH5Iu2FxCh4FvYL6UwO90DnPSm0Qfc=
-X-Google-Smtp-Source: ABdhPJwe8DmfXiHurV89f6av71936kl+HM4lp/ZzAxpMRXlN2Qv/GB4+dYblIxf4soDqHWyWkLuJ27OfLk4KVGGMVXw=
-X-Received: by 2002:aa7:99c8:: with SMTP id v8mr5137217pfi.36.1590698325132;
- Thu, 28 May 2020 13:38:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200526225022.20405-1-Sergey.Semin@baikalelectronics.ru>
- <20200526225022.20405-10-Sergey.Semin@baikalelectronics.ru>
- <20200528145224.GT1634618@smile.fi.intel.com> <20200528154022.3reghhjcd4dnsr3g@mobilestation>
-In-Reply-To: <20200528154022.3reghhjcd4dnsr3g@mobilestation>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 28 May 2020 23:38:28 +0300
-Message-ID: <CAHp75VcPVO6yOmyrSBfjVk5eSYhC4J0QXAfOhjRXGd4=FemezA@mail.gmail.com>
-Subject: Re: [PATCH v3 09/10] dmaengine: dw: Introduce max burst length hw config
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        id S2437038AbgE1W3A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 18:29:00 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:44514 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436979AbgE1WYP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 18:24:15 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 821DC80307C7;
+        Thu, 28 May 2020 22:24:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id uzcmceul0Kpr; Fri, 29 May 2020 01:24:08 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 00/11] dmaengine: dw: Take Baikal-T1 SoC DW DMAC peculiarities into account
+Date:   Fri, 29 May 2020 01:23:50 +0300
+Message-ID: <20200528222401.26941-1-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 28, 2020 at 6:43 PM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
-> On Thu, May 28, 2020 at 05:52:24PM +0300, Andy Shevchenko wrote:
-> > On Wed, May 27, 2020 at 01:50:20AM +0300, Serge Semin wrote:
+Baikal-T1 SoC has an DW DMAC on-board to provide a Mem-to-Mem, low-speed
+peripherals Dev-to-Mem and Mem-to-Dev functionality. Mostly it's compatible
+with currently implemented in the kernel DW DMAC driver, but there are some
+peculiarities which must be taken into account in order to have the device
+fully supported.
 
-...
+First of all traditionally we replaced the legacy plain text-based dt-binding
+file with yaml-based one. Secondly Baikal-T1 DW DMA Controller provides eight
+channels, which alas have different max burst length configuration.
+In particular first two channels may burst up to 128 bits (16 bytes) at a time
+while the rest of them just up to 32 bits. We must make sure that the DMA
+subsystem doesn't set values exceeding these limitations otherwise the
+controller will hang up. In third currently we discovered the problem in using
+the DW APB SPI driver together with DW DMAC. The problem happens if there is no
+natively implemented multi-block LLP transfers support and the SPI-transfer
+length exceeds the max lock size. In this case due to asynchronous handling of
+Tx- and Rx- SPI transfers interrupt we might end up with Dw APB SSI Rx FIFO
+overflow. So if DW APB SSI (or any other DMAC service consumer) intends to use
+the DMAC to asynchronously execute the transfers we'd have to at least warn
+the user of the possible errors. In forth it's worth to set the DMA device max
+segment size with max block size config specific to the DW DMA controller. It
+shall help the DMA clients to create size-optimized SG-list items for the
+controller. This in turn will cause less dw_desc allocations, less LLP
+reinitializations, better DMA device performance.
 
-> > Perhaps,
-> >
-> >       /* DesignWare DMA supports burst value from 0 */
-> >       caps->min_burst = 0;
->
-> Regarding min_burst being zero. I don't fully understand what it means.
-> It means no burst or burst with minimum length or what?
-> In fact DW DMA burst length starts from 1. Remember the burst-length run-time
-> parameter we were arguing about? Anyway the driver makes sure that both
-> 0 and 1 requested burst length are setup as burst length of 1 in the
-> CTLx.SRC_MSIZE, CTLx.DST_MSIZE fields.
+Finally there is a bug in the algorithm of the nollp flag detection.
+In particular even if DW DMAC parameters state the multi-block transfers
+support there is still HC_LLP (hardcode LLP) flag, which if set makes expected
+by the driver true multi-block LLP functionality unusable. This happens cause'
+if HC_LLP flag is set the LLP registers will be hardcoded to zero so the
+contiguous multi-block transfers will be only supported. We must take the
+flag into account when detecting the LLP support otherwise the driver just
+won't work correctly.
 
-Yeah, I also thought about it after I sent a message. 1 sounds better.
+This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
+0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
+
+Changelog v2:
+- Rearrange SoBs.
+- Move $ref to the root level of the properties. So do do with the
+  constraints in the DT binding.
+- Replace "additionalProperties: false" with "unevaluatedProperties: false"
+  property in the DT binding file.
+- Discard default settings defined out of property enum constraint.
+- Set default max-burst-len to 256 TR-WIDTH words in the DT binding.
+- Discard noLLP and block_size accessors.
+- Set max segment size of the DMA device structure with the DW DMA block size
+  config.
+- Print warning if noLLP flag is set.
+- Discard max burst length accessor.
+- Add comment about why hardware accelerated LLP list support depends
+  on both MBLK_EN and HC_LLP configs setting.
+- Use explicit bits state comparison operator in noLLP flag setting.
+
+Link: https://lore.kernel.org/dmaengine/20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Use the block_size found for the very first channel instead of looking for
+  the maximum of maximum block sizes.
+- Don't define device-specific device_dma_parameters object, since it has
+  already been defined by the platform device core.
+- Add more details into the property description about what limitations
+  snps,max-burst-len defines.
+- Move commit fb7e3bbfc830 ("dmaengine: dw: Take HC_LLP flag into account for
+  noLLP auto-config") to the head of the series.
+- Add a new patch "dmaengine: Introduce min burst length capability" as a
+  result of the discussion with Vinod and Andy regarding the burst length
+  capability.
+- Add a new patch "dmaengine: Introduce max SG list entries capability"
+  suggested by Andy.
+- Add a new patch "dmaengine: Introduce DMA-device device_caps callback" as
+  a result of the discussion with Vinud and Andy in the framework of DW DMA
+  burst and LLP capabilities.
+- Add a new patch "dmaengine: dw: Add dummy device_caps callback" as a
+  preparation commit before setting the max_burst and max_sg_nents
+  DW DMA capabilities.
+- Override the slave channel max_burst capability instead of calculating
+  the minimum value of max burst lengths and setting the DMA-device
+  generic capability.
+- Add a new patch "dmaengine: dw: Initialize max_sg_nents with nollp flag".
+  This is required to fix the DW APB SSI issue of the Tx and Rx DMA
+  channels de-synchronization.
+
+Link: https://lore.kernel.org/dmaengine/20200526225022.20405-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v4:
+- Use explicit if-else statement when assigning the max_sg_nents field.
+- Clamp the dst and src burst lengths in the generic dwc_config() method
+  instead of doing that in the encode_maxburst() callback.
+- Define max_burst with u32 type in struct dw_dma_platform_data.
+- Perform of_property_read_u32_array() with the platform data
+  max_burst member passed directly.
+- Add a new patch "dmaengine: dw: Initialize min_burst capability",
+  which initializes the min_burst capability with 1.
+- Fix of->if typo. It should be definitely "of" in the max_sg_list
+  capability description.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: dmaengine@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (11):
+  dt-bindings: dma: dw: Convert DW DMAC to DT binding
+  dt-bindings: dma: dw: Add max burst transaction length property
+  dmaengine: Introduce min burst length capability
+  dmaengine: Introduce max SG list entries capability
+  dmaengine: Introduce DMA-device device_caps callback
+  dmaengine: dw: Take HC_LLP flag into account for noLLP auto-config
+  dmaengine: dw: Set DMA device max segment size parameter
+  dmaengine: dw: Add dummy device_caps callback
+  dmaengine: dw: Initialize min_burst capability
+  dmaengine: dw: Introduce max burst length hw config
+  dmaengine: dw: Initialize max_sg_nents capability
+
+ .../bindings/dma/snps,dma-spear1340.yaml      | 176 ++++++++++++++++++
+ .../devicetree/bindings/dma/snps-dma.txt      |  69 -------
+ drivers/dma/dmaengine.c                       |   5 +
+ drivers/dma/dw/core.c                         |  47 ++++-
+ drivers/dma/dw/of.c                           |   5 +
+ drivers/dma/dw/regs.h                         |   3 +
+ include/linux/dmaengine.h                     |  14 ++
+ include/linux/platform_data/dma-dw.h          |   4 +
+ 8 files changed, 253 insertions(+), 70 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
+ delete mode 100644 Documentation/devicetree/bindings/dma/snps-dma.txt
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.26.2
+
