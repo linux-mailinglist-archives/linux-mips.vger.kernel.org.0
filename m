@@ -2,94 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 929841E6174
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 14:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7141E6133
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 14:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389872AbgE1Mw4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 08:52:56 -0400
-Received: from mail-m974.mail.163.com ([123.126.97.4]:44044 "EHLO
-        mail-m974.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389828AbgE1Mw4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 08:52:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=2Dyep
-        fzfBy/KOzfvHORsBmKYgJNqknyTEsRuBABT7qc=; b=Foj/fqXxXyDIVuGFEl7qi
-        UlBxG5Za9tlCt3B/5YEQmywa9p9RNwgyUZ3sKhVgyOQct6Nm5A8MA45/q45nIOVV
-        d2IetGiMAgSzc2tcmXfXYc6hGmD3t9slGCecKoMbJXhVFssB/29qGB0pvht5WzJ5
-        o1NrqGhEWXp+XeJEda3KzE=
-Received: from [172.20.10.2] (unknown [124.64.18.22])
-        by smtp4 (Coremail) with SMTP id HNxpCgB3LyuIsM9ev5+aBA--.24S2;
-        Thu, 28 May 2020 20:37:37 +0800 (CST)
-Subject: Re: [PATCH] MIPS: Fix IRQ tracing when call handle_fpe() and
- handle_msa_fpe()
-To:     tsbogend@alpha.franken.de
-Cc:     paulburton@kernel.org, chenhc@lemote.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liulichao@loongson.cn
-References: <20200528123505.4219-1-yuanjunqing66@163.com>
-From:   yuanjunqing <yuanjunqing66@163.com>
-Message-ID: <57a8191b-1c64-9a5e-7935-050263d715fb@163.com>
-Date:   Thu, 28 May 2020 20:37:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S2389842AbgE1Mow (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 08:44:52 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:34447 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389783AbgE1Mov (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 08:44:51 -0400
+Received: from mail-qt1-f178.google.com ([209.85.160.178]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1Mc1hn-1j0q9W2ejP-00dTHr; Thu, 28 May 2020 14:44:49 +0200
+Received: by mail-qt1-f178.google.com with SMTP id i68so22037278qtb.5;
+        Thu, 28 May 2020 05:44:49 -0700 (PDT)
+X-Gm-Message-State: AOAM533WnvN07rc9kn9iA2pOoNSxdYddSO0XUjH6YdXgd55UJILAr8km
+        up99alB8WtsYb9lfPalvPz442EBTtCqw1+osyWk=
+X-Google-Smtp-Source: ABdhPJxZXUChaKTDliaMUeX0epZa/YK95/W0ULpyjKRLy+WFzLvw+joqo7cKUbQkQVsTL7VO0+fof/I8H1lW60z6P/E=
+X-Received: by 2002:ac8:1b56:: with SMTP id p22mr2842856qtk.304.1590669888325;
+ Thu, 28 May 2020 05:44:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200528123505.4219-1-yuanjunqing66@163.com>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: HNxpCgB3LyuIsM9ev5+aBA--.24S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Wr4UAr18Cw1kWry5Aw1UZFb_yoWkJFc_Kr
-        42kw4DKrn8Grn3ur17tay8X3s7tw4agrnayr1qvw1Yvr45Wrn0kFZ5K3Wvqwn3XrsakF4I
-        y3W5JFnFkF1IyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUe-Vy7UUUUU==
-X-Originating-IP: [124.64.18.22]
-X-CM-SenderInfo: h1xd0ypxqtx0rjwwqiywtou0bp/xtbBzxEyXFaD7WC+bwAAs5
+References: <20200526125928.17096-1-Sergey.Semin@baikalelectronics.ru>
+ <20200526125928.17096-5-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75VcfkPPy5YjNrcv8c6doyQz5C47QyREE0v6tfQjXYrBijQ@mail.gmail.com>
+ <CAK8P3a2WMqTRitUU86hSV3HSK12-hF_RDoFg51PRGTLmXwznvA@mail.gmail.com> <20200528122738.rbl2dkgep4ipr2je@mobilestation>
+In-Reply-To: <20200528122738.rbl2dkgep4ipr2je@mobilestation>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 28 May 2020 14:44:32 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1ctV8Lj4PGJyzZ_eRMcXxoW1T7Wbk_2wkT4HUcFUTqdQ@mail.gmail.com>
+Message-ID: <CAK8P3a1ctV8Lj4PGJyzZ_eRMcXxoW1T7Wbk_2wkT4HUcFUTqdQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] bus: Add Baikal-T1 AXI-bus driver
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "soc@kernel.org" <soc@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:IQDK3DI2FiEo5W/E3yLMWFY0APen8SVNQA3vx4FpFNeu+sk2UjA
+ AtyC5KOHWPMxYI3ubOHRjxmmtKAHftzKsKALFrFmQqFmxv2Bm5Bbx73Isv+nAitDKMW3w20
+ WMKXTqmMSdFFijamMnOwpmYP41S1vOvK3u2vS/MSpmWmP8WlLfp+pSvBwszC+wLueWMG4rA
+ YwRDSh9AzDpMoFMPjjhVw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WEZNJkvZYx4=:4hr8MA/5d0870mqr9bFoq7
+ jJIgyNj7DvLkbFB3/30ALt4kcUfAiYRoTGxhEHoUK/XSiqEkgqzAstCcuaUsHmBzQjx520IQt
+ zzLMyiJXEDNBpVWiE6/3wqnbZMSFDYUXr9D+DW2KREnue1T6V4QucmW7aBco3zjdYicCd6+Qd
+ SOtjDlyRMhsLkkYCEZKbd2JkD3MVn8cCEhV9IkaKD98m247z6j0AE/swQMSe5pfeBdzak9xqK
+ qgqHN2+Bw+JazSf8I1zV5B/JzkEX5Sx49rQuq3jgIWGJuceJieq5x4Q49aOKTlaEHzF7Jqrje
+ AU1Eo3VYintIZwvtOwMPB/9/MPHuAYxQX9Nh6e1c93pYTDiw4yh8cBER9QJoLvbmF+oDvt/XS
+ l9ceVthdMFRw4jwFmmNyBJYv51wWVpzMheSWhfswdf//pramYtDBxuUmMxVzUa1hfpEgIVp/J
+ DhOiS7ZEf3WdUUoUcD+znBaS89I0sQX1kABmPSBknX0rxQjFaOHZHdmVmZlNFUEDf9jj+Rhrm
+ QrBbo4usm2GJ1iPqn3DevI9Xj7aCttsWQlvlnZVRZ4rp6zrH6kI3BMBzOzF5de9JXNMP/IUi8
+ CdLQZCb497VYAD79/TvRTnTOo1z2wOXrPj4ByCORy1THa/g+jsC45v150hG+c2I7TnX1DNGsJ
+ xWRfgzehnvPNcOIL74AxY0LqokQVUSBlDQw/3ILSoLiX8M4xcsPEML5QjS2MrXWzzDXJftDBC
+ xFkv/JanSFM6BDjFI9WH0BNWanp7CsCRJwvsRnbEJYbP54fdKodfTZTeTBzirzvb6ByEQAPbg
+ qqL3iOCxaxHCU3IwUW8EGbS7TwxaK1OwOXnnb+Dqs9Ni0qrsw4=
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-sorry!
-
-ÔÚ 2020/5/28 ÏÂÎç8:35, YuanJunQing Ð´µÀ:
->  Register "a1" is unsaved in this function,
->  when CONFIG_TRACE_IRQFLAGS is enabled,
->  the TRACE_IRQS_OFF macro will call trace_hardirqs_off(),
->  and this may change register "a1".
->  The changed register "a1" as argument will be send
->  to do_fpe() and do_msa_fpe().
+On Thu, May 28, 2020 at 2:27 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
 >
-> Signed-off-by: YuanJunQing <yuanjunqing66@163.com>
-> ---
->  arch/mips/kernel/genex.S | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> On Thu, May 28, 2020 at 02:14:58PM +0200, Arnd Bergmann wrote:
+> > On Thu, May 28, 2020 at 12:01 AM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Tuesday, May 26, 2020, Serge Semin <Sergey.Semin@baikalelectronics.ru> wrote:
+> > >>
+> > >> AXI3-bus is the main communication bus connecting all high-speed
+> > >> peripheral IP-cores with RAM controller and MIPS P5600 cores on Baikal-T1
+> > >> SoC. Bus traffic arbitration is done by means of DW AMBA 3 AXI
+> > >> Interconnect (so called AXI Main Interconnect) routing IO requests from
+> > >> one SoC block to another. This driver provides a way to detect any bus
+> > >> protocol errors and device not responding situations by means of an
+> > >> embedded on top of the interconnect errors handler block (EHB). AXI
+> > >> Interconnect QoS arbitration tuning is currently unsupported.
+> > >> The bus doesn't provide a way to detect the interconnected devices,
+> > >> so they are supposed to be statically defined like by means of the
+> > >> simple-bus sub-nodes.
+> > >
+> > >
+> > >
+> > > Few comments in case if you need a new version. Main point is about sysfs_streq().
+> >
+> > I've applied the patch now and folded in fixes for the build warnings and
+> > errors pointed out by the test robot, but I did not include the changes you
+> > suggested.
 >
-> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> index 8236fb291e3f..a1b966f3578e 100644
-> --- a/arch/mips/kernel/genex.S
-> +++ b/arch/mips/kernel/genex.S
-> @@ -476,20 +476,20 @@ NESTED(nmi_handler, PT_SIZE, sp)
->  	.endm
->  
->  	.macro	__build_clear_fpe
-> +	CLI
-> +	TRACE_IRQS_OFF
->  	.set	push
->  	/* gas fails to assemble cfc1 for some archs (octeon).*/ \
->  	.set	mips1
->  	SET_HARDFLOAT
->  	cfc1	a1, fcr31
->  	.set	pop
-> -	CLI
-> -	TRACE_IRQS_OFF
->  	.endm
->  
->  	.macro	__build_clear_msa_fpe
-> -	_cfcmsa	a1, MSA_CSR
->  	CLI
->  	TRACE_IRQS_OFF
-> +	_cfcmsa	a1, MSA_CSR
->  	.endm
->  
->  	.macro	__build_clear_ade
+> Are you saying that the build-errors and warnings have already been fixed by
+> you, right? If so could you please give me a link to the repo with those
+> commits, so I'd work with the up-to-date code?
 
+I've pushed it to https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/,
+
+I made a local "baikal/drivers" branch with just your patches, updated
+to address the build reports. This is merged into the "arm/drivers"
+branch that contains all driver specific changes across all SoCs and
+this is what I'll send to Linus next week.
+
+There is also the "for-next" branch that contains all arm/* branches,
+and this is what gets pulled into linux-next, so your patches will show
+up there tomorrow as well.
+
+You can normally check the status of any submission to soc@kernel.org
+at https://patchwork.kernel.org/project/linux-soc/list/, but it seems that
+has not picked up the status yet, and I'll have to update it manually.
+
+       Arnd
