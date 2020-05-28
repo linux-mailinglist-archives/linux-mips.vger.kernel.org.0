@@ -2,156 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0891E52E4
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 03:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104681E538A
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 03:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726351AbgE1BYn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 21:24:43 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:43928 "EHLO loongson.cn"
+        id S1725922AbgE1B7O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 21:59:14 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:50136 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725747AbgE1BYm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 May 2020 21:24:42 -0400
-Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr2vVEs9eUek5AA--.875S3;
-        Thu, 28 May 2020 09:24:39 +0800 (CST)
-Subject: Re: [PATCH] MIPS: DTS: Only build subdir of current platform
-To:     Guenter Roeck <linux@roeck-us.net>
-References: <1590027306-2137-1-git-send-email-yangtiezhu@loongson.cn>
- <20200527231055.GA141265@roeck-us.net>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
+        id S1725896AbgE1B7O (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 27 May 2020 21:59:14 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD2rmGs9ed+05AA--.979S2;
+        Thu, 28 May 2020 09:59:03 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <1f29c8f8-730c-d8d4-c8ed-cdf9f02e981f@loongson.cn>
-Date:   Thu, 28 May 2020 09:24:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <20200527231055.GA141265@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxr2vVEs9eUek5AA--.875S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF4xuF1xXr4UtFy3ZrW7XFb_yoWrXw4kpr
-        W3Aa1qqayxWF1Syr1fJrykWryfAr45JFZruFs8Gr17Aa9F9a40vr1ftFsayr1UZrWrta4I
-        grWfWFW7AFn5AaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        kbuild test robot <lkp@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] MIPS: DTS: Fix build errors used with various configs
+Date:   Thu, 28 May 2020 09:59:01 +0800
+Message-Id: <1590631141-23904-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxD2rmGs9ed+05AA--.979S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF43Zw17Wr15ZF4UJw18Xwb_yoW8Cw17pa
+        95Arsrt34xXryUJrWxAF1DWr90yan8CFWDuF4kCw4UGrZ5X3yUZrn3trsxtF18Ww18Ja1x
+        KFs7KrZxArn8taUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkj14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
-        zVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfU5W
-        lkUUUUU
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 05/28/2020 07:10 AM, Guenter Roeck wrote:
-> On Thu, May 21, 2020 at 10:15:06AM +0800, Tiezhu Yang wrote:
->> Add config check in Makefile to only build the subdir of current platform.
->>
->> E.g. without this patch:
->>
->>    AR      arch/mips/built-in.a
->>    AR      arch/mips/boot/dts/brcm/built-in.a
->>    AR      arch/mips/boot/dts/cavium-octeon/built-in.a
->>    AR      arch/mips/boot/dts/img/built-in.a
->>    AR      arch/mips/boot/dts/ingenic/built-in.a
->>    AR      arch/mips/boot/dts/lantiq/built-in.a
->>    DTC     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb
->>    DTB     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.S
->>    AS      arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.o
->>    DTC     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb
->>    DTB     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.S
->>    AS      arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.o
->>    AR      arch/mips/boot/dts/loongson/built-in.a
->>    AR      arch/mips/boot/dts/mscc/built-in.a
->>    AR      arch/mips/boot/dts/mti/built-in.a
->>    AR      arch/mips/boot/dts/netlogic/built-in.a
->>    AR      arch/mips/boot/dts/ni/built-in.a
->>    AR      arch/mips/boot/dts/pic32/built-in.a
->>    AR      arch/mips/boot/dts/qca/built-in.a
->>    AR      arch/mips/boot/dts/ralink/built-in.a
->>    AR      arch/mips/boot/dts/xilfpga/built-in.a
->>    AR      arch/mips/boot/dts/built-in.a
->>
->> With this patch:
->>
->>    AR      arch/mips/built-in.a
->>    DTC     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb
->>    DTB     arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.S
->>    AS      arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dtb.o
->>    DTC     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb
->>    DTB     arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.S
->>    AS      arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dtb.o
->>    AR      arch/mips/boot/dts/loongson/built-in.a
->>    AR      arch/mips/boot/dts/built-in.a
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> With this patch applied, boston.dtb is no longer built with
-> 64r6el_defconfig, even though 64r6el_defconfig enables
-> CONFIG_FIT_IMAGE_FDT_BOSTON=y. This is because the img
-> subdirectory is now only included if CONFIG_MACH_PISTACHIO=y,
-> but that is not the case with 64r6el_defconfig.
+If CONFIG_MIPS_MALTA is not set but CONFIG_LEGACY_BOARD_SEAD3 is set,
+the subdir arch/mips/boot/dts/mti will not be built, so the sead3.dts
+which depends on CONFIG_LEGACY_BOARD_SEAD3 in this subdir is also not
+built, and then there exists the following build error, fix it.
 
-Thanks for your report, sorry for this issue.
+  LD      .tmp_vmlinux.kallsyms1
+arch/mips/generic/board-sead3.o:(.mips.machines.init+0x4): undefined reference to `__dtb_sead3_begin'
+Makefile:1106: recipe for target 'vmlinux' failed
+make: *** [vmlinux] Error 1
 
-I received the build error report yesterday from
-kbuild test robot <lkp@intel.com>, I will fix it.
+Additionally, add CONFIG_FIT_IMAGE_FDT_BOSTON check for subdir img to
+fix the following build error when CONFIG_MACH_PISTACHIO is not set but
+CONFIG_FIT_IMAGE_FDT_BOSTON is set.
 
->
-> Please revisit.
->
-> Guenter
->
->> ---
->>   arch/mips/boot/dts/Makefile | 28 ++++++++++++++--------------
->>   1 file changed, 14 insertions(+), 14 deletions(-)
->>
->> diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
->> index d429a69..dce32d1 100644
->> --- a/arch/mips/boot/dts/Makefile
->> +++ b/arch/mips/boot/dts/Makefile
->> @@ -1,17 +1,17 @@
->>   # SPDX-License-Identifier: GPL-2.0
->> -subdir-y	+= brcm
->> -subdir-y	+= cavium-octeon
->> -subdir-y	+= img
->> -subdir-y	+= ingenic
->> -subdir-y	+= lantiq
->> -subdir-y	+= loongson
->> -subdir-y	+= mscc
->> -subdir-y	+= mti
->> -subdir-y	+= netlogic
->> -subdir-y	+= ni
->> -subdir-y	+= pic32
->> -subdir-y	+= qca
->> -subdir-y	+= ralink
->> -subdir-y	+= xilfpga
->> +subdir-$(CONFIG_BMIPS_GENERIC)		+= brcm
->> +subdir-$(CONFIG_CAVIUM_OCTEON_SOC)	+= cavium-octeon
->> +subdir-$(CONFIG_MACH_PISTACHIO)		+= img
->> +subdir-$(CONFIG_MACH_INGENIC)		+= ingenic
->> +subdir-$(CONFIG_LANTIQ)			+= lantiq
->> +subdir-$(CONFIG_MACH_LOONGSON64)	+= loongson
->> +subdir-$(CONFIG_MSCC_OCELOT)		+= mscc
->> +subdir-$(CONFIG_MIPS_MALTA)		+= mti
->> +subdir-$(CONFIG_NLM_XLP_BOARD)		+= netlogic
->> +subdir-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= ni
->> +subdir-$(CONFIG_MACH_PIC32)		+= pic32
->> +subdir-$(CONFIG_ATH79)			+= qca
->> +subdir-$(CONFIG_RALINK)			+= ralink
->> +subdir-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+= xilfpga
->>   
->>   obj-$(CONFIG_BUILTIN_DTB)	:= $(addsuffix /, $(subdir-y))
->> -- 
->> 2.1.0
->>
+FATAL ERROR: Couldn't open "boot/dts/img/boston.dtb": No such file or directory
+
+Reported-by: kbuild test robot <lkp@intel.com>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 41528ba6afe6 ("MIPS: DTS: Only build subdir of current platform")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/boot/dts/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
+index dce32d1..1902712 100644
+--- a/arch/mips/boot/dts/Makefile
++++ b/arch/mips/boot/dts/Makefile
+@@ -2,11 +2,13 @@
+ subdir-$(CONFIG_BMIPS_GENERIC)		+= brcm
+ subdir-$(CONFIG_CAVIUM_OCTEON_SOC)	+= cavium-octeon
+ subdir-$(CONFIG_MACH_PISTACHIO)		+= img
++subdir-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= img
+ subdir-$(CONFIG_MACH_INGENIC)		+= ingenic
+ subdir-$(CONFIG_LANTIQ)			+= lantiq
+ subdir-$(CONFIG_MACH_LOONGSON64)	+= loongson
+ subdir-$(CONFIG_MSCC_OCELOT)		+= mscc
+ subdir-$(CONFIG_MIPS_MALTA)		+= mti
++subdir-$(CONFIG_LEGACY_BOARD_SEAD3)	+= mti
+ subdir-$(CONFIG_NLM_XLP_BOARD)		+= netlogic
+ subdir-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= ni
+ subdir-$(CONFIG_MACH_PIC32)		+= pic32
+-- 
+2.1.0
 
