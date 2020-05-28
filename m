@@ -2,453 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7741E5AC6
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 10:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA981E5AD6
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 10:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726857AbgE1I2Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 04:28:24 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:39142 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726892AbgE1I2W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 May 2020 04:28:22 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf2r7dc9euh46AA--.1133S2;
-        Thu, 28 May 2020 16:27:39 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH] MIPS: Fix build warning about "PTR_STR" redefined under CONFIG_TEST_PRINTF
-Date:   Thu, 28 May 2020 16:27:39 +0800
-Message-Id: <1590654459-10827-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxf2r7dc9euh46AA--.1133S2
-X-Coremail-Antispam: 1UD129KBjvJXoWfJFyUXr1UXrW3AryfXr1xGrg_yoWkCF43pr
-        Wvkw4SvrW8tFWDAw1Y9w4j9r4kXryFvrn7CF13KFW8Gryagw1vkr9rArn8CF93Jw45u3W7
-        ZF47CFnrZa12vaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUbKZGDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1727037AbgE1Ib4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 04:31:56 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40166 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726085AbgE1Ib4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 04:31:56 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 262EF80307C0;
+        Thu, 28 May 2020 08:31:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mso_D6x-Sr2v; Thu, 28 May 2020 11:31:46 +0300 (MSK)
+Date:   Thu, 28 May 2020 11:31:44 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RESEND v3 0/2] syscon: Alter syscon and reboot drivers
+Message-ID: <20200528083144.5r2qn3mule4dvvgf@mobilestation>
+References: <20200526135102.21236-1-Sergey.Semin@baikalelectronics.ru>
+ <20200528070311.uj6bxlplxe2bths5@earth.universe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200528070311.uj6bxlplxe2bths5@earth.universe>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Replace PTR_STR with INST_PTR_STR to fix the following build warning when
-CONFIG_TEST_PRINTF is set:
+On Thu, May 28, 2020 at 09:03:11AM +0200, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Tue, May 26, 2020 at 04:50:59PM +0300, Serge Semin wrote:
+> > This is a small patchset about tuning the syscon infrastructure a bit.
+> > As it's going to be general in the framework of the Baikal-T1 SoC support
+> > integration into the kernel, we suggest to replace the legacy text-based
+> > syscon-reboot-mode dts-bindings file with yaml-based one. Then seeing a
+> > syscon reboot block is normally expected to be a part of a system
+> > controller and based on the discussion
+> > https://lore.kernel.org/linux-pm/20200306130402.1F4F0803079F@mail.baikalelectronics.ru/
+> > we decided to alter the syscon reboot driver so one would also try to fetch
+> > the syscon registers map from a parental DT node. regmap property is left
+> > supported although it's marked as deprecated from now.
+> > 
+> > This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
+> > 0e698dfa2822 ("Linux 5.7-rc4")
+> > tag: v5.7-rc4
+> > 
+> > Changelog v2:
+> > - Add Sebastian' Acked-by tag to patch 1.
+> > - Use a shorter summary describing the bindings modification patches.
+> > - Our corporate email server doesn't change Message-Id anymore, so the patchset
+> >   is resubmitted being in the cover-letter-threaded format.
+> > - Discard patch with syscon "-endian" property support. As Rob said It shall be
+> >   in the common dt-schema.
+> > - Replace patches of adding a regmap property support to the syscon-reboot-mode
+> >   with patches making syscon-reboot a sub-node of a system controller node.
+> > - Mark regmap property as deprecated from now.
+> > 
+> > Link: https://lore.kernel.org/linux-pm/20200507233846.11548-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v3:
+> > - Discard the commit 6acd3ecd88ff ("dt-bindings: power: reset: Convert
+> >   syscon-reboot-mode to DT schema") since it has been merged in by Sebatian.
+> > - Add Rob's Reviewed-by tag to the patch "dt-bindings: power: reset: Unrequire
+> >   regmap property in syscon-reboot node"
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> > Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> > Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+> > Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+> > Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > 
+> > Serge Semin (2):
+> >   dt-bindings: power: reset: Unrequire regmap property in syscon-reboot
+> >     node
+> >   power: reset: syscon-reboot: Add parental syscon support
+> > 
+> >  .../bindings/power/reset/syscon-reboot.yaml       | 15 ++++++++++-----
+> >  drivers/power/reset/syscon-reboot.c               |  7 +++++--
+> >  2 files changed, 15 insertions(+), 7 deletions(-)
+> 
+> Thanks, I queued both patches to power-supply's for-next branch.
+> 
+> -- Sebastian
 
-  CC      lib/test_printf.o
-lib/test_printf.c:214:0: warning: "PTR_STR" redefined
- #define PTR_STR "ffff0123456789ab"
- ^
-In file included from ./arch/mips/include/asm/dsemul.h:11:0,
-                 from ./arch/mips/include/asm/processor.h:22,
-                 from ./arch/mips/include/asm/thread_info.h:16,
-                 from ./include/linux/thread_info.h:38,
-                 from ./include/asm-generic/preempt.h:5,
-                 from ./arch/mips/include/generated/asm/preempt.h:1,
-                 from ./include/linux/preempt.h:78,
-                 from ./include/linux/spinlock.h:51,
-                 from ./include/linux/seqlock.h:36,
-                 from ./include/linux/time.h:6,
-                 from ./include/linux/stat.h:19,
-                 from ./include/linux/module.h:13,
-                 from lib/test_printf.c:10:
-./arch/mips/include/asm/inst.h:20:0: note: this is the location of the previous definition
- #define PTR_STR  ".dword"
- ^
+Great! Thanks.
 
-Fixes: e701656ec4db ("MIPS: inst.h: Stop including asm.h to avoid various build failures")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/include/asm/inst.h | 180 +++++++++++++++++++++----------------------
- 1 file changed, 90 insertions(+), 90 deletions(-)
-
-diff --git a/arch/mips/include/asm/inst.h b/arch/mips/include/asm/inst.h
-index 6d74ba3..3ab1c6b 100644
---- a/arch/mips/include/asm/inst.h
-+++ b/arch/mips/include/asm/inst.h
-@@ -14,10 +14,10 @@
- #include <uapi/asm/inst.h>
- 
- #if (_MIPS_SZPTR == 32)
--#define PTR_STR		".word"
-+#define INST_PTR_STR		".word"
- #endif
- #if (_MIPS_SZPTR == 64)
--#define PTR_STR		".dword"
-+#define INST_PTR_STR		".dword"
- #endif
- 
- /* HACHACHAHCAHC ...  */
-@@ -108,8 +108,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -129,8 +129,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -162,10 +162,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -190,8 +190,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -213,8 +213,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -233,8 +233,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -266,10 +266,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -311,14 +311,14 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
--		PTR_STR"\t5b, 11b\n\t"		    \
--		PTR_STR"\t6b, 11b\n\t"		    \
--		PTR_STR"\t7b, 11b\n\t"		    \
--		PTR_STR"\t8b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
-+		INST_PTR_STR"\t5b, 11b\n\t"         \
-+		INST_PTR_STR"\t6b, 11b\n\t"         \
-+		INST_PTR_STR"\t7b, 11b\n\t"         \
-+		INST_PTR_STR"\t8b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -343,8 +343,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"              \
--		PTR_STR"\t2b, 4b\n\t"              \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=r" (res)                        \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));\
-@@ -364,8 +364,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=r" (res)                                \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
-@@ -384,8 +384,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=r" (res)                                \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
-@@ -413,10 +413,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (res)				    \
- 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
-@@ -453,14 +453,14 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
--		PTR_STR"\t5b, 11b\n\t"		    \
--		PTR_STR"\t6b, 11b\n\t"		    \
--		PTR_STR"\t7b, 11b\n\t"		    \
--		PTR_STR"\t8b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
-+		INST_PTR_STR"\t5b, 11b\n\t"         \
-+		INST_PTR_STR"\t6b, 11b\n\t"         \
-+		INST_PTR_STR"\t7b, 11b\n\t"         \
-+		INST_PTR_STR"\t8b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (res)				    \
- 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
-@@ -486,8 +486,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -507,8 +507,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -540,10 +540,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -569,8 +569,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -592,8 +592,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -612,8 +612,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -645,10 +645,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -690,14 +690,14 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
--		PTR_STR"\t5b, 11b\n\t"		    \
--		PTR_STR"\t6b, 11b\n\t"		    \
--		PTR_STR"\t7b, 11b\n\t"		    \
--		PTR_STR"\t8b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
-+		INST_PTR_STR"\t5b, 11b\n\t"         \
-+		INST_PTR_STR"\t6b, 11b\n\t"         \
-+		INST_PTR_STR"\t7b, 11b\n\t"         \
-+		INST_PTR_STR"\t8b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -720,8 +720,8 @@ do {                                                 \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=r" (res)                        \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));\
-@@ -741,8 +741,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=r" (res)                                \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
-@@ -761,8 +761,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 4b\n\t"               \
--		PTR_STR"\t2b, 4b\n\t"               \
-+		INST_PTR_STR"\t1b, 4b\n\t"          \
-+		INST_PTR_STR"\t2b, 4b\n\t"          \
- 		".previous"                         \
- 		: "=r" (res)                                \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
-@@ -791,10 +791,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (res)				    \
- 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
-@@ -831,14 +831,14 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		PTR_STR"\t1b, 11b\n\t"		    \
--		PTR_STR"\t2b, 11b\n\t"		    \
--		PTR_STR"\t3b, 11b\n\t"		    \
--		PTR_STR"\t4b, 11b\n\t"		    \
--		PTR_STR"\t5b, 11b\n\t"		    \
--		PTR_STR"\t6b, 11b\n\t"		    \
--		PTR_STR"\t7b, 11b\n\t"		    \
--		PTR_STR"\t8b, 11b\n\t"		    \
-+		INST_PTR_STR"\t1b, 11b\n\t"         \
-+		INST_PTR_STR"\t2b, 11b\n\t"         \
-+		INST_PTR_STR"\t3b, 11b\n\t"         \
-+		INST_PTR_STR"\t4b, 11b\n\t"         \
-+		INST_PTR_STR"\t5b, 11b\n\t"         \
-+		INST_PTR_STR"\t6b, 11b\n\t"         \
-+		INST_PTR_STR"\t7b, 11b\n\t"         \
-+		INST_PTR_STR"\t8b, 11b\n\t"         \
- 		".previous"			    \
- 		: "=&r" (res)				    \
- 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
--- 
-2.1.0
-
+-Sergey
