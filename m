@@ -2,92 +2,204 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 104681E538A
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 03:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938561E5449
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 04:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbgE1B7O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 21:59:14 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:50136 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725896AbgE1B7O (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 May 2020 21:59:14 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD2rmGs9ed+05AA--.979S2;
-        Thu, 28 May 2020 09:59:03 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        kbuild test robot <lkp@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] MIPS: DTS: Fix build errors used with various configs
-Date:   Thu, 28 May 2020 09:59:01 +0800
-Message-Id: <1590631141-23904-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9DxD2rmGs9ed+05AA--.979S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF43Zw17Wr15ZF4UJw18Xwb_yoW8Cw17pa
-        95Arsrt34xXryUJrWxAF1DWr90yan8CFWDuF4kCw4UGrZ5X3yUZrn3trsxtF18Ww18Ja1x
-        KFs7KrZxArn8taUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkj14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1726749AbgE1C6l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 May 2020 22:58:41 -0400
+Received: from mga07.intel.com ([134.134.136.100]:12640 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725896AbgE1C6l (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 27 May 2020 22:58:41 -0400
+IronPort-SDR: rgEgWN27q7Ce3AOwPq8lG45jS6clas3DfmE9mxp4vG0TFuNrCRpUukPZbazpRR4N+nGdJJNXiH
+ tbhMd6lCp9SA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 19:58:40 -0700
+IronPort-SDR: NV1fIEi7SBqqpWFSyetil7BqpMQvRWv0Sli9g92468c8uiX8Se0i5A3wyNFWKSVJ9zyHmQnumZ
+ zGuYmBc3PSyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,443,1583222400"; 
+   d="scan'208";a="468974457"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 27 May 2020 19:58:40 -0700
+Received: from [10.214.164.131] (vramuthx-MOBL1.gar.corp.intel.com [10.214.164.131])
+        by linux.intel.com (Postfix) with ESMTP id 9E6925803C1;
+        Wed, 27 May 2020 19:58:35 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [RESENDPATCH v8 1/2] dt-bindings: mtd: Add Nand Flash Controller
+ support for Intel LGM SoC
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
+        brendanhiggins@google.com, tglx@linutronix.de,
+        boris.brezillon@collabora.com, anders.roxell@linaro.org,
+        masonccyang@mxic.com.tw, linux-mips@vger.kernel.org,
+        hauke.mehrtens@intel.com, andriy.shevchenko@intel.com,
+        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
+References: <20200520000621.49152-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200520000621.49152-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200526204306.GA224630@bogus>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <b04a6779-233d-ff7f-6eb6-b6393100189e@linux.intel.com>
+Date:   Thu, 28 May 2020 10:58:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
+MIME-Version: 1.0
+In-Reply-To: <20200526204306.GA224630@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-If CONFIG_MIPS_MALTA is not set but CONFIG_LEGACY_BOARD_SEAD3 is set,
-the subdir arch/mips/boot/dts/mti will not be built, so the sead3.dts
-which depends on CONFIG_LEGACY_BOARD_SEAD3 in this subdir is also not
-built, and then there exists the following build error, fix it.
+Hi Rob,
 
-  LD      .tmp_vmlinux.kallsyms1
-arch/mips/generic/board-sead3.o:(.mips.machines.init+0x4): undefined reference to `__dtb_sead3_begin'
-Makefile:1106: recipe for target 'vmlinux' failed
-make: *** [vmlinux] Error 1
+Thank you very much for the review comments...
 
-Additionally, add CONFIG_FIT_IMAGE_FDT_BOSTON check for subdir img to
-fix the following build error when CONFIG_MACH_PISTACHIO is not set but
-CONFIG_FIT_IMAGE_FDT_BOSTON is set.
+On 27/5/2020 4:43 am, Rob Herring wrote:
+> On Wed, May 20, 2020 at 08:06:20AM +0800, Ramuthevar,Vadivel MuruganX wrote:
+>> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>>
+>> Add YAML file for dt-bindings to support NAND Flash Controller
+>> on Intel's Lightning Mountain SoC.
+>>
+>> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>> ---
+>>   .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 91 ++++++++++++++++++++++
+>>   1 file changed, 91 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+>> new file mode 100644
+>> index 000000000000..cd4e983a449e
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+>> @@ -0,0 +1,91 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+> 
+> Still not dual licensed.
+oh sorry, will update.
+> 
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mtd/intel,lgm-nand.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Intel LGM SoC NAND Controller Device Tree Bindings
+>> +
+>> +allOf:
+>> +  - $ref: "nand-controller.yaml"
+>> +
+>> +maintainers:
+>> +  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: intel,lgm-nand-controller
+> 
+> Still doesn't match the example. And the example will fail when it does.
+Noted, will change it.
+> 
+>> +
+>> +  reg:
+>> +    items:
+>> +       - description: ebunand registers
+>> +       - description: hsnand registers
+>> +       - description: nand_cs0 external flash access
+>> +       - description: nand_cs1 external flash access
+>> +       - description: addr_sel0 memory region enable and access
+>> +       - description: addr_sel1 memory region enable and access
+> 
+> reg-names?
+   should be -const: ebunand instead added description with register 
+name , will keep "-const: ebunand ..etc"
+> 
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  dmas:
+>> +    maxItems: 2
+>> +
+>> +  dma-names:
+>> +    items:
+>> +      - const: tx
+>> +      - const: rx
+>> +
+>> +patternProperties:
+>> +  "^nand@[a-f0-9]+$":
+>> +    type: object
+>> +    properties:
+>> +      reg:
+>> +        minimum: 0
+>> +        maximum: 7
+>> +
+>> +      nand-ecc-mode: true
+>> +
+>> +      nand-ecc-algo:
+>> +        const: hw
+>> +
+>> +    additionalProperties: false
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+> 
+> Not documented or should be dropped.
+Yes, will drop it.
+> 
+>> +  - dmas
+>> +  - dma-names
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    nand-controller@e0f00000 {
+>> +      compatible = "intel,lgm-nand";
+>> +      reg = <0xe0f00000 0x100>,
+>> +            <0xe1000000 0x300>,
+>> +            <0xe1400000 0x8000>,
+>> +            <0xe1c00000 0x1000>,
+>> +            <0x17400000 0x4>,
+>> +            <0x17c00000 0x4>;
+>> +      reg-names = "ebunand", "hsnand", "nand_cs0", "nand_cs1",
+>> +        "addr_sel0","addr_sel1";
+> 
+> Not documented. And needs a space after the ','.
+Good catch, Thanks
+> 
+>> +      clocks = <&cgu0 125>;
+>> +      dmas = <&dma0 8>, <&dma0 9>;
+>> +      dma-names = "tx", "rx";
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +      #clock-cells = <1>;
+> 
+> Should be removed?
+sure, will remove it
 
-FATAL ERROR: Couldn't open "boot/dts/img/boston.dtb": No such file or directory
-
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: 41528ba6afe6 ("MIPS: DTS: Only build subdir of current platform")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/boot/dts/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
-index dce32d1..1902712 100644
---- a/arch/mips/boot/dts/Makefile
-+++ b/arch/mips/boot/dts/Makefile
-@@ -2,11 +2,13 @@
- subdir-$(CONFIG_BMIPS_GENERIC)		+= brcm
- subdir-$(CONFIG_CAVIUM_OCTEON_SOC)	+= cavium-octeon
- subdir-$(CONFIG_MACH_PISTACHIO)		+= img
-+subdir-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= img
- subdir-$(CONFIG_MACH_INGENIC)		+= ingenic
- subdir-$(CONFIG_LANTIQ)			+= lantiq
- subdir-$(CONFIG_MACH_LOONGSON64)	+= loongson
- subdir-$(CONFIG_MSCC_OCELOT)		+= mscc
- subdir-$(CONFIG_MIPS_MALTA)		+= mti
-+subdir-$(CONFIG_LEGACY_BOARD_SEAD3)	+= mti
- subdir-$(CONFIG_NLM_XLP_BOARD)		+= netlogic
- subdir-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= ni
- subdir-$(CONFIG_MACH_PIC32)		+= pic32
--- 
-2.1.0
-
+Regards
+Vadivel
+> 
+>> +
+>> +      nand@0 {
+>> +        reg = <0>;
+>> +        nand-on-flash-bbt;
+>> +        #address-cells = <1>;
+>> +        #size-cells = <1>;
+>> +      };
+>> +    };
+>> +
+>> +...
+>> -- 
+>> 2.11.0
+>>
