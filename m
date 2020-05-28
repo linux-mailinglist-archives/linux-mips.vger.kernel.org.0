@@ -2,90 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 250D81E633B
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 16:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97931E63A7
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 16:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390596AbgE1OGL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 10:06:11 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:35129 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390656AbgE1OGK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 10:06:10 -0400
-Received: by mail-il1-f194.google.com with SMTP id a14so244167ilk.2;
-        Thu, 28 May 2020 07:06:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1jidT3xKZRKULWJIwqa2tys07NIrxI3mybLQC/9d/ko=;
-        b=DWsO/F1eL9DjP82NBsLsNPxie0SlEjScD8II2Cq1DIL2kaGCxCaT4PgBl5Ww8CONba
-         3xepZq1DflZNleeydwg501TlttgPCp9bq2FQkw4TIWbHuzx21fgApSgNE218racIV0ek
-         gtVDO72sc0Wtz+soNCEEWh+8Xm2iVCvVryTP8H9FkSpnde/I7IRXh2dr1IusZyK1nX4/
-         DflFeoJ5bqSR8nFPNkC8PKTyqWaWcC9M6HlS5gdwLUBUQNVph7jEaD4Y2fbbEp+nqIrj
-         3+emczmaZD4HFc8B0ukE4wk1yi/JPUnRBr82oif9g/oZrIGs2zdkhEzIudA24C5NQncN
-         Ss7A==
-X-Gm-Message-State: AOAM532cSysK1aLb8yvlk2lsV8G4K58IQUR+VzyjoGMTYhF3wsX/22VC
-        AkOCxjc+gvGHpndH6GtVOQ==
-X-Google-Smtp-Source: ABdhPJwgyTHzsDhxjiIb8r+RbEwXO/nh2hiq7xZNTxCVYzX32CAooeVLqphtOftt4LjRzbfcNOdExw==
-X-Received: by 2002:a92:d40a:: with SMTP id q10mr3051355ilm.87.1590674768954;
-        Thu, 28 May 2020 07:06:08 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id n25sm2574334ioa.29.2020.05.28.07.06.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 07:06:08 -0700 (PDT)
-Received: (nullmailer pid 4174426 invoked by uid 1000);
-        Thu, 28 May 2020 14:06:06 -0000
-Date:   Thu, 28 May 2020 08:06:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Cc:     vigneshr@ti.com, linux-kernel@vger.kernel.org, arnd@arndb.de,
-        hauke.mehrtens@intel.com, linux-mips@vger.kernel.org,
-        richard@nod.at, qi-ming.wu@intel.com, tglx@linutronix.de,
-        brendanhiggins@google.com, linux-mtd@lists.infradead.org,
-        boris.brezillon@collabora.com, anders.roxell@linaro.org,
-        cheol.yong.kim@intel.com, devicetree@vger.kernel.org,
-        miquel.raynal@bootlin.com, andriy.shevchenko@intel.com,
-        robh+dt@kernel.org, masonccyang@mxic.com.tw
-Subject: Re: [PATCH v9 1/2] dt-bindings: mtd: Add Nand Flash Controller
- support for Intel LGM SoC
-Message-ID: <20200528140606.GA4173978@bogus>
-References: <20200528051211.3063-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200528051211.3063-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+        id S2391045AbgE1OVK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 10:21:10 -0400
+Received: from mga03.intel.com ([134.134.136.65]:20668 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390924AbgE1OVJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 May 2020 10:21:09 -0400
+IronPort-SDR: lwKWPPpfCUBJU3dam2bE/0jMqpJA8LN84Ga4uMfHoqm0O2LDKfYlrBSstawzBPwbmKvY0ICh2+
+ ltQp7l6BTv2g==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2020 07:21:05 -0700
+IronPort-SDR: RbBOw7sCwjdGD+r6XWfXsZOuFjUtGlLTVQc41w4UEzOUe0AuN9UGJnNDQcyvlokBiRqVwZyWKo
+ iFk1h8NQGUXg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,444,1583222400"; 
+   d="scan'208";a="302827105"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 28 May 2020 07:21:01 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jeJP6-009RKe-LU; Thu, 28 May 2020 17:21:04 +0300
+Date:   Thu, 28 May 2020 17:21:04 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 03/10] dmaengine: Introduce min burst length capability
+Message-ID: <20200528142104.GQ1634618@smile.fi.intel.com>
+References: <20200526225022.20405-1-Sergey.Semin@baikalelectronics.ru>
+ <20200526225022.20405-4-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200528051211.3063-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+In-Reply-To: <20200526225022.20405-4-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 28 May 2020 13:12:10 +0800, Ramuthevar,Vadivel MuruganX wrote:
-> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+On Wed, May 27, 2020 at 01:50:14AM +0300, Serge Semin wrote:
+> Some hardware aside from default 0/1 may have greater minimum burst
+> transactions length constraints. Here we introduce the DMA device
+> and slave capability, which if required can be initialized by the DMA
+> engine driver with the device-specific value.
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
 > 
-> Add YAML file for dt-bindings to support NAND Flash Controller
-> on Intel's Lightning Mountain SoC.
-> 
-> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 > ---
->  .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 93 ++++++++++++++++++++++
->  1 file changed, 93 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+> 
+> Changelog v3:
+> - This is a new patch created as a result of the discussion with Vinud and
+>   Andy in the framework of DW DMA burst and LLP capabilities.
+> ---
+>  drivers/dma/dmaengine.c   | 1 +
+>  include/linux/dmaengine.h | 4 ++++
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
+> index d31076d9ef25..b332ffe52780 100644
+> --- a/drivers/dma/dmaengine.c
+> +++ b/drivers/dma/dmaengine.c
+> @@ -590,6 +590,7 @@ int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps)
+>  	caps->src_addr_widths = device->src_addr_widths;
+>  	caps->dst_addr_widths = device->dst_addr_widths;
+>  	caps->directions = device->directions;
+> +	caps->min_burst = device->min_burst;
+>  	caps->max_burst = device->max_burst;
+>  	caps->residue_granularity = device->residue_granularity;
+>  	caps->descriptor_reuse = device->descriptor_reuse;
+> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+> index e1c03339918f..0c7403b27133 100644
+> --- a/include/linux/dmaengine.h
+> +++ b/include/linux/dmaengine.h
+> @@ -465,6 +465,7 @@ enum dma_residue_granularity {
+>   *	Since the enum dma_transfer_direction is not defined as bit flag for
+>   *	each type, the dma controller should set BIT(<TYPE>) and same
+>   *	should be checked by controller as well
+> + * @min_burst: min burst capability per-transfer
+>   * @max_burst: max burst capability per-transfer
+>   * @cmd_pause: true, if pause is supported (i.e. for reading residue or
+>   *	       for resume later)
+> @@ -478,6 +479,7 @@ struct dma_slave_caps {
+>  	u32 src_addr_widths;
+>  	u32 dst_addr_widths;
+>  	u32 directions;
+> +	u32 min_burst;
+>  	u32 max_burst;
+>  	bool cmd_pause;
+>  	bool cmd_resume;
+> @@ -769,6 +771,7 @@ struct dma_filter {
+>   *	Since the enum dma_transfer_direction is not defined as bit flag for
+>   *	each type, the dma controller should set BIT(<TYPE>) and same
+>   *	should be checked by controller as well
+> + * @min_burst: min burst capability per-transfer
+>   * @max_burst: max burst capability per-transfer
+>   * @residue_granularity: granularity of the transfer residue reported
+>   *	by tx_status
+> @@ -839,6 +842,7 @@ struct dma_device {
+>  	u32 src_addr_widths;
+>  	u32 dst_addr_widths;
+>  	u32 directions;
+> +	u32 min_burst;
+>  	u32 max_burst;
+>  	bool descriptor_reuse;
+>  	enum dma_residue_granularity residue_granularity;
+> -- 
+> 2.26.2
 > 
 
+-- 
+With Best Regards,
+Andy Shevchenko
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/intel,lgm-nand.example.dt.yaml: nand-controller@e0f00000: '#address-cells', '#size-cells' do not match any of the regexes: '^nand@[a-f0-9]+$', 'pinctrl-[0-9]+'
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/intel,lgm-nand.example.dt.yaml: nand-controller@e0f00000: nand@0: '#address-cells', '#size-cells', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
-
-See https://patchwork.ozlabs.org/patch/1299399
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
 
