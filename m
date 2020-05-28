@@ -2,147 +2,192 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 453B51E5825
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 09:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5971E58BC
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 09:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbgE1HDQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 03:03:16 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:50454 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgE1HDQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 03:03:16 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 17B192A2173
-Received: by earth.universe (Postfix, from userid 1000)
-        id A5C563C08C7; Thu, 28 May 2020 09:03:11 +0200 (CEST)
-Date:   Thu, 28 May 2020 09:03:11 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 0/2] syscon: Alter syscon and reboot drivers
-Message-ID: <20200528070311.uj6bxlplxe2bths5@earth.universe>
-References: <20200526135102.21236-1-Sergey.Semin@baikalelectronics.ru>
+        id S1725882AbgE1HgN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 03:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbgE1HgM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 03:36:12 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF58C05BD1E;
+        Thu, 28 May 2020 00:36:12 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id x14so21429579wrp.2;
+        Thu, 28 May 2020 00:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=T8l9ZUxIOXsJeQU9fuugyzz0//RYyLlqRCwB65ghuSE=;
+        b=deb9hob6pj80MVXWoVPyZ8C/QckMbya8tmtIm+WfUcS77V8mHh9bKJuaVGOCey3wRy
+         GqfvQ3dz1zbg/LbOlAoP9i3xuZyOJQk4LDu5odAzx26hK8pzNG2+dowfP1md75LXHnEt
+         64T6ueicoEn8V4MGD5DcxA/qE/J34Rw4wQB4JaBBqfByzWbsLWkBhb6f05uR4H6ZM251
+         cyEcTrjIDtjYTox+ra/LIvawYTt5Z5SdONu4pv5IoY0Bw6wwtrRlKiRRwbt7mh6UepWO
+         XMfgmtTHgWU2U+/ElLkAl73or8QFMBsyfamfrDweoTUo/cjLrXoJxmDNJfaCAJ0ZaHPU
+         2sBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=T8l9ZUxIOXsJeQU9fuugyzz0//RYyLlqRCwB65ghuSE=;
+        b=qQXXsOY2TCj7057GjkcRNp/daf/mvkXzn+BD1J1wMfI7tBKqzwI1+QD5Tfd/p2QNdg
+         Un5FXaBk833TP3E2oF3M9nfAekFUPJltzeJ62WVTx7UoICd+tkVxsamSvfpLN7xMEzdE
+         Hg7FBjXDAA3evSrxFH0bHK9jI+5kPBmG7trVW/fP6chJViibxaHRgaoKisWEq/MRmdRN
+         Mii+s9N5nHjNmw3rTscpQ1ihhBZj/vic1wY7JNlxkQwOlmzJWeOcT7fW1E4gqznpVnW5
+         NU1oQYlIFsjc+dYfCuHJemGVsP1DKk6WLWtiOAOx/N9eDSFzEHDGxf9//bKHkPfXORlV
+         zqdA==
+X-Gm-Message-State: AOAM531Xqrkp4vXwJJ4Y8Fngiy9cLmWelf0ybjTn2bFZDwuOBQ9cxzlb
+        ZcAEy7Mu+iDNCbejYE7XUiV2aR0w+fFqwXIBOd4=
+X-Google-Smtp-Source: ABdhPJy7gL+Mp0mVGqHjv05fp1fiqbe1u7pVHix37JcsNca7ofRJ8Du/5GDLPee2w/BB2iFGI2h9m5/dDrBw74nl0AY=
+X-Received: by 2002:a5d:4385:: with SMTP id i5mr2142543wrq.420.1590651370875;
+ Thu, 28 May 2020 00:36:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yrkgjjfss7htiiu2"
-Content-Disposition: inline
-In-Reply-To: <20200526135102.21236-1-Sergey.Semin@baikalelectronics.ru>
+References: <1590318819-24520-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1590318819-24520-1-git-send-email-chenhc@lemote.com>
+From:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Date:   Thu, 28 May 2020 09:35:57 +0200
+Message-ID: <CAHiYmc4uMSypSUafphc1bRu=voVj4Swvu=wEG8WNaszq34aNqQ@mail.gmail.com>
+Subject: Re: [PATCH V8 00/15] KVM: MIPS: Add Loongson-3 support (Host Side)
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        kvm <kvm@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+=D0=BD=D0=B5=D0=B4, 24. =D0=BC=D0=B0=D1=98 2020. =D1=83 13:13 Huacai Chen <=
+chenhc@lemote.com> =D1=98=D0=B5 =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=D0=BE/=
+=D0=BB=D0=B0:
+>
+> We are preparing to add KVM support for Loongson-3. VZ extension is
+> fully supported in Loongson-3A R4+, and we will not care about old CPUs
+> (at least now). We already have a full functional Linux kernel (based
+> on Linux-5.4.x LTS) and QEMU (based on 5.0.0) and their git repositories
+> are here:
+>
+> QEMU: https://github.com/chenhuacai/qemu
+> Kernel: https://github.com/chenhuacai/linux
+>
+> Of course these two repositories need to be rework and not suitable for
+> upstream (especially the commits need to be splitted). We show them here
+> is just to tell others what we have done, and how KVM/Loongson will look
+> like.
+>
+> Our plan is make the KVM host side be upstream first, and after that,
+> we will make the KVM guest side and QEMU emulator be upstream.
+>
 
---yrkgjjfss7htiiu2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Huacai, Paolo, Thomas,
 
-Hi,
+As you know, there are number of Huacai's patches to QEMU, related
+to this series, actually we could call them counterparts to this series.
 
-On Tue, May 26, 2020 at 04:50:59PM +0300, Serge Semin wrote:
-> This is a small patchset about tuning the syscon infrastructure a bit.
-> As it's going to be general in the framework of the Baikal-T1 SoC support
-> integration into the kernel, we suggest to replace the legacy text-based
-> syscon-reboot-mode dts-bindings file with yaml-based one. Then seeing a
-> syscon reboot block is normally expected to be a part of a system
-> controller and based on the discussion
-> https://lore.kernel.org/linux-pm/20200306130402.1F4F0803079F@mail.baikale=
-lectronics.ru/
-> we decided to alter the syscon reboot driver so one would also try to fet=
-ch
-> the syscon registers map from a parental DT node. regmap property is left
-> supported although it's marked as deprecated from now.
->=20
-> This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
-> 0e698dfa2822 ("Linux 5.7-rc4")
-> tag: v5.7-rc4
->=20
-> Changelog v2:
-> - Add Sebastian' Acked-by tag to patch 1.
-> - Use a shorter summary describing the bindings modification patches.
-> - Our corporate email server doesn't change Message-Id anymore, so the pa=
-tchset
->   is resubmitted being in the cover-letter-threaded format.
-> - Discard patch with syscon "-endian" property support. As Rob said It sh=
-all be
->   in the common dt-schema.
-> - Replace patches of adding a regmap property support to the syscon-reboo=
-t-mode
->   with patches making syscon-reboot a sub-node of a system controller nod=
-e.
-> - Mark regmap property as deprecated from now.
->=20
-> Link: https://lore.kernel.org/linux-pm/20200507233846.11548-1-Sergey.Semi=
-n@baikalelectronics.ru/
-> Changelog v3:
-> - Discard the commit 6acd3ecd88ff ("dt-bindings: power: reset: Convert
->   syscon-reboot-mode to DT schema") since it has been merged in by Sebati=
-an.
-> - Add Rob's Reviewed-by tag to the patch "dt-bindings: power: reset: Unre=
-quire
->   regmap property in syscon-reboot node"
->=20
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
-> Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
-> Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
->=20
-> Serge Semin (2):
->   dt-bindings: power: reset: Unrequire regmap property in syscon-reboot
->     node
->   power: reset: syscon-reboot: Add parental syscon support
->=20
->  .../bindings/power/reset/syscon-reboot.yaml       | 15 ++++++++++-----
->  drivers/power/reset/syscon-reboot.c               |  7 +++++--
->  2 files changed, 15 insertions(+), 7 deletions(-)
+Regarding QEMU upstreaming, unless someone objects, I plan to send
+pull request that will include some of Huacai-s QEMU patches in next few
+days - those that are of general nature, do not rely on any kernel changes,
+and passed review process. The rest of Huacai's QEMU patches will wait
+for this series to be integrated in kernel upstream.
 
-Thanks, I queued both patches to power-supply's for-next branch.
+Please give Huacai and myself some direction and path to go forward with
+this series. Please take into account that we inherit KVM for MIPS in an
+"orphaned" state, and do not know exactly all details how to "adopt" it.
+Forgive us if we made some missteps along the route.
 
--- Sebastian
+We would like to establish a long-lasting, and high-quality, workflow that
+will fit well to both KVM and MIPS kernel development.
 
---yrkgjjfss7htiiu2
-Content-Type: application/pgp-signature; name="signature.asc"
+Please help us do it.
 
------BEGIN PGP SIGNATURE-----
+Thanks in advance!
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7PYigACgkQ2O7X88g7
-+pqx/A/+PGQflv+EzWf4PnqFYmnpcKJ1hrJ2FJit/+ww8TBUU4ZlP614YfZTkDV0
-4QlsHgxFqcR//PC3WFJi2r0jy4PrVwf76Sxe39KxgVHExadsQZspuzfjRdzY6vOY
-lP+5ZvRNbthc9jY3eIhKK840fyBndZMUleiufKXLWTCyU0DYpmi2H1yOV8nnrR+H
-/RCjlxFBG55fyvOcK0nNiuc36/CdEIISGpmUMfUy15sQi6W6+z6HU9kVLnkDpUnN
-70TrYUtfe3nmBtJLF+0Ebx2maBHFqzZJeMuyyHSpmuGLPoH5GtyPyxYsIhci4GXE
-M5m4uQSMvhH4tTb/5rQz4bVL3y5RcWequsS/n4hcrjj7Dfb7aOg1flUQC2N/coQk
-+kwPsWeGZTgJLNnZPuj8TDyvMxoLYTtimLapEXC+kyXoTrlFBpg9a5CM/JFMvNV6
-Dwv2PuW8Xkxzbe2w9RactL/wSDkgdoXK0BKNlM0wSSQz3dCCIxWpW21761E+gJKj
-EyyL3FVEWYZD8sXtqkLqsb2+p7evHGuRB1ZJKihP+4taPP50KFi7AvZjKJ3L1jF0
-tzR7lMGtte/Hd20/uk7ahXbSs2+iLHBba+bM9/mrsyI66LOii8I3JtMr6Afcv/Ss
-AwfTnLTDizJ9mir7G5D10haA9VJA5BbMe47VadqQ2vRfCvKUfOs=
-=OULp
------END PGP SIGNATURE-----
+Aleksandar
 
---yrkgjjfss7htiiu2--
+
+
+> V1 -> V2:
+> 1, Remove "mips: define pud_index() regardless of page table folding"
+>    because it has been applied.
+> 2, Make Loongson-specific code be guarded by CONFIG_CPU_LOONGSON64.
+>
+> V2 -> V3:
+> 1, Emulate a reduced feature list of CPUCFG.
+> 2, Fix all possible checkpatch.pl errors and warnings.
+>
+> V3 -> V4:
+> 1, Emulate LOONGSON_CFG0/LOONGSON_CFG3 in CPUCFG correctly.
+> 2, Update commit messages to explain Loongson-3 Virtual IPI.
+> 3, Add Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>=
+.
+>
+> V4 -> V5:
+> 1, Fix a typo.
+> 2, Update MAINTAINERS.
+>
+> V5 -> V6:
+> 1, Fix a mismatch during rebasing.
+> 2, Add Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>.
+>
+> V6 -> V7:
+> 1, Rebase on latest mips-next (Config6 feature bits definition updated).
+>
+> V7 -> V8:
+> 1, Rebase to be applied on kvm tree, i.e., the linux-next branch of
+>    https://git.kernel.org/pub/scm/virt/kvm/kvm.git/. Building KVM/MIPS
+>    need commit 3fbfb4585bfd4ff34e ("mips: define pud_index() regardless
+>    of page table folding"), which has already been in mips tree but not
+>    in kvm tree.
+>
+> Xing Li(2):
+>  KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
+>  KVM: MIPS: Fix VPN2_MASK definition for variable cpu_vmbits
+>
+> Huacai Chen(13):
+>  KVM: MIPS: Increase KVM_MAX_VCPUS and KVM_USER_MEM_SLOTS to 16
+>  KVM: MIPS: Add EVENTFD support which is needed by VHOST
+>  KVM: MIPS: Use lddir/ldpte instructions to lookup gpa_mm.pgd
+>  KVM: MIPS: Introduce and use cpu_guest_has_ldpte
+>  KVM: MIPS: Use root tlb to control guest's CCA for Loongson-3
+>  KVM: MIPS: Let indexed cacheops cause guest exit on Loongson-3
+>  KVM: MIPS: Add more types of virtual interrupts
+>  KVM: MIPS: Add Loongson-3 Virtual IPI interrupt support
+>  KVM: MIPS: Add CPUCFG emulation for Loongson-3
+>  KVM: MIPS: Add CONFIG6 and DIAG registers emulation
+>  KVM: MIPS: Add more MMIO load/store instructions emulation
+>  KVM: MIPS: Enable KVM support for Loongson-3
+>  MAINTAINERS: Update KVM/MIPS maintainers
+>
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---
+>  MAINTAINERS                          |   4 +-
+>  arch/mips/Kconfig                    |   1 +
+>  arch/mips/include/asm/cpu-features.h |   3 +
+>  arch/mips/include/asm/kvm_host.h     |  52 +++-
+>  arch/mips/include/asm/mipsregs.h     |   7 +
+>  arch/mips/include/uapi/asm/inst.h    |  37 +++
+>  arch/mips/kernel/cpu-probe.c         |   2 +
+>  arch/mips/kvm/Kconfig                |   1 +
+>  arch/mips/kvm/Makefile               |   5 +-
+>  arch/mips/kvm/emulate.c              | 503 +++++++++++++++++++++++++++++=
++++++-
+>  arch/mips/kvm/entry.c                |  19 +-
+>  arch/mips/kvm/interrupt.c            |  93 +------
+>  arch/mips/kvm/interrupt.h            |  14 +-
+>  arch/mips/kvm/loongson_ipi.c         | 214 +++++++++++++++
+>  arch/mips/kvm/mips.c                 |  49 +++-
+>  arch/mips/kvm/tlb.c                  |  41 +++
+>  arch/mips/kvm/trap_emul.c            |   3 +
+>  arch/mips/kvm/vz.c                   | 237 ++++++++++++-----
+>  18 files changed, 1118 insertions(+), 167 deletions(-)
+>  create mode 100644 arch/mips/kvm/loongson_ipi.c
+> --
+> 2.7.0
