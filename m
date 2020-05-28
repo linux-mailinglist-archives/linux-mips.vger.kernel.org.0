@@ -2,174 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3951E54C4
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 05:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5270D1E551D
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 06:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbgE1DrB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 May 2020 23:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726793AbgE1DrA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 May 2020 23:47:00 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66458C05BD1E
-        for <linux-mips@vger.kernel.org>; Wed, 27 May 2020 20:47:00 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id y85so23673844oie.11
-        for <linux-mips@vger.kernel.org>; Wed, 27 May 2020 20:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=2qx91aVPuFO0vUiP0/I7F3TMnsxZODsCo0wW/nZA/Ek=;
-        b=PL6zETkbGU9mqzrGsocE1HBzwqKl3IMV7yV8wFZbGm4wHOwRBD8OMMG+y5JKGvCgPi
-         vm5n3+sf1eGzsQmqX4L8++JRmCX3DzLApuWLh2lFuHx1IPNt0zVceXBi8JMZm08yMjJi
-         dgTLtqCBs6olHY2rqJsuK9NL5GyMjlA9kP/Cz6nR6Si2xwGFFoE603kc/Dr53G3rQp6S
-         gFBb+PddTEBGiaWOuBvRGs40Im9zVq8VTNmoIb/MzDf19j1pLiqnHKik2BuMsIkBrRbh
-         TYnm6OVvmQUcyWzw/IOjcAS7zNs0Q98eBrYT94efLyjDduG9AxjlXGJtnrsATHUpOImZ
-         HIag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=2qx91aVPuFO0vUiP0/I7F3TMnsxZODsCo0wW/nZA/Ek=;
-        b=Y/DmyI10ORG/0j8GXtZ2OcKNCdlPcvCLqCloFnFoWHsPMntoE4PGZwjCZthEuTL8cl
-         mLEf6vKTd34s/koH627ik0FCaTdYj5wg/1OVg4H+4ivWukRmBSG7KSkSLWAmV+ddMThi
-         2flwnddGic5zgnLL8mTkaAUU3nXMcWOmoVbZuOy39Np0ARnmuqsO22L/jgcjbbs/Wt62
-         dOa4R1uirp7ysaL9ZYAehGgzLwB+FwBTyhc4oVhATyvkW/U8GEe+tTIHwy0Iv6REUX3Z
-         2xFtPwLnX6bOlOce2RCfRnwtC34aph7SKaw2dlmHNzF9aCa5kA+X6BcZTyMJN0lTspEs
-         wy2A==
-X-Gm-Message-State: AOAM533Kj5VuptC1pHhGX1pfGDeuTTq099jg68FondzE7rjQkb2aS2Qu
-        ZZQi5Mov4AwijXB7dN95JVRIxA==
-X-Google-Smtp-Source: ABdhPJyOlEQNd0DWG0KMQ3iclWevL0B8TV/DHISOzSWHCezO7ksCSIPPniMHO6dFdL8N85bmZfl1CA==
-X-Received: by 2002:aca:d856:: with SMTP id p83mr958723oig.38.1590637619384;
-        Wed, 27 May 2020 20:46:59 -0700 (PDT)
-Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id v10sm1036334oov.15.2020.05.27.20.46.55
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Wed, 27 May 2020 20:46:58 -0700 (PDT)
-Date:   Wed, 27 May 2020 20:46:22 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@eggly.anvils
-To:     Jerome Glisse <jglisse@redhat.com>
-cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Steven Capper <steve.capper@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Rabin Vincent <rabinv@axis.com>,
-        linux-arm-kernel@lists.infradead.org, rmk+kernel@arm.linux.org.uk,
-        Guo Ren <guoren@kernel.org>, linux-mips@vger.kernel.org,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S1725308AbgE1Edf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 00:33:35 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:50296 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725298AbgE1Edf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 May 2020 00:33:35 -0400
+Received: from [10.20.42.25] (unknown [10.20.42.25])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn2r_Ps9e4wI6AA--.1019S3;
+        Thu, 28 May 2020 12:33:04 +0800 (CST)
+Subject: Re: [PATCH v3 3/3] mm/memory.c: Add memory read privilege before
+ filling PTE entry
+To:     Hugh Dickins <hughd@google.com>
+References: <1589778529-25627-1-git-send-email-maobibo@loongson.cn>
+ <1589778529-25627-3-git-send-email-maobibo@loongson.cn>
+ <20200518135747.d8837ba6742b2d193e14fbb0@linux-foundation.org>
+ <d1646320-51ec-4b5f-bcad-41eba85b78cf@loongson.cn>
+ <alpine.LSU.2.11.2005271329050.6217@eggly.anvils>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
         Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        Ley Foon Tan <lftan@altera.com>,
-        nios2-dev@lists.rocketboards.org, linux-parisc@vger.kernel.org,
-        Helge Deller <deller@gmx.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Guan Xuetao <gxt@pku.edu.cn>,
-        linux-xtensa@linux-xtensa.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Chris Zankel <chris@zankel.net>
-Subject: Re: Cache flush issue with page_mapping_file() and swap back shmem
- page ?
-In-Reply-To: <20200528002033.GB1992500@redhat.com>
-Message-ID: <alpine.LSU.2.11.2005272021220.3857@eggly.anvils>
-References: <20200528002033.GB1992500@redhat.com>
-User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>
+From:   maobibo <maobibo@loongson.cn>
+Message-ID: <b5219f15-f0bb-55b0-010a-104d42bd64c2@loongson.cn>
+Date:   Thu, 28 May 2020 12:33:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <alpine.LSU.2.11.2005271329050.6217@eggly.anvils>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxn2r_Ps9e4wI6AA--.1019S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1kZw48AF47Gry7Jw1xuFg_yoW8KF1fpa
+        ySya12kr4DKrn2yFy2gw1xZF15C3yktFW5WrnxJryj9398XryrKr4aqFZYga1UCr4fCa1F
+        yrW8Xr98ua9xZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvEb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xK
+        xwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjxUg0D7DUUUU
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jerome,
 
-On Wed, 27 May 2020, Jerome Glisse wrote:
-> So any arch code which uses page_mapping_file() might get the wrong
-> answer, this function will return NULL for a swap backed page which
-> can be a shmem pages. But shmem pages can still be shared among
-> multiple process (and possibly at different virtual addresses if
-> mremap was use).
+
+On 05/28/2020 04:55 AM, Hugh Dickins wrote:
+> On Tue, 19 May 2020, maobibo wrote:
+>> On 05/19/2020 04:57 AM, Andrew Morton wrote:
+>>> On Mon, 18 May 2020 13:08:49 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
+>>>
+>>>> On mips platform, hw PTE entry valid bit is set in pte_mkyoung
+>>>> function, it is used to set physical page with readable privilege.
+>>>
+>>> pte_mkyoung() seems to be a strange place to set the pte's valid bit. 
+>>> Why is it done there?  Can it be done within mips's mk_pte()?
+>> On MIPS system hardware cannot set PAGE_ACCESS bit when accessing the page,
+>> software sets PAGE_ACCESS software bit and PAGE_VALID hw bit together during page
+>> fault stage.
+>>
+>> If mk_pte is called in page fault flow, it is ok to set both bits. If it is not 
+>> called in page fault, PAGE_ACCESS is set however there is no actual memory accessing.
 > 
-> Attached is a patch that changes page_mapping_file() to return the
-> shmem mapping for swap backed shmem page. I have not tested it (no
-> way for me to test all those architecture) and i spotted this while
-> working on something else. So i hope someone can take a closer look.
-
-I'm certainly no expert on flush_dcache_page() and friends, but I'd
-be very surprised if such a problem exists, yet has gone unnoticed
-for so long.  page_mapping_file() itself is fairly new, added when
-a risk of crashing on a race with swapoff came in: but the previous
-use of page_mapping() would have suffered equally if there were such
-a cache flushinhg problem here.
-
-And I'm afraid your patch won't do anything to help if there is a
-problem: very soon after shmem calls add_to_swap_cache(), it calls
-shmem_delete_from_page_cache(), which sets page->mapping to NULL.
-
-But I can assure you that a shmem page (unlike an anon page) is never
-put into swap cache while it is mapped into userspace, and never
-mapped into userspace while it is still in swap cache: does that help?
-
-Hugh
-
-> This might be a shmem page that is in a sense a file that
-> can be mapped multiple times in different processes at
-> possibly different virtual addresses (fork + mremap). So
-> return the shmem mapping that will allow any arch code to
-> find all mappings of the page.
+> Sorry for joining in so late, but would you please explain that some more:
+> preferably in the final commit message, if not here.
 > 
-> Note that even if page is not anonymous then the page might
-> have a NULL page->mapping field if it is being truncated,
-> but then it is fine as each pte poiting to the page will be
-> remove and cache flushing should be handled properly by that
-> part of the code.
+> I still don't understand why this is not done in the same way as on other
+> architectures - those that care (I just checked x86, powerpc, arm, arm64,
+> but not all of them) make sure that all the bits they want are there in
+> mm/mmap.c's protection_map[16], which then feeds into vma->vm_page_prot,
+> and so into mk_pte() as Andrew indicated.
 > 
-> Signed-off-by: Jerome Glisse <jglisse@redhat.com>
-> Cc: "Huang, Ying" <ying.huang@intel.com>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: "James E.J. Bottomley" <jejb@parisc-linux.org>
-> ---
->  mm/util.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
+> And I can see that arch/mips/mm/cache.c has a setup_protection_map()
+> to do that: why does it not set the additional bits that you want?
+> including the valid bit and the accessed (young) bit, as others do.
+> Are you saying that there are circumstances in which it is wrong
+> for mk_pte() to set the additional bits?
+MIPS is actually strange here, _PAGE_ACCESSED is not set in protection_map.
+I do not understand history of mips neither. 
+
+On x86/aarch/powerpc system, _PAGE_ACCESSED bit is set in the beginning. How does
+software track memory page accessing frequency?  Does software not care current
+status about _PAGE_ACCESSED bit, just calles madvise_cold to clear this bit, and
+then watches whether this bit is changed or not?
+
+regards
+bibo,mao
 > 
-> diff --git a/mm/util.c b/mm/util.c
-> index 988d11e6c17c..ec8739ab0cc3 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -685,8 +685,24 @@ EXPORT_SYMBOL(page_mapping);
->   */
->  struct address_space *page_mapping_file(struct page *page)
->  {
-> -	if (unlikely(PageSwapCache(page)))
-> +	if (unlikely(PageSwapCache(page))) {
-> +		/*
-> +		 * This might be a shmem page that is in a sense a file that
-> +		 * can be mapped multiple times in different processes at
-> +		 * possibly different virtual addresses (fork + mremap). So
-> +		 * return the shmem mapping that will allow any arch code to
-> +		 * find all mappings of the page.
-> +		 *
-> +		 * Note that even if page is not anonymous then the page might
-> +		 * have a NULL page->mapping field if it is being truncated,
-> +		 * but then it is fine as each pte poiting to the page will be
-> +		 * remove and cache flushing should be handled properly by that
-> +		 * part of the code.
-> +		 */
-> +		if (!PageAnon(page))
-> +			return page->mapping;
->  		return NULL;
-> +	}
->  	return page_mapping(page);
->  }
->  
-> -- 
-> 2.26.2
+> I'm afraid that generic mm developers will have no clue as to whether
+> or not to add a pte_sw_mkyoung() after a mk_pte(); and generic source
+> will be the cleaner if it turns out not to be needed (but thank you
+> for making sure that it does nothing on the other architectures).
+> 
+> Hugh
+> 
+
