@@ -2,64 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 200141E598B
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8B91E598C
 	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 09:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725786AbgE1HqR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 03:46:17 -0400
-Received: from elvis.franken.de ([193.175.24.41]:42141 "EHLO elvis.franken.de"
+        id S1725779AbgE1HqS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 03:46:18 -0400
+Received: from elvis.franken.de ([193.175.24.41]:42134 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725779AbgE1HqR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1725747AbgE1HqR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Thu, 28 May 2020 03:46:17 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jeDF0-0000aG-00; Thu, 28 May 2020 09:46:14 +0200
+        id 1jeDF0-0000aG-01; Thu, 28 May 2020 09:46:14 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id CE484C059F; Thu, 28 May 2020 09:44:31 +0200 (CEST)
-Date:   Thu, 28 May 2020 09:44:31 +0200
+        id D3155C05A4; Thu, 28 May 2020 09:44:48 +0200 (CEST)
+Date:   Thu, 28 May 2020 09:44:48 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        kbuild test robot <lkp@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] MIPS: DTS: Fix build errors used with various configs
-Message-ID: <20200528074431.GA10708@alpha.franken.de>
-References: <1590631141-23904-1-git-send-email-yangtiezhu@loongson.cn>
+To:     Lichao Liu <liulichao@loongson.cn>
+Cc:     Paul Burton <paulburton@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Max Filippov <jcmvbkbc@gmail.com>, jiaxun.yang@flygoat.com,
+        yuanjunqing@loongson.cn, linux-mips@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: CPU_LOONGSON2EF need software to maintain cache
+ consistency
+Message-ID: <20200528074448.GB10708@alpha.franken.de>
+References: <20200528011031.30472-1-liulichao@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1590631141-23904-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <20200528011031.30472-1-liulichao@loongson.cn>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 28, 2020 at 09:59:01AM +0800, Tiezhu Yang wrote:
-> If CONFIG_MIPS_MALTA is not set but CONFIG_LEGACY_BOARD_SEAD3 is set,
-> the subdir arch/mips/boot/dts/mti will not be built, so the sead3.dts
-> which depends on CONFIG_LEGACY_BOARD_SEAD3 in this subdir is also not
-> built, and then there exists the following build error, fix it.
+On Thu, May 28, 2020 at 09:10:31AM +0800, Lichao Liu wrote:
+> CPU_LOONGSON2EF need software to maintain cache consistency,
+> so modify the 'cpu_needs_post_dma_flush' function to return true
+> when the cpu type is CPU_LOONGSON2EF.
 > 
->   LD      .tmp_vmlinux.kallsyms1
-> arch/mips/generic/board-sead3.o:(.mips.machines.init+0x4): undefined reference to `__dtb_sead3_begin'
-> Makefile:1106: recipe for target 'vmlinux' failed
-> make: *** [vmlinux] Error 1
-> 
-> Additionally, add CONFIG_FIT_IMAGE_FDT_BOSTON check for subdir img to
-> fix the following build error when CONFIG_MACH_PISTACHIO is not set but
-> CONFIG_FIT_IMAGE_FDT_BOSTON is set.
-> 
-> FATAL ERROR: Couldn't open "boot/dts/img/boston.dtb": No such file or directory
-> 
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Fixes: 41528ba6afe6 ("MIPS: DTS: Only build subdir of current platform")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Lichao Liu <liulichao@loongson.cn>
 > ---
->  arch/mips/boot/dts/Makefile | 2 ++
->  1 file changed, 2 insertions(+)
+>  arch/mips/mm/dma-noncoherent.c | 1 +
+>  1 file changed, 1 insertion(+)
 
 applied to mips-next.
 
