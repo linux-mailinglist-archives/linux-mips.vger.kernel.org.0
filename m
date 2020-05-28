@@ -2,114 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 560651E5E3A
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 13:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA8E1E608B
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 14:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388340AbgE1L3U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 07:29:20 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:44522 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388271AbgE1L3U (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 May 2020 07:29:20 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxpumIoM9eZzM6AA--.1350S2;
-        Thu, 28 May 2020 19:29:12 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH] MIPS: Loongson64: Remove not used pci.c
-Date:   Thu, 28 May 2020 19:29:11 +0800
-Message-Id: <1590665351-2956-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9AxpumIoM9eZzM6AA--.1350S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr4rZFy5JF13ZF1xKw4DJwb_yoW8Cw1Dpa
-        yfZa17Wrs5JF47AFn3CryUJF9xAa90yrZFyF42gw10gasFv34jqryrJFy8tFWUA3y29ryU
-        Xry8Wr48JF4DGaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4k
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUvdgXUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S2388549AbgE1MPS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 08:15:18 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:54369 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388659AbgE1MPR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 08:15:17 -0400
+Received: from mail-qk1-f174.google.com ([209.85.222.174]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MfqGN-1j6sUk1oFt-00gEJo; Thu, 28 May 2020 14:15:15 +0200
+Received: by mail-qk1-f174.google.com with SMTP id n11so2769561qkn.8;
+        Thu, 28 May 2020 05:15:15 -0700 (PDT)
+X-Gm-Message-State: AOAM530eKgfPfR5PdBX4eCwMWStmPyQPjtpYBIY0fndvl2K15JFOiGlu
+        CakNANWiAUbopkPYbPFD0qDkvRxwK9Zj2Q/bn3Y=
+X-Google-Smtp-Source: ABdhPJzfvNuWOK1guCUgGeDY9M6FaFux05A8VHIga2dOSCy+tzyHgBzVaEldI6eWyDK3W7PJaJeMxRayBbXPfPlTj4w=
+X-Received: by 2002:a37:554:: with SMTP id 81mr2404916qkf.394.1590668114112;
+ Thu, 28 May 2020 05:15:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200526125928.17096-1-Sergey.Semin@baikalelectronics.ru>
+ <20200526125928.17096-5-Sergey.Semin@baikalelectronics.ru> <CAHp75VcfkPPy5YjNrcv8c6doyQz5C47QyREE0v6tfQjXYrBijQ@mail.gmail.com>
+In-Reply-To: <CAHp75VcfkPPy5YjNrcv8c6doyQz5C47QyREE0v6tfQjXYrBijQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 28 May 2020 14:14:58 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2WMqTRitUU86hSV3HSK12-hF_RDoFg51PRGTLmXwznvA@mail.gmail.com>
+Message-ID: <CAK8P3a2WMqTRitUU86hSV3HSK12-hF_RDoFg51PRGTLmXwznvA@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] bus: Add Baikal-T1 AXI-bus driver
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "soc@kernel.org" <soc@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:2RUtEdOqoxSj6/D1h9kvoLb1M2nlEgh0R2kml8qcsCYZsg6LNsU
+ RK+4wK1Qd664mKbXWRsZ9cIwj/y5djaxQ98y1xIPzQD30C63rRbKLhYW0T+BzU3sZCikgRf
+ 9s8tPmE2RT6XLK+94jUZJcCbbnXhUizu30vnz4WIWd36iWAQG1ajiaGKxoIHf19CIdWfldL
+ jqqEf+JFWEljeJ1lpxEwg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CblSyl1ebiw=:i6q0CAHPMQemypmA1dhM1o
+ OOgRwSosRJMn9cY/VVPboGDsdoN+D1Hjw7DM5Qw8DADANPB51C+6xp7hWqypgnyl0GpWWGs/I
+ 6pd7DIj39Bml30kMEQ8vzSwgfHL4RfjFcnuTdrZEkiNY8MDvgpsWkgZD5dqbZ7S04mGGH0bil
+ POJ3pPNPmnOAvS6lu33ijdwIXXg4V9nyKmCSGgD8M6J/sI+Dmcw9yspSpECgYock5dCKRrDV3
+ xepqCVf7eLrXqOhxqjItetWv/MXa5YVBmx0puJiWs21AcIZ+huN7kqa06+FZP2ujK0AdenVVl
+ TGFdmmp2u0qCjMks5TZB2mwWzLh2D2T6sDfKK6AznBKFZ7JP+3XbitivwWj4bpIKMOSkDvsX9
+ 1X9w/ho3qhv8Iw28ijSQqjifdzcBfkuDQrJpkyksp/rWmHlBq3bl6PW5+Lik4GICTnFyEMH+S
+ xg4xPnRzSSiJWt5vmj0qJ2spkSrGP9CHAZz5STv7Ix91t/lxsroOMT8n1M1iWMFZsqqi5Hmpi
+ 2AiZ/1Z49JwJ9Nqu32RTZZxp5cUGCl6b3K+2GFaz0wRzdbXkTTJrrv2MFQbzVX9dZ+sVQMVUa
+ rjF6X5nfiFIWqfaZV3lariHRXc1l8MYfBcbEfawJJIkXXbkXYCULEA/bYlLxYEj55PYEQrDR9
+ QXhSBnTTbB8sUotb91WRr5d5D221Cmk8aK3LgOcx9RMh9AK+w/w4v1qFErIr9MSH6JEV36EOL
+ I6/FFZlz0P6nsv+F8FS3HZ3DKbFMeRBO9Yc5Svgx8PfU3AWNbjeRt60Is3xGrw8GrpTBdoTRJ
+ 5bZxrPaKTN/273H2HZpiSqTQx6eCwxTboWudX5L1aoZgud/x1s=
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit 6423e59a64e7 ("MIPS: Loongson64: Switch to generic PCI
-driver"), arch/mips/loongson64/pci.c is not used any more, remove it.
+On Thu, May 28, 2020 at 12:01 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Tuesday, May 26, 2020, Serge Semin <Sergey.Semin@baikalelectronics.ru> wrote:
+>>
+>> AXI3-bus is the main communication bus connecting all high-speed
+>> peripheral IP-cores with RAM controller and MIPS P5600 cores on Baikal-T1
+>> SoC. Bus traffic arbitration is done by means of DW AMBA 3 AXI
+>> Interconnect (so called AXI Main Interconnect) routing IO requests from
+>> one SoC block to another. This driver provides a way to detect any bus
+>> protocol errors and device not responding situations by means of an
+>> embedded on top of the interconnect errors handler block (EHB). AXI
+>> Interconnect QoS arbitration tuning is currently unsupported.
+>> The bus doesn't provide a way to detect the interconnected devices,
+>> so they are supposed to be statically defined like by means of the
+>> simple-bus sub-nodes.
+>
+>
+>
+> Few comments in case if you need a new version. Main point is about sysfs_streq().
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/loongson64/pci.c | 49 ----------------------------------------------
- 1 file changed, 49 deletions(-)
- delete mode 100644 arch/mips/loongson64/pci.c
+I've applied the patch now and folded in fixes for the build warnings and
+errors pointed out by the test robot, but I did not include the changes you
+suggested.
 
-diff --git a/arch/mips/loongson64/pci.c b/arch/mips/loongson64/pci.c
-deleted file mode 100644
-index a440a27..0000000
---- a/arch/mips/loongson64/pci.c
-+++ /dev/null
-@@ -1,49 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * Copyright (C) 2007 Lemote, Inc. & Institute of Computing Technology
-- * Author: Fuxin Zhang, zhangfx@lemote.com
-- */
--#include <linux/pci.h>
--
--#include <pci.h>
--#include <loongson.h>
--#include <boot_param.h>
--
--static struct resource loongson_pci_mem_resource = {
--	.name	= "pci memory space",
--	.start	= LOONGSON_PCI_MEM_START,
--	.end	= LOONGSON_PCI_MEM_END,
--	.flags	= IORESOURCE_MEM,
--};
--
--static struct resource loongson_pci_io_resource = {
--	.name	= "pci io space",
--	.start	= LOONGSON_PCI_IO_START,
--	.end	= IO_SPACE_LIMIT,
--	.flags	= IORESOURCE_IO,
--};
--
--static struct pci_controller  loongson_pci_controller = {
--	.pci_ops	= &loongson_pci_ops,
--	.io_resource	= &loongson_pci_io_resource,
--	.mem_resource	= &loongson_pci_mem_resource,
--	.mem_offset	= 0x00000000UL,
--	.io_offset	= 0x00000000UL,
--};
--
--
--extern int sbx00_acpi_init(void);
--
--static int __init pcibios_init(void)
--{
--
--	loongson_pci_controller.io_map_base = mips_io_port_base;
--	loongson_pci_mem_resource.start = loongson_sysconf.pci_mem_start_addr;
--	loongson_pci_mem_resource.end = loongson_sysconf.pci_mem_end_addr;
--
--	register_pci_controller(&loongson_pci_controller);
--
--	return 0;
--}
--
--arch_initcall(pcibios_init);
--- 
-2.1.0
+Serge, could you send a follow-up patch to address those?
 
+     Arnd
