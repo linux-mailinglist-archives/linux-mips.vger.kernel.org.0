@@ -2,93 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0D71E641D
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 16:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A991E643C
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 16:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728495AbgE1Oix (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 10:38:53 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:42488 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbgE1Oiv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 10:38:51 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id E422580307C0;
-        Thu, 28 May 2020 14:38:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MN5UivzRgvTa; Thu, 28 May 2020 17:38:48 +0300 (MSK)
-Date:   Thu, 28 May 2020 17:38:47 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
+        id S1726467AbgE1Om6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 10:42:58 -0400
+Received: from mga14.intel.com ([192.55.52.115]:64050 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726209AbgE1Om6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 May 2020 10:42:58 -0400
+IronPort-SDR: vtbITcFiQ2YbsosHlotZ5TWQ5ITJQR6NtriOT2pykokRI0Q0Q+/Wc+ndcx+CvzhtxZj2Zmgz6C
+ dfUly+lqGkhQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2020 07:42:57 -0700
+IronPort-SDR: MkO6wj4WQWMceXjZfzB5XHP7m55tPSxlWuNtkLPz3OT58GauzV8oD1s5UGLHxx51H7En4fHf0p
+ /rVqHKTsQh0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,445,1583222400"; 
+   d="scan'208";a="310944024"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 May 2020 07:42:55 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jeJkH-009RVq-OY; Thu, 28 May 2020 17:42:57 +0300
+Date:   Thu, 28 May 2020 17:42:57 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Arnd Bergmann <arnd@arndb.de>,
-        Lee Jones <lee.jones@linaro.org>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH RESEND v2] mtd: physmap: Add Baikal-T1 physically mapped
- ROMs support
-Message-ID: <20200528143847.vd7b434xtgiaobv4@mobilestation>
-References: <20200526225849.20985-1-Sergey.Semin@baikalelectronics.ru>
- <5f5fc883-1cf0-f0b8-11bb-a60b45d135cd@ti.com>
- <20200528104245.jurucbblufluyjut@mobilestation>
- <0a9160b6-f915-2a2b-582f-3e6d657ca7df@ti.com>
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 05/10] dmaengine: Introduce DMA-device device_caps
+ callback
+Message-ID: <20200528144257.GS1634618@smile.fi.intel.com>
+References: <20200526225022.20405-1-Sergey.Semin@baikalelectronics.ru>
+ <20200526225022.20405-6-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a9160b6-f915-2a2b-582f-3e6d657ca7df@ti.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200526225022.20405-6-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 28, 2020 at 04:35:41PM +0530, Vignesh Raghavendra wrote:
-> 
-> 
-> On 28/05/20 4:12 pm, Serge Semin wrote:
-> [...]
-> >>> +
-> >>> +static map_word __xipram bt1_rom_dummy_read(struct map_info *map,
-> >>> +					  unsigned long ofs)
-> >>> +{
-> >>> +	map_word ret;
-> >>> +
-> >>> +	ret.x[0] = 0xFF;
-> >>> +
-> >>> +	return ret;
-> >>> +}
-> >> Why define dummy_io for "baikal,bt1-boot-rom"? I don't see any use of
-> >> adding a driver that always reads 0xFFs
-> > This is supposed to be temporary solution for the baikal,bt1-boot-rom ROM.
-> > The Boot ROM mirror might reflect either an embedded firmware or the SPI flash
-> > directly mapped into the memory. In former case there is no problem, we can
-> > freely read from the Boot ROM region. But in the later case the mirrored region
-> > (memory mapped SPI flash) is not always accessible. If normal Boot SPI
-> > controller is enabled, then the SPI flash mapping isn't accessible (any attempt
-> > will cause a bus-error). In order to fix this we'd need a mutual exclusive lock,
-> > which would disable the SPI controller while the mirrored memory mapped SPI flash
-> > region needs to be accessed. Such mechanism isn't currently implemented, but it
-> > will in be in the framework of my patch created for the SPI subsystem.
-> > 
-> > My idea was to just provide a dummy callback for now and replace it with normal
-> > IO-methods with mutual exclusive lock-unlocks when the corresponding SPI driver
-> > is accepted.
-> > 
-> 
-> Yes I understand, but I don't see any advantage for end user by
-> providing dummy calls... So please don't add the callbacks until they
-> implement proper functionality
+On Wed, May 27, 2020 at 01:50:16AM +0300, Serge Semin wrote:
+> There are DMA devices (like ours version of Synopsys DW DMAC) which have
+> DMA capabilities non-uniformly redistributed amongst the device channels.
+> In order to provide a way of exposing the channel-specific parameters to
+> the DMA engine consumers, we introduce a new DMA-device callback. In case
+> if provided it gets called from the dma_get_slave_caps() method and is
+> able to override the generic DMA-device capabilities.
 
-Agreed. I'll remove the Baikal-T1 Boot ROM support in the next version.
+> +	if (device->device_caps)
+> +		device->device_caps(chan, caps);
+> +
+>  	return 0;
 
--Sergey
+I dunno why this returns int, but either we get rid of this returned value
+(perhaps in the future, b/c it's not directly related to this series), or
+something like
+
+	if (device->device_caps)
+		return device->device_caps(chan, caps);
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
