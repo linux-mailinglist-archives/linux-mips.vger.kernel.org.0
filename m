@@ -2,113 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9390C1E5E1F
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 13:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560651E5E3A
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 13:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388301AbgE1LUo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 07:20:44 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:42856 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388304AbgE1LUn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 May 2020 07:20:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590664841;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0pDdsaPJ9DSWTCG29xVVgPA72+92+ZpKaGKhvHYc8/o=;
-        b=cnGYK2JC5bYnTT2Pd08ImODjvO31mfBzx6DCuwCatJUslkIA68z3sN8V+SAI0uwCmF7riy
-        oZ98Ejx2vo6hC9D5lt4lZqF3Ah6wX+67qWpQUied2otSd9O0NlcXwKUJNXT0AMsTpkVBtM
-        qZOOCOQ7RFgWFcEOIQTt0/klvhEp9jc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-357-rz4JWXClNKyU_Z2vtGkSbw-1; Thu, 28 May 2020 07:20:37 -0400
-X-MC-Unique: rz4JWXClNKyU_Z2vtGkSbw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C3F14805730;
-        Thu, 28 May 2020 11:20:32 +0000 (UTC)
-Received: from redhat.com (ovpn-113-1.rdu2.redhat.com [10.10.113.1])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E409A7A8B6;
-        Thu, 28 May 2020 11:20:26 +0000 (UTC)
-Date:   Thu, 28 May 2020 07:20:25 -0400
-From:   Jerome Glisse <jglisse@redhat.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Steven Capper <steve.capper@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Rabin Vincent <rabinv@axis.com>,
-        linux-arm-kernel@lists.infradead.org, rmk+kernel@arm.linux.org.uk,
-        Guo Ren <guoren@kernel.org>, linux-mips@vger.kernel.org,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        Ley Foon Tan <lftan@altera.com>,
-        nios2-dev@lists.rocketboards.org, linux-parisc@vger.kernel.org,
-        Helge Deller <deller@gmx.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Guan Xuetao <gxt@pku.edu.cn>,
-        linux-xtensa@linux-xtensa.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Chris Zankel <chris@zankel.net>
-Subject: Re: Cache flush issue with page_mapping_file() and swap back shmem
- page ?
-Message-ID: <20200528112025.GA10175@redhat.com>
-References: <20200528002033.GB1992500@redhat.com>
- <alpine.LSU.2.11.2005272021220.3857@eggly.anvils>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <alpine.LSU.2.11.2005272021220.3857@eggly.anvils>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+        id S2388340AbgE1L3U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 07:29:20 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:44522 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388271AbgE1L3U (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 May 2020 07:29:20 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxpumIoM9eZzM6AA--.1350S2;
+        Thu, 28 May 2020 19:29:12 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] MIPS: Loongson64: Remove not used pci.c
+Date:   Thu, 28 May 2020 19:29:11 +0800
+Message-Id: <1590665351-2956-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxpumIoM9eZzM6AA--.1350S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr4rZFy5JF13ZF1xKw4DJwb_yoW8Cw1Dpa
+        yfZa17Wrs5JF47AFn3CryUJF9xAa90yrZFyF42gw10gasFv34jqryrJFy8tFWUA3y29ryU
+        Xry8Wr48JF4DGaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4k
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUvdgXUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 27, 2020 at 08:46:22PM -0700, Hugh Dickins wrote:
-> Hi Jerome,
-> 
-> On Wed, 27 May 2020, Jerome Glisse wrote:
-> > So any arch code which uses page_mapping_file() might get the wrong
-> > answer, this function will return NULL for a swap backed page which
-> > can be a shmem pages. But shmem pages can still be shared among
-> > multiple process (and possibly at different virtual addresses if
-> > mremap was use).
-> > 
-> > Attached is a patch that changes page_mapping_file() to return the
-> > shmem mapping for swap backed shmem page. I have not tested it (no
-> > way for me to test all those architecture) and i spotted this while
-> > working on something else. So i hope someone can take a closer look.
-> 
-> I'm certainly no expert on flush_dcache_page() and friends, but I'd
-> be very surprised if such a problem exists, yet has gone unnoticed
-> for so long.  page_mapping_file() itself is fairly new, added when
-> a risk of crashing on a race with swapoff came in: but the previous
-> use of page_mapping() would have suffered equally if there were such
-> a cache flushinhg problem here.
-> 
-> And I'm afraid your patch won't do anything to help if there is a
-> problem: very soon after shmem calls add_to_swap_cache(), it calls
-> shmem_delete_from_page_cache(), which sets page->mapping to NULL.
-> 
-> But I can assure you that a shmem page (unlike an anon page) is never
-> put into swap cache while it is mapped into userspace, and never
-> mapped into userspace while it is still in swap cache: does that help?
-> 
+After commit 6423e59a64e7 ("MIPS: Loongson64: Switch to generic PCI
+driver"), arch/mips/loongson64/pci.c is not used any more, remove it.
 
-You are right i missed/forgot the part where shmem is never swapcache
-and mapped at the same time, thus page_mapping_file() can return NULL
-for those as they can no longer have alias mapping.
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/loongson64/pci.c | 49 ----------------------------------------------
+ 1 file changed, 49 deletions(-)
+ delete mode 100644 arch/mips/loongson64/pci.c
 
-Thank you Hugh
-Jérôme
+diff --git a/arch/mips/loongson64/pci.c b/arch/mips/loongson64/pci.c
+deleted file mode 100644
+index a440a27..0000000
+--- a/arch/mips/loongson64/pci.c
++++ /dev/null
+@@ -1,49 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright (C) 2007 Lemote, Inc. & Institute of Computing Technology
+- * Author: Fuxin Zhang, zhangfx@lemote.com
+- */
+-#include <linux/pci.h>
+-
+-#include <pci.h>
+-#include <loongson.h>
+-#include <boot_param.h>
+-
+-static struct resource loongson_pci_mem_resource = {
+-	.name	= "pci memory space",
+-	.start	= LOONGSON_PCI_MEM_START,
+-	.end	= LOONGSON_PCI_MEM_END,
+-	.flags	= IORESOURCE_MEM,
+-};
+-
+-static struct resource loongson_pci_io_resource = {
+-	.name	= "pci io space",
+-	.start	= LOONGSON_PCI_IO_START,
+-	.end	= IO_SPACE_LIMIT,
+-	.flags	= IORESOURCE_IO,
+-};
+-
+-static struct pci_controller  loongson_pci_controller = {
+-	.pci_ops	= &loongson_pci_ops,
+-	.io_resource	= &loongson_pci_io_resource,
+-	.mem_resource	= &loongson_pci_mem_resource,
+-	.mem_offset	= 0x00000000UL,
+-	.io_offset	= 0x00000000UL,
+-};
+-
+-
+-extern int sbx00_acpi_init(void);
+-
+-static int __init pcibios_init(void)
+-{
+-
+-	loongson_pci_controller.io_map_base = mips_io_port_base;
+-	loongson_pci_mem_resource.start = loongson_sysconf.pci_mem_start_addr;
+-	loongson_pci_mem_resource.end = loongson_sysconf.pci_mem_end_addr;
+-
+-	register_pci_controller(&loongson_pci_controller);
+-
+-	return 0;
+-}
+-
+-arch_initcall(pcibios_init);
+-- 
+2.1.0
 
