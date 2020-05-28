@@ -2,95 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA8E1E608B
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 14:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099291E608E
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 14:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388549AbgE1MPS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 08:15:18 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:54369 "EHLO
+        id S2388656AbgE1MRk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 08:17:40 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:50337 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388659AbgE1MPR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 08:15:17 -0400
-Received: from mail-qk1-f174.google.com ([209.85.222.174]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MfqGN-1j6sUk1oFt-00gEJo; Thu, 28 May 2020 14:15:15 +0200
-Received: by mail-qk1-f174.google.com with SMTP id n11so2769561qkn.8;
-        Thu, 28 May 2020 05:15:15 -0700 (PDT)
-X-Gm-Message-State: AOAM530eKgfPfR5PdBX4eCwMWStmPyQPjtpYBIY0fndvl2K15JFOiGlu
-        CakNANWiAUbopkPYbPFD0qDkvRxwK9Zj2Q/bn3Y=
-X-Google-Smtp-Source: ABdhPJzfvNuWOK1guCUgGeDY9M6FaFux05A8VHIga2dOSCy+tzyHgBzVaEldI6eWyDK3W7PJaJeMxRayBbXPfPlTj4w=
-X-Received: by 2002:a37:554:: with SMTP id 81mr2404916qkf.394.1590668114112;
- Thu, 28 May 2020 05:15:14 -0700 (PDT)
+        with ESMTP id S2388556AbgE1MRj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 08:17:39 -0400
+Received: from mail-qk1-f180.google.com ([209.85.222.180]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MnpwC-1jFMmh2RMA-00pJ48; Thu, 28 May 2020 14:17:37 +0200
+Received: by mail-qk1-f180.google.com with SMTP id 205so2817522qkg.3;
+        Thu, 28 May 2020 05:17:37 -0700 (PDT)
+X-Gm-Message-State: AOAM533bgo6TjMvJSO3UclDAwLw+NxLXP2deLshGtUYdT1PaSeksKGeQ
+        X51tKRT7XpjxRCRk+mMpn2MszHdXMS/1rmKCOuo=
+X-Google-Smtp-Source: ABdhPJyiHEmoUm3FgC49M+sAFInaSyXEhI+ENZgqiHVILIEFEm3iu5eYV31B+JBF1JL4HsB5MZy3H6qqFVw84hdPWmg=
+X-Received: by 2002:a37:554:: with SMTP id 81mr2415677qkf.394.1590668253191;
+ Thu, 28 May 2020 05:17:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200526125928.17096-1-Sergey.Semin@baikalelectronics.ru>
- <20200526125928.17096-5-Sergey.Semin@baikalelectronics.ru> <CAHp75VcfkPPy5YjNrcv8c6doyQz5C47QyREE0v6tfQjXYrBijQ@mail.gmail.com>
-In-Reply-To: <CAHp75VcfkPPy5YjNrcv8c6doyQz5C47QyREE0v6tfQjXYrBijQ@mail.gmail.com>
+References: <20200526125928.17096-1-Sergey.Semin@baikalelectronics.ru> <20200526125928.17096-6-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200526125928.17096-6-Sergey.Semin@baikalelectronics.ru>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 28 May 2020 14:14:58 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2WMqTRitUU86hSV3HSK12-hF_RDoFg51PRGTLmXwznvA@mail.gmail.com>
-Message-ID: <CAK8P3a2WMqTRitUU86hSV3HSK12-hF_RDoFg51PRGTLmXwznvA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] bus: Add Baikal-T1 AXI-bus driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+Date:   Thu, 28 May 2020 14:17:17 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1KT6G0pcLt56spm2O_Q5m_s+cdHfUrp2YUStS0wGigwQ@mail.gmail.com>
+Message-ID: <CAK8P3a1KT6G0pcLt56spm2O_Q5m_s+cdHfUrp2YUStS0wGigwQ@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] bus: Add Baikal-T1 APB-bus driver
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Olof Johansson <olof@lixom.net>,
         Rob Herring <robh+dt@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "soc@kernel.org" <soc@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        SoC Team <soc@kernel.org>, DTML <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:2RUtEdOqoxSj6/D1h9kvoLb1M2nlEgh0R2kml8qcsCYZsg6LNsU
- RK+4wK1Qd664mKbXWRsZ9cIwj/y5djaxQ98y1xIPzQD30C63rRbKLhYW0T+BzU3sZCikgRf
- 9s8tPmE2RT6XLK+94jUZJcCbbnXhUizu30vnz4WIWd36iWAQG1ajiaGKxoIHf19CIdWfldL
- jqqEf+JFWEljeJ1lpxEwg==
+X-Provags-ID: V03:K1:gqcTypKXfegn+1FpWmAP3n0+FQ9w9DRUmoRGQ4CSelsVN7rW9dK
+ VQAFPqi42JplsyqjwaZnq0WcLU5gj69quvid6hDFo/UTxD2FDS0sa/1VOr5Dr99WQVeRGmb
+ VSw8jiVv8qAa48tQGZdXkHnceIfjLftCQ5rfSVVohZycXgWBD6wwFA9s/I6P7ZbKsDqGnTN
+ 5LGqjOUxLOWXLgGQzPw9g==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CblSyl1ebiw=:i6q0CAHPMQemypmA1dhM1o
- OOgRwSosRJMn9cY/VVPboGDsdoN+D1Hjw7DM5Qw8DADANPB51C+6xp7hWqypgnyl0GpWWGs/I
- 6pd7DIj39Bml30kMEQ8vzSwgfHL4RfjFcnuTdrZEkiNY8MDvgpsWkgZD5dqbZ7S04mGGH0bil
- POJ3pPNPmnOAvS6lu33ijdwIXXg4V9nyKmCSGgD8M6J/sI+Dmcw9yspSpECgYock5dCKRrDV3
- xepqCVf7eLrXqOhxqjItetWv/MXa5YVBmx0puJiWs21AcIZ+huN7kqa06+FZP2ujK0AdenVVl
- TGFdmmp2u0qCjMks5TZB2mwWzLh2D2T6sDfKK6AznBKFZ7JP+3XbitivwWj4bpIKMOSkDvsX9
- 1X9w/ho3qhv8Iw28ijSQqjifdzcBfkuDQrJpkyksp/rWmHlBq3bl6PW5+Lik4GICTnFyEMH+S
- xg4xPnRzSSiJWt5vmj0qJ2spkSrGP9CHAZz5STv7Ix91t/lxsroOMT8n1M1iWMFZsqqi5Hmpi
- 2AiZ/1Z49JwJ9Nqu32RTZZxp5cUGCl6b3K+2GFaz0wRzdbXkTTJrrv2MFQbzVX9dZ+sVQMVUa
- rjF6X5nfiFIWqfaZV3lariHRXc1l8MYfBcbEfawJJIkXXbkXYCULEA/bYlLxYEj55PYEQrDR9
- QXhSBnTTbB8sUotb91WRr5d5D221Cmk8aK3LgOcx9RMh9AK+w/w4v1qFErIr9MSH6JEV36EOL
- I6/FFZlz0P6nsv+F8FS3HZ3DKbFMeRBO9Yc5Svgx8PfU3AWNbjeRt60Is3xGrw8GrpTBdoTRJ
- 5bZxrPaKTN/273H2HZpiSqTQx6eCwxTboWudX5L1aoZgud/x1s=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:P56ZwZSwquU=:qpr2EqGmU9lbPi3OyeTA9i
+ 37XBmap/IJqHROq+u/+agEArsMC1lcttFfogmHre99NpDNa9r+N2AgUA4kh8ALXpFoHOdQJZa
+ a/AOHTIKpFNzY9jghEFB+1iSzAKILulaWdbp0+mohJignXwJY2JlTrPDXMaRVDG11Sa1UldPB
+ hB3EqaKE67yY+q/rGlkq9wOFMKHS26zdJ5jymxZeD3dhEihE1xYFYFWJzQ7UozbrUuKzHGcZD
+ 10EzwJuiBP305SOzK8B9NM6BY9xzXDiRgQpf0PWAz015FrsljtxhalTxZSbo/xLwUCcepFp/M
+ S4Aktm2kzRl0/fF6L41EEfzu9tKIfd2ZRgAFbqeRvccuTj90u8LRG6b9HaY04dxPmCZPlRr1D
+ IF7Z3RVF1qcthSjrtpbYtwoboiEpKJNYP9N8eEhYuUw/QWmmcjz9uurjRtd/xTeTBjx96dGK5
+ bnPMQJIwZekUHJhK+8PWEALanmV6wjN8BXx26SPUS8/FQcrPiobdgUjzNXLP+/QMOnDGurQnn
+ YpkZm0rxspJ5ZYPgfiIzuTubKgr6nHRDHO6EBbP2YDPbGmtqPZeQszPFbDE6w5nIG4Z+dKcJR
+ rDg0lYnzEz+dtavWnelfHYb6m4T3JE679FbDR3uli/FtG+mxi+CpCC5NmbdNSk8+lFoYAogIX
+ GgqipjSvDsBBE5QGG2kMJNtyQzZkHwo3hfSiwxfEWGJZupzlZsWhQCB+KQhDuAcRgNcevC92K
+ ovcmzY684e/52qCoX8hC91plAO5OElu1JIHV1p84repTv6GrMnsV9QdQCoqf9A0P25C+NqJgy
+ QLMOWPhe0rNuNAahxe26asnAfJGElpVXV9LeNEndTpNImmvXIM=
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 28, 2020 at 12:01 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Tuesday, May 26, 2020, Serge Semin <Sergey.Semin@baikalelectronics.ru> wrote:
->>
->> AXI3-bus is the main communication bus connecting all high-speed
->> peripheral IP-cores with RAM controller and MIPS P5600 cores on Baikal-T1
->> SoC. Bus traffic arbitration is done by means of DW AMBA 3 AXI
->> Interconnect (so called AXI Main Interconnect) routing IO requests from
->> one SoC block to another. This driver provides a way to detect any bus
->> protocol errors and device not responding situations by means of an
->> embedded on top of the interconnect errors handler block (EHB). AXI
->> Interconnect QoS arbitration tuning is currently unsupported.
->> The bus doesn't provide a way to detect the interconnected devices,
->> so they are supposed to be statically defined like by means of the
->> simple-bus sub-nodes.
+On Tue, May 26, 2020 at 2:59 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
 >
+> Baikal-T1 AXI-APB bridge is used to access the SoC subsystem CSRs.
+> IO requests are routed to this bus by means of the DW AMBA 3 AXI
+> Interconnect. In case if an attempted APB transaction stays with no
+> response for a pre-defined time an interrupt occurs and the bus gets
+> freed for a next operation. This driver provides the interrupt handler
+> to detect the erroneous address, prints an error message about the
+> address fault, updates an errors counter. The counter and the APB-bus
+> operations timeout can be accessed via corresponding sysfs nodes.
+> A dedicated sysfs-node can be also used to artificially cause the
+> bus errors described above.
 >
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Olof Johansson <olof@lixom.net>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: soc@kernel.org
+> Cc: devicetree@vger.kernel.org
 >
-> Few comments in case if you need a new version. Main point is about sysfs_streq().
+> ---
 
-I've applied the patch now and folded in fixes for the build warnings and
-errors pointed out by the test robot, but I did not include the changes you
-suggested.
+Applied with this fixup:
 
-Serge, could you send a follow-up patch to address those?
+--- a/drivers/bus/bt1-apb.c
++++ b/drivers/bus/bt1-apb.c
+@@ -16,6 +16,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/interrupt.h>
+ #include <linux/nmi.h>
++#include <linux/of.h>
+ #include <linux/regmap.h>
+ #include <linux/clk.h>
+ #include <linux/reset.h>
+@@ -309,13 +310,13 @@ static ssize_t timeout_store(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(timeout);
 
-     Arnd
+-static int inject_error_show(struct device *dev, struct device_attribute *attr,
++static ssize_t inject_error_show(struct device *dev, struct
+device_attribute *attr,
+                             char *buf)
+ {
+        return scnprintf(buf, PAGE_SIZE, "Error injection: nodev irq\n");
+ }
+
+-static int inject_error_store(struct device *dev,
++static ssize_t inject_error_store(struct device *dev,
+                              struct device_attribute *attr,
+                              const char *data, size_t count)
+ {
