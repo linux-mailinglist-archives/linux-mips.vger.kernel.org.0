@@ -2,84 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5C01E6AA7
-	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 21:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E839E1E6BC1
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2020 21:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406435AbgE1TXr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 15:23:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51762 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406300AbgE1TXo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 May 2020 15:23:44 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B275207BC;
-        Thu, 28 May 2020 19:23:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590693823;
-        bh=KWIzbnUdC0/WL0P4Z1bjwKBGnAgV6PACPp1qBqkmfOE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IW/bkGhIbncJGc2idclnVVmK54Dm09dZ8pvN2ZYPXRa9osghjVdrkr5zdOQNP4yPk
-         h4mf680CpeabAzzXMzZBnMQVROL1MW1W9oIPunSyKYRkxNqBDhI/isso0zFpMeBjdS
-         NbY+A39KRCp8HPTEvyg7cFxsfQjFlQTVpee8GO60=
-Date:   Thu, 28 May 2020 12:23:42 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Bibo Mao <maobibo@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Dmitry Korotin <dkorotin@wavecomp.com>,
-        Philippe =?ISO-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "Maciej W. Rozycki" <macro@wdc.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v7 2/4] mm/memory.c: Update local TLB if PTE entry
- exists
-Message-Id: <20200528122342.11e51dd9c7698d68632f2a81@linux-foundation.org>
-In-Reply-To: <1590546320-21814-3-git-send-email-maobibo@loongson.cn>
-References: <1590546320-21814-1-git-send-email-maobibo@loongson.cn>
-        <1590546320-21814-3-git-send-email-maobibo@loongson.cn>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S2406850AbgE1Txn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 15:53:43 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:44018 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406687AbgE1Txm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 15:53:42 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6A6A38030839;
+        Thu, 28 May 2020 19:53:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id NGsEWW3ofFNe; Thu, 28 May 2020 22:53:38 +0300 (MSK)
+Date:   Thu, 28 May 2020 22:53:38 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 09/10] dmaengine: dw: Introduce max burst length hw
+ config
+Message-ID: <20200528195338.yzl35nhogmyikv43@mobilestation>
+References: <20200526225022.20405-1-Sergey.Semin@baikalelectronics.ru>
+ <20200526225022.20405-10-Sergey.Semin@baikalelectronics.ru>
+ <20200528145224.GT1634618@smile.fi.intel.com>
+ <20200528154022.3reghhjcd4dnsr3g@mobilestation>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200528154022.3reghhjcd4dnsr3g@mobilestation>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 27 May 2020 10:25:18 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
-
-> If two threads concurrently fault at the same page, the thread that
-> won the race updates the PTE and its local TLB. For now, the other
-> thread gives up, simply does nothing, and continues.
+On Thu, May 28, 2020 at 06:40:22PM +0300, Serge Semin wrote:
+> On Thu, May 28, 2020 at 05:52:24PM +0300, Andy Shevchenko wrote:
+> > On Wed, May 27, 2020 at 01:50:20AM +0300, Serge Semin wrote:
+> > > IP core of the DW DMA controller may be synthesized with different
+> > > max burst length of the transfers per each channel. According to Synopsis
+> > > having the fixed maximum burst transactions length may provide some
+> > > performance gain. At the same time setting up the source and destination
+> > > multi size exceeding the max burst length limitation may cause a serious
+> > > problems. In our case the DMA transaction just hangs up. In order to fix
+> > > this lets introduce the max burst length platform config of the DW DMA
+> > > controller device and don't let the DMA channels configuration code
+> > > exceed the burst length hardware limitation.
+> > > 
+> > > Note the maximum burst length parameter can be detected either in runtime
+> > > from the DWC parameter registers or from the dedicated DT property.
+> > > Depending on the IP core configuration the maximum value can vary from
+> > > channel to channel so by overriding the channel slave max_burst capability
+> > > we make sure a DMA consumer will get the channel-specific max burst
+> > > length.
+> > 
+> > ...
+> > 
+> > >  static void dwc_caps(struct dma_chan *chan, struct dma_slave_caps *caps)
+> > >  {
+> > > +	struct dw_dma_chan *dwc = to_dw_dma_chan(chan);
+> > >  
+> > 
 > 
-> It could happen that this second thread triggers another fault, whereby
-> it only updates its local TLB while handling the fault. Instead of
-> triggering another fault, let's directly update the local TLB of the
-> second thread. Function update_mmu_tlb is used here to update local
-> TLB on the second thread, and it is defined as empty on other arches.
+> > Perhaps,
+> > 
+> > 	/* DesignWare DMA supports burst value from 0 */
+> > 	caps->min_burst = 0;
 > 
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -2752,6 +2752,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
->  		new_page = old_page;
->  		page_copied = 1;
->  	} else {
-> +		update_mmu_tlb(vma, vmf->address, vmf->pte);
->  		mem_cgroup_cancel_charge(new_page, memcg, false);
->  	}
->  
+> Regarding min_burst being zero. I don't fully understand what it means.
+> It means no burst or burst with minimum length or what?
+> In fact DW DMA burst length starts from 1. Remember the burst-length run-time
+> parameter we were arguing about? Anyway the driver makes sure that both
+> 0 and 1 requested burst length are setup as burst length of 1 in the
+> CTLx.SRC_MSIZE, CTLx.DST_MSIZE fields.
+> 
+> I agree with the rest of your comments below.
+> 
+> -Sergey
+> 
+> > 
 
-When applying your patches on top of the -mm tree's changes, the above
-hunk didn't apply.  The entire `else' block was removed by
-https://ozlabs.org/~akpm/mmotm/broken-out/mm-memcontrol-convert-anon-and-file-thp-to-new-mem_cgroup_charge-api.patch
+It would be also better to initialize the dw->dma.min_burst field instead
+of setting caps->min_burst in the dwc_caps callback, since the min burst length
+can't vary from channel to channel and it will be copied to the caps->min_burst
+field anyway in the dma_get_slave_caps() method.
 
-I assumed that dropping this hunk was appropriate.  Please check?
+-Sergey
