@@ -2,123 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6881E79AD
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 11:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D22B1E79B3
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 11:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725854AbgE2Jqv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 05:46:51 -0400
-Received: from mga02.intel.com ([134.134.136.20]:17071 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgE2Jqv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 29 May 2020 05:46:51 -0400
-IronPort-SDR: 539K7uaDwjzrIU8fa/6HLyhluG834wxwgg0aJ/ktglJeGRqJ75MQjyqqwQgqo2fh7n2evuGXGv
- Mg/wd1sy/G7Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 02:46:50 -0700
-IronPort-SDR: II27uXDokvwXKCgRIhjvjcyCueBUGtMURUOyoukJkldSCEHUrp2yls6pP7patJwhBtCiYMopHp
- 0F7Dp7NUCI+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
-   d="scan'208";a="256459486"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007.jf.intel.com with ESMTP; 29 May 2020 02:46:46 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jebbE-009aWG-QF; Fri, 29 May 2020 12:46:48 +0300
-Date:   Fri, 29 May 2020 12:46:48 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Linus Walleij <linus.walleij@stericsson.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Alan Cox <alan@linux.intel.com>, Vinod Koul <vkoul@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 05/16] spi: dw: Add SPI Rx-done wait method to
- DMA-based transfer
-Message-ID: <20200529094648.GY1634618@smile.fi.intel.com>
-References: <20200529035915.20790-1-Sergey.Semin@baikalelectronics.ru>
- <20200529035915.20790-6-Sergey.Semin@baikalelectronics.ru>
+        id S1725775AbgE2Jrh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 29 May 2020 05:47:37 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:45927 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbgE2Jrh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 May 2020 05:47:37 -0400
+Received: by mail-io1-f65.google.com with SMTP id y5so1609967iob.12;
+        Fri, 29 May 2020 02:47:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OfElml7yhf6Z5HsY5EprK27AdaqzJIHqrLNGeQYTUtU=;
+        b=RU8558+eITsDuz1ZlX+eBUgZ3DYHmfou4CJKxjPyNzDODnSvHehllPpr7LTz9P93Gt
+         kaH/55SHg4nweIlHYt4FRlj/IzWlA0QNEABWlJ8HDTZEhD9WwH6Pgv7ZhGRzhwoW4hHZ
+         qqM2a+WJJNQ3lHP0BOi9WmX9slDOQkXqF6x9jqK/APzrPVxnK/zYW19A8vdLd5fVajZ/
+         35GJUvr5Wj901gRaYYDE8MfyVGTLaxh5hKoXWCsMf2rrr0aMjyORZaefHc0wY8u5f7yR
+         tuYhw2//wKNuXU4zIdRE9teo7NnwNp309u1zYfiMc+pV3CHDdo79aRg+ZOjj4CnYlu6k
+         mEsw==
+X-Gm-Message-State: AOAM53054ys+shZ1A7EINKUqYTDg6zJxRswi5Si+dulT9cI55nN5Tby0
+        5PMFBCgGl88YFZFlA5NCyk9SlP+OJnzv8cIzWZs=
+X-Google-Smtp-Source: ABdhPJwSWsT9jQI/F3K1Uk5LK241Sz0Q8lWZsuPi949qyceEuDr2zel6BLbhXVZkIXiiKF1EEU9w+uKgAKo/HHxNjHI=
+X-Received: by 2002:a02:958e:: with SMTP id b14mr6500889jai.126.1590745655399;
+ Fri, 29 May 2020 02:47:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529035915.20790-6-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200529034338.1137776-1-jiaxun.yang@flygoat.com>
+ <CAAhV-H5B+6drcEiz=JCexa0LC3JAPS0K5WZ0zwndvuKv-e9NRQ@mail.gmail.com> <82608FDB-FEF8-45FA-85D7-236B46F906B7@flygoat.com>
+In-Reply-To: <82608FDB-FEF8-45FA-85D7-236B46F906B7@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Fri, 29 May 2020 17:47:24 +0800
+Message-ID: <CAAhV-H6ib4K4O3KHuv96iqQd+xbrvC4kYoCut634XzxrgTxu=Q@mail.gmail.com>
+Subject: Re: [PATCH 0/3] MIPS: Loongson64: Initial LS7A PCH support
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 29, 2020 at 06:59:03AM +0300, Serge Semin wrote:
-> Having any data left in the Rx FIFO after the DMA engine claimed it has
-> finished all DMA transactions is an abnormal situation, since the DW SPI
-> controller driver expects to have all the data being fetched and placed
-> into the SPI Rx buffer at that moment. In case if this has happened we
-> assume that DMA engine still may be doing the data fetching, thus we give
-> it sometime to finish. If after a short period of time the data is still
-> left in the Rx FIFO, the driver will give up waiting and return an error
-> indicating that the SPI controller/DMA engine must have hung up or failed
-> at some point of doing their duties.
+Hi, Jiaxun,
 
-...
+On Fri, May 29, 2020 at 12:37 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+>
+>
+> 于 2020年5月29日 GMT+08:00 下午12:13:36, Huacai Chen <chenhc@lemote.com> 写到:
+> >Hi, Jiaxun,
+> >
+> >On Fri, May 29, 2020 at 11:45 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> >>
+> >> With this series, LS7A and Loongson-3A4000 is finally supported
+> >> note that this series should depend on irqchip support[1], which
+> >> is likely to get merged soon.
+> >>
+> >> Thanks.
+> >>
+> >> [1]: https://lkml.org/lkml/2020/5/16/72
+> >>
+> >> Jiaxun Yang (3):
+> >>   dt-bindings: mips: Document two Loongson generic boards
+> >>   MIPS: Loongson64: DeviceTree for LS7A PCH
+> >>   MIPS: Loongson64:Load LS7A dtbs
+> >>
+> >>  .../bindings/mips/loongson/devices.yaml       |   8 +
+> >>  arch/mips/boot/dts/loongson/Makefile          |   5 +-
+> >>  .../dts/loongson/loongson3-r4-package.dtsi    |  74 +++++++
+> >>  .../dts/loongson/loongson3_4core_ls7a.dts     |  25 +++
+> >>  .../boot/dts/loongson/loongson3_r4_ls7a.dts   |  10 +
+> >>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     | 185 ++++++++++++++++++
+> >>  .../asm/mach-loongson64/builtin_dtbs.h        |   2 +
+> >>  arch/mips/loongson64/env.c                    |  56 +++---
+> >>  8 files changed, 342 insertions(+), 23 deletions(-)
+> >>  create mode 100644 arch/mips/boot/dts/loongson/loongson3-r4-package.dtsi
+> >>  create mode 100644 arch/mips/boot/dts/loongson/loongson3_4core_ls7a.dts
+> >>  create mode 100644 arch/mips/boot/dts/loongson/loongson3_r4_ls7a.dts
+> >>  create mode 100644 arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> >I think the naming can be like this: Old processor (Loongson 3A R1~R3)
+> >use loongson64c_ prefix instead of loongson3, new processor (Loongson
+> >3A R4) use loongson64g_ prefix instead of loongson3_r4, and
+> >Loongson-2K use loongson64r_ prefix, this makes them consistent with
+> >their PRID definitions.
+>
+>
+> DeviceTree bindings have stable ABI. Although they're currently
+> only used internally in Kernel. I don't think it's a good idea
+> to rename existing bindings.
+I think consistency is important, and this renaming doesn't break anything.
 
-> +static int dw_spi_dma_wait_rx_done(struct dw_spi *dws)
-> +{
-> +	int retry = WAIT_RETRIES;
-> +	struct spi_delay delay;
-> +	unsigned long ns, us;
-> +	u32 nents;
-> +
-> +	/*
-> +	 * It's unlikely that DMA engine is still doing the data fetching, but
-> +	 * if it's let's give it some reasonable time. The timeout calculation
-> +	 * is based on the synchronous APB/SSI reference clock rate, on a
-> +	 * number of data entries left in the Rx FIFO, times a number of clock
-> +	 * periods normally needed for a single APB read/write transaction
-> +	 * without PREADY signal utilized (which is true for the DW APB SSI
-> +	 * controller).
-> +	 */
-> +	nents = dw_readl(dws, DW_SPI_RXFLR);
-
-> +	ns = NSEC_PER_SEC / dws->max_freq * 4 * nents;
-
-I think we may slightly increase precision by writing this like
-
-	ns = 4 * NSEC_PER_SEC / dws->max_freq * nents;
-
-
-> +	if (ns <= NSEC_PER_USEC) {
-> +		delay.unit = SPI_DELAY_UNIT_NSECS;
-> +		delay.value = ns;
-> +	} else {
-> +		us = DIV_ROUND_UP(ns, NSEC_PER_USEC);
-> +		delay.unit = SPI_DELAY_UNIT_USECS;
-> +		delay.value = clamp_val(us, 0, USHRT_MAX);
-> +	}
-> +
-> +	while (dw_spi_dma_rx_busy(dws) && retry--)
-> +		spi_delay_exec(&delay, NULL);
-> +
-> +	if (retry < 0) {
-> +		dev_err(&dws->master->dev, "Rx hanged up\n");
-> +		return -EIO;
-> +	}
-> +
-> +	return 0;
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>
+> Also, Loongson64C/64G/64R never came to a part of Loongson's
+> official naming. I doubt if end users will recognize these names.
+>
+> I'd prefer keep naming as is. It's really not a big deal.
+>
+> Thanks.
+>
+>
+> >
+> >>
+> >> --
+> >> 2.27.0.rc0
+> >>
+>
+> --
+> Jiaxun Yang
