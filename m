@@ -2,50 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE50B1E7B89
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 13:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE531E7C93
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 14:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725795AbgE2LTU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 07:19:20 -0400
-Received: from elvis.franken.de ([193.175.24.41]:43330 "EHLO elvis.franken.de"
+        id S1726161AbgE2MHa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 08:07:30 -0400
+Received: from mga05.intel.com ([192.55.52.43]:53559 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725775AbgE2LTU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 29 May 2020 07:19:20 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jed2g-0002OI-00; Fri, 29 May 2020 13:19:14 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 1E552C05C4; Fri, 29 May 2020 13:18:58 +0200 (CEST)
-Date:   Fri, 29 May 2020 13:18:58 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Maciej W . Rozycki " <macro@linux-mips.org>
-Subject: Re: [PATCH] MIPS: Fix build warning about "PTR_STR" redefinition
-Message-ID: <20200529111858.GA11955@alpha.franken.de>
-References: <1590740530-15649-1-git-send-email-chenhc@lemote.com>
+        id S1725306AbgE2MHa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 29 May 2020 08:07:30 -0400
+IronPort-SDR: Bfer6wk03mT2tGuEflGjNjQD/LpdEBmp5JhZ/T+oUfWY7DvE/81ziwYLTi/IuiTWTh0AZvxyOk
+ Nz+cOjOJWI+Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 05:07:29 -0700
+IronPort-SDR: yNF5DTHG6JqN87OhLTLFaURzZ477+cwiYfgK44kzkk2DhB1+OHlJPVL9/MYVx5OI27TQLQ/gqt
+ 4nIfwZ55QgOA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
+   d="scan'208";a="311223866"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by FMSMGA003.fm.intel.com with ESMTP; 29 May 2020 05:07:26 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jednN-009bv3-Jq; Fri, 29 May 2020 15:07:29 +0300
+Date:   Fri, 29 May 2020 15:07:29 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 03/11] dmaengine: Introduce min burst length capability
+Message-ID: <20200529120729.GJ1634618@smile.fi.intel.com>
+References: <20200528222401.26941-1-Sergey.Semin@baikalelectronics.ru>
+ <20200528222401.26941-4-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1590740530-15649-1-git-send-email-chenhc@lemote.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200528222401.26941-4-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 29, 2020 at 04:22:10PM +0800, Huacai Chen wrote:
->  arch/mips/include/asm/inst.h      | 779 ------------------------------------
->  arch/mips/include/asm/unaligned.h | 802 ++++++++++++++++++++++++++++++++++++++
+On Fri, May 29, 2020 at 01:23:53AM +0300, Serge Semin wrote:
+> Some hardware aside from default 0/1 may have greater minimum burst
+> transactions length constraints. Here we introduce the DMA device
+> and slave capability, which if required can be initialized by the DMA
+> engine driver with the device-specific value.
 
-please use a different filename for this to avoid another disaster
-because asm/unaligned.h is already used.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thomas.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> 
+> ---
+> 
+> Changelog v3:
+> - This is a new patch created as a result of the discussion with Vinud and
+>   Andy in the framework of DW DMA burst and LLP capabilities.
+> ---
+>  drivers/dma/dmaengine.c   | 1 +
+>  include/linux/dmaengine.h | 4 ++++
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
+> index d31076d9ef25..b332ffe52780 100644
+> --- a/drivers/dma/dmaengine.c
+> +++ b/drivers/dma/dmaengine.c
+> @@ -590,6 +590,7 @@ int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps)
+>  	caps->src_addr_widths = device->src_addr_widths;
+>  	caps->dst_addr_widths = device->dst_addr_widths;
+>  	caps->directions = device->directions;
+> +	caps->min_burst = device->min_burst;
+>  	caps->max_burst = device->max_burst;
+>  	caps->residue_granularity = device->residue_granularity;
+>  	caps->descriptor_reuse = device->descriptor_reuse;
+> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+> index e1c03339918f..0c7403b27133 100644
+> --- a/include/linux/dmaengine.h
+> +++ b/include/linux/dmaengine.h
+> @@ -465,6 +465,7 @@ enum dma_residue_granularity {
+>   *	Since the enum dma_transfer_direction is not defined as bit flag for
+>   *	each type, the dma controller should set BIT(<TYPE>) and same
+>   *	should be checked by controller as well
+> + * @min_burst: min burst capability per-transfer
+>   * @max_burst: max burst capability per-transfer
+>   * @cmd_pause: true, if pause is supported (i.e. for reading residue or
+>   *	       for resume later)
+> @@ -478,6 +479,7 @@ struct dma_slave_caps {
+>  	u32 src_addr_widths;
+>  	u32 dst_addr_widths;
+>  	u32 directions;
+> +	u32 min_burst;
+>  	u32 max_burst;
+>  	bool cmd_pause;
+>  	bool cmd_resume;
+> @@ -769,6 +771,7 @@ struct dma_filter {
+>   *	Since the enum dma_transfer_direction is not defined as bit flag for
+>   *	each type, the dma controller should set BIT(<TYPE>) and same
+>   *	should be checked by controller as well
+> + * @min_burst: min burst capability per-transfer
+>   * @max_burst: max burst capability per-transfer
+>   * @residue_granularity: granularity of the transfer residue reported
+>   *	by tx_status
+> @@ -839,6 +842,7 @@ struct dma_device {
+>  	u32 src_addr_widths;
+>  	u32 dst_addr_widths;
+>  	u32 directions;
+> +	u32 min_burst;
+>  	u32 max_burst;
+>  	bool descriptor_reuse;
+>  	enum dma_residue_granularity residue_granularity;
+> -- 
+> 2.26.2
+> 
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+With Best Regards,
+Andy Shevchenko
+
+
