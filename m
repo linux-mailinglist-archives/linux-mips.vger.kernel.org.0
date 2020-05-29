@@ -2,115 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBB41E8461
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 19:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B861E8488
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 19:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725839AbgE2RLA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 13:11:00 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:54488 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1725821AbgE2RK7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 29 May 2020 13:10:59 -0400
-Received: from localhost.localdomain (unknown [116.236.177.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1725839AbgE2RSh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 13:18:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37498 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725821AbgE2RSg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 29 May 2020 13:18:36 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id D9C18600B5;
-        Sat, 30 May 2020 01:10:57 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1590772258; bh=ASNrwX7HcQNFnmL60IP5kN40LCybxL+sHSIsAtXoOO4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D8CRaCp0ECq0JxH7MUAxChMWY25HhHcV56UP1AwcPOVLBW0T4RWJVa1RnvKFiRKzL
-         8xTsZQAvBAWi2ZtjBJz2QDJii5SL6LSWznVdJOX0F+WcrC55ZgLRHBllzUEuFw1bUh
-         zSnTWOao6svdt6LLNRUGxPDk2GHim2eWqSMMtZmA=
-From:   WANG Xuerui <git@xen0n.name>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     WANG Xuerui <git@xen0n.name>, linux-mips@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH 2/2] MIPS: Expose Loongson CPUCFG availability via HWCAP
-Date:   Sat, 30 May 2020 01:10:00 +0800
-Message-Id: <20200529171000.8905-3-git@xen0n.name>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200529171000.8905-1-git@xen0n.name>
-References: <20200529171000.8905-1-git@xen0n.name>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        by mail.kernel.org (Postfix) with ESMTPSA id 2DA442074D;
+        Fri, 29 May 2020 17:18:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590772716;
+        bh=mjF6mC3mF3QNXp2WlNCL1zZZbC1Evj4Ace79zxEKflE=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=NEz58XCgYR+BQkwlF0Yd0sn/+mQGZhAx5KtSHLjD2aCqLCAR9s9EZJY54qh8LFlUY
+         Kb4mNjHFdf5uYakcB3aw82g4hl78FvjpHtz3tcl3nIPSbRJksZhDDdbMw1O5t0sGPs
+         feK9PjK4ZpJC6F55lSVelSCXhORaCJjf7TNMR29s=
+Date:   Fri, 29 May 2020 18:18:32 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Feng Tang <feng.tang@intel.com>, devicetree@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        linux-mips@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+In-Reply-To: <20200529131205.31838-1-Sergey.Semin@baikalelectronics.ru>
+References: <20200529131205.31838-1-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v6 00/16] spi: dw: Add generic DW DMA controller support
+Message-Id: <159077271266.17043.13820488074564153429.b4-ty@kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The point is to allow userspace to probe for CPUCFG without possibly
-triggering invalid instructions. In addition to that, future Loongson
-feature bits could all be stuffed into CPUCFG bit fields (or "leaves"
-in x86-speak) if Loongson does not make mistakes, so ELF HWCAP bits are
-conserved.
+On Fri, 29 May 2020 16:11:49 +0300, Serge Semin wrote:
+> Baikal-T1 SoC provides a DW DMA controller to perform low-speed peripherals
+> Mem-to-Dev and Dev-to-Mem transaction. This is also applicable to the DW
+> APB SSI devices embedded into the SoC. Currently the DMA-based transfers
+> are supported by the DW APB SPI driver only as a middle layer code for
+> Intel MID/Elkhart PCI devices. Seeing the same code can be used for normal
+> platform DMAC device we introduced a set of patches to fix it within this
+> series.
+> 
+> [...]
 
-The other existing Loongson-specific HWCAP bits are, to my best
-knowledge, unused, as
+Applied to
 
-(1) they are fairly recent additions,
-(2) Loongson never back-ported the patch into their kernel fork, and
-(3) Loongson's existing installed base rarely upgrade, if ever;
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-However, they are still considered userspace ABI, hence unfortunately
-unremovable. But at least we could stop adding new Loongson HWCAP bits
-in the future.
+Thanks!
 
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Huacai Chen <chenhc@lemote.com>
-Signed-off-by: WANG Xuerui <git@xen0n.name>
----
- arch/mips/include/uapi/asm/hwcap.h | 1 +
- arch/mips/loongson64/cpucfg-emul.c | 9 ++++++++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+[01/15] spi: dw: Set xfer effective_speed_hz
+        commit: de4c2875a5ff2c886df60f2086c6affca83f890a
+[02/15] spi: dw: Return any value retrieved from the dma_transfer callback
+        commit: f0410bbf7d0fb80149e3b17d11d31f5b5197873e
+[03/15] spi: dw: Locally wait for the DMA transfers completion
+        commit: bdbdf0f06337d3661b64c0288c291cb06624065e
+[04/15] spi: dw: Add SPI Tx-done wait method to DMA-based transfer
+        commit: 1ade2d8a72f9240825f6be050f0d49c840f7daeb
+[05/15] spi: dw: Add SPI Rx-done wait method to DMA-based transfer
+        commit: 33726eff3d98e643f7d7a0940f4024844b430c82
+[06/15] spi: dw: Parameterize the DMA Rx/Tx burst length
+        commit: c534df9d6225314d1403e4330a22d68c35e0eb55
+[07/15] spi: dw: Use DMA max burst to set the request thresholds
+        commit: 0b2b66514fc9971b3a6002ba038d74f77705fd34
+[08/15] spi: dw: Fix Rx-only DMA transfers
+        commit: 46164fde6b7890e7a3982d54549947c8394c0192
+[09/15] spi: dw: Add core suffix to the DW APB SSI core source file
+        commit: 77ccff803d27279ccc100dc906c6f456c8fa515c
+[10/15] spi: dw: Move Non-DMA code to the DW PCIe-SPI driver
+        commit: 6c710c0cb6725bdbe647b958756685aed0295936
+[11/15] spi: dw: Remove DW DMA code dependency from DW_DMAC_PCI
+        commit: 06cfadb8c51b05c6b91c2d43e0fe72b3d643dced
+[12/15] spi: dw: Add DW SPI DMA/PCI/MMIO dependency on the DW SPI core
+        commit: ecb3a67edfd353837dc23b538fb250d1dfd88e7b
+[13/15] spi: dw: Cleanup generic DW DMA code namings
+        commit: 57784411728ff4d72ae051fdbba1e54fcb1f8d6f
+[14/15] spi: dw: Add DMA support to the DW SPI MMIO driver
+        commit: 0fdad596d46b28d5c3e39d1897c5e3878b64d9a2
+[15/15] spi: dw: Use regset32 DebugFS method to create regdump file
+        commit: 8378449d1f79add31be77e77fc7df9f639878e9c
 
-diff --git a/arch/mips/include/uapi/asm/hwcap.h b/arch/mips/include/uapi/asm/hwcap.h
-index 1ade1daa4921..b7e02bdc1985 100644
---- a/arch/mips/include/uapi/asm/hwcap.h
-+++ b/arch/mips/include/uapi/asm/hwcap.h
-@@ -17,5 +17,6 @@
- #define HWCAP_LOONGSON_MMI  (1 << 11)
- #define HWCAP_LOONGSON_EXT  (1 << 12)
- #define HWCAP_LOONGSON_EXT2 (1 << 13)
-+#define HWCAP_LOONGSON_CPUCFG (1 << 14)
- 
- #endif /* _UAPI_ASM_HWCAP_H */
-diff --git a/arch/mips/loongson64/cpucfg-emul.c b/arch/mips/loongson64/cpucfg-emul.c
-index c16023a13379..ca75f07252df 100644
---- a/arch/mips/loongson64/cpucfg-emul.c
-+++ b/arch/mips/loongson64/cpucfg-emul.c
-@@ -4,6 +4,7 @@
- #include <linux/types.h>
- #include <asm/cpu.h>
- #include <asm/cpu-info.h>
-+#include <asm/elf.h>
- 
- #include <loongson_regs.h>
- #include <cpucfg-emul.h>
-@@ -128,7 +129,7 @@ void loongson3_cpucfg_synthesize_data(struct cpuinfo_mips *c)
- 
- 	/* CPUs with CPUCFG support don't need to synthesize anything. */
- 	if (cpu_has_cfg())
--		return;
-+		goto have_cpucfg_now;
- 
- 	c->loongson3_cpucfg_data[0] = 0;
- 	c->loongson3_cpucfg_data[1] = 0;
-@@ -217,4 +218,10 @@ void loongson3_cpucfg_synthesize_data(struct cpuinfo_mips *c)
- 	patch_cpucfg_sel1(c);
- 	patch_cpucfg_sel2(c);
- 	patch_cpucfg_sel3(c);
-+
-+have_cpucfg_now:
-+	/* We have usable CPUCFG now, emulated or not.
-+	 * Announce CPUCFG availability to userspace via hwcap.
-+	 */
-+	elf_hwcap |= HWCAP_LOONGSON_CPUCFG;
- }
--- 
-2.26.2
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
