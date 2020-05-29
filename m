@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BBF1E8B90
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 00:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18701E8B93
+	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 00:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728473AbgE2Wxr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 18:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S1728406AbgE2WyV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 18:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725913AbgE2Wxr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 May 2020 18:53:47 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAE0C03E969;
-        Fri, 29 May 2020 15:53:47 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id h95so1168818pje.4;
-        Fri, 29 May 2020 15:53:47 -0700 (PDT)
+        with ESMTP id S1725913AbgE2WyU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 May 2020 18:54:20 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E489C03E969;
+        Fri, 29 May 2020 15:54:20 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id y11so1788876plt.12;
+        Fri, 29 May 2020 15:54:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=MylFDr6w/5dfpKOGo8aa5TLw+GcZOzIgst3igfTEQ+U=;
-        b=HohSlJiHAk0uBBwpZ/BHJyPD5TsWSlEpJ/lJHz13uKu8K5YfVqsAopttAfjZN+yeu3
-         aDi3/k8B4e6eNvala1c+hVdyMX9g/O13EUE5917xFA0K2P3R3IM8irFqbcIisIFno8Ec
-         NloEQMrVvWDJgUX79mlPW5VFGOZoSHtMlC6V+9tLuo62+Of7mGu/tj6p5iM/6IyPGXEL
-         meZuZU31mDlB0A9mu+yZm316dm3ofDKWbhQa4ifdtFWydEDhHTXrIOEDjPRmvJo2/Jd3
-         wzGMtrA4hxaPtRpJXW4BCqj57Ibky2dm4tMPn6eChSK0LFfst0aB6DatCvVbjfBjwspV
-         QXUA==
+        bh=ifXv1MWq0pnldCklAzeE2OICw/eIb7ZTvTQ6wbsz1Bs=;
+        b=hvl0lgcNdumOEKXEfkdOt6hAmbikBCCPaeSbokSG2E+xX+TVisqq+9gUB5hzJANNx3
+         ZTgIAi+4Or8PvcH0kvfTcEotvwv2z4eCGzkDPF8nv2eODLu7osGWMBpc3njjurjamwA4
+         WY5G4D52yrYCzpu0ZDXc066fo62yJyHuDT0iX7hHDeig3/2XjwkXGPw1yALW+GRNpiz/
+         LWcS1O67xldLAbIGcsUvlG+xL1MKst0eZR13LZxze7ujC9k2egTwWbboQAdoM1ek85KF
+         /X3Y6yfhk60mTpZMPk5lFEaCKxxWi9uAMi17uNxpQTj+2mDArQBSJ7AQaStI/myyWH0N
+         SQmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MylFDr6w/5dfpKOGo8aa5TLw+GcZOzIgst3igfTEQ+U=;
-        b=dxCxKad7gx7Rec5e6zOCoUzSFcXUtggSKm1qCoTxqPd5hH/jqbxpZO7RvzVo63RsLv
-         WqCUcHYBbxD68FMVMdq3WSuXNvr/9rDGr6+O6vHL1Gk3X/IHMiSuBi0yu/w9G5NusIF5
-         VBVthEHCoK7yAVih2x8DysQPQMZTYMZA0ZqgfaReOMhkm5tro28rY2e+osQMY+eSAxJ1
-         gLGZxoGKBet/dEu+yon2EY0MsDsevgZl6DtN47YrI6fVbnLvSOSy7BqJLlf8sK4mEScL
-         Cgsn4dlWtvAa1zWNVE4FKRlISURAG/B9Bv9U//5BFPSi00VXawGJSFNvMQOr0GM4AgdY
-         b3jw==
-X-Gm-Message-State: AOAM532xUDM+cgRwsKURr/1t+CD2WuiLitjY0YiwmeaT+nhaY8bdGnVU
-        xVNXmhrP0L5THGp0/ruOcls=
-X-Google-Smtp-Source: ABdhPJyWdqXEvTjUGuPpCs1shW4vNFSYO6DXHtyjBO7tB7/dd5D+DtsnBkIPB5oQBYp85uKqXIsRtQ==
-X-Received: by 2002:a17:90a:2070:: with SMTP id n103mr3326785pjc.109.1590792826739;
-        Fri, 29 May 2020 15:53:46 -0700 (PDT)
+        bh=ifXv1MWq0pnldCklAzeE2OICw/eIb7ZTvTQ6wbsz1Bs=;
+        b=UkwxpKbZEVMyq/ZzQPQ51Kvba9WHa0WXucEvp+W3nG9JmsKMI9GZ1c1N63Qj5weDai
+         Tf/5xdpMFsU6aCIfqwMPZbrnRq0Vg6LXpEm9n34okebx5uL+GlCyl+REZTeR99EDk/w9
+         IOiIZ4hEUSN7I3Iy25yXPWCFASQzwH6sDqBMZ/O8l+A7QexMH9KN4MrKCzchnv3M8JZI
+         05VelHf4dJ8ZtFbBBLmFdDjpWTS5U5JSgk95SIeON+j0wH8qNydCcKH8vEHdWxIzWaG4
+         ajprk0EJ9TFf84qHf47ZgHHRnJnGrLnEiB7FU9gTnx8oAdSAnim+C+jjIhm7IT2guPNT
+         sgqg==
+X-Gm-Message-State: AOAM532D0LIwErCAQ5MIMq3c8uC3iXLuAK187q1X9J3343B5zOrOBkAF
+        Xcp77IoWS4bzgfbpJsqAdRw=
+X-Google-Smtp-Source: ABdhPJxcpO6RvSJn8fCrKgbwmeYzhaMXAE9Fy7D388H3g/NTqo4jEt5hFcUd5ZmIB7vvBdMNQYXwPQ==
+X-Received: by 2002:a17:90a:f004:: with SMTP id bt4mr11830951pjb.128.1590792860041;
+        Fri, 29 May 2020 15:54:20 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u12sm412828pjy.37.2020.05.29.15.53.46
+        by smtp.gmail.com with ESMTPSA id 124sm8145430pfb.15.2020.05.29.15.54.19
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 29 May 2020 15:53:46 -0700 (PDT)
-Date:   Fri, 29 May 2020 15:53:45 -0700
+        Fri, 29 May 2020 15:54:19 -0700 (PDT)
+Date:   Fri, 29 May 2020 15:54:18 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -59,28 +59,26 @@ Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/7] dt-bindings: watchdog: dw-wdt: Support devices
- with asynch clocks
-Message-ID: <20200529225345.GA194089@roeck-us.net>
+Subject: Re: [PATCH v3 3/7] dt-bindings: watchdog: dw-wdt: Add watchdog TOPs
+ array property
+Message-ID: <20200529225418.GA194211@roeck-us.net>
 References: <20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru>
- <20200526154123.24402-3-Sergey.Semin@baikalelectronics.ru>
+ <20200526154123.24402-4-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200526154123.24402-3-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200526154123.24402-4-Sergey.Semin@baikalelectronics.ru>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 26, 2020 at 06:41:18PM +0300, Serge Semin wrote:
-> DW Watchdog IP core can be synthesised with asynchronous timer/APB
-> clocks support (WDT_ASYNC_CLK_MODE_ENABLE == 1). In this case
-> separate clock signals are supposed to be used to feed watchdog timer
-> and APB interface of the device. Let's update the DW Watchdog DT node
-> schema so it would support the optional APB3 bus clock specified along
-> with the mandatory watchdog timer reference clock.
+On Tue, May 26, 2020 at 06:41:19PM +0300, Serge Semin wrote:
+> In case if DW Watchdog IP core is built with WDT_USE_FIX_TOP == false,
+> a custom timeout periods are used to preset the timer counter. In
+> this case that periods should be specified in a new "snps,watchdog-tops"
+> property of the DW watchdog dts node.
 > 
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > Reviewed-by: Rob Herring <robh@kernel.org>
@@ -94,29 +92,64 @@ Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > ---
 > 
 > Changelog v2:
-> - It's a new patch unpinned from the previous one.
+> - Rearrange SoBs.
+> - Move $ref to the root level of the "snps,watchdog-tops" property
+>   so does the constraints.
+> - Add default TOP values array.
+> - Discard the label definition from the new bindings example.
+> 
+> Changelog v3:
+> - Remove items property and move the minItems and maxItems constraints to
+>   the root level of the snps,watchdog-tops property.
 > ---
->  .../devicetree/bindings/watchdog/snps,dw-wdt.yaml         | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  .../bindings/watchdog/snps,dw-wdt.yaml        | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> index 4f6944756ab4..5bf6dc6377f3 100644
+> index 5bf6dc6377f3..d9fc7bb851b1 100644
 > --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
 > +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> @@ -24,8 +24,16 @@ properties:
+> @@ -39,6 +39,23 @@ properties:
+>      description: Phandle to the DW Watchdog reset lane
 >      maxItems: 1
 >  
->    clocks:
-> +    minItems: 1
->      items:
->        - description: Watchdog timer reference clock
-> +      - description: APB3 interface clock
+> +  snps,watchdog-tops:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description: |
+> +      DW APB Watchdog custom timer intervals - Timeout Period ranges (TOPs).
+> +      Each TOP is a number loaded into the watchdog counter at the moment of
+> +      the timer restart. The counter decrementing happens each tick of the
+> +      reference clock. Therefore the TOPs array is equivalent to an array of
+> +      the timer expiration intervals supported by the DW APB Watchdog. Note
+> +      DW APB Watchdog IP-core might be synthesized with fixed TOP values,
+> +      in which case this property is unnecessary with default TOPs utilized.
+> +    default: [0x0001000 0x0002000 0x0004000 0x0008000
+> +      0x0010000 0x0020000 0x0040000 0x0080000
+> +      0x0100000 0x0200000 0x0400000 0x0800000
+> +      0x1000000 0x2000000 0x4000000 0x8000000]
+> +    minItems: 16
+> +    maxItems: 16
 > +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: tclk
-> +      - const: pclk
+>  unevaluatedProperties: false
 >  
->    resets:
->      description: Phandle to the DW Watchdog reset lane
+>  required:
+> @@ -55,4 +72,19 @@ examples:
+>        clocks = <&per_base_clk>;
+>        resets = <&wdt_rst>;
+>      };
+> +
+> +  - |
+> +    watchdog@ffd02000 {
+> +      compatible = "snps,dw-wdt";
+> +      reg = <0xffd02000 0x1000>;
+> +      interrupts = <0 171 4>;
+> +      clocks = <&per_base_clk>;
+> +      clock-names = "tclk";
+> +      snps,watchdog-tops = <0x000000FF 0x000001FF 0x000003FF
+> +                            0x000007FF 0x0000FFFF 0x0001FFFF
+> +                            0x0003FFFF 0x0007FFFF 0x000FFFFF
+> +                            0x001FFFFF 0x003FFFFF 0x007FFFFF
+> +                            0x00FFFFFF 0x01FFFFFF 0x03FFFFFF
+> +                            0x07FFFFFF>;
+> +    };
+>  ...
