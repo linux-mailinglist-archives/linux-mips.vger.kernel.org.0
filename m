@@ -2,43 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 732291E7878
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 10:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D9F1E787E
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 10:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725681AbgE2IeK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 04:34:10 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:49866 "EHLO
+        id S1725601AbgE2IhH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 04:37:07 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:49902 "EHLO
         mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1725863AbgE2IeK (ORCPT
+        by vger.kernel.org with ESMTP id S1725306AbgE2IhF (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 29 May 2020 04:34:10 -0400
+        Fri, 29 May 2020 04:37:05 -0400
 Received: from hanazono.local (unknown [116.236.177.50])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E3AAB600B5;
-        Fri, 29 May 2020 16:34:06 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id D26B1600B5;
+        Fri, 29 May 2020 16:37:01 +0800 (CST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1590741247; bh=uCB+DOyhpz1TTCzM2KBtfZzuBBkhIy9M6Mk8dh6nLjQ=;
+        t=1590741422; bh=vcez4Uof2phLwxNSzZXqwMGVMxaC1zLW1pHsq0myX3c=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=hnMGe+Kf01Q602wx4SyyiTr52Lvle5Ekj1P3GXgoQoRz+vpkmuIohMmOujrogGJK3
-         5cuIKBG0nmZyx1UtNO8N8c2vvF8KTFhmUPM1ZC0NWY+IlCrTx6lqx7wzoyqrhapkhQ
-         FP2ae6rt0GQD7EXCBeWPxSE0THA9Pm2oCoCTPw7c=
-Subject: Re: [PATCH] MIPS: Fix build warning about "PTR_STR" redefinition
-To:     Huacai Chen <chenhc@lemote.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Maciej W . Rozycki" <macro@linux-mips.org>
-References: <1590740530-15649-1-git-send-email-chenhc@lemote.com>
+        b=SG6YwROhbzgsHoBEWiufLmgZAk77BQRpFVYx9WLBgSkMfq3syoQzKNTr/H+QPGG7D
+         yatqWt2/TfmdSFwOcAaupd/jqSDZt4xnnyc5VIa9ZG1WQnktn75OFHSMGNM0gY1+1i
+         2yOTP21DNPcWKVc80eOBKS32jEi65rdObG+YmrL0=
+Subject: Re: [PATCH 1/3] dt-bindings: mips: Document two Loongson generic
+ boards
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, maz@kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200529034338.1137776-1-jiaxun.yang@flygoat.com>
+ <20200529034338.1137776-2-jiaxun.yang@flygoat.com>
 From:   WANG Xuerui <kernel@xen0n.name>
-Message-ID: <d649c2a7-13b0-014b-8043-f3fdfbc72fa9@xen0n.name>
-Date:   Fri, 29 May 2020 16:34:06 +0800
+Message-ID: <8ecd4bdd-ad3a-7cd5-65b0-f8a637facc98@xen0n.name>
+Date:   Fri, 29 May 2020 16:37:01 +0800
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
  Gecko/20100101 Thunderbird/78.0a1
 MIME-Version: 1.0
-In-Reply-To: <1590740530-15649-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <20200529034338.1137776-2-jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -47,51 +47,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Huacai,
+Hi Jiaxun,
 
 
-On 2020/5/29 16:22, Huacai Chen wrote:
+On 2020/5/29 11:43, Jiaxun Yang wrote:
+> Document loongson3-8core-ls7a and loongson3-r4-ls7a, with
+> two boards LS7A PCH.
 
-> PTR_STR is redefined when CONFIG_TEST_PRINTF is set. This causes the
-> following build warning:
->
->    CC      lib/test_printf.o
-> lib/test_printf.c:214:0: warning: "PTR_STR" redefined
->   #define PTR_STR "ffff0123456789ab"
->   ^
-> In file included from ./arch/mips/include/asm/dsemul.h:11:0,
->                   from ./arch/mips/include/asm/processor.h:22,
->                   from ./arch/mips/include/asm/thread_info.h:16,
->                   from ./include/linux/thread_info.h:38,
->                   from ./include/asm-generic/preempt.h:5,
->                   from ./arch/mips/include/generated/asm/preempt.h:1,
->                   from ./include/linux/preempt.h:78,
->                   from ./include/linux/spinlock.h:51,
->                   from ./include/linux/seqlock.h:36,
->                   from ./include/linux/time.h:6,
->                   from ./include/linux/stat.h:19,
->                   from ./include/linux/module.h:13,
->                   from lib/test_printf.c:10:
-> ./arch/mips/include/asm/inst.h:20:0: note: this is the location of the previous definition
->   #define PTR_STR  ".dword"
->   ^
->
-> Instead of renaming PTR_STR again and again, it is better to move the
-> unaligned load/store helpers from inst.h to unaligned.h, suggested by
-> Maciej W. Rozycki.
-
-I don't have time to review the implementation at the moment, but you 
-can use the Suggested-by tag to mention Maciej in a structured way.
+"with two boards LS7A PCH" -- maybe you mean "two boards with LS7A PCH"?
 
 >
-> Fixes: e701656ec4db ("MIPS: inst.h: Stop including asm.h to avoid various build failures")
-> Cc: Maciej W. Rozycki" <macro@linux-mips.org>
-> Reported-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->   arch/mips/include/asm/inst.h      | 779 ------------------------------------
->   arch/mips/include/asm/unaligned.h | 802 ++++++++++++++++++++++++++++++++++++++
->   arch/mips/kernel/unaligned.c      |   1 +
->   arch/mips/loongson64/cop2-ex.c    |   1 +
->   4 files changed, 804 insertions(+), 779 deletions(-)
->   create mode 100644 arch/mips/include/asm/unaligned.h
+>   .../devicetree/bindings/mips/loongson/devices.yaml        | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/mips/loongson/devices.yaml b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+> index 74ed4e397a78..6164b0fcb493 100644
+> --- a/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+> +++ b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+> @@ -24,4 +24,12 @@ properties:
+>         - description: Generic Loongson3 Octa Core + RS780E
+>           items:
+>             - const: loongson,loongson3-8core-rs780e
+> +
+> +      - description: Generic Loongson3 Quad Core + LS7A
+> +        items:
+> +          - const: loongson,loongson3-8core-ls7a
+> +
+> +      - description: Generic Loongson3 Release 4 + LS7A
+"R4" instead of "Release 4", as in /proc/cpuinfo output?
+> +        items:
+> +          - const: loongson,loongson3-r4-ls7a
+>   ...
