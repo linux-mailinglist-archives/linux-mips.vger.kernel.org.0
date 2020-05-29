@@ -2,96 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 491001E7FC1
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 16:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A171E802E
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 16:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbgE2OKY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 10:10:24 -0400
-Received: from ms.lwn.net ([45.79.88.28]:58654 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726476AbgE2OKY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 29 May 2020 10:10:24 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id BEE864E5;
-        Fri, 29 May 2020 14:10:22 +0000 (UTC)
-Date:   Fri, 29 May 2020 08:10:21 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     john mathew <john.mathew@unikie.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
-        lukas.bulwahn@gmail.com, x86@kernel.org,
-        linux-mips@vger.kernel.org, tglx@linutronix.de,
-        mostafa.chamanara@gmail.com, willy@infradead.org,
-        valentin.schneider@arm.com, rdunlap@infradead.org,
-        Mostafa Chamanara <mostafa.chamanara@basemark.com>,
-        Oleg Tsymbal <oleg.tsymbal@unikie.com>
-Subject: Re: [RFC PATCH v5 2/3] docs: scheduler: Add scheduler overview
- documentation
-Message-ID: <20200529081021.013e37d9@lwn.net>
-In-Reply-To: <20200529110012.GJ706495@hirez.programming.kicks-ass.net>
-References: <20200514092637.15684-1-John.Mathew@unikie.com>
-        <20200514092637.15684-3-John.Mathew@unikie.com>
-        <20200529110012.GJ706495@hirez.programming.kicks-ass.net>
-Organization: LWN.net
+        id S1726903AbgE2O0t convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 29 May 2020 10:26:49 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:39068 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbgE2O0t (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 May 2020 10:26:49 -0400
+Received: by mail-qt1-f196.google.com with SMTP id k22so2030787qtm.6
+        for <linux-mips@vger.kernel.org>; Fri, 29 May 2020 07:26:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nKBg+KBAm9AMX5S67x4gASOAHBGKT/3jyOi0pbKL+HY=;
+        b=a7nBgn2QbMzqEK4RyCy3Iwx9oNOwDQWBCgjN+h+XN4PP6OJMJ60hYlLV51+8Ynla71
+         5KtkSIPYOdtgNOs4RTH+9jIU2ASaMxI8MU0gBopUvT5KD5JIwkKrBR1GIzbh+mswK5Gj
+         InSbSDLTgNYqus5/U/NozWy2tR/1Nm9VTFGfzg/k/HWRsiP0DeLxqK4Px/QnMDKn6PWr
+         rhpUUiFhlcZYXlegNu924zBcLNsPYYJfHgzsMCaW2ejJ5Jed/VPjDs4Z0uoEnjMurRfQ
+         xjfde5+jhw5Xpz8Vd4d50oso9Yd8yDqHcPTtpb1F+R+eCf/QFmPTYaS3yBBBz9fpQJ4k
+         xUsA==
+X-Gm-Message-State: AOAM531jtbE1UKmUSwMSxHaNiB8qvRtYiS3kKyUZVE+8IGQu3w7CndSe
+        qMsn+GtDM9ZGbY3bnj9+ln5UYlNcOHZBSKVu9jE1md81LYA=
+X-Google-Smtp-Source: ABdhPJwmIHDaotg7MsqXSBveDjy0KO+vzLtFwioqn6V8h01zBqM3SbjaZW0k+Z3ANoEyEekWNd74AEXhFtLjIhYXXhA=
+X-Received: by 2002:ac8:3267:: with SMTP id y36mr9527066qta.241.1590762407748;
+ Fri, 29 May 2020 07:26:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+References: <20200528231628.120171-1-syq@debian.org> <20200529110913.GA11310@alpha.franken.de>
+In-Reply-To: <20200529110913.GA11310@alpha.franken.de>
+From:   YunQiang Su <syq@debian.org>
+Date:   Fri, 29 May 2020 22:26:37 +0800
+Message-ID: <CAKcpw6VkZBtiewrczgT1YS6C1KWf5WnWGf2vZRg+-k24yOD3_Q@mail.gmail.com>
+Subject: Re: [PATCH] mips: add o32_fp64 boot param to disable FP64 support
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips <linux-mips@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 29 May 2020 13:00:12 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+Thomas Bogendoerfer <tsbogend@alpha.franken.de> 于2020年5月29日周五 下午7:09写道：
+>
+> On Fri, May 29, 2020 at 07:16:28AM +0800, YunQiang Su wrote:
+> > When build with CONFIG_O32_FP64_SUPPORTS, even all of the userland
+> > is FPXX, we cannot run any FP32 binary.
+>
+> I don't understand what this means. Can you explain what the problem
+> is ?
+>
 
-> > +**Thermal Pressure**:  
-> 
-> I find these attached headers really hard to read. And what's with the
-> ** stuff ?
-> 
-> Other files in this same patch use a different style:
-> 
-> Header
-> ------
-> test goes here,
-> 
-> Which I find a lot more readable. Use it here too?
+Some or most CPU cannot run FP32 application if
+CONFIG_O32_FP64_SUPPORTS is enabled.
+So we switch the whole Debian archive to FPXX. But the golang cannot
+support FP32 now.
 
-Normal headers would seem to be appropriate here, yes.
+So I wish provides a way to support FP32 and FP64 with a single kernel image.
 
-> > +process runs when. In that context, it has the following tasks:
-> > +
-> > +* share CPU cores equally among all currently running processes.
-> > +* pick appropriate process to run next if required, considering scheduling
-> > +  class/policy and process priorities.
-> > +* balance processes between multiple cores in SMP systems.  
-> 
-> indent the bullets at least one space, like:
-> 
->  * share CPU cores...
->  * pick ..
-> 
-> Write it like you want to read this as a text document. Ignore all that
-> RST bullshit.
+> > Then we need to disable FP64 support temporarily with a boot param:
+> >    o32_fp64=no/disable
+>
+> A boot parameter should IMHO be last resort. But I need to understand
+> the problem first to think about different ways to solve this.
+>
 
-The "RST bullshit" can handle a leading space there just fine.
+Yes, I guess that we have a better solution, but I have no idea how to:
+   1. switch by /sys or /proc ?
+   2. support per-process mode switch.
 
-> > +Runqueue
-> > +~~~~~~~~
-> > +
-> > +:c:type:`struct rq <rq>` is the central data structure of process  
-> 
-> I so hate that rst crap; John, can't we teach the thing that anything
-> called 'struct foo' or 'foo_t' is in fact a C type, just like we did
-> with foo() being a function?
+I think that the 2) should be better.
 
-Yes, we can, we're just waiting for somebody (perhaps even me) to find the
-time to do it. Until then, I think we can probably just leave :c:type: out
-entirely.
+https://web.archive.org/web/20180828210612/https://dmz-
+portal.mips.com/wiki/MIPS_O32_ABI_-_FR0_and_FR1_Interlinking
 
-jon
+
+
+
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
