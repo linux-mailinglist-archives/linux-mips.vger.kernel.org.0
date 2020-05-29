@@ -2,122 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C28BC1E74EA
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 06:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00C71E7789
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 09:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725795AbgE2EhE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 00:37:04 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17751 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725601AbgE2EhE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 29 May 2020 00:37:04 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1590727006; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=lWSPfm98Y1jJKvPQ+zqEgwZKWQ+dXI8RRe12Uf+NwnSxF6lY+LSqfSyZYggTHjvIIL/5uwrWXiDhwzgZohufayND5VkI/FY0P0kxbpway9c4JR+WO1eToWKqasYLQ1BAhxnrZtvuj9/N4lCgkiywdbO+49jasBfOs9zVEU7DQis=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1590727006; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=O1OREt7nYCnv4UCHr9osSF6UWeM6plYBdi9iXc26Tog=; 
-        b=Rxh8XNcvWXhEjfvZKMvGHU9QIFoYNpU9ffCU/4d//cP7WY4kVqHjuVKLuLn23xETJjj30Ln5rl0hOFYo/uA/AYgXJHR2kK/Im9bH35voaasqdcHbnt1LCU3HzwejYu3RS8u18+Qg2ozEBoMyJpcJc9ZOvf/nx/EFhwX8+l6H5dk=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1590727006;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=O1OREt7nYCnv4UCHr9osSF6UWeM6plYBdi9iXc26Tog=;
-        b=dRak7D3Berg9lhxTTkFmLCivUWgTl4Hh3+VjjePj9fPkEr9cJ4g9WbfQ4vRX3/Hl
-        iDJGstJX+RrC4jYL1G3dnZIw2q7D+Xbm0gwGOQTKkcPns0sr9hJ1FUW5tM1gfGNIHEj
-        sf0PrS9Q9ays5AJptPphh0JNlEqoeHl7NsEabYg0=
-Received: from [127.0.0.1] (60.177.188.90 [60.177.188.90]) by mx.zoho.com.cn
-        with SMTPS id 159072700356037.37654661644967; Fri, 29 May 2020 12:36:43 +0800 (CST)
-Date:   Fri, 29 May 2020 12:36:41 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Huacai Chen <chenhc@lemote.com>
-CC:     Marc Zyngier <maz@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] MIPS: Loongson64: Initial LS7A PCH support
-User-Agent: K-9 Mail for Android
-Reply-to: jiaxun.yang@flygoat.com
-In-Reply-To: <CAAhV-H5B+6drcEiz=JCexa0LC3JAPS0K5WZ0zwndvuKv-e9NRQ@mail.gmail.com>
-References: <20200529034338.1137776-1-jiaxun.yang@flygoat.com> <CAAhV-H5B+6drcEiz=JCexa0LC3JAPS0K5WZ0zwndvuKv-e9NRQ@mail.gmail.com>
-Message-ID: <82608FDB-FEF8-45FA-85D7-236B46F906B7@flygoat.com>
+        id S1726326AbgE2Hzu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 03:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725855AbgE2Hzt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 May 2020 03:55:49 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F482C03E969;
+        Fri, 29 May 2020 00:55:49 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id d10so1041788pgn.4;
+        Fri, 29 May 2020 00:55:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z6s9/IaXr38uOMZ+KBf1YjM+loSDtVV15aQ5SUi0HAc=;
+        b=fMC2fYocOCX/Im4iA/3EX4G9gDKBG7O9eP4LUGsZgCVv66R7lTBjYYYhYhhKjmpj0g
+         p0xCkjTLNdHk8YRT95VVHiPtTL5pXPkAdwJg7iXmOHX/K/DoKoX7lvpueEQILVddYCk7
+         BIvsDQIG/GrfCahFkmedOQcoeWqB1D/yVMdECGdjNTABpxzIykzIl0J9DdrrUfYq7dPk
+         Mt4eG4vKx0/0eads3hx6C2T8omGrgLIvqKP77b/wOGy3RIztME6uHkfeSP5Ph1597w5b
+         xyJPhQkzAV5IIql3/FCEdspoE/odHk4CRiG2p+FLZwONEPBSKvjlgKzLJLViAytdJYmf
+         1SiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z6s9/IaXr38uOMZ+KBf1YjM+loSDtVV15aQ5SUi0HAc=;
+        b=pRjjXncrVUrPGqBhH4V6o811uB0ussUBujwg2RwX4rkotW++k35lR8xCeO3XQ+5lXY
+         j67v+Xl+wBOlxwD1dMoi6WkHi3/VNen5pFaXUA8F20LrMqi/US6qEi+XxIm+YWkt/gj3
+         u4IfEzYuw5fSxkzNQ9WtNw3OSK4US3tYgNaDPx2YI0nqWwnja8Ly9US5E/k3/CH52yUz
+         wmDanbiSgF62u7PKWUdMRRAS2eXLAHGHfplyH42yDMQCtokx3AORE5/+9Im+gEo2f/FS
+         5PJAQHimuxo1+bp6aEoHOBpW4OK7J3u0k3g5Udo13ocE59dJd1iNow92jGa4fPt82ue3
+         dltg==
+X-Gm-Message-State: AOAM531apg32BLoohv0HKq3QgYQJ40U2bmjzKPbdQmwvRQ+hQnzj1oXr
+        V91l34T7mO1Nv55xwL7VFB7jLsD3RTde2IfNc74=
+X-Google-Smtp-Source: ABdhPJztQPvnGR2j1lYeQ00/q9iGVvqSwY7oChWZphjYzN55gXTDuT+PJSQMkK+P5HpKDJN8mMSW9rH8kKjsRQY2Epw=
+X-Received: by 2002:a63:c109:: with SMTP id w9mr683396pgf.203.1590738948699;
+ Fri, 29 May 2020 00:55:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
+References: <20200529035915.20790-1-Sergey.Semin@baikalelectronics.ru> <20200529035915.20790-4-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200529035915.20790-4-Sergey.Semin@baikalelectronics.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 29 May 2020 10:55:32 +0300
+Message-ID: <CAHp75VcT2zKnuRW3uxCQtbF0A65cbS20OFpz9sX0hftbjFp1hA@mail.gmail.com>
+Subject: Re: [PATCH v5 03/16] spi: dw: Locally wait for the DMA transactions completion
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>, Feng Tang <feng.tang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-=E4=BA=8E 2020=E5=B9=B45=E6=9C=8829=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=881=
-2:13:36, Huacai Chen <chenhc@lemote=2Ecom> =E5=86=99=E5=88=B0:
->Hi, Jiaxun,
+On Fri, May 29, 2020 at 7:02 AM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
 >
->On Fri, May 29, 2020 at 11:45 AM Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom=
-> wrote:
->>
->> With this series, LS7A and Loongson-3A4000 is finally supported
->> note that this series should depend on irqchip support[1], which
->> is likely to get merged soon=2E
->>
->> Thanks=2E
->>
->> [1]: https://lkml=2Eorg/lkml/2020/5/16/72
->>
->> Jiaxun Yang (3):
->>   dt-bindings: mips: Document two Loongson generic boards
->>   MIPS: Loongson64: DeviceTree for LS7A PCH
->>   MIPS: Loongson64:Load LS7A dtbs
->>
->>  =2E=2E=2E/bindings/mips/loongson/devices=2Eyaml       |   8 +
->>  arch/mips/boot/dts/loongson/Makefile          |   5 +-
->>  =2E=2E=2E/dts/loongson/loongson3-r4-package=2Edtsi    |  74 +++++++
->>  =2E=2E=2E/dts/loongson/loongson3_4core_ls7a=2Edts     |  25 +++
->>  =2E=2E=2E/boot/dts/loongson/loongson3_r4_ls7a=2Edts   |  10 +
->>  arch/mips/boot/dts/loongson/ls7a-pch=2Edtsi     | 185 ++++++++++++++++=
-++
->>  =2E=2E=2E/asm/mach-loongson64/builtin_dtbs=2Eh        |   2 +
->>  arch/mips/loongson64/env=2Ec                    |  56 +++---
->>  8 files changed, 342 insertions(+), 23 deletions(-)
->>  create mode 100644 arch/mips/boot/dts/loongson/loongson3-r4-package=2E=
-dtsi
->>  create mode 100644 arch/mips/boot/dts/loongson/loongson3_4core_ls7a=2E=
-dts
->>  create mode 100644 arch/mips/boot/dts/loongson/loongson3_r4_ls7a=2Edts
->>  create mode 100644 arch/mips/boot/dts/loongson/ls7a-pch=2Edtsi
->I think the naming can be like this: Old processor (Loongson 3A R1~R3)
->use loongson64c_ prefix instead of loongson3, new processor (Loongson
->3A R4) use loongson64g_ prefix instead of loongson3_r4, and
->Loongson-2K use loongson64r_ prefix, this makes them consistent with
->their PRID definitions=2E
-
-
-DeviceTree bindings have stable ABI=2E Although they're currently=20
-only used internally in Kernel=2E I don't think it's a good idea
-to rename existing bindings=2E
-
-Also, Loongson64C/64G/64R never came to a part of Loongson's
-official naming=2E I doubt if end users will recognize these names=2E
-
-I'd prefer keep naming as is=2E It's really not a big deal=2E
-
-Thanks=2E
-
-
+> Even if DMA transactions are finished it doesn't mean that the SPI
+> transfers are also completed. It's specifically concerns the Tx-only
+> SPI transfers, since there might be data left in the SPI Tx FIFO after
+> the DMA engine notifies that the Tx DMA procedure is done. In order to
+> completely fix the problem first the driver has to wait for the DMA
+> transaction completion, then for the corresponding SPI operations to be
+> finished. In this commit we implement the former part of the solution.
 >
->>
->> --
->> 2=2E27=2E0=2Erc0
->>
+> Note we can't just move the SPI operations wait procedure to the DMA
+> completion callbacks, since these callbacks might be executed in the
+> tasklet context (and they will be in case of the DW DMA). In case of
+> slow SPI bus it can cause significant system performance drop.
 
---=20
-Jiaxun Yang
+I read commit message, I read the code. What's going on here since you
+repeated xfer_completion (and its wait routine) from SPI core and I'm
+wondering what happened to it? Why we are not calling
+spi_finalize_current_transfer()?
+
+...
+
+>         dws->master->cur_msg->status = -EIO;
+> -       spi_finalize_current_transfer(dws->master);
+> +       complete(&dws->dma_completion);
+>         return IRQ_HANDLED;
+
+...
+
+> +static int dw_spi_dma_wait(struct dw_spi *dws, struct spi_transfer *xfer)
+> +{
+> +       unsigned long long ms;
+> +
+> +       ms = xfer->len * MSEC_PER_SEC * BITS_PER_BYTE;
+> +       do_div(ms, xfer->effective_speed_hz);
+> +       ms += ms + 200;
+> +
+> +       if (ms > UINT_MAX)
+> +               ms = UINT_MAX;
+> +
+> +       ms = wait_for_completion_timeout(&dws->dma_completion,
+> +                                        msecs_to_jiffies(ms));
+> +
+> +       if (ms == 0) {
+> +               dev_err(&dws->master->cur_msg->spi->dev,
+> +                       "DMA transaction timed out\n");
+> +               return -ETIMEDOUT;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  /*
+>   * dws->dma_chan_busy is set before the dma transfer starts, callback for tx
+>   * channel will clear a corresponding bit.
+> @@ -155,7 +184,7 @@ static void dw_spi_dma_tx_done(void *arg)
+>                 return;
+>
+>         dw_writel(dws, DW_SPI_DMACR, 0);
+> -       spi_finalize_current_transfer(dws->master);
+> +       complete(&dws->dma_completion);
+>  }
+>
+>  static struct dma_async_tx_descriptor *dw_spi_dma_prepare_tx(struct dw_spi *dws,
+> @@ -204,7 +233,7 @@ static void dw_spi_dma_rx_done(void *arg)
+>                 return;
+>
+>         dw_writel(dws, DW_SPI_DMACR, 0);
+> -       spi_finalize_current_transfer(dws->master);
+> +       complete(&dws->dma_completion);
+>  }
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
