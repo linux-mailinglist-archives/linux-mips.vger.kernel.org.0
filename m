@@ -2,140 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BD41E853D
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 19:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277F71E8567
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 19:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725601AbgE2Rjx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 13:39:53 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:36919 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726970AbgE2Rjw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 May 2020 13:39:52 -0400
-Received: by mail-io1-f68.google.com with SMTP id r2so224379ioo.4;
-        Fri, 29 May 2020 10:39:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=oejLW2TdwFzkqvRhC8zsknCWKVy05wzs3NGL4eb1svQ=;
-        b=Nr0kSuG7lGH2UcC+cQxZjakcU8X9cffYPXSgjzJxYY8jLyaHgiYK3XM3iLlz9FGGsM
-         4IMr4gGLbSYFsEl7tGmSwIsIvv0KmUrJ/ykvqV1epfzmfqA9JF9bVbaV++FpkiZlRdkE
-         ED+cJJWrltHI6Oept/tk3tECKQM9obvuWvobta8KICcScM0YjX3g4ewvYaKwG/Rte6+M
-         3QPvtUsUvaAfE7u7vzcOB64MB/WoI99Cjx+VXQSYmWnjv8axNIZlN2PdlN6aF0WtX7+b
-         lwpwnNtrGLKmAs5hP+vt0+gw1ng8OE+uLzqQhng7yWF5UA7BmF7sWWq+QS662v/tqOAB
-         +qjA==
-X-Gm-Message-State: AOAM533SU/UC43v3bbf30EhA8JKl+MBS+E/H5uJlZT6Mx3zsMb6eKzJ/
-        Qn6chGqiir8wYCiWa5Z1tg==
-X-Google-Smtp-Source: ABdhPJznJnHduW0irWqqNPpY54m6wzGKZYPn70I7kC32C7XPYIeKyJTYhLHFXIfK6TrtTFQk3hgubQ==
-X-Received: by 2002:a05:6602:2dca:: with SMTP id l10mr7559840iow.163.1590773991709;
-        Fri, 29 May 2020 10:39:51 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id n27sm5234563ild.76.2020.05.29.10.39.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 10:39:50 -0700 (PDT)
-Received: (nullmailer pid 2629645 invoked by uid 1000);
-        Fri, 29 May 2020 17:39:49 -0000
-Date:   Fri, 29 May 2020 11:39:49 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, tsbogend@alpha.franken.de,
-        hns@goldelico.com, paul@boddie.org.uk, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
-Subject: Re: [PATCH 1/1] dt-bindings: MIPS: Document Ingenic SoCs binding.
-Message-ID: <20200529173949.GA2610526@bogus>
-References: <20200526170722.17206-1-zhouyanjie@wanyeetech.com>
- <20200526170722.17206-2-zhouyanjie@wanyeetech.com>
- <H9DYAQ.4YAB8VVZPLZO@crapouillou.net>
+        id S1726887AbgE2RnP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 13:43:15 -0400
+Received: from mga05.intel.com ([192.55.52.43]:15765 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725601AbgE2RnP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 29 May 2020 13:43:15 -0400
+IronPort-SDR: 0GMQNxtspfvO9n2WV4KXaT5/nEpcR/Tzrj9DPrlyZ5mQ6zLQDaFdzlrCuPUeJRaqmqfgm2Wivj
+ lwjCU0PjEMvA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 10:43:14 -0700
+IronPort-SDR: 0U3ux2djTvRmZBoGuVswrzHuTvOjjj3x8j4Wwlb4QflNcpE+ov/iMsCiFy5ZDECCNVtSqY02px
+ XaROONLLQcuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,449,1583222400"; 
+   d="scan'208";a="285600081"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002.jf.intel.com with ESMTP; 29 May 2020 10:43:09 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jej2G-009fMi-NW; Fri, 29 May 2020 20:43:12 +0300
+Date:   Fri, 29 May 2020 20:43:12 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Feng Tang <feng.tang@intel.com>, devicetree@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Subject: Re: [PATCH v6 00/16] spi: dw: Add generic DW DMA controller support
+Message-ID: <20200529174312.GU1634618@smile.fi.intel.com>
+References: <20200529131205.31838-1-Sergey.Semin@baikalelectronics.ru>
+ <159077271266.17043.13820488074564153429.b4-ty@kernel.org>
+ <20200529172642.hcnvyzv2ocizsvpy@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <H9DYAQ.4YAB8VVZPLZO@crapouillou.net>
+In-Reply-To: <20200529172642.hcnvyzv2ocizsvpy@mobilestation>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 26, 2020 at 09:10:29PM +0200, Paul Cercueil wrote:
-> Hi Zhou,
-> 
-> Le mer. 27 mai 2020 à 1:07, 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> a écrit :
-> > Document the available properties for the SoC root node and the
-> > CPU nodes of the devicetree for the Ingenic XBurst SoCs.
-> > 
-> > Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
-> > Tested-by: Paul Boddie <paul@boddie.org.uk>
-> > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> > ---
-> >  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 57
-> > ++++++++++++++++++++++
-> >  1 file changed, 57 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-> > b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-> > new file mode 100644
-> > index 000000000000..afb02071a756
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-> > @@ -0,0 +1,57 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mips/ingenic/ingenic,cpu.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Bindings for Ingenic XBurst family CPUs
-> > +
-> > +maintainers:
-> > +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> > +
-> > +description:
-> > +  Ingenic XBurst family CPUs shall have the following properties.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +
-> > +      - description: Ingenic XBurst®1 CPU Cores
-> > +        items:
-> 
-> Strip the 'items', put the enum directly.
-> 
-> > +          enum:
-> > +            - ingenic,xburst-mxu1.0
-> > +            - ingenic,xburst-fpu1.0-mxu1.1
-> > +            - ingenic,xburst-fpu2.0-mxu2.0
-> > +
-> > +      - description: Ingenic XBurst®2 CPU Cores
-> > +        items:
-> 
-> Same here.
-> 
-> > +          enum:
-> > +            - ingenic,xburst2-fpu2.1-mxu2.1-smt
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - device_type
-> > +  - compatible
-> > +  - reg
-> 
-> device_type is not in the list of your properties.
+On Fri, May 29, 2020 at 08:26:42PM +0300, Serge Semin wrote:
+> On Fri, May 29, 2020 at 06:18:32PM +0100, Mark Brown wrote:
+> > On Fri, 29 May 2020 16:11:49 +0300, Serge Semin wrote:
+> > > Baikal-T1 SoC provides a DW DMA controller to perform low-speed peripherals
+> > > Mem-to-Dev and Dev-to-Mem transaction. This is also applicable to the DW
+> > > APB SSI devices embedded into the SoC. Currently the DMA-based transfers
+> > > are supported by the DW APB SPI driver only as a middle layer code for
+> > > Intel MID/Elkhart PCI devices. Seeing the same code can be used for normal
+> > > platform DMAC device we introduced a set of patches to fix it within this
+> > > series.
 
-It doesn't have to be. There's already a schema for it in dt-schema. 
-It's not always required there, so requiring here is fine.
+> As you can see it has been acked by Rob. So you can also merge it into your
+> repo. Though It has to be rebased first due to the Dinh Nguyen patches
+> recently merged in. Do you want me to do the rebasing?
 
-It's an oddity of json-schema, but what's listed in required doesn't 
-have to be in 'properties'.
+I guess now you need to rebase it, because as I see the Dinh's patches are in
+the tree as well as yours.
 
-Rob
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
