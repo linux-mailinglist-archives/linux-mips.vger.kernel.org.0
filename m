@@ -2,122 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F431E8707
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 20:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCC01E878D
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 21:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726549AbgE2S63 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 14:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725865AbgE2S62 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 May 2020 14:58:28 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B48AC03E969;
-        Fri, 29 May 2020 11:58:28 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id e4so534177ljn.4;
-        Fri, 29 May 2020 11:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Cu18taknHbe/FbD9yOGPOycvyvQ+EsO0Ye+2x5fPqno=;
-        b=FVPKo3yGU/mqVlof1F0Z4UeYJc9h5xv7/3XxCkDtBAAKy6ndK3q+aMFXbt9ZgXKo+a
-         RjWfLlgoHohemD0C+CcKo4DZF1SN+Hd87TNBq/Pzk5LACsVyZvjFmy7Z+0CE0/KSaRVd
-         VtTEzv/an3wNcUdmNGjjT7Xr0whgTHsGns7eu9m7BN9ixJM5RTezvL5BlUsaToD2bivY
-         koARdORhLmLdVBhjYa2TSPy4O94JBRajg0V+KiuubXrEl3zUK7GvYqfO9bSKl4E8mpJq
-         NMdVIsio7ddwg1yhS73Rgt9gnRDG40Nr6o1/d8HodgZ8dHd86pIxeS4+5x7K9oxa48iM
-         gLPA==
+        id S1727869AbgE2TRz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 15:17:55 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:41574 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726549AbgE2TRy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 May 2020 15:17:54 -0400
+Received: by mail-io1-f68.google.com with SMTP id o5so503534iow.8;
+        Fri, 29 May 2020 12:17:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Cu18taknHbe/FbD9yOGPOycvyvQ+EsO0Ye+2x5fPqno=;
-        b=SDPgCHwIRpVOsLiDAvx3sETuZ7p6P6C3EgLbMjWLCyoynebZ9N3+TRqyVmcyiVYbc0
-         /kOeQWrWm7jGHA/vrHEBkiL1lcmA7peIYqj2YMT/BuOJhfBLOvRLwiVrBb24wa8ly9xX
-         FQIrZzyWYLB2mE4FDmiNpwJvloMp25mS6ytxxktjePDIu45AIq2Fx0LS30+UuUOabgx0
-         bh1QVsuyHxZmhtOmQQrFeIHQO+xx77VjdCSj+9uS3GLVUSuU9k6kpJ7t/WwctjsEaGvB
-         FQgzByaRVgDVRngwBxxWRJItSaW5bkAYUgC6lKPN9KqSqv9/Bdn84d9rFALUiDMiHwp4
-         0PfA==
-X-Gm-Message-State: AOAM530E8wdQXzas+2vjgQ8R9dLYA8Rddy83Og1fiOf3Z9EgYFnIZkmE
-        aSbRowZPKG+KxP3ptPJ99EM=
-X-Google-Smtp-Source: ABdhPJwOPjYAcHWCc0NuNTt+necJgZaSRwtcOXXAuB93AaP9HMLV/49dJxDvmDNMLS9f08cR0TweJw==
-X-Received: by 2002:a2e:8956:: with SMTP id b22mr5129992ljk.16.1590778706764;
-        Fri, 29 May 2020 11:58:26 -0700 (PDT)
-Received: from mobilestation ([95.79.222.123])
-        by smtp.gmail.com with ESMTPSA id q4sm2425667lfm.93.2020.05.29.11.58.25
+        bh=3ddHQiK3DJ2IUR3hVArEyzHKH2yIHD9ENKbZz+fu8a8=;
+        b=iQP8Q9cJSM1YPPKXAJ6SiCauX9rG8A6A7HDJih8gTVCcvXegUNo0Lqn5FV2TmrQdRS
+         aSSilX8tSO5HSRdh8uGJRt9D8Aq1P0OH8SSuGkcm7t2T9km1oFOKjUg5X7l0jFyKjh/r
+         eQeRKYGcJJW6k8yDVFAIYlOch7T2l4ASkRwTBypFBrEe26JTgHiiq/K4KNzpFLcqgGVo
+         BJ09FnhOiZ0eiib1WGR+PhD1de0BWl86NEHT+5R0CZcGlnPr3SMMsk/mGSLwqSRHnh03
+         08heobSJzZ91LS/wvAZi5w1HCZ4EQHt4GYipEeGSgtspnsVbUeInqlB+1tyfY7LLOMH5
+         gwvA==
+X-Gm-Message-State: AOAM532gemgqsEsrg4BsEcm9APgYrCTLeGifRlqaxrjxk/ZBWYzuVuci
+        2vYhBwvZ3F3XCvH4SI0bVbgSrVjy/g==
+X-Google-Smtp-Source: ABdhPJwXpZSrW8Me/AQYrMucDQsG4WjJwB/7zGkaasnF10zu4OJb8NfujUuM7K7ZfhxAEyp+pQzIuw==
+X-Received: by 2002:a5d:8516:: with SMTP id q22mr7822916ion.122.1590779872008;
+        Fri, 29 May 2020 12:17:52 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id n12sm3944640iog.25.2020.05.29.12.17.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 11:58:26 -0700 (PDT)
-Date:   Fri, 29 May 2020 21:58:24 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Fri, 29 May 2020 12:17:50 -0700 (PDT)
+Received: (nullmailer pid 2784485 invoked by uid 1000);
+        Fri, 29 May 2020 19:17:49 -0000
+Date:   Fri, 29 May 2020 13:17:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 02/11] dt-bindings: i2c: Discard i2c-slave flag from
- the DW I2C example
-Message-ID: <20200529185824.o2vcpxe4f63aw465@mobilestation>
-References: <20200527153046.6172-1-Sergey.Semin@baikalelectronics.ru>
- <20200527153046.6172-3-Sergey.Semin@baikalelectronics.ru>
- <20200527153351.rmzguymz7lm6gvsx@mobilestation>
- <20200529181338.GA2676189@bogus>
- <20200529182256.3bp4uvvrvz3ddlrq@mobilestation>
- <20200529184201.GX1634618@smile.fi.intel.com>
- <20200529184534.wyyv5i7hcto5y3d3@mobilestation>
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        devicetree@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v6 02/11] dt-bindings: i2c: Convert DW I2C slave to the
+ DW I2C master example
+Message-ID: <20200529191749.GA2784431@bogus>
+References: <20200528093322.23553-1-Sergey.Semin@baikalelectronics.ru>
+ <20200528093322.23553-3-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200529184534.wyyv5i7hcto5y3d3@mobilestation>
+In-Reply-To: <20200528093322.23553-3-Sergey.Semin@baikalelectronics.ru>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 29, 2020 at 09:45:37PM +0300, Serge Semin wrote:
-> On Fri, May 29, 2020 at 09:42:01PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 29, 2020 at 09:22:56PM +0300, Serge Semin wrote:
-> > > On Fri, May 29, 2020 at 12:13:38PM -0600, Rob Herring wrote:
-> > > > On Wed, May 27, 2020 at 06:33:51PM +0300, Serge Semin wrote:
-> > 
-> > > > you're sending 
-> > > > new versions too fast. Give people time to review.
-> > > 
-> > > Yeah, you did. Sorry for sending the new versions very fast. Normally I prefer
-> > > to keep up with comments so to past a particular maintainer review as fast as
-> > > possible without long delays. In my experience the longer you wait, the lesser
-> > > maintainers remember about your patchset, the harder for one to continue the
-> > > next versions review.
-> > 
+On Thu, 28 May 2020 12:33:12 +0300, Serge Semin wrote:
+> dtc currently doesn't support I2C_OWN_SLAVE_ADDRESS flag set in the
+> i2c "reg" property. If dtc finds an i2c-slave sub-node having an address
+> higher than ten-bits wide it'll print an ugly warning:
+> 
+> Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64: I2C bus unit address format error, expected "40000064"
+> Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64:reg: I2C address must be less than 10-bits, got "0x40000064"
+> 
+> In order to silence dtc up let's replace the corresponding DT binding
+> example with a normal DW I2C master mode-based one. It's done by clearing
+> the I2C_OWN_SLAVE_ADDRESS bit in the reg property and converting the
+> sub-node to be compatible with normal EEPROM like "atmel,24c02".
+> 
+> Just revert this commit when dtc is fixed.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: linux-mips@vger.kernel.org
+> 
+> ---
+> 
+> Rob, even though you asked for such modification, it might be a better to
+> just ignore the warning until dtc is properly fixed. Andy and me agree
+> with that. If you are also on the same side with us, just explicitly nack
+> this patch so Jarkko or Wolfram would ignore it when merging in the series.
+> 
+> Changelog v3:
+> - This is a new patch created as a result of the Rob request to remove
+>   the EEPROM-slave bit setting in the DT binndings example until the dtc
+>   is fixed.
+> 
+> Changelog v6:
+> - Replace the "linux,slave-24c02" compatible string with "atmel,24c02" one
+>   so the example would be perceived as a normal DW I2C master mode.
+> ---
+>  .../devicetree/bindings/i2c/snps,designware-i2c.yaml          | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 
-> > Documentation/process/submitting-patches.rst:
-> > 
-> > "Wait for a minimum of one week before resubmitting or pinging reviewers -
-> > possibly longer during busy times like merge windows."
-> 
-> Good to know what I already know.) How much do you personally wait before
-> resubmitting? In my experience reviewing your DW APB GPIO patches, no longer
-> than a few hours.
-
-Moreover the statement you cited is about the patches, which doesn't get any
-attention from the maintainers/reviewers for quite some time. In this case I
-normally resubmit the patches no sooner than a week. I was talking about the
-situation when you get the review comments, which need to be addressed.
-
--Sergey
-
-> 
-> -Sergey
-> 
-> > 
-> > 
-> > -- 
-> > With Best Regards,
-> > Andy Shevchenko
-> > 
-> > 
+Reviewed-by: Rob Herring <robh@kernel.org>
