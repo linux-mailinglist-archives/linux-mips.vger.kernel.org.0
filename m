@@ -2,27 +2,30 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A7A1E73CD
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 05:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EEC1E73CE
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 05:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436980AbgE2Doc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 May 2020 23:44:32 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:34676 "EHLO
-        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436711AbgE2Doc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 23:44:32 -0400
+        id S2388152AbgE2Dow (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 May 2020 23:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388037AbgE2Dou (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 May 2020 23:44:50 -0400
+Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DC0C08C5C6;
+        Thu, 28 May 2020 20:44:50 -0700 (PDT)
 Received: from localhost.localdomain (unknown [142.147.94.151])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id D79A120C78;
-        Fri, 29 May 2020 03:44:28 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 17AAE20C7A;
+        Fri, 29 May 2020 03:44:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1590723870; bh=0eQlqgW7U08eVzjP2LzMrCsbqr4MkB0jmFuPPb9jrzo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FXOsq1NcI2rleGjtCsFIxXA7FXQfE2Yqfuo+M0sX2x1UlshYtq2TffiLS7L6mXfHD
-         ZW4w6yqQHMNBP2HJ2KFpmiV1JQ4s2H5dPte2zEWQEnNl0nf6sWWPKnjGGA58tm8HGe
-         RkTWFEY3FQSrw92KbtUH1EGYlOg4DvRfZ4wKC9Y/1DWI3+2x2LtkS7UNMU5ER/vH+L
-         9wRK8jCY2/q2TkAG1VYwehRFMc6luGyMiB4Wov5iPwCdCv8ZbKBqJgZNXj3S0mqgqz
-         ZGxN+0zKxoid+jai2QpfpJNJPYI652E8+soO97C0gD9TZjo4K5qyUVD4EahQqav60J
-         LgxDRCDGNecyA==
+        t=1590723888; bh=PwotI4TiGasuhIiQDbOHTos1E5+4xZNTYufK4hQ7lmM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Tf6h3bMWMWFygeU0DFMWWsPUgzvMbkWkda5kT5oWqPwIYWcyGyBWswVZibnikL1G1
+         AKWGqrE2J2zlwW/96sD66GzEtxpOcABK6brRKBmFG3qMPnalhOcRfVlnx/7/dRAJ6T
+         TrBEd+DcJZKvlscRMVoRkU5J9tGlGjMsrPnrC5k/r0qFRMPH0T0zMKb1XC1rsx5B7V
+         oAoc+nVwqsmhBDpoMkify/mMQKm1hBg4aTlI53xDF0pSFYOFzYQX7f2rRC8H/djmjG
+         KcDQDz9RIxoXDi4tRIGqMcv38ArVP9gW7DQrQovpzVx97W7H7QiDHKlA8q/Ck06nhF
+         5wGFoAwM+8UHQ==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     maz@kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -30,10 +33,12 @@ Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] MIPS: Loongson64: Initial LS7A PCH support
-Date:   Fri, 29 May 2020 11:43:17 +0800
-Message-Id: <20200529034338.1137776-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH 1/3] dt-bindings: mips: Document two Loongson generic boards
+Date:   Fri, 29 May 2020 11:43:18 +0800
+Message-Id: <20200529034338.1137776-2-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.27.0.rc0
+In-Reply-To: <20200529034338.1137776-1-jiaxun.yang@flygoat.com>
+References: <20200529034338.1137776-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -41,33 +46,31 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-With this series, LS7A and Loongson-3A4000 is finally supported
-note that this series should depend on irqchip support[1], which
-is likely to get merged soon.
+Document loongson3-8core-ls7a and loongson3-r4-ls7a, with
+two boards LS7A PCH.
 
-Thanks.
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ .../devicetree/bindings/mips/loongson/devices.yaml        | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-[1]: https://lkml.org/lkml/2020/5/16/72
-
-Jiaxun Yang (3):
-  dt-bindings: mips: Document two Loongson generic boards
-  MIPS: Loongson64: DeviceTree for LS7A PCH
-  MIPS: Loongson64:Load LS7A dtbs
-
- .../bindings/mips/loongson/devices.yaml       |   8 +
- arch/mips/boot/dts/loongson/Makefile          |   5 +-
- .../dts/loongson/loongson3-r4-package.dtsi    |  74 +++++++
- .../dts/loongson/loongson3_4core_ls7a.dts     |  25 +++
- .../boot/dts/loongson/loongson3_r4_ls7a.dts   |  10 +
- arch/mips/boot/dts/loongson/ls7a-pch.dtsi     | 185 ++++++++++++++++++
- .../asm/mach-loongson64/builtin_dtbs.h        |   2 +
- arch/mips/loongson64/env.c                    |  56 +++---
- 8 files changed, 342 insertions(+), 23 deletions(-)
- create mode 100644 arch/mips/boot/dts/loongson/loongson3-r4-package.dtsi
- create mode 100644 arch/mips/boot/dts/loongson/loongson3_4core_ls7a.dts
- create mode 100644 arch/mips/boot/dts/loongson/loongson3_r4_ls7a.dts
- create mode 100644 arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-
+diff --git a/Documentation/devicetree/bindings/mips/loongson/devices.yaml b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+index 74ed4e397a78..6164b0fcb493 100644
+--- a/Documentation/devicetree/bindings/mips/loongson/devices.yaml
++++ b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+@@ -24,4 +24,12 @@ properties:
+       - description: Generic Loongson3 Octa Core + RS780E
+         items:
+           - const: loongson,loongson3-8core-rs780e
++
++      - description: Generic Loongson3 Quad Core + LS7A
++        items:
++          - const: loongson,loongson3-8core-ls7a
++
++      - description: Generic Loongson3 Release 4 + LS7A
++        items:
++          - const: loongson,loongson3-r4-ls7a
+ ...
 -- 
 2.27.0.rc0
 
