@@ -2,110 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C971E7997
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 11:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6881E79AD
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 11:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725836AbgE2Jlh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 05:41:37 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:50498 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1725821AbgE2Jlh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 29 May 2020 05:41:37 -0400
-Received: from hanazono.local (unknown [116.236.177.50])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 583C6600B5;
-        Fri, 29 May 2020 17:41:31 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1590745291; bh=VcWN+q8Jj7hAxPSqzkCtFA6pRPi8htA6nJOu2KYPqKc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=VddNvCRk64cGmTSVBcQ8Zu21cRdRfOXESVZ1stCH7BUAzPtOW3hJShj3mwVC0lrXR
-         EN8Zadz8UT1QUbjqM3eqPcVIIbynrTBmNafxIqfFjDq00g00F2yN4zGsKA4lVbaF+D
-         dBWcIL/ZhFoanvzvPAAKq8yERypx7pHboQH1iDTY=
-Subject: Re: [PATCH] function:stacktrace/mips: Fix function:stacktrace for
- mips
-To:     yuanjunqing <yuanjunqing66@163.com>, tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liulichao@loongson.cn
-References: <20200528123640.4285-1-yuanjunqing66@163.com>
- <11c90f15-0a25-e628-c8db-53343c351085@163.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-Message-ID: <43f35844-f78a-74a2-0e3d-184c3567d74f@xen0n.name>
-Date:   Fri, 29 May 2020 17:41:31 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
- Gecko/20100101 Thunderbird/78.0a1
+        id S1725854AbgE2Jqv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 05:46:51 -0400
+Received: from mga02.intel.com ([134.134.136.20]:17071 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725306AbgE2Jqv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 29 May 2020 05:46:51 -0400
+IronPort-SDR: 539K7uaDwjzrIU8fa/6HLyhluG834wxwgg0aJ/ktglJeGRqJ75MQjyqqwQgqo2fh7n2evuGXGv
+ Mg/wd1sy/G7Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 02:46:50 -0700
+IronPort-SDR: II27uXDokvwXKCgRIhjvjcyCueBUGtMURUOyoukJkldSCEHUrp2yls6pP7patJwhBtCiYMopHp
+ 0F7Dp7NUCI+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
+   d="scan'208";a="256459486"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007.jf.intel.com with ESMTP; 29 May 2020 02:46:46 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jebbE-009aWG-QF; Fri, 29 May 2020 12:46:48 +0300
+Date:   Fri, 29 May 2020 12:46:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Linus Walleij <linus.walleij@stericsson.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Alan Cox <alan@linux.intel.com>, Vinod Koul <vkoul@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 05/16] spi: dw: Add SPI Rx-done wait method to
+ DMA-based transfer
+Message-ID: <20200529094648.GY1634618@smile.fi.intel.com>
+References: <20200529035915.20790-1-Sergey.Semin@baikalelectronics.ru>
+ <20200529035915.20790-6-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <11c90f15-0a25-e628-c8db-53343c351085@163.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200529035915.20790-6-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020/5/29 17:29, yuanjunqing wrote:
+On Fri, May 29, 2020 at 06:59:03AM +0300, Serge Semin wrote:
+> Having any data left in the Rx FIFO after the DMA engine claimed it has
+> finished all DMA transactions is an abnormal situation, since the DW SPI
+> controller driver expects to have all the data being fetched and placed
+> into the SPI Rx buffer at that moment. In case if this has happened we
+> assume that DMA engine still may be doing the data fetching, thus we give
+> it sometime to finish. If after a short period of time the data is still
+> left in the Rx FIFO, the driver will give up waiting and return an error
+> indicating that the SPI controller/DMA engine must have hung up or failed
+> at some point of doing their duties.
 
-> May I ask if you have received this email.
+...
 
-At least I have received the complete thread in my inbox, so others may 
-well have no problem.
+> +static int dw_spi_dma_wait_rx_done(struct dw_spi *dws)
+> +{
+> +	int retry = WAIT_RETRIES;
+> +	struct spi_delay delay;
+> +	unsigned long ns, us;
+> +	u32 nents;
+> +
+> +	/*
+> +	 * It's unlikely that DMA engine is still doing the data fetching, but
+> +	 * if it's let's give it some reasonable time. The timeout calculation
+> +	 * is based on the synchronous APB/SSI reference clock rate, on a
+> +	 * number of data entries left in the Rx FIFO, times a number of clock
+> +	 * periods normally needed for a single APB read/write transaction
+> +	 * without PREADY signal utilized (which is true for the DW APB SSI
+> +	 * controller).
+> +	 */
+> +	nents = dw_readl(dws, DW_SPI_RXFLR);
 
-It's not polite to ping maintainers just one day after sending your 
-patch BTW; keep the patch submitting guide[1] under your pillow.
+> +	ns = NSEC_PER_SEC / dws->max_freq * 4 * nents;
 
-Lastly, don't top-post even though your message body is short.
+I think we may slightly increase precision by writing this like
 
-
-[1]: 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#don-t-get-discouraged-or-impatient
+	ns = 4 * NSEC_PER_SEC / dws->max_freq * nents;
 
 
-And a bit of review while we're at it...
+> +	if (ns <= NSEC_PER_USEC) {
+> +		delay.unit = SPI_DELAY_UNIT_NSECS;
+> +		delay.value = ns;
+> +	} else {
+> +		us = DIV_ROUND_UP(ns, NSEC_PER_USEC);
+> +		delay.unit = SPI_DELAY_UNIT_USECS;
+> +		delay.value = clamp_val(us, 0, USHRT_MAX);
+> +	}
+> +
+> +	while (dw_spi_dma_rx_busy(dws) && retry--)
+> +		spi_delay_exec(&delay, NULL);
+> +
+> +	if (retry < 0) {
+> +		dev_err(&dws->master->dev, "Rx hanged up\n");
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
 
->
-> ÔÚ 2020/5/28 ÏÂÎç8:36, YuanJunQing Ð´µÀ:
->> ftrace_call as global symbol in ftrace_caller(), this
->> will cause function:stacktrace can not work well.
-Chinglish. I can't understand this despite being a Chinese myself...
->> i.e. echo do_IRQ:stacktrace > set_ftrace_filte
-The commit message is truncated? I can't seem to make sense of this line.
->>
->> Signed-off-by: YuanJunQing <yuanjunqing66@163.com>
->> ---
->>   arch/mips/kernel/mcount.S | 13 +++++++++++--
->>   1 file changed, 11 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/mips/kernel/mcount.S b/arch/mips/kernel/mcount.S
->> index cff52b283e03..cd5545764e5f 100644
->> --- a/arch/mips/kernel/mcount.S
->> +++ b/arch/mips/kernel/mcount.S
->> @@ -87,8 +87,15 @@ EXPORT_SYMBOL(_mcount)
->>   	PTR_LA   t1, _etext
->>   	sltu     t3, t1, a0	/* t3 = (a0 > _etext) */
->>   	or       t1, t2, t3
->> +	PTR_LA	 t2, stlab-4 	/* t2: "function:stacktrace" return address */
->> +	move	 a1, AT		/* arg2: parent's return address */
->>   	beqz     t1, ftrace_call
->> -	 nop
->> +	 nop			/* "function:stacktrace" return address */
->> +stlab:
->> +	PTR_LA	t2, stlab-4
->> +	/* ftrace_call_end: ftrace_call return address */
->> +	beq	t2,ra, ftrace_call_end
->> +	nop
->>   #if defined(KBUILD_MCOUNT_RA_ADDRESS) && defined(CONFIG_32BIT)
->>   	PTR_SUBU a0, a0, 16	/* arg1: adjust to module's recorded callsite */
->>   #else
->> @@ -98,7 +105,9 @@ EXPORT_SYMBOL(_mcount)
->>   	.globl ftrace_call
->>   ftrace_call:
->>   	nop	/* a placeholder for the call to a real tracing function */
->> -	 move	a1, AT		/* arg2: parent's return address */
->> +	move	ra, t2		/* t2: "function:stacktrace" return address */
->> +
->> +ftrace_call_end:
->>   
->>   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->>   	.globl ftrace_graph_call
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
