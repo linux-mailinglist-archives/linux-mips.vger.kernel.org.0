@@ -2,128 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7D01E826D
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 17:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D33D1E845A
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 19:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726886AbgE2Ps2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 11:48:28 -0400
-Received: from mga17.intel.com ([192.55.52.151]:9070 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726838AbgE2Ps2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 29 May 2020 11:48:28 -0400
-IronPort-SDR: sOnZYYRLdCtMp3MPBKDg/eThkYEZopM5VtRKbFg6g0ZBuc86wgUF3s6WWrBlwg/Xm+BxIESxJN
- 03yU10PkQCLA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 08:48:27 -0700
-IronPort-SDR: 8rg70f1m/iIwW8+EDUPTct8YHZ43T8EY1iyW9lBF7nyta2UH/zf11NB6nAF3S6iy4FrDiciOm3
- SK5FxgETFldQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,449,1583222400"; 
-   d="scan'208";a="311277341"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by FMSMGA003.fm.intel.com with ESMTP; 29 May 2020 08:48:24 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jehFD-009dqd-LX; Fri, 29 May 2020 18:48:27 +0300
-Date:   Fri, 29 May 2020 18:48:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 09/11] dmaengine: dw: Initialize min and max burst DMA
- device capability
-Message-ID: <20200529154827.GT1634618@smile.fi.intel.com>
-References: <20200529144054.4251-1-Sergey.Semin@baikalelectronics.ru>
- <20200529144054.4251-10-Sergey.Semin@baikalelectronics.ru>
+        id S1725839AbgE2RKc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 13:10:32 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:54470 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1725821AbgE2RKc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 29 May 2020 13:10:32 -0400
+Received: from localhost.localdomain (unknown [116.236.177.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 6308B600B5;
+        Sat, 30 May 2020 01:10:27 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1590772227; bh=ws7rbod/BuGxMR0lY8uPxlvbp/b4yKJo3tXnGlGADFg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e/APdZCe84Z0FKR1201Z0QWxQOp8eWbJBXX0GjFuIT3ITDdAa3tOHGrt50obybTh6
+         ZevVvGNyjsjskYRGpC67XoWlP/yueOyzHqNcWXTcR5SVqQBP5kL4l2OPS7lV/W9BtU
+         7TuznpfMs/VB+hw8o0mANo33Pa3WPl+poDs+gXTA=
+From:   WANG Xuerui <git@xen0n.name>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     WANG Xuerui <git@xen0n.name>, linux-mips@vger.kernel.org
+Subject: [PATCH 0/2] CPUCFG emulation future-proofing & HWCAP addition
+Date:   Sat, 30 May 2020 01:09:58 +0800
+Message-Id: <20200529171000.8905-1-git@xen0n.name>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529144054.4251-10-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 29, 2020 at 05:40:52PM +0300, Serge Semin wrote:
-> According to the DW APB DMAC data book the minimum burst transaction
-> length is 1 and it's true for any version of the controller since
-> isn't parametrised in the coreAssembler so can't be changed at the
-> IP-core synthesis stage. The maximum burst transaction can vary from
-> channel to channel and from controller to controller depending on a
-> IP-core parameter the system engineer activated during the IP-core
-> synthesis. Let's initialise both min_burst and max_burst members of the
-> DMA controller descriptor with extreme values so the DMA clients could
-> use them to properly optimize the DMA requests. The channels and
-> controller-specific max_burst length initialization will be introduced
-> by the follow-up patches.
+This patch series future-proofs the CPUCFG emulation, in light of
+possibility of new Loongson cores still lacking native CPUCFG.
+Also an HWCAP flag bit is allocated and exposed for userspace's probing
+convenience, per the earlier plan shared on the mailing list.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+WANG Xuerui (2):
+  MIPS: Loongson64: Guard against future cores without CPUCFG
+  MIPS: Expose Loongson CPUCFG availability via HWCAP
 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> 
-> ---
-> 
-> Changelog v4:
-> - This is a new patch suggested by Andy.
-> 
-> Changelog v5:
-> - Introduce macro with extreme min and max burst length supported by the
->   DW DMA controller.
-> - Initialize max_burst length capability with extreme burst length supported
->   by the DW DMAC IP-core.
-> ---
->  drivers/dma/dw/core.c                | 2 ++
->  include/linux/platform_data/dma-dw.h | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/drivers/dma/dw/core.c b/drivers/dma/dw/core.c
-> index ceded21537e2..4887aa2fc73c 100644
-> --- a/drivers/dma/dw/core.c
-> +++ b/drivers/dma/dw/core.c
-> @@ -1229,6 +1229,8 @@ int do_dma_probe(struct dw_dma_chip *chip)
->  	dw->dma.device_issue_pending = dwc_issue_pending;
->  
->  	/* DMA capabilities */
-> +	dw->dma.min_burst = DW_DMA_MIN_BURST;
-> +	dw->dma.max_burst = DW_DMA_MAX_BURST;
->  	dw->dma.src_addr_widths = DW_DMA_BUSWIDTHS;
->  	dw->dma.dst_addr_widths = DW_DMA_BUSWIDTHS;
->  	dw->dma.directions = BIT(DMA_DEV_TO_MEM) | BIT(DMA_MEM_TO_DEV) |
-> diff --git a/include/linux/platform_data/dma-dw.h b/include/linux/platform_data/dma-dw.h
-> index f3eaf9ec00a1..369e41e9dcc9 100644
-> --- a/include/linux/platform_data/dma-dw.h
-> +++ b/include/linux/platform_data/dma-dw.h
-> @@ -12,6 +12,8 @@
->  
->  #define DW_DMA_MAX_NR_MASTERS	4
->  #define DW_DMA_MAX_NR_CHANNELS	8
-> +#define DW_DMA_MIN_BURST	1
-> +#define DW_DMA_MAX_BURST	256
->  
->  /**
->   * struct dw_dma_slave - Controller-specific information about a slave
-> -- 
-> 2.26.2
-> 
+ .../include/asm/mach-loongson64/cpucfg-emul.h | 11 +++++
+ arch/mips/include/uapi/asm/hwcap.h            |  1 +
+ arch/mips/kernel/traps.c                      |  4 ++
+ arch/mips/loongson64/cpucfg-emul.c            | 46 +++++++++++--------
+ 4 files changed, 44 insertions(+), 18 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.26.2
 
