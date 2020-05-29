@@ -2,106 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF981E78BB
-	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 10:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC481E78C5
+	for <lists+linux-mips@lfdr.de>; Fri, 29 May 2020 10:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbgE2Ita (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 May 2020 04:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgE2Ita (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 May 2020 04:49:30 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D3AC08C5C8
-        for <linux-mips@vger.kernel.org>; Fri, 29 May 2020 01:49:29 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id a25so1643014ljp.3
-        for <linux-mips@vger.kernel.org>; Fri, 29 May 2020 01:49:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1l4xtGOxhqqlxgIkGPyKhx55xNwxZ5usjoQR3ai/dCs=;
-        b=kaFjl6haj8O8E8+DmE686PPUoSGeVZy1HTTpnNUDRBpxA/k+lKvri2wRisWgT2iT2y
-         FVKLgHhA10JSdaHrsa+l2lQXc9FLLoHrOqQ0zr5/4PL+ZemuzIFMFMe7aYdCnLSIIH9w
-         UuceE594b7VMWDsCtVStURZka3tsH9a4a64zzX9Cw2fizZalzwZnQhFwrnuGla08HZV+
-         2TxIq4Zmk5oq2Y7/UPSUkPKe2A7rHEV7qxIuz2z7gS+xakAlKAsi/vqsq28SyAgPSHjF
-         KqTlfO7kMhzOBOBgxvy4KyFKzshw/66MYuiLhXcsYo2Hds8lD9tN+I3Hdl3t3ORl9dOt
-         a80Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1l4xtGOxhqqlxgIkGPyKhx55xNwxZ5usjoQR3ai/dCs=;
-        b=NO8MW9yH6fSLZ6Sp2JatMYVaeZPsDo1Y9vISJxblduo7XVPWMUUbV9sdyD2duMlkTj
-         SNLL8Q4pCz9iviqbbJax2/6U1pEUCrPcfxTONq5tgv3/52vuF1wNTfdYg6w2PX8VkOMw
-         d8QRopcDBYIMiRSCZMv2MdKfmfwKAT3YgyTGATFdt4ab/H3xtxBw2MjPG4UmFaCI987N
-         wCtozvMI18WwEc9El15lGMfjJndSWdOfQSaL2O+9VLpPH9l8sagt66xKgRGvPvpTyuQc
-         Of1On7tT9kU4vcOct4P0jC7UXNWPiGZHuGFEhSdPGbUnCu9R4waScN+NW9aD1pE918sk
-         gigw==
-X-Gm-Message-State: AOAM532NSwkCRd6EWItZZNyH+KdVfdcF99F2yUXIiNC+Qpg1IM8hBDSx
-        qNwT397saH7jGLhX9KvshkXIyA==
-X-Google-Smtp-Source: ABdhPJzXUde5z0UiZwHiMG/jkD4n9ZihV6t4jN0gXDun6HT126YSr0NDTPIAn28I3N14iaTVHdMcYg==
-X-Received: by 2002:a2e:7f08:: with SMTP id a8mr3840705ljd.332.1590742168088;
-        Fri, 29 May 2020 01:49:28 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:2d5:373e:50fc:221d:1226:f18a? ([2a00:1fa0:2d5:373e:50fc:221d:1226:f18a])
-        by smtp.gmail.com with ESMTPSA id l16sm2119454lfg.2.2020.05.29.01.49.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2020 01:49:27 -0700 (PDT)
-Subject: Re: [PATCH v5 01/16] spi: dw: Set xfer effective_speed_hz
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>, Feng Tang <feng.tang@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200529035915.20790-1-Sergey.Semin@baikalelectronics.ru>
- <20200529035915.20790-2-Sergey.Semin@baikalelectronics.ru>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <afdf414a-df95-b130-85e8-cda5bf4e9405@cogentembedded.com>
-Date:   Fri, 29 May 2020 11:49:12 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
+        id S1726695AbgE2Iwh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 May 2020 04:52:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53810 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725836AbgE2Iwh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 29 May 2020 04:52:37 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 64BD020776;
+        Fri, 29 May 2020 08:52:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590742356;
+        bh=lM0pqY9A9HZVoYYkL4jwxKyhd9Qx14GNUqXeaDFjVOo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZgClWNM0sAw4ZxYh9THr6qbNd7jM70YaNC0SdMPioFnxjGn4TcS7nYa5LWy/VP0+i
+         ExwrRSZ7UhSxoLq0udFelaLxB5gmonMSGF/EV90Bh2Km2pWII+L0wohxOBx5xnDnGc
+         a7Klo8lfxdyhf3TgBAi2FGW440lqLHzZp6h9SrS8=
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1jeakk-00GDsx-Na; Fri, 29 May 2020 09:52:34 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-kernel@vger.kernel.org, Jason Cooper <jason@lakedaemon.net>,
+        Huacai Chen <chenhc@lemote.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v5 0/6] Three Loongson irqchip support
+Date:   Fri, 29 May 2020 09:52:13 +0100
+Message-Id: <159074223979.887186.1909053030258448427.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200528152757.1028711-1-jiaxun.yang@flygoat.com>
+References: <20200528152757.1028711-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-In-Reply-To: <20200529035915.20790-2-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, linux-kernel@vger.kernel.org, jason@lakedaemon.net, chenhc@lemote.com, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-mips@vger.kernel.org, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
-
-On 29.05.2020 6:58, Serge Semin wrote:
-
-> Seeing DW APB SSI controller doesn't support setting the exactly
-> requested SPI bus frequency, but only a rounded frequency determined
-> by means of the odd-numbered half-worded reference clock divider,
-> it would be good tune the SPI core up and initialize the current
-                   ^ to?
-
-> transfer effective_speed_hz. By doing so the core will be able to
-> execute the xfer-related delays with better accuracy.
+On Thu, 28 May 2020 23:27:48 +0800, Jiaxun Yang wrote:
+> v5:
+>   - Add some range checks in dt-schema
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Feng Tang <feng.tang@intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-[...]
+> Jiaxun Yang (6):
+>   irqchip: Add Loongson HyperTransport Vector support
+>   dt-bindings: interrupt-controller: Add Loongson HTVEC
+>   irqchip: Add Loongson PCH PIC controller
+>   dt-bindings: interrupt-controller: Add Loongson PCH PIC
+>   irqchip: Add Loongson PCH MSI controller
+>   dt-bindings: interrupt-controller: Add Loongson PCH MSI
+> 
+> [...]
 
-MBR, Sergei
+Applied to irq/irqchip-next, thanks!
+
+[1/6] irqchip: Add Loongson HyperTransport Vector support
+      commit: 818e915fbac518e8c78e1877a0048d92d4965e5a
+[2/6] dt-bindings: interrupt-controller: Add Loongson HTVEC
+      commit: 6c2832c3c6edc38ab58bad29731b4951c0a90cf8
+[3/6] irqchip: Add Loongson PCH PIC controller
+      commit: ef8c01eb64ca6719da449dab0aa9424e13c58bd0
+[4/6] dt-bindings: interrupt-controller: Add Loongson PCH PIC
+      commit: b6e4bc125fc517969f97d901b1845ebf47bbea26
+[5/6] irqchip: Add Loongson PCH MSI controller
+      commit: 632dcc2c75ef6de3272aa4ddd8f19da1f1ace323
+[6/6] dt-bindings: interrupt-controller: Add Loongson PCH MSI
+      commit: da10a4b626657387845f32d37141fc7d48ebbdb3
+
+I've cherry-picked Rob's Rbs that were posted on the v4 series.
+
+Cheers,
+
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
+
+
