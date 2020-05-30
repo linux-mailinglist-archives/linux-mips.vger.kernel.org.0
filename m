@@ -2,104 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CDC1E8EE7
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 09:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD921E8F01
+	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 09:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728841AbgE3Hdf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 30 May 2020 03:33:35 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:33970 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1728838AbgE3Hdf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 30 May 2020 03:33:35 -0400
-Received: from localhost.localdomain (unknown [116.236.177.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 359B46018C;
-        Sat, 30 May 2020 15:33:26 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1590824006; bh=g25WwYqpKt2/jiCoOVS8HthalXCjmHQUuUhUc8JyTxE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HfbFF7EBQH147qfaajsDCO5UNmFGpRXqLnZrc10tpC6TApk6MCNbYo6G194zatKWU
-         pjkNzJFy/8XbZksYkohCHFM9YbFbiKaPV/PIfvaYR5Lk6OSLhgUefJzQPowIehJBSb
-         dwo7dADeaBamLDZCb2IVCPQAOwhE3P9++1Hwfj8A=
-From:   WANG Xuerui <git@xen0n.name>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     WANG Xuerui <git@xen0n.name>, linux-mips@vger.kernel.org,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH v2 3/3] MIPS: Loongson64: Reorder CPUCFG model match arms
-Date:   Sat, 30 May 2020 15:32:43 +0800
-Message-Id: <20200530073243.16411-4-git@xen0n.name>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200530073243.16411-1-git@xen0n.name>
-References: <20200530073243.16411-1-git@xen0n.name>
+        id S1728888AbgE3HgY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 May 2020 03:36:24 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:52002 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728786AbgE3HgX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 May 2020 03:36:23 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 45ACF8030779;
+        Sat, 30 May 2020 07:36:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zaFgTL81LlYt; Sat, 30 May 2020 10:36:18 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/7] watchdog: dw_wdt: Take Baikal-T1 DW WDT peculiarities into account
+Date:   Sat, 30 May 2020 10:35:50 +0300
+Message-ID: <20200530073557.22661-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Originally the match arms are ordered by model release date, however
-the LOONGSON_64R cores are even more reduced capability-wise. So put
-them at top of the switch block.
+Merge window is upon us. Please review/merge in/whatever the rest of the
+patches.
 
-Suggested-by: Huacai Chen <chenhc@lemote.com>
-Signed-off-by: WANG Xuerui <git@xen0n.name>
----
- arch/mips/loongson64/cpucfg-emul.c | 32 +++++++++++++++---------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+There were a few features enabled at the time of the Baikal-T1 SoC DW WDT
+IP synthesis, which weren't taken into account in the DW WDT driver available
+in the kernel. First of all the SoC engineers synthesized the watchdog core
+with WDT_USE_FIX_TOP set to false (don't really know why, but they did).
+Due to this the timer reset values weren't fixed as the driver expected
+but were initialized with a pre-defined values selected by the engineers.
+Secondly the driver expected that the watchdog APB bus and the timer had
+synchronous reference clocks, while Baikal-T1 SoC DW WDT was created with
+asynchronous ones. So the driver should enable two clock devices: APB bus
+clocks and a separate timer reference clock. Finally DW Watchdog Timer is
+capable of generating a pre-timeout interrupt if corresponding config is
+enabled. The problem was that the pre-timeout IRQ happens when the set
+timeout elapses, while the actual WDT expiration and subsequent reboot take
+place in the next timeout. This makes the pre-timeout functionality
+implementation a bit tricky, since in this case we would have to find a
+WDT timeout twice smaller the requested timeout. All of the changes described
+above are provided by the patches in this patchset.
 
-diff --git a/arch/mips/loongson64/cpucfg-emul.c b/arch/mips/loongson64/cpucfg-emul.c
-index ca75f07252df..cd619b47ba1f 100644
---- a/arch/mips/loongson64/cpucfg-emul.c
-+++ b/arch/mips/loongson64/cpucfg-emul.c
-@@ -137,6 +137,22 @@ void loongson3_cpucfg_synthesize_data(struct cpuinfo_mips *c)
- 
- 	/* Add CPUCFG features non-discoverable otherwise. */
- 	switch (c->processor_id & (PRID_IMP_MASK | PRID_REV_MASK)) {
-+	case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_0:
-+	case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_1:
-+	case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_2:
-+	case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_3:
-+		decode_loongson_config6(c);
-+		probe_uca(c);
-+
-+		c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_LSLDR0 |
-+			LOONGSON_CFG1_LSSYNCI | LOONGSON_CFG1_LLSYNC |
-+			LOONGSON_CFG1_TGTSYNC);
-+		c->loongson3_cpucfg_data[1] |= (LOONGSON_CFG2_LBT1 |
-+			LOONGSON_CFG2_LBT2 | LOONGSON_CFG2_LPMP |
-+			LOONGSON_CFG2_LPM_REV2);
-+		c->loongson3_cpucfg_data[2] = 0;
-+		break;
-+
- 	case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R1:
- 		c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_LSLDR0 |
- 			LOONGSON_CFG1_LSSYNCI | LOONGSON_CFG1_LSUCA |
-@@ -164,22 +180,6 @@ void loongson3_cpucfg_synthesize_data(struct cpuinfo_mips *c)
- 			LOONGSON_CFG3_LCAMVW_REV1);
- 		break;
- 
--	case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_0:
--	case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_1:
--	case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_2:
--	case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_3:
--		decode_loongson_config6(c);
--		probe_uca(c);
--
--		c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_LSLDR0 |
--			LOONGSON_CFG1_LSSYNCI | LOONGSON_CFG1_LLSYNC |
--			LOONGSON_CFG1_TGTSYNC);
--		c->loongson3_cpucfg_data[1] |= (LOONGSON_CFG2_LBT1 |
--			LOONGSON_CFG2_LBT2 | LOONGSON_CFG2_LPMP |
--			LOONGSON_CFG2_LPM_REV2);
--		c->loongson3_cpucfg_data[2] = 0;
--		break;
--
- 	case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0:
- 	case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_1:
- 	case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R3_0:
+In addition traditionally we replaced the legacy plain text-based dt-binding
+file with yaml-based one and added the controller registers dump DebugFS node
+to ease the driver debug procedure.
+
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
+
+Changelog v2:
+- Rearrange SoBs.
+- Discard BE copyright header from the binding file.
+- Replace "additionalProperties: false" with "unevaluatedProperties: false"
+  property in the binding.
+- Move the APB3 clocks support declared in the dt binding file into a
+  dedicated patch.
+- Move $ref to the root level of the "snps,watchdog-tops" property
+  so does the constraints.
+- Make Pre-timeout IRQs support being optional.
+- Add "ms" suffix to the methods returning msec and convert the methods
+  with no "ms" suffix to return a timeout in sec.
+- Make sure minimum timeout is at least 1 sec.
+- Refactor the timeouts calculation procedure to to retain the timeouts in
+  the ascending order.
+- Make sure there is no integer overflow in milliseconds calculation. It
+  is saved in a dedicated uint field of the timeout structure.
+- Discard timeout/pretimeout/ping/enable DebugFS nodes. Registers state
+  dump node is only left.
+
+Link: https://lore.kernel.org/linux-watchdog/20200510105807.880-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Add Rob's Reviewed-by tag to the DT-related patches.
+- Remove items from the "snps,watchdog-tops" property and move the
+  minItems and maxItems constraints to the root level of it.
+
+Link: https://lore.kernel.org/linux-watchdog/20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru
+Changelog v4:
+- Add Guenter's Reviewed-by tags.
+- IRQ > 0 is only valid in Linux so make sure we request IRQ only if valid
+  number is returned from platform_get_irq_optional().
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-watchdog@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (7):
+  dt-bindings: watchdog: Convert DW WDT binding to DT schema
+  dt-bindings: watchdog: dw-wdt: Support devices with asynch clocks
+  dt-bindings: watchdog: dw-wdt: Add watchdog TOPs array property
+  watchdog: dw_wdt: Support devices with non-fixed TOP values
+  watchdog: dw_wdt: Support devices with asynch clocks
+  watchdog: dw_wdt: Add pre-timeouts support
+  watchdog: dw_wdt: Add DebugFS files
+
+ .../devicetree/bindings/watchdog/dw_wdt.txt   |  24 -
+ .../bindings/watchdog/snps,dw-wdt.yaml        |  90 ++++
+ drivers/watchdog/dw_wdt.c                     | 437 ++++++++++++++++--
+ 3 files changed, 494 insertions(+), 57 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/dw_wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+
 -- 
 2.26.2
 
