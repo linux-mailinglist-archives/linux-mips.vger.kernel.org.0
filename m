@@ -2,72 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7101E8FEB
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 11:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E321E9020
+	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 11:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727964AbgE3JGa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 30 May 2020 05:06:30 -0400
-Received: from elvis.franken.de ([193.175.24.41]:44328 "EHLO elvis.franken.de"
+        id S1728071AbgE3Jjp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 May 2020 05:39:45 -0400
+Received: from sauhun.de ([88.99.104.3]:59840 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725889AbgE3JG3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 30 May 2020 05:06:29 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jexRh-0001vR-00; Sat, 30 May 2020 11:06:25 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E64CDC05F2; Sat, 30 May 2020 11:05:43 +0200 (CEST)
-Date:   Sat, 30 May 2020 11:05:43 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Maciej W . Rozycki" <macro@linux-mips.org>
-Subject: Re: [PATCH] MIPS: Fix build warning about "PTR_STR" redefinition
-Message-ID: <20200530090543.GA3202@alpha.franken.de>
-References: <1590740530-15649-1-git-send-email-chenhc@lemote.com>
- <20200529111858.GA11955@alpha.franken.de>
- <CAAhV-H41SPVQzRmQAVYpgW_dChz+QXwTZHKGWJQv4B7JjQ5gjA@mail.gmail.com>
+        id S1727947AbgE3Jjp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 30 May 2020 05:39:45 -0400
+Received: from localhost (p5486c6a9.dip0.t-ipconnect.de [84.134.198.169])
+        by pokefinder.org (Postfix) with ESMTPSA id F24502C2099;
+        Sat, 30 May 2020 11:39:42 +0200 (CEST)
+Date:   Sat, 30 May 2020 11:39:42 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 01/11] dt-bindings: i2c: Convert DW I2C binding to DT
+ schema
+Message-ID: <20200530093942.GB1038@ninjato>
+References: <20200528093322.23553-1-Sergey.Semin@baikalelectronics.ru>
+ <20200528093322.23553-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NMuMz9nt05w80d4+"
 Content-Disposition: inline
-In-Reply-To: <CAAhV-H41SPVQzRmQAVYpgW_dChz+QXwTZHKGWJQv4B7JjQ5gjA@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200528093322.23553-2-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, May 30, 2020 at 12:43:17PM +0800, Huacai Chen wrote:
-> Hi, Thomas,
-> 
-> On Fri, May 29, 2020 at 7:19 PM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> >
-> > On Fri, May 29, 2020 at 04:22:10PM +0800, Huacai Chen wrote:
-> > >  arch/mips/include/asm/inst.h      | 779 ------------------------------------
-> > >  arch/mips/include/asm/unaligned.h | 802 ++++++++++++++++++++++++++++++++++++++
-> >
-> > please use a different filename for this to avoid another disaster
-> > because asm/unaligned.h is already used.
-> It seems like unaligned.h is the best place, because LoadXX/StoreXX is
-> nearly the same thing as get_unaligned/put_unaligned in the original
-> unaligned.h. For PTR_STR, the only confliction comes from
-> lib/test_printf.c, but lib/test_printf.c doesn't include unaligned.h.
-> And it seems there is no future problem, because unaligned.h has only
-> one new macro (i.e., PTR_STR, while LoadXX/StoreXX has no problems).
 
-this approach has two things I don't like. First it duplicates code
-from asm-generic/unaligned.h and second it again risks to leak PTR_STR
-since asm/unaligned.h is included by other kernel code.
+--NMuMz9nt05w80d4+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I took your patch renamed unaligned.h to unaligned-emul.h, included 
-asm/asm.h and replaced PTR_STR by STR(PTR). I've pushed it to mips-next
-with a Co-developed by you.
 
-Thomas.
+Just double checking:
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+
+Rob, what about this checkpatch warning?
+
+WARNING: DT binding documents should be licensed (GPL-2.0-only OR BSD-2-Clause)
+
+
+--NMuMz9nt05w80d4+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7SKd4ACgkQFA3kzBSg
+KbayExAAqA1WC+E/dd+co6XVA6QIbdRoUNcGdXrc5Nz6f69Sux22BY2+SNe7tJYu
+56zZZtEftnxeU5s1iGYjbDgIjZoAfn27MzDmr9WwQRjjeOash6o8pHUwdaOabn+Q
+ShSHWDf1q4NwvW+SVWVifAIQwvlFbf2J71TQr2Ovn7dIQbuGqYqRnn83c5CDaomn
+P3LNoPHHForfyU1KqdoHOZiwPr30a0vW6FMCGtRCgTDceJZPJC99IdPA5EZR4VOB
+rU+zF5GUGu33oQ2WVWSxiJM6CYIkotOp4iyzpfD1Vi6AbiKRXwPcvgO4oohslbCN
+HCvOdg+FMEEniBAeeGGJ96WYNs+aUWymH7dhVGtsaytgb66KhUTTW7AitScRQhmY
+xG4SykbZ94JlZf1Od5bf3biPPa6cepKoqPkdi1dPlFdpCAVsxT65jX/Zc5nPupIo
+gBCS5C+PByK8ZgOmt6VzTIz8JBS0cUXcnyQBjasIzUqMv3QuTuMV+vf35bBoPxyT
+S4JsLPbno2Chfl9hjEDc8zxYcuAtDFZ+0rALV2IFsvdBs9glJvIUw78C3nM4EHMM
+CrMyhWhdd+sE+Hz8HlBsUgod/ssosL2QbKnuZbd4asuR9goA6g+A2psPCllK1YMg
+yYum+AcRlgQ0OX0FvbHylBnBhEAKpjyI9P640B73ayd9DvzpC8o=
+=tMg0
+-----END PGP SIGNATURE-----
+
+--NMuMz9nt05w80d4+--
