@@ -2,113 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7881E908A
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 12:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7501E90B8
+	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 13:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728071AbgE3K1t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 30 May 2020 06:27:49 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:38762 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727964AbgE3K1t (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 May 2020 06:27:49 -0400
-Received: by mail-il1-f196.google.com with SMTP id q18so4958902ilm.5
-        for <linux-mips@vger.kernel.org>; Sat, 30 May 2020 03:27:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WIAsAfoh+xhEktVPQmfz2y7yoUPBGDd89DxTdGm9PSU=;
-        b=s67/SWCd6uNF/aZWw142yBOdLf1+rcy7g/45NiJPMDeXsThOPxyFjbn+yCDish7YBv
-         OS7L/AMSmr27owy1Poau1QhynK4hs//4B4Q3Br0iCnU4hm01lOViafL8HhXpO58W3bMq
-         F3QBm4/WxGqqRgxtmaFfPTgDV38mo+jsOGKVXdEbuC018D9FEwMTUk8BEhbjbb2nT0bL
-         RmEVL6HYCCthSEqg1H9xndsvIRZzw+Chhbp8J6fDVY1+osCa/v0kv25EsBbamH2hr7m7
-         b81SYRKfKm2xCTcXmPhy4tVdxHOJom7p6wEIsB+K+vdW8P7geM7POgclSsP/mwUukXlQ
-         PysQ==
-X-Gm-Message-State: AOAM530ErCFU0/Vlhn7MLHpUzDnkmLbo1fbTBZNmaqjJsiEcpbdwn8Ib
-        rLwYdr09S+80dFRTh9mW4UZ2/RFZbP/z3uWKbtYoBJYDXykv1g==
-X-Google-Smtp-Source: ABdhPJx7XxDpKRiFFWoO2eEHB9Ct1M9dG+d/KD9G0KbU+Xe+d6WdLX7HU+u09pTWjZ5xn3v3r5x4N3+exerWPcwCATo=
-X-Received: by 2002:a05:6e02:503:: with SMTP id d3mr11905007ils.208.1590834467269;
- Sat, 30 May 2020 03:27:47 -0700 (PDT)
+        id S1728903AbgE3LJe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 May 2020 07:09:34 -0400
+Received: from sauhun.de ([88.99.104.3]:60296 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725813AbgE3LJd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 30 May 2020 07:09:33 -0400
+Received: from localhost (p5486c6a9.dip0.t-ipconnect.de [84.134.198.169])
+        by pokefinder.org (Postfix) with ESMTPSA id 773A72C206B;
+        Sat, 30 May 2020 13:09:30 +0200 (CEST)
+Date:   Sat, 30 May 2020 13:09:30 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 08/11] i2c: designware: Convert driver to using regmap
+ API
+Message-ID: <20200530110930.GC1038@ninjato>
+References: <20200528093322.23553-1-Sergey.Semin@baikalelectronics.ru>
+ <20200528093322.23553-9-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20200530073243.16411-1-git@xen0n.name> <20200530073243.16411-4-git@xen0n.name>
-In-Reply-To: <20200530073243.16411-4-git@xen0n.name>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Sat, 30 May 2020 18:27:36 +0800
-Message-ID: <CAAhV-H7cMBqVPVxeD7J16x9AsCjWujiyz7pG21y0bOz5VT9XWw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] MIPS: Loongson64: Reorder CPUCFG model match arms
-To:     WANG Xuerui <git@xen0n.name>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lMM8JwqTlfDpEaS6"
+Content-Disposition: inline
+In-Reply-To: <20200528093322.23553-9-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reviewed-by: Huacai Chen <chenhc@lemote.com>
 
-On Sat, May 30, 2020 at 3:34 PM WANG Xuerui <git@xen0n.name> wrote:
->
-> Originally the match arms are ordered by model release date, however
-> the LOONGSON_64R cores are even more reduced capability-wise. So put
-> them at top of the switch block.
->
-> Suggested-by: Huacai Chen <chenhc@lemote.com>
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
-> ---
->  arch/mips/loongson64/cpucfg-emul.c | 32 +++++++++++++++---------------
->  1 file changed, 16 insertions(+), 16 deletions(-)
->
-> diff --git a/arch/mips/loongson64/cpucfg-emul.c b/arch/mips/loongson64/cpucfg-emul.c
-> index ca75f07252df..cd619b47ba1f 100644
-> --- a/arch/mips/loongson64/cpucfg-emul.c
-> +++ b/arch/mips/loongson64/cpucfg-emul.c
-> @@ -137,6 +137,22 @@ void loongson3_cpucfg_synthesize_data(struct cpuinfo_mips *c)
->
->         /* Add CPUCFG features non-discoverable otherwise. */
->         switch (c->processor_id & (PRID_IMP_MASK | PRID_REV_MASK)) {
-> +       case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_0:
-> +       case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_1:
-> +       case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_2:
-> +       case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_3:
-> +               decode_loongson_config6(c);
-> +               probe_uca(c);
-> +
-> +               c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_LSLDR0 |
-> +                       LOONGSON_CFG1_LSSYNCI | LOONGSON_CFG1_LLSYNC |
-> +                       LOONGSON_CFG1_TGTSYNC);
-> +               c->loongson3_cpucfg_data[1] |= (LOONGSON_CFG2_LBT1 |
-> +                       LOONGSON_CFG2_LBT2 | LOONGSON_CFG2_LPMP |
-> +                       LOONGSON_CFG2_LPM_REV2);
-> +               c->loongson3_cpucfg_data[2] = 0;
-> +               break;
-> +
->         case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R1:
->                 c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_LSLDR0 |
->                         LOONGSON_CFG1_LSSYNCI | LOONGSON_CFG1_LSUCA |
-> @@ -164,22 +180,6 @@ void loongson3_cpucfg_synthesize_data(struct cpuinfo_mips *c)
->                         LOONGSON_CFG3_LCAMVW_REV1);
->                 break;
->
-> -       case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_0:
-> -       case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_1:
-> -       case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_2:
-> -       case PRID_IMP_LOONGSON_64R | PRID_REV_LOONGSON2K_R1_3:
-> -               decode_loongson_config6(c);
-> -               probe_uca(c);
-> -
-> -               c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_LSLDR0 |
-> -                       LOONGSON_CFG1_LSSYNCI | LOONGSON_CFG1_LLSYNC |
-> -                       LOONGSON_CFG1_TGTSYNC);
-> -               c->loongson3_cpucfg_data[1] |= (LOONGSON_CFG2_LBT1 |
-> -                       LOONGSON_CFG2_LBT2 | LOONGSON_CFG2_LPMP |
-> -                       LOONGSON_CFG2_LPM_REV2);
-> -               c->loongson3_cpucfg_data[2] = 0;
-> -               break;
-> -
->         case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0:
->         case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_1:
->         case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R3_0:
-> --
-> 2.26.2
->
+--lMM8JwqTlfDpEaS6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, May 28, 2020 at 12:33:18PM +0300, Serge Semin wrote:
+> Seeing the DW I2C driver is using flags-based accessors with two
+> conditional clauses it would be better to replace them with the regmap
+> API IO methods and to initialize the regmap object with read/write
+> callbacks specific to the controller registers map implementation. This
+> will be also handy for the drivers with non-standard registers mapping
+> (like an embedded into the Baikal-T1 System Controller DW I2C block, which
+> glue-driver is a part of this series).
+>=20
+> As before the driver tries to detect the mapping setup at probe stage and
+> creates a regmap object accordingly, which will be used by the rest of the
+> code to correctly access the controller registers. In two places it was
+> appropriate to convert the hand-written read-modify-write and
+> read-poll-loop design patterns to the corresponding regmap API
+> ready-to-use methods.
+>=20
+> Note the regmap IO methods return value is checked only at the probe
+> stage. The rest of the code won't do this because basically we have
+> MMIO-based regmap so non of the read/write methods can fail (this also
+> won't be needed for the Baikal-T1-specific I2C controller).
+>=20
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
+
+My codecheckers found these, rightfully I'd say:
+
+SPARSE
+drivers/i2c/busses/i2c-designware-master.c:427:53: warning: incorrect type =
+in argument 3 (different signedness)
+drivers/i2c/busses/i2c-designware-master.c:427:53:    expected unsigned int=
+ *val
+drivers/i2c/busses/i2c-designware-master.c:427:53:    got int *
+
+CC
+drivers/i2c/busses/i2c-designware-common.c:127: warning: Excess function pa=
+rameter 'base' description in 'i2c_dw_init_regmap'
+
+^ means there is an argument documented which does not exist in the
+function declaration
+
+
+--lMM8JwqTlfDpEaS6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7SPuYACgkQFA3kzBSg
+Kba4lhAApobHb6268AOmql5Sc1j6Hw5lSQChbkLvmBWJDJ4CUAMGlItfPuItWl09
+0KTU0xFSs9FbHNuNkQC3wPoepu1EvCp909EfbjA/f/GZEYa4qlRpF1/uerg60v0Y
+99ZPmJau41mK1Es33BjqiodWjPbvDDDb5eEeMqGnwA4wnvmjLjfBuzmzuymjh2Lx
+G+uE5P9XokSRxfqO3MlpmLYFvc6hOqr85qfiCCOMoC7MpB4OZ62qcj9bwhXYl8C+
+AAsf61LQ4++c3h9+BbWjvELveDmg4rH28j0YAyoHBF8jND/ZzQUh1BZopCMuPmqK
+ATEpFjIxMiWJkAloAQAlY4AeStqqtT3j+CsYyAiMdxHvEbJ9m1BGXwmwqniVNQ8M
+hir8G9gWvRij64KdYbygG4Q5h46zj4eeUsyZq1emZwY1qbJk2GQXKu80duLievGR
+KJouxra2dNct3LYM0CcPmoDlmK0rBFf549l9kIF57rjEQRt0OvYr14GGpiLKrsYx
+eeCpdVv51KEi24OOADEIPcpsKKS+RnN4O8sWonGs+l/nXIXHq0LNBW8HX5RF3KIb
+w/cBohPraJfvXUUKC11ZPlAuv6VvgDGGf6mUG8caS0VMyIgur5bCL9nGd0CIvx1e
+/kzU0Uj7d+uCEsuKrpmMkZLDV9REQ9z/w7hPNODtjFQnKaMrdZs=
+=V3Pu
+-----END PGP SIGNATURE-----
+
+--lMM8JwqTlfDpEaS6--
