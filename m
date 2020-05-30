@@ -2,93 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8981E930B
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 20:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288181E93C7
+	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 23:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729305AbgE3SO2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 30 May 2020 14:14:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57266 "EHLO mail.kernel.org"
+        id S1729098AbgE3VF6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 May 2020 17:05:58 -0400
+Received: from sauhun.de ([88.99.104.3]:37032 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729301AbgE3SO0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 30 May 2020 14:14:26 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 42BAD20722;
-        Sat, 30 May 2020 18:14:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590862466;
-        bh=tSfDPBIbYxx3kqPw8xhvYc/YW+Aubv2fDo0gm7BKCh4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=d7ni3rVrImVCBxDFZsx41MNpKRZTRtHHhrVq0kVNLcwGGxM6G5LcBnGkpEYuRQa8t
-         HkqwRtQXOftwbbG3Ey1jJ/BXrM3OdU5JxLbNLaS8LB7qWp5elCvc5aQ7GFDCkh0Bkd
-         dPNcaXSqdcccVLRpujGmKCZQUCh9Rx23vq/5Tc+g=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200526222056.18072-5-Sergey.Semin@baikalelectronics.ru>
-References: <20200526222056.18072-1-Sergey.Semin@baikalelectronics.ru> <20200526222056.18072-5-Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH v3 4/4] clk: Add Baikal-T1 CCU Dividers driver
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        id S1728741AbgE3VF5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 30 May 2020 17:05:57 -0400
+Received: from localhost (p5486c6a9.dip0.t-ipconnect.de [84.134.198.169])
+        by pokefinder.org (Postfix) with ESMTPSA id B79692C206B;
+        Sat, 30 May 2020 23:05:54 +0200 (CEST)
+Date:   Sat, 30 May 2020 23:05:54 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date:   Sat, 30 May 2020 11:14:25 -0700
-Message-ID: <159086246567.69627.6187271777288137186@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 08/11] i2c: designware: Convert driver to using regmap
+ API
+Message-ID: <20200530210554.GA15682@ninjato>
+References: <20200528093322.23553-1-Sergey.Semin@baikalelectronics.ru>
+ <20200528093322.23553-9-Sergey.Semin@baikalelectronics.ru>
+ <20200530110930.GC1038@ninjato>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="a8Wt8u1KmwUX3Y2C"
+Content-Disposition: inline
+In-Reply-To: <20200530110930.GC1038@ninjato>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Serge Semin (2020-05-26 15:20:56)
-> Nearly each Baikal-T1 IP-core is supposed to have a clock source
-> of particular frequency. But since there are greater than five
-> IP-blocks embedded into the SoC, the CCU PLLs can't fulfill all the
-> needs. Baikal-T1 CCU provides a set of fixed and configurable clock
-> dividers in order to generate a necessary signal for each chip
-> sub-block.
->=20
-> This driver creates the of-based hardware clocks for each divider
-> available in Baikal-T1 CCU. The same way as for PLLs we split the
-> functionality up into the clocks operations (gate, ungate, set rate,
-> etc) and hardware clocks declaration/registration procedures.
->=20
-> In accordance with the CCU documentation all its dividers are distributed
-> into two CCU sub-blocks: AXI-bus and system devices reference clocks.
-> The former sub-block is used to supply the clocks for AXI-bus interfaces
-> (AXI clock domains) and the later one provides the SoC IP-cores reference
-> clocks. Each sub-block is represented by a dedicated DT node, so they
-> have different compatible strings to distinguish one from another.
->=20
-> For some reason CCU provides the dividers of different types. Some
-> dividers can be gateable some can't, some are fixed while the others
-> are variable, some have special divider' limitations, some've got a
-> non-standard register layout and so on. In order to cover all of these
-> cases the hardware clocks driver is designed with an info-descriptor
-> pattern. So there are special static descriptors declared for the
-> dividers of each type with additional flags describing the block
-> peculiarity. These descriptors are then used to create hardware clocks
-> with proper operations.
->=20
-> Some CCU dividers provide a way to reset a domain they generate
-> a clock for. So the CCU AXI-bus and CCU system devices clock
-> drivers also perform the reset controller registration.
->=20
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
->=20
-> ---
 
-Applied to clk-next
+--a8Wt8u1KmwUX3Y2C
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, May 30, 2020 at 01:09:30PM +0200, Wolfram Sang wrote:
+> On Thu, May 28, 2020 at 12:33:18PM +0300, Serge Semin wrote:
+> > Seeing the DW I2C driver is using flags-based accessors with two
+> > conditional clauses it would be better to replace them with the regmap
+> > API IO methods and to initialize the regmap object with read/write
+> > callbacks specific to the controller registers map implementation. This
+> > will be also handy for the drivers with non-standard registers mapping
+> > (like an embedded into the Baikal-T1 System Controller DW I2C block, wh=
+ich
+> > glue-driver is a part of this series).
+> >=20
+> > As before the driver tries to detect the mapping setup at probe stage a=
+nd
+> > creates a regmap object accordingly, which will be used by the rest of =
+the
+> > code to correctly access the controller registers. In two places it was
+> > appropriate to convert the hand-written read-modify-write and
+> > read-poll-loop design patterns to the corresponding regmap API
+> > ready-to-use methods.
+> >=20
+> > Note the regmap IO methods return value is checked only at the probe
+> > stage. The rest of the code won't do this because basically we have
+> > MMIO-based regmap so non of the read/write methods can fail (this also
+> > won't be needed for the Baikal-T1-specific I2C controller).
+> >=20
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> > Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: devicetree@vger.kernel.org
+> > Cc: linux-mips@vger.kernel.org
+>=20
+> My codecheckers found these, rightfully I'd say:
+>=20
+> SPARSE
+> drivers/i2c/busses/i2c-designware-master.c:427:53: warning: incorrect typ=
+e in argument 3 (different signedness)
+> drivers/i2c/busses/i2c-designware-master.c:427:53:    expected unsigned i=
+nt *val
+> drivers/i2c/busses/i2c-designware-master.c:427:53:    got int *
+>=20
+> CC
+> drivers/i2c/busses/i2c-designware-common.c:127: warning: Excess function =
+parameter 'base' description in 'i2c_dw_init_regmap'
+>=20
+> ^ means there is an argument documented which does not exist in the
+> function declaration
+
+Well, I fixed these two minor things for your now...
+
+
+--a8Wt8u1KmwUX3Y2C
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7Syq4ACgkQFA3kzBSg
+KbY0gQ//YKOc7BeIxNJoEgL1mTbEvdfy6VyzbzoS8K4/J/XOSLeftwBr6tSTUNVQ
+37AcCaqImPPbzUz3EOL9mkfyduGNeVlY+BomsSqABB3SzamwSzo5GajCb64zizjj
+PlrA2ki7SjHINrO3vIIvsxMyU9gqVUR2v8ImRmnNPVm2qzmbRs+/IfnokRxbwZwT
+CHefaToS6go4dCGuCCA5MXPbWlI66j1YH59sewh6IxI/eH6gi/vRdFrJIzhlnyef
+TqHGLeypN0rewdrv1jgr53UF/pInKr9k8XC4xM35TZXjfh5FaQTgfXS2q35c1wYi
+72Cm30DLz9m6YBWEksiCBPUl22oJY3uN//W7SE+d78B1Y5rgszbU47xB7DAXEtUx
+uEzSVx/yUVobrfwuJn5BQHJRS18uQOl6I61X31qE5VFkDqaRJNjAX2E7+XhaQVSr
+wqGzm9AnFmCmNHbanNjW4EnzObW8mq23LXLAWJbWurpEIFL3HinktUN0JliSBysv
+AV67nD+0H0nBSBYul6aEi5EWgK+b4PyvaW/GEC1mGzT0jwxqiP+585SGIAGlMcLd
+8CeXJo0aPPlvGoZZxR1SXv7qlsyuJVIy3PauXfyZf/obw0+wkFZ2Gl5oyaKOGGTA
+a7yvUdM9AFaJ2zzgO4Y+cmOFpg47PIZ54nhyKwAOmD3iGSyx/HI=
+=PIEk
+-----END PGP SIGNATURE-----
+
+--a8Wt8u1KmwUX3Y2C--
