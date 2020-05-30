@@ -2,76 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CA81E916A
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 15:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B911E9304
+	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2020 20:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728433AbgE3NP6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 30 May 2020 09:15:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53780 "EHLO mail.kernel.org"
+        id S1729083AbgE3SOR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 May 2020 14:14:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56896 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727947AbgE3NP5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 30 May 2020 09:15:57 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        id S1728927AbgE3SOQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 30 May 2020 14:14:16 -0400
+Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8AFBA2074A;
-        Sat, 30 May 2020 13:15:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1FB3E20722;
+        Sat, 30 May 2020 18:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590844557;
-        bh=VceDSw21CiOfGJeqHBr1CP4d0xYCY00d31XuwrH77Jk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aVFSSCom4H9LHoxhuFn21pSETGkaKylK0YvCvLucRPX0jI6hztPTZnbP7mvnCxy4l
-         oA+AGKd0ckZc3i0+ubbQrSZm01+ROfuZeNR0pGFvQomCNspGw9SscgzpO6h2dS5r5E
-         z1k18Ix4rl6KA3vuYsaD/PcAHZOHHaKWMEJPDUBk=
-Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=wait-a-minute.lan)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1jf1L9-00GXrc-Uf; Sat, 30 May 2020 14:15:56 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Jason Cooper <jason@lakedaemon.net>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: Re: [PATCH 0/2] irqchip: loongson-*: Two small fixes
-Date:   Sat, 30 May 2020 14:15:35 +0100
-Message-Id: <159084442227.135078.812738924633130027.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200530121113.1797678-1-jiaxun.yang@flygoat.com>
-References: <20200530121113.1797678-1-jiaxun.yang@flygoat.com>
+        s=default; t=1590862456;
+        bh=nkYFO52Wz9gD47nkE3uJCDtB/pInehNr3iZBDa1Wc/0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=SbQEc+DVB6cII+RbY747UmgUGE+2mj0+nBAlMXNV7uorN68DFc1aM/S5oUiNjtPPD
+         tv1DUEG0AZTfNo+P78YB5oihselIftCf6c1PZXZ5e2nCWXoBkXTUnh5AqOcXhnvSoC
+         SXaexHPxLL+66U8yK0BtMMtflK/kQY4vFfxiWjHk=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 62.31.163.78
-X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, jason@lakedaemon.net, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, tglx@linutronix.de, chenhc@lemote.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200526222056.18072-2-Sergey.Semin@baikalelectronics.ru>
+References: <20200526222056.18072-1-Sergey.Semin@baikalelectronics.ru> <20200526222056.18072-2-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v3 1/4] dt-bindings: clk: Add Baikal-T1 CCU PLLs binding
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Date:   Sat, 30 May 2020 11:14:15 -0700
+Message-ID: <159086245542.69627.16106186464838114976@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 30 May 2020 20:11:11 +0800, Jiaxun Yang wrote:
-> 
-> Jiaxun Yang (2):
->   irqchip: loongson-pci-msi: Fix a typo in Kconfig
->   irqchip: loongson-*: Fix COMPILE_TEST
-> 
->  drivers/irqchip/Kconfig                | 2 +-
->  drivers/irqchip/irq-loongson-htpic.c   | 4 ++++
->  drivers/irqchip/irq-loongson-htvec.c   | 4 ++++
->  drivers/irqchip/irq-loongson-liointc.c | 4 ++++
->  4 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> [...]
+Quoting Serge Semin (2020-05-26 15:20:53)
+> Baikal-T1 Clocks Control Unit is responsible for transformation of a
+> signal coming from an external oscillator into clocks of various
+> frequencies to propagate them then to the corresponding clocks
+> consumers (either individual IP-blocks or clock domains). In order
+> to create a set of high-frequency clocks the external signal is
+> firstly handled by the embedded into CCU PLLs. So the corresponding
+> dts-node is just a normal clock-provider node with standard set of
+> properties. Note as being part of the Baikal-T1 System Controller its
+> DT node is supposed to be a child the system controller node.
+>=20
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: linux-mips@vger.kernel.org
+>=20
+> ---
 
-Applied to irqchip-next, thanks!
-
-[1/2] irqchip/loongson-pci-msi: Fix a typo in Kconfig
-      commit: 8abfb9b77d8707873088356cfee5bcbb842212af
-
-Cheers,
-
-	M.
--- 
-Without deviation from the norm, progress is not possible.
-
+Applied to clk-next
