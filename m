@@ -2,104 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F851E9930
-	for <lists+linux-mips@lfdr.de>; Sun, 31 May 2020 19:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC731E9B95
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jun 2020 04:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728145AbgEaRMu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 31 May 2020 13:12:50 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:45784 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726081AbgEaRMu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 31 May 2020 13:12:50 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id CDB5F8030866;
-        Sun, 31 May 2020 17:12:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WwALV05hloaX; Sun, 31 May 2020 20:12:40 +0300 (MSK)
-Date:   Sun, 31 May 2020 20:12:39 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 08/11] i2c: designware: Convert driver to using regmap
- API
-Message-ID: <20200531171239.l64zfkoncecngfll@mobilestation>
-References: <20200528093322.23553-1-Sergey.Semin@baikalelectronics.ru>
- <20200528093322.23553-9-Sergey.Semin@baikalelectronics.ru>
- <20200530110930.GC1038@ninjato>
- <20200530210554.GA15682@ninjato>
+        id S1726901AbgFACM7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 31 May 2020 22:12:59 -0400
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:14221 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726882AbgFACM6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 31 May 2020 22:12:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1590977613; x=1622513613;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=G9egf8ncqlmNo86Zk2ECTYlQmjE3EWTlChax8u0y5nc=;
+  b=fNJukKl7eiGbhjvFPEkmcQgCb6droLXWJyf6gKh7bKubcDJEXhygGg8h
+   h8cJz9o2eDW/2lWbOm8lr7JCj+2KINSuAeBYYSS04AIHWk9OxlGpqBSS0
+   +maUipAuM0U6s5fOWUngdPxSKEO69zVzJLezZdLUrxmB2+EUv/E3THw2v
+   EUeWnS8B6vO/G3bHYyzzkRbE5tWtDCPqViyWe53GRcc0DvibahF681ciT
+   KTFHkFtQImJuhffa07EdM4hc8NWoCig5J7WMR4lXQbB4enBhpL4JLZ4Kw
+   CsrdrBEyyFf+5JQNqh3BWBeCgZmdwuft1Bz4PAMHc4Wwhywm6DUWwpe3D
+   Q==;
+IronPort-SDR: M+J3AUIEp2aZfxFaLW7bUEdgSJHmPZq/QdpZrvhR8wEJyZOYBvvBcWbyjFHZXCx4DFUOaIbWvk
+ JL7YFYblrrInf+WTBEps3+6mpqL1nXSWfIoM35ZV0nK8Ql+qE1KtlJGTIeBjHgBJmTQxNcQ/GE
+ dTBiJBMnZnEZ+SSJQovupqe1n537Vffs9BixNAop4kVSOIUlQoMDSE3+yJ129jPa5mF1QlPoSO
+ Cu2Xq7dqdzyPbL+nPbjJdLng9LiRMq4bxB698KFh7OWu0drFMY8xzoUnPd9MrAgGz8AwcQzGGP
+ zCM=
+X-IronPort-AV: E=Sophos;i="5.73,459,1583164800"; 
+   d="scan'208";a="241758131"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 01 Jun 2020 10:13:33 +0800
+IronPort-SDR: xo60xNdqJ+wqbTYB4QO3H+m2pr6uop2pKMlKWxiZ9vwfLeTp4c2bLyO+PwEfhk4AXdtCgZ6ELv
+ WrsrMNYXHYSL67vvdBTYmI+6xw04TnjT0=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2020 19:02:07 -0700
+IronPort-SDR: OYgVX96uwh6+yFZthpDJwHUx7k+aRupC/Ky1jWRI+sAKygEFp/AuSBA7qVotOqw2Nj/g3bVBKI
+ ng7wdeHnnq+g==
+WDCIronportException: Internal
+Received: from unknown (HELO redsun52) ([10.149.66.28])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2020 19:12:55 -0700
+Date:   Mon, 1 Jun 2020 03:09:07 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@wdc.com>
+To:     Huacai Chen <chenhc@lemote.com>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        WANG Xuerui <git@xen0n.name>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+Subject: Re: [PATCH V2] MIPS: Tidy up CP0.Config6 bits definition
+In-Reply-To: <1590220305-29176-1-git-send-email-chenhc@lemote.com>
+Message-ID: <alpine.LFD.2.21.2006010253080.3271@redsun52.ssa.fujisawa.hgst.com>
+References: <1590220305-29176-1-git-send-email-chenhc@lemote.com>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200530210554.GA15682@ninjato>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, May 30, 2020 at 11:05:54PM +0200, Wolfram Sang wrote:
-> On Sat, May 30, 2020 at 01:09:30PM +0200, Wolfram Sang wrote:
-> > On Thu, May 28, 2020 at 12:33:18PM +0300, Serge Semin wrote:
-> > > Seeing the DW I2C driver is using flags-based accessors with two
-> > > conditional clauses it would be better to replace them with the regmap
-> > > API IO methods and to initialize the regmap object with read/write
-> > > callbacks specific to the controller registers map implementation. This
-> > > will be also handy for the drivers with non-standard registers mapping
-> > > (like an embedded into the Baikal-T1 System Controller DW I2C block, which
-> > > glue-driver is a part of this series).
-> > > 
-> > > As before the driver tries to detect the mapping setup at probe stage and
-> > > creates a regmap object accordingly, which will be used by the rest of the
-> > > code to correctly access the controller registers. In two places it was
-> > > appropriate to convert the hand-written read-modify-write and
-> > > read-poll-loop design patterns to the corresponding regmap API
-> > > ready-to-use methods.
-> > > 
-> > > Note the regmap IO methods return value is checked only at the probe
-> > > stage. The rest of the code won't do this because basically we have
-> > > MMIO-based regmap so non of the read/write methods can fail (this also
-> > > won't be needed for the Baikal-T1-specific I2C controller).
-> > > 
-> > > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > > Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > Cc: devicetree@vger.kernel.org
-> > > Cc: linux-mips@vger.kernel.org
-> > 
-> > My codecheckers found these, rightfully I'd say:
-> > 
-> > SPARSE
-> > drivers/i2c/busses/i2c-designware-master.c:427:53: warning: incorrect type in argument 3 (different signedness)
-> > drivers/i2c/busses/i2c-designware-master.c:427:53:    expected unsigned int *val
-> > drivers/i2c/busses/i2c-designware-master.c:427:53:    got int *
-> > 
-> > CC
-> > drivers/i2c/busses/i2c-designware-common.c:127: warning: Excess function parameter 'base' description in 'i2c_dw_init_regmap'
-> > 
-> > ^ means there is an argument documented which does not exist in the
-> > function declaration
-> 
-> Well, I fixed these two minor things for your now...
-> 
+On Sat, 23 May 2020, Huacai Chen wrote:
 
-Great! Sorry for me not doing it on time. I was away from my laptop and internet
-last day to do that. I saw your message about the sparse detecting the problems
-while I was on my way to outskirts and was going to fix them today either in a
-new version of the patchset or sending follow-up patches. But you already fixed
-the problems. Thank you very much for doing that for me. 
+> CP0.Config6 is a Vendor-defined register whose bits definitions are
+> different from one to another. Recently, Xuerui's Loongson-3 patch and
+> Serge's P5600 patch make the definitions inconsistency and unclear.
+> 
+> To make life easy, this patch tidy the definition up:
+> 1, Add a _MTI_ infix for proAptiv/P5600 feature bits;
+> 2, Add a _LOONGSON_ infix for Loongson-3 feature bits;
+> 3, Add bit6/bit7 definition for Loongson-3 which will be used later.
 
--Sergey
+ What a mess!  We use *prefixes* for vendor- or processor-specific names, 
+e.g.:
+
+#define R3K_ENTRYLO_G		(_ULCAST_(1) << 8)
+#define R4K_CONF_SW		(_ULCAST_(1) << 20)
+#define MTI_CONF7_PTC		(_ULCAST_(1) << 19)
+
+etc. and MIPS_ denotes a MIPS architectural (as in R1, R2, etc., i.e. not 
+legacy) definition, e.g.:
+
+#define MIPS_CONF_VI		(_ULCAST_(1) <<  3)
+
+ So to be consistent these would have to be:
+
+> +/* Config6 feature bits for proAptiv/P5600 */
+> +
+>  /* Jump register cache prediction disable */
+> -#define MIPS_CONF6_JRCD		(_ULCAST_(1) << 0)
+> +#define MIPS_CONF6_MTI_JRCD		(_ULCAST_(1) << 0)
+
+#define MTI_CONF6_JRCD		(_ULCAST_(1) << 0)
+
+etc.
+
+> +/* Config6 feature bits for Loongson-3 */
+> +
+> +/* Loongson-3 internal timer bit */
+> +#define MIPS_CONF6_LOONGSON_INTIMER	(_ULCAST_(1) << 6)
+
+#define LOONGSON_CONF6_INTIMER	(_ULCAST_(1) << 6)
+
+etc.
+
+  Maciej
