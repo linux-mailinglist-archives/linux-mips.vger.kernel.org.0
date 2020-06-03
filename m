@@ -2,103 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF93E1ED1FA
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2020 16:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F841ED4BF
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2020 19:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725905AbgFCOWI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 3 Jun 2020 10:22:08 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:37741 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbgFCOWI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Jun 2020 10:22:08 -0400
-Received: from xps13 (unknown [91.224.148.103])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 06B3C240009;
-        Wed,  3 Jun 2020 14:22:04 +0000 (UTC)
-Date:   Wed, 3 Jun 2020 16:22:03 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     linux-mtd@lists.infradead.org, Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        linux-mips@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: Re: [PATCH v2 0/8] mtd: rawnand: bcm47xx: Convert to exec_op() (and
- more)
-Message-ID: <20200603162203.7db6462a@xps13>
-In-Reply-To: <20200518162837.304471-1-boris.brezillon@collabora.com>
-References: <20200518162837.304471-1-boris.brezillon@collabora.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1725961AbgFCRNh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Jun 2020 13:13:37 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:33256 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726134AbgFCRNg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Jun 2020 13:13:36 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 166F28030807;
+        Wed,  3 Jun 2020 17:13:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cKWMr2ntXRR5; Wed,  3 Jun 2020 20:13:33 +0300 (MSK)
+Date:   Wed, 3 Jun 2020 20:13:31 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paul.burton@imgtec.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        James Hogan <jhogan@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 6/6] MAINTAINERS: Add maintainers for MIPS core drivers
+Message-ID: <20200603171331.sojjh7ceo5bouiol@mobilestation>
+References: <20200602100921.1155-1-Sergey.Semin@baikalelectronics.ru>
+ <20200602100921.1155-7-Sergey.Semin@baikalelectronics.ru>
+ <61afd4bd10ac644fa623e218f947328e@kernel.org>
+ <20200603000318.2xgizrgwauw2ywwu@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200603000318.2xgizrgwauw2ywwu@mobilestation>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+Daniel, Rafael, Thomas (Gleixner),
 
-Boris Brezillon <boris.brezillon@collabora.com> wrote on Mon, 18 May
-2020 18:28:29 +0200:
+Could you take a look at the series this patch belongs to and to this patch in
+particular? If you are ok with this, please explicitly ack. It would be great to
+merge the leftover series in this merge window.
 
-> Hello,
-> 
-> A bit of context to explain the motivation behind those conversions
-> I've been sending for the last couple of weeks. The raw NAND subsystem
-> carries a lot of history which makes any rework not only painful, but
-> also subject to regressions which we only detect when someone dares to
-> update its kernel on one of those ancient HW. While carrying drivers
-> for old HW is not a problem per se, carrying ancient and unmaintained
-> drivers that are not converted to new APIs is a maintenance burden,
-> hence this massive conversion attempt I'm conducting here.
-> 
-> So here is a series converting the BCM47XX NAND controller driver to
-> exec_op(), plus a bunch of minor improvements done along the way.
-> I hope I'll find someone to test those changes, but if there's no one
-> still having access to this  HW or no interest in keeping it supported
-> in recent kernel versions, we should definitely consider removing the
-> driver instead.
-> 
-> No major changes in this v2, apart from fixes for things reported by
-> Miquel. See the changelog on each patch for more details.
-> 
-> Regards,
-> 
-> Boris
-> 
-> Boris Brezillon (8):
->   mtd: rawnand: Add an is_last flag to nand_subop
->   mtd: rawnand: bcm47xx: Drop dependency on BCMA
->   mtd: rawnand: bcm47xx: Allow compiling the driver when COMPILE_TEST=y
->   mtd: rawnand: bcm47xx: Demistify a few more things
->   mtd: rawnand: bcm47xx: Implement the exec_op() interface
->   mtd: rawnand: bcm47xx: Get rid of the legacy implementation
->   mtd: rawnand: bcm47xx: Simplify the init() function
->   mtd: rawnand: bcm47xx: Merge all source files
-> 
->  drivers/mtd/nand/raw/Kconfig                  |   3 +-
->  drivers/mtd/nand/raw/Makefile                 |   2 +-
->  .../mtd/nand/raw/bcm47xx-nand-controller.c    | 343 +++++++++++++
->  drivers/mtd/nand/raw/bcm47xxnflash/Makefile   |   5 -
->  .../nand/raw/bcm47xxnflash/bcm47xxnflash.h    |  26 -
->  drivers/mtd/nand/raw/bcm47xxnflash/main.c     |  77 ---
->  .../mtd/nand/raw/bcm47xxnflash/ops_bcm4706.c  | 450 ------------------
->  drivers/mtd/nand/raw/nand_base.c              |   2 +
->  include/linux/mtd/rawnand.h                   |   2 +
->  9 files changed, 349 insertions(+), 561 deletions(-)
->  create mode 100644 drivers/mtd/nand/raw/bcm47xx-nand-controller.c
->  delete mode 100644 drivers/mtd/nand/raw/bcm47xxnflash/Makefile
->  delete mode 100644 drivers/mtd/nand/raw/bcm47xxnflash/bcm47xxnflash.h
->  delete mode 100644 drivers/mtd/nand/raw/bcm47xxnflash/main.c
->  delete mode 100644 drivers/mtd/nand/raw/bcm47xxnflash/ops_bcm4706.c
-> 
+-Sergey
 
-Anyone to test this series?
-
-If not I will apply it as soon as v5.8-rc1 is released.
-
-
-Thanks,
-Miquèl
+On Wed, Jun 03, 2020 at 03:03:19AM +0300, Serge Semin wrote:
+> On Tue, Jun 02, 2020 at 11:12:31AM +0100, Marc Zyngier wrote:
+> > On 2020-06-02 11:09, Serge Semin wrote:
+> > > Add Thomas and myself as maintainers of the MIPS CPU and GIC IRQchip,
+> > > MIPS
+> > > GIC timer and MIPS CPS CPUidle drivers.
+> > > 
+> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > 
+> > > ---
+> > > 
+> > > Changelog v3:
+> > > - Keep the files list alphabetically ordered.
+> > > - Add Thomas as the co-maintainer of the designated drivers.
+> > > ---
+> > >  MAINTAINERS | 11 +++++++++++
+> > >  1 file changed, 11 insertions(+)
+> > > 
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 2926327e4976..20532e0287d7 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -11278,6 +11278,17 @@
+> > > F:	arch/mips/configs/generic/board-boston.config
+> > >  F:	drivers/clk/imgtec/clk-boston.c
+> > >  F:	include/dt-bindings/clock/boston-clock.h
+> > > 
+> > > +MIPS CORE DRIVERS
+> > > +M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > > +M:	Serge Semin <fancer.lancer@gmail.com>
+> > > +L:	linux-mips@vger.kernel.org
+> > > +S:	Supported
+> > > +F:	drivers/bus/mips_cdmm.c
+> > > +F:	drivers/clocksource/mips-gic-timer.c
+> > > +F:	drivers/cpuidle/cpuidle-cps.c
+> > > +F:	drivers/irqchip/irq-mips-cpu.c
+> > > +F:	drivers/irqchip/irq-mips-gic.c
+> > > +
+> > >  MIPS GENERIC PLATFORM
+> > >  M:	Paul Burton <paulburton@kernel.org>
+> > >  L:	linux-mips@vger.kernel.org
+> > 
+> > Acked-by: Marc Zyngier <maz@kernel.org>
+> > 
+> > I assume this will go via the MIPS tree.
+> 
+> Yes, I also think so. Though I suppose first we have to get acks from
+> Rafael J. Wysocki (CPU IDLE) or Daniel Lezcano (CPU IDLE,
+> CLOCKSOURCE/CLOCKEVENT) or Thomas Gleixner (CLOCKSOURCE, CLOCKEVENT)
+> since we are going to maintain the drivers from the subsystems they
+> support. Am I right?
+> 
+> -Sergey
+> 
+> > 
+> > Thanks,
+> > 
+> >         M.
+> > -- 
+> > Jazz is not dead. It just smells funny...
