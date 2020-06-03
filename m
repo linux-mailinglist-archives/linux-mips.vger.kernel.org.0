@@ -2,69 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B601ECCC5
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2020 11:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39301ECE1D
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2020 13:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbgFCJmW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Jun 2020 05:42:22 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:43412 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725854AbgFCJmW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 3 Jun 2020 05:42:22 -0400
-Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL955cNdeqAQ9AA--.3197S2;
-        Wed, 03 Jun 2020 17:42:17 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Do not flush tlb when setting pmd entry
-Date:   Wed,  3 Jun 2020 17:42:13 +0800
-Message-Id: <1591177333-17833-1-git-send-email-maobibo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9DxL955cNdeqAQ9AA--.3197S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKr17uryxCF15Zw1xuF47twb_yoWxtFc_J3
-        W2y398GryYqrsrt3yrWFZ5JFyDuayDuF18CrsFvryYy3s5Aa1kXayjqryjyr45XrWIvrWr
-        Gr98Zr909F17tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb7xYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jY6wZUUUUU=
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+        id S1725956AbgFCLQW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Jun 2020 07:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726041AbgFCLQV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Jun 2020 07:16:21 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884F4C08C5C1
+        for <linux-mips@vger.kernel.org>; Wed,  3 Jun 2020 04:16:20 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id n5so866768ybo.7
+        for <linux-mips@vger.kernel.org>; Wed, 03 Jun 2020 04:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=d8q1i/RKsyok9DhZnpJtralPU0m9ZjwaGfmaM5P3JI0=;
+        b=qOlwfV0z6g6xdyBO9fhS/mMIhJTzYtOXs48x43UsXCMF5PzYuL/MbJuKxofES/Epd2
+         ncDNC95FjgxlyEx8KfOMqI/WWGgHXhgn5FzBdmI9KKwuep5y3Tb97AYlvKmMZ/zqCPqi
+         zSNEwwbporCWWkytkwqC+IxIlYJDRR5xypKYwDxDTAiIHYHvo2d+yX618K1SsRZiwzNQ
+         R2pj6DcTBX/ns58h4zvJt3Vprr8fBGKGDqrMOxB8HyoPMDMhy5g4gjzdtmf8a8ERhloC
+         tbe64LKNygxGBMJ47n31s/t9EqJLacF1e+A7+d+/NG8ZuEzTQDFDwpSy6I9lytfDjFoO
+         0K/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=d8q1i/RKsyok9DhZnpJtralPU0m9ZjwaGfmaM5P3JI0=;
+        b=LS9ag44U8rNihc06sZvqxQRE17x+VN+f33PMcoUyWPWuSqGVPCsGBk7DBMnAZpwF3Z
+         WBgji1PIrMU2bZO7WoPkp0Q013gemSfIQMqvlOu1Tqd8Hjas6p9K8ISsssRMezkwFgHv
+         0llJjXMpbxzslDLfoyP7R+twQQROviT4J33lpOtYgs9r9jGDW8s+WUZgGyPSzbyF82oo
+         wUIUjBZd+j0R3vWZFgouGSWA9RIbcohsyIjC8JQIeAJAfmIufWwVUJ7NYcv9uoDKJUJ6
+         Jfnv5A5UvmAXuws6a7R6/CMYsipq2CeL60rru+9iqhZrX6/c/5F7VPntnrUyXJuHkUzf
+         YIew==
+X-Gm-Message-State: AOAM531RVsD6s+B3xmeZpG/2Mtne+Fnj+7HklzPbYOFFN7ma+kSF2G0x
+        qWFuKDsMrQOntotPnz1GXA6OrHMlDO1KbQoX1ME=
+X-Google-Smtp-Source: ABdhPJwpWT5C6FLaIOYzb5s/QgarNK+7sM+Iix4kEsBUjPEidYt5x0yssDdOfbdHp+sscgBDAp+zECQHxbG2YPCU36E=
+X-Received: by 2002:a25:a248:: with SMTP id b66mr42422283ybi.81.1591182979837;
+ Wed, 03 Jun 2020 04:16:19 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a25:a56a:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 04:16:19 -0700 (PDT)
+Reply-To: viviangary53@gmail.com
+From:   Vivian Gary <barr.j.kodjo@gmail.com>
+Date:   Wed, 3 Jun 2020 13:16:19 +0200
+Message-ID: <CAAB3HGTW+AD_oduPCBtaFG=ZwTL40sdt2D4k8BTnWZyr4ThN=w@mail.gmail.com>
+Subject: I am Still Expecting Your Reply
+To:     barr.j.kodjo@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Function set_pmd_at is to set pmd entry, if tlb entry need to
-be flushed, there exists pmdp_huge_clear_flush alike function
-before set_pmd_at is called. So it is not necessary to call
-flush_tlb_all in this function.
+Hello
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- arch/mips/mm/pgtable-64.c | 1 -
- 1 file changed, 1 deletion(-)
+Greetings to you, this is the second time I send this letter to
+you,because of that I'm not sure
 
-diff --git a/arch/mips/mm/pgtable-64.c b/arch/mips/mm/pgtable-64.c
-index 6fd6e96..a236752 100644
---- a/arch/mips/mm/pgtable-64.c
-+++ b/arch/mips/mm/pgtable-64.c
-@@ -101,7 +101,6 @@ void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 		pmd_t *pmdp, pmd_t pmd)
- {
- 	*pmdp = pmd;
--	flush_tlb_all();
- }
- 
- void __init pagetable_init(void)
--- 
-1.8.3.1
+what you got the first one. I have an important and confidential
+deal,to discuss with you about
 
+dead relative, reply to this letter. Please go back to my personal address Email
+
+(viviangary53@gmail.com) if you want to know more detailed information
+Sincerely yours,
+Vivian Gary
