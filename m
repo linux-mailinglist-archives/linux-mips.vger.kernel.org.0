@@ -2,109 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EAD1EC608
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2020 02:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B601ECCC5
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2020 11:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726894AbgFCADX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 2 Jun 2020 20:03:23 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:57926 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbgFCADX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Jun 2020 20:03:23 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 0A4898030835;
-        Wed,  3 Jun 2020 00:03:21 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8X9nTlsCVJw4; Wed,  3 Jun 2020 03:03:20 +0300 (MSK)
-Date:   Wed, 3 Jun 2020 03:03:18 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paul.burton@imgtec.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        James Hogan <jhogan@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 6/6] MAINTAINERS: Add maintainers for MIPS core drivers
-Message-ID: <20200603000318.2xgizrgwauw2ywwu@mobilestation>
-References: <20200602100921.1155-1-Sergey.Semin@baikalelectronics.ru>
- <20200602100921.1155-7-Sergey.Semin@baikalelectronics.ru>
- <61afd4bd10ac644fa623e218f947328e@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <61afd4bd10ac644fa623e218f947328e@kernel.org>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+        id S1726360AbgFCJmW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Jun 2020 05:42:22 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:43412 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725854AbgFCJmW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 3 Jun 2020 05:42:22 -0400
+Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL955cNdeqAQ9AA--.3197S2;
+        Wed, 03 Jun 2020 17:42:17 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Do not flush tlb when setting pmd entry
+Date:   Wed,  3 Jun 2020 17:42:13 +0800
+Message-Id: <1591177333-17833-1-git-send-email-maobibo@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9DxL955cNdeqAQ9AA--.3197S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKr17uryxCF15Zw1xuF47twb_yoWxtFc_J3
+        W2y398GryYqrsrt3yrWFZ5JFyDuayDuF18CrsFvryYy3s5Aa1kXayjqryjyr45XrWIvrWr
+        Gr98Zr909F17tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb7xYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jY6wZUUUUU=
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 02, 2020 at 11:12:31AM +0100, Marc Zyngier wrote:
-> On 2020-06-02 11:09, Serge Semin wrote:
-> > Add Thomas and myself as maintainers of the MIPS CPU and GIC IRQchip,
-> > MIPS
-> > GIC timer and MIPS CPS CPUidle drivers.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Changelog v3:
-> > - Keep the files list alphabetically ordered.
-> > - Add Thomas as the co-maintainer of the designated drivers.
-> > ---
-> >  MAINTAINERS | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 2926327e4976..20532e0287d7 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -11278,6 +11278,17 @@
-> > F:	arch/mips/configs/generic/board-boston.config
-> >  F:	drivers/clk/imgtec/clk-boston.c
-> >  F:	include/dt-bindings/clock/boston-clock.h
-> > 
-> > +MIPS CORE DRIVERS
-> > +M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > +M:	Serge Semin <fancer.lancer@gmail.com>
-> > +L:	linux-mips@vger.kernel.org
-> > +S:	Supported
-> > +F:	drivers/bus/mips_cdmm.c
-> > +F:	drivers/clocksource/mips-gic-timer.c
-> > +F:	drivers/cpuidle/cpuidle-cps.c
-> > +F:	drivers/irqchip/irq-mips-cpu.c
-> > +F:	drivers/irqchip/irq-mips-gic.c
-> > +
-> >  MIPS GENERIC PLATFORM
-> >  M:	Paul Burton <paulburton@kernel.org>
-> >  L:	linux-mips@vger.kernel.org
-> 
-> Acked-by: Marc Zyngier <maz@kernel.org>
-> 
-> I assume this will go via the MIPS tree.
+Function set_pmd_at is to set pmd entry, if tlb entry need to
+be flushed, there exists pmdp_huge_clear_flush alike function
+before set_pmd_at is called. So it is not necessary to call
+flush_tlb_all in this function.
 
-Yes, I also think so. Though I suppose first we have to get acks from
-Rafael J. Wysocki (CPU IDLE) or Daniel Lezcano (CPU IDLE,
-CLOCKSOURCE/CLOCKEVENT) or Thomas Gleixner (CLOCKSOURCE, CLOCKEVENT)
-since we are going to maintain the drivers from the subsystems they
-support. Am I right?
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ arch/mips/mm/pgtable-64.c | 1 -
+ 1 file changed, 1 deletion(-)
 
--Sergey
+diff --git a/arch/mips/mm/pgtable-64.c b/arch/mips/mm/pgtable-64.c
+index 6fd6e96..a236752 100644
+--- a/arch/mips/mm/pgtable-64.c
++++ b/arch/mips/mm/pgtable-64.c
+@@ -101,7 +101,6 @@ void set_pmd_at(struct mm_struct *mm, unsigned long addr,
+ 		pmd_t *pmdp, pmd_t pmd)
+ {
+ 	*pmdp = pmd;
+-	flush_tlb_all();
+ }
+ 
+ void __init pagetable_init(void)
+-- 
+1.8.3.1
 
-> 
-> Thanks,
-> 
->         M.
-> -- 
-> Jazz is not dead. It just smells funny...
