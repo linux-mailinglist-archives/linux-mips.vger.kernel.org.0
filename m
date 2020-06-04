@@ -2,100 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF361EDB9C
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jun 2020 05:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36541EDD0E
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jun 2020 08:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726047AbgFDDZf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Jun 2020 23:25:35 -0400
-Received: from mail-m973.mail.163.com ([123.126.97.3]:42902 "EHLO
-        mail-m973.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbgFDDZf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Jun 2020 23:25:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=/zqF8
-        1x8WepWZf34Ay0CjhkjkK5lBprvOvKC3m4ZGz0=; b=b1HX7q3NR6ft/Ho3G3sAf
-        /DqbTw6FVMBVjbbGIM7j++5CstCxGV+HNKg8JQy5OXb/oJJgqG8+eST+/M9GSmAV
-        QypLyWJLNMGdgEGNY+ytM9PdxT+zuS2rg1LgzZwozN9c6PjXpndyLRb2bCYO5PsK
-        5CG6w13rrwbn9k8JoGPtGY=
-Received: from [172.20.10.2] (unknown [114.242.249.96])
-        by smtp3 (Coremail) with SMTP id G9xpCgDH1GyWadheSIGYAA--.53S2;
-        Thu, 04 Jun 2020 11:25:10 +0800 (CST)
-Subject: Re: [PATCH] function:stacktrace/mips: Fix function:stacktrace for
- mips
-To:     "Maciej W. Rozycki" <macro@wdc.com>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liulichao@loongson.cn,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-References: <20200528123640.4285-1-yuanjunqing66@163.com>
- <11c90f15-0a25-e628-c8db-53343c351085@163.com>
- <43f35844-f78a-74a2-0e3d-184c3567d74f@xen0n.name>
- <alpine.LFD.2.21.2006040212460.9519@redsun52.ssa.fujisawa.hgst.com>
-From:   yuanjunqing <yuanjunqing66@163.com>
-Message-ID: <810cf1b6-ce59-7570-1a5e-4fac8992a99d@163.com>
-Date:   Thu, 4 Jun 2020 11:25:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726683AbgFDGSY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Jun 2020 02:18:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58402 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725959AbgFDGSX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Jun 2020 02:18:23 -0400
+Received: from kernel.org (unknown [87.71.78.142])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3E3962072E;
+        Thu,  4 Jun 2020 06:18:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591251502;
+        bh=b58Vy5SwtTbyRgwDB1JjnKDC7odtYPgt+t7MvV6fCOU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IXkqPQoOU3wscqIXXMWt/Y5TkOrwtwnMx8e1GDO3arwp37wF3YS5TWw1he9VyaSeS
+         89Vf2ok0AEsO6njQmNORJH1sdCn3SOZLBx7rtKo7/9alOdMNqSdhDlvkldurNoZnBT
+         iW2UzmfH4Spawe1NKyJhKCr9TIFG31X5xIMnk6Lw=
+Date:   Thu, 4 Jun 2020 09:18:05 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable
+ pagefault/preempt twice
+Message-ID: <20200604061805.GA202650@kernel.org>
+References: <20200518184843.3029640-1-ira.weiny@intel.com>
+ <20200519165422.GA5838@roeck-us.net>
+ <20200519184031.GB3356843@iweiny-DESK2.sc.intel.com>
+ <20200519194215.GA71941@roeck-us.net>
+ <20200520051315.GA3660833@iweiny-DESK2.sc.intel.com>
+ <d86dba19-4f4b-061e-a2c7-4f037e9e2de2@roeck-us.net>
+ <20200521174250.GB176262@iweiny-DESK2.sc.intel.com>
+ <20200603135736.e7b5ded0082a81ae6d9067a0@linux-foundation.org>
+ <20200603211416.GA1740285@iweiny-DESK2.sc.intel.com>
+ <3538c8ad-674e-d310-d870-4ef6888092ed@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LFD.2.21.2006040212460.9519@redsun52.ssa.fujisawa.hgst.com>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: G9xpCgDH1GyWadheSIGYAA--.53S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AFW7AFWfXF15Jr1kAr4xZwb_yoW8Ww1fp3
-        yDAFW7Ca1jqr4j9ry2qwn5AryaqrWDGa4UGw1kJrnIk3Z0gF1SkF4Iv3WY9rZYvrW8Ca4f
-        ur15ZrZ0vr4vkFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jSfOwUUUUU=
-X-Originating-IP: [114.242.249.96]
-X-CM-SenderInfo: h1xd0ypxqtx0rjwwqiywtou0bp/xtbBZAY5XFQHJrpfowABs1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3538c8ad-674e-d310-d870-4ef6888092ed@roeck-us.net>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, Jun 03, 2020 at 04:44:17PM -0700, Guenter Roeck wrote:
+> On 6/3/20 2:14 PM, Ira Weiny wrote:
+> > On Wed, Jun 03, 2020 at 01:57:36PM -0700, Andrew Morton wrote:
+> >> On Thu, 21 May 2020 10:42:50 -0700 Ira Weiny <ira.weiny@intel.com> wrote:
+> >>
+> >>>>>
+> >>>>> Actually it occurs to me that the patch consolidating kmap_prot is odd for
+> >>>>> sparc 32 bit...
+> >>>>>
+> >>>>> Its a long shot but could you try reverting this patch?
+> >>>>>
+> >>>>> 4ea7d2419e3f kmap: consolidate kmap_prot definitions
+> >>>>>
+> >>>>
+> >>>> That is not easy to revert, unfortunately, due to several follow-up patches.
+> >>>
+> >>> I have gotten your sparc tests to run and they all pass...
+> >>>
+> >>> 08:10:34 > ../linux-build-test/rootfs/sparc/run-qemu-sparc.sh 
+> >>> Build reference: v5.7-rc4-17-g852b6f2edc0f
+> >>>
+> >>> Building sparc32:SPARCClassic:nosmp:scsi:hd ... running ......... passed
+> >>> Building sparc32:SPARCbook:nosmp:scsi:cd ... running ......... passed
+> >>> Building sparc32:LX:nosmp:noapc:scsi:hd ... running ......... passed
+> >>> Building sparc32:SS-4:nosmp:initrd ... running ......... passed
+> >>> Building sparc32:SS-5:nosmp:scsi:hd ... running ......... passed
+> >>> Building sparc32:SS-10:nosmp:scsi:cd ... running ......... passed
+> >>> Building sparc32:SS-20:nosmp:scsi:hd ... running ......... passed
+> >>> Building sparc32:SS-600MP:nosmp:scsi:hd ... running ......... passed
+> >>> Building sparc32:Voyager:nosmp:noapc:scsi:hd ... running ......... passed
+> >>> Building sparc32:SS-4:smp:scsi:hd ... running ......... passed
+> >>> Building sparc32:SS-5:smp:scsi:cd ... running ......... passed
+> >>> Building sparc32:SS-10:smp:scsi:hd ... running ......... passed
+> >>> Building sparc32:SS-20:smp:scsi:hd ... running ......... passed
+> >>> Building sparc32:SS-600MP:smp:scsi:hd ... running ......... passed
+> >>> Building sparc32:Voyager:smp:noapc:scsi:hd ... running ......... passed
+> >>>
+> >>> Is there another test I need to run?
+> >>
+> >> This all petered out, but as I understand it, this patchset still might
+> >> have issues on various architectures.
+> >>
+> >> Can folks please provide an update on the testing status?
+> > 
+> > I believe the tests were failing for Guenter due to another patch set...[1]
+> > 
+> > My tests with just this series are working.
+> > 
+> >>From my understanding the other failures were unrelated.[2]
+> > 
+> > 	<quote Mike Rapoport>
+> > 	I've checked the patch above on top of the mmots which already has
+> > 	Ira's patches and it booted fine. I've used sparc32_defconfig to build
+> > 	the kernel and qemu-system-sparc with default machine and CPU.
+> > 	</quote>
+> > 
+> > Mike, am I wrong?  Do you think the kmap() patches are still causing issues?
 
-ÔÚ 2020/6/4 ÉÏÎç9:17, Maciej W. Rozycki Ð´µÀ:
-> On Fri, 29 May 2020, WANG Xuerui wrote:
->
->> On 2020/5/29 17:29, yuanjunqing wrote:
->>
->>>> diff --git a/arch/mips/kernel/mcount.S b/arch/mips/kernel/mcount.S
->>>> index cff52b283e03..cd5545764e5f 100644
->>>> --- a/arch/mips/kernel/mcount.S
->>>> +++ b/arch/mips/kernel/mcount.S
->>>> @@ -87,8 +87,15 @@ EXPORT_SYMBOL(_mcount)
->>>>   	PTR_LA   t1, _etext
->>>>   	sltu     t3, t1, a0	/* t3 = (a0 > _etext) */
->>>>   	or       t1, t2, t3
->>>> +	PTR_LA	 t2, stlab-4 	/* t2: "function:stacktrace" return address */
->>>> +	move	 a1, AT		/* arg2: parent's return address */
->>>>   	beqz     t1, ftrace_call
->>>> -	 nop
->>>> +	 nop			/* "function:stacktrace" return address */
->>>> +stlab:
->>>> +	PTR_LA	t2, stlab-4
->>>> +	/* ftrace_call_end: ftrace_call return address */
->>>> +	beq	t2,ra, ftrace_call_end
->>>> +	nop
->  Broken delay slot indentation.
+sparc32 UP and microblaze work for me with next-20200603, but I didn't
+test other architectures. 
+ 
+> For my part, all I can say is that -next is in pretty bad shape right now.
+> The summary of my tests says:
+> 
+> Build results:
+> 	total: 151 pass: 130 fail: 21
+> Qemu test results:
+> 	total: 430 pass: 375 fail: 55
+> 
+> sparc32 smp images in next-20200603 still crash for me with a spinlock
+> recursion.
 
-Thank you for your reply. For this question that you mentioned about the delay slot, I will modify my patch again.
+I think this is because Will's fixes [1] are not yet in -next.
 
->
->>>>   #if defined(KBUILD_MCOUNT_RA_ADDRESS) && defined(CONFIG_32BIT)
->>>>   	PTR_SUBU a0, a0, 16	/* arg1: adjust to module's recorded callsite */
->>>>   #else
->>>> @@ -98,7 +105,9 @@ EXPORT_SYMBOL(_mcount)
->>>>   	.globl ftrace_call
->>>>   ftrace_call:
->>>>   	nop	/* a placeholder for the call to a real tracing function */
->>>> -	 move	a1, AT		/* arg2: parent's return address */
->>>> +	move	ra, t2		/* t2: "function:stacktrace" return address */
->  Likewise.  NB I haven't investigated if the change makes sense.  A more 
-> detailed explanation in the change description is certainly needed.
+> s390 images hang early in boot. Several others (alpha, arm64,
+> various ppc) don't even compile. I can run some more bisects over time,
+> but this is becoming a full-time job :-(.
+> 
+> Guenter
 
-I will attach a specific description for further explanation about the second patch later.
-
->
->   Maciej
-
+[1] https://lore.kernel.org/lkml/20200526173302.377-1-will@kernel.org
+-- 
+Sincerely yours,
+Mike.
