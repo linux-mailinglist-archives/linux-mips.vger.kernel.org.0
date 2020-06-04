@@ -2,168 +2,182 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 831C61EE9E4
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jun 2020 19:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FC91EEC67
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jun 2020 22:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730379AbgFDR5k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Jun 2020 13:57:40 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:60451 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730309AbgFDR5k (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Jun 2020 13:57:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591293458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FksnhBO6vS/Ap/hKpam5K+PoYAuOG4Rfq572TxOAyTg=;
-        b=U7A0TuTGRMwuZ/hmqIc+hLl3Uve0+rrJUCVNao+v1XX1b8Y3jdYT1hP56HTUdxbmkHgk8+
-        OXPuek3JgowzE63E12ob3JVoKDi0xqFRumHGFqfZta/Cw1+davI/fO8WMfFX2eKLnBChi6
-        Unda+Fh4Ntw2hujt43guSRvZykrBIy0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-29-_kAfzmV5MnGf15K2BmwaBw-1; Thu, 04 Jun 2020 13:57:34 -0400
-X-MC-Unique: _kAfzmV5MnGf15K2BmwaBw-1
-Received: by mail-wm1-f69.google.com with SMTP id f62so2025379wme.3
-        for <linux-mips@vger.kernel.org>; Thu, 04 Jun 2020 10:57:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FksnhBO6vS/Ap/hKpam5K+PoYAuOG4Rfq572TxOAyTg=;
-        b=hqSOrKNl/3LS3kkI61VdlyKkeSlkuZsav8uBiBtYCXM2d1jLWryVNN3qBZS1eEqhxm
-         49hmQZzkPQOGLCC34nhTTt3ZO3FCXh/xT0I9SylgZTVmA4/quS5vdyYd16x4SR9SQpf7
-         9gbND3skbvsumJOmHnq+slFFe1/D8/KGun/d0ifSLe5gw/S41rpiPK3m+mzTnjAziSwg
-         2HdzGvF/mgesf6d3fsWQYa9Zu+HP12f9nA/LRSMYcka5XqBcGbrj54xRy4KYrUXyIQMD
-         pSGQU9A7a2rMvY1xuXI4V80YhMdePr+gSzKSU75IuoCw9b01EmMTGQITH44oRf2kY/kR
-         IiNA==
-X-Gm-Message-State: AOAM5337Fy2opyeFqIiqZ+iVuSS/Cb9cbZJihmIWY4RAoB6SKLE7Jynn
-        YOY7I1c7oyp1VklTHSJACarrxKVH5oRccj8V4bKFW37REXx9r7Mh8+XhOceQCtbbfBai77ZtGhk
-        CTjBxYesu5q32IjcSPXo/Gg==
-X-Received: by 2002:a05:600c:22c9:: with SMTP id 9mr5552337wmg.68.1591293453368;
-        Thu, 04 Jun 2020 10:57:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwOGKSvoIoXAWEbKHBYSbX8H32Swgs+id+2H5vtlJpeMc9ijfIwfsCbIQxP4TuqOuWT6aI2Bg==
-X-Received: by 2002:a05:600c:22c9:: with SMTP id 9mr5552320wmg.68.1591293453077;
-        Thu, 04 Jun 2020 10:57:33 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:a0c0:5d2e:1d35:17bb? ([2001:b07:6468:f312:a0c0:5d2e:1d35:17bb])
-        by smtp.gmail.com with ESMTPSA id n23sm8155508wmc.0.2020.06.04.10.57.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jun 2020 10:57:32 -0700 (PDT)
-Subject: Re: [PATCH V7 00/15] KVM: MIPS: Add Loongson-3 support (Host Side)
-To:     Huacai Chen <chenhc@lemote.com>,
+        id S1729982AbgFDUvn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Jun 2020 16:51:43 -0400
+Received: from mga06.intel.com ([134.134.136.31]:46522 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729855AbgFDUvm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Jun 2020 16:51:42 -0400
+IronPort-SDR: 5rLgl5+qO89McM0SHHgm2sv/I44a8qLqr0eIFVtK26LQLge7H3mgQhRKAZDHnAlKxWdYvVV4sc
+ /PCMYwoAvBVA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 13:51:41 -0700
+IronPort-SDR: zs+MMvxWw13sjlZ9Bw72P4E7fjGK2DTGpjrAZCIfDuEufJrPSBND+RoMuQFrepsdDPuoy+96Bf
+ +AJaXGZ7wG6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,472,1583222400"; 
+   d="scan'208";a="348215104"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by orsmga001.jf.intel.com with ESMTP; 04 Jun 2020 13:51:40 -0700
+Date:   Thu, 4 Jun 2020 13:51:40 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <1590220602-3547-1-git-send-email-chenhc@lemote.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <d702015b-ab5a-77ae-de24-e248c38030f7@redhat.com>
-Date:   Thu, 4 Jun 2020 19:57:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable
+ pagefault/preempt twice
+Message-ID: <20200604205140.GN1505637@iweiny-DESK2.sc.intel.com>
+References: <20200519165422.GA5838@roeck-us.net>
+ <20200519184031.GB3356843@iweiny-DESK2.sc.intel.com>
+ <20200519194215.GA71941@roeck-us.net>
+ <20200520051315.GA3660833@iweiny-DESK2.sc.intel.com>
+ <d86dba19-4f4b-061e-a2c7-4f037e9e2de2@roeck-us.net>
+ <20200521174250.GB176262@iweiny-DESK2.sc.intel.com>
+ <20200603135736.e7b5ded0082a81ae6d9067a0@linux-foundation.org>
+ <20200603211416.GA1740285@iweiny-DESK2.sc.intel.com>
+ <3538c8ad-674e-d310-d870-4ef6888092ed@roeck-us.net>
+ <20200604094133.GC202650@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <1590220602-3547-1-git-send-email-chenhc@lemote.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200604094133.GC202650@kernel.org>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23/05/20 09:56, Huacai Chen wrote:
-> We are preparing to add KVM support for Loongson-3. VZ extension is
-> fully supported in Loongson-3A R4+, and we will not care about old CPUs
-> (at least now). We already have a full functional Linux kernel (based
-> on Linux-5.4.x LTS) and QEMU (based on 5.0.0) and their git repositories
-> are here:
+On Thu, Jun 04, 2020 at 12:41:33PM +0300, Mike Rapoport wrote:
+> On Wed, Jun 03, 2020 at 04:44:17PM -0700, Guenter Roeck wrote:
+> > 
+> > sparc32 smp images in next-20200603 still crash for me with a spinlock
+> > recursion. s390 images hang early in boot. Several others (alpha, arm64,
+> > various ppc) don't even compile. I can run some more bisects over time,
+> > but this is becoming a full-time job :-(.
 > 
-> QEMU: https://github.com/chenhuacai/qemu
-> Kernel: https://github.com/chenhuacai/linux
+> I've been able to bisect s390 hang to commit b614345f52bc ("x86/entry:
+> Clarify irq_{enter,exit}_rcu()").
 > 
-> Of course these two repositories need to be rework and not suitable for
-> upstream (especially the commits need to be splitted). We show them here
-> is just to tell others what we have done, and how KVM/Loongson will look
-> like.
+> After this commit, lockdep_hardirq_exit() is called twice on s390 (and
+> others) - one time in irq_exit_rcu() and another one in irq_exit():
 > 
-> Our plan is make the KVM host side be upstream first, and after that,
-> we will make the KVM guest side and QEMU emulator be upstream.
+> /**
+>  * irq_exit_rcu() - Exit an interrupt context without updating RCU
+>  *
+>  * Also processes softirqs if needed and possible.
+>  */
+> void irq_exit_rcu(void)
+> {
+> 	__irq_exit_rcu();
+> 	 /* must be last! */
+> 	lockdep_hardirq_exit();
+> }
 > 
-> V1 -> V2:
-> 1, Remove "mips: define pud_index() regardless of page table folding"
->    because it has been applied.
-> 2, Make Loongson-specific code be guarded by CONFIG_CPU_LOONGSON64.
+> /**
+>  * irq_exit - Exit an interrupt context, update RCU and lockdep
+>  *
+>  * Also processes softirqs if needed and possible.
+>  */
+> void irq_exit(void)
+> {
+> 	irq_exit_rcu();
+> 	rcu_irq_exit();
+> 	 /* must be last! */
+> 	lockdep_hardirq_exit();
+> }
 > 
-> V2 -> V3:
-> 1, Emulate a reduced feature list of CPUCFG.
-> 2, Fix all possible checkpatch.pl errors and warnings.
-> 
-> V3 -> V4:
-> 1, Emulate LOONGSON_CFG0/LOONGSON_CFG3 in CPUCFG correctly.
-> 2, Update commit messages to explain Loongson-3 Virtual IPI.
-> 3, Add Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>.
-> 
-> V4 -> V5:
-> 1, Fix a typo.
-> 2, Update MAINTAINERS.
-> 
-> V5 -> V6:
-> 1, Fix a mismatch during rebasing.
-> 2, Add Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>.
-> 
-> V6 -> V7:
-> 1, Rebase on latest mips-next (Config6 feature bits definition updated).
+> Removing the call in irq_exit() make s390 boot again, and judgung by the
+> x86 entry code, the comment /* must be last! */ is stale...
 
-Queued, thanks.  Please check the queue branch of kvm.git.
+FWIW I got s390 to compile and this patch fixes s390 booting for me as well.
 
-Paolo
+13:05:25 > /home/iweiny/dev/linux-build-test/rootfs/s390/run-qemu-s390.sh 
+Build reference: next-20200603-4-g840714292d8c
 
-> Xing Li(2):
->  KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
->  KVM: MIPS: Fix VPN2_MASK definition for variable cpu_vmbits
+Building s390:defconfig:initrd ... running ........... passed
+Building s390:defconfig:virtio-blk-ccw:rootfs ... running ........... passed
+Building s390:defconfig:scsi[virtio-ccw]:rootfs ... running ..............  passed
+Building s390:defconfig:virtio-pci:rootfs ... running ........... passed
+Building s390:defconfig:scsi[virtio-pci]:rootfs ... running ........... passed
+
+Ira
+
 > 
-> Huacai Chen(13):
->  KVM: MIPS: Increase KVM_MAX_VCPUS and KVM_USER_MEM_SLOTS to 16
->  KVM: MIPS: Add EVENTFD support which is needed by VHOST
->  KVM: MIPS: Use lddir/ldpte instructions to lookup gpa_mm.pgd
->  KVM: MIPS: Introduce and use cpu_guest_has_ldpte
->  KVM: MIPS: Use root tlb to control guest's CCA for Loongson-3
->  KVM: MIPS: Let indexed cacheops cause guest exit on Loongson-3
->  KVM: MIPS: Add more types of virtual interrupts
->  KVM: MIPS: Add Loongson-3 Virtual IPI interrupt support
->  KVM: MIPS: Add CPUCFG emulation for Loongson-3
->  KVM: MIPS: Add CONFIG6 and DIAG registers emulation
->  KVM: MIPS: Add more MMIO load/store instructions emulation
->  KVM: MIPS: Enable KVM support for Loongson-3
->  MAINTAINERS: Update KVM/MIPS maintainers
+> @Peter, @Thomas, can you comment please?
 > 
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> From e51d50ee6f4d1f446decf91c2c67230da14ff82c Mon Sep 17 00:00:00 2001
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> Date: Thu, 4 Jun 2020 12:37:03 +0300
+> Subject: [PATCH] softirq: don't call lockdep_hardirq_exit() twice
+> 
+> After commit b614345f52bc ("x86/entry: Clarify irq_{enter,exit}_rcu()")
+> lockdep_hardirq_exit() is called twice on every architecture that uses
+> irq_exit(): one time in irq_exit_rcu() and another one in irq_exit().
+> 
+> Remove the extra call in irq_exit().
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 > ---
->  MAINTAINERS                          |   4 +-
->  arch/mips/Kconfig                    |   1 +
->  arch/mips/include/asm/cpu-features.h |   3 +
->  arch/mips/include/asm/kvm_host.h     |  52 +++-
->  arch/mips/include/asm/mipsregs.h     |   7 +
->  arch/mips/include/uapi/asm/inst.h    |  11 +
->  arch/mips/kernel/cpu-probe.c         |   2 +
->  arch/mips/kvm/Kconfig                |   1 +
->  arch/mips/kvm/Makefile               |   5 +-
->  arch/mips/kvm/emulate.c              | 503 ++++++++++++++++++++++++++++++++++-
->  arch/mips/kvm/entry.c                |  19 +-
->  arch/mips/kvm/interrupt.c            |  93 +------
->  arch/mips/kvm/interrupt.h            |  14 +-
->  arch/mips/kvm/loongson_ipi.c         | 214 +++++++++++++++
->  arch/mips/kvm/mips.c                 |  49 +++-
->  arch/mips/kvm/tlb.c                  |  41 +++
->  arch/mips/kvm/trap_emul.c            |   3 +
->  arch/mips/kvm/vz.c                   | 237 ++++++++++++-----
->  18 files changed, 1092 insertions(+), 167 deletions(-)
->  create mode 100644 arch/mips/kvm/loongson_ipi.c
-> --
-> 2.7.0
+>  kernel/softirq.c | 3 ---
+>  1 file changed, 3 deletions(-)
 > 
-
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index a3eb6eba8c41..7523f4ce4c1d 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -427,7 +427,6 @@ static inline void __irq_exit_rcu(void)
+>  void irq_exit_rcu(void)
+>  {
+>  	__irq_exit_rcu();
+> -	 /* must be last! */
+>  	lockdep_hardirq_exit();
+>  }
+>  
+> @@ -440,8 +439,6 @@ void irq_exit(void)
+>  {
+>  	irq_exit_rcu();
+>  	rcu_irq_exit();
+> -	 /* must be last! */
+> -	lockdep_hardirq_exit();
+>  }
+>  
+>  /*
+> -- 
+> 2.26.2
+> 
+> 
+> 
+> > Guenter
+> 
+> -- 
+> Sincerely yours,
+> Mike.
