@@ -2,124 +2,182 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C27BD1EDD70
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jun 2020 08:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6621EDD97
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jun 2020 08:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727783AbgFDGos (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Jun 2020 02:44:48 -0400
-Received: from mga09.intel.com ([134.134.136.24]:30581 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727774AbgFDGoq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 4 Jun 2020 02:44:46 -0400
-IronPort-SDR: V6OsyqcfcyOBgZQlHSsptKANTSuPSl6zBXklPJyl2I4yhhXIS53l9C+c2oH+ZlsHow0c8Sny6k
- 1rEBEMBBocsg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2020 23:44:45 -0700
-IronPort-SDR: Hi+ARyh48YSb32/Pt8vOy4p7zx/cFnMDyZyMrnGYxWixi6a4PkX1oDrgQ4wPYlujYL2xH3fTes
- IcRlwA5YSB6w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,471,1583222400"; 
-   d="scan'208";a="445398016"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga005.jf.intel.com with ESMTP; 03 Jun 2020 23:44:44 -0700
-Date:   Wed, 3 Jun 2020 23:44:44 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
-        Christian Koenig <christian.koenig@amd.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable
- pagefault/preempt twice
-Message-ID: <20200604064444.GD1740285@iweiny-DESK2.sc.intel.com>
-References: <20200519184031.GB3356843@iweiny-DESK2.sc.intel.com>
- <20200519194215.GA71941@roeck-us.net>
- <20200520051315.GA3660833@iweiny-DESK2.sc.intel.com>
- <d86dba19-4f4b-061e-a2c7-4f037e9e2de2@roeck-us.net>
- <20200521174250.GB176262@iweiny-DESK2.sc.intel.com>
- <20200603135736.e7b5ded0082a81ae6d9067a0@linux-foundation.org>
- <20200603211416.GA1740285@iweiny-DESK2.sc.intel.com>
- <3538c8ad-674e-d310-d870-4ef6888092ed@roeck-us.net>
- <20200604062226.GA1740345@iweiny-DESK2.sc.intel.com>
- <20200604063745.GB202650@kernel.org>
+        id S1727110AbgFDG51 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 4 Jun 2020 02:57:27 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:44889 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726422AbgFDG51 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Jun 2020 02:57:27 -0400
+Received: by mail-io1-f65.google.com with SMTP id p20so5097692iop.11;
+        Wed, 03 Jun 2020 23:57:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YeTJP/xMMCYkZAkMz4q0C25mgzCugEJYabA6Tr8yPyI=;
+        b=bq0wrrTImgZoj6a8p9ELvsI0N2P5pMI4+qGgBVUT5lFaUCFYKwqVc6hLWPefK/qX0Q
+         1BFTsUkjrHPWt9p9M8yn68smiSxlL1kGlGIaC7hZ716HIFWyYTO5HTTGVUVfi3nJsNAL
+         F3gGtCkeCxbSBqVacajlPiZw2/NRveNluEOXP5R1jCdDiXZJuMv4AMNTufOO/DvOjb9H
+         2I/aPxu8SfcNL3iark4slzZGB1ij3KtTe2EPWHmmSH2DLmcQ73a3EC+vvVymFywdfWo0
+         qCNF7B3Hm+5l/uV0J83JsHCD/q6AEhaQ5CYgwC69oCmjBwwxTEXRLoJ5w7ewg7LA1jrA
+         goAg==
+X-Gm-Message-State: AOAM5311bkG95korauabXe2lz4IkYrNu1cD1aUrJGP3wVyliTCC/BRXX
+        WSS+eS7NUKylUkLtrXCx19ZG5Sv+aSvNPL7FPMU=
+X-Google-Smtp-Source: ABdhPJwu213mhzh5qFScmYIi6fe6ret32HwhzvodK/nVlOs5VktTDYvoC3AYyDhsd1Gi9CWDISQk8flF4/fptgVp4vY=
+X-Received: by 2002:a5d:9dd2:: with SMTP id 18mr2910166ioo.196.1591253845660;
+ Wed, 03 Jun 2020 23:57:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200604063745.GB202650@kernel.org>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+References: <1590318819-24520-1-git-send-email-chenhc@lemote.com> <CAHiYmc4uMSypSUafphc1bRu=voVj4Swvu=wEG8WNaszq34aNqQ@mail.gmail.com>
+In-Reply-To: <CAHiYmc4uMSypSUafphc1bRu=voVj4Swvu=wEG8WNaszq34aNqQ@mail.gmail.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Thu, 4 Jun 2020 14:57:14 +0800
+Message-ID: <CAAhV-H6qTzUiq2nrGrTBft=KBSPnR58-zL13ZuLjwN2MLzAveA@mail.gmail.com>
+Subject: Re: [PATCH V8 00/15] KVM: MIPS: Add Loongson-3 support (Host Side)
+To:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        kvm <kvm@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 04, 2020 at 09:37:45AM +0300, Mike Rapoport wrote:
-> On Wed, Jun 03, 2020 at 11:22:26PM -0700, Ira Weiny wrote:
-> > On Wed, Jun 03, 2020 at 04:44:17PM -0700, Guenter Roeck wrote:
-> > 
-> > With linux-next on sparc I too see the spinlock issue; something like:
-> > 
-> > ...
-> > Starting syslogd: BUG: spinlock recursion on CPU#0, S01syslogd/139
-> >  lock: 0xf53ef350, .magic: dead4ead, .owner: S01syslogd/139, .owner_cpu: 0
-> > CPU: 0 PID: 139 Comm: S01syslogd Not tainted 5.7.0-next-20200603 #1
-> > [f0067d00 : 
-> > do_raw_spin_lock+0xa8/0xd8 ] 
-> > [f00d598c : 
-> > copy_page_range+0x328/0x804 ] 
-> > [f0025c34 : 
-> > dup_mm+0x334/0x434 ] 
-> > [f0027198 : 
-> > copy_process+0x1248/0x12d4 ] 
-> > [f00273b8 : 
-> > _do_fork+0x54/0x30c ] 
-> > [f00276e4 : 
-> > do_fork+0x5c/0x6c ] 
-> > [f000de44 : 
-> > sparc_do_fork+0x18/0x38 ] 
-> > [f000b7f4 : 
-> > do_syscall+0x34/0x40 ] 
-> > [5010cd4c : 
-> > 0x5010cd4c ] 
-> > 
-> > 
-> > I'm going to bisect between there and HEAD.
-> 
-> The sparc issue should be fixed by 
-> 
-> https://lore.kernel.org/lkml/20200526173302.377-1-will@kernel.org
+Hi, Paolo
 
-Saw your other email.  And yes they are!
+On Thu, May 28, 2020 at 3:36 PM Aleksandar Markovic
+<aleksandar.qemu.devel@gmail.com> wrote:
+>
+> нед, 24. мај 2020. у 13:13 Huacai Chen <chenhc@lemote.com> је написао/ла:
+> >
+> > We are preparing to add KVM support for Loongson-3. VZ extension is
+> > fully supported in Loongson-3A R4+, and we will not care about old CPUs
+> > (at least now). We already have a full functional Linux kernel (based
+> > on Linux-5.4.x LTS) and QEMU (based on 5.0.0) and their git repositories
+> > are here:
+> >
+> > QEMU: https://github.com/chenhuacai/qemu
+> > Kernel: https://github.com/chenhuacai/linux
+> >
+> > Of course these two repositories need to be rework and not suitable for
+> > upstream (especially the commits need to be splitted). We show them here
+> > is just to tell others what we have done, and how KVM/Loongson will look
+> > like.
+> >
+> > Our plan is make the KVM host side be upstream first, and after that,
+> > we will make the KVM guest side and QEMU emulator be upstream.
+> >
+>
+> Huacai, Paolo, Thomas,
+>
+> As you know, there are number of Huacai's patches to QEMU, related
+> to this series, actually we could call them counterparts to this series.
+>
+> Regarding QEMU upstreaming, unless someone objects, I plan to send
+> pull request that will include some of Huacai-s QEMU patches in next few
+> days - those that are of general nature, do not rely on any kernel changes,
+> and passed review process. The rest of Huacai's QEMU patches will wait
+> for this series to be integrated in kernel upstream.
+>
+> Please give Huacai and myself some direction and path to go forward with
+> this series. Please take into account that we inherit KVM for MIPS in an
+> "orphaned" state, and do not know exactly all details how to "adopt" it.
+> Forgive us if we made some missteps along the route.
+>
+> We would like to establish a long-lasting, and high-quality, workflow that
+> will fit well to both KVM and MIPS kernel development.
+>
+> Please help us do it.
+>
+> Thanks in advance!
+>
+> Aleksandar
+>
+If you will take this series after MIPS tree be merged into upstream,
+maybe V7 is better for you.
 
-Thanks!
-Ira
-
->  
-> > Ira
-> 
-> -- 
-> Sincerely yours,
-> Mike.
+Huacai
+>
+>
+> > V1 -> V2:
+> > 1, Remove "mips: define pud_index() regardless of page table folding"
+> >    because it has been applied.
+> > 2, Make Loongson-specific code be guarded by CONFIG_CPU_LOONGSON64.
+> >
+> > V2 -> V3:
+> > 1, Emulate a reduced feature list of CPUCFG.
+> > 2, Fix all possible checkpatch.pl errors and warnings.
+> >
+> > V3 -> V4:
+> > 1, Emulate LOONGSON_CFG0/LOONGSON_CFG3 in CPUCFG correctly.
+> > 2, Update commit messages to explain Loongson-3 Virtual IPI.
+> > 3, Add Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>.
+> >
+> > V4 -> V5:
+> > 1, Fix a typo.
+> > 2, Update MAINTAINERS.
+> >
+> > V5 -> V6:
+> > 1, Fix a mismatch during rebasing.
+> > 2, Add Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>.
+> >
+> > V6 -> V7:
+> > 1, Rebase on latest mips-next (Config6 feature bits definition updated).
+> >
+> > V7 -> V8:
+> > 1, Rebase to be applied on kvm tree, i.e., the linux-next branch of
+> >    https://git.kernel.org/pub/scm/virt/kvm/kvm.git/. Building KVM/MIPS
+> >    need commit 3fbfb4585bfd4ff34e ("mips: define pud_index() regardless
+> >    of page table folding"), which has already been in mips tree but not
+> >    in kvm tree.
+> >
+> > Xing Li(2):
+> >  KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
+> >  KVM: MIPS: Fix VPN2_MASK definition for variable cpu_vmbits
+> >
+> > Huacai Chen(13):
+> >  KVM: MIPS: Increase KVM_MAX_VCPUS and KVM_USER_MEM_SLOTS to 16
+> >  KVM: MIPS: Add EVENTFD support which is needed by VHOST
+> >  KVM: MIPS: Use lddir/ldpte instructions to lookup gpa_mm.pgd
+> >  KVM: MIPS: Introduce and use cpu_guest_has_ldpte
+> >  KVM: MIPS: Use root tlb to control guest's CCA for Loongson-3
+> >  KVM: MIPS: Let indexed cacheops cause guest exit on Loongson-3
+> >  KVM: MIPS: Add more types of virtual interrupts
+> >  KVM: MIPS: Add Loongson-3 Virtual IPI interrupt support
+> >  KVM: MIPS: Add CPUCFG emulation for Loongson-3
+> >  KVM: MIPS: Add CONFIG6 and DIAG registers emulation
+> >  KVM: MIPS: Add more MMIO load/store instructions emulation
+> >  KVM: MIPS: Enable KVM support for Loongson-3
+> >  MAINTAINERS: Update KVM/MIPS maintainers
+> >
+> > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > ---
+> >  MAINTAINERS                          |   4 +-
+> >  arch/mips/Kconfig                    |   1 +
+> >  arch/mips/include/asm/cpu-features.h |   3 +
+> >  arch/mips/include/asm/kvm_host.h     |  52 +++-
+> >  arch/mips/include/asm/mipsregs.h     |   7 +
+> >  arch/mips/include/uapi/asm/inst.h    |  37 +++
+> >  arch/mips/kernel/cpu-probe.c         |   2 +
+> >  arch/mips/kvm/Kconfig                |   1 +
+> >  arch/mips/kvm/Makefile               |   5 +-
+> >  arch/mips/kvm/emulate.c              | 503 ++++++++++++++++++++++++++++++++++-
+> >  arch/mips/kvm/entry.c                |  19 +-
+> >  arch/mips/kvm/interrupt.c            |  93 +------
+> >  arch/mips/kvm/interrupt.h            |  14 +-
+> >  arch/mips/kvm/loongson_ipi.c         | 214 +++++++++++++++
+> >  arch/mips/kvm/mips.c                 |  49 +++-
+> >  arch/mips/kvm/tlb.c                  |  41 +++
+> >  arch/mips/kvm/trap_emul.c            |   3 +
+> >  arch/mips/kvm/vz.c                   | 237 ++++++++++++-----
+> >  18 files changed, 1118 insertions(+), 167 deletions(-)
+> >  create mode 100644 arch/mips/kvm/loongson_ipi.c
+> > --
+> > 2.7.0
