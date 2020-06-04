@@ -2,107 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 220D11EDA63
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jun 2020 03:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF361EDB9C
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jun 2020 05:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgFDBYJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Jun 2020 21:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726047AbgFDBYI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Jun 2020 21:24:08 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BAFC08C5C0
-        for <linux-mips@vger.kernel.org>; Wed,  3 Jun 2020 18:24:07 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id z18so5131895lji.12
-        for <linux-mips@vger.kernel.org>; Wed, 03 Jun 2020 18:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fnqOYIUQo+qaj8w3g24MOT2Gco25LKdRH9nOfQU72t8=;
-        b=UtdKeZmQ8xReEqzhYUDShUeXsTib84g3eRDLNMK7usyMbV4TBGM0vlhqgnEG9g57OY
-         g6RH2h89oJKKLDLPjSogvRLpkY1UOHe+h5yfeawReCQqmn6/iMacwKP9WhjlmJi7gK38
-         0/31CbOL/GGaaFwxJ46S/iu6T9fah2XuKCXYM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fnqOYIUQo+qaj8w3g24MOT2Gco25LKdRH9nOfQU72t8=;
-        b=Pk/GcUPMR1HUwnZnCjbHR1sHCkvcgdyhgWJhFFAwI2z1++TdeH4410vEg958MhnbJ8
-         f6JiLOJIeWcPSYYUD1E7HlTgV+q9qrICltKkj89NCT77CZV5JziMYV/CRdkCM4NAMq/q
-         FYT46HKqpSDmyQVGBbKF+9eFAjnP+4mvwA/psQClVdtJ3k6YR3Ui4nUQK089ZzFToXzf
-         KlUhb0OCcDqzmAx06Jbcinz91w0sP/fDsn7QWLVfkGMNMzHbpXckhul+CgisjkVhnzAL
-         rWwOvvdSQgmGNoSDe66JXwEG5aSB/GQat4eI5Dyu3ZT/9YnE7G0QTj+ulu93ki2+pJR1
-         FRTw==
-X-Gm-Message-State: AOAM531JGcNv2f7eF0AqVaUKuWYsndQVA130XRZgQhUfAtqeLRno5qLV
-        katObvQ/Hvm7QzuJfCtXhodTq6/8d/8=
-X-Google-Smtp-Source: ABdhPJw+3R8EoG++826LRYctEUBIsN+6mYHjmMsycAzxwarApINzkTNJVPDzFQltDp03OqrT9NcH0Q==
-X-Received: by 2002:a2e:b5bc:: with SMTP id f28mr870917ljn.394.1591233845437;
-        Wed, 03 Jun 2020 18:24:05 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id 15sm872284ljr.104.2020.06.03.18.24.04
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jun 2020 18:24:04 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id b6so5208074ljj.1
-        for <linux-mips@vger.kernel.org>; Wed, 03 Jun 2020 18:24:04 -0700 (PDT)
-X-Received: by 2002:a2e:97c3:: with SMTP id m3mr644861ljj.312.1591233844059;
- Wed, 03 Jun 2020 18:24:04 -0700 (PDT)
+        id S1726047AbgFDDZf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Jun 2020 23:25:35 -0400
+Received: from mail-m973.mail.163.com ([123.126.97.3]:42902 "EHLO
+        mail-m973.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725959AbgFDDZf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Jun 2020 23:25:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=/zqF8
+        1x8WepWZf34Ay0CjhkjkK5lBprvOvKC3m4ZGz0=; b=b1HX7q3NR6ft/Ho3G3sAf
+        /DqbTw6FVMBVjbbGIM7j++5CstCxGV+HNKg8JQy5OXb/oJJgqG8+eST+/M9GSmAV
+        QypLyWJLNMGdgEGNY+ytM9PdxT+zuS2rg1LgzZwozN9c6PjXpndyLRb2bCYO5PsK
+        5CG6w13rrwbn9k8JoGPtGY=
+Received: from [172.20.10.2] (unknown [114.242.249.96])
+        by smtp3 (Coremail) with SMTP id G9xpCgDH1GyWadheSIGYAA--.53S2;
+        Thu, 04 Jun 2020 11:25:10 +0800 (CST)
+Subject: Re: [PATCH] function:stacktrace/mips: Fix function:stacktrace for
+ mips
+To:     "Maciej W. Rozycki" <macro@wdc.com>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liulichao@loongson.cn,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+References: <20200528123640.4285-1-yuanjunqing66@163.com>
+ <11c90f15-0a25-e628-c8db-53343c351085@163.com>
+ <43f35844-f78a-74a2-0e3d-184c3567d74f@xen0n.name>
+ <alpine.LFD.2.21.2006040212460.9519@redsun52.ssa.fujisawa.hgst.com>
+From:   yuanjunqing <yuanjunqing66@163.com>
+Message-ID: <810cf1b6-ce59-7570-1a5e-4fac8992a99d@163.com>
+Date:   Thu, 4 Jun 2020 11:25:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20200602125445.GA12527@alpha.franken.de> <CAHk-=whtew82tj8_QLPU-xqT702vmB0pGgQSuQkK_Javnz6PPw@mail.gmail.com>
- <b37df9de-adca-3639-bd11-b114ad2f1e76@loongson.cn>
-In-Reply-To: <b37df9de-adca-3639-bd11-b114ad2f1e76@loongson.cn>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 3 Jun 2020 18:23:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiP68twiDi58hdgP7LrDeyTUrtFf=Kz0owF=X8i5AUTng@mail.gmail.com>
-Message-ID: <CAHk-=wiP68twiDi58hdgP7LrDeyTUrtFf=Kz0owF=X8i5AUTng@mail.gmail.com>
-Subject: Re: [GIT PULL] MIPS changes for v5.8-rc1
-To:     maobibo <maobibo@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <alpine.LFD.2.21.2006040212460.9519@redsun52.ssa.fujisawa.hgst.com>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: G9xpCgDH1GyWadheSIGYAA--.53S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AFW7AFWfXF15Jr1kAr4xZwb_yoW8Ww1fp3
+        yDAFW7Ca1jqr4j9ry2qwn5AryaqrWDGa4UGw1kJrnIk3Z0gF1SkF4Iv3WY9rZYvrW8Ca4f
+        ur15ZrZ0vr4vkFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jSfOwUUUUU=
+X-Originating-IP: [114.242.249.96]
+X-CM-SenderInfo: h1xd0ypxqtx0rjwwqiywtou0bp/xtbBZAY5XFQHJrpfowABs1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 3, 2020 at 6:11 PM maobibo <maobibo@loongson.cn> wrote:
+
+ÔÚ 2020/6/4 ÉÏÎç9:17, Maciej W. Rozycki Ð´µÀ:
+> On Fri, 29 May 2020, WANG Xuerui wrote:
 >
-> On architectures that manage the access bit in hardware, access bit is
-> set at the beginning even if there is no memory access. On MIPS system
-> access bit is not set at the beginning, it is set in page fault handling.
+>> On 2020/5/29 17:29, yuanjunqing wrote:
+>>
+>>>> diff --git a/arch/mips/kernel/mcount.S b/arch/mips/kernel/mcount.S
+>>>> index cff52b283e03..cd5545764e5f 100644
+>>>> --- a/arch/mips/kernel/mcount.S
+>>>> +++ b/arch/mips/kernel/mcount.S
+>>>> @@ -87,8 +87,15 @@ EXPORT_SYMBOL(_mcount)
+>>>>   	PTR_LA   t1, _etext
+>>>>   	sltu     t3, t1, a0	/* t3 = (a0 > _etext) */
+>>>>   	or       t1, t2, t3
+>>>> +	PTR_LA	 t2, stlab-4 	/* t2: "function:stacktrace" return address */
+>>>> +	move	 a1, AT		/* arg2: parent's return address */
+>>>>   	beqz     t1, ftrace_call
+>>>> -	 nop
+>>>> +	 nop			/* "function:stacktrace" return address */
+>>>> +stlab:
+>>>> +	PTR_LA	t2, stlab-4
+>>>> +	/* ftrace_call_end: ftrace_call return address */
+>>>> +	beq	t2,ra, ftrace_call_end
+>>>> +	nop
+>  Broken delay slot indentation.
 
-I had a hard time parsing that.
+Thank you for your reply. For this question that you mentioned about the delay slot, I will modify my patch again.
 
-But I think you mean that the access bit is already set in the pgprot
-bits on other architectures. And yeah, you seem to be right for at
-least x86.
+>
+>>>>   #if defined(KBUILD_MCOUNT_RA_ADDRESS) && defined(CONFIG_32BIT)
+>>>>   	PTR_SUBU a0, a0, 16	/* arg1: adjust to module's recorded callsite */
+>>>>   #else
+>>>> @@ -98,7 +105,9 @@ EXPORT_SYMBOL(_mcount)
+>>>>   	.globl ftrace_call
+>>>>   ftrace_call:
+>>>>   	nop	/* a placeholder for the call to a real tracing function */
+>>>> -	 move	a1, AT		/* arg2: parent's return address */
+>>>> +	move	ra, t2		/* t2: "function:stacktrace" return address */
+>  Likewise.  NB I haven't investigated if the change makes sense.  A more 
+> detailed explanation in the change description is certainly needed.
 
-So yes, it seems unnecessary to set the accessed bit again, when the
-accessed bit is already there from the pgprot bits. Good point.
+I will attach a specific description for further explanation about the second patch later.
 
-> I am investigating why access bit is not set at the
-> beginning in MIPS system.
+>
+>   Maciej
 
-Yeah, that does seem to be the right thing to do.
-
-On x86, we have (for example)
-
-  #define PAGE_COPY            __pg(__PP|   0|_USR|___A|__NX|   0|   0|   0)
-..
-  #define __P010  PAGE_COPY
-
-where that "__A" bit is the accessed bit (_PAGE_ACCESSED), just a
-small internal macro to make all those line up nicely.
-
-And that ends up being used for that protection_map[] array.
-
-MIPS fills in the initial protection bits in protection_map[] with
-dummy values, and then seems to initialize them without ever setting
-the accessed bit there.
-
-Not sure why that initialization then doesn't just add the pte_mkyoung..
-
-                Linus
