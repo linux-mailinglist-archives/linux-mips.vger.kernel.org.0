@@ -2,65 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7DA1EF464
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2020 11:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757151EF46C
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2020 11:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgFEJkt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Jun 2020 05:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
+        id S1726252AbgFEJnA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Jun 2020 05:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726173AbgFEJks (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Jun 2020 05:40:48 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C100FC08C5C2
-        for <linux-mips@vger.kernel.org>; Fri,  5 Jun 2020 02:40:47 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id w7so6947651edt.1
-        for <linux-mips@vger.kernel.org>; Fri, 05 Jun 2020 02:40:47 -0700 (PDT)
+        with ESMTP id S1726270AbgFEJm7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Jun 2020 05:42:59 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D9FC08C5C3
+        for <linux-mips@vger.kernel.org>; Fri,  5 Jun 2020 02:42:58 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id l27so9409440ejc.1
+        for <linux-mips@vger.kernel.org>; Fri, 05 Jun 2020 02:42:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=unikie-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=ecywvXU2iq6wIa5OxaC66FTJlkSC6hnhzjCCGLpVYgQ=;
-        b=RXer/WVtmnYG5+2gxmL6qfCwXKHlXv7UvofZT7mK0MXjut4OfLs5kpeGk5L4NMESxJ
-         +uN0ddZhbRLszqKR/t7mfJXrNxm73Apllk2SdEJvBC1EFkWlWefF56wMUhC+MOUgGBH4
-         CKbs42AYPaIQIrD/nGYgxaA76tvPYuRpnwiYc2IRW4HB+lVnOmAQkpbiC11KqJTkGydY
-         5E9Py7gFyuAeurdppUqEJQnNJRdp4E59UQ+pL8ZalxSMRyT3sj0lxP+WevWDKpXnh9Vk
-         Muqie02i5N2T7Fk+CflztqViDbejXk7lknCrgtQNe8nK+AvO4qSHblz1Ujnteeenc5vb
-         PyyA==
+        bh=qBlFO46Zvyk0l/tiI/P3Ytc/t26h5rE47hW1bZiT5iI=;
+        b=yDhhHob7ajuBwytrzS8JSsqGWt+9n7W5dY4Iq0b7FIDRqOecS0i9RqAkDv00h6Dh14
+         RJQUie3vThrMgGGIodoQ4uz70JXrfGNs+0jAWcRLHrI7i41McvWmxkL8N5ap+ncLofL6
+         uHnRnoiRjbaV71H2qMEr7XLyE5wIViyHWtfJSnm2P1qdBtvTdY4hZzbgttLZtFbiFGAm
+         getyp4iF2qSAExQ9ApZLeb62b5mf/A7CP9Ikuljgfi4oRbtcoIfyzYoWJ3P5ibvePebd
+         E8t3EoQ9fIYuG32IDQfJut7EnDkTxGJrHLyN9QeRVpzbQmr8/sOxHAZhpBYg47pMNHEb
+         DdZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ecywvXU2iq6wIa5OxaC66FTJlkSC6hnhzjCCGLpVYgQ=;
-        b=RL7cNQ9mBv3Wj8Eb/btNihU2qKySOFCdtYOhOGcicsY1TwV2ClOFGspTnLfzrhJK7C
-         gtWiVqpAZkQym6fK8RJ+5AsH1EG+G/RVpxVdjHCAmVx5MplXC/KK+v/h5trSjREnimxo
-         BC9u8FN7O08zDGg7jAEvJBb71ko0A/T9xXuW29dIqIlBA0wBjzo/JdGV8EQm1V1W9z0c
-         OUiSv+YKCcAaaWJ3fwyArWR57ppnYOIz2GGl0+GWwD9CEz0Cfh7Kzx8Rhrh2VLFYV1LJ
-         CEprrOvNFJtCDn/8YRE0TyBFX2otHP6oy5aSDg49hbWUd3J3ixFxw7J/y9H8sPvRkY1i
-         yEPA==
-X-Gm-Message-State: AOAM533Eh8Y0cDqH4dRD0c6X6jDXEqLE5AojyWD31FeeN9csfjdhVJvu
-        rwNxvBS/Am0XCWWkSFvcaHLV+u4/lqgcW2CLU3H5Rw==
-X-Google-Smtp-Source: ABdhPJypi4iwkivRztaHx7fbOzlowc7D+drXjiW2RAQ+37MeBy7iS9Yl8U8ZVT90PBo2r1mg04RuRk8J4f/Ej9pvNGU=
-X-Received: by 2002:a50:d785:: with SMTP id w5mr8179657edi.212.1591350045599;
- Fri, 05 Jun 2020 02:40:45 -0700 (PDT)
+        bh=qBlFO46Zvyk0l/tiI/P3Ytc/t26h5rE47hW1bZiT5iI=;
+        b=W3nGr7cuXNRhJ2kTHG/BcHDXN2Y9vMNiNzVpyIDlEpIvJJ0Kk5wYWuy1scG6Sg07CB
+         Kdyn0CLfGkz89dpu0h8ZGhWUlOchgwyqHcEksZTb+BvUnBocMdauk7FaiZN6LDPtumzH
+         Vdf0drFW1PecGP8y3sG0QO7ffj4tpGbIssFAfTJO6KFPikaNKVWaYYwJrRnNHmtH51Hm
+         ykvpVyCDpwOQPkUiDrFYTAsQB4ohEJUJrknEPE/NVsimSTeAw45P4ZLgZcfWvCInYThM
+         J4x+oNA9OcOLvFmuDSqKQBV+BKrOr7GlD7J+VY5/FgXmklBegraFaC/vSzdSpzeziIyg
+         KmiQ==
+X-Gm-Message-State: AOAM532NyMkCZy+tw+sqg1AufgMk/m2P03OIUift0b/W4yGVHX4L2UhR
+        v6u1J1vHcv5zeeSXGnZ0XekuLa1lIPJD+Zf+nCDqUw==
+X-Google-Smtp-Source: ABdhPJxL88OD040dKb5xQma2bLX+rgPFIsNiN+MKH3J96k3smzRqo1+Udo6kf/9h7u5PRzkBEHAL5VOTyaY0BV8FjZE=
+X-Received: by 2002:a17:906:34c4:: with SMTP id h4mr8477274ejb.167.1591350175702;
+ Fri, 05 Jun 2020 02:42:55 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200514092637.15684-1-John.Mathew@unikie.com>
- <20200514092637.15684-3-John.Mathew@unikie.com> <20200529110012.GJ706495@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200529110012.GJ706495@hirez.programming.kicks-ass.net>
+ <20200514092637.15684-3-John.Mathew@unikie.com> <CAKfTPtCzBw5XBofLmbdO-yx-P4tndUttXVadomgv=C81MnmHEw@mail.gmail.com>
+In-Reply-To: <CAKfTPtCzBw5XBofLmbdO-yx-P4tndUttXVadomgv=C81MnmHEw@mail.gmail.com>
 From:   John Mathew <john.mathew@unikie.com>
-Date:   Fri, 5 Jun 2020 12:40:34 +0300
-Message-ID: <CAJz2qXkWnYaUqOqd06wqCt+cGpmYfQ64VaiF6pJ_NDzrKLGwWw@mail.gmail.com>
+Date:   Fri, 5 Jun 2020 12:42:44 +0300
+Message-ID: <CAJz2qXnmMYw=Y7HU0mUrfJD9-gAzp_ip9SF6LZe3dtKTSQ-6MQ@mail.gmail.com>
 Subject: Re: [RFC PATCH v5 2/3] docs: scheduler: Add scheduler overview documentation
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, mingo@redhat.com,
-        juri.lelli@redhat.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-doc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        rostedt@goodmis.org, Benjamin Segall <bsegall@google.com>,
-        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>, x86@kernel.org,
-        linux-mips@vger.kernel.org, tglx@linutronix.de,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        tsbogend@alpha.franken.de, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        x86 <x86@kernel.org>, linux-mips@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
         mostafa.chamanara@gmail.com, willy@infradead.org,
         Valentin Schneider <valentin.schneider@arm.com>,
         Randy Dunlap <rdunlap@infradead.org>,
@@ -73,11 +76,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 29, 2020 at 2:00 PM Peter Zijlstra <peterz@infradead.org> wrote=
-:
+On Fri, May 29, 2020 at 5:48 PM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
 >
-> On Thu, May 14, 2020 at 12:26:36PM +0300, john mathew wrote:
->
+> On Thu, 14 May 2020 at 11:26, john mathew <john.mathew@unikie.com> wrote:
+> >
+> > From: John Mathew <john.mathew@unikie.com>
+> >
+> > Add documentation for
+> >  -scheduler overview
+> >  -scheduler state transtion
+> >  -CFS overview
+> >  -scheduler data structs
+> >
+> > Add rst for scheduler APIs and modify sched/core.c
+> > to add kernel-doc comments.
+> >
+> > Suggested-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > Co-developed-by: Mostafa Chamanara <mostafa.chamanara@basemark.com>
+> > Signed-off-by: Mostafa Chamanara <mostafa.chamanara@basemark.com>
+> > Co-developed-by: Oleg Tsymbal <oleg.tsymbal@unikie.com>
+> > Signed-off-by: Oleg Tsymbal <oleg.tsymbal@unikie.com>
+> > Signed-off-by: John Mathew <john.mathew@unikie.com>
+> > ---
+> >  Documentation/scheduler/cfs-overview.rst      | 102 +++++++
+> >  Documentation/scheduler/index.rst             |   2 +
+> >  Documentation/scheduler/overview.rst          | 288 ++++++++++++++++++
+> >  Documentation/scheduler/sched-cas.rst         |  92 ++++++
+> >  .../scheduler/sched-data-structs.rst          | 182 +++++++++++
+> >  Documentation/scheduler/sched-features.rst    |   1 +
+> >  Documentation/scheduler/scheduler-api.rst     |  31 ++
+> >  kernel/sched/core.c                           |  28 +-
+> >  kernel/sched/sched.h                          | 169 +++++++++-
+> >  9 files changed, 888 insertions(+), 7 deletions(-)
+> >  create mode 100644 Documentation/scheduler/cfs-overview.rst
+> >  create mode 100644 Documentation/scheduler/sched-cas.rst
+> >  create mode 100644 Documentation/scheduler/sched-data-structs.rst
+> >  create mode 100644 Documentation/scheduler/scheduler-api.rst
+> >
+> > diff --git a/Documentation/scheduler/cfs-overview.rst b/Documentation/s=
+cheduler/cfs-overview.rst
+> > new file mode 100644
+> > index 000000000000..34f336b8ec86
+> > --- /dev/null
+> > +++ b/Documentation/scheduler/cfs-overview.rst
+> > @@ -0,0 +1,102 @@
+> > +.. SPDX-License-Identifier: GPL-2.0+
+> > +
 > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > > +CFS Overview
 > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
@@ -92,17 +137,11 @@ ch are
 > > +
 > > +**Thermal Pressure**:
 >
-> I find these attached headers really hard to read. And what's with the
-> ** stuff ?
->
-> Other files in this same patch use a different style:
->
-> Header
-> ------
-> test goes here,
-Removed the headers in v7.
->
-> Which I find a lot more readable. Use it here too?
+> The title is misleading because the thermal pressure is only one
+> source of reduction of the CPU capacity. In fact thermal has just
+> reused what was already in place for RT, DL and IRQ.
+> "Tracking available capacity" is more correct IMHO
+Changed in v7
 >
 > > +Scale CPU capacity mechanism for CFS so it knows how much CPU capacity=
  is left
@@ -112,9 +151,6 @@ Removed the headers in v7.
 > > +unavailable due to thermal events.
 > > +
 > > +** Optimizations to NUMA balancing**:
->      ^ iconsistent spacing (although I think it's more readable without
->      the ** crap attached).
->
 > > +When gathering NUMA statistics, information about whether a core is Id=
 le
 > > +is also cached. In case of an imbalance, instead of doing a second sca=
@@ -130,11 +166,6 @@ idate
 > > +when a reasonable one is found instead of searching all the CPUs on th=
 e
 > > +target domain.
->
-> ^^ that makes no sense to me. That's very much not what numa balancing
-> is about.
-Added description in v7.
->
 > > +
 > > +**Asymmetric CPU capacity wakeup scan**:
 > > +Previous assumption that CPU capacities within an SD_SHARE_PKG_RESOURC=
@@ -191,11 +222,6 @@ te
 nd
 > > +busiest group.
 > > +* calculate_imbalance() decides what have to be moved.
->
-> This all reads like a changelog; why do we care about the old stuff?
-> That is, rephrase it to describe the current situation.
-Removed and added description of features.
->
 > > +
 > > +**Energy-aware wake-ups speeded up**:
 > > +Algorithmic complexity of the EAS was reduced from O(n^2) to O(n).
@@ -204,11 +230,7 @@ Removed and added description of features.
 > > +The EAS wake-up path was re-factored to compute the energy 'delta' on =
 a
 > > +per-performance domain basis, rather than the whole system.
->
-> Idem; describe what EAS does and how. Nobody cares about what it once
-> might have been.
-Added brief description and link to the related documentation.
->
+> > +
 > > +**Selection of an energy-efficient CPU on task wake-up**:
 > > +An Energy efficient CPU is found by estimating the impact on system-le=
 vel
@@ -221,10 +243,6 @@ s
 > > +aggressive task packing. The best CPU energy-wise is then selected if =
 it
 > > +saves a large enough amount of energy with respect to prev_cpu.
->
-> That's EAS, not a separate thing.
-Added brief description and link to the related documentation.
->
 > > +
 > > +**Consider misfit tasks when load-balancing**:
 > > +A task which ends up on a CPU which doesn't suit its compute demand is
@@ -240,10 +258,6 @@ PU
 > > +capacity and destination group of higher compute capacity. Otherwise, =
 misfit
 > > +balancing is ignored.
->
-> That's with the assymetric capacity thing, weird to be separate.
-Added brief description and link to the related documentation.
->
 > > +
 > > +
 > > +**Make schedstats a runtime tunable that is disabled by default**:
@@ -251,10 +265,7 @@ Added brief description and link to the related documentation.
 e
 > > +schedstats on demand (when it's built in). It is disabled by default.
 > > +The benefits are dependent on how scheduler-intensive the workload is.
->
-> So while I like the idea of an overview; this isn't one. An overview is
-> where we list current features, and explain (in short) why and what.
->
+> > +
 > > +
 > > diff --git a/Documentation/scheduler/index.rst b/Documentation/schedule=
 r/index.rst
@@ -293,151 +304,50 @@ ss are
 ling
 > > +  class/policy and process priorities.
 > > +* balance processes between multiple cores in SMP systems.
->
-> indent the bullets at least one space, like:
->
->  * share CPU cores...
->  * pick ..
-changed for all bullet points.
->
-> Write it like you want to read this as a text document. Ignore all that
-> RST bullshit.
->
-> Also, your terminology is ambiguous, what is a core?
-changed to CPU.
->
+> > +
 > > +The scheduler attempts to be responsive for I/O bound processes and ef=
 ficient
 > > +for CPU bound processes. The scheduler also applies different scheduli=
 ng
 > > +policies for real time and normal processes based on their respective
-> > +priorities.
->
->
-> > Higher priorities in the kernel have a numerical smaller
+> > +priorities. Higher priorities in the kernel have a numerical smaller
 > > +value. Real time priorities range from 1 (highest) =E2=80=93 99 wherea=
 s normal
-> > +priorities range from 100 =E2=80=93 139 (lowest).
->
-> The whole priorities thing is a mess; and you've missed some of it. -1
-> is actually the highest (static) priority. But even that doesn't
-> adequately describe things, since we have a dynamic priority scheduling
-> class these days.
->
-> Most everything that looks at the static priority of tasks these days;
-> and doesn't:
->
->  - use it to distinguish classes
->  - is the RR/FIFO static priority scheduler
->
-> is doing it wrong. Yes we have heaps of legacy, but it's not a main
-> feature anymore. Slowly but surely the ->prio field becomes less and
-> less relevant.
->
-> The fair class uses the static priority field to encode the nice level,
-> but is nice a priority? I think not.
-changed the description of priority and added it to each class.
->
-> > Scheduler implements many scheduling
->
-> 1, 2, many, right? ;-) _5_ is the number: stop, deadline, rt, fair,
-> idle.
-Added description of each.
->
+> > +priorities range from 100 =E2=80=93 139 (lowest). Scheduler implements=
+ many scheduling
 > > +classes which encapsulate a particular scheduling policy. Each schedul=
 ing
 > > +policy implements scheduler handling of tasks that belong to a particu=
 lar
-> > +priority.
->
-> policy enumeration:
-changed.
->
-> SCHED_DEADLINE goes here..
->
-> > SCHED_FIFO and SCHED_RR policies handle real time priorities tasks
->
-> They're both a static priority scheduling class. They're the only ones
-> for which the term priority actually has a sane meaning.
->
+> > +priority. SCHED_FIFO and SCHED_RR policies handle real time priorities=
+ tasks
 > > +while SCHED_NORMAL and SCHED_BATCH policies handle tasks with normal p=
 riorities.
->
-> What's an abnormal priority? Both these are weighted proportionally fair
-> and encode the weight, as nice value, in the prio field, in a range not
-> overlapping the static prio range. But that doesn't make it a priority.
->
 > > +SCHED_IDLE is also a normal scheduling policy when means its priority =
 can
 > > +be set between 100 =E2=80=93 139 range too but they are treated as pri=
 ority 139.
->
-> Priority for SCHED_IDLE is meaningless, the only reason it 'has' one is
-> so that code that looks to do a prio->class mapping works.
->
 > > +Their priority doesn't matter since they get minimal weight WEIGHT_IDL=
 EPRI=3D3.
->
-> This.
->
 > > +SCHED_DEADLINE policy tasks have negative priorities, reflecting
 > > +the fact that any of them has higher priority than RT and NORMAL/BATCH=
  tasks.
->
-> Tada, you did find the -1!
->
+> > +
 > > +And then there are the maintenance scheduler classes: idle sched class=
  and
 > > +stop sched class. Idle class doesn't manage any user tasks and so does=
 n't
->
-> Ah, so you do want to treat those too; so perhaps then present it like a
-> double iteration:
->
->  - stop_class:
->
->  - dl_class:
->
->    * SCHED_DEADLINE:
->
->  - rt_class
->
->    * SCHED_RR / SCHED_FIFO:
->
->  - fair_class:
->
->    * SCHED_NORMAL/SCHED_BATCH:
->    * SCHED_IDLE:
->
->  - idle_class:
-Added like this.
->
-> That's far easier to read than a blob of words.
->
 > > +implement a policy. Its idle tasks 'swapper/X' has priority 120 and an=
 d aren't
 > > +visible to user space. Idle tasks are responsible for by putting the C=
 PUs
 > > +into deep idle states when there is no work to do.
->
-> Priority for idle task is irrelevant, if they have a prio it is purely
-> by accident. Looking at ->prio for idle task would be a stright bug.
-> The "swapper" name is a historical accident. We do not in fact swap from
-> it.
->
 > > +Stop sched class is also used internally by the kernel doesn't impleme=
 nt any
 > > +scheduling policy. Stopper tasks 'migration/X' disguise as as a SCHED_=
 FIFO
-> > +task with priority 139.
->
-> Really? I thought we exposed it as a FIFO-99 (userpsace 99, not kernel
-> 99) task. Then again, I haven't actually looked at it recently. The
-> reason we disguise it is to present a 'known' class to userspace, to
-> avoid growing the ABI for this.
-Changed.
->
-> > Stopper tasks are a mechanism to force a CPU to stop
+> > +task with priority 139. Stopper tasks are a mechanism to force a CPU t=
+o stop
 > > +running everything else and perform a specific task. As this is the
 > > +highest-priority class, it can preempt everything else and nothing eve=
 r
@@ -446,9 +356,6 @@ pecific
 > > +function, so it is only available on SMP systems. This class is used b=
 y the
 > > +kernel for task migration.
->
->
->
 > > +
 > > +
 > > +Process Management
@@ -490,13 +397,6 @@ y
 > > +* TASK_DEAD: If a task dies, then it sets TASK_DEAD in tsk->state and =
 calls
 > > +  schedule one last time. The schedule call will never return.
->
-> return to this task; obviously the system keeps running so it must do
-> something.
->
-> Perhaps its clearer to state that the task will never be ran again.
-Changed.
->
 > > +* TASK_WAKEKILL: It works like TASK_UNINTERRUPTIBLE with the bonus tha=
 t it
 > > +  can respond to fatal signals.
@@ -527,17 +427,8 @@ e
  used
 > > + by the RT scheduler. Might be boosted by interactivity modifiers. Cha=
 nges
->
-> Again, no point in mentioning things that aren't there. Those can only
-> serve to confuse.
-Removed.
->
 > > + upon fork, setprio syscalls, and whenever the interactivity estimator
 > > + recalculates.
->
-> There is no interactivity estimator.
-Removed. I
->
 > > +
 > > +*normal_prio:* Expected priority of a task. The value of static_prio
 > > + and normal_prio are the same for non-real-time processes. For real ti=
@@ -570,19 +461,11 @@ fashion
 > > +*nr_cpus_allowed:* Bit field containing tasks affinity towards a set o=
 f
 > > + CPU cores.  Set using sched_setaffinity() system call.
->
-> nr_cpus_allowed it not a bitfield, it is the hamming weight of a
-> bitmap. The actual bitmap is found through cpus_ptr.
-Changed like this.
->
 > > +
 > > +New processes are created using the fork() system call which is descri=
 bed
 > > +at manpage :manpage:`FORK(2)` or the clone system call described at
 > > +:manpage:`CLONE(2)`.
->
->
->
 > > +Users can create threads within a process to achieve parallelism. Thre=
 ads
 > > +share address space, open files and other resources of the process. Th=
@@ -593,7 +476,7 @@ reads
 dress
 > > +space ::
 > > +
-> > +     clone(CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND, 0);
+> > +       clone(CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND, 0);
 > > +
 > > +The scheduler schedules task_structs so from scheduler perspective the=
 re is
@@ -621,13 +504,6 @@ kernel
 > > +that the scheduler should be invoked as soon as possible because anoth=
 er
 > > +process deserves to run.
->
-> Perhaps add a warning that direct manipulation of TIF_NEED_RESCHED is
-> unwise. You make it sound like a simple thing -- which I understand from
-> the PoV of explaining how it sort-of works, but might give people the
-> wrong impression.
-Added one more sentence.
->
 > > +
 > > +Following are some places that notify the kernel to schedule:
 > > +
@@ -644,9 +520,7 @@ e
 > > +* try_to_wake_up()
 > > +
 > > +* yield()
->
-> it is likely that every single user of yield() is a bug.
->
+> > +
 > > +* wait_event()
 > > +
 > > +* cond_resched() : It gives the scheduler a chance to run a higher-pri=
@@ -656,9 +530,7 @@ ority
 > > +* cond_resched_lock() : If a reschedule is pending, drop the given loc=
 k,
 > > +  call schedule, and on return reacquire the lock.
->
-> voluntary preemption points
->
+> > +
 > > +* do_task_dead()
 > > +
 > > +* preempt_schedule() : The function checks whether local interrupts ar=
@@ -673,34 +545,7 @@ e
 e
 > > +that preemption must be disabled before it is called and enabled after
 > > +the call using preempt_disable and preempt_enable functions family.
->
-> It might be less confusing if you classify those:
->
->  - blocking operations:
->
->    * mutex_lock() / wait_event() / etc..
->
->  - co-operative / voluntary preemption:
->
->    * cond_resched*()
->    * yield()
->    * preempt_enable()
->
->  - involuntary preemption:
->
->    * scheduler_tick()
->    * wake_up_process()
-Added like this.
->
-> The blocking oeprations will suspend the current task and directly call
-> into the scheduler to find something else to do.
->
-> The co-operative/voluntary crud will allow another task to run at that
-> point (subject to preemption model).
->
-> The involuntary preemption things will mark TIF_NEED_RESCHED and wait
-> for action (again depending on preemption model).
->
+> > +
 > > +
 > > +The steps during invocation are:
 > > +--------------------------------
@@ -983,12 +828,6 @@ tion/scheduler/sched-data-structs.rst
 > > +~~~~~~~~
 > > +
 > > +:c:type:`struct rq <rq>` is the central data structure of process
->
-> I so hate that rst crap; John, can't we teach the thing that anything
-> called 'struct foo' or 'foo_t' is in fact a C type, just like we did
-> with foo() being a function?
-Removed all c:types
->
 > > +scheduling. It keeps track of tasks that are in a runnable state assig=
 ned
 > > +for a particular processor. Each CPU has its own run queue and stored =
@@ -1037,22 +876,10 @@ s
 > > +structure. dl_sched_class for deadline scheduler, fair_sched_class for=
  CFS
 > > +and rt_sched_class for RT are implementations of this class.
->
-> wrong order; also perhaps a reference to the earlier exposition of the
-> same.
->
+> > +
 > > +The important methods of scheduler class are:
 > > +
 > > +enqueue_task and dequeue_task
->
-> You started an enumeration with ':' above, but have no bullet here,
-> perhaps:
->
->  - sched_class::enqueue_task()
->
-> or somesuch?
-Added like above.
->
 > > +    These functions are used to put and remove tasks from the runqueue
 > > +    respectively to change a property of a task. This is referred to a=
 s
@@ -1097,12 +924,6 @@ uler
 > > +    optimizes the picking of next task to call the pick_next_task_fair=
 ()
 > > +    if the previous task was of the similar scheduling class.
->
-> implies set_next_task() having been called on the task returned.
->
-> (the core-sched patches have some variants here, just in case you're
-> curious)
->
 > > +
 > > +put_prev_task
 > > +    Called by the scheduler when a running task is being taken off a C=
@@ -1257,10 +1078,6 @@ reempt.
 > > +SCHED_FIFO call rt_sched_class hooks. Tasks assigned with SCHED_DEADLI=
 NE
 > > +policy calls dl_sched_class hooks.
->
-> Nice!
-Thanks
->
 > > diff --git a/Documentation/scheduler/sched-features.rst b/Documentation=
 /scheduler/sched-features.rst
 > > index 1afbd9cc8d52..e576c7d9e556 100644
@@ -1289,28 +1106,28 @@ scheduler/scheduler-api.rst
 > > +
 > > +
 > > +.. kernel-doc:: kernel/sched/core.c
-> > +     :functions: __schedule
+> > +       :functions: __schedule
 > > +
 > > +.. kernel-doc:: kernel/sched/core.c
-> > +     :functions: scheduler_tick
+> > +       :functions: scheduler_tick
 > > +
 > > +.. kernel-doc:: kernel/sched/core.c
-> > +     :functions: try_to_wake_up
+> > +       :functions: try_to_wake_up
 > > +
 > > +.. kernel-doc:: kernel/sched/core.c
-> > +     :functions: do_task_dead
+> > +       :functions: do_task_dead
 > > +
 > > +.. kernel-doc:: kernel/sched/core.c
-> > +     :functions: preempt_schedule_irq
+> > +       :functions: preempt_schedule_irq
 > > +
 > > +.. kernel-doc:: kernel/sched/core.c
-> > +     :functions: prepare_task_switch
+> > +       :functions: prepare_task_switch
 > > +
 > > +.. kernel-doc:: kernel/sched/core.c
-> > +     :functions: finish_task_switch
+> > +       :functions: finish_task_switch
 > > +
 > > +.. kernel-doc:: kernel/sched/sched.h
-> > +     :functions: rq
+> > +       :functions: rq
 > > +
 > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
 > > index 9a2fbf98fd6f..b349ed9b4d92 100644
@@ -1318,7 +1135,8 @@ scheduler/scheduler-api.rst
 > > +++ b/kernel/sched/core.c
 > > @@ -3576,9 +3576,13 @@ void arch_set_thermal_pressure(struct cpumask *c=
 pus,
-> >               WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
+> >                 WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure)=
+;
 > >  }
 > >
 > > -/*
@@ -1334,7 +1152,7 @@ pus,
 > >  {
 > > @@ -3959,8 +3963,10 @@ pick_next_task(struct rq *rq, struct task_struct=
  *prev, struct rq_flags *rf)
-> >       BUG();
+> >         BUG();
 > >  }
 > >
 > > -/*
@@ -1349,7 +1167,7 @@ tion are:
 > >   *
 > > @@ -4089,6 +4095,12 @@ static void __sched notrace __schedule(bool pree=
 mpt)
-> >       balance_callback(rq);
+> >         balance_callback(rq);
 > >  }
 > >
 > > +/**
@@ -1360,7 +1178,7 @@ mpt)
 > > + */
 > >  void __noreturn do_task_dead(void)
 > >  {
-> >       /* Causes final put_task_struct in finish_task_switch(): */
+> >         /* Causes final put_task_struct in finish_task_switch(): */
 > > @@ -4320,7 +4332,8 @@ EXPORT_SYMBOL_GPL(preempt_schedule_notrace);
 > >
 > >  #endif /* CONFIG_PREEMPTION */
@@ -1382,13 +1200,9 @@ mpt)
 > > + *
 > > + * Return: 1 if reschedule was done, 0 if reschedule not done.
 > > + */
->
-> This isn't a general API and should not have the kerneldoc on. Put it on
-> cond_resched*() in linux/sched.h instead.
->
 > >  int __sched _cond_resched(void)
 > >  {
-> >       if (should_resched(0)) {
+> >         if (should_resched(0)) {
 > > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
 > > index db3a57675ccf..21f2953b72c7 100644
 > > --- a/kernel/sched/sched.h
@@ -1407,184 +1221,178 @@ mpt)
 > >   * acquire operations must be ordered by ascending &runqueue.
 > > + *
 > > + * @lock:
-> > + *   lock to be acquired while modifying the runqueue
+> > + *     lock to be acquired while modifying the runqueue
 > > + * @nr_running:
-> > + *   number of runnable tasks on this queue
+> > + *     number of runnable tasks on this queue
 > > + * @nr_numa_running:
-> > + *   number of tasks running that care about their placement
+> > + *     number of tasks running that care about their placement
 > > + * @nr_preferred_running:
-> > + *   number of tasks that are optimally NUMA placed
+> > + *     number of tasks that are optimally NUMA placed
 > > + * @numa_migrate_on:
-> > + *   per run-queue variable to check if NUMA-balance is
-> > + *   active on the run-queue
+> > + *     per run-queue variable to check if NUMA-balance is
+> > + *     active on the run-queue
 > > + * @last_blocked_load_update_tick:
-> > + *   tick stamp for decay of blocked load
+> > + *     tick stamp for decay of blocked load
 > > + * @has_blocked_load:
-> > + *   idle CPU has blocked load
+> > + *     idle CPU has blocked load
 > > + * @nohz_tick_stopped:
-> > + *   CPU is going idle with tick stopped
+> > + *     CPU is going idle with tick stopped
 > > + * @nohz_flags:
-> > + *   flags indicating NOHZ idle balancer actions
+> > + *     flags indicating NOHZ idle balancer actions
 > > + * @nr_load_updates:
-> > + *   unused
+> > + *     unused
 > > + * @nr_switches:
-> > + *   number of context switches
+> > + *     number of context switches
 > > + * @uclamp:
-> > + *   utilization clamp values based on CPU's RUNNABLE tasks
+> > + *     utilization clamp values based on CPU's RUNNABLE tasks
 > > + * @uclamp_flags:
-> > + *   flags for uclamp actions, currently one flag for idle.
+> > + *     flags for uclamp actions, currently one flag for idle.
 > > + * @cfs:
-> > + *   fair scheduling class runqueue
+> > + *     fair scheduling class runqueue
 > > + * @rt:
-> > + *   rt scheduling class runqueue
+> > + *     rt scheduling class runqueue
 > > + * @dl:
-> > + *   dl scheduing class runqueue
+> > + *     dl scheduing class runqueue
 > > + * @leaf_cfs_rq_list:
-> > + *   list of leaf cfs_rq on this CPU
+> > + *     list of leaf cfs_rq on this CPU
 > > + * @tmp_alone_branch:
-> > + *   reference to add child before its parent in leaf_cfs_rq_list
+> > + *     reference to add child before its parent in leaf_cfs_rq_list
 > > + * @nr_uninterruptible:
-> > + *   global counter where the total sum over all CPUs matters. A task
+> > + *     global counter where the total sum over all CPUs matters. A tas=
+k
 > > + *      can increase this counter on one CPU and if it got migrated
-> > + *   afterwards it may decrease it on another CPU. Always updated unde=
-r
-> > + *   the runqueue lock
+> > + *     afterwards it may decrease it on another CPU. Always updated un=
+der
+> > + *     the runqueue lock
 > > + * @curr:
-> > + *   points to the currently running task of this rq.
+> > + *     points to the currently running task of this rq.
 > > + * @idle:
-> > + *   points to the idle task of this rq
+> > + *     points to the idle task of this rq
 > > + * @stop:
-> > + *   points to the stop task of this rq
+> > + *     points to the stop task of this rq
 > > + * @next_balance:
-> > + *   shortest next balance before updating nohz.next_balance
+> > + *     shortest next balance before updating nohz.next_balance
 > > + * @prev_mm:
-> > + *   real address space of the previous task
+> > + *     real address space of the previous task
 > > + * @clock_update_flags:
-> > + *   RQCF clock_update_flags bits
+> > + *     RQCF clock_update_flags bits
 > > + * @clock:
-> > + *   sched_clock() value for the queue
+> > + *     sched_clock() value for the queue
 > > + * @clock_task:
-> > + *   clock value minus irq handling time
+> > + *     clock value minus irq handling time
 > > + * @clock_pelt:
-> > + *   clock which scales with current capacity when something is
-> > + *   running on rq and synchronizes with clock_task when rq is idle
+> > + *     clock which scales with current capacity when something is
+> > + *     running on rq and synchronizes with clock_task when rq is idle
 > > + * @lost_idle_time:
-> > + *   idle time lost when utilization of a rq has reached the
-> > + *   maximum value
+> > + *     idle time lost when utilization of a rq has reached the
+> > + *     maximum value
 > > + * @nr_iowait:
-> > + *   account the idle time that we could have spend running if it
-> > + *   were not for IO
+> > + *     account the idle time that we could have spend running if it
+> > + *     were not for IO
 > > + * @membarrier_state:
-> > + *   copy of membarrier_state from the mm_struct
+> > + *     copy of membarrier_state from the mm_struct
 > > + * @rd:
-> > + *   root domain, each exclusive cpuset essentially defines an island
-> > + *   domain by fully partitioning the member CPUs from any other cpuse=
-t
+> > + *     root domain, each exclusive cpuset essentially defines an islan=
+d
+> > + *     domain by fully partitioning the member CPUs from any other cpu=
+set
 > > + * @sd:
-> > + *   a domain heirarchy of CPU groups to balance process load among th=
-em
+> > + *     a domain heirarchy of CPU groups to balance process load among =
+them
 > > + * @cpu_capacity:
-> > + *   information about CPUs heterogeneity used for CPU performance
-> > + *   scaling
+> > + *     information about CPUs heterogeneity used for CPU performance
+> > + *     scaling
 > > + * @cpu_capacity_orig:
-> > + *   original capacity of a CPU before being altered by
-> > + *   rt tasks and/or IRQ
+> > + *     original capacity of a CPU before being altered by
+> > + *     rt tasks and/or IRQ
 > > + * @balance_callback:
-> > + *   queue to hold load balancing push and pull operations
+> > + *     queue to hold load balancing push and pull operations
 > > + * @idle_balance:
-> > + *   flag to do the nohz idle load balance
+> > + *     flag to do the nohz idle load balance
 > > + * @misfit_task_load:
-> > + *   set whenever the current running task has a utilization
-> > + *   greater than 80% of rq->cpu_capacity. A non-zero value
-> > + *   in this field enables misfit load balancing
+> > + *     set whenever the current running task has a utilization
+> > + *     greater than 80% of rq->cpu_capacity. A non-zero value
+> > + *     in this field enables misfit load balancing
 > > + * @active_balance:
-> > + *   synchronizes accesses to ->active_balance_work
+> > + *     synchronizes accesses to ->active_balance_work
 > > + * @push_cpu:
-> > + *   idle cpu to push the running task on to during active load
-> > + *   balancing.
+> > + *     idle cpu to push the running task on to during active load
+> > + *     balancing.
 > > + * @active_balance_work:
-> > + *   callback scheduled to run on one or multiple cpus
-> > + *   with maximum priority monopolozing those cpus.
+> > + *     callback scheduled to run on one or multiple cpus
+> > + *     with maximum priority monopolozing those cpus.
 > > + * @cpu:
-> > + *   CPU of this runqueue
+> > + *     CPU of this runqueue
 > > + * @online:
-> > + *   Used by scheduling classes to support CPU hotplug
+> > + *     Used by scheduling classes to support CPU hotplug
 > > + * @cfs_tasks:
-> > + *   an MRU list used for load balancing, sorted (except
-> > + *   woken tasks) starting from recently given CPU time tasks
-> > + *   toward tasks with max wait time in a run-queue
+> > + *     an MRU list used for load balancing, sorted (except
+> > + *     woken tasks) starting from recently given CPU time tasks
+> > + *     toward tasks with max wait time in a run-queue
 > > + * @avg_rt:
-> > + *   track the utilization of RT tasks for a  more accurate
-> > + *   view of the utilization of the CPU when overloaded by CFS and
-> > + *   RT tasks
+> > + *     track the utilization of RT tasks for a  more accurate
+> > + *     view of the utilization of the CPU when overloaded by CFS and
+> > + *     RT tasks
 > > + * @avg_dl:
-> > + *   track the utilization of DL tasks as CFS tasks can be preempted
-> > + *   by DL tasks and the CFS's utilization might no longer describe
-> > + *   the real utilization level
+> > + *     track the utilization of DL tasks as CFS tasks can be preempted
+> > + *     by DL tasks and the CFS's utilization might no longer describe
+> > + *     the real utilization level
 > > + * @avg_irq:
-> > + *   track the the utilization of interrupt to give a more accurate
-> > + *   level of utilization of CPU taking into account the time spent
-> > + *   under interrupt context when rqs' clock is updated
+> > + *     track the the utilization of interrupt to give a more accurate
+> > + *     level of utilization of CPU taking into account the time spent
+> > + *     under interrupt context when rqs' clock is updated
 > > + * @avg_thermal:
-> > + *   tracks thermal pressure which is the reduction in maximum
-> > + *   possible capacity due to thermal events
+> > + *     tracks thermal pressure which is the reduction in maximum
+> > + *     possible capacity due to thermal events
 > > + * @idle_stamp:
-> > + *   time stamp at which idle load balance started for this rq.
-> > + *   Used to find the idlest CPU, when multiple idle CPUs are in
-> > + *   the same state
+> > + *     time stamp at which idle load balance started for this rq.
+> > + *     Used to find the idlest CPU, when multiple idle CPUs are in
+> > + *     the same state
 > > + * @avg_idle:
-> > + *   average idle time for this rq
+> > + *     average idle time for this rq
 > > + * @max_idle_balance_cost:
-> > + *   used to determine avg_idle's max value
+> > + *     used to determine avg_idle's max value
 > > + * @prev_irq_time:
-> > + *   updated to account time consumed when a previous
-> > + *   update_rq_clock() happened inside a {soft,}irq region
+> > + *     updated to account time consumed when a previous
+> > + *     update_rq_clock() happened inside a {soft,}irq region
 > > + * @prev_steal_time:
-> > + *   to account how much elapsed time was spent in steal
+> > + *     to account how much elapsed time was spent in steal
 > > + * @prev_steal_time_rq:
-> > + *   for fine granularity task steal time accounting by
-> > + *   making update_rq_clock() aware of steal time
+> > + *     for fine granularity task steal time accounting by
+> > + *     making update_rq_clock() aware of steal time
 > > + * @calc_load_update:
-> > + *   sample window for global load-average calculations
+> > + *     sample window for global load-average calculations
 > > + * @calc_load_active:
-> > + *   fold any nr_active delta into a global accumulate
+> > + *     fold any nr_active delta into a global accumulate
 > > + * @hrtick_csd:
-> > + *   call_single_data used to set hrtick timer state on a specific CPU
+> > + *     call_single_data used to set hrtick timer state on a specific C=
+PU
 > > + * @hrtick_timer:
-> > + *   HR-timer to deliver an accurate preemption tick
+> > + *     HR-timer to deliver an accurate preemption tick
 > > + * @rq_sched_info:
-> > + *   runqueue specific latency stats
+> > + *     runqueue specific latency stats
 > > + * @rq_cpu_time:
-> > + *   runqueue specific accumulated per-task cpu runtime
+> > + *     runqueue specific accumulated per-task cpu runtime
 > > + * @yld_count:
-> > + *   runqueue specific sys_sched_yield() stats
+> > + *     runqueue specific sys_sched_yield() stats
 > > + * @sched_count:
-> > + *   runqueue specific __schedule() stats
+> > + *     runqueue specific __schedule() stats
 > > + * @sched_goidle:
-> > + *   runqueue specific idle scheduling class stats
+> > + *     runqueue specific idle scheduling class stats
 > > + * @ttwu_count:
-> > + *   runqueue specific idle ttwu stats , both remote and local
+> > + *     runqueue specific idle ttwu stats , both remote and local
 > > + * @ttwu_local:
-> > + *   ttwu count for the CPU of the rq
+> > + *     ttwu count for the CPU of the rq
 > > + * @wake_list:
-> > + *   list which stores tasks being woken up remotely by ttwu
+> > + *     list which stores tasks being woken up remotely by ttwu
 > > + * @idle_state:
-> > + *   cpuidle state pointer of the CPU of this rq used to make a
-> > + *   better decision when balancing tasks
+> > + *     cpuidle state pointer of the CPU of this rq used to make a
+> > + *     better decision when balancing tasks
 > >   */
->
-> OMG... I suppose I appreciate the effort, but that's unwieldy and 100%
-> likely to get bitrotten real quick.
->
-> Also, rq really isn't an exported API. So perhaps, if you really feel
-> the need, expand the comment on some of the fields inside the structure,
-> but I don't see this as anything other than a giant blob to ignore.
-Removed the kernel-docs and added as member comments within the struct.
->
 > >  struct rq {
-> >       /* runqueue lock: */
+> >         /* runqueue lock: */
 > > @@ -1136,7 +1299,7 @@ static inline u64 rq_clock_task(struct rq *rq)
-> >       return rq->clock_task;
+> >         return rq->clock_task;
 > >  }
 > >
 > > -/**
@@ -1595,4 +1403,3 @@ Removed the kernel-docs and added as member comments within the struct.
 > > --
 > > 2.17.1
 > >
-Thanks.
