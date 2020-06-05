@@ -2,85 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C76A21EF3C4
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2020 11:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9391EF41E
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2020 11:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbgFEJL1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Jun 2020 05:11:27 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:51160 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726261AbgFEJLZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 5 Jun 2020 05:11:25 -0400
-Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxXesqDNpeHOw9AA--.611S3;
-        Fri, 05 Jun 2020 17:11:07 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 2/2] MIPS: Add writable-applies-readable policy with pgrot
-Date:   Fri,  5 Jun 2020 17:11:06 +0800
-Message-Id: <1591348266-28392-2-git-send-email-maobibo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1591348266-28392-1-git-send-email-maobibo@loongson.cn>
-References: <1591348266-28392-1-git-send-email-maobibo@loongson.cn>
-X-CM-TRANSID: AQAAf9DxXesqDNpeHOw9AA--.611S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr1fJryDXF1xAF4rGr45Wrg_yoW8Gw45pF
-        9rA343JrWqgFy0yryUuFWrGayUGr4Dta47Jw17WF1xAws8Xw18KF93KF92qryruFsava10
-        y3WxWr48JayxAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Eb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv
-        6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-        02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
-        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK6svPMxAIw28IcxkI7VAKI4
-        8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
-        wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
-        v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
-        Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
-        AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Q_-PUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+        id S1726213AbgFEJ3S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Jun 2020 05:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbgFEJ3S (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Jun 2020 05:29:18 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C0AC08C5C2
+        for <linux-mips@vger.kernel.org>; Fri,  5 Jun 2020 02:29:18 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id c11so10909427ljn.2
+        for <linux-mips@vger.kernel.org>; Fri, 05 Jun 2020 02:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unikie-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id;
+        bh=XZQcxpnQFsR7dWRW2bG4ja76wOXb2EtshnLCYBAPPiw=;
+        b=TR82pwPBsSgXOb0+f4945e2lD/2gWu6GXR2oxCrjQEnpVbxzZmgDnoNut8X0zEclKV
+         x3Z0wHpA3k6cf7iPIxihyfJfy/Jc1wpHceBqTTVKY5FB1MnO5HtOPVA7feFdi89lmFKx
+         QMwqHrSSiGeKJ1QbVAmJ0ixM470umlmITvHIoym9x4fNefevuixCI+3C/erRx8tFlr73
+         x1W1wdg7/OvDi9I3CxArJGA1jHYCf85r1YLOfa3XAlKRCRfwousM97XBQKmM0BzQFoZE
+         oVim+Lt9reUyQ+iSW1N424xyrWhgQuUSxNMyhj/z0rrsFrG6zQ2qe/SYaxB9v8d9BJa/
+         yPzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=XZQcxpnQFsR7dWRW2bG4ja76wOXb2EtshnLCYBAPPiw=;
+        b=fj3+y9WUjX3nGUgwwM7AM23MK0n60qP4lqMUwAdZd0bE+ahdWFFnbdhWOKx2nWNPG1
+         T/RsFv6ANNI3QjTV+j6dHs7xUWXPv74Uo9NEhAPuMOgbPkiMWQGQIfdIjyIyzG4sHmY3
+         bjSRLGFjUuprDgRC2+D5OqWUHT+VsM9m7tTaNKZlGPfY7gxqjF11mP4hgGSzNX6tf5FF
+         DRxkF8H0pmYxAUP+I5t2BXGdHk0qf8g1Wq9igoN4ajQnC1ICir3XUcLqtd8zvlD1DivQ
+         nvEEE8fg54ku0PbnO2mi0PAMZC1EMqRbA+wzNpdXcwBmgSarpIuwVldKsbM0FDan+wg4
+         kbEQ==
+X-Gm-Message-State: AOAM532ajHyY3dJPbZSWJrFioW1961nZY8uz5K1YjMqBYLB0BB4PQy7g
+        QkJxhJEiGcPTLHYGGRrxAJIGRg==
+X-Google-Smtp-Source: ABdhPJxefoujOSS1MdEm7C/o48gKms2QHlyTzibqrq7EaZsF9hmiG3VfW4hlY8WBaNOO6+n59G6mFA==
+X-Received: by 2002:a2e:9192:: with SMTP id f18mr4638080ljg.383.1591349356572;
+        Fri, 05 Jun 2020 02:29:16 -0700 (PDT)
+Received: from localhost.localdomain ([109.204.235.119])
+        by smtp.googlemail.com with ESMTPSA id a1sm746471lfi.36.2020.06.05.02.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2020 02:29:15 -0700 (PDT)
+From:   john mathew <john.mathew@unikie.com>
+X-Google-Original-From: john mathew <John.Mathew@unikie.com>
+To:     linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, tsbogend@alpha.franken.de,
+        lukas.bulwahn@gmail.com, x86@kernel.org,
+        linux-mips@vger.kernel.org, tglx@linutronix.de,
+        willy@infradead.org, valentin.schneider@arm.com,
+        srikar@linux.vnet.ibm.com, john mathew <John.Mathew@unikie.com>
+Subject: [RFC PATCH v7 0/3] scheduler: Add scheduler overview
+Date:   Fri,  5 Jun 2020 12:29:03 +0300
+Message-Id: <20200605092906.29478-1-John.Mathew@unikie.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Linux system, writable applies readable privilege in most
-architectures, this patch adds this policy on MIPS platform
-where hardware rixi is supported.
+This patch series updates the scheduler documentation to add more topics
+wrt to scheduler overview. New sections are added to provide a brief
+overview of the kernel structs used by the scheduler, scheduler invocation,
+context switch and Capacity Aware Scheduling. Previous version of
+the patch was reviewed at:
+https://lore.kernel.org/lkml/20200527084421.4673-1-John.Mathew@unikie.com/
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- arch/mips/mm/cache.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+version 7:
+ -Fix overview description
+ -Removed rst headers
+ -Removed kernel-doc for struct rq and meged it as struct
+  member comments
 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index f814e43..dae0617 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -160,7 +160,7 @@ static inline void setup_protection_map(void)
- 	if (cpu_has_rixi) {
- 		protection_map[0]  = __pgprot(__PC | __PP | __NX | __NR);
- 		protection_map[1]  = __pgprot(__PC | __PP | __NX | ___R);
--		protection_map[2]  = __pgprot(__PC | __PP | __NX | __NR);
-+		protection_map[2]  = __pgprot(__PC | __PP | __NX | ___R);
- 		protection_map[3]  = __pgprot(__PC | __PP | __NX | ___R);
- 		protection_map[4]  = __pgprot(__PC | __PP | ___R);
- 		protection_map[5]  = __pgprot(__PC | __PP | ___R);
-@@ -169,7 +169,7 @@ static inline void setup_protection_map(void)
- 
- 		protection_map[8]  = __pgprot(__PC | __PP | __NX | __NR);
- 		protection_map[9]  = __pgprot(__PC | __PP | __NX | ___R);
--		protection_map[10] = __pgprot(__PC | __PP | __NX | ___W | __NR);
-+		protection_map[10] = __pgprot(__PC | __PP | __NX | ___W | ___R);
- 		protection_map[11] = __pgprot(__PC | __PP | __NX | ___W | ___R);
- 		protection_map[12] = __pgprot(__PC | __PP | ___R);
- 		protection_map[13] = __pgprot(__PC | __PP | ___R);
+version 6:
+ -Fix typos.
+
+version 5:
+ -Fix description error on CAS
+
+version 4:
+ -Added section on Capacity-Aware Scheduling
+ -Reworded CFS recently added features.
+ -Removed vruntime description from scheduler structs
+ -Added description of idle and stopper sched classses
+
+version 3:
+ -Fix spelling, spacing and typo errors.
+
+version 2:
+- Remove :c:func: directive as it was redundant
+- Limit document width (line symbol count) to 75
+- Replace dot file with ASCII art
+- Describe prepare_task_switch(), ASID use, 
+  kernel/user transtion, MIPS FPU affinity correctly
+- Add missing references to files
+- Removed internal APIs from scheduler API reference
+- Described rq struct member as kernel-doc comments
+- Replaced CFS history with CFS current status
+- Added documentation for sched_class fields
+- Refined explanation of context swtich functionality
+- Replace CFS history with recent changes
+- Added kernel-doc comments for struct rq
+
+John Mathew (3):
+  docs: scheduler: Restructure scheduler documentation.
+  docs: scheduler: Add scheduler overview documentation
+  docs: scheduler: Add introduction to scheduler context-switch
+
+ Documentation/scheduler/arch-specific.rst     |  14 +
+ Documentation/scheduler/cfs-overview.rst      |  59 ++++
+ Documentation/scheduler/context-switching.rst | 126 ++++++++
+ Documentation/scheduler/index.rst             |  33 +-
+ .../scheduler/mips-context-switch.rst         |  89 ++++++
+ Documentation/scheduler/overview.rst          | 290 ++++++++++++++++++
+ Documentation/scheduler/sched-cas.rst         |  92 ++++++
+ .../scheduler/sched-data-structs.rst          | 176 +++++++++++
+ Documentation/scheduler/sched-debugging.rst   |  14 +
+ Documentation/scheduler/sched-features.rst    |  21 ++
+ Documentation/scheduler/scheduler-api.rst     |  25 ++
+ .../scheduler/x86-context-switch.rst          |  64 ++++
+ kernel/sched/core.c                           |  21 +-
+ kernel/sched/sched.h                          |  61 ++++
+ 14 files changed, 1068 insertions(+), 17 deletions(-)
+ create mode 100644 Documentation/scheduler/arch-specific.rst
+ create mode 100644 Documentation/scheduler/cfs-overview.rst
+ create mode 100644 Documentation/scheduler/context-switching.rst
+ create mode 100644 Documentation/scheduler/mips-context-switch.rst
+ create mode 100644 Documentation/scheduler/overview.rst
+ create mode 100644 Documentation/scheduler/sched-cas.rst
+ create mode 100644 Documentation/scheduler/sched-data-structs.rst
+ create mode 100644 Documentation/scheduler/sched-debugging.rst
+ create mode 100644 Documentation/scheduler/sched-features.rst
+ create mode 100644 Documentation/scheduler/scheduler-api.rst
+ create mode 100644 Documentation/scheduler/x86-context-switch.rst
+
 -- 
-1.8.3.1
+2.17.1
 
