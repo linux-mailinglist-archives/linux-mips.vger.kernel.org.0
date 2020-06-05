@@ -2,182 +2,203 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FC91EEC67
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jun 2020 22:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FEB1EF3C2
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2020 11:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729982AbgFDUvn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Jun 2020 16:51:43 -0400
-Received: from mga06.intel.com ([134.134.136.31]:46522 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729855AbgFDUvm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 4 Jun 2020 16:51:42 -0400
-IronPort-SDR: 5rLgl5+qO89McM0SHHgm2sv/I44a8qLqr0eIFVtK26LQLge7H3mgQhRKAZDHnAlKxWdYvVV4sc
- /PCMYwoAvBVA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 13:51:41 -0700
-IronPort-SDR: zs+MMvxWw13sjlZ9Bw72P4E7fjGK2DTGpjrAZCIfDuEufJrPSBND+RoMuQFrepsdDPuoy+96Bf
- +AJaXGZ7wG6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,472,1583222400"; 
-   d="scan'208";a="348215104"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga001.jf.intel.com with ESMTP; 04 Jun 2020 13:51:40 -0700
-Date:   Thu, 4 Jun 2020 13:51:40 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        id S1726274AbgFEJL1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Jun 2020 05:11:27 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:51162 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726062AbgFEJLZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Jun 2020 05:11:25 -0400
+Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxXesqDNpeHOw9AA--.611S2;
+        Fri, 05 Jun 2020 17:11:06 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
-        Christian Koenig <christian.koenig@amd.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable
- pagefault/preempt twice
-Message-ID: <20200604205140.GN1505637@iweiny-DESK2.sc.intel.com>
-References: <20200519165422.GA5838@roeck-us.net>
- <20200519184031.GB3356843@iweiny-DESK2.sc.intel.com>
- <20200519194215.GA71941@roeck-us.net>
- <20200520051315.GA3660833@iweiny-DESK2.sc.intel.com>
- <d86dba19-4f4b-061e-a2c7-4f037e9e2de2@roeck-us.net>
- <20200521174250.GB176262@iweiny-DESK2.sc.intel.com>
- <20200603135736.e7b5ded0082a81ae6d9067a0@linux-foundation.org>
- <20200603211416.GA1740285@iweiny-DESK2.sc.intel.com>
- <3538c8ad-674e-d310-d870-4ef6888092ed@roeck-us.net>
- <20200604094133.GC202650@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200604094133.GC202650@kernel.org>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+        Paul Burton <paulburton@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 1/2] MIPS: set page access bit with pgprot on some MIPS platform
+Date:   Fri,  5 Jun 2020 17:11:05 +0800
+Message-Id: <1591348266-28392-1-git-send-email-maobibo@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9DxXesqDNpeHOw9AA--.611S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WF43GF1UtFyfKFy5tF48tFb_yoWxZrW3pF
+        97A34xArW2qry3AryxurnrAa1rCwsrtFWUJw17C3W8Z3y7XrykKrnrCa97ZrykuFWvva18
+        Aa1UXr4UWayIvFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVCm-wCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUqEoXUUUUU
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 04, 2020 at 12:41:33PM +0300, Mike Rapoport wrote:
-> On Wed, Jun 03, 2020 at 04:44:17PM -0700, Guenter Roeck wrote:
-> > 
-> > sparc32 smp images in next-20200603 still crash for me with a spinlock
-> > recursion. s390 images hang early in boot. Several others (alpha, arm64,
-> > various ppc) don't even compile. I can run some more bisects over time,
-> > but this is becoming a full-time job :-(.
-> 
-> I've been able to bisect s390 hang to commit b614345f52bc ("x86/entry:
-> Clarify irq_{enter,exit}_rcu()").
-> 
-> After this commit, lockdep_hardirq_exit() is called twice on s390 (and
-> others) - one time in irq_exit_rcu() and another one in irq_exit():
-> 
-> /**
->  * irq_exit_rcu() - Exit an interrupt context without updating RCU
->  *
->  * Also processes softirqs if needed and possible.
->  */
-> void irq_exit_rcu(void)
-> {
-> 	__irq_exit_rcu();
-> 	 /* must be last! */
-> 	lockdep_hardirq_exit();
-> }
-> 
-> /**
->  * irq_exit - Exit an interrupt context, update RCU and lockdep
->  *
->  * Also processes softirqs if needed and possible.
->  */
-> void irq_exit(void)
-> {
-> 	irq_exit_rcu();
-> 	rcu_irq_exit();
-> 	 /* must be last! */
-> 	lockdep_hardirq_exit();
-> }
-> 
-> Removing the call in irq_exit() make s390 boot again, and judgung by the
-> x86 entry code, the comment /* must be last! */ is stale...
+On MIPS system which has rixi hardware bit, page access bit is not
+set in pgrot. For memory reading, there will be one page fault to
+allocate physical page; however valid bit is not set, there will
+be the second fast tlb-miss fault handling to set valid/access bit.
 
-FWIW I got s390 to compile and this patch fixes s390 booting for me as well.
+This patch set page access/valid bit with pgrot if there is reading
+access privilege. It will reduce one tlb-miss handling for memory
+reading access.
 
-13:05:25 > /home/iweiny/dev/linux-build-test/rootfs/s390/run-qemu-s390.sh 
-Build reference: next-20200603-4-g840714292d8c
+The valid/access bit will be cleared in order to track memory
+accessing activity. If the page is accessed, tlb-miss fast handling
+will set valid/access bit, pte_sw_mkyoung is not necessary in slow
+page fault path. This patch removes pte_sw_mkyoung function which
+is defined as empty function except MIPS system.
 
-Building s390:defconfig:initrd ... running ........... passed
-Building s390:defconfig:virtio-blk-ccw:rootfs ... running ........... passed
-Building s390:defconfig:scsi[virtio-ccw]:rootfs ... running ..............  passed
-Building s390:defconfig:virtio-pci:rootfs ... running ........... passed
-Building s390:defconfig:scsi[virtio-pci]:rootfs ... running ........... passed
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ arch/mips/include/asm/pgtable.h | 11 +++++++++--
+ arch/mips/mm/cache.c            | 34 +++++++++++++++++-----------------
+ include/asm-generic/pgtable.h   | 16 ----------------
+ mm/memory.c                     |  3 ---
+ 4 files changed, 26 insertions(+), 38 deletions(-)
 
-Ira
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 85b39c9..e2452ab 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -25,6 +25,15 @@
+ struct mm_struct;
+ struct vm_area_struct;
+ 
++#define __PP	_PAGE_PRESENT
++#define __NX	_PAGE_NO_EXEC
++#define __NR	_PAGE_NO_READ
++#define ___W	_PAGE_WRITE
++#define ___A	_PAGE_ACCESSED
++#define ___R	(_PAGE_SILENT_READ | _PAGE_ACCESSED)
++#define __PC	_page_cachable_default
++
++
+ #define PAGE_NONE	__pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
+ 				 _page_cachable_default)
+ #define PAGE_SHARED	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+@@ -414,8 +423,6 @@ static inline pte_t pte_mkyoung(pte_t pte)
+ 	return pte;
+ }
+ 
+-#define pte_sw_mkyoung	pte_mkyoung
+-
+ #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ static inline int pte_huge(pte_t pte)	{ return pte_val(pte) & _PAGE_HUGE; }
+ 
+diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
+index ad6df1c..f814e43 100644
+--- a/arch/mips/mm/cache.c
++++ b/arch/mips/mm/cache.c
+@@ -158,23 +158,23 @@ void __update_cache(unsigned long address, pte_t pte)
+ static inline void setup_protection_map(void)
+ {
+ 	if (cpu_has_rixi) {
+-		protection_map[0]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-		protection_map[1]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
+-		protection_map[2]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-		protection_map[3]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
+-		protection_map[4]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[5]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[6]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[7]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-
+-		protection_map[8]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-		protection_map[9]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
+-		protection_map[10] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
+-		protection_map[11] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+-		protection_map[12] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[13] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[14] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_WRITE);
+-		protection_map[15] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_WRITE);
++		protection_map[0]  = __pgprot(__PC | __PP | __NX | __NR);
++		protection_map[1]  = __pgprot(__PC | __PP | __NX | ___R);
++		protection_map[2]  = __pgprot(__PC | __PP | __NX | __NR);
++		protection_map[3]  = __pgprot(__PC | __PP | __NX | ___R);
++		protection_map[4]  = __pgprot(__PC | __PP | ___R);
++		protection_map[5]  = __pgprot(__PC | __PP | ___R);
++		protection_map[6]  = __pgprot(__PC | __PP | ___R);
++		protection_map[7]  = __pgprot(__PC | __PP | ___R);
++
++		protection_map[8]  = __pgprot(__PC | __PP | __NX | __NR);
++		protection_map[9]  = __pgprot(__PC | __PP | __NX | ___R);
++		protection_map[10] = __pgprot(__PC | __PP | __NX | ___W | __NR);
++		protection_map[11] = __pgprot(__PC | __PP | __NX | ___W | ___R);
++		protection_map[12] = __pgprot(__PC | __PP | ___R);
++		protection_map[13] = __pgprot(__PC | __PP | ___R);
++		protection_map[14] = __pgprot(__PC | __PP | ___W | ___R);
++		protection_map[15] = __pgprot(__PC | __PP | ___W | ___R);
+ 
+ 	} else {
+ 		protection_map[0] = PAGE_NONE;
+diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
+index b5278ec..fa5c73f 100644
+--- a/include/asm-generic/pgtable.h
++++ b/include/asm-generic/pgtable.h
+@@ -244,22 +244,6 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
+ }
+ #endif
+ 
+-/*
+- * On some architectures hardware does not set page access bit when accessing
+- * memory page, it is responsibilty of software setting this bit. It brings
+- * out extra page fault penalty to track page access bit. For optimization page
+- * access bit can be set during all page fault flow on these arches.
+- * To be differentiate with macro pte_mkyoung, this macro is used on platforms
+- * where software maintains page access bit.
+- */
+-#ifndef pte_sw_mkyoung
+-static inline pte_t pte_sw_mkyoung(pte_t pte)
+-{
+-	return pte;
+-}
+-#define pte_sw_mkyoung	pte_sw_mkyoung
+-#endif
+-
+ #ifndef pte_savedwrite
+ #define pte_savedwrite pte_write
+ #endif
+diff --git a/mm/memory.c b/mm/memory.c
+index c7c8960..8bb31c4 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2704,7 +2704,6 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		}
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+ 		entry = mk_pte(new_page, vma->vm_page_prot);
+-		entry = pte_sw_mkyoung(entry);
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 		/*
+ 		 * Clear the pte entry and flush it first, before updating the
+@@ -3379,7 +3378,6 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+ 	__SetPageUptodate(page);
+ 
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
+ 	if (vma->vm_flags & VM_WRITE)
+ 		entry = pte_mkwrite(pte_mkdirty(entry));
+ 
+@@ -3662,7 +3660,6 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
+ 
+ 	flush_icache_page(vma, page);
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
+ 	if (write)
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 	/* copy-on-write page */
+-- 
+1.8.3.1
 
-> 
-> @Peter, @Thomas, can you comment please?
-> 
-> From e51d50ee6f4d1f446decf91c2c67230da14ff82c Mon Sep 17 00:00:00 2001
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> Date: Thu, 4 Jun 2020 12:37:03 +0300
-> Subject: [PATCH] softirq: don't call lockdep_hardirq_exit() twice
-> 
-> After commit b614345f52bc ("x86/entry: Clarify irq_{enter,exit}_rcu()")
-> lockdep_hardirq_exit() is called twice on every architecture that uses
-> irq_exit(): one time in irq_exit_rcu() and another one in irq_exit().
-> 
-> Remove the extra call in irq_exit().
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  kernel/softirq.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index a3eb6eba8c41..7523f4ce4c1d 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -427,7 +427,6 @@ static inline void __irq_exit_rcu(void)
->  void irq_exit_rcu(void)
->  {
->  	__irq_exit_rcu();
-> -	 /* must be last! */
->  	lockdep_hardirq_exit();
->  }
->  
-> @@ -440,8 +439,6 @@ void irq_exit(void)
->  {
->  	irq_exit_rcu();
->  	rcu_irq_exit();
-> -	 /* must be last! */
-> -	lockdep_hardirq_exit();
->  }
->  
->  /*
-> -- 
-> 2.26.2
-> 
-> 
-> 
-> > Guenter
-> 
-> -- 
-> Sincerely yours,
-> Mike.
