@@ -2,192 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2235F1F020B
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2020 23:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4661F0418
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Jun 2020 03:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728752AbgFEVkA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Jun 2020 17:40:00 -0400
-Received: from mga04.intel.com ([192.55.52.120]:22540 "EHLO mga04.intel.com"
+        id S1728316AbgFFBIG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Jun 2020 21:08:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58894 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728597AbgFEVjQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 5 Jun 2020 17:39:16 -0400
-IronPort-SDR: Pi0R58WJ/iEOK1cA8UDmGMHWql3+ltgl9tyGnEsZeQ6jwj7EypEYx5xJi/mWh47OAjW1ZlLLVq
- sYSmBAb8T/KQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2020 14:39:10 -0700
-IronPort-SDR: PWArTjc0SrJLSJ05VypN8vL975Wv8bdiyKJ53PVlmPdjQXrXRT1XPVBonpfvRNol5tassY2nle
- iHJoSum0887Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,477,1583222400"; 
-   d="scan'208";a="287860931"
-Received: from sjchrist-coffee.jf.intel.com ([10.54.74.152])
-  by orsmga002.jf.intel.com with ESMTP; 05 Jun 2020 14:39:09 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Marc Zyngier <maz@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Feiner <pfeiner@google.com>,
-        Peter Shier <pshier@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Christoffer Dall <christoffer.dall@arm.com>
-Subject: [PATCH 21/21] KVM: MIPS: Use common KVM implementation of MMU memory caches
-Date:   Fri,  5 Jun 2020 14:38:53 -0700
-Message-Id: <20200605213853.14959-22-sean.j.christopherson@intel.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200605213853.14959-1-sean.j.christopherson@intel.com>
-References: <20200605213853.14959-1-sean.j.christopherson@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726803AbgFFBIG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Jun 2020 21:08:06 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2546820723;
+        Sat,  6 Jun 2020 01:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591405684;
+        bh=JdeeZEG/s9PJWjwa/MTfv/JgYtVWchaFYWKs9Z3jNuE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vw2MqBpJYwqq+09ZZ6vagDXamXK2QaHHbzr5ql5vspav6hv4YZxBA9Sa4ChzzdwfO
+         f/Dh52fmkY9R8vhHgQz9fdtpn+TjCFlhSMwVVdtJ9ubadfm0w+RJfmxoaoYNQKAW1k
+         SmUDydhrZ/piDRkHlyEgWO2OdyChN5IIcEAyO+5E=
+Date:   Fri, 5 Jun 2020 18:08:03 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Bibo Mao <maobibo@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 1/2] MIPS: set page access bit with pgprot on some MIPS
+ platform
+Message-Id: <20200605180803.9ba58249ed681f4da9822f43@linux-foundation.org>
+In-Reply-To: <1591348266-28392-1-git-send-email-maobibo@loongson.cn>
+References: <1591348266-28392-1-git-send-email-maobibo@loongson.cn>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Move to the common MMU memory cache implementation now that the common
-code and MIPS's existing code are semantically compatible.
+On Fri,  5 Jun 2020 17:11:05 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
 
-No functional change intended.
+> On MIPS system which has rixi hardware bit, page access bit is not
+> set in pgrot. For memory reading, there will be one page fault to
+> allocate physical page; however valid bit is not set, there will
+> be the second fast tlb-miss fault handling to set valid/access bit.
+> 
+> This patch set page access/valid bit with pgrot if there is reading
+> access privilege. It will reduce one tlb-miss handling for memory
+> reading access.
+> 
+> The valid/access bit will be cleared in order to track memory
+> accessing activity. If the page is accessed, tlb-miss fast handling
+> will set valid/access bit, pte_sw_mkyoung is not necessary in slow
+> page fault path. This patch removes pte_sw_mkyoung function which
+> is defined as empty function except MIPS system.
+> 
+> ...
+>
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -2704,7 +2704,6 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+>  		}
+>  		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+>  		entry = mk_pte(new_page, vma->vm_page_prot);
+> -		entry = pte_sw_mkyoung(entry);
+>  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+>  		/*
+>  		 * Clear the pte entry and flush it first, before updating the
+> @@ -3379,7 +3378,6 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+>  	__SetPageUptodate(page);
+>  
+>  	entry = mk_pte(page, vma->vm_page_prot);
+> -	entry = pte_sw_mkyoung(entry);
+>  	if (vma->vm_flags & VM_WRITE)
+>  		entry = pte_mkwrite(pte_mkdirty(entry));
+>  
+> @@ -3662,7 +3660,6 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
+>  
+>  	flush_icache_page(vma, page);
+>  	entry = mk_pte(page, vma->vm_page_prot);
+> -	entry = pte_sw_mkyoung(entry);
+>  	if (write)
+>  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+>  	/* copy-on-write page */
 
-Suggested-by: Christoffer Dall <christoffer.dall@arm.com>
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
----
- arch/mips/include/asm/kvm_host.h  | 11 ---------
- arch/mips/include/asm/kvm_types.h |  2 ++
- arch/mips/kvm/mmu.c               | 40 ++++---------------------------
- 3 files changed, 7 insertions(+), 46 deletions(-)
+Only affects mips, so cheerily
 
-diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
-index 363e7a89d173..f49617175f60 100644
---- a/arch/mips/include/asm/kvm_host.h
-+++ b/arch/mips/include/asm/kvm_host.h
-@@ -335,17 +335,6 @@ struct kvm_mips_tlb {
- 	long tlb_lo[2];
- };
- 
--#define KVM_NR_MEM_OBJS     4
--
--/*
-- * We don't want allocation failures within the mmu code, so we preallocate
-- * enough memory for a single page fault in a cache.
-- */
--struct kvm_mmu_memory_cache {
--	int nobjs;
--	void *objects[KVM_NR_MEM_OBJS];
--};
--
- #define KVM_MIPS_AUX_FPU	0x1
- #define KVM_MIPS_AUX_MSA	0x2
- 
-diff --git a/arch/mips/include/asm/kvm_types.h b/arch/mips/include/asm/kvm_types.h
-index 5efeb32a5926..213754d9ef6b 100644
---- a/arch/mips/include/asm/kvm_types.h
-+++ b/arch/mips/include/asm/kvm_types.h
-@@ -2,4 +2,6 @@
- #ifndef _ASM_MIPS_KVM_TYPES_H
- #define _ASM_MIPS_KVM_TYPES_H
- 
-+#define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE     4
-+
- #endif /* _ASM_MIPS_KVM_TYPES_H */
-diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
-index 41a4a063a730..d6acd88c0c46 100644
---- a/arch/mips/kvm/mmu.c
-+++ b/arch/mips/kvm/mmu.c
-@@ -25,39 +25,9 @@
- #define KVM_MMU_CACHE_MIN_PAGES 2
- #endif
- 
--static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache, int min)
--{
--	void *page;
--
--	if (cache->nobjs >= min)
--		return 0;
--	while (cache->nobjs < ARRAY_SIZE(cache->objects)) {
--		page = (void *)__get_free_page(GFP_KERNEL_ACCOUNT);
--		if (!page)
--			return -ENOMEM;
--		cache->objects[cache->nobjs++] = page;
--	}
--	return 0;
--}
--
--static void mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
--{
--	while (mc->nobjs)
--		free_page((unsigned long)mc->objects[--mc->nobjs]);
--}
--
--static void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
--{
--	void *p;
--
--	BUG_ON(!mc || !mc->nobjs);
--	p = mc->objects[--mc->nobjs];
--	return p;
--}
--
- void kvm_mmu_free_memory_caches(struct kvm_vcpu *vcpu)
- {
--	mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
-+	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
- }
- 
- /**
-@@ -151,7 +121,7 @@ static pte_t *kvm_mips_walk_pgd(pgd_t *pgd, struct kvm_mmu_memory_cache *cache,
- 
- 		if (!cache)
- 			return NULL;
--		new_pmd = mmu_memory_cache_alloc(cache);
-+		new_pmd = kvm_mmu_memory_cache_alloc(cache);
- 		pmd_init((unsigned long)new_pmd,
- 			 (unsigned long)invalid_pte_table);
- 		pud_populate(NULL, pud, new_pmd);
-@@ -162,7 +132,7 @@ static pte_t *kvm_mips_walk_pgd(pgd_t *pgd, struct kvm_mmu_memory_cache *cache,
- 
- 		if (!cache)
- 			return NULL;
--		new_pte = mmu_memory_cache_alloc(cache);
-+		new_pte = kvm_mmu_memory_cache_alloc(cache);
- 		clear_page(new_pte);
- 		pmd_populate_kernel(NULL, pmd, new_pte);
- 	}
-@@ -709,7 +679,7 @@ static int kvm_mips_map_page(struct kvm_vcpu *vcpu, unsigned long gpa,
- 		goto out;
- 
- 	/* We need a minimum of cached pages ready for page table creation */
--	err = mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
-+	err = kvm_mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
- 	if (err)
- 		goto out;
- 
-@@ -793,7 +763,7 @@ static pte_t *kvm_trap_emul_pte_for_gva(struct kvm_vcpu *vcpu,
- 	int ret;
- 
- 	/* We need a minimum of cached pages ready for page table creation */
--	ret = mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
-+	ret = kvm_mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
- 	if (ret)
- 		return NULL;
- 
--- 
-2.26.0
-
+Acked-by: Andrew Morton <akpm@linux-foundation.org>
