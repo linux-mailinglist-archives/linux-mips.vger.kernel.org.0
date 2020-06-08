@@ -2,109 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AA51F2797
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A5B1F2C59
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 02:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387979AbgFHXrW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 19:47:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53726 "EHLO mail.kernel.org"
+        id S1728199AbgFIAXS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 20:23:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38762 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387930AbgFHXrP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:47:15 -0400
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+        id S1729148AbgFHXRP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:17:15 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE15420842;
-        Mon,  8 Jun 2020 23:47:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 780CB2083E;
+        Mon,  8 Jun 2020 23:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591660034;
-        bh=JfeR1OvUTiZ0lO8gFO9nXXNApbqP7Edk3LbRreh8u6o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ywVQtU9EpMa3kP7TzlTaYd3MC12ox9PdByU6JDD/+1ap9wTefo28zwbDbtquuTTXs
-         q4SPNj+fsG+okq4AuKRockpnZdiBNJVW/msRnFgduqIe/mcn6dRp+arC+1RK8sGZ2j
-         E8yZNl7fH+hOZqypdm+lPKFtCbiHHwk4e9Hqv1bw=
-Received: by mail-oo1-f52.google.com with SMTP id 7so3818488oof.8;
-        Mon, 08 Jun 2020 16:47:14 -0700 (PDT)
-X-Gm-Message-State: AOAM5313IxO3b+ngWsMl/aLyQSIZnHRLKeHaf9QodYpbmaeNnmAwenuE
-        kj6SZgiGXeLD4dwgSmnYnoLu2PmH0tC5LWQn5g==
-X-Google-Smtp-Source: ABdhPJz3gIjlkhZ2RmMRXkIMPB6UylOzQLyhAs6ndsfed5PFu+br/5Z+8Z79xY7reJQ2jrwzMbD3741AqHxlS9Wo3LE=
-X-Received: by 2002:a4a:345b:: with SMTP id n27mr19140154oof.25.1591660034065;
- Mon, 08 Jun 2020 16:47:14 -0700 (PDT)
+        s=default; t=1591658235;
+        bh=UxLFJSi2vnUJFRKmV691Uu4lf4Mr1Wmc8LbfMJiz7KI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=o/PYnR28aUUEshZruVU+htmWXhxxUT4Emg6Vw1Ygee4KoefXr9F6B385lCCbNxbea
+         kLxn88Pj170BjC+GXaVODDS5V2QrVl/sEBd1dwiJ/YKDCED5uVdoOdcWxa7Y5zG43E
+         z4uAOw+cPZ/wO+pKJNvdU25EkCGewUFtttQkP1es=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Tang Bin <tangbin@cmss.chinamobile.com>,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 247/606] net: sgi: ioc3-eth: Fix return value check in ioc3eth_probe()
+Date:   Mon,  8 Jun 2020 19:06:12 -0400
+Message-Id: <20200608231211.3363633-247-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
+References: <20200608231211.3363633-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20200527153046.6172-1-Sergey.Semin@baikalelectronics.ru>
- <20200527153046.6172-3-Sergey.Semin@baikalelectronics.ru> <20200527153351.rmzguymz7lm6gvsx@mobilestation>
- <20200529181338.GA2676189@bogus> <20200529182256.3bp4uvvrvz3ddlrq@mobilestation>
- <20200529184201.GX1634618@smile.fi.intel.com> <20200529184534.wyyv5i7hcto5y3d3@mobilestation>
- <20200529185824.o2vcpxe4f63aw465@mobilestation>
-In-Reply-To: <20200529185824.o2vcpxe4f63aw465@mobilestation>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 8 Jun 2020 17:46:59 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKZjYF2Jrvcd8BAHsMfm5-S1J11NVoc6o2q5zE5ekmRTw@mail.gmail.com>
-Message-ID: <CAL_JsqKZjYF2Jrvcd8BAHsMfm5-S1J11NVoc6o2q5zE5ekmRTw@mail.gmail.com>
-Subject: Re: [PATCH v5 02/11] dt-bindings: i2c: Discard i2c-slave flag from
- the DW I2C example
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 29, 2020 at 12:58 PM Serge Semin <fancer.lancer@gmail.com> wrote:
->
-> On Fri, May 29, 2020 at 09:45:37PM +0300, Serge Semin wrote:
-> > On Fri, May 29, 2020 at 09:42:01PM +0300, Andy Shevchenko wrote:
-> > > On Fri, May 29, 2020 at 09:22:56PM +0300, Serge Semin wrote:
-> > > > On Fri, May 29, 2020 at 12:13:38PM -0600, Rob Herring wrote:
-> > > > > On Wed, May 27, 2020 at 06:33:51PM +0300, Serge Semin wrote:
-> > >
-> > > > > you're sending
-> > > > > new versions too fast. Give people time to review.
-> > > >
-> > > > Yeah, you did. Sorry for sending the new versions very fast. Normally I prefer
-> > > > to keep up with comments so to past a particular maintainer review as fast as
-> > > > possible without long delays. In my experience the longer you wait, the lesser
-> > > > maintainers remember about your patchset, the harder for one to continue the
-> > > > next versions review.
-> > >
-> >
->
-> > > Documentation/process/submitting-patches.rst:
-> > >
-> > > "Wait for a minimum of one week before resubmitting or pinging reviewers -
-> > > possibly longer during busy times like merge windows."
-> >
-> > Good to know what I already know.) How much do you personally wait before
-> > resubmitting? In my experience reviewing your DW APB GPIO patches, no longer
-> > than a few hours.
->
-> Moreover the statement you cited is about the patches, which doesn't get any
-> attention from the maintainers/reviewers for quite some time. In this case I
-> normally resubmit the patches no sooner than a week. I was talking about the
-> situation when you get the review comments, which need to be addressed.
+From: Tang Bin <tangbin@cmss.chinamobile.com>
 
-There's not going to be any rule that always works. It takes
-judgement. I'd say the greater the rework from review comments, the
-sooner you can resend. But then if it's multiple
-subsystems/maintainers, you need to give all of them time.
+commit a7654211d0ffeaa8eb0545ea00f8445242cbce05 upstream.
 
-I go in date order mostly. You send a new version, then you go to the
-back of the queue. So if you want it reviewed the soonest, send it 2
-weeks ago. ;) There's also the strategy of reviewing other patches in
-front of yours. Sometimes I go by version numbers, but send version 50
-and I might be suspicious. And that's rewarding folks who are sloppy
-or keep sending broken stuff. The real solution is I just need more
-help reviewing things.
+In the function devm_platform_ioremap_resource(), if get resource
+failed, the return value is ERR_PTR() not NULL. Thus it must be
+replaced by IS_ERR(), or else it may result in crashes if a critical
+error path is encountered.
 
-Rob
+Fixes: 0ce5ebd24d25 ("mfd: ioc3: Add driver for SGI IOC3 chip")
+Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/net/ethernet/sgi/ioc3-eth.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
+index db6b2988e632..f4895777f5e3 100644
+--- a/drivers/net/ethernet/sgi/ioc3-eth.c
++++ b/drivers/net/ethernet/sgi/ioc3-eth.c
+@@ -865,14 +865,14 @@ static int ioc3eth_probe(struct platform_device *pdev)
+ 	ip = netdev_priv(dev);
+ 	ip->dma_dev = pdev->dev.parent;
+ 	ip->regs = devm_platform_ioremap_resource(pdev, 0);
+-	if (!ip->regs) {
+-		err = -ENOMEM;
++	if (IS_ERR(ip->regs)) {
++		err = PTR_ERR(ip->regs);
+ 		goto out_free;
+ 	}
+ 
+ 	ip->ssram = devm_platform_ioremap_resource(pdev, 1);
+-	if (!ip->ssram) {
+-		err = -ENOMEM;
++	if (IS_ERR(ip->ssram)) {
++		err = PTR_ERR(ip->ssram);
+ 		goto out_free;
+ 	}
+ 
+-- 
+2.25.1
+
