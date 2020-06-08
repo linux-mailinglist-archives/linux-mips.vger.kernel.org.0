@@ -2,140 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C33591F1CE4
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2020 18:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC551F2241
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730401AbgFHQHB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 12:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730378AbgFHQHA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Jun 2020 12:07:00 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DB0C08C5C2;
-        Mon,  8 Jun 2020 09:07:00 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id g10so56633wmh.4;
-        Mon, 08 Jun 2020 09:07:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xSm/ixCMsXrBbAVZMWIWVyDBFHz6cDKWQtZCmAnN0nA=;
-        b=ZLSxxQtAqk9VJDhuTPL/QytUa2FIBQopJdBHKih5e4AAFXp7fINT9N+ePLJodzE/tU
-         MIo4bnGqf6TwcM2yJnT8F3mNUgmp+iiR7KVcEf0MRbb/a/WciLworDKVhxZ4gXx6Shts
-         HMV0P81Yb2gscczPSxyxyT6ukEYSwfakd0VCuBT7SJriDcBqMux5KKV6paMbOPPS9Ud9
-         XRvv63vkPM7+tmGskVRlRvyeSWZZFi+ulGYCSujm6IW2JWESuFocQua+OIV3YkJciJFg
-         HRbtsT0RpycizikAmUr1ILfJsTt/0ebbdX3R89RLKixL+YdeRFBH3h6OODLDz9Ucvi9b
-         ylXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xSm/ixCMsXrBbAVZMWIWVyDBFHz6cDKWQtZCmAnN0nA=;
-        b=OE+YtbCMd+cXQXQjLPW4YTg12Zs1vwv4EGir2dfgVEm4EdyoLImtAKOUXq+JxStD75
-         1MvxH3isC93GycVVqjh1W2iwoKNQ7Gk7es5oMu5W0Rrb2bm276l0xx57xrG6PaT3EuGE
-         CII4Di19yfsist4ksgybL7T7RQfU2KBr6gHFssPHvX4UTUDyMYOQvKtutJpqp9UhBp9N
-         PaJVP9d+pzf4rIAeR5mFNbwsm/rYB6bVixqVqTJzsceq0Ck4R83aawDXvK+O6SvsPgZt
-         ESJXD4kWky4uE96Nxbf2D1aE0cRVCaAvaQ7XpkdAv1PnUiPZENWUEOiutGOqzkPs5OtQ
-         OrPQ==
-X-Gm-Message-State: AOAM531jfpNMASEPBJ6b+pJPCyQGeGX9/LRkNwwAMTSDgiStwuWJlR5T
-        DURUcQGSKZ7RDVN9y0eEQdg=
-X-Google-Smtp-Source: ABdhPJzlh/xf/IFViONY5iqBfTW9IBvJzeWdZjU4s6WE0zKa+QDIy95NBnZc/nabW15BofK0+Fz87w==
-X-Received: by 2002:a1c:24c6:: with SMTP id k189mr72594wmk.9.1591632418158;
-        Mon, 08 Jun 2020 09:06:58 -0700 (PDT)
-Received: from skynet.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
-        by smtp.gmail.com with ESMTPSA id b187sm32275wmd.26.2020.06.08.09.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2020 09:06:57 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     tsbogend@alpha.franken.de, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, jonas.gorski@gmail.com,
-        linus.walleij@linaro.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v2] mtd: parsers: bcm63xx: simplify CFE detection
-Date:   Mon,  8 Jun 2020 18:06:49 +0200
-Message-Id: <20200608160649.3717152-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200608094053.3381512-1-noltari@gmail.com>
-References: <20200608094053.3381512-1-noltari@gmail.com>
+        id S1727913AbgFHXHa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 19:07:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51676 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727903AbgFHXH2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:07:28 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6FFCB20872;
+        Mon,  8 Jun 2020 23:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591657647;
+        bh=GwEbOMu8/8JRIBBYzWPx5EysyBB4jEBoWyltDTe3v+k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oUnAVq/M1u/jUhL8Lwy4M2r5AstnD44z/Sit1/q3/B5qnDvqqti9HnVUOrwGw8Tj5
+         gw2o9PViPv5ZXH2hQhaeBhL5DJqSBylVGvQ7kIlhx+9+FPZrnEMa2edagafVfzKm93
+         0k8G72AzoO2FUDcvXiaO7B+B+eei1isqLfhYIUS0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 062/274] spi: dw: Enable interrupts in accordance with DMA xfer mode
+Date:   Mon,  8 Jun 2020 19:02:35 -0400
+Message-Id: <20200608230607.3361041-62-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
+References: <20200608230607.3361041-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Instead of trying to parse CFE version string, which is customized by some
-vendors, let's just check that "CFE1" was passed on argument 3.
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+[ Upstream commit 43dba9f3f98c2b184a19f856f06fe22817bfd9e0 ]
+
+It's pointless to track the Tx overrun interrupts if Rx-only SPI
+transfer is issued. Similarly there is no need in handling the Rx
+overrun/underrun interrupts if Tx-only SPI transfer is executed.
+So lets unmask the interrupts only if corresponding SPI
+transactions are implied.
+
+Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Link: https://lore.kernel.org/r/20200522000806.7381-3-Sergey.Semin@baikalelectronics.ru
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- v2: use CFE_EPTSEAL definition and avoid using an additional funtion.
+ drivers/spi/spi-dw-mid.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
- drivers/mtd/parsers/bcm63xxpart.c | 29 ++++-------------------------
- 1 file changed, 4 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/mtd/parsers/bcm63xxpart.c b/drivers/mtd/parsers/bcm63xxpart.c
-index 78f90c6c18fd..493a75b2f266 100644
---- a/drivers/mtd/parsers/bcm63xxpart.c
-+++ b/drivers/mtd/parsers/bcm63xxpart.c
-@@ -22,6 +22,9 @@
- #include <linux/mtd/partitions.h>
- #include <linux/of.h>
+diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
+index 1058b8a6c8a0..e6c045ecffba 100644
+--- a/drivers/spi/spi-dw-mid.c
++++ b/drivers/spi/spi-dw-mid.c
+@@ -220,19 +220,23 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
  
-+#include <asm/bootinfo.h>
-+#include <asm/fw/cfe/cfe_api.h>
-+
- #define BCM963XX_CFE_BLOCK_SIZE		SZ_64K	/* always at least 64KiB */
- 
- #define BCM963XX_CFE_MAGIC_OFFSET	0x4e0
-@@ -32,30 +35,6 @@
- #define STR_NULL_TERMINATE(x) \
- 	do { char *_str = (x); _str[sizeof(x) - 1] = 0; } while (0)
- 
--static int bcm63xx_detect_cfe(struct mtd_info *master)
--{
--	char buf[9];
--	int ret;
--	size_t retlen;
--
--	ret = mtd_read(master, BCM963XX_CFE_VERSION_OFFSET, 5, &retlen,
--		       (void *)buf);
--	buf[retlen] = 0;
--
--	if (ret)
--		return ret;
--
--	if (strncmp("cfe-v", buf, 5) == 0)
--		return 0;
--
--	/* very old CFE's do not have the cfe-v string, so check for magic */
--	ret = mtd_read(master, BCM963XX_CFE_MAGIC_OFFSET, 8, &retlen,
--		       (void *)buf);
--	buf[retlen] = 0;
--
--	return strncmp("CFE1CFE1", buf, 8);
--}
--
- static int bcm63xx_read_nvram(struct mtd_info *master,
- 	struct bcm963xx_nvram *nvram)
+ static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
  {
-@@ -138,7 +117,7 @@ static int bcm63xx_parse_cfe_partitions(struct mtd_info *master,
- 	struct bcm963xx_nvram *nvram = NULL;
- 	int ret;
+-	u16 dma_ctrl = 0;
++	u16 imr = 0, dma_ctrl = 0;
  
--	if (bcm63xx_detect_cfe(master))
-+	if (fw_arg3 != CFE_EPTSEAL)
- 		return -EINVAL;
+ 	dw_writel(dws, DW_SPI_DMARDLR, 0xf);
+ 	dw_writel(dws, DW_SPI_DMATDLR, 0x10);
  
- 	nvram = vzalloc(sizeof(*nvram));
+-	if (xfer->tx_buf)
++	if (xfer->tx_buf) {
+ 		dma_ctrl |= SPI_DMA_TDMAE;
+-	if (xfer->rx_buf)
++		imr |= SPI_INT_TXOI;
++	}
++	if (xfer->rx_buf) {
+ 		dma_ctrl |= SPI_DMA_RDMAE;
++		imr |= SPI_INT_RXUI | SPI_INT_RXOI;
++	}
+ 	dw_writel(dws, DW_SPI_DMACR, dma_ctrl);
+ 
+ 	/* Set the interrupt mask */
+-	spi_umask_intr(dws, SPI_INT_TXOI | SPI_INT_RXUI | SPI_INT_RXOI);
++	spi_umask_intr(dws, imr);
+ 
+ 	dws->transfer_handler = dma_transfer;
+ 
 -- 
-2.26.2
+2.25.1
 
