@@ -2,41 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC4B1F2A4D
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 02:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175D71F29BF
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 02:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732878AbgFIAGg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 20:06:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45094 "EHLO mail.kernel.org"
+        id S2388006AbgFIADu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 20:03:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45968 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731102AbgFHXVE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:21:04 -0400
+        id S1731210AbgFHXVo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:21:44 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 330B220870;
-        Mon,  8 Jun 2020 23:21:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1E26120899;
+        Mon,  8 Jun 2020 23:21:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658464;
-        bh=f3UQOmDiQE88hlsy01etg3kz41zegwDdc0uGCUHCiaA=;
+        s=default; t=1591658503;
+        bh=eVw2k462iJ2Do0ojBFL2gwa0NOUuOVkmrSLmnwCge2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bp6fXYmPpxac0AFtnOUxpM0Jmb8YMg7f3vHlECgGVn7qiXkeEqy2tUUpRZ1D/QCSs
-         iqkQO12FQx9Es0EbVhXq8VyM5h7yzUuu8kafTHBr9UsJCfToMUnsgrRz6MJcZ8Boxl
-         IeNxHX5l4G5GkkaIIBzPYoSf96k8jN/cldiJAkI4=
+        b=GacAHru+xui4JeSZmDBoK1YFoRrKbkSXg71C+6CdQn7gjno/psee+91zLpoBNkq57
+         zA4Q8idetKIxwNXdw3Wax+U/QGrxlx5dFMOImp3wSOUj+mEMe1RHdWOfk6hAf25tNR
+         q9r1xpH9g7BSqR1cbXk4Yw6njQ5MdfwbUg0lnnWs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Fangrui Song <maskray@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        "Maciej W . Rozycki" <macro@linux-mips.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.4 103/175] MIPS: Truncate link address into 32bit for 32bit kernel
-Date:   Mon,  8 Jun 2020 19:17:36 -0400
-Message-Id: <20200608231848.3366970-103-sashal@kernel.org>
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 134/175] mips: Add udelay lpj numbers adjustment
+Date:   Mon,  8 Jun 2020 19:18:07 -0400
+Message-Id: <20200608231848.3366970-134-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
 References: <20200608231848.3366970-1-sashal@kernel.org>
@@ -49,86 +49,125 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-[ Upstream commit ff487d41036035376e47972c7c522490b839ab37 ]
+[ Upstream commit ed26aacfb5f71eecb20a51c4467da440cb719d66 ]
 
-LLD failed to link vmlinux with 64bit load address for 32bit ELF
-while bfd will strip 64bit address into 32bit silently.
-To fix LLD build, we should truncate load address provided by platform
-into 32bit for 32bit kernel.
+Loops-per-jiffies is a special number which represents a number of
+noop-loop cycles per CPU-scheduler quantum - jiffies. As you
+understand aside from CPU-specific implementation it depends on
+the CPU frequency. So when a platform has the CPU frequency fixed,
+we have no problem and the current udelay interface will work
+just fine. But as soon as CPU-freq driver is enabled and the cores
+frequency changes, we'll end up with distorted udelay's. In order
+to fix this we have to accordinly adjust the per-CPU udelay_val
+(the same as the global loops_per_jiffy) number. This can be done
+in the CPU-freq transition event handler. We subscribe to that event
+in the MIPS arch time-inititalization method.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/786
-Link: https://sourceware.org/bugzilla/show_bug.cgi?id=25784
-Reviewed-by: Fangrui Song <maskray@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Tested-by: Nathan Chancellor <natechancellor@gmail.com>
-Cc: Maciej W. Rozycki <macro@linux-mips.org>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/Makefile                 | 13 ++++++++++++-
- arch/mips/boot/compressed/Makefile |  2 +-
- arch/mips/kernel/vmlinux.lds.S     |  2 +-
- 3 files changed, 14 insertions(+), 3 deletions(-)
+ arch/mips/kernel/time.c | 70 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index cdc09b71febe..5403a91ce098 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -285,12 +285,23 @@ ifdef CONFIG_64BIT
-   endif
- endif
+diff --git a/arch/mips/kernel/time.c b/arch/mips/kernel/time.c
+index 37e9413a393d..caa01457dce6 100644
+--- a/arch/mips/kernel/time.c
++++ b/arch/mips/kernel/time.c
+@@ -18,12 +18,82 @@
+ #include <linux/smp.h>
+ #include <linux/spinlock.h>
+ #include <linux/export.h>
++#include <linux/cpufreq.h>
++#include <linux/delay.h>
  
-+# When linking a 32-bit executable the LLVM linker cannot cope with a
-+# 32-bit load address that has been sign-extended to 64 bits.  Simply
-+# remove the upper 32 bits then, as it is safe to do so with other
-+# linkers.
-+ifdef CONFIG_64BIT
-+	load-ld			= $(load-y)
-+else
-+	load-ld			= $(subst 0xffffffff,0x,$(load-y))
-+endif
+ #include <asm/cpu-features.h>
+ #include <asm/cpu-type.h>
+ #include <asm/div64.h>
+ #include <asm/time.h>
+ 
++#ifdef CONFIG_CPU_FREQ
 +
- KBUILD_AFLAGS	+= $(cflags-y)
- KBUILD_CFLAGS	+= $(cflags-y)
--KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y)
-+KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y) -DLINKER_LOAD_ADDRESS=$(load-ld)
- KBUILD_CPPFLAGS += -DDATAOFFSET=$(if $(dataoffset-y),$(dataoffset-y),0)
- 
- bootvars-y	= VMLINUX_LOAD_ADDRESS=$(load-y) \
-+		  LINKER_LOAD_ADDRESS=$(load-ld) \
- 		  VMLINUX_ENTRY_ADDRESS=$(entry-y) \
- 		  PLATFORM="$(platform-y)" \
- 		  ITS_INPUTS="$(its-y)"
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index d859f079b771..378cbfb31ee7 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -90,7 +90,7 @@ ifneq ($(zload-y),)
- VMLINUZ_LOAD_ADDRESS := $(zload-y)
- else
- VMLINUZ_LOAD_ADDRESS = $(shell $(obj)/calc_vmlinuz_load_addr \
--		$(obj)/vmlinux.bin $(VMLINUX_LOAD_ADDRESS))
-+		$(obj)/vmlinux.bin $(LINKER_LOAD_ADDRESS))
- endif
- UIMAGE_LOADADDR = $(VMLINUZ_LOAD_ADDRESS)
- 
-diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.lds.S
-index 33ee0d18fb0a..eb9d7af93836 100644
---- a/arch/mips/kernel/vmlinux.lds.S
-+++ b/arch/mips/kernel/vmlinux.lds.S
-@@ -50,7 +50,7 @@ SECTIONS
- 	/* . = 0xa800000000300000; */
- 	. = 0xffffffff80300000;
- #endif
--	. = VMLINUX_LOAD_ADDRESS;
-+	. = LINKER_LOAD_ADDRESS;
- 	/* read-only */
- 	_text = .;	/* Text and read-only data */
- 	.text : {
++static DEFINE_PER_CPU(unsigned long, pcp_lpj_ref);
++static DEFINE_PER_CPU(unsigned long, pcp_lpj_ref_freq);
++static unsigned long glb_lpj_ref;
++static unsigned long glb_lpj_ref_freq;
++
++static int cpufreq_callback(struct notifier_block *nb,
++			    unsigned long val, void *data)
++{
++	struct cpufreq_freqs *freq = data;
++	struct cpumask *cpus = freq->policy->cpus;
++	unsigned long lpj;
++	int cpu;
++
++	/*
++	 * Skip lpj numbers adjustment if the CPU-freq transition is safe for
++	 * the loops delay. (Is this possible?)
++	 */
++	if (freq->flags & CPUFREQ_CONST_LOOPS)
++		return NOTIFY_OK;
++
++	/* Save the initial values of the lpjes for future scaling. */
++	if (!glb_lpj_ref) {
++		glb_lpj_ref = boot_cpu_data.udelay_val;
++		glb_lpj_ref_freq = freq->old;
++
++		for_each_online_cpu(cpu) {
++			per_cpu(pcp_lpj_ref, cpu) =
++				cpu_data[cpu].udelay_val;
++			per_cpu(pcp_lpj_ref_freq, cpu) = freq->old;
++		}
++	}
++
++	/*
++	 * Adjust global lpj variable and per-CPU udelay_val number in
++	 * accordance with the new CPU frequency.
++	 */
++	if ((val == CPUFREQ_PRECHANGE  && freq->old < freq->new) ||
++	    (val == CPUFREQ_POSTCHANGE && freq->old > freq->new)) {
++		loops_per_jiffy = cpufreq_scale(glb_lpj_ref,
++						glb_lpj_ref_freq,
++						freq->new);
++
++		for_each_cpu(cpu, cpus) {
++			lpj = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
++					    per_cpu(pcp_lpj_ref_freq, cpu),
++					    freq->new);
++			cpu_data[cpu].udelay_val = (unsigned int)lpj;
++		}
++	}
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block cpufreq_notifier = {
++	.notifier_call  = cpufreq_callback,
++};
++
++static int __init register_cpufreq_notifier(void)
++{
++	return cpufreq_register_notifier(&cpufreq_notifier,
++					 CPUFREQ_TRANSITION_NOTIFIER);
++}
++core_initcall(register_cpufreq_notifier);
++
++#endif /* CONFIG_CPU_FREQ */
++
+ /*
+  * forward reference
+  */
 -- 
 2.25.1
 
