@@ -2,44 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCF81F274A
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990EB1F2730
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731686AbgFHXo2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 19:44:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54828 "EHLO mail.kernel.org"
+        id S2387830AbgFHXnX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 19:43:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55400 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732075AbgFHX0y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:26:54 -0400
+        id S2387609AbgFHX1M (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:27:12 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ACA6A20801;
-        Mon,  8 Jun 2020 23:26:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22DD220775;
+        Mon,  8 Jun 2020 23:27:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658814;
-        bh=f1V455MIpPmgMu8VkJ6CW9z6ZykWPwkYorbzYRpxZvE=;
+        s=default; t=1591658831;
+        bh=pxgSyVKkpou3NKy03mk+bnttCALOfZDsUasjBAUo34Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1gfuf/6CDdnX1OcH5bEelNRwGjVEuDLvYBcVIAeviTK/ph8UdLz2eGdenWG8YjnEU
-         uV3pyGHQKK3RvDKfl46Ew36anzbGQ53ziNQ/BfMj6ES4QAJIv3YFpDPfElejkgti/n
-         vXtCS7Ap9b5Z+5u1ADnsAxe99fa2BqHIRYFdZ8xs=
+        b=X/10I+sT/JaUmL6KY/WAfob3d36oCiDt+kH3Jf5kiwDhsFxJ9yiDbKC07kIqFlSov
+         nMK90ZTxDALCuYwAp8LHjfP583oTs2/GPonR7FHYfweHzT1lQe58fL3GDHo5vKGwDQ
+         R0qCRldz3cucbFZigMdBJ1m77ZfrTLr3tLtyMJIU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Juxin Gao <gaojuxin@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.9 10/50] clocksource: dw_apb_timer_of: Fix missing clockevent timers
-Date:   Mon,  8 Jun 2020 19:26:00 -0400
-Message-Id: <20200608232640.3370262-10-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 22/50] MIPS: Make sparse_init() using top-down allocation
+Date:   Mon,  8 Jun 2020 19:26:12 -0400
+Message-Id: <20200608232640.3370262-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608232640.3370262-1-sashal@kernel.org>
 References: <20200608232640.3370262-1-sashal@kernel.org>
@@ -52,72 +44,96 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-[ Upstream commit 6d2e16a3181bafb77b535095c39ad1c8b9558c8c ]
+[ Upstream commit 269b3a9ac538c4ae87f84be640b9fa89914a2489 ]
 
-Commit 100214889973 ("clocksource: dw_apb_timer_of: use
-clocksource_of_init") replaced a publicly available driver
-initialization method with one called by the timer_probe() method
-available after CLKSRC_OF. In current implementation it traverses
-all the timers available in the system and calls their initialization
-methods if corresponding devices were either in dtb or in acpi. But
-if before the commit any number of available timers would be installed
-as clockevent and clocksource devices, after that there would be at most
-two. The rest are just ignored since default case branch doesn't do
-anything. I don't see a reason of such behaviour, neither the commit
-message explains it. Moreover this might be wrong if on some platforms
-these timers might be used for different purpose, as virtually CPU-local
-clockevent timers and as an independent broadcast timer. So in order
-to keep the compatibility with the platforms where the order of the
-timers detection has some meaning, lets add the secondly discovered
-timer to be of clocksource/sched_clock type, while the very first and
-the others would provide the clockevents service.
+In the current code, if CONFIG_SWIOTLB is set, when failed to get IO TLB
+memory from the low pages by plat_swiotlb_setup(), it may lead to the boot
+process failed with kernel panic.
 
-Fixes: 100214889973 ("clocksource: dw_apb_timer_of: use clocksource_of_init")
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20200521204818.25436-7-Sergey.Semin@baikalelectronics.ru
+(1) On the Loongson and SiByte platform
+arch/mips/loongson64/dma.c
+arch/mips/sibyte/common/dma.c
+void __init plat_swiotlb_setup(void)
+{
+	swiotlb_init(1);
+}
+
+kernel/dma/swiotlb.c
+void  __init
+swiotlb_init(int verbose)
+{
+...
+	vstart = memblock_alloc_low(PAGE_ALIGN(bytes), PAGE_SIZE);
+	if (vstart && !swiotlb_init_with_tbl(vstart, io_tlb_nslabs, verbose))
+		return;
+...
+	pr_warn("Cannot allocate buffer");
+	no_iotlb_memory = true;
+}
+
+phys_addr_t swiotlb_tbl_map_single()
+{
+...
+	if (no_iotlb_memory)
+		panic("Can not allocate SWIOTLB buffer earlier ...");
+...
+}
+
+(2) On the Cavium OCTEON platform
+arch/mips/cavium-octeon/dma-octeon.c
+void __init plat_swiotlb_setup(void)
+{
+...
+	octeon_swiotlb = memblock_alloc_low(swiotlbsize, PAGE_SIZE);
+	if (!octeon_swiotlb)
+		panic("%s: Failed to allocate %zu bytes align=%lx\n",
+		      __func__, swiotlbsize, PAGE_SIZE);
+...
+}
+
+Because IO_TLB_DEFAULT_SIZE is 64M, if the rest size of low memory is less
+than 64M when call plat_swiotlb_setup(), we can easily reproduce the panic
+case.
+
+In order to reduce the possibility of kernel panic when failed to get IO
+TLB memory under CONFIG_SWIOTLB, it is better to allocate low memory as
+small as possible before plat_swiotlb_setup(), so make sparse_init() using
+top-down allocation.
+
+Reported-by: Juxin Gao <gaojuxin@loongson.cn>
+Co-developed-by: Juxin Gao <gaojuxin@loongson.cn>
+Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clocksource/dw_apb_timer_of.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ arch/mips/kernel/setup.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/clocksource/dw_apb_timer_of.c b/drivers/clocksource/dw_apb_timer_of.c
-index aee6c0d39a7c..024e6cc5025b 100644
---- a/drivers/clocksource/dw_apb_timer_of.c
-+++ b/drivers/clocksource/dw_apb_timer_of.c
-@@ -146,10 +146,6 @@ static int num_called;
- static int __init dw_apb_timer_init(struct device_node *timer)
- {
- 	switch (num_called) {
--	case 0:
--		pr_debug("%s: found clockevent timer\n", __func__);
--		add_clockevent(timer);
--		break;
- 	case 1:
- 		pr_debug("%s: found clocksource timer\n", __func__);
- 		add_clocksource(timer);
-@@ -160,6 +156,8 @@ static int __init dw_apb_timer_init(struct device_node *timer)
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 7cc1d29334ee..2c3b89a65317 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -847,7 +847,17 @@ static void __init arch_mem_init(char **cmdline_p)
+ 				BOOTMEM_DEFAULT);
  #endif
- 		break;
- 	default:
-+		pr_debug("%s: found clockevent timer\n", __func__);
-+		add_clockevent(timer);
- 		break;
- 	}
+ 	device_tree_init();
++
++	/*
++	 * In order to reduce the possibility of kernel panic when failed to
++	 * get IO TLB memory under CONFIG_SWIOTLB, it is better to allocate
++	 * low memory as small as possible before plat_swiotlb_setup(), so
++	 * make sparse_init() using top-down allocation.
++	 */
++	memblock_set_bottom_up(false);
+ 	sparse_init();
++	memblock_set_bottom_up(true);
++
+ 	plat_swiotlb_setup();
  
+ 	dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
 -- 
 2.25.1
 
