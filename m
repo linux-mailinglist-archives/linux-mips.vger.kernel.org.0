@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A94E1F2F0E
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 02:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5531F311C
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 03:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731074AbgFIArO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 20:47:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58208 "EHLO mail.kernel.org"
+        id S1728051AbgFIBF4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 21:05:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51128 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728096AbgFHXLY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:11:24 -0400
+        id S1727820AbgFHXHN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:07:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 410C420C56;
-        Mon,  8 Jun 2020 23:11:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F2B7320842;
+        Mon,  8 Jun 2020 23:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657883;
-        bh=P1M0F4EwizQ1m+WCRYB0aMIiqJbtW9nMEnIEncHeqtk=;
+        s=default; t=1591657632;
+        bh=asHvb1M4yJnWpzR6XeynGk7s5pr0sNh85tnSYRIZyVE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LvZ7esLRCXr4ILoyVJxsL+cdTVU/F5Wf1KtoyBGc3c16hhShSf3qNi9cBCqvHN6Pk
-         OrtLUH/RHHswptxRbfYE5MzaCxMMbZfualLceUwgtq63Gnl50goe50mlgJXmbX8TSk
-         /8TmwfT1yENvqNQnaT0l5O3bB4QbnS6pzj73xX9M=
+        b=bxB2fj6AmupA8MqEdRE5Um4Jq+W7F/sgw1z6t++Dgbx1Gr3sTo9yIp6QoHf0Alsel
+         ryuEUlm2PHJyGpZ7KI3QZ1E+dtDJfTw5XFqhfJKo1HuxQfD2szANLFql7vpgjNxJxY
+         abes/FiBRDQAvZMMSqo+8CWvvmxDNvw8BO7NfITs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     YuanJunQing <yuanjunqing66@163.com>,
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 240/274] MIPS: Fix IRQ tracing when call handle_fpe() and handle_msa_fpe()
-Date:   Mon,  8 Jun 2020 19:05:33 -0400
-Message-Id: <20200608230607.3361041-240-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 051/274] MIPS: Loongson: Build ATI Radeon GPU driver as module
+Date:   Mon,  8 Jun 2020 19:02:24 -0400
+Message-Id: <20200608230607.3361041-51-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -43,52 +43,44 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: YuanJunQing <yuanjunqing66@163.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-[ Upstream commit 31e1b3efa802f97a17628dde280006c4cee4ce5e ]
+[ Upstream commit a44de7497f91834df0b8b6d459e259788ba66794 ]
 
-Register "a1" is unsaved in this function,
- when CONFIG_TRACE_IRQFLAGS is enabled,
- the TRACE_IRQS_OFF macro will call trace_hardirqs_off(),
- and this may change register "a1".
- The changed register "a1" as argument will be send
- to do_fpe() and do_msa_fpe().
+When ATI Radeon GPU driver has been compiled directly into the kernel
+instead of as a module, we should make sure the firmware for the model
+(check available ones in /lib/firmware/radeon) is built-in to the kernel
+as well, otherwise there exists the following fatal error during GPU init,
+change CONFIG_DRM_RADEON=y to CONFIG_DRM_RADEON=m to fix it.
 
-Signed-off-by: YuanJunQing <yuanjunqing66@163.com>
+[    1.900997] [drm] Loading RS780 Microcode
+[    1.905077] radeon 0000:01:05.0: Direct firmware load for radeon/RS780_pfp.bin failed with error -2
+[    1.914140] r600_cp: Failed to load firmware "radeon/RS780_pfp.bin"
+[    1.920405] [drm:r600_init] *ERROR* Failed to load firmware!
+[    1.926069] radeon 0000:01:05.0: Fatal error during GPU init
+[    1.931729] [drm] radeon: finishing device.
+
+Fixes: 024e6a8b5bb1 ("MIPS: Loongson: Add a Loongson-3 default config file")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/genex.S | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/configs/loongson3_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-index 0a43c9125267..5b7c67a3f78f 100644
---- a/arch/mips/kernel/genex.S
-+++ b/arch/mips/kernel/genex.S
-@@ -476,20 +476,20 @@ NESTED(nmi_handler, PT_SIZE, sp)
- 	.endm
- 
- 	.macro	__build_clear_fpe
-+	CLI
-+	TRACE_IRQS_OFF
- 	.set	push
- 	/* gas fails to assemble cfc1 for some archs (octeon).*/ \
- 	.set	mips1
- 	SET_HARDFLOAT
- 	cfc1	a1, fcr31
- 	.set	pop
--	CLI
--	TRACE_IRQS_OFF
- 	.endm
- 
- 	.macro	__build_clear_msa_fpe
--	_cfcmsa	a1, MSA_CSR
- 	CLI
- 	TRACE_IRQS_OFF
-+	_cfcmsa	a1, MSA_CSR
- 	.endm
- 
- 	.macro	__build_clear_ade
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 51675f5000d6..b0c24bd292b2 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -229,7 +229,7 @@ CONFIG_MEDIA_CAMERA_SUPPORT=y
+ CONFIG_MEDIA_USB_SUPPORT=y
+ CONFIG_USB_VIDEO_CLASS=m
+ CONFIG_DRM=y
+-CONFIG_DRM_RADEON=y
++CONFIG_DRM_RADEON=m
+ CONFIG_FB_RADEON=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_PLATFORM=m
 -- 
 2.25.1
 
