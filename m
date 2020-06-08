@@ -2,46 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 527401F2305
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171001F246A
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728974AbgFHXLq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 19:11:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58710 "EHLO mail.kernel.org"
+        id S1730643AbgFHXVH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 19:21:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44976 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728956AbgFHXLn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:11:43 -0400
+        id S1731105AbgFHXVG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:21:06 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 46390208C7;
-        Mon,  8 Jun 2020 23:11:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C062920823;
+        Mon,  8 Jun 2020 23:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657902;
-        bh=6HOsWHnTqpNN0Ww98s4zhADHwT4C9g+b0ZwlZiz0xY8=;
+        s=default; t=1591658466;
+        bh=FCCEw+4akgFAHzkOen0GsKaRoZY8JJzUhE5Y8DFpSiE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q6+yK5xcXoToxsmXCxnJ0RYvbO864SOBliytRVPEtlmn+RjiKVCAp6pqzQydEFfdp
-         pOFVoI2sIVECZu+C1suSAC/C3xVXxPLux/To68X1yXnRyrHJCxE0ryhhNBGuZp+HWJ
-         VkkwIiisMKmGrEKZ4RyVGhHlaUXzO6/vR/6fy0Z8=
+        b=Cgas8/HAhQo5uPv0bX1+KM/p+VrXu/+ykdRPpkwX57dYu35HyJjciPVzu+PtlHVGD
+         efkefiEocgqBNVrCZoUja/bytQiJLyFeMwwyiiYCEzKc6y5PaiTD619QA7oFZu9ZOR
+         Pyey5cWSlhCEJZvHrWerAwTrvD6nNzYDTjfTdUis=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 255/274] spi: dw: Return any value retrieved from the dma_transfer callback
-Date:   Mon,  8 Jun 2020 19:05:48 -0400
-Message-Id: <20200608230607.3361041-255-sashal@kernel.org>
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 104/175] mips: cm: Fix an invalid error code of INTVN_*_ERR
+Date:   Mon,  8 Jun 2020 19:17:37 -0400
+Message-Id: <20200608231848.3366970-104-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
-References: <20200608230607.3361041-1-sashal@kernel.org>
+In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
+References: <20200608231848.3366970-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,67 +51,49 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-[ Upstream commit f0410bbf7d0fb80149e3b17d11d31f5b5197873e ]
+[ Upstream commit 8a0efb8b101665a843205eab3d67ab09cb2d9a8d ]
 
-DW APB SSI DMA-part of the driver may need to perform the requested
-SPI-transfer synchronously. In that case the dma_transfer() callback
-will return 0 as a marker of the SPI transfer being finished so the
-SPI core doesn't need to wait and may proceed with the SPI message
-trasnfers pumping procedure. This will be needed to fix the problem
-when DMA transactions are finished, but there is still data left in
-the SPI Tx/Rx FIFOs being sent/received. But for now make dma_transfer
-to return 1 as the normal dw_spi_transfer_one() method.
+Commit 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache
+errors") adds cm2_causes[] array with map of error type ID and
+pointers to the short description string. There is a mistake in
+the table, since according to MIPS32 manual CM2_ERROR_TYPE = {17,18}
+correspond to INTVN_WR_ERR and INTVN_RD_ERR, while the table
+claims they have {0x17,0x18} codes. This is obviously hex-dec
+copy-paste bug. Moreover codes {0x18 - 0x1a} indicate L2 ECC errors.
 
+Fixes: 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache errors")
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Feng Tang <feng.tang@intel.com>
 Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
 Cc: devicetree@vger.kernel.org
-Link: https://lore.kernel.org/r/20200529131205.31838-3-Sergey.Semin@baikalelectronics.ru
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-dw-mid.c | 2 +-
- drivers/spi/spi-dw.c     | 7 ++-----
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ arch/mips/kernel/mips-cm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
-index e6c045ecffba..23cebdeb67e2 100644
---- a/drivers/spi/spi-dw-mid.c
-+++ b/drivers/spi/spi-dw-mid.c
-@@ -266,7 +266,7 @@ static int mid_spi_dma_transfer(struct dw_spi *dws, struct spi_transfer *xfer)
- 		dma_async_issue_pending(dws->txchan);
- 	}
+diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
+index e5ea3db23d6b..a9eab83d9148 100644
+--- a/arch/mips/kernel/mips-cm.c
++++ b/arch/mips/kernel/mips-cm.c
+@@ -119,9 +119,9 @@ static char *cm2_causes[32] = {
+ 	"COH_RD_ERR", "MMIO_WR_ERR", "MMIO_RD_ERR", "0x07",
+ 	"0x08", "0x09", "0x0a", "0x0b",
+ 	"0x0c", "0x0d", "0x0e", "0x0f",
+-	"0x10", "0x11", "0x12", "0x13",
+-	"0x14", "0x15", "0x16", "INTVN_WR_ERR",
+-	"INTVN_RD_ERR", "0x19", "0x1a", "0x1b",
++	"0x10", "INTVN_WR_ERR", "INTVN_RD_ERR", "0x13",
++	"0x14", "0x15", "0x16", "0x17",
++	"0x18", "0x19", "0x1a", "0x1b",
+ 	"0x1c", "0x1d", "0x1e", "0x1f"
+ };
  
--	return 0;
-+	return 1;
- }
- 
- static void mid_spi_dma_stop(struct dw_spi *dws)
-diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
-index e8f275c850ce..594a1ac09d9c 100644
---- a/drivers/spi/spi-dw.c
-+++ b/drivers/spi/spi-dw.c
-@@ -373,11 +373,8 @@ static int dw_spi_transfer_one(struct spi_controller *master,
- 
- 	spi_enable_chip(dws, 1);
- 
--	if (dws->dma_mapped) {
--		ret = dws->dma_ops->dma_transfer(dws, transfer);
--		if (ret < 0)
--			return ret;
--	}
-+	if (dws->dma_mapped)
-+		return dws->dma_ops->dma_transfer(dws, transfer);
- 
- 	if (chip->poll_mode)
- 		return poll_transfer(dws);
 -- 
 2.25.1
 
