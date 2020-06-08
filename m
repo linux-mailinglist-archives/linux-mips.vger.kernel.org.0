@@ -2,180 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8AE1F0B7D
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Jun 2020 15:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6A71F14C9
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2020 10:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726562AbgFGNlB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Jun 2020 09:41:01 -0400
-Received: from mout-p-101.mailbox.org ([80.241.56.151]:61562 "EHLO
-        mout-p-101.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbgFGNlA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Jun 2020 09:41:00 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 49fyFj4yljzKmhw;
-        Sun,  7 Jun 2020 15:40:57 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
-        with ESMTP id abC9UCy5nAMz; Sun,  7 Jun 2020 15:40:54 +0200 (CEST)
-Subject: Re: [PATCH] MIPS: lantiq: xway: sysctrl: fix the GPHY clock alias
- names
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        tsbogend@alpha.franken.de, linux-mips@vger.kernel.org
-Cc:     john@phrozen.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20200607131023.3136390-1-martin.blumenstingl@googlemail.com>
-From:   Hauke Mehrtens <hauke@hauke-m.de>
-Autocrypt: addr=hauke@hauke-m.de; keydata=
- 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
-Message-ID: <46372597-0a05-837b-0a76-4fe3b8fca117@hauke-m.de>
-Date:   Sun, 7 Jun 2020 15:40:49 +0200
+        id S1728038AbgFHI4q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 04:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726535AbgFHI4p (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Jun 2020 04:56:45 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34462C08C5C3;
+        Mon,  8 Jun 2020 01:56:45 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id o5so17680202iow.8;
+        Mon, 08 Jun 2020 01:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DxNt0eIwm9p9g/mQmVwYWK8COQJtmgwTgesczuWioPg=;
+        b=UhoDqW1r+NKy9FmTgwkOvep3I+dcHP4n4QbazpDBw5ENhBd5iDewyg+kEYSpd//7qj
+         GVeay4/TsadhtoRTPVrfnbOmd+BjIKzn5RPbIogb/LQ2BGY6OUJDouApGyodISusf/fw
+         HWbbT9X5pFBE/YIu/EvTPI86t9yV/EBzxNwgyAzf6bzcWD4LMmP9HrFC6zeW8ETQSxj2
+         sIbmHWf1MRilR55K95KR5ISOQoAS2PpIOLjHX+u0zcesqRUgPheyMLAOzC/FcO3E5hul
+         zBSXRWDsnkp9IcSK37yk4s0sZAYsSWhF0/rXYQDtxSNdVsZ2RzaYi1pJPNWQzrItm4rV
+         Xh0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DxNt0eIwm9p9g/mQmVwYWK8COQJtmgwTgesczuWioPg=;
+        b=ihWjIkSrzfUiF05s2QKmB7J+q53FxfMNomP2+hd9LVf4Yh94ISYQj6NEr7LmPoUDCg
+         cu2KsCCq5guZDu2IK62Xz8xf8yGELu9T81WZE5RsnLjm2l4Q3sGJBPUYPsgoN33D0e1N
+         6hcOFKWLt8QjhKHWoGA/jsCON5PJU69D9Qbw5KOc9pF4RalS//v9OuMUhVRhAEoruind
+         S3AosRRfW12uml70vccPVNjs2jS/RQDrJFR8kgTw3VcK4PH1UBMw5FB5xnNfaJVLcmJi
+         sxCCGsy5cwlk1UJ1xw1p2msfu76BjvTRkjDq6vsBNVulVnHFIoGtjh1j5hb0IkJ+H2Bm
+         kmVw==
+X-Gm-Message-State: AOAM5321wp4Xc6nvfBH4Z4TR+pZO0EiVH0Zju6XYyPMO/AHF+iAn5yRC
+        jIJg+iAaTvqfwBMdWya3qbboLKDS7Me6DM03neHFRAp0qK9nHw==
+X-Google-Smtp-Source: ABdhPJy33K/MZi/8fowNpbavwNCsNJmtMmm7LuXYb74EHZQGkej9w1i7LTwl8SZ8cZENnVTKt5AurBBwAssQbfegELw=
+X-Received: by 2002:a05:6602:13c6:: with SMTP id o6mr20248830iov.84.1591606604459;
+ Mon, 08 Jun 2020 01:56:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200607131023.3136390-1-martin.blumenstingl@googlemail.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="c0LCEUbaY2ON6wUrEVxOuKBeUhlk6KjCa"
-X-Rspamd-Queue-Id: A8D1B176B
-X-Rspamd-Score: -7.33 / 15.00 / 15.00
+References: <20200605213853.14959-1-sean.j.christopherson@intel.com> <20200605213853.14959-20-sean.j.christopherson@intel.com>
+In-Reply-To: <20200605213853.14959-20-sean.j.christopherson@intel.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Mon, 8 Jun 2020 16:56:32 +0800
+Message-ID: <CAAhV-H6v+tO6PCqjfDcecxk-mUk8YEmSDUMjOXMj1hL5=XSpSw@mail.gmail.com>
+Subject: Re: [PATCH 19/21] KVM: MIPS: Drop @max param from mmu_topup_memory_cache()
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>, kvm-ppc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Feiner <pfeiner@google.com>,
+        Peter Shier <pshier@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Christoffer Dall <christoffer.dall@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---c0LCEUbaY2ON6wUrEVxOuKBeUhlk6KjCa
-Content-Type: multipart/mixed; boundary="Qqk8OAHvGGx1xOBv6tAs06UR1quTJIamt"
+Reviewed-by: Huacai Chen <chenhc@lemote.com>
 
---Qqk8OAHvGGx1xOBv6tAs06UR1quTJIamt
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-
-On 6/7/20 3:10 PM, Martin Blumenstingl wrote:
-> The dt-bindings for the GSWIP describe that the node should be named
-> "switch". Use the same name in sysctrl.c so the GSWIP driver can
-> actually find the "gphy0" and "gphy1" clocks.
->=20
-> Fixes: 14fceff4771e51 ("net: dsa: Add Lantiq / Intel DSA driver for vrx=
-200")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>=
-
-
-Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
-
+On Sat, Jun 6, 2020 at 5:44 AM Sean Christopherson
+<sean.j.christopherson@intel.com> wrote:
+>
+> Replace the @max param in mmu_topup_memory_cache() and instead use
+> ARRAY_SIZE() to terminate the loop to fill the cache.  This removes a
+> BUG_ON() and sets the stage for moving MIPS to the common memory cache
+> implementation.
+>
+> No functional change intended.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 > ---
->  arch/mips/lantiq/xway/sysctrl.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/arch/mips/lantiq/xway/sysctrl.c b/arch/mips/lantiq/xway/sy=
-sctrl.c
-> index aa37545ebe8f..b10342018d19 100644
-> --- a/arch/mips/lantiq/xway/sysctrl.c
-> +++ b/arch/mips/lantiq/xway/sysctrl.c
-> @@ -514,8 +514,8 @@ void __init ltq_soc_init(void)
->  		clkdev_add_pmu("1e10b308.eth", NULL, 0, 0, PMU_SWITCH |
->  			       PMU_PPE_DP | PMU_PPE_TC);
->  		clkdev_add_pmu("1da00000.usif", "NULL", 1, 0, PMU_USIF);
-> -		clkdev_add_pmu("1e108000.gswip", "gphy0", 0, 0, PMU_GPHY);
-> -		clkdev_add_pmu("1e108000.gswip", "gphy1", 0, 0, PMU_GPHY);
-> +		clkdev_add_pmu("1e108000.switch", "gphy0", 0, 0, PMU_GPHY);
-> +		clkdev_add_pmu("1e108000.switch", "gphy1", 0, 0, PMU_GPHY);
->  		clkdev_add_pmu("1e103100.deu", NULL, 1, 0, PMU_DEU);
->  		clkdev_add_pmu("1e116000.mei", "afe", 1, 2, PMU_ANALOG_DSL_AFE);
->  		clkdev_add_pmu("1e116000.mei", "dfe", 1, 0, PMU_DFE);
-> @@ -538,8 +538,8 @@ void __init ltq_soc_init(void)
->  				PMU_SWITCH | PMU_PPE_DPLUS | PMU_PPE_DPLUM |
->  				PMU_PPE_EMA | PMU_PPE_TC | PMU_PPE_SLL01 |
->  				PMU_PPE_QSB | PMU_PPE_TOP);
-> -		clkdev_add_pmu("1e108000.gswip", "gphy0", 0, 0, PMU_GPHY);
-> -		clkdev_add_pmu("1e108000.gswip", "gphy1", 0, 0, PMU_GPHY);
-> +		clkdev_add_pmu("1e108000.switch", "gphy0", 0, 0, PMU_GPHY);
-> +		clkdev_add_pmu("1e108000.switch", "gphy1", 0, 0, PMU_GPHY);
->  		clkdev_add_pmu("1e103000.sdio", NULL, 1, 0, PMU_SDIO);
->  		clkdev_add_pmu("1e103100.deu", NULL, 1, 0, PMU_DEU);
->  		clkdev_add_pmu("1e116000.mei", "dfe", 1, 0, PMU_DFE);
->=20
-
-
-
---Qqk8OAHvGGx1xOBv6tAs06UR1quTJIamt--
-
---c0LCEUbaY2ON6wUrEVxOuKBeUhlk6KjCa
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEyz0/uAcd+JwXmwtD8bdnhZyy68cFAl7c7mEACgkQ8bdnhZyy
-68f5PQgAkMT6j+cT5CKTtUAbNjKVi/SLWZN/yQAHqqNloTDe8yHYka3eV7nIclCy
-Cz6sN4QED7DZ7oHEKus1dwIVnyYhfaTSaQvHTxcYxEGZ8eF+lvEPeEf04msuC3zM
-1jwsxnQsYQNUphZXZNz5p72vDpxWTpBbXo4TMaBlCaAjDnpN1e7ztJ5Yl+a12app
-YbtJgzbc9/ia/MudMMewBv7s+JW+QgSfRGw4ZKVt/xS8DEar3gnnBYBi9dn3S6tv
-UjtG1JwynT5YD9d+6czxt+R8b1QI6Xdq5WH87XgmPce1AZyPeUMLdT13+OcJ+CSN
-hRuK2nB9p/ztaxhaPhgyuwtOeu3GYQ==
-=HTd0
------END PGP SIGNATURE-----
-
---c0LCEUbaY2ON6wUrEVxOuKBeUhlk6KjCa--
+>  arch/mips/kvm/mmu.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+> index 7dad7a293eae..94562c54b930 100644
+> --- a/arch/mips/kvm/mmu.c
+> +++ b/arch/mips/kvm/mmu.c
+> @@ -25,15 +25,13 @@
+>  #define KVM_MMU_CACHE_MIN_PAGES 2
+>  #endif
+>
+> -static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache,
+> -                                 int min, int max)
+> +static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache, int min)
+>  {
+>         void *page;
+>
+> -       BUG_ON(max > KVM_NR_MEM_OBJS);
+>         if (cache->nobjs >= min)
+>                 return 0;
+> -       while (cache->nobjs < max) {
+> +       while (cache->nobjs < ARRAY_SIZE(cache->objects)) {
+>                 page = (void *)__get_free_page(GFP_KERNEL);
+>                 if (!page)
+>                         return -ENOMEM;
+> @@ -711,8 +709,7 @@ static int kvm_mips_map_page(struct kvm_vcpu *vcpu, unsigned long gpa,
+>                 goto out;
+>
+>         /* We need a minimum of cached pages ready for page table creation */
+> -       err = mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES,
+> -                                    KVM_NR_MEM_OBJS);
+> +       err = mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
+>         if (err)
+>                 goto out;
+>
+> @@ -796,8 +793,7 @@ static pte_t *kvm_trap_emul_pte_for_gva(struct kvm_vcpu *vcpu,
+>         int ret;
+>
+>         /* We need a minimum of cached pages ready for page table creation */
+> -       ret = mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES,
+> -                                    KVM_NR_MEM_OBJS);
+> +       ret = mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
+>         if (ret)
+>                 return NULL;
+>
+> --
+> 2.26.0
+>
