@@ -2,40 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F371F24B0
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F3C1F24C1
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731207AbgFHXVn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 19:21:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45936 "EHLO mail.kernel.org"
+        id S1731304AbgFHXWW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 19:22:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46850 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731200AbgFHXVm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:21:42 -0400
+        id S1730187AbgFHXWT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:22:19 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8327020842;
-        Mon,  8 Jun 2020 23:21:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A8B8620814;
+        Mon,  8 Jun 2020 23:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658501;
-        bh=HXy9QkS4DekEeRywjSWFzBjwCqscsZtP1slMzTKcyMU=;
+        s=default; t=1591658539;
+        bh=hX+AuUfC+65TXjmH+ynIPh/epxU7Rix/OdCLMDYXuoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G1COJ0fXv2w1eFX5Z8oujBQ8Yn7/+GmJNmiSAmt4gAqiGI6DhV7EHMrGsT9eJ63Rg
-         nFzz2ybafH1IHnGQ+rakwew1AA7k8nMMw0JMp14yzElKPvAuRTsvKRj6rRookH05da
-         esxvYckb6D7jNBozlaBsva6Juyqwrc7A6mOe6rNI=
+        b=FnQNqn2+9t3YZfXovdFs0zuJTKJH6dn7GRrdsPJyZMqKfGv29XivxmriNOpYEWB6w
+         cf8oKllhhBG8tqiCPN4MlqNvsAY0pPZRWwKAcq0GB+uXPwFTWfluxAm3d1OeUFjuZo
+         AULh4a0EyYfStPyctFT1oSiGUEs3OsMCU1XjHrgo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 133/175] mips: MAAR: Use more precise address mask
-Date:   Mon,  8 Jun 2020 19:18:06 -0400
-Message-Id: <20200608231848.3366970-133-sashal@kernel.org>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 161/175] spi: dw: Return any value retrieved from the dma_transfer callback
+Date:   Mon,  8 Jun 2020 19:18:34 -0400
+Message-Id: <20200608231848.3366970-161-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
 References: <20200608231848.3366970-1-sashal@kernel.org>
@@ -50,46 +53,67 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-[ Upstream commit bbb5946eb545fab8ad8f46bce8a803e1c0c39d47 ]
+[ Upstream commit f0410bbf7d0fb80149e3b17d11d31f5b5197873e ]
 
-Indeed according to the MIPS32 Privileged Resource Architecgture the MAAR
-pair register address field either takes [12:31] bits for non-XPA systems
-and [12:55] otherwise. In any case the current address mask is just
-wrong for 64-bit and 32-bits XPA chips. So lets extend it to 59-bits
-of physical address value. This shall cover the 64-bits architecture and
-systems with XPA enabled, and won't cause any problem for non-XPA 32-bit
-systems, since address values exceeding the architecture specific MAAR
-mask will be just truncated with setting zeros in the unsupported upper
-bits.
+DW APB SSI DMA-part of the driver may need to perform the requested
+SPI-transfer synchronously. In that case the dma_transfer() callback
+will return 0 as a marker of the SPI transfer being finished so the
+SPI core doesn't need to wait and may proceed with the SPI message
+trasnfers pumping procedure. This will be needed to fix the problem
+when DMA transactions are finished, but there is still data left in
+the SPI Tx/Rx FIFOs being sent/received. But for now make dma_transfer
+to return 1 as the normal dw_spi_transfer_one() method.
 
-Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Feng Tang <feng.tang@intel.com>
 Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
 Cc: devicetree@vger.kernel.org
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Link: https://lore.kernel.org/r/20200529131205.31838-3-Sergey.Semin@baikalelectronics.ru
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/mipsregs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-dw-mid.c | 2 +-
+ drivers/spi/spi-dw.c     | 7 ++-----
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index bdbdc19a2b8f..3afdb39d092a 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -750,7 +750,7 @@
+diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
+index b044d4071690..b07710c76fc9 100644
+--- a/drivers/spi/spi-dw-mid.c
++++ b/drivers/spi/spi-dw-mid.c
+@@ -266,7 +266,7 @@ static int mid_spi_dma_transfer(struct dw_spi *dws, struct spi_transfer *xfer)
+ 		dma_async_issue_pending(dws->txchan);
+ 	}
  
- /* MAAR bit definitions */
- #define MIPS_MAAR_VH		(_U64CAST_(1) << 63)
--#define MIPS_MAAR_ADDR		((BIT_ULL(BITS_PER_LONG - 12) - 1) << 12)
-+#define MIPS_MAAR_ADDR		GENMASK_ULL(55, 12)
- #define MIPS_MAAR_ADDR_SHIFT	12
- #define MIPS_MAAR_S		(_ULCAST_(1) << 1)
- #define MIPS_MAAR_VL		(_ULCAST_(1) << 0)
+-	return 0;
++	return 1;
+ }
+ 
+ static void mid_spi_dma_stop(struct dw_spi *dws)
+diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+index 8a4438f4c954..3063ec75dca8 100644
+--- a/drivers/spi/spi-dw.c
++++ b/drivers/spi/spi-dw.c
+@@ -370,11 +370,8 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+ 
+ 	spi_enable_chip(dws, 1);
+ 
+-	if (dws->dma_mapped) {
+-		ret = dws->dma_ops->dma_transfer(dws, transfer);
+-		if (ret < 0)
+-			return ret;
+-	}
++	if (dws->dma_mapped)
++		return dws->dma_ops->dma_transfer(dws, transfer);
+ 
+ 	if (chip->poll_mode)
+ 		return poll_transfer(dws);
 -- 
 2.25.1
 
