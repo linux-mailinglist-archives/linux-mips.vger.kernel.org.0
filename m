@@ -2,41 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA141F26A0
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4751F2714
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 01:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732132AbgFHX12 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 19:27:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55830 "EHLO mail.kernel.org"
+        id S1731616AbgFHXmE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 19:42:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56050 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732124AbgFHX10 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:27:26 -0400
+        id S1730627AbgFHX1c (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:27:32 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2324120775;
-        Mon,  8 Jun 2020 23:27:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6E13A20801;
+        Mon,  8 Jun 2020 23:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658844;
-        bh=PcpT25rK7rYNhpCqz1U5PiI8V6SO18bbgHhxO/L2RUQ=;
+        s=default; t=1591658851;
+        bh=GYEJjnVY8KxcLVgy66MTRYDQJ+J6hTQrdgqTAXH7Ni0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VMoZvbivSaz0cneP89rBBchI9zJX+XBZT/YS3CGpAClqY/G9Or865ZWUUmjVK4jJz
-         GvlkpbYBmK64NwU695O5V5WegFhCQydO6Ni38fTxVHp8SeEOS7sHExDv0xISAlc0zU
-         OIC6qtuo8eCS7nrM38EoCImFDxbgGY28H+ye/IEk=
+        b=kju3GWSYNUOw8EwqzEjdJCwIXB4PaWYlYVX9Annf4sqihhc+sIq2Wjtb5V8Tibxh4
+         /Md33ZpnXfbuurQAbNHYcrMzjw6HPQ1+8yelzvqlFKpj5aj4LUDaYAKN4lLqXJHad9
+         OdeVDwccyANjeKA9JRQs5t6ft+Y+m8bEcDQ4rA+M=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 32/50] mips: cm: Fix an invalid error code of INTVN_*_ERR
-Date:   Mon,  8 Jun 2020 19:26:22 -0400
-Message-Id: <20200608232640.3370262-32-sashal@kernel.org>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 38/50] mips: Add udelay lpj numbers adjustment
+Date:   Mon,  8 Jun 2020 19:26:28 -0400
+Message-Id: <20200608232640.3370262-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608232640.3370262-1-sashal@kernel.org>
 References: <20200608232640.3370262-1-sashal@kernel.org>
@@ -51,49 +51,123 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-[ Upstream commit 8a0efb8b101665a843205eab3d67ab09cb2d9a8d ]
+[ Upstream commit ed26aacfb5f71eecb20a51c4467da440cb719d66 ]
 
-Commit 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache
-errors") adds cm2_causes[] array with map of error type ID and
-pointers to the short description string. There is a mistake in
-the table, since according to MIPS32 manual CM2_ERROR_TYPE = {17,18}
-correspond to INTVN_WR_ERR and INTVN_RD_ERR, while the table
-claims they have {0x17,0x18} codes. This is obviously hex-dec
-copy-paste bug. Moreover codes {0x18 - 0x1a} indicate L2 ECC errors.
+Loops-per-jiffies is a special number which represents a number of
+noop-loop cycles per CPU-scheduler quantum - jiffies. As you
+understand aside from CPU-specific implementation it depends on
+the CPU frequency. So when a platform has the CPU frequency fixed,
+we have no problem and the current udelay interface will work
+just fine. But as soon as CPU-freq driver is enabled and the cores
+frequency changes, we'll end up with distorted udelay's. In order
+to fix this we have to accordinly adjust the per-CPU udelay_val
+(the same as the global loops_per_jiffy) number. This can be done
+in the CPU-freq transition event handler. We subscribe to that event
+in the MIPS arch time-inititalization method.
 
-Fixes: 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache errors")
+Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org
 Cc: devicetree@vger.kernel.org
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/mips-cm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/kernel/time.c | 70 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index 60177a612cb1..df65516778a2 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -123,9 +123,9 @@ static char *cm2_causes[32] = {
- 	"COH_RD_ERR", "MMIO_WR_ERR", "MMIO_RD_ERR", "0x07",
- 	"0x08", "0x09", "0x0a", "0x0b",
- 	"0x0c", "0x0d", "0x0e", "0x0f",
--	"0x10", "0x11", "0x12", "0x13",
--	"0x14", "0x15", "0x16", "INTVN_WR_ERR",
--	"INTVN_RD_ERR", "0x19", "0x1a", "0x1b",
-+	"0x10", "INTVN_WR_ERR", "INTVN_RD_ERR", "0x13",
-+	"0x14", "0x15", "0x16", "0x17",
-+	"0x18", "0x19", "0x1a", "0x1b",
- 	"0x1c", "0x1d", "0x1e", "0x1f"
- };
+diff --git a/arch/mips/kernel/time.c b/arch/mips/kernel/time.c
+index a7f81261c781..b7f7e08e1ce4 100644
+--- a/arch/mips/kernel/time.c
++++ b/arch/mips/kernel/time.c
+@@ -22,12 +22,82 @@
+ #include <linux/smp.h>
+ #include <linux/spinlock.h>
+ #include <linux/export.h>
++#include <linux/cpufreq.h>
++#include <linux/delay.h>
  
+ #include <asm/cpu-features.h>
+ #include <asm/cpu-type.h>
+ #include <asm/div64.h>
+ #include <asm/time.h>
+ 
++#ifdef CONFIG_CPU_FREQ
++
++static DEFINE_PER_CPU(unsigned long, pcp_lpj_ref);
++static DEFINE_PER_CPU(unsigned long, pcp_lpj_ref_freq);
++static unsigned long glb_lpj_ref;
++static unsigned long glb_lpj_ref_freq;
++
++static int cpufreq_callback(struct notifier_block *nb,
++			    unsigned long val, void *data)
++{
++	struct cpufreq_freqs *freq = data;
++	struct cpumask *cpus = freq->policy->cpus;
++	unsigned long lpj;
++	int cpu;
++
++	/*
++	 * Skip lpj numbers adjustment if the CPU-freq transition is safe for
++	 * the loops delay. (Is this possible?)
++	 */
++	if (freq->flags & CPUFREQ_CONST_LOOPS)
++		return NOTIFY_OK;
++
++	/* Save the initial values of the lpjes for future scaling. */
++	if (!glb_lpj_ref) {
++		glb_lpj_ref = boot_cpu_data.udelay_val;
++		glb_lpj_ref_freq = freq->old;
++
++		for_each_online_cpu(cpu) {
++			per_cpu(pcp_lpj_ref, cpu) =
++				cpu_data[cpu].udelay_val;
++			per_cpu(pcp_lpj_ref_freq, cpu) = freq->old;
++		}
++	}
++
++	/*
++	 * Adjust global lpj variable and per-CPU udelay_val number in
++	 * accordance with the new CPU frequency.
++	 */
++	if ((val == CPUFREQ_PRECHANGE  && freq->old < freq->new) ||
++	    (val == CPUFREQ_POSTCHANGE && freq->old > freq->new)) {
++		loops_per_jiffy = cpufreq_scale(glb_lpj_ref,
++						glb_lpj_ref_freq,
++						freq->new);
++
++		for_each_cpu(cpu, cpus) {
++			lpj = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
++					    per_cpu(pcp_lpj_ref_freq, cpu),
++					    freq->new);
++			cpu_data[cpu].udelay_val = (unsigned int)lpj;
++		}
++	}
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block cpufreq_notifier = {
++	.notifier_call  = cpufreq_callback,
++};
++
++static int __init register_cpufreq_notifier(void)
++{
++	return cpufreq_register_notifier(&cpufreq_notifier,
++					 CPUFREQ_TRANSITION_NOTIFIER);
++}
++core_initcall(register_cpufreq_notifier);
++
++#endif /* CONFIG_CPU_FREQ */
++
+ /*
+  * forward reference
+  */
 -- 
 2.25.1
 
