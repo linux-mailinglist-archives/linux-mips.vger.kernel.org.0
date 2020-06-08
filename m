@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C171F2FBE
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 02:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0771F2F44
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 02:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731599AbgFIAxD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 20:53:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55770 "EHLO mail.kernel.org"
+        id S1729622AbgFIAtC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 20:49:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727070AbgFHXJw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:09:52 -0400
+        id S1728776AbgFHXKv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:10:51 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A6C3C208A9;
-        Mon,  8 Jun 2020 23:09:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ED4CD20C56;
+        Mon,  8 Jun 2020 23:10:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657791;
-        bh=8M0BVirU0WrdSQ2GntXLcUZw8QqQhLkv8Jmputer5H8=;
+        s=default; t=1591657851;
+        bh=CHs8IERwuWU9CkOnkywO3FsEwPb/FZijDcZUOEVtpTU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2MPO/xMadygj3Oucc7Z/n43f5sfGEuxRZ5gQtpY5eOddO0RouDKD7LBQncH8/0R7A
-         TvmrUP2B3PpZBO5ks9WnBnRdJPpEoZTOJ/h2yQsSVdoiOwypztygig4o09g1XZhp11
-         KzR+fmnrGAsVod9KrDmIaSawTu4E2RD88ZbFardY=
+        b=m6ho1HA/idzxFu+DAqAtnGwz+ocu8Pg2Yh9583dxn/FEXjRJVieiBWdoVwRXQUV9B
+         U5xvo9y05jc3tNcAVbFvJKVGCbx/WPYWK9tmnEMbH+yFj50e5ij3qhE6VMTS/03N9F
+         6nGpYky0JB0g71FYAoG0oIdPxuLcqGDxZu0uK3tQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -31,12 +31,11 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 171/274] mips: cm: Fix an invalid error code of INTVN_*_ERR
-Date:   Mon,  8 Jun 2020 19:04:24 -0400
-Message-Id: <20200608230607.3361041-171-sashal@kernel.org>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 216/274] mips: MAAR: Use more precise address mask
+Date:   Mon,  8 Jun 2020 19:05:09 -0400
+Message-Id: <20200608230607.3361041-216-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -51,49 +50,46 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-[ Upstream commit 8a0efb8b101665a843205eab3d67ab09cb2d9a8d ]
+[ Upstream commit bbb5946eb545fab8ad8f46bce8a803e1c0c39d47 ]
 
-Commit 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache
-errors") adds cm2_causes[] array with map of error type ID and
-pointers to the short description string. There is a mistake in
-the table, since according to MIPS32 manual CM2_ERROR_TYPE = {17,18}
-correspond to INTVN_WR_ERR and INTVN_RD_ERR, while the table
-claims they have {0x17,0x18} codes. This is obviously hex-dec
-copy-paste bug. Moreover codes {0x18 - 0x1a} indicate L2 ECC errors.
+Indeed according to the MIPS32 Privileged Resource Architecgture the MAAR
+pair register address field either takes [12:31] bits for non-XPA systems
+and [12:55] otherwise. In any case the current address mask is just
+wrong for 64-bit and 32-bits XPA chips. So lets extend it to 59-bits
+of physical address value. This shall cover the 64-bits architecture and
+systems with XPA enabled, and won't cause any problem for non-XPA 32-bit
+systems, since address values exceeding the architecture specific MAAR
+mask will be just truncated with setting zeros in the unsupported upper
+bits.
 
-Fixes: 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache errors")
+Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org
 Cc: devicetree@vger.kernel.org
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/mips-cm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/include/asm/mipsregs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index cdb93ed91cde..361bfc91a0e6 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -119,9 +119,9 @@ static char *cm2_causes[32] = {
- 	"COH_RD_ERR", "MMIO_WR_ERR", "MMIO_RD_ERR", "0x07",
- 	"0x08", "0x09", "0x0a", "0x0b",
- 	"0x0c", "0x0d", "0x0e", "0x0f",
--	"0x10", "0x11", "0x12", "0x13",
--	"0x14", "0x15", "0x16", "INTVN_WR_ERR",
--	"INTVN_RD_ERR", "0x19", "0x1a", "0x1b",
-+	"0x10", "INTVN_WR_ERR", "INTVN_RD_ERR", "0x13",
-+	"0x14", "0x15", "0x16", "0x17",
-+	"0x18", "0x19", "0x1a", "0x1b",
- 	"0x1c", "0x1d", "0x1e", "0x1f"
- };
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 796fe47cfd17..274c2bf0d4a1 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -753,7 +753,7 @@
  
+ /* MAAR bit definitions */
+ #define MIPS_MAAR_VH		(_U64CAST_(1) << 63)
+-#define MIPS_MAAR_ADDR		((BIT_ULL(BITS_PER_LONG - 12) - 1) << 12)
++#define MIPS_MAAR_ADDR		GENMASK_ULL(55, 12)
+ #define MIPS_MAAR_ADDR_SHIFT	12
+ #define MIPS_MAAR_S		(_ULCAST_(1) << 1)
+ #define MIPS_MAAR_VL		(_ULCAST_(1) << 0)
 -- 
 2.25.1
 
