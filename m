@@ -2,35 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5531F311C
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 03:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3B01F30F7
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 03:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728051AbgFIBF4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 21:05:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51128 "EHLO mail.kernel.org"
+        id S1730586AbgFIBES (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jun 2020 21:04:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51570 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727820AbgFHXHN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:07:13 -0400
+        id S1727891AbgFHXHZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:07:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F2B7320842;
-        Mon,  8 Jun 2020 23:07:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D025320812;
+        Mon,  8 Jun 2020 23:07:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657632;
-        bh=asHvb1M4yJnWpzR6XeynGk7s5pr0sNh85tnSYRIZyVE=;
+        s=default; t=1591657645;
+        bh=dUkrinHv1Rv4amfGn74MI+e2YKhyXCrB1nrhBwjAXsU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bxB2fj6AmupA8MqEdRE5Um4Jq+W7F/sgw1z6t++Dgbx1Gr3sTo9yIp6QoHf0Alsel
-         ryuEUlm2PHJyGpZ7KI3QZ1E+dtDJfTw5XFqhfJKo1HuxQfD2szANLFql7vpgjNxJxY
-         abes/FiBRDQAvZMMSqo+8CWvvmxDNvw8BO7NfITs=
+        b=hRTpDfTaL3Gp0YHHVF/pVVfqBW/0xr2ASUfARjvkAgdOl3D6bKs1z6lxdLEI4sAqn
+         H97X82m9CAPc9AxV3Kif1DCa9aRuJgNGOL4Ked6AWOzKOTbWI/KaqHy/ApcIvCfNSh
+         k43dXp/cHWS/QF/MmerUTICdHqLjCYrF30XdypnM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 051/274] MIPS: Loongson: Build ATI Radeon GPU driver as module
-Date:   Mon,  8 Jun 2020 19:02:24 -0400
-Message-Id: <20200608230607.3361041-51-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 061/274] mips: Fix cpu_has_mips64r1/2 activation for MIPS32 CPUs
+Date:   Mon,  8 Jun 2020 19:02:34 -0400
+Message-Id: <20200608230607.3361041-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -43,44 +48,59 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-[ Upstream commit a44de7497f91834df0b8b6d459e259788ba66794 ]
+[ Upstream commit a2ac81c6ef4018ea49c034ce165bb9ea1cf99f3e ]
 
-When ATI Radeon GPU driver has been compiled directly into the kernel
-instead of as a module, we should make sure the firmware for the model
-(check available ones in /lib/firmware/radeon) is built-in to the kernel
-as well, otherwise there exists the following fatal error during GPU init,
-change CONFIG_DRM_RADEON=y to CONFIG_DRM_RADEON=m to fix it.
+Commit 1aeba347b3a9 ("MIPS: Hardcode cpu_has_mips* where target ISA
+allows") updated the cpu_has_mips* macro to be replaced with a constant
+expression where it's possible. By mistake it wasn't done correctly
+for cpu_has_mips64r1/cpu_has_mips64r2 macro. They are defined to
+be replaced with conditional expression __isa_range_or_flag(), which
+means either ISA revision being within the range or the corresponding
+CPU options flag was set at the probe stage or both being true at the
+same time. But the ISA level value doesn't indicate whether the ISA is
+MIPS32 or MIPS64. Due to this if we select MIPS32r1 - MIPS32r5
+architectures the __isa_range() macro will activate the
+cpu_has_mips64rX flags, which is incorrect. In order to fix the
+problem we make sure the 64bits CPU support is enabled by means of
+checking the flag cpu_has_64bits aside with proper ISA range and specific
+Revision flag being set.
 
-[    1.900997] [drm] Loading RS780 Microcode
-[    1.905077] radeon 0000:01:05.0: Direct firmware load for radeon/RS780_pfp.bin failed with error -2
-[    1.914140] r600_cp: Failed to load firmware "radeon/RS780_pfp.bin"
-[    1.920405] [drm:r600_init] *ERROR* Failed to load firmware!
-[    1.926069] radeon 0000:01:05.0: Fatal error during GPU init
-[    1.931729] [drm] radeon: finishing device.
-
-Fixes: 024e6a8b5bb1 ("MIPS: Loongson: Add a Loongson-3 default config file")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Fixes: 1aeba347b3a9 ("MIPS: Hardcode cpu_has_mips* where target ISA allows")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/configs/loongson3_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/include/asm/cpu-features.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 51675f5000d6..b0c24bd292b2 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -229,7 +229,7 @@ CONFIG_MEDIA_CAMERA_SUPPORT=y
- CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_DRM=y
--CONFIG_DRM_RADEON=y
-+CONFIG_DRM_RADEON=m
- CONFIG_FB_RADEON=y
- CONFIG_LCD_CLASS_DEVICE=y
- CONFIG_LCD_PLATFORM=m
+diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
+index de44c92b1c1f..d4e120464d41 100644
+--- a/arch/mips/include/asm/cpu-features.h
++++ b/arch/mips/include/asm/cpu-features.h
+@@ -288,10 +288,12 @@
+ # define cpu_has_mips32r6	__isa_ge_or_flag(6, MIPS_CPU_ISA_M32R6)
+ #endif
+ #ifndef cpu_has_mips64r1
+-# define cpu_has_mips64r1	__isa_range_or_flag(1, 6, MIPS_CPU_ISA_M64R1)
++# define cpu_has_mips64r1	(cpu_has_64bits && \
++				 __isa_range_or_flag(1, 6, MIPS_CPU_ISA_M64R1))
+ #endif
+ #ifndef cpu_has_mips64r2
+-# define cpu_has_mips64r2	__isa_range_or_flag(2, 6, MIPS_CPU_ISA_M64R2)
++# define cpu_has_mips64r2	(cpu_has_64bits && \
++				 __isa_range_or_flag(2, 6, MIPS_CPU_ISA_M64R2))
+ #endif
+ #ifndef cpu_has_mips64r6
+ # define cpu_has_mips64r6	__isa_ge_and_flag(6, MIPS_CPU_ISA_M64R6)
 -- 
 2.25.1
 
