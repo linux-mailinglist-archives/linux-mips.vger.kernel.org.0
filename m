@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF4F1F3CD9
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 15:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 595961F3CF1
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 15:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728753AbgFINmi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Jun 2020 09:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
+        id S1730147AbgFINoG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Jun 2020 09:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728082AbgFINmh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 09:42:37 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF21CC03E97C;
-        Tue,  9 Jun 2020 06:42:36 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id g10so2869468wmh.4;
-        Tue, 09 Jun 2020 06:42:36 -0700 (PDT)
+        with ESMTP id S1728799AbgFINmj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 09:42:39 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E711FC05BD1E;
+        Tue,  9 Jun 2020 06:42:37 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id h5so21380191wrc.7;
+        Tue, 09 Jun 2020 06:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FpYJiNkgnSHlg1N1yUdznvApuZcA90h4iDgIFTGjijs=;
-        b=VkyqjW1HowFHs2WIFKkETDwu91tkylxH0NZgn/byhqPmCbZYsftFITWfPq6LhV+Esn
-         ZiCFZpMWRFfNyDs07EB1DhmFTxLspB1y0M/8OS0P3MLezzaKnV3np1rMiaOpus2eoWZV
-         RRdxhJa4vcETlmTkjTBIX9I25g0fltscRPVN8LoFnpopLPNoIEzpk5/EzHMW6l6JqucY
-         tcyhen0AbbSug8r3KFbgqEF+4kN2sbIvJUqnfQGrqG1JlgPhBT+7BrIbrzjmTY85E1U6
-         1ccCTm1drVZbhYWKHH5kNt4vglFp9+MiC13MQcn48bndCnpI6Z9iZcXHxBj47L1AboLG
-         INWg==
+        bh=7jeqUuW0hGtHPFhc2sVBu1AoQmVlpxLyTbacgMXEdX8=;
+        b=DUxWZBBN41gINwscR0RJwH3sDfQ73hrqc60FamwT1QU+qcaJdFFeOjtT0lDFDXjLnR
+         UCrXQhXwupNRKmfLWhbppejjSFykqXRAArndCJx8U6ls1ewIpQMHe4usSv7j3P5sdNxW
+         x5MlacZfwW72THPYVaszYh7Q47IE8EJ0foNehUlK7yFIEN2MRRPUQN4msrAa33w35WKf
+         idL3NwzxLnWaWXYsIKW2MS4tKOcNYar5rU6Uw0HugiAoDCw1qfm1N7xDzKTmCg/egdAt
+         itgqaFL/dUkvkkztpc6SS1zpgL3zrn4FOHed6ay53Cc1oOLtD4LE6DSYc27tJa2axjba
+         q52A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FpYJiNkgnSHlg1N1yUdznvApuZcA90h4iDgIFTGjijs=;
-        b=iOxieKJTh9CMXRzDXcVyFTp2hpdtx1qnB8XZ/MI5RCAAVvJDkJ1FHW40dha/mhYFNC
-         mxZmUftxfdFTejIEK4ngxOu6yFRvHWO5Q5NjejueUINU0zYCSxbrPRpNSMclqgfuxeVc
-         CZAh7h6XU+DGyR5jUsmIJVGj2b4TITCpN3RLMez9kAmuoOICZWLRTtxyDw0Gw0OcGMGs
-         EtVKlqGDd03gmYcHRibzwQVnD+vbR/SXZJmQiYFlAHSvKa+U9EzMor2A5Gf4inqtuMwh
-         p3M/hf/UCjP7pLQ6l3xj7WlW7qu/1Tfzy/8nlOpjvYzliu7+QEBDG1j4Ux8QgNabqpft
-         En4A==
-X-Gm-Message-State: AOAM533f8wBanZUEQGUm/ncxervN82cA54UXJY8NMC9UJT4itGM3gCzH
-        BVs/QTgxCgeRyfaPMYYVO8U=
-X-Google-Smtp-Source: ABdhPJzGfhkeeAb+TCxjTnCktcdrUNsCpIfxWT1rgn5vz4ZrAQA03lJVXR/lvAsLxB7dk/uvUb+row==
-X-Received: by 2002:a1c:dc06:: with SMTP id t6mr3434278wmg.118.1591710155588;
-        Tue, 09 Jun 2020 06:42:35 -0700 (PDT)
+        bh=7jeqUuW0hGtHPFhc2sVBu1AoQmVlpxLyTbacgMXEdX8=;
+        b=cux2ybRaZi7qimFdL78CCbTxSI9stm7X/GA1EFRPY5d4JvXD1pN51YlYJ1qtNDv64h
+         5c4zA8J+JGiX6G+H5cpI2VYYjPxO19QDUIZ0Av5P/iCRDd9tX4ekSRfce3XRFZDBcgNc
+         DsTZON5P6xoJSxG7PFadb/NtXmmI+38Uq9BBGkukj8KnlbBNbZXbdop4d07OkxuMOaB/
+         FiwLmqg7FqisTB9MSerjwoda2hd3rCzHQIwG9OKGDhgE/BXPNN7ClzclBHtzPlB9b5TO
+         T9uD5A+6S6W41RqDywql1H1E6Kbhq+M0w6UHeuhRvHLLOhDrssCZbrA5tt4RRHCXlg/H
+         bOHw==
+X-Gm-Message-State: AOAM5332KLQNszlCf1u8F+JwlWZk533gCvhbMw514TH/0r34MJXNfXuW
+        WuB5rqrS6g+CUaqqbJAGr2o=
+X-Google-Smtp-Source: ABdhPJwPWGTDddUotMb53Rhg2Yvrr3ctp7WMj2Ax1vaav/7/tRHGwVX6cXlRWB+Hrx9fuPrUWXuxmw==
+X-Received: by 2002:adf:fd4f:: with SMTP id h15mr4471967wrs.397.1591710156590;
+        Tue, 09 Jun 2020 06:42:36 -0700 (PDT)
 Received: from skynet.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
-        by smtp.gmail.com with ESMTPSA id w17sm3454067wra.71.2020.06.09.06.42.34
+        by smtp.gmail.com with ESMTPSA id w17sm3454067wra.71.2020.06.09.06.42.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 06:42:35 -0700 (PDT)
+        Tue, 09 Jun 2020 06:42:36 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     p.zabel@pengutronix.de, robh+dt@kernel.org,
@@ -56,9 +56,9 @@ To:     p.zabel@pengutronix.de, robh+dt@kernel.org,
         bcm-kernel-feedback-list@broadcom.com
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH 1/7] mips: bmips: select ARCH_HAS_RESET_CONTROLLER
-Date:   Tue,  9 Jun 2020 15:42:26 +0200
-Message-Id: <20200609134232.4084718-2-noltari@gmail.com>
+Subject: [PATCH 2/7] dt-bindings: reset: add BCM6345 reset controller bindings
+Date:   Tue,  9 Jun 2020 15:42:27 +0200
+Message-Id: <20200609134232.4084718-3-noltari@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200609134232.4084718-1-noltari@gmail.com>
 References: <20200609134232.4084718-1-noltari@gmail.com>
@@ -70,25 +70,58 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This allows to add reset controllers support.
+Add support for resetting blocks through the Linux reset controller
+subsystem for BCM63xx SoCs.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 ---
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/reset/brcm,bcm6345-reset.yaml    | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reset/brcm,bcm6345-reset.yaml
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 9dc08ee3d6b9..e82586e7719c 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -229,6 +229,7 @@ config ATH79
- 
- config BMIPS_GENERIC
- 	bool "Broadcom Generic BMIPS kernel"
-+	select ARCH_HAS_RESET_CONTROLLER
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU_ALL
- 	select ARCH_HAS_PHYS_TO_DMA
- 	select BOOT_RAW
+diff --git a/Documentation/devicetree/bindings/reset/brcm,bcm6345-reset.yaml b/Documentation/devicetree/bindings/reset/brcm,bcm6345-reset.yaml
+new file mode 100644
+index 000000000000..eb3f2182e631
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reset/brcm,bcm6345-reset.yaml
+@@ -0,0 +1,37 @@
++# SPDX-License-Identifier: GPL-2.0-or-later
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/reset/brcm,bcm6345-reset.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: BCM6345 reset controller
++
++description: This document describes the BCM6345 reset controller.
++
++maintainers:
++  - Álvaro Fernández Rojas <noltari@gmail.com>
++
++properties:
++  compatible:
++    const: brcm,bcm6345-reset
++
++  reg:
++    maxItems: 2
++
++  "#reset-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    reset-controller@10000010 {
++      compatible = "brcm,bcm6345-reset";
++      reg = <0x10000010 0x4>;
++      #reset-cells = <1>;
++    };
 -- 
 2.26.2
 
