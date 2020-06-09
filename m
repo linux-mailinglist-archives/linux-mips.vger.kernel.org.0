@@ -2,55 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0A81F489D
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 23:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55ED41F499E
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 00:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727023AbgFIVHR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Jun 2020 17:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S1728779AbgFIWyS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Jun 2020 18:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726912AbgFIVHQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 17:07:16 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA16C08C5C4
-        for <linux-mips@vger.kernel.org>; Tue,  9 Jun 2020 14:07:15 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id z47so105470uad.5
-        for <linux-mips@vger.kernel.org>; Tue, 09 Jun 2020 14:07:15 -0700 (PDT)
+        with ESMTP id S1728459AbgFIWyQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 18:54:16 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45821C08C5C2
+        for <linux-mips@vger.kernel.org>; Tue,  9 Jun 2020 15:54:16 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id d21so97521vsh.12
+        for <linux-mips@vger.kernel.org>; Tue, 09 Jun 2020 15:54:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=f15ThlgRIs3s50AvF0kFQ8PMHdAjHFT357oOtlUx/ug=;
-        b=YQTUSvv3PxEEhj5ujE/dPySButOyH55bK4Xn7FFJQPplWJdwV27lg1hiiGZPMl+Csy
-         utkQv6pOjG6DMuuUAn6OW8rUDsTwDk+L09wjyrOsEHgSM9DO1jG+4DXrAkvtnH7+VocI
-         GJeE84ALY1lEBJxLNfWmnbxI8H4dKWQGgYe6NIzbLwEX92BP0BVccbN5ywjf+ad2hItV
-         hOK3koJ698Vs9caFgU0Oz67/J789jH+4rxh31hXP0eWCQ0G50xlrah8Vhcbhoz+wsVGG
-         RvWp/Z6BsjYqNpoy5p5CsKAw38VlYjZy47xgAAr8XRHehyo5E50oaLRajAfxViZwx+CC
-         YVIw==
+        bh=uselWGWC3qoQQOxqWlrwlyYH4mqd92kQlOeG7RAljPU=;
+        b=FyAfw76hywaz53lg/VPnGi9e8IgE5jPMksWxgn5Xkbqe/yhjElKv8fMDCl4QFtXQIt
+         pSyJYqrnMJYgTyWBELqlUZa5CVrDBu1huuKU9dWbO6W+XR2+iweBUHxOBj0i2RvfGdFs
+         8NiNQVMybZaYdmRyiKjkdD25LAg7GOjVAE2ahVKfo1TFfOTPVhQxv3vrhhJB1ZZYju2x
+         Sdae+oKvdyfhBYlT1ObztTGi8b7ZlawE8tQkILK8OymFeQLH+QUknrl0lziOECLhGpgE
+         9Z2h7cuvDa588K6R2CH8Tk7KwRtyK4jUdgDpy+UOvR8NULevc8eRomSXClkk9nY8gFC8
+         7ASA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=f15ThlgRIs3s50AvF0kFQ8PMHdAjHFT357oOtlUx/ug=;
-        b=NZnmJXphAfqabINdftztFqQQw9wZzJVbLLpZRZzSrdeaDnmaok5LcvjF7m7zZQ3RHn
-         //M/ah05+gfBerXr5NE0rHMysTxa5bu84OYF1nW2g0Q/lwC+d554hxqS6u2b+Vj5Kg6R
-         DM/fjUGz26lCq3lpjp/eo1bEZt2c9jrKqvqJyqM3vNnHLBhIi+MHnpAQmh4bUjvfXn6J
-         Lv/kH3ZzrMQvsg2kfSi1up3hvdh9lQxT93YirtSX71wgCS71RvdgsgtSx605RhVIAl0h
-         0Czp4qaVsMu2DK7TssIw+pzk/2FCmULCFg0U6JW6D+NaLwP+y+AvNrZAcBcnNlk/vmU+
-         +jQA==
-X-Gm-Message-State: AOAM531DjL1cbZSOtPehufzDbM41s5Il3kiVSX1av4qMxzL9BIMY8X87
-        oLW3SDKsTtCzrvgZ1yKuyTlGXrJ9Z9ec4kKaV6f5pw==
-X-Google-Smtp-Source: ABdhPJwQ+viuUyt4Xvfz0B/F5q8uWrpKqo6vNNs2uM0NepreAFEA0QuoyJVSJ76WQkzVbDy0sso7BcdwlZvUGeg7c1M=
-X-Received: by 2002:ab0:6012:: with SMTP id j18mr260224ual.69.1591736832385;
- Tue, 09 Jun 2020 14:07:12 -0700 (PDT)
+        bh=uselWGWC3qoQQOxqWlrwlyYH4mqd92kQlOeG7RAljPU=;
+        b=EUJVGL960RHMHrmdMCHnsPEIBor+V2s5lTVbIXr7WsY+I1hz1XhKq/fNgWUjY0XJhM
+         vF9Ql2jqhBkKv2vWs03+77BqxJ9+vzJm7NyFiO94pZpiSaAuQae/9vlgfzzpVdgj1822
+         tI2lhMP24uxJmk/Pagzalrn2wKK1N4rj1DnnqL72uhHFjr3fMzDckY9IUnv1LOxkEUai
+         xzmnf/gok17j8HDxMih06744t4QYES3Avmo8/fi1L+MrYjdBVMVrfUacVKFIODOzGztq
+         xxXpDXYPkEHqQS1YZOEl88LNoaSWDYG44kbprwl33U+G56Tb6lxu/4383i7cTSnSXnL7
+         84Xw==
+X-Gm-Message-State: AOAM533v5qrr4SEnaZTIu9OZMgCRmeYz80Ciezgbp8fMbEKcL+xzolFo
+        WXsk02l//T+reJsDDhNZNee5VWyCJOtjMinkHqzKwA==
+X-Google-Smtp-Source: ABdhPJx3dLS9VTThWqaFRDlqN1S9f5h0OrZVTBbY5/ftQgTD5GsCLfsUQ7mDqtAcQKwPK2rVrq3OTLOUBty+qRmGSEY=
+X-Received: by 2002:a67:af10:: with SMTP id v16mr448564vsl.235.1591743255002;
+ Tue, 09 Jun 2020 15:54:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200605213853.14959-1-sean.j.christopherson@intel.com> <20200605213853.14959-2-sean.j.christopherson@intel.com>
-In-Reply-To: <20200605213853.14959-2-sean.j.christopherson@intel.com>
+References: <20200605213853.14959-1-sean.j.christopherson@intel.com> <20200605213853.14959-3-sean.j.christopherson@intel.com>
+In-Reply-To: <20200605213853.14959-3-sean.j.christopherson@intel.com>
 From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 9 Jun 2020 14:07:01 -0700
-Message-ID: <CANgfPd87=eS6h=GX6CxZRwAj=MTET-AtVAjVQn4i1zkwZ4ApXw@mail.gmail.com>
-Subject: Re: [PATCH 01/21] KVM: x86/mmu: Track the associated kmem_cache in
- the MMU caches
+Date:   Tue, 9 Jun 2020 15:54:04 -0700
+Message-ID: <CANgfPd-hDAUe188X4HNt7bQ=5_RxtOmpnEet3C3CwpJPxi4y4Q@mail.gmail.com>
+Subject: Re: [PATCH 02/21] KVM: x86/mmu: Consolidate "page" variant of memory
+ cache helpers
 To:     Sean Christopherson <sean.j.christopherson@intel.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
@@ -82,106 +82,87 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On Fri, Jun 5, 2020 at 2:39 PM Sean Christopherson
 <sean.j.christopherson@intel.com> wrote:
 >
-> Track the kmem_cache used for non-page KVM MMU memory caches instead of
-> passing in the associated kmem_cache when filling the cache.  This will
-> allow consolidating code and other cleanups.
+> Drop the "page" variants of the topup/free memory cache helpers, using
+> the existence of an associated kmem_cache to select the correct alloc
+> or free routine.
 >
 > No functional change intended.
 >
 > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
 > ---
->  arch/x86/include/asm/kvm_host.h |  1 +
->  arch/x86/kvm/mmu/mmu.c          | 24 +++++++++++-------------
->  2 files changed, 12 insertions(+), 13 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 1da5858501ca..16347b050754 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -251,6 +251,7 @@ struct kvm_kernel_irq_routing_entry;
->   */
->  struct kvm_mmu_memory_cache {
->         int nobjs;
-> +       struct kmem_cache *kmem_cache;
->         void *objects[KVM_NR_MEM_OBJS];
->  };
+>  arch/x86/kvm/mmu/mmu.c | 37 +++++++++++--------------------------
+>  1 file changed, 11 insertions(+), 26 deletions(-)
 >
 > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index fdd05c233308..0830c195c9ed 100644
+> index 0830c195c9ed..cbc101663a89 100644
 > --- a/arch/x86/kvm/mmu/mmu.c
 > +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1060,15 +1060,14 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
->         local_irq_enable();
->  }
->
-> -static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache,
-> -                                 struct kmem_cache *base_cache, int min)
-> +static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache, int min)
->  {
->         void *obj;
->
+> @@ -1067,7 +1067,10 @@ static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache, int min)
 >         if (cache->nobjs >= min)
 >                 return 0;
 >         while (cache->nobjs < ARRAY_SIZE(cache->objects)) {
-> -               obj = kmem_cache_zalloc(base_cache, GFP_KERNEL_ACCOUNT);
-> +               obj = kmem_cache_zalloc(cache->kmem_cache, GFP_KERNEL_ACCOUNT);
+> -               obj = kmem_cache_zalloc(cache->kmem_cache, GFP_KERNEL_ACCOUNT);
+> +               if (cache->kmem_cache)
+> +                       obj = kmem_cache_zalloc(cache->kmem_cache, GFP_KERNEL_ACCOUNT);
+> +               else
+> +                       obj = (void *)__get_free_page(GFP_KERNEL_ACCOUNT);
 >                 if (!obj)
 >                         return cache->nobjs >= min ? 0 : -ENOMEM;
 >                 cache->objects[cache->nobjs++] = obj;
-> @@ -1081,11 +1080,10 @@ static int mmu_memory_cache_free_objects(struct kvm_mmu_memory_cache *cache)
->         return cache->nobjs;
->  }
+> @@ -1082,30 +1085,12 @@ static int mmu_memory_cache_free_objects(struct kvm_mmu_memory_cache *cache)
 >
-> -static void mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc,
-> -                                 struct kmem_cache *cache)
-> +static void mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
+>  static void mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
 >  {
->         while (mc->nobjs)
-> -               kmem_cache_free(cache, mc->objects[--mc->nobjs]);
-> +               kmem_cache_free(mc->kmem_cache, mc->objects[--mc->nobjs]);
+> -       while (mc->nobjs)
+> -               kmem_cache_free(mc->kmem_cache, mc->objects[--mc->nobjs]);
+> -}
+> -
+> -static int mmu_topup_memory_cache_page(struct kvm_mmu_memory_cache *cache,
+> -                                      int min)
+> -{
+> -       void *page;
+> -
+> -       if (cache->nobjs >= min)
+> -               return 0;
+> -       while (cache->nobjs < ARRAY_SIZE(cache->objects)) {
+> -               page = (void *)__get_free_page(GFP_KERNEL_ACCOUNT);
+> -               if (!page)
+> -                       return cache->nobjs >= min ? 0 : -ENOMEM;
+> -               cache->objects[cache->nobjs++] = page;
+> +       while (mc->nobjs) {
+> +               if (mc->kmem_cache)
+> +                       kmem_cache_free(mc->kmem_cache, mc->objects[--mc->nobjs]);
+> +               else
+> +                       free_page((unsigned long)mc->objects[--mc->nobjs]);
+>         }
+> -       return 0;
+> -}
+> -
+> -static void mmu_free_memory_cache_page(struct kvm_mmu_memory_cache *mc)
+> -{
+> -       while (mc->nobjs)
+> -               free_page((unsigned long)mc->objects[--mc->nobjs]);
 >  }
 >
->  static int mmu_topup_memory_cache_page(struct kvm_mmu_memory_cache *cache,
-> @@ -1115,25 +1113,22 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu)
->         int r;
->
->         r = mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
-> -                                  pte_list_desc_cache, 8 + PTE_PREFETCH_NUM);
-> +                                  8 + PTE_PREFETCH_NUM);
+>  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu)
+> @@ -1116,7 +1101,7 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu)
+>                                    8 + PTE_PREFETCH_NUM);
 >         if (r)
 >                 goto out;
->         r = mmu_topup_memory_cache_page(&vcpu->arch.mmu_page_cache, 8);
+> -       r = mmu_topup_memory_cache_page(&vcpu->arch.mmu_page_cache, 8);
+> +       r = mmu_topup_memory_cache(&vcpu->arch.mmu_page_cache, 8);
 >         if (r)
 >                 goto out;
-> -       r = mmu_topup_memory_cache(&vcpu->arch.mmu_page_header_cache,
-> -                                  mmu_page_header_cache, 4);
-> +       r = mmu_topup_memory_cache(&vcpu->arch.mmu_page_header_cache, 4);
->  out:
->         return r;
->  }
->
+>         r = mmu_topup_memory_cache(&vcpu->arch.mmu_page_header_cache, 4);
+> @@ -1127,7 +1112,7 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu)
 >  static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
 >  {
-> -       mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
-> -                               pte_list_desc_cache);
-> +       mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
->         mmu_free_memory_cache_page(&vcpu->arch.mmu_page_cache);
-> -       mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache,
-> -                               mmu_page_header_cache);
-> +       mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
+>         mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
+> -       mmu_free_memory_cache_page(&vcpu->arch.mmu_page_cache);
+> +       mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
+>         mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
 >  }
->
->  static void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
-> @@ -5684,6 +5679,9 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
->         uint i;
->         int ret;
->
-> +       vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
-> +       vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
-> +
->         vcpu->arch.mmu = &vcpu->arch.root_mmu;
->         vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
 >
 > --
 > 2.26.0
