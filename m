@@ -2,90 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD711F3264
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 04:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE291F38BB
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 12:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbgFICys (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jun 2020 22:54:48 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:44036 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726992AbgFICys (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jun 2020 22:54:48 -0400
-Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn97s+d5e0ng_AA--.375S2;
-        Tue, 09 Jun 2020 10:54:37 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Use arch specific syscall name match function
-Date:   Tue,  9 Jun 2020 10:54:35 +0800
-Message-Id: <1591671275-13849-1-git-send-email-maobibo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9Dxn97s+d5e0ng_AA--.375S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tryDKFW3tr1xKw1xWw45ZFb_yoW8WrWrpF
-        98Aw1kCrsYqF4fZFWa9w48Grn8ArsY9ryaq3yDGryYva1Yq34Fgrsayw45tFyUAFs7Cayx
-        XFWSqFWUWr4DZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l
-        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
-        AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
-        cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
-        8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
-        wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU5PpnJUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+        id S1727904AbgFIKwx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Jun 2020 06:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbgFIKws (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 06:52:48 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6E6C05BD1E;
+        Tue,  9 Jun 2020 03:52:48 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id q11so20790361wrp.3;
+        Tue, 09 Jun 2020 03:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aWQLYPhqDKfx5oH7hlkSk8K6QKJGKV4Umxbuf8XuqKE=;
+        b=ETaulQJlvjWg8li+bf8I4pofjSMqWGlkLMgkMX5FNju/527xa21LUwKQu8Llko4xu8
+         1POYDiY/fXGnQ6ArUbsP5OU9bFODfEW9vFnIymXfEOSlU39mbbW4G0d4d2JaBquvoeOA
+         NMSCtsZGtaSELMlzpvnxMXTAv1wKQiWIheudPB6/GMk+7MVwyU0G1S3lz73vGu87DOUH
+         DLS0+lymKa1C07kpMIcSCF4MulmCG2QgjNsTnNz6zcWRNxf3s4t746RbxM8n7Ye2OIjh
+         FJaNxqzpv32T4Vj3XKqlxoOAFCnv0yDBNAO5L9LL1uRnlBwEfPjwNil+YW9yyu5A4VjQ
+         SgvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aWQLYPhqDKfx5oH7hlkSk8K6QKJGKV4Umxbuf8XuqKE=;
+        b=YrwO5YvRUbHDbySOnUezjv+imNrF1pbV9OuVhlACxeCzrVfxr6Imu3zXWPO/EUtZiL
+         mausiKfiaXrFg5bE/KuyPkc9467wZcMZDEvGohgRK1UXEIf24aXGAGy7H6Esbg8kkBNj
+         r+J2PPxc6k9O/LaXrmqU5CF4QKMnVQuU+AAeUWH8MvW/FJ5LEVvVDyHPhQ3NyWiSPXCb
+         F4qCMH5biDFIp/PG2QenjALGV/suYCp0lMETfgkaOiwD/fJaglHUV2b0ZvfptFYsj19W
+         NkqqpYkeVG7+c+tJNoVcJ1JucwC2vAEEBiDh30BDNPcPXat4WeDsIiU/8PvMFPNv0nck
+         b9pA==
+X-Gm-Message-State: AOAM531rrFr+th0tTS9Uzr0NtrO9WYVuS/lg0dIq8AHUZb8Q/ZcAQZBL
+        yIuEe9liRQU20ilNvkpRnf0=
+X-Google-Smtp-Source: ABdhPJyqUX3Bx31cC0wuBVeFSjp63SpZIOZJhoutiFLUR3QrxeRzWtC4QVjzdYdNVFWTohvOnicSdQ==
+X-Received: by 2002:adf:a491:: with SMTP id g17mr4002353wrb.132.1591699966641;
+        Tue, 09 Jun 2020 03:52:46 -0700 (PDT)
+Received: from skynet.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
+        by smtp.gmail.com with ESMTPSA id h5sm2949931wrw.85.2020.06.09.03.52.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2020 03:52:46 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
+        robh+dt@kernel.org, f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH 0/4] bmips: add BCM63xx power domain controller
+Date:   Tue,  9 Jun 2020 12:52:40 +0200
+Message-Id: <20200609105244.4014823-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On MIPS system, most of the syscall function name begin with prefix
-sys_. Some syscalls are special such as clone/fork, function name of
-these begin with __sys_. Since scratch registers need be saved in
-stack when these system calls happens.
+BCM6318, BCM6328, BCM6362 and BCM63268 SoCs have a power domain controller
+to enable/disable certain components in order to save power.
 
-With ftrace system call method, system call functions are declared with
-SYSCALL_DEFINEx, metadata of the system call symbol name begins with
-sys_. Here mips specific function arch_syscall_match_sym_name is used to
-compare function name between sys_call_table[] and metadata of syscall
-symbol.
+Álvaro Fernández Rojas (4):
+  dt-bindings: soc: brcm: add BCM63xx power domain binding
+  soc: bcm: add BCM63xx power domain driver
+  mips: bmips: dts: add BCM6328 power domain support
+  mips: bmips: dts: add BCM6362 power domain support
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- arch/mips/include/asm/ftrace.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../devicetree/bindings/mips/brcm/soc.txt     |  17 +
+ arch/mips/boot/dts/brcm/bcm6328.dtsi          |   6 +
+ arch/mips/boot/dts/brcm/bcm6362.dtsi          |   6 +
+ drivers/soc/bcm/Kconfig                       |   8 +
+ drivers/soc/bcm/Makefile                      |   1 +
+ drivers/soc/bcm/bcm63xx-power.c               | 374 ++++++++++++++++++
+ 6 files changed, 412 insertions(+)
+ create mode 100644 drivers/soc/bcm/bcm63xx-power.c
 
-diff --git a/arch/mips/include/asm/ftrace.h b/arch/mips/include/asm/ftrace.h
-index b463f2a..9b42115 100644
---- a/arch/mips/include/asm/ftrace.h
-+++ b/arch/mips/include/asm/ftrace.h
-@@ -87,4 +87,20 @@ struct dyn_arch_ftrace {
- #endif /*  CONFIG_DYNAMIC_FTRACE */
- #endif /* __ASSEMBLY__ */
- #endif /* CONFIG_FUNCTION_TRACER */
-+
-+#ifndef __ASSEMBLY__
-+#ifdef CONFIG_FTRACE_SYSCALLS
-+/*
-+ * Some syscall entry functions on mips start with "__sys_" (fork and clone,
-+ * for instance). We should also match the sys_ variant with those.
-+ */
-+#define ARCH_HAS_SYSCALL_MATCH_SYM_NAME
-+static inline bool arch_syscall_match_sym_name(const char *sym,
-+					       const char *name)
-+{
-+	return !strcmp(sym, name) ||
-+		(!strncmp(sym, "__sys_", 6) && !strcmp(sym + 6, name + 4));
-+}
-+#endif /* CONFIG_FTRACE_SYSCALLS */
-+#endif /* __ASSEMBLY__ */
- #endif /* _ASM_MIPS_FTRACE_H */
 -- 
-1.8.3.1
+2.26.2
 
