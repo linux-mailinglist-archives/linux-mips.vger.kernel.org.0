@@ -2,92 +2,183 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A3E1F3D4E
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 15:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE8C1F3EDE
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 17:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728388AbgFINwn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Jun 2020 09:52:43 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:50152 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730338AbgFINwk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 09:52:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591710759;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1QZxzGJLd7MwraWpl9HYsPVgjFSkkdnN13rxpeDTWvE=;
-        b=bNcxCSaVY4LbDXddGZPULryKNQOp9rhnZwPnUAkw4Wmu5KJtFh+k4aM8EFRnXVb5rsFxbc
-        7/K66D3UkgQEr5zQ7WoK6vmMPJ8Wco7pkZWyV2w62EjnwLsDRTC0J8sMoAoxlOPzJ7CkVt
-        4Z7fOflo5Bl+Ts91bC/g+WHCP8+friM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-374-SKVCis5-OQWdNQGNLlklxw-1; Tue, 09 Jun 2020 09:52:35 -0400
-X-MC-Unique: SKVCis5-OQWdNQGNLlklxw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ABB2A18A8235;
-        Tue,  9 Jun 2020 13:52:33 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-113-78.ams2.redhat.com [10.36.113.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 708335C1BD;
-        Tue,  9 Jun 2020 13:52:19 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Palmer Dabbelt <palmer@sifive.com>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, rth@twiddle.net,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        tony.luck@intel.com, fenghua.yu@intel.com, geert@linux-m68k.org,
-        monstr@monstr.eu, ralf@linux-mips.org, paul.burton@mips.com,
-        jhogan@kernel.org, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, benh@kernel.crashing.org, paulus@samba.org,
-        mpe@ellerman.id.au, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
-        dalias@libc.org, davem@davemloft.net, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, peterz@infradead.org, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, dhowells@redhat.com, firoz.khan@linaro.org,
-        stefan@agner.ch, schwidefsky@de.ibm.com, axboe@kernel.dk,
-        christian@brauner.io, hare@suse.com, deepa.kernel@gmail.com,
-        tycho@tycho.ws, kim.phillips@arm.com, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: Add a new fchmodat4() syscall, v2
-References: <20190717012719.5524-1-palmer@sifive.com>
-Date:   Tue, 09 Jun 2020 15:52:17 +0200
-In-Reply-To: <20190717012719.5524-1-palmer@sifive.com> (Palmer Dabbelt's
-        message of "Tue, 16 Jul 2019 18:27:15 -0700")
-Message-ID: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        id S1730635AbgFIPGz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 9 Jun 2020 11:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730640AbgFIPGu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 11:06:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D9EC05BD1E
+        for <linux-mips@vger.kernel.org>; Tue,  9 Jun 2020 08:06:49 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1jifpr-0003dw-WC; Tue, 09 Jun 2020 17:06:44 +0200
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1jifpr-0008VD-2P; Tue, 09 Jun 2020 17:06:43 +0200
+Message-ID: <341e8482c6bd06267633160d7358fa8331bef515.camel@pengutronix.de>
+Subject: Re: [PATCH 3/7] reset: add BCM6345 reset controller driver
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     =?ISO-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
+        robh+dt@kernel.org, tsbogend@alpha.franken.de,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
+Date:   Tue, 09 Jun 2020 17:06:42 +0200
+In-Reply-To: <20200609134232.4084718-4-noltari@gmail.com>
+References: <20200609134232.4084718-1-noltari@gmail.com>
+         <20200609134232.4084718-4-noltari@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-* Palmer Dabbelt:
+Hi Álvaro,
 
-> This patch set adds fchmodat4(), a new syscall. The actual
-> implementation is super simple: essentially it's just the same as
-> fchmodat(), but LOOKUP_FOLLOW is conditionally set based on the flags.
-> I've attempted to make this match "man 2 fchmodat" as closely as
-> possible, which says EINVAL is returned for invalid flags (as opposed to
-> ENOTSUPP, which is currently returned by glibc for AT_SYMLINK_NOFOLLOW).
-> I have a sketch of a glibc patch that I haven't even compiled yet, but
-> seems fairly straight-forward:
+On Tue, 2020-06-09 at 15:42 +0200, Álvaro Fernández Rojas wrote:
+> Add support for resetting blocks through the Linux reset controller
+> subsystem for BCM63xx SoCs.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> ---
+>  drivers/reset/Kconfig         |   7 ++
+>  drivers/reset/Makefile        |   1 +
+>  drivers/reset/reset-bcm6345.c | 149 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 157 insertions(+)
+>  create mode 100644 drivers/reset/reset-bcm6345.c
+> 
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index d9efbfd29646..9f1da978cef6 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -41,6 +41,13 @@ config RESET_BERLIN
+>  	help
+>  	  This enables the reset controller driver for Marvell Berlin SoCs.
+>  
+> +config RESET_BCM6345
+> +	bool "BCM6345 Reset Controller"
+> +	depends on BMIPS_GENERIC || COMPILE_TEST
+> +	default BMIPS_GENERIC
+> +	help
+> +	  This enables the reset controller driver for BCM6345 SoCs.
+> +
+>  config RESET_BRCMSTB
+>  	tristate "Broadcom STB reset controller"
+>  	depends on ARCH_BRCMSTB || COMPILE_TEST
+> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> index 249ed357c997..e642aae42f0f 100644
+> --- a/drivers/reset/Makefile
+> +++ b/drivers/reset/Makefile
+> @@ -6,6 +6,7 @@ obj-$(CONFIG_ARCH_TEGRA) += tegra/
+>  obj-$(CONFIG_RESET_A10SR) += reset-a10sr.o
+>  obj-$(CONFIG_RESET_ATH79) += reset-ath79.o
+>  obj-$(CONFIG_RESET_AXS10X) += reset-axs10x.o
+> +obj-$(CONFIG_RESET_BCM6345) += reset-bcm6345.o
+>  obj-$(CONFIG_RESET_BERLIN) += reset-berlin.o
+>  obj-$(CONFIG_RESET_BRCMSTB) += reset-brcmstb.o
+>  obj-$(CONFIG_RESET_BRCMSTB_RESCAL) += reset-brcmstb-rescal.o
+> diff --git a/drivers/reset/reset-bcm6345.c b/drivers/reset/reset-bcm6345.c
+> new file mode 100644
+> index 000000000000..088b7fdb896b
+> --- /dev/null
+> +++ b/drivers/reset/reset-bcm6345.c
+> @@ -0,0 +1,149 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * BCM6345 Reset Controller Driver
+> + *
+> + * Copyright (C) 2020 Álvaro Fernández Rojas <noltari@gmail.com>
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/init.h>
+> +#include <linux/io.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset-controller.h>
+> +
+> +#define BCM6345_RESET_NUM		32
+> +#define BCM6345_RESET_SLEEP_MIN_US	10000
+> +#define BCM6345_RESET_SLEEP_MAX_US	20000
+> +
+> +struct bcm6345_reset {
+> +	struct reset_controller_dev rcdev;
+> +	void __iomem *base;
+> +	spinlock_t lock;
+> +};
+> +
+> +static int bcm6345_reset_update(struct bcm6345_reset *bcm6345_reset,
+> +				unsigned long id, bool assert)
+> +{
+> +	uint32_t val;
+> +
+> +	val = __raw_readl(bcm6345_reset->base);
+> +	if (assert)
+> +		val &= ~BIT(id);
+> +	else
+> +		val |= BIT(id);
+> +	__raw_writel(val, bcm6345_reset->base);
+> +
+> +	return 0;
+> +}
+> +
+> +static int bcm6345_reset_assert(struct reset_controller_dev *rcdev,
+> +				unsigned long id)
+> +{
+> +	struct bcm6345_reset *bcm6345_reset =
+> +		container_of(rcdev, struct bcm6345_reset, rcdev);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&bcm6345_reset->lock, flags);
+> +	bcm6345_reset_update(bcm6345_reset, id, true);
+> +	spin_unlock_irqrestore(&bcm6345_reset->lock, flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static int bcm6345_reset_deassert(struct reset_controller_dev *rcdev,
+> +				  unsigned long id)
+> +{
+> +	struct bcm6345_reset *bcm6345_reset =
+> +		container_of(rcdev, struct bcm6345_reset, rcdev);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&bcm6345_reset->lock, flags);
+> +	bcm6345_reset_update(bcm6345_reset, id, false);
+> +	spin_unlock_irqrestore(&bcm6345_reset->lock, flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static int bcm6345_reset_reset(struct reset_controller_dev *rcdev,
+> +			       unsigned long id)
+> +{
+> +	struct bcm6345_reset *bcm6345_reset =
+> +		container_of(rcdev, struct bcm6345_reset, rcdev);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&bcm6345_reset->lock, flags);
+> +	usleep_range(BCM6345_RESET_SLEEP_MIN_US,
+> +		     BCM6345_RESET_SLEEP_MAX_US);
 
-What's the status here?  We'd really like to see this system call in the
-kernel because our emulation in glibc has its problems (especially if
-/proc is not mounted).
+What is the purpose of sleeping before reset assertion?
 
-Thanks,
-Florian
+If you can do without this, with I think this driver could be made to
+use reset-simple.
 
+regards
+Philipp
