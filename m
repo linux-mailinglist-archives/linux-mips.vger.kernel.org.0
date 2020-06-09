@@ -2,251 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B09371F4135
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 18:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFB41F47EF
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 22:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730884AbgFIQlx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Jun 2020 12:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
+        id S2387552AbgFIURV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Jun 2020 16:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730180AbgFIQlv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 12:41:51 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE72C05BD1E;
-        Tue,  9 Jun 2020 09:41:50 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id t18so22078769wru.6;
-        Tue, 09 Jun 2020 09:41:50 -0700 (PDT)
+        with ESMTP id S1726184AbgFIURS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 16:17:18 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BD2C05BD1E;
+        Tue,  9 Jun 2020 13:17:18 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ne5so1863108pjb.5;
+        Tue, 09 Jun 2020 13:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=AZYG0K93PsQJdOxUwBoc+JlrzBQiHlCzR6DIMHy9gzM=;
-        b=Qnc9zETfrjvQCtihO8N+ww82xz2gFstOVQIhtDytjaAswNCjJkOIeNxenav3SKer6u
-         VlZaasnPed6euS+O7aEP2hmu+H+0D3a5p4AaFtTmIeGlu7iALgddtoNyRkyMovUTuvuc
-         XLq8l61ge33GfudUR8C8wyFhghbuozL3uuEkXavOLGGdKDR1ML9zPw3emD6RiCVVTOFH
-         +GpnD32MeXFiSfmBt0ITJWzgbsIYIcZEZl8Dd+IbiiBLAoDv17IxQ5VncBdAxP4QbfbU
-         MwcB6wtaX6S2pvP4df22/0ISfrF47jEmrxFIG+OOXZgfkAEImxIjeRGXAuzqqFuJ8nI8
-         c3yQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ycBfwZJp2iSk0H+6hD6qHTXZoBhADfY0mavrlMkbOJI=;
+        b=GRlKpdJHXqeavogNWIbRTZXFAqecpcMOBD54j6AOI+aKs8H3lwYxW9IJkSbNfgeJvJ
+         xire/2BfLwwyptZd8q+QGzejfVC706NkjJ9mnPswdtwskW6WKhqRo2A2mcUCI/f2UZQ1
+         9YXhoyds80y168jeQ0ziR9pXNO/4+Kroy16uF4kBGmnSSDrY6gTCAm7zQ42oESUAWUte
+         c31UMBDe5aD5YiVKceEPt3iXa4v9d9LJ8AZbw/iF1GeJ1uZEVljRrZf0uBbsH4aNFDOH
+         mBaMFjkwCEwpaU1pvaVhCbet9qhe6bHiXaJ2lJAjLlcZb/EGr4vh1wJYlMJswColVlSi
+         HvJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=AZYG0K93PsQJdOxUwBoc+JlrzBQiHlCzR6DIMHy9gzM=;
-        b=mPWXsoYHGShcucGA7dOi2UJURQMllDxqcGYp8eMXjZROY4Y+V3yp84x8NVscRU+Z66
-         MJowOGUK2FcOGFC71eFzxCcR3lkcb7Y1LOaEYpI5U5kO3CJf00HpsiZboF9O+Ig6NsPu
-         cupvio4j87FXIg0NQTdh6XFfcWTkxSVi38gSKqWrRklcDWZ56e9581ALIXhKE2dtMpt8
-         Xuo1NoaUzptssK/Hmj6O+elW7br82+6GybOrjOc2KZ7S4eppLLPjACAN6reYKvdzNHmx
-         wCLeJwGX4dlNDSpWuEXke+04ayQ7kEB2wNil9l/1m0xOCQCq1I2G2zQHO7FKhDMm43g/
-         a2ug==
-X-Gm-Message-State: AOAM532t2wEs1vEnqpMIK5lOWdkk0j37vIpje4bLtxDROif7zXRhyZiI
-        SE/wChf5NrTn8HwPZqoxVb0=
-X-Google-Smtp-Source: ABdhPJyGpJCVZw+2xb/iyyGrCWfBAeQZNwZKVIZ4KwrEhZ9D9uA5HLtcYsA8YTZ1D5G9l66zXF2Zlg==
-X-Received: by 2002:a5d:4d4d:: with SMTP id a13mr5560604wru.252.1591720908896;
-        Tue, 09 Jun 2020 09:41:48 -0700 (PDT)
-Received: from macbook-pro-alvaro.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
-        by smtp.gmail.com with ESMTPSA id n189sm3488999wmb.43.2020.06.09.09.41.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Jun 2020 09:41:48 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ycBfwZJp2iSk0H+6hD6qHTXZoBhADfY0mavrlMkbOJI=;
+        b=Fes65+2qBerFnzu3zuLH5E9inN0YUAPwm6Dh9MznXcarqidVBTiJVBTSPkQT/SU2hl
+         3B6D4BmYbFMU7o72m2SB4DSoN8iTqafudQ8Pp7PNyTGVdONfnxSrvrNiMFKbDtJzUGC0
+         UbQX0PLQZMx5jOTi5BVl/Dce7+zzfEVmkOibst5q7ct3TfSiZt4L0hX7r3UcPw8Q25dT
+         tSBb1QcaQa2GmB3mUuYg/uJaG4JIzYWXby5u3Dqp5J7p+h2C8LZrPEoVOGUNQxvle7EI
+         JN/jVR8JYJu8rVlOYOK2yRVg9yMjDsXqN7dxusL+vSLr1r67fssvIUkMESygrTNZRRuF
+         gZmQ==
+X-Gm-Message-State: AOAM533s1rmvztixw/DAdGqeo46XUj1EPjedi4GKQEkjwtn+n09uaGZa
+        dh9BtD/+TObt4PVx94YAV1/TPIvA
+X-Google-Smtp-Source: ABdhPJwanqh4CtSImWJt1rizt00WKH4mXR4I7BTHb+CSiyqSXDleaNuLB6XrtDSyVmukLYHS769hOA==
+X-Received: by 2002:a17:902:7783:: with SMTP id o3mr97268pll.286.1591733837558;
+        Tue, 09 Jun 2020 13:17:17 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 140sm10769164pfv.38.2020.06.09.13.17.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2020 13:17:16 -0700 (PDT)
 Subject: Re: [PATCH 3/7] reset: add BCM6345 reset controller driver
-From:   =?utf-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>
-In-Reply-To: <2a621f170574a616bcf047f6725c74552f7abbb1.camel@pengutronix.de>
-Date:   Tue, 9 Jun 2020 18:41:47 +0200
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
 Cc:     robh+dt@kernel.org, tsbogend@alpha.franken.de,
-        Florian Fainelli <f.fainelli@gmail.com>,
         Jonas Gorski <jonas.gorski@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <46614E69-578A-4782-9D72-85B2D2F38FB8@gmail.com>
 References: <20200609134232.4084718-1-noltari@gmail.com>
  <20200609134232.4084718-4-noltari@gmail.com>
  <341e8482c6bd06267633160d7358fa8331bef515.camel@pengutronix.de>
  <729976E9-CAF7-47B6-8783-5FD3D85F9EFD@gmail.com>
  <2a621f170574a616bcf047f6725c74552f7abbb1.camel@pengutronix.de>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-X-Mailer: Apple Mail (2.3608.80.23.2.2)
+ <46614E69-578A-4782-9D72-85B2D2F38FB8@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <e80e5c4c-ceef-3a62-3158-02f742bf76b7@gmail.com>
+Date:   Tue, 9 Jun 2020 13:17:14 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <46614E69-578A-4782-9D72-85B2D2F38FB8@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Philipp,
 
-> El 9 jun 2020, a las 18:32, Philipp Zabel <p.zabel@pengutronix.de> =
-escribi=C3=B3:
->=20
-> Hi =C3=81lvaro,
->=20
-> On Tue, 2020-06-09 at 17:14 +0200, =C3=81lvaro Fern=C3=A1ndez Rojas =
-wrote:
->> Hi Philipp,
->>=20
->>> El 9 jun 2020, a las 17:06, Philipp Zabel <p.zabel@pengutronix.de> =
-escribi=C3=B3:
->>>=20
->>> Hi =C3=81lvaro,
->>>=20
->>> On Tue, 2020-06-09 at 15:42 +0200, =C3=81lvaro Fern=C3=A1ndez Rojas =
-wrote:
->>>> Add support for resetting blocks through the Linux reset controller
->>>> subsystem for BCM63xx SoCs.
->>>>=20
->>>> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
->>>> ---
->>>> drivers/reset/Kconfig         |   7 ++
->>>> drivers/reset/Makefile        |   1 +
->>>> drivers/reset/reset-bcm6345.c | 149 =
-++++++++++++++++++++++++++++++++++
->>>> 3 files changed, 157 insertions(+)
->>>> create mode 100644 drivers/reset/reset-bcm6345.c
->>>>=20
->>>> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
->>>> index d9efbfd29646..9f1da978cef6 100644
->>>> --- a/drivers/reset/Kconfig
->>>> +++ b/drivers/reset/Kconfig
->>>> @@ -41,6 +41,13 @@ config RESET_BERLIN
->>>> 	help
->>>> 	  This enables the reset controller driver for Marvell Berlin =
-SoCs.
->>>>=20
->>>> +config RESET_BCM6345
->>>> +	bool "BCM6345 Reset Controller"
->>>> +	depends on BMIPS_GENERIC || COMPILE_TEST
->>>> +	default BMIPS_GENERIC
->>>> +	help
->>>> +	  This enables the reset controller driver for BCM6345 SoCs.
->>>> +
->>>> config RESET_BRCMSTB
->>>> 	tristate "Broadcom STB reset controller"
->>>> 	depends on ARCH_BRCMSTB || COMPILE_TEST
->>>> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
->>>> index 249ed357c997..e642aae42f0f 100644
->>>> --- a/drivers/reset/Makefile
->>>> +++ b/drivers/reset/Makefile
->>>> @@ -6,6 +6,7 @@ obj-$(CONFIG_ARCH_TEGRA) +=3D tegra/
->>>> obj-$(CONFIG_RESET_A10SR) +=3D reset-a10sr.o
->>>> obj-$(CONFIG_RESET_ATH79) +=3D reset-ath79.o
->>>> obj-$(CONFIG_RESET_AXS10X) +=3D reset-axs10x.o
->>>> +obj-$(CONFIG_RESET_BCM6345) +=3D reset-bcm6345.o
->>>> obj-$(CONFIG_RESET_BERLIN) +=3D reset-berlin.o
->>>> obj-$(CONFIG_RESET_BRCMSTB) +=3D reset-brcmstb.o
->>>> obj-$(CONFIG_RESET_BRCMSTB_RESCAL) +=3D reset-brcmstb-rescal.o
->>>> diff --git a/drivers/reset/reset-bcm6345.c =
-b/drivers/reset/reset-bcm6345.c
->>>> new file mode 100644
->>>> index 000000000000..088b7fdb896b
->>>> --- /dev/null
->>>> +++ b/drivers/reset/reset-bcm6345.c
->>>> @@ -0,0 +1,149 @@
->>>> +// SPDX-License-Identifier: GPL-2.0-or-later
->>>> +/*
->>>> + * BCM6345 Reset Controller Driver
->>>> + *
->>>> + * Copyright (C) 2020 =C3=81lvaro Fern=C3=A1ndez Rojas =
-<noltari@gmail.com>
->>>> + */
->>>> +
->>>> +#include <linux/delay.h>
->>>> +#include <linux/init.h>
->>>> +#include <linux/io.h>
->>>> +#include <linux/mod_devicetable.h>
->>>> +#include <linux/platform_device.h>
->>>> +#include <linux/reset-controller.h>
->>>> +
->>>> +#define BCM6345_RESET_NUM		32
->>>> +#define BCM6345_RESET_SLEEP_MIN_US	10000
->>>> +#define BCM6345_RESET_SLEEP_MAX_US	20000
->>>> +
->>>> +struct bcm6345_reset {
->>>> +	struct reset_controller_dev rcdev;
->>>> +	void __iomem *base;
->>>> +	spinlock_t lock;
->>>> +};
->>>> +
->>>> +static int bcm6345_reset_update(struct bcm6345_reset =
-*bcm6345_reset,
->>>> +				unsigned long id, bool assert)
->>>> +{
->>>> +	uint32_t val;
->>>> +
->>>> +	val =3D __raw_readl(bcm6345_reset->base);
->>>> +	if (assert)
->>>> +		val &=3D ~BIT(id);
->>>> +	else
->>>> +		val |=3D BIT(id);
->>>> +	__raw_writel(val, bcm6345_reset->base);
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int bcm6345_reset_assert(struct reset_controller_dev =
-*rcdev,
->>>> +				unsigned long id)
->>>> +{
->>>> +	struct bcm6345_reset *bcm6345_reset =3D
->>>> +		container_of(rcdev, struct bcm6345_reset, rcdev);
->>>> +	unsigned long flags;
->>>> +
->>>> +	spin_lock_irqsave(&bcm6345_reset->lock, flags);
->>>> +	bcm6345_reset_update(bcm6345_reset, id, true);
->>>> +	spin_unlock_irqrestore(&bcm6345_reset->lock, flags);
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int bcm6345_reset_deassert(struct reset_controller_dev =
-*rcdev,
->>>> +				  unsigned long id)
->>>> +{
->>>> +	struct bcm6345_reset *bcm6345_reset =3D
->>>> +		container_of(rcdev, struct bcm6345_reset, rcdev);
->>>> +	unsigned long flags;
->>>> +
->>>> +	spin_lock_irqsave(&bcm6345_reset->lock, flags);
->>>> +	bcm6345_reset_update(bcm6345_reset, id, false);
->>>> +	spin_unlock_irqrestore(&bcm6345_reset->lock, flags);
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int bcm6345_reset_reset(struct reset_controller_dev *rcdev,
->>>> +			       unsigned long id)
->>>> +{
->>>> +	struct bcm6345_reset *bcm6345_reset =3D
->>>> +		container_of(rcdev, struct bcm6345_reset, rcdev);
->>>> +	unsigned long flags;
->>>> +
->>>> +	spin_lock_irqsave(&bcm6345_reset->lock, flags);
->>>> +	usleep_range(BCM6345_RESET_SLEEP_MIN_US,
->>>> +		     BCM6345_RESET_SLEEP_MAX_US);
->>>=20
->>> What is the purpose of sleeping before reset assertion?
->>=20
->> None, I must have introduced that for testing something and then I =
-forgot to remove it. Sorry for that...
->>=20
->>> If you can do without this, with I think this driver could be made =
-to
->>> use reset-simple.
->>=20
->> Yes, but only if I can add reset support with a configurable sleep =
-range to reset-simple. Is this possible?
->=20
-> I should have mentioned, support for this is on the reset/next branch:
->=20
->  git://git.pengutronix.de/pza/linux.git reset/next
 
-Yes, but reset_us was only added to reset_simple_data, so there=E2=80=99s =
-no way to fill that value from reset_simple_devdata or device tree, =
-right?
+On 6/9/2020 9:41 AM, Álvaro Fernández Rojas wrote:
+>>>> If you can do without this, with I think this driver could be made to
+>>>> use reset-simple.
+>>>
+>>> Yes, but only if I can add reset support with a configurable sleep range to reset-simple. Is this possible?
+>>
+>> I should have mentioned, support for this is on the reset/next branch:
+>>
+>>  git://git.pengutronix.de/pza/linux.git reset/next
+> 
+> Yes, but reset_us was only added to reset_simple_data, so there’s no way to fill that value from reset_simple_devdata or device tree, right?
 
->=20
-> regards
-> Philipp
+Not that I can see, but you could certainly extend it here:
 
-Regards,
-=C3=81lvaro.
+if (devdata) {
+		reg_offset = devdata->reg_offset;
+		if (devdata->nr_resets)
+			data->rcdev.nr_resets = devdata->nr_resets;
+		data->active_low = devdata->active_low;
+		data->status_active_low = devdata->status_active_low;
+	}
 
+and have an appropriate devdata structure be provided for your
+compatible string:
+
++	{ .compatible = "brcm,bcm6345-reset", .data = bcm6345_reset_devdata },
+-- 
+Florian
