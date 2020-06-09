@@ -2,107 +2,187 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFB41F47EF
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 22:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0A81F489D
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 23:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387552AbgFIURV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Jun 2020 16:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
+        id S1727023AbgFIVHR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Jun 2020 17:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726184AbgFIURS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 16:17:18 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BD2C05BD1E;
-        Tue,  9 Jun 2020 13:17:18 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id ne5so1863108pjb.5;
-        Tue, 09 Jun 2020 13:17:18 -0700 (PDT)
+        with ESMTP id S1726912AbgFIVHQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 17:07:16 -0400
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA16C08C5C4
+        for <linux-mips@vger.kernel.org>; Tue,  9 Jun 2020 14:07:15 -0700 (PDT)
+Received: by mail-ua1-x944.google.com with SMTP id z47so105470uad.5
+        for <linux-mips@vger.kernel.org>; Tue, 09 Jun 2020 14:07:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ycBfwZJp2iSk0H+6hD6qHTXZoBhADfY0mavrlMkbOJI=;
-        b=GRlKpdJHXqeavogNWIbRTZXFAqecpcMOBD54j6AOI+aKs8H3lwYxW9IJkSbNfgeJvJ
-         xire/2BfLwwyptZd8q+QGzejfVC706NkjJ9mnPswdtwskW6WKhqRo2A2mcUCI/f2UZQ1
-         9YXhoyds80y168jeQ0ziR9pXNO/4+Kroy16uF4kBGmnSSDrY6gTCAm7zQ42oESUAWUte
-         c31UMBDe5aD5YiVKceEPt3iXa4v9d9LJ8AZbw/iF1GeJ1uZEVljRrZf0uBbsH4aNFDOH
-         mBaMFjkwCEwpaU1pvaVhCbet9qhe6bHiXaJ2lJAjLlcZb/EGr4vh1wJYlMJswColVlSi
-         HvJA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f15ThlgRIs3s50AvF0kFQ8PMHdAjHFT357oOtlUx/ug=;
+        b=YQTUSvv3PxEEhj5ujE/dPySButOyH55bK4Xn7FFJQPplWJdwV27lg1hiiGZPMl+Csy
+         utkQv6pOjG6DMuuUAn6OW8rUDsTwDk+L09wjyrOsEHgSM9DO1jG+4DXrAkvtnH7+VocI
+         GJeE84ALY1lEBJxLNfWmnbxI8H4dKWQGgYe6NIzbLwEX92BP0BVccbN5ywjf+ad2hItV
+         hOK3koJ698Vs9caFgU0Oz67/J789jH+4rxh31hXP0eWCQ0G50xlrah8Vhcbhoz+wsVGG
+         RvWp/Z6BsjYqNpoy5p5CsKAw38VlYjZy47xgAAr8XRHehyo5E50oaLRajAfxViZwx+CC
+         YVIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ycBfwZJp2iSk0H+6hD6qHTXZoBhADfY0mavrlMkbOJI=;
-        b=Fes65+2qBerFnzu3zuLH5E9inN0YUAPwm6Dh9MznXcarqidVBTiJVBTSPkQT/SU2hl
-         3B6D4BmYbFMU7o72m2SB4DSoN8iTqafudQ8Pp7PNyTGVdONfnxSrvrNiMFKbDtJzUGC0
-         UbQX0PLQZMx5jOTi5BVl/Dce7+zzfEVmkOibst5q7ct3TfSiZt4L0hX7r3UcPw8Q25dT
-         tSBb1QcaQa2GmB3mUuYg/uJaG4JIzYWXby5u3Dqp5J7p+h2C8LZrPEoVOGUNQxvle7EI
-         JN/jVR8JYJu8rVlOYOK2yRVg9yMjDsXqN7dxusL+vSLr1r67fssvIUkMESygrTNZRRuF
-         gZmQ==
-X-Gm-Message-State: AOAM533s1rmvztixw/DAdGqeo46XUj1EPjedi4GKQEkjwtn+n09uaGZa
-        dh9BtD/+TObt4PVx94YAV1/TPIvA
-X-Google-Smtp-Source: ABdhPJwanqh4CtSImWJt1rizt00WKH4mXR4I7BTHb+CSiyqSXDleaNuLB6XrtDSyVmukLYHS769hOA==
-X-Received: by 2002:a17:902:7783:: with SMTP id o3mr97268pll.286.1591733837558;
-        Tue, 09 Jun 2020 13:17:17 -0700 (PDT)
-Received: from [10.230.188.43] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 140sm10769164pfv.38.2020.06.09.13.17.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2020 13:17:16 -0700 (PDT)
-Subject: Re: [PATCH 3/7] reset: add BCM6345 reset controller driver
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     robh+dt@kernel.org, tsbogend@alpha.franken.de,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
-References: <20200609134232.4084718-1-noltari@gmail.com>
- <20200609134232.4084718-4-noltari@gmail.com>
- <341e8482c6bd06267633160d7358fa8331bef515.camel@pengutronix.de>
- <729976E9-CAF7-47B6-8783-5FD3D85F9EFD@gmail.com>
- <2a621f170574a616bcf047f6725c74552f7abbb1.camel@pengutronix.de>
- <46614E69-578A-4782-9D72-85B2D2F38FB8@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <e80e5c4c-ceef-3a62-3158-02f742bf76b7@gmail.com>
-Date:   Tue, 9 Jun 2020 13:17:14 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f15ThlgRIs3s50AvF0kFQ8PMHdAjHFT357oOtlUx/ug=;
+        b=NZnmJXphAfqabINdftztFqQQw9wZzJVbLLpZRZzSrdeaDnmaok5LcvjF7m7zZQ3RHn
+         //M/ah05+gfBerXr5NE0rHMysTxa5bu84OYF1nW2g0Q/lwC+d554hxqS6u2b+Vj5Kg6R
+         DM/fjUGz26lCq3lpjp/eo1bEZt2c9jrKqvqJyqM3vNnHLBhIi+MHnpAQmh4bUjvfXn6J
+         Lv/kH3ZzrMQvsg2kfSi1up3hvdh9lQxT93YirtSX71wgCS71RvdgsgtSx605RhVIAl0h
+         0Czp4qaVsMu2DK7TssIw+pzk/2FCmULCFg0U6JW6D+NaLwP+y+AvNrZAcBcnNlk/vmU+
+         +jQA==
+X-Gm-Message-State: AOAM531DjL1cbZSOtPehufzDbM41s5Il3kiVSX1av4qMxzL9BIMY8X87
+        oLW3SDKsTtCzrvgZ1yKuyTlGXrJ9Z9ec4kKaV6f5pw==
+X-Google-Smtp-Source: ABdhPJwQ+viuUyt4Xvfz0B/F5q8uWrpKqo6vNNs2uM0NepreAFEA0QuoyJVSJ76WQkzVbDy0sso7BcdwlZvUGeg7c1M=
+X-Received: by 2002:ab0:6012:: with SMTP id j18mr260224ual.69.1591736832385;
+ Tue, 09 Jun 2020 14:07:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <46614E69-578A-4782-9D72-85B2D2F38FB8@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200605213853.14959-1-sean.j.christopherson@intel.com> <20200605213853.14959-2-sean.j.christopherson@intel.com>
+In-Reply-To: <20200605213853.14959-2-sean.j.christopherson@intel.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Tue, 9 Jun 2020 14:07:01 -0700
+Message-ID: <CANgfPd87=eS6h=GX6CxZRwAj=MTET-AtVAjVQn4i1zkwZ4ApXw@mail.gmail.com>
+Subject: Re: [PATCH 01/21] KVM: x86/mmu: Track the associated kmem_cache in
+ the MMU caches
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Feiner <pfeiner@google.com>,
+        Peter Shier <pshier@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Christoffer Dall <christoffer.dall@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 6/9/2020 9:41 AM, Álvaro Fernández Rojas wrote:
->>>> If you can do without this, with I think this driver could be made to
->>>> use reset-simple.
->>>
->>> Yes, but only if I can add reset support with a configurable sleep range to reset-simple. Is this possible?
->>
->> I should have mentioned, support for this is on the reset/next branch:
->>
->>  git://git.pengutronix.de/pza/linux.git reset/next
-> 
-> Yes, but reset_us was only added to reset_simple_data, so there’s no way to fill that value from reset_simple_devdata or device tree, right?
-
-Not that I can see, but you could certainly extend it here:
-
-if (devdata) {
-		reg_offset = devdata->reg_offset;
-		if (devdata->nr_resets)
-			data->rcdev.nr_resets = devdata->nr_resets;
-		data->active_low = devdata->active_low;
-		data->status_active_low = devdata->status_active_low;
-	}
-
-and have an appropriate devdata structure be provided for your
-compatible string:
-
-+	{ .compatible = "brcm,bcm6345-reset", .data = bcm6345_reset_devdata },
--- 
-Florian
+On Fri, Jun 5, 2020 at 2:39 PM Sean Christopherson
+<sean.j.christopherson@intel.com> wrote:
+>
+> Track the kmem_cache used for non-page KVM MMU memory caches instead of
+> passing in the associated kmem_cache when filling the cache.  This will
+> allow consolidating code and other cleanups.
+>
+> No functional change intended.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Reviewed-by: Ben Gardon <bgardon@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  1 +
+>  arch/x86/kvm/mmu/mmu.c          | 24 +++++++++++-------------
+>  2 files changed, 12 insertions(+), 13 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 1da5858501ca..16347b050754 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -251,6 +251,7 @@ struct kvm_kernel_irq_routing_entry;
+>   */
+>  struct kvm_mmu_memory_cache {
+>         int nobjs;
+> +       struct kmem_cache *kmem_cache;
+>         void *objects[KVM_NR_MEM_OBJS];
+>  };
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index fdd05c233308..0830c195c9ed 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1060,15 +1060,14 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
+>         local_irq_enable();
+>  }
+>
+> -static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache,
+> -                                 struct kmem_cache *base_cache, int min)
+> +static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache, int min)
+>  {
+>         void *obj;
+>
+>         if (cache->nobjs >= min)
+>                 return 0;
+>         while (cache->nobjs < ARRAY_SIZE(cache->objects)) {
+> -               obj = kmem_cache_zalloc(base_cache, GFP_KERNEL_ACCOUNT);
+> +               obj = kmem_cache_zalloc(cache->kmem_cache, GFP_KERNEL_ACCOUNT);
+>                 if (!obj)
+>                         return cache->nobjs >= min ? 0 : -ENOMEM;
+>                 cache->objects[cache->nobjs++] = obj;
+> @@ -1081,11 +1080,10 @@ static int mmu_memory_cache_free_objects(struct kvm_mmu_memory_cache *cache)
+>         return cache->nobjs;
+>  }
+>
+> -static void mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc,
+> -                                 struct kmem_cache *cache)
+> +static void mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
+>  {
+>         while (mc->nobjs)
+> -               kmem_cache_free(cache, mc->objects[--mc->nobjs]);
+> +               kmem_cache_free(mc->kmem_cache, mc->objects[--mc->nobjs]);
+>  }
+>
+>  static int mmu_topup_memory_cache_page(struct kvm_mmu_memory_cache *cache,
+> @@ -1115,25 +1113,22 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu)
+>         int r;
+>
+>         r = mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
+> -                                  pte_list_desc_cache, 8 + PTE_PREFETCH_NUM);
+> +                                  8 + PTE_PREFETCH_NUM);
+>         if (r)
+>                 goto out;
+>         r = mmu_topup_memory_cache_page(&vcpu->arch.mmu_page_cache, 8);
+>         if (r)
+>                 goto out;
+> -       r = mmu_topup_memory_cache(&vcpu->arch.mmu_page_header_cache,
+> -                                  mmu_page_header_cache, 4);
+> +       r = mmu_topup_memory_cache(&vcpu->arch.mmu_page_header_cache, 4);
+>  out:
+>         return r;
+>  }
+>
+>  static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
+>  {
+> -       mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
+> -                               pte_list_desc_cache);
+> +       mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
+>         mmu_free_memory_cache_page(&vcpu->arch.mmu_page_cache);
+> -       mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache,
+> -                               mmu_page_header_cache);
+> +       mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
+>  }
+>
+>  static void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
+> @@ -5684,6 +5679,9 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+>         uint i;
+>         int ret;
+>
+> +       vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
+> +       vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
+> +
+>         vcpu->arch.mmu = &vcpu->arch.root_mmu;
+>         vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
+>
+> --
+> 2.26.0
+>
