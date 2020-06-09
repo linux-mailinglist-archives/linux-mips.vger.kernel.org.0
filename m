@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A8E1F4013
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 18:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD481F4015
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2020 18:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731089AbgFIQCv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Jun 2020 12:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S1731100AbgFIQC4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Jun 2020 12:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731045AbgFIQCu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 12:02:50 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85C5C03E97C;
-        Tue,  9 Jun 2020 09:02:49 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j10so21924778wrw.8;
-        Tue, 09 Jun 2020 09:02:49 -0700 (PDT)
+        with ESMTP id S1731090AbgFIQCw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 12:02:52 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8B8C08C5C2;
+        Tue,  9 Jun 2020 09:02:50 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id c3so21896794wru.12;
+        Tue, 09 Jun 2020 09:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CrQdTQDATqYp3sxstTL4aGf3soKrJgWCi2CiwVXCWvI=;
-        b=TliqcV4BuYykND6y4HFi5OrTPpLx5KcltdDWv8GuIFIynpSyEE8ixiQio4cTKFH0xn
-         LdawG/hkXYl4LWbJS9c+FmvPrX7eAcVqijr3/draDP/JGCmQ3KR8gwVKeMMhA0dQ1vlN
-         9mP7GKMhEr+mDEx72cDVwnXsPnSo00t+ETBLUTS4tRje1I/V5Q0J3OqwUJxmYimtpQru
-         XuuHy36KaFuQBuJjoMNqMyOChyS5248Q3MRyq92bFYbDxYdrDrD1VT9ylGcfDzhOzMNQ
-         tJdrSPflcnJo5g3b64VbGpa8jw8CGIiiYiH1NCEItrvT+ecu7qz/fvmMjYi4OpPUroOr
-         yFWg==
+        bh=jQCktjAhwsdDH0SpUwBS0maLAhUFCTSeJiilbxgLKcY=;
+        b=iuM6+0lHJ7AUQQDyj/N5XZmOt7OhNo6duD4sqLLxvKHuaLEoGsSS2yrj/khZw537um
+         W+81M9vov9GyIykB8/hyI+VdkIfwDEqpWY589ZXDbMLVAmTSYzSjjJt/fQpXZvK4igYo
+         Fw8eqNmsa0+TJadQsoJ6ZYtpid2mgrqmmBlypTTHdgbQImScyg1D1TNqoZ2lgYmtplYA
+         nchVe9G6SvKZP3Y8V+kZo6A7B8F8SBp7oQEhitSJJ1+Py370TKelEoHzGLJfPAAh1xu0
+         CGD3At7lptPm74pWw74bpFkHsTOLd6XwOxmnXG+DhiXtBQ65uPKW/SrC3mKa3MMdpRYM
+         tOrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CrQdTQDATqYp3sxstTL4aGf3soKrJgWCi2CiwVXCWvI=;
-        b=HaPrSypBNLFwuwo7dE7qxaJLS3/Sg3YJs0tNXgyeTah1CVQeOgs+Q2yTd6jyGyEln6
-         M+96YxXoyriaEWjWTOhHvKqgbSERoNd6VO9xKim3ZqZs4H5x7PPBjpla5TkY7dSgrKd/
-         TracG0f36Yr/Y6AMzuSuY7L9I0I9mz6Gy6LR2Fm38ZK9dQ1ilQTmvhwumqmxwwlWL+ad
-         DsJ0pv8U7H9XBiVrblAHU55pr+5hmA7NAGf23xeGWrdHNwHBVPAOwaaMI+FUUtW9E63P
-         ajn3aPtV1GLvt/htiXBfgXiih5i08+A70tnkXcrsl5TWf5GF+6ceIoXjEONFGkfbjcSX
-         fjhw==
-X-Gm-Message-State: AOAM532sw3hfyRIHljH3Bd21coq6sLf3fG7fYhQYi5n/p7u9sEldwxMr
-        JobrbEvUid08kvaDruw6KbE=
-X-Google-Smtp-Source: ABdhPJxhJDA1raG+nucM0ohTnxqxgWYdxrzVUrFJh23s5+tDALa+JJQRgcm17gSCGQGe5YcYQI4Vlw==
-X-Received: by 2002:a5d:4d89:: with SMTP id b9mr5574933wru.210.1591718568420;
-        Tue, 09 Jun 2020 09:02:48 -0700 (PDT)
+        bh=jQCktjAhwsdDH0SpUwBS0maLAhUFCTSeJiilbxgLKcY=;
+        b=m0yryEA+88bMm2ozTSzn/UyJFam7Eki6a/0MNpmv+JeuWMWjFxXXMk+dDrJZr3Vnmh
+         zzW8zlN8W2JIN/SOJuXwcP2lhP05ImUP28h06rd4E8ecyUuYIcABmBbsXoLvGgaXBqIM
+         WomLJsRoqscZUVMTudeNJVXIhemE+J/F/K8kCR9gXwTPiY0YB72qT1F1EQ/rUixC7Bz/
+         iMm7tceyK98pgy73SD4zim3bg+5B8/SQzZpj6BKKs9UM9lwKEqr2GHko1XsECuCgU2l6
+         RsqhlwuH8k8l6rbpWhFkmTetHrKUCCjAYBSZuqk8qUq2Qq2XESgCGNosrxmoqb5HCQac
+         5tGA==
+X-Gm-Message-State: AOAM531oWbO9rLubUOR0HCQHiAPiy9a9dPnbM7Ei/U+8mVMQvZOEeEic
+        fg5nridEe3JnF59R6y4eXBs=
+X-Google-Smtp-Source: ABdhPJxRSt1KSfU3+6L0/kPkfMXR/VHjK0qxWW6OFi0yT+TX0jOvnZiXilAdApO7VAiLMfUorKH5Jg==
+X-Received: by 2002:a5d:4a0d:: with SMTP id m13mr5596168wrq.12.1591718569456;
+        Tue, 09 Jun 2020 09:02:49 -0700 (PDT)
 Received: from skynet.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
-        by smtp.gmail.com with ESMTPSA id y14sm3341864wma.25.2020.06.09.09.02.47
+        by smtp.gmail.com with ESMTPSA id y14sm3341864wma.25.2020.06.09.09.02.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 09:02:47 -0700 (PDT)
+        Tue, 09 Jun 2020 09:02:49 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     p.zabel@pengutronix.de, robh+dt@kernel.org,
@@ -56,9 +56,9 @@ To:     p.zabel@pengutronix.de, robh+dt@kernel.org,
         bcm-kernel-feedback-list@broadcom.com
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH v2 1/7] mips: bmips: select ARCH_HAS_RESET_CONTROLLER
-Date:   Tue,  9 Jun 2020 18:02:38 +0200
-Message-Id: <20200609160244.4139366-2-noltari@gmail.com>
+Subject: [PATCH v2 2/7] dt-bindings: reset: add BCM6345 reset controller bindings
+Date:   Tue,  9 Jun 2020 18:02:39 +0200
+Message-Id: <20200609160244.4139366-3-noltari@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200609160244.4139366-1-noltari@gmail.com>
 References: <20200609134232.4084718-1-noltari@gmail.com>
@@ -71,27 +71,60 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This allows to add reset controllers support.
+Add support for resetting blocks through the Linux reset controller
+subsystem for BCM63xx SoCs.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 ---
  v2: no changes
 
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/reset/brcm,bcm6345-reset.yaml    | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reset/brcm,bcm6345-reset.yaml
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 9dc08ee3d6b9..e82586e7719c 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -229,6 +229,7 @@ config ATH79
- 
- config BMIPS_GENERIC
- 	bool "Broadcom Generic BMIPS kernel"
-+	select ARCH_HAS_RESET_CONTROLLER
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU_ALL
- 	select ARCH_HAS_PHYS_TO_DMA
- 	select BOOT_RAW
+diff --git a/Documentation/devicetree/bindings/reset/brcm,bcm6345-reset.yaml b/Documentation/devicetree/bindings/reset/brcm,bcm6345-reset.yaml
+new file mode 100644
+index 000000000000..eb3f2182e631
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reset/brcm,bcm6345-reset.yaml
+@@ -0,0 +1,37 @@
++# SPDX-License-Identifier: GPL-2.0-or-later
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/reset/brcm,bcm6345-reset.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: BCM6345 reset controller
++
++description: This document describes the BCM6345 reset controller.
++
++maintainers:
++  - Álvaro Fernández Rojas <noltari@gmail.com>
++
++properties:
++  compatible:
++    const: brcm,bcm6345-reset
++
++  reg:
++    maxItems: 2
++
++  "#reset-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    reset-controller@10000010 {
++      compatible = "brcm,bcm6345-reset";
++      reg = <0x10000010 0x4>;
++      #reset-cells = <1>;
++    };
 -- 
 2.26.2
 
