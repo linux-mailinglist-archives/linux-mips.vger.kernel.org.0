@@ -2,87 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A89511F4B81
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 04:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8F81F4D7A
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 08:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgFJCkY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Jun 2020 22:40:24 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:50216 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725927AbgFJCkW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 9 Jun 2020 22:40:22 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT9_3R+BeKBdAAA--.3191S2;
-        Wed, 10 Jun 2020 10:39:51 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Andrew Murray <amurray@thegoodpenguin.co.uk>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH] PCI: Loongson: Use DECLARE_PCI_FIXUP_EARLY for bridge_class_quirk()
-Date:   Wed, 10 Jun 2020 10:39:50 +0800
-Message-Id: <1591756790-12081-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9DxT9_3R+BeKBdAAA--.3191S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJrW3Wr18tF4UGF48ZryrZwb_yoW8Gr17p3
-        45Aa17KF4ftrs8A3WDX3yDGas8ZF93G34kCFWfuwnFgasxXa4UWry2k3ZYvF4UJrZ7XayU
-        ZayDCw18Can8ur7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
-        xVA2Y2ka0xkIwI1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3
-        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbN6pPUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1726353AbgFJGDQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Jun 2020 02:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726335AbgFJGDI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 02:03:08 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11DCC05BD1E;
+        Tue,  9 Jun 2020 23:03:06 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id x14so812332wrp.2;
+        Tue, 09 Jun 2020 23:03:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=mvokNqexRaegU1modB7NHhGEwXygj1rNSFFDdGJdwa0=;
+        b=mMAGEukTDdiryhtO2yW2E65dypnqCGYbqRrs7w7rKE/V+EEhAhBM27L4eNMIGkYQqd
+         EFkWD7+mPh+dpmN6keyW+8gGZxasZh2CJGRTghTOMp+Vg3YlsI1Cogf6VwyGv5oCQ9eL
+         BznuKmizzvAmZpw4YFSZHDSXMvPUYArmHD50q5r79HngvZ4P/kONZDkm+6lB3b76iBEg
+         6PHxDgbF93E8986oHdtewWko1O8gyekJ+/j/fd81jbb2rL0ICxOgPw3pEmMNDtPRRq+b
+         xPBQOlfwnIYmoMe9wzlyZZsm+UK5bPVow+Yc+d6EA4GN/ElP4+7JDH8ZV5XqI3oi9hGG
+         Sr0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=mvokNqexRaegU1modB7NHhGEwXygj1rNSFFDdGJdwa0=;
+        b=XHP0e1LismEyuhLJjelsltEtnr4wdg4drMOJUXBAtDKNubb/NhrtgSHnyOmxIZ6LvQ
+         y3dgl3nQ0zLbF5CY0uiA95x3UMS/w6w11ZiB1+XHJkubh64Tx4umeyl1GNe2ST+K7z47
+         gDhi6UtNwfZDg3IF6sIzw2hGXY1p08pckvPRe0lW0bNhb1eFh9cC6EMczpevfktwy4oc
+         4sbI0MYec34X7k9MFWa7EU7prG4COihkHIDr5ufReDLUXfc2cG6yQpCVItL5CxIHL4x5
+         UDbmGqgZBrxaxoPKEZvKC1DgPHqK+SbrJdwv7fUBQtO9Yp9Cq543IZt7WZ45MwCm1roJ
+         HTvA==
+X-Gm-Message-State: AOAM532ncCz9/c/d/2Xu5UQrqoB+Nk3224fPS3riQPqxBjiYY5NiBBbk
+        1HsSqze7K57R/DtLxO5yhuD+6okn06M=
+X-Google-Smtp-Source: ABdhPJyWv4V1rxzPNSAS30xkqIspxg9pNDEfhvr6Do6JVCr3W3NNGdGXnItKMO7FLMOxDcCF6HDvXg==
+X-Received: by 2002:a05:6000:1146:: with SMTP id d6mr1639898wrx.400.1591768984735;
+        Tue, 09 Jun 2020 23:03:04 -0700 (PDT)
+Received: from macbook-pro-alvaro.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
+        by smtp.gmail.com with ESMTPSA id q5sm6449183wrm.62.2020.06.09.23.03.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Jun 2020 23:03:04 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+Subject: Re: [PATCH 1/4] dt-bindings: soc: brcm: add BCM63xx power domain
+ binding
+From:   =?utf-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>
+In-Reply-To: <f6cbb9bb-15df-6283-a509-ea8a8b9bdaab@gmail.com>
+Date:   Wed, 10 Jun 2020 08:03:02 +0200
+Cc:     hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
+        robh+dt@kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <EC84127B-DFF6-4EE3-ABDF-BEFAD6BCDEFB@gmail.com>
+References: <20200609105244.4014823-1-noltari@gmail.com>
+ <20200609105244.4014823-2-noltari@gmail.com>
+ <f6cbb9bb-15df-6283-a509-ea8a8b9bdaab@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+X-Mailer: Apple Mail (2.3608.80.23.2.2)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use DECLARE_PCI_FIXUP_EARLY instead of DECLARE_PCI_FIXUP_HEADER
-for bridge_class_quirk() in pci-loongson.c, otherwise the fixup
-has no effect.
+Ok, I will send v2 with a separate YAML file.
 
-Fixes: 1f58cca5cf2b ("PCI: Add Loongson PCI Controller support")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-
-This patch is based on mips-next tree.
-
- drivers/pci/controller/pci-loongson.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-index 459009c..58b862a 100644
---- a/drivers/pci/controller/pci-loongson.c
-+++ b/drivers/pci/controller/pci-loongson.c
-@@ -37,11 +37,11 @@ static void bridge_class_quirk(struct pci_dev *dev)
- {
- 	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
- }
--DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
- 			DEV_PCIE_PORT_0, bridge_class_quirk);
--DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
- 			DEV_PCIE_PORT_1, bridge_class_quirk);
--DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
- 			DEV_PCIE_PORT_2, bridge_class_quirk);
- 
- static void system_bus_quirk(struct pci_dev *pdev)
--- 
-2.1.0
+> El 10 jun 2020, a las 3:15, Florian Fainelli <f.fainelli@gmail.com> =
+escribi=C3=B3:
+>=20
+>=20
+>=20
+> On 6/9/2020 3:52 AM, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
+>> BCM6318, BCM6328, BCM6362 and BCM63268 SoCs have a power domain =
+controller
+>> to enable/disable certain components in order to save power.
+>>=20
+>> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+>> ---
+>> .../devicetree/bindings/mips/brcm/soc.txt       | 17 =
++++++++++++++++++
+>=20
+> You should probably create a YAML binding from the beginning that way
+> you get validation for free. This file should ultimately be broken =
+down
+> into separate YAML bindings, but I Have not had the time to do that =
+yet
+> (you are welcome to if you feel like it).
+>=20
+> Other than that, the binding definition looks good to me.
+> --=20
+> Florian
 
