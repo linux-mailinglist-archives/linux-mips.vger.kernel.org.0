@@ -2,70 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 121721F594E
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 18:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085861F595C
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 18:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726610AbgFJQo0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Jun 2020 12:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S1726525AbgFJQtO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Jun 2020 12:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726095AbgFJQoZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 12:44:25 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A708FC03E96B;
-        Wed, 10 Jun 2020 09:44:25 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id n23so1206328pgb.12;
-        Wed, 10 Jun 2020 09:44:25 -0700 (PDT)
+        with ESMTP id S1726358AbgFJQtO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 12:49:14 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3879FC03E96B;
+        Wed, 10 Jun 2020 09:49:14 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id d66so1343738pfd.6;
+        Wed, 10 Jun 2020 09:49:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:references:from:message-id:date:user-agent:mime-version
          :in-reply-to:content-language:content-transfer-encoding;
-        bh=N3nz8VAx3pKlB78ptGPJm5PU6bVNdaxgHQ+ZtZ70o9g=;
-        b=RsK0qjQFG8smIxeDdC/ls5gDxMuvHX5+WypypUF024Eh63wsT1MsDgA13sE5uy0HDc
-         dPmzxBGYGshoC3i+1AtL/WmMIURMP/2xE3y81c3yPS4efGLfyhTvG9AFFcb0A64kp7/Y
-         edagcH+s6qf6uwq3KTZvwD4l2PzfGsRL+PVK++/1+yK1ZC1UJZbvwB2CbY6+KM1wyqcU
-         RvwWuoV3ek52JrICTM1Q7LsoEkgYaq1XjJKadz+T2q0YbspNHYG/EHlmdUKOBJLNeimF
-         ZV14DkA3gNqx5RfFpUvzwPdkxcRggPr/IsiizXOlFPvSt4FSRM8kZuYihbCxN+97fAHI
-         9rkQ==
+        bh=/cy/uIpKW9q7ihiRoimeihBOOfnT0c4u1MNl2d7+GgU=;
+        b=WWwFjtH9a8SO0yZWqP+Grk6jS2UOUMFoSnTVKoZ/A0/0yM0uT1OjDYUwmivhAM7gqL
+         Q46NjNQjmBWyIZnGZdV8bkSV8DuA8RylsNHY9srRF/ob90UNDUjTEvC79t35LIsVGtrM
+         2IlY2r4d7n6RyOV7frM9sqlRS/mpKynKIZnNszzNBptiSaOJZPOULtFIwVEkWiEEuY+1
+         rhja8xF7s1kDGWNeFmDEe6dfG9Cd0otxxIHSunwH4r3Ra+LfBi5OWRqkVnal80+wqlvM
+         2VIxRftJmSj4cRsnWk0W7w2u+MAX+Iq2El18eNLKXtRuY+0udaFpjo8UGcyMnceTOIA/
+         Xcqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=N3nz8VAx3pKlB78ptGPJm5PU6bVNdaxgHQ+ZtZ70o9g=;
-        b=ryW93pvwz5K5BvlTG5oaVvwM9Kaxf7vDX6zJzioWXfC1TU5Xjgq5xWtlQ05t7KDT0q
-         cXu1ZN8T4O2ujiSQ+lu+bB0cEU0rNKFXac0ktZbeMw9TnvhLXilxJwh8vTmKT0X2DS5F
-         xUqS0rr5gEEqi83WXxxBmmNm/qdVeo62uh41arvWzvGdlH6xDBzcXL5odBfoLQ/bxnPp
-         wX7e0gZrCeacSRv8mMxnxTHFLXfF/orrpL8vfvSj/C8BMksq5xQeXp4+ge7XDQbiDN5Z
-         WpdcZOiwGEZvJj6C0gqueZfE/05ym0C7vWpE+enwu0RtVD108JPh2dGFTAQDR1vZ6T7V
-         jhfw==
-X-Gm-Message-State: AOAM532zTt/C9Kjff7BqZN3F2yLICcUpuxdBHtHCOkY5ne+/wOz7OO6M
-        x0rOzoJZIR6jiRCN+T6EkeU=
-X-Google-Smtp-Source: ABdhPJy0NGS7tUqHFFyb+RqTdlQCvJL+oOjZKAXNJ0x3T27vy1QMofrb6uWEJqEWGS1qIggn63zRlg==
-X-Received: by 2002:a63:5fc8:: with SMTP id t191mr3313480pgb.185.1591807465016;
-        Wed, 10 Jun 2020 09:44:25 -0700 (PDT)
+        bh=/cy/uIpKW9q7ihiRoimeihBOOfnT0c4u1MNl2d7+GgU=;
+        b=NQAGXcXLohzR7+XCNvYe/lBgM63Kj0lWYQgMJWgW97IoNRcLaDTEIdw1qu/on3q1yh
+         Cie/r1FvUU5Cv8pRzWB9594dHpf4RpM0AnOcYUAAJAPnNnd0xxohw8wqkL+tbk9eaQ+S
+         Lg1Vg6+5HEMZboj72mg2O642uV6PS4tREpgI+OEVSvj8FKT3HaPvyIBXD0vbcR9mRrqQ
+         JFe8iCMrsgAtpECLWXwrq4RYeVilmkfflZSpi4apE9RGonEsOpPszXelvPG1uL6mmfqF
+         w3NoDtRZOK228Ku7NvlBEnJs2GSMPcP/l3VH6ieDoaNSgT+2iw859c18zi1yBerHsDkw
+         xE/A==
+X-Gm-Message-State: AOAM533CuGsZHp8kNz7dE9HoMiIGW02Jf8GrAf9lEM36QQPoCxG6AxQy
+        FlvOvWLMsHC68BT+0Oc5RtI=
+X-Google-Smtp-Source: ABdhPJxjaWyE5/Gb2mNlQCzDShZJ2mCUN/2tVx5a6+9AbIH+xrje4wbBiwivdj4mCq3lCs6Tvu5OTw==
+X-Received: by 2002:a62:1692:: with SMTP id 140mr3664223pfw.168.1591807753421;
+        Wed, 10 Jun 2020 09:49:13 -0700 (PDT)
 Received: from [10.230.188.43] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id u128sm387931pfu.148.2020.06.10.09.44.23
+        by smtp.gmail.com with ESMTPSA id t201sm430222pfc.104.2020.06.10.09.49.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jun 2020 09:44:24 -0700 (PDT)
-Subject: Re: [PATCH v2 1/6] dt-bindings: soc: brcm: add BCM63xx power domain
- binding
+        Wed, 10 Jun 2020 09:49:12 -0700 (PDT)
+Subject: Re: [PATCH v2 0/6] bmips: add BCM63xx power domain controller
 To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
         hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
-        robh+dt@kernel.org, jonas.gorski@gmail.com,
+        robh+dt@kernel.org, f.fainelli@gmail.com, jonas.gorski@gmail.com,
         bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20200609105244.4014823-1-noltari@gmail.com>
  <20200610163301.461160-1-noltari@gmail.com>
- <20200610163301.461160-2-noltari@gmail.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <61be8299-890e-37c4-4374-06893b8e9e3f@gmail.com>
-Date:   Wed, 10 Jun 2020 09:44:21 -0700
+Message-ID: <a1c00227-275d-60e6-07e5-924b053aef27@gmail.com>
+Date:   Wed, 10 Jun 2020 09:49:10 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Firefox/68.0 Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200610163301.461160-2-noltari@gmail.com>
+In-Reply-To: <20200610163301.461160-1-noltari@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -80,8 +78,15 @@ On 6/10/2020 9:32 AM, Álvaro Fernández Rojas wrote:
 > BCM6318, BCM6328, BCM6362 and BCM63268 SoCs have a power domain controller
 > to enable/disable certain components in order to save power.
 > 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> v2: Introduce changes suggested by Florian:
+>   - Add separate YAML file for dt-bindings.
+>   - Add bcm63xx folder in drivers/soc/bcm.
+>   - Update MAINTAINERS.
+>   - Add dt-bindings header files.
+>   - Also add BCM63268 support.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Thomas, since I typically send pull requests to soc@kernel.org for
+drivers/soc/bcm/, do you want me to take the full series and updatse to
+drivers/soc/bcm/bcm63xx/ in the future as well?
 -- 
 Florian
