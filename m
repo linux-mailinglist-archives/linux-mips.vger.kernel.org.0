@@ -2,138 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B65A41F51A0
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 11:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0DF1F5453
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 14:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbgFJJz4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Jun 2020 05:55:56 -0400
-Received: from relay5.mymailcheap.com ([159.100.248.207]:40887 "EHLO
-        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727966AbgFJJz4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 05:55:56 -0400
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.102])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id 455C42632D
-        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 09:55:53 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay1.mymailcheap.com (Postfix) with ESMTPS id 046213ECE3;
-        Wed, 10 Jun 2020 05:55:51 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id D1F352A3AB;
-        Wed, 10 Jun 2020 05:55:50 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1591782950;
-        bh=qkIvV28wJk59OLxALLf3BLKbl9EBb3Pvsepqpq9voow=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=I/NS7TACB6fzAsbLaS1qB2VVaKSdDR3iarfY4ZcjZ2CLCEltMzMZ8hY+7t82DVVgD
-         W5kUaFkh0gp7pBOVUyNNIKF2q1IdQ9RB83kUzTTTd1WjCR/qKKf2KOTx/8s0MpIA01
-         EagBhDM2tmS2oJvpHaojmvSR1u0LnFnbVTvswYdA=
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NRgzJQTyvagZ; Wed, 10 Jun 2020 05:55:48 -0400 (EDT)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Wed, 10 Jun 2020 05:55:48 -0400 (EDT)
-Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id D6308403ED;
-        Wed, 10 Jun 2020 09:55:46 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="N1ECOWI5";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [0.0.0.0] (unknown [192.227.170.24])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 09508403ED;
-        Wed, 10 Jun 2020 09:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1591782938;
-        bh=qkIvV28wJk59OLxALLf3BLKbl9EBb3Pvsepqpq9voow=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=N1ECOWI5JzPlyK2V3u8StREeW1oiNzxxq3fyIaHbf+s0ZDJKNBHYGhVsD9u7gbw5I
-         tbfIou6MIR/YeuFVRIIcL6rlIXYjLZ8hmSvnYElq3i0OB/ykP9bDfIZg43z3zcyWdU
-         G6QPwCJUdAkaqt2DccTi4R1aCNPQC8tqD7dnbBp0=
-Subject: Re: [PATCH] MIPS:Loongson64:Add support for Loongson 2k processor.
-To:     Lichao Liu <liulichao@loongson.cn>,
-        Huacai Chen <chenhc@lemote.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     yuanjunqing@loongson.cn, linux-mips@vger.kernel.org
-References: <20200610093919.875-1-liulichao@loongson.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <eae9fb4e-68a6-563c-701b-b0025e71eb7c@flygoat.com>
-Date:   Wed, 10 Jun 2020 17:55:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1728558AbgFJMN3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Jun 2020 08:13:29 -0400
+Received: from mail-m975.mail.163.com ([123.126.97.5]:53460 "EHLO
+        mail-m975.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728547AbgFJMN2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 08:13:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=JJhsv
+        FYwW+8tEWWr/oiMmbCKVPyMC4y0gNIMmx5KF+c=; b=MnUAft4oj05Sj+PgR67JH
+        pGD5zfdf9iIZRKNMRh683qj4kjFPW5bd6ArAKOtiFbvj9CKn7qcyj9m5K2jowom1
+        amYuhRMaesbgqE5nsAP4LGH54smYx6Pi/qdxLgV39HPh+zz2GVak8ljXHhSLG/24
+        HXmJMXQbrUsrgKYraHkADE=
+Received: from localhost.localdomain (unknown [114.242.249.96])
+        by smtp5 (Coremail) with SMTP id HdxpCgCX2lxNzuBekc1XBw--.277S4;
+        Wed, 10 Jun 2020 20:13:20 +0800 (CST)
+From:   YuanJunQing <yuanjunqing66@163.com>
+To:     tsbogend@alpha.franken.de
+Cc:     yszhou4tech@gmail.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liulichao@loongson.cn,
+        YuanJunQing <yuanjunqing66@163.com>
+Subject: [PATCH] mips/ftrace: Fix stack backtrace in unwind_stack_by_address()
+Date:   Wed, 10 Jun 2020 20:12:54 +0800
+Message-Id: <20200610121254.1780-1-yuanjunqing66@163.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20200610093919.875-1-liulichao@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: D6308403ED
-X-Spamd-Result: default: False [-0.10 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         ARC_NA(0.00)[];
-         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         RCPT_COUNT_FIVE(0.00)[5];
-         ML_SERVERS(-3.10)[148.251.23.173];
-         DKIM_TRACE(0.00)[flygoat.com:+];
-         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
-         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
-         RCVD_COUNT_TWO(0.00)[2];
-         MID_RHS_MATCH_FROM(0.00)[];
-         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
-X-Rspamd-Server: mail20.mymailcheap.com
+X-CM-TRANSID: HdxpCgCX2lxNzuBekc1XBw--.277S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4xXrWUuFyktFW5CFWDCFg_yoW5Gw18pr
+        ZIk3ZxtrWkXa12kryfur18Wry5JrykZa42kry7Jry5Z3ZxXF13XryI93WDKr1DJrW0ka4f
+        ury7trsrurZ0vaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UmiiDUUUUU=
+X-Originating-IP: [114.242.249.96]
+X-CM-SenderInfo: h1xd0ypxqtx0rjwwqiywtou0bp/xtbBzwA-XFaD7e0wIAAAsp
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Calling the unwind_stack_by_address() function for stack backtrace
+will fail, when we use "echo function: stacktrace > set_ftrace_filter".
 
+The stack backtrace as follows:
+           <...>-3102  [001] ...2    63.557737: <stack trace>
+ => 0
+ => 0
+ => 0
+ => 0
+ => 0
+ => 0
+ => 0
+ => 0
+ =>
+          <idle>-0     [000] .N.2    63.558793: <stack trace>
 
-‘⁄ 2020/6/10 17:39, Lichao Liu –¥µ¿:
-> Add minimal support for Loongson 2k processor:
-> 1,startup with 2 cores;
-> 2,irqchip driver support Loongson 2k;
-> 3,test boot ramfs ok.
-> 
-> Core modification points:
-> 1,Loongson 2k only parse dtb, do not process UEFI parameters;
-> 2,Loongson 2k doesn't support NUMA;
-> 3,Loongson 2k's interrupt controller support 64 irqs, so modify
->    linintc dirver to support Loongson 2k;
-> 4,add new dts file and def config.
-> 
-> Signed-off-by: Lichao Liu <liulichao@loongson.cn>
+The reason is that when performing stack backtrace, the "ftrace_call"
+and "ftrace_graph_call" global symbols in ftrace_caller() are
+treated as functions.
 
-Thanks for your patch, although it certainly doesn't meet mainline 
-requirments, however, we have another in-progess mainline plan for 
-Loongson-2K, with corrected booting protocol and sharing kernel image 
-with other Loongson64 processors.
+If CONFIG_FUNCTION_GRAPH_TRACER is defined, the value in the "ra"
+register is the address of ftrace_graph_call when the stack
+backtrace back to ftrace_caller(). ‚Äùftrace_graph_call‚Äú is a global
+symbol, and the value of "ofs" is set to zero when the
+kallsyms_lookup_size_offset() is called. Otherwise, the value
+in the "ra" register is the address of ftrace_call+8. "ftrace_call"
+is the global symbol, and return one when the get_frame_info() is called.
 
-We've already got acknoledgement from Loongson Embedeed department about 
-our plans, and they're now working on it to.
+Signed-off-by: YuanJunQing <yuanjunqing66@163.com>
+---
+ arch/mips/kernel/process.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-Here's our works[1] [2], if you're interested you can get in touch with 
-Qining Ye <yeqining@loongson.cn>, he is the director of Loongson-2K's 
-community projects in your company.
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index b2a797557825..ac4fe79bc5bc 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -53,6 +53,8 @@
+ #include <asm/inst.h>
+ #include <asm/stacktrace.h>
+ #include <asm/irq_regs.h>
++#include <linux/ftrace.h>
++#include <generated/asm-offsets.h>
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+ void arch_cpu_idle_dead(void)
+@@ -569,6 +571,13 @@ unsigned long notrace unwind_stack_by_address(unsigned long stack_page,
+ 	 * Return ra if an exception occurred at the first instruction
+ 	 */
+ 	if (unlikely(ofs == 0)) {
++#ifdef CONFIG_FUNCTION_GRAPH_TRACER
++		extern void ftrace_graph_call(void);
++		if ((pc == (unsigned long)ftrace_graph_call)) {
++			pc = ((unsigned long *)(*sp))[PT_R31/sizeof(long)];
++			*sp += PT_SIZE;
++		} else
++#endif
+ 		pc = *ra;
+ 		*ra = 0;
+ 		return pc;
+@@ -583,16 +592,23 @@ unsigned long notrace unwind_stack_by_address(unsigned long stack_page,
+ 	if (*sp < low || *sp + info.frame_size > high)
+ 		return 0;
+ 
+-	if (leaf)
++	if (leaf) {
+ 		/*
+ 		 * For some extreme cases, get_frame_info() can
+ 		 * consider wrongly a nested function as a leaf
+ 		 * one. In that cases avoid to return always the
+ 		 * same value.
+ 		 */
++#ifdef CONFIG_DYNAMIC_FTRACE
++		if (info.func == (void *)ftrace_call) {
++			pc = ((unsigned long *)(*sp))[PT_R31/sizeof(long)];
++			info.frame_size = PT_SIZE;
++		} else
++#endif
+ 		pc = pc != *ra ? *ra : 0;
+-	else
++	} else {
+ 		pc = ((unsigned long *)(*sp))[info.pc_offset];
++	}
+ 
+ 	*sp += info.frame_size;
+ 	*ra = 0;
+-- 
+2.17.1
 
-Btw: We're also trying to establish full devicetree based booting, but 
-far from Loongson's current approach.
-
-Thanks.
-
-[1]: https://github.com/FlyGoat/linux/tree/next-testing-2k
-[2]: https://github.com/flygoat/pmon-ls2k
-
-- Jiaxun
