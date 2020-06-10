@@ -2,235 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 516DD1F5BB6
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 21:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81BD1F5C37
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 21:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729044AbgFJTCJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Jun 2020 15:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726266AbgFJTCI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 15:02:08 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D6DC08C5C2
-        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 12:02:06 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id l10so1902532vsr.10
-        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 12:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XkZ55trzaUYm4ZN8iiWbYVBM5yaqKCA9LC0xYy1/Ppg=;
-        b=j77jjoo7BrC8ciPGZh5G4XNFx0e/IBM+vJQKsFXGHoq2TXyMMOLL5IFSAOeVWYXIHX
-         UUepAz4IhQ0AlzlRyIrLJDLHLN+OtKh3UbUcbB2FA8h2jPk0dBpfyHtdvHuw98gIMd/S
-         XJqRGYa0RiMBLTj/KghRH1rEWrRVKCG5FkNT65MrWebia3qbZLyzgCVQzSovmX+pk/QO
-         YLuGZoIPx1vpd9s1OPQZGxAui+c216eaaqJjwovF8i+u2NRGk6b5wFirQho+mZYNHiCo
-         M4pT5y57eyroD64Cjkknjiy2l/c1llHRr6NKOVDCNXHHADTAr3hlsVP2nooHvKJ0+0Qv
-         boAQ==
+        id S1730349AbgFJTuN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Jun 2020 15:50:13 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:45905 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730085AbgFJTuM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 15:50:12 -0400
+Received: by mail-io1-f68.google.com with SMTP id y5so3659115iob.12;
+        Wed, 10 Jun 2020 12:50:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XkZ55trzaUYm4ZN8iiWbYVBM5yaqKCA9LC0xYy1/Ppg=;
-        b=TVl8O5rZgywGTkDpa1v6XDXdFC1cPvkH8E5qP0/VAtNtZZp7uiZ6NXKsgqsdoHTLZw
-         iSj9mAAJ83armFLBON/0wwrRxPU1dH9T7AD9IgJDRBJaKvzaHAgFIIz1kIHBzCrsiM4e
-         g00C5cBKKj1GWpb+xvwHCwOGuk4M4DrXK0fNgU2InWCYQgj9tslEzBEwz6ek/ofamNgj
-         dU9LhLAZnt5TJyWKbHYZJfbw621dy16tGOmlU4l35IoKvbC1MH7NTlK5zhVhnNq4O8P8
-         mUs0Ij69mfXKJD3jEOXzKTZaBI0DQgIUyQtU4VK0C3P3affTCR9j3lQyC+SKnfa7/9K3
-         4ODA==
-X-Gm-Message-State: AOAM531WxbFaJp/7caaCwweL9Fo8IMc/yszzdaliD/ZM+3ihg6soWbwP
-        crY7ZexdyzkdQ3Wd/pu22Bk69DpITnaRNGabSt5n6A==
-X-Google-Smtp-Source: ABdhPJw1h1etsAjqik8ZjlfcXh6LoIcFUCUxEYjPHBc2XH6MGt7HC0fZP7/Ar9KFOlcDw0D5NiX7gZFNtlTQQHnm/A4=
-X-Received: by 2002:a67:af10:: with SMTP id v16mr4200556vsl.235.1591815725256;
- Wed, 10 Jun 2020 12:02:05 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1M+bkyx1XWH7KVWinjgxEZPKQ01wy/6i2E3dZnftVyk=;
+        b=ZzEpRxML6tWtIm/jZFALrpgYbkBDWNFWtV7yavAziDp5urDmFSFIyIJfAN79wmPAnb
+         0XKkClI/aMh9hqv9dEzUdDkme6XUZNAsoojRj8acj+G32r/9V5i0yPwkv3VN6eYevlVZ
+         PecbQwzv1ksetHFEcIW8QjjpLijjhp6+y6viksPAQS5oz9gYnXoxrYvqnRZqpu0MONa/
+         ep42rS7g0qVqNR1IwTYAhGBpWWhm4KMWE18xM6GtMSHN094SnRjkAsfEJePn87bNejJe
+         1R8Mg/7B1fc4tSdooctoH2vv1d0dY5zZiLJRhJ9gi1HzTLtRFAPiOxLlxPhclBhW8GVn
+         MYdw==
+X-Gm-Message-State: AOAM5307H4vlOJYqmy2Yx1uqKOMYwgvsI15J7M4UGzl+1ulnQR8Q8Wll
+        FrMQvArNYAxfEoaj4T7Xww==
+X-Google-Smtp-Source: ABdhPJwRvh/ZDpjvs6OY941xd3Y3JedADa0np5Xq47sS8wJemJewWQcJKW2EHSGQVFQz2QSMIpkUzg==
+X-Received: by 2002:a6b:249:: with SMTP id 70mr4950251ioc.146.1591818610318;
+        Wed, 10 Jun 2020 12:50:10 -0700 (PDT)
+Received: from xps15 ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id n12sm399848iog.25.2020.06.10.12.50.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2020 12:50:09 -0700 (PDT)
+Received: (nullmailer pid 3606732 invoked by uid 1000);
+        Wed, 10 Jun 2020 19:50:07 -0000
+Date:   Wed, 10 Jun 2020 13:50:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     rick.tyliu@ingenic.com, dongsheng.qiu@ingenic.com,
+        zhenwenjin@gmail.com, aric.pzqi@ingenic.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        yanfei.li@ingenic.com, tsbogend@alpha.franken.de,
+        paul@crapouillou.net, sernia.zhou@foxmail.com,
+        linux-mips@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v2 1/1] dt-bindings: MIPS: Document Ingenic SoCs binding.
+Message-ID: <20200610195007.GA3606682@bogus>
+References: <20200602183354.39707-1-zhouyanjie@wanyeetech.com>
+ <20200602183354.39707-2-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-References: <20200605213853.14959-1-sean.j.christopherson@intel.com> <20200605213853.14959-15-sean.j.christopherson@intel.com>
-In-Reply-To: <20200605213853.14959-15-sean.j.christopherson@intel.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Wed, 10 Jun 2020 12:01:54 -0700
-Message-ID: <CANgfPd_v31zC5-mKsT14hd7W=X2Pvg3RBPjn2d4tFSChdbsr3A@mail.gmail.com>
-Subject: Re: [PATCH 14/21] KVM: Move x86's version of struct
- kvm_mmu_memory_cache to common code
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Feiner <pfeiner@google.com>,
-        Peter Shier <pshier@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Christoffer Dall <christoffer.dall@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200602183354.39707-2-zhouyanjie@wanyeetech.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 5, 2020 at 2:39 PM Sean Christopherson
-<sean.j.christopherson@intel.com> wrote:
->
-> Move x86's 'struct kvm_mmu_memory_cache' to common code in anticipation
-> of moving the entire x86 implementation code to common KVM and reusing
-> it for arm64 and MIPS.  Add a new architecture specific asm/kvm_types.h
-> to control the existence and parameters of the struct.  The new header
-> is needed to avoid a chicken-and-egg problem with asm/kvm_host.h as all
-> architectures define instances of the struct in their vCPU structs.
->
-> Suggested-by: Christoffer Dall <christoffer.dall@arm.com>
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
+On Wed, 03 Jun 2020 02:33:54 +0800, 周琰杰 (Zhou Yanjie) wrote:
+> Document the available properties for the SoC root node and the
+> CPU nodes of the devicetree for the Ingenic XBurst SoCs.
+> 
+> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Tested-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 > ---
->  arch/arm64/include/asm/kvm_types.h   |  6 ++++++
->  arch/mips/include/asm/kvm_types.h    |  5 +++++
->  arch/powerpc/include/asm/kvm_types.h |  5 +++++
->  arch/s390/include/asm/kvm_types.h    |  5 +++++
->  arch/x86/include/asm/kvm_host.h      | 13 -------------
->  arch/x86/include/asm/kvm_types.h     |  7 +++++++
->  include/linux/kvm_types.h            | 19 +++++++++++++++++++
->  7 files changed, 47 insertions(+), 13 deletions(-)
->  create mode 100644 arch/arm64/include/asm/kvm_types.h
->  create mode 100644 arch/mips/include/asm/kvm_types.h
->  create mode 100644 arch/powerpc/include/asm/kvm_types.h
->  create mode 100644 arch/s390/include/asm/kvm_types.h
->  create mode 100644 arch/x86/include/asm/kvm_types.h
->
-> diff --git a/arch/arm64/include/asm/kvm_types.h b/arch/arm64/include/asm/kvm_types.h
-> new file mode 100644
-> index 000000000000..d0987007d581
-> --- /dev/null
-> +++ b/arch/arm64/include/asm/kvm_types.h
-> @@ -0,0 +1,6 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_ARM64_KVM_TYPES_H
-> +#define _ASM_ARM64_KVM_TYPES_H
-> +
-> +#endif /* _ASM_ARM64_KVM_TYPES_H */
-> +
-> diff --git a/arch/mips/include/asm/kvm_types.h b/arch/mips/include/asm/kvm_types.h
-> new file mode 100644
-> index 000000000000..5efeb32a5926
-> --- /dev/null
-> +++ b/arch/mips/include/asm/kvm_types.h
-> @@ -0,0 +1,5 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_MIPS_KVM_TYPES_H
-> +#define _ASM_MIPS_KVM_TYPES_H
-> +
-> +#endif /* _ASM_MIPS_KVM_TYPES_H */
-> diff --git a/arch/powerpc/include/asm/kvm_types.h b/arch/powerpc/include/asm/kvm_types.h
-> new file mode 100644
-> index 000000000000..f627eceaa314
-> --- /dev/null
-> +++ b/arch/powerpc/include/asm/kvm_types.h
-> @@ -0,0 +1,5 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_POWERPC_KVM_TYPES_H
-> +#define _ASM_POWERPC_KVM_TYPES_H
-> +
-> +#endif /* _ASM_POWERPC_KVM_TYPES_H */
-> diff --git a/arch/s390/include/asm/kvm_types.h b/arch/s390/include/asm/kvm_types.h
-> new file mode 100644
-> index 000000000000..b66a81f8a354
-> --- /dev/null
-> +++ b/arch/s390/include/asm/kvm_types.h
-> @@ -0,0 +1,5 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_S390_KVM_TYPES_H
-> +#define _ASM_S390_KVM_TYPES_H
-> +
-> +#endif /* _ASM_S390_KVM_TYPES_H */
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index fb99e6776e27..8e8fea13b6c7 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -193,8 +193,6 @@ struct x86_exception;
->  enum x86_intercept;
->  enum x86_intercept_stage;
->
-> -#define KVM_NR_MEM_OBJS 40
-> -
->  #define KVM_NR_DB_REGS 4
->
->  #define DR6_BD         (1 << 13)
-> @@ -245,17 +243,6 @@ enum x86_intercept_stage;
->
->  struct kvm_kernel_irq_routing_entry;
->
-> -/*
-> - * We don't want allocation failures within the mmu code, so we preallocate
-> - * enough memory for a single page fault in a cache.
-> - */
-> -struct kvm_mmu_memory_cache {
-> -       int nobjs;
-> -       gfp_t gfp_zero;
-> -       struct kmem_cache *kmem_cache;
-> -       void *objects[KVM_NR_MEM_OBJS];
-> -};
-> -
->  /*
->   * the pages used as guest page table on soft mmu are tracked by
->   * kvm_memory_slot.arch.gfn_track which is 16 bits, so the role bits used
-> diff --git a/arch/x86/include/asm/kvm_types.h b/arch/x86/include/asm/kvm_types.h
-> new file mode 100644
-> index 000000000000..08f1b57d3b62
-> --- /dev/null
-> +++ b/arch/x86/include/asm/kvm_types.h
-> @@ -0,0 +1,7 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_KVM_TYPES_H
-> +#define _ASM_X86_KVM_TYPES_H
-> +
-> +#define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE 40
-> +
-> +#endif /* _ASM_X86_KVM_TYPES_H */
-> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-> index 68e84cf42a3f..a7580f69dda0 100644
-> --- a/include/linux/kvm_types.h
-> +++ b/include/linux/kvm_types.h
-> @@ -20,6 +20,8 @@ enum kvm_mr_change;
->
->  #include <linux/types.h>
->
-> +#include <asm/kvm_types.h>
-> +
->  /*
->   * Address types:
->   *
-> @@ -58,4 +60,21 @@ struct gfn_to_pfn_cache {
->         bool dirty;
->  };
->
-> +#ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
-> +/*
-> + * Memory caches are used to preallocate memory ahead of various MMU flows,
-> + * e.g. page fault handlers.  Gracefully handling allocation failures deep in
-> + * MMU flows is problematic, as is triggering reclaim, I/O, etc... while
-> + * holding MMU locks.  Note, these caches act more like prefetch buffers than
-> + * classical caches, i.e. objects are not returned to the cache on being freed.
-> + */
-> +struct kvm_mmu_memory_cache {
-> +       int nobjs;
-> +       gfp_t gfp_zero;
-> +       struct kmem_cache *kmem_cache;
-> +       void *objects[KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE];
-> +};
-> +#endif
-> +
-> +
->  #endif /* __KVM_TYPES_H__ */
-> --
-> 2.26.0
->
+> 
+> Notes:
+>     v1->v2:
+>     1.Remove unnecessary "items".
+>     2.Add "clocks" as suggested by Paul Cercueil.
+> 
+>  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 67 ++++++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
