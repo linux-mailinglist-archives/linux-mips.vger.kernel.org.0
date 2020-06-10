@@ -2,105 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD051F5820
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 17:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66CE1F5916
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 18:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730311AbgFJPsj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Jun 2020 11:48:39 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58164 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728075AbgFJPsi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 10 Jun 2020 11:48:38 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05AFWZNE136637;
-        Wed, 10 Jun 2020 11:48:19 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31k2800emm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Jun 2020 11:48:18 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05AFX7Rh138244;
-        Wed, 10 Jun 2020 11:48:18 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31k2800ekw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Jun 2020 11:48:18 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05AFlSns025914;
-        Wed, 10 Jun 2020 15:48:16 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 31g2s7yyge-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Jun 2020 15:48:16 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05AFkw2D393944
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 10 Jun 2020 15:46:58 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48E3F52051;
-        Wed, 10 Jun 2020 15:48:14 +0000 (GMT)
-Received: from thinkpad (unknown [9.171.55.252])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with SMTP id 739E752054;
-        Wed, 10 Jun 2020 15:48:13 +0000 (GMT)
-Date:   Wed, 10 Jun 2020 17:48:11 +0200
-From:   Gerald Schaefer <gerald.schaefer@de.ibm.com>
-To:     Peter Xu <peterx@redhat.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        Guan Xuetao <gxt@pku.edu.cn>, linux-xtensa@linux-xtensa.org,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Possible duplicate page fault accounting on some archs after commit
- 4064b9827063
-Message-ID: <20200610174811.44b94525@thinkpad>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1728814AbgFJQdG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Jun 2020 12:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728730AbgFJQdF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 12:33:05 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34ACEC03E96B;
+        Wed, 10 Jun 2020 09:33:05 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id y17so2984022wrn.11;
+        Wed, 10 Jun 2020 09:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=rpDBv2piDn9Q2J9N0i4yiYrjSsor/HRxSClbwdprklk=;
+        b=A3hfbvJ0Q7Jn4eZle67FwEdc1leGYOb7+BdYCoCHSOl/51k/clt4ipp2BpCuRSaJOY
+         IntQmAlLDFuBi7LIqjtK/EZ7lOChoCk9Erp8HeTY+mgeJY/p5FH8whi/Ja+X+h9wSF+2
+         l40McgBrBH+dHEAGJHZOcpQwNhSdHelxmC2KTXvX8/Oah4Sm2aXMfBV6e/QTd1OVxhM+
+         Z44PTtiDGEWbnB5TLwiM76V2TyUvPNzN2K1qXrJWANbzQuWlF5cIeKTSw3gVG+sLnakS
+         nMSZRVnPE42vI2DYHsZsJeat3ylQu/OHrzZ4dvKALwd6czAYv/DHSPaQx0q6MQQOa+LR
+         gIgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rpDBv2piDn9Q2J9N0i4yiYrjSsor/HRxSClbwdprklk=;
+        b=ZfxfHW1/tXqkpMijzX7tCVZ5I66JC3SKYaqARaq12uqFHrylk4PAcKqlQvVHzJXAQG
+         l61gqKy2RF/HucSyiBgMoZsnIkPQCFEfeKE6MImHluoUGxP7zfianmYBooY+XTxpgfEh
+         dz7SjA7xZazEtT1yU4Lae1LlhlHeZycljnoPkKgMUpNAomVaUurcXO/ZMB781q+D4+gZ
+         Anwcpw1+vToXMGrSu8qBc3GC/RIMA78eg0h7wgLmgr/snPzLGquNvyHKi/a3qasARMJ2
+         mtiK1hDie7K3qxJqLDOC3tXu2fev6wOoo7JehIWdogmA/SD6vAb4/UCGkP5pipEkTFH2
+         ao7Q==
+X-Gm-Message-State: AOAM530rEOC7jnA2CvQeFDz5D6YGFdMU4h9QFzM6Wj9a7cTmxfltL1fi
+        MmLlpBsjZz0UBbjERnh1mb0=
+X-Google-Smtp-Source: ABdhPJw986CQrWCSJAue58mSsilDl/bEgvJUv0KDGG7CDlhYCSLRXNUnEBFvAgfX9ezIlWDuASlMEQ==
+X-Received: by 2002:adf:e588:: with SMTP id l8mr4944794wrm.255.1591806783485;
+        Wed, 10 Jun 2020 09:33:03 -0700 (PDT)
+Received: from skynet.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
+        by smtp.gmail.com with ESMTPSA id t7sm414430wrq.41.2020.06.10.09.33.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2020 09:33:02 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
+        robh+dt@kernel.org, f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH v2 0/6] bmips: add BCM63xx power domain controller
+Date:   Wed, 10 Jun 2020 18:32:55 +0200
+Message-Id: <20200610163301.461160-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200609105244.4014823-1-noltari@gmail.com>
+References: <20200609105244.4014823-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-10_09:2020-06-10,2020-06-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- suspectscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
- cotscore=-2147483648 malwarescore=0 clxscore=1011 lowpriorityscore=0
- priorityscore=1501 spamscore=0 bulkscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006100115
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+BCM6318, BCM6328, BCM6362 and BCM63268 SoCs have a power domain controller
+to enable/disable certain components in order to save power.
 
-Some architectures have their page fault accounting code inside the fault
-retry loop, and rely on only going through that code once. Before commit
-4064b9827063 ("mm: allow VM_FAULT_RETRY for multiple times"), that was
-ensured by testing for and clearing FAULT_FLAG_ALLOW_RETRY.
+v2: Introduce changes suggested by Florian:
+  - Add separate YAML file for dt-bindings.
+  - Add bcm63xx folder in drivers/soc/bcm.
+  - Update MAINTAINERS.
+  - Add dt-bindings header files.
+  - Also add BCM63268 support.
 
-That commit had to remove the clearing of FAULT_FLAG_ALLOW_RETRY for all
-architectures, and introduced a subtle change to page fault accounting
-logic in the affected archs. It is now possible to go through the retry
-loop multiple times, and the affected archs would then account multiple
-page faults instead of just one.
+Álvaro Fernández Rojas (6):
+  dt-bindings: soc: brcm: add BCM63xx power domain binding
+  soc: bcm: add BCM63xx power domain driver
+  mips: bmips: dts: add BCM6328 power domain support
+  mips: bmips: dts: add BCM6362 power domain support
+  mips: bmips: dts: add BCM63268 power domain support
+  mips: bmips: add BCM6318 power domain definitions
 
-This was found by coincidence in s390 code, and a quick check showed that
-there are quite a lot of other architectures that seem to be affected in a
-similar way. I'm preparing a fix for s390, by moving the accounting behind
-the retry loop, similar to x86. It is not completely straight-forward, so
-I leave the fix for other archs to the respective maintainers.
+ .../bindings/soc/bcm/brcm,bcm63xx-power.yaml  |  44 +++
+ MAINTAINERS                                   |   1 +
+ arch/mips/boot/dts/brcm/bcm63268.dtsi         |   6 +
+ arch/mips/boot/dts/brcm/bcm6328.dtsi          |   6 +
+ arch/mips/boot/dts/brcm/bcm6362.dtsi          |   6 +
+ drivers/soc/bcm/Kconfig                       |  10 +
+ drivers/soc/bcm/Makefile                      |   1 +
+ drivers/soc/bcm/bcm63xx/Kconfig               |  12 +
+ drivers/soc/bcm/bcm63xx/Makefile              |   2 +
+ drivers/soc/bcm/bcm63xx/bcm63xx-power.c       | 374 ++++++++++++++++++
+ include/dt-bindings/soc/bcm6318-pm.h          |  17 +
+ include/dt-bindings/soc/bcm63268-pm.h         |  21 +
+ include/dt-bindings/soc/bcm6328-pm.h          |  17 +
+ include/dt-bindings/soc/bcm6362-pm.h          |  21 +
+ 14 files changed, 538 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/bcm/brcm,bcm63xx-power.yaml
+ create mode 100644 drivers/soc/bcm/bcm63xx/Kconfig
+ create mode 100644 drivers/soc/bcm/bcm63xx/Makefile
+ create mode 100644 drivers/soc/bcm/bcm63xx/bcm63xx-power.c
+ create mode 100644 include/dt-bindings/soc/bcm6318-pm.h
+ create mode 100644 include/dt-bindings/soc/bcm63268-pm.h
+ create mode 100644 include/dt-bindings/soc/bcm6328-pm.h
+ create mode 100644 include/dt-bindings/soc/bcm6362-pm.h
 
-Added the lists for possibly affected archs on cc, but no guarantee for
-completeness.
+-- 
+2.26.2
 
-Regards,
-Gerald
