@@ -2,99 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4151F595F
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 18:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481771F596E
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 18:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726824AbgFJQtV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Jun 2020 12:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726358AbgFJQtT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 12:49:19 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76074C03E96B;
-        Wed, 10 Jun 2020 09:49:18 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id m2so1120558pjv.2;
-        Wed, 10 Jun 2020 09:49:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=0L6mRul+d0ij/T0+YwUu11OLWJeSvBQq7osEoU9o22g=;
-        b=Gyrl29mgzU0gGGWPNAXIufDCgZz/WcJTwme/dXo6nnRhBBKoe3YbyCm92QiFtUCZIr
-         ljpilXI7nAD3ogAwUS0CFK1HNNISgp/Feg9D2XMFU50TOa9Yk/Z/q71WjPtfdwpWWRr5
-         Zz9M+VHN4z1zeVxAU6zeowOmTnPNZw/PoJr44shxIdtIFhvChGKegEnoBHgfiRKnv5+M
-         EV1ppIKtFzYdRwpVUxvyUy56RryWsBs5tBVVgE3OFovsAmgLxSk5F0gSKaPUmVxiPezW
-         e2GUEQZd+fT42IK28EiMDhZNwXey5TMQ8c16Gjw/htxO3/+klYhR6G3iCUYxCVSekZgE
-         QBBg==
+        id S1729155AbgFJQud (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Jun 2020 12:50:33 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:36833 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729095AbgFJQub (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Jun 2020 12:50:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591807830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EMwUauau342Zml1K34QLPe12sp1DuwpV44r+JLoVGLk=;
+        b=HmDpJKhsOu6i+uvNkS67WV/27yfgCTe34kwlqJ5ictiAtbUaZeNVjGTmhXiRiiGHYZLiF6
+        T2fLb9k6+gYCzwSv1OETtf1dr6MA8W7kAmBDb/TtG26LSicGIcHYTUG2JTw6gzchm+JeIb
+        uD35kC94iOXHJkfa7ZOpyd0Cl7iOJrY=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-104-67Vrj1aHOWiwiqwKFxn6mQ-1; Wed, 10 Jun 2020 12:50:28 -0400
+X-MC-Unique: 67Vrj1aHOWiwiqwKFxn6mQ-1
+Received: by mail-qv1-f70.google.com with SMTP id 59so2320256qvb.4
+        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 09:50:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0L6mRul+d0ij/T0+YwUu11OLWJeSvBQq7osEoU9o22g=;
-        b=AAusyxbunpSlNZ7H/5xK9qdnPdYou4TE9uu1t8eDVpqN5XtQqDgvVJq7cD8AYp4JRQ
-         8RJHbYWCJSjuCpgOF4a9sYdT1Ldc0hNOZ+Vi5ZBNdiaiUGLhdps5dfNlU1fjndzAQ390
-         24YKy5efm6mnZbiDG2owoVQqXul7PsSkgFpVmG0APojWjpcKP2KVl/6HBCICf74FBIVy
-         J/F8A0U4LIE/pbI00XPCz6BrbGimZRZhMA2SycIR+wjpp+xCCHQo8BtujAwqODKaglef
-         d4iS3uykPG2XDnw7YKHGwaJED/UGTmKC29IOKyB/YJA8V5bxfETIN1WTfuWNNRbhJ56j
-         recQ==
-X-Gm-Message-State: AOAM530Mlbd5bhpic28SxMG5IpEwP3oeKExCPOzIrs155Hxhk0x527Xy
-        pz5K/JQ5ZQDAhDmbFEpmhC0=
-X-Google-Smtp-Source: ABdhPJyBYL9WX0FUwlh7Mm7FPNGeHAef0xvzd3jHqzul0sk1FCzs4b8Ta/4q3CQZuFG1jOY72HRTZQ==
-X-Received: by 2002:a17:902:c111:: with SMTP id 17mr3419167pli.319.1591807757697;
-        Wed, 10 Jun 2020 09:49:17 -0700 (PDT)
-Received: from [10.230.188.43] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s11sm382597pfh.204.2020.06.10.09.49.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jun 2020 09:49:16 -0700 (PDT)
-Subject: Re: [PATCH v2 2/6] soc: bcm: add BCM63xx power domain driver
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
-        robh+dt@kernel.org, f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20200609105244.4014823-1-noltari@gmail.com>
- <20200610163301.461160-1-noltari@gmail.com>
- <20200610163301.461160-3-noltari@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <098e7389-f41e-0493-302b-213477268b81@gmail.com>
-Date:   Wed, 10 Jun 2020 09:49:14 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.9.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EMwUauau342Zml1K34QLPe12sp1DuwpV44r+JLoVGLk=;
+        b=ic6wqa1z05i3CvY9CPweEfxacVmBukX+TwVtUfrh2DzRc7CCK40R91XT2qwylmUnqL
+         QnUaxqI0n5U4DCTbrUpJDf5CvtVusDK51tLYYIxaQoMNoUlIBQqNl5aeKoBupZJy8zGt
+         cGOO4+ytoKGPDqRvvf3pnCsplhGGHo+eOJAcA2FYh+FoYFfBA3jy2jco1K1kmclPrJUz
+         cQcPk5vrOi1e/TgZPt2HzH8Zl2Bgz8sTwE9E7arNIBOrM8eFfy7EgJP0Tcbv/8T+iIGn
+         h9F1CJZDddRqLvw3tqAoo6wTDlXaZcSNKtCmOBWIVPYQ1pt8YyZGF7hDCHyVkzj9GYbS
+         d5zg==
+X-Gm-Message-State: AOAM533urTt/StotIPZacxHuBDt+VRSxb/NcuLPWufuhoLGUgRjy+5hl
+        SntfDU/WpKbPJGZfP975MrHttCLVU+uc1n7Wz8EIrH7T4btJucPstIrD7fFuIeOlp7AXrE9FVs/
+        tMjzJL53UKoG6sXUeTgx0VA==
+X-Received: by 2002:a37:9cc7:: with SMTP id f190mr3987568qke.236.1591807826876;
+        Wed, 10 Jun 2020 09:50:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyn20TLNz7hD3Ni4blZzJN/2PX0jI8mrO6z2/UHNbD+ObHKXkY/kSbOK73eCMc/XFP0Ereokw==
+X-Received: by 2002:a37:9cc7:: with SMTP id f190mr3987535qke.236.1591807826580;
+        Wed, 10 Jun 2020 09:50:26 -0700 (PDT)
+Received: from xz-x1 ([2607:9880:19c0:32::2])
+        by smtp.gmail.com with ESMTPSA id 207sm149672qki.134.2020.06.10.09.50.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2020 09:50:25 -0700 (PDT)
+Date:   Wed, 10 Jun 2020 12:50:23 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Gerald Schaefer <gerald.schaefer@de.ibm.com>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        Guan Xuetao <gxt@pku.edu.cn>, linux-xtensa@linux-xtensa.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: Possible duplicate page fault accounting on some archs after
+ commit 4064b9827063
+Message-ID: <20200610165023.GA67179@xz-x1>
+References: <20200610174811.44b94525@thinkpad>
 MIME-Version: 1.0
-In-Reply-To: <20200610163301.461160-3-noltari@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <20200610174811.44b94525@thinkpad>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, Jun 10, 2020 at 05:48:11PM +0200, Gerald Schaefer wrote:
+> Hi,
 
+Hi, Gerald,
 
-On 6/10/2020 9:32 AM, Álvaro Fernández Rojas wrote:
-> BCM6318, BCM6328, BCM6362 and BCM63268 SoCs have a power domain controller
-> to enable/disable certain components in order to save power.
 > 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> Some architectures have their page fault accounting code inside the fault
+> retry loop, and rely on only going through that code once. Before commit
+> 4064b9827063 ("mm: allow VM_FAULT_RETRY for multiple times"), that was
+> ensured by testing for and clearing FAULT_FLAG_ALLOW_RETRY.
+> 
+> That commit had to remove the clearing of FAULT_FLAG_ALLOW_RETRY for all
+> architectures, and introduced a subtle change to page fault accounting
+> logic in the affected archs. It is now possible to go through the retry
+> loop multiple times, and the affected archs would then account multiple
+> page faults instead of just one.
+> 
+> This was found by coincidence in s390 code, and a quick check showed that
+> there are quite a lot of other architectures that seem to be affected in a
+> similar way. I'm preparing a fix for s390, by moving the accounting behind
+> the retry loop, similar to x86. It is not completely straight-forward, so
+> I leave the fix for other archs to the respective maintainers.
 
-Thanks for addressing the previous comments, this looks good to me,
-there is just a single request below:
+Sorry for not noticing this before.  The accounting part should definitely be
+put at least into a check against fault_flag_allow_retry_first() to mimic what
+was done before.  And I agree it would be even better to put it after the retry
+logic, so if any of the page faults gets a major fault, it'll be accounted as a
+major fault which makes more sense to me, just like what x86 is doing now with:
 
-[snip]
+	major |= fault & VM_FAULT_MAJOR;
 
-> +static const struct bcm63xx_power_data bcm6318_power_domains[] = {
-> +	{
-> +		.name = "pcie",
-> +		.bit = 0,
-
-All of these bits definition should use the constants that you add in
-patches 3 through 6, this means you would have to re-order the patches
-to maintain bisectability obviously.
+I'm not sure what's the preference of the arch maintainers, just let me know if
+it's preferred to use a single series to address this issue for all affected
+archs (or the archs besides s390), then I'll do.
 
 Thanks!
+
 -- 
-Florian
+Peter Xu
+
