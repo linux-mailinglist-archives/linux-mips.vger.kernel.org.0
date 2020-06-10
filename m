@@ -2,81 +2,253 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B81BD1F5C37
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 21:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD7A1F5D16
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 22:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730349AbgFJTuN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Jun 2020 15:50:13 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:45905 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730085AbgFJTuM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 15:50:12 -0400
-Received: by mail-io1-f68.google.com with SMTP id y5so3659115iob.12;
-        Wed, 10 Jun 2020 12:50:12 -0700 (PDT)
+        id S1728288AbgFJUYd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Jun 2020 16:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726277AbgFJUYc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 16:24:32 -0400
+Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E03C08C5C1
+        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 13:24:32 -0700 (PDT)
+Received: by mail-ua1-x943.google.com with SMTP id z47so1330982uad.5
+        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 13:24:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OYjqAVwtvPl7Y3hFy8cg2FHFUeVaZTx/znZrNTcOHyg=;
+        b=c2GBWEymOyDmHxxDIPkNDniIbX3TqlOV7Ry9nkanRvVCrSn2NMJ1GnwEfVB5/R50jP
+         77Rjx/4tfzv/21jbJwgXQWYHRcGohQXCaWO3gsp+nHajYQM5boFPucGIPLgfHX2MDKZ9
+         +OTXs9o5nIuxF0NxV+MOUmd1vMtcj2kdrDNZSP44fW4w0h/heaF22VAQQKgm2rqnMc6V
+         NJb+uAZ7l7pOtCuqjyYuB03gXscyCe3TL+JYrlC+kUJVKogfkmlGDaS6Z3tJZHdjtIyR
+         8GoO1sGjzYWFt6lmc/+nI7dUOUzM6fyQMlG2J8rvlAJmgx36NdSbKub1xcaNcasqobbn
+         Zo8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1M+bkyx1XWH7KVWinjgxEZPKQ01wy/6i2E3dZnftVyk=;
-        b=ZzEpRxML6tWtIm/jZFALrpgYbkBDWNFWtV7yavAziDp5urDmFSFIyIJfAN79wmPAnb
-         0XKkClI/aMh9hqv9dEzUdDkme6XUZNAsoojRj8acj+G32r/9V5i0yPwkv3VN6eYevlVZ
-         PecbQwzv1ksetHFEcIW8QjjpLijjhp6+y6viksPAQS5oz9gYnXoxrYvqnRZqpu0MONa/
-         ep42rS7g0qVqNR1IwTYAhGBpWWhm4KMWE18xM6GtMSHN094SnRjkAsfEJePn87bNejJe
-         1R8Mg/7B1fc4tSdooctoH2vv1d0dY5zZiLJRhJ9gi1HzTLtRFAPiOxLlxPhclBhW8GVn
-         MYdw==
-X-Gm-Message-State: AOAM5307H4vlOJYqmy2Yx1uqKOMYwgvsI15J7M4UGzl+1ulnQR8Q8Wll
-        FrMQvArNYAxfEoaj4T7Xww==
-X-Google-Smtp-Source: ABdhPJwRvh/ZDpjvs6OY941xd3Y3JedADa0np5Xq47sS8wJemJewWQcJKW2EHSGQVFQz2QSMIpkUzg==
-X-Received: by 2002:a6b:249:: with SMTP id 70mr4950251ioc.146.1591818610318;
-        Wed, 10 Jun 2020 12:50:10 -0700 (PDT)
-Received: from xps15 ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id n12sm399848iog.25.2020.06.10.12.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2020 12:50:09 -0700 (PDT)
-Received: (nullmailer pid 3606732 invoked by uid 1000);
-        Wed, 10 Jun 2020 19:50:07 -0000
-Date:   Wed, 10 Jun 2020 13:50:07 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     rick.tyliu@ingenic.com, dongsheng.qiu@ingenic.com,
-        zhenwenjin@gmail.com, aric.pzqi@ingenic.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        yanfei.li@ingenic.com, tsbogend@alpha.franken.de,
-        paul@crapouillou.net, sernia.zhou@foxmail.com,
-        linux-mips@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v2 1/1] dt-bindings: MIPS: Document Ingenic SoCs binding.
-Message-ID: <20200610195007.GA3606682@bogus>
-References: <20200602183354.39707-1-zhouyanjie@wanyeetech.com>
- <20200602183354.39707-2-zhouyanjie@wanyeetech.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OYjqAVwtvPl7Y3hFy8cg2FHFUeVaZTx/znZrNTcOHyg=;
+        b=PwQRZwUFdID1Y94+iIjiEK8Z+UKdo/F0XJDBb9dXlHWTRh83WaZMl+wNNluNB6eaGO
+         Ytal0AxcSQb1ie5G88xFXo3XQu++pioO7NIQhvPLcdU5bR28cqtn0b0e7o2oK8lU1zgP
+         NxVc8QE4/wqEwbAs4jcHs9QCKQrxO6uWP4QGTCJ2w2uloBi7BdANM7wA8gj9pHImVUWO
+         dB9qKvxcbyTZ6+x1ryD2WkHw5CeaUGAz+fNLjl7TreAcSCC/gmQaY+66dOAwRJsE3HLj
+         j07DnrVqjxOd4YZNq5PpSOaUoxvfpFBSRoKW14q2iCidfi1NvDc7NOCGRwgtKMRIzbOr
+         9DZQ==
+X-Gm-Message-State: AOAM5328WV7dUdUDZH0h0pXl3JhTPbel1G2q7FrF7dpgzpsPElzsv2Xz
+        04tNrJovCNeg4qQ/JJHnoWVYp7LNbkkRsR/5Y37nTA==
+X-Google-Smtp-Source: ABdhPJzuDO175rlKEOjx+cUrssRUoDydSEqe6opXAVLnE5jRaJ0s7w5Cvs20/NG/qvzCO9X/JYv7sNtKVyijp2/LQvA=
+X-Received: by 2002:ab0:5642:: with SMTP id z2mr4013044uaa.6.1591820670801;
+ Wed, 10 Jun 2020 13:24:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200602183354.39707-2-zhouyanjie@wanyeetech.com>
+References: <20200605213853.14959-1-sean.j.christopherson@intel.com> <20200605213853.14959-16-sean.j.christopherson@intel.com>
+In-Reply-To: <20200605213853.14959-16-sean.j.christopherson@intel.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Wed, 10 Jun 2020 13:24:18 -0700
+Message-ID: <CANgfPd_oGhO4dpkejhzh1PaAc-0U068kVdoHj4_fiQveW8yXLg@mail.gmail.com>
+Subject: Re: [PATCH 15/21] KVM: Move x86's MMU memory cache helpers to common
+ KVM code
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Feiner <pfeiner@google.com>,
+        Peter Shier <pshier@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Christoffer Dall <christoffer.dall@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 03 Jun 2020 02:33:54 +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Document the available properties for the SoC root node and the
-> CPU nodes of the devicetree for the Ingenic XBurst SoCs.
-> 
-> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Tested-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+On Fri, Jun 5, 2020 at 2:39 PM Sean Christopherson
+<sean.j.christopherson@intel.com> wrote:
+>
+> Move x86's memory cache helpers to common KVM code so that they can be
+> reused by arm64 and MIPS in future patches.
+>
+> Suggested-by: Christoffer Dall <christoffer.dall@arm.com>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Reviewed-by: Ben Gardon <bgardon@google.com>
 > ---
-> 
-> Notes:
->     v1->v2:
->     1.Remove unnecessary "items".
->     2.Add "clocks" as suggested by Paul Cercueil.
-> 
->  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 67 ++++++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-> 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+>  arch/x86/kvm/mmu/mmu.c   | 53 --------------------------------------
+>  include/linux/kvm_host.h |  7 +++++
+>  virt/kvm/kvm_main.c      | 55 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 62 insertions(+), 53 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index b85d3e8e8403..a627437f73fd 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1060,47 +1060,6 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
+>         local_irq_enable();
+>  }
+>
+> -static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+> -                                              gfp_t gfp_flags)
+> -{
+> -       gfp_flags |= mc->gfp_zero;
+> -
+> -       if (mc->kmem_cache)
+> -               return kmem_cache_alloc(mc->kmem_cache, gfp_flags);
+> -       else
+> -               return (void *)__get_free_page(gfp_flags);
+> -}
+> -
+> -static int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> -{
+> -       void *obj;
+> -
+> -       if (mc->nobjs >= min)
+> -               return 0;
+> -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+> -               if (!obj)
+> -                       return mc->nobjs >= min ? 0 : -ENOMEM;
+> -               mc->objects[mc->nobjs++] = obj;
+> -       }
+> -       return 0;
+> -}
+> -
+> -static int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc)
+> -{
+> -       return mc->nobjs;
+> -}
+> -
+> -static void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
+> -{
+> -       while (mc->nobjs) {
+> -               if (mc->kmem_cache)
+> -                       kmem_cache_free(mc->kmem_cache, mc->objects[--mc->nobjs]);
+> -               else
+> -                       free_page((unsigned long)mc->objects[--mc->nobjs]);
+> -       }
+> -}
+> -
+>  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+>  {
+>         int r;
+> @@ -1132,18 +1091,6 @@ static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
+>         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
+>  }
+>
+> -static void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
+> -{
+> -       void *p;
+> -
+> -       if (WARN_ON(!mc->nobjs))
+> -               p = mmu_memory_cache_alloc_obj(mc, GFP_ATOMIC | __GFP_ACCOUNT);
+> -       else
+> -               p = mc->objects[--mc->nobjs];
+> -       BUG_ON(!p);
+> -       return p;
+> -}
+> -
+>  static struct pte_list_desc *mmu_alloc_pte_list_desc(struct kvm_vcpu *vcpu)
+>  {
+>         return kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_pte_list_desc_cache);
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index d38d6b9c24be..802b9e2306f0 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -815,6 +815,13 @@ void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool usermode_vcpu_not_eligible);
+>  void kvm_flush_remote_tlbs(struct kvm *kvm);
+>  void kvm_reload_remote_mmus(struct kvm *kvm);
+>
+> +#ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+> +int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min);
+> +int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc);
+> +void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
+> +void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+> +#endif
+> +
+>  bool kvm_make_vcpus_request_mask(struct kvm *kvm, unsigned int req,
+>                                  struct kvm_vcpu *except,
+>                                  unsigned long *vcpu_bitmap, cpumask_var_t tmp);
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 4db151f6101e..fead5f1d5594 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -342,6 +342,61 @@ void kvm_reload_remote_mmus(struct kvm *kvm)
+>         kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_RELOAD);
+>  }
+>
+> +#ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+> +static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+> +                                              gfp_t gfp_flags)
+> +{
+> +       gfp_flags |= mc->gfp_zero;
+> +
+> +       if (mc->kmem_cache)
+> +               return kmem_cache_alloc(mc->kmem_cache, gfp_flags);
+> +       else
+> +               return (void *)__get_free_page(gfp_flags);
+> +}
+> +
+> +int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> +{
+> +       void *obj;
+> +
+> +       if (mc->nobjs >= min)
+> +               return 0;
+> +       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> +               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+> +               if (!obj)
+> +                       return mc->nobjs >= min ? 0 : -ENOMEM;
+> +               mc->objects[mc->nobjs++] = obj;
+> +       }
+> +       return 0;
+> +}
+> +
+> +int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc)
+> +{
+> +       return mc->nobjs;
+> +}
+> +
+> +void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
+> +{
+> +       while (mc->nobjs) {
+> +               if (mc->kmem_cache)
+> +                       kmem_cache_free(mc->kmem_cache, mc->objects[--mc->nobjs]);
+> +               else
+> +                       free_page((unsigned long)mc->objects[--mc->nobjs]);
+> +       }
+> +}
+> +
+> +void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
+> +{
+> +       void *p;
+> +
+> +       if (WARN_ON(!mc->nobjs))
+> +               p = mmu_memory_cache_alloc_obj(mc, GFP_ATOMIC | __GFP_ACCOUNT);
+> +       else
+> +               p = mc->objects[--mc->nobjs];
+> +       BUG_ON(!p);
+> +       return p;
+> +}
+> +#endif
+> +
+>  static void kvm_vcpu_init(struct kvm_vcpu *vcpu, struct kvm *kvm, unsigned id)
+>  {
+>         mutex_init(&vcpu->mutex);
+> --
+> 2.26.0
+>
