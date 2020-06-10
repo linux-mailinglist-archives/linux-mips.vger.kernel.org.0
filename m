@@ -2,84 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C55C41F4B6A
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 04:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89511F4B81
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 04:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725988AbgFJC1d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Jun 2020 22:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725798AbgFJC12 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Jun 2020 22:27:28 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A27BC05BD1E;
-        Tue,  9 Jun 2020 19:27:27 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id r10so291521pgv.8;
-        Tue, 09 Jun 2020 19:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=6MDJxP19WPGYDK5RYXnflZJ1FBWzKzFWdzGVhyzU/Lk=;
-        b=nKFql9qoJJ412TjcOwdtBKo0XP/Azm/+cAxSaHUsjFC8TwgVwHsidhjVhxcY4Hs2H6
-         CHRGsi4ithzJfjLF+fZiMaH+lw6uajss6PiAffjbD00GlbO0x0YNca+Ca/Qy32q8D62K
-         UEtE+EP4vo6+kyT3BQo1zVL0kftNb64uA4UkzzOI4fmlO7mhvJmGKMM05XpyMeaCduZA
-         MFMzS0/SxXjC+wZuNMpxZicfF5R0JsGhCHBCPb/sshBWzS3XSgh2ZduhuCaQeSQROXXj
-         c5jC/EGu0iHa7Mq6RkWLG9nr+Orl4ZJlJo5nbZDw8hKL0tLxJ/ko5tVDxiJUusqIc9BP
-         SxWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6MDJxP19WPGYDK5RYXnflZJ1FBWzKzFWdzGVhyzU/Lk=;
-        b=dzEu73Cde7KSVSqkxdYKl+GCR1HtCvr0JSQUKo7kaNqymH0a6cb68pSwy1tW4Ha7RZ
-         Or6iZNDT4BgSMEKtaqPpkx+S1m6H6p8MjVhEFqskW0kA49+0Tdl9YAuMaEyqv4RXm0yb
-         5ILKAMoOPfpKctHzinKGt4X7huUSh33bhcWZKLEwkV+c1GABKQlzdPYbUTnGEzOzfGfk
-         KT4i4wV4HX0sx6YrtKbqZ6yHM3qaLAcCoAZm479cBOxwasGt26tyOqu/cFkM5EYfCU6b
-         bIPeYoqUhNJFpTmC5vTis3vhnigxcitiYrScSWaHJedVdX9UW4/mtZngCRkRq+OSexQ4
-         s1Bw==
-X-Gm-Message-State: AOAM532DAFapiD25FoMGoWE1ruTU4REzOUy1ueM1aVQNgrmZHAhDzTRC
-        DwXYBGti+lTEMiX2Tlmrmug=
-X-Google-Smtp-Source: ABdhPJxUUZnClIL//Wqvm0VbUuZ1R/c0nZOIjemZg+Eez8yLqIdHcB5Yjx4SnIoePiWQU9shTrC/IQ==
-X-Received: by 2002:a62:5ac5:: with SMTP id o188mr715392pfb.37.1591756047148;
-        Tue, 09 Jun 2020 19:27:27 -0700 (PDT)
-Received: from [10.230.188.43] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j1sm3625949pjv.21.2020.06.09.19.27.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2020 19:27:26 -0700 (PDT)
-Subject: Re: [PATCH 4/4] mips: bmips: dts: add BCM6362 power domain support
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
-        robh+dt@kernel.org, jonas.gorski@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20200609105244.4014823-1-noltari@gmail.com>
- <20200609105244.4014823-5-noltari@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <56bd5a50-f985-04c6-0c62-a48cbbabac4c@gmail.com>
-Date:   Tue, 9 Jun 2020 19:27:24 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200609105244.4014823-5-noltari@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1726017AbgFJCkY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Jun 2020 22:40:24 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:50216 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725927AbgFJCkW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 9 Jun 2020 22:40:22 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT9_3R+BeKBdAAA--.3191S2;
+        Wed, 10 Jun 2020 10:39:51 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] PCI: Loongson: Use DECLARE_PCI_FIXUP_EARLY for bridge_class_quirk()
+Date:   Wed, 10 Jun 2020 10:39:50 +0800
+Message-Id: <1591756790-12081-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxT9_3R+BeKBdAAA--.3191S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJrW3Wr18tF4UGF48ZryrZwb_yoW8Gr17p3
+        45Aa17KF4ftrs8A3WDX3yDGas8ZF93G34kCFWfuwnFgasxXa4UWry2k3ZYvF4UJrZ7XayU
+        ZayDCw18Can8ur7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3
+        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbN6pPUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Use DECLARE_PCI_FIXUP_EARLY instead of DECLARE_PCI_FIXUP_HEADER
+for bridge_class_quirk() in pci-loongson.c, otherwise the fixup
+has no effect.
 
+Fixes: 1f58cca5cf2b ("PCI: Add Loongson PCI Controller support")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
-On 6/9/2020 3:52 AM, Álvaro Fernández Rojas wrote:
-> BCM6362 SoCs have a power domain controller to enable/disable certain
-> components in order to save power.
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+This patch is based on mips-next tree.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+ drivers/pci/controller/pci-loongson.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+index 459009c..58b862a 100644
+--- a/drivers/pci/controller/pci-loongson.c
++++ b/drivers/pci/controller/pci-loongson.c
+@@ -37,11 +37,11 @@ static void bridge_class_quirk(struct pci_dev *dev)
+ {
+ 	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
+ }
+-DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+ 			DEV_PCIE_PORT_0, bridge_class_quirk);
+-DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+ 			DEV_PCIE_PORT_1, bridge_class_quirk);
+-DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+ 			DEV_PCIE_PORT_2, bridge_class_quirk);
+ 
+ static void system_bus_quirk(struct pci_dev *pdev)
 -- 
-Florian
+2.1.0
+
