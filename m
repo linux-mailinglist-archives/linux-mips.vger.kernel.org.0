@@ -2,134 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0DF1F5453
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 14:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD051F5820
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 17:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728558AbgFJMN3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Jun 2020 08:13:29 -0400
-Received: from mail-m975.mail.163.com ([123.126.97.5]:53460 "EHLO
-        mail-m975.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728547AbgFJMN2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 08:13:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=JJhsv
-        FYwW+8tEWWr/oiMmbCKVPyMC4y0gNIMmx5KF+c=; b=MnUAft4oj05Sj+PgR67JH
-        pGD5zfdf9iIZRKNMRh683qj4kjFPW5bd6ArAKOtiFbvj9CKn7qcyj9m5K2jowom1
-        amYuhRMaesbgqE5nsAP4LGH54smYx6Pi/qdxLgV39HPh+zz2GVak8ljXHhSLG/24
-        HXmJMXQbrUsrgKYraHkADE=
-Received: from localhost.localdomain (unknown [114.242.249.96])
-        by smtp5 (Coremail) with SMTP id HdxpCgCX2lxNzuBekc1XBw--.277S4;
-        Wed, 10 Jun 2020 20:13:20 +0800 (CST)
-From:   YuanJunQing <yuanjunqing66@163.com>
-To:     tsbogend@alpha.franken.de
-Cc:     yszhou4tech@gmail.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liulichao@loongson.cn,
-        YuanJunQing <yuanjunqing66@163.com>
-Subject: [PATCH] mips/ftrace: Fix stack backtrace in unwind_stack_by_address()
-Date:   Wed, 10 Jun 2020 20:12:54 +0800
-Message-Id: <20200610121254.1780-1-yuanjunqing66@163.com>
-X-Mailer: git-send-email 2.17.1
+        id S1730311AbgFJPsj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Jun 2020 11:48:39 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58164 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728075AbgFJPsi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Jun 2020 11:48:38 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05AFWZNE136637;
+        Wed, 10 Jun 2020 11:48:19 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31k2800emm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Jun 2020 11:48:18 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05AFX7Rh138244;
+        Wed, 10 Jun 2020 11:48:18 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31k2800ekw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Jun 2020 11:48:18 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05AFlSns025914;
+        Wed, 10 Jun 2020 15:48:16 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 31g2s7yyge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Jun 2020 15:48:16 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05AFkw2D393944
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Jun 2020 15:46:58 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 48E3F52051;
+        Wed, 10 Jun 2020 15:48:14 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.55.252])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with SMTP id 739E752054;
+        Wed, 10 Jun 2020 15:48:13 +0000 (GMT)
+Date:   Wed, 10 Jun 2020 17:48:11 +0200
+From:   Gerald Schaefer <gerald.schaefer@de.ibm.com>
+To:     Peter Xu <peterx@redhat.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        Guan Xuetao <gxt@pku.edu.cn>, linux-xtensa@linux-xtensa.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Possible duplicate page fault accounting on some archs after commit
+ 4064b9827063
+Message-ID: <20200610174811.44b94525@thinkpad>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgCX2lxNzuBekc1XBw--.277S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4xXrWUuFyktFW5CFWDCFg_yoW5Gw18pr
-        ZIk3ZxtrWkXa12kryfur18Wry5JrykZa42kry7Jry5Z3ZxXF13XryI93WDKr1DJrW0ka4f
-        ury7trsrurZ0vaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UmiiDUUUUU=
-X-Originating-IP: [114.242.249.96]
-X-CM-SenderInfo: h1xd0ypxqtx0rjwwqiywtou0bp/xtbBzwA-XFaD7e0wIAAAsp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-10_09:2020-06-10,2020-06-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ suspectscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
+ cotscore=-2147483648 malwarescore=0 clxscore=1011 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006100115
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Calling the unwind_stack_by_address() function for stack backtrace
-will fail, when we use "echo function: stacktrace > set_ftrace_filter".
+Hi,
 
-The stack backtrace as follows:
-           <...>-3102  [001] ...2    63.557737: <stack trace>
- => 0
- => 0
- => 0
- => 0
- => 0
- => 0
- => 0
- => 0
- =>
-          <idle>-0     [000] .N.2    63.558793: <stack trace>
+Some architectures have their page fault accounting code inside the fault
+retry loop, and rely on only going through that code once. Before commit
+4064b9827063 ("mm: allow VM_FAULT_RETRY for multiple times"), that was
+ensured by testing for and clearing FAULT_FLAG_ALLOW_RETRY.
 
-The reason is that when performing stack backtrace, the "ftrace_call"
-and "ftrace_graph_call" global symbols in ftrace_caller() are
-treated as functions.
+That commit had to remove the clearing of FAULT_FLAG_ALLOW_RETRY for all
+architectures, and introduced a subtle change to page fault accounting
+logic in the affected archs. It is now possible to go through the retry
+loop multiple times, and the affected archs would then account multiple
+page faults instead of just one.
 
-If CONFIG_FUNCTION_GRAPH_TRACER is defined, the value in the "ra"
-register is the address of ftrace_graph_call when the stack
-backtrace back to ftrace_caller(). ”ftrace_graph_call“ is a global
-symbol, and the value of "ofs" is set to zero when the
-kallsyms_lookup_size_offset() is called. Otherwise, the value
-in the "ra" register is the address of ftrace_call+8. "ftrace_call"
-is the global symbol, and return one when the get_frame_info() is called.
+This was found by coincidence in s390 code, and a quick check showed that
+there are quite a lot of other architectures that seem to be affected in a
+similar way. I'm preparing a fix for s390, by moving the accounting behind
+the retry loop, similar to x86. It is not completely straight-forward, so
+I leave the fix for other archs to the respective maintainers.
 
-Signed-off-by: YuanJunQing <yuanjunqing66@163.com>
----
- arch/mips/kernel/process.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+Added the lists for possibly affected archs on cc, but no guarantee for
+completeness.
 
-diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-index b2a797557825..ac4fe79bc5bc 100644
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -53,6 +53,8 @@
- #include <asm/inst.h>
- #include <asm/stacktrace.h>
- #include <asm/irq_regs.h>
-+#include <linux/ftrace.h>
-+#include <generated/asm-offsets.h>
- 
- #ifdef CONFIG_HOTPLUG_CPU
- void arch_cpu_idle_dead(void)
-@@ -569,6 +571,13 @@ unsigned long notrace unwind_stack_by_address(unsigned long stack_page,
- 	 * Return ra if an exception occurred at the first instruction
- 	 */
- 	if (unlikely(ofs == 0)) {
-+#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-+		extern void ftrace_graph_call(void);
-+		if ((pc == (unsigned long)ftrace_graph_call)) {
-+			pc = ((unsigned long *)(*sp))[PT_R31/sizeof(long)];
-+			*sp += PT_SIZE;
-+		} else
-+#endif
- 		pc = *ra;
- 		*ra = 0;
- 		return pc;
-@@ -583,16 +592,23 @@ unsigned long notrace unwind_stack_by_address(unsigned long stack_page,
- 	if (*sp < low || *sp + info.frame_size > high)
- 		return 0;
- 
--	if (leaf)
-+	if (leaf) {
- 		/*
- 		 * For some extreme cases, get_frame_info() can
- 		 * consider wrongly a nested function as a leaf
- 		 * one. In that cases avoid to return always the
- 		 * same value.
- 		 */
-+#ifdef CONFIG_DYNAMIC_FTRACE
-+		if (info.func == (void *)ftrace_call) {
-+			pc = ((unsigned long *)(*sp))[PT_R31/sizeof(long)];
-+			info.frame_size = PT_SIZE;
-+		} else
-+#endif
- 		pc = pc != *ra ? *ra : 0;
--	else
-+	} else {
- 		pc = ((unsigned long *)(*sp))[info.pc_offset];
-+	}
- 
- 	*sp += info.frame_size;
- 	*ra = 0;
--- 
-2.17.1
-
+Regards,
+Gerald
