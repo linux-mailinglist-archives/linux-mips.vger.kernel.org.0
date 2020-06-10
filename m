@@ -2,114 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D9D1F5982
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 18:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDB31F59F8
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2020 19:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgFJQyP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Jun 2020 12:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S1729546AbgFJRQg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Jun 2020 13:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727004AbgFJQyO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 12:54:14 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994FCC08C5C6
-        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 09:54:11 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id c21so1876917lfb.3
-        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 09:54:11 -0700 (PDT)
+        with ESMTP id S1727938AbgFJRQf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 13:16:35 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBF6C03E96B;
+        Wed, 10 Jun 2020 10:16:34 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id g10so2538271wmh.4;
+        Wed, 10 Jun 2020 10:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PGXejVSpqx4L2PlHIfd5JVBtSOWL/TuutZfvvE958Z8=;
-        b=ZFce94Usj6EkI4Lk9l8ZbLgBKcrOaOEIKI+lsoHoWwucoH5PaFSFEUF5nSpDfmtX/m
-         zpiTKIsyT2HuVYK0uUKJl0hfSDP//4+ueTqu4gfQUH9jmW1Fx7086RKZCkNC01IFk27w
-         7I94+DibpxplQFqh0putGbec4FKBVLxsfzedA=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iL6JkaFSUDsP2cIBAqcTq5ZWB5YvEmykfE8Vq8awAQw=;
+        b=bcaxtTLa6yaXrQr2WGhIcl4gQ4/S25pS4Pf3MrwSx1+HgqR+dZygxVMix77dSFWnty
+         w0mkbgZtq8IggE5+g4Ub3WuVA5nffbm/f2X24HModSll9RDFYB9IJmpGrtGYRKzQTZ0s
+         bo0wy+4IhxSu3mj7zOQgaF3sygoe7cOJs3wfAlQRDHpal2FGEg7vpWhIfvQmw7J2XCnL
+         qnEbjEGeafrxz+O++Q48VDZeTXz22dfHPeRYUq1p+kvLy4Koo2Cal247UJA23SsC+Di4
+         q21HXcJv8lQqDEUFEJ2RdpmTXxFqkt5cYXNfd3uqnWF52kNTONWbQTHucMPDFa3qyBv6
+         KVHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PGXejVSpqx4L2PlHIfd5JVBtSOWL/TuutZfvvE958Z8=;
-        b=R/r3weqp7GVmSict0a/1If9IserOrvbglSKIW28U5b6aEo5vGLLfZuLJmW4rSS6wca
-         5o27ZmSqpVP2TGm7sU65OazrlgecyValY/5QcmWodF+ayHvK5IozhU79mqsXMAcna7N0
-         M9UxhfJcG4PzwW07i0aS1jX3sgcvbVspeARaPs+dr7C67ycdecx62QsQrV5ktdn3gUs3
-         VE+LPQMO9NYHalyip1P8CXkYN4oC/8RdEMGuyvRpkodsNKwoQUOy3Kh1ShFbjCWALtye
-         kUR6U62/x3SCYa6sXdFu7OGwVBdIUNafrDpqm636774GLk2wvNjTCCPIkM3SSs5vvM/6
-         QPDw==
-X-Gm-Message-State: AOAM531wHNWpci04qh6sqCp7LcCW+nJmX0hXRlQT3oH1bJb6ZHHtKU9O
-        fUm6MiuWgz5ftQdHQSPzgpbOu2De8a4=
-X-Google-Smtp-Source: ABdhPJxo6jpXnBWpk0PZ33i8/YHZ1x+eqCzjvDp6aZqQUp3PwDZCbiPW2juqHUACXBWSnyT1KkLqbw==
-X-Received: by 2002:a05:6512:3049:: with SMTP id b9mr2162084lfb.44.1591808049164;
-        Wed, 10 Jun 2020 09:54:09 -0700 (PDT)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
-        by smtp.gmail.com with ESMTPSA id y21sm68190ljy.74.2020.06.10.09.54.05
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jun 2020 09:54:06 -0700 (PDT)
-Received: by mail-lj1-f175.google.com with SMTP id x18so3385059lji.1
-        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 09:54:05 -0700 (PDT)
-X-Received: by 2002:a2e:8991:: with SMTP id c17mr1979736lji.421.1591808045437;
- Wed, 10 Jun 2020 09:54:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iL6JkaFSUDsP2cIBAqcTq5ZWB5YvEmykfE8Vq8awAQw=;
+        b=slLMt1CR1WR0BkMZC6PbacUuVGxXrtse+pPF+cB9zjqIhlnMsg4JNp+P9Z4BX3mqxa
+         PqMCByS24jokJiBNHYqmEgp8PBt5dSJ+zCtAxs6uadAzt7shmtXRFZuYuAyQFkQv//TR
+         irAon1Arng4BKeNHMO8U8ULF/Ezz7QDGsPFMlptR8+9EoKR5q8HR0D4dp3uzX16QNkS9
+         X7maB1BxziiaH94kTTKe/QMpy+LCPAlydRDWQ834VdRmGFfyEWQtmqLHStTNdyBKyiBq
+         ou5H/yC+5Ws60QvcE+Cw7QeEeQH7YyDMaql7NqE4V2VsF0pmf/ettGCVjpjrAMzpOpXj
+         UBQA==
+X-Gm-Message-State: AOAM531vpiEGzb2w6wEXg1zWQNPyEBQHnlzcj5L+EJp0HmKDH+enbR3X
+        h9/enTHlC2vtMHr4RaYMjZ4oHAjU0K8=
+X-Google-Smtp-Source: ABdhPJwxgdE+sQMmQXCuZ/GRpKGHoC8dqENeYrpej3wStTwKD+EQDcCzPpXybdP9IDNRejW39sOmMA==
+X-Received: by 2002:a1c:6606:: with SMTP id a6mr3979323wmc.37.1591809392680;
+        Wed, 10 Jun 2020 10:16:32 -0700 (PDT)
+Received: from skynet.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
+        by smtp.gmail.com with ESMTPSA id f11sm589048wrm.13.2020.06.10.10.16.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2020 10:16:31 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
+        robh+dt@kernel.org, f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH v3 0/9] bmips: add BCM63xx power domain controller
+Date:   Wed, 10 Jun 2020 19:16:21 +0200
+Message-Id: <20200610171630.465579-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200610163301.461160-1-noltari@gmail.com>
+References: <20200610163301.461160-1-noltari@gmail.com>
 MIME-Version: 1.0
-References: <20200610174811.44b94525@thinkpad>
-In-Reply-To: <20200610174811.44b94525@thinkpad>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 10 Jun 2020 09:53:49 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgm0_0PjXaSVbrpDfgtn6UbDyWjSRnXvfdebweUYSZ+eA@mail.gmail.com>
-Message-ID: <CAHk-=wgm0_0PjXaSVbrpDfgtn6UbDyWjSRnXvfdebweUYSZ+eA@mail.gmail.com>
-Subject: Re: Possible duplicate page fault accounting on some archs after
- commit 4064b9827063
-To:     Gerald Schaefer <gerald.schaefer@de.ibm.com>
-Cc:     Peter Xu <peterx@redhat.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>, linux-mips@vger.kernel.org,
-        Nick Hu <nickhu@andestech.com>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux@vger.kernel.org,
-        linux-um <linux-um@lists.infradead.org>,
-        Guan Xuetao <gxt@pku.edu.cn>, linux-xtensa@linux-xtensa.org,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 10, 2020 at 8:48 AM Gerald Schaefer
-<gerald.schaefer@de.ibm.com> wrote:
->
-> This was found by coincidence in s390 code, and a quick check showed that
-> there are quite a lot of other architectures that seem to be affected in a
-> similar way. I'm preparing a fix for s390, by moving the accounting behind
-> the retry loop, similar to x86. It is not completely straight-forward, so
-> I leave the fix for other archs to the respective maintainers.
+BCM6318, BCM6328, BCM6362 and BCM63268 SoCs have a power domain controller
+to enable/disable certain components in order to save power.
 
-Hmm. I wonder if we could move the handling into  handle_mm_fault() itself.
+v3: Introduce changes suggested by Florian:
+  - Use dt-bindings definitions in power domain driver.
+  - Separate dt-bindings definitions from power domain .dtsi support.
+v2: Introduce changes suggested by Florian:
+  - Add separate YAML file for dt-bindings.
+  - Add bcm63xx folder in drivers/soc/bcm.
+  - Update MAINTAINERS.
+  - Add dt-bindings header files.
+  - Also add BCM63268 support.
 
-It's _fairly_ trivial to do on the arch side, just as long as you
-remember to make the VM_FAULT_MAJOR bit sticky like x86 does with that
+Álvaro Fernández Rojas (9):
+  dt-bindings: soc: brcm: add BCM63xx power domain binding
+  mips: bmips: dts: add BCM6328 power domain definitions
+  mips: bmips: dts: add BCM6362 power domain definitions
+  mips: bmips: dts: add BCM63268 power domain definitions
+  mips: bmips: add BCM6318 power domain definitions
+  soc: bcm: add BCM63xx power domain driver
+  mips: bmips: dts: add BCM6328 power domain support
+  mips: bmips: dts: add BCM6362 power domain support
+  mips: bmips: dts: add BCM63268 power domain support
 
-        major |= fault & VM_FAULT_MAJOR;
+ .../bindings/soc/bcm/brcm,bcm63xx-power.yaml  |  44 ++
+ MAINTAINERS                                   |   1 +
+ arch/mips/boot/dts/brcm/bcm63268.dtsi         |   6 +
+ arch/mips/boot/dts/brcm/bcm6328.dtsi          |   6 +
+ arch/mips/boot/dts/brcm/bcm6362.dtsi          |   6 +
+ drivers/soc/bcm/Kconfig                       |  10 +
+ drivers/soc/bcm/Makefile                      |   1 +
+ drivers/soc/bcm/bcm63xx/Kconfig               |  12 +
+ drivers/soc/bcm/bcm63xx/Makefile              |   2 +
+ drivers/soc/bcm/bcm63xx/bcm63xx-power.c       | 378 ++++++++++++++++++
+ include/dt-bindings/soc/bcm6318-pm.h          |  17 +
+ include/dt-bindings/soc/bcm63268-pm.h         |  21 +
+ include/dt-bindings/soc/bcm6328-pm.h          |  17 +
+ include/dt-bindings/soc/bcm6362-pm.h          |  21 +
+ 14 files changed, 542 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/bcm/brcm,bcm63xx-power.yaml
+ create mode 100644 drivers/soc/bcm/bcm63xx/Kconfig
+ create mode 100644 drivers/soc/bcm/bcm63xx/Makefile
+ create mode 100644 drivers/soc/bcm/bcm63xx/bcm63xx-power.c
+ create mode 100644 include/dt-bindings/soc/bcm6318-pm.h
+ create mode 100644 include/dt-bindings/soc/bcm63268-pm.h
+ create mode 100644 include/dt-bindings/soc/bcm6328-pm.h
+ create mode 100644 include/dt-bindings/soc/bcm6362-pm.h
 
-right after handle_mm_fault(). But it certainly doesn't seem like it
-would be hard to move into common code in handle_mm_fault() either, by
-just not doing the accounting if it's about to return VM_FAULT_RETRY
-or VM_FAULT_ERROR.
+-- 
+2.26.2
 
-That said, we want that perf_sw_event() accounting too, so we'd have
-to pass in a 'struct regs *' as well. And it's not clear which way
-accounting should go for other callers of handle_mm_fault() (ie gup
-etc).
-
-So I guess just having architectures fix it up individually and make
-sure they don't do it for retry conditions is the right thing to do..
-
-             Linus
