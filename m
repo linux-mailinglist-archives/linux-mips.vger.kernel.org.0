@@ -2,180 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D771F6AB5
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2020 17:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D761F6B40
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2020 17:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728515AbgFKPQK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 Jun 2020 11:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
+        id S1728642AbgFKPmr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 Jun 2020 11:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728455AbgFKPQJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Jun 2020 11:16:09 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEA6C08C5C1;
-        Thu, 11 Jun 2020 08:16:09 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id t18so6567628wru.6;
-        Thu, 11 Jun 2020 08:16:09 -0700 (PDT)
+        with ESMTP id S1728104AbgFKPmq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Jun 2020 11:42:46 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0E8C08C5C1;
+        Thu, 11 Jun 2020 08:42:46 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id r18so2684024pgk.11;
+        Thu, 11 Jun 2020 08:42:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ekZS4aH+9SdzL+TCB6y0YZ7lKqUewvODAqRgveIbzBQ=;
-        b=boniqFtwc6F5pPI2Ls4+Ba7k45IGWop1Bff1qXYj94NW5TCfQBIOcWtiS+/AR2EVJG
-         7F4g67hCPrnfisVbm7XAtyEdyYCdD2qWd6u6CU3bQdl54QMFLwta81YoFrh0tI4QQdYN
-         FHjtpTFxDnbjJgs+4rpqSlE7L3Bg4IENUJ2yd4pTMWCFlwjwVOfABk+hwOVHfnXTHdfI
-         0iPw9nxcEiBXTChqMqbCgzyVOvfcrskmrApZyc6v7VXj5Ue8Vr16/C8e7RsHxBvh8xK9
-         qDCFDJm159eyRs4whTdZpBtuaDUUXTQrNpa5zFxgqY7A4kejR/IMc4wvQkIA5IIzNvWb
-         0C0A==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fQ+wsrzemkIPe2q506QN7HeF76dszLO8Devz823zEFU=;
+        b=Ec9Owej5gVTLx1LgNfE5z+WQetriTeu1ERovocrLzbYfjsFYQ4SqhApR7I5YxA28Fl
+         sTvU3lpjWRcLGD9LEt8x3ZZzyQhrGx0NOrCw7Jp4gFweeYvwLnnkBEgexGXU0A+icWYq
+         fRUNXqVgRJRBCKCykhCY3BGZ76l5RWpHM1XmW7rxJegXOvvjhlVIDos+zZXjUFs4c20M
+         Y+ZC7RaONrSiu5opRrIKb2Vhp88Rh+h3ND0fEvkfXdZVS8+ui3sjFgeEv+yMhXfU2s8Y
+         qoqOts0a3vFDGNEbR4Z682dZBNgWAt3iRDnRuIeP0OM+7H0nsODztVmo1ZAxRfGhTIMG
+         ysig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ekZS4aH+9SdzL+TCB6y0YZ7lKqUewvODAqRgveIbzBQ=;
-        b=OCi2xPIgKzA2OdkHRn9KqZGJuMP2xSKi2s/KJmQ3EPhUzH4oMo8b/CK8pb0Lots4If
-         ECHne1GAeo44/IZTX+Ru8UgcSgt6/oL3zvi7igGnv//O6LgIaxeEaFi4/UK/pk+iPgjZ
-         mxP6Tf82IeTTX+FagEprEbnan5iCdnLg49HyUOqtDka2xk5rkbIC6dIZmCjOquFqzAeE
-         i89ouVgqN60eX8KyEez8VJkYXPm3e/GCBloD5s2K/fBTN+XiYEvL/Vod41PVgHtl72+V
-         djcZm5mZjQg1tSnxP2cgW3v+mSy519HSXFI9HWFMbPo1H9Ghs147O9cssl+FFQcqQ19O
-         QZRQ==
-X-Gm-Message-State: AOAM532OTAPJB1YLH0L8jF4Ej4RC/YGbLYYwmoJzUwPK4yCPgSH7tHaQ
-        OhGGh4JX2pDACwOgnCDpImCz/ohLpiw=
-X-Google-Smtp-Source: ABdhPJwA+DiZuy6xl8wG41wqWju0oynDNJh6M3rEm018zeY+edIUL8WNZYWusLz93cuBSfoRG/fQhg==
-X-Received: by 2002:a05:6000:1ce:: with SMTP id t14mr10050620wrx.300.1591888567919;
-        Thu, 11 Jun 2020 08:16:07 -0700 (PDT)
-Received: from macbook-pro-alvaro.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
-        by smtp.gmail.com with ESMTPSA id z6sm5408008wrh.79.2020.06.11.08.16.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Jun 2020 08:16:07 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fQ+wsrzemkIPe2q506QN7HeF76dszLO8Devz823zEFU=;
+        b=DUuLttg2fPIp0oxNywZuH1Z4eAEEMv6nonzH1tqfIZtx8RMmDjSu3fUgKZ1NZA1Ut0
+         0n+L2pB4dNV9rD3jHxC3g9or3SKh1OmnkLu8dCqw/x+y7EuVQlER5PkaO+aV5qmYkmhO
+         78yQH/u2/jgffOTw+HDJz1Cboxok4jYAhwN0DyCU9aZlb3ri398dEb1kdE+Hi62/sXeC
+         Yhnj2JUSviqelno3G3RNUbgSAqdqlUF/d4QEyZCBRyPWq8jx4u5FDej0A10LYVjrli4L
+         ewyhg1j8fYGKxfIMKgs8BCPdqkj4P+9vZAPXIlFoCP6cC2+jOFtVMEQmIES76aKgcxQv
+         jmsA==
+X-Gm-Message-State: AOAM5316WKVS6ztlbtWF1jg8BOKzwSYaNiKQbBJi2bo8LCbG2oPIaxpU
+        o/fEtyNVVGSBPoask/ePWZ0=
+X-Google-Smtp-Source: ABdhPJwIRQAPnj3r6aqieKP9UnNBsABbKwe5X6HFBUwRl50yl3r3oJQiOfH59nPr0GARKI5+XAFa/w==
+X-Received: by 2002:a63:e34d:: with SMTP id o13mr7215684pgj.45.1591890166194;
+        Thu, 11 Jun 2020 08:42:46 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id k19sm3749457pfg.153.2020.06.11.08.42.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jun 2020 08:42:45 -0700 (PDT)
 Subject: Re: [PATCH v2] mtd: parsers: bcm63xx: simplify CFE detection
-From:   =?utf-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>
-In-Reply-To: <20200611095540.250184d2@xps13>
-Date:   Thu, 11 Jun 2020 17:16:04 +0200
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     tsbogend@alpha.franken.de, Florian Fainelli <f.fainelli@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com, richard@nod.at,
         vigneshr@ti.com, Jonas Gorski <jonas.gorski@gmail.com>,
         linus.walleij@linaro.org, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mtd@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <779D37C7-58CB-49AF-8739-C34295B86FC4@gmail.com>
 References: <20200608094053.3381512-1-noltari@gmail.com>
  <20200608160649.3717152-1-noltari@gmail.com> <20200611095540.250184d2@xps13>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-X-Mailer: Apple Mail (2.3608.80.23.2.2)
+ <779D37C7-58CB-49AF-8739-C34295B86FC4@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <715b0947-f4dd-0c04-5c52-5da06c04d665@gmail.com>
+Date:   Thu, 11 Jun 2020 08:42:42 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <779D37C7-58CB-49AF-8739-C34295B86FC4@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Miquel,
 
-> El 11 jun 2020, a las 9:55, Miquel Raynal <miquel.raynal@bootlin.com> =
-escribi=C3=B3:
->=20
-> Hi =C3=81lvaro,
->=20
-> =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com> wrote on Mon,  8 =
-Jun 2020
-> 18:06:49 +0200:
->=20
->> Instead of trying to parse CFE version string, which is customized by =
-some
->> vendors, let's just check that "CFE1" was passed on argument 3.
->>=20
->> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
->> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
->> ---
->> v2: use CFE_EPTSEAL definition and avoid using an additional funtion.
->>=20
->> drivers/mtd/parsers/bcm63xxpart.c | 29 ++++-------------------------
->> 1 file changed, 4 insertions(+), 25 deletions(-)
->>=20
->> diff --git a/drivers/mtd/parsers/bcm63xxpart.c =
-b/drivers/mtd/parsers/bcm63xxpart.c
->> index 78f90c6c18fd..493a75b2f266 100644
->> --- a/drivers/mtd/parsers/bcm63xxpart.c
->> +++ b/drivers/mtd/parsers/bcm63xxpart.c
->> @@ -22,6 +22,9 @@
->> #include <linux/mtd/partitions.h>
->> #include <linux/of.h>
->>=20
->> +#include <asm/bootinfo.h>
->> +#include <asm/fw/cfe/cfe_api.h>
->=20
-> Are you sure both includes are needed?
 
-asm/bootinfo.h is needed for fw_arg3 and asm/fw/cfe/cfe_api.h is needed =
-for CFE_EPTSEAL.
+On 6/11/2020 8:16 AM, Álvaro Fernández Rojas wrote:
+> Hi Miquel,
+> 
+>> El 11 jun 2020, a las 9:55, Miquel Raynal <miquel.raynal@bootlin.com> escribió:
+>>
+>> Hi Álvaro,
+>>
+>> Álvaro Fernández Rojas <noltari@gmail.com> wrote on Mon,  8 Jun 2020
+>> 18:06:49 +0200:
+>>
+>>> Instead of trying to parse CFE version string, which is customized by some
+>>> vendors, let's just check that "CFE1" was passed on argument 3.
+>>>
+>>> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+>>> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+>>> ---
+>>> v2: use CFE_EPTSEAL definition and avoid using an additional funtion.
+>>>
+>>> drivers/mtd/parsers/bcm63xxpart.c | 29 ++++-------------------------
+>>> 1 file changed, 4 insertions(+), 25 deletions(-)
+>>>
+>>> diff --git a/drivers/mtd/parsers/bcm63xxpart.c b/drivers/mtd/parsers/bcm63xxpart.c
+>>> index 78f90c6c18fd..493a75b2f266 100644
+>>> --- a/drivers/mtd/parsers/bcm63xxpart.c
+>>> +++ b/drivers/mtd/parsers/bcm63xxpart.c
+>>> @@ -22,6 +22,9 @@
+>>> #include <linux/mtd/partitions.h>
+>>> #include <linux/of.h>
+>>>
+>>> +#include <asm/bootinfo.h>
+>>> +#include <asm/fw/cfe/cfe_api.h>
+>>
+>> Are you sure both includes are needed?
+> 
+> asm/bootinfo.h is needed for fw_arg3 and asm/fw/cfe/cfe_api.h is needed for CFE_EPTSEAL.
+> 
+>>
+>> I don't think it is a good habit to include asm/ headers, are you sure
+>> there is not another header doing it just fine?
+> 
+> Both are needed unless you want to add another definition of CFE_EPTSEAL value.
+> There are currently two CFE magic definitions, the one in asm/fw/cfe/cfe_api.h and another one in bcm47xxpart.c:
+> https://github.com/torvalds/linux/blob/master/arch/mips/include/asm/fw/cfe/cfe_api.h#L28
+> https://github.com/torvalds/linux/blob/master/drivers/mtd/parsers/bcm47xxpart.c#L33
 
->=20
-> I don't think it is a good habit to include asm/ headers, are you sure
-> there is not another header doing it just fine?
-
-Both are needed unless you want to add another definition of CFE_EPTSEAL =
-value.
-There are currently two CFE magic definitions, the one in =
-asm/fw/cfe/cfe_api.h and another one in bcm47xxpart.c:
-=
-https://github.com/torvalds/linux/blob/master/arch/mips/include/asm/fw/cfe=
-/cfe_api.h#L28
-=
-https://github.com/torvalds/linux/blob/master/drivers/mtd/parsers/bcm47xxp=
-art.c#L33
-
->=20
->> +
->> #define BCM963XX_CFE_BLOCK_SIZE		SZ_64K	/* always at =
-least 64KiB */
->>=20
->> #define BCM963XX_CFE_MAGIC_OFFSET	0x4e0
->> @@ -32,30 +35,6 @@
->> #define STR_NULL_TERMINATE(x) \
->> 	do { char *_str =3D (x); _str[sizeof(x) - 1] =3D 0; } while (0)
->>=20
->> -static int bcm63xx_detect_cfe(struct mtd_info *master)
->> -{
->> -	char buf[9];
->> -	int ret;
->> -	size_t retlen;
->> -
->> -	ret =3D mtd_read(master, BCM963XX_CFE_VERSION_OFFSET, 5, =
-&retlen,
->> -		       (void *)buf);
->> -	buf[retlen] =3D 0;
->> -
->> -	if (ret)
->> -		return ret;
->> -
->> -	if (strncmp("cfe-v", buf, 5) =3D=3D 0)
->> -		return 0;
->> -
->> -	/* very old CFE's do not have the cfe-v string, so check for =
-magic */
->> -	ret =3D mtd_read(master, BCM963XX_CFE_MAGIC_OFFSET, 8, &retlen,
->> -		       (void *)buf);
->> -	buf[retlen] =3D 0;
->> -
->> -	return strncmp("CFE1CFE1", buf, 8);
->> -}
->> -
->> static int bcm63xx_read_nvram(struct mtd_info *master,
->> 	struct bcm963xx_nvram *nvram)
->> {
->> @@ -138,7 +117,7 @@ static int bcm63xx_parse_cfe_partitions(struct =
-mtd_info *master,
->> 	struct bcm963xx_nvram *nvram =3D NULL;
->> 	int ret;
->>=20
->> -	if (bcm63xx_detect_cfe(master))
->> +	if (fw_arg3 !=3D CFE_EPTSEAL)
->> 		return -EINVAL;
->>=20
->> 	nvram =3D vzalloc(sizeof(*nvram));
-
-Best regards,
-=C3=81lvaro.
-
+The caveat with that approach is that this reduces the compilation
+surface to MIPS and BMIPS_GENERIC and BCM63XX only, which is a bit
+small. If we could move the CFE definitions to a shared header, and
+consolidate the value used by bcm47xxpart.c as well, that would allow us
+to build the bcm63xxpart.c file with COMPILE_TEST on other
+architectures. This does not really have functional value, but for
+maintainers like Miquel, it allows them to quickly test their entire
+drivers/mtd/ directory.
+-- 
+Florian
