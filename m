@@ -2,127 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB5C1F5E5F
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2020 00:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D999E1F6118
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2020 06:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbgFJWel (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Jun 2020 18:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726300AbgFJWek (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Jun 2020 18:34:40 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033F3C03E96F
-        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 15:34:39 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id q2so2299882vsr.1
-        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 15:34:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C9LYQ8aclMkdwfJP4cdhxWD4N8cMJMuN6znPHlB3Rsc=;
-        b=UevvpOtsXUfdMcqvIgRfPVVQSDyZs6oXq/Xnj/8uJDFNeQBZ7vzloiU32xzvK6mFCu
-         cGGLwNrdnw/Q0on5lLXJlkuu8D4VI6gjZehfPhGO6t/torNaJ6NxHMQ2JuDgO8FwHc4P
-         o8FP7KzD9QWU8u7G49I5aLDbEK8X8zhTnPGPK+25pdCKJLn9W7w1iBlkb84D2LADSGpc
-         tCqhhzfq26VpCG0se8b1WZwp4CCFSusJSn+larn2+KMSi4aCsCQRQ/S3A4qsfTfUDCpT
-         JYfiX91/2CIDQozv8ZBX3SClrislUPBF+zqSWJE7quvH7sEsU2MJoNuxaq5T13FcVb0X
-         ExAg==
+        id S1725799AbgFKEya convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 11 Jun 2020 00:54:30 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:42310 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbgFKEya (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Jun 2020 00:54:30 -0400
+Received: by mail-qk1-f194.google.com with SMTP id l17so4453686qki.9
+        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2020 21:54:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C9LYQ8aclMkdwfJP4cdhxWD4N8cMJMuN6znPHlB3Rsc=;
-        b=OJDMf36dlnLeLRof4OsaFUECozqif942rnkyWzSgNTsV1PNfon/EUagXnfRHQCjHiT
-         qhg8lurTIunsmFBKj77QkN6pFb3F2oUzuoEeV0n3obQ9gN1lFg3pKrDB6t3xU5LuM7wh
-         U10qVujsfHseBlY18swV/KAGFbN9v5I6nU0ubLSvu+wbpoAR3FF91DsrZLEsk3e4T+o2
-         STZE8XYzyPIYja1D5kQBtZx4SfigPajQRF8jp5tFDAipN6nKLj3/HcA1pKtdtLunjnRI
-         w4HISevNLFCT6rFz2PbAt88ReSoeb1tS1GiK63PHRNQ7F4tFVqkXQb23CheRUU31ucB0
-         QJHA==
-X-Gm-Message-State: AOAM531yYQXEEP0KB2ZTA79tSOnUrox065ZT8f/O0I42ENmV1azsdcqM
-        piNOWHmFLADsrxmQijPFeMOiJgn1VBBddY1pUY7MPw==
-X-Google-Smtp-Source: ABdhPJzdt1t5lYhNZNFDbxTCIee/fOpBW2dvkZTK5r9pH/LqHC+MVWmHSuu/UxjSaFUQydIW/izqWRJz+CsXZPttueA=
-X-Received: by 2002:a67:79ce:: with SMTP id u197mr4725019vsc.17.1591828478904;
- Wed, 10 Jun 2020 15:34:38 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JOTpogiQZ3qH8WA8V9O5kAZ+rRJ4JnbAw1qwXw6An2M=;
+        b=dnxgcCFzX1S8QhRxJtekmnbIFw6LFDe6PB/vE3z90QDSwi/vzda+6MQfoC6RUdvTEr
+         dt90PKBdVPf29GjdbZRDmQ5FSyDcLzSOuh6/R8hZMT1xWtv4B+AcKTsQ1mS7IqNkAsYV
+         AAU7up2aRclZg3a9jPpfrY0rlOojfLzMWffYmWVxmUEtAYAALCafevaNiPbULxN1Is0X
+         ParZs6KEPNHSa0RnHDY9rGts/1Cr43V9PQbioF9DwaCsvyouTxMK4WBJmfprq8xBRkja
+         5mEN+42sTKljQ8/uIr69fyozNMYNl1hrEv5LVkChoknoO+0+K1r7wd8EnqfVBvFYVsyd
+         OFMw==
+X-Gm-Message-State: AOAM533NceGUAqidn9rmOE7eoZVCj3NnAN1d97p5HwhlPDF4xJJ0deSK
+        t3C78i1a4LDnJbjipdIq83OvSrP0Q/Q+iDs5arrvP+5zW4g=
+X-Google-Smtp-Source: ABdhPJxiKQ92Yockp7orzBj+khMA46ggqysYKlRUWlfgS04BdNz0w0ShJZ8Qid9wUJBDti1cMqtDyEOvb3MMdopPrCg=
+X-Received: by 2002:a37:a8b:: with SMTP id 133mr6429012qkk.134.1591851268783;
+ Wed, 10 Jun 2020 21:54:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200605213853.14959-1-sean.j.christopherson@intel.com> <20200605213853.14959-8-sean.j.christopherson@intel.com>
-In-Reply-To: <20200605213853.14959-8-sean.j.christopherson@intel.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Wed, 10 Jun 2020 15:34:28 -0700
-Message-ID: <CANgfPd9UH01vO1SYJ3vrKq4H_DXcJ3OL_VaeY2TV8_ZH9cR1GQ@mail.gmail.com>
-Subject: Re: [PATCH 07/21] KVM: x86/mmu: Topup memory caches after walking GVA->GPA
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Feiner <pfeiner@google.com>,
-        Peter Shier <pshier@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Christoffer Dall <christoffer.dall@arm.com>
+References: <20200528231628.120171-1-syq@debian.org> <20200529110913.GA11310@alpha.franken.de>
+ <CAKcpw6VkZBtiewrczgT1YS6C1KWf5WnWGf2vZRg+-k24yOD3_Q@mail.gmail.com> <alpine.LFD.2.21.2006040038360.9519@redsun52.ssa.fujisawa.hgst.com>
+In-Reply-To: <alpine.LFD.2.21.2006040038360.9519@redsun52.ssa.fujisawa.hgst.com>
+From:   YunQiang Su <syq@debian.org>
+Date:   Thu, 11 Jun 2020 12:54:17 +0800
+Message-ID: <CAKcpw6WsTR=hu6O1jgRNQC2hGJyXbA6qwQShz=dCrnZJsSQNKw@mail.gmail.com>
+Subject: Re: [PATCH] mips: add o32_fp64 boot param to disable FP64 support
+To:     "Maciej W. Rozycki" <macro@wdc.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 5, 2020 at 2:39 PM Sean Christopherson
-<sean.j.christopherson@intel.com> wrote:
+Maciej W. Rozycki <macro@wdc.com> 于2020年6月4日周四 上午8:19写道：
 >
-> Topup memory caches after walking the GVA->GPA translation during a
-> shadow page fault, there is no need to ensure the caches are full when
-> walking the GVA.  As of commit f5a1e9f89504f ("KVM: MMU: remove call
-> to kvm_mmu_pte_write from walk_addr"), the FNAME(walk_addr) flow no
-> longer add rmaps via kvm_mmu_pte_write().
+> On Fri, 29 May 2020, YunQiang Su wrote:
 >
-> This avoids allocating memory in the case that the GVA is unmapped in
-> the guest, and also provides a paper trail of why/when the memory caches
-> need to be filled.
+> > > > When build with CONFIG_O32_FP64_SUPPORTS, even all of the userland
+> > > > is FPXX, we cannot run any FP32 binary.
+> > >
+> > > I don't understand what this means. Can you explain what the problem
+> > > is ?
+> > >
+> >
+> > Some or most CPU cannot run FP32 application if
+> > CONFIG_O32_FP64_SUPPORTS is enabled.
+> > So we switch the whole Debian archive to FPXX. But the golang cannot
+> > support FP32 now.
+> >
+> > So I wish provides a way to support FP32 and FP64 with a single kernel image.
 >
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
-> ---
->  arch/x86/kvm/mmu/paging_tmpl.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  Well, FP32 and FP64 (and FPXX) are per-program attributes set in the ELF
+> headers of o32 binaries and CP0.Status.FR is a per-process property.  At
+> program execution an FP64-enabled kernel will set CP0.Status.FR in the
+> program's user context according to the FP32/FP64 setting in the program's
+> ELF structures, or fail if hardware does not support the requested mode.
+
+Yes. It is a bug of golang. It is FP32 while claims that it is FPXX,
+due to it use gcc,
+while doesn't pass -mfp32 to it.
+
+https://go-review.googlesource.com/c/go/+/237058
+
 >
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 38c576495048..3de32122f601 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -791,10 +791,6 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
+>  The FPXX hybrid mode is there to permit running with either CP0.Status.FR
+> setting, by tightening the FP ABI and forbidding the use of some code that
+> is allowed with both FP32 and FP64.  This mode also permits the use of
+> either FP32 or FP64 modules (but not both at a time) in dynamic loading,
+> by switching CP0.Status.FR accordingly as long as supported by the piece
+> of hardware being run on.
 >
->         pgprintk("%s: addr %lx err %x\n", __func__, addr, error_code);
+>  If you have software that only supports a certain FPxx setting, then
+> build it accordingly and the kernel will do the rest.  If the setting
+> required is not compatible with what hardware supports, then you can't run
+> your software on your hardware, and if you override the checks by patching
+> the kernel, then you'll get incorrect results.
 >
-> -       r = mmu_topup_memory_caches(vcpu);
-> -       if (r)
-> -               return r;
-> -
->         /*
->          * If PFEC.RSVD is set, this is a shadow page fault.
->          * The bit needs to be cleared before walking guest page tables.
-> @@ -822,6 +818,10 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
->                 return RET_PF_EMULATE;
->         }
+>  So what problem are you trying to solve?  Why do you need FP32 support if
+
+The problem is that I enabled CONFIG_O32_FP64_SUPPORT for Debian buster
+while now golang cannot work with it.
+
+I don't want to switch it off again, by instead, I *was* preferring to
+provides a
+boot-time option for sysadmin. So I can keep this option open, and the
+kernel of DSA (debian official sysadmin) can turn it off on boot-time.
+
+> all your software is FPXX (which will run with any CP0.Status.FR setting),
+> and why does Go have issues (what kind of issues?) with any particular
+> FPxx setting given that it uses the same MIPS backend as all the other
+> language frontends do?
 >
-> +       r = mmu_topup_memory_caches(vcpu);
-> +       if (r)
-> +               return r;
-> +
->         vcpu->arch.write_fault_to_shadow_pgtable = false;
->
->         is_self_change_mapping = FNAME(is_self_change_mapping)(vcpu,
-> --
-> 2.26.0
->
+>   Maciej
