@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A7A1F81DF
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Jun 2020 10:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238CA1F81DD
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jun 2020 10:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbgFMIWQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1726561AbgFMIWQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Sat, 13 Jun 2020 04:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbgFMIVv (ORCPT
+        with ESMTP id S1726441AbgFMIVv (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Sat, 13 Jun 2020 04:21:51 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A118AC08C5C1;
-        Sat, 13 Jun 2020 01:21:49 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id x6so12098549wrm.13;
-        Sat, 13 Jun 2020 01:21:49 -0700 (PDT)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5BFC08C5C2;
+        Sat, 13 Jun 2020 01:21:50 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id d128so10025979wmc.1;
+        Sat, 13 Jun 2020 01:21:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AEQAdXu90LvQ2AREiNSrBT25q02451T/bmVdo1rl85I=;
-        b=sTnosNkZfJq+enWfeEumBw83MbvfBfG6O7SlMeJ/WYrtUtcLAB1wLSEOWFDU3bOomI
-         iFCk4aKwwJFkOcH8rRK+aJZu49MwPVIbuvEyHhv3PGuviq1a0BKJZUvlsCJQoLbTqtsN
-         rNROXAF0k2OeRIK7/Cw8iOJa20T/uGGsEcoiZnLDchldCOLQAkTTHtEvgKwNqAxQg8tD
-         TxRr6Ez8n2GZYYDCuc4PhOVDicHvBpuxd5B5oXuq0vE+rViJVYlhcYgRLJwoYhdORU7N
-         bwSpAQKjJBwbiYf0vq+qf2HUFWyhr97YL+19u33duS8s4yXA5981vx5wOLI0+NSYTjZb
-         yv+A==
+        bh=eFELRKlgi51zXRTgZvULoamMhty3QhBmoZ29VwRZiTs=;
+        b=KfZDBbAZFKRdgc3DrMOy5US+r/xs5xOcPlRZNDrPt3zst6Mz8gOiU6Rut8NHj85onA
+         MhwJdL9h4kaK6wIiNxsDrBXEIxJobpdH8i0xKrlybi43dAz8fu6DXeNzkyAGMCdIX8kg
+         4getyyN3+eTxA/1b2U2w5ArrVJckk0CcKk4Tx6icB4vaIteEUFh6kPkWlKJiREpEX7Zs
+         zBnZHt17GbW2UvRzUYzPYmXQfmxcenyVnp4i4lyQvRw8Z8WKuGT4FTXY4c0ErPZ+vnhn
+         Wah7oGPjejzz6ULSk1yZ0faFlXyUySt5BxuMuO3GqSUv+IR9aBh5C3mVhOd3bQ2DZQ8o
+         Iviw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AEQAdXu90LvQ2AREiNSrBT25q02451T/bmVdo1rl85I=;
-        b=TgVXzaDhWnPHqYLGa3gP99pQkExznfe6IDn1GCuaM90HcZBKdpziVzCdFX2utWBDGv
-         oCwA8zidHjKckmoSOi8STTWTY1BmSi6dpeW6NBSalWBczuCBThvSBbop2GNkV6uz5com
-         I6qFdqu6cAcIc6qXAd61lbPGbLw80s35090nLXLGQ1TH2G0e5xwvIkmp2kRPqt1b4X2Z
-         Zr73CypfmZ52F6l3Gc922YwtZHAIJhc35jNhzAmEfnuXj6fTOMY8ssukjXiF2juI/rJX
-         7ypk/zbKB49xFivNcbv93piI4g+blQI06jok8AGNUHqb5w0NQvreUPu3vAHMLEiE3Zig
-         jDYg==
-X-Gm-Message-State: AOAM530CACpy4vpUHKPOhG4QT0VqfptNgL/nkb1OfUZs4WcHQYUVbK2x
-        dEwjxUxFFdNuCJcZLkUGbTU=
-X-Google-Smtp-Source: ABdhPJzZiBiKIJ/ojqWqqYiFeDDIRCdctUBs/8RqjN3cMLJipWuI2orIRKuQT/6WUVAOKXCPDQ159w==
-X-Received: by 2002:a5d:4bc5:: with SMTP id l5mr19165177wrt.104.1592036507929;
-        Sat, 13 Jun 2020 01:21:47 -0700 (PDT)
+        bh=eFELRKlgi51zXRTgZvULoamMhty3QhBmoZ29VwRZiTs=;
+        b=Bsi5CIC4ZIru8vCfKZX6/a97ffToo8/jerJ849UygFYMFNOq2YBvAp/c4EuUQUZQQ0
+         Uyb6ClL8p2N6wsdM3fBK87cOlvcW87boX4TYiBb3SDRJZxIIWsx5zIFKLejoHSy6/5oq
+         XlPvcbl7l2TRMgabJULqDUSq9R5qHUelYz/P1kr7j/rCGE8pysVgKr8HghQqTrZvzUyg
+         vPfAZsjuQnXpLycIUNrJ4eIYvBO6a4dKD77jeHHtOvfH+WS7iRdmrf/aM4XSZGy2JnXu
+         HgQ5vjSpIZg7TqFNPyy9gjdxQ1uVRi2F3F49teNQG/4j9/HbPYtR+LjKZ/+KMgAXRzN7
+         nIIg==
+X-Gm-Message-State: AOAM533douPPHqpS9A9aUZVP7Qt2eFpNooIjfppHqe0LlLKOzYJMEcbY
+        +NoVpyXWlDadUJrDr7gP3eI=
+X-Google-Smtp-Source: ABdhPJz9nU/D/VRRxp4n9kuI1XmXf+ipBXnCNKdlvJCgjqyVUG/Xb4Et2dJ3dt+soSRKl9cIvdRJdw==
+X-Received: by 2002:a1c:c904:: with SMTP id f4mr2901906wmb.69.1592036509020;
+        Sat, 13 Jun 2020 01:21:49 -0700 (PDT)
 Received: from skynet.lan (168.red-88-20-188.staticip.rima-tde.net. [88.20.188.168])
-        by smtp.gmail.com with ESMTPSA id n189sm12243603wmb.43.2020.06.13.01.21.46
+        by smtp.gmail.com with ESMTPSA id n189sm12243603wmb.43.2020.06.13.01.21.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2020 01:21:47 -0700 (PDT)
+        Sat, 13 Jun 2020 01:21:48 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
@@ -56,9 +56,9 @@ To:     hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
         linux-arm-kernel@lists.infradead.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH v4 4/9] mips: bmips: add BCM63268 power domain definitions
-Date:   Sat, 13 Jun 2020 10:21:35 +0200
-Message-Id: <20200613082140.2009461-5-noltari@gmail.com>
+Subject: [PATCH v4 5/9] mips: bmips: add BCM6318 power domain definitions
+Date:   Sat, 13 Jun 2020 10:21:36 +0200
+Message-Id: <20200613082140.2009461-6-noltari@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200613082140.2009461-1-noltari@gmail.com>
 References: <20200610171630.465579-1-noltari@gmail.com>
@@ -71,45 +71,42 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-BCM63268 SoCs have a power domain controller to enable/disable certain
+BCM6318 SoCs have a power domain controller to enable/disable certain
 components in order to save power.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 ---
- v4: Remove "dts: " from commit title.
- v3: Separate dt-bindings definitions from power domain .dtsi support.
+ v4: no changes.
+ v3: no changes (patch reordered).
+ v2: Add BCM6318 dt-bindings header file.
 
- include/dt-bindings/soc/bcm63268-pm.h | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 include/dt-bindings/soc/bcm63268-pm.h
+ include/dt-bindings/soc/bcm6318-pm.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100644 include/dt-bindings/soc/bcm6318-pm.h
 
-diff --git a/include/dt-bindings/soc/bcm63268-pm.h b/include/dt-bindings/soc/bcm63268-pm.h
+diff --git a/include/dt-bindings/soc/bcm6318-pm.h b/include/dt-bindings/soc/bcm6318-pm.h
 new file mode 100644
-index 000000000000..84ded53a732f
+index 000000000000..05931dce8333
 --- /dev/null
-+++ b/include/dt-bindings/soc/bcm63268-pm.h
-@@ -0,0 +1,21 @@
++++ b/include/dt-bindings/soc/bcm6318-pm.h
+@@ -0,0 +1,17 @@
 +/* SPDX-License-Identifier: GPL-2.0+ */
 +
-+#ifndef __DT_BINDINGS_BMIPS_BCM63268_PM_H
-+#define __DT_BINDINGS_BMIPS_BCM63268_PM_H
++#ifndef __DT_BINDINGS_BMIPS_BCM6318_PM_H
++#define __DT_BINDINGS_BMIPS_BCM6318_PM_H
 +
-+#define BCM63268_POWER_DOMAIN_SAR	0
-+#define BCM63268_POWER_DOMAIN_IPSEC	1
-+#define BCM63268_POWER_DOMAIN_MIPS	2
-+#define BCM63268_POWER_DOMAIN_DECT	3
-+#define BCM63268_POWER_DOMAIN_USBH	4
-+#define BCM63268_POWER_DOMAIN_USBD	5
-+#define BCM63268_POWER_DOMAIN_ROBOSW	6
-+#define BCM63268_POWER_DOMAIN_PCM	7
-+#define BCM63268_POWER_DOMAIN_PERIPH	8
-+#define BCM63268_POWER_DOMAIN_VDSL_PHY	9
-+#define BCM63268_POWER_DOMAIN_VDSL_MIPS	10
-+#define BCM63268_POWER_DOMAIN_FAP	11
-+#define BCM63268_POWER_DOMAIN_PCIE	12
-+#define BCM63268_POWER_DOMAIN_WLAN_PADS	13
++#define BCM6318_POWER_DOMAIN_PCIE	0
++#define BCM6318_POWER_DOMAIN_USB	1
++#define BCM6318_POWER_DOMAIN_EPHY0	2
++#define BCM6318_POWER_DOMAIN_EPHY1	3
++#define BCM6318_POWER_DOMAIN_EPHY2	4
++#define BCM6318_POWER_DOMAIN_EPHY3	5
++#define BCM6318_POWER_DOMAIN_LDO2P5	6
++#define BCM6318_POWER_DOMAIN_LDO2P9	7
++#define BCM6318_POWER_DOMAIN_SW1P0	8
++#define BCM6318_POWER_DOMAIN_PAD	9
 +
-+#endif /* __DT_BINDINGS_BMIPS_BCM63268_PM_H */
++#endif /* __DT_BINDINGS_BMIPS_BCM6318_PM_H */
 -- 
 2.27.0
 
