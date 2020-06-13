@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AEA1F81D9
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Jun 2020 10:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96D71F81E1
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jun 2020 10:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgFMIWS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 13 Jun 2020 04:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
+        id S1726570AbgFMIWR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 13 Jun 2020 04:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbgFMIVq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 Jun 2020 04:21:46 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00EBC08C5C1;
-        Sat, 13 Jun 2020 01:21:45 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id x13so12143304wrv.4;
-        Sat, 13 Jun 2020 01:21:45 -0700 (PDT)
+        with ESMTP id S1726349AbgFMIVr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 Jun 2020 04:21:47 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13107C08C5C2;
+        Sat, 13 Jun 2020 01:21:47 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id x13so12143330wrv.4;
+        Sat, 13 Jun 2020 01:21:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1E2Ih5H7xJKGoxw3JHd4DtWaa/tIBR+qMw0Gq6OYSe4=;
-        b=L6qJwDrnWn0ihRuKWVZpvfxkUnj9w+K8r6r4ikLAtSfUHokX3r1x645HtLs3Xglomu
-         BOD37kPT7T/QN5A1LLV7mXPjnN8xXAnYEDF0D3qYDRCVzSDSqeODq7ALfEpFEgNLabPa
-         Kq38sCWQ64zudFbRxszzZh0gDtdIFi0qX84TrtxauqOb4RwMTnpTh6ruZ2f37C69XUIw
-         /f7NYaMvIRObQb7IVgZrqEe7rICcsnbx6zl9UWLh1XGitCLYnlF0MxjcZdiVJdm6wHJA
-         ZMJJHGSNCy2TpbAfjD8ft2VEaNlTariNZ172us5UVWxTl4LUT8WsSVOE6dXfs1agyk9x
-         OQBw==
+        bh=1xHqshvxVKt/Lif7hiknmlHxlW07FtmhilPxSVlIbzA=;
+        b=hQeMubGl0U1kMD9APCucPsThjqmZErTgqMqpas/RXVrVuKik3XLu267jxm8+MFyp7i
+         CxObj0oCpakzUlx30JZ1apyR5ezRwug9pH+/B/XrhK14bNf+HffCgsfIr9QX6bSN+h6A
+         QkW9Mw4AQuM8AeYXWXuwI8RbtL4SmXg40XTciweYEYYIH4qYjJDethU72hXLVZvXlZPd
+         7/3l550iXVDmRHP6vLtLkMKGmT3nDOEZ7ryXeZXb+9u4DawV6XWkh/lXOwd7VVB/MV0I
+         J1lpvgNzEnhQfs8UwJeEjm3TDlCxm7W1X2eGjb5M3hioDrBnaatbok0dZNedkvltqLaP
+         +FJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1E2Ih5H7xJKGoxw3JHd4DtWaa/tIBR+qMw0Gq6OYSe4=;
-        b=eoM/ilkd4cLIXQdVLdTdkXw7fhNEP2WgTVUzpy/ZAs4NCExJtfOHhJ4eeTX9Yy9HJB
-         rng+bvARKS9oR+y3T1zemEFopsyij2AXSq+Z82DuQ9yQ++LIzo9wgU+r/6jr3mNdfyht
-         tVH46f8pQzwm6T+Y/EL9ioXXaJdFxSK1jAdPBXTE/ZdyrktYcNyfOo8qsrWSd7Lj3zBC
-         6TugiloHUShLfEMsaeK07b2JOf99lmegPXZB/eJH46u6f0abQc9aDHGYa31UIjP/BET2
-         HgcHpFVaSFF60sOY0y4s9PNpJ0epGmzTFN8CLeOZcQzzyjf3t6fiR/3HB45A1elk4RPS
-         b9Hw==
-X-Gm-Message-State: AOAM532+G5c7mOZUPFKMw1oYSb4bkDtJjl5TOJBuf5DsFKXc+SlyrcoJ
-        vsFrxox3LiRoqUPTB9l9gHM=
-X-Google-Smtp-Source: ABdhPJw1hjDRx32smBdpBxZq6dqT18RaiGPaijgAgtyFVgaMLRqjVXS/AGYQtyGbbQ2rzfHmb3702Q==
-X-Received: by 2002:adf:fdcd:: with SMTP id i13mr17893979wrs.190.1592036504596;
-        Sat, 13 Jun 2020 01:21:44 -0700 (PDT)
+        bh=1xHqshvxVKt/Lif7hiknmlHxlW07FtmhilPxSVlIbzA=;
+        b=PvelzqkgV7TAoIVEHeXEZWC5vtHiS9b7K2aiQbCS8KkX4TnADlVJkfGw50dow1yl2u
+         x1GDNYf4GqqI4Vo4RIoe9QJsa9UZCfnm2EfhMA0IH7LqINJhg3j0sxL+5hZP6d5AIR4b
+         c1xOco7aoHPTF9rv2uTEBaTbEgI/n5jYT8Eblk+eGq4vIkqz/XRQxHbYh7pH1p+FZdwt
+         jivcKQyxaI500DFTy3U2LwPp9pyxYuduCyMgZ8JAVDhR37/1o/JrU/DUzzovDZZNjny5
+         9vaxIEsFlgJ5dqPoZlpnU600uet6hHEzUqkcUiYDxubyB+IG128ro5UVo5HQsPB7wvgY
+         ab8w==
+X-Gm-Message-State: AOAM533Zwr+JxKqhwKsrm+HpAZEd9chirEXzD2ecsjzBnEVf1iBqpp4k
+        JwIP6RkMlhJBYwm3ATULdeE=
+X-Google-Smtp-Source: ABdhPJyoQ7Fl36M6toxK2SERExtYee+vDUqZWL7IQ4fImJNlfNCpjSb7bNaalRlw+jY7fWa03bWqbw==
+X-Received: by 2002:adf:f611:: with SMTP id t17mr18253571wrp.69.1592036505707;
+        Sat, 13 Jun 2020 01:21:45 -0700 (PDT)
 Received: from skynet.lan (168.red-88-20-188.staticip.rima-tde.net. [88.20.188.168])
-        by smtp.gmail.com with ESMTPSA id n189sm12243603wmb.43.2020.06.13.01.21.43
+        by smtp.gmail.com with ESMTPSA id n189sm12243603wmb.43.2020.06.13.01.21.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2020 01:21:44 -0700 (PDT)
+        Sat, 13 Jun 2020 01:21:45 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
@@ -56,9 +56,9 @@ To:     hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
         linux-arm-kernel@lists.infradead.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH v4 1/9] dt-bindings: soc: brcm: add BCM63xx power domain binding
-Date:   Sat, 13 Jun 2020 10:21:32 +0200
-Message-Id: <20200613082140.2009461-2-noltari@gmail.com>
+Subject: [PATCH v4 2/9] mips: bmips: add BCM6328 power domain definitions
+Date:   Sat, 13 Jun 2020 10:21:33 +0200
+Message-Id: <20200613082140.2009461-3-noltari@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200613082140.2009461-1-noltari@gmail.com>
 References: <20200610171630.465579-1-noltari@gmail.com>
@@ -71,70 +71,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-BCM6318, BCM6328, BCM6362 and BCM63268 SoCs have a power domain controller
-to enable/disable certain components in order to save power.
+BCM6328 SoCs have a power domain controller to enable/disable certain
+components in order to save power.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- v4: change license and move to bindings/power.
- v3: fix reg maxItems and quote #power-domain-cells.
- v2: Add separate YAML file.
+ v4: Remove "dts: " from commit title.
+ v3: Separate dt-bindings definitions from power domain .dtsi support.
 
- .../bindings/power/brcm,bcm63xx-power.yaml    | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/brcm,bcm63xx-power.yaml
+ include/dt-bindings/soc/bcm6328-pm.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100644 include/dt-bindings/soc/bcm6328-pm.h
 
-diff --git a/Documentation/devicetree/bindings/power/brcm,bcm63xx-power.yaml b/Documentation/devicetree/bindings/power/brcm,bcm63xx-power.yaml
+diff --git a/include/dt-bindings/soc/bcm6328-pm.h b/include/dt-bindings/soc/bcm6328-pm.h
 new file mode 100644
-index 000000000000..63b15ac6dde4
+index 000000000000..557e1a69b7f7
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/brcm,bcm63xx-power.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/power/brcm,bcm63xx-power.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++++ b/include/dt-bindings/soc/bcm6328-pm.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
 +
-+title: BCM63xx power domain driver
++#ifndef __DT_BINDINGS_BMIPS_BCM6328_PM_H
++#define __DT_BINDINGS_BMIPS_BCM6328_PM_H
 +
-+maintainers:
-+  - Álvaro Fernández Rojas <noltari@gmail.com>
++#define BCM6328_POWER_DOMAIN_ADSL2_MIPS	0
++#define BCM6328_POWER_DOMAIN_ADSL2_PHY	1
++#define BCM6328_POWER_DOMAIN_ADSL2_AFE	2
++#define BCM6328_POWER_DOMAIN_SAR	3
++#define BCM6328_POWER_DOMAIN_PCM	4
++#define BCM6328_POWER_DOMAIN_USBD	5
++#define BCM6328_POWER_DOMAIN_USBH	6
++#define BCM6328_POWER_DOMAIN_PCIE	7
++#define BCM6328_POWER_DOMAIN_ROBOSW	8
++#define BCM6328_POWER_DOMAIN_EPHY	9
 +
-+description: |
-+  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs have a power domain controller
-+  to enable/disable certain components in order to save power.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - brcm,bcm6318-power-controller
-+          - brcm,bcm6328-power-controller
-+          - brcm,bcm6362-power-controller
-+          - brcm,bcm63268-power-controller
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#power-domain-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#power-domain-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    periph_pwr: power-controller@10001848 {
-+        compatible = "brcm,bcm6328-power-controller";
-+        reg = <0x10001848 0x4>;
-+        #power-domain-cells = <1>;
-+    };
++#endif /* __DT_BINDINGS_BMIPS_BCM6328_PM_H */
 -- 
 2.27.0
 
