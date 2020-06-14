@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 072671F87E6
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jun 2020 10:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506C41F87E0
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jun 2020 10:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbgFNI72 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 Jun 2020 04:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
+        id S1727024AbgFNI7U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 Jun 2020 04:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726946AbgFNI67 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Jun 2020 04:58:59 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B73DC03E969;
-        Sun, 14 Jun 2020 01:58:59 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id q25so11885977wmj.0;
-        Sun, 14 Jun 2020 01:58:59 -0700 (PDT)
+        with ESMTP id S1726954AbgFNI7C (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Jun 2020 04:59:02 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A270AC03E969;
+        Sun, 14 Jun 2020 01:59:00 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id r9so11726768wmh.2;
+        Sun, 14 Jun 2020 01:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HB8Tch1V41ytesZxvjVq3/CheZkikOQdfvTTbMjrdJQ=;
-        b=foRGXEUmUb+joWyYv8IYVlqnAp7IyqC5f1lmhrfcVXSf8HulL0RLjUORlFN0G/qSW5
-         U2lgVdOsQr4qev+6vc5wgevBx7xP/V0sOd9bQDPWP/th+15xQV8Oaa1j4R5I2clD6iIA
-         Kyt7bBaIA3buLjD951Se9sCPJhpG2gUDvoTpERg9yjUQzLZY61MA2LAp1gY3Is60Sw+c
-         JmEVLM55YSpGaWoCoVRnTYfaIkFY6Jnfg7S7lBfIgJQVvh2GqyKyOhZASii6Q8Mmjl3q
-         OZ63CbqXrpcA+gkE3reNOJGXwsjloG72598KLQJr0lwdul8mgBj9D8Sjjq1xkQNNx6Vz
-         vweA==
+        bh=neX6E8hntC9fT3Zj0KGtyILAtZYWImGCNunXFjoeSWw=;
+        b=p6n7E5f6Xbo8BbxKNo+srasve4AEbgc7TE/KUb10qP4iIlYFazWt1f4skY9WWHlySC
+         VrtYU/ieeyrcDY5fAMBnBvdACXz3qxrpXcDms8swD3KMYGexEUEmQeFW87TkozhPY1JN
+         F1oDKSjEKUglgbB3gp2Bc9VFTtzR2f/pK32hWSUMw+1YXbOqMKGUDCrlaedWHT0iX7Ft
+         lVio440UhF7CPk+oyoBetojE/z9F2ansuVj/iiK/kd7bSIz+BzMiDUKC0ql8Hsu2qssB
+         yJha8UZIA4ZiimtN46Xo6IfYeFt3E6noeHC+QuwUtfgShfdgQFXX1YsGRb0hWxy26Uc+
+         4IeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HB8Tch1V41ytesZxvjVq3/CheZkikOQdfvTTbMjrdJQ=;
-        b=M+ymWWWKxH3ndLtjl4WursXtiKDDpF06d4QEgdmh97AXnjIiptdyR2iAYKO/T3GdIA
-         qoRtB0IG468ULIAQOvwKex/bCTF16QGNiteQuQvXPkUYNwrzQ+Bp265blBmbcdsfhaDj
-         2Zon2zot+9ze7OUDH0ObpdUcfGYzY1b8qYY4U43xojR0W6hBHnf6qj0vECYtkmApChBw
-         uOhUZl+hDsA864Y4oMMcHgAaIQ28rUdPl1aHIvlQLFQfltSwRXgddyk2/q2foBOqdaqd
-         BdBXQsd9fxudPmJHOhpfq53IcmzQLHM1vs9Z7RMA4klhi0rLs+DkSj7I4wrSKLDBkksW
-         ClrA==
-X-Gm-Message-State: AOAM5321ljTl8to0FIs0vJDj2gkVWFh8ZPoMrwpPBTRbAh/xouwovBd8
-        LRxd+P0RanEPYSlyTdG9Q9M=
-X-Google-Smtp-Source: ABdhPJyfXD/QaQspmyS8FXnfjmhmCeyVKtkJeRoFO9OvjRjqD2Co8k+IHpU1A/YonSLwYk434nsLwQ==
-X-Received: by 2002:a1c:2cd7:: with SMTP id s206mr7155114wms.109.1592125138015;
-        Sun, 14 Jun 2020 01:58:58 -0700 (PDT)
+        bh=neX6E8hntC9fT3Zj0KGtyILAtZYWImGCNunXFjoeSWw=;
+        b=BsYQBpwki55R/Z6YLHC0AB4sHDAJaYsVSG6tLMM31/wyDcmPe/gkBvfeodN8aZJwfU
+         YRSrl7oafZx5BwXJXo0dOGcTmo0oMRV0jp9wjjNDO20kp1lyCKxwGZSIj0UukRz6oK4q
+         bOvH9vIelNyiBi7skiiWbYTDHt8o65hUSNPVBo71eyErTxcqaxyrN+9Xi21J08uw1GES
+         DMMw58+0jD2KnHsp0fc2in3s/006bMTytTkjlMnPgNk7GBXB6b7+HiM291I2BCLgbO88
+         df06376XzC+uscEW0koGWVsML9l7Q2MWC2PiBGdMs8WkOwWQUa6i5jWRquFRtwm5fOJX
+         d8fg==
+X-Gm-Message-State: AOAM531GzAdp+SOzh5eLSgn+pZM3BUA23hnoG9DuU60hWvhPtoePKiOH
+        N4nqpGQqdTLTfb8l+YDl1gY=
+X-Google-Smtp-Source: ABdhPJxQQaoZ8QCzWUqJWbPLWO7DKq2+qsuKVgIrFjCVMHTzYwjQQ9jpvTpAGbpKe2sTUHcrD2Em8g==
+X-Received: by 2002:a7b:c201:: with SMTP id x1mr7357312wmi.58.1592125139013;
+        Sun, 14 Jun 2020 01:58:59 -0700 (PDT)
 Received: from skynet.lan (168.red-88-20-188.staticip.rima-tde.net. [88.20.188.168])
-        by smtp.gmail.com with ESMTPSA id u4sm17174043wmb.48.2020.06.14.01.58.57
+        by smtp.gmail.com with ESMTPSA id u4sm17174043wmb.48.2020.06.14.01.58.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jun 2020 01:58:57 -0700 (PDT)
+        Sun, 14 Jun 2020 01:58:58 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     p.zabel@pengutronix.de, robh+dt@kernel.org,
@@ -55,10 +55,10 @@ To:     p.zabel@pengutronix.de, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>, Florian Fainelli <F.fainelli@gmail.com>
-Subject: [PATCH v5 3/9] reset: add BCM6345 reset controller driver
-Date:   Sun, 14 Jun 2020 10:58:46 +0200
-Message-Id: <20200614085852.2130147-4-noltari@gmail.com>
+        <noltari@gmail.com>
+Subject: [PATCH v5 4/9] mips: bmips: dts: add BCM6328 reset controller support
+Date:   Sun, 14 Jun 2020 10:58:47 +0200
+Message-Id: <20200614085852.2130147-5-noltari@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200614085852.2130147-1-noltari@gmail.com>
 References: <20200613083813.2027186-1-noltari@gmail.com>
@@ -71,195 +71,62 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add support for resetting blocks through the Linux reset controller
-subsystem for BCM63xx SoCs.
+BCM6328 SoCs have a reset controller for certain components.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-Reviewed-by: Florian Fainelli <F.fainelli@gmail.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- v5: fix kbuild robot error (drop __init).
+ v5: no changes.
  v4: no changes.
- v3: using reset-simple isn't possible since sleeping after performing the
-     reset is also needed.
- v2: add compatibility to reset-simple instead of adding a new driver.
+ v3: add reset controller definitions header file.
+ v2: no changes.
 
- drivers/reset/Kconfig         |   7 ++
- drivers/reset/Makefile        |   1 +
- drivers/reset/reset-bcm6345.c | 135 ++++++++++++++++++++++++++++++++++
- 3 files changed, 143 insertions(+)
- create mode 100644 drivers/reset/reset-bcm6345.c
+ arch/mips/boot/dts/brcm/bcm6328.dtsi      |  6 ++++++
+ include/dt-bindings/reset/bcm6328-reset.h | 18 ++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 include/dt-bindings/reset/bcm6328-reset.h
 
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index d9efbfd29646..9f1da978cef6 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -41,6 +41,13 @@ config RESET_BERLIN
- 	help
- 	  This enables the reset controller driver for Marvell Berlin SoCs.
+diff --git a/arch/mips/boot/dts/brcm/bcm6328.dtsi b/arch/mips/boot/dts/brcm/bcm6328.dtsi
+index af860d06def6..590118cf5c12 100644
+--- a/arch/mips/boot/dts/brcm/bcm6328.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6328.dtsi
+@@ -57,6 +57,12 @@ clkctl: clock-controller@10000004 {
+ 			#clock-cells = <1>;
+ 		};
  
-+config RESET_BCM6345
-+	bool "BCM6345 Reset Controller"
-+	depends on BMIPS_GENERIC || COMPILE_TEST
-+	default BMIPS_GENERIC
-+	help
-+	  This enables the reset controller driver for BCM6345 SoCs.
++		periph_rst: reset-controller@10000010 {
++			compatible = "brcm,bcm6345-reset";
++			reg = <0x10000010 0x4>;
++			#reset-cells = <1>;
++		};
 +
- config RESET_BRCMSTB
- 	tristate "Broadcom STB reset controller"
- 	depends on ARCH_BRCMSTB || COMPILE_TEST
-diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-index 249ed357c997..e642aae42f0f 100644
---- a/drivers/reset/Makefile
-+++ b/drivers/reset/Makefile
-@@ -6,6 +6,7 @@ obj-$(CONFIG_ARCH_TEGRA) += tegra/
- obj-$(CONFIG_RESET_A10SR) += reset-a10sr.o
- obj-$(CONFIG_RESET_ATH79) += reset-ath79.o
- obj-$(CONFIG_RESET_AXS10X) += reset-axs10x.o
-+obj-$(CONFIG_RESET_BCM6345) += reset-bcm6345.o
- obj-$(CONFIG_RESET_BERLIN) += reset-berlin.o
- obj-$(CONFIG_RESET_BRCMSTB) += reset-brcmstb.o
- obj-$(CONFIG_RESET_BRCMSTB_RESCAL) += reset-brcmstb-rescal.o
-diff --git a/drivers/reset/reset-bcm6345.c b/drivers/reset/reset-bcm6345.c
+ 		periph_intc: interrupt-controller@10000020 {
+ 			compatible = "brcm,bcm6345-l1-intc";
+ 			reg = <0x10000020 0x10>,
+diff --git a/include/dt-bindings/reset/bcm6328-reset.h b/include/dt-bindings/reset/bcm6328-reset.h
 new file mode 100644
-index 000000000000..e1acb8d9f661
+index 000000000000..0f3df87d47af
 --- /dev/null
-+++ b/drivers/reset/reset-bcm6345.c
-@@ -0,0 +1,135 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * BCM6345 Reset Controller Driver
-+ *
-+ * Copyright (C) 2020 Álvaro Fernández Rojas <noltari@gmail.com>
-+ */
++++ b/include/dt-bindings/reset/bcm6328-reset.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
 +
-+#include <linux/delay.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset-controller.h>
++#ifndef __DT_BINDINGS_RESET_BCM6328_H
++#define __DT_BINDINGS_RESET_BCM6328_H
 +
-+#define BCM6345_RESET_NUM		32
-+#define BCM6345_RESET_SLEEP_MIN_US	10000
-+#define BCM6345_RESET_SLEEP_MAX_US	20000
++#define BCM6328_RST_SPI		0
++#define BCM6328_RST_EPHY	1
++#define BCM6328_RST_SAR		2
++#define BCM6328_RST_ENETSW	3
++#define BCM6328_RST_USBS	4
++#define BCM6328_RST_USBH	5
++#define BCM6328_RST_PCM		6
++#define BCM6328_RST_PCIE_CORE	7
++#define BCM6328_RST_PCIE	8
++#define BCM6328_RST_PCIE_EXT	9
++#define BCM6328_RST_PCIE_HARD	10
 +
-+struct bcm6345_reset {
-+	struct reset_controller_dev rcdev;
-+	void __iomem *base;
-+	spinlock_t lock;
-+};
-+
-+static void bcm6345_reset_update(struct reset_controller_dev *rcdev,
-+				 unsigned long id, bool assert)
-+{
-+	struct bcm6345_reset *bcm6345_reset =
-+		container_of(rcdev, struct bcm6345_reset, rcdev);
-+	unsigned long flags;
-+	uint32_t val;
-+
-+	spin_lock_irqsave(&bcm6345_reset->lock, flags);
-+	val = __raw_readl(bcm6345_reset->base);
-+	if (assert)
-+		val &= ~BIT(id);
-+	else
-+		val |= BIT(id);
-+	__raw_writel(val, bcm6345_reset->base);
-+	spin_unlock_irqrestore(&bcm6345_reset->lock, flags);
-+}
-+
-+static int bcm6345_reset_assert(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	bcm6345_reset_update(rcdev, id, true);
-+
-+	return 0;
-+}
-+
-+static int bcm6345_reset_deassert(struct reset_controller_dev *rcdev,
-+				  unsigned long id)
-+{
-+	bcm6345_reset_update(rcdev, id, false);
-+
-+	return 0;
-+}
-+
-+static int bcm6345_reset_reset(struct reset_controller_dev *rcdev,
-+			       unsigned long id)
-+{
-+	bcm6345_reset_update(rcdev, id, true);
-+	usleep_range(BCM6345_RESET_SLEEP_MIN_US,
-+		     BCM6345_RESET_SLEEP_MAX_US);
-+
-+	bcm6345_reset_update(rcdev, id, false);
-+	usleep_range(BCM6345_RESET_SLEEP_MIN_US,
-+		     BCM6345_RESET_SLEEP_MAX_US);
-+
-+	return 0;
-+}
-+
-+static int bcm6345_reset_status(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	struct bcm6345_reset *bcm6345_reset =
-+		container_of(rcdev, struct bcm6345_reset, rcdev);
-+
-+	return !(__raw_readl(bcm6345_reset->base) & BIT(id));
-+}
-+
-+static struct reset_control_ops bcm6345_reset_ops = {
-+	.assert = bcm6345_reset_assert,
-+	.deassert = bcm6345_reset_deassert,
-+	.reset = bcm6345_reset_reset,
-+	.status = bcm6345_reset_status,
-+};
-+
-+static int bcm6345_reset_probe(struct platform_device *pdev)
-+{
-+	struct bcm6345_reset *bcm6345_reset;
-+	struct resource *res;
-+	int err;
-+
-+	bcm6345_reset = devm_kzalloc(&pdev->dev,
-+				     sizeof(*bcm6345_reset), GFP_KERNEL);
-+	if (!bcm6345_reset)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, bcm6345_reset);
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	bcm6345_reset->base = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(bcm6345_reset->base))
-+		return PTR_ERR(bcm6345_reset->base);
-+
-+	spin_lock_init(&bcm6345_reset->lock);
-+	bcm6345_reset->rcdev.ops = &bcm6345_reset_ops;
-+	bcm6345_reset->rcdev.owner = THIS_MODULE;
-+	bcm6345_reset->rcdev.of_node = pdev->dev.of_node;
-+	bcm6345_reset->rcdev.of_reset_n_cells = 1;
-+	bcm6345_reset->rcdev.nr_resets = BCM6345_RESET_NUM;
-+
-+	err = devm_reset_controller_register(&pdev->dev,
-+					     &bcm6345_reset->rcdev);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id bcm6345_reset_of_match[] = {
-+	{ .compatible = "brcm,bcm6345-reset" },
-+	{ },
-+};
-+
-+static struct platform_driver bcm6345_reset_driver = {
-+	.probe = bcm6345_reset_probe,
-+	.driver	= {
-+		.name = "bcm6345-reset",
-+		.of_match_table = bcm6345_reset_of_match,
-+		.suppress_bind_attrs = true,
-+	},
-+};
-+builtin_platform_driver(bcm6345_reset_driver);
++#endif /* __DT_BINDINGS_RESET_BCM6328_H */
 -- 
 2.27.0
 
