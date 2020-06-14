@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA691F87D4
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jun 2020 10:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216551F87D9
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jun 2020 10:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbgFNI7F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 Jun 2020 04:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S1725265AbgFNI7L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 Jun 2020 04:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726977AbgFNI7E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Jun 2020 04:59:04 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B36C03E96F;
-        Sun, 14 Jun 2020 01:59:04 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id y20so11860824wmi.2;
-        Sun, 14 Jun 2020 01:59:04 -0700 (PDT)
+        with ESMTP id S1726460AbgFNI7F (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Jun 2020 04:59:05 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D478C03E969;
+        Sun, 14 Jun 2020 01:59:05 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id j10so14039985wrw.8;
+        Sun, 14 Jun 2020 01:59:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mscrfRheBqwi4NhM9/GlVUUXuK5F08x7HX7HV0LZ6qM=;
-        b=k8TVBuD4UFMXOAYy8Wb/unlDdBY3WypeYEBkXChgL8zdZIidr+ivJGuxwqF1kbJ/8L
-         GxrlNFJHbBIZCliX+Ova6TaP2bIz96qsUUkIAjPlkCgDM3W3t8ZzyLpk/4V9fJTqavwG
-         TzKGHbiZ7Oj0phFZQoruIp0TToJhmgEe4LoV6070eoclwL9lsOrVDLRc4bQfc5nx4YBB
-         ydyRVrlxQyS3vNYgZ8ObIwXfBVt/A3/zUAvuoAQjrvJMnV1dtyRG8tsHncCpU9143XPJ
-         cBscQ8YyvMe11k7QA+8Tex1mR/ngvHvp2fcueJCgQ2lxsri0XLjSkkpG80nzQ2M0Hq8b
-         zLhg==
+        bh=bfBfjc13i9oNkQ8+Zqf2QVGnWSdbHs2CT9bleKRk3vM=;
+        b=VmNnphxe/tlqN9qdh0se5AF78dwcs2rEq07gVb2RhQNqK5JMsCM6MAiQW+kxHjYHlF
+         vOZwdz+fItaEVUvu4d1s8W6fPczxu192jJ3I2I3tuLtq6SZc4unUS0RDbreUE3AyDhU9
+         5YzSlLKYYy01fEmhLnQGVfG+wNl+seEaHVxcfuiXjbhxdEHUasPAdXaLUr4gF7zO3PrI
+         6LjEI0ujoYMEWvCtXQu3aZ2TsUzbfQ+x2uIZR21Bm3UqTSQ99ZgNCOtZsY5La9ybr2Jo
+         UDSDV3OQ1tZfC4w/1gS6wS0xfXWTWucPLkx6c6CGQ/AxoDGP7AwcfKwQieDzIZsVsgjJ
+         /h2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mscrfRheBqwi4NhM9/GlVUUXuK5F08x7HX7HV0LZ6qM=;
-        b=NKwkIjYP5LIDwef/DC1nkPxbDrg9+3vsl2oQ+OkC/j/zXwan5+tuUAsg06Rxfsr42M
-         ZR1oSqMnwq80IYF1pwRUROUfgSvwvSRM6ougH2CTFch1bml7BVIWKrCpL713m7vHCGLU
-         ymrlYUHis4qvzNgAZ61XKRVVWF6tH46q86azw5AJj6G7qt707ay8mlygSpQ9SLucOavq
-         YgwtH0RPlZ3tT7w5Vub+OA+IA9j3XlyZ3IPGrOPvFQwbOVnKHWSUa7P5Fxnr9XgH1OzJ
-         G7UbpmrTA53N9YCP08u/Cb3b5DhY3llkl4CZgnbAKpwPAPqyhQqGch3rNtyp5guUj179
-         hzkw==
-X-Gm-Message-State: AOAM532CMSuR7RU//1rAn+53kXG25kCX1jLRBLeYcAhcYGOfzSbnz+A0
-        jU7wNKuRI723jtR83VfKNek=
-X-Google-Smtp-Source: ABdhPJzPX+5xD9W4HbBx+tvAad+rp+p7+pUAqpd0bYYrGKkfXXIfwp8IOoZIo7XSWF9HPZUJtfNSaw==
-X-Received: by 2002:a05:600c:2945:: with SMTP id n5mr7992723wmd.189.1592125142835;
-        Sun, 14 Jun 2020 01:59:02 -0700 (PDT)
+        bh=bfBfjc13i9oNkQ8+Zqf2QVGnWSdbHs2CT9bleKRk3vM=;
+        b=Kr4LWzB+TRO7UL1ShBKGbScKYnt4zOck1j5pNkib5EpxT+vbY3tKEqG9wGaC4C+HXE
+         0qWAKXclzwGaOViieuGzCF26PhKYPBpKXyerBFXTiakYVi5b3o5jb1LVbE87uWpKQdRk
+         wGS0nV4imuDxK5F0YcsHR86yVkNrhEgNRf+MF+dHtY5KtJ/Be5HZUzHqjdBryRQB+Lsm
+         H38tkwHCOcYxLyw6eRgBdMmnbhUAXDyBF7+tKZ4XE8fEtbe2WrubIMPzfSnQgC3JxHOK
+         gPk+e6Gr3emjd5+t16oxbvIjf4fewY+waKMdwSyN5Aj///Ef4ZFdcA/imZZmqCQnZTAb
+         Km9g==
+X-Gm-Message-State: AOAM530uVgKnktUI34stW4cuyjBM20bMURCNl7782TzzZy7CnFLk8xnN
+        JkIKTWiyRyp6ONr08MSoVkejeJQFCdM=
+X-Google-Smtp-Source: ABdhPJyrWu3tPQCvkEYvTz6K4aMJz2Ts6V/3m25HhZqYVJ+DpP33UqxhQWvnpiWcPJ5qBP9f8czSyg==
+X-Received: by 2002:adf:f812:: with SMTP id s18mr22370339wrp.28.1592125143824;
+        Sun, 14 Jun 2020 01:59:03 -0700 (PDT)
 Received: from skynet.lan (168.red-88-20-188.staticip.rima-tde.net. [88.20.188.168])
         by smtp.gmail.com with ESMTPSA id u4sm17174043wmb.48.2020.06.14.01.59.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jun 2020 01:59:02 -0700 (PDT)
+        Sun, 14 Jun 2020 01:59:03 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     p.zabel@pengutronix.de, robh+dt@kernel.org,
@@ -55,10 +55,10 @@ To:     p.zabel@pengutronix.de, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v5 8/9] mips: bmips: dts: add BCM63268 reset controller support
-Date:   Sun, 14 Jun 2020 10:58:51 +0200
-Message-Id: <20200614085852.2130147-9-noltari@gmail.com>
+        <noltari@gmail.com>, Florian Fainelli <F.fainelli@gmail.com>
+Subject: [PATCH v5 9/9] mips: bmips: add BCM6318 reset controller definitions
+Date:   Sun, 14 Jun 2020 10:58:52 +0200
+Message-Id: <20200614085852.2130147-10-noltari@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200614085852.2130147-1-noltari@gmail.com>
 References: <20200613083813.2027186-1-noltari@gmail.com>
@@ -71,69 +71,45 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-BCM63268 SoCs have a reset controller for certain components.
+BCM6318 SoCs have a reset controller for certain components.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Acked-by: Florian Fainelli <F.fainelli@gmail.com>
 ---
  v5: no changes.
  v4: no changes.
- v3: add new path with BCM63268 reset controller support.
+ v3: add new path with BCM6318 reset controller definitions.
 
- arch/mips/boot/dts/brcm/bcm63268.dtsi      |  6 +++++
- include/dt-bindings/reset/bcm63268-reset.h | 26 ++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
- create mode 100644 include/dt-bindings/reset/bcm63268-reset.h
+ include/dt-bindings/reset/bcm6318-reset.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 include/dt-bindings/reset/bcm6318-reset.h
 
-diff --git a/arch/mips/boot/dts/brcm/bcm63268.dtsi b/arch/mips/boot/dts/brcm/bcm63268.dtsi
-index beec24145af7..0150da7e3905 100644
---- a/arch/mips/boot/dts/brcm/bcm63268.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm63268.dtsi
-@@ -70,6 +70,12 @@ reboot: syscon-reboot@10000008 {
- 			mask = <0x1>;
- 		};
- 
-+		periph_rst: reset-controller@10000010 {
-+			compatible = "brcm,bcm6345-reset";
-+			reg = <0x10000010 0x4>;
-+			#reset-cells = <1>;
-+		};
-+
- 		periph_intc: interrupt-controller@10000020 {
- 			compatible = "brcm,bcm6345-l1-intc";
- 			reg = <0x10000020 0x20>,
-diff --git a/include/dt-bindings/reset/bcm63268-reset.h b/include/dt-bindings/reset/bcm63268-reset.h
+diff --git a/include/dt-bindings/reset/bcm6318-reset.h b/include/dt-bindings/reset/bcm6318-reset.h
 new file mode 100644
-index 000000000000..6a6403a4c2d5
+index 000000000000..f4fef7bfb06d
 --- /dev/null
-+++ b/include/dt-bindings/reset/bcm63268-reset.h
-@@ -0,0 +1,26 @@
++++ b/include/dt-bindings/reset/bcm6318-reset.h
+@@ -0,0 +1,20 @@
 +/* SPDX-License-Identifier: GPL-2.0+ */
 +
-+#ifndef __DT_BINDINGS_RESET_BCM63268_H
-+#define __DT_BINDINGS_RESET_BCM63268_H
++#ifndef __DT_BINDINGS_RESET_BCM6318_H
++#define __DT_BINDINGS_RESET_BCM6318_H
 +
-+#define BCM63268_RST_SPI	0
-+#define BCM63268_RST_IPSEC	1
-+#define BCM63268_RST_EPHY	2
-+#define BCM63268_RST_SAR	3
-+#define BCM63268_RST_ENETSW	4
-+#define BCM63268_RST_USBS	5
-+#define BCM63268_RST_USBH	6
-+#define BCM63268_RST_PCM	7
-+#define BCM63268_RST_PCIE_CORE	8
-+#define BCM63268_RST_PCIE	9
-+#define BCM63268_RST_PCIE_EXT	10
-+#define BCM63268_RST_WLAN_SHIM	11
-+#define BCM63268_RST_DDR_PHY	12
-+#define BCM63268_RST_FAP0	13
-+#define BCM63268_RST_WLAN_UBUS	14
-+#define BCM63268_RST_DECT	15
-+#define BCM63268_RST_FAP1	16
-+#define BCM63268_RST_PCIE_HARD	17
-+#define BCM63268_RST_GPHY	18
++#define BCM6318_RST_SPI		0
++#define BCM6318_RST_EPHY	1
++#define BCM6318_RST_SAR		2
++#define BCM6318_RST_ENETSW	3
++#define BCM6318_RST_USBD	4
++#define BCM6318_RST_USBH	5
++#define BCM6318_RST_PCIE_CORE	6
++#define BCM6318_RST_PCIE	7
++#define BCM6318_RST_PCIE_EXT	8
++#define BCM6318_RST_PCIE_HARD	9
++#define BCM6318_RST_ADSL	10
++#define BCM6318_RST_PHYMIPS	11
++#define BCM6318_RST_HOSTMIPS	11
 +
-+#endif /* __DT_BINDINGS_RESET_BCM63268_H */
++#endif /* __DT_BINDINGS_RESET_BCM6318_H */
 -- 
 2.27.0
 
