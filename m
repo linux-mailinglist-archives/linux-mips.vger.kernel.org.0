@@ -2,102 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 903571F95E0
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2020 14:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D9B1F9787
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2020 15:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729816AbgFOMB3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Jun 2020 08:01:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60608 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729815AbgFOMB2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Jun 2020 08:01:28 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6CB9B20679;
-        Mon, 15 Jun 2020 12:01:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592222487;
-        bh=bckLxMEKq0w5/9SzJe+n69vU2/hXF7ff/hu/a17+8+c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JYy9uvJD0PYRI2p3DwIotJOPqtgow49a6afHPJvsWcuBY0yjMd4cMirM6pN9r8hnW
-         bAuNvqGDTjO1PYNVybPD0JTt0QO17WOahY67f2Xbvv7ksMXm+vjQWpUNkhQeWo72XL
-         h9meg4DTVT4OxdC2+kMDmPK4hWvZvLhU3rIlMDWM=
-Date:   Mon, 15 Jun 2020 13:01:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 13/29] dt: fix broken links due to txt->yaml renames
-Message-ID: <20200615120125.GJ4447@sirena.org.uk>
-References: <cover.1592203542.git.mchehab+huawei@kernel.org>
- <0e4a7f0b7efcc8109c8a41a2e13c8adde4d9c6b9.1592203542.git.mchehab+huawei@kernel.org>
- <20200615111927.GC4447@sirena.org.uk>
- <20200615135739.798f4489@coco.lan>
+        id S1730162AbgFONAi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Jun 2020 09:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729977AbgFONAh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Jun 2020 09:00:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2023C061A0E;
+        Mon, 15 Jun 2020 06:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=KEBwjnYUxfYhJTwez4F4fZnZA29JFLpBE55ailzCXvU=; b=DgNA8zNjg31fURBe4MXNxzAOhB
+        NK3HSZHgIza8gTjAdkipWM3Ym6khB8DZ1Ua2lKEqsk4tChR51Rv6Nj5tQjHuqiwguPR1MTqqOvvVn
+        ATtNL2LZr+Fd8c2w/Zj7gjJH5p4xd42seDJ5bXqk5d2VCQMt91YWdE22Y+ATPBXjMmnbBTqWS0Dd0
+        WC9a5c+5d0BUckpT8EBBuMnD6ZAGG8RnlfP6N+x8oECvP3pxtIr9pT9jH+TUIZfKlbL5tKsxJA+6t
+        4OnNPShuVQndS1ghp/bJMSINGJuiWu3E2lGr+9nhQG8ntYFYHPcdmIj4F16cvC9IPe1XdgSVWewgZ
+        aNIELFwg==;
+Received: from 195-192-102-148.dyn.cablelink.at ([195.192.102.148] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jkoj4-0007nP-Cw; Mon, 15 Jun 2020 13:00:34 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: properly support exec and wait with kernel pointers
+Date:   Mon, 15 Jun 2020 15:00:26 +0200
+Message-Id: <20200615130032.931285-1-hch@lst.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="va4/JQ6j8/8uipEp"
-Content-Disposition: inline
-In-Reply-To: <20200615135739.798f4489@coco.lan>
-X-Cookie: Offer may end without notice.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi all,
 
---va4/JQ6j8/8uipEp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this series first cleans up the exec code and then adds proper
+kernel_execveat and kernel_wait callers instead of relying on the fact
+that the early init code and kernel threads implicitly run with
+the address limit set to KERNEL_DS.
 
-On Mon, Jun 15, 2020 at 01:57:39PM +0200, Mauro Carvalho Chehab wrote:
-> Mark Brown <broonie@kernel.org> escreveu:
-> > On Mon, Jun 15, 2020 at 08:46:52AM +0200, Mauro Carvalho Chehab wrote:
-> > > There are some new broken doc links due to yaml renames
-> > > at DT. Developers should really run: =20
-
-> > I also previously acked this one in 20200504100822.GA5491@sirena.org.uk.
-> > Has anything changed here to cause the ack to be dropped?
-
-> Both patches are the same. I forgot to add your acks on my tree.=20
-
-> My bad!
-
-Ah, no worries - no wonder I couldn't spot the changes!
-
---va4/JQ6j8/8uipEp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7nYxUACgkQJNaLcl1U
-h9AlAAf8D93i17Pj7T800BmwJ3UUHzaiQeRYZFSyfjkXbmviTRnh3rTP+7Rx/Rqe
-83+UeFeMR/Rn18FzLvpCjXuZ1LTbEsOj7/3vkvecKW+LQy/oHwTsTr09Im4vI0h2
-9r3wxGGCXOU+EPu2c9ZT3j+Sp9yhWheTN0ym70YLHDtJuat1Bjw96kBQF8vpo1d9
-AGTB8NOjhstg/4Z+dZYlx5NhdbG4f5qV9zkkVGyZJ1xcdrgs60KfolFrCfTtUG2X
-qRm7RhGf/Rum0bhUG8lvkRaJGz9+Wh9eQA3JUHItfxFEvpM1scwlHJrBTxo7fP9y
-ytZ9j2PBRG+rP5iCMbibBf7cKbhhMg==
-=xi26
------END PGP SIGNATURE-----
-
---va4/JQ6j8/8uipEp--
+Note that the cleanup removes the compat execve(at) handlers (almost)
+entirely, as we can handle the compat difference very nicely in a
+unified codebase.  The only exception is x86 where this would list the
+handlers twice in the same syscall table due to the messed up x32
+design.  I had to add an extra compat handler just for that case, but
+maybe someone has a better idea.
