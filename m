@@ -2,108 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2161FA0B6
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2020 21:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB5D1FA2E3
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2020 23:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730375AbgFOTph (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Jun 2020 15:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728773AbgFOTph (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Jun 2020 15:45:37 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E851C061A0E;
-        Mon, 15 Jun 2020 12:45:36 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id s18so19321344ioe.2;
-        Mon, 15 Jun 2020 12:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GcEsP5XHkAYWjVB1MFDssViF4cxMQLWXk2Kgbxji0hs=;
-        b=d1N76KYXqQ1fpaIX30dgZBqRd8wI/sojfUihP9H9n7SrJl5fw8AIM1QjJHFUie0ynn
-         Ba7u2YUNcGPgUH5k5/xR7j1g1AD4ubDfekbuaJsUIn8tpQbEqATe7gJrtx3bqoUJmH4s
-         5+bquUS4RYotC8sNbFVFKTlUv9aULk2bwxwqhhxgC1NWXrZ2b3J+MnEA2epJN5YcPwJd
-         seJUjothmBUqRpHkR2X5MhScZehYA2HegUeEnFWW4JD2VuEs9SDBgZ0eGzbMT5M7oi0/
-         XAULqncIPF3a7VQsBQHJiygHfxiVk4UqM7Xb3uuuIVXJb73uzIjZdrMQlG7Z9vwbj0Z+
-         CyHA==
+        id S1731665AbgFOVer (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Jun 2020 17:34:47 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:41508 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731540AbgFOVer (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Jun 2020 17:34:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592256886;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ItwxuioZVdA5XdCXR1QbAewm4+8qdb0KbH1lb+9ehrA=;
+        b=Qq9hJmDAFSNbT0dxqko+g5j+VdL+eMmI9uhGXBbnrSRcb2Iu1Q7FxYb+KZe3t+FoW1W9su
+        tTwKTp/dmNCQNsJuo1aFYOTOK0vDgEnYFDvK9XWMxO6Efe0fqMWnM/Bon/XCJi9+Rb3/fn
+        9tgmR+X8hTs2HPXnk8zu4wywZG7DJc0=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-407-vXNf6Wz9M4W_OCPXfzSMtA-1; Mon, 15 Jun 2020 17:34:34 -0400
+X-MC-Unique: vXNf6Wz9M4W_OCPXfzSMtA-1
+Received: by mail-qv1-f72.google.com with SMTP id s15so14024859qvo.6
+        for <linux-mips@vger.kernel.org>; Mon, 15 Jun 2020 14:34:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GcEsP5XHkAYWjVB1MFDssViF4cxMQLWXk2Kgbxji0hs=;
-        b=oD8rqe1WbSqXPeGF+kDGc8ny/y8ZwR4nKi3K9xLvoeN5cmrNEsfuIvRKjrB9b7cCiJ
-         aDCzAMYetaJJYLn4POxwKcLWyDI6do9l4LZ0aeCbK2KLF3ogWlhDpI8t563TOxzlbiZi
-         XsZTmklNrV1zI+xAv3WWoQcNa3ktsCTo2/rDEpvnpDmW6nmx08TKX5jQtJTPE6WEr6wT
-         +KIDoOpMRYvPoSjcw46UA9Xq02vIsOmDgE92qyte4GfseqBE8SDPaTjV9IN2h423Pu1U
-         Yk/lBu3IiMSLLtpuLiRGJeYlp8q905CasW9zE37EJjIJPmzDMe+v1HFJb6r1JIQDTV09
-         8loQ==
-X-Gm-Message-State: AOAM5319MNyHR3uHQK7Fo+4VDz/IfJHwZzc5RA/G6XG2nu1ijlVfVvDg
-        SRSa0DwKOOS+q/xtbhN83gIl0E1UlgXQQZlNUA==
-X-Google-Smtp-Source: ABdhPJxruXU+i+P2JjGW09+nvoxmHKpEF1SP+mxNnwxG3exn2/HqUJry5Lh3ZGwSfno6ZlJbUa99xQueu/DZAVZXhg0=
-X-Received: by 2002:a05:6602:80b:: with SMTP id z11mr29222473iow.109.1592250335524;
- Mon, 15 Jun 2020 12:45:35 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ItwxuioZVdA5XdCXR1QbAewm4+8qdb0KbH1lb+9ehrA=;
+        b=bbapbaIobuRPWVi/DjkkZ5xZ41/44fX1LES81OYTjoY+9vOsCnfasDaZA5kcCHjWg4
+         xeWjUq2YzyXseMaDOyOmUnZF9fT0lleMKhfp7Qu1QbI+q6N46+bZ0dY/ci/7ZyX/6pL+
+         JpiBbyc0T5pW3YRWQKhXoutQiFaX92gONes9WWlI2N4Q5xNXU1f5r9SfdPSBFm2X4GDX
+         N3+soNZGl6btrZl5pYJzR3KTbyTUY06pmoh7MfGuyU6dYfXiu+2R2q8gWlGZ7IIK1aAO
+         MBZMYQlIh+uYdj1ZKHK4G7u+JmoJJaS6diLTlPTFYe8NNxLloEFvmGKyJ53zw8ekXWcF
+         50aA==
+X-Gm-Message-State: AOAM530Yp3JH9LXULY7QoGagH1lUXzl8/9JYJxt5X4Gl2mw8PMU6+iSF
+        CLJka8d+WK39LUYDyyt5lBpQkcwLlhvr8HauEHKZC9WW8mWlWzjCHI+R4AusdLqQHAkgz5wRbVB
+        U9crBVrzLLk9HhLQdlnGyPQ==
+X-Received: by 2002:a0c:ed31:: with SMTP id u17mr25540583qvq.117.1592256874112;
+        Mon, 15 Jun 2020 14:34:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz0iHGiHde51cucRTUPE7NzfM/1jQRbNlFV4ChXmFExBXup/Ay4TPRKGywEeToUwHIWcL2Psg==
+X-Received: by 2002:a0c:ed31:: with SMTP id u17mr25540552qvq.117.1592256873805;
+        Mon, 15 Jun 2020 14:34:33 -0700 (PDT)
+Received: from xz-x1 ([2607:9880:19c0:32::2])
+        by smtp.gmail.com with ESMTPSA id f30sm12961493qtb.9.2020.06.15.14.34.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2020 14:34:33 -0700 (PDT)
+Date:   Mon, 15 Jun 2020 17:34:31 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Gerald Schaefer <gerald.schaefer@de.ibm.com>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        Guan Xuetao <gxt@pku.edu.cn>, linux-xtensa@linux-xtensa.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: Possible duplicate page fault accounting on some archs after
+ commit 4064b9827063
+Message-ID: <20200615213431.GC111927@xz-x1>
+References: <20200610174811.44b94525@thinkpad>
+ <20200610165023.GA67179@xz-x1>
 MIME-Version: 1.0
-References: <20200615130032.931285-1-hch@lst.de> <20200615130032.931285-3-hch@lst.de>
- <CAK8P3a0bRD3RzE_X6Tjzu9Tj+OhHhP+S=k6+VYODBGko8oQhew@mail.gmail.com>
- <20200615141239.GA12951@lst.de> <CAMzpN2heSzZzg16ws3yQkd7YZwmPPx_4RFCpb9JYfFWJ9gfPhA@mail.gmail.com>
- <CAK8P3a3q-hC7kZwLPbc+E5VYcqthQS4J4Rqo+rKkBRU2n071XA@mail.gmail.com>
-In-Reply-To: <CAK8P3a3q-hC7kZwLPbc+E5VYcqthQS4J4Rqo+rKkBRU2n071XA@mail.gmail.com>
-From:   Brian Gerst <brgerst@gmail.com>
-Date:   Mon, 15 Jun 2020 15:45:24 -0400
-Message-ID: <CAMzpN2iDPKatOqs+Uuw70ACbnB-D__dgSRZU0wBjOUBwTGOJ-A@mail.gmail.com>
-Subject: Re: [PATCH 2/6] exec: simplify the compat syscall handling
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200610165023.GA67179@xz-x1>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 2:47 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Jun 15, 2020 at 4:48 PM Brian Gerst <brgerst@gmail.com> wrote:
-> > On Mon, Jun 15, 2020 at 10:13 AM Christoph Hellwig <hch@lst.de> wrote:
-> > > On Mon, Jun 15, 2020 at 03:31:35PM +0200, Arnd Bergmann wrote:
->
-> > >
-> > > I'd rather keep it in common code as that allows all the low-level
-> > > exec stuff to be marked static, and avoid us growing new pointless
-> > > compat variants through copy and paste.
-> > > smart compiler to d
-> > >
-> > > > I don't really understand
-> > > > the comment, why can't this just use this?
-> > >
-> > > That errors out with:
-> > >
-> > > ld: arch/x86/entry/syscall_x32.o:(.rodata+0x1040): undefined reference to
-> > > `__x32_sys_execve'
-> > > ld: arch/x86/entry/syscall_x32.o:(.rodata+0x1108): undefined reference to
-> > > `__x32_sys_execveat'
-> > > make: *** [Makefile:1139: vmlinux] Error 1
-> >
-> > I think I have a fix for this, by modifying the syscall wrappers to
-> > add an alias for the __x32 variant to the native __x64_sys_foo().
-> > I'll get back to you with a patch.
->
-> Do we actually need the __x32 prefix any more, or could we just
-> change all x32 specific calls to use __x64_compat_sys_foo()?
+On Wed, Jun 10, 2020 at 12:50:23PM -0400, Peter Xu wrote:
+> On Wed, Jun 10, 2020 at 05:48:11PM +0200, Gerald Schaefer wrote:
+> > Hi,
+> 
+> Hi, Gerald,
+> 
+> > 
+> > Some architectures have their page fault accounting code inside the fault
+> > retry loop, and rely on only going through that code once. Before commit
+> > 4064b9827063 ("mm: allow VM_FAULT_RETRY for multiple times"), that was
+> > ensured by testing for and clearing FAULT_FLAG_ALLOW_RETRY.
+> > 
+> > That commit had to remove the clearing of FAULT_FLAG_ALLOW_RETRY for all
+> > architectures, and introduced a subtle change to page fault accounting
+> > logic in the affected archs. It is now possible to go through the retry
+> > loop multiple times, and the affected archs would then account multiple
+> > page faults instead of just one.
+> > 
+> > This was found by coincidence in s390 code, and a quick check showed that
+> > there are quite a lot of other architectures that seem to be affected in a
+> > similar way. I'm preparing a fix for s390, by moving the accounting behind
+> > the retry loop, similar to x86. It is not completely straight-forward, so
+> > I leave the fix for other archs to the respective maintainers.
+> 
+> Sorry for not noticing this before.  The accounting part should definitely be
+> put at least into a check against fault_flag_allow_retry_first() to mimic what
+> was done before.  And I agree it would be even better to put it after the retry
+> logic, so if any of the page faults gets a major fault, it'll be accounted as a
+> major fault which makes more sense to me, just like what x86 is doing now with:
+> 
+> 	major |= fault & VM_FAULT_MAJOR;
+> 
+> I'm not sure what's the preference of the arch maintainers, just let me know if
+> it's preferred to use a single series to address this issue for all affected
+> archs (or the archs besides s390), then I'll do.
 
-I suppose that would work too.  The prefix really describes the
-register mapping.
+To make sure this won't fall through the cracks... I'll give it a shot with a
+single series to address this issue for all archs.  Although it might not be
+easy to do accounting directly in handle_mm_fault(), it might be still a chance
+to introduce a helper so the accounting can be done in general code.
 
---
-Brian Gerst
+Thanks,
+
+-- 
+Peter Xu
+
