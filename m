@@ -2,53 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB861F9DA9
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2020 18:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50AE1F9EAA
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2020 19:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730565AbgFOQli (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Jun 2020 12:41:38 -0400
-Received: from verein.lst.de ([213.95.11.211]:34309 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730431AbgFOQlh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Jun 2020 12:41:37 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 14E2268AFE; Mon, 15 Jun 2020 18:41:34 +0200 (CEST)
-Date:   Mon, 15 Jun 2020 18:41:33 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Brian Gerst <brgerst@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/6] exec: simplify the compat syscall handling
-Message-ID: <20200615164133.GA23493@lst.de>
-References: <20200615130032.931285-1-hch@lst.de> <20200615130032.931285-3-hch@lst.de> <CAK8P3a0bRD3RzE_X6Tjzu9Tj+OhHhP+S=k6+VYODBGko8oQhew@mail.gmail.com> <20200615141239.GA12951@lst.de> <CAK8P3a2MeZhayZWkPbd4Ckq3n410p_n808NJTwN=JjzqHRiAXg@mail.gmail.com> <20200615144310.GA15101@lst.de> <CAK8P3a17h782gO65qJ9Mmz0EuiTSKQPEyr_=nvqOtnmQZuh9Kw@mail.gmail.com> <20200615150926.GA17108@lst.de> <CAMzpN2htYX7s6pmRg-c8qwZL1f1_+sB=ztDG_L=617hWsm-=8g@mail.gmail.com>
+        id S1729124AbgFORi2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Jun 2020 13:38:28 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:47561 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729354AbgFORi2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Jun 2020 13:38:28 -0400
+X-Originating-IP: 91.224.148.103
+Received: from localhost.localdomain (unknown [91.224.148.103])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 15B6420009;
+        Mon, 15 Jun 2020 17:38:20 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
+        tsbogend@alpha.franken.de, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, jonas.gorski@gmail.com,
+        linus.walleij@linaro.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v4] mtd: parsers: bcm63xx: simplify CFE detection
+Date:   Mon, 15 Jun 2020 19:38:20 +0200
+Message-Id: <20200615173820.25624-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200615091740.2958303-1-noltari@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMzpN2htYX7s6pmRg-c8qwZL1f1_+sB=ztDG_L=617hWsm-=8g@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: 6c91c7bc6f841fa54627af10c4bc85de2eb843db
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 11:33:49AM -0400, Brian Gerst wrote:
-> If you move those aliases above all the __SYSCALL_* defines it will
-> work, since that will get the forward declaration too.  This would be
-> the simplest workaround.
+On Mon, 2020-06-15 at 09:17:40 UTC, =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= wrote:
+> Instead of trying to parse CFE version string, which is customized by some
+> vendors, let's just check that "CFE1" was passed on argument 3.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 
-That compiles and also passes my exaustive x32 tests (chroot + ls -l).
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 
-This is the updated version:
-
-http://git.infradead.org/users/hch/misc.git/commitdiff/c8d319711ad2f53be003ae8e9be08519068bdcee
+Miquel
