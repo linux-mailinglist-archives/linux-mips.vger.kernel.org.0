@@ -2,50 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF601F946D
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2020 12:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD141F952D
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2020 13:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728368AbgFOKQM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Jun 2020 06:16:12 -0400
-Received: from elvis.franken.de ([193.175.24.41]:34158 "EHLO elvis.franken.de"
+        id S1729040AbgFOLTa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Jun 2020 07:19:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41348 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728505AbgFOKQL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Jun 2020 06:16:11 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jkm9s-0005U9-00; Mon, 15 Jun 2020 12:16:04 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id C39B8C0688; Mon, 15 Jun 2020 12:14:43 +0200 (CEST)
-Date:   Mon, 15 Jun 2020 12:14:43 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Bibo Mao <maobibo@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Do not flush tlb when setting pmd entry
-Message-ID: <20200615101443.GA10075@alpha.franken.de>
-References: <1591177333-17833-1-git-send-email-maobibo@loongson.cn>
+        id S1728285AbgFOLT3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Jun 2020 07:19:29 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 058D020679;
+        Mon, 15 Jun 2020 11:19:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592219969;
+        bh=09YCLJTSpwXYksfyCYSJl2k+cwsJ7qFx3Cq3UzjbGyI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y9XD9p0MeL4taa2ELATHmZjnxuB2Qwom8k1ILpzM+ZKmgHncRSrZRkWHzXJoKUZYG
+         RVzFdcjhfF4+7tviRu0Z7J7pql7QVnbcy5lmyaFqXh1wKUMpINf6iGMDn+vhj+ObwV
+         iv9FZnGvAGdOWuUFB1fqKEZG7JlfMHbBDSJzRm08=
+Date:   Mon, 15 Jun 2020 12:19:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH 13/29] dt: fix broken links due to txt->yaml renames
+Message-ID: <20200615111927.GC4447@sirena.org.uk>
+References: <cover.1592203542.git.mchehab+huawei@kernel.org>
+ <0e4a7f0b7efcc8109c8a41a2e13c8adde4d9c6b9.1592203542.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WfZ7S8PLGjBY9Voh"
 Content-Disposition: inline
-In-Reply-To: <1591177333-17833-1-git-send-email-maobibo@loongson.cn>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <0e4a7f0b7efcc8109c8a41a2e13c8adde4d9c6b9.1592203542.git.mchehab+huawei@kernel.org>
+X-Cookie: Offer may end without notice.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 05:42:13PM +0800, Bibo Mao wrote:
-> Function set_pmd_at is to set pmd entry, if tlb entry need to
-> be flushed, there exists pmdp_huge_clear_flush alike function
-> before set_pmd_at is called. So it is not necessary to call
-> flush_tlb_all in this function.
 
-have you checked all set_pmd_at() calls ? I found a few case where
-it's not clear to me, if tlb flushing is done... If you think this
-is still the right thing to do, please change arch/mips/mm/pgtable-32.c
-as well.
+--WfZ7S8PLGjBY9Voh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thomas.
+On Mon, Jun 15, 2020 at 08:46:52AM +0200, Mauro Carvalho Chehab wrote:
+> There are some new broken doc links due to yaml renames
+> at DT. Developers should really run:
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+I also previously acked this one in 20200504100822.GA5491@sirena.org.uk.
+Has anything changed here to cause the ack to be dropped?
+
+--WfZ7S8PLGjBY9Voh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7nWT4ACgkQJNaLcl1U
+h9BSJQf9FR8Vke3pe9Gs5pnWmw6vzxds7jfidCUpXIKPoosgfYfzYQrN1G9m2fSm
+pLlYWjhQBEAU+w9oq7WktfEZ8r736noKsRW4hd5a+Zf2koBr0M9O7ull4h7WlHvr
+asCHlWuqJvpVevxf1ag9x0dAA9NRMqh8xxd8ah/ENWTbXmzZPir0Pa6Q+9lzG2Ld
+aqgHcA+WbonAUk4BqLRSasRy6AkO3zUbYWqVecAV8xRPcVjiWd/PkhEQ/BV67wG9
+Kh/sFCs6+PalKQu5PDZP70apmaRPYHwPZmkNu5Y8rAUsjsQradS2JB1zFlWDSxZk
+0qIWVDJdY+FIcxlqt8Rda5akpjL2SQ==
+=51fv
+-----END PGP SIGNATURE-----
+
+--WfZ7S8PLGjBY9Voh--
