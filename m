@@ -2,49 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C251FAE11
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2020 12:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4041FAF8D
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2020 13:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726052AbgFPKe3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Jun 2020 06:34:29 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:52506 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725843AbgFPKe1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Jun 2020 06:34:27 -0400
-Received: from [10.20.42.25] (unknown [10.20.42.25])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_98toOheQWFEAA--.6519S3;
-        Tue, 16 Jun 2020 18:34:22 +0800 (CST)
-Subject: Re: [PATCH] MIPS: Do not flush tlb when setting pmd entry
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <1591177333-17833-1-git-send-email-maobibo@loongson.cn>
- <20200615101443.GA10075@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   maobibo <maobibo@loongson.cn>
-Message-ID: <4bef403d-baba-ddf8-c25c-3d6968897a53@loongson.cn>
-Date:   Tue, 16 Jun 2020 18:34:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726306AbgFPLzE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Jun 2020 07:55:04 -0400
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:44277 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726261AbgFPLzE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Jun 2020 07:55:04 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07484;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=37;SR=0;TI=SMTPD_---0U.mfflQ_1592308495;
+Received: from 30.27.116.240(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0U.mfflQ_1592308495)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 16 Jun 2020 19:54:57 +0800
+Subject: Re: [PATCH v4 6/7] KVM: MIPS: clean up redundant 'kvm_run' parameters
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>, paulus@ozlabs.org,
+        mpe@ellerman.id.au,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        cohuck@redhat.com, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        sean.j.christopherson@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org, hpa@zytor.com,
+        Marc Zyngier <maz@kernel.org>, james.morse@arm.com,
+        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
+        christoffer.dall@arm.com, Peter Xu <peterx@redhat.com>,
+        thuth@redhat.com, kvm@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <20200427043514.16144-1-tianjia.zhang@linux.alibaba.com>
+ <20200427043514.16144-7-tianjia.zhang@linux.alibaba.com>
+ <CAAhV-H7kpKUfQoWid6GSNL5+4hTTroGyL83EaW6yZwS2+Ti9kA@mail.gmail.com>
+ <37246a25-c4dc-7757-3f5c-d46870a4f186@linux.alibaba.com>
+ <30c2ac06-1a7e-2f85-fbe1-e9dc25bf2ae2@redhat.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <5f0d01ad-d299-083b-70e4-995ad7596fbd@linux.alibaba.com>
+Date:   Tue, 16 Jun 2020 19:54:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-In-Reply-To: <20200615101443.GA10075@alpha.franken.de>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <30c2ac06-1a7e-2f85-fbe1-e9dc25bf2ae2@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dx_98toOheQWFEAA--.6519S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZw43trW5uFykuw15WrWDCFg_yoWxAwcEqw
-        n2yr4kXr1Utr47tFs5JrZ8JFn8Wr17WFy8XryxXr1UXryrAw4kGrnakr1Syw15JFW2gFsI
-        kw4rZr9YqwnFvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcxYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8v_M3UUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -52,22 +58,34 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 06/15/2020 06:14 PM, Thomas Bogendoerfer wrote:
-> On Wed, Jun 03, 2020 at 05:42:13PM +0800, Bibo Mao wrote:
->> Function set_pmd_at is to set pmd entry, if tlb entry need to
->> be flushed, there exists pmdp_huge_clear_flush alike function
->> before set_pmd_at is called. So it is not necessary to call
->> flush_tlb_all in this function.
+On 2020/5/29 17:48, Paolo Bonzini wrote:
+> On 27/05/20 08:24, Tianjia Zhang wrote:
+>>>>
+>>>>
+>>
+>> Hi Huacai,
+>>
+>> These two patches(6/7 and 7/7) should be merged into the tree of the
+>> mips architecture separately. At present, there seems to be no good way
+>> to merge the whole architecture patchs.
+>>
+>> For this series of patches, some architectures have been merged, some
+>> need to update the patch.
 > 
-> have you checked all set_pmd_at() calls ? I found a few case where
-> it's not clear to me, if tlb flushing is done... If you think this
-> is still the right thing to do, please change arch/mips/mm/pgtable-32.c
-> as well.
-well, I will double check this and do more testing about thp and hugepage.
+> Hi Tianjia, I will take care of this during the merge window.
+> 
+> Thanks,
+> 
+> Paolo
+> 
 
-regards
-bibo,mao
-> 
-> Thomas.
-> 
+Hi Paolo,
 
+The following individual patch is the v5 version of 5/7 in this group of 
+patches.
+
+https://lkml.org/lkml/2020/5/28/106
+([v5] KVM: PPC: clean up redundant kvm_run parameters in assembly)
+
+Thanks and best,
+Tianjia
