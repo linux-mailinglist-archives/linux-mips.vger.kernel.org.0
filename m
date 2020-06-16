@@ -2,137 +2,169 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4601FA35A
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2020 00:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7051FAC87
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2020 11:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbgFOWRA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Jun 2020 18:17:00 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:39154 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726564AbgFOWQe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Jun 2020 18:16:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592259393;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k8RD1B8wb1dTFuTqvcr6ZWbigMuslfX1X9yF8acF4FQ=;
-        b=QuJdK3yBcMMA4wn0+wAflpc9+yP4D8qw1sN9W4Gou0bsZ/8VhrWisTIQdjs3K1NBojqE/S
-        IocruoJoxbDyCZeqZ4mQYDIjePxiw60Sb94XAYu5G5ofjz55Jl3c/UXwhijPNeom1Rjjaj
-        s4pUMHQZPK1BW4511D7JrICSsUaBzMg=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-146-_RXsBhMpPhaDXdl_4FlwjA-1; Mon, 15 Jun 2020 18:16:31 -0400
-X-MC-Unique: _RXsBhMpPhaDXdl_4FlwjA-1
-Received: by mail-qv1-f72.google.com with SMTP id p18so14113246qvy.11
-        for <linux-mips@vger.kernel.org>; Mon, 15 Jun 2020 15:16:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=k8RD1B8wb1dTFuTqvcr6ZWbigMuslfX1X9yF8acF4FQ=;
-        b=A6M7RFhpHRU7TUyvsp2jFdsKwxoV+3+v0sWmLvHJGw6CwMPVE2HmbuAxU2VmlMXz1k
-         czX9+pRkSGQFnMZeVXE02iT+4IELGnbza4uWhmpBx3m15I2uQ1x0ZtgwtgCLYC7cX5ub
-         TlnlnhCaKo1WxRP56ahR24YKKwlCj6uJtyC0npWA44ZGDzHmrvO16QAEsyQHlQ7i9hvO
-         l2mCp7/W5LaYeyQ9w+TnmthELWXlz8FMdwCGTeOAaQe4hC6sOoJWlpcHb81fQlwsLgvU
-         bjoMijQz5ne+VqVAR3voaUQJpGWNKrndqqrrzxKNPbziXvXUb9hK8x3FgLQg1liDsgU4
-         JnYQ==
-X-Gm-Message-State: AOAM530H7Z4GsKSO4vwn5WXShwtEEhSFfSZz9rmSe7dpa4lYOmCUp2rU
-        MI6r2zHFSyQqOIFO6Yu152pOLw6UN1YOdZyHuM9D9turfu6eketNX20h5TlR5BDaEgTrUKiNLoa
-        ta70S4Ht/NL3DWzTQR5ghwA==
-X-Received: by 2002:a37:ac14:: with SMTP id e20mr17758581qkm.20.1592259390904;
-        Mon, 15 Jun 2020 15:16:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxk1+i3mjIQwPhD2lbehxtygSZfiJxv5Zm8yfvOnzyKWTHYGgv5WurQfy7csXRutMmX+Ql/qw==
-X-Received: by 2002:a37:ac14:: with SMTP id e20mr17758556qkm.20.1592259390643;
-        Mon, 15 Jun 2020 15:16:30 -0700 (PDT)
-Received: from xz-x1.hitronhub.home ([2607:9880:19c0:32::2])
-        by smtp.gmail.com with ESMTPSA id w13sm12351509qkb.91.2020.06.15.15.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 15:16:30 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 12/25] mm/mips: Use mm_fault_accounting()
-Date:   Mon, 15 Jun 2020 18:15:54 -0400
-Message-Id: <20200615221607.7764-13-peterx@redhat.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200615221607.7764-1-peterx@redhat.com>
-References: <20200615221607.7764-1-peterx@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1728061AbgFPJfT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Jun 2020 05:35:19 -0400
+Received: from mga12.intel.com ([192.55.52.136]:45975 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727876AbgFPJfS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Jun 2020 05:35:18 -0400
+IronPort-SDR: SAApe2ws/+pz7zKg+6jWznAcF01tk8BFmjXmDIyKAs9AaUqL0zJr/CPAIAoYu2IVHfOjpyBORo
+ CwXz/C+oTw7g==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 02:35:17 -0700
+IronPort-SDR: tPIe9CrVZst9Nt2oJX8Dee4+DGxcICSrc10i1t2Ky1CZkP320jTN5cdZAu4YmUnUuQZpEytnvo
+ 4c1L9ptmqe4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,518,1583222400"; 
+   d="scan'208";a="308403436"
+Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
+  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2020 02:35:12 -0700
+From:   "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+To:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, miquel.raynal@bootlin.com
+Cc:     richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
+        brendanhiggins@google.com, tglx@linutronix.de,
+        boris.brezillon@collabora.com, anders.roxell@linaro.org,
+        masonccyang@mxic.com.tw, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, hauke.mehrtens@intel.com,
+        andriy.shevchenko@intel.com, qi-ming.wu@intel.com,
+        cheol.yong.kim@intel.com,
+        "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [RESEND, v11 0/2] mtd: rawnand: Add NAND controller support on Intel LGM SoC
+Date:   Tue, 16 Jun 2020 17:33:30 +0800
+Message-Id: <20200616093332.53927-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use the new mm_fault_accounting() helper for page fault accounting.
+This patch adds the new IP of Nand Flash Controller(NFC) support
+on Intel's Lightning Mountain(LGM) SoC.
 
-Avoid doing page fault accounting multiple times if the page fault is retried.
-Since at it, move the accouting out of mmap_sem because not needed.
+DMA is used for burst data transfer operation, also DMA HW supports
+aligned 32bit memory address and aligned data access by default.
+DMA burst of 8 supported. Data register used to support the read/write
+operation from/to device.
 
-CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC: linux-mips@vger.kernel.org
-Signed-off-by: Peter Xu <peterx@redhat.com>
+NAND controller also supports in-built HW ECC engine.
+
+NAND controller driver implements ->exec_op() to replace legacy hooks,
+these specific call-back method to execute NAND operations.
+
+Thanks Boris, Andy, Arnd and Rob for the review comments and suggestions.
 ---
- arch/mips/mm/fault.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+v11-resend:
+  - Rebase to v5.8-rc1
+v11:
+  - No Change
+v10:
+  - No Change
+v9:
+  - No change
+v8:
+  - fix the kbuild bot warnings
+  - correct the typo's
+v7:
+  - indentation issue is fixed
+  - add error check for retrieve the resource from dt
+v6:
+  - update EBU_ADDR_SELx register base value build it from DT
+  - Add tabs in in Kconfig
+v5:
+  - replace by 'HSNAND_CLE_OFFS | HSNAND_CS_OFFS' to NAND_WRITE_CMD and NAND_WRITE_ADDR
+  - remove the unused macros
+  - update EBU_ADDR_MASK(x) macro
+  - update the EBU_ADDR_SELx register values to be written
+v4:
+  - add ebu_nand_cs structure for multiple-CS support
+  - mask/offset encoding for 0x51 value
+  - update macro HSNAND_CTL_ENABLE_ECC
+  - drop the op argument and un-used macros.
+  - updated the datatype and macros
+  - add function disable nand module
+  - remove ebu_host->dma_rx = NULL;
+  - rename MMIO address range variables to ebu and hsnand
+  - implement ->setup_data_interface()
+  - update label err_cleanup_nand and err_cleanup_dma
+  - add return value check in the nand_remove function
+  - add/remove tabs and spaces as per coding standard
+  - encoded CS ids by reg property
+v3:
+  - Add depends on MACRO in Kconfig
+  - file name update in Makefile
+  - file name update to intel-nand-controller
+  - modification of MACRO divided like EBU, HSNAND and NAND
+  - add NAND_ALE_OFFS, NAND_CLE_OFFS and NAND_CS_OFFS
+  - rename lgm_ to ebu_ and _va suffix is removed in the whole file
+  - rename structure and varaibles as per review comments.
+  - remove lgm_read_byte(), lgm_dev_ready() and cmd_ctrl() un-used function
+  - update in exec_op() as per review comments
+  - rename function lgm_dma_exit() by lgm_dma_cleanup()
+  - hardcoded magic value  for base and offset replaced by MACRO defined
+  - mtd_device_unregister() + nand_cleanup() instead of nand_release()
+v2:
+  - implement the ->exec_op() to replaces the legacy hook-up.
+  - update the commit message
+  - add MIPS maintainers and xway_nand driver author in CC
 
-diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
-index f8d62cd83b36..0b937fb12614 100644
---- a/arch/mips/mm/fault.c
-+++ b/arch/mips/mm/fault.c
-@@ -43,7 +43,7 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 	struct mm_struct *mm = tsk->mm;
- 	const int field = sizeof(unsigned long) * 2;
- 	int si_code;
--	vm_fault_t fault;
-+	vm_fault_t fault, major = 0;
- 	unsigned int flags = FAULT_FLAG_DEFAULT;
+v1:
+ - initial version
  
- 	static DEFINE_RATELIMIT_STATE(ratelimit_state, 5 * HZ, 10);
-@@ -153,11 +153,11 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 	 * the fault.
- 	 */
- 	fault = handle_mm_fault(vma, address, flags);
-+	major |= fault & VM_FAULT_MAJOR;
- 
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
--	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-@@ -168,15 +168,6 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 		BUG();
- 	}
- 	if (flags & FAULT_FLAG_ALLOW_RETRY) {
--		if (fault & VM_FAULT_MAJOR) {
--			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1,
--						  regs, address);
--			tsk->maj_flt++;
--		} else {
--			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1,
--						  regs, address);
--			tsk->min_flt++;
--		}
- 		if (fault & VM_FAULT_RETRY) {
- 			flags |= FAULT_FLAG_TRIED;
- 
-@@ -191,6 +182,7 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 	}
- 
- 	up_read(&mm->mmap_sem);
-+	mm_fault_accounting(tsk, regs, address, major);
- 	return;
- 
- /*
+dt-bindings: mtd: Add Nand Flash Controller support for Intel LGM SoC
+---
+v11-resend:
+  - No change
+v11:
+  - Fixed the compatible issue with example
+10:
+  - fix bot errors
+v9:
+  - Rob's review comments address
+  - dual licensed
+  - compatible change
+  - add reg-names
+  - drop clock-names and clock-cells
+  - correct typo's
+v8:
+  No change
+v7:
+  - Rob's review comments addressed
+  - dt-schema build issue fixed with upgraded dt-schema
+v6:
+  - Rob's review comments addressed in YAML file
+  - add addr_sel0 and addr_sel1 reg-names in YAML example
+v5:
+  - add the example in YAML file
+v4:
+  - No change
+v3:
+  - No change
+v2:
+  YAML compatible string update to intel, lgm-nand-controller
+v1:
+  - initial version
+
+
+Ramuthevar Vadivel Murugan (2):
+  dt-bindings: mtd: Add Nand Flash Controller support for Intel LGM SoC
+  mtd: rawnand: Add NAND controller support on Intel LGM SoC
+
+ .../devicetree/bindings/mtd/intel,lgm-nand.yaml    |  99 +++
+ drivers/mtd/nand/raw/Kconfig                       |   8 +
+ drivers/mtd/nand/raw/Makefile                      |   1 +
+ drivers/mtd/nand/raw/intel-nand-controller.c       | 747 +++++++++++++++++++++
+ 4 files changed, 855 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+ create mode 100644 drivers/mtd/nand/raw/intel-nand-controller.c
+
 -- 
-2.26.2
+2.11.0
 
