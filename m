@@ -2,498 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1F81FD140
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Jun 2020 17:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C6D1FD241
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jun 2020 18:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726835AbgFQPuU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Jun 2020 11:50:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38788 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726511AbgFQPuT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 17 Jun 2020 11:50:19 -0400
-Received: from localhost (mobile-166-170-222-206.mycingular.net [166.170.222.206])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 732AD20773;
-        Wed, 17 Jun 2020 15:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592409017;
-        bh=0XX0Neg6rqJ60J3T0nNMWFJUKq6z1gWzk0W6g0jZa74=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=AOU9mRwuF6CZWoURPlSqNu0yWihfib63eZ9mxHuyS1k9Kh9bqxFiZP3+ZJ69pOzWH
-         AsccJRlR24GgHPg1wC/7PpovkGBbPRiyXtujMf4F97VmWZBWcoAh8z0w7cqikBVjin
-         AkUpvlhZDYYHTVA0UWVVantVseIbAKVJAKlhfMVc=
-Date:   Wed, 17 Jun 2020 10:50:15 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     bhelgaas@google.com, robh+dt@kernel.org, tsbogend@alpha.franken.de,
-        lorenzo.pieralisi@arm.com, p.zabel@pengutronix.de,
-        jiaxun.yang@flygoat.com, paulburton@kernel.org, info@metux.net,
-        allison@lohutok.net, kstewart@linuxfoundation.org,
-        tglx@linutronix.de, jonas.gorski@gmail.com, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH 3/3] pci: add BCM6328 PCIe controller support
-Message-ID: <20200617155015.GA2035534@bjorn-Precision-5520>
+        id S1726861AbgFQQgi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Jun 2020 12:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726840AbgFQQgh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Jun 2020 12:36:37 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D43C0613ED
+        for <linux-mips@vger.kernel.org>; Wed, 17 Jun 2020 09:36:37 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id m25so1750035vsp.8
+        for <linux-mips@vger.kernel.org>; Wed, 17 Jun 2020 09:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L8DsS6xxyGZ4X1I2BsfKE5F+wl5+Bc0v/Cbn7ErCR3k=;
+        b=eawpKQDd4c5bCWEDiwcn6BhRKGQcd5albFMeNaZdFKCB6O3sFwD2XAZx9LvvOYi87t
+         Zd0041rw93VndgUPf5lk4RuZlA8dXcSVTpu7VYahKPZdbqv05KKeJ7LnJttdizTtluT5
+         OYHgJdvNb8dH72kutypMPcXeLhyWIrRgMaS2iyuw/Lr6YD8+6DI8AvQtasmtlXDE9C7F
+         FLi5DWCcWK7BKjDne7sZg/HbVdCiwosxxGZDthxyWacUQng42CxceziSSSXk8BO1AWeN
+         BJDSiX2/zLffm0wAwppKnLGmoK/ndXvK8/qS5cg9IJUTWjiRKFGR6YFdm/zusqJzzUqC
+         dKQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L8DsS6xxyGZ4X1I2BsfKE5F+wl5+Bc0v/Cbn7ErCR3k=;
+        b=MG5i/Cap0omFicBXOzQ0vS9dWgmieFiUQq3FmFI5dcMHI95sGWfa5wdlpOMYJxf7GZ
+         X6x6DkVXwn8zjrl8qw30tmA2gFLV8237bJ4otsPEgqNZvnrx9LwxtFP4e7VvjyhctL6C
+         7uCJleIOF+/tzcAygkz/G9uXsQnhjIcRg7oSOgFYjjWUaTJKALscvpxH6uGx3woAH2Fs
+         wahQkn65elHT856GqSf9tpDy2u2CMUU3k1D10DJffNRxcddjQ0+Oc/UFXLg/SncOV/nn
+         M52k8HJemEMDXcCDAm1eH6xqLI+i4SIOXPoD+4v0rAC4w+57a2GyW942VS3WYlhM/MD8
+         sNNA==
+X-Gm-Message-State: AOAM532r+/Wx/cC238pno8U23vwyuWxgUlNyuicTDb4Veu3d9iMtFPd1
+        2p+DODei5thoyHQ3Tbkv7LAf0F0gogd65CWr6cMUrg==
+X-Google-Smtp-Source: ABdhPJz7oaun07TMv+zayNnAIYVTbbeP778/fuG5Ll7911G7zeLD5BHbO9dbHYGezneDNySTtZXTodF2yXRXfDK1+ZE=
+X-Received: by 2002:a67:70c3:: with SMTP id l186mr6698034vsc.117.1592411796250;
+ Wed, 17 Jun 2020 09:36:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200617102556.3792821-4-noltari@gmail.com>
+References: <20200605213853.14959-1-sean.j.christopherson@intel.com>
+ <20200605213853.14959-6-sean.j.christopherson@intel.com> <CANgfPd8B5R9NRL5q_4v4xvvn_3Vo9N93Ms3EiUFANMzqAMedMw@mail.gmail.com>
+ <20200617005309.GA19540@linux.intel.com>
+In-Reply-To: <20200617005309.GA19540@linux.intel.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Wed, 17 Jun 2020 09:36:25 -0700
+Message-ID: <CANgfPd8xkEotTJQPkMOrJNLOLXb4+TOA06wqO16UPdk_icF8tw@mail.gmail.com>
+Subject: Re: [PATCH 05/21] KVM: x86/mmu: Try to avoid crashing KVM if a MMU
+ memory cache is empty
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Feiner <pfeiner@google.com>,
+        Peter Shier <pshier@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Christoffer Dall <christoffer.dall@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-"git log --oneline drivers/pci/controller/" tells you that the
-conventional style for the subject would be:
+On Tue, Jun 16, 2020 at 5:53 PM Sean Christopherson
+<sean.j.christopherson@intel.com> wrote:
+>
+> On Wed, Jun 10, 2020 at 03:12:04PM -0700, Ben Gardon wrote:
+> > On Fri, Jun 5, 2020 at 2:39 PM Sean Christopherson
+> > <sean.j.christopherson@intel.com> wrote:
+> > >
+> > > Attempt to allocate a new object instead of crashing KVM (and likely the
+> > > kernel) if a memory cache is unexpectedly empty.  Use GFP_ATOMIC for the
+> > > allocation as the caches are used while holding mmu_lock.  The immediate
+> > > BUG_ON() makes the code unnecessarily explosive and led to confusing
+> > > minimums being used in the past, e.g. allocating 4 objects where 1 would
+> > > suffice.
+> > >
+> > > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Reviewed-by: Ben Gardon <bgardon@google.com>
+> > > ---
+> > >  arch/x86/kvm/mmu/mmu.c | 21 +++++++++++++++------
+> > >  1 file changed, 15 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index ba70de24a5b0..5e773564ab20 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -1060,6 +1060,15 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
+> > >         local_irq_enable();
+> > >  }
+> > >
+> > > +static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+> > > +                                              gfp_t gfp_flags)
+> > > +{
+> > > +       if (mc->kmem_cache)
+> > > +               return kmem_cache_zalloc(mc->kmem_cache, gfp_flags);
+> > > +       else
+> > > +               return (void *)__get_free_page(gfp_flags);
+> > > +}
+> > > +
+> > >  static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> > >  {
+> > >         void *obj;
+> > > @@ -1067,10 +1076,7 @@ static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> > >         if (mc->nobjs >= min)
+> > >                 return 0;
+> > >         while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> > > -               if (mc->kmem_cache)
+> > > -                       obj = kmem_cache_zalloc(mc->kmem_cache, GFP_KERNEL_ACCOUNT);
+> > > -               else
+> > > -                       obj = (void *)__get_free_page(GFP_KERNEL_ACCOUNT);
+> > > +               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+> > >                 if (!obj)
+> > >                         return mc->nobjs >= min ? 0 : -ENOMEM;
+> > >                 mc->objects[mc->nobjs++] = obj;
+> > > @@ -1118,8 +1124,11 @@ static void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
+> > >  {
+> > >         void *p;
+> > >
+> > > -       BUG_ON(!mc->nobjs);
+> > > -       p = mc->objects[--mc->nobjs];
+> > > +       if (WARN_ON(!mc->nobjs))
+> > > +               p = mmu_memory_cache_alloc_obj(mc, GFP_ATOMIC | __GFP_ACCOUNT);
+> > Is an atomic allocation really necessary here? In most cases, when
+> > topping up the memory cache we are handing a guest page fault. This
+> > bug could also be removed by returning null if unable to allocate from
+> > the cache, and then re-trying the page fault in that case.
+>
+> The whole point of these caches is to avoid having to deal with allocation
+> errors in the low level MMU paths, e.g. propagating an error up from
+> pte_list_add() would be a mess.
+>
+> > I don't know if this is necessary to handle other, non-x86 architectures more
+> > easily, but I worry this could cause some unpleasantness if combined with
+> > some other bug or the host was in a low memory situation and then this
+> > consumed the atomic pool. Perhaps this is a moot point since we log a warning
+> > and consider the atomic allocation something of an error.
+>
+> Yeah, it's the latter.  If we reach this point it's a guaranteed KVM bug.
+> Because it's likely that the caller holds a lock, triggering the BUG_ON()
+> has a high chance of hanging the system.  The idea is to take the path that
+> _may_ crash the kernel instead of killing the VM and more than likely
+> crashing the kernel.  And hopefully this code will never be exercised on a
+> production kernel.
 
-  PCI: bcm6328: Add BCM6328 PCIe host controller support
+That makes sense to me. I agree it's definitely positive to replace a
+BUG_ON with something else.
 
-On Wed, Jun 17, 2020 at 12:25:56PM +0200, Álvaro Fernández Rojas wrote:
-> BCM6328 PCIe host controller is found on BCM6328, BCM6362 and BCM63268 SoCs.
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> ---
->  drivers/pci/controller/Kconfig        |   8 +
->  drivers/pci/controller/Makefile       |   1 +
->  drivers/pci/controller/pcie-bcm6328.c | 346 ++++++++++++++++++++++++++
->  3 files changed, 355 insertions(+)
->  create mode 100644 drivers/pci/controller/pcie-bcm6328.c
-> 
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index adddf21fa381..7e238c04764e 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -3,6 +3,14 @@
->  menu "PCI controller drivers"
->  	depends on PCI
->  
-> +config PCIE_BCM6328
-> +	bool "BCM6328 PCIe controller"
-> +	depends on BMIPS_GENERIC || COMPILE_TEST
-> +	depends on OF
-> +	help
-> +	  Say Y here if you want support for the PCIe host controller found
-> +	  on BCM6328, BCM6362 and BCM63268 SoCs.
-> +
->  config PCI_MVEBU
->  	bool "Marvell EBU PCIe controller"
->  	depends on ARCH_MVEBU || ARCH_DOVE || COMPILE_TEST
-> diff --git a/drivers/pci/controller/Makefile b/drivers/pci/controller/Makefile
-> index efd9733ead26..1c3e82575845 100644
-> --- a/drivers/pci/controller/Makefile
-> +++ b/drivers/pci/controller/Makefile
-> @@ -1,4 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +obj-$(CONFIG_PCIE_BCM6328) += pcie-bcm6328.o
->  obj-$(CONFIG_PCIE_CADENCE) += cadence/
->  obj-$(CONFIG_PCI_FTPCI100) += pci-ftpci100.o
->  obj-$(CONFIG_PCI_HYPERV) += pci-hyperv.o
-> diff --git a/drivers/pci/controller/pcie-bcm6328.c b/drivers/pci/controller/pcie-bcm6328.c
-> new file mode 100644
-> index 000000000000..5bd86b166336
-> --- /dev/null
-> +++ b/drivers/pci/controller/pcie-bcm6328.c
-> @@ -0,0 +1,346 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * BCM6328 PCIe Controller Driver
-> + *
-> + * Copyright (C) 2020 Álvaro Fernández Rojas <noltari@gmail.com>
-> + * Copyright (C) 2015 Jonas Gorski <jonas.gorski@gmail.com>
-> + * Copyright (C) 2008 Maxime Bizon <mbizon@freebox.fr>
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/of_pci.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset.h>
-> +
-> +#include "../pci.h"
-> +
-> +#define SERDES_PCIE_EN			BIT(0)
-> +#define SERDES_PCIE_EXD_EN		BIT(15)
-> +
-> +#define PCIE_BUS_BRIDGE			0
-> +#define PCIE_BUS_DEVICE			1
-> +
-> +#define PCIE_CONFIG2_REG		0x408
-> +#define CONFIG2_BAR1_SIZE_EN		1
-> +#define CONFIG2_BAR1_SIZE_MASK		0xf
-> +
-> +#define PCIE_IDVAL3_REG			0x43c
-> +#define IDVAL3_CLASS_CODE_MASK		0xffffff
-> +#define IDVAL3_SUBCLASS_SHIFT		8
-> +#define IDVAL3_CLASS_SHIFT		16
-> +
-> +#define PCIE_DLSTATUS_REG		0x1048
-> +#define DLSTATUS_PHYLINKUP		BIT(13)
-> +
-> +#define PCIE_BRIDGE_OPT1_REG		0x2820
-> +#define OPT1_RD_BE_OPT_EN		BIT(7)
-> +#define OPT1_RD_REPLY_BE_FIX_EN		BIT(9)
-> +#define OPT1_PCIE_BRIDGE_HOLE_DET_EN	BIT(11)
-> +#define OPT1_L1_INT_STATUS_MASK_POL	BIT(12)
-> +
-> +#define PCIE_BRIDGE_OPT2_REG		0x2824
-> +#define OPT2_UBUS_UR_DECODE_DIS		BIT(2)
-> +#define OPT2_TX_CREDIT_CHK_EN		BIT(4)
-> +#define OPT2_CFG_TYPE1_BD_SEL		BIT(7)
-> +#define OPT2_CFG_TYPE1_BUS_NO_SHIFT	16
-> +#define OPT2_CFG_TYPE1_BUS_NO_MASK	(0xff << OPT2_CFG_TYPE1_BUS_NO_SHIFT)
-> +
-> +#define PCIE_BRIDGE_BAR0_BASEMASK_REG	0x2828
-> +#define BASEMASK_REMAP_EN		BIT(0)
-> +#define BASEMASK_SWAP_EN		BIT(1)
-> +#define BASEMASK_MASK_SHIFT		4
-> +#define BASEMASK_MASK_MASK		(0xfff << BASEMASK_MASK_SHIFT)
-> +#define BASEMASK_BASE_SHIFT		20
-> +#define BASEMASK_BASE_MASK		(0xfff << BASEMASK_BASE_SHIFT)
-> +
-> +#define PCIE_BRIDGE_BAR0_REBASE_ADDR_REG 0x282c
-> +#define REBASE_ADDR_BASE_SHIFT		20
-> +#define REBASE_ADDR_BASE_MASK		(0xfff << REBASE_ADDR_BASE_SHIFT)
-> +
-> +#define PCIE_BRIDGE_RC_INT_MASK_REG	0x2854
-> +#define PCIE_RC_INT_A			BIT(0)
-> +#define PCIE_RC_INT_B			BIT(1)
-> +#define PCIE_RC_INT_C			BIT(2)
-> +#define PCIE_RC_INT_D			BIT(3)
-> +
-> +#define PCIE_DEVICE_OFFSET		0x8000
-> +
-> +struct bcm6328_pcie {
-> +	void __iomem *base;
-> +	struct regmap *serdes;
-> +	struct clk *clk;
-> +	struct reset_control *reset;
-> +	struct reset_control *reset_ext;
-> +	struct reset_control *reset_core;
-> +	struct reset_control *reset_hard;
-> +};
-> +
-> +static struct bcm6328_pcie bcm6328_pcie;
-
-It would be better to dynamically allocate this like all the other
-drivers in driver/pci/controller/ do.
-
-> +/*
-> + * swizzle 32bits data to return only the needed part
-> + */
-> +static int postprocess_read(u32 data, int where, unsigned int size)
-> +{
-> +	u32 ret = 0;
-> +
-> +	switch (size) {
-> +	case 1:
-> +		ret = (data >> ((where & 3) << 3)) & 0xff;
-> +		break;
-> +	case 2:
-> +		ret = (data >> ((where & 3) << 3)) & 0xffff;
-> +		break;
-> +	case 4:
-> +		ret = data;
-> +		break;
-> +	}
-> +
-> +	return ret;
-
-No need for "ret" here; just return the values directly.
-
-> +}
-> +
-> +static int preprocess_write(u32 orig_data, u32 val, int where,
-> +			    unsigned int size)
-> +{
-> +	u32 ret = 0;
-> +
-> +	switch (size) {
-> +	case 1:
-> +		ret = (orig_data & ~(0xff << ((where & 3) << 3))) |
-> +		      (val << ((where & 3) << 3));
-> +		break;
-> +	case 2:
-> +		ret = (orig_data & ~(0xffff << ((where & 3) << 3))) |
-> +		      (val << ((where & 3) << 3));
-> +		break;
-> +	case 4:
-> +		ret = val;
-> +		break;
-> +	}
-> +
-> +	return ret;
-
-No need for "ret" here either.
-
-> +}
-> +
-> +static int bcm6328_pcie_can_access(struct pci_bus *bus, int devfn)
-> +{
-> +	struct bcm6328_pcie *priv = &bcm6328_pcie;
-> +
-> +	switch (bus->number) {
-> +	case PCIE_BUS_BRIDGE:
-> +		return PCI_SLOT(devfn) == 0;
-> +	case PCIE_BUS_DEVICE:
-> +		if (PCI_SLOT(devfn) == 0)
-> +			return __raw_readl(priv->base + PCIE_DLSTATUS_REG)
-> +			       & DLSTATUS_PHYLINKUP;
-
-Checking for link up is problematic.  The link may go down after we
-check but before we do the actual config read.  We have to be able to
-handle that case anyway, so you should not check whether the link is
-up.
-
-> +		/* fall through */
-> +	default:
-> +		return false;
-> +	}
-
-Why do you need this function at all?  Normally a config read to a
-device that doesn't exist returns ~0 data, and the PCI core knows how
-to interpret that.
-
-The implication is that this controller is severely limited and can
-only support:
-
-  bus 0, device 0, functions 0-7 (presumably root ports), and
-  bus 1, device 0, functions 0-7 (presumably endpoints)?
-
-It cannot support any switches or slots?  And apparently the root bus
-number is not programmable?
-
-> +}
-> +
-> +static int bcm6328_pcie_read(struct pci_bus *bus, unsigned int devfn,
-> +			     int where, int size, u32 *val)
-> +{
-> +	struct bcm6328_pcie *priv = &bcm6328_pcie;
-> +	u32 data;
-> +	u32 reg = where & ~3;
-> +
-> +	if (!bcm6328_pcie_can_access(bus, devfn))
-> +		return PCIBIOS_DEVICE_NOT_FOUND;
-> +
-> +	if (bus->number == PCIE_BUS_DEVICE)
-> +		reg += PCIE_DEVICE_OFFSET;
-> +
-> +	data = __raw_readl(priv->base + reg);
-
-Why do you need __raw_readl() and __raw_writel?  This would be the
-first use in drivers/pci/, so you shouldn't need them unless this
-hardware is really unique in some way.
-
-> +	*val = postprocess_read(data, where, size);
-> +
-> +	return PCIBIOS_SUCCESSFUL;
-> +}
-> +
-> +static int bcm6328_pcie_write(struct pci_bus *bus, unsigned int devfn,
-> +			      int where, int size, u32 val)
-> +{
-> +	struct bcm6328_pcie *priv = &bcm6328_pcie;
-> +	u32 data;
-> +	u32 reg = where & ~3;
-> +
-> +	if (!bcm6328_pcie_can_access(bus, devfn))
-> +		return PCIBIOS_DEVICE_NOT_FOUND;
-> +
-> +	if (bus->number == PCIE_BUS_DEVICE)
-> +		reg += PCIE_DEVICE_OFFSET;
-> +
-> +	data = __raw_readl(priv->base + reg);
-> +	data = preprocess_write(data, val, where, size);
-> +	__raw_writel(data, priv->base + reg);
-
-So this hardware is unable to perform 1- or 2-byte config writes on
-PCI?  That's a hardware defect that can cause corruption of config
-registers.
-
-See pci_generic_config_write32() and add a similar warning here if
-this hardware is broken in this way.
-
-> +	return PCIBIOS_SUCCESSFUL;
-> +}
-> +
-> +static struct pci_ops bcm6328_pcie_ops = {
-> +	.read = bcm6328_pcie_read,
-> +	.write = bcm6328_pcie_write,
-> +};
-> +
-> +static struct resource bcm6328_pcie_io_resource;
-> +static struct resource bcm6328_pcie_mem_resource;
-> +static struct resource bcm6328_pcie_busn_resource;
-> +
-> +static struct pci_controller bcm6328_pcie_controller = {
-> +	.pci_ops = &bcm6328_pcie_ops,
-> +	.io_resource = &bcm6328_pcie_io_resource,
-> +	.mem_resource = &bcm6328_pcie_mem_resource,
-> +	.busn_resource = &bcm6328_pcie_busn_resource,
-> +};
-> +
-> +static void bcm6328_pcie_reset(struct bcm6328_pcie *priv)
-> +{
-> +	regmap_write_bits(priv->serdes, 0,
-> +			  SERDES_PCIE_EN | SERDES_PCIE_EXD_EN,
-> +			  SERDES_PCIE_EN | SERDES_PCIE_EXD_EN);
-> +
-> +	reset_control_assert(priv->reset);
-> +	reset_control_assert(priv->reset_core);
-> +	reset_control_assert(priv->reset_ext);
-> +	if (priv->reset_hard) {
-> +		reset_control_assert(priv->reset_hard);
-> +		mdelay(10);
-> +		reset_control_deassert(priv->reset_hard);
-> +	}
-> +	mdelay(10);
-> +
-> +	reset_control_deassert(priv->reset_core);
-> +	reset_control_deassert(priv->reset);
-> +	mdelay(10);
-> +
-> +	reset_control_deassert(priv->reset_ext);
-> +	mdelay(200);
-> +}
-> +
-> +static void bcm6328_pcie_setup(struct bcm6328_pcie *priv)
-> +{
-> +	u32 val;
-> +
-> +	val = __raw_readl(priv->base + PCIE_BRIDGE_OPT1_REG);
-> +	val |= OPT1_RD_BE_OPT_EN;
-> +	val |= OPT1_RD_REPLY_BE_FIX_EN;
-> +	val |= OPT1_PCIE_BRIDGE_HOLE_DET_EN;
-> +	val |= OPT1_L1_INT_STATUS_MASK_POL;
-> +	__raw_writel(val, priv->base + PCIE_BRIDGE_OPT1_REG);
-> +
-> +	val = __raw_readl(priv->base + PCIE_BRIDGE_RC_INT_MASK_REG);
-> +	val |= PCIE_RC_INT_A;
-> +	val |= PCIE_RC_INT_B;
-> +	val |= PCIE_RC_INT_C;
-> +	val |= PCIE_RC_INT_D;
-> +	__raw_writel(val, priv->base + PCIE_BRIDGE_RC_INT_MASK_REG);
-> +
-> +	val = __raw_readl(priv->base + PCIE_BRIDGE_OPT2_REG);
-> +	/* enable credit checking and error checking */
-> +	val |= OPT2_TX_CREDIT_CHK_EN;
-> +	val |= OPT2_UBUS_UR_DECODE_DIS;
-> +	/* set device bus/func for the pcie device */
-> +	val |= (PCIE_BUS_DEVICE << OPT2_CFG_TYPE1_BUS_NO_SHIFT);
-> +	val |= OPT2_CFG_TYPE1_BD_SEL;
-> +	__raw_writel(val, priv->base + PCIE_BRIDGE_OPT2_REG);
-> +
-> +	/* setup class code as bridge */
-> +	val = __raw_readl(priv->base + PCIE_IDVAL3_REG);
-> +	val &= ~IDVAL3_CLASS_CODE_MASK;
-> +	val |= (PCI_CLASS_BRIDGE_PCI << IDVAL3_SUBCLASS_SHIFT);
-> +	__raw_writel(val, priv->base + PCIE_IDVAL3_REG);
-> +
-> +	/* disable bar1 size */
-> +	val = __raw_readl(priv->base + PCIE_CONFIG2_REG);
-> +	val &= ~CONFIG2_BAR1_SIZE_MASK;
-> +	__raw_writel(val, priv->base + PCIE_CONFIG2_REG);
-> +
-> +	/* set bar0 to little endian */
-> +	val = (bcm6328_pcie_mem_resource.start >> 20)
-> +	      << BASEMASK_BASE_SHIFT;
-> +	val |= (bcm6328_pcie_mem_resource.end >> 20) << BASEMASK_MASK_SHIFT;
-> +	val |= BASEMASK_REMAP_EN;
-> +	__raw_writel(val, priv->base + PCIE_BRIDGE_BAR0_BASEMASK_REG);
-> +
-> +	val = (bcm6328_pcie_mem_resource.start >> 20)
-> +	      << REBASE_ADDR_BASE_SHIFT;
-> +	__raw_writel(val, priv->base + PCIE_BRIDGE_BAR0_REBASE_ADDR_REG);
-> +}
-> +
-> +static int bcm6328_pcie_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct bcm6328_pcie *priv = &bcm6328_pcie;
-> +	int ret;
-> +
-> +	of_pci_check_probe_only();
-
-Why do you need this?
-
-> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->base))
-> +		return PTR_ERR(priv->base);
-> +
-> +	priv->serdes = syscon_regmap_lookup_by_phandle(np, "brcm,serdes");
-> +	if (IS_ERR(priv->serdes))
-> +		return PTR_ERR(priv->serdes);
-> +
-> +	priv->reset = devm_reset_control_get_exclusive(dev, "pcie");
-> +	if (IS_ERR(priv->reset))
-> +		return PTR_ERR(priv->reset);
-> +
-> +	priv->reset_ext = devm_reset_control_get_exclusive(dev, "pcie-ext");
-> +	if (IS_ERR(priv->reset_ext))
-> +		return PTR_ERR(priv->reset_ext);
-> +
-> +	priv->reset_core = devm_reset_control_get_exclusive(dev, "pcie-core");
-> +	if (IS_ERR(priv->reset_core))
-> +		return PTR_ERR(priv->reset_core);
-> +
-> +	priv->reset_hard = devm_reset_control_get_optional_exclusive(dev,
-> +		"pcie-hard");
-> +	if (IS_ERR(priv->reset_hard))
-> +		return PTR_ERR(priv->reset_hard);
-> +
-> +	priv->clk = devm_clk_get(dev, "pcie");
-> +	if (IS_ERR(priv->clk))
-> +		return PTR_ERR(priv->clk);
-> +
-> +	ret = clk_prepare_enable(priv->clk);
-> +	if (ret) {
-> +		dev_err(dev, "could not enable clock: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	pci_load_of_ranges(&bcm6328_pcie_controller, np);
-
-Please use the generic pci_parse_request_of_pci_ranges() as most PCIe
-host drivers do, instead of the MIPS-specific pci_load_of_ranges().
-
-I know that's probably not a trivial change, but it would help remove
-a lot of unnecessarily MIPS-specific code from this driver and its
-dependencies.
-
-> +	if (!bcm6328_pcie_mem_resource.start)
-> +		return -EINVAL;
-> +
-> +	of_pci_parse_bus_range(np, &bcm6328_pcie_busn_resource);
-> +
-> +	bcm6328_pcie_reset(priv);
-> +	bcm6328_pcie_setup(priv);
-> +
-> +	register_pci_controller(&bcm6328_pcie_controller);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id bcm6328_pcie_of_match[] = {
-> +	{ .compatible = "brcm,bcm6328-pcie", },
-> +	{ .compatible = "brcm,bcm6362-pcie", },
-> +	{ .compatible = "brcm,bcm63268-pcie", },
-> +	{ /* sentinel */ },
-> +};
-> +
-> +static struct platform_driver bcm6328_pcie_driver = {
-> +	.driver	= {
-> +		.name = "bcm6328-pcie",
-> +		.of_match_table = bcm6328_pcie_of_match,
-> +	},
-> +	.probe = bcm6328_pcie_probe,
-> +};
-> +builtin_platform_driver(bcm6328_pcie_driver);
-> -- 
-> 2.27.0
-> 
+>
+> > > +       else
+> > > +               p = mc->objects[--mc->nobjs];
+> > > +       BUG_ON(!p);
+> > >         return p;
+> > >  }
+> > >
+> > > --
+> > > 2.26.0
+> > >
