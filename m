@@ -2,38 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 022A21FD8D2
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2020 00:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA541FD8D0
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2020 00:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727029AbgFQWcT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Jun 2020 18:32:19 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:57354 "EHLO
+        id S1727019AbgFQWcS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Jun 2020 18:32:18 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:57382 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726913AbgFQWcS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Jun 2020 18:32:18 -0400
+        with ESMTP id S1726840AbgFQWcR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Jun 2020 18:32:17 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 19B26803202A;
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id AFAB8803202C;
         Wed, 17 Jun 2020 22:32:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BF6jUKbQ7f0p; Thu, 18 Jun 2020 01:32:11 +0300 (MSK)
+        with ESMTP id Mdk4A4-gDvp8; Thu, 18 Jun 2020 01:32:12 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
+        Serge Semin <fancer.lancer@gmail.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Rob Herring <robh@kernel.org>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-mips@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 3/6] dt-bindings: bus: Add MIPS CDMM controller
-Date:   Thu, 18 Jun 2020 01:31:57 +0300
-Message-ID: <20200617223201.23259-4-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v4 4/6] mips: cdmm: Add mti,mips-cdmm dtb node support
+Date:   Thu, 18 Jun 2020 01:31:58 +0300
+Message-ID: <20200617223201.23259-5-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200617223201.23259-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200617223201.23259-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -45,64 +43,60 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-It's a Common Device Memory Map controller embedded into the MIPS IP
-cores, which dts node is supposed to have compatible and reg properties.
+Since having and mapping the CDMM block is platform specific, then
+instead of just returning a zero-address, lets make the default CDMM
+base address search method (mips_cdmm_phys_base()) to do something
+useful. For instance to find the address in a dedicated dtb-node in
+order to support of-based platforms by default.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Rob Herring <robh@kernel.org>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: linux-mips@vger.kernel.org
+Cc: devicetree@vger.kernel.org
 
 ---
 
 Changelog prev:
-- Lowercase the example hex'es.
+- Use alphabetical order for the include pre-processor operator.
 ---
- .../bindings/bus/mti,mips-cdmm.yaml           | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml
+ drivers/bus/mips_cdmm.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml b/Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml
-new file mode 100644
-index 000000000000..b3ba98515cbe
---- /dev/null
-+++ b/Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml
-@@ -0,0 +1,35 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/bus/mti,mips-cdmm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/bus/mips_cdmm.c b/drivers/bus/mips_cdmm.c
+index 1b14256376d2..9f7ed1fcd428 100644
+--- a/drivers/bus/mips_cdmm.c
++++ b/drivers/bus/mips_cdmm.c
+@@ -13,6 +13,8 @@
+ #include <linux/cpu.h>
+ #include <linux/cpumask.h>
+ #include <linux/io.h>
++#include <linux/of_address.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/smp.h>
+@@ -337,9 +339,22 @@ static phys_addr_t mips_cdmm_cur_base(void)
+  * Picking a suitable physical address at which to map the CDMM region is
+  * platform specific, so this weak function can be overridden by platform
+  * code to pick a suitable value if none is configured by the bootloader.
++ * By default this method tries to find a CDMM-specific node in the system
++ * dtb. Note that this won't work for early serial console.
+  */
+ phys_addr_t __weak mips_cdmm_phys_base(void)
+ {
++	struct device_node *np;
++	struct resource res;
++	int err;
 +
-+title: MIPS Common Device Memory Map
++	np = of_find_compatible_node(NULL, NULL, "mti,mips-cdmm");
++	if (np) {
++		err = of_address_to_resource(np, 0, &res);
++		if (!err)
++			return res.start;
++	}
 +
-+description: |
-+  Defines a location of the MIPS Common Device Memory Map registers.
-+
-+maintainers:
-+  - James Hogan <jhogan@kernel.org>
-+
-+properties:
-+  compatible:
-+    const: mti,mips-cdmm
-+
-+  reg:
-+    description: |
-+      Base address and size of an unoccupied memory region, which will be
-+      used to map the MIPS CDMM registers block.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+examples:
-+  - |
-+    cdmm@1bde8000 {
-+      compatible = "mti,mips-cdmm";
-+      reg = <0 0x1bde8000 0 0x8000>;
-+    };
-+...
+ 	return 0;
+ }
+ 
 -- 
 2.26.2
 
