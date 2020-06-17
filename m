@@ -2,94 +2,178 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD47F1FD31E
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Jun 2020 19:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B6A1FD7E8
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jun 2020 23:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726815AbgFQRHm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Jun 2020 13:07:42 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:33651 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726329AbgFQRHl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Jun 2020 13:07:41 -0400
-Received: by mail-io1-f68.google.com with SMTP id i25so3702407iog.0;
-        Wed, 17 Jun 2020 10:07:40 -0700 (PDT)
+        id S1726840AbgFQVuk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Jun 2020 17:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726758AbgFQVuk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Jun 2020 17:50:40 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF1AC06174E;
+        Wed, 17 Jun 2020 14:50:40 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id v24so1547679plo.6;
+        Wed, 17 Jun 2020 14:50:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=2inp6DL1Tpkycn57HGb7bKgExPCkT7AU0S7N4Zm5vFs=;
+        b=Gwvvo9mOU5t201a9zj5JmgtflABhfhYczUd+LVugvwo8+GDqTuA5Mkec/W06P8aNIB
+         dDo0nW2p8dh9+V9NSxCHvhVQiRYywvotNaAX5duHdVGnOIa1YAsQXM6lF6qYzE0d1S8q
+         7CACGCuNASoQIEoi1nT8NkEULYYgzcsVFqOqFhtZdw094seNXsZur69I1czBiEPz7mqI
+         tmi/pMSL+OrVvq5RG4+KJUYwdzOWMBaIp8IbN++5K/ThkY7kam+ezfkqPhcDkpeY45IO
+         SQRAA6d9wG14qiuo6VxD/C6YsV5jw5Y/U4MYKBqG+ompA39r2egYNBJbFFrBS90fYmNM
+         Utfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=aa7D83B/ClCWcQNqJL006J66fB/5CW+TLd1mIIzTwg4=;
-        b=GTXaIPm+n4GA66IZS6ZHj5dRnFBfOXIlDgaYcZilUzQ9juSJRclwvzJYmSbIC1n3Su
-         gMRDulsKLd4MNRvt/h9E2XXhjJ6TPnyxCND67VsA6v2cGVUEvXs6rxeMOkcbRUnzf1rd
-         cC2mi0n1/IjBVQQMDHdFQb+aOD+xMBHtxC4vUKj+l1k50FsX2US6fNRyo9d6c97yN26y
-         cSQwk+wcPfZxcvwzvtNg8NEYOphTfJ3ZDWgE8joWtxfK0iU0OKFse8je/yk9LFLojB+K
-         qI/Xaq/YdtcjxQE6kV5c6lq1ASl2PeUw+2wqeo0BJ8AJOI+SyoGVhxc9wYDgqKj6sSPa
-         egWA==
-X-Gm-Message-State: AOAM5308cy67gwQjD/ink0qq2JZaRJRJXDfCPvQ2MtBuqRfBgPsysHu5
-        PMcMX3E1o2FJ1hmbjDac5P8lFi03kA==
-X-Google-Smtp-Source: ABdhPJzk1bhDyxnqHb8lYcC/GMKocSvjEgnDTMrCBJR4RW71d1k8lcFxEZvVowy7fZRj+n4S8Jk/ZA==
-X-Received: by 2002:a05:6602:22d6:: with SMTP id e22mr389380ioe.128.1592413660462;
-        Wed, 17 Jun 2020 10:07:40 -0700 (PDT)
-Received: from xps15 ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id l12sm120363ilj.8.2020.06.17.10.07.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 10:07:39 -0700 (PDT)
-Received: (nullmailer pid 2315363 invoked by uid 1000);
-        Wed, 17 Jun 2020 17:07:38 -0000
-Date:   Wed, 17 Jun 2020 11:07:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     paulburton@kernel.org, tsbogend@alpha.franken.de,
-        devicetree@vger.kernel.org, kstewart@linuxfoundation.org,
-        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        lorenzo.pieralisi@arm.com, p.zabel@pengutronix.de,
-        robh+dt@kernel.org, jonas.gorski@gmail.com,
-        linux-kernel@vger.kernel.org, info@metux.net, tglx@linutronix.de,
-        allison@lohutok.net, linux-pci@vger.kernel.org,
-        jiaxun.yang@flygoat.com, bhelgaas@google.com,
-        linux-mips@vger.kernel.org
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2inp6DL1Tpkycn57HGb7bKgExPCkT7AU0S7N4Zm5vFs=;
+        b=SJEL8aaVvbF/2fNhK8/xqO0QME5IhhDUFdZCCTRj2zLN+O5jPXu4cRxnh4G/eEkbwL
+         +tO+qLlM6l6mAjIKLcHe7r0f0VZ3Nb/VGhF1HvLYinwk2xvgeEjfgrH5mV6Gr3xMSawB
+         GWwGPtiKn8qilgPx7L/zIJ4RVW9RoA3dzhXVGLsJkUWZjjaiILPmo379F5jiTEapF1ID
+         cddh+MopxdHfUcZSTjryrMjzlAinPWBmsSYEU+MpeDoKAkri9CKPSKC2XZoa89vfvioF
+         yiipbG+XcJApglIIQ8eR6+lXwiqoRP5/RWMovwj9LMHyvc5YdroFsReI45mNR/oFAFjX
+         WrVw==
+X-Gm-Message-State: AOAM533ZuPakEl3LRP1vqMpvtYbUS5AfPkVPy4VDRWVT2/cY/22s+Wob
+        cY+O9S41+li3r8AwppnCaLZhpTe8
+X-Google-Smtp-Source: ABdhPJwIUupeR6Q/8kfiMpacfI9dNWprV9GMSeiLVuJ66LCtcmufPiwuObOjIBZDi8wPQlZL4kq13w==
+X-Received: by 2002:a17:90b:4c4b:: with SMTP id np11mr1077511pjb.58.1592430638848;
+        Wed, 17 Jun 2020 14:50:38 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id j17sm666204pgk.66.2020.06.17.14.50.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jun 2020 14:50:38 -0700 (PDT)
 Subject: Re: [PATCH 2/3] dt-bindings: Document BCM6328 PCIe Host Controller
-Message-ID: <20200617170738.GA2315041@bogus>
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        bhelgaas@google.com, robh+dt@kernel.org, tsbogend@alpha.franken.de,
+        lorenzo.pieralisi@arm.com, p.zabel@pengutronix.de,
+        jiaxun.yang@flygoat.com, paulburton@kernel.org, info@metux.net,
+        allison@lohutok.net, kstewart@linuxfoundation.org,
+        tglx@linutronix.de, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
 References: <20200617102556.3792821-1-noltari@gmail.com>
  <20200617102556.3792821-3-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <e4831ec7-dfe7-ce4d-585f-bf11a1cb1baa@gmail.com>
+Date:   Wed, 17 Jun 2020 14:50:35 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <20200617102556.3792821-3-noltari@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 17 Jun 2020 12:25:55 +0200, ¡lvaro Fern·ndez Rojas wrote:
+
+
+On 6/17/2020 3:25 AM, √Ålvaro Fern√°ndez Rojas wrote:
 > BCM6328 PCIe host controller is found on BCM6328, BCM6362 and BCM63268 SoCs.
 > 
-> Signed-off-by: ¡lvaro Fern·ndez Rojas <noltari@gmail.com>
+> Signed-off-by: √Ålvaro Fern√°ndez Rojas <noltari@gmail.com>
 > ---
 >  .../bindings/pci/brcm,bcm6328-pcie.yaml       | 109 ++++++++++++++++++
 >  1 file changed, 109 insertions(+)
 >  create mode 100644 Documentation/devicetree/bindings/pci/brcm,bcm6328-pcie.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/pci/brcm,bcm6328-pcie.yaml b/Documentation/devicetree/bindings/pci/brcm,bcm6328-pcie.yaml
+> new file mode 100644
+> index 000000000000..d2bd4933a5fa
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/brcm,bcm6328-pcie.yaml
+> @@ -0,0 +1,109 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pci/brcm,bcm6328-pcie.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: BCM6328 PCIe Host Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - √Ålvaro Fern√°ndez Rojas <noltari@gmail.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/pci-bus.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +     - brcm,bcm6328-pcie
+> +     - brcm,bcm6362-pcie
+> +     - brcm,bcm63268-pcie
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pcie
+> +
+> +  "#interrupt-cells":
+> +    const: 1
+> +
+> +  interrupt-map-mask:
+> +    maxItems: 1
+> +
+> +  interrupt-map:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  ranges:
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 4
+> +
+> +  reset-names:
+> +    items:
+> +      - const: pcie
+> +      - const: pcie-core
+> +      - const: pcie-ext
+> +      - const: pcie-hard
+> +
+> +required:
+> +  - brcm,serdes
+> +  - clocks
+> +  - clock-names
+> +  - "#interrupt-cells"
+> +  - interrupt-map-mask
+> +  - interrupt-map
+> +  - ranges
+> +  - reg
+> +  - resets
+> +  - reset-names
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    serdes_cntl: syscon@10001800 {
+> +      compatible = "syscon";
+> +      reg = <0x10001800 0x4>;
+> +      native-endian;
+> +    };
 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-Error: Documentation/devicetree/bindings/pci/brcm,bcm6328-pcie.example.dts:38.49-50 syntax error
-FATAL ERROR: Unable to parse input tree
-scripts/Makefile.lib:315: recipe for target 'Documentation/devicetree/bindings/pci/brcm,bcm6328-pcie.example.dt.yaml' failed
-make[1]: *** [Documentation/devicetree/bindings/pci/brcm,bcm6328-pcie.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-Makefile:1347: recipe for target 'dt_binding_check' failed
-make: *** [dt_binding_check] Error 2
-
-
-See https://patchwork.ozlabs.org/patch/1311090
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+I believe you could be modelling the SerDes as generic PHY driver which
+would be a little cleaner than the syscon approach. In newer chips like
+6318 it looks like you should be able to use pcie-brcmstb.c since the
+controller appears to be nearly the same and the PHY abstraction would
+work nicely there.
+-- 
+Florian
