@@ -2,208 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AC11FC9F4
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Jun 2020 11:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5A61FCACB
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jun 2020 12:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726591AbgFQJfl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 17 Jun 2020 05:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S1726558AbgFQK0D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Jun 2020 06:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbgFQJfl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Jun 2020 05:35:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A53BC061573
-        for <linux-mips@vger.kernel.org>; Wed, 17 Jun 2020 02:35:41 -0700 (PDT)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1jlUTp-0006br-6s; Wed, 17 Jun 2020 11:35:37 +0200
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1jlUTo-0002Xx-9t; Wed, 17 Jun 2020 11:35:36 +0200
-Message-ID: <409257e69ca434f5d5e90d2453fbdf8ae5d12b0f.camel@pengutronix.de>
-Subject: Re: [PATCH v6 3/9] reset: add BCM6345 reset controller driver
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     =?ISO-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
-        robh+dt@kernel.org, tsbogend@alpha.franken.de,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        with ESMTP id S1725964AbgFQK0B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Jun 2020 06:26:01 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A840C061573;
+        Wed, 17 Jun 2020 03:26:00 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id c3so1710351wru.12;
+        Wed, 17 Jun 2020 03:26:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bUsNDRJx4UdhHJ9XZ2hWvZsvpKhRR87KicV5rBQcMlA=;
+        b=REjFk9PljVEzzc8bmjLN3vf+ZmWBNUGi/7sn+3Rw9k9s1UO32qTb5nIbKbMQ6j15sJ
+         IqSnMuNHZjEuGKuhFm7XR53lHucGJ8yVPgzNyeKhR5J2vKcc6MhDIH6EWOnpuPWR2hbu
+         Ql02vpK5F2WUrK5Zapm2RmgkwtMiBRYBBJ8C05PViIow0Su/oqlpqx80qCmfTkedgb+w
+         9leTVqNlADqzPADiijWc5h+4161ZBfc5/g8IMYgET5FH03vb4aqTstvNDnSllHiFg46U
+         6EUzorPt7IrzMFksl6KlnRGHW0NyvGBji6ywZS3BYmcDkTypvKjS5aKb+TQomeYTEdFL
+         fUKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bUsNDRJx4UdhHJ9XZ2hWvZsvpKhRR87KicV5rBQcMlA=;
+        b=c0cmcBPy8svecV8JynhLBWU80mQYquNXY25n7FHhbNGPswOGydEHzbYc2J2FnlA6pi
+         nnr65FEiw3ujh/Pu9T+WJeHZsIzgpNSYuPGVKKJvXHtxuQ63D7XnlFoyF4fEECpRowwl
+         umX+v6/bOtzimudVgxgLqA20GZ/KZG+b77Kwv9rWU3YbQI4xZseHo6V7ueb1uOX1FzF9
+         l9njx4RYT8V/qF0LM8FMntWnZQx5Y1/FnUgJWCbS87LqIHE5yDhFYpMHdrtqprcg+OTm
+         f+DGK/soWGUrGJ0BWqWE29joI+H1eqc3yAGIBzHgweurUv5sDxFXgdoyg2Qpi9rOJu3Z
+         tvSw==
+X-Gm-Message-State: AOAM532Evp6nr6L2p5be8gmcBnJfTXgtiNQfk1ns5/ujyH63q8TSsWEG
+        V3uctyw/K0pYcf6jdk6PTf0=
+X-Google-Smtp-Source: ABdhPJw/BV83JYk1Qad+8wyFBqupdYqj3LlDIYo3Vsn7/VdgTbvcdpxEfsQuXw7pA3hk0bdKQShlBw==
+X-Received: by 2002:a5d:4f0d:: with SMTP id c13mr8192114wru.357.1592389558982;
+        Wed, 17 Jun 2020 03:25:58 -0700 (PDT)
+Received: from skynet.lan (90.red-88-20-62.staticip.rima-tde.net. [88.20.62.90])
+        by smtp.gmail.com with ESMTPSA id z206sm7569847wmg.30.2020.06.17.03.25.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 03:25:58 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     bhelgaas@google.com, robh+dt@kernel.org, tsbogend@alpha.franken.de,
+        lorenzo.pieralisi@arm.com, p.zabel@pengutronix.de,
+        jiaxun.yang@flygoat.com, paulburton@kernel.org, info@metux.net,
+        allison@lohutok.net, kstewart@linuxfoundation.org,
+        tglx@linutronix.de, jonas.gorski@gmail.com, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
-Date:   Wed, 17 Jun 2020 11:35:36 +0200
-In-Reply-To: <20200617083231.3699090-4-noltari@gmail.com>
-References: <20200617083231.3699090-1-noltari@gmail.com>
-         <20200617083231.3699090-4-noltari@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        linux-mips@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH 0/3] mips: bmips: add BCM6328 PCIe support
+Date:   Wed, 17 Jun 2020 12:25:53 +0200
+Message-Id: <20200617102556.3792821-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Álvaro,
+BCM6328 PCIe host controller is found on BCM6328, BCM6362 and BCM63268 SoCs.
 
-thank you for the patch. A few comments below:
+Álvaro Fernández Rojas (3):
+  mips: bmips: add PCI support
+  dt-bindings: Document BCM6328 PCIe Host Controller
+  pci: add BCM6328 PCIe controller support
 
-On Wed, 2020-06-17 at 10:32 +0200, Álvaro Fernández Rojas wrote:
-> Add support for resetting blocks through the Linux reset controller
-> subsystem for BCM63xx SoCs.
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> Reviewed-by: Florian Fainelli <F.fainelli@gmail.com>
-> ---
->  v6: driver improvements:
->      - use devm_platform_ioremap_resource.
->      - simplify bcm6345_reset_probe return.
->      - introduce and use to_bcm6345_reset function.
->  v5: fix kbuild robot error (drop __init).
->  v4: no changes.
->  v3: using reset-simple isn't possible since sleeping after performing the
->      reset is also needed.
->  v2: add compatibility to reset-simple instead of adding a new driver.
-> 
->  drivers/reset/Kconfig         |   7 ++
->  drivers/reset/Makefile        |   1 +
->  drivers/reset/reset-bcm6345.c | 132 ++++++++++++++++++++++++++++++++++
->  3 files changed, 140 insertions(+)
->  create mode 100644 drivers/reset/reset-bcm6345.c
-> 
-> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> index d9efbfd29646..9f1da978cef6 100644
-> --- a/drivers/reset/Kconfig
-> +++ b/drivers/reset/Kconfig
-> @@ -41,6 +41,13 @@ config RESET_BERLIN
->  	help
->  	  This enables the reset controller driver for Marvell Berlin SoCs.
->  
-> +config RESET_BCM6345
-> +	bool "BCM6345 Reset Controller"
-> +	depends on BMIPS_GENERIC || COMPILE_TEST
-> +	default BMIPS_GENERIC
-> +	help
-> +	  This enables the reset controller driver for BCM6345 SoCs.
-> +
+ .../bindings/pci/brcm,bcm6328-pcie.yaml       | 109 ++++++
+ arch/mips/Kconfig                             |   1 +
+ arch/mips/pci/Makefile                        |   1 +
+ arch/mips/pci/fixup-bmips.c                   |  17 +
+ drivers/pci/controller/Kconfig                |   8 +
+ drivers/pci/controller/Makefile               |   1 +
+ drivers/pci/controller/pcie-bcm6328.c         | 346 ++++++++++++++++++
+ 7 files changed, 483 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pci/brcm,bcm6328-pcie.yaml
+ create mode 100644 arch/mips/pci/fixup-bmips.c
+ create mode 100644 drivers/pci/controller/pcie-bcm6328.c
 
-Please sort these alphabetically.
+-- 
+2.27.0
 
->  config RESET_BRCMSTB
->  	tristate "Broadcom STB reset controller"
->  	depends on ARCH_BRCMSTB || COMPILE_TEST
-> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-> index 249ed357c997..e642aae42f0f 100644
-> --- a/drivers/reset/Makefile
-> +++ b/drivers/reset/Makefile
-> @@ -6,6 +6,7 @@ obj-$(CONFIG_ARCH_TEGRA) += tegra/
->  obj-$(CONFIG_RESET_A10SR) += reset-a10sr.o
->  obj-$(CONFIG_RESET_ATH79) += reset-ath79.o
->  obj-$(CONFIG_RESET_AXS10X) += reset-axs10x.o
-> +obj-$(CONFIG_RESET_BCM6345) += reset-bcm6345.o
-
-This is the right place.
-
->  obj-$(CONFIG_RESET_BERLIN) += reset-berlin.o
->  obj-$(CONFIG_RESET_BRCMSTB) += reset-brcmstb.o
->  obj-$(CONFIG_RESET_BRCMSTB_RESCAL) += reset-brcmstb-rescal.o
-> diff --git a/drivers/reset/reset-bcm6345.c b/drivers/reset/reset-bcm6345.c
-> new file mode 100644
-> index 000000000000..3eedea226028
-> --- /dev/null
-> +++ b/drivers/reset/reset-bcm6345.c
-> @@ -0,0 +1,132 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * BCM6345 Reset Controller Driver
-> + *
-> + * Copyright (C) 2020 Álvaro Fernández Rojas <noltari@gmail.com>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset-controller.h>
-> +
-> +#define BCM6345_RESET_NUM		32
-> +#define BCM6345_RESET_SLEEP_MIN_US	10000
-> +#define BCM6345_RESET_SLEEP_MAX_US	20000
-> +
-> +struct bcm6345_reset {
-> +	struct reset_controller_dev rcdev;
-> +	void __iomem *base;
-> +	spinlock_t lock;
-> +};
-> +
-> +static inline struct bcm6345_reset *
-> +to_bcm6345_reset(struct reset_controller_dev *rcdev)
-> +{
-> +	return container_of(rcdev, struct bcm6345_reset, rcdev);
-> +}
-> +
-> +static void bcm6345_reset_update(struct reset_controller_dev *rcdev,
-> +				 unsigned long id, bool assert)
-> +{
-> +	struct bcm6345_reset *bcm6345_reset = to_bcm6345_reset(rcdev);
-> +	unsigned long flags;
-> +	uint32_t val;
-> +
-> +	spin_lock_irqsave(&bcm6345_reset->lock, flags);
-> +	val = __raw_readl(bcm6345_reset->base);
-> +	if (assert)
-> +		val &= ~BIT(id);
-> +	else
-> +		val |= BIT(id);
-> +	__raw_writel(val, bcm6345_reset->base);
-> +	spin_unlock_irqrestore(&bcm6345_reset->lock, flags);
-> +}
-> +
-> +static int bcm6345_reset_assert(struct reset_controller_dev *rcdev,
-> +				unsigned long id)
-> +{
-> +	bcm6345_reset_update(rcdev, id, true);
-> +
-> +	return 0;
-> +}
-> +
-> +static int bcm6345_reset_deassert(struct reset_controller_dev *rcdev,
-> +				  unsigned long id)
-> +{
-> +	bcm6345_reset_update(rcdev, id, false);
-> +
-> +	return 0;
-
-These two could be shortened if you let bcm6345_reset_update() return 0:
-
-	return bcm6345_reset_update(rcdev, id, false);
-
-> +}
-
-> +
-> +static int bcm6345_reset_reset(struct reset_controller_dev *rcdev,
-> +			       unsigned long id)
-> +{
-> +	bcm6345_reset_update(rcdev, id, true);
-> +	usleep_range(BCM6345_RESET_SLEEP_MIN_US,
-> +		     BCM6345_RESET_SLEEP_MAX_US);
-> +
-> +	bcm6345_reset_update(rcdev, id, false);
-
-This second sleep is unusual:
-
-> +	usleep_range(BCM6345_RESET_SLEEP_MIN_US,
-> +		     BCM6345_RESET_SLEEP_MAX_US);
-
-Could you add a comment describing why it is needed?
-
-Otherwise,
-
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-
-regards
-Philipp
