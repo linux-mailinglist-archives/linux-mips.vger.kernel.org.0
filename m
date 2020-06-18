@@ -2,75 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3224A1FED63
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2020 10:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB581FED85
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2020 10:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728546AbgFRISC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Jun 2020 04:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
+        id S1728633AbgFRIWM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Jun 2020 04:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728540AbgFRISA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Jun 2020 04:18:00 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF38BC06174E;
-        Thu, 18 Jun 2020 01:17:59 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id i12so2200056pju.3;
-        Thu, 18 Jun 2020 01:17:59 -0700 (PDT)
+        with ESMTP id S1728629AbgFRIWJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Jun 2020 04:22:09 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201CCC06174E;
+        Thu, 18 Jun 2020 01:22:07 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id k1so2146636pls.2;
+        Thu, 18 Jun 2020 01:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0/j4lz8e312J9gqDQle5+Czh+8aD3rzQh6Eq9ULGAuI=;
-        b=RrkJOwr/g8SsBdGksexkQvk3ctT+Mb6RiwWgiCOlkIGDk12nQIblPpzjXep8RUF9q8
-         PyESA919QIjX4IaVj2aFv4rejKo0Y0pBtREGjS8m/S7Vaos7yTd5mRk7TK9CvD2JCenG
-         zfA5zNiw6q94EYYiq7Sn5KCulLcCaQyUsZlCyO3W3XoRQPQOHCccie7xzFQt6AWeHvbd
-         s2PJ73zTxE3+1w1gv0XC/lJ0NFGAUMwOyGswCKuA17cUL0cAZxRbkiVqCupRI/gWWm5R
-         3BGiTbjS/wnWA5aYvWpUd3suBl8xY0jn+1H1WaSOqSRQmcp0+L0KxKF8JN5Ma6WyJOsx
-         +hLQ==
+        bh=5va4+zAz3Y84F8I+jfwGK7kVZgA+OWKUCO/DBzqZ2lk=;
+        b=cDW1fPwusXFzGuCl5MLlwj3Weok2y/3zDATZakbo/QxGCfddQPnP9+2vX2AwQ7pOCU
+         WO7ztjrphuOdlaWUCyCendYSCETu3ckX0m+nG+esOVlkRgTCNW7IyvIZS+ptQGtMAQYY
+         BXLd8pI1mh8TBLJ8yWa+ZtEFKB252rKhjqGdLRJK5w19fvKuLyB6J9YmhHO0vYyO2zS4
+         DY6PJbKGD6Z9sNQ+Wcva2R90nSOstl+3TkSQx8qHoJKBH0yLeVdbTs91CbeM/lv7p2Sj
+         1Q8MkQ3YLnT0fshzg2HkNSmtQh5YJXuaBiNe8Rzi1w7Fm7JCQAkFpGMR9ini0g/Qudel
+         1nEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0/j4lz8e312J9gqDQle5+Czh+8aD3rzQh6Eq9ULGAuI=;
-        b=cjmcoFnCUMEKFUIP7fEWmw+x4j4W9VPnHB7UgnvGZDtkdnQ7MseBON5D58W3HYrXIy
-         9gR5ibbBcex21xS9f1vyAw/wFShUKIwMzuf1aI7zKC0AyRzrj3srqn4s+E1lvPy9Y0tC
-         H/SfzviAPGeo3C80SHMDkWa6h8z8Ox6W0SH8Iavy2E6coEkf4TkxTQuIEssDQVG8QKef
-         c39sHJqUBMcjrp9Zq1OouQIhZgchmSTAC+tVldIYc4mlG27OtrZNHpmKBRfYnPYCFhWu
-         06q3LuqI1I9BiGuPoKxFgRKJpVmUWwWZpYblgC6BiRJK66F90p95iCUqc/egui6xTbgg
-         yGXg==
-X-Gm-Message-State: AOAM531RQQfhuv/bemjXsrWdwlz1D2nT0JYsNBBZBRG3b4kk60P6kFnz
-        9YEXnSY/GZbVgNwSARBhoFrHlgnEYrHN4LKkBD4=
-X-Google-Smtp-Source: ABdhPJyscf5NEQ/BIUYwjTjCSvoTJNw50TUXXg+adzLOX+5uYCSAsbfWwtwy5S9Aw9ln921/3ZR8DWJVxNYy8OXTtfU=
-X-Received: by 2002:a17:90a:220f:: with SMTP id c15mr3206084pje.129.1592468279221;
- Thu, 18 Jun 2020 01:17:59 -0700 (PDT)
+        bh=5va4+zAz3Y84F8I+jfwGK7kVZgA+OWKUCO/DBzqZ2lk=;
+        b=DqRlM1zo4YbQCJc8uA92q2L+QmRJXEfmhxqi18bgebJNRJdr2emXuzvRcK+f8ONu5y
+         HI0cqBzpt7VFBOtsC5g/e8rZ+ZjDQcwgQGXxuiOTA38BCYIi+2yfzmuBT4tO9sWrWz7k
+         dEQwP9alvivbX1uaIDXiPgnojdAnUSo9rde4/AZVgya5ZVKoGM/LO6kXd6JkPQnGE85l
+         okANFXSq8O0G74XjUIJfciQ0oKhDeN6vc46pFaOmgj1ryXQG61O0LnzpiQciiqdvnziB
+         bxfT1RDymJkP01pv4HF7ZpgNMScsR2vhMUmaiL1aqq6CgUwxRjydxOteDO6kPJheV8lj
+         CT9A==
+X-Gm-Message-State: AOAM532wctvWeYA5k/cUQXhfgnIHxKu13/wLp6O4//8YODpyuGG+AWlG
+        XgGTF9c59qOeI6ylvPhyfGv3e5imj8vN3AXfUCk=
+X-Google-Smtp-Source: ABdhPJxX08N8JTeQWAXqBjqWujBqYCDSdKV6HtPJTrJdC6PtGGZb5xiN1DV0gsb2hPJw/LyrQK9UVr140CiNu7pAebo=
+X-Received: by 2002:a17:90a:ac05:: with SMTP id o5mr3196269pjq.228.1592468526692;
+ Thu, 18 Jun 2020 01:22:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200617224813.23853-1-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200617224813.23853-1-Sergey.Semin@baikalelectronics.ru>
+References: <20200617234028.25808-1-Sergey.Semin@baikalelectronics.ru> <20200617234028.25808-2-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200617234028.25808-2-Sergey.Semin@baikalelectronics.ru>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 18 Jun 2020 11:17:47 +0300
-Message-ID: <CAHp75VfPEdxN1UeKJ+gCWpgJymK7YzQs1Lznq1aBfoRNBiMHbQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v6 0/3] serial: 8250_dw: Fix ref clock usage
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
+Date:   Thu, 18 Jun 2020 11:21:53 +0300
+Message-ID: <CAHp75Vd+3ZN51geXg+KiQYVpBZN7F+kgt-2Snw7VDiKiYVqX=A@mail.gmail.com>
+Subject: Re: [PATCH v6 1/9] dt-bindings: dma: dw: Convert DW DMAC to DT binding
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-mips@vger.kernel.org,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+        dmaengine <dmaengine@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
@@ -78,93 +69,62 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 1:52 AM Serge Semin
+On Thu, Jun 18, 2020 at 2:43 AM Serge Semin
 <Sergey.Semin@baikalelectronics.ru> wrote:
 >
-> Greg, Jiri. We've missed the last merge window. It would be pity to miss
-> the next one. Please review/merge in the series.
->
-> Regarding the patchset. It might be dangerous if an UART port reference
-> clock rate is suddenly changed. In particular the 8250 port drivers
-> (and AFAICS most of the tty drivers using common clock framework clocks)
-> rely either on the exclusive reference clock utilization or on the ref
-> clock rate being always constant. Needless to say that it turns out not
-> true and if some other service suddenly changes the clock rate behind an
-> UART port driver back no good can happen. So the port might not only end
-> up with an invalid uartclk value saved, but may also experience a
-> distorted output/input data since such action will effectively update the
-> programmed baud-clock. We discovered such problem on Baikal-T1 SoC where
-> two DW 8250 ports have got a shared reference clock. Allwinner SoC is
-> equipped with an UART, which clock is derived from the CPU PLL clock
-> source, so the CPU frequency change might be propagated down up to the
-> serial port reference clock. This patchset provides a way to fix the
-> problem to the 8250 serial port controllers and mostly fixes it for the
-> DW 8250-compatible UART. I say mostly because due to not having a facility
-> to pause/stop and resume/restart on-going transfers we implemented the
-> UART clock rate update procedure executed post factum of the actual
-> reference clock rate change.
->
-> In addition the patchset includes a small optimization patch. It
-> simplifies the DW APB UART ref clock rate setting procedure a bit.
->
-> This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
-> base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
-> tag: v5.7-rc4
-
-I'm wondering how this will collaborate with runtime PM.
-
-> Changelog v3:
-> - Refactor the original patch to adjust the UART port divisor instead of
->   requesting an exclusive ref clock utilization.
->
-> Changelog v4:
-> - Discard commit b426bf0fb085 ("serial: 8250: Fix max baud limit in generic
->   8250 port") since Greg has already merged it into the tty-next branch.
-> - Use EXPORT_SYMBOL_GPL() for the serial8250_update_uartclk() method.
->
-> Changelog v5:
-> - Refactor dw8250_clk_work_cb() function cheking the clk_get_rate()
->   return value for being erroneous and exit if it is.
-> - Don't update p->uartclk in the port startup. It will be updated later in
->   the same procedure at the set_termios() function being invoked by the
->   serial_core anyway.
->
-> Changelog v6:
-> - Resend
+> Modern device tree bindings are supposed to be created as YAML-files
+> in accordance with dt-schema. This commit replaces the Synopsis
+> Designware DMA controller legacy bare text bindings with YAML file.
+> The only required prorties are "compatible", "reg", "#dma-cells" and
+> "interrupts", which will be used by the driver to correctly find the
+> controller memory region and handle its events. The rest of the properties
+> are optional, since in case if either "dma-channels" or "dma-masters" isn't
+> specified, the driver will attempt to auto-detect the IP core
+> configuration.
 >
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
-> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
-> Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
-> Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > Cc: Arnd Bergmann <arnd@arndb.de>
 > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Russell King <linux@armlinux.org.uk>
 > Cc: linux-mips@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
->
-> Serge Semin (3):
->   serial: 8250: Add 8250 port clock update method
->   serial: 8250_dw: Simplify the ref clock rate setting procedure
->   serial: 8250_dw: Fix common clocks usage race condition
->
->  drivers/tty/serial/8250/8250_dw.c   | 116 +++++++++++++++++++++++++---
->  drivers/tty/serial/8250/8250_port.c |  38 +++++++++
->  include/linux/serial_8250.h         |   2 +
->  3 files changed, 144 insertions(+), 12 deletions(-)
->
-> --
-> 2.26.2
->
 
+
+Rob, here are questions to you.
+
+> +  dma-channels:
+> +    description: |
+> +      Number of DMA channels supported by the controller. In case if
+> +      not specified the driver will try to auto-detect this and
+> +      the rest of the optional parameters.
+> +    minimum: 1
+> +    maximum: 8
+
+...
+
+> +  multi-block:
+
+> +      maxItems: 8
+
+This maximum is defined by above dma-channels property. Is there any
+way to put it in the schema?
+
+...
+
+> +  snps,dma-protection-control:
+> +    $ref: /schemas/types.yaml#definitions/uint32
+> +    description: |
+> +      Bits one-to-one passed to the AHB HPROT[3:1] bus. Each bit setting
+> +      indicates the following features: bit 0 - privileged mode,
+> +      bit 1 - DMA is bufferable, bit 2 - DMA is cacheable.
+> +    default: 0
+> +    minimum: 0
+> +    maximum: 7
+
+AFAIR this is defined by bit flags, does schema have a mechanism to
+define flags-like entries?
 
 -- 
 With Best Regards,
