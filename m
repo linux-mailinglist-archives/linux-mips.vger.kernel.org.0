@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF561FE568
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2020 04:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1621FE8C5
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2020 04:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729774AbgFRBRQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Jun 2020 21:17:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48326 "EHLO mail.kernel.org"
+        id S1728466AbgFRCvQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Jun 2020 22:51:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35138 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729769AbgFRBRQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:17:16 -0400
+        id S1728030AbgFRBJF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:09:05 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 45BB3221F1;
-        Thu, 18 Jun 2020 01:17:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 426A021D6C;
+        Thu, 18 Jun 2020 01:09:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443035;
-        bh=w3ChTkUJ7kKAcOUwVsofeHlMjwmkoQ+pP8IZYyjE00s=;
+        s=default; t=1592442544;
+        bh=mJwDThznqFqYuVdPQYXqiTJAdQqBcPNpMgkMU+wC5+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QK/wpH3sqiAEQNMIQyabBLa7afD2AvghoKCi3eZ3ScyIM+GhxrXd5JwB31d57Od9Z
-         1W4Jm5XmRan3SUAuWr4PPcSfn34aY4RLl4XbXjAt8pZ243vYRitPzhDJHGWr/DNrhy
-         3gp4lPLd0evpqveZEy1ikJ2WvnHZezsqSTxEmMg4=
+        b=fSd7QNjMPDeFi3LsPdBP2gxPl/l2RsFX2psqjD0lOyTQm9yPfPd09GaySURCx1MnQ
+         082C3VaVpiOOjLCk5TBR1KUWGrmHTkr1IEsjGmKa0QCqs3gXY4jBwsY2NYv70/geB7
+         ReJb/vZ//RKIkdAPBJDPEw36STGDuXCLukGmqyxA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -41,12 +41,12 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         linux-mediatek@lists.infradead.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 032/266] serial: 8250: Fix max baud limit in generic 8250 port
-Date:   Wed, 17 Jun 2020 21:12:37 -0400
-Message-Id: <20200618011631.604574-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 043/388] serial: 8250: Fix max baud limit in generic 8250 port
+Date:   Wed, 17 Jun 2020 21:02:20 -0400
+Message-Id: <20200618010805.600873-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
-References: <20200618011631.604574-1-sashal@kernel.org>
+In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
+References: <20200618010805.600873-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -108,10 +108,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 2c65c775bf5a..dbb27303a6b4 100644
+index f77bf820b7a3..4d83c85a7389 100644
 --- a/drivers/tty/serial/8250/8250_port.c
 +++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2539,6 +2539,8 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+@@ -2615,6 +2615,8 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
  					     struct ktermios *termios,
  					     struct ktermios *old)
  {
@@ -120,7 +120,7 @@ index 2c65c775bf5a..dbb27303a6b4 100644
  	/*
  	 * Ask the core to calculate the divisor for us.
  	 * Allow 1% tolerance at the upper limit so uart clks marginally
-@@ -2547,7 +2549,7 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+@@ -2623,7 +2625,7 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
  	 */
  	return uart_get_baud_rate(port, termios, old,
  				  port->uartclk / 16 / UART_DIV_MAX,
