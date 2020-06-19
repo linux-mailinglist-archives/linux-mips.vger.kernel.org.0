@@ -2,147 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E4B201B61
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 21:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9783C201B81
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 21:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389196AbgFSThY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Jun 2020 15:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387688AbgFSThX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Jun 2020 15:37:23 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28879C06174E
-        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 12:37:23 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id h22so4699954pjf.1
-        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 12:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=o7if+DdFqLdTqlhmKOgGWwPbnBli3b0MNWvVpv3R4kw=;
-        b=FUB52KH7JaEZzQ1Sa88+rHDFmBQsWgAcadbsgEbWzKh0ASy5MJvrDDegCm1NTXAOS8
-         vGHr/8ouSL2waaiB0YbuZHgyMv/9ZwoFxlq+Rv9mQnqomECuQBKi0/XNW3pVwoYGpCEf
-         Goc0O9aqUxBX+7MjVIfo9KadJ7D/V9gTIEtuA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=o7if+DdFqLdTqlhmKOgGWwPbnBli3b0MNWvVpv3R4kw=;
-        b=Bv1ec34Y0OmEJysUQhORsd+wkdaNeVjvGNBt3s6XBFSAZuFXPY7RLCNBMeofWSa6L3
-         IkbHIv81DGRtH7lMo7F7KP821r9DBah/DAQEsoBmAuML6ndDtAomX+vv+/65mGgEw0oB
-         H9N/5BHcnczGY9KLVGtD8+nuBdiPORojzzK4L3GnA+tvGX1qJk7L5fH7CkbuN+UHb1gS
-         52udBxAeeAPGy7uscKMph0SXCy3qCpSVUXLPYWjcSQENI9TZ+XR6z9u8MBjcuLct9sdY
-         se++BMlZUhdBkEoKMro/kr3fCE7Ylh84789U0klrzrbfzQ8S64Sst8nzb2NpXdKv5RVM
-         Cy5Q==
-X-Gm-Message-State: AOAM533mrvRF59YFi6KNxemtatlHLrNdpTuiQf8G0YLWOlYlAwRC25g1
-        +NIeUvvT5EK25QURzpHHiTvBTA==
-X-Google-Smtp-Source: ABdhPJy1kxnlCvJmO5IS+9Scdoew2zfX/pdbNf5xDUloU8j9e4g8x0h4K8xzytX/BaBY+vfXdU7CGQ==
-X-Received: by 2002:a17:90a:ea84:: with SMTP id h4mr4579161pjz.45.1592595442674;
-        Fri, 19 Jun 2020 12:37:22 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w10sm5773025pgm.70.2020.06.19.12.37.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2020 12:37:21 -0700 (PDT)
-Date:   Fri, 19 Jun 2020 12:37:20 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-mips@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH] seccomp: Use -1 marker for end of mode 1 syscall list
-Message-ID: <202006191236.AC3E22AAB@keescook>
+        id S2389974AbgFSTm1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Jun 2020 15:42:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50690 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389687AbgFSTm1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 19 Jun 2020 15:42:27 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 99F66206C3
+        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 19:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592595746;
+        bh=u7Q+9lveWuHW5aLyR3G8V9eIOsfyptLC0kbPADPFrWQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sjMuI2k5LnSDBQHixU8X+Wt9nQph+at6Oenp0L/mHoX0a6okbEocQvP+kub+ELobb
+         jBS5ODQUzGGPJDcgS1iI6wVPLkmKPBlup8JbaTHN9QXhyYFqr9UuxFUxOczlDcOOso
+         VfPF5cETeyzJBik4k2r/frMc/+bkQn7obx5HuEao=
+Received: by mail-wr1-f43.google.com with SMTP id q11so10820039wrp.3
+        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 12:42:26 -0700 (PDT)
+X-Gm-Message-State: AOAM531fC21Kn8yUzJwOUFmCVrby9cJNx3NZTdVvqHWDaxsgWjRus0PD
+        TyZr8PRD89g1vqv2KE4hMY04s+Y6racCKOmEDSMZ3g==
+X-Google-Smtp-Source: ABdhPJx5azSOHLfoMlVfQaoY+OUvFQy0JEKqZUc1FxYz5irmT1AzPU+k9GiBgkz9x79ch9sgMeLhdc8wqHh6EjJuqC0=
+X-Received: by 2002:adf:a111:: with SMTP id o17mr5623209wro.257.1592595745224;
+ Fri, 19 Jun 2020 12:42:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202006191236.AC3E22AAB@keescook>
+In-Reply-To: <202006191236.AC3E22AAB@keescook>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 19 Jun 2020 12:42:14 -0700
+X-Gmail-Original-Message-ID: <CALCETrXM5gneAC40RLWyjnCeHE6JFVOKnM0ooKLooGGaVV1KOA@mail.gmail.com>
+Message-ID: <CALCETrXM5gneAC40RLWyjnCeHE6JFVOKnM0ooKLooGGaVV1KOA@mail.gmail.com>
+Subject: Re: [PATCH] seccomp: Use -1 marker for end of mode 1 syscall list
+To:     Kees Cook <keescook@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>, Will Drewry <wad@chromium.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The terminator for the mode 1 syscalls list was a 0, but that could be
-a valid syscall number (e.g. x86_64 __NR_read). By luck, __NR_read was
-listed first and the loop construct would not test it, so there was no
-bug. However, this is fragile. Replace the terminator with -1 instead,
-and make the variable name for mode 1 syscall lists more descriptive.
+On Fri, Jun 19, 2020 at 12:37 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> The terminator for the mode 1 syscalls list was a 0, but that could be
+> a valid syscall number (e.g. x86_64 __NR_read). By luck, __NR_read was
+> listed first and the loop construct would not test it, so there was no
+> bug. However, this is fragile. Replace the terminator with -1 instead,
+> and make the variable name for mode 1 syscall lists more descriptive.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-I'll be putting this into my for-next/seccomp tree. I would love a MIPS
-ack, if someone's got a moment to double-check this. :)
----
- arch/mips/include/asm/seccomp.h |  4 ++--
- include/asm-generic/seccomp.h   |  2 +-
- kernel/seccomp.c                | 10 +++++-----
- 3 files changed, 8 insertions(+), 8 deletions(-)
+Could the architecture instead supply the length of the list?
 
-diff --git a/arch/mips/include/asm/seccomp.h b/arch/mips/include/asm/seccomp.h
-index e383d7e27b93..aa809589a181 100644
---- a/arch/mips/include/asm/seccomp.h
-+++ b/arch/mips/include/asm/seccomp.h
-@@ -9,12 +9,12 @@ static inline const int *get_compat_mode1_syscalls(void)
- 	static const int syscalls_O32[] = {
- 		__NR_O32_Linux + 3, __NR_O32_Linux + 4,
- 		__NR_O32_Linux + 1, __NR_O32_Linux + 193,
--		0, /* null terminated */
-+		-1, /* negative terminated */
- 	};
- 	static const int syscalls_N32[] = {
- 		__NR_N32_Linux + 0, __NR_N32_Linux + 1,
- 		__NR_N32_Linux + 58, __NR_N32_Linux + 211,
--		0, /* null terminated */
-+		-1, /* negative terminated */
- 	};
- 
- 	if (IS_ENABLED(CONFIG_MIPS32_O32) && test_thread_flag(TIF_32BIT_REGS))
-diff --git a/include/asm-generic/seccomp.h b/include/asm-generic/seccomp.h
-index 1321ac7821d7..6b6f42bc58f9 100644
---- a/include/asm-generic/seccomp.h
-+++ b/include/asm-generic/seccomp.h
-@@ -33,7 +33,7 @@ static inline const int *get_compat_mode1_syscalls(void)
- 	static const int mode1_syscalls_32[] = {
- 		__NR_seccomp_read_32, __NR_seccomp_write_32,
- 		__NR_seccomp_exit_32, __NR_seccomp_sigreturn_32,
--		0, /* null terminated */
-+		-1, /* negative terminated */
- 	};
- 	return mode1_syscalls_32;
- }
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 0ed57e8c49d0..866a432cd746 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -742,20 +742,20 @@ static inline void seccomp_log(unsigned long syscall, long signr, u32 action,
-  */
- static const int mode1_syscalls[] = {
- 	__NR_seccomp_read, __NR_seccomp_write, __NR_seccomp_exit, __NR_seccomp_sigreturn,
--	0, /* null terminated */
-+	-1, /* negative terminated */
- };
- 
- static void __secure_computing_strict(int this_syscall)
- {
--	const int *syscall_whitelist = mode1_syscalls;
-+	const int *allowed_syscalls = mode1_syscalls;
- #ifdef CONFIG_COMPAT
- 	if (in_compat_syscall())
--		syscall_whitelist = get_compat_mode1_syscalls();
-+		allowed_syscalls = get_compat_mode1_syscalls();
- #endif
- 	do {
--		if (*syscall_whitelist == this_syscall)
-+		if (*allowed_syscalls == this_syscall)
- 			return;
--	} while (*++syscall_whitelist);
-+	} while (*++allowed_syscalls != -1);
- 
- #ifdef SECCOMP_DEBUG
- 	dump_stack();
--- 
-2.25.1
-
-
--- 
-Kees Cook
+--Andy
