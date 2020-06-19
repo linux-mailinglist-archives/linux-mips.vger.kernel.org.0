@@ -2,122 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F3D2014C6
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 18:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28B92013F1
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 18:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390667AbgFSPA7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Jun 2020 11:00:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57378 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390671AbgFSPA6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 19 Jun 2020 11:00:58 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 84DE020734;
-        Fri, 19 Jun 2020 15:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592578858;
-        bh=Pg7o7hR6OuF3WqB28s1pOE/hk0d383YdOIRcUIRuGsg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f2LVDoNa45YBAG9lbXrTibHbHAkGdI/umi2h6DPNOabQa3Lw2QibgDUI5Ptt6uteL
-         4kbUZ3cqzhtCQ9D/rFeK1b8SOxX61+jDjZkcDDtP0BIk8pyiNxEiwgQsnHH3bGJL7I
-         rZSQdmQTuglTjCzF6/yb6L8yzsUzJ2vvnhHwvteU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S2394200AbgFSQG0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Jun 2020 12:06:26 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:50058 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2394020AbgFSQGH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 19 Jun 2020 12:06:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592582765;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fdwEEPmGbF+7vaa9v+aN1XHbOlUdwOKUfmYW6uYEoCM=;
+        b=YefcB85riAbHoGU3YjA2sPfNbZE6JiL49GO79urIs3V2CGJau9/5vz83jwMrOAGyv5zxn8
+        OwFJHKfNijkkhdA3FuYsCvst37ORGAHIIUiFE/VeQLgDZ79AbmG9EZC55EDVp1WSCAMrm8
+        i/FuMFis+lSXokAffstCR9m66Dy537c=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-363-NZKFXwZhP92Bp7Z1RpDiqg-1; Fri, 19 Jun 2020 12:06:04 -0400
+X-MC-Unique: NZKFXwZhP92Bp7Z1RpDiqg-1
+Received: by mail-qt1-f199.google.com with SMTP id q21so7384735qtn.20
+        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 09:06:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fdwEEPmGbF+7vaa9v+aN1XHbOlUdwOKUfmYW6uYEoCM=;
+        b=YnIyRlazqVt88lOBQuxqtTKWPcdygO7B3G903CjktbxDI/aFePBz3FW1n3OcckYuPF
+         jnSXFixFzRmxnH+0VYMxzLIFS1Z32qpTIiKNaD7GErS19tUTVKG93uho9N5XPmwXPcQa
+         Z/KV5VCi74KsSbV5gRfmBWwUyo/N9dSWWyr5/b1vhLWoEKZt4D1DTYeQM3t7FKhKkeE/
+         2gNQlLoQote6O0+6C/zUa+/6u2RRZalvozbMuoTdjjl8CYiXdXjAgu5qhDL/GD4ei93B
+         A9/nkIgyqZdd4dmsrKW/2iLQL8/freuEbp+0zN5ZnF4D8SzflWkMqa0JiGlRJZe+7PhW
+         /5rA==
+X-Gm-Message-State: AOAM531PISXyHt0vO1Y2LlPKMnaw5Xx5bvjJV5unOyII4xUFcu4yRxnt
+        rdomWJi2E55OrbleSpWqE/xdMo/nLfygAD41uifVoU5OIyW2pPur7SB75JI86cWxTwsJiAWqUIU
+        44x5yOtSd5frAFAEQ13XhgQ==
+X-Received: by 2002:ac8:fec:: with SMTP id f41mr1437149qtk.212.1592582761259;
+        Fri, 19 Jun 2020 09:06:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz8wG2GTQ9R1eiAtzaifkaB+aa3jdUijFfrRdNWsFEhdltAKDggKtTyb2MbmKOZqrM66lR9pA==
+X-Received: by 2002:ac8:fec:: with SMTP id f41mr1437088qtk.212.1592582760619;
+        Fri, 19 Jun 2020 09:06:00 -0700 (PDT)
+Received: from xz-x1.redhat.com ([2607:9880:19c0:32::2])
+        by smtp.gmail.com with ESMTPSA id g11sm6412604qkk.123.2020.06.19.09.05.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2020 09:05:59 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Gerald Schaefer <gerald.schaefer@de.ibm.com>, peterx@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 182/267] spi: dw: Return any value retrieved from the dma_transfer callback
-Date:   Fri, 19 Jun 2020 16:32:47 +0200
-Message-Id: <20200619141657.498868116@linuxfoundation.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200619141648.840376470@linuxfoundation.org>
-References: <20200619141648.840376470@linuxfoundation.org>
-User-Agent: quilt/0.66
+        linux-mips@vger.kernel.org
+Subject: [PATCH 11/26] mm/mips: Use general page fault accounting
+Date:   Fri, 19 Jun 2020 12:05:23 -0400
+Message-Id: <20200619160538.8641-12-peterx@redhat.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200619160538.8641-1-peterx@redhat.com>
+References: <20200619160538.8641-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Use the general page fault accounting by passing regs into handle_mm_fault().
+It naturally solve the issue of multiple page fault accounting when page fault
+retry happened.
 
-[ Upstream commit f0410bbf7d0fb80149e3b17d11d31f5b5197873e ]
+Fix PERF_COUNT_SW_PAGE_FAULTS perf event manually for page fault retries, by
+moving it before taking mmap_sem.
 
-DW APB SSI DMA-part of the driver may need to perform the requested
-SPI-transfer synchronously. In that case the dma_transfer() callback
-will return 0 as a marker of the SPI transfer being finished so the
-SPI core doesn't need to wait and may proceed with the SPI message
-trasnfers pumping procedure. This will be needed to fix the problem
-when DMA transactions are finished, but there is still data left in
-the SPI Tx/Rx FIFOs being sent/received. But for now make dma_transfer
-to return 1 as the normal dw_spi_transfer_one() method.
-
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Feng Tang <feng.tang@intel.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Link: https://lore.kernel.org/r/20200529131205.31838-3-Sergey.Semin@baikalelectronics.ru
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC: linux-mips@vger.kernel.org
+Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- drivers/spi/spi-dw-mid.c | 2 +-
- drivers/spi/spi-dw.c     | 7 ++-----
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ arch/mips/mm/fault.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
-index e1b34ef9a31c..10f328558d55 100644
---- a/drivers/spi/spi-dw-mid.c
-+++ b/drivers/spi/spi-dw-mid.c
-@@ -274,7 +274,7 @@ static int mid_spi_dma_transfer(struct dw_spi *dws, struct spi_transfer *xfer)
- 		dma_async_issue_pending(dws->txchan);
+diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
+index 31c2afb8f8a5..750a4978a12b 100644
+--- a/arch/mips/mm/fault.c
++++ b/arch/mips/mm/fault.c
+@@ -96,6 +96,8 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
+ 
+ 	if (user_mode(regs))
+ 		flags |= FAULT_FLAG_USER;
++
++	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+ retry:
+ 	down_read(&mm->mmap_sem);
+ 	vma = find_vma(mm, address);
+@@ -152,12 +154,11 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
+ 	 * make sure we exit gracefully rather than endlessly redo
+ 	 * the fault.
+ 	 */
+-	fault = handle_mm_fault(vma, address, flags, NULL);
++	fault = handle_mm_fault(vma, address, flags, regs);
+ 
+ 	if (fault_signal_pending(fault, regs))
+ 		return;
+ 
+-	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+ 	if (unlikely(fault & VM_FAULT_ERROR)) {
+ 		if (fault & VM_FAULT_OOM)
+ 			goto out_of_memory;
+@@ -168,15 +169,6 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
+ 		BUG();
  	}
+ 	if (flags & FAULT_FLAG_ALLOW_RETRY) {
+-		if (fault & VM_FAULT_MAJOR) {
+-			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1,
+-						  regs, address);
+-			tsk->maj_flt++;
+-		} else {
+-			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1,
+-						  regs, address);
+-			tsk->min_flt++;
+-		}
+ 		if (fault & VM_FAULT_RETRY) {
+ 			flags |= FAULT_FLAG_TRIED;
  
--	return 0;
-+	return 1;
- }
- 
- static void mid_spi_dma_stop(struct dw_spi *dws)
-diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
-index 3fbd6f01fb10..b1c137261d0f 100644
---- a/drivers/spi/spi-dw.c
-+++ b/drivers/spi/spi-dw.c
-@@ -383,11 +383,8 @@ static int dw_spi_transfer_one(struct spi_controller *master,
- 
- 	spi_enable_chip(dws, 1);
- 
--	if (dws->dma_mapped) {
--		ret = dws->dma_ops->dma_transfer(dws, transfer);
--		if (ret < 0)
--			return ret;
--	}
-+	if (dws->dma_mapped)
-+		return dws->dma_ops->dma_transfer(dws, transfer);
- 
- 	if (chip->poll_mode)
- 		return poll_transfer(dws);
 -- 
-2.25.1
-
-
+2.26.2
 
