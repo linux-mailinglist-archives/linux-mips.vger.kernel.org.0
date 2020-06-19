@@ -2,90 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DBB2003E3
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 10:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972322007EF
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 13:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731364AbgFSI3L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Jun 2020 04:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731188AbgFSI3F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Jun 2020 04:29:05 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF8EC061795
-        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 01:29:01 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id g2so5089465lfb.0
-        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 01:29:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=irVvm75B8uOjhet4ds9NewlHhGnanjSr3qTRTZzIUE4=;
-        b=qkbi8YvZIpYdgXOhuLz+oLhk6FU5nre6FOh8jwCxVM9654uCe38mG3xi4sHqGzzDyG
-         SEH1hJrw2TFIChHUxX1ZXnbwARwg6RC5j0BV0+jMRPStvzbKMhHOWFkkmEsrWjqdX5F+
-         D1IOfQlW2zLQg/nVx9gJMOxi4uOERKvqBd1S1RhEt6EhjY5th0/tAvBfP2KAJAM96y7o
-         h72udRwv1GPKxwptl875dVONvJoltvXpQNW88Rr7UCqkXi2dwlS43kJ7lnlN+shZedPc
-         UEpFi+EUsizwMgSG5KrzWkYQzjXdopu2qfdbxfjTUi6dvlVTSJe8cWAu3gdUIqCShHxT
-         T2Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=irVvm75B8uOjhet4ds9NewlHhGnanjSr3qTRTZzIUE4=;
-        b=uiept98lrJPwQwNx2nTWOv52QetYtze6W9OrdsjhaBS2FjvwTl/1a0p4pMfD7OHWFL
-         FaWYJa+Gch31Ii2aDBbbtkFt8L6bqNQMFFEPVLbZ8IfU966rzMevUD55Pa/YFT5D9CdT
-         ZuaPLWLehcD4BTGAI2fWkprbI7fGLoYog2EtJMoMBak5lDUWxG3y6S3DShKODHmugOtD
-         oB8XVlKgpOvbMDZNYGrIMk/v6sAYfBWmYGKJlSHzvHPS/2LS+hPiRtoTzGZqf91EwvzL
-         fgN4hapn3kad+Xb/muPWhI+2dj46AO2KbBQYG30SMdjmlRIne8dHgBYb+kCeSrLgXe/a
-         tVcQ==
-X-Gm-Message-State: AOAM530FUd5T1nqCmsZa15hi+uPGyP7JnMJKkgxKm7BiZTldSR+/sK1m
-        cPPbOg9OgBJHo5RCUl4XQlZ1qg==
-X-Google-Smtp-Source: ABdhPJxnSAk4hCfsyIu7N052ONa1UuRXTstPiF0JmLx3L/kM6WdrlnqV1xaj4A+uNl5wLop8yEYwoQ==
-X-Received: by 2002:ac2:5c49:: with SMTP id s9mr1327184lfp.90.1592555339610;
-        Fri, 19 Jun 2020 01:28:59 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:8c9:4beb:2ce8:f19d:33e5:571e? ([2a00:1fa0:8c9:4beb:2ce8:f19d:33e5:571e])
-        by smtp.gmail.com with ESMTPSA id a16sm1058721ljb.107.2020.06.19.01.28.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2020 01:28:58 -0700 (PDT)
-Subject: Re: [PATCH 3/6] exec: cleanup the count() function
-To:     Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Gerst <brgerst@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200618144627.114057-1-hch@lst.de>
- <20200618144627.114057-4-hch@lst.de>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <04e7876b-a8f3-3f6e-939c-bb0764ece1ac@cogentembedded.com>
-Date:   Fri, 19 Jun 2020 11:28:44 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1731087AbgFSLgQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Jun 2020 07:36:16 -0400
+Received: from elvis.franken.de ([193.175.24.41]:37513 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727814AbgFSLfR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 19 Jun 2020 07:35:17 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jmFIK-0007F9-00; Fri, 19 Jun 2020 13:34:52 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id E6491C06E7; Fri, 19 Jun 2020 13:05:24 +0200 (CEST)
+Date:   Fri, 19 Jun 2020 13:05:24 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+Subject: Re: [PATCH v2 1/1] dt-bindings: MIPS: Document Ingenic SoCs binding.
+Message-ID: <20200619110524.GA9391@alpha.franken.de>
+References: <20200602183354.39707-1-zhouyanjie@wanyeetech.com>
+ <20200602183354.39707-2-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-In-Reply-To: <20200618144627.114057-4-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200602183354.39707-2-zhouyanjie@wanyeetech.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
-
-On 18.06.2020 17:46, Christoph Hellwig wrote:
-
-> Remove the max argument as it is hard wired to MAX_ARG_STRINGS, and
-
-    Technically, argument is what's actually passed to a function, you're 
-removing a function parameter.
-
-> give the function a slightly less generic name.
+On Wed, Jun 03, 2020 at 02:33:54AM +0800, 周琰杰 (Zhou Yanjie) wrote:
+> Document the available properties for the SoC root node and the
+> CPU nodes of the devicetree for the Ingenic XBurst SoCs.
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-[...]
+> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Tested-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> ---
+> 
+> Notes:
+>     v1->v2:
+>     1.Remove unnecessary "items".
+>     2.Add "clocks" as suggested by Paul Cercueil.
+> 
+>  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 67 ++++++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
 
-MBR, Sergei
+applied to mips-next.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
