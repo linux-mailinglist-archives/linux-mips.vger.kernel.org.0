@@ -2,108 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73756201CDE
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 23:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC69201CFD
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 23:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391860AbgFSVHW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Jun 2020 17:07:22 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:50614 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391572AbgFSVHV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Jun 2020 17:07:21 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 0A47C1C0C12; Fri, 19 Jun 2020 23:07:20 +0200 (CEST)
-Date:   Fri, 19 Jun 2020 23:07:19 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 4.19 182/267] spi: dw: Return any value retrieved from
- the dma_transfer callback
-Message-ID: <20200619210719.GB12233@amd>
-References: <20200619141648.840376470@linuxfoundation.org>
- <20200619141657.498868116@linuxfoundation.org>
+        id S1726958AbgFSVRF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Jun 2020 17:17:05 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:38222 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726313AbgFSVRF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Jun 2020 17:17:05 -0400
+Received: by mail-pj1-f68.google.com with SMTP id d6so4814960pjs.3;
+        Fri, 19 Jun 2020 14:17:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7hNihcV3mvm2VbgzMCb3VuZiHFSALZHgtjxranVJTmE=;
+        b=dFoRRUIOPhGwq71xQ3P5RaSFVt3bmwjhvl5AdFG+meSI/NEIzNPMMe/xEPhAxzdJ2r
+         d50+IrkTF9f1gGmcHySTy01RmU8QPumj3DOkYArg6zbHLPBcw8QAg2cFZul0l3Sfs5Ob
+         NVZGBZgPzPK/dF4mW9jtu+ycQkiChDdC242EIgLwTR5vM4A45huK/cVwNkPc7kfAs1FK
+         m7UJxPpQrCKNg5x8vWei+3cZ5f2S2K93IBHb8+03qBUtQ3soUjocdfODW8pK0tITf5Vj
+         D4165oNfL+4ZtFffGDbWOQc0n+3yUNv/uGpxRsf6guBFMPf8m7zetLKit9qzowIDS4L/
+         BPFw==
+X-Gm-Message-State: AOAM53268EVEXHpnR3d9xMFMIGRV9mClDCGDRBXanluYcF3KQrPbMdqW
+        AL+PA3LJMsLIrsDQrzB1QNQ=
+X-Google-Smtp-Source: ABdhPJzVFn2+ANNt35xVqck48K2jzOLKssbmFAqliq16/KCjcWBHQm/+K7WAIhdQVl6WxrZdgzhwhg==
+X-Received: by 2002:a17:90a:7a8f:: with SMTP id q15mr4751132pjf.116.1592601423167;
+        Fri, 19 Jun 2020 14:17:03 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id s188sm6551320pfb.118.2020.06.19.14.17.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2020 14:17:01 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 0E5884063E; Fri, 19 Jun 2020 21:17:00 +0000 (UTC)
+Date:   Fri, 19 Jun 2020 21:17:00 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
+        Brian Gerst <brgerst@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] kernel: add a kernel_wait helper
+Message-ID: <20200619211700.GS11244@42.do-not-panic.com>
+References: <20200618144627.114057-1-hch@lst.de>
+ <20200618144627.114057-7-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="NMuMz9nt05w80d4+"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200619141657.498868116@linuxfoundation.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200618144627.114057-7-hch@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, Jun 18, 2020 at 04:46:27PM +0200, Christoph Hellwig wrote:
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -1626,6 +1626,22 @@ long kernel_wait4(pid_t upid, int __user *stat_addr, int options,
+>  	return ret;
+>  }
+>  
+> +int kernel_wait(pid_t pid, int *stat)
+> +{
+> +	struct wait_opts wo = {
+> +		.wo_type	= PIDTYPE_PID,
+> +		.wo_pid		= find_get_pid(pid),
+> +		.wo_flags	= WEXITED,
+> +	};
+> +	int ret;
+> +
+> +	ret = do_wait(&wo);
+> +	if (ret > 0 && wo.wo_stat)
+> +		*stat = wo.wo_stat;
 
---NMuMz9nt05w80d4+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since all we care about is WEXITED, that could be simplified
+to something like this:
 
-On Fri 2020-06-19 16:32:47, Greg Kroah-Hartman wrote:
-> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
->=20
-> [ Upstream commit f0410bbf7d0fb80149e3b17d11d31f5b5197873e ]
->=20
-> DW APB SSI DMA-part of the driver may need to perform the requested
-> SPI-transfer synchronously. In that case the dma_transfer() callback
-> will return 0 as a marker of the SPI transfer being finished so the
-> SPI core doesn't need to wait and may proceed with the SPI message
-> trasnfers pumping procedure. This will be needed to fix the problem
-> when DMA transactions are finished, but there is still data left in
-> the SPI Tx/Rx FIFOs being sent/received. But for now make dma_transfer
-> to return 1 as the normal dw_spi_transfer_one() method.
+if (ret > 0 && KWIFEXITED(wo.wo_stat)
+ 	*stat = KWEXITSTATUS(wo.wo_stat)
 
-As far as I understand, this is support for new SoC, not a fix?
+Otherwise callers have to use W*() wrappers.
 
-> +++ b/drivers/spi/spi-dw.c
-> @@ -383,11 +383,8 @@ static int dw_spi_transfer_one(struct spi_controller=
- *master,
-> =20
->  	spi_enable_chip(dws, 1);
-> =20
-> -	if (dws->dma_mapped) {
-> -		ret =3D dws->dma_ops->dma_transfer(dws, transfer);
-> -		if (ret < 0)
-> -			return ret;
-> -	}
-> +	if (dws->dma_mapped)
-> +		return dws->dma_ops->dma_transfer(dws, transfer);
-> =20
->  	if (chip->poll_mode)
->  		return poll_transfer(dws);
+> +	put_pid(wo.wo_pid);
+> +	return ret;
+> +}
 
-Mainline patch simply changes return value, but code is different in
-v4.19, and poll_transfer will now be avoided when dws->dma_mapped. Is
-that a problem?
+Then we don't get *any* in-kernel code dealing with the W*() crap.
+I just unwrapped this for the umh [0], given that otherwise we'd
+have to use KW*() callers elsewhere. Doing it upshot one level
+further would be even better.
 
-Best regards,
-									Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
+[0] https://lkml.kernel.org/r/20200610154923.27510-1-mcgrof@kernel.org              
 
---NMuMz9nt05w80d4+
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl7tKQcACgkQMOfwapXb+vJ1sgCeOJVyrkyrloM2p+RmL54QRIPJ
-CLQAn1uKYJOgsc+yYzmNLkQTUJ86pN4t
-=lPtX
------END PGP SIGNATURE-----
-
---NMuMz9nt05w80d4+--
+  Luis
