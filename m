@@ -2,62 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9783C201B81
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 21:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AF8201BA9
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 21:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389974AbgFSTm1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Jun 2020 15:42:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50690 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389687AbgFSTm1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 19 Jun 2020 15:42:27 -0400
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 99F66206C3
-        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 19:42:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592595746;
-        bh=u7Q+9lveWuHW5aLyR3G8V9eIOsfyptLC0kbPADPFrWQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sjMuI2k5LnSDBQHixU8X+Wt9nQph+at6Oenp0L/mHoX0a6okbEocQvP+kub+ELobb
-         jBS5ODQUzGGPJDcgS1iI6wVPLkmKPBlup8JbaTHN9QXhyYFqr9UuxFUxOczlDcOOso
-         VfPF5cETeyzJBik4k2r/frMc/+bkQn7obx5HuEao=
-Received: by mail-wr1-f43.google.com with SMTP id q11so10820039wrp.3
-        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 12:42:26 -0700 (PDT)
-X-Gm-Message-State: AOAM531fC21Kn8yUzJwOUFmCVrby9cJNx3NZTdVvqHWDaxsgWjRus0PD
-        TyZr8PRD89g1vqv2KE4hMY04s+Y6racCKOmEDSMZ3g==
-X-Google-Smtp-Source: ABdhPJx5azSOHLfoMlVfQaoY+OUvFQy0JEKqZUc1FxYz5irmT1AzPU+k9GiBgkz9x79ch9sgMeLhdc8wqHh6EjJuqC0=
-X-Received: by 2002:adf:a111:: with SMTP id o17mr5623209wro.257.1592595745224;
- Fri, 19 Jun 2020 12:42:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <202006191236.AC3E22AAB@keescook>
-In-Reply-To: <202006191236.AC3E22AAB@keescook>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Fri, 19 Jun 2020 12:42:14 -0700
-X-Gmail-Original-Message-ID: <CALCETrXM5gneAC40RLWyjnCeHE6JFVOKnM0ooKLooGGaVV1KOA@mail.gmail.com>
-Message-ID: <CALCETrXM5gneAC40RLWyjnCeHE6JFVOKnM0ooKLooGGaVV1KOA@mail.gmail.com>
-Subject: Re: [PATCH] seccomp: Use -1 marker for end of mode 1 syscall list
-To:     Kees Cook <keescook@chromium.org>
+        id S1732560AbgFSTxu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Jun 2020 15:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731128AbgFSTxu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Jun 2020 15:53:50 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A302C0613EF
+        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 12:53:50 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id p3so2237564pgh.3
+        for <linux-mips@vger.kernel.org>; Fri, 19 Jun 2020 12:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=anG95SJd4AOjTnI4MV3+T4SvuNW+x6NMVdWZoSy8e08=;
+        b=ha9EfugfFqrYvP9ncS5JDX/+xka+I18knexTDvSEUg3ZZbryI7a/FLIh6rXbkvHOES
+         h9ujOx/D0LNG/bvHVXHGHYuGvaBOEvr390y7KSfwiaD/IR/aV/nVT/jKrFqWjIHCUjyp
+         pKx8tPOkcfw+AMC9k4Y1o7kg3qc1QC/Tvgvsg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=anG95SJd4AOjTnI4MV3+T4SvuNW+x6NMVdWZoSy8e08=;
+        b=uEoKnH+SbiJOvGBQh/nwrzbBLdN9ULRtydxbPUQ98hpWACTSbOmJ5eRvfIovGtexEM
+         c0SLOrU/Dp5p4TSF330KQxyY8KUcT3Qb5MpZbQX4IUtEK3cq60OX6c/d3hhwAaOACBwk
+         citG4HgiQZo8tZ4iLxMxDmx51ZLrsH44yNKEVeZ1Vp5gwujG6D4bE57xTelWqncZCJD9
+         tEYk+QocwOGDprT9Fb7iq0creYwQkjsvdnE9kKBLLQf28SMgziR9tm/kcCYY26tr4o7n
+         yMxu7JPvAuY3JpaxWTcVrl2t8qeaOO4rnbRyhwPPeYjhG7krQfpBmRnCKh/I8E46vitz
+         26/Q==
+X-Gm-Message-State: AOAM531hfdW8HF2z1D1UuUSK4vH+ydfX1L3HfnlMJhuV3sQnmKXrHd09
+        dnPU7Fj//0OSBM0wUNfEjoxPGA==
+X-Google-Smtp-Source: ABdhPJzHp+ulgh26iR+Xv3g/K0aOiw7U9M6bVmBEmxiFXk8mFx/tiNvkiTra7x6B5etHiCFnYsht0g==
+X-Received: by 2002:a62:5c03:: with SMTP id q3mr9555744pfb.58.1592596428586;
+        Fri, 19 Jun 2020 12:53:48 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h20sm6473821pfo.105.2020.06.19.12.53.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2020 12:53:47 -0700 (PDT)
+Date:   Fri, 19 Jun 2020 12:53:46 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andy Lutomirski <luto@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Arnd Bergmann <arnd@arndb.de>, Will Drewry <wad@chromium.org>,
         "open list:MIPS" <linux-mips@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] seccomp: Use -1 marker for end of mode 1 syscall list
+Message-ID: <202006191253.B00874B22@keescook>
+References: <202006191236.AC3E22AAB@keescook>
+ <CALCETrXM5gneAC40RLWyjnCeHE6JFVOKnM0ooKLooGGaVV1KOA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrXM5gneAC40RLWyjnCeHE6JFVOKnM0ooKLooGGaVV1KOA@mail.gmail.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 12:37 PM Kees Cook <keescook@chromium.org> wrote:
->
-> The terminator for the mode 1 syscalls list was a 0, but that could be
-> a valid syscall number (e.g. x86_64 __NR_read). By luck, __NR_read was
-> listed first and the loop construct would not test it, so there was no
-> bug. However, this is fragile. Replace the terminator with -1 instead,
-> and make the variable name for mode 1 syscall lists more descriptive.
+On Fri, Jun 19, 2020 at 12:42:14PM -0700, Andy Lutomirski wrote:
+> On Fri, Jun 19, 2020 at 12:37 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > The terminator for the mode 1 syscalls list was a 0, but that could be
+> > a valid syscall number (e.g. x86_64 __NR_read). By luck, __NR_read was
+> > listed first and the loop construct would not test it, so there was no
+> > bug. However, this is fragile. Replace the terminator with -1 instead,
+> > and make the variable name for mode 1 syscall lists more descriptive.
+> 
+> Could the architecture instead supply the length of the list?
 
-Could the architecture instead supply the length of the list?
+It could, but I didn't like the way the plumbing for that looked.
 
---Andy
+-- 
+Kees Cook
