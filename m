@@ -2,102 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC69201CFD
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2020 23:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BF9201DD1
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Jun 2020 00:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726958AbgFSVRF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Jun 2020 17:17:05 -0400
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:38222 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726313AbgFSVRF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Jun 2020 17:17:05 -0400
-Received: by mail-pj1-f68.google.com with SMTP id d6so4814960pjs.3;
-        Fri, 19 Jun 2020 14:17:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7hNihcV3mvm2VbgzMCb3VuZiHFSALZHgtjxranVJTmE=;
-        b=dFoRRUIOPhGwq71xQ3P5RaSFVt3bmwjhvl5AdFG+meSI/NEIzNPMMe/xEPhAxzdJ2r
-         d50+IrkTF9f1gGmcHySTy01RmU8QPumj3DOkYArg6zbHLPBcw8QAg2cFZul0l3Sfs5Ob
-         NVZGBZgPzPK/dF4mW9jtu+ycQkiChDdC242EIgLwTR5vM4A45huK/cVwNkPc7kfAs1FK
-         m7UJxPpQrCKNg5x8vWei+3cZ5f2S2K93IBHb8+03qBUtQ3soUjocdfODW8pK0tITf5Vj
-         D4165oNfL+4ZtFffGDbWOQc0n+3yUNv/uGpxRsf6guBFMPf8m7zetLKit9qzowIDS4L/
-         BPFw==
-X-Gm-Message-State: AOAM53268EVEXHpnR3d9xMFMIGRV9mClDCGDRBXanluYcF3KQrPbMdqW
-        AL+PA3LJMsLIrsDQrzB1QNQ=
-X-Google-Smtp-Source: ABdhPJzVFn2+ANNt35xVqck48K2jzOLKssbmFAqliq16/KCjcWBHQm/+K7WAIhdQVl6WxrZdgzhwhg==
-X-Received: by 2002:a17:90a:7a8f:: with SMTP id q15mr4751132pjf.116.1592601423167;
-        Fri, 19 Jun 2020 14:17:03 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id s188sm6551320pfb.118.2020.06.19.14.17.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2020 14:17:01 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 0E5884063E; Fri, 19 Jun 2020 21:17:00 +0000 (UTC)
-Date:   Fri, 19 Jun 2020 21:17:00 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
-        Brian Gerst <brgerst@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] kernel: add a kernel_wait helper
-Message-ID: <20200619211700.GS11244@42.do-not-panic.com>
-References: <20200618144627.114057-1-hch@lst.de>
- <20200618144627.114057-7-hch@lst.de>
+        id S1729040AbgFSWLW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Jun 2020 18:11:22 -0400
+Received: from out28-122.mail.aliyun.com ([115.124.28.122]:48381 "EHLO
+        out28-122.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728906AbgFSWLW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Jun 2020 18:11:22 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1879015|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00592788-0.0025966-0.991476;FP=0|0|0|0|0|-1|-1|-1;HT=e01a16367;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.HpPfw4y_1592604655;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HpPfw4y_1592604655)
+          by smtp.aliyun-inc.com(10.147.42.16);
+          Sat, 20 Jun 2020 06:11:18 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com,
+        tsbogend@alpha.franken.de, ak@linux.intel.com,
+        keescook@chromium.org, ebiederm@xmission.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: [PATCH 0/3] Add support for Ingenic X1830 SoC and Y&A CU1830-Neo board.
+Date:   Sat, 20 Jun 2020 06:10:28 +0800
+Message-Id: <20200619221031.33558-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200618144627.114057-7-hch@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 04:46:27PM +0200, Christoph Hellwig wrote:
-> --- a/kernel/exit.c
-> +++ b/kernel/exit.c
-> @@ -1626,6 +1626,22 @@ long kernel_wait4(pid_t upid, int __user *stat_addr, int options,
->  	return ret;
->  }
->  
-> +int kernel_wait(pid_t pid, int *stat)
-> +{
-> +	struct wait_opts wo = {
-> +		.wo_type	= PIDTYPE_PID,
-> +		.wo_pid		= find_get_pid(pid),
-> +		.wo_flags	= WEXITED,
-> +	};
-> +	int ret;
-> +
-> +	ret = do_wait(&wo);
-> +	if (ret > 0 && wo.wo_stat)
-> +		*stat = wo.wo_stat;
+1.Add support for Ingenic X1830 SoC.
+2.Add support for CU1830-Neo development board. CU1830-Neo is a development
+  board using Ingenic X1830 SoC. It comes with 128MiB of RAM. 
 
-Since all we care about is WEXITED, that could be simplified
-to something like this:
+周琰杰 (Zhou Yanjie) (3):
+  MIPS: Ingenic: Add Ingenic X1830 support.
+  dt-bindings: MIPS: Add Ingenic X1830 based boards.
+  MIPS: Ingenic: Add YSH & ATIL CU Neo board support.
 
-if (ret > 0 && KWIFEXITED(wo.wo_stat)
- 	*stat = KWEXITSTATUS(wo.wo_stat)
+ .../devicetree/bindings/mips/ingenic/devices.yaml  |  12 +-
+ arch/mips/boot/dts/ingenic/Makefile                |   1 +
+ arch/mips/boot/dts/ingenic/cu1830-neo.dts          | 160 +++++++++++
+ arch/mips/boot/dts/ingenic/x1830.dtsi              | 299 +++++++++++++++++++++
+ arch/mips/configs/cu1830-neo_defconfig             | 119 ++++++++
+ arch/mips/jz4740/Kconfig                           |  10 +
+ 6 files changed, 598 insertions(+), 3 deletions(-)
+ create mode 100644 arch/mips/boot/dts/ingenic/cu1830-neo.dts
+ create mode 100755 arch/mips/boot/dts/ingenic/x1830.dtsi
+ create mode 100644 arch/mips/configs/cu1830-neo_defconfig
 
-Otherwise callers have to use W*() wrappers.
+-- 
+2.11.0
 
-> +	put_pid(wo.wo_pid);
-> +	return ret;
-> +}
 
-Then we don't get *any* in-kernel code dealing with the W*() crap.
-I just unwrapped this for the umh [0], given that otherwise we'd
-have to use KW*() callers elsewhere. Doing it upshot one level
-further would be even better.
 
-[0] https://lkml.kernel.org/r/20200610154923.27510-1-mcgrof@kernel.org              
-
-  Luis
