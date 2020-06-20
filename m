@@ -2,372 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 139DD201DDA
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Jun 2020 00:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99BC202113
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Jun 2020 05:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729106AbgFSWLf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Jun 2020 18:11:35 -0400
-Received: from out28-172.mail.aliyun.com ([115.124.28.172]:33855 "EHLO
-        out28-172.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728906AbgFSWL0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Jun 2020 18:11:26 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436474|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0164743-0.000831457-0.982694;FP=0|0|0|0|0|-1|-1|-1;HT=e01a16384;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.HpPfw4y_1592604655;
-Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HpPfw4y_1592604655)
-          by smtp.aliyun-inc.com(10.147.42.16);
-          Sat, 20 Jun 2020 06:11:22 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com,
-        tsbogend@alpha.franken.de, ak@linux.intel.com,
-        keescook@chromium.org, ebiederm@xmission.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Subject: [PATCH 3/3] MIPS: Ingenic: Add YSH & ATIL CU Neo board support.
-Date:   Sat, 20 Jun 2020 06:10:31 +0800
-Message-Id: <20200619221031.33558-4-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200619221031.33558-1-zhouyanjie@wanyeetech.com>
-References: <20200619221031.33558-1-zhouyanjie@wanyeetech.com>
+        id S1725938AbgFTDsM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Jun 2020 23:48:12 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:55488 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725290AbgFTDsL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 19 Jun 2020 23:48:11 -0400
+Received: from [10.20.42.25] (unknown [10.20.42.25])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH2nXhu1eKzJHAA--.7854S3;
+        Sat, 20 Jun 2020 11:47:36 +0800 (CST)
+From:   maobibo <maobibo@loongson.cn>
+Subject: Re: [PATCH] MIPS: Do not flush tlb when setting pmd entry
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1591177333-17833-1-git-send-email-maobibo@loongson.cn>
+ <20200615101443.GA10075@alpha.franken.de>
+ <4bef403d-baba-ddf8-c25c-3d6968897a53@loongson.cn>
+ <20200617111403.GC9940@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <ea914a82-70c1-b9a3-f6f0-f92a6d6c6e7f@loongson.cn>
+Date:   Sat, 20 Jun 2020 11:47:35 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200617111403.GC9940@alpha.franken.de>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxH2nXhu1eKzJHAA--.7854S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxGF1xXr4kCw1rCrW3urWfXwb_yoWrWrWUpF
+        93JFn7tr4UJw1DJw4xJrW8Xr45tr15Ja45Jr15Gw18Jr1q9r48Kr1UJ348XayUJry5ArWU
+        XF4YqFyDXw1UJ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bOoGdUUUUU=
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a device tree for the Ingenic X1830 based YSH & ATIL CU Neo board.
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
- arch/mips/boot/dts/ingenic/Makefile       |   1 +
- arch/mips/boot/dts/ingenic/cu1830-neo.dts | 160 ++++++++++++++++++++++++++++++
- arch/mips/configs/cu1830-neo_defconfig    | 119 ++++++++++++++++++++++
- arch/mips/jz4740/Kconfig                  |   4 +
- 4 files changed, 284 insertions(+)
- create mode 100644 arch/mips/boot/dts/ingenic/cu1830-neo.dts
- create mode 100644 arch/mips/configs/cu1830-neo_defconfig
 
-diff --git a/arch/mips/boot/dts/ingenic/Makefile b/arch/mips/boot/dts/ingenic/Makefile
-index e1654291a7b0..c33434fad007 100644
---- a/arch/mips/boot/dts/ingenic/Makefile
-+++ b/arch/mips/boot/dts/ingenic/Makefile
-@@ -3,5 +3,6 @@ dtb-$(CONFIG_JZ4740_QI_LB60)	+= qi_lb60.dtb
- dtb-$(CONFIG_JZ4770_GCW0)	+= gcw0.dtb
- dtb-$(CONFIG_JZ4780_CI20)	+= ci20.dtb
- dtb-$(CONFIG_X1000_CU1000_NEO)	+= cu1000-neo.dtb
-+dtb-$(CONFIG_X1830_CU1830_NEO)	+= cu1830-neo.dtb
- 
- obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
-diff --git a/arch/mips/boot/dts/ingenic/cu1830-neo.dts b/arch/mips/boot/dts/ingenic/cu1830-neo.dts
-new file mode 100644
-index 000000000000..d55b9c02f471
---- /dev/null
-+++ b/arch/mips/boot/dts/ingenic/cu1830-neo.dts
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+
-+#include "x1830.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/ingenic,tcu.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	compatible = "yna,cu1830-neo", "ingenic,x1830";
-+	model = "YSH & ATIL General Board CU Neo";
-+
-+	aliases {
-+		serial1 = &uart1;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial1:115200n8";
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+		reg = <0x0 0x08000000>;
-+	};
-+
-+	wlan_pwrseq: msc1-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+
-+		reset-gpios = <&gpc 13 GPIO_ACTIVE_LOW>;
-+		post-power-on-delay-ms = <200>;
-+	};
-+};
-+
-+&exclk {
-+	clock-frequency = <24000000>;
-+};
-+
-+&tcu {
-+	/* 1500 kHz for the system timer and clocksource */
-+	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER2>;
-+	assigned-clock-rates = <1500000>, <1500000>;
-+
-+	/* Use channel #0 for the system timer channel #2 for the clocksource */
-+	ingenic,pwm-channels-mask = <0xfa>;
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_i2c0>;
-+
-+	ads7830@48 {
-+		compatible = "ti,ads7830";
-+		reg = <0x48>;
-+	};
-+};
-+
-+&uart1 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_uart1>;
-+};
-+
-+&mac {
-+	status = "okay";
-+
-+	phy-mode = "rmii";
-+	phy-handle = <&ip101gr>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_mac>;
-+
-+	snps,reset-gpio = <&gpb 28 GPIO_ACTIVE_LOW>; /* PB28 */
-+	snps,reset-active-low;
-+	snps,reset-delays-us = <0 10000 30000>;
-+};
-+
-+&mdio {
-+	status = "okay";
-+
-+	ip101gr: ethernet-phy@0 {
-+		compatible = "ethernet-phy-id0243.0c54", "ethernet-phy-ieee802.3-c22";
-+		reg = <0>;
-+	};
-+};
-+
-+&msc0 {
-+	status = "okay";
-+
-+	bus-width = <4>;
-+	max-frequency = <50000000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_msc0>;
-+
-+	non-removable;
-+};
-+
-+&msc1 {
-+	status = "okay";
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	bus-width = <4>;
-+	max-frequency = <50000000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_msc1>;
-+
-+	non-removable;
-+
-+	mmc-pwrseq = <&wlan_pwrseq>;
-+
-+	ap6212a: wifi@1 {
-+		compatible = "brcm,bcm4329-fmac";
-+		reg = <1>;
-+
-+		interrupt-parent = <&gpc>;
-+		interrupts = <25 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-names = "host-wake";
-+
-+		brcm,drive-strength = <10>;
-+	};
-+};
-+
-+&pinctrl {
-+	pins_i2c0: i2c0 {
-+		function = "i2c0";
-+		groups = "i2c0-data";
-+		bias-pull-up;
-+	};
-+
-+	pins_uart1: uart1 {
-+		function = "uart1";
-+		groups = "uart1-data";
-+		bias-pull-up;
-+	};
-+
-+	pins_mac: mac {
-+		function = "mac";
-+		groups = "mac";
-+		bias-disable;
-+	};
-+
-+	pins_msc0: msc0 {
-+		function = "mmc0";
-+		groups = "mmc0-1bit", "mmc0-4bit";
-+		bias-disable;
-+	};
-+
-+	pins_msc1: msc1 {
-+		function = "mmc1";
-+		groups = "mmc1-1bit", "mmc1-4bit";
-+		bias-disable;
-+	};
-+};
-diff --git a/arch/mips/configs/cu1830-neo_defconfig b/arch/mips/configs/cu1830-neo_defconfig
-new file mode 100644
-index 000000000000..e027ae1e75f2
---- /dev/null
-+++ b/arch/mips/configs/cu1830-neo_defconfig
-@@ -0,0 +1,119 @@
-+CONFIG_LOCALVERSION_AUTO=y
-+CONFIG_KERNEL_GZIP=y
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+CONFIG_CGROUPS=y
-+CONFIG_MEMCG=y
-+CONFIG_MEMCG_KMEM=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_NAMESPACES=y
-+CONFIG_USER_NS=y
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_EMBEDDED=y
-+# CONFIG_VM_EVENT_COUNTERS is not set
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB=y
-+CONFIG_MACH_INGENIC=y
-+CONFIG_X1830_CU1830_NEO=y
-+CONFIG_HIGHMEM=y
-+CONFIG_HZ_100=y
-+# CONFIG_SECCOMP is not set
-+# CONFIG_SUSPEND is not set
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+# CONFIG_COMPACTION is not set
-+CONFIG_CMA=y
-+CONFIG_CMA_AREAS=7
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_CFG80211=y
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+# CONFIG_FW_LOADER is not set
-+# CONFIG_ALLOW_DEV_COREDUMP is not set
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_MD=y
-+CONFIG_BLK_DEV_DM=y
-+CONFIG_NETDEVICES=y
-+CONFIG_STMMAC_ETH=y
-+CONFIG_ICPLUS_PHY=y
-+CONFIG_BRCMFMAC=y
-+# CONFIG_INPUT_MOUSEDEV is not set
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_LEGACY_PTY_COUNT=2
-+CONFIG_SERIAL_EARLYCON=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_NR_UARTS=2
-+CONFIG_SERIAL_8250_RUNTIME_UARTS=2
-+CONFIG_SERIAL_8250_INGENIC=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+# CONFIG_HW_RANDOM is not set
-+CONFIG_I2C=y
-+CONFIG_I2C_JZ4780=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_SENSORS_ADS7828=y
-+CONFIG_WATCHDOG=y
-+CONFIG_JZ4740_WDT=y
-+# CONFIG_LCD_CLASS_DEVICE is not set
-+# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
-+# CONFIG_VGA_CONSOLE is not set
-+# CONFIG_HID is not set
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_MMC=y
-+CONFIG_MMC_JZ4740=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_JZ4740=y
-+CONFIG_DMADEVICES=y
-+CONFIG_DMA_JZ4780=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_NVMEM=y
-+CONFIG_NVMEM_SYSFS=y
-+CONFIG_EXT4_FS=y
-+# CONFIG_DNOTIFY is not set
-+CONFIG_AUTOFS_FS=y
-+CONFIG_PROC_KCORE=y
-+# CONFIG_PROC_PAGE_MONITOR is not set
-+CONFIG_TMPFS=y
-+CONFIG_CONFIGFS_FS=y
-+CONFIG_NFS_FS=y
-+CONFIG_NLS=y
-+CONFIG_NLS_CODEPAGE_936=y
-+CONFIG_NLS_CODEPAGE_950=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_CRYPTO_ECHAINIV=y
-+CONFIG_CRYPTO_AES=y
-+CONFIG_CRYPTO_DEFLATE=y
-+CONFIG_CRYPTO_LZO=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=15
-+CONFIG_CONSOLE_LOGLEVEL_QUIET=15
-+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
-+CONFIG_DEBUG_INFO=y
-+CONFIG_STRIP_ASM_SYMS=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_PANIC_ON_OOPS=y
-+CONFIG_PANIC_TIMEOUT=10
-+# CONFIG_SCHED_DEBUG is not set
-+# CONFIG_DEBUG_PREEMPT is not set
-+CONFIG_STACKTRACE=y
-+# CONFIG_FTRACE is not set
-+CONFIG_CMDLINE_BOOL=y
-+CONFIG_CMDLINE="earlycon clk_ignore_unused"
-diff --git a/arch/mips/jz4740/Kconfig b/arch/mips/jz4740/Kconfig
-index cd0ddb52da99..6c065dcaeff8 100644
---- a/arch/mips/jz4740/Kconfig
-+++ b/arch/mips/jz4740/Kconfig
-@@ -27,6 +27,10 @@ config X1000_CU1000_NEO
- 	bool "YSH & ATIL CU1000 Module with Neo backplane"
- 	select MACH_X1000
- 
-+config X1830_CU1830_NEO
-+	bool "YSH & ATIL CU1830 Module with Neo backplane"
-+	select MACH_X1830
-+
- endchoice
- 
- config MACH_JZ4740
--- 
-2.11.0
+On 06/17/2020 07:14 PM, Thomas Bogendoerfer wrote:
+> On Tue, Jun 16, 2020 at 06:34:21PM +0800, maobibo wrote:
+>>
+>>
+>> On 06/15/2020 06:14 PM, Thomas Bogendoerfer wrote:
+>>> On Wed, Jun 03, 2020 at 05:42:13PM +0800, Bibo Mao wrote:
+>>>> Function set_pmd_at is to set pmd entry, if tlb entry need to
+>>>> be flushed, there exists pmdp_huge_clear_flush alike function
+>>>> before set_pmd_at is called. So it is not necessary to call
+>>>> flush_tlb_all in this function.
+>>>
+>>> have you checked all set_pmd_at() calls ? I found a few case where
+>>> it's not clear to me, if tlb flushing is done... If you think this
+>>> is still the right thing to do, please change arch/mips/mm/pgtable-32.c
+>>> as well.
+>> well, I will double check this and do more testing about thp and hugepage.
+> 
+> I was more concerned about
+> 
+> fs/dax.c
+> fs/proc/task_mmu.c
+> mm/rmap.c
+
+I think that flush_tlb_all should not be called in function set_pmd_at
+on mips platform. However update_mmu_cache_pmd() should be called __after__
+set_pmd_at() function to update tlb entry at some places, it is another issue.
+Here is my analysis in the three files where set_pmd_at is called.
+
+in file fs/dax.c
+------------------------------------------------------
+                if (pmdp) {
+#ifdef CONFIG_FS_DAX_PMD
+                        pmd_t pmd;
+        
+                        if (pfn != pmd_pfn(*pmdp))
+                                goto unlock_pmd;          
+                        if (!pmd_dirty(*pmdp) && !pmd_write(*pmdp))
+                                goto unlock_pmd;
+        
+                        flush_cache_page(vma, address, pfn);
+                        pmd = pmdp_invalidate(vma, address, pmdp);
+                        pmd = pmd_wrprotect(pmd);
+                        pmd = pmd_mkclean(pmd);
+                        set_pmd_at(vma->vm_mm, address, pmdp, pmd);
+unlock_pmd:          
+#endif 
+------------------------------------------------------
+pmdp_invalidate is called here to flush pmd range already, it is not necessary
+to flush pmd range in function set_pmd_at
+
+------------------------------------------------------
+        if (!pmd_none(*(vmf->pmd))) {
+                spin_unlock(ptl);
+                goto fallback;
+        }
+
+        if (pgtable) {
+                pgtable_trans_huge_deposit(vma->vm_mm, vmf->pmd, pgtable);
+                mm_inc_nr_ptes(vma->vm_mm);
+        }
+        pmd_entry = mk_pmd(zero_page, vmf->vma->vm_page_prot);
+        pmd_entry = pmd_mkhuge(pmd_entry);
+        set_pmd_at(vmf->vma->vm_mm, pmd_addr, vmf->pmd, pmd_entry);
+        spin_unlock(ptl);
+        trace_dax_pmd_load_hole(inode, vmf, zero_page, *entry);
+        return VM_FAULT_NOPAGE;
+------------------------------------------------------
+pmd entry is none, does not need to flush pmd range
+
+
+in file fs/proc/task_mmu.c
+------------------------------------------------------
+static inline void clear_soft_dirty_pmd(struct vm_area_struct *vma,
+                unsigned long addr, pmd_t *pmdp)
+{
+        pmd_t old, pmd = *pmdp;
+
+        if (pmd_present(pmd)) {
+                /* See comment in change_huge_pmd() */
+                old = pmdp_invalidate(vma, addr, pmdp);
+                if (pmd_dirty(old))
+                        pmd = pmd_mkdirty(pmd);
+                if (pmd_young(old))
+                        pmd = pmd_mkyoung(pmd);
+
+                pmd = pmd_wrprotect(pmd);
+                pmd = pmd_clear_soft_dirty(pmd);
+
+                set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
+        } else if (is_migration_entry(pmd_to_swp_entry(pmd))) {
+                pmd = pmd_swp_clear_soft_dirty(pmd);
+                set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
+        }
+}
+------------------------------------------------------
+At the first place where set_pmd_at is called, pmdp_invalidate is called to
+flush pmd range. At the second place, on mips system pmd_swp_clear_soft_dirty(pmd)
+is equal to pmd, pmd entry has no change, does not need to flush pmd range
+
+in file linux/mm/rmap.c:
+------------------------------------------------------
+                        pmd_t *pmd = pvmw.pmd;
+                        pmd_t entry;
+                                                          
+                        if (!pmd_dirty(*pmd) && !pmd_write(*pmd))
+                                continue;
+        
+                        flush_cache_page(vma, address, page_to_pfn(page));
+                        entry = pmdp_invalidate(vma, address, pmd);
+                        entry = pmd_wrprotect(entry);
+                        entry = pmd_mkclean(entry);
+                        set_pmd_at(vma->vm_mm, address, pmd, entry);
+                        ret = 1;
+------------------------------------------------------
+pmdp_invalidate is called to flush pmd range, does not need to flush pmd range
+again in function set_pmd_at.
+
+> 
+> Thomas.
+> 
 
