@@ -2,78 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFCA2022E4
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Jun 2020 11:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C71B202578
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Jun 2020 19:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727873AbgFTJfN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 20 Jun 2020 05:35:13 -0400
-Received: from mail-40136.protonmail.ch ([185.70.40.136]:56248 "EHLO
-        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726533AbgFTJfN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 20 Jun 2020 05:35:13 -0400
-Date:   Sat, 20 Jun 2020 09:35:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1592645711; bh=ZqCBGivQpOR7bWQOuKEUf/s+T102VDiFA/V/fTLFZqc=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=DTzrTbxZrXttoZLXPKtH8AZoe5YO3WXyoqCLvHbdez2+t565T/Lerh1pRuOpcAicl
-         dN7Z3iUCq8Figxs+3Fy917O08s5P3fzo56FUgsPf5Vn7SM3E0PeK2fVFYQSLTv3z0E
-         mhXIceiqbwYrdsbtgR9BDoExCrJl4OHiV49wH3of+5YrB9ejbIHW75CgL9a3L+HOTQ
-         a/IX+yb7G6/CDg9uyl48vNFxC64jo8/CwI8j2wDOAnPC3af6QWVgACKp7/UFt3X6yq
-         bBeclz7JT1yB5tW59NbaOyXSL2utlZBcC7BZBFJbPq7l/FpmpUxbpTFUoL2lshYJRj
-         IFNKA8M+uYmyg==
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Alexander Lobakin <alobakin@pm.me>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH mips-next 3/3] MIPS: checksum: fix sparse flooding on asm/checksum.h
-Message-ID: <WDTCGAs6T_1WrYWzhajhKbTIXfzTBLg0bGDdJpUkGxVMdTG4pu3AzSorhGtletaoPhEf43qQ_F6kO0dndfIfhZsc2MGwcU9indtM80T4cI0=@pm.me>
-In-Reply-To: <OXAnLrccR2GxIpepN5IUjppNnjyVAnjQmCIx2RmgpMLsOzOBgXMKYvmjivy4Rq0bAVf11R5V9_FwfGx-MML3dShuOOoPUtAHUHUedlVrW_g=@pm.me>
-References: <OXAnLrccR2GxIpepN5IUjppNnjyVAnjQmCIx2RmgpMLsOzOBgXMKYvmjivy4Rq0bAVf11R5V9_FwfGx-MML3dShuOOoPUtAHUHUedlVrW_g=@pm.me>
+        id S1728061AbgFTRCY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 20 Jun 2020 13:02:24 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:38352 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726043AbgFTRCX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 20 Jun 2020 13:02:23 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x207so6087215pfc.5;
+        Sat, 20 Jun 2020 10:02:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hkYGXZYFNkz40ca5bdh2l8rwBQsGz5Dfq7lbQQ/ZMb4=;
+        b=X9q8UfJZmL34AI1GiO5Dnai9g9KS072++uMh4hlNtqTqlfTy5/ba7jBlkjyo535lWC
+         tUjHuWsJ6BPP/ng5gG33nwINjMbyZyZXMLjmIIqzIeVChyJTJIG4F6u8B9q4RB2Ma+y8
+         WJcvd4TZ3OI9OplZ3O/vxXPXbSeB8wfjr/U6oY6tCu2sC50Vye2G/kNYpLsk6cIOSamP
+         guRd24fxw8r53lgGCHCwHvgsFDXv+sVkbrHH5E41l0PLB8LSubGIpnQ6sJj/G6Mscd93
+         SSnVhc8HhP3+CXxlv76lEjbFs4oQuFkWahQsOtVi5j94GE4u11uRpTmvgCdU01InmuDF
+         noQw==
+X-Gm-Message-State: AOAM532IfNgmHSESpXOm/8YZ5RnmvNPpxNVpAeW2B8+AFwNFEkzkSkgR
+        tAqhwQpGJwLLW+PloRYKDzduPcQOyUA=
+X-Google-Smtp-Source: ABdhPJw4cY69dDBjGxi+dEmU+lne2Jaj+Kt7j3+OOL+ZesgQbK+T06ayny/Nuk+eU5cbc92qa9tynQ==
+X-Received: by 2002:a63:7c5e:: with SMTP id l30mr7050243pgn.276.1592672542711;
+        Sat, 20 Jun 2020 10:02:22 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id x18sm9195784pfr.106.2020.06.20.10.02.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Jun 2020 10:02:20 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id B439940430; Sat, 20 Jun 2020 17:02:19 +0000 (UTC)
+Date:   Sat, 20 Jun 2020 17:02:19 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Brian Gerst <brgerst@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] kernel: add a kernel_wait helper
+Message-ID: <20200620170219.GT11244@42.do-not-panic.com>
+References: <20200618144627.114057-1-hch@lst.de>
+ <20200618144627.114057-7-hch@lst.de>
+ <20200619211700.GS11244@42.do-not-panic.com>
+ <20200620063538.GA2408@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200620063538.GA2408@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-csum_fold() in MIPS' asm/checksum.h is another source of sparse flooding
-when building different networking source code.
-The thing is that only half of __wsum <--> u32 casts inside the funtion
-is forced, which is insufficient.
-Add all necessary forced typecasting to stop floods and simplify actual
-bug hunting.
+On Sat, Jun 20, 2020 at 08:35:38AM +0200, Christoph Hellwig wrote:
+> On Fri, Jun 19, 2020 at 09:17:00PM +0000, Luis Chamberlain wrote:
+> > On Thu, Jun 18, 2020 at 04:46:27PM +0200, Christoph Hellwig wrote:
+> > > --- a/kernel/exit.c
+> > > +++ b/kernel/exit.c
+> > > @@ -1626,6 +1626,22 @@ long kernel_wait4(pid_t upid, int __user *stat_addr, int options,
+> > >  	return ret;
+> > >  }
+> > >  
+> > > +int kernel_wait(pid_t pid, int *stat)
+> > > +{
+> > > +	struct wait_opts wo = {
+> > > +		.wo_type	= PIDTYPE_PID,
+> > > +		.wo_pid		= find_get_pid(pid),
+> > > +		.wo_flags	= WEXITED,
+> > > +	};
+> > > +	int ret;
+> > > +
+> > > +	ret = do_wait(&wo);
+> > > +	if (ret > 0 && wo.wo_stat)
+> > > +		*stat = wo.wo_stat;
+> > 
+> > Since all we care about is WEXITED, that could be simplified
+> > to something like this:
+> > 
+> > if (ret > 0 && KWIFEXITED(wo.wo_stat)
+> >  	*stat = KWEXITSTATUS(wo.wo_stat)
+> > 
+> > Otherwise callers have to use W*() wrappers.
+> > 
+> > > +	put_pid(wo.wo_pid);
+> > > +	return ret;
+> > > +}
+> > 
+> > Then we don't get *any* in-kernel code dealing with the W*() crap.
+> > I just unwrapped this for the umh [0], given that otherwise we'd
+> > have to use KW*() callers elsewhere. Doing it upshot one level
+> > further would be even better.
+> > 
+> > [0] https://lkml.kernel.org/r/20200610154923.27510-1-mcgrof@kernel.org              
+> Do you just want to pick this patch up, add your suggested bits and
+> add it to the beginning of your series?  That should clean the whole
+> thing up a bit.  Nothing else in this series depends on the patch.
 
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
----
- arch/mips/include/asm/checksum.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Sure but let's wait to hear from the NFS folks.
 
-diff --git a/arch/mips/include/asm/checksum.h b/arch/mips/include/asm/check=
-sum.h
-index dcebaaf8c862..181f7d14efb9 100644
---- a/arch/mips/include/asm/checksum.h
-+++ b/arch/mips/include/asm/checksum.h
-@@ -113,9 +113,9 @@ static inline __sum16 csum_fold(__wsum csum)
- =09u32 sum =3D (__force u32)csum;
-=20
- =09sum +=3D (sum << 16);
--=09csum =3D (sum < csum);
-+=09csum =3D (__force __wsum)(sum < (__force u32)csum);
- =09sum >>=3D 16;
--=09sum +=3D csum;
-+=09sum +=3D (__force u32)csum;
-=20
- =09return (__force __sum16)~sum;
- }
---=20
-2.27.0
+I'm waiting to hear from NFS folks if the one place where the UMH is
+fixed for the error code (on fs/nfsd/nfs4recover.c we never were
+disabling the upcall as the error code of -ENOENT or -EACCES was *never*
+properly checked for) to see how critical that was. If it can help
+stable kernels the fix can go in as I proposed, followed by this patch
+to further take the KWEXITSTATUS() up further, and ensure we *never*
+deal with this in-kernel. If its not a fix stable kernels should care
+for what you suggest of taking this patch first would be best and I'd be
+happy to do that.
 
-
+  Luis
