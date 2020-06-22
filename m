@@ -2,81 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7691B2032DC
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2020 11:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2628B203B8A
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2020 17:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbgFVJHI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Jun 2020 05:07:08 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:56330 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725991AbgFVJHI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 22 Jun 2020 05:07:08 -0400
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb2qwdPBeexxIAA--.10312S2;
-        Mon, 22 Jun 2020 17:06:56 +0800 (CST)
-From:   Kaige Li <likaige@loongson.cn>
-To:     Christian Benvenuti <benve@cisco.com>,
-        Govindarajulu Varadarajan <_govind@gmx.com>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Kaige Li <likaige@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net/cisco: Fix a sleep-in-atomic-context bug in enic_init_affinity_hint()
-Date:   Mon, 22 Jun 2020 17:06:54 +0800
-Message-Id: <1592816814-32241-1-git-send-email-likaige@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxb2qwdPBeexxIAA--.10312S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4DurW5Aw47Wr1UAFykuFg_yoW8GryUpa
-        y8t3y8Zws5Jw1DZa1kK3Z7G3yruay3u34qkF47A39YqrZ5XFWkJr9rtF47Zr1UXrWUGF1a
-        q3W2yr43WFn8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUeID7DUUUU
-X-CM-SenderInfo: 5olntxtjh6z05rqj20fqof0/
+        id S1729673AbgFVPvS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Jun 2020 11:51:18 -0400
+Received: from elvis.franken.de ([193.175.24.41]:33902 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729577AbgFVPvS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Jun 2020 11:51:18 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jnOj4-0002AG-00; Mon, 22 Jun 2020 17:51:14 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id BA609C06E9; Mon, 22 Jun 2020 17:44:53 +0200 (CEST)
+Date:   Mon, 22 Jun 2020 17:44:53 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>
+Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH V2] MIPS: Unify naming style of vendor CP0.Config6 bits
+Message-ID: <20200622154453.GA17294@alpha.franken.de>
+References: <1592397282-14433-1-git-send-email-chenhc@lemote.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1592397282-14433-1-git-send-email-chenhc@lemote.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The kernel module may sleep with holding a spinlock.
+On Wed, Jun 17, 2020 at 08:34:42PM +0800, Huacai Chen wrote:
+> Other vendor-defined registers use the vendor name as a prefix, not an
+> infix, so unify the naming style of CP0.Config6 bits.
+> 
+> Suggested-by: Maciej W. Rozycki" <macro@linux-mips.org>
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
 
-The function call paths (from bottom to top) are:
+Maciej,
 
-[FUNC] zalloc_cpumask_var(GFP_KERNEL)
-drivers/net/ethernet/cisco/enic/enic_main.c, 125: zalloc_cpumask_var in enic_init_affinity_hint
-drivers/net/ethernet/cisco/enic/enic_main.c, 1918: enic_init_affinity_hint in enic_open
-drivers/net/ethernet/cisco/enic/enic_main.c, 2348: enic_open in enic_reset
-drivers/net/ethernet/cisco/enic/enic_main.c, 2341: spin_lock in enic_reset
+before applying I'd like to get a comment from you, if things are now
+in a good shape.
 
-To fix this bug, GFP_KERNEL is replaced with GFP_ATOMIC.
+Thomas.
 
-Signed-off-by: Kaige Li <likaige@loongson.cn>
----
- drivers/net/ethernet/cisco/enic/enic_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/cisco/enic/enic_main.c b/drivers/net/ethernet/cisco/enic/enic_main.c
-index cd5fe4f..ee62065 100644
---- a/drivers/net/ethernet/cisco/enic/enic_main.c
-+++ b/drivers/net/ethernet/cisco/enic/enic_main.c
-@@ -122,7 +122,7 @@ static void enic_init_affinity_hint(struct enic *enic)
- 		     !cpumask_empty(enic->msix[i].affinity_mask)))
- 			continue;
- 		if (zalloc_cpumask_var(&enic->msix[i].affinity_mask,
--				       GFP_KERNEL))
-+				       GFP_ATOMIC))
- 			cpumask_set_cpu(cpumask_local_spread(i, numa_node),
- 					enic->msix[i].affinity_mask);
- 	}
 -- 
-2.1.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
