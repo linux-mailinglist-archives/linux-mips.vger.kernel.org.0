@@ -2,121 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C71B202578
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Jun 2020 19:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7691B2032DC
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2020 11:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728061AbgFTRCY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 20 Jun 2020 13:02:24 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38352 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbgFTRCX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 20 Jun 2020 13:02:23 -0400
-Received: by mail-pf1-f195.google.com with SMTP id x207so6087215pfc.5;
-        Sat, 20 Jun 2020 10:02:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hkYGXZYFNkz40ca5bdh2l8rwBQsGz5Dfq7lbQQ/ZMb4=;
-        b=X9q8UfJZmL34AI1GiO5Dnai9g9KS072++uMh4hlNtqTqlfTy5/ba7jBlkjyo535lWC
-         tUjHuWsJ6BPP/ng5gG33nwINjMbyZyZXMLjmIIqzIeVChyJTJIG4F6u8B9q4RB2Ma+y8
-         WJcvd4TZ3OI9OplZ3O/vxXPXbSeB8wfjr/U6oY6tCu2sC50Vye2G/kNYpLsk6cIOSamP
-         guRd24fxw8r53lgGCHCwHvgsFDXv+sVkbrHH5E41l0PLB8LSubGIpnQ6sJj/G6Mscd93
-         SSnVhc8HhP3+CXxlv76lEjbFs4oQuFkWahQsOtVi5j94GE4u11uRpTmvgCdU01InmuDF
-         noQw==
-X-Gm-Message-State: AOAM532IfNgmHSESpXOm/8YZ5RnmvNPpxNVpAeW2B8+AFwNFEkzkSkgR
-        tAqhwQpGJwLLW+PloRYKDzduPcQOyUA=
-X-Google-Smtp-Source: ABdhPJw4cY69dDBjGxi+dEmU+lne2Jaj+Kt7j3+OOL+ZesgQbK+T06ayny/Nuk+eU5cbc92qa9tynQ==
-X-Received: by 2002:a63:7c5e:: with SMTP id l30mr7050243pgn.276.1592672542711;
-        Sat, 20 Jun 2020 10:02:22 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id x18sm9195784pfr.106.2020.06.20.10.02.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2020 10:02:20 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id B439940430; Sat, 20 Jun 2020 17:02:19 +0000 (UTC)
-Date:   Sat, 20 Jun 2020 17:02:19 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Gerst <brgerst@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] kernel: add a kernel_wait helper
-Message-ID: <20200620170219.GT11244@42.do-not-panic.com>
-References: <20200618144627.114057-1-hch@lst.de>
- <20200618144627.114057-7-hch@lst.de>
- <20200619211700.GS11244@42.do-not-panic.com>
- <20200620063538.GA2408@lst.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200620063538.GA2408@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726201AbgFVJHI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Jun 2020 05:07:08 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:56330 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725991AbgFVJHI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Jun 2020 05:07:08 -0400
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb2qwdPBeexxIAA--.10312S2;
+        Mon, 22 Jun 2020 17:06:56 +0800 (CST)
+From:   Kaige Li <likaige@loongson.cn>
+To:     Christian Benvenuti <benve@cisco.com>,
+        Govindarajulu Varadarajan <_govind@gmx.com>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Kaige Li <likaige@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net/cisco: Fix a sleep-in-atomic-context bug in enic_init_affinity_hint()
+Date:   Mon, 22 Jun 2020 17:06:54 +0800
+Message-Id: <1592816814-32241-1-git-send-email-likaige@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxb2qwdPBeexxIAA--.10312S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4DurW5Aw47Wr1UAFykuFg_yoW8GryUpa
+        y8t3y8Zws5Jw1DZa1kK3Z7G3yruay3u34qkF47A39YqrZ5XFWkJr9rtF47Zr1UXrWUGF1a
+        q3W2yr43WFn8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUeID7DUUUU
+X-CM-SenderInfo: 5olntxtjh6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 20, 2020 at 08:35:38AM +0200, Christoph Hellwig wrote:
-> On Fri, Jun 19, 2020 at 09:17:00PM +0000, Luis Chamberlain wrote:
-> > On Thu, Jun 18, 2020 at 04:46:27PM +0200, Christoph Hellwig wrote:
-> > > --- a/kernel/exit.c
-> > > +++ b/kernel/exit.c
-> > > @@ -1626,6 +1626,22 @@ long kernel_wait4(pid_t upid, int __user *stat_addr, int options,
-> > >  	return ret;
-> > >  }
-> > >  
-> > > +int kernel_wait(pid_t pid, int *stat)
-> > > +{
-> > > +	struct wait_opts wo = {
-> > > +		.wo_type	= PIDTYPE_PID,
-> > > +		.wo_pid		= find_get_pid(pid),
-> > > +		.wo_flags	= WEXITED,
-> > > +	};
-> > > +	int ret;
-> > > +
-> > > +	ret = do_wait(&wo);
-> > > +	if (ret > 0 && wo.wo_stat)
-> > > +		*stat = wo.wo_stat;
-> > 
-> > Since all we care about is WEXITED, that could be simplified
-> > to something like this:
-> > 
-> > if (ret > 0 && KWIFEXITED(wo.wo_stat)
-> >  	*stat = KWEXITSTATUS(wo.wo_stat)
-> > 
-> > Otherwise callers have to use W*() wrappers.
-> > 
-> > > +	put_pid(wo.wo_pid);
-> > > +	return ret;
-> > > +}
-> > 
-> > Then we don't get *any* in-kernel code dealing with the W*() crap.
-> > I just unwrapped this for the umh [0], given that otherwise we'd
-> > have to use KW*() callers elsewhere. Doing it upshot one level
-> > further would be even better.
-> > 
-> > [0] https://lkml.kernel.org/r/20200610154923.27510-1-mcgrof@kernel.org              
-> Do you just want to pick this patch up, add your suggested bits and
-> add it to the beginning of your series?  That should clean the whole
-> thing up a bit.  Nothing else in this series depends on the patch.
+The kernel module may sleep with holding a spinlock.
 
-Sure but let's wait to hear from the NFS folks.
+The function call paths (from bottom to top) are:
 
-I'm waiting to hear from NFS folks if the one place where the UMH is
-fixed for the error code (on fs/nfsd/nfs4recover.c we never were
-disabling the upcall as the error code of -ENOENT or -EACCES was *never*
-properly checked for) to see how critical that was. If it can help
-stable kernels the fix can go in as I proposed, followed by this patch
-to further take the KWEXITSTATUS() up further, and ensure we *never*
-deal with this in-kernel. If its not a fix stable kernels should care
-for what you suggest of taking this patch first would be best and I'd be
-happy to do that.
+[FUNC] zalloc_cpumask_var(GFP_KERNEL)
+drivers/net/ethernet/cisco/enic/enic_main.c, 125: zalloc_cpumask_var in enic_init_affinity_hint
+drivers/net/ethernet/cisco/enic/enic_main.c, 1918: enic_init_affinity_hint in enic_open
+drivers/net/ethernet/cisco/enic/enic_main.c, 2348: enic_open in enic_reset
+drivers/net/ethernet/cisco/enic/enic_main.c, 2341: spin_lock in enic_reset
 
-  Luis
+To fix this bug, GFP_KERNEL is replaced with GFP_ATOMIC.
+
+Signed-off-by: Kaige Li <likaige@loongson.cn>
+---
+ drivers/net/ethernet/cisco/enic/enic_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/cisco/enic/enic_main.c b/drivers/net/ethernet/cisco/enic/enic_main.c
+index cd5fe4f..ee62065 100644
+--- a/drivers/net/ethernet/cisco/enic/enic_main.c
++++ b/drivers/net/ethernet/cisco/enic/enic_main.c
+@@ -122,7 +122,7 @@ static void enic_init_affinity_hint(struct enic *enic)
+ 		     !cpumask_empty(enic->msix[i].affinity_mask)))
+ 			continue;
+ 		if (zalloc_cpumask_var(&enic->msix[i].affinity_mask,
+-				       GFP_KERNEL))
++				       GFP_ATOMIC))
+ 			cpumask_set_cpu(cpumask_local_spread(i, numa_node),
+ 					enic->msix[i].affinity_mask);
+ 	}
+-- 
+2.1.0
+
