@@ -2,77 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC17203B8D
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2020 17:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9E1203D41
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2020 18:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729417AbgFVPvR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Jun 2020 11:51:17 -0400
-Received: from elvis.franken.de ([193.175.24.41]:33897 "EHLO elvis.franken.de"
+        id S1729983AbgFVQ5c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Jun 2020 12:57:32 -0400
+Received: from mga01.intel.com ([192.55.52.88]:43835 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729147AbgFVPvQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 22 Jun 2020 11:51:16 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jnOj4-0002AG-02; Mon, 22 Jun 2020 17:51:14 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 3E785C06F0; Mon, 22 Jun 2020 17:48:55 +0200 (CEST)
-Date:   Mon, 22 Jun 2020 17:48:55 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     maobibo <maobibo@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Do not flush tlb when setting pmd entry
-Message-ID: <20200622154855.GC17294@alpha.franken.de>
-References: <1591177333-17833-1-git-send-email-maobibo@loongson.cn>
- <20200615101443.GA10075@alpha.franken.de>
- <4bef403d-baba-ddf8-c25c-3d6968897a53@loongson.cn>
- <20200617111403.GC9940@alpha.franken.de>
- <ea914a82-70c1-b9a3-f6f0-f92a6d6c6e7f@loongson.cn>
+        id S1729807AbgFVQ5b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Jun 2020 12:57:31 -0400
+IronPort-SDR: q/tRks1hscFs2MNhMH5PButSYmFl+L/ggYNHf5xZCioFe++saGujHG+dSjYINvaarLidUDkE4J
+ RhVk9bvYvtSg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="161896136"
+X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
+   d="scan'208";a="161896136"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 09:57:30 -0700
+IronPort-SDR: S4VEirMcNhQ2lH0bAVvJJDP7s7VRkd36rpU/H5Pu+0zC5Ty7uMfI7DemqqyQV4/pP77ANcjPYf
+ AXdGOcNkkbyA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
+   d="scan'208";a="384580750"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Jun 2020 09:57:30 -0700
+Date:   Mon, 22 Jun 2020 09:57:30 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Feiner <pfeiner@google.com>,
+        Peter Shier <pshier@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Christoffer Dall <christoffer.dall@arm.com>
+Subject: Re: [PATCH 14/21] KVM: Move x86's version of struct
+ kvm_mmu_memory_cache to common code
+Message-ID: <20200622165730.GD5150@linux.intel.com>
+References: <20200605213853.14959-1-sean.j.christopherson@intel.com>
+ <20200605213853.14959-15-sean.j.christopherson@intel.com>
+ <CANgfPd_v31zC5-mKsT14hd7W=X2Pvg3RBPjn2d4tFSChdbsr3A@mail.gmail.com>
+ <CANgfPd-iH8AShSPPJiaDCxV1H76kfpTOQMZSMP_+nP3LoXbYBg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ea914a82-70c1-b9a3-f6f0-f92a6d6c6e7f@loongson.cn>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <CANgfPd-iH8AShSPPJiaDCxV1H76kfpTOQMZSMP_+nP3LoXbYBg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 20, 2020 at 11:47:35AM +0800, maobibo wrote:
-> 
-> 
-> On 06/17/2020 07:14 PM, Thomas Bogendoerfer wrote:
-> > On Tue, Jun 16, 2020 at 06:34:21PM +0800, maobibo wrote:
-> >>
-> >>
-> >> On 06/15/2020 06:14 PM, Thomas Bogendoerfer wrote:
-> >>> On Wed, Jun 03, 2020 at 05:42:13PM +0800, Bibo Mao wrote:
-> >>>> Function set_pmd_at is to set pmd entry, if tlb entry need to
-> >>>> be flushed, there exists pmdp_huge_clear_flush alike function
-> >>>> before set_pmd_at is called. So it is not necessary to call
-> >>>> flush_tlb_all in this function.
-> >>>
-> >>> have you checked all set_pmd_at() calls ? I found a few case where
-> >>> it's not clear to me, if tlb flushing is done... If you think this
-> >>> is still the right thing to do, please change arch/mips/mm/pgtable-32.c
-> >>> as well.
-> >> well, I will double check this and do more testing about thp and hugepage.
-> > 
-> > I was more concerned about
-> > 
-> > fs/dax.c
-> > fs/proc/task_mmu.c
-> > mm/rmap.c
-> 
-> I think that flush_tlb_all should not be called in function set_pmd_at
-> on mips platform. However update_mmu_cache_pmd() should be called __after__
-> set_pmd_at() function to update tlb entry at some places, it is another issue.
-> Here is my analysis in the three files where set_pmd_at is called.
-> [..]
+On Wed, Jun 10, 2020 at 02:58:21PM -0700, Ben Gardon wrote:
+> On Wed, Jun 10, 2020 at 12:01 PM Ben Gardon <bgardon@google.com> wrote:
+> > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > > index fb99e6776e27..8e8fea13b6c7 100644
+> > > --- a/arch/x86/include/asm/kvm_host.h
+> > > +++ b/arch/x86/include/asm/kvm_host.h
+> > > @@ -193,8 +193,6 @@ struct x86_exception;
+> > >  enum x86_intercept;
+> > >  enum x86_intercept_stage;
+> > >
+> > > -#define KVM_NR_MEM_OBJS 40
+> > > -
+> Oops I didn't catch this on my first read through, but in patch 16 in
+> this series I see some references to KVM_NR_MEM_OBJS being removed. As
+> a result I would not expect this patch to build. Other references to
+> this value should probably replaced with
+> KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE as well.
 
-thank you for confirming that we are good with removing flush_tlb_all().
+This patch intentionally uses a different name for the #define (see below)
+so that the existing arm64 and MIPS declarations don't get picked up by
+common KVM code.  This is required so that arm64 and MIPS continue to use
+their versions of the cache implementation until they are converted to the
+common implementation later in the series, e.g. in patch 16 when the
+references to KVM_NR_MEM_OBJS are removed.
 
-Thomas.
+I confirmed the above (after sending v1) by compiling all non-x86 changes
+on arm64, MIPS, s390 and PPC to verify that this doesn't break bisection.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+> > >  #define KVM_NR_DB_REGS 4
+> > >
+> > >  #define DR6_BD         (1 << 13)
+> > > @@ -245,17 +243,6 @@ enum x86_intercept_stage;
+> > >
+> > >  struct kvm_kernel_irq_routing_entry;
+
+...
+
+> > > +#ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+> > > +/*
+> > > + * Memory caches are used to preallocate memory ahead of various MMU flows,
+> > > + * e.g. page fault handlers.  Gracefully handling allocation failures deep in
+> > > + * MMU flows is problematic, as is triggering reclaim, I/O, etc... while
+> > > + * holding MMU locks.  Note, these caches act more like prefetch buffers than
+> > > + * classical caches, i.e. objects are not returned to the cache on being freed.
+> > > + */
+> > > +struct kvm_mmu_memory_cache {
+> > > +       int nobjs;
+> > > +       gfp_t gfp_zero;
+> > > +       struct kmem_cache *kmem_cache;
+> > > +       void *objects[KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE];
+> > > +};
+> > > +#endif
+> > > +
+> > > +
+> > >  #endif /* __KVM_TYPES_H__ */
+> > > --
+> > > 2.26.0
+> > >
