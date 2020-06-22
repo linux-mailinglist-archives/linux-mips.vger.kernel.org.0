@@ -2,126 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB1420422F
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2020 22:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECE8204386
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 00:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728809AbgFVUvc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Jun 2020 16:51:32 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:45422 "EHLO
+        id S1730777AbgFVWY4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Jun 2020 18:24:56 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:45742 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728421AbgFVUvc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Jun 2020 16:51:32 -0400
+        with ESMTP id S1730756AbgFVWY4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Jun 2020 18:24:56 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id B03E78030809;
-        Mon, 22 Jun 2020 20:51:23 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 401AB8030833;
+        Mon, 22 Jun 2020 22:24:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zrSYLP8U0TZk; Mon, 22 Jun 2020 23:51:22 +0300 (MSK)
-Date:   Mon, 22 Jun 2020 23:51:21 +0300
+        with ESMTP id ruqNffr3OvTc; Tue, 23 Jun 2020 01:24:52 +0300 (MSK)
+Date:   Tue, 23 Jun 2020 01:24:50 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Pavel Machek <pavel@denx.de>
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 4.19 182/267] spi: dw: Return any value retrieved from
- the dma_transfer callback
-Message-ID: <20200622205121.4xuki7guyj6u5yul@mobilestation>
-References: <20200619141648.840376470@linuxfoundation.org>
- <20200619141657.498868116@linuxfoundation.org>
- <20200619210719.GB12233@amd>
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Will Deacon <will@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 2/3] serial: 8250_dw: Simplify the ref clock rate
+ setting procedure
+Message-ID: <20200622222450.3sijzrmfxc4ivl6s@mobilestation>
+References: <20200619200251.9066-1-Sergey.Semin@baikalelectronics.ru>
+ <20200619200251.9066-3-Sergey.Semin@baikalelectronics.ru>
+ <20200620081201.GQ1551@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200619210719.GB12233@amd>
+In-Reply-To: <20200620081201.GQ1551@shell.armlinux.org.uk>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Pavel
+Hello Russell,
 
-On Fri, Jun 19, 2020 at 11:07:19PM +0200, Pavel Machek wrote:
-> On Fri 2020-06-19 16:32:47, Greg Kroah-Hartman wrote:
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > [ Upstream commit f0410bbf7d0fb80149e3b17d11d31f5b5197873e ]
-> > 
-> > DW APB SSI DMA-part of the driver may need to perform the requested
-> > SPI-transfer synchronously. In that case the dma_transfer() callback
-> > will return 0 as a marker of the SPI transfer being finished so the
-> > SPI core doesn't need to wait and may proceed with the SPI message
-> > trasnfers pumping procedure. This will be needed to fix the problem
-> > when DMA transactions are finished, but there is still data left in
-> > the SPI Tx/Rx FIFOs being sent/received. But for now make dma_transfer
-> > to return 1 as the normal dw_spi_transfer_one() method.
+Thanks for your comments. My response is below.
+
+On Sat, Jun 20, 2020 at 09:12:01AM +0100, Russell King - ARM Linux admin wrote:
+> On Fri, Jun 19, 2020 at 11:02:50PM +0300, Serge Semin wrote:
+> > Really instead of twice checking the clk_round_rate() return value
+> > we could do it once, and if it isn't error the clock rate can be changed.
+> > By doing so we decrease a number of ret-value tests and remove a weird
+> > goto-based construction implemented in the dw8250_set_termios() method.
+> 
+> This doesn't look right to me - neither the before code nor the after
+> code.
+> 
+> >  	clk_disable_unprepare(d->clk);
+> >  	rate = clk_round_rate(d->clk, baud * 16);
+> > -	if (rate < 0)
+> > -		ret = rate;
+> > -	else if (rate == 0)
+> > -		ret = -ENOENT;
+> > -	else
+> > +	if (rate > 0) {
+> >  		ret = clk_set_rate(d->clk, rate);
+> > +		if (!ret)
+> > +			p->uartclk = rate;
+> > +	}
+> >  	clk_prepare_enable(d->clk);
+> >  
+> > -	if (ret)
+> > -		goto out;
+> > -
+> > -	p->uartclk = rate;
+> 
+> 	newrate = baud * 16;
+> 
+> 	clk_disable_unprepare(d->clk);
+
+> 	rate = clk_round_rate(newrate);
+> 	ret = clk_set_rate(d->clk, newrate);
+> 	if (!ret)
+> 		p->uartclk = rate;
+> 
+> 	ret = elk_prepare_enable(d->clk);
+> 	/* check ret for failure, means the clock is no longer running */
+> 
+> is all that should be necessary: note that clk_round_rate() is required
+> to return the rate that a successful call to clk_set_rate() would result
+> in for that clock.
+
+While I do understand your note regarding the newrate passing to both methods, I
+don't fully get it why is it ok to skip checking the clk_round_rate() return
+value? As I see it there is no point in calling clk_set_rate() if
+clk_round_rate() has returned an error. From that perspective this patch
+is full acceptable, right?
+
+In addition to that in order to provide an optimization I'll have to check the
+return value of the clk_round_rate() anyway in the next patch of this series
+("serial: 8250_dw: Fix common clocks usage race condition") since I'll need to
+set uartclk with that value before calling clk_set_rate() (see the patch and
+notes there for details). So there is no point in removing the check here since
+it will be got back in the next patch anyway.
+
+One more note in favor of checking the clk_round_rate() return value is below.
+
+> It is equivalent to:
 > 
 
-> As far as I understand, this is support for new SoC, not a fix?
+> 	ret = clk_set_rate(d->clk, newrate);
+> 	if (ret == 0)
+> 		p->uartclk = clk_get_rate(d->clk);
 
-Not really. That patch is a first one of a series fixing a problem with
-SPI transfer completion:
-33726eff3d98 spi: dw: Add SPI Rx-done wait method to DMA-based transfer
-1ade2d8a72f9 spi: dw: Add SPI Tx-done wait method to DMA-based transfer
-bdbdf0f06337 spi: dw: Locally wait for the DMA transfers completion
-f0410bbf7d0f spi: dw: Return any value retrieved from the dma_transfer callback
+Alas neither this nor the suggested code above will work if the clock is
+optional. If it is, then d->clk will be NULL and clk_round_rate(),
+clk_set_rate() and clk_get_rate() will return zero. Thus in accordance with the
+fixes suggested by you we'll rewrite a fixed uartclk value supplied by a
+firmware.
 
-In anyway having just first commit applied is harmless, though pretty much
-pointless in fixing the problem it had been originally introduced for. But it
-can be useful for something else. See my comment below.
+To sum it up getting a positive value returned from clk_round_rate() will
+mean not only an actual clock frequency, but also having a real reference clock
+installed. So we can use that value to update the uartclk field of the UART port
+descriptor.
 
 > 
-> > +++ b/drivers/spi/spi-dw.c
-> > @@ -383,11 +383,8 @@ static int dw_spi_transfer_one(struct spi_controller *master,
-> >  
-> >  	spi_enable_chip(dws, 1);
-> >  
-> > -	if (dws->dma_mapped) {
-> > -		ret = dws->dma_ops->dma_transfer(dws, transfer);
-> > -		if (ret < 0)
-> > -			return ret;
-> > -	}
-> > +	if (dws->dma_mapped)
-> > +		return dws->dma_ops->dma_transfer(dws, transfer);
-> >  
-> >  	if (chip->poll_mode)
-> >  		return poll_transfer(dws);
-> 
+> The other commonly misunderstood thing about the clk API is that the
+> rate you pass in to clk_round_rate() to discover the actual clock rate
+> and the value passed in to clk_set_rate() _should_ be the same value.
+> You should _not_ do clk_set_rate(clk, clk_round_rate(clk, newrate));
 
-> Mainline patch simply changes return value, but code is different in
-> v4.19, and poll_transfer will now be avoided when dws->dma_mapped. Is
-> that a problem?
-
-Actually no.) In that old 4.19 context it's even better to return straight away
-no matter what value is returned by the dma_transfer() callback. In the code
-without this patch applied, the transfer_one() method will check the poll_mode
-flag state even if the dma_transfer() returns a positive value. The positive
-value (1) means that the DMA transfer has been executed and the SPI core must
-wait for its completion. Needless to say, that if the poll_mode flag state
-gets to be true, then a poll-transfer will be executed alongside with the DMA
-transfer. Which as you understand will be very wrong. So by having this patch
-applied we implicitly fix that problem. Although a probability of the
-problematic situation is very low, since the DW APB SSI driver poll-mode hasn't
-been utilized by any SPI client driver since long time ago...
+Agreed. Thanks for the comment. I'll fix it in the next version of the series.
 
 -Sergey
 
 > 
-> Best regards,
-> 									Pavel
 > -- 
-> (english) http://www.livejournal.com/~pavelmachek
-> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
-
-
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
