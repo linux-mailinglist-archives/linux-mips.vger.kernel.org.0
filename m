@@ -2,33 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C234205A7E
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 20:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1EA205A82
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 20:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733261AbgFWSZ1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Jun 2020 14:25:27 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:52152 "EHLO
+        id S1732549AbgFWSZf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Jun 2020 14:25:35 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:52196 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732549AbgFWSZ0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jun 2020 14:25:26 -0400
+        with ESMTP id S1733075AbgFWSZf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jun 2020 14:25:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1592936688; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1592936689; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XghSCXLoXnDYRQ/6JmcfdRYpTnLy4dP9MGr2AOJEaqM=;
-        b=s2UcFamXFjhJBChZ5WsBn+lzWyPdYLxhZchfzUi7VJqmlt1mLRc5TCDBmLMi/3nXKvxEBt
-        JaqPjJrOiFi8PA72g2b44USOY4bwP/PCfqs3FMkaInX84hBAao47545U8uM+AGjZb07RPk
-        zBGZzBNqEXXQbQrSOXMjRlqwHMhWNvE=
+        bh=EPdm0Yhn/83KdV9iPjfd0sOIgIxMXCsj5QXkNwC1Uwo=;
+        b=EL3fcqKkyd6KqdKZRIqAwoXlabo1AeUTWKWHITV+xL00oaeGYbvHD4bX151bVTror+sazA
+        dM9WoBAslVZFiEn5nuMcy7qvURD65zZT9GEeJs4Qu9YKeAxfLG+gCGAoOw1D5WUFXl4yUQ
+        82dW1WXP7cuZ4bj917s42u/3VVe9vHg=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>,
         od@zcrc.me, linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 6/7] MIPS: ingenic: Add support for the RS90 board
-Date:   Tue, 23 Jun 2020 20:24:31 +0200
-Message-Id: <20200623182432.187843-6-paul@crapouillou.net>
+Subject: [PATCH 7/7] MIPS: ingenic: RS90: Added defconfig
+Date:   Tue, 23 Jun 2020 20:24:32 +0200
+Message-Id: <20200623182432.187843-7-paul@crapouillou.net>
 In-Reply-To: <20200623182432.187843-1-paul@crapouillou.net>
 References: <20200623182432.187843-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -38,361 +38,202 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The RS-90, better known as RetroMini, is a small and pocketable handheld
-gaming console from YLMChina. It has little more than a JZ4725B SoC, a
-NAND, a screen, some buttons and a speaker.
+Add a basic default config for the RS-90 RetroMini board.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- arch/mips/boot/dts/ingenic/Makefile |   1 +
- arch/mips/boot/dts/ingenic/rs90.dts | 311 ++++++++++++++++++++++++++++
- arch/mips/jz4740/Kconfig            |   4 +
- 3 files changed, 316 insertions(+)
- create mode 100644 arch/mips/boot/dts/ingenic/rs90.dts
+ arch/mips/configs/rs90_defconfig | 182 +++++++++++++++++++++++++++++++
+ 1 file changed, 182 insertions(+)
+ create mode 100644 arch/mips/configs/rs90_defconfig
 
-diff --git a/arch/mips/boot/dts/ingenic/Makefile b/arch/mips/boot/dts/ingenic/Makefile
-index e1654291a7b0..f23ff5109e5b 100644
---- a/arch/mips/boot/dts/ingenic/Makefile
-+++ b/arch/mips/boot/dts/ingenic/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- dtb-$(CONFIG_JZ4740_QI_LB60)	+= qi_lb60.dtb
-+dtb-$(CONFIG_JZ4740_RS90)	+= rs90.dtb
- dtb-$(CONFIG_JZ4770_GCW0)	+= gcw0.dtb
- dtb-$(CONFIG_JZ4780_CI20)	+= ci20.dtb
- dtb-$(CONFIG_X1000_CU1000_NEO)	+= cu1000-neo.dtb
-diff --git a/arch/mips/boot/dts/ingenic/rs90.dts b/arch/mips/boot/dts/ingenic/rs90.dts
+diff --git a/arch/mips/configs/rs90_defconfig b/arch/mips/configs/rs90_defconfig
 new file mode 100644
-index 000000000000..246f97efe5ef
+index 000000000000..433ac5c0266a
 --- /dev/null
-+++ b/arch/mips/boot/dts/ingenic/rs90.dts
-@@ -0,0 +1,311 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+
-+#include "jz4725b.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/iio/adc/ingenic,adc.h>
-+#include <dt-bindings/input/linux-event-codes.h>
-+
-+/ {
-+	compatible = "ylm,rs90", "ingenic,jz4725b";
-+	model = "RS-90";
-+
-+	memory {
-+		device_type = "memory";
-+		reg = <0x0 0x2000000>;
-+	};
-+
-+	vcc: regulator {
-+		compatible = "regulator-fixed";
-+
-+		regulator-name = "vcc";
-+		regulaor-min-microvolt = <3300000>;
-+		regulaor-max-microvolt = <3300000>;
-+		regulator-always-on;
-+	};
-+
-+	backlight: backlight {
-+		compatible = "pwm-backlight";
-+		pwms = <&pwm 3 40000 0>;
-+
-+		brightness-levels = <0 16 32 48 64 80 112 144 192 255>;
-+		default-brightness-level = <8>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pins_pwm3>;
-+
-+		power-supply = <&vcc>;
-+	};
-+
-+	keys@0 {
-+		compatible = "gpio-keys";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		key@0 {
-+			label = "D-pad up";
-+			linux,code = <KEY_UP>;
-+			gpios = <&gpc 10 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		key@1 {
-+			label = "D-pad down";
-+			linux,code = <KEY_DOWN>;
-+			gpios = <&gpc 11 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		key@2 {
-+			label = "D-pad left";
-+			linux,code = <KEY_LEFT>;
-+			gpios = <&gpb 31 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		key@3 {
-+			label = "D-pad right";
-+			linux,code = <KEY_RIGHT>;
-+			gpios = <&gpd 21 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		key@4 {
-+			label = "Button A";
-+			linux,code = <KEY_LEFTCTRL>;
-+			gpios = <&gpc 31 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		key@5 {
-+			label = "Button B";
-+			linux,code = <KEY_LEFTALT>;
-+			gpios = <&gpc 30 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		key@6 {
-+			label = "Right shoulder button";
-+			linux,code = <KEY_BACKSPACE>;
-+			gpios = <&gpc 12 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <10>;
-+		};
-+
-+		key@7 {
-+			label = "Start button";
-+			linux,code = <KEY_ENTER>;
-+			gpios = <&gpd 17 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	keys@1 {
-+		compatible = "adc-keys";
-+		io-channels = <&adc INGENIC_ADC_AUX>;
-+		io-channel-names = "buttons";
-+		keyup-threshold-microvolt = <1400000>;
-+		poll-interval = <30>;
-+
-+		key@0 {
-+			label = "Left shoulder button";
-+			linux,code = <KEY_TAB>;
-+			press-threshold-microvolt = <800000>;
-+		};
-+
-+		key@1 {
-+			label = "Select button";
-+			linux,code = <KEY_ESC>;
-+			press-threshold-microvolt = <1100000>;
-+		};
-+	};
-+
-+	amp: analog-amplifier {
-+		compatible = "simple-audio-amplifier";
-+		enable-gpios = <&gpc 15 GPIO_ACTIVE_HIGH>;
-+
-+		VCC-supply = <&vcc>;
-+	};
-+
-+	sound {
-+		compatible = "simple-audio-card";
-+
-+		simple-audio-card,name = "rs90-audio";
-+		simple-audio-card,format = "i2s";
-+
-+		simple-audio-card,widgets =
-+			"Speaker", "Speaker",
-+			"Headphone", "Headphones";
-+		simple-audio-card,routing =
-+			"INL", "LHPOUT",
-+			"INR", "RHPOUT",
-+			"Headphones", "LHPOUT",
-+			"Headphones", "RHPOUT",
-+			"Speaker", "OUTL",
-+			"Speaker", "OUTR";
-+		simple-audio-card,pin-switches = "Speaker";
-+
-+		simple-audio-card,hp-det-gpio = <&gpd 16 GPIO_ACTIVE_LOW>;
-+		simple-audio-card,aux-devs = <&amp>;
-+
-+		simple-audio-card,bitclock-master = <&dai_codec>;
-+		simple-audio-card,frame-master = <&dai_codec>;
-+
-+		dai_cpu: simple-audio-card,cpu {
-+			sound-dai = <&aic>;
-+		};
-+
-+		dai_codec: simple-audio-card,codec {
-+			sound-dai = <&codec>;
-+		};
-+
-+	};
-+
-+	usb_phy: usb-phy {
-+		compatible = "usb-nop-xceiv";
-+		#phy-cells = <0>;
-+
-+		clocks = <&cgu JZ4725B_CLK_UDC_PHY>;
-+		clock-names = "main_clk";
-+		vcc-supply = <&vcc>;
-+	};
-+
-+	panel {
-+		compatible = "sharp,ls020b1dd01d";
-+
-+		backlight = <&backlight>;
-+		power-supply = <&vcc>;
-+
-+		port {
-+			panel_input: endpoint {
-+				remote-endpoint = <&panel_output>;
-+			};
-+		};
-+	};
-+};
-+
-+&ext {
-+	clock-frequency = <12000000>;
-+};
-+
-+&rtc_dev {
-+	system-power-controller;
-+};
-+
-+&udc {
-+	phys = <&usb_phy>;
-+};
-+
-+&pinctrl {
-+	pins_mmc1: mmc1 {
-+		function = "mmc1";
-+		groups = "mmc1-1bit";
-+	};
-+
-+	pins_nemc: nemc {
-+		function = "nand";
-+		groups = "nand-cs1", "nand-cle-ale", "nand-fre-fwe";
-+	};
-+
-+	pins_pwm3: pwm3 {
-+		function = "pwm3";
-+		groups = "pwm3";
-+		bias-disable;
-+	};
-+
-+	pins_lcd: lcd {
-+		function = "lcd";
-+		groups = "lcd-8bit", "lcd-16bit", "lcd-special";
-+	};
-+};
-+
-+&mmc0 {
-+	status = "disabled";
-+};
-+
-+&mmc1 {
-+	bus-width = <1>;
-+	max-frequency = <48000000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_mmc1>;
-+
-+	cd-gpios = <&gpc 20 GPIO_ACTIVE_LOW>;
-+};
-+
-+&uart {
-+	/*
-+	 * The pins for RX/TX are used for the right shoulder button and
-+	 * backlight PWM.
-+	 */
-+	status = "disabled";
-+};
-+
-+&nemc {
-+	nandc: nand-controller@1 {
-+		compatible = "ingenic,jz4725b-nand";
-+		reg = <1 0 0x4000000>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		ecc-engine = <&bch>;
-+
-+		ingenic,nemc-tAS = <10>;
-+		ingenic,nemc-tAH = <5>;
-+		ingenic,nemc-tBP = <10>;
-+		ingenic,nemc-tAW = <15>;
-+		ingenic,nemc-tSTRV = <100>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pins_nemc>;
-+
-+		rb-gpios = <&gpc 27 GPIO_ACTIVE_HIGH>;
-+
-+		nand@1 {
-+			reg = <1>;
-+
-+			nand-ecc-step-size = <512>;
-+			nand-ecc-strength = <8>;
-+			nand-ecc-mode = "hw";
-+			nand-is-boot-medium;
-+			nand-on-flash-bbt;
-+
-+			partitions {
-+				compatible = "fixed-partitions";
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				partition@0 {
-+					label = "bootloader";
-+					reg = <0x0 0x20000>;
-+				};
-+
-+				partition@20000 {
-+					label = "system";
-+					reg = <0x20000 0x0>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&cgu {
-+	/* Use 32kHz oscillator as the parent of the RTC clock */
-+	assigned-clocks = <&cgu JZ4725B_CLK_RTC>;
-+	assigned-clock-parents = <&cgu JZ4725B_CLK_OSC32K>;
-+};
-+
-+&tcu {
-+	/*
-+	 * 750 kHz for the system timer and clocksource, and use RTC as the
-+	 * parent for the watchdog clock.
-+	 */
-+	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>, <&tcu TCU_CLK_WDT>;
-+	assigned-clock-parents = <0>, <0>, <&cgu JZ4725B_CLK_RTC>;
-+	assigned-clock-rates = <750000>, <750000>;
-+};
-+
-+&lcd {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_lcd>;
-+
-+	port {
-+		panel_output: endpoint {
-+			remote-endpoint = <&panel_input>;
-+		};
-+	};
-+};
-diff --git a/arch/mips/jz4740/Kconfig b/arch/mips/jz4740/Kconfig
-index 0325153efbd4..baa315c8183a 100644
---- a/arch/mips/jz4740/Kconfig
-+++ b/arch/mips/jz4740/Kconfig
-@@ -15,6 +15,10 @@ config JZ4740_QI_LB60
- 	bool "Qi Hardware Ben NanoNote"
- 	select MACH_JZ4740
- 
-+config JZ4740_RS90
-+	bool "YLM RetroMini (RS-90)"
-+	select MACH_JZ4725B
-+
- config JZ4770_GCW0
- 	bool "Game Consoles Worldwide GCW Zero"
- 	select MACH_JZ4770
++++ b/arch/mips/configs/rs90_defconfig
+@@ -0,0 +1,182 @@
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_DEFAULT_HOSTNAME="rs90"
++# CONFIG_CROSS_MEMORY_ATTACH is not set
++CONFIG_NO_HZ_IDLE=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_PREEMPT_VOLUNTARY=y
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y
++# CONFIG_SGETMASK_SYSCALL is not set
++# CONFIG_SYSFS_SYSCALL is not set
++# CONFIG_ELF_CORE is not set
++# CONFIG_BASE_FULL is not set
++# CONFIG_TIMERFD is not set
++# CONFIG_AIO is not set
++# CONFIG_IO_URING is not set
++# CONFIG_ADVISE_SYSCALLS is not set
++# CONFIG_KALLSYMS is not set
++CONFIG_EMBEDDED=y
++# CONFIG_PERF_EVENTS is not set
++CONFIG_SLAB=y
++CONFIG_PROFILING=y
++CONFIG_MACH_INGENIC=y
++CONFIG_JZ4740_RS90=y
++CONFIG_PAGE_SIZE_16KB=y
++CONFIG_HZ_100=y
++# CONFIG_SECCOMP is not set
++CONFIG_MIPS_CMDLINE_DTB_EXTEND=y
++# CONFIG_SUSPEND is not set
++CONFIG_PM=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
++CONFIG_CPUFREQ_DT=y
++CONFIG_OPROFILE=y
++CONFIG_JUMP_LABEL=y
++# CONFIG_STACKPROTECTOR is not set
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_PARTITION_ADVANCED=y
++# CONFIG_EFI_PARTITION is not set
++# CONFIG_MQ_IOSCHED_DEADLINE is not set
++# CONFIG_MQ_IOSCHED_KYBER is not set
++CONFIG_FRONTSWAP=y
++CONFIG_CMA=y
++CONFIG_ZSMALLOC=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_IP_MULTIPLE_TABLES=y
++CONFIG_IP_ROUTE_MULTIPATH=y
++CONFIG_IP_ROUTE_VERBOSE=y
++CONFIG_IP_MROUTE=y
++CONFIG_IP_MROUTE_MULTIPLE_TABLES=y
++# CONFIG_INET_DIAG is not set
++CONFIG_TCP_CONG_ADVANCED=y
++# CONFIG_TCP_CONG_BIC is not set
++# CONFIG_TCP_CONG_CUBIC is not set
++# CONFIG_TCP_CONG_HTCP is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_MTD=y
++CONFIG_MTD_RAW_NAND=y
++CONFIG_MTD_NAND_JZ4780=y
++CONFIG_MTD_NAND_JZ4725B_BCH=y
++CONFIG_MTD_UBI=y
++CONFIG_MTD_UBI_FASTMAP=y
++CONFIG_ZRAM=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_LOOP_MIN_COUNT=0
++CONFIG_NETDEVICES=y
++# CONFIG_ETHERNET is not set
++# CONFIG_WLAN is not set
++CONFIG_INPUT_EVDEV=y
++CONFIG_KEYBOARD_ADC=y
++# CONFIG_KEYBOARD_ATKBD is not set
++CONFIG_KEYBOARD_GPIO=y
++# CONFIG_INPUT_MOUSE is not set
++# CONFIG_SERIO is not set
++CONFIG_LEGACY_PTY_COUNT=2
++# CONFIG_DEVMEM is not set
++# CONFIG_HW_RANDOM is not set
++# CONFIG_I2C_COMPAT is not set
++# CONFIG_I2C_HELPER_AUTO is not set
++CONFIG_POWER_SUPPLY=y
++CONFIG_BATTERY_INGENIC=y
++# CONFIG_HWMON is not set
++CONFIG_WATCHDOG=y
++# CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is not set
++CONFIG_JZ4740_WDT=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_DRM=y
++CONFIG_DRM_FBDEV_OVERALLOC=300
++CONFIG_DRM_PANEL_SIMPLE=y
++CONFIG_DRM_INGENIC=y
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++# CONFIG_BACKLIGHT_GENERIC is not set
++CONFIG_BACKLIGHT_PWM=y
++# CONFIG_VGA_CONSOLE is not set
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_LOGO=y
++# CONFIG_LOGO_LINUX_MONO is not set
++# CONFIG_LOGO_LINUX_VGA16 is not set
++# CONFIG_LOGO_LINUX_CLUT224 is not set
++CONFIG_SOUND=y
++CONFIG_SND=y
++# CONFIG_SND_PCM_TIMER is not set
++# CONFIG_SND_SUPPORT_OLD_API is not set
++# CONFIG_SND_PROC_FS is not set
++# CONFIG_SND_DRIVERS is not set
++# CONFIG_SND_MIPS is not set
++CONFIG_SND_SOC=y
++CONFIG_SND_JZ4740_SOC_I2S=y
++CONFIG_SND_SOC_JZ4725B_CODEC=y
++CONFIG_SND_SOC_SIMPLE_AMPLIFIER=y
++CONFIG_SND_SIMPLE_CARD=y
++# CONFIG_HID is not set
++CONFIG_USB_MUSB_HDRC=y
++CONFIG_USB_MUSB_JZ4740=y
++CONFIG_USB_INVENTRA_DMA=y
++CONFIG_NOP_USB_XCEIV=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_GADGET_VBUS_DRAW=500
++CONFIG_USB_CONFIGFS=y
++CONFIG_USB_CONFIGFS_ECM_SUBSET=y
++CONFIG_USB_CONFIGFS_RNDIS=y
++CONFIG_USB_CONFIGFS_F_FS=y
++CONFIG_MMC=y
++# CONFIG_PWRSEQ_EMMC is not set
++# CONFIG_PWRSEQ_SIMPLE is not set
++CONFIG_MMC_JZ4740=y
++CONFIG_RTC_CLASS=y
++# CONFIG_RTC_HCTOSYS is not set
++# CONFIG_RTC_SYSTOHC is not set
++# CONFIG_RTC_NVMEM is not set
++# CONFIG_RTC_INTF_PROC is not set
++CONFIG_RTC_DRV_JZ4740=y
++CONFIG_DMADEVICES=y
++CONFIG_DMA_JZ4780=y
++# CONFIG_VIRTIO_MENU is not set
++# CONFIG_MIPS_PLATFORM_DEVICES is not set
++CONFIG_INGENIC_OST=y
++# CONFIG_IOMMU_SUPPORT is not set
++CONFIG_MEMORY=y
++CONFIG_IIO=y
++CONFIG_INGENIC_ADC=y
++CONFIG_IIO_RESCALE=y
++CONFIG_PWM=y
++CONFIG_PWM_JZ4740=y
++# CONFIG_NVMEM is not set
++CONFIG_EXT4_FS=y
++# CONFIG_DNOTIFY is not set
++CONFIG_VFAT_FS=y
++CONFIG_PROC_KCORE=y
++CONFIG_TMPFS=y
++CONFIG_UBIFS_FS=y
++CONFIG_UBIFS_FS_ADVANCED_COMPR=y
++# CONFIG_UBIFS_FS_ZSTD is not set
++# CONFIG_UBIFS_FS_XATTR is not set
++CONFIG_SQUASHFS=y
++CONFIG_SQUASHFS_FILE_DIRECT=y
++CONFIG_SQUASHFS_DECOMP_MULTI=y
++CONFIG_SQUASHFS_LZO=y
++CONFIG_SQUASHFS_4K_DEVBLK_SIZE=y
++# CONFIG_NETWORK_FILESYSTEMS is not set
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ASCII=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_UTF8=y
++# CONFIG_CRYPTO_HW is not set
++CONFIG_FONTS=y
++CONFIG_FONT_6x10=y
++# CONFIG_SYMBOLIC_ERRNAME is not set
++CONFIG_STRIP_ASM_SYMS=y
++# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
++# CONFIG_DEBUG_MISC is not set
++CONFIG_PANIC_ON_OOPS=y
++# CONFIG_FTRACE is not set
++# CONFIG_RUNTIME_TESTING_MENU is not set
 -- 
 2.27.0
 
