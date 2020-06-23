@@ -2,238 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1EA205A82
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 20:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF10205CA0
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 22:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732549AbgFWSZf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Jun 2020 14:25:35 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:52196 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733075AbgFWSZf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jun 2020 14:25:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1592936689; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EPdm0Yhn/83KdV9iPjfd0sOIgIxMXCsj5QXkNwC1Uwo=;
-        b=EL3fcqKkyd6KqdKZRIqAwoXlabo1AeUTWKWHITV+xL00oaeGYbvHD4bX151bVTror+sazA
-        dM9WoBAslVZFiEn5nuMcy7qvURD65zZT9GEeJs4Qu9YKeAxfLG+gCGAoOw1D5WUFXl4yUQ
-        82dW1WXP7cuZ4bj917s42u/3VVe9vHg=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>,
-        od@zcrc.me, linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 7/7] MIPS: ingenic: RS90: Added defconfig
-Date:   Tue, 23 Jun 2020 20:24:32 +0200
-Message-Id: <20200623182432.187843-7-paul@crapouillou.net>
-In-Reply-To: <20200623182432.187843-1-paul@crapouillou.net>
-References: <20200623182432.187843-1-paul@crapouillou.net>
+        id S2388096AbgFWUDt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Jun 2020 16:03:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41708 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388104AbgFWUDs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 23 Jun 2020 16:03:48 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D64E2206C3;
+        Tue, 23 Jun 2020 20:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592942627;
+        bh=97ur8RLnc6uZV2ZwBva1Z/GnkPnVj4yOtOwXI3V349k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=W3R8SorGbnp7S4FynSPjfO8zZdaFqqcj92WUvjGtXSGMoebZmQJ7wcTQEjOmZ9U0N
+         G/iQbCPjn4vXt2xJ5ftZ8Z8exxZA4ywM4tx5xPgYGcSB0hpTfyu4JJbje5tkXHjiJn
+         wfcNdLFd6gZ0Rn+wQ33ff1gkU/fbwC/dwC05F6QY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Long Cheng <long.cheng@mediatek.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.7 042/477] serial: 8250: Fix max baud limit in generic 8250 port
+Date:   Tue, 23 Jun 2020 21:50:39 +0200
+Message-Id: <20200623195409.597252000@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200623195407.572062007@linuxfoundation.org>
+References: <20200623195407.572062007@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a basic default config for the RS-90 RetroMini board.
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+[ Upstream commit 7b668c064ec33f3d687c3a413d05e355172e6c92 ]
+
+Standard 8250 UART ports are designed in a way so they can communicate
+with baud rates up to 1/16 of a reference frequency. It's expected from
+most of the currently supported UART controllers. That's why the former
+version of serial8250_get_baud_rate() method called uart_get_baud_rate()
+with min and max baud rates passed as (port->uartclk / 16 / UART_DIV_MAX)
+and ((port->uartclk + tolerance) / 16) respectively. Doing otherwise, like
+it was suggested in commit ("serial: 8250_mtk: support big baud rate."),
+caused acceptance of bauds, which was higher than the normal UART
+controllers actually supported. As a result if some user-space program
+requested to set a baud greater than (uartclk / 16) it would have been
+permitted without truncation, but then serial8250_get_divisor(baud)
+(which calls uart_get_divisor() to get the reference clock divisor) would
+have returned a zero divisor. Setting zero divisor will cause an
+unpredictable effect varying from chip to chip. In case of DW APB UART the
+communications just stop.
+
+Lets fix this problem by getting back the limitation of (uartclk +
+tolerance) / 16 maximum baud supported by the generic 8250 port. Mediatek
+8250 UART ports driver developer shouldn't have touched it in the first
+place  notably seeing he already provided a custom version of set_termios()
+callback in that glue-driver which took into account the extended baud
+rate values and accordingly updated the standard and vendor-specific
+divisor latch registers anyway.
+
+Fixes: 81bb549fdf14 ("serial: 8250_mtk: support big baud rate.")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Long Cheng <long.cheng@mediatek.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Link: https://lore.kernel.org/r/20200506233136.11842-2-Sergey.Semin@baikalelectronics.ru
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/configs/rs90_defconfig | 182 +++++++++++++++++++++++++++++++
- 1 file changed, 182 insertions(+)
- create mode 100644 arch/mips/configs/rs90_defconfig
+ drivers/tty/serial/8250/8250_port.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/configs/rs90_defconfig b/arch/mips/configs/rs90_defconfig
-new file mode 100644
-index 000000000000..433ac5c0266a
---- /dev/null
-+++ b/arch/mips/configs/rs90_defconfig
-@@ -0,0 +1,182 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_DEFAULT_HOSTNAME="rs90"
-+# CONFIG_CROSS_MEMORY_ATTACH is not set
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT_VOLUNTARY=y
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y
-+# CONFIG_SGETMASK_SYSCALL is not set
-+# CONFIG_SYSFS_SYSCALL is not set
-+# CONFIG_ELF_CORE is not set
-+# CONFIG_BASE_FULL is not set
-+# CONFIG_TIMERFD is not set
-+# CONFIG_AIO is not set
-+# CONFIG_IO_URING is not set
-+# CONFIG_ADVISE_SYSCALLS is not set
-+# CONFIG_KALLSYMS is not set
-+CONFIG_EMBEDDED=y
-+# CONFIG_PERF_EVENTS is not set
-+CONFIG_SLAB=y
-+CONFIG_PROFILING=y
-+CONFIG_MACH_INGENIC=y
-+CONFIG_JZ4740_RS90=y
-+CONFIG_PAGE_SIZE_16KB=y
-+CONFIG_HZ_100=y
-+# CONFIG_SECCOMP is not set
-+CONFIG_MIPS_CMDLINE_DTB_EXTEND=y
-+# CONFIG_SUSPEND is not set
-+CONFIG_PM=y
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
-+CONFIG_CPUFREQ_DT=y
-+CONFIG_OPROFILE=y
-+CONFIG_JUMP_LABEL=y
-+# CONFIG_STACKPROTECTOR is not set
-+# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_PARTITION_ADVANCED=y
-+# CONFIG_EFI_PARTITION is not set
-+# CONFIG_MQ_IOSCHED_DEADLINE is not set
-+# CONFIG_MQ_IOSCHED_KYBER is not set
-+CONFIG_FRONTSWAP=y
-+CONFIG_CMA=y
-+CONFIG_ZSMALLOC=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_ADVANCED_ROUTER=y
-+CONFIG_IP_MULTIPLE_TABLES=y
-+CONFIG_IP_ROUTE_MULTIPATH=y
-+CONFIG_IP_ROUTE_VERBOSE=y
-+CONFIG_IP_MROUTE=y
-+CONFIG_IP_MROUTE_MULTIPLE_TABLES=y
-+# CONFIG_INET_DIAG is not set
-+CONFIG_TCP_CONG_ADVANCED=y
-+# CONFIG_TCP_CONG_BIC is not set
-+# CONFIG_TCP_CONG_CUBIC is not set
-+# CONFIG_TCP_CONG_HTCP is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_MTD=y
-+CONFIG_MTD_RAW_NAND=y
-+CONFIG_MTD_NAND_JZ4780=y
-+CONFIG_MTD_NAND_JZ4725B_BCH=y
-+CONFIG_MTD_UBI=y
-+CONFIG_MTD_UBI_FASTMAP=y
-+CONFIG_ZRAM=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_LOOP_MIN_COUNT=0
-+CONFIG_NETDEVICES=y
-+# CONFIG_ETHERNET is not set
-+# CONFIG_WLAN is not set
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_KEYBOARD_ADC=y
-+# CONFIG_KEYBOARD_ATKBD is not set
-+CONFIG_KEYBOARD_GPIO=y
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO is not set
-+CONFIG_LEGACY_PTY_COUNT=2
-+# CONFIG_DEVMEM is not set
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_I2C_COMPAT is not set
-+# CONFIG_I2C_HELPER_AUTO is not set
-+CONFIG_POWER_SUPPLY=y
-+CONFIG_BATTERY_INGENIC=y
-+# CONFIG_HWMON is not set
-+CONFIG_WATCHDOG=y
-+# CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is not set
-+CONFIG_JZ4740_WDT=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_DRM=y
-+CONFIG_DRM_FBDEV_OVERALLOC=300
-+CONFIG_DRM_PANEL_SIMPLE=y
-+CONFIG_DRM_INGENIC=y
-+CONFIG_BACKLIGHT_CLASS_DEVICE=y
-+# CONFIG_BACKLIGHT_GENERIC is not set
-+CONFIG_BACKLIGHT_PWM=y
-+# CONFIG_VGA_CONSOLE is not set
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_LOGO=y
-+# CONFIG_LOGO_LINUX_MONO is not set
-+# CONFIG_LOGO_LINUX_VGA16 is not set
-+# CONFIG_LOGO_LINUX_CLUT224 is not set
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+# CONFIG_SND_PCM_TIMER is not set
-+# CONFIG_SND_SUPPORT_OLD_API is not set
-+# CONFIG_SND_PROC_FS is not set
-+# CONFIG_SND_DRIVERS is not set
-+# CONFIG_SND_MIPS is not set
-+CONFIG_SND_SOC=y
-+CONFIG_SND_JZ4740_SOC_I2S=y
-+CONFIG_SND_SOC_JZ4725B_CODEC=y
-+CONFIG_SND_SOC_SIMPLE_AMPLIFIER=y
-+CONFIG_SND_SIMPLE_CARD=y
-+# CONFIG_HID is not set
-+CONFIG_USB_MUSB_HDRC=y
-+CONFIG_USB_MUSB_JZ4740=y
-+CONFIG_USB_INVENTRA_DMA=y
-+CONFIG_NOP_USB_XCEIV=y
-+CONFIG_USB_GADGET=y
-+CONFIG_USB_GADGET_VBUS_DRAW=500
-+CONFIG_USB_CONFIGFS=y
-+CONFIG_USB_CONFIGFS_ECM_SUBSET=y
-+CONFIG_USB_CONFIGFS_RNDIS=y
-+CONFIG_USB_CONFIGFS_F_FS=y
-+CONFIG_MMC=y
-+# CONFIG_PWRSEQ_EMMC is not set
-+# CONFIG_PWRSEQ_SIMPLE is not set
-+CONFIG_MMC_JZ4740=y
-+CONFIG_RTC_CLASS=y
-+# CONFIG_RTC_HCTOSYS is not set
-+# CONFIG_RTC_SYSTOHC is not set
-+# CONFIG_RTC_NVMEM is not set
-+# CONFIG_RTC_INTF_PROC is not set
-+CONFIG_RTC_DRV_JZ4740=y
-+CONFIG_DMADEVICES=y
-+CONFIG_DMA_JZ4780=y
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_MIPS_PLATFORM_DEVICES is not set
-+CONFIG_INGENIC_OST=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_MEMORY=y
-+CONFIG_IIO=y
-+CONFIG_INGENIC_ADC=y
-+CONFIG_IIO_RESCALE=y
-+CONFIG_PWM=y
-+CONFIG_PWM_JZ4740=y
-+# CONFIG_NVMEM is not set
-+CONFIG_EXT4_FS=y
-+# CONFIG_DNOTIFY is not set
-+CONFIG_VFAT_FS=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_TMPFS=y
-+CONFIG_UBIFS_FS=y
-+CONFIG_UBIFS_FS_ADVANCED_COMPR=y
-+# CONFIG_UBIFS_FS_ZSTD is not set
-+# CONFIG_UBIFS_FS_XATTR is not set
-+CONFIG_SQUASHFS=y
-+CONFIG_SQUASHFS_FILE_DIRECT=y
-+CONFIG_SQUASHFS_DECOMP_MULTI=y
-+CONFIG_SQUASHFS_LZO=y
-+CONFIG_SQUASHFS_4K_DEVBLK_SIZE=y
-+# CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+# CONFIG_CRYPTO_HW is not set
-+CONFIG_FONTS=y
-+CONFIG_FONT_6x10=y
-+# CONFIG_SYMBOLIC_ERRNAME is not set
-+CONFIG_STRIP_ASM_SYMS=y
-+# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
-+# CONFIG_DEBUG_MISC is not set
-+CONFIG_PANIC_ON_OOPS=y
-+# CONFIG_FTRACE is not set
-+# CONFIG_RUNTIME_TESTING_MENU is not set
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index f77bf820b7a30..4d83c85a7389b 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2615,6 +2615,8 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+ 					     struct ktermios *termios,
+ 					     struct ktermios *old)
+ {
++	unsigned int tolerance = port->uartclk / 100;
++
+ 	/*
+ 	 * Ask the core to calculate the divisor for us.
+ 	 * Allow 1% tolerance at the upper limit so uart clks marginally
+@@ -2623,7 +2625,7 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+ 	 */
+ 	return uart_get_baud_rate(port, termios, old,
+ 				  port->uartclk / 16 / UART_DIV_MAX,
+-				  port->uartclk);
++				  (port->uartclk + tolerance) / 16);
+ }
+ 
+ void
 -- 
-2.27.0
+2.25.1
+
+
 
