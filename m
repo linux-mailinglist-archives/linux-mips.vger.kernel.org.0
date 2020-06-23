@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 962B7204D7F
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 11:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6108C204D7A
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 11:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731968AbgFWJHP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Jun 2020 05:07:15 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:44746 "EHLO loongson.cn"
+        id S1732043AbgFWJGw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Jun 2020 05:06:52 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:44752 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731921AbgFWJGu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Jun 2020 05:06:50 -0400
+        id S1732051AbgFWJGv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 23 Jun 2020 05:06:51 -0400
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf2oexvFeJ7JIAA--.33S7;
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf2oexvFeJ7JIAA--.33S8;
         Tue, 23 Jun 2020 17:06:44 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -22,16 +22,16 @@ Cc:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH 5/7 RESEND] irqchip/loongson-pch-msi: Remove unneeded variable
-Date:   Tue, 23 Jun 2020 17:06:36 +0800
-Message-Id: <1592903198-5505-6-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH 6/7 RESEND] irqchip/loongson-htpic: Remove unneeded select of I8259
+Date:   Tue, 23 Jun 2020 17:06:37 +0800
+Message-Id: <1592903198-5505-7-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1592903198-5505-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1592903198-5505-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxf2oexvFeJ7JIAA--.33S7
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFW7Jw17Kr47Cr15WryUZFb_yoWktwb_CF
-        1Iq3ZxGFy2yr43WF4xK3yYqFy2vFyDuF1v9FWFva13X3yYgws7AFW3Aan3JrW7Gr18Zr1f
-        CrZ5Gw1Syr129jkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: AQAAf9Dxf2oexvFeJ7JIAA--.33S8
+X-Coremail-Antispam: 1UD129KBjvdXoWruFW3Cw13KF4kAr4DXF15CFg_yoWxAFg_C3
+        9IqFZ7JFyIkry7G34agF4fWFyjyayqgFn7ur4jqryrX34xX34xtFW5Ja98Xr17GayqgF1S
+        vrWfur1vkr1IyjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbCxYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I
         6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7
         IE14v26r126s0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0
@@ -53,39 +53,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-irq_domain_alloc_irqs_parent() returns 0 on success and non-zero value
-on failure, it is redudant to check its non-zero return value and then
-return it, so just remove the variable "ret" and return directly in the
-function pch_msi_parent_domain_alloc().
+LOONGSON_HTPIC depends on MACH_LOONGSON64 and MACH_LOONGSON64 already
+selects I8259 in arch/mips/Kconfig, so no need to select I8259 again
+when config LOONGSON_HTPIC.
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/irqchip/irq-loongson-pch-msi.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/irqchip/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-loongson-pch-msi.c b/drivers/irqchip/irq-loongson-pch-msi.c
-index 50becd2..12aeeab 100644
---- a/drivers/irqchip/irq-loongson-pch-msi.c
-+++ b/drivers/irqchip/irq-loongson-pch-msi.c
-@@ -100,17 +100,12 @@ static int pch_msi_parent_domain_alloc(struct irq_domain *domain,
- 					unsigned int virq, int hwirq)
- {
- 	struct irq_fwspec fwspec;
--	int ret;
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 29fead2..9f57aed 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -541,7 +541,6 @@ config LOONGSON_HTPIC
+ 	default y
+ 	select IRQ_DOMAIN
+ 	select GENERIC_IRQ_CHIP
+-	select I8259
+ 	help
+ 	  Support for the Loongson-3 HyperTransport PIC Controller.
  
- 	fwspec.fwnode = domain->parent->fwnode;
- 	fwspec.param_count = 1;
- 	fwspec.param[0] = hwirq;
- 
--	ret = irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
--	if (ret)
--		return ret;
--
--	return 0;
-+	return irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
- }
- 
- static int pch_msi_middle_domain_alloc(struct irq_domain *domain,
 -- 
 2.1.0
 
