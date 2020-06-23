@@ -2,120 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D77204EFA
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 12:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D40205075
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 13:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732155AbgFWKYs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Jun 2020 06:24:48 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:49947 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732236AbgFWKYr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Jun 2020 06:24:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592907886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K0VMF+zOglKc79uK7nAPfjf+HV37t2ditCPtYi6hRnc=;
-        b=jCttVLpoGnxxGvO41x5swM1yUUQ52MfjQF6W3+A2PF3mM7n82xab9eO493Qlp+wz0EotS6
-        6L2C/XFna6HUHJKEsFeZVTQUcF6oVMDNKaxClyTwZQzl58t/7ZdCQiKrtbQImaZijRIhLa
-        s82D5fWkNrN5snbRAQo6qTA1ic88vxU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-355-c0pVjbMbM9yhB8Syt91T1A-1; Tue, 23 Jun 2020 06:24:42 -0400
-X-MC-Unique: c0pVjbMbM9yhB8Syt91T1A-1
-Received: by mail-wm1-f72.google.com with SMTP id a18so3326820wmm.3
-        for <linux-mips@vger.kernel.org>; Tue, 23 Jun 2020 03:24:42 -0700 (PDT)
+        id S1732526AbgFWLQx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Jun 2020 07:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732510AbgFWLQw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jun 2020 07:16:52 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25190C061798
+        for <linux-mips@vger.kernel.org>; Tue, 23 Jun 2020 04:16:51 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id l10so20099909wrr.10
+        for <linux-mips@vger.kernel.org>; Tue, 23 Jun 2020 04:16:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=E6E/hlNpiM6PnoAOVZ+7voPc9wpxPmWA12rEiYoj/bAUsYe0AJbyTzI9pZwPUUDdPP
+         2sshPYcb9oIsA99JTikTl0u76qfHNPIW2jIbz6C+DLselDK71HuKa++SqaGTSZ4p4+te
+         gTQ9UTEVmk4+r2eFXVbrvBf8ptXVBuknudxlYS3vrFAv18ZetPr28ECYav3lG+E2L5JM
+         St9yzES6OGBMLQpZbQAQLmSOp9Akg+wflxGB71dvTLo/TJoexQV6LE+g+JoBlfC2QAg7
+         b+ja973yyVQOwbfrTF90BaaIQGUXchEhek4sdIUmlBpL8Ak1D79EOMoTbcuGCplWvTHT
+         W4hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=K0VMF+zOglKc79uK7nAPfjf+HV37t2ditCPtYi6hRnc=;
-        b=IYRAIR9kQsoUEGiwbQKo7S57YOhcmaqj2WaCx+AEIqOYIfoXMGCSiWgQxEoYf0XaYs
-         bIWzqQoy0+vQXC23HNhVy3KwYq9308dYSjRM1EX1a9BAfsBOrxtN0HnnbWpH3n1+9z0m
-         FzV6rSgxZoynsLRdokfMaE0zmpTzZmkJ2PgkDCowHgegwvszSsxADlxTB/Y8XeoXgkog
-         jVe92d6NAZCv/PHzFAfrmydAwm2bagyhfFAMJIC2w0dcEszp1djbkBCkCocNZJLGXHA0
-         7XYxH6xxtSBkAohiK26gsAVIFUXpOh9FjUvCnKzzlXCq76mtscszcv5HQ77oK4XlNXI/
-         Q5Bw==
-X-Gm-Message-State: AOAM531liKDFEXeYYBFvfApwHLft9C76k25InKumUpNVwABc1CJKtzIi
-        HTmqSlK0PdZuwvWwR1gEQ8G5dVvuQOIMAMO+EELxy0gb9BI0w5pvkcXGZYYjER89VoeufiI+01Z
-        m4LamXVjO+pHIJ1tHExWpxg==
-X-Received: by 2002:a05:6000:ce:: with SMTP id q14mr16454564wrx.294.1592907881329;
-        Tue, 23 Jun 2020 03:24:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw7GKxnJWV0b4Mz/7lWJjdPl3+rZwUgIO80Ac5HDjj13PmRVjDey+yK0l49hJjTmncjlmTnYw==
-X-Received: by 2002:a05:6000:ce:: with SMTP id q14mr16454534wrx.294.1592907881013;
-        Tue, 23 Jun 2020 03:24:41 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:24f5:23b:4085:b879? ([2001:b07:6468:f312:24f5:23b:4085:b879])
-        by smtp.gmail.com with ESMTPSA id c66sm3351206wma.20.2020.06.23.03.24.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jun 2020 03:24:40 -0700 (PDT)
-Subject: Re: [PATCH v4 0/7] clean up redundant 'kvm_run' parameters
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        tsbogend@alpha.franken.de, paulus@ozlabs.org, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com,
-        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        sean.j.christopherson@intel.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, maz@kernel.org, james.morse@arm.com,
-        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
-        christoffer.dall@arm.com, peterx@redhat.com, thuth@redhat.com,
-        chenhuacai@gmail.com
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200427043514.16144-1-tianjia.zhang@linux.alibaba.com>
- <fe463233-d094-fca5-b4e9-c1d97124fd69@redhat.com>
- <3a2bee8b-20b4-5d33-7d12-09c374a5afde@linux.alibaba.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <bad08799-274e-0a6f-9638-92c0010b1ba1@redhat.com>
-Date:   Tue, 23 Jun 2020 12:24:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=Uxi/wRDb1mm1AOXaogDljIVT1jQXlUTgwFCm2zf6NJv3VakpHfBzZiVwIoLkMz66aJ
+         qtI2cmnz4jFkGRvSWVZ43vTxzcG0Tw28t74l+uwQo2nvC5aZNv24RYSZ6orn5zg29Xei
+         0V7SS9kfqAXsi+1aXzIG0HpjipZFvL3ZeWhGItwO2DH60619+w78+YMZwkdw5+mG3tjk
+         5NxQmN967UPvTEiQFxEvoaK4Q67rv5WEN8YgrL1SrXTG7aDY3FWsUeFLEN5ZpI8RgCVY
+         NLWYqpRtGu+WF0RXtSt2B8j21G6IDNzxrOxM+c3dflMmHwIIH8mYP8yxnKQXvLQXlZJ4
+         p6Xg==
+X-Gm-Message-State: AOAM531b0x/wNbE+bseM6aY2n7IA9Ttd9p3XxM6rqcNm5jW3qKNUrRy/
+        VP/EVtYEQMGwvhLXDdHgALqOW3P35OTq/JGfJqA=
+X-Google-Smtp-Source: ABdhPJzZ1QWBbLEVEJDiR8ozgNL3BKht/bHhiiCQZFbEUfR5i8VLBKqhwlX7a4NXmF6FqxDOEk5UW9nntOQTLpvDlps=
+X-Received: by 2002:a5d:62d1:: with SMTP id o17mr24071305wrv.162.1592911009833;
+ Tue, 23 Jun 2020 04:16:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <3a2bee8b-20b4-5d33-7d12-09c374a5afde@linux.alibaba.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a1c:f002:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:16:49
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <paulwiliam782@gmail.com>
+Date:   Tue, 23 Jun 2020 12:16:49 +0100
+Message-ID: <CAHqcnY16ZzcoYpU31SEco0sXeb2W5Dq2VVpzQr8ZENW9eKiFTA@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23/06/20 12:00, Tianjia Zhang wrote:
-> 
-> 
-> On 2020/6/23 17:42, Paolo Bonzini wrote:
->> On 27/04/20 06:35, Tianjia Zhang wrote:
->>> In the current kvm version, 'kvm_run' has been included in the
->>> 'kvm_vcpu'
->>> structure. For historical reasons, many kvm-related function parameters
->>> retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time. This
->>> patch does a unified cleanup of these remaining redundant parameters.
->>>
->>> This series of patches has completely cleaned the architecture of
->>> arm64, mips, ppc, and s390 (no such redundant code on x86). Due to
->>> the large number of modified codes, a separate patch is made for each
->>> platform. On the ppc platform, there is also a redundant structure
->>> pointer of 'kvm_run' in 'vcpu_arch', which has also been cleaned
->>> separately.
->>
->> Tianjia, can you please refresh the patches so that each architecture
->> maintainer can pick them up?  Thanks very much for this work!
->>
->> Paolo
->>
-> 
-> No problem, this is what I should do.
-> After I update, do I submit separately for each architecture or submit
-> them together in a patchset?
+Greetings From Mrs. Sarah Koffi
 
-You can send them together.
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
 
-Paolo
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
 
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
+
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
+
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
+
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
+
+I will wait to hear from you so as to give you details.With love from
+
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
+
+Mrs. Sarah Koffi
