@@ -2,33 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E337205A7B
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 20:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C234205A7E
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 20:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733105AbgFWSZS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Jun 2020 14:25:18 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:52110 "EHLO
+        id S1733261AbgFWSZ1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Jun 2020 14:25:27 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:52152 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732549AbgFWSZS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jun 2020 14:25:18 -0400
+        with ESMTP id S1732549AbgFWSZ0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jun 2020 14:25:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1592936687; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1592936688; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FYKfNVd30L/ZHXSNz64Wbq3SIUcXXkgLY/JGnV8rS3o=;
-        b=SXtxxLymCpJiqoKGGUqUgsFf0FrL2HgnjyEXSiBm4czVKcDVofRBCWDNXGbvcAbq1y5Eor
-        yJ2/bJ6tLamOgZLhaEr5CDHRrqHtCxphl+P1WoYCjIcSMBLmp4iLS+lDUCLtYj3aAEWXvA
-        sLutyTpMqT45FWaQqNlE6Q3PaIdU4jg=
+        bh=XghSCXLoXnDYRQ/6JmcfdRYpTnLy4dP9MGr2AOJEaqM=;
+        b=s2UcFamXFjhJBChZ5WsBn+lzWyPdYLxhZchfzUi7VJqmlt1mLRc5TCDBmLMi/3nXKvxEBt
+        JaqPjJrOiFi8PA72g2b44USOY4bwP/PCfqs3FMkaInX84hBAao47545U8uM+AGjZb07RPk
+        zBGZzBNqEXXQbQrSOXMjRlqwHMhWNvE=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>,
         od@zcrc.me, linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 5/7] MIPS: ingenic: Add support for the JZ4725B SoC
-Date:   Tue, 23 Jun 2020 20:24:30 +0200
-Message-Id: <20200623182432.187843-5-paul@crapouillou.net>
+Subject: [PATCH 6/7] MIPS: ingenic: Add support for the RS90 board
+Date:   Tue, 23 Jun 2020 20:24:31 +0200
+Message-Id: <20200623182432.187843-6-paul@crapouillou.net>
 In-Reply-To: <20200623182432.187843-1-paul@crapouillou.net>
 References: <20200623182432.187843-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -38,400 +38,361 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add preliminary support for boards based on the JZ4725B SoC from
-Ingenic.
-
-The JZ4725B SoC is supposed to be older than the JZ4740 SoC, but its
-internals are much closer to what can be found on the JZ4750 and newer
-SoCs.
-
-It is low-power SoC with a MIPS32r1 SoC running at ~360 MHz, and no FPU.
+The RS-90, better known as RetroMini, is a small and pocketable handheld
+gaming console from YLMChina. It has little more than a JZ4725B SoC, a
+NAND, a screen, some buttons and a speaker.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- arch/mips/boot/dts/ingenic/jz4725b.dtsi | 334 ++++++++++++++++++++++++
- arch/mips/jz4740/Kconfig                |   4 +
- arch/mips/jz4740/setup.c                |   4 +
- 3 files changed, 342 insertions(+)
- create mode 100644 arch/mips/boot/dts/ingenic/jz4725b.dtsi
+ arch/mips/boot/dts/ingenic/Makefile |   1 +
+ arch/mips/boot/dts/ingenic/rs90.dts | 311 ++++++++++++++++++++++++++++
+ arch/mips/jz4740/Kconfig            |   4 +
+ 3 files changed, 316 insertions(+)
+ create mode 100644 arch/mips/boot/dts/ingenic/rs90.dts
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4725b.dtsi b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
+diff --git a/arch/mips/boot/dts/ingenic/Makefile b/arch/mips/boot/dts/ingenic/Makefile
+index e1654291a7b0..f23ff5109e5b 100644
+--- a/arch/mips/boot/dts/ingenic/Makefile
++++ b/arch/mips/boot/dts/ingenic/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ dtb-$(CONFIG_JZ4740_QI_LB60)	+= qi_lb60.dtb
++dtb-$(CONFIG_JZ4740_RS90)	+= rs90.dtb
+ dtb-$(CONFIG_JZ4770_GCW0)	+= gcw0.dtb
+ dtb-$(CONFIG_JZ4780_CI20)	+= ci20.dtb
+ dtb-$(CONFIG_X1000_CU1000_NEO)	+= cu1000-neo.dtb
+diff --git a/arch/mips/boot/dts/ingenic/rs90.dts b/arch/mips/boot/dts/ingenic/rs90.dts
 new file mode 100644
-index 000000000000..89402a15f049
+index 000000000000..246f97efe5ef
 --- /dev/null
-+++ b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-@@ -0,0 +1,334 @@
++++ b/arch/mips/boot/dts/ingenic/rs90.dts
+@@ -0,0 +1,311 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#include <dt-bindings/clock/jz4725b-cgu.h>
-+#include <dt-bindings/clock/ingenic,tcu.h>
++/dts-v1/;
++
++#include "jz4725b.dtsi"
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/iio/adc/ingenic,adc.h>
++#include <dt-bindings/input/linux-event-codes.h>
 +
 +/ {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+	compatible = "ingenic,jz4725b";
++	compatible = "ylm,rs90", "ingenic,jz4725b";
++	model = "RS-90";
 +
-+	cpuintc: interrupt-controller {
-+		#address-cells = <0>;
-+		#interrupt-cells = <1>;
-+		interrupt-controller;
-+		compatible = "mti,cpu-interrupt-controller";
++	memory {
++		device_type = "memory";
++		reg = <0x0 0x2000000>;
 +	};
 +
-+	intc: interrupt-controller@10001000 {
-+		compatible = "ingenic,jz4725b-intc", "ingenic,jz4740-intc";
-+		reg = <0x10001000 0x14>;
++	vcc: regulator {
++		compatible = "regulator-fixed";
 +
-+		interrupt-controller;
-+		#interrupt-cells = <1>;
-+
-+		interrupt-parent = <&cpuintc>;
-+		interrupts = <2>;
++		regulator-name = "vcc";
++		regulaor-min-microvolt = <3300000>;
++		regulaor-max-microvolt = <3300000>;
++		regulator-always-on;
 +	};
 +
-+	ext: ext {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
++	backlight: backlight {
++		compatible = "pwm-backlight";
++		pwms = <&pwm 3 40000 0>;
++
++		brightness-levels = <0 16 32 48 64 80 112 144 192 255>;
++		default-brightness-level = <8>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&pins_pwm3>;
++
++		power-supply = <&vcc>;
 +	};
 +
-+	osc32k: osc32k {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+	};
-+
-+	cgu: clock-controller@10000000 {
-+		compatible = "ingenic,jz4725b-cgu";
-+		reg = <0x10000000 0x100>;
-+
-+		clocks = <&ext>, <&osc32k>;
-+		clock-names = "ext", "osc32k";
-+
-+		#clock-cells = <1>;
-+	};
-+
-+	tcu: timer@10002000 {
-+		compatible = "ingenic,jz4725b-tcu", "simple-mfd";
-+		reg = <0x10002000 0x1000>;
++	keys@0 {
++		compatible = "gpio-keys";
 +		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0x0 0x10002000 0x1000>;
++		#size-cells = <0>;
 +
-+		#clock-cells = <1>;
-+
-+		clocks = <&cgu JZ4725B_CLK_RTC>,
-+			 <&cgu JZ4725B_CLK_EXT>,
-+			 <&cgu JZ4725B_CLK_PCLK>,
-+			 <&cgu JZ4725B_CLK_TCU>;
-+		clock-names = "rtc", "ext", "pclk", "tcu";
-+
-+		interrupt-controller;
-+		#interrupt-cells = <1>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <23>, <22>, <21>;
-+
-+		watchdog: watchdog@0 {
-+			compatible = "ingenic,jz4725b-watchdog", "ingenic,jz4740-watchdog";
-+			reg = <0x0 0xc>;
-+
-+			clocks = <&tcu TCU_CLK_WDT>;
-+			clock-names = "wdt";
++		key@0 {
++			label = "D-pad up";
++			linux,code = <KEY_UP>;
++			gpios = <&gpc 10 GPIO_ACTIVE_LOW>;
 +		};
 +
-+		pwm: pwm@60 {
-+			compatible = "ingenic,jz4725b-pwm";
-+			reg = <0x60 0x40>;
-+
-+			#pwm-cells = <3>;
-+
-+			clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
-+				 <&tcu TCU_CLK_TIMER2>, <&tcu TCU_CLK_TIMER3>,
-+				 <&tcu TCU_CLK_TIMER4>, <&tcu TCU_CLK_TIMER5>;
-+			clock-names = "timer0", "timer1", "timer2",
-+				      "timer3", "timer4", "timer5";
++		key@1 {
++			label = "D-pad down";
++			linux,code = <KEY_DOWN>;
++			gpios = <&gpc 11 GPIO_ACTIVE_LOW>;
 +		};
 +
-+		ost: timer@e0 {
-+			compatible = "ingenic,jz4725b-ost";
-+			reg = <0xe0 0x20>;
++		key@2 {
++			label = "D-pad left";
++			linux,code = <KEY_LEFT>;
++			gpios = <&gpb 31 GPIO_ACTIVE_LOW>;
++		};
 +
-+			clocks = <&tcu TCU_CLK_OST>;
-+			clock-names = "ost";
++		key@3 {
++			label = "D-pad right";
++			linux,code = <KEY_RIGHT>;
++			gpios = <&gpd 21 GPIO_ACTIVE_LOW>;
++		};
 +
-+			interrupts = <15>;
++		key@4 {
++			label = "Button A";
++			linux,code = <KEY_LEFTCTRL>;
++			gpios = <&gpc 31 GPIO_ACTIVE_LOW>;
++		};
++
++		key@5 {
++			label = "Button B";
++			linux,code = <KEY_LEFTALT>;
++			gpios = <&gpc 30 GPIO_ACTIVE_LOW>;
++		};
++
++		key@6 {
++			label = "Right shoulder button";
++			linux,code = <KEY_BACKSPACE>;
++			gpios = <&gpc 12 GPIO_ACTIVE_LOW>;
++			debounce-interval = <10>;
++		};
++
++		key@7 {
++			label = "Start button";
++			linux,code = <KEY_ENTER>;
++			gpios = <&gpd 17 GPIO_ACTIVE_LOW>;
 +		};
 +	};
 +
-+	rtc_dev: rtc@10003000 {
-+		compatible = "ingenic,jz4725b-rtc", "ingenic,jz4740-rtc";
-+		reg = <0x10003000 0x40>;
++	keys@1 {
++		compatible = "adc-keys";
++		io-channels = <&adc INGENIC_ADC_AUX>;
++		io-channel-names = "buttons";
++		keyup-threshold-microvolt = <1400000>;
++		poll-interval = <30>;
 +
-+		interrupt-parent = <&intc>;
-+		interrupts = <6>;
++		key@0 {
++			label = "Left shoulder button";
++			linux,code = <KEY_TAB>;
++			press-threshold-microvolt = <800000>;
++		};
 +
-+		clocks = <&cgu JZ4725B_CLK_RTC>;
-+		clock-names = "rtc";
++		key@1 {
++			label = "Select button";
++			linux,code = <KEY_ESC>;
++			press-threshold-microvolt = <1100000>;
++		};
 +	};
 +
-+	pinctrl: pinctrl@10010000 {
-+		compatible = "ingenic,jz4725b-pinctrl";
-+		reg = <0x10010000 0x400>;
++	amp: analog-amplifier {
++		compatible = "simple-audio-amplifier";
++		enable-gpios = <&gpc 15 GPIO_ACTIVE_HIGH>;
++
++		VCC-supply = <&vcc>;
++	};
++
++	sound {
++		compatible = "simple-audio-card";
++
++		simple-audio-card,name = "rs90-audio";
++		simple-audio-card,format = "i2s";
++
++		simple-audio-card,widgets =
++			"Speaker", "Speaker",
++			"Headphone", "Headphones";
++		simple-audio-card,routing =
++			"INL", "LHPOUT",
++			"INR", "RHPOUT",
++			"Headphones", "LHPOUT",
++			"Headphones", "RHPOUT",
++			"Speaker", "OUTL",
++			"Speaker", "OUTR";
++		simple-audio-card,pin-switches = "Speaker";
++
++		simple-audio-card,hp-det-gpio = <&gpd 16 GPIO_ACTIVE_LOW>;
++		simple-audio-card,aux-devs = <&amp>;
++
++		simple-audio-card,bitclock-master = <&dai_codec>;
++		simple-audio-card,frame-master = <&dai_codec>;
++
++		dai_cpu: simple-audio-card,cpu {
++			sound-dai = <&aic>;
++		};
++
++		dai_codec: simple-audio-card,codec {
++			sound-dai = <&codec>;
++		};
++
++	};
++
++	usb_phy: usb-phy {
++		compatible = "usb-nop-xceiv";
++		#phy-cells = <0>;
++
++		clocks = <&cgu JZ4725B_CLK_UDC_PHY>;
++		clock-names = "main_clk";
++		vcc-supply = <&vcc>;
++	};
++
++	panel {
++		compatible = "sharp,ls020b1dd01d";
++
++		backlight = <&backlight>;
++		power-supply = <&vcc>;
++
++		port {
++			panel_input: endpoint {
++				remote-endpoint = <&panel_output>;
++			};
++		};
++	};
++};
++
++&ext {
++	clock-frequency = <12000000>;
++};
++
++&rtc_dev {
++	system-power-controller;
++};
++
++&udc {
++	phys = <&usb_phy>;
++};
++
++&pinctrl {
++	pins_mmc1: mmc1 {
++		function = "mmc1";
++		groups = "mmc1-1bit";
++	};
++
++	pins_nemc: nemc {
++		function = "nand";
++		groups = "nand-cs1", "nand-cle-ale", "nand-fre-fwe";
++	};
++
++	pins_pwm3: pwm3 {
++		function = "pwm3";
++		groups = "pwm3";
++		bias-disable;
++	};
++
++	pins_lcd: lcd {
++		function = "lcd";
++		groups = "lcd-8bit", "lcd-16bit", "lcd-special";
++	};
++};
++
++&mmc0 {
++	status = "disabled";
++};
++
++&mmc1 {
++	bus-width = <1>;
++	max-frequency = <48000000>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pins_mmc1>;
++
++	cd-gpios = <&gpc 20 GPIO_ACTIVE_LOW>;
++};
++
++&uart {
++	/*
++	 * The pins for RX/TX are used for the right shoulder button and
++	 * backlight PWM.
++	 */
++	status = "disabled";
++};
++
++&nemc {
++	nandc: nand-controller@1 {
++		compatible = "ingenic,jz4725b-nand";
++		reg = <1 0 0x4000000>;
 +
 +		#address-cells = <1>;
 +		#size-cells = <0>;
 +
-+		gpa: gpio@0 {
-+			compatible = "ingenic,jz4725b-gpio";
-+			reg = <0>;
++		ecc-engine = <&bch>;
 +
-+			gpio-controller;
-+			gpio-ranges = <&pinctrl 0 0 32>;
-+			#gpio-cells = <2>;
++		ingenic,nemc-tAS = <10>;
++		ingenic,nemc-tAH = <5>;
++		ingenic,nemc-tBP = <10>;
++		ingenic,nemc-tAW = <15>;
++		ingenic,nemc-tSTRV = <100>;
 +
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pins_nemc>;
 +
-+			interrupt-parent = <&intc>;
-+			interrupts = <16>;
-+		};
++		rb-gpios = <&gpc 27 GPIO_ACTIVE_HIGH>;
 +
-+		gpb: gpio@1 {
-+			compatible = "ingenic,jz4725b-gpio";
++		nand@1 {
 +			reg = <1>;
 +
-+			gpio-controller;
-+			gpio-ranges = <&pinctrl 0 32 32>;
-+			#gpio-cells = <2>;
++			nand-ecc-step-size = <512>;
++			nand-ecc-strength = <8>;
++			nand-ecc-mode = "hw";
++			nand-is-boot-medium;
++			nand-on-flash-bbt;
 +
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
++			partitions {
++				compatible = "fixed-partitions";
++				#address-cells = <1>;
++				#size-cells = <1>;
 +
-+			interrupt-parent = <&intc>;
-+			interrupts = <15>;
-+		};
++				partition@0 {
++					label = "bootloader";
++					reg = <0x0 0x20000>;
++				};
 +
-+		gpc: gpio@2 {
-+			compatible = "ingenic,jz4725b-gpio";
-+			reg = <2>;
-+
-+			gpio-controller;
-+			gpio-ranges = <&pinctrl 0 64 32>;
-+			#gpio-cells = <2>;
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+
-+			interrupt-parent = <&intc>;
-+			interrupts = <14>;
-+		};
-+
-+		gpd: gpio@3 {
-+			compatible = "ingenic,jz4725b-gpio";
-+			reg = <3>;
-+
-+			gpio-controller;
-+			gpio-ranges = <&pinctrl 0 96 32>;
-+			#gpio-cells = <2>;
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+
-+			interrupt-parent = <&intc>;
-+			interrupts = <13>;
++				partition@20000 {
++					label = "system";
++					reg = <0x20000 0x0>;
++				};
++			};
 +		};
 +	};
++};
 +
-+	aic: audio-controller@10020000 {
-+		compatible = "ingenic,jz4725b-i2s", "ingenic,jz4740-i2s";
-+		reg = <0x10020000 0x38>;
++&cgu {
++	/* Use 32kHz oscillator as the parent of the RTC clock */
++	assigned-clocks = <&cgu JZ4725B_CLK_RTC>;
++	assigned-clock-parents = <&cgu JZ4725B_CLK_OSC32K>;
++};
 +
-+		#sound-dai-cells = <0>;
++&tcu {
++	/*
++	 * 750 kHz for the system timer and clocksource, and use RTC as the
++	 * parent for the watchdog clock.
++	 */
++	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>, <&tcu TCU_CLK_WDT>;
++	assigned-clock-parents = <0>, <0>, <&cgu JZ4725B_CLK_RTC>;
++	assigned-clock-rates = <750000>, <750000>;
++};
 +
-+		clocks = <&cgu JZ4725B_CLK_AIC>,
-+			 <&cgu JZ4725B_CLK_I2S>,
-+			 <&cgu JZ4725B_CLK_EXT>,
-+			 <&cgu JZ4725B_CLK_PLL_HALF>;
-+		clock-names = "aic", "i2s", "ext", "pll half";
++&lcd {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pins_lcd>;
 +
-+		interrupt-parent = <&intc>;
-+		interrupts = <10>;
-+
-+		dmas = <&dmac 25 0xffffffff>, <&dmac 24 0xffffffff>;
-+		dma-names = "rx", "tx";
-+	};
-+
-+	codec: audio-codec@100200a4 {
-+		compatible = "ingenic,jz4725b-codec";
-+		reg = <0x100200a4 0x8>;
-+
-+		#sound-dai-cells = <0>;
-+
-+		clocks = <&cgu JZ4725B_CLK_AIC>;
-+		clock-names = "aic";
-+	};
-+
-+	mmc0: mmc@10021000 {
-+		compatible = "ingenic,jz4725b-mmc";
-+		reg = <0x10021000 0x1000>;
-+
-+		clocks = <&cgu JZ4725B_CLK_MMC0>;
-+		clock-names = "mmc";
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <25>;
-+
-+		dmas = <&dmac 27 0xffffffff>, <&dmac 26 0xffffffff>;
-+		dma-names = "rx", "tx";
-+
-+		cap-sd-highspeed;
-+		cap-mmc-highspeed;
-+		cap-sdio-irq;
-+	};
-+
-+	mmc1: mmc@10022000 {
-+		compatible = "ingenic,jz4725b-mmc";
-+		reg = <0x10022000 0x1000>;
-+
-+		clocks = <&cgu JZ4725B_CLK_MMC1>;
-+		clock-names = "mmc";
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <24>;
-+
-+		dmas = <&dmac 31 0xffffffff>, <&dmac 30 0xffffffff>;
-+		dma-names = "rx", "tx";
-+
-+		cap-sd-highspeed;
-+		cap-mmc-highspeed;
-+		cap-sdio-irq;
-+	};
-+
-+	uart: serial@10030000 {
-+		compatible = "ingenic,jz4725b-uart", "ingenic,jz4740-uart";
-+		reg = <0x10030000 0x100>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <9>;
-+
-+		clocks = <&ext>, <&cgu JZ4725B_CLK_UART>;
-+		clock-names = "baud", "module";
-+	};
-+
-+	adc: adc@10070000 {
-+		compatible = "ingenic,jz4725b-adc";
-+		#io-channel-cells = <1>;
-+
-+		reg = <0x10070000 0x30>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0x0 0x10070000 0x30>;
-+
-+		clocks = <&cgu JZ4725B_CLK_ADC>;
-+		clock-names = "adc";
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <18>;
-+	};
-+
-+	nemc: memory-controller@13010000 {
-+		compatible = "ingenic,jz4725b-nemc", "ingenic,jz4740-nemc";
-+		reg = <0x13010000 0x10000>;
-+		#address-cells = <2>;
-+		#size-cells = <1>;
-+		ranges = <1 0 0x18000000 0x4000000>, <2 0 0x14000000 0x4000000>,
-+			 <3 0 0x0c000000 0x4000000>, <4 0 0x08000000 0x4000000>;
-+
-+		clocks = <&cgu JZ4725B_CLK_MCLK>;
-+	};
-+
-+	dmac: dma-controller@13020000 {
-+		compatible = "ingenic,jz4725b-dma";
-+		reg = <0x13020000 0xd8>, <0x13020300 0x14>;
-+
-+		#dma-cells = <2>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <29>;
-+
-+		clocks = <&cgu JZ4725B_CLK_DMA>;
-+	};
-+
-+	udc: usb@13040000 {
-+		compatible = "ingenic,jz4725b-musb", "ingenic,jz4740-musb";
-+		reg = <0x13040000 0x10000>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <27>;
-+		interrupt-names = "mc";
-+
-+		clocks = <&cgu JZ4725B_CLK_UDC>;
-+		clock-names = "udc";
-+	};
-+
-+	lcd: lcd-controller@13050000 {
-+		compatible = "ingenic,jz4725b-lcd";
-+		reg = <0x13050000 0x1000>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <31>;
-+
-+		clocks = <&cgu JZ4725B_CLK_LCD>;
-+		clock-names = "lcd_pclk";
-+	};
-+
-+	bch: ecc-controller@130d0000 {
-+		compatible = "ingenic,jz4725b-bch";
-+		reg = <0x130d0000 0x44>;
-+
-+		clocks = <&cgu JZ4725B_CLK_BCH>;
-+	};
-+
-+	rom: memory@1fc00000 {
-+		compatible = "mtd-rom";
-+		probe-type = "map_rom";
-+		reg = <0x1fc00000 0x2000>;
-+
-+		bank-width = <4>;
-+		device-width = <1>;
++	port {
++		panel_output: endpoint {
++			remote-endpoint = <&panel_input>;
++		};
 +	};
 +};
 diff --git a/arch/mips/jz4740/Kconfig b/arch/mips/jz4740/Kconfig
-index 9c2e8c15bb97..0325153efbd4 100644
+index 0325153efbd4..baa315c8183a 100644
 --- a/arch/mips/jz4740/Kconfig
 +++ b/arch/mips/jz4740/Kconfig
-@@ -29,6 +29,10 @@ config X1000_CU1000_NEO
+@@ -15,6 +15,10 @@ config JZ4740_QI_LB60
+ 	bool "Qi Hardware Ben NanoNote"
+ 	select MACH_JZ4740
  
- endchoice
- 
-+config MACH_JZ4725B
-+	bool
-+	select SYS_HAS_CPU_MIPS32_R1
++config JZ4740_RS90
++	bool "YLM RetroMini (RS-90)"
++	select MACH_JZ4725B
 +
- config MACH_JZ4740
- 	bool
- 	select SYS_HAS_CPU_MIPS32_R1
-diff --git a/arch/mips/jz4740/setup.c b/arch/mips/jz4740/setup.c
-index 61468a87775c..83f343abf13e 100644
---- a/arch/mips/jz4740/setup.c
-+++ b/arch/mips/jz4740/setup.c
-@@ -57,6 +57,8 @@ static unsigned long __init get_board_mach_type(const void *fdt)
- 		return MACH_INGENIC_JZ4780;
- 	if (!fdt_node_check_compatible(fdt, 0, "ingenic,jz4770"))
- 		return MACH_INGENIC_JZ4770;
-+	if (!fdt_node_check_compatible(fdt, 0, "ingenic,jz4725b"))
-+		return MACH_INGENIC_JZ4725B;
- 
- 	return MACH_INGENIC_JZ4740;
- }
-@@ -99,6 +101,8 @@ const char *get_system_type(void)
- 		return "JZ4780";
- 	case MACH_INGENIC_JZ4770:
- 		return "JZ4770";
-+	case MACH_INGENIC_JZ4725B:
-+		return "JZ4725B";
- 	default:
- 		return "JZ4740";
- 	}
+ config JZ4770_GCW0
+ 	bool "Game Consoles Worldwide GCW Zero"
+ 	select MACH_JZ4770
 -- 
 2.27.0
 
