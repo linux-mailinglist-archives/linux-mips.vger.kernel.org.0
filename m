@@ -2,69 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A91A920589B
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 19:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2675205A6D
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 20:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733025AbgFWR1D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Jun 2020 13:27:03 -0400
-Received: from mga03.intel.com ([134.134.136.65]:17255 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732961AbgFWR1C (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Jun 2020 13:27:02 -0400
-IronPort-SDR: GFYQ7YSPjeYxhWokklsrMIaUddpka5Iniqp6dAqTi8QLIG+xX0N3s03LZGn86ejZ7TCZpmKcD/
- DfXaiQ0mr2UA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="144171077"
-X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
-   d="scan'208";a="144171077"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 10:26:59 -0700
-IronPort-SDR: dFkTC0Q3VbYtMwEZFits5/7wHj7dRqejoXJIagA8vcDlFKA9TiqfEssKP0af/RV+QvSnY0a5QI
- IIkrU34/15jg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
-   d="scan'208";a="478939562"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Jun 2020 10:26:58 -0700
-Date:   Tue, 23 Jun 2020 10:26:58 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>,
-        Peter Feiner <pfeiner@google.com>,
-        Peter Shier <pshier@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Christoffer Dall <christoffer.dall@arm.com>
-Subject: Re: [PATCH v2 00/21] KVM: Cleanup and unify kvm_mmu_memory_cache
- usage
-Message-ID: <20200623172658.GF23842@linux.intel.com>
-References: <20200622200822.4426-1-sean.j.christopherson@intel.com>
+        id S1733045AbgFWSYr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Jun 2020 14:24:47 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:51528 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732549AbgFWSYr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jun 2020 14:24:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1592936683; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=Jo5zwpfouXsdEQg4LUVTZQR1ueuE0Fx3LvAue7M9EQ8=;
+        b=mqZMYW9VYrZe19z9Q+dxIxDGXqv6ddNt52vw1OzNL0gGmFCB08lL40OA3WN/MvKKbNCECI
+        qxGVz1hJX423gZJEdQOFoWmEN+IJGQ4KyaPT0yKU+9RuXeauS/a1J74UL1G386WqR8vYQN
+        +vyVWHGvm/OhQrutUvzOrdQAzc+xYUM=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>,
+        od@zcrc.me, linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 1/7] dt-bindings: vendor-prefixes: Add YLM
+Date:   Tue, 23 Jun 2020 20:24:26 +0200
+Message-Id: <20200623182432.187843-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200622200822.4426-1-sean.j.christopherson@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 01:08:01PM -0700, Sean Christopherson wrote:
-> Note, patch 18 will conflict with the p4d rework in 5.8.  I originally
-> stated I would send v2 only after that got pulled into Paolo's tree, but
-> I got my timing wrong, i.e. I was thinking that would have already
-> happened.  I'll send v3 if necessary.  I wanted to get v2 out there now
-> that I actually compile tested other architectures.
+Shenzhen Yangliming Electronic Technology Co., Ltd., abbreviated YLM or
+YLMChina, and known as Anbernic in the rest of the world, is a Chinese
+manufacturer of handheld game consoles, some of which are known to be
+running Linux.
 
-Gah, too impatient by one day :-)  I'll spin v3 later in the week.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 9aeab66be85f..d24ecc7614fa 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1167,6 +1167,8 @@ patternProperties:
+     description: Shenzhen Xunlong Software CO.,Limited
+   "^xylon,.*":
+     description: Xylon
++  "^ylm,.*":
++    description: Shenzhen Yangliming Electronic Technology Co., Ltd.
+   "^yna,.*":
+     description: YSH & ATIL
+   "^yones-toptech,.*":
+-- 
+2.27.0
+
