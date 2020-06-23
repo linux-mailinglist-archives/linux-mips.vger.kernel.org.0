@@ -2,52 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CBC20645C
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 23:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF6A206476
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jun 2020 23:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387713AbgFWVU0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Jun 2020 17:20:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41592 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390296AbgFWUX1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:23:27 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8812C206C3;
-        Tue, 23 Jun 2020 20:23:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592943807;
-        bh=TBlHH28Xc5Yl2pRyaZ+HJFciz2+iVOEHPTosfHaNpE0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PKIqeapDHsBDkOE6bx64SiHPf3XfGJx65OpwKvhbVeaUiUfBqaPqT+ZqFYsuUD8t4
-         8cml1m5ud2paYU41TsFdTIj/L1jo54Y10LJQCzMDCKGqQKTolVjCPDwDnvpZQrGlmO
-         nZtGmcEEtjwJpGQQbztBAg4yCCUOfe8HNaYhhWUo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Long Cheng <long.cheng@mediatek.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 031/314] serial: 8250: Fix max baud limit in generic 8250 port
-Date:   Tue, 23 Jun 2020 21:53:46 +0200
-Message-Id: <20200623195340.293777554@linuxfoundation.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200623195338.770401005@linuxfoundation.org>
-References: <20200623195338.770401005@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S2389189AbgFWVVw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Jun 2020 17:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404249AbgFWVVv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jun 2020 17:21:51 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BB1C061573;
+        Tue, 23 Jun 2020 14:21:50 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id l188so7235107qkf.10;
+        Tue, 23 Jun 2020 14:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JyKLP13MA3we/vWXo7vrVA6xMNeRPMkMoZjirv2W5f8=;
+        b=frQCVrMNN/+WhRNV+xlYiJ59hqptoPUZlFyQEi5Nxs1ZDTbZCHFzkP5Fy+KHZmFx42
+         4IJltfqqSa4cluvGdrB4QfYoiCddWuCbVEMiIL6FvU/Mjg/zWLLtqFYCq+HGrgRVQigm
+         e1zJzySEmJ7pSb7vKwaNOzU+CG88I+Vm5N2F6Vmg60ITcOh6RaK2G52nuUAqhRk7QpWT
+         jKGMiyN6PpnOOGPsPIukYvhMFkaarZQ4yeSa1wdJ1yDxyAA1MLvXSOCLVDnpBJN9yWq2
+         UzM3uNt2YbG7Sa4i5E79iwTPccj9Z6xjuyIg1TF4ioqpdc5bEslAT2EgP+LR4fpOBfKS
+         4KTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JyKLP13MA3we/vWXo7vrVA6xMNeRPMkMoZjirv2W5f8=;
+        b=szwbNOW340Hfr+2PwizwZwucn4EhqXN3WvNetSHsWvd0EmQRJQMJwPZ7PfB7L6K/fc
+         leaUW30hOyN/2hhKzTADZxtYIGim19JQv83Q8PAr1an7n2HQzzPC3XuM1+pUjGjjYsAy
+         FJuH8g92nrM1FIEUnQ0Kh5KAFb6zim+A5+K25gziMflTrrSl/dxesGBYAgoBeY+pz3De
+         L7LeEXZMIktE70JvEqKAZZW7sCTKiEtlRxGRyMfaUkZed+p9qx74L4OQOjJpQnFvYVFU
+         J2oDZtxNJoKP267s7RQ8wfMeoUuqpxfWh+tbz4A5IneSwHX1TwTSVGHrCgd269UAVN4F
+         uoEQ==
+X-Gm-Message-State: AOAM5306NgY4u3ftBcAGZ10cYHR5FQTPM3PiHqdHMm/cJfryz5QiwJ17
+        bCBZ4SmyKBzJm9a47rWhQEaYg2rMf7pjqg==
+X-Google-Smtp-Source: ABdhPJxPuHCjth4EvPORtZ3tcp/As6OSbqLCTv4lhJm6iUiMx7p+8K7lcbf/Vp1AKm6A+CrjKnFUXQ==
+X-Received: by 2002:a37:6fc6:: with SMTP id k189mr21800161qkc.289.1592947310034;
+        Tue, 23 Jun 2020 14:21:50 -0700 (PDT)
+Received: from DESKTOP-J6NUVB7.localdomain ([179.232.194.217])
+        by smtp.gmail.com with ESMTPSA id b4sm1459665qka.133.2020.06.23.14.21.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2020 14:21:49 -0700 (PDT)
+From:   =?UTF-8?q?Jo=C3=A3o=20H=2E=20Spies?= <jhlspies@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jo=C3=A3o=20H=2E=20Spies?= <jhlspies@gmail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] MIPS: ingenic: gcw0: Fix HP detection GPIO.
+Date:   Tue, 23 Jun 2020 18:19:45 -0300
+Message-Id: <20200623211945.823-1-jhlspies@gmail.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,81 +66,28 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Previously marked as active high, but is in reality active low.
 
-[ Upstream commit 7b668c064ec33f3d687c3a413d05e355172e6c92 ]
-
-Standard 8250 UART ports are designed in a way so they can communicate
-with baud rates up to 1/16 of a reference frequency. It's expected from
-most of the currently supported UART controllers. That's why the former
-version of serial8250_get_baud_rate() method called uart_get_baud_rate()
-with min and max baud rates passed as (port->uartclk / 16 / UART_DIV_MAX)
-and ((port->uartclk + tolerance) / 16) respectively. Doing otherwise, like
-it was suggested in commit ("serial: 8250_mtk: support big baud rate."),
-caused acceptance of bauds, which was higher than the normal UART
-controllers actually supported. As a result if some user-space program
-requested to set a baud greater than (uartclk / 16) it would have been
-permitted without truncation, but then serial8250_get_divisor(baud)
-(which calls uart_get_divisor() to get the reference clock divisor) would
-have returned a zero divisor. Setting zero divisor will cause an
-unpredictable effect varying from chip to chip. In case of DW APB UART the
-communications just stop.
-
-Lets fix this problem by getting back the limitation of (uartclk +
-tolerance) / 16 maximum baud supported by the generic 8250 port. Mediatek
-8250 UART ports driver developer shouldn't have touched it in the first
-place  notably seeing he already provided a custom version of set_termios()
-callback in that glue-driver which took into account the extended baud
-rate values and accordingly updated the standard and vendor-specific
-divisor latch registers anyway.
-
-Fixes: 81bb549fdf14 ("serial: 8250_mtk: support big baud rate.")
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Long Cheng <long.cheng@mediatek.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
-Link: https://lore.kernel.org/r/20200506233136.11842-2-Sergey.Semin@baikalelectronics.ru
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: b1bfdb660516 ("MIPS: ingenic: DTS: Update GCW0 support")
+Signed-off-by: João H. Spies <jhlspies@gmail.com>
 ---
- drivers/tty/serial/8250/8250_port.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/mips/boot/dts/ingenic/gcw0.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 2c65c775bf5aa..dbb27303a6b49 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2539,6 +2539,8 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
- 					     struct ktermios *termios,
- 					     struct ktermios *old)
- {
-+	unsigned int tolerance = port->uartclk / 100;
-+
- 	/*
- 	 * Ask the core to calculate the divisor for us.
- 	 * Allow 1% tolerance at the upper limit so uart clks marginally
-@@ -2547,7 +2549,7 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
- 	 */
- 	return uart_get_baud_rate(port, termios, old,
- 				  port->uartclk / 16 / UART_DIV_MAX,
--				  port->uartclk);
-+				  (port->uartclk + tolerance) / 16);
- }
+diff --git a/arch/mips/boot/dts/ingenic/gcw0.dts b/arch/mips/boot/dts/ingenic/gcw0.dts
+index 8d22828787d8..bc72304a2440 100644
+--- a/arch/mips/boot/dts/ingenic/gcw0.dts
++++ b/arch/mips/boot/dts/ingenic/gcw0.dts
+@@ -92,7 +92,7 @@
+ 			"MIC1N", "Built-in Mic";
+ 		simple-audio-card,pin-switches = "Speaker", "Headphones";
  
- void
+-		simple-audio-card,hp-det-gpio = <&gpf 21 GPIO_ACTIVE_HIGH>;
++		simple-audio-card,hp-det-gpio = <&gpf 21 GPIO_ACTIVE_LOW>;
+ 		simple-audio-card,aux-devs = <&speaker_amp>, <&headphones_amp>;
+ 
+ 		simple-audio-card,bitclock-master = <&dai_codec>;
 -- 
-2.25.1
-
-
+2.17.1
 
