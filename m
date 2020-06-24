@@ -2,96 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA2F206FCF
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 11:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40674206FD9
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 11:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389222AbgFXJPf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jun 2020 05:15:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33682 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387970AbgFXJPe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Jun 2020 05:15:34 -0400
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CF882082F;
-        Wed, 24 Jun 2020 09:15:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592990133;
-        bh=14K+VhMvuge//+mHFVRO68jMad3Xx5brMH+O3+ggBOk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IFQxL2bunzkopmfTsIvl2UbpyJSVNCbVz1tMkicOQpIhZE+i7/lWCftYg10E3XPAI
-         LleqWHI0jaKN4UcquF75OjUnAAl7OdeSI1CZUwvRqOC11GAXNdmVhHLdaOFnoVbq1E
-         XfG8K/JctUacbaPa4zvCuXENEZxWe4yQDQX+rA74=
-Received: by mail-lj1-f182.google.com with SMTP id 9so1752239ljc.8;
-        Wed, 24 Jun 2020 02:15:33 -0700 (PDT)
-X-Gm-Message-State: AOAM533UbckesswlTmbt/oQeNGmzfV1ZPmHY9ngNSAuY/zZug+mGZ68u
-        ONx4rT1rT0ygL8cH+U/nlA58qlLJp/ozW7Bl0iQ=
-X-Google-Smtp-Source: ABdhPJxbxsux7XuzN8uOjxja4hquHGy/NKFHEFBm47OMUifwg0Hc5X+Fhkw49rQCA/MTWVvIK0zPn0Jq/i3BDFjZoEY=
-X-Received: by 2002:a2e:954c:: with SMTP id t12mr13005177ljh.287.1592990131408;
- Wed, 24 Jun 2020 02:15:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <1592902276-3969-1-git-send-email-yangtiezhu@loongson.cn> <1592902276-3969-2-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1592902276-3969-2-git-send-email-yangtiezhu@loongson.cn>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 24 Jun 2020 11:15:20 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPc9QuDp+FEogVamf7x+4JEUw78MSKqSPFpRcyTYZ7HSMA@mail.gmail.com>
-Message-ID: <CAJKOXPc9QuDp+FEogVamf7x+4JEUw78MSKqSPFpRcyTYZ7HSMA@mail.gmail.com>
-Subject: Re: [PATCH 1/7] irqchip: Fix potential resource leaks
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Baruch Siach <baruch@tkos.co.il>,
+        id S2388372AbgFXJRE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jun 2020 05:17:04 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:60472 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387886AbgFXJRE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Jun 2020 05:17:04 -0400
+Received: from [10.130.0.52] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT2gCGvNexTBJAA--.646S3;
+        Wed, 24 Jun 2020 17:16:51 +0800 (CST)
+Subject: Re: [1/7] irqchip: Fix potential resource leaks
+To:     Markus Elfring <Markus.Elfring@web.de>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <65e734f7-c43c-f96b-3650-980e15edba60@web.de>
+ <d2111f53-ca52-fedf-0257-71f0aa89b093@loongson.cn>
+ <9ca22645-8bf3-008f-fe55-d432f962cac3@web.de>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         Huacai Chen <chenhc@lemote.com>,
+        Jason Cooper <jason@lakedaemon.net>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Kukjin Kim <kgene@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Xuefeng Li <lixuefeng@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <bd28aef9-ba70-0539-bdc3-6ce7162cefca@loongson.cn>
+Date:   Wed, 24 Jun 2020 17:16:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <9ca22645-8bf3-008f-fe55-d432f962cac3@web.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxT2gCGvNexTBJAA--.646S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gry8Jw4xZr1DWrWUGw18Grg_yoWfuwbEk3
+        WxK34DW397AF4UCr17tr4jqr98G3sxGa45tw4DtFW2gryavwsxCFZ7WrWrJw18WrZ7Crnx
+        Arsrt34fXw1xujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbfAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr4
+        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2jsIEc7
+        CjxVAFwI0_GcCE3sUvcSsGvfC2KfnxnUUI43ZEXa7VUbdOz3UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 23 Jun 2020 at 10:51, Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+On 06/24/2020 04:42 PM, Markus Elfring wrote:
+>>> Can it helpful to add jump targets so that a bit of exception handling
+>>> can be better reused at the end of this function?
+>> OK, no problem, I will do it in the v2.
+> It seems that the software evolution will be continued with another
+> update suggestion like the following.
 >
-> There exists some potential resource leaks in the error path, fix them.
+> [PATCH v3 10/14 RESEND] irqchip/nvic: Fix potential resource leaks
+> https://lore.kernel.org/linux-mips/1592984711-3130-11-git-send-email-yangtiezhu@loongson.cn/
+> https://lore.kernel.org/patchwork/patch/1263191/
+>
+>
+> Can it matter to omit the word “potential” from change descriptions
+> after you detected that specific function calls were missing
+> in if branches?
 
-This should be split per driver and per bug (although mostly in driver
-it's just one bug). Otherwise it is difficult to review, backport and
-revert.
+Oh, I find this issue through code review, I have no test environment
+to trigger the error path, but I think it is better to release the resource
+in the error path, so I use "potential" description.
 
-Best regards,
-Krzysztof
+>
+> Regards,
+> Markus
 
-
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  drivers/irqchip/irq-ath79-misc.c      |  3 +++
->  drivers/irqchip/irq-csky-apb-intc.c   |  3 +++
->  drivers/irqchip/irq-csky-mpintc.c     | 26 ++++++++++++++++++++------
->  drivers/irqchip/irq-davinci-aintc.c   | 17 +++++++++++++----
->  drivers/irqchip/irq-davinci-cp-intc.c | 17 ++++++++++++++---
->  drivers/irqchip/irq-digicolor.c       |  4 ++++
->  drivers/irqchip/irq-dw-apb-ictl.c     | 11 ++++++++---
->  drivers/irqchip/irq-loongson-htvec.c  |  5 ++++-
->  drivers/irqchip/irq-ls1x.c            |  4 +++-
->  drivers/irqchip/irq-mscc-ocelot.c     |  6 ++++--
->  drivers/irqchip/irq-nvic.c            |  2 ++
->  drivers/irqchip/irq-omap-intc.c       |  4 +++-
->  drivers/irqchip/irq-riscv-intc.c      |  1 +
->  drivers/irqchip/irq-s3c24xx.c         | 20 +++++++++++++++-----
->  drivers/irqchip/irq-xilinx-intc.c     |  1 +
->  15 files changed, 98 insertions(+), 26 deletions(-)
