@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDB7206CDB
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 08:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB97206CEA
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 08:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389411AbgFXGpu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jun 2020 02:45:50 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:48442 "EHLO loongson.cn"
+        id S2389382AbgFXGqU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jun 2020 02:46:20 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:48424 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389381AbgFXGpu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Jun 2020 02:45:50 -0400
+        id S2389144AbgFXGpt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Jun 2020 02:45:49 -0400
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxXeuQ9vJebSBJAA--.397S8;
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxXeuQ9vJebSBJAA--.397S9;
         Wed, 24 Jun 2020 14:45:40 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -22,69 +22,61 @@ Cc:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v2 6/7 RESEND] irqchip/loongson-pch-msi: Remove unneeded variable
-Date:   Wed, 24 Jun 2020 14:45:35 +0800
-Message-Id: <1592981136-3572-7-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v2 7/7 RESEND] dt-bindings: interrupt-controller: Fix typos in loongson,liointc.yaml
+Date:   Wed, 24 Jun 2020 14:45:36 +0800
+Message-Id: <1592981136-3572-8-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1592981136-3572-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1592981136-3572-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxXeuQ9vJebSBJAA--.397S8
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFW7Jw17Kr47Cr15WryUZFb_yoWktwb_CF
-        1Iq3ZxGFy2yr43WF4xK3yYqFy2vFyDuF1v9FWFva13X3yYgws7AFW3Aan3JrW7Gr18Zr1f
-        CrZ5Gw1Syr129jkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbmkFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-        F7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr
-        1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-        kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l
-        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
-        AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
-        cVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26c
-        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4UJVWxJr1lIxAIcVC2z280aVCY1x02
-        67AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZEXa7VUUNB_UUUUUU==
+X-CM-TRANSID: AQAAf9DxXeuQ9vJebSBJAA--.397S9
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4Dtw4rXr1ktry8Ww1Dtrb_yoW8Gry7pa
+        yDC3ZFgF4Utr17C3yDt3Wvk3W3Zr98AwnrGFZ3ZrWxJFsxuw1jqr4agF95A3W5GrWxtFWU
+        XryrKa10gFy2yw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUQa14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
+        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
+        z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
+        4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE
+        3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
+        x0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8
+        JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2
+        ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48J
+        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+        0xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Cr1j6rxdYxBIdaVFxhVjvjDU0xZFpf9x0JUwmRUUUUUU=
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-irq_domain_alloc_irqs_parent() returns 0 on success and non-zero value
-on failure, it is redudant to check its non-zero return value and then
-return it, so just remove the variable "ret" and return directly in the
-function pch_msi_parent_domain_alloc().
+Fix the following two typos in loongson,liointc.yaml:
+fron -> from
+it's -> its
 
+Fixes: b6280c8bb6f5 ("dt-bindings: interrupt-controller: Add Loongson LIOINTC")
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/irqchip/irq-loongson-pch-msi.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ .../devicetree/bindings/interrupt-controller/loongson,liointc.yaml    | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-loongson-pch-msi.c b/drivers/irqchip/irq-loongson-pch-msi.c
-index 50becd2..12aeeab 100644
---- a/drivers/irqchip/irq-loongson-pch-msi.c
-+++ b/drivers/irqchip/irq-loongson-pch-msi.c
-@@ -100,17 +100,12 @@ static int pch_msi_parent_domain_alloc(struct irq_domain *domain,
- 					unsigned int virq, int hwirq)
- {
- 	struct irq_fwspec fwspec;
--	int ret;
- 
- 	fwspec.fwnode = domain->parent->fwnode;
- 	fwspec.param_count = 1;
- 	fwspec.param[0] = hwirq;
- 
--	ret = irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
--	if (ret)
--		return ret;
--
--	return 0;
-+	return irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
- }
- 
- static int pch_msi_middle_domain_alloc(struct irq_domain *domain,
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+index b1db21e..13908ca 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+@@ -51,8 +51,8 @@ properties:
+     description: |
+       This property points how the children interrupts will be mapped into CPU
+       interrupt lines. Each cell refers to a parent interrupt line from 0 to 3
+-      and each bit in the cell refers to a children interrupt fron 0 to 31.
+-      If a CPU interrupt line didn't connected with liointc, then keep it's
++      and each bit in the cell refers to a children interrupt from 0 to 31.
++      If a CPU interrupt line didn't connected with liointc, then keep its
+       cell with zero.
+     $ref: /schemas/types.yaml#/definitions/uint32-array
+     minItems: 4
 -- 
 2.1.0
 
