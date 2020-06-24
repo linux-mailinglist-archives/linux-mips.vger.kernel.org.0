@@ -2,45 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 043C02072E7
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 14:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B6E207337
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 14:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390052AbgFXMJQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jun 2020 08:09:16 -0400
-Received: from mout.web.de ([217.72.192.78]:46053 "EHLO mout.web.de"
+        id S2388696AbgFXMV7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jun 2020 08:21:59 -0400
+Received: from mout.web.de ([212.227.17.11]:34607 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389376AbgFXMJO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Jun 2020 08:09:14 -0400
+        id S2388548AbgFXMV5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Jun 2020 08:21:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1593000535;
-        bh=uybshzasRqTcZW79c46LSh2lccop5yXtAJOR/YpgACY=;
+        s=dbaedf251592; t=1593001301;
+        bh=WisVhBCfz0SP6h3EvjFjZ/eWWqjYUw1MSCnTssHoI7k=;
         h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=eA28hmyU++R082r86ENS3Masxush3kNB+0tHDMtS+O+SScIbvRcUjW+XgaXaUx7vg
-         z4J1cc4GXJ4Vwc+gl3ZYZVZo3G7xv2nnOnZR4qHbOrs9prcfA6eS0KLdDGRyvF8Rre
-         mZ+UrdXqxrgxBgyVljJtt1RfXY9MJyFoj6zHmQ6E=
+        b=kwI8dij2+4KdZag4R1yewxbyuOKWUlyYtWdlMSl5Lrj/F2VujlK/J+PAvv5m0pr0X
+         eGr+/8r7NJYEFvEjfMBPWb2TVZif9nZpw6rrYa4vGA9cnf4tyFVbKO0/3Z0gEl7K09
+         WLEZlXOOUumIhBMI2xqcZgF83biw8WVaxAr8OjJY=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([93.132.175.204]) by smtp.web.de (mrweb102
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0M0hbG-1j06Fk3IJ4-00utiD; Wed, 24
- Jun 2020 14:08:54 +0200
-Subject: Re: [1/7] irqchip: Fix potential resource leaks
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
+Received: from [192.168.1.2] ([93.132.175.204]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MWzCt-1jLBfA1UT3-00XMEZ; Wed, 24
+ Jun 2020 14:21:41 +0200
+Subject: Re: [v3 03/14] irqchip/csky-mpintc: Fix potential resource leaks
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-mips@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhc@lemote.com>,
         Jason Cooper <jason@lakedaemon.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Xuefeng Li <lixuefeng@loongson.cn>
-References: <65e734f7-c43c-f96b-3650-980e15edba60@web.de>
- <d2111f53-ca52-fedf-0257-71f0aa89b093@loongson.cn>
- <9ca22645-8bf3-008f-fe55-d432f962cac3@web.de>
- <bd28aef9-ba70-0539-bdc3-6ce7162cefca@loongson.cn>
- <cc6b95ec-691e-f010-4a04-add39d706c4b@web.de>
- <423f83e0-c533-c346-ab8b-f2c6ccc828a2@loongson.cn>
- <37ff7ca4-dc7c-6a43-94a3-9628efe69b25@web.de>
- <8556e402-52ae-849f-2f6e-e56406057dce@loongson.cn>
+References: <a0ace7a8-5c26-ee20-fe76-7dff57a18ca3@web.de>
+ <be3acb13-2963-ddf1-a867-7e30fd23a0b4@loongson.cn>
 From:   Markus Elfring <Markus.Elfring@web.de>
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
@@ -85,56 +75,60 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <c425c66a-d2fc-dad2-dc98-31659342a5fb@web.de>
-Date:   Wed, 24 Jun 2020 14:08:53 +0200
+Message-ID: <4470b5f0-31ec-e43c-b841-5f8f3a3157b1@web.de>
+Date:   Wed, 24 Jun 2020 14:21:39 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <8556e402-52ae-849f-2f6e-e56406057dce@loongson.cn>
+In-Reply-To: <be3acb13-2963-ddf1-a867-7e30fd23a0b4@loongson.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:TMrVdAMv2r4yE0IXrqu973sG93qI6PprVOuEjfmzb9NIxtkbnn5
- 5Q/GJuiHLuSfVh/vFKw+nQ5H9KmvhwfP1U2y3dRlz8LLeNX4xa3Grr6yh3gc+TEpPBD4jxW
- 09FlZ+eR9Fz5kfB3r/csqh8wdNiYEWe1INKsIJPjx/9UIbUYNapGFigNLJX9x2m2JK17FGZ
- oN9ntbjNcRhNizIx0Or3Q==
+X-Provags-ID: V03:K1:2YKmand55G8WKMJxv2NEmWfeMbkEz8+hAS4KETdeEKtfLrv05w6
+ ZwyVSXqcJ1I7WJ6S86FVZ0yFEkY9qj57NeImy3TdoWNAE3oZL41TXwdyhT8fSh4h/XG131n
+ S7FyCcqrpB8jfHCtQ5MjmHYCQ7v1TRWOs5e4s4Mkh+qAUgBRn8W2n4memnY9zC7ccwd/ae/
+ 7gf4QlJ+m8w8p91ediWtQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PGtDIMoWboA=:b2k3jubGkn3HRTxlmhNReY
- AuUb8DwjOxV1JTNnNf5X3q/4+2V25zjbQxvDXjAgtk5WMZMwvPZ0x3oaHFvpB/GM9h1UX0seE
- lxIph6q6ZusltwPzMvIC/JnSA8kSCkTPha6w3d+nJaZltvyMRzdGUlq8vMoj4A/CoUUDavtA2
- +gEnSK2tB/+QwiwDtfuWtXsXWAFY4cWGNBmVOrzdJiyagT2/xVP7oMq5XRdLcu9iu8My093Z9
- sW54rsBIUbWoYSM3z8wOgZzF0r+Nh17G8NJ6zgeG39gz4gX2tNloe8eVXo/JyjMHALK8VCJs8
- lI5rDndJDfaFHBbD+k6z4mt6v4tmto79GtYJ/aeWQGeQDKY+vneDd95Y0IKDN7K3e0zZNypNs
- rn2r2ssu2hn4D3W908tHbaMKWz0dqu+jlaQmG8uvm2dcqX7CW3t1LBkOzocA1znGHFqTZwpJi
- nGIjCBivUBtiVZgtyPz1UmAE/FWm534A+zAiGtpnY17rm4H12Ii7gLuZDAy0sc45oPMst6nPm
- GCY59YTe1TA3Y0bkyzUkcqLgTvm7OOn9JnoaOgq01X0mhTNVTAHPaAZYOG/QKtDBOcqqP1Lee
- tTr8oo40DmVN9idnmq9P1BHyVQqME97R3Rz1Xf5CHAcipW8jdo1bw+/2c1gHorwootGa9pECf
- fugiEozUJyBMOE3GymLWaGEF4Z+pG3nMZ2xRi46Aol7M04yoLnj8WGhpUYMvCrJj+4ta/f/Ga
- NMMzKiITIwpQBkaytmftu334aCDSx/tw3Nr1bPUWWOmeTOouTP5dmZUGm6mRWC8IV3GHNzDpF
- dD9aQrotHbQpJZtu3g9jjvRpqUaJOJ3HrYYfJ4PDP0pxdVz02H4XnEVjr90zCa8KFCrT4Uuli
- naglNF/xOFfYOpIlE4pZhhj0fHs6KdCAHWiP0C5r17zQI/IfNN7dKY2eRusnVMj3QyOB7/KQ8
- 9jbrony9Oeb+B/dF2ph5A4YvAawFsjN92FeCWA/Mqrh4SuVcXQkPkx10EhNR4TR3RSvpdjn6W
- 77BlSdm0Uyg0CciwMsti7c2a+K3yf4TdvJoI+ZRlmhfPdGufiErQrMBOSuT1S1L9Phs7cOr0r
- xw+epbsdsCUvw4KHeozp/gt4XWLEkBi/QJ7MaiBGTxNDHUlbkWBMjO8zc5lj+YLO6P5PNsDfa
- YpWAEF4tuPCn4RaZqnZVJQ5//yVZaxBu53qfJAuyejagYto/ss/Q2yL8pyMkZk5SsKv0OwZh8
- zJRdz/XVrq0c0jm8Q
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rKduGn9r5l4=:rnwiWHPdFVi7JhvvmsJgPy
+ U7ftwDTv4IXy1FzM+5DMdsG5quAuHOOCw4S94+7ZLxShE4NkfOmdsuGhfZz525GBQnAjE8FaW
+ HM0byRJWcvRDlKejn33v7Bj62ID6wQPjOOFKATu++pzYsvm6W6PFCav4mrgeMd03jxkNAh0eY
+ Jdl3PBs997KR1c0O4vdmwWlZZ1BFgItkaOa7sA8QAp9UBjZC/BTUfZoM+zs0qQXQAS1N41QzG
+ 64cZGiLvKh1T7poJ9Ep1Hk81SVhdwjHeyNR/FBTxfkuNgLEgDWjKXLA0T4E3uDvw6K2Qih8S6
+ tKPj+yb/caeyiSDQAHIHCcprjE3Id5Ni+P1upbVFxG/R9Fq81Qy+/qkGB/4X/kDkXhIWXPLh5
+ igSQGzF63fOLYJLv0afOwMHYqubpev+hH4b/ga8bn982s1jkWd0a2TFKbxeFQOPdpjHmRnpUc
+ yiZBe5v7SsYMBW6gwZW38jgodyXoa1zDJgMAYv4oRIWmtZ/TxAleRFPunLM19VKxuoYraviIq
+ POKiUAJBHrbmGeVy5M77irejrCQg1+OQ2C49pj0nPVhLEbzKEFirKLbqLdRdZoVHEDfYrKOIy
+ M2lLiEgIgQ/cKqB/Hz7rbLE1ApjIGKEopCgOtlKoQtBKBg6nesMj1YRyhZiPLZl2ceccD0F8e
+ LLFKVR3Z4+v6EXWdtRMxwURiSkCszp3+O4ACeywfYuMLGrlX3sVNYljT0QjC+5lhR2CrCjapZ
+ 7w2VUTQ5BXq1YM15K5nbv/XpigI5kVg51j1KurVVz+pS7CA6SX3zYOMQrl1Y6MKUd+laEZyj9
+ 08fiZC0rq/wuncDovA23ACTBFlh4WK+STwzXMp18c/SbKDt/cAoX/WRaujTWLXo+THx6j/T6B
+ KiP33g6GZsVvoHz7+lIfBghB7CEDZ6U8ou9N9mY6YxprG6KwmLFD7EY4EBuSaIYWmwQYszhOC
+ opj0CAroPZElpuwj1eRanWh6rUo9zDwQnKmvVfDbxeABmwEVnjekw3OUdY+kmTNRxDOIibj8s
+ FVY4O/iqkg0pGvc2lw84bbv2XJlPS6fBFvybEd3LFLxsKTFAve5JsCDzMzjrltDvEEeGAeu6p
+ YfppsglP/4vtt3uqpzYfmrK3LMF9nt1dzXKPn2pCoy8xt5I7Aer5xWiDTrVqC6Hk9rXcbcS9b
+ I9NQvJBqs+0KfcpERzYSnZixeC+8qP13Gp4otLwHvTVZYR+XzCrgx2jJNDodFWloq4GEXIA7g
+ opyCDcustv3E7YmQL
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
->> How do you think about to extend source code analysis tools accordingly=
-?
+>> How do you think about another wording variant?
+>>
+>> =C2=A0=C2=A0=C2=A0 Specific system resources were not released in a few=
+ error cases.
+>> =C2=A0=C2=A0=C2=A0 Thus add jump targets for the completion of the desi=
+red exception handling.
 >
-> I have no good idea,
-> maybe some simple match check tools can do this.
+> OK, thank you, it looks good to me.
 
-Would you like to help with any additional software development resources
-(besides your current contribution)?
+Thanks for your positive feedback.
 
-Have you heard anything according to recent research (from computer scienc=
-e)
-for this application domain?
+
+> Maybe I can use this description for other patches of this series.
+
+Would you like to make any of the affected commit messages more =E2=80=9Cs=
+pecific=E2=80=9D?
 
 Regards,
 Markus
