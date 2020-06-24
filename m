@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D724206E00
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 09:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B39E206E02
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 09:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389583AbgFXHpV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jun 2020 03:45:21 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:35800 "EHLO loongson.cn"
+        id S2390010AbgFXHpW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jun 2020 03:45:22 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:35804 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389929AbgFXHpU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S2389984AbgFXHpU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Wed, 24 Jun 2020 03:45:20 -0400
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD2qIBPNevCZJAA--.660S4;
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD2qIBPNevCZJAA--.660S5;
         Wed, 24 Jun 2020 15:45:13 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -20,19 +20,19 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v3 02/14 RESEND] irqchip/csky-apb-intc: Fix potential resource leaks
-Date:   Wed, 24 Jun 2020 15:44:59 +0800
-Message-Id: <1592984711-3130-3-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v3 03/14 RESEND] irqchip/csky-mpintc: Fix potential resource leaks
+Date:   Wed, 24 Jun 2020 15:45:00 +0800
+Message-Id: <1592984711-3130-4-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1592984711-3130-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1592984711-3130-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxD2qIBPNevCZJAA--.660S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF1DWw18XF4Utr1UZFyxZrb_yoW8Gry5pF
-        WUG39I9rZ7tw1xWrn7uF1DZr98u348KrZFk34fCas2vrnxWws0kryrAF1j9Fn8C3yxG3WF
-        9Fs5ta45Ca1UAFDanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUHGb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+X-CM-TRANSID: AQAAf9DxD2qIBPNevCZJAA--.660S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF47urWrWr1UAF1rKF15Arb_yoW8Aw1DpF
+        48u3ySgrZ7Gr1UWr1fC3W8XryrG3yftay8K34Skas3JrnxWr98CFW8AF1Duw1fJa1rGayf
+        Zrs7t3y5C3WDAFDanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUHGb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
         0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
+        8067AKxVWUWwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
         64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcV
         CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280
         aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8w
@@ -44,7 +44,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7tF1DWw18XF4Utr1UZFyxZrb_yoW8Gry5pF
         twCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26F1j6w1UMIIF0xvE2Ix0cI8IcVCY1x
         0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
         6r4UJVWxJr1lIxAIcVC2z280aVCY1x0267AKxVW0oVCq3bIYCTnIWIevJa73UjIFyTuYvj
-        4Rh0elUUUUU
+        4RzuWNDUUUU
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
@@ -53,45 +53,67 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 There exists potential resource leaks in the error path, fix them.
 
-Fixes: edff1b4835b7 ("irqchip: add C-SKY APB bus interrupt controller")
+Fixes: d8a5f5f79122 ("irqchip: add C-SKY SMP interrupt controller")
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/irqchip/irq-csky-apb-intc.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/irqchip/irq-csky-mpintc.c | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/irqchip/irq-csky-apb-intc.c b/drivers/irqchip/irq-csky-apb-intc.c
-index 5a2ec43..11a35eb 100644
---- a/drivers/irqchip/irq-csky-apb-intc.c
-+++ b/drivers/irqchip/irq-csky-apb-intc.c
-@@ -118,7 +118,8 @@ ck_intc_init_comm(struct device_node *node, struct device_node *parent)
- 					    &irq_generic_chip_ops, NULL);
- 	if (!root_domain) {
- 		pr_err("C-SKY Intc irq_domain_add failed.\n");
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto err_iounmap;
- 	}
+diff --git a/drivers/irqchip/irq-csky-mpintc.c b/drivers/irqchip/irq-csky-mpintc.c
+index a1534ed..c195e24 100644
+--- a/drivers/irqchip/irq-csky-mpintc.c
++++ b/drivers/irqchip/irq-csky-mpintc.c
+@@ -247,8 +247,10 @@ csky_mpintc_init(struct device_node *node, struct device_node *parent)
+ 	if (INTCG_base == NULL) {
+ 		INTCG_base = ioremap(mfcr("cr<31, 14>"),
+ 				     INTCL_SIZE*nr_cpu_ids + INTCG_SIZE);
+-		if (INTCG_base == NULL)
+-			return -EIO;
++		if (INTCG_base == NULL) {
++			ret = -EIO;
++			goto err_free;
++		}
  
- 	ret = irq_alloc_domain_generic_chips(root_domain, 32, 1,
-@@ -126,10 +127,17 @@ ck_intc_init_comm(struct device_node *node, struct device_node *parent)
- 			IRQ_NOREQUEST | IRQ_NOPROBE | IRQ_NOAUTOEN, 0, 0);
- 	if (ret) {
- 		pr_err("C-SKY Intc irq_alloc_gc failed.\n");
--		return -ENOMEM;
-+		ret = -ENOMEM;
+ 		INTCL_base = INTCG_base + INTCG_SIZE;
+ 
+@@ -257,8 +259,10 @@ csky_mpintc_init(struct device_node *node, struct device_node *parent)
+ 
+ 	root_domain = irq_domain_add_linear(node, nr_irq, &csky_irqdomain_ops,
+ 					    NULL);
+-	if (!root_domain)
+-		return -ENXIO;
++	if (!root_domain) {
++		ret = -ENXIO;
++		goto err_iounmap;
++	}
+ 
+ 	/* for every cpu */
+ 	for_each_present_cpu(cpu) {
+@@ -270,12 +274,22 @@ csky_mpintc_init(struct device_node *node, struct device_node *parent)
+ 
+ #ifdef CONFIG_SMP
+ 	ipi_irq = irq_create_mapping(root_domain, IPI_IRQ);
+-	if (!ipi_irq)
+-		return -EIO;
++	if (!ipi_irq) {
++		ret = -EIO;
 +		goto err_domain_remove;
- 	}
++	}
+ 
+ 	set_send_ipi(&csky_mpintc_send_ipi, ipi_irq);
+ #endif
  
  	return 0;
 +
 +err_domain_remove:
 +	irq_domain_remove(root_domain);
 +err_iounmap:
-+	iounmap(reg_base);
++	iounmap(INTCG_base);
++err_free:
++	kfree(__trigger);
 +	return ret;
  }
- 
- static inline bool handle_irq_perbit(struct pt_regs *regs, u32 hwirq,
+ IRQCHIP_DECLARE(csky_mpintc, "csky,mpintc", csky_mpintc_init);
 -- 
 2.1.0
 
