@@ -2,35 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B6E207337
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 14:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AA520740E
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 15:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388696AbgFXMV7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jun 2020 08:21:59 -0400
-Received: from mout.web.de ([212.227.17.11]:34607 "EHLO mout.web.de"
+        id S2389515AbgFXNNH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jun 2020 09:13:07 -0400
+Received: from mout.web.de ([217.72.192.78]:37983 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388548AbgFXMV5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Jun 2020 08:21:57 -0400
+        id S2387747AbgFXNNA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Jun 2020 09:13:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1593001301;
-        bh=WisVhBCfz0SP6h3EvjFjZ/eWWqjYUw1MSCnTssHoI7k=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=kwI8dij2+4KdZag4R1yewxbyuOKWUlyYtWdlMSl5Lrj/F2VujlK/J+PAvv5m0pr0X
-         eGr+/8r7NJYEFvEjfMBPWb2TVZif9nZpw6rrYa4vGA9cnf4tyFVbKO0/3Z0gEl7K09
-         WLEZlXOOUumIhBMI2xqcZgF83biw8WVaxAr8OjJY=
+        s=dbaedf251592; t=1593004360;
+        bh=zAuqcv5c3pQC472cThqMqd6o0JE7uGZhrYFFqHnzpD8=;
+        h=X-UI-Sender-Class:Cc:Subject:From:To:Date;
+        b=c+9zBn6OyF/rpjb+YDc5rw+SBM7IvLd5lGQPuoH5DrOICqy5pcwfXOp7+icjc9/Pd
+         8EKEdetSa+AhQeFrYEoQqkr8/9agn2lTlnEVNaqVxhbJy/vk8MNZeq9WUQiKFnJ8Md
+         DMkZ9N05ayEagCWiqaT5YElLlWbHvTegoHcr3S9g=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([93.132.175.204]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MWzCt-1jLBfA1UT3-00XMEZ; Wed, 24
- Jun 2020 14:21:41 +0200
-Subject: Re: [v3 03/14] irqchip/csky-mpintc: Fix potential resource leaks
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-mips@vger.kernel.org
+Received: from [192.168.1.2] ([93.132.175.204]) by smtp.web.de (mrweb103
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0MJCWU-1jpkA6120A-002oqa; Wed, 24
+ Jun 2020 15:12:40 +0200
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jason Cooper <jason@lakedaemon.net>,
         Marc Zyngier <maz@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Xuefeng Li <lixuefeng@loongson.cn>
-References: <a0ace7a8-5c26-ee20-fe76-7dff57a18ca3@web.de>
- <be3acb13-2963-ddf1-a867-7e30fd23a0b4@loongson.cn>
+Subject: Re: [PATCH v3 04/14] irqchip/davinci-aintc: Fix potential resource
+ leaks
 From:   Markus Elfring <Markus.Elfring@web.de>
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
@@ -75,60 +73,71 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <4470b5f0-31ec-e43c-b841-5f8f3a3157b1@web.de>
-Date:   Wed, 24 Jun 2020 14:21:39 +0200
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-mips@vger.kernel.org
+Message-ID: <0e39761c-4673-d116-fc62-5573c2abae06@web.de>
+Date:   Wed, 24 Jun 2020 15:12:36 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <be3acb13-2963-ddf1-a867-7e30fd23a0b4@loongson.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2YKmand55G8WKMJxv2NEmWfeMbkEz8+hAS4KETdeEKtfLrv05w6
- ZwyVSXqcJ1I7WJ6S86FVZ0yFEkY9qj57NeImy3TdoWNAE3oZL41TXwdyhT8fSh4h/XG131n
- S7FyCcqrpB8jfHCtQ5MjmHYCQ7v1TRWOs5e4s4Mkh+qAUgBRn8W2n4memnY9zC7ccwd/ae/
- 7gf4QlJ+m8w8p91ediWtQ==
+X-Provags-ID: V03:K1:iW2saXIEBgXpQgxGEEEAAuU/UAEMLXSGs8QPxotSdz4VN/pt8gG
+ bUe+HrEuJe5IJ9frdJFu9HcKU8xsUSsN1pto+heV5fgeXLLrlT255RC/mWyKwUGbPe25/yj
+ t7XA5VnqvEK6Psog2HZORolEhl1IBMQhjJ0fKt1XHf0hEqiu0MdOb6pVNI5Oiyl9ZS2waLq
+ D0pxe38/f91vHg4dwa+/Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rKduGn9r5l4=:rnwiWHPdFVi7JhvvmsJgPy
- U7ftwDTv4IXy1FzM+5DMdsG5quAuHOOCw4S94+7ZLxShE4NkfOmdsuGhfZz525GBQnAjE8FaW
- HM0byRJWcvRDlKejn33v7Bj62ID6wQPjOOFKATu++pzYsvm6W6PFCav4mrgeMd03jxkNAh0eY
- Jdl3PBs997KR1c0O4vdmwWlZZ1BFgItkaOa7sA8QAp9UBjZC/BTUfZoM+zs0qQXQAS1N41QzG
- 64cZGiLvKh1T7poJ9Ep1Hk81SVhdwjHeyNR/FBTxfkuNgLEgDWjKXLA0T4E3uDvw6K2Qih8S6
- tKPj+yb/caeyiSDQAHIHCcprjE3Id5Ni+P1upbVFxG/R9Fq81Qy+/qkGB/4X/kDkXhIWXPLh5
- igSQGzF63fOLYJLv0afOwMHYqubpev+hH4b/ga8bn982s1jkWd0a2TFKbxeFQOPdpjHmRnpUc
- yiZBe5v7SsYMBW6gwZW38jgodyXoa1zDJgMAYv4oRIWmtZ/TxAleRFPunLM19VKxuoYraviIq
- POKiUAJBHrbmGeVy5M77irejrCQg1+OQ2C49pj0nPVhLEbzKEFirKLbqLdRdZoVHEDfYrKOIy
- M2lLiEgIgQ/cKqB/Hz7rbLE1ApjIGKEopCgOtlKoQtBKBg6nesMj1YRyhZiPLZl2ceccD0F8e
- LLFKVR3Z4+v6EXWdtRMxwURiSkCszp3+O4ACeywfYuMLGrlX3sVNYljT0QjC+5lhR2CrCjapZ
- 7w2VUTQ5BXq1YM15K5nbv/XpigI5kVg51j1KurVVz+pS7CA6SX3zYOMQrl1Y6MKUd+laEZyj9
- 08fiZC0rq/wuncDovA23ACTBFlh4WK+STwzXMp18c/SbKDt/cAoX/WRaujTWLXo+THx6j/T6B
- KiP33g6GZsVvoHz7+lIfBghB7CEDZ6U8ou9N9mY6YxprG6KwmLFD7EY4EBuSaIYWmwQYszhOC
- opj0CAroPZElpuwj1eRanWh6rUo9zDwQnKmvVfDbxeABmwEVnjekw3OUdY+kmTNRxDOIibj8s
- FVY4O/iqkg0pGvc2lw84bbv2XJlPS6fBFvybEd3LFLxsKTFAve5JsCDzMzjrltDvEEeGAeu6p
- YfppsglP/4vtt3uqpzYfmrK3LMF9nt1dzXKPn2pCoy8xt5I7Aer5xWiDTrVqC6Hk9rXcbcS9b
- I9NQvJBqs+0KfcpERzYSnZixeC+8qP13Gp4otLwHvTVZYR+XzCrgx2jJNDodFWloq4GEXIA7g
- opyCDcustv3E7YmQL
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NoYiJ7pL76Y=:cFgWgkXpeqrUwtzfhxgtW6
+ jHGJuVXqtkyzFDumiWeF11aX1y5BiUlxG1wbukz44LL42qBsFv+ybDvx/EU0O0MqlKr5kK2nn
+ Y5q86y8m1MugsiNPdGpG0wr/ZMRmaxBO2QxupLeGKQLZis/4RBmJEltkwCGrCE/k9j+37LG7f
+ KFsDtMxeLg6Z0qREVLGZZg3d61wMzXNsztW6DigVjH0O/Zl7a1TR+bOrp4IpA1sj2jWORi/5X
+ DTbioo15gGkaEsXqee2JXQONRVzqlcYWro1s+OKfy5Ugk2nEojo9lzWXm63wox2C67+RGawKv
+ FiFyVDfT1aFsa6Qcgzj5KF/Gd0pcRfDpQ9H+jUIJ43roQlAn0bU0HKs51NeHs/QizXURkEqv9
+ lB1m5qvEfv3pF271/qpKA/k0dvJ5t07S52UrnTxrnt3mxbbqTfnLaj3UMl7EcRQ+f2D/ayn+/
+ kA+GK/wnVP5PP0H58GBiy0Zo6yWUG+Nppz0TLBK2wovJ3K4ps1xQZ54eBHQg1tstSeWfN+2Gq
+ v2DxWNof+WYxcdaKeu5pD7P+W8twApWXPH0u8Ibmio9Ok2+ktJGsD6hsV0c/qbD7YPiPbOaks
+ x4wgAonmysZSG+MJKjj2r6VsCdHBuf9NM9CMyv0s8+FxSP8iLOBQ9Jivc4lRDT4hIdRNvObnL
+ s/pEeHOKRFyj34fvr9MjvtSzUtJyvUs/fos4TcrhqWqmsFEe+cYv0dl/i7hhOxfm/hRSaBumQ
+ ImDMIiU3ECCFDcemPG2oDgRkUUEoHbWXOUvuFT/bDgI42MlhsqSLQLzut3EGLJy96iQujKKjb
+ Nq77Gy1SKz+YBcwYkAtm7kSOQ315DgfLn3jotMIapu25RsnRL6NnZYM7MjOOpmTmWl1iV9O1A
+ jGsN/D6mzvJgaS7hCjDNcVHPCLhhRs8Ni4/YFFaZfloS5pkpeDQkgmQag9eolpQAEEp124XVy
+ n9K1vhAch2iDJeG3lUbbKxVj5i9j3LBhffENGOJToVfvUmLa/HjpFCN5IQqvl+5otxqOvayHN
+ W6qVfGS/wYBeKaNqapzEpn11/rv8EZJmtd2MrHbylHj/O3Wd5RjfgxPhlUxgQCS6PSTyt/BO0
+ r/qyr+X6+aKgW1kxhox6UehIjCTN7t46pmw12lraXOr+MSW5Lmv6TaiXZav1X3I8SXEp+/5Lo
+ H7YDhWhiREKxk+ASQ/PvjbM+QY43jZP3E2qmRdr0yMo4f7E8/4iz0fBP8emkQ2UwTu3hnYZW4
+ v+pSpLK9snYD7dESI
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
->> How do you think about another wording variant?
->>
->> =C2=A0=C2=A0=C2=A0 Specific system resources were not released in a few=
- error cases.
->> =C2=A0=C2=A0=C2=A0 Thus add jump targets for the completion of the desi=
-red exception handling.
+> There exists potential resource leaks in the error path, fix them.
+
+Would you like to reconsider this change description?
+https://lore.kernel.org/linux-mips/be3acb13-2963-ddf1-a867-7e30fd23a0b4@lo=
+ongson.cn/
+https://lkml.org/lkml/2020/6/24/498
+
+
+=E2=80=A6
+> +++ b/drivers/irqchip/irq-davinci-aintc.c
+=E2=80=A6
+> @@ -160,4 +160,13 @@ void __init davinci_aintc_init(const struct davinci=
+_aintc_config *config)
+>  				       irq_base + irq_off, 32);
 >
-> OK, thank you, it looks good to me.
+>  	set_handle_irq(davinci_aintc_handle_irq);
+> +
+> +err_domain_remove:
+=E2=80=A6
 
-Thanks for your positive feedback.
+Are you sure that you would to like to release the allocated system resour=
+ces
+always in this function implementation?
 
-
-> Maybe I can use this description for other patches of this series.
-
-Would you like to make any of the affected commit messages more =E2=80=9Cs=
-pecific=E2=80=9D?
+Otherwise, I suggest to add a return statement before the source code sect=
+ion
+for the desired exception handling.
 
 Regards,
 Markus
