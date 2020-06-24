@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C8A206C74
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 08:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CDE206C7E
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 08:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389134AbgFXGdS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jun 2020 02:33:18 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:45112 "EHLO loongson.cn"
+        id S2389268AbgFXGdu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jun 2020 02:33:50 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:45180 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387880AbgFXGdS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Jun 2020 02:33:18 -0400
+        id S2388428AbgFXGdT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Jun 2020 02:33:19 -0400
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj9+j8_Je2R5JAA--.564S10;
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj9+j8_Je2R5JAA--.564S11;
         Wed, 24 Jun 2020 14:33:13 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -20,16 +20,16 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v2 08/14] irqchip/ls1x: Fix potential resource leaks
-Date:   Wed, 24 Jun 2020 14:32:41 +0800
-Message-Id: <1592980367-1816-9-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v2 09/14] irqchip/mscc-ocelot: Fix potential resource leaks
+Date:   Wed, 24 Jun 2020 14:32:42 +0800
+Message-Id: <1592980367-1816-10-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1592980367-1816-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1592980367-1816-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxj9+j8_Je2R5JAA--.564S10
-X-Coremail-Antispam: 1UD129KBjvdXoWrurWUWFykJF48Zr47Zr4xJFb_yoWDZFgE9r
-        1Sg3s3WayIyr1fJ3yIgw13ZFW7trZYgFs2vFW0kF13ta4xWw1rur4xZr1fJF4xuFWjkF97
-        C3yjvr10y34xAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: AQAAf9Dxj9+j8_Je2R5JAA--.564S11
+X-Coremail-Antispam: 1UD129KBjvdXoWrKw13uF47Ary7tFW8CrW7Jwb_yoWkXFb_Cr
+        s0g3s3GrWUKr4fJanrtwnxZ34kWr4v9F1vgrZ7t3Zxt34xK3s7Zr4avrsxAr48uFZ0krnr
+        Ga1j9r4xAw1xujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbf8FF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
         6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
         IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
@@ -51,34 +51,38 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 There exists potential resource leaks in the error path, fix them.
 
-Fixes: 9e543e22e204 ("irqchip: Add driver for Loongson-1 interrupt controller")
+Fixes: 19d99164480a ("irqchip: Add a driver for the Microsemi Ocelot controller")
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/irqchip/irq-ls1x.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-mscc-ocelot.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-ls1x.c b/drivers/irqchip/irq-ls1x.c
-index 353111a..409001b 100644
---- a/drivers/irqchip/irq-ls1x.c
-+++ b/drivers/irqchip/irq-ls1x.c
-@@ -131,7 +131,7 @@ static int __init ls1x_intc_of_init(struct device_node *node,
- 	if (!priv->domain) {
- 		pr_err("ls1x-irq: cannot add IRQ domain\n");
- 		err = -ENOMEM;
--		goto out_iounmap;
-+		goto out_dispose_irq;
+diff --git a/drivers/irqchip/irq-mscc-ocelot.c b/drivers/irqchip/irq-mscc-ocelot.c
+index 88143c0..e676ae2 100644
+--- a/drivers/irqchip/irq-mscc-ocelot.c
++++ b/drivers/irqchip/irq-mscc-ocelot.c
+@@ -73,7 +73,8 @@ static int __init ocelot_irq_init(struct device_node *node,
+ 				       &irq_generic_chip_ops, NULL);
+ 	if (!domain) {
+ 		pr_err("%pOFn: unable to add irq domain\n", node);
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto err_irq_dispose;
  	}
  
- 	err = irq_alloc_domain_generic_chips(priv->domain, 32, 2,
-@@ -182,6 +182,8 @@ static int __init ls1x_intc_of_init(struct device_node *node,
+ 	ret = irq_alloc_domain_generic_chips(domain, OCELOT_NR_IRQ, 1,
+@@ -109,9 +110,10 @@ static int __init ocelot_irq_init(struct device_node *node,
  
- out_free_domain:
- 	irq_domain_remove(priv->domain);
-+out_dispose_irq:
+ err_gc_free:
+ 	irq_free_generic_chip(gc);
+-
+ err_domain_remove:
+ 	irq_domain_remove(domain);
++err_irq_dispose:
 +	irq_dispose_mapping(parent_irq);
- out_iounmap:
- 	iounmap(priv->intc_base);
- out_free_priv:
+ 
+ 	return ret;
+ }
 -- 
 2.1.0
 
