@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3875D206C75
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 08:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0079206C7D
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 08:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389128AbgFXGdS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jun 2020 02:33:18 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:45170 "EHLO loongson.cn"
+        id S2389064AbgFXGdu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jun 2020 02:33:50 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:45196 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388424AbgFXGdS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Jun 2020 02:33:18 -0400
+        id S2389009AbgFXGdT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Jun 2020 02:33:19 -0400
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj9+j8_Je2R5JAA--.564S13;
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj9+j8_Je2R5JAA--.564S14;
         Wed, 24 Jun 2020 14:33:14 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -20,16 +20,16 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v2 11/14] irqchip/omap-intc: Fix potential resource leak
-Date:   Wed, 24 Jun 2020 14:32:44 +0800
-Message-Id: <1592980367-1816-12-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v2 12/14] irqchip/riscv-intc: Fix potential resource leak
+Date:   Wed, 24 Jun 2020 14:32:45 +0800
+Message-Id: <1592980367-1816-13-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1592980367-1816-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1592980367-1816-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxj9+j8_Je2R5JAA--.564S13
-X-Coremail-Antispam: 1UD129KBjvdXoW7GF4rtF1xAryrCFyfWw1xZrb_yoW3AFc_u3
-        Wqgas3Wr4xAr4rGr1Igw13ZryYvrWkWFn7uF40q3ZxJ3y3Xw10yr42vrZ3JF10kFWUCr97
-        Gr4UurWxAw1IyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: AQAAf9Dxj9+j8_Je2R5JAA--.564S14
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF4rWrW3Ary5Jw43XF4DCFg_yoW3Grg_CF
+        1jgr93GryIyrs3AFyIyr45XFyjy3s7WF4vgF4IgFy3G3s8Gw17Cw12yrW3tF18Kr10yrs7
+        ArW8ZrWIyr17CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbf8FF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
         6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
         IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
@@ -51,28 +51,24 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 There exists potential resource leak in the error path, fix it.
 
-Fixes: 8598066cddd1 ("arm: omap: irq: move irq.c to drivers/irqchip/")
+Fixes: 6b7ce8927b5a ("irqchip: RISC-V per-HART local interrupt controller driver")
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/irqchip/irq-omap-intc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-riscv-intc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/irqchip/irq-omap-intc.c b/drivers/irqchip/irq-omap-intc.c
-index d360a6e..e711530 100644
---- a/drivers/irqchip/irq-omap-intc.c
-+++ b/drivers/irqchip/irq-omap-intc.c
-@@ -254,8 +254,10 @@ static int __init omap_init_irq_of(struct device_node *node)
- 	omap_irq_soft_reset();
+diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+index a6f97fa..8d6286c 100644
+--- a/drivers/irqchip/irq-riscv-intc.c
++++ b/drivers/irqchip/irq-riscv-intc.c
+@@ -122,6 +122,7 @@ static int __init riscv_intc_init(struct device_node *node,
+ 	rc = set_handle_irq(&riscv_intc_irq);
+ 	if (rc) {
+ 		pr_err("failed to set irq handler\n");
++		irq_domain_remove(intc_domain);
+ 		return rc;
+ 	}
  
- 	ret = omap_alloc_gc_of(domain, omap_irq_base);
--	if (ret < 0)
-+	if (ret < 0) {
- 		irq_domain_remove(domain);
-+		iounmap(omap_irq_base);
-+	}
- 
- 	return ret;
- }
 -- 
 2.1.0
 
