@@ -2,113 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FAE206FA7
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 11:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA2F206FCF
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2020 11:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387926AbgFXJFa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jun 2020 05:05:30 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:57736 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728857AbgFXJFa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Jun 2020 05:05:30 -0400
-Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn95JF_NevS9JAA--.726S3;
-        Wed, 24 Jun 2020 17:05:13 +0800 (CST)
-Subject: Re: [PATCH v2 7/7 RESEND] dt-bindings: interrupt-controller: Fix
- typos in loongson,liointc.yaml
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>
-References: <1592981136-3572-1-git-send-email-yangtiezhu@loongson.cn>
- <1592981136-3572-8-git-send-email-yangtiezhu@loongson.cn>
- <0b20ab00-2809-1770-c7c0-114260b2a571@cogentembedded.com>
-Cc:     Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <3ae468e7-505e-dbac-8255-8803dd6e2f64@loongson.cn>
-Date:   Wed, 24 Jun 2020 17:05:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S2389222AbgFXJPf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jun 2020 05:15:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33682 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387970AbgFXJPe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Jun 2020 05:15:34 -0400
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CF882082F;
+        Wed, 24 Jun 2020 09:15:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592990133;
+        bh=14K+VhMvuge//+mHFVRO68jMad3Xx5brMH+O3+ggBOk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IFQxL2bunzkopmfTsIvl2UbpyJSVNCbVz1tMkicOQpIhZE+i7/lWCftYg10E3XPAI
+         LleqWHI0jaKN4UcquF75OjUnAAl7OdeSI1CZUwvRqOC11GAXNdmVhHLdaOFnoVbq1E
+         XfG8K/JctUacbaPa4zvCuXENEZxWe4yQDQX+rA74=
+Received: by mail-lj1-f182.google.com with SMTP id 9so1752239ljc.8;
+        Wed, 24 Jun 2020 02:15:33 -0700 (PDT)
+X-Gm-Message-State: AOAM533UbckesswlTmbt/oQeNGmzfV1ZPmHY9ngNSAuY/zZug+mGZ68u
+        ONx4rT1rT0ygL8cH+U/nlA58qlLJp/ozW7Bl0iQ=
+X-Google-Smtp-Source: ABdhPJxbxsux7XuzN8uOjxja4hquHGy/NKFHEFBm47OMUifwg0Hc5X+Fhkw49rQCA/MTWVvIK0zPn0Jq/i3BDFjZoEY=
+X-Received: by 2002:a2e:954c:: with SMTP id t12mr13005177ljh.287.1592990131408;
+ Wed, 24 Jun 2020 02:15:31 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <0b20ab00-2809-1770-c7c0-114260b2a571@cogentembedded.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxn95JF_NevS9JAA--.726S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr13CFy7Kr4xtr4xKw45Wrg_yoW8WFW7pa
-        yDC3ZrKF4Utr13Ca97t3WvkF13ZrsxArnrGFZxZrW8JFZrWr1Fqr4agF95J3Z8Kr4Iq3Wj
-        qryrWay0gFWUAaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr4
-        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
-        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
-        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
-        wI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv6xkF7I
-        0E14v26rxl6s0DYxBIdaVFxhVjvjDU0xZFpf9x0JUSsjbUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+References: <1592902276-3969-1-git-send-email-yangtiezhu@loongson.cn> <1592902276-3969-2-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1592902276-3969-2-git-send-email-yangtiezhu@loongson.cn>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 24 Jun 2020 11:15:20 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPc9QuDp+FEogVamf7x+4JEUw78MSKqSPFpRcyTYZ7HSMA@mail.gmail.com>
+Message-ID: <CAJKOXPc9QuDp+FEogVamf7x+4JEUw78MSKqSPFpRcyTYZ7HSMA@mail.gmail.com>
+Subject: Re: [PATCH 1/7] irqchip: Fix potential resource leaks
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Kukjin Kim <kgene@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 06/24/2020 04:42 PM, Sergei Shtylyov wrote:
-> Hello!
+On Tue, 23 Jun 2020 at 10:51, Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> On 24.06.2020 9:45, Tiezhu Yang wrote:
->
->> Fix the following two typos in loongson,liointc.yaml:
->> fron -> from
->> it's -> its
->>
->> Fixes: b6280c8bb6f5 ("dt-bindings: interrupt-controller: Add Loongson 
->> LIOINTC")
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->> .../devicetree/bindings/interrupt-controller/loongson,liointc.yaml | 
->> 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git 
->> a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml 
->> b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml 
->>
->> index b1db21e..13908ca 100644
->> --- 
->> a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
->> +++ 
->> b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
->> @@ -51,8 +51,8 @@ properties:
->>       description: |
->>         This property points how the children interrupts will be 
->> mapped into CPU
->>         interrupt lines. Each cell refers to a parent interrupt line 
->> from 0 to 3
->> -      and each bit in the cell refers to a children interrupt fron 0 
->> to 31.
->> -      If a CPU interrupt line didn't connected with liointc, then 
->> keep it's
->> +      and each bit in the cell refers to a children interrupt from 0 
->> to 31.
->> +      If a CPU interrupt line didn't connected with liointc, then 
->> keep its
->
->    "Connect", while you're at it?
+> There exists some potential resource leaks in the error path, fix them.
 
-OK, thank you.
-I will do it in the next version, maybe some days later.
+This should be split per driver and per bug (although mostly in driver
+it's just one bug). Otherwise it is difficult to review, backport and
+revert.
 
->
->>         cell with zero.
->>       $ref: /schemas/types.yaml#/definitions/uint32-array
->>       minItems: 4
->
-> MBR, Sergei
+Best regards,
+Krzysztof
 
+
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  drivers/irqchip/irq-ath79-misc.c      |  3 +++
+>  drivers/irqchip/irq-csky-apb-intc.c   |  3 +++
+>  drivers/irqchip/irq-csky-mpintc.c     | 26 ++++++++++++++++++++------
+>  drivers/irqchip/irq-davinci-aintc.c   | 17 +++++++++++++----
+>  drivers/irqchip/irq-davinci-cp-intc.c | 17 ++++++++++++++---
+>  drivers/irqchip/irq-digicolor.c       |  4 ++++
+>  drivers/irqchip/irq-dw-apb-ictl.c     | 11 ++++++++---
+>  drivers/irqchip/irq-loongson-htvec.c  |  5 ++++-
+>  drivers/irqchip/irq-ls1x.c            |  4 +++-
+>  drivers/irqchip/irq-mscc-ocelot.c     |  6 ++++--
+>  drivers/irqchip/irq-nvic.c            |  2 ++
+>  drivers/irqchip/irq-omap-intc.c       |  4 +++-
+>  drivers/irqchip/irq-riscv-intc.c      |  1 +
+>  drivers/irqchip/irq-s3c24xx.c         | 20 +++++++++++++++-----
+>  drivers/irqchip/irq-xilinx-intc.c     |  1 +
+>  15 files changed, 98 insertions(+), 26 deletions(-)
