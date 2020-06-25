@@ -2,121 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CCF20A34A
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jun 2020 18:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424D520A420
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jun 2020 19:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390785AbgFYQqe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Jun 2020 12:46:34 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:49502 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390396AbgFYQqe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jun 2020 12:46:34 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05PGfvZx169156;
-        Thu, 25 Jun 2020 16:46:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=UEPtC+P7KIzY6w6/Ov/JEOtd2nMhGKGYQuzAtbcQOsw=;
- b=gB6CIWx2h6622MTQgbZSZ+oBWezbrX1y8ddqt+bWtjk+pikrfz189Vv/IPEDjIImvgPq
- Mwgbt5zMSxahSpqvU4Q0SiPmYl2WQzlVW1juXmu7esfbZ1MaDR3HSPjVsqOBGKkMooUg
- aUPCWDjvPDmvIhbwOMfgZaKcb8aTQyRcuQejd1oSL+wu0Z3MOn+QsmT5yw1uiQfXV4i5
- 4gTUSLA9fxaH5FPNd+mK91P3G2iBDk1lQ+/NJhXl/h2gZT0MwHTcQ9dkocFysuNYkBV5
- cDX4l3gNydhWutT5s1bwng88tGryqrk04NpBxNrxpBc4/U2nFyJ90KPdZf7HBIBE38aV yQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 31uusu1ms3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 25 Jun 2020 16:46:15 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05PGcGPW056764;
-        Thu, 25 Jun 2020 16:46:15 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 31uur9sres-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Jun 2020 16:46:14 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05PGk7fA012777;
-        Thu, 25 Jun 2020 16:46:08 GMT
-Received: from [192.168.2.112] (/50.38.35.18)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 25 Jun 2020 16:46:07 +0000
-Subject: Re: [PATCH 2/3] mm/huge_memory.c: update tlb entry if pmd is changed
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Daniel Silsby <dansilsby@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <1592990792-1923-1-git-send-email-maobibo@loongson.cn>
- <1592990792-1923-2-git-send-email-maobibo@loongson.cn>
- <07f78e99-6e59-0bce-8ac0-50d7c7600461@oracle.com>
- <87lfkbl5gz.fsf@linux.ibm.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <6071df89-1438-1a25-136d-228b8863364e@oracle.com>
-Date:   Thu, 25 Jun 2020 09:46:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S2406798AbgFYRhv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Jun 2020 13:37:51 -0400
+Received: from out28-74.mail.aliyun.com ([115.124.28.74]:40688 "EHLO
+        out28-74.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728181AbgFYRhv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jun 2020 13:37:51 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1705442|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00394338-0.000234983-0.995822;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03306;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.HsRfZK5_1593106660;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HsRfZK5_1593106660)
+          by smtp.aliyun-inc.com(10.147.41.231);
+          Fri, 26 Jun 2020 01:37:45 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        paul.burton@mips.com, paul@crapouillou.net, robh+dt@kernel.org,
+        tsbogend@alpha.franken.de, ak@linux.intel.com,
+        ebiederm@xmission.com, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+Subject: [PATCH v2 0/3] Add support for Ingenic X1830 SoC and Y&A CU1830-Neo board.
+Date:   Fri, 26 Jun 2020 01:37:13 +0800
+Message-Id: <20200625173716.56146-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-In-Reply-To: <87lfkbl5gz.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9663 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=18 spamscore=0
- adultscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006250104
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9663 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=18 bulkscore=0
- cotscore=-2147483648 malwarescore=0 mlxscore=0 clxscore=1011
- lowpriorityscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
- spamscore=0 impostorscore=0 adultscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006250104
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/25/20 5:01 AM, Aneesh Kumar K.V wrote:
-> Mike Kravetz <mike.kravetz@oracle.com> writes:
-> 
->> On 6/24/20 2:26 AM, Bibo Mao wrote:
->>> When set_pmd_at is called in function do_huge_pmd_anonymous_page,
->>> new tlb entry can be added by software on MIPS platform.
->>>
->>> Here add update_mmu_cache_pmd when pmd entry is set, and
->>> update_mmu_cache_pmd is defined as empty excepts arc/mips platform.
->>> This patch has no negative effect on other platforms except arc/mips
->>> system.
->>
->> I am confused by this comment.  It appears that update_mmu_cache_pmd
->> is defined as non-empty on arc, mips, powerpc and sparc architectures.
->> Am I missing something?
->>
->> If those architectures do provide update_mmu_cache_pmd, then the previous
->> patch and this one now call update_mmu_cache_pmd with the actual faulting
->> address instead of the huge page aligned address.  This was intentional
->> for mips.  However, are there any potential issues on the other architectures?
->> I am no expert in any of those architectures.  arc looks like it could be
->> problematic as update_mmu_cache_pmd calls update_mmu_cache and then
->> operates on (address & PAGE_MASK).  That could now be different.
->>
-> 
-> Also we added update_mmu_cache_pmd to update a THP entry. That could be
-> different from a hugetlb entry on some architectures. If we need to do
-> hugetlb equivalent for update_mmu_cache, we should add a different
-> function.
+v1->v2:
+1.Add DT node for LED.
+2.Update defconfig for LED.
 
-I do not know the mips architecture well enough or if the motivation for
-this patch was based on THP or hugetlb pages.  However, it will change
-the address passed to update_mmu_cache_pmd from huge page aligned to the
-actual faulting address.  Will such a change in the passed address impact
-the powerpc update_mmu_cache_pmd routine?
+周琰杰 (Zhou Yanjie) (3):
+  MIPS: Ingenic: Add Ingenic X1830 support.
+  dt-bindings: MIPS: Add Ingenic X1830 based boards.
+  MIPS: Ingenic: Add YSH & ATIL CU Neo board support.
+
+ .../devicetree/bindings/mips/ingenic/devices.yaml  |  12 +-
+ arch/mips/boot/dts/ingenic/Makefile                |   1 +
+ arch/mips/boot/dts/ingenic/cu1830-neo.dts          | 168 ++++++++++++
+ arch/mips/boot/dts/ingenic/x1830.dtsi              | 300 +++++++++++++++++++++
+ arch/mips/configs/cu1830-neo_defconfig             | 123 +++++++++
+ arch/mips/jz4740/Kconfig                           |  10 +
+ 6 files changed, 611 insertions(+), 3 deletions(-)
+ create mode 100644 arch/mips/boot/dts/ingenic/cu1830-neo.dts
+ create mode 100755 arch/mips/boot/dts/ingenic/x1830.dtsi
+ create mode 100644 arch/mips/configs/cu1830-neo_defconfig
 
 -- 
-Mike Kravetz
+2.11.0
+
+
+
