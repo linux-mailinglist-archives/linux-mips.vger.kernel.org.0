@@ -2,51 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0044F209B4F
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jun 2020 10:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BE2209B52
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jun 2020 10:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390624AbgFYIbP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Jun 2020 04:31:15 -0400
-Received: from elvis.franken.de ([193.175.24.41]:36823 "EHLO elvis.franken.de"
+        id S2390679AbgFYIbR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Jun 2020 04:31:17 -0400
+Received: from elvis.franken.de ([193.175.24.41]:36835 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389537AbgFYIbP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 25 Jun 2020 04:31:15 -0400
+        id S2390597AbgFYIbQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 25 Jun 2020 04:31:16 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1joNHs-0001Gi-02; Thu, 25 Jun 2020 10:31:12 +0200
+        id 1joNHt-0001Gi-04; Thu, 25 Jun 2020 10:31:13 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 98D3FC06F9; Thu, 25 Jun 2020 10:23:11 +0200 (CEST)
-Date:   Thu, 25 Jun 2020 10:23:11 +0200
+        id C8607C06F9; Thu, 25 Jun 2020 10:28:37 +0200 (CEST)
+Date:   Thu, 25 Jun 2020 10:28:37 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     =?iso-8859-1?Q?Jo=E3o_H=2E?= Spies <jhlspies@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: ingenic: gcw0: Fix HP detection GPIO.
-Message-ID: <20200625082311.GA6319@alpha.franken.de>
-References: <20200623211945.823-1-jhlspies@gmail.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH 11/26] mm/mips: Use general page fault accounting
+Message-ID: <20200625082837.GD6319@alpha.franken.de>
+References: <20200619160538.8641-1-peterx@redhat.com>
+ <20200619160538.8641-12-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200623211945.823-1-jhlspies@gmail.com>
+In-Reply-To: <20200619160538.8641-12-peterx@redhat.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 06:19:45PM -0300, João H. Spies wrote:
-> Previously marked as active high, but is in reality active low.
+On Fri, Jun 19, 2020 at 12:05:23PM -0400, Peter Xu wrote:
+> Use the general page fault accounting by passing regs into handle_mm_fault().
+> It naturally solve the issue of multiple page fault accounting when page fault
+> retry happened.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: b1bfdb660516 ("MIPS: ingenic: DTS: Update GCW0 support")
-> Signed-off-by: João H. Spies <jhlspies@gmail.com>
+> Fix PERF_COUNT_SW_PAGE_FAULTS perf event manually for page fault retries, by
+> moving it before taking mmap_sem.
+> 
+> CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> CC: linux-mips@vger.kernel.org
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 > ---
->  arch/mips/boot/dts/ingenic/gcw0.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/mm/fault.c | 14 +++-----------
+>  1 file changed, 3 insertions(+), 11 deletions(-)
 
-applied to mips-fixes.
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
 Thomas.
 
