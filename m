@@ -2,74 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF226209C5F
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jun 2020 11:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF535209C5B
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jun 2020 11:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390002AbgFYJ7n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Jun 2020 05:59:43 -0400
-Received: from elvis.franken.de ([193.175.24.41]:37041 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388485AbgFYJ7n (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 25 Jun 2020 05:59:43 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1joOfV-0001nc-00; Thu, 25 Jun 2020 11:59:41 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 1DCD5C0708; Thu, 25 Jun 2020 11:40:59 +0200 (CEST)
-Date:   Thu, 25 Jun 2020 11:40:59 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S2390771AbgFYJ5j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Jun 2020 05:57:39 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:34688 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388485AbgFYJ5j (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 25 Jun 2020 05:57:39 -0400
+Received: from [10.20.42.25] (unknown [10.20.42.25])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axf+judPReSJtJAA--.1308S3;
+        Thu, 25 Jun 2020 17:57:03 +0800 (CST)
+Subject: Re: [PATCH 2/3] mm/huge_memory.c: update tlb entry if pmd is changed
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH mips-next 0/3] MIPS: fix the two most annoying sparse
- floods
-Message-ID: <20200625094059.GA7660@alpha.franken.de>
-References: <OXAnLrccR2GxIpepN5IUjppNnjyVAnjQmCIx2RmgpMLsOzOBgXMKYvmjivy4Rq0bAVf11R5V9_FwfGx-MML3dShuOOoPUtAHUHUedlVrW_g=@pm.me>
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Daniel Silsby <dansilsby@gmail.com>
+References: <1592990792-1923-1-git-send-email-maobibo@loongson.cn>
+ <1592990792-1923-2-git-send-email-maobibo@loongson.cn>
+ <07f78e99-6e59-0bce-8ac0-50d7c7600461@oracle.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+From:   maobibo <maobibo@loongson.cn>
+Message-ID: <b6f29ae6-8246-9110-1d93-3a68d55e19d0@loongson.cn>
+Date:   Thu, 25 Jun 2020 17:57:02 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OXAnLrccR2GxIpepN5IUjppNnjyVAnjQmCIx2RmgpMLsOzOBgXMKYvmjivy4Rq0bAVf11R5V9_FwfGx-MML3dShuOOoPUtAHUHUedlVrW_g=@pm.me>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <07f78e99-6e59-0bce-8ac0-50d7c7600461@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Axf+judPReSJtJAA--.1308S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFykKr1xKr18Kr18Wr13twb_yoW8Xr47p3
+        yfGan5Jw4DKr40krs7Xw47Xr4FvwsIqFWDXr1YkrWUZ3W5Xw1Fkr97uws7Wa4UZr4rXw47
+        ZayjgF98ur98ZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvCb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
+        Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7IU56c_DUUUUU==
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 20, 2020 at 09:33:38AM +0000, Alexander Lobakin wrote:
-> This set addresses the two most annoying sparse floods when building the
-> tree with C={1,2}: one in asm/io.h (in several mangle-port.h actually),
-> and one in asm/checksum.h.
-> Both of these comes from lack of forced typecasting and hence harmless,
-> but complicates real bug hunting, as asm/io.h is included in almost
-> every driver, while asm/checksum.h is included in lots of networking
-> code.
-> 
-> I also fixed two wrong __mem_ioswabq() macros while was nearby.
-> Tested on Generic MIPS platform -- no more flooding in console (there's
-> one more source in mips-cm.h, but it's included in just a few files, so
-> not a real problem. It can be issued separately anyway), while objdump
-> doesn't see any difference at all.
-> 
-> Alexander Lobakin (3):
->   MIPS: generic/ip32: io: fix __mem_ioswabq()
->   MIPS: io: fix sparse flood on asm/io.h
->   MIPS: checksum: fix sparse flooding on asm/checksum.h
-> 
->  arch/mips/include/asm/checksum.h                     |  4 ++--
->  .../include/asm/mach-cavium-octeon/mangle-port.h     | 12 +++++++++---
->  arch/mips/include/asm/mach-generic/mangle-port.h     | 12 ++++++------
->  arch/mips/include/asm/mach-ip27/mangle-port.h        |  6 +++---
->  arch/mips/include/asm/mach-ip30/mangle-port.h        |  6 +++---
->  arch/mips/include/asm/mach-ip32/mangle-port.h        |  6 +++---
->  arch/mips/include/asm/mach-tx39xx/mangle-port.h      |  6 +++---
->  arch/mips/include/asm/mach-tx49xx/mangle-port.h      |  6 +++---
->  8 files changed, 32 insertions(+), 26 deletions(-)
 
-series applied to mips-next.
 
-Thomas.
+On 06/25/2020 08:30 AM, Mike Kravetz wrote:
+> On 6/24/20 2:26 AM, Bibo Mao wrote:
+>> When set_pmd_at is called in function do_huge_pmd_anonymous_page,
+>> new tlb entry can be added by software on MIPS platform.
+>>
+>> Here add update_mmu_cache_pmd when pmd entry is set, and
+>> update_mmu_cache_pmd is defined as empty excepts arc/mips platform.
+>> This patch has no negative effect on other platforms except arc/mips
+>> system.
+> 
+> I am confused by this comment.  It appears that update_mmu_cache_pmd
+> is defined as non-empty on arc, mips, powerpc and sparc architectures.
+> Am I missing something?
+ohh, sparc is missing here, it not defined as empty. On powerpc it is defined
+as empty.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+> 
+> If those architectures do provide update_mmu_cache_pmd, then the previous
+> patch and this one now call update_mmu_cache_pmd with the actual faulting
+> address instead of the huge page aligned address.  This was intentional
+> for mips.  However, are there any potential issues on the other architectures?
+It is not special for mips, only that fault address is useful on mips system.
+In function huge_pmd_set_accessed/do_huge_pmd_wp_page, update_mmu_cache_pmd is
+called with vmf->address, rather than start address of pmd page.
+
+regards
+bibo,mao
+
+> I am no expert in any of those architectures.  arc looks like it could be
+> problematic as update_mmu_cache_pmd calls update_mmu_cache and then
+> operates on (address & PAGE_MASK).  That could now be different.
+
