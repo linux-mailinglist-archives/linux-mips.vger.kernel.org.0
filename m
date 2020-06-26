@@ -2,131 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D2D20AE41
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2020 10:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C97420B44F
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2020 17:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728988AbgFZINf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Jun 2020 04:13:35 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54748 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728817AbgFZINe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 26 Jun 2020 04:13:34 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05Q89UrY054383;
-        Fri, 26 Jun 2020 04:13:16 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31vxqkyb28-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Jun 2020 04:13:15 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05Q89XJu054597;
-        Fri, 26 Jun 2020 04:13:15 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31vxqkyb1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Jun 2020 04:13:15 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05Q8Bmio024767;
-        Fri, 26 Jun 2020 08:13:13 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 31uusjjp7s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Jun 2020 08:13:12 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05Q8DAGX34537708
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Jun 2020 08:13:10 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCD9D42042;
-        Fri, 26 Jun 2020 08:13:10 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB02742049;
-        Fri, 26 Jun 2020 08:13:07 +0000 (GMT)
-Received: from [9.199.51.116] (unknown [9.199.51.116])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 26 Jun 2020 08:13:07 +0000 (GMT)
-Subject: Re: [PATCH 2/3] mm/huge_memory.c: update tlb entry if pmd is changed
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S1729379AbgFZPSF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Jun 2020 11:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726657AbgFZPSE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Jun 2020 11:18:04 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1000EC03E97B
+        for <linux-mips@vger.kernel.org>; Fri, 26 Jun 2020 08:18:03 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id r22so9040203qke.13
+        for <linux-mips@vger.kernel.org>; Fri, 26 Jun 2020 08:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=0S3+/lb8kTzTF7FG+GaZo7TfixBDNtLBveukGJJz1OA=;
+        b=pxn6ZawdwN+2yWmx04djJWqqXdCzmPwgL9uoMrdcjCFQHtH0kzj7+OCDwo0NOmsffI
+         9MOHjqXADtuM6Eonqp4mO8OVha8dQsqVFHr/fsbKSPzfb4VeCRa4Y/AvLZD/8V0uU5i/
+         rv7kDng9weKxmLnpPFfwzd+LfObFbsB8K1spR8cRZCUarMngFTeSX5Ld3FXEvhPHGkUk
+         LU2sSRqEKa84G2P38oJ3kPczTjj+h65ZLaeQKCHPmv2RIhcv8wLQ4cFpausDgh4rvWK3
+         Xu76inpSAyo5OgQIz5cRPF4yA2kxbxvNbAD9bugtRDyE8P2IpIUbA7E40aEAZewiExcE
+         yOzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0S3+/lb8kTzTF7FG+GaZo7TfixBDNtLBveukGJJz1OA=;
+        b=ZwmBZAXi/CXDOFM4NIbfwWw99+xhduA7RpFATW6q52IHQ74fwWqTCiowa8fZ8+li9t
+         IL0bRn0ok+toDFFPjbKB221iS8QuqjcCFVbBK0hgRBciutHWuq22iGy1HjnTjZ1UAzf5
+         PPdmFDweo93T9JuKimtkNqqJOTuv9+xbTZ1N2E8ZwDBuolprY/Bi72d0/LspiwIUQNP7
+         tUOInxKYk4zkLhPg8JROfmPPH98oxJMpys34neaoA1AjW6AYUGMAsrU5MA/3oPHtx7XL
+         MsS6T+Mllsd1J8BmBMpWiC9K2WVDmTrO1E0jgk74a/L4APEUJgtD44gohG3PQdbGKFLO
+         WQVA==
+X-Gm-Message-State: AOAM531IEcyD0DAea9BEJLHGICQy1c4Onzy/ajH7q6onxnRvQ7d+Ipg+
+        hSqRHKaYkdjzmfevelrWhR/ILA==
+X-Google-Smtp-Source: ABdhPJyxJJEEnnxsuDhIU/toh+dHV3q9cCmOXXFJqgFN0cKJYvcOuPUsKnfNvqaMB58IcRJE4TEmhg==
+X-Received: by 2002:a37:7683:: with SMTP id r125mr1013064qkc.39.1593184682285;
+        Fri, 26 Jun 2020 08:18:02 -0700 (PDT)
+Received: from localhost (rfs.netwinder.org. [206.248.184.2])
+        by smtp.gmail.com with ESMTPSA id 79sm173640qkd.134.2020.06.26.08.18.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 26 Jun 2020 08:18:01 -0700 (PDT)
+Date:   Fri, 26 Jun 2020 11:18:00 -0400
+From:   Ralph Siemsen <ralph.siemsen@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Pavel Machek <pavel@denx.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Daniel Silsby <dansilsby@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <1592990792-1923-1-git-send-email-maobibo@loongson.cn>
- <1592990792-1923-2-git-send-email-maobibo@loongson.cn>
- <07f78e99-6e59-0bce-8ac0-50d7c7600461@oracle.com>
- <87lfkbl5gz.fsf@linux.ibm.com>
- <6071df89-1438-1a25-136d-228b8863364e@oracle.com>
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Message-ID: <ad67e08e-9da8-6123-2c14-c197d22ee27a@linux.ibm.com>
-Date:   Fri, 26 Jun 2020 13:43:06 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 4.19 182/267] spi: dw: Return any value retrieved from
+ the dma_transfer callback
+Message-ID: <20200626151800.GA22242@maple.netwinder.org>
+References: <20200619141648.840376470@linuxfoundation.org>
+ <20200619141657.498868116@linuxfoundation.org>
+ <20200619210719.GB12233@amd>
+ <20200622205121.4xuki7guyj6u5yul@mobilestation>
 MIME-Version: 1.0
-In-Reply-To: <6071df89-1438-1a25-136d-228b8863364e@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-26_04:2020-06-26,2020-06-26 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- bulkscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=999
- malwarescore=0 impostorscore=0 priorityscore=1501 cotscore=-2147483648
- spamscore=0 suspectscore=8 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006260058
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20200622205121.4xuki7guyj6u5yul@mobilestation>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/25/20 10:16 PM, Mike Kravetz wrote:
-> On 6/25/20 5:01 AM, Aneesh Kumar K.V wrote:
->> Mike Kravetz <mike.kravetz@oracle.com> writes:
->>
->>> On 6/24/20 2:26 AM, Bibo Mao wrote:
->>>> When set_pmd_at is called in function do_huge_pmd_anonymous_page,
->>>> new tlb entry can be added by software on MIPS platform.
->>>>
->>>> Here add update_mmu_cache_pmd when pmd entry is set, and
->>>> update_mmu_cache_pmd is defined as empty excepts arc/mips platform.
->>>> This patch has no negative effect on other platforms except arc/mips
->>>> system.
->>>
->>> I am confused by this comment.  It appears that update_mmu_cache_pmd
->>> is defined as non-empty on arc, mips, powerpc and sparc architectures.
->>> Am I missing something?
->>>
->>> If those architectures do provide update_mmu_cache_pmd, then the previous
->>> patch and this one now call update_mmu_cache_pmd with the actual faulting
->>> address instead of the huge page aligned address.  This was intentional
->>> for mips.  However, are there any potential issues on the other architectures?
->>> I am no expert in any of those architectures.  arc looks like it could be
->>> problematic as update_mmu_cache_pmd calls update_mmu_cache and then
->>> operates on (address & PAGE_MASK).  That could now be different.
->>>
->>
->> Also we added update_mmu_cache_pmd to update a THP entry. That could be
->> different from a hugetlb entry on some architectures. If we need to do
->> hugetlb equivalent for update_mmu_cache, we should add a different
->> function.
-> 
-> I do not know the mips architecture well enough or if the motivation for
-> this patch was based on THP or hugetlb pages.  However, it will change
-> the address passed to update_mmu_cache_pmd from huge page aligned to the
-> actual faulting address.  Will such a change in the passed address impact
-> the powerpc update_mmu_cache_pmd routine?
-> 
+Hi Serge, Pavel, Greg,
 
-Right now powerpc update_mmu_cache_pmd() is a dummy function. But I 
-agree we should audit arch to make sure such a change can work with 
-architectures. My comment was related to the fact that mmu cache update 
-w.r.t THP and hugetlb can be different on some platforms. So we may
-want to avoid using the same function for both.
+On Mon, Jun 22, 2020 at 11:51:21PM +0300, Serge Semin wrote:
+>Hello Pavel
+>
+>On Fri, Jun 19, 2020 at 11:07:19PM +0200, Pavel Machek wrote:
+>
+>> Mainline patch simply changes return value, but code is different in
+>> v4.19, and poll_transfer will now be avoided when dws->dma_mapped. Is
+>> that a problem?
+>
+>Actually no.) In that old 4.19 context it's even better to return straight away
+>no matter what value is returned by the dma_transfer() callback.
 
--aneesh
+This patch changes the return dma_transfer return value from 0 to 1, 
+however it was only done in spi-dw-mid.c func mid_spi_dma_transfer().
+
+There is an identical function in spi-dw-mmio.c that needs the same 
+treatment, otherwise access to the SPI device becomes erratic and even 
+causes kernel to hang. Guess how I found this ;-)
+
+So the following patch is needed as well, at least in 4.9 and 4.19, I 
+did not check/test other versions. Mainline does not need this, since 
+the code seems to have been refactored to avoid the duplication.
+
+Regards,
+-Ralph
+
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index c563c2815093..99641c485288 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -358,7 +358,7 @@ static int mmio_spi_dma_transfer(struct dw_spi *dws, struct spi_transfer *xfer)
+ 		dma_async_issue_pending(dws->txchan);
+ 	}
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ static void mmio_spi_dma_stop(struct dw_spi *dws)
+-- 
+2.17.1
+
