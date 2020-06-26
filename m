@@ -2,392 +2,434 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB3020A428
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jun 2020 19:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF2F20ACCB
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2020 09:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405219AbgFYRiC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Jun 2020 13:38:02 -0400
-Received: from out28-100.mail.aliyun.com ([115.124.28.100]:37057 "EHLO
-        out28-100.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406766AbgFYRhy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jun 2020 13:37:54 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436374|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0151357-0.000846497-0.984018;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03275;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.HsRfZK5_1593106660;
-Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HsRfZK5_1593106660)
-          by smtp.aliyun-inc.com(10.147.41.231);
-          Fri, 26 Jun 2020 01:37:48 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        paul.burton@mips.com, paul@crapouillou.net, robh+dt@kernel.org,
-        tsbogend@alpha.franken.de, ak@linux.intel.com,
-        ebiederm@xmission.com, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
-Subject: [PATCH v2 3/3] MIPS: Ingenic: Add YSH & ATIL CU Neo board support.
-Date:   Fri, 26 Jun 2020 01:37:16 +0800
-Message-Id: <20200625173716.56146-4-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200625173716.56146-1-zhouyanjie@wanyeetech.com>
-References: <20200625173716.56146-1-zhouyanjie@wanyeetech.com>
+        id S1727960AbgFZHJu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 26 Jun 2020 03:09:50 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:42253 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725801AbgFZHJu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Jun 2020 03:09:50 -0400
+X-Originating-IP: 91.224.148.103
+Received: from xps13 (unknown [91.224.148.103])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 628BE1C0004;
+        Fri, 26 Jun 2020 07:09:41 +0000 (UTC)
+Date:   Fri, 26 Jun 2020 09:09:40 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, richard@nod.at, vigneshr@ti.com,
+        arnd@arndb.de, brendanhiggins@google.com, tglx@linutronix.de,
+        boris.brezillon@collabora.com, anders.roxell@linaro.org,
+        masonccyang@mxic.com.tw, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, hauke.mehrtens@intel.com,
+        andriy.shevchenko@intel.com, qi-ming.wu@intel.com,
+        cheol.yong.kim@intel.com
+Subject: Re: [RESEND, v11 2/2] mtd: rawnand: Add NAND controller support on
+ Intel LGM SoC
+Message-ID: <20200626090940.4d55bf9d@xps13>
+In-Reply-To: <20200616093332.53927-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+References: <20200616093332.53927-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+        <20200616093332.53927-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a device tree and a defconfig for the Ingenic X1830 based
-YSH & ATIL CU Neo board.
+Hello,
 
-Tested-by: 周正 (Zhou Zheng) <sernia.zhou@foxmail.com>
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
+"Ramuthevar,Vadivel MuruganX"
+<vadivel.muruganx.ramuthevar@linux.intel.com> wrote on Tue, 16 Jun 2020
+17:33:32 +0800:
 
-Notes:
-    v1->v2:
-    1.Add DT node for LED.
-    2.Update defconfig for LED.
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> 
+> This patch adds the new IP of Nand Flash Controller(NFC) support
+> on Intel's Lightning Mountain(LGM) SoC.
+> 
+> DMA is used for burst data transfer operation, also DMA HW supports
+> aligned 32bit memory address and aligned data access by default.
+> DMA burst of 8 supported. Data register used to support the read/write
+> operation from/to device.
+> 
+> NAND controller driver implements ->exec_op() to replace legacy hooks,
+> these specific call-back method to execute NAND operations.
+> 
+> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> ---
 
- arch/mips/boot/dts/ingenic/Makefile       |   1 +
- arch/mips/boot/dts/ingenic/cu1830-neo.dts | 168 ++++++++++++++++++++++++++++++
- arch/mips/configs/cu1830-neo_defconfig    | 123 ++++++++++++++++++++++
- arch/mips/jz4740/Kconfig                  |   4 +
- 4 files changed, 296 insertions(+)
- create mode 100644 arch/mips/boot/dts/ingenic/cu1830-neo.dts
- create mode 100644 arch/mips/configs/cu1830-neo_defconfig
+[...]
 
-diff --git a/arch/mips/boot/dts/ingenic/Makefile b/arch/mips/boot/dts/ingenic/Makefile
-index e1654291a7b0..c33434fad007 100644
---- a/arch/mips/boot/dts/ingenic/Makefile
-+++ b/arch/mips/boot/dts/ingenic/Makefile
-@@ -3,5 +3,6 @@ dtb-$(CONFIG_JZ4740_QI_LB60)	+= qi_lb60.dtb
- dtb-$(CONFIG_JZ4770_GCW0)	+= gcw0.dtb
- dtb-$(CONFIG_JZ4780_CI20)	+= ci20.dtb
- dtb-$(CONFIG_X1000_CU1000_NEO)	+= cu1000-neo.dtb
-+dtb-$(CONFIG_X1830_CU1830_NEO)	+= cu1830-neo.dtb
- 
- obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
-diff --git a/arch/mips/boot/dts/ingenic/cu1830-neo.dts b/arch/mips/boot/dts/ingenic/cu1830-neo.dts
-new file mode 100644
-index 000000000000..605160927fe6
---- /dev/null
-+++ b/arch/mips/boot/dts/ingenic/cu1830-neo.dts
-@@ -0,0 +1,168 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+
-+#include "x1830.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/ingenic,tcu.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	compatible = "yna,cu1830-neo", "ingenic,x1830";
-+	model = "YSH & ATIL General Board CU1830-Neo";
-+
-+	aliases {
-+		serial1 = &uart1;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial1:115200n8";
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+		reg = <0x0 0x08000000>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		led-0 {
-+			gpios = <&gpc 17 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "mmc0";
-+		};
-+	};
-+
-+	wlan_pwrseq: msc1-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+
-+		reset-gpios = <&gpc 13 GPIO_ACTIVE_LOW>;
-+		post-power-on-delay-ms = <200>;
-+	};
-+};
-+
-+&exclk {
-+	clock-frequency = <24000000>;
-+};
-+
-+&tcu {
-+	/* 1500 kHz for the system timer and clocksource */
-+	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER2>;
-+	assigned-clock-rates = <1500000>, <1500000>;
-+
-+	/* Use channel #0 for the system timer channel #2 for the clocksource */
-+	ingenic,pwm-channels-mask = <0xfa>;
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_i2c0>;
-+
-+	ads7830: adc@48 {
-+		compatible = "ti,ads7830";
-+		reg = <0x48>;
-+	};
-+};
-+
-+&uart1 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_uart1>;
-+};
-+
-+&mac {
-+	status = "okay";
-+
-+	phy-mode = "rmii";
-+	phy-handle = <&ip101gr>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_mac>;
-+
-+	snps,reset-gpio = <&gpb 28 GPIO_ACTIVE_LOW>; /* PB28 */
-+	snps,reset-active-low;
-+	snps,reset-delays-us = <0 10000 30000>;
-+};
-+
-+&mdio {
-+	status = "okay";
-+
-+	ip101gr: ethernet-phy@0 {
-+		compatible = "ethernet-phy-id0243.0c54", "ethernet-phy-ieee802.3-c22";
-+		reg = <0>;
-+	};
-+};
-+
-+&msc0 {
-+	status = "okay";
-+
-+	bus-width = <4>;
-+	max-frequency = <50000000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_msc0>;
-+
-+	non-removable;
-+};
-+
-+&msc1 {
-+	status = "okay";
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	bus-width = <4>;
-+	max-frequency = <50000000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_msc1>;
-+
-+	non-removable;
-+
-+	mmc-pwrseq = <&wlan_pwrseq>;
-+
-+	ap6212a: wifi@1 {
-+		compatible = "brcm,bcm4329-fmac";
-+		reg = <1>;
-+
-+		interrupt-parent = <&gpc>;
-+		interrupts = <25 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-names = "host-wake";
-+
-+		brcm,drive-strength = <10>;
-+	};
-+};
-+
-+&pinctrl {
-+	pins_i2c0: i2c0 {
-+		function = "i2c0";
-+		groups = "i2c0-data";
-+		bias-pull-up;
-+	};
-+
-+	pins_uart1: uart1 {
-+		function = "uart1";
-+		groups = "uart1-data";
-+		bias-pull-up;
-+	};
-+
-+	pins_mac: mac {
-+		function = "mac";
-+		groups = "mac";
-+		bias-disable;
-+	};
-+
-+	pins_msc0: msc0 {
-+		function = "mmc0";
-+		groups = "mmc0-1bit", "mmc0-4bit";
-+		bias-disable;
-+	};
-+
-+	pins_msc1: msc1 {
-+		function = "mmc1";
-+		groups = "mmc1-1bit", "mmc1-4bit";
-+		bias-disable;
-+	};
-+};
-diff --git a/arch/mips/configs/cu1830-neo_defconfig b/arch/mips/configs/cu1830-neo_defconfig
-new file mode 100644
-index 000000000000..cbfb62900273
---- /dev/null
-+++ b/arch/mips/configs/cu1830-neo_defconfig
-@@ -0,0 +1,123 @@
-+CONFIG_LOCALVERSION_AUTO=y
-+CONFIG_KERNEL_GZIP=y
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+CONFIG_CGROUPS=y
-+CONFIG_MEMCG=y
-+CONFIG_MEMCG_KMEM=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_NAMESPACES=y
-+CONFIG_USER_NS=y
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_EMBEDDED=y
-+# CONFIG_VM_EVENT_COUNTERS is not set
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB=y
-+CONFIG_MACH_INGENIC=y
-+CONFIG_X1830_CU1830_NEO=y
-+CONFIG_HIGHMEM=y
-+CONFIG_HZ_100=y
-+# CONFIG_SECCOMP is not set
-+# CONFIG_SUSPEND is not set
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+# CONFIG_COMPACTION is not set
-+CONFIG_CMA=y
-+CONFIG_CMA_AREAS=7
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_CFG80211=y
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+# CONFIG_FW_LOADER is not set
-+# CONFIG_ALLOW_DEV_COREDUMP is not set
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_MD=y
-+CONFIG_BLK_DEV_DM=y
-+CONFIG_NETDEVICES=y
-+CONFIG_STMMAC_ETH=y
-+CONFIG_ICPLUS_PHY=y
-+CONFIG_BRCMFMAC=y
-+# CONFIG_INPUT_MOUSEDEV is not set
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_LEGACY_PTY_COUNT=2
-+CONFIG_SERIAL_EARLYCON=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_NR_UARTS=2
-+CONFIG_SERIAL_8250_RUNTIME_UARTS=2
-+CONFIG_SERIAL_8250_INGENIC=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+# CONFIG_HW_RANDOM is not set
-+CONFIG_I2C=y
-+CONFIG_I2C_JZ4780=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_SENSORS_ADS7828=y
-+CONFIG_WATCHDOG=y
-+CONFIG_JZ4740_WDT=y
-+# CONFIG_LCD_CLASS_DEVICE is not set
-+# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
-+# CONFIG_VGA_CONSOLE is not set
-+# CONFIG_HID is not set
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_MMC=y
-+CONFIG_MMC_JZ4740=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_JZ4740=y
-+CONFIG_DMADEVICES=y
-+CONFIG_DMA_JZ4780=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_NVMEM=y
-+CONFIG_NVMEM_SYSFS=y
-+CONFIG_EXT4_FS=y
-+# CONFIG_DNOTIFY is not set
-+CONFIG_AUTOFS_FS=y
-+CONFIG_PROC_KCORE=y
-+# CONFIG_PROC_PAGE_MONITOR is not set
-+CONFIG_TMPFS=y
-+CONFIG_CONFIGFS_FS=y
-+CONFIG_NFS_FS=y
-+CONFIG_NLS=y
-+CONFIG_NLS_CODEPAGE_936=y
-+CONFIG_NLS_CODEPAGE_950=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_CRYPTO_ECHAINIV=y
-+CONFIG_CRYPTO_AES=y
-+CONFIG_CRYPTO_DEFLATE=y
-+CONFIG_CRYPTO_LZO=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=15
-+CONFIG_CONSOLE_LOGLEVEL_QUIET=15
-+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
-+CONFIG_DEBUG_INFO=y
-+CONFIG_STRIP_ASM_SYMS=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_PANIC_ON_OOPS=y
-+CONFIG_PANIC_TIMEOUT=10
-+# CONFIG_SCHED_DEBUG is not set
-+# CONFIG_DEBUG_PREEMPT is not set
-+CONFIG_STACKTRACE=y
-+# CONFIG_FTRACE is not set
-+CONFIG_CMDLINE_BOOL=y
-+CONFIG_CMDLINE="earlycon clk_ignore_unused"
-diff --git a/arch/mips/jz4740/Kconfig b/arch/mips/jz4740/Kconfig
-index cd0ddb52da99..6c065dcaeff8 100644
---- a/arch/mips/jz4740/Kconfig
-+++ b/arch/mips/jz4740/Kconfig
-@@ -27,6 +27,10 @@ config X1000_CU1000_NEO
- 	bool "YSH & ATIL CU1000 Module with Neo backplane"
- 	select MACH_X1000
- 
-+config X1830_CU1830_NEO
-+	bool "YSH & ATIL CU1830 Module with Neo backplane"
-+	select MACH_X1830
-+
- endchoice
- 
- config MACH_JZ4740
--- 
-2.11.0
+> +static int ebu_nand_write_page_hwecc(struct nand_chip *chip, const u8 *buf,
+> +				     int oob_required, int page)
+> +{
+> +	struct mtd_info *mtd = nand_to_mtd(chip);
+> +	struct ebu_nand_controller *ebu_host = nand_get_controller_data(chip);
+> +	void __iomem *int_sta = ebu_host->hsnand + HSNAND_INT_STA;
+> +	int ret, val, x;
+> +	u32 reg;
+> +
+> +	ebu_nand_trigger(ebu_host, page, NAND_CMD_SEQIN);
+> +
+> +	ret = ebu_dma_start(ebu_host, DMA_MEM_TO_DEV, buf, mtd->writesize);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (oob_required) {
+> +		reg = (chip->oob_poi[3] << 24) | (chip->oob_poi[2] << 16) |
+> +			(chip->oob_poi[1] << 8) | chip->oob_poi[0];
+> +
+> +		writel(reg, ebu_host->hsnand + HSNAND_CMSG_0);
+> +
+> +		reg = (chip->oob_poi[7] << 24) | (chip->oob_poi[6] << 16) |
+> +			(chip->oob_poi[5] << 8) | chip->oob_poi[4];
+> +
+> +		writel(reg, ebu_host->hsnand + HSNAND_CMSG_1);
+> +	}
+> +
+> +	ret = readl_poll_timeout_atomic(int_sta, val,
+> +					!(val & HSNAND_INT_STA_WR_C), 10, 1000);
+> +	if (ret)
+> +		return -EIO;
+> +
+> +	x = readl(ebu_host->hsnand + HSNAND_CTL);
+> +	x &= ~HSNAND_CTL_GO;
+> +	writel(x, ebu_host->hsnand + HSNAND_CTL);
+> +
+> +	return 0;
+> +}
+> +
+> +static const u8 ecc_strength[] = { 1, 1, 4, 8, 24, 32, 40, 60, };
+> +
+> +static int ebu_nand_attach_chip(struct nand_chip *chip)
+> +{
+> +	struct mtd_info *mtd = nand_to_mtd(chip);
+> +	struct ebu_nand_controller *ebu_host = nand_get_controller_data(chip);
+> +	u32 eccsize, eccsteps, eccbytes, ecctotal, pagesize, pg_per_blk;
+> +	u32 eccstrength = chip->ecc.strength;
+> +	u32 writesize = mtd->writesize;
+> +	u32 blocksize = mtd->erasesize;
+> +	int start, val, i;
+> +
+> +	if (chip->ecc.mode != NAND_ECC_HW)
+> +		return 0;
+> +
+> +	/* Check whether eccsize is 0x0 or wrong. assign eccsize = 512 if YES */
 
+	/* Default to an ECC size of 512 */
+
+> +	if (!chip->ecc.size)
+> +		chip->ecc.size = 512;
+> +	eccsize = chip->ecc.size;
+> +
+> +	switch (eccsize) {
+> +	case 512:
+> +		start = 1;
+> +		if (!eccstrength)
+> +			eccstrength = 4;
+> +		break;
+> +	case 1024:
+> +		start = 4;
+> +		if (!eccstrength)
+
+You might want to look at other drivers and check the ecc_strength_ds
+property.
+
+> +			eccstrength = 32;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	i = round_up(start + 1, 4);
+> +	for (val = start; val < i; val++) {
+> +		if (eccstrength == ecc_strength[val])
+> +			break;
+> +	}
+
+A comment to explain what is this would be nice.
+
+Also "i" is not meaningful at all.
+
+> +	if (val == i)
+> +		return -EINVAL;
+> +
+> +	if (eccstrength == 8)
+> +		eccbytes = 14;
+> +	else
+> +		eccbytes = DIV_ROUND_UP(eccstrength * fls(8 * eccsize), 8);
+
+Does this formula works for eccstrength == 8 too?
+
+> +
+> +	eccsteps = writesize / eccsize;
+> +	ecctotal = eccsteps * eccbytes;
+> +	if ((ecctotal + 8) > mtd->oobsize)
+> +		return -ERANGE;
+> +
+> +	chip->ecc.total = ecctotal;
+> +	pagesize = fls(writesize >> 11);
+> +	if (pagesize > HSNAND_PARA0_PAGE_V8192)
+> +		return -ERANGE;
+> +
+> +	pg_per_blk = fls((blocksize / writesize) >> 6) << 4;
+> +	if (pg_per_blk > HSNAND_PARA0_PIB_V256)
+> +		return -ERANGE;
+> +
+> +	ebu_host->nd_para0 = pagesize | pg_per_blk | HSNAND_PARA0_BYP_EN_NP |
+> +			     HSNAND_PARA0_BYP_DEC_NP | HSNAND_PARA0_ADEP_EN |
+> +			     HSNAND_PARA0_TYPE_ONFI | (val << 29);
+> +
+> +	mtd_set_ooblayout(mtd, &ebu_nand_ooblayout_ops);
+> +	chip->ecc.read_page = ebu_nand_read_page_hwecc;
+> +	chip->ecc.write_page = ebu_nand_write_page_hwecc;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ebu_nand_exec_op(struct nand_chip *chip,
+> +			    const struct nand_operation *op, bool check_only)
+
+You don't handle the check_only parameter. This will fail with recent
+versions of the core.
+
+> +{
+> +	struct ebu_nand_controller *ctrl = nand_to_ebu(chip);
+> +	const struct nand_op_instr *instr = NULL;
+> +	unsigned int op_id;
+> +	int i, time_out, ret = 0;
+> +	u32 stat;
+> +
+> +	ebu_select_chip(chip);
+> +
+> +	for (op_id = 0; op_id < op->ninstrs; op_id++) {
+> +		instr = &op->instrs[op_id];
+> +
+> +		switch (instr->type) {
+> +		case NAND_OP_CMD_INSTR:
+> +			ebu_nand_writeb(chip, HSNAND_CLE_OFFS | HSNAND_CS_OFFS,
+> +					instr->ctx.cmd.opcode);
+> +			break;
+> +
+> +		case NAND_OP_ADDR_INSTR:
+> +			for (i = 0; i < instr->ctx.addr.naddrs; i++)
+> +				ebu_nand_writeb(chip,
+> +						HSNAND_ALE_OFFS | HSNAND_CS_OFFS,
+> +						instr->ctx.addr.addrs[i]);
+> +			break;
+> +
+> +		case NAND_OP_DATA_IN_INSTR:
+> +			ebu_read_buf(chip, instr->ctx.data.buf.in,
+> +				     instr->ctx.data.len);
+> +			break;
+> +
+> +		case NAND_OP_DATA_OUT_INSTR:
+> +			ebu_write_buf(chip, instr->ctx.data.buf.out,
+> +				      instr->ctx.data.len);
+> +			break;
+> +
+> +		case NAND_OP_WAITRDY_INSTR:
+> +			time_out = instr->ctx.waitrdy.timeout_ms * 1000;
+> +			ret = readl_poll_timeout(ctrl->ebu + EBU_WAIT,
+> +						 stat, stat & EBU_WAIT_RDBY,
+> +						 20, time_out);
+> +			break;
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct nand_controller_ops ebu_nand_controller_ops = {
+> +	.attach_chip = ebu_nand_attach_chip,
+> +	.exec_op = ebu_nand_exec_op,
+> +	.setup_data_interface = ebu_nand_setup_data_interface,
+> +};
+> +
+> +static void ebu_dma_cleanup(struct ebu_nand_controller *ebu_host)
+> +{
+> +	if (ebu_host->dma_rx)
+> +		dma_release_channel(ebu_host->dma_rx);
+> +
+> +	if (ebu_host->dma_tx)
+> +		dma_release_channel(ebu_host->dma_tx);
+> +}
+> +
+> +static int ebu_nand_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct ebu_nand_controller *ebu_host;
+> +	struct nand_chip *nand;
+> +	struct mtd_info *mtd;
+> +	struct resource *res;
+> +	char *resname;
+> +	int ret, i;
+> +	u32 reg;
+> +
+> +	ebu_host = devm_kzalloc(dev, sizeof(*ebu_host), GFP_KERNEL);
+> +	if (!ebu_host)
+> +		return -ENOMEM;
+> +
+> +	ebu_host->dev = dev;
+> +	nand_controller_init(&ebu_host->controller);
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ebunand");
+> +	ebu_host->ebu = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(ebu_host->ebu))
+> +		return PTR_ERR(ebu_host->ebu);
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hsnand");
+> +	ebu_host->hsnand = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(ebu_host->hsnand))
+> +		return PTR_ERR(ebu_host->hsnand);
+> +
+> +	ret = device_property_read_u32(dev, "nand,cs", &reg);
+> +	if (ret) {
+> +		dev_err(dev, "failed to get chip select: %d\n", ret);
+> +		return ret;
+> +	}
+> +	ebu_host->cs_num = reg;
+> +
+> +	for (i = 0; i < MAX_CS; i++) {
+> +		resname = devm_kasprintf(dev, GFP_KERNEL, "nand_cs%d", i);
+> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+> +						   resname);
+> +		if (!res)
+> +			return -EINVAL;
+> +		ebu_host->cs[i].chipaddr = devm_ioremap_resource(dev, res);
+> +		ebu_host->cs[i].nand_pa = res->start;
+> +		if (IS_ERR(ebu_host->cs[i].chipaddr))
+> +			return PTR_ERR(ebu_host->cs[i].chipaddr);
+> +	}
+> +
+> +	ebu_host->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(ebu_host->clk)) {
+> +		ret = PTR_ERR(ebu_host->clk);
+> +		dev_err(dev, "failed to get clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = clk_prepare_enable(ebu_host->clk);
+> +	if (ret) {
+> +		dev_err(dev, "failed to enable clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +	ebu_host->clk_rate = clk_get_rate(ebu_host->clk);
+> +
+> +	ebu_host->dma_tx = dma_request_chan(dev, "tx");
+> +	if (IS_ERR(ebu_host->dma_tx)) {
+> +		ret = PTR_ERR(ebu_host->dma_tx);
+> +		dev_err(dev, "DMA tx channel request fail!.\n");
+> +		goto err_cleanup_dma;
+> +	}
+> +
+> +	ebu_host->dma_rx = dma_request_chan(dev, "rx");
+> +	if (IS_ERR(ebu_host->dma_rx)) {
+> +		ret = PTR_ERR(ebu_host->dma_rx);
+> +		dev_err(dev, "DMA rx channel request fail!.\n");
+> +		goto err_cleanup_dma;
+> +	}
+> +
+> +	for (i = 0; i < MAX_CS; i++) {
+> +		resname = devm_kasprintf(dev, GFP_KERNEL, "addr_sel%d", i);
+> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+> +						   resname);
+> +		if (!res)
+> +			return -EINVAL;
+
+New line
+
+> +		ebu_host->cs[i].addr_sel = res->start;
+> +		writel(ebu_host->cs[i].addr_sel | EBU_ADDR_MASK(5) |
+> +		       EBU_ADDR_SEL_REGEN, ebu_host->ebu + EBU_ADDR_SEL(i));
+> +	}
+> +
+> +	nand_set_flash_node(&ebu_host->chip, dev->of_node);
+
+You probably want to verify that mtd->name is set after
+nand_set_flash_node, to validate the presence of the mandatory 'label'
+DT property.
+
+> +	mtd = nand_to_mtd(&ebu_host->chip);
+> +	mtd->dev.parent = dev;
+> +	ebu_host->dev = dev;
+> +
+> +	platform_set_drvdata(pdev, ebu_host);
+> +	nand_set_controller_data(&ebu_host->chip, ebu_host);
+> +
+> +	nand = &ebu_host->chip;
+> +	nand->controller = &ebu_host->controller;
+> +	nand->controller->ops = &ebu_nand_controller_ops;
+> +
+> +	/* Scan to find existence of the device */
+> +	ret = nand_scan(&ebu_host->chip, 1);
+> +	if (ret)
+> +		goto err_cleanup_dma;
+> +
+> +	ret = mtd_device_register(mtd, NULL, 0);
+> +	if (ret)
+> +		goto err_clean_nand;
+> +
+> +	return 0;
+> +
+> +err_clean_nand:
+> +	nand_cleanup(&ebu_host->chip);
+> +err_cleanup_dma:
+> +	ebu_dma_cleanup(ebu_host);
+> +	clk_disable_unprepare(ebu_host->clk);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ebu_nand_remove(struct platform_device *pdev)
+> +{
+> +	struct ebu_nand_controller *ebu_host = platform_get_drvdata(pdev);
+> +
+> +	mtd_device_unregister(nand_to_mtd(&ebu_host->chip));
+
+ret = mtd_device...
+WARN_ON(ret);
+
+> +	nand_cleanup(&ebu_host->chip);
+> +	ebu_nand_disable(&ebu_host->chip);
+> +	ebu_dma_cleanup(ebu_host);
+> +	clk_disable_unprepare(ebu_host->clk);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id ebu_nand_match[] = {
+> +	{ .compatible = "intel,nand-controller", },
+
+Any version to append to the compatible?
+
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, ebu_nand_match);
+> +
+> +static struct platform_driver ebu_nand_driver = {
+> +	.probe = ebu_nand_probe,
+> +	.remove = ebu_nand_remove,
+> +	.driver = {
+> +		.name = "intel-nand-controller",
+> +		.of_match_table = ebu_nand_match,
+> +	},
+> +
+> +};
+> +module_platform_driver(ebu_nand_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Vadivel Murugan R <vadivel.muruganx.ramuthevar@intel.com>");
+> +MODULE_DESCRIPTION("Intel's LGM External Bus NAND Controller driver");
+
+
+Thanks,
+Miquèl
