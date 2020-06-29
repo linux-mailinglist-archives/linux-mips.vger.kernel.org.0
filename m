@@ -2,96 +2,242 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC47020E660
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 00:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7947220E9B2
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 02:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404036AbgF2Vq4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Jun 2020 17:46:56 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:44187 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727795AbgF2Vqy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jun 2020 17:46:54 -0400
-Received: by mail-il1-f196.google.com with SMTP id w73so4010394ila.11;
-        Mon, 29 Jun 2020 14:46:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=93evjCDhdxZ5UWBeY+2YkNq7PalFs0r3h+XQkaBP8dE=;
-        b=Jn8n6FSAMp1WRC9FP4nhYyc5yzZIUJrJYvbRitDXqTh0+9F2M07/kj959pmP8c+7O2
-         163nyURuKwDEz9i35weEXUawZhSRNuDe+1nJQtKwjpOutQDmXpGI10KNgHkdbx0gNvx7
-         Yz3H67uBzx5plqmfaxJZuOneXyewxlbR/5qcV285XVc6qW/OkrA6lb1GtqD+hd/xNuRh
-         7CpUdLEfnjLJAxJTHK5S6GiHE1pF6kwd3Fb4tbacMb/Ef5vDDsDOyWWNvX/Z12gK/jIS
-         Ex4xwE6Ews3MMf9pU1VT7sP87tNcUnxle6Pa3PPTa8DbZgfmBOcQ1kgo5QEmaJsQSXpc
-         PVNA==
-X-Gm-Message-State: AOAM5319guXfCAtwVpDMKvYyG/5KK/rotBknpcGCgkNSJNGUtivOiHG+
-        221pvJd0LixWV7LzkfN0A70zvFBUQg==
-X-Google-Smtp-Source: ABdhPJy5G6waKe2rY07vRikAafpF0kBxLxk5gLmS6+u89sWZvMM/h5dLNkW6kl0bObAjVL3Cfk1hBg==
-X-Received: by 2002:a92:d4cf:: with SMTP id o15mr18251954ilm.25.1593467213572;
-        Mon, 29 Jun 2020 14:46:53 -0700 (PDT)
-Received: from xps15 ([64.188.179.255])
-        by smtp.gmail.com with ESMTPSA id k185sm654843ilk.16.2020.06.29.14.46.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 14:46:53 -0700 (PDT)
-Received: (nullmailer pid 2982377 invoked by uid 1000);
-        Mon, 29 Jun 2020 21:46:52 -0000
-Date:   Mon, 29 Jun 2020 15:46:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        devicetree@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-mips@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v4 3/6] dt-bindings: bus: Add MIPS CDMM controller
-Message-ID: <20200629214652.GA2981813@bogus>
-References: <20200617223201.23259-1-Sergey.Semin@baikalelectronics.ru>
- <20200617223201.23259-4-Sergey.Semin@baikalelectronics.ru>
+        id S1727027AbgF2XwZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Jun 2020 19:52:25 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:49166 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726226AbgF2XwX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jun 2020 19:52:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1593474740; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=P5Qq095rKF3uyYrOAeCOssNQFzeyNSGNN2mhlGuYWGE=;
+        b=UIDT07o7LqUOtL3gDxuLzAWkaKUkTQrPveZZfJwId6GzoldMh/f6XTvM+P/+1ujwHEbpwy
+        koAK17MI2X92+mkPcLwl+iWo2YBkuwK1llyf10gXnQsMnG+WjbojRFc9tM3tIAW8VConjr
+        JhugrEsLFTEQpoP5qmvNW7+iO/uAZQQ=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     od@zcrc.me, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh@kernel.org>, Sam Ravnborg <sam@ravnborg.org>
+Subject: [PATCH v2 01/10] dt-bindings: display: Convert ingenic,lcd.txt to YAML
+Date:   Tue, 30 Jun 2020 01:52:01 +0200
+Message-Id: <20200629235210.441709-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617223201.23259-4-Sergey.Semin@baikalelectronics.ru>
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 18 Jun 2020 01:31:57 +0300, Serge Semin wrote:
-> It's a Common Device Memory Map controller embedded into the MIPS IP
-> cores, which dts node is supposed to have compatible and reg properties.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: linux-mips@vger.kernel.org
-> 
-> ---
-> 
-> Changelog prev:
-> - Lowercase the example hex'es.
-> ---
->  .../bindings/bus/mti,mips-cdmm.yaml           | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml
-> 
+Convert the ingenic,lcd.txt to a new ingenic,lcd.yaml file.
 
+In the process, the new ingenic,jz4780-lcd compatible string has been
+added.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
 
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/mti,mips-cdmm.example.dt.yaml: example-0: cdmm@1bde8000:reg:0: [0, 467566592, 0, 32768] is too long
+Notes:
+    v2: Add info about IPU at port@8
 
+ .../bindings/display/ingenic,lcd.txt          |  45 -------
+ .../bindings/display/ingenic,lcd.yaml         | 126 ++++++++++++++++++
+ 2 files changed, 126 insertions(+), 45 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/ingenic,lcd.txt
+ create mode 100644 Documentation/devicetree/bindings/display/ingenic,lcd.yaml
 
-See https://patchwork.ozlabs.org/patch/1311658
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
+diff --git a/Documentation/devicetree/bindings/display/ingenic,lcd.txt b/Documentation/devicetree/bindings/display/ingenic,lcd.txt
+deleted file mode 100644
+index 01e3261defb6..000000000000
+--- a/Documentation/devicetree/bindings/display/ingenic,lcd.txt
++++ /dev/null
+@@ -1,45 +0,0 @@
+-Ingenic JZ47xx LCD driver
+-
+-Required properties:
+-- compatible: one of:
+-  * ingenic,jz4740-lcd
+-  * ingenic,jz4725b-lcd
+-  * ingenic,jz4770-lcd
+-- reg: LCD registers location and length
+-- clocks: LCD pixclock and device clock specifiers.
+-	   The device clock is only required on the JZ4740.
+-- clock-names: "lcd_pclk" and "lcd"
+-- interrupts: Specifies the interrupt line the LCD controller is connected to.
+-
+-Example:
+-
+-panel {
+-	compatible = "sharp,ls020b1dd01d";
+-
+-	backlight = <&backlight>;
+-	power-supply = <&vcc>;
+-
+-	port {
+-		panel_input: endpoint {
+-			remote-endpoint = <&panel_output>;
+-		};
+-	};
+-};
+-
+-
+-lcd: lcd-controller@13050000 {
+-	compatible = "ingenic,jz4725b-lcd";
+-	reg = <0x13050000 0x1000>;
+-
+-	interrupt-parent = <&intc>;
+-	interrupts = <31>;
+-
+-	clocks = <&cgu JZ4725B_CLK_LCD>;
+-	clock-names = "lcd";
+-
+-	port {
+-		panel_output: endpoint {
+-			remote-endpoint = <&panel_input>;
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/display/ingenic,lcd.yaml b/Documentation/devicetree/bindings/display/ingenic,lcd.yaml
+new file mode 100644
+index 000000000000..d56db1802fad
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/ingenic,lcd.yaml
+@@ -0,0 +1,126 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/ingenic,lcd.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Ingenic SoCs LCD controller devicetree bindings
++
++maintainers:
++  - Paul Cercueil <paul@crapouillou.net>
++
++properties:
++  $nodename:
++    pattern: "^lcd-controller@[0-9a-f]+$"
++
++  compatible:
++    enum:
++      - ingenic,jz4740-lcd
++      - ingenic,jz4725b-lcd
++      - ingenic,jz4770-lcd
++      - ingenic,jz4780-lcd
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Pixel clock
++      - description: Module clock
++    minItems: 1
++
++  clock-names:
++    items:
++      - const: lcd_pclk
++      - const: lcd
++    minItems: 1
++
++  port:
++    description: OF graph bindings (specified in bindings/graph.txt).
++
++  ports:
++    description: OF graph bindings (specified in bindings/graph.txt).
++    type: object
++    properties:
++      port@0:
++        type: object
++        description: DPI output, to interface with TFT panels.
++
++      port@8:
++        type: object
++        description: Link to the Image Processing Unit (IPU).
++          (See ingenic,ipu.yaml).
++
++    required:
++      - port@0
++
++required:
++    - compatible
++    - reg
++    - interrupts
++    - clocks
++    - clock-names
++
++if:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - ingenic,jz4740-lcd
++          - ingenic,jz4780-lcd
++then:
++  properties:
++    clocks:
++      minItems: 2
++    clock-names:
++      minItems: 2
++else:
++  properties:
++    clocks:
++      maxItems: 1
++    clock-names:
++      maxItems: 1
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/jz4740-cgu.h>
++    lcd-controller@13050000 {
++      compatible = "ingenic,jz4740-lcd";
++      reg = <0x13050000 0x1000>;
++
++      interrupt-parent = <&intc>;
++      interrupts = <30>;
++
++      clocks = <&cgu JZ4740_CLK_LCD_PCLK>, <&cgu JZ4740_CLK_LCD>;
++      clock-names = "lcd_pclk", "lcd";
++
++      port {
++        endpoint {
++          remote-endpoint = <&panel_input>;
++        };
++      };
++    };
++
++  - |
++    #include <dt-bindings/clock/jz4725b-cgu.h>
++    lcd-controller@13050000 {
++      compatible = "ingenic,jz4725b-lcd";
++      reg = <0x13050000 0x1000>;
++
++      interrupt-parent = <&intc>;
++      interrupts = <31>;
++
++      clocks = <&cgu JZ4725B_CLK_LCD>;
++      clock-names = "lcd_pclk";
++
++      port {
++        endpoint {
++          remote-endpoint = <&panel_input>;
++        };
++      };
++    };
+-- 
+2.27.0
 
