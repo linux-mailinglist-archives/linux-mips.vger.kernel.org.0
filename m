@@ -2,34 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB0220E9BF
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 02:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9316920E9C3
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 02:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726226AbgF2Xwy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Jun 2020 19:52:54 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:49608 "EHLO
+        id S1726934AbgF2XxC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Jun 2020 19:53:02 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:49800 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726199AbgF2Xwy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jun 2020 19:52:54 -0400
+        with ESMTP id S1726596AbgF2XxC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jun 2020 19:53:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1593474744; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1593474745; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XhUI9cXsdT/2cw8/5dvvRfnnNMBhQmrV1moGXmAW/Lw=;
-        b=mpqOZSbM5JU2BKhHEQ0C0DcH7p9ZsEcJ1o58c9yUtf6P0ZHUwDFK98VyD5i5qAxjqqB7IW
-        KOktx4qh6rMJwrQ2nHix1hvysVlvS3W8q25aGxcaPoHRBO+7EBKBcLKMTmSft1nsulTFiQ
-        8f6YFQvEnicwmtaVgtEYHx0VySIAN30=
+        bh=NzZtxTYFppOxJnlICRZ7phC+Q8/+aCXEQXT9OW1NRwk=;
+        b=gCSAXXOz9YfYM8EBmvMKB6y2ngfnt0p1yuQOOK0p9czTJ18w+dNdekcOleASnuhCec9kwF
+        mwY9vBd8Cgl/DvhY9wlm2yz/4LGOOe/hGGv3vweWIEs/8Hrj1PBqYyvThi3gfq1G6/4v+O
+        xtYE/eeQxWm4RpdMxYcxNy3G3weJ4Cs=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     od@zcrc.me, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        stable@vger.kernel.org
-Subject: [PATCH v2 05/10] drm/ingenic: Fix incorrect assumption about plane->index
-Date:   Tue, 30 Jun 2020 01:52:05 +0200
-Message-Id: <20200629235210.441709-5-paul@crapouillou.net>
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 06/10] drm/ingenic: Set DMA descriptor chain address in probe
+Date:   Tue, 30 Jun 2020 01:52:06 +0200
+Message-Id: <20200629235210.441709-6-paul@crapouillou.net>
 In-Reply-To: <20200629235210.441709-1-paul@crapouillou.net>
 References: <20200629235210.441709-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -39,34 +38,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-plane->index is NOT the index of the color plane in a YUV frame.
-Actually, a YUV frame is represented by a single drm_plane, even though
-it contains three Y, U, V planes.
+The address of the DMA descriptor never changes. It can therefore be set
+in the probe function.
 
-Cc: stable@vger.kernel.org # v5.3
-Fixes: 90b86fcc47b4 ("DRM: Add KMS driver for the Ingenic JZ47xx SoCs")
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
 
 Notes:
     v2: No change
 
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index a15f9a1940c6..924c8daf071a 100644
+index 924c8daf071a..f7b0c5dc8cd8 100644
 --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
 +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -386,7 +386,7 @@ static void ingenic_drm_plane_atomic_update(struct drm_plane *plane,
- 		addr = drm_fb_cma_get_gem_addr(state->fb, state, 0);
- 		width = state->src_w >> 16;
- 		height = state->src_h >> 16;
--		cpp = state->fb->format->cpp[plane->index];
-+		cpp = state->fb->format->cpp[0];
+@@ -358,8 +358,6 @@ static void ingenic_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+ 		ingenic_drm_crtc_update_ctrl(priv, finfo);
  
- 		priv->dma_hwdesc->addr = addr;
- 		priv->dma_hwdesc->cmd = width * height * cpp / 4;
+ 		clk_set_rate(priv->pix_clk, state->adjusted_mode.clock * 1000);
+-
+-		regmap_write(priv->map, JZ_REG_LCD_DA0, priv->dma_hwdesc->next);
+ 	}
+ 
+ 	if (event) {
+@@ -757,6 +755,9 @@ static int ingenic_drm_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	/* Set address of our DMA descriptor chain */
++	regmap_write(priv->map, JZ_REG_LCD_DA0, priv->dma_hwdesc_phys);
++
+ 	ret = drm_dev_register(drm, 0);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register DRM driver\n");
 -- 
 2.27.0
 
