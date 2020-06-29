@@ -2,113 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 138B220D759
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2020 22:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9674920E637
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 00:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730630AbgF2T3C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Jun 2020 15:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732436AbgF2T2q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jun 2020 15:28:46 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1D3C061755;
-        Mon, 29 Jun 2020 12:28:45 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id f5so3647930ljj.10;
-        Mon, 29 Jun 2020 12:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RBInpL/Za49/XjwUK8A/HWIZmWUwGYyRxdCJnIDd3Ig=;
-        b=A3C7JMKeEB3sJoq3A6GeNMPUsRgZSUY3/rVmrmegxNpUcrjl6D8Z/ibLjrxtUVuxKS
-         nKCOQh3RRYwaLrzSozk96EKdww8+fYCAPdwH8QJGWtFSqVjj8IqlAXWIuUetgdtyywKx
-         qzGS+jLA9afBu8dOfYcfwCww2q+LpI5uIb/LdGn/27F4N0jaEetuIyJRJgXAYDdTblVS
-         5XZvw+LkVbxktg8T1629GWo79XwHOgfbUh/ZY8OHlACaZ3P0ydhIaqfToNFUR+mq7qMM
-         SmUpFmZO5zUjvYMafKFhvwNwR4miilhO63RuAgYds5e70IC7NWAbiV14XOP/RDvNTjmt
-         g9XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RBInpL/Za49/XjwUK8A/HWIZmWUwGYyRxdCJnIDd3Ig=;
-        b=rvCUNbLfVbo9QYXbdPizkDcbW+7bPlJjdUHJLAbFHjh1oZpWmUjtukpe7vwd5zTgMB
-         defk3uzDeKnbhBGsTkDFkJ4xpBozxaMil4EHoS3vFLJUcZ+XXTI+TvYoTxvU0Lr5dD34
-         l44U489NkV3ElC7qJ7nuOo/q/Ie9qFWxsa76NxInY2p/Srpd3QWdqyByfEXAcvg06g9B
-         +6jViRxe2aPAaERH3SgM/kZAyBH+KAf+bfDWg9BT4+zhZhJyazBMGdPWyDDvvHs9/MD9
-         0+VTUioVkaP8qEfRqNiFJ8c1+CyboMj9mLIzXkEYQxTX7dgGKlHGTc29mX2dzcyEVSGP
-         S5YA==
-X-Gm-Message-State: AOAM532sNcrsZ0TG367EtSKdUKZOw9zRRnlizzYkevhcnOM7lrUfVhF5
-        2doseLtJd4nNX8QbAndJkjPREUn5aOW7gjViYmw=
-X-Google-Smtp-Source: ABdhPJzZJVxmTnAMNUQ40iw0js01vP110xyPx2ui71LxJnZcifaQu49DgbDPTsaYRsoVL+/z5PNnEpbP+zqyYZJFTCo=
-X-Received: by 2002:a05:651c:544:: with SMTP id q4mr9390835ljp.310.1593458923219;
- Mon, 29 Jun 2020 12:28:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200602183354.39707-1-zhouyanjie@wanyeetech.com>
- <20200602183354.39707-2-zhouyanjie@wanyeetech.com> <20200619110524.GA9391@alpha.franken.de>
-In-Reply-To: <20200619110524.GA9391@alpha.franken.de>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 29 Jun 2020 16:28:31 -0300
-Message-ID: <CAOMZO5CuxzMm+XFX6-mh55mcw5jgf5iYs-ej5NqjCsD6hSnr7Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] dt-bindings: MIPS: Document Ingenic SoCs binding.
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, linux-mips@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S2404060AbgF2VpS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Jun 2020 17:45:18 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:49520 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727123AbgF2Shn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 29 Jun 2020 14:37:43 -0400
+Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9566flezmRMAA--.4772S2;
+        Mon, 29 Jun 2020 21:15:39 +0800 (CST)
+From:   bibo mao <maobibo@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Bibo Mao <maobibo@loongson.cn>
+Subject: [PATCH 1/2] hugetlb: clear huge pte during flush function on mips platform
+Date:   Mon, 29 Jun 2020 21:15:32 +0800
+Message-Id: <1593436533-8645-1-git-send-email-maobibo@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9Dxn9566flezmRMAA--.4772S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrWDGFWfKw4rAr17Ary3XFb_yoW8XF4kpF
+        WDCwn5G3ykGr9IkF1xZ34kK3y3tw4qgaySyFyrKF4FywnxXw4UKF97WFWUAw4kZrZ5ta18
+        uF4jqr4kAFsFvw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK
+        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DUUUU
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 9:48 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Wed, Jun 03, 2020 at 02:33:54AM +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zh=
-ou Yanjie) wrote:
-> > Document the available properties for the SoC root node and the
-> > CPU nodes of the devicetree for the Ingenic XBurst SoCs.
-> >
-> > Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
-> > Tested-by: Paul Boddie <paul@boddie.org.uk>
-> > Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wa=
-nyeetech.com>
-> > ---
-> >
-> > Notes:
-> >     v1->v2:
-> >     1.Remove unnecessary "items".
-> >     2.Add "clocks" as suggested by Paul Cercueil.
-> >
-> >  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 67 ++++++++++++++=
-++++++++
-> >  1 file changed, 67 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/inge=
-nic,cpu.yaml
->
-> applied to mips-next.
+From: Bibo Mao <maobibo@loongson.cn>
 
-This causes 'make dt_binding_check' to fail:
+If multiple threads are accessing the same huge page at the same
+time, hugetlb_cow will be called if one thread write the COW huge
+page. And function huge_ptep_clear_flush is called to notify other
+threads to clear the huge pte tlb entry. The other threads clear
+the huge pte tlb entry and reload it from page table, the reload
+huge pte entry may be old.
 
-$ make dt_binding_check
-  CHKDT   Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml:
-while scanning a block scalar
-  in "<unicode string>", line 42, column 5
-found a tab character where an indentation space is expected
-  in "<unicode string>", line 46, column 1
-Documentation/devicetree/bindings/Makefile:20: recipe for target
-'Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.example.dts'
-failed
-make[1]: *** [Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.ex=
-ample.dts]
-Error 1
-Makefile:1343: recipe for target 'dt_binding_check' failed
-make: *** [dt_binding_check] Error 2
+This patch fixes this issue on mips platform, and it clears huge
+pte entry before notifying other threads to flush current huge
+page entry, it is similar with other architectures.
+
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ arch/mips/include/asm/hugetlb.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
+index 10e3be87..c214440 100644
+--- a/arch/mips/include/asm/hugetlb.h
++++ b/arch/mips/include/asm/hugetlb.h
+@@ -46,7 +46,13 @@ static inline pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
+ static inline void huge_ptep_clear_flush(struct vm_area_struct *vma,
+ 					 unsigned long addr, pte_t *ptep)
+ {
+-	flush_tlb_page(vma, addr & huge_page_mask(hstate_vma(vma)));
++	/*
++	 * clear the huge pte entry firstly, so that the other smp threads will
++	 * not get old pte entry after finishing flush_tlb_page and before
++	 * setting new huge pte entry
++	 */
++	huge_ptep_get_and_clear(vma->vm_mm, addr, ptep);
++	flush_tlb_page(vma, addr);
+ }
+ 
+ #define __HAVE_ARCH_HUGE_PTE_NONE
+-- 
+1.8.3.1
+
