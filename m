@@ -2,120 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E216320EA90
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 02:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FFB20EAFC
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 03:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbgF3A67 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Jun 2020 20:58:59 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:55686 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726175AbgF3A67 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 29 Jun 2020 20:58:59 -0400
-Received: from localhost.localdomain (unknown [61.148.244.181])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD2hJjvpekrVMAA--.366S2;
-        Tue, 30 Jun 2020 08:58:54 +0800 (CST)
-From:   Lichao Liu <liulichao@loongson.cn>
-To:     tsbogend@alpha.franken.de, yuanjunqing@loongson.cn,
-        chenhc@lemote.com, jiaxun.yang@flygoat.com
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lichao Liu <liulichao@loongson.cn>
-Subject: [PATCH] MIPS: Grant pte read permission, even if vma only have VM_WRITE permission.
-Date:   Tue, 30 Jun 2020 08:58:45 +0800
-Message-Id: <20200630005845.1239974-1-liulichao@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1728397AbgF3Bgi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Jun 2020 21:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbgF3Bgh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jun 2020 21:36:37 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B637C03E979
+        for <linux-mips@vger.kernel.org>; Mon, 29 Jun 2020 18:36:37 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id h23so14499274qtr.0
+        for <linux-mips@vger.kernel.org>; Mon, 29 Jun 2020 18:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=l2Xg4aQwUyetnTxL0PwCdz9HzeQwoFK5MsRigLULc90=;
+        b=YzFIJVJ/Sw7j2tzy65Yy+gqcrGf6iq4u3OgvAr6xS4iJ/A/shX5XG/5576LGcx+LaW
+         7nFbDmXxHkShYE32yooPq3SORcZlMebYHQBKJWKpkz04GSwyKu6bFzKoRLZ50sUD0oMj
+         Fzy8bpjn5lNBjYKJZeVfWEaB8Qv2C7RooI02r4Yx3Dh68IfgOT5fLfdwNS/TZIEls4jn
+         IF2MZoj+xNuvggxJ0hdZWr67hkPvaPCyhA5Skflke00gfGLcmy2+5Mvjsn3hJjdVyeEW
+         Xz7g/DU6h71hdpbSkSj4gmnEt3yAvaRqxY4FRY8xGOKpjtCydxPIweQbDrY3nxNVBHiV
+         +gzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=l2Xg4aQwUyetnTxL0PwCdz9HzeQwoFK5MsRigLULc90=;
+        b=q1oXZ79v5I0r28sC7E8J6h+6LJjEKjScllpzcWVUudR4j6AH3NeTfS4wdZ5Ul+K+LK
+         S2wjPkzBrhBO0IhuV4UYVYXMVH+hJAtq6XM4TrK7I8F+SZ2ql/1XH+VoeeqiR9KhFgLN
+         PbxUwtOqx4aloafr2okkZkuQq/hVc6SMOxsK4HwxxX9wY9o6YbzEA3vxeeGSS9C0E+99
+         VYqm4xJKza06guLukybe7TQSClRF956Bg21nQSVjUgm9V2CsOtBfV+6EpbrXeCF0UazR
+         NBNNjbtLvmeDGai8vXlLCJDnoG35pyMeinRDO/xys7E8dXaPwpNBMk9iyDLlW/w6PBOF
+         3vXA==
+X-Gm-Message-State: AOAM530X5S+ZU1//rrk+FK1mdrTsgcroKbZcUI3K7ca2niOyxdWTFtZQ
+        Vrij1aMM1KnUvardaJsIayQDsw==
+X-Google-Smtp-Source: ABdhPJwJ2tBwLuCXC4nb7gGwAadRBqolulV56bI5ht0QSbVmXHbbTCC95NBxsvzxVfB16FCzxcRQ5w==
+X-Received: by 2002:ac8:7508:: with SMTP id u8mr18615749qtq.339.1593480996652;
+        Mon, 29 Jun 2020 18:36:36 -0700 (PDT)
+Received: from localhost (rfs.netwinder.org. [206.248.184.2])
+        by smtp.gmail.com with ESMTPSA id q28sm1890413qtk.13.2020.06.29.18.36.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Jun 2020 18:36:36 -0700 (PDT)
+Date:   Mon, 29 Jun 2020 21:36:35 -0400
+From:   Ralph Siemsen <ralph.siemsen@linaro.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Pavel Machek <pavel@denx.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH 4.19 182/267] spi: dw: Return any value retrieved from
+ the dma_transfer callback
+Message-ID: <20200630013635.GA27038@maple.netwinder.org>
+References: <20200619141648.840376470@linuxfoundation.org>
+ <20200619141657.498868116@linuxfoundation.org>
+ <20200619210719.GB12233@amd>
+ <20200622205121.4xuki7guyj6u5yul@mobilestation>
+ <20200626151800.GA22242@maple.netwinder.org>
+ <20200629142606.GR1931@sasha-vm>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxD2hJjvpekrVMAA--.366S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxur48Aw1fuF15Zry3Kr1UAwb_yoWrGr4xpa
-        4kCryxArWaqry7Zry7Zw17Zw4rAa9IqFW8Xw1Uu3W5ua1fWryktrZIka92va4Du393Cw4U
-        Zw4UXr45uw4av37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_twCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUr73kUUUUU=
-X-CM-SenderInfo: xolxzxpfkd0qxorr0wxvrqhubq/
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20200629142606.GR1931@sasha-vm>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Background:
-a cpu have RIXI feature.
+On Mon, Jun 29, 2020 at 10:26:06AM -0400, Sasha Levin wrote:
+>>diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+>>index c563c2815093..99641c485288 100644
+>>--- a/drivers/spi/spi-dw-mmio.c
+>>+++ b/drivers/spi/spi-dw-mmio.c
+>>@@ -358,7 +358,7 @@ static int mmio_spi_dma_transfer(struct dw_spi *dws, struct spi_transfer *xfer)
+>
+>Um, I can't find this function anywhere... what am I missing?
 
-Now, if a vma only have VM_WRITE permission, the vma->vm_page_prot will
-set _PAGE_NO_READ. In general case, someone read the vma will trigger
-RI exception, then do_page_fault will handle it.
+Nothing... my bad. The code in question was added on a vendor branch
+(https://github.com/renesas-rz/rzn1_linux/blob/rzn1-stable-v4.19/drivers/spi/spi-dw-mmio.c#L338
+if you are curious).
 
-But in the following scene, program will hang.
+I'm very sorry for wasting your time... please disregard the patch!
 
-example scene(a trinity test case):
-futex_wake_op() will read uaddr, which is passed from user space.
-If a program mmap a vma, which only have VM_WRITE permission,
-then call futex, and use an address belonging to the vma as uaddr
-argument. futex_wake_op() will read the address after disable
-pagefault and set correct __ex_table(return -14 directly),
-do_page_fault will find the correct __ex_table, and then return -14.
-Then futex_wake_op() will try to fixup this error by call
-fault_in_user_writeable(), because the pte have write permission,
-so handle_mm_fault will do nothing, and return success.
-But the RI bit in pte and tlb entry still exsits.
-The program will deadloop:
-do_page_fault -> find __ex_table success -> return -14;
-futex_wake_op -> call fault_in_user_writeable() to fix the error -> retry;
-do_page_fault -> find __ex_table success -> return -14;
-futex_wake_op -> call fault_in_user_writeable() to fix the error -> retry;
-.....
-
-The first perspective of root cause:
-Futex think a pte have write permission will have read permission.
-When page fault, it only try to fixup with FAULT_FLAG_WRITE.
-
-The second perspective of root cause:
-MIPS platform doesn't grant pte read permission, if vma only have
-VM_WRITE permission.But X86 and arm64 will.
-
-Most of the architecture will grant pte read permission, even if
-the vma only have VM_WRITE permission.
-And if the cpu doesn't have RIXI feature, MIPS platform will
-grant pte read permission by set _PAGE_READ.
-So I think we should fixup thix problem by grant pte read permission,
-even if vma only have VM_WRITE permission.
-
-Signed-off-by: Lichao Liu <liulichao@loongson.cn>
----
- arch/mips/mm/cache.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index ad6df1cea866..72b60c44a962 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -160,7 +160,7 @@ static inline void setup_protection_map(void)
- 	if (cpu_has_rixi) {
- 		protection_map[0]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
- 		protection_map[1]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
--		protection_map[2]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+		protection_map[2]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
- 		protection_map[3]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
- 		protection_map[4]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
- 		protection_map[5]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
-@@ -169,7 +169,7 @@ static inline void setup_protection_map(void)
- 
- 		protection_map[8]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
- 		protection_map[9]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
--		protection_map[10] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
-+		protection_map[10] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
- 		protection_map[11] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
- 		protection_map[12] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
- 		protection_map[13] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--- 
-2.25.1
-
+-Ralph
