@@ -2,182 +2,198 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D03720F246
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 12:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A25F20F250
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 12:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732284AbgF3KJh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Jun 2020 06:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732165AbgF3KJf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Jun 2020 06:09:35 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B56C03E979
-        for <linux-mips@vger.kernel.org>; Tue, 30 Jun 2020 03:09:35 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id t9so11002283lfl.5
-        for <linux-mips@vger.kernel.org>; Tue, 30 Jun 2020 03:09:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qmWg/+jpbOxQ2F1Zn/eg6jJ0YSCVNYZ/cm+95B4TJCY=;
-        b=GUqTDJ9KLKN9o+dp11x/jJH6eyI5mdjgZqCufGPzCAeE0W2ZtXNIeQrA52zabXMd9k
-         aNihOto2tdj+oHp8IuRNwTIJqph1SNFhyi+1nC544G+9LLbmx1NVOiaNsJrmLBopA18/
-         gc5lbnRDSEbwDgP73uE38AAmenOGm5QAT9c6XtiV+lDofflh/kMhCJKDFt+uO8qs4bfb
-         jWt5sSOrcTsJQBMul/qSQSRhiOvOvZG+yRAwSqoghKCe8E2SSQL4MWjLlXM+klJePrYU
-         75CIcj+94wTwNNY6ImSdHqXeOXKRjSsUlWewSuoBqDKfacM1gfhmoI4BzSzy6qtaPOZq
-         +L0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qmWg/+jpbOxQ2F1Zn/eg6jJ0YSCVNYZ/cm+95B4TJCY=;
-        b=WNxP/jHbLpJny9FekVQkxVyQGMSKFwCw+L+f9hGHUSpOgC6j0ZbbGXwa3G9n8+u4UZ
-         yrkybqtuvvWZOIhd9GZyTjP126PldD0OiEd1cN3xYPBAfLw2hAswkzTGn6WL6pbW9MAf
-         taMwheUaEfCw78CCKQx4YEYsHV9xMjyLE1UD0mZyfXVt679JZYsMfKQDUJQJpJwUVqsM
-         dAveDNDFlT5Cb+y0Mgegd3BAW2UjlUokf9bi602n5C3K23gWWcVD2unhx++0wabwpPf4
-         DbNxGqBiW1aVzkx1zRTpW11eFRgybik/L53eOfM+YXPUqBPT8A6vzY3KOgGT2w/JI/tq
-         O8bQ==
-X-Gm-Message-State: AOAM531kCvDeOMYJoCF5y2WehrXjmCTXkZhtM3GUgb2NQklfs5Kj4ZAO
-        Q4brKmya1c4UUlFi1j3wlckdQg==
-X-Google-Smtp-Source: ABdhPJySik5PUCHYPI0zhpnvXdET33Ycn7xwDFaHIxLodpL5XimXyR5OUblyqsatUY4l9OE3msdbwg==
-X-Received: by 2002:ac2:5f04:: with SMTP id 4mr11471273lfq.140.1593511773581;
-        Tue, 30 Jun 2020 03:09:33 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id f5sm657759ljc.99.2020.06.30.03.09.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2020 03:09:32 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 5793D101187; Tue, 30 Jun 2020 13:09:40 +0300 (+03)
-Date:   Tue, 30 Jun 2020 13:09:40 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Bibo Mao <maobibo@loongson.cn>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Daniel Silsby <dansilsby@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 1/3] mm: set page fault address for update_mmu_cache_pmd
-Message-ID: <20200630100940.wo5l5fcs44xhrqo7@box>
-References: <1592990792-1923-1-git-send-email-maobibo@loongson.cn>
+        id S1732316AbgF3KKY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Jun 2020 06:10:24 -0400
+Received: from asavdk4.altibox.net ([109.247.116.15]:34554 "EHLO
+        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732310AbgF3KKY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Jun 2020 06:10:24 -0400
+Received: from ravnborg.org (unknown [188.228.123.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk4.altibox.net (Postfix) with ESMTPS id BFA4B80522;
+        Tue, 30 Jun 2020 12:10:20 +0200 (CEST)
+Date:   Tue, 30 Jun 2020 12:10:19 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, od@zcrc.me
+Subject: Re: [PATCH v2 04/10] drm/ingenic: Add missing CR in debug strings
+Message-ID: <20200630101019.GC553950@ravnborg.org>
+References: <20200629235210.441709-1-paul@crapouillou.net>
+ <20200629235210.441709-4-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1592990792-1923-1-git-send-email-maobibo@loongson.cn>
+In-Reply-To: <20200629235210.441709-4-paul@crapouillou.net>
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=aP3eV41m c=1 sm=1 tr=0
+        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
+        a=kj9zAlcOel0A:10 a=ER_8r6IbAAAA:8 a=7gkXJVJtAAAA:8 a=e5mUnYsNAAAA:8
+        a=O7-e7zmCaJ8UY64ll6EA:9 a=CjuIK1q_8ugA:10 a=9LHmKk7ezEChjTCyhBa9:22
+        a=E9Po1WZjFZOl8hwRPBS3:22 a=Vxmtnl_E_bksehYqCbjh:22
+        a=pHzHmUro8NiASowvMSCR:22 a=nt3jZW36AmriUCFCBwmW:22
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 05:26:30PM +0800, Bibo Mao wrote:
-> update_mmu_cache_pmd is used to update tlb for the pmd entry by
-> software. On MIPS system, the tlb entry indexed by page fault
-> address maybe exists already, only that tlb entry may be small
-> page, also it may be huge page. Before updating pmd entry with
-> huge page size, older tlb entry need to be invalidated.
+On Tue, Jun 30, 2020 at 01:52:04AM +0200, Paul Cercueil wrote:
+> If you pass a string that is not terminated with a carriage return to
+> dev_err(), it will eventually be printed with a carriage return, but
+> not right away, since the kernel will wait for a pr_cont().
 > 
-> Here page fault address is passed to function update_mmu_cache_pmd,
-> rather than pmd huge page start address. The page fault address
-> can be used for invalidating older tlb entry.
-> 
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+
+It would have been nice if most was converted to drm_err() and friends
+when touching these.
+That may come later..
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
+
 > ---
->  arch/mips/include/asm/pgtable.h | 9 +++++++++
->  mm/huge_memory.c                | 7 ++++---
->  mm/memory.c                     | 2 +-
->  3 files changed, 14 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-> index dd7a0f5..bd81661 100644
-> --- a/arch/mips/include/asm/pgtable.h
-> +++ b/arch/mips/include/asm/pgtable.h
-> @@ -554,11 +554,20 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
->  #define	__HAVE_ARCH_UPDATE_MMU_TLB
->  #define update_mmu_tlb	update_mmu_cache
+> Notes:
+>     v2: New patch
+> 
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 30 +++++++++++------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> index 16f0740df507..a15f9a1940c6 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -623,14 +623,14 @@ static int ingenic_drm_probe(struct platform_device *pdev)
 >  
-> +extern void local_flush_tlb_page(struct vm_area_struct *vma,
-> +				unsigned long page);
->  static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
->  	unsigned long address, pmd_t *pmdp)
->  {
->  	pte_t pte = *(pte_t *)pmdp;
->  
-> +	/*
-> +	 * If pmd_none is true, older tlb entry will be normal page.
-> +	 * here to invalidate older tlb entry indexed by address
-> +	 * parameter address must be page fault address rather than
-> +	 * start address of pmd huge page
-> +	 */
-> +	local_flush_tlb_page(vma, address);
-
-Can't say I follow what is going on.
-
-Why local? What happens on SMP?
-
-And don't you want to flush PMD_SIZE range around the address?
-
->  	__update_tlb(vma, address, pte);
->  }
->  
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 78c84be..0f9187b 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -780,6 +780,7 @@ static void insert_pfn_pmd(struct vm_area_struct *vma, unsigned long addr,
->  		pgtable_t pgtable)
->  {
->  	struct mm_struct *mm = vma->vm_mm;
-> +	unsigned long start = addr & PMD_MASK;
->  	pmd_t entry;
->  	spinlock_t *ptl;
->  
-> @@ -792,7 +793,7 @@ static void insert_pfn_pmd(struct vm_area_struct *vma, unsigned long addr,
->  			}
->  			entry = pmd_mkyoung(*pmd);
->  			entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
-> -			if (pmdp_set_access_flags(vma, addr, pmd, entry, 1))
-> +			if (pmdp_set_access_flags(vma, start, pmd, entry, 1))
->  				update_mmu_cache_pmd(vma, addr, pmd);
->  		}
->  
-> @@ -813,7 +814,7 @@ static void insert_pfn_pmd(struct vm_area_struct *vma, unsigned long addr,
->  		pgtable = NULL;
+>  	base = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(base)) {
+> -		dev_err(dev, "Failed to get memory resource");
+> +		dev_err(dev, "Failed to get memory resource\n");
+>  		return PTR_ERR(base);
 >  	}
 >  
-> -	set_pmd_at(mm, addr, pmd, entry);
-> +	set_pmd_at(mm, start, pmd, entry);
->  	update_mmu_cache_pmd(vma, addr, pmd);
+>  	priv->map = devm_regmap_init_mmio(dev, base,
+>  					  &ingenic_drm_regmap_config);
+>  	if (IS_ERR(priv->map)) {
+> -		dev_err(dev, "Failed to create regmap");
+> +		dev_err(dev, "Failed to create regmap\n");
+>  		return PTR_ERR(priv->map);
+>  	}
 >  
->  out_unlock:
-> @@ -864,7 +865,7 @@ vm_fault_t vmf_insert_pfn_pmd_prot(struct vm_fault *vmf, pfn_t pfn,
+> @@ -641,21 +641,21 @@ static int ingenic_drm_probe(struct platform_device *pdev)
+>  	if (soc_info->needs_dev_clk) {
+>  		priv->lcd_clk = devm_clk_get(dev, "lcd");
+>  		if (IS_ERR(priv->lcd_clk)) {
+> -			dev_err(dev, "Failed to get lcd clock");
+> +			dev_err(dev, "Failed to get lcd clock\n");
+>  			return PTR_ERR(priv->lcd_clk);
+>  		}
+>  	}
 >  
->  	track_pfn_insert(vma, &pgprot, pfn);
+>  	priv->pix_clk = devm_clk_get(dev, "lcd_pclk");
+>  	if (IS_ERR(priv->pix_clk)) {
+> -		dev_err(dev, "Failed to get pixel clock");
+> +		dev_err(dev, "Failed to get pixel clock\n");
+>  		return PTR_ERR(priv->pix_clk);
+>  	}
 >  
-> -	insert_pfn_pmd(vma, addr, vmf->pmd, pfn, pgprot, write, pgtable);
-> +	insert_pfn_pmd(vma, vmf->address, vmf->pmd, pfn, pgprot, write, pgtable);
->  	return VM_FAULT_NOPAGE;
->  }
->  EXPORT_SYMBOL_GPL(vmf_insert_pfn_pmd_prot);
-> diff --git a/mm/memory.c b/mm/memory.c
-> index dc7f354..c703458 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3592,7 +3592,7 @@ static vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
+>  	ret = drm_of_find_panel_or_bridge(dev->of_node, 0, 0, &panel, &bridge);
+>  	if (ret) {
+>  		if (ret != -EPROBE_DEFER)
+> -			dev_err(dev, "Failed to get panel handle");
+> +			dev_err(dev, "Failed to get panel handle\n");
+>  		return ret;
+>  	}
 >  
->  	set_pmd_at(vma->vm_mm, haddr, vmf->pmd, entry);
+> @@ -684,7 +684,7 @@ static int ingenic_drm_probe(struct platform_device *pdev)
+>  				       ARRAY_SIZE(ingenic_drm_primary_formats),
+>  				       NULL, DRM_PLANE_TYPE_PRIMARY, NULL);
+>  	if (ret) {
+> -		dev_err(dev, "Failed to register primary plane: %i", ret);
+> +		dev_err(dev, "Failed to register primary plane: %i\n", ret);
+>  		return ret;
+>  	}
 >  
-> -	update_mmu_cache_pmd(vma, haddr, vmf->pmd);
-> +	update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
+> @@ -693,7 +693,7 @@ static int ingenic_drm_probe(struct platform_device *pdev)
+>  	ret = drm_crtc_init_with_planes(drm, &priv->crtc, &priv->primary,
+>  					NULL, &ingenic_drm_crtc_funcs, NULL);
+>  	if (ret) {
+> -		dev_err(dev, "Failed to init CRTC: %i", ret);
+> +		dev_err(dev, "Failed to init CRTC: %i\n", ret);
+>  		return ret;
+>  	}
 >  
->  	/* fault is handled */
->  	ret = 0;
+> @@ -705,25 +705,25 @@ static int ingenic_drm_probe(struct platform_device *pdev)
+>  	ret = drm_simple_encoder_init(drm, &priv->encoder,
+>  				      DRM_MODE_ENCODER_DPI);
+>  	if (ret) {
+> -		dev_err(dev, "Failed to init encoder: %i", ret);
+> +		dev_err(dev, "Failed to init encoder: %i\n", ret);
+>  		return ret;
+>  	}
+>  
+>  	ret = drm_bridge_attach(&priv->encoder, bridge, NULL, 0);
+>  	if (ret) {
+> -		dev_err(dev, "Unable to attach bridge");
+> +		dev_err(dev, "Unable to attach bridge\n");
+>  		return ret;
+>  	}
+>  
+>  	ret = drm_irq_install(drm, irq);
+>  	if (ret) {
+> -		dev_err(dev, "Unable to install IRQ handler");
+> +		dev_err(dev, "Unable to install IRQ handler\n");
+>  		return ret;
+>  	}
+>  
+>  	ret = drm_vblank_init(drm, 1);
+>  	if (ret) {
+> -		dev_err(dev, "Failed calling drm_vblank_init()");
+> +		dev_err(dev, "Failed calling drm_vblank_init()\n");
+>  		return ret;
+>  	}
+>  
+> @@ -731,7 +731,7 @@ static int ingenic_drm_probe(struct platform_device *pdev)
+>  
+>  	ret = clk_prepare_enable(priv->pix_clk);
+>  	if (ret) {
+> -		dev_err(dev, "Unable to start pixel clock");
+> +		dev_err(dev, "Unable to start pixel clock\n");
+>  		return ret;
+>  	}
+>  
+> @@ -746,20 +746,20 @@ static int ingenic_drm_probe(struct platform_device *pdev)
+>  		 */
+>  		ret = clk_set_rate(priv->lcd_clk, parent_rate);
+>  		if (ret) {
+> -			dev_err(dev, "Unable to set LCD clock rate");
+> +			dev_err(dev, "Unable to set LCD clock rate\n");
+>  			goto err_pixclk_disable;
+>  		}
+>  
+>  		ret = clk_prepare_enable(priv->lcd_clk);
+>  		if (ret) {
+> -			dev_err(dev, "Unable to start lcd clock");
+> +			dev_err(dev, "Unable to start lcd clock\n");
+>  			goto err_pixclk_disable;
+>  		}
+>  	}
+>  
+>  	ret = drm_dev_register(drm, 0);
+>  	if (ret) {
+> -		dev_err(dev, "Failed to register DRM driver");
+> +		dev_err(dev, "Failed to register DRM driver\n");
+>  		goto err_devclk_disable;
+>  	}
+>  
 > -- 
-> 1.8.3.1
+> 2.27.0
 > 
-> 
-
--- 
- Kirill A. Shutemov
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
