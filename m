@@ -2,183 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D05E120E9D2
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 02:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E216320EA90
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 02:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728574AbgF2Xxf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Jun 2020 19:53:35 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:50264 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728527AbgF2Xxe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jun 2020 19:53:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1593474749; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0DynBegu3BQi3AOKQqJAS/lq1/E9JbDIO+f1jYZbVtg=;
-        b=JmnOwkQA+/xyJbIditbSFEDzGiojGeimG0Yx09gNMWyCNCASccMLGPP4yeWa02yI+TDqYJ
-        pSjONFmnbWDdQiBkpwUc0wfXu6hIfyawRLf0xr5QMjPfLR8DaskZ0Bd0CQDUlUCQ04FE9h
-        fqdb2ynWWTq94mpjJTAxvKqxRrLkAE0=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     od@zcrc.me, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 10/10] drm/ingenic: Support multiple panels/bridges
-Date:   Tue, 30 Jun 2020 01:52:10 +0200
-Message-Id: <20200629235210.441709-10-paul@crapouillou.net>
-In-Reply-To: <20200629235210.441709-1-paul@crapouillou.net>
-References: <20200629235210.441709-1-paul@crapouillou.net>
+        id S1726865AbgF3A67 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Jun 2020 20:58:59 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:55686 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726175AbgF3A67 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 29 Jun 2020 20:58:59 -0400
+Received: from localhost.localdomain (unknown [61.148.244.181])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD2hJjvpekrVMAA--.366S2;
+        Tue, 30 Jun 2020 08:58:54 +0800 (CST)
+From:   Lichao Liu <liulichao@loongson.cn>
+To:     tsbogend@alpha.franken.de, yuanjunqing@loongson.cn,
+        chenhc@lemote.com, jiaxun.yang@flygoat.com
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lichao Liu <liulichao@loongson.cn>
+Subject: [PATCH] MIPS: Grant pte read permission, even if vma only have VM_WRITE permission.
+Date:   Tue, 30 Jun 2020 08:58:45 +0800
+Message-Id: <20200630005845.1239974-1-liulichao@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxD2hJjvpekrVMAA--.366S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur48Aw1fuF15Zry3Kr1UAwb_yoWrGr4xpa
+        4kCryxArWaqry7Zry7Zw17Zw4rAa9IqFW8Xw1Uu3W5ua1fWryktrZIka92va4Du393Cw4U
+        Zw4UXr45uw4av37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_twCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUr73kUUUUU=
+X-CM-SenderInfo: xolxzxpfkd0qxorr0wxvrqhubq/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Support multiple panels or bridges connected to the same DPI output of
-the SoC. This setup can be found for instance on the GCW Zero, where the
-same DPI output interfaces the internal 320x240 TFT panel, and the ITE
-IT6610 HDMI chip.
+Background:
+a cpu have RIXI feature.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Now, if a vma only have VM_WRITE permission, the vma->vm_page_prot will
+set _PAGE_NO_READ. In general case, someone read the vma will trigger
+RI exception, then do_page_fault will handle it.
+
+But in the following scene, program will hang.
+
+example scene(a trinity test case):
+futex_wake_op() will read uaddr, which is passed from user space.
+If a program mmap a vma, which only have VM_WRITE permission,
+then call futex, and use an address belonging to the vma as uaddr
+argument. futex_wake_op() will read the address after disable
+pagefault and set correct __ex_table(return -14 directly),
+do_page_fault will find the correct __ex_table, and then return -14.
+Then futex_wake_op() will try to fixup this error by call
+fault_in_user_writeable(), because the pte have write permission,
+so handle_mm_fault will do nothing, and return success.
+But the RI bit in pte and tlb entry still exsits.
+The program will deadloop:
+do_page_fault -> find __ex_table success -> return -14;
+futex_wake_op -> call fault_in_user_writeable() to fix the error -> retry;
+do_page_fault -> find __ex_table success -> return -14;
+futex_wake_op -> call fault_in_user_writeable() to fix the error -> retry;
+.....
+
+The first perspective of root cause:
+Futex think a pte have write permission will have read permission.
+When page fault, it only try to fixup with FAULT_FLAG_WRITE.
+
+The second perspective of root cause:
+MIPS platform doesn't grant pte read permission, if vma only have
+VM_WRITE permission.But X86 and arm64 will.
+
+Most of the architecture will grant pte read permission, even if
+the vma only have VM_WRITE permission.
+And if the cpu doesn't have RIXI feature, MIPS platform will
+grant pte read permission by set _PAGE_READ.
+So I think we should fixup thix problem by grant pte read permission,
+even if vma only have VM_WRITE permission.
+
+Signed-off-by: Lichao Liu <liulichao@loongson.cn>
 ---
+ arch/mips/mm/cache.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Notes:
-    v2: No change
-
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 74 +++++++++++++----------
- 1 file changed, 43 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 36440acd23de..18f7a9eccfc0 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -52,7 +52,6 @@ struct ingenic_drm {
- 	struct drm_device drm;
- 	struct drm_plane f0, f1, *ipu_plane;
- 	struct drm_crtc crtc;
--	struct drm_encoder encoder;
+diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
+index ad6df1cea866..72b60c44a962 100644
+--- a/arch/mips/mm/cache.c
++++ b/arch/mips/mm/cache.c
+@@ -160,7 +160,7 @@ static inline void setup_protection_map(void)
+ 	if (cpu_has_rixi) {
+ 		protection_map[0]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+ 		protection_map[1]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
+-		protection_map[2]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
++		protection_map[2]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
+ 		protection_map[3]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
+ 		protection_map[4]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+ 		protection_map[5]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+@@ -169,7 +169,7 @@ static inline void setup_protection_map(void)
  
- 	struct device *dev;
- 	struct regmap *map;
-@@ -106,12 +105,6 @@ static inline struct ingenic_drm *drm_crtc_get_priv(struct drm_crtc *crtc)
- 	return container_of(crtc, struct ingenic_drm, crtc);
- }
- 
--static inline struct ingenic_drm *
--drm_encoder_get_priv(struct drm_encoder *encoder)
--{
--	return container_of(encoder, struct ingenic_drm, encoder);
--}
--
- static void ingenic_drm_crtc_atomic_enable(struct drm_crtc *crtc,
- 					   struct drm_crtc_state *state)
- {
-@@ -451,7 +444,7 @@ static void ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
- 						struct drm_crtc_state *crtc_state,
- 						struct drm_connector_state *conn_state)
- {
--	struct ingenic_drm *priv = drm_encoder_get_priv(encoder);
-+	struct ingenic_drm *priv = drm_device_get_priv(encoder->dev);
- 	struct drm_display_mode *mode = &crtc_state->adjusted_mode;
- 	struct drm_connector *conn = conn_state->connector;
- 	struct drm_display_info *info = &conn->display_info;
-@@ -654,9 +647,11 @@ static int ingenic_drm_bind(struct device *dev)
- 	struct clk *parent_clk;
- 	struct drm_bridge *bridge;
- 	struct drm_panel *panel;
-+	struct drm_encoder *encoder;
- 	struct drm_device *drm;
- 	void __iomem *base;
- 	long parent_rate;
-+	unsigned int i, clone_mask = 0;
- 	int ret, irq;
- 
- 	soc_info = of_device_get_match_data(dev);
-@@ -730,17 +725,6 @@ static int ingenic_drm_bind(struct device *dev)
- 		return PTR_ERR(priv->pix_clk);
- 	}
- 
--	ret = drm_of_find_panel_or_bridge(dev->of_node, 0, 0, &panel, &bridge);
--	if (ret) {
--		if (ret != -EPROBE_DEFER)
--			dev_err(dev, "Failed to get panel handle\n");
--		return ret;
--	}
--
--	if (panel)
--		bridge = devm_drm_panel_bridge_add_typed(dev, panel,
--							 DRM_MODE_CONNECTOR_DPI);
--
- 	priv->dma_hwdesc[0] = dma_alloc_coherent(dev, sizeof(*priv->dma_hwdesc[0]),
- 						 &priv->dma_hwdesc_phys[0],
- 						 GFP_KERNEL);
-@@ -804,22 +788,50 @@ static int ingenic_drm_bind(struct device *dev)
- 		}
- 	}
- 
--	priv->encoder.possible_crtcs = 1;
-+	for (i = 0; ; i++) {
-+		ret = drm_of_find_panel_or_bridge(dev->of_node, 0, i,
-+						  &panel, &bridge);
-+		if (ret) {
-+			if (ret == -ENODEV)
-+				break; /* we're done */
-+			if (ret != -EPROBE_DEFER)
-+				dev_err(dev, "Failed to get bridge handle\n");
-+			return ret;
-+		}
- 
--	drm_encoder_helper_add(&priv->encoder,
--			       &ingenic_drm_encoder_helper_funcs);
-+		if (panel)
-+			bridge = devm_drm_panel_bridge_add_typed(dev, panel,
-+								 DRM_MODE_CONNECTOR_DPI);
- 
--	ret = drm_simple_encoder_init(drm, &priv->encoder,
--				      DRM_MODE_ENCODER_DPI);
--	if (ret) {
--		dev_err(dev, "Failed to init encoder: %i\n", ret);
--		return ret;
-+		encoder = devm_kzalloc(dev, sizeof(*encoder), GFP_KERNEL);
-+		if (!encoder)
-+			return -ENOMEM;
-+
-+		encoder->possible_crtcs = 1;
-+
-+		drm_encoder_helper_add(encoder,
-+				       &ingenic_drm_encoder_helper_funcs);
-+
-+		ret = drm_simple_encoder_init(drm, encoder,
-+					      DRM_MODE_ENCODER_DPI);
-+		if (ret) {
-+			dev_err(dev, "Failed to init encoder: %d\n", ret);
-+			return ret;
-+		}
-+
-+		ret = drm_bridge_attach(encoder, bridge, NULL, 0);
-+		if (ret) {
-+			dev_err(dev, "Unable to attach bridge\n");
-+			return ret;
-+		}
- 	}
- 
--	ret = drm_bridge_attach(&priv->encoder, bridge, NULL, 0);
--	if (ret) {
--		dev_err(dev, "Unable to attach bridge\n");
--		return ret;
-+	drm_for_each_encoder(encoder, drm) {
-+		clone_mask |= BIT(drm_encoder_index(encoder));
-+	}
-+
-+	drm_for_each_encoder(encoder, drm) {
-+		encoder->possible_clones = clone_mask;
- 	}
- 
- 	ret = drm_irq_install(drm, irq);
+ 		protection_map[8]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+ 		protection_map[9]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
+-		protection_map[10] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
++		protection_map[10] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+ 		protection_map[11] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+ 		protection_map[12] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+ 		protection_map[13] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
 -- 
-2.27.0
+2.25.1
 
