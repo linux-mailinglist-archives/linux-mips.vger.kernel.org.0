@@ -2,334 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B4720F3C0
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 13:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B28120F3E4
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2020 13:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733082AbgF3LqQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Jun 2020 07:46:16 -0400
-Received: from asavdk4.altibox.net ([109.247.116.15]:43228 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733080AbgF3LqP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Jun 2020 07:46:15 -0400
-Received: from ravnborg.org (unknown [188.228.123.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id 9A64880535;
-        Tue, 30 Jun 2020 13:46:09 +0200 (CEST)
-Date:   Tue, 30 Jun 2020 13:46:08 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Paul Cercueil <paul@crapouillou.net>
+        id S1732491AbgF3LzI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Jun 2020 07:55:08 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:57292 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729580AbgF3LzG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Jun 2020 07:55:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1593518102; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iLivQZbuAtImOA556A9/GwUMm1HUXka6DPlyQAzwKuo=;
+        b=Q/LSsYXZWBuyh3RUShBSmnkCNm3OyljvBxuq7YsUziu9aEZs299XhTkBGr9tr0Vk/6OK0l
+        0ehGwufTYFqKBASWXDhdCexfbuQqnfAcYbmJZLcPrEdMC6yBgFauZJXyceTNFvTKj/2stY
+        u8pTDrig8VjQB57LdZpNC3n9/a9sxxo=
+Date:   Tue, 30 Jun 2020 13:54:51 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 06/10] drm/ingenic: Set DMA descriptor chain address in
+ probe
+To:     Sam Ravnborg <sam@ravnborg.org>
 Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, od@zcrc.me
-Subject: Re: [PATCH v2 07/10] drm/ingenic: Move register definitions to
- ingenic-drm.h
-Message-ID: <20200630114608.GC560155@ravnborg.org>
+Message-Id: <FFMQCQ.LQ37IHUC6U3Z@crapouillou.net>
+In-Reply-To: <20200630114453.GB560155@ravnborg.org>
 References: <20200629235210.441709-1-paul@crapouillou.net>
- <20200629235210.441709-7-paul@crapouillou.net>
+        <20200629235210.441709-6-paul@crapouillou.net>
+        <20200630114453.GB560155@ravnborg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200629235210.441709-7-paul@crapouillou.net>
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=aP3eV41m c=1 sm=1 tr=0
-        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
-        a=kj9zAlcOel0A:10 a=ER_8r6IbAAAA:8 a=7gkXJVJtAAAA:8 a=e5mUnYsNAAAA:8
-        a=8_MGJwbRltm55tZ9CNwA:9 a=CjuIK1q_8ugA:10 a=9LHmKk7ezEChjTCyhBa9:22
-        a=E9Po1WZjFZOl8hwRPBS3:22 a=Vxmtnl_E_bksehYqCbjh:22
-        a=pHzHmUro8NiASowvMSCR:22 a=nt3jZW36AmriUCFCBwmW:22
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 01:52:07AM +0200, Paul Cercueil wrote:
-> Move the register definitions to ingenic-drm.h, to keep
-> ingenic-drm-drv.c tidy.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-> ---
-> 
-> Notes:
->     v2: Fix SPDX license tag
-> 
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 116 +-------------------
->  drivers/gpu/drm/ingenic/ingenic-drm.h     | 126 ++++++++++++++++++++++
->  2 files changed, 128 insertions(+), 114 deletions(-)
->  create mode 100644 drivers/gpu/drm/ingenic/ingenic-drm.h
-> 
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> index f7b0c5dc8cd8..6590b61cb915 100644
-> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> @@ -4,6 +4,8 @@
->  //
->  // Copyright (C) 2019, Paul Cercueil <paul@crapouillou.net>
->  
-> +#include "ingenic-drm.h"
-> +
->  #include <linux/clk.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/module.h>
-> @@ -32,120 +34,6 @@
->  #include <drm/drm_simple_kms_helper.h>
->  #include <drm/drm_vblank.h>
->  
-> -#define JZ_REG_LCD_CFG				0x00
-> -#define JZ_REG_LCD_VSYNC			0x04
-> -#define JZ_REG_LCD_HSYNC			0x08
-> -#define JZ_REG_LCD_VAT				0x0C
-> -#define JZ_REG_LCD_DAH				0x10
-> -#define JZ_REG_LCD_DAV				0x14
-> -#define JZ_REG_LCD_PS				0x18
-> -#define JZ_REG_LCD_CLS				0x1C
-> -#define JZ_REG_LCD_SPL				0x20
-> -#define JZ_REG_LCD_REV				0x24
-> -#define JZ_REG_LCD_CTRL				0x30
-> -#define JZ_REG_LCD_STATE			0x34
-> -#define JZ_REG_LCD_IID				0x38
-> -#define JZ_REG_LCD_DA0				0x40
-> -#define JZ_REG_LCD_SA0				0x44
-> -#define JZ_REG_LCD_FID0				0x48
-> -#define JZ_REG_LCD_CMD0				0x4C
-> -#define JZ_REG_LCD_DA1				0x50
-> -#define JZ_REG_LCD_SA1				0x54
-> -#define JZ_REG_LCD_FID1				0x58
-> -#define JZ_REG_LCD_CMD1				0x5C
-> -
-> -#define JZ_LCD_CFG_SLCD				BIT(31)
-> -#define JZ_LCD_CFG_PS_DISABLE			BIT(23)
-> -#define JZ_LCD_CFG_CLS_DISABLE			BIT(22)
-> -#define JZ_LCD_CFG_SPL_DISABLE			BIT(21)
-> -#define JZ_LCD_CFG_REV_DISABLE			BIT(20)
-> -#define JZ_LCD_CFG_HSYNCM			BIT(19)
-> -#define JZ_LCD_CFG_PCLKM			BIT(18)
-> -#define JZ_LCD_CFG_INV				BIT(17)
-> -#define JZ_LCD_CFG_SYNC_DIR			BIT(16)
-> -#define JZ_LCD_CFG_PS_POLARITY			BIT(15)
-> -#define JZ_LCD_CFG_CLS_POLARITY			BIT(14)
-> -#define JZ_LCD_CFG_SPL_POLARITY			BIT(13)
-> -#define JZ_LCD_CFG_REV_POLARITY			BIT(12)
-> -#define JZ_LCD_CFG_HSYNC_ACTIVE_LOW		BIT(11)
-> -#define JZ_LCD_CFG_PCLK_FALLING_EDGE		BIT(10)
-> -#define JZ_LCD_CFG_DE_ACTIVE_LOW		BIT(9)
-> -#define JZ_LCD_CFG_VSYNC_ACTIVE_LOW		BIT(8)
-> -#define JZ_LCD_CFG_18_BIT			BIT(7)
-> -#define JZ_LCD_CFG_PDW				(BIT(5) | BIT(4))
-> -
-> -#define JZ_LCD_CFG_MODE_GENERIC_16BIT		0
-> -#define JZ_LCD_CFG_MODE_GENERIC_18BIT		BIT(7)
-> -#define JZ_LCD_CFG_MODE_GENERIC_24BIT		BIT(6)
-> -
-> -#define JZ_LCD_CFG_MODE_SPECIAL_TFT_1		1
-> -#define JZ_LCD_CFG_MODE_SPECIAL_TFT_2		2
-> -#define JZ_LCD_CFG_MODE_SPECIAL_TFT_3		3
-> -
-> -#define JZ_LCD_CFG_MODE_TV_OUT_P		4
-> -#define JZ_LCD_CFG_MODE_TV_OUT_I		6
-> -
-> -#define JZ_LCD_CFG_MODE_SINGLE_COLOR_STN	8
-> -#define JZ_LCD_CFG_MODE_SINGLE_MONOCHROME_STN	9
-> -#define JZ_LCD_CFG_MODE_DUAL_COLOR_STN		10
-> -#define JZ_LCD_CFG_MODE_DUAL_MONOCHROME_STN	11
-> -
-> -#define JZ_LCD_CFG_MODE_8BIT_SERIAL		12
-> -#define JZ_LCD_CFG_MODE_LCM			13
-> -
-> -#define JZ_LCD_VSYNC_VPS_OFFSET			16
-> -#define JZ_LCD_VSYNC_VPE_OFFSET			0
-> -
-> -#define JZ_LCD_HSYNC_HPS_OFFSET			16
-> -#define JZ_LCD_HSYNC_HPE_OFFSET			0
-> -
-> -#define JZ_LCD_VAT_HT_OFFSET			16
-> -#define JZ_LCD_VAT_VT_OFFSET			0
-> -
-> -#define JZ_LCD_DAH_HDS_OFFSET			16
-> -#define JZ_LCD_DAH_HDE_OFFSET			0
-> -
-> -#define JZ_LCD_DAV_VDS_OFFSET			16
-> -#define JZ_LCD_DAV_VDE_OFFSET			0
-> -
-> -#define JZ_LCD_CTRL_BURST_4			(0x0 << 28)
-> -#define JZ_LCD_CTRL_BURST_8			(0x1 << 28)
-> -#define JZ_LCD_CTRL_BURST_16			(0x2 << 28)
-> -#define JZ_LCD_CTRL_RGB555			BIT(27)
-> -#define JZ_LCD_CTRL_OFUP			BIT(26)
-> -#define JZ_LCD_CTRL_FRC_GRAYSCALE_16		(0x0 << 24)
-> -#define JZ_LCD_CTRL_FRC_GRAYSCALE_4		(0x1 << 24)
-> -#define JZ_LCD_CTRL_FRC_GRAYSCALE_2		(0x2 << 24)
-> -#define JZ_LCD_CTRL_PDD_MASK			(0xff << 16)
-> -#define JZ_LCD_CTRL_EOF_IRQ			BIT(13)
-> -#define JZ_LCD_CTRL_SOF_IRQ			BIT(12)
-> -#define JZ_LCD_CTRL_OFU_IRQ			BIT(11)
-> -#define JZ_LCD_CTRL_IFU0_IRQ			BIT(10)
-> -#define JZ_LCD_CTRL_IFU1_IRQ			BIT(9)
-> -#define JZ_LCD_CTRL_DD_IRQ			BIT(8)
-> -#define JZ_LCD_CTRL_QDD_IRQ			BIT(7)
-> -#define JZ_LCD_CTRL_REVERSE_ENDIAN		BIT(6)
-> -#define JZ_LCD_CTRL_LSB_FISRT			BIT(5)
-> -#define JZ_LCD_CTRL_DISABLE			BIT(4)
-> -#define JZ_LCD_CTRL_ENABLE			BIT(3)
-> -#define JZ_LCD_CTRL_BPP_1			0x0
-> -#define JZ_LCD_CTRL_BPP_2			0x1
-> -#define JZ_LCD_CTRL_BPP_4			0x2
-> -#define JZ_LCD_CTRL_BPP_8			0x3
-> -#define JZ_LCD_CTRL_BPP_15_16			0x4
-> -#define JZ_LCD_CTRL_BPP_18_24			0x5
-> -#define JZ_LCD_CTRL_BPP_MASK			(JZ_LCD_CTRL_RGB555 | (0x7 << 0))
-> -
-> -#define JZ_LCD_CMD_SOF_IRQ			BIT(31)
-> -#define JZ_LCD_CMD_EOF_IRQ			BIT(30)
-> -#define JZ_LCD_CMD_ENABLE_PAL			BIT(28)
-> -
-> -#define JZ_LCD_SYNC_MASK			0x3ff
-> -
-> -#define JZ_LCD_STATE_EOF_IRQ			BIT(5)
-> -#define JZ_LCD_STATE_SOF_IRQ			BIT(4)
-> -#define JZ_LCD_STATE_DISABLED			BIT(0)
-> -
->  struct ingenic_dma_hwdesc {
->  	u32 next;
->  	u32 addr;
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm.h b/drivers/gpu/drm/ingenic/ingenic-drm.h
-> new file mode 100644
-> index 000000000000..cb578cff7bb1
-> --- /dev/null
-> +++ b/drivers/gpu/drm/ingenic/ingenic-drm.h
-> @@ -0,0 +1,126 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +//
-> +// Ingenic JZ47xx KMS driver - Register definitions and private API
-> +//
-> +// Copyright (C) 2020, Paul Cercueil <paul@crapouillou.net>
-> +
-> +#ifndef DRIVERS_GPU_DRM_INGENIC_INGENIC_DRM_H
-> +#define DRIVERS_GPU_DRM_INGENIC_INGENIC_DRM_H
-> +
-> +#include <linux/bitops.h>
-> +
-> +#define JZ_REG_LCD_CFG				0x00
-> +#define JZ_REG_LCD_VSYNC			0x04
-> +#define JZ_REG_LCD_HSYNC			0x08
-> +#define JZ_REG_LCD_VAT				0x0C
-> +#define JZ_REG_LCD_DAH				0x10
-> +#define JZ_REG_LCD_DAV				0x14
-> +#define JZ_REG_LCD_PS				0x18
-> +#define JZ_REG_LCD_CLS				0x1C
-> +#define JZ_REG_LCD_SPL				0x20
-> +#define JZ_REG_LCD_REV				0x24
-> +#define JZ_REG_LCD_CTRL				0x30
-> +#define JZ_REG_LCD_STATE			0x34
-> +#define JZ_REG_LCD_IID				0x38
-> +#define JZ_REG_LCD_DA0				0x40
-> +#define JZ_REG_LCD_SA0				0x44
-> +#define JZ_REG_LCD_FID0				0x48
-> +#define JZ_REG_LCD_CMD0				0x4C
-> +#define JZ_REG_LCD_DA1				0x50
-> +#define JZ_REG_LCD_SA1				0x54
-> +#define JZ_REG_LCD_FID1				0x58
-> +#define JZ_REG_LCD_CMD1				0x5C
-> +
-> +#define JZ_LCD_CFG_SLCD				BIT(31)
-> +#define JZ_LCD_CFG_PS_DISABLE			BIT(23)
-> +#define JZ_LCD_CFG_CLS_DISABLE			BIT(22)
-> +#define JZ_LCD_CFG_SPL_DISABLE			BIT(21)
-> +#define JZ_LCD_CFG_REV_DISABLE			BIT(20)
-> +#define JZ_LCD_CFG_HSYNCM			BIT(19)
-> +#define JZ_LCD_CFG_PCLKM			BIT(18)
-> +#define JZ_LCD_CFG_INV				BIT(17)
-> +#define JZ_LCD_CFG_SYNC_DIR			BIT(16)
-> +#define JZ_LCD_CFG_PS_POLARITY			BIT(15)
-> +#define JZ_LCD_CFG_CLS_POLARITY			BIT(14)
-> +#define JZ_LCD_CFG_SPL_POLARITY			BIT(13)
-> +#define JZ_LCD_CFG_REV_POLARITY			BIT(12)
-> +#define JZ_LCD_CFG_HSYNC_ACTIVE_LOW		BIT(11)
-> +#define JZ_LCD_CFG_PCLK_FALLING_EDGE		BIT(10)
-> +#define JZ_LCD_CFG_DE_ACTIVE_LOW		BIT(9)
-> +#define JZ_LCD_CFG_VSYNC_ACTIVE_LOW		BIT(8)
-> +#define JZ_LCD_CFG_18_BIT			BIT(7)
-> +#define JZ_LCD_CFG_PDW				(BIT(5) | BIT(4))
-> +
-> +#define JZ_LCD_CFG_MODE_GENERIC_16BIT		0
-> +#define JZ_LCD_CFG_MODE_GENERIC_18BIT		BIT(7)
-> +#define JZ_LCD_CFG_MODE_GENERIC_24BIT		BIT(6)
-> +
-> +#define JZ_LCD_CFG_MODE_SPECIAL_TFT_1		1
-> +#define JZ_LCD_CFG_MODE_SPECIAL_TFT_2		2
-> +#define JZ_LCD_CFG_MODE_SPECIAL_TFT_3		3
-> +
-> +#define JZ_LCD_CFG_MODE_TV_OUT_P		4
-> +#define JZ_LCD_CFG_MODE_TV_OUT_I		6
-> +
-> +#define JZ_LCD_CFG_MODE_SINGLE_COLOR_STN	8
-> +#define JZ_LCD_CFG_MODE_SINGLE_MONOCHROME_STN	9
-> +#define JZ_LCD_CFG_MODE_DUAL_COLOR_STN		10
-> +#define JZ_LCD_CFG_MODE_DUAL_MONOCHROME_STN	11
-> +
-> +#define JZ_LCD_CFG_MODE_8BIT_SERIAL		12
-> +#define JZ_LCD_CFG_MODE_LCM			13
-> +
-> +#define JZ_LCD_VSYNC_VPS_OFFSET			16
-> +#define JZ_LCD_VSYNC_VPE_OFFSET			0
-> +
-> +#define JZ_LCD_HSYNC_HPS_OFFSET			16
-> +#define JZ_LCD_HSYNC_HPE_OFFSET			0
-> +
-> +#define JZ_LCD_VAT_HT_OFFSET			16
-> +#define JZ_LCD_VAT_VT_OFFSET			0
-> +
-> +#define JZ_LCD_DAH_HDS_OFFSET			16
-> +#define JZ_LCD_DAH_HDE_OFFSET			0
-> +
-> +#define JZ_LCD_DAV_VDS_OFFSET			16
-> +#define JZ_LCD_DAV_VDE_OFFSET			0
-> +
-> +#define JZ_LCD_CTRL_BURST_4			(0x0 << 28)
-> +#define JZ_LCD_CTRL_BURST_8			(0x1 << 28)
-> +#define JZ_LCD_CTRL_BURST_16			(0x2 << 28)
-> +#define JZ_LCD_CTRL_RGB555			BIT(27)
-> +#define JZ_LCD_CTRL_OFUP			BIT(26)
-> +#define JZ_LCD_CTRL_FRC_GRAYSCALE_16		(0x0 << 24)
-> +#define JZ_LCD_CTRL_FRC_GRAYSCALE_4		(0x1 << 24)
-> +#define JZ_LCD_CTRL_FRC_GRAYSCALE_2		(0x2 << 24)
-> +#define JZ_LCD_CTRL_PDD_MASK			(0xff << 16)
-> +#define JZ_LCD_CTRL_EOF_IRQ			BIT(13)
-> +#define JZ_LCD_CTRL_SOF_IRQ			BIT(12)
-> +#define JZ_LCD_CTRL_OFU_IRQ			BIT(11)
-> +#define JZ_LCD_CTRL_IFU0_IRQ			BIT(10)
-> +#define JZ_LCD_CTRL_IFU1_IRQ			BIT(9)
-> +#define JZ_LCD_CTRL_DD_IRQ			BIT(8)
-> +#define JZ_LCD_CTRL_QDD_IRQ			BIT(7)
-> +#define JZ_LCD_CTRL_REVERSE_ENDIAN		BIT(6)
-> +#define JZ_LCD_CTRL_LSB_FISRT			BIT(5)
-> +#define JZ_LCD_CTRL_DISABLE			BIT(4)
-> +#define JZ_LCD_CTRL_ENABLE			BIT(3)
-> +#define JZ_LCD_CTRL_BPP_1			0x0
-> +#define JZ_LCD_CTRL_BPP_2			0x1
-> +#define JZ_LCD_CTRL_BPP_4			0x2
-> +#define JZ_LCD_CTRL_BPP_8			0x3
-> +#define JZ_LCD_CTRL_BPP_15_16			0x4
-> +#define JZ_LCD_CTRL_BPP_18_24			0x5
-> +#define JZ_LCD_CTRL_BPP_MASK			(JZ_LCD_CTRL_RGB555 | 0x7)
-> +
-> +#define JZ_LCD_CMD_SOF_IRQ			BIT(31)
-> +#define JZ_LCD_CMD_EOF_IRQ			BIT(30)
-> +#define JZ_LCD_CMD_ENABLE_PAL			BIT(28)
-> +
-> +#define JZ_LCD_SYNC_MASK			0x3ff
-> +
-> +#define JZ_LCD_STATE_EOF_IRQ			BIT(5)
-> +#define JZ_LCD_STATE_SOF_IRQ			BIT(4)
-> +#define JZ_LCD_STATE_DISABLED			BIT(0)
-> +
-> +#endif /* DRIVERS_GPU_DRM_INGENIC_INGENIC_DRM_H */
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+Hi Sam,
+
+Le mar. 30 juin 2020 =E0 13:44, Sam Ravnborg <sam@ravnborg.org> a =E9crit=20
+:
+> Hi Paul.
+>=20
+> On Tue, Jun 30, 2020 at 01:52:06AM +0200, Paul Cercueil wrote:
+>>  The address of the DMA descriptor never changes. It can therefore=20
+>> be set
+>>  in the probe function.
+>>=20
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>=20
+>>  Notes:
+>>      v2: No change
+>>=20
+>>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>=20
+>>  diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c=20
+>> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>>  index 924c8daf071a..f7b0c5dc8cd8 100644
+>>  --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>>  +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>>  @@ -358,8 +358,6 @@ static void=20
+>> ingenic_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+>>   		ingenic_drm_crtc_update_ctrl(priv, finfo);
+>>=20
+>>   		clk_set_rate(priv->pix_clk, state->adjusted_mode.clock * 1000);
+>>  -
+>>  -		regmap_write(priv->map, JZ_REG_LCD_DA0, priv->dma_hwdesc->next);
+>>   	}
+>>=20
+>>   	if (event) {
+>>  @@ -757,6 +755,9 @@ static int ingenic_drm_probe(struct=20
+>> platform_device *pdev)
+>>   		}
+>>   	}
+>>=20
+>>  +	/* Set address of our DMA descriptor chain */
+>>  +	regmap_write(priv->map, JZ_REG_LCD_DA0, priv->dma_hwdesc_phys);
+>>  +
+>=20
+>=20
+> What is the purpose of this code after the assignment was moved:
+>=20
+> static int ingenic_drm_probe(struct platform_device *pdev)
+> {
+> ...
+> 	priv->dma_hwdesc->next =3D priv->dma_hwdesc_phys;
+>=20
+> I do not see ->next used anymore.
+> Could this assignment be dropped?
+>=20
+>=20
+> And the following line:
+> 	priv->dma_hwdesc->id =3D 0xdeafbead;
+>=20
+> I can only see ->id be assingned, it is never referenced??
+>=20
+> Maybe this is all related to the structure assumed by the data pointed
+> to by JZ_REG_LCD_DA0?
+
+As its name suggests, 'dma_hwdesc' points to a DMA hardware descriptor.=20
+Setting ->next sets the address of the next descriptor (which is itself=20
+since we only use one descriptor). The 'id' field will be copied by the=20
+hardware to a register when the DMA descriptor is loaded, so we can=20
+know from userspace (debugfs) what DMA descriptors are loaded by=20
+looking up the IDs.
+
+-Paul
+
+> 	Sam
+>=20
+>>   	ret =3D drm_dev_register(drm, 0);
+>>   	if (ret) {
+>>   		dev_err(dev, "Failed to register DRM driver\n");
+>>  --
+>>  2.27.0
+>>=20
+>>  _______________________________________________
+>>  dri-devel mailing list
+>>  dri-devel@lists.freedesktop.org
+>>  https://lists.freedesktop.org/mailman/listinfo/dri-devel
+
+
