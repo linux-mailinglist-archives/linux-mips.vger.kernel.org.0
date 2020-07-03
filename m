@@ -2,206 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F2A21318F
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Jul 2020 04:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7E12131F4
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Jul 2020 05:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbgGCCgu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Jul 2020 22:36:50 -0400
-Received: from mga05.intel.com ([192.55.52.43]:33754 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726340AbgGCCgO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 2 Jul 2020 22:36:14 -0400
-IronPort-SDR: IyXpnycBF/0e9BKehCqWmgftuZtlsPvg0JuO0l3i+JLyoDDHhJLMC0/xAiPqqRED7+mM6iZ8BW
- qR81kPB8z4Mw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="231938505"
-X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="231938505"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 19:36:06 -0700
-IronPort-SDR: 6X1DufKoQvQTpLpsvtwmDMN38UaAa1O/P6Vpk8YDJlCUTWf0Wz+eIPQ52K4cnL2azvNBK0Uxgf
- MSYTYl4MQC2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="278295793"
-Received: from sjchrist-coffee.jf.intel.com ([10.54.74.152])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jul 2020 19:36:06 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>,
-        Peter Feiner <pfeiner@google.com>,
-        Peter Shier <pshier@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Christoffer Dall <christoffer.dall@arm.com>
-Subject: [PATCH v3 21/21] KVM: MIPS: Use common KVM implementation of MMU memory caches
-Date:   Thu,  2 Jul 2020 19:35:45 -0700
-Message-Id: <20200703023545.8771-22-sean.j.christopherson@intel.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200703023545.8771-1-sean.j.christopherson@intel.com>
-References: <20200703023545.8771-1-sean.j.christopherson@intel.com>
+        id S1726048AbgGCDAG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 2 Jul 2020 23:00:06 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:36078 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725915AbgGCDAG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Jul 2020 23:00:06 -0400
+Received: by mail-io1-f68.google.com with SMTP id y2so31090621ioy.3
+        for <linux-mips@vger.kernel.org>; Thu, 02 Jul 2020 20:00:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Q6YWpX/edcA+ETbRdMidH3dlYw218poo2zXkfknc2UA=;
+        b=Ae2IFx5k1tK1/5asq0pZMyuiOBBB/kpqzOb8v7X5snVhcR+MJSyjL/s1BAjfrabh28
+         mZSArcw5t6AJOezi3yRLUGLD2B3wytIi/IiUpeboPtqn2kLQpji5mbNXAtkPXYCS3ArG
+         z/9ZnA4fAKuQ4/CIWylpBHYqaRByIBm3UDh6AUuWR4oBTd8yONhDR6lprfRYwiWH3aXn
+         UeS4DSMQSRi9Yjlya3Bg0IEbZhYhHDzYfRI4sNcNWBCoQOPG9mLjqX7/wM0sf1FY+ADm
+         7QlumAraXhX5aa4x5u5LY9G2gGa7ZpqX5qe6vgkHJEges5eJ0X9xOz7Vt/pelJ0DMGkF
+         jg6w==
+X-Gm-Message-State: AOAM531ydrK/PwTJN+NjMmE8RKO9naZKnhPVKcKNazEj8tVphjunR6iZ
+        533I96CFkTgky+mExB401MHCoZrjJvf/FdkVBBfV0qGUoRre8g==
+X-Google-Smtp-Source: ABdhPJxis2U1h39iJtDy02eeCT3NmCXLrPYZxzhGNkV8/kjCNhzi5OtW8hX/naZ1s9oJVZPfuprLchLcLsHDfdITCPY=
+X-Received: by 2002:a5d:97d9:: with SMTP id k25mr10465144ios.42.1593745205262;
+ Thu, 02 Jul 2020 20:00:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200703000533.1716-1-r@hev.cc> <95165841-879d-c9fc-6628-446899bcd315@flygoat.com>
+In-Reply-To: <95165841-879d-c9fc-6628-446899bcd315@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Fri, 3 Jul 2020 10:59:54 +0800
+Message-ID: <CAAhV-H7QMw3nKy_x9Fyyfnp5Z21d3GAuW39yXijiVpM6i2Cwpw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Fix ejtag debug buffer address of per cpu
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Heiher <r@hev.cc>,
+        Linux MIPS Mailing List <linux-mips@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Move to the common MMU memory cache implementation now that the common
-code and MIPS's existing code are semantically compatible.
+Reviewed-by: Huacai Chen <chenhc@lemote.com>
 
-No functional change intended.
-
-Suggested-by: Christoffer Dall <christoffer.dall@arm.com>
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
----
- arch/mips/include/asm/Kbuild      |  1 -
- arch/mips/include/asm/kvm_host.h  | 11 ---------
- arch/mips/include/asm/kvm_types.h |  7 ++++++
- arch/mips/kvm/mmu.c               | 40 ++++---------------------------
- 4 files changed, 12 insertions(+), 47 deletions(-)
- create mode 100644 arch/mips/include/asm/kvm_types.h
-
-diff --git a/arch/mips/include/asm/Kbuild b/arch/mips/include/asm/Kbuild
-index 397e6d24d2ab..8643d313890e 100644
---- a/arch/mips/include/asm/Kbuild
-+++ b/arch/mips/include/asm/Kbuild
-@@ -5,7 +5,6 @@ generated-y += syscall_table_64_n32.h
- generated-y += syscall_table_64_n64.h
- generated-y += syscall_table_64_o32.h
- generic-y += export.h
--generic-y += kvm_types.h
- generic-y += local64.h
- generic-y += mcs_spinlock.h
- generic-y += parport.h
-diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
-index 363e7a89d173..f49617175f60 100644
---- a/arch/mips/include/asm/kvm_host.h
-+++ b/arch/mips/include/asm/kvm_host.h
-@@ -335,17 +335,6 @@ struct kvm_mips_tlb {
- 	long tlb_lo[2];
- };
- 
--#define KVM_NR_MEM_OBJS     4
--
--/*
-- * We don't want allocation failures within the mmu code, so we preallocate
-- * enough memory for a single page fault in a cache.
-- */
--struct kvm_mmu_memory_cache {
--	int nobjs;
--	void *objects[KVM_NR_MEM_OBJS];
--};
--
- #define KVM_MIPS_AUX_FPU	0x1
- #define KVM_MIPS_AUX_MSA	0x2
- 
-diff --git a/arch/mips/include/asm/kvm_types.h b/arch/mips/include/asm/kvm_types.h
-new file mode 100644
-index 000000000000..213754d9ef6b
---- /dev/null
-+++ b/arch/mips/include/asm/kvm_types.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_MIPS_KVM_TYPES_H
-+#define _ASM_MIPS_KVM_TYPES_H
-+
-+#define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE     4
-+
-+#endif /* _ASM_MIPS_KVM_TYPES_H */
-diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
-index 9d3c8c025624..87fa8d8a1031 100644
---- a/arch/mips/kvm/mmu.c
-+++ b/arch/mips/kvm/mmu.c
-@@ -25,39 +25,9 @@
- #define KVM_MMU_CACHE_MIN_PAGES 2
- #endif
- 
--static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache, int min)
--{
--	void *page;
--
--	if (cache->nobjs >= min)
--		return 0;
--	while (cache->nobjs < ARRAY_SIZE(cache->objects)) {
--		page = (void *)__get_free_page(GFP_KERNEL_ACCOUNT);
--		if (!page)
--			return -ENOMEM;
--		cache->objects[cache->nobjs++] = page;
--	}
--	return 0;
--}
--
--static void mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
--{
--	while (mc->nobjs)
--		free_page((unsigned long)mc->objects[--mc->nobjs]);
--}
--
--static void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
--{
--	void *p;
--
--	BUG_ON(!mc || !mc->nobjs);
--	p = mc->objects[--mc->nobjs];
--	return p;
--}
--
- void kvm_mmu_free_memory_caches(struct kvm_vcpu *vcpu)
- {
--	mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
-+	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
- }
- 
- /**
-@@ -151,7 +121,7 @@ static pte_t *kvm_mips_walk_pgd(pgd_t *pgd, struct kvm_mmu_memory_cache *cache,
- 
- 		if (!cache)
- 			return NULL;
--		new_pmd = mmu_memory_cache_alloc(cache);
-+		new_pmd = kvm_mmu_memory_cache_alloc(cache);
- 		pmd_init((unsigned long)new_pmd,
- 			 (unsigned long)invalid_pte_table);
- 		pud_populate(NULL, pud, new_pmd);
-@@ -162,7 +132,7 @@ static pte_t *kvm_mips_walk_pgd(pgd_t *pgd, struct kvm_mmu_memory_cache *cache,
- 
- 		if (!cache)
- 			return NULL;
--		new_pte = mmu_memory_cache_alloc(cache);
-+		new_pte = kvm_mmu_memory_cache_alloc(cache);
- 		clear_page(new_pte);
- 		pmd_populate_kernel(NULL, pmd, new_pte);
- 	}
-@@ -709,7 +679,7 @@ static int kvm_mips_map_page(struct kvm_vcpu *vcpu, unsigned long gpa,
- 		goto out;
- 
- 	/* We need a minimum of cached pages ready for page table creation */
--	err = mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
-+	err = kvm_mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
- 	if (err)
- 		goto out;
- 
-@@ -793,7 +763,7 @@ static pte_t *kvm_trap_emul_pte_for_gva(struct kvm_vcpu *vcpu,
- 	int ret;
- 
- 	/* We need a minimum of cached pages ready for page table creation */
--	ret = mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
-+	ret = kvm_mmu_topup_memory_cache(memcache, KVM_MMU_CACHE_MIN_PAGES);
- 	if (ret)
- 		return NULL;
- 
--- 
-2.26.0
-
+On Fri, Jul 3, 2020 at 8:32 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+>
+>
+> 在 2020/7/3 上午8:05, Heiher 写道:
+> > From: Heiher <r@hev.cc>
+> >
+> > We can directly calculate pointer type offset of per cpu
+> > by shifting SMP_CPUID_PTRSHIFT.
+> >
+> > Cc: Paul Burton <paulburton@kernel.org>
+> > Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Cc: Huacai Chen <chenhc@lemote.com>
+> > Signed-off-by: Heiher <r@hev.cc>
+> > ---
+> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>
+> Btw:
+> linux-mips@linux-mips.org have been abandoned, please go to the new
+> list: linux-mips@vger.kernel.org.
+>
+> Thanks.
+>
+> >   arch/mips/kernel/genex.S | 2 --
+> >   1 file changed, 2 deletions(-)
+> >
+> > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+> > index a1b966f3578e..a1ebb94b3626 100644
+> > --- a/arch/mips/kernel/genex.S
+> > +++ b/arch/mips/kernel/genex.S
+> > @@ -369,7 +369,6 @@ NESTED(ejtag_debug_handler, PT_SIZE, sp)
+> >
+> >       ASM_CPUID_MFC0 k1, ASM_SMP_CPUID_REG
+> >       PTR_SRL k1, SMP_CPUID_PTRSHIFT
+> > -     PTR_SLL k1, LONGLOG
+> >       PTR_LA  k0, ejtag_debug_buffer_per_cpu
+> >       PTR_ADDU k0, k1
+> >
+> > @@ -392,7 +391,6 @@ NESTED(ejtag_debug_handler, PT_SIZE, sp)
+> >   #ifdef CONFIG_SMP
+> >       ASM_CPUID_MFC0 k1, ASM_SMP_CPUID_REG
+> >       PTR_SRL k1, SMP_CPUID_PTRSHIFT
+> > -     PTR_SLL k1, LONGLOG
+> >       PTR_LA  k0, ejtag_debug_buffer_per_cpu
+> >       PTR_ADDU k0, k1
+> >       LONG_L  k1, 0(k0)
