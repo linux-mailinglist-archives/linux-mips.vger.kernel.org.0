@@ -2,118 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0939216031
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Jul 2020 22:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74CD21693E
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Jul 2020 11:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbgGFUWy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Jul 2020 16:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbgGFUWy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Jul 2020 16:22:54 -0400
-Received: from srv1.deutnet.info (srv1.deutnet.info [IPv6:2a01:4f8:c2c:6846::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FFEC061755;
-        Mon,  6 Jul 2020 13:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deutnet.info; s=default; h=In-Reply-To:Date:Message-ID:From:Cc:To:Subject;
-         bh=QHBoMnopn1GeLbQTtaFDXykK4kBLCM1Q0oST0aeB5hc=; b=n4VB5fe918Nk4ritAC86gzwqh
-        2g3OXDucNHbXUyywRSdmKDY+ZI9QxRpqWbe4RXzi7G0HoHUqPLf4qpTX74IIwDJW0EnGzIPWb6ZFT
-        LP42pHUc0QpAuoqlcyUPref/1Db85VPE2pHJfbaXBLP0WDVXeEqzc/f+TB3WWJwHNhOtt0ZNW0UOc
-        mMFrhqHmxy9uoCF5O1WSwR5KJjlUqU68V7SXRyaxMDu0y17Bs3rmQl+9Zz8QUfwqdGTvTh73+HXej
-        DaSn3KeTNxraDmUX1CKTLZqogxXh4gL0FpluQfjABb7+lNkN1j+JiZJR0Ih2KWJ5tizMqBbJaDVEO
-        gm+Zwc3aw==;
-Received: from [2a01:e0a:186:d21:be5f:f4ff:fe8b:2fc1]
-        by srv1.deutnet.info with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <agriveaux@deutnet.info>)
-        id 1jsXda-0005ot-8b; Mon, 06 Jul 2020 22:22:50 +0200
-Subject: Re: [PATCH] MIPS: CI20: DTS: Correcting IW8103 Wifi binding
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20200705103215.96672-1-agriveaux@deutnet.info>
- <457C75ED-A033-4B46-A9D9-53B510C16F37@goldelico.com>
-From:   Alexandre GRIVEAUX <agriveaux@deutnet.info>
-Message-ID: <f617580b-fad7-f4f2-e89d-402b53c21c47@deutnet.info>
-Date:   Mon, 6 Jul 2020 22:22:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <457C75ED-A033-4B46-A9D9-53B510C16F37@goldelico.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        id S1728204AbgGGJjo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Jul 2020 05:39:44 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:54998 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727120AbgGGJjn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 7 Jul 2020 05:39:43 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr964QgRfBzJRAA--.950S2;
+        Tue, 07 Jul 2020 17:39:05 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Juxin Gao <gaojuxin@loongson.cn>
+Subject: [PATCH] MIPS: Prevent READ_IMPLIES_EXEC propagation
+Date:   Tue,  7 Jul 2020 17:39:01 +0800
+Message-Id: <1594114741-26852-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxr964QgRfBzJRAA--.950S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJry3Ar4ruF4DGw4xtryfXrb_yoW8tr48pF
+        ykCa4Dt3yUGryFkas5Z3ykury5JFZxGr429ayxuFWDAanIv3WFvwnayFn0yF15CFsYqa42
+        v3sakrnrJF4jkFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4f
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUPl13UUUU
+        U==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Le 06/07/2020 à 13:15, H. Nikolaus Schaller a écrit :
-> Hi Alexandre,
->
->> Am 05.07.2020 um 12:32 schrieb agriveaux@deutnet.info:
->>
->> From: Alexandre GRIVEAUX <agriveaux@deutnet.info>
->>
->> Use brcm,bcm4329-fmac instead of brcm,bcm4330-fmac.
->>
->> Signed-off-by: Alexandre GRIVEAUX <agriveaux@deutnet.info>
->> ---
->> arch/mips/boot/dts/ingenic/ci20.dts | 4 ++--
->> 1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
->> index 75f5bfbf2c37..82a1f126b778 100644
->> --- a/arch/mips/boot/dts/ingenic/ci20.dts
->> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
->> @@ -116,8 +116,8 @@
->> 	pinctrl-0 = <&pins_mmc1>;
->>
->> 	brcmf: wifi@1 {
->> -/*		reg = <4>;*/
->> -		compatible = "brcm,bcm4330-fmac";
->> +		reg = <1>;
->> +		compatible = "brcm,bcm4329-fmac";
->> 		vcc-supply = <&wlan0_power>;
->> 		device-wakeup-gpios = <&gpd 9 GPIO_ACTIVE_HIGH>;
->> 		shutdown-gpios = <&gpf 7 GPIO_ACTIVE_LOW>;
-> Do you have it working with a v5.8 kernel?
->
-> I don't see any activity to detect the module or load firmware.
->
-> Does it rely on some other patch?
->
-> BR and thanks,
-> Nikolaus
->
-Hi Nikolaus
+In the MIPS architecture, we should clear the security-relevant
+flag READ_IMPLIES_EXEC in the function SET_PERSONALITY2() of the
+file arch/mips/include/asm/elf.h.
 
+Otherwise, with this flag set, PROT_READ implies PROT_EXEC for
+mmap to make memory executable that is not safe, because this
+condition allows an attacker to simply jump to and execute bytes
+that are considered to be just data [1].
 
-At this time the patch have been only "tested" for error will doing make:
+In mm/mmap.c:
+unsigned long do_mmap(struct file *file, unsigned long addr,
+			unsigned long len, unsigned long prot,
+			unsigned long flags, vm_flags_t vm_flags,
+			unsigned long pgoff, unsigned long *populate,
+			struct list_head *uf)
+{
+	[...]
+	if ((prot & PROT_READ) && (current->personality & READ_IMPLIES_EXEC))
+		if (!(file && path_noexec(&file->f_path)))
+			prot |= PROT_EXEC;
+	[...]
+}
 
-make ARCH=mips CROSS_COMPILE=mipsel-linux-gnu- olddefconfig &&  make
-ARCH=mips CROSS_COMPILE=mipsel-linux-gnu- -j8 && make ARCH=mips
-CROSS_COMPILE=mipsel-linux-gnu- -j8 uImage
+By the way, x86 and ARM64 have done the similar thing.
 
+After commit 250c22777fe1 ("x86_64: move kernel"), in the file
+arch/x86/kernel/process_64.c:
+void set_personality_64bit(void)
+{
+	[...]
+	current->personality &= ~READ_IMPLIES_EXEC;
+}
 
-The .config come from creator-ci20 kernel 'config-3.18.3-ci20-1'
+After commit 48f99c8ec0b2 ("arm64: Preventing READ_IMPLIES_EXEC
+propagation"), in the file arch/arm64/include/asm/elf.h:
+#define SET_PERSONALITY(ex)						\
+({									\
+	clear_thread_flag(TIF_32BIT);					\
+	current->personality &= ~READ_IMPLIES_EXEC;			\
+})
 
+[1] https://insights.sei.cmu.edu/cert/2014/02/feeling-insecure-blame-your-parent.html
 
-Even with the right DT
-(Documentation/devicetree/bindings/net/wireless/brcm,bcm43xx-fmac.txt)
-it's need some config with brcm enabled I gess.
+Reported-by: Juxin Gao <gaojuxin@loongson.cn>
+Co-developed-by: Juxin Gao <gaojuxin@loongson.cn>
+Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/include/asm/elf.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-I need to do some investigation will trying the uImage this week,
-unfortunaly kernel developpement is not my main work, it's a hobby.
-
-
-Thanks.
+diff --git a/arch/mips/include/asm/elf.h b/arch/mips/include/asm/elf.h
+index 5aa29ce..71c7622 100644
+--- a/arch/mips/include/asm/elf.h
++++ b/arch/mips/include/asm/elf.h
+@@ -410,6 +410,7 @@ do {									\
+ 	clear_thread_flag(TIF_32BIT_FPREGS);				\
+ 	clear_thread_flag(TIF_HYBRID_FPREGS);				\
+ 	clear_thread_flag(TIF_32BIT_ADDR);				\
++	current->personality &= ~READ_IMPLIES_EXEC;			\
+ 									\
+ 	if ((ex).e_ident[EI_CLASS] == ELFCLASS32)			\
+ 		__SET_PERSONALITY32(ex, state);				\
+-- 
+2.1.0
 
