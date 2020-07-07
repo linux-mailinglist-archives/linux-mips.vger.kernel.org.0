@@ -2,79 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA61A217830
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Jul 2020 21:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E053A217B48
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Jul 2020 00:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728492AbgGGTpo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Jul 2020 15:45:44 -0400
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:53820 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728470AbgGGTpn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Jul 2020 15:45:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1594151165; x=1625687165;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=rYdMBPFrRbVbk8DFcQNubWpbbG2Xb3oRsw/dpkB/QeY=;
-  b=iZm8ucIwss395xYeuy6/lyIrXg/lxl1aIE5T381krOpDcgWMl3grSISR
-   mrK4r8gy0I00VkRsnzbxxmAPUEMc1R6YLP2wZroapQofD8IpYEA9mKXBx
-   oueGgieWW4x8mD7y+oQwQaq3wZMQeoGTUINhyO22+my56JJjxG4SP9zzM
-   0mWveAUEdJXsqP4jWs9hWbTyFeL6JbL4w5mzNeApk0D/WuF+kJyu6aG9j
-   8gsnyb8e5OtI58FrupM9Rit/yQsIEC8kdRBJnTxE04mEVwmcBndF7QoWX
-   d1v3udBqXVZQNyaXtp7ckgwk7L4ZK9DP/H0ITIX+u99aN6QRlCAm2+9F3
-   A==;
-IronPort-SDR: btQDLBa3Z1VKjRGWwi659ExoF2P0emFH899iYeQnMViGMOHIDHsdHiDetDykHUa3eThgOOHg3x
- ex/TEPcMztWkaWiRoPs3mQunupN/GPH6WgKJLXWqC5hXo1YmmUfuIP3UxZvQ/SGl3AOs0oXh5B
- aPgLqNudufRl0DSuyJ3FN8r7zDiG1+ztjK/576iJ0mmeBZEDQj2dnDrFqnkvSHBzlRCN3qqLhX
- o5OKeG53Z9+ZuQCdd+kQZhvtGhyHR+x+4WMWYrtoLIYeixNZhx9UhI09YbtC2/J8XIQZyUDHXv
- JiE=
-X-IronPort-AV: E=Sophos;i="5.75,324,1589212800"; 
-   d="scan'208";a="244884702"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Jul 2020 03:46:05 +0800
-IronPort-SDR: nSKFKD1wIQuP7Y1kcmCly4O9Vqh8RONK/bvL3DW8BFAiw6pb0y/ftDYK9eaXpjZCpblbjU9Ea8
- cwv5oboEtpM1DCNFfrhwOzsXb7+HqlISI=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2020 12:34:22 -0700
-IronPort-SDR: y0nVZrUYU/RZaOg80bWjddoYfs2s76PYymRZwFgUvzefJHjOwJCL/zV/TdKh9Mp88c3v2Rhp/u
- e6i0JrmsTDhw==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2020 12:45:42 -0700
-Date:   Tue, 7 Jul 2020 20:45:38 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@wdc.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-Subject: Re: [PATCH] MIPS: Prevent READ_IMPLIES_EXEC propagation
-In-Reply-To: <1594114741-26852-1-git-send-email-yangtiezhu@loongson.cn>
-Message-ID: <alpine.LFD.2.21.2007072043250.31807@redsun52.ssa.fujisawa.hgst.com>
-References: <1594114741-26852-1-git-send-email-yangtiezhu@loongson.cn>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1729659AbgGGWuq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Jul 2020 18:50:46 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:37725 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729626AbgGGWup (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Jul 2020 18:50:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594162244;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DEmzww7H5zywGqZA9zT7LUnhxIyJ8MI0ZWzVs6Wigj0=;
+        b=UHURBdyQ9bESfAP3XXMr3LZP4Ie9a56H8fsPOH6RgBRy4Lv6wdXUll933CUxmZoWGqKIsl
+        MG4ajYfIhQwoIamLNkDeNu2U7q2FvFFCyekCDDDNxwCma6Pn66tK7uuz4IWkLqJXXPEv+v
+        3no4XXvqPflNNzDiW2MbsFjmeU/Ps3k=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-220-Ojqg1z0PO0aAqWUVmyk-xQ-1; Tue, 07 Jul 2020 18:50:42 -0400
+X-MC-Unique: Ojqg1z0PO0aAqWUVmyk-xQ-1
+Received: by mail-qt1-f200.google.com with SMTP id x6so2751965qtf.2
+        for <linux-mips@vger.kernel.org>; Tue, 07 Jul 2020 15:50:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DEmzww7H5zywGqZA9zT7LUnhxIyJ8MI0ZWzVs6Wigj0=;
+        b=FoWOp0LNYSyZqAl6CvafIvkKpT1knxeWmgacpYFWd2CcbkOzQoEXywHy+X/lSKvdYy
+         tE5siAub95/foAKFhPwDBMc2mpmBRi3YYbDa5UIU4c3lyPIGR9dE1zWq8YvtzDl4kA85
+         lVhFHKXT1tGccWHXRfkgk00ZNiTurQG5/df0fRc6Dm5UyE63M0wcFeuw4gW/h30CHS6F
+         HN3xn33mKfP2QDLkwY/XFvusx/x23M7/zsev9CnvjGPfy4Kp0fTWVxK59eSHtQ0pCPnf
+         rDnILFgZd2vB+bkVSOdZ7Q2jCMycTU2ribJgWt36jxRdkJEDR/ka3jhIK2GWgs2PDxj2
+         MLzQ==
+X-Gm-Message-State: AOAM533jNWjSyltzAtm7EIlf+tFfkK9zGZoSjChOQaQsnsL7HByrfV9A
+        Sse98c2KWWx/dUKpXWUp2Mk3cPh4t1xNzg5dN94TbhiG+FdTdyWZ7+xbEI5KQYhAIqmso6CNSn9
+        zRTT+uMHy/Ma/LGgWQXRKzQ==
+X-Received: by 2002:a05:620a:6c9:: with SMTP id 9mr52692042qky.271.1594162242430;
+        Tue, 07 Jul 2020 15:50:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy1qTJEBcfEtMVTs2oSUGxcvlRB7kFM/hzR/mKCkF4/EjMMmKG7vtyho7cDDf2sOJlHl1+CRg==
+X-Received: by 2002:a05:620a:6c9:: with SMTP id 9mr52692017qky.271.1594162242180;
+        Tue, 07 Jul 2020 15:50:42 -0700 (PDT)
+Received: from xz-x1.redhat.com ([2607:9880:19c0:32::2])
+        by smtp.gmail.com with ESMTPSA id j16sm26267642qtp.92.2020.07.07.15.50.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2020 15:50:41 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        peterx@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v5 11/25] mm/mips: Use general page fault accounting
+Date:   Tue,  7 Jul 2020 18:50:07 -0400
+Message-Id: <20200707225021.200906-12-peterx@redhat.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200707225021.200906-1-peterx@redhat.com>
+References: <20200707225021.200906-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 7 Jul 2020, Tiezhu Yang wrote:
+Use the general page fault accounting by passing regs into handle_mm_fault().
+It naturally solve the issue of multiple page fault accounting when page fault
+retry happened.
 
-> In the MIPS architecture, we should clear the security-relevant
-> flag READ_IMPLIES_EXEC in the function SET_PERSONALITY2() of the
-> file arch/mips/include/asm/elf.h.
-> 
-> Otherwise, with this flag set, PROT_READ implies PROT_EXEC for
-> mmap to make memory executable that is not safe, because this
-> condition allows an attacker to simply jump to and execute bytes
-> that are considered to be just data [1].
+Fix PERF_COUNT_SW_PAGE_FAULTS perf event manually for page fault retries, by
+moving it before taking mmap_sem.
 
- Why isn't the arrangement made with `mips_elf_read_implies_exec' 
-sufficient?
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC: linux-mips@vger.kernel.org
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ arch/mips/mm/fault.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-  Maciej
+diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
+index b1db39784db9..7c871b14e74a 100644
+--- a/arch/mips/mm/fault.c
++++ b/arch/mips/mm/fault.c
+@@ -96,6 +96,8 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
+ 
+ 	if (user_mode(regs))
+ 		flags |= FAULT_FLAG_USER;
++
++	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+ retry:
+ 	mmap_read_lock(mm);
+ 	vma = find_vma(mm, address);
+@@ -152,12 +154,11 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
+ 	 * make sure we exit gracefully rather than endlessly redo
+ 	 * the fault.
+ 	 */
+-	fault = handle_mm_fault(vma, address, flags, NULL);
++	fault = handle_mm_fault(vma, address, flags, regs);
+ 
+ 	if (fault_signal_pending(fault, regs))
+ 		return;
+ 
+-	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+ 	if (unlikely(fault & VM_FAULT_ERROR)) {
+ 		if (fault & VM_FAULT_OOM)
+ 			goto out_of_memory;
+@@ -168,15 +169,6 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
+ 		BUG();
+ 	}
+ 	if (flags & FAULT_FLAG_ALLOW_RETRY) {
+-		if (fault & VM_FAULT_MAJOR) {
+-			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1,
+-						  regs, address);
+-			tsk->maj_flt++;
+-		} else {
+-			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1,
+-						  regs, address);
+-			tsk->min_flt++;
+-		}
+ 		if (fault & VM_FAULT_RETRY) {
+ 			flags |= FAULT_FLAG_TRIED;
+ 
+-- 
+2.26.2
+
