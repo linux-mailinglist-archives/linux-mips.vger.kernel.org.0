@@ -2,137 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E053A217B48
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Jul 2020 00:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690132181CA
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Jul 2020 09:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729659AbgGGWuq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Jul 2020 18:50:46 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:37725 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729626AbgGGWup (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Jul 2020 18:50:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594162244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DEmzww7H5zywGqZA9zT7LUnhxIyJ8MI0ZWzVs6Wigj0=;
-        b=UHURBdyQ9bESfAP3XXMr3LZP4Ie9a56H8fsPOH6RgBRy4Lv6wdXUll933CUxmZoWGqKIsl
-        MG4ajYfIhQwoIamLNkDeNu2U7q2FvFFCyekCDDDNxwCma6Pn66tK7uuz4IWkLqJXXPEv+v
-        3no4XXvqPflNNzDiW2MbsFjmeU/Ps3k=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-220-Ojqg1z0PO0aAqWUVmyk-xQ-1; Tue, 07 Jul 2020 18:50:42 -0400
-X-MC-Unique: Ojqg1z0PO0aAqWUVmyk-xQ-1
-Received: by mail-qt1-f200.google.com with SMTP id x6so2751965qtf.2
-        for <linux-mips@vger.kernel.org>; Tue, 07 Jul 2020 15:50:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DEmzww7H5zywGqZA9zT7LUnhxIyJ8MI0ZWzVs6Wigj0=;
-        b=FoWOp0LNYSyZqAl6CvafIvkKpT1knxeWmgacpYFWd2CcbkOzQoEXywHy+X/lSKvdYy
-         tE5siAub95/foAKFhPwDBMc2mpmBRi3YYbDa5UIU4c3lyPIGR9dE1zWq8YvtzDl4kA85
-         lVhFHKXT1tGccWHXRfkgk00ZNiTurQG5/df0fRc6Dm5UyE63M0wcFeuw4gW/h30CHS6F
-         HN3xn33mKfP2QDLkwY/XFvusx/x23M7/zsev9CnvjGPfy4Kp0fTWVxK59eSHtQ0pCPnf
-         rDnILFgZd2vB+bkVSOdZ7Q2jCMycTU2ribJgWt36jxRdkJEDR/ka3jhIK2GWgs2PDxj2
-         MLzQ==
-X-Gm-Message-State: AOAM533jNWjSyltzAtm7EIlf+tFfkK9zGZoSjChOQaQsnsL7HByrfV9A
-        Sse98c2KWWx/dUKpXWUp2Mk3cPh4t1xNzg5dN94TbhiG+FdTdyWZ7+xbEI5KQYhAIqmso6CNSn9
-        zRTT+uMHy/Ma/LGgWQXRKzQ==
-X-Received: by 2002:a05:620a:6c9:: with SMTP id 9mr52692042qky.271.1594162242430;
-        Tue, 07 Jul 2020 15:50:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy1qTJEBcfEtMVTs2oSUGxcvlRB7kFM/hzR/mKCkF4/EjMMmKG7vtyho7cDDf2sOJlHl1+CRg==
-X-Received: by 2002:a05:620a:6c9:: with SMTP id 9mr52692017qky.271.1594162242180;
-        Tue, 07 Jul 2020 15:50:42 -0700 (PDT)
-Received: from xz-x1.redhat.com ([2607:9880:19c0:32::2])
-        by smtp.gmail.com with ESMTPSA id j16sm26267642qtp.92.2020.07.07.15.50.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 15:50:41 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        peterx@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v5 11/25] mm/mips: Use general page fault accounting
-Date:   Tue,  7 Jul 2020 18:50:07 -0400
-Message-Id: <20200707225021.200906-12-peterx@redhat.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200707225021.200906-1-peterx@redhat.com>
-References: <20200707225021.200906-1-peterx@redhat.com>
+        id S1726315AbgGHHvt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Jul 2020 03:51:49 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:59718 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725747AbgGHHvt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 8 Jul 2020 03:51:49 -0400
+Received: from [10.130.0.52] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxidT8egVf4RMAAA--.116S3;
+        Wed, 08 Jul 2020 15:51:25 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Prevent READ_IMPLIES_EXEC propagation
+To:     "Maciej W. Rozycki" <macro@wdc.com>
+References: <1594114741-26852-1-git-send-email-yangtiezhu@loongson.cn>
+ <alpine.LFD.2.21.2007072043250.31807@redsun52.ssa.fujisawa.hgst.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <b62c76c5-3548-c3d5-ad3e-5664c463a52f@loongson.cn>
+Date:   Wed, 8 Jul 2020 15:51:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <alpine.LFD.2.21.2007072043250.31807@redsun52.ssa.fujisawa.hgst.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9CxidT8egVf4RMAAA--.116S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruF1rCFy3Zry8ur1UWrW7Jwb_yoWDZFg_Ar
+        4fZw1DGw1UurZ0g34S9r43Zas7Wa47Ja4ftrWfCw4xKw1DXanxAayvyFyfAryxGanrtrsx
+        WFsxJws5Grna9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
+        bIxvr21lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUBpB-UUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use the general page fault accounting by passing regs into handle_mm_fault().
-It naturally solve the issue of multiple page fault accounting when page fault
-retry happened.
+On 07/08/2020 03:45 AM, Maciej W. Rozycki wrote:
+> On Tue, 7 Jul 2020, Tiezhu Yang wrote:
+>
+>> In the MIPS architecture, we should clear the security-relevant
+>> flag READ_IMPLIES_EXEC in the function SET_PERSONALITY2() of the
+>> file arch/mips/include/asm/elf.h.
+>>
+>> Otherwise, with this flag set, PROT_READ implies PROT_EXEC for
+>> mmap to make memory executable that is not safe, because this
+>> condition allows an attacker to simply jump to and execute bytes
+>> that are considered to be just data [1].
+>   Why isn't the arrangement made with `mips_elf_read_implies_exec'
+> sufficient?
 
-Fix PERF_COUNT_SW_PAGE_FAULTS perf event manually for page fault retries, by
-moving it before taking mmap_sem.
+We inherit the READ_IMPLIES_EXEC personality flag across fork().
+If we do not explicitly clear this flag in SET_PERSONALITY2(),
+PROT_READ implies PROT_EXEC for mmap to make memory executable
+even if used with the GCC option "-z noexecstack" when compile.
 
-CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC: linux-mips@vger.kernel.org
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- arch/mips/mm/fault.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+By the way, we can see some other reasons in the following commit:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=48f99c8ec0b2
 
-diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
-index b1db39784db9..7c871b14e74a 100644
---- a/arch/mips/mm/fault.c
-+++ b/arch/mips/mm/fault.c
-@@ -96,6 +96,8 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 
- 	if (user_mode(regs))
- 		flags |= FAULT_FLAG_USER;
-+
-+	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
- retry:
- 	mmap_read_lock(mm);
- 	vma = find_vma(mm, address);
-@@ -152,12 +154,11 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 	 * make sure we exit gracefully rather than endlessly redo
- 	 * the fault.
- 	 */
--	fault = handle_mm_fault(vma, address, flags, NULL);
-+	fault = handle_mm_fault(vma, address, flags, regs);
- 
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
--	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-@@ -168,15 +169,6 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 		BUG();
- 	}
- 	if (flags & FAULT_FLAG_ALLOW_RETRY) {
--		if (fault & VM_FAULT_MAJOR) {
--			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1,
--						  regs, address);
--			tsk->maj_flt++;
--		} else {
--			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1,
--						  regs, address);
--			tsk->min_flt++;
--		}
- 		if (fault & VM_FAULT_RETRY) {
- 			flags |= FAULT_FLAG_TRIED;
- 
--- 
-2.26.2
+>
+>    Maciej
 
