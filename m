@@ -2,125 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1444321943F
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2020 01:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412A62196E8
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2020 05:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726223AbgGHX0N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Jul 2020 19:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725903AbgGHX0M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Jul 2020 19:26:12 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAC2C08C5C1
-        for <linux-mips@vger.kernel.org>; Wed,  8 Jul 2020 16:26:11 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id mn17so242459pjb.4
-        for <linux-mips@vger.kernel.org>; Wed, 08 Jul 2020 16:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nH2GS/OTrvCduU0b8tDpOcN6ehsAwEU0onRF+A5Ut5k=;
-        b=HYbrvo/xF79bO2B6IrkMMLUkmjKPzdJkvanrMInp8S42k6HBGtzvlMd9S1UMsOPkQq
-         kD96OG7jPioQJwVhmcN6AkeMW4/SHyENEHjDe4IuQjxeLq714wlZHE3s1cGSQxT8Jbv7
-         MrPitnx0OcckBdRzsOFubqaRZyUAfYAh/ym5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nH2GS/OTrvCduU0b8tDpOcN6ehsAwEU0onRF+A5Ut5k=;
-        b=bKaDrUfCWjtNQvGHfkRzGMed+5Zcr5pJ2MBoYDNq/p4PXYeSP/mBuy2viOgf54cY0x
-         EtKZSXnku3gPUhZKQlxp+3D5dcUnRZSsF0mCIOOv4trX+eYL6KTJZLvFf45+rdP8uVWY
-         IggN5HllrLCtS7AhJtY1d+nrYLCXWMsQ7/+DKcIUWo1huq68gyT+EeOj1QqIvRh+1Dhk
-         +kWYybPvn7LlDtv7O5IWAReuc+prhc0jk4kyRA95PHwTk1/As0dq/RNwwpc1mp31gfIt
-         ChTbH9EVxVGCHp0FHukvFZDiix/b7070CAlhyu7e0g1bAdRaBo9uAGl7U+FZdvA8Iok5
-         Py8Q==
-X-Gm-Message-State: AOAM533AlUmMwNd9Y13JNZJSM/FgE9ZmQrPubRrvE+JTeP7+C5te0/yy
-        txzCsk8gaW29bEX1Ue6X6uxmXx6gVmc=
-X-Google-Smtp-Source: ABdhPJzniWV9Twx/MX+UzsIO+dG+AvwC8/i/kZk/gvvqhaDExjNsUdeEEAP66hKEdkwugkIW4si31A==
-X-Received: by 2002:a17:90a:780f:: with SMTP id w15mr11778381pjk.235.1594250771013;
-        Wed, 08 Jul 2020 16:26:11 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i128sm759010pfe.74.2020.07.08.16.26.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2020 16:26:10 -0700 (PDT)
-Date:   Wed, 8 Jul 2020 16:26:09 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Juxin Gao <gaojuxin@loongson.cn>
-Subject: Re: [PATCH] MIPS: Prevent READ_IMPLIES_EXEC propagation
-Message-ID: <202007081624.82FA0CC1EA@keescook>
-References: <1594114741-26852-1-git-send-email-yangtiezhu@loongson.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1594114741-26852-1-git-send-email-yangtiezhu@loongson.cn>
+        id S1726124AbgGIDz0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Jul 2020 23:55:26 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:49276 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726119AbgGIDz0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 8 Jul 2020 23:55:26 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxqdQplQZfXJUAAA--.714S2;
+        Thu, 09 Jul 2020 11:55:22 +0800 (CST)
+From:   Zhi Li <lizhi01@loongson.cn>
+To:     chenhc@lemote.com, jiaxun.yang@flygoat.com,
+        tsbogend@alpha.franken.de, lixuefeng@loongson.cn
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] MIPS: Loongson: Fix some issues of cpu_hwmon.c
+Date:   Thu,  9 Jul 2020 11:55:18 +0800
+Message-Id: <1594266921-28971-1-git-send-email-lizhi01@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9CxqdQplQZfXJUAAA--.714S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY67AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z2
+        80aVCY1x0267AKxVWxJr0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28I
+        cVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx
+        0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwAC
+        jI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
+        j40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
+        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUTmh5UUUUU==
+X-CM-SenderInfo: xol2xxqqr6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 07, 2020 at 05:39:01PM +0800, Tiezhu Yang wrote:
-> In the MIPS architecture, we should clear the security-relevant
-> flag READ_IMPLIES_EXEC in the function SET_PERSONALITY2() of the
-> file arch/mips/include/asm/elf.h.
-> 
-> Otherwise, with this flag set, PROT_READ implies PROT_EXEC for
-> mmap to make memory executable that is not safe, because this
-> condition allows an attacker to simply jump to and execute bytes
-> that are considered to be just data [1].
-> 
-> In mm/mmap.c:
-> unsigned long do_mmap(struct file *file, unsigned long addr,
-> 			unsigned long len, unsigned long prot,
-> 			unsigned long flags, vm_flags_t vm_flags,
-> 			unsigned long pgoff, unsigned long *populate,
-> 			struct list_head *uf)
-> {
-> 	[...]
-> 	if ((prot & PROT_READ) && (current->personality & READ_IMPLIES_EXEC))
-> 		if (!(file && path_noexec(&file->f_path)))
-> 			prot |= PROT_EXEC;
-> 	[...]
-> }
-> 
-> By the way, x86 and ARM64 have done the similar thing.
-> 
-> After commit 250c22777fe1 ("x86_64: move kernel"), in the file
-> arch/x86/kernel/process_64.c:
-> void set_personality_64bit(void)
-> {
-> 	[...]
-> 	current->personality &= ~READ_IMPLIES_EXEC;
-> }
-> 
-> After commit 48f99c8ec0b2 ("arm64: Preventing READ_IMPLIES_EXEC
-> propagation"), in the file arch/arm64/include/asm/elf.h:
-> #define SET_PERSONALITY(ex)						\
-> ({									\
-> 	clear_thread_flag(TIF_32BIT);					\
-> 	current->personality &= ~READ_IMPLIES_EXEC;			\
-> })
-> 
-> [1] https://insights.sei.cmu.edu/cert/2014/02/feeling-insecure-blame-your-parent.html
-> 
-> Reported-by: Juxin Gao <gaojuxin@loongson.cn>
-> Co-developed-by: Juxin Gao <gaojuxin@loongson.cn>
-> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+v2:
+  - Drop the patch "MIPS: Loongson: Add hwmon support for generic CPU"
+  - Reduce possible loop times in do_thermal_timer()
 
-This seems correct to me.
+v3:
+  - Fix boot warning about hwmon_device_register()
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Tiezhu Yang (2):
+  MIPS: Loongson: Cleanup cpu_hwmon.c
+  MIPS: Loongson: Reduce possible loop times and add log in
+    do_thermal_timer()
 
-BTW, does MIPS also need similar changes to this series:
-https://lore.kernel.org/lkml/20200327064820.12602-1-keescook@chromium.org/
+Zhi Li (1):
+  MIPS: Loongson: Fix boot warning about hwmon_device_register()
 
-Quoting from there "MIPS may need adjusting but the history of CPU
-features and toolchain behavior is very unclear to me."
+ drivers/platform/mips/cpu_hwmon.c | 66 +++++++++++++++------------------------
+ 1 file changed, 25 insertions(+), 41 deletions(-)
 
 -- 
-Kees Cook
+2.1.0
+
