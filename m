@@ -2,35 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 776D52196EC
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2020 05:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF132196EE
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2020 05:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbgGIDzj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Jul 2020 23:55:39 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:49390 "EHLO loongson.cn"
+        id S1726124AbgGIDzo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Jul 2020 23:55:44 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:49392 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726245AbgGIDzi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 8 Jul 2020 23:55:38 -0400
+        id S1726263AbgGIDzj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 8 Jul 2020 23:55:39 -0400
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxqdQplQZfXJUAAA--.714S4;
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxqdQplQZfXJUAAA--.714S5;
         Thu, 09 Jul 2020 11:55:34 +0800 (CST)
 From:   Zhi Li <lizhi01@loongson.cn>
 To:     chenhc@lemote.com, jiaxun.yang@flygoat.com,
         tsbogend@alpha.franken.de, lixuefeng@loongson.cn
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v3 2/3] MIPS: Loongson: Reduce possible loop times and add log in do_thermal_timer()
-Date:   Thu,  9 Jul 2020 11:55:20 +0800
-Message-Id: <1594266921-28971-3-git-send-email-lizhi01@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 3/3] MIPS: Loongson: Fix boot warning about hwmon_device_register()
+Date:   Thu,  9 Jul 2020 11:55:21 +0800
+Message-Id: <1594266921-28971-4-git-send-email-lizhi01@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1594266921-28971-1-git-send-email-lizhi01@loongson.cn>
 References: <1594266921-28971-1-git-send-email-lizhi01@loongson.cn>
-X-CM-TRANSID: AQAAf9CxqdQplQZfXJUAAA--.714S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw48KFWrur4UKF17Xw48tFb_yoW8GF17pr
-        WfG34YvF48Ww4qv3WUtayj9FW3Gw1DKry7uFyxCwnYyan8X3sIqFyUJ3WFyr97GF4rX3W7
-        ZrnavFnxua17uF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUmC14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+X-CM-TRANSID: AQAAf9CxqdQplQZfXJUAAA--.714S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw1DGr4DGFyxKw13ur4Durg_yoW5Wr43pF
+        WxGayYgry8Wr4DXa1kZa1qqa45Grn5K34xZFn7Cw1vkFnrW345Xa4rJFy5Ary7ArW8Ga15
+        XrykJ34UCF43Wr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUmC14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
         x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
         Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
         8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxd
@@ -41,55 +40,86 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7Aw48KFWrur4UKF17Xw48tFb_yoW8GF17pr
         xVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r
         106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AK
         xVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7
-        xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_
-        Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRhXoxUUUUU=
+        xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_
+        Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRyGQkUUUUU=
 X-CM-SenderInfo: xol2xxqqr6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Replace hwmon_device_register() with hwmon_device_register_with_info()
+to fix the following boot warning :
 
-Once the temperature of any CPUs is too high, it can power off immediately,
-no need to check the rest of CPUs, and it is better to print a log before
-power off, this is useful when analysis the abnormal issues.
+[    9.029924] Loongson Hwmon Enter...
+[    9.106850] (NULL device *): hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 Signed-off-by: Zhi Li <lizhi01@loongson.cn>
 ---
- drivers/platform/mips/cpu_hwmon.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/platform/mips/cpu_hwmon.c | 22 ++--------------------
+ 1 file changed, 2 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/platform/mips/cpu_hwmon.c b/drivers/platform/mips/cpu_hwmon.c
-index fa42b13..c9f35e5 100644
+index c9f35e5..386389f 100644
 --- a/drivers/platform/mips/cpu_hwmon.c
 +++ b/drivers/platform/mips/cpu_hwmon.c
-@@ -153,18 +153,17 @@ static struct delayed_work thermal_work;
+@@ -55,9 +55,7 @@ int loongson3_cpu_temp(int cpu)
+ static int nr_packages;
+ static struct device *cpu_hwmon_dev;
  
- static void do_thermal_timer(struct work_struct *work)
- {
--	int i, value, temp_max = 0;
-+	int i, value;
+-static ssize_t get_hwmon_name(struct device *dev,
+-			struct device_attribute *attr, char *buf);
+-static SENSOR_DEVICE_ATTR(name, 0444, get_hwmon_name, NULL, 0);
++static SENSOR_DEVICE_ATTR(name, 0444, NULL, NULL, 0);
  
- 	for (i = 0; i < nr_packages; i++) {
- 		value = loongson3_cpu_temp(i);
--		if (value > temp_max)
--			temp_max = value;
-+		if (value > CPU_THERMAL_THRESHOLD) {
-+			pr_emerg("Power off due to high temp: %d\n", value);
-+			orderly_poweroff(true);
-+		}
- 	}
+ static struct attribute *cpu_hwmon_attributes[] = {
+ 	&sensor_dev_attr_name.dev_attr.attr,
+@@ -69,13 +67,6 @@ static struct attribute_group cpu_hwmon_attribute_group = {
+ 	.attrs = cpu_hwmon_attributes,
+ };
  
--	if (temp_max <= CPU_THERMAL_THRESHOLD)
--		schedule_delayed_work(&thermal_work, msecs_to_jiffies(5000));
--	else
--		orderly_poweroff(true);
-+	schedule_delayed_work(&thermal_work, msecs_to_jiffies(5000));
- }
+-/* Hwmon device get name */
+-static ssize_t get_hwmon_name(struct device *dev,
+-			struct device_attribute *attr, char *buf)
+-{
+-	return sprintf(buf, "cpu-hwmon\n");
+-}
+-
+ static ssize_t get_cpu_temp(struct device *dev,
+ 			struct device_attribute *attr, char *buf);
+ static ssize_t cpu_temp_label(struct device *dev,
+@@ -176,7 +167,7 @@ static int __init loongson_hwmon_init(void)
+ 		csr_temp_enable = csr_readl(LOONGSON_CSR_FEATURES) &
+ 				  LOONGSON_CSRF_TEMP;
  
- static int __init loongson_hwmon_init(void)
+-	cpu_hwmon_dev = hwmon_device_register(NULL);
++	cpu_hwmon_dev = hwmon_device_register_with_info(NULL, "cpu_hwmon", NULL, NULL, NULL);
+ 	if (IS_ERR(cpu_hwmon_dev)) {
+ 		ret = PTR_ERR(cpu_hwmon_dev);
+ 		pr_err("hwmon_device_register fail!\n");
+@@ -186,13 +177,6 @@ static int __init loongson_hwmon_init(void)
+ 	nr_packages = loongson_sysconf.nr_cpus /
+ 		loongson_sysconf.cores_per_package;
+ 
+-	ret = sysfs_create_group(&cpu_hwmon_dev->kobj,
+-				&cpu_hwmon_attribute_group);
+-	if (ret) {
+-		pr_err("fail to create loongson hwmon!\n");
+-		goto fail_sysfs_create_group_hwmon;
+-	}
+-
+ 	ret = create_sysfs_cputemp_files(&cpu_hwmon_dev->kobj);
+ 	if (ret) {
+ 		pr_err("fail to create cpu temperature interface!\n");
+@@ -207,8 +191,6 @@ static int __init loongson_hwmon_init(void)
+ fail_create_sysfs_cputemp_files:
+ 	sysfs_remove_group(&cpu_hwmon_dev->kobj,
+ 				&cpu_hwmon_attribute_group);
+-
+-fail_sysfs_create_group_hwmon:
+ 	hwmon_device_unregister(cpu_hwmon_dev);
+ 
+ fail_hwmon_device_register:
 -- 
 2.1.0
 
