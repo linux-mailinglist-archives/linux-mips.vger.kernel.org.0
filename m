@@ -2,156 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE04219F1C
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2020 13:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C2B219FC9
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2020 14:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726387AbgGILcu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jul 2020 07:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726315AbgGILcu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jul 2020 07:32:50 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1402FC061A0B
-        for <linux-mips@vger.kernel.org>; Thu,  9 Jul 2020 04:32:50 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id u18so893961pfk.10
-        for <linux-mips@vger.kernel.org>; Thu, 09 Jul 2020 04:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ke7Zf1ZW7Et4WlTRV0TbV4rRL7sgSa1K1bqneGMxfVA=;
-        b=TzzlZK+u/PbUiUpd8GRCvg4RCkEM0xYqvJZEwI/NhcALcY96sjcmfClJpiycaWlD4z
-         p2TRlFBaPHmsNC3o2ylRYPpzUwMVKgOib4HdjTfj2CE7Q8sZxKgT/4ihT4POdPdOeezd
-         zPM1gUrH4hoEmKGOmzs7WD91TUDBKc00cd5cZd1bt112KVjSS1f7cJGpB4gChnbSJpBN
-         +4i9zRjTMxJe9Gahp+LggCOvR1RSG1iWpJGt2Tf9fkgasNwsc9JplZm9V9X41j4FIBt3
-         eEVBOZBJG3pR4qBOg/RUssIzLSK1D37X7unn9WMvayIT+/nspcj//cIvZ4N2TXtfoQU6
-         UXgQ==
+        id S1727819AbgGIMOg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jul 2020 08:14:36 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:50344 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726767AbgGIMOg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jul 2020 08:14:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594296874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kwRIPXQdD58+F7cV0LER43YEzOAqv3hHNiA5thj41Io=;
+        b=T+nG7teysCQg9Wgr5b8XmzUEiYcCai/DdYNiuEWUrAuset/I638gBJLBFxoLDnOWtgDTf7
+        +DnxG87twGbH6fsfLMIa9TnTkWoJdVATePkGGYliHaTqrFDzvyi0JN0bGv+v0HvDQ6XK6S
+        2mDyQfmsrCJ8zVtmqiOR6iyfm6S0/to=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-414-x2dc35sdPxquVUhtnCjZdA-1; Thu, 09 Jul 2020 08:14:32 -0400
+X-MC-Unique: x2dc35sdPxquVUhtnCjZdA-1
+Received: by mail-wr1-f72.google.com with SMTP id j5so1760919wro.6
+        for <linux-mips@vger.kernel.org>; Thu, 09 Jul 2020 05:14:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=ke7Zf1ZW7Et4WlTRV0TbV4rRL7sgSa1K1bqneGMxfVA=;
-        b=aVz4mivrmcTIz/FVQLaPtXcBFmIBY63tO+sx5D1v4MQJq/JN+R7AKESdYp0jemlXha
-         91kAShpK6Up64Sx3UEihuaON+Z3snBBCuWiPpf/CX7eiqI+CE4w7pBQpaQX4bKiji39e
-         0a1y8AXfCSocoUlL7vLNfQrGLWU7cwWeJct+7+sNtLcCeD6HaMXWRMB7UL46QAoM9Zbg
-         aWMGLiqMDy0kKreaRo07dmD5iBKVM3ABA4d22e1IAy/M3PJjYmHOAoM68xXypkEp6hHx
-         /ImZWXzUOb+22wQhtZ/6qdmQZ2nDrajJRtN5HhPn/ucJN18Zs146t/4+98GRwFFqDsRB
-         Xbaw==
-X-Gm-Message-State: AOAM532tFjgpKOHHopnYTWiNRfsbFio/Sj2ASu2CpashZvBXo/ZDe8vc
-        Re0uT0ZsNTSvu/7iHr//1vA=
-X-Google-Smtp-Source: ABdhPJz/65LbroD0A596G2XIqAQTCcT05RRYex7UBWfxcvRGlIzI2qL76B13SehUS80WB7lzWGXoTg==
-X-Received: by 2002:a63:405:: with SMTP id 5mr51813400pge.449.1594294369645;
-        Thu, 09 Jul 2020 04:32:49 -0700 (PDT)
-Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id w4sm2612507pfd.39.2020.07.09.04.32.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Jul 2020 04:32:49 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH 4/4] MIPS: Loongson64: Reserve legacy MMIO space according to bridge type
-Date:   Thu,  9 Jul 2020 19:33:44 +0800
-Message-Id: <1594294424-26218-4-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
-In-Reply-To: <1594294424-26218-1-git-send-email-chenhc@lemote.com>
-References: <1594294424-26218-1-git-send-email-chenhc@lemote.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kwRIPXQdD58+F7cV0LER43YEzOAqv3hHNiA5thj41Io=;
+        b=m2eFvbO2Zn2EFX0t9EA1+IY4xunjwKNe5p3LazBCamGCARoPHm5yvMpx/CXakv/O51
+         O3uM5vd3Hb2eRVmx7glX/ZhYwgZNyC1gW46bwmR4aRVLUdUe22htlA7B/OhkgFU+yHtU
+         f4bNLXZE33uBPcbd/NF3LkLf4CjxiOjJiHEGnX5N87bgRrB96bBWnpNGHj9MEkZ9hjci
+         My91kqMdvpWj1FYUTKm6H0/Zv2Pt8z96rK67ZGwG2hE2WPB1UVtZYxvMRrKuNM2gyH28
+         eXV66nBJYaM4VWAyw1DlwASkS6x4VuRTKsQC8soXBF/b4ymTTx6BFKs/b/rWB6w8b7Ir
+         uCMw==
+X-Gm-Message-State: AOAM531arfLKPOJQh6wQ4jFazSjh/avag1bDHmxVLXH0G3bVXKTgVTVT
+        rmPyvH4Pvr90ZlUIg7/S1aMCeVCB8ermlMLS6t5HSQwCgtAEewGNmBRcR1J+Vp5w+emEvyRFKse
+        Bfk2VAOpIGBz8GgqZbkgQbQ==
+X-Received: by 2002:a7b:c92e:: with SMTP id h14mr13361797wml.36.1594296871531;
+        Thu, 09 Jul 2020 05:14:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwRhPo7g5kUipBnsOFe+3r9VY5ESGX0vtcsJ/9+mosHc1rT3gI7GlSh2CG+AM/UAt8pI6ZlHQ==
+X-Received: by 2002:a7b:c92e:: with SMTP id h14mr13361761wml.36.1594296871306;
+        Thu, 09 Jul 2020 05:14:31 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:9541:9439:cb0f:89c? ([2001:b07:6468:f312:9541:9439:cb0f:89c])
+        by smtp.gmail.com with ESMTPSA id c206sm4897543wmf.36.2020.07.09.05.14.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jul 2020 05:14:30 -0700 (PDT)
+Subject: Re: [PATCH v3 00/21] KVM: Cleanup and unify kvm_mmu_memory_cache
+ usage
+To:     Sean Christopherson <sean.j.christopherson@intel.com>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>,
+        Peter Feiner <pfeiner@google.com>,
+        Peter Shier <pshier@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Christoffer Dall <christoffer.dall@arm.com>
+References: <20200703023545.8771-1-sean.j.christopherson@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <9cce79d8-bc8a-8a3a-060a-c9a882dd7e07@redhat.com>
+Date:   Thu, 9 Jul 2020 14:14:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200703023545.8771-1-sean.j.christopherson@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Define MMIO_LOWER_RESERVED as a constant is incorrect, because different
-PCHs (bridge types) have different legacy MMIO space size. According to
-the datasheets, the legacy MMIO space size of LS7A is 0x20000, and which
-of other PCHs is 0x4000. So it is necessary to reserve legacy MMIO space
-according to the bridge type.
+On 03/07/20 04:35, Sean Christopherson wrote:
+> The only interesting delta from v2 is that patch 18 is updated to handle
+> a conflict with arm64's p4d rework.  Resolution was straightforward
+> (famous last words).
+> 
+> 
+> This series resurrects Christoffer Dall's series[1] to provide a common
+> MMU memory cache implementation that can be shared by x86, arm64 and MIPS.
+> 
+> It also picks up a suggested change from Ben Gardon[2] to clear shadow
+> page tables during initial allocation so as to avoid clearing entire
+> pages while holding mmu_lock.
+> 
+> The front half of the patches do house cleaning on x86's memory cache
+> implementation in preparation for moving it to common code, along with a
+> fair bit of cleanup on the usage.  The middle chunk moves the patches to
+> common KVM, and the last two chunks convert arm64 and MIPS to the common
+> implementation.
+> 
+> Fully tested on x86 only.  Compile tested patches 14-21 on arm64, MIPS,
+> s390 and PowerPC.
 
-Currently IO_SPACE_LIMIT is defined as 0xffff which is too small for the
-LS7A bridge, so increase it to 0xfffff for LOONGSON64.
+Queued, thanks.
 
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/include/asm/io.h                     |  4 ++++
- arch/mips/include/asm/mach-loongson64/spaces.h |  3 ---
- arch/mips/loongson64/init.c                    | 18 ++++++++++++++----
- 3 files changed, 18 insertions(+), 7 deletions(-)
+Paolo
 
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index 346fffd..7358372 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -51,7 +51,11 @@
- 
- /* ioswab[bwlq], __mem_ioswab[bwlq] are defined in mangle-port.h */
- 
-+#ifndef CONFIG_CPU_LOONGSON64
- #define IO_SPACE_LIMIT 0xffff
-+#else
-+#define IO_SPACE_LIMIT 0xfffff
-+#endif
- 
- /*
-  * On MIPS I/O ports are memory mapped, so we access them using normal
-diff --git a/arch/mips/include/asm/mach-loongson64/spaces.h b/arch/mips/include/asm/mach-loongson64/spaces.h
-index 3de0ac9..93bdd9e 100644
---- a/arch/mips/include/asm/mach-loongson64/spaces.h
-+++ b/arch/mips/include/asm/mach-loongson64/spaces.h
-@@ -11,8 +11,5 @@
- #define PCI_IOSIZE	SZ_16M
- #define MAP_BASE	(PCI_IOBASE + PCI_IOSIZE)
- 
--/* Reserved at the start of PCI_IOBASE for legacy drivers */
--#define MMIO_LOWER_RESERVED	0x10000
--
- #include <asm/mach-generic/spaces.h>
- #endif
-diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-index 59ddada..606cdc4 100644
---- a/arch/mips/loongson64/init.c
-+++ b/arch/mips/loongson64/init.c
-@@ -65,14 +65,25 @@ void __init prom_free_prom_memory(void)
- 
- static __init void reserve_pio_range(void)
- {
-+	/* Reserved at the start of PCI_IOBASE for legacy drivers */
-+	int mmio_lower_reserved;
- 	struct logic_pio_hwaddr *range;
- 
- 	range = kzalloc(sizeof(*range), GFP_ATOMIC);
- 	if (!range)
- 		return;
- 
-+	switch (loongson_sysconf.bridgetype) {
-+	case LS7A:
-+		mmio_lower_reserved = 0x20000;
-+		break;
-+	default:
-+		mmio_lower_reserved = 0x4000;
-+		break;
-+	}
-+
- 	range->fwnode = &of_root->fwnode;
--	range->size = MMIO_LOWER_RESERVED;
-+	range->size = mmio_lower_reserved;
- 	range->hw_start = LOONGSON_PCIIO_BASE;
- 	range->flags = LOGIC_PIO_CPU_MMIO;
- 
-@@ -89,9 +100,8 @@ static __init void reserve_pio_range(void)
- 	 * i8259 would access I/O space, so mapping must be done here.
- 	 * Please remove it when all drivers can be managed by logic_pio.
- 	 */
--	ioremap_page_range(PCI_IOBASE, PCI_IOBASE + MMIO_LOWER_RESERVED,
--				LOONGSON_PCIIO_BASE,
--				pgprot_device(PAGE_KERNEL));
-+	ioremap_page_range(PCI_IOBASE, PCI_IOBASE + mmio_lower_reserved,
-+			LOONGSON_PCIIO_BASE, pgprot_device(PAGE_KERNEL));
- 
- 	return;
- unregister:
--- 
-2.7.0
+> v3:
+>   - Rebased to kvm/queue, commit a037ff353ba6 ("Merge ... into HEAD")
+>   - Collect more review tags. [Ben]
+> 
+> v2:
+>   - Rebase to kvm-5.8-2, commit 49b3deaad345 ("Merge tag ...").
+>   - Use an asm-generic kvm_types.h for s390 and PowerPC instead of an
+>     empty arch-specific file. [Marc]
+>   - Explicit document "GFP_PGTABLE_USER == GFP_KERNEL_ACCOUNT | GFP_ZERO"
+>     in the arm64 conversion patch. [Marc]
+>   - Collect review tags. [Ben]
+> 
+> Sean Christopherson (21):
+>   KVM: x86/mmu: Track the associated kmem_cache in the MMU caches
+>   KVM: x86/mmu: Consolidate "page" variant of memory cache helpers
+>   KVM: x86/mmu: Use consistent "mc" name for kvm_mmu_memory_cache locals
+>   KVM: x86/mmu: Remove superfluous gotos from mmu_topup_memory_caches()
+>   KVM: x86/mmu: Try to avoid crashing KVM if a MMU memory cache is empty
+>   KVM: x86/mmu: Move fast_page_fault() call above
+>     mmu_topup_memory_caches()
+>   KVM: x86/mmu: Topup memory caches after walking GVA->GPA
+>   KVM: x86/mmu: Clean up the gorilla math in mmu_topup_memory_caches()
+>   KVM: x86/mmu: Separate the memory caches for shadow pages and gfn
+>     arrays
+>   KVM: x86/mmu: Make __GFP_ZERO a property of the memory cache
+>   KVM: x86/mmu: Zero allocate shadow pages (outside of mmu_lock)
+>   KVM: x86/mmu: Skip filling the gfn cache for guaranteed direct MMU
+>     topups
+>   KVM: x86/mmu: Prepend "kvm_" to memory cache helpers that will be
+>     global
+>   KVM: Move x86's version of struct kvm_mmu_memory_cache to common code
+>   KVM: Move x86's MMU memory cache helpers to common KVM code
+>   KVM: arm64: Drop @max param from mmu_topup_memory_cache()
+>   KVM: arm64: Use common code's approach for __GFP_ZERO with memory
+>     caches
+>   KVM: arm64: Use common KVM implementation of MMU memory caches
+>   KVM: MIPS: Drop @max param from mmu_topup_memory_cache()
+>   KVM: MIPS: Account pages used for GPA page tables
+>   KVM: MIPS: Use common KVM implementation of MMU memory caches
+> 
+>  arch/arm64/include/asm/kvm_host.h  |  11 ---
+>  arch/arm64/include/asm/kvm_types.h |   8 ++
+>  arch/arm64/kvm/arm.c               |   2 +
+>  arch/arm64/kvm/mmu.c               |  56 +++----------
+>  arch/mips/include/asm/kvm_host.h   |  11 ---
+>  arch/mips/include/asm/kvm_types.h  |   7 ++
+>  arch/mips/kvm/mmu.c                |  44 ++--------
+>  arch/powerpc/include/asm/Kbuild    |   1 +
+>  arch/s390/include/asm/Kbuild       |   1 +
+>  arch/x86/include/asm/kvm_host.h    |  14 +---
+>  arch/x86/include/asm/kvm_types.h   |   7 ++
+>  arch/x86/kvm/mmu/mmu.c             | 129 +++++++++--------------------
+>  arch/x86/kvm/mmu/paging_tmpl.h     |  10 +--
+>  include/asm-generic/kvm_types.h    |   5 ++
+>  include/linux/kvm_host.h           |   7 ++
+>  include/linux/kvm_types.h          |  19 +++++
+>  virt/kvm/kvm_main.c                |  55 ++++++++++++
+>  17 files changed, 176 insertions(+), 211 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/kvm_types.h
+>  create mode 100644 arch/mips/include/asm/kvm_types.h
+>  create mode 100644 arch/x86/include/asm/kvm_types.h
+>  create mode 100644 include/asm-generic/kvm_types.h
+> 
 
