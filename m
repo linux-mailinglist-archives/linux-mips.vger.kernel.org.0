@@ -2,79 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE3821A8F9
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2020 22:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F73D21AA84
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2020 00:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726213AbgGIU2n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jul 2020 16:28:43 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:41640 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726183AbgGIU2m (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jul 2020 16:28:42 -0400
-Received: by mail-il1-f196.google.com with SMTP id q3so3155784ilt.8;
-        Thu, 09 Jul 2020 13:28:41 -0700 (PDT)
+        id S1726228AbgGIWb1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jul 2020 18:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbgGIWb0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jul 2020 18:31:26 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B327C08C5CE;
+        Thu,  9 Jul 2020 15:31:26 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id l17so3730073wmj.0;
+        Thu, 09 Jul 2020 15:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=1ZXHHJyT4ZWtPPZc+bM/HKDR03mHSzkUIiQvXIJuh1o=;
+        b=t2NUbC/F7fOEsFIbvEwoVqdBw7F0qnNn3BG/fu08kTJXPNrqeqm26mMRqlsvo9Oluj
+         CSW+lsriyYwfgl9llQa6RQA1LBUmsJ7sBD5wgYgH8BS4UOJpWZ81/kbU2enpH2UL3LFh
+         Holg4gYg/fEv0ZU9c48UFTpbPMLjiwHKVxpYsjheTU+2c6xKp7FOLYEQ+Ub3O7XT1HJL
+         XzmqoJ4if2WRn8VBWeZdVk+0fq8nQxW3Te4Uqp+3w66EZaQdW0Tvl01Iwb1erAie3ib6
+         lFBMcntOva/OaP/1Ahfza8o+p+a+G2p2traFPrCyEqELB626fm+dJyJrA0nuUynL9na2
+         K5Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=f86UOLnCawtqhCK/Q6eF0gy2sdMy97aoXKHRFnr5wqE=;
-        b=qSfbdyiNg0ZpEhW+E0tLnUJJc3dNxXbsrO7JJq+uDyftSceMPkDY1gJ4fDjVxpTxk6
-         gtTkb6SY2EDkNOk0bMzIO2ZGeyn39f1ZeG9QlnrEqq5mgfnbES3WCWpUsiYRD7UOp7Km
-         sZoSMaoPKVXD2WxmZTPfJP0QR1dCtIkHAq/iPcHi9aYRk62kjx8rvLQXEUHOGzGLYzsm
-         YiFGOGieVwTVmXXAaQ1sg3pFS6Hn7BWIiNqAYpejuNcRFdZBe1aik53whtpq33x1t5kl
-         3Zq9D0lx2i4u0BEcBhLGnvpVgrZEPPvFsfdT16fM9QHq7+hGE+292CKEi8moiN4G8dDQ
-         zCXw==
-X-Gm-Message-State: AOAM533d29PoMsIo/KYJGd8TAJtOPy1vtX/iqOF9IaSiwHVa/8YWqcu5
-        uHD6BzLNzOPcnBe4fXiEiQ==
-X-Google-Smtp-Source: ABdhPJw1ErPn0i/flIuVykZc4G9AUQr0yJoBYuG+gUne33UoponLiMSDnxOcY82bQJv9S7f+2E8S4g==
-X-Received: by 2002:a05:6e02:e05:: with SMTP id a5mr45125941ilk.92.1594326521440;
-        Thu, 09 Jul 2020 13:28:41 -0700 (PDT)
-Received: from xps15 ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id u65sm2619035iod.45.2020.07.09.13.28.40
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=1ZXHHJyT4ZWtPPZc+bM/HKDR03mHSzkUIiQvXIJuh1o=;
+        b=rzxK+ouNJOoNtuP4t4m0WGj999ZsrfCeDpMZGsKvqaLW2VAUVyiVskPXeWO5i0oAgb
+         j58gchgWqF2sZaxY5luf2/3CLZsbJIMuvDkOQCYb2awH0J2wYM3gEFjPutsplMZMqjT8
+         mnJ4lVWUd5nG8F6a8VVRRZA3WN4GzGtPRyH6R8ydjr8WGjFyJtPmRgtSM4vlNhbGUpT9
+         l0JS95WreIJhQExK44T9jguBYd4BA0WMABlNmhC9iDE4X/S+zACtl3KFn8G/o8DZV0jw
+         MwA9DMg3FVNko8tRl2HIGKvqfwnHhhtcrJUVzeZl+GgsOsKNJKIFbXbGA0+iRrnlXqpM
+         640Q==
+X-Gm-Message-State: AOAM530pbuFp/KP+9E6FuG0vwL+FAz+CsLc5LPFe/XueO8o/UGwbRcuM
+        yhGmLD/bE3/GnZuopwMD0CfiesNt
+X-Google-Smtp-Source: ABdhPJyQMem+AdS3FQG91slu/e8CNlip8v9odOwgRMv7PyWemUE9qtN8mi7LNpKFSPiaZ03uwOzPmg==
+X-Received: by 2002:a1c:e910:: with SMTP id q16mr2058462wmc.188.1594333884718;
+        Thu, 09 Jul 2020 15:31:24 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id m10sm7375267wru.4.2020.07.09.15.31.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 13:28:40 -0700 (PDT)
-Received: (nullmailer pid 834740 invoked by uid 1000);
-        Thu, 09 Jul 2020 20:28:39 -0000
-Date:   Thu, 9 Jul 2020 14:28:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     devicetree@vger.kernel.org, jonas.gorski@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        robh+dt@kernel.org, f.fainelli@gmail.com,
-        linux-mips@vger.kernel.org, p.zabel@pengutronix.de,
-        Florian Fainelli <F.fainelli@gmail.com>
-Subject: Re: [PATCH v7 9/9] mips: bmips: add BCM6318 reset controller
- definitions
-Message-ID: <20200709202839.GA834690@bogus>
-References: <20200617105042.3824116-1-noltari@gmail.com>
- <20200617105042.3824116-10-noltari@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200617105042.3824116-10-noltari@gmail.com>
+        Thu, 09 Jul 2020 15:31:24 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM7XXX ARM
+        ARCHITECTURE),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
+        ARM ARCHITECTURE)
+Subject: [PATCH 0/6] irqchip: Broadcom STB interrupt controller updates
+Date:   Thu,  9 Jul 2020 15:30:10 -0700
+Message-Id: <20200709223016.989-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 17 Jun 2020 12:50:41 +0200, Álvaro Fernández Rojas wrote:
-> BCM6318 SoCs have a reset controller for certain components.
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> Acked-by: Florian Fainelli <F.fainelli@gmail.com>
-> ---
->  v7: no changes.
->  v6: fix BCM6318_RST_HOSTMIPS value (12 vs 11).
->  v5: no changes.
->  v4: no changes.
->  v3: add new path with BCM6318 reset controller definitions.
-> 
->  include/dt-bindings/reset/bcm6318-reset.h | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 include/dt-bindings/reset/bcm6318-reset.h
-> 
+Hi Marc,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+This patch series contains a number of updates for Broadcom STB L2
+interrupt controllers to enable them as wake-up interrupt controllers,
+and add missing compatible strings that should be matched.
+
+Thanks!
+
+Florian Fainelli (3):
+  dt-bindings: interrupt-controller: Document Broadcom STB HIF L2
+  dt-bindings: interrupt-controller: Document UPG auxiliary L2
+  irqchip/brcmstb-l2: Match UPG_AUX_AON_INTR2 compatible
+
+Justin Chen (2):
+  irqchip/bcm7120-l2: Set controller as wake-up source
+  irqchip/brcmstb-l2: Set controller as wake-up source
+
+Kamal Dasu (1):
+  irqchip/brcmstb-l2: Match HIF_SPI_INTR2 compatible
+
+ .../bindings/interrupt-controller/brcm,l2-intc.txt        | 5 ++++-
+ drivers/irqchip/irq-bcm7120-l2.c                          | 8 +++++---
+ drivers/irqchip/irq-brcmstb-l2.c                          | 5 +++++
+ 3 files changed, 14 insertions(+), 4 deletions(-)
+
+-- 
+2.17.1
+
