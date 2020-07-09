@@ -2,177 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C2B219FC9
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2020 14:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D400021A8E7
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2020 22:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727819AbgGIMOg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jul 2020 08:14:36 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:50344 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726767AbgGIMOg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jul 2020 08:14:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594296874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kwRIPXQdD58+F7cV0LER43YEzOAqv3hHNiA5thj41Io=;
-        b=T+nG7teysCQg9Wgr5b8XmzUEiYcCai/DdYNiuEWUrAuset/I638gBJLBFxoLDnOWtgDTf7
-        +DnxG87twGbH6fsfLMIa9TnTkWoJdVATePkGGYliHaTqrFDzvyi0JN0bGv+v0HvDQ6XK6S
-        2mDyQfmsrCJ8zVtmqiOR6iyfm6S0/to=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-414-x2dc35sdPxquVUhtnCjZdA-1; Thu, 09 Jul 2020 08:14:32 -0400
-X-MC-Unique: x2dc35sdPxquVUhtnCjZdA-1
-Received: by mail-wr1-f72.google.com with SMTP id j5so1760919wro.6
-        for <linux-mips@vger.kernel.org>; Thu, 09 Jul 2020 05:14:32 -0700 (PDT)
+        id S1726309AbgGIU0L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jul 2020 16:26:11 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:43733 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbgGIU0K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jul 2020 16:26:10 -0400
+Received: by mail-il1-f195.google.com with SMTP id i18so3153365ilk.10;
+        Thu, 09 Jul 2020 13:26:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kwRIPXQdD58+F7cV0LER43YEzOAqv3hHNiA5thj41Io=;
-        b=m2eFvbO2Zn2EFX0t9EA1+IY4xunjwKNe5p3LazBCamGCARoPHm5yvMpx/CXakv/O51
-         O3uM5vd3Hb2eRVmx7glX/ZhYwgZNyC1gW46bwmR4aRVLUdUe22htlA7B/OhkgFU+yHtU
-         f4bNLXZE33uBPcbd/NF3LkLf4CjxiOjJiHEGnX5N87bgRrB96bBWnpNGHj9MEkZ9hjci
-         My91kqMdvpWj1FYUTKm6H0/Zv2Pt8z96rK67ZGwG2hE2WPB1UVtZYxvMRrKuNM2gyH28
-         eXV66nBJYaM4VWAyw1DlwASkS6x4VuRTKsQC8soXBF/b4ymTTx6BFKs/b/rWB6w8b7Ir
-         uCMw==
-X-Gm-Message-State: AOAM531arfLKPOJQh6wQ4jFazSjh/avag1bDHmxVLXH0G3bVXKTgVTVT
-        rmPyvH4Pvr90ZlUIg7/S1aMCeVCB8ermlMLS6t5HSQwCgtAEewGNmBRcR1J+Vp5w+emEvyRFKse
-        Bfk2VAOpIGBz8GgqZbkgQbQ==
-X-Received: by 2002:a7b:c92e:: with SMTP id h14mr13361797wml.36.1594296871531;
-        Thu, 09 Jul 2020 05:14:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwRhPo7g5kUipBnsOFe+3r9VY5ESGX0vtcsJ/9+mosHc1rT3gI7GlSh2CG+AM/UAt8pI6ZlHQ==
-X-Received: by 2002:a7b:c92e:: with SMTP id h14mr13361761wml.36.1594296871306;
-        Thu, 09 Jul 2020 05:14:31 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:9541:9439:cb0f:89c? ([2001:b07:6468:f312:9541:9439:cb0f:89c])
-        by smtp.gmail.com with ESMTPSA id c206sm4897543wmf.36.2020.07.09.05.14.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jul 2020 05:14:30 -0700 (PDT)
-Subject: Re: [PATCH v3 00/21] KVM: Cleanup and unify kvm_mmu_memory_cache
- usage
-To:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>,
-        Peter Feiner <pfeiner@google.com>,
-        Peter Shier <pshier@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Christoffer Dall <christoffer.dall@arm.com>
-References: <20200703023545.8771-1-sean.j.christopherson@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <9cce79d8-bc8a-8a3a-060a-c9a882dd7e07@redhat.com>
-Date:   Thu, 9 Jul 2020 14:14:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pbqcota+uxMHedfTegltZRxrsC6vfzXshLlXxe0iuA8=;
+        b=MA3r+Apiiwt047W2N6FfWHbA84e+aBRwYnvrLTWrC/+sxIGvuWI8AZOX/82FKw+Z1J
+         XhZG960jao2bJi20ykLXPrHAPmow0MXBoB9URKaPSb6wig23KoZxyqSzwCdf34FLQ09r
+         Q+OEnO8nBtTa24TPVoKlgOKJ75eLh2IL/5+ZaWULq/VF56UBgDWIz9l5eW9tlGnwIwEV
+         HBd+ek9KbUM/5i3vOciANbOIg1ulsHDrHue0J5qFGMg6ytLnCBAycaNkitvFgkymN9Xz
+         w2Ds448FnfESmcaSsw9ArgL+zXxjlDi5KK4AEUj4F8JTJt4T7w5T56Gvb48lXNqAEE9s
+         o8qw==
+X-Gm-Message-State: AOAM532zMLpbiQViSN5oydu83ybvbWjDK/5JoPXqnWcRayphpycNsqcp
+        WFfsniLLkR5I67sxOUR35sQ6e6hL9Q==
+X-Google-Smtp-Source: ABdhPJz/rrxaNaSnbsqf9KR30EyQSwsbmLE+U5dYgyuILwBQnI28nLIAJh6GSc0L5Paa1d13u6Lulg==
+X-Received: by 2002:a92:89da:: with SMTP id w87mr14231050ilk.236.1594326369801;
+        Thu, 09 Jul 2020 13:26:09 -0700 (PDT)
+Received: from xps15 ([64.188.179.254])
+        by smtp.gmail.com with ESMTPSA id s17sm2788133ioj.10.2020.07.09.13.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2020 13:26:09 -0700 (PDT)
+Received: (nullmailer pid 830691 invoked by uid 1000);
+        Thu, 09 Jul 2020 20:26:08 -0000
+Date:   Thu, 9 Jul 2020 14:26:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, f.fainelli@gmail.com, robh+dt@kernel.org,
+        jonas.gorski@gmail.com, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v7 2/9] dt-bindings: reset: add BCM6345 reset controller
+ bindings
+Message-ID: <20200709202608.GA830643@bogus>
+References: <20200617105042.3824116-1-noltari@gmail.com>
+ <20200617105042.3824116-3-noltari@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200703023545.8771-1-sean.j.christopherson@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200617105042.3824116-3-noltari@gmail.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/07/20 04:35, Sean Christopherson wrote:
-> The only interesting delta from v2 is that patch 18 is updated to handle
-> a conflict with arm64's p4d rework.  Resolution was straightforward
-> (famous last words).
+On Wed, 17 Jun 2020 12:50:34 +0200, Álvaro Fernández Rojas wrote:
+> Add device tree binding documentation for BCM6345 reset controller.
 > 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  v7: no changes
+>  v6: no changes
+>  v5: no changes
+>  v4: change license and fix maxItems.
+>  v3: no changes
+>  v2: no changes
 > 
-> This series resurrects Christoffer Dall's series[1] to provide a common
-> MMU memory cache implementation that can be shared by x86, arm64 and MIPS.
-> 
-> It also picks up a suggested change from Ben Gardon[2] to clear shadow
-> page tables during initial allocation so as to avoid clearing entire
-> pages while holding mmu_lock.
-> 
-> The front half of the patches do house cleaning on x86's memory cache
-> implementation in preparation for moving it to common code, along with a
-> fair bit of cleanup on the usage.  The middle chunk moves the patches to
-> common KVM, and the last two chunks convert arm64 and MIPS to the common
-> implementation.
-> 
-> Fully tested on x86 only.  Compile tested patches 14-21 on arm64, MIPS,
-> s390 and PowerPC.
-
-Queued, thanks.
-
-Paolo
-
-> v3:
->   - Rebased to kvm/queue, commit a037ff353ba6 ("Merge ... into HEAD")
->   - Collect more review tags. [Ben]
-> 
-> v2:
->   - Rebase to kvm-5.8-2, commit 49b3deaad345 ("Merge tag ...").
->   - Use an asm-generic kvm_types.h for s390 and PowerPC instead of an
->     empty arch-specific file. [Marc]
->   - Explicit document "GFP_PGTABLE_USER == GFP_KERNEL_ACCOUNT | GFP_ZERO"
->     in the arm64 conversion patch. [Marc]
->   - Collect review tags. [Ben]
-> 
-> Sean Christopherson (21):
->   KVM: x86/mmu: Track the associated kmem_cache in the MMU caches
->   KVM: x86/mmu: Consolidate "page" variant of memory cache helpers
->   KVM: x86/mmu: Use consistent "mc" name for kvm_mmu_memory_cache locals
->   KVM: x86/mmu: Remove superfluous gotos from mmu_topup_memory_caches()
->   KVM: x86/mmu: Try to avoid crashing KVM if a MMU memory cache is empty
->   KVM: x86/mmu: Move fast_page_fault() call above
->     mmu_topup_memory_caches()
->   KVM: x86/mmu: Topup memory caches after walking GVA->GPA
->   KVM: x86/mmu: Clean up the gorilla math in mmu_topup_memory_caches()
->   KVM: x86/mmu: Separate the memory caches for shadow pages and gfn
->     arrays
->   KVM: x86/mmu: Make __GFP_ZERO a property of the memory cache
->   KVM: x86/mmu: Zero allocate shadow pages (outside of mmu_lock)
->   KVM: x86/mmu: Skip filling the gfn cache for guaranteed direct MMU
->     topups
->   KVM: x86/mmu: Prepend "kvm_" to memory cache helpers that will be
->     global
->   KVM: Move x86's version of struct kvm_mmu_memory_cache to common code
->   KVM: Move x86's MMU memory cache helpers to common KVM code
->   KVM: arm64: Drop @max param from mmu_topup_memory_cache()
->   KVM: arm64: Use common code's approach for __GFP_ZERO with memory
->     caches
->   KVM: arm64: Use common KVM implementation of MMU memory caches
->   KVM: MIPS: Drop @max param from mmu_topup_memory_cache()
->   KVM: MIPS: Account pages used for GPA page tables
->   KVM: MIPS: Use common KVM implementation of MMU memory caches
-> 
->  arch/arm64/include/asm/kvm_host.h  |  11 ---
->  arch/arm64/include/asm/kvm_types.h |   8 ++
->  arch/arm64/kvm/arm.c               |   2 +
->  arch/arm64/kvm/mmu.c               |  56 +++----------
->  arch/mips/include/asm/kvm_host.h   |  11 ---
->  arch/mips/include/asm/kvm_types.h  |   7 ++
->  arch/mips/kvm/mmu.c                |  44 ++--------
->  arch/powerpc/include/asm/Kbuild    |   1 +
->  arch/s390/include/asm/Kbuild       |   1 +
->  arch/x86/include/asm/kvm_host.h    |  14 +---
->  arch/x86/include/asm/kvm_types.h   |   7 ++
->  arch/x86/kvm/mmu/mmu.c             | 129 +++++++++--------------------
->  arch/x86/kvm/mmu/paging_tmpl.h     |  10 +--
->  include/asm-generic/kvm_types.h    |   5 ++
->  include/linux/kvm_host.h           |   7 ++
->  include/linux/kvm_types.h          |  19 +++++
->  virt/kvm/kvm_main.c                |  55 ++++++++++++
->  17 files changed, 176 insertions(+), 211 deletions(-)
->  create mode 100644 arch/arm64/include/asm/kvm_types.h
->  create mode 100644 arch/mips/include/asm/kvm_types.h
->  create mode 100644 arch/x86/include/asm/kvm_types.h
->  create mode 100644 include/asm-generic/kvm_types.h
+>  .../bindings/reset/brcm,bcm6345-reset.yaml    | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/reset/brcm,bcm6345-reset.yaml
 > 
 
+Reviewed-by: Rob Herring <robh@kernel.org>
