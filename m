@@ -2,91 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F02C421ABC0
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2020 01:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE0021AF76
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2020 08:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726227AbgGIXmd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jul 2020 19:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbgGIXmc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jul 2020 19:42:32 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E431C08C5DD;
-        Thu,  9 Jul 2020 16:42:32 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id z13so4046259wrw.5;
-        Thu, 09 Jul 2020 16:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=4w3mY8dRce2YSM1Q27IO4UqK6/aMeTR2SDeihQy+Qik=;
-        b=J8doVttIiTOhEDp1n4SUfuPhQlprEVjYY9KcuJLUg0/2vXk3IG9wdhnVmLNzUZW2Et
-         4rRGLvbLLtVxvDKMKKQ/6gwYxh1WF6vBfAt3MLQpBNzyZy97/jTMkJ+si3MAkfmVBnUu
-         PeDo+d+l1qIxewnwsV7o2iS+9M7zUc3Pkm2zCoX4mfz7zpjdwt6A8E/QQAhhmRopid/v
-         utbjG7ZoUwTewNvQYVcm+tVRzclmUHZNCxA8WObfsEPE8xi7qX2r8jV4WYt+Ier5G8ug
-         qvJA/e4Nb2rxEJrEN39BUjbBBgKIFKF42/OGVin/CU809exdUe0SH2wVRJhUivSgbzBP
-         HVzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=4w3mY8dRce2YSM1Q27IO4UqK6/aMeTR2SDeihQy+Qik=;
-        b=XU9GnY/RfxbUwSCR6OFRZ6i8aGde1Bms4ouUYh0+pmBp7AsX6Iims9a6TTqKMSpcv8
-         Ouykint2wGscM1CRD8M5LgO+rgDIhddMpNQYFwG8jZpwBIrRbRkcD8hKoLZM/LN74Mhg
-         Q7c8iU3vZo3ER1AzKwjNzmfJrmq3CTpMcd4aMn6QuRX7Vx2m2Z+M3Rv5TRbCN9TMDLBJ
-         IoKIfzNGucTFYRw38ZlC1BMC4kDEwRn/wDvSZI9/z3BitNJ+yMKiMXzqDRhXI4Qxj60Z
-         /vSRjDGZMS9LVFgyuU1Gkxta9dL1E0ViMtMkfg1mpdNtbAine1UOOENvptQ9yl84L34n
-         lWiw==
-X-Gm-Message-State: AOAM532t3XT0Vqy0WmnTIa+yZu9yXTU/pnRoyB3+x+YiJ0cKtHnRLQCa
-        18EtjG5BkIk03oocK+ZeQ8volPHE
-X-Google-Smtp-Source: ABdhPJxmDxwwdel8727y2cVLTisEvSjH08iGdXcl433UXp/9DuF3EAKkY5c7J/eK9Q/SvV8Fw4jHJw==
-X-Received: by 2002:a5d:62cd:: with SMTP id o13mr64149639wrv.272.1594338150963;
-        Thu, 09 Jul 2020 16:42:30 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id f16sm6615034wmh.27.2020.07.09.16.42.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 16:42:30 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM BMIPS MIPS
-        ARCHITECTURE),
-        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE)
-Subject: [PATCH] irqchip/irq-bcm7038-l1: Allow building on ARM 32-bit
-Date:   Thu,  9 Jul 2020 16:41:41 -0700
-Message-Id: <20200709234141.4901-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726948AbgGJGc2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jul 2020 02:32:28 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:40620 "EHLO
+        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726004AbgGJGc2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jul 2020 02:32:28 -0400
+Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 589A51FF13;
+        Fri, 10 Jul 2020 06:32:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1594362747; bh=mKcRZRz0SOJEYqGXRTX5Rcjg9hStrtnxlG5utBmVrdg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=b/lZnQyFE1L7HDw+cKy7OX6z/eFeKFaGpm1RK7vM2GpP3vcshS4KDW/4JGRvh8upL
+         xCNI8u4vSLmFHipoNd+5WOXa5IGzpuJ6vIrIkR43LvQWLc3fKBXSyh4f79ZNffYLlE
+         IJun9AO8nktgZdm/ThbuOYyU9rEepnd6ThkzkPTzzWXTnvQlUs/9EGhMb1mvnKzDSN
+         Fx7wK5lgokP2S2qCglv3OmBHrwWCVM2Sh10d1eVWZHF+cKLDrGxdwj2Qi609pfRHIg
+         KwgfYTyIKuh7ujoGTcvpPaiqJw66TFIRcNy0O/i+dTQnuvtXrJQLTkM7TBQu0Q5MfH
+         BfvOQBCQkP1Rw==
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [RFC PATCH 0/3] MIPS KVM related clean-ups
+Date:   Fri, 10 Jul 2020 14:30:15 +0800
+Message-Id: <20200710063047.154611-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We need to have a definition for cpu_logical_map[] which on ARM
-platforms is provided by asm/smp_plat.h. This header is not
-automatically included from linux/smp.h and untangling it is a bit
-difficult.
+Retire some features that never worked in the real world.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/irqchip/irq-bcm7038-l1.c | 3 +++
- 1 file changed, 3 insertions(+)
+Also I wonder if there are any actual user of TE KVM.
+Will Huacai or Alexsander take care relevant code?
 
-diff --git a/drivers/irqchip/irq-bcm7038-l1.c b/drivers/irqchip/irq-bcm7038-l1.c
-index fd7c537fb42a..f36bcd296ce2 100644
---- a/drivers/irqchip/irq-bcm7038-l1.c
-+++ b/drivers/irqchip/irq-bcm7038-l1.c
-@@ -28,6 +28,9 @@
- #include <linux/irqchip.h>
- #include <linux/irqchip/chained_irq.h>
- #include <linux/syscore_ops.h>
-+#ifdef CONFIG_ARM
-+#include <asm/smp_plat.h>
-+#endif
- 
- #define IRQS_PER_WORD		32
- #define REG_BYTES_PER_IRQ_WORD	(sizeof(u32) * 4)
+Thanks.
+
+Jiaxun Yang (3):
+  MIPS: Retire kvm paravirt
+  MIPS: KVM: Limit Trap-and-Emulate to MIPS32R2 only
+  MIPS: KVM: Remove outdated README
+
+ arch/mips/Kbuild.platforms                |   1 -
+ arch/mips/Kconfig                         |  20 +-
+ arch/mips/configs/mips_paravirt_defconfig |  98 ------
+ arch/mips/include/asm/Kbuild              |   1 +
+ arch/mips/include/asm/kvm_para.h          | 115 -------
+ arch/mips/include/uapi/asm/Kbuild         |   2 +
+ arch/mips/include/uapi/asm/kvm_para.h     |   5 -
+ arch/mips/kvm/00README.txt                |  31 --
+ arch/mips/kvm/Kconfig                     |   3 +-
+ arch/mips/paravirt/Kconfig                |   7 -
+ arch/mips/paravirt/Makefile               |  14 -
+ arch/mips/paravirt/Platform               |   7 -
+ arch/mips/paravirt/paravirt-irq.c         | 368 ----------------------
+ arch/mips/paravirt/paravirt-smp.c         | 145 ---------
+ arch/mips/paravirt/serial.c               |  39 ---
+ arch/mips/paravirt/setup.c                |  67 ----
+ arch/mips/pci/Makefile                    |   1 -
+ arch/mips/pci/pci-virtio-guest.c          | 131 --------
+ 18 files changed, 6 insertions(+), 1049 deletions(-)
+ delete mode 100644 arch/mips/configs/mips_paravirt_defconfig
+ delete mode 100644 arch/mips/include/asm/kvm_para.h
+ delete mode 100644 arch/mips/include/uapi/asm/kvm_para.h
+ delete mode 100644 arch/mips/kvm/00README.txt
+ delete mode 100644 arch/mips/paravirt/Kconfig
+ delete mode 100644 arch/mips/paravirt/Makefile
+ delete mode 100644 arch/mips/paravirt/Platform
+ delete mode 100644 arch/mips/paravirt/paravirt-irq.c
+ delete mode 100644 arch/mips/paravirt/paravirt-smp.c
+ delete mode 100644 arch/mips/paravirt/serial.c
+ delete mode 100644 arch/mips/paravirt/setup.c
+ delete mode 100644 arch/mips/pci/pci-virtio-guest.c
+
 -- 
-2.17.1
+2.27.0
 
