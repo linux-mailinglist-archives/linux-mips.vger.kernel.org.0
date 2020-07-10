@@ -2,161 +2,213 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C8221B0FD
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2020 10:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0A121B160
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2020 10:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727840AbgGJIHA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Jul 2020 04:07:00 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:36196 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727007AbgGJIG7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jul 2020 04:06:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594368417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U4jS1QoQjjeHX3nPPzYjEddY3DRl7Jsr2mcq4h0i1jc=;
-        b=BtVEkmGyeiLf1NmxwEisL0pgA/fXYsAzjvm7IvGNMzI5Dmrb+P5tPUmzesic+F0EH/lBj4
-        +BOobClErGeXU57p3mnY6H6x0DL+Wkg6k8M60/IBm/VZmhTgvach14O+DbWG1tw2CpJhIT
-        gzXgHz0KKDuvkdNYqQmeD8my8zhcqzU=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-162-aXYW4qlzOUimajY3qU2Zbw-1; Fri, 10 Jul 2020 04:06:55 -0400
-X-MC-Unique: aXYW4qlzOUimajY3qU2Zbw-1
-Received: by mail-wr1-f71.google.com with SMTP id y18so5141624wrq.4
-        for <linux-mips@vger.kernel.org>; Fri, 10 Jul 2020 01:06:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=U4jS1QoQjjeHX3nPPzYjEddY3DRl7Jsr2mcq4h0i1jc=;
-        b=bk5l16u0YKt8tmVv36KkWYgJDRyaRHJqtdKgw+K4VMRjoXiEaccqPCfZmuYCWTCj+E
-         jMWhGAHy4Bl2uGzxWKCVl/kJxRfU8A93oLqpiS8+f4JfKwbH/CsNqTO9BeQZZlscy5XL
-         liIK1FOy0qf88lYAIPGCWqg8Rut0mYduWjb+MUDSDQ6qS9MyUAvhrracJ2ksmD+58YTR
-         hr1AAah0PaU2qKXtFWCAs8FtTrFtmcFgmGE2ZMEoe0P8Xk22j/u31tHc4f/mR2wWFXQr
-         GAbKbAjX46gjiJi+1/7pobzl/K5BfrcnUhXnLZC61gUD4LJWUnyolGjmMreetLgo35yP
-         txBw==
-X-Gm-Message-State: AOAM5319jh5IhRuudnY3t61Jn9VHfici41YPWZkRBWI+Ufu0ldoLhN/t
-        +5tGsA4KlUj3lx+O4BatG8PR2JAR3/FrqX4JVyUZXDNziDkN6A9EN7qEFVtEOXmgSWqeUk0Or4r
-        8Pdy6w9Wo1Y0MrU9UmpJjOw==
-X-Received: by 2002:a1c:1fd1:: with SMTP id f200mr3838440wmf.162.1594368414542;
-        Fri, 10 Jul 2020 01:06:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyJjT5tWv9/nRHPZPlasSYyXK0UFRsIXqd7zkWACOymjphFAEJPu8OB7fs8YgXWFmbnz1f6Yg==
-X-Received: by 2002:a1c:1fd1:: with SMTP id f200mr3838385wmf.162.1594368414271;
-        Fri, 10 Jul 2020 01:06:54 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:9541:9439:cb0f:89c? ([2001:b07:6468:f312:9541:9439:cb0f:89c])
-        by smtp.gmail.com with ESMTPSA id v3sm9130496wrq.57.2020.07.10.01.06.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jul 2020 01:06:53 -0700 (PDT)
-Subject: Re: [PATCH v6 0/5] clean up redundant 'kvm_run' parameters
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        tsbogend@alpha.franken.de, paulus@ozlabs.org, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com,
-        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        sean.j.christopherson@intel.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, maz@kernel.org, james.morse@arm.com,
-        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
-        christoffer.dall@arm.com, peterx@redhat.com, thuth@redhat.com,
-        chenhuacai@gmail.com
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200623131418.31473-1-tianjia.zhang@linux.alibaba.com>
- <6604e273-d7b1-5007-8721-75c4a4dec68e@linux.alibaba.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <433ae9a7-ee86-28ea-e600-8769f9759513@redhat.com>
-Date:   Fri, 10 Jul 2020 10:06:51 +0200
+        id S1726977AbgGJIbP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jul 2020 04:31:15 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:57176 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726816AbgGJIbO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jul 2020 04:31:14 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06A8Uj5W051326;
+        Fri, 10 Jul 2020 03:30:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1594369845;
+        bh=aASjBaynNGHy9YdF4r1xWy8RE/lfoom+1VXoKmsjynU=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=rY863hSGr3T9f1kgsDiKQ375WtTBh+aeC0eOEp9Mj04P/Yxa3nZxHgELd350a8TRY
+         19EGMjWn0sDwHciPLMQCmesYJL5qDGdBJ2sFsrOi4+/1LXa+xHPZMW+BKQWcLZIDJb
+         HvHodxqEc/KRu/7jR14UpQtxR5AHnUnLNZgVliNI=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 06A8Uj5O067706
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 10 Jul 2020 03:30:45 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 10
+ Jul 2020 03:30:45 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 10 Jul 2020 03:30:45 -0500
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06A8UgXj109862;
+        Fri, 10 Jul 2020 03:30:42 -0500
+Subject: Re: [PATCH v7 04/11] dmaengine: Introduce max SG list entries
+ capability
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20200709224550.15539-1-Sergey.Semin@baikalelectronics.ru>
+ <20200709224550.15539-5-Sergey.Semin@baikalelectronics.ru>
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+X-Pep-Version: 2.0
+Message-ID: <d667adda-6576-623d-6976-30f60ab3c3dc@ti.com>
+Date:   Fri, 10 Jul 2020 11:31:47 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <6604e273-d7b1-5007-8721-75c4a4dec68e@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20200709224550.15539-5-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/07/20 09:32, Tianjia Zhang wrote:
-> Hi Paolo,
-> 
-> Any opinion on this series patches? Can I help with this patchset ?
 
-I was hoping to have some Tested-by, for now I'm queuing patches 1 and
-2.  Thanks,
 
-Paolo
+On 10/07/2020 1.45, Serge Semin wrote:
+> Some devices may lack the support of the hardware accelerated SG list
+> entries automatic walking through and execution. In this case a burden =
+of
+> the SG list traversal and DMA engine re-initialization lies on the
+> DMA engine driver (normally implemented by using a DMA transfer complet=
+ion
+> IRQ to recharge the DMA device with a next SG list entry). But such
+> solution may not be suitable for some DMA consumers. In particular SPI
+> devices need both Tx and Rx DMA channels work synchronously in order
+> to avoid the Rx FIFO overflow. In case if Rx DMA channel is paused for
+> some time while the Tx DMA channel works implicitly pulling data into t=
+he
+> Rx FIFO, the later will be eventually overflown, which will cause the d=
+ata
+> loss. So if SG list entries aren't automatically fetched by the DMA
+> engine, but are one-by-one manually selected for execution in the
+> ISRs/deferred work/etc., such problem will eventually happen due to the=
 
-> Thanks and best,
-> Tianjia
-> 
-> On 2020/6/23 21:14, Tianjia Zhang wrote:
->> In the current kvm version, 'kvm_run' has been included in the 'kvm_vcpu'
->> structure. For historical reasons, many kvm-related function parameters
->> retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time. This
->> patch does a unified cleanup of these remaining redundant parameters.
->>
->> This series of patches has completely cleaned the architecture of
->> arm64, mips, ppc, and s390 (no such redundant code on x86). Due to
->> the large number of modified codes, a separate patch is made for each
->> platform. On the ppc platform, there is also a redundant structure
->> pointer of 'kvm_run' in 'vcpu_arch', which has also been cleaned
->> separately.
->>
->> ---
->> v6 changes:
->>    Rearrange patch sets, only keep the unmerged patch.
->>    rebase on mainline.
->>
->> v5 change:
->>    ppc: fix for review.
->>
->> v4 change:
->>    mips: fixes two errors in entry.c.
->>
->> v3 change:
->>    Keep the existing `vcpu->run` in the function body unchanged.
->>
->> v2 change:
->>    s390 retains the original variable name and minimizes modification.
->>
->> Tianjia Zhang (5):
->>    KVM: s390: clean up redundant 'kvm_run' parameters
->>    KVM: arm64: clean up redundant 'kvm_run' parameters
->>    KVM: PPC: clean up redundant kvm_run parameters in assembly
->>    KVM: MIPS: clean up redundant 'kvm_run' parameters
->>    KVM: MIPS: clean up redundant kvm_run parameters in assembly
->>
->>   arch/arm64/include/asm/kvm_coproc.h   |  12 +--
->>   arch/arm64/include/asm/kvm_host.h     |  11 +--
->>   arch/arm64/include/asm/kvm_mmu.h      |   2 +-
->>   arch/arm64/kvm/arm.c                  |   6 +-
->>   arch/arm64/kvm/handle_exit.c          |  36 ++++----
->>   arch/arm64/kvm/mmio.c                 |  11 +--
->>   arch/arm64/kvm/mmu.c                  |   5 +-
->>   arch/arm64/kvm/sys_regs.c             |  13 ++-
->>   arch/mips/include/asm/kvm_host.h      |  32 ++------
->>   arch/mips/kvm/emulate.c               |  59 +++++--------
->>   arch/mips/kvm/entry.c                 |  21 ++---
->>   arch/mips/kvm/mips.c                  |  14 ++--
->>   arch/mips/kvm/trap_emul.c             | 114 +++++++++++---------------
->>   arch/mips/kvm/vz.c                    |  26 +++---
->>   arch/powerpc/include/asm/kvm_ppc.h    |   2 +-
->>   arch/powerpc/kvm/book3s_interrupts.S  |  22 +++--
->>   arch/powerpc/kvm/book3s_pr.c          |   9 +-
->>   arch/powerpc/kvm/booke.c              |   9 +-
->>   arch/powerpc/kvm/booke_interrupts.S   |   9 +-
->>   arch/powerpc/kvm/bookehv_interrupts.S |  10 +--
->>   arch/s390/kvm/kvm-s390.c              |  23 ++++--
->>   21 files changed, 188 insertions(+), 258 deletions(-)
->>
-> 
+> non-deterministic latencies of the service execution.
+
+It is not really the number of sg nents which is the problem, but the
+combination of total number of bytes _and_ the number of nents used to
+map them.
+Obviously the TX and RX number of bytes must match in duplex case and at
+the same time neither nents should be over the number of SGs the DMA
+device can handle without interruption (linking, chaining, or whatever
+means).
+
+The EDMA from TI have similar limitation (we set the limit to 20 nents).
+Longer lists will be broken up to maximum of 20 segment transfers.
+This setup has bigger impact on audio (cyclic) as we need to limit the
+number of periods to not exceed this limit of 20.
+
+The sDMA on the other hand has different limits. Earlier versions
+without linking support can execute one SG chunk at the time and needs
+to reconfigure for the next one -> max_sg_nents is 1 for the older sDMAs.=
+=2E.
+
+> In order to let the DMA consumer know about the DMA device capabilities=
+
+> regarding the hardware accelerated SG list traversal we introduce the
+> max_sg_list capability. It is supposed to be initialized by the DMA eng=
+ine
+> driver with 0 if there is no limitation for the number of SG entries
+> atomically executed and with non-zero value if there is such constraint=
+s,
+> so the upper limit is determined by the number set to the property.
+>=20
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+>=20
+> ---
+>=20
+> Changelog v3:
+> - This is a new patch created as a result of the discussion with Vinud =
+and
+>   Andy in the framework of DW DMA burst and LLP capabilities.
+>=20
+> Changelog v4:
+> - Fix of->if typo. It should be definitely of.
+> ---
+>  drivers/dma/dmaengine.c   | 1 +
+>  include/linux/dmaengine.h | 8 ++++++++
+>  2 files changed, 9 insertions(+)
+>=20
+> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
+> index b332ffe52780..ad56ad58932c 100644
+> --- a/drivers/dma/dmaengine.c
+> +++ b/drivers/dma/dmaengine.c
+> @@ -592,6 +592,7 @@ int dma_get_slave_caps(struct dma_chan *chan, struc=
+t dma_slave_caps *caps)
+>  	caps->directions =3D device->directions;
+>  	caps->min_burst =3D device->min_burst;
+>  	caps->max_burst =3D device->max_burst;
+> +	caps->max_sg_nents =3D device->max_sg_nents;
+>  	caps->residue_granularity =3D device->residue_granularity;
+>  	caps->descriptor_reuse =3D device->descriptor_reuse;
+>  	caps->cmd_pause =3D !!device->device_pause;
+> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+> index 0c7403b27133..a7e4d8dfdd19 100644
+> --- a/include/linux/dmaengine.h
+> +++ b/include/linux/dmaengine.h
+> @@ -467,6 +467,9 @@ enum dma_residue_granularity {
+>   *	should be checked by controller as well
+>   * @min_burst: min burst capability per-transfer
+>   * @max_burst: max burst capability per-transfer
+> + * @max_sg_nents: max number of SG list entries executed in a single a=
+tomic
+> + *	DMA tansaction with no intermediate IRQ for reinitialization. Zero
+> + *	value means unlimited number of entries.
+
+Without looking at the comment the name max_sg_nents implies that the
+DMA can not handle longer lists, but it is not really true.
+max_sg_nents_burst might be a bit cleaner for the first look?
+
+>   * @cmd_pause: true, if pause is supported (i.e. for reading residue o=
+r
+>   *	       for resume later)
+>   * @cmd_resume: true, if resume is supported
+> @@ -481,6 +484,7 @@ struct dma_slave_caps {
+>  	u32 directions;
+>  	u32 min_burst;
+>  	u32 max_burst;
+> +	u32 max_sg_nents;
+>  	bool cmd_pause;
+>  	bool cmd_resume;
+>  	bool cmd_terminate;
+> @@ -773,6 +777,9 @@ struct dma_filter {
+>   *	should be checked by controller as well
+>   * @min_burst: min burst capability per-transfer
+>   * @max_burst: max burst capability per-transfer
+> + * @max_sg_nents: max number of SG list entries executed in a single a=
+tomic
+> + *	DMA tansaction with no intermediate IRQ for reinitialization. Zero
+> + *	value means unlimited number of entries.
+>   * @residue_granularity: granularity of the transfer residue reported
+>   *	by tx_status
+>   * @device_alloc_chan_resources: allocate resources and return the
+> @@ -844,6 +851,7 @@ struct dma_device {
+>  	u32 directions;
+>  	u32 min_burst;
+>  	u32 max_burst;
+> +	u32 max_sg_nents;
+>  	bool descriptor_reuse;
+>  	enum dma_residue_granularity residue_granularity;
+> =20
+>=20
+
+- P=C3=A9ter
+
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
 
