@@ -2,79 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4537A21B017
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2020 09:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8E321B03C
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2020 09:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbgGJHZG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Jul 2020 03:25:06 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:21594 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726288AbgGJHZG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jul 2020 03:25:06 -0400
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0pAwkq52bM="
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-        by smtp.strato.de (RZmta 46.10.5 DYNA|AUTH)
-        with ESMTPSA id V07054w6A7Ok6WB
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Fri, 10 Jul 2020 09:24:46 +0200 (CEST)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        "H. Nikolaus Schaller" <hns@goldelico.com>, stable@vger.kernel.org
-Subject: [PATCH] Revert "pwm: jz4740: Enhance precision in calculation of duty cycle"
-Date:   Fri, 10 Jul 2020 09:24:45 +0200
-Message-Id: <9335b924318fb36a882d5b46e8e9f2a10bb24daa.1594365885.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.26.2
+        id S1726509AbgGJHcg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jul 2020 03:32:36 -0400
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:54267 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725851AbgGJHcf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 10 Jul 2020 03:32:35 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04427;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=37;SR=0;TI=SMTPD_---0U2Gmw93_1594366344;
+Received: from 30.27.116.248(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0U2Gmw93_1594366344)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 10 Jul 2020 15:32:26 +0800
+Subject: Re: [PATCH v6 0/5] clean up redundant 'kvm_run' parameters
+To:     pbonzini@redhat.com, tsbogend@alpha.franken.de, paulus@ozlabs.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        cohuck@redhat.com, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        sean.j.christopherson@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, maz@kernel.org, james.morse@arm.com,
+        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
+        christoffer.dall@arm.com, peterx@redhat.com, thuth@redhat.com,
+        chenhuacai@gmail.com
+Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200623131418.31473-1-tianjia.zhang@linux.alibaba.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <6604e273-d7b1-5007-8721-75c4a4dec68e@linux.alibaba.com>
+Date:   Fri, 10 Jul 2020 15:32:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200623131418.31473-1-tianjia.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This reverts commit a6030d71e62d3e0e270bf3b7fb48d32a636732db.
+Hi Paolo,
 
-which was applied to v5.4.49. This ends in a compile issue:
+Any opinion on this series patches? Can I help with this patchset ?
 
-  CC      drivers/pwm/pwm-jz4740.o - due to target missing
-drivers/pwm/pwm-jz4740.c: In function 'jz4740_pwm_apply':
-drivers/pwm/pwm-jz4740.c:111:28: error: 'rate' undeclared (first use in this function)
-  tmp = (unsigned long long)rate * state->duty_cycle;
-                            ^
-drivers/pwm/pwm-jz4740.c:111:28: note: each undeclared identifier is reported only once for each function it appears in
-make[4]: *** [drivers/pwm/pwm-jz4740.o] Error 1
+Thanks and best,
+Tianjia
 
-v5.5 and later include the required additional patches to define
-the rate variable.
-
-Fixes: a6030d71e62d ("pwm: jz4740: Enhance precision in calculation of duty cycle")
-Cc: stable@vger.kernel.org # v5.4.49
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- drivers/pwm/pwm-jz4740.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
-index d0f5c69930d0d9..9d78cc21cb1279 100644
---- a/drivers/pwm/pwm-jz4740.c
-+++ b/drivers/pwm/pwm-jz4740.c
-@@ -108,8 +108,8 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 	if (prescaler == 6)
- 		return -EINVAL;
- 
--	tmp = (unsigned long long)rate * state->duty_cycle;
--	do_div(tmp, NSEC_PER_SEC);
-+	tmp = (unsigned long long)period * state->duty_cycle;
-+	do_div(tmp, state->period);
- 	duty = period - tmp;
- 
- 	if (duty >= period)
--- 
-2.26.2
-
+On 2020/6/23 21:14, Tianjia Zhang wrote:
+> In the current kvm version, 'kvm_run' has been included in the 'kvm_vcpu'
+> structure. For historical reasons, many kvm-related function parameters
+> retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time. This
+> patch does a unified cleanup of these remaining redundant parameters.
+> 
+> This series of patches has completely cleaned the architecture of
+> arm64, mips, ppc, and s390 (no such redundant code on x86). Due to
+> the large number of modified codes, a separate patch is made for each
+> platform. On the ppc platform, there is also a redundant structure
+> pointer of 'kvm_run' in 'vcpu_arch', which has also been cleaned
+> separately.
+> 
+> ---
+> v6 changes:
+>    Rearrange patch sets, only keep the unmerged patch.
+>    rebase on mainline.
+> 
+> v5 change:
+>    ppc: fix for review.
+> 
+> v4 change:
+>    mips: fixes two errors in entry.c.
+> 
+> v3 change:
+>    Keep the existing `vcpu->run` in the function body unchanged.
+> 
+> v2 change:
+>    s390 retains the original variable name and minimizes modification.
+> 
+> Tianjia Zhang (5):
+>    KVM: s390: clean up redundant 'kvm_run' parameters
+>    KVM: arm64: clean up redundant 'kvm_run' parameters
+>    KVM: PPC: clean up redundant kvm_run parameters in assembly
+>    KVM: MIPS: clean up redundant 'kvm_run' parameters
+>    KVM: MIPS: clean up redundant kvm_run parameters in assembly
+> 
+>   arch/arm64/include/asm/kvm_coproc.h   |  12 +--
+>   arch/arm64/include/asm/kvm_host.h     |  11 +--
+>   arch/arm64/include/asm/kvm_mmu.h      |   2 +-
+>   arch/arm64/kvm/arm.c                  |   6 +-
+>   arch/arm64/kvm/handle_exit.c          |  36 ++++----
+>   arch/arm64/kvm/mmio.c                 |  11 +--
+>   arch/arm64/kvm/mmu.c                  |   5 +-
+>   arch/arm64/kvm/sys_regs.c             |  13 ++-
+>   arch/mips/include/asm/kvm_host.h      |  32 ++------
+>   arch/mips/kvm/emulate.c               |  59 +++++--------
+>   arch/mips/kvm/entry.c                 |  21 ++---
+>   arch/mips/kvm/mips.c                  |  14 ++--
+>   arch/mips/kvm/trap_emul.c             | 114 +++++++++++---------------
+>   arch/mips/kvm/vz.c                    |  26 +++---
+>   arch/powerpc/include/asm/kvm_ppc.h    |   2 +-
+>   arch/powerpc/kvm/book3s_interrupts.S  |  22 +++--
+>   arch/powerpc/kvm/book3s_pr.c          |   9 +-
+>   arch/powerpc/kvm/booke.c              |   9 +-
+>   arch/powerpc/kvm/booke_interrupts.S   |   9 +-
+>   arch/powerpc/kvm/bookehv_interrupts.S |  10 +--
+>   arch/s390/kvm/kvm-s390.c              |  23 ++++--
+>   21 files changed, 188 insertions(+), 258 deletions(-)
+> 
