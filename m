@@ -2,136 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 250C721F13C
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 14:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4C321F1D4
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 14:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbgGNMa6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jul 2020 08:30:58 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:41886 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726041AbgGNMa6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Jul 2020 08:30:58 -0400
-Received: from ticat.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf9dapQ1fV3EEAA--.990S2;
-        Tue, 14 Jul 2020 20:30:19 +0800 (CST)
-From:   Peng Fan <fanpeng@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mips/vdso: Fix resource leaks in genvdso.c
-Date:   Tue, 14 Jul 2020 20:30:18 +0800
-Message-Id: <1594729818-7859-1-git-send-email-fanpeng@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxf9dapQ1fV3EEAA--.990S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF4ftF1UJrW8WrW3urWktFb_yoW8tF4UpF
-        sY9Fyv9rZ2kry7tw43J3409FZ5A3Z7Xryjgr4kA3yDZFWrX39FyrW8GFWFqFy5Aryav3yS
-        9a9ruFZ5Ar43t3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6ryUMxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUI6wZUUUUU
-X-CM-SenderInfo: xidq1vtqj6z05rqj20fqof0/
+        id S1728305AbgGNMsR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jul 2020 08:48:17 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:33050 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726889AbgGNMsQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jul 2020 08:48:16 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 75C9480045E5;
+        Tue, 14 Jul 2020 12:48:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id YWtsWr-lMKj8; Tue, 14 Jul 2020 15:48:11 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        <linux-mips@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/4] serial: 8250_dw: Fix ref clock usage
+Date:   Tue, 14 Jul 2020 15:48:03 +0300
+Message-ID: <20200714124808.21493-1-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Close "fd" before the return of map_vdso() and close "out_file"
-in main().
+Greg, Jiri. We've missed the last merge window. It would be pity to miss
+the next one. Please review/merge in the series.
 
-Signed-off-by: Peng Fan <fanpeng@loongson.cn>
----
+Regarding the patchset. It might be dangerous if an UART port reference
+clock rate is suddenly changed. In particular the 8250 port drivers
+(and AFAICS most of the tty drivers using common clock framework clocks)
+rely either on the exclusive reference clock utilization or on the ref
+clock rate being always constant. Needless to say that it turns out not
+true and if some other service suddenly changes the clock rate behind an
+UART port driver back no good can happen. So the port might not only end
+up with an invalid uartclk value saved, but may also experience a
+distorted output/input data since such action will effectively update the
+programmed baud-clock. We discovered such problem on Baikal-T1 SoC where
+two DW 8250 ports have got a shared reference clock. Allwinner SoC is
+equipped with an UART, which clock is derived from the CPU PLL clock
+source, so the CPU frequency change might be propagated down up to the
+serial port reference clock. This patchset provides a way to fix the
+problem to the 8250 serial port controllers and mostly fixes it for the
+DW 8250-compatible UART. I say mostly because due to not having a facility
+to pause/stop and resume/restart on-going transfers we implemented the
+UART clock rate update procedure executed post factum of the actual
+reference clock rate change.
 
-v2:
-  - add one missing fclose()
+In addition the patchset includes a small optimization patch. It
+simplifies the DW APB UART ref clock rate setting procedure a bit.
 
----
- arch/mips/vdso/genvdso.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
+base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
 
-diff --git a/arch/mips/vdso/genvdso.c b/arch/mips/vdso/genvdso.c
-index be57b832..ccba50e 100644
---- a/arch/mips/vdso/genvdso.c
-+++ b/arch/mips/vdso/genvdso.c
-@@ -122,6 +122,7 @@ static void *map_vdso(const char *path, size_t *_size)
- 	if (fstat(fd, &stat) != 0) {
- 		fprintf(stderr, "%s: Failed to stat '%s': %s\n", program_name,
- 			path, strerror(errno));
-+		close(fd);
- 		return NULL;
- 	}
- 
-@@ -130,6 +131,7 @@ static void *map_vdso(const char *path, size_t *_size)
- 	if (addr == MAP_FAILED) {
- 		fprintf(stderr, "%s: Failed to map '%s': %s\n", program_name,
- 			path, strerror(errno));
-+		close(fd);
- 		return NULL;
- 	}
- 
-@@ -139,6 +141,7 @@ static void *map_vdso(const char *path, size_t *_size)
- 	if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG) != 0) {
- 		fprintf(stderr, "%s: '%s' is not an ELF file\n", program_name,
- 			path);
-+		close(fd);
- 		return NULL;
- 	}
- 
-@@ -150,6 +153,7 @@ static void *map_vdso(const char *path, size_t *_size)
- 	default:
- 		fprintf(stderr, "%s: '%s' has invalid ELF class\n",
- 			program_name, path);
-+		close(fd);
- 		return NULL;
- 	}
- 
-@@ -161,6 +165,7 @@ static void *map_vdso(const char *path, size_t *_size)
- 	default:
- 		fprintf(stderr, "%s: '%s' has invalid ELF data order\n",
- 			program_name, path);
-+		close(fd);
- 		return NULL;
- 	}
- 
-@@ -168,15 +173,18 @@ static void *map_vdso(const char *path, size_t *_size)
- 		fprintf(stderr,
- 			"%s: '%s' has invalid ELF machine (expected EM_MIPS)\n",
- 			program_name, path);
-+		close(fd);
- 		return NULL;
- 	} else if (swap_uint16(ehdr->e_type) != ET_DYN) {
- 		fprintf(stderr,
- 			"%s: '%s' has invalid ELF type (expected ET_DYN)\n",
- 			program_name, path);
-+		close(fd);
- 		return NULL;
- 	}
- 
- 	*_size = stat.st_size;
-+	close(fd);
- 	return addr;
- }
- 
-@@ -293,10 +301,12 @@ int main(int argc, char **argv)
- 	/* Calculate and write symbol offsets to <output file> */
- 	if (!get_symbols(dbg_vdso_path, dbg_vdso)) {
- 		unlink(out_path);
-+		fclose(out_file);
- 		return EXIT_FAILURE;
- 	}
- 
- 	fprintf(out_file, "};\n");
-+	fclose(out_file);
- 
- 	return EXIT_SUCCESS;
- }
+Changelog v3:
+- Refactor the original patch to adjust the UART port divisor instead of
+  requesting an exclusive ref clock utilization.
+
+Changelog v4:
+- Discard commit b426bf0fb085 ("serial: 8250: Fix max baud limit in generic
+  8250 port") since Greg has already merged it into the tty-next branch.
+- Use EXPORT_SYMBOL_GPL() for the serial8250_update_uartclk() method.
+
+Changelog v5:
+- Refactor dw8250_clk_work_cb() function cheking the clk_get_rate()
+  return value for being erroneous and exit if it is.
+- Don't update p->uartclk in the port startup. It will be updated later in
+  the same procedure at the set_termios() function being invoked by the
+  serial_core anyway.
+
+Changelog v6:
+- Resend
+
+Link: https://lore.kernel.org/linux-serial/20200617224813.23853-1-Sergey.Semin@baikalelectronics.ru
+Changelog v7:
+- Wake the device up on the serial port divider update.
+
+Link: https://lore.kernel.org/linux-serial/20200619200251.9066-1-Sergey.Semin@baikalelectronics.ru
+Changelog v8:
+- Add a new patch:
+  "serial: 8250_dw: Pass the same rate to the clk round and set rate methods"
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-serial@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (4):
+  serial: 8250: Add 8250 port clock update method
+  serial: 8250_dw: Simplify the ref clock rate setting procedure
+  serial: 8250_dw: Pass the same rate to the clk round and set rate
+    methods
+  serial: 8250_dw: Fix common clocks usage race condition
+
+ drivers/tty/serial/8250/8250_dw.c   | 120 ++++++++++++++++++++++++----
+ drivers/tty/serial/8250/8250_port.c |  40 ++++++++++
+ include/linux/serial_8250.h         |   2 +
+ 3 files changed, 148 insertions(+), 14 deletions(-)
+
 -- 
-2.1.0
+2.26.2
 
