@@ -2,87 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D51FD21F3A6
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 16:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73B421F5D3
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 17:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725931AbgGNOPJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jul 2020 10:15:09 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:33610 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbgGNOPJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jul 2020 10:15:09 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id A21E68030867;
-        Tue, 14 Jul 2020 14:15:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3m-kbe7wnLov; Tue, 14 Jul 2020 17:15:06 +0300 (MSK)
-Date:   Tue, 14 Jul 2020 17:15:04 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 5/6] bus: cdmm: Add MIPS R5 arch support
-Message-ID: <20200714141504.oybqzaii5hcdy7cq@mobilestation>
-References: <20200714125753.22466-1-Sergey.Semin@baikalelectronics.ru>
- <20200714125753.22466-6-Sergey.Semin@baikalelectronics.ru>
- <CAK8P3a09RW+zCMJ9Luh2C3NkYPdY4Esu6EKk_QX_i4faV-rUjg@mail.gmail.com>
+        id S1728049AbgGNPI1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jul 2020 11:08:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:38354 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725876AbgGNPI0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Jul 2020 11:08:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EFDDC30E;
+        Tue, 14 Jul 2020 08:08:25 -0700 (PDT)
+Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FD5B3F792;
+        Tue, 14 Jul 2020 08:08:24 -0700 (PDT)
+Date:   Tue, 14 Jul 2020 16:08:22 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH v2] PCI: loongson: Use DECLARE_PCI_FIXUP_EARLY for
+ bridge_class_quirk()
+Message-ID: <20200714150822.GB14416@e121166-lin.cambridge.arm.com>
+References: <1591925417-27665-1-git-send-email-yangtiezhu@loongson.cn>
+ <43b4409d-ff0f-9711-0b8f-1cfb19d31f24@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a09RW+zCMJ9Luh2C3NkYPdY4Esu6EKk_QX_i4faV-rUjg@mail.gmail.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <43b4409d-ff0f-9711-0b8f-1cfb19d31f24@loongson.cn>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 03:28:30PM +0200, Arnd Bergmann wrote:
-> On Tue, Jul 14, 2020 at 2:58 PM Serge Semin
-> <Sergey.Semin@baikalelectronics.ru> wrote:
-> >
-> >  config MIPS_CDMM
-> >         bool "MIPS Common Device Memory Map (CDMM) Driver"
-> > -       depends on CPU_MIPSR2
-> > +       depends on CPU_MIPSR2 || CPU_MIPSR5
-> >         help
+On Tue, Jul 14, 2020 at 03:37:51PM +0800, Tiezhu Yang wrote:
+> On 06/12/2020 09:30 AM, Tiezhu Yang wrote:
+> > Use DECLARE_PCI_FIXUP_EARLY instead of DECLARE_PCI_FIXUP_HEADER
+> > for bridge_class_quirk() in pci-loongson.c, otherwise the fixup
+> > has no effect.
+> > 
+> > Fixes: 1f58cca5cf2b ("PCI: Add Loongson PCI Controller support")
+> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > ---
+> > 
+> > v2:
+> >    - modify the patch subject used with lower case "loongson"
+> > 
+> > This patch is based on mips-next tree.
+> > 
+> >   drivers/pci/controller/pci-loongson.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+> > index 459009c..58b862a 100644
+> > --- a/drivers/pci/controller/pci-loongson.c
+> > +++ b/drivers/pci/controller/pci-loongson.c
+> > @@ -37,11 +37,11 @@ static void bridge_class_quirk(struct pci_dev *dev)
+> >   {
+> >   	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
+> >   }
+> > -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
+> > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> >   			DEV_PCIE_PORT_0, bridge_class_quirk);
+> > -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
+> > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> >   			DEV_PCIE_PORT_1, bridge_class_quirk);
+> > -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
+> > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> >   			DEV_PCIE_PORT_2, bridge_class_quirk);
+> >   static void system_bus_quirk(struct pci_dev *pdev)
 > 
-
-> Wouldn't a kernel built for P5600 have CPU_MIPSR2 set already?
-
-No. P5600 core is based on MIPS32 r5, for which since 5.8 there has been a
-dedicated kernel config CPU_MIPSR5 available. 
-
-> I thought R5 was just a backwards-compatible extension of R2.
-
-Yes, it's an extension and they are compatible in most of aspects, but
-there are still differences, which when activated/used make kernel built
-for R5 being incompatible with R2. For instance there is an ISA
-extension in R5 which hasn't been available in R5 like "eretnc"
-(return from exceptions with no atomic flag cleared), "mfhc/mthc0"
-(extended C0 register move instructions), etc. There is some other
-features/optimizations available since R5. Please see commit
-ab7c01fdc3cf ("mips: Add MIPS Release 5 support") for details.
-
+> Hi,
 > 
-> If not, what about R3?
+> Any comments?
 
-Currently if some chip is equipped with R3, then the kernel must be built
-for R2 with features like EVA enabled if it's required.
+(1) how was this driver tested if this patch is required ? Is it because
+    you are testing on a different platform ?
+(2) Please explain why it is needed (I mean describe what happens
+    in current code and how this fixes it) in the commit log, it is
+    useful for people who may need to tweak this code further
 
--Sergey
+I will apply it then, thanks.
 
+Lorenzo
+
+> Could you please apply this patch?
 > 
->       Arnd
+> Thanks,
+> Tiezhu
+> 
