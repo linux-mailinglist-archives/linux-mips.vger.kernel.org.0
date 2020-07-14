@@ -2,93 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A835C21E1B5
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2020 22:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7514C21E5B1
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 04:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgGMUzR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Jul 2020 16:55:17 -0400
-Received: from mga07.intel.com ([134.134.136.100]:49219 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726338AbgGMUzR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 13 Jul 2020 16:55:17 -0400
-IronPort-SDR: EbeLArq4HkKuXrlRxYpB/WS2qvAXL+eK3WEI4G9/favHK5tDRXMs139ILa9JUq6sYcrvGIBs++
- dPhiTZl6KmIg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="213545772"
-X-IronPort-AV: E=Sophos;i="5.75,348,1589266800"; 
-   d="scan'208";a="213545772"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2020 13:55:16 -0700
-IronPort-SDR: 7szJfcXPONfImWsDE0U1Og3oR6gRPzY9NXu27bBlEUhLsXyTzhLMHYMpnGwjaJkpOUSxedhjvm
- WmmYlkewsJUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,348,1589266800"; 
-   d="scan'208";a="390288665"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.172.11]) ([10.212.172.11])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Jul 2020 13:55:15 -0700
-Subject: Re: [PATCH v7 05/11] dmaengine: Introduce DMA-device device_caps
- callback
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200709224550.15539-1-Sergey.Semin@baikalelectronics.ru>
- <20200709224550.15539-6-Sergey.Semin@baikalelectronics.ru>
- <20200710084503.GE3703480@smile.fi.intel.com>
- <20200710093834.su3nsjesnhntpd6d@mobilestation>
-From:   Dave Jiang <dave.jiang@intel.com>
-Message-ID: <07d4a977-1de6-b611-3d4f-7c7d6cd7fe5f@intel.com>
-Date:   Mon, 13 Jul 2020 13:55:14 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726409AbgGNCcP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Jul 2020 22:32:15 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:43147 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726150AbgGNCcP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jul 2020 22:32:15 -0400
+Received: by mail-io1-f67.google.com with SMTP id k23so15707754iom.10;
+        Mon, 13 Jul 2020 19:32:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=vuZsgMdLWQO/ahKQ1C/JJlufkzXzbLL7H9cb+d1HU9k=;
+        b=rqifzt8TD6Mil1azgM6lu7g9q2pS1UiUptIHj2ucwHXY7ZEMkJtypqevom+AVMDkot
+         gnA6HneVk+i2O63rwfhH8tr4uk9G7VQEzhGzCAJaSP224L13gWAjOqD0orBkf1w59x9+
+         gpK6CVFsoaT2YL46qK8MtlaKOx+lvbsDLo1lD+RX6zoKNuMFbs5MdUoJAwU0UQbYE03C
+         EJbCFeQUn6/rKOoWWYsdAvCYMxeOHLRt8SmKUGREVeonsfS2msAEAZhv8gqiHO4aEmRa
+         Sj3qGaksA+Teo3pvmb/BzVell+Z3RcAsqWqIBAjZKr5PkvFYzjOIBhTNVmKIdwqA1iAw
+         W4eg==
+X-Gm-Message-State: AOAM533OBg8A6Kv3imDiScRuY0fPW/McygZzuPvR0/4/xrc5Gffev5R/
+        lGdyO9JJ2Ft/534SYn3sLMS5KOwFr4x1
+X-Google-Smtp-Source: ABdhPJzSiwbxk0e5azgvPYsuI4yurNtqRdxZNnQgVDbStBikimwSnWmtqDpMJgj/pWf09alzKiI/tw==
+X-Received: by 2002:a05:6638:2493:: with SMTP id x19mr3577157jat.53.1594693934506;
+        Mon, 13 Jul 2020 19:32:14 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id v5sm8522890ios.54.2020.07.13.19.32.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 19:32:13 -0700 (PDT)
+Received: (nullmailer pid 1163897 invoked by uid 1000);
+        Tue, 14 Jul 2020 02:32:12 -0000
+Date:   Mon, 13 Jul 2020 20:32:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, paul.burton@mips.com,
+        paul@crapouillou.net, tsbogend@alpha.franken.de,
+        ak@linux.intel.com, ebiederm@xmission.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: Re: [PATCH v2 2/3] dt-bindings: MIPS: Add Ingenic X1830 based boards.
+Message-ID: <20200714023212.GA1162143@bogus>
+References: <20200625173716.56146-1-zhouyanjie@wanyeetech.com>
+ <20200625173716.56146-3-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-In-Reply-To: <20200710093834.su3nsjesnhntpd6d@mobilestation>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200625173716.56146-3-zhouyanjie@wanyeetech.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 7/10/2020 2:38 AM, Serge Semin wrote:
-> On Fri, Jul 10, 2020 at 11:45:03AM +0300, Andy Shevchenko wrote:
->> On Fri, Jul 10, 2020 at 01:45:44AM +0300, Serge Semin wrote:
->>> There are DMA devices (like ours version of Synopsys DW DMAC) which have
->>> DMA capabilities non-uniformly redistributed between the device channels.
->>> In order to provide a way of exposing the channel-specific parameters to
->>> the DMA engine consumers, we introduce a new DMA-device callback. In case
->>> if provided it gets called from the dma_get_slave_caps() method and is
->>> able to override the generic DMA-device capabilities.
->>
+On Fri, Jun 26, 2020 at 01:37:15AM +0800, 周琰杰 (Zhou Yanjie) wrote:
+> Add bindings for Ingenic X1830 based board, prepare for later dts.
 > 
->> In light of recent developments consider not to add 'slave' and a such words to the kernel.
+> Tested-by: 周正 (Zhou Zheng) <sernia.zhou@foxmail.com>
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> ---
 > 
-> As long as the 'slave' word is used in the name of the dma_slave_caps
-> structure and in the rest of the DMA-engine subsystem, it will be ambiguous
-> to use some else terminology. If renaming needs to be done, then it should be
-> done synchronously for the whole subsystem.
+> Notes:
+>     v1->v2:
+>     No change.
+> 
+>  Documentation/devicetree/bindings/mips/ingenic/devices.yaml | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mips/ingenic/devices.yaml b/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
+> index d1175030781a..feb695be9f66 100644
+> --- a/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
+> +++ b/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
+> @@ -8,7 +8,8 @@ title: Ingenic XBurst based Platforms Device Tree Bindings
+>  
+>  maintainers:
+>    - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> -description: |
+> +
+> +description:
+>    Devices with a Ingenic XBurst CPU shall have the following properties.
+>  
+>  properties:
+> @@ -32,8 +33,13 @@ properties:
+>            - const: img,ci20
+>            - const: ingenic,jz4780
+>  
+> -      - description: YSH & ATIL General Board CU Neo
+> +      - description: YSH & ATIL General Board, CU1000 Module with Neo Backplane
+>          items:
+>            - const: yna,cu1000-neo
+> -          - const: ingenic,x1000
+> +          - const: ingenic,x1000e
 
-What about just calling it dma_device_caps? Consider this is a useful function 
-not only slave DMA will utilize this. I can see this being useful for some of my 
-future code with idxd driver.
+What's this change? You can't just change bindings.
 
+> +
+> +      - description: YSH & ATIL General Board, CU1830 Module with Neo Backplane
+> +        items:
+> +          - const: yna,cu1830-neo
+> +          - const: ingenic,x1830
+>  ...
+> -- 
+> 2.11.0
 > 
-> -Sergey
-> 
->>
->>
->> -- 
->> With Best Regards,
->> Andy Shevchenko
->>
->>
