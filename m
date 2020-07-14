@@ -2,41 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8008B21EB78
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 10:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250C721F13C
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 14:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726431AbgGNIeI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jul 2020 04:34:08 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:57054 "EHLO loongson.cn"
+        id S1726352AbgGNMa6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jul 2020 08:30:58 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:41886 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725884AbgGNIeH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Jul 2020 04:34:07 -0400
+        id S1726041AbgGNMa6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Jul 2020 08:30:58 -0400
 Received: from ticat.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Cxr9b5bQ1fM1MEAA--.5354S2;
-        Tue, 14 Jul 2020 16:34:02 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf9dapQ1fV3EEAA--.990S2;
+        Tue, 14 Jul 2020 20:30:19 +0800 (CST)
 From:   Peng Fan <fanpeng@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mips/vdso: Fix resource leaks in genvdso.c
-Date:   Tue, 14 Jul 2020 16:34:01 +0800
-Message-Id: <1594715641-8492-1-git-send-email-fanpeng@loongson.cn>
+Subject: [PATCH v2] mips/vdso: Fix resource leaks in genvdso.c
+Date:   Tue, 14 Jul 2020 20:30:18 +0800
+Message-Id: <1594729818-7859-1-git-send-email-fanpeng@loongson.cn>
 X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Cxr9b5bQ1fM1MEAA--.5354S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr4xCrWkur17WrykXr43Jrb_yoW8ZFW7pF
-        s5uFyv9rZ2kFy7tw45J34j9FZ5AFn7XryUWr4kA3yDZFZ5X3sFy3y8GFyrtFy5Ar9Iq3yS
-        9anruFZ5AFs7trJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUySb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+X-CM-TRANSID: AQAAf9Dxf9dapQ1fV3EEAA--.990S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF4ftF1UJrW8WrW3urWktFb_yoW8tF4UpF
+        sY9Fyv9rZ2kry7tw43J3409FZ5A3Z7Xryjgr4kA3yDZFWrX39FyrW8GFWFqFy5Aryav3yS
+        9a9ruFZ5Ar43t3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
         0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC2
-        0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-        0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-        14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20x
-        vaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
-        6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jFfO7UUUUU=
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6ryUMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUI6wZUUUUU
 X-CM-SenderInfo: xidq1vtqj6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
@@ -48,11 +48,16 @@ in main().
 
 Signed-off-by: Peng Fan <fanpeng@loongson.cn>
 ---
- arch/mips/vdso/genvdso.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+
+v2:
+  - add one missing fclose()
+
+---
+ arch/mips/vdso/genvdso.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/arch/mips/vdso/genvdso.c b/arch/mips/vdso/genvdso.c
-index be57b832..f459c7a 100644
+index be57b832..ccba50e 100644
 --- a/arch/mips/vdso/genvdso.c
 +++ b/arch/mips/vdso/genvdso.c
 @@ -122,6 +122,7 @@ static void *map_vdso(const char *path, size_t *_size)
@@ -114,7 +119,12 @@ index be57b832..f459c7a 100644
  	return addr;
  }
  
-@@ -297,6 +305,7 @@ int main(int argc, char **argv)
+@@ -293,10 +301,12 @@ int main(int argc, char **argv)
+ 	/* Calculate and write symbol offsets to <output file> */
+ 	if (!get_symbols(dbg_vdso_path, dbg_vdso)) {
+ 		unlink(out_path);
++		fclose(out_file);
+ 		return EXIT_FAILURE;
  	}
  
  	fprintf(out_file, "};\n");
