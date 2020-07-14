@@ -2,122 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5001D21F7A4
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 18:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6945021F7C2
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 18:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgGNQtO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jul 2020 12:49:14 -0400
-Received: from mga07.intel.com ([134.134.136.100]:24475 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726062AbgGNQtO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Jul 2020 12:49:14 -0400
-IronPort-SDR: sG6FR9LDdBAh9OFAZbydWojuVPv7uSudemPznpiYhU/zXx/PO4KyYptqLgrE2rHEnP2mgLwH33
- uDmIjofcdWuQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="213748140"
-X-IronPort-AV: E=Sophos;i="5.75,352,1589266800"; 
-   d="scan'208";a="213748140"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 09:49:13 -0700
-IronPort-SDR: 43WJZfLT0kjZUqlt8ocOMEylSo7SumVMqMI+Ur3jhEQ0x0Y3UBB1QpGj1WRuq+4bxI2fLMDprb
- Ztv5v9RASv+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,352,1589266800"; 
-   d="scan'208";a="307939488"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.209.140.223]) ([10.209.140.223])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2020 09:49:12 -0700
-Subject: Re: [PATCH v7 05/11] dmaengine: Introduce DMA-device device_caps
- callback
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200709224550.15539-1-Sergey.Semin@baikalelectronics.ru>
- <20200709224550.15539-6-Sergey.Semin@baikalelectronics.ru>
- <20200710084503.GE3703480@smile.fi.intel.com>
- <20200710093834.su3nsjesnhntpd6d@mobilestation>
- <07d4a977-1de6-b611-3d4f-7c7d6cd7fe5f@intel.com>
- <20200714160830.GL34333@vkoul-mobl>
- <f746fafd-851e-f402-3755-03ef94a65988@intel.com>
- <20200714162953.2333hke6pfvovjuk@mobilestation>
-From:   Dave Jiang <dave.jiang@intel.com>
-Message-ID: <7d1a9ae9-0a95-cba5-be62-4493501039e7@intel.com>
-Date:   Tue, 14 Jul 2020 09:49:12 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728312AbgGNQ62 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jul 2020 12:58:28 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:60063 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726062AbgGNQ62 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Jul 2020 12:58:28 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id A37F6C60;
+        Tue, 14 Jul 2020 12:58:26 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 14 Jul 2020 12:58:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm1; bh=J
+        n3Ad37SZHYYU1k/teK9BKKpMr/A2B9BBUZL/dISkAw=; b=rRonHJCIud40+m7Fz
+        d+DHSXfd+BJrfwWI9tMwkRffZ9Uq6k1GrtwJp8Q/C+26k4tbg1Yadc4d8S9n0S2v
+        hr9/Y+eRygltnOdxjjJynh0JPxJ1sO9TD2EGJ3Dtxlls0Pyt2LjuSDDdiz6/V0bL
+        QtV1fvo1t0YsoPYh9G0dS+ZBFGGAe0X1LDtgH74M3CNpmsfJiyQJmLwNS6nD3yEC
+        KHO8+Bd12f85i453o5FMCvI1kdxIsYiCjebwFU7Iu23L0izQyOlDhpqPGpIKB0+O
+        wIgmwFAWli4AO2TMnjlLZY4ga+cC8rrw1KVMe+69I1bolPRn7KsS2l8h7dcGMGju
+        lahJQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=Jn3Ad37SZHYYU1k/teK9BKKpMr/A2B9BBUZL/dISk
+        Aw=; b=d+e507VnLJEX/bU269xQFlaHhcDOlaP56eL+UnVJ7wS4UreDbd8+wLQeG
+        uGH63+FGRR56QaYud7+WzxfVDv3UND+hrIn+1lCyp88mrfW26LxGfirevaL8a8th
+        CC+8WuOFk708i+HhV4k7JovSRtirV7+DJcHCS8trHqAID2oYQfEg4hkUMs+oIE3Z
+        CzcEl4U5g7QsXfiVGMHbIrhfjac4KNfm8ziykmD6SLQ7g9aWbZn00WF8IawDgiow
+        k9CldDrW0DAXLwxm6EFMkLD6AHAUSIrncd2Ctu9BE0ZJ6wqeoyhnld2528nHl2WL
+        hwx/xDu+pfFLY3W740H86KbR6I3MA==
+X-ME-Sender: <xms:MeQNXx2shWVdt-0a8WgJskjjtwldq8kpE3j9wl8ERVlphuKK_PnVvQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrfedtgddutdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepvedtie
+    elueetgeeggfeufefhvefgtdetgfetgfdtvdegjeehieduvddtkeffheffnecukfhppeek
+    fedrkeeirdekledruddtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:MeQNX4FyPmsEPLoY3rJG8-Y8k4t0iP8vvEsKbuYdUy9cqLoB-OzVvg>
+    <xmx:MeQNXx7_wijXZzyA34CaJUKkrb6C4m7QA7OesUtE3Fm0ub106fNjrg>
+    <xmx:MeQNX-3_xgT0Lj0TRaq6m2md3F0rVqWozNva2WE0gCQWbKK6iQKY3Q>
+    <xmx:MuQNX55S2lpFY5-BJy5oiPdD7CKarlEeyLKeKRZCmequaFXEhoYibA>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id EF64A3280065;
+        Tue, 14 Jul 2020 12:58:24 -0400 (EDT)
+Date:   Tue, 14 Jul 2020 18:58:23 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>, stable@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de
+Subject: Re: [PATCH] [stable v5.4.x] pwm: jz4740: Fix build failure
+Message-ID: <20200714165823.GA2127080@kroah.com>
+References: <20200710102758.8341-1-u.kleine-koenig@pengutronix.de>
+ <DB8C7C01-0FBB-4A9F-B068-15C06BBC0873@goldelico.com>
+ <20200710194702.ire4deel2zn7mnxk@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20200714162953.2333hke6pfvovjuk@mobilestation>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200710194702.ire4deel2zn7mnxk@pengutronix.de>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Fri, Jul 10, 2020 at 09:47:02PM +0200, Uwe Kleine-König wrote:
+> On Fri, Jul 10, 2020 at 12:48:36PM +0200, H. Nikolaus Schaller wrote:
+> > 
+> > > Am 10.07.2020 um 12:27 schrieb Uwe Kleine-König <u.kleine-koenig@pengutronix.de>:
+> > > 
+> > > When commit 9017dc4fbd59 ("pwm: jz4740: Enhance precision in calculation
+> > > of duty cycle") from v5.8-rc1 was backported to v5.4.x its dependency on
+> > > commit ce1f9cece057 ("pwm: jz4740: Use clocks from TCU driver") was not
+> > > noticed which made the pwm-jz4740 driver fail to build.
+> > 
+> > Please can you add my "reported by?"
+> 
+> Greg, can you please add this while applying? (Assuming you're ok with
+> this change and ideally Paul can confirm the change is fine.)
+> 
+> Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
 
-
-On 7/14/2020 9:29 AM, Serge Semin wrote:
-> On Tue, Jul 14, 2020 at 09:18:16AM -0700, Dave Jiang wrote:
->>
->>
->> On 7/14/2020 9:08 AM, Vinod Koul wrote:
->>> On 13-07-20, 13:55, Dave Jiang wrote:
->>>>
->>>>
->>>> On 7/10/2020 2:38 AM, Serge Semin wrote:
->>>>> On Fri, Jul 10, 2020 at 11:45:03AM +0300, Andy Shevchenko wrote:
->>>>>> On Fri, Jul 10, 2020 at 01:45:44AM +0300, Serge Semin wrote:
->>>>>>> There are DMA devices (like ours version of Synopsys DW DMAC) which have
->>>>>>> DMA capabilities non-uniformly redistributed between the device channels.
->>>>>>> In order to provide a way of exposing the channel-specific parameters to
->>>>>>> the DMA engine consumers, we introduce a new DMA-device callback. In case
->>>>>>> if provided it gets called from the dma_get_slave_caps() method and is
->>>>>>> able to override the generic DMA-device capabilities.
->>>>>>
->>>>>
->>>>>> In light of recent developments consider not to add 'slave' and a such words to the kernel.
->>>>>
->>>>> As long as the 'slave' word is used in the name of the dma_slave_caps
->>>>> structure and in the rest of the DMA-engine subsystem, it will be ambiguous
->>>>> to use some else terminology. If renaming needs to be done, then it should be
->>>>> done synchronously for the whole subsystem.
->>>>
->>>> What about just calling it dma_device_caps? Consider this is a useful
->>>> function not only slave DMA will utilize this. I can see this being useful
->>>> for some of my future code with idxd driver.
->>>
->>> Some of the caps may make sense to generic dmaengine but few of them do
->>> not :) While at it, am planning to make it dmaengine_periph_caps to
->>> denote that these are dmaengine peripheral capabilities.
->>>
->>
-> 
->> If the function only passes in periph_caps, how do we allow the non periph
->> DMA utilize this function?
-> 
-> Hello Dave. That seems reasonable. "dma_device_caps" or even "dma_chan_caps"
-> might be more suitable seeing after this patchset merged in the "dma_slave_caps"
-> may really provide the DMA channel-specific configs. Moreover that structure is
-> accessible only by means of the dma_chan descriptor:
-> 
-> int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps);
-> 
-> which makes those caps being the channel-specific even without this patchset.
-> 
-> So as I see it "dma_chan_caps" might be the better choice.
-
-Hi Sergey. Yes I think that sounds pretty good. Especially seeing there are DMA 
-engines that have channels with different/asymmetric capabilities now.
-
-> 
-> -Sergey
-> 
+Now added, thanks.
