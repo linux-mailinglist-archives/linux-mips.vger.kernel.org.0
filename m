@@ -2,112 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7514C21E5B1
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 04:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA8821E5BD
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 04:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726409AbgGNCcP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Jul 2020 22:32:15 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:43147 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbgGNCcP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jul 2020 22:32:15 -0400
-Received: by mail-io1-f67.google.com with SMTP id k23so15707754iom.10;
-        Mon, 13 Jul 2020 19:32:14 -0700 (PDT)
+        id S1726372AbgGNCih (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Jul 2020 22:38:37 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:46418 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726150AbgGNCih (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jul 2020 22:38:37 -0400
+Received: by mail-io1-f66.google.com with SMTP id a12so15706059ion.13;
+        Mon, 13 Jul 2020 19:38:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=vuZsgMdLWQO/ahKQ1C/JJlufkzXzbLL7H9cb+d1HU9k=;
-        b=rqifzt8TD6Mil1azgM6lu7g9q2pS1UiUptIHj2ucwHXY7ZEMkJtypqevom+AVMDkot
-         gnA6HneVk+i2O63rwfhH8tr4uk9G7VQEzhGzCAJaSP224L13gWAjOqD0orBkf1w59x9+
-         gpK6CVFsoaT2YL46qK8MtlaKOx+lvbsDLo1lD+RX6zoKNuMFbs5MdUoJAwU0UQbYE03C
-         EJbCFeQUn6/rKOoWWYsdAvCYMxeOHLRt8SmKUGREVeonsfS2msAEAZhv8gqiHO4aEmRa
-         Sj3qGaksA+Teo3pvmb/BzVell+Z3RcAsqWqIBAjZKr5PkvFYzjOIBhTNVmKIdwqA1iAw
-         W4eg==
-X-Gm-Message-State: AOAM533OBg8A6Kv3imDiScRuY0fPW/McygZzuPvR0/4/xrc5Gffev5R/
-        lGdyO9JJ2Ft/534SYn3sLMS5KOwFr4x1
-X-Google-Smtp-Source: ABdhPJzSiwbxk0e5azgvPYsuI4yurNtqRdxZNnQgVDbStBikimwSnWmtqDpMJgj/pWf09alzKiI/tw==
-X-Received: by 2002:a05:6638:2493:: with SMTP id x19mr3577157jat.53.1594693934506;
-        Mon, 13 Jul 2020 19:32:14 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to;
+        bh=4Gg8DYJFGz0ri+pNHJ3d+QdBSaSue9B9wGaWAqzH7gE=;
+        b=cDzmnpZqLIr89deEgp39vsGloYK7iVfJ623XNV4qDAXKBbcKr3RgQ+mDtNCSh6FiBs
+         qc7YOrRRB6ebCpJL2Acr+ihYQo6mvJ/hHsv3oTjn7aqahjG8F9RkSKJ7ufkaH1BGvN15
+         AZqnpe99/iBWluuePChy59IT95dojhJzyDPi3/th+2GZSkWueDIRloM7yvLVIroKtkLy
+         y8HGpzxRKMljNMM4gapq4lm+INy2CpYwKBI/RfYTkp8/8cUfFqI6TIy9c3VSmx1ymJWN
+         uqBnKZZmr7zHcjccH6sINhbtqVdPPb+Zjtu1Zjom3M+gk+IkuG0vhB18+UqwCp03NRjq
+         eY8g==
+X-Gm-Message-State: AOAM5324DEydaH5vS2GlYkj7Bi9HEY6AoCTRNlNvoWEdR0zMS6YU8qio
+        AkmA2lvQi8bsnZEc+QdTSg==
+X-Google-Smtp-Source: ABdhPJwZqnw3INgfD6Hay7X47f+EZmXP1MZ7Ywp8k31VukJNIC1u1XNf6R93i8iUljLxukbnVOSYfg==
+X-Received: by 2002:a5d:9590:: with SMTP id a16mr2767645ioo.150.1594694316558;
+        Mon, 13 Jul 2020 19:38:36 -0700 (PDT)
 Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id v5sm8522890ios.54.2020.07.13.19.32.12
+        by smtp.gmail.com with ESMTPSA id d6sm9425301ilq.27.2020.07.13.19.38.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 19:32:13 -0700 (PDT)
-Received: (nullmailer pid 1163897 invoked by uid 1000);
-        Tue, 14 Jul 2020 02:32:12 -0000
-Date:   Mon, 13 Jul 2020 20:32:12 -0600
+        Mon, 13 Jul 2020 19:38:35 -0700 (PDT)
+Received: (nullmailer pid 1172482 invoked by uid 1000);
+        Tue, 14 Jul 2020 02:38:35 -0000
+Date:   Mon, 13 Jul 2020 20:38:35 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, paul.burton@mips.com,
-        paul@crapouillou.net, tsbogend@alpha.franken.de,
-        ak@linux.intel.com, ebiederm@xmission.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Subject: Re: [PATCH v2 2/3] dt-bindings: MIPS: Add Ingenic X1830 based boards.
-Message-ID: <20200714023212.GA1162143@bogus>
-References: <20200625173716.56146-1-zhouyanjie@wanyeetech.com>
- <20200625173716.56146-3-zhouyanjie@wanyeetech.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+        David Airlie <airlied@linux.ie>, linux-mips@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, od@zcrc.me
+Subject: Re: [PATCH v2 02/10] dt-bindings: display: Add ingenic,ipu.yaml
+Message-ID: <20200714023835.GA1172429@bogus>
+References: <20200629235210.441709-1-paul@crapouillou.net>
+ <20200629235210.441709-2-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200625173716.56146-3-zhouyanjie@wanyeetech.com>
+In-Reply-To: <20200629235210.441709-2-paul@crapouillou.net>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 01:37:15AM +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Add bindings for Ingenic X1830 based board, prepare for later dts.
+On Tue, 30 Jun 2020 01:52:02 +0200, Paul Cercueil wrote:
+> Add documentation of the Device Tree bindings for the Image Processing
+> Unit (IPU) found in most Ingenic SoCs.
 > 
-> Tested-by: 周正 (Zhou Zheng) <sernia.zhou@foxmail.com>
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
 > 
 > Notes:
->     v1->v2:
->     No change.
+>     v2: Add missing 'const' in items list
 > 
->  Documentation/devicetree/bindings/mips/ingenic/devices.yaml | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+>  .../bindings/display/ingenic,ipu.yaml         | 65 +++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/ingenic,ipu.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/mips/ingenic/devices.yaml b/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
-> index d1175030781a..feb695be9f66 100644
-> --- a/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
-> +++ b/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
-> @@ -8,7 +8,8 @@ title: Ingenic XBurst based Platforms Device Tree Bindings
->  
->  maintainers:
->    - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> -description: |
-> +
-> +description:
->    Devices with a Ingenic XBurst CPU shall have the following properties.
->  
->  properties:
-> @@ -32,8 +33,13 @@ properties:
->            - const: img,ci20
->            - const: ingenic,jz4780
->  
-> -      - description: YSH & ATIL General Board CU Neo
-> +      - description: YSH & ATIL General Board, CU1000 Module with Neo Backplane
->          items:
->            - const: yna,cu1000-neo
-> -          - const: ingenic,x1000
-> +          - const: ingenic,x1000e
 
-What's this change? You can't just change bindings.
-
-> +
-> +      - description: YSH & ATIL General Board, CU1830 Module with Neo Backplane
-> +        items:
-> +          - const: yna,cu1830-neo
-> +          - const: ingenic,x1830
->  ...
-> -- 
-> 2.11.0
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>
