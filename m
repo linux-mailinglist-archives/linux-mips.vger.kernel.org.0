@@ -2,98 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A73B421F5D3
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 17:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899C921F6BC
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2020 18:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728049AbgGNPI1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jul 2020 11:08:27 -0400
-Received: from foss.arm.com ([217.140.110.172]:38354 "EHLO foss.arm.com"
+        id S1726999AbgGNQIf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jul 2020 12:08:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39908 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbgGNPI0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Jul 2020 11:08:26 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EFDDC30E;
-        Tue, 14 Jul 2020 08:08:25 -0700 (PDT)
-Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FD5B3F792;
-        Tue, 14 Jul 2020 08:08:24 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 16:08:22 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>, Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH v2] PCI: loongson: Use DECLARE_PCI_FIXUP_EARLY for
- bridge_class_quirk()
-Message-ID: <20200714150822.GB14416@e121166-lin.cambridge.arm.com>
-References: <1591925417-27665-1-git-send-email-yangtiezhu@loongson.cn>
- <43b4409d-ff0f-9711-0b8f-1cfb19d31f24@loongson.cn>
+        id S1725876AbgGNQIf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Jul 2020 12:08:35 -0400
+Received: from localhost (unknown [122.171.202.192])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A3AE822515;
+        Tue, 14 Jul 2020 16:08:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594742914;
+        bh=m1sZU8ZEuecg3AdLYhlDX2E1cX3Y8hJyqEV30UQuGNU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dYPw/QTslqDwXMkvcuWmgLjUlIp+8O6gOIUKVUY2+TlTa34zQ+zz1U09lJOwQW09S
+         Zs39faJMF1AQ5iw8NUoRb+aOAmoaJq57/pNyE2didK61rX+fg7Upj2jbx+qnSqFSBo
+         krdukl4duieXXuhukMg/55wm4P/zD5q7x9vpVeLg=
+Date:   Tue, 14 Jul 2020 21:38:30 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Dave Jiang <dave.jiang@intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 05/11] dmaengine: Introduce DMA-device device_caps
+ callback
+Message-ID: <20200714160830.GL34333@vkoul-mobl>
+References: <20200709224550.15539-1-Sergey.Semin@baikalelectronics.ru>
+ <20200709224550.15539-6-Sergey.Semin@baikalelectronics.ru>
+ <20200710084503.GE3703480@smile.fi.intel.com>
+ <20200710093834.su3nsjesnhntpd6d@mobilestation>
+ <07d4a977-1de6-b611-3d4f-7c7d6cd7fe5f@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <43b4409d-ff0f-9711-0b8f-1cfb19d31f24@loongson.cn>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <07d4a977-1de6-b611-3d4f-7c7d6cd7fe5f@intel.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 03:37:51PM +0800, Tiezhu Yang wrote:
-> On 06/12/2020 09:30 AM, Tiezhu Yang wrote:
-> > Use DECLARE_PCI_FIXUP_EARLY instead of DECLARE_PCI_FIXUP_HEADER
-> > for bridge_class_quirk() in pci-loongson.c, otherwise the fixup
-> > has no effect.
-> > 
-> > Fixes: 1f58cca5cf2b ("PCI: Add Loongson PCI Controller support")
-> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > ---
-> > 
-> > v2:
-> >    - modify the patch subject used with lower case "loongson"
-> > 
-> > This patch is based on mips-next tree.
-> > 
-> >   drivers/pci/controller/pci-loongson.c | 6 +++---
-> >   1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-> > index 459009c..58b862a 100644
-> > --- a/drivers/pci/controller/pci-loongson.c
-> > +++ b/drivers/pci/controller/pci-loongson.c
-> > @@ -37,11 +37,11 @@ static void bridge_class_quirk(struct pci_dev *dev)
-> >   {
-> >   	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-> >   }
-> > -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-> > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> >   			DEV_PCIE_PORT_0, bridge_class_quirk);
-> > -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-> > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> >   			DEV_PCIE_PORT_1, bridge_class_quirk);
-> > -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-> > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> >   			DEV_PCIE_PORT_2, bridge_class_quirk);
-> >   static void system_bus_quirk(struct pci_dev *pdev)
+On 13-07-20, 13:55, Dave Jiang wrote:
 > 
-> Hi,
 > 
-> Any comments?
-
-(1) how was this driver tested if this patch is required ? Is it because
-    you are testing on a different platform ?
-(2) Please explain why it is needed (I mean describe what happens
-    in current code and how this fixes it) in the commit log, it is
-    useful for people who may need to tweak this code further
-
-I will apply it then, thanks.
-
-Lorenzo
-
-> Could you please apply this patch?
+> On 7/10/2020 2:38 AM, Serge Semin wrote:
+> > On Fri, Jul 10, 2020 at 11:45:03AM +0300, Andy Shevchenko wrote:
+> > > On Fri, Jul 10, 2020 at 01:45:44AM +0300, Serge Semin wrote:
+> > > > There are DMA devices (like ours version of Synopsys DW DMAC) which have
+> > > > DMA capabilities non-uniformly redistributed between the device channels.
+> > > > In order to provide a way of exposing the channel-specific parameters to
+> > > > the DMA engine consumers, we introduce a new DMA-device callback. In case
+> > > > if provided it gets called from the dma_get_slave_caps() method and is
+> > > > able to override the generic DMA-device capabilities.
+> > > 
+> > 
+> > > In light of recent developments consider not to add 'slave' and a such words to the kernel.
+> > 
+> > As long as the 'slave' word is used in the name of the dma_slave_caps
+> > structure and in the rest of the DMA-engine subsystem, it will be ambiguous
+> > to use some else terminology. If renaming needs to be done, then it should be
+> > done synchronously for the whole subsystem.
 > 
-> Thanks,
-> Tiezhu
-> 
+> What about just calling it dma_device_caps? Consider this is a useful
+> function not only slave DMA will utilize this. I can see this being useful
+> for some of my future code with idxd driver.
+
+Some of the caps may make sense to generic dmaengine but few of them do
+not :) While at it, am planning to make it dmaengine_periph_caps to
+denote that these are dmaengine peripheral capabilities.
+
+-- 
+~Vinod
