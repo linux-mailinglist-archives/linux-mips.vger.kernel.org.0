@@ -2,71 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AC62206C6
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2020 10:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D449220B95
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2020 13:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729001AbgGOIJW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Jul 2020 04:09:22 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:36017 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727871AbgGOIJW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jul 2020 04:09:22 -0400
-Received: by mail-il1-f196.google.com with SMTP id x9so1235871ila.3;
-        Wed, 15 Jul 2020 01:09:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7GqAsqCXaN6ZfFXKDdHixXpcIHkuyc+NEgmoh8fdZz8=;
-        b=MwoLRGQHki8I70p8PY1fC5Eu9GHm/9QCavVUWsZwhbY0dW1a3POgmR4FkJ/L4R5YMY
-         ZeByr0S8ujpQsa5LdyaC1IrLpdRg+7ANU/o8Zu+Ilryn1rNWzutcj+FZadNorEUqQ8eB
-         JiSB14RZ3enGv46nrXApTCY9X0GjbjQiQtKy7aUOEVheYplxUON1ZhXRIu4ARb8Hyz4n
-         ieBHMSZ1yG1dA4VB3fmUZqtcMwWHzQ6+oJEdv6KP5Kkzol3P5L6zi4H1ugGPFT2KtChB
-         dBtC95QLiSYjXmXRaQHbTBdER4uNVraeHtbvbgLNGBUEQHAV9YY6hA4PKmxvholB0OG+
-         jv3Q==
-X-Gm-Message-State: AOAM532lmT+LoDnVkKpsCBDMo9a+puV8StV5NSHemIhTsTzKd6XAlk3S
-        4u4aoEGg6dxM4Z3N9dbUWN/lheZlayUlZ8YFlUE=
-X-Google-Smtp-Source: ABdhPJzqSQf+tjLQ6NhcA9CTBoOtkRZPoTX/7p73ixJyP/w1wKQ/vZG/+2ertGRZN/JjVhw51KcAwtPSAhtfWGIBH5g=
-X-Received: by 2002:a92:d204:: with SMTP id y4mr3899253ily.147.1594800561490;
- Wed, 15 Jul 2020 01:09:21 -0700 (PDT)
+        id S1726784AbgGOLNU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jul 2020 07:13:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51210 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726034AbgGOLNU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 15 Jul 2020 07:13:20 -0400
+Received: from localhost (unknown [122.171.202.192])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 21EC220658;
+        Wed, 15 Jul 2020 11:13:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594811600;
+        bh=eydGT5vyj3DFkrTR3iGkM6VbuT/mY9iEwObflzBiA5M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uRYxnG5OXQN4sijkPXo4JIQSHo3Qzo2kvJDps2v9dTJ0oqZ96Rea5oLMtoDrybZEf
+         YHq/nhv6B7uhMyy7b5+bRM81cLS0YnTrkJlEiNxEi2qoxzVHKehGD6hMe8e5faj4Na
+         wjf5BXMWyoj6kPiSBzLZn+xio+Bhagas8hBXFHcQ=
+Date:   Wed, 15 Jul 2020 16:43:15 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 04/11] dmaengine: Introduce max SG list entries
+ capability
+Message-ID: <20200715111315.GK34333@vkoul-mobl>
+References: <20200709224550.15539-1-Sergey.Semin@baikalelectronics.ru>
+ <20200709224550.15539-5-Sergey.Semin@baikalelectronics.ru>
+ <d667adda-6576-623d-6976-30f60ab3c3dc@ti.com>
+ <20200710092738.z7zyywe46mp7uuf3@mobilestation>
+ <427bc5c8-0325-bc25-8637-a7627bcac26f@ti.com>
+ <20200710161445.t6eradkgt4terdr3@mobilestation>
 MIME-Version: 1.0
-References: <1594791329-20563-1-git-send-email-chenhc@lemote.com> <32525b2d-6a5d-1064-788c-96233a375d1d@cogentembedded.com>
-In-Reply-To: <32525b2d-6a5d-1064-788c-96233a375d1d@cogentembedded.com>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Wed, 15 Jul 2020 16:09:09 +0800
-Message-ID: <CAAhV-H5Ubx+tRm1+tVifyHyF-Ef=zH+0j_9A2GmkRMR+JyFs-A@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: CPU#0 is not hotpluggable
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200710161445.t6eradkgt4terdr3@mobilestation>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Sergei,
+On 10-07-20, 19:14, Serge Semin wrote:
+> On Fri, Jul 10, 2020 at 02:51:33PM +0300, Peter Ujfalusi wrote:
 
-On Wed, Jul 15, 2020 at 3:56 PM Sergei Shtylyov
-<sergei.shtylyov@cogentembedded.com> wrote:
->
-> Hello!
->
-> On 15.07.2020 8:35, Huacai Chen wrote:
->
-> > Now CPU#0 is not hotpluggable on MIPS, so prevent to create /sys/devices
-> > /system/cpu/cpu0/online which confusing some user-space tools.
->
->     Confuses?
-Yes, this is my fault.
+> > Since we should be able to handle longer lists and this is kind of a
+> > hint for clients that above this number of nents the list will be broken
+> > up to smaller 'bursts', which when traversing could cause latency.
+> > 
+> > sg_chunk_len might be another candidate.
+> 
+> Ok. We've got four candidates:
+> - max_sg_nents_burst
+> - max_sg_burst
+> - max_sg_chain
+> - sg_chunk_len
+> 
+> @Vinod, @Andy, what do you think?
 
->
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> [...]
->
-> MBR, Sergei
+So IIUC your hw supports single sg and in that you would like to publish
+the length of each chunk, is that correct? If so sg_chunk_len seems
+apt..
+
+-- 
+~Vinod
