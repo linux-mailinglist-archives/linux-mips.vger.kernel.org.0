@@ -2,115 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13EB6221337
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2020 19:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00227221537
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2020 21:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725866AbgGORIt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Jul 2020 13:08:49 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:38260 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725838AbgGORIt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jul 2020 13:08:49 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id A28E5803202D;
-        Wed, 15 Jul 2020 17:08:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id u5_RIfGIlZua; Wed, 15 Jul 2020 20:08:45 +0300 (MSK)
-Date:   Wed, 15 Jul 2020 20:08:43 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 04/11] dmaengine: Introduce max SG list entries
- capability
-Message-ID: <20200715170843.w4rwl7zjwfcr7rg2@mobilestation>
-References: <20200709224550.15539-1-Sergey.Semin@baikalelectronics.ru>
- <20200709224550.15539-5-Sergey.Semin@baikalelectronics.ru>
- <d667adda-6576-623d-6976-30f60ab3c3dc@ti.com>
- <20200710092738.z7zyywe46mp7uuf3@mobilestation>
- <427bc5c8-0325-bc25-8637-a7627bcac26f@ti.com>
- <20200710161445.t6eradkgt4terdr3@mobilestation>
- <20200715111315.GK34333@vkoul-mobl>
+        id S1727042AbgGOThG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jul 2020 15:37:06 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:42190 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727021AbgGOThF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jul 2020 15:37:05 -0400
+Received: by mail-io1-f66.google.com with SMTP id c16so3488417ioi.9;
+        Wed, 15 Jul 2020 12:37:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WZaIoDzYYl/HXO7lkwjh/Xm4aTRVdttVJOPKuBMdG0Y=;
+        b=KCb12iau8xG2V+/g++kf3vHPFhzrDZ5WauN19JTO/8JKX4Qy1OtCAngL2FHXN3xT2H
+         6QZ0KO2MxGUueFK2Mz2TqZvzFRc0adoiEgIrlzydwiT7+F/2LbOZuliPQBJiJwvB767+
+         v3Wi83vs427LV48U+TbV2OahhvqgduxTpQW+srTsBBxzPkq3VI9SJRoXc07ZlZdtVZnv
+         uYf4A2+IcB4bVf8uz53vWg9glbvd0DziGvLA7tTSG0aR7llj7sM7myd4tpiTeG0N0NSU
+         T5j4ILG3CQuwz+KgYHWc2oTiMWkVeyJpzEmSgmT5P0wyLf29AcvCAqEllJzmwcuq1OPJ
+         NaGQ==
+X-Gm-Message-State: AOAM531/x88/ZKKzfO+hlbqLnTiRme8WOQYElWTBdMzaz84kMIKrYOMm
+        zC9rhqFkoQI1PWOukhECLLeFoAl3gw==
+X-Google-Smtp-Source: ABdhPJxcBpVavEBVS1LYGqWlui1bdPPAV/Of34Hrn8YE0UAQW3n3OJuA4f90VAJa6/W+EUbZLkh/vg==
+X-Received: by 2002:a6b:8d04:: with SMTP id p4mr901288iod.174.1594841823937;
+        Wed, 15 Jul 2020 12:37:03 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id k1sm1506055ilr.35.2020.07.15.12.37.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2020 12:37:03 -0700 (PDT)
+Received: (nullmailer pid 696024 invoked by uid 1000);
+        Wed, 15 Jul 2020 19:37:02 -0000
+Date:   Wed, 15 Jul 2020 13:37:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     od@zcrc.me, =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH 1/7] dt-bindings: vendor-prefixes: Add YLM
+Message-ID: <20200715193702.GA695993@bogus>
+References: <20200623182432.187843-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200715111315.GK34333@vkoul-mobl>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200623182432.187843-1-paul@crapouillou.net>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 04:43:15PM +0530, Vinod Koul wrote:
-> On 10-07-20, 19:14, Serge Semin wrote:
-> > On Fri, Jul 10, 2020 at 02:51:33PM +0300, Peter Ujfalusi wrote:
+On Tue, 23 Jun 2020 20:24:26 +0200, Paul Cercueil wrote:
+> Shenzhen Yangliming Electronic Technology Co., Ltd., abbreviated YLM or
+> YLMChina, and known as Anbernic in the rest of the world, is a Chinese
+> manufacturer of handheld game consoles, some of which are known to be
+> running Linux.
 > 
-> > > Since we should be able to handle longer lists and this is kind of a
-> > > hint for clients that above this number of nents the list will be broken
-> > > up to smaller 'bursts', which when traversing could cause latency.
-> > > 
-> > > sg_chunk_len might be another candidate.
-> > 
-> > Ok. We've got four candidates:
-> > - max_sg_nents_burst
-> > - max_sg_burst
-> > - max_sg_chain
-> > - sg_chunk_len
-> > 
-> > @Vinod, @Andy, what do you think?
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
-> So IIUC your hw supports single sg and in that you would like to publish
-> the length of each chunk, is that correct?
-
-No. My DMA engine does support only a single-entry SG-list, but the new DMA
-{~~slave~~,channel,device,peripheral,...} capability isn't about the length, but
-is about the maximum number of SG-list entries a DMA engine is able to
-automatically/"without software help" walk through and execute. In this thread
-we are debating about that new capability naming.
-
-The name suggested in this patch: max_sg_nents. Peter noted (I mostly agree with
-him), that it might be ambiguous, since from it (without looking into the
-dma_slave_caps structure comment) a user might think that it's a maximum number of
-SG-entries, which can be submitted for the DMA engine execution, while in fact it's
-about the DMA engine capability of automatic/burst/"without software intervention"
-SG-list entries walking through. (Such information will be helpful to solve a
-problem discussed in this mailing thread, and described in the cover-letter to
-this patchset. We also discussed it with you and Andy in the framework of this
-patchset many times.)
-
-As an alternative Peter suggested: max_sg_nents_burst. I also think it's better
-than "max_sg_nents" but for me it seems a bit long. max_sg_burst seems better.
-There is no need in having the "nents" in the name, since SG-list implies a list,
-which main parameter (if not to say only parameter) is the number of entries.
-"burst" is pointing out to the automatic/accelerated/"without software intervention"
-SG-list entries walking through.
-
-On the second thought suggested by me "max_sg_chain" sounds worse than "max_sg_burst",
-because it also might be perceived as a parameter limiting the number of SG-list
-entries is able to be submitted for the DMA engine execution, while in fact it
-describes another matter.
-
-Regarding "sg_chunk_len". I think it's ambiguous too, since the "chunk
-length" might be referred to both the entries length and to the sub-SG-list
-length.
-
-So what do you think? What name is better describing the new DMA capability?
-
--Sergey
-
-> If so sg_chunk_len seems apt..
-> 
-> -- 
-> ~Vinod
+Acked-by: Rob Herring <robh@kernel.org>
