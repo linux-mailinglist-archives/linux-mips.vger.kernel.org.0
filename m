@@ -2,88 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0BF222222
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jul 2020 14:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0FE222363
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jul 2020 15:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728126AbgGPMEn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jul 2020 08:04:43 -0400
-Received: from elvis.franken.de ([193.175.24.41]:38367 "EHLO elvis.franken.de"
+        id S1728257AbgGPNDL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jul 2020 09:03:11 -0400
+Received: from elvis.franken.de ([193.175.24.41]:38446 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727844AbgGPMEn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Jul 2020 08:04:43 -0400
+        id S1728093AbgGPNDK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Jul 2020 09:03:10 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jw2cz-0000rW-01; Thu, 16 Jul 2020 14:04:41 +0200
+        id 1jw3XT-0001Iu-00; Thu, 16 Jul 2020 15:03:03 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 26AA0C0813; Thu, 16 Jul 2020 14:04:00 +0200 (CEST)
-Date:   Thu, 16 Jul 2020 14:04:00 +0200
+        id 42D36C0813; Thu, 16 Jul 2020 14:59:28 +0200 (CEST)
+Date:   Thu, 16 Jul 2020 14:59:28 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 4/4] MIPS: Loongson64: Reserve legacy MMIO space
- according to bridge type
-Message-ID: <20200716120400.GB11361@alpha.franken.de>
-References: <1594294424-26218-1-git-send-email-chenhc@lemote.com>
- <1594294424-26218-4-git-send-email-chenhc@lemote.com>
- <20200716100030.GG8455@alpha.franken.de>
- <CAAhV-H6NE9EHxZOGxHqapK1Yj9hmVk0cXhcfG5__O5hNdVxR0Q@mail.gmail.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, Michal Simek <michal.simek@xilinx.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] MIPS: Retire kvm paravirt
+Message-ID: <20200716125928.GA12483@alpha.franken.de>
+References: <20200710063047.154611-1-jiaxun.yang@flygoat.com>
+ <20200710063047.154611-2-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAhV-H6NE9EHxZOGxHqapK1Yj9hmVk0cXhcfG5__O5hNdVxR0Q@mail.gmail.com>
+In-Reply-To: <20200710063047.154611-2-jiaxun.yang@flygoat.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 07:10:09PM +0800, Huacai Chen wrote:
-> Hi, Thomas,
+On Fri, Jul 10, 2020 at 02:30:16PM +0800, Jiaxun Yang wrote:
+> paravirt machine was introduced for Cavium's partial virtualization
+> technology, however, it's host side support and QEMU support never
+> landed in upstream.
 > 
-> On Thu, Jul 16, 2020 at 6:01 PM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> >
-> > On Thu, Jul 09, 2020 at 07:33:44PM +0800, Huacai Chen wrote:
-> > > Define MMIO_LOWER_RESERVED as a constant is incorrect, because different
-> > > PCHs (bridge types) have different legacy MMIO space size. According to
-> > > the datasheets, the legacy MMIO space size of LS7A is 0x20000, and which
-> > > of other PCHs is 0x4000. So it is necessary to reserve legacy MMIO space
-> > > according to the bridge type.
-> > >
-> > > Currently IO_SPACE_LIMIT is defined as 0xffff which is too small for the
-> > > LS7A bridge, so increase it to 0xfffff for LOONGSON64.
-> > >
-> > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> > > ---
-> > >  arch/mips/include/asm/io.h                     |  4 ++++
-> > >  arch/mips/include/asm/mach-loongson64/spaces.h |  3 ---
-> > >  arch/mips/loongson64/init.c                    | 18 ++++++++++++++----
-> > >  3 files changed, 18 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-> > > index 346fffd..7358372 100644
-> > > --- a/arch/mips/include/asm/io.h
-> > > +++ b/arch/mips/include/asm/io.h
-> > > @@ -51,7 +51,11 @@
-> > >
-> > >  /* ioswab[bwlq], __mem_ioswab[bwlq] are defined in mangle-port.h */
-> > >
-> > > +#ifndef CONFIG_CPU_LOONGSON64
-> > >  #define IO_SPACE_LIMIT 0xffff
-> > > +#else
-> > > +#define IO_SPACE_LIMIT 0xfffff
-> > > +#endif
-> >
-> > can you please move this #define to mach-generic/spaces.h and
-> > override it in mach-loongson64/spaces.h ?
-> Maybe that's not a good idea, because all other archs define
-> IO_SPACE_LIMIT in io.h, moving to another file may cause some build
-> errors.
+> As Cavium was acquired by Marvel and they have no intention to maintain
+> their MIPS product line, also paravirt is unlikely to be utilized by
+> community users, it's time to retire it if nobody steps in to maintain
+> it.
 
-it's already included via asm/addrspace.h
+I've fine deleting it. I'll wait a few more days before applying this patch.
+So if anybody wants to keep it, speak up now.
 
 Thomas.
 
