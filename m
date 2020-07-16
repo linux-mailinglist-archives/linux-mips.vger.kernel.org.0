@@ -2,110 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A352219C6
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jul 2020 04:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B922219CE
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jul 2020 04:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbgGPCTa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Jul 2020 22:19:30 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:37408 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726770AbgGPCTa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 Jul 2020 22:19:30 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxqdQbuQ9ff2QFAA--.5347S2;
-        Thu, 16 Jul 2020 10:19:08 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v3] PCI: loongson: Use DECLARE_PCI_FIXUP_EARLY for bridge_class_quirk()
-Date:   Thu, 16 Jul 2020 10:19:06 +0800
-Message-Id: <1594865946-15188-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9CxqdQbuQ9ff2QFAA--.5347S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF4kGr4UtrW7Gr4xZr47urg_yoW5Cw4Dpa
-        y5Ja12kF4FqFZ8AwnrW34DCasY9FnxArykCa9xWwnF9a43ua45WrW7KF9YqF45Jw4kXr4U
-        Xas8C3W8Ja15urUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-        628vn2kIc2xKxwCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyU
-        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUF3kuDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1727114AbgGPCUJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jul 2020 22:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726770AbgGPCUI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jul 2020 22:20:08 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BF6C061755;
+        Wed, 15 Jul 2020 19:20:08 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id c16so4416029ioi.9;
+        Wed, 15 Jul 2020 19:20:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=K/9/0SgT5wZwj9R1sUpghAh7g+m3fTsSEDjugLqxv8g=;
+        b=AmaTntOhlM4JMpice0Mu6RueTbKa9PX+0i/1Y0wXYX3sQf4/ejGiVFod6jfAFwtznn
+         114JAsWVBWEtd+7RHxF3gPeFFdZB+nUp1nq6pV45Ie6uGGTO7u9oPh/zstwy86v5HSgz
+         FuzwLvhkYIMUn5Y/ruAar309gX3p1x+Iqk9TfRXNxT5d5vHTFy9vZp8ieyiimbWwgzdV
+         RusncxjDRivjZF/2CVhAL5tJzyDKz3F87J+H8HpdJSDVtsgAbIEUYGOdEGSbdIYR7zI+
+         6ncZtYnLw6o/4T5VJ7x75Wc9VIfYrTjneocgunyBQjeq4aFi5RG0gELTTHGkQJPsbkYN
+         7DgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K/9/0SgT5wZwj9R1sUpghAh7g+m3fTsSEDjugLqxv8g=;
+        b=oN2rzsxp2sVSw1gpc4FOd60sGodb3FsSc4rmXx4iOTdMdA94Q5wAKeQpx8N0QYvvAe
+         PNt0RHFQtTkqng/zy3Np6B8nGM5Uw/VBaMr25akHyPph4JxNI15H42Tzi39+hx3A1ecm
+         5AxN6A3DIYeOshwuFDhLCokdnKzM4f9XAeteO7O/aoW79DwacPBt21kzAVTW24kD5Ccn
+         pseH7S1O3lGo+yoI6JA/aZWeBekJxEYe4uZOdqZG7R1RdgpA4AGQN4DEjhfhB2GvS3M+
+         eB/UbhymNiAOMAsrXCGClGrj2O5Ju5mZAGUij4HjMYldDxaF4Ry5R4h11+skBdKlcXw/
+         YrGA==
+X-Gm-Message-State: AOAM532Zx1wlqeW+2hQZJAMojIEabD0SJaQ1x8cIHfh7jG+qHH3r/0G0
+        MVazBrX6b50YG93yl73gRnSAbU0xNrCl0tKaIFs/8HGlNno=
+X-Google-Smtp-Source: ABdhPJxd2FP6wrXSARjYJQs4NkI4C6Vi3SJiTATKbF/80/JnJaXB2T4OQeYu/4X4ob+oS3tvJy/DqPj0y8+T9cs7JMQ=
+X-Received: by 2002:a05:6602:1685:: with SMTP id s5mr2237314iow.84.1594866008138;
+ Wed, 15 Jul 2020 19:20:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200623131418.31473-1-tianjia.zhang@linux.alibaba.com>
+ <20200623131418.31473-6-tianjia.zhang@linux.alibaba.com> <e447bb5c-8b83-dfb1-a293-f2e9e586c2ec@flygoat.com>
+In-Reply-To: <e447bb5c-8b83-dfb1-a293-f2e9e586c2ec@flygoat.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 16 Jul 2020 10:19:56 +0800
+Message-ID: <CAAhV-H53JLTtyi=3vvSw3xxR12YiJq-5SKRXZzVcFLt=r2iXgQ@mail.gmail.com>
+Subject: Re: [PATCH v6 5/5] KVM: MIPS: clean up redundant kvm_run parameters
+ in assembly
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-According to the datasheet of Loongson LS7A bridge chip, the old version
-of Loongson LS7A PCIE port has a hardware bug about PCI class. As far as
-I know, the latest version has already fixed this bug.
+Hi, all,
 
-In order to maintain downward compatibility, use DECLARE_PCI_FIXUP_EARLY
-instead of DECLARE_PCI_FIXUP_HEADER for bridge_class_quirk() to fix it as
-early as possible.
+On Thu, Jul 16, 2020 at 10:10 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrot=
+e:
+>
+>
+>
+> =E5=9C=A8 2020/6/23 21:14, Tianjia Zhang =E5=86=99=E9=81=93:
+> > In the current kvm version, 'kvm_run' has been included in the 'kvm_vcp=
+u'
+> > structure. For historical reasons, many kvm-related function parameters
+> > retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time. This
+> > patch does a unified cleanup of these remaining redundant parameters.
+> >
+> > Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> > Reviewed-by: Huacai Chen <chenhc@lemote.com>
+>
+> Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>
+> Can confirm it works on Loongson-3A4000.
+I'm sorry for the late response, and thank Jiaxun for his tests.
 
-Otherwise, in the function pci_setup_device(), the related code about
-"dev->class" such as "class = dev->class >> 8;" and "dev->transparent
-= ((dev->class & 0xff) == 1);" maybe get wrong value due to without
-EARLY fixup.
-
-By the way, we can see that the PCI class fixup of other controllers are
-all EARLY fixups:
-
-[root@linux linux.git]# grep -rn -A 3 "PCI_CLASS_BRIDGE_PCI << 8" drivers/pci/controller/ | grep EARLY
-drivers/pci/controller/pcie-tango.c-327-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_SIGMA, 0x0024, tango_fixup_class);
-drivers/pci/controller/pcie-tango.c-328-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_SIGMA, 0x0028, tango_fixup_class);
-drivers/pci/controller/pci-tegra.c-775-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_NVIDIA, 0x0bf0, tegra_pcie_fixup_class);
-drivers/pci/controller/pci-tegra.c-776-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_NVIDIA, 0x0bf1, tegra_pcie_fixup_class);
-drivers/pci/controller/dwc/pcie-qcom.c-1442-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0101, qcom_fixup_class);
-drivers/pci/controller/dwc/pcie-qcom.c-1443-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0104, qcom_fixup_class);
-drivers/pci/controller/pcie-iproc-bcma.c-23-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_BROADCOM, 0x8011, bcma_pcie2_fixup_class);
-drivers/pci/controller/pcie-iproc-bcma.c-24-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_BROADCOM, 0x8012, bcma_pcie2_fixup_class);
-
-Fixes: 1f58cca5cf2b ("PCI: Add Loongson PCI Controller support")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-
-v2: Modify the patch subject used with lower case "loongson"
-
-v3: Update the commit message
-
- drivers/pci/controller/pci-loongson.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-index 459009c..58b862a 100644
---- a/drivers/pci/controller/pci-loongson.c
-+++ b/drivers/pci/controller/pci-loongson.c
-@@ -37,11 +37,11 @@ static void bridge_class_quirk(struct pci_dev *dev)
- {
- 	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
- }
--DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
- 			DEV_PCIE_PORT_0, bridge_class_quirk);
--DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
- 			DEV_PCIE_PORT_1, bridge_class_quirk);
--DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
- 			DEV_PCIE_PORT_2, bridge_class_quirk);
- 
- static void system_bus_quirk(struct pci_dev *pdev)
--- 
-2.1.0
-
+Huacai
+>
+> Thanks!
+>
+> > ---
+>
+> --
+> - Jiaxun
