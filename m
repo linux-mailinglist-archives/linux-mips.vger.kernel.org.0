@@ -2,152 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC65221F5A
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jul 2020 11:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19048221FCE
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jul 2020 11:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728470AbgGPJD3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jul 2020 05:03:29 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7767 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726440AbgGPJD2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Jul 2020 05:03:28 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id A775DAD475FB705B7DF6;
-        Thu, 16 Jul 2020 17:03:27 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 16 Jul 2020 17:03:25 +0800
-From:   Qinglang Miao <miaoqinglang@huawei.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>
-CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] mips: Convert to DEFINE_SHOW_ATTRIBUTE
-Date:   Thu, 16 Jul 2020 17:07:21 +0800
-Message-ID: <20200716090721.14436-1-miaoqinglang@huawei.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+        id S1726968AbgGPJhX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jul 2020 05:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725975AbgGPJhW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Jul 2020 05:37:22 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C05C061755;
+        Thu, 16 Jul 2020 02:37:22 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id x9so3626406plr.2;
+        Thu, 16 Jul 2020 02:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=7NAnZNOW9RnOu3wm5S7KBfhMHZl/bPVZtLS6stku3C0=;
+        b=T/kOZWQ0OXEOBX7qh4Q5LFhAWW3G0FMDDErt2JJeUxvVvc0lzf/OJY4ATloZgcQ0g3
+         XrRLtRJSawAyy4DC2Gfu0FtZPdy/Kf9ncRZ+VhADrhJERQyE7ru5MbSiFcMHxQ7yoK+P
+         PHRDmay6NqpmJlE7fOFNvMOT9rJC71RB2b7FXCQY4y6dBlat+vi2LKwc8Cscj/yNg1KL
+         mU0R+hCJ+woOwPDp8PjY53U2KFdMK16PxDaOwaJa2Bq6yR9msbLrZBdbDnMKaDMOEHy4
+         F6ielKWSJIvLvosprMCfwqsm4lpsDXlzj/QNpSrE3PhgUJBiCHf+Fg05FnirdM/4559m
+         TzWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=7NAnZNOW9RnOu3wm5S7KBfhMHZl/bPVZtLS6stku3C0=;
+        b=lPEZKHsWtu0OtSLSoWGKSU6LVxWS0SCoT/R+l1vMlbDOInjsTMJhItJrD/5xOZHdwz
+         wvAN6vERhhuelyDHKFU/htXLnuhe7fxbSB8Wu4ScKiMMJqwKx7own5Yr7f/uF4c42vlz
+         B0TsBKiKcrhm6TB6AARUIkrBVk4hWWCvOKYdfOYa6h+Qfk4VpNV5VN0fG1buizoDSiFo
+         3AL2fnUbLP6NrgOXnL8U4MlCo7HWVKKpp/easKhMj0XI6FwRgrRu46lRj1YjYA6k15h6
+         mZhDmjx0ksg+uA+0AI3oUuvOhUxT8CKcDK8NbSw3O9a1vBYrAyJX4KY+y3IdHfntdB6w
+         P6qw==
+X-Gm-Message-State: AOAM531bJwJ9nJEawlHS/yIL+2abbpRAALPBuZkS4nLj8yoMnrXXCLao
+        3tuyLP+aOYX69NlumWfd0go7egGUdzQ5gA==
+X-Google-Smtp-Source: ABdhPJxbN08AJydzVzFjZaKsNAf1GlxJkrYVy3CkwoCswSYz6ZwHbI+R/8vLHV0hb+dfMPK/vyXmAg==
+X-Received: by 2002:a17:90a:2b8f:: with SMTP id u15mr3853403pjd.98.1594892242062;
+        Thu, 16 Jul 2020 02:37:22 -0700 (PDT)
+Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
+        by smtp.gmail.com with ESMTPSA id a11sm4523871pjw.35.2020.07.16.02.37.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 Jul 2020 02:37:21 -0700 (PDT)
+From:   Huacai Chen <chenhc@lemote.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "Stable # 4 . 4/4 . 9/4 . 14/4 . 19" <stable@vger.kernel.org>
+Subject: [PATCH -stable] MIPS: Fix build for LTS kernel caused by backporting lpj adjustment
+Date:   Thu, 16 Jul 2020 17:39:29 +0800
+Message-Id: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
+X-Mailer: git-send-email 2.7.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Chen Huang <chenhuang5@huawei.com>
+Commit ed26aacfb5f71eecb20a ("mips: Add udelay lpj numbers adjustment")
+has backported to 4.4~5.4, but the "struct cpufreq_freqs" (and also the
+cpufreq notifier machanism) of 4.4~4.19 are different from the upstream
+kernel. These differences cause build errors, and this patch can fix the
+build.
 
-Use DEFINE_SHOW_ATTRIBUTE macro to simplify the code.
-
-Signed-off-by: Chen Huang <chenhuang5@huawei.com>
+Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Stable <stable@vger.kernel.org> # 4.4/4.9/4.14/4.19
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
 ---
- arch/mips/cavium-octeon/oct_ilm.c | 16 +++-------------
- arch/mips/kernel/segment.c        | 14 ++------------
- arch/mips/ralink/bootrom.c        | 14 ++------------
- 3 files changed, 7 insertions(+), 37 deletions(-)
+ arch/mips/kernel/time.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/arch/mips/cavium-octeon/oct_ilm.c b/arch/mips/cavium-octeon/oct_ilm.c
-index 4d91cb8da..10ed6ebdb 100644
---- a/arch/mips/cavium-octeon/oct_ilm.c
-+++ b/arch/mips/cavium-octeon/oct_ilm.c
-@@ -28,7 +28,7 @@ struct latency_info {
- static struct latency_info li;
- static struct dentry *dir;
- 
--static int show_latency(struct seq_file *m, void *v)
-+static int oct_ilm_show(struct seq_file *m, void *v)
+diff --git a/arch/mips/kernel/time.c b/arch/mips/kernel/time.c
+index b7f7e08..b15ee12 100644
+--- a/arch/mips/kernel/time.c
++++ b/arch/mips/kernel/time.c
+@@ -40,10 +40,8 @@ static unsigned long glb_lpj_ref_freq;
+ static int cpufreq_callback(struct notifier_block *nb,
+ 			    unsigned long val, void *data)
  {
- 	u64 cpuclk, avg, max, min;
- 	struct latency_info curr_li = li;
-@@ -44,17 +44,7 @@ static int show_latency(struct seq_file *m, void *v)
- 	return 0;
- }
+-	struct cpufreq_freqs *freq = data;
+-	struct cpumask *cpus = freq->policy->cpus;
+-	unsigned long lpj;
+ 	int cpu;
++	struct cpufreq_freqs *freq = data;
  
--static int oct_ilm_open(struct inode *inode, struct file *file)
--{
--	return single_open(file, show_latency, NULL);
--}
--
--static const struct file_operations oct_ilm_ops = {
--	.open = oct_ilm_open,
--	.read_iter = seq_read_iter,
--	.llseek = seq_lseek,
--	.release = single_release,
--};
-+DEFINE_SHOW_ATTRIBUTE(oct_ilm);
+ 	/*
+ 	 * Skip lpj numbers adjustment if the CPU-freq transition is safe for
+@@ -64,6 +62,7 @@ static int cpufreq_callback(struct notifier_block *nb,
+ 		}
+ 	}
  
- static int reset_statistics(void *data, u64 value)
- {
-@@ -67,7 +57,7 @@ DEFINE_SIMPLE_ATTRIBUTE(reset_statistics_ops, NULL, reset_statistics, "%llu\n");
- static void init_debugfs(void)
- {
- 	dir = debugfs_create_dir("oct_ilm", 0);
--	debugfs_create_file("statistics", 0222, dir, NULL, &oct_ilm_ops);
-+	debugfs_create_file("statistics", 0222, dir, NULL, &oct_ilm_fops);
- 	debugfs_create_file("reset", 0222, dir, NULL, &reset_statistics_ops);
- }
++	cpu = freq->cpu;
+ 	/*
+ 	 * Adjust global lpj variable and per-CPU udelay_val number in
+ 	 * accordance with the new CPU frequency.
+@@ -74,12 +73,8 @@ static int cpufreq_callback(struct notifier_block *nb,
+ 						glb_lpj_ref_freq,
+ 						freq->new);
  
-diff --git a/arch/mips/kernel/segment.c b/arch/mips/kernel/segment.c
-index 9ea0c2e79..778487bf3 100644
---- a/arch/mips/kernel/segment.c
-+++ b/arch/mips/kernel/segment.c
-@@ -46,7 +46,7 @@ static void build_segment_config(char *str, unsigned int cfg)
- 		((cfg & MIPS_SEGCFG_EU) >> MIPS_SEGCFG_EU_SHIFT));
- }
+-		for_each_cpu(cpu, cpus) {
+-			lpj = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
+-					    per_cpu(pcp_lpj_ref_freq, cpu),
+-					    freq->new);
+-			cpu_data[cpu].udelay_val = (unsigned int)lpj;
+-		}
++		cpu_data[cpu].udelay_val = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
++					   per_cpu(pcp_lpj_ref_freq, cpu), freq->new);
+ 	}
  
--static int show_segments(struct seq_file *m, void *v)
-+static int segments_show(struct seq_file *m, void *v)
- {
- 	unsigned int segcfg;
- 	char str[42];
-@@ -81,17 +81,7 @@ static int show_segments(struct seq_file *m, void *v)
- 	return 0;
- }
- 
--static int segments_open(struct inode *inode, struct file *file)
--{
--	return single_open(file, show_segments, NULL);
--}
--
--static const struct file_operations segments_fops = {
--	.open		= segments_open,
--	.read_iter		= seq_read_iter,
--	.llseek		= seq_lseek,
--	.release	= single_release,
--};
-+DEFINE_SHOW_ATTRIBUTE(segments);
- 
- static int __init segments_info(void)
- {
-diff --git a/arch/mips/ralink/bootrom.c b/arch/mips/ralink/bootrom.c
-index bc83a355f..c57fd38fd 100644
---- a/arch/mips/ralink/bootrom.c
-+++ b/arch/mips/ralink/bootrom.c
-@@ -19,21 +19,11 @@ static int bootrom_show(struct seq_file *s, void *unused)
- 	return 0;
- }
- 
--static int bootrom_open(struct inode *inode, struct file *file)
--{
--	return single_open(file, bootrom_show, NULL);
--}
--
--static const struct file_operations bootrom_file_ops = {
--	.open		= bootrom_open,
--	.read_iter		= seq_read_iter,
--	.llseek		= seq_lseek,
--	.release	= single_release,
--};
-+DEFINE_SHOW_ATTRIBUTE(bootrom);
- 
- static int __init bootrom_setup(void)
- {
--	debugfs_create_file("bootrom", 0444, NULL, NULL, &bootrom_file_ops);
-+	debugfs_create_file("bootrom", 0444, NULL, NULL, &bootrom_fops);
- 	return 0;
- }
- 
+ 	return NOTIFY_OK;
 -- 
-2.17.1
+2.7.0
 
