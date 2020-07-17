@@ -2,82 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA5C223017
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jul 2020 02:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7346D223055
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jul 2020 03:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbgGQApo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jul 2020 20:45:44 -0400
-Received: from sonic314-21.consmr.mail.ne1.yahoo.com ([66.163.189.147]:41005
-        "EHLO sonic314-21.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726138AbgGQApn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Jul 2020 20:45:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1594946743; bh=GR4TRCXK6wRteJXXqtI/y/2pwYNeSYeNMXUPo1+ojQ4=; h=Date:From:Reply-To:Subject:References:From:Subject; b=dL1gQX6FsaygUNIciTOKEmEu+NTUnVqzvtAyKcbTitHuyetclTkEkQTv5iFWi2TLsLYg5Me15+3e7WCwFl10nazybzgWQhJRRsiN8wCkHz9+b7rPohyAcExGo8KySVvHiegItJ3zDi3Hzu5E9gar+uJgJ2iJ5GKfyB/p3+uC2InfGvP8hv5C5o+p9Fo/wsVToz+ZWlzpOwF7c5lPA+sr7yH6mj/0iQkzMkre8nps8qntDQdnUZIspUbtklu7RC1T6KTKrBkzalc4iQwXnu1PVSHXihAYI7F9iNUuJVyA4EaLHsC0pboBBL6OMM/UhD4XEXrut3V1ymQ3wUUOoobkgw==
-X-YMail-OSG: cR2giLUVM1kWklA9tplsp.jPozlvucXEOHQkpr_GDRqDm2jwjq.5kqqeq8HcvKt
- VfxqHApTPZ_giGkozPnlwoSV7RGpw4uhKc1nkxByJ6.j_mqQXB.vbRYb.9C8BF4zBk3tVp8xLt60
- oY6r0yVPp7s4qDim8MCQ97p2DRavmdkV1gsqyN9x4G7Ra_ekVjBpbPA3KxznRl44w6NOhePZsBG7
- ZZuvVx_INpIANLMmtM6EoDqhEK3enupTY8HZQQp8.xKeUia34wZFOFUe_ItYyV1jCwLGZxHyOwqf
- JDMcW0DF3tfSQJBp_43_148zO5qAgyIOeLMYyhkk85tHW._2a2vO6urnog0DtiCPgRXhhlk8Jnwg
- Ds66wkmFlGYArP8ql4zTdiBJMrE1Pat9sERtTEG4ArBRXp7VZyExfcbs7DU.hCbq.OUAxFFEsCbK
- .riSVfodTZ_D9fKBn7ZaLrl7h_9pB9y4qt05X6lMe5qB7_nRDRJpRzMa7.HVeYrMifhBUO4edc.Q
- D8DPe7xX6WKmp9taQyVbRlAfKvGBHTpJ4NCzMVJNpn9D38ZKnaqx1KO7qP8yco9ddb_yDFxgnt25
- l4_p31jmmkBDKbAM8prAlTBMMSd9Rj2WDYPzNv.hodtgkpBVTP_TuarKZm1nS4_ZilzQHtdF3Fep
- xHZnzjDGeQTQC_cn1Oy.Cc4NEU8K5uXoPbb__hKS6ZI3mPMv1cvloj4Ayez8aWreiwd9L0E5PPC3
- dUrF7r6c4o_jhFHpIGsm8z79gbYV8ymjghZVZXH0vUU3r220fji1149tvV31HRc1XjO9zzvy.tp0
- xhUoO_kentJ0mg3G7nHNVX7h_wASSoB5ImBe7Gg4aTKMCWVnUjNGoZaJQ2XFNIQG9YWResFhXFXH
- 23V5CBeL0oXpox2XtjYo0x1ojOqOo.fbORYWQDRgnWwjZVpeAkzcCjwevwmeu31zDOqXrNLPB2kC
- 4mPrIszRhRF6GWgaI0pCeJ.dKBMka80X3q6QUV68yySv4Dd0jqEBzqRiXBC0e4MeFoEmIZoD5hJR
- raaVh1HqTQqM0Qh9RWOh1JwlZe8Y6KF5lznBbHMO1I7GL.yuzOmyzVAfCDAI46SjMA7jFeRPYhBo
- bGEE8fXfAnW55vbJOoaif5rJhT412HZ9woSnt5TkkFwys3MYcVC.wa7GIPGWB8GevAzPuNRgm1v9
- cXaOAAhnvxfUTgGCDL8FevmFd.sFLX1Zyokqf5y2lhwHR77md2IXx6USqMmssFNbFC5LCPcSkhJn
- X98UCB56dpG9Xo4l7MYXGi3tE7DgdaWze_fxfTxctkEf.4x7fJSFrZAQW9dadx0FcSPyovQ--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Fri, 17 Jul 2020 00:45:43 +0000
-Date:   Fri, 17 Jul 2020 00:45:42 +0000 (UTC)
-From:   Jak Abdullah mishail <mjakabdullah@gmail.com>
-Reply-To: mishailjakabdullah@gmail.com
-Message-ID: <609068648.2948766.1594946742331@mail.yahoo.com>
-Subject: I NEED YOUR ASSISTANCE AND CO-OPERATION TO INVEST IN YOUR COUNTRY,
+        id S1726401AbgGQBdY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jul 2020 21:33:24 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:36980 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbgGQBdY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Jul 2020 21:33:24 -0400
+Received: by mail-io1-f68.google.com with SMTP id v6so8599891iob.4
+        for <linux-mips@vger.kernel.org>; Thu, 16 Jul 2020 18:33:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QRZYFgYg5fhavZDy+s6ULls+ac5ZOeG8EI+0gG8xhwA=;
+        b=BBe6F6PhLOvKwoHZskwa5BOv1RUuBnhn3HbYZTICDoivQAV6Gh8/Cwa76Uy90ymSc/
+         vT6JrEwSUdekk22e7G3O4jg4kR5sscaGL4GDb0JfqyKQePqppafvzZ7hp2Pg/BPApZ6w
+         dVMtJMRtsaNGimNVPYUNnyRUjAguvyhoGUiiIT98EjvMGo12WcyKiy0z5SaO7syBzO17
+         0mWU4HNtQwHbXyKPSfOrh74OmonF/pMmFBJT42fog/qLYtK/GYJZ9qyTABGnSVf1gCh7
+         mS2jGEcLkRugDrQgQ6a4wby1GMGBQ/i3Kp5QvtXuhh9XBWBw2FyGRU2AyGo9MIifMp40
+         ozDg==
+X-Gm-Message-State: AOAM531VKE31fGSwTbwF1Bd+z8B7amrUzjdpM1hs2wSCmlLhBMzl+df3
+        /3XYxknj00cwa8UuV3gH90H/Gq2fgoVcZVMoxkU=
+X-Google-Smtp-Source: ABdhPJymSBxY4i014mYXmeyjl+h0yxqj5w4KknaniYw6OD6QlK6bKUD4CJ0uDiEgl0yECE8s+PEjVs9h+vN+A6a9uOo=
+X-Received: by 2002:a05:6602:1408:: with SMTP id t8mr7346355iov.125.1594949603311;
+ Thu, 16 Jul 2020 18:33:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <609068648.2948766.1594946742331.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16271 YMailNodin Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0
-To:     unlisted-recipients:; (no To-header on input)
+References: <1594294424-26218-1-git-send-email-chenhc@lemote.com>
+ <1594294424-26218-4-git-send-email-chenhc@lemote.com> <20200716100030.GG8455@alpha.franken.de>
+ <CAAhV-H6NE9EHxZOGxHqapK1Yj9hmVk0cXhcfG5__O5hNdVxR0Q@mail.gmail.com> <20200716120400.GB11361@alpha.franken.de>
+In-Reply-To: <20200716120400.GB11361@alpha.franken.de>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Fri, 17 Jul 2020 09:33:11 +0800
+Message-ID: <CAAhV-H5GeBObxk71pt4GoUQ6nGRJ6NPG9pxwvke3QcjReMeE0g@mail.gmail.com>
+Subject: Re: [PATCH 4/4] MIPS: Loongson64: Reserve legacy MMIO space according
+ to bridge type
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Greeting,
+Hi, Thomas,
 
-My Name is Mr.Jak Abdullah mishail from Damascus Syria, and I am now resign=
-ed from the government. I am a member of an opposition party government in =
-Syria and a business man also,
-
-I need a foreign partner to enable me transport my investment capital and t=
-hen Relocate with my family, honestly I wish I will discuss more and get al=
-ong I need a partner because my investment capital is in my international a=
-ccount. Am interested in buying Properties, houses, building real estates a=
-nd some tourist places, my capital for investment is ($16.5 million USD) Me=
-anwhile if there is any profitable investment that you have so much experie=
-nce on it then we can join together as partners since I=E2=80=99m a foreign=
-er.
-
-I came across your e-mail contact through private search while in need of y=
-our assistance and I decided to contact you directly to ask you if you know=
- any Lucrative Business Investment in your Country I can invest my Money si=
-nce my Country Syria Security and Economic Independent has lost to the Grea=
-test Lower level, and our Culture has lost forever including our happiness =
-has been taken away from us. Our Country has been on fire for many years no=
-w.
-
-If you are capable of handling this business Contact me for more details i =
-will appreciate it if you can contact me immediately.
-You may as well tell me little more about yourself. Contact me urgently to =
-enable us proceed with the business.
-
-I will be waiting for your respond.
-
-Sincerely Yours,
-
-Jak Abdullah mishail
+On Thu, Jul 16, 2020 at 8:05 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Thu, Jul 16, 2020 at 07:10:09PM +0800, Huacai Chen wrote:
+> > Hi, Thomas,
+> >
+> > On Thu, Jul 16, 2020 at 6:01 PM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > >
+> > > On Thu, Jul 09, 2020 at 07:33:44PM +0800, Huacai Chen wrote:
+> > > > Define MMIO_LOWER_RESERVED as a constant is incorrect, because different
+> > > > PCHs (bridge types) have different legacy MMIO space size. According to
+> > > > the datasheets, the legacy MMIO space size of LS7A is 0x20000, and which
+> > > > of other PCHs is 0x4000. So it is necessary to reserve legacy MMIO space
+> > > > according to the bridge type.
+> > > >
+> > > > Currently IO_SPACE_LIMIT is defined as 0xffff which is too small for the
+> > > > LS7A bridge, so increase it to 0xfffff for LOONGSON64.
+> > > >
+> > > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > > > ---
+> > > >  arch/mips/include/asm/io.h                     |  4 ++++
+> > > >  arch/mips/include/asm/mach-loongson64/spaces.h |  3 ---
+> > > >  arch/mips/loongson64/init.c                    | 18 ++++++++++++++----
+> > > >  3 files changed, 18 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> > > > index 346fffd..7358372 100644
+> > > > --- a/arch/mips/include/asm/io.h
+> > > > +++ b/arch/mips/include/asm/io.h
+> > > > @@ -51,7 +51,11 @@
+> > > >
+> > > >  /* ioswab[bwlq], __mem_ioswab[bwlq] are defined in mangle-port.h */
+> > > >
+> > > > +#ifndef CONFIG_CPU_LOONGSON64
+> > > >  #define IO_SPACE_LIMIT 0xffff
+> > > > +#else
+> > > > +#define IO_SPACE_LIMIT 0xfffff
+> > > > +#endif
+> > >
+> > > can you please move this #define to mach-generic/spaces.h and
+> > > override it in mach-loongson64/spaces.h ?
+> > Maybe that's not a good idea, because all other archs define
+> > IO_SPACE_LIMIT in io.h, moving to another file may cause some build
+> > errors.
+>
+> it's already included via asm/addrspace.h
+Yes, you are right, I'll send V2.
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
