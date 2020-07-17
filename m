@@ -2,96 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 250362238D8
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jul 2020 12:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB6A22393C
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jul 2020 12:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbgGQKAY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jul 2020 06:00:24 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:30532 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725864AbgGQKAX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jul 2020 06:00:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1594980022; x=1626516022;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=vQ2ImtfRZyj0kAtoB4fUjN5q3ds0AJVtdj0mCNHOPw8=;
-  b=mRHQH2YHwIi17bE30SzNOkO6Osj7dUCH4U+yPwKO/eMlBZOMSL9JNVwY
-   N0fCYE6a54bpv+XVRyEU0NeiIsicZxr32MTsCXYpsSg/GXKmaojC1t7fY
-   2iF9R1+4+vcwsgYkpJkvk+naRjfKY3vIhxJLM+IC3J2yvT1yYQJzLDExG
-   F/wK4M/UfEuT1OgjtmwOKNqvzKg1Kj2hbY0b3lI2qgx89pJWKfjBHAWN0
-   D82izDheKxH1ytFZPUDeh76LPqpQvb/vHoa6Nao4uuDNzbd9sWdd0+Ye6
-   IwRMb56ergYudwaOpT2jxYNcK2mLDyYyBrQLhX4LDy5001wStmlyfZRHy
-   w==;
-IronPort-SDR: A1UpebW7/PWJ6JLdUyFI7rQX4qZyGjpeQD33D4uTqS44rt+BfepdRBh8XUYfACx9EbdKYk/Y2c
- 3vtsWoYBzuTaJLG220LBxr7568mVNSLKAAraPjR6dR9UzHKO+bADvE6zcXQJC1sakToN62vo5q
- NgbeiyvBm87JPPUCUxFtmnQ666fS+65aUbaNTcnZkyFIImA4/SOJ6L/1mSip2xCoTzf5QnWozc
- 5yqm1N8mVC49V27cM5E1vGSCGqeyhffyvKWeGVGUi0dWx+YioAbN0t2lQmmPrhsNCoLxJCcY17
- udU=
-X-IronPort-AV: E=Sophos;i="5.75,362,1589212800"; 
-   d="scan'208";a="251971917"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 17 Jul 2020 18:00:22 +0800
-IronPort-SDR: f9vfUf2pFQWJ8+lNQ04XXBbuhljU2nuLirptshi7O7+2iWJSHKEb0ZldaqpO5YoQHH4B87NSyj
- 2aH+BnDRDA07sX6hY9oSpvpmHYthkqk70=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 02:48:11 -0700
-IronPort-SDR: Few0pq9UDnEi1rkPglf8o17OfuANd9zMmPZqD5dk+SyOrI9wD0xwtIiGehCM8iIdlFweLIXJ/l
- aZH7rRhluDzA==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 03:00:21 -0700
-Date:   Fri, 17 Jul 2020 11:00:18 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@wdc.com>
+        id S1726205AbgGQK2u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jul 2020 06:28:50 -0400
+Received: from foss.arm.com ([217.140.110.172]:50922 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725864AbgGQK2u (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 17 Jul 2020 06:28:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A68A1D6E;
+        Fri, 17 Jul 2020 03:28:49 -0700 (PDT)
+Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 56D223F66E;
+        Fri, 17 Jul 2020 03:28:48 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 11:28:42 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-Subject: Re: [PATCH] MIPS: Prevent READ_IMPLIES_EXEC propagation
-In-Reply-To: <b62c76c5-3548-c3d5-ad3e-5664c463a52f@loongson.cn>
-Message-ID: <alpine.LFD.2.21.2007171044320.24175@redsun52.ssa.fujisawa.hgst.com>
-References: <1594114741-26852-1-git-send-email-yangtiezhu@loongson.cn> <alpine.LFD.2.21.2007072043250.31807@redsun52.ssa.fujisawa.hgst.com> <b62c76c5-3548-c3d5-ad3e-5664c463a52f@loongson.cn>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH v3] PCI: loongson: Use DECLARE_PCI_FIXUP_EARLY for
+ bridge_class_quirk()
+Message-ID: <20200717102842.GA4353@e121166-lin.cambridge.arm.com>
+References: <1594865946-15188-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1594865946-15188-1-git-send-email-yangtiezhu@loongson.cn>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 8 Jul 2020, Tiezhu Yang wrote:
+On Thu, Jul 16, 2020 at 10:19:06AM +0800, Tiezhu Yang wrote:
+> According to the datasheet of Loongson LS7A bridge chip, the old version
+> of Loongson LS7A PCIE port has a hardware bug about PCI class. As far as
+> I know, the latest version has already fixed this bug.
 
-> >> In the MIPS architecture, we should clear the security-relevant
-> >> flag READ_IMPLIES_EXEC in the function SET_PERSONALITY2() of the
-> >> file arch/mips/include/asm/elf.h.
-> >>
-> >> Otherwise, with this flag set, PROT_READ implies PROT_EXEC for
-> >> mmap to make memory executable that is not safe, because this
-> >> condition allows an attacker to simply jump to and execute bytes
-> >> that are considered to be just data [1].
-> >   Why isn't the arrangement made with `mips_elf_read_implies_exec'
-> > sufficient?
+Please define the bug and how are you fixing it, that's it.
+
+> In order to maintain downward compatibility, use DECLARE_PCI_FIXUP_EARLY
+> instead of DECLARE_PCI_FIXUP_HEADER for bridge_class_quirk() to fix it as
+> early as possible.
 > 
-> We inherit the READ_IMPLIES_EXEC personality flag across fork().
-> If we do not explicitly clear this flag in SET_PERSONALITY2(),
-> PROT_READ implies PROT_EXEC for mmap to make memory executable
-> even if used with the GCC option "-z noexecstack" when compile.
+> Otherwise, in the function pci_setup_device(), the related code about
+> "dev->class" such as "class = dev->class >> 8;" and "dev->transparent
+> = ((dev->class & 0xff) == 1);" maybe get wrong value due to without
+> EARLY fixup.
+> 
+> By the way, we can see that the PCI class fixup of other controllers are
+> all EARLY fixups:
+> 
+> [root@linux linux.git]# grep -rn -A 3 "PCI_CLASS_BRIDGE_PCI << 8" drivers/pci/controller/ | grep EARLY
+> drivers/pci/controller/pcie-tango.c-327-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_SIGMA, 0x0024, tango_fixup_class);
+> drivers/pci/controller/pcie-tango.c-328-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_SIGMA, 0x0028, tango_fixup_class);
+> drivers/pci/controller/pci-tegra.c-775-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_NVIDIA, 0x0bf0, tegra_pcie_fixup_class);
+> drivers/pci/controller/pci-tegra.c-776-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_NVIDIA, 0x0bf1, tegra_pcie_fixup_class);
+> drivers/pci/controller/dwc/pcie-qcom.c-1442-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0101, qcom_fixup_class);
+> drivers/pci/controller/dwc/pcie-qcom.c-1443-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0104, qcom_fixup_class);
+> drivers/pci/controller/pcie-iproc-bcma.c-23-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_BROADCOM, 0x8011, bcma_pcie2_fixup_class);
+> drivers/pci/controller/pcie-iproc-bcma.c-24-DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_BROADCOM, 0x8012, bcma_pcie2_fixup_class);
 
- It makes no sense to me to repeat this across all the architectures, and 
-even less so to do it individually one by one as people rediscover this 
-issue.
+This is irrelevant information, please remove it.
 
- Why don't we maintain the flag globally in `fs/binfmt_elf.c' which is 
-where we already set it?  E.g.:
+Thanks,
+Lorenzo
 
-	SET_PERSONALITY2(*elf_ex, &arch_state);
-	if (elf_read_implies_exec(*elf_ex, executable_stack))
-		current->personality |= READ_IMPLIES_EXEC;
-	else
-		current->personality &= ~READ_IMPLIES_EXEC;
-
-  Maciej
+> Fixes: 1f58cca5cf2b ("PCI: Add Loongson PCI Controller support")
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+> 
+> v2: Modify the patch subject used with lower case "loongson"
+> 
+> v3: Update the commit message
+> 
+>  drivers/pci/controller/pci-loongson.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+> index 459009c..58b862a 100644
+> --- a/drivers/pci/controller/pci-loongson.c
+> +++ b/drivers/pci/controller/pci-loongson.c
+> @@ -37,11 +37,11 @@ static void bridge_class_quirk(struct pci_dev *dev)
+>  {
+>  	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
+>  }
+> -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+>  			DEV_PCIE_PORT_0, bridge_class_quirk);
+> -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+>  			DEV_PCIE_PORT_1, bridge_class_quirk);
+> -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+>  			DEV_PCIE_PORT_2, bridge_class_quirk);
+>  
+>  static void system_bus_quirk(struct pci_dev *pdev)
+> -- 
+> 2.1.0
+> 
