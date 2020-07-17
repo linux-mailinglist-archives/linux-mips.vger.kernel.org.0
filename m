@@ -2,129 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8805922325D
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jul 2020 06:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC232232FA
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jul 2020 07:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726046AbgGQE3x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jul 2020 00:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
+        id S1726634AbgGQFe1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jul 2020 01:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725300AbgGQE3w (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jul 2020 00:29:52 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8A1C061755
-        for <linux-mips@vger.kernel.org>; Thu, 16 Jul 2020 21:29:52 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id k6so9628487wrn.3
-        for <linux-mips@vger.kernel.org>; Thu, 16 Jul 2020 21:29:52 -0700 (PDT)
+        with ESMTP id S1726200AbgGQFe0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jul 2020 01:34:26 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68010C08C5C0
+        for <linux-mips@vger.kernel.org>; Thu, 16 Jul 2020 22:34:26 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id q7so11283474ljm.1
+        for <linux-mips@vger.kernel.org>; Thu, 16 Jul 2020 22:34:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1tDBsEB/Y/GIBrRp2Nt+MzFeYT1byF7qFbjareBCBb8=;
-        b=V0eo/BmTHHgK+MlrVTN9OKc/H0lfIajVou8J3eEOOCwqBMOECUTa9e8NprwMkAoeIF
-         c4QWTWJFytRLVhS1HGJyQn7Bq7ilD1sQRV9+lE0xozhev03WbAuGqnOED/+wk+hHaLUr
-         //gJmvR8REfhlvfNHblPj9u5xK3eI//Sp2aWIrsw50oklO7+opPpOFTiKm21R5Ki70Tl
-         VrKVComa+BsYwbMH7WxeFjYM57H6L6ygZfEQZ5LEv2y6empJkio+mO+aPZ8hpMvctir6
-         +mVIiEi5oU0Klk6V3dw7EEaBsEo5XyL6DldI22qVjT2rCD7TJFKE7B+e4aFz1VbrBND9
-         h1cA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zWAhdSodPBqi2H5JBOy9sRuP2bwibuSZHD7FBC1gg6E=;
+        b=yuTxGWFXIZNclTVHW9RjLUKJiO7NML3Kg9ysqGYkCZzgOzySzsu+afs7DiEe8YQIyq
+         j6i9gcuRSFaYeo4vSt77AO22/v6He7q1IzbaNZDBW/0MVVw6PvGmvp3vO+Y4BhlnxBVT
+         7fvggj/uO7ypPmVBTBvu1NFeSXI8ntvUYvbE+vnI0rQYJZcvpF2bvB7lR7NqY34b85yn
+         LlT62FJRHL5juMiyrjPf7uW0a629izRxRCq7xshGd4WUmZ+R+zKGsKAAUDbewb+jbIo5
+         pnTJoMm3gEh06sV14/Xg9ypmD2utGpnb1ohoq2s3j4ABVsAWpKmSX+TTHRcxA3W6Za9V
+         9RLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1tDBsEB/Y/GIBrRp2Nt+MzFeYT1byF7qFbjareBCBb8=;
-        b=lqU53enWh0NxsC4YK+CY2FbrN40na8cQNH9fHw4pUZkNtjoAUJroCU1uDMAGpw/4ny
-         xJd7v0hgTvuQ5vZsTVLaw1Fw7MOTIB+++3UcJyH/m1DixiumMQrHWaXY4OKhxyoFugT7
-         fgmDdLMmZR1ynz9LY9901GeL1hPso+99MRflAZh3Or9ChpecddC/LmUXczAm7msgwrZL
-         lG2psZsO7JLUYU0W0l0Ia5x0yGcQP3GWoZ4E/TWeLd/4ZB30bRzhN8fE3W184aWnL5gH
-         fVohIGi06/v/KGe4v79GzVUfdfi2xgMCtqe6aKnOemwB7ScufA1zw1EOZeUxcTc74gUb
-         VH1g==
-X-Gm-Message-State: AOAM5320sHAh9YhHSFOMV4MBd+sfjRsN92pqFLpoe5K8olCOe0j0AOj+
-        TEfTkpqBqzm+Zu59QmnfJEQrkQ==
-X-Google-Smtp-Source: ABdhPJwABlZse6fgnC9vqzXT9wBMJCvVaIPVCzgJiMranO0cboa0iq7rxUuUl+OShnPM6guwowLlqw==
-X-Received: by 2002:a5d:4c8a:: with SMTP id z10mr8170440wrs.384.1594960191110;
-        Thu, 16 Jul 2020 21:29:51 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:9880:a643:3e69:6393? ([2a01:e34:ed2f:f020:9880:a643:3e69:6393])
-        by smtp.googlemail.com with ESMTPSA id r28sm12716371wrr.20.2020.07.16.21.29.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jul 2020 21:29:50 -0700 (PDT)
-Subject: Re: [PATCH v5 6/6] MAINTAINERS: Add maintainers for MIPS core drivers
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200714125753.22466-1-Sergey.Semin@baikalelectronics.ru>
- <20200714125753.22466-7-Sergey.Semin@baikalelectronics.ru>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <53a3785b-2f6f-35de-a5ac-565f059cd1f4@linaro.org>
-Date:   Fri, 17 Jul 2020 06:29:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zWAhdSodPBqi2H5JBOy9sRuP2bwibuSZHD7FBC1gg6E=;
+        b=ZmXBb8w6ltTjFNIojwXHTiaRhJ5BZrssH8CDLTrEoJDTblG8JQl2tBWf0olQYREjxT
+         jcbyl57m/Q3oOLnvVwE5AgMjOORye9UoycI54Il8zXqz1CIUKjIhaJIgxn76ys6+zoX6
+         /7NgMXkf18VrDPewhU63VEeOAzj3jMkT0DmvRyFGaGfap6npBPqEPoXg8pFkJV/NRKiq
+         XAw5eBuhtBilhQ8QMldzO76rvAADTyD5Q7gvZOtwTqYzpgpGmdt5PojLWolopex4cYBC
+         Af0fzMTX9gOkM/xOBQFns7XhTJCvDYREliaqDsHM6JW9DqrLt1NeNLylxGgkhD/i8SEn
+         YEFw==
+X-Gm-Message-State: AOAM530WJqezFGS7P9T0onzTC4hppDBcUcLhZUGiqgpjc1iJ+3W+vkiP
+        rtGIuFYDeDc1kdVXKKNnddGm0uKyiAiCaIIo7UuROg==
+X-Google-Smtp-Source: ABdhPJzqUmHupuN7xBd1VTvCVu4k5dno0l+c/2WmOWFAQ4OBBksSBPxWrHIfCMe/SzKgL2Kj8mCltIWrhIYwmLvoT/I=
+X-Received: by 2002:a2e:b88c:: with SMTP id r12mr3686377ljp.266.1594964064687;
+ Thu, 16 Jul 2020 22:34:24 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200714125753.22466-7-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200623174037.3951353-1-guro@fb.com> <20200623174037.3951353-9-guro@fb.com>
+ <CA+G9fYs0vDPAL_84oDEVdGdbFEDjAR1RFoVeFTpjN6b2yS+ZPg@mail.gmail.com> <20200716200744.GB13387@carbon.dhcp.thefacebook.com>
+In-Reply-To: <20200716200744.GB13387@carbon.dhcp.thefacebook.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 17 Jul 2020 11:04:13 +0530
+Message-ID: <CA+G9fYsvkrVJE-Aiqrkv0UG5fBWrNQ-fEvLeDgEtL5htr3m9wg@mail.gmail.com>
+Subject: Re: [PATCH v7 08/19] mm: memcg/slab: save obj_cgroup for non-root
+ slab objects
+To:     Roman Gushchin <guro@fb.com>
+Cc:     linux-mips@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-mm <linux-mm@kvack.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Kernel Team <kernel-team@fb.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14/07/2020 14:57, Serge Semin wrote:
-> Add Thomas and myself as maintainers of the MIPS CPU and GIC IRQchip, MIPS
-> GIC timer and MIPS CPS CPUidle drivers.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Acked-by: Marc Zyngier <maz@kernel.org>
-
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-> ---
-> 
-> Changelog v3:
-> - Keep the files list alphabetically ordered.
-> - Add Thomas as the co-maintainer of the designated drivers.
-> ---
->  MAINTAINERS | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2926327e4976..20532e0287d7 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11278,6 +11278,17 @@ F:	arch/mips/configs/generic/board-boston.config
->  F:	drivers/clk/imgtec/clk-boston.c
->  F:	include/dt-bindings/clock/boston-clock.h
->  
-> +MIPS CORE DRIVERS
-> +M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> +M:	Serge Semin <fancer.lancer@gmail.com>
-> +L:	linux-mips@vger.kernel.org
-> +S:	Supported
-> +F:	drivers/bus/mips_cdmm.c
-> +F:	drivers/clocksource/mips-gic-timer.c
-> +F:	drivers/cpuidle/cpuidle-cps.c
-> +F:	drivers/irqchip/irq-mips-cpu.c
-> +F:	drivers/irqchip/irq-mips-gic.c
-> +
->  MIPS GENERIC PLATFORM
->  M:	Paul Burton <paulburton@kernel.org>
->  L:	linux-mips@vger.kernel.org
-> 
+On Fri, 17 Jul 2020 at 01:38, Roman Gushchin <guro@fb.com> wrote:
+>
+> On Thu, Jul 16, 2020 at 10:25:01PM +0530, Naresh Kamboju wrote:
+> > On Tue, 23 Jun 2020 at 23:11, Roman Gushchin <guro@fb.com> wrote:
+> > >
+> > > Store the obj_cgroup pointer in the corresponding place of
+> > > page->obj_cgroups for each allocated non-root slab object.  Make sure that
+> > > each allocated object holds a reference to obj_cgroup.
+> > >
+> > > Objcg pointer is obtained from the memcg->objcg dereferencing in
+> > > memcg_kmem_get_cache() and passed from pre_alloc_hook to post_alloc_hook.
+> > > Then in case of successful allocation(s) it's getting stored in the
+> > > page->obj_cgroups vector.
+> > >
+> > > The objcg obtaining part look a bit bulky now, but it will be simplified
+> > > by next commits in the series.
+> > >
+> > > Signed-off-by: Roman Gushchin <guro@fb.com>
+> > > Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> > > Reviewed-by: Shakeel Butt <shakeelb@google.com>
+> > > ---
+> > >  include/linux/memcontrol.h |  3 +-
+> > >  mm/memcontrol.c            | 14 +++++++--
+> > >  mm/slab.c                  | 18 +++++++-----
+> > >  mm/slab.h                  | 60 ++++++++++++++++++++++++++++++++++----
+> > >  mm/slub.c                  | 14 +++++----
+> > >  5 files changed, 88 insertions(+), 21 deletions(-)
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> > >
+> >
+> > I am not sure if this is the related patch or not that is causing
+> > mips architecture build failure on linux -next.
+>
+> Hello, Naresh!
+>
+> Thank you for the report, interesting...
+> There is nothing arch-specific in the code, so there must be something
+> compiler-dependent. My wild guess is that the problem is caused by a memory
+> allocation from the memcg_slab_post_alloc_hook(), but it's added by a later
+> patch in the series. So if it really fails at this patch, there must be something
+> different. I'll try to reproduce it, but I have to install the MIPS toolchain first,
+> so it might take some time. If it creates some troubles, can you, please, check
+> if s/__always_inline/inline helps?
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+sed -i -e 's#__always_inline#inline#g' mm/slub.c ->> then builds fine.
+
+-  Naresh
