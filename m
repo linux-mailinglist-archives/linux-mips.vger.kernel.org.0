@@ -2,128 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCD1224ED7
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Jul 2020 05:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA15225141
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Jul 2020 12:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726577AbgGSDYO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 18 Jul 2020 23:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        id S1725988AbgGSKVY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Jul 2020 06:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726284AbgGSDYN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Jul 2020 23:24:13 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70983C0619D2;
-        Sat, 18 Jul 2020 20:24:13 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id p205so14233348iod.8;
-        Sat, 18 Jul 2020 20:24:13 -0700 (PDT)
+        with ESMTP id S1725836AbgGSKVX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Jul 2020 06:21:23 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D28DC0619D2;
+        Sun, 19 Jul 2020 03:21:23 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id l63so8891009pge.12;
+        Sun, 19 Jul 2020 03:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VfYXONP7f5DFev6Rfp67qeylGPLCplY2PgNHGgPbNcE=;
-        b=jVrHCC4gz/+MJwlUbZoQeUtwQ8e1WN/GcsiNos5XXHTXuUzxM5wmKroA5dGcNxpI8s
-         0bXt3+417kBZmD5WmUhj/bI4D+Ns6sKs5T2cojzMUpIdcJNfkqGPMnpUf2ByPZgDHp3F
-         6UhILQVetV6IZMsL7PQtr69zPwmDENKIjyLKydzNGpOnXpfbMS9sQAhY9A00knoWcUzG
-         xNZH8lNilA0Fy5c27eauUomHrWp4hUtsLupHIp2E7Y4GghczYClk7hw0RuY3ExBf2ndB
-         fKHt4l7yQ2BJXhVZJE6+yplrriTUJHE1Pss/BZQugoplcuoi7nTUZ3si7uewAj3wWN8f
-         hfyg==
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=jEXavRvD3y6/Bjh0tIzjOCNSq6rpCbWUQWApQCUf4mo=;
+        b=b8PS/gz0a3rtMBdf/w1wHbRCMi+F8WpQCLeALDgjSaFe5r2bqFz84K/g1LOeqpeV03
+         VSGp5TLNmZJm+Nzz6KHGwy3uoZggI4FJSX6c0vH9mCmMPQTldtv+ZIBh9AFSdt9XKVje
+         04CNpDfhq2h1WOWvrbr1nCWmLUUl6HPnBLPcRxWuKrBI1Fms2ig5s6+aq0uvCf5LDogO
+         rn+2blzqbjUOSQnRdpT3R4Y8MHEz6QANUNctCGtp4zyFRjQeUthf4v/cLyk82NK1d7PN
+         FNNyjExD3W4K67gCDBSY4qxGxXDPvh08aRPAAYtxptLibzuuJKypxU+yz4r++fdNWG2s
+         mdMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VfYXONP7f5DFev6Rfp67qeylGPLCplY2PgNHGgPbNcE=;
-        b=MdX6G8RiKapm5e5Yqu/Hxf8HuoYjYayqvPcrAHBAdwMr27Nvo8SrpjnAe+lGH08r1E
-         1GQXG6NCBKlbZLpK90mc9vzdloHro9XFv07VBzDCR+Dz5dJJ4sX1pzcQE8lKEo3kXN85
-         gr3Fg/mwZ9ESyfcXyYirVmchv7kMuSaultyNePB9nmrLN8eyvz4jtCBNFzyipoGW+s4M
-         ZcHE4a00zPg9Jed2uRA+13bN/KHtgSyi9O5dbKOj3755bvGFERy2Mb2ezgCCiUB7L0fD
-         64JfxSvvoKZgmKQyX4zZ4C2nUJnuFmdfk1Tsi/ZL9HsFn2CRK2zL+XEgNQQtYQXyH25j
-         grNg==
-X-Gm-Message-State: AOAM530jETKrOSpvAxxxvxkS4hL5SQ3UDsxss+xBJBC9+atI6TTv9TbX
-        Zfgpnuya0cfy0aphbq4DupijWjmq3kpDZHGq+7w=
-X-Google-Smtp-Source: ABdhPJz3HGoQMtHrd0tbQzKTT8j3j/xqKpqIprmQYXeOvr++uyzmWAkLhpRnbcSkH/aX7JTPtJKqflXVea8hpCTqgcw=
-X-Received: by 2002:a05:6638:1308:: with SMTP id r8mr9731088jad.106.1595129052520;
- Sat, 18 Jul 2020 20:24:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
-In-Reply-To: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sun, 19 Jul 2020 11:24:01 +0800
-Message-ID: <CAAhV-H4wdxtLCAFOJE6wgAZdg+U5mquSZjHmAL_qsDaGtENbFg@mail.gmail.com>
-Subject: Re: [PATCH -stable] MIPS: Fix build for LTS kernel caused by
- backporting lpj adjustment
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=jEXavRvD3y6/Bjh0tIzjOCNSq6rpCbWUQWApQCUf4mo=;
+        b=YfwueNY6Qgw+FwUwCTE/9Z6lz79JN8iadLPVATzjdHUPUknu5MdmATm/zXRaStOd6Q
+         /QOSnyf3PW1dJayirq2Jm0MlSXK9/3BAXjAxq7JamCeHuPOXJvEp8Ay2Ya2V4BZorZo2
+         NH9580Iowz42QhA75X4H+FZmjqf5psypn9cRAh0BvuwIqN5CIbk3+ZAcMBTtPKwCIdaN
+         hLtE4UtgJXZ4mM5UTPpeFcHIgz9vbw5gdcYSNLUQU+cXdf8NNKX/mPgm+JwzsBxubhUp
+         daVUCwMe5cRLkcbaVaj+rDD0onBR3awXVSiDjaYEtX/Evcungimfc9Kwba8w9QkSlyXK
+         UBPw==
+X-Gm-Message-State: AOAM532E52/r6Oc8v/Q9x0gDn6GN5Hf8OlYshsmQ5F+KtiyfO2Qf6yEq
+        u7A6SuAw4iR6LW1WQibuuC0=
+X-Google-Smtp-Source: ABdhPJwsTcLBZugd0mm+nvjiAfP8wQ1pBLMr5m4acjjtaBQyGW1s9tYBpVXyWwzlDjNFaNC49Qtm1g==
+X-Received: by 2002:a62:f905:: with SMTP id o5mr15709242pfh.244.1595154082015;
+        Sun, 19 Jul 2020 03:21:22 -0700 (PDT)
+Received: from software.domain.org ([45.77.13.216])
+        by smtp.gmail.com with ESMTPSA id 137sm12635263pgg.72.2020.07.19.03.21.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 19 Jul 2020 03:21:21 -0700 (PDT)
+From:   Huacai Chen <chenhc@lemote.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
         Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        "Stable # 4 . 4/4 . 9/4 . 14/4 . 19" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Huacai Chen <chenhc@lemote.com>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] MIPS: KVM: Fix build error caused by 'kvm_run' cleanup
+Date:   Sun, 19 Jul 2020 18:23:27 +0800
+Message-Id: <1595154207-9787-1-git-send-email-chenhc@lemote.com>
+X-Mailer: git-send-email 2.7.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Serge,
+Commit c34b26b98caca48ec9ee9 ("KVM: MIPS: clean up redundant 'kvm_run'
+parameters") remove the 'kvm_run' parameter in kvm_mips_complete_mmio_
+load(), but forget to update all callers.
 
-Could you please have a look at this patch?
+Fixes: c34b26b98caca48ec9ee9 ("KVM: MIPS: clean up redundant 'kvm_run' parameters")
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+---
+I have reviewed Tianjia's patch but hadn't found the bug, I'm very very
+sorry for that.
 
-Huacai
+ arch/mips/kvm/emulate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, Jul 16, 2020 at 5:37 PM Huacai Chen <chenhc@lemote.com> wrote:
->
-> Commit ed26aacfb5f71eecb20a ("mips: Add udelay lpj numbers adjustment")
-> has backported to 4.4~5.4, but the "struct cpufreq_freqs" (and also the
-> cpufreq notifier machanism) of 4.4~4.19 are different from the upstream
-> kernel. These differences cause build errors, and this patch can fix the
-> build.
->
-> Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Stable <stable@vger.kernel.org> # 4.4/4.9/4.14/4.19
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> ---
->  arch/mips/kernel/time.c | 13 ++++---------
->  1 file changed, 4 insertions(+), 9 deletions(-)
->
-> diff --git a/arch/mips/kernel/time.c b/arch/mips/kernel/time.c
-> index b7f7e08..b15ee12 100644
-> --- a/arch/mips/kernel/time.c
-> +++ b/arch/mips/kernel/time.c
-> @@ -40,10 +40,8 @@ static unsigned long glb_lpj_ref_freq;
->  static int cpufreq_callback(struct notifier_block *nb,
->                             unsigned long val, void *data)
->  {
-> -       struct cpufreq_freqs *freq = data;
-> -       struct cpumask *cpus = freq->policy->cpus;
-> -       unsigned long lpj;
->         int cpu;
-> +       struct cpufreq_freqs *freq = data;
->
->         /*
->          * Skip lpj numbers adjustment if the CPU-freq transition is safe for
-> @@ -64,6 +62,7 @@ static int cpufreq_callback(struct notifier_block *nb,
->                 }
->         }
->
-> +       cpu = freq->cpu;
->         /*
->          * Adjust global lpj variable and per-CPU udelay_val number in
->          * accordance with the new CPU frequency.
-> @@ -74,12 +73,8 @@ static int cpufreq_callback(struct notifier_block *nb,
->                                                 glb_lpj_ref_freq,
->                                                 freq->new);
->
-> -               for_each_cpu(cpu, cpus) {
-> -                       lpj = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
-> -                                           per_cpu(pcp_lpj_ref_freq, cpu),
-> -                                           freq->new);
-> -                       cpu_data[cpu].udelay_val = (unsigned int)lpj;
-> -               }
-> +               cpu_data[cpu].udelay_val = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
-> +                                          per_cpu(pcp_lpj_ref_freq, cpu), freq->new);
->         }
->
->         return NOTIFY_OK;
-> --
-> 2.7.0
->
+diff --git a/arch/mips/kvm/emulate.c b/arch/mips/kvm/emulate.c
+index d242300c..3b3f7b11 100644
+--- a/arch/mips/kvm/emulate.c
++++ b/arch/mips/kvm/emulate.c
+@@ -2128,7 +2128,7 @@ enum emulation_result kvm_mips_emulate_load(union mips_instruction inst,
+ 			run->mmio.phys_addr, run->mmio.len, run->mmio.data);
+ 
+ 	if (!r) {
+-		kvm_mips_complete_mmio_load(vcpu, run);
++		kvm_mips_complete_mmio_load(vcpu);
+ 		vcpu->mmio_needed = 0;
+ 		return EMULATE_DONE;
+ 	}
+-- 
+2.7.0
+
