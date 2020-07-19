@@ -2,107 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8054225160
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Jul 2020 12:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE0F225255
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Jul 2020 16:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbgGSKrY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Jul 2020 06:47:24 -0400
-Received: from relay5.mymailcheap.com ([159.100.248.207]:40224 "EHLO
-        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725836AbgGSKrX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Jul 2020 06:47:23 -0400
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.102])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id E261126283;
-        Sun, 19 Jul 2020 10:47:19 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay1.mymailcheap.com (Postfix) with ESMTPS id D94EA3F157;
-        Sun, 19 Jul 2020 06:47:17 -0400 (EDT)
+        id S1726094AbgGSOvd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Jul 2020 10:51:33 -0400
+Received: from relay3.mymailcheap.com ([217.182.119.157]:41267 "EHLO
+        relay3.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726024AbgGSOvd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Jul 2020 10:51:33 -0400
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay3.mymailcheap.com (Postfix) with ESMTPS id 3DEA03F1CC;
+        Sun, 19 Jul 2020 16:51:29 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id B48392A3B3;
-        Sun, 19 Jul 2020 06:47:17 -0400 (EDT)
+        by filter2.mymailcheap.com (Postfix) with ESMTP id 1A8912A6D5;
+        Sun, 19 Jul 2020 16:51:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1595155637;
-        bh=Efv36P2QP2SU4fscZ+1ezXV90wtvaDLxz7YK6olWc1k=;
+        s=default; t=1595170289;
+        bh=MGwkLzKypO4J6nY2xTrNaiT71gTYgq65h2UegRb3cCs=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=q+v7bCDFWIOKX/B7dOHDs9q8i90smhJag8tSQgnZ6jgnq58sbHcfscph/NLYGLt8A
-         WYhGHqPxIjX5sVDOvfvJ3PbGFc7q1Z9Gd85Ho+Eii/SoxZk9Q+QWZqs2oh3NkoYbHg
-         mPOXvMUWqMP9yJS8mxm22rmihJ6ukwjIXphecu30=
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZQtubH6C6Npr; Sun, 19 Jul 2020 06:47:16 -0400 (EDT)
+        b=Ltz8Ki61iJpBU0cM8AfvAsBB1cSD7Rr4GUA6ISGHLilzONfdf4yy0xhhBbY573mCA
+         7zy0mESheh4i8cSAloNkmmU908H0+5W/z+zxQn3tW2RIRNYdi0yHedsCe+sj05K34c
+         reQfiVj9qlI5s/sLGfxUK0op014G0UBXbU2RVKV8=
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id O1Ig8pEgcOla; Sun, 19 Jul 2020 16:51:27 +0200 (CEST)
 Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
         (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Sun, 19 Jul 2020 06:47:16 -0400 (EDT)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Sun, 19 Jul 2020 16:51:27 +0200 (CEST)
 Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id 456CC40856;
-        Sun, 19 Jul 2020 10:47:12 +0000 (UTC)
+        by mail20.mymailcheap.com (Postfix) with ESMTP id 1A2E940854;
+        Sun, 19 Jul 2020 14:51:25 +0000 (UTC)
 Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="o3YaAinj";
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="S+f/pb22";
         dkim-atps=neutral
 AI-Spam-Status: Not processed
 Received: from [0.0.0.0] (ec2-18-162-62-95.ap-east-1.compute.amazonaws.com [18.162.62.95])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 04DB540854;
-        Sun, 19 Jul 2020 10:44:50 +0000 (UTC)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 0A66E40854;
+        Sun, 19 Jul 2020 14:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1595155498;
-        bh=Efv36P2QP2SU4fscZ+1ezXV90wtvaDLxz7YK6olWc1k=;
+        s=default; t=1595170277;
+        bh=MGwkLzKypO4J6nY2xTrNaiT71gTYgq65h2UegRb3cCs=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=o3YaAinjatmykFPsPv18oT85EmT2nxBeqacLxGsHo4+rRxuNgDTRSEpwK2aNu0nSJ
-         C86mcW/OZvZhzHcKyzP+VpZxRer2SPIQ8bMAtJd1hmfdqkg/XnaJRWsT/Gh+olG0D2
-         Mmk17xiijngNrddGhEejlBm4EXnagZKOCWn5G8Vs=
-Subject: Re: [PATCH] MIPS: KVM: Fix build error caused by 'kvm_run' cleanup
-To:     Huacai Chen <chenhc@lemote.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-References: <1595154207-9787-1-git-send-email-chenhc@lemote.com>
+        b=S+f/pb22Bb/rS+vxjFukXkRjKG/2+AZQ3iSmXUTN7KGqAGrX701TM+khW7FNXhIsp
+         ZaMySFm9jE3/jdNofjZSmTjLCruoyAo+aH/TwUAzf42zs2DC8e9jM3Ay+KR9TFNwUW
+         2h2MeKXSKkMXyf+Fqm5HaSQhi5ddYuML+A6+N6a8=
+Subject: Re: [PATCH -stable] MIPS: Fix build for LTS kernel caused by
+ backporting lpj adjustment
+To:     Huacai Chen <chenhuacai@gmail.com>, gregkh@linuxfoundation.org
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "Stable # 4 . 4/4 . 9/4 . 14/4 . 19" <stable@vger.kernel.org>
+References: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
+ <CAAhV-H4wdxtLCAFOJE6wgAZdg+U5mquSZjHmAL_qsDaGtENbFg@mail.gmail.com>
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <79b5e965-b509-c1a3-cabc-715780e78f3c@flygoat.com>
-Date:   Sun, 19 Jul 2020 18:44:45 +0800
+Message-ID: <34928e81-3675-0309-b020-0cb4b402dc5c@flygoat.com>
+Date:   Sun, 19 Jul 2020 22:51:11 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1595154207-9787-1-git-send-email-chenhc@lemote.com>
-Content-Type: text/plain; charset=gbk; format=flowed
+In-Reply-To: <CAAhV-H4wdxtLCAFOJE6wgAZdg+U5mquSZjHmAL_qsDaGtENbFg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-X-Rspamd-Queue-Id: 456CC40856
-X-Spamd-Result: default: False [1.40 / 10.00];
+X-Rspamd-Queue-Id: 1A2E940854
+X-Spamd-Result: default: False [-0.10 / 10.00];
          RCVD_VIA_SMTP_AUTH(0.00)[];
          ARC_NA(0.00)[];
          R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
-         MID_RHS_MATCH_FROM(0.00)[];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
          FREEMAIL_ENVRCPT(0.00)[gmail.com];
          TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[];
          MIME_GOOD(-0.10)[text/plain];
          R_SPF_SOFTFAIL(0.00)[~all];
-         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1];
+         RCPT_COUNT_FIVE(0.00)[5];
          ML_SERVERS(-3.10)[148.251.23.173];
          DKIM_TRACE(0.00)[flygoat.com:+];
          DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
-         RCPT_COUNT_SEVEN(0.00)[9];
          DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
-         FREEMAIL_TO(0.00)[lemote.com,redhat.com,alpha.franken.de,gmail.com];
+         FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org];
          RCVD_NO_TLS_LAST(0.10)[];
          FROM_EQ_ENVFROM(0.00)[];
          MIME_TRACE(0.00)[0:+];
          ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
-         FREEMAIL_CC(0.00)[vger.kernel.org,lemote.com,gmail.com,linux.alibaba.com];
-         SUSPICIOUS_RECIPS(1.50)[];
-         RCVD_COUNT_TWO(0.00)[2]
+         RCVD_COUNT_TWO(0.00)[2];
+         MID_RHS_MATCH_FROM(0.00)[];
+         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
 X-Rspamd-Server: mail20.mymailcheap.com
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
@@ -110,40 +102,75 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-ÔÚ 2020/7/19 ÏÂÎç6:23, Huacai Chen Ð´µÀ:
-> Commit c34b26b98caca48ec9ee9 ("KVM: MIPS: clean up redundant 'kvm_run'
-> parameters") remove the 'kvm_run' parameter in kvm_mips_complete_mmio_
-> load(), but forget to update all callers.
+åœ¨ 2020/7/19 ä¸Šåˆ11:24, Huacai Chen å†™é“:
+> Hi, Serge,
 >
-> Fixes: c34b26b98caca48ec9ee9 ("KVM: MIPS: clean up redundant 'kvm_run' parameters")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> ---
-> I have reviewed Tianjia's patch but hadn't found the bug, I'm very very
-> sorry for that.
+> Could you please have a look at this patch?
 
 
-Oops, I suspected it as my local merge conflict at my initial test.
++ Gregkh
 
-Sorry for the inconvinence.
+This is urgent for next stable release, please take a look.
 
-- Jiaxun
+Thanks
+
 
 >
->   arch/mips/kvm/emulate.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Huacai
 >
-> diff --git a/arch/mips/kvm/emulate.c b/arch/mips/kvm/emulate.c
-> index d242300c..3b3f7b11 100644
-> --- a/arch/mips/kvm/emulate.c
-> +++ b/arch/mips/kvm/emulate.c
-> @@ -2128,7 +2128,7 @@ enum emulation_result kvm_mips_emulate_load(union mips_instruction inst,
->   			run->mmio.phys_addr, run->mmio.len, run->mmio.data);
->   
->   	if (!r) {
-> -		kvm_mips_complete_mmio_load(vcpu, run);
-> +		kvm_mips_complete_mmio_load(vcpu);
->   		vcpu->mmio_needed = 0;
->   		return EMULATE_DONE;
->   	}
+> On Thu, Jul 16, 2020 at 5:37 PM Huacai Chen <chenhc@lemote.com> wrote:
+>> Commit ed26aacfb5f71eecb20a ("mips: Add udelay lpj numbers adjustment")
+>> has backported to 4.4~5.4, but the "struct cpufreq_freqs" (and also the
+>> cpufreq notifier machanism) of 4.4~4.19 are different from the upstream
+>> kernel. These differences cause build errors, and this patch can fix the
+>> build.
+>>
+>> Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>> Cc: Stable <stable@vger.kernel.org> # 4.4/4.9/4.14/4.19
+>> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+>> ---
+>>   arch/mips/kernel/time.c | 13 ++++---------
+>>   1 file changed, 4 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/arch/mips/kernel/time.c b/arch/mips/kernel/time.c
+>> index b7f7e08..b15ee12 100644
+>> --- a/arch/mips/kernel/time.c
+>> +++ b/arch/mips/kernel/time.c
+>> @@ -40,10 +40,8 @@ static unsigned long glb_lpj_ref_freq;
+>>   static int cpufreq_callback(struct notifier_block *nb,
+>>                              unsigned long val, void *data)
+>>   {
+>> -       struct cpufreq_freqs *freq = data;
+>> -       struct cpumask *cpus = freq->policy->cpus;
+>> -       unsigned long lpj;
+>>          int cpu;
+>> +       struct cpufreq_freqs *freq = data;
+>>
+>>          /*
+>>           * Skip lpj numbers adjustment if the CPU-freq transition is safe for
+>> @@ -64,6 +62,7 @@ static int cpufreq_callback(struct notifier_block *nb,
+>>                  }
+>>          }
+>>
+>> +       cpu = freq->cpu;
+>>          /*
+>>           * Adjust global lpj variable and per-CPU udelay_val number in
+>>           * accordance with the new CPU frequency.
+>> @@ -74,12 +73,8 @@ static int cpufreq_callback(struct notifier_block *nb,
+>>                                                  glb_lpj_ref_freq,
+>>                                                  freq->new);
+>>
+>> -               for_each_cpu(cpu, cpus) {
+>> -                       lpj = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
+>> -                                           per_cpu(pcp_lpj_ref_freq, cpu),
+>> -                                           freq->new);
+>> -                       cpu_data[cpu].udelay_val = (unsigned int)lpj;
+>> -               }
+>> +               cpu_data[cpu].udelay_val = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
+>> +                                          per_cpu(pcp_lpj_ref_freq, cpu), freq->new);
+>>          }
+>>
+>>          return NOTIFY_OK;
+>> --
+>> 2.7.0
+>>
