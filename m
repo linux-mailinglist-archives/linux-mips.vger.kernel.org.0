@@ -2,94 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0120E224A8D
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Jul 2020 12:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCD1224ED7
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Jul 2020 05:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgGRKKz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 18 Jul 2020 06:10:55 -0400
-Received: from out28-52.mail.aliyun.com ([115.124.28.52]:37594 "EHLO
-        out28-52.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbgGRKKy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Jul 2020 06:10:54 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1048682|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00811512-0.00229485-0.98959;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03306;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.I3qN-fY_1595067048;
-Received: from 192.168.10.205(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.I3qN-fY_1595067048)
-          by smtp.aliyun-inc.com(10.147.43.95);
-          Sat, 18 Jul 2020 18:10:49 +0800
-Subject: Re: [PATCH v7 3/5] MIPS: Ingenic: Let the Kconfig of platform enable
- the clocksource driver.
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        daniel.lezcano@linaro.org, tsbogend@alpha.franken.de,
-        robh+dt@kernel.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, tglx@linutronix.de,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, paul@crapouillou.net
-References: <20200717165947.56158-1-zhouyanjie@wanyeetech.com>
- <20200717165947.56158-4-zhouyanjie@wanyeetech.com>
- <4903f4ba-6ecb-5c38-aa5a-4f20bd473124@cogentembedded.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <7e4e55c1-6341-c073-8ace-fd99c03fc464@wanyeetech.com>
-Date:   Sat, 18 Jul 2020 18:10:45 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1726577AbgGSDYO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 18 Jul 2020 23:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726284AbgGSDYN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Jul 2020 23:24:13 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70983C0619D2;
+        Sat, 18 Jul 2020 20:24:13 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id p205so14233348iod.8;
+        Sat, 18 Jul 2020 20:24:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VfYXONP7f5DFev6Rfp67qeylGPLCplY2PgNHGgPbNcE=;
+        b=jVrHCC4gz/+MJwlUbZoQeUtwQ8e1WN/GcsiNos5XXHTXuUzxM5wmKroA5dGcNxpI8s
+         0bXt3+417kBZmD5WmUhj/bI4D+Ns6sKs5T2cojzMUpIdcJNfkqGPMnpUf2ByPZgDHp3F
+         6UhILQVetV6IZMsL7PQtr69zPwmDENKIjyLKydzNGpOnXpfbMS9sQAhY9A00knoWcUzG
+         xNZH8lNilA0Fy5c27eauUomHrWp4hUtsLupHIp2E7Y4GghczYClk7hw0RuY3ExBf2ndB
+         fKHt4l7yQ2BJXhVZJE6+yplrriTUJHE1Pss/BZQugoplcuoi7nTUZ3si7uewAj3wWN8f
+         hfyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VfYXONP7f5DFev6Rfp67qeylGPLCplY2PgNHGgPbNcE=;
+        b=MdX6G8RiKapm5e5Yqu/Hxf8HuoYjYayqvPcrAHBAdwMr27Nvo8SrpjnAe+lGH08r1E
+         1GQXG6NCBKlbZLpK90mc9vzdloHro9XFv07VBzDCR+Dz5dJJ4sX1pzcQE8lKEo3kXN85
+         gr3Fg/mwZ9ESyfcXyYirVmchv7kMuSaultyNePB9nmrLN8eyvz4jtCBNFzyipoGW+s4M
+         ZcHE4a00zPg9Jed2uRA+13bN/KHtgSyi9O5dbKOj3755bvGFERy2Mb2ezgCCiUB7L0fD
+         64JfxSvvoKZgmKQyX4zZ4C2nUJnuFmdfk1Tsi/ZL9HsFn2CRK2zL+XEgNQQtYQXyH25j
+         grNg==
+X-Gm-Message-State: AOAM530jETKrOSpvAxxxvxkS4hL5SQ3UDsxss+xBJBC9+atI6TTv9TbX
+        Zfgpnuya0cfy0aphbq4DupijWjmq3kpDZHGq+7w=
+X-Google-Smtp-Source: ABdhPJz3HGoQMtHrd0tbQzKTT8j3j/xqKpqIprmQYXeOvr++uyzmWAkLhpRnbcSkH/aX7JTPtJKqflXVea8hpCTqgcw=
+X-Received: by 2002:a05:6638:1308:: with SMTP id r8mr9731088jad.106.1595129052520;
+ Sat, 18 Jul 2020 20:24:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <4903f4ba-6ecb-5c38-aa5a-4f20bd473124@cogentembedded.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Sun, 19 Jul 2020 11:24:01 +0800
+Message-ID: <CAAhV-H4wdxtLCAFOJE6wgAZdg+U5mquSZjHmAL_qsDaGtENbFg@mail.gmail.com>
+Subject: Re: [PATCH -stable] MIPS: Fix build for LTS kernel caused by
+ backporting lpj adjustment
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "Stable # 4 . 4/4 . 9/4 . 14/4 . 19" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sergei,
+Hi, Serge,
 
-在 2020/7/18 下午4:39, Sergei Shtylyov 写道:
-> Hello!
->
-> On 17.07.2020 19:59, 周琰杰 (Zhou Yanjie) wrote:
->
->> The previous clocksource patch in this series ([2/3]) has remove
->
->   Removed.
->
->> "default MACH_INGENIC" and make option silent, so we need to
->
->   Made?
->
->> enable the corresponding driver in the platform's Kconfig.
->>
->> Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Tested-by: 周正 (Zhou Zheng) <sernia.zhou@foxmail.com>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>
->> Notes:
->>      v7:
->>      New patch.
->>
->>   arch/mips/jz4740/Kconfig | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/arch/mips/jz4740/Kconfig b/arch/mips/jz4740/Kconfig
->> index 6c065dcaeff8..5ad60998702e 100644
->> --- a/arch/mips/jz4740/Kconfig
->> +++ b/arch/mips/jz4740/Kconfig
->> @@ -36,27 +36,34 @@ endchoice
->>   config MACH_JZ4740
->>       bool
->>       select SYS_HAS_CPU_MIPS32_R1
->> +    select INGENIC_TIMER
->
->    Please use tab instead of spaces here an below.
->
+Could you please have a look at this patch?
 
-Sure, I will do it in the next version.
+Huacai
 
-Thanks and best regards!
-
-
-> [...]
+On Thu, Jul 16, 2020 at 5:37 PM Huacai Chen <chenhc@lemote.com> wrote:
 >
-> MBR, Sergei
+> Commit ed26aacfb5f71eecb20a ("mips: Add udelay lpj numbers adjustment")
+> has backported to 4.4~5.4, but the "struct cpufreq_freqs" (and also the
+> cpufreq notifier machanism) of 4.4~4.19 are different from the upstream
+> kernel. These differences cause build errors, and this patch can fix the
+> build.
+>
+> Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Stable <stable@vger.kernel.org> # 4.4/4.9/4.14/4.19
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---
+>  arch/mips/kernel/time.c | 13 ++++---------
+>  1 file changed, 4 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/mips/kernel/time.c b/arch/mips/kernel/time.c
+> index b7f7e08..b15ee12 100644
+> --- a/arch/mips/kernel/time.c
+> +++ b/arch/mips/kernel/time.c
+> @@ -40,10 +40,8 @@ static unsigned long glb_lpj_ref_freq;
+>  static int cpufreq_callback(struct notifier_block *nb,
+>                             unsigned long val, void *data)
+>  {
+> -       struct cpufreq_freqs *freq = data;
+> -       struct cpumask *cpus = freq->policy->cpus;
+> -       unsigned long lpj;
+>         int cpu;
+> +       struct cpufreq_freqs *freq = data;
+>
+>         /*
+>          * Skip lpj numbers adjustment if the CPU-freq transition is safe for
+> @@ -64,6 +62,7 @@ static int cpufreq_callback(struct notifier_block *nb,
+>                 }
+>         }
+>
+> +       cpu = freq->cpu;
+>         /*
+>          * Adjust global lpj variable and per-CPU udelay_val number in
+>          * accordance with the new CPU frequency.
+> @@ -74,12 +73,8 @@ static int cpufreq_callback(struct notifier_block *nb,
+>                                                 glb_lpj_ref_freq,
+>                                                 freq->new);
+>
+> -               for_each_cpu(cpu, cpus) {
+> -                       lpj = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
+> -                                           per_cpu(pcp_lpj_ref_freq, cpu),
+> -                                           freq->new);
+> -                       cpu_data[cpu].udelay_val = (unsigned int)lpj;
+> -               }
+> +               cpu_data[cpu].udelay_val = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
+> +                                          per_cpu(pcp_lpj_ref_freq, cpu), freq->new);
+>         }
+>
+>         return NOTIFY_OK;
+> --
+> 2.7.0
+>
