@@ -2,98 +2,210 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DCB225CDC
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jul 2020 12:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170F2225DA9
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jul 2020 13:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728310AbgGTKpf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Jul 2020 06:45:35 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:43951 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728232AbgGTKpe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Jul 2020 06:45:34 -0400
-Received: from mail-qt1-f177.google.com ([209.85.160.177]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1M42Ss-1jxTIZ46T2-0003I2; Mon, 20 Jul 2020 12:45:32 +0200
-Received: by mail-qt1-f177.google.com with SMTP id k18so12496427qtm.10;
-        Mon, 20 Jul 2020 03:45:31 -0700 (PDT)
-X-Gm-Message-State: AOAM533wRoO7L7l3KNVDnVj0MwnUMTxSvrDR9zZRWI7GE7+hSau13fCt
-        qWGj+BIafh4uxeweRJra5r2JMpfrj+32ZJE7QWU=
-X-Google-Smtp-Source: ABdhPJyveE09U5DOyjZw3YD0auFd/AcGtjZ7tGnHfjeOnNRKPaTJocr9ClHFJbUiY0/o5kQ5Bq1u1bhlyLaVg4bN9i4=
-X-Received: by 2002:ac8:83d:: with SMTP id u58mr16596516qth.188.1595241930633;
- Mon, 20 Jul 2020 03:45:30 -0700 (PDT)
+        id S1728551AbgGTLoY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 20 Jul 2020 07:44:24 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:36001 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728058AbgGTLoY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Jul 2020 07:44:24 -0400
+Received: by mail-io1-f67.google.com with SMTP id y2so17218005ioy.3;
+        Mon, 20 Jul 2020 04:44:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+GN39BSEPAUfJ0bpjcxQHGly9Se3lNLoksrqMlxAACI=;
+        b=kEUcdS8XOKileHZATRLxqzaBDBZHx8ePPXyU//4NBgasjV5meACd+T3anZ77V6IvM4
+         AD0Bf3aKxIFHFHEq6octXjALzM7KxGlcBEcWQ43zHIHe+NcKzjZxoAfKdmpMwBbK8Os3
+         zlyCxFKKpuiku2xBRrzPUZ4KjNfZiw8pRSUHuRP3TN1mJjzy+yrmidXToioycrXzP6wS
+         KmjUZu/KO2qBPnguodSh5oowJHvAYxM00o0SIn05snRwI7/Bs6mBUQcXHYak2jRrJ5U8
+         +SaPXnZU/bDAMwoqjwadNJv0GQg0zjEh7aU8VMWmj0UUAZFnqM9nN4OBB6DjwF2RsrtT
+         eIhQ==
+X-Gm-Message-State: AOAM532E4xQonKSlZk5l6nUkIVs9T5whxGNVBNPfrsZq8xiWyV13h615
+        jZ3i//Zg3RMmPazZ6vghn5bLCXIZvTu+AkU+xJg=
+X-Google-Smtp-Source: ABdhPJwHsT+22EimMWWdW5XiMz9g20yj0zPkGPGv0lZLPIwCzNsJkybtQeO7vSlQlH+9nyTdmMI+jz/itVffUz0hzmE=
+X-Received: by 2002:a5d:97d9:: with SMTP id k25mr22575386ios.42.1595245462494;
+ Mon, 20 Jul 2020 04:44:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200720074249.596364-1-jiaxun.yang@flygoat.com> <20200720074249.596364-4-jiaxun.yang@flygoat.com>
-In-Reply-To: <20200720074249.596364-4-jiaxun.yang@flygoat.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 20 Jul 2020 12:45:14 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a13vZJyOGZ1FpS98ytVC57P6NgmQpSfhf2h9b7meQLtcw@mail.gmail.com>
-Message-ID: <CAK8P3a13vZJyOGZ1FpS98ytVC57P6NgmQpSfhf2h9b7meQLtcw@mail.gmail.com>
-Subject: Re: [PATCH 3/5] MIPS: Loongson64: Enlarge IO_SPACE_LIMIT
+References: <20200720074249.596364-1-jiaxun.yang@flygoat.com>
+ <20200720074249.596364-3-jiaxun.yang@flygoat.com> <CAAhV-H52=2-Hij0AFBGuZWhQ4kWqEwLsvzXPR-ZndQKtkjnMbw@mail.gmail.com>
+ <618053d0-57ea-8675-99ee-2f0b93faa334@flygoat.com>
+In-Reply-To: <618053d0-57ea-8675-99ee-2f0b93faa334@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Mon, 20 Jul 2020 19:44:10 +0800
+Message-ID: <CAAhV-H7n3Uy-X6ePgTsC6VfV0HbV22SM-BV9Q0i6BS=oxw__yA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] MIPS: Loongson64: Process ISA Node in DeviceTree
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
         Frank Rowand <frowand.list@gmail.com>,
         Paul Burton <paulburton@kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        DTML <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:wxeTemO9I9qgRPajk466puVV0AUS0rUjtzK82g1IgJxYsxM8hZf
- 8drL7XzB88nzF7YnDKnnLRQDeDRnuXPzCp7vEtn6RKhDI7DJ5bBBEKZ0X/S4wfZHnhHLlJv
- oM9nOlCLLhEoldO5rJwP5lzqo2KxWCMD+Mf5ZxKXnbExaXaGe8bEbsjqT0og9CEnpOItzl+
- 1vnmr+IHLQwxhkhzzHHLw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nVSe/g0VnjQ=:UFJn06VN8QV8JK/lm+7VCg
- xn2/3+TfCt6XbD0xE2iE9jNYkXX1CMbmjJRRYj5j3XiGbBmMGJU4x14S2Mt6XcZbRHkQ04K0W
- mp/dfifUhNJny1E19dYiFZ6GYWKY0UXeZkRHesmfzRnq/jTzRj0varPZYnB+Asi+Ga9TCD8xd
- sL7mG5LrMw6K8DRKmiLKeRQIAsy9u/V4BHHziqSEq7fypx94brn8WIQEDLlCNbF0EXiOnU60P
- sz4bk5W5JKjND9wDyIzZpf2ZrtWGxmguumXJckHsF+gGXLf76aa7H/3Q5m8UG7qudpCMWZqY+
- TrntflQNP0qBMip4trQZYHLNm/oUqYM7z187y0sDRVuxzAg2HS4YPNYemV5oDuwDZ5tgbjqRW
- u6uRhGXz54kDgbgQeO8FMAgG+gFOA4J4rRWv5BFOzPD+qh8GjVdnelZKJTe9hkLd9xlSn01gg
- SYdXPG26m8aFfreY/okFPk7Tv8y48i6z1Z6++ylyDsHNtuftepOqtM5nFNVMVN/WalFDr7n+S
- VBbh9Zfy55Y9LKPeLwjQdTX/byCazPOXjhdjOl17lPMcyUl0bbkSInZpRrAANd7k21s+T61Rm
- HctU9rAV38lbAUxL5iGn0l9uix8dPRJyhaPGqOH5RjC6ZTPSAX7FTFvOWcXqc5xUTgUANO08U
- VcCMpRriu6MnA1MKqbrZi2Zzu1wieN3XIQR4EZobn3uffDiLpXRu2FKhqLnlG6W89thz4RHg1
- VvWGpUaDy9Bc6duKBln/29htbyb2aKW/qyWOq79Ox1Zt/ES7qkYKyk5MPSNQ12CAav97cmTxM
- LzJF7H/O2wBlf16pwfoHhRabQZdeTl8xV9wcq4E2CXu+Qd2aP5na4lCCzpWnc1d4xs/dcDvqP
- kfCF5Si1cohX7BUjIwNR5oief6deYeYTm6Ak8FnPmGATPc+oUEzBvecWFLXx1ndU06nALNoLH
- sj9uQR2mv3NbxXURIJNHOKPyvkuFmvZC2LXxo8wGUgNaCarjfRSm1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 20, 2020 at 9:44 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+Hi, Jiaxun,
+
+On Mon, Jul 20, 2020 at 6:20 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
-> It can be very big on LS7A PCH systems.
 >
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->   * On MIPS I/O ports are memory mapped, so we access them using normal
-> diff --git a/arch/mips/include/asm/mach-loongson64/spaces.h b/arch/mips/include/asm/mach-loongson64/spaces.h
-> index 3de0ac9d8829..b99b43854929 100644
-> --- a/arch/mips/include/asm/mach-loongson64/spaces.h
-> +++ b/arch/mips/include/asm/mach-loongson64/spaces.h
-> @@ -11,8 +11,7 @@
->  #define PCI_IOSIZE     SZ_16M
->  #define MAP_BASE       (PCI_IOBASE + PCI_IOSIZE)
 >
-> -/* Reserved at the start of PCI_IOBASE for legacy drivers */
-> -#define MMIO_LOWER_RESERVED    0x10000
-> +#define IO_SPACE_LIMIT 0x00ffffff
+> 在 2020/7/20 下午6:01, Huacai Chen 写道:
+> > Hi, Jiaxun,
+> >
+> > On Mon, Jul 20, 2020 at 3:44 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> >> Previously, we're hardcoding resserved ISA I/O Space in code, now
+> >> we're processing reverved I/O via DeviceTree directly. Using the ranges
+> >> property to determine the size and address of reserved I/O space.
+> > Maybe it is better to reserve a default legacy io range if there is no
+> > "isa" node in the .dts file?
+>
+> As currently all dts is built-in in Kernel, I don't think it's necessary.
+>
+> Also the only ISA driver remaining that can't be probed by dts is i8042.
+> We can convert it to DeviceTree based, and then we'll always be safe.
+>
+If you don't reserve a default legacy io range, then I should define
+an "isa" node for KVM guests even if the VM doesn't have i8042 and
+i8259. Because some pci devices still have legacy i/o ports, such as
+qxl. I have tested your patches and found that KVM guests with qxl
+cannot work without an "isa" node.
 
-Does this mean that firmware may already have assigned "high" I/O space
-numbers for devices? I'm not sure how well device drivers can generally
-deal with port numbers that don't fit into a 16-bit integer.
-
-Is it possible to run a 32-bit kernel on these machines? If yes, than
-taking up 16MB of virtual addresses may also become a problem.
-
-In practice, one should rarely need more than a few kb worth of
-port numbers, unless you expect to see hundreds of legacy PCI
-devices.
-
-       Arnd
+Huacai
+> Thanks.
+>
+> - Jiaxun
+>
+> >
+> > Huacai
+> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >> ---
+> >>   arch/mips/loongson64/init.c | 85 ++++++++++++++++++++++++++-----------
+> >>   1 file changed, 60 insertions(+), 25 deletions(-)
+> >>
+> >> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+> >> index 59ddadace83f..028d7b324ec2 100644
+> >> --- a/arch/mips/loongson64/init.c
+> >> +++ b/arch/mips/loongson64/init.c
+> >> @@ -7,6 +7,8 @@
+> >>   #include <linux/irqchip.h>
+> >>   #include <linux/logic_pio.h>
+> >>   #include <linux/memblock.h>
+> >> +#include <linux/of.h>
+> >> +#include <linux/of_address.h>
+> >>   #include <asm/bootinfo.h>
+> >>   #include <asm/traps.h>
+> >>   #include <asm/smp-ops.h>
+> >> @@ -63,41 +65,74 @@ void __init prom_free_prom_memory(void)
+> >>   {
+> >>   }
+> >>
+> >> -static __init void reserve_pio_range(void)
+> >> +static int __init add_legacy_isa_io(struct fwnode_handle *fwnode, phys_addr_t addr,
+> >> +                            resource_size_t    size)
+> >>   {
+> >> +       int ret = 0;
+> >>          struct logic_pio_hwaddr *range;
+> >> +       unsigned long vaddr;
+> >>
+> >>          range = kzalloc(sizeof(*range), GFP_ATOMIC);
+> >>          if (!range)
+> >> -               return;
+> >> +               return -ENOMEM;
+> >>
+> >> -       range->fwnode = &of_root->fwnode;
+> >> -       range->size = MMIO_LOWER_RESERVED;
+> >> -       range->hw_start = LOONGSON_PCIIO_BASE;
+> >> +       range->fwnode = fwnode;
+> >> +       range->size = size;
+> >> +       range->hw_start = addr;
+> >>          range->flags = LOGIC_PIO_CPU_MMIO;
+> >>
+> >> -       if (logic_pio_register_range(range)) {
+> >> -               pr_err("Failed to reserve PIO range for legacy ISA\n");
+> >> -               goto free_range;
+> >> +       ret = logic_pio_register_range(range);
+> >> +       if (ret) {
+> >> +               kfree(range);
+> >> +               return ret;
+> >> +       }
+> >> +
+> >> +       /* Legacy ISA must placed at the start of PCI_IOBASE */
+> >> +       if (range->io_start != 0) {
+> >> +               logic_pio_unregister_range(range);
+> >> +               kfree(range);
+> >> +               return -EINVAL;
+> >>          }
+> >>
+> >> -       if (WARN(range->io_start != 0,
+> >> -                       "Reserved PIO range does not start from 0\n"))
+> >> -               goto unregister;
+> >> -
+> >> -       /*
+> >> -        * i8259 would access I/O space, so mapping must be done here.
+> >> -        * Please remove it when all drivers can be managed by logic_pio.
+> >> -        */
+> >> -       ioremap_page_range(PCI_IOBASE, PCI_IOBASE + MMIO_LOWER_RESERVED,
+> >> -                               LOONGSON_PCIIO_BASE,
+> >> -                               pgprot_device(PAGE_KERNEL));
+> >> -
+> >> -       return;
+> >> -unregister:
+> >> -       logic_pio_unregister_range(range);
+> >> -free_range:
+> >> -       kfree(range);
+> >> +       vaddr = PCI_IOBASE + range->io_start;
+> >> +
+> >> +       ioremap_page_range(vaddr, vaddr + size, addr, pgprot_device(PAGE_KERNEL));
+> >> +
+> >> +       return 0;
+> >> +}
+> >> +
+> >> +static __init void reserve_pio_range(void)
+> >> +{
+> >> +       struct device_node *np;
+> >> +
+> >> +       for_each_node_by_name(np, "isa") {
+> >> +               struct of_pci_range range;
+> >> +               struct of_pci_range_parser parser;
+> >> +
+> >> +               pr_info("ISA Bridge: %pOF\n", np);
+> >> +
+> >> +               if (of_pci_range_parser_init(&parser, np)) {
+> >> +                       pr_info("Failed to parse resources.\n");
+> >> +                       break;
+> >> +               }
+> >> +
+> >> +               for_each_of_pci_range(&parser, &range) {
+> >> +                       switch (range.flags & IORESOURCE_TYPE_BITS) {
+> >> +                       case IORESOURCE_IO:
+> >> +                               pr_info(" IO 0x%016llx..0x%016llx\n",
+> >> +                                       range.cpu_addr,
+> >> +                                       range.cpu_addr + range.size - 1);
+> >> +                               if (add_legacy_isa_io(&np->fwnode, range.cpu_addr, range.size))
+> >> +                                       pr_warn("Failed to reserve legacy IO in Logic PIO\n");
+> >> +                               break;
+> >> +                       case IORESOURCE_MEM:
+> >> +                               pr_info(" MEM 0x%016llx..0x%016llx\n",
+> >> +                                       range.cpu_addr,
+> >> +                                       range.cpu_addr + range.size - 1);
+> >> +                               break;
+> >> +                       }
+> >> +               }
+> >> +       }
+> >>   }
+> >>
+> >>   void __init arch_init_irq(void)
+> >> --
+> >> 2.28.0.rc1
+> >>
