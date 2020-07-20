@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5076225C59
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jul 2020 12:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB59225C62
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jul 2020 12:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728248AbgGTKDn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Jul 2020 06:03:43 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:40977 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728001AbgGTKDn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Jul 2020 06:03:43 -0400
-Received: by mail-io1-f68.google.com with SMTP id p205so16911446iod.8;
-        Mon, 20 Jul 2020 03:03:42 -0700 (PDT)
+        id S1728381AbgGTKE4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Jul 2020 06:04:56 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:32825 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728001AbgGTKE4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Jul 2020 06:04:56 -0400
+Received: by mail-io1-f65.google.com with SMTP id d18so16947847ion.0;
+        Mon, 20 Jul 2020 03:04:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LfMkjlve+umafu2b9kaq1QVtcg2fakCMAu1E0vZcPhc=;
-        b=L1haK1uD9caSQVSsNJLCTSf+iLrUF4V7UD2uqcFTtjV5PoTzs/UZpJmgZido5cQ5iV
-         6/awqHHcR2/ED85fYyjjvx+UWN5poE1Yf31Jwb7oUL+0l5Ni4c17ZKXBtorf03sDBean
-         zZb4P8LEBIDjTNss69FaPW9m1ZKiFtHz4BKgIfOg+3s6h+XkcUDiYFJJPcaoB6Q6IQxG
-         Bz0gKI7VXYFP0bJSSww5qAmCrWCE0LN8k9Kps04AXxmZ35fPnfq1Ygb9I9NKfUzTfkBi
-         eCYdiQ/ADo3FRd4TTmOYSJITPyQkyu+j5CV5RgqLH9oM2fsaAZ8aAqvTQ6j9iR/ZdVIe
-         jESg==
-X-Gm-Message-State: AOAM530BYgWfgN8TwA9VMVFQclLz/7nqaGZKfcFcdR/rKKQByHdbrSTy
-        zFYR1I5ep6uxYQCWjNCh1ljB5vJEZ0ZFm+HIPxU=
-X-Google-Smtp-Source: ABdhPJwRZzzyScQp7O3xKTtSgAG6gq0krXRSgOszXlAIMTPuEofrPLkeLRuQhYQZDANrjByvsOVuFe155zXEsy/unbo=
-X-Received: by 2002:a6b:ba03:: with SMTP id k3mr15176905iof.72.1595239422312;
- Mon, 20 Jul 2020 03:03:42 -0700 (PDT)
+        bh=CM2+Zrnq9M8noNSG5Xi3kI72CDLisvB2MXVxJ1TJNrE=;
+        b=i1tKeAkEz4EIKQo0ed0WsxilberMsZhRRz8FQUbO3drTEDvnt9aE3JxC47+23LkDL3
+         FwdczPfqNQ90B8iwV0lr/tyhSxX71T4/nrV8aF5lGKv2SGvQw9pbs/QPMqhaIzRA7Ri6
+         BvHx4AKuIyjHh68lW1zfe/U4laTpIQYCsP0Lzc5pZ6hmyHqde8ZL8Hkn4UWWeg4/Ne4B
+         srM7L0I8hhi8aEDp4d+TuhdFB00wvSjiCp7SkBDyxR6zdBLCcE+W5Q5wCVxrKleUtzCB
+         DvAH8aBQVSauLISzBkqPgPT7KKK2t5f+6YDyVm4w2h+KW+tbQwf1vFkBVtZ7HmuPbUrf
+         iDFA==
+X-Gm-Message-State: AOAM530371qOjDK8PWzpoTs0btU9/HMF4kso1+5f4NNgJtOSVaUjIIwy
+        rk3hAmrPiAiIKru+9RNfbMtC/X2EDOIWaXS0cZw=
+X-Google-Smtp-Source: ABdhPJxagtFSFjh/gohNerQfF8vhoW3BuaMsvkdkTMYmVAmJVpu+reiILn4UMsx8vQOZa3f0UcEMP/SyStaIKZ6QTgw=
+X-Received: by 2002:a05:6638:1308:: with SMTP id r8mr15956587jad.106.1595239494941;
+ Mon, 20 Jul 2020 03:04:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200720074249.596364-1-jiaxun.yang@flygoat.com> <20200720074249.596364-4-jiaxun.yang@flygoat.com>
-In-Reply-To: <20200720074249.596364-4-jiaxun.yang@flygoat.com>
+References: <20200720074249.596364-1-jiaxun.yang@flygoat.com> <20200720074249.596364-6-jiaxun.yang@flygoat.com>
+In-Reply-To: <20200720074249.596364-6-jiaxun.yang@flygoat.com>
 From:   Huacai Chen <chenhc@lemote.com>
-Date:   Mon, 20 Jul 2020 18:03:30 +0800
-Message-ID: <CAAhV-H5sYFUnzgdJwV1SUpfJeZPMTsUVP3i-R0sebi2y9oW_cg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] MIPS: Loongson64: Enlarge IO_SPACE_LIMIT
+Date:   Mon, 20 Jul 2020 18:04:43 +0800
+Message-ID: <CAAhV-H4i52bxu=fnGhZ=OD0HWC9G2MJ-EN-cSzRNA_9GgBmXPg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] MIPS: Loongson64: Add ISA node for LS7A PCH
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -43,7 +43,6 @@ Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Paul Burton <paulburton@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -54,48 +53,39 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi, Jiaxun,
 
-On Mon, Jul 20, 2020 at 3:45 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+On Mon, Jul 20, 2020 at 3:48 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
-> It can be very big on LS7A PCH systems.
+> Although currently we're not enabling any ISA device in devicetree,
+> but this node is required to express the ranges of address reserved
+> for ISA.
 >
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  arch/mips/include/asm/io.h                     | 3 ++-
->  arch/mips/include/asm/mach-loongson64/spaces.h | 3 +--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
-> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-> index 346fffd9e972..0072489325fa 100644
-> --- a/arch/mips/include/asm/io.h
-> +++ b/arch/mips/include/asm/io.h
-> @@ -50,8 +50,9 @@
->  # define __relaxed_ioswabq ioswabq
+> diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> index 1c286bb8c703..724929ea3f5f 100644
+> --- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> +++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> @@ -19,6 +19,13 @@ pic: interrupt-controller@10000000 {
+>                         #interrupt-cells = <2>;
+>                 };
 >
->  /* ioswab[bwlq], __mem_ioswab[bwlq] are defined in mangle-port.h */
-> -
-> +#ifndef IO_SPACE_LIMIT
->  #define IO_SPACE_LIMIT 0xffff
-> +#endif
->
->  /*
->   * On MIPS I/O ports are memory mapped, so we access them using normal
-> diff --git a/arch/mips/include/asm/mach-loongson64/spaces.h b/arch/mips/include/asm/mach-loongson64/spaces.h
-> index 3de0ac9d8829..b99b43854929 100644
-> --- a/arch/mips/include/asm/mach-loongson64/spaces.h
-> +++ b/arch/mips/include/asm/mach-loongson64/spaces.h
-> @@ -11,8 +11,7 @@
->  #define PCI_IOSIZE     SZ_16M
->  #define MAP_BASE       (PCI_IOBASE + PCI_IOSIZE)
->
-> -/* Reserved at the start of PCI_IOBASE for legacy drivers */
-> -#define MMIO_LOWER_RESERVED    0x10000
-> +#define IO_SPACE_LIMIT 0x00ffffff
-Maybe using 0xffffff is better?
+> +               isa {
+> +                       compatible = "isa";
+> +                       #address-cells = <2>;
+> +                       #size-cells = <1>;
+> +                       ranges = <1 0 0 0x18000000 0x20000>;
+> +               };
+> +
+Maybe it is better to define isa after pci, which keeps the
+consistency as rs780e.
 
 Huacai
->
->  #include <asm/mach-generic/spaces.h>
->  #endif
+>                 pci@1a000000 {
+>                         compatible = "loongson,ls7a-pci";
+>                         device_type = "pci";
 > --
 > 2.28.0.rc1
 >
