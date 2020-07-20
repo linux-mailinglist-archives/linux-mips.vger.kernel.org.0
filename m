@@ -2,68 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56187225263
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Jul 2020 17:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7FC225587
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jul 2020 03:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbgGSPNN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Jul 2020 11:13:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53178 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726024AbgGSPNM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 19 Jul 2020 11:13:12 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 478E622B4D;
-        Sun, 19 Jul 2020 15:13:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595171591;
-        bh=NJ+8Y8xBtYKVq7It5UDmlrFvfA6IdxHidPvXTq/XF7I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Faftx/0Hn6GnZ5dDLGHnUEQ4pR549d2YryvE4r5cdmBdg58nTgYPN7WHH7wtQPdqF
-         no581pI7YeuY17rsynWainmO83EUPIyxLHvkTOZI+boGzKVkX1piQM4uqJMmchQT6f
-         K1aBnhzIlRioT3WUJ1VrQok/NXExiUBDHEMRzbCw=
-Date:   Sun, 19 Jul 2020 17:13:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Huacai Chen <chenhuacai@gmail.com>,
+        id S1726510AbgGTBmQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Jul 2020 21:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726225AbgGTBmP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Jul 2020 21:42:15 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DDDC0619D2;
+        Sun, 19 Jul 2020 18:42:15 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id f23so15934747iof.6;
+        Sun, 19 Jul 2020 18:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BghG0bhxWxmBh6VLuN4rW89/t/Sbp9UWEGt+blG5lpA=;
+        b=mzeyWIfsjwH1IQyIIN4YJKNVI2eThHp+im81JcoQOIZ1moVEy+D/Y8K4rISLL6r9Go
+         UK3hFVfT41JV9GqK3ZwLtQnPhfywXpgHKabxiADEfUQDQCMGRb2QjYkkdk1wo/8MXlI7
+         QUybG41Drb6npsCuwg8uKVZGQ7zc89h7+MvwY39M2nKeR409auVs8rRSTVY82U3Po/Zp
+         mywB+0atdCxzu7LEdbo03Qw8/EmpCqiZl0/HvpKqkBziqNSLAKzwZNjN/q57QOv8y0FP
+         jqJOhFFTwQh5VTuxjg4n1KSOTKnd5VbA2Uw3T2PmqUk+x3Vqllge8MfaSA9XBsSDzio6
+         nxJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BghG0bhxWxmBh6VLuN4rW89/t/Sbp9UWEGt+blG5lpA=;
+        b=ZUzXA3JGq0vS8cKDi6RgrvaUmK2lU4j2ckdL7pVYIeFmpsiMt7ozvwQBlNJ3b0P9xz
+         AvWb3YnaBGFcWJIhXiC3Akqguo44ENS3pWrOKamh1BG5e0liAsCsDVLL7cMNQg7rIuMq
+         Ge8z2kpnHd4IWhqDwJ4uXryidVQlfPvQfPclPR0cWPyY7mK5saLSC0JpWz0RH/qQnyUG
+         Jc0X1ibdD8DWD0ZeYJ3xr0JCp1Mvik3MTkRIJRFiUS2WBw7z4uE++rVZJYIvqpZV1IJU
+         OA/h315wSFEYP9NrrwRke820Gkxv4CPpoElfhbg1ofmz8qNGeTxwGeCVfjakk7Njr9GR
+         bLvQ==
+X-Gm-Message-State: AOAM531L/DorN2flPfQRwTmVGISnfMo+2/zZ5FsLCfUgacCaaxkBaHpM
+        G5BZESOdcm6bs6ajryixjMfeGPHK0dXfXE5UpDTZeZ5grlI=
+X-Google-Smtp-Source: ABdhPJwjmlGa4NcywVbK4jNW6SEoxFdHHqdKUqEu0Tv0w1iyQfd566RIjz08dqDkFK5lpsAdNcDI9YKg66qYxJD8oNw=
+X-Received: by 2002:a05:6638:61b:: with SMTP id g27mr23016894jar.123.1595209334713;
+ Sun, 19 Jul 2020 18:42:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
+ <CAAhV-H4wdxtLCAFOJE6wgAZdg+U5mquSZjHmAL_qsDaGtENbFg@mail.gmail.com>
+ <34928e81-3675-0309-b020-0cb4b402dc5c@flygoat.com> <20200719151322.GA301242@kroah.com>
+In-Reply-To: <20200719151322.GA301242@kroah.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Mon, 20 Jul 2020 09:42:03 +0800
+Message-ID: <CAAhV-H6f0Ohx=jZL_VeC2oncW-UUMA85t5C+x84xC_NZs83jNA@mail.gmail.com>
+Subject: Re: [PATCH -stable] MIPS: Fix build for LTS kernel caused by
+ backporting lpj adjustment
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         "open list:MIPS" <linux-mips@vger.kernel.org>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         "Stable # 4 . 4/4 . 9/4 . 14/4 . 19" <stable@vger.kernel.org>
-Subject: Re: [PATCH -stable] MIPS: Fix build for LTS kernel caused by
- backporting lpj adjustment
-Message-ID: <20200719151322.GA301242@kroah.com>
-References: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
- <CAAhV-H4wdxtLCAFOJE6wgAZdg+U5mquSZjHmAL_qsDaGtENbFg@mail.gmail.com>
- <34928e81-3675-0309-b020-0cb4b402dc5c@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <34928e81-3675-0309-b020-0cb4b402dc5c@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Jul 19, 2020 at 10:51:11PM +0800, Jiaxun Yang wrote:
-> 
-> 在 2020/7/19 上午11:24, Huacai Chen 写道:
-> > Hi, Serge,
-> > 
-> > Could you please have a look at this patch?
-> 
-> 
-> + Gregkh
-> 
-> This is urgent for next stable release, please take a look.
+Hi, Greg,
 
-Relax, it was only sent 3 days ago, we will get to this...
+On Sun, Jul 19, 2020 at 11:13 PM Greg KH <gregkh@linuxfoundation.org> wrote=
+:
+>
+> On Sun, Jul 19, 2020 at 10:51:11PM +0800, Jiaxun Yang wrote:
+> >
+> > =E5=9C=A8 2020/7/19 =E4=B8=8A=E5=8D=8811:24, Huacai Chen =E5=86=99=E9=
+=81=93:
+> > > Hi, Serge,
+> > >
+> > > Could you please have a look at this patch?
+> >
+> >
+> > + Gregkh
+> >
+> > This is urgent for next stable release, please take a look.
+>
+> Relax, it was only sent 3 days ago, we will get to this...
+>
+> Also, why was this not caught by any of the testing systems that we
+> have?  That might be good to determine so we don't mess up again in the
+> future.
+I think that is because CPUFREQ is disabled by default on MIPS.
 
-Also, why was this not caught by any of the testing systems that we
-have?  That might be good to determine so we don't mess up again in the
-future.
+Huacai
 
-thanks,
-
-greg k-h
+>
+> thanks,
+>
+> greg k-h
