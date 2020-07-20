@@ -2,98 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7372261A5
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jul 2020 16:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEE2227012
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jul 2020 22:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726095AbgGTOKn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Jul 2020 10:10:43 -0400
-Received: from foss.arm.com ([217.140.110.172]:49004 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726046AbgGTOKm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Jul 2020 10:10:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5EBFB113E;
-        Mon, 20 Jul 2020 07:10:42 -0700 (PDT)
-Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 101573F718;
-        Mon, 20 Jul 2020 07:10:40 -0700 (PDT)
-Date:   Mon, 20 Jul 2020 15:10:34 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
+        id S1726468AbgGTUyU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Jul 2020 16:54:20 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:51598 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726012AbgGTUyT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Jul 2020 16:54:19 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 261A78030867;
+        Mon, 20 Jul 2020 20:54:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pC6jqx2WqjEa; Mon, 20 Jul 2020 23:54:12 +0300 (MSK)
+Date:   Mon, 20 Jul 2020 23:54:10 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Huacai Chen <chenhc@lemote.com>
+CC:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-mips@vger.kernel.org>, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH v5] PCI: loongson: Use DECLARE_PCI_FIXUP_EARLY for
- bridge_class_quirk()
-Message-ID: <20200720141034.GA26850@e121166-lin.cambridge.arm.com>
-References: <1595065176-460-1-git-send-email-yangtiezhu@loongson.cn>
+        "Stable # 4 . 4/4 . 9/4 . 14/4 . 19" <stable@vger.kernel.org>
+Subject: Re: [PATCH -stable] MIPS: Fix build for LTS kernel caused by
+ backporting lpj adjustment
+Message-ID: <20200720205410.qicgkpbyikenagbx@mobilestation>
+References: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1595065176-460-1-git-send-email-yangtiezhu@loongson.cn>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <1594892369-28060-1-git-send-email-chenhc@lemote.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jul 18, 2020 at 05:39:36PM +0800, Tiezhu Yang wrote:
-> According to the datasheet of Loongson LS7A bridge chip, the old version
-> of Loongson LS7A PCIE port has a wrong value about PCI class which is
-> 0x060000, the correct value should be 0x060400, this bug can be fixed by
-> "dev->class = PCI_CLASS_BRIDGE_PCI << 8;" at the software level. As far
-> as I know, the latest version of LS7A has already fixed the value at the
-> hardware level.
+Hello Huacai,
+
+Thanks for the fix. The patch looks good to me except a small cleanup
+comment.
+
+On Thu, Jul 16, 2020 at 05:39:29PM +0800, Huacai Chen wrote:
+> Commit ed26aacfb5f71eecb20a ("mips: Add udelay lpj numbers adjustment")
+> has backported to 4.4~5.4, but the "struct cpufreq_freqs" (and also the
+> cpufreq notifier machanism) of 4.4~4.19 are different from the upstream
+> kernel. These differences cause build errors, and this patch can fix the
+> build.
 > 
-> In order to maintain downward compatibility, use DECLARE_PCI_FIXUP_EARLY
-> instead of DECLARE_PCI_FIXUP_HEADER for bridge_class_quirk() to fix it as
-> early as possible.
-> 
-> Otherwise, in the function pci_setup_device(), the related code about
-> "dev->class" such as "class = dev->class >> 8;" and "dev->transparent
-> = ((dev->class & 0xff) == 1);" maybe get wrong value without EARLY fixup.
-> 
-> Fixes: 1f58cca5cf2b ("PCI: Add Loongson PCI Controller support")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Stable <stable@vger.kernel.org> # 4.4/4.9/4.14/4.19
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
 > ---
+>  arch/mips/kernel/time.c | 13 ++++---------
+>  1 file changed, 4 insertions(+), 9 deletions(-)
 > 
-> v2: Modify the patch subject used with lower case "loongson"
-> 
-> v3: Update the commit message
-> 
-> v4: Update the commit message to describe the bug
-> 
-> v5: Remove "due to" in the commit message suggested by Sergei Shtylyov
-> 
->  drivers/pci/controller/pci-loongson.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-
-Applied to pci/loongson, thanks.
-
-Lorenzo
-
-> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-> index 459009c..58b862a 100644
-> --- a/drivers/pci/controller/pci-loongson.c
-> +++ b/drivers/pci/controller/pci-loongson.c
-> @@ -37,11 +37,11 @@ static void bridge_class_quirk(struct pci_dev *dev)
+> diff --git a/arch/mips/kernel/time.c b/arch/mips/kernel/time.c
+> index b7f7e08..b15ee12 100644
+> --- a/arch/mips/kernel/time.c
+> +++ b/arch/mips/kernel/time.c
+> @@ -40,10 +40,8 @@ static unsigned long glb_lpj_ref_freq;
+>  static int cpufreq_callback(struct notifier_block *nb,
+>  			    unsigned long val, void *data)
 >  {
->  	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
->  }
-> -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
->  			DEV_PCIE_PORT_0, bridge_class_quirk);
-> -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
->  			DEV_PCIE_PORT_1, bridge_class_quirk);
-> -DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_LOONGSON,
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
->  			DEV_PCIE_PORT_2, bridge_class_quirk);
+> -	struct cpufreq_freqs *freq = data;
+> -	struct cpumask *cpus = freq->policy->cpus;
+> -	unsigned long lpj;
+>  	int cpu;
+> +	struct cpufreq_freqs *freq = data;
+
+Why do you want to rearrange the cpu and freq variables declarations?
+IMO the order should be left as before since the change doesn't really
+make the code looking or working any better. If so the change is unneeded.
+Moreover reverse xmas tree-like variables declaration looks neater than any
+other.
+
+After fixing that feel free to add
+
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Sergey
+
 >  
->  static void system_bus_quirk(struct pci_dev *pdev)
+>  	/*
+>  	 * Skip lpj numbers adjustment if the CPU-freq transition is safe for
+> @@ -64,6 +62,7 @@ static int cpufreq_callback(struct notifier_block *nb,
+>  		}
+>  	}
+>  
+> +	cpu = freq->cpu;
+>  	/*
+>  	 * Adjust global lpj variable and per-CPU udelay_val number in
+>  	 * accordance with the new CPU frequency.
+> @@ -74,12 +73,8 @@ static int cpufreq_callback(struct notifier_block *nb,
+>  						glb_lpj_ref_freq,
+>  						freq->new);
+>  
+> -		for_each_cpu(cpu, cpus) {
+> -			lpj = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
+> -					    per_cpu(pcp_lpj_ref_freq, cpu),
+> -					    freq->new);
+> -			cpu_data[cpu].udelay_val = (unsigned int)lpj;
+> -		}
+> +		cpu_data[cpu].udelay_val = cpufreq_scale(per_cpu(pcp_lpj_ref, cpu),
+> +					   per_cpu(pcp_lpj_ref_freq, cpu), freq->new);
+>  	}
+>  
+>  	return NOTIFY_OK;
 > -- 
-> 2.1.0
+> 2.7.0
 > 
