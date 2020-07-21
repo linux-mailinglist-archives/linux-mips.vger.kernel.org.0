@@ -2,50 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4452273B9
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jul 2020 02:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0918A2273C8
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jul 2020 02:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728144AbgGUAWB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Jul 2020 20:22:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51688 "EHLO mail.kernel.org"
+        id S1728075AbgGUA1g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Jul 2020 20:27:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56066 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728063AbgGUAWA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Jul 2020 20:22:00 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        id S1727119AbgGUA1f (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 20 Jul 2020 20:27:35 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E05CB2080D;
-        Tue, 21 Jul 2020 00:21:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0ACB82080D;
+        Tue, 21 Jul 2020 00:27:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595290919;
-        bh=Da6qbEX+o6uaMHJDmFF0770XklkhAChY4ArFWsyOmmA=;
+        s=default; t=1595291255;
+        bh=c6SZiY+whgjX+KRRviicz0UCk9I8GfA5MfRpG2BBP94=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=1piYj1C1iwDOdLUDzd1rpVvo9vemkWJsXS8URCuVmBS46JfALaTtF4CFjYAEuenRx
-         +jMlCMyHpvZDdEsGvJ0CoPXR8b32rY/c1OXxwFthmAOfQxQUS1g7q7jovgKBJmLiqa
-         /VmUOqCuAFq6Ad4vUGlG3bwxJWvcFC5mEinDh5Sk=
-Received: by mail-ot1-f47.google.com with SMTP id e90so13752181ote.1;
-        Mon, 20 Jul 2020 17:21:58 -0700 (PDT)
-X-Gm-Message-State: AOAM531mxw6kpiBRe6xAK/ysT9gbXsjp7ak6UMiyQulUgoTufzuQRdlL
-        L71u1+Gtl+MyPb0EgsCIDOraPBcST6XfuSQK+w==
-X-Google-Smtp-Source: ABdhPJwGHRLkI27jNoNgF7ILMZHHY4pXlB5JpjB75m22H4vcQUfZq0NMhHBlUVhvdM2QlsP4dOjhti/AnlshASjzvYo=
-X-Received: by 2002:a9d:2646:: with SMTP id a64mr20938572otb.107.1595290918250;
- Mon, 20 Jul 2020 17:21:58 -0700 (PDT)
+        b=h25Ur3YjDXsIffNXZbUEBviwLUlanTRFbhwbcg8s+C+yYrfFTYIWsit+7qQSc+V8s
+         8O1o15xWRghSS3gfayQfZmw7lGcP6klqpEGdE6Jl4feXp8b0tUvfLKezUjoZEAcstW
+         D8t7q8kYE+tLgxEgh745NuSPqBpOJ99ojzMEhBuA=
+Received: by mail-ot1-f50.google.com with SMTP id 72so13757859otc.3;
+        Mon, 20 Jul 2020 17:27:35 -0700 (PDT)
+X-Gm-Message-State: AOAM533IcDoMSj7MN3QdD7Br4oeEdjzymF5zSDoRS/20KGj4eReK0Dfk
+        BHhecWyOt1xOHekWBeBQVoelk0nCDNSRK0Bfzg==
+X-Google-Smtp-Source: ABdhPJy1WG7lsLgsUdYuKa9S5Q9mvAiX/mi4NprNl1cvMY0HgadPJ9FKGMIqdUm5qCrPvLhnJyKu659d9wOYC469eCU=
+X-Received: by 2002:a9d:2646:: with SMTP id a64mr20951382otb.107.1595291254348;
+ Mon, 20 Jul 2020 17:27:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200720074249.596364-1-jiaxun.yang@flygoat.com> <20200720074249.596364-2-jiaxun.yang@flygoat.com>
-In-Reply-To: <20200720074249.596364-2-jiaxun.yang@flygoat.com>
+References: <20200720074249.596364-1-jiaxun.yang@flygoat.com> <20200720074249.596364-3-jiaxun.yang@flygoat.com>
+In-Reply-To: <20200720074249.596364-3-jiaxun.yang@flygoat.com>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 20 Jul 2020 18:21:45 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKhs=m=q9YcdxFz8XPcn4KUOum3U_XwcLoxMs4FqjptXQ@mail.gmail.com>
-Message-ID: <CAL_JsqKhs=m=q9YcdxFz8XPcn4KUOum3U_XwcLoxMs4FqjptXQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] of_address: Add bus type match for pci ranges parser
+Date:   Mon, 20 Jul 2020 18:27:22 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLOVwgFGm82EA+rs2Skjv_=xuuW1V_Asnu2yHHqdy6CvA@mail.gmail.com>
+Message-ID: <CAL_JsqLOVwgFGm82EA+rs2Skjv_=xuuW1V_Asnu2yHHqdy6CvA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] MIPS: Loongson64: Process ISA Node in DeviceTree
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Huacai Chen <chenhc@lemote.com>,
         Frank Rowand <frowand.list@gmail.com>,
         Paul Burton <paulburton@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
@@ -53,100 +54,138 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 20, 2020 at 1:49 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+On Mon, Jul 20, 2020 at 1:54 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
-> So the parser can be used to parse range property of different bus
-> types, such as ISA bus.
-
-Regular MMIO buses are actually already supported, but not ISA.
-
->
-> As they're all using PCI-like method of range property, there is no need
-> start a new parser.
+> Previously, we're hardcoding resserved ISA I/O Space in code, now
+> we're processing reverved I/O via DeviceTree directly. Using the ranges
+> property to determine the size and address of reserved I/O space.
 >
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  drivers/of/address.c       | 15 +++++++++++----
->  include/linux/of_address.h |  3 +++
->  2 files changed, 14 insertions(+), 4 deletions(-)
+>  arch/mips/loongson64/init.c | 85 ++++++++++++++++++++++++++-----------
+>  1 file changed, 60 insertions(+), 25 deletions(-)
 >
-> diff --git a/drivers/of/address.c b/drivers/of/address.c
-> index 8eea3f6e29a4..250c91767648 100644
-> --- a/drivers/of/address.c
-> +++ b/drivers/of/address.c
-> @@ -702,6 +702,10 @@ static int parser_init(struct of_pci_range_parser *parser,
->         parser->ns = of_bus_n_size_cells(node);
->         parser->dma = !strcmp(name, "dma-ranges");
+> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+> index 59ddadace83f..028d7b324ec2 100644
+> --- a/arch/mips/loongson64/init.c
+> +++ b/arch/mips/loongson64/init.c
+> @@ -7,6 +7,8 @@
+>  #include <linux/irqchip.h>
+>  #include <linux/logic_pio.h>
+>  #include <linux/memblock.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+>  #include <asm/bootinfo.h>
+>  #include <asm/traps.h>
+>  #include <asm/smp-ops.h>
+> @@ -63,41 +65,74 @@ void __init prom_free_prom_memory(void)
+>  {
+>  }
 >
-> +       parser->bus = of_match_bus(node);
-> +       if (!parser->bus)
-> +               return -ENOENT;
-
-You'll hit BUG() before you get here, so you can assume success.
-
-> +
->         parser->range = of_get_property(node, name, &rlen);
->         if (parser->range == NULL)
->                 return -ENOENT;
-> @@ -732,6 +736,7 @@ struct of_pci_range *of_pci_range_parser_one(struct of_pci_range_parser *parser,
->         int na = parser->na;
->         int ns = parser->ns;
->         int np = parser->pna + na + ns;
-> +       int bus_na = 0;
+> -static __init void reserve_pio_range(void)
+> +static int __init add_legacy_isa_io(struct fwnode_handle *fwnode, phys_addr_t addr,
+> +                            resource_size_t    size)
+>  {
+> +       int ret = 0;
+>         struct logic_pio_hwaddr *range;
+> +       unsigned long vaddr;
 >
+>         range = kzalloc(sizeof(*range), GFP_ATOMIC);
 >         if (!range)
->                 return NULL;
-> @@ -739,8 +744,10 @@ struct of_pci_range *of_pci_range_parser_one(struct of_pci_range_parser *parser,
->         if (!parser->range || parser->range + np > parser->end)
->                 return NULL;
+> -               return;
+> +               return -ENOMEM;
 >
-> -       if (parser->na == 3)
-> -               range->flags = of_bus_pci_get_flags(parser->range);
-> +       parser->bus->count_cells(parser->node, &bus_na, NULL);
+> -       range->fwnode = &of_root->fwnode;
+> -       range->size = MMIO_LOWER_RESERVED;
+> -       range->hw_start = LOONGSON_PCIIO_BASE;
+> +       range->fwnode = fwnode;
+> +       range->size = size;
+> +       range->hw_start = addr;
+>         range->flags = LOGIC_PIO_CPU_MMIO;
+>
+> -       if (logic_pio_register_range(range)) {
+> -               pr_err("Failed to reserve PIO range for legacy ISA\n");
+> -               goto free_range;
+> +       ret = logic_pio_register_range(range);
+> +       if (ret) {
+> +               kfree(range);
+> +               return ret;
+> +       }
 > +
-> +       if (parser->na == bus_na)
-> +               range->flags = parser->bus->get_flags(parser->range);
-
-I think you can just unconditionally call this and drop the else. For
-plain MMIO bus, we'd just return IORESOURCE_MEM, but I think the flags
-are ignored in that case.
-
->         else
->                 range->flags = 0;
+> +       /* Legacy ISA must placed at the start of PCI_IOBASE */
+> +       if (range->io_start != 0) {
+> +               logic_pio_unregister_range(range);
+> +               kfree(range);
+> +               return -EINVAL;
+>         }
 >
-> @@ -761,8 +768,8 @@ struct of_pci_range *of_pci_range_parser_one(struct of_pci_range_parser *parser,
->                 u32 flags = 0;
->                 u64 pci_addr, cpu_addr, size;
->
-> -               if (parser->na == 3)
-> -                       flags = of_bus_pci_get_flags(parser->range);
-> +               if (parser->na == bus_na)
-
-This too can be unconditional.
-
-> +                       flags = parser->bus->get_flags(parser->range);
->                 pci_addr = of_read_number(parser->range, na);
-
-Perhaps rename pci_addr to child_addr and cpu_addr to parent_addr.
-
->                 if (parser->dma)
->                         cpu_addr = of_translate_dma_address(parser->node,
-> diff --git a/include/linux/of_address.h b/include/linux/of_address.h
-> index 763022ed3456..3929b4637033 100644
-> --- a/include/linux/of_address.h
-> +++ b/include/linux/of_address.h
-> @@ -6,8 +6,11 @@
->  #include <linux/of.h>
->  #include <linux/io.h>
->
-> +struct of_bus;
+> -       if (WARN(range->io_start != 0,
+> -                       "Reserved PIO range does not start from 0\n"))
+> -               goto unregister;
+> -
+> -       /*
+> -        * i8259 would access I/O space, so mapping must be done here.
+> -        * Please remove it when all drivers can be managed by logic_pio.
+> -        */
+> -       ioremap_page_range(PCI_IOBASE, PCI_IOBASE + MMIO_LOWER_RESERVED,
+> -                               LOONGSON_PCIIO_BASE,
+> -                               pgprot_device(PAGE_KERNEL));
+> -
+> -       return;
+> -unregister:
+> -       logic_pio_unregister_range(range);
+> -free_range:
+> -       kfree(range);
+> +       vaddr = PCI_IOBASE + range->io_start;
 > +
->  struct of_pci_range_parser {
->         struct device_node *node;
-> +       struct of_bus *bus;
->         const __be32 *range;
->         const __be32 *end;
->         int na;
+> +       ioremap_page_range(vaddr, vaddr + size, addr, pgprot_device(PAGE_KERNEL));
+> +
+> +       return 0;
+> +}
+> +
+> +static __init void reserve_pio_range(void)
+> +{
+> +       struct device_node *np;
+> +
+> +       for_each_node_by_name(np, "isa") {
+> +               struct of_pci_range range;
+> +               struct of_pci_range_parser parser;
+
+Use of_range, of_range_parser instead of PCI variant.
+
+> +
+> +               pr_info("ISA Bridge: %pOF\n", np);
+> +
+> +               if (of_pci_range_parser_init(&parser, np)) {
+> +                       pr_info("Failed to parse resources.\n");
+> +                       break;
+> +               }
+> +
+> +               for_each_of_pci_range(&parser, &range) {
+
+for_each_of_range()
+
+We need to add a define for of_range_parser_init too.
+
+> +                       switch (range.flags & IORESOURCE_TYPE_BITS) {
+> +                       case IORESOURCE_IO:
+> +                               pr_info(" IO 0x%016llx..0x%016llx\n",
+> +                                       range.cpu_addr,
+> +                                       range.cpu_addr + range.size - 1);
+> +                               if (add_legacy_isa_io(&np->fwnode, range.cpu_addr, range.size))
+> +                                       pr_warn("Failed to reserve legacy IO in Logic PIO\n");
+> +                               break;
+> +                       case IORESOURCE_MEM:
+> +                               pr_info(" MEM 0x%016llx..0x%016llx\n",
+> +                                       range.cpu_addr,
+> +                                       range.cpu_addr + range.size - 1);
+> +                               break;
+> +                       }
+> +               }
+> +       }
+>  }
+>
+>  void __init arch_init_irq(void)
 > --
 > 2.28.0.rc1
 >
