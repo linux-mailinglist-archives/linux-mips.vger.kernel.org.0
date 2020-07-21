@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1962281D6
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jul 2020 16:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB252281D7
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jul 2020 16:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728960AbgGUOSf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Jul 2020 10:18:35 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:41568 "EHLO
+        id S1728989AbgGUOSp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Jul 2020 10:18:45 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:41584 "EHLO
         vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726522AbgGUOSe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jul 2020 10:18:34 -0400
+        with ESMTP id S1726522AbgGUOSp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jul 2020 10:18:45 -0400
 Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id CF6DA1FEB4;
-        Tue, 21 Jul 2020 14:18:31 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id EA9381FEB5;
+        Tue, 21 Jul 2020 14:18:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1595341113; bh=7kyPXpWNdFxYWiKuEJD7T9ohyci+Zzk/Mord055cn14=;
+        t=1595341124; bh=vaKD7IUjG1etsvFupW6edy8t9lQ2LBk8C1F1iGCfaLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JAUCNyipqyESTVsdn4u+7HA0OzfLHkI6Lg99tzqNHkpPi4eQi+O4v+NlXnSu6Zw+z
-         h7qnYbqAaIEO1hYX7MIw5tJbmU4laMDda4Bo9uwLSt0ozrL/dfhzXh3tzAicKcyNyb
-         xSb1zwss+kI5YTuz6FUOW9RQA2KBuRQ2bJs6T3tlqPng92+uAOKOlyO/dNEXxIoSRU
-         6BB7dJOpGxYFiQYTFRmO3yG5Pzt28vLxjb/KHRdOq72pEjs9pVuKQBEiTbW3YB8j4S
-         nBdyQSXTjud021yuFxU/aphMZo4xcIkCpiFnVLgmqzKw361uiIPLlX/zPLp7y4E2+a
-         VNHT2caz1GQKA==
+        b=tce9KQGX93te0m68uhC/CMSBP0c091jJweStn3YBbYVkQL/iO0rIpJeBNo784UcxT
+         O4agLh/309o8puqXrtgadFqp4pLuONuOmrbRVvtF6XpJtJfRkL8aSy7tbkZ2djVg7Z
+         Q9JYpH/0UX8oP2Esa6P3Bhtzt0N2pimL/XWEVV2jYsrKp/Vh4yofO5YI6syWpbehn5
+         iE2so5lSFUdaFS6YPwcJFruXCl68xFnKFJBIGDu2F3njisBMFYW3k5rIah6Plh1fod
+         6X/rXB89msdwEIs+KhLmptnalyF1XRRQDAMxHpUp1wHGf+kRUZsSnFvj0uUOff96eP
+         eSt7ggJireOzw==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -34,9 +34,9 @@ Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/5] MIPS: Loongson64: DTS: Fix ISA range for RS780E PCH
-Date:   Tue, 21 Jul 2020 22:17:32 +0800
-Message-Id: <20200721141742.996350-5-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 5/5] MIPS: Loongson64: Add ISA node for LS7A PCH
+Date:   Tue, 21 Jul 2020 22:17:33 +0800
+Message-Id: <20200721141742.996350-6-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.28.0.rc1
 In-Reply-To: <20200721141742.996350-1-jiaxun.yang@flygoat.com>
 References: <20200721141742.996350-1-jiaxun.yang@flygoat.com>
@@ -47,26 +47,32 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Ranges should express the actual physical address on bus.
+Although currently we're not enabling any ISA device in devicetree,
+but this node is required to express the ranges of address reserved
+for ISA.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/boot/dts/loongson/rs780e-pch.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/mips/boot/dts/loongson/rs780e-pch.dtsi b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-index d4c803d74036..99174b52dfb8 100644
---- a/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-+++ b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-@@ -25,7 +25,7 @@ isa {
- 			compatible = "isa";
- 			#address-cells = <2>;
- 			#size-cells = <1>;
--			ranges = <1 0 0 0 0x4000>;
-+			ranges = <1 0 0 0x18000000 0x4000>;
- 
- 			rtc0: rtc@70 {
- 				compatible = "motorola,mc146818";
+diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+index 1c286bb8c703..e574a062dfae 100644
+--- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
++++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+@@ -367,5 +367,12 @@ pci_bridge@14,0 {
+ 				interrupt-map = <0 0 0 0 &pic 39 IRQ_TYPE_LEVEL_HIGH>;
+ 			};
+ 		};
++
++		isa {
++			compatible = "isa";
++			#address-cells = <2>;
++			#size-cells = <1>;
++			ranges = <1 0 0 0x18000000 0x20000>;
++		};
+ 	};
+ };
 -- 
 2.28.0.rc1
 
