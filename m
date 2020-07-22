@@ -2,84 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E392295E6
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jul 2020 12:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BF5229C16
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jul 2020 17:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726821AbgGVKYo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jul 2020 06:24:44 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:57346 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726153AbgGVKYo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 22 Jul 2020 06:24:44 -0400
-Received: from localhost.loongson.cn (unknown [10.10.132.142])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP2TmExhfMTMDAA--.685S2;
-        Wed, 22 Jul 2020 18:24:39 +0800 (CST)
-From:   Jinyang He <hejinyang@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Fix unable to allocate memory for crashkernel
-Date:   Wed, 22 Jul 2020 18:24:38 +0800
-Message-Id: <1595413478-21269-1-git-send-email-hejinyang@loongson.cn>
-X-Mailer: git-send-email 2.1.0
+        id S1733038AbgGVPzg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Jul 2020 11:55:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36830 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733022AbgGVPzf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 22 Jul 2020 11:55:35 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3E14722BEF;
+        Wed, 22 Jul 2020 15:55:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595433334;
+        bh=kbnKA7mCq4Ti8FRp3szUEaPvkReboJRHj1Bnap/yDXc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=M7PCNAT9DGUX2L0caH+10UVk/p1rx6cEhyeyfCRf6jASk+SutrbKCUhw/JYEbYB32
+         BjD0ohEjSXEDVDq1qz6Q8MfXlggxLHeV1j3pv/wpdz0SRtzmomA0dZBVPY43/EzREm
+         Ocy1sPp4IMvGRDmbA0L51GpMPky3zMlh5grWjl2M=
+Received: by mail-ot1-f43.google.com with SMTP id t18so2122728otq.5;
+        Wed, 22 Jul 2020 08:55:34 -0700 (PDT)
+X-Gm-Message-State: AOAM530N5TuAfQ/pLHpqByyI61P8YN2eA3v3d8CJjtoyGidTLgKWC5GX
+        Ptrb3Z2DSNb5dzgwhOLIzzfc5i3UmQuiqBFgNg==
+X-Google-Smtp-Source: ABdhPJyb6F8z3WA4lftymR6yk0cNa75DCHAW9IbL6thShEbw7ONJr6PozDiOwNdaclBZhAjRHcaGBf8TXqSfAfl9dE4=
+X-Received: by 2002:a9d:46c:: with SMTP id 99mr580182otc.192.1595433333529;
+ Wed, 22 Jul 2020 08:55:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxP2TmExhfMTMDAA--.685S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Jr4UAw1fGr1UXr43Ar47urg_yoW8Jr13p3
-        4UZw4DC3yUWFWDCan5Aas3urWfJwn5Way8XFWUtrWkAas3Jr9rAr4fXF1Y9Fyqqr18K3WY
-        qF12gr1kuw1vyFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUySb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC2
-        0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-        0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-        14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20x
-        vaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
-        6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bOoGdUUUUU=
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+References: <20200721141742.996350-1-jiaxun.yang@flygoat.com> <20200721141742.996350-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20200721141742.996350-2-jiaxun.yang@flygoat.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 22 Jul 2020 09:55:21 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLFZc8ChR=Sj3N-G-b0tq_4F0-HSQPt5+WmkcDZrxUznA@mail.gmail.com>
+Message-ID: <CAL_JsqLFZc8ChR=Sj3N-G-b0tq_4F0-HSQPt5+WmkcDZrxUznA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] of_address: Add bus type match for pci ranges parser
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use 0 as the align parameter in memblock_find_in_range() is
-incorrect when we allocate memory for crashkernel. It's
-finally used as by round_down(). Like this call tree:
+On Tue, Jul 21, 2020 at 8:18 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> So the parser can be used to parse range property of ISA bus.
+>
+> As they're all using PCI-like method of range property, there is no need
+> start a new parser.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>
+> --
+> v2: Drop useless check, fix some na for bus_addr
+>         add define of of_range_parser_init according to
+>         Rob's suggestion.
+> ---
+>  drivers/of/address.c       | 27 +++++++++++++++------------
+>  include/linux/of_address.h |  5 +++++
+>  2 files changed, 20 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/of/address.c b/drivers/of/address.c
+> index 8eea3f6e29a4..7406636cea87 100644
+> --- a/drivers/of/address.c
+> +++ b/drivers/of/address.c
+> @@ -698,9 +698,10 @@ static int parser_init(struct of_pci_range_parser *parser,
+>
+>         parser->node = node;
+>         parser->pna = of_n_addr_cells(node);
+> -       parser->na = of_bus_n_addr_cells(node);
+> -       parser->ns = of_bus_n_size_cells(node);
+>         parser->dma = !strcmp(name, "dma-ranges");
+> +       parser->bus = of_match_bus(node);
+> +
+> +       parser->bus->count_cells(parser->node, &parser->na, &parser->ns);
+>
+>         parser->range = of_get_property(node, name, &rlen);
+>         if (parser->range == NULL)
+> @@ -732,6 +733,7 @@ struct of_pci_range *of_pci_range_parser_one(struct of_pci_range_parser *parser,
+>         int na = parser->na;
+>         int ns = parser->ns;
+>         int np = parser->pna + na + ns;
+> +       int busflag_na = 0;
+>
+>         if (!range)
+>                 return NULL;
+> @@ -739,12 +741,14 @@ struct of_pci_range *of_pci_range_parser_one(struct of_pci_range_parser *parser,
+>         if (!parser->range || parser->range + np > parser->end)
+>                 return NULL;
+>
+> -       if (parser->na == 3)
+> -               range->flags = of_bus_pci_get_flags(parser->range);
+> -       else
+> -               range->flags = 0;
+> +       range->flags = parser->bus->get_flags(parser->range);
+> +
+> +       /* PCI and ISA have a extra cell for resource flags */
+> +       if (strcmp(parser->bus->name, "pci") ||
+> +           strcmp(parser->bus->name, "isa"))
+> +               busflag_na = 1;
 
-mm/memblock.c
+This should be abstracted out. Probably the easiest is to add a
+'has_flags' boolean to the of_bus struct.
 
-memblock_find_in_range
-└── memblock_find_in_range_node
-    ├── __memblock_find_range_bottom_up
-    │   └── round_down
-    └── __memblock_find_range_top_down
-        └── round_down
+>
+> -       range->pci_addr = of_read_number(parser->range, na);
+> +       range->bus_addr = of_read_number(parser->range + busflag_na, na - busflag_na);
+>
+>         if (parser->dma)
+>                 range->cpu_addr = of_translate_dma_address(parser->node,
+> @@ -759,11 +763,10 @@ struct of_pci_range *of_pci_range_parser_one(struct of_pci_range_parser *parser,
+>         /* Now consume following elements while they are contiguous */
+>         while (parser->range + np <= parser->end) {
+>                 u32 flags = 0;
+> -               u64 pci_addr, cpu_addr, size;
+> +               u64 bus_addr, cpu_addr, size;
+>
+> -               if (parser->na == 3)
+> -                       flags = of_bus_pci_get_flags(parser->range);
+> -               pci_addr = of_read_number(parser->range, na);
+> +               flags = parser->bus->get_flags(parser->range);
+> +               bus_addr = of_read_number(parser->range + busflag_na, na - busflag_na);
+>                 if (parser->dma)
+>                         cpu_addr = of_translate_dma_address(parser->node,
+>                                         parser->range + na);
+> @@ -774,7 +777,7 @@ struct of_pci_range *of_pci_range_parser_one(struct of_pci_range_parser *parser,
+>
+>                 if (flags != range->flags)
+>                         break;
+> -               if (pci_addr != range->pci_addr + range->size ||
+> +               if (bus_addr != range->bus_addr + range->size ||
+>                     cpu_addr != range->cpu_addr + range->size)
+>                         break;
+>
+> diff --git a/include/linux/of_address.h b/include/linux/of_address.h
+> index 763022ed3456..3e8d6489cbf1 100644
+> --- a/include/linux/of_address.h
+> +++ b/include/linux/of_address.h
+> @@ -6,8 +6,11 @@
+>  #include <linux/of.h>
+>  #include <linux/io.h>
+>
+> +struct of_bus;
+> +
+>  struct of_pci_range_parser {
+>         struct device_node *node;
+> +       struct of_bus *bus;
+>         const __be32 *range;
+>         const __be32 *end;
+>         int na;
+> @@ -53,6 +56,7 @@ extern const __be32 *of_get_address(struct device_node *dev, int index,
+>
+>  extern int of_pci_range_parser_init(struct of_pci_range_parser *parser,
+>                         struct device_node *node);
+> +#define of_range_parser_init of_pci_range_parser_init
+>  extern int of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
+>                         struct device_node *node);
+>  extern struct of_pci_range *of_pci_range_parser_one(
+> @@ -83,6 +87,7 @@ static inline int of_pci_range_parser_init(struct of_pci_range_parser *parser,
+>  {
+>         return -ENOSYS;
+>  }
+> +#define of_range_parser_init of_pci_range_parser_init
 
-However, the round_down's second parameter must be a power of 2.
-The author mean not align. So change it from 0 to 1.
-
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
----
- arch/mips/kernel/setup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 7b537fa..588b212 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -497,7 +497,7 @@ static void __init mips_parse_crashkernel(void)
- 	if (ret != 0 || crash_size <= 0)
- 		return;
- 
--	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 0)) {
-+	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 1)) {
- 		pr_warn("Invalid memory region reserved for crash kernel\n");
- 		return;
- 	}
--- 
-2.1.0
-
+No need for 2 defines. Move this outside of the ifdef like the others.
