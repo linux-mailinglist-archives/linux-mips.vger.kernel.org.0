@@ -2,55 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2795722C47E
+	by mail.lfdr.de (Postfix) with ESMTP id 9832D22C47F
 	for <lists+linux-mips@lfdr.de>; Fri, 24 Jul 2020 13:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726326AbgGXLsG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1726411AbgGXLsG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Fri, 24 Jul 2020 07:48:06 -0400
-Received: from elvis.franken.de ([193.175.24.41]:47133 "EHLO elvis.franken.de"
+Received: from elvis.franken.de ([193.175.24.41]:47128 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726317AbgGXLsG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1726280AbgGXLsG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Fri, 24 Jul 2020 07:48:06 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jywBI-0003GQ-01; Fri, 24 Jul 2020 13:48:04 +0200
+        id 1jywBI-0003GQ-02; Fri, 24 Jul 2020 13:48:04 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D1AB0C09A9; Fri, 24 Jul 2020 13:09:48 +0200 (CEST)
-Date:   Fri, 24 Jul 2020 13:09:48 +0200
+        id DD84BC09A9; Fri, 24 Jul 2020 13:15:55 +0200 (CEST)
+Date:   Fri, 24 Jul 2020 13:15:55 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: BCM63xx: improve CFE version detection
-Message-ID: <20200724110948.GB17183@alpha.franken.de>
-References: <20200608092835.3377581-1-noltari@gmail.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH] mips: traps, add __init to parity_protection_init
+Message-ID: <20200724111555.GC17183@alpha.franken.de>
+References: <20200723094235.12706-1-jslaby@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200608092835.3377581-1-noltari@gmail.com>
+In-Reply-To: <20200723094235.12706-1-jslaby@suse.cz>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 08, 2020 at 11:28:35AM +0200, Álvaro Fernández Rojas wrote:
-> There are some CFE variants that start with 'cfe-vd' instead of 'cfe-v', such
-> as the one used in the Huawei HG556a: "cfe-vd081.5003". In this case, the CFE
-> version is stored as is (string vs number bytes).
+On Thu, Jul 23, 2020 at 11:42:35AM +0200, Jiri Slaby wrote:
+> It references __initdata and is called only from an __init function:
+> trap_init. This avoids section mismatches (which I am seeing with gcc
+> 10).
 > 
-> Some newer devices have an additional version number, such as the Comtrend
-> VR-3032u: "1.0.38-112.118-11".
-> 
-> Finally, print the string as is if the version doesn't start with "cfe-v" or
-> "cfe-vd", but starts with "cfe-".
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
 > ---
->  arch/mips/bcm63xx/boards/board_bcm963xx.c | 22 ++++++++++++++++++----
->  1 file changed, 18 insertions(+), 4 deletions(-)
+>  arch/mips/kernel/traps.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 applied to mips-next.
 
