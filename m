@@ -2,114 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 676CA22D548
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Jul 2020 07:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D600922D58B
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Jul 2020 08:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725941AbgGYF4n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Jul 2020 01:56:43 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:42128 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725825AbgGYF4n (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 25 Jul 2020 01:56:43 -0400
-Received: from localhost.cn (unknown [10.10.132.142])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9+WyRtfI24AAA--.495S2;
-        Sat, 25 Jul 2020 13:56:38 +0800 (CST)
-From:   Jinyang He <hejinyang@loongson.cn>
-To:     linux-mips@vger.kernel.org
-Cc:     Jinyang He <hejinyang@loongson.cn>
-Subject: [PATCH] MIPS: Fix unable to reserve memory for Crash kernel
-Date:   Sat, 25 Jul 2020 13:56:38 +0800
-Message-Id: <1595656598-10859-1-git-send-email-hejinyang@loongson.cn>
-X-Mailer: git-send-email 2.1.0
+        id S1726817AbgGYGiS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 Jul 2020 02:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725941AbgGYGiR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Jul 2020 02:38:17 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD99C0619D3;
+        Fri, 24 Jul 2020 23:38:16 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id l1so11982507ioh.5;
+        Fri, 24 Jul 2020 23:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b67K2e0Y5dToW3EVzzyFy6c/ZgBGS96NL2NdfK6mZtw=;
+        b=tJ5xsDoW4PUzFtNZqDhB0WPHq5/F4E2INMVfk9DvHhEv6TP39pIvVwiQ/iehqWQDfn
+         Ts+NvkXuZKk6HjJstXe+UucLuY6kTgBmvf9++HaW69gDDs8jkEh1sF5vUfnaC0Eeajk2
+         xf+MWhAZegVuIQhcN3AklESUcL+ag8SjBHkM3FoTmWHX7mpgkAj7nVfcJkXjlFMNuNCx
+         +LvQpzpR+Hov6G3dioIWJKqrRGLMR9boPQMD6YVmnIoJfbJ/5dDBSnTb+E0xhl8btnaR
+         hHehO3fk+O6bDvBrvPsy1qzLhgzTmoU6e10gtZbisQwabHiV0u5YfK8OuF8gqtZRe4K6
+         4qTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b67K2e0Y5dToW3EVzzyFy6c/ZgBGS96NL2NdfK6mZtw=;
+        b=NXGcUy6B2u3/2ZuY3qeV1C9wRd8jlcQT1FGRh7QKD4lUD2A4ly2xnl8vFqZwvlFNMk
+         Tow+SFMw+at4qiCi4C0Pw8awJfFwZ0sJIVqrCkpj3twkbJfGcb2Ng97fuIIlB7Lz0BYT
+         EPnOngh0zfXchbbwjlC52cYDPeW/SwFHP0fsxgiwxKJaUSjVUf20cEF8C8XhvqiPVF0A
+         Llug3y7C+LX897UESJpduqPEIoxzLulV2/7E+bI/PYNS2IhKvze0gF7QhdzIBc55J3VQ
+         QyL/h17Eht/iDVi3PeLpP5J/bQB0QIp7FrjnvdCCzBkIJygkjuvmVfKRJWo4q7BrFBcV
+         GhWg==
+X-Gm-Message-State: AOAM531IKF2oT1intosNSlnQ6SxWl9JvXJhcWZ2u5wsCggVrFa2U8lVI
+        PUZIiTJRZ8Zaar5Pgkx1CFainQtNC6ndDgjgv5PC9F7uvzTmtQ==
+X-Google-Smtp-Source: ABdhPJwn08RlGtecKEm1Lv7crJTWeP4hLGBovlA63tFvTHNSLtGgoGEjvCM36mQDChbzFbWdJ5AMtbvZmwowmzDrLzc=
+X-Received: by 2002:a05:6638:2411:: with SMTP id z17mr14466514jat.50.1595659095871;
+ Fri, 24 Jul 2020 23:38:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxv9+WyRtfI24AAA--.495S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw1fAr17try7tw13Ww1fXrb_yoW8uFWrp3
-        4UZw1UKw4kWF4DAa95Aay3uryftwnYka48XFyqqrZYyasYqwnrCr4Yqr1YvF9rtr18Kr17
-        XFnFgwnF9wnYyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
-        6r4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
-        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUb3rc3UUUUU==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+References: <1594896024-16624-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1594896024-16624-1-git-send-email-chenhc@lemote.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Sat, 25 Jul 2020 14:37:52 +0800
+Message-ID: <CAAhV-H4QH-cyabcfYyNJv89LpOdpsXN+dpZBYy0gNKmSnsUsKA@mail.gmail.com>
+Subject: Re: [PATCH V2] MIPS: CPU#0 is not hotpluggable
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use 0 as the align parameter in memblock_find_in_range() is
-incorrect when we reserve memory for Crash kernel.
+Hi, Thomas,
 
-The environment as follows:
-[    0.000000] MIPS: machine is loongson,loongson64c-4core-rs780e
-...
-[    1.951016]     crashkernel=64M@128M
+What do you think about this patch? Other archs also do the same thing
+except those support hotplug CPU#0.
 
-The warning as follows:
-[    0.000000] Invalid memory region reserved for crash kernel
+grep hotpluggable arch -rwI
+arch/riscv/kernel/setup.c:        cpu->hotpluggable = cpu_has_hotplug(i);
+arch/powerpc/kernel/sysfs.c:    BUG_ON(!c->hotpluggable);
+arch/powerpc/kernel/sysfs.c:            c->hotpluggable = 1;
+arch/powerpc/kernel/sysfs.c:        if (cpu_online(cpu) || c->hotpluggable) {
+arch/arm/kernel/setup.c:        cpuinfo->cpu.hotpluggable =
+platform_can_hotplug_cpu(cpu);
+arch/sh/kernel/topology.c:        c->hotpluggable = 1;
+arch/ia64/kernel/topology.c:     * CPEI target, then it is hotpluggable
+arch/ia64/kernel/topology.c:        sysfs_cpus[num].cpu.hotpluggable = 1;
+arch/xtensa/kernel/setup.c:        cpu->hotpluggable = !!i;
+arch/s390/kernel/smp.c:    c->hotpluggable = 1;
+arch/mips/kernel/topology.c:        c->hotpluggable = 1;
+arch/arm64/kernel/cpuinfo.c: * In case the boot CPU is hotpluggable,
+we record its initial state and
+arch/arm64/kernel/setup.c:        cpu->hotpluggable = cpu_can_disable(i);
+arch/x86/kernel/topology.c:        per_cpu(cpu_devices,
+num).cpu.hotpluggable = 1;
 
-And the iomem as follows:
-00200000-0effffff : System RAM
-  04000000-0484009f : Kernel code
-  048400a0-04ad7fff : Kernel data
-  04b40000-05c4c6bf : Kernel bss
-1a000000-1bffffff : pci@1a000000
-...
-
-The align parameter may be finally used by round_down() or round_up().
-Like the following call tree:
-
-mips-next: mm/memblock.c
-
-memblock_find_in_range
-└── memblock_find_in_range_node
-    ├── __memblock_find_range_bottom_up
-    │   └── round_up
-    └── __memblock_find_range_top_down
-        └── round_down
-\#define round_up(x, y) ((((x)-1) | __round_mask(x, y))+1)
-\#define round_down(x, y) ((x) & ~__round_mask(x, y))
-\#define __round_mask(x, y) ((__typeof__(x))((y)-1))
-
-The round_down(or round_up)'s second parameter must be a power of 2.
-If the second parameter is 0, it both will return 0.
-
-Use 1 as the parameter to fix the bug and the iomem as follows:
-00200000-0effffff : System RAM
-  04000000-0484009f : Kernel code
-  048400a0-04ad7fff : Kernel data
-  04b40000-05c4c6bf : Kernel bss
-  08000000-0bffffff : Crash kernel
-1a000000-1bffffff : pci@1a000000
-...
-
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
----
- arch/mips/kernel/setup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 7b537fa..588b212 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -497,7 +497,7 @@ static void __init mips_parse_crashkernel(void)
- 	if (ret != 0 || crash_size <= 0)
- 		return;
- 
--	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 0)) {
-+	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 1)) {
- 		pr_warn("Invalid memory region reserved for crash kernel\n");
- 		return;
- 	}
--- 
-2.1.0
-
+On Thu, Jul 16, 2020 at 6:38 PM Huacai Chen <chenhc@lemote.com> wrote:
+>
+> Now CPU#0 is not hotpluggable on MIPS, so prevent to create /sys/devices
+> /system/cpu/cpu0/online which confuses some user-space tools.
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---
+>  arch/mips/kernel/topology.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
+> index cd3e1f8..08ad637 100644
+> --- a/arch/mips/kernel/topology.c
+> +++ b/arch/mips/kernel/topology.c
+> @@ -20,7 +20,7 @@ static int __init topology_init(void)
+>         for_each_present_cpu(i) {
+>                 struct cpu *c = &per_cpu(cpu_devices, i);
+>
+> -               c->hotpluggable = 1;
+> +               c->hotpluggable = !!i;
+>                 ret = register_cpu(c, i);
+>                 if (ret)
+>                         printk(KERN_WARNING "topology_init: register_cpu %d "
+> --
+> 2.7.0
+>
