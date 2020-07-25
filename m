@@ -2,45 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDAB022D78B
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Jul 2020 14:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D03522D78F
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Jul 2020 14:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbgGYMiV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Jul 2020 08:38:21 -0400
-Received: from crapouillou.net ([89.234.176.41]:42190 "EHLO crapouillou.net"
+        id S1726618AbgGYMko (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 Jul 2020 08:40:44 -0400
+Received: from crapouillou.net ([89.234.176.41]:43986 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726583AbgGYMiV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 25 Jul 2020 08:38:21 -0400
+        id S1726583AbgGYMko (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 25 Jul 2020 08:40:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1595680698; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1595680842; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7/K1S5tO51vq/D+dmrYz3As5SIimWsQTOvR+jAS/StA=;
-        b=ghKqg4gz7SdSK24i50kGFGHfl0MbRKgPV2np40eRUeza0f0TdUyz45XbZpXG5OlPfgznXU
-        sG6U+iHaq0jl/vWp1adyDthxFqD1UGwCDFSZLJjhHYIUrHRgNmqW4KcWGUvsmphNv0mMtZ
-        prdsEhlSIza2jpawcun6cR9uVHf9VnU=
-Date:   Sat, 25 Jul 2020 14:38:07 +0200
+        bh=TSqCu54P76Pf8omFHiednQkv0plQDhhPIfzS3rmPvYA=;
+        b=RfE7cy+8GwZCNQD4Vy27gamIlVKhQGqzSrVyXgQfSDqQHV8tJfLfQsNEPKXrMOdrCNlcv6
+        E3iwFGJMdJ8n3HlHc4WBy772Blq+rAU/kkherEtxm6brq2HwuM67UXLGyuzNzJycApLEJ3
+        hSer8kJK171OU5JL0GTBHfX4Qi8JyOs=
+Date:   Sat, 25 Jul 2020 14:40:32 +0200
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] MAINTAINERS: Add linux-mips mailing list to JZ47xx
- entries
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org
-Message-Id: <J3Z0EQ.V70YLMM6L6RR2@crapouillou.net>
-In-Reply-To: <20200724155816.8125-1-krzk@kernel.org>
-References: <20200724155816.8125-1-krzk@kernel.org>
+Subject: Re: [PATCH RESEND] memory: jz4780_nemc: Only request IO memory the
+ driver will use
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     od@zcrc.me, =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "H . Nikolaus Schaller" <hns@goldelico.com>
+Message-Id: <K7Z0EQ.R0J26UF6HDOR@crapouillou.net>
+In-Reply-To: <20200723090414.5824-1-paul@crapouillou.net>
+References: <20200723090414.5824-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -49,55 +41,82 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Krzysztof,
+Thomas, Greg,
 
-Le ven. 24 juil. 2020 =E0 17:58, Krzysztof Kozlowski <krzk@kernel.org> a=20
+Nevermind the previous note, it turns out a new maintainer (Krzysztof)=20
+just appeared for drivers/memory/, I will upstream this patch through=20
+him.
+
+Cheers,
+-Paul
+
+
+Le jeu. 23 juil. 2020 =E0 11:04, Paul Cercueil <paul@crapouillou.net> a=20
 =E9crit :
-> The entries for JZ47xx SoCs and its drivers lacked MIPS mailing list.
-> Only MTD NAND driver pointed linux-mtd.  Add linux-mips so the=20
-> relevant
-> patches will get attention of MIPS developers.
+> The driver only uses the registers up to offset 0x54. Since the EFUSE
+> registers are in the middle of the NEMC registers, we only request
+> the registers we will use for now - that way the EFUSE driver can
+> probe too.
 >=20
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  MAINTAINERS | 3 +++
->  1 file changed, 3 insertions(+)
 >=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cba0ed77775b..f41fc775a3c9 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8543,17 +8543,20 @@ F:	samples/bpf/ibumad_user.c
+> Notes:
+>     Thomas:
 >=20
->  INGENIC JZ4780 DMA Driver
->  M:	Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-> +L:	linux-mips@vger.kernel.org
->  S:	Maintained
->  F:	drivers/dma/dma-jz4780.c
-
-This entry can be removed completely, Zubair specified that he does not=20
-maintain this driver anymore. Besides this e-mail address is no more=20
-valid.
-
-With that said:
-Acked-by: Paul Cercueil <paul@crapouillou.net>
-
+>     drivers/memory/ has no dedicated maintainer, so sending this
+>     patch upstream is like sending a bottle to the sea. Since it
+>     touches a driver for a Ingenic SoC, if Greg doesn't take it
+>     (I don't blame him - he's a busy man), could you take it in
+>     your tree?
 >=20
->  INGENIC JZ4780 NAND DRIVER
->  M:	Harvey Hunt <harveyhuntnexus@gmail.com>
->  L:	linux-mtd@lists.infradead.org
-> +L:	linux-mips@vger.kernel.org
->  S:	Maintained
->  F:	drivers/mtd/nand/raw/ingenic/
+>     Thanks,
+>     -Paul
 >=20
->  INGENIC JZ47xx SoCs
->  M:	Paul Cercueil <paul@crapouillou.net>
-> +L:	linux-mips@vger.kernel.org
->  S:	Maintained
->  F:	arch/mips/boot/dts/ingenic/
->  F:	arch/mips/include/asm/mach-jz4740/
+>  drivers/memory/jz4780-nemc.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/memory/jz4780-nemc.c=20
+> b/drivers/memory/jz4780-nemc.c
+> index b232ed279fc3..647267ea8c63 100644
+> --- a/drivers/memory/jz4780-nemc.c
+> +++ b/drivers/memory/jz4780-nemc.c
+> @@ -8,6 +8,7 @@
+>=20
+>  #include <linux/clk.h>
+>  #include <linux/init.h>
+> +#include <linux/io.h>
+>  #include <linux/math64.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+> @@ -288,7 +289,19 @@ static int jz4780_nemc_probe(struct=20
+> platform_device *pdev)
+>  	nemc->dev =3D dev;
+>=20
+>  	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	nemc->base =3D devm_ioremap_resource(dev, res);
+> +
+> +	/*
+> +	 * The driver only uses the registers up to offset 0x54. Since the=20
+> EFUSE
+> +	 * registers are in the middle of the NEMC registers, we only=20
+> request
+> +	 * the registers we will use for now - that way the EFUSE driver can
+> +	 * probe too.
+> +	 */
+> +	if (!devm_request_mem_region(dev, res->start, 0x54, dev_name(dev)))=20
+> {
+> +		dev_err(dev, "unable to request I/O memory region\n");
+> +		return -EBUSY;
+> +	}
+> +
+> +	nemc->base =3D devm_ioremap(dev, res->start, resource_size(res));
+>  	if (IS_ERR(nemc->base)) {
+>  		dev_err(dev, "failed to get I/O memory\n");
+>  		return PTR_ERR(nemc->base);
 > --
-> 2.17.1
+> 2.27.0
 >=20
 
 
