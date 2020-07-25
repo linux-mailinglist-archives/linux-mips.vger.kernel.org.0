@@ -2,80 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4B222D3A7
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Jul 2020 03:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676CA22D548
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Jul 2020 07:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727014AbgGYBqo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Jul 2020 21:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726701AbgGYBqo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Jul 2020 21:46:44 -0400
-Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218E5C0619D3;
-        Fri, 24 Jul 2020 18:46:44 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id EA8101FECD;
-        Sat, 25 Jul 2020 01:46:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1595641603; bh=vaKD7IUjG1etsvFupW6edy8t9lQ2LBk8C1F1iGCfaLk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rQTCgS/aUbpHeSUWsnjBtcd7X09EjjstBhr88VM0i1XjAEGMun/AOfqJL+hpTewQ1
-         DvsqbBntCloVENKsfuezgUL7bLfZH7Ma1PWh+jNUz1Mt6GvzO6bWqCmpRFXkngZ833
-         EKNswPCUd+48axr75k+eFKEuVEDWVZIir82/D28KZlpFkkhzR3bvfpZv6V6u5mqtHg
-         rEAceI7QZYM06jrJ3AXj2ZsyUeTXgLdVd5ENmJm+HL+plMULKPG81/fz8QL5MnStpn
-         Cj6Ckp5l3+H6iAmDG/maOriPS68IJvToTJVS/ISAYxL2SKXBaZmBHX7jd/JMACiDm7
-         PW73LwosyxoJA==
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+        id S1725941AbgGYF4n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 Jul 2020 01:56:43 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:42128 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725825AbgGYF4n (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 25 Jul 2020 01:56:43 -0400
+Received: from localhost.cn (unknown [10.10.132.142])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9+WyRtfI24AAA--.495S2;
+        Sat, 25 Jul 2020 13:56:38 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
 To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] MIPS: Loongson64: Add ISA node for LS7A PCH
-Date:   Sat, 25 Jul 2020 09:45:19 +0800
-Message-Id: <20200725014529.1143208-6-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.28.0.rc1
-In-Reply-To: <20200725014529.1143208-1-jiaxun.yang@flygoat.com>
-References: <20200725014529.1143208-1-jiaxun.yang@flygoat.com>
+Cc:     Jinyang He <hejinyang@loongson.cn>
+Subject: [PATCH] MIPS: Fix unable to reserve memory for Crash kernel
+Date:   Sat, 25 Jul 2020 13:56:38 +0800
+Message-Id: <1595656598-10859-1-git-send-email-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.1.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxv9+WyRtfI24AAA--.495S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw1fAr17try7tw13Ww1fXrb_yoW8uFWrp3
+        4UZw1UKw4kWF4DAa95Aay3uryftwnYka48XFyqqrZYyasYqwnrCr4Yqr1YvF9rtr18Kr17
+        XFnFgwnF9wnYyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
+        6r4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
+        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUb3rc3UUUUU==
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Although currently we're not enabling any ISA device in devicetree,
-but this node is required to express the ranges of address reserved
-for ISA.
+Use 0 as the align parameter in memblock_find_in_range() is
+incorrect when we reserve memory for Crash kernel.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+The environment as follows:
+[    0.000000] MIPS: machine is loongson,loongson64c-4core-rs780e
+...
+[    1.951016]     crashkernel=64M@128M
+
+The warning as follows:
+[    0.000000] Invalid memory region reserved for crash kernel
+
+And the iomem as follows:
+00200000-0effffff : System RAM
+  04000000-0484009f : Kernel code
+  048400a0-04ad7fff : Kernel data
+  04b40000-05c4c6bf : Kernel bss
+1a000000-1bffffff : pci@1a000000
+...
+
+The align parameter may be finally used by round_down() or round_up().
+Like the following call tree:
+
+mips-next: mm/memblock.c
+
+memblock_find_in_range
+└── memblock_find_in_range_node
+    ├── __memblock_find_range_bottom_up
+    │   └── round_up
+    └── __memblock_find_range_top_down
+        └── round_down
+\#define round_up(x, y) ((((x)-1) | __round_mask(x, y))+1)
+\#define round_down(x, y) ((x) & ~__round_mask(x, y))
+\#define __round_mask(x, y) ((__typeof__(x))((y)-1))
+
+The round_down(or round_up)'s second parameter must be a power of 2.
+If the second parameter is 0, it both will return 0.
+
+Use 1 as the parameter to fix the bug and the iomem as follows:
+00200000-0effffff : System RAM
+  04000000-0484009f : Kernel code
+  048400a0-04ad7fff : Kernel data
+  04b40000-05c4c6bf : Kernel bss
+  08000000-0bffffff : Crash kernel
+1a000000-1bffffff : pci@1a000000
+...
+
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
 ---
- arch/mips/boot/dts/loongson/ls7a-pch.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/mips/kernel/setup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-index 1c286bb8c703..e574a062dfae 100644
---- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-+++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-@@ -367,5 +367,12 @@ pci_bridge@14,0 {
- 				interrupt-map = <0 0 0 0 &pic 39 IRQ_TYPE_LEVEL_HIGH>;
- 			};
- 		};
-+
-+		isa {
-+			compatible = "isa";
-+			#address-cells = <2>;
-+			#size-cells = <1>;
-+			ranges = <1 0 0 0x18000000 0x20000>;
-+		};
- 	};
- };
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 7b537fa..588b212 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -497,7 +497,7 @@ static void __init mips_parse_crashkernel(void)
+ 	if (ret != 0 || crash_size <= 0)
+ 		return;
+ 
+-	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 0)) {
++	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 1)) {
+ 		pr_warn("Invalid memory region reserved for crash kernel\n");
+ 		return;
+ 	}
 -- 
-2.28.0.rc1
+2.1.0
 
