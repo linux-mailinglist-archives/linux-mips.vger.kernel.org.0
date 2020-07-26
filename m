@@ -2,99 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B3922DBA9
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Jul 2020 06:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD2122DD40
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Jul 2020 10:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725298AbgGZEP4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Jul 2020 00:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbgGZEPy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Jul 2020 00:15:54 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BD3C0619D2;
-        Sat, 25 Jul 2020 21:15:54 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id a9so7335400pjd.3;
-        Sat, 25 Jul 2020 21:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=4WYzTUUdMZgoaXQcj1WqQmcltrZ3z5zlJgG5BDAvVq0=;
-        b=Mds+cXhHNoz5AXlWOYXU3s73JA7XvAoKNrtZ0EoUYw/9juGs858oarelVHf6MWejx/
-         K9qwRNU48Io3CpDFBwMxYkMly/guogRkDhKc5l4Cfga+EVXIORgOW2e12NUAcOcdZKr6
-         oK52z8X0jkbOo/87p2Q5o9O+QLCnpKDmL+Avmq9S07uECG3Kh6MTBpGsxOZlNaFT1Wcm
-         EJSyRBFw2X/6m3tRl0UnAJOcRaT3+hed9IcREYVk5eKDgZjYcsT7x7BN9f2MLYFpfix/
-         PA82QHvi9dKmU48qqAmpIedC24aGdFnWkx/FnvfnLjgVb4TxRXGoe+N3HJpIIfJr3Vcy
-         kE5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=4WYzTUUdMZgoaXQcj1WqQmcltrZ3z5zlJgG5BDAvVq0=;
-        b=CQGXSaFWZXDKL9shWKH2aJ0QQ3xjSUTTd6elt3lAZ40pGFJRKcqqQcDKmTVqc2CRN9
-         n0XM/k0vB7pJ37YowTgAvP0kmahesETFSSW2OqVO2odok/cFTRjIhoQHAY4Qj495JYzU
-         me6y2Uw1DRe5DJ+AW5HJoe+1vkseAHNY/ECta9Hw2LjdrV5sI+zrw2sIJR5qdsOo7G2f
-         zXIWGwrd9vbSQWJ4QLnbsbtDlr/WGGIv6ujQTkiosFYryFCSjVEyCVlkgFaeWRJXqnLR
-         1bKavAt3llRNCIeVp96JkKXlVV8zIcR7eBpCycJqC7WAQoP+1+7sCefZ872WtXVx9V5e
-         Wjrw==
-X-Gm-Message-State: AOAM53084VzbBvpedeXI+i2J0u9eoRTKDK7AbSytwZ1a+6HWIo2V7Moo
-        fmbEnuSe3HOqiVaRtsmrCK0=
-X-Google-Smtp-Source: ABdhPJysTVPd/ymZRoYHMSRlnRVchHuwkNi4184gSgJMYsFYwQOSJsmMh6BDWtCwUSoGz2ypa3V9tg==
-X-Received: by 2002:a17:90a:648d:: with SMTP id h13mr11662239pjj.44.1595736954007;
-        Sat, 25 Jul 2020 21:15:54 -0700 (PDT)
-Received: from localhost.localdomain (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id d16sm10725568pfo.156.2020.07.25.21.15.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jul 2020 21:15:53 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mips@linux-mips.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org (open list:BROADCOM BCM47XX MIPS
-        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] MIPS: BCM47xx: Include bcm47xx_sprom.h
-Date:   Sat, 25 Jul 2020 21:15:21 -0700
-Message-Id: <20200726041521.5398-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200726041521.5398-1-f.fainelli@gmail.com>
-References: <20200726041521.5398-1-f.fainelli@gmail.com>
+        id S1726244AbgGZIcW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Jul 2020 04:32:22 -0400
+Received: from elvis.franken.de ([193.175.24.41]:49107 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725972AbgGZIcW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 26 Jul 2020 04:32:22 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jzc4y-0004Hg-00; Sun, 26 Jul 2020 10:32:20 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id AF654C09A9; Sun, 26 Jul 2020 10:22:14 +0200 (CEST)
+Date:   Sun, 26 Jul 2020 10:22:14 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH 0/6] mips: delete duplicated words
+Message-ID: <20200726082214.GA5032@alpha.franken.de>
+References: <20200726003429.20356-1-rdunlap@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200726003429.20356-1-rdunlap@infradead.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now that bcm47xx_sprom.h contains a prototype for bcm47xx_fill_sprom,
-include that header file directly from bcm47xx.h.
+On Sat, Jul 25, 2020 at 05:34:23PM -0700, Randy Dunlap wrote:
+> Delete duplicated words in arch/mips/ header files.
+> 
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> 
+>  arch/mips/include/asm/io.h              |    2 +-
+>  arch/mips/include/asm/octeon/cvmx-l2c.h |    2 +-
+>  arch/mips/include/asm/octeon/cvmx-pip.h |    2 +-
+>  arch/mips/include/asm/octeon/cvmx-pko.h |    7 +++----
+>  arch/mips/include/asm/octeon/cvmx-pow.h |    8 ++++----
+>  arch/mips/include/asm/octeon/octeon.h   |    2 +-
+>  6 files changed, 11 insertions(+), 12 deletions(-)
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- arch/mips/include/asm/mach-bcm47xx/bcm47xx.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+series applied to mips-next.
 
-diff --git a/arch/mips/include/asm/mach-bcm47xx/bcm47xx.h b/arch/mips/include/asm/mach-bcm47xx/bcm47xx.h
-index d7f1ef246d5c..93817bfb7fb2 100644
---- a/arch/mips/include/asm/mach-bcm47xx/bcm47xx.h
-+++ b/arch/mips/include/asm/mach-bcm47xx/bcm47xx.h
-@@ -10,6 +10,7 @@
- #include <linux/bcma/bcma.h>
- #include <linux/bcma/bcma_soc.h>
- #include <linux/bcm47xx_nvram.h>
-+#include <linux/bcm47xx_sprom.h>
- 
- enum bcm47xx_bus_type {
- #ifdef CONFIG_BCM47XX_SSB
-@@ -32,9 +33,6 @@ union bcm47xx_bus {
- extern union bcm47xx_bus bcm47xx_bus;
- extern enum bcm47xx_bus_type bcm47xx_bus_type;
- 
--void bcm47xx_fill_sprom(struct ssb_sprom *sprom, const char *prefix,
--			bool fallback);
--
- void bcm47xx_set_system_type(u16 chip_id);
- 
- #endif /* __ASM_BCM47XX_H */
+Thomas.
+
 -- 
-2.17.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
