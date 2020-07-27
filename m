@@ -2,112 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F371522EDFA
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Jul 2020 15:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184BC22F5D8
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Jul 2020 18:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726247AbgG0NyH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Jul 2020 09:54:07 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:22712 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728098AbgG0NyH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jul 2020 09:54:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595858045;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zEtQDs6cVppDK5WKf5nJI5uTNdjoT/6wHXknBUUaQAk=;
-        b=dPb6n2EWCCXyrUwNyax6429YodowF8wXf19SWg6Q3NyKYvWFx8emESlgBgYKxYAZR1Xy8m
-        P7o8YP1tgUyV4LB+4JplYXFw2ADNMjozyXoKAjsoJqseTixZRE3FvkvZqjSaycQ0hTiFy3
-        XNEoD4H+PJaqUwvSwYtSx3vOFrKDTw8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-411-kiX0T1BsO1KwonkvcdxvLQ-1; Mon, 27 Jul 2020 09:53:56 -0400
-X-MC-Unique: kiX0T1BsO1KwonkvcdxvLQ-1
-Received: by mail-wm1-f71.google.com with SMTP id s12so6540586wmc.5
-        for <linux-mips@vger.kernel.org>; Mon, 27 Jul 2020 06:53:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zEtQDs6cVppDK5WKf5nJI5uTNdjoT/6wHXknBUUaQAk=;
-        b=dFF4vzlMblPgLlw3x9mTJ+Lkc5QiHoedakHrCqpCWgiQpPkDtMfVqDviznWogbpiDd
-         6ehUmUtGMbsaTSNFXcKx4IlHzahmAr3+4UCJGdQfUjY31Yh5tnuJOoFyZjWXN9ON6tqJ
-         XNUKtMj2r73+EVzSU5SITYLWce4Mtu4lzrZlUS00j4xROnYR2NWrM/PkNYkYgTi36e55
-         /LRjytNFoYUHLUjZ+hAssAo1r6b6WIXm+p7LqBT7v8j/8dFizbfgVdnkaQNdiLAgpcGW
-         3evvU1qmzWH07ya6l0pNgR68LZKbQ2PFTN+//MnwTChITLvCXiyei8qe8+o01kJTM2LK
-         bDVw==
-X-Gm-Message-State: AOAM533VdLfCsHwb44VmBZ5zHlAAJu70HWsolE59PDlPE/C89Jh680dp
-        ajxG0gO0ozzQkpGXWJNZY6xYIkRZyWM637thFUFDM2gnbOYRfpirChqf8M1uOV42JHrATslFOyK
-        QCpvWF5UsxjwBEKOqaimwJw==
-X-Received: by 2002:a05:600c:2209:: with SMTP id z9mr20038382wml.70.1595858035175;
-        Mon, 27 Jul 2020 06:53:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw8T3WYkDDJyVBZk0vOV3Xvzou/NRMJtSKXBjdBGUAmkCaSBmPaaxVeHEWeMNixgTZXBHCw6w==
-X-Received: by 2002:a05:600c:2209:: with SMTP id z9mr20038364wml.70.1595858034895;
-        Mon, 27 Jul 2020 06:53:54 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:4502:3ee3:2bae:c612? ([2001:b07:6468:f312:4502:3ee3:2bae:c612])
-        by smtp.gmail.com with ESMTPSA id y11sm13158673wrs.80.2020.07.27.06.53.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jul 2020 06:53:54 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: KVM: Fix build error caused by 'kvm_run' cleanup
-To:     Huacai Chen <chenhc@lemote.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-References: <1595154207-9787-1-git-send-email-chenhc@lemote.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <21b0e23a-5974-dbcb-0e0a-e2c1847a97d4@redhat.com>
-Date:   Mon, 27 Jul 2020 15:53:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1728518AbgG0Qxt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Jul 2020 12:53:49 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:48628 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1726620AbgG0Qxt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 27 Jul 2020 12:53:49 -0400
+Received: from ld50.lan (unknown [112.64.68.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id ABB5B6006D;
+        Tue, 28 Jul 2020 00:51:11 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1595868671; bh=0DY4w9F/JvIxZoLUyQIMs5zt2ofGuK1nyof5jeq8wA8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=H/B/SI3wM7DNRHXHEI+N7JUkrPs09kgktnmlRN8+5fQwu+ON0iSQby9ZlEysB1N+J
+         lTNrTzXVMDMt57iFoHpevTGZ6lQ+CxBjkd4MB93Eauq2yT4C9hB1wX3gsE47lObtZB
+         Bb0/JtDXs5AmqEFmqc9VztJMwWTtPjdrP9tmJiTo=
+From:   WANG Xuerui <git@xen0n.name>
+To:     linux-mips@vger.kernel.org
+Cc:     WANG Xuerui <git@xen0n.name>
+Subject: [PATCH v3 0/3] Refactor FTLBPar exception handling and add GSExc handler
+Date:   Tue, 28 Jul 2020 00:51:05 +0800
+Message-Id: <20200727165108.2378227-1-git@xen0n.name>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1595154207-9787-1-git-send-email-chenhc@lemote.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 19/07/20 12:23, Huacai Chen wrote:
-> Commit c34b26b98caca48ec9ee9 ("KVM: MIPS: clean up redundant 'kvm_run'
-> parameters") remove the 'kvm_run' parameter in kvm_mips_complete_mmio_
-> load(), but forget to update all callers.
-> 
-> Fixes: c34b26b98caca48ec9ee9 ("KVM: MIPS: clean up redundant 'kvm_run' parameters")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> ---
-> I have reviewed Tianjia's patch but hadn't found the bug, I'm very very
-> sorry for that.
-> 
->  arch/mips/kvm/emulate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/kvm/emulate.c b/arch/mips/kvm/emulate.c
-> index d242300c..3b3f7b11 100644
-> --- a/arch/mips/kvm/emulate.c
-> +++ b/arch/mips/kvm/emulate.c
-> @@ -2128,7 +2128,7 @@ enum emulation_result kvm_mips_emulate_load(union mips_instruction inst,
->  			run->mmio.phys_addr, run->mmio.len, run->mmio.data);
->  
->  	if (!r) {
-> -		kvm_mips_complete_mmio_load(vcpu, run);
-> +		kvm_mips_complete_mmio_load(vcpu);
->  		vcpu->mmio_needed = 0;
->  		return EMULATE_DONE;
->  	}
-> 
+It was found that some undocumented unprivileged instructions could
+crash the kernel with a "FTLB parity error" on Loongson-3A4000, but the
+error registers were garbage:
 
-Queued, thanks.
+[  896.970419] FTLB error exception, cp0_ecc=0x00000002:
+[  896.975446] cp0_errorepc == ffffffffffffffff
+[  896.979755] c0_cacheerr == 00000000
+[  896.983277] Decoded c0_cacheerr: primary cache fault in insn reference.
+[  896.989963] Cache error exception:
+[  896.993396] cp0_errorepc == ffffffffffffffff
+[  896.997707] c0_cacheerr == 00000000
+[  897.001228] Decoded c0_cacheerr: primary cache fault in insn reference.
+[  897.007916] Error bits: 
+[  897.010467] IDX: 0x00000000
+[  897.013284] Kernel panic - not syncing: Can't handle the cache error!
+[  897.019807] ---[ end Kernel panic - not syncing: Can't handle the cache error! ]---
 
-Paolo
+Turns out the FTLBPar exception code is actually implementation-specific.
+On Loongson cores the exception is "GSExc" instead, and is non-fatal in
+Loongson's linux-3.10 fork. So we dynamically register the correct handler
+for the exception, and do not panic on the specific undocumented case.
+
+P.S. There is not much space left in the cpuinfo_mips.options flag. We
+should consider moving to something like x86's feature flags that is
+extensible.
+
+v3:
+- Simplified declaration of cpu_has_gsexcex, as suggested by Huacai
+
+v2:
+- Removed stray GSExc logic in cpu_probe_legacy, pointed out by Huacai
+
+WANG Xuerui (3):
+  MIPS: only register FTLBPar exception handler for supported models
+  MIPS: add definitions for Loongson-specific CP0.Diag1 register
+  MIPS: handle Loongson-specific GSExc exception
+
+ arch/mips/include/asm/cpu-features.h |  8 ++++++
+ arch/mips/include/asm/cpu.h          |  2 ++
+ arch/mips/include/asm/mipsregs.h     | 11 ++++++++
+ arch/mips/kernel/cpu-probe.c         | 16 ++++++++++++
+ arch/mips/kernel/genex.S             |  7 +++++
+ arch/mips/kernel/traps.c             | 38 +++++++++++++++++++++++++++-
+ 6 files changed, 81 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
 
