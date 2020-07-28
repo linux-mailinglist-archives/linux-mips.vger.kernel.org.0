@@ -2,123 +2,183 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC26623002C
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 05:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128C4230078
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 06:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727849AbgG1DfB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Jul 2020 23:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727798AbgG1DfA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jul 2020 23:35:00 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B816BC061794;
-        Mon, 27 Jul 2020 20:35:00 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id p1so9190548pls.4;
-        Mon, 27 Jul 2020 20:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TiWkNEwCCC0m6okc9WhV7jiLYdcUc3FOzWjygUNhbfY=;
-        b=R59x4WUX1ge7CJHjp7PrxGdP+hoQajod9t8NFjvLRVLvs1peTEITeF3Gp27+jITFY6
-         GQoi9/EQoCPfOnxLXkP60QFfYCWSUEk3eTkXFQDG4Xguo7gH94G/37wS49eJT7z+YrCB
-         t+RbWg7MuO/Y/4E7YJoEiKhWZZeXAH0Qe9n5b5qfzTJCR04vvxQi6Go4PeF2Jjhqg4Xh
-         17wdDPEF5ZtwdcKNb8nZb/v5B5Lf+XnKAQAzkxZI33zWGNV6HYMtiXt9O9x6JmS7FN92
-         eLf5M3eUdmffl7AUPxZUBULkdVbqsd2wMnbu7a2v9vLL3TyoTRtKsQXPZ5cfBIxmBlRR
-         fgaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TiWkNEwCCC0m6okc9WhV7jiLYdcUc3FOzWjygUNhbfY=;
-        b=gzuXM3ApYqicnRxEjZPemaRpG5eNri7fdozwgntKlVTZjoD4TvrvEBtnfbyQc9dpPm
-         4lsEXGmFoWyyEdMkZogVEmyPaA7w3IulzUfgxQvrbVORm7nO5h1mUXR+rXBoFOFBF1H2
-         jtkp5A/bwMjbO3Sp+r8BBCk4Ynrd0Dd+vQzmP88WooRrj/KGNNiSRZymWtR1ekESZtOY
-         hVkZUvm1tm3TDfER1JK9MG9Eqm8sw7ZNDntGbytYcP3HhAcQmTK4rcDzdoeLVb7mr9Fn
-         grigASNR3kyiKHu0aeWfsa63c1s+fxBI129kfzuTiLaCL9AMHyxSEPqIDVgE6DwtKEtO
-         UPrw==
-X-Gm-Message-State: AOAM531Ns9nZJGm9S9ZBMe1hNIxpbReBAlfxXVy5ssJvmBrSiJRFKaCV
-        bBZS4BT8rn0QWuLl2Net3dW1wRwb
-X-Google-Smtp-Source: ABdhPJxRYhI8/MsagOMafo1pS6zstDzKFOU2r074Wy/70Oqrct466kgOSbiaCGCHCixCD0dMGIKZ1Q==
-X-Received: by 2002:a17:902:b60d:: with SMTP id b13mr10131584pls.48.1595907300090;
-        Mon, 27 Jul 2020 20:35:00 -0700 (PDT)
-Received: from bobo.ozlabs.ibm.com (110-174-173-27.tpgi.com.au. [110.174.173.27])
-        by smtp.gmail.com with ESMTPSA id r4sm998707pji.37.2020.07.27.20.34.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 20:34:59 -0700 (PDT)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     linux-arch@vger.kernel.org
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
+        id S1726336AbgG1EIW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jul 2020 00:08:22 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:54742 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1726004AbgG1EIV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Jul 2020 00:08:21 -0400
+Received: from hanazono.local (unknown [116.236.177.53])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 5BEBF6006D;
+        Tue, 28 Jul 2020 12:08:12 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1595909292; bh=7sU+b2S5OQeF51fBW5K0xFQWC95f2Va54OtBp2iiUT0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ASOVaySfrnbNQNSf6P2yQu7oteymYDCChKRnXURc05Td9jut3RI28PEHnB6lGLGEB
+         SdYAN4AeDs1LPBYioJT9e8seGa9b+jyrazqi/Nq4/Kcyqcvrw1HiCKHbpLqlTzC9wu
+         P2EYUkAeg0n09nVgq/K7iSYvyIGoTKiMJ1/GmY1I=
+Subject: Re: [PATCH v3 2/5] MIPS: Loongson64: Process ISA Node in DeviceTree
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 11/24] mips: use asm-generic/mmu_context.h for no-op implementations
-Date:   Tue, 28 Jul 2020 13:33:52 +1000
-Message-Id: <20200728033405.78469-12-npiggin@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200728033405.78469-1-npiggin@gmail.com>
-References: <20200728033405.78469-1-npiggin@gmail.com>
+        Huacai Chen <chenhc@lemote.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200725014529.1143208-1-jiaxun.yang@flygoat.com>
+ <20200725014529.1143208-3-jiaxun.yang@flygoat.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+Message-ID: <b239011a-d946-17b8-3d29-995f1158d0bf@xen0n.name>
+Date:   Tue, 28 Jul 2020 12:08:11 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:80.0)
+ Gecko/20100101 Thunderbird/80.0a1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200725014529.1143208-3-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- arch/mips/include/asm/mmu_context.h | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+Hi Jiaxun,
 
-diff --git a/arch/mips/include/asm/mmu_context.h b/arch/mips/include/asm/mmu_context.h
-index cddead91acd4..ed9f2d748f63 100644
---- a/arch/mips/include/asm/mmu_context.h
-+++ b/arch/mips/include/asm/mmu_context.h
-@@ -124,10 +124,6 @@ static inline void set_cpu_context(unsigned int cpu,
- #define cpu_asid(cpu, mm) \
- 	(cpu_context((cpu), (mm)) & cpu_asid_mask(&cpu_data[cpu]))
- 
--static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
--{
--}
--
- extern void get_new_mmu_context(struct mm_struct *mm);
- extern void check_mmu_context(struct mm_struct *mm);
- extern void check_switch_mmu_context(struct mm_struct *mm);
-@@ -136,6 +132,7 @@ extern void check_switch_mmu_context(struct mm_struct *mm);
-  * Initialize the context related info for a new mm_struct
-  * instance.
-  */
-+#define init_new_context init_new_context
- static inline int
- init_new_context(struct task_struct *tsk, struct mm_struct *mm)
- {
-@@ -180,14 +177,12 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
-  * Destroy context related info for an mm_struct that is about
-  * to be put to rest.
-  */
-+#define destroy_context destroy_context
- static inline void destroy_context(struct mm_struct *mm)
- {
- 	dsemul_mm_cleanup(mm);
- }
- 
--#define activate_mm(prev, next)	switch_mm(prev, next, current)
--#define deactivate_mm(tsk, mm)	do { } while (0)
--
- static inline void
- drop_mmu_context(struct mm_struct *mm)
- {
-@@ -237,4 +232,6 @@ drop_mmu_context(struct mm_struct *mm)
- 	local_irq_restore(flags);
- }
- 
-+#include <asm-generic/mmu_context.h>
-+
- #endif /* _ASM_MMU_CONTEXT_H */
--- 
-2.23.0
 
+On 2020/7/25 09:45, Jiaxun Yang wrote:
+> Previously, we're hardcoding resserved ISA I/O Space in code, now
+"reserved"; also "in code" seems redundant (we're "hard-coding", aren't we?)
+> we're processing reverved I/O via DeviceTree directly. Using the ranges
+another "reserved" typo, but better restructure the whole clause.
+> property to determine the size and address of reserved I/O space.
+This sentence has no verb. Maybe you mean "Use"?
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> --
+> v2: Use range_parser instead of pci_range_parser
+> ---
+>  arch/mips/loongson64/init.c | 87 ++++++++++++++++++++++++++-----------
+>  1 file changed, 62 insertions(+), 25 deletions(-)
+>
+> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+> index 59ddadace83f..8ba22c30f312 100644
+> --- a/arch/mips/loongson64/init.c
+> +++ b/arch/mips/loongson64/init.c
+> @@ -7,6 +7,8 @@
+>  #include <linux/irqchip.h>
+>  #include <linux/logic_pio.h>
+>  #include <linux/memblock.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+>  #include <asm/bootinfo.h>
+>  #include <asm/traps.h>
+>  #include <asm/smp-ops.h>
+> @@ -63,41 +65,76 @@ void __init prom_free_prom_memory(void)
+>  {
+>  }
+>  
+> -static __init void reserve_pio_range(void)
+> +static int __init add_legacy_isa_io(struct fwnode_handle *fwnode, resource_size_t hw_start,
+> +				    resource_size_t size)
+>  {
+> +	int ret = 0;
+>  	struct logic_pio_hwaddr *range;
+> +	unsigned long vaddr;
+>  
+>  	range = kzalloc(sizeof(*range), GFP_ATOMIC);
+>  	if (!range)
+> -		return;
+> +		return -ENOMEM;
+>  
+> -	range->fwnode = &of_root->fwnode;
+> -	range->size = MMIO_LOWER_RESERVED;
+> -	range->hw_start = LOONGSON_PCIIO_BASE;
+> +	range->fwnode = fwnode;
+> +	range->size = size;
+> +	range->hw_start = hw_start;
+>  	range->flags = LOGIC_PIO_CPU_MMIO;
+>  
+> -	if (logic_pio_register_range(range)) {
+> -		pr_err("Failed to reserve PIO range for legacy ISA\n");
+> -		goto free_range;
+> +	ret = logic_pio_register_range(range);
+> +	if (ret) {
+> +		kfree(range);
+> +		return ret;
+> +	}
+> +
+> +	/* Legacy ISA must placed at the start of PCI_IOBASE */
+> +	if (range->io_start != 0) {
+> +		logic_pio_unregister_range(range);
+> +		kfree(range);
+> +		return -EINVAL;
+>  	}
+>  
+> -	if (WARN(range->io_start != 0,
+> -			"Reserved PIO range does not start from 0\n"))
+> -		goto unregister;
+> -
+> -	/*
+> -	 * i8259 would access I/O space, so mapping must be done here.
+> -	 * Please remove it when all drivers can be managed by logic_pio.
+> -	 */
+> -	ioremap_page_range(PCI_IOBASE, PCI_IOBASE + MMIO_LOWER_RESERVED,
+> -				LOONGSON_PCIIO_BASE,
+> -				pgprot_device(PAGE_KERNEL));
+> -
+> -	return;
+> -unregister:
+> -	logic_pio_unregister_range(range);
+> -free_range:
+> -	kfree(range);
+> +	vaddr = PCI_IOBASE + range->io_start;
+> +
+> +	ioremap_page_range(vaddr, vaddr + size, hw_start, pgprot_device(PAGE_KERNEL));
+> +
+> +	return 0;
+> +}
+> +
+> +static __init void reserve_pio_range(void)
+> +{
+> +	struct device_node *np;
+> +
+> +	for_each_node_by_name(np, "isa") {
+> +		struct of_range range;
+> +		struct of_range_parser parser;
+> +
+> +		pr_info("ISA Bridge: %pOF\n", np);
+> +
+> +		if (of_range_parser_init(&parser, np)) {
+> +			pr_info("Failed to parse resources.\n");
+> +			break;
+> +		}
+> +
+> +		for_each_of_range(&parser, &range) {
+> +			switch (range.flags & IORESOURCE_TYPE_BITS) {
+> +			case IORESOURCE_IO:
+> +				pr_info(" IO 0x%016llx..0x%016llx  ->  0x%016llx\n",
+> +					range.cpu_addr,
+> +					range.cpu_addr + range.size - 1,
+> +					range.bus_addr);
+> +				if (add_legacy_isa_io(&np->fwnode, range.cpu_addr, range.size))
+> +					pr_warn("Failed to reserve legacy IO in Logic PIO\n");
+> +				break;
+> +			case IORESOURCE_MEM:
+> +				pr_info(" MEM 0x%016llx..0x%016llx  ->  0x%016llx\n",
+> +					range.cpu_addr,
+> +					range.cpu_addr + range.size - 1,
+> +					range.bus_addr);
+> +				break;
+> +			}
+> +		}
+> +	}
+>  }
+>  
+>  void __init arch_init_irq(void)
