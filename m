@@ -2,226 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC7123074A
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 12:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714922307F1
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 12:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728532AbgG1KHM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Jul 2020 06:07:12 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:57950 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1728516AbgG1KHM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Jul 2020 06:07:12 -0400
-Received: from ld50.lan (unknown [140.207.23.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id BE90260163;
-        Tue, 28 Jul 2020 18:07:04 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1595930825; bh=m6wz7vQZvzTBdMAfe8GuGXNmpJR1uCDpXxJoXhtQIas=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kyAb3yH6rLZ4eQBH/v/1SUCm+7SQnP/XWrsbF7puJKLiigLgsDRqnW4O5kw0yrZci
-         q7fVPTak77tKXKVYzqKDg6nWpY/99hzRRjdocwPOJ8TnME8RMd8E8MTg2ffVb8cSvm
-         g+ETRM7HibpYNkhxzh9hLLDVqSr+mE826NJyzO0U=
-From:   WANG Xuerui <git@xen0n.name>
-To:     linux-mips@vger.kernel.org
-Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v4 3/3] MIPS: handle Loongson-specific GSExc exception
-Date:   Tue, 28 Jul 2020 18:06:55 +0800
-Message-Id: <20200728100655.3005831-4-git@xen0n.name>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200728100655.3005831-1-git@xen0n.name>
-References: <20200728100655.3005831-1-git@xen0n.name>
+        id S1728588AbgG1Koq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jul 2020 06:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728566AbgG1Koq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jul 2020 06:44:46 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B836FC061794;
+        Tue, 28 Jul 2020 03:44:45 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id c2so8588299edx.8;
+        Tue, 28 Jul 2020 03:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3Jtd/NLDfEi5mS55S0K4WbnSIzqpGJbZScZKeEtsXAQ=;
+        b=rFUcMCUj2AwdC69csGGjJVjr3K/8WS4HC4QuFwZtg451Qj4L37BpO16QBPnCSOnEqP
+         0XLFh6CAcMNi+86g1xCyy/bqdVTYRHcM+S9kEIZb7EWJKKOmGB7fGMyBy9goHLKaJvij
+         l3J//FegCgxfC20hSO+SeOOi0ojcNdANd874jllkW9bgWXdBSGjDZ+KKsJ5ItnWu5ElM
+         TutsV7Y/UWKyR2rEXX1BEUlxaWMHKF0PMaSsOZWNK/0D0ZH9xxW9nIbDP8AygACtKk6q
+         SuVbplxJKZehbky/ztC2U7bihOneNjqjj52Fn1yyk39lDMDQeAEZqoI3viUUxFXSv5vl
+         9XJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=3Jtd/NLDfEi5mS55S0K4WbnSIzqpGJbZScZKeEtsXAQ=;
+        b=ZSQUTmefeWtLK+CEQ054R8zMjwmMr1kQGHV//SrV/Y7NrFrRJ4LYlseGfoN/hq3CMG
+         I8GvY7tiADo4UFH7Is3XoHqXnHo/DvY1E4xdG8kI5X92lzDEg624ps0HiRRY6FjAQdo1
+         IdZjS0135VXkU7hpgT8x2Q1QSC3ceQkZ6/8g+BJezbXSo+KU/3BhgJirmIqHSHwaIheD
+         9hUvgz+0qewAIgFn0bZBTtEMyBT5kyOJnGsyAQZgYlhE8h2YDAKRsYfjuMdhTDmSPpy3
+         TJTUWePl+6L4iEHGGhEU9iwwQmNHPKbuxNGnpykm8Nu27GRT4TsyvefzlxZ+sgA5r5F6
+         K1DA==
+X-Gm-Message-State: AOAM5320ckPRT4QDJ4QrsdqQf3JNcI55zxYPlDM3R9GhQb13GjHrfS/b
+        BBdHsWr5QRCXwQoFBbH/UIg=
+X-Google-Smtp-Source: ABdhPJztizS2/FT37W5GVOnd6egL7RbIXP7ubjCB3LMqpraJ3F9fNNOV7TQhtwANWplTQvf13TbOQg==
+X-Received: by 2002:aa7:dd15:: with SMTP id i21mr12013673edv.153.1595933084517;
+        Tue, 28 Jul 2020 03:44:44 -0700 (PDT)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id cf10sm460841ejb.4.2020.07.28.03.44.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2020 03:44:43 -0700 (PDT)
+Date:   Tue, 28 Jul 2020 12:44:40 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: Re: [PATCH 14/15] x86/numa: remove redundant iteration over
+ memblock.reserved
+Message-ID: <20200728104440.GA222284@gmail.com>
+References: <20200728051153.1590-1-rppt@kernel.org>
+ <20200728051153.1590-15-rppt@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200728051153.1590-15-rppt@kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Newer Loongson cores (Loongson-3A R2 and newer) use the
-implementation-dependent ExcCode 16 to signal Loongson-specific
-exceptions. The extended cause is put in the non-standard CP0.Diag1
-register which is CP0 Register 22 Select 1, called GSCause in Loongson
-manuals. Inside is an exception code bitfield called GSExcCode, only
-codes 0 to 6 inclusive are documented (so far, in the Loongson 3A3000
-User Manual, Volume 2).
 
-During experiments, it was found that some undocumented unprivileged
-instructions can trigger the also-undocumented GSExcCode 8 on Loongson
-3A4000. Processor state is not corrupted, but we cannot continue without
-further knowledge, and Loongson is not providing that information as of
-this writing. So we send SIGILL on seeing this exception code to thwart
-easy local DoS attacks.
+* Mike Rapoport <rppt@kernel.org> wrote:
 
-Other exception codes are made fatal, partly because of insufficient
-knowledge, also partly because they are not as easily reproduced. None
-of them are encountered in the wild with upstream kernels and userspace
-so far.
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> numa_clear_kernel_node_hotplug() function first traverses numa_meminfo
+> regions to set node ID in memblock.reserved and than traverses
+> memblock.reserved to update reserved_nodemask to include node IDs that were
+> set in the first loop.
+> 
+> Remove redundant traversal over memblock.reserved and update
+> reserved_nodemask while iterating over numa_meminfo.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  arch/x86/mm/numa.c | 26 ++++++++++----------------
+>  1 file changed, 10 insertions(+), 16 deletions(-)
 
-Some older cores (Loongson-3A1000 and Loongson-3B1500) have ExcCode 16
-too, but the semantic is equivalent to GSExcCode 0. Because the
-respective manuals did not mention the CP0.Diag1 register or its read
-behavior, these cores are not covered in this patch, as MFC0 from
-non-existent CP0 registers is UNDEFINED according to the MIPS
-architecture spec.
+I suspect you'd like to carry this in the -mm tree?
 
-Reviewed-by: Huacai Chen <chenhc@lemote.com>
-Signed-off-by: WANG Xuerui <git@xen0n.name>
-Cc: Huacai Chen <chenhc@lemote.com>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/include/asm/cpu-features.h |  4 ++++
- arch/mips/include/asm/cpu.h          |  1 +
- arch/mips/include/asm/mipsregs.h     |  3 +++
- arch/mips/kernel/cpu-probe.c         |  3 +++
- arch/mips/kernel/genex.S             |  7 ++++++
- arch/mips/kernel/traps.c             | 35 ++++++++++++++++++++++++++++
- 6 files changed, 53 insertions(+)
+Acked-by: Ingo Molnar <mingo@kernel.org>
 
-diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
-index 0b1bc7ed913b..78cf7e300f12 100644
---- a/arch/mips/include/asm/cpu-features.h
-+++ b/arch/mips/include/asm/cpu-features.h
-@@ -572,6 +572,10 @@
- # define cpu_has_ftlbparex	__opt(MIPS_CPU_FTLBPAREX)
- #endif
- 
-+#ifndef cpu_has_gsexcex
-+# define cpu_has_gsexcex	__opt(MIPS_CPU_GSEXCEX)
-+#endif
-+
- #ifdef CONFIG_SMP
- /*
-  * Some systems share FTLB RAMs between threads within a core (siblings in
-diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-index 9d08bd33b11f..388a82f28a87 100644
---- a/arch/mips/include/asm/cpu.h
-+++ b/arch/mips/include/asm/cpu.h
-@@ -428,6 +428,7 @@ enum cpu_type_enum {
- #define MIPS_CPU_MM_FULL	BIT_ULL(59)	/* CPU supports write-through full merge */
- #define MIPS_CPU_MAC_2008_ONLY	BIT_ULL(60)	/* CPU Only support MAC2008 Fused multiply-add instruction */
- #define MIPS_CPU_FTLBPAREX	BIT_ULL(61)	/* CPU has FTLB parity exception */
-+#define MIPS_CPU_GSEXCEX	BIT_ULL(62)	/* CPU has GSExc exception */
- 
- /*
-  * CPU ASE encodings
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index 5ba268266d16..4ddc12e4444a 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -474,6 +474,9 @@
- /* Implementation specific trap codes used by MIPS cores */
- #define MIPS_EXCCODE_TLBPAR	16	/* TLB parity error exception */
- 
-+/* Implementation specific trap codes used by Loongson cores */
-+#define LOONGSON_EXCCODE_GSEXC	16	/* Loongson-specific exception */
-+
- /*
-  * Bits in the coprocessor 0 config register.
-  */
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 519d101fd009..e2955f1f6316 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -2043,6 +2043,9 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- {
- 	decode_configs(c);
- 
-+	/* All Loongson processors covered here define ExcCode 16 as GSExc. */
-+	c->options |= MIPS_CPU_GSEXCEX;
-+
- 	switch (c->processor_id & PRID_IMP_MASK) {
- 	case PRID_IMP_LOONGSON_64R: /* Loongson-64 Reduced */
- 		switch (c->processor_id & PRID_REV_MASK) {
-diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-index a1b966f3578e..5fa87d4b5dca 100644
---- a/arch/mips/kernel/genex.S
-+++ b/arch/mips/kernel/genex.S
-@@ -498,6 +498,12 @@ NESTED(nmi_handler, PT_SIZE, sp)
- 	KMODE
- 	.endm
- 
-+	.macro __build_clear_gsexc
-+	mfc0	a1, CP0_DIAGNOSTIC1
-+	TRACE_IRQS_ON
-+	STI
-+	.endm
-+
- 	.macro	__BUILD_silent exception
- 	.endm
- 
-@@ -556,6 +562,7 @@ NESTED(nmi_handler, PT_SIZE, sp)
- 	BUILD_HANDLER fpe fpe fpe silent		/* #15 */
- #endif
- 	BUILD_HANDLER ftlb ftlb none silent		/* #16 */
-+	BUILD_HANDLER gsexc gsexc gsexc silent		/* #16 */
- 	BUILD_HANDLER msa msa sti silent		/* #21 */
- 	BUILD_HANDLER mdmx mdmx sti silent		/* #22 */
- #ifdef	CONFIG_HARDWARE_WATCHPOINTS
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 9c37a6997259..b95ef98fc847 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -90,6 +90,7 @@ extern asmlinkage void handle_tr(void);
- extern asmlinkage void handle_msa_fpe(void);
- extern asmlinkage void handle_fpe(void);
- extern asmlinkage void handle_ftlb(void);
-+extern asmlinkage void handle_gsexc(void);
- extern asmlinkage void handle_msa(void);
- extern asmlinkage void handle_mdmx(void);
- extern asmlinkage void handle_watch(void);
-@@ -1900,6 +1901,37 @@ asmlinkage void do_ftlb(void)
- 	cache_parity_error();
- }
- 
-+asmlinkage void do_gsexc(struct pt_regs *regs, u32 diag1)
-+{
-+	u32 exccode = (diag1 & LOONGSON_DIAG1_EXCCODE) >>
-+			LOONGSON_DIAG1_EXCCODE_SHIFT;
-+	enum ctx_state prev_state;
-+
-+	prev_state = exception_enter();
-+
-+	switch (exccode) {
-+	case 0x08:
-+		/* Undocumented exception, will trigger on certain
-+		 * also-undocumented instructions accessible from userspace.
-+		 * Processor state is not otherwise corrupted, but currently
-+		 * we don't know how to proceed. Maybe there is some
-+		 * undocumented control flag to enable the instructions?
-+		 */
-+		force_sig(SIGILL);
-+		break;
-+
-+	default:
-+		/* None of the other exceptions, documented or not, have
-+		 * further details given; none are encountered in the wild
-+		 * either. Panic in case some of them turn out to be fatal.
-+		 */
-+		show_regs(regs);
-+		panic("Unhandled Loongson exception - GSCause = %08x", diag1);
-+	}
-+
-+	exception_exit(prev_state);
-+}
-+
- /*
-  * SDBBP EJTAG debug exception handler.
-  * We skip the instruction and return to the next instruction.
-@@ -2457,6 +2489,9 @@ void __init trap_init(void)
- 	if (cpu_has_ftlbparex)
- 		set_except_vector(MIPS_EXCCODE_TLBPAR, handle_ftlb);
- 
-+	if (cpu_has_gsexcex)
-+		set_except_vector(LOONGSON_EXCCODE_GSEXC, handle_gsexc);
-+
- 	if (cpu_has_rixiex) {
- 		set_except_vector(EXCCODE_TLBRI, tlb_do_page_fault_0);
- 		set_except_vector(EXCCODE_TLBXI, tlb_do_page_fault_0);
--- 
-2.25.1
+Thanks,
 
+	Ingo
