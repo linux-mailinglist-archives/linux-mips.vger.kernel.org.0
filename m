@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E824E23012C
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 07:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BB0230133
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 07:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726873AbgG1FMe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Jul 2020 01:12:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34122 "EHLO mail.kernel.org"
+        id S1726251AbgG1FMp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jul 2020 01:12:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34482 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726251AbgG1FMe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Jul 2020 01:12:34 -0400
+        id S1726308AbgG1FMo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Jul 2020 01:12:44 -0400
 Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B6452070A;
-        Tue, 28 Jul 2020 05:12:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 062C32177B;
+        Tue, 28 Jul 2020 05:12:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595913153;
-        bh=4DNtFGpQ7uDaB3zOvxrPIrzPc60FGUwiPzAlH9TywcA=;
+        s=default; t=1595913163;
+        bh=AgkSEjcZN+4R6IPrVqzpRXpoFcyMHs54nGgAVWDTHPg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m3WIeA90qkRvl2gsmAfQuDGwJAbJi5UUCCAg4LmaseT2GduhfCilwi3H3N+JLaGfy
-         J6liV31fxMOs5Q3H2ZjqTO28omsPhlPG1oCTgC9Eu3s2MLIy3PimP/FPxYL28QvZkd
-         olHKuwsJqS/tqZjOOqJgFqsJsJs1UbU0Wq3HadR8=
+        b=x+PwdBnFBSyRKhO6/VqoU+SYFSiUr4ZPNt1hhIVRjzQ9HePzYy2S+Yej0Z/u11LyZ
+         uG+rbcxXiMNQpl4LSWOpjj+pufoPsK+yHEQT836x2daZ8a9CQWGcIAPHex79AOe15D
+         gx9ohcFjCH4Hd8YFqXCT+rPcPQSgxmmLmhUebxnM=
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andy Lutomirski <luto@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
         openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
         uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
-Subject: [PATCH 02/15] dma-contiguous: simplify cma_early_percent_memory()
-Date:   Tue, 28 Jul 2020 08:11:40 +0300
-Message-Id: <20200728051153.1590-3-rppt@kernel.org>
+Subject: [PATCH 03/15] arm, xtensa: simplify initialization of high memory pages
+Date:   Tue, 28 Jul 2020 08:11:41 +0300
+Message-Id: <20200728051153.1590-4-rppt@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200728051153.1590-1-rppt@kernel.org>
 References: <20200728051153.1590-1-rppt@kernel.org>
@@ -71,43 +71,175 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-The memory size calculation in cma_early_percent_memory() traverses
-memblock.memory rather than simply call memblock_phys_mem_size(). The
-comment in that function suggests that at some point there should have been
-call to memblock_analyze() before memblock_phys_mem_size() could be used.
-As of now, there is no memblock_analyze() at all and
-memblock_phys_mem_size() can be used as soon as cold-plug memory is
-registerd with memblock.
+The function free_highpages() in both arm and xtensa essentially open-code
+for_each_free_mem_range() loop to detect high memory pages that were not
+reserved and that should be initialized and passed to the buddy allocator.
 
-Replace loop over memblock.memory with a call to memblock_phys_mem_size().
+Replace open-coded implementation of for_each_free_mem_range() with usage
+of memblock API to simplify the code.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- kernel/dma/contiguous.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ arch/arm/mm/init.c    | 48 +++++++------------------------------
+ arch/xtensa/mm/init.c | 55 ++++++++-----------------------------------
+ 2 files changed, 18 insertions(+), 85 deletions(-)
 
-diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
-index 15bc5026c485..1992afd8ca7b 100644
---- a/kernel/dma/contiguous.c
-+++ b/kernel/dma/contiguous.c
-@@ -73,16 +73,7 @@ early_param("cma", early_cma);
- 
- static phys_addr_t __init __maybe_unused cma_early_percent_memory(void)
- {
--	struct memblock_region *reg;
--	unsigned long total_pages = 0;
--
--	/*
--	 * We cannot use memblock_phys_mem_size() here, because
--	 * memblock_analyze() has not been called yet.
--	 */
--	for_each_memblock(memory, reg)
--		total_pages += memblock_region_memory_end_pfn(reg) -
--			       memblock_region_memory_base_pfn(reg);
-+	unsigned long total_pages = PHYS_PFN(memblock_phys_mem_size());
- 
- 	return (total_pages * CONFIG_CMA_SIZE_PERCENTAGE / 100) << PAGE_SHIFT;
+diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
+index 01e18e43b174..626af348eb8f 100644
+--- a/arch/arm/mm/init.c
++++ b/arch/arm/mm/init.c
+@@ -352,61 +352,29 @@ static void __init free_unused_memmap(void)
+ #endif
  }
+ 
+-#ifdef CONFIG_HIGHMEM
+-static inline void free_area_high(unsigned long pfn, unsigned long end)
+-{
+-	for (; pfn < end; pfn++)
+-		free_highmem_page(pfn_to_page(pfn));
+-}
+-#endif
+-
+ static void __init free_highpages(void)
+ {
+ #ifdef CONFIG_HIGHMEM
+ 	unsigned long max_low = max_low_pfn;
+-	struct memblock_region *mem, *res;
++	phys_addr_t range_start, range_end;
++	u64 i;
+ 
+ 	/* set highmem page free */
+-	for_each_memblock(memory, mem) {
+-		unsigned long start = memblock_region_memory_base_pfn(mem);
+-		unsigned long end = memblock_region_memory_end_pfn(mem);
++	for_each_free_mem_range(i, NUMA_NO_NODE, MEMBLOCK_NONE,
++				&range_start, &range_end, NULL) {
++		unsigned long start = PHYS_PFN(range_start);
++		unsigned long end = PHYS_PFN(range_end);
+ 
+ 		/* Ignore complete lowmem entries */
+ 		if (end <= max_low)
+ 			continue;
+ 
+-		if (memblock_is_nomap(mem))
+-			continue;
+-
+ 		/* Truncate partial highmem entries */
+ 		if (start < max_low)
+ 			start = max_low;
+ 
+-		/* Find and exclude any reserved regions */
+-		for_each_memblock(reserved, res) {
+-			unsigned long res_start, res_end;
+-
+-			res_start = memblock_region_reserved_base_pfn(res);
+-			res_end = memblock_region_reserved_end_pfn(res);
+-
+-			if (res_end < start)
+-				continue;
+-			if (res_start < start)
+-				res_start = start;
+-			if (res_start > end)
+-				res_start = end;
+-			if (res_end > end)
+-				res_end = end;
+-			if (res_start != start)
+-				free_area_high(start, res_start);
+-			start = res_end;
+-			if (start == end)
+-				break;
+-		}
+-
+-		/* And now free anything which remains */
+-		if (start < end)
+-			free_area_high(start, end);
++		for (; start < end; start++)
++			free_highmem_page(pfn_to_page(start));
+ 	}
+ #endif
+ }
+diff --git a/arch/xtensa/mm/init.c b/arch/xtensa/mm/init.c
+index a05b306cf371..ad9d59d93f39 100644
+--- a/arch/xtensa/mm/init.c
++++ b/arch/xtensa/mm/init.c
+@@ -79,67 +79,32 @@ void __init zones_init(void)
+ 	free_area_init(max_zone_pfn);
+ }
+ 
+-#ifdef CONFIG_HIGHMEM
+-static void __init free_area_high(unsigned long pfn, unsigned long end)
+-{
+-	for (; pfn < end; pfn++)
+-		free_highmem_page(pfn_to_page(pfn));
+-}
+-
+ static void __init free_highpages(void)
+ {
++#ifdef CONFIG_HIGHMEM
+ 	unsigned long max_low = max_low_pfn;
+-	struct memblock_region *mem, *res;
++	phys_addr_t range_start, range_end;
++	u64 i;
+ 
+-	reset_all_zones_managed_pages();
+ 	/* set highmem page free */
+-	for_each_memblock(memory, mem) {
+-		unsigned long start = memblock_region_memory_base_pfn(mem);
+-		unsigned long end = memblock_region_memory_end_pfn(mem);
++	for_each_free_mem_range(i, NUMA_NO_NODE, MEMBLOCK_NONE,
++				&range_start, &range_end, NULL) {
++		unsigned long start = PHYS_PFN(range_start);
++		unsigned long end = PHYS_PFN(range_end);
+ 
+ 		/* Ignore complete lowmem entries */
+ 		if (end <= max_low)
+ 			continue;
+ 
+-		if (memblock_is_nomap(mem))
+-			continue;
+-
+ 		/* Truncate partial highmem entries */
+ 		if (start < max_low)
+ 			start = max_low;
+ 
+-		/* Find and exclude any reserved regions */
+-		for_each_memblock(reserved, res) {
+-			unsigned long res_start, res_end;
+-
+-			res_start = memblock_region_reserved_base_pfn(res);
+-			res_end = memblock_region_reserved_end_pfn(res);
+-
+-			if (res_end < start)
+-				continue;
+-			if (res_start < start)
+-				res_start = start;
+-			if (res_start > end)
+-				res_start = end;
+-			if (res_end > end)
+-				res_end = end;
+-			if (res_start != start)
+-				free_area_high(start, res_start);
+-			start = res_end;
+-			if (start == end)
+-				break;
+-		}
+-
+-		/* And now free anything which remains */
+-		if (start < end)
+-			free_area_high(start, end);
++		for (; start < end; start++)
++			free_highmem_page(pfn_to_page(start));
+ 	}
+-}
+-#else
+-static void __init free_highpages(void)
+-{
+-}
+ #endif
++}
+ 
+ /*
+  * Initialize memory pages.
 -- 
 2.26.2
 
