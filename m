@@ -2,88 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4931230BB7
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 15:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E57230C36
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 16:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730146AbgG1NqT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Jul 2020 09:46:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57232 "EHLO mail.kernel.org"
+        id S1730297AbgG1OPW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jul 2020 10:15:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730149AbgG1NqT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Jul 2020 09:46:19 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1730012AbgG1OPU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Jul 2020 10:15:20 -0400
+Received: from kernel.org (unknown [87.71.40.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 93BC7206D7;
-        Tue, 28 Jul 2020 13:46:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7BC04206F5;
+        Tue, 28 Jul 2020 14:15:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595943978;
-        bh=2l4nZ5zEun3ITHFRFbhR5oj+u34Wm7h0bAZkj3TkoYU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EOlS+6JoJuSj9+Yx5l+IHRPcQCwPSoO9EgS/DmRloNif3HD9f1rUEmBmCqPuu4/1E
-         IQ6MpBtNipOLmwcYStorTyMeevlXl39vouJJ1qOLOreKBTyzMSwBRuCCGvgd+AkpFD
-         OQjl0fSdqVzY8uH3uz/Qagx8Ql8+OYCozBJu5LDA=
-Received: by mail-ot1-f47.google.com with SMTP id a65so5736304otc.8;
-        Tue, 28 Jul 2020 06:46:18 -0700 (PDT)
-X-Gm-Message-State: AOAM533hhLvckwuiox2/2jKK41lwx3nFKtHlpdRYAuL3bKIyCX2N76dH
-        d5GkFJJiu+whT9nC7DI20uMEIkKRhr8HHHGkjQ==
-X-Google-Smtp-Source: ABdhPJyGMvLSy2o12/O4HMAGmyUT2I5c4ZQOAvLI2HQi1RCoYju+FyDtWZCrssFH21dUA3s0muQ53gKip1xGHsvcb+g=
-X-Received: by 2002:a9d:46c:: with SMTP id 99mr24620844otc.192.1595943977984;
- Tue, 28 Jul 2020 06:46:17 -0700 (PDT)
+        s=default; t=1595945719;
+        bh=lUPY2x+FC7QKHEsbHiDvmWaDq+mpMmmwkd+OggYom1s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QgGc4X7YUZ1ckDx2DS7TV0wJ9kprJKWkAHEon+OMgHl2R1sb+tkMTAcVnCBfWfbCy
+         0OtC+wiVDREvJNkkA1XcIE7jDME0kzNs1q63GPOaIsM59WTD15P6atSjYRp+nh+npo
+         fGSf3gFWEKzBxONEs1GYYDPsR5qUaUEQHRNOUSzo=
+Date:   Tue, 28 Jul 2020 17:15:04 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: Re: [PATCH 14/15] x86/numa: remove redundant iteration over
+ memblock.reserved
+Message-ID: <20200728141504.GC3655207@kernel.org>
+References: <20200728051153.1590-1-rppt@kernel.org>
+ <20200728051153.1590-15-rppt@kernel.org>
+ <20200728110254.GA14854@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-References: <20200725014529.1143208-1-jiaxun.yang@flygoat.com>
- <20200725014529.1143208-2-jiaxun.yang@flygoat.com> <CAL_JsqKePrUW3-HoSnQawqhgg23XJ7MxzawD7TKt-__q3jM55g@mail.gmail.com>
- <20200728083308.GD9062@alpha.franken.de>
-In-Reply-To: <20200728083308.GD9062@alpha.franken.de>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 28 Jul 2020 07:46:04 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+oswHvuF0BaM27CP0j9aHg1whAOv7bZneFjdkDX=MnSg@mail.gmail.com>
-Message-ID: <CAL_Jsq+oswHvuF0BaM27CP0j9aHg1whAOv7bZneFjdkDX=MnSg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] of_address: Add bus type match for pci ranges parser
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Huacai Chen <chenhc@lemote.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200728110254.GA14854@MiWiFi-R3L-srv>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 2:39 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Mon, Jul 27, 2020 at 11:50:14AM -0600, Rob Herring wrote:
-> > On Fri, Jul 24, 2020 at 7:45 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> > >
-> > > So the parser can be used to parse range property of ISA bus.
-> > >
-> > > As they're all using PCI-like method of range property, there is no need
-> > > start a new parser.
-> > >
-> > > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > >
-> > > --
-> > > v2: Drop useless check, fix some na for bus_addr
-> > >         add define of of_range_parser_init according to
-> > >         Rob's suggestion.
-> > > v3: Abstract out has_flags. simplify define.
-> > > ---
-> > >  drivers/of/address.c       | 29 +++++++++++++++++------------
-> > >  include/linux/of_address.h |  4 ++++
-> > >  2 files changed, 21 insertions(+), 12 deletions(-)
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
->
-> Rob, are you ok with merging this via the mips-next tree ?
+On Tue, Jul 28, 2020 at 07:02:54PM +0800, Baoquan He wrote:
+> On 07/28/20 at 08:11am, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > numa_clear_kernel_node_hotplug() function first traverses numa_meminfo
+> > regions to set node ID in memblock.reserved and than traverses
+> > memblock.reserved to update reserved_nodemask to include node IDs that were
+> > set in the first loop.
+> > 
+> > Remove redundant traversal over memblock.reserved and update
+> > reserved_nodemask while iterating over numa_meminfo.
+> > 
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > ---
+> >  arch/x86/mm/numa.c | 26 ++++++++++----------------
+> >  1 file changed, 10 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+> > index 8ee952038c80..4078abd33938 100644
+> > --- a/arch/x86/mm/numa.c
+> > +++ b/arch/x86/mm/numa.c
+> > @@ -498,31 +498,25 @@ static void __init numa_clear_kernel_node_hotplug(void)
+> >  	 * and use those ranges to set the nid in memblock.reserved.
+> >  	 * This will split up the memblock regions along node
+> >  	 * boundaries and will set the node IDs as well.
+> > +	 *
+> > +	 * The nid will also be set in reserved_nodemask which is later
+> > +	 * used to clear MEMBLOCK_HOTPLUG flag.
+> > +	 *
+> > +	 * [ Note, when booting with mem=nn[kMG] or in a kdump kernel,
+> > +	 *   numa_meminfo might not include all memblock.reserved
+> > +	 *   memory ranges, because quirks such as trim_snb_memory()
+> > +	 *   reserve specific pages for Sandy Bridge graphics.
+> > +	 *   These ranges will remain with nid == MAX_NUMNODES. ]
+> >  	 */
+> >  	for (i = 0; i < numa_meminfo.nr_blks; i++) {
+> >  		struct numa_memblk *mb = numa_meminfo.blk + i;
+> >  		int ret;
+> >  
+> >  		ret = memblock_set_node(mb->start, mb->end - mb->start, &memblock.reserved, mb->nid);
+> > +		node_set(mb->nid, reserved_nodemask);
+> 
+> Really? This will set all node id into reserved_nodemask. But in the
+> current code, it's setting nid into memblock reserved region which
+> interleaves with numa_memoinfo, then get those nid and set it in
+> reserved_nodemask. This is so different, with my understanding. Please
+> correct me if I am wrong.
 
-That's my expectation hence the Reviewed-by.
+You are right, I've missed the intersections of numa_meminfo with
+memblock.reserved.
 
-Rob
+x86 interaction with membock is so, hmm, interesting...
+ 
+> Thanks
+> Baoquan
+> 
+> >  		WARN_ON_ONCE(ret);
+> >  	}
+> >  
+> > -	/*
+> > -	 * Now go over all reserved memblock regions, to construct a
+> > -	 * node mask of all kernel reserved memory areas.
+> > -	 *
+> > -	 * [ Note, when booting with mem=nn[kMG] or in a kdump kernel,
+> > -	 *   numa_meminfo might not include all memblock.reserved
+> > -	 *   memory ranges, because quirks such as trim_snb_memory()
+> > -	 *   reserve specific pages for Sandy Bridge graphics. ]
+> > -	 */
+> > -	for_each_memblock(reserved, mb_region) {
+> > -		int nid = memblock_get_region_node(mb_region);
+> > -
+> > -		if (nid != MAX_NUMNODES)
+> > -			node_set(nid, reserved_nodemask);
+> > -	}
+> > -
+> >  	/*
+> >  	 * Finally, clear the MEMBLOCK_HOTPLUG flag for all memory
+> >  	 * belonging to the reserved node mask.
+> > -- 
+> > 2.26.2
+> > 
+> > 
+> 
+
+-- 
+Sincerely yours,
+Mike.
