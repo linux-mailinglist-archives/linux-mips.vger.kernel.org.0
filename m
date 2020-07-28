@@ -2,183 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 128C4230078
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 06:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9C223011C
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 07:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726336AbgG1EIW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Jul 2020 00:08:22 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:54742 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1726004AbgG1EIV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Jul 2020 00:08:21 -0400
-Received: from hanazono.local (unknown [116.236.177.53])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        id S1726308AbgG1FMO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jul 2020 01:12:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33608 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726251AbgG1FMO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Jul 2020 01:12:14 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 5BEBF6006D;
-        Tue, 28 Jul 2020 12:08:12 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1595909292; bh=7sU+b2S5OQeF51fBW5K0xFQWC95f2Va54OtBp2iiUT0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ASOVaySfrnbNQNSf6P2yQu7oteymYDCChKRnXURc05Td9jut3RI28PEHnB6lGLGEB
-         SdYAN4AeDs1LPBYioJT9e8seGa9b+jyrazqi/Nq4/Kcyqcvrw1HiCKHbpLqlTzC9wu
-         P2EYUkAeg0n09nVgq/K7iSYvyIGoTKiMJ1/GmY1I=
-Subject: Re: [PATCH v3 2/5] MIPS: Loongson64: Process ISA Node in DeviceTree
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200725014529.1143208-1-jiaxun.yang@flygoat.com>
- <20200725014529.1143208-3-jiaxun.yang@flygoat.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-Message-ID: <b239011a-d946-17b8-3d29-995f1158d0bf@xen0n.name>
-Date:   Tue, 28 Jul 2020 12:08:11 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:80.0)
- Gecko/20100101 Thunderbird/80.0a1
+        by mail.kernel.org (Postfix) with ESMTPSA id 799682070A;
+        Tue, 28 Jul 2020 05:12:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595913133;
+        bh=SiunFkOH1KIyW1NC3iO0mc1YnQ8vPMqtL902CN9Sglg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=zUj8Ky/ISJogZYImW1cerS7gxpsJPyD/s5COPLWHq2m806d7LS+KeFmOjturCkeKD
+         HrFFBTdERy4l0XPM2jQi1NdsS/0AEv/DNIDcsxWU/Hw8p6tUQjHHE7reUbZz0w1jhv
+         yHsh8/Ni8CjiRR1lxOFECz5g0SlMvzBSWjQUZxXU=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: [PATCH 00/15] memblock: seasonal cleaning^w cleanup
+Date:   Tue, 28 Jul 2020 08:11:38 +0300
+Message-Id: <20200728051153.1590-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20200725014529.1143208-3-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun,
+From: Mike Rapoport <rppt@linux.ibm.com>
 
+Hi,
 
-On 2020/7/25 09:45, Jiaxun Yang wrote:
-> Previously, we're hardcoding resserved ISA I/O Space in code, now
-"reserved"; also "in code" seems redundant (we're "hard-coding", aren't we?)
-> we're processing reverved I/O via DeviceTree directly. Using the ranges
-another "reserved" typo, but better restructure the whole clause.
-> property to determine the size and address of reserved I/O space.
-This sentence has no verb. Maybe you mean "Use"?
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> --
-> v2: Use range_parser instead of pci_range_parser
-> ---
->  arch/mips/loongson64/init.c | 87 ++++++++++++++++++++++++++-----------
->  1 file changed, 62 insertions(+), 25 deletions(-)
->
-> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-> index 59ddadace83f..8ba22c30f312 100644
-> --- a/arch/mips/loongson64/init.c
-> +++ b/arch/mips/loongson64/init.c
-> @@ -7,6 +7,8 @@
->  #include <linux/irqchip.h>
->  #include <linux/logic_pio.h>
->  #include <linux/memblock.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
->  #include <asm/bootinfo.h>
->  #include <asm/traps.h>
->  #include <asm/smp-ops.h>
-> @@ -63,41 +65,76 @@ void __init prom_free_prom_memory(void)
->  {
->  }
->  
-> -static __init void reserve_pio_range(void)
-> +static int __init add_legacy_isa_io(struct fwnode_handle *fwnode, resource_size_t hw_start,
-> +				    resource_size_t size)
->  {
-> +	int ret = 0;
->  	struct logic_pio_hwaddr *range;
-> +	unsigned long vaddr;
->  
->  	range = kzalloc(sizeof(*range), GFP_ATOMIC);
->  	if (!range)
-> -		return;
-> +		return -ENOMEM;
->  
-> -	range->fwnode = &of_root->fwnode;
-> -	range->size = MMIO_LOWER_RESERVED;
-> -	range->hw_start = LOONGSON_PCIIO_BASE;
-> +	range->fwnode = fwnode;
-> +	range->size = size;
-> +	range->hw_start = hw_start;
->  	range->flags = LOGIC_PIO_CPU_MMIO;
->  
-> -	if (logic_pio_register_range(range)) {
-> -		pr_err("Failed to reserve PIO range for legacy ISA\n");
-> -		goto free_range;
-> +	ret = logic_pio_register_range(range);
-> +	if (ret) {
-> +		kfree(range);
-> +		return ret;
-> +	}
-> +
-> +	/* Legacy ISA must placed at the start of PCI_IOBASE */
-> +	if (range->io_start != 0) {
-> +		logic_pio_unregister_range(range);
-> +		kfree(range);
-> +		return -EINVAL;
->  	}
->  
-> -	if (WARN(range->io_start != 0,
-> -			"Reserved PIO range does not start from 0\n"))
-> -		goto unregister;
-> -
-> -	/*
-> -	 * i8259 would access I/O space, so mapping must be done here.
-> -	 * Please remove it when all drivers can be managed by logic_pio.
-> -	 */
-> -	ioremap_page_range(PCI_IOBASE, PCI_IOBASE + MMIO_LOWER_RESERVED,
-> -				LOONGSON_PCIIO_BASE,
-> -				pgprot_device(PAGE_KERNEL));
-> -
-> -	return;
-> -unregister:
-> -	logic_pio_unregister_range(range);
-> -free_range:
-> -	kfree(range);
-> +	vaddr = PCI_IOBASE + range->io_start;
-> +
-> +	ioremap_page_range(vaddr, vaddr + size, hw_start, pgprot_device(PAGE_KERNEL));
-> +
-> +	return 0;
-> +}
-> +
-> +static __init void reserve_pio_range(void)
-> +{
-> +	struct device_node *np;
-> +
-> +	for_each_node_by_name(np, "isa") {
-> +		struct of_range range;
-> +		struct of_range_parser parser;
-> +
-> +		pr_info("ISA Bridge: %pOF\n", np);
-> +
-> +		if (of_range_parser_init(&parser, np)) {
-> +			pr_info("Failed to parse resources.\n");
-> +			break;
-> +		}
-> +
-> +		for_each_of_range(&parser, &range) {
-> +			switch (range.flags & IORESOURCE_TYPE_BITS) {
-> +			case IORESOURCE_IO:
-> +				pr_info(" IO 0x%016llx..0x%016llx  ->  0x%016llx\n",
-> +					range.cpu_addr,
-> +					range.cpu_addr + range.size - 1,
-> +					range.bus_addr);
-> +				if (add_legacy_isa_io(&np->fwnode, range.cpu_addr, range.size))
-> +					pr_warn("Failed to reserve legacy IO in Logic PIO\n");
-> +				break;
-> +			case IORESOURCE_MEM:
-> +				pr_info(" MEM 0x%016llx..0x%016llx  ->  0x%016llx\n",
-> +					range.cpu_addr,
-> +					range.cpu_addr + range.size - 1,
-> +					range.bus_addr);
-> +				break;
-> +			}
-> +		}
-> +	}
->  }
->  
->  void __init arch_init_irq(void)
+These patches simplify several uses of memblock iterators and hide some of
+the memblock implementation details from the rest of the system.
+
+The patches are on top of v5.8-rc7 + cherry-pick of "mm/sparse: cleanup the
+code surrounding memory_present()" [1] from mmotm tree.
+
+[1] http://lkml.kernel.org/r/20200712083130.22919-1-rppt@kernel.org 
+
+Mike Rapoport (15):
+  KVM: PPC: Book3S HV: simplify kvm_cma_reserve()
+  dma-contiguous: simplify cma_early_percent_memory()
+  arm, xtensa: simplify initialization of high memory pages
+  arm64: numa: simplify dummy_numa_init()
+  h8300, nds32, openrisc: simplify detection of memory extents
+  powerpc: fadamp: simplify fadump_reserve_crash_area()
+  riscv: drop unneeded node initialization
+  mircoblaze: drop unneeded NUMA and sparsemem initializations
+  memblock: make for_each_memblock_type() iterator private
+  memblock: make memblock_debug and related functionality private
+  memblock: reduce number of parameters in for_each_mem_range()
+  arch, mm: replace for_each_memblock() with for_each_mem_pfn_range()
+  arch, drivers: replace for_each_membock() with for_each_mem_range()
+  x86/numa: remove redundant iteration over memblock.reserved
+  memblock: remove 'type' parameter from for_each_memblock()
+
+ .clang-format                            |  1 +
+ arch/arm/kernel/setup.c                  | 18 +++++---
+ arch/arm/mm/init.c                       | 59 +++++-------------------
+ arch/arm/mm/mmu.c                        | 39 ++++++----------
+ arch/arm/mm/pmsa-v7.c                    | 20 ++++----
+ arch/arm/mm/pmsa-v8.c                    | 17 ++++---
+ arch/arm/xen/mm.c                        |  7 +--
+ arch/arm64/kernel/machine_kexec_file.c   |  6 +--
+ arch/arm64/kernel/setup.c                |  2 +-
+ arch/arm64/mm/init.c                     | 11 ++---
+ arch/arm64/mm/kasan_init.c               |  8 ++--
+ arch/arm64/mm/mmu.c                      | 11 ++---
+ arch/arm64/mm/numa.c                     | 15 +++---
+ arch/c6x/kernel/setup.c                  |  9 ++--
+ arch/h8300/kernel/setup.c                |  8 ++--
+ arch/microblaze/mm/init.c                | 24 ++--------
+ arch/mips/cavium-octeon/dma-octeon.c     | 12 ++---
+ arch/mips/kernel/setup.c                 | 31 ++++++-------
+ arch/mips/netlogic/xlp/setup.c           |  2 +-
+ arch/nds32/kernel/setup.c                |  8 +---
+ arch/openrisc/kernel/setup.c             |  9 +---
+ arch/openrisc/mm/init.c                  |  8 ++--
+ arch/powerpc/kernel/fadump.c             | 58 ++++++++---------------
+ arch/powerpc/kvm/book3s_hv_builtin.c     | 11 +----
+ arch/powerpc/mm/book3s64/hash_utils.c    | 16 +++----
+ arch/powerpc/mm/book3s64/radix_pgtable.c | 11 ++---
+ arch/powerpc/mm/kasan/kasan_init_32.c    |  8 ++--
+ arch/powerpc/mm/mem.c                    | 33 +++++++------
+ arch/powerpc/mm/numa.c                   |  7 +--
+ arch/powerpc/mm/pgtable_32.c             |  8 ++--
+ arch/riscv/mm/init.c                     | 33 ++++---------
+ arch/riscv/mm/kasan_init.c               | 10 ++--
+ arch/s390/kernel/crash_dump.c            |  8 ++--
+ arch/s390/kernel/setup.c                 | 31 ++++++++-----
+ arch/s390/mm/page-states.c               |  6 +--
+ arch/s390/mm/vmem.c                      | 16 ++++---
+ arch/sh/mm/init.c                        |  9 ++--
+ arch/sparc/mm/init_64.c                  | 12 ++---
+ arch/x86/mm/numa.c                       | 26 ++++-------
+ arch/xtensa/mm/init.c                    | 55 ++++------------------
+ drivers/bus/mvebu-mbus.c                 | 12 ++---
+ drivers/s390/char/zcore.c                |  9 ++--
+ include/linux/memblock.h                 | 45 +++++++++---------
+ kernel/dma/contiguous.c                  | 11 +----
+ mm/memblock.c                            | 28 +++++++----
+ mm/page_alloc.c                          | 11 ++---
+ mm/sparse.c                              | 10 ++--
+ 47 files changed, 324 insertions(+), 485 deletions(-)
+
+-- 
+2.26.2
+
