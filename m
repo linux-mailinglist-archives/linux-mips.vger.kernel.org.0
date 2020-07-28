@@ -2,83 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7D1230886
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 13:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16802308B6
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 13:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729081AbgG1LTl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 28 Jul 2020 07:19:41 -0400
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:46496 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729048AbgG1LTl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jul 2020 07:19:41 -0400
-Received: by mail-ej1-f66.google.com with SMTP id l4so20189929ejd.13;
-        Tue, 28 Jul 2020 04:19:39 -0700 (PDT)
+        id S1729134AbgG1Lbe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jul 2020 07:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729056AbgG1Lbc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jul 2020 07:31:32 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB96C061794;
+        Tue, 28 Jul 2020 04:31:31 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id g11so8513136ejr.0;
+        Tue, 28 Jul 2020 04:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y5PIG9gv3+Q65q73c5WJL/D8ixTHr55LzcpS0la2b94=;
+        b=P7HSEqdJclVd5Bnzob/XF2RdTn0Nmb3HUJySlROmL68osljlcfCEFlV3HJYGTsfk+b
+         VHrJ1f+xMExFZ+YSvv8Rmeh1N5GaQQ3p6pZuSDQBx0nbSt1s4XPLJfYIDrJpBvMTIQ3T
+         tnPlkWxuMjJu8J60O/OlnbAruEsKB2973ivyYANGexg1cYLi5G1vwz7DY7w0Hk/PvarE
+         qINCzPe5al7+9kODm2QQrbeaDo+Ef9vruELr0bSlzbcnvJrfytMgRRiJ5yKDr3S0B9bh
+         pUq4JqHBAw9f6ZNp7JiPY7EX8klIc+e+asMdZK9Yz7BoN21wjEsZd5KQdrrR+TAABie5
+         JrSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=dM5eSEIkgFsWm5/PXwhPw6+TPBfgiyZycrwo5NO8ZdA=;
-        b=OVhLEfy/je3Ry4pId7FoOP4r3bmoN0oYXN/iCFbvvpKBRlr14GhLY5tveJlfOr9hz9
-         D6o09KRJL5wh9fN9GcIdGUO5sViefshAaJ4Wxe9t7CMB8lX0Hrbfq2M/QFgm2g9qgbYV
-         8euVt0QdJ4lSY5uqWf7wCq4+S25XGmJhbhCjdYhJZ+9ss6p+xt9kzFrsaFmqi1iEhAjT
-         qTRliTY54rgQE+0a0SBAZaa+H1aGde3xEmOWtDxIQN1PyyURa+5r8ekY479+MPEv0Ojw
-         46/ZDTIJLJSacctsfxxOPTkyrfWKbmusR/FnIGyay69TayMFqIe5I6patuNU9IbHXWV/
-         qUSw==
-X-Gm-Message-State: AOAM533Hyh8ae1G68bwq3SpQVcOAbE9e2PVJJMeZ/N5aybg2yVnJ1kLE
-        joH9yl/zNHrQF1l9kf2FR/s=
-X-Google-Smtp-Source: ABdhPJyz2/TikQUdItm0+uq4RKPRKwe4oJHmYss6SVmNZp8hFZcshbLBoejJ8XshmK75eH6Zzjxqaw==
-X-Received: by 2002:a17:906:b352:: with SMTP id cd18mr620105ejb.230.1595935178942;
-        Tue, 28 Jul 2020 04:19:38 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.213])
-        by smtp.googlemail.com with ESMTPSA id h24sm8878994ejg.53.2020.07.28.04.19.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 28 Jul 2020 04:19:38 -0700 (PDT)
-Date:   Tue, 28 Jul 2020 13:19:35 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v4 2/2] MIPS: ingenic: Enable JZ4780_NEMC manually
-Message-ID: <20200728111935.GA26683@kozik-lap>
-References: <20200728104503.23655-1-krzk@kernel.org>
- <20200728104503.23655-2-krzk@kernel.org>
- <B4F6EQ.WB2WZOY40FDR@crapouillou.net>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=y5PIG9gv3+Q65q73c5WJL/D8ixTHr55LzcpS0la2b94=;
+        b=OOzFgRSu/DvjBP+3eKmGLIftrUVRhrB6OCXZ7oI2ZKitEKe/7hOLHMA2fChf3XyTpy
+         C/Th+ceg3zrQt4MJt63pZXHsRvYbvbwIzdi11gA2GVWubw6Bi5U4qLHR1GLlmB5sXo+c
+         Qn9yJjRW/dW3grvrpRiPd+RcAzbbu67hXsAIujKJkQqt3jx32eutYjeHmJYMmO3ktPIH
+         Te1JETAsO1UKem6WhMYMY//je33oKgHo5SFX3uBFNJ9Q5SnWGqnoyn6NGr3PkBy54Due
+         JCanvJO0i8JQollrWJNEvSpGwd1kSRM58A9wC7DP9DKSirPwszFXHRTSqGLAK02rEwn+
+         cnNw==
+X-Gm-Message-State: AOAM533fxYOvBNmJhet9bMjHRrwqic3bShiFK8FVomFCweRS2L2toODh
+        MIrI9LjpDNApb2rNBcUVJ88=
+X-Google-Smtp-Source: ABdhPJyQbAVtd7rvh28AKuUuAlpNq5u8pcARe+eVx7W3hTuAzpqofzarCSjsJ0a8Qe+YPenFOSGRUQ==
+X-Received: by 2002:a17:906:22c1:: with SMTP id q1mr16036266eja.443.1595935889994;
+        Tue, 28 Jul 2020 04:31:29 -0700 (PDT)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id qw19sm7634705ejb.46.2020.07.28.04.31.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2020 04:31:29 -0700 (PDT)
+Date:   Tue, 28 Jul 2020 13:31:26 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: Re: [PATCH 14/15] x86/numa: remove redundant iteration over
+ memblock.reserved
+Message-ID: <20200728113126.GB233444@gmail.com>
+References: <20200728051153.1590-1-rppt@kernel.org>
+ <20200728051153.1590-15-rppt@kernel.org>
+ <20200728104440.GA222284@gmail.com>
+ <20200728105602.GB3655207@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <B4F6EQ.WB2WZOY40FDR@crapouillou.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200728105602.GB3655207@kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 01:12:11PM +0200, Paul Cercueil wrote:
-> Hi Krzysztof,
-> 
-> Le mar. 28 juil. 2020 à 12:45, Krzysztof Kozlowski <krzk@kernel.org> a écrit
-> :
-> > The CONFIG_JZ4780_NEMC was previously a default on MIPS but now it has
-> > to be enabled manually.
+
+* Mike Rapoport <rppt@kernel.org> wrote:
+
+> On Tue, Jul 28, 2020 at 12:44:40PM +0200, Ingo Molnar wrote:
 > > 
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > * Mike Rapoport <rppt@kernel.org> wrote:
+> > 
+> > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > 
+> > > numa_clear_kernel_node_hotplug() function first traverses numa_meminfo
+> > > regions to set node ID in memblock.reserved and than traverses
+> > > memblock.reserved to update reserved_nodemask to include node IDs that were
+> > > set in the first loop.
+> > > 
+> > > Remove redundant traversal over memblock.reserved and update
+> > > reserved_nodemask while iterating over numa_meminfo.
+> > > 
+> > > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > > ---
+> > >  arch/x86/mm/numa.c | 26 ++++++++++----------------
+> > >  1 file changed, 10 insertions(+), 16 deletions(-)
+> > 
+> > I suspect you'd like to carry this in the -mm tree?
 > 
-> I think you should swap the two so that there are no problems when
-> bisecting.
-
-Good point. I was thinking that it will go via some of MIPS trees and
-the patch #1 will just wait a cycle.  However with acks, I can take it
-through drivers/memory tree.
-
+> Yes.
+>  
+> > Acked-by: Ingo Molnar <mingo@kernel.org>
 > 
-> With that:
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+> Thanks!
+
+Assuming it is correct and works. :-)
 
 Thanks,
 
-Best regards,
-Krzysztof
+	Ingo
