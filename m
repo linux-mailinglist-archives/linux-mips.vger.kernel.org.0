@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7962307F7
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 12:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432932307FA
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jul 2020 12:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728855AbgG1KpL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Jul 2020 06:45:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58176 "EHLO mail.kernel.org"
+        id S1728868AbgG1KpN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jul 2020 06:45:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728566AbgG1KpK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Jul 2020 06:45:10 -0400
+        id S1728566AbgG1KpM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Jul 2020 06:45:12 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.213])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 81CBF20775;
-        Tue, 28 Jul 2020 10:45:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB710207E8;
+        Tue, 28 Jul 2020 10:45:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595933110;
-        bh=zefyhpGvTLn3ZTB/hhE8xNDFfEGO8gcnjogC92IGGmo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ehGr5L2IoN2hIGtt08BR0qBSTQAlX0XQLoNjpouJEG/2s9PPQkLue8WT6c+hVBlsy
-         FicpV9lYQhCEHcwxH3dhGhWocA+ZoMd9+3q4hMJHW4HX6VkNZbMtbPdkChY7+HJQr7
-         2Jimfepgp6atHfDTxsKnbRKaBj/BDpZzULEvCfg4=
+        s=default; t=1595933112;
+        bh=8yMg9fJQRjOOXsxqO6TAUCfO3nYZZssnCt0NXo42FWg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lDghIWQc/P63HUUqZ8YTt3YwY4KoLo+JFMa+116li7oKFkNrFzlg+0Bl3YIEhDCm3
+         8UIEmLPyuf2+4JOIcsRC9/M6PRtCt6mPI9MgA+6GS/GhHOBA6XiMR1JBKNEGifIVJF
+         GG0/N0vYs+vDoa36c7WoNhElNkYYR5LlFjlsBENc=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Krzysztof Kozlowski <krzk@kernel.org>,
@@ -30,45 +30,68 @@ To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "H. Nikolaus Schaller" <hns@goldelico.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v4 1/2] memory: jz4780-nemc: Do not build by default
-Date:   Tue, 28 Jul 2020 12:45:02 +0200
-Message-Id: <20200728104503.23655-1-krzk@kernel.org>
+Subject: [PATCH v4 2/2] MIPS: ingenic: Enable JZ4780_NEMC manually
+Date:   Tue, 28 Jul 2020 12:45:03 +0200
+Message-Id: <20200728104503.23655-2-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200728104503.23655-1-krzk@kernel.org>
+References: <20200728104503.23655-1-krzk@kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Enabling the JZ4780_NEMC driver makes sense only for specific hardware -
-the Ingenic SoC architecture.  It is not an essential driver for the SoC
-support so do not enable it by default.
+The CONFIG_JZ4780_NEMC was previously a default on MIPS but now it has
+to be enabled manually.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
 ---
 
 Changes since v3:
-1. Just drop the default, don't touch depends
-2. Drop second patch for MTD_NAND_JZ4780
-
-Changes since v2:
-1. MIPS -> MACH_INGENIC, as suggested by Arnd
+1. New patch
 ---
- drivers/memory/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ arch/mips/configs/ci20_defconfig    | 1 +
+ arch/mips/configs/qi_lb60_defconfig | 1 +
+ arch/mips/configs/rs90_defconfig    | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
-index f64106fa63b7..8072204bc21a 100644
---- a/drivers/memory/Kconfig
-+++ b/drivers/memory/Kconfig
-@@ -164,7 +164,6 @@ config FSL_IFC
- 
- config JZ4780_NEMC
- 	bool "Ingenic JZ4780 SoC NEMC driver"
--	default y
- 	depends on MIPS || COMPILE_TEST
- 	depends on HAS_IOMEM && OF
- 	help
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index e511fe0243a5..0a46199fdc3f 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -128,6 +128,7 @@ CONFIG_DMA_JZ4780=y
+ CONFIG_INGENIC_OST=y
+ # CONFIG_IOMMU_SUPPORT is not set
+ CONFIG_MEMORY=y
++CONFIG_JZ4780_NEMC=y
+ CONFIG_PWM=y
+ CONFIG_PWM_JZ4740=m
+ CONFIG_EXT4_FS=y
+diff --git a/arch/mips/configs/qi_lb60_defconfig b/arch/mips/configs/qi_lb60_defconfig
+index 97c9a69d1528..81bfbee72b0c 100644
+--- a/arch/mips/configs/qi_lb60_defconfig
++++ b/arch/mips/configs/qi_lb60_defconfig
+@@ -108,6 +108,7 @@ CONFIG_RTC_DRV_JZ4740=y
+ CONFIG_DMADEVICES=y
+ CONFIG_DMA_JZ4780=y
+ CONFIG_MEMORY=y
++CONFIG_JZ4780_NEMC=y
+ CONFIG_IIO=y
+ CONFIG_INGENIC_ADC=y
+ CONFIG_PWM=y
+diff --git a/arch/mips/configs/rs90_defconfig b/arch/mips/configs/rs90_defconfig
+index 433ac5c0266a..de6752051ecc 100644
+--- a/arch/mips/configs/rs90_defconfig
++++ b/arch/mips/configs/rs90_defconfig
+@@ -145,6 +145,7 @@ CONFIG_DMA_JZ4780=y
+ CONFIG_INGENIC_OST=y
+ # CONFIG_IOMMU_SUPPORT is not set
+ CONFIG_MEMORY=y
++CONFIG_JZ4780_NEMC=y
+ CONFIG_IIO=y
+ CONFIG_INGENIC_ADC=y
+ CONFIG_IIO_RESCALE=y
 -- 
 2.17.1
 
