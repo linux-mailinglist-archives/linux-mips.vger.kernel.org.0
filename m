@@ -2,33 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F382D231F10
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 15:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217C7231F14
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 15:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbgG2NO3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Jul 2020 09:14:29 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:44454 "EHLO
+        id S1726353AbgG2NPN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Jul 2020 09:15:13 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:44458 "EHLO
         mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1726353AbgG2NO2 (ORCPT
+        by vger.kernel.org with ESMTP id S1726391AbgG2NPN (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Jul 2020 09:14:28 -0400
+        Wed, 29 Jul 2020 09:15:13 -0400
 Received: from ld50.lan (unknown [140.207.23.30])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id C13E760161;
-        Wed, 29 Jul 2020 21:14:23 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id A7E4F60162;
+        Wed, 29 Jul 2020 21:14:24 +0800 (CST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1596028463; bh=Mhhlubv9eZaRUyNVr2CaJH4THwxa7LGX/5QNhtjsp1c=;
+        t=1596028464; bh=Sy5D/qpMTXAVfR40gwMseHO9e3qqlPZ1+KWghnEkioY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TMIij7OSYCLm9K513yoERuaPOdo4gJCe1bUmnNDBg9Ui6RwuQ0Pd7qX+TWnUOBD2e
-         n/gDVjBQUbOABhM7jamnSbEBSceSj9se/IqzHW5jJRpJ9kxa/hkVDI6pBoEcS9+FEP
-         jOj2VjcT/SFd5KTsyZg2a55baew2QVKmNDubvE2c=
+        b=fIm2no8uuCYl2yh08VZIRkTVk6qdZ0IEcDn90jm/q3Z+h2OSm2i9Fk+17T/MrK4WG
+         fyJltgbmGkwXl1H6gOx6fvR4WuctkcYFGFTMuMDebNDHhS+D8Q5vnd/A0nEEjZ2GUY
+         PjJSTBEquPnm17jiejGBDt4SMDo0AUiIh78pJMXY=
 From:   WANG Xuerui <git@xen0n.name>
 To:     linux-mips@vger.kernel.org
-Cc:     WANG Xuerui <git@xen0n.name>
-Subject: [PATCH v5 0/3] Refactor FTLBPar exception handling and add GSExc handler
-Date:   Wed, 29 Jul 2020 21:14:14 +0800
-Message-Id: <20200729131417.4000213-2-git@xen0n.name>
+Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhc@lemote.com>,
+        Paul Burton <paulburton@kernel.org>
+Subject: [PATCH v5 1/3] MIPS: only register FTLBPar exception handler for supported models
+Date:   Wed, 29 Jul 2020 21:14:15 +0800
+Message-Id: <20200729131417.4000213-3-git@xen0n.name>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200729131417.4000213-1-git@xen0n.name>
 References: <20200729131417.4000213-1-git@xen0n.name>
@@ -39,62 +40,88 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-It was found that some undocumented unprivileged instructions could
-crash the kernel with a "FTLB parity error" on Loongson-3A4000, but the
-error registers were garbage:
+Previously ExcCode 16 is unconditionally treated as the FTLB parity
+exception (FTLBPar), but in fact its semantic is implementation-
+dependent. Looking at various manuals it seems the FTLBPar exception is
+only present on some recent MIPS Technologies cores, so only register
+the handler on these.
 
-[  896.970419] FTLB error exception, cp0_ecc=0x00000002:
-[  896.975446] cp0_errorepc == ffffffffffffffff
-[  896.979755] c0_cacheerr == 00000000
-[  896.983277] Decoded c0_cacheerr: primary cache fault in insn reference.
-[  896.989963] Cache error exception:
-[  896.993396] cp0_errorepc == ffffffffffffffff
-[  896.997707] c0_cacheerr == 00000000
-[  897.001228] Decoded c0_cacheerr: primary cache fault in insn reference.
-[  897.007916] Error bits: 
-[  897.010467] IDX: 0x00000000
-[  897.013284] Kernel panic - not syncing: Can't handle the cache error!
-[  897.019807] ---[ end Kernel panic - not syncing: Can't handle the cache error! ]---
+Fixes: 75b5b5e0a262790f ("MIPS: Add support for FTLBs")
+Reviewed-by: Huacai Chen <chenhc@lemote.com>
+Signed-off-by: WANG Xuerui <git@xen0n.name>
+Cc: Paul Burton <paulburton@kernel.org>
+---
+ arch/mips/include/asm/cpu-features.h |  4 ++++
+ arch/mips/include/asm/cpu.h          |  1 +
+ arch/mips/kernel/cpu-probe.c         | 13 +++++++++++++
+ arch/mips/kernel/traps.c             |  3 ++-
+ 4 files changed, 20 insertions(+), 1 deletion(-)
 
-Turns out the FTLBPar exception code is actually implementation-specific.
-On Loongson cores the exception is "GSExc" instead, and is non-fatal in
-Loongson's linux-3.10 fork. So we dynamically register the correct handler
-for the exception, and do not panic on the specific undocumented case.
-
-P.S. There is not much space left in the cpuinfo_mips.options flag. We
-should consider moving to something like x86's feature flags that is
-extensible.
-
-v5:
-- Fixed broken build on pre-MIPS32 configs where mfc0 can't have
-  selector, pointed out by Thomas. Build-tested ip22_defconfig.
-- Added more description in the commit message of the 2nd patch
-
-v4:
-- Added Reviewed-by tags from Huacai
-- Dropped bouncing Cc addresses from the first patch
-- Fixed "MFC0" -> "mfc0" in genex.S, as that CP0 register is 32-bit
-  according to Loongson's manuals
-
-v3:
-- Simplified declaration of cpu_has_gsexcex, as suggested by Huacai
-
-v2:
-- Removed stray GSExc logic in cpu_probe_legacy, pointed out by Huacai
-
-WANG Xuerui (3):
-  MIPS: only register FTLBPar exception handler for supported models
-  MIPS: add definitions for Loongson-specific CP0.Diag1 register
-  MIPS: handle Loongson-specific GSExc exception
-
- arch/mips/include/asm/cpu-features.h |  8 ++++++
- arch/mips/include/asm/cpu.h          |  2 ++
- arch/mips/include/asm/mipsregs.h     | 11 ++++++++
- arch/mips/kernel/cpu-probe.c         | 16 ++++++++++++
- arch/mips/kernel/genex.S             | 14 ++++++++++
- arch/mips/kernel/traps.c             | 38 +++++++++++++++++++++++++++-
- 6 files changed, 88 insertions(+), 1 deletion(-)
-
+diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
+index 724dfddcab92..0b1bc7ed913b 100644
+--- a/arch/mips/include/asm/cpu-features.h
++++ b/arch/mips/include/asm/cpu-features.h
+@@ -568,6 +568,10 @@
+ # define cpu_has_mac2008_only	__opt(MIPS_CPU_MAC_2008_ONLY)
+ #endif
+ 
++#ifndef cpu_has_ftlbparex
++# define cpu_has_ftlbparex	__opt(MIPS_CPU_FTLBPAREX)
++#endif
++
+ #ifdef CONFIG_SMP
+ /*
+  * Some systems share FTLB RAMs between threads within a core (siblings in
+diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
+index f5b04e8f6061..9d08bd33b11f 100644
+--- a/arch/mips/include/asm/cpu.h
++++ b/arch/mips/include/asm/cpu.h
+@@ -427,6 +427,7 @@ enum cpu_type_enum {
+ #define MIPS_CPU_MM_SYSAD	BIT_ULL(58)	/* CPU supports write-through SysAD Valid merge */
+ #define MIPS_CPU_MM_FULL	BIT_ULL(59)	/* CPU supports write-through full merge */
+ #define MIPS_CPU_MAC_2008_ONLY	BIT_ULL(60)	/* CPU Only support MAC2008 Fused multiply-add instruction */
++#define MIPS_CPU_FTLBPAREX	BIT_ULL(61)	/* CPU has FTLB parity exception */
+ 
+ /*
+  * CPU ASE encodings
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index d9e8d39a7289..519d101fd009 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1827,6 +1827,19 @@ static inline void cpu_probe_mips(struct cpuinfo_mips *c, unsigned int cpu)
+ 	default:
+ 		break;
+ 	}
++
++	/* Recent MIPS cores use the implementation-dependent ExcCode 16 for
++	 * cache/FTLB parity exceptions.
++	 */
++	switch (__get_cpu_type(c->cputype)) {
++	case CPU_PROAPTIV:
++	case CPU_P5600:
++	case CPU_P6600:
++	case CPU_I6400:
++	case CPU_I6500:
++		c->options |= MIPS_CPU_FTLBPAREX;
++		break;
++	}
+ }
+ 
+ static inline void cpu_probe_alchemy(struct cpuinfo_mips *c, unsigned int cpu)
+diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+index 06aba49d37c9..9c37a6997259 100644
+--- a/arch/mips/kernel/traps.c
++++ b/arch/mips/kernel/traps.c
+@@ -2454,7 +2454,8 @@ void __init trap_init(void)
+ 	if (cpu_has_fpu && !cpu_has_nofpuex)
+ 		set_except_vector(EXCCODE_FPE, handle_fpe);
+ 
+-	set_except_vector(MIPS_EXCCODE_TLBPAR, handle_ftlb);
++	if (cpu_has_ftlbparex)
++		set_except_vector(MIPS_EXCCODE_TLBPAR, handle_ftlb);
+ 
+ 	if (cpu_has_rixiex) {
+ 		set_except_vector(EXCCODE_TLBRI, tlb_do_page_fault_0);
 -- 
 2.25.1
 
