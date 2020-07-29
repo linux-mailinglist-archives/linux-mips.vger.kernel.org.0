@@ -2,59 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED700231916
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 07:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A43231917
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 07:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbgG2F2L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Jul 2020 01:28:11 -0400
-Received: from relay3.mymailcheap.com ([217.182.119.155]:43678 "EHLO
-        relay3.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726203AbgG2F2L (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jul 2020 01:28:11 -0400
+        id S1726299AbgG2F2O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Jul 2020 01:28:14 -0400
+Received: from relay5.mymailcheap.com ([159.100.241.64]:48694 "EHLO
+        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgG2F2N (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jul 2020 01:28:13 -0400
+Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [151.80.165.199])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id E9DB1206D8
+        for <linux-mips@vger.kernel.org>; Wed, 29 Jul 2020 05:28:10 +0000 (UTC)
 Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
-        by relay3.mymailcheap.com (Postfix) with ESMTPS id 8E8173ECDF;
+        by relay2.mymailcheap.com (Postfix) with ESMTPS id A30253ECDA;
         Wed, 29 Jul 2020 07:28:08 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by filter2.mymailcheap.com (Postfix) with ESMTP id 674072A905;
+        by filter2.mymailcheap.com (Postfix) with ESMTP id 7945E2A90C;
         Wed, 29 Jul 2020 07:28:08 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
         s=default; t=1596000488;
-        bh=RCHXjbHW2v3nI56l860UVxxb2sk18iKVE4RRTzyRF24=;
+        bh=/mjyj1nXQ1JYIYOY8ZC2mbGyQtv+lLogDTF5Fdrwkv4=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Z+tavpovrvxx8deji0TsJaavSJ5LpaN4Q8pM4Wy/Sqnm6NUjJ00Vexh/DTWexGgGr
-         4WbNPkkxbcTE0rMkp8eCjH0MPEBitfNNCxQbyUiVLsn0shauHjb5IK9P1PNo3/4Nko
-         Co4+HOabp5Op7EiRxgXKrqzzmc66n1VMTCsdhZEk=
+        b=DnJ0P/ZLfwDRGaq1nfvCEv+H7cPBNx6GVL5DWxJx3bavzSUeCvvxgCJN0STJh5pHj
+         POZk5uDmYb+ImQQNbKH+nVH6f0i60PQ2mkWaPVp6mvS/M+GOhRdgiiy+rBtZqE0eKt
+         Isf/UZ/O55AjJTtDpgsE8QNVLRxJxPQiRess5gpM=
 X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
 Received: from filter2.mymailcheap.com ([127.0.0.1])
         by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1ARtCvndUUjA; Wed, 29 Jul 2020 07:28:06 +0200 (CEST)
+        with ESMTP id 8GrEOB2n6pbr; Wed, 29 Jul 2020 07:28:07 +0200 (CEST)
 Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
         (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         by filter2.mymailcheap.com (Postfix) with ESMTPS;
-        Wed, 29 Jul 2020 07:28:06 +0200 (CEST)
+        Wed, 29 Jul 2020 07:28:07 +0200 (CEST)
 Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id 2BBC5418CF;
+        by mail20.mymailcheap.com (Postfix) with ESMTP id A9F5640847;
         Wed, 29 Jul 2020 05:28:06 +0000 (UTC)
 Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="kRH6Bfml";
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="WpeuYM1b";
         dkim-atps=neutral
 AI-Spam-Status: Not processed
 Received: from [0.0.0.0] (li161-247.members.linode.com [173.230.151.247])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 45A4241312;
-        Wed, 29 Jul 2020 05:26:51 +0000 (UTC)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 8E08841312;
+        Wed, 29 Jul 2020 05:27:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1596000416;
-        bh=RCHXjbHW2v3nI56l860UVxxb2sk18iKVE4RRTzyRF24=;
+        s=default; t=1596000443;
+        bh=/mjyj1nXQ1JYIYOY8ZC2mbGyQtv+lLogDTF5Fdrwkv4=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kRH6Bfmlx+Mc0zBIp5q0Ouz0Tee3oxPGOm0gKvyNcI4Qd3qElRvWFhYK2u+jljBuE
-         AcVErP9PfRxcNxCmMcfE+2wELUmLhCYXtGtZSoteOuLkUgkLig/is5mLcWnNIHjNnp
-         VmSrFXvvpudiSpPsVkxq1JH9jb63g4cdJMoxCiAM=
-Subject: Re: [PATCH 3/5] irqchip: loongson-liointc: Fix misuse of
- gc->mask_cache
+        b=WpeuYM1bh38U+2Wa9oxWhNy9I4d9FT9ygs/3zMowa7JwkeMTQUjc9C3z2dNK1eDo1
+         Cnq8T0PkC57ttW9mIishO5S91XU2uGcrN0+HpHZfFbdPmBPnbPEkT32E87RTN5lAUU
+         i7rrTFU27NTkUC894byyB8xW5ugvJnC85l1cxXjI=
+Subject: Re: [PATCH 4/5] irqchip: loongson-htvec: Support 8 groups of HT
+ vectors
 To:     Huacai Chen <chenhc@lemote.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -63,17 +66,17 @@ To:     Huacai Chen <chenhc@lemote.com>,
 Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
         Huacai Chen <chenhuacai@gmail.com>
 References: <1596000130-8689-1-git-send-email-chenhc@lemote.com>
- <1596000130-8689-3-git-send-email-chenhc@lemote.com>
+ <1596000130-8689-4-git-send-email-chenhc@lemote.com>
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <ccd646fd-9df6-517f-0cee-4672e8a052f8@flygoat.com>
-Date:   Wed, 29 Jul 2020 13:26:49 +0800
+Message-ID: <4b7f46ac-2136-be28-1e86-c7e3476b7260@flygoat.com>
+Date:   Wed, 29 Jul 2020 13:27:14 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.0.1
 MIME-Version: 1.0
-In-Reply-To: <1596000130-8689-3-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1596000130-8689-4-git-send-email-chenhc@lemote.com>
 Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 2BBC5418CF
+X-Rspamd-Queue-Id: A9F5640847
 X-Spamd-Result: default: False [1.40 / 10.00];
          ARC_NA(0.00)[];
          RCVD_VIA_SMTP_AUTH(0.00)[];
@@ -109,55 +112,97 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 ÔÚ 2020/7/29 13:22, Huacai Chen Ð´µÀ:
-> In gc->mask_cache bits, 1 means enabled and 0 means disabled, but in the
-> loongson-liointc driver mask_cache is misused by reverting its meaning.
-> This patch fix the bug and update the comments as well.
-
-Suprisingly it even works with the wrong usage of mask_cache.
-Thanks for catching that!
+> The original version can only used by old Loongson-3 which only use 4
+> groups of HT vectors. Now Loongson-3A R4 can use 8 groups, so improve
+> the driver to support all 8 groups.
 
 Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 >
 > Signed-off-by: Huacai Chen <chenhc@lemote.com>
 > ---
->   drivers/irqchip/irq-loongson-liointc.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
+>   drivers/irqchip/irq-loongson-htvec.c | 22 ++++++++++------------
+>   1 file changed, 10 insertions(+), 12 deletions(-)
 >
-> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-> index 63b6147..08165c5 100644
-> --- a/drivers/irqchip/irq-loongson-liointc.c
-> +++ b/drivers/irqchip/irq-loongson-liointc.c
-> @@ -60,7 +60,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
->   	if (!pending) {
->   		/* Always blame LPC IRQ if we have that bug */
->   		if (handler->priv->has_lpc_irq_errata &&
-> -			(handler->parent_int_map & ~gc->mask_cache &
-> +			(handler->parent_int_map & gc->mask_cache &
->   			BIT(LIOINTC_ERRATA_IRQ)))
->   			pending = BIT(LIOINTC_ERRATA_IRQ);
->   		else
-> @@ -131,11 +131,11 @@ static void liointc_resume(struct irq_chip_generic *gc)
->   	irq_gc_lock_irqsave(gc, flags);
->   	/* Disable all at first */
->   	writel(0xffffffff, gc->reg_base + LIOINTC_REG_INTC_DISABLE);
-> -	/* Revert map cache */
-> +	/* Restore map cache */
->   	for (i = 0; i < LIOINTC_CHIP_IRQ; i++)
->   		writeb(priv->map_cache[i], gc->reg_base + i);
-> -	/* Revert mask cache */
-> -	writel(~gc->mask_cache, gc->reg_base + LIOINTC_REG_INTC_ENABLE);
-> +	/* Restore mask cache */
-> +	writel(gc->mask_cache, gc->reg_base + LIOINTC_REG_INTC_ENABLE);
->   	irq_gc_unlock_irqrestore(gc, flags);
->   }
+> diff --git a/drivers/irqchip/irq-loongson-htvec.c b/drivers/irqchip/irq-loongson-htvec.c
+> index 1ece933..e7722fa 100644
+> --- a/drivers/irqchip/irq-loongson-htvec.c
+> +++ b/drivers/irqchip/irq-loongson-htvec.c
+> @@ -19,15 +19,14 @@
 >   
-> @@ -243,7 +243,7 @@ int __init liointc_of_init(struct device_node *node,
->   	ct->chip.irq_mask_ack = irq_gc_mask_disable_reg;
->   	ct->chip.irq_set_type = liointc_set_type;
+>   /* Registers */
+>   #define HTVEC_EN_OFF		0x20
+> -#define HTVEC_MAX_PARENT_IRQ	4
+> +#define HTVEC_MAX_PARENT_IRQ	8
 >   
-> -	gc->mask_cache = 0xffffffff;
-> +	gc->mask_cache = 0;
->   	priv->gc = gc;
+>   #define VEC_COUNT_PER_REG	32
+> -#define VEC_REG_COUNT		4
+> -#define VEC_COUNT		(VEC_COUNT_PER_REG * VEC_REG_COUNT)
+>   #define VEC_REG_IDX(irq_id)	((irq_id) / VEC_COUNT_PER_REG)
+>   #define VEC_REG_BIT(irq_id)	((irq_id) % VEC_COUNT_PER_REG)
 >   
->   	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
+>   struct htvec {
+> +	int			num_parents;
+>   	void __iomem		*base;
+>   	struct irq_domain	*htvec_domain;
+>   	raw_spinlock_t		htvec_lock;
+> @@ -43,7 +42,7 @@ static void htvec_irq_dispatch(struct irq_desc *desc)
+>   
+>   	chained_irq_enter(chip, desc);
+>   
+> -	for (i = 0; i < VEC_REG_COUNT; i++) {
+> +	for (i = 0; i < priv->num_parents; i++) {
+>   		pending = readl(priv->base + 4 * i);
+>   		while (pending) {
+>   			int bit = __ffs(pending);
+> @@ -147,7 +146,7 @@ static void htvec_reset(struct htvec *priv)
+>   	u32 idx;
+>   
+>   	/* Clear IRQ cause registers, mask all interrupts */
+> -	for (idx = 0; idx < VEC_REG_COUNT; idx++) {
+> +	for (idx = 0; idx < priv->num_parents; idx++) {
+>   		writel_relaxed(0x0, priv->base + HTVEC_EN_OFF + 4 * idx);
+>   		writel_relaxed(0xFFFFFFFF, priv->base);
+>   	}
+> @@ -157,7 +156,7 @@ static int htvec_of_init(struct device_node *node,
+>   				struct device_node *parent)
+>   {
+>   	struct htvec *priv;
+> -	int err, parent_irq[4], num_parents = 0, i;
+> +	int err, parent_irq[8], i;
+>   
+>   	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>   	if (!priv)
+> @@ -176,19 +175,18 @@ static int htvec_of_init(struct device_node *node,
+>   		if (parent_irq[i] <= 0)
+>   			break;
+>   
+> -		num_parents++;
+> +		priv->num_parents++;
+>   	}
+>   
+> -	if (!num_parents) {
+> +	if (!priv->num_parents) {
+>   		pr_err("Failed to get parent irqs\n");
+>   		err = -ENODEV;
+>   		goto iounmap_base;
+>   	}
+>   
+>   	priv->htvec_domain = irq_domain_create_linear(of_node_to_fwnode(node),
+> -						      VEC_COUNT,
+> -						      &htvec_domain_ops,
+> -						      priv);
+> +					(VEC_COUNT_PER_REG * priv->num_parents),
+> +					&htvec_domain_ops, priv);
+>   	if (!priv->htvec_domain) {
+>   		pr_err("Failed to create IRQ domain\n");
+>   		err = -ENOMEM;
+> @@ -197,7 +195,7 @@ static int htvec_of_init(struct device_node *node,
+>   
+>   	htvec_reset(priv);
+>   
+> -	for (i = 0; i < num_parents; i++)
+> +	for (i = 0; i < priv->num_parents; i++)
+>   		irq_set_chained_handler_and_data(parent_irq[i],
+>   						 htvec_irq_dispatch, priv);
+>   
