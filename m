@@ -2,50 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0845D23190F
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 07:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A10231910
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 07:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726445AbgG2FUP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Jul 2020 01:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
+        id S1726208AbgG2FVC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Jul 2020 01:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbgG2FUP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jul 2020 01:20:15 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECADC061794
-        for <linux-mips@vger.kernel.org>; Tue, 28 Jul 2020 22:20:15 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id w17so11271291ply.11
-        for <linux-mips@vger.kernel.org>; Tue, 28 Jul 2020 22:20:15 -0700 (PDT)
+        with ESMTP id S1726203AbgG2FVB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jul 2020 01:21:01 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74FAC061794
+        for <linux-mips@vger.kernel.org>; Tue, 28 Jul 2020 22:21:01 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id k27so13655565pgm.2
+        for <linux-mips@vger.kernel.org>; Tue, 28 Jul 2020 22:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=wgl47zlXLMmHZ6eEnoQJBs9qSoBOoLqIxj7epSy1h8w=;
-        b=iDeSfvGC71I9U3K2ZCwFkvEJkzM/d6d5nYOnxa+1KsD6ljTlTMnZrhdZbeVx6IOVhF
-         b1jS6dBnpo9VEp1i/O5mMj3y9Ajlr2zupP/KNnCXEo2viOZR1PWZ9LMmdSFscwYb1a89
-         a48SjCUZTJ8xvOXmJG8YNrm8lHT/gsw2b+lOpUnGiZIuOwMHnCZCJk6PaDCZro7Bv0Ok
-         NtttaUjkLp0iCgs8LTurgj4KloKAaeKhYLgbRQHJhfHRMlqWxrEwPi9G/MOHoNfVSTQD
-         BotbEfqbpY15i7nsUlCDB6Byd5/8tFxZSUobdcrUbaeoZRYB6bsKSTneVDcA/yV2kIkd
-         a1ZQ==
+        bh=Yn6T+ydwl7t04EuWlZ6rQm0TIidTqiY2rykbdkGbhsw=;
+        b=lMM9W7v4OPQqECfr4szNZkA19dmNn4QoKb3XijzZ6c/WMXBWUwlwcCKAKrE/TkgIM2
+         DUV4yn5Hw3cH+7Ud0nJ6M3Q+LiWQdHjRSj5FBMwNAMHmFB36vJwCY3ipSdVgZkWz7rUz
+         G5e31fCIRqK354Zh243bHz8o7AWCYqum9goUqvit5MtPM2z6IybOQnYq/JCYIkxEhpOU
+         zbqqjcaeguesXStzA1DPUhnlbRFUyU4PzUs5CvE/JpNmUcyMQbfyLsipEhykYnP6C3Nh
+         uXbnYXFHLij7OpOegs96xWt5v8YPf1IJCGla6345CoJFI3Y3dobebcA4ZnqlIauPmj4E
+         4jUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=wgl47zlXLMmHZ6eEnoQJBs9qSoBOoLqIxj7epSy1h8w=;
-        b=mXXatSBlwRYfK2LD10A02HYtJSbjZVNNwhcgLWiYoKlm2lLIveauzBhv+JDYufsVEA
-         +/T5tFUCX2t9NlJHfL6jCXCuuFsd88VKCgsNcDE7uiqAu9h3owwA2vD5yRm0XSHpgYUU
-         M843UsChVccoH/MgLk6tEnNLfyyKmEsrTrzkDmOx0dM8nTUgMOUsp9ADiF0kUTYHaLKQ
-         XIDXA3bVCJcfJ93wnubrlFYMUYXiZCVe3nOLpgrXtGhimL8qrkB8zhgycf5B2woh2aMi
-         NYIU/w8S+XkKrcbMIoqvreFWsYd9ZZiKLknGiyPU8VlVRkjh/WdsYR7bM+U8zlQJDdAw
-         yulA==
-X-Gm-Message-State: AOAM533aednRiNrAtCGU6Ez4DPo8+p3wTIgXUmp2BKZL4LcrUI6HAifG
-        sEWX9WkP6ulkv8wodyC8kl0=
-X-Google-Smtp-Source: ABdhPJzXURjIVyqhfHtWZngMUHMAV1b3NqT9VBPtTJDD/rsFVyopdHF0NVo+7i24WfL/YHIFgo3PVQ==
-X-Received: by 2002:a17:90b:1116:: with SMTP id gi22mr8323651pjb.8.1596000014822;
-        Tue, 28 Jul 2020 22:20:14 -0700 (PDT)
+        bh=Yn6T+ydwl7t04EuWlZ6rQm0TIidTqiY2rykbdkGbhsw=;
+        b=nZttsCD4Grd3BxL9RrK9Us2vp2h6YHH+zmWvzhIfL6WKmIkygK+QiH6ZSZnzHT5hYd
+         O0m1Sau293mQ6j90hSNZ0YO6eP02Di/BKSI2QE2l/JnKcVvIfXFQvZ5fjTCYyp6OeSkM
+         ErKt4sMhrMAXwydycNxkF29W8aMgCvPeAAZee7hxApnf/jyLsDWtM9gZ7gXFgu7HnqV+
+         hYSbi/5J8LmULCaz6cwmemkED7iaECeHJdf+95qbejeO0MCvZk0Yv/XPKfsWehb7egGZ
+         +CK4mvaKdqv2YBJztkZCSK7y0Zh0c0PyZ5w52FEpWOthsacVGpj1uW905M+SV06MWWGP
+         uGSw==
+X-Gm-Message-State: AOAM5314F8Dwwi8+ovNM1x4zdHCM+iQ0gKl85Mk98N9mFZN7wLCj4gbJ
+        7TQlRrkylAw68dfVz/pU2E0=
+X-Google-Smtp-Source: ABdhPJyKH53i5bE9xWCkQuCIiwtHb4EZ+nOi/TXEAVtULa6mqR5NsZI2+GR2jKF8ciwhqsub31ClYw==
+X-Received: by 2002:aa7:988e:: with SMTP id r14mr28454110pfl.35.1596000061354;
+        Tue, 28 Jul 2020 22:21:01 -0700 (PDT)
 Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id l4sm739539pjr.46.2020.07.28.22.20.12
+        by smtp.gmail.com with ESMTPSA id l4sm739539pjr.46.2020.07.28.22.20.58
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 Jul 2020 22:20:14 -0700 (PDT)
+        Tue, 28 Jul 2020 22:21:00 -0700 (PDT)
 From:   Huacai Chen <chenhc@lemote.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -55,9 +55,9 @@ Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH 2/5] MIPS: DTS: Fix number of msi vectors for Loongson64G
-Date:   Wed, 29 Jul 2020 13:22:07 +0800
-Message-Id: <1596000130-8689-2-git-send-email-chenhc@lemote.com>
+Subject: [PATCH 3/5] irqchip: loongson-liointc: Fix misuse of gc->mask_cache
+Date:   Wed, 29 Jul 2020 13:22:08 +0800
+Message-Id: <1596000130-8689-3-git-send-email-chenhc@lemote.com>
 X-Mailer: git-send-email 2.7.0
 In-Reply-To: <1596000130-8689-1-git-send-email-chenhc@lemote.com>
 References: <1596000130-8689-1-git-send-email-chenhc@lemote.com>
@@ -66,41 +66,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-HT irqs vectors are 8 groups, each group has 32 irqs, Loongson64C CPUs
-can use only 4 groups and Loongson64G CPUs can use all 8 groups. So the
-number of msi vectors of Loongson64G is 192 (32*8 - 64 = 192).
+In gc->mask_cache bits, 1 means enabled and 0 means disabled, but in the
+loongson-liointc driver mask_cache is misused by reverting its meaning.
+This patch fix the bug and update the comments as well.
 
 Signed-off-by: Huacai Chen <chenhc@lemote.com>
 ---
- arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dts | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/irqchip/irq-loongson-liointc.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dts b/arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dts
-index bdc911e..c945f85 100644
---- a/arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dts
-+++ b/arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dts
-@@ -20,7 +20,11 @@
- 		interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
- 			     <25 IRQ_TYPE_LEVEL_HIGH>,
- 			     <26 IRQ_TYPE_LEVEL_HIGH>,
--			     <27 IRQ_TYPE_LEVEL_HIGH>;
-+			     <27 IRQ_TYPE_LEVEL_HIGH>,
-+			     <28 IRQ_TYPE_LEVEL_HIGH>,
-+			     <29 IRQ_TYPE_LEVEL_HIGH>,
-+			     <30 IRQ_TYPE_LEVEL_HIGH>,
-+			     <31 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- };
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index 63b6147..08165c5 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -60,7 +60,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
+ 	if (!pending) {
+ 		/* Always blame LPC IRQ if we have that bug */
+ 		if (handler->priv->has_lpc_irq_errata &&
+-			(handler->parent_int_map & ~gc->mask_cache &
++			(handler->parent_int_map & gc->mask_cache &
+ 			BIT(LIOINTC_ERRATA_IRQ)))
+ 			pending = BIT(LIOINTC_ERRATA_IRQ);
+ 		else
+@@ -131,11 +131,11 @@ static void liointc_resume(struct irq_chip_generic *gc)
+ 	irq_gc_lock_irqsave(gc, flags);
+ 	/* Disable all at first */
+ 	writel(0xffffffff, gc->reg_base + LIOINTC_REG_INTC_DISABLE);
+-	/* Revert map cache */
++	/* Restore map cache */
+ 	for (i = 0; i < LIOINTC_CHIP_IRQ; i++)
+ 		writeb(priv->map_cache[i], gc->reg_base + i);
+-	/* Revert mask cache */
+-	writel(~gc->mask_cache, gc->reg_base + LIOINTC_REG_INTC_ENABLE);
++	/* Restore mask cache */
++	writel(gc->mask_cache, gc->reg_base + LIOINTC_REG_INTC_ENABLE);
+ 	irq_gc_unlock_irqrestore(gc, flags);
+ }
  
-@@ -31,7 +35,7 @@
- 		interrupt-controller;
- 		msi-controller;
- 		loongson,msi-base-vec = <64>;
--		loongson,msi-num-vecs = <128>;
-+		loongson,msi-num-vecs = <192>;
- 		interrupt-parent = <&htvec>;
- 	};
- };
+@@ -243,7 +243,7 @@ int __init liointc_of_init(struct device_node *node,
+ 	ct->chip.irq_mask_ack = irq_gc_mask_disable_reg;
+ 	ct->chip.irq_set_type = liointc_set_type;
+ 
+-	gc->mask_cache = 0xffffffff;
++	gc->mask_cache = 0;
+ 	priv->gc = gc;
+ 
+ 	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
 -- 
 2.7.0
 
