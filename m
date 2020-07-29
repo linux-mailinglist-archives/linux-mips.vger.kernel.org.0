@@ -2,56 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED48231C64
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 12:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F44231C7F
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 12:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbgG2KAU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Jul 2020 06:00:20 -0400
-Received: from elvis.franken.de ([193.175.24.41]:53182 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726054AbgG2KAU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Jul 2020 06:00:20 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1k0isj-0005MI-00; Wed, 29 Jul 2020 12:00:17 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 7939AC0A9B; Wed, 29 Jul 2020 11:52:48 +0200 (CEST)
-Date:   Wed, 29 Jul 2020 11:52:48 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
+        id S1726509AbgG2KIg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Jul 2020 06:08:36 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:41688 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725851AbgG2KIg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jul 2020 06:08:36 -0400
+Received: by mail-il1-f195.google.com with SMTP id c16so7079313ils.8;
+        Wed, 29 Jul 2020 03:08:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EvMl0qvQb+jx+7NrSC3p+seDViq+tdV7DqvHK41k5Pk=;
+        b=Mihu02plrkILuvWb5qSPBGzvtTqYHm6UbTHb/MHYt0bJv3f+xIfIVheJ41sJSHZjc6
+         HgTqWtRtvLlOdh94IFBYGM4TG8AvE7jr2BryDlUtgxYeoht6MVU5WFQVtCYqD37JHo69
+         ZNxIQch27LSD5jyeY3HZMPH7S2yqClQTxjZ+nW2XNFkBZtz+HtmSuqmr4EkiErjv78tN
+         EjszetogIpDIUVZ2AAhvfZA69qtIv/iBE0SiMESNie/GxXALOYJxjWGshh4IbzaM+aPb
+         DrpJr3Ad8M4mT7VEoRU2LEYEJNXh3qJkwRdnhZvP/R3w/X/aJAeNKLSEOrkpQFT5HqDM
+         INQw==
+X-Gm-Message-State: AOAM533Alrn3jV40aeQWC+uzCFVMPn47cm7smjEHlolV+rclikYpXUgI
+        sjyejyPY7HyybSyj3jaQHHVYh1mtG9872dt7Log=
+X-Google-Smtp-Source: ABdhPJxxYw3JHbWt2yX4I3lgL29whhgai7wbVUBwqEea98C/D0nS5byjebP8p+/QhoYJQBZq309k3DN2EERfZKWoXH8=
+X-Received: by 2002:a92:dcc6:: with SMTP id b6mr6330769ilr.147.1596017315490;
+ Wed, 29 Jul 2020 03:08:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <1596005919-29365-1-git-send-email-chenhc@lemote.com>
+ <1596005919-29365-2-git-send-email-chenhc@lemote.com> <20200729095248.GA9234@alpha.franken.de>
+In-Reply-To: <20200729095248.GA9234@alpha.franken.de>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Wed, 29 Jul 2020 18:08:24 +0800
+Message-ID: <CAAhV-H7MzcW6Uv8XPaOh=5PmsFbRa9n=W1GjWP1WWwCYL_r-hA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] dt-bindings: mips: Document Loongson kvm guest board
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>, Fuxin Zhang <zhangfx@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 2/5] dt-bindings: mips: Document Loongson kvm guest board
-Message-ID: <20200729095248.GA9234@alpha.franken.de>
-References: <1596005919-29365-1-git-send-email-chenhc@lemote.com>
- <1596005919-29365-2-git-send-email-chenhc@lemote.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1596005919-29365-2-git-send-email-chenhc@lemote.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jul 29, 2020 at 02:58:36PM +0800, Huacai Chen wrote:
-> Document loongson64v-4core-virtio, a virtio based kvm guest board for
-> Loongson-3.
-> 
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Hi, Thomas,
 
-hmm, I can't remember adding my signed-off to this patch. Could you
-give me a reference for this ?
 
-Thomas.
+On Wed, Jul 29, 2020 at 6:00 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Wed, Jul 29, 2020 at 02:58:36PM +0800, Huacai Chen wrote:
+> > Document loongson64v-4core-virtio, a virtio based kvm guest board for
+> > Loongson-3.
+> >
+> > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>
+> hmm, I can't remember adding my signed-off to this patch. Could you
+> give me a reference for this ?
+>
+I'm sorry, this is a copy paste error..
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Huacai
+
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
