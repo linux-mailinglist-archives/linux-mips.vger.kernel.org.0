@@ -2,62 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3583231915
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 07:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED700231916
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jul 2020 07:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726203AbgG2F0P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Jul 2020 01:26:15 -0400
-Received: from relay5.mymailcheap.com ([159.100.241.64]:48692 "EHLO
-        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbgG2F0O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jul 2020 01:26:14 -0400
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.100])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id D849D206D8
-        for <linux-mips@vger.kernel.org>; Wed, 29 Jul 2020 05:26:10 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay1.mymailcheap.com (Postfix) with ESMTPS id D2B523F201;
-        Wed, 29 Jul 2020 01:26:08 -0400 (EDT)
+        id S1726287AbgG2F2L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Jul 2020 01:28:11 -0400
+Received: from relay3.mymailcheap.com ([217.182.119.155]:43678 "EHLO
+        relay3.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgG2F2L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jul 2020 01:28:11 -0400
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay3.mymailcheap.com (Postfix) with ESMTPS id 8E8173ECDF;
+        Wed, 29 Jul 2020 07:28:08 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id B6A6A2A0F5;
-        Wed, 29 Jul 2020 01:26:08 -0400 (EDT)
+        by filter2.mymailcheap.com (Postfix) with ESMTP id 674072A905;
+        Wed, 29 Jul 2020 07:28:08 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1596000368;
-        bh=9VssQ0eef15T/7P1MGtE1aax+C82Jg82Exjogk88SO0=;
+        s=default; t=1596000488;
+        bh=RCHXjbHW2v3nI56l860UVxxb2sk18iKVE4RRTzyRF24=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=MBqyH03sQABq+2tuIBcuDlOQyQDOSkID5tn9jdeRY8db+lWrr+4l1M5lj0tB4HYwO
-         lyO6PZ+Is1WAIRV+rc+SqrRz0AJ5cHaiXTuApwpyppt9UzNerPynMFi6Vr5D8R54ww
-         /Nb83svj6zbG38zq+KTPeR5aM37WenEiMn3V6P5w=
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id kOGvyz4H2cYR; Wed, 29 Jul 2020 01:26:07 -0400 (EDT)
+        b=Z+tavpovrvxx8deji0TsJaavSJ5LpaN4Q8pM4Wy/Sqnm6NUjJ00Vexh/DTWexGgGr
+         4WbNPkkxbcTE0rMkp8eCjH0MPEBitfNNCxQbyUiVLsn0shauHjb5IK9P1PNo3/4Nko
+         Co4+HOabp5Op7EiRxgXKrqzzmc66n1VMTCsdhZEk=
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1ARtCvndUUjA; Wed, 29 Jul 2020 07:28:06 +0200 (CEST)
 Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
         (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Wed, 29 Jul 2020 01:26:07 -0400 (EDT)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Wed, 29 Jul 2020 07:28:06 +0200 (CEST)
 Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id D9EEC40847;
-        Wed, 29 Jul 2020 05:26:03 +0000 (UTC)
+        by mail20.mymailcheap.com (Postfix) with ESMTP id 2BBC5418CF;
+        Wed, 29 Jul 2020 05:28:06 +0000 (UTC)
 Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="HVNv0mHI";
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="kRH6Bfml";
         dkim-atps=neutral
 AI-Spam-Status: Not processed
 Received: from [0.0.0.0] (li161-247.members.linode.com [173.230.151.247])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id C0E0240847;
-        Wed, 29 Jul 2020 05:25:29 +0000 (UTC)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 45A4241312;
+        Wed, 29 Jul 2020 05:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1596000333;
-        bh=9VssQ0eef15T/7P1MGtE1aax+C82Jg82Exjogk88SO0=;
+        s=default; t=1596000416;
+        bh=RCHXjbHW2v3nI56l860UVxxb2sk18iKVE4RRTzyRF24=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=HVNv0mHIS+BjbYTqqBGzVzy39/0LHKm8HC3BsDrIHH80YjNFDNAKXVWKYU8FzeXq/
-         kWzP6HBoXovvIt8nONmsaiwa8GrNFn/jQBjqQIQO3Wde6ug7vDyDQ4//Al44F7jHDO
-         3r0AnnTKHBK0bwp3LmwuH4sU1X1zDsXHei0utPCk=
-Subject: Re: [PATCH 1/5] dt-bindings: interrupt-controller: Update Loongson
- HTVEC description
+        b=kRH6Bfmlx+Mc0zBIp5q0Ouz0Tee3oxPGOm0gKvyNcI4Qd3qElRvWFhYK2u+jljBuE
+         AcVErP9PfRxcNxCmMcfE+2wELUmLhCYXtGtZSoteOuLkUgkLig/is5mLcWnNIHjNnp
+         VmSrFXvvpudiSpPsVkxq1JH9jb63g4cdJMoxCiAM=
+Subject: Re: [PATCH 3/5] irqchip: loongson-liointc: Fix misuse of
+ gc->mask_cache
 To:     Huacai Chen <chenhc@lemote.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -66,19 +63,20 @@ To:     Huacai Chen <chenhc@lemote.com>,
 Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
         Huacai Chen <chenhuacai@gmail.com>
 References: <1596000130-8689-1-git-send-email-chenhc@lemote.com>
+ <1596000130-8689-3-git-send-email-chenhc@lemote.com>
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <c066601c-aa5b-1ef7-1fe4-9f874ed919b6@flygoat.com>
-Date:   Wed, 29 Jul 2020 13:25:26 +0800
+Message-ID: <ccd646fd-9df6-517f-0cee-4672e8a052f8@flygoat.com>
+Date:   Wed, 29 Jul 2020 13:26:49 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.0.1
 MIME-Version: 1.0
-In-Reply-To: <1596000130-8689-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1596000130-8689-3-git-send-email-chenhc@lemote.com>
 Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: D9EEC40847
+X-Rspamd-Queue-Id: 2BBC5418CF
 X-Spamd-Result: default: False [1.40 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
          ARC_NA(0.00)[];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
          R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
          MID_RHS_MATCH_FROM(0.00)[];
          FROM_HAS_DN(0.00)[];
@@ -87,7 +85,7 @@ X-Spamd-Result: default: False [1.40 / 10.00];
          TO_MATCH_ENVRCPT_ALL(0.00)[];
          TAGGED_RCPT(0.00)[dt];
          MIME_GOOD(-0.10)[text/plain];
-         R_SPF_SOFTFAIL(0.00)[~all];
+         R_SPF_SOFTFAIL(0.00)[~all:c];
          HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1];
          ML_SERVERS(-3.10)[213.133.102.83];
          DKIM_TRACE(0.00)[flygoat.com:+];
@@ -111,28 +109,55 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 ÔÚ 2020/7/29 13:22, Huacai Chen Ð´µÀ:
-> Loongson HTVEC support 8 parents interrupts in maximum, so update the
-> maxItems description.
+> In gc->mask_cache bits, 1 means enabled and 0 means disabled, but in the
+> loongson-liointc driver mask_cache is misused by reverting its meaning.
+> This patch fix the bug and update the comments as well.
+
+Suprisingly it even works with the wrong usage of mask_cache.
+Thanks for catching that!
 
 Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 >
 > Signed-off-by: Huacai Chen <chenhc@lemote.com>
 > ---
->   .../devicetree/bindings/interrupt-controller/loongson,htvec.yaml      | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/irqchip/irq-loongson-liointc.c | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,htvec.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,htvec.yaml
-> index e865cd8..87a7455 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,htvec.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,htvec.yaml
-> @@ -22,8 +22,8 @@ properties:
+> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+> index 63b6147..08165c5 100644
+> --- a/drivers/irqchip/irq-loongson-liointc.c
+> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> @@ -60,7 +60,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
+>   	if (!pending) {
+>   		/* Always blame LPC IRQ if we have that bug */
+>   		if (handler->priv->has_lpc_irq_errata &&
+> -			(handler->parent_int_map & ~gc->mask_cache &
+> +			(handler->parent_int_map & gc->mask_cache &
+>   			BIT(LIOINTC_ERRATA_IRQ)))
+>   			pending = BIT(LIOINTC_ERRATA_IRQ);
+>   		else
+> @@ -131,11 +131,11 @@ static void liointc_resume(struct irq_chip_generic *gc)
+>   	irq_gc_lock_irqsave(gc, flags);
+>   	/* Disable all at first */
+>   	writel(0xffffffff, gc->reg_base + LIOINTC_REG_INTC_DISABLE);
+> -	/* Revert map cache */
+> +	/* Restore map cache */
+>   	for (i = 0; i < LIOINTC_CHIP_IRQ; i++)
+>   		writeb(priv->map_cache[i], gc->reg_base + i);
+> -	/* Revert mask cache */
+> -	writel(~gc->mask_cache, gc->reg_base + LIOINTC_REG_INTC_ENABLE);
+> +	/* Restore mask cache */
+> +	writel(gc->mask_cache, gc->reg_base + LIOINTC_REG_INTC_ENABLE);
+>   	irq_gc_unlock_irqrestore(gc, flags);
+>   }
 >   
->     interrupts:
->       minItems: 1
-> -    maxItems: 4
-> -    description: Four parent interrupts that receive chained interrupts.
-> +    maxItems: 8
-> +    description: Eight parent interrupts that receive chained interrupts.
+> @@ -243,7 +243,7 @@ int __init liointc_of_init(struct device_node *node,
+>   	ct->chip.irq_mask_ack = irq_gc_mask_disable_reg;
+>   	ct->chip.irq_set_type = liointc_set_type;
 >   
->     interrupt-controller: true
+> -	gc->mask_cache = 0xffffffff;
+> +	gc->mask_cache = 0;
+>   	priv->gc = gc;
 >   
+>   	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
