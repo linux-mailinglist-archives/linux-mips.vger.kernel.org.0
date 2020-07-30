@@ -2,87 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B838232964
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jul 2020 03:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D228F2329AF
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jul 2020 03:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbgG3BQk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 29 Jul 2020 21:16:40 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:46175 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726194AbgG3BQk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jul 2020 21:16:40 -0400
-Received: by mail-io1-f65.google.com with SMTP id a5so11342917ioa.13
-        for <linux-mips@vger.kernel.org>; Wed, 29 Jul 2020 18:16:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AoWp1DfbofRaHOxaLO1Cu6eA3hYkVAkwKj1Rsw6DKkE=;
-        b=EW7+vDl6cRe2XgNsYmf7BtelG3CdrHY8JZ0taBNEbyEAdBhhLncLC4esQ/j0QOXQZP
-         HdSQZIJHQYt60fh/v58VTfg4BUdsAUGdGI3PaA+sXw8rNrkQI5jDV3XKxJGMB499pBe0
-         o0mZAJ7xFvcw9dGe2Zxpm2++iVWD9vVxoyRfNeXgdwjQ78F42XsXUMJOfj+i0A8m/PeY
-         rQceQPhHEwmLdQAdcjszodaSA22BnXx/rVD71W6B8T3ZOnHlklDR/ZFmTJuYxhgM+ub0
-         y7CZM75rhQfbkzdhO6qjL2drL5Qg0JwMfulj/oJCeePb9A7Lxo+5gEP07lkezwhHNYq/
-         g7mw==
-X-Gm-Message-State: AOAM532ecyxukNLAb2jOhUG+mDtSAvQJhY84ZjtSyLhpxoxEyaZpG9pN
-        KDp7fSiuT0cZdirtBI130lETD9W39y4hkFa8Di1ul9/eGWBHdw==
-X-Google-Smtp-Source: ABdhPJwUTzv58u+Hy7viwh0CsjMkl/vJkawZB7oZtYfBJ1312NRW+uP39UZJATkkhd/5Djc9emMg3yXYzmXN9DGVYZw=
-X-Received: by 2002:a6b:ce11:: with SMTP id p17mr36688619iob.125.1596071799488;
- Wed, 29 Jul 2020 18:16:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <1596000130-8689-1-git-send-email-chenhc@lemote.com>
- <1596000130-8689-3-git-send-email-chenhc@lemote.com> <ccd646fd-9df6-517f-0cee-4672e8a052f8@flygoat.com>
- <2c8f7e82a5a878c774379f386462e802@kernel.org>
-In-Reply-To: <2c8f7e82a5a878c774379f386462e802@kernel.org>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Thu, 30 Jul 2020 09:16:28 +0800
-Message-ID: <CAAhV-H5Ehs4H2ZSet=PqKAAbLZQEME7R45a7jrkt-4RD9Sr_vA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] irqchip: loongson-liointc: Fix misuse of gc->mask_cache
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S1728310AbgG3Bwl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Jul 2020 21:52:41 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:58373 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728305AbgG3Bwk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 29 Jul 2020 21:52:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596073959;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wr/vxuRMCyMaqxtO9q8uf3t1cVc0k0F6Dgt7vG6jHBM=;
+        b=aBhw3tWRZefQIBzuMK7MB9IbwUcjun42aeewRNDlN5wALbcL3JvpIO1/mxkYwjY3G1PBcE
+        d7lQGs4tJRovG22Fboyc9wGygmn0NnReZss0iDjt1lfiqZ77cuU1EJbsQGqI/y5pprn4Zu
+        bGVgBk5QdtElrbllzKMuUU6A/wp7Q1w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-146-29YBKjvJP4OrLqv9mdWq_A-1; Wed, 29 Jul 2020 21:52:35 -0400
+X-MC-Unique: 29YBKjvJP4OrLqv9mdWq_A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A1F7459;
+        Thu, 30 Jul 2020 01:52:29 +0000 (UTC)
+Received: from localhost (ovpn-12-125.pek2.redhat.com [10.72.12.125])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4E3136179C;
+        Thu, 30 Jul 2020 01:52:27 +0000 (UTC)
+Date:   Thu, 30 Jul 2020 09:52:21 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: Re: [PATCH 09/15] memblock: make for_each_memblock_type() iterator
+ private
+Message-ID: <20200730015221.GI14854@MiWiFi-R3L-srv>
+References: <20200728051153.1590-1-rppt@kernel.org>
+ <20200728051153.1590-10-rppt@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200728051153.1590-10-rppt@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Marc
+On 07/28/20 at 08:11am, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> for_each_memblock_type() is not used outside mm/memblock.c, move it there
+> from include/linux/memblock.h
+> 
+> ---
+>  include/linux/memblock.h | 5 -----
+>  mm/memblock.c            | 5 +++++
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> index 017fae833d4a..220b5f0dad42 100644
+> --- a/include/linux/memblock.h
+> +++ b/include/linux/memblock.h
+> @@ -532,11 +532,6 @@ static inline unsigned long memblock_region_reserved_end_pfn(const struct memblo
+>  	     region < (memblock.memblock_type.regions + memblock.memblock_type.cnt);	\
+>  	     region++)
+>  
+> -#define for_each_memblock_type(i, memblock_type, rgn)			\
+> -	for (i = 0, rgn = &memblock_type->regions[0];			\
+> -	     i < memblock_type->cnt;					\
+> -	     i++, rgn = &memblock_type->regions[i])
+> -
+>  extern void *alloc_large_system_hash(const char *tablename,
+>  				     unsigned long bucketsize,
+>  				     unsigned long numentries,
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 39aceafc57f6..a5b9b3df81fc 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -129,6 +129,11 @@ struct memblock memblock __initdata_memblock = {
+>  	.current_limit		= MEMBLOCK_ALLOC_ANYWHERE,
+>  };
+>  
+> +#define for_each_memblock_type(i, memblock_type, rgn)			\
+> +	for (i = 0, rgn = &memblock_type->regions[0];			\
+> +	     i < memblock_type->cnt;					\
+> +	     i++, rgn = &memblock_type->regions[i])
+> +
 
-On Wed, Jul 29, 2020 at 11:04 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> Huacai,
->
-> On 2020-07-29 06:26, Jiaxun Yang wrote:
-> > 在 2020/7/29 13:22, Huacai Chen 写道:
-> >> In gc->mask_cache bits, 1 means enabled and 0 means disabled, but in
-> >> the
-> >> loongson-liointc driver mask_cache is misused by reverting its
-> >> meaning.
-> >> This patch fix the bug and update the comments as well.
-> >
-> > Suprisingly it even works with the wrong usage of mask_cache.
-> > Thanks for catching that!
-> >
-> > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->
-> Does any of this series need to be backported to a previous revision
-> of the kernel? If so, please provide Fixes: tags for the relevant
-> patches, and potentially a Cc: stable if required.
->
-> Also, please add a cover letter when posting such a series,
-> as it makes it easier to track.
-OK, I will send V2, thanks.
+Reviewed-by: Baoquan He <bhe@redhat.com>
 
->
-> Thanks,
->
->          M.
-> --
-> Jazz is not dead. It just smells funny...
