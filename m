@@ -2,135 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4545D2331D1
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jul 2020 14:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83920233484
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jul 2020 16:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727889AbgG3MPY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Jul 2020 08:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727852AbgG3MPX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Jul 2020 08:15:23 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54853C061794;
-        Thu, 30 Jul 2020 05:15:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BHTrL6Fgfz9sRN;
-        Thu, 30 Jul 2020 22:15:14 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1596111321;
-        bh=YNSVJAmG6iTLprr4AXeykiRRbuPWau8/ePuc4CoRMGM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dDG2HeGveH8jvsO0a3nV+Tp8BcGIZDu65BOPDvIIBo9wVTyiHzeoVy9VEea0rigvp
-         Y31hCYMQ/HUQJyt9f4Ns+ZWd4J0yauoOrKc1q24QkaP65G5RtKXvj8BnxizCtGPCIs
-         4Qc5Gy9BbRkYcfHS9FaL2IesmCw9kHwdS0i+jJ5INj6RLnsR8z4hMy+N03Q+rveLd0
-         2v5hfX/mFHnRdxjBR0pUmOS4LXqz54J4KK7TRfoGZVmsUzhhMnBhUvMn3FR8lvfRl/
-         Ax9t5/4az9jOznaLXvwqANu/Zl8pK6CgRrdLYmMHTgYkBan25IQFsKLy25EXJBUiYn
-         TCPH/khAUMFFQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
+        id S1728297AbgG3Odb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Jul 2020 10:33:31 -0400
+Received: from elvis.franken.de ([193.175.24.41]:55279 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726535AbgG3Odb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Jul 2020 10:33:31 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1k19cb-0005pd-00; Thu, 30 Jul 2020 16:33:25 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id CB504C0A9D; Thu, 30 Jul 2020 14:31:17 +0200 (CEST)
+Date:   Thu, 30 Jul 2020 14:31:17 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Huacai Chen <chenhc@lemote.com>, Rob Herring <robh+dt@kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        clang-built-linux@googlegroups.com,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org,
-        Hari Bathini <hbathini@in.ibm.com>
-Subject: Re: [PATCH 06/15] powerpc: fadamp: simplify fadump_reserve_crash_area()
-In-Reply-To: <20200728051153.1590-7-rppt@kernel.org>
-References: <20200728051153.1590-1-rppt@kernel.org> <20200728051153.1590-7-rppt@kernel.org>
-Date:   Thu, 30 Jul 2020 22:15:13 +1000
-Message-ID: <87d04d5hda.fsf@mpe.ellerman.id.au>
+        linux-mips@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Fuxin Zhang <zhangfx@lemote.com>
+Subject: Re: [PATCH V2 0/5] MIPS: Loongson64: Fix and improve irqchip drivers
+Message-ID: <20200730123117.GA4509@alpha.franken.de>
+References: <1596099090-23516-1-git-send-email-chenhc@lemote.com>
+ <159611041857.27532.12008177304488845888.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <159611041857.27532.12008177304488845888.b4-ty@kernel.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Mike Rapoport <rppt@kernel.org> writes:
-> From: Mike Rapoport <rppt@linux.ibm.com>
->
-> fadump_reserve_crash_area() reserves memory from a specified base address
-> till the end of the RAM.
->
-> Replace iteration through the memblock.memory with a single call to
-> memblock_reserve() with appropriate  that will take care of proper memory
-                                     ^
-                                     parameters?
-> reservation.
->
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  arch/powerpc/kernel/fadump.c | 20 +-------------------
->  1 file changed, 1 insertion(+), 19 deletions(-)
+On Thu, Jul 30, 2020 at 01:06:03PM +0100, Marc Zyngier wrote:
+> On Thu, 30 Jul 2020 16:51:25 +0800, Huacai Chen wrote:
+> > Modernized Loongson64 platforms use a hierarchical interrupt controller
+> > architecture. For LS7A PCH, the hierarchy (from inside to outside) is
+> > CPUINTC --> LIOINTC --> HTVEC --> PCHPIC/PCHMSI. However, the current
+> > status is that there are several bugs in the LIOINTC and PCHPIC drivers,
+> > and the HTVEC driver should be improved to support 8 groups of vectors.
+> > Loonson64C support only 4 groups of HT vectors, and Loongson64G support
+> > as many as 8 groups, so the .dts file and dt-bindings description should
+> > also be updated.
+> > 
+> > [...]
+> 
+> Applied to irq/irqchip-next, thanks!
+> 
+> [1/5] dt-bindings: interrupt-controller: Update Loongson HTVEC description
+>       commit: 8fea4b2e804ab8ff93bd0d67a3dadee1d1a3e24f
+> [3/5] irqchip/loongson-liointc: Fix misuse of gc->mask_cache
+>       commit: c9c73a05413ea4a465cae1cb3593b01b190a233f
+> [4/5] irqchip/loongson-htvec: Support 8 groups of HT vectors
+>       commit: c47e388cfc648421bd821f5d9fda9e76eefe29cd
+> [5/5] irqchip/loongson-pch-pic: Fix the misused irq flow handler
+>       commit: ac62460c24126eb2442e3653a266ebbf05b004d8
+> 
+> Please note that I haven't taken patch #2, as it doesn't apply on top 
+> of irqchip/next. Please route it via the MIPS tree.
 
-I think this looks OK to me, but I don't have a setup to test it easily.
-I've added Hari to Cc who might be able to.
+I'll take it.
 
-But I'll give you an ack in the hope that it works :)
+Thomas.
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au>
-
-
-> diff --git a/arch/powerpc/kernel/fadump.c b/arch/powerpc/kernel/fadump.c
-> index 78ab9a6ee6ac..2446a61e3c25 100644
-> --- a/arch/powerpc/kernel/fadump.c
-> +++ b/arch/powerpc/kernel/fadump.c
-> @@ -1658,25 +1658,7 @@ int __init fadump_reserve_mem(void)
->  /* Preserve everything above the base address */
->  static void __init fadump_reserve_crash_area(u64 base)
->  {
-> -	struct memblock_region *reg;
-> -	u64 mstart, msize;
-> -
-> -	for_each_memblock(memory, reg) {
-> -		mstart = reg->base;
-> -		msize  = reg->size;
-> -
-> -		if ((mstart + msize) < base)
-> -			continue;
-> -
-> -		if (mstart < base) {
-> -			msize -= (base - mstart);
-> -			mstart = base;
-> -		}
-> -
-> -		pr_info("Reserving %lluMB of memory at %#016llx for preserving crash data",
-> -			(msize >> 20), mstart);
-> -		memblock_reserve(mstart, msize);
-> -	}
-> +	memblock_reserve(base, memblock_end_of_DRAM() - base);
->  }
->  
->  unsigned long __init arch_reserved_kernel_pages(void)
-> -- 
-> 2.26.2
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
