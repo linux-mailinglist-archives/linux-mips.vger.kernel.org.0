@@ -2,74 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83920233484
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jul 2020 16:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73134233665
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jul 2020 18:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728297AbgG3Odb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Jul 2020 10:33:31 -0400
-Received: from elvis.franken.de ([193.175.24.41]:55279 "EHLO elvis.franken.de"
+        id S1726353AbgG3QMo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Jul 2020 12:12:44 -0400
+Received: from crapouillou.net ([89.234.176.41]:46982 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726535AbgG3Odb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 30 Jul 2020 10:33:31 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1k19cb-0005pd-00; Thu, 30 Jul 2020 16:33:25 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id CB504C0A9D; Thu, 30 Jul 2020 14:31:17 +0200 (CEST)
-Date:   Thu, 30 Jul 2020 14:31:17 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Huacai Chen <chenhc@lemote.com>, Rob Herring <robh+dt@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-mips@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Fuxin Zhang <zhangfx@lemote.com>
-Subject: Re: [PATCH V2 0/5] MIPS: Loongson64: Fix and improve irqchip drivers
-Message-ID: <20200730123117.GA4509@alpha.franken.de>
-References: <1596099090-23516-1-git-send-email-chenhc@lemote.com>
- <159611041857.27532.12008177304488845888.b4-ty@kernel.org>
+        id S1726275AbgG3QMn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Jul 2020 12:12:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1596125561; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=4UC5bN4C11HykhL6jcWAyq2cNXGmAe0l6v/GKa5hpCM=;
+        b=SFqwTAVXyt5/QqdVrTJJqTsoraPX+mj2SLqfbWIh9748jBha+th241DbIgs37ngAPh6W6x
+        Eov0wNaCpN6UGlztkNMSt6q8xky2mTwpo82jhTM+DMII5ttFKAQKpLyJcgo3rDWwCVzEJR
+        QdvCWO1Vkls7RRlJp/4MS9tQmAlExXE=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, od@zcrc.me,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 1/4] MIPS: head.S: Init fw_passed_dtb to builtin DTB
+Date:   Thu, 30 Jul 2020 18:12:30 +0200
+Message-Id: <20200730161233.61876-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <159611041857.27532.12008177304488845888.b4-ty@kernel.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 01:06:03PM +0100, Marc Zyngier wrote:
-> On Thu, 30 Jul 2020 16:51:25 +0800, Huacai Chen wrote:
-> > Modernized Loongson64 platforms use a hierarchical interrupt controller
-> > architecture. For LS7A PCH, the hierarchy (from inside to outside) is
-> > CPUINTC --> LIOINTC --> HTVEC --> PCHPIC/PCHMSI. However, the current
-> > status is that there are several bugs in the LIOINTC and PCHPIC drivers,
-> > and the HTVEC driver should be improved to support 8 groups of vectors.
-> > Loonson64C support only 4 groups of HT vectors, and Loongson64G support
-> > as many as 8 groups, so the .dts file and dt-bindings description should
-> > also be updated.
-> > 
-> > [...]
-> 
-> Applied to irq/irqchip-next, thanks!
-> 
-> [1/5] dt-bindings: interrupt-controller: Update Loongson HTVEC description
->       commit: 8fea4b2e804ab8ff93bd0d67a3dadee1d1a3e24f
-> [3/5] irqchip/loongson-liointc: Fix misuse of gc->mask_cache
->       commit: c9c73a05413ea4a465cae1cb3593b01b190a233f
-> [4/5] irqchip/loongson-htvec: Support 8 groups of HT vectors
->       commit: c47e388cfc648421bd821f5d9fda9e76eefe29cd
-> [5/5] irqchip/loongson-pch-pic: Fix the misused irq flow handler
->       commit: ac62460c24126eb2442e3653a266ebbf05b004d8
-> 
-> Please note that I haven't taken patch #2, as it doesn't apply on top 
-> of irqchip/next. Please route it via the MIPS tree.
+Init the 'fw_passed_dtb' pointer to the buit-in Device Tree blob when it
+has been compiled in with CONFIG_BUILTIN_DTB.
 
-I'll take it.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ arch/mips/kernel/head.S | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thomas.
-
+diff --git a/arch/mips/kernel/head.S b/arch/mips/kernel/head.S
+index 3b02ffe46304..7dd234e788e6 100644
+--- a/arch/mips/kernel/head.S
++++ b/arch/mips/kernel/head.S
+@@ -111,6 +111,12 @@ NESTED(kernel_entry, 16, sp)			# kernel entry point
+ 	move		t2, a1
+ 	beq		a0, t1, dtb_found
+ 
++#ifdef CONFIG_BUILTIN_DTB
++	PTR_LA	t2, __dtb_start
++	PTR_LA	t1, __dtb_end
++	bne		t1, t2, dtb_found
++#endif /* CONFIG_BUILTIN_DTB */
++
+ 	li		t2, 0
+ dtb_found:
+ #endif /* CONFIG_USE_OF */
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.27.0
+
