@@ -2,242 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A432329DD
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jul 2020 04:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C6A232EDC
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jul 2020 10:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbgG3CW0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Jul 2020 22:22:26 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:32227 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726319AbgG3CWZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jul 2020 22:22:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596075743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KXlCZQMZEmyQ5Mo2+6vJS9lY2Q4U/rCj7yYVDEkdTyE=;
-        b=fuFGtOOugJJnOX0Em8Bjy1G3gKfETPFfqqwCHmEYAxWYQAvtJtv97ZEqtvXEnZ4ktahMUr
-        MR5ZwBccYh+WaOcCbiGEon8KC4c4+EaI8OZwjEZEBXJYSW3tgnDKvupIaF69xaXn2abU59
-        1fNbrI3ST9mRWujYPQuSq+8L8+d89Ac=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-450-x5Uy2qT2P5q-DIcPrk6VSQ-1; Wed, 29 Jul 2020 22:22:21 -0400
-X-MC-Unique: x5Uy2qT2P5q-DIcPrk6VSQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 90479801504;
-        Thu, 30 Jul 2020 02:22:16 +0000 (UTC)
-Received: from localhost (ovpn-13-67.pek2.redhat.com [10.72.13.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 62E1519D82;
-        Thu, 30 Jul 2020 02:22:15 +0000 (UTC)
-Date:   Thu, 30 Jul 2020 10:22:09 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
+        id S1726819AbgG3ItE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Jul 2020 04:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725892AbgG3ItD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Jul 2020 04:49:03 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC2EC061794
+        for <linux-mips@vger.kernel.org>; Thu, 30 Jul 2020 01:49:03 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id ha11so3861687pjb.1
+        for <linux-mips@vger.kernel.org>; Thu, 30 Jul 2020 01:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=qo4qJkkZijodV9ycIz7cYi4ledm+dhapr58GzUikPmA=;
+        b=a+4drS9/MV70i8QOVVg7lijNCQ8vNkfyl5EOVtebg6Xld4b1eKg5FkYgZ9UrG/pRKp
+         CyiRTCJ011uD9vsYjs6z1/Hp4wmaUvKyEjPIA3UVDXxgzU3PQOb4Dt5Qq+JX32j+j/VA
+         asjiT445uacn/W3m7UOHrkPcn4Wbm4/H5oOljWOPLkY4fRHP+YSHhmtq0yte4Nf3yJgY
+         XVkYpnZ5Vfv7x+A9ySbltRA+Uv8kLpRvFPAl7nMHl6DTxr42BzHS+mbFRprTsLo5lDem
+         BMkSD7TkXMYP809pMbk4xEnLu2ZQ5CvPBtOdmuBtqdFtMHts8OVf9ihXbHQsSJrsZ5xx
+         8bGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=qo4qJkkZijodV9ycIz7cYi4ledm+dhapr58GzUikPmA=;
+        b=T+SgmpqbbqeGQcvzxdUT/X3+14aSt3v+VpQdW8tVkqRQFDsLYXoX55WZ1WLEPIIB7g
+         fQZSsnmtQIcWJrJJoLx2WxgU89jyz8k/vf1YGxtg5QR7GlgedJNqnOXHe5Ao11LTkA1W
+         z8sWP01+tZne6dSp3gTx9+cJT6FwdDZu/AEZdC5bQuCRLEdQl5jVPLEGuhOznHHSvqlP
+         cWJolV7J4ZyuFVo+n5Sssv2vo21bD299XSslNQAxRJqqO3lAZe+C4J6hWb4fh7Kzll1O
+         cMhUI2umxULwRS2Fq5t8cpqhVXoGgsN5mj1QnwgCSBppg6beWc/yjf80d4d1ugpCHEH4
+         bkLw==
+X-Gm-Message-State: AOAM532jVC01HMp8BgVg8foevPxFuBicaBcEQhD4T2WLTSpr7bPxwWQz
+        camumX0HCqCSOH7UAG59Hk4=
+X-Google-Smtp-Source: ABdhPJxfMsrX6bRO8puwvHf5oE5H1ewNRN70d5pVzuHzeRv4G8JbVAPY1paMNbODWJj2qA+TpOuqhQ==
+X-Received: by 2002:a65:64c7:: with SMTP id t7mr32047317pgv.89.1596098942418;
+        Thu, 30 Jul 2020 01:49:02 -0700 (PDT)
+Received: from software.domain.org ([45.77.13.216])
+        by smtp.gmail.com with ESMTPSA id m26sm5235345pff.84.2020.07.30.01.48.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 30 Jul 2020 01:49:01 -0700 (PDT)
+From:   Huacai Chen <chenhc@lemote.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        clang-built-linux@googlegroups.com,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
-Subject: Re: [PATCH 11/15] memblock: reduce number of parameters in
- for_each_mem_range()
-Message-ID: <20200730022209.GK14854@MiWiFi-R3L-srv>
-References: <20200728051153.1590-1-rppt@kernel.org>
- <20200728051153.1590-12-rppt@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200728051153.1590-12-rppt@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH V2 0/5] MIPS: Loongson64: Fix and improve irqchip drivers
+Date:   Thu, 30 Jul 2020 16:51:25 +0800
+Message-Id: <1596099090-23516-1-git-send-email-chenhc@lemote.com>
+X-Mailer: git-send-email 2.7.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07/28/20 at 08:11am, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> Currently for_each_mem_range() iterator is the most generic way to traverse
-> memblock regions. As such, it has 8 parameters and it is hardly convenient
-> to users. Most users choose to utilize one of its wrappers and the only
-> user that actually needs most of the parameters outside memblock is s390
-> crash dump implementation.
-> 
-> To avoid yet another naming for memblock iterators, rename the existing
-> for_each_mem_range() to __for_each_mem_range() and add a new
-> for_each_mem_range() wrapper with only index, start and end parameters.
-> 
-> The new wrapper nicely fits into init_unavailable_mem() and will be used in
-> upcoming changes to simplify memblock traversals.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  .clang-format                          |  1 +
->  arch/arm64/kernel/machine_kexec_file.c |  6 ++----
->  arch/s390/kernel/crash_dump.c          |  8 ++++----
->  include/linux/memblock.h               | 18 ++++++++++++++----
->  mm/page_alloc.c                        |  3 +--
->  5 files changed, 22 insertions(+), 14 deletions(-)
+Modernized Loongson64 platforms use a hierarchical interrupt controller
+architecture. For LS7A PCH, the hierarchy (from inside to outside) is
+CPUINTC --> LIOINTC --> HTVEC --> PCHPIC/PCHMSI. However, the current
+status is that there are several bugs in the LIOINTC and PCHPIC drivers,
+and the HTVEC driver should be improved to support 8 groups of vectors.
+Loonson64C support only 4 groups of HT vectors, and Loongson64G support
+as many as 8 groups, so the .dts file and dt-bindings description should
+also be updated.
 
-Reviewed-by: Baoquan He <bhe@redhat.com>
+V1 -> V2:
+1, Add a cover letter.
+2, Add Reviewed-by and Tested-by tags.
+3, Improve commit messages by adding Fixes: tags.
 
-> 
-> diff --git a/.clang-format b/.clang-format
-> index a0a96088c74f..52ededab25ce 100644
-> --- a/.clang-format
-> +++ b/.clang-format
-> @@ -205,6 +205,7 @@ ForEachMacros:
->    - 'for_each_memblock_type'
->    - 'for_each_memcg_cache_index'
->    - 'for_each_mem_pfn_range'
-> +  - '__for_each_mem_range'
->    - 'for_each_mem_range'
->    - 'for_each_mem_range_rev'
->    - 'for_each_migratetype_order'
-> diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
-> index 361a1143e09e..5b0e67b93cdc 100644
-> --- a/arch/arm64/kernel/machine_kexec_file.c
-> +++ b/arch/arm64/kernel/machine_kexec_file.c
-> @@ -215,8 +215,7 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
->  	phys_addr_t start, end;
->  
->  	nr_ranges = 1; /* for exclusion of crashkernel region */
-> -	for_each_mem_range(i, &memblock.memory, NULL, NUMA_NO_NODE,
-> -					MEMBLOCK_NONE, &start, &end, NULL)
-> +	for_each_mem_range(i, &start, &end)
->  		nr_ranges++;
->  
->  	cmem = kmalloc(struct_size(cmem, ranges, nr_ranges), GFP_KERNEL);
-> @@ -225,8 +224,7 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
->  
->  	cmem->max_nr_ranges = nr_ranges;
->  	cmem->nr_ranges = 0;
-> -	for_each_mem_range(i, &memblock.memory, NULL, NUMA_NO_NODE,
-> -					MEMBLOCK_NONE, &start, &end, NULL) {
-> +	for_each_mem_range(i, &start, &end) {
->  		cmem->ranges[cmem->nr_ranges].start = start;
->  		cmem->ranges[cmem->nr_ranges].end = end - 1;
->  		cmem->nr_ranges++;
-> diff --git a/arch/s390/kernel/crash_dump.c b/arch/s390/kernel/crash_dump.c
-> index f96a5857bbfd..e28085c725ff 100644
-> --- a/arch/s390/kernel/crash_dump.c
-> +++ b/arch/s390/kernel/crash_dump.c
-> @@ -549,8 +549,8 @@ static int get_mem_chunk_cnt(void)
->  	int cnt = 0;
->  	u64 idx;
->  
-> -	for_each_mem_range(idx, &memblock.physmem, &oldmem_type, NUMA_NO_NODE,
-> -			   MEMBLOCK_NONE, NULL, NULL, NULL)
-> +	__for_each_mem_range(idx, &memblock.physmem, &oldmem_type, NUMA_NO_NODE,
-> +			     MEMBLOCK_NONE, NULL, NULL, NULL)
->  		cnt++;
->  	return cnt;
->  }
-> @@ -563,8 +563,8 @@ static void loads_init(Elf64_Phdr *phdr, u64 loads_offset)
->  	phys_addr_t start, end;
->  	u64 idx;
->  
-> -	for_each_mem_range(idx, &memblock.physmem, &oldmem_type, NUMA_NO_NODE,
-> -			   MEMBLOCK_NONE, &start, &end, NULL) {
-> +	__for_each_mem_range(idx, &memblock.physmem, &oldmem_type, NUMA_NO_NODE,
-> +			     MEMBLOCK_NONE, &start, &end, NULL) {
->  		phdr->p_filesz = end - start;
->  		phdr->p_type = PT_LOAD;
->  		phdr->p_offset = start;
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index e6a23b3db696..d70c2835e913 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -142,7 +142,7 @@ void __next_reserved_mem_region(u64 *idx, phys_addr_t *out_start,
->  void __memblock_free_late(phys_addr_t base, phys_addr_t size);
->  
->  /**
-> - * for_each_mem_range - iterate through memblock areas from type_a and not
-> + * __for_each_mem_range - iterate through memblock areas from type_a and not
->   * included in type_b. Or just type_a if type_b is NULL.
->   * @i: u64 used as loop variable
->   * @type_a: ptr to memblock_type to iterate
-> @@ -153,7 +153,7 @@ void __memblock_free_late(phys_addr_t base, phys_addr_t size);
->   * @p_end: ptr to phys_addr_t for end address of the range, can be %NULL
->   * @p_nid: ptr to int for nid of the range, can be %NULL
->   */
-> -#define for_each_mem_range(i, type_a, type_b, nid, flags,		\
-> +#define __for_each_mem_range(i, type_a, type_b, nid, flags,		\
->  			   p_start, p_end, p_nid)			\
->  	for (i = 0, __next_mem_range(&i, nid, flags, type_a, type_b,	\
->  				     p_start, p_end, p_nid);		\
-> @@ -182,6 +182,16 @@ void __memblock_free_late(phys_addr_t base, phys_addr_t size);
->  	     __next_mem_range_rev(&i, nid, flags, type_a, type_b,	\
->  				  p_start, p_end, p_nid))
->  
-> +/**
-> + * for_each_mem_range - iterate through memory areas.
-> + * @i: u64 used as loop variable
-> + * @p_start: ptr to phys_addr_t for start address of the range, can be %NULL
-> + * @p_end: ptr to phys_addr_t for end address of the range, can be %NULL
-> + */
-> +#define for_each_mem_range(i, p_start, p_end) \
-> +	__for_each_mem_range(i, &memblock.memory, NULL, NUMA_NO_NODE,	\
-> +			     MEMBLOCK_NONE, p_start, p_end, NULL)
-> +
->  /**
->   * for_each_reserved_mem_region - iterate over all reserved memblock areas
->   * @i: u64 used as loop variable
-> @@ -287,8 +297,8 @@ int __init deferred_page_init_max_threads(const struct cpumask *node_cpumask);
->   * soon as memblock is initialized.
->   */
->  #define for_each_free_mem_range(i, nid, flags, p_start, p_end, p_nid)	\
-> -	for_each_mem_range(i, &memblock.memory, &memblock.reserved,	\
-> -			   nid, flags, p_start, p_end, p_nid)
-> +	__for_each_mem_range(i, &memblock.memory, &memblock.reserved,	\
-> +			     nid, flags, p_start, p_end, p_nid)
->  
->  /**
->   * for_each_free_mem_range_reverse - rev-iterate through free memblock areas
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index e028b87ce294..95af111d69d3 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6972,8 +6972,7 @@ static void __init init_unavailable_mem(void)
->  	 * Loop through unavailable ranges not covered by memblock.memory.
->  	 */
->  	pgcnt = 0;
-> -	for_each_mem_range(i, &memblock.memory, NULL,
-> -			NUMA_NO_NODE, MEMBLOCK_NONE, &start, &end, NULL) {
-> +	for_each_mem_range(i, &start, &end) {
->  		if (next < start)
->  			pgcnt += init_unavailable_range(PFN_DOWN(next),
->  							PFN_UP(start));
-> -- 
-> 2.26.2
-> 
-> 
+Huacai Chen(5):
+ dt-bindings: interrupt-controller: Update Loongson HTVEC description
+ MIPS: DTS: Fix number of msi vectors for Loongson64G
+ irqchip: loongson-liointc: Fix misuse of gc->mask_cache
+ irqchip: loongson-htvec: Support 8 groups of HT vectors
+ irqchip: loongson-pch-pic: Fix the misused irq flow handler
 
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+---
+ .../interrupt-controller/loongson,htvec.yaml       |  4 ++--
+ .../boot/dts/loongson/loongson64g_4core_ls7a.dts   |  8 ++++++--
+ drivers/irqchip/irq-loongson-htvec.c               | 22 ++++++++++------------
+ drivers/irqchip/irq-loongson-liointc.c             | 10 +++++-----
+ drivers/irqchip/irq-loongson-pch-pic.c             | 15 ++++-----------
+ 5 files changed, 27 insertions(+), 32 deletions(-)
+--
+2.7.0
