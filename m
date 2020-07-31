@@ -2,64 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0C9234DCD
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Aug 2020 00:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398F8234DCF
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Aug 2020 00:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726775AbgGaWtj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 31 Jul 2020 18:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S1726925AbgGaWt5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 31 Jul 2020 18:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726099AbgGaWti (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 Jul 2020 18:49:38 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF04C06174A;
-        Fri, 31 Jul 2020 15:49:38 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id b14so28628070qkn.4;
-        Fri, 31 Jul 2020 15:49:38 -0700 (PDT)
+        with ESMTP id S1726099AbgGaWt5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 Jul 2020 18:49:57 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04DDC06174A;
+        Fri, 31 Jul 2020 15:49:56 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id u64so30287074qka.12;
+        Fri, 31 Jul 2020 15:49:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KldUXxywDI2lybh6bj7T/diBCppFO1Ycr5/0d2oq2Kw=;
-        b=f0PbYsZpguL0x4cQoCXf/NJ0Fgg1tekz7mQomMv/Y4eD3nk6O/K16CNToj7A6ZB8u6
-         hD4U8hnkjkDZZZzrNnXXgJoCu8VsCVEMEMons8FqGjzYBT23GS9UwHzdcna69VD+E3uL
-         ZXN5WxKdhNE5dxTbe6odKZgUfVCBAlK3NgO/DNBfAErKZDvBsPZYpN+uftz6+WYWYDPy
-         qdEy9nCci5AeM1YvkTbGE6LzUydZ85LmbFNmwI1PcX5DA6eZe6/dMoDp2fk+Vr9FUWri
-         75YHg/FKacuNh9KybVZISAodoHsif/mM4PfITRzvpr5UHemuKULCR4UP5BT9NMkiB5R7
-         9wGw==
+        bh=AfbW4OLDw+jzbh8Q9mzutrmZ1iJBIk7i75MGhkUmwS0=;
+        b=QXzGKWEwR0ofLRFMNj0alecTARQPT8OECxFmlkWodRukCpTriShNTuWuK27RTzQuTU
+         KoRNwJQcLoXcwKzUCEUs+D50eAIoWLWCBh0wmKZrf9Qz/vHlxnsSb8zIwWGA680Q6KuF
+         keVjr2R1PqCxAOz+9wesAUQm1oWrBvbWxE0JRNChFpy+kd1zlnlh3o5oaMt0JdGwp/3c
+         8KypZXNDusFrnLp0Z2yDFz3kU9tB+lwH3LTscaAeCL35XtkOgf6ajKGtjnBEuWr1UfeS
+         H4vkNBgp9Km95CHGHKerz8mUXkUoY8U74P7z5YYyt3/CUS5UtvcFQvWMtGm2rZdxbjld
+         gM6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=KldUXxywDI2lybh6bj7T/diBCppFO1Ycr5/0d2oq2Kw=;
-        b=Pv1jUR4D4WOh4Hl3V3ZBsrbhzxcPcF5TJWFgVMQSWA8P9vcVXakj1XRnZYEdyXLkH/
-         gnRJcPah4fH7vSyVy9vLhQNT5um1WDBSpxbHEZr/A3ssvKyxnYs6LLmdnfJbFvYvWnBl
-         WxJgoCTdPtJffwH9tYS3nYYYBhuW6ynnSlIqB2W9Uyikt1MW57+3wGQ+UZ9fImvaIrKF
-         kWF+zLoeMv85+41An5nglZMxF2t09std4PK0OMI70TyBk/CqWjTidlSC3PE9pAKjP0L+
-         Sy9QaT/beqFjNjnl/Jdy7fjiWnfc2z84J4fHsUng2vSUJDwrWteZedjwkyzLBECZz9Vj
-         5XUg==
-X-Gm-Message-State: AOAM531v3eKff8qWVP4ozSdsJdlH+xZiPKdRy1XY8TnQsPtlmqChmH9k
-        NeIGgA7iRDTwecSZK5HoQanWjD+8
-X-Google-Smtp-Source: ABdhPJyDDpLtaqgVw5b/rqNhxR801xyrnKQCOq653pE5P8Cm4Cb83rkzNVqOCJNkxi5z2wE2HxLXPg==
-X-Received: by 2002:a05:620a:48c:: with SMTP id 12mr6399491qkr.452.1596235777420;
-        Fri, 31 Jul 2020 15:49:37 -0700 (PDT)
+        bh=AfbW4OLDw+jzbh8Q9mzutrmZ1iJBIk7i75MGhkUmwS0=;
+        b=bGRQ87VKqj0DcnntQ4NbQHW40w8BDc83BILD972b18slUjivpgPWqkw6ltcevEaqxi
+         XTzuTa+u7sUvn7jJp7gumNCDjc3+A/0qkTBuxM1/y+XAZHsnknpY9CIfXImsWzwNHiAf
+         CtmaOryoubZG/1VRPWvj40BPCn8/TdbAlZsdILDyFB+BlE72SYI5prpsm8y+PSyjvFjw
+         E8+V01lRqEky1NeL//L/Exj17s8HkYc6IcqtMmJnha0KYP2GN9OYSz8qF58TPvJb2IPL
+         SLIIwwFLsiMUSo0y1Gy9/g09u6wuNadObOhdArIh5EgUMk2Kw/1FmEu19/qK0Bs+/9/y
+         HNXA==
+X-Gm-Message-State: AOAM5304il84b4OBGuM5oe5R9pRlYoyYVYPA6/ZkJtYfOPyM+fWQevVw
+        AclUSW3ErSTOex4wIN7bNtXScecf
+X-Google-Smtp-Source: ABdhPJyioXUcyyGTHfCRytrcx2dEW2kYlCNrixAp901RDf1v4KdKa0vOKXy6DBe2QcDeQNywP/1zFw==
+X-Received: by 2002:a37:e04:: with SMTP id 4mr6148532qko.269.1596235795663;
+        Fri, 31 Jul 2020 15:49:55 -0700 (PDT)
 Received: from [10.67.50.75] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id r6sm9953894qtt.81.2020.07.31.15.49.35
+        by smtp.googlemail.com with ESMTPSA id x28sm9749990qki.55.2020.07.31.15.49.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jul 2020 15:49:36 -0700 (PDT)
+        Fri, 31 Jul 2020 15:49:54 -0700 (PDT)
 Subject: Re: [PATCH] MIPS: BMIPS: Disable pref 30 for buggy CPUs
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-mips@linux-mips.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mips@linux-mips.org,
         "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
         <bcm-kernel-feedback-list@broadcom.com>,
         "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
         <linux-mips@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
 References: <20200731042401.22871-1-f.fainelli@gmail.com>
- <21ad5472-1287-acba-5604-09f2e633c043@flygoat.com>
+ <20200731090526.GB7946@alpha.franken.de>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  xsDiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -115,63 +114,53 @@ Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  HvsHIcv4lxCWkFXkwsuWqzEKK6kxVpRDoEQPDj+Oy/ZJ5fYuMbkdHrlegwoQ64LrqdmiVVPC
  TwQYEQIADwIbDAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2Do+FAJ956xSz2XpDHql+Wg/2qv3b
  G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
-Message-ID: <46de49ec-cc8b-708a-0cdd-82389b041078@gmail.com>
-Date:   Fri, 31 Jul 2020 15:49:28 -0700
+Message-ID: <0809b01e-3b36-9d8f-2de1-58b7d649f4c8@gmail.com>
+Date:   Fri, 31 Jul 2020 15:49:53 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <21ad5472-1287-acba-5604-09f2e633c043@flygoat.com>
+In-Reply-To: <20200731090526.GB7946@alpha.franken.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/31/20 3:34 AM, Jiaxun Yang wrote:
-> 
-> 
-> 在 2020/7/31 下午12:24, Florian Fainelli 写道:
+On 7/31/20 2:05 AM, Thomas Bogendoerfer wrote:
+> On Thu, Jul 30, 2020 at 09:24:01PM -0700, Florian Fainelli wrote:
 >> Disable pref 30 by utilizing the standard quirk method and matching the
 >> affected SoCs: 7344, 7346, 7425.
 >>
 >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 >> ---
->>   arch/mips/bmips/setup.c | 17 +++++++++++++++++
->>   1 file changed, 17 insertions(+)
+>>  arch/mips/bmips/setup.c | 17 +++++++++++++++++
+>>  1 file changed, 17 insertions(+)
 >>
 >> diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
 >> index 19308df5f577..df0efea12611 100644
 >> --- a/arch/mips/bmips/setup.c
 >> +++ b/arch/mips/bmips/setup.c
 >> @@ -110,6 +110,20 @@ static void bcm6368_quirks(void)
->>       bcm63xx_fixup_cpu1();
->>   }
->>   +static void bmips5000_pref30_quirk(void)
+>>  	bcm63xx_fixup_cpu1();
+>>  }
+>>  
+>> +static void bmips5000_pref30_quirk(void)
 >> +{
->> +    __asm__ __volatile__(
->> +    "    li    $8, 0x5a455048\n"
->> +    "    .word    0x4088b00f\n"    /* mtc0 $8, $22, 15 */
->> +    "    nop; nop; nop\n"
->> +    "    .word    0x4008b008\n"    /* mfc0 $8, $22, 8 */
->> +    /* disable "pref 30" on buggy CPUs */
->> +    "    lui    $9, 0x0800\n"
->> +    "    or    $8, $9\n"
->> +    "    .word    0x4088b008\n"    /* mtc0 $8, $22, 8 */
->> +    : : : "$8", "$9");
->> +}
-> Hi,
+>> +	__asm__ __volatile__(
+>> +	"	li	$8, 0x5a455048\n"
+>> +	"	.word	0x4088b00f\n"	/* mtc0 $8, $22, 15 */
+>> +	"	nop; nop; nop\n"
+>> +	"	.word	0x4008b008\n"	/* mfc0 $8, $22, 8 */
+>> +	/* disable "pref 30" on buggy CPUs */
+>> +	"	lui	$9, 0x0800\n"
+>> +	"	or	$8, $9\n"
+>> +	"	.word	0x4088b008\n"	/* mtc0 $8, $22, 8 */
+>> +	: : : "$8", "$9");
 > 
-> Is there any toolchain issue blocking read_c0_**** family helpers being
-> used?
-> 
-> Use .word looks unreasonable.
+> what's the reason for not using mfc/mtc here ?
 
-Yes, the assembler would be choking on the custom $22 selector, however
-this patch should not be necessary given that the boot loader (CFE)
-should have long been updated by now to disable pref 30.
-
-Thanks
+See my response to Jiaxun, thanks!
 -- 
 Florian
