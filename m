@@ -2,116 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 661DD23400D
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Jul 2020 09:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FE8234144
+	for <lists+linux-mips@lfdr.de>; Fri, 31 Jul 2020 10:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731659AbgGaHgb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 31 Jul 2020 03:36:31 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:57426 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727851AbgGaHgb (ORCPT
+        id S1728594AbgGaId0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 31 Jul 2020 04:33:26 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:40014 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1728494AbgGaId0 (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 31 Jul 2020 03:36:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596180990;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=553KQ1qNVymmVc2Jbs3bPD4YZyJND+P5R8Nz7Iw3uxY=;
-        b=gWxQJWcKWMRqsEmV6rmV34vl1w/EIlulavU3LmnhHMdTMQPxUke9ZXMNPAuAmySm3V3zIg
-        EP/2k9BJl035U11Pbhl7jAoN7XccsZASNfjK2NfURxAPyf7Av03NGvPqbbWsmdD+nkLSQr
-        9aOyJbGcKEtDzjvBG21Y7Ph5AbfYDQs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-276-0xR8VgtcNlOTkXYmWVmjAQ-1; Fri, 31 Jul 2020 03:36:26 -0400
-X-MC-Unique: 0xR8VgtcNlOTkXYmWVmjAQ-1
-Received: by mail-wm1-f70.google.com with SMTP id z74so1888684wmc.4
-        for <linux-mips@vger.kernel.org>; Fri, 31 Jul 2020 00:36:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=553KQ1qNVymmVc2Jbs3bPD4YZyJND+P5R8Nz7Iw3uxY=;
-        b=rQcRye4aJk+SOtHSuH/PDHKnDLCvTRvWhlA7y2CF7V1FEl7Q4zjyDge5kfcIHJKIgn
-         9YSMQ7x2PC0NHo6O9xusCBBZpgNz/xiY0751beygfFqIpc00Kvu3IlfvvRJIeKArQJun
-         wBM4rZ9zShz4GurWza9pehuRK0E2XsT8WyUMwCfINQPSwcnfh/7dvcFy4MokhN90J4RJ
-         iDzI2BqkATJnfnYQ+fg9Eo90zHxedEFwDm0uW9AzZSPhzsdZKZShW1/YSrzSDpp4NV2E
-         ilYqwgniPA2nbe1Cz15EZSXHX7K5/3P6m6S+zf5IsARcMW3QPle+bTl7cA8wscoNSNCd
-         oFbA==
-X-Gm-Message-State: AOAM532aAxSYUtju3SbxMZHWQ2c28fnM3KGzdEXsyxaGzbSAa0uc9SxH
-        aGsv41DozSMv59HbZV9RAGVW9s9jQqnbmEtD3sbvP6xhjrJTl5VGXHz45I7qoLkO4ggDJgEIR2U
-        0PLhSDegAXgRIZZsJVJb0pg==
-X-Received: by 2002:a5d:5609:: with SMTP id l9mr2180878wrv.86.1596180985662;
-        Fri, 31 Jul 2020 00:36:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyK5Kv8TZaxnsghX4+eREYu/xA6eXNCFl4Iau4DmmrIF5oz1lEHRcJA6j4qFKcbXil6qN/DmQ==
-X-Received: by 2002:a5d:5609:: with SMTP id l9mr2180862wrv.86.1596180985472;
-        Fri, 31 Jul 2020 00:36:25 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:90a5:f767:5f9f:3445? ([2001:b07:6468:f312:90a5:f767:5f9f:3445])
-        by smtp.gmail.com with ESMTPSA id t11sm11878979wrs.66.2020.07.31.00.36.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jul 2020 00:36:24 -0700 (PDT)
-Subject: Re: [PATCH -next] emulate:Fix build error
-To:     Peng Wu <wupeng58@huawei.com>, tsbogend@alpha.franken.de
-Cc:     chenhc@lemote.com, aleksandar.qemu.devel@gmail.com,
-        colin.king@canonical.com, tianjia.zhang@linux.alibaba.com,
-        huanglllzu@gmail.com, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1596179807-17713-1-git-send-email-wupeng58@huawei.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <ddee30c4-6190-5cbc-6340-c138bd1550b5@redhat.com>
-Date:   Fri, 31 Jul 2020 09:36:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Fri, 31 Jul 2020 04:33:26 -0400
+Received: from hanazono.local (unknown [116.236.177.53])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id C255260130;
+        Fri, 31 Jul 2020 16:33:21 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1596184402; bh=k/rgArit88h2OIcboYHgG+XD5TJS5EAhZcv7J3t+lVI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=bsRjpc5HvVev7q1qhFOKfcib8o1VPe5FXGjacL8nFgYY4IZG74bT826t7qK42JNkp
+         1ztaK5ZKjz1zHgOLU+9NncrSqwkdapZV09ZF+pNqWP3r8Ibd5G+KKT6NFg+a050jHJ
+         uUMqqtaW9Bq0x/ml1NXmH5Jldl5Zfxze9ufxyRag=
+Subject: Re: [PATCH] MIPS: Provide Kconfig option for default IEEE754
+ conformance mode
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Huacai Chen <chenhc@lemote.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>,
+        Liangliang Huang <huanglllzu@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20200731041018.1381642-1-jiaxun.yang@flygoat.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+Message-ID: <e314d7f4-56cb-950f-6f38-d49a00101f5f@xen0n.name>
+Date:   Fri, 31 Jul 2020 16:33:21 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:81.0)
+ Gecko/20100101 Thunderbird/81.0a1
 MIME-Version: 1.0
-In-Reply-To: <1596179807-17713-1-git-send-email-wupeng58@huawei.com>
+In-Reply-To: <20200731041018.1381642-1-jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 31/07/20 09:16, Peng Wu wrote:
-> The declaration of function kvm_mips_complete_mmio_load
-> has only one formal parameter,but two parameters are passed
-> when called. So, the following error is seen while building
-> emulate.c
-> 
-> arch/mips/kvm/emulate.c: In function ‘kvm_mips_emulate_load’:
-> arch/mips/kvm/emulate.c:2130:3: error: too many arguments
-> to function ‘kvm_mips_complete_mmio_load’
->    kvm_mips_complete_mmio_load(vcpu, run);
->    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from linux/include/linux/kvm_host.h:36,
->                  from linux/arch/mips/kvm/emulate.c:15:
-> arch/mips/include/asm/kvm_host.h:1072:30: note: declared here
-> extern enum emulation_result
-> 	kvm_mips_complete_mmio_load(struct kvm_vcpu *vcpu);
-> 
-> Signed-off-by: Peng Wu <wupeng58@huawei.com>
+Hi Jiaxun,
+
+Nice catch! Only one minor nit. Otherwise:
+
+Reviewed-by: WANG Xuerui <git@xen0n.name>
+
+
+On 2020/7/31 12:10, Jiaxun Yang wrote:
+> Requested by downstream distros, a Kconfig option for default
+> IEEE754 conformance mode allows them to set their mode to
+> relaxed by default.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  arch/mips/kvm/emulate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/kvm/emulate.c b/arch/mips/kvm/emulate.c
-> index 1d41965..7037823 100644
-> --- a/arch/mips/kvm/emulate.c
-> +++ b/arch/mips/kvm/emulate.c
-> @@ -2127,7 +2127,7 @@ enum emulation_result kvm_mips_emulate_load(union mips_instruction inst,
->  			run->mmio.phys_addr, run->mmio.len, run->mmio.data);
+>  arch/mips/Kconfig            | 21 +++++++++++++++++++++
+>  arch/mips/kernel/cpu-probe.c | 12 +++++++++++-
+>  2 files changed, 32 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index f6bb446d30f0..ef5b2a177b1b 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -2877,6 +2877,27 @@ config MIPS_NR_CPU_NR_MAP
+>  	default 1024 if MIPS_NR_CPU_NR_MAP_1024
+>  	default NR_CPUS if !MIPS_NR_CPU_NR_MAP_1024
 >  
->  	if (!r) {
-> -		kvm_mips_complete_mmio_load(vcpu, run);
-> +		kvm_mips_complete_mmio_load(vcpu);
->  		vcpu->mmio_needed = 0;
->  		return EMULATE_DONE;
->  	}
-> 
+> +choice
+> +	prompt "Default IEEE Std 754 conformance mode"
+> +	default IEEE754_DEFAULT_STRICT
+> +	help
+> +	  Default IEEE Std 754 conformance mode, see ieee754= kernel parameter
+> +	  for detail.
 
-This is queued already, I' will push it shortly.  Thanks!
+Here and the title, "IEEE Std 754" can be just "IEEE 754". I don't
+remember seeing the "IEEE Std 754" phrase anywhere.
 
-Paolo
+I suggest the following help message:
 
+"Sets the default IEEE 754 conformance mode, same as overriding the
+default value for the ieee754= kernel parameter. See the kernel
+parameter for details."
+
+> +
+> +	config IEEE754_DEFAULT_STRICT
+> +		bool "Strict"
+> +
+> +	config IEEE754_DEFAULT_LEGACY
+> +		bool "Legacy"
+> +
+> +	config IEEE754_DEFAULT_STD2008
+> +		bool "2008"
+> +
+> +	config IEEE754_DEFAULT_RELAXED
+> +		bool "Relaxed"
+> +
+> +endchoice
+> +
+>  #
+>  # Timer Interrupt Frequency Configuration
+>  #
+> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+> index d9e8d39a7289..03adeed58efb 100644
+> --- a/arch/mips/kernel/cpu-probe.c
+> +++ b/arch/mips/kernel/cpu-probe.c
+> @@ -157,7 +157,17 @@ static void cpu_set_fpu_2008(struct cpuinfo_mips *c)
+>   * IEEE 754 conformance mode to use.  Affects the NaN encoding and the
+>   * ABS.fmt/NEG.fmt execution mode.
+>   */
+> -static enum { STRICT, LEGACY, STD2008, RELAXED } ieee754 = STRICT;
+> +enum ieee754_mode { STRICT, LEGACY, STD2008, RELAXED };
+> +
+> +#if defined(CONFIG_IEEE754_DEFAULT_STRICT)
+> +static enum ieee754_mode ieee754 = STRICT;
+> +#elif defined(CONFIG_IEEE754_DEFAULT_LEGACY)
+> +static enum ieee754_mode ieee754 = LEGACY;
+> +#elif defined(CONFIG_IEEE754_DEFAULT_STD2008)
+> +static enum ieee754_mode ieee754 = STD2008;
+> +#elif defined(CONFIG_IEEE754_DEFAULT_RELAXED)
+> +static enum ieee754_mode ieee754 = RELAXED;
+> +#endif
+>  
+>  /*
+>   * Set the IEEE 754 NaN encodings and the ABS.fmt/NEG.fmt execution modes
