@@ -2,42 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4CC233E1F
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Jul 2020 06:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E9E233E21
+	for <lists+linux-mips@lfdr.de>; Fri, 31 Jul 2020 06:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726318AbgGaELB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 31 Jul 2020 00:11:01 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:42394 "EHLO
+        id S1726321AbgGaEMB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 31 Jul 2020 00:12:01 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:42414 "EHLO
         vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbgGaELB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 Jul 2020 00:11:01 -0400
+        with ESMTP id S1726318AbgGaEMA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 Jul 2020 00:12:00 -0400
 Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id F22691FEB4;
-        Fri, 31 Jul 2020 04:10:53 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id E43091FEB5;
+        Fri, 31 Jul 2020 04:11:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1596168655; bh=XbAuVWGJ53uaGf3mqTQrfRt8OpiJ6Pji6xLj0mTAQKQ=;
+        t=1596168719; bh=XbAuVWGJ53uaGf3mqTQrfRt8OpiJ6Pji6xLj0mTAQKQ=;
         h=From:To:Cc:Subject:Date:From;
-        b=JS/ZtJWOyGRjQyE4ZXePwxCzqx8Epx/xyJ0PRPPpbZkicmyOfLk74z+eIQcYEcYEC
-         TJxynuOKYcJs1iTozWXCdPZ5/7PAN5wquGxy7PBrYuwdPsNkJKq1Veb6gFx13vk1t1
-         hf09WK2A0TIDUs14nYQzDCpCX6XXf98hFhVVEQmzmXZOoX5A9miqdktA3kKPSnHUcc
-         OL+1w1aETSZPvOS5gnZscGRlmKvwS++WuNjhGfQF8HrwFKaCaFKm36sP6LHhDXkFGO
-         L2yYHCNFdy//ksm1zd8j2/KlRUY7ddmmVJ2VINkHS4Fr1rQgQNYsmQRQ5/VJm9FHwO
-         Di0z74zcLUUVw==
+        b=kOh9Sok6QKXxhL1spvB05M+RDY9CIXO2tecYEVK+HjrddvpOWJh02pUSnEtSFCy6/
+         jOWPzrRkLnC/bRpg65lYp3ANWnSFHLatMac1GR5NnalTzlHwPl1+AFnUI8cMwjVqbk
+         b4qzgasgZ/0k0xQqywDsbUrXJxABhsLazMfIarDMQXvwf64d7imG4l9ISfY+c0A+y6
+         wprGjxZbCPoYFFBaeuCSngNVss1MIB8OkVl80hvgyYcz024iwRqW860bmlU47FV0LB
+         LCmF3aATD/yWO8YqgSAseGjjBlgquKUrNqHFp0XlHeREdiByPeaWyVOK/C/75xEYb9
+         voVtq7zwpHMLA==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Huacai Chen <chenhc@lemote.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Zhou Yanjie <zhouyanjie@zoho.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>,
         Liangliang Huang <huanglllzu@gmail.com>,
         linux-kernel@vger.kernel.org
 Subject: [PATCH] MIPS: Provide Kconfig option for default IEEE754 conformance mode
-Date:   Fri, 31 Jul 2020 12:10:16 +0800
-Message-Id: <20200731041018.1381642-1-jiaxun.yang@flygoat.com>
+Date:   Fri, 31 Jul 2020 12:11:50 +0800
+Message-Id: <20200731041152.1382077-1-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.28.0.rc1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
