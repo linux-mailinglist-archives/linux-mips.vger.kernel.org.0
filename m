@@ -2,43 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E9E233E21
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Jul 2020 06:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13405233E2B
+	for <lists+linux-mips@lfdr.de>; Fri, 31 Jul 2020 06:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726321AbgGaEMB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 31 Jul 2020 00:12:01 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:42414 "EHLO
-        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbgGaEMA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 Jul 2020 00:12:00 -0400
-Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id E43091FEB5;
-        Fri, 31 Jul 2020 04:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1596168719; bh=XbAuVWGJ53uaGf3mqTQrfRt8OpiJ6Pji6xLj0mTAQKQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kOh9Sok6QKXxhL1spvB05M+RDY9CIXO2tecYEVK+HjrddvpOWJh02pUSnEtSFCy6/
-         jOWPzrRkLnC/bRpg65lYp3ANWnSFHLatMac1GR5NnalTzlHwPl1+AFnUI8cMwjVqbk
-         b4qzgasgZ/0k0xQqywDsbUrXJxABhsLazMfIarDMQXvwf64d7imG4l9ISfY+c0A+y6
-         wprGjxZbCPoYFFBaeuCSngNVss1MIB8OkVl80hvgyYcz024iwRqW860bmlU47FV0LB
-         LCmF3aATD/yWO8YqgSAseGjjBlgquKUrNqHFp0XlHeREdiByPeaWyVOK/C/75xEYb9
-         voVtq7zwpHMLA==
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        id S1726318AbgGaEYL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 31 Jul 2020 00:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726257AbgGaEYK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 Jul 2020 00:24:10 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A74FC061574;
+        Thu, 30 Jul 2020 21:24:10 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id ha11so6606857pjb.1;
+        Thu, 30 Jul 2020 21:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5XLltA1o6pc+ms03acl/cow8Wgm9MAL4rEVgQOQxOXs=;
+        b=R+cwfOL6NcJp8QGoq2xjIXflokIsVx622KY2RnJiZB47nBdk02++HS9e6aS+1PMzIY
+         nraLIWrZfkbYexzXytN7Jzh9jt3puoZhvsin46iMRCfP6felnjw2Rj8QtfNIFvdGIm2N
+         GNrWLRqnguVlwSZsgkACWyTZtoi4PY77xOB+QfaAXuV/SJiEkWhq2J0O2cmILmFBj8tp
+         Y+8G43/gIKYEVnWlnnRQvxOfz5Ge/mBqTJsP/SXd14TVYKFv5Gy5Oyfnio6/R47E63Fc
+         hfS0L+oE+dccYvVS52TkqUPd7aj/iyo1ukRdR77nIsWaJDT5QdTaXdqErF0GnO07uGcs
+         FMnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5XLltA1o6pc+ms03acl/cow8Wgm9MAL4rEVgQOQxOXs=;
+        b=pTiDCtoNNEmd7xluHeXJDlHy1z80Zd58bgzuERh1S4KNcox+ipr/adU0/9X9VV0WAI
+         u4+t5AyBK+3h/eAxKUHG5MOwyVdtcsIUzmGVpobNyObjAoYGi2WD4C2RwSS+WKMGht8j
+         6Lsff3bwf8BJiUtP7EmyJHWoRLP+ZS0JMVEHNh5lOSxqWFhvTYI/HyJIfjYDdWJtj7UV
+         QOLWdA3sWjzDIFGDOlADzE2dezBoIZJYUEXu1Qfoz7iRLQZFTfEPTh8Z/20cg6oeqczi
+         Q6MnjYRkLVVUqwbPHDinNsMjEJIe+FA0MdY0SqctC9Vp91b83ClUx48KHwXfU0KNUEVf
+         WZ0A==
+X-Gm-Message-State: AOAM533NYGt9kNJHL6iL0Bn/iK2aWSNGp7QFeU54d+t0BkTi7wTTC5fk
+        P2HM1LMQkPRqrhyupTHFn0A=
+X-Google-Smtp-Source: ABdhPJzn9ymAVeVuY+l9qZQU/oBRkPls19wH8CecqTiZHvsbi9pPXSDVLn0xlFP+JWf46iB4vrsaow==
+X-Received: by 2002:a63:6d48:: with SMTP id i69mr1984205pgc.354.1596169449711;
+        Thu, 30 Jul 2020 21:24:09 -0700 (PDT)
+Received: from localhost.localdomain (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
+        by smtp.gmail.com with ESMTPSA id w3sm8149192pff.56.2020.07.30.21.24.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2020 21:24:09 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-mips@linux-mips.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>,
-        Liangliang Huang <huanglllzu@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Provide Kconfig option for default IEEE754 conformance mode
-Date:   Fri, 31 Jul 2020 12:11:50 +0800
-Message-Id: <20200731041152.1382077-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.28.0.rc1
+        bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM BMIPS MIPS
+        ARCHITECTURE),
+        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] MIPS: BMIPS: Disable pref 30 for buggy CPUs
+Date:   Thu, 30 Jul 2020 21:24:01 -0700
+Message-Id: <20200731042401.22871-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -46,71 +66,49 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Requested by downstream distros, a Kconfig option for default
-IEEE754 conformance mode allows them to set their mode to
-relaxed by default.
+Disable pref 30 by utilizing the standard quirk method and matching the
+affected SoCs: 7344, 7346, 7425.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- arch/mips/Kconfig            | 21 +++++++++++++++++++++
- arch/mips/kernel/cpu-probe.c | 12 +++++++++++-
- 2 files changed, 32 insertions(+), 1 deletion(-)
+ arch/mips/bmips/setup.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index f6bb446d30f0..ef5b2a177b1b 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2877,6 +2877,27 @@ config MIPS_NR_CPU_NR_MAP
- 	default 1024 if MIPS_NR_CPU_NR_MAP_1024
- 	default NR_CPUS if !MIPS_NR_CPU_NR_MAP_1024
+diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
+index 19308df5f577..df0efea12611 100644
+--- a/arch/mips/bmips/setup.c
++++ b/arch/mips/bmips/setup.c
+@@ -110,6 +110,20 @@ static void bcm6368_quirks(void)
+ 	bcm63xx_fixup_cpu1();
+ }
  
-+choice
-+	prompt "Default IEEE Std 754 conformance mode"
-+	default IEEE754_DEFAULT_STRICT
-+	help
-+	  Default IEEE Std 754 conformance mode, see ieee754= kernel parameter
-+	  for detail.
++static void bmips5000_pref30_quirk(void)
++{
++	__asm__ __volatile__(
++	"	li	$8, 0x5a455048\n"
++	"	.word	0x4088b00f\n"	/* mtc0 $8, $22, 15 */
++	"	nop; nop; nop\n"
++	"	.word	0x4008b008\n"	/* mfc0 $8, $22, 8 */
++	/* disable "pref 30" on buggy CPUs */
++	"	lui	$9, 0x0800\n"
++	"	or	$8, $9\n"
++	"	.word	0x4088b008\n"	/* mtc0 $8, $22, 8 */
++	: : : "$8", "$9");
++}
 +
-+	config IEEE754_DEFAULT_STRICT
-+		bool "Strict"
-+
-+	config IEEE754_DEFAULT_LEGACY
-+		bool "Legacy"
-+
-+	config IEEE754_DEFAULT_STD2008
-+		bool "2008"
-+
-+	config IEEE754_DEFAULT_RELAXED
-+		bool "Relaxed"
-+
-+endchoice
-+
- #
- # Timer Interrupt Frequency Configuration
- #
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index d9e8d39a7289..03adeed58efb 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -157,7 +157,17 @@ static void cpu_set_fpu_2008(struct cpuinfo_mips *c)
-  * IEEE 754 conformance mode to use.  Affects the NaN encoding and the
-  * ABS.fmt/NEG.fmt execution mode.
-  */
--static enum { STRICT, LEGACY, STD2008, RELAXED } ieee754 = STRICT;
-+enum ieee754_mode { STRICT, LEGACY, STD2008, RELAXED };
-+
-+#if defined(CONFIG_IEEE754_DEFAULT_STRICT)
-+static enum ieee754_mode ieee754 = STRICT;
-+#elif defined(CONFIG_IEEE754_DEFAULT_LEGACY)
-+static enum ieee754_mode ieee754 = LEGACY;
-+#elif defined(CONFIG_IEEE754_DEFAULT_STD2008)
-+static enum ieee754_mode ieee754 = STD2008;
-+#elif defined(CONFIG_IEEE754_DEFAULT_RELAXED)
-+static enum ieee754_mode ieee754 = RELAXED;
-+#endif
+ static const struct bmips_quirk bmips_quirk_list[] = {
+ 	{ "brcm,bcm3368",		&bcm6358_quirks			},
+ 	{ "brcm,bcm3384-viper",		&bcm3384_viper_quirks		},
+@@ -120,6 +134,9 @@ static const struct bmips_quirk bmips_quirk_list[] = {
+ 	{ "brcm,bcm6368",		&bcm6368_quirks			},
+ 	{ "brcm,bcm63168",		&bcm6368_quirks			},
+ 	{ "brcm,bcm63268",		&bcm6368_quirks			},
++	{ "brcm,bcm7344",		&bmips5000_pref30_quirk		},
++	{ "brcm,bcm7346",		&bmips5000_pref30_quirk		},
++	{ "brcm,bcm7425",		&bmips5000_pref30_quirk		},
+ 	{ },
+ };
  
- /*
-  * Set the IEEE 754 NaN encodings and the ABS.fmt/NEG.fmt execution modes
 -- 
-2.28.0
+2.25.1
 
