@@ -2,97 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E22B5234D9C
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Aug 2020 00:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0C9234DCD
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Aug 2020 00:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbgGaWhg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 31 Jul 2020 18:37:36 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:44568 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726119AbgGaWhf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 Jul 2020 18:37:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1596235055; x=1627771055;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=fHsR8J3pziaEpfOkReKOKQRI2dS7+dilXvqPZXOBDiY=;
-  b=W1ywNMIgds/lZMvobXKq9v1xuxafr0iADsg6YQrnN4UqhWu08jdAz4kO
-   hXbildqYQEmyfOw9IzeCLy2lobtKBJIhk2XefCuaK1xDyiZXioE6SL2Xe
-   LvxtMqDtI+E24R6vB+/3jBSJs9DwnSyXqYUpQKMtrtvrlN3hJE0RT4vUs
-   4wKec8qAQhgCmV3bqk/eV0rwWmjV7v1RLtKOIdTpV69cy9Rw0mjmCo95+
-   BvbyHN7jdybfVLxMTSIIHUpuZLMuzRgzg7S//AYCQhAK4/Mm9dd1ITRyc
-   prQ1+bc8hUWrNRLmHUvg0rc6ovahGtbpLBMspCqc0Bauu5Z2Z0m3F50mD
-   Q==;
-IronPort-SDR: Otymg+j1sUeEEQpY9/KcG36YZeZJm2Kwb8F8oyMt46CC4PM3ooell5LogIShi9T9bBP+AWOuK0
- kAPZ1II+Go5mA4y6TW/ScdBL/8sdDmyyYhkLLuPn8t7GoBisvP0AQgX4ROf9fwxKSl+pFjJy0p
- X2CjSXU403TPXRY1tr7o7LhzTYpN6uHUrdC8+jH0TqhPn8Y8kmFEHQ/0u7S5ET1flWxfyhjVcL
- BrYXcq1JN43Puv8ARFuq4JzD9RPMeO6uRyTNY2Yp3gK++MRwvXNZIopGruAqQ6ssJ2BFXcNwjB
- fdE=
-X-IronPort-AV: E=Sophos;i="5.75,419,1589212800"; 
-   d="scan'208";a="253222744"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Aug 2020 06:37:34 +0800
-IronPort-SDR: PKwJ++/QC0vo0Km3Hi/Jot1WjxcDllCCSRuFKlaKwLmw8aAVPcYWznq2jt2WO49LcMGN72Na1z
- NXjiq7TblejAMf4LZse/dYQG8bSLclcWQ=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2020 15:25:02 -0700
-IronPort-SDR: CSLz2CPsdh485JhDLhjonjinNdotBWlcP5lANoZ87IGqquVBi2AWaLuTuG3GjpHzwb/a2VduMc
- tDbHM1RmWxsg==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2020 15:37:35 -0700
-Date:   Fri, 31 Jul 2020 23:37:29 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@wdc.com>
-To:     Lichao Liu <liulichao@loongson.cn>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-Subject: Re: [PATCH] MIPS: Grant pte read permission, even if vma only have
- VM_WRITE permission.
-In-Reply-To: <c42085fa-43f7-c845-79d7-8b30eefb78da@loongson.cn>
-Message-ID: <alpine.LFD.2.21.2007312312300.24175@redsun52.ssa.fujisawa.hgst.com>
-References: <20200717095536.45011-1-liulichao@loongson.cn> <20200722093603.GA10090@alpha.franken.de> <c42085fa-43f7-c845-79d7-8b30eefb78da@loongson.cn>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1726775AbgGaWtj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 31 Jul 2020 18:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726099AbgGaWti (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 Jul 2020 18:49:38 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF04C06174A;
+        Fri, 31 Jul 2020 15:49:38 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id b14so28628070qkn.4;
+        Fri, 31 Jul 2020 15:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=KldUXxywDI2lybh6bj7T/diBCppFO1Ycr5/0d2oq2Kw=;
+        b=f0PbYsZpguL0x4cQoCXf/NJ0Fgg1tekz7mQomMv/Y4eD3nk6O/K16CNToj7A6ZB8u6
+         hD4U8hnkjkDZZZzrNnXXgJoCu8VsCVEMEMons8FqGjzYBT23GS9UwHzdcna69VD+E3uL
+         ZXN5WxKdhNE5dxTbe6odKZgUfVCBAlK3NgO/DNBfAErKZDvBsPZYpN+uftz6+WYWYDPy
+         qdEy9nCci5AeM1YvkTbGE6LzUydZ85LmbFNmwI1PcX5DA6eZe6/dMoDp2fk+Vr9FUWri
+         75YHg/FKacuNh9KybVZISAodoHsif/mM4PfITRzvpr5UHemuKULCR4UP5BT9NMkiB5R7
+         9wGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=KldUXxywDI2lybh6bj7T/diBCppFO1Ycr5/0d2oq2Kw=;
+        b=Pv1jUR4D4WOh4Hl3V3ZBsrbhzxcPcF5TJWFgVMQSWA8P9vcVXakj1XRnZYEdyXLkH/
+         gnRJcPah4fH7vSyVy9vLhQNT5um1WDBSpxbHEZr/A3ssvKyxnYs6LLmdnfJbFvYvWnBl
+         WxJgoCTdPtJffwH9tYS3nYYYBhuW6ynnSlIqB2W9Uyikt1MW57+3wGQ+UZ9fImvaIrKF
+         kWF+zLoeMv85+41An5nglZMxF2t09std4PK0OMI70TyBk/CqWjTidlSC3PE9pAKjP0L+
+         Sy9QaT/beqFjNjnl/Jdy7fjiWnfc2z84J4fHsUng2vSUJDwrWteZedjwkyzLBECZz9Vj
+         5XUg==
+X-Gm-Message-State: AOAM531v3eKff8qWVP4ozSdsJdlH+xZiPKdRy1XY8TnQsPtlmqChmH9k
+        NeIGgA7iRDTwecSZK5HoQanWjD+8
+X-Google-Smtp-Source: ABdhPJyDDpLtaqgVw5b/rqNhxR801xyrnKQCOq653pE5P8Cm4Cb83rkzNVqOCJNkxi5z2wE2HxLXPg==
+X-Received: by 2002:a05:620a:48c:: with SMTP id 12mr6399491qkr.452.1596235777420;
+        Fri, 31 Jul 2020 15:49:37 -0700 (PDT)
+Received: from [10.67.50.75] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id r6sm9953894qtt.81.2020.07.31.15.49.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Jul 2020 15:49:36 -0700 (PDT)
+Subject: Re: [PATCH] MIPS: BMIPS: Disable pref 30 for buggy CPUs
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-mips@linux-mips.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200731042401.22871-1-f.fainelli@gmail.com>
+ <21ad5472-1287-acba-5604-09f2e633c043@flygoat.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ xsDiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
+ xGlkaOSDuu09rxuW+69Y2f1TzjFuGpBk4ysWOR85O2Nx8AJ6fYGCoeTbovrNlGT1M9obSFGQ
+ X3IzRnWoqlfudjTO5TKoqkbOgpYqIo5n1QbEjCCwCwCg3DOH/4ug2AUUlcIT9/l3pGvoRJ0E
+ AICDzi3l7pmC5IWn2n1mvP5247urtHFs/uusE827DDj3K8Upn2vYiOFMBhGsxAk6YKV6IP0d
+ ZdWX6fqkJJlu9cSDvWtO1hXeHIfQIE/xcqvlRH783KrihLcsmnBqOiS6rJDO2x1eAgC8meAX
+ SAgsrBhcgGl2Rl5gh/jkeA5ykwbxA/9u1eEuL70Qzt5APJmqVXR+kWvrqdBVPoUNy/tQ8mYc
+ nzJJ63ng3tHhnwHXZOu8hL4nqwlYHRa9eeglXYhBqja4ZvIvCEqSmEukfivk+DlIgVoOAJbh
+ qIWgvr3SIEuR6ayY3f5j0f2ejUMYlYYnKdiHXFlF9uXm1ELrb0YX4GMHz80nRmxvcmlhbiBG
+ YWluZWxsaSA8Zi5mYWluZWxsaUBnbWFpbC5jb20+wmYEExECACYCGyMGCwkIBwMCBBUCCAME
+ FgIDAQIeAQIXgAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2DvCVAJ4u4/bPF4P3jxb4qEY8I2gS
+ 6hG0gACffNWlqJ2T4wSSn+3o7CCZNd7SLSDOwU0EVxvH8AEQAOqv6agYuT4x3DgFIJNv9i0e
+ S443rCudGwmg+CbjXGA4RUe1bNdPHYgbbIaN8PFkXfb4jqg64SyU66FXJJJO+DmPK/t7dRNA
+ 3eMB1h0GbAHlLzsAzD0DKk1ARbjIusnc02aRQNsAUfceqH5fAMfs2hgXBa0ZUJ4bLly5zNbr
+ r0t/fqZsyI2rGQT9h1D5OYn4oF3KXpSpo+orJD93PEDeseho1EpmMfsVH7PxjVUlNVzmZ+tc
+ IDw24CDSXf0xxnaojoicQi7kzKpUrJodfhNXUnX2JAm/d0f9GR7zClpQMezJ2hYAX7BvBajb
+ Wbtzwi34s8lWGI121VjtQNt64mSqsK0iQAE6OYk0uuQbmMaxbBTT63+04rTPBO+gRAWZNDmQ
+ b2cTLjrOmdaiPGClSlKx1RhatzW7j1gnUbpfUl91Xzrp6/Rr9BgAZydBE/iu57KWsdMaqu84
+ JzO9UBGomh9eyBWBkrBt+Fe1qN78kM7JO6i3/QI56NA4SflV+N4PPgI8TjDVaxgrfUTV0gVa
+ cr9gDE5VgnSeSiOleChM1jOByZu0JTShOkT6AcSVW0kCz3fUrd4e5sS3J3uJezSvXjYDZ53k
+ +0GS/Hy//7PSvDbNVretLkDWL24Sgxu/v8i3JiYIxe+F5Br8QpkwNa1tm7FK4jOd95xvYADl
+ BUI1EZMCPI7zABEBAAHCwagEGBECAAkFAlcbx/ACGwICKQkQYVeZFbVjdg7BXSAEGQECAAYF
+ Alcbx/AACgkQh9CWnEQHBwSJBw//Z5n6IO19mVzMy/ZLU/vu8flv0Aa0kwk5qvDyvuvfiDTd
+ WQzq2PLs+obX0y1ffntluhvP+8yLzg7h5O6/skOfOV26ZYD9FeV3PIgR3QYF26p2Ocwa3B/k
+ P6ENkk2pRL2hh6jaA1Bsi0P34iqC2UzzLq+exctXPa07ioknTIJ09BT31lQ36Udg7NIKalnj
+ 5UbkRjqApZ+Rp0RAP9jFtq1n/gjvZGyEfuuo/G+EVCaiCt3Vp/cWxDYf2qsX6JxkwmUNswuL
+ C3duQ0AOMNYrT6Pn+Vf0kMboZ5UJEzgnSe2/5m8v6TUc9ZbC5I517niyC4+4DY8E2m2V2LS9
+ es9uKpA0yNcd4PfEf8bp29/30MEfBWOf80b1yaubrP5y7yLzplcGRZMF3PgBfi0iGo6kM/V2
+ 13iD/wQ45QTV0WTXaHVbklOdRDXDHIpT69hFJ6hAKnnM7AhqZ70Qi31UHkma9i/TeLLzYYXz
+ zhLHGIYaR04dFT8sSKTwTSqvm8rmDzMpN54/NeDSoSJitDuIE8givW/oGQFb0HGAF70qLgp0
+ 2XiUazRyRU4E4LuhNHGsUxoHOc80B3l+u3jM6xqJht2ZyMZndbAG4LyVA2g9hq2JbpX8BlsF
+ skzW1kbzIoIVXT5EhelxYEGqLFsZFdDhCy8tjePOWK069lKuuFSssaZ3C4edHtkZ8gCfWWtA
+ 8dMsqeOIg9Trx7ZBCDOZGNAAnjYQmSb2eYOAti3PX3Ex7vI8ZhJCzsNNBEjPuBIQEAC/6NPW
+ 6EfQ91ZNU7e/oKWK91kOoYGFTjfdOatp3RKANidHUMSTUcN7J2mxww80AQHKjr3Yu2InXwVX
+ SotMMR4UrkQX7jqabqXV5G+88bj0Lkr3gi6qmVkUPgnNkIBe0gaoM523ujYKLreal2OQ3GoJ
+ PS6hTRoSUM1BhwLCLIWqdX9AdT6FMlDXhCJ1ffA/F3f3nTN5oTvZ0aVF0SvQb7eIhGVFxrlb
+ WS0+dpyulr9hGdU4kzoqmZX9T/r8WCwcfXipmmz3Zt8o2pYWPMq9Utby9IEgPwultaP06MHY
+ nhda1jfzGB5ZKco/XEaXNvNYADtAD91dRtNGMwRHWMotIGiWwhEJ6vFc9bw1xcR88oYBs+7p
+ gbFSpmMGYAPA66wdDKGj9+cLhkd0SXGht9AJyaRA5AWB85yNmqcXXLkzzh2chIpSEawRsw8B
+ rQIZXc5QaAcBN2dzGN9UzqQArtWaTTjMrGesYhN+aVpMHNCmJuISQORhX5lkjeg54oplt6Zn
+ QyIsOCH3MfG95ha0TgWwyFtdxOdY/UY2zv5wGivZ3WeS0TtQf/BcGre2y85rAohFziWOzTaS
+ BKZKDaBFHwnGcJi61Pnjkz82hena8OmsnsBIucsz4N0wE+hVd6AbDYN8ZcFNIDyt7+oGD1+c
+ PfqLz2df6qjXzq27BBUboklbGUObNwADBQ//V45Z51Q4fRl/6/+oY5q+FPbRLDPlUF2lV6mb
+ hymkpqIzi1Aj/2FUKOyImGjbLAkuBQj3uMqy+BSSXyQLG3sg8pDDe8AJwXDpG2fQTyTzQm6l
+ OnaMCzosvALk2EOPJryMkOCI52+hk67cSFA0HjgTbkAv4Mssd52y/5VZR28a+LW+mJIZDurI
+ Y14UIe50G99xYxjuD1lNdTa/Yv6qFfEAqNdjEBKNuOEUQOlTLndOsvxOOPa1mRUk8Bqm9BUt
+ LHk3GDb8bfDwdos1/h2QPEi+eI+O/bm8YX7qE7uZ13bRWBY+S4+cd+Cyj8ezKYAJo9B+0g4a
+ RVhdhc3AtW44lvZo1h2iml9twMLfewKkGV3oG35CcF9mOd7n6vDad3teeNpYd/5qYhkopQrG
+ k2oRBqxyvpSLrJepsyaIpfrt5NNaH7yTCtGXcxlGf2jzGdei6H4xQPjDcVq2Ra5GJohnb/ix
+ uOc0pWciL80ohtpSspLlWoPiIowiKJu/D/Y0bQdatUOZcGadkywCZc/dg5hcAYNYchc8AwA4
+ 2dp6w8SlIsm1yIGafWlNnfvqbRBglSTnxFuKqVggiz2zk+1wa/oP+B96lm7N4/3Aw6uy7lWC
+ HvsHIcv4lxCWkFXkwsuWqzEKK6kxVpRDoEQPDj+Oy/ZJ5fYuMbkdHrlegwoQ64LrqdmiVVPC
+ TwQYEQIADwIbDAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2Do+FAJ956xSz2XpDHql+Wg/2qv3b
+ G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
+Message-ID: <46de49ec-cc8b-708a-0cdd-82389b041078@gmail.com>
+Date:   Fri, 31 Jul 2020 15:49:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <21ad5472-1287-acba-5604-09f2e633c043@flygoat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 24 Jul 2020, Lichao Liu wrote:
-
-> > IMHO it's exactly the point of RIXI enabled CPUs to support a
-> > writeonly mapping even if most of other archs aren't able to
-> > support it. So if there is no real good reason to change this,
-> > I'm going to leave it this way.
-[...]
-> I think there are have two solutions to the problem:
-> 1)modify fault_in_user_writeable(), 
->   must claim read permission when claiming write permission.
-> 2)Grant pte read permission, even if vma only have VM_WRITE permission.
+On 7/31/20 3:34 AM, Jiaxun Yang wrote:
 > 
-> But not sure which one is more suitable.
+> 
+> 在 2020/7/31 下午12:24, Florian Fainelli 写道:
+>> Disable pref 30 by utilizing the standard quirk method and matching the
+>> affected SoCs: 7344, 7346, 7425.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>>   arch/mips/bmips/setup.c | 17 +++++++++++++++++
+>>   1 file changed, 17 insertions(+)
+>>
+>> diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
+>> index 19308df5f577..df0efea12611 100644
+>> --- a/arch/mips/bmips/setup.c
+>> +++ b/arch/mips/bmips/setup.c
+>> @@ -110,6 +110,20 @@ static void bcm6368_quirks(void)
+>>       bcm63xx_fixup_cpu1();
+>>   }
+>>   +static void bmips5000_pref30_quirk(void)
+>> +{
+>> +    __asm__ __volatile__(
+>> +    "    li    $8, 0x5a455048\n"
+>> +    "    .word    0x4088b00f\n"    /* mtc0 $8, $22, 15 */
+>> +    "    nop; nop; nop\n"
+>> +    "    .word    0x4008b008\n"    /* mfc0 $8, $22, 8 */
+>> +    /* disable "pref 30" on buggy CPUs */
+>> +    "    lui    $9, 0x0800\n"
+>> +    "    or    $8, $9\n"
+>> +    "    .word    0x4088b008\n"    /* mtc0 $8, $22, 8 */
+>> +    : : : "$8", "$9");
+>> +}
+> Hi,
+> 
+> Is there any toolchain issue blocking read_c0_**** family helpers being
+> used?
+> 
+> Use .word looks unreasonable.
 
- Well, the internal documentation is clear:
+Yes, the assembler would be choking on the custom $22 selector, however
+this patch should not be necessary given that the boot loader (CFE)
+should have long been updated by now to disable pref 30.
 
- * fault_in_user_writeable() - Fault in user address and verify RW access
-
-so if it does only verify W rather than RW access, then it has to be fixed 
-and verify both kinds of access at a time.  Presumably:
-
-	mmap_read_lock(mm);
-	ret = fixup_user_fault(current, mm, (unsigned long)uaddr, 0, NULL);
-	if (!ret)
-		ret = fixup_user_fault(current, mm, (unsigned long)uaddr,
-				       FAULT_FLAG_WRITE, NULL);
-        mmap_read_unlock(mm);
-
-at the minimum or perhaps by expanding the interface of `fixup_user_fault' 
-to also support FAULT_FLAG_RW so as to avoid the double call.
-
- As Thomas says silently expanding access permissions beyond what has been 
-granted would be a security breach.
-
-  Maciej
+Thanks
+-- 
+Florian
