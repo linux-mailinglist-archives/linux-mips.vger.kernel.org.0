@@ -2,142 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDB02351A0
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Aug 2020 12:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE212351AC
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Aug 2020 12:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728816AbgHAKTL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 1 Aug 2020 06:19:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43666 "EHLO mail.kernel.org"
+        id S1727116AbgHAK1C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 1 Aug 2020 06:27:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726888AbgHAKTL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 1 Aug 2020 06:19:11 -0400
-Received: from kernel.org (unknown [87.70.91.42])
+        id S1725931AbgHAK1B (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 1 Aug 2020 06:27:01 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5ED692087C;
-        Sat,  1 Aug 2020 10:18:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DC9E220716;
+        Sat,  1 Aug 2020 10:27:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596277150;
-        bh=jQD0i2dEJRPR8dDJK6vZOAFdpUe2Ho5YLvcSFtENhXg=;
+        s=default; t=1596277621;
+        bh=dTDPisaiOwWgBRPxyOcZVlqvISth3k2YybRmOP3G9d0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BOX5CM31age4ZqR8WpA9Tu6Sib3TWB8q0axiVZJ9476Af21jQMyZgnRXNsbolGSGn
-         pWpwQlO3I1Ym/ZhVqWnuEZ70zJ8p8UgBgfsl0uitfuYMEFBB9GFeRHX0dU8VC7876G
-         1GC7zC28lCBEAGXT18VZfRnXSGNcrY6WFAZx7Yv0=
-Date:   Sat, 1 Aug 2020 13:18:54 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        clang-built-linux@googlegroups.com,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org,
-        Hari Bathini <hbathini@in.ibm.com>
-Subject: Re: [PATCH 06/15] powerpc: fadamp: simplify
- fadump_reserve_crash_area()
-Message-ID: <20200801101854.GD534153@kernel.org>
-References: <20200728051153.1590-1-rppt@kernel.org>
- <20200728051153.1590-7-rppt@kernel.org>
- <87d04d5hda.fsf@mpe.ellerman.id.au>
+        b=sE2PdH9llyDeM8m0MEmqFVgE7HAN/mCYINrXf60zFtJM9LEOZn5FNC57vVBUQJqz3
+         d/8hJS7+J0X3wBiqgL5JF7/8pDdxtPC+elts4N9KRi2N48G1BeclAypsLxRl060sqx
+         IMlnFkAlepxh2lVehIrIhTLCNVd4TrXRdSZ/L8Vg=
+Date:   Sat, 1 Aug 2020 12:26:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     stable@vger.kernel.org, linux-mips@vger.kernel.org,
+        chenhc@lemote.com
+Subject: Re: [PATCH stable] MIPS: Loongson: Introduce and use
+ loongson_llsc_mb()
+Message-ID: <20200801102646.GA3046974@kroah.com>
+References: <20200801063443.1438289-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87d04d5hda.fsf@mpe.ellerman.id.au>
+In-Reply-To: <20200801063443.1438289-1-jiaxun.yang@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 10:15:13PM +1000, Michael Ellerman wrote:
-> Mike Rapoport <rppt@kernel.org> writes:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> >
-> > fadump_reserve_crash_area() reserves memory from a specified base address
-> > till the end of the RAM.
-> >
-> > Replace iteration through the memblock.memory with a single call to
-> > memblock_reserve() with appropriate  that will take care of proper memory
->                                      ^
->                                      parameters?
-> > reservation.
-> >
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > ---
-> >  arch/powerpc/kernel/fadump.c | 20 +-------------------
-> >  1 file changed, 1 insertion(+), 19 deletions(-)
+On Sat, Aug 01, 2020 at 02:34:43PM +0800, Jiaxun Yang wrote:
+> From: Huacai Chen <chenhc@lemote.com>
 > 
-> I think this looks OK to me, but I don't have a setup to test it easily.
-> I've added Hari to Cc who might be able to.
+> commit e02e07e3127d8aec1f4bcdfb2fc52a2d99b4859e upstream.
 > 
-> But I'll give you an ack in the hope that it works :)
+> On the Loongson-2G/2H/3A/3B there is a hardware flaw that ll/sc and
+> lld/scd is very weak ordering. We should add sync instructions "before
+> each ll/lld" and "at the branch-target between ll/sc" to workaround.
+> Otherwise, this flaw will cause deadlock occasionally (e.g. when doing
+> heavy load test with LTP).
+> 
+> Below is the explaination of CPU designer:
+> 
+> "For Loongson 3 family, when a memory access instruction (load, store,
+> or prefetch)'s executing occurs between the execution of LL and SC, the
+> success or failure of SC is not predictable. Although programmer would
+> not insert memory access instructions between LL and SC, the memory
+> instructions before LL in program-order, may dynamically executed
+> between the execution of LL/SC, so a memory fence (SYNC) is needed
+> before LL/LLD to avoid this situation.
+> 
+> Since Loongson-3A R2 (3A2000), we have improved our hardware design to
+> handle this case. But we later deduce a rarely circumstance that some
+> speculatively executed memory instructions due to branch misprediction
+> between LL/SC still fall into the above case, so a memory fence (SYNC)
+> at branch-target (if its target is not between LL/SC) is needed for
+> Loongson 3A1000, 3B1500, 3A2000 and 3A3000.
+> 
+> Our processor is continually evolving and we aim to to remove all these
+> workaround-SYNCs around LL/SC for new-come processor."
+> 
+> Here is an example:
+> 
+> Both cpu1 and cpu2 simutaneously run atomic_add by 1 on same atomic var,
+> this bug cause both 'sc' run by two cpus (in atomic_add) succeed at same
+> time('sc' return 1), and the variable is only *added by 1*, sometimes,
+> which is wrong and unacceptable(it should be added by 2).
+> 
+> Why disable fix-loongson3-llsc in compiler?
+> Because compiler fix will cause problems in kernel's __ex_table section.
+> 
+> This patch fix all the cases in kernel, but:
+> 
+> +. the fix at the end of futex_atomic_cmpxchg_inatomic is for branch-target
+> of 'bne', there other cases which smp_mb__before_llsc() and smp_llsc_mb() fix
+> the ll and branch-target coincidently such as atomic_sub_if_positive/
+> cmpxchg/xchg, just like this one.
+> 
+> +. Loongson 3 does support CONFIG_EDAC_ATOMIC_SCRUB, so no need to touch
+> edac.h
+> 
+> +. local_ops and cmpxchg_local should not be affected by this bug since
+> only the owner can write.
+> 
+> +. mips_atomic_set for syscall.c is deprecated and rarely used, just let
+> it go
+> 
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> [paul.burton@mips.com:
+>   - Simplify the addition of -mno-fix-loongson3-llsc to cflags, and add
+>     a comment describing why it's there.
+>   - Make loongson_llsc_mb() a no-op when
+>     CONFIG_CPU_LOONGSON3_WORKAROUNDS=n, rather than a compiler memory
+>     barrier.
+>   - Add a comment describing the bug & how loongson_llsc_mb() helps
+>     in asm/barrier.h.]
+> Signed-off-by: Paul Burton <paul.burton@mips.com>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: ambrosehua@gmail.com
+> Cc: Steven J . Hill <Steven.Hill@cavium.com>
+> Cc: linux-mips@linux-mips.org
+> Cc: Fuxin Zhang <zhangfx@lemote.com>
+> Cc: Zhangjin Wu <wuzhangjin@gmail.com>
+> Cc: Li Xuefeng <lixuefeng@loongson.cn>
+> Cc: Xu Chenghua <xuchenghua@loongson.cn>
+> Cc: stable@vger.kernel.org # 4.19
+> 
+> ---
+> Backport to stable according to request from Debian downstream.
 
-Actually, I did some digging in the git log and the traversal was added
-there on purpose by the commit b71a693d3db3 ("powerpc/fadump: exclude
-memory holes while reserving memory in second kernel")
-Presuming this is still reqruired I'm going to drop this patch and will
-simply replace for_each_memblock() with for_each_mem_range() in v2.
- 
-> Acked-by: Michael Ellerman <mpe@ellerman.id.au>
-> 
-> 
-> > diff --git a/arch/powerpc/kernel/fadump.c b/arch/powerpc/kernel/fadump.c
-> > index 78ab9a6ee6ac..2446a61e3c25 100644
-> > --- a/arch/powerpc/kernel/fadump.c
-> > +++ b/arch/powerpc/kernel/fadump.c
-> > @@ -1658,25 +1658,7 @@ int __init fadump_reserve_mem(void)
-> >  /* Preserve everything above the base address */
-> >  static void __init fadump_reserve_crash_area(u64 base)
-> >  {
-> > -	struct memblock_region *reg;
-> > -	u64 mstart, msize;
-> > -
-> > -	for_each_memblock(memory, reg) {
-> > -		mstart = reg->base;
-> > -		msize  = reg->size;
-> > -
-> > -		if ((mstart + msize) < base)
-> > -			continue;
-> > -
-> > -		if (mstart < base) {
-> > -			msize -= (base - mstart);
-> > -			mstart = base;
-> > -		}
-> > -
-> > -		pr_info("Reserving %lluMB of memory at %#016llx for preserving crash data",
-> > -			(msize >> 20), mstart);
-> > -		memblock_reserve(mstart, msize);
-> > -	}
-> > +	memblock_reserve(base, memblock_end_of_DRAM() - base);
-> >  }
-> >  
-> >  unsigned long __init arch_reserved_kernel_pages(void)
-> > -- 
-> > 2.26.2
+What do you mean by "request"?
 
--- 
-Sincerely yours,
-Mike.
+This feels like a new feature, why can't people just use the 5.4 kernel
+or newer?  Given that this issue has been fixed upstream for 1 1/2
+years, why does it need to go to the 4.19.y stable kernel now?
+
+thanks,
+
+greg k-h
