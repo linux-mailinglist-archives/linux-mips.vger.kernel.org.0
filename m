@@ -2,162 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2E823530A
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Aug 2020 17:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C3D23548B
+	for <lists+linux-mips@lfdr.de>; Sun,  2 Aug 2020 00:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbgHAPoI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 1 Aug 2020 11:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725841AbgHAPoI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 1 Aug 2020 11:44:08 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A230AC06174A
-        for <linux-mips@vger.kernel.org>; Sat,  1 Aug 2020 08:44:07 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id r4so27498274wrx.9
-        for <linux-mips@vger.kernel.org>; Sat, 01 Aug 2020 08:44:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bHLK3Bi2pP1Ho8FYARp1XSE1OBWnsfktZ5SO7At57/I=;
-        b=g8Ye2aPQKqQH+YwwhmifxE1BHkHX2VnLTTY0oW2bNalVJgjmhPHNSLHSzmYc+9yL6p
-         yYlR/1wBvBeOTEiSfSGJa340zr4N4mRwr9oNTxMiv9Mxxaevk1svi/myS56x4w78t5YN
-         cvsF8StXj35pbJkrWwgpBYjdpWroOiF+tBSPvK66bTZxHzdbSz/JIGCHpfJbWxlObii8
-         tOorR6E9CdsChU11pqmpQ7N40CUsLnqO3LseTdeALkxLbdy3gIf9XElzsJlkANwHYSRg
-         iODUHTH9PadwPElJ4pCrd/IJfYyBGzDMw9CGVr6INl5DT2Hj+WDvmPWetK/90UjGUrXj
-         0BMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bHLK3Bi2pP1Ho8FYARp1XSE1OBWnsfktZ5SO7At57/I=;
-        b=Ygetj890ZJbQtoRLFwon77/V9zAPBnUL+sEPcs5/cTS1/6rgZlOApmeLJiaapbbvst
-         Q+Jwwm4QhNZLBz1u1iE0hYzO0WH6WP2hCo3d/MCTxDS4XUXZlLC1VoyWhdwyP6yLz310
-         75wt3vE5B0FbdrvwdTOlZ9uZmEObD8PBb34QCM4+B5YLYPXUUpQaWhhYHj4S6yxgsdBH
-         8PD6vPbFKtl8bEoCF/20xIDbiQdYoPdir8WDikOlKfAKV49mtg2qdh7LNkTMCVbtJLCB
-         lnOWyd/J4uzfc3xSHbygOVnVZJY0Ghm+z2m8o1KSTZDTxn4CjTx7W6yI1gc1GVgVWKO3
-         GZgw==
-X-Gm-Message-State: AOAM530YSO9oSbk7BtBbwRG6UdDPNBFF8bNkYKa3VsQjzDRUnshl7Rxo
-        xqSpy8Pb0kwEN1DfZ+NJMB3fgxMm
-X-Google-Smtp-Source: ABdhPJxIdTcXpgvn4m/0wcc7mml5pQpyW03wdADbx5tWzLZ5eECKotOaZmaWXryvfNb2snoN8nqQzQ==
-X-Received: by 2002:adf:f388:: with SMTP id m8mr8201767wro.338.1596296644729;
-        Sat, 01 Aug 2020 08:44:04 -0700 (PDT)
-Received: from localhost.localdomain (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr. [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
-        by smtp.gmail.com with ESMTPSA id o10sm16398780wrw.79.2020.08.01.08.44.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2020 08:44:04 -0700 (PDT)
-From:   Romain Naour <romain.naour@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Romain Naour <romain.naour@gmail.com>
-Subject: [PATCHv3] mips: Do not include hi and lo in clobber list for R6
-Date:   Sat,  1 Aug 2020 17:44:01 +0200
-Message-Id: <20200801154401.4177009-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.25.4
+        id S1726709AbgHAWa3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 1 Aug 2020 18:30:29 -0400
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:17057 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726477AbgHAWa3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 1 Aug 2020 18:30:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1596321044; x=1627857044;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=L14aWr0zcB4saLYNZ4ZyhS1dUVmXAlE8OaF6Iq0FgdA=;
+  b=o5sihKwVGvfsakR5GCJLroC+IhZeIQbZT3hDTV5wLQfJGbCQXIhNqAr3
+   6KHRWTDTPB0MvpaHe1v+jUlpnLkDaVrIitc7l70YnUTqshiAOO3saognT
+   GOGJojN8qKujs2RIwvwtdVVsA6+MKEL3exvGqeuP82OIMQQ/J2NeQoqH2
+   jUs/K/Z5PNRv+ZT+Wt2QJsmKld50wuGf1IBnpegzG54GRBYi98Vg0zJ7n
+   R9dibNggf/m5rxUHpOuw8gDIJnQjDqvTzbxfO8Tq5X1K0ospQKcpy+StG
+   Znpl3tUfWy2ZkzZxjO3m6xkQkBPDgwfbWR2HiC3bJ7qmh/S4bCVNBToGi
+   w==;
+IronPort-SDR: s9DMmPyl5q549spB2XgcQDblLGo255R46mWGcJzP2Mer+G1YYgEM7twMEcOgucq+3bsQr8SYny
+ Wmc4/dGVay1bhYfU26SGd58p+TVXFhJP66IwRL5DwbF4ZYFP4R9DyX8+hRvDk169EUsjlXDXGh
+ SEWfsd+Lkd6exqZSme16CgP9X0Y9RAPvjhjfzQU4+kkMnLhpGL9xtSdCCr2Ej1BOgt/ZGr2SJ5
+ kvkQ+sYNewc6SnuPVlUUNM2zd772b6AxF2k41DA14af9L20cn7Tn0kqdSHCksaDND9WgmnaqC7
+ bZ0=
+X-IronPort-AV: E=Sophos;i="5.75,424,1589212800"; 
+   d="scan'208";a="247017592"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 02 Aug 2020 06:30:44 +0800
+IronPort-SDR: 93fkEqGZxT2xPehFCJsKsJMfblXtymZ21W3tURa5K+mjrPrKuzetIYbuL181BXUpQCsg4Pbx9r
+ dYIlgnftCIWN1Bur90on9k+AiThn5aH64=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2020 15:18:32 -0700
+IronPort-SDR: DtHLDmnKmhjkVWU6YOYbQYaCkmTi6ZXAsPpW+RRW1gI23437Sz3nkHj+2AgpMGjga3ggzSov1+
+ 3G96KZX3Uj5w==
+WDCIronportException: Internal
+Received: from unknown (HELO redsun52) ([10.149.66.28])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2020 15:30:27 -0700
+Date:   Sat, 1 Aug 2020 23:30:23 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@wdc.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+Subject: Re: [PATCH v2 1/2] MAINTAINERS: Remove JZ4780 DMA driver entry
+In-Reply-To: <20200726155559.4650-1-krzk@kernel.org>
+Message-ID: <alpine.LFD.2.21.2008012327070.24175@redsun52.ssa.fujisawa.hgst.com>
+References: <20200726155559.4650-1-krzk@kernel.org>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From [1]
-"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
-available to be present in the clobber list anymore, resulting in build failure
-for mips*r6 targets in form of:
-...
-.../sysdep.h:146:2: error: the register ‘lo’ cannot be clobbered in ‘asm’ for the current target
-  146 |  __asm__ volatile (      \
-      |  ^~~~~~~
+On Sun, 26 Jul 2020, Krzysztof Kozlowski wrote:
 
-This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
-This patch provides the alternative clobber list for r6 targets that won't include
-those registers."
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cba0ed77775b..362863cae239 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8541,11 +8541,6 @@ F:	include/uapi/rdma/
+>  F:	samples/bpf/ibumad_kern.c
+>  F:	samples/bpf/ibumad_user.c
+>  
+> -INGENIC JZ4780 DMA Driver
+> -M:	Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
+> -S:	Maintained
+> -F:	drivers/dma/dma-jz4780.c
+> -
 
-Since kernel 5.4 and mips support for generic vDSO [2], the kernel fail to build
-for mips r6 cpus with gcc 10 for the same reason as glibc.
+ FYI, the usual approach would be marking the entry "Orphan" rather than 
+removing it entirely, so that the mapping remains and makes it easy for 
+someone to pick it up.
 
-[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=24640f233b466051ad3a5d2786d2951e43026c9d
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v3 Avoid duplicate code (Maciej W. Rozycki)
-v2 use MIPS_ISA_REV instead of __mips_isa_rev (Alexander Lobakin)
----
- arch/mips/include/asm/vdso/gettimeofday.h | 30 +++++++++++++++++++----
- 1 file changed, 25 insertions(+), 5 deletions(-)
-
-diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
-index c63ddcaea54c..93008551282e 100644
---- a/arch/mips/include/asm/vdso/gettimeofday.h
-+++ b/arch/mips/include/asm/vdso/gettimeofday.h
-@@ -35,7 +35,11 @@ static __always_inline long gettimeofday_fallback(
- 	: "=r" (ret), "=r" (error)
- 	: "r" (tv), "r" (tz), "r" (nr)
- 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
--	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
-+	  "$14", "$15", "$24", "$25",
-+#if MIPS_ISA_REV < 6
-+	  "hi", "lo",
-+#endif
-+          "memory");
- 
- 	return error ? -ret : ret;
- }
-@@ -59,7 +63,11 @@ static __always_inline long clock_gettime_fallback(
- 	: "=r" (ret), "=r" (error)
- 	: "r" (clkid), "r" (ts), "r" (nr)
- 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
--	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
-+	  "$14", "$15", "$24", "$25",
-+#if MIPS_ISA_REV < 6
-+	  "hi", "lo",
-+#endif
-+	  "memory");
- 
- 	return error ? -ret : ret;
- }
-@@ -83,7 +91,11 @@ static __always_inline int clock_getres_fallback(
- 	: "=r" (ret), "=r" (error)
- 	: "r" (clkid), "r" (ts), "r" (nr)
- 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
--	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
-+	  "$14", "$15", "$24", "$25",
-+#if MIPS_ISA_REV < 6
-+	  "hi", "lo",
-+#endif
-+	  "memory");
- 
- 	return error ? -ret : ret;
- }
-@@ -105,7 +117,11 @@ static __always_inline long clock_gettime32_fallback(
- 	: "=r" (ret), "=r" (error)
- 	: "r" (clkid), "r" (ts), "r" (nr)
- 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
--	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
-+	  "$14", "$15", "$24", "$25",
-+#if MIPS_ISA_REV < 6
-+	  "hi", "lo",
-+#endif
-+	  "memory");
- 
- 	return error ? -ret : ret;
- }
-@@ -125,7 +141,11 @@ static __always_inline int clock_getres32_fallback(
- 	: "=r" (ret), "=r" (error)
- 	: "r" (clkid), "r" (ts), "r" (nr)
- 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
--	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
-+	  "$14", "$15", "$24", "$25",
-+#if MIPS_ISA_REV < 6
-+	  "hi", "lo",
-+#endif
-+	  "memory");
- 
- 	return error ? -ret : ret;
- }
--- 
-2.25.4
-
+  Maciej
