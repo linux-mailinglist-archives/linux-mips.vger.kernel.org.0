@@ -2,151 +2,162 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B37552352BB
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Aug 2020 16:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2E823530A
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Aug 2020 17:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726300AbgHAOd0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 1 Aug 2020 10:33:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52452 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725778AbgHAOd0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 1 Aug 2020 10:33:26 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2786E207BC;
-        Sat,  1 Aug 2020 14:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596292405;
-        bh=3hASn8Q08edza735DCqH9YFFJFq9TW19O89gdrFOYcI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c0X4GKvHHB4B2K2BBwENThs8TtDUNT6YML2vG8IZTGp0OVH5ZlZY59z3wph8zdXjo
-         lNjAIxt6++PZY6VZh0bcbP43ycD6pg2QBsm3PrlGIB3XlpRkhk54zQwdSdwTBKdvUm
-         Y2gL0X+oOA7NA42+1yimR3Ccvb42gbH8HIXYg3kg=
-Date:   Sat, 1 Aug 2020 16:33:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     stable@vger.kernel.org, linux-mips@vger.kernel.org,
-        chenhc@lemote.com
-Subject: Re: [PATCH stable] MIPS: Loongson: Introduce and use
- loongson_llsc_mb()
-Message-ID: <20200801143309.GA2620594@kroah.com>
-References: <20200801063443.1438289-1-jiaxun.yang@flygoat.com>
- <20200801102646.GA3046974@kroah.com>
- <5E555C31-EA38-456E-BB5D-263A54647873@flygoat.com>
- <20200801120459.GA506427@kroah.com>
- <1b535cbd-b4b9-68a2-5e85-8cbcfcdbcf9a@flygoat.com>
+        id S1726970AbgHAPoI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 1 Aug 2020 11:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725841AbgHAPoI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 1 Aug 2020 11:44:08 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A230AC06174A
+        for <linux-mips@vger.kernel.org>; Sat,  1 Aug 2020 08:44:07 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id r4so27498274wrx.9
+        for <linux-mips@vger.kernel.org>; Sat, 01 Aug 2020 08:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bHLK3Bi2pP1Ho8FYARp1XSE1OBWnsfktZ5SO7At57/I=;
+        b=g8Ye2aPQKqQH+YwwhmifxE1BHkHX2VnLTTY0oW2bNalVJgjmhPHNSLHSzmYc+9yL6p
+         yYlR/1wBvBeOTEiSfSGJa340zr4N4mRwr9oNTxMiv9Mxxaevk1svi/myS56x4w78t5YN
+         cvsF8StXj35pbJkrWwgpBYjdpWroOiF+tBSPvK66bTZxHzdbSz/JIGCHpfJbWxlObii8
+         tOorR6E9CdsChU11pqmpQ7N40CUsLnqO3LseTdeALkxLbdy3gIf9XElzsJlkANwHYSRg
+         iODUHTH9PadwPElJ4pCrd/IJfYyBGzDMw9CGVr6INl5DT2Hj+WDvmPWetK/90UjGUrXj
+         0BMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bHLK3Bi2pP1Ho8FYARp1XSE1OBWnsfktZ5SO7At57/I=;
+        b=Ygetj890ZJbQtoRLFwon77/V9zAPBnUL+sEPcs5/cTS1/6rgZlOApmeLJiaapbbvst
+         Q+Jwwm4QhNZLBz1u1iE0hYzO0WH6WP2hCo3d/MCTxDS4XUXZlLC1VoyWhdwyP6yLz310
+         75wt3vE5B0FbdrvwdTOlZ9uZmEObD8PBb34QCM4+B5YLYPXUUpQaWhhYHj4S6yxgsdBH
+         8PD6vPbFKtl8bEoCF/20xIDbiQdYoPdir8WDikOlKfAKV49mtg2qdh7LNkTMCVbtJLCB
+         lnOWyd/J4uzfc3xSHbygOVnVZJY0Ghm+z2m8o1KSTZDTxn4CjTx7W6yI1gc1GVgVWKO3
+         GZgw==
+X-Gm-Message-State: AOAM530YSO9oSbk7BtBbwRG6UdDPNBFF8bNkYKa3VsQjzDRUnshl7Rxo
+        xqSpy8Pb0kwEN1DfZ+NJMB3fgxMm
+X-Google-Smtp-Source: ABdhPJxIdTcXpgvn4m/0wcc7mml5pQpyW03wdADbx5tWzLZ5eECKotOaZmaWXryvfNb2snoN8nqQzQ==
+X-Received: by 2002:adf:f388:: with SMTP id m8mr8201767wro.338.1596296644729;
+        Sat, 01 Aug 2020 08:44:04 -0700 (PDT)
+Received: from localhost.localdomain (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr. [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+        by smtp.gmail.com with ESMTPSA id o10sm16398780wrw.79.2020.08.01.08.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Aug 2020 08:44:04 -0700 (PDT)
+From:   Romain Naour <romain.naour@gmail.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Romain Naour <romain.naour@gmail.com>
+Subject: [PATCHv3] mips: Do not include hi and lo in clobber list for R6
+Date:   Sat,  1 Aug 2020 17:44:01 +0200
+Message-Id: <20200801154401.4177009-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1b535cbd-b4b9-68a2-5e85-8cbcfcdbcf9a@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Aug 01, 2020 at 10:11:24PM +0800, Jiaxun Yang wrote:
-> 
-> 
-> 在 2020/8/1 下午8:04, Greg KH 写道:
-> > On Sat, Aug 01, 2020 at 07:48:48PM +0800, Jiaxun Yang wrote:
-> > > 
-> > > 于 2020年8月1日 GMT+08:00 下午6:26:46, Greg KH <gregkh@linuxfoundation.org> 写到:
-> > > > On Sat, Aug 01, 2020 at 02:34:43PM +0800, Jiaxun Yang wrote:
-> > > > > From: Huacai Chen <chenhc@lemote.com>
-> > > > > 
-> > > > > commit e02e07e3127d8aec1f4bcdfb2fc52a2d99b4859e upstream.
-> > > > > 
-> > > > > On the Loongson-2G/2H/3A/3B there is a hardware flaw that ll/sc and
-> > > > > lld/scd is very weak ordering. We should add sync instructions "before
-> > > > > each ll/lld" and "at the branch-target between ll/sc" to workaround.
-> > > > > Otherwise, this flaw will cause deadlock occasionally (e.g. when doing
-> > > > > heavy load test with LTP).
-> > > > > 
-> > > > > Below is the explaination of CPU designer:
-> > > > > 
-> > > > > "For Loongson 3 family, when a memory access instruction (load, store,
-> > > > > or prefetch)'s executing occurs between the execution of LL and SC, the
-> > > > > success or failure of SC is not predictable. Although programmer would
-> > > > > not insert memory access instructions between LL and SC, the memory
-> > > > > instructions before LL in program-order, may dynamically executed
-> > > > > between the execution of LL/SC, so a memory fence (SYNC) is needed
-> > > > > before LL/LLD to avoid this situation.
-> > > > > 
-> > > > > Since Loongson-3A R2 (3A2000), we have improved our hardware design to
-> > > > > handle this case. But we later deduce a rarely circumstance that some
-> > > > > speculatively executed memory instructions due to branch misprediction
-> > > > > between LL/SC still fall into the above case, so a memory fence (SYNC)
-> > > > > at branch-target (if its target is not between LL/SC) is needed for
-> > > > > Loongson 3A1000, 3B1500, 3A2000 and 3A3000.
-> > > > > 
-> > > > > Our processor is continually evolving and we aim to to remove all these
-> > > > > workaround-SYNCs around LL/SC for new-come processor."
-> > > > > 
-> > > > > Here is an example:
-> > > > > 
-> > > > > Both cpu1 and cpu2 simutaneously run atomic_add by 1 on same atomic var,
-> > > > > this bug cause both 'sc' run by two cpus (in atomic_add) succeed at same
-> > > > > time('sc' return 1), and the variable is only *added by 1*, sometimes,
-> > > > > which is wrong and unacceptable(it should be added by 2).
-> > > > > 
-> > > > > Why disable fix-loongson3-llsc in compiler?
-> > > > > Because compiler fix will cause problems in kernel's __ex_table section.
-> > > > > 
-> > > > > This patch fix all the cases in kernel, but:
-> > > > > 
-> > > > > +. the fix at the end of futex_atomic_cmpxchg_inatomic is for branch-target
-> > > > > of 'bne', there other cases which smp_mb__before_llsc() and smp_llsc_mb() fix
-> > > > > the ll and branch-target coincidently such as atomic_sub_if_positive/
-> > > > > cmpxchg/xchg, just like this one.
-> > > > > 
-> > > > > +. Loongson 3 does support CONFIG_EDAC_ATOMIC_SCRUB, so no need to touch
-> > > > > edac.h
-> > > > > 
-> > > > > +. local_ops and cmpxchg_local should not be affected by this bug since
-> > > > > only the owner can write.
-> > > > > 
-> > > > > +. mips_atomic_set for syscall.c is deprecated and rarely used, just let
-> > > > > it go
-> > > > > 
-> > > > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> > > > > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > > > > [paul.burton@mips.com:
-> > > > >    - Simplify the addition of -mno-fix-loongson3-llsc to cflags, and add
-> > > > >      a comment describing why it's there.
-> > > > >    - Make loongson_llsc_mb() a no-op when
-> > > > >      CONFIG_CPU_LOONGSON3_WORKAROUNDS=n, rather than a compiler memory
-> > > > >      barrier.
-> > > > >    - Add a comment describing the bug & how loongson_llsc_mb() helps
-> > > > >      in asm/barrier.h.]
-> > > > > Signed-off-by: Paul Burton <paul.burton@mips.com>
-> > > > > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > > > > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > > > > Cc: ambrosehua@gmail.com
-> > > > > Cc: Steven J . Hill <Steven.Hill@cavium.com>
-> > > > > Cc: linux-mips@linux-mips.org
-> > > > > Cc: Fuxin Zhang <zhangfx@lemote.com>
-> > > > > Cc: Zhangjin Wu <wuzhangjin@gmail.com>
-> > > > > Cc: Li Xuefeng <lixuefeng@loongson.cn>
-> > > > > Cc: Xu Chenghua <xuchenghua@loongson.cn>
-> > > > > Cc: stable@vger.kernel.org # 4.19
-> > > > > 
-> > > > > ---
-> > > > > Backport to stable according to request from Debian downstream.
-> > > > What do you mean by "request"?
-> > > Debian guys asked us to backport this to ensure the system stability on "buster" release if possible.
-> > Who is "Debian guys"?  And why can't they just add this to their kernel?
-> 
-> Hmm I just got this request from #debian-mips channel, they're tracing a
-> deadlock
-> issue and thought this might be the root cause. So they thought deal with it
-> in upstream
-> stable version may benefit users.
+From [1]
+"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
+available to be present in the clobber list anymore, resulting in build failure
+for mips*r6 targets in form of:
+...
+.../sysdep.h:146:2: error: the register ‘lo’ cannot be clobbered in ‘asm’ for the current target
+  146 |  __asm__ volatile (      \
+      |  ^~~~~~~
 
-Has anyone verified that this really is the "root cause" and this fixes
-the problem for them?  If not, that would be good to have done :)
+This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
+This patch provides the alternative clobber list for r6 targets that won't include
+those registers."
 
-thanks,
+Since kernel 5.4 and mips support for generic vDSO [2], the kernel fail to build
+for mips r6 cpus with gcc 10 for the same reason as glibc.
 
-greg k-h
+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=24640f233b466051ad3a5d2786d2951e43026c9d
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+v3 Avoid duplicate code (Maciej W. Rozycki)
+v2 use MIPS_ISA_REV instead of __mips_isa_rev (Alexander Lobakin)
+---
+ arch/mips/include/asm/vdso/gettimeofday.h | 30 +++++++++++++++++++----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
+index c63ddcaea54c..93008551282e 100644
+--- a/arch/mips/include/asm/vdso/gettimeofday.h
++++ b/arch/mips/include/asm/vdso/gettimeofday.h
+@@ -35,7 +35,11 @@ static __always_inline long gettimeofday_fallback(
+ 	: "=r" (ret), "=r" (error)
+ 	: "r" (tv), "r" (tz), "r" (nr)
+ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+-	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
++	  "$14", "$15", "$24", "$25",
++#if MIPS_ISA_REV < 6
++	  "hi", "lo",
++#endif
++          "memory");
+ 
+ 	return error ? -ret : ret;
+ }
+@@ -59,7 +63,11 @@ static __always_inline long clock_gettime_fallback(
+ 	: "=r" (ret), "=r" (error)
+ 	: "r" (clkid), "r" (ts), "r" (nr)
+ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+-	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
++	  "$14", "$15", "$24", "$25",
++#if MIPS_ISA_REV < 6
++	  "hi", "lo",
++#endif
++	  "memory");
+ 
+ 	return error ? -ret : ret;
+ }
+@@ -83,7 +91,11 @@ static __always_inline int clock_getres_fallback(
+ 	: "=r" (ret), "=r" (error)
+ 	: "r" (clkid), "r" (ts), "r" (nr)
+ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+-	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
++	  "$14", "$15", "$24", "$25",
++#if MIPS_ISA_REV < 6
++	  "hi", "lo",
++#endif
++	  "memory");
+ 
+ 	return error ? -ret : ret;
+ }
+@@ -105,7 +117,11 @@ static __always_inline long clock_gettime32_fallback(
+ 	: "=r" (ret), "=r" (error)
+ 	: "r" (clkid), "r" (ts), "r" (nr)
+ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+-	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
++	  "$14", "$15", "$24", "$25",
++#if MIPS_ISA_REV < 6
++	  "hi", "lo",
++#endif
++	  "memory");
+ 
+ 	return error ? -ret : ret;
+ }
+@@ -125,7 +141,11 @@ static __always_inline int clock_getres32_fallback(
+ 	: "=r" (ret), "=r" (error)
+ 	: "r" (clkid), "r" (ts), "r" (nr)
+ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+-	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
++	  "$14", "$15", "$24", "$25",
++#if MIPS_ISA_REV < 6
++	  "hi", "lo",
++#endif
++	  "memory");
+ 
+ 	return error ? -ret : ret;
+ }
+-- 
+2.25.4
+
