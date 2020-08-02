@@ -2,106 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCEF235702
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Aug 2020 15:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF40235735
+	for <lists+linux-mips@lfdr.de>; Sun,  2 Aug 2020 15:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728159AbgHBNOW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 2 Aug 2020 09:14:22 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39497 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728043AbgHBNOV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 2 Aug 2020 09:14:21 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BKM0z2dLrz9sSG;
-        Sun,  2 Aug 2020 23:14:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1596374059;
-        bh=l8Vv313rJGqlK2PcaNCVrGcU8SJlDczW2rNrY770DTs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZE71Wyclmt4MQrTZPs6iY6nA2eek+wB/iYUyHxx7nWlyJbBID58C0vJfORjrDD43E
-         wNND8mtfpDbimWptgmYv4VddxYAmX0rHolg1XVT+G8s2w1bA+8uHwFHNUayBhafmGn
-         U3RDd9O7hEfPsfEFxg1WUJgbZZ35QUi0zip6yzBRdj0KvzX0aIma+XejtIevU686ru
-         HM91WecXmsJTqK1azOcV4OJmJvhTYVRaSfqOgAvj1ip20Yb1FPEAys0j9IKpP3z8BI
-         XGg3VJKFsWHrW1MkBYjbjQi72gF9zJZpWvDX1DLzzpzZpzoVYn1bqH1kWqIhbU7xhV
-         gtswbHEE4eTGQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        clang-built-linux@googlegroups.com,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org,
-        Hari Bathini <hbathini@in.ibm.com>
-Subject: Re: [PATCH 06/15] powerpc: fadamp: simplify fadump_reserve_crash_area()
-In-Reply-To: <20200801101854.GD534153@kernel.org>
-References: <20200728051153.1590-1-rppt@kernel.org> <20200728051153.1590-7-rppt@kernel.org> <87d04d5hda.fsf@mpe.ellerman.id.au> <20200801101854.GD534153@kernel.org>
-Date:   Sun, 02 Aug 2020 23:14:10 +1000
-Message-ID: <87o8nt197h.fsf@mpe.ellerman.id.au>
+        id S1726643AbgHBNwJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 2 Aug 2020 09:52:09 -0400
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:48351 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725826AbgHBNwI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 Aug 2020 09:52:08 -0400
+Received: from localhost.localdomain ([93.22.148.198])
+        by mwinf5d42 with ME
+        id Ads5230064H42jh03ds5fw; Sun, 02 Aug 2020 15:52:06 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 02 Aug 2020 15:52:06 +0200
+X-ME-IP: 93.22.148.198
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     ralf@linux-mips.org, davem@davemloft.net, kuba@kernel.org,
+        tbogendoerfer@suse.de
+Cc:     linux-mips@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] net: sgi: ioc3-eth: Fix the size used in some 'dma_free_coherent()' calls
+Date:   Sun,  2 Aug 2020 15:52:04 +0200
+Message-Id: <20200802135204.690832-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Mike Rapoport <rppt@kernel.org> writes:
-> On Thu, Jul 30, 2020 at 10:15:13PM +1000, Michael Ellerman wrote:
->> Mike Rapoport <rppt@kernel.org> writes:
->> > From: Mike Rapoport <rppt@linux.ibm.com>
->> >
->> > fadump_reserve_crash_area() reserves memory from a specified base address
->> > till the end of the RAM.
->> >
->> > Replace iteration through the memblock.memory with a single call to
->> > memblock_reserve() with appropriate  that will take care of proper memory
->>                                      ^
->>                                      parameters?
->> > reservation.
->> >
->> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
->> > ---
->> >  arch/powerpc/kernel/fadump.c | 20 +-------------------
->> >  1 file changed, 1 insertion(+), 19 deletions(-)
->> 
->> I think this looks OK to me, but I don't have a setup to test it easily.
->> I've added Hari to Cc who might be able to.
->> 
->> But I'll give you an ack in the hope that it works :)
->
-> Actually, I did some digging in the git log and the traversal was added
-> there on purpose by the commit b71a693d3db3 ("powerpc/fadump: exclude
-> memory holes while reserving memory in second kernel")
-> Presuming this is still reqruired I'm going to drop this patch and will
-> simply replace for_each_memblock() with for_each_mem_range() in v2.
+Update the size used in 'dma_free_coherent()' in order to match the one
+used in the corresponding 'dma_alloc_coherent()'.
 
-Thanks.
+Fixes: 369a782af0f1 ("net: sgi: ioc3-eth: ensure tx ring is 16k aligned.")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/net/ethernet/sgi/ioc3-eth.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-cheers
+diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
+index 6646eba9f57f..6eef0f45b133 100644
+--- a/drivers/net/ethernet/sgi/ioc3-eth.c
++++ b/drivers/net/ethernet/sgi/ioc3-eth.c
+@@ -951,7 +951,7 @@ static int ioc3eth_probe(struct platform_device *pdev)
+ 		dma_free_coherent(ip->dma_dev, RX_RING_SIZE, ip->rxr,
+ 				  ip->rxr_dma);
+ 	if (ip->tx_ring)
+-		dma_free_coherent(ip->dma_dev, TX_RING_SIZE, ip->tx_ring,
++		dma_free_coherent(ip->dma_dev, TX_RING_SIZE + SZ_16K - 1, ip->tx_ring,
+ 				  ip->txr_dma);
+ out_free:
+ 	free_netdev(dev);
+@@ -964,7 +964,7 @@ static int ioc3eth_remove(struct platform_device *pdev)
+ 	struct ioc3_private *ip = netdev_priv(dev);
+ 
+ 	dma_free_coherent(ip->dma_dev, RX_RING_SIZE, ip->rxr, ip->rxr_dma);
+-	dma_free_coherent(ip->dma_dev, TX_RING_SIZE, ip->tx_ring, ip->txr_dma);
++	dma_free_coherent(ip->dma_dev, TX_RING_SIZE + SZ_16K - 1, ip->tx_ring, ip->txr_dma);
+ 
+ 	unregister_netdev(dev);
+ 	del_timer_sync(&ip->ioc3_timer);
+-- 
+2.25.1
+
