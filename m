@@ -2,81 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E232323594B
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Aug 2020 18:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E64235999
+	for <lists+linux-mips@lfdr.de>; Sun,  2 Aug 2020 20:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725910AbgHBQqd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 2 Aug 2020 12:46:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52018 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725877AbgHBQqb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 2 Aug 2020 12:46:31 -0400
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A229C20738;
-        Sun,  2 Aug 2020 16:46:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596386791;
-        bh=q8MbbbW36EMMgIj47Vr+zJcP7Ddn+q47moJuUNcQw4I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=c0A87dvXeqWX1O66DbG8odRrfV4O5jfcDafRrFfPbTGRiG8Rr/ZZBOERmkSq1ngDI
-         GG9Ywrq3IaJl/F5F2+IyNa+gMHlpYc0c5GKBBjPv2su8iwVdjT8QlJDSYGtsSf0GKj
-         bd/vQ4LsrJDHm3VHe6l1Envn4bZTg+jZXE70hy+w=
-Received: by mail-lj1-f173.google.com with SMTP id v4so27535042ljd.0;
-        Sun, 02 Aug 2020 09:46:30 -0700 (PDT)
-X-Gm-Message-State: AOAM532KbHIoysXyaemRfqNcapCpZPH8QQbpNR+/v+4JQ2XwimMwXksN
-        4PBYoHgPdEGD0Iy5l+/rsx4g27VCqh/9sgopKyg=
-X-Google-Smtp-Source: ABdhPJyG79cCeQzsf2oxy/QUSAIJBjM95f3ZKNwmKzFSAlruEAqDnOs2qbRyIKvsBj+NnDrqLdBiegEAVW+7Rd2pAXI=
-X-Received: by 2002:a2e:85d1:: with SMTP id h17mr4176911ljj.341.1596386789040;
- Sun, 02 Aug 2020 09:46:29 -0700 (PDT)
+        id S1726826AbgHBSBR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 2 Aug 2020 14:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725906AbgHBSBQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 Aug 2020 14:01:16 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598E8C06174A;
+        Sun,  2 Aug 2020 11:01:16 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id f24so15844056ejx.6;
+        Sun, 02 Aug 2020 11:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cWqP425OZ00Oz4x2XaCg5sL4Bi3BuFHBZ9fhbstEoPo=;
+        b=uknpQ4DMxgwRI+7RXzKKaxSHSsHT4JX+qN+G3Zw62I+z7K+v0oM82e+YsM5L2ibFwZ
+         ZtPLnfzJt8IFqkH991n5kK4zcZ2/fsZTMmLNrFK7hPe3auCniFr0qepP8+PKlvq/+X4Y
+         6FOXivLK6+BH8tYzSACnWRFDv80Xb8yKxgJKQm36t4gslbAugHoQp37YMrGD2IIEXvEW
+         lHLgWw9HHo88+yhhI1SsXvM9DHpmveOnmArUrLkNHDmUxgOR5yVJEiJKHqYfS7BI8LbU
+         2xANFxjuEWzWjHDwLiCM886yebnNr5jnEbr0RMGk15mMx04KzIUKhAfWZe7dw+zaroY/
+         roWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=cWqP425OZ00Oz4x2XaCg5sL4Bi3BuFHBZ9fhbstEoPo=;
+        b=qCdOCZpG7/sz7BFat4IaZBpFpBNC4rySzQREiTNaBC3onXjdu7Ayn4Ds8H5qBm0qLN
+         Tjudbzz7DesieuzKE758Bu/pGXbrCi50WUxTtsLXgctGf+AKIRyWICrN8VURgKOzSwKm
+         yejLw28lTL+gllHMiqr0enMKndpTm7/3nMf5Ps0/kPSte8A3Bjzl5vxIUyAVqBHAYcvi
+         wAfiMcXiuu/59k9X99jDPl2f+dwH8AFhk7G840YX6Mcr9J3pLfyXQHaUKn5TcmutMDE1
+         kqeNkNtWgNEqC/pABcW+nEExVLlQKpwYL5W5O5VLn8VlvLY8uYTKp9IC235z1/Tis2AH
+         qpDg==
+X-Gm-Message-State: AOAM532N1e5Iq13l2IZ3ehtocfYpaduM/+U1aKn3bVwDV49bSy4e+uWt
+        8PfQP50/xpnfy6geOglkZJU=
+X-Google-Smtp-Source: ABdhPJzKJVSrfGoQ7+sK5UMaqi5wNpNE5CXoSPOw/FVAw4VikTzayUXH2AGSuVR6AmkbWWniCTFE/A==
+X-Received: by 2002:a17:906:c187:: with SMTP id g7mr13929214ejz.108.1596391275076;
+        Sun, 02 Aug 2020 11:01:15 -0700 (PDT)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id t19sm14191760edw.63.2020.08.02.11.01.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2020 11:01:13 -0700 (PDT)
+Date:   Sun, 2 Aug 2020 20:01:10 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: Re: [PATCH v2 13/17] x86/setup: simplify initrd relocation and
+ reservation
+Message-ID: <20200802180110.GA86614@gmail.com>
+References: <20200802163601.8189-1-rppt@kernel.org>
+ <20200802163601.8189-14-rppt@kernel.org>
 MIME-Version: 1.0
-References: <20200726155559.4650-1-krzk@kernel.org> <alpine.LFD.2.21.2008012327070.24175@redsun52.ssa.fujisawa.hgst.com>
- <DGFFEQ.RMDW72DK0U5B1@crapouillou.net> <alpine.LFD.2.21.2008021339110.24175@redsun52.ssa.fujisawa.hgst.com>
-In-Reply-To: <alpine.LFD.2.21.2008021339110.24175@redsun52.ssa.fujisawa.hgst.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Sun, 2 Aug 2020 18:46:17 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfHMzWeUAK30Q9VRn3VhStvQA4g30syBfFbbASXAgCysQ@mail.gmail.com>
-Message-ID: <CAJKOXPfHMzWeUAK30Q9VRn3VhStvQA4g30syBfFbbASXAgCysQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] MAINTAINERS: Remove JZ4780 DMA driver entry
-To:     "Maciej W. Rozycki" <macro@wdc.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200802163601.8189-14-rppt@kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 2 Aug 2020 at 14:43, Maciej W. Rozycki <macro@wdc.com> wrote:
->
-> On Sun, 2 Aug 2020, Paul Cercueil wrote:
->
-> > >  FYI, the usual approach would be marking the entry "Orphan" rather
-> > > than
-> > > removing it entirely, so that the mapping remains and makes it easy
-> > > for
-> > > someone to pick it up.
-> >
-> > This is OK in this case, as the driver is also listed as part of the
-> > "INGENIC JZ47xx SoCs".
->
->  Fair enough (and odd enough too to have two entries for one piece),
-> though in this case I think the commit description ought to mention it.
-> As it stands it makes one think the driver is not going to have a
-> maintainer anymore: "[...] and no maintenance is provided."
 
-Sure, the message could be improved. How about:
+* Mike Rapoport <rppt@kernel.org> wrote:
 
-"The entry for MIPS Ingenic JZ4780 DMA driver is not up to date
-anymore. Zubair Lutfullah Kakakhel's email bounces. The maintenance is
-provided through Ingenic SoC maintainers entry."
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Currently, initrd image is reserved very early during setup and then it
+> might be relocated and re-reserved after the initial physical memory
+> mapping is created. The "late" reservation of memblock verifies that mapped
+> memory size exceeds the size of initrd, the checks whether the relocation
+> required and, if yes, relocates inirtd to a new memory allocated from
+> memblock and frees the old location.
+> 
+> The check for memory size is excessive as memblock allocation will anyway
+> fail if there is not enough memory. Besides, there is no point to allocate
+> memory from memblock using memblock_find_in_range() + memblock_reserve()
+> when there exists memblock_phys_alloc_range() with required functionality.
+> 
+> Remove the redundant check and simplify memblock allocation.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 
-If it is OK, I can either resend or it could be fixed up when applying.
+Assuming there's no hidden dependency here breaking something:
 
-Best regards,
-Krzysztof
+  Acked-by: Ingo Molnar <mingo@kernel.org>
+
+Thanks,
+
+	Ingo
