@@ -2,66 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 550FA239C41
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Aug 2020 23:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B6C239D03
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Aug 2020 01:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgHBVqk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 2 Aug 2020 17:46:40 -0400
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:14837 "EHLO
+        id S1727060AbgHBX75 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 2 Aug 2020 19:59:57 -0400
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:37192 "EHLO
         esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725925AbgHBVqj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 Aug 2020 17:46:39 -0400
+        with ESMTP id S1726364AbgHBX75 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 Aug 2020 19:59:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1596404799; x=1627940799;
+  t=1596412797; x=1627948797;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=HhMDDX9Zyq0lnAOjaZ2ZkZv1uEybzvPPlvRAKPE2Mi4=;
-  b=Dhp3GcG3AGn2YVR9hczUBPPeHRUbCw3nkvx3b7iI4SwTGqpgmb+xtaS7
-   eTum5I8rA1TEOLjgqQRpYe5UXlozN8VmshY4rmQgHkcjfCR88OuJtz41Q
-   35sbkTtZItI23hpepEDWF0Fq/9qBka1E9sb3flsYLo12cMZS4cQAoikBM
-   rnt4OFvig8B31Ctt6yfKmAveFv5vJA5xZhsLdHsnzmeer0ucCpWfrkCyU
-   xBB0LM748/laN0fZeKHkyAKENBETRSWfsPYG8MAlp2+LjYPM/B6bXUcWS
-   fMJEeF//I0V7RRnYNaJAGfow6SzzgbJd7s/oV7ZDOCfrMilbOS8bzFxkv
-   Q==;
-IronPort-SDR: mmGC6VYzUw0/Xm3SF7hz7+mqq/r+LRNGVbtlVKftD/xekcs0CTjvE6kzEf2bvCHP7QvbBxfDvK
- OWrcSRPgEwcBDunBc+bwRkn1djtmBPjI/HywPouj1zsfO3BwyAdD/V1DLug6NSWg99NQRtWYS6
- HpWeIP64ItHu1acYKWpbZ4rqy3fPOzwncqkwRiFuOwrUVRoPGEHKcE8TC1kNTWnPh0may3ZOHh
- wWNWbZez0S7uefPsSFcK+B/sx9NfaaLocWAGb/1WpBH9Gn+rY86ykRiEb5fnwzVKMYocw1IR/7
- mNA=
-X-IronPort-AV: E=Sophos;i="5.75,427,1589212800"; 
-   d="scan'208";a="145206025"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 03 Aug 2020 05:46:39 +0800
-IronPort-SDR: Of+NQSeWgfwtFfqruu8dUkJBUG+rmaqAx6V0PBh4ra70Xjik38WsDJ5/CDKQRCXPcbGuCCf7JU
- zXeVX120rt/A==
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2020 14:34:41 -0700
-IronPort-SDR: JTyJYmcsIT11nuHwWLExo6iBi+mF5vdh7h7vaYkePP/j5kQrDj9empvuoa8t8vFkBznxCIW4zU
- DS6T5zWH/Fvw==
+  bh=ur8Ff/9vPrbxyZspjOu+aYVmKVsvs/qexsjUIe2px8o=;
+  b=GQ84xw5NDJRmmHsjEhcunzgBS8RyMEHFrgCKv87FrqaLbnDfxB4Nre3q
+   XFmiObDlX+Zz1CnB8DPCxhq47i8mDJocdlyUYGsB0nG8IrV4NZI1Qy6cp
+   uUQpYtrs3gGG8D1eXlE8/wz14oxo3jx0hgftZEcLpMKo1Lsml9vbeSto0
+   bh9gtvJ+DcPcpb0gwFAW/4vN6RNkCl1pBl3nkaAmuT5LiVa7hhUjHm1dM
+   GX7YZscx6h/dBhkwheXnu+oGfoTEm6CWGmmEXV5FvfXu7cz4PvTb2MYDZ
+   bBXJz93IM9B6RkGcfba7LhgtzfFk4Q/9JwhIaQnhEzDqA3AlCRLYbVwTi
+   g==;
+IronPort-SDR: N8yS1RhQXe0KxYnipsY+1G3rQKcoxkeRj+gYOAtCmQkUyVkdKkx1g1OEfy+AX+TcNSRNCcQZyh
+ EPml9Oi1bX+xsJ97j+e1yvU9bUwNE9fvgezUBxR+5XzA1Mjux5ZdZjTzQRY94Aj6u9DEKJBKw2
+ XrHt9uBbfqW/rCBMGYNossIu0G5UQYx/cJDUp7jfIwkTVRlg5EwZAaPoocmy/DAMC81SpcCJnb
+ EPguu0xTsF8v/0qvBl+9+tWnz4cgQbehgimOfqNw8QxDZU1hYw8J4mt2QFEcr1il8E4S7Q9l9F
+ ccE=
+X-IronPort-AV: E=Sophos;i="5.75,428,1589212800"; 
+   d="scan'208";a="145210150"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 03 Aug 2020 07:59:57 +0800
+IronPort-SDR: 0y0HofJs6ztnGBIs0YfoM0zh8RxhqrGdxfLyWG5Bl44M9aeWcblAH63qVuBtKOw69/hnob7VjV
+ wBO+avnH9VCA==
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2020 16:47:19 -0700
+IronPort-SDR: FDWYD31ChbhmzNfP97EtrNNqqD76JVHE8hK144xUJYCGaXIzs8YpvUQttjHcy1wmP/2G783v1Y
+ irAy8jQ2UDgQ==
 WDCIronportException: Internal
 Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2020 14:46:37 -0700
-Date:   Sun, 2 Aug 2020 22:46:31 +0100 (BST)
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2020 16:59:56 -0700
+Date:   Mon, 3 Aug 2020 00:59:51 +0100 (BST)
 From:   "Maciej W. Rozycki" <macro@wdc.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        =?UTF-8?Q?=E5=91=A8=E7=90=B0=E6=9D=B0_=28Zhou_Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>,
-        Liangliang Huang <huanglllzu@gmail.com>,
-        linux-kernel@vger.kernel.org,
+To:     Romain Naour <romain.naour@gmail.com>
+cc:     linux-mips@vger.kernel.org,
         "Maciej W. Rozycki" <macro@linux-mips.org>
-Subject: Re: [PATCH] MIPS: Provide Kconfig option for default IEEE754
- conformance mode
-In-Reply-To: <20200731061702.fxdfyxpvd6qrhoql@mobilestation>
-Message-ID: <alpine.LFD.2.21.2008022213500.24175@redsun52.ssa.fujisawa.hgst.com>
-References: <20200731041018.1381642-1-jiaxun.yang@flygoat.com> <20200731061702.fxdfyxpvd6qrhoql@mobilestation>
+Subject: Re: [PATCHv3] mips: Do not include hi and lo in clobber list for
+ R6
+In-Reply-To: <20200801154401.4177009-1-romain.naour@gmail.com>
+Message-ID: <alpine.LFD.2.21.2008030044230.24175@redsun52.ssa.fujisawa.hgst.com>
+References: <20200801154401.4177009-1-romain.naour@gmail.com>
 User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -70,36 +60,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 31 Jul 2020, Serge Semin wrote:
+On Sat, 1 Aug 2020, Romain Naour wrote:
 
-> > Requested by downstream distros, a Kconfig option for default
-> > IEEE754 conformance mode allows them to set their mode to
-> > relaxed by default.
+> v3 Avoid duplicate code (Maciej W. Rozycki)
+> v2 use MIPS_ISA_REV instead of __mips_isa_rev (Alexander Lobakin)
+> ---
+>  arch/mips/include/asm/vdso/gettimeofday.h | 30 +++++++++++++++++++----
+>  1 file changed, 25 insertions(+), 5 deletions(-)
 > 
-> That's what should have been here in the first place. Thanks!
+> diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
+> index c63ddcaea54c..93008551282e 100644
+> --- a/arch/mips/include/asm/vdso/gettimeofday.h
+> +++ b/arch/mips/include/asm/vdso/gettimeofday.h
+> @@ -35,7 +35,11 @@ static __always_inline long gettimeofday_fallback(
+>  	: "=r" (ret), "=r" (error)
+>  	: "r" (tv), "r" (tz), "r" (nr)
+>  	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+> -	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+> +	  "$14", "$15", "$24", "$25",
+> +#if MIPS_ISA_REV < 6
+> +	  "hi", "lo",
+> +#endif
+> +          "memory");
 
- Well, originally plans were there to have NaN interlinking implemented 
-and no such mess or desire for hacks like one here would result.  Cf.:
+ Can you please use a helper macro, say GCC_REGS_HI_LO, moving the details 
+into a separate header, just as I suggested with examples given?  My very 
+point was to avoid `#if MIPS_ISA_REV < 6' sprinkled throughout code.
 
-<https://gcc.gnu.org/ml/gcc/2015-11/msg00068.html>,
-<https://gcc.gnu.org/ml/gcc/2016-05/msg00137.html>,
-
-and then:
-
-<https://lkml.org/lkml/2015/11/16/386>,
-<https://sourceware.org/ml/libc-alpha/2015-11/msg00485.html>,
-<https://sourceware.org/ml/binutils/2015-11/msg00170.html>,
-<https://gcc.gnu.org/ml/gcc-patches/2015-11/msg03241.html>.
-
-You could well pick this work up and complete it if you like.  Final 
-conclusions for further work were made here:
-
-<https://gcc.gnu.org/ml/gcc/2016-11/msg00027.html>,
-<https://gcc.gnu.org/ml/gcc/2017-08/msg00260.html>,
-<https://gcc.gnu.org/ml/gcc/2017-10/msg00142.html>.
-
- In the relaxed mode math programs may produce wrong results unless you 
-rebuild all your software for the correct NaN mode for the hardware used 
-(in which case you don't need the relaxed setting in the first place).
+ Also I note all the clobbers are the same across all the syscalls used 
+here, so another possibility is to have a macro like VDSO_SYSCALL_CLOBBERS 
+defined in a single place according to the architecture level, and then 
+just use it throughout avoiding code duplication.
 
   Maciej
