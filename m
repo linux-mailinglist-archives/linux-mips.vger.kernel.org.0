@@ -2,100 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CEF239F65
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Aug 2020 08:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33FF239FD9
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Aug 2020 08:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbgHCGFe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 3 Aug 2020 02:05:34 -0400
-Received: from mail-ej1-f67.google.com ([209.85.218.67]:43567 "EHLO
-        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726057AbgHCGFe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Aug 2020 02:05:34 -0400
-Received: by mail-ej1-f67.google.com with SMTP id a21so37350756ejj.10;
-        Sun, 02 Aug 2020 23:05:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=P5/aFjolm3M+oCoTSlbVZywzMbGCJC0bsu5eqXOedy4=;
-        b=Nj2MODNP+s48shkPhJ4N7+NWWEMHhyS/0yNXppp1tFWlZMXDfdGhEq2dXOHebg6MOd
-         AtGTiP60GkL0PURKuEWuvej4F/qyyJNYwzzpX28wxsrP3zGZ60Ug7RdnTb+BqKZ+lsx5
-         Exs7sD5U1APr+kAFa5Ew8trWGqCEM5Ne//ZoOi+JfTEtHqqzT5yhmIgR8ns6cpNkSvpd
-         pZn14j6pOlXhP/BFIYS4m7LN1A3I/aRLluIiHDkFkGn/W2OrWUT0H9F3rSGkaSqaemrM
-         pIzQhU+/ygzXmuAmKm+agdxdm0mZiuqBdkc1JaXsXWFnimJwafgzOpw1t8BT+Clkitj5
-         GUpw==
-X-Gm-Message-State: AOAM531XjDyPHXnHYVmJj0gTLFI7CGFW1qHMbRVGFjs5iNmxDBWK2pJO
-        9uzdVA3kHqJF2wao3bu1Q+9zE6rxy2WODtqB524=
-X-Google-Smtp-Source: ABdhPJwWWqvObnrecqnO/2BhEsCNEUqOGTb5s/4nUYl9UEviwLlifCJjoEUYRsE2/aUjVz8mB0om3ZsjuV4vacGZUsQ=
-X-Received: by 2002:a17:907:42cb:: with SMTP id nz19mr14956717ejb.447.1596434732278;
- Sun, 02 Aug 2020 23:05:32 -0700 (PDT)
+        id S1726707AbgHCGxa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 3 Aug 2020 02:53:30 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:55615 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726622AbgHCGxa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Aug 2020 02:53:30 -0400
+X-Originating-IP: 91.224.148.103
+Received: from xps13 (unknown [91.224.148.103])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 0E2DCC0002;
+        Mon,  3 Aug 2020 06:53:27 +0000 (UTC)
+Date:   Mon, 3 Aug 2020 08:53:26 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        MTD Maling List <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH] bcm963xx_tag.h: fix duplicated word
+Message-ID: <20200803085326.099e608d@xps13>
+In-Reply-To: <847e3e46-2fc2-daea-67f3-3aaf0f2af4ac@gmail.com>
+References: <d30c09a3-fe30-ddf1-3f21-00fc48b16443@infradead.org>
+        <847e3e46-2fc2-daea-67f3-3aaf0f2af4ac@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <1596005919-29365-1-git-send-email-chenhc@lemote.com>
- <1596005919-29365-2-git-send-email-chenhc@lemote.com> <20200729095248.GA9234@alpha.franken.de>
- <CAAhV-H7MzcW6Uv8XPaOh=5PmsFbRa9n=W1GjWP1WWwCYL_r-hA@mail.gmail.com>
- <CAAhV-H4SXCmW8V-fXhGGiSQbM4cQ3bN3K76JK61Ms+vWxiuviw@mail.gmail.com>
- <20200731083252.GA7946@alpha.franken.de> <89376514-e6c1-469c-f212-865d7a549854@flygoat.com>
-In-Reply-To: <89376514-e6c1-469c-f212-865d7a549854@flygoat.com>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Mon, 3 Aug 2020 14:05:20 +0800
-Message-ID: <CAAhV-H4amAWtNr-DTWV=W-g-B4eob3+zLjVDN5GgKMumnjqYjw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] dt-bindings: mips: Document Loongson kvm guest board
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>, Fuxin Zhang <zhangfx@lemote.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Thomas,
+Hello,
 
-On Fri, Jul 31, 2020 at 7:57 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
->
->
-> 在 2020/7/31 下午4:32, Thomas Bogendoerfer 写道:
-> > On Fri, Jul 31, 2020 at 11:01:58AM +0800, Huacai Chen wrote:
-> >> Hi, Thomas,
-> >>
-> >> On Wed, Jul 29, 2020 at 6:08 PM Huacai Chen <chenhc@lemote.com> wrote:
-> >>> Hi, Thomas,
-> >>>
-> >>>
-> >>> On Wed, Jul 29, 2020 at 6:00 PM Thomas Bogendoerfer
-> >>> <tsbogend@alpha.franken.de> wrote:
-> >>>> On Wed, Jul 29, 2020 at 02:58:36PM +0800, Huacai Chen wrote:
-> >>>>> Document loongson64v-4core-virtio, a virtio based kvm guest board for
-> >>>>> Loongson-3.
-> >>>>>
-> >>>>> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> >>>>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >>>>> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> >>>> hmm, I can't remember adding my signed-off to this patch. Could you
-> >>>> give me a reference for this ?
-> >>>>
-> >>> I'm sorry, this is a copy paste error..
-> >>>
-> >> Should I send V2 for this series?
-> > no, if nothing else needs a resent. Problem with this series is,
-> > that it touches a few places, so it's not clear who should merge
-> > it...
->
-> Actually the first patch is already in the next. I suspect they should
-> go through MIPS tree.
-> Probably this patch needs a ack from Rob?
-I agree with Jiaxun, this series should go through MIPS tree.
+Florian Fainelli <f.fainelli@gmail.com> wrote on Wed, 15 Jul 2020
+19:06:36 -0700:
 
-Huacai
->
-> - Jiaxun
->
-> >
-> > Thomas.
-> >
+> Le 2020-07-15 à 18:28, Randy Dunlap a écrit :
+> > From: Randy Dunlap <rdunlap@infradead.org>
+> > 
+> > Change doubled word "is" to "it is".
+> > 
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > Cc: bcm-kernel-feedback-list@broadcom.com
+> > Cc: linux-mips@vger.kernel.org  
+> 
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> This should probably be merged via linux-mips or linux-mtd, since we
+> have consumers of this header on both trees.
+
+Sorry for the delay, I was away the last weeks. I can take it through
+the MTD tree (next release cycle) or let mips folks to do it. It's
+just a comment change, so not that impacting.
+
+> 
+> > ---
+> >  include/linux/bcm963xx_tag.h |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > --- linux-next-20200714.orig/include/linux/bcm963xx_tag.h
+> > +++ linux-next-20200714/include/linux/bcm963xx_tag.h
+> > @@ -84,7 +84,7 @@ struct bcm_tag {
+> >  	char flash_layout_ver[FLASHLAYOUTVER_LEN];
+> >  	/* 196-199: kernel+rootfs CRC32 */
+> >  	__u32 fskernel_crc;
+> > -	/* 200-215: Unused except on Alice Gate where is is information */
+> > +	/* 200-215: Unused except on Alice Gate where it is information */
+> >  	char information2[TAGINFO2_LEN];
+> >  	/* 216-219: CRC32 of image less imagetag (kernel for Alice Gate) */
+> >  	__u32 image_crc;
+> >   
+> 
+> 
+
+Thanks,
+Miquèl
