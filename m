@@ -2,128 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D587123B16F
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Aug 2020 01:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FC423B645
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Aug 2020 10:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729475AbgHCX67 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 3 Aug 2020 19:58:59 -0400
-Received: from smtp.gentoo.org ([140.211.166.183]:36514 "EHLO smtp.gentoo.org"
+        id S1728113AbgHDIFG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Aug 2020 04:05:06 -0400
+Received: from elvis.franken.de ([193.175.24.41]:33542 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729462AbgHCX67 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 3 Aug 2020 19:58:59 -0400
-Subject: Re: arch/mips/include/asm/mach-ip27/topology.h:19:7: error: implicit
- declaration of function 'hub_data'
-To:     Mike Rapoport <rppt@linux.ibm.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     linux-kernel@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        linux-mips@vger.kernel.org
-References: <202008040108.xTarUIe8%lkp@intel.com>
- <20200803194910.GC72435@linux.ibm.com>
-From:   Joshua Kinard <kumba@gentoo.org>
-Openpgp: preference=signencrypt
-Message-ID: <6a37284b-cbdb-36c8-b258-1a47e6c029ef@gentoo.org>
-Date:   Mon, 3 Aug 2020 19:58:54 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1725909AbgHDIFG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 4 Aug 2020 04:05:06 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1k2rwP-000517-00; Tue, 04 Aug 2020 10:04:57 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 5A819C0B3D; Tue,  4 Aug 2020 09:47:30 +0200 (CEST)
+Date:   Tue, 4 Aug 2020 09:47:30 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Huacai Chen <chenhc@lemote.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>, Fuxin Zhang <zhangfx@lemote.com>
+Subject: Re: [PATCH 2/5] dt-bindings: mips: Document Loongson kvm guest board
+Message-ID: <20200804074730.GA7536@alpha.franken.de>
+References: <1596005919-29365-1-git-send-email-chenhc@lemote.com>
+ <1596005919-29365-2-git-send-email-chenhc@lemote.com>
+ <20200729095248.GA9234@alpha.franken.de>
+ <CAAhV-H7MzcW6Uv8XPaOh=5PmsFbRa9n=W1GjWP1WWwCYL_r-hA@mail.gmail.com>
+ <CAAhV-H4SXCmW8V-fXhGGiSQbM4cQ3bN3K76JK61Ms+vWxiuviw@mail.gmail.com>
+ <20200731083252.GA7946@alpha.franken.de>
+ <89376514-e6c1-469c-f212-865d7a549854@flygoat.com>
+ <CAAhV-H4amAWtNr-DTWV=W-g-B4eob3+zLjVDN5GgKMumnjqYjw@mail.gmail.com>
+ <a1147c93-8852-4a6f-fdee-214b64f2db65@flygoat.com>
 MIME-Version: 1.0
-In-Reply-To: <20200803194910.GC72435@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a1147c93-8852-4a6f-fdee-214b64f2db65@flygoat.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8/3/2020 15:49, Mike Rapoport wrote:
-> Hi,
+On Mon, Aug 03, 2020 at 05:13:39PM +0800, Jiaxun Yang wrote:
 > 
-> On Tue, Aug 04, 2020 at 01:39:14AM +0800, kernel test robot wrote:
->> Hi Mike,
->>
->> FYI, the error/warning still remains.
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   bcf876870b95592b52519ed4aafcf9d95999bc9c
->> commit: 397dc00e249ec64e106374565575dd0eb7e25998 mips: sgi-ip27: switch from DISCONTIGMEM to SPARSEMEM
->> date:   10 months ago
->> config: mips-randconfig-r032-20200803 (attached as .config)
->> compiler: mips64-linux-gcc (GCC) 9.3.0
->> reproduce (this is a W=1 build):
->>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>         chmod +x ~/bin/make.cross
->>         git checkout 397dc00e249ec64e106374565575dd0eb7e25998
->>         # save the attached .config to linux build tree
->>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=mips 
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>    In file included from arch/mips/include/asm/topology.h:11,
->>                     from include/linux/topology.h:36,
->>                     from include/linux/gfp.h:9,
->>                     from include/linux/slab.h:15,
->>                     from include/linux/crypto.h:19,
->>                     from include/crypto/hash.h:11,
->>                     from include/linux/uio.h:10,
->>                     from include/linux/socket.h:8,
->>                     from include/linux/compat.h:15,
->>                     from arch/mips/kernel/asm-offsets.c:12:
->>    arch/mips/include/asm/mach-ip27/topology.h:25:39: error: 'MAX_COMPACT_NODES' undeclared here (not in a function)
->>       25 | extern unsigned char __node_distances[MAX_COMPACT_NODES][MAX_COMPACT_NODES];
->>          |                                       ^~~~~~~~~~~~~~~~~
->>    include/linux/topology.h: In function 'numa_node_id':
->>>> arch/mips/include/asm/mach-ip27/topology.h:16:27: error: implicit declaration of function 'cputonasid' [-Werror=implicit-function-declaration]
->>       16 | #define cpu_to_node(cpu) (cputonasid(cpu))
->>          |                           ^~~~~~~~~~
 > 
-> This happens when randconfig disables NUMA and has SGI_IP27 enabled.
-> Before switch from discontigmem to sparsemem, there always was
-> CONFIG_NEED_MULTIPLE_NODES=y because it was selected by DISCONTIGMEM.
-> Without DISCONTIGMEM it is possible to have SPARSEMEM without NUMA for
-> SGI_IP27 and as many things there rely on custom node definition, the
-> build breaks.
+> 在 2020/8/3 下午2:05, Huacai Chen 写道:
+> >Hi, Thomas,
+> >
+> >On Fri, Jul 31, 2020 at 7:57 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> >>
+> >>
+> >>在 2020/7/31 下午4:32, Thomas Bogendoerfer 写道:
+> >>>On Fri, Jul 31, 2020 at 11:01:58AM +0800, Huacai Chen wrote:
+> >>>>Hi, Thomas,
+> >>>>
+> >>>>On Wed, Jul 29, 2020 at 6:08 PM Huacai Chen <chenhc@lemote.com> wrote:
+> >>>>>Hi, Thomas,
+> >>>>>
+> >>>>>
+> >>>>>On Wed, Jul 29, 2020 at 6:00 PM Thomas Bogendoerfer
+> >>>>><tsbogend@alpha.franken.de> wrote:
+> >>>>>>On Wed, Jul 29, 2020 at 02:58:36PM +0800, Huacai Chen wrote:
+> >>>>>>>Document loongson64v-4core-virtio, a virtio based kvm guest board for
+> >>>>>>>Loongson-3.
+> >>>>>>>
+> >>>>>>>Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> >>>>>>>Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >>>>>>>Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> >>>>>>hmm, I can't remember adding my signed-off to this patch. Could you
+> >>>>>>give me a reference for this ?
+> >>>>>>
+> >>>>>I'm sorry, this is a copy paste error..
+> >>>>>
+> >>>>Should I send V2 for this series?
+> >>>no, if nothing else needs a resent. Problem with this series is,
+> >>>that it touches a few places, so it's not clear who should merge
+> >>>it...
+> >>Actually the first patch is already in the next. I suspect they should
+> >>go through MIPS tree.
+> >>Probably this patch needs a ack from Rob?
+> >I agree with Jiaxun, this series should go through MIPS tree.
 > 
-> I don't remember small Origin or Onyx systems so I think it would be
-> reasonable to make SGI_IP27 to select NUMA. If the below patch makes
-> sense I'll resend it formally.
+> I'd suggest to have a topic branch for this after getting PCI tree merged.
 > 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 6fee1a133e9d..a7e40bb1e5bc 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -678,6 +678,7 @@ config SGI_IP27
->  	select SYS_SUPPORTS_NUMA
->  	select SYS_SUPPORTS_SMP
->  	select MIPS_L1_CACHE_SHIFT_7
-> +	select NUMA
->  	help
->  	  This are the SGI Origin 200, Origin 2000 and Onyx 2 Graphics
->  	  workstations.  To compile a Linux kernel that runs on these, say Y
+> Anyway, I really wish to see this as a part of 5.9 release.
 
-NUMA is really only needed if you have more than one nodeboard for the Onyx2
-or Origin2000 systems.  If you just have a single Origin 200 system, you
-want to turn NUMA off.  I happen to have both a single Origin 200 system and
-an Onyx2 w/ two nodeboards.  Haven't fired them up recently on modern
-kernels, though.
+I've applied patches 2-5 to mips-next. To avoid the mess with the
+first patch, I've removed the case PCI_VENDOR_ID_REDHAT: from
+patch 3 as this is the same as the default: case. It would help
+a lot to not mix patches to different trees in one series next time.
 
-I can't think of a good workaround off the top of my head for this case.
-NUMA shouldn't hurt an Origin 200, but I recall Ralf once telling me it does
-introduce slowdown at some points due to checks for other nodes being done
-when we know there can't physically be any more (exception: dual Origin
-200's hooked together via CrossTown cables).
+Thomas.
 
 -- 
-Joshua Kinard
-Gentoo/MIPS
-kumba@gentoo.org
-rsa6144/5C63F4E3F5C6C943 2015-04-27
-177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
-
-"The past tempts us, the present confuses us, the future frightens us.  And
-our lives slip away, moment by moment, lost in that vast, terrible in-between."
-
---Emperor Turhan, Centauri Republic
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
