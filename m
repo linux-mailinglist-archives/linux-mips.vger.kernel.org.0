@@ -2,83 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCE523D18B
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 22:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFA923D29C
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 22:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728257AbgHEUCW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Aug 2020 16:02:22 -0400
-Received: from elvis.franken.de ([193.175.24.41]:35621 "EHLO elvis.franken.de"
+        id S1726630AbgHEUOh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Aug 2020 16:14:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48568 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726877AbgHEQii (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 5 Aug 2020 12:38:38 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1k3IFd-0001jV-00; Wed, 05 Aug 2020 14:10:33 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 821FEC0C25; Wed,  5 Aug 2020 14:10:21 +0200 (CEST)
-Date:   Wed, 5 Aug 2020 14:10:21 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
-Message-ID: <20200805121021.GA12598@alpha.franken.de>
-References: <1588395344-5400-1-git-send-email-chenhc@lemote.com>
- <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com>
- <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
+        id S1726615AbgHEQX0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 5 Aug 2020 12:23:26 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E1E932076E;
+        Wed,  5 Aug 2020 12:51:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596631911;
+        bh=HOnj3Rf9xvYALWHvNzwxaM2OZCJy8zKF4WAd1JhW220=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XudrjJsWpfCBAJJ8j5BppShNMFB17hCnJEe1RkAj+b445j2sdQinbuYok0ZAPoY/4
+         QEALh8/3vpuplsPnBWfKjuLsf+wRiG9iPh1Qp3Ru0K5F9AoKY2XUEN9lI/mabG57rN
+         x+A2+zvpvbvZJrpgCe4722pZ8vEgVOB4+QXqLByg=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Paul Burton <paulburton@kernel.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
+Subject: [PATCH] MIPS: SGI-IP27: always enable NUMA in Kconfig
+Date:   Wed,  5 Aug 2020 15:51:41 +0300
+Message-Id: <20200805125141.24987-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Aug 01, 2020 at 03:59:41PM +0800, Huacai Chen wrote:
-> On Wed, May 6, 2020 at 1:30 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> >
-> >
-> >
-> > 于 2020年5月2日 GMT+08:00 下午12:55:43, Huacai Chen <chenhc@lemote.com> 写到:
-> > >Loongson-3's COP2 is Multi-Media coprocessor, it is disabled in kernel
-> > >mode by default. However, gslq/gssq (16-bytes load/store instructions)
-> > >overrides the instruction format of lwc2/swc2. If we wan't to use gslq/
-> > >gssq for optimization in kernel, we should enable COP2 usage in kernel.
-> > >
-> > >Please pay attention that in this patch we only enable COP2 in kernel,
-> > >which means it will lose ST0_CU2 when a process go to user space (try
-> > >to use COP2 in user space will trigger an exception and then grab COP2,
-> > >which is similar to FPU). And as a result, we need to modify the context
-> > >switching code because the new scheduled process doesn't contain ST0_CU2
-> > >in its THERAD_STATUS probably.
-> > >
-> > >Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> >
-> > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >
-> Does this patch have some unresolved problems, or there is something unclear?
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-yes there is. Since this COP2 is a total black box to me, it would be
-really helpfull to get some docs for it or at least some information what
-it exactly does and how you want to use it in kernel code.
+When a configuration has NUMA disabled and SGI_IP27 enabled, the build
+fails:
 
-Looking closer at the patch I realized, that there is already support
-for usage of COP2 in user land, which I thought isn't the case (at least
-I understood that from one of your mails). So is there enough state
-saving to support this ?
+  CC      kernel/bounds.s
+  CC      arch/mips/kernel/asm-offsets.s
+In file included from arch/mips/include/asm/topology.h:11,
+                 from include/linux/topology.h:36,
+                 from include/linux/gfp.h:9,
+                 from include/linux/slab.h:15,
+                 from include/linux/crypto.h:19,
+                 from include/crypto/hash.h:11,
+                 from include/linux/uio.h:10,
+                 from include/linux/socket.h:8,
+                 from include/linux/compat.h:15,
+                 from arch/mips/kernel/asm-offsets.c:12:
+include/linux/topology.h: In function 'numa_node_id':
+arch/mips/include/asm/mach-ip27/topology.h:16:27: error: implicit declaration of function 'cputonasid'; did you mean 'cpu_vpe_id'? [-Werror=implicit-function-declaration]
+ #define cpu_to_node(cpu) (cputonasid(cpu))
+                           ^~~~~~~~~~
+include/linux/topology.h:119:9: note: in expansion of macro 'cpu_to_node'
+  return cpu_to_node(raw_smp_processor_id());
+         ^~~~~~~~~~~
+include/linux/topology.h: In function 'cpu_cpu_mask':
+arch/mips/include/asm/mach-ip27/topology.h:19:7: error: implicit declaration of function 'hub_data' [-Werror=implicit-function-declaration]
+      &hub_data(node)->h_cpus)
+       ^~~~~~~~
+include/linux/topology.h:210:9: note: in expansion of macro 'cpumask_of_node'
+  return cpumask_of_node(cpu_to_node(cpu));
+         ^~~~~~~~~~~~~~~
+arch/mips/include/asm/mach-ip27/topology.h:19:21: error: invalid type argument of '->' (have 'int')
+      &hub_data(node)->h_cpus)
+                     ^~
+include/linux/topology.h:210:9: note: in expansion of macro 'cpumask_of_node'
+  return cpumask_of_node(cpu_to_node(cpu));
+         ^~~~~~~~~~~~~~~
 
-And finally what I stil don't like is the splittering of more
-#ifdef LOONGSON into common code. I'd prefer a more generic way
-to enable COPx for in kernel usage. Maybe a more generic config option
-or a dynamic solution like the one for user land.
+Before switch from discontigmem to sparsemem, there always was
+CONFIG_NEED_MULTIPLE_NODES=y because it was selected by DISCONTIGMEM.
+Without DISCONTIGMEM it is possible to have SPARSEMEM without NUMA for
+SGI_IP27 and as many things there rely on custom node definition, the
+build breaks.
 
-Thomas.
+As Thomas noted "... there are right now too many places in IP27 code,
+which assumes NUMA enabled", the simplest solution would be to always
+enable NUMA for SGI-IP27 builds.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 397dc00e249e ("mips: sgi-ip27: switch from DISCONTIGMEM to SPARSEMEM")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+---
+ arch/mips/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 6fee1a133e9d..a7e40bb1e5bc 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -678,6 +678,7 @@ config SGI_IP27
+ 	select SYS_SUPPORTS_NUMA
+ 	select SYS_SUPPORTS_SMP
+ 	select MIPS_L1_CACHE_SHIFT_7
++	select NUMA
+ 	help
+ 	  This are the SGI Origin 200, Origin 2000 and Onyx 2 Graphics
+ 	  workstations.  To compile a Linux kernel that runs on these, say Y
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.26.2
+
