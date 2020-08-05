@@ -2,171 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA0823CD95
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 19:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33C523D00E
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 21:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728924AbgHERjf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Aug 2020 13:39:35 -0400
-Received: from relay5.mymailcheap.com ([159.100.248.207]:51954 "EHLO
-        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728915AbgHERea (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Aug 2020 13:34:30 -0400
-Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.80.156])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id C434526370
-        for <linux-mips@vger.kernel.org>; Wed,  5 Aug 2020 13:57:10 +0000 (UTC)
-Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
-        by relay4.mymailcheap.com (Postfix) with ESMTPS id 203A53F1D0;
-        Wed,  5 Aug 2020 15:52:00 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by filter2.mymailcheap.com (Postfix) with ESMTP id DF4042A520;
-        Wed,  5 Aug 2020 15:51:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1596635519;
-        bh=CLac2EjUFlcauyotKW1A9AVfqwV6qAvXNlOsMGyq7lc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=q0EzBw/HzsAjguJDrIld02zG5VFI454bS4VYAjYwNeXJB+S4FpgRejlf7BylqS66M
-         YesuF9ovGKxki9ElQqphfEVBkop4feD6fKTmq66gKqDYg3FMQmvGAYC4XKmsp5CKzs
-         +sC/t+ZhjuPKdy6ABAzD2OSYIix7l6GWntd3p4gc=
-X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
-Received: from filter2.mymailcheap.com ([127.0.0.1])
-        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id p7yJAyvHKnOt; Wed,  5 Aug 2020 15:51:57 +0200 (CEST)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter2.mymailcheap.com (Postfix) with ESMTPS;
-        Wed,  5 Aug 2020 15:51:57 +0200 (CEST)
-Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id A311B425BD;
-        Wed,  5 Aug 2020 13:51:56 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="HxqvFXf+";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [0.0.0.0] (li986-206.members.linode.com [45.33.36.206])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 6F212425BC;
-        Wed,  5 Aug 2020 13:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1596635511;
-        bh=CLac2EjUFlcauyotKW1A9AVfqwV6qAvXNlOsMGyq7lc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=HxqvFXf+B8dKlaqII6IBCCHlA9+s/zF6oT8C+jdH4FPB+jUCe5yRtMQvRcoCTt7yN
-         09SgNYg7hEBHXPn1BY6xauFjMSo5KGA95HHQxsXI7n8ZKMt/fWM7ZmEvNHjrSREqKs
-         clE3Hb66C2/cWvCYrifcVeMgYVfXQPMkmZ/xdxgI=
-Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-References: <1588395344-5400-1-git-send-email-chenhc@lemote.com>
- <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com>
- <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
- <20200805121021.GA12598@alpha.franken.de>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
-Date:   Wed, 5 Aug 2020 21:51:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.1.0
+        id S1729041AbgHET3E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Aug 2020 15:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728587AbgHERKf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Aug 2020 13:10:35 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C17EC06179E;
+        Wed,  5 Aug 2020 10:10:17 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id v15so20124964lfg.6;
+        Wed, 05 Aug 2020 10:10:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q+69HNPUBLn+0j8xa7ztNqSpAC3bH5kdSFM7se7mw/Y=;
+        b=RdzmbMMLETEqNtoVgyRCKj1pU2wD/0M8qEqvRXNRRNY+b914UvXZkxoVgayVQubBPC
+         CE/souAwCoROj7cmbTcH2Md3LKEYbq7hyPYtIYReTO92nMUXfSeWszPI988KPS2REOZ/
+         x8Lg5axuTOlNvJMwV7URNblxu16MjbinauMnuxvVDwlqKDPHVH06HlMC2htBpXCjb11y
+         71kjYcUyosO0NzQGNjoXOZVONMcKv4BHAUmemA/OfyAvVhCb2Eag/fpp10a8cB3ymmQm
+         ukYz/pLgzNQdHe5F/wMNFpu3aiLl6i8gq8ye/o/O6zNgd9JR7Oi+/mkdZRJPFt4uOCZ/
+         Wj4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q+69HNPUBLn+0j8xa7ztNqSpAC3bH5kdSFM7se7mw/Y=;
+        b=TXA78WnFRc7+kmsk06wFjNijSy6LcK6tOgi2FTu2ciKvRimGzMeuck5iG/SZL7JiD9
+         GwZ+CFCpm9kMgB2Ld+pG1hFVfufKo3zPrBbmTqn5Y9qDfMdA7Oxl0qP3G/GesI4a61QB
+         BSYpmKkZk7PrSKqdiRb3FQ6EYKkVdzL/XqXwnsI9TvlVXpZEOAEJRSlGTbcGNJnpRK2x
+         vYCK9PIvqb8fjsv5ewo+yM54g6YjxZAwl4GhbGOenmAvFaTZgkumx8hW4yhBXqrY27xo
+         7joA0Jryu0v1/H1v77ciO/uy29dQaFhQjKcJEMEA7s4BabD6KpMiYJ/pDsMWabNqNQ7V
+         8NUQ==
+X-Gm-Message-State: AOAM532WYA+IN1EbKq89uAf0HSpe48/1ZkI9I2oWCmM69FfDECjegqem
+        4igrjEsW9b8kbHB0IENnsnh0LWeW4WNhD3NfjCE=
+X-Google-Smtp-Source: ABdhPJwrfD4lQmBmRhZhj4oSbWRKgm3lTiWKFBcnnoErai4/oJd38wR2GismiRK0iE3hYzt+6N6iDQ3Zkito0n/twrM=
+X-Received: by 2002:a05:6512:3b7:: with SMTP id v23mr2064439lfp.10.1596647415748;
+ Wed, 05 Aug 2020 10:10:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200805121021.GA12598@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: A311B425BD
-X-Spamd-Result: default: False [-0.10 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         ARC_NA(0.00)[];
-         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
-         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1];
-         FROM_HAS_DN(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         RCPT_COUNT_FIVE(0.00)[5];
-         ML_SERVERS(-3.10)[148.251.23.173];
-         TO_DN_ALL(0.00)[];
-         DKIM_TRACE(0.00)[flygoat.com:+];
-         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
-         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
-         FREEMAIL_CC(0.00)[vger.kernel.org,lemote.com,gmail.com];
-         MID_RHS_MATCH_FROM(0.00)[];
-         RCVD_COUNT_TWO(0.00)[2]
-X-Rspamd-Server: mail20.mymailcheap.com
+References: <20200802163601.8189-1-rppt@kernel.org> <20200802163601.8189-18-rppt@kernel.org>
+In-Reply-To: <20200802163601.8189-18-rppt@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 5 Aug 2020 19:10:04 +0200
+Message-ID: <CANiq72kaw7EMePMbgYyKMCkBC+7CgERq4FV2Lp-fH+ea3H12vg@mail.gmail.com>
+Subject: Re: [PATCH v2 17/17] memblock: use separate iterators for memory and
+ reserved regions
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        iommu@lists.linux-foundation.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-c6x-dev@linux-c6x.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-在 2020/8/5 20:10, Thomas Bogendoerfer 写道:
-> On Sat, Aug 01, 2020 at 03:59:41PM +0800, Huacai Chen wrote:
->> On Wed, May 6, 2020 at 1:30 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->>>
->>>
->>> 于 2020年5月2日 GMT+08:00 下午12:55:43, Huacai Chen <chenhc@lemote.com> 写到:
->>>> Loongson-3's COP2 is Multi-Media coprocessor, it is disabled in kernel
->>>> mode by default. However, gslq/gssq (16-bytes load/store instructions)
->>>> overrides the instruction format of lwc2/swc2. If we wan't to use gslq/
->>>> gssq for optimization in kernel, we should enable COP2 usage in kernel.
->>>>
->>>> Please pay attention that in this patch we only enable COP2 in kernel,
->>>> which means it will lose ST0_CU2 when a process go to user space (try
->>>> to use COP2 in user space will trigger an exception and then grab COP2,
->>>> which is similar to FPU). And as a result, we need to modify the context
->>>> switching code because the new scheduled process doesn't contain ST0_CU2
->>>> in its THERAD_STATUS probably.
->>>>
->>>> Signed-off-by: Huacai Chen <chenhc@lemote.com>
->>> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->>>
->> Does this patch have some unresolved problems, or there is something unclear?
-> yes there is. Since this COP2 is a total black box to me, it would be
-> really helpfull to get some docs for it or at least some information what
-> it exactly does and how you want to use it in kernel code.
-
-FYI:
-Loongson doesn't have any CU2 register. It just reused LWC2 & LDC2 opcode
-to define some load & store instructions (e.g. 128bit load to two GPRs).
-
-I have a collection of these instructions here[1].
-
- From GS464E (3A2000+), execuating these instruction won't produce COP2 
-unusable
-exception. But older Loongson cores (GS464) will still produce COP2 
-exception, thus
-we should have CU2 enabled in kernel. That would allow us use to these 
-instructions
-to optimize kernel.
-
+On Sun, Aug 2, 2020 at 6:41 PM Mike Rapoport <rppt@kernel.org> wrote:
 >
-> Looking closer at the patch I realized, that there is already support
-> for usage of COP2 in user land, which I thought isn't the case (at least
-> I understood that from one of your mails). So is there enough state
-> saving to support this ?
+>  .clang-format                  |  3 ++-
 
-Actually there is no CU2 state for Loongson to save.
+The .clang-format bit:
 
->
-> And finally what I stil don't like is the splittering of more
-> #ifdef LOONGSON into common code. I'd prefer a more generic way
-> to enable COPx for in kernel usage. Maybe a more generic config option
-> or a dynamic solution like the one for user land.
-Agreed. some Kconfig options or cpuinfo_mips.options can be helpful.
+Acked-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 
-Thanks.
-
-- Jiaxun
-
-[1]: https://github.com/FlyGoat/loongson-insn/
->
-> Thomas.
->
+Cheers,
+Miguel
