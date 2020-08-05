@@ -2,133 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF4723C7C6
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 10:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBA323C7EB
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 10:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbgHEI3q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Aug 2020 04:29:46 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:48179 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725981AbgHEI3n (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Aug 2020 04:29:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596616182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FvaMXP5a+m7YjPK069Q+H34K0fPtN+F8dCVJuIAUPpY=;
-        b=hMcbvQE3/6PHohXD5AnlpX4YK4WSpkKiz5L8dfk8MkpoHUb45xWStoCOyrqYaJNLY4POO4
-        9QRufP4WyYlP08RsLhDk34wxxwpPEgBa0wYB/zvFl0MydEGFuEv6iu+3LCmlRyPCgE25n4
-        XaZVum7Gs1/3b9CyVAvE9/wM3HdSLj0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-459-Fs5bhd50MLqa0hbUoos07g-1; Wed, 05 Aug 2020 04:29:36 -0400
-X-MC-Unique: Fs5bhd50MLqa0hbUoos07g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F02638064AB;
-        Wed,  5 Aug 2020 08:29:30 +0000 (UTC)
-Received: from localhost (ovpn-12-71.pek2.redhat.com [10.72.12.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E2DCC10013D0;
-        Wed,  5 Aug 2020 08:29:26 +0000 (UTC)
-Date:   Wed, 5 Aug 2020 16:29:24 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        clang-built-linux@googlegroups.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
-Subject: Re: [PATCH v2 15/17] memblock: remove unused memblock_mem_size()
-Message-ID: <20200805082924.GV10792@MiWiFi-R3L-srv>
-References: <20200802163601.8189-1-rppt@kernel.org>
- <20200802163601.8189-16-rppt@kernel.org>
+        id S1726104AbgHEIif (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Aug 2020 04:38:35 -0400
+Received: from elvis.franken.de ([193.175.24.41]:35123 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726175AbgHEIie (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 5 Aug 2020 04:38:34 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1k3EwR-0008Mh-00; Wed, 05 Aug 2020 10:38:31 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 50BAFC0BDA; Wed,  5 Aug 2020 10:37:20 +0200 (CEST)
+Date:   Wed, 5 Aug 2020 10:37:20 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org
+Subject: Re: arch/mips/include/asm/mach-ip27/topology.h:19:7: error: implicit
+ declaration of function 'hub_data'
+Message-ID: <20200805083720.GA7297@alpha.franken.de>
+References: <202008040108.xTarUIe8%lkp@intel.com>
+ <20200803194910.GC72435@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200802163601.8189-16-rppt@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <20200803194910.GC72435@linux.ibm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 08/02/20 at 07:35pm, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On Mon, Aug 03, 2020 at 10:49:10PM +0300, Mike Rapoport wrote:
+> On Tue, Aug 04, 2020 at 01:39:14AM +0800, kernel test robot wrote:
+> [...]
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    In file included from arch/mips/include/asm/topology.h:11,
+> >                     from include/linux/topology.h:36,
+> >                     from include/linux/gfp.h:9,
+> >                     from include/linux/slab.h:15,
+> >                     from include/linux/crypto.h:19,
+> >                     from include/crypto/hash.h:11,
+> >                     from include/linux/uio.h:10,
+> >                     from include/linux/socket.h:8,
+> >                     from include/linux/compat.h:15,
+> >                     from arch/mips/kernel/asm-offsets.c:12:
+> >    arch/mips/include/asm/mach-ip27/topology.h:25:39: error: 'MAX_COMPACT_NODES' undeclared here (not in a function)
+> >       25 | extern unsigned char __node_distances[MAX_COMPACT_NODES][MAX_COMPACT_NODES];
+> >          |                                       ^~~~~~~~~~~~~~~~~
+> >    include/linux/topology.h: In function 'numa_node_id':
+> > >> arch/mips/include/asm/mach-ip27/topology.h:16:27: error: implicit declaration of function 'cputonasid' [-Werror=implicit-function-declaration]
+> >       16 | #define cpu_to_node(cpu) (cputonasid(cpu))
+> >          |                           ^~~~~~~~~~
 > 
-> The only user of memblock_mem_size() was x86 setup code, it is gone now and
-> memblock_mem_size() funciton can be removed.
+> This happens when randconfig disables NUMA and has SGI_IP27 enabled.
+> Before switch from discontigmem to sparsemem, there always was
+> CONFIG_NEED_MULTIPLE_NODES=y because it was selected by DISCONTIGMEM.
+> Without DISCONTIGMEM it is possible to have SPARSEMEM without NUMA for
+> SGI_IP27 and as many things there rely on custom node definition, the
+> build breaks.
 > 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  include/linux/memblock.h |  1 -
->  mm/memblock.c            | 15 ---------------
->  2 files changed, 16 deletions(-)
-> 
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index d70c2835e913..ec2fd8f32a19 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -450,7 +450,6 @@ static inline bool memblock_bottom_up(void)
->  
->  phys_addr_t memblock_phys_mem_size(void);
->  phys_addr_t memblock_reserved_size(void);
-> -phys_addr_t memblock_mem_size(unsigned long limit_pfn);
->  phys_addr_t memblock_start_of_DRAM(void);
->  phys_addr_t memblock_end_of_DRAM(void);
->  void memblock_enforce_memory_limit(phys_addr_t memory_limit);
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index c1a4c8798973..48d614352b25 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -1656,21 +1656,6 @@ phys_addr_t __init_memblock memblock_reserved_size(void)
->  	return memblock.reserved.total_size;
->  }
->  
-> -phys_addr_t __init memblock_mem_size(unsigned long limit_pfn)
-> -{
-> -	unsigned long pages = 0;
-> -	unsigned long start_pfn, end_pfn;
-> -	int i;
-> -
-> -	for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, NULL) {
-> -		start_pfn = min_t(unsigned long, start_pfn, limit_pfn);
-> -		end_pfn = min_t(unsigned long, end_pfn, limit_pfn);
-> -		pages += end_pfn - start_pfn;
-> -	}
-> -
-> -	return PFN_PHYS(pages);
-> -}
+> I don't remember small Origin or Onyx systems so I think it would be
+> reasonable to make SGI_IP27 to select NUMA.
 
-Reviewed-by: Baoquan He <bhe@redhat.com>
+IMHO there are right now too many places in IP27 code, which assumes NUMA
+enabled, so your patch makes sense. And if someone wants to get it
+supported without NUMA enabled, I'm taking that patch as well.
 
+> If the below patch makes sense I'll resend it formally.
+
+yes please.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
