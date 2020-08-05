@@ -2,137 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FC223D026
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 21:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCE523D18B
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 22:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbgHETan (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Aug 2020 15:30:43 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:20597 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728378AbgHETa1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Aug 2020 15:30:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1596655826; x=1628191826;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=22FNyOPpYPWk//S3AUoFOnpQi+utyKNlP93NhezS5ZQ=;
-  b=qgI5K9FEFK2UgET/clHaHZzNvF8A2Un2kYxyOXlpTF3Yb59xmxfPFg8d
-   Pwxu9bPo/8dGjbfDWhSlS8KAeoBJuk6x3GunuY+2QqdCDlH92ogmRziJM
-   VJrPEDlZLuiD972ESCDAQ9lzpjyRa8IkBIm5BAN4lPJQCj1mNRlcva6nq
-   Tsb+macQ/ECUKr/E2gMptOOgxeW6ABB3j3IchratDIa6CRyNjWFaBaKyh
-   0v/G1m/VPdelz7vRBw9OwHAiH8osZBxYJ0iPa9OVuVmTTUw+a9UYlniPa
-   b+bTILtvnRlzNTd6LBy+DwXIL2uVKz1dKseudKucqkWalYdjp8PNaYY2f
-   w==;
-IronPort-SDR: ubq9YOGV2iwm/yQRMo6y6tqSb+SbO+O3X3vhaQXBvY4j6CGcunyU6pXFlXjqB5xKa+ueKnZuoS
- 49K/XL3Qe2U6lyWHIDBTRvUdbO0gjkI5QmO/VKh0EINdM3HL+gd09TQls8arSN9p1/JB7+kfsB
- OnOWS64kzopCXmOqq50nMcrqR91I119Of8sUfj5Ht7JLdgC2E3Ck0Mtr5mB/WBR2JCwtE1z0DQ
- WhuplqSFko0vsjQCPG05AWOvBL7FvYvwHmJyontyVGp/v5Rsb5fcMrv5Q0EHmm7LIDP8JXvr0M
- pbw=
-X-IronPort-AV: E=Sophos;i="5.75,438,1589212800"; 
-   d="scan'208";a="253587414"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Aug 2020 03:30:22 +0800
-IronPort-SDR: wEjx5pDVU305WbH5AwF9fA/XmkHKYTrsSVDvA35S9gh7yEtzz9TDG+p58BOZ+6Pau3m9HrQwKt
- DghsGNZ22OKA==
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2020 12:17:41 -0700
-IronPort-SDR: UxS74IHkuTgSa/zr/0eE6Ttb+qVm2kznk/CZSU8sPDe4YHP/x1DjwKUb4Pby73WrHTBt0hkDr1
- 8fcBWc3hA/2A==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2020 12:30:21 -0700
-Date:   Wed, 5 Aug 2020 20:30:17 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@wdc.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        =?UTF-8?Q?=E5=91=A8=E7=90=B0=E6=9D=B0_=28Zhou_Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>,
-        Liangliang Huang <huanglllzu@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-Subject: Re: [PATCH] MIPS: Provide Kconfig option for default IEEE754
- conformance mode
-In-Reply-To: <ceb71bef-b3e6-68ce-df80-bcff92085e66@flygoat.com>
-Message-ID: <alpine.LFD.2.21.2008051850390.24175@redsun52.ssa.fujisawa.hgst.com>
-References: <20200731041018.1381642-1-jiaxun.yang@flygoat.com> <20200731061702.fxdfyxpvd6qrhoql@mobilestation> <alpine.LFD.2.21.2008022213500.24175@redsun52.ssa.fujisawa.hgst.com> <ceb71bef-b3e6-68ce-df80-bcff92085e66@flygoat.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1728257AbgHEUCW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Aug 2020 16:02:22 -0400
+Received: from elvis.franken.de ([193.175.24.41]:35621 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726877AbgHEQii (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 5 Aug 2020 12:38:38 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1k3IFd-0001jV-00; Wed, 05 Aug 2020 14:10:33 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 821FEC0C25; Wed,  5 Aug 2020 14:10:21 +0200 (CEST)
+Date:   Wed, 5 Aug 2020 14:10:21 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+Message-ID: <20200805121021.GA12598@alpha.franken.de>
+References: <1588395344-5400-1-git-send-email-chenhc@lemote.com>
+ <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com>
+ <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 3 Aug 2020, Jiaxun Yang wrote:
-
-> >   Well, originally plans were there to have NaN interlinking implemented
-> > and no such mess or desire for hacks like one here would result.  Cf.:
+On Sat, Aug 01, 2020 at 03:59:41PM +0800, Huacai Chen wrote:
+> On Wed, May 6, 2020 at 1:30 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 > >
-> > <https://gcc.gnu.org/ml/gcc/2015-11/msg00068.html>,
-> > <https://gcc.gnu.org/ml/gcc/2016-05/msg00137.html>,
 > >
-> > and then:
 > >
-> > <https://lkml.org/lkml/2015/11/16/386>,
-> > <https://sourceware.org/ml/libc-alpha/2015-11/msg00485.html>,
-> > <https://sourceware.org/ml/binutils/2015-11/msg00170.html>,
-> > <https://gcc.gnu.org/ml/gcc-patches/2015-11/msg03241.html>.
+> > 于 2020年5月2日 GMT+08:00 下午12:55:43, Huacai Chen <chenhc@lemote.com> 写到:
+> > >Loongson-3's COP2 is Multi-Media coprocessor, it is disabled in kernel
+> > >mode by default. However, gslq/gssq (16-bytes load/store instructions)
+> > >overrides the instruction format of lwc2/swc2. If we wan't to use gslq/
+> > >gssq for optimization in kernel, we should enable COP2 usage in kernel.
+> > >
+> > >Please pay attention that in this patch we only enable COP2 in kernel,
+> > >which means it will lose ST0_CU2 when a process go to user space (try
+> > >to use COP2 in user space will trigger an exception and then grab COP2,
+> > >which is similar to FPU). And as a result, we need to modify the context
+> > >switching code because the new scheduled process doesn't contain ST0_CU2
+> > >in its THERAD_STATUS probably.
+> > >
+> > >Signed-off-by: Huacai Chen <chenhc@lemote.com>
 > >
-> > You could well pick this work up and complete it if you like.  Final
-> > conclusions for further work were made here:
+> > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > >
-> > <https://gcc.gnu.org/ml/gcc/2016-11/msg00027.html>,
-> > <https://gcc.gnu.org/ml/gcc/2017-08/msg00260.html>,
-> > <https://gcc.gnu.org/ml/gcc/2017-10/msg00142.html>.
-> >
-> >   In the relaxed mode math programs may produce wrong results unless you
-> > rebuild all your software for the correct NaN mode for the hardware used
-> 
-> Unfortunately most of the hardware guys didn't understood the difficulty 
-> here.
-> They decided to implement their hardware (P5600 & LS3A4000) as NaN2008 only.
+> Does this patch have some unresolved problems, or there is something unclear?
 
- Sadly we (the software group) have lost the battle with the hardware 
-group for the architecture to have FCSR.NAN2008 at least optionally 
-writable, and the feature was subsequently removed from R5 on, along with 
-the writability of FCSR.ABS2008 and the FCSR.MAC2008 bit altogether.
+yes there is. Since this COP2 is a total black box to me, it would be
+really helpfull to get some docs for it or at least some information what
+it exactly does and how you want to use it in kernel code.
 
- Still R3 did permit those bits to be r/w (check rev. 3.50 of the 
-architecture spec), which is why I implemented them as such in our FP 
-emulation and also QEMU (although I need to note that a competing QEMU 
-implementation was pushed upstream behind my back, which I believe wasn't 
-as complete as mine, so this part may or may not have been implemented).
+Looking closer at the patch I realized, that there is already support
+for usage of COP2 in user land, which I thought isn't the case (at least
+I understood that from one of your mails). So is there enough state
+saving to support this ?
 
-> I was thinking about let Kernel drop SIGFPE exception was caused by 
-> mismatched NaN,
-> as most applications don't rely on signaling NaN, but it is still a 
-> dirty hack. Not a good
-> idea in general.
+And finally what I stil don't like is the splittering of more
+#ifdef LOONGSON into common code. I'd prefer a more generic way
+to enable COPx for in kernel usage. Maybe a more generic config option
+or a dynamic solution like the one for user land.
 
- I think you cannot reliably send SIGFPE, because hardware does not trap 
-on what it considers a qNaN.
+Thomas.
 
- The interlinking effort was there to let individual pieces of software 
-that have various requirements for NaNs, or do not use FP at all, to use a 
-set of rules for possibly being allowed to run on incompatible hardware or 
-loaded together by the dynamic loader.  For example there was a mode 
-specified where all NaNs were silently treated as qNaNs regardless of the 
-hardware interpretation of a specific encoding.
-
- I maintain this is the way to move forward, and if you are serious about 
-keeping the architecture alive, then I strongly recommend to upstream the 
-implementation, possibly based on my patches previously published, 
-although as indicated in the discussion referred there have been design 
-issues observed, which mean a certain amount of rework will be required, 
-first on the spec, and then the implementation.
-
- FWIW,
-
-  Maciej
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
