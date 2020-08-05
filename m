@@ -2,115 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 559DE23C349
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 04:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814D323C413
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 05:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726011AbgHECGm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Aug 2020 22:06:42 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:56510 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725864AbgHECGm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Aug 2020 22:06:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1596593201; x=1628129201;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-transfer-encoding;
-  bh=mr8pEVR8EM2vtCoJYlVhaVMY23O+8KAaStBjD4hUG9U=;
-  b=UOzwjeP3u11NEHuWvuztHqk1uf2wdN0hFd3uQBm7zqCRh1xTotCmTpOg
-   imuUvnGEClv12uZEDCipCXg1Nflg7VQQsgyfcmOrdp1/vpLRE4PgQVu4m
-   d2RMOwjzAr/rPilI4kfC2uQdYexp+E1Ymh/rgOkp3Pj8NY0JS2J/8ohSx
-   buNH8Xzb9xn1vC+5jVGlXwhwkSOLHsWKawn/L2QsEE0uJYTOlkGPEyBps
-   Tu4Ds8cc3JHlebp8Ygkj2Scbq9+i6SNoPpGNkzuHdxBXt/OZ98mPfNQ+K
-   sVIFbNZI5UeDiUeqbd8JbU3mGq99srXFWcmPYtBhEzh4EzmwjGrsoIpQt
-   w==;
-IronPort-SDR: 4CiEYIfPGx/er/2fMh7GgBPYbry7z7bJ9UrdZbOpTf+Bg1vBQIt7Pg7ZrCumy8cJwVD8hIADXE
- V6khl8+rwHIEdz7sOI8Q86ldtpIacEEtP15Z+NgqL8b2tXTYAPb35C9pxggeqlh8N5pvauT0Zb
- OngvhgJGjfHP9vdT0xnqllilVb4WXsmwFXFICOs6892h3QBz/OvgYt3alSmEdAZmqc/QjjkE1x
- Cp8GMFlZFdu+Ji9eVfAegA6U6ayigL+qp2pG5m5485syJSBSJ4Bo9097FLKKGAPFplwaqCmkwZ
- /sw=
-X-IronPort-AV: E=Sophos;i="5.75,436,1589212800"; 
-   d="scan'208";a="253513162"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Aug 2020 10:06:41 +0800
-IronPort-SDR: dLsXiV1JFaRo4eYiVkK9KAv6/QaRoRbX8UHYUkmM1N4Yo5O3tX0CdUoRx65QsvAOpBoQZF9PQR
- hvHqMctAApUw==
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2020 18:54:01 -0700
-IronPort-SDR: TLhMEyPXwBjZRTNKUDbkN/wLMnj2ldUs7WjvT7jQGs0HtUMdjyM3RdD9bF/Ed/GwnQyNTpSQEe
- VPBQWkxZip7g==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2020 19:06:40 -0700
-Date:   Wed, 5 Aug 2020 03:06:36 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@wdc.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@linux-mips.org,
-        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
-        <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-Subject: Re: [PATCH] MIPS: BMIPS: Disable pref 30 for buggy CPUs
-In-Reply-To: <bcd3255c-bbb0-f4c0-1a33-7a16ee9f7b93@gmail.com>
-Message-ID: <alpine.LFD.2.21.2008050259550.24175@redsun52.ssa.fujisawa.hgst.com>
-References: <20200731042401.22871-1-f.fainelli@gmail.com> <21ad5472-1287-acba-5604-09f2e633c043@flygoat.com> <46de49ec-cc8b-708a-0cdd-82389b041078@gmail.com> <20200803113020.GA8958@alpha.franken.de> <bcd3255c-bbb0-f4c0-1a33-7a16ee9f7b93@gmail.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1725999AbgHEDuk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Aug 2020 23:50:40 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:32528 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725904AbgHEDuk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Aug 2020 23:50:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596599438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PBRFUAvhtw5NCrkPVOAd8K2sp2Oav4oQ9F6n5x6FCHA=;
+        b=UbfKB69am46vtxWK00Hrt2B3evhyQ6OnoB+JRMBZoC9j5/Dplaabbxpfxuq+n2I3sh55Y0
+        E238xkg3B527U9DIM6WRMHp1gppA0FYxWyQtq4nkYt/8SIZR2vAu5DtyswYuUJvP1CBL7b
+        9iy/Z81ZgJEJXGe6ApfSg7dMSetjw3Y=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-185-xI0_yRdGMPGizyxDuo-nyA-1; Tue, 04 Aug 2020 23:50:36 -0400
+X-MC-Unique: xI0_yRdGMPGizyxDuo-nyA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8CFAE102C7EC;
+        Wed,  5 Aug 2020 03:50:30 +0000 (UTC)
+Received: from localhost (ovpn-12-71.pek2.redhat.com [10.72.12.71])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 17E4F8AC06;
+        Wed,  5 Aug 2020 03:50:27 +0000 (UTC)
+Date:   Wed, 5 Aug 2020 11:50:24 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: Re: [PATCH v2 02/17] dma-contiguous: simplify
+ cma_early_percent_memory()
+Message-ID: <20200805035024.GR10792@MiWiFi-R3L-srv>
+References: <20200802163601.8189-1-rppt@kernel.org>
+ <20200802163601.8189-3-rppt@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200802163601.8189-3-rppt@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 3 Aug 2020, Florian Fainelli wrote:
-
-> >>>> diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
-> >>>> index 19308df5f577..df0efea12611 100644
-> >>>> --- a/arch/mips/bmips/setup.c
-> >>>> +++ b/arch/mips/bmips/setup.c
-> >>>> @@ -110,6 +110,20 @@ static void bcm6368_quirks(void)
-> >>>>       bcm63xx_fixup_cpu1();
-> >>>>   }
-> >>>>   +static void bmips5000_pref30_quirk(void)
-> >>>> +{
-> >>>> +    __asm__ __volatile__(
-> >>>> +    "    li    $8, 0x5a455048\n"
-> >>>> +    "    .word    0x4088b00f\n"    /* mtc0 $8, $22, 15 */
-> >>>> +    "    nop; nop; nop\n"
-> >>>> +    "    .word    0x4008b008\n"    /* mfc0 $8, $22, 8 */
-> >>>> +    /* disable "pref 30" on buggy CPUs */
-> >>>> +    "    lui    $9, 0x0800\n"
-> >>>> +    "    or    $8, $9\n"
-> >>>> +    "    .word    0x4088b008\n"    /* mtc0 $8, $22, 8 */
-> >>>> +    : : : "$8", "$9");
-> >>>> +}
-> >>> Hi,
-> >>>
-> >>> Is there any toolchain issue blocking read_c0_**** family helpers being
-> >>> used?
-> >>>
-> >>> Use .word looks unreasonable.
-> >>
-> >> Yes, the assembler would be choking on the custom $22 selector, however
-> > 
-> > I guess you meant selector 8 and 15. If BMIPS has a 4 bit selector field
-> > it might be good to do a binutils patch supporting it.
+On 08/02/20 at 07:35pm, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> Yes, sorry that is what I meant. I don't think an assembler patch makes
-> sense at this point given this is an isolated use, and there is not just
-> binutils these days, the Clang/LLVM integrated assembler would also need
-> to be supported, and then we would need to have the kernel say: I
-> require this minimum version to support the customer selectors, not
-> worth the trouble if you ask me.
+> The memory size calculation in cma_early_percent_memory() traverses
+> memblock.memory rather than simply call memblock_phys_mem_size(). The
+> comment in that function suggests that at some point there should have been
+> call to memblock_analyze() before memblock_phys_mem_size() could be used.
+> As of now, there is no memblock_analyze() at all and
+> memblock_phys_mem_size() can be used as soon as cold-plug memory is
+> registerd with memblock.
+> 
+> Replace loop over memblock.memory with a call to memblock_phys_mem_size().
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  kernel/dma/contiguous.c | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
+> 
+> diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
+> index 15bc5026c485..1992afd8ca7b 100644
+> --- a/kernel/dma/contiguous.c
+> +++ b/kernel/dma/contiguous.c
+> @@ -73,16 +73,7 @@ early_param("cma", early_cma);
+>  
+>  static phys_addr_t __init __maybe_unused cma_early_percent_memory(void)
+>  {
+> -	struct memblock_region *reg;
+> -	unsigned long total_pages = 0;
+> -
+> -	/*
+> -	 * We cannot use memblock_phys_mem_size() here, because
+> -	 * memblock_analyze() has not been called yet.
+> -	 */
+> -	for_each_memblock(memory, reg)
+> -		total_pages += memblock_region_memory_end_pfn(reg) -
+> -			       memblock_region_memory_base_pfn(reg);
+> +	unsigned long total_pages = PHYS_PFN(memblock_phys_mem_size());
 
- Well, I asked for a GAS patch to add support 4.5 years ago, so by now and 
-9 binutils releases later it would have become fairly common.  And then I 
-also suggested how to handle it in a robust way.  Cf. 
-<https://www.linux-mips.org/cgi-bin/mesg.cgi?a=linux-mips&i=alpine.DEB.2.00.1602092245180.15885%40tp.orcam.me.uk>.
+Reviewed-by: Baoquan He <bhe@redhat.com>
 
-  Maciej
+>  
+>  	return (total_pages * CONFIG_CMA_SIZE_PERCENTAGE / 100) << PAGE_SHIFT;
+>  }
+> -- 
+> 2.26.2
+> 
+
