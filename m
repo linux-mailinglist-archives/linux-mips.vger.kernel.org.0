@@ -2,107 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA32223D346
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Aug 2020 22:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367BB23D4C9
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Aug 2020 02:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbgHEUt6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Aug 2020 16:49:58 -0400
-Received: from out28-74.mail.aliyun.com ([115.124.28.74]:59095 "EHLO
-        out28-74.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725372AbgHEUt5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Aug 2020 16:49:57 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1063297|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.100094-0.014619-0.885287;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03268;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.ID03Ai1_1596660592;
-Received: from 192.168.10.205(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.ID03Ai1_1596660592)
-          by smtp.aliyun-inc.com(10.147.41.121);
-          Thu, 06 Aug 2020 04:49:53 +0800
-Subject: Re: [PATCH] MIPS: Provide Kconfig option for default IEEE754
- conformance mode
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Maciej W. Rozycki" <macro@wdc.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>,
-        Liangliang Huang <huanglllzu@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-References: <20200731041018.1381642-1-jiaxun.yang@flygoat.com>
- <20200731061702.fxdfyxpvd6qrhoql@mobilestation>
- <alpine.LFD.2.21.2008022213500.24175@redsun52.ssa.fujisawa.hgst.com>
- <ceb71bef-b3e6-68ce-df80-bcff92085e66@flygoat.com>
-From:   Zhou Yanjie <zhouyu@wanyeetech.com>
-Message-ID: <ca13783f-ec52-0e39-a408-2a01393fa22d@wanyeetech.com>
-Date:   Thu, 6 Aug 2020 04:49:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1726149AbgHFAnv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Aug 2020 20:43:51 -0400
+Received: from smtp.gentoo.org ([140.211.166.183]:59468 "EHLO smtp.gentoo.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725999AbgHFAnt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 5 Aug 2020 20:43:49 -0400
+Subject: Re: [PATCH] MIPS: SGI-IP27: always enable NUMA in Kconfig
+To:     Mike Rapoport <rppt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Paul Burton <paulburton@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
+References: <20200805125141.24987-1-rppt@kernel.org>
+From:   Joshua Kinard <kumba@gentoo.org>
+Openpgp: preference=signencrypt
+Message-ID: <11255b1d-5488-9ede-fbca-a176a0572a33@gentoo.org>
+Date:   Wed, 5 Aug 2020 20:43:45 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <ceb71bef-b3e6-68ce-df80-bcff92085e66@flygoat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200805125141.24987-1-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 8/5/2020 08:51, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> When a configuration has NUMA disabled and SGI_IP27 enabled, the build
+> fails:
+> 
+>   CC      kernel/bounds.s
+>   CC      arch/mips/kernel/asm-offsets.s
+> In file included from arch/mips/include/asm/topology.h:11,
+>                  from include/linux/topology.h:36,
+>                  from include/linux/gfp.h:9,
+>                  from include/linux/slab.h:15,
+>                  from include/linux/crypto.h:19,
+>                  from include/crypto/hash.h:11,
+>                  from include/linux/uio.h:10,
+>                  from include/linux/socket.h:8,
+>                  from include/linux/compat.h:15,
+>                  from arch/mips/kernel/asm-offsets.c:12:
+> include/linux/topology.h: In function 'numa_node_id':
+> arch/mips/include/asm/mach-ip27/topology.h:16:27: error: implicit declaration of function 'cputonasid'; did you mean 'cpu_vpe_id'? [-Werror=implicit-function-declaration]
+>  #define cpu_to_node(cpu) (cputonasid(cpu))
+>                            ^~~~~~~~~~
+> include/linux/topology.h:119:9: note: in expansion of macro 'cpu_to_node'
+>   return cpu_to_node(raw_smp_processor_id());
+>          ^~~~~~~~~~~
+> include/linux/topology.h: In function 'cpu_cpu_mask':
+> arch/mips/include/asm/mach-ip27/topology.h:19:7: error: implicit declaration of function 'hub_data' [-Werror=implicit-function-declaration]
+>       &hub_data(node)->h_cpus)
+>        ^~~~~~~~
+> include/linux/topology.h:210:9: note: in expansion of macro 'cpumask_of_node'
+>   return cpumask_of_node(cpu_to_node(cpu));
+>          ^~~~~~~~~~~~~~~
+> arch/mips/include/asm/mach-ip27/topology.h:19:21: error: invalid type argument of '->' (have 'int')
+>       &hub_data(node)->h_cpus)
+>                      ^~
+> include/linux/topology.h:210:9: note: in expansion of macro 'cpumask_of_node'
+>   return cpumask_of_node(cpu_to_node(cpu));
+>          ^~~~~~~~~~~~~~~
+> 
+> Before switch from discontigmem to sparsemem, there always was
+> CONFIG_NEED_MULTIPLE_NODES=y because it was selected by DISCONTIGMEM.
+> Without DISCONTIGMEM it is possible to have SPARSEMEM without NUMA for
+> SGI_IP27 and as many things there rely on custom node definition, the
+> build breaks.
+> 
+> As Thomas noted "... there are right now too many places in IP27 code,
+> which assumes NUMA enabled", the simplest solution would be to always
+> enable NUMA for SGI-IP27 builds.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 397dc00e249e ("mips: sgi-ip27: switch from DISCONTIGMEM to SPARSEMEM")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  arch/mips/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 6fee1a133e9d..a7e40bb1e5bc 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -678,6 +678,7 @@ config SGI_IP27
+>  	select SYS_SUPPORTS_NUMA
+>  	select SYS_SUPPORTS_SMP
+>  	select MIPS_L1_CACHE_SHIFT_7
+> +	select NUMA
+>  	help
+>  	  This are the SGI Origin 200, Origin 2000 and Onyx 2 Graphics
+>  	  workstations.  To compile a Linux kernel that runs on these, say Y
+> 
 
-在 2020/8/3 下午5:01, Jiaxun Yang 写道:
->
->
-> 在 2020/8/3 上午5:46, Maciej W. Rozycki 写道:
->> On Fri, 31 Jul 2020, Serge Semin wrote:
->>
->>>> Requested by downstream distros, a Kconfig option for default
->>>> IEEE754 conformance mode allows them to set their mode to
->>>> relaxed by default.
->>> That's what should have been here in the first place. Thanks!
->>   Well, originally plans were there to have NaN interlinking implemented
->> and no such mess or desire for hacks like one here would result.  Cf.:
->>
->> <https://gcc.gnu.org/ml/gcc/2015-11/msg00068.html>,
->> <https://gcc.gnu.org/ml/gcc/2016-05/msg00137.html>,
->>
->> and then:
->>
->> <https://lkml.org/lkml/2015/11/16/386>,
->> <https://sourceware.org/ml/libc-alpha/2015-11/msg00485.html>,
->> <https://sourceware.org/ml/binutils/2015-11/msg00170.html>,
->> <https://gcc.gnu.org/ml/gcc-patches/2015-11/msg03241.html>.
->>
->> You could well pick this work up and complete it if you like. Final
->> conclusions for further work were made here:
->>
->> <https://gcc.gnu.org/ml/gcc/2016-11/msg00027.html>,
->> <https://gcc.gnu.org/ml/gcc/2017-08/msg00260.html>,
->> <https://gcc.gnu.org/ml/gcc/2017-10/msg00142.html>.
->>
->>   In the relaxed mode math programs may produce wrong results unless you
->> rebuild all your software for the correct NaN mode for the hardware used
->
-> Unfortunately most of the hardware guys didn't understood the 
-> difficulty here.
-> They decided to implement their hardware (P5600 & LS3A4000) as NaN2008 
-> only.
->
-
-All SoCs based on Ingenic XBurst2 CPU core are also NaN2008 only.
-
-
-> I was thinking about let Kernel drop SIGFPE exception was caused by 
-> mismatched NaN,
-> as most applications don't rely on signaling NaN, but it is still a 
-> dirty hack. Not a good
-> idea in general.
->
-> Thanks.
->
-> - Jiaxun
->
->> (in which case you don't need the relaxed setting in the first place).
->
->>
->>    Maciej
+Reviewed-by: Joshua Kinard <kumba@gentoo.org>
