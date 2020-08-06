@@ -2,100 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D86C623D7D0
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Aug 2020 10:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7736023D7E8
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Aug 2020 10:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728678AbgHFIIQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 Aug 2020 04:08:16 -0400
-Received: from elvis.franken.de ([193.175.24.41]:36293 "EHLO elvis.franken.de"
+        id S1728615AbgHFIQ2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 Aug 2020 04:16:28 -0400
+Received: from elvis.franken.de ([193.175.24.41]:36318 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726799AbgHFIEO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 6 Aug 2020 04:04:14 -0400
+        id S1727768AbgHFIQ0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 6 Aug 2020 04:16:26 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1k3arg-0000uJ-00; Thu, 06 Aug 2020 10:03:04 +0200
+        id 1k3b4Z-0000ze-00; Thu, 06 Aug 2020 10:16:23 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 42BD9C0C56; Thu,  6 Aug 2020 09:41:41 +0200 (CEST)
-Date:   Thu, 6 Aug 2020 09:41:41 +0200
+        id 7F708C0C58; Thu,  6 Aug 2020 10:16:05 +0200 (CEST)
+Date:   Thu, 6 Aug 2020 10:16:05 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: SGI-IP27: always enable NUMA in Kconfig
-Message-ID: <20200806074141.GA5148@alpha.franken.de>
-References: <20200805125141.24987-1-rppt@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     WANG Xuerui <git@xen0n.name>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        Liangliang Huang <huanglllzu@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: Provide Kconfig option for default IEEE 754
+ conformance mode
+Message-ID: <20200806081605.GA5715@alpha.franken.de>
+References: <20200801061147.1412187-1-jiaxun.yang@flygoat.com>
+ <d03a350c-842c-c041-f11b-017ec68e3de4@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200805125141.24987-1-rppt@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d03a350c-842c-c041-f11b-017ec68e3de4@flygoat.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 05, 2020 at 03:51:41PM +0300, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On Wed, Aug 05, 2020 at 09:59:15PM +0800, Jiaxun Yang wrote:
 > 
-> When a configuration has NUMA disabled and SGI_IP27 enabled, the build
-> fails:
 > 
->   CC      kernel/bounds.s
->   CC      arch/mips/kernel/asm-offsets.s
-> In file included from arch/mips/include/asm/topology.h:11,
->                  from include/linux/topology.h:36,
->                  from include/linux/gfp.h:9,
->                  from include/linux/slab.h:15,
->                  from include/linux/crypto.h:19,
->                  from include/crypto/hash.h:11,
->                  from include/linux/uio.h:10,
->                  from include/linux/socket.h:8,
->                  from include/linux/compat.h:15,
->                  from arch/mips/kernel/asm-offsets.c:12:
-> include/linux/topology.h: In function 'numa_node_id':
-> arch/mips/include/asm/mach-ip27/topology.h:16:27: error: implicit declaration of function 'cputonasid'; did you mean 'cpu_vpe_id'? [-Werror=implicit-function-declaration]
->  #define cpu_to_node(cpu) (cputonasid(cpu))
->                            ^~~~~~~~~~
-> include/linux/topology.h:119:9: note: in expansion of macro 'cpu_to_node'
->   return cpu_to_node(raw_smp_processor_id());
->          ^~~~~~~~~~~
-> include/linux/topology.h: In function 'cpu_cpu_mask':
-> arch/mips/include/asm/mach-ip27/topology.h:19:7: error: implicit declaration of function 'hub_data' [-Werror=implicit-function-declaration]
->       &hub_data(node)->h_cpus)
->        ^~~~~~~~
-> include/linux/topology.h:210:9: note: in expansion of macro 'cpumask_of_node'
->   return cpumask_of_node(cpu_to_node(cpu));
->          ^~~~~~~~~~~~~~~
-> arch/mips/include/asm/mach-ip27/topology.h:19:21: error: invalid type argument of '->' (have 'int')
->       &hub_data(node)->h_cpus)
->                      ^~
-> include/linux/topology.h:210:9: note: in expansion of macro 'cpumask_of_node'
->   return cpumask_of_node(cpu_to_node(cpu));
->          ^~~~~~~~~~~~~~~
+> 在 2020/8/1 14:11, Jiaxun Yang 写道:
+> >Requested by downstream distros, a Kconfig option for default
+> >IEEE 754 conformance mode allows them to set their mode to
+> >relaxed by default.
+> >
+> >Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >Reviewed-by: WANG Xuerui <git@xen0n.name>
+> >Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+> >Reviewed-by: Huacai Chen <chenhc@lemote.com>
+> >
+> >--
+> >v2: Reword according to Xuerui's suggestion.
+> >---
+> Hi Thomas,
 > 
-> Before switch from discontigmem to sparsemem, there always was
-> CONFIG_NEED_MULTIPLE_NODES=y because it was selected by DISCONTIGMEM.
-> Without DISCONTIGMEM it is possible to have SPARSEMEM without NUMA for
-> SGI_IP27 and as many things there rely on custom node definition, the
-> build breaks.
-> 
-> As Thomas noted "... there are right now too many places in IP27 code,
-> which assumes NUMA enabled", the simplest solution would be to always
-> enable NUMA for SGI-IP27 builds.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 397dc00e249e ("mips: sgi-ip27: switch from DISCONTIGMEM to SPARSEMEM")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  arch/mips/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+> Is it possible to get this patch into 5.9 merge window?
+> I think it have got enough review tag, and the config option was requested
+> by a Debian developer. The next Debian release will take 5.9 lts kernel and
+> they don't want to ship a non-bootable kernel in a major release.
 
-applied to mips-next.
+no I won't include it into 5.9, I need to first go through links pointed
+to by Maciej and fully understand what a proper solution could be.
 
 Thomas.
 
