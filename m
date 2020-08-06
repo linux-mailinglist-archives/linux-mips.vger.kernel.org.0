@@ -2,125 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 158D323D4FB
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Aug 2020 03:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D9B23D72E
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Aug 2020 09:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbgHFBPO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 5 Aug 2020 21:15:14 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:37244 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725996AbgHFBPM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Aug 2020 21:15:12 -0400
-Received: by mail-io1-f65.google.com with SMTP id w12so34311106iom.4
-        for <linux-mips@vger.kernel.org>; Wed, 05 Aug 2020 18:15:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7qLFgRtzX/dzlut0sVD+jjd/8NYIgwDgdIVR8V7X2CA=;
-        b=ClVAbmY+Dnx7T0APvUDtOlSpEn+pBV7zfYvFi3RVDl++Sf7VwT3JDpz7g2U2kidrxO
-         bBZJfNW94pfrjgJ1ixJsbUHH3p0xmy3nEb8YmdZxYTTq3O1rx9wY8vbE4QEdkKCmHCkj
-         2psPMax8K1aSPW8tNzw9Zr3FOWhCDLFyQd8WtMFP47tMoY6c5cMcWVynHHm04kTxOpC3
-         5QeAGqUGUniNEhKAvhFa48POZhl2OYL9QHS1HUyAlN9MsW9XZJY3x1ZvVBA2IkTJEQln
-         p9FmDTbmGWqeGK6I0TnJEGlQcySXe4mN76t0e+ryXMuBiUDSQzo7kSpuZ0J+HU9n/T8J
-         18tA==
-X-Gm-Message-State: AOAM533RoTbJBbLKTQkpDgA72Wn0dr8mzYkA5exmAqXFzar4oem7F6jn
-        xJg61gJXLkwv4GtvfGHcyqj+yKUSLwfdh4IeXkI=
-X-Google-Smtp-Source: ABdhPJxpEGvROfve9cwf6XQmHjOeUMMuzz9cX80bprPy1FAhXQgF4EYjRyMjXS1M+0b1Al9wvV84dSNolYvLabTfJ+E=
-X-Received: by 2002:a6b:b345:: with SMTP id c66mr6696201iof.42.1596676511795;
- Wed, 05 Aug 2020 18:15:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <1588395344-5400-1-git-send-email-chenhc@lemote.com>
- <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com> <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
- <20200805121021.GA12598@alpha.franken.de> <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
-In-Reply-To: <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Thu, 6 Aug 2020 09:15:00 +0800
-Message-ID: <CAAhV-H7Yu_wdt0O0rBGi4EAnWqMG4n-6yiivB2mdJD92yvER0w@mail.gmail.com>
-Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        id S1728475AbgHFHJR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 Aug 2020 03:09:17 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:47006 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728443AbgHFHJQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 6 Aug 2020 03:09:16 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP9yNrCtfsTgFAA--.866S2;
+        Thu, 06 Aug 2020 15:09:05 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Introduce cmdline argument writecombine=
+Date:   Thu,  6 Aug 2020 15:09:01 +0800
+Message-Id: <1596697741-3561-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxP9yNrCtfsTgFAA--.866S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFWUGFyrtw1ftr47CF48JFb_yoW5XrW7pF
+        4qk3Z7Gr4Fgw1vyF9xAr1jgrW5Zrn5AFZxJr4UCw18Zas0qr4kKFnaqrWaqF48XFyxJa48
+        tFWruFyUKw1Iy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyqb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCF
+        x2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14
+        v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY
+        67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2
+        IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+        xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUy75rDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Jiaxun
+Loongson processors have a writecombine issue that maybe failed to
+write back framebuffer used with ATI Radeon or AMD GPU at times,
+after commit 8a08e50cee66 ("drm: Permit video-buffers writecombine
+mapping for MIPS"), there exists some errors such as blurred screen
+and lockup, and so on.
 
-On Thu, Aug 6, 2020 at 1:39 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
->
->
-> 在 2020/8/5 20:10, Thomas Bogendoerfer 写道:
-> > On Sat, Aug 01, 2020 at 03:59:41PM +0800, Huacai Chen wrote:
-> >> On Wed, May 6, 2020 at 1:30 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> >>>
-> >>>
-> >>> 于 2020年5月2日 GMT+08:00 下午12:55:43, Huacai Chen <chenhc@lemote.com> 写到:
-> >>>> Loongson-3's COP2 is Multi-Media coprocessor, it is disabled in kernel
-> >>>> mode by default. However, gslq/gssq (16-bytes load/store instructions)
-> >>>> overrides the instruction format of lwc2/swc2. If we wan't to use gslq/
-> >>>> gssq for optimization in kernel, we should enable COP2 usage in kernel.
-> >>>>
-> >>>> Please pay attention that in this patch we only enable COP2 in kernel,
-> >>>> which means it will lose ST0_CU2 when a process go to user space (try
-> >>>> to use COP2 in user space will trigger an exception and then grab COP2,
-> >>>> which is similar to FPU). And as a result, we need to modify the context
-> >>>> switching code because the new scheduled process doesn't contain ST0_CU2
-> >>>> in its THERAD_STATUS probably.
-> >>>>
-> >>>> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> >>> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >>>
-> >> Does this patch have some unresolved problems, or there is something unclear?
-> > yes there is. Since this COP2 is a total black box to me, it would be
-> > really helpfull to get some docs for it or at least some information what
-> > it exactly does and how you want to use it in kernel code.
->
-> FYI:
-> Loongson doesn't have any CU2 register. It just reused LWC2 & LDC2 opcode
-> to define some load & store instructions (e.g. 128bit load to two GPRs).
->
-> I have a collection of these instructions here[1].
->
->  From GS464E (3A2000+), execuating these instruction won't produce COP2
-> unusable
-> exception. But older Loongson cores (GS464) will still produce COP2
-> exception, thus
-> we should have CU2 enabled in kernel. That would allow us use to these
-> instructions
-> to optimize kernel.
->
-> >
-> > Looking closer at the patch I realized, that there is already support
-> > for usage of COP2 in user land, which I thought isn't the case (at least
-> > I understood that from one of your mails). So is there enough state
-> > saving to support this ?
->
-> Actually there is no CU2 state for Loongson to save.
->
-> >
-> > And finally what I stil don't like is the splittering of more
-> > #ifdef LOONGSON into common code. I'd prefer a more generic way
-> > to enable COPx for in kernel usage. Maybe a more generic config option
-> > or a dynamic solution like the one for user land.
-> Agreed. some Kconfig options or cpuinfo_mips.options can be helpful.
->
-So make those codes depend on CONFIG_CPU_LOONGSON3_WORKAROUNDS instead
-of CONFIG_CPU_LOONGSON64?
+With this patch, disable writecombine by default for Loongson64 to
+work well with ATI Radeon or AMD GPU, and it has no influence on the
+other platforms due to writecombine is enabled by default.
 
-Huacai
+Additionally, if it is necessary, writecombine=on can be set manually
+in the cmdline to enhance the performance for Loongson LS7A integrated
+graphics in the future.
 
-> Thanks.
->
-> - Jiaxun
->
-> [1]: https://github.com/FlyGoat/loongson-insn/
-> >
-> > Thomas.
-> >
+[   60.958721] radeon 0000:03:00.0: ring 0 stalled for more than 10079msec
+[   60.965315] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000112 last fence id 0x000000000000011d on ring 0)
+[   60.976525] radeon 0000:03:00.0: ring 3 stalled for more than 10086msec
+[   60.983156] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000374 last fence id 0x00000000000003a8 on ring 3)
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/include/asm/pgtable.h |  4 ++++
+ arch/mips/kernel/cpu-probe.c    | 19 +++++++++++++++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index dd7a0f5..34869f7 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -473,6 +473,10 @@ static inline pgprot_t pgprot_noncached(pgprot_t _prot)
+ static inline pgprot_t pgprot_writecombine(pgprot_t _prot)
+ {
+ 	unsigned long prot = pgprot_val(_prot);
++	extern bool mips_writecombine;
++
++	if (!mips_writecombine)
++		return pgprot_noncached(_prot);
+ 
+ 	/* cpu_data[0].writecombine is already shifted by _CACHE_SHIFT */
+ 	prot = (prot & ~_CACHE_MASK) | cpu_data[0].writecombine;
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index e2955f1..98777ca 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -459,6 +459,25 @@ static int __init ftlb_disable(char *s)
+ 
+ __setup("noftlb", ftlb_disable);
+ 
++#ifdef CONFIG_MACH_LOONGSON64
++bool mips_writecombine; /* initialise to false by default */
++#else
++bool mips_writecombine = true;
++#endif
++EXPORT_SYMBOL(mips_writecombine);
++
++static int __init writecombine_setup(char *str)
++{
++	if (strcmp(str, "on") == 0)
++		mips_writecombine = true;
++	else if (strcmp(str, "off") == 0)
++		mips_writecombine = false;
++
++	return 1;
++}
++
++__setup("writecombine=", writecombine_setup);
++
+ /*
+  * Check if the CPU has per tc perf counters
+  */
+-- 
+2.1.0
+
