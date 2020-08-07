@@ -2,199 +2,335 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE63623EE25
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 15:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207EF23EE43
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 15:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725936AbgHGNZ7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Aug 2020 09:25:59 -0400
-Received: from relay3.mymailcheap.com ([217.182.119.155]:39308 "EHLO
-        relay3.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725893AbgHGNZ7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Aug 2020 09:25:59 -0400
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay3.mymailcheap.com (Postfix) with ESMTPS id 91D7E3F1CC;
-        Fri,  7 Aug 2020 15:25:55 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id C42822A3BC;
-        Fri,  7 Aug 2020 09:25:54 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1596806754;
-        bh=XfrD3CWWFnVEW2rWMOyI6dxR8hMqcjfEnhLHEp6qURk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ZO4kKgaL2/TAzn+HSVmaHDVqj+ep4KWPWVNNJpBUFZJAODHw/EtG6i4a3DF9wQj1r
-         Jq1kTAMwTOfqCPnmZQNs2N/auxfK2c/nnvQeTk7cQ/IWsybeW8ycpkwdDlxh662NEt
-         Ekh7r4JgFCZDhyURH2kftSqmmnSQyzMosUKU98WY=
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id c4d39l01lJc0; Fri,  7 Aug 2020 09:25:53 -0400 (EDT)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Fri,  7 Aug 2020 09:25:53 -0400 (EDT)
-Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id BD8AD425AB;
-        Fri,  7 Aug 2020 13:25:50 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="SsBwpMHH";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [0.0.0.0] (li988-228.members.linode.com [45.33.38.228])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 63957425AB;
-        Fri,  7 Aug 2020 13:25:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1596806733;
-        bh=XfrD3CWWFnVEW2rWMOyI6dxR8hMqcjfEnhLHEp6qURk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=SsBwpMHH3xr3zOmBKGCTkt3rncY+ySUuqNR42i2JBk6IJfabn0l895zpOCaMpUgEJ
-         syzDx+kgHb5XXzUALvc+QoN/IpVsDoUBufsLtamJsjcse8IPCQUf1rG6hq8qohjB58
-         u9Ly2qEHZhXzTitWInNZrejlHC6EoabL/FY8KQjE=
-Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Huacai Chen <chenhc@lemote.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-References: <1588395344-5400-1-git-send-email-chenhc@lemote.com>
- <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com>
- <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
- <20200805121021.GA12598@alpha.franken.de>
- <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
- <20200807131357.GA11979@alpha.franken.de>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
-Date:   Fri, 7 Aug 2020 21:25:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.1.0
+        id S1726015AbgHGNd5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Aug 2020 09:33:57 -0400
+Received: from elvis.franken.de ([193.175.24.41]:37678 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725970AbgHGNd5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 7 Aug 2020 09:33:57 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1k42VQ-0004mv-00
+        for linux-mips@vger.kernel.org; Fri, 07 Aug 2020 15:33:56 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 055DFC0C84; Fri,  7 Aug 2020 15:33:47 +0200 (CEST)
+Date:   Fri, 7 Aug 2020 15:33:47 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org
+Subject: FYI Pull request for v5.9-rc1
+Message-ID: <20200807133347.GA12293@alpha.franken.de>
 MIME-Version: 1.0
-In-Reply-To: <20200807131357.GA11979@alpha.franken.de>
-Content-Type: text/plain; charset=gbk; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: BD8AD425AB
-X-Spamd-Result: default: False [-0.10 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         ARC_NA(0.00)[];
-         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
-         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1];
-         FROM_HAS_DN(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         RCPT_COUNT_FIVE(0.00)[5];
-         ML_SERVERS(-3.10)[213.133.102.83];
-         TO_DN_ALL(0.00)[];
-         DKIM_TRACE(0.00)[flygoat.com:+];
-         RCVD_IN_DNSWL_NONE(0.00)[213.133.102.83:from];
-         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
-         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
-         FREEMAIL_CC(0.00)[lemote.com,vger.kernel.org,gmail.com];
-         MID_RHS_MATCH_FROM(0.00)[];
-         RCVD_COUNT_TWO(0.00)[2]
-X-Rspamd-Server: mail20.mymailcheap.com
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi,
+
+I forgot to CC this list, when sending my pull request yesterday
+(which Linus already merged). So this is just FYI.
+
+Thomas.
 
 
-ÔÚ 2020/8/7 21:13, Thomas Bogendoerfer Ð´µÀ:
-> On Wed, Aug 05, 2020 at 09:51:44PM +0800, Jiaxun Yang wrote:
->>> yes there is. Since this COP2 is a total black box to me, it would be
->>> really helpfull to get some docs for it or at least some information what
->>> it exactly does and how you want to use it in kernel code.
->> FYI:
->> Loongson doesn't have any CU2 register. It just reused LWC2 & LDC2 opcode
->> to define some load & store instructions (e.g. 128bit load to two GPRs).
->>
->> I have a collection of these instructions here[1].
->>
->>  From GS464E (3A2000+), execuating these instruction won't produce COP2
->> unusable
->> exception. But older Loongson cores (GS464) will still produce COP2
->> exception, thus
->> we should have CU2 enabled in kernel. That would allow us use to these
->> instructions
->> to optimize kernel.
-> thank you that makes things a little bit clearer.
->
-> How will this be used in kernel code ? Special assembler routines or
-> by enabling gcc options ?
+The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
 
-Via special assembly routines, as -msoft-float will disable generation of
-these instructions in GCC.
+  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
 
-I knew Huacai have out-of-tree memcpy optimization and Xuerui have
-RAID5 optimiztion with these instructions.
+are available in the Git repository at:
 
->
->>> And finally what I stil don't like is the splittering of more
->>> #ifdef LOONGSON into common code. I'd prefer a more generic way
->>> to enable COPx for in kernel usage. Maybe a more generic config option
->>> or a dynamic solution like the one for user land.
->> Agreed. some Kconfig options or cpuinfo_mips.options can be helpful.
-> let's see whether this really is needed.
->
-> To me it looks like the COP2 exception support for loongson makes
-> thing worse than it helps. How about the patch below ? There is still
-> a gap between starting the kernel and COP2 enabled for which I'm not
-> sure, if we are hitting COP2 instructions.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.9
 
-Yes, the exception does not really make sense.
-What's your opinion Huacai?
+for you to fetch changes up to 6c86a3029ce3b44597526909f2e39a77a497f640:
 
-For in-kernel usage, we still have to enable it in genex.
+  MIPS: SGI-IP27: always enable NUMA in Kconfig (2020-08-05 23:40:29 +0200)
 
-Thanks for your advice~
+----------------------------------------------------------------
+MIPS upates for v5.9
 
-- Jiaxun
+- improvements for Loongson64
+- extended ingenic support
+- removal of not maintained paravirt system type
+- cleanups and fixes
 
->
-> Thomas.
->
-> diff --git a/arch/mips/include/asm/cop2.h b/arch/mips/include/asm/cop2.h
-> index 6b7396a6a115..dfa72e9be64a 100644
-> --- a/arch/mips/include/asm/cop2.h
-> +++ b/arch/mips/include/asm/cop2.h
-> @@ -33,13 +33,6 @@ extern void nlm_cop2_restore(struct nlm_cop2_state *);
->   #define cop2_present		1
->   #define cop2_lazy_restore	0
->   
-> -#elif defined(CONFIG_CPU_LOONGSON64)
-> -
-> -#define cop2_present		1
-> -#define cop2_lazy_restore	1
-> -#define cop2_save(r)		do { (void)(r); } while (0)
-> -#define cop2_restore(r)		do { (void)(r); } while (0)
-> -
->   #else
->   
->   #define cop2_present		0
-> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-> index b95ef98fc847..f0a8ef5a8605 100644
-> --- a/arch/mips/kernel/traps.c
-> +++ b/arch/mips/kernel/traps.c
-> @@ -2194,6 +2194,11 @@ static void configure_status(void)
->   #ifdef CONFIG_64BIT
->   	status_set |= ST0_FR|ST0_KX|ST0_SX|ST0_UX;
->   #endif
-> +#ifdef CONFIG_CPU_LOONGSON64
-> +	/* enable 16-bytes load/store instructions */
-> +	status_set |= ST0_CU2;
-> +#endif
-> +
->   	if (current_cpu_data.isa_level & MIPS_CPU_ISA_IV)
->   		status_set |= ST0_XX;
->   	if (cpu_has_dsp)
->
->
->
+----------------------------------------------------------------
+Alexander A. Klimov (1):
+      mips: Replace HTTP links with HTTPS ones
+
+Alexander Lobakin (3):
+      MIPS: generic/ip32: io: fix __mem_ioswabq()
+      MIPS: io: fix sparse flood on asm/io.h
+      MIPS: checksum: fix sparse flooding on asm/checksum.h
+
+Huacai Chen (12):
+      MIPS: Unify naming style of vendor CP0.Config6 bits
+      MIPS: Loongson64: Adjust IRQ layout
+      MIPS: Loongson: Rename CPU device-tree binding
+      dt-bindings: mips: Document two Loongson boards
+      MIPS: Loongson: Update dts file for RS780E
+      MIPS: Loongson64: Fix machine naming
+      MIPS: CPU#0 is not hotpluggable
+      MIPS: DTS: Fix number of msi vectors for Loongson64G
+      dt-bindings: mips: Document Loongson kvm guest board
+      MIPS: KVM: Add kvm guest support for Loongson-3
+      MIPS: Update default config file for Loongson-3
+      MAINTAINERS: Update KVM/MIPS maintainers
+
+Jiaxun Yang (9):
+      MIPS: Loongson64: DeviceTree for LS7A PCH
+      MIPS: Loongson64: Load LS7A dtbs
+      MIPS: Retire kvm paravirt
+      of_address: Add bus type match for pci ranges parser
+      MIPS: Loongson64: Process ISA Node in DeviceTree
+      MIPS: Loongson64: Enlarge IO_SPACE_LIMIT
+      MIPS: Loongson64: DTS: Fix ISA and PCI I/O ranges for RS780E PCH
+      MIPS: Loongson64: Add ISA node for LS7A PCH
+      of_address: Guard of_bus_pci_get_flags with CONFIG_PCI
+
+Jinyang He (1):
+      MIPS: Fix unable to reserve memory for Crash kernel
+
+Jiri Slaby (1):
+      mips: traps, add __init to parity_protection_init
+
+Krzysztof Kozlowski (2):
+      MIPS: ingenic: Enable JZ4780_NEMC manually
+      memory: jz4780-nemc: Do not build by default
+
+Lichao Liu (1):
+      MIPS: Loongson-2EF: disable fix-loongson3-llsc in compiler
+
+Mike Rapoport (1):
+      MIPS: SGI-IP27: always enable NUMA in Kconfig
+
+Nicolas Saenz Julienne (1):
+      of: address: Fix parser address/size cells initialization
+
+Paul Cercueil (15):
+      dt-bindings: vendor-prefixes: Add YLM
+      dt-bindings: MIPS: Add entry for the YLM RetroMini
+      dt-bindings: timer/ingenic,tcu: Add compatible strings for JZ4725B SoC
+      MIPS: ingenic: Use enum instead of macros for Ingenic SoCs
+      MIPS: ingenic: Add support for the JZ4725B SoC
+      MIPS: ingenic: Add support for the RS90 board
+      MIPS: ingenic: RS90: Added defconfig
+      MIPS: ingenic: JZ4725B: Add IPU node
+      MIPS: ath79: Remove unused include <asm/mips_machine.h>
+      MIPS: Remove legacy MIPS_MACHINE option
+      MIPS: qi_lb60: Fix routing to audio amplifier
+      MIPS: head.S: Init fw_passed_dtb to builtin DTB
+      MIPS: ingenic: Use fw_passed_dtb even if CONFIG_BUILTIN_DTB
+      MIPS: DTS: ingenic/qi,lb60: Add model and memory node
+      MIPS: ingenic: Hardcode mem size for qi,lb60 board
+
+Peng Fan (1):
+      mips/vdso: Fix resource leaks in genvdso.c
+
+Randy Dunlap (6):
+      mips: io.h: delete duplicated word
+      mips: octeon: cvmx-l2c.h: delete duplicated word
+      mips: octeon: cvmx-pip.h: delete duplicated word
+      mips: octeon: cvmx-pkoh: fix duplicated words
+      mips: octeon: cvmx-pow.h: fix duplicated words
+      mips: octeon: octeon.h: delete duplicated word
+
+Serge Semin (6):
+      dt-bindings: power: Convert mti,mips-cpc to DT schema
+      dt-bindings: interrupt-controller: Convert mti,gic to DT schema
+      dt-bindings: bus: Add MIPS CDMM controller
+      mips: cdmm: Add mti,mips-cdmm dtb node support
+      bus: cdmm: Add MIPS R5 arch support
+      MAINTAINERS: Add maintainers for MIPS core drivers
+
+Sunguoyun (1):
+      MIPS: fix vdso different address spaces
+
+Thomas Bogendoerfer (2):
+      dt-bindings: MIPS: Fix tabs in Ingenic SoCs binding.
+      MIPS: cpu-feature-overrides: Remove not needed overrides
+
+Tiezhu Yang (3):
+      MIPS: Loongson: Cleanup cpu_hwmon.c
+      MIPS: Loongson: Reduce possible loop times and add log in do_thermal_timer()
+      MIPS: Prevent READ_IMPLIES_EXEC propagation
+
+WANG Xuerui (3):
+      MIPS: only register FTLBPar exception handler for supported models
+      MIPS: add definitions for Loongson-specific CP0.Diag1 register
+      MIPS: handle Loongson-specific GSExc exception
+
+Wei Yongjun (1):
+      MIPS: Loongson64: Make acpi_registers_setup() static
+
+Yu Kuai (1):
+      MIPS: OCTEON: add missing put_device() call in dwc3_octeon_device_init()
+
+Zhi Li (1):
+      MIPS: Loongson: Fix boot warning about hwmon_device_register()
+
+Ãlvaro FernÃ¡ndez Rojas (2):
+      MIPS: BCM63xx: add endif comments
+      MIPS: BCM63xx: improve CFE version detection
+
+å‘¨ç°æ° (Zhou Yanjie) (7):
+      dt-bindings: MIPS: Document Ingenic SoCs binding.
+      MIPS: Ingenic: Add Ingenic X1830 support.
+      dt-bindings: MIPS: Add X1830 based CU1830-Neo and fix bug in CU1000-Neo.
+      MIPS: Ingenic: Add YSH & ATIL CU Neo board support.
+      MIPS: Ingenic: Fix bugs and add missing LED node for X1000.
+      MIPS: CU1000-Neo: Refresh defconfig to support LED.
+      MIPS: X2000: Add X2000 system type.
+
+ .../devicetree/bindings/bus/mti,mips-cdmm.yaml     |  35 ++
+ .../bindings/interrupt-controller/mips-gic.txt     |  67 ----
+ .../bindings/interrupt-controller/mti,gic.yaml     | 148 ++++++++
+ .../devicetree/bindings/mips/ingenic/devices.yaml  |  17 +-
+ .../bindings/mips/ingenic/ingenic,cpu.yaml         |  67 ++++
+ .../devicetree/bindings/mips/loongson/devices.yaml |  20 +-
+ .../devicetree/bindings/power/mti,mips-cpc.txt     |   8 -
+ .../devicetree/bindings/power/mti,mips-cpc.yaml    |  35 ++
+ .../devicetree/bindings/timer/ingenic,tcu.yaml     |   5 +-
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |  15 +-
+ arch/mips/Kbuild.platforms                         |   1 -
+ arch/mips/Kconfig                                  |  26 +-
+ arch/mips/ath79/setup.c                            |   1 -
+ arch/mips/bcm63xx/boards/board_bcm963xx.c          |  55 +--
+ arch/mips/boot/dts/ingenic/Makefile                |   2 +
+ arch/mips/boot/dts/ingenic/cu1000-neo.dts          | 114 +++----
+ arch/mips/boot/dts/ingenic/cu1830-neo.dts          | 168 +++++++++
+ arch/mips/boot/dts/ingenic/jz4725b.dtsi            | 364 ++++++++++++++++++++
+ arch/mips/boot/dts/ingenic/qi_lb60.dts             |   8 +-
+ arch/mips/boot/dts/ingenic/rs90.dts                | 315 +++++++++++++++++
+ arch/mips/boot/dts/ingenic/x1000.dtsi              | 126 ++++---
+ arch/mips/boot/dts/ingenic/x1830.dtsi              | 300 ++++++++++++++++
+ arch/mips/boot/dts/loongson/Makefile               |   6 +-
+ ...gson3-package.dtsi => loongson64c-package.dtsi} |   0
+ .../boot/dts/loongson/loongson64c_4core_ls7a.dts   |  37 ++
+ ...ore_rs780e.dts => loongson64c_4core_rs780e.dts} |   4 +-
+ ...ore_rs780e.dts => loongson64c_8core_rs780e.dts} |   4 +-
+ .../boot/dts/loongson/loongson64g-package.dtsi     |  61 ++++
+ .../boot/dts/loongson/loongson64g_4core_ls7a.dts   |  41 +++
+ .../boot/dts/loongson/loongson64v_4core_virtio.dts | 102 ++++++
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi          | 378 +++++++++++++++++++++
+ arch/mips/boot/dts/loongson/rs780e-pch.dtsi        |   4 +-
+ arch/mips/cavium-octeon/octeon-usb.c               |   5 +-
+ arch/mips/configs/ci20_defconfig                   |   1 +
+ arch/mips/configs/cu1000-neo_defconfig             |   4 +
+ arch/mips/configs/cu1830-neo_defconfig             | 123 +++++++
+ arch/mips/configs/loongson3_defconfig              |  89 ++++-
+ arch/mips/configs/mips_paravirt_defconfig          |  98 ------
+ arch/mips/configs/qi_lb60_defconfig                |   1 +
+ arch/mips/configs/rs90_defconfig                   | 183 ++++++++++
+ arch/mips/include/asm/Kbuild                       |   1 +
+ arch/mips/include/asm/bootinfo.h                   |  23 +-
+ arch/mips/include/asm/checksum.h                   |   4 +-
+ arch/mips/include/asm/cpu-features.h               |   8 +
+ arch/mips/include/asm/cpu.h                        |   8 +-
+ arch/mips/include/asm/elf.h                        |   1 +
+ arch/mips/include/asm/io.h                         |   4 +-
+ arch/mips/include/asm/kvm_para.h                   | 115 -------
+ .../include/asm/mach-cavium-octeon/mangle-port.h   |  12 +-
+ .../include/asm/mach-dec/cpu-feature-overrides.h   |   1 -
+ arch/mips/include/asm/mach-generic/mangle-port.h   |  12 +-
+ arch/mips/include/asm/mach-generic/spaces.h        |   4 +
+ .../include/asm/mach-ip27/cpu-feature-overrides.h  |   3 -
+ arch/mips/include/asm/mach-ip27/mangle-port.h      |   6 +-
+ .../include/asm/mach-ip30/cpu-feature-overrides.h  |   3 -
+ arch/mips/include/asm/mach-ip30/mangle-port.h      |   6 +-
+ arch/mips/include/asm/mach-ip32/mangle-port.h      |   6 +-
+ arch/mips/include/asm/mach-loongson64/boot_param.h |   4 +-
+ .../include/asm/mach-loongson64/builtin_dtbs.h     |   7 +-
+ arch/mips/include/asm/mach-loongson64/irq.h        |   6 +-
+ arch/mips/include/asm/mach-loongson64/spaces.h     |   3 +-
+ .../asm/mach-paravirt/cpu-feature-overrides.h      |   1 -
+ arch/mips/include/asm/mach-tx39xx/mangle-port.h    |   6 +-
+ arch/mips/include/asm/mach-tx49xx/mangle-port.h    |   6 +-
+ arch/mips/include/asm/mips_machine.h               |  46 ---
+ arch/mips/include/asm/mipsregs.h                   |  39 ++-
+ arch/mips/include/asm/octeon/cvmx-l2c.h            |   2 +-
+ arch/mips/include/asm/octeon/cvmx-pip.h            |   2 +-
+ arch/mips/include/asm/octeon/cvmx-pko.h            |   7 +-
+ arch/mips/include/asm/octeon/cvmx-pow.h            |   8 +-
+ arch/mips/include/asm/octeon/octeon.h              |   2 +-
+ arch/mips/include/asm/war.h                        |   2 +-
+ arch/mips/include/uapi/asm/Kbuild                  |   2 +
+ arch/mips/include/uapi/asm/kvm_para.h              |   5 -
+ arch/mips/jz4740/Kconfig                           |  18 +
+ arch/mips/jz4740/setup.c                           |  52 +--
+ arch/mips/kernel/Makefile                          |   1 -
+ arch/mips/kernel/cpu-probe.c                       |  39 ++-
+ arch/mips/kernel/genex.S                           |  14 +
+ arch/mips/kernel/head.S                            |   6 +
+ arch/mips/kernel/mips_machine.c                    |  62 ----
+ arch/mips/kernel/setup.c                           |   2 +-
+ arch/mips/kernel/topology.c                        |   2 +-
+ arch/mips/kernel/traps.c                           |  40 ++-
+ arch/mips/kvm/vz.c                                 |   4 +-
+ arch/mips/loongson2ef/Platform                     |  22 ++
+ arch/mips/loongson64/cpucfg-emul.c                 |   6 +-
+ arch/mips/loongson64/env.c                         |  70 ++--
+ arch/mips/loongson64/init.c                        |  92 +++--
+ arch/mips/mm/c-r4k.c                               |   4 +-
+ arch/mips/paravirt/Kconfig                         |   7 -
+ arch/mips/paravirt/Makefile                        |  14 -
+ arch/mips/paravirt/Platform                        |   7 -
+ arch/mips/paravirt/paravirt-irq.c                  | 368 --------------------
+ arch/mips/paravirt/paravirt-smp.c                  | 145 --------
+ arch/mips/paravirt/serial.c                        |  39 ---
+ arch/mips/paravirt/setup.c                         |  67 ----
+ arch/mips/pci/Makefile                             |   1 -
+ arch/mips/pci/pci-virtio-guest.c                   | 131 -------
+ arch/mips/vdso/genvdso.c                           |  12 +-
+ drivers/bus/Kconfig                                |   2 +-
+ drivers/bus/mips_cdmm.c                            |  15 +
+ drivers/memory/Kconfig                             |   1 -
+ drivers/of/address.c                               |  27 +-
+ drivers/platform/mips/cpu_hwmon.c                  |  66 ++--
+ drivers/platform/mips/rs780e-acpi.c                |   2 +-
+ include/linux/of_address.h                         |   4 +
+ 108 files changed, 3139 insertions(+), 1608 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mips-gic.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
+ create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+ delete mode 100644 Documentation/devicetree/bindings/power/mti,mips-cpc.txt
+ create mode 100644 Documentation/devicetree/bindings/power/mti,mips-cpc.yaml
+ create mode 100644 arch/mips/boot/dts/ingenic/cu1830-neo.dts
+ create mode 100644 arch/mips/boot/dts/ingenic/jz4725b.dtsi
+ create mode 100644 arch/mips/boot/dts/ingenic/rs90.dts
+ create mode 100644 arch/mips/boot/dts/ingenic/x1830.dtsi
+ rename arch/mips/boot/dts/loongson/{loongson3-package.dtsi => loongson64c-package.dtsi} (100%)
+ create mode 100644 arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dts
+ rename arch/mips/boot/dts/loongson/{loongson3_4core_rs780e.dts => loongson64c_4core_rs780e.dts} (83%)
+ rename arch/mips/boot/dts/loongson/{loongson3_8core_rs780e.dts => loongson64c_8core_rs780e.dts} (83%)
+ create mode 100644 arch/mips/boot/dts/loongson/loongson64g-package.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dts
+ create mode 100644 arch/mips/boot/dts/loongson/loongson64v_4core_virtio.dts
+ create mode 100644 arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+ create mode 100644 arch/mips/configs/cu1830-neo_defconfig
+ delete mode 100644 arch/mips/configs/mips_paravirt_defconfig
+ create mode 100644 arch/mips/configs/rs90_defconfig
+ delete mode 100644 arch/mips/include/asm/kvm_para.h
+ delete mode 100644 arch/mips/include/asm/mips_machine.h
+ delete mode 100644 arch/mips/include/uapi/asm/kvm_para.h
+ delete mode 100644 arch/mips/kernel/mips_machine.c
+ delete mode 100644 arch/mips/paravirt/Kconfig
+ delete mode 100644 arch/mips/paravirt/Makefile
+ delete mode 100644 arch/mips/paravirt/Platform
+ delete mode 100644 arch/mips/paravirt/paravirt-irq.c
+ delete mode 100644 arch/mips/paravirt/paravirt-smp.c
+ delete mode 100644 arch/mips/paravirt/serial.c
+ delete mode 100644 arch/mips/paravirt/setup.c
+ delete mode 100644 arch/mips/pci/pci-virtio-guest.c
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
