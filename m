@@ -2,57 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD63E23F2C2
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 20:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F003523F2C8
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 20:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726398AbgHGSaj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Aug 2020 14:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
+        id S1726825AbgHGSbg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Aug 2020 14:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726067AbgHGSai (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Aug 2020 14:30:38 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E07C061756
-        for <linux-mips@vger.kernel.org>; Fri,  7 Aug 2020 11:30:38 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id k8so2735944wma.2
-        for <linux-mips@vger.kernel.org>; Fri, 07 Aug 2020 11:30:37 -0700 (PDT)
+        with ESMTP id S1726061AbgHGSbf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Aug 2020 14:31:35 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090BDC061756
+        for <linux-mips@vger.kernel.org>; Fri,  7 Aug 2020 11:31:35 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id x12so2020338qtp.1
+        for <linux-mips@vger.kernel.org>; Fri, 07 Aug 2020 11:31:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=subject:to:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Zq/nRl4F/y1xOayJYlJHtASd/NJhOENZfAbMKHvc1kI=;
-        b=Sn8lGf/CabeDQCXVNa4x0kE1IuFmCK/wIeodYP3zfOtGxQqmCtwBZcJbwmybTlHx3q
-         EXDvkPrZWUn+PqQPMkaFgP0eF14eZHj3wbnyjFsHTMEc3q5nMJ2kIuEc8kJnA729dvN0
-         4jtsuFHZPKreBmf9h2YGJAzrg4leAN9utPsAw=
+        bh=37J7qkTY92lWYAHiK2P2ufque3G/VsvfMWt12OXbwFg=;
+        b=S2EB4cW+wNSqkIy28VEhJoHLwrZkwysdckNeOMZOdGnBY6yTLLBEk8bUco+3kGa7Et
+         +1tntLFyB49yfNG9+Km7kRHYmw3WiwN4AR9iK8ESzkXIXTKW2QrmL87UFaL/xcoPM83I
+         7vmYROEqceEVWG1iCLBKW4xk1nT23kIRcIqok=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Zq/nRl4F/y1xOayJYlJHtASd/NJhOENZfAbMKHvc1kI=;
-        b=E5dpAT3RE0uF7EnSuIsDR7rLFn/TPn6ryR+S7I03IML1e02bwez8LRtZTuz/S8Jmu1
-         C2P+zuqkiHakEkX71t3A96Y7KJenEzzZTV9DA+yNAPgKQsM3vZN8Hp6LGy8Oq6gyNQjd
-         FhLLtgS3wHLxdgoR/Hb/qhQSNn9Y7DWpdXg0dNcUyMiTN7HPzd4S+022q87Rl2zI+c68
-         zSdaYHjuMwKErXhU3d8nf5FGxlAzLILG850k9HA/zpsAMP6AdXAX53kCAD2Na4SCOKnv
-         bWz0KqRM4MsgXlcNiR7JZsFa5DyAzAN7HqWZNkGcOr7CiDPBe3KUd88rbopYrBS5LK0+
-         3Fww==
-X-Gm-Message-State: AOAM532SfxUaDo3yRO9dWUZkELftPZWS4+GNWE7ixE1nZTLP4Xglpi+9
-        gsNwuekOS1o+TdvUzfEHoFqnLQ==
-X-Google-Smtp-Source: ABdhPJzc1yrwQy304gQvZF/lV5rtH0Z3t9pakhIeRbNu6d3W66sP3UF2WecBevQujdJ1AVEfKL5GHQ==
-X-Received: by 2002:a1c:cc12:: with SMTP id h18mr14756759wmb.56.1596825036585;
-        Fri, 07 Aug 2020 11:30:36 -0700 (PDT)
-Received: from [10.230.30.107] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id z12sm11380818wrp.20.2020.08.07.11.30.33
+        bh=37J7qkTY92lWYAHiK2P2ufque3G/VsvfMWt12OXbwFg=;
+        b=t8MyG/iDLqOHmv7W9qSHsj36WcB+cvUrgmNq8gauJVMnk8XnQJdQkeYNbP2Pf/C4iu
+         GK9j3XwSlvitExoWN1wItZt44iRutNYZi/aDDlKBizB5LkGvFAT7ZYCjK5y0cFU76brP
+         n9no76LUMNv28ps6r4jLES19xhjmWe8v4YyB5UuSOlR9DJ6J26D+37aXitQRKeOkk4Le
+         7uPMlRzZIgoCJZr1WXXx8/aiXZl/qnEM5nu4g9bDgdQ3aPxMvtAaIekmwPXh/x3nD+kF
+         DynJXig/nYimnJFjzus38qVTpDYtvbEyRtjr2ef6B7H6nOjhjM9j4Ji7tL4TZIkiLBiz
+         Y59Q==
+X-Gm-Message-State: AOAM532NUGrekOmFpOX1ZRsrf3OLJtqLnSJO4eRO5ysT/rI0vGeO4hm7
+        RHSqFCmjJ583Z8c4ORN3n1L5tw==
+X-Google-Smtp-Source: ABdhPJzmMbF2ReskD0h3kwWD6Zs3hnqV2cvq+9bDeGMxGiKNZ80EE3N3uUU2+kzN1rtiIVobk/e/UA==
+X-Received: by 2002:ac8:50a:: with SMTP id u10mr15457097qtg.175.1596825094120;
+        Fri, 07 Aug 2020 11:31:34 -0700 (PDT)
+Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
+        by smtp.gmail.com with ESMTPSA id h55sm8955916qte.16.2020.08.07.11.31.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Aug 2020 11:30:35 -0700 (PDT)
-Subject: Re: [PATCH v2 3/4] MIPS: BCM63xx: enable EHCI for DWV-S0 board
+        Fri, 07 Aug 2020 11:31:33 -0700 (PDT)
+Subject: Re: [PATCH v2 4/4] MIPS: BCM63xx: refactor board declarations
 To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
         tsbogend@alpha.franken.de, f.fainelli@gmail.com,
         jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 References: <20200807100411.2904279-1-noltari@gmail.com>
- <20200807100411.2904279-4-noltari@gmail.com>
+ <20200807100411.2904279-5-noltari@gmail.com>
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  mQENBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
@@ -86,12 +86,12 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  rw1j77+q3QXldOw/bON361EusWHdbhcRwu3WWFiY2ZslH+Xr69VtYAoMC1xtDxIvZ96ps9ZX
  pUPJUqHJr8QSrTG1/zioQH7j/4iMJ07MMPeQNkmj4kGQOdTcsFfDhYLDdCE5dj5WeE6fYRxE
  Q3up0ArDSP1L
-Message-ID: <4376ebeb-7428-9c04-3d37-e9131fda5859@broadcom.com>
-Date:   Fri, 7 Aug 2020 11:30:31 -0700
+Message-ID: <6e80d5ad-4dfa-bf2b-1126-3a994ea90273@broadcom.com>
+Date:   Fri, 7 Aug 2020 11:31:29 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Firefox/68.0 Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200807100411.2904279-4-noltari@gmail.com>
+In-Reply-To: <20200807100411.2904279-5-noltari@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -103,10 +103,13 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 On 8/7/2020 3:04 AM, Álvaro Fernández Rojas wrote:
-> EHCI and OHCI share the same USB ports. Therefore, if the board has OHCI
-> it should also have EHCI.
+> Current board declarations are a mess. Let's put some order and make them
+> follow the same structure. Also board declarations tabs.
+> Switch to SPDX license identifier.
 > 
 > Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+
+That is a lot of churn, not sure if this is really worth it... in any case:
 
 Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
