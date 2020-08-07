@@ -2,102 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F8023EEB0
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 16:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D267423F042
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 17:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbgHGOIS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Aug 2020 10:08:18 -0400
-Received: from elvis.franken.de ([193.175.24.41]:37705 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726393AbgHGOCV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 7 Aug 2020 10:02:21 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1k42wu-0004yP-00; Fri, 07 Aug 2020 16:02:20 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id F25D0C0C85; Fri,  7 Aug 2020 15:36:06 +0200 (CEST)
-Date:   Fri, 7 Aug 2020 15:36:06 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Huacai Chen <chenhc@lemote.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
-Message-ID: <20200807133606.GA12704@alpha.franken.de>
-References: <1588395344-5400-1-git-send-email-chenhc@lemote.com>
- <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com>
- <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
- <20200805121021.GA12598@alpha.franken.de>
- <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
- <20200807131357.GA11979@alpha.franken.de>
- <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+        id S1726584AbgHGPzc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Aug 2020 11:55:32 -0400
+Received: from out28-173.mail.aliyun.com ([115.124.28.173]:38881 "EHLO
+        out28-173.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725993AbgHGPzb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Aug 2020 11:55:31 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436521|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_enroll_verification|0.0144054-0.000982358-0.984612;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03267;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.IE4cuQu_1596815718;
+Received: from 192.168.10.205(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IE4cuQu_1596815718)
+          by smtp.aliyun-inc.com(10.147.41.137);
+          Fri, 07 Aug 2020 23:55:20 +0800
+Subject: Re: [PATCH] MIPS: CI20: Update defconfig for EFUSE.
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     tsbogend@alpha.franken.de, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, keescook@chromium.org,
+        hns@goldelico.com, ebiederm@xmission.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+References: <20200723071950.130007-1-zhouyanjie@wanyeetech.com>
+ <20200723071950.130007-2-zhouyanjie@wanyeetech.com>
+ <V2ZWDQ.DNM4EVLAB6YN3@crapouillou.net>
+ <b1de1e95-9ce3-1324-346d-07196aa30637@wanyeetech.com>
+ <PIR6EQ.G22CDHRT7D5O@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <d8b28bac-8995-23db-816e-31ba1f8d02f3@wanyeetech.com>
+Date:   Fri, 7 Aug 2020 23:55:18 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <PIR6EQ.G22CDHRT7D5O@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 07, 2020 at 09:25:25PM +0800, Jiaxun Yang wrote:
-> 
-> 
-> 在 2020/8/7 21:13, Thomas Bogendoerfer 写道:
-> >On Wed, Aug 05, 2020 at 09:51:44PM +0800, Jiaxun Yang wrote:
-> >>>yes there is. Since this COP2 is a total black box to me, it would be
-> >>>really helpfull to get some docs for it or at least some information what
-> >>>it exactly does and how you want to use it in kernel code.
-> >>FYI:
-> >>Loongson doesn't have any CU2 register. It just reused LWC2 & LDC2 opcode
-> >>to define some load & store instructions (e.g. 128bit load to two GPRs).
-> >>
-> >>I have a collection of these instructions here[1].
-> >>
-> >> From GS464E (3A2000+), execuating these instruction won't produce COP2
-> >>unusable
-> >>exception. But older Loongson cores (GS464) will still produce COP2
-> >>exception, thus
-> >>we should have CU2 enabled in kernel. That would allow us use to these
-> >>instructions
-> >>to optimize kernel.
-> >thank you that makes things a little bit clearer.
-> >
-> >How will this be used in kernel code ? Special assembler routines or
-> >by enabling gcc options ?
-> 
-> Via special assembly routines, as -msoft-float will disable generation of
-> these instructions in GCC.
-> 
-> I knew Huacai have out-of-tree memcpy optimization and Xuerui have
-> RAID5 optimiztion with these instructions.
-> 
-> >
-> >>>And finally what I stil don't like is the splittering of more
-> >>>#ifdef LOONGSON into common code. I'd prefer a more generic way
-> >>>to enable COPx for in kernel usage. Maybe a more generic config option
-> >>>or a dynamic solution like the one for user land.
-> >>Agreed. some Kconfig options or cpuinfo_mips.options can be helpful.
-> >let's see whether this really is needed.
-> >
-> >To me it looks like the COP2 exception support for loongson makes
-> >thing worse than it helps. How about the patch below ? There is still
-> >a gap between starting the kernel and COP2 enabled for which I'm not
-> >sure, if we are hitting COP2 instructions.
-> 
-> Yes, the exception does not really make sense.
-> What's your opinion Huacai?
-> 
-> For in-kernel usage, we still have to enable it in genex.
+Hi Paul,
 
-you shouldn't need any other changes. ST0_CU2 will be set in
-configure_status() and not touched after that.
+在 2020/7/28 下午11:40, Paul Cercueil 写道:
+> Hi Zhou,
+>
+> Le sam. 25 juil. 2020 à 16:02, Zhou Yanjie <zhouyanjie@wanyeetech.com> 
+> a écrit :
+>> Hi Paul,
+>>
+>> 在 2020/7/23 下午4:47, Paul Cercueil 写道:
+>>> Hi Zhou,
+>>>
+>>> Le jeu. 23 juil. 2020 à 15:19, 周琰杰 (Zhou Yanjie) 
+>>> <zhouyanjie@wanyeetech.com> a écrit :
+>>>> The commit 19c968222934 ("MIPS: DTS: CI20: make DM9000 Ethernet
+>>>> controller use NVMEM to find the default MAC address") add EFUSE
+>>>> node for DM9000 in CI20, however, the EFUSE driver is not selected,
+>>>> which will cause the DM9000 to fail to read the MAC address from
+>>>> EFUSE, causing the following issue:
+>>>>
+>>>> [FAILED] Failed to start Raise network interfaces.
+>>>>
+>>>> Fix this problem by select CONFIG_JZ4780_EFUSE by default in the
+>>>> ci20_defconfig.
+>>>
+>>> Does it actually fix it on a clean 5.8-rc kernel?
+>>>
+>>> From what I know, the efuse driver cannot probe, because the nemc 
+>>> driver requests the complete memory resource, so the efuse driver's 
+>>> devm_platform_ioremap_resource() fails.
+>>>
+>>> I did send a patch to fix this 
+>>> (https://lore.kernel.org/lkml/551a8560261543c1decb1d4d1671ec4b7fa52fdb.1582905653.git.hns@goldelico.com/),
+>>> but it's hard to have somebody merge it, because nobody maintains 
+>>> drivers/memory/.
+>>>
+>> You are right, I cleaned up the changes made to support X1000's EFUSE 
+>> and rebase to clean 5.8-RC6, it still does not work properly, I think 
+>> we should drop this fix patch.
+>
+> The patch I mentioned was merged, so starting from 5.9-rc1 the efuse 
+> driver should work. Please resend this patch after 5.9-rc1 then.
+>
 
-Thomas.
+Sure, I will resent when 5.9-rc1 is released.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Thanks and best regards!
+
+> Thanks,
+> -Paul
+>
+>>
+>>>> Fixes: 19c968222934 ("MIPS: DTS: CI20: make DM9000 Ethernet
+>>>> controller use NVMEM to find the default MAC address").
+>>>
+>>> That shouldn't be a fix IMHO - the devicetree was updated in one 
+>>> commit, the config should be updated in another. The "bug" here is 
+>>> that it wasn't done right away.
+>>>
+>> Okay.
+>>>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>>
+>>> Btw - when you add a Fixes: tag to fix a commit that is not for the 
+>>> kernel currently in RC phase, you need to Cc linux-stable as well.
+>>>
+>> Sure, I will pay attention next time.
+>>
+>> Thanks and best regards!
+>>
+>>
+>>> Cheers,
+>>> -Paul
+>>>
+>>>> ---
+>>>>  arch/mips/configs/ci20_defconfig | 1 +
+>>>>  1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/arch/mips/configs/ci20_defconfig 
+>>>> b/arch/mips/configs/ci20_defconfig
+>>>> index f433fad16073..ba26ba4de09a 100644
+>>>> --- a/arch/mips/configs/ci20_defconfig
+>>>> +++ b/arch/mips/configs/ci20_defconfig
+>>>> @@ -140,6 +140,7 @@ CONFIG_INGENIC_OST=y
+>>>>  CONFIG_MEMORY=y
+>>>>  CONFIG_PWM=y
+>>>>  CONFIG_PWM_JZ4740=m
+>>>> +CONFIG_JZ4780_EFUSE=y
+>>>>  CONFIG_EXT4_FS=y
+>>>>  # CONFIG_DNOTIFY is not set
+>>>>  CONFIG_AUTOFS_FS=y
+>>>> -- 
+>>>> 2.11.0
+>>>>
+>>>
+>
