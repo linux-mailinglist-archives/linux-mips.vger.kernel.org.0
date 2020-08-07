@@ -2,139 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CB023EE77
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 15:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F8023EEB0
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 16:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726217AbgHGNxE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Aug 2020 09:53:04 -0400
-Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:53622 "EHLO
-        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726155AbgHGNxD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Aug 2020 09:53:03 -0400
-Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
-        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id 758DF30C0FE;
-        Fri,  7 Aug 2020 06:51:19 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com 758DF30C0FE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1596808279;
-        bh=tGx/rX9q9g90/gKcnXViGFt5JZcPsprp9pEqIAGHWrg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HCkl2wKm3M07Wx2cO8ia4Y9gCs3H8AfVX8V49ovatQqPwV7RIFwms8MgfWrce0z3T
-         sxrLl/j4lvXM6x+UqFHsrZLubj29EiRg0eV+3eCUiWmx+M6ujkzFziOgClpbi5dB43
-         V0eyDND3RzPpjnoArEyk4QsixeII2WmeqHJtVGec=
-Received: from stbsrv-and-01.and.broadcom.net (stbsrv-and-01.and.broadcom.net [10.28.16.211])
-        by mail-irv-17.broadcom.com (Postfix) with ESMTP id ACD5A140093;
-        Fri,  7 Aug 2020 06:53:00 -0700 (PDT)
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-To:     linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        james.quinlan@broadcom.com
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1] MIPS: uasm: false warning on use of uasm_i_lui()
-Date:   Fri,  7 Aug 2020 09:52:45 -0400
-Message-Id: <20200807135251.32148-1-james.quinlan@broadcom.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726232AbgHGOIS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Aug 2020 10:08:18 -0400
+Received: from elvis.franken.de ([193.175.24.41]:37705 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726393AbgHGOCV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 7 Aug 2020 10:02:21 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1k42wu-0004yP-00; Fri, 07 Aug 2020 16:02:20 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id F25D0C0C85; Fri,  7 Aug 2020 15:36:06 +0200 (CEST)
+Date:   Fri, 7 Aug 2020 15:36:06 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Huacai Chen <chenhc@lemote.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+Message-ID: <20200807133606.GA12704@alpha.franken.de>
+References: <1588395344-5400-1-git-send-email-chenhc@lemote.com>
+ <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com>
+ <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
+ <20200805121021.GA12598@alpha.franken.de>
+ <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
+ <20200807131357.GA11979@alpha.franken.de>
+ <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Currently, the example uasm code
+On Fri, Aug 07, 2020 at 09:25:25PM +0800, Jiaxun Yang wrote:
+> 
+> 
+> 在 2020/8/7 21:13, Thomas Bogendoerfer 写道:
+> >On Wed, Aug 05, 2020 at 09:51:44PM +0800, Jiaxun Yang wrote:
+> >>>yes there is. Since this COP2 is a total black box to me, it would be
+> >>>really helpfull to get some docs for it or at least some information what
+> >>>it exactly does and how you want to use it in kernel code.
+> >>FYI:
+> >>Loongson doesn't have any CU2 register. It just reused LWC2 & LDC2 opcode
+> >>to define some load & store instructions (e.g. 128bit load to two GPRs).
+> >>
+> >>I have a collection of these instructions here[1].
+> >>
+> >> From GS464E (3A2000+), execuating these instruction won't produce COP2
+> >>unusable
+> >>exception. But older Loongson cores (GS464) will still produce COP2
+> >>exception, thus
+> >>we should have CU2 enabled in kernel. That would allow us use to these
+> >>instructions
+> >>to optimize kernel.
+> >thank you that makes things a little bit clearer.
+> >
+> >How will this be used in kernel code ? Special assembler routines or
+> >by enabling gcc options ?
+> 
+> Via special assembly routines, as -msoft-float will disable generation of
+> these instructions in GCC.
+> 
+> I knew Huacai have out-of-tree memcpy optimization and Xuerui have
+> RAID5 optimiztion with these instructions.
+> 
+> >
+> >>>And finally what I stil don't like is the splittering of more
+> >>>#ifdef LOONGSON into common code. I'd prefer a more generic way
+> >>>to enable COPx for in kernel usage. Maybe a more generic config option
+> >>>or a dynamic solution like the one for user land.
+> >>Agreed. some Kconfig options or cpuinfo_mips.options can be helpful.
+> >let's see whether this really is needed.
+> >
+> >To me it looks like the COP2 exception support for loongson makes
+> >thing worse than it helps. How about the patch below ? There is still
+> >a gap between starting the kernel and COP2 enabled for which I'm not
+> >sure, if we are hitting COP2 instructions.
+> 
+> Yes, the exception does not really make sense.
+> What's your opinion Huacai?
+> 
+> For in-kernel usage, we still have to enable it in genex.
 
-	uasm_i_lui(p, tmp, 0xa000);
+you shouldn't need any other changes. ST0_CU2 will be set in
+configure_status() and not touched after that.
 
-issues a warning at Linux boot when the code is "assembled".  This is
-because the "lui" instruction is defined by the macro "Ip_u1s2(_lui)" -- I
-believe it should be Ip_u1u2(_lui) -- and its definition is associated with
-the SIMM macro -- I believe it should be the UIMM macro.  The current code
-takes a 32bit number and checks that it can be converted to a 16bit signed
-immediate.  This check fails of course for an immediate such as 0x0000a000.
+Thomas.
 
-This is fixed.  However, there are two uses of uasm_i_lui() in
-UASM_i_LA_mostly() which use 16bit signed immediates in the form of a
-sign-extended 32 bit number.  Left alone these may now cause a warning when
-being processed by build_imm().  These two uses have been modified by first
-calling build_simm() on the argument to uasm_i_lui() as to convert it to a
-proper 16 bit unsigned integer.
-
-Signed-off-by: Jim Quinlan <james.quinlan@broadcom.com>
----
- arch/mips/include/asm/uasm.h  | 2 +-
- arch/mips/mm/uasm-micromips.c | 2 +-
- arch/mips/mm/uasm-mips.c      | 2 +-
- arch/mips/mm/uasm.c           | 6 +++---
- 4 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/mips/include/asm/uasm.h b/arch/mips/include/asm/uasm.h
-index f7effca791a5..7ea1d338570b 100644
---- a/arch/mips/include/asm/uasm.h
-+++ b/arch/mips/include/asm/uasm.h
-@@ -127,7 +127,7 @@ Ip_u2s3u1(_lh);
- Ip_u2s3u1(_lhu);
- Ip_u2s3u1(_ll);
- Ip_u2s3u1(_lld);
--Ip_u1s2(_lui);
-+Ip_u1u2(_lui);
- Ip_u2s3u1(_lw);
- Ip_u2s3u1(_lwu);
- Ip_u3u1u2(_lwx);
-diff --git a/arch/mips/mm/uasm-micromips.c b/arch/mips/mm/uasm-micromips.c
-index 75ef90486fe6..86ee1499e120 100644
---- a/arch/mips/mm/uasm-micromips.c
-+++ b/arch/mips/mm/uasm-micromips.c
-@@ -82,7 +82,7 @@ static const struct insn insn_table_MM[insn_invalid] = {
- 	[insn_lh]	= {M(mm_lh32_op, 0, 0, 0, 0, 0), RT | RS | SIMM},
- 	[insn_ll]	= {M(mm_pool32c_op, 0, 0, (mm_ll_func << 1), 0, 0), RS | RT | SIMM},
- 	[insn_lld]	= {0, 0},
--	[insn_lui]	= {M(mm_pool32i_op, mm_lui_op, 0, 0, 0, 0), RS | SIMM},
-+	[insn_lui]	= {M(mm_pool32i_op, mm_lui_op, 0, 0, 0, 0), RS | UIMM},
- 	[insn_lw]	= {M(mm_lw32_op, 0, 0, 0, 0, 0), RT | RS | SIMM},
- 	[insn_mfc0]	= {M(mm_pool32a_op, 0, 0, 0, mm_mfc0_op, mm_pool32axf_op), RT | RS | RD},
- 	[insn_mfhi]	= {M(mm_pool32a_op, 0, 0, 0, mm_mfhi32_op, mm_pool32axf_op), RS},
-diff --git a/arch/mips/mm/uasm-mips.c b/arch/mips/mm/uasm-mips.c
-index 7154a1d99aad..b45c15111d68 100644
---- a/arch/mips/mm/uasm-mips.c
-+++ b/arch/mips/mm/uasm-mips.c
-@@ -132,7 +132,7 @@ static const struct insn insn_table[insn_invalid] = {
- 	[insn_ll]	= {M6(spec3_op, 0, 0, 0, ll6_op),  RS | RT | SIMM9},
- 	[insn_lld]	= {M6(spec3_op, 0, 0, 0, lld6_op),  RS | RT | SIMM9},
- #endif
--	[insn_lui]	= {M(lui_op, 0, 0, 0, 0, 0),	RT | SIMM},
-+	[insn_lui]	= {M(lui_op, 0, 0, 0, 0, 0),	RT | UIMM},
- 	[insn_lw]	= {M(lw_op, 0, 0, 0, 0, 0),  RS | RT | SIMM},
- 	[insn_lwu]	= {M(lwu_op, 0, 0, 0, 0, 0),  RS | RT | SIMM},
- 	[insn_lwx]	= {M(spec3_op, 0, 0, 0, lwx_op, lx_op), RS | RT | RD},
-diff --git a/arch/mips/mm/uasm.c b/arch/mips/mm/uasm.c
-index c56f129c9a4b..ca5d47da3bd1 100644
---- a/arch/mips/mm/uasm.c
-+++ b/arch/mips/mm/uasm.c
-@@ -327,7 +327,7 @@ I_u2s3u1(_lh)
- I_u2s3u1(_lhu)
- I_u2s3u1(_ll)
- I_u2s3u1(_lld)
--I_u1s2(_lui)
-+I_u1u2(_lui)
- I_u2s3u1(_lw)
- I_u2s3u1(_lwu)
- I_u1u2u3(_mfc0)
-@@ -457,7 +457,7 @@ UASM_EXPORT_SYMBOL(uasm_rel_lo);
- void UASM_i_LA_mostly(u32 **buf, unsigned int rs, long addr)
- {
- 	if (!uasm_in_compat_space_p(addr)) {
--		uasm_i_lui(buf, rs, uasm_rel_highest(addr));
-+		uasm_i_lui(buf, rs, build_simm(uasm_rel_highest(addr)));
- 		if (uasm_rel_higher(addr))
- 			uasm_i_daddiu(buf, rs, rs, uasm_rel_higher(addr));
- 		if (uasm_rel_hi(addr)) {
-@@ -468,7 +468,7 @@ void UASM_i_LA_mostly(u32 **buf, unsigned int rs, long addr)
- 		} else
- 			uasm_i_dsll32(buf, rs, rs, 0);
- 	} else
--		uasm_i_lui(buf, rs, uasm_rel_hi(addr));
-+		uasm_i_lui(buf, rs, build_simm(uasm_rel_hi(addr)));
- }
- UASM_EXPORT_SYMBOL(UASM_i_LA_mostly);
- 
 -- 
-2.17.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
