@@ -2,1002 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F08C823EA88
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 11:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8391A23EA93
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 11:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727914AbgHGJih (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Aug 2020 05:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727946AbgHGJid (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Aug 2020 05:38:33 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C363C061756;
-        Fri,  7 Aug 2020 02:38:33 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id a15so1048391wrh.10;
-        Fri, 07 Aug 2020 02:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yHl3lbPswZ66K8k2wNl07sQwMw4eSiE6FpMuxKVMh+8=;
-        b=hEBLv9IYInstHDYx3xx4NGDA7T2iRMQLfs8zas3Ob/ChDGYlI+lbBaaE8LDnIMQi5+
-         rfbmYc0hGsvXhgLWpy/zY2XOjmKqlqM2PE0h7312F7le575rDwmOdRJyY0DPLfQa4OM4
-         FKRCTbvwk4DWmbLAv/jUjgfMydkSR3cUp1G8LsPOJk96dkRukp9ixwbYrnIPcbdjaubS
-         87FqVEYCa803KJJH36cyol392wqxhNEry5FonTdVixFciWK+c27bzj31BCRE/p/FZcW3
-         ztrae7AUGsagShI67jFxhhKjZS9/4rn+uRj/5Fb8Ti6AJQ+WK8xvyO5Ldf/ixWzs7ppc
-         c/ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yHl3lbPswZ66K8k2wNl07sQwMw4eSiE6FpMuxKVMh+8=;
-        b=XfolISCpZjSW95Xnq10FuNIowU+TyrmWUL5cG/EQhckkP/tNObxDR70MqEEqESYiqD
-         kJsXzEDeGIEcR4OpFXyPsGu71Xulj2NElNB1LiJ8LCxk9U/PQdzMOhyyobmnsXBoeniQ
-         MJhSoJJw67Ipazn/r9YhkRB7+ctLpRL6kapuFtVV8l7lBjgs9NC3t1fL449LYuZAk5cf
-         ThrOit6gnlj/BtgKUtsjaPnRQPjk42xN8o/7q0D6M79Lby0gJmm2HwxY7OeLSu19HgCw
-         RQYRzlYApQbh+asOca8ujzkIK2qz4jyRlQO8m5J9JZ9ECUr07Edbl6Wf8NMVu/H5ETC8
-         pMag==
-X-Gm-Message-State: AOAM531+vkR9BLi68xkHcRMOGGG68iRGqK4QufbIEspgW10/i+ypZzlm
-        OK0bZZDS4TQgWLEv7oNA8yM=
-X-Google-Smtp-Source: ABdhPJzVHr7Cg0XyLXijpWbX/To51NInpSWKKVLa8V/9qWvgiXQvc7JFxL7NxidTeHWJ/SgDvbMjjA==
-X-Received: by 2002:a5d:5589:: with SMTP id i9mr11165692wrv.91.1596793111713;
-        Fri, 07 Aug 2020 02:38:31 -0700 (PDT)
-Received: from skynet.lan (88.red-83-49-60.dynamicip.rima-tde.net. [83.49.60.88])
-        by smtp.gmail.com with ESMTPSA id q19sm9460529wrf.48.2020.08.07.02.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2020 02:38:31 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     tsbogend@alpha.franken.de, f.fainelli@gmail.com,
-        jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH 4/4] MIPS: BCM63xx: refactor board declarations
-Date:   Fri,  7 Aug 2020 11:38:25 +0200
-Message-Id: <20200807093825.2902474-5-noltari@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200807093825.2902474-1-noltari@gmail.com>
-References: <20200807093825.2902474-1-noltari@gmail.com>
+        id S1727792AbgHGJjm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Aug 2020 05:39:42 -0400
+Received: from relay1.mymailcheap.com ([144.217.248.100]:40547 "EHLO
+        relay1.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726809AbgHGJjl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Aug 2020 05:39:41 -0400
+X-Greylist: delayed 54591 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 05:39:40 EDT
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay1.mymailcheap.com (Postfix) with ESMTPS id BE50D3F201;
+        Fri,  7 Aug 2020 05:39:39 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by filter2.mymailcheap.com (Postfix) with ESMTP id F3B532A6D5;
+        Fri,  7 Aug 2020 11:39:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1596793179;
+        bh=xr0BRST6/Xn8OfADNiDvnj6VvXEN9x9a0Er5jCPYjFU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=wOKXdavR4Mg7OYpp4vli9L6wVGBwjFOSKHHF+1tRylq0nJ9LUrqFyKlykPsF0oOZG
+         KIciT0dm4nWATwLMWocSBYgHhAkZUnEm/ADZhptVryJIOdtU7BhMPvVZ5189cykA+M
+         EwF8fzFi/Tts+1lkvhJOq8IbV2/sdvhRoS0UxqtQ=
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id YfPQYa7AxrDu; Fri,  7 Aug 2020 11:39:36 +0200 (CEST)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Fri,  7 Aug 2020 11:39:36 +0200 (CEST)
+Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id 58764425A5;
+        Fri,  7 Aug 2020 09:39:34 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="CxJy1L3e";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from [0.0.0.0] (unknown [203.86.239.91])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 6F61D425A5;
+        Fri,  7 Aug 2020 09:39:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
+        s=default; t=1596793165;
+        bh=xr0BRST6/Xn8OfADNiDvnj6VvXEN9x9a0Er5jCPYjFU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=CxJy1L3eUC1HGcWGGR62Obkeach/70fV368tZWYgbuitY7sNSNFKK0b/dYmh7sky9
+         fT1PKXiDLo3GMBp7NI/3m2YACvAS8lYxRQfJw5dVHDhTiJ52ot159kO9BVtqMoTKeb
+         To0/7YTg0WQ1L40RnzweITIWe1YTD54F5m+FPxvA=
+Subject: Re: loongson ls2k1000: PCIe serial card WCH CH382L not working, maybe
+ ioports problem
+To:     Marc Kleine-Budde <mkl@blackshift.org>,
+        Du Huanpeng <u74147@gmail.com>, linux-mips@vger.kernel.org
+Cc:     zhangj@wch.cn, linux@rempel-privat.de
+References: <20200807030826.GA10693@tkernel.org>
+ <88921f60-1458-ab04-2ed9-bce57ce7101d@flygoat.com>
+ <ad026820-6b57-15a1-a31e-2d8c8829b7f4@blackshift.org>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <12ec3fa0-263e-71d6-0c95-cedde0713f0c@flygoat.com>
+Date:   Fri, 7 Aug 2020 17:39:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <ad026820-6b57-15a1-a31e-2d8c8829b7f4@blackshift.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Rspamd-Queue-Id: 58764425A5
+X-Spamd-Result: default: False [-0.10 / 10.00];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         ARC_NA(0.00)[];
+         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         R_SPF_SOFTFAIL(0.00)[~all];
+         RCPT_COUNT_FIVE(0.00)[5];
+         ML_SERVERS(-3.10)[148.251.23.173];
+         DKIM_TRACE(0.00)[flygoat.com:+];
+         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
+         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+         FREEMAIL_TO(0.00)[blackshift.org,gmail.com,vger.kernel.org];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
+         RCVD_COUNT_TWO(0.00)[2];
+         MID_RHS_MATCH_FROM(0.00)[];
+         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
+X-Rspamd-Server: mail20.mymailcheap.com
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Current board declarations are a mess. Let's put some order and make them
-follow the same structure.
-Also remove board declarations tabs and double whitespace in the header.
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
----
- arch/mips/bcm63xx/boards/board_bcm963xx.c | 617 +++++++++++-----------
- 1 file changed, 306 insertions(+), 311 deletions(-)
 
-diff --git a/arch/mips/bcm63xx/boards/board_bcm963xx.c b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-index ac9570b66f37..36dd356374b1 100644
---- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
-+++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-@@ -1,6 +1,6 @@
- /*
-  * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file "COPYING" in the main directory of this archive
-+ * License. See the file "COPYING" in the main directory of this archive
-  * for more details.
-  *
-  * Copyright (C) 2008 Maxime Bizon <mbizon@freebox.fr>
-@@ -41,30 +41,28 @@ static struct board_info board;
-  */
- #ifdef CONFIG_BCM63XX_CPU_3368
- static struct board_info __initdata board_cvg834g = {
--	.name				= "CVG834G_E15R3921",
--	.expected_cpu_id		= 0x3368,
-+	.name = "CVG834G_E15R3921",
-+	.expected_cpu_id = 0x3368,
- 
--	.has_uart0			= 1,
--	.has_uart1			= 1,
--
--	.has_enet0			= 1,
--	.has_pci			= 1,
-+	.ephy_reset_gpio = 36,
-+	.ephy_reset_gpio_flags = GPIOF_INIT_HIGH,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
-+	.has_uart1 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
- 
- 	.leds = {
- 		{
--			.name		= "CVG834G:green:power",
--			.gpio		= 37,
-+			.name = "CVG834G:green:power",
-+			.gpio = 37,
- 			.default_trigger= "default-on",
- 		},
- 	},
--
--	.ephy_reset_gpio		= 36,
--	.ephy_reset_gpio_flags		= GPIOF_INIT_HIGH,
- };
- #endif /* CONFIG_BCM63XX_CPU_3368 */
- 
-@@ -73,44 +71,44 @@ static struct board_info __initdata board_cvg834g = {
-  */
- #ifdef CONFIG_BCM63XX_CPU_6328
- static struct board_info __initdata board_96328avng = {
--	.name				= "96328avng",
--	.expected_cpu_id		= 0x6328,
-+	.name = "96328avng",
-+	.expected_cpu_id = 0x6328,
- 
--	.has_uart0			= 1,
--	.has_pci			= 1,
--	.has_usbd			= 0,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_usbd = 0,
- 	.usbd = {
--		.use_fullspeed		= 0,
--		.port_no		= 0,
-+		.use_fullspeed = 0,
-+		.port_no = 0,
- 	},
- 
- 	.leds = {
- 		{
--			.name		= "96328avng::ppp-fail",
--			.gpio		= 2,
--			.active_low	= 1,
-+			.name = "96328avng::ppp-fail",
-+			.gpio = 2,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "96328avng::power",
--			.gpio		= 4,
--			.active_low	= 1,
-+			.name = "96328avng::power",
-+			.gpio = 4,
-+			.active_low = 1,
- 			.default_trigger = "default-on",
- 		},
- 		{
--			.name		= "96328avng::power-fail",
--			.gpio		= 8,
--			.active_low	= 1,
-+			.name = "96328avng::power-fail",
-+			.gpio = 8,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "96328avng::wps",
--			.gpio		= 9,
--			.active_low	= 1,
-+			.name = "96328avng::wps",
-+			.gpio = 9,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "96328avng::ppp",
--			.gpio		= 11,
--			.active_low	= 1,
-+			.name = "96328avng::ppp",
-+			.gpio = 11,
-+			.active_low = 1,
- 		},
- 	},
- };
-@@ -121,85 +119,86 @@ static struct board_info __initdata board_96328avng = {
-  */
- #ifdef CONFIG_BCM63XX_CPU_6338
- static struct board_info __initdata board_96338gw = {
--	.name				= "96338GW",
--	.expected_cpu_id		= 0x6338,
-+	.name = "96338GW",
-+	.expected_cpu_id = 0x6338,
-+
-+	.has_ohci0 = 1,
-+	.has_uart0 = 1,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
- 
--	.has_ohci0			= 1,
--
- 	.leds = {
- 		{
--			.name		= "adsl",
--			.gpio		= 3,
--			.active_low	= 1,
-+			.name = "adsl",
-+			.gpio = 3,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ses",
--			.gpio		= 5,
--			.active_low	= 1,
-+			.name = "ses",
-+			.gpio = 5,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp-fail",
--			.gpio		= 4,
--			.active_low	= 1,
-+			.name = "ppp-fail",
-+			.gpio = 4,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "power",
--			.gpio		= 0,
--			.active_low	= 1,
-+			.name = "power",
-+			.gpio = 0,
-+			.active_low = 1,
- 			.default_trigger = "default-on",
- 		},
- 		{
--			.name		= "stop",
--			.gpio		= 1,
--			.active_low	= 1,
-+			.name = "stop",
-+			.gpio = 1,
-+			.active_low = 1,
- 		}
- 	},
- };
- 
- static struct board_info __initdata board_96338w = {
--	.name				= "96338W",
--	.expected_cpu_id		= 0x6338,
-+	.name = "96338W",
-+	.expected_cpu_id = 0x6338,
-+
-+	.has_uart0 = 1,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
- 
- 	.leds = {
- 		{
--			.name		= "adsl",
--			.gpio		= 3,
--			.active_low	= 1,
-+			.name = "adsl",
-+			.gpio = 3,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ses",
--			.gpio		= 5,
--			.active_low	= 1,
-+			.name = "ses",
-+			.gpio = 5,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp-fail",
--			.gpio		= 4,
--			.active_low	= 1,
-+			.name = "ppp-fail",
-+			.gpio = 4,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "power",
--			.gpio		= 0,
--			.active_low	= 1,
-+			.name = "power",
-+			.gpio = 0,
-+			.active_low = 1,
- 			.default_trigger = "default-on",
- 		},
- 		{
--			.name		= "stop",
--			.gpio		= 1,
--			.active_low	= 1,
-+			.name = "stop",
-+			.gpio = 1,
-+			.active_low = 1,
- 		},
- 	},
- };
-@@ -210,10 +209,10 @@ static struct board_info __initdata board_96338w = {
-  */
- #ifdef CONFIG_BCM63XX_CPU_6345
- static struct board_info __initdata board_96345gw2 = {
--	.name				= "96345GW2",
--	.expected_cpu_id		= 0x6345,
-+	.name = "96345GW2",
-+	.expected_cpu_id = 0x6345,
- 
--	.has_uart0			= 1,
-+	.has_uart0 = 1,
- };
- #endif /* CONFIG_BCM63XX_CPU_6345 */
- 
-@@ -222,282 +221,282 @@ static struct board_info __initdata board_96345gw2 = {
-  */
- #ifdef CONFIG_BCM63XX_CPU_6348
- static struct board_info __initdata board_96348r = {
--	.name				= "96348R",
--	.expected_cpu_id		= 0x6348,
-+	.name = "96348R",
-+	.expected_cpu_id = 0x6348,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
--	.has_pci			= 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
- 
- 	.leds = {
- 		{
--			.name		= "adsl-fail",
--			.gpio		= 2,
--			.active_low	= 1,
-+			.name = "adsl-fail",
-+			.gpio = 2,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp",
--			.gpio		= 3,
--			.active_low	= 1,
-+			.name = "ppp",
-+			.gpio = 3,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp-fail",
--			.gpio		= 4,
--			.active_low	= 1,
-+			.name = "ppp-fail",
-+			.gpio = 4,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "power",
--			.gpio		= 0,
--			.active_low	= 1,
-+			.name = "power",
-+			.gpio = 0,
-+			.active_low = 1,
- 			.default_trigger = "default-on",
- 
- 		},
- 		{
--			.name		= "stop",
--			.gpio		= 1,
--			.active_low	= 1,
-+			.name = "stop",
-+			.gpio = 1,
-+			.active_low = 1,
- 		},
- 	},
- };
- 
- static struct board_info __initdata board_96348gw_10 = {
--	.name				= "96348GW-10",
--	.expected_cpu_id		= 0x6348,
-+	.name = "96348GW-10",
-+	.expected_cpu_id = 0x6348,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_ohci0 = 1,
-+	.has_pccard = 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
-+
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
- 
--	.has_ohci0			= 1,
--	.has_pccard			= 1,
--
- 	.leds = {
- 		{
--			.name		= "adsl-fail",
--			.gpio		= 2,
--			.active_low	= 1,
-+			.name = "adsl-fail",
-+			.gpio = 2,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp",
--			.gpio		= 3,
--			.active_low	= 1,
-+			.name = "ppp",
-+			.gpio = 3,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp-fail",
--			.gpio		= 4,
--			.active_low	= 1,
-+			.name = "ppp-fail",
-+			.gpio = 4,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "power",
--			.gpio		= 0,
--			.active_low	= 1,
-+			.name = "power",
-+			.gpio = 0,
-+			.active_low = 1,
- 			.default_trigger = "default-on",
- 		},
- 		{
--			.name		= "stop",
--			.gpio		= 1,
--			.active_low	= 1,
-+			.name = "stop",
-+			.gpio = 1,
-+			.active_low = 1,
- 		},
- 	},
- };
- 
- static struct board_info __initdata board_96348gw_11 = {
--	.name				= "96348GW-11",
--	.expected_cpu_id		= 0x6348,
-+	.name = "96348GW-11",
-+	.expected_cpu_id = 0x6348,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_ohci0 = 1,
-+	.has_pccard = 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
- 
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
- 
--	.has_ohci0 = 1,
--	.has_pccard = 1,
--
- 	.leds = {
- 		{
--			.name		= "adsl-fail",
--			.gpio		= 2,
--			.active_low	= 1,
-+			.name = "adsl-fail",
-+			.gpio = 2,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp",
--			.gpio		= 3,
--			.active_low	= 1,
-+			.name = "ppp",
-+			.gpio = 3,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp-fail",
--			.gpio		= 4,
--			.active_low	= 1,
-+			.name = "ppp-fail",
-+			.gpio = 4,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "power",
--			.gpio		= 0,
--			.active_low	= 1,
-+			.name = "power",
-+			.gpio = 0,
-+			.active_low = 1,
- 			.default_trigger = "default-on",
- 		},
- 		{
--			.name		= "stop",
--			.gpio		= 1,
--			.active_low	= 1,
-+			.name = "stop",
-+			.gpio = 1,
-+			.active_low = 1,
- 		},
- 	},
- };
- 
- static struct board_info __initdata board_96348gw = {
--	.name				= "96348GW",
--	.expected_cpu_id		= 0x6348,
-+	.name = "96348GW",
-+	.expected_cpu_id = 0x6348,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_ohci0 = 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
-+
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
- 
--	.has_ohci0 = 1,
--
- 	.leds = {
- 		{
--			.name		= "adsl-fail",
--			.gpio		= 2,
--			.active_low	= 1,
-+			.name = "adsl-fail",
-+			.gpio = 2,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp",
--			.gpio		= 3,
--			.active_low	= 1,
-+			.name = "ppp",
-+			.gpio = 3,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp-fail",
--			.gpio		= 4,
--			.active_low	= 1,
-+			.name = "ppp-fail",
-+			.gpio = 4,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "power",
--			.gpio		= 0,
--			.active_low	= 1,
-+			.name = "power",
-+			.gpio = 0,
-+			.active_low = 1,
- 			.default_trigger = "default-on",
- 		},
- 		{
--			.name		= "stop",
--			.gpio		= 1,
--			.active_low	= 1,
-+			.name = "stop",
-+			.gpio = 1,
-+			.active_low = 1,
- 		},
- 	},
- };
- 
- static struct board_info __initdata board_FAST2404 = {
--	.name				= "F@ST2404",
--	.expected_cpu_id		= 0x6348,
-+	.name = "F@ST2404",
-+	.expected_cpu_id = 0x6348,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_ohci0 = 1,
-+	.has_pccard = 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
- 
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
--
--	.has_ohci0			= 1,
--	.has_pccard			= 1,
- };
- 
- static struct board_info __initdata board_rta1025w_16 = {
--	.name				= "RTA1025W_16",
--	.expected_cpu_id		= 0x6348,
-+	.name = "RTA1025W_16",
-+	.expected_cpu_id = 0x6348,
- 
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_pci = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
-+
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
- };
- 
- static struct board_info __initdata board_DV201AMR = {
--	.name				= "DV201AMR",
--	.expected_cpu_id		= 0x6348,
-+	.name = "DV201AMR",
-+	.expected_cpu_id = 0x6348,
- 
--	.has_uart0			= 1,
--	.has_pci			= 1,
--	.has_ohci0			= 1,
-+	.has_ohci0 = 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
--	.has_enet0			= 1,
--	.has_enet1			= 1,
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
-+
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
- };
- 
- static struct board_info __initdata board_96348gw_a = {
--	.name				= "96348GW-A",
--	.expected_cpu_id		= 0x6348,
-+	.name = "96348GW-A",
-+	.expected_cpu_id = 0x6348,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_ohci0 = 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
-+
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
--
--	.has_ohci0 = 1,
- };
- #endif /* CONFIG_BCM63XX_CPU_6348 */
- 
-@@ -506,146 +505,142 @@ static struct board_info __initdata board_96348gw_a = {
-  */
- #ifdef CONFIG_BCM63XX_CPU_6358
- static struct board_info __initdata board_96358vw = {
--	.name				= "96358VW",
--	.expected_cpu_id		= 0x6358,
-+	.name = "96358VW",
-+	.expected_cpu_id = 0x6358,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_ehci0 = 1,
-+	.has_ohci0 = 1,
-+	.has_pccard = 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
- 
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
- 
--	.has_ohci0 = 1,
--	.has_pccard = 1,
--	.has_ehci0 = 1,
--
- 	.leds = {
- 		{
--			.name		= "adsl-fail",
--			.gpio		= 15,
--			.active_low	= 1,
-+			.name = "adsl-fail",
-+			.gpio = 15,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp",
--			.gpio		= 22,
--			.active_low	= 1,
-+			.name = "ppp",
-+			.gpio = 22,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp-fail",
--			.gpio		= 23,
--			.active_low	= 1,
-+			.name = "ppp-fail",
-+			.gpio = 23,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "power",
--			.gpio		= 4,
-+			.name = "power",
-+			.gpio = 4,
- 			.default_trigger = "default-on",
- 		},
- 		{
--			.name		= "stop",
--			.gpio		= 5,
-+			.name = "stop",
-+			.gpio = 5,
- 		},
- 	},
- };
- 
- static struct board_info __initdata board_96358vw2 = {
--	.name				= "96358VW2",
--	.expected_cpu_id		= 0x6358,
-+	.name = "96358VW2",
-+	.expected_cpu_id = 0x6358,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_ehci0 = 1,
-+	.has_ohci0 = 1,
-+	.has_pccard = 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
- 
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
- 
--	.has_ohci0 = 1,
--	.has_pccard = 1,
--	.has_ehci0 = 1,
--
- 	.leds = {
- 		{
--			.name		= "adsl",
--			.gpio		= 22,
--			.active_low	= 1,
-+			.name = "adsl",
-+			.gpio = 22,
-+			.active_low = 1,
- 		},
- 		{
--			.name		= "ppp-fail",
--			.gpio		= 23,
-+			.name = "ppp-fail",
-+			.gpio = 23,
- 		},
- 		{
--			.name		= "power",
--			.gpio		= 5,
--			.active_low	= 1,
-+			.name = "power",
-+			.gpio = 5,
-+			.active_low = 1,
- 			.default_trigger = "default-on",
- 		},
- 		{
--			.name		= "stop",
--			.gpio		= 4,
--			.active_low	= 1,
-+			.name = "stop",
-+			.gpio = 4,
-+			.active_low = 1,
- 		},
- 	},
- };
- 
- static struct board_info __initdata board_AGPFS0 = {
--	.name				= "AGPF-S0",
--	.expected_cpu_id		= 0x6358,
-+	.name = "AGPF-S0",
-+	.expected_cpu_id = 0x6358,
- 
--	.has_uart0			= 1,
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_ehci0 = 1,
-+	.has_ohci0 = 1,
-+	.has_pci = 1,
-+	.has_uart0 = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
- 
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
--
--	.has_ohci0 = 1,
--	.has_ehci0 = 1,
- };
- 
- static struct board_info __initdata board_DWVS0 = {
--	.name				= "DWV-S0",
--	.expected_cpu_id		= 0x6358,
-+	.name = "DWV-S0",
-+	.expected_cpu_id = 0x6358,
- 
--	.has_enet0			= 1,
--	.has_enet1			= 1,
--	.has_pci			= 1,
-+	.has_ehci0 = 1,
-+	.has_ohci0 = 1,
-+	.has_pci = 1,
- 
-+	.has_enet0 = 1,
- 	.enet0 = {
--		.has_phy		= 1,
--		.use_internal_phy	= 1,
-+		.has_phy = 1,
-+		.use_internal_phy = 1,
- 	},
- 
-+	.has_enet1 = 1,
- 	.enet1 = {
--		.force_speed_100	= 1,
--		.force_duplex_full	= 1,
-+		.force_speed_100 = 1,
-+		.force_duplex_full = 1,
- 	},
--
--	.has_ohci0			= 1,
--	.has_ehci0			= 1,
- };
- #endif /* CONFIG_BCM63XX_CPU_6358 */
- 
--- 
-2.27.0
+在 2020/8/7 下午4:35, Marc Kleine-Budde 写道:
+> On 8/7/20 10:01 AM, Jiaxun Yang wrote:
+>>> I'm testing a PCIe card to two uarts (WCH CH382L compatible,
+>>>            https://item.jd.com/48547850173.html) on a loongson ls2k1000 board.
+>>>
+>>> With the card inserted the kernel detects the two new uarts:
+>>>
+>>> [    2.060884] pci 0000:00:04.1: EHCI: unrecognized capability ff
+>>> [    2.066721] pci 0000:00:04.1: EHCI: capability loop?
+>>> [    2.066745] pci 0000:00:04.1: quirk_usb_early_handoff+0x0/0xa60 took 358764 usecs
+>>> [    2.074542] pcieport 0000:00:09.0: PME: Signaling with IRQ 2
+>>> [    2.080651] pcieport 0000:00:0a.0: PME: Signaling with IRQ 3
+>>> [    2.086648] pcieport 0000:00:0b.0: PME: Signaling with IRQ 4
+>>> [    2.092616] pcieport 0000:00:0c.0: PME: Signaling with IRQ 5
+>>> [    2.098579] pcieport 0000:00:0d.0: PME: Signaling with IRQ 6
+>>> [    2.104557] pcieport 0000:00:0e.0: PME: Signaling with IRQ 7
+>>> [    2.113728] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+>>> [    2.120891] serial 0000:06:00.0: limiting MRRS to 256
+>>> [    2.126314] 0000:06:00.0: ttyS0 at I/O 0xc0 (irq = 7, base_baud = 115200) is a XR16850
+>>> [    2.134618] 0000:06:00.0: ttyS1 at I/O 0xc8 (irq = 7, base_baud = 115200) is a XR16850
+>>> [    2.143130] 1fe00000.serial: ttyS2 at MMIO 0x1fe00000 (irq = 1, base_baud = 7812500) is a 16550A
+>>> [    2.151946] printk: console [ttyS2] enabled
+>>> [    2.160255] printk: bootconsole [early0] disabled
+>>> [    2.170112] [drm] radeon kernel modesetting enabled.
+>>>
+>>> However a write to the serial fails:
+>>> / # echo "hello" >/dev/ttyS0
+>>> [ 9369.631915] serial 0000:06:00.0: LSR safety check engaged!
+>>> sh: write error: Input/output error
+>> I assume you're using my out-of-tree fork to support LS2K.
+>> I messed with Logic PIO in that fork.
+>> I'll fix it in mainline, sorry for the issue...
+> Do you have a tree that we can test?
 
+I'm trying to trim my patches to meet mainline requirement but I was
+really busy recent days.
+
+I'll report when the tree is ready.
+
+Thanks.
+
+- Jiaxun
+>
+> Marc
+>
