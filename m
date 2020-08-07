@@ -2,169 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC0023E61E
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 05:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549B123E6D8
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Aug 2020 06:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726071AbgHGDIe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 Aug 2020 23:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726038AbgHGDId (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Aug 2020 23:08:33 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E182C061574
-        for <linux-mips@vger.kernel.org>; Thu,  6 Aug 2020 20:08:33 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id a79so242161pfa.8
-        for <linux-mips@vger.kernel.org>; Thu, 06 Aug 2020 20:08:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=ya3jWnOPUK2Tv1Pm23ddcT2HF0DKqGTPXhSqbR5ywk8=;
-        b=PAskZOTRNH3n0xjTGizg8COT/YcdXHFQU2tlQvLKv9vso6y5QJC4+ey0sqck/cogsn
-         3sAR7fFSfFG0apJGOSfXuCkTdQTw4e66byYjP0EG9w9ZQt02rwqNGHI77mfiqWQWxmXP
-         if0kmHjCefre5tvla97Pv5e5b/IUhyLhgP8nuIqS/2XabJShmSvFsMsXDa2Lt56BtoAe
-         SVRFcWBZ5LnpWe9kGXoCaYtw0789S/PJDY0yashwMFcfrt13cdXfO68FCPaHLG3YH9vo
-         T4D+NvLuYJxcGfmtj9p4DeMcSs4WmkkLKR3w2+YK1+0jwJ5DQqGFNgacYrcxDXVfAsN9
-         d8RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=ya3jWnOPUK2Tv1Pm23ddcT2HF0DKqGTPXhSqbR5ywk8=;
-        b=m6qLL4ZUwRnGemOcuguR7qbvddsr05AVnacMunZVBse2GatFD/WFX0G8mm+cYvsEmq
-         +gAsMB0+nj9lm4iQXBVYzeHjCIYb9Z+AzDRlGY97i9aAB+uXTblV76zxKfMH7eVX1R/R
-         kHkW/77zFnBDXu9bwThGtyeiHP8rz6onozBNeK0OKkcohSec4lE1sSpmAm3xeWfBpsMj
-         UXZ/cRBHZe+fN4h8LZZJao2lZoNvnsd2Tlyhu0ABXD2ipe2fPviBwMj04OyEUdbD0uZa
-         om+L10c1UrRK7vvyzwP2lQn1bvw1qbWXQo8wdBaY7whZHXQGzehCSi7zeEhSdH5wQUxb
-         FFWA==
-X-Gm-Message-State: AOAM5305a/+TIXmkGdGScBROFxBtkv6Jsb7hVwsXLyqWFey0fla7Qf4R
-        vowG48P1ytNl1ndSOr2y4VadoIW6HfQ=
-X-Google-Smtp-Source: ABdhPJyBuEilg9FooRBa/l34ZP9gBpPaxKxCPpN8NE+Vn30DX0NYVKhWUG37y2Lwmf65QvLpuvHHDw==
-X-Received: by 2002:a05:6a00:15d0:: with SMTP id o16mr11310715pfu.230.1596769712595;
-        Thu, 06 Aug 2020 20:08:32 -0700 (PDT)
-Received: from tkernel.org ([207.204.224.6])
-        by smtp.gmail.com with ESMTPSA id y3sm6443901pgh.71.2020.08.06.20.08.30
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Aug 2020 20:08:32 -0700 (PDT)
-Date:   Fri, 7 Aug 2020 11:08:27 +0800
-From:   Du Huanpeng <u74147@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     mkl@blackshift.org, zhangj@wch.cn, linux@rempel-privat.de,
-        jiaxun.yang@flygoat.com
-Subject: loongson ls2k1000: PCIe serial card WCH CH382L not working, maybe
- ioports problem
-Message-ID: <20200807030826.GA10693@tkernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1725287AbgHGEfF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Aug 2020 00:35:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46148 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725263AbgHGEfF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 7 Aug 2020 00:35:05 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 49D0421744;
+        Fri,  7 Aug 2020 04:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596774904;
+        bh=5O8qOqoxu6cXV6n8s+ir2UAXTbHifSn0FzcatJDVJZQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=meBb48lXMEMvszs9mFfHQbw+SAFTZepacdQ+fAduyOqNB85rAk9a/6JjN0PkyK9WM
+         +5vk+BkcGUxBrePySKzDt7STTIXfL5zVC/ZFqPxXFHPIzqXM7HfZkUablsN2WfTGXt
+         Tliwrf0i2fUD7DZxJVi+7iMfjjLcOpKKVZyl2zhQ=
+Date:   Thu, 6 Aug 2020 21:35:03 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Daniel Silsby <dansilsby@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 2/3] mm/huge_memory.c: update tlb entry if pmd is
+ changed
+Message-Id: <20200806213503.58f40af5f2dd99e386b0f6cb@linux-foundation.org>
+In-Reply-To: <ad67e08e-9da8-6123-2c14-c197d22ee27a@linux.ibm.com>
+References: <1592990792-1923-1-git-send-email-maobibo@loongson.cn>
+        <1592990792-1923-2-git-send-email-maobibo@loongson.cn>
+        <07f78e99-6e59-0bce-8ac0-50d7c7600461@oracle.com>
+        <87lfkbl5gz.fsf@linux.ibm.com>
+        <6071df89-1438-1a25-136d-228b8863364e@oracle.com>
+        <ad67e08e-9da8-6123-2c14-c197d22ee27a@linux.ibm.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi all,
+On Fri, 26 Jun 2020 13:43:06 +0530 "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> wrote:
 
-I'm testing a PCIe card to two uarts (WCH CH382L compatible,
-         https://item.jd.com/48547850173.html) on a loongson ls2k1000 board.
+> On 6/25/20 10:16 PM, Mike Kravetz wrote:
+> > On 6/25/20 5:01 AM, Aneesh Kumar K.V wrote:
+> >> Mike Kravetz <mike.kravetz@oracle.com> writes:
+> >>
+> >>> On 6/24/20 2:26 AM, Bibo Mao wrote:
+> >>>> When set_pmd_at is called in function do_huge_pmd_anonymous_page,
+> >>>> new tlb entry can be added by software on MIPS platform.
+> >>>>
+> >>>> Here add update_mmu_cache_pmd when pmd entry is set, and
+> >>>> update_mmu_cache_pmd is defined as empty excepts arc/mips platform.
+> >>>> This patch has no negative effect on other platforms except arc/mips
+> >>>> system.
+> >>>
+> >>> I am confused by this comment.  It appears that update_mmu_cache_pmd
+> >>> is defined as non-empty on arc, mips, powerpc and sparc architectures.
+> >>> Am I missing something?
+> >>>
+> >>> If those architectures do provide update_mmu_cache_pmd, then the previous
+> >>> patch and this one now call update_mmu_cache_pmd with the actual faulting
+> >>> address instead of the huge page aligned address.  This was intentional
+> >>> for mips.  However, are there any potential issues on the other architectures?
+> >>> I am no expert in any of those architectures.  arc looks like it could be
+> >>> problematic as update_mmu_cache_pmd calls update_mmu_cache and then
+> >>> operates on (address & PAGE_MASK).  That could now be different.
+> >>>
+> >>
+> >> Also we added update_mmu_cache_pmd to update a THP entry. That could be
+> >> different from a hugetlb entry on some architectures. If we need to do
+> >> hugetlb equivalent for update_mmu_cache, we should add a different
+> >> function.
+> > 
+> > I do not know the mips architecture well enough or if the motivation for
+> > this patch was based on THP or hugetlb pages.  However, it will change
+> > the address passed to update_mmu_cache_pmd from huge page aligned to the
+> > actual faulting address.  Will such a change in the passed address impact
+> > the powerpc update_mmu_cache_pmd routine?
+> > 
+> 
+> Right now powerpc update_mmu_cache_pmd() is a dummy function. But I 
+> agree we should audit arch to make sure such a change can work with 
+> architectures. My comment was related to the fact that mmu cache update 
+> w.r.t THP and hugetlb can be different on some platforms. So we may
+> want to avoid using the same function for both.
 
-With the card inserted the kernel detects the two new uarts:
-
-[    2.060884] pci 0000:00:04.1: EHCI: unrecognized capability ff
-[    2.066721] pci 0000:00:04.1: EHCI: capability loop?
-[    2.066745] pci 0000:00:04.1: quirk_usb_early_handoff+0x0/0xa60 took 358764 usecs
-[    2.074542] pcieport 0000:00:09.0: PME: Signaling with IRQ 2
-[    2.080651] pcieport 0000:00:0a.0: PME: Signaling with IRQ 3
-[    2.086648] pcieport 0000:00:0b.0: PME: Signaling with IRQ 4
-[    2.092616] pcieport 0000:00:0c.0: PME: Signaling with IRQ 5
-[    2.098579] pcieport 0000:00:0d.0: PME: Signaling with IRQ 6
-[    2.104557] pcieport 0000:00:0e.0: PME: Signaling with IRQ 7
-[    2.113728] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-[    2.120891] serial 0000:06:00.0: limiting MRRS to 256
-[    2.126314] 0000:06:00.0: ttyS0 at I/O 0xc0 (irq = 7, base_baud = 115200) is a XR16850
-[    2.134618] 0000:06:00.0: ttyS1 at I/O 0xc8 (irq = 7, base_baud = 115200) is a XR16850
-[    2.143130] 1fe00000.serial: ttyS2 at MMIO 0x1fe00000 (irq = 1, base_baud = 7812500) is a 16550A
-[    2.151946] printk: console [ttyS2] enabled
-[    2.160255] printk: bootconsole [early0] disabled
-[    2.170112] [drm] radeon kernel modesetting enabled.
-
-However a write to the serial fails:
-/ # echo "hello" >/dev/ttyS0
-[ 9369.631915] serial 0000:06:00.0: LSR safety check engaged!
-sh: write error: Input/output error
-
-read from the serial, too:
-/ # cat /dev/ttyS0
-[ 9531.127623] serial 0000:06:00.0: LSR safety check engaged!
-cat: read error: Input/output error
-
-A dump_stack() in front of the "LSR safety check engaged!" shows the following backtrace:
-[   40.891789] [<ffffffff8020e7d4>] show_stack+0x9c/0x130
-[   40.896949] [<ffffffff80685944>] dump_stack+0xb4/0xf0
-[   40.902021] [<ffffffff80743d30>] serial8250_do_startup+0x480/0x888
-[   40.908216] [<ffffffff8073e07c>] uart_startup.part.19+0x12c/0x2c0
-[   40.914321] [<ffffffff8073e27c>] uart_port_activate+0x6c/0xa8
-[   40.920085] [<ffffffff807221b8>] tty_port_open+0xa0/0x128
-[   40.925493] [<ffffffff8073a2ec>] uart_open+0x1c/0x30
-[   40.930467] [<ffffffff80719220>] tty_open+0x118/0x500
-[   40.935530] [<ffffffff80391e0c>] chrdev_open+0xc4/0x1e0
-[   40.940767] [<ffffffff803865e8>] do_dentry_open+0x210/0x480
-[   40.946353] [<ffffffff8039e7e8>] path_openat+0xb38/0xe50
-[   40.951675] [<ffffffff8039fe00>] do_filp_open+0xe8/0x130
-[   40.956996] [<ffffffff80386d8c>] do_sys_openat2+0x1fc/0x338
-[   40.962579] [<ffffffff803884ac>] do_sys_open+0x5c/0x88
-[   40.967728] [<ffffffff80214470>] syscall_common+0x34/0x58
-
-/ # cat /proc/ioports
-000000c0-000000c7 : serial
-000000c8-000000cf : serial
-
-/ # lspci
-00:03.1 Class 0200: 0014:7a03
-00:08.0 Class 0106: 0014:7a08
-00:0d.0 Class 0604: 0014:7a19
-00:10.0 Class 0480: 0014:7a16
-00:04.2 Class 0c03: 0014:7a24
-00:04.0 Class 0c03: 0014:7a04
-00:07.0 Class 0403: 0014:7a07
-00:0c.0 Class 0604: 0014:7a09
-00:0f.0 Class 0880: 0014:7a0f
-06:00.0 Class 0700: 1c00:3253 <-- WCH CH382L
-00:03.0 Class 0200: 0014:7a03
-00:06.0 Class 0300: 0014:7a06
-00:0b.0 Class 0604: 0014:7a09
-00:04.1 Class 0c03: 0014:7a14
-00:09.0 Class 0604: 0014:7a19
-00:0e.0 Class 0604: 0014:7a09
-00:11.0 Class 0480: 0014:7a26
-00:02.0 Class 0880: 0014:7a02
-00:05.0 Class 0302: 0014:7a05
-00:0a.0 Class 0604: 0014:7a09
-
-I'm using Yang Jiaxun's kernel and pmon:
-
-kernel:
-  https://github.com/FlyGoat/linux
-  branch: loogson/next-testing-2k
-bootloader:
-  https://github.com/FlyGoat/pmon-ls2k
-  branch: master
-and a simple rootfs:
-  https://sourceforge.net/projects/loongsonpi2/files/source-extra/miniroot.tar.xz
-
-For reference, the card work on a standard PC:
-    [    0.701127] 0000:01:00.0: ttyS4 at I/O 0xe0c0 (irq = 16, base_baud = 115200) is a XR16850
-    [    0.701295] 0000:01:00.0: ttyS5 at I/O 0xe0c8 (irq = 16, base_baud = 115200) is a XR16850
-
-The relevant part of /proc/ioports:
-0d00-ffff : PCI Bus 0000:00
-  e000-efff : PCI Bus 0000:01
-    e000-e0ff : 0000:01:00.0
-      e0c0-e0c7 : serial
-      e0c8-e0cf : serial
-
-
-Regards,
-Du Huanpeng
+So I'll assume that this patch is stalled until such an audit has taken
+place?
 
