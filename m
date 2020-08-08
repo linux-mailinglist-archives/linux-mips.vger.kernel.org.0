@@ -2,92 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEB823F7A6
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Aug 2020 14:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B1D23F7D4
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Aug 2020 15:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726190AbgHHMsG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 8 Aug 2020 08:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726125AbgHHMsF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Aug 2020 08:48:05 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E1BC061756;
-        Sat,  8 Aug 2020 05:48:05 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id m34so2398182pgl.11;
-        Sat, 08 Aug 2020 05:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=VeTKxr8w7VLVr4PGx0bAYjFSbETGJkL04gDai2o4qs4=;
-        b=U5CvQ/2Cnvhn7c6MOZlq7QCryWur+muKFaIQcI4LrT4XcYibOrpe8G/L+GO091zjeJ
-         FPxWh6HfuUcjO5icElHQhTK6rt03FgKfwaMz2DPDgXdibBViPLJI5h9Xkk1kGXDNXnip
-         9wRtjiMv6fxak8aeKsSbqth4OGZGT8a6P60vYdAYNdCz6mrRNlPvhsgUbeQN8KwIwBUZ
-         lTarmCI5MVKr/1/QvBOMj1o2ryOzc/BCYXvlBfIiDvNwGeqfpIUwt2O6hVB+SZVoHYUF
-         RYMNO3Dd4ifXPSDwTbqtwTtUud2ZI4dm0ReMGCUZVSa+M0fRwfrd59W1463IzyusXAXt
-         zoUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=VeTKxr8w7VLVr4PGx0bAYjFSbETGJkL04gDai2o4qs4=;
-        b=ay6+gGoiAAu7wFqa9sBeGkHZ6tFUIn6pySykOqri/TQLgB1beidPayMDlpcNsqGIXs
-         wk08Iilm8lAcVOMe2DE7MPLcgwHgwhb8Nn82KBYnR6q2xZYnOleIBau6Kt9kH3Y0pQ6q
-         KL79f9X0TOdiFMV/RaR+2xX59YdNhqFZe2zohOj+lQW+JFUfH67GsC0aRwh/LkuOf8Vv
-         YKPAKkwQTdfuRA/PSqLCf96XOf7+St786WvFvDJ31oNypQuEZy19XrrbmO6vRzfpgwpi
-         Rx/cctKdZRBxQaMKz+I3rRT28F3xl3jNEfF5vSM3Zk+F2Vl9L8cOFiT+M2l6Wb9fZLru
-         vUkw==
-X-Gm-Message-State: AOAM530Dbxab4tiyBAYGQplnwESpBWdCvaVO8RnMXToXcLsW4BGy3r7K
-        a8P7UNGjIxppdkKK9wZcO0M=
-X-Google-Smtp-Source: ABdhPJxhzrk/tqVULXH30q6hg12JI5TtBQTTTXXABv1XWrscmxSMa2C+RDwJcctCkcGojQ5FGR80lw==
-X-Received: by 2002:a63:1a49:: with SMTP id a9mr15391246pgm.110.1596890884864;
-        Sat, 08 Aug 2020 05:48:04 -0700 (PDT)
-Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id k12sm14023458pjp.38.2020.08.08.05.48.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 08 Aug 2020 05:48:04 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
+        id S1726214AbgHHNmH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 8 Aug 2020 09:42:07 -0400
+Received: from elvis.franken.de ([193.175.24.41]:39026 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726190AbgHHNmE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 8 Aug 2020 09:42:04 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1k4P6k-0004vB-00; Sat, 08 Aug 2020 15:41:58 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 19B0AC0C98; Sat,  8 Aug 2020 15:41:47 +0200 (CEST)
+Date:   Sat, 8 Aug 2020 15:41:47 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Alex Deucher <alexander.deucher@amd.com>, christian.koenig@amd.com,
+        Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>, stable@vger.kernel.org
-Subject: [PATCH] MIPS: VZ: Only include loongson_regs.h for CPU_LOONGSON64
-Date:   Sat,  8 Aug 2020 20:50:52 +0800
-Message-Id: <1596891052-24052-1-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
+        linux-mips@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpu/drm: Remove TTM_PL_FLAG_WC of VRAM to fix
+ writecombine issue for Loongson64
+Message-ID: <20200808134147.GA5772@alpha.franken.de>
+References: <1596871502-3432-1-git-send-email-yangtiezhu@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1596871502-3432-1-git-send-email-yangtiezhu@loongson.cn>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Only Loongson64 platform has and needs loongson_regs.h, including it
-unconditionally will cause build errors.
+On Sat, Aug 08, 2020 at 03:25:02PM +0800, Tiezhu Yang wrote:
+> Loongson processors have a writecombine issue that maybe failed to
+> write back framebuffer used with ATI Radeon or AMD GPU at times,
+> after commit 8a08e50cee66 ("drm: Permit video-buffers writecombine
+> mapping for MIPS"), there exists some errors such as blurred screen
+> and lockup, and so on.
+> 
+> Remove the flag TTM_PL_FLAG_WC of VRAM to fix writecombine issue for
+> Loongson64 to work well with ATI Radeon or AMD GPU, and it has no any
+> influence on the other platforms.
 
-Fixes: 7f2a83f1c2a941ebfee5 ("KVM: MIPS: Add CPUCFG emulation for Loongson-3")
-Cc: stable@vger.kernel.org
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/kvm/vz.c | 2 ++
- 1 file changed, 2 insertions(+)
+well it's not my call to take or reject this patch, but I already
+indicated it might be better to disable writecombine on the CPU
+detection side (or do you have other devices where writecombining
+works ?). Something like below will disbale it for all loongson64 CPUs.
+If you now find out where it works and where it doesn't, you can even
+reduce it to the required minium of affected CPUs.
 
-diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
-index 3932f76..a474578 100644
---- a/arch/mips/kvm/vz.c
-+++ b/arch/mips/kvm/vz.c
-@@ -29,7 +29,9 @@
- #include <linux/kvm_host.h>
- 
- #include "interrupt.h"
-+#ifdef CONFIG_CPU_LOONGSON64
- #include "loongson_regs.h"
-+#endif
- 
- #include "trace.h"
- 
+Thomas.
+
+
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index def1659fe262..cdd87009e931 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -2043,7 +2043,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 			set_isa(c, MIPS_CPU_ISA_M64R2);
+ 			break;
+ 		}
+-		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_EXT |
+ 				MIPS_ASE_LOONGSON_EXT2);
+ 		break;
+@@ -2073,7 +2072,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 		 * register, we correct it here.
+ 		 */
+ 		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
+-		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+ 			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
+ 		c->ases &= ~MIPS_ASE_VZ; /* VZ of Loongson-3A2000/3000 is incomplete */
+@@ -2084,7 +2082,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 		set_elf_platform(cpu, "loongson3a");
+ 		set_isa(c, MIPS_CPU_ISA_M64R2);
+ 		decode_cpucfg(c);
+-		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		break;
+ 	default:
+ 		panic("Unknown Loongson Processor ID!");
+
 -- 
-2.7.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
