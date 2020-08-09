@@ -2,86 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7061023FF95
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Aug 2020 19:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6740923FFB4
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Aug 2020 20:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgHIRp6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Aug 2020 13:45:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34080 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726175AbgHIRp5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 9 Aug 2020 13:45:57 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58AA92067C;
-        Sun,  9 Aug 2020 17:45:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596995156;
-        bh=rTpo/phmT1OzvgYXBKfuEB38QjP5FPg3isb1JEqbFxU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LHT4mJVDR6wffysh9KH2O7142l0WwRZ5ojTdZQRCCTWZP3l2hSS8ja2JHRzV0FZAz
-         s3J7FnsC0tWqAGunURaHXnhNeE/+By5lIj28ngc+jlgk2kiNCsaS2cR3oaqf6eW2KG
-         H/uOHh5bjaumkH/u9p/QkrFKbKScHeuEtdYx6bPY=
-Date:   Sun, 9 Aug 2020 13:45:55 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Greg KH <greg@kroah.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: VZ: Only include loongson_regs.h for CPU_LOONGSON64
-Message-ID: <20200809174555.GG2975990@sasha-vm>
-References: <1596891052-24052-1-git-send-email-chenhc@lemote.com>
- <20200808153123.GC369184@kroah.com>
- <2b2937d0-eae6-a489-07bd-c40ded02ce89@flygoat.com>
- <20200809070235.GA1098081@kroah.com>
- <5ffc7bb1-8e3f-227a-7ad0-cec5fc32a96a@redhat.com>
- <20200809173822.GF2975990@sasha-vm>
+        id S1726266AbgHISki convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sun, 9 Aug 2020 14:40:38 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:37487 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726199AbgHISki (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Aug 2020 14:40:38 -0400
+Received: by mail-ej1-f66.google.com with SMTP id qc22so7229083ejb.4;
+        Sun, 09 Aug 2020 11:40:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RZ2r2fEGzTZM9l6ALM21HkIBfxbLLAFJENwfeQcKsXs=;
+        b=oxwahWGK8RsgRJDqLrzRbV0pYraaXpTSsphw57FNZKxk8quXc5a3oChoATV9nM5cM4
+         cK5GOPjwItxGITR5M4Fgov+/XlE7oQ1E1TVnJwNqsB9WWmXzb/W+a4hibYzLCj9ndY6P
+         rThZ6TSKUoQshXYsNl+s6paCfQTF4sYtuNJkXcnN5UImrNGfpi28XA98DGEnTXU3xOPB
+         FXewKP2ITKWeOpZ/Yits7Pxhm7cLXCL1pKdh8+fpFvv95KH+cj2uViunYqTc5GmgQOVk
+         HZppZvIoq/89K2ZMHpUX57+zy3pWy8NcMLaXEGGa7GR8139yThGXX8vHtovT9VgjgC2X
+         XA2A==
+X-Gm-Message-State: AOAM531fSpNt0tCMD5c194KACHqWZLZzYJaIBnQX9lW9CjF1yxX2rDLT
+        2T8mI/Ch/DrjTb2Q7Dz3qzldN28R+eICt1WwEYdwJAu0
+X-Google-Smtp-Source: ABdhPJwdaNQKUc35CAq1Vl+g4p0CKN8xjonX62rbI+Usre2BHByWTnCU4SNyNAUh+RC0zEUvP1W2rHdr75LflYZlZhg=
+X-Received: by 2002:a17:906:f914:: with SMTP id lc20mr18351445ejb.138.1596998435939;
+ Sun, 09 Aug 2020 11:40:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200809173822.GF2975990@sasha-vm>
+References: <20200807100411.2904279-1-noltari@gmail.com> <20200807100411.2904279-2-noltari@gmail.com>
+In-Reply-To: <20200807100411.2904279-2-noltari@gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Sun, 9 Aug 2020 20:40:24 +0200
+Message-ID: <CAAdtpL4EydRG0jLqCKuggc4SvKe=qk3Z1aYuD51vnXp8DoRT5g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] MIPS: BCM63xx: remove duplicated new lines
+To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Aug 09, 2020 at 01:38:22PM -0400, Sasha Levin wrote:
->On Sun, Aug 09, 2020 at 07:23:28PM +0200, Paolo Bonzini wrote:
->>On 09/08/20 09:02, Greg KH wrote:
->>>>>>diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
->>>>>>index 3932f76..a474578 100644
->>>>>>--- a/arch/mips/kvm/vz.c
->>>>>>+++ b/arch/mips/kvm/vz.c
->>>>>>@@ -29,7 +29,9 @@
->>>>>>  #include <linux/kvm_host.h>
->>>>>>  #include "interrupt.h"
->>>>>>+#ifdef CONFIG_CPU_LOONGSON64
->>>>>>  #include "loongson_regs.h"
->>>>>>+#endif
->>>>>The fix for this should be in the .h file, no #ifdef should be needed in
->>>>>a .c file.
->>>>The header file can only be reached when CONFIG_CPU_LOONGSON64 is
->>>>selected...
->>>>Otherwise the include path of this file won't be a part of CFLAGS.
->>>That sounds like you should fix up the path of this file in the
->>>#include line as well :)
->>>
->>
->>There is more #ifdef CONFIG_CPU_LOONGSON64 in arch/mips/kvm/vz.c, and
->>more #include "loongson_regs.h" in arch/mips.  So while I agree with
->>Greg that this idiom is quite unusual, it seems to be the expected way
->>to use this header.  I queued the patch.
+On Fri, Aug 7, 2020 at 12:06 PM Álvaro Fernández Rojas
+<noltari@gmail.com> wrote:
 >
->Where is that header coming from anyway? I can't find it in the tree,
->nor anything that would generate it.
+> There are 3 duplicated new lines, let's remove them.
+>
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 
-Woops, nevermind - sorry for the noise.
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+=)
 
--- 
-Thanks,
-Sasha
+> ---
+>  v2: no changes.
+>
+>  arch/mips/bcm63xx/boards/board_bcm963xx.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/arch/mips/bcm63xx/boards/board_bcm963xx.c b/arch/mips/bcm63xx/boards/board_bcm963xx.c
+> index 230bf27c1fb8..744aa16bab12 100644
+> --- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
+> +++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
+> @@ -32,7 +32,6 @@
+>
+>  #include <uapi/linux/bcm933xx_hcs.h>
+>
+> -
+>  #define HCS_OFFSET_128K                        0x20000
+>
+>  static struct board_info board;
+> @@ -337,7 +336,6 @@ static struct board_info __initdata board_96348gw_11 = {
+>                 .force_duplex_full      = 1,
+>         },
+>
+> -
+>         .has_ohci0 = 1,
+>         .has_pccard = 1,
+>         .has_ehci0 = 1,
+> @@ -580,7 +578,6 @@ static struct board_info __initdata board_96358vw2 = {
+>                 .force_duplex_full      = 1,
+>         },
+>
+> -
+>         .has_ohci0 = 1,
+>         .has_pccard = 1,
+>         .has_ehci0 = 1,
+> --
+> 2.27.0
+>
