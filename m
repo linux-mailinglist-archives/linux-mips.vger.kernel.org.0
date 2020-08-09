@@ -2,143 +2,180 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0452123FE29
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Aug 2020 14:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DB123FED4
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Aug 2020 16:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbgHIMNb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Aug 2020 08:13:31 -0400
-Received: from mail-co1nam11on2069.outbound.protection.outlook.com ([40.107.220.69]:16128
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726009AbgHIMN2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 9 Aug 2020 08:13:28 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VRXFOOL9dQviBmuhHHmEzJGqIxYVjRbTYQhQT0dpg+Qy2ZDKDnm3odXtJnvEvnwsrAVJ07aDICGYYgvDjTlvV6+WVHJU20YxbLfbcnzQI5VVLKcAm5nezq4dE9QzIZP03TGlGI32HCN4CM+LGjPBdOWSOxrsMur5xxw10ohXpWLdK3De+IeVPOvhXvYuuUKCHmqYgf4PjEGspa6TU1Cr9uObSXcREEtUucG24Ef/b9B1N73RsWq9tcpdogPh8EgihcUVCv5t+gaT3pxIPBiL1isYlnpGd/k2muFE7ROJCPSBAcoIbWF+Hf4V+caaZ1ThPUE7AT87Lg1qf94266gpDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GqMl/ywsyFOJ1cIT3GhjhamVIVIYTPF9BSkLV7w3hZQ=;
- b=cxsHsYX8vEdtpQyTCx+fqpeVLMBU1ccdujYhiKx6z4BojOrJYbc54tm7uM8tNC7f/cIUlHUSqfF3XbXQ0fppapVheJ6VLrtMkmNnWMCXwt9N+qaq6FgREEgHInUurEljnPmRgt08TJtbhk3hawUqFUY7ChKQ2pYGbmDPXqGtBEe9Tr6rq3ynp4THibPDwG4QC0o2OFHRY+xTfueZBWSsCtobD5WGfhia3UppDXyZzV8d8TysqgAVurygi3S2caDixz+CM6LAZsottHUP65m/Wo3o+SWwTcpGwq3EGHT2BmBmRQD4jM8t7c6/xp/LHnPeDFQVuk/5pyQZmbkarE7jAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GqMl/ywsyFOJ1cIT3GhjhamVIVIYTPF9BSkLV7w3hZQ=;
- b=ZSd6umuF6vKIE9BekmevIPrYMLxDxMDDmgR6kIiVghYJr4uC4EwJT8TlpeRXe6tH8WSXthOhKu4KWcpueMaSFjQ8vwfBtouGOuf04zNcYIM8AR8HkZX9WI96gxeCuVNAFczIugcWkmQO3cAIxVtk/VbGf5p1Myj7GZYHsInM6tU=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19)
- by MN2PR12MB4125.namprd12.prod.outlook.com (2603:10b6:208:1d9::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.19; Sun, 9 Aug
- 2020 12:13:24 +0000
-Received: from MN2PR12MB3775.namprd12.prod.outlook.com
- ([fe80::a16e:8812:b4c0:918d]) by MN2PR12MB3775.namprd12.prod.outlook.com
- ([fe80::a16e:8812:b4c0:918d%6]) with mapi id 15.20.3261.022; Sun, 9 Aug 2020
- 12:13:23 +0000
-Subject: Re: [PATCH] gpu/drm: Remove TTM_PL_FLAG_WC of VRAM to fix
- writecombine issue for Loongson64
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <1596871502-3432-1-git-send-email-yangtiezhu@loongson.cn>
- <20200808134147.GA5772@alpha.franken.de>
- <b7b16df1-d661-d59a-005b-da594ce9fc95@flygoat.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <38857c24-25c4-cff3-569e-5bcb773bfae6@amd.com>
-Date:   Sun, 9 Aug 2020 14:13:15 +0200
+        id S1726200AbgHIOxf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Aug 2020 10:53:35 -0400
+Received: from relay5.mymailcheap.com ([159.100.248.207]:60143 "EHLO
+        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726175AbgHIOxe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Aug 2020 10:53:34 -0400
+Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [217.182.113.132])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id 88C0826071
+        for <linux-mips@vger.kernel.org>; Sun,  9 Aug 2020 14:53:31 +0000 (UTC)
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay2.mymailcheap.com (Postfix) with ESMTPS id 18A583ECDA;
+        Sun,  9 Aug 2020 16:53:29 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by filter2.mymailcheap.com (Postfix) with ESMTP id E92002A520;
+        Sun,  9 Aug 2020 16:53:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1596984808;
+        bh=R0WzzEqN7mlSBa+1KtD/NwrIEvN0Gq43dvp71k6BdAE=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=m55ZPDEo3aYyTOsGTIg7YOs+afAm6MHSNTrWE+1qZaKLpZuXrNMrh9LdivsOkKYfU
+         t447gsEEgVM/AB5J6WAudA+jO4ivEhusKPwot1JabVCmOfE99vrg+zOznu2j7EC3+F
+         ym0FRbHRTGMVNB9J++3maEk9iFF0EQIaAIP2mgeA=
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id THLrV2--RzoY; Sun,  9 Aug 2020 16:53:26 +0200 (CEST)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Sun,  9 Aug 2020 16:53:26 +0200 (CEST)
+Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id D8B45425B3;
+        Sun,  9 Aug 2020 14:53:24 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="qtle7la+";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from [0.0.0.0] (li1000-254.members.linode.com [45.33.50.254])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id D8070425AA;
+        Sun,  9 Aug 2020 14:53:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
+        s=default; t=1596984800;
+        bh=R0WzzEqN7mlSBa+1KtD/NwrIEvN0Gq43dvp71k6BdAE=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=qtle7la+RLLtfeum+VJosir/LWmxz6cL7tiFg5Pvnt3ePhkJddrco54AJaCYER/pv
+         5FyuZrk1hwpWnSqy0eGw0Q0ddbj80X7m1Flf8BPoEri9O1/cfG5wTVnTC8jFggMe2b
+         i4XrDaO/69YT3bT6yGjMXIxTz7dml64Puiyj5qO0=
+Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Huacai Chen <chenhc@lemote.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+References: <1588395344-5400-1-git-send-email-chenhc@lemote.com>
+ <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com>
+ <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
+ <20200805121021.GA12598@alpha.franken.de>
+ <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
+ <20200807131357.GA11979@alpha.franken.de>
+ <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+Message-ID: <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com>
+Date:   Sun, 9 Aug 2020 22:53:13 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <b7b16df1-d661-d59a-005b-da594ce9fc95@flygoat.com>
-Content-Type: text/plain; charset=gbk; format=flowed
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+In-Reply-To: <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-X-ClientProxiedBy: AM0PR07CA0010.eurprd07.prod.outlook.com
- (2603:10a6:208:ac::23) To MN2PR12MB3775.namprd12.prod.outlook.com
- (2603:10b6:208:159::19)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM0PR07CA0010.eurprd07.prod.outlook.com (2603:10a6:208:ac::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.7 via Frontend Transport; Sun, 9 Aug 2020 12:13:21 +0000
-X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: b5c63698-e1d9-42ba-a989-08d83c5d9c88
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4125:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4125AD19075424D0E5D970D083470@MN2PR12MB4125.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uN8Y5xJg/KLD8QPvwgezJpZ0r4VCinFUcwfwimT/glg1ehEDVWmVdzI7rEiPHp6E0w6O3nSaHiLOi3furEHw4Q//bJXeNj+z0wUj/5KMTCuB5F/Btdmkp7vzs3kDwPEMhMuPDDjOT87NyE5sQOCGdjn1jq7yeHo54y0QBv+YabV7zUatCad4z0WH9cY31tpJICkw1t5ULPGOwhmtjulgMm9qnA4jUxPYnD/ZtxTRii52UJNSQYrHEkN+V05uT9JTfg2swssZn6gN2WyzVPxDt4Gxw3RPiyBJVawvVCry38TPLFpR4u4iSVrne/SR+Z0pRvTviwVlGQaW45dWI1TxkyZZEEvmiBZSMTeCZ1JB9xBQphlMSVet0/GjXZem8qwg
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3775.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(376002)(346002)(39860400002)(136003)(396003)(5660300002)(83380400001)(478600001)(36756003)(52116002)(66476007)(66556008)(6666004)(6486002)(110136005)(54906003)(66946007)(8676002)(31696002)(2616005)(16526019)(86362001)(2906002)(31686004)(8936002)(316002)(186003)(4326008)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: 2rj0ni+RFjrw9Vu3DRmSNHmtBsIxZKQMNJpdBqls7kK73gSEuu693TbiAJErpn0nT3Z9Wgzuw7K1I/tSaagnyaty3+42DIBrLs8WP5ZXES1Q++h6r7o2y+YeL4GLlx3IljMXOYgeAykbHYvkJeVX2sT7dv3qlX1X0fSGS+fiB+kwjfKPdLYYN7nDEXGqQLHkIxuHLgR6lM9W9yh9tK/CQ9nW0P59SwFqurLYWQ00sqjAOr4EUVQaXAEJtr5CS1AEGID46QILURR/xesSkCsmzp6nPI6YzKZBG0Uz2fpp778PP3uTksVnV5ZgrmVOM3p9v+W6FllzzC+OTbrs+toVHlu8Zq3dC/PPnXE4lAHYZFD/zTaRjAMwMpzlAyRkghUWxlW5Q7M/Vs2C0k/gkpP3Kq2MLPlgZWXxSQcM9P9jZ3gfBowZBL7md2eZq9/5Gm6iY8Wj2qPcKaLKfaizgepWeL1erjO+97kPCAmhhCHJbxyXQ9JU4Twa8gIIJlLwSouYmAUDx0vSD255Gp0g6QfzfrKnwKO/f5AP9aDHuGHDANps8kUiijfAZRwBmm1/khUR279E203fICA7jpNBW48Yuga1rDdTT/Zmyz38DDsL7BKezqBVcRVwkUabd6tEVD9FlI26poTUZDhNoqKX0/KkWz2vJDFR4QazwpP9dQ+ds+IzFHcC7CJXJLgLACb47qNrB5/ANAIqAxM291U1brdGbg==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5c63698-e1d9-42ba-a989-08d83c5d9c88
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3775.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2020 12:13:23.7107
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YDgOsZI0O83TVmJ8yX7Cbzv04xALq9Z9fNvkiGf4J7qQpZ0EDjZnPoyvVZUtnrFe
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4125
+X-Rspamd-Queue-Id: D8B45425B3
+X-Spamd-Result: default: False [-0.10 / 10.00];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         ARC_NA(0.00)[];
+         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
+         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1];
+         FROM_HAS_DN(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         R_SPF_SOFTFAIL(0.00)[~all];
+         RCPT_COUNT_FIVE(0.00)[5];
+         ML_SERVERS(-3.10)[213.133.102.83];
+         TO_DN_ALL(0.00)[];
+         DKIM_TRACE(0.00)[flygoat.com:+];
+         RCVD_IN_DNSWL_NONE(0.00)[213.133.102.83:from];
+         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
+         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
+         FREEMAIL_CC(0.00)[lemote.com,vger.kernel.org,gmail.com];
+         MID_RHS_MATCH_FROM(0.00)[];
+         RCVD_COUNT_TWO(0.00)[2]
+X-Rspamd-Server: mail20.mymailcheap.com
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Am 08.08.20 um 15:50 schrieb Jiaxun Yang:
+
+
+åœ¨ 2020/8/7 ä¸‹åˆ9:25, Jiaxun Yang å†™é“:
 >
 >
-> ÔÚ 2020/8/8 ÏÂÎç9:41, Thomas Bogendoerfer Ð´µÀ:
->> On Sat, Aug 08, 2020 at 03:25:02PM +0800, Tiezhu Yang wrote:
->>> Loongson processors have a writecombine issue that maybe failed to
->>> write back framebuffer used with ATI Radeon or AMD GPU at times,
->>> after commit 8a08e50cee66 ("drm: Permit video-buffers writecombine
->>> mapping for MIPS"), there exists some errors such as blurred screen
->>> and lockup, and so on.
+> åœ¨ 2020/8/7 21:13, Thomas Bogendoerfer å†™é“:
+>> On Wed, Aug 05, 2020 at 09:51:44PM +0800, Jiaxun Yang wrote:
+>>>> yes there is. Since this COP2 is a total black box to me, it would be
+>>>> really helpfull to get some docs for it or at least some 
+>>>> information what
+>>>> it exactly does and how you want to use it in kernel code.
+>>> FYI:
+>>> Loongson doesn't have any CU2 register. It just reused LWC2 & LDC2 
+>>> opcode
+>>> to define some load & store instructions (e.g. 128bit load to two 
+>>> GPRs).
 >>>
->>> Remove the flag TTM_PL_FLAG_WC of VRAM to fix writecombine issue for
->>> Loongson64 to work well with ATI Radeon or AMD GPU, and it has no any
->>> influence on the other platforms.
->> well it's not my call to take or reject this patch, but I already
->> indicated it might be better to disable writecombine on the CPU
->> detection side (or do you have other devices where writecombining
->> works ?). Something like below will disbale it for all loongson64 CPUs.
->> If you now find out where it works and where it doesn't, you can even
->> reduce it to the required minium of affected CPUs.
-> Hi Tiezhu, Thomas,
+>>> I have a collection of these instructions here[1].
+>>>
+>>> Â From GS464E (3A2000+), execuating these instruction won't produce COP2
+>>> unusable
+>>> exception. But older Loongson cores (GS464) will still produce COP2
+>>> exception, thus
+>>> we should have CU2 enabled in kernel. That would allow us use to these
+>>> instructions
+>>> to optimize kernel.
+>> thank you that makes things a little bit clearer.
+>>
+>> How will this be used in kernel code ? Special assembler routines or
+>> by enabling gcc options ?
 >
-> Yes, writecombine works well on LS7A's internal GPU....
-> And even works well with some AMD GPUs (in my case, RX550).
-
-In this case the patch is a clear NAK since you haven't root caused the 
-issue and are just working around it in a very questionable manner.
-
+> Via special assembly routines, as -msoft-float will disable generation of
+> these instructions in GCC.
 >
-> Tiezhu, is it possible to investigate the issue deeper in Loongson?
-> Probably we just need to add some barrier to maintain the data coherency,
-> or disable writecombine for AMD GPU's command buffer and leave 
-> texture/frame
-> buffer wc accelerated.
-
-Have you moved any buffer to VRAM and forgot to add an HDP flush/invalidate?
-
-The acceleration is not much of a problem, but if WC doesn't work in 
-general you need to disable it for the whole CPU and not for individual 
-drivers.
-
-Regards,
-Christian.
-
+> I knew Huacai have out-of-tree memcpy optimization and Xuerui have
+> RAID5 optimiztion with these instructions.
 >
-> Thanks.
+>>
+>>>> And finally what I stil don't like is the splittering of more
+>>>> #ifdef LOONGSON into common code. I'd prefer a more generic way
+>>>> to enable COPx for in kernel usage. Maybe a more generic config option
+>>>> or a dynamic solution like the one for user land.
+>>> Agreed. some Kconfig options or cpuinfo_mips.options can be helpful.
+>> let's see whether this really is needed.
+>>
+>> To me it looks like the COP2 exception support for loongson makes
+>> thing worse than it helps. How about the patch below ? There is still
+>> a gap between starting the kernel and COP2 enabled for which I'm not
+>> sure, if we are hitting COP2 instructions.
 >
-> - Jiaxun
 
+I had a off-list discussion with Huacai and found it's not the case.
+
+Some Loongson CU2 instructions (e.g. GSLQC1) uses FPU registers, and now 
+we're uncoditionally
+let the thread own FPU in cop2-ex handler when CU2 exception triggered.
+However, if we enable CU2 all the time, than the FPU context of these 
+instructions might be lost.
+(Yes, these instructions won't generate CU1 unusable exception when CU2 
+is enabled but not CU1,
+it is likely to be a design fault.)
+
+Thus we still need to enable CU2 with exception for user space, and we 
+can always enable CU2 in
+kernel since kernel won't be compiled with hard-float. :-)
+
+Thanks.
+
+- Jiaxun
