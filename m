@@ -2,93 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC1323FADC
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Aug 2020 01:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218D023FC17
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Aug 2020 03:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728334AbgHHXih (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 8 Aug 2020 19:38:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52668 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728326AbgHHXig (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 8 Aug 2020 19:38:36 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1B8DD20748;
-        Sat,  8 Aug 2020 23:38:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596929916;
-        bh=x2EdT82fe7GeAYl9x+JFtiof54LVZjz/+2qJUuXzK6Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w+KezyTDvP1bD1aJCqx8I/y72KOzuH/iHHEpr+SEzMVUYTB8HmezKnmD3VclyikaG
-         WmDiAqtfbVT4GHIt3wGjtM4gvdLuO0VOdj7HhU7JY3azCAzRpUu9HM4uuB1C7BY6a7
-         cu0+e82+oKu6Blk5ERUvVMMYsSO8sl6/25SHBstk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 52/58] irqchip/irq-bcm7038-l1: Guard uses of cpu_logical_map
-Date:   Sat,  8 Aug 2020 19:37:18 -0400
-Message-Id: <20200808233724.3618168-52-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200808233724.3618168-1-sashal@kernel.org>
-References: <20200808233724.3618168-1-sashal@kernel.org>
+        id S1726073AbgHIB2z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 8 Aug 2020 21:28:55 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:39307 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726071AbgHIB2z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Aug 2020 21:28:55 -0400
+Received: by mail-il1-f194.google.com with SMTP id z17so4852272ill.6;
+        Sat, 08 Aug 2020 18:28:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VS8yH85WvutsO/KjeEQ2FvfbJcVZS6nX5Zxp1darUqc=;
+        b=ePAJDTEFgL2Bn+H2WTjEDCgkRDv3glyvxCz/KnhdE1yYdfKVn0G5UgYdYFgXUM/k1H
+         ARzJHrnzzgusiIYtg2EvebxINac+KfayTTYeqULYQnIw94y+zp7ejHGWnNeIq22lXPTa
+         T7mOWCT1xezBylthxndCJJffCi8QNIabEGaFrYXf2Hm4h7DL7+AYIvv2Dx6bB9HpOD6C
+         BIuLT61EC1PL0r7M9zSghymSUm2B6+r4ZHmHopXq6bdrY4/XfVcXBmTAQt0S3WM3PLS9
+         lfMOqrjH8wOeqBF8BMLG6BNRKNoLqajaFJTibqla8dBxUUp1BB3dIeQEM4DdguWbU3Qb
+         ZbuA==
+X-Gm-Message-State: AOAM5322ojAuaBIf1lS4l6l5eS8M+Zcho+hnpMmPPCg3bYNSe7HEdf20
+        KhMOIMuQp5HdKBVYP82YS+ojBCNs0r46JvshYnkkjLr7+IY=
+X-Google-Smtp-Source: ABdhPJyXoPzVNwr0tJXZD05cAi3FhTBjqLmbBNMdvEQtSCscJAdZQTYIC+eBygDZqqi+6K/NkaFEPZZ9fWB5mwCqXTU=
+X-Received: by 2002:a92:d30a:: with SMTP id x10mr11616603ila.287.1596936533940;
+ Sat, 08 Aug 2020 18:28:53 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20200808123227.2873961-1-jiaxun.yang@flygoat.com>
+In-Reply-To: <20200808123227.2873961-1-jiaxun.yang@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Sun, 9 Aug 2020 09:28:42 +0800
+Message-ID: <CAAhV-H5aG5=rR8iHCp7HMa5eDeFo06GXx9gDjrDy+uFhWy28PA@mail.gmail.com>
+Subject: Re: [PATCH for-fixes] MIPS: Loongson64: Do not override watch and
+ ejtag feature
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Huacai Chen <chenhc@lemote.com>
 
-[ Upstream commit 9808357ff2e5bfe1e0dcafef5e78cc5b617a7078 ]
-
-cpu_logical_map is only defined for CONFIG_SMP builds, when we are in an
-UP configuration, the boot CPU is 0.
-
-Fixes: 6468fc18b006 ("irqchip/irq-bcm7038-l1: Add PM support")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20200724184157.29150-1-f.fainelli@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/irqchip/irq-bcm7038-l1.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/irqchip/irq-bcm7038-l1.c b/drivers/irqchip/irq-bcm7038-l1.c
-index fd7c537fb42ac..4127eeab10af1 100644
---- a/drivers/irqchip/irq-bcm7038-l1.c
-+++ b/drivers/irqchip/irq-bcm7038-l1.c
-@@ -327,7 +327,11 @@ static int bcm7038_l1_suspend(void)
- 	u32 val;
- 
- 	/* Wakeup interrupt should only come from the boot cpu */
-+#ifdef CONFIG_SMP
- 	boot_cpu = cpu_logical_map(0);
-+#else
-+	boot_cpu = 0;
-+#endif
- 
- 	list_for_each_entry(intc, &bcm7038_l1_intcs_list, list) {
- 		for (word = 0; word < intc->n_words; word++) {
-@@ -347,7 +351,11 @@ static void bcm7038_l1_resume(void)
- 	struct bcm7038_l1_chip *intc;
- 	int boot_cpu, word;
- 
-+#ifdef CONFIG_SMP
- 	boot_cpu = cpu_logical_map(0);
-+#else
-+	boot_cpu = 0;
-+#endif
- 
- 	list_for_each_entry(intc, &bcm7038_l1_intcs_list, list) {
- 		for (word = 0; word < intc->n_words; word++) {
--- 
-2.25.1
-
+On Sat, Aug 8, 2020 at 8:33 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> Do not override ejtag feature to 0 as Loongson 3A1000+ do have ejtag.
+> For watch, as KVM emulated CPU doesn't have watch feature, we should
+> not enable it unconditionally.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> This patch should go into mips-fixes tree as watch feature is blocking
+> KVM guest boot in some cases.
+> ---
+>  arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h b/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
+> index b6e9c99b85a5..eb181224eb4c 100644
+> --- a/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
+> +++ b/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
+> @@ -26,7 +26,6 @@
+>  #define cpu_has_counter                1
+>  #define cpu_has_dc_aliases     (PAGE_SIZE < 0x4000)
+>  #define cpu_has_divec          0
+> -#define cpu_has_ejtag          0
+>  #define cpu_has_inclusive_pcaches      1
+>  #define cpu_has_llsc           1
+>  #define cpu_has_mcheck         0
+> @@ -42,7 +41,6 @@
+>  #define cpu_has_veic           0
+>  #define cpu_has_vint           0
+>  #define cpu_has_vtag_icache    0
+> -#define cpu_has_watch          1
+>  #define cpu_has_wsbh           1
+>  #define cpu_has_ic_fills_f_dc  1
+>  #define cpu_hwrena_impl_bits   0xc0000000
+> --
+> 2.28.0.rc1
+>
