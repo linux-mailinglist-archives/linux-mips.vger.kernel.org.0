@@ -2,84 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB42240411
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Aug 2020 11:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CA32404F3
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Aug 2020 12:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbgHJJco (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Aug 2020 05:32:44 -0400
-Received: from elvis.franken.de ([193.175.24.41]:41814 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725984AbgHJJco (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 10 Aug 2020 05:32:44 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1k54AZ-000764-00; Mon, 10 Aug 2020 11:32:39 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 12CD8C0CA2; Mon, 10 Aug 2020 11:31:59 +0200 (CEST)
-Date:   Mon, 10 Aug 2020 11:31:59 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Greg KH <greg@kroah.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        id S1726448AbgHJK7B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Aug 2020 06:59:01 -0400
+Received: from mail.netline.ch ([148.251.143.178]:41850 "EHLO
+        netline-mail3.netline.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726173AbgHJK7B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Aug 2020 06:59:01 -0400
+X-Greylist: delayed 489 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Aug 2020 06:58:59 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by netline-mail3.netline.ch (Postfix) with ESMTP id A582E2A6042;
+        Mon, 10 Aug 2020 12:50:48 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at netline-mail3.netline.ch
+Received: from netline-mail3.netline.ch ([127.0.0.1])
+        by localhost (netline-mail3.netline.ch [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id Mpbg-h6jHzk1; Mon, 10 Aug 2020 12:50:48 +0200 (CEST)
+Received: from thor (212.174.63.188.dynamic.wline.res.cust.swisscom.ch [188.63.174.212])
+        by netline-mail3.netline.ch (Postfix) with ESMTPSA id 9C3F02A6016;
+        Mon, 10 Aug 2020 12:50:46 +0200 (CEST)
+Received: from [::1]
+        by thor with esmtp (Exim 4.94)
+        (envelope-from <michel@daenzer.net>)
+        id 1k55O9-000Uyj-S3; Mon, 10 Aug 2020 12:50:45 +0200
+Subject: Re: [PATCH] gpu/drm: Remove TTM_PL_FLAG_WC of VRAM to fix
+ writecombine issue for Loongson64
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: VZ: Only include loongson_regs.h for CPU_LOONGSON64
-Message-ID: <20200810093158.GA6026@alpha.franken.de>
-References: <1596891052-24052-1-git-send-email-chenhc@lemote.com>
- <20200808153123.GC369184@kroah.com>
- <2b2937d0-eae6-a489-07bd-c40ded02ce89@flygoat.com>
- <20200809070235.GA1098081@kroah.com>
- <5ffc7bb1-8e3f-227a-7ad0-cec5fc32a96a@redhat.com>
- <20200810074417.GA1529187@kroah.com>
- <5522eef8-0da5-7f73-b2f8-2d0c19bb5819@redhat.com>
- <20200810090310.GA1837172@kroah.com>
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <1596871502-3432-1-git-send-email-yangtiezhu@loongson.cn>
+ <20200808134147.GA5772@alpha.franken.de>
+ <b7b16df1-d661-d59a-005b-da594ce9fc95@flygoat.com>
+ <38857c24-25c4-cff3-569e-5bcb773bfae6@amd.com>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>
+Message-ID: <2f3fd325-8093-98e7-5bc8-75490258baac@daenzer.net>
+Date:   Mon, 10 Aug 2020 12:50:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200810090310.GA1837172@kroah.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <38857c24-25c4-cff3-569e-5bcb773bfae6@amd.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 10, 2020 at 11:03:10AM +0200, Greg KH wrote:
-> On Mon, Aug 10, 2020 at 10:56:48AM +0200, Paolo Bonzini wrote:
-> > On 10/08/20 09:44, Greg KH wrote:
-> > >> There is more #ifdef CONFIG_CPU_LOONGSON64 in arch/mips/kvm/vz.c, and
-> > >> more #include "loongson_regs.h" in arch/mips.  So while I agree with
-> > >> Greg that this idiom is quite unusual, it seems to be the expected way
-> > >> to use this header.  I queued the patch.
-> > > Or you all could fix it up to work properly like all other #include
-> > > lines in the kernel source tree.  There's no reason mips should be
-> > > "special" here, right?
-> > 
-> > It's not just this #include, there's a couple dozen mach-* directories;
-> > changing how they work would be up to the MIPS maintainers (CCed), and
-> > it would certainly not be a patch that can be merged in stable@ kernels.
-> > 
-> > arch/mips/kernel/cpu-probe.c has the same
-> > 
-> > #ifdef CONFIG_CPU_LOONGSON64
-> > #include <loongson_regs.h>
-> > 
-> > for example, so apparently they're good with this.  So if I don't pick
-> > up the patch to fix the build it would be in all likelihood merged by
-> > MIPS maintainers.  The only difference will be how long the build
-> > remains broken and the fact that they need to worry about KVM despite
-> > the presence of a specific maintainer.
+On 2020-08-09 2:13 p.m., Christian König wrote:
+> Am 08.08.20 um 15:50 schrieb Jiaxun Yang:
+>> 在 2020/8/8 下午9:41, Thomas Bogendoerfer 写道:
+>>> On Sat, Aug 08, 2020 at 03:25:02PM +0800, Tiezhu Yang wrote:
+>>>> Loongson processors have a writecombine issue that maybe failed to
+>>>> write back framebuffer used with ATI Radeon or AMD GPU at times,
+>>>> after commit 8a08e50cee66 ("drm: Permit video-buffers writecombine
+>>>> mapping for MIPS"), there exists some errors such as blurred screen
+>>>> and lockup, and so on.
+>>>>
+>>>> Remove the flag TTM_PL_FLAG_WC of VRAM to fix writecombine issue for
+>>>> Loongson64 to work well with ATI Radeon or AMD GPU, and it has no any
+>>>> influence on the other platforms.
+>>> well it's not my call to take or reject this patch, but I already
+>>> indicated it might be better to disable writecombine on the CPU
+>>> detection side (or do you have other devices where writecombining
+>>> works ?). Something like below will disbale it for all loongson64 CPUs.
+>>> If you now find out where it works and where it doesn't, you can even
+>>> reduce it to the required minium of affected CPUs.
+>> Hi Tiezhu, Thomas,
+>>
+>> Yes, writecombine works well on LS7A's internal GPU....
+>> And even works well with some AMD GPUs (in my case, RX550).
 > 
-> Ok, fair enough, but in the long-run, this should probably be fixed up
-> "properly" if this arch is still being maintained.
+> In this case the patch is a clear NAK since you haven't root caused the
+> issue and are just working around it in a very questionable manner.
 
-I have it on my todo list. My plan is to move stuff out of mach-* directories,
-which aren't needed there. This should solve issues like the one here.
+To be fair though, amdgpu & radeon are already disabling write-combining
+for system memory pages in 32-bit x86 kernels for similar reasons.
 
-Thomas.
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Earthling Michel Dänzer               |               https://redhat.com
+Libre software enthusiast             |             Mesa and X developer
