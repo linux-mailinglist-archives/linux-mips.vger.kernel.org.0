@@ -2,70 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B8C24033C
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Aug 2020 10:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3304F2403AA
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Aug 2020 10:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbgHJILy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Aug 2020 04:11:54 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:44476 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726115AbgHJILx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Aug 2020 04:11:53 -0400
+        id S1726558AbgHJI4z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Aug 2020 04:56:55 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:34396 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726108AbgHJI4y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 10 Aug 2020 04:56:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1597047111;
+        s=mimecast20190719; t=1597049813;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zC1toKyx2VR+U9KzPo/PLlhMRukBuugOL6OoEK15XWo=;
-        b=SaVuQHoAemjvkwGob5LvIq1/GupOG5FcC/6gvtmNVKMNVv/j0+hATlwvSiVNrROZxSBe8q
-        4llgTJEm3EtUMWIhYLyKcRusKIUf54UsiH1C7tDBRbgu4Tg2C9+Js96DVlcbV5GaktlOdt
-        fUgYQ2Vdu0a2hpxvOK+sN2f3z+blDoY=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-297-1OoPpLK3PbKHvBWeV4Ikxw-1; Mon, 10 Aug 2020 04:11:49 -0400
-X-MC-Unique: 1OoPpLK3PbKHvBWeV4Ikxw-1
-Received: by mail-wr1-f69.google.com with SMTP id j2so3917927wrr.14
-        for <linux-mips@vger.kernel.org>; Mon, 10 Aug 2020 01:11:49 -0700 (PDT)
+        bh=QK1lBf3fdqSyygn/hbL7QdHaPZhuIx0fYdi0xlJuh6M=;
+        b=e/dPn4g5cZokbrEVkyKUecljO9P+/fflzb+zqFnJvAvaveDx7hCuKOfLSIhJt9m0GNekAv
+        97nQf2wEzjEEPVc/1Hsqt4WGqPesj9V9msMzxvM3W2U+l8lsl5jdFB2pOtYfxeNnER2FW1
+        RsRDNgv2qtBsmnJAbIF1+bdqNLzGCco=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-134-Zfd3ybr3N92fSKcF0eU-Ng-1; Mon, 10 Aug 2020 04:56:51 -0400
+X-MC-Unique: Zfd3ybr3N92fSKcF0eU-Ng-1
+Received: by mail-wr1-f72.google.com with SMTP id m7so3933140wrb.20
+        for <linux-mips@vger.kernel.org>; Mon, 10 Aug 2020 01:56:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zC1toKyx2VR+U9KzPo/PLlhMRukBuugOL6OoEK15XWo=;
-        b=Y7XU0+pzpcX4bky9ECqasUFfjtgic/uslcZMvo9am4zDRXTB1veRorzV1bt2324Chc
-         tnKEwgOg6IJm64Ubg8Jc1xJKOhm1Ycap6LVFPGiNpQihco/RBTKttMQqyHfmE/qnoGa/
-         VO1E3ptPaulAY+IHpqlyZf5QeWsJ2zxQGvxcQeiLXo5IlQxb2NCoHVO7Gu/53qD4oxZg
-         s8AOKjkFAPo/arSX9RsG1GQVc0MmNqYf/sQ6p8bVQl/wwKK+kS9AEX9OHNc8A/KK9PIc
-         6BeO/c0rQjgeXVsW8/SOLohM0N+TcEqb+7/vzny99HGOP8RUuIZPAAmd9TinwZdxlzJa
-         fDlg==
-X-Gm-Message-State: AOAM530IAUCwqNz1A0xqSnlgkx57y4wdzQim78IWFpDt3pa3X/NFGBP1
-        fuoXsWuckLkbPx8EZdTgq7VVlj9L+inyxKP13UpGYXLuB5FTPhkziYKwcJ5BAHxD7AQ+P/O0KNr
-        sqQ1p8J02kzBKl53uzGVQgQ==
-X-Received: by 2002:a5d:5704:: with SMTP id a4mr22915224wrv.318.1597047108706;
-        Mon, 10 Aug 2020 01:11:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx06vKPGNJTLrqXR4QKmwbxkXMvNDUzd/1ArhhCxhYjuqxYkRBJZpNV0anpK/U2bP0kmVxWYw==
-X-Received: by 2002:a5d:5704:: with SMTP id a4mr22915196wrv.318.1597047108466;
-        Mon, 10 Aug 2020 01:11:48 -0700 (PDT)
+        bh=QK1lBf3fdqSyygn/hbL7QdHaPZhuIx0fYdi0xlJuh6M=;
+        b=Jv47Aq3X4F24UagQKFgroqR2L9hNLZv5bC6Irikg7ypJMLRjQw+JJl7rs7G1tqycfP
+         S2rUBx0pqREwf87OLOwiHakIpLihLEsVRieWzLbINbmpwQpsbHbQr0Vm5MTAZ7hSdMaa
+         tg5xfJYwZtYBOMK8api/osz+ME7lMBo3MqDzGWjbyFSKA9+076ZyznurY0gqlU+2wIZE
+         uGg/gpQcpGa/kwSfRu0s69H30sEtEW7ZfetcL7EqFT2UJpYOun6UEgkIxdl/Sm0dl/os
+         eI+6iyCmmAIJvbCzeuC79uF9MKUd4XW/FAzImZM/qXyEmGi3NT/1+tAGTxyN0qv9bnJ/
+         Tvxg==
+X-Gm-Message-State: AOAM531+fF7crXb1x6b7n/1HvnwZDP7TdNPY6exUsZePZmAXZVsrpEl5
+        F4/9vkKQ4WF8fErtocQiBT13L0/g4ZPpSojKR5h5UFGjf/JslDY0kQPi3cFTFMHHakkkjcQwuGb
+        nHZT5nEnCi66sCR0AZl0dbg==
+X-Received: by 2002:adf:de09:: with SMTP id b9mr24016618wrm.409.1597049810471;
+        Mon, 10 Aug 2020 01:56:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwbLVCWnrRjOybrhtLaR57NXiNKoVkHe0cAFaru2+iqq7APVclTt+MtrDeQRn4Qbj2QB8kQAA==
+X-Received: by 2002:adf:de09:: with SMTP id b9mr24016610wrm.409.1597049810240;
+        Mon, 10 Aug 2020 01:56:50 -0700 (PDT)
 Received: from ?IPv6:2001:b07:6468:f312:5d6c:f50:4462:5103? ([2001:b07:6468:f312:5d6c:f50:4462:5103])
-        by smtp.gmail.com with ESMTPSA id f131sm20877690wme.40.2020.08.10.01.11.47
+        by smtp.gmail.com with ESMTPSA id g3sm22278906wrb.59.2020.08.10.01.56.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Aug 2020 01:11:47 -0700 (PDT)
-Subject: Re: [PATCH RESEND for-5.9] MIPS: KVM: Convert a fallthrough comment
- to fallthrough
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, kvm@vger.kernel.org
-Cc:     Huacai Chen <chenhc@lemote.com>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Mon, 10 Aug 2020 01:56:49 -0700 (PDT)
+Subject: Re: [PATCH] MIPS: VZ: Only include loongson_regs.h for CPU_LOONGSON64
+To:     Greg KH <greg@kroah.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200810011749.3211128-1-jiaxun.yang@flygoat.com>
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        kvm@vger.kernel.org, linux-mips@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>, stable@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1596891052-24052-1-git-send-email-chenhc@lemote.com>
+ <20200808153123.GC369184@kroah.com>
+ <2b2937d0-eae6-a489-07bd-c40ded02ce89@flygoat.com>
+ <20200809070235.GA1098081@kroah.com>
+ <5ffc7bb1-8e3f-227a-7ad0-cec5fc32a96a@redhat.com>
+ <20200810074417.GA1529187@kroah.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <a479bd7f-a71b-441d-4e82-6bcc163bab71@redhat.com>
-Date:   Mon, 10 Aug 2020 10:11:47 +0200
+Message-ID: <5522eef8-0da5-7f73-b2f8-2d0c19bb5819@redhat.com>
+Date:   Mon, 10 Aug 2020 10:56:48 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200810011749.3211128-1-jiaxun.yang@flygoat.com>
+In-Reply-To: <20200810074417.GA1529187@kroah.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -74,43 +83,43 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/08/20 03:17, Jiaxun Yang wrote:
-> There is a fallthrough comment being forgotten,
-> GCC complains about it:
-> 
-> arch/mips/kvm/emulate.c: In function kvm_mips_emulate_load:
-> arch/mips/kvm/emulate.c:1936:21: error: this statement may fall through
->  1936 |   vcpu->mmio_needed = 1; /* unsigned */
->       |   ~~~~~~~~~~~~~~~~~~^~~
-> arch/mips/kvm/emulate.c:1939:2: note: here
->  1939 |  case lw_op:
-> 
-> Just fix it.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Reviewed-by: Huacai Chen <chenhc@lemote.com>
-> ---
-> This is blocking KVM MIPS from build, so it needs to get into 5.9.
-> ---
->  arch/mips/kvm/emulate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/kvm/emulate.c b/arch/mips/kvm/emulate.c
-> index 703782355318..d70c4f8e14e2 100644
-> --- a/arch/mips/kvm/emulate.c
-> +++ b/arch/mips/kvm/emulate.c
-> @@ -1935,7 +1935,7 @@ enum emulation_result kvm_mips_emulate_load(union mips_instruction inst,
->  
->  	case lwu_op:
->  		vcpu->mmio_needed = 1;	/* unsigned */
-> -		/* fall through */
-> +		fallthrough;
->  #endif
->  	case lw_op:
->  		run->mmio.len = 4;
-> 
+On 10/08/20 09:44, Greg KH wrote:
+>> There is more #ifdef CONFIG_CPU_LOONGSON64 in arch/mips/kvm/vz.c, and
+>> more #include "loongson_regs.h" in arch/mips.  So while I agree with
+>> Greg that this idiom is quite unusual, it seems to be the expected way
+>> to use this header.  I queued the patch.
+> Or you all could fix it up to work properly like all other #include
+> lines in the kernel source tree.  There's no reason mips should be
+> "special" here, right?
 
-Queued, thanks.
+It's not just this #include, there's a couple dozen mach-* directories;
+changing how they work would be up to the MIPS maintainers (CCed), and
+it would certainly not be a patch that can be merged in stable@ kernels.
+
+arch/mips/kernel/cpu-probe.c has the same
+
+#ifdef CONFIG_CPU_LOONGSON64
+#include <loongson_regs.h>
+
+for example, so apparently they're good with this.  So if I don't pick
+up the patch to fix the build it would be in all likelihood merged by
+MIPS maintainers.  The only difference will be how long the build
+remains broken and the fact that they need to worry about KVM despite
+the presence of a specific maintainer.
+
+KVM could of course just #include <asm/mach-loongson64/loongson_regs.h>,
+which would be found unconditionally.  But there is some assembly in the
+header, so even if it would compile (I didn't check) it seems wrong to
+include it unconditionally and in fact it would be the only case of a
+file including <asm/mach-*/*.h> even if it is not compiled for that
+platform.
+
+Another alternative would be to move CONFIG_CPU_LOONGSON64 code out of
+arch/mips/kvm/vz.c and include it with obj-$(CONFIG_CPU_LOONGSON64).
+I'll gladly accept a patch to do that, but I won't write it since I
+don't have access to the hardware in order to test it.  For now, and for
+the immediate purpose of not breaking the build, when in Rome I'll do as
+the Romans do.
 
 Paolo
 
