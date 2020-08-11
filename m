@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DE8241CD5
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Aug 2020 17:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7129E241CDD
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Aug 2020 17:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728841AbgHKPB1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Aug 2020 11:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S1728879AbgHKPBq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Aug 2020 11:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728788AbgHKPB0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Aug 2020 11:01:26 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315D7C06174A;
-        Tue, 11 Aug 2020 08:01:26 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id f7so11810214wrw.1;
-        Tue, 11 Aug 2020 08:01:26 -0700 (PDT)
+        with ESMTP id S1728837AbgHKPB1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Aug 2020 11:01:27 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592C7C061788;
+        Tue, 11 Aug 2020 08:01:27 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id k8so3168449wma.2;
+        Tue, 11 Aug 2020 08:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+Omhf4JBO1kZHIgbP4gDHiaQBVFEO7TFQZk4NOsjloA=;
-        b=ri7njzHPSdK+1vvpXER+6XhtZxEPcPjHNADeBwkSVNGZazFv+ojx2xY49M9VbK6QO5
-         u/0Jb/xaoLBFO1V9acq0xegoa8z9x/ebFpODSdvHbPE8csJpxQ2ZtFF7plMoCnsLcdUp
-         c9SwAbuerYK/Z1gT0k12/UJe5MKb7YCAm1fwU5mJgIISEhj+CweDkG+Edz3MNLihZ60r
-         qN/ba3yXsQ7X5mZ0eCi2OZRDbkwC0VVZMHU9K/P6Usb81XOBh/c3Ce5xltOXaQ3hK3WJ
-         YIgCo0dOoDDqeNRP80zcXuUqeF29sGjbGdQAzmn+csIE2MyhSiO+FfHuCNv+HWnEAnwX
-         I6cQ==
+        bh=/PamCJTJWS9McL3YMw+k49gmnnx82kmNjt/V1IJPP/I=;
+        b=oYmEnwpIQfNzxBaW7xyHlYGZ7gBxIlmi7VVyyEY9i+tNIV1xQSkmcPcaNt7ExW8gDT
+         9vDMuoZUE7maoFTnSoXHDOirn4ztEaKTVHNBozUX8qm+swQHSEH1rX/JXuDDZJCfy/pb
+         TuyjB1LV3W0FuvpXiXYZbRR0wkgNMfWGdyNZQdEyyKPOQUB34I+QYtawzU5+71YLfjAy
+         wvw039t3mNJ1aglJS8/da2lyCVRmgHf7RZQMprMrXIBxuNO0z6J4gjBeOOhvmQwke5TH
+         Yby0cOubgbbPViPvN4v1zwOdWIT745QAmxo8/n9i3SJb4IRv6B0pqCsa0wmGd9K4nbW1
+         q15Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+Omhf4JBO1kZHIgbP4gDHiaQBVFEO7TFQZk4NOsjloA=;
-        b=gj+nZHdrS//f37F5eZRD3Ce4ZbXgfFzeZTJqRwT11zrGdk6R4kEyYeLQo/jvqwcuOb
-         Kg0VB98+e9GBtQCNlaabCubAu6Z/qChCEx21C5aeDtSIGeSZovuMC6s8yIVn9sVn3PkE
-         JF/m5N6hf+bui81Bb+rV7h/fuhRsNjKIyf9UZTwXIGCxxSiME2oZATkUcfpb78YsqZzw
-         04TW2Fpl98YbTD3f2AIRD5NamCiF2AjtUTK6KvOcp6VWdXAw/3l+ZMYIVqGhk3TiC+ct
-         NqfEVaZWtR5sUQc61/nSP3CwzE7VG209IOOtrziYCPiGbtgw71pPOOBNB34VCZl+UCpL
-         HBgg==
-X-Gm-Message-State: AOAM532S7H2Njzddklci3Ejhq+l17q0VRQGNlkNGYiSz3iVftbmzMZTi
-        bUTJ3k44gPZj583QlC4grgA=
-X-Google-Smtp-Source: ABdhPJw89nJhwhRxpiAc7wtxhctP0JeXOUosd+DiR3bD4tyvj8F6bG+jdppW163PAWiolKNckTx2RQ==
-X-Received: by 2002:a5d:4a0b:: with SMTP id m11mr29054420wrq.407.1597158084729;
-        Tue, 11 Aug 2020 08:01:24 -0700 (PDT)
+        bh=/PamCJTJWS9McL3YMw+k49gmnnx82kmNjt/V1IJPP/I=;
+        b=f/8y/F3oNRMSDm9amIlM2aQs9WskoLkm4G9VaPJFob89bKrBsrXDjOy518fWCZyOtH
+         LqInaMK99pfeContxs6hL5Ijqagiq0QaXVlPFvOY2do5C8vrfeqciflMqXcx5KZ+HOGv
+         W8l3AEmMikyGdy8V63uPVXYrxHa21vN7+88mCS9YUo3+LQBXZdiKzQ1cyjc4Qf/Uygvj
+         E1ZX5ynXNh4S/pFWoHhPUT/A6jKHwayj0fLO3rvcjTNb7AAxzcmq2wkkNIJculaq7NaR
+         MwOVQq+zgZRbyvK757zeZJvTLCXIC8YpOisIxVwG1fiawEk7u17uy4UABl2SdHXBneCh
+         55Hg==
+X-Gm-Message-State: AOAM532pwGaSmJHgSNoTcBNNMx4zfoJAGJCQ9+60tn0dJV9dR02m5/5D
+        Z8f7YXoj6eR2uLmVweilnsE=
+X-Google-Smtp-Source: ABdhPJyB6mUBDCgmoeQDB4nnf4wlqRwmDF87BAw3MEbpoX0X0eFFZ3M+TFnnTF51izQ+sNRlvQn2Uw==
+X-Received: by 2002:a05:600c:21d3:: with SMTP id x19mr4556815wmj.174.1597158085803;
+        Tue, 11 Aug 2020 08:01:25 -0700 (PDT)
 Received: from skynet.lan (88.red-83-49-60.dynamicip.rima-tde.net. [83.49.60.88])
-        by smtp.gmail.com with ESMTPSA id 15sm5350494wmo.33.2020.08.11.08.01.23
+        by smtp.gmail.com with ESMTPSA id 15sm5350494wmo.33.2020.08.11.08.01.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2020 08:01:24 -0700 (PDT)
+        Tue, 11 Aug 2020 08:01:25 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     tsbogend@alpha.franken.de, f.fainelli@gmail.com,
@@ -54,11 +54,10 @@ To:     tsbogend@alpha.franken.de, f.fainelli@gmail.com,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
-Subject: [PATCH v3 1/4] MIPS: BCM63xx: remove duplicated new lines
-Date:   Tue, 11 Aug 2020 17:01:14 +0200
-Message-Id: <20200811150117.254620-2-noltari@gmail.com>
+        <noltari@gmail.com>
+Subject: [PATCH v3 2/4] MIPS: BCM63xx: remove EHCI from BCM6348 boards
+Date:   Tue, 11 Aug 2020 17:01:15 +0200
+Message-Id: <20200811150117.254620-3-noltari@gmail.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200811150117.254620-1-noltari@gmail.com>
 References: <20200811150117.254620-1-noltari@gmail.com>
@@ -70,11 +69,10 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There are 3 duplicated new lines, let's remove them.
+There's no EHCI controller on BCM6348.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
 ---
  v3: no changes.
  v2: no changes.
@@ -83,33 +81,33 @@ Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
  1 file changed, 3 deletions(-)
 
 diff --git a/arch/mips/bcm63xx/boards/board_bcm963xx.c b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-index 230bf27c1fb8..744aa16bab12 100644
+index 744aa16bab12..45f1bc437245 100644
 --- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
 +++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-@@ -32,7 +32,6 @@
+@@ -285,7 +285,6 @@ static struct board_info __initdata board_96348gw_10 = {
  
- #include <uapi/linux/bcm933xx_hcs.h>
+ 	.has_ohci0			= 1,
+ 	.has_pccard			= 1,
+-	.has_ehci0			= 1,
  
--
- #define HCS_OFFSET_128K			0x20000
+ 	.leds = {
+ 		{
+@@ -338,7 +337,6 @@ static struct board_info __initdata board_96348gw_11 = {
  
- static struct board_info board;
-@@ -337,7 +336,6 @@ static struct board_info __initdata board_96348gw_11 = {
- 		.force_duplex_full	= 1,
- 	},
- 
--
  	.has_ohci0 = 1,
  	.has_pccard = 1,
- 	.has_ehci0 = 1,
-@@ -580,7 +578,6 @@ static struct board_info __initdata board_96358vw2 = {
- 		.force_duplex_full	= 1,
- 	},
+-	.has_ehci0 = 1,
  
--
- 	.has_ohci0 = 1,
- 	.has_pccard = 1,
- 	.has_ehci0 = 1,
+ 	.leds = {
+ 		{
+@@ -441,7 +439,6 @@ static struct board_info __initdata board_FAST2404 = {
+ 
+ 	.has_ohci0			= 1,
+ 	.has_pccard			= 1,
+-	.has_ehci0			= 1,
+ };
+ 
+ static struct board_info __initdata board_rta1025w_16 = {
 -- 
 2.28.0
 
