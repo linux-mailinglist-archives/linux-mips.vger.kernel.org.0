@@ -2,99 +2,178 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B852414FA
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Aug 2020 04:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B49F24166F
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Aug 2020 08:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726971AbgHKCdv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Aug 2020 22:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbgHKCdu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Aug 2020 22:33:50 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ADDC06174A;
-        Mon, 10 Aug 2020 19:33:50 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id m7so10406262qki.12;
-        Mon, 10 Aug 2020 19:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7oCC5oUKG+SSG28wXifIp6MPrRleapWysXVZ3T9Urho=;
-        b=DXgS/arh9/9yYFYXbDzO0r5dePHSSrRCMD49flNv5AftIZX7HT0X7L78nFJJHIjfZP
-         br3hOuGW7HxaL2d7Zf4Jn4bsjSNL4bqz3vZXR0LyX80g7PpWhkJs2rkefgrDhDCYzrE4
-         cK6F0MB0DuEFCM8wV84HyNPP95wS3hD9hYE/TXaGyIR3h1egs+Ml8xSiuKScC30Xxz6A
-         hajW6cOEfo6E+fnwsZB2VPFCZiKHyTGfRrjinT6BU2NF8yj3iF/GAyPIg1x5f6TD2UMk
-         yDGqgan/QgtPZaTO6l1s5/X1n4CC4X+IrvKfRnN9bxQdLc0PJI1yIHaIyuuu3Vrq+U46
-         kbcw==
+        id S1728018AbgHKGpS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 11 Aug 2020 02:45:18 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:44288 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727066AbgHKGpS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Aug 2020 02:45:18 -0400
+Received: by mail-io1-f67.google.com with SMTP id v6so11525440iow.11
+        for <linux-mips@vger.kernel.org>; Mon, 10 Aug 2020 23:45:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7oCC5oUKG+SSG28wXifIp6MPrRleapWysXVZ3T9Urho=;
-        b=opTOpprvHhxzpf4SAQP0uwXFrzhI8JziW74TvLYHwm2RWfyU2CFDinSzcwZxDczWNp
-         P4+B3Q/KJc2SlyIFjSlLwOQyb5HmtuWQmqzbPTI1W3CsZkppGphqr/S5s7Vc+pbdy+fl
-         Ozpo4uSOXa9FsZ8Vspv3S4kXj//4iZ6Plp/JHq7OPkS4L4J6mxGh4L8Hi2YJqsST04n6
-         RvmiQZvgsPVbVu4eeC6MfF74pTFe+5PjOl7fCjBfISnD596hYqC3fSn7OYfUXaHoE49e
-         4sGitsCVed4/ZQ9UYxErzcJoazetK9ZWPaPGV+1cRZeVcby3BRNWlEEW3xq9GnnaYqiW
-         Yu0A==
-X-Gm-Message-State: AOAM531yT2aBtH/+5bSpDzGdrVnm1yZNwMKi3d7+EYPHV1mTE8BVmehw
-        cn6aLf8Z3KZyc/C2MfQRppe3vEiO
-X-Google-Smtp-Source: ABdhPJwe8UYWaUgrasvpBwhqujStM1uIsyxDOPiwRUmCTDhmkaI80KIECz9rIXCj08klupW2QylnuQ==
-X-Received: by 2002:a37:62cf:: with SMTP id w198mr29454919qkb.172.1597113229005;
-        Mon, 10 Aug 2020 19:33:49 -0700 (PDT)
-Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id 7sm15235445qky.89.2020.08.10.19.33.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Aug 2020 19:33:47 -0700 (PDT)
-Subject: Re: [PATCH v2 3/4] MIPS: BCM63xx: enable EHCI for DWV-S0 board
-To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
-        =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200807100411.2904279-1-noltari@gmail.com>
- <20200807100411.2904279-4-noltari@gmail.com>
- <CAAdtpL7+_inNrbDpq_wt1Eo=tU6+e+yYR9ox-BF7bN82HVV5_Q@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <b1210ef6-36ec-9e3f-e686-a87244ea1c33@gmail.com>
-Date:   Mon, 10 Aug 2020 19:33:45 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sFa+cVPDgSsK7ULy2QfzfpHWsd43vvyv2bHj5XtrWvU=;
+        b=cTiTsWYVn0Esz1iZl7RY4EVf4TmkpH/0qKgi+0w7YOLxlZ4/ZbOeXPTKDSdm7tBlWo
+         hgMmhMFuuLpzKpkNsAf+UgrQ6p+n2qm5KGwlbj1LYhyP6AYKv0S3XY4uDAiT/ibxynFF
+         I3tS20QhrtceoFwsxZ08M3cZaXl+pS3jco8mQiw/dgzri/3w0v1QO041NQzOzB84Bw8P
+         jmwOzWFs1B6RpL6RFa/kvoh5OLdaisp0NKD7s/LoYMurJsqRC4DBtIXyucLhzP8OfhwJ
+         ds/nIaQvN+RR5EYUxd8kTmd3wTXCUnvISb4J6LaIUxy9QKGnQBAdsva38Egno/o1l+p1
+         UdGA==
+X-Gm-Message-State: AOAM532vuAS7DV1p+MWNmBtMS3eUIQ4a2xGft9qtjUfD/yvZoADFAz7l
+        u4Rm14GZbscTzp3gzEoNeHtJwzDkcF3YQ+dmjALT1mWYpEOYSA==
+X-Google-Smtp-Source: ABdhPJxajOA5ELn+wS6tzwiObWdhEoeS8eFqQ+nAXJURz63HHKZdQ1spyiCLpw2/ehaNn0PDy1+fPb+1YwEhzO2pd4A=
+X-Received: by 2002:a02:730b:: with SMTP id y11mr24839961jab.126.1597128316797;
+ Mon, 10 Aug 2020 23:45:16 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAAdtpL7+_inNrbDpq_wt1Eo=tU6+e+yYR9ox-BF7bN82HVV5_Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1588395344-5400-1-git-send-email-chenhc@lemote.com>
+ <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com> <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
+ <20200805121021.GA12598@alpha.franken.de> <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
+ <20200807131357.GA11979@alpha.franken.de> <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+ <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com> <20200810141219.GA2844@alpha.franken.de>
+ <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com>
+In-Reply-To: <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Tue, 11 Aug 2020 14:45:05 +0800
+Message-ID: <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
+Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi, Thomas and Jiaxun,
 
+On Tue, Aug 11, 2020 at 10:18 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+>
+>
+> 在 2020/8/10 22:12, Thomas Bogendoerfer 写道:
+> > On Sun, Aug 09, 2020 at 10:53:13PM +0800, Jiaxun Yang wrote:
+> >> Thus we still need to enable CU2 with exception for user space, and we can
+> >> always enable CU2 in
+> >> kernel since kernel won't be compiled with hard-float. :-)
+> > I see, how about the patch below
+> That looks fine for me.
+> Is it good with you, Huacai?
 
-On 8/9/2020 11:49 AM, Philippe Mathieu-Daudé wrote:
-> Hi Álvaro,
-> 
-> On Fri, Aug 7, 2020 at 12:05 PM Álvaro Fernández Rojas
-> <noltari@gmail.com> wrote:
->>
->> EHCI and OHCI share the same USB ports. Therefore, if the board has OHCI
->> it should also have EHCI.
-> 
-> This statement isn't correct. OHCI doesn't imply EHCI...
-> (although the opposite is almost always true).
-> 
-> Now per 6358-PB01-R the bcm6358 indeed has a EHCI controller.
-> 
-> Do you mind rewording the commit description?
+There are two problems:
+1, zboot (arch/mips/boot/compressed/head.S) should be considered,
+because the initial value of Status may or may not contain CU2.
+2, r4k_switch.S should set CU2 for the new process, otherwise it
+cannot use gslq/gssq while it in kernel (Because the new process
+doesn't contain CU2 in
+THERAD_STATUS. Though a process sets CU2 when it enters kernel, but it
+only sets CU2 in hardware, not in THREAD_STATUS).
 
-Is not it that a single USB port is used and we need the EHCI controller
-active in order for the correct speed negotiation to occur?
--- 
-Florian
+Huacai
+
+>
+> Thanks.
+>
+> - Jiaxun
+>
+> >
+> > Thomas.
+> >
+> >
+> > diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+> > index 4ddc12e4444a..f7144116b43b 100644
+> > --- a/arch/mips/include/asm/mipsregs.h
+> > +++ b/arch/mips/include/asm/mipsregs.h
+> > @@ -389,6 +389,13 @@
+> >   #define ST0_CU3                     0x80000000
+> >   #define ST0_XX                      0x80000000      /* MIPS IV naming */
+> >
+> > +/* in-kernel enabled CUs */
+> > +#ifdef CONFIG_CPU_LOONGSOON64
+> > +#define ST0_KERNEL_CUMASK    (ST0_CU0 | ST_CU2)
+> > +#else
+> > +#define ST0_KERNEL_CUMASK    ST0_CU0
+> > +#endif
+> > +
+> >   /*
+> >    * Bitfields and bit numbers in the coprocessor 0 IntCtl register. (MIPSR2)
+> >    */
+> > diff --git a/arch/mips/include/asm/stackframe.h b/arch/mips/include/asm/stackframe.h
+> > index 3e8d2aaf96af..aa430a6c68b2 100644
+> > --- a/arch/mips/include/asm/stackframe.h
+> > +++ b/arch/mips/include/asm/stackframe.h
+> > @@ -450,7 +450,7 @@
+> >    */
+> >               .macro  CLI
+> >               mfc0    t0, CP0_STATUS
+> > -             li      t1, ST0_CU0 | STATMASK
+> > +             li      t1, ST0_KERNEL_CUMASK | STATMASK
+> >               or      t0, t1
+> >               xori    t0, STATMASK
+> >               mtc0    t0, CP0_STATUS
+> > @@ -463,7 +463,7 @@
+> >    */
+> >               .macro  STI
+> >               mfc0    t0, CP0_STATUS
+> > -             li      t1, ST0_CU0 | STATMASK
+> > +             li      t1, ST0_KERNEL_CUMASK | STATMASK
+> >               or      t0, t1
+> >               xori    t0, STATMASK & ~1
+> >               mtc0    t0, CP0_STATUS
+> > @@ -477,7 +477,7 @@
+> >    */
+> >               .macro  KMODE
+> >               mfc0    t0, CP0_STATUS
+> > -             li      t1, ST0_CU0 | (STATMASK & ~1)
+> > +             li      t1, ST0_KERNEL_CUMASK | (STATMASK & ~1)
+> >   #if defined(CONFIG_CPU_R3000) || defined(CONFIG_CPU_TX39XX)
+> >               andi    t2, t0, ST0_IEP
+> >               srl     t2, 2
+> > diff --git a/arch/mips/kernel/head.S b/arch/mips/kernel/head.S
+> > index 7dd234e788e6..61b73580b877 100644
+> > --- a/arch/mips/kernel/head.S
+> > +++ b/arch/mips/kernel/head.S
+> > @@ -35,7 +35,7 @@
+> >       .macro  setup_c0_status set clr
+> >       .set    push
+> >       mfc0    t0, CP0_STATUS
+> > -     or      t0, ST0_CU0|\set|0x1f|\clr
+> > +     or      t0, ST0_KERNEL_CUMASK|\set|0x1f|\clr
+> >       xor     t0, 0x1f|\clr
+> >       mtc0    t0, CP0_STATUS
+> >       .set    noreorder
+> > diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+> > index ff5320b79100..90b869297893 100644
+> > --- a/arch/mips/kernel/process.c
+> > +++ b/arch/mips/kernel/process.c
+> > @@ -68,7 +68,7 @@ void start_thread(struct pt_regs * regs, unsigned long pc, unsigned long sp)
+> >       unsigned long status;
+> >
+> >       /* New thread loses kernel privileges. */
+> > -     status = regs->cp0_status & ~(ST0_CU0|ST0_CU1|ST0_FR|KU_MASK);
+> > +     status = regs->cp0_status & ~(ST0_CU0|ST0_CU1|ST0_CU2|ST0_FR|KU_MASK);
+> >       status |= KU_USER;
+> >       regs->cp0_status = status;
+> >       lose_fpu(0);
+> > diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+> > index b95ef98fc847..f4362ac172c6 100644
+> > --- a/arch/mips/kernel/traps.c
+> > +++ b/arch/mips/kernel/traps.c
+> > @@ -2190,7 +2190,7 @@ static void configure_status(void)
+> >        * flag that some firmware may have left set and the TS bit (for
+> >        * IP27).  Set XX for ISA IV code to work.
+> >        */
+> > -     unsigned int status_set = ST0_CU0;
+> > +     unsigned int status_set = ST0_KERNEL_CUMASK;
+> >   #ifdef CONFIG_64BIT
+> >       status_set |= ST0_FR|ST0_KX|ST0_SX|ST0_UX;
+> >   #endif
+> >
