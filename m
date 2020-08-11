@@ -2,96 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 165CA24184E
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Aug 2020 10:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C801B2418B6
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Aug 2020 11:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728253AbgHKIdY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Aug 2020 04:33:24 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:56696 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728224AbgHKIdY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 11 Aug 2020 04:33:24 -0400
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxeMXKVzJfOlcHAA--.16S2;
-        Tue, 11 Aug 2020 16:33:16 +0800 (CST)
-From:   XingxingSu <suxingxing@loongson.cn>
-To:     Huacai Chen <chenhc@lemote.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: MIPS/VZ: Fix build error caused by 'kvm_run' cleanup
-Date:   Tue, 11 Aug 2020 16:33:14 +0800
-Message-Id: <1597134794-20611-1-git-send-email-suxingxing@loongson.cn>
-X-Mailer: git-send-email 2.1.0
+        id S1728380AbgHKJJe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 11 Aug 2020 05:09:34 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:39503 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728336AbgHKJJe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Aug 2020 05:09:34 -0400
+Received: by mail-ed1-f67.google.com with SMTP id c10so8497449edk.6;
+        Tue, 11 Aug 2020 02:09:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7nAprOq2xfZCg8U+qPFrSCSPVHDN3Z4PSbLlksPqDaQ=;
+        b=KZbRVuhOyyK9le2+9kicadsjCLCe942WCWBJWfgiwQcHAVQEnGTLhiWIfkh0Fz2lPo
+         F1Dei75G/We1kp9Sq5QiHCOAvVCMGtRyadnlzhRP5mRhonBuCI8DlUpHYnOws8mHNDuz
+         aEn0FdZ1ZSqnKwISo5upjzjid7dPyaPJhrjVdtQfObVLHXn+qWUPo9dhFaeduFcUPGfI
+         gvHygsnERxeIoA3XsElWAEHDGhjitK2MOSXroKTEhat1uPtKMoQ5rZY8WinpWOUoCVwR
+         mfJNWhEdq5hICUf4Ghc2xVRgneT11Zs0HOn5KPta3kazemQUum2m7FuKRd2MA+ErHfa5
+         Dxvw==
+X-Gm-Message-State: AOAM530NhfatOxATEaVFYTI5tMJvWTpN53FyH/ibYcNIHFLT8emGGjal
+        akZaPWymLXQu7kF2HsL0AlnvKyLDnPeSZOqKT+RuQZzX
+X-Google-Smtp-Source: ABdhPJwsET5r+S0OddQDzlODnuDPEC1cxBkBpR48tmVZwKKukz6tCJ53SK+KdU7nBegaksGW9TaBIk4T/gZYhQf8RXE=
+X-Received: by 2002:a50:e70e:: with SMTP id a14mr9836310edn.93.1597136972345;
+ Tue, 11 Aug 2020 02:09:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxeMXKVzJfOlcHAA--.16S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYd7k0a2IF6FyUM7kC6x804xWl14x267AK
-        xVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
-        A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j
-        6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr
-        1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
-        0487M2AExVAIFx02aVAFz4v204v7Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4kE6I8I3I0E14AKx2xKxVC2ax8xMxkIecxEwVAFwVW8ZwCF04k20x
-        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r1j6r18MI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
-        cVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jVUDJUUUUU=
-X-CM-SenderInfo: pvx0x0xj0l0wo6or00hjvr0hdfq/1tbiAQAFC13QvMLnFwABsN
+References: <20200807100411.2904279-1-noltari@gmail.com> <20200807100411.2904279-4-noltari@gmail.com>
+ <CAAdtpL7+_inNrbDpq_wt1Eo=tU6+e+yYR9ox-BF7bN82HVV5_Q@mail.gmail.com> <b1210ef6-36ec-9e3f-e686-a87244ea1c33@gmail.com>
+In-Reply-To: <b1210ef6-36ec-9e3f-e686-a87244ea1c33@gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Tue, 11 Aug 2020 11:09:20 +0200
+Message-ID: <CAAdtpL7=oA-2f0CA8-d6o44jbd7VtBOSSJSGmQjitVT3e_WLZw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] MIPS: BCM63xx: enable EHCI for DWV-S0 board
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit c34b26b98caca48ec9ee9 ("KVM: MIPS: clean up redundant 'kvm_run'
-parameters") remove the 'kvm_run' parameter in kvm_vz_gpsi_lwc2.
+Hi Florian,
 
-The following build error:
+On Tue, Aug 11, 2020 at 4:33 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> On 8/9/2020 11:49 AM, Philippe Mathieu-Daudé wrote:
+> > Hi Álvaro,
+> >
+> > On Fri, Aug 7, 2020 at 12:05 PM Álvaro Fernández Rojas
+> > <noltari@gmail.com> wrote:
+> >>
+> >> EHCI and OHCI share the same USB ports. Therefore, if the board has OHCI
+> >> it should also have EHCI.
+> >
+> > This statement isn't correct. OHCI doesn't imply EHCI...
+> > (although the opposite is almost always true).
+> >
+> > Now per 6358-PB01-R the bcm6358 indeed has a EHCI controller.
+> >
+> > Do you mind rewording the commit description?
+>
+> Is not it that a single USB port is used and we need the EHCI controller
+> active in order for the correct speed negotiation to occur?
 
-arch/mips/kvm/vz.c: In function ‘kvm_trap_vz_handle_gpsi’:
-arch/mips/kvm/vz.c:1243:43: error: ‘run’ undeclared (first use in this function)
-   er = kvm_vz_gpsi_lwc2(inst, opc, cause, run, vcpu);
-                                           ^~~
-arch/mips/kvm/vz.c:1243:43: note: each undeclared identifier is reported only 
- once for each function it appears in
-scripts/Makefile.build:283: recipe for target 'arch/mips/kvm/vz.o' failed
-make[2]: *** [arch/mips/kvm/vz.o] Error 1
-scripts/Makefile.build:500: recipe for target 'arch/mips/kvm' failed
-make[1]: *** [arch/mips/kvm] Error 2
-Makefile:1785: recipe for target 'arch/mips' failed
-make: *** [arch/mips] Error 2
+Yes. What sounds odd is "if the board has OHCI it should also have EHCI."
 
+This is true for this particular board because its chipset is a bcm6358,
+but I'm worried it might later confuse other developers. For example the
+bcm6348 has a OHCI controller, but that doesn't imply its port can be
+used as EHCI.
 
-Signed-off-by: XingxingSu <suxingxing@loongson.cn>
----
- arch/mips/kvm/vz.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Regards,
 
-diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
-index 3932f76..49c6a2a 100644
---- a/arch/mips/kvm/vz.c
-+++ b/arch/mips/kvm/vz.c
-@@ -1142,7 +1142,6 @@ static enum emulation_result kvm_vz_gpsi_cache(union mips_instruction inst,
- #ifdef CONFIG_CPU_LOONGSON64
- static enum emulation_result kvm_vz_gpsi_lwc2(union mips_instruction inst,
- 					      u32 *opc, u32 cause,
--					      struct kvm_run *run,
- 					      struct kvm_vcpu *vcpu)
- {
- 	unsigned int rs, rd;
-@@ -1240,7 +1239,7 @@ static enum emulation_result kvm_trap_vz_handle_gpsi(u32 cause, u32 *opc,
- #endif
- #ifdef CONFIG_CPU_LOONGSON64
- 	case lwc2_op:
--		er = kvm_vz_gpsi_lwc2(inst, opc, cause, run, vcpu);
-+		er = kvm_vz_gpsi_lwc2(inst, opc, cause, vcpu);
- 		break;
- #endif
- 	case spec3_op:
--- 
-2.1.0
+Phil.
 
+> --
+> Florian
