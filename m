@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C9424255A
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Aug 2020 08:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078AA242569
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Aug 2020 08:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbgHLGbu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Aug 2020 02:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
+        id S1726969AbgHLGb7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Aug 2020 02:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726917AbgHLGbr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Aug 2020 02:31:47 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80C9C06174A;
-        Tue, 11 Aug 2020 23:31:46 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id r2so919652wrs.8;
-        Tue, 11 Aug 2020 23:31:46 -0700 (PDT)
+        with ESMTP id S1726819AbgHLGbs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Aug 2020 02:31:48 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F124EC06178B;
+        Tue, 11 Aug 2020 23:31:47 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id a15so910481wrh.10;
+        Tue, 11 Aug 2020 23:31:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TX8IXzrcv/xGU3VpzsK8e7YzUUV+UsBwTqcWB7csBrk=;
-        b=iDM5x2tWqi6Hif32PHOIsgRlDPVRzwujecnmaqkvZYDlH3z3gP89Uw/QxDtPXbZS03
-         xf8bAs1M0neBswUB8kHHPgfKs46iEYpfOwHKFYNhn4w23LbLy1d9sN7qFTSPuQ063+pa
-         m26xGJyoW1GWjsfLNlJdS8KyuWmICpw4IZugzrF2DfH5q6zRFSl2og0HulkFe+2AJcmU
-         C+FuEmz4eHkjcam8MHV6QCyXzhRvEWww3vbK4Y9OVyUS1MUMIk3DCJPiwAFXsfvkkmcv
-         dHMKSfYIcxd/Iszmv5/xbpTMYFJSkF811gUcsAJ8IdGh4VywPv62ej+X9up7ZbQYfVCZ
-         BzwQ==
+        bh=zxUxT0dnx3HVpCzQf3wWbQyXRNb4CKXHAPGk5+OKM58=;
+        b=AYxms+aHCUosJ3SHA2cHns3KhVnqeg6VXSY/vck5ur//Er8U0spDXqbHspOkSZMXsE
+         mOww/zzkkSRDHf9hzJ4a421dnDPMVJ6sWzj4oAMyy9owGi/4raLrXoM8bVDDWLjIOB39
+         vT92K1/Uw6/BgB6O3LFISVPLa6VR/YvWHr1syV0UF9BfsHsPyWcB0/H5F9tT3o4O5caS
+         3QjH/N5G2CKLxSWdpS0wIgcD3aSrzt8mqShGX4QN+JXj1uQAQ7oDyDFgMVLYwa5Q+v/V
+         fTZQkl6DCd0p0VLbzwmMVkttH1mZz+qyxvxy2xrs4CMQmzo45Vf6lb2WEHvau+ROrUO/
+         ZzFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TX8IXzrcv/xGU3VpzsK8e7YzUUV+UsBwTqcWB7csBrk=;
-        b=BudXXTADQv/4hIaKYl/C0BKBEL9s3gXJw2wH3v8uxzxc0h2V1Jnr3vxN/bGz9EqxlC
-         WfWaF9r1kwtxsIjtSfflwi8tdoZJlj08aA8A99+dQUp99j0pJ6NkQ2FFXxMt+8vwdZD2
-         AhJUsxhzXrpNqAg6GzrjBLwGx78I3wEbVKanxB8rhtbHqTvcpTEUj7VJs5NtJX+jMTBb
-         jKR+kcXKByOikCdKzl1D95clmXqQcfRsP1t1N5BrYr3DcFNw+wITQRQVa7atqCKgP/JV
-         4z/6QKrcKiqTF2P+phaEuYmP5GRytqBsxDj8VZkIF/ytL80VZePJgBYuEFinM0IMqGNu
-         o8GA==
-X-Gm-Message-State: AOAM531YZHiJOOgnkNs+7Eyn4lOzLrLDStt3XG9QtggjFq7iIxHAW11c
-        UouQhfLo0GrDBZWS/4r+j5w=
-X-Google-Smtp-Source: ABdhPJzDI0AqA5Lf3vbNVjOsSn/JnA0ScfCkMKiDyQm/jIQU496gdbS+Ne+wANL6Ss6PoDHTLQ+5qw==
-X-Received: by 2002:adf:c3c8:: with SMTP id d8mr31452998wrg.406.1597213905567;
-        Tue, 11 Aug 2020 23:31:45 -0700 (PDT)
+        bh=zxUxT0dnx3HVpCzQf3wWbQyXRNb4CKXHAPGk5+OKM58=;
+        b=BeaF+gceOzO4PTUaqbPsGx8DDDZm73ybBrqPVUKImxnjfIXC0wK/m7EDE8Qjke9Ts5
+         b0KPtsMKwAxaP997JG6ebaUkU6BMUylrre9J3KWPHoqZuzBlWoC2sVCVw3iyu2SskNTB
+         h0noNow6lNGIKjbj9Nccef6wL5WXCNJ8ECcGyGDUFue2H/eKDqX2h2uwV6c3fvJqzLKn
+         CqxQiWv3gZ5sGFdcLNFDIh03n2d7G+hXSItutp6Y5/euV1KTG7op7BwrolRuZbHGAADV
+         sk0VfeL+9JEZDpAFW3LOI3oGeRBLL0BE92jY/O87+OBRonuRi72N8px45zRMWRZtLAmS
+         LKvg==
+X-Gm-Message-State: AOAM532fjVThBE5SVrUKIzSOdRyETdmCTDBcGJirPNg+J8E/595EgCUn
+        hmB4yQ6cR1uw5whuWWkZ3fg=
+X-Google-Smtp-Source: ABdhPJzWHV+/wfYN9iZPP0h+9Qc7PEzVok4j8yvFv/Pz0eYe6ojo9aLBIMfEqWsLebRnSI5FCgv4tA==
+X-Received: by 2002:adf:e911:: with SMTP id f17mr31919274wrm.397.1597213906593;
+        Tue, 11 Aug 2020 23:31:46 -0700 (PDT)
 Received: from skynet.lan (88.red-83-49-60.dynamicip.rima-tde.net. [83.49.60.88])
-        by smtp.gmail.com with ESMTPSA id m16sm2149945wrr.71.2020.08.11.23.31.44
+        by smtp.gmail.com with ESMTPSA id m16sm2149945wrr.71.2020.08.11.23.31.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2020 23:31:45 -0700 (PDT)
+        Tue, 11 Aug 2020 23:31:46 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     f.fainelli@gmail.com, robh+dt@kernel.org,
@@ -55,9 +55,9 @@ To:     f.fainelli@gmail.com, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH 12/14] mips: bmips: bcm6362: include and use dt-bindings
-Date:   Wed, 12 Aug 2020 08:31:27 +0200
-Message-Id: <20200812063129.361862-13-noltari@gmail.com>
+Subject: [PATCH 13/14] mips: bmips: bcm6368: include and use dt-bindings
+Date:   Wed, 12 Aug 2020 08:31:28 +0200
+Message-Id: <20200812063129.361862-14-noltari@gmail.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200812063129.361862-1-noltari@gmail.com>
 References: <20200812063129.361862-1-noltari@gmail.com>
@@ -73,58 +73,58 @@ Now that there are proper device tree bindings we can start using them.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 ---
- arch/mips/boot/dts/brcm/bcm6362.dtsi | 12 ++++++++----
+ arch/mips/boot/dts/brcm/bcm6368.dtsi | 12 ++++++++----
  1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/boot/dts/brcm/bcm6362.dtsi b/arch/mips/boot/dts/brcm/bcm6362.dtsi
-index 8ae6981735b8..e6ec366818a9 100644
---- a/arch/mips/boot/dts/brcm/bcm6362.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm6362.dtsi
+diff --git a/arch/mips/boot/dts/brcm/bcm6368.dtsi b/arch/mips/boot/dts/brcm/bcm6368.dtsi
+index 449c167dd892..62599d4e6abe 100644
+--- a/arch/mips/boot/dts/brcm/bcm6368.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6368.dtsi
 @@ -1,4 +1,8 @@
  // SPDX-License-Identifier: GPL-2.0
 +
-+#include "dt-bindings/clock/bcm6362-clock.h"
-+#include "dt-bindings/interrupt-controller/bcm6362-interrupt-controller.h"
++#include "dt-bindings/clock/bcm6368-clock.h"
++#include "dt-bindings/interrupt-controller/bcm6368-interrupt-controller.h"
 +
  / {
  	#address-cells = <1>;
  	#size-cells = <1>;
-@@ -87,7 +91,7 @@ uart0: serial@10000100 {
+@@ -94,7 +98,7 @@ uart0: serial@10000100 {
+ 			compatible = "brcm,bcm6345-uart";
  			reg = <0x10000100 0x18>;
- 
+ 			interrupt-parent = <&periph_intc>;
+-			interrupts = <2>;
++			interrupts = <BCM6368_IRQ_UART0>;
+ 			clocks = <&periph_clk>;
+ 			clock-names = "refclk";
+ 			status = "disabled";
+@@ -104,7 +108,7 @@ uart1: serial@10000120 {
+ 			compatible = "brcm,bcm6345-uart";
+ 			reg = <0x10000120 0x18>;
  			interrupt-parent = <&periph_intc>;
 -			interrupts = <3>;
-+			interrupts = <BCM6362_IRQ_UART0>;
- 
++			interrupts = <BCM6368_IRQ_UART1>;
  			clocks = <&periph_clk>;
  			clock-names = "refclk";
-@@ -100,7 +104,7 @@ uart1: serial@10000120 {
- 			reg = <0x10000120 0x18>;
- 
- 			interrupt-parent = <&periph_intc>;
--			interrupts = <4>;
-+			interrupts = <BCM6362_IRQ_UART1>;
- 
- 			clocks = <&periph_clk>;
- 			clock-names = "refclk";
-@@ -123,7 +127,7 @@ ehci: usb@10002500 {
+ 			status = "disabled";
+@@ -115,7 +119,7 @@ ehci: usb@10001500 {
+ 			reg = <0x10001500 0x100>;
  			big-endian;
- 
  			interrupt-parent = <&periph_intc>;
--			interrupts = <10>;
-+			interrupts = <BCM6362_IRQ_EHCI>;
- 
+-			interrupts = <7>;
++			interrupts = <BCM6368_IRQ_EHCI>;
  			status = "disabled";
  		};
-@@ -135,7 +139,7 @@ ohci: usb@10002600 {
+ 
+@@ -125,7 +129,7 @@ ohci: usb@10001600 {
+ 			big-endian;
  			no-big-frame-no;
- 
  			interrupt-parent = <&periph_intc>;
--			interrupts = <9>;
-+			interrupts = <BCM6362_IRQ_OHCI>;
- 
+-			interrupts = <5>;
++			interrupts = <BCM6368_IRQ_OHCI>;
  			status = "disabled";
  		};
+ 	};
 -- 
 2.28.0
 
