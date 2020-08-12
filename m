@@ -2,70 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1482423BE
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Aug 2020 03:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F5D24257B
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Aug 2020 08:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726630AbgHLBcR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Aug 2020 21:32:17 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:47554 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726564AbgHLBcP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 11 Aug 2020 21:32:15 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx392aRjNfgboHAA--.4254S2;
-        Wed, 12 Aug 2020 09:32:12 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Add git tree for KVM/mips
-Date:   Wed, 12 Aug 2020 09:32:10 +0800
-Message-Id: <1597195930-13613-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dx392aRjNfgboHAA--.4254S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrCr1UKr45Xr1DAryxZF43Wrg_yoWxXFb_CF
-        47JayxWryrGrZrA3yvg3ZrKFyFq3y8JF93Z3ZFqwsFyas8tryYqrZFy3s7C34DCr4kCrWD
-        Xay3Jwna9r43WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb2xYjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I
-        8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_KwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU2lksDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1726798AbgHLGbf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Aug 2020 02:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726572AbgHLGbf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Aug 2020 02:31:35 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2556BC06174A;
+        Tue, 11 Aug 2020 23:31:35 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id y3so938329wrl.4;
+        Tue, 11 Aug 2020 23:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s+W2KNSfxt+TusGOoBlggzdrLIrra6LZ2EEZWr0qxxg=;
+        b=h8Ljwbab37d7TOBhq1tXfSegVssJHdWNOoI+wFqC4x5QurtELxYWxhPF2zqNq1mXVU
+         fJ9zbcTXGRB6SRZIpPWpNuwCE0wKl23/9JZh1JjVi//JHvUbCylMgww7xotqLJvf4+oC
+         bmK7ZXkxyVvhNg9PC4XPs+u1aVnGMQE1RHEUe/Go6yppEH393EbF9SZuXVps5n051g3i
+         j4jTBA5u89+fdow2n0Qlfv9L1dWFWgbXADLatGvDg0pxm80+ziooBJveZChdQSRXfn/T
+         vBNCyV5Dbiw77RB8wQ5tSq0SvxxTcoIaBw49XCheCok9S2T8LlZnd04pOIRWfyMOU2Ni
+         0HtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s+W2KNSfxt+TusGOoBlggzdrLIrra6LZ2EEZWr0qxxg=;
+        b=hNgNSPgavnw+WYkfnwJxoJ/i368ZdcdNatIPw0FChl58N0WjymYXrjyiA3LYpGbZFH
+         PvQPkFKdzV1xvFEfe4xO7kJoGZ7x44GGC2Q92hy9cVobtoXWYf2fwf6K8evFsWKngadS
+         O0Jf276esV31hzQEiQRuC710Z05MXD+RO1PN2Nc98zHYrkwbrQ3vzkQI2PyFIozwZb09
+         z1fqkylM2p7nECuMrgCt3y38cpNqSeZ2UW5z87V4oyVk8F3v4G6xSwSJvSv+QS/JKEIq
+         WBDON3ovDjQ5QWprVolZDtgC/0NPGpe+G6PYuHPW7PCQG0l+d6irdwOKzW7R3kR5hfFj
+         SMMA==
+X-Gm-Message-State: AOAM533aJ9L2fNcXQb45owCRjOfDMydlhZ9ASG3E+A68JLhpERkOKETB
+        7ysuTMfEmY6DuxWvNL52YhKSMbB+
+X-Google-Smtp-Source: ABdhPJzNHsi5MhhPLOLNTQvdztPaMWIkUFu8BCtXisQJFx8zkIGGBTVR5eZ5XcuYRe+eHs7QdYyhmQ==
+X-Received: by 2002:adf:ba52:: with SMTP id t18mr31838238wrg.26.1597213892758;
+        Tue, 11 Aug 2020 23:31:32 -0700 (PDT)
+Received: from skynet.lan (88.red-83-49-60.dynamicip.rima-tde.net. [83.49.60.88])
+        by smtp.gmail.com with ESMTPSA id m16sm2149945wrr.71.2020.08.11.23.31.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2020 23:31:31 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     f.fainelli@gmail.com, robh+dt@kernel.org,
+        tsbogend@alpha.franken.de, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH 00/14] mips: bmips: include dt-bindings headers
+Date:   Wed, 12 Aug 2020 08:31:15 +0200
+Message-Id: <20200812063129.361862-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There is no git tree for KVM/mips in MAINTAINERS, it is not
-convinent to rebase, add it.
+Allow including dt-bindings header files and use them for bcm63xx.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Álvaro Fernández Rojas (14):
+  mips: dts: brcm: allow including header files
+  mips: bmips: add BCM3368 irq definitions
+  mips: bmips: add BCM6318 irq definitions
+  mips: bmips: add BCM6328 irq definitions
+  mips: bmips: add BCM6358 irq definitions
+  mips: bmips: add BCM6362 irq definitions
+  mips: bmips: add BCM6368 irq definitions
+  mips: bmips: add BCM63268 irq definitions
+  mips: bmips: bcm3368: include and use dt-bindings
+  mips: bmips: bcm6328: include and use dt-bindings
+  mips: bmips: bcm6358: include and use dt-bindings
+  mips: bmips: bcm6362: include and use dt-bindings
+  mips: bmips: bcm6368: include and use dt-bindings
+  mips: bmips: bcm63268: include and use dt-bindings
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e627ed6..11c82c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9546,6 +9546,7 @@ M:	Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
- L:	linux-mips@vger.kernel.org
- L:	kvm@vger.kernel.org
- S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
- F:	arch/mips/include/asm/kvm*
- F:	arch/mips/include/uapi/asm/kvm*
- F:	arch/mips/kvm/
+ .../boot/dts/brcm/bcm3368-netgear-cvg834g.dts |  2 +-
+ arch/mips/boot/dts/brcm/bcm3368.dtsi          |  8 +-
+ .../dts/brcm/bcm63268-comtrend-vr-3032u.dts   |  2 +-
+ arch/mips/boot/dts/brcm/bcm63268.dtsi         | 12 ++-
+ arch/mips/boot/dts/brcm/bcm6328.dtsi          | 12 ++-
+ .../dts/brcm/bcm6358-neufbox4-sercomm.dts     |  2 +-
+ arch/mips/boot/dts/brcm/bcm6358.dtsi          | 12 ++-
+ .../dts/brcm/bcm6362-neufbox6-sercomm.dts     |  2 +-
+ arch/mips/boot/dts/brcm/bcm6362.dtsi          | 12 ++-
+ arch/mips/boot/dts/brcm/bcm6368.dtsi          | 12 ++-
+ arch/mips/boot/dts/brcm/bcm93384wvg.dts       |  2 +-
+ arch/mips/boot/dts/brcm/bcm93384wvg_viper.dts |  2 +-
+ arch/mips/boot/dts/brcm/bcm96368mvwg.dts      |  2 +-
+ arch/mips/boot/dts/brcm/bcm97125cbmb.dts      |  2 +-
+ arch/mips/boot/dts/brcm/bcm97346dbsmb.dts     |  4 +-
+ arch/mips/boot/dts/brcm/bcm97358svmb.dts      |  4 +-
+ arch/mips/boot/dts/brcm/bcm97360svmb.dts      |  2 +-
+ arch/mips/boot/dts/brcm/bcm97362svmb.dts      |  4 +-
+ arch/mips/boot/dts/brcm/bcm97420c.dts         |  2 +-
+ arch/mips/boot/dts/brcm/bcm97425svmb.dts      |  4 +-
+ arch/mips/boot/dts/brcm/bcm97435svmb.dts      |  4 +-
+ arch/mips/boot/dts/brcm/bcm9ejtagprb.dts      |  2 +-
+ .../bcm3368-interrupt-controller.h            | 19 ++++
+ .../bcm6318-interrupt-controller.h            | 84 ++++++++++++++++++
+ .../bcm63268-interrupt-controller.h           | 86 +++++++++++++++++++
+ .../bcm6328-interrupt-controller.h            | 68 +++++++++++++++
+ .../bcm6358-interrupt-controller.h            | 38 ++++++++
+ .../bcm6362-interrupt-controller.h            | 71 +++++++++++++++
+ .../bcm6368-interrupt-controller.h            | 71 +++++++++++++++
+ 29 files changed, 504 insertions(+), 43 deletions(-)
+ create mode 100644 include/dt-bindings/interrupt-controller/bcm3368-interrupt-controller.h
+ create mode 100644 include/dt-bindings/interrupt-controller/bcm6318-interrupt-controller.h
+ create mode 100644 include/dt-bindings/interrupt-controller/bcm63268-interrupt-controller.h
+ create mode 100644 include/dt-bindings/interrupt-controller/bcm6328-interrupt-controller.h
+ create mode 100644 include/dt-bindings/interrupt-controller/bcm6358-interrupt-controller.h
+ create mode 100644 include/dt-bindings/interrupt-controller/bcm6362-interrupt-controller.h
+ create mode 100644 include/dt-bindings/interrupt-controller/bcm6368-interrupt-controller.h
+
 -- 
-2.1.0
+2.28.0
 
