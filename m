@@ -2,96 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB0424265B
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Aug 2020 09:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F3424274C
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Aug 2020 11:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726965AbgHLHwp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Aug 2020 03:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
+        id S1726629AbgHLJPn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Aug 2020 05:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726955AbgHLHwo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Aug 2020 03:52:44 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFECC061787;
-        Wed, 12 Aug 2020 00:52:43 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id f18so3675283wmc.0;
-        Wed, 12 Aug 2020 00:52:43 -0700 (PDT)
+        with ESMTP id S1726595AbgHLJPm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Aug 2020 05:15:42 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09322C06174A;
+        Wed, 12 Aug 2020 02:15:42 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id t23so1433820ljc.3;
+        Wed, 12 Aug 2020 02:15:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qwUjwkfqICRHh42RRckTZulCKoTgiXL8sF/Vq2ZOcio=;
-        b=cp93HeWBHmLrhvB/k2i1QpBuR8xBJWl32nubDbYh/J7WapTEBYyGoVRZvIzqVlRJBD
-         DDuijVtYrK+PSr4PUvrXyAXkFtTkcFC88izA/Q3+D3Y1SYXJi1/gsQVCf9HFjgRu27Fe
-         KnK71VX4Kq1PV2zdxjNj5cSs/hZJlDs9h1jTn8lyciTH5N9hcZ/sriK3ovr9cTbPKjqk
-         3uB/oOltzRhXhth11ycTy+3StUnM2mgqRyNBieiTUQ+vRs/ykcUs9L3gPzdf4rSFPC1Y
-         aF/BoPADDEfvmdk0ToAaMuxhfyq0rEXexFoi5KiJkyitBgg/rjBHlw+IxMCFM9mMvr3N
-         7VjQ==
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/3bbT+znQtvhBvyL05XoYG/sT1t/szYIcY75YFFqv74=;
+        b=t2wsHSUquV599ok7d7bCW6Ei5aL5mUDcxse9EkUaWZA6DDac8xIGsia/1RrFy0M6e0
+         tuM/DI8zi7D5/OgIcr6nEWZmVIb/SL2T3+h+ZOL3y5eSUTF9c1ZajUu1KH/kQxiLErog
+         fpjVPHqL4svpzM2QMPUs4qkbdAL/G4jBoi+c1ago8RYhyCE6PoUgiXyspAaqMmkIE5zb
+         EwinRv2r5DUdKlAdgWqZHUOliL23wWQ9s3TFSd97ec9j4uVQero1R7FxBsuvJja9NQRG
+         aFSpaaeMkniSdabQ5iYDw/Bn7ftlzGmp3MO38deO9etGxCI6DdS6X1EXesV3txXmQkC4
+         2fTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qwUjwkfqICRHh42RRckTZulCKoTgiXL8sF/Vq2ZOcio=;
-        b=VizegPwD9ePsJTJXKsaFnS6ikEoz/p5KBcf770V6DYexU8RAfAmVNZ6oeuaRn0TL7m
-         h5YY0N0HFB1VU5qKYqa55JnKIMG5fVYN8YymAw9O7o6E6ENsZWLrPx5ylCNX/pCwQMbZ
-         YbQN2LegRnjGEsO6m9UFQVVg9FzsjT5eIiv0tyd3lBMQdYNtyK6yMpkvyok6cTY7ehzP
-         QXCdoV+GDbUpUKlllkl6Uz/7widxJ6YCOcbxz0Td266o5duIhlJYtMAL/ZzveG6ASWfq
-         JdH9W23CciptLqgqCsDgiisciLzleEDsDzZ2mmnJnsvsg3GSz7/GrQ4QLqaqq9FQmV22
-         oT0w==
-X-Gm-Message-State: AOAM530CBjXl6adKr0u05OnQLvd9I6rngreoFwnF2oe9mBki8/J0N96a
-        g8WmABuTsyKWqTg40lJ87yA=
-X-Google-Smtp-Source: ABdhPJxvUAOFT5BOCYK6fO4FCKOU+WOiJ/CtC83HWGoRTX1vBqGPpOdZuwLP/FkuTTuq2QIfZ2/fmg==
-X-Received: by 2002:a7b:c2aa:: with SMTP id c10mr7262505wmk.86.1597218762490;
-        Wed, 12 Aug 2020 00:52:42 -0700 (PDT)
-Received: from skynet.lan (88.red-83-49-60.dynamicip.rima-tde.net. [83.49.60.88])
-        by smtp.gmail.com with ESMTPSA id 6sm2470984wmf.4.2020.08.12.00.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2020 00:52:42 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     tsbogend@alpha.franken.de, f.fainelli@gmail.com,
-        jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v4 5/5] MIPS: BCM63xx: switch to SPDX license identifier
-Date:   Wed, 12 Aug 2020 09:52:35 +0200
-Message-Id: <20200812075235.366864-6-noltari@gmail.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200812075235.366864-1-noltari@gmail.com>
-References: <20200812075235.366864-1-noltari@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=/3bbT+znQtvhBvyL05XoYG/sT1t/szYIcY75YFFqv74=;
+        b=kFYurdZaIoOi7b33LxIzmeNxk0nyJUfztOfMHW3hQAhdzKuCBA8xBPog7Y2AIw+x2b
+         LMVudNSeEy62+6ornsQ6d/tIQrhTT5pMM8fG6unwz9U5HA/KOx+c6z6TfgmJRytWR7G8
+         UrexeOB1oZWSQj7uDiK68LJrlBIsGiqQL/3Nr6PJKptyO7YZmi0mEb9Rl4jrvqv6iOAw
+         px+tA9q4XT4E9ZbB24E4Rlm/zdty8KlZELrbeNpr1hSQ8gC2xZkCW0VB+mcD4o66MWZu
+         IDug4pgexuMZX3N5+1zDAFpq0Mg4+zSjDup3plY9u+P2znAhTiAdIcDsPIvIXltkNxzW
+         2W8g==
+X-Gm-Message-State: AOAM532SC6dUjgwu1v1MMrUzPTpD/6j/UD5966IdSMzdjfRt1F8iz5S2
+        HVgKTq1nBTqbtFdKeObfwd/Evw8NCSo=
+X-Google-Smtp-Source: ABdhPJzEnrexISBTxARVq2yOEqceqeSZvwAJY9hy/o23qvF9pO4LaoPbBKSxndRFqx54Qsam925pgA==
+X-Received: by 2002:a2e:a16f:: with SMTP id u15mr5210687ljl.5.1597223740380;
+        Wed, 12 Aug 2020 02:15:40 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:41b:98d0:14d2:8cca:fcf5:be6? ([2a00:1fa0:41b:98d0:14d2:8cca:fcf5:be6])
+        by smtp.gmail.com with ESMTPSA id e25sm310460ljp.47.2020.08.12.02.15.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Aug 2020 02:15:39 -0700 (PDT)
+Subject: Re: [PATCH v2 07/13] MIPS: generic: Support booting with built-in or
+ appended DTB
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Paul Burton <paulburton@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>, od@zcrc.me,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20200812001510.460382-1-paul@crapouillou.net>
+ <20200812001510.460382-8-paul@crapouillou.net>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <1380509b-6479-3f1b-9e5b-7eb14f7ab158@gmail.com>
+Date:   Wed, 12 Aug 2020 12:15:33 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200812001510.460382-8-paul@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use SPDX license indentifier instead of local reference to COPYING.
+Hello!
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
----
- v4: add new patch with SPDX license change.
+On 12.08.2020 3:15, Paul Cercueil wrote:
 
- arch/mips/bcm63xx/boards/board_bcm963xx.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+> The plat_get_fdt() checked that the kernel was booted using UHI before
+> reading the 'fw_passed_dtb' variable. However, this variable is also set
+> when the kernel has been appended, or when it has been built into the
 
-diff --git a/arch/mips/bcm63xx/boards/board_bcm963xx.c b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-index fa0acf003a46..01aff80a5967 100644
---- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
-+++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-@@ -1,8 +1,5 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-- * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file "COPYING" in the main directory of this archive
-- * for more details.
-- *
-  * Copyright (C) 2008 Maxime Bizon <mbizon@freebox.fr>
-  * Copyright (C) 2008 Florian Fainelli <florian@openwrt.org>
-  */
--- 
-2.28.0
+    s/kernel/DT/?
 
+> kernel.
+> 
+> Support these usecases by removing the UHI check.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+[...]
+
+MBR, Sergei
