@@ -2,85 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A8724330B
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Aug 2020 05:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EA6243A94
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Aug 2020 15:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbgHMD5G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Aug 2020 23:57:06 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:36756 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726167AbgHMD5F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Aug 2020 23:57:05 -0400
-Received: by mail-il1-f198.google.com with SMTP id o191so3447927ila.3
-        for <linux-mips@vger.kernel.org>; Wed, 12 Aug 2020 20:57:04 -0700 (PDT)
+        id S1726526AbgHMNLm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 13 Aug 2020 09:11:42 -0400
+Received: from mail-ej1-f65.google.com ([209.85.218.65]:33621 "EHLO
+        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbgHMNLl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Aug 2020 09:11:41 -0400
+Received: by mail-ej1-f65.google.com with SMTP id jp10so6132017ejb.0;
+        Thu, 13 Aug 2020 06:11:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=818BGdNc1wvnUSaZirTtzYWcZvgSsVpOYq9GYar7pzo=;
-        b=VYA75bEmQYEfpHnq1HtBxZNg5rsA1fsOQmCzQeyFKXd45DcMBzMdHdlltie4+IXAFm
-         wfHRy9Kvj4uAuj6UYYTbjKiSpwOKuY4y67itylIhq0qpkIU3CfZf2SR9LjYrnlCBDVz+
-         Sf2AZHdjchDogxsfuLkmS+0FzygDhXX3J+m4qZmoukbsBm9vzgKsorXcgkhxdtOGpd2C
-         c3lTnL0x/NmW6N3kc/RebppnRCSWWI5YrTAsxypU08fIcZNFxQUy727fG7a1EcSK9BlR
-         qDC6+OcTOi4AflfIOdPj0i+I8gjy7NiqVp3FaQD5fn43rrwj3bOUMdJjwuB+elR9FtHg
-         qNPw==
-X-Gm-Message-State: AOAM530ZSLkwPv0anXpwbH4ZKQ4K3kg2Vhq4oUn6xiAgkr03NrBHpKlj
-        pEzPMZN2BZgiL76YiAzYCY7Ar3XAKe5e5jtUsu6EPuyub3rd
-X-Google-Smtp-Source: ABdhPJxyW2a+ykA+fUEC8D6mFHSlTwIHpmNmLpjhnj+1O5R02Uizom5WTc4bNxK6AVfdyCvjg+GBZ9zseGC71qHLHgVFHLNbJAN8
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CSRMWQrpbXjKiPmzSjMTrmXNs7M8tA2lIbZDv/L+QPI=;
+        b=H/1WDeMHs15XP7/pXqKxXtVeqlMiHuboH0i/e7fBVD3/2LGzMayi3j13rAKGq76O7B
+         LqBBrb8J1DoQQOxIkE3mTnr5HhwH/clqCEQiAi3mJnzWeRV/Fuysy/5O4WEPn8z1k4Se
+         XPirIi/gWwUoPMx4YGFwavblyqw6/pPNIzc1w+7BGFCSVt7qDJ4M83UlK80Fj+WBR4nk
+         oLFQxoVx0BJcAWv9jhFNY/GicDaS/TgkNbzXxCqpn+d433V8od9NP/Zxt4gNbxhyhh5R
+         bEb7EYJYlU0OCyhdJoBY/GKMGQ4Q1oIdqFTLEbJ5O4/RqTvuBV/myuGHTqYmUkv95CRF
+         mjvQ==
+X-Gm-Message-State: AOAM533ixxpAoZGTkjJQWRUU5FEbbyYbe6KEwab6Gc06+FuW9R5EZXvW
+        kUsolBM9u9/O2GtDz6o8pS0vBlajHNdAYbPM1K8=
+X-Google-Smtp-Source: ABdhPJyH9IJflC8Pr6xOJ+m0fQElASfLaLPfCdY1NQ/X3OFyzv/3zAxtfhjpJUzt7CibwdDKFGMd+ZgLiyLFG6gCoXA=
+X-Received: by 2002:a17:906:c1c3:: with SMTP id bw3mr4927681ejb.8.1597324299611;
+ Thu, 13 Aug 2020 06:11:39 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:874a:: with SMTP id d10mr2849478ilm.273.1597291024427;
- Wed, 12 Aug 2020 20:57:04 -0700 (PDT)
-Date:   Wed, 12 Aug 2020 20:57:04 -0700
-In-Reply-To: <00000000000084b59f05abe928ee@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001d3cbb05acba4cc2@google.com>
-Subject: Re: INFO: task hung in pipe_release (2)
-From:   syzbot <syzbot+61acc40a49a3e46e25ea@syzkaller.appspotmail.com>
-To:     James.Bottomley@HansenPartnership.com, amanieu@gmail.com,
-        arnd@arndb.de, benh@kernel.crashing.org, bfields@fieldses.org,
-        borntraeger@de.ibm.com, bp@alien8.de, catalin.marinas@arm.com,
-        chris@zankel.net, christian@brauner.io, corbet@lwn.net,
-        cyphar@cyphar.com, dalias@libc.org, davem@davemloft.net,
-        deller@gmx.de, dvyukov@google.com, fenghua.yu@intel.com,
-        geert@linux-m68k.org, gor@linux.ibm.com, heiko.carstens@de.ibm.com,
-        hpa@zytor.com, ink@jurassic.park.msu.ru, jcmvbkbc@gmail.com,
-        jhogan@kernel.org, jlayton@kernel.org, kvalo@codeaurora.org,
-        linux-alpha@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux@armlinux.org.uk,
-        linux@dominikbrodowski.net, linuxppc-dev@lists.ozlabs.org,
-        luis.f.correia@gmail.com, luto@kernel.org, martink@posteo.de,
-        mattst88@gmail.com, ming.lei@canonical.com, ming.lei@redhat.com,
-        mingo@redhat.com, monstr@monstr.eu
+References: <20200812075235.366864-1-noltari@gmail.com> <20200812075235.366864-5-noltari@gmail.com>
+In-Reply-To: <20200812075235.366864-5-noltari@gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Thu, 13 Aug 2020 15:11:28 +0200
+Message-ID: <CAAdtpL5z0FsbWpkmRvUAPN13XRKu=H20VMsZ1+py9LkEcz7PJw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/5] MIPS: BCM63xx: refactor board declarations
+To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Wed, Aug 12, 2020 at 9:53 AM Álvaro Fernández Rojas
+<noltari@gmail.com> wrote:
+>
+> Current board declarations are a mess. Let's put some order and make them
+> follow the same structure.
 
-commit fddb5d430ad9fa91b49b1d34d0202ffe2fa0e179
-Author: Aleksa Sarai <cyphar@cyphar.com>
-Date:   Sat Jan 18 12:07:59 2020 +0000
+What a mess indeed. Patch easier to review using 'git-diff --ignore-all-space'.
 
-    open: introduce openat2(2) syscall
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=164e716a900000
-start commit:   6ba1b005 Merge tag 'asm-generic-fixes-5.8' of git://git.ke..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=154e716a900000
-console output: https://syzkaller.appspot.com/x/log.txt?x=114e716a900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=84f076779e989e69
-dashboard link: https://syzkaller.appspot.com/bug?extid=61acc40a49a3e46e25ea
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142ae224900000
-
-Reported-by: syzbot+61acc40a49a3e46e25ea@syzkaller.appspotmail.com
-Fixes: fddb5d430ad9 ("open: introduce openat2(2) syscall")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  v4: split license change to a new patch.
+>  v3: no changes.
+>  v2: switch to SPDX license identifier.
+>
+>  arch/mips/bcm63xx/boards/board_bcm963xx.c | 615 +++++++++++-----------
+>  1 file changed, 305 insertions(+), 310 deletions(-)
