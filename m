@@ -2,67 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2B0243DCA
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Aug 2020 18:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFD0243DCD
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Aug 2020 18:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgHMQ65 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Aug 2020 12:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S1726174AbgHMQ7V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Aug 2020 12:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726167AbgHMQ65 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Aug 2020 12:58:57 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE07C061757;
-        Thu, 13 Aug 2020 09:58:57 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id c10so4482530pjn.1;
-        Thu, 13 Aug 2020 09:58:57 -0700 (PDT)
+        with ESMTP id S1726167AbgHMQ7V (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Aug 2020 12:59:21 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27217C061757;
+        Thu, 13 Aug 2020 09:59:21 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id t10so2876269plz.10;
+        Thu, 13 Aug 2020 09:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:references:from:message-id:date:user-agent:mime-version
          :in-reply-to:content-language:content-transfer-encoding;
         bh=olkCz3qauGZtAoAm2mefdOOlM1vSB0djGLpawNROqyk=;
-        b=bfsD1bHKjHgagcIbmGw6JdjOw/zGzVgK+pVIsM9i5IMwG1dS+sE4l0aNRUTdNNUIJO
-         Jin3/PhfpJRRFFddzUs4iuL/5QBvhFoaX4WHc/C+f29H5NnM9a/HUM7WXvCy/V3+ZhSv
-         8NYES4sCehyKzwORLKjA9tRNZQyW74+eDABy9UFzV3ZQ/EoiQIYnL0vwK5TbqySWNkMA
-         oU49qAxoJEASJwfKivEgohiVCOsId3cosJ5qS7yTh0jnJG6A5edpt8GYs9hfoJW6GmrV
-         Dljk4nozIVNsoI7z0BCPDvTtHlAmXU/REXI4fT3LCcMYyKl0gIOjL82SMUAUOeqWmJE3
-         p+/A==
+        b=lSy5II33pB3kE4XX6D+UWACaXPLf2aKpYiiMNaYJDpzczIoPZQLODvaNx6oAhPdXYx
+         O81lEBx3Y3FyHwON2KJAdRsjmP2K2pGDkgfFhdFTqWgtAxvwv0Ajdob5HxQhiL5zbmUM
+         Gj232ABHEFe9cKgvGOaYQCz2s23xIbPm4Mij+kw81ejqoK6kTIIiVOMdkFpbdYYKkDpH
+         wtfFdFwcHxIqSl6ZoKybfSCewePPgCsW1tXeSypM0JLXjWrIGgwOdKdubTyJo1j551at
+         65IahFMOnV3DDComNQ11g8K1yy6MxGN1OwgYbQizoW+DE9LWtdbPG0Eq+QGAms1FFwkC
+         F8Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
         bh=olkCz3qauGZtAoAm2mefdOOlM1vSB0djGLpawNROqyk=;
-        b=ewkTi/A1md7icWd+pv7WAyQA6pVDknei5HfZtnrdnkv1rQdmCwMI9TF6ATDmidRcuv
-         P4jS+UnQ73JsR9lkNzQm9pP7UJwoqmbr802tVcdXaRil5uh5o3curdeZN5phfBk+afPZ
-         uPkVrtYAvSa8/RPY/Od43D09DCO154QxkZTJK4wuMqlGB6BzvxbiTgLFFSNVFWrW5MBr
-         tKBl5E1rqUizWwJXnBJVxKzE0HSnLgd7YUs++74JaY4Z399stpj9hoA/VJF/Fh6gYH9d
-         b1W1DGVNQ5ZAYpKWsQ7xvw7aBKKUStu6aJ878D2rU2DxHtZR9RTOzzJo+Cj/p/sbXiOD
-         0zrg==
-X-Gm-Message-State: AOAM530coftTswVRFB3rU7RFwcCGev83m2CdOVhxujz8p+ng8vtmnKGH
-        zT7uRJtNAMsTCl2DzEDYZ6UXvr2p
-X-Google-Smtp-Source: ABdhPJxuRb1zZlRnM6RiqZndkFPGk5rps6oWW8G4wPOAxDvKdb8ZUbEU5ZuLHsLEVTvWxtPiujctgw==
-X-Received: by 2002:a17:90b:1116:: with SMTP id gi22mr6237958pjb.209.1597337936137;
-        Thu, 13 Aug 2020 09:58:56 -0700 (PDT)
+        b=eEuS7WhfIX0gx7QEQzEL01pWOMa2rL/QWeLGj84MnDLwcGdukYeWyeiBKl6jzDnVD+
+         pCBI/IhNxQqOv/SS1wQHH4yl2qmedFdf+EUkMxskLIOV6RjYCY6KIvMSEgUAlb7vj8LV
+         mc6QjvHUIxD/428rkO2aFfE/8HFAD3jMu+ML1PocznKBMCZVghoiCHoHxNfyntkFGscE
+         r6B0SBRuIU0KhlnQ3gsZcZ6K6aV9koQkTTfSV0PAeHv5ZfA1512dGFMh6ehC1Zd0RYO0
+         fVlt6vAtgmMh4iTdqRUagISigTOVPKDwtcvdZd5piEtjOKOrYueY9nUvJqJkXLZOHn50
+         RXKA==
+X-Gm-Message-State: AOAM532h/4NWkCED0NaHn8shRsh5/TNtwz3gfuyJXOxIxSwCiLn0ll86
+        T6vVw/REUGfyTQCAwE3BXQox8zjM
+X-Google-Smtp-Source: ABdhPJy5AehFf8UaVgxMiMxd5DMsB0b9X4h9ej9HkVN96iAYjLvCjGuR3RddaXrad2gUKSrxYnL56A==
+X-Received: by 2002:a17:90b:817:: with SMTP id bk23mr5882655pjb.46.1597337960331;
+        Thu, 13 Aug 2020 09:59:20 -0700 (PDT)
 Received: from [10.230.30.107] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 75sm6454278pfx.187.2020.08.13.09.58.49
+        by smtp.gmail.com with ESMTPSA id b15sm5877247pgk.14.2020.08.13.09.59.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Aug 2020 09:58:55 -0700 (PDT)
-Subject: Re: [PATCH 09/14] mips: bmips: bcm3368: include and use dt-bindings
+        Thu, 13 Aug 2020 09:59:19 -0700 (PDT)
+Subject: Re: [PATCH 10/14] mips: bmips: bcm6328: include and use dt-bindings
 To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
         robh+dt@kernel.org, tsbogend@alpha.franken.de,
         jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
         linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20200812063129.361862-1-noltari@gmail.com>
- <20200812063129.361862-10-noltari@gmail.com>
+ <20200812063129.361862-11-noltari@gmail.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <493ccb41-71c7-2c1e-7ea0-3b4639192c45@gmail.com>
-Date:   Thu, 13 Aug 2020 09:58:46 -0700
+Message-ID: <cc92a8a7-05e2-fa8d-9588-ca323d5b1c47@gmail.com>
+Date:   Thu, 13 Aug 2020 09:59:12 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.1.1
 MIME-Version: 1.0
-In-Reply-To: <20200812063129.361862-10-noltari@gmail.com>
+In-Reply-To: <20200812063129.361862-11-noltari@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
