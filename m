@@ -2,67 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2778243DBE
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Aug 2020 18:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59C6243DC5
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Aug 2020 18:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726499AbgHMQzR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Aug 2020 12:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S1726334AbgHMQ5j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Aug 2020 12:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726167AbgHMQzR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Aug 2020 12:55:17 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7A3C061757;
-        Thu, 13 Aug 2020 09:55:17 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id u10so2877725plr.7;
-        Thu, 13 Aug 2020 09:55:17 -0700 (PDT)
+        with ESMTP id S1726174AbgHMQ5i (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Aug 2020 12:57:38 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E38DC061757;
+        Thu, 13 Aug 2020 09:57:38 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id h12so3108251pgm.7;
+        Thu, 13 Aug 2020 09:57:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:subject:to:references:message-id:date:user-agent:mime-version
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
          :in-reply-to:content-language:content-transfer-encoding;
-        bh=wxsKhS2l6+3Uh7nPOiKRBonKsZC+1QXIECJzcrgR1Zc=;
-        b=NeWvr5tfPwnl+pcteObUQ5oMQEZXL3X3qxl0I2Z8B2q/f9ugOtQdYwdx8Teoo2jzZo
-         wWfhVZx4zFtQxJZoHYtMpY4p1ExLS6ORamHKYFy2bRZSYUxyRgp8JpGawWiAaHwuIFZR
-         //eHotamC77GqPQ5LF90DhEE4QdMQ3313HXhKuU6Azy9B2gtKEAZVVF5oAI38xUMwntw
-         F2sh/d48onjk2YB8TX+stMTib2DI/Pw3HmkxRewRlvqTm5EfLESAOFNTspKSDGrMbRJN
-         eUGZPCbz8QmOkVHS5AmL6Bfw67v3IaNTj0TorGfZ2ZBXlqsYRAEsUVEbAlsOo0IU5jNq
-         goUA==
+        bh=Mr+Xf+EWE7uQgdhH13STal4z0jk/q0v933I8KribYdg=;
+        b=jOsePt4MVEjiPDvrsxS4qlvRX4bsqeWr7zI//94oHXPS1eF68M0Uv8AGH7cjbpZ31J
+         9TZMOFRGsbjFRCjKR2osM39N1GskJAZZdv9Q/cW49Ia+XRORloqWYbSKyMCPym1R219c
+         ixytdULOO96cUyq/DAjzM2o7Ju0Tmz7D4ENTQ2LYS85xzv6FBvtXHNkV2HCxmBD5DXhw
+         l+d/z4rpIGTfRnJlWpSzVItzK+8/EkCgrktmAiODcQRfTgAwrJQ1tKfk2ECYFYqJjrFB
+         icakd3AWMu4gKylB/mnzRVBqDRgR1A2WFNJfIz3Rq5cx2vVcqilS6b1PTs0IFLcYmWzE
+         SGNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:references:message-id:date
+        h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=wxsKhS2l6+3Uh7nPOiKRBonKsZC+1QXIECJzcrgR1Zc=;
-        b=TuahBTDDsivMfzCvKetaYTmz3oTrMiwoLvZquOZ6OWF091J1WXFIPR/hLw+e10vF1/
-         u8rVi+Jt8+O+NYAvfEJ/blEch3Ks1jbwE9e2R25e8CwBTEXSPQSkk603JH+Ze5kWQh6r
-         1uu0xlBAHF24wjb6zDUbzGBFCbsHHE/JgvEWE8cCefRRnSvFnV3yamU4XsffM9CWokUc
-         QzgQQa8PoRPag7diIsmsN2eNlpPOOLIbalU89VU9lt8zPr4GEMy/0qsNEgmzfKntGcPK
-         aEB2pb/1PVyamHPKwkIJAiGd0Els71polOkejy2ojgSLgdj9M7WSPVSmDMUl5jK0SWUw
-         RQdw==
-X-Gm-Message-State: AOAM530XbrkLBReIKmYePoB6ZtmVIpOFlEzCXlrWg9ddRuixKyagNttD
-        nfFHKxaFizniRHA4zuV7SvSSSWtW
-X-Google-Smtp-Source: ABdhPJyLGcrNZ4DqFSLYbSGiNdVPLDcdz21oM93jLWf+8IVO+GOyvGXQ2CKrf/YoWfUJFDFLZiWdiQ==
-X-Received: by 2002:a17:90a:9503:: with SMTP id t3mr6172112pjo.171.1597337716520;
-        Thu, 13 Aug 2020 09:55:16 -0700 (PDT)
+        bh=Mr+Xf+EWE7uQgdhH13STal4z0jk/q0v933I8KribYdg=;
+        b=as2pI6WMGVZuPgHo+FdEyXCrfoVRzweG4yaSp5hprywwbtI/2PK7hmLzL/pHPTezxS
+         X1S5zGgrhjIE7nM8s+VU+HLJKEOSVfK55IU6L+ZqkqKfbL5qq2L64yX+x1KxARrHElFQ
+         JFXHv3QbBpTeLueEgcMo/piXKGp3ib3uI6uefLlwtLy1bI+NZUM1twmZcf/xj9J7jvbN
+         HUWulh8Vnsmd1rb71IpoIzioekcwZZsKCFVQQx2tllzatp9foOpl0i/voPk0APxS7jig
+         gwfqjuHAbbg816qVEpG5/fFxOqhgb48vd7KdiYD4eeeJDO61ZJWEVTAYz/+9HwD2XU90
+         I3JQ==
+X-Gm-Message-State: AOAM532rOV3DLw+Udv8cCk+zDNvyUaKcbyTC27GgOg0yaWyn5qm8qlFa
+        M6WBSnxCL5qV2jO2JcELHur/jEaM
+X-Google-Smtp-Source: ABdhPJyBnz1McwZz82ZDm+SancyIlKku8TFd7+B2C0UW0oADyip7xCepkBjGwr/WnAjZ6Dn68JGFoQ==
+X-Received: by 2002:a63:1f04:: with SMTP id f4mr4493293pgf.34.1597337856842;
+        Thu, 13 Aug 2020 09:57:36 -0700 (PDT)
 Received: from [10.230.30.107] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g8sm6566914pfo.132.2020.08.13.09.55.15
+        by smtp.gmail.com with ESMTPSA id y196sm6538053pfc.202.2020.08.13.09.57.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Aug 2020 09:55:15 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 02/14] mips: bmips: add BCM3368 irq definitions
+        Thu, 13 Aug 2020 09:57:35 -0700 (PDT)
+Subject: Re: [PATCH 03/14] mips: bmips: add BCM6318 irq definitions
 To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
         robh+dt@kernel.org, tsbogend@alpha.franken.de,
         jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
         linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20200812063129.361862-1-noltari@gmail.com>
- <20200812063129.361862-3-noltari@gmail.com>
-Message-ID: <54e3462e-4cad-a10b-3c33-6380d867d9f3@gmail.com>
-Date:   Thu, 13 Aug 2020 09:55:14 -0700
+ <20200812063129.361862-4-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <03bbdcac-55c3-6805-14a9-e41a199e7efe@gmail.com>
+Date:   Thu, 13 Aug 2020 09:57:34 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.1.1
 MIME-Version: 1.0
-In-Reply-To: <20200812063129.361862-3-noltari@gmail.com>
+In-Reply-To: <20200812063129.361862-4-noltari@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -74,7 +74,7 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 On 8/11/2020 11:31 PM, Álvaro Fernández Rojas wrote:
-> Add header with BCM3368 definitions in order to be able to include it from
+> Add header with BCM6318 definitions in order to be able to include it from
 > device tree files.
 > 
 > Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
