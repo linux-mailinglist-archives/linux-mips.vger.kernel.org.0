@@ -2,136 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D587A244742
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Aug 2020 11:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7168C244808
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Aug 2020 12:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgHNJob convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 14 Aug 2020 05:44:31 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:46994 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726889AbgHNJob (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Aug 2020 05:44:31 -0400
-Received: by mail-il1-f193.google.com with SMTP id c6so7882433ilo.13
-        for <linux-mips@vger.kernel.org>; Fri, 14 Aug 2020 02:44:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xosEYrDoba41qWFRog+Uv/Mk1S2eoK9q+2rQ9FX5pWo=;
-        b=hvxa6Xc+5yB9ItzLXbQghvGGUSoRzSKdfnkYV8PZlCdW+XsoJyCnbWVEFw9oRubIv2
-         Ex9fbhXOky5WguiwoK1GD0P5fh/7zwHsKLloP3n39PxaBPZyggZ/1ccQjry2KZiH4VAx
-         f0m/gokzKjMBUZgtSdeSOoSCNjcwmJNW2SGs+NP2oZsbKdhyg2seJKcqRSOg4iyxIIw0
-         2H5wCEvzK1rDwvxjx7QsQH5iCvhwdTZc6XesB0MaHw2b9Td24TtMu2G39W0NNAnZkN0G
-         3iyKwXsozD91dAWWFKaHzaNKVQgZi5TXgld4FIttPGZQHDY5YM4f4ZxWOyFc6pm23G/O
-         40Dg==
-X-Gm-Message-State: AOAM532Ni6A2sl4Z5gbKQpj+qkaI+wwE/uQiy2QIAQZjJ+3JG4FbdR3L
-        5BD4eZB2tVymKU8ExLcIed8+3zrLjkRbHZ8KUAE=
-X-Google-Smtp-Source: ABdhPJzh3ixmp+5lff425K1TXESM9QgonCLgEq0zYMEhmo9YQsyqvfMhMAUNGIaJJTtsUWxORw+imYZDMtqOyh1zbhg=
-X-Received: by 2002:a05:6e02:962:: with SMTP id q2mr1860882ilt.171.1597398270011;
- Fri, 14 Aug 2020 02:44:30 -0700 (PDT)
+        id S1726674AbgHNKbg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Aug 2020 06:31:36 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:44992 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726012AbgHNKbg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 14 Aug 2020 06:31:36 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx398DaDZfOuUIAA--.29S2;
+        Fri, 14 Aug 2020 18:31:31 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH v2] MIPS: Loongson: Use default CONFIG_FRAME_WARN as 2048 for Loongson64 to fix build warnings
+Date:   Fri, 14 Aug 2020 18:31:30 +0800
+Message-Id: <1597401090-4314-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
 MIME-Version: 1.0
-References: <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com>
- <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
- <20200805121021.GA12598@alpha.franken.de> <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
- <20200807131357.GA11979@alpha.franken.de> <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
- <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com> <20200810141219.GA2844@alpha.franken.de>
- <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com> <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
- <20200811120645.GA6199@alpha.franken.de>
-In-Reply-To: <20200811120645.GA6199@alpha.franken.de>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Fri, 14 Aug 2020 17:44:18 +0800
-Message-ID: <CAAhV-H5YqF5dcdFiBgVSXzu67QOKTFq3FME8ernswGts45GHfQ@mail.gmail.com>
-Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dx398DaDZfOuUIAA--.29S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7trWDuF1DAr47Kw13tw1UJrb_yoW8AFWUpF
+        WfJr1DAr4UKF4Fya90kFZ7GFZYy3Z3AFW7GFW7Xa4UXF909ayDXrnrKF1UGr42qFWvyay8
+        uF95KF1a9a4q937anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        twCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUuOJ5UUU
+        UU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Thomas,
+After commit 70b838292bef ("MIPS: Update default config file for
+Loongson-3"), CONFIG_VHOST_SCSI and CONFIG_VHOST are set when use
+loongson3_defconfig, and then there exists the following two build
+warnings related with these two configs:
 
-On Tue, Aug 11, 2020 at 8:08 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Tue, Aug 11, 2020 at 02:45:05PM +0800, Huacai Chen wrote:
-> > Hi, Thomas and Jiaxun,
-> >
-> > On Tue, Aug 11, 2020 at 10:18 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> > >
-> > >
-> > >
-> > > 在 2020/8/10 22:12, Thomas Bogendoerfer 写道:
-> > > > On Sun, Aug 09, 2020 at 10:53:13PM +0800, Jiaxun Yang wrote:
-> > > >> Thus we still need to enable CU2 with exception for user space, and we can
-> > > >> always enable CU2 in
-> > > >> kernel since kernel won't be compiled with hard-float. :-)
-> > > > I see, how about the patch below
-> > > That looks fine for me.
-> > > Is it good with you, Huacai?
-> >
-> > There are two problems:
-> > 1, zboot (arch/mips/boot/compressed/head.S) should be considered,
-> > because the initial value of Status may or may not contain CU2.
->
-> this comes with it's own memcpy/memset and stuff, I don't see a reason why
-> COP2 needs to be enabled there,
-gslq/gssq can also be generated by toolchains.
+  CC [M]  drivers/vhost/scsi.o
+drivers/vhost/scsi.c: In function ‘vhost_scsi_flush’:
+drivers/vhost/scsi.c:1374:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+ }
+ ^
+  LD [M]  drivers/vhost/vhost_scsi.o
+  CC [M]  drivers/vhost/vsock.o
+  LD [M]  drivers/vhost/vhost_vsock.o
+  CC [M]  drivers/vhost/vhost.o
+drivers/vhost/vhost.c: In function ‘log_used’:
+drivers/vhost/vhost.c:1896:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+ }
+ ^
 
->
-> > 2, r4k_switch.S should set CU2 for the new process, otherwise it
-> > cannot use gslq/gssq while it in kernel (Because the new process
-> > doesn't contain CU2 in THERAD_STATUS.
->
-> which is correct for all user space process, otherwise the whole
-> cop2 exception thing wouldn't work. And if cop2 exception handling
-> has been run it's set in THREAD_STATUS.
->
-THREAD_STATUS means thread_struct.cp0_status, which is the cp0_status
-when a process runs in kernel-space. KSTK_STATUS (what you have seen
-in copy_thread_tls() below) means cp0_status in a process's kernel
-stack, which saves the cp0_status when a process runs in user-space.
-Whether COP2 exception can work depends on that KSTK_STATUS (but not
-THREAD_STATUS) should not contain CU2 at the first time. So, whether
-or not THREAD_STATUS contains CU2, it won't break COP2 handling.
+CONFIG_FRAME_WARN=2048 can fix it, since the default CONFIG_FRAME_WARN
+for 64BIT is 2048, just delete the CONFIG_FRAME_WARN line in defconfig.
 
-Huacai
-> > Though a process sets CU2 when it enters kernel, but it
-> > only sets CU2 in hardware, not in THREAD_STATUS).
->
-> A kernel thread will get THREAD_STATUS from current running kernel code,
-> at least that's how I read this code:
->
->        if (unlikely(p->flags & PF_KTHREAD)) {
->                 /* kernel thread */
->                 unsigned long status = p->thread.cp0_status;
->                 memset(childregs, 0, sizeof(struct pt_regs));
->                 ti->addr_limit = KERNEL_DS;
->                 p->thread.reg16 = usp; /* fn */
->                 p->thread.reg17 = kthread_arg;
->                 p->thread.reg29 = childksp;
->                 p->thread.reg31 = (unsigned long) ret_from_kernel_thread;
-> #if defined(CONFIG_CPU_R3000) || defined(CONFIG_CPU_TX39XX)
->                 status = (status & ~(ST0_KUP | ST0_IEP | ST0_IEC)) |
->                          ((status & (ST0_KUC | ST0_IEC)) << 2);
-> #else
->                 status |= ST0_EXL;
-> #endif
->                 childregs->cp0_status = status;
->                 return 0;
->         }
->
-> If there is still something missing, I want to find the root cause
-> and not paper over it in r4k_switch.S and IMHO break COP2 handling for
-> loongsoon completely.
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+config FRAME_WARN
+        int "Warn for stack frames larger than"
+        range 0 8192
+        default 2048 if GCC_PLUGIN_LATENT_ENTROPY
+        default 1280 if (!64BIT && PARISC)
+        default 1024 if (!64BIT && !PARISC)
+        default 2048 if 64BIT
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/configs/loongson3_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index a65b08d..a5005c8 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -403,7 +403,6 @@ CONFIG_CRYPTO_TEA=m
+ CONFIG_CRYPTO_TWOFISH=m
+ CONFIG_CRYPTO_DEFLATE=m
+ CONFIG_PRINTK_TIME=y
+-CONFIG_FRAME_WARN=1024
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_MAGIC_SYSRQ=y
+ # CONFIG_SCHED_DEBUG is not set
+-- 
+2.1.0
+
