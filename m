@@ -2,74 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 543A524439C
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Aug 2020 04:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8393B2443A2
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Aug 2020 04:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbgHNCxG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Aug 2020 22:53:06 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:52709 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgHNCxG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Aug 2020 22:53:06 -0400
-Received: by mail-il1-f198.google.com with SMTP id q16so376197ils.19
-        for <linux-mips@vger.kernel.org>; Thu, 13 Aug 2020 19:53:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=HxfLWIdBAiPbucnwPKF3cZxaVC8QuNU2YTSLpVJCUKw=;
-        b=G0Q5SsQIuRJBC15U00Qb4gpAjcPzr+wR85/WsN/jbIRjnNC3L6TUv8NCRsyF2QhX6B
-         b8LVXI3NtxYPhfQJuLxSrsbER9GDHwAXnwMLedPj6dfz9aT6BzLSp6pv+GbDRnBOSoTT
-         AsHCIpJlW59Mc06GNAC65ad0uqTPhnnNoWz+Pq8mk+xxJcdI0OVfPcXgDcqouWt92s4s
-         EilVEemJ75IdN/g2XTBNiU9qeqDlKcRU/fgikiVKtJPoZSAOBr/ZmNbn5ybDliakKLX2
-         BSMsuJSVS2p9fPtHhu9IYDIJSlfQ71mFRFsPZRCCTUKy90+/drzsITEtkGxxojdk7aMu
-         wH9g==
-X-Gm-Message-State: AOAM533HJAE+z34pJOQiDmhkP2316rjeH2B+9ZkDbdbPtOcqijVrMyYO
-        PbqVMvERZvSwKXrQ3M/n2dlmmxuGfFI0OzcTKKTam4ipgtMT
-X-Google-Smtp-Source: ABdhPJzryMeKOZ496e+GJ+LGFENqZB41wF2qyZpZxNTovBIXHQqXhdpw9rzntoAMQSMpzfINa/YRJDaIms05Hc/ZO6OshxSkwVFv
+        id S1726568AbgHNC4i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Aug 2020 22:56:38 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:39610 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726564AbgHNC4h (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 13 Aug 2020 22:56:37 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj95h_TVfJbkIAA--.14S2;
+        Fri, 14 Aug 2020 10:56:34 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] MIPS: Loongson: Set CONFIG_FRAME_WARN=2048 in loongson3_defconfig to fix build warning
+Date:   Fri, 14 Aug 2020 10:56:33 +0800
+Message-Id: <1597373793-8482-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:dd04:: with SMTP id n4mr789973ilm.70.1597373585198;
- Thu, 13 Aug 2020 19:53:05 -0700 (PDT)
-Date:   Thu, 13 Aug 2020 19:53:05 -0700
-In-Reply-To: <000000000000735f5205a5b02279@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001e967a05accd8573@google.com>
-Subject: Re: BUG: unable to handle kernel paging request in fl_dump_key
-From:   syzbot <syzbot+9c1be56e9317b795e874@syzkaller.appspotmail.com>
-To:     benh@kernel.crashing.org, dalias@libc.org, davem@davemloft.net,
-        jhogan@kernel.org, jhs@mojatatu.com, jiri@mellanox.com,
-        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mpe@ellerman.id.au, netdev@vger.kernel.org, paul.burton@mips.com,
-        paulus@samba.org, ralf@linux-mips.org, shuah@kernel.org,
-        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com,
-        ysato@users.sourceforge.jp
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxj95h_TVfJbkIAA--.14S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ary8GFykKw43uF4Uur15Jwb_yoW8WryfpF
+        WfJr1DAr48KF4Fya98CF97WFZYvFn3AFW7WFW7Xa4UXF909ayDZr9rKF1UJr47tryqyw40
+        9as5KFnIvFWDC37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU3pnPUUU
+        UU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-syzbot has bisected this issue to:
+After commit 70b838292bef ("MIPS: Update default config file for
+Loongson-3"), CONFIG_VHOST_SCSI and CONFIG_VHOST are set when use
+loongson3_defconfig, and then there exists the following two build
+warnings related with these two configs, set CONFIG_FRAME_WARN=2048
+in loongson3_defconfig to fix it.
 
-commit a51486266c3ba8e035a47fa96df67f274fe0c7d0
-Author: Jiri Pirko <jiri@mellanox.com>
-Date:   Sat Jun 15 09:03:49 2019 +0000
+  CC [M]  drivers/vhost/scsi.o
+drivers/vhost/scsi.c: In function ‘vhost_scsi_flush’:
+drivers/vhost/scsi.c:1374:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+ }
+ ^
+  LD [M]  drivers/vhost/vhost_scsi.o
+  CC [M]  drivers/vhost/vsock.o
+  LD [M]  drivers/vhost/vhost_vsock.o
+  CC [M]  drivers/vhost/vhost.o
+drivers/vhost/vhost.c: In function ‘log_used’:
+drivers/vhost/vhost.c:1896:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+ }
+ ^
 
-    net: sched: remove NET_CLS_IND config option
+Fixes: 70b838292bef ("MIPS: Update default config file for Loongson-3")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/configs/loongson3_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17463509900000
-start commit:   1ca0fafd tcp: md5: allow changing MD5 keys in all socket s..
-git tree:       net
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14c63509900000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10c63509900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bf3aec367b9ab569
-dashboard link: https://syzkaller.appspot.com/bug?extid=9c1be56e9317b795e874
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1062a40b100000
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index a65b08d..2b356d9 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -403,7 +403,7 @@ CONFIG_CRYPTO_TEA=m
+ CONFIG_CRYPTO_TWOFISH=m
+ CONFIG_CRYPTO_DEFLATE=m
+ CONFIG_PRINTK_TIME=y
+-CONFIG_FRAME_WARN=1024
++CONFIG_FRAME_WARN=2048
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_MAGIC_SYSRQ=y
+ # CONFIG_SCHED_DEBUG is not set
+-- 
+2.1.0
 
-Reported-by: syzbot+9c1be56e9317b795e874@syzkaller.appspotmail.com
-Fixes: a51486266c3b ("net: sched: remove NET_CLS_IND config option")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
