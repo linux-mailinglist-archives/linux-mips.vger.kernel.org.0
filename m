@@ -2,173 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14231244EF5
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Aug 2020 21:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A164244FF5
+	for <lists+linux-mips@lfdr.de>; Sat, 15 Aug 2020 00:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726213AbgHNTtz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Aug 2020 15:49:55 -0400
-Received: from mx4.wp.pl ([212.77.101.12]:7384 "EHLO mx4.wp.pl"
+        id S1726834AbgHNWva (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Aug 2020 18:51:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37054 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726662AbgHNTtz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 14 Aug 2020 15:49:55 -0400
-Received: (wp-smtpd smtp.wp.pl 27067 invoked from network); 14 Aug 2020 21:49:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1597434590; bh=6hs6TPHFIz1kOVdD6LgU8CRUVT9Umoi+c/8YAc/xC4M=;
-          h=From:To:Cc:Subject;
-          b=eN8v/ZpcBq4H7jMtxIUpXjF98kThu7jSSm54P6uuEch+cVb48QelKmg460BIds1/A
-           09ptcadME72tw3bbC4ztUfVtLh4894huexGOo0favP0554YmvmDTG1OIM83ZXOlqUc
-           YrFZWYGVS6fGIh+lzVQvM1LIiY30f+Dck1J+7KTk=
-Received: from riviera.nat.student.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <linux-gpio@vger.kernel.org>; 14 Aug 2020 21:49:50 +0200
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, bgolaszewski@baylibre.com,
-        linus.walleij@linaro.org, john@phrozen.org
-Cc:     Aleksander Jan Bajkowski <olek2@wp.pl>
-Subject: [PATCH] gpio: stp-xway: automatically drive GPHY leds on ar10 and grx390
-Date:   Fri, 14 Aug 2020 21:48:47 +0200
-Message-Id: <20200814194847.3171-1-olek2@wp.pl>
-X-Mailer: git-send-email 2.20.1
+        id S1726213AbgHNWva (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 14 Aug 2020 18:51:30 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 675D12224D;
+        Fri, 14 Aug 2020 22:51:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597445489;
+        bh=htFr2L7stDcDCXIGv/hhOio3Jcl0xCNKJ2kseITjPCo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cKqV9OFqvaHWEhTDf2LEI4Dje2q46a3LsQE+XNtXgU9lHhnBfwDHhSydghk3goqp5
+         UFhyl34nlPNGAqvnyd6RwtINV8kwA9W9zUoSsGdjPeUzJ59tVQsSNDb2BytyQxhw7W
+         shAFGcjtkPU5Lwbn6ItmRCBFTY0wR187iy/U4Tdo=
+Received: by mail-oi1-f182.google.com with SMTP id l204so9505925oib.3;
+        Fri, 14 Aug 2020 15:51:29 -0700 (PDT)
+X-Gm-Message-State: AOAM533FEPxKh+sy30/61JwmPG2SYkY8hZ4upeIVCpcfE97yQfAxvPGE
+        jxmaToLSAuDWJ/pwXn37ahlRgDVqyu3fWBIlHg==
+X-Google-Smtp-Source: ABdhPJzwlsOE0vIZtVkxtrm2RpjdBQfDqtuIQWPloUyMh68cc38LPi5MX0gALl3aqsFJIm91AkoxqlumFe1fqqnHKFI=
+X-Received: by 2002:aca:190c:: with SMTP id l12mr3031294oii.147.1597445488562;
+ Fri, 14 Aug 2020 15:51:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-DKIM-Status: good (id: wp.pl)                                      
-X-WP-MailID: 51f58ab8618c49ec09034a6d961ab25c
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [MXMQ]                               
+References: <20200728153708.1296374-1-jiaxun.yang@flygoat.com>
+ <20200728153708.1296374-2-jiaxun.yang@flygoat.com> <889508bae5da3c55690a7adbd101a5cd@kernel.org>
+In-Reply-To: <889508bae5da3c55690a7adbd101a5cd@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 14 Aug 2020 16:51:17 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKVhxu_cdo_umhY_SfuDhCC0G-AdsPAZpGB3eepOVFi-g@mail.gmail.com>
+Message-ID: <CAL_JsqKVhxu_cdo_umhY_SfuDhCC0G-AdsPAZpGB3eepOVFi-g@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] of_address: Add bus type match for pci ranges parser
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Ar10 (xr300) has 3 and grx390 (xrx330) has 4 built-in GPHY. PHY LEDs are
-connected via STP. STP is a peripheral controller used to drive external
-shift register cascades. The hardware is able to allow the GPHY to drive
-some GPIO of the cascade automatically.This patch allows for this on ar10
-and grx390.
+On Fri, Aug 14, 2020 at 12:21 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> Hi all,
+>
+> On 2020-07-28 16:36, Jiaxun Yang wrote:
+> > So the parser can be used to parse range property of ISA bus.
+> >
+> > As they're all using PCI-like method of range property, there is no
+> > need
+> > start a new parser.
+> >
+> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+>
+> This patch, although it looks correct, breaks the RK3399-based
+> systems, as they miss the (now required) 'device_type = "pci";'
+> property.
 
-Tested on D-Link DWR-966 with OpenWRT.
+Required since 1990 something...
 
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- drivers/gpio/gpio-stp-xway.c | 54 ++++++++++++++++++++++++++++++++----
- 1 file changed, 48 insertions(+), 6 deletions(-)
+> We can fix the in-tree DT, but that's not really an option
+> if someone relies on the DT being provided by the firmware
+> (I for one definitely do).
 
-diff --git a/drivers/gpio/gpio-stp-xway.c b/drivers/gpio/gpio-stp-xway.c
-index 9e23a5ae8108..0ce1543426a4 100644
---- a/drivers/gpio/gpio-stp-xway.c
-+++ b/drivers/gpio/gpio-stp-xway.c
-@@ -41,7 +41,10 @@
- #define XWAY_STP_4HZ		BIT(23)
- #define XWAY_STP_8HZ		BIT(24)
- #define XWAY_STP_10HZ		(BIT(24) | BIT(23))
--#define XWAY_STP_SPEED_MASK	(0xf << 23)
-+#define XWAY_STP_SPEED_MASK	(BIT(23) | BIT(24) | BIT(25) | BIT(26) | BIT(27))
-+
-+#define XWAY_STP_FPIS_VALUE	BIT(21)
-+#define XWAY_STP_FPIS_MASK	(BIT(20) | BIT(21))
- 
- /* clock source for automatic update */
- #define XWAY_STP_UPD_FPI	BIT(31)
-@@ -54,7 +57,9 @@
- /* 2 groups of 3 bits can be driven by the phys */
- #define XWAY_STP_PHY_MASK	0x7
- #define XWAY_STP_PHY1_SHIFT	27
--#define XWAY_STP_PHY2_SHIFT	15
-+#define XWAY_STP_PHY2_SHIFT	3
-+#define XWAY_STP_PHY3_SHIFT	6
-+#define XWAY_STP_PHY4_SHIFT	15
- 
- /* STP has 3 groups of 8 bits */
- #define XWAY_STP_GROUP0		BIT(0)
-@@ -80,6 +85,8 @@ struct xway_stp {
- 	u8 dsl;		/* the 2 LSBs can be driven by the dsl core */
- 	u8 phy1;	/* 3 bits can be driven by phy1 */
- 	u8 phy2;	/* 3 bits can be driven by phy2 */
-+	u8 phy3;	/* 3 bits can be driven by phy3 */
-+	u8 phy4;	/* 3 bits can be driven by phy4 */
- 	u8 reserved;	/* mask out the hw driven bits in gpio_request */
- };
- 
-@@ -114,7 +121,8 @@ static void xway_stp_set(struct gpio_chip *gc, unsigned gpio, int val)
- 	else
- 		chip->shadow &= ~BIT(gpio);
- 	xway_stp_w32(chip->virt, chip->shadow, XWAY_STP_CPU0);
--	xway_stp_w32_mask(chip->virt, 0, XWAY_STP_CON_SWU, XWAY_STP_CON0);
-+	if (!chip->reserved)
-+		xway_stp_w32_mask(chip->virt, 0, XWAY_STP_CON_SWU, XWAY_STP_CON0);
- }
- 
- /**
-@@ -188,16 +196,37 @@ static void xway_stp_hw_init(struct xway_stp *chip)
- 			chip->phy2 << XWAY_STP_PHY2_SHIFT,
- 			XWAY_STP_CON1);
- 
-+	if (of_machine_is_compatible("lantiq,grx390")
-+	    || of_machine_is_compatible("lantiq,ar10")) {
-+		xway_stp_w32_mask(chip->virt,
-+				XWAY_STP_PHY_MASK << XWAY_STP_PHY3_SHIFT,
-+				chip->phy3 << XWAY_STP_PHY3_SHIFT,
-+				XWAY_STP_CON1);
-+	}
-+
-+	if (of_machine_is_compatible("lantiq,grx390")) {
-+		xway_stp_w32_mask(chip->virt,
-+				XWAY_STP_PHY_MASK << XWAY_STP_PHY4_SHIFT,
-+				chip->phy4 << XWAY_STP_PHY4_SHIFT,
-+				XWAY_STP_CON1);
-+	}
-+
- 	/* mask out the hw driven bits in gpio_request */
--	chip->reserved = (chip->phy2 << 5) | (chip->phy1 << 2) | chip->dsl;
-+	chip->reserved = (chip->phy4 << 11) | (chip->phy3 << 8) | (chip->phy2 << 5)
-+		| (chip->phy1 << 2) | chip->dsl;
- 
- 	/*
- 	 * if we have pins that are driven by hw, we need to tell the stp what
- 	 * clock to use as a timer.
- 	 */
--	if (chip->reserved)
-+	if (chip->reserved) {
- 		xway_stp_w32_mask(chip->virt, XWAY_STP_UPD_MASK,
- 			XWAY_STP_UPD_FPI, XWAY_STP_CON1);
-+		xway_stp_w32_mask(chip->virt, XWAY_STP_SPEED_MASK,
-+			XWAY_STP_10HZ, XWAY_STP_CON1);
-+		xway_stp_w32_mask(chip->virt, XWAY_STP_FPIS_MASK,
-+			XWAY_STP_FPIS_VALUE, XWAY_STP_CON1);
-+	}
- }
- 
- static int xway_stp_probe(struct platform_device *pdev)
-@@ -242,13 +271,26 @@ static int xway_stp_probe(struct platform_device *pdev)
- 	/* find out which gpios are controlled by the phys */
- 	if (of_machine_is_compatible("lantiq,ar9") ||
- 			of_machine_is_compatible("lantiq,gr9") ||
--			of_machine_is_compatible("lantiq,vr9")) {
-+			of_machine_is_compatible("lantiq,vr9") ||
-+			of_machine_is_compatible("lantiq,ar10") ||
-+			of_machine_is_compatible("lantiq,grx390")) {
- 		if (!of_property_read_u32(pdev->dev.of_node, "lantiq,phy1", &phy))
- 			chip->phy1 = phy & XWAY_STP_PHY_MASK;
- 		if (!of_property_read_u32(pdev->dev.of_node, "lantiq,phy2", &phy))
- 			chip->phy2 = phy & XWAY_STP_PHY_MASK;
- 	}
- 
-+	if (of_machine_is_compatible("lantiq,ar10") ||
-+			of_machine_is_compatible("lantiq,grx390")) {
-+		if (!of_property_read_u32(pdev->dev.of_node, "lantiq,phy3", &phy))
-+			chip->phy3 = phy & XWAY_STP_PHY_MASK;
-+	}
-+
-+	if (of_machine_is_compatible("lantiq,grx390")) {
-+		if (!of_property_read_u32(pdev->dev.of_node, "lantiq,phy4", &phy))
-+			chip->phy4 = phy & XWAY_STP_PHY_MASK;
-+	}
-+
- 	/* check which edge trigger we should use, default to a falling edge */
- 	if (!of_find_property(pdev->dev.of_node, "lantiq,rising", NULL))
- 		chip->edge = XWAY_STP_FALLING;
--- 
-2.20.1
+Perhaps time to pay attention to schema errors:
 
+arch/arm64/boot/dts/rockchip/rk3399-sapphire-excavator.dt.yaml:
+pcie@f8000000: 'device_type' is a required property
+
+(I thought dtc would also catch this, but there we look for
+device_type and then do PCI checks like node name. I guess we needed
+to check for either device_type or the node name...)
+
+> I came up with the following hack, which solves the issue for
+> me. Definitely not my finest hour, but I really need this box
+> to keep going. I will post a patch fixing the DT separately.
+>
+> Thanks,
+>
+>          M.
+>
+>  From ceef5fd9c4d2005eb577505c68868ebe527c098f Mon Sep 17 00:00:00 2001
+>  From: Marc Zyngier <maz@kernel.org>
+> Date: Fri, 14 Aug 2020 19:10:12 +0100
+> Subject: [PATCH] of: address: Workaround broken DTs missing the
+> 'device_type =
+>   "pci"' property
+>
+> Recent changes to the PCI bus parsing made it mandatory for
+> device trees nodes describing a PCI controller to have the
+> 'device_type = "pci"' property for the node to be matched.
+>
+> Although this is compliant with the specification, it breaks
+> existing device-trees that have been working fine for years
+> (the Rockchip rk3399-based systems being a prime example of
+> such breakage).
+>
+> In order to paper over the blunder, let's also match nodes
+> that have the "linux,pci-domain" property, as they are
+> pretty likely to be PCI nodes. This fixes the issue for
+> systems such as the above platforms.
+>
+> Fixes: 2f96593ecc37 ("of_address: Add bus type match for pci ranges
+> parser")
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> ---
+>   drivers/of/address.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/of/address.c b/drivers/of/address.c
+> index 590493e04b01..712e03781a2a 100644
+> --- a/drivers/of/address.c
+> +++ b/drivers/of/address.c
+> @@ -134,9 +134,12 @@ static int of_bus_pci_match(struct device_node *np)
+>          * "pciex" is PCI Express
+>          * "vci" is for the /chaos bridge on 1st-gen PCI powermacs
+>          * "ht" is hypertransport
+> +        * "linux,pci-domain" is a workaround for broken device trees
+> +        * lacking the required "device_type" property.
+
+I would suggest looking for 'pci' or 'pcie' node name instead.
+
+You should remove linux,pci-domain from rk3399 as it is pointless when
+there's a single PCI host bridge.
+
+The other option is fixup the live tree with of_add_property() in the
+Rockchip PCI driver. Less likely to impact anyone else.
+
+>          */
+>         return of_node_is_type(np, "pci") || of_node_is_type(np, "pciex") ||
+> -               of_node_is_type(np, "vci") || of_node_is_type(np, "ht");
+> +               of_node_is_type(np, "vci") || of_node_is_type(np, "ht") ||
+> +               of_find_property(np, "linux,pci-domain", NULL);
+>   }
+>
+>   static void of_bus_pci_count_cells(struct device_node *np,
+> --
+> 2.27.0
+>
+>
+> --
+> Jazz is not dead. It just smells funny...
