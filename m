@@ -2,159 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F722446A4
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Aug 2020 10:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D587A244742
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Aug 2020 11:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbgHNI4V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Aug 2020 04:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726050AbgHNI4U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Aug 2020 04:56:20 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE96C061383;
-        Fri, 14 Aug 2020 01:56:19 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id 17so4249336pfw.9;
-        Fri, 14 Aug 2020 01:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=zTcT2yb4VlahiZ+8x3DiZcJOZkmeuTPvsJD8D2PV1jQ=;
-        b=oc/++NNgtI8v6eFrM0KIqAXlLPm2RknS/SV/lh/tUXDQHB8pdqmlxlheAvtfix/5OM
-         tLzhnCft3oe37d3qXf8+l2t5J1sMEmkoMEGS8geSLxgl8sB6PAChS1CPjmvrXFbEpR+y
-         wjjjZ2rG5DHJoEdIEyYJjoh3w1DWc24UyiyzLuB8MyeLfo7uFVzXZewZkiG4dEN8MFUo
-         Gqtf1ez/+cJr/WCQCHpUTzl92NvKY+ZXVgEVd4ZwEHGiVtSv24CJqm12bVfjavCkMQPo
-         BMPs7crTzHlHKtw9WAVBafFsZdiz9VNy0mzmcKGUUy4r7tV3NcK4fukNDbqRJsBMVAEe
-         uz3Q==
+        id S1726890AbgHNJob convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 14 Aug 2020 05:44:31 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:46994 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726889AbgHNJob (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Aug 2020 05:44:31 -0400
+Received: by mail-il1-f193.google.com with SMTP id c6so7882433ilo.13
+        for <linux-mips@vger.kernel.org>; Fri, 14 Aug 2020 02:44:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=zTcT2yb4VlahiZ+8x3DiZcJOZkmeuTPvsJD8D2PV1jQ=;
-        b=c2saxJ57njuQO8sD3zq0ydc7KH3vs8Ry2heTV6MguSoYFFXjmV+Qz537HEfP6WQtMG
-         +ytcKxuz2+ZXAi467h9ZMpKdg70OUii1CEU1lOWuq2gCKH3pjZJc3G1PWzdBzLCJz70y
-         Iudw7GnKEl8x4j3jMdiJjGG54KS9ILVXVUYxfz6utXd53oSmTEkRrdrZAH4lb4SMKHP+
-         yE7uvEl+gLDfwiC8xii7OdgPmGu7J/h8u3ULQpbdRlOqURjv9ubZhNuPZdAroOXvzQnN
-         8MImDZG44lt+zhK6xKeNTxRevOn3TSCVil4Pc0J2E7TwiYvgqdTcP8IHQDA6aoLwjI0Z
-         mPSg==
-X-Gm-Message-State: AOAM533yKlqoc31EhlNrpLJtKnh1b1+dbKHt/HWHSw7RZrQ7NHADpSXV
-        iGwh4A+Gk7NovlItOvezlPavZ37IzXw=
-X-Google-Smtp-Source: ABdhPJyfJw+JRCcHRK5mYeqXgxZBEKbhdNI+zRQErExZOJKxYHQqSs2GplRu196nml01FcKc6RgA3g==
-X-Received: by 2002:a62:e704:: with SMTP id s4mr1165962pfh.177.1597395379200;
-        Fri, 14 Aug 2020 01:56:19 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n2sm7349968pgv.37.2020.08.14.01.56.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 14 Aug 2020 01:56:18 -0700 (PDT)
-Date:   Fri, 14 Aug 2020 01:56:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     tsbogend@alpha.franken.de, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, jonas.gorski@gmail.com,
-        linus.walleij@linaro.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v4] mtd: parsers: bcm63xx: simplify CFE detection
-Message-ID: <20200814085617.GA129183@roeck-us.net>
-References: <20200612073549.1658336-1-noltari@gmail.com>
- <20200615091740.2958303-1-noltari@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xosEYrDoba41qWFRog+Uv/Mk1S2eoK9q+2rQ9FX5pWo=;
+        b=hvxa6Xc+5yB9ItzLXbQghvGGUSoRzSKdfnkYV8PZlCdW+XsoJyCnbWVEFw9oRubIv2
+         Ex9fbhXOky5WguiwoK1GD0P5fh/7zwHsKLloP3n39PxaBPZyggZ/1ccQjry2KZiH4VAx
+         f0m/gokzKjMBUZgtSdeSOoSCNjcwmJNW2SGs+NP2oZsbKdhyg2seJKcqRSOg4iyxIIw0
+         2H5wCEvzK1rDwvxjx7QsQH5iCvhwdTZc6XesB0MaHw2b9Td24TtMu2G39W0NNAnZkN0G
+         3iyKwXsozD91dAWWFKaHzaNKVQgZi5TXgld4FIttPGZQHDY5YM4f4ZxWOyFc6pm23G/O
+         40Dg==
+X-Gm-Message-State: AOAM532Ni6A2sl4Z5gbKQpj+qkaI+wwE/uQiy2QIAQZjJ+3JG4FbdR3L
+        5BD4eZB2tVymKU8ExLcIed8+3zrLjkRbHZ8KUAE=
+X-Google-Smtp-Source: ABdhPJzh3ixmp+5lff425K1TXESM9QgonCLgEq0zYMEhmo9YQsyqvfMhMAUNGIaJJTtsUWxORw+imYZDMtqOyh1zbhg=
+X-Received: by 2002:a05:6e02:962:: with SMTP id q2mr1860882ilt.171.1597398270011;
+ Fri, 14 Aug 2020 02:44:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200615091740.2958303-1-noltari@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <D5AFA61A-5AAC-408C-9B3D-1E0829C9FB13@flygoat.com>
+ <CAAhV-H6M-BnBMzFYUom04mdBZhA4+9M3JTUC-dvckTMUeFw9+w@mail.gmail.com>
+ <20200805121021.GA12598@alpha.franken.de> <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
+ <20200807131357.GA11979@alpha.franken.de> <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+ <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com> <20200810141219.GA2844@alpha.franken.de>
+ <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com> <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
+ <20200811120645.GA6199@alpha.franken.de>
+In-Reply-To: <20200811120645.GA6199@alpha.franken.de>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Fri, 14 Aug 2020 17:44:18 +0800
+Message-ID: <CAAhV-H5YqF5dcdFiBgVSXzu67QOKTFq3FME8ernswGts45GHfQ@mail.gmail.com>
+Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 11:17:40AM +0200, Álvaro Fernández Rojas wrote:
-> Instead of trying to parse CFE version string, which is customized by some
-> vendors, let's just check that "CFE1" was passed on argument 3.
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Hi, Thomas,
 
-mips:allmodconfig:
+On Tue, Aug 11, 2020 at 8:08 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Tue, Aug 11, 2020 at 02:45:05PM +0800, Huacai Chen wrote:
+> > Hi, Thomas and Jiaxun,
+> >
+> > On Tue, Aug 11, 2020 at 10:18 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> > >
+> > >
+> > >
+> > > åœ¨ 2020/8/10 22:12, Thomas Bogendoerfer å†™é“:
+> > > > On Sun, Aug 09, 2020 at 10:53:13PM +0800, Jiaxun Yang wrote:
+> > > >> Thus we still need to enable CU2 with exception for user space, and we can
+> > > >> always enable CU2 in
+> > > >> kernel since kernel won't be compiled with hard-float. :-)
+> > > > I see, how about the patch below
+> > > That looks fine for me.
+> > > Is it good with you, Huacai?
+> >
+> > There are two problems:
+> > 1, zboot (arch/mips/boot/compressed/head.S) should be considered,
+> > because the initial value of Status may or may not contain CU2.
+>
+> this comes with it's own memcpy/memset and stuff, I don't see a reason why
+> COP2 needs to be enabled there,
+gslq/gssq can also be generated by toolchains.
 
-ERROR: modpost: "fw_arg3" [drivers/mtd/parsers/bcm63xxpart.ko] undefined!
+>
+> > 2, r4k_switch.S should set CU2 for the new process, otherwise it
+> > cannot use gslq/gssq while it in kernel (Because the new process
+> > doesn't contain CU2 in THERAD_STATUS.
+>
+> which is correct for all user space process, otherwise the whole
+> cop2 exception thing wouldn't work. And if cop2 exception handling
+> has been run it's set in THREAD_STATUS.
+>
+THREAD_STATUS means thread_struct.cp0_status, which is the cp0_status
+when a process runs in kernel-space. KSTK_STATUS (what you have seen
+in copy_thread_tls() below) means cp0_status in a process's kernel
+stack, which saves the cp0_status when a process runs in user-space.
+Whether COP2 exception can work depends on that KSTK_STATUS (but not
+THREAD_STATUS) should not contain CU2 at the first time. So, whether
+or not THREAD_STATUS contains CU2, it won't break COP2 handling.
 
-This is not surprising, since fw_arg3 is not exported.
-
-Guenter
-
-> ---
->  v4: shorten conditional compilation part as suggested by Miquèl.
->  v3: keep COMPILE_TEST compatibility by adding a new function that only checks
->      fw_arg3 when CONFIG_MIPS is defined.
->  v2: use CFE_EPTSEAL definition and avoid using an additional function.
-> 
->  drivers/mtd/parsers/bcm63xxpart.c | 32 ++++++++++++-------------------
->  1 file changed, 12 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/mtd/parsers/bcm63xxpart.c b/drivers/mtd/parsers/bcm63xxpart.c
-> index 78f90c6c18fd..b15bdadaedb5 100644
-> --- a/drivers/mtd/parsers/bcm63xxpart.c
-> +++ b/drivers/mtd/parsers/bcm63xxpart.c
-> @@ -22,6 +22,11 @@
->  #include <linux/mtd/partitions.h>
->  #include <linux/of.h>
->  
-> +#ifdef CONFIG_MIPS
-> +#include <asm/bootinfo.h>
-> +#include <asm/fw/cfe/cfe_api.h>
-> +#endif /* CONFIG_MIPS */
-> +
->  #define BCM963XX_CFE_BLOCK_SIZE		SZ_64K	/* always at least 64KiB */
->  
->  #define BCM963XX_CFE_MAGIC_OFFSET	0x4e0
-> @@ -32,28 +37,15 @@
->  #define STR_NULL_TERMINATE(x) \
->  	do { char *_str = (x); _str[sizeof(x) - 1] = 0; } while (0)
->  
-> -static int bcm63xx_detect_cfe(struct mtd_info *master)
-> +static inline int bcm63xx_detect_cfe(void)
->  {
-> -	char buf[9];
-> -	int ret;
-> -	size_t retlen;
-> +	int ret = 0;
->  
-> -	ret = mtd_read(master, BCM963XX_CFE_VERSION_OFFSET, 5, &retlen,
-> -		       (void *)buf);
-> -	buf[retlen] = 0;
-> +#ifdef CONFIG_MIPS
-> +	ret = (fw_arg3 == CFE_EPTSEAL);
-> +#endif /* CONFIG_MIPS */
->  
-> -	if (ret)
-> -		return ret;
-> -
-> -	if (strncmp("cfe-v", buf, 5) == 0)
-> -		return 0;
-> -
-> -	/* very old CFE's do not have the cfe-v string, so check for magic */
-> -	ret = mtd_read(master, BCM963XX_CFE_MAGIC_OFFSET, 8, &retlen,
-> -		       (void *)buf);
-> -	buf[retlen] = 0;
-> -
-> -	return strncmp("CFE1CFE1", buf, 8);
-> +	return ret;
->  }
->  
->  static int bcm63xx_read_nvram(struct mtd_info *master,
-> @@ -138,7 +130,7 @@ static int bcm63xx_parse_cfe_partitions(struct mtd_info *master,
->  	struct bcm963xx_nvram *nvram = NULL;
->  	int ret;
->  
-> -	if (bcm63xx_detect_cfe(master))
-> +	if (!bcm63xx_detect_cfe())
->  		return -EINVAL;
->  
->  	nvram = vzalloc(sizeof(*nvram));
+Huacai
+> > Though a process sets CU2 when it enters kernel, but it
+> > only sets CU2 in hardware, not in THREAD_STATUS).
+>
+> A kernel thread will get THREAD_STATUS from current running kernel code,
+> at least that's how I read this code:
+>
+>        if (unlikely(p->flags & PF_KTHREAD)) {
+>                 /* kernel thread */
+>                 unsigned long status = p->thread.cp0_status;
+>                 memset(childregs, 0, sizeof(struct pt_regs));
+>                 ti->addr_limit = KERNEL_DS;
+>                 p->thread.reg16 = usp; /* fn */
+>                 p->thread.reg17 = kthread_arg;
+>                 p->thread.reg29 = childksp;
+>                 p->thread.reg31 = (unsigned long) ret_from_kernel_thread;
+> #if defined(CONFIG_CPU_R3000) || defined(CONFIG_CPU_TX39XX)
+>                 status = (status & ~(ST0_KUP | ST0_IEP | ST0_IEC)) |
+>                          ((status & (ST0_KUC | ST0_IEC)) << 2);
+> #else
+>                 status |= ST0_EXL;
+> #endif
+>                 childregs->cp0_status = status;
+>                 return 0;
+>         }
+>
+> If there is still something missing, I want to find the root cause
+> and not paper over it in r4k_switch.S and IMHO break COP2 handling for
+> loongsoon completely.
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
