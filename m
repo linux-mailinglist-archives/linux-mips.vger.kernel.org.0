@@ -2,96 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B401E245807
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Aug 2020 16:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AA22458A7
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Aug 2020 19:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729466AbgHPObU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 16 Aug 2020 10:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
+        id S1728167AbgHPRGh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Aug 2020 13:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728794AbgHPO3y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Aug 2020 10:29:54 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06946C06136A
-        for <linux-mips@vger.kernel.org>; Sun, 16 Aug 2020 07:28:37 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id g75so11860071wme.4
-        for <linux-mips@vger.kernel.org>; Sun, 16 Aug 2020 07:28:36 -0700 (PDT)
+        with ESMTP id S1726825AbgHPRGg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Aug 2020 13:06:36 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1694C061786;
+        Sun, 16 Aug 2020 10:06:35 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id g6so14895840ljn.11;
+        Sun, 16 Aug 2020 10:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
-         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
-         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
-         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
-         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
-         yMKA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+gW0MeUUnWtjGRnB3GIB/WuouXI03ogec5oC+V29aXA=;
+        b=THsajkBAG42CvgrWy6I1Je7Lx/8NmASsawcagk5GF0lskivIr6aFzS5ChY5lhYUZov
+         mDcnQKZWeglWiacSJ5Ycv1CnUteCPoZpZs8VZwSi1gGb7rI3F/puVLI/OS82UTppzPtb
+         EU5/JrYmZUI8Rx6Qt+XnNW4GQO/BDPrcjNx78xfPWHQnTA5MUI2Yn8SXKZ7AqQHIeCHm
+         DuRhBpiSoeRTISRh3ZgjUQ1oTSzgPa9HOXgtXyURcDrVe/rv2A1lPhus4S3n/l46SPon
+         Ks0UleO23P3swz0uDr31OaQx72gvLZdpuT3l5vfjo9CXRYTLQXn7Ve6kviAWMqPGCFeX
+         WAmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=RqMyWCBsm07Vd1ToNme+rGjwXApF2jzSL6xxLyc5pqHNRNF90pH7y6wm2EvBfedPYM
-         Y6AFvPCT7oSkKN47uoaDY6vrcE5dOP1BvhADEnAPncddeuCjH4P4AI5K5iHpXbx2IW6z
-         LLb4UdH2fubKzBhpI+0C5hEPG88V3rcNtAKP5JDgneCG3vAMHWZVcIY7A1gJfJko1N0j
-         mIXa/hdNdK/r5wpEwxy627p65wTRJ4DMl+ULqQHWpwpzAVY7iM8sJj3vaavEgSHNyjFU
-         wB0rB0uHa6dR3YW/xWJsb6fsAEFm+OcZ9KnouznsvypzPmphmGriBM/t5qbZ2HzsbbLv
-         eLMA==
-X-Gm-Message-State: AOAM533czRNYrublfylVz0DfY0m6JTK+DyY5Yr5XqaEunLmEy/Ef6fUo
-        n1S0/NXms+pQx0ClZAOCC81frPd8Hq1faJiQYUciglEU8/8=
-X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
-X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
- Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+gW0MeUUnWtjGRnB3GIB/WuouXI03ogec5oC+V29aXA=;
+        b=RxJcoa4Swu7L5bLcawu1WBCfqdc2UWtsigbff9zfghEb+wKMfuODH2r/c/fTO2D5Fg
+         ZkCMRttJl8aauo3YWTyxsGP9i+RrIM1ulY9zIoUA818VQCvHefd5iY6T4cHWklDgp3Qo
+         aWozP/MnHCJZ4FT+7x4Bxlc2cGobmCZ9ExhOwTvaO1qv+hAWQW6STMB7nFPcSbVMdlzZ
+         ByAGxL0vX4sD067quhiHSG5aUvYsO0aK1C/xI8up3+3322cClEAOPFo8ylDOloDv/tmp
+         +NKWbT83URlA18rpl33qDXfw3DD7R/fvWJH7DvRisKz/LHU9JItBr0OUYeTJp+AiRGuz
+         +bbw==
+X-Gm-Message-State: AOAM533pP3ZuToBmQjRmJsIOmlagPD0YRDjtQ5Bv8Yts7iqVhnwQ9bZQ
+        2Zdmmqh4jL5uKVB4O0SjUBw=
+X-Google-Smtp-Source: ABdhPJyNtcSHRXcoHCBFOUYMBtvctEp+pL4AFjbCfXAK5mX+sYqHMK321l2KNAO4FoTJLqe3YFcLcw==
+X-Received: by 2002:a2e:98d5:: with SMTP id s21mr5151864ljj.59.1597597594314;
+        Sun, 16 Aug 2020 10:06:34 -0700 (PDT)
+Received: from wasted.omprussia.ru ([2a00:1fa0:48fd:f54c:8335:c09f:7e7c:be7b])
+        by smtp.gmail.com with ESMTPSA id d6sm1320889lji.110.2020.08.16.10.06.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Aug 2020 10:06:33 -0700 (PDT)
+Subject: Re: [PATCH 2/3] MIPS: DTS: img: marduk: Add Cascoda CA8210 6LoWPAN
+To:     Hauke Mehrtens <hauke@hauke-m.de>, tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, james.hartley@sondrel.com,
+        rahulbedarkar89@gmail.com, wigyori@uid0.hu
+References: <20200815163514.11631-1-hauke@hauke-m.de>
+ <20200815163514.11631-2-hauke@hauke-m.de>
+ <b6267d62-af3b-4d29-51b0-3a61d0fd2679@gmail.com>
+ <b094bf63-dd4e-e5e0-812c-957b1f11805a@hauke-m.de>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <5ed658c5-c5f8-8b06-82f8-0409901c6b40@gmail.com>
+Date:   Sun, 16 Aug 2020 20:06:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
- -0700 (PDT)
-Reply-To: sctnld11170@tlen.pl
-From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
-Date:   Sun, 16 Aug 2020 07:28:30 -0700
-Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
-Subject: Hello, Please
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <b094bf63-dd4e-e5e0-812c-957b1f11805a@hauke-m.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
---=20
-Dear Friend,
+On 8/16/20 1:59 PM, Hauke Mehrtens wrote:
+ 
+> Thank you for the review Sergei.
 
-I'm Mr. Scott Donald a Successful businessMan dealing with
-Exportation, I got your mail contact through search to let you know my
-intension and my Ugly Situation Am a dying Man here in Los Angeles
-California Hospital Bed in (USA), I Lost my Wife and my only Daughter
-for Covid-19 and I also have a problem in my Health and I can die
-anytime I Know,
+   You're welcome. :-)
 
-I have a project that I am about to hand over to you. and I already
-instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
-of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
-able you
-to give 50% of this fund to Charitable Home in your State and take 50%
-don't think otherwise and why would anybody send someone you barely
-know to help you deliver a message, help me do this for the happiness
-of my soul and for God to mercy me and my Family and give Us a good
-place.
+[...]
+>>> Add Cascoda CA8210 6LoWPAN controller to device tree.
+>>>
+>>> Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
+>>> ---
+>>>   arch/mips/boot/dts/img/pistachio_marduk.dts | 22 +++++++++++++++++++++
+>>>   1 file changed, 22 insertions(+)
+>>>
+>>> diff --git a/arch/mips/boot/dts/img/pistachio_marduk.dts
+>>> b/arch/mips/boot/dts/img/pistachio_marduk.dts
+>>> index ea11a21b133b..633a41954cc0 100644
+>>> --- a/arch/mips/boot/dts/img/pistachio_marduk.dts
+>>> +++ b/arch/mips/boot/dts/img/pistachio_marduk.dts
+>>> @@ -75,6 +75,28 @@
+>>>       VDD-supply = <&internal_dac_supply>;
+>>>   };
+>>>   +&spfi0 {
+>>> +    status = "okay";
+>>> +    pinctrl-0 = <&spim0_pins>, <&spim0_cs0_alt_pin>,
+>>> <&spim0_cs2_alt_pin>, <&spim0_cs3_alt_pin>, <&spim0_cs4_alt_pin>;
+>>> +    pinctrl-names = "default";
+>>> +
+>>> +    cs-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>, <&gpio0 2
+>>> GPIO_ACTIVE_HIGH>,
+>>> +            <&gpio1 12 GPIO_ACTIVE_HIGH>, <&gpio1 13 GPIO_ACTIVE_HIGH>;
+>>> +
+>>> +    ca8210: ca8210@0 {
+>>
+>>    The device nodes are supposed to have the generic names...
+> 
+> I am not referencing this, so I can also remove it:
+> 	ca8210@0 {
 
-please, do as I said there was someone from your State that I deeply
-love so very very much and I miss her so badly I have no means to
-reach any Charitable Home there. that is why I go for a personal
-search of the Country and State and I got your mail contact through
-search to let you know my Bitterness and please, help me is getting
-Dark I ask my Doctor to help me keep you notice failure for me to
-reach you in person Your urgent Response, here is my Doctor Whats-app
-Number for urgent notice +13019692737
+   I said name, not label. :-)
 
-Hope To Hear From You. I'm sending this email to you for the second
-time yet no response from you.
+> Otherwise, would this be ok:
+> 	ieee802154: ca8210@0 {
+> 
+>>> +        status = "okay";
+> 
+> This status = "okay"; can be removed.
 
-My Regards.
+   Yes, and probably even shpould be removed...
 
-Mr. Scott Donald
-CEO
+>>> +        compatible = "cascoda,ca8210";
+>>> +        reg = <0>;
+>>> +        spi-max-frequency = <4000000>;
+>>
+>>    Only 4MHz?
+> 
+> The vendor device tree also use 4MHz:
+> https://github.com/CreatorDev/openwrt/blob/ci40/target/linux/pistachio/dts/pistachio/pistachio_marduk.dts#L34
+> The device tree binding says "Maximum clock speed, should be *less than*
+> 4000000", it could even make sense to switch this to 3MHz.
+> https://www.kernel.org/doc/Documentation/devicetree/bindings/net/ieee802154/ca8210.txt
+
+   It just sounds too low SPI frequency, those a usually one order higher...
+
+> I do not have the datasheet for the cascoda,ca8210.
+> 
+>>> +        spi-cpol;
+>>> +        reset-gpio = <&gpio0 12 GPIO_ACTIVE_HIGH>;
+>>> +        irq-gpio = <&gpio2 12 GPIO_ACTIVE_HIGH>;
+>>> +        extclock-enable;
+>>> +        extclock-freq = <16000000>;
+>>> +        extclock-gpio = <2>;
+>>
+>>    Hm, strange spec for a GPIO prop, shouldn't they all be alike?
+> 
+> I am also getting this compile warning:
+> arch/mips/boot/dts/img/pistachio_marduk.dts:135.3-23: Warning
+> (gpios_property): /spi@18100f00/ca8210@0:extclock-gpio: cell 0 is not a
+> phandle reference
+> arch/mips/boot/dts/img/pistachio_marduk.dts:126.19-136.4: Warning
+> (gpios_property): /spi@18100f00/ca8210@0: Missing property '#gpio-cells'
+> in node /clk@18144000 or bad phandle (referred from extclock-gpio[0])
+
+     Expected. :-)
+
+> I do not know how to fix this.
+
+> The binding is defined here:
+> https://www.kernel.org/doc/Documentation/devicetree/bindings/net/ieee802154/ca8210.txt
+
+   Have to fix the bindings somehow, "extclock-gpio" was a bad name...
+
+> Hauke
+
+MBR, Sergei
