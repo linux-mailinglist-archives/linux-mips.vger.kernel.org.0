@@ -2,109 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCB02483F0
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Aug 2020 13:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E315B2483F3
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Aug 2020 13:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726646AbgHRLeV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Aug 2020 07:34:21 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:44242 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726145AbgHRLdY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 18 Aug 2020 07:33:24 -0400
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD99gvDtfbm0KAA--.22S2;
-        Tue, 18 Aug 2020 19:32:48 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Loongson64: Fix build error about redeclaration of enumerator 'VIRTUAL' and "CONFIG_DM_THIN_PROVISIONING"
-Date:   Tue, 18 Aug 2020 19:32:48 +0800
-Message-Id: <1597750368-14086-1-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
+        id S1726647AbgHRLfh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Aug 2020 07:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726671AbgHRLeJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Aug 2020 07:34:09 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FD0C061342
+        for <linux-mips@vger.kernel.org>; Tue, 18 Aug 2020 04:34:02 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id cq28so14963775edb.10
+        for <linux-mips@vger.kernel.org>; Tue, 18 Aug 2020 04:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=lwFzNVoRwddBB/TDf9d34KZm+HY66MZbVl/f7VC3N7M=;
+        b=pTXpwEjg+pV0Ah2ntE9DXy0vt92HiaSpKNJk4DHZGs5JGuBbRanTaDsgu4M8x6IHI9
+         xH9btOyMWlhN1nFr/34eeJmMyxWbR6uRmfAQ+lHh50Lio2J4BWeTLTpMs/+VYXH4X4z3
+         bFazYb9+phkobfG3YqkurjGFshQ6f0n/RdbXzg4ccaAbL5fVgRHXdatE1XdnvsGptPFQ
+         mfSecx+6MkufgmwXxKst8nkDjRxjgwZhddjOaZYL3GfpdUI7V38LcVYvy4Q7vTAuqIv/
+         3ezoq4tlP+vPCZZI0eO7HJNlAucaT2me3VlVNnCLD1sru8ZpDur/0/ZqAzho21+p9Elh
+         9K+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=lwFzNVoRwddBB/TDf9d34KZm+HY66MZbVl/f7VC3N7M=;
+        b=V9sXIn0nU0x7zCkMwWu/nKvgXAZSY9N6ZkRznNgc6ltL2kUGQTLhKcYPMge0vyqsK6
+         ylnUZggLnLFZJztr+lPNjsNP2tHp2XLkdeA7XJ087zVPV1kyGcbFUxO66PIogfqZcE6u
+         dHHRH72XVRH+QYVZeCEfqOzxYFbZIRiTVEISprj75xs8hGP1K74hOobd7/8jtXfYumAe
+         deFxb9s9CdAGJX1NabMFXWguQ6AZyJS0pjTQS1Al6j+FbqjqnDdxA+gSyr54A/v4EQAQ
+         /Ldm+p/j+zXXI+vg6aItm08fI04i5JlDLHND3ZO0i+1l5V4Hnq/hzIkKU1ePeLbuesn1
+         8UDw==
+X-Gm-Message-State: AOAM531AoiCJXdxUSLuq444ur2gZoqQiMe8taY0Wmj7Pmx060oVz29Ic
+        pRFFyDr7ZmWXu83Fn79w6j/Q2EvuE3WN9AKE3U1xpETpm+lFpw==
+X-Google-Smtp-Source: ABdhPJxTcS/DfBe/a3p4fFGsd+0IgsFzYYshn45yOLysjyR3c5WEyxcpTe+aW5J2IHQOZKdTilgrYvjf71IMLkZvsY0=
+X-Received: by 2002:a05:6402:1846:: with SMTP id v6mr19464348edy.179.1597750436283;
+ Tue, 18 Aug 2020 04:33:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxD99gvDtfbm0KAA--.22S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw1DAr4kKw1xZF1UAFyDAwb_yoW8tFy8pa
-        nrAwn5Gr4DWrW3AFn5ArW8uryrAa98GrW2qFW29F1YgasIqFy0qrs8GFn5ArsFyF45Ka4x
-        WrySgry7GFnrAr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWxJVW8Jr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8KwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUc8nYUUUUU
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+From:   Guruswamy Basavaiah <guru2018@gmail.com>
+Date:   Tue, 18 Aug 2020 17:03:44 +0530
+Message-ID: <CAHSpA58o1DOWRVtNJfW57BCnw7FbcqAHDNRzX-coUp9GVqR2hA@mail.gmail.com>
+Subject: smp_call_function_many hangs for a moment (from 100millisecond to 1 second)
+To:     linux-mips@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000328d9505ad2543e1"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit 39c1485c8baa (MIPS: KVM: Add kvm guestsupport for Loongson-3)
+--000000000000328d9505ad2543e1
+Content-Type: text/plain; charset="UTF-8"
 
-Fix the following build error:
+Hello,
+ smp_call_function_many randomly hangs. Attached is the call trace.
+ Below is the location where hang happens.
+ [<ffffffff809137e0>] smp_call_function_many+0x2b0/0x330
 
-drivers/md/dm-thin.c:116:2: error: redeclaration of enumerator ‘VIRTUAL’
-  VIRTUAL,
-  ^
-In file included from ./arch/mips/include/asm/mach-loongson64/mmzone.h:12:0,
-                 from ./arch/mips/include/asm/mmzone.h:12,
-                 from ./include/linux/mmzone.h:962,
-                 from ./include/linux/gfp.h:6,
-                 from ./include/linux/slab.h:15,
-                 from ./include/linux/genhd.h:16,
-                 from ./include/linux/blkdev.h:8,
-                 from drivers/md/persistent-data/dm-block-manager.h:11,
-                 from drivers/md/dm-thin-metadata.h:10,
-                 from drivers/md/dm-thin.c:7:
-./arch/mips/include/asm/mach-loongson64/boot_param.h:198:2: note: previous
-definition of ‘VIRTUAL’ was here VIRTUAL = 3
-                                 ^
-scripts/Makefile.build:283: recipe for target 'drivers/md/dm-thin.o' failed
-make[2]: *** [drivers/md/dm-thin.o] Error 1
+ When disassembled the vmlinux and checked, the hang was in the SYNC
+instruction.
 
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
----
- arch/mips/include/asm/mach-loongson64/boot_param.h | 2 +-
- arch/mips/loongson64/env.c                         | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Code snippet:
+ffffffff809137d8:       8c830018        lw      v1,24(a0)
+ffffffff809137dc:       0000000f        sync
+ffffffff809137e0:       e860fffd        bbit1
+v1,0x0,ffffffff809137d8 <smp_call_function_many+0x2a8>
 
-diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
-index afc92b7..a4ef4ac 100644
---- a/arch/mips/include/asm/mach-loongson64/boot_param.h
-+++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
-@@ -195,7 +195,7 @@ struct boot_params {
- enum loongson_bridge_type {
- 	LS7A = 1,
- 	RS780E = 2,
--	VIRTUAL = 3
-+	VIRT = 3
- };
- 
- struct loongson_system_configuration {
-diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
-index 134cb8e..623b3f1 100644
---- a/arch/mips/loongson64/env.c
-+++ b/arch/mips/loongson64/env.c
-@@ -180,8 +180,8 @@ void __init prom_init_env(void)
- 		loongson_sysconf.early_config = rs780e_early_config;
- 		break;
- 	default:
--		pr_info("The bridge chip is VIRTUAL\n");
--		loongson_sysconf.bridgetype = VIRTUAL;
-+		pr_info("The bridge chip is VIRT\n");
-+		loongson_sysconf.bridgetype = VIRT;
- 		loongson_sysconf.early_config = virtual_early_config;
- 		loongson_fdt_blob = __dtb_loongson64v_4core_virtio_begin;
- 		break;
+Is this issue known ? or how to fix this ?
 -- 
-2.1.0
+Guruswamy Basavaiah
 
+--000000000000328d9505ad2543e1
+Content-Type: text/plain; charset="US-ASCII"; name="log.txt"
+Content-Disposition: attachment; filename="log.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kdzv5pxk0>
+X-Attachment-Id: f_kdzv5pxk0
+
+SnVsIDMxIDEzOjIzOjEyLjA4NzE0MCB3YXJuIGtlcm5lbDogWyAgMzAyLjI3NjE1MF0gdGFzazog
+ODAwMDAwMDdmOTZmMGQ4MCB0aTogODAwMDAwMDdmMzIxMDAwMCB0YXNrLnRpOiA4MDAwMDAwN2Yz
+MjEwMDAwCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYxNTdd
+ICQgMCAgIDogMDAwMDAwMDAwMDAwMDAwMCBmZmZmZmZmZjgwODY0YTUwIDAwMDAwMDAwMDAwMDAw
+MDIgMDAwMDAwMDAwMDAwMDAwMwpKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4ga2VybmVsOiBb
+ICAzMDIuMjc2MTY2XSAkIDQgICA6IDgwMDAwMDAwYzlkZDhkNDAgMDAwMDAwMDAwMDAwMDAwMiAw
+MDAwMDAwMDAwMDAwMDAyIDAwMDAwMDAwMDAwMDAwMDAKSnVsIDMxIDEzOjIzOjEyLjA4NzE0MCB3
+YXJuIGtlcm5lbDogWyAgMzAyLjI3NjE3M10gJCA4ICAgOiAwMDAwMDAwMDBmZmZiZmZmIDgwMDAw
+MDAwYzUxOTQyYjAgMDAwMDAwMWUzZjM2MDIwZCA4MDAwMDAwMGE1ZDE3MDAzCkp1bCAzMSAxMzoy
+MzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYxODBdICQxMiAgIDogMDAwMDAwMDAw
+MDAwMDAwMCAwMDAwMDAwMDEwMDAwMDFlIDAwMDAwMDAxMjJhY2QwMzcgMDAwMDAwMDAwMDAwMDAy
+OQpKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4ga2VybmVsOiBbICAzMDIuMjc2MTg3XSAkMTYg
+ICA6IDgwMDAwMDAwYzlmNGZkNDAgZmZmZmZmZmY4MTA3NDY2MCA4MDAwMDAwMGM5ZTg5MjAwIGZm
+ZmZmZmZmODEwNzAwMDAKSnVsIDMxIDEzOjIzOjEyLjA4NzE0MCB3YXJuIGtlcm5lbDogWyAgMzAy
+LjI3NjE5NF0gJDIwICAgOiA4MDAwMDAwMGM5ZTg5MjA4IDAwMDAwMDAwMDAwMDAwMDEgMDAwMDAw
+MDAwMDAwMDEwMCAwMDAwMDAwMDAwMDAwMDIwCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBr
+ZXJuZWw6IFsgIDMwMi4yNzYyMDNdICQyNCAgIDogMDAwMDAwMDAwMDAwMDAwMCAwMDAwMDBmZmU5
+YWZkYmUwCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYyMTBd
+ICQyOCAgIDogODAwMDAwMDdmMzIxMDAwMCA4MDAwMDAwN2YzMjEzYjAwIDgwMDAwMDA3ZjMyMTNi
+NzAgZmZmZmZmZmY4MDkxMzdhNApKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4ga2VybmVsOiBb
+ICAzMDIuMjc2MjExXSBIaSAgICA6IDAwMDAwMDAwMDAzM2I3OGEKSnVsIDMxIDEzOjIzOjEyLjA4
+NzE0MCB3YXJuIGtlcm5lbDogWyAgMzAyLjI3NjIxMl0gTG8gICAgOiAwMDAwMDAwMDAwMDAwMzJi
+Ckp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYyMTldIGVwYyAg
+IDogZmZmZmZmZmY4MDkxMzdlMCBzbXBfY2FsbF9mdW5jdGlvbl9tYW55KzB4MmIwLzB4MzMwCkp1
+bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYyMjRdIHJhICAgIDog
+ZmZmZmZmZmY4MDkxMzdhNCBzbXBfY2FsbF9mdW5jdGlvbl9tYW55KzB4Mjc0LzB4MzMwCkp1bCAz
+MSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYyMzFdIFN0YXR1czogMTAw
+MDhjZTNLWCBTWCBVWCBLRVJORUwgRVhMIElFCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBr
+ZXJuZWw6IFsgIDMwMi4yNzYyMzJdIENhdXNlIDogMDA4MDA4MDAgKEV4Y0NvZGUgMDApCkp1bCAz
+MSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYyMzZdIFBySWQgIDogMDAw
+ZDkxMDkgKENhdml1bSBPY3Rlb24gSUkpCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJu
+ZWw6IFsgIDMwMi4yNzYyNDBdIENQVTogMTQgUElEOiA3ODEwIENvbW06IEhBU05vZGVBZ2VudCBU
+YWludGVkOiBHICAgICAgICAgICBPICAgIDQuNC4yMjctb2N0ZW9uLWRpc3Ryby5naXQtdjIuMTA1
+LTEtcmMtd25kICMxCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4y
+NzYzMDRdIFN0YWNrIDogMDAwMDAwMDAwMDAwMDAwMCAwMDAwMDAwMDAwMDAwMDA0IDAwMDAwMDAw
+MDAwMDAwMDYgMDAwMDAwMDAwMDAwMDAwMApKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4ga2Vy
+bmVsOiBbICAzMDIuMjc2MzA0XSAgIGZmZmZmZmZmODFjZmE1ZTAgZmZmZmZmZmY4MTE0ZWEzOCBm
+ZmZmZmZmZjgxMTRlYTM4IGZmZmZmZmZmODA4ZTAwODQKSnVsIDMxIDEzOjIzOjEyLjA4NzE0MCB3
+YXJuIGtlcm5lbDogWyAgMzAyLjI3NjMwNF0gICAwMDAwMDAwMDAwMDAwMDA0IGZmZmZmZmZmODEx
+NTAwMDAgZmZmZmZmZmY4MWQxOTE0MCBmZmZmZmZmZjgwOGU1YjNjCkp1bCAzMSAxMzoyMzoxMi4w
+ODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYzMDRdICAgMDAwMDAwMDAwMDAwMDAwMCAwMDAw
+MDAwMDAwMDAwMDZiIDAwMDAwMDAwMDAwMDAwMGUgZmZmZmZmZmY4MDhlNzNkNApKdWwgMzEgMTM6
+MjM6MTIuMDg3MTQwIHdhcm4ga2VybmVsOiBbICAzMDIuMjc2MzA0XSAgIDAwMDAwMDAwMDAwMDAw
+MDAgMDAwMDAwMDAwMDAwMDAwMCBmZmZmZmZmZjgxY2UwMDAwIGZmZmZmZmZmODFjZDJhZjgKSnVs
+IDMxIDEzOjIzOjEyLjA4NzE0MCB3YXJuIGtlcm5lbDogWyAgMzAyLjI3NjMwNF0gICBmZmZmZmZm
+ZjgxMDdhYjA3IGZmZmZmZmZmODBmYjI0YjAgODAwMDAwMDdmOTZmMGQ4MCBmZmZmZmZmZjgxY2Qy
+YWY4Ckp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYzMDRdICAg
+MDAwMDAwMDAwMDAwMWU4MiAwMDAwMDAwMDAwMDAwMDBlIGZmZmZmZmZmODFjY2U0MDAgODAwMDAw
+MDdmZjEyMDYwMApKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4ga2VybmVsOiBbICAzMDIuMjc2
+MzA0XSAgIDgwMDAwMDA3ZjMyMTNiNzAgODAwMDAwMDdmZjBkYmNiMCA4MDAwMDAwN2ZmMGRiZGM4
+IGZmZmZmZmZmODBiNTgyMzgKSnVsIDMxIDEzOjIzOjEyLjA4NzE0MCB3YXJuIGtlcm5lbDogWyAg
+MzAyLjI3NjMwNF0gICAwMDAwMDAwMDAwMDAwMDAwIGZmZmZmZmZmODA4ZTg1ODQgMDAwMDAwNDY2
+MTExNTNhOSBmZmZmZmZmZjgwZmIyNGIwCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJu
+ZWw6IFsgIDMwMi4yNzYzMDRdICAgMDAwMDAwMDAwMDAwMDAwZSBmZmZmZmZmZjgwODcyZTAwIDAw
+MDAwMDAwMDAwMDAwMDAgMDAwMDAwMDAwMDAwMDAwMApKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdh
+cm4ga2VybmVsOiBbICAzMDIuMjc2MzA0XSAgIC4uLgpKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdh
+cm4ga2VybmVsOiBbICAzMDIuMjc2MzA3XSBDYWxsIFRyYWNlOgpKdWwgMzEgMTM6MjM6MTIuMDg3
+MTQwIHdhcm4ga2VybmVsOiBbICAzMDIuMjc2MzEyXSBbPGZmZmZmZmZmODA4NzJlMDA+XSBzaG93
+X3N0YWNrKzB4OTgvMHhiOApKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4ga2VybmVsOiBbICAz
+MDIuMjc2MzE4XSBbPGZmZmZmZmZmODBiNTgyMzg+XSBkdW1wX3N0YWNrKzB4ZTgvMHgxNzAKSnVs
+IDMxIDEzOjIzOjEyLjA4NzE0MCB3YXJuIGtlcm5lbDogWyAgMzAyLjI3NjMyM10gWzxmZmZmZmZm
+ZjgwODZlN2IwPl0gYXJjaF9kdW1wX3N0YWNrKzB4NTgvMHhjMApKdWwgMzEgMTM6MjM6MTIuMDg3
+MTQwIHdhcm4ga2VybmVsOiBbICAzMDIuMjc2MzI5XSBbPGZmZmZmZmZmODA5MTJkZTA+XSBmbHVz
+aF9zbXBfY2FsbF9mdW5jdGlvbl9xdWV1ZSsweGQ4LzB4MTkwCkp1bCAzMSAxMzoyMzoxMi4wODcx
+NDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYzMzZdIFs8ZmZmZmZmZmY4MDg2NDg0Yz5dIG1haWxi
+b3hfaW50ZXJydXB0KzB4MTA0LzB4MWQwCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJu
+ZWw6IFsgIDMwMi4yNzYzNDFdIFs8ZmZmZmZmZmY4MDhlOTIyYz5dIGhhbmRsZV9pcnFfZXZlbnRf
+cGVyY3B1KzB4ODQvMHgyYjAKSnVsIDMxIDEzOjIzOjEyLjA4NzE0MCB3YXJuIGtlcm5lbDogWyAg
+MzAyLjI3NjM0N10gWzxmZmZmZmZmZjgwOGVkZjhjPl0gaGFuZGxlX3BlcmNwdV9pcnErMHg4Yy8w
+eGMwCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzYzNTNdIFs8
+ZmZmZmZmZmY4MDhlODY5ND5dIGdlbmVyaWNfaGFuZGxlX2lycSsweDQ0LzB4NTgKSnVsIDMxIDEz
+OjIzOjEyLjA4NzE0MCB3YXJuIGtlcm5lbDogWyAgMzAyLjI3NjM1OV0gWzxmZmZmZmZmZjgwZTI1
+ZThjPl0gZG9fSVJRKzB4MjQvMHgzMApKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4ga2VybmVs
+OiBbICAzMDIuMjc2Mzc4XSBbPGZmZmZmZmZmODA4MDZhNTQ+XSBvY3Rlb25faXJxX2NpdTJfbWJv
+eCsweDZjLzB4MTAwCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4y
+NzYzODNdIFs8ZmZmZmZmZmY4MDgwN2RkYz5dIHBsYXRfaXJxX2Rpc3BhdGNoKzB4ZGMvMHgxNDgK
+SnVsIDMxIDEzOjIzOjEyLjA4NzE0MCB3YXJuIGtlcm5lbDogWyAgMzAyLjI3NjM4N10gWzxmZmZm
+ZmZmZjgwODZjNTE0Pl0gaGFuZGxlX2ludCsweDE5NC8weDFhMApKdWwgMzEgMTM6MjM6MTIuMDg3
+MTQwIHdhcm4ga2VybmVsOiBbICAzMDIuMjc2MzkzXSBbPGZmZmZmZmZmODA5MTM3ZTA+XSBzbXBf
+Y2FsbF9mdW5jdGlvbl9tYW55KzB4MmIwLzB4MzMwCkp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2Fy
+biBrZXJuZWw6IFsgIDMwMi4yNzYzOThdIFs8ZmZmZmZmZmY4MDkxMzg5ND5dIHNtcF9jYWxsX2Z1
+bmN0aW9uKzB4MzQvMHg0OApKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4ga2VybmVsOiBbICAz
+MDIuMjc2NDA1XSBbPGZmZmZmZmZmODA4NzhiZWM+XSBmbHVzaF90bGJfcGFnZSsweDZjLzB4MTIw
+Ckp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMwMi4yNzY0MTFdIFs8ZmZm
+ZmZmZmY4MDliYmU1OD5dIHB0ZXBfc2V0X2FjY2Vzc19mbGFncysweDgwLzB4ZDAKSnVsIDMxIDEz
+OjIzOjEyLjA4NzE0MCB3YXJuIGtlcm5lbDogWyAgMzAyLjI3NjQxOV0gWzxmZmZmZmZmZjgwOWE4
+ODE0Pl0gZG9fd3BfcGFnZSsweDEyYy8weDg2MApKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4g
+a2VybmVsOiBbICAzMDIuMjc2NDI1XSBbPGZmZmZmZmZmODA5YWI5Zjg+XSBoYW5kbGVfbW1fZmF1
+bHQrMHhlZTgvMHgxNmE4Ckp1bCAzMSAxMzoyMzoxMi4wODcxNDAgd2FybiBrZXJuZWw6IFsgIDMw
+Mi4yNzY0MzFdIFs8ZmZmZmZmZmY4MDg4NDdkMD5dIF9fZG9fcGFnZV9mYXVsdCsweDFhMC8weDU5
+OApKdWwgMzEgMTM6MjM6MTIuMDg3MTQwIHdhcm4ga2VybmVsOiBbICAzMDIuMjc2NDM2XSBbPGZm
+ZmZmZmZmODA4NmJmYzA+XSByZXRfZnJvbV9leGNlcHRpb24rMHgwLzB4MTgKCg==
+--000000000000328d9505ad2543e1--
