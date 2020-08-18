@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99679248121
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Aug 2020 10:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC2724811E
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Aug 2020 10:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbgHRI47 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1726630AbgHRI47 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Tue, 18 Aug 2020 04:56:59 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37684 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:37694 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726353AbgHRI46 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1726370AbgHRI46 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Tue, 18 Aug 2020 04:56:58 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 28929AC48;
+        by mx2.suse.de (Postfix) with ESMTP id 5A7DEB02B;
         Tue, 18 Aug 2020 08:57:22 +0000 (UTC)
 From:   Jiri Slaby <jslaby@suse.cz>
 To:     gregkh@linuxfoundation.org
@@ -22,9 +22,9 @@ Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: [PATCH 2/8] newport_con: fix no return statement in newport_show_logo
-Date:   Tue, 18 Aug 2020 10:56:49 +0200
-Message-Id: <20200818085655.12071-2-jslaby@suse.cz>
+Subject: [PATCH 3/8] newport_con: make module's init & exit static using module_driver
+Date:   Tue, 18 Aug 2020 10:56:50 +0200
+Message-Id: <20200818085655.12071-3-jslaby@suse.cz>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200818085655.12071-1-jslaby@suse.cz>
 References: <20200818085655.12071-1-jslaby@suse.cz>
@@ -35,13 +35,13 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When CONFIG_LOGO_SGI_CLUT224 is unset, newport_show_logo contains no
-return, despite it should return a pointer. Add one returning NULL to
-fix a compiler warning:
-   drivers/video/console/newport_con.c: In function 'newport_show_logo':
-   drivers/video/console/newport_con.c:132:1: warning: no return statement in function returning non-void
+The compiler complains that newport_console_init and
+newport_console_exit are not declared:
+   drivers/video/console/newport_con.c:745:12: warning: no previous prototype for 'newport_console_init'
+   drivers/video/console/newport_con.c:750:13: warning: no previous prototype for 'newport_console_exit'
 
-Note that the caller expects NULL from the function already.
+Here, it translates into: they should be marked static. Do so by
+converting the simple un/registration to module_driver().
 
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
@@ -49,22 +49,33 @@ Cc: dri-devel@lists.freedesktop.org
 Cc: linux-fbdev@vger.kernel.org
 Cc: linux-mips@vger.kernel.org
 ---
- drivers/video/console/newport_con.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/video/console/newport_con.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
 diff --git a/drivers/video/console/newport_con.c b/drivers/video/console/newport_con.c
-index 72f146d047d9..4d9110393479 100644
+index 4d9110393479..0d0989040c58 100644
 --- a/drivers/video/console/newport_con.c
 +++ b/drivers/video/console/newport_con.c
-@@ -131,6 +131,8 @@ static const struct linux_logo *newport_show_logo(void)
- 		npregs->go.hostrw0 = *data++ << 24;
+@@ -751,18 +751,6 @@ static struct gio_driver newport_driver = {
+ 	.probe = newport_probe,
+ 	.remove = newport_remove,
+ };
+-
+-int __init newport_console_init(void)
+-{
+-	return gio_register_driver(&newport_driver);
+-}
+-
+-void __exit newport_console_exit(void)
+-{
+-	gio_unregister_driver(&newport_driver);
+-}
+-
+-module_init(newport_console_init);
+-module_exit(newport_console_exit);
++module_driver(newport_driver, gio_register_driver, gio_unregister_driver);
  
- 	return logo;
-+#else
-+	return NULL;
- #endif /* CONFIG_LOGO_SGI_CLUT224 */
- }
- 
+ MODULE_LICENSE("GPL");
 -- 
 2.28.0
 
