@@ -2,99 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B6B248B1D
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Aug 2020 18:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4C5248EBC
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Aug 2020 21:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgHRQI3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Aug 2020 12:08:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46862 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726670AbgHRQIY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 18 Aug 2020 12:08:24 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 828A3207D3;
-        Tue, 18 Aug 2020 16:08:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597766904;
-        bh=0XDiFtoCzEGx2zRl6dr6v/7GtRSHYOaTcxUyoIADvEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BqiPJIVx7P1uKny20654FpTQ1dYQDn2N/LYxgmIJfdgyKpNsD3aY2gjM4XLa0YPMo
-         EI8QqOK433KMw0XDi1/BZ2Bj+z7UslW4eJYBYSkfJ0RbYxl2t+S9qWJMCAcu53o7OY
-         +6MDIROG5nLysgpO550aaHXqu7TGh1kjzeMo/3vg=
-Date:   Tue, 18 Aug 2020 17:08:16 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
-        linux-snps-arc@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: Flushing transparent hugepages
-Message-ID: <20200818160815.GA16191@willie-the-truck>
-References: <20200818150736.GQ17456@casper.infradead.org>
+        id S1726633AbgHRTdI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Aug 2020 15:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726684AbgHRTdH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Aug 2020 15:33:07 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CBEC061342
+        for <linux-mips@vger.kernel.org>; Tue, 18 Aug 2020 12:33:06 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id b14so19413432qkn.4
+        for <linux-mips@vger.kernel.org>; Tue, 18 Aug 2020 12:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9v9LH57+IfNt2arroNdfPSnoAN0s5S5MCTGnfuBn1wA=;
+        b=nID6AIEUt87zPzVhsiu3zSRICoA8xdjdUmnpqUuhZDzIWO6fpU5q00kOORdeEDydV0
+         +1pLQ+SOk2QtbtINMc46qLvmcGM1oX7xQVeE4tKTgqjnbI97bt5nXaj3Pn50/TQKbicn
+         k7xX/uH3VKdJSYOWA53667Lh1bTJhecRepgu6hdfDY82F8HAvs8z2LIcaB4KmW4sHUIW
+         YI+DvsiBHpEJMk45qfUo6ORkvcTLbS8LW3wzMW0mgPGdrL42G/P1KOESfw3YI17x1H8w
+         AhzC0mI1zxDM9k0tpzD3QhbMKbs+16pKxNr6z0aVI+DL8DZaiU2PNbO4j/dWtdWVP4FH
+         LaoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9v9LH57+IfNt2arroNdfPSnoAN0s5S5MCTGnfuBn1wA=;
+        b=P1LEP+Egbd/hWSFKcZ+sVl8Dq/2mvn60KwRAP87HwQl6IiRAvX+yCQQfPvV4FfmYty
+         K68rJD7/5R+mBCZC5oW2gG1TzxZCdGM2hyAGbMuya+RtLExaR7mi+rdsY5g9p65TQCnt
+         gD3fXTdxD+42T3kPG/XZ0bpK420DW5RcPDZl+RCwG54HJk3mIyoxiVNr4DSZ9zdeujWk
+         NyMG1VBT9iuVxroo/ylTWR18j6BR9sBFTxK7hv5AaOZjrW6g0u9NLNwDrxuwjYkbA1Ef
+         +kBsSRZEJdHOfdT/OYqsRd6eoD3RL4fy0DXw6I5lnArKdsrQygg/+4Wt+HLC2ZxUiK+P
+         jjOg==
+X-Gm-Message-State: AOAM53397xhKTHFMVaEEeGZEQY96c5i1NjMind+ZgKvivfA5BzgPVd2D
+        xUnrRCjegwxZ9x04v985/czN6CHY3IsKzCp6qxlRbg==
+X-Google-Smtp-Source: ABdhPJwmnD0GkDIn2RBiNaYhiNXsC+hVsNBfaZCb7bBepphu0Bkn4ovqkFMtTO4UzpqXIrzQAxfXXRicf60+wy+pB8s=
+X-Received: by 2002:a37:a495:: with SMTP id n143mr19052701qke.330.1597779185970;
+ Tue, 18 Aug 2020 12:33:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200818150736.GQ17456@casper.infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200814194847.3171-1-olek2@wp.pl>
+In-Reply-To: <20200814194847.3171-1-olek2@wp.pl>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Tue, 18 Aug 2020 21:32:55 +0200
+Message-ID: <CAMpxmJX2RWUaGnntxwyR+yNkeYo79cWhPJV8F9i=_Nz0yn+w6g@mail.gmail.com>
+Subject: Re: [PATCH] gpio: stp-xway: automatically drive GPHY leds on ar10 and grx390
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        John Crispin <john@phrozen.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 04:07:36PM +0100, Matthew Wilcox wrote:
-> For example, arm64 seems confused in this scenario:
-> 
-> void flush_dcache_page(struct page *page)
-> {
->         if (test_bit(PG_dcache_clean, &page->flags))
->                 clear_bit(PG_dcache_clean, &page->flags);
-> }
-> 
-> ...
-> 
-> void __sync_icache_dcache(pte_t pte)
-> {
->         struct page *page = pte_page(pte);
-> 
->         if (!test_and_set_bit(PG_dcache_clean, &page->flags))
->                 sync_icache_aliases(page_address(page), page_size(page));
-> }
-> 
-> So arm64 keeps track on a per-page basis which ones have been flushed.
-> page_size() will return PAGE_SIZE if called on a tail page or regular
-> page, but will return PAGE_SIZE << compound_order if called on a head
-> page.  So this will either over-flush, or it's missing the opportunity
-> to clear the bits on all the subpages which have now been flushed.
+On Fri, Aug 14, 2020 at 9:49 PM Aleksander Jan Bajkowski <olek2@wp.pl> wrote:
+>
+> Ar10 (xr300) has 3 and grx390 (xrx330) has 4 built-in GPHY. PHY LEDs are
+> connected via STP. STP is a peripheral controller used to drive external
+> shift register cascades. The hardware is able to allow the GPHY to drive
+> some GPIO of the cascade automatically.This patch allows for this on ar10
+> and grx390.
+>
+> Tested on D-Link DWR-966 with OpenWRT.
+>
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> ---
 
-Hmm, that seems to go all the way back to 2014 as the result of a bug fix
-in 923b8f5044da ("arm64: mm: Make icache synchronisation logic huge page
-aware") which has a Reported-by Mark and a CC stable, suggesting something
-_was_ going wrong at the time :/ Was there a point where the tail pages
-could end up with PG_arch_1 uncleared on allocation?
+Queued for v5.10, thanks!
 
-> What would you _like_ to see?  Would you rather flush_dcache_page()
-> were called once for each subpage, or would you rather maintain
-> the page-needs-flushing state once per compound page?  We could also
-> introduce flush_dcache_thp() if some architectures would prefer it one
-> way and one the other, although that brings into question what to do
-> for hugetlbfs pages.
-
-For arm64, we'd like to see PG_arch_1 preserved during huge page splitting
-[1], but there was a worry that it might break x86 and s390. It's also not
-clear to me that we can change __sync_icache_dcache() as it's called when
-we're installing the entry in the page-table, so why would it be called
-again for the tail pages?
-
-Will
-
-[1] https://lore.kernel.org/linux-arch/20200703153718.16973-8-catalin.marinas@arm.com/
+Bartosz
