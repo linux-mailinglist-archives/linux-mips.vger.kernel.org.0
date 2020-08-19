@@ -2,24 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA31624A135
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Aug 2020 16:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D8524A18F
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Aug 2020 16:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728505AbgHSOHc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Aug 2020 10:07:32 -0400
-Received: from foss.arm.com ([217.140.110.172]:38040 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728415AbgHSOHP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 19 Aug 2020 10:07:15 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 671BB1045;
-        Wed, 19 Aug 2020 07:07:14 -0700 (PDT)
-Received: from [10.57.40.122] (unknown [10.57.40.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A9DCD3F71F;
-        Wed, 19 Aug 2020 07:07:07 -0700 (PDT)
+        id S1728351AbgHSOTB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Aug 2020 10:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728124AbgHSOSz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Aug 2020 10:18:55 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99201C061757
+        for <linux-mips@vger.kernel.org>; Wed, 19 Aug 2020 07:18:52 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id 185so25524318ljj.7
+        for <linux-mips@vger.kernel.org>; Wed, 19 Aug 2020 07:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/Js4y14Ghs6Bq4zdQYDVHKruVAGVzHlKISQN4bMebSg=;
+        b=dV/u8lgzRJf9R13RTyQNVA0z7K0gpop908KdbH7mh1lom7wOwawyDuMH4lJJUnAt3N
+         ER1Hz91rD7vCxhZyzb6LHpsKYbaB2LKK6Ns95j0nfjmJX5hZXauljIjL3//YJqgWaxRv
+         97QHf+SgHVXKKphnPxr8+LnwmzFET6Ce2ARqc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/Js4y14Ghs6Bq4zdQYDVHKruVAGVzHlKISQN4bMebSg=;
+        b=G1A/uy0jbtC0nIBKNKpcgY95AXCcWk67MauF4+uqk+O1Xp7jujBmzEbA4+HTcivZwK
+         Xsacc/272pKPE1nMxvJPmfb43jn0yib9qHsKE9qKPBPb1pa3OR2+r2R2AN1ZPH6OD8Hu
+         8BIDxsK2BXz0CblBdB3gCtKW7P1weoTlDTMKEgY+LXtgAm0wyKkZ+y6GAAVxJH9hWYL3
+         FVuMAcjlDIb4iGDDjnY+7yT4TedR2fG9X4MyDSXdAhzTWkEwUHFGKFC/TTz8QPFZMXnw
+         MCbJ6HGABo8Yexpe7LzsOwyatztC0budh07POLKclzmQuST8ybhsC90kNj9AB3fX2HwI
+         HNfQ==
+X-Gm-Message-State: AOAM530DwqT9SE4uBOEsDr/2ssJd5xoFziRKBBOgGHQ27nExssJ7RrGl
+        QQri+PP6vikiExH02Y+L1yPyJS7cGxbLog==
+X-Google-Smtp-Source: ABdhPJzT4tinOF/N8A8Jp6hKmvhXrBd3gERaQnO4RkRBrWc+pkiNc0MyzAHDYfonlqrsYC0zCHb9zg==
+X-Received: by 2002:a2e:9913:: with SMTP id v19mr11729939lji.292.1597846729424;
+        Wed, 19 Aug 2020 07:18:49 -0700 (PDT)
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
+        by smtp.gmail.com with ESMTPSA id v18sm7286578lfd.78.2020.08.19.07.18.49
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Aug 2020 07:18:49 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id f26so25551081ljc.8
+        for <linux-mips@vger.kernel.org>; Wed, 19 Aug 2020 07:18:49 -0700 (PDT)
+X-Received: by 2002:adf:ec4f:: with SMTP id w15mr24104550wrn.385.1597846328915;
+ Wed, 19 Aug 2020 07:12:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de>
+ <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com>
+ <62e4f4fc-c8a5-3ee8-c576-fe7178cb4356@arm.com> <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com>
+ <20200819135738.GB17098@lst.de>
+In-Reply-To: <20200819135738.GB17098@lst.de>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Wed, 19 Aug 2020 16:11:52 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5BvpzJTycFvjntmX9W_d879hHFX+rJ8W9EK6+6cqFaVMA@mail.gmail.com>
+Message-ID: <CAAFQd5BvpzJTycFvjntmX9W_d879hHFX+rJ8W9EK6+6cqFaVMA@mail.gmail.com>
 Subject: Re: [PATCH 05/28] media/v4l2: remove V4L2-FLAG-MEMORY-NON-CONSISTENT
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Christoph Hellwig <hch@lst.de>, alsa-devel@alsa-project.org,
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Robin Murphy <robin.murphy@arm.com>, alsa-devel@alsa-project.org,
         linux-ia64@vger.kernel.org,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
@@ -38,110 +80,61 @@ Cc:     Christoph Hellwig <hch@lst.de>, alsa-devel@alsa-project.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
         Joerg Roedel <joro@8bytes.org>,
-        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
         Seung-Woo Kim <sw0312.kim@samsung.com>,
         linux-mips@vger.kernel.org
-References: <20200819065555.1802761-1-hch@lst.de>
- <20200819065555.1802761-6-hch@lst.de>
- <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com>
- <62e4f4fc-c8a5-3ee8-c576-fe7178cb4356@arm.com>
- <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <2b32f1d8-16f7-3352-40a5-420993d52fb5@arm.com>
-Date:   Wed, 19 Aug 2020 15:07:04 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
-MIME-Version: 1.0
-In-Reply-To: <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020-08-19 13:49, Tomasz Figa wrote:
-> On Wed, Aug 19, 2020 at 1:51 PM Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> Hi Tomasz,
->>
->> On 2020-08-19 12:16, Tomasz Figa wrote:
->>> Hi Christoph,
->>>
->>> On Wed, Aug 19, 2020 at 8:56 AM Christoph Hellwig <hch@lst.de> wrote:
->>>>
->>>> The V4L2-FLAG-MEMORY-NON-CONSISTENT flag is entirely unused,
->>>
->>> Could you explain what makes you think it's unused? It's a feature of
->>> the UAPI generally supported by the videobuf2 framework and relied on
->>> by Chromium OS to get any kind of reasonable performance when
->>> accessing V4L2 buffers in the userspace.
->>>
->>>> and causes
->>>> weird gymanstics with the DMA_ATTR_NON_CONSISTENT flag, which is
->>>> unimplemented except on PARISC and some MIPS configs, and about to be
->>>> removed.
->>>
->>> It is implemented by the generic DMA mapping layer [1], which is used
->>> by a number of architectures including ARM64 and supposed to be used
->>> by new architectures going forward.
->>
->> AFAICS all that V4L2_FLAG_MEMORY_NON_CONSISTENT does is end up
->> controling whether DMA_ATTR_NON_CONSISTENT is added to vb2_queue::dma_attrs.
->>
->> Please can you point to where DMA_ATTR_NON_CONSISTENT does anything at
->> all on arm64?
->>
-> 
-> With the default config it doesn't, but with
-> CONFIG_DMA_NONCOHERENT_CACHE_SYNC enabled it makes dma_pgprot() keep
-> the pgprot value as is, without enforcing coherence attributes.
+On Wed, Aug 19, 2020 at 3:57 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Wed, Aug 19, 2020 at 02:49:01PM +0200, Tomasz Figa wrote:
+> > With the default config it doesn't, but with
+> > CONFIG_DMA_NONCOHERENT_CACHE_SYNC enabled it makes dma_pgprot() keep
+> > the pgprot value as is, without enforcing coherence attributes.
+>
+> Which isn't selected on arm64, and that is for a good reason.
+>
+> > AFAIK dma_cache_sync() isn't the only way to perform the cache
+> > synchronization.
+>
+> Yes, it is the only documented way to do it.  And if you read the whole
+> series instead of screaming you'd see that it provides a proper way
+> to deal with non-coherent memory which will also work with arm64.
+> instead of screaming
+>
 
-How active are the PA-RISC and MIPS ports of Chromium OS?
+I'm sorry if I have offended you in any way, but would also appreciate
+it if a less aggressive tone was directed towards me as well.
 
-Hacking CONFIG_DMA_NONCOHERENT_CACHE_SYNC into an architecture that 
-doesn't provide dma_cache_sync() is wrong, since at worst it may break 
-other drivers. If downstream is wildly misusing an API then so be it, 
-but it's hardly a strong basis for an upstream argument.
+I have valid reasons to object to this patch, as stated in my previous
+emails. The fact that the original feature has problems is of course
+another story and, as I mentioned too, I'm willing to look into fixing
+them.
 
->> Also, I posit that videobuf2 is not actually relying on
->> DMA_ATTR_NON_CONSISTENT anyway, since it's clearly not using it properly:
->>
->> "By using this API, you are guaranteeing to the platform
->> that you have all the correct and necessary sync points for this memory
->> in the driver should it choose to return non-consistent memory."
->>
->> $ git grep dma_cache_sync drivers/media
->> $
-> 
-> AFAIK dma_cache_sync() isn't the only way to perform the cache
-> synchronization. The earlier patch series that I reviewed relied on
-> dma_get_sgtable() and then dma_sync_sg_*() (which existed in the
-> vb2-dc since forever [1]). However, it looks like with the final code
-> the sgtable isn't acquired and the synchronization isn't happening, so
-> you have a point.
+I'm of course happy to review the rest of the series and even more
+happy to help migrating this code to whatever is added there, as long
+as the functionality is preserved.
 
-Using the streaming sync calls on coherent allocations has also always 
-been wrong per the API, regardless of the bodies of code that have 
-happened to get away with it for so long.
+> > By the way, as a videobuf2 reviewer, I'd appreciate being CC'd on any
+> > series related to the subsystem-facing DMA API changes, since
+> > videobuf2 is one of the biggest users of it.
+>
+> The cc list is too long - I cc lists and key maintainers.  As a reviewer
+> should should watch your subsystems lists closely.
 
-> FWIW, I asked back in time what the plan is for non-coherent
-> allocations and it seemed like DMA_ATTR_NON_CONSISTENT and
-> dma_sync_*() was supposed to be the right thing to go with. [2] The
-> same thread also explains why dma_alloc_pages() isn't suitable for the
-> users of dma_alloc_attrs() and DMA_ATTR_NON_CONSISTENT.
+Well, I guess we can disagree on this, because there is no clear
+policy. I'm listed in the MAINTAINERS file for the subsystem and I
+believe the purpose of the file is to list the people to CC on
+relevant patches. We're all overloaded with work and having to look
+through the huge volume of mailing lists like linux-media doesn't help
+and thus I'd still appreciate being added on CC.
 
-AFAICS even back then Christoph was implying getting rid of 
-NON_CONSISTENT and *replacing* it with something streaming-API-based - 
-i.e. this series - not encouraging mixing the existing APIs. It doesn't 
-seem impossible to implement a remapping version of this new 
-dma_alloc_pages() for IOMMU-backed ops if it's really warranted 
-(although at that point it seems like "non-coherent" vb2-dc starts to 
-have significant conceptual overlap with vb2-sg).
-
-Robin.
+Best regards,
+Tomasz
