@@ -2,100 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9384D24A5F6
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Aug 2020 20:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6BF24A6D3
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Aug 2020 21:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726876AbgHSS1D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Aug 2020 14:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726862AbgHSS0z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Aug 2020 14:26:55 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98856C061342;
-        Wed, 19 Aug 2020 11:26:54 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id e4so1499892pjd.0;
-        Wed, 19 Aug 2020 11:26:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=bJRIu4AKXa9o6BirWluUiYhtcb7eVkTRiaHn64Lt67A=;
-        b=A5s2kMYYEMQBYDn6wv+r02A1jmwG3l4a/IGeihq1wRmt1DhLX21RW8W35ONRjviVOV
-         jSkYPCJbJryj2V9YuatJeCJvWQpvBRBCnVwGFCcnsy7CLUirDG4ZsGTCQOw0eYF8GbAx
-         wV+vUTyJPZs8jZRP3cLxLOp2qLKQJAEV70ZaZa08yRcIqahOdBq7IgOce+rM8WsZ0BFc
-         ilVz9aDaVQxk1FYp2PKkBnqtQBZOo35wlWXdcTxkydG3dtnSWOVikHAqNCTxLE57eME/
-         8HKUCZ3x5of9TbEAzN66xeNY4LHV7ad+nBkSmKqpBW2U8TAVuLtKGA3zKUq0DEyN0i0r
-         KG8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=bJRIu4AKXa9o6BirWluUiYhtcb7eVkTRiaHn64Lt67A=;
-        b=bVy+OaMQpvimB9jR24TY1+TwOO/C1OtaNWo0CQJWDVQnhjO3vPOpO9eJtL95Td4VUb
-         VYPtLRXq4IrBtX18e8m0p4FpshL5ShBCh1xKHF5OWVfQ8uusiU5xIb9zh8vMvs1T28he
-         bm2dSDBHUuwbMCYWdlWGfYKC9luZeo058qLClEtd9slreCdhFN3xgnIIVqIscSewcFwi
-         tJYnQojPdH/W4l3RmK/k0GpxR8ezreHMvF/OKErZe6ndGFNXnEgixU5+9oyW7tR0LQyb
-         kS3akEuDQYZgckIG/Imjhncsm9ejUMdThYoIs3DmjRwyHIVU9FRSast84VTBWtkYvs7w
-         dZ9w==
-X-Gm-Message-State: AOAM53112Dko0WEpPZvqDFkCqRa4RGzVfpOLefw+dsjA0U981+93HypC
-        Ek1qfTmD68WDQXre1QwL/Xg=
-X-Google-Smtp-Source: ABdhPJy1X+nX5eyvmZ5gcfbh8dE7g5MajewTIuS7k22bWzoCv7cWfFyRyh6+WmGJJ78bhHaF3n4uXw==
-X-Received: by 2002:a17:90b:684:: with SMTP id m4mr5139519pjz.4.1597861614160;
-        Wed, 19 Aug 2020 11:26:54 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id l78sm29448483pfd.130.2020.08.19.11.26.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2020 11:26:53 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mips@linux-mips.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Liangliang Huang <huanglllzu@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM BMIPS MIPS
-        ARCHITECTURE),
-        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH mips-fixes 2/2] MIPS: BMIPS: Also call bmips_cpu_setup() for secondary cores
-Date:   Wed, 19 Aug 2020 11:26:45 -0700
-Message-Id: <20200819182645.30132-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200819182645.30132-1-f.fainelli@gmail.com>
-References: <20200819182645.30132-1-f.fainelli@gmail.com>
+        id S1726466AbgHSTYI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Aug 2020 15:24:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34292 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726646AbgHSTYI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 19 Aug 2020 15:24:08 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9402E2078D;
+        Wed, 19 Aug 2020 19:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597865047;
+        bh=6hhM8PiKqrI8OznN19QgLRQ0zl2av/Rwj0VbHVeg6TI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GeI8lPtKHV2olB+n1d/AHlFuCQdtbzjHW+ZeY/rUdgLakHkOt9wUYAnS0FY5DAaBS
+         I2RN/QPVX1NYA77mL4Gju2LBembz/syr0lV3QTr54MfcpA1iUpBgt41tqO0dgw0etA
+         mFQuuqulIWY5wbe9fNPxiTsAazhpzTtzhltFAhpw=
+Date:   Wed, 19 Aug 2020 12:24:05 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>, Daniel Axtens <dja@axtens.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: Re: [PATCH v3 09/17] memblock: make memblock_debug and related
+ functionality private
+Message-Id: <20200819122405.88e9719e86ac7c3c44b4db32@linux-foundation.org>
+In-Reply-To: <20200818151634.14343-10-rppt@kernel.org>
+References: <20200818151634.14343-1-rppt@kernel.org>
+        <20200818151634.14343-10-rppt@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The initialization done by bmips_cpu_setup() typically affects both
-threads of a given core, on 7435 which supports 2 cores and 2 threads,
-logical CPU number 2 and 3 would not run this initialization.
+On Tue, 18 Aug 2020 18:16:26 +0300 Mike Rapoport <rppt@kernel.org> wrote:
 
-Fixes: 738a3f79027b ("MIPS: BMIPS: Add early CPU initialization code")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- arch/mips/kernel/smp-bmips.c | 2 ++
- 1 file changed, 2 insertions(+)
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> The only user of memblock_dbg() outside memblock was s390 setup code and it
+> is converted to use pr_debug() instead.
+> This allows to stop exposing memblock_debug and memblock_dbg() to the rest
+> of the kernel.
+> 
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -137,7 +137,10 @@ struct memblock_type physmem = {
+>  	     i < memblock_type->cnt;					\
+>  	     i++, rgn = &memblock_type->regions[i])
+>  
+> -int memblock_debug __initdata_memblock;
+> +#define memblock_dbg(fmt, ...) \
+> +	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+> +
 
-diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-index 2f513506a3d5..1dbfb5aadffd 100644
---- a/arch/mips/kernel/smp-bmips.c
-+++ b/arch/mips/kernel/smp-bmips.c
-@@ -239,6 +239,8 @@ static int bmips_boot_secondary(int cpu, struct task_struct *idle)
-  */
- static void bmips_init_secondary(void)
- {
-+	bmips_cpu_setup();
-+
- 	switch (current_cpu_type()) {
- 	case CPU_BMIPS4350:
- 	case CPU_BMIPS4380:
--- 
-2.17.1
+checkpatch doesn't like this much.
+
+ERROR: Macros starting with if should be enclosed by a do - while loop to avoid possible if/else logic defects
+#101: FILE: mm/memblock.c:140:
++#define memblock_dbg(fmt, ...) \
++	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+
+WARNING: Prefer [subsystem eg: netdev]_info([subsystem]dev, ... then dev_info(dev, ... then pr_info(...  to printk(KERN_INFO ...
+#102: FILE: mm/memblock.c:141:
++	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+
+ERROR: trailing statements should be on next line
+#102: FILE: mm/memblock.c:141:
++	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+
+
+The first one is significant:
+
+	if (foo)
+		memblock_dbg(...);
+	else
+		save_the_world();
+
+could end up inadvertently destroying the planet.
+
+This?
+
+--- a/mm/memblock.c~memblock-make-memblock_debug-and-related-functionality-private-fix
++++ a/mm/memblock.c
+@@ -137,8 +137,11 @@ struct memblock_type physmem = {
+ 	     i < memblock_type->cnt;					\
+ 	     i++, rgn = &memblock_type->regions[i])
+ 
+-#define memblock_dbg(fmt, ...) \
+-	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
++#define memblock_dbg(fmt, ...)						\
++	do {								\
++		if (memblock_debug)					\
++			pr_info(fmt, ##__VA_ARGS__);			\
++	} while (0)
+ 
+ static int memblock_debug __initdata_memblock;
+ static bool system_has_some_mirror __initdata_memblock = false;
+_
 
