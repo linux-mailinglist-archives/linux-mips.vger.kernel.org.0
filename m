@@ -2,50 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F008C24A5F2
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Aug 2020 20:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9384D24A5F6
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Aug 2020 20:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726868AbgHSS07 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Aug 2020 14:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S1726876AbgHSS1D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Aug 2020 14:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726810AbgHSS0x (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Aug 2020 14:26:53 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE03C061757;
-        Wed, 19 Aug 2020 11:26:52 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id y10so9666551plr.11;
-        Wed, 19 Aug 2020 11:26:52 -0700 (PDT)
+        with ESMTP id S1726862AbgHSS0z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Aug 2020 14:26:55 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98856C061342;
+        Wed, 19 Aug 2020 11:26:54 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id e4so1499892pjd.0;
+        Wed, 19 Aug 2020 11:26:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=qCN/5vzgqEfQvumo24ihZle46Xb4ELiwR/jqerThKtc=;
-        b=lx1RsfMzld1unBv/pUBP6EzOHaTwjmaAqgzjBqtN7uIA0VbDMwgIMmcYoy6qcEQeib
-         7taJ0WpxRbj2FiERacyZ4bkAiygahYjAB3apwpU9LU1e6IHRyrN3mPCj4+vOKZhI8jVy
-         Gbi2aT5I2fVuVCgPavPv8vm9ikYG2UW2b8i8DU7ZmUuxmi0flH6boGIp1Fg/OkS+3NHa
-         3htkwI7sS3wR/poEvhCM0EQzbIti/IcFlwCsOJqWRUIhDAbFcHCfduJ+uYRQktWyvWKx
-         C9zI9M2CyG3PV4xdHxDl33A3N3aIfj71Y3hlCPcaDasj00hfxPt80rBSX/3FBN+jtCmi
-         oRkA==
+        bh=bJRIu4AKXa9o6BirWluUiYhtcb7eVkTRiaHn64Lt67A=;
+        b=A5s2kMYYEMQBYDn6wv+r02A1jmwG3l4a/IGeihq1wRmt1DhLX21RW8W35ONRjviVOV
+         jSkYPCJbJryj2V9YuatJeCJvWQpvBRBCnVwGFCcnsy7CLUirDG4ZsGTCQOw0eYF8GbAx
+         wV+vUTyJPZs8jZRP3cLxLOp2qLKQJAEV70ZaZa08yRcIqahOdBq7IgOce+rM8WsZ0BFc
+         ilVz9aDaVQxk1FYp2PKkBnqtQBZOo35wlWXdcTxkydG3dtnSWOVikHAqNCTxLE57eME/
+         8HKUCZ3x5of9TbEAzN66xeNY4LHV7ad+nBkSmKqpBW2U8TAVuLtKGA3zKUq0DEyN0i0r
+         KG8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=qCN/5vzgqEfQvumo24ihZle46Xb4ELiwR/jqerThKtc=;
-        b=tic5FSEt2UcO8f6VNBDvF3Hsjh+q34ra/P0vtDwuaNGbHu7kxhdHub3Sc9SLrij9IF
-         JZh/AoUxW2CZqYDhRTNbr9UOcwLxQkt2CJddo7CDAZpDj+WKvObsgCEb8Uq9BpeF73Co
-         5mmRpuFiskrUsS+wrtNcq5a9dywEG3JHq6c+Wan0b1yoC+ehAdLTHeoFvS4cf9oDTGNg
-         nl7U/PJLgrNPF86OxdxSL+ovsAyoqyGuiaGGn7Dh8t8PJ7zJjdsu1BGLcPeGvvnAR/HT
-         fZ3/+WN8N9hxGYV/KNTWuEL+ugz6viAJ/VPS107/ZG98CwMMW4tpJvJVf2xsWs38McwE
-         agqA==
-X-Gm-Message-State: AOAM532rQy/o7cDTQs6ijoVCu/SRDe2d/65CDSfQdvozURQvxWHVTKk7
-        w31u1hbEHfRjyYt6ilBDErE=
-X-Google-Smtp-Source: ABdhPJyXQSfZn+JzTr6Vxknv11vB+BelNOwEfnt+fry0El7QWN8nI69X6we4kBNtn0a5wqIkvXs3tw==
-X-Received: by 2002:a17:902:7291:: with SMTP id d17mr19628026pll.141.1597861612266;
-        Wed, 19 Aug 2020 11:26:52 -0700 (PDT)
+        bh=bJRIu4AKXa9o6BirWluUiYhtcb7eVkTRiaHn64Lt67A=;
+        b=bVy+OaMQpvimB9jR24TY1+TwOO/C1OtaNWo0CQJWDVQnhjO3vPOpO9eJtL95Td4VUb
+         VYPtLRXq4IrBtX18e8m0p4FpshL5ShBCh1xKHF5OWVfQ8uusiU5xIb9zh8vMvs1T28he
+         bm2dSDBHUuwbMCYWdlWGfYKC9luZeo058qLClEtd9slreCdhFN3xgnIIVqIscSewcFwi
+         tJYnQojPdH/W4l3RmK/k0GpxR8ezreHMvF/OKErZe6ndGFNXnEgixU5+9oyW7tR0LQyb
+         kS3akEuDQYZgckIG/Imjhncsm9ejUMdThYoIs3DmjRwyHIVU9FRSast84VTBWtkYvs7w
+         dZ9w==
+X-Gm-Message-State: AOAM53112Dko0WEpPZvqDFkCqRa4RGzVfpOLefw+dsjA0U981+93HypC
+        Ek1qfTmD68WDQXre1QwL/Xg=
+X-Google-Smtp-Source: ABdhPJy1X+nX5eyvmZ5gcfbh8dE7g5MajewTIuS7k22bWzoCv7cWfFyRyh6+WmGJJ78bhHaF3n4uXw==
+X-Received: by 2002:a17:90b:684:: with SMTP id m4mr5139519pjz.4.1597861614160;
+        Wed, 19 Aug 2020 11:26:54 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id l78sm29448483pfd.130.2020.08.19.11.26.50
+        by smtp.gmail.com with ESMTPSA id l78sm29448483pfd.130.2020.08.19.11.26.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2020 11:26:51 -0700 (PDT)
+        Wed, 19 Aug 2020 11:26:53 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-mips@linux-mips.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -62,9 +62,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         ARCHITECTURE),
         linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH mips-fixes 1/2] MIPS: mm: BMIPS5000 has inclusive physical caches
-Date:   Wed, 19 Aug 2020 11:26:44 -0700
-Message-Id: <20200819182645.30132-2-f.fainelli@gmail.com>
+Subject: [PATCH mips-fixes 2/2] MIPS: BMIPS: Also call bmips_cpu_setup() for secondary cores
+Date:   Wed, 19 Aug 2020 11:26:45 -0700
+Message-Id: <20200819182645.30132-3-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200819182645.30132-1-f.fainelli@gmail.com>
 References: <20200819182645.30132-1-f.fainelli@gmail.com>
@@ -73,33 +73,29 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When the BMIPS generic cpu-feature-overrides.h file was introduced,
-cpu_has_inclusive_caches/MIPS_CPU_INCLUSIVE_CACHES was not set for
-BMIPS5000 CPUs. Correct this when we have initialized the MIPS secondary
-cache successfully.
+The initialization done by bmips_cpu_setup() typically affects both
+threads of a given core, on 7435 which supports 2 cores and 2 threads,
+logical CPU number 2 and 3 would not run this initialization.
 
-Fixes: f337967d6d87 ("MIPS: BMIPS: Add cpu-feature-overrides.h")
+Fixes: 738a3f79027b ("MIPS: BMIPS: Add early CPU initialization code")
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- arch/mips/mm/c-r4k.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/mips/kernel/smp-bmips.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
-index fc5a6d25f74f..0ef717093262 100644
---- a/arch/mips/mm/c-r4k.c
-+++ b/arch/mips/mm/c-r4k.c
-@@ -1712,7 +1712,11 @@ static void setup_scache(void)
- 				printk("MIPS secondary cache %ldkB, %s, linesize %d bytes.\n",
- 				       scache_size >> 10,
- 				       way_string[c->scache.ways], c->scache.linesz);
+diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
+index 2f513506a3d5..1dbfb5aadffd 100644
+--- a/arch/mips/kernel/smp-bmips.c
++++ b/arch/mips/kernel/smp-bmips.c
+@@ -239,6 +239,8 @@ static int bmips_boot_secondary(int cpu, struct task_struct *idle)
+  */
+ static void bmips_init_secondary(void)
+ {
++	bmips_cpu_setup();
 +
-+				if (current_cpu_type() == CPU_BMIPS5000)
-+					c->options |= MIPS_CPU_INCLUSIVE_CACHES;
- 			}
-+
- #else
- 			if (!(c->scache.flags & MIPS_CACHE_NOT_PRESENT))
- 				panic("Dunno how to handle MIPS32 / MIPS64 second level cache");
+ 	switch (current_cpu_type()) {
+ 	case CPU_BMIPS4350:
+ 	case CPU_BMIPS4380:
 -- 
 2.17.1
 
