@@ -2,324 +2,204 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E51D24A175
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Aug 2020 16:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C908324A1B9
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Aug 2020 16:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726703AbgHSOQN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Aug 2020 10:16:13 -0400
-Received: from out28-220.mail.aliyun.com ([115.124.28.220]:56196 "EHLO
-        out28-220.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726560AbgHSOQN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Aug 2020 10:16:13 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07459106|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00916649-0.000605191-0.990228;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03294;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.IKEbisC_1597846562;
-Received: from 192.168.10.194(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IKEbisC_1597846562)
-          by smtp.aliyun-inc.com(10.147.40.7);
-          Wed, 19 Aug 2020 22:16:03 +0800
-Subject: Re: [PATCH v2 12/13] MIPS: configs: Regenerate configs of Ingenic
- boards
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>, od@zcrc.me,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20200812001510.460382-1-paul@crapouillou.net>
- <20200812001510.460382-13-paul@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <98620ba7-8c2d-dde1-819e-32b7f9790bf2@wanyeetech.com>
-Date:   Wed, 19 Aug 2020 22:16:02 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1728431AbgHSO2V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Aug 2020 10:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728477AbgHSO2Q (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Aug 2020 10:28:16 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC12C061757
+        for <linux-mips@vger.kernel.org>; Wed, 19 Aug 2020 07:28:16 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id a26so26549377ejc.2
+        for <linux-mips@vger.kernel.org>; Wed, 19 Aug 2020 07:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uEY7dk9y/9x4HcaWjwFAfwvm+T0doGz7atsT11F+few=;
+        b=MwoQKU4RRVGBwswghQT2kEA4PWtzNJ9PP0GlvGH+VtAzrSvBnEW2dUpr0fs6tqB36t
+         NEatNz3nTo9Srl8JZAX9oVp9pc5TQLgcK+vTRNeNePaaHI1s5H4G84GiGqxdAJ9X51ZU
+         9RjLZl32ILMLyADH9W9JtyN4rfe/+nXKgJFvs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uEY7dk9y/9x4HcaWjwFAfwvm+T0doGz7atsT11F+few=;
+        b=CoNjWv9COOX0/pkWwmCofHSYaEPv7Pn2KSt76kwNu6AVPXZlTwaQfRDzju99ku8jgN
+         hwGDOmUU5vO+IRzX9qjzOFfQ+SYg05lx7zOhZFdxa/G8LOiFlwZRkRMXr+PD+XuArykE
+         yBXh1EVwyyo+88lPVmTrcS78oBmsOAknj47L9SAe2lSDiMNOTZvmQULawhxC/P5naUvV
+         /ggG6ZueB4Xx3POqhXly0yWalz81pBrFIJxW/h9ZG+Mal+Yw8uJ1UXcPuzJmZxM06/Lz
+         MsIgH/+wgiNP4xqtQvG0ClkL9h8yCzEVBsZlT3SPrVtFYIkQ94ztKhVXmTuJU7Z9ypZ7
+         73FA==
+X-Gm-Message-State: AOAM532hiLvNefS//1Dqa9JbKjQvTy1NrM4Q00PzAt1X0aYH8B8BIA0Q
+        tj1GxxUjVp+DPBxHsTpn2Ke8YJ/6GL6R4g==
+X-Google-Smtp-Source: ABdhPJybXOVm87l7NJjL9vmY6O/Htb+huFGh38RSt5uZJ/EUH1hImlB6j55eLDAg9knbXhrzSKS91A==
+X-Received: by 2002:a17:906:d159:: with SMTP id br25mr4352621ejb.16.1597847294327;
+        Wed, 19 Aug 2020 07:28:14 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id i35sm6682164edi.41.2020.08.19.07.28.13
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Aug 2020 07:28:14 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id a5so21757565wrm.6
+        for <linux-mips@vger.kernel.org>; Wed, 19 Aug 2020 07:28:13 -0700 (PDT)
+X-Received: by 2002:adf:ec45:: with SMTP id w5mr25495420wrn.415.1597846966201;
+ Wed, 19 Aug 2020 07:22:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200812001510.460382-13-paul@crapouillou.net>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de>
+ <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com>
+ <62e4f4fc-c8a5-3ee8-c576-fe7178cb4356@arm.com> <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com>
+ <2b32f1d8-16f7-3352-40a5-420993d52fb5@arm.com>
+In-Reply-To: <2b32f1d8-16f7-3352-40a5-420993d52fb5@arm.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Wed, 19 Aug 2020 16:22:29 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5DrEq7UVi_aH=-DO4xYC3SbjJ3m1aQSbt=8THL-W+orMQ@mail.gmail.com>
+Message-ID: <CAAFQd5DrEq7UVi_aH=-DO4xYC3SbjJ3m1aQSbt=8THL-W+orMQ@mail.gmail.com>
+Subject: Re: [PATCH 05/28] media/v4l2: remove V4L2-FLAG-MEMORY-NON-CONSISTENT
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Christoph Hellwig <hch@lst.de>, alsa-devel@alsa-project.org,
+        linux-ia64@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-mm@kvack.org, Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        linux-scsi@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pawel Osciak <pawel@osciak.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, Aug 19, 2020 at 4:07 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> On 2020-08-19 13:49, Tomasz Figa wrote:
+> > On Wed, Aug 19, 2020 at 1:51 PM Robin Murphy <robin.murphy@arm.com> wrote:
+> >>
+> >> Hi Tomasz,
+> >>
+> >> On 2020-08-19 12:16, Tomasz Figa wrote:
+> >>> Hi Christoph,
+> >>>
+> >>> On Wed, Aug 19, 2020 at 8:56 AM Christoph Hellwig <hch@lst.de> wrote:
+> >>>>
+> >>>> The V4L2-FLAG-MEMORY-NON-CONSISTENT flag is entirely unused,
+> >>>
+> >>> Could you explain what makes you think it's unused? It's a feature of
+> >>> the UAPI generally supported by the videobuf2 framework and relied on
+> >>> by Chromium OS to get any kind of reasonable performance when
+> >>> accessing V4L2 buffers in the userspace.
+> >>>
+> >>>> and causes
+> >>>> weird gymanstics with the DMA_ATTR_NON_CONSISTENT flag, which is
+> >>>> unimplemented except on PARISC and some MIPS configs, and about to be
+> >>>> removed.
+> >>>
+> >>> It is implemented by the generic DMA mapping layer [1], which is used
+> >>> by a number of architectures including ARM64 and supposed to be used
+> >>> by new architectures going forward.
+> >>
+> >> AFAICS all that V4L2_FLAG_MEMORY_NON_CONSISTENT does is end up
+> >> controling whether DMA_ATTR_NON_CONSISTENT is added to vb2_queue::dma_attrs.
+> >>
+> >> Please can you point to where DMA_ATTR_NON_CONSISTENT does anything at
+> >> all on arm64?
+> >>
+> >
+> > With the default config it doesn't, but with
+> > CONFIG_DMA_NONCOHERENT_CACHE_SYNC enabled it makes dma_pgprot() keep
+> > the pgprot value as is, without enforcing coherence attributes.
+>
+> How active are the PA-RISC and MIPS ports of Chromium OS?
 
-ÔÚ 2020/8/12 ÉÏÎç8:15, Paul Cercueil Ð´µÀ:
-> For each board the MACH_INGENIC_SOC option was selected instead of
-> MACH_INGENIC. Nothing else was changed in the menuconfig.
+Not active. We enable CONFIG_DMA_NONCOHERENT_CACHE_SYNC for ARM64,
+given the directions received back in April when discussing the
+noncoherent memory functionality on the mailing list in the thread I
+pointed out in my previous message and no clarification on why it is
+disabled for ARM64 in upstream, despite making several attempts to get
+some.
+
 >
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
+> Hacking CONFIG_DMA_NONCOHERENT_CACHE_SYNC into an architecture that
+> doesn't provide dma_cache_sync() is wrong, since at worst it may break
+> other drivers. If downstream is wildly misusing an API then so be it,
+> but it's hardly a strong basis for an upstream argument.
+
+I guess it means that we're wildly misusing the API, but it still does
+work. Could you explain how it could break other drivers?
+
 >
-> Notes:
->      v2: Update cu1830-neo board config as well.
+> >> Also, I posit that videobuf2 is not actually relying on
+> >> DMA_ATTR_NON_CONSISTENT anyway, since it's clearly not using it properly:
+> >>
+> >> "By using this API, you are guaranteeing to the platform
+> >> that you have all the correct and necessary sync points for this memory
+> >> in the driver should it choose to return non-consistent memory."
+> >>
+> >> $ git grep dma_cache_sync drivers/media
+> >> $
+> >
+> > AFAIK dma_cache_sync() isn't the only way to perform the cache
+> > synchronization. The earlier patch series that I reviewed relied on
+> > dma_get_sgtable() and then dma_sync_sg_*() (which existed in the
+> > vb2-dc since forever [1]). However, it looks like with the final code
+> > the sgtable isn't acquired and the synchronization isn't happening, so
+> > you have a point.
 >
->   arch/mips/configs/ci20_defconfig       |  4 ++--
->   arch/mips/configs/cu1000-neo_defconfig | 16 ++--------------
->   arch/mips/configs/cu1830-neo_defconfig | 15 ++-------------
->   arch/mips/configs/gcw0_defconfig       |  2 +-
->   arch/mips/configs/qi_lb60_defconfig    |  5 ++---
->   arch/mips/configs/rs90_defconfig       |  4 ++--
->   6 files changed, 11 insertions(+), 35 deletions(-)
+> Using the streaming sync calls on coherent allocations has also always
+> been wrong per the API, regardless of the bodies of code that have
+> happened to get away with it for so long.
 >
-> diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
-> index 0a46199fdc3f..052c5ad0f2b1 100644
-> --- a/arch/mips/configs/ci20_defconfig
-> +++ b/arch/mips/configs/ci20_defconfig
-> @@ -22,7 +22,7 @@ CONFIG_EMBEDDED=y
->   # CONFIG_VM_EVENT_COUNTERS is not set
->   # CONFIG_COMPAT_BRK is not set
->   CONFIG_SLAB=y
-> -CONFIG_MACH_INGENIC=y
-> +CONFIG_MACH_INGENIC_SOC=y
->   CONFIG_JZ4780_CI20=y
->   CONFIG_HIGHMEM=y
->   CONFIG_HZ_100=y
-> @@ -42,7 +42,7 @@ CONFIG_IP_PNP_DHCP=y
->   # CONFIG_IPV6 is not set
->   # CONFIG_WIRELESS is not set
->   CONFIG_DEVTMPFS=y
-> -# CONFIG_FW_LOADER is not set
-> +CONFIG_FW_LOADER=m
->   # CONFIG_ALLOW_DEV_COREDUMP is not set
->   CONFIG_MTD=y
->   CONFIG_MTD_RAW_NAND=y
-> diff --git a/arch/mips/configs/cu1000-neo_defconfig b/arch/mips/configs/cu1000-neo_defconfig
-> index 6b471cdb16cf..55d0690a3ffe 100644
-> --- a/arch/mips/configs/cu1000-neo_defconfig
-> +++ b/arch/mips/configs/cu1000-neo_defconfig
-> @@ -1,5 +1,3 @@
-> -CONFIG_LOCALVERSION_AUTO=y
-> -CONFIG_KERNEL_GZIP=y
->   CONFIG_SYSVIPC=y
->   CONFIG_NO_HZ_IDLE=y
->   CONFIG_HIGH_RES_TIMERS=y
-> @@ -9,7 +7,6 @@ CONFIG_IKCONFIG_PROC=y
->   CONFIG_LOG_BUF_SHIFT=14
->   CONFIG_CGROUPS=y
->   CONFIG_MEMCG=y
-> -CONFIG_MEMCG_KMEM=y
->   CONFIG_CGROUP_SCHED=y
->   CONFIG_CGROUP_FREEZER=y
->   CONFIG_CGROUP_DEVICE=y
-> @@ -17,13 +14,12 @@ CONFIG_CGROUP_CPUACCT=y
->   CONFIG_NAMESPACES=y
->   CONFIG_USER_NS=y
->   CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-> -CONFIG_SYSCTL_SYSCALL=y
-This has already been dropped in the current mips-next tree.
->   CONFIG_KALLSYMS_ALL=y
->   CONFIG_EMBEDDED=y
->   # CONFIG_VM_EVENT_COUNTERS is not set
->   # CONFIG_COMPAT_BRK is not set
->   CONFIG_SLAB=y
-> -CONFIG_MACH_INGENIC=y
-> +CONFIG_MACH_INGENIC_SOC=y
->   CONFIG_X1000_CU1000_NEO=y
->   CONFIG_HIGHMEM=y
->   CONFIG_HZ_100=y
-> @@ -32,7 +28,6 @@ CONFIG_HZ_100=y
->   # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
->   # CONFIG_COMPACTION is not set
->   CONFIG_CMA=y
-> -CONFIG_CMA_AREAS=7
->   CONFIG_NET=y
->   CONFIG_PACKET=y
->   CONFIG_UNIX=y
-> @@ -41,19 +36,16 @@ CONFIG_CFG80211=y
->   CONFIG_UEVENT_HELPER=y
->   CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
->   CONFIG_DEVTMPFS=y
-> -# CONFIG_FW_LOADER is not set
->   # CONFIG_ALLOW_DEV_COREDUMP is not set
->   CONFIG_NETDEVICES=y
->   CONFIG_STMMAC_ETH=y
->   CONFIG_SMSC_PHY=y
->   CONFIG_BRCMFMAC=y
-> -# CONFIG_INPUT_MOUSEDEV is not set
->   # CONFIG_INPUT_KEYBOARD is not set
->   # CONFIG_INPUT_MOUSE is not set
->   # CONFIG_SERIO is not set
->   CONFIG_VT_HW_CONSOLE_BINDING=y
->   CONFIG_LEGACY_PTY_COUNT=2
-> -CONFIG_SERIAL_EARLYCON=y
->   CONFIG_SERIAL_8250=y
->   CONFIG_SERIAL_8250_CONSOLE=y
->   CONFIG_SERIAL_8250_NR_UARTS=3
-> @@ -67,8 +59,6 @@ CONFIG_GPIO_SYSFS=y
->   CONFIG_SENSORS_ADS7828=y
->   CONFIG_WATCHDOG=y
->   CONFIG_JZ4740_WDT=y
-> -# CONFIG_LCD_CLASS_DEVICE is not set
-> -# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
->   # CONFIG_VGA_CONSOLE is not set
->   # CONFIG_HID is not set
->   # CONFIG_USB_SUPPORT is not set
-> @@ -83,8 +73,6 @@ CONFIG_RTC_DRV_JZ4740=y
->   CONFIG_DMADEVICES=y
->   CONFIG_DMA_JZ4780=y
->   # CONFIG_IOMMU_SUPPORT is not set
-> -CONFIG_NVMEM=y
-> -CONFIG_NVMEM_SYSFS=y
->   CONFIG_EXT4_FS=y
->   # CONFIG_DNOTIFY is not set
->   CONFIG_AUTOFS_FS=y
-> @@ -109,8 +97,8 @@ CONFIG_CONSOLE_LOGLEVEL_QUIET=15
->   CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
->   CONFIG_DEBUG_INFO=y
->   CONFIG_STRIP_ASM_SYMS=y
-> -CONFIG_DEBUG_FS=y
->   CONFIG_MAGIC_SYSRQ=y
-> +CONFIG_DEBUG_FS=y
->   CONFIG_PANIC_ON_OOPS=y
->   CONFIG_PANIC_TIMEOUT=10
->   # CONFIG_SCHED_DEBUG is not set
-> diff --git a/arch/mips/configs/cu1830-neo_defconfig b/arch/mips/configs/cu1830-neo_defconfig
-> index cbfb62900273..e7064851a47a 100644
-> --- a/arch/mips/configs/cu1830-neo_defconfig
-> +++ b/arch/mips/configs/cu1830-neo_defconfig
-> @@ -1,5 +1,3 @@
-> -CONFIG_LOCALVERSION_AUTO=y
-> -CONFIG_KERNEL_GZIP=y
->   CONFIG_SYSVIPC=y
->   CONFIG_NO_HZ_IDLE=y
->   CONFIG_HIGH_RES_TIMERS=y
-> @@ -9,7 +7,6 @@ CONFIG_IKCONFIG_PROC=y
->   CONFIG_LOG_BUF_SHIFT=14
->   CONFIG_CGROUPS=y
->   CONFIG_MEMCG=y
-> -CONFIG_MEMCG_KMEM=y
->   CONFIG_CGROUP_SCHED=y
->   CONFIG_CGROUP_FREEZER=y
->   CONFIG_CGROUP_DEVICE=y
-> @@ -22,7 +19,7 @@ CONFIG_EMBEDDED=y
->   # CONFIG_VM_EVENT_COUNTERS is not set
->   # CONFIG_COMPAT_BRK is not set
->   CONFIG_SLAB=y
-> -CONFIG_MACH_INGENIC=y
-> +CONFIG_MACH_INGENIC_SOC=y
->   CONFIG_X1830_CU1830_NEO=y
->   CONFIG_HIGHMEM=y
->   CONFIG_HZ_100=y
-> @@ -31,7 +28,6 @@ CONFIG_HZ_100=y
->   # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
->   # CONFIG_COMPACTION is not set
->   CONFIG_CMA=y
-> -CONFIG_CMA_AREAS=7
->   CONFIG_NET=y
->   CONFIG_PACKET=y
->   CONFIG_UNIX=y
-> @@ -40,7 +36,6 @@ CONFIG_CFG80211=y
->   CONFIG_UEVENT_HELPER=y
->   CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
->   CONFIG_DEVTMPFS=y
-> -# CONFIG_FW_LOADER is not set
->   # CONFIG_ALLOW_DEV_COREDUMP is not set
->   CONFIG_MD=y
->   CONFIG_BLK_DEV_MD=y
-> @@ -49,13 +44,11 @@ CONFIG_NETDEVICES=y
->   CONFIG_STMMAC_ETH=y
->   CONFIG_ICPLUS_PHY=y
->   CONFIG_BRCMFMAC=y
-> -# CONFIG_INPUT_MOUSEDEV is not set
->   # CONFIG_INPUT_KEYBOARD is not set
->   # CONFIG_INPUT_MOUSE is not set
->   # CONFIG_SERIO is not set
->   CONFIG_VT_HW_CONSOLE_BINDING=y
->   CONFIG_LEGACY_PTY_COUNT=2
-> -CONFIG_SERIAL_EARLYCON=y
->   CONFIG_SERIAL_8250=y
->   CONFIG_SERIAL_8250_CONSOLE=y
->   CONFIG_SERIAL_8250_NR_UARTS=2
-> @@ -69,8 +62,6 @@ CONFIG_GPIO_SYSFS=y
->   CONFIG_SENSORS_ADS7828=y
->   CONFIG_WATCHDOG=y
->   CONFIG_JZ4740_WDT=y
-> -# CONFIG_LCD_CLASS_DEVICE is not set
-> -# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
->   # CONFIG_VGA_CONSOLE is not set
->   # CONFIG_HID is not set
->   # CONFIG_USB_SUPPORT is not set
-> @@ -85,8 +76,6 @@ CONFIG_RTC_DRV_JZ4740=y
->   CONFIG_DMADEVICES=y
->   CONFIG_DMA_JZ4780=y
->   # CONFIG_IOMMU_SUPPORT is not set
-> -CONFIG_NVMEM=y
-> -CONFIG_NVMEM_SYSFS=y
->   CONFIG_EXT4_FS=y
->   # CONFIG_DNOTIFY is not set
->   CONFIG_AUTOFS_FS=y
-> @@ -111,8 +100,8 @@ CONFIG_CONSOLE_LOGLEVEL_QUIET=15
->   CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
->   CONFIG_DEBUG_INFO=y
->   CONFIG_STRIP_ASM_SYMS=y
-> -CONFIG_DEBUG_FS=y
->   CONFIG_MAGIC_SYSRQ=y
-> +CONFIG_DEBUG_FS=y
->   CONFIG_PANIC_ON_OOPS=y
->   CONFIG_PANIC_TIMEOUT=10
->   # CONFIG_SCHED_DEBUG is not set
-> diff --git a/arch/mips/configs/gcw0_defconfig b/arch/mips/configs/gcw0_defconfig
-> index 48131cb47e66..e0ee6c37f410 100644
-> --- a/arch/mips/configs/gcw0_defconfig
-> +++ b/arch/mips/configs/gcw0_defconfig
-> @@ -4,7 +4,7 @@ CONFIG_HIGH_RES_TIMERS=y
->   CONFIG_PREEMPT_VOLUNTARY=y
->   CONFIG_EMBEDDED=y
->   CONFIG_PROFILING=y
-> -CONFIG_MACH_INGENIC=y
-> +CONFIG_MACH_INGENIC_SOC=y
->   CONFIG_JZ4770_GCW0=y
->   CONFIG_HIGHMEM=y
->   # CONFIG_SECCOMP is not set
-> diff --git a/arch/mips/configs/qi_lb60_defconfig b/arch/mips/configs/qi_lb60_defconfig
-> index 81bfbee72b0c..60428262ae9f 100644
-> --- a/arch/mips/configs/qi_lb60_defconfig
-> +++ b/arch/mips/configs/qi_lb60_defconfig
-> @@ -7,7 +7,7 @@ CONFIG_EMBEDDED=y
->   # CONFIG_VM_EVENT_COUNTERS is not set
->   # CONFIG_COMPAT_BRK is not set
->   CONFIG_SLAB=y
-> -CONFIG_MACH_INGENIC=y
-> +CONFIG_MACH_INGENIC_SOC=y
->   CONFIG_HZ_100=y
->   # CONFIG_SECCOMP is not set
->   CONFIG_MODULES=y
-> @@ -72,7 +72,6 @@ CONFIG_DRM=y
->   CONFIG_DRM_FBDEV_OVERALLOC=200
->   CONFIG_DRM_PANEL_SIMPLE=y
->   CONFIG_DRM_INGENIC=y
-> -# CONFIG_LCD_CLASS_DEVICE is not set
->   CONFIG_BACKLIGHT_CLASS_DEVICE=y
->   # CONFIG_BACKLIGHT_GENERIC is not set
->   # CONFIG_VGA_CONSOLE is not set
-> @@ -170,9 +169,9 @@ CONFIG_PRINTK_TIME=y
->   CONFIG_DEBUG_INFO=y
->   CONFIG_STRIP_ASM_SYMS=y
->   CONFIG_READABLE_ASM=y
-> +CONFIG_KGDB=y
->   CONFIG_DEBUG_KMEMLEAK=y
->   CONFIG_DEBUG_MEMORY_INIT=y
->   CONFIG_DEBUG_STACKOVERFLOW=y
->   CONFIG_PANIC_ON_OOPS=y
->   # CONFIG_FTRACE is not set
-> -CONFIG_KGDB=y
-> diff --git a/arch/mips/configs/rs90_defconfig b/arch/mips/configs/rs90_defconfig
-> index de6752051ecc..dfbb9fed9a42 100644
-> --- a/arch/mips/configs/rs90_defconfig
-> +++ b/arch/mips/configs/rs90_defconfig
-> @@ -19,7 +19,7 @@ CONFIG_EMBEDDED=y
->   # CONFIG_PERF_EVENTS is not set
->   CONFIG_SLAB=y
->   CONFIG_PROFILING=y
-> -CONFIG_MACH_INGENIC=y
-> +CONFIG_MACH_INGENIC_SOC=y
->   CONFIG_JZ4740_RS90=y
->   CONFIG_PAGE_SIZE_16KB=y
->   CONFIG_HZ_100=y
-> @@ -80,8 +80,8 @@ CONFIG_KEYBOARD_GPIO=y
->   # CONFIG_INPUT_MOUSE is not set
->   # CONFIG_SERIO is not set
->   CONFIG_LEGACY_PTY_COUNT=2
-> -# CONFIG_DEVMEM is not set
->   # CONFIG_HW_RANDOM is not set
-> +# CONFIG_DEVMEM is not set
->   # CONFIG_I2C_COMPAT is not set
->   # CONFIG_I2C_HELPER_AUTO is not set
->   CONFIG_POWER_SUPPLY=y
+> > FWIW, I asked back in time what the plan is for non-coherent
+> > allocations and it seemed like DMA_ATTR_NON_CONSISTENT and
+> > dma_sync_*() was supposed to be the right thing to go with. [2] The
+> > same thread also explains why dma_alloc_pages() isn't suitable for the
+> > users of dma_alloc_attrs() and DMA_ATTR_NON_CONSISTENT.
+>
+> AFAICS even back then Christoph was implying getting rid of
+> NON_CONSISTENT and *replacing* it with something streaming-API-based -
+
+That's not how I read his reply from the thread I pointed to, but that
+might of course be my misunderstanding.
+
+> i.e. this series - not encouraging mixing the existing APIs. It doesn't
+> seem impossible to implement a remapping version of this new
+> dma_alloc_pages() for IOMMU-backed ops if it's really warranted
+> (although at that point it seems like "non-coherent" vb2-dc starts to
+> have significant conceptual overlap with vb2-sg).
+
+No, there is no overlap between vb2-dc and vb2-sg. They differ on
+another level - the former is to be used by devices without
+scatter-gather or internal mapping capabilities and gives the driver a
+single DMA address for the whole buffer, regardless of whether it's
+IOVA-contiguous (for devices behind an IOMMU) or physically contiguous
+(for the others), while the latter gives the driver an sgtable, which
+of course may be DMA-contiguous internally, but doesn't have to and
+usually isn't. This model makes it possible to hide the SoC
+implementation details from particular drivers, since those are very
+often reused on many SoCs which differ in the availability of IOMMU,
+DMA addressing restrictions and so on.
+
+Best regards,
+Tomasz
