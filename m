@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F2624C39D
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Aug 2020 18:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E874C24C3B2
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Aug 2020 18:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729474AbgHTQvT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Aug 2020 12:51:19 -0400
-Received: from verein.lst.de ([213.95.11.211]:43051 "EHLO verein.lst.de"
+        id S1729817AbgHTQwS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Aug 2020 12:52:18 -0400
+Received: from verein.lst.de ([213.95.11.211]:43074 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727946AbgHTQvS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 20 Aug 2020 12:51:18 -0400
+        id S1729701AbgHTQwR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 20 Aug 2020 12:52:17 -0400
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 01D2C68AFE; Thu, 20 Aug 2020 18:51:13 +0200 (CEST)
-Date:   Thu, 20 Aug 2020 18:51:12 +0200
+        id 48F9168AFE; Thu, 20 Aug 2020 18:52:13 +0200 (CEST)
+Date:   Thu, 20 Aug 2020 18:52:13 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Tomasz Figa <tfiga@chromium.org>
 Cc:     Christoph Hellwig <hch@lst.de>,
@@ -44,26 +44,35 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         linux-mips@vger.kernel.org
 Subject: Re: [PATCH 05/28] media/v4l2: remove
  V4L2-FLAG-MEMORY-NON-CONSISTENT
-Message-ID: <20200820165112.GB12693@lst.de>
-References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de> <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com> <62e4f4fc-c8a5-3ee8-c576-fe7178cb4356@arm.com> <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com> <20200819135738.GB17098@lst.de> <CAAFQd5BvpzJTycFvjntmX9W_d879hHFX+rJ8W9EK6+6cqFaVMA@mail.gmail.com> <20200820044533.GA4570@lst.de> <CAAFQd5CEsC2h-oEdZOPTkUQ4WfFL0yyYu9dE5UscEVpLyMLrCg@mail.gmail.com>
+Message-ID: <20200820165213.GC12693@lst.de>
+References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de> <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com> <62e4f4fc-c8a5-3ee8-c576-fe7178cb4356@arm.com> <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com> <2b32f1d8-16f7-3352-40a5-420993d52fb5@arm.com> <20200820050214.GA4815@lst.de> <CAAFQd5AknYpP5BamC=wJkEJyO-q47V6Gc+HT65h6B+HyT+-xjQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAFQd5CEsC2h-oEdZOPTkUQ4WfFL0yyYu9dE5UscEVpLyMLrCg@mail.gmail.com>
+In-Reply-To: <CAAFQd5AknYpP5BamC=wJkEJyO-q47V6Gc+HT65h6B+HyT+-xjQ@mail.gmail.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 12:09:34PM +0200, Tomasz Figa wrote:
-> > I'm happy to Cc and active participant in the discussion.  I'm not
-> > going to add all reviewers because even with the trimmed CC list
-> > I'm already hitting the number of receipients limit on various lists.
+On Thu, Aug 20, 2020 at 12:24:31PM +0200, Tomasz Figa wrote:
+> > Of course this still uses the scatterlist structure with its annoying
+> > mix of input and output parametes, so I'd rather not expose it as
+> > an official API at the DMA layer.
 > 
-> Fair enough.
+> The problem with the above open coded approach is that it requires
+> explicit handling of the non-IOMMU and IOMMU cases and this is exactly
+> what we don't want to have in vb2 and what was actually the job of the
+> DMA API to hide. Is the plan to actually move the IOMMU handling out
+> of the DMA API?
 > 
-> We'll make your job easier and just turn my MAINTAINERS entry into a
-> maintainer. :)
+> Do you think we could instead turn it into a dma_alloc_noncoherent()
+> helper, which has similar semantics as dma_alloc_attrs() and handles
+> the various corner cases (e.g. invalidate_kernel_vmap_range and
+> flush_kernel_vmap_range) to achieve the desired functionality without
+> delegating the "hell", as you called it, to the users?
 
-Sounds like a plan.
+Yes, I guess I could do something in that direction.  At least for
+dma-iommu, which thanks to Robin should be all you'll need in the
+foreseeable future.
