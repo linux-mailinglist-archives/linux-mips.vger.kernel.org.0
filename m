@@ -2,86 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 357B724BD2A
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Aug 2020 15:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F2624C39D
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Aug 2020 18:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729082AbgHTNAb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Aug 2020 09:00:31 -0400
-Received: from mail1.windriver.com ([147.11.146.13]:57318 "EHLO
-        mail1.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725885AbgHTNAQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Aug 2020 09:00:16 -0400
-Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com [147.11.189.40])
-        by mail1.windriver.com (8.15.2/8.15.2) with ESMTPS id 07KCxkOl018093
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Thu, 20 Aug 2020 05:59:47 -0700 (PDT)
-Received: from pek-lpg-core2.corp.ad.wrs.com (128.224.153.41) by
- ALA-HCA.corp.ad.wrs.com (147.11.189.40) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 20 Aug 2020 05:59:45 -0700
-From:   <zhe.he@windriver.com>
-To:     <rric@kernel.org>, <tsbogend@alpha.franken.de>,
-        <oprofile-list@lists.sf.net>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zhe.he@windriver.com>
-Subject: [PATCH] mips/oprofile: Fix fallthrough placement
-Date:   Thu, 20 Aug 2020 20:54:40 +0800
-Message-ID: <20200820125440.350184-1-zhe.he@windriver.com>
-X-Mailer: git-send-email 2.17.1
+        id S1729474AbgHTQvT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Aug 2020 12:51:19 -0400
+Received: from verein.lst.de ([213.95.11.211]:43051 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727946AbgHTQvS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 20 Aug 2020 12:51:18 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 01D2C68AFE; Thu, 20 Aug 2020 18:51:13 +0200 (CEST)
+Date:   Thu, 20 Aug 2020 18:51:12 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        alsa-devel@alsa-project.org, linux-ia64@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-mm@kvack.org, Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        linux-scsi@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pawel Osciak <pawel@osciak.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH 05/28] media/v4l2: remove
+ V4L2-FLAG-MEMORY-NON-CONSISTENT
+Message-ID: <20200820165112.GB12693@lst.de>
+References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de> <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com> <62e4f4fc-c8a5-3ee8-c576-fe7178cb4356@arm.com> <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com> <20200819135738.GB17098@lst.de> <CAAFQd5BvpzJTycFvjntmX9W_d879hHFX+rJ8W9EK6+6cqFaVMA@mail.gmail.com> <20200820044533.GA4570@lst.de> <CAAFQd5CEsC2h-oEdZOPTkUQ4WfFL0yyYu9dE5UscEVpLyMLrCg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAFQd5CEsC2h-oEdZOPTkUQ4WfFL0yyYu9dE5UscEVpLyMLrCg@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: He Zhe <zhe.he@windriver.com>
+On Thu, Aug 20, 2020 at 12:09:34PM +0200, Tomasz Figa wrote:
+> > I'm happy to Cc and active participant in the discussion.  I'm not
+> > going to add all reviewers because even with the trimmed CC list
+> > I'm already hitting the number of receipients limit on various lists.
+> 
+> Fair enough.
+> 
+> We'll make your job easier and just turn my MAINTAINERS entry into a
+> maintainer. :)
 
-We want neither
-"
-include/linux/compiler_attributes.h:201:41: warning: statement will never
-be executed [-Wswitch-unreachable]
-  201 | # define fallthrough __attribute__((__fallthrough__))
-      |                      ^~~~~~~~~~~~~
-"
-nor
-"
-include/linux/compiler_attributes.h:201:41: warning: attribute
-'fallthrough' not preceding a case label or default label
-  201 | # define fallthrough __attribute__((__fallthrough__))
-      |                      ^~~~~~~~~~~~~
-"
-
-It's not worth adding one more macro. Let's simply place the fallthrough
-in between the expansions.
-
-Signed-off-by: He Zhe <zhe.he@windriver.com>
----
- arch/mips/oprofile/op_model_mipsxx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/oprofile/op_model_mipsxx.c b/arch/mips/oprofile/op_model_mipsxx.c
-index 1493c49ca47a..55d7b7fd18b6 100644
---- a/arch/mips/oprofile/op_model_mipsxx.c
-+++ b/arch/mips/oprofile/op_model_mipsxx.c
-@@ -245,7 +245,6 @@ static int mipsxx_perfcount_handler(void)
- 
- 	switch (counters) {
- #define HANDLE_COUNTER(n)						\
--	fallthrough;							\
- 	case n + 1:							\
- 		control = r_c0_perfctrl ## n();				\
- 		counter = r_c0_perfcntr ## n();				\
-@@ -256,8 +255,11 @@ static int mipsxx_perfcount_handler(void)
- 			handled = IRQ_HANDLED;				\
- 		}
- 	HANDLE_COUNTER(3)
-+	fallthrough;
- 	HANDLE_COUNTER(2)
-+	fallthrough;
- 	HANDLE_COUNTER(1)
-+	fallthrough;
- 	HANDLE_COUNTER(0)
- 	}
- 
--- 
-2.17.1
-
+Sounds like a plan.
