@@ -2,148 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA9624A7EE
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Aug 2020 22:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903FC24ABDB
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Aug 2020 02:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727111AbgHSUtE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Aug 2020 16:49:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49906 "EHLO mail.kernel.org"
+        id S1728325AbgHTANa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Aug 2020 20:13:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727050AbgHSUtE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 19 Aug 2020 16:49:04 -0400
-Received: from kernel.org (unknown [87.70.91.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726874AbgHTABc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 19 Aug 2020 20:01:32 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4559022B43;
-        Wed, 19 Aug 2020 20:48:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B3B27214F1;
+        Thu, 20 Aug 2020 00:01:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597870143;
-        bh=qGoMJNQU47bi4Lr27Xvnh0/Sq60m3eAX4xqpvHpl7z0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EDED5GsJw4zUuBdGb05pEvujvo8C6rUQNmDr6tFajHgKyq8u0aC1JhmrGGKixlNzr
-         iJK0JwajiHl4HBTkAxVXhkjy+fJ4SSitgCYA/knE1HAPx9DykSi5zvv7ufmh3aqaBj
-         /RQUWYvoEHKL6x5oDDNaW/gHGb6Yyk2UI/DMzVR8=
-Date:   Wed, 19 Aug 2020 23:48:48 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>, Daniel Axtens <dja@axtens.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        clang-built-linux@googlegroups.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
-Subject: Re: [PATCH v3 09/17] memblock: make memblock_debug and related
- functionality private
-Message-ID: <20200819204848.GX752365@kernel.org>
-References: <20200818151634.14343-1-rppt@kernel.org>
- <20200818151634.14343-10-rppt@kernel.org>
- <20200819122405.88e9719e86ac7c3c44b4db32@linux-foundation.org>
+        s=default; t=1597881690;
+        bh=P4hYlXuCrt4vYT4MbhM81oT38igvQ0iujDFHaqGZrHk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MKdA8v/kKzhE6IDrQH0+pQ5G8sc2JpNobgDHhGowmqP02QKgw5X05cW4/r98mw7w6
+         sRZEjG09FtH2yQ59Olqd8V80mfbfW1mYrk6+ISR9L7F1JC+PjdRYrzHRwzOTY8cyQX
+         oAU7XWgEdwtkH9itlMLuN0eGNZ/jeJumXfPPGhqg=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 10/27] MIPS: Fix unable to reserve memory for Crash kernel
+Date:   Wed, 19 Aug 2020 20:00:59 -0400
+Message-Id: <20200820000116.214821-10-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200820000116.214821-1-sashal@kernel.org>
+References: <20200820000116.214821-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200819122405.88e9719e86ac7c3c44b4db32@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 12:24:05PM -0700, Andrew Morton wrote:
-> On Tue, 18 Aug 2020 18:16:26 +0300 Mike Rapoport <rppt@kernel.org> wrote:
-> 
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> > 
-> > The only user of memblock_dbg() outside memblock was s390 setup code and it
-> > is converted to use pr_debug() instead.
-> > This allows to stop exposing memblock_debug and memblock_dbg() to the rest
-> > of the kernel.
-> > 
-> > --- a/mm/memblock.c
-> > +++ b/mm/memblock.c
-> > @@ -137,7 +137,10 @@ struct memblock_type physmem = {
-> >  	     i < memblock_type->cnt;					\
-> >  	     i++, rgn = &memblock_type->regions[i])
-> >  
-> > -int memblock_debug __initdata_memblock;
-> > +#define memblock_dbg(fmt, ...) \
-> > +	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-> > +
-> 
-> checkpatch doesn't like this much.
-> 
-> ERROR: Macros starting with if should be enclosed by a do - while loop to avoid possible if/else logic defects
-> #101: FILE: mm/memblock.c:140:
-> +#define memblock_dbg(fmt, ...) \
-> +	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-> 
-> WARNING: Prefer [subsystem eg: netdev]_info([subsystem]dev, ... then dev_info(dev, ... then pr_info(...  to printk(KERN_INFO ...
-> #102: FILE: mm/memblock.c:141:
-> +	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-> 
-> ERROR: trailing statements should be on next line
-> #102: FILE: mm/memblock.c:141:
-> +	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-> 
-> 
-> The first one is significant:
-> 
-> 	if (foo)
-> 		memblock_dbg(...);
-> 	else
-> 		save_the_world();
-> 
-> could end up inadvertently destroying the planet.
+From: Jinyang He <hejinyang@loongson.cn>
 
-Well, it didn't till now ;-)
+[ Upstream commit b1ce9716f3b5ed3b49badf1f003b9e34b7ead0f9 ]
 
-> This?
-> 
-> --- a/mm/memblock.c~memblock-make-memblock_debug-and-related-functionality-private-fix
-> +++ a/mm/memblock.c
-> @@ -137,8 +137,11 @@ struct memblock_type physmem = {
->  	     i < memblock_type->cnt;					\
->  	     i++, rgn = &memblock_type->regions[i])
->  
-> -#define memblock_dbg(fmt, ...) \
-> -	if (memblock_debug) printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-> +#define memblock_dbg(fmt, ...)						\
-> +	do {								\
-> +		if (memblock_debug)					\
-> +			pr_info(fmt, ##__VA_ARGS__);			\
-> +	} while (0)
+Use 0 as the align parameter in memblock_find_in_range() is
+incorrect when we reserve memory for Crash kernel.
 
-Sure, thanks!
+The environment as follows:
+[    0.000000] MIPS: machine is loongson,loongson64c-4core-rs780e
+...
+[    1.951016]     crashkernel=64M@128M
 
->  static int memblock_debug __initdata_memblock;
->  static bool system_has_some_mirror __initdata_memblock = false;
-> _
-> 
+The warning as follows:
+[    0.000000] Invalid memory region reserved for crash kernel
 
+And the iomem as follows:
+00200000-0effffff : System RAM
+  04000000-0484009f : Kernel code
+  048400a0-04ad7fff : Kernel data
+  04b40000-05c4c6bf : Kernel bss
+1a000000-1bffffff : pci@1a000000
+...
+
+The align parameter may be finally used by round_down() or round_up().
+Like the following call tree:
+
+mips-next: mm/memblock.c
+
+memblock_find_in_range
+└── memblock_find_in_range_node
+    ├── __memblock_find_range_bottom_up
+    │   └── round_up
+    └── __memblock_find_range_top_down
+        └── round_down
+\#define round_up(x, y) ((((x)-1) | __round_mask(x, y))+1)
+\#define round_down(x, y) ((x) & ~__round_mask(x, y))
+\#define __round_mask(x, y) ((__typeof__(x))((y)-1))
+
+The round_down(or round_up)'s second parameter must be a power of 2.
+If the second parameter is 0, it both will return 0.
+
+Use 1 as the parameter to fix the bug and the iomem as follows:
+00200000-0effffff : System RAM
+  04000000-0484009f : Kernel code
+  048400a0-04ad7fff : Kernel data
+  04b40000-05c4c6bf : Kernel bss
+  08000000-0bffffff : Crash kernel
+1a000000-1bffffff : pci@1a000000
+...
+
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/kernel/setup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 7b537fa2035df..588b21245e00b 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -497,7 +497,7 @@ static void __init mips_parse_crashkernel(void)
+ 	if (ret != 0 || crash_size <= 0)
+ 		return;
+ 
+-	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 0)) {
++	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 1)) {
+ 		pr_warn("Invalid memory region reserved for crash kernel\n");
+ 		return;
+ 	}
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+
