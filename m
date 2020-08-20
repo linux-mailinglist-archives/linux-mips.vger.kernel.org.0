@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 903FC24ABDB
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Aug 2020 02:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71BB924ABA3
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Aug 2020 02:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728325AbgHTANa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Aug 2020 20:13:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57606 "EHLO mail.kernel.org"
+        id S1728265AbgHTAL0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Aug 2020 20:11:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58550 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726874AbgHTABc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 19 Aug 2020 20:01:32 -0400
+        id S1727024AbgHTACH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 19 Aug 2020 20:02:07 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B3B27214F1;
-        Thu, 20 Aug 2020 00:01:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E290A207FB;
+        Thu, 20 Aug 2020 00:02:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597881690;
-        bh=P4hYlXuCrt4vYT4MbhM81oT38igvQ0iujDFHaqGZrHk=;
+        s=default; t=1597881726;
+        bh=COjiY0b/wWEh1aAE8ioSHBgdaNmtR5MlWi3AkEpblWg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MKdA8v/kKzhE6IDrQH0+pQ5G8sc2JpNobgDHhGowmqP02QKgw5X05cW4/r98mw7w6
-         sRZEjG09FtH2yQ59Olqd8V80mfbfW1mYrk6+ISR9L7F1JC+PjdRYrzHRwzOTY8cyQX
-         oAU7XWgEdwtkH9itlMLuN0eGNZ/jeJumXfPPGhqg=
+        b=OOeQnnwtGA1Adv8q7iKke6zi3+VjC4QuGxcMLBfW02JMzSlMxphmqHY/6rMlu7y4J
+         2At8vmD9bvK4AXMS39gjVc40nyEyIkL5aWsxA2sdXuJIu/qUoHu/+hEbbbDJrdk+tj
+         UoD+cNwq7q240KiyLqHgNEyP24jpuYRHBudjWL2U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jinyang He <hejinyang@loongson.cn>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 10/27] MIPS: Fix unable to reserve memory for Crash kernel
-Date:   Wed, 19 Aug 2020 20:00:59 -0400
-Message-Id: <20200820000116.214821-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 08/24] MIPS: Fix unable to reserve memory for Crash kernel
+Date:   Wed, 19 Aug 2020 20:01:39 -0400
+Message-Id: <20200820000155.215089-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200820000116.214821-1-sashal@kernel.org>
-References: <20200820000116.214821-1-sashal@kernel.org>
+In-Reply-To: <20200820000155.215089-1-sashal@kernel.org>
+References: <20200820000155.215089-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -104,7 +104,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 7b537fa2035df..588b21245e00b 100644
+index 573509e0f2d4e..3ace115740dd1 100644
 --- a/arch/mips/kernel/setup.c
 +++ b/arch/mips/kernel/setup.c
 @@ -497,7 +497,7 @@ static void __init mips_parse_crashkernel(void)
