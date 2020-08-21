@@ -2,130 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F8224D0B6
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Aug 2020 10:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFC324D16A
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Aug 2020 11:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728071AbgHUIqu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Aug 2020 04:46:50 -0400
-Received: from mail-mw2nam10on2052.outbound.protection.outlook.com ([40.107.94.52]:25152
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727008AbgHUIqt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 21 Aug 2020 04:46:49 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kefBkRWNfKeNgghAM2IZFiCbAXNWaADFM4lRTxjfjMSl096Q9qeQbuiGGdzNhKgCjN42T9Vh3MuUE3HCjh48v19Hv2t+J6kKUcQsI+QhgdTdrJx/2rM1kJ8sV1QDaBfY1ZsGNAY01y6fMBPUQgtQ1MnczRJPtJ9Aw8lVHwJjSme4Hv8yuOaLEACONGNq7b/nvs88GIlZo3hj4tf6EZJsxHLLpwC+B8/w0KJTeZ7i+YSfUoiLW0TlUDasiMSlOaIwMWgslOg93xSC35ExC8pmFDyP65KvKA/h08OkYvW113+21gWO1qtBh+U0mrL9JH7JJOFeVoIKJP+XTslafP76bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3mdL0QKGf1VMaxE+yFFiPcOi2C+u5aL005WruikGTZs=;
- b=TvuMQYLTHZfnC87ahfV9OZ2kpEtKQJ0qy0bkrmTg+A+z39pava+EWVOsYa6yJUerzITH5Qy80zfOpD4CGaPsPG5ZDv4Z2LctUJven127035C8AelSx0ChUeHphHg8HAJ+rw8ujx/X5TG4YsJYxmTOfzC+U66owhAvFyChPP7qk7T1S24oHMhotlnwnLoNakWJvTOnni7U1CZil9ujTEnLylTItl/PWEXjTSIj5f7+RlzTVRifcSWloe/YZ03Pj2ONFplp3vzm/cMEWWKJD8zkfxLwSVWls0r0YxRGjWLxJzB48/7d9W+blFrMcSMg6B8fuIVSz/tw2bnYaE6hz4yYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=windriversystems.onmicrosoft.com;
- s=selector2-windriversystems-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3mdL0QKGf1VMaxE+yFFiPcOi2C+u5aL005WruikGTZs=;
- b=e/tTvIsWDbK+l603Nqljm2zQayPC+Qo2l669nrkzSymAKA2qW5Slbea76u6ZvkVT714+K6kn4Bepj/zSjBHZGXDBIipqdtK+tImeyYXIXSj9IBkjc9Uy6N5Jm1pkDKairICnh5Ym3JMxKkq2TRaiLCFBpw1i9tJJA9menph6qYo=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=windriver.com;
-Received: from SN6PR11MB3360.namprd11.prod.outlook.com (2603:10b6:805:c8::30)
- by SA0PR11MB4637.namprd11.prod.outlook.com (2603:10b6:806:97::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24; Fri, 21 Aug
- 2020 08:46:46 +0000
-Received: from SN6PR11MB3360.namprd11.prod.outlook.com
- ([fe80::4497:4639:274:54d6]) by SN6PR11MB3360.namprd11.prod.outlook.com
- ([fe80::4497:4639:274:54d6%6]) with mapi id 15.20.3305.025; Fri, 21 Aug 2020
- 08:46:46 +0000
-Subject: Re: [PATCH] mips/oprofile: Fix fallthrough placement
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     rric@kernel.org, oprofile-list@lists.sf.net,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200820125440.350184-1-zhe.he@windriver.com>
- <20200821074821.GD8336@alpha.franken.de>
-From:   He Zhe <zhe.he@windriver.com>
-Message-ID: <5e86b824-4c92-3cfe-fc36-493425e85f2a@windriver.com>
-Date:   Fri, 21 Aug 2020 16:46:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20200821074821.GD8336@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: BYAPR08CA0053.namprd08.prod.outlook.com
- (2603:10b6:a03:117::30) To SN6PR11MB3360.namprd11.prod.outlook.com
- (2603:10b6:805:c8::30)
+        id S1726805AbgHUJ1B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Aug 2020 05:27:01 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:36186 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725806AbgHUJ1B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Aug 2020 05:27:01 -0400
+Received: by mail-il1-f196.google.com with SMTP id f75so558838ilh.3
+        for <linux-mips@vger.kernel.org>; Fri, 21 Aug 2020 02:27:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P6zilLs44DpbpnnhUv07R1u3h8slkGGWvxze0Kj/Gdo=;
+        b=JfiurewIm99iaoyz2IEf3xvyP6Redalf91qjoGRIhZ3cVkVB98Z9nXd60IZGiEZ1g+
+         sqAkSld9J61qlwbYHx0OPpMjUH+qat0xMnKwgxxWeB7kwC/e0xfaN3VoFGGQ14qo5bt1
+         T3VvI1ZBjHP7j8nwL0tkIK3l9kGGsOv1CelQZauJ5I6nOXn8z2Erc5SRU8+dmBHd52eS
+         RRY8+EMlst1zOmwgNkjyL3WqbxcXtaJJPSlBrVeQw5oqXQCu8f4DUTiOnI5Ozskubllw
+         lbUZZlr+aOOtLfQf6XUsDoGo9cWZH1YKcfBdr8eP2+9+iotNtpGKoIfcKSmbkPY/mP82
+         yY2A==
+X-Gm-Message-State: AOAM533n4eCkOjLNg+Kctkk8ToLiEqimWFNazDvW3XqO9dWrB9FsLrd/
+        ncZYS1L4ftHqK4lEguHyAL9L3H9u0fwyp35bJTbnEJhvyu0u6Q==
+X-Google-Smtp-Source: ABdhPJwtlk38LWXGznSCTzEUC9nqTEQeWHEXOqjTUxNiLEogN/SbBE1pB022mop+Qf4f7tk32nGEUgDpx75AK4WMwsA=
+X-Received: by 2002:a05:6e02:962:: with SMTP id q2mr1898452ilt.171.1598002019933;
+ Fri, 21 Aug 2020 02:26:59 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from 255.255.255.255 (255.255.255.255) by BYAPR08CA0053.namprd08.prod.outlook.com (2603:10b6:a03:117::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25 via Frontend Transport; Fri, 21 Aug 2020 08:46:43 +0000
-X-Originating-IP: [60.247.85.82]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2101f93d-d5c1-442c-98b9-08d845aebc33
-X-MS-TrafficTypeDiagnostic: SA0PR11MB4637:
-X-Microsoft-Antispam-PRVS: <SA0PR11MB4637CB95445D9B262D89388F8F5B0@SA0PR11MB4637.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m7HQOBQyScLygMHiJiB+FNW3l5N4JnJE9pjmQDjOAkmDvEi5D40TM5GHxayKcoJ4DR0xbLm+UvKSVSlJ30qtqg6ANMeaPY6hhAuTYWzpJPwSX6dnPmWEY6tA4FuYCz2o5ljFQvaanXQbLOZOcWX51Gw1dp+4LtCOPMdgRi/nwSSOT8vE7d2FW9Teyz+bZ68poEKeVyg5M3N9lhyJ8YhYcv3XkAKrUMDlN8x4LlIdMO9zj3OMhM9XUSw/10DoI4aZs8CPLcz1nU5XMjVLsQdElh5288qowM0xpkh4eXOF5c0lIdpWshxOZ2wy1AgCnpqFdkpmD/uzb6qnlhvOr7Dh3S9GX/0z0auE5uXG0EsHEXTr6Y5/qWnQRalbgJO7eelzhqUhHUrejC8bz4/3IuhAY2STkLIe3iQV6bsGEBfTWBd08RkpUZDp4hDYPAYQaMr9vKCx2RWCnXETBqCaE8mznFXhOoqUKLE59Ws92BbA9Zo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3360.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(39850400004)(366004)(346002)(376002)(4326008)(31686004)(6486002)(8676002)(16576012)(186003)(2616005)(956004)(316002)(6666004)(8936002)(52116002)(110011004)(2906002)(83380400001)(66476007)(6916009)(53546011)(66946007)(5660300002)(66556008)(86362001)(966005)(36756003)(478600001)(26005)(31696002)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: 4j+G2VRhl7QB4uZhuvM7oWx2bPcq14tLuuNTaO/yjdWs6EktAjLBqMjl88AYJCj5bNL+mKEYl1HV8JFg6zWI7QhPtRW070hp+b1w9/GtoKeEIRMSKqFW392TNHkLe3MyZO4LZg8kshkF0wxVXMLJNNw0jq/dq8HWUVOYP4kJG7FenXZRWZjjq5i91WFFR1PWBNNre0/fkveE3rwOVh7oS7kP8fNz42xr5xbUCrDeHZF8O6Uhvdy6bhvqMfrhidn0BXJ1NQ2MD6YAJY1kGlsF5TEyfDFzYy3mOdWkAi3gwzSB8B3Di9NW8W4de9hGFbcJNf35di+tmqIo7Owe8UgDSbJCMWSMEtRHFy9s6A5+AF38ajwc07J6jPDuqduYV7Qk7SaAEDFowSuXIzFgdIPj5xNFBR3U1uXYGKfQY+pUKwf23HnvkXX8/Ot+3h8p7qY9+qNtBCaPPa3w/w+t3LrG52LM4fT4Gc5XG24lDhw4ST+fzRlhUJVpxO3IqODY6FYyjFhdppNJFoM+oSkd4/A0BiQCFjC1v+im1dcy37QtCAZp1cZy3bOfXAeC9oSug/srZGqpATa1pUotGYI4j2IVF+EMx3CEDjk8rXzY54KsOXsd0eMPT4LQSx2girce9YZ6ujr50FXtl92OBn9B6Iiy1Q==
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2101f93d-d5c1-442c-98b9-08d845aebc33
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3360.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2020 08:46:46.3135
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4L6yCCAbRhmfD44OtLC9+Sm/NdC7A4lgIhHhZYccjF+QoyhDW4jzgoVzR+xkj2/Ttviubfci2GVqjh7iVsNTHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4637
+References: <20200821072329.18006-1-huangpei@loongson.cn> <20200821072329.18006-3-huangpei@loongson.cn>
+In-Reply-To: <20200821072329.18006-3-huangpei@loongson.cn>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Fri, 21 Aug 2020 17:26:09 +0800
+Message-ID: <CAAhV-H4pg0pL_Sh+ibYcPs2QjzMJxDOhNwBi3AT=481NOB-5zA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Revert "MIPS: Flush wrong invalid FTLB entry for huge page"
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Ambrose <ambrosehua@gmail.com>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi,
 
-
-On 8/21/20 3:48 PM, Thomas Bogendoerfer wrote:
-> On Thu, Aug 20, 2020 at 08:54:40PM +0800, zhe.he@windriver.com wrote:
->> From: He Zhe <zhe.he@windriver.com>
->>
->> We want neither
->> "
->> include/linux/compiler_attributes.h:201:41: warning: statement will never
->> be executed [-Wswitch-unreachable]
->>   201 | # define fallthrough __attribute__((__fallthrough__))
->>       |                      ^~~~~~~~~~~~~
->> "
->> nor
->> "
->> include/linux/compiler_attributes.h:201:41: warning: attribute
->> 'fallthrough' not preceding a case label or default label
->>   201 | # define fallthrough __attribute__((__fallthrough__))
->>       |                      ^~~~~~~~~~~~~
->> "
->>
->> It's not worth adding one more macro. Let's simply place the fallthrough
->> in between the expansions.
->>
->> Signed-off-by: He Zhe <zhe.he@windriver.com>
-> there is already another patch for the problem, which I've applied
-> to mips-fixes.
-
-You mean the below one?
-https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?h=mips-fixes&id=5900acb374fe2f4f42bbcb2c84db64f582d917a1
-
-That patch handles the first warning in my commit log but does not handle the
-second one which is introduced since gcc v10.1.0 commit 6c80b1b56dec
-("Make more bad uses of fallthrough attribute into pedwarns.").
-
-Zhe
-
+On Fri, Aug 21, 2020 at 3:24 PM Huang Pei <huangpei@loongson.cn> wrote:
 >
-> Thomas.
+> This reverts commit 0115f6cbf26663c86496bc56eeea293f85b77897.
 >
+> The fix in 0115f6cbf26663c86496bc56eeea293f85b77897 is two late, since
+Do you means "too late"?
 
+> __update_tlb hit the same problem first. So let __update_tlb fix it
+>
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> ---
+>  arch/mips/mm/tlb-r4k.c | 15 ++++++++++++++-
+>  arch/mips/mm/tlbex.c   | 25 ++++---------------------
+>  2 files changed, 18 insertions(+), 22 deletions(-)
+>
+> diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+> index 38e2894d5fa3..cb8afa326b2c 100644
+> --- a/arch/mips/mm/tlb-r4k.c
+> +++ b/arch/mips/mm/tlb-r4k.c
+> @@ -328,6 +328,7 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+>         /* this could be a huge page  */
+>         if (pmd_huge(*pmdp)) {
+>                 unsigned long lo;
+> +               unsigned long entryhi;
+>                 write_c0_pagemask(PM_HUGE_MASK);
+>                 ptep = (pte_t *)pmdp;
+>                 lo = pte_to_entrylo(pte_val(*ptep));
+> @@ -335,7 +336,19 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+>                 write_c0_entrylo1(lo + (HPAGE_SIZE >> 7));
+>
+>                 mtc0_tlbw_hazard();
+> -               if (idx < 0)
+> +               if (idx >= current_cpu_data.tlbsizevtlb) {
+> +               /* hit in FTLB.
+> +                * Invalid it then tlbwr, since FTLB hold only base page*/
+> +                       entryhi = read_c0_entryhi();
+> +                       write_c0_entryhi(MIPS_ENTRYHI_EHINV);
+> +                       tlb_write_indexed();
+> +                       tlbw_use_hazard();
+> +                       write_c0_entryhi(entryhi);
+> +
+> +               }
+> +
+> +
+> +               if (idx < 0 || idx >= current_cpu_data.tlbsizevtlb)
+>                         tlb_write_random();
+>                 else
+>                         tlb_write_indexed();
+> diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+> index 14f8ba93367f..9c4cd08c00d3 100644
+> --- a/arch/mips/mm/tlbex.c
+> +++ b/arch/mips/mm/tlbex.c
+> @@ -762,8 +762,7 @@ static void build_huge_update_entries(u32 **p, unsigned int pte,
+>  static void build_huge_handler_tail(u32 **p, struct uasm_reloc **r,
+>                                     struct uasm_label **l,
+>                                     unsigned int pte,
+> -                                   unsigned int ptr,
+> -                                   unsigned int flush)
+> +                                   unsigned int ptr)
+>  {
+>  #ifdef CONFIG_SMP
+>         UASM_i_SC(p, pte, 0, ptr);
+> @@ -772,22 +771,6 @@ static void build_huge_handler_tail(u32 **p, struct uasm_reloc **r,
+>  #else
+>         UASM_i_SW(p, pte, 0, ptr);
+>  #endif
+> -       if (cpu_has_ftlb && flush) {
+> -               BUG_ON(!cpu_has_tlbinv);
+> -
+> -               UASM_i_MFC0(p, ptr, C0_ENTRYHI);
+> -               uasm_i_ori(p, ptr, ptr, MIPS_ENTRYHI_EHINV);
+> -               UASM_i_MTC0(p, ptr, C0_ENTRYHI);
+> -               build_tlb_write_entry(p, l, r, tlb_indexed);
+> -
+> -               uasm_i_xori(p, ptr, ptr, MIPS_ENTRYHI_EHINV);
+> -               UASM_i_MTC0(p, ptr, C0_ENTRYHI);
+> -               build_huge_update_entries(p, pte, ptr);
+> -               build_huge_tlb_write_entry(p, l, r, pte, tlb_random, 0);
+> -
+> -               return;
+> -       }
+> -
+>         build_huge_update_entries(p, pte, ptr);
+>         build_huge_tlb_write_entry(p, l, r, pte, tlb_indexed, 0);
+>  }
+> @@ -2278,7 +2261,7 @@ static void build_r4000_tlb_load_handler(void)
+>                 uasm_l_tlbl_goaround2(&l, p);
+>         }
+>         uasm_i_ori(&p, wr.r1, wr.r1, (_PAGE_ACCESSED | _PAGE_VALID));
+> -       build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2, 1);
+> +       build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2);
+>  #endif
+>
+>         uasm_l_nopage_tlbl(&l, p);
+> @@ -2334,7 +2317,7 @@ static void build_r4000_tlb_store_handler(void)
+>         build_tlb_probe_entry(&p);
+>         uasm_i_ori(&p, wr.r1, wr.r1,
+>                    _PAGE_ACCESSED | _PAGE_MODIFIED | _PAGE_VALID | _PAGE_DIRTY);
+> -       build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2, 1);
+> +       build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2);
+>  #endif
+>
+>         uasm_l_nopage_tlbs(&l, p);
+> @@ -2391,7 +2374,7 @@ static void build_r4000_tlb_modify_handler(void)
+>         build_tlb_probe_entry(&p);
+>         uasm_i_ori(&p, wr.r1, wr.r1,
+>                    _PAGE_ACCESSED | _PAGE_MODIFIED | _PAGE_VALID | _PAGE_DIRTY);
+> -       build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2, 0);
+> +       build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2);
+>  #endif
+>
+>         uasm_l_nopage_tlbm(&l, p);
+> --
+> 2.17.1
+>
