@@ -2,38 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E7724DDFF
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Aug 2020 19:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8CB24DD59
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Aug 2020 19:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbgHURZY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Aug 2020 13:25:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47754 "EHLO mail.kernel.org"
+        id S1728887AbgHURPq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Aug 2020 13:15:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727888AbgHUQPR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:15:17 -0400
+        id S1728093AbgHUQQh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 21 Aug 2020 12:16:37 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2ECF42224D;
-        Fri, 21 Aug 2020 16:15:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E870D2224D;
+        Fri, 21 Aug 2020 16:16:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598026516;
+        s=default; t=1598026596;
         bh=duA5OZY/skQ/JAo3h/E2BEJCdypBbG0QAcMV7CMJLRU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GkYnQM5Bik6RrP3fVB/84sqNQBPd8bRMrGRWiPlXTY2m2Nf3UsyO6GYbZsAWM9kO9
-         Qbj9w5NBGYnKrWzaB11HS3qHnIEmDoPGPQynGeQKw2wzRLI/fgy1+WQKINSclSDjAk
-         eBPsQAEo0Q+jhjnkra7CrAkanNUtCtYDMsewvk+M=
+        b=PuS6/muXchPKbdCrgCG/o3144LAZNA5Yb5J5yRJaEJYagsb58jfS7xvvgqgY3Bv7J
+         kMafr1ZTrGRgdVKcHrvCjqRPFuJIW1HUxZedZG9r5SdgqIpjF6GEcZoj9L9oE6eGUi
+         P1tjOBg50Sgodl9nHsLwYn8RMqUvh03xH7m8Ojug=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Peng Fan <fanpeng@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 41/62] mips/vdso: Fix resource leaks in genvdso.c
-Date:   Fri, 21 Aug 2020 12:14:02 -0400
-Message-Id: <20200821161423.347071-41-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 40/61] mips/vdso: Fix resource leaks in genvdso.c
+Date:   Fri, 21 Aug 2020 12:15:24 -0400
+Message-Id: <20200821161545.347622-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821161423.347071-1-sashal@kernel.org>
-References: <20200821161423.347071-1-sashal@kernel.org>
+In-Reply-To: <20200821161545.347622-1-sashal@kernel.org>
+References: <20200821161545.347622-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
