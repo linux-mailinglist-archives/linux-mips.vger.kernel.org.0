@@ -2,64 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6601D24CFEE
+	by mail.lfdr.de (Postfix) with ESMTP id DDD4A24CFEF
 	for <lists+linux-mips@lfdr.de>; Fri, 21 Aug 2020 09:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728048AbgHUHuN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Aug 2020 03:50:13 -0400
-Received: from elvis.franken.de ([193.175.24.41]:54235 "EHLO elvis.franken.de"
+        id S1728107AbgHUHuW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Aug 2020 03:50:22 -0400
+Received: from elvis.franken.de ([193.175.24.41]:54254 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725908AbgHUHuM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 21 Aug 2020 03:50:12 -0400
+        id S1725908AbgHUHuV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 21 Aug 2020 03:50:21 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1k91oP-00079q-00; Fri, 21 Aug 2020 09:50:09 +0200
+        id 1k91oP-00079q-01; Fri, 21 Aug 2020 09:50:09 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D9FBCC0D76; Fri, 21 Aug 2020 09:46:25 +0200 (CEST)
-Date:   Fri, 21 Aug 2020 09:46:25 +0200
+        id D4FA1C0D89; Fri, 21 Aug 2020 09:46:46 +0200 (CEST)
+Date:   Fri, 21 Aug 2020 09:46:46 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Robert Richter <rric@kernel.org>, Huacai Chen <chenhc@lemote.com>,
-        Liangliang Huang <huanglllzu@gmail.com>,
-        oprofile-list@lists.sf.net, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: op_model_mipsxx: Fix non-executable code bug
-Message-ID: <20200821074625.GA8336@alpha.franken.de>
-References: <20200819045813.GA24181@embeddedor>
+To:     WANG Xuerui <git@xen0n.name>
+Cc:     Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Youling Tang <tangyouling@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Loongson64: Remove unnecessary inclusion of
+ boot_param.h
+Message-ID: <20200821074646.GB8336@alpha.franken.de>
+References: <20200819060722.2267677-1-git@xen0n.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200819045813.GA24181@embeddedor>
+In-Reply-To: <20200819060722.2267677-1-git@xen0n.name>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 11:58:13PM -0500, Gustavo A. R. Silva wrote:
-> The fallthrough pseudo-keyword is being wrongly used and is causing
-> the non-executable code error below:
+On Wed, Aug 19, 2020 at 02:07:22PM +0800, WANG Xuerui wrote:
+> The couple of #includes are unused by now; remove to prevent namespace
+> pollution.
 > 
-> arch/mips/oprofile/op_model_mipsxx.c: In function ‘mipsxx_perfcount_handler’:
-> ./include/linux/compiler_attributes.h:214:41: warning: statement will never be executed [-Wswitch-unreachable]
->  # define fallthrough                    __attribute__((__fallthrough__))
->                                          ^
-> arch/mips/oprofile/op_model_mipsxx.c:248:2: note: in expansion of macro ‘fallthrough’
->   fallthrough;       \
->   ^~~~~~~~~~~
-> arch/mips/oprofile/op_model_mipsxx.c:258:2: note: in expansion of macro ‘HANDLE_COUNTER’
->   HANDLE_COUNTER(3)
->   ^~~~~~~~~~~~~~
+> This fixes e.g. build of dm_thin, which has a VIRTUAL symbol that
+> conflicted with the newly-introduced one in mach-loongson64/boot_param.h.
 > 
-> Fix this by placing the fallthrough macro at the proper place.
-> 
-> Fixes: c9b029903466 ("MIPS: Use fallthrough for arch/mips")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Fixes: 39c1485c8baa ("MIPS: KVM: Add kvm guest support for Loongson-3")
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
 > ---
->  arch/mips/oprofile/op_model_mipsxx.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  arch/mips/include/asm/mach-loongson64/irq.h    | 2 --
+>  arch/mips/include/asm/mach-loongson64/mmzone.h | 1 -
+>  2 files changed, 3 deletions(-)
 
 applied to mips-fixes.
 
