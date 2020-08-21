@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D6424CF40
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Aug 2020 09:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D181624CF3F
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Aug 2020 09:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727841AbgHUHX5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1726548AbgHUHX5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Fri, 21 Aug 2020 03:23:57 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:46552 "EHLO loongson.cn"
+Received: from mail.loongson.cn ([114.242.206.163]:46562 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727900AbgHUHX5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1727841AbgHUHX5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Fri, 21 Aug 2020 03:23:57 -0400
 Received: from localhost.localdomain (unknown [222.209.8.90])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP997dj9fGgoMAA--.14754S3;
-        Fri, 21 Aug 2020 15:23:48 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP997dj9fGgoMAA--.14754S4;
+        Fri, 21 Aug 2020 15:23:51 +0800 (CST)
 From:   Huang Pei <huangpei@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         ambrosehua@gmail.com
@@ -22,19 +22,19 @@ Cc:     Li Xuefeng <lixuefeng@loongson.cn>,
         Gao Juxin <gaojuxin@loongson.cn>,
         Fuxin Zhang <zhangfx@lemote.com>,
         Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org
-Subject: [PATCH 2/3] MIPS: make userspace mapping young by default
-Date:   Fri, 21 Aug 2020 15:23:28 +0800
-Message-Id: <20200821072329.18006-2-huangpei@loongson.cn>
+Subject: [PATCH 3/3] Revert "MIPS: Flush wrong invalid FTLB entry for huge page"
+Date:   Fri, 21 Aug 2020 15:23:29 +0800
+Message-Id: <20200821072329.18006-3-huangpei@loongson.cn>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200821072329.18006-1-huangpei@loongson.cn>
 References: <20200821072329.18006-1-huangpei@loongson.cn>
-X-CM-TRANSID: AQAAf9DxP997dj9fGgoMAA--.14754S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3XrWUGr1fKw45Jr4xCF4fGrg_yoWxtF47pa
-        s7Cry8A3y3Xr13ZryxZrnrAw1rAwsIqFyjqwnrCa15X343Z34ktrs8KrZ2vrykWa92kw4U
-        Z3WUXr4rW39I9rUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9m14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+X-CM-TRANSID: AQAAf9DxP997dj9fGgoMAA--.14754S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF1fKr4rJrW8Wry5Xr17GFg_yoWrJw1kpr
+        9YkF15JrWYyrnxWFykAF9rXF13A3ykG392qrsrKry5Kw4qkF1FgFn5KwnYyrykCFWkZw42
+        9w1Yqr98Grn7Ar7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9m14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
         Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
         8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
         0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
@@ -44,148 +44,121 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3XrWUGr1fKw45Jr4xCF4fGrg_yoWxtF47pa
         6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
         AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
         s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqAp5UUUUU=
+        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUc6pPUUUUU=
 X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch adds support for non-rixi, based on [1].
+This reverts commit 0115f6cbf26663c86496bc56eeea293f85b77897.
 
-MIPS page fault path take 1 tlb miss + 2 tlb invalid exceptions, the
-second tlb invalid excpetion is just caused by __update_tlb from
-do_page_fault writing tlb without _PAGE_VALID set. With this patch, it
-only take 1 tlb miss + 1 tlb invalid exceptions
-
-[1]: https://lkml.kernel.org/lkml/1591416169-26666-1-git-send-email-maobibo@loongson.cn/
+The fix in 0115f6cbf26663c86496bc56eeea293f85b77897 is two late, since
+__update_tlb hit the same problem first. So let __update_tlb fix it
 
 Signed-off-by: Huang Pei <huangpei@loongson.cn>
 ---
- arch/mips/include/asm/pgtable.h | 32 +++++++++++++++-----------------
- arch/mips/mm/cache.c            | 25 +++++++++++++------------
- mm/memory.c                     |  3 ---
- 3 files changed, 28 insertions(+), 32 deletions(-)
+ arch/mips/mm/tlb-r4k.c | 15 ++++++++++++++-
+ arch/mips/mm/tlbex.c   | 25 ++++---------------------
+ 2 files changed, 18 insertions(+), 22 deletions(-)
 
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index dd7a0f552cac..aaafe3d6a0a1 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -25,22 +25,22 @@
- struct mm_struct;
- struct vm_area_struct;
+diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+index 38e2894d5fa3..cb8afa326b2c 100644
+--- a/arch/mips/mm/tlb-r4k.c
++++ b/arch/mips/mm/tlb-r4k.c
+@@ -328,6 +328,7 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+ 	/* this could be a huge page  */
+ 	if (pmd_huge(*pmdp)) {
+ 		unsigned long lo;
++		unsigned long entryhi;
+ 		write_c0_pagemask(PM_HUGE_MASK);
+ 		ptep = (pte_t *)pmdp;
+ 		lo = pte_to_entrylo(pte_val(*ptep));
+@@ -335,7 +336,19 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+ 		write_c0_entrylo1(lo + (HPAGE_SIZE >> 7));
  
--#define PAGE_NONE	__pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
--				 _page_cachable_default)
--#define PAGE_SHARED	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
--				 _page_cachable_default)
--#define PAGE_COPY	__pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
--				 _page_cachable_default)
--#define PAGE_READONLY	__pgprot(_PAGE_PRESENT | \
--				 _page_cachable_default)
--#define PAGE_KERNEL	__pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
--				 _PAGE_GLOBAL | _page_cachable_default)
--#define PAGE_KERNEL_NC	__pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
--				 _PAGE_GLOBAL | _CACHE_CACHABLE_NONCOHERENT)
--#define PAGE_USERIO	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
--				 _page_cachable_default)
-+#define PAGE_NONE      __pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
-+                                _page_cachable_default)
-+#define PAGE_SHARED    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
-+                                __READABLE | _page_cachable_default)
-+#define PAGE_COPY      __pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
-+                                __READABLE | _page_cachable_default)
-+#define PAGE_READONLY  __pgprot(_PAGE_PRESENT |  __READABLE | \
-+                                _page_cachable_default)
-+#define PAGE_KERNEL    __pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
-+                                _PAGE_GLOBAL | _page_cachable_default)
-+#define PAGE_KERNEL_NC __pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
-+                                _PAGE_GLOBAL | _CACHE_CACHABLE_NONCOHERENT)
-+#define PAGE_USERIO    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
-+                                _page_cachable_default)
- #define PAGE_KERNEL_UNCACHED __pgprot(_PAGE_PRESENT | __READABLE | \
--			__WRITEABLE | _PAGE_GLOBAL | _CACHE_UNCACHED)
-+                       __WRITEABLE | _PAGE_GLOBAL | _CACHE_UNCACHED)
- 
- /*
-  * If _PAGE_NO_EXEC is not defined, we can't do page protection for
-@@ -414,8 +414,6 @@ static inline pte_t pte_mkyoung(pte_t pte)
- 	return pte;
- }
- 
--#define pte_sw_mkyoung	pte_mkyoung
--
- #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- static inline int pte_huge(pte_t pte)	{ return pte_val(pte) & _PAGE_HUGE; }
- 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index 3e81ba000096..ed75f2871aad 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -159,22 +159,23 @@ static inline void setup_protection_map(void)
- {
- 	if (cpu_has_rixi) {
- 		protection_map[0]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--		protection_map[1]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
-+		protection_map[1]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
- 		protection_map[2]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--		protection_map[3]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
--		protection_map[4]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[5]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[6]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[7]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
-+		protection_map[3]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
-+		protection_map[4]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[5]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[6]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[7]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
- 
- 		protection_map[8]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--		protection_map[9]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
-+		protection_map[9]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
- 		protection_map[10] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
--		protection_map[11] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
--		protection_map[12] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[13] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[14] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_WRITE);
--		protection_map[15] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_WRITE);
-+		protection_map[11] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | __READABLE);
-+		protection_map[12]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[13]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[14]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
-+		protection_map[15]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
+ 		mtc0_tlbw_hazard();
+-		if (idx < 0)
++		if (idx >= current_cpu_data.tlbsizevtlb) {
++		/* hit in FTLB.
++		 * Invalid it then tlbwr, since FTLB hold only base page*/
++			entryhi = read_c0_entryhi();
++			write_c0_entryhi(MIPS_ENTRYHI_EHINV);
++			tlb_write_indexed();
++			tlbw_use_hazard();
++			write_c0_entryhi(entryhi);
 +
++		}
++
++
++		if (idx < 0 || idx >= current_cpu_data.tlbsizevtlb)
+ 			tlb_write_random();
+ 		else
+ 			tlb_write_indexed();
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index 14f8ba93367f..9c4cd08c00d3 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -762,8 +762,7 @@ static void build_huge_update_entries(u32 **p, unsigned int pte,
+ static void build_huge_handler_tail(u32 **p, struct uasm_reloc **r,
+ 				    struct uasm_label **l,
+ 				    unsigned int pte,
+-				    unsigned int ptr,
+-				    unsigned int flush)
++				    unsigned int ptr)
+ {
+ #ifdef CONFIG_SMP
+ 	UASM_i_SC(p, pte, 0, ptr);
+@@ -772,22 +771,6 @@ static void build_huge_handler_tail(u32 **p, struct uasm_reloc **r,
+ #else
+ 	UASM_i_SW(p, pte, 0, ptr);
+ #endif
+-	if (cpu_has_ftlb && flush) {
+-		BUG_ON(!cpu_has_tlbinv);
+-
+-		UASM_i_MFC0(p, ptr, C0_ENTRYHI);
+-		uasm_i_ori(p, ptr, ptr, MIPS_ENTRYHI_EHINV);
+-		UASM_i_MTC0(p, ptr, C0_ENTRYHI);
+-		build_tlb_write_entry(p, l, r, tlb_indexed);
+-
+-		uasm_i_xori(p, ptr, ptr, MIPS_ENTRYHI_EHINV);
+-		UASM_i_MTC0(p, ptr, C0_ENTRYHI);
+-		build_huge_update_entries(p, pte, ptr);
+-		build_huge_tlb_write_entry(p, l, r, pte, tlb_random, 0);
+-
+-		return;
+-	}
+-
+ 	build_huge_update_entries(p, pte, ptr);
+ 	build_huge_tlb_write_entry(p, l, r, pte, tlb_indexed, 0);
+ }
+@@ -2278,7 +2261,7 @@ static void build_r4000_tlb_load_handler(void)
+ 		uasm_l_tlbl_goaround2(&l, p);
+ 	}
+ 	uasm_i_ori(&p, wr.r1, wr.r1, (_PAGE_ACCESSED | _PAGE_VALID));
+-	build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2, 1);
++	build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2);
+ #endif
  
- 	} else {
- 		protection_map[0] = PAGE_NONE;
-diff --git a/mm/memory.c b/mm/memory.c
-index 3a7779d9891d..834424ea8a24 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2705,7 +2705,6 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 		}
- 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
- 		entry = mk_pte(new_page, vma->vm_page_prot);
--		entry = pte_sw_mkyoung(entry);
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 		/*
- 		 * Clear the pte entry and flush it first, before updating the
-@@ -3386,7 +3385,6 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	__SetPageUptodate(page);
+ 	uasm_l_nopage_tlbl(&l, p);
+@@ -2334,7 +2317,7 @@ static void build_r4000_tlb_store_handler(void)
+ 	build_tlb_probe_entry(&p);
+ 	uasm_i_ori(&p, wr.r1, wr.r1,
+ 		   _PAGE_ACCESSED | _PAGE_MODIFIED | _PAGE_VALID | _PAGE_DIRTY);
+-	build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2, 1);
++	build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2);
+ #endif
  
- 	entry = mk_pte(page, vma->vm_page_prot);
--	entry = pte_sw_mkyoung(entry);
- 	if (vma->vm_flags & VM_WRITE)
- 		entry = pte_mkwrite(pte_mkdirty(entry));
+ 	uasm_l_nopage_tlbs(&l, p);
+@@ -2391,7 +2374,7 @@ static void build_r4000_tlb_modify_handler(void)
+ 	build_tlb_probe_entry(&p);
+ 	uasm_i_ori(&p, wr.r1, wr.r1,
+ 		   _PAGE_ACCESSED | _PAGE_MODIFIED | _PAGE_VALID | _PAGE_DIRTY);
+-	build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2, 0);
++	build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2);
+ #endif
  
-@@ -3661,7 +3659,6 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct page *page)
- 
- 	flush_icache_page(vma, page);
- 	entry = mk_pte(page, vma->vm_page_prot);
--	entry = pte_sw_mkyoung(entry);
- 	if (write)
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 	/* copy-on-write page */
+ 	uasm_l_nopage_tlbm(&l, p);
 -- 
 2.17.1
 
