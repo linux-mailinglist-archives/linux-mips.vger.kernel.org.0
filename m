@@ -2,148 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BAA2509CB
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Aug 2020 22:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C13250A1F
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Aug 2020 22:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbgHXULY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Aug 2020 16:11:24 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:51560 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725946AbgHXULV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 24 Aug 2020 16:11:21 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07OKAPgd023015;
-        Mon, 24 Aug 2020 13:11:14 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=j8wbXSb7Oi8M3ikjYAebD5DasDulkBee7Qt9TRNLGts=;
- b=M1PyAGHTjCp75G6eedWOuwK0kr7CTapbzQOGxkgYBPuV3YbG5ogbEuFWWkGhcwkYbEwC
- K2csNx6to8ZYFRUrsBS4B1WPxlCKwwbRjBORxcZ+fBVnGBq6ULrGpyVKHnQSKHaP7A9A
- q/0phdi+pNgbzrDtJQyUZugJbrr49hnL9jU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33316f1r1f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 24 Aug 2020 13:11:14 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 24 Aug 2020 13:11:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hoWR4E6i13o5Yhf/vNZLEh8IqMB+wjvLQ9PEgwW72G9iNnzX2qtfmya6NrgUhQgMdiU3b9rRs4d43dAiLKmmkNvc9qIOXRqKniP8Aq6Hi9z9pkpu7bCXf7W3SoyLvpan+0iGnU1UKMyt0fnDzrWKndIOf1lpTU0jqZ6VS0+JNzyaKyFnVdm24DemiuWeZitUXLc8Pi8XdNxRUf5J1BIt2KIPO2Mec47CHKF7m5Iak5gMRLDWVJ+kAPDuPTkvanJUe47TKU5RSpPERUwdAKTisqoHDhlrIlmZbkvvwdRt5SKEEHzilP/+E/HiRATKVCF8xxMVSam/zIiTvxWlHq6JhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j8wbXSb7Oi8M3ikjYAebD5DasDulkBee7Qt9TRNLGts=;
- b=BFnSrc2bMSnatJeN6HQM/vp2M4lrm9jMnXwpeX/Hd4lUEby7n+XCImhB9si87xPmcmFeludb3VOUhr8iayvMFVGzPkQ5IhX6wKiNeZ11eA7wzTcoZkPeF26k84gIURKpE2+aSGeo/vcUnZjwH29rf+zuBsqpwg23CWJQH6861wqPyxqSB1/SBrsfRx0mBMPGde8ij+daBDz2QZzDXmZSad1Vh0PvDCxEyqqIbMirCkxu8yfVSD1XauHJqvwukKWEAUcAnCJFo2jaM6itpK7VDB5bvbYhpw/jgxjwCXP/yUpA2eqhJUc62tTnYOAYrR7Bu/K13589CFRrhD/IjJxp4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j8wbXSb7Oi8M3ikjYAebD5DasDulkBee7Qt9TRNLGts=;
- b=RdwuC1KXg0hbIi1tBD5W0Ep77Rfrh/vYU0ZdrnYHCoQ6j16jlhfRBUZ93w2nJPKkHpXZx/UspYkDDalLwHV8g7JbrgV9sih4/5IcbeYsQMjEJHfjDdxoxTq7dlbe7s84bsW47Eox70iveZpE7UMOb5/izXakrR8z9mtTc0Yzw/A=
-Received: from BY5PR15MB3667.namprd15.prod.outlook.com (2603:10b6:a03:1f9::18)
- by BYAPR15MB2581.namprd15.prod.outlook.com (2603:10b6:a03:15a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Mon, 24 Aug
- 2020 20:11:13 +0000
-Received: from BY5PR15MB3667.namprd15.prod.outlook.com
- ([fe80::f4b9:8011:9aaa:e4ea]) by BY5PR15MB3667.namprd15.prod.outlook.com
- ([fe80::f4b9:8011:9aaa:e4ea%3]) with mapi id 15.20.3305.026; Mon, 24 Aug 2020
- 20:11:13 +0000
-From:   Nick Terrell <terrelln@fb.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "od@zcrc.me" <od@zcrc.me>
-Subject: Re: [PATCH 1/2] lib: decompress_unzstd: Limit output size
-Thread-Topic: [PATCH 1/2] lib: decompress_unzstd: Limit output size
-Thread-Index: AQHWd9hunYA3PypfW06cD4Fch/Sxu6lHtbsA
-Date:   Mon, 24 Aug 2020 20:11:12 +0000
-Message-ID: <8E3C6FC0-2DF0-49B5-9885-BA4AC81A117D@fb.com>
-References: <20200821162948.146947-1-paul@crapouillou.net>
-In-Reply-To: <20200821162948.146947-1-paul@crapouillou.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: crapouillou.net; dkim=none (message not signed)
- header.d=none;crapouillou.net; dmarc=none action=none header.from=fb.com;
-x-originating-ip: [2620:10d:c090:400::5:d050]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ce39047c-d70b-46fd-64a2-08d84869d97d
-x-ms-traffictypediagnostic: BYAPR15MB2581:
-x-microsoft-antispam-prvs: <BYAPR15MB2581A251337AF87402D71BE2AB560@BYAPR15MB2581.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zb5J5elSJ1++9xlmfKJae00+eQSzxkD6nHUS2J+A5ifMoVGtynonCTSoEFWt5w3l1Wv8IWvKNtRReB1p9ZHc8szbRJjEvI6LuPXULlFqleuUaWGK7y/h9kj/+HcwPUrAQtif+7Ylw9vV15rK0qwVbfTMi5q2qpWA8IsvlaLkw14uA4iBzxkIASx244rhmeN38b1pkoSJDRh+W1yhpHMG+rTD+Zbx8lWFyZDwBaI6ydYdsOpGLx+7xGm7aEQ8yCn76+hCBA1CaUEaiiNajXR1cW/6ENsysnw+q3OTYsvPlXNCsLvk9nyZ4V29MF1yeXf4WoO0ZAcOSTeXXMRITpqmxQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3667.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(376002)(346002)(366004)(136003)(66556008)(316002)(8936002)(6512007)(6506007)(53546011)(2906002)(8676002)(76116006)(71200400001)(83380400001)(64756008)(66476007)(66946007)(54906003)(66446008)(2616005)(86362001)(6486002)(4326008)(478600001)(33656002)(5660300002)(36756003)(6916009)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: WhvyZHg1VGfIhb3kBEWmvXQghrmlCFbVEblMIfJl7nblP3gwq9aytJKKiUjIClmLGFV0enN5o7z3QqZtHm4u7SQ5I0Wggv8u56AGmXkmUJ3CWx7K9AlPqmWKVEob9GbMjWOffVbGl6EkU0w7j/hxfQYYgA5ejqssmoSwGXcfMC69LOOp6X8W+VUpVh4/hnB+c1oGXO3Lj6IysiT8V4Hpr+wUH1rzICyfynWyXbt23pJRWA20wH0gwP7pjGKkVNSrsGbybUO7HTYZQbeZIvzTCWBTXYDmRuv1oXbLS1gp48yEfLXSMPiHinJqDkYtrt7nN56TqeIEvlBSFJ5LPYMQclI3Q18cGWVIqp3GRTiuR6U/z28uJJy4QRzOqOUyUABPzi4m4cNb9Uj2JMRca83ZTL5QTdpTKZzTSwpq0Y16nCW0A+SK9KzL8KEW/Hi6qbzLIMtOHiijPdFvg4Z1migtogTTjdq68zbfZ2HnrHxOx+P4EyEpgXl9O70GMov2/KJrnNJwYQ/nMF8Xxpp/peh59sc0ttfcP9iF2Go2SgLMwpn5UiUM5YVBs1kidnvqgocTyaPPa6L8Seca9agsal4cRjH9yMJFeG65wf3jPy72PYoNsf167ma2W1H3uSnK2TIv/KaUK2A1JWl/vjD20l03KxbvbcMpUXv2j2g7KZBEiCIx8x7iim5pr73DDkON3d5t
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <173D7138118501489F1DCBACA0A7AAAC@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726856AbgHXUiM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Aug 2020 16:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726845AbgHXUiI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Aug 2020 16:38:08 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED2FC061574;
+        Mon, 24 Aug 2020 13:38:08 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id i10so5203441pgk.1;
+        Mon, 24 Aug 2020 13:38:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IqnBw4YezwXNy4Z35/omKW3Gx0GKaPbKIPkRVM54FFc=;
+        b=vMotFDjCc0HJkEwloXq6HyY7rBr932KBm2R6nuVdPKl+Fq1QNDukaMloX6bDfd3ubD
+         W4U/l6MXIcJuCziOB06bnsO3F9rIeRy73FAWafrKYQ5l8ty1g827l+wO1+wr/CfL4hYs
+         sXDQB/a/f0f5Ik89VjuHD/34MQml6aTIBtF0r3kQQigatK5628WTAU0UuOiRIlEN6t0h
+         wALpFYD8GUhQc+YuQGdcwjm+5PB5Asui4S50t1tD7UPalQDbR1yalwNT+OpwxqEFFTL3
+         +8kcm2oF3cemwkWqKvwgjHWGcMkStRB81Rq0fyqXoxHa3ZYSr+F7spvNodYv5bOwzUKG
+         r9FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=IqnBw4YezwXNy4Z35/omKW3Gx0GKaPbKIPkRVM54FFc=;
+        b=TVBM/N+zDrStsjUnsSkTyWC3r0f1zh+Bobu4QsSL6AJ09UDanj5aHhoPa71OGnBx7R
+         azbRqZuzmAeqcmFlpY24EF02A0CYMtEfKrdGPpLxOIQg5Gpsij9HhNJiBZhw/q79i0r4
+         7z4iN+sZ4UnHqe2jugg4IhUdf53xT7kDsRrqowI6fcaia3y28EXUgG1HHBPmsgsC85jO
+         agcocZBrYasGuu7OsV70AKtsTKh/ys1SyUnUI/v5bP77cBsbvxBuLaa4fWWZhHbS/ZYE
+         5Aa7L9/ILJjZG0pXDqu/+kko7AklD62zXUU9tnKoICu+DCdbgE/iOeWytgBKLLQvmmE3
+         lzIQ==
+X-Gm-Message-State: AOAM531u2aGGVDHCOKyuV3Qwz+3gMU8JQyaRmPvrF3qO/Q1QETG5n1XY
+        DsPFo3o7RvkMqf1EZYzkvctQ9R6WXHM=
+X-Google-Smtp-Source: ABdhPJxA3KhR9hC/U7Iq5mqPkZ56tXQWasKsA995K4xfkem3F2j4wVNX1RC/mfteTHmtqHYx4nTTBg==
+X-Received: by 2002:a63:4456:: with SMTP id t22mr4539632pgk.362.1598301487463;
+        Mon, 24 Aug 2020 13:38:07 -0700 (PDT)
+Received: from [10.67.50.75] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id mp1sm422526pjb.27.2020.08.24.13.38.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Aug 2020 13:38:06 -0700 (PDT)
+Subject: Re: [PATCH 00/12] Convert WAR defines to config options
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20200824163257.44533-1-tsbogend@alpha.franken.de>
+ <430f374e-d87e-0302-5b83-70670125f873@gmail.com>
+ <20200824172850.GA11179@alpha.franken.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ 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
+ M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
+Message-ID: <84cce4f0-8a7a-4421-c6f3-764999c985d6@gmail.com>
+Date:   Mon, 24 Aug 2020 13:37:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3667.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce39047c-d70b-46fd-64a2-08d84869d97d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2020 20:11:12.9065
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9yawshEyCfornSHr9ZbcWld3dk67mQ0985bKFRmBlUfqNgyxZC7dtzGpnCZ76pKT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2581
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-24_12:2020-08-24,2020-08-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- spamscore=0 impostorscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999
- malwarescore=0 adultscore=0 priorityscore=1501 suspectscore=0 phishscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008240158
-X-FB-Internal: deliver
+In-Reply-To: <20200824172850.GA11179@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-DQoNCj4gT24gQXVnIDIxLCAyMDIwLCBhdCA5OjI5IEFNLCBQYXVsIENlcmN1ZWlsIDxwYXVsQGNy
-YXBvdWlsbG91Lm5ldD4gd3JvdGU6DQo+IA0KPiBUaGUgenN0ZCBkZWNvbXByZXNzaW9uIGNvZGUs
-IGFzIGl0IGlzIHJpZ2h0IG5vdywgd2lsbCBoYXZlIGludGVybmFsDQo+IHZhbHVlcyBvdmVyZmxv
-dyBvbiAzMi1iaXQgc3lzdGVtcyB3aGVuIHRoZSBvdXRwdXQgc2l6ZSBpcyBMT05HX01BWC4NCj4g
-DQo+IFVudGlsIHNvbWVvbmUgc21hcnRlciB0aGFuIG1lIGNhbiBmaWd1cmUgb3V0IGhvdyB0byBm
-aXggdGhlIHpzdGQgY29kZQ0KPiBwcm9wZXJseSwgbGltaXQgdGhlIGRlc3RpbmF0aW9uIGJ1ZmZl
-ciBzaXplIHRvIDUxMiBNaUIsIHdoaWNoIHNob3VsZCBiZQ0KPiBlbm91Z2ggZm9yIGV2ZXJ5Ym9k
-eSwgaW4gb3JkZXIgdG8gbWFrZSBpdCB1c2FibGUgb24gMzItYml0IHN5c3RlbXMuDQoNCkNhbiB5
-b3UgYnVtcCB0aGUgc2l6ZSB1cCB0byAyR0I/IEkgc3VzcGVjdCB0aGUgcHJvYmxlbSBpbnNpZGUg
-b2YgenN0ZA0KaXMgYW4gb2ZmLWJ5LW9uZSBlcnJvciBvciBzb21ldGhpbmcgc2ltaWxhciwgc28g
-Z2V0dGluZyBjbG9zZXIgdG8gdGhlIGxpbWl0DQpzaG91bGRuJ3QgYmUgYSBwcm9ibGVtLiBJ4oCZ
-ZCBmZWVsIG1vcmUgY29tZm9ydGFibGUgd2l0aCAyR0IsIHNpbmNlDQprZXJuZWxzIGNhbiBnZXQg
-cHJldHR5IGxhcmdlLg0KDQpIbW0sIHpzdGQgc2hvdWxkbuKAmXQgYmUgb3ZlcmZsb3dpbmcgdGhh
-dCB2YWx1ZS4gSeKAmW0gY3VycmVudGx5IHByZXBhcmluZw0KYSBwYXRjaCB0byB1cGRhdGluZyB0
-aGUgdmVyc2lvbiBvZiB6c3RkIGluIHRoZSBrZXJuZWwsIGFuZCB1c2luZyB1cHN0cmVhbQ0KZGly
-ZWN0bHkuIEkgd2lsbCBhZGQgYSB0ZXN0IHVwc3RyZWFtIGluIDMyLWJpdCBtb2RlIHRvIGVuc3Vy
-ZSB0aGF0IHdlIGRvbuKAmXQNCm92ZXJmbG93IGEgMzItYml0IHNpemVfdCwgc28gdGhpcyB3aWxs
-IGJlIGZpeGVkIGFmdGVyIHRoZSB1cGRhdGUuDQoNCi1OaWNrDQoNCj4gU2lnbmVkLW9mZi1ieTog
-UGF1bCBDZXJjdWVpbCA8cGF1bEBjcmFwb3VpbGxvdS5uZXQ+DQo+IC0tLQ0KPiBsaWIvZGVjb21w
-cmVzc191bnpzdGQuYyB8IDMgKystDQo+IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyks
-IDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9saWIvZGVjb21wcmVzc191bnpzdGQu
-YyBiL2xpYi9kZWNvbXByZXNzX3VuenN0ZC5jDQo+IGluZGV4IDBhZDJjMTU0NzllZC4uZTFjMDNi
-MWVhYTZlIDEwMDY0NA0KPiAtLS0gYS9saWIvZGVjb21wcmVzc191bnpzdGQuYw0KPiArKysgYi9s
-aWIvZGVjb21wcmVzc191bnpzdGQuYw0KPiBAQCAtNzcsNiArNzcsNyBAQA0KPiANCj4gI2luY2x1
-ZGUgPGxpbnV4L2RlY29tcHJlc3MvbW0uaD4NCj4gI2luY2x1ZGUgPGxpbnV4L2tlcm5lbC5oPg0K
-PiArI2luY2x1ZGUgPGxpbnV4L3NpemVzLmg+DQo+ICNpbmNsdWRlIDxsaW51eC96c3RkLmg+DQo+
-IA0KPiAvKiAxMjhNQiBpcyB0aGUgbWF4aW11bSB3aW5kb3cgc2l6ZSBzdXBwb3J0ZWQgYnkgenN0
-ZC4gKi8NCj4gQEAgLTE3OSw3ICsxODAsNyBAQCBzdGF0aWMgaW50IElOSVQgX191bnpzdGQodW5z
-aWduZWQgY2hhciAqaW5fYnVmLCBsb25nIGluX2xlbiwNCj4gCXNpemVfdCByZXQ7DQo+IA0KPiAJ
-aWYgKG91dF9sZW4gPT0gMCkNCj4gLQkJb3V0X2xlbiA9IExPTkdfTUFYOyAvKiBubyBsaW1pdCAq
-Lw0KPiArCQlvdXRfbGVuID0gU1pfNTEyTTsgLyogc2hvdWxkIGJlIGJpZyBlbm91Z2gsIHJpZ2h0
-PyAqLw0KPiANCj4gCWlmIChmaWxsID09IE5VTEwgJiYgZmx1c2ggPT0gTlVMTCkNCj4gCQkvKg0K
-PiAtLSANCj4gMi4yOC4wDQo+IA0KDQo=
+On 8/24/20 10:28 AM, Thomas Bogendoerfer wrote:
+> On Mon, Aug 24, 2020 at 10:10:07AM -0700, Florian Fainelli wrote:
+>> On 8/24/20 9:32 AM, Thomas Bogendoerfer wrote:
+>>> This patches convert workaround (WAR) defines into config options and
+>>> gets rid of mach-*/war.h files.
+>>
+>> Most (all but octeon?) of those platforms are not particularly popular
+>> or widespread, but is not this going to make it harder for distributions
+>> and people doing CI by having an explosion in the number of
+>> configurations to test?
+> 
+> all options are only selected by arch/mips/Kconfig, so nothing should
+> change for any CI.
+
+OK, had missed that part, thanks.
+-- 
+Florian
