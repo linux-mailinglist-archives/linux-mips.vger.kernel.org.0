@@ -2,279 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8644225063F
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Aug 2020 19:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9D1250504
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Aug 2020 19:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728175AbgHXQfU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Aug 2020 12:35:20 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50666 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728078AbgHXQd1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:33:27 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 3508CAF85;
-        Mon, 24 Aug 2020 16:33:53 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 06/12] MIPS: Convert ICACHE_REFILLS_WORKAROUND_WAR into a config option
-Date:   Mon, 24 Aug 2020 18:32:48 +0200
-Message-Id: <20200824163257.44533-7-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200824163257.44533-1-tsbogend@alpha.franken.de>
+        id S1726953AbgHXRKt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Aug 2020 13:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728094AbgHXRKV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Aug 2020 13:10:21 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B62C061573;
+        Mon, 24 Aug 2020 10:10:20 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id b16so9470080ioj.4;
+        Mon, 24 Aug 2020 10:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IMPieJ6G/FjISqeIaeyMBO8mjHCzr6gbFdzDsbc9RjU=;
+        b=mKXT5UYxS5oCUEqFkSp6EnQe1A8HIM5kdPJpSYXFRQFw4WQkEBNLmTwb7JMoZRmZLW
+         Mya22X3jCngtDbO65fbmL532dvtLsoQwFKTb6Ki9/ZUBfzrlCR0AmHxK7IMsE1m9U7lU
+         t0McOpd//phZkJUXj28SB7BJ8sRXxyEKL2OAdnOWpQtHtoxTuaUBUBSfpnJ9YKP4n5GS
+         OSEtYFRxR3/WnXpseiGYj5+eaVb9JuwsAQosg3ezjmZysbOeLFlm5En4asBAzehlM3b/
+         n6JWxIam76vJ4IJ2iFTRGPKCjfMJlFiAEmU0ZM4bVUpMk5qWRgL0M/WDLoyLpBqN4mRQ
+         2YYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IMPieJ6G/FjISqeIaeyMBO8mjHCzr6gbFdzDsbc9RjU=;
+        b=XgVCv45o6CbNOgX1ou1pbvDxFK8rTRmCehbogVwLwzXcDzeIzDsNCRazb/EUG1URtp
+         U42AaGn7DUSEE0ytYh37Q3FHIfcdc5ffBqnZ7PDPsvMWrxlMsUn+TE5YNyHfbQD9uvh+
+         EPFIhPKBdeCo6xW8PFQ6kDBC4GXd2nc/NXV4x7lLru4iKw5CUydvQFjjX+qbPUKaWcH1
+         ntY4CLDTdyuwrt5Z6kBT4hlQsOuSJyEqr0TzJzoYFUnEgfjgnmFMn0Ld0i5qs53okg7J
+         7B4TH7f2RuyhN9oEKTnPsZF1upXxGTJHHTNEXut3d27PJYp1UcUJUB+zPR4D7HuFN2mH
+         dzVQ==
+X-Gm-Message-State: AOAM530OFKLfD9mnjDCWQKI1nwjfwkdpclWDYGrZQBgtBAoUt3JTa2Cq
+        6lG0vTYpFwb+M/kWzuH/26ASf61kKkk=
+X-Google-Smtp-Source: ABdhPJzPD0GqZZcrOIp+/3GUKKV/wDisq+HkkvnR/EzkahjQjOsvqCIkJlui1S+vEVoOMGuM4r6p7Q==
+X-Received: by 2002:a6b:7d42:: with SMTP id d2mr5632006ioq.17.1598289015607;
+        Mon, 24 Aug 2020 10:10:15 -0700 (PDT)
+Received: from [10.67.50.75] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id z11sm1386609iop.37.2020.08.24.10.10.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Aug 2020 10:10:14 -0700 (PDT)
+Subject: Re: [PATCH 00/12] Convert WAR defines to config options
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
 References: <20200824163257.44533-1-tsbogend@alpha.franken.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ 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
+ M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
+Message-ID: <430f374e-d87e-0302-5b83-70670125f873@gmail.com>
+Date:   Mon, 24 Aug 2020 10:10:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200824163257.44533-1-tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use a new config option to enable I-cache refill workaround and remove
-define from different war.h files.
+On 8/24/20 9:32 AM, Thomas Bogendoerfer wrote:
+> This patches convert workaround (WAR) defines into config options and
+> gets rid of mach-*/war.h files.
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/Kconfig                              |  9 +++++++++
- arch/mips/include/asm/mach-cavium-octeon/war.h |  1 -
- arch/mips/include/asm/mach-generic/war.h       |  1 -
- arch/mips/include/asm/mach-ip22/war.h          |  1 -
- arch/mips/include/asm/mach-ip27/war.h          |  1 -
- arch/mips/include/asm/mach-ip28/war.h          |  1 -
- arch/mips/include/asm/mach-ip30/war.h          |  1 -
- arch/mips/include/asm/mach-ip32/war.h          |  1 -
- arch/mips/include/asm/mach-malta/war.h         |  1 -
- arch/mips/include/asm/mach-rc32434/war.h       |  1 -
- arch/mips/include/asm/mach-rm/war.h            |  1 -
- arch/mips/include/asm/mach-sibyte/war.h        |  1 -
- arch/mips/include/asm/mach-tx49xx/war.h        |  1 -
- arch/mips/include/asm/war.h                    | 10 ----------
- arch/mips/kernel/signal.c                      |  8 +++++++-
- 15 files changed, 16 insertions(+), 23 deletions(-)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 7db9611d7800..c32f6160f854 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -568,6 +568,7 @@ config MIPS_MALTA
- 	select SYS_SUPPORTS_VPE_LOADER
- 	select SYS_SUPPORTS_ZBOOT
- 	select USE_OF
-+	select WAR_ICACHE_REFILLS
- 	select ZONE_DMA32 if 64BIT
- 	help
- 	  This enables support for the MIPS Technologies Malta evaluation
-@@ -756,6 +757,7 @@ config SGI_IP32
- 	select SYS_HAS_CPU_NEVADA
- 	select SYS_SUPPORTS_64BIT_KERNEL
- 	select SYS_SUPPORTS_BIG_ENDIAN
-+	select WAR_ICACHE_REFILLS
- 	help
- 	  If you want this kernel to run on SGI O2 workstation, say Y here.
- 
-@@ -2666,6 +2668,13 @@ config WAR_R4600_V2_HIT_CACHEOP
- config WAR_TX49XX_ICACHE_INDEX_INV
- 	bool
- 
-+# The RM7000 processors and the E9000 cores have a bug (though PMC-Sierra
-+# opposes it being called that) where invalid instructions in the same
-+# I-cache line worth of instructions being fetched may case spurious
-+# exceptions.
-+config WAR_ICACHE_REFILLS
-+	bool
-+
- #
- # - Highmem only makes sense for the 32-bit kernel.
- # - The current highmem code will only work properly on physically indexed
-diff --git a/arch/mips/include/asm/mach-cavium-octeon/war.h b/arch/mips/include/asm/mach-cavium-octeon/war.h
-index 1cb30485dc94..1061917152c6 100644
---- a/arch/mips/include/asm/mach-cavium-octeon/war.h
-+++ b/arch/mips/include/asm/mach-cavium-octeon/war.h
-@@ -11,7 +11,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #define R10000_LLSC_WAR			0
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-generic/war.h b/arch/mips/include/asm/mach-generic/war.h
-index 79530836cc79..966f40aedf16 100644
---- a/arch/mips/include/asm/mach-generic/war.h
-+++ b/arch/mips/include/asm/mach-generic/war.h
-@@ -10,7 +10,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #define R10000_LLSC_WAR			0
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-ip22/war.h b/arch/mips/include/asm/mach-ip22/war.h
-index 35286ba3ec57..99f6531e5b9b 100644
---- a/arch/mips/include/asm/mach-ip22/war.h
-+++ b/arch/mips/include/asm/mach-ip22/war.h
-@@ -10,7 +10,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #define R10000_LLSC_WAR			0
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/mach-ip27/war.h
-index a18293c16ade..d8dfa7258bea 100644
---- a/arch/mips/include/asm/mach-ip27/war.h
-+++ b/arch/mips/include/asm/mach-ip27/war.h
-@@ -10,7 +10,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #define R10000_LLSC_WAR			1
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-ip28/war.h b/arch/mips/include/asm/mach-ip28/war.h
-index 1a6092e5c7b3..f252df761ec8 100644
---- a/arch/mips/include/asm/mach-ip28/war.h
-+++ b/arch/mips/include/asm/mach-ip28/war.h
-@@ -10,7 +10,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #define R10000_LLSC_WAR			1
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-ip30/war.h b/arch/mips/include/asm/mach-ip30/war.h
-index 031c7b9c5236..58ff9ca345b7 100644
---- a/arch/mips/include/asm/mach-ip30/war.h
-+++ b/arch/mips/include/asm/mach-ip30/war.h
-@@ -7,7 +7,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #ifdef CONFIG_CPU_R10000
- #define R10000_LLSC_WAR			1
- #else
-diff --git a/arch/mips/include/asm/mach-ip32/war.h b/arch/mips/include/asm/mach-ip32/war.h
-index 25552158fa3a..ca3efe457ae0 100644
---- a/arch/mips/include/asm/mach-ip32/war.h
-+++ b/arch/mips/include/asm/mach-ip32/war.h
-@@ -10,7 +10,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	1
- #define R10000_LLSC_WAR			0
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-malta/war.h b/arch/mips/include/asm/mach-malta/war.h
-index 9b0803537bce..b7827eb09375 100644
---- a/arch/mips/include/asm/mach-malta/war.h
-+++ b/arch/mips/include/asm/mach-malta/war.h
-@@ -10,7 +10,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	1
- #define R10000_LLSC_WAR			0
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-rc32434/war.h b/arch/mips/include/asm/mach-rc32434/war.h
-index 924b51b9a340..b7827eb09375 100644
---- a/arch/mips/include/asm/mach-rc32434/war.h
-+++ b/arch/mips/include/asm/mach-rc32434/war.h
-@@ -10,7 +10,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #define R10000_LLSC_WAR			0
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-rm/war.h b/arch/mips/include/asm/mach-rm/war.h
-index 0536972b24c8..fe04d059dd0c 100644
---- a/arch/mips/include/asm/mach-rm/war.h
-+++ b/arch/mips/include/asm/mach-rm/war.h
-@@ -10,7 +10,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #define R10000_LLSC_WAR			0
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-sibyte/war.h b/arch/mips/include/asm/mach-sibyte/war.h
-index 9e006fdcf38a..7c376f6eee9b 100644
---- a/arch/mips/include/asm/mach-sibyte/war.h
-+++ b/arch/mips/include/asm/mach-sibyte/war.h
-@@ -24,7 +24,6 @@ extern int sb1250_m3_workaround_needed(void);
- 
- #endif
- 
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #define R10000_LLSC_WAR			0
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/mach-tx49xx/war.h b/arch/mips/include/asm/mach-tx49xx/war.h
-index 9293c5f9ffb2..5768889c20a7 100644
---- a/arch/mips/include/asm/mach-tx49xx/war.h
-+++ b/arch/mips/include/asm/mach-tx49xx/war.h
-@@ -10,7 +10,6 @@
- 
- #define BCM1250_M3_WAR			0
- #define SIBYTE_1956_WAR			0
--#define ICACHE_REFILLS_WORKAROUND_WAR	0
- #define R10000_LLSC_WAR			0
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-diff --git a/arch/mips/include/asm/war.h b/arch/mips/include/asm/war.h
-index 7a69641de57b..a0942821d67d 100644
---- a/arch/mips/include/asm/war.h
-+++ b/arch/mips/include/asm/war.h
-@@ -93,16 +93,6 @@
- #error Check setting of SIBYTE_1956_WAR for your platform
- #endif
- 
--/*
-- * The RM7000 processors and the E9000 cores have a bug (though PMC-Sierra
-- * opposes it being called that) where invalid instructions in the same
-- * I-cache line worth of instructions being fetched may case spurious
-- * exceptions.
-- */
--#ifndef ICACHE_REFILLS_WORKAROUND_WAR
--#error Check setting of ICACHE_REFILLS_WORKAROUND_WAR for your platform
--#endif
--
- /*
-  * On the R10000 up to version 2.6 (not sure about 2.7) there is a bug that
-  * may cause ll / sc and lld / scd sequences to execute non-atomically.
-diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
-index a0262729cd4c..f44265025281 100644
---- a/arch/mips/kernel/signal.c
-+++ b/arch/mips/kernel/signal.c
-@@ -545,6 +545,12 @@ int restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
- 	return err ?: protected_restore_fp_context(sc);
- }
- 
-+#ifdef CONFIG_WAR_ICACHE_REFILLS
-+#define SIGMASK		~(cpu_icache_line_size()-1)
-+#else
-+#define SIGMASK		ALMASK
-+#endif
-+
- void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
- 			  size_t frame_size)
- {
-@@ -565,7 +571,7 @@ void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
- 
- 	sp = sigsp(sp, ksig);
- 
--	return (void __user *)((sp - frame_size) & (ICACHE_REFILLS_WORKAROUND_WAR ? ~(cpu_icache_line_size()-1) : ALMASK));
-+	return (void __user *)((sp - frame_size) & SIGMASK);
- }
- 
- /*
+Most (all but octeon?) of those platforms are not particularly popular
+or widespread, but is not this going to make it harder for distributions
+and people doing CI by having an explosion in the number of
+configurations to test?
 -- 
-2.16.4
-
+Florian
