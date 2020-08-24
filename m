@@ -2,103 +2,209 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B08224F800
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Aug 2020 11:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D2F24FB3B
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Aug 2020 12:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726008AbgHXJY0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Aug 2020 05:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbgHXJYY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Aug 2020 05:24:24 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB585C061573
-        for <linux-mips@vger.kernel.org>; Mon, 24 Aug 2020 02:24:23 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id g6so2001325pjl.0
-        for <linux-mips@vger.kernel.org>; Mon, 24 Aug 2020 02:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=0sZaz/VyycuoChmF6tm3frTdEvnNpUVNY3yIXV61ue8=;
-        b=tLJJyDXNj8q3l725W6RKZQSBQ8FPEejYaE8AyRfhOea+oa72TpVoDkp2MyD4/8Bns4
-         hXxQhjfvx/c3IVOxhv9GTdLdPaGLfnRX1gAwUgZjoC7c6aLG5GgKck90mtGGI5tKQbWO
-         fRR0cqAM0+wbBvQyJ6ZsMs7vr+AU1G1+j7dghxMvP2KX4GslrGC2PYTcv5/JhYee3wXo
-         2M226V18lhx5Bto8k8Bm1mbnkUHPpvbDjFebQlC//EShUx2PLIqkr2L1doPosz1lBcCV
-         5ihObmkc+VcBg0yJKricRNnpmv3OmAMR1t2+qjPonZOpPtexqqKWULtW1AI4XiSFTDlQ
-         gkPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=0sZaz/VyycuoChmF6tm3frTdEvnNpUVNY3yIXV61ue8=;
-        b=SER1B0RAoFfidx8o8gjEyl0ia/5PAA+akfUX+03e/H48z4xkbPMuw2zCJcCOWuYaes
-         Im2LPKhN0Uj3Cl+6XRhALuG+lVckD1PLY++/q0/wyxiMtPsPuTicjyNHj6xC5vwTRcgU
-         Bz4d5pA6FoEi9p6O2l2ikz7p6VWnY86V+cwgXaSWVj/1fYLJvD70I7SFG3WxnUwqjLkg
-         +8DNJsYUZCdlY3iY9+Xo5WZvgkRpZQBHwFH5gFYCKT7IppesU5FFu5+Lbi0Cg5+mRASP
-         pM8Yb6jzCgCbsHt4/JHYm6UgjlXRzXIK7ckXJQRuQj1QaOuFBgKo0o8LmegNXRKJcp3K
-         4FAA==
-X-Gm-Message-State: AOAM53004yq82IPsKgNrB+zSF6th8PUdzbLNb/p9+Svqwwkz0eaZ5TBP
-        jUjW7q5fRJAK5uoaaTM5STY=
-X-Google-Smtp-Source: ABdhPJwGdFpotcmFT6hIIyNH31Qn9lFoF1orJ+IB/DI/R8nL3ojmi/ZiUytPtefY0LFNu1G1rOWjHw==
-X-Received: by 2002:a17:902:8bcb:: with SMTP id r11mr3149623plo.65.1598261062865;
-        Mon, 24 Aug 2020 02:24:22 -0700 (PDT)
-Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id gz7sm9230808pjb.45.2020.08.24.02.24.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Aug 2020 02:24:22 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH V4 2/2] MIPS: Loongson-3: Calculate ra properly when unwinding the stack
-Date:   Mon, 24 Aug 2020 17:27:17 +0800
-Message-Id: <1598261237-21342-2-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
-In-Reply-To: <1598261237-21342-1-git-send-email-chenhc@lemote.com>
-References: <1598261237-21342-1-git-send-email-chenhc@lemote.com>
+        id S1725968AbgHXKT7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Aug 2020 06:19:59 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:39210 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725906AbgHXKT7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 24 Aug 2020 06:19:59 -0400
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [222.209.10.89])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxqMU_lENfWVwNAA--.18667S2;
+        Mon, 24 Aug 2020 18:19:50 +0800 (CST)
+Date:   Mon, 24 Aug 2020 18:19:43 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     linux-mips@vger.kernel.org, lixuefeng@loongson.cn,
+        gaojuxin@loongson.cn, yangtiezhu@loongson.cn,
+        tsbogend@alpha.franken.de
+Subject: Re: [PATCH 3/3] Revert "MIPS: Flush wrong invalid FTLB entry for
+ huge page"
+Message-ID: <20200824101943.s2l4hfvqlz3zpyqq@ambrosehua-HP-xw6600-Workstation>
+References: <20200821072329.18006-1-huangpei@loongson.cn>
+ <20200821072329.18006-3-huangpei@loongson.cn>
+ <CAAhV-H4pg0pL_Sh+ibYcPs2QjzMJxDOhNwBi3AT=481NOB-5zA@mail.gmail.com>
+ <20200822042707.5754967.41900.8563@loongson.cn>
+ <CAAhV-H72uX0nPLgTBp+cA71Q1G97M98WA=e__8XvutTpD5jgAQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H72uX0nPLgTBp+cA71Q1G97M98WA=e__8XvutTpD5jgAQ@mail.gmail.com>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9DxqMU_lENfWVwNAA--.18667S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jr17CFy3ZryxWryxJryUGFg_yoW7CF13pr
+        9YyFs8AF4jqr1UWr1vvF90qF1S93yDK392qrsrtFy5Xa4qy3Z3GFs5Kr1Fyr97CFZ7Zw4I
+        9r1jgrZxWF97ZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUym14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l
+        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+        AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+        cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
+        8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+        14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Loongson-3 has 16-bytes load/store instructions: gslq and gssq. This
-patch calculate ra properly when unwinding the stack, if ra is saved
-by gssq and restored by gslq.
+On Mon, Aug 24, 2020 at 03:13:20PM +0800, Huacai Chen wrote:
 
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/kernel/process.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+the fix in __update_tlb is same as [1], which is to check if the CP0
+index returned by tlbp is in FTLB range, if so, then invalidate this
+entry and rewrite it with Huge Page by tlbwr again, otherwise tlbwr 
+when not hit or tlbwi when hit in VTLB range.
 
-diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-index 9412314..c4e9fd8 100644
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -279,7 +279,21 @@ static inline int is_ra_save_ins(union mips_instruction *ip, int *poff)
- 		*poff = ip->i_format.simmediate / sizeof(ulong);
- 		return 1;
- 	}
--
-+#ifdef CONFIG_CPU_LOONGSON64
-+	if ((ip->loongson3_lswc2_format.opcode == swc2_op) &&
-+		      (ip->loongson3_lswc2_format.ls == 1) &&
-+		      (ip->loongson3_lswc2_format.fr == 0) &&
-+		      (ip->loongson3_lswc2_format.base == 29)) {
-+		if (ip->loongson3_lswc2_format.rt == 31) {
-+			*poff = ip->loongson3_lswc2_format.offset << 1;
-+			return 1;
-+		}
-+		if (ip->loongson3_lswc2_format.rq == 31) {
-+			*poff = (ip->loongson3_lswc2_format.offset << 1) + 1;
-+			return 1;
-+		}
-+	}
-+#endif
- 	return 0;
- #endif
- }
--- 
-2.7.0
+The previous patch, aka patch 2, just reveal the problem *explicitly*. Just 
+with Patch 3 but without Patch 2, the __update_tlb would write a Huge Page
+mapping into VTLB without _PAGE_VALID set successfully, which still need [1]
+to cover it in the second TLb Invalid exception, and make Patch 3 looks
+like DOES NOT WORK
+
+Anyway，Patch 3 can not fix it perfectly, without Patch 2
+
+> Hi, Pei,
+> 
+> On Sat, Aug 22, 2020 at 12:27 PM 黄沛 <huangpei@loongson.cn> wrote:
+> >
+> >
+> > ‎
+> >   原始消息
+> > 发件人： Huacai Chen
+> > 已发送： 2020年8月21日星期五 18:37
+> > 收件人： Huang Pei
+> > 抄送： Thomas Bogendoerfer; Paul Ambrose; Li Xuefeng; Yang Tiezhu; Gao Juxin; Fuxin Zhang; open list:MIPS
+> > 主题： Re: [PATCH 3/3] Revert "MIPS: Flush wrong invalid FTLB entry for huge page"
+> >
+> > Got it, it is "too late", anything else?
+> >
+> > I will re-send it next week
+> How to fix it in __update_tlb? the previous patch?
+> 
+> Huacai
+> >
+> >
+> > On Fri, Aug 21, 2020 at 3:24 PM Huang Pei <huangpei@loongson.cn> wrote:
+> > >
+> > > This reverts commit 0115f6cbf26663c86496bc56eeea293f85b77897.
+> > >
+> > > The fix in 0115f6cbf26663c86496bc56eeea293f85b77897 is two late, since
+> > Do you means "too late"?
+> >
+> > > __update_tlb hit the same problem first. So let __update_tlb fix it
+> > >
+> > > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > > ---
+> > > arch/mips/mm/tlb-r4k.c | 15 ++++++++++++++-
+> > > arch/mips/mm/tlbex.c | 25 ++++---------------------
+> > > 2 files changed, 18 insertions(+), 22 deletions(-)
+> > >
+> > > diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+> > > index 38e2894d5fa3..cb8afa326b2c 100644
+> > > --- a/arch/mips/mm/tlb-r4k.c
+> > > +++ b/arch/mips/mm/tlb-r4k.c
+> > > @@ -328,6 +328,7 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+> > > /* this could be a huge page */
+> > > if (pmd_huge(*pmdp)) {
+> > > unsigned long lo;
+> > > + unsigned long entryhi;
+> > > write_c0_pagemask(PM_HUGE_MASK);
+> > > ptep = (pte_t *)pmdp;
+> > > lo = pte_to_entrylo(pte_val(*ptep));
+> > > @@ -335,7 +336,19 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+> > > write_c0_entrylo1(lo + (HPAGE_SIZE >> 7));
+> > >
+> > > mtc0_tlbw_hazard();
+> > > - if (idx < 0)
+> > > + if (idx >= current_cpu_data.tlbsizevtlb) {
+> > > + /* hit in FTLB.
+> > > + * Invalid it then tlbwr, since FTLB hold only base page*/
+> > > + entryhi = read_c0_entryhi();
+> > > + write_c0_entryhi(MIPS_ENTRYHI_EHINV);
+> > > + tlb_write_indexed();
+> > > + tlbw_use_hazard();
+> > > + write_c0_entryhi(entryhi);
+> > > +
+> > > + }
+> > > +
+> > > +
+> > > + if (idx < 0 || idx >= current_cpu_data.tlbsizevtlb)
+> > > tlb_write_random();
+> > > else
+> > > tlb_write_indexed();
+> > > diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+> > > index 14f8ba93367f..9c4cd08c00d3 100644
+> > > --- a/arch/mips/mm/tlbex.c
+> > > +++ b/arch/mips/mm/tlbex.c
+> > > @@ -762,8 +762,7 @@ static void build_huge_update_entries(u32 **p, unsigned int pte,
+> > > static void build_huge_handler_tail(u32 **p, struct uasm_reloc **r,
+> > > struct uasm_label **l,
+> > > unsigned int pte,
+> > > - unsigned int ptr,
+> > > - unsigned int flush)
+> > > + unsigned int ptr)
+> > > {
+> > > #ifdef CONFIG_SMP
+> > > UASM_i_SC(p, pte, 0, ptr);
+> > > @@ -772,22 +771,6 @@ static void build_huge_handler_tail(u32 **p, struct uasm_reloc **r,
+> > > #else
+> > > UASM_i_SW(p, pte, 0, ptr);
+> > > #endif
+> > > - if (cpu_has_ftlb && flush) {
+> > > - BUG_ON(!cpu_has_tlbinv);
+> > > -
+> > > - UASM_i_MFC0(p, ptr, C0_ENTRYHI);
+> > > - uasm_i_ori(p, ptr, ptr, MIPS_ENTRYHI_EHINV);
+> > > - UASM_i_MTC0(p, ptr, C0_ENTRYHI);
+> > > - build_tlb_write_entry(p, l, r, tlb_indexed);
+> > > -
+> > > - uasm_i_xori(p, ptr, ptr, MIPS_ENTRYHI_EHINV);
+> > > - UASM_i_MTC0(p, ptr, C0_ENTRYHI);
+> > > - build_huge_update_entries(p, pte, ptr);
+> > > - build_huge_tlb_write_entry(p, l, r, pte, tlb_random, 0);
+> > > -
+> > > - return;
+> > > - }
+> > > -
+> > > build_huge_update_entries(p, pte, ptr);
+> > > build_huge_tlb_write_entry(p, l, r, pte, tlb_indexed, 0);
+> > > }
+> > > @@ -2278,7 +2261,7 @@ static void build_r4000_tlb_load_handler(void)
+> > > uasm_l_tlbl_goaround2(&l, p);
+> > > }
+> > > uasm_i_ori(&p, wr.r1, wr.r1, (_PAGE_ACCESSED | _PAGE_VALID));
+> > > - build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2, 1);
+> > > + build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2);
+> > > #endif
+> > >
+> > > uasm_l_nopage_tlbl(&l, p);
+> > > @@ -2334,7 +2317,7 @@ static void build_r4000_tlb_store_handler(void)
+> > > build_tlb_probe_entry(&p);
+> > > uasm_i_ori(&p, wr.r1, wr.r1,
+> > > _PAGE_ACCESSED | _PAGE_MODIFIED | _PAGE_VALID | _PAGE_DIRTY);
+> > > - build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2, 1);
+> > > + build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2);
+> > > #endif
+> > >
+> > > uasm_l_nopage_tlbs(&l, p);
+> > > @@ -2391,7 +2374,7 @@ static void build_r4000_tlb_modify_handler(void)
+> > > build_tlb_probe_entry(&p);
+> > > uasm_i_ori(&p, wr.r1, wr.r1,
+> > > _PAGE_ACCESSED | _PAGE_MODIFIED | _PAGE_VALID | _PAGE_DIRTY);
+> > > - build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2, 0);
+> > > + build_huge_handler_tail(&p, &r, &l, wr.r1, wr.r2);
+> > > #endif
+> > >
+> > > uasm_l_nopage_tlbm(&l, p);
+> > > --
+> > > 2.17.1
+> > >
 
