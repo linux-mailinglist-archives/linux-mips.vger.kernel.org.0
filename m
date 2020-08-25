@@ -2,111 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD21250C29
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Aug 2020 01:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1075E250FE9
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Aug 2020 05:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727913AbgHXXPY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Aug 2020 19:15:24 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:40622 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726090AbgHXXPX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Aug 2020 19:15:23 -0400
-Received: by mail-io1-f66.google.com with SMTP id q132so107838iod.7;
-        Mon, 24 Aug 2020 16:15:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=glE9MJLwvJksS6Kq8WSkXlWHv26cBEY9xO46r0OVXSU=;
-        b=Snifu9Q4V00yZgnz+O+oBIwsk8zNp/jBywO1B5XMHY4Lamv9KfIZ+7WCQBPCf72TYj
-         bkj7eDmhPR4fVgPuYvonWbbPu9rCsr+srkOhvIGqSwoU7Spz3N+27juQCF24blaJwNz8
-         jH0MrymzkJ6COKS4mNdHl1BFFhrI7JzfVaaRsoeylIAhZPB7JMP1Vu7vy2fvIwDsPrJR
-         gUakRkmzN/7eWjz3sEfMpSEEQ42hbOxtXJKItzcDQCCfQdxd0vXwppvkv4Vjz+y/LnoI
-         yIlg8R6MPSVKZ8zXgj3UPRKoEHh3vFiovoXllqHuEvKGDkpNa/J0Sdy0SJ+K7/Jzj32D
-         F0Pg==
-X-Gm-Message-State: AOAM532+Mjf2SRjKEcyYWXHrr9GW5yA39QcnOcgzoibHu2TDP11gjVEa
-        89r1ZN5F+xUXgjTow6cfGw==
-X-Google-Smtp-Source: ABdhPJyi8756H2KScziyvfj8N3dhCo662Valtwe3X4z9g1X/I/OGyZyNv2EQX/btFiKGf0FNeNSZVg==
-X-Received: by 2002:a6b:bfc1:: with SMTP id p184mr6858446iof.193.1598310922357;
-        Mon, 24 Aug 2020 16:15:22 -0700 (PDT)
-Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id a71sm8392575ill.19.2020.08.24.16.15.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 16:15:21 -0700 (PDT)
-Received: (nullmailer pid 3515104 invoked by uid 1000);
-        Mon, 24 Aug 2020 23:15:19 -0000
-Date:   Mon, 24 Aug 2020 17:15:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     f.fainelli@gmail.com, tsbogend@alpha.franken.de,
-        jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/14] mips: bmips: include dt-bindings headers
-Message-ID: <20200824231519.GA3507085@bogus>
-References: <20200812063129.361862-1-noltari@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200812063129.361862-1-noltari@gmail.com>
+        id S1728556AbgHYDW7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Aug 2020 23:22:59 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:34532 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728554AbgHYDW7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 24 Aug 2020 23:22:59 -0400
+Received: from localhost.localdomain (unknown [222.209.10.89])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxauT3g0RfXqUNAA--.17408S2;
+        Tue, 25 Aug 2020 11:22:38 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     tsbogend@alpha.franken.de
+Cc:     akpm@linux-foundation.org, jiaxun.yang@flygoat.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        maobibo@loongson.cn, paulburton@kernel.org
+Subject: Re: [PATCH v2 1/2] MIPS: Set page access bit with pgprot on
+Date:   Tue, 25 Aug 2020 11:20:38 +0800
+Message-Id: <20200825032039.21413-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200726083206.GE5032@alpha.franken.de>
+References: <20200726083206.GE5032@alpha.franken.de>
+X-CM-TRANSID: AQAAf9AxauT3g0RfXqUNAA--.17408S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5t7k0a2IF6F4UM7kC6x804xWl14x267AK
+        xVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
+        A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j
+        6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr
+        1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvE
+        ncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I
+        8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK
+        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8rcTPUUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 08:31:15AM +0200, Álvaro Fernández Rojas wrote:
-> Allow including dt-bindings header files and use them for bcm63xx.
-> 
-> Álvaro Fernández Rojas (14):
->   mips: dts: brcm: allow including header files
->   mips: bmips: add BCM3368 irq definitions
->   mips: bmips: add BCM6318 irq definitions
->   mips: bmips: add BCM6328 irq definitions
->   mips: bmips: add BCM6358 irq definitions
->   mips: bmips: add BCM6362 irq definitions
->   mips: bmips: add BCM6368 irq definitions
->   mips: bmips: add BCM63268 irq definitions
->   mips: bmips: bcm3368: include and use dt-bindings
->   mips: bmips: bcm6328: include and use dt-bindings
->   mips: bmips: bcm6358: include and use dt-bindings
->   mips: bmips: bcm6362: include and use dt-bindings
->   mips: bmips: bcm6368: include and use dt-bindings
->   mips: bmips: bcm63268: include and use dt-bindings
-> 
->  .../boot/dts/brcm/bcm3368-netgear-cvg834g.dts |  2 +-
->  arch/mips/boot/dts/brcm/bcm3368.dtsi          |  8 +-
->  .../dts/brcm/bcm63268-comtrend-vr-3032u.dts   |  2 +-
->  arch/mips/boot/dts/brcm/bcm63268.dtsi         | 12 ++-
->  arch/mips/boot/dts/brcm/bcm6328.dtsi          | 12 ++-
->  .../dts/brcm/bcm6358-neufbox4-sercomm.dts     |  2 +-
->  arch/mips/boot/dts/brcm/bcm6358.dtsi          | 12 ++-
->  .../dts/brcm/bcm6362-neufbox6-sercomm.dts     |  2 +-
->  arch/mips/boot/dts/brcm/bcm6362.dtsi          | 12 ++-
->  arch/mips/boot/dts/brcm/bcm6368.dtsi          | 12 ++-
->  arch/mips/boot/dts/brcm/bcm93384wvg.dts       |  2 +-
->  arch/mips/boot/dts/brcm/bcm93384wvg_viper.dts |  2 +-
->  arch/mips/boot/dts/brcm/bcm96368mvwg.dts      |  2 +-
->  arch/mips/boot/dts/brcm/bcm97125cbmb.dts      |  2 +-
->  arch/mips/boot/dts/brcm/bcm97346dbsmb.dts     |  4 +-
->  arch/mips/boot/dts/brcm/bcm97358svmb.dts      |  4 +-
->  arch/mips/boot/dts/brcm/bcm97360svmb.dts      |  2 +-
->  arch/mips/boot/dts/brcm/bcm97362svmb.dts      |  4 +-
->  arch/mips/boot/dts/brcm/bcm97420c.dts         |  2 +-
->  arch/mips/boot/dts/brcm/bcm97425svmb.dts      |  4 +-
->  arch/mips/boot/dts/brcm/bcm97435svmb.dts      |  4 +-
->  arch/mips/boot/dts/brcm/bcm9ejtagprb.dts      |  2 +-
->  .../bcm3368-interrupt-controller.h            | 19 ++++
->  .../bcm6318-interrupt-controller.h            | 84 ++++++++++++++++++
->  .../bcm63268-interrupt-controller.h           | 86 +++++++++++++++++++
->  .../bcm6328-interrupt-controller.h            | 68 +++++++++++++++
->  .../bcm6358-interrupt-controller.h            | 38 ++++++++
->  .../bcm6362-interrupt-controller.h            | 71 +++++++++++++++
->  .../bcm6368-interrupt-controller.h            | 71 +++++++++++++++
+adjust the code and add support non-rixi 
 
-You'll notice that there are essentially no other headers with 
-SoC interrupt numbers. That's because we don't do defines for them. It's 
-pointless obfuscation.
 
-Rob
