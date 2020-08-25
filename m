@@ -2,57 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 124B6251989
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Aug 2020 15:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC35252250
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Aug 2020 23:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbgHYN0S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Aug 2020 09:26:18 -0400
-Received: from verein.lst.de ([213.95.11.211]:58839 "EHLO verein.lst.de"
+        id S1726391AbgHYVBh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Aug 2020 17:01:37 -0400
+Received: from crapouillou.net ([89.234.176.41]:50668 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726149AbgHYN0S (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 25 Aug 2020 09:26:18 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 6E33E68BEB; Tue, 25 Aug 2020 15:26:12 +0200 (CEST)
-Date:   Tue, 25 Aug 2020 15:26:12 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Pawel Osciak <pawel@osciak.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        linux-mm@kvack.org, alsa-devel@alsa-project.org
-Subject: Re: a saner API for allocating DMA addressable pages
-Message-ID: <20200825132612.GA22318@lst.de>
-References: <CGME20200819065610eucas1p2fde88e81917071b1888e7cc01ba0f298@eucas1p2.samsung.com> <20200819065555.1802761-1-hch@lst.de> <8fa1ce36-c783-1a02-6890-211eb504a33b@samsung.com>
+        id S1726149AbgHYVBh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 25 Aug 2020 17:01:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1598389294; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=YiQosPnUbJltatnhYmaMYvXeDJkSAec2ypBziUzmlAs=;
+        b=IomyVSIzBptidH1chI3rnfuOki0KTV9EtNOFxkgdXC1Z4yOoKJ8pnC1H172rRsnJmvTKm5
+        Ry/wXaK5XvGuDEn2aYYfXgeuW10stCZJ26oyyQiUY17WffHxUJGR57Nv38PGTHasA8MvUq
+        bjJIKFElQau/8wC5niTUGPSyZhrtb4c=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Nick Terrell <terrelln@fb.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        od@zcrc.me, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 1/2] lib: decompress_unzstd: Limit output size
+Date:   Tue, 25 Aug 2020 23:01:26 +0200
+Message-Id: <20200825210127.17850-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8fa1ce36-c783-1a02-6890-211eb504a33b@samsung.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 01:30:41PM +0200, Marek Szyprowski wrote:
-> I really wonder what is the difference between this new API and 
-> alloc_pages(GFP_DMA, n). Is this API really needed? I thought that this 
-> is legacy thing to be removed one day...
+The zstd decompression code, as it is right now, will have internal
+values overflow on 32-bit systems when the output size is bigger than
+1 GiB.
 
-The difference is that the pages returned are guranteed to be addressable
-by the devie.  This is a very important difference that matters for
-a lot of use cases.
+Until someone smarter than me can figure out how to fix the zstd code
+properly, limit the destination buffer size to 1 GiB, which should be
+enough for everybody, in order to make it usable on 32-bit systems.
+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Nick Terrell <terrelln@fb.com>
+---
+
+Notes:
+    v2: Change limit to 1 GiB
+
+ lib/decompress_unzstd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lib/decompress_unzstd.c b/lib/decompress_unzstd.c
+index 0ad2c15479ed..414517baedb0 100644
+--- a/lib/decompress_unzstd.c
++++ b/lib/decompress_unzstd.c
+@@ -77,6 +77,7 @@
+ 
+ #include <linux/decompress/mm.h>
+ #include <linux/kernel.h>
++#include <linux/sizes.h>
+ #include <linux/zstd.h>
+ 
+ /* 128MB is the maximum window size supported by zstd. */
+@@ -179,7 +180,7 @@ static int INIT __unzstd(unsigned char *in_buf, long in_len,
+ 	size_t ret;
+ 
+ 	if (out_len == 0)
+-		out_len = LONG_MAX; /* no limit */
++		out_len = SZ_1G; /* should be big enough, right? */
+ 
+ 	if (fill == NULL && flush == NULL)
+ 		/*
+-- 
+2.28.0
+
