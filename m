@@ -2,113 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92420252F79
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Aug 2020 15:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AED325323D
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Aug 2020 16:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730209AbgHZNRt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Aug 2020 09:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
+        id S1728295AbgHZOxl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Aug 2020 10:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729177AbgHZNRs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Aug 2020 09:17:48 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B95C061574
-        for <linux-mips@vger.kernel.org>; Wed, 26 Aug 2020 06:17:47 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id j15so960538lfg.7
-        for <linux-mips@vger.kernel.org>; Wed, 26 Aug 2020 06:17:47 -0700 (PDT)
+        with ESMTP id S1728289AbgHZOxj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Aug 2020 10:53:39 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFACC061574;
+        Wed, 26 Aug 2020 07:53:39 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id k18so1105414pfp.7;
+        Wed, 26 Aug 2020 07:53:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=05vLOnzlD86DIl3ohasIKpv7Jy8X0lsYQpErjAX0LQg=;
-        b=YEDThhb+P6FGKaGx+4o88GoERqYpIHpxaTeCPddUIFqufkNnnbN+siVdKDCpmGHYaM
-         gKOA1LBONTeQW+xJ7ybFsqi9jnQE/HcOEiwETjAwLamhWI7O3odrms9qjwzQOIEq55H5
-         5InetjI0g4GSzlLoxLP5aE8JIDBgomBfYgiwSIrZdAyjjoKteoIDrttoctC3HQjRl6gN
-         c0yhOEzmFheS2K2ZwZkvRuFDGMl4zGenYldooc6ORNBTKj7U67WMhLKEmPK78Hsw/ET6
-         bPu83ZltEUsmmP/4a6mfWSV3xqohs/KzO97/pAPYRLLDArVztACdmBVPtbsis7vuzLit
-         G3hQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TiWkNEwCCC0m6okc9WhV7jiLYdcUc3FOzWjygUNhbfY=;
+        b=rAKnJSzoYGEt2qz9xpeOoAPU5HEBAIcGp2QMXDNOmDMGvtSi8nEbdgdGX4IFZOiDiJ
+         YSulPWs0g0rFoIPZzuactbR2BzWo5KyJRQQUHVUOb6e/mDu+rYLgN/LRkGmT8cCqU89s
+         1gnriktuGcmVtyq5bcKKFpiJ1VRGhSGNgnd8mZJxfHm05adz9W8WQTN7fjs4ghDMr4Hi
+         lgafmjkMsR+S4+gktKITf8DascRPy8EvmLArXwgjenS1P8c+O3dBReOxcnW7/4hyOfEw
+         KWapPWgWXqrwefoxSsG9l0cwhzt8lPpewxhDXihJURChqO74oQEOhPh571wclGPTwXKJ
+         75RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=05vLOnzlD86DIl3ohasIKpv7Jy8X0lsYQpErjAX0LQg=;
-        b=cu8gTigpars+WoJPvP58H4Q6XN1MzMxwSut/L7ciVRAcHSypwhN6cGIMHkf58du5h+
-         EfmFi5uhg9QEHSJMKtmBCCi0ZRegQ1Z7dDR7MDE/LzKcFlNzBVpVUD6ATK3ffNWcT3GW
-         ySoS1upfai7X+Bf1pnHAUvJTt8ATa5u7+Un9qSryEvcBGd76DvMt794GIXBmzOPdlRG+
-         AVWuH+r/boHZ0kjqV8/vLa7d3/CD8/b65W48RV3RAyvpmLr9NW9kqizCdLpkLfb6d23W
-         Y3tCFw0gmQCeoPJEJ0HU4n/NejsBWOM5CtN4gjCm8BqB3DpKbVGZHCeaBZAi5FSzcQZl
-         8c1A==
-X-Gm-Message-State: AOAM533suMhtHaU8KLynBzUprSNvycmv5gcZbXRVMg+XXm1B/9pILprc
-        y+uaK6w0sAQ3xNTuIgBjQM4s9yI7/AM=
-X-Google-Smtp-Source: ABdhPJyk5TtZqSIanmBpyF8fLCJETum8BIZ+eLMlczScJ9OBWAPvEBhQr7Y6PTjFbUJtqpUfDaLGyg==
-X-Received: by 2002:a05:6512:3af:: with SMTP id v15mr7300859lfp.79.1598447865432;
-        Wed, 26 Aug 2020 06:17:45 -0700 (PDT)
-Received: from wasted.omprussia.ru ([2a00:1fa0:487e:dc41:71fc:79e9:7575:22c2])
-        by smtp.gmail.com with ESMTPSA id e14sm564062lfd.19.2020.08.26.06.17.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Aug 2020 06:17:44 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: add missing MSACSR and upper MSA initialization
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     linux-mips@vger.kernel.org
-References: <20200825043807.5741-1-huangpei@loongson.cn>
- <20200825043807.5741-2-huangpei@loongson.cn>
- <0d88a29f-035b-2c91-c802-3a405d8f69d8@gmail.com>
- <20200826101037.5aam5rhuiais3yrc@ambrosehua-HP-xw6600-Workstation>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <893e5ba3-1f2b-d439-1294-d4860a2bf672@gmail.com>
-Date:   Wed, 26 Aug 2020 16:17:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TiWkNEwCCC0m6okc9WhV7jiLYdcUc3FOzWjygUNhbfY=;
+        b=Hv/xFeRDdOgvYTyXuzToNzoPBfYMJ6MKRhNzifPyjOZ6B4iDk9pLQlDYy9+VMTZrnY
+         jIusMUK6rOKEF/OM1UXhkiZz966KvlIGHXkIJWnTtUPGzaN9ecFMYrsS4jMKcPJfNxX+
+         6v/PfHvC87aVc1yX6jUssALs109PoV3Op6/PaTMne4XXWNOH/HievxcOBy1obbWSrasa
+         oZrQOCHPrRvt10te382/Eu8G1Zfcw8sc4zrmCinooTguf3AVYka5wegz5jN9ebrQbTO6
+         qAuTYvO8dWK0NxnIpxhdNVvSuohHll40CkIBG5O5dKt2y/tFf0a2k7RsP4nVDycoefzM
+         RE5Q==
+X-Gm-Message-State: AOAM5339Mevr62mKHzrWppIRSoQaMPXa+OPp7suVpDIn8YWdZIv9s4gM
+        ODYEyLxQsECG9ZA8GgDp4G2cTIdRNgM=
+X-Google-Smtp-Source: ABdhPJzrJJGcj7n7yPW1Wiv/Z390c4CVmxzbpAV27ojgXu7b+a5x8oR0g/bY1t7uSrfq0YKzDrAWsg==
+X-Received: by 2002:a63:747:: with SMTP id 68mr3027260pgh.90.1598453618734;
+        Wed, 26 Aug 2020 07:53:38 -0700 (PDT)
+Received: from bobo.ozlabs.ibm.com (61-68-212-105.tpgi.com.au. [61.68.212.105])
+        by smtp.gmail.com with ESMTPSA id r7sm3327140pfl.186.2020.08.26.07.53.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 07:53:38 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-arch@vger.kernel.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v2 11/23] mips: use asm-generic/mmu_context.h for no-op implementations
+Date:   Thu, 27 Aug 2020 00:52:37 +1000
+Message-Id: <20200826145249.745432-12-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200826145249.745432-1-npiggin@gmail.com>
+References: <20200826145249.745432-1-npiggin@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200826101037.5aam5rhuiais3yrc@ambrosehua-HP-xw6600-Workstation>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8/26/20 1:10 PM, Huang Pei wrote:
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+ arch/mips/include/asm/mmu_context.h | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-> From 0f4003eb418737df75cb8be79d4da34b1500f3d7 Mon Sep 17 00:00:00 2001
-> From: Huang Pei <huangpei@loongson.cn>
-> Date: Fri, 21 Aug 2020 10:48:40 +0800
-> Subject: [PATCH] MIPS: add missing MSACSR and upper MSA initialization
-> 
-> init_fp_ctx just initialize the fp/msa context, and own_fp_inatomic
-> just restore FCSR and 64bit FP regs from it, but miss MSACSR and upper
-> MSA regs for MSA, so MSACSR and MSA upper regs's value from previous
-> task on current cpu can leak into current task and cause unpredictable
-> behavior when MSA context not initialized.
-> 
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->  arch/mips/kernel/traps.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-> index 38aa07ccdbcc..e843b38486b8 100644
-> --- a/arch/mips/kernel/traps.c
-> +++ b/arch/mips/kernel/traps.c
-> @@ -1287,6 +1287,16 @@ static int enable_restore_fp_context(int msa)
->  		err = own_fpu_inatomic(1);
->  		if (msa && !err) {
->  			enable_msa();
-> +			/* with MSA enabled, userspace can see MSACSR 
-> +			 * and MSA regs, but the values in them are from
-> +			 * other task before current task, restore them
-> +			 * from saved fp/msa context
-> +			 */
-> +			write_msa_csr(current->thread.fpu.msacsr);
-> +			/* own_fpu_inatomic(1) just restore low 64bit,
-> +			 * fix the high 64bit
-> +			 */
+diff --git a/arch/mips/include/asm/mmu_context.h b/arch/mips/include/asm/mmu_context.h
+index cddead91acd4..ed9f2d748f63 100644
+--- a/arch/mips/include/asm/mmu_context.h
++++ b/arch/mips/include/asm/mmu_context.h
+@@ -124,10 +124,6 @@ static inline void set_cpu_context(unsigned int cpu,
+ #define cpu_asid(cpu, mm) \
+ 	(cpu_context((cpu), (mm)) & cpu_asid_mask(&cpu_data[cpu]))
+ 
+-static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
+-{
+-}
+-
+ extern void get_new_mmu_context(struct mm_struct *mm);
+ extern void check_mmu_context(struct mm_struct *mm);
+ extern void check_switch_mmu_context(struct mm_struct *mm);
+@@ -136,6 +132,7 @@ extern void check_switch_mmu_context(struct mm_struct *mm);
+  * Initialize the context related info for a new mm_struct
+  * instance.
+  */
++#define init_new_context init_new_context
+ static inline int
+ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
+ {
+@@ -180,14 +177,12 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+  * Destroy context related info for an mm_struct that is about
+  * to be put to rest.
+  */
++#define destroy_context destroy_context
+ static inline void destroy_context(struct mm_struct *mm)
+ {
+ 	dsemul_mm_cleanup(mm);
+ }
+ 
+-#define activate_mm(prev, next)	switch_mm(prev, next, current)
+-#define deactivate_mm(tsk, mm)	do { } while (0)
+-
+ static inline void
+ drop_mmu_context(struct mm_struct *mm)
+ {
+@@ -237,4 +232,6 @@ drop_mmu_context(struct mm_struct *mm)
+ 	local_irq_restore(flags);
+ }
+ 
++#include <asm-generic/mmu_context.h>
++
+ #endif /* _ASM_MMU_CONTEXT_H */
+-- 
+2.23.0
 
-   This comment style is acceptable only for the networking code, all the other code
-should have the 1st comment line empty.
-
-[...]
-
-MBR, Sergei
