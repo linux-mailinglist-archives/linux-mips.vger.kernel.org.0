@@ -2,106 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D92253C2E
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Aug 2020 05:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEF925401D
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Aug 2020 10:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726820AbgH0Dso (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Aug 2020 23:48:44 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:41506 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726802AbgH0Dso (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Aug 2020 23:48:44 -0400
-Received: by mail-il1-f193.google.com with SMTP id q14so3726344ilj.8
-        for <linux-mips@vger.kernel.org>; Wed, 26 Aug 2020 20:48:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2yQB9vv8cABNgRI3wgl1XZDlLshfhQVSPektWkTQ+dg=;
-        b=RUlnYLbX5A42RV5jrNNPzErACgDkX7DBxXhjyy3zqbDekHh7+jTVnWHML7yTds4Q0Q
-         xpC4w3sl1dJIddnQL2SoItXhC/+sDgw5iKwDga/uR46o0HuGJge0nDEvpjrubDaM+emN
-         TI3CDwWD9xRvvR7pz4pe+QELY8O8TRj3qofR7hoXQJwDXK6kjD/TYnQIbAHZD+BneyBF
-         Omjxxcok4thuQI1I0hx3zCyga0O7K5CRFZk8iHkuPrxrBvddkwbVb2ktRhJIceqxTfEz
-         5cHyNUmxkb4ZcpLwNsgBI0tI9RLoPLLuEytu3va0ZEbMyAuTH5FaTNy4jnyGwXh8xTe1
-         GQ8Q==
-X-Gm-Message-State: AOAM5335SqfAk0vJLyRjQBO8jrzIIDolTXiZeq2W/e8ik4YS0xjhI9Cj
-        Z6E4bFP6bMrh2oMETbIpVmKfQpVC3Psv0e/Kluc=
-X-Google-Smtp-Source: ABdhPJxdVVURT4dO/33sC4fUGfA7NUErmoCbheNWaQAuXBRtQVVBuTEzR/Fi1tes81+/Z98DqmXF7FX8MsCpr0wgxq4=
-X-Received: by 2002:a05:6e02:cb0:: with SMTP id 16mr15114931ilg.147.1598500123069;
- Wed, 26 Aug 2020 20:48:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200805121021.GA12598@alpha.franken.de> <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
- <20200807131357.GA11979@alpha.franken.de> <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
- <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com> <20200810141219.GA2844@alpha.franken.de>
- <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com> <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
- <20200811120645.GA6199@alpha.franken.de> <CAAhV-H5YqF5dcdFiBgVSXzu67QOKTFq3FME8ernswGts45GHfQ@mail.gmail.com>
- <20200826124646.GA9809@alpha.franken.de>
-In-Reply-To: <20200826124646.GA9809@alpha.franken.de>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Thu, 27 Aug 2020 11:48:29 +0800
-Message-ID: <CAAhV-H41-nyVPy1weKT_10A9_ATYB0pYq0_1jMm3Z3adv0Yutw@mail.gmail.com>
-Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727839AbgH0IDU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Aug 2020 04:03:20 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:48450 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726851AbgH0IDQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 27 Aug 2020 04:03:16 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr928aEdfv4kOAA--.81S2;
+        Thu, 27 Aug 2020 16:03:09 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] MIPS: perf: Fix wrong check condition of Loongson event IDs
+Date:   Thu, 27 Aug 2020 16:03:08 +0800
+Message-Id: <1598515388-3604-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxr928aEdfv4kOAA--.81S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CF45trW3tryfKryfuw45ZFb_yoW8Jw13pr
+        4UuanIgwnrKw12gay5Zan7Xw45Grn5ua9rWayUG3W5Aw45Z3s5XanrZFn8tr1fXrnIka47
+        XayxKr47Za4qkaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUb6wCDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Thomas,
+According to the user's manual chapter 8.2.1 of Loongson 3A2000 CPU [1]
+and 3A3000 CPU [2], we should take some event IDs such as 274, 358, 359
+and 360 as valid in the check condition, otherwise they are recognized
+as "not supported", fix it.
 
-On Wed, Aug 26, 2020 at 8:48 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Fri, Aug 14, 2020 at 05:44:18PM +0800, Huacai Chen wrote:
-> > On Tue, Aug 11, 2020 at 8:08 PM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > > this comes with it's own memcpy/memset and stuff, I don't see a reason why
-> > > COP2 needs to be enabled there,
-> > gslq/gssq can also be generated by toolchains.
->
-> I don't want to introduce every single CPU optimization bits into such
-> a closed first stage loader. So please use $(filter-out) in
-> arch/mips/boot/compressed/Makefile to disable creation of 16byte load/stores.
->
-> > > which is correct for all user space process, otherwise the whole
-> > > cop2 exception thing wouldn't work. And if cop2 exception handling
-> > > has been run it's set in THREAD_STATUS.
-> > >
-> > THREAD_STATUS means thread_struct.cp0_status, which is the cp0_status
-> > when a process runs in kernel-space. KSTK_STATUS (what you have seen
-> > in copy_thread_tls() below) means cp0_status in a process's kernel
-> > stack, which saves the cp0_status when a process runs in user-space.
-> > Whether COP2 exception can work depends on that KSTK_STATUS (but not
-> > THREAD_STATUS) should not contain CU2 at the first time. So, whether
-> > or not THREAD_STATUS contains CU2, it won't break COP2 handling.
->
-> so why don't we fix the the in-kernel cp0_status instead ?
->
-> How about this ?
->
-> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> index 90b869297893..26fb77a8d406 100644
-> --- a/arch/mips/kernel/process.c
-> +++ b/arch/mips/kernel/process.c
-> @@ -133,6 +133,7 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
->         /*  Put the stack after the struct pt_regs.  */
->         childksp = (unsigned long) childregs;
->         p->thread.cp0_status = read_c0_status() & ~(ST0_CU2|ST0_CU1);
-> +       p->thread.cp0_status |= ST0_KERNEL_CUMASK;
->         if (unlikely(p->flags & PF_KTHREAD)) {
->                 /* kernel thread */
->                 unsigned long status = p->thread.cp0_status;
-This seems a good idea, I will send a new version.
+[1] http://www.loongson.cn/uploadfile/cpu/3A2000/Loongson3A2000_user2.pdf
+[2] http://www.loongson.cn/uploadfile/cpu/3A3000/Loongson3A3000_3B3000user2.pdf
 
-Huacai
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+Fixes: e9dfbaaeef1c ("MIPS: perf: Add hardware perf events support for new Loongson-3")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/kernel/perf_event_mipsxx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/kernel/perf_event_mipsxx.c b/arch/mips/kernel/perf_event_mipsxx.c
+index efce5de..011eb6bb 100644
+--- a/arch/mips/kernel/perf_event_mipsxx.c
++++ b/arch/mips/kernel/perf_event_mipsxx.c
+@@ -1898,8 +1898,8 @@ static const struct mips_perf_event *mipsxx_pmu_map_raw_event(u64 config)
+ 				(base_id >= 64 && base_id < 90) ||
+ 				(base_id >= 128 && base_id < 164) ||
+ 				(base_id >= 192 && base_id < 200) ||
+-				(base_id >= 256 && base_id < 274) ||
+-				(base_id >= 320 && base_id < 358) ||
++				(base_id >= 256 && base_id < 275) ||
++				(base_id >= 320 && base_id < 361) ||
+ 				(base_id >= 384 && base_id < 574))
+ 				break;
+ 
+-- 
+2.1.0
+
