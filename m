@@ -2,73 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8EE254562
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Aug 2020 14:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35C82545A7
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Aug 2020 15:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729011AbgH0Mwj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Aug 2020 08:52:39 -0400
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:50104 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729135AbgH0Mv0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 27 Aug 2020 08:51:26 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04392;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0U7.HW59_1598532682;
-Received: from B-455UMD6M-2027.local(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0U7.HW59_1598532682)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 27 Aug 2020 20:51:23 +0800
-Subject: Re: [PATCH v6 5/5] KVM: MIPS: clean up redundant kvm_run parameters
- in assembly
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, chenhuacai@gmail.com
-References: <20200623131418.31473-1-tianjia.zhang@linux.alibaba.com>
- <20200623131418.31473-6-tianjia.zhang@linux.alibaba.com>
- <e447bb5c-8b83-dfb1-a293-f2e9e586c2ec@flygoat.com>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Message-ID: <fdc4635f-7e44-3227-ea65-db28abde42d6@linux.alibaba.com>
-Date:   Thu, 27 Aug 2020 20:51:22 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.1.1
-MIME-Version: 1.0
-In-Reply-To: <e447bb5c-8b83-dfb1-a293-f2e9e586c2ec@flygoat.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        id S1726936AbgH0NFp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Aug 2020 09:05:45 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:51496 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726250AbgH0NFk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 27 Aug 2020 09:05:40 -0400
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz92Tr0df6psOAA--.34S2;
+        Thu, 27 Aug 2020 21:05:23 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
+To:     linux-mips@vger.kernel.org
+Subject: [PATCH] MIPS: CPU_P5600: Cleanup unused code
+Date:   Thu, 27 Aug 2020 21:05:17 +0800
+Message-Id: <1598533517-13491-1-git-send-email-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxz92Tr0df6psOAA--.34S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrW8XFW7Jw43AryxAFW5Jrb_yoWxAwc_Jw
+        sIya1rWrn3Z3s7WryUWrWrAF1qyayj9ryxArnFvryav3ySv3W7J3yUJFnrXr1DGanF934r
+        ZrWfJr1Uurn7tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb28YjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6ry8MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUJVWUXwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jaSoJUUUUU=
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Paolo
+$ grep "CPU_SUPPORTS_UNCACHED_ACCELERATED" -nR
+arch/mips/Kconfig:1591:	select \
+CPU_SUPPORTS_UNCACHED_ACCELERATED
 
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+---
+ arch/mips/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-Do you need any other comments on this patch?
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 99220e7..6ee4488 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1589,7 +1589,6 @@ config CPU_P5600
+ 	select CPU_SUPPORTS_32BIT_KERNEL
+ 	select CPU_SUPPORTS_HIGHMEM
+ 	select CPU_SUPPORTS_MSA
+-	select CPU_SUPPORTS_UNCACHED_ACCELERATED
+ 	select CPU_SUPPORTS_CPUFREQ
+ 	select CPU_MIPSR2_IRQ_VI
+ 	select CPU_MIPSR2_IRQ_EI
+-- 
+2.1.0
 
-
-Thanks,
-
-Tianjia
-
-
-On 7/16/20 10:10 AM, Jiaxun Yang wrote:
->
->
-> ÔÚ 2020/6/23 21:14, Tianjia Zhang Ð´µÀ:
->> In the current kvm version, 'kvm_run' has been included in the 
->> 'kvm_vcpu'
->> structure. For historical reasons, many kvm-related function parameters
->> retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time. This
->> patch does a unified cleanup of these remaining redundant parameters.
->>
->> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
->> Reviewed-by: Huacai Chen <chenhc@lemote.com>
->
-> Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->
-> Can confirm it works on Loongson-3A4000.
->
-> Thanks!
->
->> ---
->
