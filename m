@@ -2,101 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 734C8253981
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Aug 2020 23:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DC7253BDC
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Aug 2020 04:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726802AbgHZVGa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Aug 2020 17:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726739AbgHZVGa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Aug 2020 17:06:30 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EC3C061574;
-        Wed, 26 Aug 2020 14:06:29 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id q1so1456367pjd.1;
-        Wed, 26 Aug 2020 14:06:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=BNVvx026q+w3S50fDZO4SFY1mveXLMUajizgrhaD8KQ=;
-        b=mcGogTOTXL0EQfUn4qrkiDJ1f6vcYVDd3HR1c0w0MfhBlcya/nkdxe0DqhfM2sCfB3
-         zKc3zbMM8mGt6FzT7j8KtLPgxmt0NNuMWPJZpsgsPZFcM+L6FJGMIcBTIF+PpquIttMh
-         ZCmgPrcAOUtVDdZULfWoeXuSpLC56VMNpIUY1gQlAeumhsTtj0fEY3NYdnBOhmYzVcCQ
-         rl83rJEW3bJOKamwuKHJFhdZvyvF95XGYjXrFI6QQREbxamyGj0lBbJXJAoj3W3Fcgl3
-         dDfgbA4vhAmgkN9Cv/dHodkGBOGR/iSxkTgA9sTrVLQr8F1WC0nnu/Zbxl49henHH9hT
-         jiag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=BNVvx026q+w3S50fDZO4SFY1mveXLMUajizgrhaD8KQ=;
-        b=qn4hRdpeqecCAXvFSyl0wo7lGCqZ0dULKqv94UCKpN7P7tJ3FmvLGNA11/zV2C+GR+
-         Y/tdFxe4FtEW7AEMhaNpJ486dyEYW11bw0wgPOBtThJ/XnkdR56YxCXRznCgotg0gf62
-         BvFmglZo6JKi0sOG6n5wN80nMSeWo8OCXGMO8zxjj4HM5mpJeJ98Vz/O/P330pfsqW5Y
-         L/dAVTOwsaK+IjJlurvj/LiuCnA3UmvMJxCucM97o1Mh3MRWEqIn5inmwgPv2ISLZWo7
-         NHeTwjyXq6v4LKu4cxfx5mH5m073+F0N5O6ApHe2jPQudSMzsCqaxqCvErbG0r9H89+6
-         sBRg==
-X-Gm-Message-State: AOAM531kMgqHkol+XUhceB4/R6bYNq+Wmj31rk2B11OvaEmL9SgubpsD
-        2ezUlaBk/liUF/yXC5/sgTCXsvJoj/A=
-X-Google-Smtp-Source: ABdhPJx8qMKzf+YUGkO9ycWzs15QYQEWlFfWtdsSQZwoixwMlBfLlynubJpb7Op32qbOOerq779IJw==
-X-Received: by 2002:a17:90b:3543:: with SMTP id lt3mr7942701pjb.180.1598475989306;
-        Wed, 26 Aug 2020 14:06:29 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 27sm3032823pgk.89.2020.08.26.14.06.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 26 Aug 2020 14:06:28 -0700 (PDT)
-Date:   Wed, 26 Aug 2020 14:06:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Paul Burton <paul.burton@mips.com>,
-        Huacai Chen <chenhc@lemote.com>,
+        id S1726977AbgH0Cb5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Aug 2020 22:31:57 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:45328 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726826AbgH0Cb5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 26 Aug 2020 22:31:57 -0400
+Received: from [10.130.0.60] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj9wFG0dfEnYOAA--.427S3;
+        Thu, 27 Aug 2020 10:31:35 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Loongson: Fix complie errors without CONFIG_SMP
+To:     Matthew Wilcox <willy@infradead.org>
+References: <1598446407-8845-1-git-send-email-hejinyang@loongson.cn>
+ <20200826130122.GR17456@casper.infradead.org>
+Cc:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH 4.19 66/81] MIPS: Disable Loongson MMI instructions for
- kernel build
-Message-ID: <20200826210628.GA173536@roeck-us.net>
-References: <20191016214805.727399379@linuxfoundation.org>
- <20191016214845.344235056@linuxfoundation.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+From:   hejinyang <hejinyang@loongson.cn>
+Message-ID: <5394f030-104c-f191-e581-4f1ed23a85a6@loongson.cn>
+Date:   Thu, 27 Aug 2020 10:31:33 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191016214845.344235056@linuxfoundation.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200826130122.GR17456@casper.infradead.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxj9wFG0dfEnYOAA--.427S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw43tr43uF18Ww1kGr47twb_yoW3ZwcEgw
+        4Du3W8JF13XFyvgFZFg3y8Zr4qgF4UWasrGw1rur12934Yqr95XayktrZxuFn8u3y5XrZ7
+        WF4S9FyFvanavjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbx8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+        DUUUUU=
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
 
-On Wed, Oct 16, 2019 at 02:51:17PM -0700, Greg Kroah-Hartman wrote:
-> From: Paul Burton <paul.burton@mips.com>
-> 
-> commit 2f2b4fd674cadd8c6b40eb629e140a14db4068fd upstream.
-> 
-> GCC 9.x automatically enables support for Loongson MMI instructions when
-> using some -march= flags, and then errors out when -msoft-float is
-> specified with:
-> 
->   cc1: error: ‘-mloongson-mmi’ must be used with ‘-mhard-float’
-> 
-> The kernel shouldn't be using these MMI instructions anyway, just as it
-> doesn't use floating point instructions. Explicitly disable them in
-> order to fix the build with GCC 9.x.
-> 
 
-I still see this problem when trying to compile fuloong2e_defconfig with
-gcc 9.x or later. Reason seems to be that the patch was applied to
-arch/mips/loongson64/Platform, but fuloong2e_defconfig uses
-arch/mips/loongson2ef/Platform.
+On 08/26/2020 09:01 PM, Matthew Wilcox wrote:
+> On Wed, Aug 26, 2020 at 08:53:27PM +0800, Jinyang He wrote:
+>> +++ b/arch/mips/include/asm/mach-loongson64/topology.h
+>> @@ -4,7 +4,11 @@
+>>   
+>>   #ifdef CONFIG_NUMA
+>>   
+>> +#ifdef CONFIG_SMP
+>>   #define cpu_to_node(cpu)	(cpu_logical_map(cpu) >> 2)
+>> +#else
+>> +#define cpu_to_node(cpu)	0
+>> +#endif
+> Are you saying you've enabled NUMA without enabling SMP?  Does that make
+> sense?
 
-Am I missing something ?
+NUMA option normally work with more than two nodes, though Loongson64 use it
+default after patch 6fbde6b492dfc761ad60a68fb2cb32b1eb05b786. Loongson64(3A)'s
+each node consists of 4 cpus while it only has 4 cpus. In other words, it has
+only one node while open NUMA. I'm confused it if NUMA deponds on SMP.
 
-Thanks,
-Guenter
+I'll try fix it with unabling NUMA and SMP later.
+
+Thanks.:-)
+
