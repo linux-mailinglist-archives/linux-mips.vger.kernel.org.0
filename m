@@ -2,87 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B06253C0E
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Aug 2020 05:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D92253C2E
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Aug 2020 05:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726802AbgH0DMb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Aug 2020 23:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726798AbgH0DMa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Aug 2020 23:12:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5700FC0612A3;
-        Wed, 26 Aug 2020 20:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xeNavqw5VrEUhK1uC5SznmQUTraq5Hr4BCCsMByRsaI=; b=YpT/6OF/Gpyyb1tY7UT8DwNc0I
-        tFI/88DFWeXSQmA721mD00+5P8ucXGbX9dP60A+99p1JQPchNJh1Xq9kPw7LRbJwt3hiWzmTKz/KH
-        dws/BCGIKixIhx17rIDQv0MWEbrxnbUXmyNZcDpw2eD/+78PYE2z0gp9K0mVRT5KUevIistUUAP0I
-        6caaYXd9pcpPBoDi4/MQ+1mmaa8XYNMQw/MaXcYFKKOiW2K7xwTVECPjpqqxwOOngzrL5GEUT3GFr
-        dGeIDdBreF/qwOahd84rmbAi6wqIaXQxvBGAzJbuKgiMdIfu8ahGG/eumx1Bvw3jDTBpxH0XSLrwe
-        /mK/z8fQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kB8Km-0001jN-Il; Thu, 27 Aug 2020 03:12:16 +0000
-Date:   Thu, 27 Aug 2020 04:12:16 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     hejinyang <hejinyang@loongson.cn>
-Cc:     Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH] MIPS: Loongson: Fix complie errors without CONFIG_SMP
-Message-ID: <20200827031216.GB14765@casper.infradead.org>
-References: <1598446407-8845-1-git-send-email-hejinyang@loongson.cn>
- <20200826130122.GR17456@casper.infradead.org>
- <5394f030-104c-f191-e581-4f1ed23a85a6@loongson.cn>
+        id S1726820AbgH0Dso (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Aug 2020 23:48:44 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:41506 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726802AbgH0Dso (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Aug 2020 23:48:44 -0400
+Received: by mail-il1-f193.google.com with SMTP id q14so3726344ilj.8
+        for <linux-mips@vger.kernel.org>; Wed, 26 Aug 2020 20:48:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2yQB9vv8cABNgRI3wgl1XZDlLshfhQVSPektWkTQ+dg=;
+        b=RUlnYLbX5A42RV5jrNNPzErACgDkX7DBxXhjyy3zqbDekHh7+jTVnWHML7yTds4Q0Q
+         xpC4w3sl1dJIddnQL2SoItXhC/+sDgw5iKwDga/uR46o0HuGJge0nDEvpjrubDaM+emN
+         TI3CDwWD9xRvvR7pz4pe+QELY8O8TRj3qofR7hoXQJwDXK6kjD/TYnQIbAHZD+BneyBF
+         Omjxxcok4thuQI1I0hx3zCyga0O7K5CRFZk8iHkuPrxrBvddkwbVb2ktRhJIceqxTfEz
+         5cHyNUmxkb4ZcpLwNsgBI0tI9RLoPLLuEytu3va0ZEbMyAuTH5FaTNy4jnyGwXh8xTe1
+         GQ8Q==
+X-Gm-Message-State: AOAM5335SqfAk0vJLyRjQBO8jrzIIDolTXiZeq2W/e8ik4YS0xjhI9Cj
+        Z6E4bFP6bMrh2oMETbIpVmKfQpVC3Psv0e/Kluc=
+X-Google-Smtp-Source: ABdhPJxdVVURT4dO/33sC4fUGfA7NUErmoCbheNWaQAuXBRtQVVBuTEzR/Fi1tes81+/Z98DqmXF7FX8MsCpr0wgxq4=
+X-Received: by 2002:a05:6e02:cb0:: with SMTP id 16mr15114931ilg.147.1598500123069;
+ Wed, 26 Aug 2020 20:48:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5394f030-104c-f191-e581-4f1ed23a85a6@loongson.cn>
+References: <20200805121021.GA12598@alpha.franken.de> <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
+ <20200807131357.GA11979@alpha.franken.de> <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+ <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com> <20200810141219.GA2844@alpha.franken.de>
+ <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com> <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
+ <20200811120645.GA6199@alpha.franken.de> <CAAhV-H5YqF5dcdFiBgVSXzu67QOKTFq3FME8ernswGts45GHfQ@mail.gmail.com>
+ <20200826124646.GA9809@alpha.franken.de>
+In-Reply-To: <20200826124646.GA9809@alpha.franken.de>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Thu, 27 Aug 2020 11:48:29 +0800
+Message-ID: <CAAhV-H41-nyVPy1weKT_10A9_ATYB0pYq0_1jMm3Z3adv0Yutw@mail.gmail.com>
+Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 10:31:33AM +0800, hejinyang wrote:
-> 
-> 
-> On 08/26/2020 09:01 PM, Matthew Wilcox wrote:
-> > On Wed, Aug 26, 2020 at 08:53:27PM +0800, Jinyang He wrote:
-> > > +++ b/arch/mips/include/asm/mach-loongson64/topology.h
-> > > @@ -4,7 +4,11 @@
-> > >   #ifdef CONFIG_NUMA
-> > > +#ifdef CONFIG_SMP
-> > >   #define cpu_to_node(cpu)	(cpu_logical_map(cpu) >> 2)
-> > > +#else
-> > > +#define cpu_to_node(cpu)	0
-> > > +#endif
-> > Are you saying you've enabled NUMA without enabling SMP?  Does that make
-> > sense?
-> 
-> NUMA option normally work with more than two nodes, though Loongson64 use it
-> default after patch 6fbde6b492dfc761ad60a68fb2cb32b1eb05b786. Loongson64(3A)'s
-> each node consists of 4 cpus while it only has 4 cpus. In other words, it has
-> only one node while open NUMA. I'm confused it if NUMA deponds on SMP.
-> 
-> I'll try fix it with unabling NUMA and SMP later.
+Hi, Thomas,
 
-mips:
-config NUMA
-        bool "NUMA Support"
-        depends on SYS_SUPPORTS_NUMA
+On Wed, Aug 26, 2020 at 8:48 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Fri, Aug 14, 2020 at 05:44:18PM +0800, Huacai Chen wrote:
+> > On Tue, Aug 11, 2020 at 8:08 PM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > > this comes with it's own memcpy/memset and stuff, I don't see a reason why
+> > > COP2 needs to be enabled there,
+> > gslq/gssq can also be generated by toolchains.
+>
+> I don't want to introduce every single CPU optimization bits into such
+> a closed first stage loader. So please use $(filter-out) in
+> arch/mips/boot/compressed/Makefile to disable creation of 16byte load/stores.
+>
+> > > which is correct for all user space process, otherwise the whole
+> > > cop2 exception thing wouldn't work. And if cop2 exception handling
+> > > has been run it's set in THREAD_STATUS.
+> > >
+> > THREAD_STATUS means thread_struct.cp0_status, which is the cp0_status
+> > when a process runs in kernel-space. KSTK_STATUS (what you have seen
+> > in copy_thread_tls() below) means cp0_status in a process's kernel
+> > stack, which saves the cp0_status when a process runs in user-space.
+> > Whether COP2 exception can work depends on that KSTK_STATUS (but not
+> > THREAD_STATUS) should not contain CU2 at the first time. So, whether
+> > or not THREAD_STATUS contains CU2, it won't break COP2 handling.
+>
+> so why don't we fix the the in-kernel cp0_status instead ?
+>
+> How about this ?
+>
+> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+> index 90b869297893..26fb77a8d406 100644
+> --- a/arch/mips/kernel/process.c
+> +++ b/arch/mips/kernel/process.c
+> @@ -133,6 +133,7 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
+>         /*  Put the stack after the struct pt_regs.  */
+>         childksp = (unsigned long) childregs;
+>         p->thread.cp0_status = read_c0_status() & ~(ST0_CU2|ST0_CU1);
+> +       p->thread.cp0_status |= ST0_KERNEL_CUMASK;
+>         if (unlikely(p->flags & PF_KTHREAD)) {
+>                 /* kernel thread */
+>                 unsigned long status = p->thread.cp0_status;
+This seems a good idea, I will send a new version.
 
-x86:
-config NUMA
-        bool "NUMA Memory Allocation and Scheduler Support"
-        depends on SMP
-
-If you had a good reason for enabling NUMA without enabling SMP (CPU-less
-memory nodes?), that'd be an interesting discussion to have.  Since your
-hardware seems to have SMP by default, I'd suggest just adding the missing
-'depends'.
+Huacai
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
