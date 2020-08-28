@@ -2,134 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED5B255808
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Aug 2020 11:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FAA25594B
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Aug 2020 13:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728218AbgH1JwU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Aug 2020 05:52:20 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:43562 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728016AbgH1JwS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Aug 2020 05:52:18 -0400
-Received: by mail-il1-f195.google.com with SMTP id m1so344599ilj.10
-        for <linux-mips@vger.kernel.org>; Fri, 28 Aug 2020 02:52:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1uAKjng0UIBlO6miYN7hfCf7HNVgfDf1UDVJW4y6fVw=;
-        b=XbL4V/+5YZeWyVS19Q0rsWhfhjk/ddBoUUoO3n0l+30UOcDmraIRzjEjTwlpfQh1LD
-         S5UfbfvgePJVzGwS9YRh+9z9QJtMTXKbKP6uxDoGPcdB1NbdIaDLBDq6opG9zcgrgfVN
-         qsjvwlLHZIxeXrBPUI8juP7V0zZFteEEoOxDVDqFLfdBTAzgRlKrtyfcPzQV+vVKA2Do
-         IVkScLPxWsl6jbaWA1t+H4Sf0r832I1PG4HTOnGN/TYgA+OqvCBK/3MlgbisM8qH+YZm
-         WwjY5pU0yeMteqms+8Mz7VSsAzv6rrTlF5yxn7hkot9elS/PKsfwIoc/wgcI854GWK1R
-         HyeA==
-X-Gm-Message-State: AOAM532RIvFVFWLv72wVU4v5e01ZT1HSIY0VJekuiAjX04Se+rOk2GDc
-        1haB6W893wPJT7gViT+dUDbYeIRGWpYpNPSs5Y5M6hjNNnGfQupN
-X-Google-Smtp-Source: ABdhPJy7EXzq/+Mg34/Q4JCbDjxRjpoB/Ui3bOO9zffnw5sk6OFgGAl7HqeSSbWzXn7SGJ9/jR4SlYJX0QwmfBArcYk=
-X-Received: by 2002:a05:6e02:cb0:: with SMTP id 16mr734734ilg.147.1598608337609;
- Fri, 28 Aug 2020 02:52:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com>
- <20200810141219.GA2844@alpha.franken.de> <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com>
- <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
- <20200811120645.GA6199@alpha.franken.de> <CAAhV-H5YqF5dcdFiBgVSXzu67QOKTFq3FME8ernswGts45GHfQ@mail.gmail.com>
- <20200826124646.GA9809@alpha.franken.de> <CAAhV-H41-nyVPy1weKT_10A9_ATYB0pYq0_1jMm3Z3adv0Yutw@mail.gmail.com>
- <20200828084242.GA6817@alpha.franken.de> <CAAhV-H4_=zeYZ4HSnLmqSk_utNJ=daS_s+UQdvx7n=iEKVW2pQ@mail.gmail.com>
- <20200828093308.GA7888@alpha.franken.de>
-In-Reply-To: <20200828093308.GA7888@alpha.franken.de>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Fri, 28 Aug 2020 17:52:05 +0800
-Message-ID: <CAAhV-H7ZrkLjpVSENR93XhA=YHROShavAhydPPdYeuGNBzOnyA@mail.gmail.com>
-Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+        id S1728680AbgH1LYW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Aug 2020 07:24:22 -0400
+Received: from elvis.franken.de ([193.175.24.41]:36780 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729226AbgH1LYE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 28 Aug 2020 07:24:04 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kBcKi-0000dc-00; Fri, 28 Aug 2020 13:14:12 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id A1EB3C0E2C; Fri, 28 Aug 2020 13:12:57 +0200 (CEST)
+Date:   Fri, 28 Aug 2020 13:12:57 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huacai Chen <chenhc@lemote.com>
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         "open list:MIPS" <linux-mips@vger.kernel.org>,
         Fuxin Zhang <zhangfx@lemote.com>,
         Zhangjin Wu <wuzhangjin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+Message-ID: <20200828111257.GA2912@alpha.franken.de>
+References: <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com>
+ <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
+ <20200811120645.GA6199@alpha.franken.de>
+ <CAAhV-H5YqF5dcdFiBgVSXzu67QOKTFq3FME8ernswGts45GHfQ@mail.gmail.com>
+ <20200826124646.GA9809@alpha.franken.de>
+ <CAAhV-H41-nyVPy1weKT_10A9_ATYB0pYq0_1jMm3Z3adv0Yutw@mail.gmail.com>
+ <20200828084242.GA6817@alpha.franken.de>
+ <CAAhV-H4_=zeYZ4HSnLmqSk_utNJ=daS_s+UQdvx7n=iEKVW2pQ@mail.gmail.com>
+ <20200828093308.GA7888@alpha.franken.de>
+ <CAAhV-H7ZrkLjpVSENR93XhA=YHROShavAhydPPdYeuGNBzOnyA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H7ZrkLjpVSENR93XhA=YHROShavAhydPPdYeuGNBzOnyA@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Thomas,
+On Fri, Aug 28, 2020 at 05:52:05PM +0800, Huacai Chen wrote:
+> Hi, Thomas,
+> 
+> On Fri, Aug 28, 2020 at 5:34 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> > if it is enabled at that point, it was already enabled in kernel.
+> In kernel FPU may be enabled temporarily, and it seems a preemptible
+> kernel may enable FPU for a new process (maybe I'm wrong, this is a
+> bit complex).
 
-On Fri, Aug 28, 2020 at 5:34 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Fri, Aug 28, 2020 at 05:21:19PM +0800, Huacai Chen wrote:
-> > Hi, Thomas,
-> >
-> > On Fri, Aug 28, 2020 at 4:43 PM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > >
-> > > On Thu, Aug 27, 2020 at 11:48:29AM +0800, Huacai Chen wrote:
-> > > > Hi, Thomas,
-> > > >
-> > > > On Wed, Aug 26, 2020 at 8:48 PM Thomas Bogendoerfer
-> > > > <tsbogend@alpha.franken.de> wrote:
-> > > > >
-> > > > > On Fri, Aug 14, 2020 at 05:44:18PM +0800, Huacai Chen wrote:
-> > > > > > On Tue, Aug 11, 2020 at 8:08 PM Thomas Bogendoerfer
-> > > > > > <tsbogend@alpha.franken.de> wrote:
-> > > > > > > this comes with it's own memcpy/memset and stuff, I don't see a reason why
-> > > > > > > COP2 needs to be enabled there,
-> > > > > > gslq/gssq can also be generated by toolchains.
-> > > > >
-> > > > > I don't want to introduce every single CPU optimization bits into such
-> > > > > a closed first stage loader. So please use $(filter-out) in
-> > > > > arch/mips/boot/compressed/Makefile to disable creation of 16byte load/stores.
-> > > > >
-> > > > > > > which is correct for all user space process, otherwise the whole
-> > > > > > > cop2 exception thing wouldn't work. And if cop2 exception handling
-> > > > > > > has been run it's set in THREAD_STATUS.
-> > > > > > >
-> > > > > > THREAD_STATUS means thread_struct.cp0_status, which is the cp0_status
-> > > > > > when a process runs in kernel-space. KSTK_STATUS (what you have seen
-> > > > > > in copy_thread_tls() below) means cp0_status in a process's kernel
-> > > > > > stack, which saves the cp0_status when a process runs in user-space.
-> > > > > > Whether COP2 exception can work depends on that KSTK_STATUS (but not
-> > > > > > THREAD_STATUS) should not contain CU2 at the first time. So, whether
-> > > > > > or not THREAD_STATUS contains CU2, it won't break COP2 handling.
-> > > > >
-> > > > > so why don't we fix the the in-kernel cp0_status instead ?
-> > > > >
-> > > > > How about this ?
-> > > > >
-> > > > > diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> > > > > index 90b869297893..26fb77a8d406 100644
-> > > > > --- a/arch/mips/kernel/process.c
-> > > > > +++ b/arch/mips/kernel/process.c
-> > > > > @@ -133,6 +133,7 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
-> > > > >         /*  Put the stack after the struct pt_regs.  */
-> > > > >         childksp = (unsigned long) childregs;
-> > > > >         p->thread.cp0_status = read_c0_status() & ~(ST0_CU2|ST0_CU1);
-> > > > > +       p->thread.cp0_status |= ST0_KERNEL_CUMASK;
-> > > > >         if (unlikely(p->flags & PF_KTHREAD)) {
-> > > > >                 /* kernel thread */
-> > > > >                 unsigned long status = p->thread.cp0_status;
-> > > > This seems a good idea, I will send a new version.
-> > >
-> > > IMHO it migt be even better to just use
-> > >
-> > > p->thread.cp0_status = read_c0_status();
-> > >
-> > > without masking. We are in kernel, so we took care of whatever CU1/CU2
-> > > handling had to be done at kernel entry. So keeping the current cp0 status
-> > > for the new thread looks more sane to me.
-> > I think this may cause FPU be enabled in kernel by mistake.
->
-> if it is enabled at that point, it was already enabled in kernel.
-In kernel FPU may be enabled temporarily, and it seems a preemptible
-kernel may enable FPU for a new process (maybe I'm wrong, this is a
-bit complex).
+no you are completly right. We need to clear CU1 in this place otherwise
+a orphan cpu warning will trigger. It's enabled, if the current thread owns
+it, but the newly created thread doesn't.
 
-Huacai
+Thomas.
 
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
