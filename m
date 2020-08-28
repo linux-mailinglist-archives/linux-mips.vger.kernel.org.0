@@ -2,90 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86950255DC9
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Aug 2020 17:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650E8255F57
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Aug 2020 19:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728037AbgH1P0i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Aug 2020 11:26:38 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:37048 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1727843AbgH1P0Y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 28 Aug 2020 11:26:24 -0400
-Received: from [192.168.9.172] (unknown [101.224.81.0])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        id S1726436AbgH1RGR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Aug 2020 13:06:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54750 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725814AbgH1RGP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 28 Aug 2020 13:06:15 -0400
+Received: from gaia (unknown [46.69.195.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 5D9D060092;
-        Fri, 28 Aug 2020 23:26:20 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1598628380; bh=PNJeVnJSJLVcFuFOjNg6VsVDyT5qP/ZB6usv8VPz0KE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=R4KFnk9XwVSsOb8WubafwZrG4vTCGfmX/YpqqxzQVrpcZKGAjKWMhTTCM9cGYwDa9
-         InXABseyMe83/p7QOLEU5G4KAt5EyYKOGjknqbknEkZGJEl6TEeqbKFF+Txbw0Rhaj
-         KXnOSBTAoWVlUnpY8SZFvrSCf4fxCpCi1UZNAoD0=
-Subject: Re: [PATCH Fixes] MIPS: add missing MSACSR and upper MSA
- initialization
-To:     Huang Pei <huangpei@loongson.cn>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 67CC620776;
+        Fri, 28 Aug 2020 17:06:11 +0000 (UTC)
+Date:   Fri, 28 Aug 2020 18:06:08 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-arch@vger.kernel.org,
+        Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org
-References: <20200828085706.29190-1-huangpei@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-Message-ID: <28ec8eab-065b-3bc5-986a-883211c2b522@xen0n.name>
-Date:   Fri, 28 Aug 2020 23:26:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:81.0) Gecko/20100101
- Thunderbird/81.0a1
+        linux-mips@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: Flushing transparent hugepages
+Message-ID: <20200828170608.GJ3169@gaia>
+References: <20200818150736.GQ17456@casper.infradead.org>
+ <20200818160815.GA16191@willie-the-truck>
 MIME-Version: 1.0
-In-Reply-To: <20200828085706.29190-1-huangpei@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200818160815.GA16191@willie-the-truck>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Pei,
+On Tue, Aug 18, 2020 at 05:08:16PM +0100, Will Deacon wrote:
+> On Tue, Aug 18, 2020 at 04:07:36PM +0100, Matthew Wilcox wrote:
+> > For example, arm64 seems confused in this scenario:
+> > 
+> > void flush_dcache_page(struct page *page)
+> > {
+> >         if (test_bit(PG_dcache_clean, &page->flags))
+> >                 clear_bit(PG_dcache_clean, &page->flags);
+> > }
+> > 
+> > ...
+> > 
+> > void __sync_icache_dcache(pte_t pte)
+> > {
+> >         struct page *page = pte_page(pte);
+> > 
+> >         if (!test_and_set_bit(PG_dcache_clean, &page->flags))
+> >                 sync_icache_aliases(page_address(page), page_size(page));
+> > }
+> > 
+> > So arm64 keeps track on a per-page basis which ones have been flushed.
+> > page_size() will return PAGE_SIZE if called on a tail page or regular
+> > page, but will return PAGE_SIZE << compound_order if called on a head
+> > page.  So this will either over-flush, or it's missing the opportunity
+> > to clear the bits on all the subpages which have now been flushed.
+> 
+> Hmm, that seems to go all the way back to 2014 as the result of a bug fix
+> in 923b8f5044da ("arm64: mm: Make icache synchronisation logic huge page
+> aware") which has a Reported-by Mark and a CC stable, suggesting something
+> _was_ going wrong at the time :/ Was there a point where the tail pages
+> could end up with PG_arch_1 uncleared on allocation?
 
-On 8/28/20 4:57 PM, Huang Pei wrote:
-> init_fp_ctx just initialize the fp/msa context, and own_fp_inatomic
-> just restore FCSR and 64bit FP regs from it, but miss MSACSR and upper
-> MSA regs for MSA, so MSACSR and MSA upper regs's value from previous
-> task on current cpu can leak into current task and cause unpredictable
-> behavior when MSA context not initialized.
->
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-Actually I think what Thomas meant by saying "add a Fixes tag" in the 
-previous thread was "to add a Fixes: tag to refer to the broken commit" 
-. So perhaps send a v3?
-> ---
->   arch/mips/kernel/traps.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
->
-> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-> index 38aa07ccdbcc..cf788591f091 100644
-> --- a/arch/mips/kernel/traps.c
-> +++ b/arch/mips/kernel/traps.c
-> @@ -1287,6 +1287,18 @@ static int enable_restore_fp_context(int msa)
->   		err = own_fpu_inatomic(1);
->   		if (msa && !err) {
->   			enable_msa();
-> +			/*
-> +			 * with MSA enabled, userspace can see MSACSR
-> +			 * and MSA regs, but the values in them are from
-> +			 * other task before current task, restore them
-> +			 * from saved fp/msa context
-> +			 */
-> +			write_msa_csr(current->thread.fpu.msacsr);
-> +			/*
-> +			 * own_fpu_inatomic(1) just restore low 64bit,
-> +			 * fix the high 64bit
-> +			 */
-> +			init_msa_upper();
->   			set_thread_flag(TIF_USEDMSA);
->   			set_thread_flag(TIF_MSA_CTX_LIVE);
->   		}
+In my experience, it's the other way around: you can end up with
+PG_arch_1 cleared in a tail page when the head one was set (splitting
+THP).
+
+> > What would you _like_ to see?  Would you rather flush_dcache_page()
+> > were called once for each subpage, or would you rather maintain
+> > the page-needs-flushing state once per compound page?  We could also
+> > introduce flush_dcache_thp() if some architectures would prefer it one
+> > way and one the other, although that brings into question what to do
+> > for hugetlbfs pages.
+> 
+> For arm64, we'd like to see PG_arch_1 preserved during huge page splitting
+> [1], but there was a worry that it might break x86 and s390. It's also not
+> clear to me that we can change __sync_icache_dcache() as it's called when
+> we're installing the entry in the page-table, so why would it be called
+> again for the tail pages?
+
+Indeed, __sync_icache_dcache() is called from set_pte_at() on the head
+page, though it could always iterate and flush the tail pages
+individually (I think we could have done this in commit 923b8f5044da).
+Currently I suspect it does some over-flushing if you use THP on
+executable pages (it's a no-op on non-exec pages).
+
+With MTE (arm64 memory tagging) I'm introducing a PG_arch_2 flag and
+losing this is more problematic as it can lead to clearing valid tags.
+In the subsequent patch [2], mte_sync_tags() (also called from
+set_pte_at()) checks the PG_arch_2 in each page of a compound one.
+
+My preference would be to treat both PG_arch_1 and _2 similarly.
+
+> [1] https://lore.kernel.org/linux-arch/20200703153718.16973-8-catalin.marinas@arm.com/
+
+[2] https://lore.kernel.org/linux-arch/20200703153718.16973-9-catalin.marinas@arm.com/
+
+-- 
+Catalin
