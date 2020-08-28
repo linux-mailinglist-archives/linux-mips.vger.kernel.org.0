@@ -2,96 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5C4254966
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Aug 2020 17:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7451F2552A5
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Aug 2020 03:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbgH0P3F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Aug 2020 11:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726825AbgH0P3E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Aug 2020 11:29:04 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40842C061264
-        for <linux-mips@vger.kernel.org>; Thu, 27 Aug 2020 08:29:04 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id y2so6919092ljc.1
-        for <linux-mips@vger.kernel.org>; Thu, 27 Aug 2020 08:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Lu+Jd3Vyz1swvDaPudUhLlzjSTbN5VfLz21uPCiCZTQ=;
-        b=F+PeYV6cRu/cQg6DoJ7PBamjJ9FGVwsRqGkrc51FyTff7eDlSmst65feacP+FO8tVt
-         vNnJwerjL+9FiBGtIKph0hkmx+HeguD/ccqbiQHCuaFmsNHhzcOC9tGf4GsziSeCTKdQ
-         4lloftKWw2y5FPMxVXD7GrAphWkCC/MDBLjswvCKFZgmdzjLzSsyAForECgmVxr8KwxG
-         BhvNjlmwQjLegEjhNH4L4DANmbWtPhAY3qg35UrqFTUpF08ffLafFMpuMmqSk65sO/5W
-         +i/icor5WpmvaRBQMaNCFRqy63/zESK6mJU8+yNaz38OvP28pgbGW2tJJv3bXh3kXa26
-         witg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Lu+Jd3Vyz1swvDaPudUhLlzjSTbN5VfLz21uPCiCZTQ=;
-        b=FEKTTGMOHZ9SrlDTXpfe0yfJGQfgRsHhJh+wB+8vnV97vy+mCNvbPVBD9spRtOnQAo
-         aNkIah7BIZBwm1cGjIcd4KQ6TVGspR5qZMxCcWm7aHRv9fjBWCeIjGOTOV0SeOdnfxpK
-         l2Fz97WLdgmKrGl6MQzi3uRF9UWDkKrhq/O1TcKXSSRfmjOomOjpReo1tfswE2T2mHRb
-         re2vOmV36XEzL/F03LblulqD/oKaMuw8U/ILwV+zGH59Fr89dQHQTRNbdqJ9lGjf473q
-         Q8gc8uuSc2Pq2URukTc9MI4rnAOlyCT94CwvD6Cm02IalZda78SYEjetnMSH6ilE4XaJ
-         WPJA==
-X-Gm-Message-State: AOAM533WFKxbblk62KctwP5tReQt6SIDdyRQs5H/F795SJhHuRo5bEfU
-        P1/CgV7UK7M1QBfbXclLvKXTpI6JuN8=
-X-Google-Smtp-Source: ABdhPJzEVMIqfcj4AAk/tvJG5bmK7jdqYzUvkZmMcx4JqXFFE/mSLnnhqfARjbyXwa9Oki4ZyO3TAQ==
-X-Received: by 2002:a2e:88d4:: with SMTP id a20mr9809599ljk.326.1598542141372;
-        Thu, 27 Aug 2020 08:29:01 -0700 (PDT)
-Received: from mobilestation ([95.79.127.85])
-        by smtp.gmail.com with ESMTPSA id b18sm600787lfp.36.2020.08.27.08.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 08:29:00 -0700 (PDT)
-Date:   Thu, 27 Aug 2020 18:28:58 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     linux-mips@vger.kernel.org
+        id S1728053AbgH1Bmo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Aug 2020 21:42:44 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:51042 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726147AbgH1Bmn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 27 Aug 2020 21:42:43 -0400
+Received: from [10.130.0.60] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxyMQNYUhf_8gOAA--.234S3;
+        Fri, 28 Aug 2020 09:42:38 +0800 (CST)
 Subject: Re: [PATCH] MIPS: CPU_P5600: Cleanup unused code
-Message-ID: <20200827152858.ug65tmemto5h76ob@mobilestation>
+To:     Serge Semin <fancer.lancer@gmail.com>
 References: <1598533517-13491-1-git-send-email-hejinyang@loongson.cn>
+ <20200827152858.ug65tmemto5h76ob@mobilestation>
+Cc:     linux-mips@vger.kernel.org
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <6c7502c1-da92-79ae-6641-d637ccb76218@loongson.cn>
+Date:   Fri, 28 Aug 2020 09:42:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1598533517-13491-1-git-send-email-hejinyang@loongson.cn>
+In-Reply-To: <20200827152858.ug65tmemto5h76ob@mobilestation>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxyMQNYUhf_8gOAA--.234S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKw17XFWxJr17WF4ktryxKrg_yoWDAFX_Gw
+        sIka18AFn3X3s3uFyDWrWFyr1qya4Uu34xZr9Ivryavw4fA3W7J3y5JF9xXrn8Ga12k3yr
+        ZryrZry29FnxAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsxYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr
+        0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
+        r21lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E
+        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07brAp5UUUUU=
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Jinyang,
 
-Thanks for the patch. Although the commit message doesn't reflect the essence
-of the patch. Perhaps "mips: p5600: Discard UCA config selection" ?
 
--Sergey
+On 08/27/2020 11:28 PM, Serge Semin wrote:
+> Hello Jinyang,
+>
+> Thanks for the patch. Although the commit message doesn't reflect the essence
+> of the patch. Perhaps "mips: p5600: Discard UCA config selection" ?
+I'll send v2 later. Thanks.
+>
+> On Thu, Aug 27, 2020 at 09:05:17PM +0800, Jinyang He wrote:
+>> $ grep "CPU_SUPPORTS_UNCACHED_ACCELERATED" -nR
+>> arch/mips/Kconfig:1591:	select \
+>> CPU_SUPPORTS_UNCACHED_ACCELERATED
+>>
+>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>> ---
+>>   arch/mips/Kconfig | 1 -
+>>   1 file changed, 1 deletion(-)
+>>
+>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>> index 99220e7..6ee4488 100644
+>> --- a/arch/mips/Kconfig
+>> +++ b/arch/mips/Kconfig
+>> @@ -1589,7 +1589,6 @@ config CPU_P5600
+>>   	select CPU_SUPPORTS_32BIT_KERNEL
+>>   	select CPU_SUPPORTS_HIGHMEM
+>>   	select CPU_SUPPORTS_MSA
+>> -	select CPU_SUPPORTS_UNCACHED_ACCELERATED
+>>   	select CPU_SUPPORTS_CPUFREQ
+>>   	select CPU_MIPSR2_IRQ_VI
+>>   	select CPU_MIPSR2_IRQ_EI
+>> -- 
+>> 2.1.0
+>>
 
-On Thu, Aug 27, 2020 at 09:05:17PM +0800, Jinyang He wrote:
-> $ grep "CPU_SUPPORTS_UNCACHED_ACCELERATED" -nR
-> arch/mips/Kconfig:1591:	select \
-> CPU_SUPPORTS_UNCACHED_ACCELERATED
-> 
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> ---
->  arch/mips/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 99220e7..6ee4488 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -1589,7 +1589,6 @@ config CPU_P5600
->  	select CPU_SUPPORTS_32BIT_KERNEL
->  	select CPU_SUPPORTS_HIGHMEM
->  	select CPU_SUPPORTS_MSA
-> -	select CPU_SUPPORTS_UNCACHED_ACCELERATED
->  	select CPU_SUPPORTS_CPUFREQ
->  	select CPU_MIPSR2_IRQ_VI
->  	select CPU_MIPSR2_IRQ_EI
-> -- 
-> 2.1.0
-> 
