@@ -2,86 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F7D2556FA
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Aug 2020 10:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480AA255770
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Aug 2020 11:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728444AbgH1I5c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Aug 2020 04:57:32 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:54106 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728362AbgH1I5b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 28 Aug 2020 04:57:31 -0400
-Received: from localhost.localdomain (unknown [182.149.161.99])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxuuTtxkhfu+MOAA--.19227S2;
-        Fri, 28 Aug 2020 16:57:24 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
+        id S1728764AbgH1JVf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Aug 2020 05:21:35 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:42473 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726010AbgH1JVb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Aug 2020 05:21:31 -0400
+Received: by mail-io1-f67.google.com with SMTP id g13so528043ioo.9
+        for <linux-mips@vger.kernel.org>; Fri, 28 Aug 2020 02:21:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nSWO/rKEFIXUkPLV8fq3XSxE9tZSX7vQ0yI64sMLv+I=;
+        b=ZG9dLTWcZb9e/guRf6/jp/eC08YiPXwEg0Seu4aemKtdAt/oajMFo27a3iJw4I9sIM
+         8BCM38MJl/ZIhlKw3Ec1RdcVQpQ5RV40z4f1H9P/qA+QYaOg0XjRNHUMPLLhOss3+2t5
+         i2K5UishceI8GXb+coz0Tnd/V+6jlYk7K3P9FQ+vl6B/xTSIL6/vYyPHuixXQYP7FSAR
+         ZGY75UTrjut+bknSB9I62/11ygRZGUbz47K0LZV3FFTUfDNDvSP3fCVP0QRff83Rl5M3
+         UojaviAckyo3Wmn2/noCobrIa8ijfHuw3DgLwNvsB0pvHpmKkRheWB0E5eB7rHePAGkn
+         RbPg==
+X-Gm-Message-State: AOAM5309UjuV7TDGjnriD8Q6WTa391btz5Ry2BpAENYzfPghpZadAas7
+        tzFljR5EiTtiKxIFF2ugpfc0fxCphekNe2YaQiMr8dIERCyllg==
+X-Google-Smtp-Source: ABdhPJw5yeUXINSvWnGZIvbtcxgZP1hh+DjzcZtaPhlatnEHahYx3RsflsUvl/+YyNjyt23XBXzg6IIREAQUsxJ8eVk=
+X-Received: by 2002:a05:6638:24cf:: with SMTP id y15mr310593jat.137.1598606490850;
+ Fri, 28 Aug 2020 02:21:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200807131357.GA11979@alpha.franken.de> <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+ <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com> <20200810141219.GA2844@alpha.franken.de>
+ <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com> <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
+ <20200811120645.GA6199@alpha.franken.de> <CAAhV-H5YqF5dcdFiBgVSXzu67QOKTFq3FME8ernswGts45GHfQ@mail.gmail.com>
+ <20200826124646.GA9809@alpha.franken.de> <CAAhV-H41-nyVPy1weKT_10A9_ATYB0pYq0_1jMm3Z3adv0Yutw@mail.gmail.com>
+ <20200828084242.GA6817@alpha.franken.de>
+In-Reply-To: <20200828084242.GA6817@alpha.franken.de>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Fri, 28 Aug 2020 17:21:19 +0800
+Message-ID: <CAAhV-H4_=zeYZ4HSnLmqSk_utNJ=daS_s+UQdvx7n=iEKVW2pQ@mail.gmail.com>
+Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
         Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org
-Subject: [PATCH Fixes] MIPS: add missing MSACSR and upper MSA initialization
-Date:   Fri, 28 Aug 2020 16:57:06 +0800
-Message-Id: <20200828085706.29190-1-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: AQAAf9AxuuTtxkhfu+MOAA--.19227S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gr1fJFWfuw1rCFyDJFy7Jrb_yoWkKFbE93
-        WxA34kKr45A3Wqqa9F9rZ8WFyFq3yDWF1S93WvgFWYk34rJry5Ar4Uua4Yvrn5WrsYkrsa
-        qr9xGr1v9anrKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8ZwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUP-B_UUUUU=
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-init_fp_ctx just initialize the fp/msa context, and own_fp_inatomic
-just restore FCSR and 64bit FP regs from it, but miss MSACSR and upper
-MSA regs for MSA, so MSACSR and MSA upper regs's value from previous
-task on current cpu can leak into current task and cause unpredictable
-behavior when MSA context not initialized.
+Hi, Thomas,
 
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/kernel/traps.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On Fri, Aug 28, 2020 at 4:43 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Thu, Aug 27, 2020 at 11:48:29AM +0800, Huacai Chen wrote:
+> > Hi, Thomas,
+> >
+> > On Wed, Aug 26, 2020 at 8:48 PM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > >
+> > > On Fri, Aug 14, 2020 at 05:44:18PM +0800, Huacai Chen wrote:
+> > > > On Tue, Aug 11, 2020 at 8:08 PM Thomas Bogendoerfer
+> > > > <tsbogend@alpha.franken.de> wrote:
+> > > > > this comes with it's own memcpy/memset and stuff, I don't see a reason why
+> > > > > COP2 needs to be enabled there,
+> > > > gslq/gssq can also be generated by toolchains.
+> > >
+> > > I don't want to introduce every single CPU optimization bits into such
+> > > a closed first stage loader. So please use $(filter-out) in
+> > > arch/mips/boot/compressed/Makefile to disable creation of 16byte load/stores.
+> > >
+> > > > > which is correct for all user space process, otherwise the whole
+> > > > > cop2 exception thing wouldn't work. And if cop2 exception handling
+> > > > > has been run it's set in THREAD_STATUS.
+> > > > >
+> > > > THREAD_STATUS means thread_struct.cp0_status, which is the cp0_status
+> > > > when a process runs in kernel-space. KSTK_STATUS (what you have seen
+> > > > in copy_thread_tls() below) means cp0_status in a process's kernel
+> > > > stack, which saves the cp0_status when a process runs in user-space.
+> > > > Whether COP2 exception can work depends on that KSTK_STATUS (but not
+> > > > THREAD_STATUS) should not contain CU2 at the first time. So, whether
+> > > > or not THREAD_STATUS contains CU2, it won't break COP2 handling.
+> > >
+> > > so why don't we fix the the in-kernel cp0_status instead ?
+> > >
+> > > How about this ?
+> > >
+> > > diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+> > > index 90b869297893..26fb77a8d406 100644
+> > > --- a/arch/mips/kernel/process.c
+> > > +++ b/arch/mips/kernel/process.c
+> > > @@ -133,6 +133,7 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
+> > >         /*  Put the stack after the struct pt_regs.  */
+> > >         childksp = (unsigned long) childregs;
+> > >         p->thread.cp0_status = read_c0_status() & ~(ST0_CU2|ST0_CU1);
+> > > +       p->thread.cp0_status |= ST0_KERNEL_CUMASK;
+> > >         if (unlikely(p->flags & PF_KTHREAD)) {
+> > >                 /* kernel thread */
+> > >                 unsigned long status = p->thread.cp0_status;
+> > This seems a good idea, I will send a new version.
+>
+> IMHO it migt be even better to just use
+>
+> p->thread.cp0_status = read_c0_status();
+>
+> without masking. We are in kernel, so we took care of whatever CU1/CU2
+> handling had to be done at kernel entry. So keeping the current cp0 status
+> for the new thread looks more sane to me.
+I think this may cause FPU be enabled in kernel by mistake.
 
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 38aa07ccdbcc..cf788591f091 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -1287,6 +1287,18 @@ static int enable_restore_fp_context(int msa)
- 		err = own_fpu_inatomic(1);
- 		if (msa && !err) {
- 			enable_msa();
-+			/*
-+			 * with MSA enabled, userspace can see MSACSR
-+			 * and MSA regs, but the values in them are from
-+			 * other task before current task, restore them
-+			 * from saved fp/msa context
-+			 */
-+			write_msa_csr(current->thread.fpu.msacsr);
-+			/*
-+			 * own_fpu_inatomic(1) just restore low 64bit,
-+			 * fix the high 64bit
-+			 */
-+			init_msa_upper();
- 			set_thread_flag(TIF_USEDMSA);
- 			set_thread_flag(TIF_MSA_CTX_LIVE);
- 		}
--- 
-2.17.1
-
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
