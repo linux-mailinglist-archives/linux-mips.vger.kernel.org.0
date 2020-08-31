@@ -2,128 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EFB256B28
-	for <lists+linux-mips@lfdr.de>; Sun, 30 Aug 2020 04:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227D7257196
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Aug 2020 03:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728614AbgH3CXc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Aug 2020 22:23:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47746 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728609AbgH3CXc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 29 Aug 2020 22:23:32 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C6E420776;
-        Sun, 30 Aug 2020 02:23:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598754211;
-        bh=dXTTvvUTH4ze8YE/wK5hp4N4rIH/LzeYfhV5j6PFUWE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ziuXrkGcW3IS9YeYrKruFhO2o6MBX9552VS8jGjrQajKayxIcNmHxG7RpsDx3swt9
-         UeDE4pKRaJPdleBPoPok81iOnHuKfyvHsGlKoLZZxcrkKphvmS7U8JUGh5c+h1Lqsa
-         76Wz78sMFKalEB0JU38zeyYx7B7LkFlDrLxmpFZs=
-Date:   Sat, 29 Aug 2020 22:23:30 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Hauke Mehrtens <hauke@hauke-m.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Victor Kamensky <kamensky@cisco.com>,
-        Bruce Ashfield <bruce.ashfield@gmail.com>,
-        Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        richard.purdie@linuxfoundation.org,
-        Tony Ambardar <itugrok@yahoo.com>
-Subject: Re: [PATCH AUTOSEL 5.4 10/58] mips: vdso: fix 'jalr t9' crash in
- vdso code
-Message-ID: <20200830022330.GY8670@sasha-vm>
-References: <20200305171420.29595-1-sashal@kernel.org>
- <20200305171420.29595-10-sashal@kernel.org>
- <d10c1981-ab79-86a9-4cf4-bd098d8c55f4@hauke-m.de>
- <20200829135656.GX8670@sasha-vm>
- <3c275203-8df8-4746-0941-c142cf72bee4@hauke-m.de>
+        id S1726452AbgHaBin (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 30 Aug 2020 21:38:43 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:50224 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726573AbgHaBim (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 30 Aug 2020 21:38:42 -0400
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.161.99])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxuuSVVExf430PAA--.20338S2;
+        Mon, 31 Aug 2020 09:38:36 +0800 (CST)
+Date:   Mon, 31 Aug 2020 09:38:29 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH Fixes] MIPS: add missing MSACSR and upper MSA
+ initialization
+Message-ID: <20200831013829.5jvxr4xxdqwxdcom@ambrosehua-HP-xw6600-Workstation>
+References: <20200828085706.29190-1-huangpei@loongson.cn>
+ <28ec8eab-065b-3bc5-986a-883211c2b522@xen0n.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3c275203-8df8-4746-0941-c142cf72bee4@hauke-m.de>
+In-Reply-To: <28ec8eab-065b-3bc5-986a-883211c2b522@xen0n.name>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9AxuuSVVExf430PAA--.20338S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF1kJF4UAr1DZFyUAr1rXrb_yoW8Wryrpa
+        98CF95Kw4rXF1vy3saya4Fqry3G39Yqr4Iva9xKayrXa15Gr1rGFn7tFnxWa4a9rWUWa10
+        ga4YqF1UKa92y37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUySb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC2
+        0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
+        0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
+        14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20x
+        vaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
+        6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bOoGdUUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Aug 29, 2020 at 04:37:32PM +0200, Hauke Mehrtens wrote:
->On 8/29/20 3:56 PM, Sasha Levin wrote:
->> On Sat, Aug 29, 2020 at 03:08:01PM +0200, Hauke Mehrtens wrote:
->>> On 3/5/20 6:13 PM, Sasha Levin wrote:
->>>> From: Victor Kamensky <kamensky@cisco.com>
->>>>
->>>> [ Upstream commit d3f703c4359ff06619b2322b91f69710453e6b6d ]
->>>>
->>>> Observed that when kernel is built with Yocto mips64-poky-linux-gcc,
->>>> and mips64-poky-linux-gnun32-gcc toolchain, resulting vdso contains
->>>> 'jalr t9' instructions in its code and since in vdso case nobody
->>>> sets GOT table code crashes when instruction reached. On other hand
->>>> observed that when kernel is built mips-poky-linux-gcc toolchain, the
->>>> same 'jalr t9' instruction are replaced with PC relative function
->>>> calls using 'bal' instructions.
->>>>
->>>> The difference boils down to -mrelax-pic-calls and -mexplicit-relocs
->>>> gcc options that gets different default values depending on gcc
->>>> target triplets and corresponding binutils. -mrelax-pic-calls got
->>>> enabled by default only in mips-poky-linux-gcc case. MIPS binutils
->>>> ld relies on R_MIPS_JALR relocation to convert 'jalr t9' into 'bal'
->>>> and such relocation is generated only if -mrelax-pic-calls option
->>>> is on.
->>>>
->>>> Please note 'jalr t9' conversion to 'bal' can happen only to static
->>>> functions. These static PIC calls use mips local GOT entries that
->>>> are supposed to be filled with start of DSO value by run-time linker
->>>> (missing in VDSO case) and they do not have dynamic relocations.
->>>> Global mips GOT entries must have dynamic relocations and they should
->>>> be prevented by cmd_vdso_check Makefile rule.
->>>>
->>>> Solution call out -mrelax-pic-calls and -mexplicit-relocs options
->>>> explicitly while compiling MIPS vdso code. That would get correct
->>>> and consistent between different toolchains behaviour.
->>>>
->>>> Reported-by: Bruce Ashfield <bruce.ashfield@gmail.com>
->>>> Signed-off-by: Victor Kamensky <kamensky@cisco.com>
->>>> Signed-off-by: Paul Burton <paulburton@kernel.org>
->>>> Cc: linux-mips@vger.kernel.org
->>>> Cc: Ralf Baechle <ralf@linux-mips.org>
->>>> Cc: James Hogan <jhogan@kernel.org>
->>>> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>> Cc: richard.purdie@linuxfoundation.org
->>>> Signed-off-by: Sasha Levin <sashal@kernel.org>
->>>> ---
->>>>  arch/mips/vdso/Makefile | 1 +
->>>>  1 file changed, 1 insertion(+)
->>>>
->>>
->>> Hi Sasha,
->>>
->>> Why was this not added to the 5.4 stable branch?
->>>
->>> Some OpenWrt users ran into this problem with kernel 5.4 on MIPS64 [0].
->>> We backported this patch on our own in OpenWrt [1], but it should be
->>> added to the sable branch in my opinion as it fixes a real problem.
->>>
->>> @Sasha: Can you add it to the 5.4 stable branch or should I send some
->>> special email?
->>
->> It failed building on 5.4. If you'd like it included, please send me a
->> tested backport for 5.4.
->>
->
->I successfully compiled a kernel 5.4.61 with this patch on top with GCC
->8.4 for MIPS 64 big and little Endian.
->
->What was broken in your compile test?
+On Fri, Aug 28, 2020 at 11:26:19PM +0800, WANG Xuerui wrote:
+> Hi Pei,
+> 
+> On 8/28/20 4:57 PM, Huang Pei wrote:
+> > init_fp_ctx just initialize the fp/msa context, and own_fp_inatomic
+> > just restore FCSR and 64bit FP regs from it, but miss MSACSR and upper
+> > MSA regs for MSA, so MSACSR and MSA upper regs's value from previous
+> > task on current cpu can leak into current task and cause unpredictable
+> > behavior when MSA context not initialized.
+> > 
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> Actually I think what Thomas meant by saying "add a Fixes tag" in the
+> previous thread was "to add a Fixes: tag to refer to the broken commit" . So
+> perhaps send a v3?
+> > ---
+> >   arch/mips/kernel/traps.c | 12 ++++++++++++
+> >   1 file changed, 12 insertions(+)
+> > 
+> > diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+> > index 38aa07ccdbcc..cf788591f091 100644
+> > --- a/arch/mips/kernel/traps.c
+> > +++ b/arch/mips/kernel/traps.c
+> > @@ -1287,6 +1287,18 @@ static int enable_restore_fp_context(int msa)
+> >   		err = own_fpu_inatomic(1);
+> >   		if (msa && !err) {
+> >   			enable_msa();
+> > +			/*
+> > +			 * with MSA enabled, userspace can see MSACSR
+> > +			 * and MSA regs, but the values in them are from
+> > +			 * other task before current task, restore them
+> > +			 * from saved fp/msa context
+> > +			 */
+> > +			write_msa_csr(current->thread.fpu.msacsr);
+> > +			/*
+> > +			 * own_fpu_inatomic(1) just restore low 64bit,
+> > +			 * fix the high 64bit
+> > +			 */
+> > +			init_msa_upper();
+> >   			set_thread_flag(TIF_USEDMSA);
+> >   			set_thread_flag(TIF_MSA_CTX_LIVE);
+> >   		}
+Got it, resend with a tag refering to hte broken commit
 
-See https://lore.kernel.org/stable/bfdce3ef-5fe9-8dab-1695-be3d33727529@roeck-us.net/
-
--- 
-Thanks,
-Sasha
