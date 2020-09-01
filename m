@@ -2,99 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5884C258977
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Sep 2020 09:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737D0258A94
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Sep 2020 10:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726050AbgIAHn2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Sep 2020 03:43:28 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:45875 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726124AbgIAHn1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Sep 2020 03:43:27 -0400
-Received: by mail-il1-f195.google.com with SMTP id q6so356646ild.12
-        for <linux-mips@vger.kernel.org>; Tue, 01 Sep 2020 00:43:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+hx9EcMk9bM0obY8UGdA932fnjPoRe1BWIv65aI+aP0=;
-        b=WESR76T1UNSE1gPpY3B1H0+c/KltdN2Iy1L8JMfmPJL/LXns9s3OFqik+ZZh7lAWJ+
-         VLGZEO6M1LxR3vyqopbGfIwM7nLnGM48Kqc/yY+QGdXLVMXXczKAjPPAV8fscEuplwd5
-         4s/seAVogjHLCaxwR0IYrVs/IX7yyNet5+4p6+EO2vzAsjDSyC17OdOcVlH08KKvzuXn
-         bCEGpEvmHY02x2IR0eRSicjy3DBzko3FdC9AofTQfZnM6i2svPYWSJFBoGJ8S4BpWJ2o
-         We60dtUaUY+0P4jFAyElmiG1lg+t6hZtsB3bbefbeWro/cUsYt78kE0mw/0PyVuj2HBM
-         UXwA==
-X-Gm-Message-State: AOAM531H1wTviIrt44KQ6oM0d0454ESYvwstEYBvl4qlBipafHsxIuY6
-        I2KtSxD+Cnq2Ayf3+Jk2ItzqgLb9Hp+tJnREaLs=
-X-Google-Smtp-Source: ABdhPJxN55nlBysWSRAJtYnY48YWtc4cclwYq52SFNbgldHYNU4oGWW2aBUyuRoj6sZzjV7X8Dgj8upkV3+T+sW9iV0=
-X-Received: by 2002:a92:1b0b:: with SMTP id b11mr259756ilb.287.1598946206082;
- Tue, 01 Sep 2020 00:43:26 -0700 (PDT)
+        id S1726212AbgIAIoP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Sep 2020 04:44:15 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:60134 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726078AbgIAIoO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 1 Sep 2020 04:44:14 -0400
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.161.99])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj93VCU5f290PAA--.640S2;
+        Tue, 01 Sep 2020 16:44:07 +0800 (CST)
+Date:   Tue, 1 Sep 2020 16:44:05 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH] MIPS: perf: Fix wrong check condition of Loongson event
+ IDs
+Message-ID: <20200901084405.2lhsns5zxljbkhgy@ambrosehua-HP-xw6600-Workstation>
+References: <1598515388-3604-1-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H4MA7L8uBG3y1R-VgkS74Awa5-Qsp-vQUsYM8jwgtekJg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20200901065309.5952-1-huangpei@loongson.cn>
-In-Reply-To: <20200901065309.5952-1-huangpei@loongson.cn>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Tue, 1 Sep 2020 15:43:15 +0800
-Message-ID: <CAAhV-H4ZzPD46OBrKhO-9UaJT-eyZooTarsLj_-h-tNGWfa5gQ@mail.gmail.com>
-Subject: Re: [PATCH v4] MIPS: add missing MSACSR and upper MSA initialization
-To:     Huang Pei <huangpei@loongson.cn>,
-        Paul Burton <paulburton@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Ambrose <ambrosehua@gmail.com>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H4MA7L8uBG3y1R-VgkS74Awa5-Qsp-vQUsYM8jwgtekJg@mail.gmail.com>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9Dxj93VCU5f290PAA--.640S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cry7Cw45KFW3XF4Duw4DJwb_yoW8WF4Upr
+        4Uua1aywnrtr12ga98ZanrJr1DJrn8uwnrWayDKF13Awn8Z34DXFsrXFn8tr15Xwn0kayx
+        Xay2gr17Za4UZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF
+        x2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14
+        v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY
+        67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2
+        IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+        xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, all,
+On Fri, Aug 28, 2020 at 04:49:37PM +0800, Huacai Chen wrote:
+> Hi, Pei,
+> 
+> On Thu, Aug 27, 2020 at 4:05 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> >
+> > According to the user's manual chapter 8.2.1 of Loongson 3A2000 CPU [1]
+> > and 3A3000 CPU [2], we should take some event IDs such as 274, 358, 359
+> > and 360 as valid in the check condition, otherwise they are recognized
+> > as "not supported", fix it.
+> I think this patch needs you to confirm.
+> 
+> >
+> > [1] http://www.loongson.cn/uploadfile/cpu/3A2000/Loongson3A2000_user2.pdf
+> > [2] http://www.loongson.cn/uploadfile/cpu/3A3000/Loongson3A3000_3B3000user2.pdf
+> >
+> > Fixes: e9dfbaaeef1c ("MIPS: perf: Add hardware perf events support for new Loongson-3")
+> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > ---
+> >  arch/mips/kernel/perf_event_mipsxx.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/mips/kernel/perf_event_mipsxx.c b/arch/mips/kernel/perf_event_mipsxx.c
+> > index efce5de..011eb6bb 100644
+> > --- a/arch/mips/kernel/perf_event_mipsxx.c
+> > +++ b/arch/mips/kernel/perf_event_mipsxx.c
+> > @@ -1898,8 +1898,8 @@ static const struct mips_perf_event *mipsxx_pmu_map_raw_event(u64 config)
+> >                                 (base_id >= 64 && base_id < 90) ||
+> >                                 (base_id >= 128 && base_id < 164) ||
+> >                                 (base_id >= 192 && base_id < 200) ||
+> > -                               (base_id >= 256 && base_id < 274) ||
+> > -                               (base_id >= 320 && base_id < 358) ||
+> > +                               (base_id >= 256 && base_id < 275) ||
+> > +                               (base_id >= 320 && base_id < 361) ||
+> >                                 (base_id >= 384 && base_id < 574))
+> >                                 break;
+> >
+> > --
+> > 2.1.0
+> >
+Acked-by: Huang Pei <huangpei@loongson.cn>
 
-On Tue, Sep 1, 2020 at 2:53 PM Huang Pei <huangpei@loongson.cn> wrote:
->
-> In cc97ab235f ("MIPS: Simplify FP context initialization), init_fp_ctx
-> just initialize the fp/msa context, and own_fp_inatomic just restore
-> FCSR and 64bit FP regs from it, but miss MSACSR and upper MSA regs for
-> MSA, so MSACSR and MSA upper regs's value from previous task on current
-> cpu can leak into current task and cause unpredictable behavior when MSA
-> context not initialized.
->
-I still think this needs an ACK from Paul Burton.
-
-Huacai
-
-> Fixes: cc97ab235f ("MIPS: Simplify FP context initialization")
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->  arch/mips/kernel/traps.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-> index 38aa07ccdbcc..cf788591f091 100644
-> --- a/arch/mips/kernel/traps.c
-> +++ b/arch/mips/kernel/traps.c
-> @@ -1287,6 +1287,18 @@ static int enable_restore_fp_context(int msa)
->                 err = own_fpu_inatomic(1);
->                 if (msa && !err) {
->                         enable_msa();
-> +                       /*
-> +                        * with MSA enabled, userspace can see MSACSR
-> +                        * and MSA regs, but the values in them are from
-> +                        * other task before current task, restore them
-> +                        * from saved fp/msa context
-> +                        */
-> +                       write_msa_csr(current->thread.fpu.msacsr);
-> +                       /*
-> +                        * own_fpu_inatomic(1) just restore low 64bit,
-> +                        * fix the high 64bit
-> +                        */
-> +                       init_msa_upper();
->                         set_thread_flag(TIF_USEDMSA);
->                         set_thread_flag(TIF_MSA_CTX_LIVE);
->                 }
-> --
-> 2.17.1
->
