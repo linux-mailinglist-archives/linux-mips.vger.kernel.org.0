@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A73D225906E
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Sep 2020 16:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877A6259060
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Sep 2020 16:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728409AbgIAO1l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Sep 2020 10:27:41 -0400
-Received: from crapouillou.net ([89.234.176.41]:45308 "EHLO crapouillou.net"
+        id S1727032AbgIAO2T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Sep 2020 10:28:19 -0400
+Received: from crapouillou.net ([89.234.176.41]:45394 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728060AbgIAO1g (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Sep 2020 10:27:36 -0400
+        id S1728289AbgIAO1r (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 1 Sep 2020 10:27:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1598970418; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1598970419; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pv8t6eZQwKe+7ukpfvfRewZxi85dPebobIiJKndKFcA=;
-        b=CzZ+0a4Oqagv4fj5P/eW9dz+6LVKMHQPmfFDpnl6ZuehrZ7TtbeK5zQit6vA+MFPJwj8H3
-        6xj7nsll9p3eTRuUC7kxo7UKA+pUNTk41mbVI3+eAe67aoJE/SVoKqsleKbN6jLra4QvKU
-        jHXLTG/c/Wv3ub9azN2qkD3BMDkuU+0=
+        bh=yU+G5wm9UV0/Lr0JJrsdPUDzSeYzX6a4lcXqh4c6G+0=;
+        b=HhHU3Nc6W8OyBdfECWVhQHZrKsN6YU67y7ugf5zT0hdIOTsbRpIry/YTQJY4IHt7pyqlgm
+        u3XKVUQJRz67Ja9q01KpglQXo9i7er1TVwlHD/6zvqAvba2zwPnjfuKNohZBYBw9pEU9jp
+        G9nm5SGShMU9AI9MOC87A5L/Rrrvr1A=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Nick Terrell <terrelln@fb.com>
 Cc:     od@zcrc.me, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 1/2] lib: decompress_unzstd: Limit output size
-Date:   Tue,  1 Sep 2020 16:26:50 +0200
-Message-Id: <20200901142651.1165237-2-paul@crapouillou.net>
+Subject: [PATCH v3 2/2] MIPS: Add support for ZSTD-compressed kernels
+Date:   Tue,  1 Sep 2020 16:26:51 +0200
+Message-Id: <20200901142651.1165237-3-paul@crapouillou.net>
 In-Reply-To: <20200901142651.1165237-1-paul@crapouillou.net>
 References: <20200901142651.1165237-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -37,43 +37,111 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The zstd decompression code, as it is right now, will most likely fail
-on 32-bit systems, as the default output buffer size causes the buffer's
-end address to overflow.
+Add support for self-extracting kernels with a ZSTD compression.
 
-Address this issue by setting a sane default to the default output size,
-with a value that won't overflow the buffer's end address.
+Tested on a kernel for the GCW-Zero, it allows to reduce the size of the
+kernel file from 4.1 MiB with gzip to 3.5 MiB with ZSTD, and boots just
+as fast.
+
+Compressed kernels are now also compiled with -D__DISABLE_EXPORTS in
+order to disable the EXPORT_SYMBOL() macros inside of
+lib/zstd/decompress.c.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
 
 Notes:
-    v2: Change limit to 1 GiB
+    v2: Add -D__DISABLE_EXPORTS to CFLAGS and use zstd22
     
-    v3: Compute size limit instead of using hardcoded value
+    v3: Make memmove __weak, since it is provided for other compression
+        schemes
 
- lib/decompress_unzstd.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/mips/Kconfig                      |  1 +
+ arch/mips/boot/compressed/Makefile     |  3 ++-
+ arch/mips/boot/compressed/decompress.c |  4 ++++
+ arch/mips/boot/compressed/string.c     | 17 +++++++++++++++++
+ 4 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/lib/decompress_unzstd.c b/lib/decompress_unzstd.c
-index 0ad2c15479ed..790abc472f5b 100644
---- a/lib/decompress_unzstd.c
-+++ b/lib/decompress_unzstd.c
-@@ -178,8 +178,13 @@ static int INIT __unzstd(unsigned char *in_buf, long in_len,
- 	int err;
- 	size_t ret;
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index c95fa3a2484c..b9d7c4249dc9 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1890,6 +1890,7 @@ config SYS_SUPPORTS_ZBOOT
+ 	select HAVE_KERNEL_LZMA
+ 	select HAVE_KERNEL_LZO
+ 	select HAVE_KERNEL_XZ
++	select HAVE_KERNEL_ZSTD
  
-+	/*
-+	 * ZSTD decompression code won't be happy if the buffer size is so big
-+	 * that its end address overflows. When the size is not provided, make
-+	 * it as big as possible without having the end address overflow.
-+	 */
- 	if (out_len == 0)
--		out_len = LONG_MAX; /* no limit */
-+		out_len = UINTPTR_MAX - (uintptr_t)out_buf;
+ config SYS_SUPPORTS_ZBOOT_UART16550
+ 	bool
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index 6e56caef69f0..9a9ba77b745e 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -22,7 +22,7 @@ KBUILD_CFLAGS := $(filter-out -pg, $(KBUILD_CFLAGS))
  
- 	if (fill == NULL && flush == NULL)
- 		/*
+ KBUILD_CFLAGS := $(filter-out -fstack-protector, $(KBUILD_CFLAGS))
+ 
+-KBUILD_CFLAGS := $(KBUILD_CFLAGS) -D__KERNEL__ \
++KBUILD_CFLAGS := $(KBUILD_CFLAGS) -D__KERNEL__ -D__DISABLE_EXPORTS \
+ 	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
+ 
+ KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+@@ -70,6 +70,7 @@ tool_$(CONFIG_KERNEL_LZ4)     = lz4
+ tool_$(CONFIG_KERNEL_LZMA)    = lzma
+ tool_$(CONFIG_KERNEL_LZO)     = lzo
+ tool_$(CONFIG_KERNEL_XZ)      = xzkern
++tool_$(CONFIG_KERNEL_ZSTD)    = zstd22
+ 
+ targets += vmlinux.bin.z
+ $(obj)/vmlinux.bin.z: $(obj)/vmlinux.bin FORCE
+diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
+index 88f5d637b1c4..c61c641674e6 100644
+--- a/arch/mips/boot/compressed/decompress.c
++++ b/arch/mips/boot/compressed/decompress.c
+@@ -72,6 +72,10 @@ void error(char *x)
+ #include "../../../../lib/decompress_unxz.c"
+ #endif
+ 
++#ifdef CONFIG_KERNEL_ZSTD
++#include "../../../../lib/decompress_unzstd.c"
++#endif
++
+ const unsigned long __stack_chk_guard = 0x000a0dff;
+ 
+ void __stack_chk_fail(void)
+diff --git a/arch/mips/boot/compressed/string.c b/arch/mips/boot/compressed/string.c
+index 43beecc3587c..0b593b709228 100644
+--- a/arch/mips/boot/compressed/string.c
++++ b/arch/mips/boot/compressed/string.c
+@@ -5,6 +5,7 @@
+  * Very small subset of simple string routines
+  */
+ 
++#include <linux/compiler_attributes.h>
+ #include <linux/types.h>
+ 
+ void *memcpy(void *dest, const void *src, size_t n)
+@@ -27,3 +28,19 @@ void *memset(void *s, int c, size_t n)
+ 		ss[i] = c;
+ 	return s;
+ }
++
++void * __weak memmove(void *dest, const void *src, size_t n)
++{
++	unsigned int i;
++	const char *s = src;
++	char *d = dest;
++
++	if ((uintptr_t)dest < (uintptr_t)src) {
++		for (i = 0; i < n; i++)
++			d[i] = s[i];
++	} else {
++		for (i = n; i > 0; i--)
++			d[i - 1] = s[i - 1];
++	}
++	return dest;
++}
 -- 
 2.28.0
 
