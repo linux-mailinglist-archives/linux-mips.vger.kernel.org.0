@@ -2,47 +2,25 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4346225933A
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Sep 2020 17:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD3A259809
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Sep 2020 18:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729725AbgIAPXD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Sep 2020 11:23:03 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42978 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729348AbgIAPXB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Sep 2020 11:23:01 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0E0068EE187;
-        Tue,  1 Sep 2020 08:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1598973779;
-        bh=oM6M8l0ba8Kwr86wVvWOr0ibc9GeoVF02RI3gdpRvZg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=UvqMRf/V4bYGUnXRFYzHR0MoWszTvt72MUDJlkPgLVL7Z5C9ghIwUJJ5HYM5kfJ3n
-         5VYFPt986TvN+zbqjMT6pkl+t9bvzRZjP81gXVEMiUig/anUDkmm0cM9tI1gLXtLCF
-         UIwKWRUmpM4JixpLzQm9dVgj9tnlX6pm+UJWHqoc=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id U-JPs2CIcW43; Tue,  1 Sep 2020 08:22:58 -0700 (PDT)
-Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 8B8B18EE0F5;
-        Tue,  1 Sep 2020 08:22:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1598973778;
-        bh=oM6M8l0ba8Kwr86wVvWOr0ibc9GeoVF02RI3gdpRvZg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=QlglmDYfmn+LUmPHNl9G1vxZ4WANgTGEDBcv3VoTq5jkCobGzHRwV7MDXP/8CkPRF
-         DlnAvyJzmngr5D0/wC86DqyXRPVdp/OwUQc4zsVd3Mrk54apOxtDVbGKnBnOuqrFqS
-         /e8+ps58Vp9230FkQlqzYQQbltdvuVP33ee7Vxcw=
-Message-ID: <1598973776.4238.11.camel@HansenPartnership.com>
-Subject: Re: [PATCH 07/28] 53c700: improve non-coherent DMA handling
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S1731185AbgIAQV6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Sep 2020 12:21:58 -0400
+Received: from elvis.franken.de ([193.175.24.41]:45872 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731021AbgIAPcY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 1 Sep 2020 11:32:24 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kD8Gf-0002rq-00; Tue, 01 Sep 2020 17:32:17 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 92E50C0E4C; Tue,  1 Sep 2020 17:22:09 +0200 (CEST)
+Date:   Tue, 1 Sep 2020 17:22:09 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
         Joonyoung Shim <jy0922.shim@samsung.com>,
         Seung-Woo Kim <sw0312.kim@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -59,38 +37,59 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
         linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
         linux-mm@kvack.org, alsa-devel@alsa-project.org
-Date:   Tue, 01 Sep 2020 08:22:56 -0700
-In-Reply-To: <20200901150554.GN14765@casper.infradead.org>
+Subject: Re: [PATCH 22/28] sgiseeq: convert from dma_cache_sync to
+ dma_sync_single_for_device
+Message-ID: <20200901152209.GA14288@alpha.franken.de>
 References: <20200819065555.1802761-1-hch@lst.de>
-         <20200819065555.1802761-8-hch@lst.de>
-         <1598971960.4238.5.camel@HansenPartnership.com>
-         <20200901150554.GN14765@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+ <20200819065555.1802761-23-hch@lst.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200819065555.1802761-23-hch@lst.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 2020-09-01 at 16:05 +0100, Matthew Wilcox wrote:
-> On Tue, Sep 01, 2020 at 07:52:40AM -0700, James Bottomley wrote:
-> > I think this looks mostly OK, except for one misnamed parameter
-> > below. Unfortunately, the last non-coherent parisc was the 700
-> > series and I no longer own a box, so I can't test that part of it
-> > (I can fire up the C360 to test it on a coherent arch).
+On Wed, Aug 19, 2020 at 08:55:49AM +0200, Christoph Hellwig wrote:
+> Use the proper modern API to transfer cache ownership for incoherent DMA.
 > 
-> I have a 715/50 that probably hasn't been powered on in 15 years if
-> you need something that old to test on (I believe the 725/100 uses
-> the 7100LC and so is coherent).  I'll need to set up a cross-compiler 
-> ...
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/net/ethernet/seeq/sgiseeq.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/seeq/sgiseeq.c b/drivers/net/ethernet/seeq/sgiseeq.c
+> index 39599bbb5d45b6..f91dae16d69a19 100644
+> --- a/drivers/net/ethernet/seeq/sgiseeq.c
+> +++ b/drivers/net/ethernet/seeq/sgiseeq.c
+> @@ -112,14 +112,18 @@ struct sgiseeq_private {
+>  
+>  static inline void dma_sync_desc_cpu(struct net_device *dev, void *addr)
+>  {
+> -	dma_cache_sync(dev->dev.parent, addr, sizeof(struct sgiseeq_rx_desc),
+> -		       DMA_FROM_DEVICE);
+> +	struct sgiseeq_private *sp = netdev_priv(dev);
+> +
+> +	dma_sync_single_for_cpu(dev->dev.parent, VIRT_TO_DMA(sp, addr),
+> +			sizeof(struct sgiseeq_rx_desc), DMA_BIDIRECTIONAL);
+>  }
+>  
+>  static inline void dma_sync_desc_dev(struct net_device *dev, void *addr)
+>  {
+> -	dma_cache_sync(dev->dev.parent, addr, sizeof(struct sgiseeq_rx_desc),
+> -		       DMA_TO_DEVICE);
+> +	struct sgiseeq_private *sp = netdev_priv(dev);
+> +
+> +	dma_sync_single_for_device(dev->dev.parent, VIRT_TO_DMA(sp, addr),
+> +			sizeof(struct sgiseeq_rx_desc), DMA_BIDIRECTIONAL);
+>  }
 
-I'm not going to say no to actual testing, but it's going to be a world
-of pain getting something so old going.  I do have a box of older
-systems I keep for architectural testing that I need to rummage around
-in ... I just have a vague memory that my 715 actually caught fire a
-decade ago and had to be disposed of.
+this breaks ethernet on IP22 completely, but I haven't figured out why, yet.
 
-James
+Thomas.
 
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
