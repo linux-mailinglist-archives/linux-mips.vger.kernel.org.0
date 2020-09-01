@@ -2,94 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3C82588D7
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Sep 2020 09:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5884C258977
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Sep 2020 09:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726327AbgIAHOD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Sep 2020 03:14:03 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:41600 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726006AbgIAHOD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Sep 2020 03:14:03 -0400
-Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.161.99])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj9209E1fr9cPAA--.602S2;
-        Tue, 01 Sep 2020 15:13:58 +0800 (CST)
-Date:   Tue, 1 Sep 2020 15:13:56 +0800
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     ambrosehua@gmail.com, Li Xuefeng <lixuefeng@loongson.cn>,
+        id S1726050AbgIAHn2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Sep 2020 03:43:28 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:45875 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726124AbgIAHn1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Sep 2020 03:43:27 -0400
+Received: by mail-il1-f195.google.com with SMTP id q6so356646ild.12
+        for <linux-mips@vger.kernel.org>; Tue, 01 Sep 2020 00:43:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+hx9EcMk9bM0obY8UGdA932fnjPoRe1BWIv65aI+aP0=;
+        b=WESR76T1UNSE1gPpY3B1H0+c/KltdN2Iy1L8JMfmPJL/LXns9s3OFqik+ZZh7lAWJ+
+         VLGZEO6M1LxR3vyqopbGfIwM7nLnGM48Kqc/yY+QGdXLVMXXczKAjPPAV8fscEuplwd5
+         4s/seAVogjHLCaxwR0IYrVs/IX7yyNet5+4p6+EO2vzAsjDSyC17OdOcVlH08KKvzuXn
+         bCEGpEvmHY02x2IR0eRSicjy3DBzko3FdC9AofTQfZnM6i2svPYWSJFBoGJ8S4BpWJ2o
+         We60dtUaUY+0P4jFAyElmiG1lg+t6hZtsB3bbefbeWro/cUsYt78kE0mw/0PyVuj2HBM
+         UXwA==
+X-Gm-Message-State: AOAM531H1wTviIrt44KQ6oM0d0454ESYvwstEYBvl4qlBipafHsxIuY6
+        I2KtSxD+Cnq2Ayf3+Jk2ItzqgLb9Hp+tJnREaLs=
+X-Google-Smtp-Source: ABdhPJxN55nlBysWSRAJtYnY48YWtc4cclwYq52SFNbgldHYNU4oGWW2aBUyuRoj6sZzjV7X8Dgj8upkV3+T+sW9iV0=
+X-Received: by 2002:a92:1b0b:: with SMTP id b11mr259756ilb.287.1598946206082;
+ Tue, 01 Sep 2020 00:43:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200901065309.5952-1-huangpei@loongson.cn>
+In-Reply-To: <20200901065309.5952-1-huangpei@loongson.cn>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Tue, 1 Sep 2020 15:43:15 +0800
+Message-ID: <CAAhV-H4ZzPD46OBrKhO-9UaJT-eyZooTarsLj_-h-tNGWfa5gQ@mail.gmail.com>
+Subject: Re: [PATCH v4] MIPS: add missing MSACSR and upper MSA initialization
+To:     Huang Pei <huangpei@loongson.cn>,
+        Paul Burton <paulburton@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Ambrose <ambrosehua@gmail.com>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
         Yang Tiezhu <yangtiezhu@loongson.cn>,
         Gao Juxin <gaojuxin@loongson.cn>,
         Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: fix missing MSACSR and upper MSA initialization
- for cc97ab23
-Message-ID: <20200901071242.35opmdv67mroryek@ambrosehua-HP-xw6600-Workstation>
-References: <20200831020145.31706-1-huangpei@loongson.cn>
- <20200831020145.31706-2-huangpei@loongson.cn>
- <20200831210733.GA14500@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200831210733.GA14500@alpha.franken.de>
-User-Agent: NeoMutt/20171215
-X-CM-TRANSID: AQAAf9Dxj9209E1fr9cPAA--.602S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFykKr1UXr18Wry5Gw48WFg_yoW8Gr4rpa
-        y7G3WYkay8tFyxC3sIk34rt3yY9aykJrWxZFZ3C3yfJry3XrnxWrWxGrs8WFy3ur4FyF10
-        yFyDZF15CFyDJ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8CwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUGhFxUUUUU=
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 31, 2020 at 11:07:33PM +0200, Thomas Bogendoerfer wrote:
-> On Mon, Aug 31, 2020 at 10:01:45AM +0800, Huang Pei wrote:
-> > In cc97ab235f3fe32401ca198cebe6f42642e95770, init_fp_ctx just initialize the
-> 
-> checkpatch will warn you about this:
-> 
-> WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-> #7: 
-> In cc97ab235f3fe32401ca198cebe6f42642e95770, init_fp_ctx just initialize the
-> 
-> Use cc97ab235f3f ("MIPS: Simplify FP context initialization") instead of
-> the pure hash.
-> 
-> 
-> > fp/msa context, and own_fp_inatomic just restore FCSR and 64bit FP regs from
-> > it, but miss MSACSR and upper MSA regs for MSA, so MSACSR and MSA upper regs's
-> > value from previous task on current cpu can leak into current task and cause
-> > unpredictable behavior when MSA context not initialized.
-> 
-> And add
-> 
-> Fixes: cc97ab235f3f ("MIPS: Simplify FP context initialization")
-> 
-> before your Signed-off-by, which is what I meant with "add fixes tag".
-> 
-> > 
-> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > ---
-> >  arch/mips/kernel/traps.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+Hi, all,
 
-Thank you for your time, I will reread submitting-patches.rst and
-recheck all my patches
+On Tue, Sep 1, 2020 at 2:53 PM Huang Pei <huangpei@loongson.cn> wrote:
+>
+> In cc97ab235f ("MIPS: Simplify FP context initialization), init_fp_ctx
+> just initialize the fp/msa context, and own_fp_inatomic just restore
+> FCSR and 64bit FP regs from it, but miss MSACSR and upper MSA regs for
+> MSA, so MSACSR and MSA upper regs's value from previous task on current
+> cpu can leak into current task and cause unpredictable behavior when MSA
+> context not initialized.
+>
+I still think this needs an ACK from Paul Burton.
 
+Huacai
+
+> Fixes: cc97ab235f ("MIPS: Simplify FP context initialization")
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> ---
+>  arch/mips/kernel/traps.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+> index 38aa07ccdbcc..cf788591f091 100644
+> --- a/arch/mips/kernel/traps.c
+> +++ b/arch/mips/kernel/traps.c
+> @@ -1287,6 +1287,18 @@ static int enable_restore_fp_context(int msa)
+>                 err = own_fpu_inatomic(1);
+>                 if (msa && !err) {
+>                         enable_msa();
+> +                       /*
+> +                        * with MSA enabled, userspace can see MSACSR
+> +                        * and MSA regs, but the values in them are from
+> +                        * other task before current task, restore them
+> +                        * from saved fp/msa context
+> +                        */
+> +                       write_msa_csr(current->thread.fpu.msacsr);
+> +                       /*
+> +                        * own_fpu_inatomic(1) just restore low 64bit,
+> +                        * fix the high 64bit
+> +                        */
+> +                       init_msa_upper();
+>                         set_thread_flag(TIF_USEDMSA);
+>                         set_thread_flag(TIF_MSA_CTX_LIVE);
+>                 }
+> --
+> 2.17.1
+>
