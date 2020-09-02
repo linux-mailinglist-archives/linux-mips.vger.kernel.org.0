@@ -2,111 +2,212 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E679925A5DB
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Sep 2020 08:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FAB25A6D3
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Sep 2020 09:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgIBGy3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Sep 2020 02:54:29 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:45851 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726419AbgIBGyX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Sep 2020 02:54:23 -0400
-Received: by mail-il1-f196.google.com with SMTP id q6so4059490ild.12
-        for <linux-mips@vger.kernel.org>; Tue, 01 Sep 2020 23:54:23 -0700 (PDT)
+        id S1726567AbgIBHcX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Sep 2020 03:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726489AbgIBHcT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Sep 2020 03:32:19 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2786DC061244
+        for <linux-mips@vger.kernel.org>; Wed,  2 Sep 2020 00:32:19 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id w7so2368064pfi.4
+        for <linux-mips@vger.kernel.org>; Wed, 02 Sep 2020 00:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=5n7bgn4R3+/TM7Aq0opn1yMLhpKfeHQArQkUaqzLUrY=;
+        b=FqgWUzqGQ5DuQzo4eqLQwpgXH/UaZgGKO8MoJ3u1fHqUoOCZsX/5inUlG1VJanK5kE
+         9IDWOqSlGDljNLw1lmElFV8MGSy6hoY5ZK/zOpi4VRIwwN6SCtrzOJRwZ86siUnuTkzZ
+         L/jnoy56okuG2e/G/Ma3uDwJZsTW5/dvr7R3jDCOYVr/v/o8ZbAsY3JuzIyLSHwesX/j
+         xOHxa4PWA/6Pqdi1R+WDhsFLt6IvjYwmDbe5DWwMhe22DEuLZsi161Bn+b9prvjMSAxy
+         eoanrlZGPgMNAaBN1hYGKsFIvr2psrhk4ct6FiiOR0g9X4mD7ZktfVA+ILXEe6zxPb2x
+         hApA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NXkrhht6q/ABGeb2TBNJsVr+vrAGAjQ8EtRde81433k=;
-        b=Dwq74fY8RCugUnlhM8ctg9x75N4TKoB3nUQ9Ted3DuNY6PCHbVWqjYe/Y0ucnAaMO9
-         qzzUq9VL1iaU1C3gCpwQJ8i4oYr7CvWzrj1yPSoyQnSXNRrrvEzu2AuYk7XwH3R1pXwu
-         xwoLNj5EYKDJ36hve9bky/8gpEZ03dk9T3gjVKhkG11hcoDgEoWWmX4cggams1hIUOij
-         DOtO6eEfD1c9rW4v8ZiEEDQ3JVvHkoSfl+gHIrFwQx4n7bTNt2Zps5m3tN+cNYd6TxFb
-         CqrH6OrvPc3IFSB+RsagU59aBJjSkHx1exBLK+9zsrANrTbz7o+FTFg955OlKmFFzGam
-         BQyA==
-X-Gm-Message-State: AOAM533ewdDie73McygbY2o/zrf2fOsAKAIBvvgDezY3lA4n9aRERJdQ
-        Tucv1Dp2tpLtdO3fWr8wrYHwadqXHJ+iomCW2xhHo2mtnl4=
-X-Google-Smtp-Source: ABdhPJxsBa8KV/DcxswJoSPrsszeS7ZqF/8OnJpWCil4w8MwgBOWEuaEHrXubDUvjCFVF+2jpycCVyiJekfOwVuCevg=
-X-Received: by 2002:a05:6e02:d8f:: with SMTP id i15mr2441590ilj.147.1599029662622;
- Tue, 01 Sep 2020 23:54:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200805121021.GA12598@alpha.franken.de> <1c3cb503-720f-059e-2bac-ae692203c389@flygoat.com>
- <20200807131357.GA11979@alpha.franken.de> <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
- <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com> <20200810141219.GA2844@alpha.franken.de>
- <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com> <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
- <20200811120645.GA6199@alpha.franken.de> <CAAhV-H5YqF5dcdFiBgVSXzu67QOKTFq3FME8ernswGts45GHfQ@mail.gmail.com>
- <20200826124646.GA9809@alpha.franken.de>
-In-Reply-To: <20200826124646.GA9809@alpha.franken.de>
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=5n7bgn4R3+/TM7Aq0opn1yMLhpKfeHQArQkUaqzLUrY=;
+        b=n3ULLGKPS/k0w+ejRWWp2Y+5kPQHO8sHB1PzGOA474XoJW3KyVPZOtvTGQdIr4jF0c
+         +DKotDdiR1MK1kWXRMWIE5G4apmxA/1NBZL0jzCS+iEc5iIVvZPaAAbXL5x6Ih/nZIp+
+         5/7mQc65/txK4tX88gVLnRhCt+8kNGYvij77We/5qxTpr5SvG4Vcrt3tU1CAkWp7wAJj
+         ef6TgYtDz48ojyF+wlUidQ+UupIQabJ32w/OhOs7YCJJ+akdRh6BkYnlTMdNi0mjDzX8
+         q70d+CnOt6ZOid3usLIpUTFjvrIiGr7i6NIWRrkPewjJr7F1BToNsrl49j9swasXKWAp
+         sFxw==
+X-Gm-Message-State: AOAM531X7DIxMzwO6U4YMqgDJKcbBI1Io6Y/O/qUH1qRSHk8BCiPdIjr
+        Y4re/1Mu/Za5R8U86zFcrl8=
+X-Google-Smtp-Source: ABdhPJxMBpqvA+FtyTmBoDhGqNHTfLa9+SF568ZBMezvFyyDMraYQ4NVHeD3bnBf1zVeEj913rZFrQ==
+X-Received: by 2002:a63:2d0:: with SMTP id 199mr947084pgc.408.1599031938697;
+        Wed, 02 Sep 2020 00:32:18 -0700 (PDT)
+Received: from software.domain.org ([45.77.13.216])
+        by smtp.gmail.com with ESMTPSA id r10sm3518082pjp.49.2020.09.02.00.32.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 02 Sep 2020 00:32:17 -0700 (PDT)
 From:   Huacai Chen <chenhc@lemote.com>
-Date:   Wed, 2 Sep 2020 14:54:10 +0800
-Message-ID: <CAAhV-H4dZMgjdHiLrebBz10J7asadErM53F+TM=fLV_66dhiLw@mail.gmail.com>
-Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH V5 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+Date:   Wed,  2 Sep 2020 15:32:03 +0800
+Message-Id: <1599031924-31659-1-git-send-email-chenhc@lemote.com>
+X-Mailer: git-send-email 2.7.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Thomas,
+Loongson-3's COP2 is Multi-Media coprocessor, it is disabled in kernel
+mode by default. However, gslq/gssq (16-bytes load/store instructions)
+overrides the instruction format of lwc2/swc2. If we wan't to use gslq/
+gssq for optimization in kernel, we should enable COP2 usage in kernel.
 
-On Wed, Aug 26, 2020 at 8:48 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Fri, Aug 14, 2020 at 05:44:18PM +0800, Huacai Chen wrote:
-> > On Tue, Aug 11, 2020 at 8:08 PM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > > this comes with it's own memcpy/memset and stuff, I don't see a reason why
-> > > COP2 needs to be enabled there,
-> > gslq/gssq can also be generated by toolchains.
->
-> I don't want to introduce every single CPU optimization bits into such
-> a closed first stage loader. So please use $(filter-out) in
-> arch/mips/boot/compressed/Makefile to disable creation of 16byte load/stores.
->
-> > > which is correct for all user space process, otherwise the whole
-> > > cop2 exception thing wouldn't work. And if cop2 exception handling
-> > > has been run it's set in THREAD_STATUS.
-> > >
-> > THREAD_STATUS means thread_struct.cp0_status, which is the cp0_status
-> > when a process runs in kernel-space. KSTK_STATUS (what you have seen
-> > in copy_thread_tls() below) means cp0_status in a process's kernel
-> > stack, which saves the cp0_status when a process runs in user-space.
-> > Whether COP2 exception can work depends on that KSTK_STATUS (but not
-> > THREAD_STATUS) should not contain CU2 at the first time. So, whether
-> > or not THREAD_STATUS contains CU2, it won't break COP2 handling.
->
-> so why don't we fix the the in-kernel cp0_status instead ?
->
-> How about this ?
->
-> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> index 90b869297893..26fb77a8d406 100644
-> --- a/arch/mips/kernel/process.c
-> +++ b/arch/mips/kernel/process.c
-> @@ -133,6 +133,7 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
->         /*  Put the stack after the struct pt_regs.  */
->         childksp = (unsigned long) childregs;
->         p->thread.cp0_status = read_c0_status() & ~(ST0_CU2|ST0_CU1);
-> +       p->thread.cp0_status |= ST0_KERNEL_CUMASK;
->         if (unlikely(p->flags & PF_KTHREAD)) {
->                 /* kernel thread */
->                 unsigned long status = p->thread.cp0_status;
-I tried this way but it doesn't work, the reason is that the resume
-routine in r4k_switch.S save the current hardware status into
-THREAD_STATUS, but CU2 in hardware is cleared in its caller (i.e.,
-switch_to). However, I will send V5 to use ST0_KERNEL_CUMASK in all
-possible places to avoid #ifdefs.
+Please pay attention that in this patch we only enable COP2 in kernel,
+which means it will lose ST0_CU2 when a process go to user space (try
+to use COP2 in user space will trigger an exception and then grab COP2,
+which is similar to FPU). And as a result, we need to modify the context
+switching code because the new scheduled process doesn't contain ST0_CU2
+in its THERAD_STATUS probably.
 
-Huacai
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+---
+V3: Stop using ST0_MM and use ST0_CU2 instead (Thank Thomas and Maciej).
+V4: Adopt Thomas's suggestion to improve coding style.
+V5: Use ST0_KERNEL_CUMASK in all possible places to avoid #ifdefs.
 
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+ arch/mips/boot/compressed/head.S   | 5 +++++
+ arch/mips/include/asm/mipsregs.h   | 7 +++++++
+ arch/mips/include/asm/stackframe.h | 6 +++---
+ arch/mips/kernel/head.S            | 2 +-
+ arch/mips/kernel/process.c         | 2 +-
+ arch/mips/kernel/r4k_switch.S      | 1 +
+ arch/mips/kernel/traps.c           | 2 +-
+ 7 files changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/arch/mips/boot/compressed/head.S b/arch/mips/boot/compressed/head.S
+index 409cb48..9fc88ec 100644
+--- a/arch/mips/boot/compressed/head.S
++++ b/arch/mips/boot/compressed/head.S
+@@ -14,11 +14,16 @@
+ 
+ #include <asm/asm.h>
+ #include <asm/regdef.h>
++#include <asm/mipsregs.h>
+ 
+ 	.set noreorder
+ 	.cprestore
+ 	LEAF(start)
+ start:
++	mfc0    t0, CP0_STATUS
++	or	t0, ST0_KERNEL_CUMASK
++	mtc0    t0, CP0_STATUS
++
+ 	/* Save boot rom start args */
+ 	move	s0, a0
+ 	move	s1, a1
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 1a03fdc2..36b8433 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -389,6 +389,13 @@
+ #define ST0_CU3			0x80000000
+ #define ST0_XX			0x80000000	/* MIPS IV naming */
+ 
++/* in-kernel enabled CUs */
++#ifdef CONFIG_CPU_LOONGSON64
++#define ST0_KERNEL_CUMASK      (ST0_CU0 | ST0_CU2)
++#else
++#define ST0_KERNEL_CUMASK      ST0_CU0
++#endif
++
+ /*
+  * Bitfields and bit numbers in the coprocessor 0 IntCtl register. (MIPSR2)
+  */
+diff --git a/arch/mips/include/asm/stackframe.h b/arch/mips/include/asm/stackframe.h
+index 3e8d2aa..aa430a6 100644
+--- a/arch/mips/include/asm/stackframe.h
++++ b/arch/mips/include/asm/stackframe.h
+@@ -450,7 +450,7 @@
+  */
+ 		.macro	CLI
+ 		mfc0	t0, CP0_STATUS
+-		li	t1, ST0_CU0 | STATMASK
++		li	t1, ST0_KERNEL_CUMASK | STATMASK
+ 		or	t0, t1
+ 		xori	t0, STATMASK
+ 		mtc0	t0, CP0_STATUS
+@@ -463,7 +463,7 @@
+  */
+ 		.macro	STI
+ 		mfc0	t0, CP0_STATUS
+-		li	t1, ST0_CU0 | STATMASK
++		li	t1, ST0_KERNEL_CUMASK | STATMASK
+ 		or	t0, t1
+ 		xori	t0, STATMASK & ~1
+ 		mtc0	t0, CP0_STATUS
+@@ -477,7 +477,7 @@
+  */
+ 		.macro	KMODE
+ 		mfc0	t0, CP0_STATUS
+-		li	t1, ST0_CU0 | (STATMASK & ~1)
++		li	t1, ST0_KERNEL_CUMASK | (STATMASK & ~1)
+ #if defined(CONFIG_CPU_R3000) || defined(CONFIG_CPU_TX39XX)
+ 		andi	t2, t0, ST0_IEP
+ 		srl	t2, 2
+diff --git a/arch/mips/kernel/head.S b/arch/mips/kernel/head.S
+index 7dd234e..61b7358 100644
+--- a/arch/mips/kernel/head.S
++++ b/arch/mips/kernel/head.S
+@@ -35,7 +35,7 @@
+ 	.macro	setup_c0_status set clr
+ 	.set	push
+ 	mfc0	t0, CP0_STATUS
+-	or	t0, ST0_CU0|\set|0x1f|\clr
++	or	t0, ST0_KERNEL_CUMASK|\set|0x1f|\clr
+ 	xor	t0, 0x1f|\clr
+ 	mtc0	t0, CP0_STATUS
+ 	.set	noreorder
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index f5dc316..9412314 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -68,7 +68,7 @@ void start_thread(struct pt_regs * regs, unsigned long pc, unsigned long sp)
+ 	unsigned long status;
+ 
+ 	/* New thread loses kernel privileges. */
+-	status = regs->cp0_status & ~(ST0_CU0|ST0_CU1|ST0_FR|KU_MASK);
++	status = regs->cp0_status & ~(ST0_CU0|ST0_CU1|ST0_CU2|ST0_FR|KU_MASK);
+ 	status |= KU_USER;
+ 	regs->cp0_status = status;
+ 	lose_fpu(0);
+diff --git a/arch/mips/kernel/r4k_switch.S b/arch/mips/kernel/r4k_switch.S
+index 58232ae..8f33bbc 100644
+--- a/arch/mips/kernel/r4k_switch.S
++++ b/arch/mips/kernel/r4k_switch.S
+@@ -53,6 +53,7 @@
+ 	nor	a3, $0, a3
+ 	and	a2, a3
+ 	or	a2, t1
++	or	a2, ST0_KERNEL_CUMASK
+ 	mtc0	a2, CP0_STATUS
+ 	move	v0, a0
+ 	jr	ra
+diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+index 38aa07c..14225b6 100644
+--- a/arch/mips/kernel/traps.c
++++ b/arch/mips/kernel/traps.c
+@@ -2192,7 +2192,7 @@ static void configure_status(void)
+ 	 * flag that some firmware may have left set and the TS bit (for
+ 	 * IP27).  Set XX for ISA IV code to work.
+ 	 */
+-	unsigned int status_set = ST0_CU0;
++	unsigned int status_set = ST0_KERNEL_CUMASK;
+ #ifdef CONFIG_64BIT
+ 	status_set |= ST0_FR|ST0_KX|ST0_SX|ST0_UX;
+ #endif
+-- 
+2.7.0
+
