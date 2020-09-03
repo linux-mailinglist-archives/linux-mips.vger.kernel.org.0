@@ -2,53 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E96A625BD3B
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Sep 2020 10:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA8A25BD89
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Sep 2020 10:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728298AbgICI1X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Sep 2020 04:27:23 -0400
-Received: from elvis.franken.de ([193.175.24.41]:50522 "EHLO elvis.franken.de"
+        id S1726448AbgICIme (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Sep 2020 04:42:34 -0400
+Received: from verein.lst.de ([213.95.11.211]:37001 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727857AbgICI1M (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Sep 2020 04:27:12 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kDkaL-0000I1-07; Thu, 03 Sep 2020 10:27:09 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 4DDD5C0E86; Thu,  3 Sep 2020 10:24:40 +0200 (CEST)
-Date:   Thu, 3 Sep 2020 10:24:40 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     oleg@redhat.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Davidlohr Bueso <dbueso@suse.de>
-Subject: Re: [PATCH] MIPS: Use rcu to lookup a task in
- mipsmt_sys_sched_setaffinity()
-Message-ID: <20200903082440.GH6220@alpha.franken.de>
-References: <20200831201402.2837-1-dave@stgolabs.net>
+        id S1726025AbgICImd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Sep 2020 04:42:33 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 2B13F68BEB; Thu,  3 Sep 2020 10:42:27 +0200 (CEST)
+Date:   Thu, 3 Sep 2020 10:42:26 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Christoph Hellwig <hch@lst.de>, alsa-devel@alsa-project.org,
+        linux-ia64@vger.kernel.org, linux-doc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-mm@kvack.org, Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        linux-scsi@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        linux-media@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pawel Osciak <pawel@osciak.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+        netdev@vger.kernel.org, Seung-Woo Kim <sw0312.kim@samsung.com>,
+        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org
+Subject: Re: [PATCH 22/28] sgiseeq: convert from dma_cache_sync to
+ dma_sync_single_for_device
+Message-ID: <20200903084226.GA24410@lst.de>
+References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-23-hch@lst.de> <20200901152209.GA14288@alpha.franken.de> <20200901171241.GA20685@alpha.franken.de> <20200901171627.GA8255@lst.de> <20200901173810.GA25282@alpha.franken.de> <20200902213809.GA7998@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200831201402.2837-1-dave@stgolabs.net>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200902213809.GA7998@alpha.franken.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 31, 2020 at 01:14:02PM -0700, Davidlohr Bueso wrote:
-> The call simply looks up the corresponding task (without iterating
-> the tasklist), which is safe under rcu instead of the tasklist_lock.
-> In addition, the setaffinity counter part already does this.
-> 
-> Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
-> ---
->  arch/mips/kernel/mips-mt-fpaff.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Wed, Sep 02, 2020 at 11:38:09PM +0200, Thomas Bogendoerfer wrote:
+> the patch below fixes the problem.
 
-applied to mips-next.
+But is very wrong unfortunately.
 
-Thomas.
+>  static inline void dma_sync_desc_cpu(struct net_device *dev, void *addr)
+>  {
+> -       dma_cache_sync(dev->dev.parent, addr, sizeof(struct sgiseeq_rx_desc),
+> -                      DMA_FROM_DEVICE);
+> +       struct sgiseeq_private *sp = netdev_priv(dev);
+> +
+> +       dma_sync_single_for_device(dev->dev.parent, VIRT_TO_DMA(sp, addr),
+> +                       sizeof(struct sgiseeq_rx_desc), DMA_FROM_DEVICE);
+>  }
+>  
+>  static inline void dma_sync_desc_dev(struct net_device *dev, void *addr)
+>  {
+> -       dma_cache_sync(dev->dev.parent, addr, sizeof(struct sgiseeq_rx_desc),
+> -                      DMA_TO_DEVICE);
+> +       struct sgiseeq_private *sp = netdev_priv(dev);
+> +
+> +       dma_sync_single_for_device(dev->dev.parent, VIRT_TO_DMA(sp, addr),
+> +                       sizeof(struct sgiseeq_rx_desc), DMA_TO_DEVICE);
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+This is not how the DMA API works.  You can only call
+dma_sync_single_for_{device,cpu} with the direction that the memory
+was mapped.  It then transfer ownership to the device or the cpu,
+and the ownership of the memory is a fundamental concept that allows
+for reasoning about the caching interaction.
+
+>  }
+>  
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
+---end quoted text---
