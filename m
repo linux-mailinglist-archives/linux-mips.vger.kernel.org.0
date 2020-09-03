@@ -2,79 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 708C325BE6A
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Sep 2020 11:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6978125BE93
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Sep 2020 11:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbgICJZ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Sep 2020 05:25:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36448 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726025AbgICJZ6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Sep 2020 05:25:58 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 28BA3206C0;
-        Thu,  3 Sep 2020 09:25:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599125157;
-        bh=1qLuh4C0lY1AtWSacfumdAnrXtxtJ3GknJ6aSYAaKdA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bSJQTasMRckHmzdu8nh3w5f525dMvfZDoPDh0NxJ8Kcv2MXugwPez/60NyBIWd4uk
-         LG59DeR31S64XHJFu25CuSIgRSFZzo9RLyo8jnDH7ktBWqzEi1KP/gs3bkKzh7MR1A
-         HmcFDvqzcrtpH0mN+1HXQCFt6H0dbIEsA/qWe+Uo=
-Date:   Thu, 3 Sep 2020 11:26:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Paul Burton <paul.burton@mips.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH 4.19 66/81] MIPS: Disable Loongson MMI instructions for
- kernel build
-Message-ID: <20200903092621.GB2220117@kroah.com>
-References: <20191016214805.727399379@linuxfoundation.org>
- <20191016214845.344235056@linuxfoundation.org>
- <20200826210628.GA173536@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200826210628.GA173536@roeck-us.net>
+        id S1726323AbgICJmZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Sep 2020 05:42:25 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:36146 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726047AbgICJmY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Sep 2020 05:42:24 -0400
+Received: from localhost.localdomain (unknown [182.149.160.36])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxuuR1ulBfBV0QAA--.21305S2;
+        Thu, 03 Sep 2020 17:42:19 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org
+Subject: [PATCH V5] MIPS: add missing MSACSR and upper MSA initialization
+Date:   Thu,  3 Sep 2020 17:42:03 +0800
+Message-Id: <20200903094203.11465-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: AQAAf9AxuuR1ulBfBV0QAA--.21305S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urWUKFy7Cw1fCF1fKw4rZrb_yoW8Gr47pa
+        nrA3Z8Kw4UXFykt3sYyayFq3y3Wr95trW7ua9rK3yfXan0gr15W3WxJFZ8JFyagrW0ga10
+        934YvF4UKan2yw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4f
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUqLvtUUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 02:06:28PM -0700, Guenter Roeck wrote:
-> Hi,
-> 
-> On Wed, Oct 16, 2019 at 02:51:17PM -0700, Greg Kroah-Hartman wrote:
-> > From: Paul Burton <paul.burton@mips.com>
-> > 
-> > commit 2f2b4fd674cadd8c6b40eb629e140a14db4068fd upstream.
-> > 
-> > GCC 9.x automatically enables support for Loongson MMI instructions when
-> > using some -march= flags, and then errors out when -msoft-float is
-> > specified with:
-> > 
-> >   cc1: error: ‘-mloongson-mmi’ must be used with ‘-mhard-float’
-> > 
-> > The kernel shouldn't be using these MMI instructions anyway, just as it
-> > doesn't use floating point instructions. Explicitly disable them in
-> > order to fix the build with GCC 9.x.
-> > 
-> 
-> I still see this problem when trying to compile fuloong2e_defconfig with
-> gcc 9.x or later. Reason seems to be that the patch was applied to
-> arch/mips/loongson64/Platform, but fuloong2e_defconfig uses
-> arch/mips/loongson2ef/Platform.
-> 
-> Am I missing something ?
+In cc97ab235f3fe324 ("MIPS: Simplify FP context initialization),
+init_fp_ctx just initialize the fp/msa context, and own_fp_inatomic just
+restore FCSR and 64bit FP regs from it, but miss MSACSR and upper MSA regs
+for MSA, so MSACSR and MSA upper regs's value from previous task on current
+cpu can leak into current task and cause unpredictable behavior when MSA
+context not initialized.
 
-I don't know, sorry, that would be something that Paul understands.
+Fixes: cc97ab235f3fe324 ("MIPS: Simplify FP context initialization")
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+---
+ arch/mips/kernel/traps.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Paul?
-
+diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+index 38aa07ccdbcc..cf788591f091 100644
+--- a/arch/mips/kernel/traps.c
++++ b/arch/mips/kernel/traps.c
+@@ -1287,6 +1287,18 @@ static int enable_restore_fp_context(int msa)
+ 		err = own_fpu_inatomic(1);
+ 		if (msa && !err) {
+ 			enable_msa();
++			/*
++			 * with MSA enabled, userspace can see MSACSR
++			 * and MSA regs, but the values in them are from
++			 * other task before current task, restore them
++			 * from saved fp/msa context
++			 */
++			write_msa_csr(current->thread.fpu.msacsr);
++			/*
++			 * own_fpu_inatomic(1) just restore low 64bit,
++			 * fix the high 64bit
++			 */
++			init_msa_upper();
+ 			set_thread_flag(TIF_USEDMSA);
+ 			set_thread_flag(TIF_MSA_CTX_LIVE);
+ 		}
+-- 
+2.17.1
 
