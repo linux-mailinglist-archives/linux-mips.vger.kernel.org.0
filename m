@@ -2,73 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FD625BD93
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Sep 2020 10:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5190025BD99
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Sep 2020 10:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728386AbgICInJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Sep 2020 04:43:09 -0400
-Received: from verein.lst.de ([213.95.11.211]:37010 "EHLO verein.lst.de"
+        id S1726493AbgICIn4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Sep 2020 04:43:56 -0400
+Received: from elvis.franken.de ([193.175.24.41]:50566 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726025AbgICInG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Sep 2020 04:43:06 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 1CF6368CEC; Thu,  3 Sep 2020 10:43:03 +0200 (CEST)
-Date:   Thu, 3 Sep 2020 10:43:02 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Christoph Hellwig <hch@lst.de>, alsa-devel@alsa-project.org,
-        linux-ia64@vger.kernel.org, linux-doc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-mm@kvack.org, Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        linux-scsi@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        linux-media@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Pawel Osciak <pawel@osciak.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
-        netdev@vger.kernel.org, Seung-Woo Kim <sw0312.kim@samsung.com>,
-        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: Re: [PATCH 22/28] sgiseeq: convert from dma_cache_sync to
- dma_sync_single_for_device
-Message-ID: <20200903084302.GB24410@lst.de>
-References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-23-hch@lst.de> <20200901152209.GA14288@alpha.franken.de> <20200901171241.GA20685@alpha.franken.de> <20200901171627.GA8255@lst.de> <20200901173810.GA25282@alpha.franken.de>
+        id S1726448AbgICInz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Sep 2020 04:43:55 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kDkqX-0000U1-00; Thu, 03 Sep 2020 10:43:53 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id ECE03C0E86; Thu,  3 Sep 2020 10:43:31 +0200 (CEST)
+Date:   Thu, 3 Sep 2020 10:43:31 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Subject: Re: [PATCH V3 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+Message-ID: <20200903084331.GA7223@alpha.franken.de>
+References: <20200807131357.GA11979@alpha.franken.de>
+ <410cf75c-4cf5-94d8-fbc9-821d38f8a299@flygoat.com>
+ <96dbe0be-7af6-b182-bbe0-534883539812@flygoat.com>
+ <20200810141219.GA2844@alpha.franken.de>
+ <106e65f5-d456-deaa-b47b-45b2a461b048@flygoat.com>
+ <CAAhV-H7xJXX7V18ZUKw6RdEOtKUF49itrXY0PBNFAcSBbr4idQ@mail.gmail.com>
+ <20200811120645.GA6199@alpha.franken.de>
+ <CAAhV-H5YqF5dcdFiBgVSXzu67QOKTFq3FME8ernswGts45GHfQ@mail.gmail.com>
+ <20200826124646.GA9809@alpha.franken.de>
+ <CAAhV-H4dZMgjdHiLrebBz10J7asadErM53F+TM=fLV_66dhiLw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200901173810.GA25282@alpha.franken.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <CAAhV-H4dZMgjdHiLrebBz10J7asadErM53F+TM=fLV_66dhiLw@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 07:38:10PM +0200, Thomas Bogendoerfer wrote:
-> this is the problem:
+On Wed, Sep 02, 2020 at 02:54:10PM +0800, Huacai Chen wrote:
+> Hi, Thomas,
 > 
->        /* Always check for received packets. */
->         sgiseeq_rx(dev, sp, hregs, sregs);
-> 
-> so the driver will look at the rx descriptor on every interrupt, so
-> we cache the rx descriptor on the first interrupt and if there was
-> $no rx packet, we will only see it, if cache line gets flushed for
-> some other reason.
+> On Wed, Aug 26, 2020 at 8:48 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > On Fri, Aug 14, 2020 at 05:44:18PM +0800, Huacai Chen wrote:
+> > > On Tue, Aug 11, 2020 at 8:08 PM Thomas Bogendoerfer
+> > > <tsbogend@alpha.franken.de> wrote:
+> > > > this comes with it's own memcpy/memset and stuff, I don't see a reason why
+> > > > COP2 needs to be enabled there,
+> > > gslq/gssq can also be generated by toolchains.
+> >
+> > I don't want to introduce every single CPU optimization bits into such
+> > a closed first stage loader. So please use $(filter-out) in
+> > arch/mips/boot/compressed/Makefile to disable creation of 16byte load/stores.
+> >
+> > > > which is correct for all user space process, otherwise the whole
+> > > > cop2 exception thing wouldn't work. And if cop2 exception handling
+> > > > has been run it's set in THREAD_STATUS.
+> > > >
+> > > THREAD_STATUS means thread_struct.cp0_status, which is the cp0_status
+> > > when a process runs in kernel-space. KSTK_STATUS (what you have seen
+> > > in copy_thread_tls() below) means cp0_status in a process's kernel
+> > > stack, which saves the cp0_status when a process runs in user-space.
+> > > Whether COP2 exception can work depends on that KSTK_STATUS (but not
+> > > THREAD_STATUS) should not contain CU2 at the first time. So, whether
+> > > or not THREAD_STATUS contains CU2, it won't break COP2 handling.
+> >
+> > so why don't we fix the the in-kernel cp0_status instead ?
+> >
+> > How about this ?
+> >
+> > diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+> > index 90b869297893..26fb77a8d406 100644
+> > --- a/arch/mips/kernel/process.c
+> > +++ b/arch/mips/kernel/process.c
+> > @@ -133,6 +133,7 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
+> >         /*  Put the stack after the struct pt_regs.  */
+> >         childksp = (unsigned long) childregs;
+> >         p->thread.cp0_status = read_c0_status() & ~(ST0_CU2|ST0_CU1);
+> > +       p->thread.cp0_status |= ST0_KERNEL_CUMASK;
+> >         if (unlikely(p->flags & PF_KTHREAD)) {
+> >                 /* kernel thread */
+> >                 unsigned long status = p->thread.cp0_status;
+> I tried this way but it doesn't work, the reason is that the resume
+> routine in r4k_switch.S save the current hardware status into
+> THREAD_STATUS, but CU2 in hardware is cleared in its caller (i.e.,
+> switch_to).
 
-That means a transfer back to device ownership is missing after a
-(negative) check.
+so let's fix it there:
 
-> kick_tx() does a busy loop checking tx descriptors,
-> with just sync_desc_cpu...
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
----end quoted text---
+diff --git a/arch/mips/include/asm/switch_to.h b/arch/mips/include/asm/switch_to.h
+index 0b0a93bf83cd..a4374b4cb88f 100644
+--- a/arch/mips/include/asm/switch_to.h
++++ b/arch/mips/include/asm/switch_to.h
+@@ -117,6 +117,8 @@ do {                                                                        \
+                __restore_dsp(next);                                    \
+        }                                                               \
+        if (cop2_present) {                                             \
++               u32 status = read_c0_status();                          \
++                                                                       \
+                set_c0_status(ST0_CU2);                                 \
+                if ((KSTK_STATUS(prev) & ST0_CU2)) {                    \
+                        if (cop2_lazy_restore)                          \
+@@ -127,7 +129,7 @@ do {                                                                        \
+                    !cop2_lazy_restore) {                               \
+                        cop2_restore(next);                             \
+                }                                                       \
+-               clear_c0_status(ST0_CU2);                               \
++               write_c0_status(status);                                \
+        }                                                               \
+        __clear_r5_hw_ll_bit();                                         \
+        __clear_software_ll_bit();                                      \
+
+BTW. if we come up to a final solution, this change should be a seperate
+patch. And the change in process.c probably, too.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
