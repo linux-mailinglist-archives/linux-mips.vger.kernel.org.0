@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3142B25F036
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Sep 2020 21:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B10125F038
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Sep 2020 21:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgIFTbe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 6 Sep 2020 15:31:34 -0400
-Received: from crapouillou.net ([89.234.176.41]:36050 "EHLO crapouillou.net"
+        id S1726063AbgIFTbo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 6 Sep 2020 15:31:44 -0400
+Received: from crapouillou.net ([89.234.176.41]:36074 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726063AbgIFTbd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 6 Sep 2020 15:31:33 -0400
+        id S1726858AbgIFTbl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 6 Sep 2020 15:31:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1599420597; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1599420598; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/cPaq6OOhUYjFsmDjXU2CSlSg6qf83UC/Fmqp/j1WCw=;
-        b=xz4j9otBzfSToFA1b+uA+VVFzB4h/BFnz4IjDnHQiC5Hwr/Bouj0C8av4BPt6W5OpvZTJz
-        fWI2ayBX41wpaAtftYAdhYFRYwO1cQ6RGH9+3ZRaZFTZNEmX4HW/PzIRlm6a9N3Iwwclu6
-        jePo7VL/o3OHSsShNyrpSpigaiAMPKc=
+        bh=rEKyNfo45oGWfwAyWXYVakAaidQd5uH9fd/cmH2s8cY=;
+        b=v662w+tuMPG02WOhLky+mqODR1WbURumu4wNoIrqTqyITRC/wI/y20SnPr2+iXbobyhgxN
+        Bb06aAZwBu+JD7kMs2STpiYdXSGExzdHoIOaSCioV8eW3MvDI81hm/CqRfk8qiVKq5gWua
+        cVyISMnzaNGg6bvTKG7HHtWjQpkAgsM=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     "Maciej W . Rozycki" <macro@linux-mips.org>,
@@ -27,9 +27,9 @@ Cc:     "Maciej W . Rozycki" <macro@linux-mips.org>,
         Zhou Yanjie <zhouyanjie@wanyeetech.com>, od@zcrc.me,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 12/15] MIPS: jz4740: Drop all obsolete files
-Date:   Sun,  6 Sep 2020 21:29:32 +0200
-Message-Id: <20200906192935.107086-13-paul@crapouillou.net>
+Subject: [PATCH v3 13/15] MIPS: jz4740: Rename jz4740 folders to ingenic
+Date:   Sun,  6 Sep 2020 21:29:33 +0200
+Message-Id: <20200906192935.107086-14-paul@crapouillou.net>
 In-Reply-To: <20200906192935.107086-1-paul@crapouillou.net>
 References: <20200906192935.107086-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -39,223 +39,60 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Support for Ingenic SoCs is now provided by the arch/mips/generic/ code,
-so all files in the arch/mips/jz4740/ folder can dropped, except for the
-Kconfig, and the cpu-feature-overrides.h header file.
+Now that all the jz4740 platform code has been removed, and we're left
+with only a Kconfig and the cpu-feature-overrides.h file, finalize the
+cleanup process by renaming the jz4740 and include/mach-jz4740 folders
+to ingenic and include/mach-ingenic.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
 
 Notes:
-    v2: No change
-    
-    v3: - Don't rename the folder to ingenic, it will be done in a follow-up patch.
-        - Don't remove cpu-feature-overrides.h
+    v3: New patch
 
- arch/mips/include/asm/mach-jz4740/irq.h |  13 ---
- arch/mips/jz4740/Makefile               |   9 --
- arch/mips/jz4740/Platform               |   3 -
- arch/mips/jz4740/setup.c                | 145 ------------------------
- 4 files changed, 170 deletions(-)
- delete mode 100644 arch/mips/include/asm/mach-jz4740/irq.h
- delete mode 100644 arch/mips/jz4740/Makefile
- delete mode 100644 arch/mips/jz4740/Platform
- delete mode 100644 arch/mips/jz4740/setup.c
+ arch/mips/Kconfig                                               | 2 +-
+ arch/mips/generic/Platform                                      | 2 +-
+ .../asm/{mach-jz4740 => mach-ingenic}/cpu-feature-overrides.h   | 0
+ arch/mips/{jz4740 => ingenic}/Kconfig                           | 0
+ 4 files changed, 2 insertions(+), 2 deletions(-)
+ rename arch/mips/include/asm/{mach-jz4740 => mach-ingenic}/cpu-feature-overrides.h (100%)
+ rename arch/mips/{jz4740 => ingenic}/Kconfig (100%)
 
-diff --git a/arch/mips/include/asm/mach-jz4740/irq.h b/arch/mips/include/asm/mach-jz4740/irq.h
-deleted file mode 100644
-index 27c543bd340f..000000000000
---- a/arch/mips/include/asm/mach-jz4740/irq.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- *  Copyright (C) 2009-2010, Lars-Peter Clausen <lars@metafoo.de>
-- *  JZ4740 IRQ definitions
-- */
--
--#ifndef __ASM_MACH_JZ4740_IRQ_H__
--#define __ASM_MACH_JZ4740_IRQ_H__
--
--#define MIPS_CPU_IRQ_BASE 0
--#define NR_IRQS 256
--
--#endif
-diff --git a/arch/mips/jz4740/Makefile b/arch/mips/jz4740/Makefile
-deleted file mode 100644
-index f96c0f5eca44..000000000000
---- a/arch/mips/jz4740/Makefile
-+++ /dev/null
-@@ -1,9 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--#
--# Makefile for the Ingenic JZ4740.
--#
--
--# Object file lists.
--obj-y += setup.o
--
--CFLAGS_setup.o = -I$(src)/../../../scripts/dtc/libfdt
-diff --git a/arch/mips/jz4740/Platform b/arch/mips/jz4740/Platform
-deleted file mode 100644
-index bd35d0621b13..000000000000
---- a/arch/mips/jz4740/Platform
-+++ /dev/null
-@@ -1,3 +0,0 @@
--cflags-$(CONFIG_MACH_INGENIC)	+= -I$(srctree)/arch/mips/include/asm/mach-jz4740
--load-$(CONFIG_MACH_INGENIC)	+= 0xffffffff80010000
--zload-$(CONFIG_MACH_INGENIC)	+= 0xffffffff81000000
-diff --git a/arch/mips/jz4740/setup.c b/arch/mips/jz4740/setup.c
-deleted file mode 100644
-index 51d906325ce6..000000000000
---- a/arch/mips/jz4740/setup.c
-+++ /dev/null
-@@ -1,145 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- *  Copyright (C) 2009-2010, Lars-Peter Clausen <lars@metafoo.de>
-- *  Copyright (C) 2011, Maarten ter Huurne <maarten@treewalker.org>
-- *  JZ4740 setup code
-- */
--
--#include <linux/clocksource.h>
--#include <linux/init.h>
--#include <linux/io.h>
--#include <linux/irqchip.h>
--#include <linux/kernel.h>
--#include <linux/libfdt.h>
--#include <linux/of_clk.h>
--#include <linux/of_fdt.h>
--#include <linux/pm.h>
--#include <linux/sizes.h>
--#include <linux/suspend.h>
--
--#include <asm/bootinfo.h>
--#include <asm/fw/fw.h>
--#include <asm/prom.h>
--#include <asm/reboot.h>
--#include <asm/time.h>
--
--static unsigned long __init get_board_mach_type(const void *fdt)
--{
--	if (!fdt_node_check_compatible(fdt, 0, "ingenic,x2000"))
--		return MACH_INGENIC_X2000;
--	if (!fdt_node_check_compatible(fdt, 0, "ingenic,x1830"))
--		return MACH_INGENIC_X1830;
--	if (!fdt_node_check_compatible(fdt, 0, "ingenic,x1000"))
--		return MACH_INGENIC_X1000;
--	if (!fdt_node_check_compatible(fdt, 0, "ingenic,jz4780"))
--		return MACH_INGENIC_JZ4780;
--	if (!fdt_node_check_compatible(fdt, 0, "ingenic,jz4770"))
--		return MACH_INGENIC_JZ4770;
--	if (!fdt_node_check_compatible(fdt, 0, "ingenic,jz4725b"))
--		return MACH_INGENIC_JZ4725B;
--
--	return MACH_INGENIC_JZ4740;
--}
--
--void __init plat_mem_setup(void)
--{
--	void *dtb = (void *)fw_passed_dtb;
--
--	__dt_setup_arch(dtb);
--
--	/*
--	 * Old devicetree files for the qi,lb60 board did not have a /memory
--	 * node. Hardcode the memory info here.
--	 */
--	if (!fdt_node_check_compatible(dtb, 0, "qi,lb60") &&
--	    fdt_path_offset(dtb, "/memory") < 0)
--		early_init_dt_add_memory_arch(0, SZ_32M);
--
--	mips_machtype = get_board_mach_type(dtb);
--}
--
--void __init device_tree_init(void)
--{
--	if (!initial_boot_params)
--		return;
--
--	unflatten_and_copy_device_tree();
--}
--
--const char *get_system_type(void)
--{
--	switch (mips_machtype) {
--	case MACH_INGENIC_X2000:
--		return "X2000";
--	case MACH_INGENIC_X1830:
--		return "X1830";
--	case MACH_INGENIC_X1000:
--		return "X1000";
--	case MACH_INGENIC_JZ4780:
--		return "JZ4780";
--	case MACH_INGENIC_JZ4770:
--		return "JZ4770";
--	case MACH_INGENIC_JZ4725B:
--		return "JZ4725B";
--	default:
--		return "JZ4740";
--	}
--}
--
--void __init arch_init_irq(void)
--{
--	irqchip_init();
--}
--
--void __init plat_time_init(void)
--{
--	of_clk_init(NULL);
--	timer_probe();
--}
--
--void __init prom_init(void)
--{
--	fw_init_cmdline();
--}
--
--void __init prom_free_prom_memory(void)
--{
--}
--
--static void jz4740_wait_instr(void)
--{
--	__asm__(".set push;\n"
--		".set mips3;\n"
--		"wait;\n"
--		".set pop;\n"
--	);
--}
--
--static void jz4740_halt(void)
--{
--	for (;;)
--		jz4740_wait_instr();
--}
--
--static int __maybe_unused jz4740_pm_enter(suspend_state_t state)
--{
--	jz4740_wait_instr();
--
--	return 0;
--}
--
--static const struct platform_suspend_ops jz4740_pm_ops __maybe_unused = {
--	.valid = suspend_valid_only_mem,
--	.enter = jz4740_pm_enter,
--};
--
--static int __init jz4740_pm_init(void)
--{
--	if (IS_ENABLED(CONFIG_PM_SLEEP))
--		suspend_set_ops(&jz4740_pm_ops);
--	_machine_halt = jz4740_halt;
--
--	return 0;
--
--}
--late_initcall(jz4740_pm_init);
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 61e8d32eea1b..0e2895423c80 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1024,8 +1024,8 @@ source "arch/mips/bcm47xx/Kconfig"
+ source "arch/mips/bcm63xx/Kconfig"
+ source "arch/mips/bmips/Kconfig"
+ source "arch/mips/generic/Kconfig"
++source "arch/mips/ingenic/Kconfig"
+ source "arch/mips/jazz/Kconfig"
+-source "arch/mips/jz4740/Kconfig"
+ source "arch/mips/lantiq/Kconfig"
+ source "arch/mips/pic32/Kconfig"
+ source "arch/mips/pistachio/Kconfig"
+diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
+index 7d511fc28a01..f8ef2f9d107e 100644
+--- a/arch/mips/generic/Platform
++++ b/arch/mips/generic/Platform
+@@ -9,7 +9,7 @@
+ #
+ 
+ # Note: order matters, keep the asm/mach-generic include last.
+-cflags-$(CONFIG_MACH_INGENIC_SOC)	+= -I$(srctree)/arch/mips/include/asm/mach-jz4740
++cflags-$(CONFIG_MACH_INGENIC_SOC)	+= -I$(srctree)/arch/mips/include/asm/mach-ingenic
+ cflags-$(CONFIG_MIPS_GENERIC)	+= -I$(srctree)/arch/mips/include/asm/mach-generic
+ 
+ load-$(CONFIG_MIPS_GENERIC)	+= 0xffffffff80100000
+diff --git a/arch/mips/include/asm/mach-jz4740/cpu-feature-overrides.h b/arch/mips/include/asm/mach-ingenic/cpu-feature-overrides.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-jz4740/cpu-feature-overrides.h
+rename to arch/mips/include/asm/mach-ingenic/cpu-feature-overrides.h
+diff --git a/arch/mips/jz4740/Kconfig b/arch/mips/ingenic/Kconfig
+similarity index 100%
+rename from arch/mips/jz4740/Kconfig
+rename to arch/mips/ingenic/Kconfig
 -- 
 2.28.0
 
