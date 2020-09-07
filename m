@@ -2,84 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EE22601C5
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Sep 2020 19:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44CB260559
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Sep 2020 22:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731209AbgIGRMn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Sep 2020 13:12:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46326 "EHLO mail.kernel.org"
+        id S1728834AbgIGUDp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Sep 2020 16:03:45 -0400
+Received: from elvis.franken.de ([193.175.24.41]:58700 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730589AbgIGQcZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 7 Sep 2020 12:32:25 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C24EE218AC;
-        Mon,  7 Sep 2020 16:32:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599496344;
-        bh=AVqPuBkTTjcguZkuosZqOamQYFdo3B3gnE6D204M4To=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VHtHKTmzAUq4Dg5QWZT6zXALMVNhSbbsWSfd1d8fUE/rF2XjrfdFjQ8auHvEkFZwu
-         ok8PY0IKE8tXrXw4TDrC4AMbWe4qtWlDyutkEQzrIB7aDPwvMU0vRbol8gHAVLRXK2
-         a3EGAuedTrMNeq87vgEHYTjYFgDra0Gp64VGB7Hk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 03/53] MIPS: Loongson64: Do not override watch and ejtag feature
-Date:   Mon,  7 Sep 2020 12:31:29 -0400
-Message-Id: <20200907163220.1280412-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200907163220.1280412-1-sashal@kernel.org>
-References: <20200907163220.1280412-1-sashal@kernel.org>
+        id S1726458AbgIGUDp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 7 Sep 2020 16:03:45 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kFNMc-00073E-00; Mon, 07 Sep 2020 22:03:42 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 6044CC0F58; Mon,  7 Sep 2020 21:53:37 +0200 (CEST)
+Date:   Mon, 7 Sep 2020 21:53:37 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Maciej W . Rozycki" <macro@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Zhou Yanjie <zhouyanjie@wanyeetech.com>, od@zcrc.me,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 10/15] MIPS: generic: Increase NR_IRQS to 256
+Message-ID: <20200907195337.GA17854@alpha.franken.de>
+References: <20200906192935.107086-1-paul@crapouillou.net>
+ <20200906192935.107086-11-paul@crapouillou.net>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200906192935.107086-11-paul@crapouillou.net>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+On Sun, Sep 06, 2020 at 09:29:30PM +0200, Paul Cercueil wrote:
+> 128 IRQs is not enough to support Ingenic SoCs.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+> 
+> Notes:
+>     v2-v3: No change
+> 
+>  arch/mips/include/asm/mach-generic/irq.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/include/asm/mach-generic/irq.h b/arch/mips/include/asm/mach-generic/irq.h
+> index 72ac2c202c55..079889ced4f3 100644
+> --- a/arch/mips/include/asm/mach-generic/irq.h
+> +++ b/arch/mips/include/asm/mach-generic/irq.h
+> @@ -9,7 +9,7 @@
+>  #define __ASM_MACH_GENERIC_IRQ_H
+>  
+>  #ifndef NR_IRQS
+> -#define NR_IRQS 128
+> +#define NR_IRQS 256
+>  #endif
 
-[ Upstream commit 433c1ca0d441ee0b88fdd83c84ee6d6d43080dcd ]
+this will increase NR_IRQS for all platforms, which don't override
+NR_IRQS in their mach-XXX directory. Size of the data segment increases
+by 18464 bytes for a 32bit kernel and 33792 for a 64bit kernel. I would
+take this change as this allows to remove a few more mach-*/irq.h files.
+And if a platform needs save every byte it finds, we can add a irq.h file
+for that. An even nicer way would be to make NR_IRQS selectable via Kconfig.
+Something like "select NR_IRQS 51" would be quite handy for that...
 
-Do not override ejtag feature to 0 as Loongson 3A1000+ do have ejtag.
-For watch, as KVM emulated CPU doesn't have watch feature, we should
-not enable it unconditionally.
+Thomas.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Reviewed-by: Huacai Chen <chenhc@lemote.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h b/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
-index b6e9c99b85a52..eb181224eb4c4 100644
---- a/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
-+++ b/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
-@@ -26,7 +26,6 @@
- #define cpu_has_counter		1
- #define cpu_has_dc_aliases	(PAGE_SIZE < 0x4000)
- #define cpu_has_divec		0
--#define cpu_has_ejtag		0
- #define cpu_has_inclusive_pcaches	1
- #define cpu_has_llsc		1
- #define cpu_has_mcheck		0
-@@ -42,7 +41,6 @@
- #define cpu_has_veic		0
- #define cpu_has_vint		0
- #define cpu_has_vtag_icache	0
--#define cpu_has_watch		1
- #define cpu_has_wsbh		1
- #define cpu_has_ic_fills_f_dc	1
- #define cpu_hwrena_impl_bits	0xc0000000
 -- 
-2.25.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
