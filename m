@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF5F2615B0
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Sep 2020 18:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55804261599
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Sep 2020 18:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731932AbgIHQyQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Sep 2020 12:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
+        id S1731712AbgIHQxR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Sep 2020 12:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732001AbgIHQsR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Sep 2020 12:48:17 -0400
+        with ESMTP id S1732028AbgIHQsj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Sep 2020 12:48:39 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224F0C061755;
-        Tue,  8 Sep 2020 09:48:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321FAC061797;
+        Tue,  8 Sep 2020 09:48:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=soQt1Tw9+1Fdq6LKNOQ8tGb15t1mDxMbN44xbNYSfjs=; b=hV05IY82BWGuy3E6hUTd9qlkH0
-        3oipOFrp2gTwvrCawc0gW9yoF7cBZZxwQdGaLBWY4XlC/ONtKbMMUkySMuwkGsoEF/gQx/GYNw+I8
-        MfWTbHnPuhNsegLXX1h6kM/OQQK9laVWV8EIDOZz4Rlys4taZ4LWYBm+3jyq+tEJWKoAw95AWCEu0
-        rDwcjhcSDoy+g3JL9SzEmYQuMd+fpVE97CcNwzufa3BRDqhSMz7dmErGFEND2MHibfQSfHa2JaYaF
-        sbXzb+HWnTBz6NEgLaLQpBVOsky9rwpoW+2qZZGt01gs74COue8pbul31rJWukjAEk8PbbkVi6HLy
-        plooEkQg==;
+        bh=qqLaTPZucw5oDcARbFfOdxVBbFJKkf1DfCLZzjkn6K0=; b=QOaAUIFrVFFBjMiPtBwShGGSii
+        AfLQaagJtB8aVjJw7OhF/Ht9ngdo/gAEWUZUrTiEDBn5xZqgk3w8MSBaImeDG9le0FkFftx+M/b88
+        qssTqDexo3PO80Q3S7qztIKVdBmgkb/baXG9Av7oUJf/02ZCS2Lvw+L7VqIqAALTlNALU4Pfft2Ve
+        RFt4zfGcQp9UNTeuOAC0r9EQciwD+CL2DHdEZsveYr5VD9UoSn+f2I21TZ19GLqfRy8JQCans4QVs
+        v2wwDl1U6SNwJDAsoMj1LV5zwhr6oyQSFPXRATwoHHL5F0x1X/BjmCvsw2pOhy/FthSuwoOzN6uO9
+        wc+KTwuA==;
 Received: from [2001:4bb8:184:af1:3dc3:9c83:fc6c:e0f] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kFgmo-0001Rd-Mm; Tue, 08 Sep 2020 16:48:03 +0000
+        id 1kFgmq-0001Ry-1W; Tue, 08 Sep 2020 16:48:04 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Tony Luck <tony.luck@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -35,9 +35,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>, Joerg Roedel <joro@8bytes.org>,
         Robin Murphy <robin.murphy@arm.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: [PATCH 03/12] MIPS/jazzdma: decouple from dma-direct
-Date:   Tue,  8 Sep 2020 18:47:49 +0200
-Message-Id: <20200908164758.3177341-4-hch@lst.de>
+Subject: [PATCH 04/12] dma-mapping: fix DMA_OPS dependencies
+Date:   Tue,  8 Sep 2020 18:47:50 +0200
+Message-Id: <20200908164758.3177341-5-hch@lst.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200908164758.3177341-1-hch@lst.de>
 References: <20200908164758.3177341-1-hch@lst.de>
@@ -49,85 +49,42 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The jazzdma ops implement support for a very basic IOMMU.  Thus we really
-should not use the dma-direct code that takes physical address limits
-into account.  This survived through the great MIPS DMA ops cleanup mostly
-because I was lazy, but now it is time to fully split the implementations.
+Driver that select DMA_OPS need to depend on HAS_DMA support to
+work.  The vop driver was missing that dependency, so add it, and also
+add a nother depends in DMA_OPS itself.  That won't fix the issue due
+to how the Kconfig dependencies work, but at least produce a warning
+about unmet dependencies.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- arch/mips/jazz/jazzdma.c | 32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ drivers/misc/mic/Kconfig | 1 +
+ kernel/dma/Kconfig       | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/arch/mips/jazz/jazzdma.c b/arch/mips/jazz/jazzdma.c
-index fe40dbed04c1d6..d0b5a2ba2b1a8a 100644
---- a/arch/mips/jazz/jazzdma.c
-+++ b/arch/mips/jazz/jazzdma.c
-@@ -16,7 +16,6 @@
- #include <linux/memblock.h>
- #include <linux/spinlock.h>
- #include <linux/gfp.h>
--#include <linux/dma-direct.h>
- #include <linux/dma-noncoherent.h>
- #include <asm/mipsregs.h>
- #include <asm/jazz.h>
-@@ -492,26 +491,38 @@ int vdma_get_enable(int channel)
- static void *jazz_dma_alloc(struct device *dev, size_t size,
- 		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs)
- {
-+	struct page *page;
- 	void *ret;
+diff --git a/drivers/misc/mic/Kconfig b/drivers/misc/mic/Kconfig
+index b9bb086785db48..8a7c2c5711d5f4 100644
+--- a/drivers/misc/mic/Kconfig
++++ b/drivers/misc/mic/Kconfig
+@@ -35,6 +35,7 @@ config SCIF_BUS
  
--	ret = dma_direct_alloc_pages(dev, size, dma_handle, gfp, attrs);
--	if (!ret)
--		return NULL;
-+	if (attrs & DMA_ATTR_NO_WARN)
-+		gfp |= __GFP_NOWARN;
+ config VOP_BUS
+ 	tristate "VOP Bus Driver"
++	depends on HAS_DMA
+ 	select DMA_OPS
+ 	help
+ 	  This option is selected by any driver which registers a
+diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
+index 0ddfb5510fe45f..e7b801649f6574 100644
+--- a/kernel/dma/Kconfig
++++ b/kernel/dma/Kconfig
+@@ -9,6 +9,7 @@ config HAS_DMA
+ 	default y
  
--	*dma_handle = vdma_alloc(virt_to_phys(ret), size);
--	if (*dma_handle == DMA_MAPPING_ERROR) {
--		dma_direct_free_pages(dev, size, ret, *dma_handle, attrs);
-+	size = PAGE_ALIGN(size);
-+	page = alloc_pages(gfp, get_order(size));
-+	if (!page)
- 		return NULL;
--	}
-+	ret = page_address(page);
-+	*dma_handle = vdma_alloc(virt_to_phys(ret), size);
-+	if (*dma_handle == DMA_MAPPING_ERROR)
-+		goto out_free_pages;
-+
-+	if (attrs & DMA_ATTR_NON_CONSISTENT)
-+		return ret;
-+	arch_dma_prep_coherent(page, size);
-+	return (void *)(UNCAC_BASE + __pa(ret));
+ config DMA_OPS
++	depends on HAS_DMA
+ 	bool
  
--	return ret;
-+out_free_pages:
-+	__free_pages(page, get_order(size));
-+	return NULL;
- }
- 
- static void jazz_dma_free(struct device *dev, size_t size, void *vaddr,
- 		dma_addr_t dma_handle, unsigned long attrs)
- {
- 	vdma_free(dma_handle);
--	dma_direct_free_pages(dev, size, vaddr, dma_handle, attrs);
-+	if (!(attrs & DMA_ATTR_NON_CONSISTENT))
-+		vaddr = __va(vaddr - UNCAC_BASE);
-+	__free_pages(virt_to_page(vaddr), get_order(size));
- }
- 
- static dma_addr_t jazz_dma_map_page(struct device *dev, struct page *page,
-@@ -608,7 +619,6 @@ const struct dma_map_ops jazz_dma_ops = {
- 	.sync_single_for_device	= jazz_dma_sync_single_for_device,
- 	.sync_sg_for_cpu	= jazz_dma_sync_sg_for_cpu,
- 	.sync_sg_for_device	= jazz_dma_sync_sg_for_device,
--	.dma_supported		= dma_direct_supported,
- 	.cache_sync		= arch_dma_cache_sync,
- 	.mmap			= dma_common_mmap,
- 	.get_sgtable		= dma_common_get_sgtable,
+ #
 -- 
 2.28.0
 
