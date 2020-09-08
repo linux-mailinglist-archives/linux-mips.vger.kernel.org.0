@@ -2,126 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A30526158E
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Sep 2020 18:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8FE2618E0
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Sep 2020 20:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732112AbgIHQs4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Sep 2020 12:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        id S1731644AbgIHSEX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Sep 2020 14:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732051AbgIHQsj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Sep 2020 12:48:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C393C06179A;
-        Tue,  8 Sep 2020 09:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=rHSBc/M4bEuOb9Ey0sWSjsN3haNI1yyBuzSqz9ajJzQ=; b=uxw883jDfwFTqx1kQc02sE7gz5
-        T6genhEdpIBo8JlGHDRJLZO1GDNKrAaT3hBfl5H8ctRGOHxy5Z1YqDRFk+WjfvWPsdn+D8DsTPCyq
-        vDvPDJ1bItTKRBJS/MqIg7Y+g0ET2HXq5KwdIxujVMlz4QZvDS7BAxR4hYzQ1/G5mvt8WnVoFDugj
-        CMJfssAPg1+RF/6Eh1DefJdk2m+sdW0ZQh/oTrXkeco0dHfYJ5j/onoZm1u7SowznLxDFMRAMkPa/
-        ngnL6UNUTGFCYWQfM4yvmctPYaU0E3BbqiVBxwE7Fc5RZJfgv+ZWoYjmfC2K2WKhCQkuUdqpuhNN/
-        CsdNekXg==;
-Received: from [2001:4bb8:184:af1:3dc3:9c83:fc6c:e0f] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kFgn1-0001Tl-LF; Tue, 08 Sep 2020 16:48:15 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Tony Luck <tony.luck@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
+        with ESMTP id S1731585AbgIHSEV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Sep 2020 14:04:21 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A21C061573;
+        Tue,  8 Sep 2020 11:04:20 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id k25so60044ljg.9;
+        Tue, 08 Sep 2020 11:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jEj3Cyz6BLHbNpIEqvvmWp+Pn9SwJlYwmj/5uG+ZbOA=;
+        b=QhqMJTVlEdukL/UWb9NH/q8ck0QAqkSghth47dlIa6+z38TfeH5UeH7aF/DPIY6N+Y
+         RZUR5lu4uSb9PoyE1lmcxqtb9FdzR1Rh/QqGuXr/lf6oUIicrNk/yM5G1l0t3at2Cgao
+         tJGoOrFPc2kJP5heYLK08GwdxikRUO/ufIBas2fADjoq6KBwqp7iVLMBIkjyaJS/YOE1
+         aGtiUCdVhXDzxRQ3cxbvbcjICM3usQaxMiLHtY0KyOqBJAPYzXguIY6r/Ec7MSggqDtD
+         DmtGlJsMExhc94sstGACELYqVDZPj7by4c+NgNKqC0V0hK/lfK4B4I8wS/bwEtwY7TBu
+         /xQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jEj3Cyz6BLHbNpIEqvvmWp+Pn9SwJlYwmj/5uG+ZbOA=;
+        b=So6fK4OqfRgDnIYRFVkUY0CsQFBE/BhSzx+413EsLXQ/wXTNkVzfpxxIzkYFZk/U7z
+         uOIbCIB955KLzgKvf2mCFqilfa8ftDXuZ29pifKlxlTzG0VXyEWKIehveoGvgbEXAIoP
+         bONkrd9UATVCfAzCqUSkqDtF+UfnXsOG4zCql9rwwDc5S5T5mMgokNmGLXWYM1hjFR5T
+         CxAxljX+zr8UlKVw4PWnUJsNp7VC7xTSvXrwICgVLjCWQ29o1V+lmrnoSBAVF+O2EHca
+         oDMhCNSAHmyZGcoQgpeN1U5bbdIJELD+RmJfRFj/WzjcoBSQb5j01Nliezzj5dEj5WN6
+         7/ag==
+X-Gm-Message-State: AOAM5321WnX0hw86lcQdLgEcHvB29Cjbz15TxCtuJ74VRJmbgFgSZBpC
+        4xUCqoN2kkx2/GGJL2klHt2OoA7+ojNjKg==
+X-Google-Smtp-Source: ABdhPJxOUh/DrhDJ0sLHODDZNX/AG6pD3ZL1wq5ajq4aTkSAV8ndeDN1OI1ZCYVq9+MPf2vTkw+8bg==
+X-Received: by 2002:a2e:9047:: with SMTP id n7mr14193403ljg.125.1599588259222;
+        Tue, 08 Sep 2020 11:04:19 -0700 (PDT)
+Received: from wasted.omprussia.ru ([2a00:1fa0:4400:1ee0:403c:d08c:bf15:55e0])
+        by smtp.gmail.com with ESMTPSA id h17sm132955ljj.4.2020.09.08.11.04.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Sep 2020 11:04:18 -0700 (PDT)
+Subject: Re: [PATCH 04/12] dma-mapping: fix DMA_OPS dependencies
+To:     Christoph Hellwig <hch@lst.de>, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         iommu@lists.linux-foundation.org
 Cc:     Tomasz Figa <tfiga@chromium.org>, Joerg Roedel <joro@8bytes.org>,
         Robin Murphy <robin.murphy@arm.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: [PATCH 12/12] dma-mapping: move the dma_declare_coherent_memory documentation
-Date:   Tue,  8 Sep 2020 18:47:58 +0200
-Message-Id: <20200908164758.3177341-13-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200908164758.3177341-1-hch@lst.de>
 References: <20200908164758.3177341-1-hch@lst.de>
+ <20200908164758.3177341-5-hch@lst.de>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <8404208b-7276-914e-e4da-e65a907a5e9b@gmail.com>
+Date:   Tue, 8 Sep 2020 21:04:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200908164758.3177341-5-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-dma_declare_coherent_memory should not be in a DMA API guide aimed
-at driver writers (that is consumers of the API).  Move it to a comment
-near the function instead.
+Hello!
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- Documentation/core-api/dma-api.rst | 24 ------------------------
- kernel/dma/coherent.c              | 17 +++++++++++++++++
- 2 files changed, 17 insertions(+), 24 deletions(-)
+On 9/8/20 7:47 PM, Christoph Hellwig wrote:
 
-diff --git a/Documentation/core-api/dma-api.rst b/Documentation/core-api/dma-api.rst
-index 3b3abbbb4b9a6f..90239348b30f6f 100644
---- a/Documentation/core-api/dma-api.rst
-+++ b/Documentation/core-api/dma-api.rst
-@@ -586,30 +586,6 @@ the DMA_ATTR_NON_CONSISTENT flag starting at virtual address vaddr and
- continuing on for size.  Again, you *must* observe the cache line
- boundaries when doing this.
- 
--::
--
--	int
--	dma_declare_coherent_memory(struct device *dev, phys_addr_t phys_addr,
--				    dma_addr_t device_addr, size_t size);
--
--Declare region of memory to be handed out by dma_alloc_coherent() when
--it's asked for coherent memory for this device.
--
--phys_addr is the CPU physical address to which the memory is currently
--assigned (this will be ioremapped so the CPU can access the region).
--
--device_addr is the DMA address the device needs to be programmed
--with to actually address this memory (this will be handed out as the
--dma_addr_t in dma_alloc_coherent()).
--
--size is the size of the area (must be multiples of PAGE_SIZE).
--
--As a simplification for the platforms, only *one* such region of
--memory may be declared per device.
--
--For reasons of efficiency, most platforms choose to track the declared
--region only at the granularity of a page.  For smaller allocations,
--you should use the dma_pool() API.
- 
- Part III - Debug drivers use of the DMA-API
- -------------------------------------------
-diff --git a/kernel/dma/coherent.c b/kernel/dma/coherent.c
-index 2a0c4985f38e41..f85d14bbfcbe03 100644
---- a/kernel/dma/coherent.c
-+++ b/kernel/dma/coherent.c
-@@ -107,6 +107,23 @@ static int dma_assign_coherent_memory(struct device *dev,
- 	return 0;
- }
- 
-+/*
-+ * Declare a region of memory to be handed out by dma_alloc_coherent() when it
-+ * is asked for coherent memory for this device.  This shall only be used
-+ * from platform code, usually based on the device tree description.
-+ * 
-+ * phys_addr is the CPU physical address to which the memory is currently
-+ * assigned (this will be ioremapped so the CPU can access the region).
-+ *
-+ * device_addr is the DMA address the device needs to be programmed with to
-+ * actually address this memory (this will be handed out as the dma_addr_t in
-+ * dma_alloc_coherent()).
-+ *
-+ * size is the size of the area (must be a multiple of PAGE_SIZE).
-+ *
-+ * As a simplification for the platforms, only *one* such region of memory may
-+ * be declared per device.
-+ */
- int dma_declare_coherent_memory(struct device *dev, phys_addr_t phys_addr,
- 				dma_addr_t device_addr, size_t size)
- {
--- 
-2.28.0
+> Driver that select DMA_OPS need to depend on HAS_DMA support to
+> work.  The vop driver was missing that dependency, so add it, and also
+> add a nother depends in DMA_OPS itself.  That won't fix the issue due
 
+   Another? :-)
+
+> to how the Kconfig dependencies work, but at least produce a warning
+> about unmet dependencies.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+[...]
+
+MBR, Sergei
