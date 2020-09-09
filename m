@@ -2,125 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0012639B2
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Sep 2020 04:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056F9263A6C
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Sep 2020 04:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730412AbgIJCAZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 9 Sep 2020 22:00:25 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:45956 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729525AbgIJBlK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Sep 2020 21:41:10 -0400
-Received: by mail-il1-f195.google.com with SMTP id q6so4174545ild.12;
-        Wed, 09 Sep 2020 18:41:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gbx95JmWRu+tNJB//sm1NIc5T2Lh4ktsJ6AdK4Wo+2k=;
-        b=I7n7xk6HEaxXkY9OFiEigSMUaq4r4XfDslLGR+M00gkjwGMjF2ThteBATNsQ2jK0mE
-         nB6f6Yyev/kbIk8AwE5s9p84UcStPwbkzuLk8fCD+jNl4qVSUeE5dxUpRxZ/XUaD5ONf
-         3D+qR+T1wmiC3/LSfAV6vLfRCPETmcJbygkx+vZELSoSA2BLEId3dkcMgtQACeWhNWco
-         mVJOn6jCuX5V070vrtcgE2H1qkbC6ViUVfWnxOUwFhsHYwZQQegdng5EtVhelx90qVN1
-         IiRZs11CW3YpdgjdwrHhn4cJyQGePoh+Ub1k4qzVepBtBlC3uFZ6Z5O3EFKBpynn9aEe
-         5gUw==
-X-Gm-Message-State: AOAM533a5RVjYKErr5UWHUiSf8i4W/YO6dfsjh9z428ooWivxU+Q4Hkv
-        g8nxs8CwvbwsOYPLVZH55SRXeqW2gvlKzzgtUUk=
-X-Google-Smtp-Source: ABdhPJyhQEsv8PLqHzxt4OxUqUlMDPjolx0tmd3Db+rB0RyPwwLjDBu8hpoTpGqhURnX8Dzpkh1wqqx5bStMowo31NA=
-X-Received: by 2002:a92:c8c4:: with SMTP id c4mr3878144ilq.287.1599702069954;
- Wed, 09 Sep 2020 18:41:09 -0700 (PDT)
+        id S1730309AbgIJC1C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Sep 2020 22:27:02 -0400
+Received: from smtprelay0192.hostedemail.com ([216.40.44.192]:41384 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729413AbgIJCYQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Sep 2020 22:24:16 -0400
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave01.hostedemail.com (Postfix) with ESMTP id 55AC918027FA3;
+        Wed,  9 Sep 2020 22:47:33 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id A42B7181D337B;
+        Wed,  9 Sep 2020 22:47:32 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:2898:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3873:4321:5007:6742:6743:8700:10004:10400:10848:11232:11658:11914:12043:12297:12740:12760:12895:13069:13311:13357:13439:14181:14659:14721:21080:21433:21627:21939:30054:30070:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: sort28_6003546270e1
+X-Filterd-Recvd-Size: 3292
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf20.hostedemail.com (Postfix) with ESMTPA;
+        Wed,  9 Sep 2020 22:47:25 +0000 (UTC)
+Message-ID: <b3d6f71aea87f4bb88554f1a3fdaee0b2feb158c.camel@perches.com>
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+From:   Joe Perches <joe@perches.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Kees Cook <kees.cook@canonical.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
+        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        storagedev@microchip.com, sparclinux@vger.kernel.org,
+        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+        alsa-devel <alsa-devel@alsa-project.org>
+Date:   Wed, 09 Sep 2020 15:47:24 -0700
+In-Reply-To: <20200909223602.GJ87483@ziepe.ca>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+         <20200909223602.GJ87483@ziepe.ca>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-References: <1599624552-17523-1-git-send-email-chenhc@lemote.com>
- <1599624552-17523-3-git-send-email-chenhc@lemote.com> <be0840ac-ecb4-1c93-828f-0773f348f4b0@flygoat.com>
-In-Reply-To: <be0840ac-ecb4-1c93-828f-0773f348f4b0@flygoat.com>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Thu, 10 Sep 2020 09:40:58 +0800
-Message-ID: <CAAhV-H5vigV8jfrOK3uciRjkwE_c1Or+YpmzDb0CSfraNLtc3g@mail.gmail.com>
-Subject: Re: [PATCH 3/3] irqchip/loongson-pch-pic: Reserve legacy LPC irqs
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Jiaxun,
-
-On Thu, Sep 10, 2020 at 8:52 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
->
->
-> 在 2020/9/9 12:09, Huacai Chen 写道:
-> > Reserve legacy LPC irqs (0~15) to avoid spurious interrupts.
->
-> It doesn't make sense at all.
->
-> How can you allocate IRQ without irqchip backing it?
->
-> - Jiaxun
-As you know, this patch resolves the kdump problem, and 0~15 is really
-needed to reserve for LPC, right?
-
-Huacai
->
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+On Wed, 2020-09-09 at 19:36 -0300, Jason Gunthorpe wrote:
+> On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
+> > fallthrough to a separate case/default label break; isn't very readable.
+> > 
+> > Convert pseudo-keyword fallthrough; statements to a simple break; when
+> > the next label is case or default and the only statement in the next
+> > label block is break;
+> > 
+> > Found using:
+> > 
+> > $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
+> > 
+> > Miscellanea:
+> > 
+> > o Move or coalesce a couple label blocks above a default: block.
+> > 
+> > Signed-off-by: Joe Perches <joe@perches.com>
 > > ---
-> >   drivers/irqchip/irq-loongson-pch-pic.c | 19 ++++++++++++++++++-
-> >   1 file changed, 18 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
-> > index 9bf6b9a..9f6719c 100644
-> > --- a/drivers/irqchip/irq-loongson-pch-pic.c
-> > +++ b/drivers/irqchip/irq-loongson-pch-pic.c
-> > @@ -35,6 +35,7 @@
-> >
-> >   struct pch_pic {
-> >       void __iomem            *base;
-> > +     struct irq_domain       *lpc_domain;
-> >       struct irq_domain       *pic_domain;
-> >       u32                     ht_vec_base;
-> >       raw_spinlock_t          pic_lock;
-> > @@ -184,9 +185,9 @@ static void pch_pic_reset(struct pch_pic *priv)
-> >   static int pch_pic_of_init(struct device_node *node,
-> >                               struct device_node *parent)
-> >   {
-> > +     int i, base, err;
-> >       struct pch_pic *priv;
-> >       struct irq_domain *parent_domain;
-> > -     int err;
-> >
-> >       priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-> >       if (!priv)
-> > @@ -213,6 +214,22 @@ static int pch_pic_of_init(struct device_node *node,
-> >               goto iounmap_base;
-> >       }
-> >
-> > +     base = irq_alloc_descs(-1, 0, NR_IRQS_LEGACY, 0);
-> > +     if (base < 0) {
-> > +             pr_err("Failed to allocate LPC IRQ numbers\n");
-> > +             goto iounmap_base;
-> > +     }
-> > +
-> > +     priv->lpc_domain = irq_domain_add_legacy(node, NR_IRQS_LEGACY, 0, 0,
-> > +                                              &irq_domain_simple_ops, NULL);
-> > +     if (!priv->lpc_domain) {
-> > +             pr_err("Failed to add irqdomain for LPC controller");
-> > +             goto iounmap_base;
-> > +     }
-> > +
-> > +     for (i = 0; i < NR_IRQS_LEGACY; i++)
-> > +             irq_set_chip_and_handler(i, &dummy_irq_chip, handle_simple_irq);
-> > +
-> >       priv->pic_domain = irq_domain_create_hierarchy(parent_domain, 0,
-> >                                                      PIC_COUNT,
-> >                                                      of_node_to_fwnode(node),
+> > 
+> > Compiled allyesconfig x86-64 only.
+> > A few files for other arches were not compiled.
+> 
+> IB part looks OK, I prefer it like this
+> 
+> You could do the same for continue as well, I saw a few of those..
+
+I saw some continue uses as well but wasn't sure
+and didn't look to see if the switch/case with
+continue was in a for/while loop.
+
+
