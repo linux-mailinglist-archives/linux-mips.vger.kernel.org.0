@@ -2,91 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B3B264370
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Sep 2020 12:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF06264348
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Sep 2020 12:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727010AbgIJKNy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Sep 2020 06:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730556AbgIJKNu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Sep 2020 06:13:50 -0400
-X-Greylist: delayed 375 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Sep 2020 03:13:49 PDT
-Received: from pax.zz.de (pax.zz.de [IPv6:2a01:4f8:201:92f3::f10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92D3C061573
-        for <linux-mips@vger.kernel.org>; Thu, 10 Sep 2020 03:13:49 -0700 (PDT)
-Received: by pax.zz.de (Postfix, from userid 1181)
-        id 571F010012D; Thu, 10 Sep 2020 12:07:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=zz.de; s=mail;
-        t=1599732451; bh=W0mFI0Yj41ANC2MtFVkUZcMVw5ndhVnMhcrndSD696Y=;
-        h=Date:From:To:Subject:From;
-        b=jV5xbZ7p1BozhMf/L8W6Yikk1MeEnxL2EpYlVR6membODY0q6O8JhMTBqCKoUKuYd
-         M3ei8LLtyt344sLn671VhLXoRiCRxTB/UDJlX0920clr4zZO9HAaj3C9vT8fPFjCgd
-         YrJhBN2f99h2OAge4s21dyCy9rq16Uf5QnVIAMwRvuDzariXYRHyv8vSqpiPO4VBIl
-         Hv8IVvQszMHoz66UxYSkDC47R8G7vwkD2ASyDNSPQ9aDQBJjJLRD/I/Im/NkC01q0J
-         AGx3PRhjVHyn+VtsR3Cw++DUkLwj/Ui9MjVYERUjSvE74KYfP+9PcrLF1gc4rmA3EM
-         DUW91TMfXNQ8g==
-Date:   Thu, 10 Sep 2020 12:07:31 +0200
-From:   Florian Lohoff <f@zz.de>
-To:     linux-mips@vger.kernel.org
-Subject: Undust unknown hardware / Algo P-6064
-Message-ID: <20200910100729.c6qn22j6pfqxxu5z@pax.zz.de>
+        id S1726569AbgIJKIj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Sep 2020 06:08:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53226 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725887AbgIJKIh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 10 Sep 2020 06:08:37 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 645E920BED;
+        Thu, 10 Sep 2020 10:08:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599732516;
+        bh=GSM8J+48mwsvILRs4rmqaKqBdd8oi047X8MVr/4pEOQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AGn50qCzqlhgIZc4JK7k4G+YPcOs3M4SFoiMYMAYsbkrULYwsOqdLoDcT49/wpTwi
+         mkPK5r1z2D4fugmTfvnJhunpwBWBfSEH0P1mbyj+BN2UQol6snDyYoMRgZtW0hSOig
+         a6FHgyYXmWhSTCeYy/feVHkJjZQIBScn+ZBAWhKU=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1kGJVK-00Ae3W-DK; Thu, 10 Sep 2020 11:08:34 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yvsmazlv4tpgtqm7"
-Content-Disposition: inline
-Organization: rfc822 - pure communication
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 10 Sep 2020 11:08:34 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 3/3] irqchip/loongson-pch-pic: Reserve legacy LPC irqs
+In-Reply-To: <1599624552-17523-3-git-send-email-chenhc@lemote.com>
+References: <1599624552-17523-1-git-send-email-chenhc@lemote.com>
+ <1599624552-17523-3-git-send-email-chenhc@lemote.com>
+User-Agent: Roundcube Webmail/1.4.8
+Message-ID: <613dd7bc4d7eeec1a5fd30f679fc83eb@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: chenhc@lemote.com, tsbogend@alpha.franken.de, tglx@linutronix.de, jason@lakedaemon.net, linux-mips@vger.kernel.org, zhangfx@lemote.com, chenhuacai@gmail.com, jiaxun.yang@flygoat.com, stable@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 2020-09-09 05:09, Huacai Chen wrote:
+> Reserve legacy LPC irqs (0~15) to avoid spurious interrupts.
 
---yvsmazlv4tpgtqm7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+How can they be spurious? Why are they enabled the first place?
 
+This looks like you are papering over a much bigger issue.
 
-Hi,
+         M.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---
+>  drivers/irqchip/irq-loongson-pch-pic.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c
+> b/drivers/irqchip/irq-loongson-pch-pic.c
+> index 9bf6b9a..9f6719c 100644
+> --- a/drivers/irqchip/irq-loongson-pch-pic.c
+> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
+> @@ -35,6 +35,7 @@
+> 
+>  struct pch_pic {
+>  	void __iomem		*base;
+> +	struct irq_domain	*lpc_domain;
+>  	struct irq_domain	*pic_domain;
+>  	u32			ht_vec_base;
+>  	raw_spinlock_t		pic_lock;
+> @@ -184,9 +185,9 @@ static void pch_pic_reset(struct pch_pic *priv)
+>  static int pch_pic_of_init(struct device_node *node,
+>  				struct device_node *parent)
+>  {
+> +	int i, base, err;
+>  	struct pch_pic *priv;
+>  	struct irq_domain *parent_domain;
+> -	int err;
+> 
+>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+> @@ -213,6 +214,22 @@ static int pch_pic_of_init(struct device_node 
+> *node,
+>  		goto iounmap_base;
+>  	}
+> 
+> +	base = irq_alloc_descs(-1, 0, NR_IRQS_LEGACY, 0);
+> +	if (base < 0) {
+> +		pr_err("Failed to allocate LPC IRQ numbers\n");
+> +		goto iounmap_base;
+> +	}
+> +
+> +	priv->lpc_domain = irq_domain_add_legacy(node, NR_IRQS_LEGACY, 0, 0,
+> +						 &irq_domain_simple_ops, NULL);
+> +	if (!priv->lpc_domain) {
+> +		pr_err("Failed to add irqdomain for LPC controller");
+> +		goto iounmap_base;
+> +	}
+> +
+> +	for (i = 0; i < NR_IRQS_LEGACY; i++)
+> +		irq_set_chip_and_handler(i, &dummy_irq_chip, handle_simple_irq);
+> +
+>  	priv->pic_domain = irq_domain_create_hierarchy(parent_domain, 0,
+>  						       PIC_COUNT,
+>  						       of_node_to_fwnode(node),
 
-After i undusted a box which i moved around for years, which i
-thought to be a Swarm, i found it to be an Algorithmics P-6064.=20
-
-After some maintenance it turns on and ends up in PMON.
-
-=46rom what Google told me there was once upon a time a linux kernel
-sourcetree within Algorithmics supporting that board. It seems this
-never made it upstream.
-
-Are there any resources still available? Documentation? The old
-kernel source trees? Anything?
-
-Flo
---=20
-Florian Lohoff                                                 f@zz.de
-        UTF-8 Test: The =F0=9F=90=88 ran after a =F0=9F=90=81, but the =F0=
-=9F=90=81 ran away
-
---yvsmazlv4tpgtqm7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdb9o7oebX2papQ/KkN1BIMsJ8i8FAl9Z+uEACgkQkN1BIMsJ
-8i9uyhAAifG3d6AeCJRdpYuesB/RDvE86WpY8BCh8PLMcdDRj9H1DhyNTiuktmwf
-/5auXgHjZbDBi2Jq63pTCxRrVIvy306SMK47fudsZ2UBXLjX9TBh6eIJSamSqKHq
-A0eomtOKaQYGzOM7KytNxDfxHEUOE3B5hGDKbqSNxa0zuNuH6VqY1aOC+NO0BtwY
-FLYMnQ8DTOxFYQs0JWo8JxzlBBB4eIfL3E3+IKomq/fUWDFMZxoAAQH/sRlZlR32
-c3dWsZQX4ZGl9vOGaI6i9G7X2FGsrGgH3yKVw8jS+rMfMt03yV7ZmonQbL0ScfiC
-Z2rrahlR3zuJd9fcQQ2j+caPDTzOvgowJoeGhMrrJxWwD7YX8AZcQSv5pzU+ty+8
-eeD69EY+Cq4uXEaDBoIrHM9bgsq4ChhilMnLGdCO9/Ha+7BxzTmsNHuLw+GyCOGJ
-/Xz2mlenYhKcv4kahjfvS+5RkPhbAIoCffJgc480/2ZvenC2+3dQdTn/DnqsjWhG
-pExB2mlvGUZT/QpEmDBmzat8jeXO6Np3nAHXAkhauaaDa9vL4SSGifbLA+j1Gyg+
-t02mXa32LWwZnv2DvYV/q8l7eoNYLax2NUF7RIzhvvydeWKMbfCnzDfVoS/NK5Xg
-+b1VJjVF4RYeBP8mB4t5nuT1oRI2dvy5wA/vj/fnrC3zAq7z0Vw=
-=SykY
------END PGP SIGNATURE-----
-
---yvsmazlv4tpgtqm7--
+-- 
+Jazz is not dead. It just smells funny...
