@@ -2,59 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1E62652DC
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Sep 2020 23:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5044265480
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Sep 2020 23:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbgIJVYg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Sep 2020 17:24:36 -0400
-Received: from foss.arm.com ([217.140.110.172]:37282 "EHLO foss.arm.com"
+        id S1727983AbgIJVm1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Sep 2020 17:42:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:35360 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731004AbgIJOXM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 10 Sep 2020 10:23:12 -0400
+        id S1730879AbgIJM40 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 10 Sep 2020 08:56:26 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3BEB11B3;
-        Thu, 10 Sep 2020 07:21:17 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF2C01063;
+        Thu, 10 Sep 2020 05:55:44 -0700 (PDT)
 Received: from [10.57.40.122] (unknown [10.57.40.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B4783F66E;
-        Thu, 10 Sep 2020 07:21:08 -0700 (PDT)
-Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
- break;
-To:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        oss-drivers@netronome.com, nouveau@lists.freedesktop.org,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
-        dm-devel@redhat.com, linux-mtd@lists.infradead.org,
-        linux-i2c@vger.kernel.org, sparclinux@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-rtc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-serial@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Kees Cook <kees.cook@canonical.com>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-sctp@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
-        storagedev@microchip.com, ceph-devel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
-        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Will Deacon <will@kernel.org>
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 141203F66E;
+        Thu, 10 Sep 2020 05:55:40 -0700 (PDT)
+Subject: Re: [PATCH 04/12] dma-mapping: fix DMA_OPS dependencies
+To:     Christoph Hellwig <hch@lst.de>, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        iommu@lists.linux-foundation.org
+Cc:     Tomasz Figa <tfiga@chromium.org>, Joerg Roedel <joro@8bytes.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20200908164758.3177341-1-hch@lst.de>
+ <20200908164758.3177341-5-hch@lst.de>
 From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <9372456a-8dcf-2735-57a4-e126aa5df3a6@arm.com>
-Date:   Thu, 10 Sep 2020 15:21:05 +0100
+Message-ID: <1e3c7094-62da-6e8c-0a41-0bc63dd3db68@arm.com>
+Date:   Thu, 10 Sep 2020 13:55:37 +0100
 User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+In-Reply-To: <20200908164758.3177341-5-hch@lst.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
@@ -63,50 +42,57 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020-09-09 21:06, Joe Perches wrote:
-> fallthrough to a separate case/default label break; isn't very readable.
+On 2020-09-08 17:47, Christoph Hellwig wrote:
+> Driver that select DMA_OPS need to depend on HAS_DMA support to
+> work.  The vop driver was missing that dependency, so add it, and also
+> add a nother depends in DMA_OPS itself.  That won't fix the issue due
+> to how the Kconfig dependencies work, but at least produce a warning
+> about unmet dependencies.
 > 
-> Convert pseudo-keyword fallthrough; statements to a simple break; when
-> the next label is case or default and the only statement in the next
-> label block is break;
-> 
-> Found using:
-> 
-> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
-> 
-> Miscellanea:
-> 
-> o Move or coalesce a couple label blocks above a default: block.
-> 
-> Signed-off-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
+>   drivers/misc/mic/Kconfig | 1 +
+>   kernel/dma/Kconfig       | 1 +
+>   2 files changed, 2 insertions(+)
 > 
-> Compiled allyesconfig x86-64 only.
-> A few files for other arches were not compiled.
-> 
+> diff --git a/drivers/misc/mic/Kconfig b/drivers/misc/mic/Kconfig
+> index b9bb086785db48..8a7c2c5711d5f4 100644
+> --- a/drivers/misc/mic/Kconfig
+> +++ b/drivers/misc/mic/Kconfig
+> @@ -35,6 +35,7 @@ config SCIF_BUS
+>   
+>   config VOP_BUS
+>   	tristate "VOP Bus Driver"
+> +	depends on HAS_DMA
+>   	select DMA_OPS
 
-[...]
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> index c192544e874b..743db1abec40 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -3777,7 +3777,7 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
->   	switch (FIELD_GET(IDR0_TTF, reg)) {
->   	case IDR0_TTF_AARCH32_64:
->   		smmu->ias = 40;
-> -		fallthrough;
-> +		break;
->   	case IDR0_TTF_AARCH64:
->   		break;
->   	default:
+AFAICS all three of these bus drivers are only proxying a struct 
+dma_map_ops * pointer around, so if they used the set_dma_ops() helper 
+they shouldn't even need these selects at all. Only INTEL_MIC_HOST 
+appears to have a logical dependency on DMA_OPS for actual functionality.
 
-I have to say I don't really agree with the readability argument for 
-this one - a fallthrough is semantically correct here, since the first 
-case is a superset of the second. It just happens that anything we would 
-do for the common subset is implicitly assumed (there are other 
-potential cases we simply haven't added support for at the moment), thus 
-the second case is currently empty.
+However, I have a vague feeling you might not be fond of those dma_ops 
+helpers, and I have no great objection to this one-liner as-is, so 
+(modulo the couple of commit message typos),
 
-This change actively obfuscates that distinction.
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+
+(of course the hunk below is unquestionably OK)
 
 Robin.
+
+>   	help
+>   	  This option is selected by any driver which registers a
+> diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
+> index 0ddfb5510fe45f..e7b801649f6574 100644
+> --- a/kernel/dma/Kconfig
+> +++ b/kernel/dma/Kconfig
+> @@ -9,6 +9,7 @@ config HAS_DMA
+>   	default y
+>   
+>   config DMA_OPS
+> +	depends on HAS_DMA
+>   	bool
+>   
+>   #
+> 
