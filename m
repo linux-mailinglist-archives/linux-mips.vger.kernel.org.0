@@ -2,120 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0C6263938
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Sep 2020 00:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0012639B2
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Sep 2020 04:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729719AbgIIWgK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Sep 2020 18:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729449AbgIIWgG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Sep 2020 18:36:06 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F817C061786
-        for <linux-mips@vger.kernel.org>; Wed,  9 Sep 2020 15:36:04 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id d20so4139188qka.5
-        for <linux-mips@vger.kernel.org>; Wed, 09 Sep 2020 15:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=c134n78aG+T1D05fG/7gwyDy+RohECK5LAEVlOiODCw=;
-        b=NyzBsT+JUu0U0kwfTlzpDClheXiWwFCChT8B3B3AnRObKvk4drNujFjFruGeHjyE5E
-         J/ekKdFGX4ZPNWUfEPhKExoK0sWWjXwST+pbBqDSQQLO3bhHO97u7XE9KwITCllyZTNP
-         KD49/yc1MfvhSPgbWZUU1AxUsv6U0vCFkivBcLxiu3ppVdmJeK1Itxs2CD5ayafEhare
-         Y4u34snA9MTl4Likr5RS+E4LR0hKde+fx41J4h2BvlUn7go15Yxb6eLzvLXVka4Mre/N
-         zumvX8Blxljzlanq14R9XGa7dbkpGn90Uvx/RhT36f5UMVOZXDvQeH4wAZB+Eu6xRGBh
-         woew==
+        id S1730412AbgIJCAZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 9 Sep 2020 22:00:25 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:45956 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729525AbgIJBlK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Sep 2020 21:41:10 -0400
+Received: by mail-il1-f195.google.com with SMTP id q6so4174545ild.12;
+        Wed, 09 Sep 2020 18:41:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c134n78aG+T1D05fG/7gwyDy+RohECK5LAEVlOiODCw=;
-        b=hJKwi1/ltwv5cHAAMokRPO8igwma9ZK9stsdQroEjisNY5qgdkwF+n8qXFSqNct0gI
-         1SUKMdO1q1YYLZJXTWvOePd26yvp0GWnSDhqf50hs9y7LtDDsvofE921JZOmUkDdoFtH
-         JhN33q6Gnefi9ndozd5S1zdX949j0C0UXA0IDlmnceCOXPvb49ezG6yDCrayQz4xq+2M
-         BDXhcpaLKB55N/PmMNjVLqwPLV8n9WBZBF1+iGclhrzwM3GBxGxyYkxoJ5rzrInu6ugB
-         PZCt1yKaCsLKoo3lJiQ+BmmEHum2b7+aFeVTdl10JalfsLAtBGj5kXoj4khcCSJ/7r63
-         Butw==
-X-Gm-Message-State: AOAM531eZWaGAIL/F2j7ZAPCACGoKfZXo4zN8tA8kCmwCy0L7MvdezQ2
-        7YrRSueKQDmFPvtB/GqUpuwOfQ==
-X-Google-Smtp-Source: ABdhPJx7fgh7UgPdTXT6uFy6snoRxxciP2Hd+WS8NFMVek051RlvF5/SRN4VKGquIHZA++zqp1uC0Q==
-X-Received: by 2002:a05:620a:2225:: with SMTP id n5mr5229154qkh.171.1599690963887;
-        Wed, 09 Sep 2020 15:36:03 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id g5sm4497430qtx.43.2020.09.09.15.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 15:36:03 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kG8h8-004BIN-8t; Wed, 09 Sep 2020 19:36:02 -0300
-Date:   Wed, 9 Sep 2020 19:36:02 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Joe Perches <joe@perches.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Kees Cook <kees.cook@canonical.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
-        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
-        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        storagedev@microchip.com, sparclinux@vger.kernel.org,
-        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>
-Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
- break;
-Message-ID: <20200909223602.GJ87483@ziepe.ca>
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gbx95JmWRu+tNJB//sm1NIc5T2Lh4ktsJ6AdK4Wo+2k=;
+        b=I7n7xk6HEaxXkY9OFiEigSMUaq4r4XfDslLGR+M00gkjwGMjF2ThteBATNsQ2jK0mE
+         nB6f6Yyev/kbIk8AwE5s9p84UcStPwbkzuLk8fCD+jNl4qVSUeE5dxUpRxZ/XUaD5ONf
+         3D+qR+T1wmiC3/LSfAV6vLfRCPETmcJbygkx+vZELSoSA2BLEId3dkcMgtQACeWhNWco
+         mVJOn6jCuX5V070vrtcgE2H1qkbC6ViUVfWnxOUwFhsHYwZQQegdng5EtVhelx90qVN1
+         IiRZs11CW3YpdgjdwrHhn4cJyQGePoh+Ub1k4qzVepBtBlC3uFZ6Z5O3EFKBpynn9aEe
+         5gUw==
+X-Gm-Message-State: AOAM533a5RVjYKErr5UWHUiSf8i4W/YO6dfsjh9z428ooWivxU+Q4Hkv
+        g8nxs8CwvbwsOYPLVZH55SRXeqW2gvlKzzgtUUk=
+X-Google-Smtp-Source: ABdhPJyhQEsv8PLqHzxt4OxUqUlMDPjolx0tmd3Db+rB0RyPwwLjDBu8hpoTpGqhURnX8Dzpkh1wqqx5bStMowo31NA=
+X-Received: by 2002:a92:c8c4:: with SMTP id c4mr3878144ilq.287.1599702069954;
+ Wed, 09 Sep 2020 18:41:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+References: <1599624552-17523-1-git-send-email-chenhc@lemote.com>
+ <1599624552-17523-3-git-send-email-chenhc@lemote.com> <be0840ac-ecb4-1c93-828f-0773f348f4b0@flygoat.com>
+In-Reply-To: <be0840ac-ecb4-1c93-828f-0773f348f4b0@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Thu, 10 Sep 2020 09:40:58 +0800
+Message-ID: <CAAhV-H5vigV8jfrOK3uciRjkwE_c1Or+YpmzDb0CSfraNLtc3g@mail.gmail.com>
+Subject: Re: [PATCH 3/3] irqchip/loongson-pch-pic: Reserve legacy LPC irqs
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
-> fallthrough to a separate case/default label break; isn't very readable.
-> 
-> Convert pseudo-keyword fallthrough; statements to a simple break; when
-> the next label is case or default and the only statement in the next
-> label block is break;
-> 
-> Found using:
-> 
-> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
-> 
-> Miscellanea:
-> 
-> o Move or coalesce a couple label blocks above a default: block.
-> 
-> Signed-off-by: Joe Perches <joe@perches.com>
-> ---
-> 
-> Compiled allyesconfig x86-64 only.
-> A few files for other arches were not compiled.
+Hi, Jiaxun,
 
-IB part looks OK, I prefer it like this
+On Thu, Sep 10, 2020 at 8:52 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+>
+>
+> 在 2020/9/9 12:09, Huacai Chen 写道:
+> > Reserve legacy LPC irqs (0~15) to avoid spurious interrupts.
+>
+> It doesn't make sense at all.
+>
+> How can you allocate IRQ without irqchip backing it?
+>
+> - Jiaxun
+As you know, this patch resolves the kdump problem, and 0~15 is really
+needed to reserve for LPC, right?
 
-You could do the same for continue as well, I saw a few of those..
-
-Thanks,
-Jason
+Huacai
+>
+> >
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > ---
+> >   drivers/irqchip/irq-loongson-pch-pic.c | 19 ++++++++++++++++++-
+> >   1 file changed, 18 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+> > index 9bf6b9a..9f6719c 100644
+> > --- a/drivers/irqchip/irq-loongson-pch-pic.c
+> > +++ b/drivers/irqchip/irq-loongson-pch-pic.c
+> > @@ -35,6 +35,7 @@
+> >
+> >   struct pch_pic {
+> >       void __iomem            *base;
+> > +     struct irq_domain       *lpc_domain;
+> >       struct irq_domain       *pic_domain;
+> >       u32                     ht_vec_base;
+> >       raw_spinlock_t          pic_lock;
+> > @@ -184,9 +185,9 @@ static void pch_pic_reset(struct pch_pic *priv)
+> >   static int pch_pic_of_init(struct device_node *node,
+> >                               struct device_node *parent)
+> >   {
+> > +     int i, base, err;
+> >       struct pch_pic *priv;
+> >       struct irq_domain *parent_domain;
+> > -     int err;
+> >
+> >       priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> >       if (!priv)
+> > @@ -213,6 +214,22 @@ static int pch_pic_of_init(struct device_node *node,
+> >               goto iounmap_base;
+> >       }
+> >
+> > +     base = irq_alloc_descs(-1, 0, NR_IRQS_LEGACY, 0);
+> > +     if (base < 0) {
+> > +             pr_err("Failed to allocate LPC IRQ numbers\n");
+> > +             goto iounmap_base;
+> > +     }
+> > +
+> > +     priv->lpc_domain = irq_domain_add_legacy(node, NR_IRQS_LEGACY, 0, 0,
+> > +                                              &irq_domain_simple_ops, NULL);
+> > +     if (!priv->lpc_domain) {
+> > +             pr_err("Failed to add irqdomain for LPC controller");
+> > +             goto iounmap_base;
+> > +     }
+> > +
+> > +     for (i = 0; i < NR_IRQS_LEGACY; i++)
+> > +             irq_set_chip_and_handler(i, &dummy_irq_chip, handle_simple_irq);
+> > +
+> >       priv->pic_domain = irq_domain_create_hierarchy(parent_domain, 0,
+> >                                                      PIC_COUNT,
+> >                                                      of_node_to_fwnode(node),
