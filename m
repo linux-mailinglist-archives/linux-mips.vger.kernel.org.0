@@ -2,44 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65738268FDA
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Sep 2020 17:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A5F26901A
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Sep 2020 17:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbgINP06 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Sep 2020 11:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
+        id S1726454AbgINPeb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Sep 2020 11:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725992AbgINP0o (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Sep 2020 11:26:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE965C06174A;
-        Mon, 14 Sep 2020 08:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7O2Rc307Jq8KkaDn7zbVItvtt/ecHc/too3yP9zxMNw=; b=M80c+D3BqJySppi+H3eNYCcnH/
-        gkfi1LX5tkOxqiYr7vGlDhimfScWmyFoD4H7IZc29yxj59fxiZw4CTf73qE/Frs6kv2D1VP9Z0cDk
-        mxHwC6y23VXZp0GWVeuCJj/TuYsYfRbshYeLxTfn4NkxNbZt/mCYZDG48aAzhZnPSD26Tjx+8/mwu
-        2BX9yzKsoQKr11uV/Bwnigc9od3UdV8s2rG69+T+l2QU+9l3XPVzWYgBbLqR3TeV+3H8nv+hHYZRQ
-        AbZDHlAxP767K2OWIVLYATsG32mlziFsc93sPs4pmGxH1oa7RFwa/hq19KGZWcLA7yuKXtQ9v35Ul
-        oAwe3FdQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kHqN0-0004bK-27; Mon, 14 Sep 2020 15:26:18 +0000
-Date:   Mon, 14 Sep 2020 16:26:17 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        with ESMTP id S1726196AbgINPeH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Sep 2020 11:34:07 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A12DC06174A;
+        Mon, 14 Sep 2020 08:34:06 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id a15so75289ljk.2;
+        Mon, 14 Sep 2020 08:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6QGIaljRH231VAywJdapvuATziOfA42BJnpSHpoIEVE=;
+        b=RSn2RJzblwAHTSK+plrf24n4vXY7/p/jXtG+T94xADRsRUBY8CHEBNgnMf/kQyrnxy
+         YieEPQGTw3bOqSmW8AmGOLLdGNA7YSDJLGbEMo+AGcNWh2pxH6XRgNcz8Cs5uCOpKkzC
+         gQyRsPyGfUidZAcBfjITy0I3uSNrMpc1xEktaPuU1N5ohOzXYJc8kuUdIFaZ6+PLkH1j
+         ej79ZdbMIfsu6iduHBqVwRFdln66PldWiNNCVGGJ8TfEu+jWybTfxA05D2VHpJvxymYA
+         bWH+DdU6BYBQ8HP2CiwI9zxdkYMl9jJc8yEPZeyVx3GZKr3H03N+EEitFWK+0KohnbKI
+         Gy2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6QGIaljRH231VAywJdapvuATziOfA42BJnpSHpoIEVE=;
+        b=YeYWECqoKGgbUSdB7xoMSOD7SkTRDc++YfYAp4jk2pcoR4iYbHtzsBxOMMgZAAkNIO
+         8QtdEuJPnlwOBQpkNGad07r0lsOxpKt1h2+UZ6i/kHMRtFHCAjel0r/VHQqr7/FtYbAe
+         tuG1V9nzlm84tLTlUTgV0QsgfadauDyZrs4kQmrzDhELpX9kRusWxY/R+w09JbzqL//8
+         TYkG0uoblChY5NtJ0UNIh+/C3iH4CPRt+4ThnH1eB3Vd9C4HM1RMAA0bqOKwZDTSwBwh
+         C48ANhNXerj6QSjh4FHIcX9eV8JXMcoF/jlBJK9h8vTDa7iPvTC9mCY2bplQ9NeFWN3p
+         W44g==
+X-Gm-Message-State: AOAM533/5JLXyTteFDb4tICppE4xrIsfS8mNU4Jh3XRiNR6b8pOfPFxa
+        xc5ym6NM7k92D0ZIoIA23D4=
+X-Google-Smtp-Source: ABdhPJwhd/LhTRq+JWSW5bzIk6PAoYzRDD2WFOZyHy/0zgbs8GXUoAwbOWmbxU7cQ/01j9Vl+1ORow==
+X-Received: by 2002:a05:651c:200b:: with SMTP id s11mr5091489ljo.196.1600097644849;
+        Mon, 14 Sep 2020 08:34:04 -0700 (PDT)
+Received: from wasted.omprussia.ru ([2a00:1fa0:44ca:acb2:3cb7:6882:b0eb:1108])
+        by smtp.gmail.com with ESMTPSA id l129sm3367001lfd.191.2020.09.14.08.34.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Sep 2020 08:34:04 -0700 (PDT)
+Subject: Re: [PATCH 03/17] drm/exynos: stop setting DMA_ATTR_NON_CONSISTENT
+To:     Christoph Hellwig <hch@lst.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
         Joonyoung Shim <jy0922.shim@samsung.com>,
         Seung-Woo Kim <sw0312.kim@samsung.com>,
         Ben Skeggs <bskeggs@redhat.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Tomasz Figa <tfiga@chromium.org>,
         Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        iommu@lists.linux-foundation.org
+Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
         linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
@@ -47,48 +68,31 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
         linux-scsi@vger.kernel.org, linux-mm@kvack.org,
         alsa-devel@alsa-project.org
-Subject: Re: a saner API for allocating DMA addressable pages v2
-Message-ID: <20200914152617.GR6583@casper.infradead.org>
 References: <20200914144433.1622958-1-hch@lst.de>
+ <20200914144433.1622958-4-hch@lst.de>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <7a1d11c2-0fc5-e110-dabe-960e516bb343@gmail.com>
+Date:   Mon, 14 Sep 2020 18:34:02 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200914144433.1622958-1-hch@lst.de>
+In-Reply-To: <20200914144433.1622958-4-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 04:44:16PM +0200, Christoph Hellwig wrote:
-> I'm still a little unsure about the API naming, as alloc_pages sort of
-> implies a struct page return value, but we return a kernel virtual
-> address.
+On 9/14/20 5:44 PM, Christoph Hellwig wrote:
 
-Erm ... dma_alloc_pages() returns a struct page, so is this sentence
-stale?
+> DMA_ATTR_NON_CONSISTENT is a no-op except on PARISC and some mips
+> configs, so don't set it in this ARM specific driver.
 
-From patch 14:
+   Hm, PARICS and ARM capitalized but mips in lower case? :-)
 
-+struct page *dma_alloc_pages(struct device *dev, size_t size,
-+               dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp);
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+[...]
 
-> The other alternative would be to name the API
-> dma_alloc_noncoherent, but the whole non-coherent naming seems to put
-> people off.
-
-You say that like it's a bad thing.  I think the problem is more that
-people don't understand what non-coherent means and think they're
-supporting it when they're not.
-
-dma_alloc_manual_flushing()?
-
-> As a follow up I plan to move the implementation of the
-> DMA_ATTR_NO_KERNEL_MAPPING flag over to this framework as well, given
-> that is also is a fundamentally non coherent allocation.  The replacement
-> for that flag would then return a struct page, as it is allowed to
-> actually return pages without a kernel mapping as the name suggested
-> (although most of the time they will actually have a kernel mapping..)
-
-If the page doesn't have a kernel mapping, shouldn't it return a PFN
-or a phys_addr?
-
+MBR, Sergei
