@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB9A268DBD
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Sep 2020 16:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5701B268DDA
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Sep 2020 16:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726649AbgINNFv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Sep 2020 09:05:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60290 "EHLO mail.kernel.org"
+        id S1726749AbgINOff (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Sep 2020 10:35:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32912 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726616AbgINNF3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:05:29 -0400
+        id S1726633AbgINNFm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:05:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 20DB32222A;
-        Mon, 14 Sep 2020 13:04:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E79032224C;
+        Mon, 14 Sep 2020 13:05:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600088673;
-        bh=FJGrFZh/wSlG57bHCjvhePW4NhaqITwdnUviTd90E1o=;
+        s=default; t=1600088701;
+        bh=CecopbIxRuxj/S1S8shXfRQpmD8h2mSpBBGt+VGBdOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IPZ84mhEoyRPga2DH98rhbeTd3HY/6eUSFUdJThfihiGwdYshpOmG2+csdig2XmBX
-         AE21hP3lmmyk6aWqwdX/hoccOSdc2IERQQALwOoizmxdS0ZHtBVb4eaPVcecovi4d+
-         e+sqSsXlkAgLb56hbPvAoJEAwousK/EVzZ3fpK3E=
+        b=VWwg+A9PvyD4P3zj1oy45b3LHGRaiHWijvDfffa1A+8Gd86WJ6JrMivYFdHxpAGoB
+         0pPXQzLJScTfZuRNavnb86KtdYY3+I+l4e4WVXC6CU8mvUw9YuEljgaHDfRznRYhBq
+         oMg+iJTy31rJtAwZL+YWdb+0khdc2aEDdD0YkAeI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Huacai Chen <chenhc@lemote.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org,
         kvm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 29/29] KVM: MIPS: Change the definition of kvm type
-Date:   Mon, 14 Sep 2020 09:03:58 -0400
-Message-Id: <20200914130358.1804194-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 22/22] KVM: MIPS: Change the definition of kvm type
+Date:   Mon, 14 Sep 2020 09:04:34 -0400
+Message-Id: <20200914130434.1804478-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200914130358.1804194-1-sashal@kernel.org>
-References: <20200914130358.1804194-1-sashal@kernel.org>
+In-Reply-To: <20200914130434.1804478-1-sashal@kernel.org>
+References: <20200914130434.1804478-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index 666d3350b4ac1..6c6836669ce16 100644
+index 1109924560d8c..b22a3565e1330 100644
 --- a/arch/mips/kvm/mips.c
 +++ b/arch/mips/kvm/mips.c
-@@ -137,6 +137,8 @@ extern void kvm_init_loongson_ipi(struct kvm *kvm);
+@@ -131,6 +131,8 @@ int kvm_arch_check_processor_compat(void)
  int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
  {
  	switch (type) {
@@ -101,10 +101,10 @@ index 666d3350b4ac1..6c6836669ce16 100644
  	case KVM_VM_MIPS_VZ:
  #else
 diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 4fdf303165827..65fd95f9784ce 100644
+index e735bc4075dc7..1b6b8e05868dd 100644
 --- a/include/uapi/linux/kvm.h
 +++ b/include/uapi/linux/kvm.h
-@@ -789,9 +789,10 @@ struct kvm_ppc_resize_hpt {
+@@ -768,9 +768,10 @@ struct kvm_ppc_resize_hpt {
  #define KVM_VM_PPC_HV 1
  #define KVM_VM_PPC_PR 2
  
