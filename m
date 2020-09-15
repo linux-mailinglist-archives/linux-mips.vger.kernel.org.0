@@ -2,21 +2,21 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D31526A945
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Sep 2020 18:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E289B26A9A5
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Sep 2020 18:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727577AbgIOQCM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Sep 2020 12:02:12 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:48004 "EHLO
+        id S1726320AbgIOQWp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Sep 2020 12:22:45 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:49549 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727505AbgIOP7D (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Sep 2020 11:59:03 -0400
+        with ESMTP id S1727430AbgIOQWV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Sep 2020 12:22:21 -0400
 Received: from ip5f5af089.dynamic.kabel-deutschland.de ([95.90.240.137] helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kIDLP-0005nY-4d; Tue, 15 Sep 2020 15:58:11 +0000
-Date:   Tue, 15 Sep 2020 17:58:10 +0200
+        id 1kIDNS-0005wg-Oh; Tue, 15 Sep 2020 16:00:18 +0000
+Date:   Tue, 15 Sep 2020 18:00:18 +0200
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     linux-kernel@vger.kernel.org,
@@ -29,27 +29,26 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-xtensa@linux-xtensa.org,
         linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 05/15] selftests/seccomp: arm64: Define SYSCALL_NUM_SET
- macro
-Message-ID: <20200915155810.iviwgb47alajagvt@wittgenstein>
+Subject: Re: [PATCH 06/15] selftests/seccomp: mips: Remove O32-specific macro
+Message-ID: <20200915160018.fstuxjp5mkwieweq@wittgenstein>
 References: <20200912110820.597135-1-keescook@chromium.org>
- <20200912110820.597135-6-keescook@chromium.org>
+ <20200912110820.597135-7-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200912110820.597135-6-keescook@chromium.org>
+In-Reply-To: <20200912110820.597135-7-keescook@chromium.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Sep 12, 2020 at 04:08:10AM -0700, Kees Cook wrote:
-> Remove the arm64 special-case in change_syscall().
+On Sat, Sep 12, 2020 at 04:08:11AM -0700, Kees Cook wrote:
+> Instead of having the mips O32 macro special-cased, pull the logic into
+> the SYSCALL_NUM() macro. Additionally include the ABI headers, since
+> these appear to have been missing, leaving __NR_O32_Linux undefined.
 > 
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
-
-We're using iovecs in ptrace()??
 
 Looks good!
 Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
