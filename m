@@ -2,194 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B3C2696B0
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Sep 2020 22:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0654269DC6
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Sep 2020 07:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbgINUca (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Sep 2020 16:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbgINUcM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Sep 2020 16:32:12 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE878C06178A
-        for <linux-mips@vger.kernel.org>; Mon, 14 Sep 2020 13:32:11 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id v14so489121pjd.4
-        for <linux-mips@vger.kernel.org>; Mon, 14 Sep 2020 13:32:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MAegNs4VOwWv9UrQbG/3KsC+fif9tz3H9h+v9DTenlg=;
-        b=fLq43tsj0idL5YeRKTDNHNUi+/bcp9W/YMHPxve4qth42qg71hfTUM5Xq3cazIdDrI
-         NFB+4SH1S70GAC48b8DplcyZACd4EXVyXgXskD80RFmDCDa/3pUt9RLyrlu1vxpWwB4f
-         i2X0eeheLlVij915s5y5BUr4hEXriYpLc1OPM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MAegNs4VOwWv9UrQbG/3KsC+fif9tz3H9h+v9DTenlg=;
-        b=tJ4YPLNwINXUc97eRqmZYA5jFdo+T/2C0aSfKJYtUHKqOPKrlgBtnm7NXRo8TKGmUa
-         rAvsFVRgr3oEKER3Py9jzcYXcOtGUNGBg4Ka1QVh0e3oNZ63nn7ixEVn5xfRYhaM/05n
-         wXZP7SgIRfaT8DY8Pz6wMYd82Ev8ipTu9e1xnsxU9toTGAmRvW1Sl34XgJ9gA7jACFsZ
-         b0/x2vd66J9XV6Nzy2m9JoUI3ztniGtmzThPm0y7vPs6RGXk1rK3yJGPtnfZlSPgZyUL
-         15bCQ55GaEALoQJ8afpnYc0PzTbrnkdEtafpbADx6LhYjeS/H2h4htGDNYK4OGTtYBQt
-         zAew==
-X-Gm-Message-State: AOAM53356HSgdztR6dWv3R95F9rYUg3LLB8/E/0xjLHy36dIKMvsiT9f
-        c6XR9cEuB8cRyp1U+yBuoe0Cvg==
-X-Google-Smtp-Source: ABdhPJwLrAeD4ZMb7OCOucEtPSfmxZNEDPJonNkzAiZJUR7jlcfwd9QjlJseUiJhoAyO2uqhAGri2A==
-X-Received: by 2002:a17:90b:364c:: with SMTP id nh12mr972235pjb.182.1600115531070;
-        Mon, 14 Sep 2020 13:32:11 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j19sm11207357pfi.51.2020.09.14.13.32.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2020 13:32:10 -0700 (PDT)
-Date:   Mon, 14 Sep 2020 13:32:09 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kernel@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 00/15] selftests/seccomp: Refactor change_syscall()
-Message-ID: <202009141321.366935EF52@keescook>
-References: <20200912110820.597135-1-keescook@chromium.org>
- <87wo0wpnah.fsf@mpe.ellerman.id.au>
+        id S1726057AbgIOFXc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Sep 2020 01:23:32 -0400
+Received: from relay5.mymailcheap.com ([159.100.248.207]:45836 "EHLO
+        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726128AbgIOFX2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Sep 2020 01:23:28 -0400
+Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [151.80.165.199])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id DB92F260EC
+        for <linux-mips@vger.kernel.org>; Tue, 15 Sep 2020 05:23:24 +0000 (UTC)
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay2.mymailcheap.com (Postfix) with ESMTPS id 558093ECD9;
+        Tue, 15 Sep 2020 07:23:22 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by filter2.mymailcheap.com (Postfix) with ESMTP id 333942A915;
+        Tue, 15 Sep 2020 07:23:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1600147402;
+        bh=pBHxIokCZynYw3ScP/nVOVKseKLK233vgSqlpJUmg8A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=bIT0cp+OUDccBEjI4exCMEETszF6VAaJNDul4g5Pw4+cDePoH1Hqn4z8zldu6osaK
+         N/waUdna8r2WRIQAzqXoUUmx2U0Rq9GktutljBOBF6zboWtkmCAajw4zj5uCtnGVmd
+         C/vznaqS4no7swxbwWZrthnw2cNEuI1B/YjaGz9w=
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WzuQ6Z2bmB7U; Tue, 15 Sep 2020 07:23:20 +0200 (CEST)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Tue, 15 Sep 2020 07:23:20 +0200 (CEST)
+Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id 1E83040EB6;
+        Tue, 15 Sep 2020 05:23:19 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="M2Vxjr+b";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from [0.0.0.0] (li1197-90.members.linode.com [45.79.98.90])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id A31AE40EB6;
+        Tue, 15 Sep 2020 05:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
+        s=default; t=1600147301;
+        bh=pBHxIokCZynYw3ScP/nVOVKseKLK233vgSqlpJUmg8A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=M2Vxjr+bqYCs2uI1Ehg4PTFLqOQt2Wg93SvP4fLHxJ566MAd5LGFwSqUCjzLUOob0
+         30l4v8cgGUd4ZmYthhPsnwp9yGAPdEpIPRJ3367oMX/dEABXhA4BRScVc3dCxAr1uF
+         sxzoivehszQyKQEH1k3a8no/E0QSGlZU49iwPv/c=
+Subject: Re: [PATCH V6 2/3] MIPS: Loongson-3: Enable COP2 usage in kernel
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>
+Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>
+References: <1599473169-6599-1-git-send-email-chenhc@lemote.com>
+ <1599473169-6599-2-git-send-email-chenhc@lemote.com>
+ <20200914111118.GB8974@alpha.franken.de>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <2a0e87d6-f157-d645-cbb3-bbc3e0f33c7a@flygoat.com>
+Date:   Tue, 15 Sep 2020 13:21:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wo0wpnah.fsf@mpe.ellerman.id.au>
+In-Reply-To: <20200914111118.GB8974@alpha.franken.de>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 1E83040EB6
+X-Spamd-Result: default: False [-0.10 / 10.00];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         ARC_NA(0.00)[];
+         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
+         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         R_SPF_SOFTFAIL(0.00)[~all];
+         RCPT_COUNT_FIVE(0.00)[5];
+         ML_SERVERS(-3.10)[213.133.102.83];
+         DKIM_TRACE(0.00)[flygoat.com:+];
+         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
+         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
+         FREEMAIL_CC(0.00)[vger.kernel.org,lemote.com,gmail.com];
+         MID_RHS_MATCH_FROM(0.00)[];
+         RCVD_COUNT_TWO(0.00)[2]
+X-Rspamd-Server: mail20.mymailcheap.com
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 10:15:18PM +1000, Michael Ellerman wrote:
-> Kees Cook <keescook@chromium.org> writes:
-> > Hi,
-> >
-> > This refactors the seccomp selftest macros used in change_syscall(),
-> > in an effort to remove special cases for mips, arm, arm64, and xtensa,
-> > which paves the way for powerpc fixes.
-> >
-> > I'm not entirely done testing, but all-arch build tests and x86_64
-> > selftests pass. I'll be doing arm, arm64, and i386 selftests shortly,
-> > but I currently don't have an easy way to check xtensa, mips, nor
-> > powerpc. Any help there would be appreciated!
-> 
-> The series builds fine for me, and all the tests pass (see below).
-> 
-> Thanks for picking up those changes to deal with powerpc being oddball.
-> 
-> Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-Awesome; thanks!
 
-However...
+ÔÚ 2020/9/14 19:11, Thomas Bogendoerfer Ð´µÀ:
+> On Mon, Sep 07, 2020 at 06:06:08PM +0800, Huacai Chen wrote:
+>> diff --git a/arch/mips/boot/compressed/head.S b/arch/mips/boot/compressed/head.S
+>> index 409cb48..9fc88ec 100644
+>> --- a/arch/mips/boot/compressed/head.S
+>> +++ b/arch/mips/boot/compressed/head.S
+>> @@ -14,11 +14,16 @@
+>>   
+>>   #include <asm/asm.h>
+>>   #include <asm/regdef.h>
+>> +#include <asm/mipsregs.h>
+>>   
+>>   	.set noreorder
+>>   	.cprestore
+>>   	LEAF(start)
+>>   start:
+>> +	mfc0    t0, CP0_STATUS
+>> +	or	t0, ST0_KERNEL_CUMASK
+>> +	mtc0    t0, CP0_STATUS
+>> +
+>>   	/* Save boot rom start args */
+>>   	move	s0, a0
+>>   	move	s1, a1
+> please to compiler flags in arch/mips/boot/compressed/Makefile to
+> disable generation of instruction not supported, if CU2 is disabled
+> (and don't forget about 2ef).
 
-> 
-> cheers
-> 
-> 
-> ./seccomp_bpf
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> #  RUN           global.kcmp ...
-> #            OK  global.kcmp
-> ok 1 global.kcmp
-> [...]
-> #  RUN           global.KILL_thread ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
+I don't think it's worthy to have different CFLAGS between zboot and rest of
+the kernel.
 
-Was this a mis-paste, or has something very very bad happened here in
-global.KILL_one_arg_six finishes?
+On GCC version prior to 9, there is no flag to control the generation of
+these instructions, unless drop supplied "-march=loongson3a" option,
+that's messy and unreliable for Makefile.
 
-> #  RUN           global.kcmp ...
-> #            OK  global.kcmp
-> ok 1 global.kcmp
-> [...]
-> #  RUN           global.user_notification_basic ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_basic ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_signal ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_closed_listener ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_child_pid_ns ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_sibling_pid_ns ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_sibling_pid_ns ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_sibling_pid_ns ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_fault_recv ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_continue ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_filter_empty ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_filter_empty_threaded ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_addfd ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_addfd_rlimit ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> # PASSED: 86 / 86 tests passed.
-> # Totals: pass:86 fail:0 xfail:0 xpass:0 skip:0 error:0
+By contrast, enabling CU2 in zboot have no side effect. Some firmware even
+did it in early ROM initilization stage.
 
-And after every user_notification test? O_O
+Thanks.
 
--- 
-Kees Cook
+- Jiaxun
+
+>
+> Rest of the patch LGTM.
+>
+> Thomas.
+>
