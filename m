@@ -2,135 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F5726A59D
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Sep 2020 14:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C5126A999
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Sep 2020 18:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726446AbgIOMyR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Sep 2020 08:54:17 -0400
-Received: from ozlabs.org ([203.11.71.1]:47259 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726465AbgIOMxL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 15 Sep 2020 08:53:11 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BrNRX3vxHz9sTH;
-        Tue, 15 Sep 2020 22:52:24 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1600174345;
-        bh=d/1zO1TaulNZ9TriOX5RFloiXPE2NV9jxfBjB11mp0w=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=FfFXLMeE2/ukRgHVh1faaE5PJKdoiqxv+CnQForJcVqIfgnCirEobNGOuirFbQArI
-         d2NntCSaLCpCM5Bq2xN5x1kCIalVsLtXdKMNwHsT5qmjtyEbfV+Z4b7+aL87r0Ogvz
-         lPdMr15Ykp2zmNjFy7Fn+qRhRvEeqP86GZDzRJ/qjT+pl42nsJ0n1K3DQIbU6FJJP9
-         7Cat14dfRK7pcReb0Am4FQowrlCURdSk5w1YFGjc4rouv0CRpMsdj18pm867aogkiV
-         hqbEVsF3mw0FiANRbWn6629as6qXyzKEFbNtu8PCrAzu5DZzMxiotCuCOV0Hb317oY
-         Ebi5ZNT7djt1g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 00/15] selftests/seccomp: Refactor change_syscall()
-In-Reply-To: <202009141321.366935EF52@keescook>
-References: <20200912110820.597135-1-keescook@chromium.org> <87wo0wpnah.fsf@mpe.ellerman.id.au> <202009141321.366935EF52@keescook>
-Date:   Tue, 15 Sep 2020 22:52:21 +1000
-Message-ID: <87een3p5h6.fsf@mpe.ellerman.id.au>
+        id S1727302AbgIOQUs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Sep 2020 12:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727579AbgIOQUQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Sep 2020 12:20:16 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072EEC0611BD;
+        Tue, 15 Sep 2020 09:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=i+wSADPYCfjiINNNap/OtPKewAd3CUR2UpLQDRhWXVM=; b=KV4MHtGI1c35fx301ypBZ2ix5f
+        j6+9ZBm5fX2GTWrmr4Ucexej6a/A5AgmrccjxIJaXRVSJ25VeGNarsOyAh2mV63O4QoWYIt397+p/
+        PEj6Fh9y7Z9MocC0Hlfy6ktdLodgEKBx1jPzxDDRVZFQxq6HUKkZ+ruLNJ7tWvxCUBT0Uc4ZWj9aI
+        eodnHxY42TKdaain8L+MAGrX7+JkUf2CCLX1ArOSkzY+hjEXko2GALiYhYarDUPJ5lEjgchOlPjSa
+        oTRbf+Wq093khDrwEuwBqMXFNj+Kn+GSdd95aFRR1UNfKr4GP9znnnjfctGimxooOjIWir3e/76iY
+        9DM3BvgA==;
+Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kIDgI-0005Cn-PU; Tue, 15 Sep 2020 16:19:47 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        iommu@lists.linux-foundation.org
+Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org
+Subject: [PATCH 12/18] sgiseeq: convert to dma_alloc_noncoherent
+Date:   Tue, 15 Sep 2020 17:51:16 +0200
+Message-Id: <20200915155122.1768241-13-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200915155122.1768241-1-hch@lst.de>
+References: <20200915155122.1768241-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-> On Mon, Sep 14, 2020 at 10:15:18PM +1000, Michael Ellerman wrote:
->> Kees Cook <keescook@chromium.org> writes:
->> > Hi,
->> >
->> > This refactors the seccomp selftest macros used in change_syscall(),
->> > in an effort to remove special cases for mips, arm, arm64, and xtensa,
->> > which paves the way for powerpc fixes.
->> >
->> > I'm not entirely done testing, but all-arch build tests and x86_64
->> > selftests pass. I'll be doing arm, arm64, and i386 selftests shortly,
->> > but I currently don't have an easy way to check xtensa, mips, nor
->> > powerpc. Any help there would be appreciated!
->> 
->> The series builds fine for me, and all the tests pass (see below).
->> 
->> Thanks for picking up those changes to deal with powerpc being oddball.
->> 
->> Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
->
-> Awesome; thanks!
->
-> However...
->
->> ./seccomp_bpf
->> TAP version 13
->> 1..86
->> # Starting 86 tests from 7 test cases.
->> #  RUN           global.kcmp ...
->> #            OK  global.kcmp
->> ok 1 global.kcmp
->> [...]
->> #  RUN           global.KILL_thread ...
->> TAP version 13
->> 1..86
->> # Starting 86 tests from 7 test cases.
->
-> Was this a mis-paste, or has something very very bad happened here in
-> global.KILL_one_arg_six finishes?
->
-...
->> TAP version 13
->> 1..86
->> # Starting 86 tests from 7 test cases.
->> [...]
->> # PASSED: 86 / 86 tests passed.
->> # Totals: pass:86 fail:0 xfail:0 xpass:0 skip:0 error:0
->
-> And after every user_notification test? O_O
+Use the new non-coherent DMA API including proper ownership transfers.
+This includes adding additional calls to dma_sync_desc_dev as the
+old syncing was rather ad-hoc.
 
-Haha, I thought that was normal :)
+Thanks to Thomas Bogendoerfer for debugging the ownership transfer
+issues.
 
-It's because of redirection, I run the tests with:
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/net/ethernet/seeq/sgiseeq.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
-  find . -executable -type f -print -execdir '{}' ';' | tee test.log
-
-If I just run it directly on the terminal everything is normal.
-
-It'll be fork() vs libc buffering.
-
-I can fix it with:
-
-$ stdbuf -oL ./seccomp_bpf | tee test.log
-
-Or the patch below.
-
-I can send a proper patch for that tomorrow, I don't know that harness
-code, but I think that's the right fix.
-
-cheers
-
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 4f78e4805633..b1bd00ff3d94 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -971,6 +971,7 @@ void __run_test(struct __fixture_metadata *f,
+diff --git a/drivers/net/ethernet/seeq/sgiseeq.c b/drivers/net/ethernet/seeq/sgiseeq.c
+index 8507ff2420143a..37ff25a84030eb 100644
+--- a/drivers/net/ethernet/seeq/sgiseeq.c
++++ b/drivers/net/ethernet/seeq/sgiseeq.c
+@@ -112,14 +112,18 @@ struct sgiseeq_private {
  
- 	ksft_print_msg(" RUN           %s%s%s.%s ...\n",
- 	       f->name, variant->name[0] ? "." : "", variant->name, t->name);
-+	fflush(stdout);
- 	t->pid = fork();
- 	if (t->pid < 0) {
- 		ksft_print_msg("ERROR SPAWNING TEST CHILD\n");
+ static inline void dma_sync_desc_cpu(struct net_device *dev, void *addr)
+ {
+-	dma_cache_sync(dev->dev.parent, addr, sizeof(struct sgiseeq_rx_desc),
+-		       DMA_FROM_DEVICE);
++	struct sgiseeq_private *sp = netdev_priv(dev);
++
++	dma_sync_single_for_cpu(dev->dev.parent, VIRT_TO_DMA(sp, addr),
++			sizeof(struct sgiseeq_rx_desc), DMA_BIDIRECTIONAL);
+ }
+ 
+ static inline void dma_sync_desc_dev(struct net_device *dev, void *addr)
+ {
+-	dma_cache_sync(dev->dev.parent, addr, sizeof(struct sgiseeq_rx_desc),
+-		       DMA_TO_DEVICE);
++	struct sgiseeq_private *sp = netdev_priv(dev);
++
++	dma_sync_single_for_device(dev->dev.parent, VIRT_TO_DMA(sp, addr),
++			sizeof(struct sgiseeq_rx_desc), DMA_BIDIRECTIONAL);
+ }
+ 
+ static inline void hpc3_eth_reset(struct hpc3_ethregs *hregs)
+@@ -403,6 +407,8 @@ static inline void sgiseeq_rx(struct net_device *dev, struct sgiseeq_private *sp
+ 		rd = &sp->rx_desc[sp->rx_new];
+ 		dma_sync_desc_cpu(dev, rd);
+ 	}
++	dma_sync_desc_dev(dev, rd);
++
+ 	dma_sync_desc_cpu(dev, &sp->rx_desc[orig_end]);
+ 	sp->rx_desc[orig_end].rdma.cntinfo &= ~(HPCDMA_EOR);
+ 	dma_sync_desc_dev(dev, &sp->rx_desc[orig_end]);
+@@ -443,6 +449,7 @@ static inline void kick_tx(struct net_device *dev,
+ 		dma_sync_desc_cpu(dev, td);
+ 	}
+ 	if (td->tdma.cntinfo & HPCDMA_XIU) {
++		dma_sync_desc_dev(dev, td);
+ 		hregs->tx_ndptr = VIRT_TO_DMA(sp, td);
+ 		hregs->tx_ctrl = HPC3_ETXCTRL_ACTIVE;
+ 	}
+@@ -476,6 +483,7 @@ static inline void sgiseeq_tx(struct net_device *dev, struct sgiseeq_private *sp
+ 		if (!(td->tdma.cntinfo & (HPCDMA_XIU)))
+ 			break;
+ 		if (!(td->tdma.cntinfo & (HPCDMA_ETXD))) {
++			dma_sync_desc_dev(dev, td);
+ 			if (!(status & HPC3_ETXCTRL_ACTIVE)) {
+ 				hregs->tx_ndptr = VIRT_TO_DMA(sp, td);
+ 				hregs->tx_ctrl = HPC3_ETXCTRL_ACTIVE;
+@@ -740,8 +748,8 @@ static int sgiseeq_probe(struct platform_device *pdev)
+ 	sp = netdev_priv(dev);
+ 
+ 	/* Make private data page aligned */
+-	sr = dma_alloc_attrs(&pdev->dev, sizeof(*sp->srings), &sp->srings_dma,
+-			     GFP_KERNEL, DMA_ATTR_NON_CONSISTENT);
++	sr = dma_alloc_noncoherent(&pdev->dev, sizeof(*sp->srings),
++			&sp->srings_dma, DMA_BIDIRECTIONAL, GFP_KERNEL);
+ 	if (!sr) {
+ 		printk(KERN_ERR "Sgiseeq: Page alloc failed, aborting.\n");
+ 		err = -ENOMEM;
+@@ -802,8 +810,8 @@ static int sgiseeq_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err_out_free_attrs:
+-	dma_free_attrs(&pdev->dev, sizeof(*sp->srings), sp->srings,
+-		       sp->srings_dma, DMA_ATTR_NON_CONSISTENT);
++	dma_free_noncoherent(&pdev->dev, sizeof(*sp->srings), sp->srings,
++		       sp->srings_dma, DMA_BIDIRECTIONAL);
+ err_out_free_dev:
+ 	free_netdev(dev);
+ 
+@@ -817,8 +825,8 @@ static int sgiseeq_remove(struct platform_device *pdev)
+ 	struct sgiseeq_private *sp = netdev_priv(dev);
+ 
+ 	unregister_netdev(dev);
+-	dma_free_attrs(&pdev->dev, sizeof(*sp->srings), sp->srings,
+-		       sp->srings_dma, DMA_ATTR_NON_CONSISTENT);
++	dma_free_noncoherent(&pdev->dev, sizeof(*sp->srings), sp->srings,
++		       sp->srings_dma, DMA_BIDIRECTIONAL);
+ 	free_netdev(dev);
+ 
+ 	return 0;
+-- 
+2.28.0
+
