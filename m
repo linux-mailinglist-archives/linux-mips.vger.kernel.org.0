@@ -2,268 +2,378 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B97F726BBE0
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Sep 2020 07:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E9026BCBD
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Sep 2020 08:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbgIPFje convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 16 Sep 2020 01:39:34 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:33255 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbgIPFj3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Sep 2020 01:39:29 -0400
-Received: by mail-io1-f66.google.com with SMTP id r25so7001198ioj.0;
-        Tue, 15 Sep 2020 22:39:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=m9rQtnvCU+IbA/sQe0l2NvgWiLgB/KgBw4a2JM/7lWY=;
-        b=rBR6XJ186k285eiWofvoSZbPUWRYRzdGH7VI2F3gaGmTqbExtBv8G14uk/0FbDNf3d
-         QuEJX63IWkNAC1SVyvBq9goMUuLoR2ljmYn8lCr6HCeEzUVdb35fIVXWIn+GBkj2uAc8
-         ONTUssRhc+ftN24v3xT+hxMoRUKnl8vzYG9NXMDcQl+jZ6Yk7+/szlAxUXnIoAnN0ZbY
-         kuav4/scyUwYNCL0lEeMJYefoTkllPTNXdsUQyySTB0ybV7PWr7BNyVnK96QyHZODj/K
-         TsvS3wu5+pVjEJko1DPP3f1/+VAJWsd/CUcKPqwYguama3tEnzNV6VVMePRyELOSifEQ
-         ETVw==
-X-Gm-Message-State: AOAM530t2Cgvim73vlJCzYUu1AFwsmBMRTOJXrVDuEzIVc3jPmePSqJZ
-        FFzwMjr25hr013Qj79hhG1p2A6Hc6tj+z4NrPybTU5qFY/bl3g==
-X-Google-Smtp-Source: ABdhPJx6VHVQ9BdKAMzLKQqYttjH3cMKpG9Kvw5xtYq+Yt2OQUDWDdHm72njbFfdkhbHUyWnPmFxn5oVsnX8vnowI9k=
-X-Received: by 2002:a02:9086:: with SMTP id x6mr21517661jaf.126.1600234767322;
- Tue, 15 Sep 2020 22:39:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <1600175263-7872-1-git-send-email-hejinyang@loongson.cn>
- <376B4B91-0736-43FA-87EA-43E12FF24EF1@flygoat.com> <7b78c4d4-7ee3-cf57-71d1-95611713de2b@loongson.cn>
-In-Reply-To: <7b78c4d4-7ee3-cf57-71d1-95611713de2b@loongson.cn>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Wed, 16 Sep 2020 01:39:13 -0400
-Message-ID: <CAAhV-H5t3KWL1O+JKVp+T2qqGXuW7OiasjnnCLmV0+GE0Ns9xQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Loongson64: Add kexec/kdump support
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Youling Tang <tangyouling@loongson.cn>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, kexec@lists.infradead.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726172AbgIPGVw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 16 Sep 2020 02:21:52 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:3516 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726444AbgIPGVn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Sep 2020 02:21:43 -0400
+Received: from DGGEMM406-HUB.china.huawei.com (unknown [172.30.72.56])
+        by Forcepoint Email with ESMTP id C6665CA0DC758315E6CA;
+        Wed, 16 Sep 2020 14:21:38 +0800 (CST)
+Received: from dggemi711-chm.china.huawei.com (10.3.20.110) by
+ DGGEMM406-HUB.china.huawei.com (10.3.20.214) with Microsoft SMTP Server (TLS)
+ id 14.3.487.0; Wed, 16 Sep 2020 14:21:26 +0800
+Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
+ dggemi711-chm.china.huawei.com (10.3.20.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Wed, 16 Sep 2020 14:21:25 +0800
+Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
+ dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.1913.007;
+ Wed, 16 Sep 2020 14:21:25 +0800
+From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+CC:     Roman Gushchin <guro@fb.com>, Mike Rapoport <rppt@kernel.org>,
+        Joonsoo Kim <js1304@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Aslan Bakirov <aslan@fb.com>, Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: RE: [PATCH] cma: make number of CMA areas dynamic, remove
+ CONFIG_CMA_AREAS
+Thread-Topic: [PATCH] cma: make number of CMA areas dynamic, remove
+ CONFIG_CMA_AREAS
+Thread-Index: AQHWi6MmbaTsa4oYpkCWXNyUO1XFb6lqyD6w
+Date:   Wed, 16 Sep 2020 06:21:25 +0000
+Message-ID: <356184a14f9a4f6699ab6f2ed4b1e4ec@hisilicon.com>
+References: <20200915205703.34572-1-mike.kravetz@oracle.com>
+In-Reply-To: <20200915205703.34572-1-mike.kravetz@oracle.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.126.202.164]
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Jinyang,
 
-On Tue, Sep 15, 2020 at 10:17 PM Jinyang He <hejinyang@loongson.cn> wrote:
->
->
->
-> On 09/16/2020 09:33 AM, Jiaxun Yang wrote:
-> >
-> > 于 2020年9月15日 GMT+08:00 下午9:07:43, Jinyang He <hejinyang@loongson.cn> 写到:
-> >> Add loongson_kexec_prepare(), loongson_kexec_shutdown() and
-> >> loongson_kexec_crashdown() for passing the parameters of kexec_args.
-> >>
-> >> To start loongson64, CPU0 needs 3 parameters:
-> >> fw_arg0: the number of cmd.
-> >> fw_arg1: cmd structure which seems strange, the cmd array[index]'s
-> >>          value is cmd string's address, index >= 1.
-> >> fw_arg2: environment.
-> >>
-> >> Secondary CPUs do not need parameter at once. They query their
-> >> mailbox to get PC, SP and GP in a loop before CPU0 brings them up
-> >> and passes these parameters via mailbox.
-> >>
-> >> loongson_kexec_prepare(): Alloc new memory to save cmd for kexec.
-> >> Combine the kexec append option string as cmd structure, and the cmd
-> >> struct will be parsed in fw_init_cmdline() of arch/mips/fw/lib/cmdline.c.
-> >> image->control_code_page need pointing to a safe memory page. In order to
-> >> maintain compatibility for the old firmware the low 2MB is reserverd
-> >> and safe for Loongson. So let it points here.
-> >>
-> >> loongson_kexec_shutdown(): Wake up all present CPUs and let them go
-> >> to reboot_code_buffer. Pass the kexec parameters to kexec_args.
-> >>
-> >> loongson_crash_shutdown(): Pass the kdump parameters to kexec_args.
-> >>
-> >> The assembly part provide a way like BIOS doing to keep secondary
-> >> CPUs in a querying loop.
-> >>
-> >> This patch referenced [1][2][3].
-> >>
-> >> [1] arch/mips/cavium-octeon/setup.c
-> >> [2] https://patchwork.kernel.org/patch/10799217/
-> >> [3] https://gitee.com/loongsonlab/qemu/blob/master/hw/mips/loongson3a_rom.h
-> >>
-> >> Co-developed-by: Youling Tang <tangyouling@loongson.cn>
-> >> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-> >> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> >> ---
-> >> arch/mips/kernel/relocate_kernel.S | 19 ++++++++
-> >> arch/mips/loongson64/reset.c       | 88 ++++++++++++++++++++++++++++++++++++++
-> >> 2 files changed, 107 insertions(+)
-> >>
-> >> diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
-> >> index ac87089..061cbfb 100644
-> >> --- a/arch/mips/kernel/relocate_kernel.S
-> >> +++ b/arch/mips/kernel/relocate_kernel.S
-> >> @@ -133,6 +133,25 @@ LEAF(kexec_smp_wait)
-> >> #else
-> >>      sync
-> >> #endif
-> >> +
-> >> +#ifdef CONFIG_CPU_LOONGSON64
-> >> +#define MAILBOX_BASE 0x900000003ff01000
-> > Please avoid hardcoded SMP information. You're breaking Loongson 3B support.
-> >
-> Ok, I see. Since my machine is Loongson 3A. I'll send v2
-> after I test it in 3B.
-1, My original version can work on both Loongson-3A and Loongson-3B,
-why you modify my patch and hadn't discuss with me?
 
-2, With this single patch both kexec and kdump cannot work reliably,
-because kexec need this patch:
-   https://patchwork.kernel.org/patch/11695929/
+> -----Original Message-----
+> From: Mike Kravetz [mailto:mike.kravetz@oracle.com]
+> Sent: Wednesday, September 16, 2020 8:57 AM
+> To: linux-mm@kvack.org; linux-kernel@vger.kernel.org;
+> linux-arm-kernel@lists.infradead.org; linux-mips@vger.kernel.org
+> Cc: Roman Gushchin <guro@fb.com>; Song Bao Hua (Barry Song)
+> <song.bao.hua@hisilicon.com>; Mike Rapoport <rppt@kernel.org>; Joonsoo
+> Kim <js1304@gmail.com>; Rik van Riel <riel@surriel.com>; Aslan Bakirov
+> <aslan@fb.com>; Michal Hocko <mhocko@kernel.org>; Andrew Morton
+> <akpm@linux-foundation.org>; Mike Kravetz <mike.kravetz@oracle.com>
+> Subject: [PATCH] cma: make number of CMA areas dynamic, remove
+> CONFIG_CMA_AREAS
+> 
+> The number of distinct CMA areas is limited by the constant
+> CONFIG_CMA_AREAS.  In most environments, this was set to a default
+> value of 7.  Not too long ago, support was added to allocate hugetlb
+> gigantic pages from CMA.  More recent changes to make dma_alloc_coherent
+> NUMA-aware on arm64 added more potential users of CMA areas.  Along
+> with the dma_alloc_coherent changes, the default value of CMA_AREAS
+> was bumped up to 19 if NUMA is enabled.
+> 
+> It seems that the number of CMA users is likely to grow.  Instead of
+> using a static array for cma areas, use a simple linked list.  These
+> areas are used before normal memory allocators, so use the memblock
+> allocator.
+> 
+> Acked-by: Roman Gushchin <guro@fb.com>
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+> rfc->v1
+>   - Made minor changes suggested by Song Bao Hua (Barry Song)
+>   - Removed check for late calls to cma_init_reserved_mem that was part
+>     of RFC.
+>   - Added ACK from Roman Gushchin
+>   - Still in need of arm testing
 
-   and kdump need my first patch in my original version:
-   https://patchwork.kernel.org/patch/10799215/
+Unfortunately, the test result on my arm64 board is negative, Linux can't boot after applying
+this patch.
 
-   You may argue that you have tested. Yes, I believe that, I'm not
-saying that you haven't test, and I'm not saying that your patch
-cannot work, I'm just saying that your patch is not robust.
+I guess we have to hold on this patch for a while till this is fixed. BTW, Mike, do you have
+a qemu-based arm64 numa system to debug? It is very easy to reproduce, we don't need to
+use hugetlb_cma and pernuma_cma. Just the default cma will make the boot hang.
 
-3, I'm the original author and paying attention to kexec/kdump
-continuosly, I will send a new version once the above two patches be
-accepted. But you re-send my patch without any communication with me,
-why you so impatient?
+> 
+>  arch/arm/mm/dma-mapping.c              | 28 ++++++++++++-------
+>  arch/mips/configs/cu1000-neo_defconfig |  1 -
+>  arch/mips/configs/cu1830-neo_defconfig |  1 -
+>  include/linux/cma.h                    | 12 ---------
+>  mm/Kconfig                             | 12 ---------
+>  mm/cma.c                               | 37 +++++++++++---------------
+>  mm/cma.h                               |  4 +--
+>  mm/cma_debug.c                         |  6 ++---
+>  8 files changed, 39 insertions(+), 62 deletions(-)
+> 
+> diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+> index 8a8949174b1c..764286637a0b 100644
+> --- a/arch/arm/mm/dma-mapping.c
+> +++ b/arch/arm/mm/dma-mapping.c
+> @@ -383,25 +383,33 @@ postcore_initcall(atomic_pool_init);
+>  struct dma_contig_early_reserve {
+>  	phys_addr_t base;
+>  	unsigned long size;
+> +	struct list_head areas;
+>  };
+> 
+> -static struct dma_contig_early_reserve dma_mmu_remap[MAX_CMA_AREAS]
+> __initdata;
+> -
+> -static int dma_mmu_remap_num __initdata;
+> +static __initdata LIST_HEAD(dma_mmu_remap_areas);
+> 
+>  void __init dma_contiguous_early_fixup(phys_addr_t base, unsigned long
+> size)
+>  {
+> -	dma_mmu_remap[dma_mmu_remap_num].base = base;
+> -	dma_mmu_remap[dma_mmu_remap_num].size = size;
+> -	dma_mmu_remap_num++;
+> +	struct dma_contig_early_reserve *d;
+> +
+> +	d = memblock_alloc(sizeof(*d), sizeof(void *));
+> +	if (!d) {
+> +		pr_err("Unable to allocate dma_contig_early_reserve struct!\n");
+> +		return;
+> +	}
+> +
+> +	d->base = base;
+> +	d->size = size;
+> +	list_add_tail(&d->areas, &dma_mmu_remap_areas);
+>  }
+> 
+>  void __init dma_contiguous_remap(void)
+>  {
+> -	int i;
+> -	for (i = 0; i < dma_mmu_remap_num; i++) {
+> -		phys_addr_t start = dma_mmu_remap[i].base;
+> -		phys_addr_t end = start + dma_mmu_remap[i].size;
+> +	struct dma_contig_early_reserve *d;
+> +
+> +	list_for_each_entry(d, &dma_mmu_remap_areas, areas) {
+> +		phys_addr_t start = d->base;
+> +		phys_addr_t end = start + d->size;
+>  		struct map_desc map;
+>  		unsigned long addr;
+> 
+> diff --git a/arch/mips/configs/cu1000-neo_defconfig
+> b/arch/mips/configs/cu1000-neo_defconfig
+> index e924c817f73d..b86f3fd420f2 100644
+> --- a/arch/mips/configs/cu1000-neo_defconfig
+> +++ b/arch/mips/configs/cu1000-neo_defconfig
+> @@ -31,7 +31,6 @@ CONFIG_HZ_100=y
+>  # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+>  # CONFIG_COMPACTION is not set
+>  CONFIG_CMA=y
+> -CONFIG_CMA_AREAS=7
+>  CONFIG_NET=y
+>  CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+> diff --git a/arch/mips/configs/cu1830-neo_defconfig
+> b/arch/mips/configs/cu1830-neo_defconfig
+> index cbfb62900273..98a31334fc57 100644
+> --- a/arch/mips/configs/cu1830-neo_defconfig
+> +++ b/arch/mips/configs/cu1830-neo_defconfig
+> @@ -31,7 +31,6 @@ CONFIG_HZ_100=y
+>  # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+>  # CONFIG_COMPACTION is not set
+>  CONFIG_CMA=y
+> -CONFIG_CMA_AREAS=7
+>  CONFIG_NET=y
+>  CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+> diff --git a/include/linux/cma.h b/include/linux/cma.h
+> index 217999c8a762..ea9a3dab0c20 100644
+> --- a/include/linux/cma.h
+> +++ b/include/linux/cma.h
+> @@ -6,18 +6,6 @@
+>  #include <linux/types.h>
+>  #include <linux/numa.h>
+> 
+> -/*
+> - * There is always at least global CMA area and a few optional
+> - * areas configured in kernel .config.
+> - */
+> -#ifdef CONFIG_CMA_AREAS
+> -#define MAX_CMA_AREAS	(1 + CONFIG_CMA_AREAS)
+> -
+> -#else
+> -#define MAX_CMA_AREAS	(0)
+> -
+> -#endif
+> -
+>  #define CMA_MAX_NAME 64
+> 
+>  struct cma;
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 7d56281ff41e..a52345093f4d 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -513,18 +513,6 @@ config CMA_DEBUGFS
+>  	help
+>  	  Turns on the DebugFS interface for CMA.
+> 
+> -config CMA_AREAS
+> -	int "Maximum count of the CMA areas"
+> -	depends on CMA
+> -	default 19 if NUMA
+> -	default 7
+> -	help
+> -	  CMA allows to create CMA areas for particular purpose, mainly,
+> -	  used as device private area. This parameter sets the maximum
+> -	  number of CMA area in the system.
+> -
+> -	  If unsure, leave the default value "7" in UMA and "19" in NUMA.
+> -
+>  config MEM_SOFT_DIRTY
+>  	bool "Track memory changes"
+>  	depends on CHECKPOINT_RESTORE && HAVE_ARCH_SOFT_DIRTY &&
+> PROC_FS
+> diff --git a/mm/cma.c b/mm/cma.c
+> index 7f415d7cda9f..f3a983acf70e 100644
+> --- a/mm/cma.c
+> +++ b/mm/cma.c
+> @@ -36,8 +36,9 @@
+> 
+>  #include "cma.h"
+> 
+> -struct cma cma_areas[MAX_CMA_AREAS];
+> -unsigned cma_area_count;
+> +/* modify here */
+> +LIST_HEAD(cma_areas);
+> +static unsigned int cma_area_count;
+>  static DEFINE_MUTEX(cma_mutex);
+> 
+>  phys_addr_t cma_get_base(const struct cma *cma)
+> @@ -143,10 +144,10 @@ static void __init cma_activate_area(struct cma
+> *cma)
+> 
+>  static int __init cma_init_reserved_areas(void)
+>  {
+> -	int i;
+> +	struct cma *c;
+> 
+> -	for (i = 0; i < cma_area_count; i++)
+> -		cma_activate_area(&cma_areas[i]);
+> +	list_for_each_entry(c, &cma_areas, areas)
+> +		cma_activate_area(c);
+> 
+>  	return 0;
+>  }
+> @@ -172,12 +173,6 @@ int __init cma_init_reserved_mem(phys_addr_t base,
+> phys_addr_t size,
+>  	struct cma *cma;
+>  	phys_addr_t alignment;
+> 
+> -	/* Sanity checks */
+> -	if (cma_area_count == ARRAY_SIZE(cma_areas)) {
+> -		pr_err("Not enough slots for CMA reserved regions!\n");
+> -		return -ENOSPC;
+> -	}
+> -
+>  	if (!size || !memblock_is_region_reserved(base, size))
+>  		return -EINVAL;
+> 
+> @@ -192,12 +187,17 @@ int __init cma_init_reserved_mem(phys_addr_t
+> base, phys_addr_t size,
+>  	if (ALIGN(base, alignment) != base || ALIGN(size, alignment) != size)
+>  		return -EINVAL;
+> 
+> +	cma = memblock_alloc(sizeof(*cma), sizeof(long));
+> +	if (!cma) {
+> +		pr_err("Unable to allocate CMA descriptor!\n");
+> +		return -ENOSPC;
+> +	}
+> +	list_add_tail(&cma->areas, &cma_areas);
+> +
+>  	/*
+>  	 * Each reserved area must be initialised later, when more kernel
+>  	 * subsystems (like slab allocator) are available.
+>  	 */
+> -	cma = &cma_areas[cma_area_count];
+> -
+>  	if (name)
+>  		snprintf(cma->name, CMA_MAX_NAME, name);
+>  	else
+> @@ -253,11 +253,6 @@ int __init cma_declare_contiguous_nid(phys_addr_t
+> base,
+>  	pr_debug("%s(size %pa, base %pa, limit %pa alignment %pa)\n",
+>  		__func__, &size, &base, &limit, &alignment);
+> 
+> -	if (cma_area_count == ARRAY_SIZE(cma_areas)) {
+> -		pr_err("Not enough slots for CMA reserved regions!\n");
+> -		return -ENOSPC;
+> -	}
+> -
+>  	if (!size)
+>  		return -EINVAL;
+> 
+> @@ -530,10 +525,10 @@ bool cma_release(struct cma *cma, const struct
+> page *pages, unsigned int count)
+> 
+>  int cma_for_each_area(int (*it)(struct cma *cma, void *data), void *data)
+>  {
+> -	int i;
+> +	struct cma *c;
+> 
+> -	for (i = 0; i < cma_area_count; i++) {
+> -		int ret = it(&cma_areas[i], data);
+> +	list_for_each_entry(c, &cma_areas, areas) {
+> +		int ret = it(c, data);
+> 
+>  		if (ret)
+>  			return ret;
+> diff --git a/mm/cma.h b/mm/cma.h
+> index 42ae082cb067..fed800b63819 100644
+> --- a/mm/cma.h
+> +++ b/mm/cma.h
+> @@ -15,11 +15,11 @@ struct cma {
+>  	spinlock_t mem_head_lock;
+>  	struct debugfs_u32_array dfs_bitmap;
+>  #endif
+> +	struct list_head areas;
+>  	char name[CMA_MAX_NAME];
+>  };
+> 
+> -extern struct cma cma_areas[MAX_CMA_AREAS];
+> -extern unsigned cma_area_count;
+> +extern struct list_head cma_areas;
+> 
+>  static inline unsigned long cma_bitmap_maxno(struct cma *cma)
+>  {
+> diff --git a/mm/cma_debug.c b/mm/cma_debug.c
+> index d5bf8aa34fdc..c39695d50224 100644
+> --- a/mm/cma_debug.c
+> +++ b/mm/cma_debug.c
+> @@ -188,12 +188,12 @@ static void cma_debugfs_add_one(struct cma *cma,
+> struct dentry *root_dentry)
+>  static int __init cma_debugfs_init(void)
+>  {
+>  	struct dentry *cma_debugfs_root;
+> -	int i;
+> +	struct cma *c;
+> 
+>  	cma_debugfs_root = debugfs_create_dir("cma", NULL);
+> 
+> -	for (i = 0; i < cma_area_count; i++)
+> -		cma_debugfs_add_one(&cma_areas[i], cma_debugfs_root);
+> +	list_for_each_entry(c, &cma_areas, areas)
+> +		cma_debugfs_add_one(c, cma_debugfs_root);
+> 
+>  	return 0;
+>  }
+> --
+> 2.25.4
 
-Huacai
+Thanks
+Barry
 
->
-> Thanks.
->
-> - Jinyang
-> >> +    mfc0  t1, CP0_EBASE
-> >> +    andi  t1, MIPS_EBASE_CPUNUM
-> >> +    dli   t0, MAILBOX_BASE
-> >> +    andi  t3, t1, 0x3
-> >> +    sll   t3, 8
-> >> +    or    t0, t0, t3        /* insert core id */
-> >> +    andi  t2, t1, 0xc
-> >> +    dsll  t2, 42
-> >> +    or    t0, t0, t2        /* insert node id */
-> >> +1:  ld    s1, 0x20(t0)      /* get PC via mailbox0 */
-> >> +    beqz  s1, 1b
-> >> +    ld    sp, 0x28(t0)      /* get SP via mailbox1 */
-> >> +    ld    gp, 0x30(t0)      /* get GP via mailbox2 */
-> >> +    ld    a1, 0x38(t0)
-> >> +    jr    s1
-> >> +#endif
-> >>      j               s1
-> >>      END(kexec_smp_wait)
-> >> #endif
-> >> diff --git a/arch/mips/loongson64/reset.c b/arch/mips/loongson64/reset.c
-> >> index 3bb8a1e..322c326 100644
-> >> --- a/arch/mips/loongson64/reset.c
-> >> +++ b/arch/mips/loongson64/reset.c
-> >> @@ -47,12 +47,100 @@ static void loongson_halt(void)
-> >>      }
-> >> }
-> >>
-> >> +#ifdef CONFIG_KEXEC
-> >> +#include <linux/cpu.h>
-> >> +#include <linux/kexec.h>
-> >> +
-> >> +#include <asm/bootinfo.h>
-> >> +
-> >> +#define CONTROL_CODE_PAGE    0xFFFFFFFF80000000UL
-> >> +static int kexec_argc;
-> >> +static int kdump_argc;
-> >> +static void *kexec_argv;
-> >> +static void *kdump_argv;
-> >> +
-> >> +static int loongson_kexec_prepare(struct kimage *image)
-> >> +{
-> >> +    int i, offt, argc = 0;
-> >> +    int *argv;
-> >> +    char *str, *ptr, *bootloader = "kexec";
-> >> +
-> >> +    argv = kmalloc(COMMAND_LINE_SIZE, GFP_KERNEL);
-> >> +    if (!argv)
-> >> +            return -ENOMEM;
-> >> +
-> >> +    for (i = 0; i < image->nr_segments; i++) {
-> >> +            if (!strncmp(bootloader, (char *)image->segment[i].buf,
-> >> +                            strlen(bootloader))) {
-> >> +                    argv[argc++] = fw_arg1 + COMMAND_LINE_SIZE/2;
-> >> +                    str = (char *)argv + COMMAND_LINE_SIZE/2;
-> >> +                    memcpy(str, image->segment[i].buf, COMMAND_LINE_SIZE/2);
-> >> +                    ptr = strchr(str, ' ');
-> >> +                    while (ptr) {
-> >> +                            *ptr = '\0';
-> >> +                            if (ptr[1] != ' ') {
-> >> +                                    offt = (int)(ptr - str + 1);
-> >> +                                    argv[argc++] = fw_arg1 + COMMAND_LINE_SIZE/2 + offt;
-> >> +                            }
-> >> +                            ptr = strchr(ptr + 1, ' ');
-> >> +                    }
-> >> +                    break;
-> >> +            }
-> >> +    }
-> >> +
-> >> +    /* Kexec/kdump needs a safe page to save reboot_code_buffer. */
-> >> +    image->control_code_page = virt_to_page((void *)CONTROL_CODE_PAGE);
-> >> +
-> >> +    if (image->type == KEXEC_TYPE_CRASH) {
-> >> +            kfree(kdump_argv);
-> >> +            kdump_argc = argc;
-> >> +            kdump_argv = argv;
-> >> +    } else {
-> >> +            kfree(kexec_argv);
-> >> +            kexec_argc = argc;
-> >> +            kexec_argv = argv;
-> >> +    }
-> >> +
-> >> +    return 0;
-> >> +}
-> >> +
-> >> +static void loongson_kexec_shutdown(void)
-> >> +{
-> >> +#ifdef CONFIG_SMP
-> >> +    bringup_nonboot_cpus(loongson_sysconf.nr_cpus);
-> >> +#endif
-> >> +    fw_arg0 = kexec_argc;
-> >> +    memcpy((void *)fw_arg1, kexec_argv, COMMAND_LINE_SIZE);
-> >> +
-> >> +    kexec_args[0] = fw_arg0;
-> >> +    kexec_args[1] = fw_arg1;
-> >> +    kexec_args[2] = fw_arg2;
-> >> +}
-> >> +
-> >> +static void loongson_crash_shutdown(struct pt_regs *regs)
-> >> +{
-> >> +    default_machine_crash_shutdown(regs);
-> >> +    fw_arg0 = kdump_argc;
-> >> +    memcpy((void *)fw_arg1, kdump_argv, COMMAND_LINE_SIZE);
-> >> +
-> >> +    kexec_args[0] = fw_arg0;
-> >> +    kexec_args[1] = fw_arg1;
-> >> +    kexec_args[2] = fw_arg2;
-> >> +}
-> >> +#endif
-> >> +
-> >> static int __init mips_reboot_setup(void)
-> >> {
-> >>      _machine_restart = loongson_restart;
-> >>      _machine_halt = loongson_halt;
-> >>      pm_power_off = loongson_poweroff;
-> >>
-> >> +#ifdef CONFIG_KEXEC
-> >> +    _machine_kexec_prepare = loongson_kexec_prepare;
-> >> +    _machine_kexec_shutdown = loongson_kexec_shutdown;
-> >> +    _machine_crash_shutdown = loongson_crash_shutdown;
-> >> +#endif
-> >> +
-> >>      return 0;
-> >> }
-> >>
->
