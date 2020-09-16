@@ -2,164 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDCF26CB02
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Sep 2020 22:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B54026CE55
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Sep 2020 00:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727106AbgIPUPk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Sep 2020 16:15:40 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:42066 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726921AbgIPRb3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Sep 2020 13:31:29 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08GHSOsr182311;
-        Wed, 16 Sep 2020 17:31:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=16MVLMxJEjiqUj2yCZKb2qIuPejsvOFsf6Uv7KdzcwM=;
- b=Oh9ULta134KSgFt7v49f3Efb9aRp74ymj1fBPooUp6AFLmpBTd+m+J/TBfkSo1fDtx4n
- T6LQ3nkEAv6RwDIbPCaOzPXpU40GPYu3yOuNANTUAoTNQX/6dbOBhDeO5A+6M2A/9d42
- L4Pw9XkYSPR949KVvzWMh8ch5Pl2+yg+U1fT9Wt7KK1iRHQOAWkzs6jDv5VNBXHU/+hf
- Xp7f4lItRqNsuzpkmJb15B3GMZjy1aXTTFVx6Xe4M5DXIKc8DhvazYV4U0YBnYvdcxTi
- USscGpZXe2UNDmiNYqMYGE0b4w7jvoPkrcYsOWHAvnaQLVit7kQLLNY+JgCR3o/NDbhe Sw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 33j91dp56h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 16 Sep 2020 17:31:05 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08GHTs5J134351;
-        Wed, 16 Sep 2020 17:31:04 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 33hm337mvg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Sep 2020 17:31:04 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08GHV0OP017867;
-        Wed, 16 Sep 2020 17:31:00 GMT
-Received: from [192.168.2.112] (/50.38.35.18)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 16 Sep 2020 17:31:00 +0000
-Subject: Re: [RFC PATCH] cma: make number of CMA areas dynamic, remove
+        id S1726189AbgIPWIB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Sep 2020 18:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726321AbgIPWH7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Sep 2020 18:07:59 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1D3C0698D0;
+        Wed, 16 Sep 2020 14:59:55 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id 5C3D229BBA2
+Subject: Re: [PATCH] cma: make number of CMA areas dynamic, remove
  CONFIG_CMA_AREAS
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Roman Gushchin <guro@fb.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Joonsoo Kim <js1304@gmail.com>,
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Cc:     Aslan Bakirov <aslan@fb.com>, Joonsoo Kim <js1304@gmail.com>,
         Rik van Riel <riel@surriel.com>,
-        Aslan Bakirov <aslan@fb.com>, Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20200903030204.253433-1-mike.kravetz@oracle.com>
- <20200916043207.GA713@infradead.org>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <7e730a74-3a9d-a18c-3f6a-f7bb206298d5@oracle.com>
-Date:   Wed, 16 Sep 2020 10:30:57 -0700
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>, Roman Gushchin <guro@fb.com>,
+        Mike Rapoport <rppt@kernel.org>, kernelci-results@groups.io
+References: <20200915205703.34572-1-mike.kravetz@oracle.com>
+ <4b7b14c9eb6a42509f8324f7ed84b46f@hisilicon.com>
+ <2bf99eee-29b1-4965-da7d-d4e341803440@oracle.com>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+Message-ID: <70ad632d-88f3-db6d-3493-b09451150298@collabora.com>
+Date:   Wed, 16 Sep 2020 22:59:48 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20200916043207.GA713@infradead.org>
+In-Reply-To: <2bf99eee-29b1-4965-da7d-d4e341803440@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9746 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=999
- malwarescore=0 mlxscore=0 phishscore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009160122
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9746 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=999
- clxscore=1011 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009160122
-Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 9/15/20 9:32 PM, Christoph Hellwig wrote:
-> On Wed, Sep 02, 2020 at 08:02:04PM -0700, Mike Kravetz wrote:
->> --- a/arch/arm/mm/dma-mapping.c
->> +++ b/arch/arm/mm/dma-mapping.c
->> @@ -383,25 +383,34 @@ postcore_initcall(atomic_pool_init);
->>  struct dma_contig_early_reserve {
->>  	phys_addr_t base;
->>  	unsigned long size;
->> +	struct list_head areas;
->>  };
->>  
->> +static __initdata LIST_HEAD(dma_mmu_remap_areas);
->>  
->>  void __init dma_contiguous_early_fixup(phys_addr_t base, unsigned long size)
->>  {
->> +	struct dma_contig_early_reserve *d;
->> +
->> +	d = memblock_alloc(sizeof(struct dma_contig_early_reserve),
->> +			sizeof(void *));
->> +	if (!d) {
->> +		pr_err("Unable to allocate dma_contig_early_reserve struct!\n");
->> +		return;
->> +	}
->> +
->> +	d->base = base;
->> +	d->size = size;
->> +	list_add_tail(&d->areas, &dma_mmu_remap_areas);
->>  }
+On 16/09/2020 17:30, Mike Kravetz wrote:
+> On 9/16/20 2:14 AM, Song Bao Hua (Barry Song) wrote:
+>>>> -----Original Message-----
+>>>> From: Mike Kravetz [mailto:mike.kravetz@oracle.com]
+>>>> Sent: Wednesday, September 16, 2020 8:57 AM
+>>>> To: linux-mm@kvack.org; linux-kernel@vger.kernel.org;
+>>>> linux-arm-kernel@lists.infradead.org; linux-mips@vger.kernel.org
+>>>> Cc: Roman Gushchin <guro@fb.com>; Song Bao Hua (Barry Song)
+>>>> <song.bao.hua@hisilicon.com>; Mike Rapoport <rppt@kernel.org>; Joonsoo
+>>>> Kim <js1304@gmail.com>; Rik van Riel <riel@surriel.com>; Aslan Bakirov
+>>>> <aslan@fb.com>; Michal Hocko <mhocko@kernel.org>; Andrew Morton
+>>>> <akpm@linux-foundation.org>; Mike Kravetz <mike.kravetz@oracle.com>
+>>>> Subject: [PATCH] cma: make number of CMA areas dynamic, remove
+>>>> CONFIG_CMA_AREAS
+>>>>
+>>>> The number of distinct CMA areas is limited by the constant
+>>>> CONFIG_CMA_AREAS.  In most environments, this was set to a default
+>>>> value of 7.  Not too long ago, support was added to allocate hugetlb
+>>>> gigantic pages from CMA.  More recent changes to make
+>>> dma_alloc_coherent
+>>>> NUMA-aware on arm64 added more potential users of CMA areas.  Along
+>>>> with the dma_alloc_coherent changes, the default value of CMA_AREAS
+>>>> was bumped up to 19 if NUMA is enabled.
+>>>>
+>>>> It seems that the number of CMA users is likely to grow.  Instead of
+>>>> using a static array for cma areas, use a simple linked list.  These
+>>>> areas are used before normal memory allocators, so use the memblock
+>>>> allocator.
+>>>>
+>>>> Acked-by: Roman Gushchin <guro@fb.com>
+>>>> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+>>>> ---
+>>>> rfc->v1
+>>>>   - Made minor changes suggested by Song Bao Hua (Barry Song)
+>>>>   - Removed check for late calls to cma_init_reserved_mem that was part
+>>>>     of RFC.
+>>>>   - Added ACK from Roman Gushchin
+>>>>   - Still in need of arm testing
+>>>
+>>> Unfortunately, the test result on my arm64 board is negative, Linux can't boot
+>>> after applying
+>>> this patch.
+>>>
+>>> I guess we have to hold on this patch for a while till this is fixed. BTW, Mike, do
+>>> you have
+>>> a qemu-based arm64 numa system to debug? It is very easy to reproduce, we
+>>> don't need to
+>>> use hugetlb_cma and pernuma_cma. Just the default cma will make the boot
+>>> hang.
+>>
+>> Hi Mike,
+>> I spent some time on debugging the boot issue and sent a patch here:
+>> https://lore.kernel.org/linux-mm/20200916085933.25220-1-song.bao.hua@hisilicon.com/
+>> All details and knic oops can be found there.
+>> pls feel free to merge my patch into your v2 if you want. And we probably need ack from
+>> arm maintainers.
+>>
+>> Also,  +Will,
+>>
+>> Hi Will, the whole story is that Mike tried to remove the cma array with CONFIG_CMA_AREAS
+>> and moved to use memblock_alloc() to allocate cma area, so that the number of cma areas
+>> could be dynamic. It turns out it causes a kernel panic on arm64 during system boot as the
+>> returned address from memblock_alloc is invalid before paging_init() is done on arm64.
+>>
 > 
-> I wonder if struct cma should grow a flags or type field, so that the
-> arm code can simply use cma_for_each_area to iterate the CMA areas for
-> the DMA fixup, and we can remove the extra list and the magic hook.
-
-I will look into a way of doing that.
-
+> Thank you!
 > 
->> +/* modify here */
->> +LIST_HEAD(cma_areas);
+> Based on your analysis, I am concerned that other architectures may also
+> have issues.
 > 
-> What does this comment mean?
+> Andrew,
+> I suggest we remove this patch from your tree.  I will audit all architectures
+> which enable CMA and look for similar issues there.  Will then merge Barry's
+> patch into a V2 with any other arch specific changes.
 
-Sorry, that might have been a note to myself that was accidentally left.
+FYI This was also bisected on kernelci.org[1] and it landed on
+this commit: c999bd436fe9 ("mm/cma: make number of CMA areas
+dynamic, remove CONFIG_CMA_AREAS").  Only arm and arm64 seem to
+be affected, and not with all the builds:
 
-> 
->> +static unsigned int cma_area_count;
-> 
-> It seems this is only used to provide a default name for the CMA
-> areas, but all areas actually provide a name, so I think we can drop
-> the default naming and the cma_area_count variable entirely.
-> 
+  https://kernelci.org/test/job/next/branch/master/kernel/next-20200916/plan/baseline/
 
-Seems reasonable.
-We can change behavior to require a name.
+The list of failures above might help someone debug the issue
+with a platform they have at hand.
 
->>  	if (!size || !memblock_is_region_reserved(base, size))
->>  		return -EINVAL;
->>  
->> +
->>  	/* ensure minimal alignment required by mm core */
-> 
-> This adds a spurious empty line.
+Guillaume
 
-yes, my bad.
-
->>  static int __init cma_debugfs_init(void)
->>  {
->>  	struct dentry *cma_debugfs_root;
->> -	int i;
->> +	struct cma *c;
->>  
->>  	cma_debugfs_root = debugfs_create_dir("cma", NULL);
->>  
->> -	for (i = 0; i < cma_area_count; i++)
->> -		cma_debugfs_add_one(&cma_areas[i], cma_debugfs_root);
->> +	list_for_each_entry(c, &cma_areas, areas)
->> +		cma_debugfs_add_one(c, cma_debugfs_root);
-> 
-> I think this should use cma_for_each_area, that way cma_areas can be
-> keep static in cma.c.
-
-Yes, will provide a cma_for_each_area routine.
-
--- 
-Mike Kravetz
+[1] https://groups.io/g/kernelci-results-staging/message/2027
