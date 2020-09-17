@@ -2,108 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C31926D55C
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Sep 2020 09:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B520C26D5FC
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Sep 2020 10:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbgIQH4H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Sep 2020 03:56:07 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:45786 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726142AbgIQHzS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 17 Sep 2020 03:55:18 -0400
-X-Greylist: delayed 929 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 03:55:16 EDT
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id B33DB4BED30A64A36B82
-        for <linux-mips@vger.kernel.org>; Thu, 17 Sep 2020 15:39:32 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Thu, 17 Sep 2020
- 15:39:31 +0800
-From:   Qilong Zhang <zhangqilong3@huawei.com>
-To:     <tsbogend@alpha.franken.de>
-CC:     <linux-mips@vger.kernel.org>
-Subject: [PATCH -next] MIPS: pci: use devm_platform_ioremap_resource_byname
-Date:   Thu, 17 Sep 2020 15:46:22 +0800
-Message-ID: <20200917074622.42298-1-zhangqilong3@huawei.com>
-X-Mailer: git-send-email 2.26.0.106.g9fadedd
+        id S1726489AbgIQILe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Sep 2020 04:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726358AbgIQIE2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Sep 2020 04:04:28 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3323BC06178A
+        for <linux-mips@vger.kernel.org>; Thu, 17 Sep 2020 01:03:39 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id k18so1037641wmj.5
+        for <linux-mips@vger.kernel.org>; Thu, 17 Sep 2020 01:03:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TUShtxADeMIRUv08jDyFnIdO2h4AVdi1g89uLOtrWXw=;
+        b=Xm9muXpLMfdw+3JTaQ5+6nxJDSneO0K8th2wgQ0VLh2VI2BmK+XWoQ9cDtIn8+KaRJ
+         B45Xbntr5JjNU8mF7nIZd8VP+CTHviEtF1Um5VazOhr6GEQCgh9bbRNIM6C+XWioNjmk
+         ImuOo8Gi8eD0FtSQ7hHZ1yPAo82BLFHJwGGg0UxKCYs0oMSSpMWIe45dJUN+DzUELaKQ
+         JzvvcS8KVPQMZJTfgm/lLBewbBl9UGKGHM3XV6hYGQwunOqgCSfJKO8sQaLl1M6X9BRD
+         K+XM2hJttDJQqNZl5Xftk9yd2fnhmTZR2ol6vfSH0itoQkT2+o/FcX7saxpuLl0f47l5
+         EzpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TUShtxADeMIRUv08jDyFnIdO2h4AVdi1g89uLOtrWXw=;
+        b=EtT/WxDdD2K14NRVFkJouX9ZueAMv6sN0WJghiA3AZBh+JiIzDmK/fYCNtf0hqZmSI
+         YAbKK7nQs4Nm+vfnV74QBftYzpQF/TBx/5iHj1rQuHUDq7M3XTO7ZSbiCAiG+tr5ZqIt
+         TwxnUvNLXngIbghzhOObTrBrnB6AnwOusuFknJsafVyq7q531UHzn99utLhSi8AwnC/m
+         Ccz2APbRahPM59zAYnMWD3QeMIYbpjLWgFQf5fsI0Ankc/EagYJtQu4wPY0Wp3kqfU9i
+         OUCiSmutxmWKO0iYMDdLwTk0/Tj+PBVSTg3EuASqFzumb+URrOBALuEIJKmsAuXXe+A2
+         ORCQ==
+X-Gm-Message-State: AOAM533gI+PbgqCfLj9g3dZ0zeIc4QhtdE1c1x8ePop28qtaeQ+K2AQK
+        GnZVp8AyhvPt4ZZb6OmyLh4vlw==
+X-Google-Smtp-Source: ABdhPJzTwzfeJOnCQh65prZummqH9JR09Yxja+zvv2OTSAZpPcom4k7xuvXSyH3Yv50qn/8+2aIWyQ==
+X-Received: by 2002:a1c:e256:: with SMTP id z83mr8793930wmg.33.1600329817598;
+        Thu, 17 Sep 2020 01:03:37 -0700 (PDT)
+Received: from netronome.com ([2001:982:756:703:d63d:7eff:fe99:ac9d])
+        by smtp.gmail.com with ESMTPSA id a13sm9836030wme.26.2020.09.17.01.03.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 01:03:36 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 10:03:35 +0200
+From:   Simon Horman <simon.horman@netronome.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Kees Cook <kees.cook@canonical.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
+        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        storagedev@microchip.com, sparclinux@vger.kernel.org,
+        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+        alsa-devel <alsa-devel@alsa-project.org>
+Subject: Re: [oss-drivers] [trivial PATCH] treewide: Convert switch/case
+ fallthrough; to break;
+Message-ID: <20200917080334.GB5769@netronome.com>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.225]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Zhang Qilong <zhangqilong3@huawei.com>
+On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
+> fallthrough to a separate case/default label break; isn't very readable.
+> 
+> Convert pseudo-keyword fallthrough; statements to a simple break; when
+> the next label is case or default and the only statement in the next
+> label block is break;
+> 
+> Found using:
+> 
+> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
+> 
+> Miscellanea:
+> 
+> o Move or coalesce a couple label blocks above a default: block.
+> 
+> Signed-off-by: Joe Perches <joe@perches.com>
 
-Use the devm_platform_ioremap_resource_byname() helper instead of
-calling platform_get_resource_byname() and devm_ioremap_resource()
-separately.
+...
 
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
----
- arch/mips/pci/pci-ar2315.c | 5 ++---
- arch/mips/pci/pci-ar71xx.c | 4 ++--
- arch/mips/pci/pci-ar724x.c | 9 +++------
- 3 files changed, 7 insertions(+), 11 deletions(-)
+> diff --git a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
+> index 252fe06f58aa..1d5b87079104 100644
+> --- a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
+> +++ b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
+> @@ -345,7 +345,7 @@ static int matching_bar(struct nfp_bar *bar, u32 tgt, u32 act, u32 tok,
+>  		baract = NFP_CPP_ACTION_RW;
+>  		if (act == 0)
+>  			act = NFP_CPP_ACTION_RW;
+> -		fallthrough;
+> +		break;
+>  	case NFP_PCIE_BAR_PCIE2CPP_MapType_FIXED:
+>  		break;
+>  	default:
 
-diff --git a/arch/mips/pci/pci-ar2315.c b/arch/mips/pci/pci-ar2315.c
-index cef4a47ab063..0b15730cef88 100644
---- a/arch/mips/pci/pci-ar2315.c
-+++ b/arch/mips/pci/pci-ar2315.c
-@@ -423,9 +423,8 @@ static int ar2315_pci_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	apc->irq = irq;
- 
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
--					   "ar2315-pci-ctrl");
--	apc->mmr_mem = devm_ioremap_resource(dev, res);
-+	apc->mmr_mem = devm_platform_ioremap_resource_byname(pdev,
-+							     "ar2315-pci-ctrl");
- 	if (IS_ERR(apc->mmr_mem))
- 		return PTR_ERR(apc->mmr_mem);
- 
-diff --git a/arch/mips/pci/pci-ar71xx.c b/arch/mips/pci/pci-ar71xx.c
-index a9f8e7c881bd..118760b3fa82 100644
---- a/arch/mips/pci/pci-ar71xx.c
-+++ b/arch/mips/pci/pci-ar71xx.c
-@@ -336,8 +336,8 @@ static int ar71xx_pci_probe(struct platform_device *pdev)
- 	if (!apc)
- 		return -ENOMEM;
- 
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg_base");
--	apc->cfg_base = devm_ioremap_resource(&pdev->dev, res);
-+	apc->cfg_base = devm_platform_ioremap_resource_byname(pdev,
-+							      "cfg_base");
- 	if (IS_ERR(apc->cfg_base))
- 		return PTR_ERR(apc->cfg_base);
- 
-diff --git a/arch/mips/pci/pci-ar724x.c b/arch/mips/pci/pci-ar724x.c
-index 869d5c9a2f8d..807558b251ef 100644
---- a/arch/mips/pci/pci-ar724x.c
-+++ b/arch/mips/pci/pci-ar724x.c
-@@ -372,18 +372,15 @@ static int ar724x_pci_probe(struct platform_device *pdev)
- 	if (!apc)
- 		return -ENOMEM;
- 
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ctrl_base");
--	apc->ctrl_base = devm_ioremap_resource(&pdev->dev, res);
-+	apc->ctrl_base = devm_platform_ioremap_resource_byname(pdev, "ctrl_base");
- 	if (IS_ERR(apc->ctrl_base))
- 		return PTR_ERR(apc->ctrl_base);
- 
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg_base");
--	apc->devcfg_base = devm_ioremap_resource(&pdev->dev, res);
-+	apc->devcfg_base = devm_platform_ioremap_resource_byname(pdev, "cfg_base");
- 	if (IS_ERR(apc->devcfg_base))
- 		return PTR_ERR(apc->devcfg_base);
- 
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "crp_base");
--	apc->crp_base = devm_ioremap_resource(&pdev->dev, res);
-+	apc->crp_base = devm_platform_ioremap_resource_byname(pdev, "crp_base");
- 	if (IS_ERR(apc->crp_base))
- 		return PTR_ERR(apc->crp_base);
- 
--- 
-2.17.1
+This is a cascading fall-through handling all map types.
+I don't think this change improves readability.
 
+...
