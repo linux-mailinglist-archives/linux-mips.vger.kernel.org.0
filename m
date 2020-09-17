@@ -2,172 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8120D26D011
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Sep 2020 02:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C31926D55C
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Sep 2020 09:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726187AbgIQAki (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Sep 2020 20:40:38 -0400
-Received: from mga07.intel.com ([134.134.136.100]:17741 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725858AbgIQAkb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 16 Sep 2020 20:40:31 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Sep 2020 20:40:30 EDT
-IronPort-SDR: nC5ark3m55yVhP9UL1nzoH4UFpvAd3CUotlynV1KnDqiIehPsBVC5E/P/lFUD3htqPTEtvofn1
- I7mH4kfdLw4Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="223776507"
-X-IronPort-AV: E=Sophos;i="5.76,434,1592895600"; 
-   d="scan'208";a="223776507"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 17:33:21 -0700
-IronPort-SDR: Bwn0ODfEHbq9zqA5JteQfCHSNWJMmIFeHhb1BNCi6R2Xc5+gHVbMXx1mnM4rh4B0n2ZuzoGFDi
- zWAC8rL36QyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,434,1592895600"; 
-   d="scan'208";a="380354389"
-Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
-  by orsmga001.jf.intel.com with ESMTP; 16 Sep 2020 17:33:17 -0700
-From:   "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-To:     miquel.raynal@bootlin.com, linux-kernel@vger.kernel.org
-Cc:     linux-mtd@lists.infradead.org, richard@nod.at, vigneshr@ti.com,
-        boris.brezillon@collabora.com, christophe.kerello@st.com,
-        piotrs@cadence.com, robert.jarzmik@free.fr,
-        brendanhiggins@google.com, devicetree@vger.kernel.org,
-        tglx@linutronix.de, hauke.mehrtens@intel.com, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, arnd@arndb.de,
-        andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
-        qi-ming.wu@intel.com,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Subject: [PATCH v13 1/2] dt-bindings: mtd: Add Nand Flash Controller support for Intel LGM SoC
-Date:   Thu, 17 Sep 2020 08:33:07 +0800
-Message-Id: <20200917003308.57038-2-vadivel.muruganx.ramuthevar@linux.intel.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200917003308.57038-1-vadivel.muruganx.ramuthevar@linux.intel.com>
-References: <20200917003308.57038-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+        id S1726216AbgIQH4H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Sep 2020 03:56:07 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:45786 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726142AbgIQHzS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 17 Sep 2020 03:55:18 -0400
+X-Greylist: delayed 929 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 03:55:16 EDT
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id B33DB4BED30A64A36B82
+        for <linux-mips@vger.kernel.org>; Thu, 17 Sep 2020 15:39:32 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Thu, 17 Sep 2020
+ 15:39:31 +0800
+From:   Qilong Zhang <zhangqilong3@huawei.com>
+To:     <tsbogend@alpha.franken.de>
+CC:     <linux-mips@vger.kernel.org>
+Subject: [PATCH -next] MIPS: pci: use devm_platform_ioremap_resource_byname
+Date:   Thu, 17 Sep 2020 15:46:22 +0800
+Message-ID: <20200917074622.42298-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.26.0.106.g9fadedd
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.225]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-Add YAML file for dt-bindings to support NAND Flash Controller
-on Intel's Lightning Mountain SoC.
+Use the devm_platform_ioremap_resource_byname() helper instead of
+calling platform_get_resource_byname() and devm_ioremap_resource()
+separately.
 
-Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
 ---
- .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 99 ++++++++++++++++++++++
- 1 file changed, 99 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+ arch/mips/pci/pci-ar2315.c | 5 ++---
+ arch/mips/pci/pci-ar71xx.c | 4 ++--
+ arch/mips/pci/pci-ar724x.c | 9 +++------
+ 3 files changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
-new file mode 100644
-index 000000000000..313daec4d783
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
-@@ -0,0 +1,99 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mtd/intel,lgm-nand.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Intel LGM SoC NAND Controller Device Tree Bindings
-+
-+allOf:
-+  - $ref: "nand-controller.yaml"
-+
-+maintainers:
-+  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-+
-+properties:
-+  compatible:
-+    const: intel,lgm-nand
-+
-+  reg:
-+    maxItems: 6
-+
-+  reg-names:
-+    items:
-+       - const: ebunand
-+       - const: hsnand
-+       - const: nand_cs0
-+       - const: nand_cs1
-+       - const: addr_sel0
-+       - const: addr_sel1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  dmas:
-+    maxItems: 2
-+
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+patternProperties:
-+  "^nand@[a-f0-9]+$":
-+    type: object
-+    properties:
-+      reg:
-+        minimum: 0
-+        maximum: 7
-+
-+      nand-ecc-mode: true
-+
-+      nand-ecc-algo:
-+        const: hw
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - dmas
-+  - dma-names
-+  - "#address-cells"
-+  - "#size-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    nand-controller@e0f00000 {
-+      compatible = "intel,lgm-nand";
-+      reg = <0xe0f00000 0x100>,
-+            <0xe1000000 0x300>,
-+            <0xe1400000 0x8000>,
-+            <0xe1c00000 0x1000>,
-+            <0x17400000 0x4>,
-+            <0x17c00000 0x4>;
-+      reg-names = "ebunand", "hsnand", "nand_cs0", "nand_cs1",
-+        "addr_sel0", "addr_sel1";
-+      clocks = <&cgu0 125>;
-+      dmas = <&dma0 8>, <&dma0 9>;
-+      dma-names = "tx", "rx";
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      nand@0 {
-+        reg = <0>;
-+        nand-ecc-mode = "hw";
-+      };
-+    };
-+
-+...
+diff --git a/arch/mips/pci/pci-ar2315.c b/arch/mips/pci/pci-ar2315.c
+index cef4a47ab063..0b15730cef88 100644
+--- a/arch/mips/pci/pci-ar2315.c
++++ b/arch/mips/pci/pci-ar2315.c
+@@ -423,9 +423,8 @@ static int ar2315_pci_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	apc->irq = irq;
+ 
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+-					   "ar2315-pci-ctrl");
+-	apc->mmr_mem = devm_ioremap_resource(dev, res);
++	apc->mmr_mem = devm_platform_ioremap_resource_byname(pdev,
++							     "ar2315-pci-ctrl");
+ 	if (IS_ERR(apc->mmr_mem))
+ 		return PTR_ERR(apc->mmr_mem);
+ 
+diff --git a/arch/mips/pci/pci-ar71xx.c b/arch/mips/pci/pci-ar71xx.c
+index a9f8e7c881bd..118760b3fa82 100644
+--- a/arch/mips/pci/pci-ar71xx.c
++++ b/arch/mips/pci/pci-ar71xx.c
+@@ -336,8 +336,8 @@ static int ar71xx_pci_probe(struct platform_device *pdev)
+ 	if (!apc)
+ 		return -ENOMEM;
+ 
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg_base");
+-	apc->cfg_base = devm_ioremap_resource(&pdev->dev, res);
++	apc->cfg_base = devm_platform_ioremap_resource_byname(pdev,
++							      "cfg_base");
+ 	if (IS_ERR(apc->cfg_base))
+ 		return PTR_ERR(apc->cfg_base);
+ 
+diff --git a/arch/mips/pci/pci-ar724x.c b/arch/mips/pci/pci-ar724x.c
+index 869d5c9a2f8d..807558b251ef 100644
+--- a/arch/mips/pci/pci-ar724x.c
++++ b/arch/mips/pci/pci-ar724x.c
+@@ -372,18 +372,15 @@ static int ar724x_pci_probe(struct platform_device *pdev)
+ 	if (!apc)
+ 		return -ENOMEM;
+ 
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ctrl_base");
+-	apc->ctrl_base = devm_ioremap_resource(&pdev->dev, res);
++	apc->ctrl_base = devm_platform_ioremap_resource_byname(pdev, "ctrl_base");
+ 	if (IS_ERR(apc->ctrl_base))
+ 		return PTR_ERR(apc->ctrl_base);
+ 
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg_base");
+-	apc->devcfg_base = devm_ioremap_resource(&pdev->dev, res);
++	apc->devcfg_base = devm_platform_ioremap_resource_byname(pdev, "cfg_base");
+ 	if (IS_ERR(apc->devcfg_base))
+ 		return PTR_ERR(apc->devcfg_base);
+ 
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "crp_base");
+-	apc->crp_base = devm_ioremap_resource(&pdev->dev, res);
++	apc->crp_base = devm_platform_ioremap_resource_byname(pdev, "crp_base");
+ 	if (IS_ERR(apc->crp_base))
+ 		return PTR_ERR(apc->crp_base);
+ 
 -- 
-2.11.0
+2.17.1
 
