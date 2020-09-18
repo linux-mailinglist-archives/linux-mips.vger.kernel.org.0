@@ -2,296 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD24F26F65D
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Sep 2020 08:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E16D26FCD3
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Sep 2020 14:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbgIRG5Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Sep 2020 02:57:24 -0400
-Received: from mga09.intel.com ([134.134.136.24]:16007 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726290AbgIRG5Y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 18 Sep 2020 02:57:24 -0400
-IronPort-SDR: +H/DtMPrJAQ23wNxqypfZ2HHwfvozuAUjA/O8194IWcdofJZy9bOoxt7sw5/8Q3Frm3Fk/NZdj
- ibx9YE9pT3kg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="160794754"
-X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="160794754"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 23:57:23 -0700
-IronPort-SDR: apw7X2tvrgEQ7JKnAgRMaAoUZeIxL1xJNnaI32NwBvFJSn0GcYXTmUdp3i9V/rNOnOk5/eMijP
- QVwGYzN+AxOA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="410196068"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Sep 2020 23:57:22 -0700
-Received: from [10.249.68.124] (vramuthx-MOBL1.gar.corp.intel.com [10.249.68.124])
-        by linux.intel.com (Postfix) with ESMTP id 94A7958053A;
-        Thu, 17 Sep 2020 23:57:17 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v13 2/2] mtd: rawnand: Add NAND controller support on
- Intel LGM SoC
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     miquel.raynal@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, richard@nod.at, vigneshr@ti.com,
-        boris.brezillon@collabora.com, christophe.kerello@st.com,
-        piotrs@cadence.com, robert.jarzmik@free.fr,
-        brendanhiggins@google.com, devicetree@vger.kernel.org,
-        tglx@linutronix.de, hauke.mehrtens@intel.com, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, arnd@arndb.de,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-References: <20200917003308.57038-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200917003308.57038-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200917130523.GM3956970@smile.fi.intel.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <bb8606e9-e102-916d-359c-5ce7a94cc4e4@linux.intel.com>
-Date:   Fri, 18 Sep 2020 14:57:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726658AbgIRMps (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Sep 2020 08:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726518AbgIRMpr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Sep 2020 08:45:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36099C061756;
+        Fri, 18 Sep 2020 05:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=V3X+nIZPxUoB2BOajjqXji1hFeXgDyeXoEcOBeTEcjY=; b=vJlif4ODGlFSaA/X96y95TBxaJ
+        n1vQfWDy9aeQQz/QfN88AtyhJjnDQw4iBBxB3dOINUYSWIDVuarqzmR0pZ51u4RNdWq3xd56/l+oR
+        5GEDqjcn7bBB3CNVKgHN2a9wCcAG8SVe7T2vZu1M3dI0BtwzjwiuqLtNf9Jp3kLrAw46KAsyjal9/
+        QoDWN5trBS3vHnHgnjwv02AJsET1D7F4cR807vr6jIEUKZP+oBkLuggklbUB1OR5q/LzveCjsdCRd
+        XkzH7AWVhPje1BKWsGUA6phSyo6a5kaSlGjDsD4kHaEc69ADj0ykAyKUBp48wXzsnb2cVPD/Usdlf
+        ivQpFJ1w==;
+Received: from [80.122.85.238] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kJFle-0008SE-9Z; Fri, 18 Sep 2020 12:45:36 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: let import_iovec deal with compat_iovecs as well
+Date:   Fri, 18 Sep 2020 14:45:24 +0200
+Message-Id: <20200918124533.3487701-1-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20200917130523.GM3956970@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Andy,
+Hi Al,
 
-  Thank you for the review comments...
+this series changes import_iovec to transparently deal with comat iovec
+structures, and then cleanups up a lot of code dupliation.  But to get
+there it first has to fix the pre-existing bug that io_uring compat
+contexts don't trigger the in_compat_syscall() check.  This has so far
+been relatively harmless as very little code callable from io_uring used
+the check, and even that code that could be called usually wasn't.
 
-On 17/9/2020 9:05 pm, Andy Shevchenko wrote:
-> On Thu, Sep 17, 2020 at 08:33:08AM +0800, Ramuthevar,Vadivel MuruganX wrote:
->> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->>
->> This patch adds the new IP of Nand Flash Controller(NFC) support
->> on Intel's Lightning Mountain(LGM) SoC.
->>
->> DMA is used for burst data transfer operation, also DMA HW supports
->> aligned 32bit memory address and aligned data access by default.
->> DMA burst of 8 supported. Data register used to support the read/write
->> operation from/to device.
->>
->> NAND controller driver implements ->exec_op() to replace legacy hooks,
->> these specific call-back method to execute NAND operations.
-> 
-> ...
-> 
->> +#include <linux/clk.h>
->> +#include <linux/completion.h>
->> +#include <linux/dmaengine.h>
->> +#include <linux/dma-direction.h>
->> +#include <linux/dma-mapping.h>
->> +#include <linux/err.h>
->> +#include <linux/init.h>
-> 
->> +#include <linux/io.h>
->> +#include <linux/iopoll.h>
-> 
-> io.h is guaranteed to be included by iopoll.h.
-Noted
-> 
->> +#include <linux/kernel.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/module.h>
-> 
->> +#include <linux/mtd/mtd.h>
->> +#include <linux/mtd/rawnand.h>
->> +#include <linux/mtd/nand_ecc.h>
->> +#include <linux/mtd/nand.h>
-> 
-> Since mtd is a hosting framework for this driver, I would move this group of headers after more generic ones with a blank line in between.
-okay, noted
-> 
-> 
->> +#include <linux/resource.h>
-> 
-> And this I think is guaranteed to be included by io.h.
-Sure, will check and update.
-> 
->> +#include <linux/sched.h>
->> +#include <linux/slab.h>
->> +#include <linux/types.h>
-> 
->> +#include <linux/platform_device.h>
-> 
-> Dup? It's exactly the reason how alphabetical order can help.
-Good catch
-> 
-> ...
-> 
->> +#define EBU_ADDR_SEL(n)		(0x20 + (n) * 4)
-> 
-> I think 0x20 is an offset here, and better to have it as 0x020 to be consistent
-> with all other offsets.
-> 
-> ...
-> 
->> +#define EBU_BUSCON(n)		(0x60 + (n) * 4)
-> 
-> Ditto.
-Noted, will update
-> 
-> ...
-> 
->> +static void ebu_nand_setup_timing(struct ebu_nand_controller *ctrl,
->> +				  const struct nand_sdr_timings *timings)
->> +{
->> +	unsigned int rate = clk_get_rate(ctrl->clk) / 1000000;
-> 
-> HZ_PER_MHZ?
-yes, you're right we can use it.
-> 
->> +	unsigned int period = DIV_ROUND_UP(1000000, rate);
-> 
-> USEC_PER_SEC?
-yes, you're right we can use it.
-> 
->> +	u32 trecov, thold, twrwait, trdwait;
->> +	u32 reg = 0;
->> +
->> +	trecov = DIV_ROUND_UP(max(timings->tREA_max, timings->tREH_min),
->> +			      period);
->> +	reg |= EBU_BUSCON_RECOVC(trecov);
->> +
->> +	thold = DIV_ROUND_UP(max(timings->tDH_min, timings->tDS_min), period);
->> +	reg |= EBU_BUSCON_HOLDC(thold);
->> +
->> +	trdwait = DIV_ROUND_UP(max(timings->tRC_min, timings->tREH_min),
->> +			       period);
->> +	reg |= EBU_BUSCON_WAITRDC(trdwait);
->> +
->> +	twrwait = DIV_ROUND_UP(max(timings->tWC_min, timings->tWH_min), period);
->> +	reg |= EBU_BUSCON_WAITWRC(twrwait);
->> +
->> +	reg |= EBU_BUSCON_CMULT_V4 | EBU_BUSCON_BCGEN_CS | EBU_BUSCON_ALEC |
->> +		EBU_BUSCON_SETUP_EN;
->> +
->> +	writel(reg, ctrl->ebu + EBU_BUSCON(ctrl->cs_num));
->> +}
-> 
-> ...
-> 
->> +	if (oob_required) {
->> +		reg = (chip->oob_poi[3] << 24) | (chip->oob_poi[2] << 16) |
->> +			(chip->oob_poi[1] << 8) | chip->oob_poi[0];
-> 
-> get_unligned_le32()?
-last time seen system crash ,so I left it.
-> 
-> ...
-> 
->> +		reg = (chip->oob_poi[7] << 24) | (chip->oob_poi[6] << 16) |
->> +			(chip->oob_poi[5] << 8) | chip->oob_poi[4];
-> 
-> Ditto.
-Let me double check will add it, keep the same if not
-> 
-> ...
-> 
->> +	ret = readl_poll_timeout_atomic(int_sta, val,
->> +					!(val & HSNAND_INT_STA_WR_C), 10, 1000);
-> 
-> Slightly better (logically split between lines):
-> 
-> 	ret = readl_poll_timeout_atomic(int_sta, val, !(val & HSNAND_INT_STA_WR_C),
-> 					10, 1000);
-Thanks!, will update
-> 
-> 
->> +	if (ret)
->> +		return ret;
-> 
-> ...
-> 
->> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ebunand");
->> +	ebu_host->ebu = devm_ioremap_resource(&pdev->dev, res);
-> 
-> Why not to use
-> 
-> 	ebu_host->ebu = devm_platform_ioremap_resource_byname(&pdev->dev, "ebunand");
-As Boris mtd-maintainer suggested me to split into 2 API's, thanks!.
-> 
-> ?
-> 
->> +	if (IS_ERR(ebu_host->ebu))
->> +		return PTR_ERR(ebu_host->ebu);
->> +
->> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hsnand");
->> +	ebu_host->hsnand = devm_ioremap_resource(&pdev->dev, res);
-> 
-> Ditto.
-> 
->> +	if (IS_ERR(ebu_host->hsnand))
->> +		return PTR_ERR(ebu_host->hsnand);
-> 
-> ...
-> 
-> 
->> +	for (i = 0; i < MAX_CS; i++) {
->> +		resname = devm_kasprintf(dev, GFP_KERNEL, "nand_cs%d", i);
->> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
->> +						   resname);
-> 
->> +		if (!res)
->> +			return -EINVAL;
-> 
-> Redundant check.
-> 
->> +		ebu_host->cs[i].chipaddr = devm_ioremap_resource(dev, res);
-> 
-> Ditto (see above).
-Noted
-> 
->> +		ebu_host->cs[i].nand_pa = res->start;
->> +		if (IS_ERR(ebu_host->cs[i].chipaddr))
->> +			return PTR_ERR(ebu_host->cs[i].chipaddr);
->> +	}
-> 
-> ...
-> 
->> +	ebu_host->clk = devm_clk_get(dev, NULL);
->> +	if (IS_ERR(ebu_host->clk)) {
-> 
->> +		ret = PTR_ERR(ebu_host->clk);
->> +		dev_err(dev, "failed to get clock: %d\n", ret);
->> +		return ret;
-> 
-> 	return dev_err_probe() ?
-Noted, will add it.
-> 
->> +	}
-> 
-> ...
-> 
->> +	ebu_host->dma_tx = dma_request_chan(dev, "tx");
->> +	if (IS_ERR(ebu_host->dma_tx)) {
-> 
->> +		ret = PTR_ERR(ebu_host->dma_tx);
->> +		dev_err(dev, "DMA tx channel request fail!.\n");
->> +		goto err_cleanup_dma;
-> 
-> Ditto. On top why !. ???
-sorry missed it,Noted
-> 
->> +	}
->> +
->> +	ebu_host->dma_rx = dma_request_chan(dev, "rx");
->> +	if (IS_ERR(ebu_host->dma_rx)) {
-> 
->> +		ret = PTR_ERR(ebu_host->dma_rx);
->> +		dev_err(dev, "DMA rx channel request fail!.\n");
->> +		goto err_cleanup_dma;
-> 
-> Ditto.
-Noted
-
-Regards
-Vadivel
-> 
->> +	}
-> 
+Diffstat
+ arch/arm64/include/asm/unistd32.h                  |   10 
+ arch/mips/kernel/syscalls/syscall_n32.tbl          |   10 
+ arch/mips/kernel/syscalls/syscall_o32.tbl          |   10 
+ arch/parisc/kernel/syscalls/syscall.tbl            |   10 
+ arch/powerpc/kernel/syscalls/syscall.tbl           |   10 
+ arch/s390/kernel/syscalls/syscall.tbl              |   10 
+ arch/sparc/include/asm/compat.h                    |    3 
+ arch/sparc/kernel/syscalls/syscall.tbl             |   10 
+ arch/x86/entry/syscall_x32.c                       |    5 
+ arch/x86/entry/syscalls/syscall_32.tbl             |   10 
+ arch/x86/entry/syscalls/syscall_64.tbl             |   10 
+ arch/x86/include/asm/compat.h                      |    2 
+ block/scsi_ioctl.c                                 |   12 
+ drivers/scsi/sg.c                                  |    9 
+ fs/aio.c                                           |   38 --
+ fs/io_uring.c                                      |   21 -
+ fs/read_write.c                                    |  307 ++++-----------------
+ fs/splice.c                                        |   57 ---
+ include/linux/compat.h                             |   29 -
+ include/linux/fs.h                                 |    7 
+ include/linux/sched.h                              |    1 
+ include/linux/uio.h                                |    7 
+ include/uapi/asm-generic/unistd.h                  |   12 
+ lib/iov_iter.c                                     |   30 --
+ mm/process_vm_access.c                             |   69 ----
+ net/compat.c                                       |    4 
+ security/keys/compat.c                             |   37 --
+ security/keys/internal.h                           |    5 
+ security/keys/keyctl.c                             |    2 
+ tools/include/uapi/asm-generic/unistd.h            |   12 
+ tools/perf/arch/powerpc/entry/syscalls/syscall.tbl |   10 
+ tools/perf/arch/s390/entry/syscalls/syscall.tbl    |   10 
+ tools/perf/arch/x86/entry/syscalls/syscall_64.tbl  |   10 
+ 33 files changed, 207 insertions(+), 582 deletions(-)
