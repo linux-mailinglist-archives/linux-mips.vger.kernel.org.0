@@ -2,249 +2,296 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9342C26F5D3
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Sep 2020 08:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD24F26F65D
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Sep 2020 08:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbgIRGUo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Sep 2020 02:20:44 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:55436 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726022AbgIRGUo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 18 Sep 2020 02:20:44 -0400
-Received: from [10.130.0.60] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxmMSxUWRfgSoWAA--.1044S3;
-        Fri, 18 Sep 2020 14:20:34 +0800 (CST)
-Subject: Re: [PATCH] MIPS: Loongson64: Add kexec/kdump support
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-References: <1600175263-7872-1-git-send-email-hejinyang@loongson.cn>
- <376B4B91-0736-43FA-87EA-43E12FF24EF1@flygoat.com>
- <7b78c4d4-7ee3-cf57-71d1-95611713de2b@loongson.cn>
- <CAAhV-H5t3KWL1O+JKVp+T2qqGXuW7OiasjnnCLmV0+GE0Ns9xQ@mail.gmail.com>
- <647822a9-bc3b-5da1-95e7-c048a5a3b8fa@loongson.cn>
- <42ff66fb-a0bf-937f-8415-5d407fb93e03@flygoat.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Youling Tang <tangyouling@loongson.cn>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, kexec@lists.infradead.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <97e7b66c-b1cc-4810-7431-ba302abaabe0@loongson.cn>
-Date:   Fri, 18 Sep 2020 14:20:33 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726456AbgIRG5Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Sep 2020 02:57:24 -0400
+Received: from mga09.intel.com ([134.134.136.24]:16007 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726290AbgIRG5Y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 18 Sep 2020 02:57:24 -0400
+IronPort-SDR: +H/DtMPrJAQ23wNxqypfZ2HHwfvozuAUjA/O8194IWcdofJZy9bOoxt7sw5/8Q3Frm3Fk/NZdj
+ ibx9YE9pT3kg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="160794754"
+X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
+   d="scan'208";a="160794754"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 23:57:23 -0700
+IronPort-SDR: apw7X2tvrgEQ7JKnAgRMaAoUZeIxL1xJNnaI32NwBvFJSn0GcYXTmUdp3i9V/rNOnOk5/eMijP
+ QVwGYzN+AxOA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
+   d="scan'208";a="410196068"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga001.fm.intel.com with ESMTP; 17 Sep 2020 23:57:22 -0700
+Received: from [10.249.68.124] (vramuthx-MOBL1.gar.corp.intel.com [10.249.68.124])
+        by linux.intel.com (Postfix) with ESMTP id 94A7958053A;
+        Thu, 17 Sep 2020 23:57:17 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH v13 2/2] mtd: rawnand: Add NAND controller support on
+ Intel LGM SoC
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     miquel.raynal@bootlin.com, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, richard@nod.at, vigneshr@ti.com,
+        boris.brezillon@collabora.com, christophe.kerello@st.com,
+        piotrs@cadence.com, robert.jarzmik@free.fr,
+        brendanhiggins@google.com, devicetree@vger.kernel.org,
+        tglx@linutronix.de, hauke.mehrtens@intel.com, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, arnd@arndb.de,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
+References: <20200917003308.57038-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200917003308.57038-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200917130523.GM3956970@smile.fi.intel.com>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <bb8606e9-e102-916d-359c-5ce7a94cc4e4@linux.intel.com>
+Date:   Fri, 18 Sep 2020 14:57:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <42ff66fb-a0bf-937f-8415-5d407fb93e03@flygoat.com>
+In-Reply-To: <20200917130523.GM3956970@smile.fi.intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxmMSxUWRfgSoWAA--.1044S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3JFy8ZFWUWF15ZFWktrW8JFb_yoWxCFW3pa
-        y5Aa1Ykr4DJr42ywsaqr18ZryYv34rJr9rWr43tryDuryqq3WxJr1IvF1Y9F9rZr1rKF12
-        vryfXw1xuF1jyFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUjY0PDUUUUU==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/17/2020 10:21 PM, Jiaxun Yang wrote:
->
->
-> 在 2020/9/17 20:41, Jinyang He 写道:
->> Hi, Huacai,
->>
->>
->> On 09/16/2020 01:39 PM, Huacai Chen wrote:
->>> Hi, Jinyang,
->>>
->>> On Tue, Sep 15, 2020 at 10:17 PM Jinyang He <hejinyang@loongson.cn> 
->>> wrote:
->>>>
->>>>
->>>> On 09/16/2020 09:33 AM, Jiaxun Yang wrote:
->>>>> 于 2020年9月15日 GMT+08:00 下午9:07:43, Jinyang He 
->>>>> <hejinyang@loongson.cn> 写到:
->>>>>> Add loongson_kexec_prepare(), loongson_kexec_shutdown() and
->>>>>> loongson_kexec_crashdown() for passing the parameters of kexec_args.
->>>>>>
->>>>>> To start loongson64, CPU0 needs 3 parameters:
->>>>>> fw_arg0: the number of cmd.
->>>>>> fw_arg1: cmd structure which seems strange, the cmd array[index]'s
->>>>>>           value is cmd string's address, index >= 1.
->>>>>> fw_arg2: environment.
->>>>>>
->>>>>> Secondary CPUs do not need parameter at once. They query their
->>>>>> mailbox to get PC, SP and GP in a loop before CPU0 brings them up
->>>>>> and passes these parameters via mailbox.
->>>>>>
->>>>>> loongson_kexec_prepare(): Alloc new memory to save cmd for kexec.
->>>>>> Combine the kexec append option string as cmd structure, and the cmd
->>>>>> struct will be parsed in fw_init_cmdline() of 
->>>>>> arch/mips/fw/lib/cmdline.c.
->>>>>> image->control_code_page need pointing to a safe memory page. In 
->>>>>> order to
->>>>>> maintain compatibility for the old firmware the low 2MB is reserverd
->>>>>> and safe for Loongson. So let it points here.
->>>>>>
->>>>>> loongson_kexec_shutdown(): Wake up all present CPUs and let them go
->>>>>> to reboot_code_buffer. Pass the kexec parameters to kexec_args.
->>>>>>
->>>>>> loongson_crash_shutdown(): Pass the kdump parameters to kexec_args.
->>>>>>
->>>>>> The assembly part provide a way like BIOS doing to keep secondary
->>>>>> CPUs in a querying loop.
->>>>>>
->>>>>> This patch referenced [1][2][3].
->>>>>>
->>>>>> [1] arch/mips/cavium-octeon/setup.c
->>>>>> [2] https://patchwork.kernel.org/patch/10799217/
->>>>>> [3] 
->>>>>> https://gitee.com/loongsonlab/qemu/blob/master/hw/mips/loongson3a_rom.h 
->>>>>>
->>>>>>
->>>>>> Co-developed-by: Youling Tang <tangyouling@loongson.cn>
->>>>>> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
->>>>>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
->>>>>> ---
->>>>>> arch/mips/kernel/relocate_kernel.S | 19 ++++++++
->>>>>> arch/mips/loongson64/reset.c       | 88 
->>>>>> ++++++++++++++++++++++++++++++++++++++
->>>>>> 2 files changed, 107 insertions(+)
->>>>>>
->>>>>> diff --git a/arch/mips/kernel/relocate_kernel.S 
->>>>>> b/arch/mips/kernel/relocate_kernel.S
->>>>>> index ac87089..061cbfb 100644
->>>>>> --- a/arch/mips/kernel/relocate_kernel.S
->>>>>> +++ b/arch/mips/kernel/relocate_kernel.S
->>>>>> @@ -133,6 +133,25 @@ LEAF(kexec_smp_wait)
->>>>>> #else
->>>>>>       sync
->>>>>> #endif
->>>>>> +
->>>>>> +#ifdef CONFIG_CPU_LOONGSON64
->>>>>> +#define MAILBOX_BASE 0x900000003ff01000
->>>>> Please avoid hardcoded SMP information. You're breaking Loongson 
->>>>> 3B support.
->>>>>
->>>> Ok, I see. Since my machine is Loongson 3A. I'll send v2
->>>> after I test it in 3B.
->>> 1, My original version can work on both Loongson-3A and Loongson-3B,
->>> why you modify my patch and hadn't discuss with me?
->>>
->>> 2, With this single patch both kexec and kdump cannot work reliably,
->>> because kexec need this patch:
->>>     https://patchwork.kernel.org/patch/11695929/
->>>
->>>     and kdump need my first patch in my original version:
->>>     https://patchwork.kernel.org/patch/10799215/
->>>
->>>     You may argue that you have tested. Yes, I believe that, I'm not
->>> saying that you haven't test, and I'm not saying that your patch
->>> cannot work, I'm just saying that your patch is not robust.
->>>
->>> 3, I'm the original author and paying attention to kexec/kdump
->>> continuosly, I will send a new version once the above two patches be
->>> accepted. But you re-send my patch without any communication with me,
->>> why you so impatient?
->>>
->>> Huacai
->>>
->>
->> 1, Your original version:
->>    https://patchwork.kernel.org/patch/10799217/
->>
->> This patch can work on Loongson-3A, I tested it.
->>
->> But it works wrong after the follow behaviors,
->>    kexec -l vmlinux --append=cmdline_kexec
->>    kexec -p vmlinux --append=cmdline_kdump
->>    kexec -e
->>
->> It works but cmdline_kdump merged cmdline_kexec.
->>
->> And this patch memcpy from fw_arg2 to kexec_envp and later memcpy from
->> kexec_envp to fw_arg2 when fw_arg2 was not changed, it's redundant.
->>
->> However, I have not Loongson-3B now, and did not test it. For this 
->> patch,
->> does it work well on Loongson-3B3000/Loongson-3B4000?
->
-> Hi Jingyang,
->
-> Well for Loongson-3B I meant 3B1000/3B1500, which have different layout
-> of SMP registers. For 3B3000/3B4000 everyone know they're just different
-> branding to the same silicon.
+Hi Andy,
 
-OK, I see. Thank you.
+  Thank you for the review comments...
 
+On 17/9/2020 9:05 pm, Andy Shevchenko wrote:
+> On Thu, Sep 17, 2020 at 08:33:08AM +0800, Ramuthevar,Vadivel MuruganX wrote:
+>> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 >>
->> 3, I try to fix Loongson64 kexec function since I joined the community.
->> I fell sorry to not do enough research on Loongson64 kexec. My first 
->> patch:
->>    https://patchwork.kernel.org/patch/11684849/
->
-> I'm glad to see Loongson staff joining the community and enhance our 
-> code.
-> It is common practice to investigate historical changes before do 
-> something
-> to the upstream code :-)
->
+>> This patch adds the new IP of Nand Flash Controller(NFC) support
+>> on Intel's Lightning Mountain(LGM) SoC.
 >>
->> It fixed problem about "Crash kernel" which can be traced back to 
->> linux-5.4.
->> At that time, I thought there is no developer work on Kexec. Thus, I 
->> did a
->> lot on Kexec. Are you really continuosly paying attention to 
->> kexec/kdump?
->> With the exploring and developing deep, I found your patch several 
->> days ago
->> after I did a draft patch witch referenced:
->>    arch/mips/cavium-octeon/setup.c
->> https://gitee.com/loongsonlab/qemu/blob/master/hw/mips/loongson3a_rom.h
+>> DMA is used for burst data transfer operation, also DMA HW supports
+>> aligned 32bit memory address and aligned data access by default.
+>> DMA burst of 8 supported. Data register used to support the read/write
+>> operation from/to device.
 >>
->> There is no doubt that your patch gives me confidence and suggestion 
->> while
->> it gives me worry. As a newcomer, I do not know if should communicate 
->> with
->> you since your patch was committed one year ago. And now it may be a 
->> good
->> chance to do some communication.
->
-> You should *always* try to *credit* others properly, that's the first 
-> thing.
-> Communication is optional but highly recommanded.
->
-> Recently I can smell there are some tensions raised between the 
-> community and
-> the Loongson company, mainly about GPL violation and Loongson's attitude
-> towards the community. Personaly I don't hold any hostility to Loongosn's
-> practice in the community but I'd also like to see Loongson show their 
-> respect
-> to the community.
+>> NAND controller driver implements ->exec_op() to replace legacy hooks,
+>> these specific call-back method to execute NAND operations.
+> 
+> ...
+> 
+>> +#include <linux/clk.h>
+>> +#include <linux/completion.h>
+>> +#include <linux/dmaengine.h>
+>> +#include <linux/dma-direction.h>
+>> +#include <linux/dma-mapping.h>
+>> +#include <linux/err.h>
+>> +#include <linux/init.h>
+> 
+>> +#include <linux/io.h>
+>> +#include <linux/iopoll.h>
+> 
+> io.h is guaranteed to be included by iopoll.h.
+Noted
+> 
+>> +#include <linux/kernel.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/module.h>
+> 
+>> +#include <linux/mtd/mtd.h>
+>> +#include <linux/mtd/rawnand.h>
+>> +#include <linux/mtd/nand_ecc.h>
+>> +#include <linux/mtd/nand.h>
+> 
+> Since mtd is a hosting framework for this driver, I would move this group of headers after more generic ones with a blank line in between.
+okay, noted
+> 
+> 
+>> +#include <linux/resource.h>
+> 
+> And this I think is guaranteed to be included by io.h.
+Sure, will check and update.
+> 
+>> +#include <linux/sched.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/types.h>
+> 
+>> +#include <linux/platform_device.h>
+> 
+> Dup? It's exactly the reason how alphabetical order can help.
+Good catch
+> 
+> ...
+> 
+>> +#define EBU_ADDR_SEL(n)		(0x20 + (n) * 4)
+> 
+> I think 0x20 is an offset here, and better to have it as 0x020 to be consistent
+> with all other offsets.
+> 
+> ...
+> 
+>> +#define EBU_BUSCON(n)		(0x60 + (n) * 4)
+> 
+> Ditto.
+Noted, will update
+> 
+> ...
+> 
+>> +static void ebu_nand_setup_timing(struct ebu_nand_controller *ctrl,
+>> +				  const struct nand_sdr_timings *timings)
+>> +{
+>> +	unsigned int rate = clk_get_rate(ctrl->clk) / 1000000;
+> 
+> HZ_PER_MHZ?
+yes, you're right we can use it.
+> 
+>> +	unsigned int period = DIV_ROUND_UP(1000000, rate);
+> 
+> USEC_PER_SEC?
+yes, you're right we can use it.
+> 
+>> +	u32 trecov, thold, twrwait, trdwait;
+>> +	u32 reg = 0;
+>> +
+>> +	trecov = DIV_ROUND_UP(max(timings->tREA_max, timings->tREH_min),
+>> +			      period);
+>> +	reg |= EBU_BUSCON_RECOVC(trecov);
+>> +
+>> +	thold = DIV_ROUND_UP(max(timings->tDH_min, timings->tDS_min), period);
+>> +	reg |= EBU_BUSCON_HOLDC(thold);
+>> +
+>> +	trdwait = DIV_ROUND_UP(max(timings->tRC_min, timings->tREH_min),
+>> +			       period);
+>> +	reg |= EBU_BUSCON_WAITRDC(trdwait);
+>> +
+>> +	twrwait = DIV_ROUND_UP(max(timings->tWC_min, timings->tWH_min), period);
+>> +	reg |= EBU_BUSCON_WAITWRC(twrwait);
+>> +
+>> +	reg |= EBU_BUSCON_CMULT_V4 | EBU_BUSCON_BCGEN_CS | EBU_BUSCON_ALEC |
+>> +		EBU_BUSCON_SETUP_EN;
+>> +
+>> +	writel(reg, ctrl->ebu + EBU_BUSCON(ctrl->cs_num));
+>> +}
+> 
+> ...
+> 
+>> +	if (oob_required) {
+>> +		reg = (chip->oob_poi[3] << 24) | (chip->oob_poi[2] << 16) |
+>> +			(chip->oob_poi[1] << 8) | chip->oob_poi[0];
+> 
+> get_unligned_le32()?
+last time seen system crash ,so I left it.
+> 
+> ...
+> 
+>> +		reg = (chip->oob_poi[7] << 24) | (chip->oob_poi[6] << 16) |
+>> +			(chip->oob_poi[5] << 8) | chip->oob_poi[4];
+> 
+> Ditto.
+Let me double check will add it, keep the same if not
+> 
+> ...
+> 
+>> +	ret = readl_poll_timeout_atomic(int_sta, val,
+>> +					!(val & HSNAND_INT_STA_WR_C), 10, 1000);
+> 
+> Slightly better (logically split between lines):
+> 
+> 	ret = readl_poll_timeout_atomic(int_sta, val, !(val & HSNAND_INT_STA_WR_C),
+> 					10, 1000);
+Thanks!, will update
+> 
+> 
+>> +	if (ret)
+>> +		return ret;
+> 
+> ...
+> 
+>> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ebunand");
+>> +	ebu_host->ebu = devm_ioremap_resource(&pdev->dev, res);
+> 
+> Why not to use
+> 
+> 	ebu_host->ebu = devm_platform_ioremap_resource_byname(&pdev->dev, "ebunand");
+As Boris mtd-maintainer suggested me to split into 2 API's, thanks!.
+> 
+> ?
+> 
+>> +	if (IS_ERR(ebu_host->ebu))
+>> +		return PTR_ERR(ebu_host->ebu);
+>> +
+>> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hsnand");
+>> +	ebu_host->hsnand = devm_ioremap_resource(&pdev->dev, res);
+> 
+> Ditto.
+> 
+>> +	if (IS_ERR(ebu_host->hsnand))
+>> +		return PTR_ERR(ebu_host->hsnand);
+> 
+> ...
+> 
+> 
+>> +	for (i = 0; i < MAX_CS; i++) {
+>> +		resname = devm_kasprintf(dev, GFP_KERNEL, "nand_cs%d", i);
+>> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+>> +						   resname);
+> 
+>> +		if (!res)
+>> +			return -EINVAL;
+> 
+> Redundant check.
+> 
+>> +		ebu_host->cs[i].chipaddr = devm_ioremap_resource(dev, res);
+> 
+> Ditto (see above).
+Noted
+> 
+>> +		ebu_host->cs[i].nand_pa = res->start;
+>> +		if (IS_ERR(ebu_host->cs[i].chipaddr))
+>> +			return PTR_ERR(ebu_host->cs[i].chipaddr);
+>> +	}
+> 
+> ...
+> 
+>> +	ebu_host->clk = devm_clk_get(dev, NULL);
+>> +	if (IS_ERR(ebu_host->clk)) {
+> 
+>> +		ret = PTR_ERR(ebu_host->clk);
+>> +		dev_err(dev, "failed to get clock: %d\n", ret);
+>> +		return ret;
+> 
+> 	return dev_err_probe() ?
+Noted, will add it.
+> 
+>> +	}
+> 
+> ...
+> 
+>> +	ebu_host->dma_tx = dma_request_chan(dev, "tx");
+>> +	if (IS_ERR(ebu_host->dma_tx)) {
+> 
+>> +		ret = PTR_ERR(ebu_host->dma_tx);
+>> +		dev_err(dev, "DMA tx channel request fail!.\n");
+>> +		goto err_cleanup_dma;
+> 
+> Ditto. On top why !. ???
+sorry missed it,Noted
+> 
+>> +	}
+>> +
+>> +	ebu_host->dma_rx = dma_request_chan(dev, "rx");
+>> +	if (IS_ERR(ebu_host->dma_rx)) {
+> 
+>> +		ret = PTR_ERR(ebu_host->dma_rx);
+>> +		dev_err(dev, "DMA rx channel request fail!.\n");
+>> +		goto err_cleanup_dma;
+> 
+> Ditto.
+Noted
 
-I have replied to Yanjie:
-https://lore.kernel.org/patchwork/patch/1306401/#1502870
-
->
-> Thanks.
->
-> - Jiaxun
->
->>
->> Thanks,
->>
->> - Jinyang.
->>
-
+Regards
+Vadivel
+> 
+>> +	}
+> 
