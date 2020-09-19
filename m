@@ -2,62 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B25A9270DED
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 14:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B86270E97
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 16:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726501AbgISMp0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 19 Sep 2020 08:45:26 -0400
-Received: from out28-97.mail.aliyun.com ([115.124.28.97]:56959 "EHLO
-        out28-97.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726218AbgISMpX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Sep 2020 08:45:23 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1753833|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0258038-0.00147429-0.972722;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03303;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.IZJIYjg_1600519505;
-Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IZJIYjg_1600519505)
-          by smtp.aliyun-inc.com(10.147.42.198);
-          Sat, 19 Sep 2020 20:45:18 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     paulburton@kernel.org, tsbogend@alpha.franken.de,
-        paul@crapouillou.net
-Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        jiaxun.yang@flygoat.com, rppt@kernel.org,
-        Sergey.Semin@baikalelectronics.ru,
-        Alexey.Malahov@baikalelectronics.ru, akpm@linux-foundation.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Subject: [PATCH 2/2] MIPS: Ingenic: Fix bugs when detecting X1000E's L2 cache.
-Date:   Sat, 19 Sep 2020 20:44:37 +0800
-Message-Id: <20200919124437.89576-3-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200919124437.89576-1-zhouyanjie@wanyeetech.com>
-References: <20200919124437.89576-1-zhouyanjie@wanyeetech.com>
+        id S1726526AbgISObG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sat, 19 Sep 2020 10:31:06 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:23285 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726493AbgISObG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 19 Sep 2020 10:31:06 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-281-bAjbsE6rN1eTAY15huzJqA-1; Sat, 19 Sep 2020 15:24:11 +0100
+X-MC-Unique: bAjbsE6rN1eTAY15huzJqA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Sat, 19 Sep 2020 15:24:10 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Sat, 19 Sep 2020 15:24:10 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: let import_iovec deal with compat_iovecs as well
+Thread-Topic: let import_iovec deal with compat_iovecs as well
+Thread-Index: AQHWjbnKEn35LxofhEeT1lmdzdUiWqlwBNiw
+Date:   Sat, 19 Sep 2020 14:24:10 +0000
+Message-ID: <2c7bf42ee4314484ae0177280cd8f5f3@AcuMS.aculab.com>
+References: <20200918124533.3487701-1-hch@lst.de>
+In-Reply-To: <20200918124533.3487701-1-hch@lst.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Fix bugs when detecting L2 cache sets value and ways value.
+From: Christoph Hellwig
+> Sent: 18 September 2020 13:45
+> 
+> this series changes import_iovec to transparently deal with comat iovec
+> structures, and then cleanups up a lot of code dupliation.  But to get
+> there it first has to fix the pre-existing bug that io_uring compat
+> contexts don't trigger the in_compat_syscall() check.  This has so far
+> been relatively harmless as very little code callable from io_uring used
+> the check, and even that code that could be called usually wasn't.
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
- arch/mips/mm/sc-mips.c | 1 +
- 1 file changed, 1 insertion(+)
+I thought about that change while writing my import_iovec() => iovec_import()
+patch - and thought that the io_uring code would (as usual) cause grief.
 
-diff --git a/arch/mips/mm/sc-mips.c b/arch/mips/mm/sc-mips.c
-index 97dc0511e63f..145b39ecb246 100644
---- a/arch/mips/mm/sc-mips.c
-+++ b/arch/mips/mm/sc-mips.c
-@@ -235,6 +235,7 @@ static inline int __init mips_sc_probe(void)
- 		 * According to config2 it would be 5-ways and 512-sets,
- 		 * but that is contradicted by all documentation.
- 		 */
-+		case MACH_INGENIC_X1000E:
- 		case MACH_INGENIC_X1000:
- 			c->scache.sets = 256;
- 			c->scache.ways = 4;
--- 
-2.11.0
+Christoph - did you see those patches?
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
