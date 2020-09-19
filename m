@@ -2,133 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A4B270EAD
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 16:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161C1270F1F
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 17:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726463AbgISOyW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sat, 19 Sep 2020 10:54:22 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:36715 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726526AbgISOyR (ORCPT
+        id S1726664AbgISPgJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 19 Sep 2020 11:36:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:33427 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726657AbgISPgI (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 19 Sep 2020 10:54:17 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-123-Q8cAoOVtN9-3ia4vwC15wg-1; Sat, 19 Sep 2020 15:53:09 +0100
-X-MC-Unique: Q8cAoOVtN9-3ia4vwC15wg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Sat, 19 Sep 2020 15:53:08 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Sat, 19 Sep 2020 15:53:08 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Al Viro' <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: RE: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-Thread-Topic: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-Thread-Index: AQHWjcPPLxbJUITJXkeWJwtHmAdwxKlwCErw
-Date:   Sat, 19 Sep 2020 14:53:08 +0000
-Message-ID: <6d064d8688324279af89152a8da22d69@AcuMS.aculab.com>
-References: <20200918124533.3487701-1-hch@lst.de>
- <20200918124533.3487701-2-hch@lst.de>
- <20200918134012.GY3421308@ZenIV.linux.org.uk> <20200918134406.GA17064@lst.de>
- <20200918135822.GZ3421308@ZenIV.linux.org.uk>
-In-Reply-To: <20200918135822.GZ3421308@ZenIV.linux.org.uk>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 19 Sep 2020 11:36:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600529767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XnnTTEIYoAMS908w1ROcklMBcFclX4Kd46b1r/IPFT0=;
+        b=I052Qi2ZARwS+K0kkr/CV4GfFGb88M/Petg4y8scSjswNDzGsmzR3NkIm67gYXHCc7xV9X
+        Uh+brti7945OsCRQvv/LyvIOq/Mo7GPP1tKaSCUxEnPFIxxUyP+//0a1/QZp3unJuP7Mvw
+        yfKb8jbLDWsNN6yFCV/n2rgYuKZxiR8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-487-ODjCTSzpPgeeB7ZOqvhSFA-1; Sat, 19 Sep 2020 11:36:05 -0400
+X-MC-Unique: ODjCTSzpPgeeB7ZOqvhSFA-1
+Received: by mail-wr1-f72.google.com with SMTP id w7so3584168wrp.2
+        for <linux-mips@vger.kernel.org>; Sat, 19 Sep 2020 08:36:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XnnTTEIYoAMS908w1ROcklMBcFclX4Kd46b1r/IPFT0=;
+        b=tmMV/6Hq50ItT2THa4Me1Ih3GlX+6giMKFRTLO4VZBrALK2sCFtjWvUcLrucN5eVas
+         I8G2y8eDkFd+bS661zDAu+D3NBk046wmlnnd68J/Bw/odIVNC8MsBirQnUe+/KdG1cYE
+         Ls9HvqCyAWX40SKH3hKgU5l6ZgEAoQnq46EsjU1CzeWtz/yyfnWLo/4i9q5/a3icEfhO
+         mTn6gzBnkaciiLt8CtsHSpHsr+LUVTKycA10H1BvNQEcH2I6KmPeY8XdRAzWJA30NkpP
+         u2Oy1cXysP+tq0sBItV0sfGRx/k4IX57nw7oU/KHtfC5ReNH7A2wZ6g0xn8QVNX/sFAq
+         Jqtw==
+X-Gm-Message-State: AOAM531SVmejBJrbdrvZLixnFV/Up/kAN/7a4SfnvuUWmTvxZLOxnZ+E
+        L3dkga1/OaqaPxxkNaTwlERZwC+e0gec0RDDsMbBKs4ZeKVrW7nr/akzT8GLYt8hRbCUeZNY3Su
+        2Zx3d2HIZpWg++KpiygT//w==
+X-Received: by 2002:adf:d4c7:: with SMTP id w7mr44311889wrk.263.1600529763972;
+        Sat, 19 Sep 2020 08:36:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzVGDEQuwZFSFM7b48KqNUPZW/rcdMmRJHBVwzymzEmhdRP2MHpLJ2JvhoMk9zYGbmu6d8Tvg==
+X-Received: by 2002:adf:d4c7:: with SMTP id w7mr44311854wrk.263.1600529763724;
+        Sat, 19 Sep 2020 08:36:03 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:b20a:b600:521c:512d? ([2001:b07:6468:f312:b20a:b600:521c:512d])
+        by smtp.gmail.com with ESMTPSA id m4sm12529789wro.18.2020.09.19.08.36.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Sep 2020 08:36:03 -0700 (PDT)
+Subject: Re: [PATCH] KVM: MIPS: Change the definition of kvm type
+To:     Thomas Huth <thuth@redhat.com>, Huacai Chen <chenhc@lemote.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+References: <1599734031-28746-1-git-send-email-chenhc@lemote.com>
+ <45a71ce2-42d2-ba49-72a3-155dacede289@redhat.com>
+ <dc709e46-1daf-98f2-8eb1-436096bb3274@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <3359152a-627a-162f-8731-75c39d46ef40@redhat.com>
+Date:   Sat, 19 Sep 2020 17:36:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <dc709e46-1daf-98f2-8eb1-436096bb3274@redhat.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Al Viro
-> Sent: 18 September 2020 14:58
-> 
-> On Fri, Sep 18, 2020 at 03:44:06PM +0200, Christoph Hellwig wrote:
-> > On Fri, Sep 18, 2020 at 02:40:12PM +0100, Al Viro wrote:
-> > > >  	/* Vector 0x110 is LINUX_32BIT_SYSCALL_TRAP */
-> > > > -	return pt_regs_trap_type(current_pt_regs()) == 0x110;
-> > > > +	return pt_regs_trap_type(current_pt_regs()) == 0x110 ||
-> > > > +		(current->flags & PF_FORCE_COMPAT);
-> > >
-> > > Can't say I like that approach ;-/  Reasoning about the behaviour is much
-> > > harder when it's controlled like that - witness set_fs() shite...
-> >
-> > I don't particularly like it either.  But do you have a better idea
-> > how to deal with io_uring vs compat tasks?
-> 
-> <wry> git rm fs/io_uring.c would make a good starting point </wry>
-> Yes, I know it's not going to happen, but one can dream...
+On 19/09/20 11:18, Thomas Huth wrote:
+>>>
+>>> So I define like this:
+>>>
+>>>  #define KVM_VM_MIPS_AUTO        0
+>>>  #define KVM_VM_MIPS_VZ          1
+>>>  #define KVM_VM_MIPS_TE          2
+>>>
+>>> Since VZ and TE cannot co-exists, using type 0 on a TE platform will
+>>> still return success (so old user-space tools have no problems on new
+>>> kernels); the advantage is that using type 0 on a VZ platform will not
+>>> return failure. So, the only problem is "new user-space tools use type
+>>> 2 on old kernels", but if we treat this as a kernel bug, we can backport
+>>> this patch to old stable kernels.
+>> I'm a bit wary to do that.  However it's not an issue for QEMU since it
+>> generally updates the kernel headers.
+> Are there any other userspace programs beside QEMU that use KVM on MIPS?
+> If there aren't any other serious userspace programs, I think we should
+> go ahead with this patch here. Otherwise, what are the other programs
+> that could be affected?
 
-Maybe the io_uring code needs some changes to make it vaguely safe.
-- No support for 32-bit compat mixed working (or at all?).
-  Plausibly a special worker could do 32bit work.
-- ring structure (I'm assuming mapped by mmap()) never mapped
-  in more than one process (not cloned by fork()).
-- No implicit handover of files to another process.
-  Would need an munmap, handover, mmap sequence.
+kvmtool (aka lkvm) I guess.  I don't know if it is affected but I
+wouldn't be worried.
 
-In any case the io_ring rather abuses the import_iovec() interface.
-
-The canonical sequence is (types from memory):
-	struct iovec cache[8], *iov = cache;
-	struct iter iter;
-	...
-	rval = import_iovec(..., &iov, 8, &iter);
-	// Do read/write user using 'iter'
-	free(iov);
-
-I don't think there is any strict requirement that iter.iov
-is set to either 'cache' or 'iov' (it probably must point
-into one of them.)
-But the io_uring code will make that assumption because the
-actual copies can be done much later and it doesn't save 'iter'.
-It gets itself in a right mess because it doesn't separate
-the 'address I need to free' from 'the iov[] for any transfers'.
-
-io_uring is also the only code that relies on import_iovec()
-returning the iter.count on success.
-It would be much better to have:
-	iov = import_iovec(..., &cache, ...);
-	free(iov);
-and use ERR_PTR() et al for error detectoion.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Paolo
 
