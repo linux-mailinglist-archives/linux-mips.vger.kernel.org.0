@@ -2,339 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9BB270BB5
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 10:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E62C270BD8
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 10:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbgISIG5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 19 Sep 2020 04:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbgISIGt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Sep 2020 04:06:49 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501FAC0613CF
-        for <linux-mips@vger.kernel.org>; Sat, 19 Sep 2020 01:06:49 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id u13so4871544pgh.1
-        for <linux-mips@vger.kernel.org>; Sat, 19 Sep 2020 01:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4mjAsO6i14BLDGSTSdDKCE/ErMpri2AIzn0P8gVWa8M=;
-        b=f0OFDsETa78EaeXMDCZ1RlCfxiwXc9SrnugxfxtZMcxjpwzsQZOe/tYIDistENL+3n
-         8aJ8UY7gOEmoL3ldEcxG/KpWw2K2lmPViEdyK2GebPCprnlzSQiPqZqOPp3m2hjzte7U
-         XTdyC+J3wSoKeBaYrzyy/kuZdk1+t7cxQEEzc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4mjAsO6i14BLDGSTSdDKCE/ErMpri2AIzn0P8gVWa8M=;
-        b=aYCtitxhhzUl0JA6ewOvtcDoR3se7ltR4/tq0j9PgwRYyJXzsM4rsd3eXpCdeBFnYA
-         hB8qAIQjvnHvEllE99SR07Ra1F6rno6nx2nJvRgwBNGs/hNWa7qw/aJJHzZlJtPjEmX6
-         klvuugwWhabdwrfRkH3Qsp+NikDsjbt4rbI1h08PBeQTN275rkBvb/SsDpYRj2O0QqxE
-         Acn3MQ9bgULobp7T209jjytthhjVxXeBrRcvazhTpL7gUCmcFUdB78NTR4yjY43AFPf3
-         yqiob3houexbczGzsJhyjebV7Jy4/a5L+7LUPMNjOXwo8Sp0K68b4F0Qd8D5kiWg4WVf
-         +f7A==
-X-Gm-Message-State: AOAM531gRjfbRaLnnC9EMPgaciZMUB4lgtvFEb0S8ruw1sEm5OgrvZEN
-        Pi6cqEXBoug1S5JM+JGsg6w7Jw==
-X-Google-Smtp-Source: ABdhPJzoDBiiDd/qwVg2H2idKKM+EA63R2fRTH/k5PeOCGXyrSeLjPAUUIbnlIzg8EvmDnpbjiiFuA==
-X-Received: by 2002:a63:491:: with SMTP id 139mr13312846pge.147.1600502808858;
-        Sat, 19 Sep 2020 01:06:48 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s3sm5443116pgc.61.2020.09.19.01.06.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2020 01:06:45 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2 4/4] selftests/clone3: Avoid OS-defined clone_args
-Date:   Sat, 19 Sep 2020 01:06:37 -0700
-Message-Id: <20200919080637.259478-5-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200919080637.259478-1-keescook@chromium.org>
-References: <20200919080637.259478-1-keescook@chromium.org>
+        id S1726097AbgISI3r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 19 Sep 2020 04:29:47 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:38778 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726041AbgISI3r (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 19 Sep 2020 04:29:47 -0400
+Received: from [10.130.0.187] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD91zwWVfAG0WAA--.6874S3;
+        Sat, 19 Sep 2020 16:29:40 +0800 (CST)
+Subject: Re: [PATCH] MIPS: kexec: Add crashkernel=YM handling
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1600480546-10448-1-git-send-email-tangyouling@loongson.cn>
+ <3F79DD89-BE1E-456F-9297-273DDBB4E12A@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <e0154fb4-f2bd-5017-17ea-9827b95b8e68@loongson.cn>
+Date:   Sat, 19 Sep 2020 16:29:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
+In-Reply-To: <3F79DD89-BE1E-456F-9297-273DDBB4E12A@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxD91zwWVfAG0WAA--.6874S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF47XrWDZr1DCr1rtrW8JFb_yoWrWr1xpr
+        yUAa15GF4xGF9rGw4fArn3CryFyw1vvayUKrs5tryFkF909F1ktr4fWF17uryqvr1vgF1x
+        ZFs2qFsF9w1FyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487
+        MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IU0-djtUUUUU==
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-As the UAPI headers start to appear in distros, we need to avoid outdated
-versions of struct clone_args to be able to test modern features;
-rename to "struct __clone_args". Additionally update the struct size
-macro names to match UAPI names.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/clone3/clone3.c       | 45 ++++++++-----------
- .../clone3/clone3_cap_checkpoint_restore.c    |  4 +-
- .../selftests/clone3/clone3_clear_sighand.c   |  2 +-
- .../selftests/clone3/clone3_selftests.h       | 24 +++++-----
- .../testing/selftests/clone3/clone3_set_tid.c |  4 +-
- tools/testing/selftests/seccomp/seccomp_bpf.c |  4 +-
- 6 files changed, 40 insertions(+), 43 deletions(-)
 
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index b7e6dec36173..42be3b925830 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -20,13 +20,6 @@
- #include "../kselftest.h"
- #include "clone3_selftests.h"
- 
--/*
-- * Different sizes of struct clone_args
-- */
--#ifndef CLONE3_ARGS_SIZE_V0
--#define CLONE3_ARGS_SIZE_V0 64
--#endif
--
- enum test_mode {
- 	CLONE3_ARGS_NO_TEST,
- 	CLONE3_ARGS_ALL_0,
-@@ -38,13 +31,13 @@ enum test_mode {
- 
- static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- {
--	struct clone_args args = {
-+	struct __clone_args args = {
- 		.flags = flags,
- 		.exit_signal = SIGCHLD,
- 	};
- 
- 	struct clone_args_extended {
--		struct clone_args args;
-+		struct __clone_args args;
- 		__aligned_u64 excess_space[2];
- 	} args_ext;
- 
-@@ -52,11 +45,11 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- 	int status;
- 
- 	memset(&args_ext, 0, sizeof(args_ext));
--	if (size > sizeof(struct clone_args))
-+	if (size > sizeof(struct __clone_args))
- 		args_ext.excess_space[1] = 1;
- 
- 	if (size == 0)
--		size = sizeof(struct clone_args);
-+		size = sizeof(struct __clone_args);
- 
- 	switch (test_mode) {
- 	case CLONE3_ARGS_ALL_0:
-@@ -77,9 +70,9 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- 		break;
- 	}
- 
--	memcpy(&args_ext.args, &args, sizeof(struct clone_args));
-+	memcpy(&args_ext.args, &args, sizeof(struct __clone_args));
- 
--	pid = sys_clone3((struct clone_args *)&args_ext, size);
-+	pid = sys_clone3((struct __clone_args *)&args_ext, size);
- 	if (pid < 0) {
- 		ksft_print_msg("%s - Failed to create new process\n",
- 				strerror(errno));
-@@ -144,14 +137,14 @@ int main(int argc, char *argv[])
- 	else
- 		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
- 
--	/* Do a clone3() with CLONE3_ARGS_SIZE_V0. */
--	test_clone3(0, CLONE3_ARGS_SIZE_V0, 0, CLONE3_ARGS_NO_TEST);
-+	/* Do a clone3() with CLONE_ARGS_SIZE_VER0. */
-+	test_clone3(0, CLONE_ARGS_SIZE_VER0, 0, CLONE3_ARGS_NO_TEST);
- 
--	/* Do a clone3() with CLONE3_ARGS_SIZE_V0 - 8 */
--	test_clone3(0, CLONE3_ARGS_SIZE_V0 - 8, -EINVAL, CLONE3_ARGS_NO_TEST);
-+	/* Do a clone3() with CLONE_ARGS_SIZE_VER0 - 8 */
-+	test_clone3(0, CLONE_ARGS_SIZE_VER0 - 8, -EINVAL, CLONE3_ARGS_NO_TEST);
- 
- 	/* Do a clone3() with sizeof(struct clone_args) + 8 */
--	test_clone3(0, sizeof(struct clone_args) + 8, 0, CLONE3_ARGS_NO_TEST);
-+	test_clone3(0, sizeof(struct __clone_args) + 8, 0, CLONE3_ARGS_NO_TEST);
- 
- 	/* Do a clone3() with exit_signal having highest 32 bits non-zero */
- 	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG);
-@@ -165,31 +158,31 @@ int main(int argc, char *argv[])
- 	/* Do a clone3() with NSIG < exit_signal < CSIG */
- 	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG);
- 
--	test_clone3(0, sizeof(struct clone_args) + 8, 0, CLONE3_ARGS_ALL_0);
-+	test_clone3(0, sizeof(struct __clone_args) + 8, 0, CLONE3_ARGS_ALL_0);
- 
--	test_clone3(0, sizeof(struct clone_args) + 16, -E2BIG,
-+	test_clone3(0, sizeof(struct __clone_args) + 16, -E2BIG,
- 			CLONE3_ARGS_ALL_0);
- 
--	test_clone3(0, sizeof(struct clone_args) * 2, -E2BIG,
-+	test_clone3(0, sizeof(struct __clone_args) * 2, -E2BIG,
- 			CLONE3_ARGS_ALL_0);
- 
- 	/* Do a clone3() with > page size */
- 	test_clone3(0, getpagesize() + 8, -E2BIG, CLONE3_ARGS_NO_TEST);
- 
--	/* Do a clone3() with CLONE3_ARGS_SIZE_V0 in a new PID NS. */
-+	/* Do a clone3() with CLONE_ARGS_SIZE_VER0 in a new PID NS. */
- 	if (uid == 0)
--		test_clone3(CLONE_NEWPID, CLONE3_ARGS_SIZE_V0, 0,
-+		test_clone3(CLONE_NEWPID, CLONE_ARGS_SIZE_VER0, 0,
- 				CLONE3_ARGS_NO_TEST);
- 	else
- 		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
- 
--	/* Do a clone3() with CLONE3_ARGS_SIZE_V0 - 8 in a new PID NS */
--	test_clone3(CLONE_NEWPID, CLONE3_ARGS_SIZE_V0 - 8, -EINVAL,
-+	/* Do a clone3() with CLONE_ARGS_SIZE_VER0 - 8 in a new PID NS */
-+	test_clone3(CLONE_NEWPID, CLONE_ARGS_SIZE_VER0 - 8, -EINVAL,
- 			CLONE3_ARGS_NO_TEST);
- 
- 	/* Do a clone3() with sizeof(struct clone_args) + 8 in a new PID NS */
- 	if (uid == 0)
--		test_clone3(CLONE_NEWPID, sizeof(struct clone_args) + 8, 0,
-+		test_clone3(CLONE_NEWPID, sizeof(struct __clone_args) + 8, 0,
- 				CLONE3_ARGS_NO_TEST);
- 	else
- 		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
-diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
-index 9562425aa0a9..55bd387ce7ec 100644
---- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
-+++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
-@@ -44,13 +44,13 @@ static int call_clone3_set_tid(struct __test_metadata *_metadata,
- 	int status;
- 	pid_t pid = -1;
- 
--	struct clone_args args = {
-+	struct __clone_args args = {
- 		.exit_signal = SIGCHLD,
- 		.set_tid = ptr_to_u64(set_tid),
- 		.set_tid_size = set_tid_size,
- 	};
- 
--	pid = sys_clone3(&args, sizeof(struct clone_args));
-+	pid = sys_clone3(&args, sizeof(args));
- 	if (pid < 0) {
- 		TH_LOG("%s - Failed to create new process", strerror(errno));
- 		return -errno;
-diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-index db5fc9c5edcf..47a8c0fc3676 100644
---- a/tools/testing/selftests/clone3/clone3_clear_sighand.c
-+++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-@@ -47,7 +47,7 @@ static void test_clone3_clear_sighand(void)
- {
- 	int ret;
- 	pid_t pid;
--	struct clone_args args = {};
-+	struct __clone_args args = {};
- 	struct sigaction act;
- 
- 	/*
-diff --git a/tools/testing/selftests/clone3/clone3_selftests.h b/tools/testing/selftests/clone3/clone3_selftests.h
-index 91c1a78ddb39..e81ffaaee02b 100644
---- a/tools/testing/selftests/clone3/clone3_selftests.h
-+++ b/tools/testing/selftests/clone3/clone3_selftests.h
-@@ -19,13 +19,11 @@
- #define CLONE_INTO_CGROUP 0x200000000ULL /* Clone into a specific cgroup given the right permissions. */
- #endif
- 
--#ifndef CLONE_ARGS_SIZE_VER0
--#define CLONE_ARGS_SIZE_VER0 64
--#endif
--
- #ifndef __NR_clone3
- #define __NR_clone3 -1
--struct clone_args {
-+#endif
-+
-+struct __clone_args {
- 	__aligned_u64 flags;
- 	__aligned_u64 pidfd;
- 	__aligned_u64 child_tid;
-@@ -34,15 +32,21 @@ struct clone_args {
- 	__aligned_u64 stack;
- 	__aligned_u64 stack_size;
- 	__aligned_u64 tls;
--#define CLONE_ARGS_SIZE_VER1 80
-+#ifndef CLONE_ARGS_SIZE_VER0
-+#define CLONE_ARGS_SIZE_VER0 64	/* sizeof first published struct */
-+#endif
- 	__aligned_u64 set_tid;
- 	__aligned_u64 set_tid_size;
--#define CLONE_ARGS_SIZE_VER2 88
-+#ifndef CLONE_ARGS_SIZE_VER1
-+#define CLONE_ARGS_SIZE_VER1 80	/* sizeof second published struct */
-+#endif
- 	__aligned_u64 cgroup;
-+#ifndef CLONE_ARGS_SIZE_VER2
-+#define CLONE_ARGS_SIZE_VER2 88	/* sizeof third published struct */
-+#endif
- };
--#endif /* __NR_clone3 */
- 
--static pid_t sys_clone3(struct clone_args *args, size_t size)
-+static pid_t sys_clone3(struct __clone_args *args, size_t size)
- {
- 	fflush(stdout);
- 	fflush(stderr);
-@@ -52,7 +56,7 @@ static pid_t sys_clone3(struct clone_args *args, size_t size)
- static inline void test_clone3_supported(void)
- {
- 	pid_t pid;
--	struct clone_args args = {};
-+	struct __clone_args args = {};
- 
- 	if (__NR_clone3 < 0)
- 		ksft_exit_skip("clone3() syscall is not supported\n");
-diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
-index 5831c1082d6d..0229e9ebb995 100644
---- a/tools/testing/selftests/clone3/clone3_set_tid.c
-+++ b/tools/testing/selftests/clone3/clone3_set_tid.c
-@@ -46,14 +46,14 @@ static int call_clone3_set_tid(pid_t *set_tid,
- 	int status;
- 	pid_t pid = -1;
- 
--	struct clone_args args = {
-+	struct __clone_args args = {
- 		.flags = flags,
- 		.exit_signal = SIGCHLD,
- 		.set_tid = ptr_to_u64(set_tid),
- 		.set_tid_size = set_tid_size,
- 	};
- 
--	pid = sys_clone3(&args, sizeof(struct clone_args));
-+	pid = sys_clone3(&args, sizeof(args));
- 	if (pid < 0) {
- 		ksft_print_msg("%s - Failed to create new process\n",
- 			       strerror(errno));
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 894c2404d321..4a180439ee9e 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -3817,7 +3817,7 @@ TEST(user_notification_filter_empty)
- 	long ret;
- 	int status;
- 	struct pollfd pollfd;
--	struct clone_args args = {
-+	struct __clone_args args = {
- 		.flags = CLONE_FILES,
- 		.exit_signal = SIGCHLD,
- 	};
-@@ -3871,7 +3871,7 @@ TEST(user_notification_filter_empty_threaded)
- 	long ret;
- 	int status;
- 	struct pollfd pollfd;
--	struct clone_args args = {
-+	struct __clone_args args = {
- 		.flags = CLONE_FILES,
- 		.exit_signal = SIGCHLD,
- 	};
--- 
-2.25.1
+On 09/19/2020 03:02 PM, Jiaxun Yang wrote:
+>
+> 于 2020年9月19日 GMT+08:00 上午9:55:46, Youling Tang <tangyouling@loongson.cn> 写到:
+>> When the kernel crashkernel parameter is specified with just a size,
+>> we are supposed to allocate a region from RAM to store the crashkernel.
+>> However, MIPS merely reserves physical address zero with no checking
+>> that there is even RAM there.
+>>
+>> Fix this by lifting similar code from x86, importing it to MIPS with the
+>> MIPS specific parameters added. In the absence of any platform specific
+>> information, we allocate the crashkernel region from the first 512MB of
+>> physical memory (limited to CKSEG0 or KSEG0 address range).
+>>
+>> When X is not specified, crash_base defaults to 0 (crashkernel=YM@XM).
+>>
+>> E.g. without this patch:
+>>
+>> The environment as follows:
+>> [    0.000000] MIPS: machine is loongson,loongson64c-4core-ls7a
+>> ...
+>> [    0.000000] Kernel command line: root=/dev/sda2 crashkernel=96M ...
+>>
+>> The warning as follows:
+>> [    0.000000] Invalid memory region reserved for crash kernel
+>>
+>> And the iomem as follows:
+>> 00200000-0effffff : System RAM
+>>   00200000-00b47f87 : Kernel code
+>>   00b47f88-00dfffff : Kernel data
+>>   00e60000-01f73c7f : Kernel bss
+>> 1a000000-1bffffff : pci@1a000000
+>> ...
+>>
+>> With this patch:
+>>
+>> After increasing crash_base <= 0 handling.
+>>
+>> And the iomem as follows:
+>> 00200000-0effffff : System RAM
+>>   00200000-00b47f87 : Kernel code
+>>   00b47f88-00dfffff : Kernel data
+>>   00e60000-01f73c7f : Kernel bss
+>>   04000000-09ffffff : Crash kernel
+>> 1a000000-1bffffff : pci@1a000000
+>> ...
+>>
+>> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+>> ---
+>> arch/mips/kernel/setup.c | 24 +++++++++++++++++++++---
+>> 1 file changed, 21 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+>> index bf5f5ac..59a88ea 100644
+>> --- a/arch/mips/kernel/setup.c
+>> +++ b/arch/mips/kernel/setup.c
+>> @@ -477,6 +477,11 @@ early_param("elfcorehdr", early_parse_elfcorehdr);
+>> #endif
+>>
+>> #ifdef CONFIG_KEXEC
+>> +
+>> +/* 64M alignment for crash kernel regions */
+>> +#define CRASH_ALIGN	SZ_64M
+>> +#define CRASH_ADDR_MAX	SZ_512M
+> Hi Youling
+>
+> How do you determine the alignment requirement?
+>
+> Can we relax it?
+>
+> Thanks.
+>
+> - Jiaxun
+Hi Jiaxun
+
+Only when XM is not specified, 64M alignment is specified.
+
+After the capture kernel is configured with CRASH_DUMP, PHYSICAL_START
+defaults to 0x0xffffffff84000000 (64M). The kexec -p operation will
+succeed only when the reserved Crash kernel start address is consistent
+with PHYSICAL_START.
+
+The description of PHYSICAL_START in arch/mips/Kconfig:2996 is as follows:
+This gives the CKSEG0 or KSEG0 address where the kernel is loaded.If you
+plan to use kernel for capturing the crash dump change this value to start
+of the reserved region (the "X" value as specified in the 
+"crashkernel=YM@XM"
+command line boot parameter passed to the panic-ed kernel).
+
+Thanks,
+
+- Youling
+>> +
+>> static void __init mips_parse_crashkernel(void)
+>> {
+>> 	unsigned long long total_mem;
+>> @@ -489,9 +494,22 @@ static void __init mips_parse_crashkernel(void)
+>> 	if (ret != 0 || crash_size <= 0)
+>> 		return;
+>>
+>> -	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 1)) {
+>> -		pr_warn("Invalid memory region reserved for crash kernel\n");
+>> -		return;
+>> +	if (crash_base <= 0) {
+>> +		crash_base = memblock_find_in_range(CRASH_ALIGN, CRASH_ADDR_MAX,
+>> +							crash_size, CRASH_ALIGN);
+>> +		if (!crash_base) {
+>> +			pr_warn("crashkernel reservation failed - No suitable area found.\n");
+>> +			return;
+>> +		}
+>> +	} else {
+>> +		unsigned long long start;
+>> +
+>> +		start = memblock_find_in_range(crash_base, crash_base + crash_size,
+>> +						crash_size, 1);
+>> +		if (start != crash_base) {
+>> +			pr_warn("Invalid memory region reserved for crash kernel\n");
+>> +			return;
+>> +		}
+>> 	}
+>>
+>> 	crashk_res.start = crash_base;
 
