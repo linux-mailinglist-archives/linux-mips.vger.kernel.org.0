@@ -2,104 +2,165 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8717E270C29
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 11:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB44270C72
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 11:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726249AbgISJSl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 19 Sep 2020 05:18:41 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:20124 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726250AbgISJSl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Sep 2020 05:18:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600507120;
+        id S1726201AbgISJuD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 19 Sep 2020 05:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726097AbgISJuD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Sep 2020 05:50:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32A7C0613CE;
+        Sat, 19 Sep 2020 02:50:02 -0700 (PDT)
+Message-Id: <20200919091751.011116649@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600509000;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lfetqzo7kRPYXW7uWXLArRB8xjwWDZKQ4lA60FHitpQ=;
-        b=TGbUtK3/ijXQ9gr0j5xIufZjqZJpsSQn606slT7kRgnfHhphhiJVxbbgZQ7DjsXSRB3Vab
-        pBRQkblPP937ijIaPDZRDSlv+B50JOrLGwstDQTd+8VRMNfh257+YAwTKhaD7XzWyxNSUS
-        GbR08esNOed+Txod2Z/GTlaTbpA4a3s=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-151-AhdzIlUmO1e7TAKsLd7wUQ-1; Sat, 19 Sep 2020 05:18:36 -0400
-X-MC-Unique: AhdzIlUmO1e7TAKsLd7wUQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4F5801891E81;
-        Sat, 19 Sep 2020 09:18:34 +0000 (UTC)
-Received: from thuth.remote.csb (ovpn-112-63.ams2.redhat.com [10.36.112.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D5DD55771;
-        Sat, 19 Sep 2020 09:18:31 +0000 (UTC)
-Subject: Re: [PATCH] KVM: MIPS: Change the definition of kvm type
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhc@lemote.com>,
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wXMSkZdDTGr2cnZMoKDSJw7MNirhJVzX4vOCHJbvoN0=;
+        b=ul0AzmKXYj0qCi93y+r/rwwgxSXPin2sTe3PYhi7zjaY3NKa41EvWRmaZkAKju2f4qLfIs
+        i1aVPwNRkUKTlsYfZfyyB/zi5KZf7ZY7OD58PCvZV59UcRuCOhEQsNPck5r1VuTJtHi72C
+        +LNe+RY18cKtN3h7SPt+666fUzU5ch+DkMG/6qPFHiUag3Vd24Fa5TJBueGpK9wLzW3bo0
+        IscYJhM/dQECgU1ilCEI7V6IMnuxdAonST0geBGtFlUWgd5xXJJx546wfo5abrk+4cO8Sx
+        euhWyLJDvleHSJCh+QF6n/GwOhvNr9+hHKu+6tM3Z9VRQSgIOxJikgFGusnWsg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600509000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wXMSkZdDTGr2cnZMoKDSJw7MNirhJVzX4vOCHJbvoN0=;
+        b=KbJ6GiNRGpCyvVdElEw4H+4LtrSHxOXy5YeKjcqGSrhkBp5nKWiHepRirVJ50oI9WjzN2D
+        1DCAFhaD9E835KBw==
+Date:   Sat, 19 Sep 2020 11:17:51 +0200
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Paul McKenney <paulmck@kernel.org>, x86@kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
-References: <1599734031-28746-1-git-send-email-chenhc@lemote.com>
- <45a71ce2-42d2-ba49-72a3-155dacede289@redhat.com>
-From:   Thomas Huth <thuth@redhat.com>
-Message-ID: <dc709e46-1daf-98f2-8eb1-436096bb3274@redhat.com>
-Date:   Sat, 19 Sep 2020 11:18:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org
+Subject: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
+ kmap_atomic & friends
 MIME-Version: 1.0
-In-Reply-To: <45a71ce2-42d2-ba49-72a3-155dacede289@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/09/2020 19.22, Paolo Bonzini wrote:
-> On 10/09/20 12:33, Huacai Chen wrote:
->> MIPS defines two kvm types:
->>
->>  #define KVM_VM_MIPS_TE          0
->>  #define KVM_VM_MIPS_VZ          1
->>
->> In Documentation/virt/kvm/api.rst it is said that "You probably want to
->> use 0 as machine type", which implies that type 0 be the "automatic" or
->> "default" type. And, in user-space libvirt use the null-machine (with
->> type 0) to detect the kvm capability, which returns "KVM not supported"
->> on a VZ platform.
->>
->> I try to fix it in QEMU but it is ugly:
->> https://lists.nongnu.org/archive/html/qemu-devel/2020-08/msg05629.html
->>
->> And Thomas Huth suggests me to change the definition of kvm type:
->> https://lists.nongnu.org/archive/html/qemu-devel/2020-09/msg03281.html
->>
->> So I define like this:
->>
->>  #define KVM_VM_MIPS_AUTO        0
->>  #define KVM_VM_MIPS_VZ          1
->>  #define KVM_VM_MIPS_TE          2
->>
->> Since VZ and TE cannot co-exists, using type 0 on a TE platform will
->> still return success (so old user-space tools have no problems on new
->> kernels); the advantage is that using type 0 on a VZ platform will not
->> return failure. So, the only problem is "new user-space tools use type
->> 2 on old kernels", but if we treat this as a kernel bug, we can backport
->> this patch to old stable kernels.
-> 
-> I'm a bit wary to do that.  However it's not an issue for QEMU since it
-> generally updates the kernel headers.
-
-Are there any other userspace programs beside QEMU that use KVM on MIPS?
-If there aren't any other serious userspace programs, I think we should
-go ahead with this patch here. Otherwise, what are the other programs
-that could be affected?
-
- Thomas
-
-
+Rmlyc3Qgb2YgYWxsLCBzb3JyeSBmb3IgdGhlIGhvcnJpYmx5IGJpZyBDYyBsaXN0IQoKRm9sbG93
+aW5nIHVwIHRvIHRoZSBkaXNjdXNzaW9uIGluOgoKICBodHRwczovL2xvcmUua2VybmVsLm9yZy9y
+LzIwMjAwOTE0MjA0MjA5LjI1NjI2NjA5M0BsaW51dHJvbml4LmRlCgp0aGlzIHByb3ZpZGVzIGEg
+cHJlZW1wdGlibGUgdmFyaWFudCBvZiBrbWFwX2F0b21pYyAmIHJlbGF0ZWQKaW50ZXJmYWNlcy4g
+VGhpcyBpcyBhY2hpZXZlZCBieToKCiAtIENvbnNvbGlkYXRpbmcgYWxsIGttYXAgYXRvbWljIGlt
+cGxlbWVudGF0aW9ucyBpbiBnZW5lcmljIGNvZGUKCiAtIFN3aXRjaGluZyBmcm9tIHBlciBDUFUg
+c3RvcmFnZSBvZiB0aGUga21hcCBpbmRleCB0byBhIHBlciB0YXNrIHN0b3JhZ2UKCiAtIEFkZGlu
+ZyBhIHB0ZXZhbCBhcnJheSB0byB0aGUgcGVyIHRhc2sgc3RvcmFnZSB3aGljaCBjb250YWlucyB0
+aGUgcHRldmFscwogICBvZiB0aGUgY3VycmVudGx5IGFjdGl2ZSB0ZW1wb3Jhcnkga21hcHMKCiAt
+IEFkZGluZyBjb250ZXh0IHN3aXRjaCBjb2RlIHdoaWNoIGNoZWNrcyB3aGV0aGVyIHRoZSBvdXRn
+b2luZyBvciB0aGUKICAgaW5jb21pbmcgdGFzayBoYXMgYWN0aXZlIHRlbXBvcmFyeSBrbWFwcy4g
+SWYgc28sIHRoZSBvdXRnb2luZyB0YXNrJ3MKICAga21hcHMgYXJlIHJlbW92ZWQgYW5kIHRoZSBp
+bmNvbWluZyB0YXNrJ3Mga21hcHMgYXJlIHJlc3RvcmVkLgoKIC0gQWRkaW5nIG5ldyBpbnRlcmZh
+Y2VzIGtbdW5dbWFwX3RlbXBvcmFyeSooKSB3aGljaCBhcmUgbm90IGRpc2FibGluZwogICBwcmVl
+bXB0aW9uIGFuZCBjYW4gYmUgY2FsbGVkIGZyb20gYW55IGNvbnRleHQgKGV4Y2VwdCBOTUkpLgoK
+ICAgQ29udHJhcnkgdG8ga21hcCgpIHdoaWNoIHByb3ZpZGVzIHByZWVtcHRpYmxlIGFuZCAicGVy
+c2lzdGFudCIgbWFwcGluZ3MsCiAgIHRoZXNlIGludGVyZmFjZXMgYXJlIG1lYW50IHRvIHJlcGxh
+Y2UgdGhlIHRlbXBvcmFyeSBtYXBwaW5ncyBwcm92aWRlZCBieQogICBrbWFwX2F0b21pYyooKSB0
+b2RheS4KClRoaXMgYWxsb3dzIHRvIGdldCByaWQgb2YgY29uZGl0aW9uYWwgbWFwcGluZyBjaG9p
+Y2VzIGFuZCBhbGxvd3MgdG8gaGF2ZQpwcmVlbXB0aWJsZSBzaG9ydCB0ZXJtIG1hcHBpbmdzIG9u
+IDY0Yml0IHdoaWNoIGFyZSB0b2RheSBlbmZvcmNlZCB0byBiZQpub24tcHJlZW1wdGlibGUgZHVl
+IHRvIHRoZSBoaWdobWVtIGNvbnN0cmFpbnRzLiBJdCBjbGVhcmx5IHB1dHMgb3ZlcmhlYWQgb24K
+dGhlIGhpZ2htZW0gdXNlcnMsIGJ1dCBoaWdobWVtIGlzIHNsb3cgYW55d2F5LgoKVGhpcyBpcyBu
+b3QgYSB3aG9sZXNhbGUgY29udmVyc2lvbiB3aGljaCBtYWtlcyBrbWFwX2F0b21pYyBtYWdpY2Fs
+bHkKcHJlZW1wdGlibGUgYmVjYXVzZSB0aGVyZSBtaWdodCBiZSB1c2FnZSBzaXRlcyB3aGljaCBy
+ZWx5IG9uIHRoZSBpbXBsaWNpdApwcmVlbXB0IGRpc2FibGUuIFNvIHRoaXMgbmVlZHMgdG8gYmUg
+ZG9uZSBvbiBhIGNhc2UgYnkgY2FzZSBiYXNpcyBhbmQgdGhlCmNhbGwgc2l0ZXMgY29udmVydGVk
+IHRvIGttYXBfdGVtcG9yYXJ5LgoKTm90ZSwgdGhhdCB0aGlzIGlzIG9ubHkgbGlnaHRseSB0ZXN0
+ZWQgb24gWDg2IGFuZCBjb21wbGV0ZWx5IHVudGVzdGVkIG9uCmFsbCBvdGhlciBhcmNoaXRlY3R1
+cmVzLgoKVGhlIGxvdCBpcyBhbHNvIGF2YWlsYWJsZSBmcm9tCgogICBnaXQ6Ly9naXQua2VybmVs
+Lm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdGdseC9kZXZlbC5naXQgaGlnaG1lbQoKVGhh
+bmtzLAoKCXRnbHgKLS0tCiBhL2FyY2gvYXJtL21tL2hpZ2htZW0uYyAgICAgICAgICAgICAgIHwg
+IDEyMSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0KIGEvYXJjaC9taWNyb2JsYXplL21tL2hpZ2htZW0u
+YyAgICAgICAgfCAgIDc4IC0tLS0tLS0tLS0tLS0KIGEvYXJjaC9uZHMzMi9tbS9oaWdobWVtLmMg
+ICAgICAgICAgICAgfCAgIDQ4IC0tLS0tLS0tCiBhL2FyY2gvcG93ZXJwYy9tbS9oaWdobWVtLmMg
+ICAgICAgICAgIHwgICA2NyAtLS0tLS0tLS0tLQogYS9hcmNoL3NwYXJjL21tL2hpZ2htZW0uYyAg
+ICAgICAgICAgICB8ICAxMTUgLS0tLS0tLS0tLS0tLS0tLS0tLS0KIGFyY2gvYXJjL0tjb25maWcg
+ICAgICAgICAgICAgICAgICAgICAgfCAgICAxIAogYXJjaC9hcmMvaW5jbHVkZS9hc20vaGlnaG1l
+bS5oICAgICAgICB8ICAgIDggKwogYXJjaC9hcmMvbW0vaGlnaG1lbS5jICAgICAgICAgICAgICAg
+ICB8ICAgNDQgLS0tLS0tLQogYXJjaC9hcm0vS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgICB8
+ICAgIDEgCiBhcmNoL2FybS9pbmNsdWRlL2FzbS9oaWdobWVtLmggICAgICAgIHwgICAzMCArKyst
+LQogYXJjaC9hcm0vbW0vTWFrZWZpbGUgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBhcmNoL2Nz
+a3kvS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgIHwgICAgMSAKIGFyY2gvY3NreS9pbmNsdWRl
+L2FzbS9oaWdobWVtLmggICAgICAgfCAgICA0IAogYXJjaC9jc2t5L21tL2hpZ2htZW0uYyAgICAg
+ICAgICAgICAgICB8ICAgNzUgLS0tLS0tLS0tLS0tLQogYXJjaC9taWNyb2JsYXplL0tjb25maWcg
+ICAgICAgICAgICAgICB8ICAgIDEgCiBhcmNoL21pY3JvYmxhemUvaW5jbHVkZS9hc20vaGlnaG1l
+bS5oIHwgICAgNiAtCiBhcmNoL21pY3JvYmxhemUvbW0vTWFrZWZpbGUgICAgICAgICAgIHwgICAg
+MSAKIGFyY2gvbWljcm9ibGF6ZS9tbS9pbml0LmMgICAgICAgICAgICAgfCAgICA2IC0KIGFyY2gv
+bWlwcy9LY29uZmlnICAgICAgICAgICAgICAgICAgICAgfCAgICAxIAogYXJjaC9taXBzL2luY2x1
+ZGUvYXNtL2hpZ2htZW0uaCAgICAgICB8ICAgIDQgCiBhcmNoL21pcHMvbW0vaGlnaG1lbS5jICAg
+ICAgICAgICAgICAgIHwgICA3NyAtLS0tLS0tLS0tLS0tCiBhcmNoL21pcHMvbW0vaW5pdC5jICAg
+ICAgICAgICAgICAgICAgIHwgICAgMyAKIGFyY2gvbmRzMzIvS2NvbmZpZy5jcHUgICAgICAgICAg
+ICAgICAgfCAgICAxIAogYXJjaC9uZHMzMi9pbmNsdWRlL2FzbS9oaWdobWVtLmggICAgICB8ICAg
+MjEgKystCiBhcmNoL25kczMyL21tL01ha2VmaWxlICAgICAgICAgICAgICAgIHwgICAgMSAKIGFy
+Y2gvcG93ZXJwYy9LY29uZmlnICAgICAgICAgICAgICAgICAgfCAgICAxIAogYXJjaC9wb3dlcnBj
+L2luY2x1ZGUvYXNtL2hpZ2htZW0uaCAgICB8ICAgIDYgLQogYXJjaC9wb3dlcnBjL21tL01ha2Vm
+aWxlICAgICAgICAgICAgICB8ICAgIDEgCiBhcmNoL3Bvd2VycGMvbW0vbWVtLmMgICAgICAgICAg
+ICAgICAgIHwgICAgNyAtCiBhcmNoL3NwYXJjL0tjb25maWcgICAgICAgICAgICAgICAgICAgIHwg
+ICAgMSAKIGFyY2gvc3BhcmMvaW5jbHVkZS9hc20vaGlnaG1lbS5oICAgICAgfCAgICA3IC0KIGFy
+Y2gvc3BhcmMvbW0vTWFrZWZpbGUgICAgICAgICAgICAgICAgfCAgICAzIAogYXJjaC9zcGFyYy9t
+bS9zcm1tdS5jICAgICAgICAgICAgICAgICB8ICAgIDIgCiBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9m
+aXhtYXAuaCAgICAgICAgIHwgICAgMSAKIGFyY2gveDg2L2luY2x1ZGUvYXNtL2hpZ2htZW0uaCAg
+ICAgICAgfCAgIDEyICstCiBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9pb21hcC5oICAgICAgICAgIHwg
+ICAyOSArKystLQogYXJjaC94ODYvbW0vaGlnaG1lbV8zMi5jICAgICAgICAgICAgICB8ICAgNTkg
+LS0tLS0tLS0tLQogYXJjaC94ODYvbW0vaW5pdF8zMi5jICAgICAgICAgICAgICAgICB8ICAgMTUg
+LS0KIGFyY2gveDg2L21tL2lvbWFwXzMyLmMgICAgICAgICAgICAgICAgfCAgIDU3IC0tLS0tLS0t
+LS0KIGFyY2gveHRlbnNhL0tjb25maWcgICAgICAgICAgICAgICAgICAgfCAgICAxIAogYXJjaC94
+dGVuc2EvaW5jbHVkZS9hc20vaGlnaG1lbS5oICAgICB8ICAgIDkgKwogYXJjaC94dGVuc2EvbW0v
+aGlnaG1lbS5jICAgICAgICAgICAgICB8ICAgNDQgLS0tLS0tLQogYi9hcmNoL3g4Ni9LY29uZmln
+ICAgICAgICAgICAgICAgICAgICB8ICAgIDMgCiBpbmNsdWRlL2xpbnV4L2hpZ2htZW0uaCAgICAg
+ICAgICAgICAgIHwgIDE0MSArKysrKysrKysrKysrKystLS0tLS0tLS0KIGluY2x1ZGUvbGludXgv
+aW8tbWFwcGluZy5oICAgICAgICAgICAgfCAgICAyIAogaW5jbHVkZS9saW51eC9zY2hlZC5oICAg
+ICAgICAgICAgICAgICB8ICAgIDkgKwoga2VybmVsL3NjaGVkL2NvcmUuYyAgICAgICAgICAgICAg
+ICAgICB8ICAgMTAgKwogbW0vS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAg
+IDMgCiBtbS9oaWdobWVtLmMgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDE5MiArKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKy0tCiA0OSBmaWxlcyBjaGFuZ2VkLCA0MjIgaW5zZXJ0
+aW9ucygrKSwgOTA5IGRlbGV0aW9ucygtKQo=
