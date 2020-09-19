@@ -2,75 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A037E270987
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 02:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BAE2709D0
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 04:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726154AbgISAwH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Sep 2020 20:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgISAwH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Sep 2020 20:52:07 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0CCC0613CE;
-        Fri, 18 Sep 2020 17:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=Bdi+Xp/Uz5SX5F6bKzX/LNWrKxgSRH5Rf2H0YRsSQc0=; b=BG66IDlEWbX95+cObFyAdcEZ6o
-        D99VCZK1VtNAYoSvABcVaiK5glmgseErndVLl+yO2IOFRGqpIAGjhAQx/JMonfC4EXWBGkpvPbodz
-        LwfEwnRtcq0snbYdu2J4ftLEdMcg+r+0wIp0GdDUDVKduqyaSS8gbN8J0P3R9oWP5Uk9V0oxgvPQW
-        vTRG0cf927OZCzIumnA0+FaQd2YPU1b1B86k/bV+33ZCFaMDm28LIwZBKo+BEIQQ225xR4p3DikP/
-        br3c7LI4cU18eMI2a3A4/a4jbFcQSRjnZPHADQnLghKirP655MvVmbaM8+X587AHCRVI0ivLXAPKv
-        13O2zI4Q==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kJR6i-00049c-Tk; Sat, 19 Sep 2020 00:52:05 +0000
-To:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] Documentation: kernel-parameters: fix formatting of MIPS
- "machtype"
-Message-ID: <c9059e35-188d-a749-1907-767b53479328@infradead.org>
-Date:   Fri, 18 Sep 2020 17:52:02 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726269AbgISCCo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Sep 2020 22:02:44 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:44436 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726252AbgISCCo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 18 Sep 2020 22:02:44 -0400
+X-Greylist: delayed 412 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Sep 2020 22:02:41 EDT
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx6MQiZWVfIF8WAA--.1308S2;
+        Sat, 19 Sep 2020 09:55:46 +0800 (CST)
+From:   Youling Tang <tangyouling@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: kexec: Add crashkernel=YM handling
+Date:   Sat, 19 Sep 2020 09:55:46 +0800
+Message-Id: <1600480546-10448-1-git-send-email-tangyouling@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dx6MQiZWVfIF8WAA--.1308S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw4xJF1UGF4fZw15Zw1UWrg_yoW5WF13p3
+        4UAw4rKr48JF9rG3yfArnxCr4rA3WFyayUWFZrtrWFkF9xWrn8tr4fW3W7ZF9rtr9Yg3W7
+        ArsaqFsIka1rZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6w4l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bYlk3UUUUU=
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+When the kernel crashkernel parameter is specified with just a size,
+we are supposed to allocate a region from RAM to store the crashkernel.
+However, MIPS merely reserves physical address zero with no checking
+that there is even RAM there.
 
-For the "machtype" boot parameter,
-fix word spacing, line wrap, and plural of "laptops".
+Fix this by lifting similar code from x86, importing it to MIPS with the
+MIPS specific parameters added. In the absence of any platform specific
+information, we allocate the crashkernel region from the first 512MB of
+physical memory (limited to CKSEG0 or KSEG0 address range).
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org
+When X is not specified, crash_base defaults to 0 (crashkernel=YM@XM).
+
+E.g. without this patch:
+
+The environment as follows:
+[    0.000000] MIPS: machine is loongson,loongson64c-4core-ls7a
+...
+[    0.000000] Kernel command line: root=/dev/sda2 crashkernel=96M ...
+
+The warning as follows:
+[    0.000000] Invalid memory region reserved for crash kernel
+
+And the iomem as follows:
+00200000-0effffff : System RAM
+  00200000-00b47f87 : Kernel code
+  00b47f88-00dfffff : Kernel data
+  00e60000-01f73c7f : Kernel bss
+1a000000-1bffffff : pci@1a000000
+...
+
+With this patch:
+
+After increasing crash_base <= 0 handling.
+
+And the iomem as follows:
+00200000-0effffff : System RAM
+  00200000-00b47f87 : Kernel code
+  00b47f88-00dfffff : Kernel data
+  00e60000-01f73c7f : Kernel bss
+  04000000-09ffffff : Crash kernel
+1a000000-1bffffff : pci@1a000000
+...
+
+Signed-off-by: Youling Tang <tangyouling@loongson.cn>
 ---
- Documentation/admin-guide/kernel-parameters.txt |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/mips/kernel/setup.c | 24 +++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
 
---- linux-next-20200917.orig/Documentation/admin-guide/kernel-parameters.txt
-+++ linux-next-20200917/Documentation/admin-guide/kernel-parameters.txt
-@@ -2596,8 +2596,8 @@
- 			(machvec) in a generic kernel.
- 			Example: machvec=hpzx1
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index bf5f5ac..59a88ea 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -477,6 +477,11 @@ early_param("elfcorehdr", early_parse_elfcorehdr);
+ #endif
  
--	machtype=	[Loongson] Share the same kernel image file between different
--			 yeeloong laptop.
-+	machtype=	[Loongson] Share the same kernel image file between
-+			different yeeloong laptops.
- 			Example: machtype=lemote-yeeloong-2f-7inch
+ #ifdef CONFIG_KEXEC
++
++/* 64M alignment for crash kernel regions */
++#define CRASH_ALIGN	SZ_64M
++#define CRASH_ADDR_MAX	SZ_512M
++
+ static void __init mips_parse_crashkernel(void)
+ {
+ 	unsigned long long total_mem;
+@@ -489,9 +494,22 @@ static void __init mips_parse_crashkernel(void)
+ 	if (ret != 0 || crash_size <= 0)
+ 		return;
  
- 	max_addr=nn[KMG]	[KNL,BOOT,ia64] All physical memory greater
+-	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 1)) {
+-		pr_warn("Invalid memory region reserved for crash kernel\n");
+-		return;
++	if (crash_base <= 0) {
++		crash_base = memblock_find_in_range(CRASH_ALIGN, CRASH_ADDR_MAX,
++							crash_size, CRASH_ALIGN);
++		if (!crash_base) {
++			pr_warn("crashkernel reservation failed - No suitable area found.\n");
++			return;
++		}
++	} else {
++		unsigned long long start;
++
++		start = memblock_find_in_range(crash_base, crash_base + crash_size,
++						crash_size, 1);
++		if (start != crash_base) {
++			pr_warn("Invalid memory region reserved for crash kernel\n");
++			return;
++		}
+ 	}
+ 
+ 	crashk_res.start = crash_base;
+-- 
+2.1.0
 
