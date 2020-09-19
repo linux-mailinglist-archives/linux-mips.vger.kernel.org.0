@@ -2,38 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71057270FD2
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 19:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C624D271028
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 21:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgISRjX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 19 Sep 2020 13:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S1726520AbgISTSq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 19 Sep 2020 15:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726449AbgISRjX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Sep 2020 13:39:23 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D853EC0613CE;
-        Sat, 19 Sep 2020 10:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=K7cFTcsHe45qv1JJ+UknwUT4mvbkrB+z2Jy5+goIZf0=; b=GA8JmFgANuCgqfeQ26a1OMpRZE
-        ZlbdTi1XaGMnZkdmimNhxcmAfB4GoKEHChTyR/daa8IK0MpK+Ph2ryH9b//aJ7p80Ibs7l4BswfKA
-        sIzYu18LtoXosTxZAkge/rc7Gjb4PaaE+FfoSKec+IBx6JDUvF50gAZCGBJozVv3Q9TlSsMTvnq4U
-        keH99iWU1/g/8GqcgNItUNMFJkFHNg8zhSjOTYLGYkT6E6wJJ/7Hz/Yg8vF2N30AJY+JgAxJpcH7t
-        m+E+NNmErAuLXNLlz9CT3fJe5cNWm4y9wNwF8wRjFWgpkB/kQEiLyYiDCjBe1dWILsbbqWV9yJF6I
-        kDktgdcw==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kJgpG-0007zK-4s; Sat, 19 Sep 2020 17:39:06 +0000
-Date:   Sat, 19 Sep 2020 18:39:06 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        with ESMTP id S1726518AbgISTSp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Sep 2020 15:18:45 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55357C0613CE
+        for <linux-mips@vger.kernel.org>; Sat, 19 Sep 2020 12:18:45 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id z22so12445626ejl.7
+        for <linux-mips@vger.kernel.org>; Sat, 19 Sep 2020 12:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=10sVGN8u2TwfCpnAq/jp4iLrESxL2PzGGvVZbBHI37U=;
+        b=SNvzyY/D28nrQ/9in1B6Dzi002SQEpeIWQ8e1hzmI9hVRDCDcHjzeJE8AlbYJKjj8B
+         G7NnpY7h0luEeygyoDxqLDk2AWGbQCdyloo3Y9XIxWLvxZdXjZ/NeK2kaD/mL0YWoior
+         T+0jhpZUK76WT2Sz7na41qAPiBNog2OUpnoIA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=10sVGN8u2TwfCpnAq/jp4iLrESxL2PzGGvVZbBHI37U=;
+        b=eg9tMfsB0QaspvqgNfSperfwDSXLOo5zqYjYTcArynnDEPJFu6dtrtUur0FhgO17z+
+         zFAV9S2PsGbGdFoPKDPVPcJD86dkuDrdssjR6MLDCmFtlTwOxNiWtixNzQNZP46Zgkz5
+         tFPLv1o0o0MqyA9Y0A6uaSOXMZxmoYC87rjijXGAgq0oYuAcjxfNyxubjwgetrGdqfRZ
+         3yy++5rkdaDKRZomF/+Y8F/XpV7t5wW6mUAqda8Z9jkX+rRhQKr9Jz8F6DWpn5XujKoa
+         0BaMaOQf8qOh2i+q3U8tjTUo/DJMdmMMr5DxB1+u+K09ryCSPej6mjhoCUqf4XQUnXUm
+         10EA==
+X-Gm-Message-State: AOAM533jRZCjFinFgXEAh1hdt7DpDN2KqbInsIn7VbF3bDBgOvcbhL/Q
+        YwOtOFwtIj0I0QwcZ0TzFEDI+CYqsMGGfg==
+X-Google-Smtp-Source: ABdhPJz/wxLVTmIsFAGUzgiEG7oY4LkS8bDxzXtrB1pY6ei5sCh/9102dqXfG57ZwEXz/aJf2mAUhA==
+X-Received: by 2002:a17:906:b784:: with SMTP id dt4mr44622119ejb.376.1600543123701;
+        Sat, 19 Sep 2020 12:18:43 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id l21sm5198763ejg.124.2020.09.19.12.18.43
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Sep 2020 12:18:43 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id t16so9172306edw.7
+        for <linux-mips@vger.kernel.org>; Sat, 19 Sep 2020 12:18:43 -0700 (PDT)
+X-Received: by 2002:a19:8907:: with SMTP id l7mr12464193lfd.105.1600542797553;
+ Sat, 19 Sep 2020 12:13:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
+ <20200919173906.GQ32101@casper.infradead.org>
+In-Reply-To: <20200919173906.GQ32101@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 19 Sep 2020 12:13:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgyVxGaYkL71DhHgmyU=tE=4rEHgAkOYRq=1-9+q_adAw@mail.gmail.com>
+Message-ID: <CAHk-=wgyVxGaYkL71DhHgmyU=tE=4rEHgAkOYRq=1-9+q_adAw@mail.gmail.com>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
+ kmap_atomic & friends
+To:     Matthew Wilcox <willy@infradead.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -74,63 +105,19 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         "David S. Miller" <davem@davemloft.net>,
         linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-Message-ID: <20200919173906.GQ32101@casper.infradead.org>
-References: <20200919091751.011116649@linutronix.de>
- <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 10:18:54AM -0700, Linus Torvalds wrote:
-> On Sat, Sep 19, 2020 at 2:50 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >
-> > this provides a preemptible variant of kmap_atomic & related
-> > interfaces. This is achieved by:
-> 
-> Ack. This looks really nice, even apart from the new capability.
-> 
-> The only thing I really reacted to is that the name doesn't make sense
-> to me: "kmap_temporary()" seems a bit odd.
-> 
-> Particularly for an interface that really is basically meant as a
-> better replacement of "kmap_atomic()" (but is perhaps also a better
-> replacement for "kmap()").
-> 
-> I think I understand how the name came about: I think the "temporary"
-> is there as a distinction from the "longterm" regular kmap(). So I
-> think it makes some sense from an internal implementation angle, but I
-> don't think it makes a lot of sense from an interface name.
-> 
-> I don't know what might be a better name, but if we want to emphasize
-> that it's thread-private and a one-off, maybe "local" would be a
-> better naming, and make it distinct from the "global" nature of the
-> old kmap() interface?
-> 
-> However, another solution might be to just use this new preemptible
-> "local" kmap(), and remove the old global one entirely. Yes, the old
-> global one caches the page table mapping and that sounds really
-> efficient and nice. But it's actually horribly horribly bad, because
-> it means that we need to use locking for them. Your new "temporary"
-> implementation seems to be fundamentally better locking-wise, and only
-> need preemption disabling as locking (and is equally fast for the
-> non-highmem case).
-> 
-> So I wonder if the single-page TLB flush isn't a better model, and
-> whether it wouldn't be a lot simpler to just get rid of the old
-> complex kmap() entirely, and replace it with this?
-> 
-> I agree we can't replace the kmap_atomic() version, because maybe
-> people depend on the preemption disabling it also implied. But what
-> about replacing the non-atomic kmap()?
+On Sat, Sep 19, 2020 at 10:39 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> My concern with that is people might use kmap() and then pass the address
+> to a different task.  So we need to audit the current users of kmap()
+> and convert any that do that into using vmap() instead.
 
-My concern with that is people might use kmap() and then pass the address
-to a different task.  So we need to audit the current users of kmap()
-and convert any that do that into using vmap() instead.
+Ahh. Yes, I guess they might do that. It sounds strange, but not
+entirely crazy - I could imagine some "PIO thread" that does IO to a
+page that has been set up by somebody else using kmap(). Or similar.
 
-I like kmap_local().  Or kmap_thread().
+                Linus
