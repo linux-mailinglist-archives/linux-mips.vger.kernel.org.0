@@ -2,176 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E62C270BD8
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 10:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8717E270C29
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 11:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbgISI3r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 19 Sep 2020 04:29:47 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:38778 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726041AbgISI3r (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 19 Sep 2020 04:29:47 -0400
-Received: from [10.130.0.187] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD91zwWVfAG0WAA--.6874S3;
-        Sat, 19 Sep 2020 16:29:40 +0800 (CST)
-Subject: Re: [PATCH] MIPS: kexec: Add crashkernel=YM handling
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <1600480546-10448-1-git-send-email-tangyouling@loongson.cn>
- <3F79DD89-BE1E-456F-9297-273DDBB4E12A@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <e0154fb4-f2bd-5017-17ea-9827b95b8e68@loongson.cn>
-Date:   Sat, 19 Sep 2020 16:29:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726249AbgISJSl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 19 Sep 2020 05:18:41 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:20124 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726250AbgISJSl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Sep 2020 05:18:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600507120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lfetqzo7kRPYXW7uWXLArRB8xjwWDZKQ4lA60FHitpQ=;
+        b=TGbUtK3/ijXQ9gr0j5xIufZjqZJpsSQn606slT7kRgnfHhphhiJVxbbgZQ7DjsXSRB3Vab
+        pBRQkblPP937ijIaPDZRDSlv+B50JOrLGwstDQTd+8VRMNfh257+YAwTKhaD7XzWyxNSUS
+        GbR08esNOed+Txod2Z/GTlaTbpA4a3s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-151-AhdzIlUmO1e7TAKsLd7wUQ-1; Sat, 19 Sep 2020 05:18:36 -0400
+X-MC-Unique: AhdzIlUmO1e7TAKsLd7wUQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4F5801891E81;
+        Sat, 19 Sep 2020 09:18:34 +0000 (UTC)
+Received: from thuth.remote.csb (ovpn-112-63.ams2.redhat.com [10.36.112.63])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D5DD55771;
+        Sat, 19 Sep 2020 09:18:31 +0000 (UTC)
+Subject: Re: [PATCH] KVM: MIPS: Change the definition of kvm type
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+References: <1599734031-28746-1-git-send-email-chenhc@lemote.com>
+ <45a71ce2-42d2-ba49-72a3-155dacede289@redhat.com>
+From:   Thomas Huth <thuth@redhat.com>
+Message-ID: <dc709e46-1daf-98f2-8eb1-436096bb3274@redhat.com>
+Date:   Sat, 19 Sep 2020 11:18:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <3F79DD89-BE1E-456F-9297-273DDBB4E12A@flygoat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <45a71ce2-42d2-ba49-72a3-155dacede289@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxD91zwWVfAG0WAA--.6874S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF47XrWDZr1DCr1rtrW8JFb_yoWrWr1xpr
-        yUAa15GF4xGF9rGw4fArn3CryFyw1vvayUKrs5tryFkF909F1ktr4fWF17uryqvr1vgF1x
-        ZFs2qFsF9w1FyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487
-        MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-        JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
-        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU0-djtUUUUU==
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 11/09/2020 19.22, Paolo Bonzini wrote:
+> On 10/09/20 12:33, Huacai Chen wrote:
+>> MIPS defines two kvm types:
+>>
+>>  #define KVM_VM_MIPS_TE          0
+>>  #define KVM_VM_MIPS_VZ          1
+>>
+>> In Documentation/virt/kvm/api.rst it is said that "You probably want to
+>> use 0 as machine type", which implies that type 0 be the "automatic" or
+>> "default" type. And, in user-space libvirt use the null-machine (with
+>> type 0) to detect the kvm capability, which returns "KVM not supported"
+>> on a VZ platform.
+>>
+>> I try to fix it in QEMU but it is ugly:
+>> https://lists.nongnu.org/archive/html/qemu-devel/2020-08/msg05629.html
+>>
+>> And Thomas Huth suggests me to change the definition of kvm type:
+>> https://lists.nongnu.org/archive/html/qemu-devel/2020-09/msg03281.html
+>>
+>> So I define like this:
+>>
+>>  #define KVM_VM_MIPS_AUTO        0
+>>  #define KVM_VM_MIPS_VZ          1
+>>  #define KVM_VM_MIPS_TE          2
+>>
+>> Since VZ and TE cannot co-exists, using type 0 on a TE platform will
+>> still return success (so old user-space tools have no problems on new
+>> kernels); the advantage is that using type 0 on a VZ platform will not
+>> return failure. So, the only problem is "new user-space tools use type
+>> 2 on old kernels", but if we treat this as a kernel bug, we can backport
+>> this patch to old stable kernels.
+> 
+> I'm a bit wary to do that.  However it's not an issue for QEMU since it
+> generally updates the kernel headers.
 
+Are there any other userspace programs beside QEMU that use KVM on MIPS?
+If there aren't any other serious userspace programs, I think we should
+go ahead with this patch here. Otherwise, what are the other programs
+that could be affected?
 
-On 09/19/2020 03:02 PM, Jiaxun Yang wrote:
->
-> 于 2020年9月19日 GMT+08:00 上午9:55:46, Youling Tang <tangyouling@loongson.cn> 写到:
->> When the kernel crashkernel parameter is specified with just a size,
->> we are supposed to allocate a region from RAM to store the crashkernel.
->> However, MIPS merely reserves physical address zero with no checking
->> that there is even RAM there.
->>
->> Fix this by lifting similar code from x86, importing it to MIPS with the
->> MIPS specific parameters added. In the absence of any platform specific
->> information, we allocate the crashkernel region from the first 512MB of
->> physical memory (limited to CKSEG0 or KSEG0 address range).
->>
->> When X is not specified, crash_base defaults to 0 (crashkernel=YM@XM).
->>
->> E.g. without this patch:
->>
->> The environment as follows:
->> [    0.000000] MIPS: machine is loongson,loongson64c-4core-ls7a
->> ...
->> [    0.000000] Kernel command line: root=/dev/sda2 crashkernel=96M ...
->>
->> The warning as follows:
->> [    0.000000] Invalid memory region reserved for crash kernel
->>
->> And the iomem as follows:
->> 00200000-0effffff : System RAM
->>   00200000-00b47f87 : Kernel code
->>   00b47f88-00dfffff : Kernel data
->>   00e60000-01f73c7f : Kernel bss
->> 1a000000-1bffffff : pci@1a000000
->> ...
->>
->> With this patch:
->>
->> After increasing crash_base <= 0 handling.
->>
->> And the iomem as follows:
->> 00200000-0effffff : System RAM
->>   00200000-00b47f87 : Kernel code
->>   00b47f88-00dfffff : Kernel data
->>   00e60000-01f73c7f : Kernel bss
->>   04000000-09ffffff : Crash kernel
->> 1a000000-1bffffff : pci@1a000000
->> ...
->>
->> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
->> ---
->> arch/mips/kernel/setup.c | 24 +++++++++++++++++++++---
->> 1 file changed, 21 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
->> index bf5f5ac..59a88ea 100644
->> --- a/arch/mips/kernel/setup.c
->> +++ b/arch/mips/kernel/setup.c
->> @@ -477,6 +477,11 @@ early_param("elfcorehdr", early_parse_elfcorehdr);
->> #endif
->>
->> #ifdef CONFIG_KEXEC
->> +
->> +/* 64M alignment for crash kernel regions */
->> +#define CRASH_ALIGN	SZ_64M
->> +#define CRASH_ADDR_MAX	SZ_512M
-> Hi Youling
->
-> How do you determine the alignment requirement?
->
-> Can we relax it?
->
-> Thanks.
->
-> - Jiaxun
-Hi Jiaxun
+ Thomas
 
-Only when XM is not specified, 64M alignment is specified.
-
-After the capture kernel is configured with CRASH_DUMP, PHYSICAL_START
-defaults to 0x0xffffffff84000000 (64M). The kexec -p operation will
-succeed only when the reserved Crash kernel start address is consistent
-with PHYSICAL_START.
-
-The description of PHYSICAL_START in arch/mips/Kconfig:2996 is as follows:
-This gives the CKSEG0 or KSEG0 address where the kernel is loaded.If you
-plan to use kernel for capturing the crash dump change this value to start
-of the reserved region (the "X" value as specified in the 
-"crashkernel=YM@XM"
-command line boot parameter passed to the panic-ed kernel).
-
-Thanks,
-
-- Youling
->> +
->> static void __init mips_parse_crashkernel(void)
->> {
->> 	unsigned long long total_mem;
->> @@ -489,9 +494,22 @@ static void __init mips_parse_crashkernel(void)
->> 	if (ret != 0 || crash_size <= 0)
->> 		return;
->>
->> -	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 1)) {
->> -		pr_warn("Invalid memory region reserved for crash kernel\n");
->> -		return;
->> +	if (crash_base <= 0) {
->> +		crash_base = memblock_find_in_range(CRASH_ALIGN, CRASH_ADDR_MAX,
->> +							crash_size, CRASH_ALIGN);
->> +		if (!crash_base) {
->> +			pr_warn("crashkernel reservation failed - No suitable area found.\n");
->> +			return;
->> +		}
->> +	} else {
->> +		unsigned long long start;
->> +
->> +		start = memblock_find_in_range(crash_base, crash_base + crash_size,
->> +						crash_size, 1);
->> +		if (start != crash_base) {
->> +			pr_warn("Invalid memory region reserved for crash kernel\n");
->> +			return;
->> +		}
->> 	}
->>
->> 	crashk_res.start = crash_base;
 
