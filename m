@@ -2,137 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BAE2709D0
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 04:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B29C270A3C
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Sep 2020 04:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgISCCo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Sep 2020 22:02:44 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:44436 "EHLO loongson.cn"
+        id S1726474AbgISCwC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Sep 2020 22:52:02 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:13715 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726252AbgISCCo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 18 Sep 2020 22:02:44 -0400
-X-Greylist: delayed 412 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Sep 2020 22:02:41 EDT
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx6MQiZWVfIF8WAA--.1308S2;
-        Sat, 19 Sep 2020 09:55:46 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: kexec: Add crashkernel=YM handling
-Date:   Sat, 19 Sep 2020 09:55:46 +0800
-Message-Id: <1600480546-10448-1-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dx6MQiZWVfIF8WAA--.1308S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw4xJF1UGF4fZw15Zw1UWrg_yoW5WF13p3
-        4UAw4rKr48JF9rG3yfArnxCr4rA3WFyayUWFZrtrWFkF9xWrn8tr4fW3W7ZF9rtr9Yg3W7
-        ArsaqFsIka1rZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6w4l42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bYlk3UUUUU=
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+        id S1726382AbgISCvj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 18 Sep 2020 22:51:39 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id E0B8A29B20C02A2E11D7;
+        Sat, 19 Sep 2020 10:51:37 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.487.0; Sat, 19 Sep 2020 10:51:27 +0800
+From:   Qinglang Miao <miaoqinglang@huawei.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>
+CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Qinglang Miao" <miaoqinglang@huawei.com>
+Subject: [PATCH -next v2] mips: Convert to DEFINE_SHOW_ATTRIBUTE
+Date:   Sat, 19 Sep 2020 10:51:59 +0800
+Message-ID: <20200919025159.17337-1-miaoqinglang@huawei.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When the kernel crashkernel parameter is specified with just a size,
-we are supposed to allocate a region from RAM to store the crashkernel.
-However, MIPS merely reserves physical address zero with no checking
-that there is even RAM there.
+Use DEFINE_SHOW_ATTRIBUTE macro to simplify the code.
 
-Fix this by lifting similar code from x86, importing it to MIPS with the
-MIPS specific parameters added. In the absence of any platform specific
-information, we allocate the crashkernel region from the first 512MB of
-physical memory (limited to CKSEG0 or KSEG0 address range).
-
-When X is not specified, crash_base defaults to 0 (crashkernel=YM@XM).
-
-E.g. without this patch:
-
-The environment as follows:
-[    0.000000] MIPS: machine is loongson,loongson64c-4core-ls7a
-...
-[    0.000000] Kernel command line: root=/dev/sda2 crashkernel=96M ...
-
-The warning as follows:
-[    0.000000] Invalid memory region reserved for crash kernel
-
-And the iomem as follows:
-00200000-0effffff : System RAM
-  00200000-00b47f87 : Kernel code
-  00b47f88-00dfffff : Kernel data
-  00e60000-01f73c7f : Kernel bss
-1a000000-1bffffff : pci@1a000000
-...
-
-With this patch:
-
-After increasing crash_base <= 0 handling.
-
-And the iomem as follows:
-00200000-0effffff : System RAM
-  00200000-00b47f87 : Kernel code
-  00b47f88-00dfffff : Kernel data
-  00e60000-01f73c7f : Kernel bss
-  04000000-09ffffff : Crash kernel
-1a000000-1bffffff : pci@1a000000
-...
-
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
 ---
- arch/mips/kernel/setup.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+v2: based on linux-next(20200917), and can be applied to
+    mainline cleanly now.
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index bf5f5ac..59a88ea 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -477,6 +477,11 @@ early_param("elfcorehdr", early_parse_elfcorehdr);
- #endif
+ arch/mips/cavium-octeon/oct_ilm.c | 16 +++-------------
+ arch/mips/kernel/segment.c        | 14 ++------------
+ arch/mips/ralink/bootrom.c        | 14 ++------------
+ 3 files changed, 7 insertions(+), 37 deletions(-)
+
+diff --git a/arch/mips/cavium-octeon/oct_ilm.c b/arch/mips/cavium-octeon/oct_ilm.c
+index 99e27155b..10ed6ebdb 100644
+--- a/arch/mips/cavium-octeon/oct_ilm.c
++++ b/arch/mips/cavium-octeon/oct_ilm.c
+@@ -28,7 +28,7 @@ struct latency_info {
+ static struct latency_info li;
+ static struct dentry *dir;
  
- #ifdef CONFIG_KEXEC
-+
-+/* 64M alignment for crash kernel regions */
-+#define CRASH_ALIGN	SZ_64M
-+#define CRASH_ADDR_MAX	SZ_512M
-+
- static void __init mips_parse_crashkernel(void)
+-static int show_latency(struct seq_file *m, void *v)
++static int oct_ilm_show(struct seq_file *m, void *v)
  {
- 	unsigned long long total_mem;
-@@ -489,9 +494,22 @@ static void __init mips_parse_crashkernel(void)
- 	if (ret != 0 || crash_size <= 0)
- 		return;
+ 	u64 cpuclk, avg, max, min;
+ 	struct latency_info curr_li = li;
+@@ -44,17 +44,7 @@ static int show_latency(struct seq_file *m, void *v)
+ 	return 0;
+ }
  
--	if (!memblock_find_in_range(crash_base, crash_base + crash_size, crash_size, 1)) {
--		pr_warn("Invalid memory region reserved for crash kernel\n");
--		return;
-+	if (crash_base <= 0) {
-+		crash_base = memblock_find_in_range(CRASH_ALIGN, CRASH_ADDR_MAX,
-+							crash_size, CRASH_ALIGN);
-+		if (!crash_base) {
-+			pr_warn("crashkernel reservation failed - No suitable area found.\n");
-+			return;
-+		}
-+	} else {
-+		unsigned long long start;
-+
-+		start = memblock_find_in_range(crash_base, crash_base + crash_size,
-+						crash_size, 1);
-+		if (start != crash_base) {
-+			pr_warn("Invalid memory region reserved for crash kernel\n");
-+			return;
-+		}
- 	}
+-static int oct_ilm_open(struct inode *inode, struct file *file)
+-{
+-	return single_open(file, show_latency, NULL);
+-}
+-
+-static const struct file_operations oct_ilm_ops = {
+-	.open = oct_ilm_open,
+-	.read = seq_read,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-};
++DEFINE_SHOW_ATTRIBUTE(oct_ilm);
  
- 	crashk_res.start = crash_base;
+ static int reset_statistics(void *data, u64 value)
+ {
+@@ -67,7 +57,7 @@ DEFINE_SIMPLE_ATTRIBUTE(reset_statistics_ops, NULL, reset_statistics, "%llu\n");
+ static void init_debugfs(void)
+ {
+ 	dir = debugfs_create_dir("oct_ilm", 0);
+-	debugfs_create_file("statistics", 0222, dir, NULL, &oct_ilm_ops);
++	debugfs_create_file("statistics", 0222, dir, NULL, &oct_ilm_fops);
+ 	debugfs_create_file("reset", 0222, dir, NULL, &reset_statistics_ops);
+ }
+ 
+diff --git a/arch/mips/kernel/segment.c b/arch/mips/kernel/segment.c
+index 0a9bd7b09..778487bf3 100644
+--- a/arch/mips/kernel/segment.c
++++ b/arch/mips/kernel/segment.c
+@@ -46,7 +46,7 @@ static void build_segment_config(char *str, unsigned int cfg)
+ 		((cfg & MIPS_SEGCFG_EU) >> MIPS_SEGCFG_EU_SHIFT));
+ }
+ 
+-static int show_segments(struct seq_file *m, void *v)
++static int segments_show(struct seq_file *m, void *v)
+ {
+ 	unsigned int segcfg;
+ 	char str[42];
+@@ -81,17 +81,7 @@ static int show_segments(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ 
+-static int segments_open(struct inode *inode, struct file *file)
+-{
+-	return single_open(file, show_segments, NULL);
+-}
+-
+-static const struct file_operations segments_fops = {
+-	.open		= segments_open,
+-	.read		= seq_read,
+-	.llseek		= seq_lseek,
+-	.release	= single_release,
+-};
++DEFINE_SHOW_ATTRIBUTE(segments);
+ 
+ static int __init segments_info(void)
+ {
+diff --git a/arch/mips/ralink/bootrom.c b/arch/mips/ralink/bootrom.c
+index 94ca8379b..c57fd38fd 100644
+--- a/arch/mips/ralink/bootrom.c
++++ b/arch/mips/ralink/bootrom.c
+@@ -19,21 +19,11 @@ static int bootrom_show(struct seq_file *s, void *unused)
+ 	return 0;
+ }
+ 
+-static int bootrom_open(struct inode *inode, struct file *file)
+-{
+-	return single_open(file, bootrom_show, NULL);
+-}
+-
+-static const struct file_operations bootrom_file_ops = {
+-	.open		= bootrom_open,
+-	.read		= seq_read,
+-	.llseek		= seq_lseek,
+-	.release	= single_release,
+-};
++DEFINE_SHOW_ATTRIBUTE(bootrom);
+ 
+ static int __init bootrom_setup(void)
+ {
+-	debugfs_create_file("bootrom", 0444, NULL, NULL, &bootrom_file_ops);
++	debugfs_create_file("bootrom", 0444, NULL, NULL, &bootrom_fops);
+ 	return 0;
+ }
+ 
 -- 
-2.1.0
+2.23.0
 
