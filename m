@@ -2,112 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D4B27181A
-	for <lists+linux-mips@lfdr.de>; Sun, 20 Sep 2020 23:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D9C271823
+	for <lists+linux-mips@lfdr.de>; Sun, 20 Sep 2020 23:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726516AbgITVNi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 20 Sep 2020 17:13:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:43700 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726440AbgITVNh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 20 Sep 2020 17:13:37 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-64-HkvgTllpM-iYq_Po-gc7vg-1; Sun, 20 Sep 2020 22:13:25 +0100
-X-MC-Unique: HkvgTllpM-iYq_Po-gc7vg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Sun, 20 Sep 2020 22:13:24 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Sun, 20 Sep 2020 22:13:24 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>
-CC:     Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-aio <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>
-Subject: RE: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-Thread-Topic: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-Thread-Index: AQHWj495LxbJUITJXkeWJwtHmAdwxKlyBKsQ
-Date:   Sun, 20 Sep 2020 21:13:24 +0000
-Message-ID: <8363d874e503470f8caa201e85e9fbd4@AcuMS.aculab.com>
-References: <20200918124533.3487701-1-hch@lst.de>
- <20200918124533.3487701-2-hch@lst.de>
- <20200920151510.GS32101@casper.infradead.org>
- <20200920180742.GN3421308@ZenIV.linux.org.uk>
- <20200920190159.GT32101@casper.infradead.org>
- <20200920191031.GQ3421308@ZenIV.linux.org.uk>
- <20200920192259.GU32101@casper.infradead.org>
- <CALCETrXVtBkxNJcMxf9myaKT9snHKbCWUenKHGRfp8AOtORBPg@mail.gmail.com>
- <CAK8P3a37BRFj_qg61gP2oVrjJzBrZ58y1vggeTk_5n55Ou5U2Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a37BRFj_qg61gP2oVrjJzBrZ58y1vggeTk_5n55Ou5U2Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-Content-Language: en-US
+        id S1726303AbgITVNr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 20 Sep 2020 17:13:47 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43068 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726508AbgITVNq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 20 Sep 2020 17:13:46 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 628ADAC12;
+        Sun, 20 Sep 2020 21:14:20 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: malta: remove mach-malta/malta-dtshim.h header file
+Date:   Sun, 20 Sep 2020 23:13:42 +0200
+Message-Id: <20200920211343.117262-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyMCBTZXB0ZW1iZXIgMjAyMCAyMTo0OQ0KPiAN
-Cj4gT24gU3VuLCBTZXAgMjAsIDIwMjAgYXQgOToyOCBQTSBBbmR5IEx1dG9taXJza2kgPGx1dG9A
-a2VybmVsLm9yZz4gd3JvdGU6DQo+ID4gT24gU3VuLCBTZXAgMjAsIDIwMjAgYXQgMTI6MjMgUE0g
-TWF0dGhldyBXaWxjb3ggPHdpbGx5QGluZnJhZGVhZC5vcmc+IHdyb3RlOg0KPiA+ID4NCj4gPiA+
-IE9uIFN1biwgU2VwIDIwLCAyMDIwIGF0IDA4OjEwOjMxUE0gKzAxMDAsIEFsIFZpcm8gd3JvdGU6
-DQo+ID4gPiA+IElNTyBpdCdzIG11Y2ggc2FuZXIgdG8gbWFyayB0aG9zZSBhbmQgcmVmdXNlIHRv
-IHRvdWNoIHRoZW0gZnJvbSBpb191cmluZy4uLg0KPiA+ID4NCj4gPiA+IFNpbXBsZXIgc29sdXRp
-b24gaXMgdG8gcmVtb3ZlIGlvX3VyaW5nIGZyb20gdGhlIDMyLWJpdCBzeXNjYWxsIGxpc3QuDQo+
-ID4gPiBJZiB5b3UncmUgYSAzMi1iaXQgcHJvY2VzcywgeW91IGRvbid0IGdldCB0byB1c2UgaW9f
-dXJpbmcuICBXb3VsZA0KPiA+ID4gYW55IHJlYWwgdXNlcnMgYWN0dWFsbHkgY2FyZSBhYm91dCB0
-aGF0Pw0KPiA+DQo+ID4gV2UgY291bGQgZ28gb25lIHN0ZXAgZmFydGhlciBhbmQgZGVjbGFyZSB0
-aGF0IHdlJ3JlIGRvbmUgYWRkaW5nICphbnkqDQo+ID4gbmV3IGNvbXBhdCBzeXNjYWxscyA6KQ0K
-PiANCj4gV291bGQgeW91IGFsc28gc3RvcCBhZGRpbmcgc3lzdGVtIGNhbGxzIHRvIG5hdGl2ZSAz
-Mi1iaXQgc3lzdGVtcyB0aGVuPw0KPiANCj4gT24gbWVtb3J5IGNvbnN0cmFpbmVkIHN5c3RlbXMg
-KGxlc3MgdGhhbiAyR0IgYS50Lm0uKSwgdGhlcmUgaXMgc3RpbGwgYQ0KPiBzdHJvbmcgZGVtYW5k
-IGZvciBydW5uaW5nIDMyLWJpdCB1c2VyIHNwYWNlLCBidXQgYWxsIG9mIHRoZSByZWNlbnQgQXJt
-DQo+IGNvcmVzIChhZnRlciBDb3J0ZXgtQTU1KSBkcm9wcGVkIHRoZSBhYmlsaXR5IHRvIHJ1biAz
-Mi1iaXQga2VybmVscywgc28NCj4gdGhhdCBjb21wYXQgbW9kZSBtYXkgZXZlbnR1YWxseSBiZWNv
-bWUgdGhlIHByaW1hcnkgd2F5IHRvIHJ1bg0KPiBMaW51eCBvbiBjaGVhcCBlbWJlZGRlZCBzeXN0
-ZW1zLg0KPiANCj4gSSBkb24ndCB0aGluayB0aGVyZSBpcyBhbnkgY2hhbmNlIHdlIGNhbiByZWFs
-aXN0aWNhbGx5IHRha2UgYXdheSBpb191cmluZw0KPiBmcm9tIHRoZSAzMi1iaXQgQUJJIGFueSBt
-b3JlIG5vdy4NCg0KQ2FuJ3QgaXQganVzdCBydW4gcmVxdWVzdHMgZnJvbSAzMmJpdCBhcHBzIGlu
-IGEga2VybmVsIHRocmVhZCB0aGF0IGhhcw0KdGhlICdpbl9jb21wYXRfc3lzY2FsbCcgZmxhZyBz
-ZXQ/DQpOb3QgdGhhdCBpIHJlY2FsbCBzZWVpbmcgdGhlIGNvZGUgd2hlcmUgaXQgc2F2ZXMgdGhl
-ICdjb21wYXQnIG5hdHVyZQ0Kb2YgYW55IHJlcXVlc3RzLg0KDQpJdCBpcyBhbHJlYWR5IGNvbXBs
-ZXRlbHkgZipja2VkIGlmIHlvdSB0cnkgdG8gcGFzcyB0aGUgY29tbWFuZCByaW5nDQp0byBhIGNo
-aWxkIHByb2Nlc3MgLSBpdCB1c2VzIHRoZSB3cm9uZyAnbW0nLg0KSSBzdXNwZWN0IHRoZXJlIGFy
-ZSBzb21lIHJlYWxseSBob3JyaWQgc2VjdXJpdHkgaG9sZXMgaW4gdGhhdCBhcmVhLg0KDQoJRGF2
-aWQuDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3Vu
-dCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3
-Mzg2IChXYWxlcykNCg==
+To clean up mach-* directories move external declaration of malta_dt_shim()
+to mips-boards/malta.h and remove malta-dtshim.h.
+
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/include/asm/mach-malta/malta-dtshim.h | 25 -------------------------
+ arch/mips/include/asm/mips-boards/malta.h       |  2 ++
+ arch/mips/mti-malta/malta-setup.c               |  1 -
+ 3 files changed, 2 insertions(+), 26 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-malta/malta-dtshim.h
+
+diff --git a/arch/mips/include/asm/mach-malta/malta-dtshim.h b/arch/mips/include/asm/mach-malta/malta-dtshim.h
+deleted file mode 100644
+index 7c97b710121d..000000000000
+--- a/arch/mips/include/asm/mach-malta/malta-dtshim.h
++++ /dev/null
+@@ -1,25 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2015 Imagination Technologies
+- * Author: Paul Burton <paul.burton@mips.com>
+- */
+-
+-#ifndef __MIPS_MALTA_DTSHIM_H__
+-#define __MIPS_MALTA_DTSHIM_H__
+-
+-#include <linux/init.h>
+-
+-#ifdef CONFIG_MIPS_MALTA
+-
+-extern void __init *malta_dt_shim(void *fdt);
+-
+-#else /* !CONFIG_MIPS_MALTA */
+-
+-static inline void *malta_dt_shim(void *fdt)
+-{
+-	return fdt;
+-}
+-
+-#endif /* !CONFIG_MIPS_MALTA */
+-
+-#endif /* __MIPS_MALTA_DTSHIM_H__ */
+diff --git a/arch/mips/include/asm/mips-boards/malta.h b/arch/mips/include/asm/mips-boards/malta.h
+index 65de4fb06096..254be3d62519 100644
+--- a/arch/mips/include/asm/mips-boards/malta.h
++++ b/arch/mips/include/asm/mips-boards/malta.h
+@@ -92,4 +92,6 @@ static inline unsigned long get_msc_port_base(unsigned long reg)
+ 
+ #define MALTA_JMPRS_REG		0x1f000210
+ 
++extern void __init *malta_dt_shim(void *fdt);
++
+ #endif /* __ASM_MIPS_BOARDS_MALTA_H */
+diff --git a/arch/mips/mti-malta/malta-setup.c b/arch/mips/mti-malta/malta-setup.c
+index c4ad5a9b4bc1..e1fb8b534944 100644
+--- a/arch/mips/mti-malta/malta-setup.c
++++ b/arch/mips/mti-malta/malta-setup.c
+@@ -16,7 +16,6 @@
+ 
+ #include <asm/dma-coherence.h>
+ #include <asm/fw/fw.h>
+-#include <asm/mach-malta/malta-dtshim.h>
+ #include <asm/mips-cps.h>
+ #include <asm/mips-boards/generic.h>
+ #include <asm/mips-boards/malta.h>
+-- 
+2.16.4
 
