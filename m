@@ -2,40 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A6A27165D
-	for <lists+linux-mips@lfdr.de>; Sun, 20 Sep 2020 19:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52962271672
+	for <lists+linux-mips@lfdr.de>; Sun, 20 Sep 2020 19:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbgITRkq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 20 Sep 2020 13:40:46 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:46884 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbgITRkp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 20 Sep 2020 13:40:45 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1600623642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9ka0n+28OJXKPQLIVVR5Idhk3egkf6ni8LHSNLSNto8=;
-        b=QNCArf/vGifXO0hggd/oZT3co789XMX68FBpCZc9ELpUzjSb976p4qnrJXsUs4Wtn54Oe5
-        cREp7rnAnzQ2lkpB3S51Szog5eqcRviWtdYmN6anOoL9fmTtcQqDtDSWpVqORSo+xe9eNI
-        ov8P0XhtU/ulbV28ywMlU0xr6kjRfIcVtmCVZ2FKw+DGK6aL/ezJuFiklF8NhXvAMiIh49
-        yrsZFHHw6uzr03zNYpu3ftPmTuZ7RyM2m1FWCRDFflQbJ/wuC7iq3YbPgWy/7QFdvivYSQ
-        /Lqxr0wjpHyMFoiBEk4JJ16r2HL2cAu9GKsxBmw9WWw39VkpbDCGdel1jZCIGw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1600623642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9ka0n+28OJXKPQLIVVR5Idhk3egkf6ni8LHSNLSNto8=;
-        b=pomJJyR0iiUjZA6jjfbK7rYJBQcHpFL04sHLhdkrrobwFUG9h3ONNeKC4FHSzSIeasL6F6
-        5LIRCzwKaerEOICg==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        id S1726037AbgITRu4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 20 Sep 2020 13:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725858AbgITRu4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 20 Sep 2020 13:50:56 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A411C061755
+        for <linux-mips@vger.kernel.org>; Sun, 20 Sep 2020 10:50:56 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id l17so10619008edq.12
+        for <linux-mips@vger.kernel.org>; Sun, 20 Sep 2020 10:50:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ejz/GOVvBNgiciatH4EjBRwlfy2MnL1tDSObr2BrKeg=;
+        b=cBDZkiv4uiqeUChUbmqRPD8tkvllq4angLGjbI6fcWbyt0pYNQ1SGMQdEdmcewXaXT
+         IE5S9J/GFuNXr/rpY1dC/0Yf7uyzIPTs0u+8f3gLaQ3BI+ak5trluGhkQvuTa+ZLZ3HS
+         UcueGtftJ4Q3p1fqvR6MgwdAfAMUTTFhAr56U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ejz/GOVvBNgiciatH4EjBRwlfy2MnL1tDSObr2BrKeg=;
+        b=TCfmp6cMrg+NbxiHUjrLpQv1ESQrKdbEYs80QhZO2C4HUJ03XPM/9TwVZlnyu8nbzp
+         5PxMECk+dgXoX15F9yLkN+1vxPdfqXAhaukxg3z9vslessAKBapuabd2kb9fff3qw+P6
+         30IBOZN3ZDQC4yMPAQSwdn5E8pFoRSiZqzzzSIlzN5tmBVgRvlu4iPla1fbNOV6c1ycD
+         UvpMkydIcKRZdgxj94P197FeePRIdVFC5G+a672KgqkZlkDMfFOb8AjUROi81zcrQM5/
+         4QpPhAHlbyw8lZ47PhLipefrUVfr7q8ENotWOClZ1LhjUIXvkf38YL20jgeOBpylxsqq
+         PWDQ==
+X-Gm-Message-State: AOAM5308zTF4N/KETjjVHiauNTIwnCtnLZOnVtMvM7G8QIOt1DyLrb1O
+        IDODKw0cBW9UtippVy7EqbmVJNSSSSyTpA==
+X-Google-Smtp-Source: ABdhPJznoxpRFzUfgPAK07lAp6K5lcIiJK9GHjnHFRlt+Y1z8+pZpwDBuCYz30ei1z8nqz6h7RQMEw==
+X-Received: by 2002:a50:ab1d:: with SMTP id s29mr50518617edc.246.1600624254462;
+        Sun, 20 Sep 2020 10:50:54 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id k13sm6913317edj.92.2020.09.20.10.50.54
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Sep 2020 10:50:54 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id w5so10421236wrp.8
+        for <linux-mips@vger.kernel.org>; Sun, 20 Sep 2020 10:50:54 -0700 (PDT)
+X-Received: by 2002:a2e:84d6:: with SMTP id q22mr13708479ljh.70.1600623791519;
+ Sun, 20 Sep 2020 10:43:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
+ <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <87eemwcpnq.fsf@nanos.tec.linutronix.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 20 Sep 2020 10:42:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+Message-ID: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
+ kmap_atomic & friends
+To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -62,7 +91,7 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Vineet Gupta <vgupta@synopsys.com>,
-        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
         <linux-snps-arc@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
@@ -76,82 +105,24 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         "David S. Miller" <davem@davemloft.net>,
         linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
-In-Reply-To: <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
-References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com> <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de> <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
-Date:   Sun, 20 Sep 2020 19:40:41 +0200
-Message-ID: <87eemwcpnq.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Sep 20 2020 at 09:57, Linus Torvalds wrote:
-> On Sun, Sep 20, 2020 at 1:49 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> Btw, looking at the stack code, Ithink your new implementation of it
-> is a bit scary:
+On Sun, Sep 20, 2020 at 10:40 AM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
->    static inline int kmap_atomic_idx_push(void)
->    {
->   -       int idx = __this_cpu_inc_return(__kmap_atomic_idx) - 1;
->   +       int idx = current->kmap_ctrl.idx++;
+> I think the more obvious solution is to split the whole exercise:
 >
-> and now that 'current->kmap_ctrl.idx' is not atomic wrt
+>   schedule()
+>      prepare_switch()
+>         unmap()
 >
->  (a) NMI's (this may be ok, maybe we never do kmaps in NMIs, and with
-> nesting I think it's fine anyway - the NMI will undo whatever it did)
-
-Right. Nesting should be a non issue, but I don't think we have
-kmap_atomic() in NMI context.
-
->  (b) the prev/next switch
+>     switch_to()
 >
-> And that (b) part worries me. You do the kmap_switch_temporary() to
-> switch the entries, but you do that *separately* from actually
-> switching 'current' to the new value.
->
-> So kmap_switch_temporary() looks safe, but I don't think it actually
-> is. Because while it first unmaps the old entries and then remaps the
-> new ones, an interrupt can come in, and at that point it matters what
-> is *CURRENT*.
->
-> And regardless of whether 'current' is 'prev' or 'next', that
-> kmap_switch_temporary() loop may be doing the wrong thing, depending
-> on which one had the deeper stack. The interrupt will be using
-> whatever "current->kmap_ctrl.idx" is, but that might overwrite entries
-> that are in the process of being restored (if current is still 'prev',
-> but kmap_switch_temporary() is in the "restore @next's kmaps" pgase),
-> or it might stomp on entries that have been pte_clear()'ed by the
-> 'prev' thing.
+>     finish_switch()
+>         map()
 
-Duh yes. Never thought about that.
+Yeah, that looks much easier to explain. Ack.
 
-> Alternatively, that process counter would need about a hundred lines
-> of commentary about exactly why it's safe. Because I don't think it
-> is.
-
-I think the more obvious solution is to split the whole exercise:
-
-
-  schedule()
-     prepare_switch()
-        unmap()
-
-    switch_to()
-
-    finish_switch()
-        map()
-
-That's safe because neither the unmap() nor the map() code changes
-kmap_ctrl.idx. So if there is an interrupt coming in between unmap() and
-switch_to() then a kmap_local() there will use the next entry. So we
-could even do the unmap() with interrupts enabled (preemption disabled).
-Same for the map() part.
-
-To explain that we need only a few lines of commentry methinks.
-
-Thanks,
-
-        tglx
-
+               Linus
