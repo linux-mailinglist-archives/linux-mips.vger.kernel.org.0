@@ -2,104 +2,234 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5092B2717F5
-	for <lists+linux-mips@lfdr.de>; Sun, 20 Sep 2020 22:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9ADA2717FA
+	for <lists+linux-mips@lfdr.de>; Sun, 20 Sep 2020 22:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726314AbgITUt1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 20 Sep 2020 16:49:27 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:59005 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbgITUt1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 20 Sep 2020 16:49:27 -0400
-Received: from mail-qt1-f182.google.com ([209.85.160.182]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1N8XHb-1kWs4J3JmT-014Ptw; Sun, 20 Sep 2020 22:49:23 +0200
-Received: by mail-qt1-f182.google.com with SMTP id g3so10564365qtq.10;
-        Sun, 20 Sep 2020 13:49:21 -0700 (PDT)
-X-Gm-Message-State: AOAM533FAqUmi9ggyBgk95+0qEs9x8sjXEEQE6YM9b/GmWlH5oFml7xM
-        tQFQtTWGHBUJ+ZKkulQ0J5mbPHkWHrsIJ3/Vf1A=
-X-Google-Smtp-Source: ABdhPJwBXwBil3iRHV11f3BxYsgRD++l69TenwTYSqKgYe+2Dux9TFUrSKvqlq1FFlXpzrttVMSzDz47tEK6RfJnMjg=
-X-Received: by 2002:aed:2ce5:: with SMTP id g92mr30020804qtd.204.1600634960428;
- Sun, 20 Sep 2020 13:49:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200918124533.3487701-1-hch@lst.de> <20200918124533.3487701-2-hch@lst.de>
- <20200920151510.GS32101@casper.infradead.org> <20200920180742.GN3421308@ZenIV.linux.org.uk>
- <20200920190159.GT32101@casper.infradead.org> <20200920191031.GQ3421308@ZenIV.linux.org.uk>
- <20200920192259.GU32101@casper.infradead.org> <CALCETrXVtBkxNJcMxf9myaKT9snHKbCWUenKHGRfp8AOtORBPg@mail.gmail.com>
-In-Reply-To: <CALCETrXVtBkxNJcMxf9myaKT9snHKbCWUenKHGRfp8AOtORBPg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 20 Sep 2020 22:49:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a37BRFj_qg61gP2oVrjJzBrZ58y1vggeTk_5n55Ou5U2Q@mail.gmail.com>
-Message-ID: <CAK8P3a37BRFj_qg61gP2oVrjJzBrZ58y1vggeTk_5n55Ou5U2Q@mail.gmail.com>
-Subject: Re: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-aio <linux-aio@kvack.org>, io-uring@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:CVl0ZST0kq+ZM8bIyVy4buxByYewwVWTGaSQX2cG7S+fxfOLfg4
- 3IYQ1WP9vOXA8wRJwMcZrEPB4//duV8Ezeyis3yGi12DLKgs/AttJWnePBnn8Tp2+uaC/ge
- glaUSs0pf4QOVqQCS3dbPqrr+HVUhs3EVO6/ZQWS1fjn9MdptiKjtHzdDpBD3MOE+/lqWn4
- qrZAlLdnkVWlRVBK6p/Xg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:f3fveQ4ykwA=:KAthfX0nOA+uyVgjLJ5kAm
- +/NVDftUAleKVGB39k3aR+WDoJXnKOKr6t0aNGpkuqe7jfEq/uGu2lDt3nAOfF8VCbJPOf4sD
- EgLD/hnHr9RytPu/kIn5l/M3EBZ8RMtiJ1xJQZNflulbXLsBTwNWmmZ8iZ6gB6DuAOUBSBxSC
- t853woJyRuBR5tuswbZynFfuGe33fG3jbhQK7yAXsaw9n7fUE0xDXyYvaZCdUz8xqATZDqjey
- nYZQbfbxA4yMlNPr70CtwEsRXZfZeS1qFqGeT43XWfVwEWJi2jjBUEMh4JhQ21IT5k7O+EobU
- kGGbTkmhquG64kwlsXoOIPQrgEv7h40navwp6Hox2SlcjftISGtvKG5O/CcTZ1vU4HX/HvuHC
- kFKPhyT89sDque3Fz2CYyKS24aoMJMsiee2bPj12K0A1+lSil9cIuWHnhrgHHYwgzFDFNtLC0
- WyJH63cIEgohAbXtU9AmMhBTOAYK2MBtu5WarlG36VJyxmIEXBsEi8AiU6DMZrkNB7rKhw0SH
- g7tVgijFac4tF/ImrUh3277u2SPu3b+aCRqOSlL6ujCW6QJNhZT6bEH0UzrVkMQOPe8RX4mqd
- 3Q3/xiTMKfaOWNw4LpD2G3oAnrxTrvMVK64rlvlguG9O2vzugecMZ1ODciPfxq+rXPGyAfJRu
- pLeh2aR8vSevKSlkxmTUYkCNXe8vIwxrPDZQZuIOzVaJqVxHH4NzxwbWjk5IyiiV3590nWd2f
- UB4Gj65iTtx5p/d2Mv52pqinXBPIOrh02+jFufA90d1Pj9Az9vPqOY5Df2zY2LWHaUsBZXxB0
- BqJAswtSXAA97rNNoyP5162ODXNDLV8UHH0m6k/E9vkD8feGqKIjajwGStAE1k0b1BXWEin
+        id S1726332AbgITUv5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 20 Sep 2020 16:51:57 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39326 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726126AbgITUv5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 20 Sep 2020 16:51:57 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id C9CABAC12;
+        Sun, 20 Sep 2020 20:52:29 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: SGI-IP30: Move irq bits to better header files
+Date:   Sun, 20 Sep 2020 22:51:50 +0200
+Message-Id: <20200920205151.112113-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Sep 20, 2020 at 9:28 PM Andy Lutomirski <luto@kernel.org> wrote:
-> On Sun, Sep 20, 2020 at 12:23 PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Sun, Sep 20, 2020 at 08:10:31PM +0100, Al Viro wrote:
-> > > IMO it's much saner to mark those and refuse to touch them from io_uring...
-> >
-> > Simpler solution is to remove io_uring from the 32-bit syscall list.
-> > If you're a 32-bit process, you don't get to use io_uring.  Would
-> > any real users actually care about that?
->
-> We could go one step farther and declare that we're done adding *any*
-> new compat syscalls :)
+Move HEART specific parts of mach-ip30/irq.h to asm/sgi/heart.h and IP30
+specific parts to sgi-ip30/ip30-common.h.
 
-Would you also stop adding system calls to native 32-bit systems then?
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/include/asm/mach-ip30/irq.h | 87 -----------------------------------
+ arch/mips/include/asm/sgi/heart.h     | 51 ++++++++++++++++++++
+ arch/mips/sgi-ip30/ip30-common.h      | 14 ++++++
+ arch/mips/sgi-ip30/ip30-irq.c         |  2 +
+ 4 files changed, 67 insertions(+), 87 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-ip30/irq.h
 
-On memory constrained systems (less than 2GB a.t.m.), there is still a
-strong demand for running 32-bit user space, but all of the recent Arm
-cores (after Cortex-A55) dropped the ability to run 32-bit kernels, so
-that compat mode may eventually become the primary way to run
-Linux on cheap embedded systems.
+diff --git a/arch/mips/include/asm/mach-ip30/irq.h b/arch/mips/include/asm/mach-ip30/irq.h
+deleted file mode 100644
+index 27ba899c95be..000000000000
+--- a/arch/mips/include/asm/mach-ip30/irq.h
++++ /dev/null
+@@ -1,87 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * HEART IRQ defines
+- *
+- * Copyright (C) 2009 Johannes Dickgreber <tanzy@gmx.de>
+- *		 2014-2016 Joshua Kinard <kumba@gentoo.org>
+- *
+- */
+-
+-#ifndef __ASM_MACH_IP30_IRQ_H
+-#define __ASM_MACH_IP30_IRQ_H
+-
+-/*
+- * HEART has 64 hardware interrupts, but use 128 to leave room for a few
+- * software interrupts as well (such as the CPU timer interrupt.
+- */
+-#define NR_IRQS				128
+-
+-extern void __init ip30_install_ipi(void);
+-
+-/*
+- * HEART has 64 interrupt vectors available to it, subdivided into five
+- * priority levels.  They are numbered 0 to 63.
+- */
+-#define HEART_NUM_IRQS			64
+-
+-/*
+- * These are the five interrupt priority levels and their corresponding
+- * CPU IPx interrupt pins.
+- *
+- * Level 4 - Error Interrupts.
+- * Level 3 - HEART timer interrupt.
+- * Level 2 - CPU IPI, CPU debug, power putton, general device interrupts.
+- * Level 1 - General device interrupts.
+- * Level 0 - General device GFX flow control interrupts.
+- */
+-#define HEART_L4_INT_MASK		0xfff8000000000000ULL	/* IP6 */
+-#define HEART_L3_INT_MASK		0x0004000000000000ULL	/* IP5 */
+-#define HEART_L2_INT_MASK		0x0003ffff00000000ULL	/* IP4 */
+-#define HEART_L1_INT_MASK		0x00000000ffff0000ULL	/* IP3 */
+-#define HEART_L0_INT_MASK		0x000000000000ffffULL	/* IP2 */
+-
+-/* HEART L0 Interrupts (Low Priority) */
+-#define HEART_L0_INT_GENERIC		 0
+-#define HEART_L0_INT_FLOW_CTRL_HWTR_0	 1
+-#define HEART_L0_INT_FLOW_CTRL_HWTR_1	 2
+-
+-/* HEART L2 Interrupts (High Priority) */
+-#define HEART_L2_INT_RESCHED_CPU_0	46
+-#define HEART_L2_INT_RESCHED_CPU_1	47
+-#define HEART_L2_INT_CALL_CPU_0		48
+-#define HEART_L2_INT_CALL_CPU_1		49
+-
+-/* HEART L3 Interrupts (Compare/Counter Timer) */
+-#define HEART_L3_INT_TIMER		50
+-
+-/* HEART L4 Interrupts (Errors) */
+-#define HEART_L4_INT_XWID_ERR_9		51
+-#define HEART_L4_INT_XWID_ERR_A		52
+-#define HEART_L4_INT_XWID_ERR_B		53
+-#define HEART_L4_INT_XWID_ERR_C		54
+-#define HEART_L4_INT_XWID_ERR_D		55
+-#define HEART_L4_INT_XWID_ERR_E		56
+-#define HEART_L4_INT_XWID_ERR_F		57
+-#define HEART_L4_INT_XWID_ERR_XBOW	58
+-#define HEART_L4_INT_CPU_BUS_ERR_0	59
+-#define HEART_L4_INT_CPU_BUS_ERR_1	60
+-#define HEART_L4_INT_CPU_BUS_ERR_2	61
+-#define HEART_L4_INT_CPU_BUS_ERR_3	62
+-#define HEART_L4_INT_HEART_EXCP		63
+-
+-/*
+- * Power Switch is wired via BaseIO BRIDGE slot #6.
+- *
+- * ACFail is wired via BaseIO BRIDGE slot #7.
+- */
+-#define IP30_POWER_IRQ		HEART_L2_INT_POWER_BTN
+-
+-#include <asm/mach-generic/irq.h>
+-
+-#define IP30_HEART_L0_IRQ	(MIPS_CPU_IRQ_BASE + 2)
+-#define IP30_HEART_L1_IRQ	(MIPS_CPU_IRQ_BASE + 3)
+-#define IP30_HEART_L2_IRQ	(MIPS_CPU_IRQ_BASE + 4)
+-#define IP30_HEART_TIMER_IRQ	(MIPS_CPU_IRQ_BASE + 5)
+-#define IP30_HEART_ERR_IRQ	(MIPS_CPU_IRQ_BASE + 6)
+-
+-#endif /* __ASM_MACH_IP30_IRQ_H */
+diff --git a/arch/mips/include/asm/sgi/heart.h b/arch/mips/include/asm/sgi/heart.h
+index c423221b4792..0d03751955c4 100644
+--- a/arch/mips/include/asm/sgi/heart.h
++++ b/arch/mips/include/asm/sgi/heart.h
+@@ -264,6 +264,57 @@ struct ip30_heart_regs {		/* 0x0ff00000 */
+ #define HC_NCOR_MEM_ERR			BIT(1)
+ #define HC_COR_MEM_ERR			BIT(0)
+ 
++/*
++ * HEART has 64 interrupt vectors available to it, subdivided into five
++ * priority levels.  They are numbered 0 to 63.
++ */
++#define HEART_NUM_IRQS			64
++
++/*
++ * These are the five interrupt priority levels and their corresponding
++ * CPU IPx interrupt pins.
++ *
++ * Level 4 - Error Interrupts.
++ * Level 3 - HEART timer interrupt.
++ * Level 2 - CPU IPI, CPU debug, power putton, general device interrupts.
++ * Level 1 - General device interrupts.
++ * Level 0 - General device GFX flow control interrupts.
++ */
++#define HEART_L4_INT_MASK		0xfff8000000000000ULL	/* IP6 */
++#define HEART_L3_INT_MASK		0x0004000000000000ULL	/* IP5 */
++#define HEART_L2_INT_MASK		0x0003ffff00000000ULL	/* IP4 */
++#define HEART_L1_INT_MASK		0x00000000ffff0000ULL	/* IP3 */
++#define HEART_L0_INT_MASK		0x000000000000ffffULL	/* IP2 */
++
++/* HEART L0 Interrupts (Low Priority) */
++#define HEART_L0_INT_GENERIC		 0
++#define HEART_L0_INT_FLOW_CTRL_HWTR_0	 1
++#define HEART_L0_INT_FLOW_CTRL_HWTR_1	 2
++
++/* HEART L2 Interrupts (High Priority) */
++#define HEART_L2_INT_RESCHED_CPU_0	46
++#define HEART_L2_INT_RESCHED_CPU_1	47
++#define HEART_L2_INT_CALL_CPU_0		48
++#define HEART_L2_INT_CALL_CPU_1		49
++
++/* HEART L3 Interrupts (Compare/Counter Timer) */
++#define HEART_L3_INT_TIMER		50
++
++/* HEART L4 Interrupts (Errors) */
++#define HEART_L4_INT_XWID_ERR_9		51
++#define HEART_L4_INT_XWID_ERR_A		52
++#define HEART_L4_INT_XWID_ERR_B		53
++#define HEART_L4_INT_XWID_ERR_C		54
++#define HEART_L4_INT_XWID_ERR_D		55
++#define HEART_L4_INT_XWID_ERR_E		56
++#define HEART_L4_INT_XWID_ERR_F		57
++#define HEART_L4_INT_XWID_ERR_XBOW	58
++#define HEART_L4_INT_CPU_BUS_ERR_0	59
++#define HEART_L4_INT_CPU_BUS_ERR_1	60
++#define HEART_L4_INT_CPU_BUS_ERR_2	61
++#define HEART_L4_INT_CPU_BUS_ERR_3	62
++#define HEART_L4_INT_HEART_EXCP		63
++
+ extern struct ip30_heart_regs __iomem *heart_regs;
+ 
+ #define heart_read	____raw_readq
+diff --git a/arch/mips/sgi-ip30/ip30-common.h b/arch/mips/sgi-ip30/ip30-common.h
+index d2bcaee712f3..7b5db24b6279 100644
+--- a/arch/mips/sgi-ip30/ip30-common.h
++++ b/arch/mips/sgi-ip30/ip30-common.h
+@@ -3,6 +3,20 @@
+ #ifndef __IP30_COMMON_H
+ #define __IP30_COMMON_H
+ 
++/*
++ * Power Switch is wired via BaseIO BRIDGE slot #6.
++ *
++ * ACFail is wired via BaseIO BRIDGE slot #7.
++ */
++#define IP30_POWER_IRQ		HEART_L2_INT_POWER_BTN
++
++#define IP30_HEART_L0_IRQ	(MIPS_CPU_IRQ_BASE + 2)
++#define IP30_HEART_L1_IRQ	(MIPS_CPU_IRQ_BASE + 3)
++#define IP30_HEART_L2_IRQ	(MIPS_CPU_IRQ_BASE + 4)
++#define IP30_HEART_TIMER_IRQ	(MIPS_CPU_IRQ_BASE + 5)
++#define IP30_HEART_ERR_IRQ	(MIPS_CPU_IRQ_BASE + 6)
++
++extern void __init ip30_install_ipi(void);
+ extern struct plat_smp_ops ip30_smp_ops;
+ extern void __init ip30_per_cpu_init(void);
+ 
+diff --git a/arch/mips/sgi-ip30/ip30-irq.c b/arch/mips/sgi-ip30/ip30-irq.c
+index c2ffcb920250..e8374e4c705b 100644
+--- a/arch/mips/sgi-ip30/ip30-irq.c
++++ b/arch/mips/sgi-ip30/ip30-irq.c
+@@ -14,6 +14,8 @@
+ #include <asm/irq_cpu.h>
+ #include <asm/sgi/heart.h>
+ 
++#include "ip30-common.h"
++
+ struct heart_irq_data {
+ 	u64	*irq_mask;
+ 	int	cpu;
+-- 
+2.16.4
 
-I don't think there is any chance we can realistically take away io_uring
-from the 32-bit ABI any more now.
-
-      Arnd
