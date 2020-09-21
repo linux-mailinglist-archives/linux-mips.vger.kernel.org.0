@@ -2,203 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F310C273362
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 21:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C63AA27347B
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 22:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728083AbgIUT62 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Sep 2020 15:58:28 -0400
-Received: from mga09.intel.com ([134.134.136.24]:6567 "EHLO mga09.intel.com"
+        id S1727591AbgIUU7w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Sep 2020 16:59:52 -0400
+Received: from elvis.franken.de ([193.175.24.41]:49843 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727197AbgIUT61 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 21 Sep 2020 15:58:27 -0400
-IronPort-SDR: rGkQ8Ecn3RdphPtP6caXGYgD+FcvA6RwBTyeWuzrNdI2h8XRvK+IUIeCT3Si0BglJpbU5to+io
- ADKkpkVtFatQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="161391856"
-X-IronPort-AV: E=Sophos;i="5.77,287,1596524400"; 
-   d="scan'208";a="161391856"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 12:58:26 -0700
-IronPort-SDR: uOMQ77kzm8Nf+yWek1kTuScXulU6TmYu78CjdACPceLW7H1QaWd6t0P9Uf87NBJvd3fOhvq6oe
- f2Bh5k5J2ZCg==
-X-IronPort-AV: E=Sophos;i="5.77,287,1596524400"; 
-   d="scan'208";a="485647918"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 12:58:25 -0700
-Date:   Mon, 21 Sep 2020 12:58:25 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-Message-ID: <20200921195824.GM2540965@iweiny-DESK2.sc.intel.com>
-References: <20200919091751.011116649@linutronix.de>
- <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
- <20200919173906.GQ32101@casper.infradead.org>
+        id S1728113AbgIUU7o (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 21 Sep 2020 16:59:44 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kKSuS-0001Rx-00; Mon, 21 Sep 2020 22:59:40 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 404A1C0FE2; Mon, 21 Sep 2020 22:13:29 +0200 (CEST)
+Date:   Mon, 21 Sep 2020 22:13:29 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     paul@crapouillou.net, paulburton@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        jiaxun.yang@flygoat.com, Sergey.Semin@baikalelectronics.ru,
+        akpm@linux-foundation.org, rppt@kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: Re: [PATCH v2 1/2] MIPS: Ingenic: Add system type for new Ingenic
+ SoCs.
+Message-ID: <20200921201329.GA29269@alpha.franken.de>
+References: <20200921174522.33866-1-zhouyanjie@wanyeetech.com>
+ <20200921174522.33866-2-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200919173906.GQ32101@casper.infradead.org>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200921174522.33866-2-zhouyanjie@wanyeetech.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 06:39:06PM +0100, Matthew Wilcox wrote:
-> On Sat, Sep 19, 2020 at 10:18:54AM -0700, Linus Torvalds wrote:
-> > On Sat, Sep 19, 2020 at 2:50 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> > >
-> > > this provides a preemptible variant of kmap_atomic & related
-> > > interfaces. This is achieved by:
-> > 
-> > Ack. This looks really nice, even apart from the new capability.
-> > 
-> > The only thing I really reacted to is that the name doesn't make sense
-> > to me: "kmap_temporary()" seems a bit odd.
-> > 
-> > Particularly for an interface that really is basically meant as a
-> > better replacement of "kmap_atomic()" (but is perhaps also a better
-> > replacement for "kmap()").
-> > 
-> > I think I understand how the name came about: I think the "temporary"
-> > is there as a distinction from the "longterm" regular kmap(). So I
-> > think it makes some sense from an internal implementation angle, but I
-> > don't think it makes a lot of sense from an interface name.
-> > 
-> > I don't know what might be a better name, but if we want to emphasize
-> > that it's thread-private and a one-off, maybe "local" would be a
-> > better naming, and make it distinct from the "global" nature of the
-> > old kmap() interface?
-> > 
-> > However, another solution might be to just use this new preemptible
-> > "local" kmap(), and remove the old global one entirely. Yes, the old
-> > global one caches the page table mapping and that sounds really
-> > efficient and nice. But it's actually horribly horribly bad, because
-> > it means that we need to use locking for them. Your new "temporary"
-> > implementation seems to be fundamentally better locking-wise, and only
-> > need preemption disabling as locking (and is equally fast for the
-> > non-highmem case).
-> > 
-> > So I wonder if the single-page TLB flush isn't a better model, and
-> > whether it wouldn't be a lot simpler to just get rid of the old
-> > complex kmap() entirely, and replace it with this?
-> > 
-> > I agree we can't replace the kmap_atomic() version, because maybe
-> > people depend on the preemption disabling it also implied. But what
-> > about replacing the non-atomic kmap()?
-> 
-> My concern with that is people might use kmap() and then pass the address
-> to a different task.  So we need to audit the current users of kmap()
-> and convert any that do that into using vmap() instead.
-> 
+On Tue, Sep 22, 2020 at 01:45:21AM +0800, 周琰杰 (Zhou Yanjie) wrote:
+> @@ -56,9 +64,13 @@ static const struct of_device_id ingenic_of_match[] __initconst = {
+>  	{ .compatible = "ingenic,jz4740", .data = (void *)MACH_INGENIC_JZ4740 },
+>  	{ .compatible = "ingenic,jz4725b", .data = (void *)MACH_INGENIC_JZ4725B },
+>  	{ .compatible = "ingenic,jz4770", .data = (void *)MACH_INGENIC_JZ4770 },
+> +	{ .compatible = "ingenic,jz4775", .data = (void *)MACH_INGENIC_JZ4775 },
+>  	{ .compatible = "ingenic,jz4780", .data = (void *)MACH_INGENIC_JZ4780 },
+>  	{ .compatible = "ingenic,x1000", .data = (void *)MACH_INGENIC_X1000 },
+> +	{ .compatible = "ingenic,x1000e", .data = (void *)MACH_INGENIC_X1000E },
+>  	{ .compatible = "ingenic,x1830", .data = (void *)MACH_INGENIC_X1830 },
+> +	{ .compatible = "ingenic,x2000", .data = (void *)MACH_INGENIC_X2000 },
+> +	{ .compatible = "ingenic,x2000e", .data = (void *)MACH_INGENIC_X2000E },
 
-I've done some of this work.[3]  PKS and pmem stray write protection[2] depend
-on kmap to enable the correct PKS settings.  After working through the
-exception handling we realized that some users of kmap() seem to be doing just
-this; passing the address to a different task.
+I get a warning from checkpatch:
 
-From what I have found ~90% of kmap() callers are 'kmap_thread()' and the other
-~10% are kmap().[3]  But of those 10% I'm not familiar with the code enough to
-know if they really require a 'global' map.  What I do know is they save an
-address which appears to be used in other threads.  But I could be wrong.
+WARNING: DT compatible string "ingenic,x2000e" appears un-documented -- check ./Documentation/devicetree/bindings/
 
-For PKS I added a 'global' implementation which could then be called by kmap()
-and added a new kmap_thread() call which used the original 'local' version of
-the PKS interface.  The PKS work is still being reviewed internally for the TIP
-core code.  But I've pushed it all to git hub for purposes of this
-discussion.[1]
+Thomas.
 
-> I like kmap_local().  Or kmap_thread().
-
-I chose kmap_thread() so that makes sense to me.  I also thought about using
-kmap_global() as an alternative interface which would change just ~10% of the
-callers and make the series much smaller.  But internal discussions lead me to
-chose kmap_thread() as the new interface so that we don't change the semantics
-of kmap().
-
-Ira
-
-
-[1] https://github.com/weiny2/linux-kernel/tree/lm-pks-pmem-for-5.10-v3
-
-[2] https://lore.kernel.org/lkml/20200717072056.73134-1-ira.weiny@intel.com/
-
-[3]
-12:42:06 > git grep ' kmap(' *.c | grep -v '* ' | wc -l
-22
-
-12:43:32 > git grep ' kmap_thread(' *.c | grep -v '* ' | wc -l
-204
-
-Here are the callers which hand an address to another thread.
-
-12:45:25 > git grep ' kmap(' *.c | grep -v '* '
-arch/x86/mm/dump_pagetables.c:  [PKMAP_BASE_NR]         = { 0UL, "Persistent kmap() Area" },
-drivers/firewire/net.c:         ptr = kmap(dev->broadcast_rcv_buffer.pages[u]);
-drivers/gpu/drm/i915/gem/i915_gem_pages.c:              return kmap(sg_page(sgt->sgl));
-drivers/gpu/drm/i915/selftests/i915_perf.c:     scratch = kmap(ce->vm->scratch[0].base.page);
-drivers/gpu/drm/ttm/ttm_bo_util.c:              map->virtual = kmap(map->page);
-drivers/infiniband/hw/qib/qib_user_sdma.c:      mpage = kmap(page);
-drivers/misc/vmw_vmci/vmci_host.c:      context->notify = kmap(context->notify_page) + (uva & (PAGE_SIZE - 1));
-drivers/misc/xilinx_sdfec.c:            addr = kmap(pages[i]);
-drivers/mmc/host/usdhi6rol0.c:  host->pg.mapped         = kmap(host->pg.page);
-drivers/mmc/host/usdhi6rol0.c:  host->pg.mapped = kmap(host->pg.page);
-drivers/mmc/host/usdhi6rol0.c:  host->pg.mapped = kmap(host->pg.page);
-drivers/nvme/target/tcp.c:              iov->iov_base = kmap(sg_page(sg)) + sg->offset + sg_offset;
-drivers/scsi/libiscsi_tcp.c:            segment->sg_mapped = kmap(sg_page(sg));
-drivers/target/iscsi/iscsi_target.c:            iov[i].iov_base = kmap(sg_page(sg)) + sg->offset + page_off;
-drivers/target/target_core_transport.c:         return kmap(sg_page(sg)) + sg->offset;
-fs/btrfs/check-integrity.c:             block_ctx->datav[i] = kmap(block_ctx->pagev[i]);
-fs/ceph/dir.c:          cache_ctl->dentries = kmap(cache_ctl->page);
-fs/ceph/inode.c:                ctl->dentries = kmap(ctl->page);
-lib/scatterlist.c:              miter->addr = kmap(miter->page) + miter->__offset;
-net/ceph/pagelist.c:    pl->mapped_tail = kmap(page);
-net/ceph/pagelist.c:            pl->mapped_tail = kmap(page);
-virt/kvm/kvm_main.c:                    hva = kmap(page);
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
