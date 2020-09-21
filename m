@@ -2,49 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9B8273480
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 23:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75971273487
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 23:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728054AbgIUU7n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Sep 2020 16:59:43 -0400
-Received: from elvis.franken.de ([193.175.24.41]:49825 "EHLO elvis.franken.de"
+        id S1727519AbgIUVAM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Sep 2020 17:00:12 -0400
+Received: from elvis.franken.de ([193.175.24.41]:49821 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727483AbgIUU7m (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1726471AbgIUU7m (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Mon, 21 Sep 2020 16:59:42 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kKSuS-0001Rx-05; Mon, 21 Sep 2020 22:59:40 +0200
+        id 1kKSuS-0001Rx-06; Mon, 21 Sep 2020 22:59:40 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id AEA1CC0FE4; Mon, 21 Sep 2020 22:26:00 +0200 (CEST)
-Date:   Mon, 21 Sep 2020 22:26:00 +0200
+        id 4CB79C0FE4; Mon, 21 Sep 2020 22:29:53 +0200 (CEST)
+Date:   Mon, 21 Sep 2020 22:29:53 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jason Yan <yanaijie@huawei.com>
-Cc:     paulburton@kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH] MIPS: Make setup_elfcorehdr and setup_elfcorehdr_size
- static
-Message-ID: <20200921202600.GE29322@alpha.franken.de>
-References: <20200911020132.1464661-1-yanaijie@huawei.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: SGI-IP30: Move irq bits to better header files
+Message-ID: <20200921202953.GF29322@alpha.franken.de>
+References: <20200920205151.112113-1-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200911020132.1464661-1-yanaijie@huawei.com>
+In-Reply-To: <20200920205151.112113-1-tsbogend@alpha.franken.de>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 11, 2020 at 10:01:32AM +0800, Jason Yan wrote:
-> This addresses the following sparse warning:
+On Sun, Sep 20, 2020 at 10:51:50PM +0200, Thomas Bogendoerfer wrote:
+> Move HEART specific parts of mach-ip30/irq.h to asm/sgi/heart.h and IP30
+> specific parts to sgi-ip30/ip30-common.h.
 > 
-> arch/mips/kernel/setup.c:446:33: warning: symbol 'setup_elfcorehdr_size'
-> was not declared. Should it be static?
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > ---
->  arch/mips/kernel/setup.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/include/asm/mach-ip30/irq.h | 87 -----------------------------------
+>  arch/mips/include/asm/sgi/heart.h     | 51 ++++++++++++++++++++
+>  arch/mips/sgi-ip30/ip30-common.h      | 14 ++++++
+>  arch/mips/sgi-ip30/ip30-irq.c         |  2 +
+>  4 files changed, 67 insertions(+), 87 deletions(-)
+>  delete mode 100644 arch/mips/include/asm/mach-ip30/irq.h
 
 applied to mips-next.
 
