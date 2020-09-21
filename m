@@ -2,111 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCCE271AF8
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 08:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A87271C29
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 09:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726415AbgIUGgf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Sep 2020 02:36:35 -0400
-Received: from verein.lst.de ([213.95.11.211]:38634 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726011AbgIUGge (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 21 Sep 2020 02:36:34 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B25CE68AFE; Mon, 21 Sep 2020 08:36:28 +0200 (CEST)
-Date:   Mon, 21 Sep 2020 08:36:28 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        id S1726412AbgIUHjr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Sep 2020 03:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726244AbgIUHjo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Sep 2020 03:39:44 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECCAC061755;
+        Mon, 21 Sep 2020 00:39:44 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600673980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wvyp0RounB/4LwU0Wfnprorn1wbUFCaaQDFAPWZa1lY=;
+        b=gMaSuZ51Lbc6QPkc00DoVI0ZeYFw1anwmwmCpCgA9mSAGscjICMP76VBc9c5LYYHJhtr1V
+        szZo7+Ww9dytWz1dbrc8RA2obQDOH1QUnyfZvjgPqxmDJsiP27s/hsVMbOD0Zjwlv+ber/
+        qWGRVkhYTPW2tTmS4pYTCoYSiT9DI/ZTsnsQ80U+VCocs0lPSE8nq5758cGblIbk8SVdnx
+        hPCPSLtdjkL9+573S5HhFCgk6FFXO/026nXOGnu4ti8sxk/fC+L2RQhONm/U5tVeg66C+O
+        R0NLgGerMKEFgnb0uRm7Ot+c09xW+a47s/CiEhYERktxgUfSN56PQvvbENyzPg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600673980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wvyp0RounB/4LwU0Wfnprorn1wbUFCaaQDFAPWZa1lY=;
+        b=xr4r44czYL0yv7MaHM0svfQR/cc+aXpFFvMpVd1kcucOlLs0NXid+7U1RRYcOhbAYMYtxi
+        ganiHIU1DBLF2YCA==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org
-Cc:     alsa-devel@alsa-project.org, linux-samsung-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-doc@vger.kernel.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        netdev@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: Re: a saner API for allocating DMA addressable pages v3
-Message-ID: <20200921063628.GB18349@lst.de>
-References: <20200915155122.1768241-1-hch@lst.de>
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
+In-Reply-To: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com> <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de> <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+Date:   Mon, 21 Sep 2020 09:39:39 +0200
+Message-ID: <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200915155122.1768241-1-hch@lst.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Any comments?
+On Sun, Sep 20 2020 at 10:42, Linus Torvalds wrote:
+> On Sun, Sep 20, 2020 at 10:40 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>>
+>> I think the more obvious solution is to split the whole exercise:
+>>
+>>   schedule()
+>>      prepare_switch()
+>>         unmap()
+>>
+>>     switch_to()
+>>
+>>     finish_switch()
+>>         map()
+>
+> Yeah, that looks much easier to explain. Ack.
 
-Thomas: this should be identical to the git tree I gave you for mips
-testing, and you add your tested-by (and reviewd-by tags where
-applicable)?
+So far so good, but Peter Z. just pointed out to me that I completely
+missed the fact that this cannot work.
 
-Helge: for parisc this should effectively be the same as the first
-version, but I've dropped the tested-by tags due to the reshuffle,
-and chance you could retest it?
+If a task is migrated to a different CPU then the mapping address will
+change which will explode in colourful ways.
 
-On Tue, Sep 15, 2020 at 05:51:04PM +0200, Christoph Hellwig wrote:
-> Hi all,
-> 
-> this series replaced the DMA_ATTR_NON_CONSISTENT flag to dma_alloc_attrs
-> with a separate new dma_alloc_pages API, which is available on all
-> platforms.  In addition to cleaning up the convoluted code path, this
-> ensures that other drivers that have asked for better support for
-> non-coherent DMA to pages with incurring bounce buffering over can finally
-> be properly supported.
-> 
-> As a follow up I plan to move the implementation of the
-> DMA_ATTR_NO_KERNEL_MAPPING flag over to this framework as well, given
-> that is also is a fundamentally non coherent allocation.  The replacement
-> for that flag would then return a struct page, as it is allowed to
-> actually return pages without a kernel mapping as the name suggested
-> (although most of the time they will actually have a kernel mapping..)
-> 
-> In addition to the conversions of the existing non-coherent DMA users,
-> I've also added a patch to convert the firewire ohci driver to use
-> the new dma_alloc_pages API.
-> 
-> The first patch is queued up for 5.9 in the media tree, but included here
-> for completeness.
-> 
-> 
-> A git tree is available here:
-> 
->     git://git.infradead.org/users/hch/misc.git dma_alloc_pages
-> 
-> Gitweb:
-> 
->     http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/dma_alloc_pages
-> 
-> 
-> Changes since v2:
->  - fix up the patch reshuffle which wasn't quite correct
->  - fix up a few commit messages
-> 
-> Changes since v1:
->  - rebased on the latests dma-mapping tree, which merged many of the
->    cleanups
->  - fix an argument passing typo in 53c700, caught by sparse
->  - rename a few macro arguments in 53c700
->  - pass the right device to the DMA API in the lib82596 drivers
->  - fix memory ownershiptransfers in sgiseeq
->  - better document what a page in the direct kernel mapping means
->  - split into dma_alloc_pages that returns a struct page and is in the
->    direct mapping vs dma_alloc_noncoherent that can be vmapped
->  - conver the firewire ohci driver to dma_alloc_pages
-> 
-> Diffstat:
-> _______________________________________________
-> iommu mailing list
-> iommu@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/iommu
----end quoted text---
+On RT kernels this works because we ping the task to the CPU via
+migrate_disable(). On a !RT kernel migrate_disable() maps to
+preempt_disable() which brings us back to square one.
+
+/me goes back to the drawing board.
+
+Thanks,
+
+        tglx
