@@ -2,53 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B99F9271C59
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 09:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CAE271EA4
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 11:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbgIUHye (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Sep 2020 03:54:34 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:49555 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbgIUHye (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Sep 2020 03:54:34 -0400
-Received: from ip5f5af089.dynamic.kabel-deutschland.de ([95.90.240.137] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kKGee-0001xR-V7; Mon, 21 Sep 2020 07:54:33 +0000
-Date:   Mon, 21 Sep 2020 09:54:32 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 4/4] selftests/clone3: Avoid OS-defined clone_args
-Message-ID: <20200921075432.u4gis3s2o5qrsb5g@wittgenstein>
-References: <20200919080637.259478-1-keescook@chromium.org>
- <20200919080637.259478-5-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200919080637.259478-5-keescook@chromium.org>
+        id S1726504AbgIUJMr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Sep 2020 05:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgIUJMr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Sep 2020 05:12:47 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF8EC061755
+        for <linux-mips@vger.kernel.org>; Mon, 21 Sep 2020 02:12:47 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id k133so3718324pgc.7
+        for <linux-mips@vger.kernel.org>; Mon, 21 Sep 2020 02:12:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=G5IfRmqPuMpaOCcxbL+BlkKGKTuCTWSjkTLclXpS/yY=;
+        b=vVm9XH6YgerSfOUcNMpWCMM69d2IcKounq6YuvZFNSHgliuk2hhDatDAIBRQgu1YZS
+         4vD1/eIyCqGqa9yNNlupH1cCEs67xJhOwjxnGdvhjoWYZOt1wkgqklb5ssr1F0NS4F9u
+         S/5EpC9xnTaWxyxibyBZXS3jcyIUDcyOYVD3CrSM6tPgHYOeyblQTf06ONOCu1QHk7ti
+         vopThNIqDjXWG0T6OpmIw8f1EIaV6L7RlBbyT/pdZm3GDJkjIjuwa6QMqgWVstJBs0m4
+         +k7BQkOwN86qpNaBscmZ7KyS5ZmuHYarSkcz91LLdcgkH2i86zpUhu4ccYPOrcC/urGQ
+         hY/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=G5IfRmqPuMpaOCcxbL+BlkKGKTuCTWSjkTLclXpS/yY=;
+        b=G+iO7kMgktxZaIx/mHqbJ297648OBvWNQ+SZ6owmMSx+sOuEpl/ihjTSWOcPAZSviN
+         2GcNx5zMM2y00CUEEQfG3sSR+S2CO0C/2lETFXnXQSrQS7yVf28XqcjNL33+AURPNQZ+
+         rFBilxuYzj4wi9WZwAjBAZumW34ybRcooAE0NMeDXqZZeO2LZaw32BJzWTX+uodsOEgW
+         lGeiowT4JQXqWfv+wiHVMvHT0WtWj05jcde9b3HDJYMSqNkaTf2N0UcyLAAL9XOor+o4
+         RjSoZI6A+rHUdfLAfLNwlKZk+kgzMmo8OH6vKt1cJHV3Q48BOZPY2so2/XIG7fv7ncoJ
+         5XjA==
+X-Gm-Message-State: AOAM531J660m1nYcbyYEFhtPZQpMGUVVx/9LlchC1XvIcSFcD5oDqLvB
+        xx4njfksVZDrBdW7xTrP5wg=
+X-Google-Smtp-Source: ABdhPJyI0pNzC9AthVmpVsgy5y4nefaneiXb05XR7lbyW5Ugb1SV9DRUoR7b1n8//U3Tq5xGjhHYkw==
+X-Received: by 2002:a17:902:d88e:b029:d0:89f4:6222 with SMTP id b14-20020a170902d88eb02900d089f46222mr44280447plz.10.1600679566942;
+        Mon, 21 Sep 2020 02:12:46 -0700 (PDT)
+Received: from software.domain.org ([45.77.13.216])
+        by smtp.gmail.com with ESMTPSA id 134sm11723885pfa.93.2020.09.21.02.12.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Sep 2020 02:12:46 -0700 (PDT)
+Sender: Huacai Chen <chenhuacai@gmail.com>
+From:   Huacai Chen <chenhc@lemote.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH V7 1/3] MIPS: context switch: Use save/restore instead of set/clear for Status.CU2
+Date:   Mon, 21 Sep 2020 17:12:26 +0800
+Message-Id: <1600679548-29154-1-git-send-email-chenhc@lemote.com>
+X-Mailer: git-send-email 2.7.0
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 01:06:37AM -0700, Kees Cook wrote:
-> As the UAPI headers start to appear in distros, we need to avoid outdated
-> versions of struct clone_args to be able to test modern features;
-> rename to "struct __clone_args". Additionally update the struct size
-> macro names to match UAPI names.
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+Some processors (such as Loongson-3) need to enable CU2 in kernel mode,
+current set/clear method will lose Status.CU2 during context switching,
+so use save/restore method instead.
 
-Looks good, thanks!
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+---
+ arch/mips/include/asm/switch_to.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/include/asm/switch_to.h b/arch/mips/include/asm/switch_to.h
+index 0b0a93b..a4374b4 100644
+--- a/arch/mips/include/asm/switch_to.h
++++ b/arch/mips/include/asm/switch_to.h
+@@ -117,6 +117,8 @@ do {									\
+ 		__restore_dsp(next);					\
+ 	}								\
+ 	if (cop2_present) {						\
++		u32 status = read_c0_status();				\
++									\
+ 		set_c0_status(ST0_CU2);					\
+ 		if ((KSTK_STATUS(prev) & ST0_CU2)) {			\
+ 			if (cop2_lazy_restore)				\
+@@ -127,7 +129,7 @@ do {									\
+ 		    !cop2_lazy_restore) {				\
+ 			cop2_restore(next);				\
+ 		}							\
+-		clear_c0_status(ST0_CU2);				\
++		write_c0_status(status);				\
+ 	}								\
+ 	__clear_r5_hw_ll_bit();						\
+ 	__clear_software_ll_bit();					\
+-- 
+2.7.0
+
