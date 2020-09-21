@@ -2,130 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C2927232F
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 13:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E923C272385
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 14:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgIUL4a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Sep 2020 07:56:30 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:46626 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726326AbgIUL4a (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 21 Sep 2020 07:56:30 -0400
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP9zolGhfDc8WAA--.1715S2;
-        Mon, 21 Sep 2020 19:56:24 +0800 (CST)
-From:   Jinyang He <hejinyang@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
+        id S1726444AbgIUMQI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Sep 2020 08:16:08 -0400
+Received: from elvis.franken.de ([193.175.24.41]:49018 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726341AbgIUMQI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 21 Sep 2020 08:16:08 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kKKjj-0004Bw-00; Mon, 21 Sep 2020 14:16:03 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id D4B22C0FE0; Mon, 21 Sep 2020 14:15:54 +0200 (CEST)
+Date:   Mon, 21 Sep 2020 14:15:54 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Loongson64: Fix cmdline parsing "mem=" and "memmap="
-Date:   Mon, 21 Sep 2020 19:56:24 +0800
-Message-Id: <1600689384-11032-1-git-send-email-hejinyang@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9DxP9zolGhfDc8WAA--.1715S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw43JFy7Cr17uFy5uw4DJwb_yoW5AF4fpr
-        ZrCwn5Gr4rWFZ7Za4rtry8ur4rA3sYgFWfuFW7CF18uas5Zry7Ar4fG3WUXF1jqrW8t3WY
-        qF1Fq3y7tanFkaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Cr0_Gr
-        1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_Gw4l42xK
-        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bYkskUUUUU=
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+Subject: Re: [PATCH V7 2/3] MIPS: Loongson-3: Enable COP2 usage in kernel
+Message-ID: <20200921121554.GA8642@alpha.franken.de>
+References: <1600679548-29154-1-git-send-email-chenhc@lemote.com>
+ <1600679548-29154-2-git-send-email-chenhc@lemote.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1600679548-29154-2-git-send-email-chenhc@lemote.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit a94e4f24ec83 ("MIPS: init: Drop boot_mem_map") left
-add_memory_region() for historical reason. Machine cannot start normally
-when use "mem=" on the Loongson64 platform because parsing "mem=" calls
-memblock_add() by add_memory_region(). Loongson64 always enable NUMA and
-need memblock_add_node().
+On Mon, Sep 21, 2020 at 05:12:27PM +0800, Huacai Chen wrote:
+> Loongson-3's COP2 is Multi-Media coprocessor, it is disabled in kernel
+> mode by default. However, gslq/gssq (16-bytes load/store instructions)
+> overrides the instruction format of lwc2/swc2. If we wan't to use gslq/
+> gssq for optimization in kernel, we should enable COP2 usage in kernel.
+> 
+> Please pay attention that in this patch we only enable COP2 in kernel,
+> which means it will lose ST0_CU2 when a process go to user space (try
+> to use COP2 in user space will trigger an exception and then grab COP2,
+> which is similar to FPU). And as a result, we need to modify the context
+> switching code because the new scheduled process doesn't contain ST0_CU2
+> in its THERAD_STATUS probably.
+> 
+> For zboot, we disable gslq/gssq be generated by toolchain.
+> 
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---
+> V3: Stop using ST0_MM and use ST0_CU2 instead (Thank Thomas and Maciej).
+> V4: Adopt Thomas's suggestion to improve coding style.
+> V5: Use ST0_KERNEL_CUMASK in all possible places to avoid #ifdefs.
+> V6: Modify switch_to() and don't touch r4k_switch.S.
+> V7: For zboot, disable gslq/gssq be generated by toolchain.
+> 
+>  arch/mips/boot/compressed/Makefile | 5 +++++
+>  arch/mips/include/asm/mipsregs.h   | 7 +++++++
+>  arch/mips/include/asm/stackframe.h | 6 +++---
+>  arch/mips/kernel/head.S            | 2 +-
+>  arch/mips/kernel/process.c         | 4 ++--
+>  arch/mips/kernel/traps.c           | 2 +-
+>  6 files changed, 19 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+> index 9a9ba77..2c491c1 100644
+> --- a/arch/mips/boot/compressed/Makefile
+> +++ b/arch/mips/boot/compressed/Makefile
+> @@ -22,6 +22,11 @@ KBUILD_CFLAGS := $(filter-out -pg, $(KBUILD_CFLAGS))
+>  
+>  KBUILD_CFLAGS := $(filter-out -fstack-protector, $(KBUILD_CFLAGS))
+>  
+> +# Disable lq/sq in zboot
+> +ifdef CONFIG_CPU_LOONGSON64
+> +KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) -march=mips64r2
+> +endif
+> +
 
-Replace add_memory_rigion(start, size, BOOT_MEM_RAM) with a weak function
-which named mips_memblock_add. For Loongson64, override mips_memblock_add
-at loongson64/numa.c. "memmap=" is similar to "mem=", replace it too.
+thanks for doing this, I'm going to apply this later.
 
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
----
- arch/mips/include/asm/bootinfo.h | 1 +
- arch/mips/kernel/setup.c         | 9 +++++++--
- arch/mips/loongson64/numa.c      | 8 ++++++++
- 3 files changed, 16 insertions(+), 2 deletions(-)
+This remind of another question, what about loongson2ef ? I'm getting
+kbuild failure because of enabled loongson-mmi mails. Are we are missing
+something like cflags-y += $(call cc-option,-mno-loongson-mmi) in Platform
+file ? Who is taking care of loongson2ef ?
 
-diff --git a/arch/mips/include/asm/bootinfo.h b/arch/mips/include/asm/bootinfo.h
-index 147c932..66fef4c 100644
---- a/arch/mips/include/asm/bootinfo.h
-+++ b/arch/mips/include/asm/bootinfo.h
-@@ -96,6 +96,7 @@ extern unsigned long mips_machtype;
- 
- extern void add_memory_region(phys_addr_t start, phys_addr_t size, long type);
- extern void detect_memory_region(phys_addr_t start, phys_addr_t sz_min,  phys_addr_t sz_max);
-+extern void mips_memblock_add(phys_addr_t start, phys_addr_t size);
- 
- extern void prom_init(void);
- extern void prom_free_prom_memory(void);
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index bf5f5ac..ef84b4d 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -149,6 +149,11 @@ void __init detect_memory_region(phys_addr_t start, phys_addr_t sz_min, phys_add
- 	add_memory_region(start, size, BOOT_MEM_RAM);
- }
- 
-+void __init __weak mips_memblock_add(phys_addr_t start, phys_addr_t size)
-+{
-+	memblock_add(start, size);
-+}
-+
- /*
-  * Manage initrd
-  */
-@@ -400,7 +405,7 @@ static int __init early_parse_mem(char *p)
- 	if (*p == '@')
- 		start = memparse(p + 1, &p);
- 
--	add_memory_region(start, size, BOOT_MEM_RAM);
-+	mips_memblock_add(start, size);
- 
- 	return 0;
- }
-@@ -426,7 +431,7 @@ static int __init early_parse_memmap(char *p)
- 
- 	if (*p == '@') {
- 		start_at = memparse(p+1, &p);
--		add_memory_region(start_at, mem_size, BOOT_MEM_RAM);
-+		mips_memblock_add(start_at, mem_size);
- 	} else if (*p == '#') {
- 		pr_err("\"memmap=nn#ss\" (force ACPI data) invalid on MIPS\n");
- 		return -EINVAL;
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index ea8bb1b..d8ecdf2 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -257,6 +257,14 @@ void __init mem_init(void)
- 	mem_init_print_info(NULL);
- }
- 
-+void __init mips_memblock_add(phys_addr_t start, phys_addr_t size)
-+{
-+	u64 node_id;
-+
-+	node_id = (start >> 44) & 3;
-+	memblock_add_node(start, size, node_id);
-+}
-+
- /* All PCI device belongs to logical Node-0 */
- int pcibus_to_node(struct pci_bus *bus)
- {
+Thomas.
+
 -- 
-2.1.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
