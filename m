@@ -2,93 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 078B9272C29
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 18:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483AC272C8F
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 18:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728258AbgIUQ2F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Sep 2020 12:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
+        id S1727654AbgIUQdO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Sep 2020 12:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727323AbgIUQ2F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Sep 2020 12:28:05 -0400
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC5CC061755;
-        Mon, 21 Sep 2020 09:28:04 -0700 (PDT)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kKOfR-003EDr-FT; Mon, 21 Sep 2020 16:27:53 +0000
-Date:   Mon, 21 Sep 2020 17:27:53 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH 02/11] mm: call import_iovec() instead of
- rw_copy_check_uvector() in process_vm_rw()
-Message-ID: <20200921162753.GY3421308@ZenIV.linux.org.uk>
-References: <20200921143434.707844-1-hch@lst.de>
- <20200921143434.707844-3-hch@lst.de>
- <20200921150211.GS3421308@ZenIV.linux.org.uk>
- <ef67787edb2f48548d69caaaff6997ba@AcuMS.aculab.com>
- <20200921152937.GX3421308@ZenIV.linux.org.uk>
- <226e03bf941844eba4d64af31633c177@AcuMS.aculab.com>
+        with ESMTP id S1728557AbgIUQdO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Sep 2020 12:33:14 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883E9C0613CF
+        for <linux-mips@vger.kernel.org>; Mon, 21 Sep 2020 09:33:13 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id n13so13390341edo.10
+        for <linux-mips@vger.kernel.org>; Mon, 21 Sep 2020 09:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LbpMl5lO0+qWgp9uAKdYj5ux1bx38Si35gqGXl7ChFs=;
+        b=a2Cw4ka1cjcNejUhLUZAAjSLNoYelCoyZSpmQCatftbiLw5qTc+pZIam7CQ+bzySoC
+         gGOBNlZFILF1rbb13VR5vHbBB6o7IPhfhEtjuIQ55GiefDbPErJYqMNF7ag3KHBM9T1M
+         Z1SXFFsw84dXXtq0Bg7SO0KF3jcdxFjvGihOo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LbpMl5lO0+qWgp9uAKdYj5ux1bx38Si35gqGXl7ChFs=;
+        b=hoGkv4rdCbQn0AQWFncgQm81uYtdHhqzrRXoXCK382Ftv8eYX7evijo+1t64+9LDV3
+         dSd3d3mDVoKoXjQaKziCkOMbuT8J/B+QwBtbwBqRW4vr63sIsBmkjEJqHiPWe+DBj1GJ
+         bHsMLmjt0Dasf21zTIa/I3k6eAZ4suIDPXh6Jp/Whpg+ASuBjYDMOEExRdVEgdvNTb1B
+         w6vsW7Opdjd1hpKvrZ0gIBgwIjtjQrW25z+uuVO64gxwGzZ2TKO8nsu/jw7HovOseqJv
+         OJyvXF4hfGKxoXunzt8K6faYfJdcflKtXmNsdPUBzwVUjLjq76Tg6JIqaNphStXBfF4N
+         loSA==
+X-Gm-Message-State: AOAM531VnJbh0gleWpp8sNHcn4y3/sUiXH1+txk1vdTWEK4uj3g3uGv8
+        jFHOWLK1NXjXjPqZ8pAUF53osmdizE9/eA==
+X-Google-Smtp-Source: ABdhPJwg9/4ltpQL/E/0tsiucEP99QQTtylNP3bPu8N84NtkDRb7pVHHuKCTCnEsafuuMvVS1Si6Ig==
+X-Received: by 2002:aa7:da10:: with SMTP id r16mr467269eds.333.1600705991986;
+        Mon, 21 Sep 2020 09:33:11 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id d25sm8798913edq.52.2020.09.21.09.33.11
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2020 09:33:11 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id n13so13390286edo.10
+        for <linux-mips@vger.kernel.org>; Mon, 21 Sep 2020 09:33:11 -0700 (PDT)
+X-Received: by 2002:a2e:994a:: with SMTP id r10mr154392ljj.102.1600705501870;
+ Mon, 21 Sep 2020 09:25:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <226e03bf941844eba4d64af31633c177@AcuMS.aculab.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
+ <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
+ <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+ <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 21 Sep 2020 09:24:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
+Message-ID: <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
+ kmap_atomic & friends
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 03:44:00PM +0000, David Laight wrote:
-> From: Al Viro
-> > Sent: 21 September 2020 16:30
-> > 
-> > On Mon, Sep 21, 2020 at 03:21:35PM +0000, David Laight wrote:
-> > 
-> > > You really don't want to be looping through the array twice.
-> > 
-> > Profiles, please.
-> 
-> I did some profiling of send() v sendmsg() much earlier in the year.
-> I can't remember the exact details but the extra cost of sendmsg()
-> is far more than you might expect.
-> (I was timing sending fully built IPv4 UDP packets using a raw socket.)
-> 
-> About half the difference does away if you change the
-> copy_from_user() to __copy_from_user() when reading the struct msghdr
-> and iov[] from userspace (user copy hardening is expensive).
+On Mon, Sep 21, 2020 at 12:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> If a task is migrated to a different CPU then the mapping address will
+> change which will explode in colourful ways.
 
-Wha...?  So the difference is within 4 times the overhead of the
-hardening checks done for one call of copy_from_user()?
+Heh.
 
-> The rest is just code path, my gut feeling is that a lot of that
-> is in import_iovec().
-> 
-> Remember semdmsg() is likely to be called with an iov count of 1.
+Right you are.
 
-... which makes that loop unlikely to be noticable in the entire
-mess, whether you pass it once or twice.  IOW, unless you can show
-profiles where that loop is sufficiently hot or if you can show
-the timings change from splitting it in two, I'll remain very
-sceptical about that assertion.
+Maybe we really *could* call this new kmap functionality something
+like "kmap_percpu()" (or maybe "local" is good enough), and make it
+act like your RT code does for spinlocks - not disable preemption, but
+only disabling CPU migration.
+
+That would probably be good enough for a lot of users that don't want
+to expose excessive latencies, but where it's really not a huge deal
+to say "stick to this CPU for a short while".
+
+The crypto code certainly sounds like one such case.
+
+             Linus
