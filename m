@@ -2,86 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D37962721D5
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 13:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E962721EB
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Sep 2020 13:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726358AbgIULIj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Sep 2020 07:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726333AbgIULIj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Sep 2020 07:08:39 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3066BC061755;
-        Mon, 21 Sep 2020 04:08:39 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id o25so3774915pgm.0;
-        Mon, 21 Sep 2020 04:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=tTJbfvIDALmyR7sTPva/nF1F/vNWEEleaGcrx9Y7chE=;
-        b=pGbo9CrZk3dpPVufFvRvlvmtnSPBWwcHxeohMWGvXgBiKOsgF4lY+QXgWypEQwVmDR
-         6i+JkUPN8rJs4wdJgaCX1Fl6yZOVAsofAVFv2F6SS4PmpJuplcYfJZBexy4omH1IIgsf
-         GA8v12vzRmNw1BUYk02H9JFcoY7Dn+AGRNCZqWrh0VncHj6gdklC7fPR2rkZZA2ph6Go
-         YqcQjjnB4K04YRCjbkvr2C9nYSMSz22f99RpL4LJ5m8OgUjFZrts4UR4PNIBoR6nB7E/
-         n2B4KogYtim1RmMlOll3lqopa6BUo0xQs/LrBk64p/FV+hjGeM5PJt4/KkGlegWbgQCV
-         QOug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=tTJbfvIDALmyR7sTPva/nF1F/vNWEEleaGcrx9Y7chE=;
-        b=YgPKZsiCjwbLeWBD1v30UpHZUVhLz8+v8Vae775EEoQLntt8XThajkIIhimJhidT68
-         fi1cTY8d4FWy2BW7zA2OXV0PZyn6BDRDxp0yqz5nrIA9HIYOs0IlEf7biWDgG+FRPfx7
-         0Bd2yLf+SNLNCzKcz1qMJgH3dgyIWHCRZNFPIQUn0QqmnQb6JqUji1wHfOBPr5vTvWTn
-         5n+T6ECLJLzQz2mED6XS+FuFuxkoP7rjJ2iZEBpKG8SPc3aRtY5KlSluEBJ5Ufl8Id6k
-         ZKN3QLlfuTUy/8tqaS9ASChrpVXzW5SShRox/u338eoKRmnhrq8LjBWLyfWwvukAyFCi
-         bF8g==
-X-Gm-Message-State: AOAM530r8nra6qITWnUaOVsIixRCujQSn35RpENFfEpr+8/8XQfvN7ps
-        D7Ex3BRChfZUaun6FmX1L2mUzrNLNE1ggI1/
-X-Google-Smtp-Source: ABdhPJzBKH5ggzLFKOwKWfQkvmXrCfIZAt5gaURBcKKuSEy9slOMJZiElyqFBxyZiCNL4gbGcVCYCw==
-X-Received: by 2002:a17:902:b086:b029:d1:e5e7:bddb with SMTP id p6-20020a170902b086b02900d1e5e7bddbmr25889899plr.59.1600686518800;
-        Mon, 21 Sep 2020 04:08:38 -0700 (PDT)
-Received: from localhost.localdomain ([47.242.131.39])
-        by smtp.gmail.com with ESMTPSA id 6sm147026pgu.16.2020.09.21.04.08.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2020 04:08:38 -0700 (PDT)
-From:   Herrington <hankinsea@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Huacai Chen <chenhc@lemote.com>,
-        Liangliang Huang <huanglllzu@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Herrington <hankinsea@gmail.com>,
-        Pujin Shi <shipujin.t@gmail.com>, Pujin Shi <shipj@lemote.com>
-Subject: [PATCH] MIPS: kernel: include probes-common.h header in branch.c
-Date:   Mon, 21 Sep 2020 19:07:54 +0800
-Message-Id: <20200921110754.1131-1-hankinsea@gmail.com>
-X-Mailer: git-send-email 2.18.4
+        id S1726718AbgIULL2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 21 Sep 2020 07:11:28 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:59862 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726702AbgIULL1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 21 Sep 2020 07:11:27 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-233-9UYq0ao9O6ejB4ujVxtO9g-1; Mon, 21 Sep 2020 12:11:22 +0100
+X-MC-Unique: 9UYq0ao9O6ejB4ujVxtO9g-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 21 Sep 2020 12:11:21 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 21 Sep 2020 12:11:21 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>
+CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: let import_iovec deal with compat_iovecs as well
+Thread-Topic: let import_iovec deal with compat_iovecs as well
+Thread-Index: AQHWjbnKEn35LxofhEeT1lmdzdUiWqlwBNiwgAJx3YCAAH2K4A==
+Date:   Mon, 21 Sep 2020 11:11:21 +0000
+Message-ID: <ac8a3691c4f5442f908c51298260ca0e@AcuMS.aculab.com>
+References: <20200918124533.3487701-1-hch@lst.de>
+ <2c7bf42ee4314484ae0177280cd8f5f3@AcuMS.aculab.com>
+ <20200921044125.GA16522@lst.de>
+In-Reply-To: <20200921044125.GA16522@lst.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-arch/mips/kernel/branch.c:876:5: error: no previous prototype for '__insn_is_compact_branch' [-Werror=missing-prototypes]
+> On Sat, Sep 19, 2020 at 02:24:10PM +0000, David Laight wrote:
+> > I thought about that change while writing my import_iovec() => iovec_import()
+> > patch - and thought that the io_uring code would (as usual) cause grief.
+> >
+> > Christoph - did you see those patches?
 
-Signed-off-by: Herrington <hankinsea@gmail.com>
-Signed-off-by: Pujin Shi <shipujin.t@gmail.com>
-Signed-off-by: Pujin Shi <shipj@lemote.com>
----
- arch/mips/kernel/branch.c | 2 ++
- 1 file changed, 2 insertions(+)
+Link to cover email.
 
-diff --git a/arch/mips/kernel/branch.c b/arch/mips/kernel/branch.c
-index fb3e203698ea..0216ff24c392 100644
---- a/arch/mips/kernel/branch.c
-+++ b/arch/mips/kernel/branch.c
-@@ -20,6 +20,8 @@
- #include <asm/ptrace.h>
- #include <linux/uaccess.h>
- 
-+#include "probes-common.h"
-+
- /*
-  * Calculate and return exception PC in case of branch delay slot
-  * for microMIPS and MIPS16e. It does not clear the ISA mode bit.
--- 
-2.18.1
+https://lkml.org/lkml/2020/9/15/661
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
