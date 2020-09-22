@@ -2,155 +2,184 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EBC273854
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Sep 2020 04:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFB9273931
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Sep 2020 05:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729260AbgIVCGi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Sep 2020 22:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
+        id S1728478AbgIVDSs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Sep 2020 23:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728884AbgIVCGi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Sep 2020 22:06:38 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A47C061755
-        for <linux-mips@vger.kernel.org>; Mon, 21 Sep 2020 19:06:38 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id a19so15793417ilq.10
-        for <linux-mips@vger.kernel.org>; Mon, 21 Sep 2020 19:06:38 -0700 (PDT)
+        with ESMTP id S1728386AbgIVDSs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Sep 2020 23:18:48 -0400
+Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F3AC0613CF
+        for <linux-mips@vger.kernel.org>; Mon, 21 Sep 2020 20:18:47 -0700 (PDT)
+Received: by mail-vk1-xa43.google.com with SMTP id t189so3913103vka.10
+        for <linux-mips@vger.kernel.org>; Mon, 21 Sep 2020 20:18:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9VSIniuosVUcGxg46RB89VQ5kzCnZyazzw6xIC0FvG0=;
-        b=dKqUVZl17Q3kXAgcr06p4UlY1N6qTV2Mue4anb6tYFurZL0W6gu6FrERYn/jWXURKI
-         HZUpdRbohepVE4ybVVLE/7ocnbYZKp99WmpKbf99i0E5FhqYJ9kzZdicze56GanbI0AL
-         acKRNySDxzdd4v54NWeBwSnudm5QL+GOoUguYA/95v0rCV3k2iWcq83Qz6Jwnyl0JSbq
-         l+k4GnZp39V3yTpU3V/KJAxoG/X2+9znpQSwp3uJh52bx7Hh0VzUOe6WgTctuuI1iuQM
-         9rgkuZFG+LkRWnOZx5BmqmWlry0Y//TI99/gZhCX8ffEXDp7efUB9cVU4lhXXabhZIGK
-         iekA==
+         :cc:content-transfer-encoding;
+        bh=a399iMwad77Pjy4LzbXkCDo8iyJ1PbYFH+ke+Rxn7Uk=;
+        b=Xi5CVdRBDwfUKjomm9GdawzAxb2XCK50F3VmBba6sFTowJpj1kg5sr6jMdCAkrreKx
+         tYJZLP8yRu60u5UqSBBwD5zLI3RbelyV3qU61jwX1hbL+AbWBBXHP6ZUFhLUS3jFcYzI
+         kBC3qP1woDhGEXSYfDOmU0SxQy2CNSIsks7ag2iz89GxaMXvg60Q20CMwxLRZ7gw+6Al
+         HCfM/ffysfoBMTaDH2JzS5xcv0JVnn7CDYmdD15kerq94H2k853s5oyaiCfecLJcgNuc
+         inHVCS120DGZGy68+nORlSUKZdJjgYrDI7jw8k/9Lh0fKFy2ceRB+PSnwNo+omicCP+O
+         slWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9VSIniuosVUcGxg46RB89VQ5kzCnZyazzw6xIC0FvG0=;
-        b=NLEvsHFQqt+dEb1LhCI4FC7sbo0cbPdNedMHI1WIGJIr+gFV2vMQUiPCv2loImkMXv
-         HPLMm2zehLykFRXVVzwa21EaoN+BlxwSZ3LV1qgOYyZSjKMAo4E3LvFmuvwVDm0mI5mp
-         AE81O2LkeV7hmtAEZkoJ3zKGS/OqNBN2ois4yEcJmdE5lckEr9ojx9h7WCb1VvxPG1Fm
-         HSwB7kbXRC4MoSsUVmvSpNR+zCzWLv3ejVF1OlgVPFH8PtXH9HXNH9cg80s8Sl0Kl26R
-         ZerVSQbZ+QTvvzh3CamyX2rPpF32YojASKrsw/8sA8DvLCxmpfoxb5lW58RLl16RIkFW
-         kAzA==
-X-Gm-Message-State: AOAM532+IkeSTYEI5uSeQn+VDE1isTXojI7za10O5pDTVYRo59GCXbXt
-        jDBbC8jetiCLTVdZm1Kmml1lPbieCXqPYFzfXw1y6bnAAZI=
-X-Google-Smtp-Source: ABdhPJxYMY3R3rzyd8AI/wmA2DQvsTMSYgMk2YHaa52XOOSipOwoZC5rW47WICFMomXDDFe0hOJ9/Vd40FHIta2qRco=
-X-Received: by 2002:a05:6e02:13ae:: with SMTP id h14mr2533166ilo.208.1600740397007;
- Mon, 21 Sep 2020 19:06:37 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=a399iMwad77Pjy4LzbXkCDo8iyJ1PbYFH+ke+Rxn7Uk=;
+        b=L6+kbt1NLuNqRJZ1Ueu2vYb+9ScL0cKAbuGD4v/tav7u1FdUrpjdXbepBBvjlS52yB
+         ME7+Xgx+3xfMliZ/SNYxl39SdyiNOclyRXhMaIlVeEGiVKiE0qpk5R26XXtZmHYDF4AV
+         Dtb159m3bSntSMzvD6r0EAuY8NeD0fh+b9Iu40opXpAfn6aHb5ukRMAL5qQl4KXv7aMi
+         RcVz1yEF/UTXZu2eBmTt4GKtschT1TsrU0bOJHU0dpIFBCDRgcJGpeRAZyzFrE3SixoZ
+         H0H0l44+NpJMa/sVRn0oUR+AJLCnbdCcGrmQqXhIZnCdr9xfJhcGkeVRo4UzuOsZQfym
+         PjKw==
+X-Gm-Message-State: AOAM5315JK7g+5JMtwIvD+5fJgqd6QR61gnUR8hIO5ICZVtjUH7pnkSi
+        RdqVflNd38Uf/sDWXRDF3TsAJ9HVqGlUH5ANLsdPMQ==
+X-Google-Smtp-Source: ABdhPJyxBLzdXdTesnpHTplStB5Xn7/rADNj/6HmT1maoy3kyBYH52XP9XDJfcMA2cA3I131efLv9swvLxvGLmjFEs8=
+X-Received: by 2002:a1f:fec9:: with SMTP id l192mr2121611vki.21.1600744726839;
+ Mon, 21 Sep 2020 20:18:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <1598255043-11839-1-git-send-email-chenhc@lemote.com>
-In-Reply-To: <1598255043-11839-1-git-send-email-chenhc@lemote.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Tue, 22 Sep 2020 10:06:24 +0800
-Message-ID: <CAAhV-H7hzoO6OfunBZ4R0dUDRNX=jyjhdurV6VdGhdtXZ4Mj5g@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Loongson-3: Fix fp register access if MSA enabled
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Pei Huang <huangpei@loongson.cn>
+References: <20200612073549.1658336-1-noltari@gmail.com> <20200615091740.2958303-1-noltari@gmail.com>
+ <20200814085617.GA129183@roeck-us.net>
+In-Reply-To: <20200814085617.GA129183@roeck-us.net>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 22 Sep 2020 08:48:35 +0530
+Message-ID: <CA+G9fYvGkowdQmi1eBfoq2dhzBfgkFh9+7tgdNw75LydxkAEPw@mail.gmail.com>
+Subject: Re: [PATCH v4] mtd: parsers: bcm63xx: simplify CFE detection
+To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>,
+        linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>, jonas.gorski@gmail.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mtd@lists.infradead.org, lkft-triage@lists.linaro.org,
+        Guenter Roeck <linux@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Ping?
+On Fri, 14 Aug 2020 at 14:26, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Mon, Jun 15, 2020 at 11:17:40AM +0200, =C3=81lvaro Fern=C3=A1ndez Roja=
+s wrote:
+> > Instead of trying to parse CFE version string, which is customized by s=
+ome
+> > vendors, let's just check that "CFE1" was passed on argument 3.
+> >
+> > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+> > Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+> > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+>
 
-On Mon, Aug 24, 2020 at 3:40 PM Huacai Chen <chenhc@lemote.com> wrote:
+We still see mips: allmodconfig build failure on Linus tree
+
+make -sk KBUILD_BUILD_USER=3DTuxBuild -C/linux ARCH=3Dmips
+CROSS_COMPILE=3Dmips-linux-gnu- HOSTCC=3Dgcc CC=3D"sccache
+mips-linux-gnu-gcc" O=3Dbuild allmodconfig
+
+make -sk KBUILD_BUILD_USER=3DTuxBuild -C/linux -j16 ARCH=3Dmips
+CROSS_COMPILE=3Dmips-linux-gnu- HOSTCC=3Dgcc CC=3D"sccache
+mips-linux-gnu-gcc" O=3Dbuild
+
+
+> mips:allmodconfig:
 >
-> If MSA is enabled, FPU_REG_WIDTH is 128 rather than 64, then get_fpr64()
-> /set_fpr64() in the original unaligned instruction emulation code access
-> the wrong fp registers. This is because the current code doesn't specify
-> the correct index field, so fix it.
+> ERROR: modpost: "fw_arg3" [drivers/mtd/parsers/bcm63xxpart.ko] undefined!
+
+ERROR: modpost: "fw_arg3" [drivers/mtd/parsers/bcm63xxpart.ko] undefined!
+
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+Full build link,
+https://builds.tuxbuild.com/Sm59_9tjFMpIvT27qf5kNA/build.log
+
 >
-> Fixes: f83e4f9896eff614d0f2547a ("MIPS: Loongson-3: Add some unaligned instructions emulation")
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> Signed-off-by: Pei Huang <huangpei@loongson.cn>
-> ---
->  arch/mips/loongson64/cop2-ex.c | 24 ++++++++----------------
->  1 file changed, 8 insertions(+), 16 deletions(-)
+> This is not surprising, since fw_arg3 is not exported.
 >
-> diff --git a/arch/mips/loongson64/cop2-ex.c b/arch/mips/loongson64/cop2-ex.c
-> index f130f62..00055d4 100644
-> --- a/arch/mips/loongson64/cop2-ex.c
-> +++ b/arch/mips/loongson64/cop2-ex.c
-> @@ -95,10 +95,8 @@ static int loongson_cu2_call(struct notifier_block *nfb, unsigned long action,
->                         if (res)
->                                 goto fault;
+> Guenter
 >
-> -                       set_fpr64(current->thread.fpu.fpr,
-> -                               insn.loongson3_lswc2_format.rt, value);
-> -                       set_fpr64(current->thread.fpu.fpr,
-> -                               insn.loongson3_lswc2_format.rq, value_next);
-> +                       set_fpr64(&current->thread.fpu.fpr[insn.loongson3_lswc2_format.rt], 0, value);
-> +                       set_fpr64(&current->thread.fpu.fpr[insn.loongson3_lswc2_format.rq], 0, value_next);
->                         compute_return_epc(regs);
->                         own_fpu(1);
->                 }
-> @@ -130,15 +128,13 @@ static int loongson_cu2_call(struct notifier_block *nfb, unsigned long action,
->                                 goto sigbus;
->
->                         lose_fpu(1);
-> -                       value_next = get_fpr64(current->thread.fpu.fpr,
-> -                                       insn.loongson3_lswc2_format.rq);
-> +                       value_next = get_fpr64(&current->thread.fpu.fpr[insn.loongson3_lswc2_format.rq], 0);
->
->                         StoreDW(addr + 8, value_next, res);
->                         if (res)
->                                 goto fault;
->
-> -                       value = get_fpr64(current->thread.fpu.fpr,
-> -                                       insn.loongson3_lswc2_format.rt);
-> +                       value = get_fpr64(&current->thread.fpu.fpr[insn.loongson3_lswc2_format.rt], 0);
->
->                         StoreDW(addr, value, res);
->                         if (res)
-> @@ -204,8 +200,7 @@ static int loongson_cu2_call(struct notifier_block *nfb, unsigned long action,
->                         if (res)
->                                 goto fault;
->
-> -                       set_fpr64(current->thread.fpu.fpr,
-> -                                       insn.loongson3_lsdc2_format.rt, value);
-> +                       set_fpr64(&current->thread.fpu.fpr[insn.loongson3_lsdc2_format.rt], 0, value);
->                         compute_return_epc(regs);
->                         own_fpu(1);
->
-> @@ -221,8 +216,7 @@ static int loongson_cu2_call(struct notifier_block *nfb, unsigned long action,
->                         if (res)
->                                 goto fault;
->
-> -                       set_fpr64(current->thread.fpu.fpr,
-> -                                       insn.loongson3_lsdc2_format.rt, value);
-> +                       set_fpr64(&current->thread.fpu.fpr[insn.loongson3_lsdc2_format.rt], 0, value);
->                         compute_return_epc(regs);
->                         own_fpu(1);
->                         break;
-> @@ -286,8 +280,7 @@ static int loongson_cu2_call(struct notifier_block *nfb, unsigned long action,
->                                 goto sigbus;
->
->                         lose_fpu(1);
-> -                       value = get_fpr64(current->thread.fpu.fpr,
-> -                                       insn.loongson3_lsdc2_format.rt);
-> +                       value = get_fpr64(&current->thread.fpu.fpr[insn.loongson3_lsdc2_format.rt], 0);
->
->                         StoreW(addr, value, res);
->                         if (res)
-> @@ -305,8 +298,7 @@ static int loongson_cu2_call(struct notifier_block *nfb, unsigned long action,
->                                 goto sigbus;
->
->                         lose_fpu(1);
-> -                       value = get_fpr64(current->thread.fpu.fpr,
-> -                                       insn.loongson3_lsdc2_format.rt);
-> +                       value = get_fpr64(&current->thread.fpu.fpr[insn.loongson3_lsdc2_format.rt], 0);
->
->                         StoreDW(addr, value, res);
->                         if (res)
-> --
-> 2.7.0
->
+> > ---
+> >  v4: shorten conditional compilation part as suggested by Miqu=C3=A8l.
+> >  v3: keep COMPILE_TEST compatibility by adding a new function that only=
+ checks
+> >      fw_arg3 when CONFIG_MIPS is defined.
+> >  v2: use CFE_EPTSEAL definition and avoid using an additional function.
+> >
+> >  drivers/mtd/parsers/bcm63xxpart.c | 32 ++++++++++++-------------------
+> >  1 file changed, 12 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/drivers/mtd/parsers/bcm63xxpart.c b/drivers/mtd/parsers/bc=
+m63xxpart.c
+> > index 78f90c6c18fd..b15bdadaedb5 100644
+> > --- a/drivers/mtd/parsers/bcm63xxpart.c
+> > +++ b/drivers/mtd/parsers/bcm63xxpart.c
+> > @@ -22,6 +22,11 @@
+> >  #include <linux/mtd/partitions.h>
+> >  #include <linux/of.h>
+> >
+> > +#ifdef CONFIG_MIPS
+> > +#include <asm/bootinfo.h>
+> > +#include <asm/fw/cfe/cfe_api.h>
+> > +#endif /* CONFIG_MIPS */
+> > +
+> >  #define BCM963XX_CFE_BLOCK_SIZE              SZ_64K  /* always at leas=
+t 64KiB */
+> >
+> >  #define BCM963XX_CFE_MAGIC_OFFSET    0x4e0
+> > @@ -32,28 +37,15 @@
+> >  #define STR_NULL_TERMINATE(x) \
+> >       do { char *_str =3D (x); _str[sizeof(x) - 1] =3D 0; } while (0)
+> >
+> > -static int bcm63xx_detect_cfe(struct mtd_info *master)
+> > +static inline int bcm63xx_detect_cfe(void)
+> >  {
+> > -     char buf[9];
+> > -     int ret;
+> > -     size_t retlen;
+> > +     int ret =3D 0;
+> >
+> > -     ret =3D mtd_read(master, BCM963XX_CFE_VERSION_OFFSET, 5, &retlen,
+> > -                    (void *)buf);
+> > -     buf[retlen] =3D 0;
+> > +#ifdef CONFIG_MIPS
+> > +     ret =3D (fw_arg3 =3D=3D CFE_EPTSEAL);
+> > +#endif /* CONFIG_MIPS */
+> >
+> > -     if (ret)
+> > -             return ret;
+> > -
+> > -     if (strncmp("cfe-v", buf, 5) =3D=3D 0)
+> > -             return 0;
+> > -
+> > -     /* very old CFE's do not have the cfe-v string, so check for magi=
+c */
+> > -     ret =3D mtd_read(master, BCM963XX_CFE_MAGIC_OFFSET, 8, &retlen,
+> > -                    (void *)buf);
+> > -     buf[retlen] =3D 0;
+> > -
+> > -     return strncmp("CFE1CFE1", buf, 8);
+> > +     return ret;
+> >  }
+> >
+> >  static int bcm63xx_read_nvram(struct mtd_info *master,
+> > @@ -138,7 +130,7 @@ static int bcm63xx_parse_cfe_partitions(struct mtd_=
+info *master,
+> >       struct bcm963xx_nvram *nvram =3D NULL;
+> >       int ret;
+> >
+> > -     if (bcm63xx_detect_cfe(master))
+> > +     if (!bcm63xx_detect_cfe())
+> >               return -EINVAL;
+> >
+> >       nvram =3D vzalloc(sizeof(*nvram));
