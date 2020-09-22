@@ -2,80 +2,224 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A12E1274745
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Sep 2020 19:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1264B274D41
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Sep 2020 01:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgIVRMB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Sep 2020 13:12:01 -0400
-Received: from crapouillou.net ([89.234.176.41]:52486 "EHLO crapouillou.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726566AbgIVRMB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Sep 2020 13:12:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1600794718; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r/cBwbH6F21bf+CzYpi3RQBt3loDuzCrOh9FPh+DK/Q=;
-        b=oDbemLGwAvHDecTmpDqn1e6akkMxbQwF+Iu1nIT8sfm2lVcX0J9JuWAFVjEt2iZAykvcYw
-        Eu9Y9tfGKqEwZwhn1tB6sMmX0Orcebf8p0dmtdaFkMBvoLuBAC9b0DSohykikcW5LBpNHN
-        R6L1tbO1XvxUqyULygMJKfhq7Yl0QcQ=
-Date:   Tue, 22 Sep 2020 19:11:48 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] MIPS: Increase range of CONFIG_FORCE_MAX_ZONEORDER
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     od@zcrc.me, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <O3L2HQ.37Y7OUPZFQDO1@crapouillou.net>
-In-Reply-To: <20200922160218.GA10358@alpha.franken.de>
-References: <20200917133528.83091-1-paul@crapouillou.net>
-        <20200922160218.GA10358@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+        id S1726851AbgIVXWA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Sep 2020 19:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726849AbgIVXVx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Sep 2020 19:21:53 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3596C0613D2
+        for <linux-mips@vger.kernel.org>; Tue, 22 Sep 2020 16:21:53 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id f185so17612694ybf.17
+        for <linux-mips@vger.kernel.org>; Tue, 22 Sep 2020 16:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=tGcXn3sDm57uE3gVQiqH/xFvLNTI0/uhdj25yBP9OJM=;
+        b=cAARJB9tQz4JFwu+kbKkxA+YQXekK4ONh76aUVGk60ANDFmn3LzczEkxUmIX4dGUqE
+         5+GexyhewVbiCnAS31iStuersWlZoY0hTROpLlnUSlfVGrQHCJ2YtjP4qsvuUxs3VDh7
+         0LVX4wegpTtuYdKicQnFOMYiwk5PNRomalJTdjJ5fYR0jNP2Vw9EjgKuYUk0iI+OGons
+         5gnMGnR6RFuE7FhM0OmkQ375mP8hPvNt8oJ+AXJdM0lKaRwJ7H7wmg4i61m2rzjx4Aw1
+         yT7rcgrxPn1Wd2aPKjHIaDsFP4mx6wTg/AFk910wUEuvevcrWly6ccaxezXXXi5tE90G
+         ZlUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=tGcXn3sDm57uE3gVQiqH/xFvLNTI0/uhdj25yBP9OJM=;
+        b=HBOuytnX3OtSJ6engavyWVJ8UjkSCGhuy2Q2208/rlhtQsz5rPhy73C4Z676HtVjVr
+         vCZBII9HYnaopBnEB8QWvwlgclzHbYzlnuxBjig4iAdX8G4uSmsD+Hvi6j/8GImFJ0Eo
+         zueFgtbeT+ZLMfpbjKdLIeAgwrczLg3bZYKS0CeeB9iz1byXib9HSgR85dg4uK0NttgV
+         zFO/oVV1YyZVdAPOFEN/pH9Pz33h7LwOdHdkTVrQPHI7P6ebvbZFXkmm6uKugVYIX9BV
+         iTEMyoEC/aajYwt1iaV01WBQxyGUFPyyFVyuRODjACcX691M/IYRQHgjb0qMdmbF8ln6
+         lxIQ==
+X-Gm-Message-State: AOAM5329oQSxjpUfH8PZQRK4EIkUllCbWoC2Rnabx7iwIg8SM6QYVyi1
+        q+cdSEk1EzYtd9plkKs/TEFs7KNp
+X-Google-Smtp-Source: ABdhPJxUgxwW4VA+vB29eR+veCkKgDowzHp+nyf81WrQ9ev1/t+X3X9+s1UrsuH08x6IBr4JM162UcMNug==
+Sender: "morbo via sendgmr" <morbo@fawn.svl.corp.google.com>
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:7220:84ff:fe0f:9f6a])
+ (user=morbo job=sendgmr) by 2002:a25:3453:: with SMTP id b80mr10708338yba.237.1600816912562;
+ Tue, 22 Sep 2020 16:21:52 -0700 (PDT)
+Date:   Tue, 22 Sep 2020 16:21:40 -0700
+Message-Id: <20200922232140.1994390-1-morbo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
+Subject: [PATCH] kbuild: explicitly specify the build id style
+From:   Bill Wendling <morbo@google.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Will Deacon <will@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+ld's --build-id defaults to "sha1" style, while lld defaults to "fast".
+The build IDs are very different between the two, which may confuse
+programs that reference them.
 
-Le mar. 22 sept. 2020 =E0 18:02, Thomas Bogendoerfer=20
-<tsbogend@alpha.franken.de> a =E9crit :
-> On Thu, Sep 17, 2020 at 03:35:28PM +0200, Paul Cercueil wrote:
->>  There is nothing that prevents us from using lower maximum values.
->>  It's something that we actually want, when using bigger page sizes=20
->> on
->>  devices with low RAM.
->>=20
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>   arch/mips/Kconfig | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->>  diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
->>  index 632fe8fe68c4..dca2bbdbfc24 100644
->>  --- a/arch/mips/Kconfig
->>  +++ b/arch/mips/Kconfig
->>  @@ -2251,7 +2251,7 @@ config FORCE_MAX_ZONEORDER
->>   	default "13" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_32KB
->>   	range 12 64 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_16KB
->>   	default "12" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_16KB
->>  -	range 11 64
->>  +	range 0 64
->=20
-> Do we need the range at all ? Most other archs don't use a range...
+Signed-off-by: Bill Wendling <morbo@google.com>
+---
+ Makefile                             | 4 ++--
+ arch/arm/vdso/Makefile               | 2 +-
+ arch/arm64/kernel/vdso/Makefile      | 2 +-
+ arch/arm64/kernel/vdso32/Makefile    | 2 +-
+ arch/mips/vdso/Makefile              | 2 +-
+ arch/riscv/kernel/vdso/Makefile      | 2 +-
+ arch/s390/kernel/vdso64/Makefile     | 2 +-
+ arch/sparc/vdso/Makefile             | 2 +-
+ arch/x86/entry/vdso/Makefile         | 2 +-
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 10 files changed, 11 insertions(+), 11 deletions(-)
 
-The maximum contiguous block size cannot be lower than a huge page, so=20
-that's why the 'range' are here.
-
-Which makes me think that there should probably be a "range 11 64 if=20
-MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_8KB" and the same for 4KB pages.
-
-With a lower value and huge pages enabled in the config, the kernel=20
-probably would not boot.
-
-Cheers,
--Paul
-
+diff --git a/Makefile b/Makefile
+index 2b66d3398878..7e6f41c9803a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -973,8 +973,8 @@ KBUILD_CPPFLAGS += $(KCPPFLAGS)
+ KBUILD_AFLAGS   += $(KAFLAGS)
+ KBUILD_CFLAGS   += $(KCFLAGS)
+ 
+-KBUILD_LDFLAGS_MODULE += --build-id
+-LDFLAGS_vmlinux += --build-id
++KBUILD_LDFLAGS_MODULE += --build-id=sha1
++LDFLAGS_vmlinux += --build-id=sha1
+ 
+ ifeq ($(CONFIG_STRIP_ASM_SYMS),y)
+ LDFLAGS_vmlinux	+= $(call ld-option, -X,)
+diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
+index a54f70731d9f..150ce6e6a5d3 100644
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -19,7 +19,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO32
+ ldflags-$(CONFIG_CPU_ENDIAN_BE8) := --be8
+ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
+ 	    -z max-page-size=4096 -nostdlib -shared $(ldflags-y) \
+-	    --hash-style=sysv --build-id \
++	    --hash-style=sysv --build-id=sha1 \
+ 	    -T
+ 
+ obj-$(CONFIG_VDSO) += vdso.o
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index 45d5cfe46429..871915097f9d 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -24,7 +24,7 @@ btildflags-$(CONFIG_ARM64_BTI_KERNEL) += -z force-bti
+ # routines, as x86 does (see 6f121e548f83 ("x86, vdso: Reimplement vdso.so
+ # preparation in build-time C")).
+ ldflags-y := -shared -nostdlib -soname=linux-vdso.so.1 --hash-style=sysv	\
+-	     -Bsymbolic $(call ld-option, --no-eh-frame-hdr) --build-id -n	\
++	     -Bsymbolic $(call ld-option, --no-eh-frame-hdr) --build-id=sha1 -n	\
+ 	     $(btildflags-y) -T
+ 
+ ccflags-y := -fno-common -fno-builtin -fno-stack-protector -ffixed-x18
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index d6adb4677c25..4fa4b3fe8efb 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -128,7 +128,7 @@ VDSO_LDFLAGS += -Wl,-Bsymbolic -Wl,--no-undefined -Wl,-soname=linux-vdso.so.1
+ VDSO_LDFLAGS += -Wl,-z,max-page-size=4096 -Wl,-z,common-page-size=4096
+ VDSO_LDFLAGS += -nostdlib -shared -mfloat-abi=soft
+ VDSO_LDFLAGS += -Wl,--hash-style=sysv
+-VDSO_LDFLAGS += -Wl,--build-id
++VDSO_LDFLAGS += -Wl,--build-id=sha1
+ VDSO_LDFLAGS += $(call cc32-ldoption,-fuse-ld=bfd)
+ 
+ 
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index 57fe83235281..5810cc12bc1d 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -61,7 +61,7 @@ endif
+ # VDSO linker flags.
+ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
+ 	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
+-	-G 0 --eh-frame-hdr --hash-style=sysv --build-id -T
++	-G 0 --eh-frame-hdr --hash-style=sysv --build-id=sha1 -T
+ 
+ CFLAGS_REMOVE_vdso.o = -pg
+ 
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index 478e7338ddc1..7d6a94d45ec9 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -49,7 +49,7 @@ $(obj)/vdso.so.dbg: $(src)/vdso.lds $(obj-vdso) FORCE
+ # refer to these symbols in the kernel code rather than hand-coded addresses.
+ 
+ SYSCFLAGS_vdso.so.dbg = -shared -s -Wl,-soname=linux-vdso.so.1 \
+-	-Wl,--build-id -Wl,--hash-style=both
++	-Wl,--build-id=sha1 -Wl,--hash-style=both
+ $(obj)/vdso-dummy.o: $(src)/vdso.lds $(obj)/rt_sigreturn.o FORCE
+ 	$(call if_changed,vdsold)
+ 
+diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
+index 4a66a1cb919b..edc473b32e42 100644
+--- a/arch/s390/kernel/vdso64/Makefile
++++ b/arch/s390/kernel/vdso64/Makefile
+@@ -19,7 +19,7 @@ KBUILD_AFLAGS_64 += -m64 -s
+ KBUILD_CFLAGS_64 := $(filter-out -m64,$(KBUILD_CFLAGS))
+ KBUILD_CFLAGS_64 += -m64 -fPIC -shared -fno-common -fno-builtin
+ ldflags-y := -fPIC -shared -nostdlib -soname=linux-vdso64.so.1 \
+-	     --hash-style=both --build-id -T
++	     --hash-style=both --build-id=sha1 -T
+ 
+ $(targets:%=$(obj)/%.dbg): KBUILD_CFLAGS = $(KBUILD_CFLAGS_64)
+ $(targets:%=$(obj)/%.dbg): KBUILD_AFLAGS = $(KBUILD_AFLAGS_64)
+diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
+index f44355e46f31..469dd23887ab 100644
+--- a/arch/sparc/vdso/Makefile
++++ b/arch/sparc/vdso/Makefile
+@@ -115,7 +115,7 @@ quiet_cmd_vdso = VDSO    $@
+ 		       -T $(filter %.lds,$^) $(filter %.o,$^) && \
+ 		sh $(srctree)/$(src)/checkundef.sh '$(OBJDUMP)' '$@'
+ 
+-VDSO_LDFLAGS = -shared --hash-style=both --build-id -Bsymbolic
++VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 -Bsymbolic
+ GCOV_PROFILE := n
+ 
+ #
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 215376d975a2..ebba25ed9a38 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -176,7 +176,7 @@ quiet_cmd_vdso = VDSO    $@
+ 		       -T $(filter %.lds,$^) $(filter %.o,$^) && \
+ 		 sh $(srctree)/$(src)/checkundef.sh '$(NM)' '$@'
+ 
+-VDSO_LDFLAGS = -shared --hash-style=both --build-id \
++VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 \
+ 	$(call ld-option, --eh-frame-hdr) -Bsymbolic
+ GCOV_PROFILE := n
+ 
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index fc946b7ac288..daf186f88a63 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -133,7 +133,7 @@ $(OUTPUT)/%:%.c
+ 
+ $(OUTPUT)/urandom_read: urandom_read.c
+ 	$(call msg,BINARY,,$@)
+-	$(Q)$(CC) $(LDFLAGS) -o $@ $< $(LDLIBS) -Wl,--build-id
++	$(Q)$(CC) $(LDFLAGS) -o $@ $< $(LDLIBS) -Wl,--build-id=sha1
+ 
+ $(OUTPUT)/test_stub.o: test_stub.c $(BPFOBJ)
+ 	$(call msg,CC,,$@)
+-- 
+2.28.0.681.g6f77f65b4e-goog
 
