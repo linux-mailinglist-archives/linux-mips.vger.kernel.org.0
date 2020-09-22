@@ -2,121 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B859273938
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Sep 2020 05:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 342AE273AFA
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Sep 2020 08:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728589AbgIVD0X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Sep 2020 23:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S1729157AbgIVGco (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Sep 2020 02:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728546AbgIVD0X (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Sep 2020 23:26:23 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC00C061755;
-        Mon, 21 Sep 2020 20:26:23 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id x14so19494615oic.9;
-        Mon, 21 Sep 2020 20:26:23 -0700 (PDT)
+        with ESMTP id S1726898AbgIVGcn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Sep 2020 02:32:43 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CE8C061755;
+        Mon, 21 Sep 2020 23:32:43 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id s12so15689127wrw.11;
+        Mon, 21 Sep 2020 23:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NsLOhgLyrsC3y4elp6O/jQnxUTulJL0+nvpYvr5hkXA=;
-        b=Pi5SMY8gahJjPqjL51bEyytPDq7zuskWxXDF570j/BfidkyWEphGd/Bdx8395JCwF2
-         ejCU6LO+u0Cock2W6kKaJZZC53VdCKzK5FY1QYpdW4A5lPPulIZrA0JQpCmw6X9I7Gms
-         s69V3lZ6qWLdNbjh3ph8unhyW3lrvGXiCU/TIRZbp8RCjfA6qPbYaoVb9uwhIV1P4i4l
-         o4cHrcp3WTdGaCFidYT8jB2T/NcuLn7tb46hwBVVcosVV628shLNnS7o6zZdbUAvTqgR
-         g2mSGGFciH3Cs3qVKx+M7qQeCONJlGbZMVb58/k0yRpPCjwZ+4n54aS84+cNfyoCYWWo
-         ebbA==
+        h=to:cc:references:from:autocrypt:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=eDOz/JMLknkTw9g+y5dhApSm97qkVUEs/ZHTL0gz2fw=;
+        b=HaQCQALGHVNQEMfZjWIQPSNwZdZYY918PSJxIKXBtHGREzrfZs14l3A7EVqs2FMev/
+         IJEb11WYJ0Io7OvlAVv0yN7wti4dY6131+xDOqnq33+mYC8No5DoDKBA0p28miZblzSh
+         iNg4UEEi1t4FGDg7qM28k8HJWOiayhzucNTCXz50wqRizN5pQgGXudx9Eg67GPANhr56
+         mEa26Q61i7gAReMjuCfJwAh+HVaTrMT52kQoueu+Kbqdewu6qCadAh37ghukc7GFxD1C
+         O0B5pJecQysUZMJL8izt5QrVScpa7C7bG8FE9jy6GPyeF/acFygKkym3brbq6FgSx5HG
+         wh1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+        h=x-gm-message-state:to:cc:references:from:autocrypt:subject
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=NsLOhgLyrsC3y4elp6O/jQnxUTulJL0+nvpYvr5hkXA=;
-        b=JFzMTBVd5nZSwN9UdrhbAUUac5C5qXROHTCv4zYd4tSubJBR86gejtKKUihkIKlBNZ
-         b20RigzkWbwJbYvEQeA7t1gEEOPQ1zgSpGjBwbABMd91BZAFrEYJxuEbApaGugJsy5lL
-         gT4V1CIY+sG/aECnGyqwPs7I+zz69PyoDYBTd/rJSfx0EY+nSYk+g/M8nHNW+V9CrOKL
-         3WRvqqXNxSnuDppX4hCUOO43qGF3+sZqYgsrVdFN6B75/VOdnL73cI0wKL5+Wnl1ipn9
-         9lBmjUXvWrSnwO/4OuIpKI2Lomq8qaq2r6vf1g0jYJ84FKE7xlOVAM9mMd2Jn//cOfG3
-         zBSQ==
-X-Gm-Message-State: AOAM533yiAdsFw6tW7sUdg0MAmUbObU+LHsKG1ifX0DkJO6eL+3rgJE9
-        v7xqdHtKGrdfnEtmhNrdlG5BT1Z7KA0=
-X-Google-Smtp-Source: ABdhPJxJp9NZva5ckfrNyr+MbsHwrsAfPiEmY/nGAsQs2M3vqvGID0GwmBFQ2+MhdJrnucU7moK2JQ==
-X-Received: by 2002:aca:ef56:: with SMTP id n83mr1378523oih.89.1600745182535;
-        Mon, 21 Sep 2020 20:26:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v5sm7929510oon.32.2020.09.21.20.26.20
+        bh=eDOz/JMLknkTw9g+y5dhApSm97qkVUEs/ZHTL0gz2fw=;
+        b=Axole8VmCQWtxzHLCme95aa2gjvpwCeAqQ/XplPdXWi9n9Fq8DufMbCjLqXf5ZfTtO
+         Ch8tlHpb2sL1gQXm58m21ZO/davJUmJDN0xo7DerDQBFswX3WiLct+Wkv6EFgFETfPRe
+         ELQ5iaTNhTj/TCCYdsvYubqWqMZ1EUMopOMgcxeLLrt9uNa95+0rAA1Bf685XRPVKlRz
+         q/gzLtocacn9F8pNtAvlwDQ+8XvEn0tydk+QGFiCejguPN7WJbLJfqPUNvjQm95wkaTc
+         enrT+GO9dL/RT3RD3IFYoFdFjWhDyCPjq/KyBtycJKFYE9JC2YRNUT6uVFYGlfgNwkPY
+         HaDg==
+X-Gm-Message-State: AOAM5319ax/wOO1qbckVBBZwPS6hA56KhtDH0tdIUbSZsXuL+6nVvtbY
+        kRevcHEenz3p2xAxeUBBOG08goVq8kIyog==
+X-Google-Smtp-Source: ABdhPJzC1rbzyPo53+fNSxXWPDaZOzMzgC1GT/88osu+za3TOCt7+Tr5Ya9aJiKtMy5iRtpQZlj3MQ==
+X-Received: by 2002:adf:fa52:: with SMTP id y18mr3532704wrr.264.1600756361855;
+        Mon, 21 Sep 2020 23:32:41 -0700 (PDT)
+Received: from [192.168.43.240] ([5.100.192.97])
+        by smtp.gmail.com with ESMTPSA id d83sm3167538wmf.23.2020.09.21.23.32.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2020 20:26:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v4] mtd: parsers: bcm63xx: simplify CFE detection
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>, jonas.gorski@gmail.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mtd@lists.infradead.org, lkft-triage@lists.linaro.org
-References: <20200612073549.1658336-1-noltari@gmail.com>
- <20200615091740.2958303-1-noltari@gmail.com>
- <20200814085617.GA129183@roeck-us.net>
- <CA+G9fYvGkowdQmi1eBfoq2dhzBfgkFh9+7tgdNw75LydxkAEPw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <bff67b4c-4fa0-2441-ddbe-15366c8601d1@roeck-us.net>
-Date:   Mon, 21 Sep 2020 20:26:19 -0700
+        Mon, 21 Sep 2020 23:32:41 -0700 (PDT)
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Howells <dhowells@redhat.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-aio <linux-aio@kvack.org>, io-uring@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Network Development <netdev@vger.kernel.org>,
+        keyrings@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>
+References: <CAK8P3a2Mi+1yttyGk4k7HxRVrMtmFqJewouVhynqUL0PJycmog@mail.gmail.com>
+ <D0791499-1190-4C3F-A984-0A313ECA81C7@amacapital.net>
+ <563138b5-7073-74bc-f0c5-b2bad6277e87@gmail.com>
+ <486c92d0-0f2e-bd61-1ab8-302524af5e08@gmail.com>
+ <CALCETrW3rwGsgfLNnu_0JAcL5jvrPVTLTWM3JpbB5P9Hye6Fdw@mail.gmail.com>
+ <d5c6736a-2cb4-4e22-78da-a667bda5c05a@gmail.com>
+ <CALCETrUEC81va8-fuUXG1uA5rbKxnKDYsDOXC70_HtKD4LAeAg@mail.gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+Autocrypt: addr=asml.silence@gmail.com; prefer-encrypt=mutual; keydata=
+ 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 bA==
+Subject: Re: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
+Message-ID: <e0a1b4d1-ff47-18d1-d535-c62812cb3105@gmail.com>
+Date:   Tue, 22 Sep 2020 09:30:09 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <CA+G9fYvGkowdQmi1eBfoq2dhzBfgkFh9+7tgdNw75LydxkAEPw@mail.gmail.com>
+In-Reply-To: <CALCETrUEC81va8-fuUXG1uA5rbKxnKDYsDOXC70_HtKD4LAeAg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -124,117 +135,85 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 9/21/20 8:18 PM, Naresh Kamboju wrote:
-> On Fri, 14 Aug 2020 at 14:26, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On Mon, Jun 15, 2020 at 11:17:40AM +0200, Álvaro Fernández Rojas wrote:
->>> Instead of trying to parse CFE version string, which is customized by some
->>> vendors, let's just check that "CFE1" was passed on argument 3.
+On 22/09/2020 03:58, Andy Lutomirski wrote:
+> On Mon, Sep 21, 2020 at 5:24 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>>>>>> Ah, so reading /dev/input/event* would suffer from the same issue,
+>>>>>>> and that one would in fact be broken by your patch in the hypothetical
+>>>>>>> case that someone tried to use io_uring to read /dev/input/event on x32...
+>>>>>>>
+>>>>>>> For reference, I checked the socket timestamp handling that has a
+>>>>>>> number of corner cases with time32/time64 formats in compat mode,
+>>>>>>> but none of those appear to be affected by the problem.
+>>>>>>>
+>>>>>>>> Aside from the potentially nasty use of per-task variables, one thing
+>>>>>>>> I don't like about PF_FORCE_COMPAT is that it's one-way.  If we're
+>>>>>>>> going to have a generic mechanism for this, shouldn't we allow a full
+>>>>>>>> override of the syscall arch instead of just allowing forcing compat
+>>>>>>>> so that a compat syscall can do a non-compat operation?
+>>>>>>>
+>>>>>>> The only reason it's needed here is that the caller is in a kernel
+>>>>>>> thread rather than a system call. Are there any possible scenarios
+>>>>>>> where one would actually need the opposite?
+>>>>>>>
+>>>>>>
+>>>>>> I can certainly imagine needing to force x32 mode from a kernel thread.
+>>>>>>
+>>>>>> As for the other direction: what exactly are the desired bitness/arch semantics of io_uring?  Is the operation bitness chosen by the io_uring creation or by the io_uring_enter() bitness?
+>>>>>
+>>>>> It's rather the second one. Even though AFAIR it wasn't discussed
+>>>>> specifically, that how it works now (_partially_).
+>>>>
+>>>> Double checked -- I'm wrong, that's the former one. Most of it is based
+>>>> on a flag that was set an creation.
+>>>>
 >>>
->>> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
->>> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
->>> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+>>> Could we get away with making io_uring_enter() return -EINVAL (or
+>>> maybe -ENOTTY?) if you try to do it with bitness that doesn't match
+>>> the io_uring?  And disable SQPOLL in compat mode?
 >>
+>> Something like below. If PF_FORCE_COMPAT or any other solution
+>> doesn't lend by the time, I'll take a look whether other io_uring's
+>> syscalls need similar checks, etc.
+>>
+>>
+>> diff --git a/fs/io_uring.c b/fs/io_uring.c
+>> index 0458f02d4ca8..aab20785fa9a 100644
+>> --- a/fs/io_uring.c
+>> +++ b/fs/io_uring.c
+>> @@ -8671,6 +8671,10 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u32, to_submit,
+>>         if (ctx->flags & IORING_SETUP_R_DISABLED)
+>>                 goto out;
+>>
+>> +       ret = -EINVAl;
+>> +       if (ctx->compat != in_compat_syscall())
+>> +               goto out;
+>> +
 > 
-> We still see mips: allmodconfig build failure on Linus tree
+> This seems entirely reasonable to me.  Sharing an io_uring ring
+> between programs with different ABIs seems a bit nutty.
 > 
+>>         /*
+>>          * For SQ polling, the thread will do all submissions and completions.
+>>          * Just return the requested submit count, and wake the thread if
+>> @@ -9006,6 +9010,10 @@ static int io_uring_create(unsigned entries, struct io_uring_params *p,
+>>         if (ret)
+>>                 goto err;
+>>
+>> +       ret = -EINVAL;
+>> +       if (ctx->compat)
+>> +               goto err;
+>> +
+> 
+> I may be looking at a different kernel than you, but aren't you
+> preventing creating an io_uring regardless of whether SQPOLL is
+> requested?
 
-Yes, same here.
+I diffed a not-saved file on a sleepy head, thanks for noticing.
+As you said, there should be an SQPOLL check.
 
-Guenter
+...
+if (ctx->compat && (p->flags & IORING_SETUP_SQPOLL))
+	goto err;
 
-> make -sk KBUILD_BUILD_USER=TuxBuild -C/linux ARCH=mips
-> CROSS_COMPILE=mips-linux-gnu- HOSTCC=gcc CC="sccache
-> mips-linux-gnu-gcc" O=build allmodconfig
-> 
-> make -sk KBUILD_BUILD_USER=TuxBuild -C/linux -j16 ARCH=mips
-> CROSS_COMPILE=mips-linux-gnu- HOSTCC=gcc CC="sccache
-> mips-linux-gnu-gcc" O=build
-> 
-> 
->> mips:allmodconfig:
->>
->> ERROR: modpost: "fw_arg3" [drivers/mtd/parsers/bcm63xxpart.ko] undefined!
-> 
-> ERROR: modpost: "fw_arg3" [drivers/mtd/parsers/bcm63xxpart.ko] undefined!
-> 
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> 
-> Full build link,
-> https://builds.tuxbuild.com/Sm59_9tjFMpIvT27qf5kNA/build.log
-> 
->>
->> This is not surprising, since fw_arg3 is not exported.
->>
->> Guenter
->>
->>> ---
->>>  v4: shorten conditional compilation part as suggested by Miquèl.
->>>  v3: keep COMPILE_TEST compatibility by adding a new function that only checks
->>>      fw_arg3 when CONFIG_MIPS is defined.
->>>  v2: use CFE_EPTSEAL definition and avoid using an additional function.
->>>
->>>  drivers/mtd/parsers/bcm63xxpart.c | 32 ++++++++++++-------------------
->>>  1 file changed, 12 insertions(+), 20 deletions(-)
->>>
->>> diff --git a/drivers/mtd/parsers/bcm63xxpart.c b/drivers/mtd/parsers/bcm63xxpart.c
->>> index 78f90c6c18fd..b15bdadaedb5 100644
->>> --- a/drivers/mtd/parsers/bcm63xxpart.c
->>> +++ b/drivers/mtd/parsers/bcm63xxpart.c
->>> @@ -22,6 +22,11 @@
->>>  #include <linux/mtd/partitions.h>
->>>  #include <linux/of.h>
->>>
->>> +#ifdef CONFIG_MIPS
->>> +#include <asm/bootinfo.h>
->>> +#include <asm/fw/cfe/cfe_api.h>
->>> +#endif /* CONFIG_MIPS */
->>> +
->>>  #define BCM963XX_CFE_BLOCK_SIZE              SZ_64K  /* always at least 64KiB */
->>>
->>>  #define BCM963XX_CFE_MAGIC_OFFSET    0x4e0
->>> @@ -32,28 +37,15 @@
->>>  #define STR_NULL_TERMINATE(x) \
->>>       do { char *_str = (x); _str[sizeof(x) - 1] = 0; } while (0)
->>>
->>> -static int bcm63xx_detect_cfe(struct mtd_info *master)
->>> +static inline int bcm63xx_detect_cfe(void)
->>>  {
->>> -     char buf[9];
->>> -     int ret;
->>> -     size_t retlen;
->>> +     int ret = 0;
->>>
->>> -     ret = mtd_read(master, BCM963XX_CFE_VERSION_OFFSET, 5, &retlen,
->>> -                    (void *)buf);
->>> -     buf[retlen] = 0;
->>> +#ifdef CONFIG_MIPS
->>> +     ret = (fw_arg3 == CFE_EPTSEAL);
->>> +#endif /* CONFIG_MIPS */
->>>
->>> -     if (ret)
->>> -             return ret;
->>> -
->>> -     if (strncmp("cfe-v", buf, 5) == 0)
->>> -             return 0;
->>> -
->>> -     /* very old CFE's do not have the cfe-v string, so check for magic */
->>> -     ret = mtd_read(master, BCM963XX_CFE_MAGIC_OFFSET, 8, &retlen,
->>> -                    (void *)buf);
->>> -     buf[retlen] = 0;
->>> -
->>> -     return strncmp("CFE1CFE1", buf, 8);
->>> +     return ret;
->>>  }
->>>
->>>  static int bcm63xx_read_nvram(struct mtd_info *master,
->>> @@ -138,7 +130,7 @@ static int bcm63xx_parse_cfe_partitions(struct mtd_info *master,
->>>       struct bcm963xx_nvram *nvram = NULL;
->>>       int ret;
->>>
->>> -     if (bcm63xx_detect_cfe(master))
->>> +     if (!bcm63xx_detect_cfe())
->>>               return -EINVAL;
->>>
->>>       nvram = vzalloc(sizeof(*nvram));
-
+-- 
+Pavel Begunkov
