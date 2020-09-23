@@ -2,230 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0477274D9E
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Sep 2020 02:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019FC274F04
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Sep 2020 04:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726805AbgIWAFj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Sep 2020 20:05:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35642 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726179AbgIWAFi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Sep 2020 20:05:38 -0400
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 585CF23A1D;
-        Wed, 23 Sep 2020 00:05:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600819537;
-        bh=BN2JO8cF+jS2JfvaTCuvroT3lVzAjAOUVtydtxaO3O4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=D4BsQwtrE0bRRALj0ZhdHfCLSujXjh6F7meja8WT18qpviXbA+QZpG22D6TStoFzD
-         esLcNEEis3q5GD2ngAjDv1JBj3nuV1NJDjbAM1zx1PLnf+GaJE4CWCPciG6IKeEj9P
-         2etOQlfFcS6a8cIi5hnan134iSIropl9NNarJz0U=
-Received: by mail-lf1-f48.google.com with SMTP id m5so20012350lfp.7;
-        Tue, 22 Sep 2020 17:05:37 -0700 (PDT)
-X-Gm-Message-State: AOAM530+PnvaE7YXTbFCc5RzNePMH2/z0TW6+pAuQ01OsCwpJeCsn2X6
-        2Etm8PCEARnxsajIruZonESmNLO9mlZYfowtXOU=
-X-Google-Smtp-Source: ABdhPJzKHKLgsGXChluCkkkYPY85+IzWQtpjD+xwRPqP5lLV/gun1FBs3gKk0smb1Hrbxlj4VdZ3a5tMZisYukVr51E=
-X-Received: by 2002:ac2:51aa:: with SMTP id f10mr2347652lfk.451.1600819535428;
- Tue, 22 Sep 2020 17:05:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200919091751.011116649@linutronix.de> <20200919092616.432209211@linutronix.de>
-In-Reply-To: <20200919092616.432209211@linutronix.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 23 Sep 2020 08:05:24 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTcs2589gj6iYhumuoXPa6ejycedAKv4O8QwXQkKU0_fw@mail.gmail.com>
-Message-ID: <CAJF2gTTcs2589gj6iYhumuoXPa6ejycedAKv4O8QwXQkKU0_fw@mail.gmail.com>
-Subject: Re: [patch RFC 06/15] csky/mm/highmem: Switch to generic kmap atomic
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Paul McKenney <paulmck@kernel.org>, x86@kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-csky@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
-        linux-snps-arc@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1727032AbgIWCbJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Sep 2020 22:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726893AbgIWCbJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Sep 2020 22:31:09 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B459C061755
+        for <linux-mips@vger.kernel.org>; Tue, 22 Sep 2020 19:31:09 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id r19so6054202pls.1
+        for <linux-mips@vger.kernel.org>; Tue, 22 Sep 2020 19:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=0V6+MO40T7RQQa2+6CkybLfijKZrU0OL4srRvkZWkcE=;
+        b=atgt49gyTw8rUkL4uva3MSAMlvKNi1IgKBmdun7l1fH78Qzpgl9G84HuRUAS+yq4vT
+         HcvFHVF7Cp9WSTMwnJJAuVls0eRbkWPrggU6ypquQXavyjHlmO5frh1gdTDA+eTNiOJp
+         uAxSiuFrVMp5S3WL4zo4JT0QSEhKsi8Nkt7b20kF1oOr27nbKS1qy/5DtZQ28brc0VHc
+         bECUL6J/+rvCigJExxXThK38bRFHz0BqZJJWQbENgwl+V1gFz1lrlCH8wIPScIdBSKlI
+         5MFwiEGnxOCxuAslFwP9AFxOiJNS7nKBFwBFF4pLzrShhj8SottKSjKggnjVkhM0D+Pf
+         zhew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=0V6+MO40T7RQQa2+6CkybLfijKZrU0OL4srRvkZWkcE=;
+        b=DQMHyhM/QNM84oeurQ1n7mH2xKqbzkaVIsdZLTU5Mhws2U1mYNI/GShjXgVSRheAch
+         rsItu+FpjmvcP8UxhC4pADnMLsuSHH/A2NJSm+W4jebCCbazxl+uVpyUyyRFGK0AGq+V
+         FkhSx6OVlNSnyuAbUsuszsJF64Ka4dEmR+aN5BTaYijEwxJaSMfENt5zt4LTvK736mZu
+         jCm5uQ+R62WcKhwToNkoKqEHDEPeryUaZpYK1KzcwjfmNKrxgE+knGfFWkVFTlnYEoqD
+         rKpOk1g4ucyjr0V5NxzKYYB/ypbxKNvdUoM6EJ52NsEWT/wRA/jW2lDSED/5meP3FH/f
+         P9uA==
+X-Gm-Message-State: AOAM530Uqh/YP+ugrzge80pP2pv25NhjoWvAj7qQcCliZWWvjlsB2Hyr
+        PRpNhTQ75QvZNHrSuVq+x/M=
+X-Google-Smtp-Source: ABdhPJxaupKZkt0j7Iuv5fG+DSBVblOScNi25HNVSXii5MQ84paNqJNhEQzgnv3RAbaKawZxM48iWg==
+X-Received: by 2002:a17:90a:ba91:: with SMTP id t17mr6486978pjr.83.1600828268579;
+        Tue, 22 Sep 2020 19:31:08 -0700 (PDT)
+Received: from software.domain.org ([45.77.13.216])
+        by smtp.gmail.com with ESMTPSA id 72sm16019599pfx.79.2020.09.22.19.31.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 22 Sep 2020 19:31:08 -0700 (PDT)
+Sender: Huacai Chen <chenhuacai@gmail.com>
+From:   Huacai Chen <chenhc@lemote.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>
+Cc:     linux-mips@vger.kernel.org, kexec@lists.infradead.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH 1/3] MIPS: Crash kernel should be able to see old memories
+Date:   Wed, 23 Sep 2020 10:30:55 +0800
+Message-Id: <1600828257-31316-1-git-send-email-chenhc@lemote.com>
+X-Mailer: git-send-email 2.7.0
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+Kexec-tools use mem=X@Y to pass usable memories to crash kernel, but in
+commit a94e4f24ec836c8984f83959 ("MIPS: init: Drop boot_mem_map") all
+BIOS passed memories are removed by early_parse_mem(). I think this is
+reasonable for a normal kernel but not for a crash kernel, because a
+crash kernel should be able to see all old memories, even though it is
+not supposed to use them.
 
-On Sat, Sep 19, 2020 at 5:50 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: linux-csky@vger.kernel.org
-> ---
-> Note: Completely untested
-> ---
->  arch/csky/Kconfig               |    1
->  arch/csky/include/asm/highmem.h |    4 +-
->  arch/csky/mm/highmem.c          |   75 ----------------------------------------
->  3 files changed, 5 insertions(+), 75 deletions(-)
->
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -285,6 +285,7 @@ config NR_CPUS
->  config HIGHMEM
->         bool "High Memory Support"
->         depends on !CPU_CK610
-> +       select KMAP_ATOMIC_GENERIC
->         default y
->
->  config FORCE_MAX_ZONEORDER
-> --- a/arch/csky/include/asm/highmem.h
-> +++ b/arch/csky/include/asm/highmem.h
-> @@ -32,10 +32,12 @@ extern pte_t *pkmap_page_table;
->
->  #define ARCH_HAS_KMAP_FLUSH_TLB
->  extern void kmap_flush_tlb(unsigned long addr);
-> -extern void *kmap_atomic_pfn(unsigned long pfn);
->
->  #define flush_cache_kmaps() do {} while (0)
->
-> +#define arch_kmap_temp_post_map(vaddr, pteval) kmap_flush_tlb(vaddr)
-> +#define arch_kmap_temp_post_unmap(vaddr)       kmap_flush_tlb(vaddr)
-> +
->  extern void kmap_init(void);
->
->  #endif /* __KERNEL__ */
-> --- a/arch/csky/mm/highmem.c
-> +++ b/arch/csky/mm/highmem.c
-> @@ -9,8 +9,6 @@
->  #include <asm/tlbflush.h>
->  #include <asm/cacheflush.h>
->
-> -static pte_t *kmap_pte;
-> -
->  unsigned long highstart_pfn, highend_pfn;
->
->  void kmap_flush_tlb(unsigned long addr)
-> @@ -19,67 +17,7 @@ void kmap_flush_tlb(unsigned long addr)
->  }
->  EXPORT_SYMBOL(kmap_flush_tlb);
->
-> -void *kmap_atomic_high_prot(struct page *page, pgprot_t prot)
-> -{
-> -       unsigned long vaddr;
-> -       int idx, type;
-> -
-> -       type = kmap_atomic_idx_push();
-> -       idx = type + KM_TYPE_NR*smp_processor_id();
-> -       vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
-> -#ifdef CONFIG_DEBUG_HIGHMEM
-> -       BUG_ON(!pte_none(*(kmap_pte - idx)));
-> -#endif
-> -       set_pte(kmap_pte-idx, mk_pte(page, prot));
-> -       flush_tlb_one((unsigned long)vaddr);
-> -
-> -       return (void *)vaddr;
-> -}
-> -EXPORT_SYMBOL(kmap_atomic_high_prot);
-> -
-> -void kunmap_atomic_high(void *kvaddr)
-> -{
-> -       unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
-> -       int idx;
-> -
-> -       if (vaddr < FIXADDR_START)
-> -               return;
-> -
-> -#ifdef CONFIG_DEBUG_HIGHMEM
-> -       idx = KM_TYPE_NR*smp_processor_id() + kmap_atomic_idx();
-> -
-> -       BUG_ON(vaddr != __fix_to_virt(FIX_KMAP_BEGIN + idx));
-> -
-> -       pte_clear(&init_mm, vaddr, kmap_pte - idx);
-> -       flush_tlb_one(vaddr);
-> -#else
-> -       (void) idx; /* to kill a warning */
-> -#endif
-> -       kmap_atomic_idx_pop();
-> -}
-> -EXPORT_SYMBOL(kunmap_atomic_high);
-> -
-> -/*
-> - * This is the same as kmap_atomic() but can map memory that doesn't
-> - * have a struct page associated with it.
-> - */
-> -void *kmap_atomic_pfn(unsigned long pfn)
-> -{
-> -       unsigned long vaddr;
-> -       int idx, type;
-> -
-> -       pagefault_disable();
-> -
-> -       type = kmap_atomic_idx_push();
-> -       idx = type + KM_TYPE_NR*smp_processor_id();
-> -       vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
-> -       set_pte(kmap_pte-idx, pfn_pte(pfn, PAGE_KERNEL));
-> -       flush_tlb_one(vaddr);
-> -
-> -       return (void *) vaddr;
-> -}
-> -
-> -static void __init kmap_pages_init(void)
-> +void __init kmap_init(void)
->  {
->         unsigned long vaddr;
->         pgd_t *pgd;
-> @@ -96,14 +34,3 @@ static void __init kmap_pages_init(void)
->         pte = pte_offset_kernel(pmd, vaddr);
->         pkmap_page_table = pte;
->  }
-> -
-> -void __init kmap_init(void)
-> -{
-> -       unsigned long vaddr;
-> -
-> -       kmap_pages_init();
-> -
-> -       vaddr = __fix_to_virt(FIX_KMAP_BEGIN);
-> -
-> -       kmap_pte = pte_offset_kernel((pmd_t *)pgd_offset_k(vaddr), vaddr);
-> -}
->
+Fixes: a94e4f24ec836c8984f83959 ("MIPS: init: Drop boot_mem_map")
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+---
+ arch/mips/kernel/setup.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 4c04a86..e2804a2 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -392,8 +392,10 @@ static int __init early_parse_mem(char *p)
+ 	 */
+ 	if (usermem == 0) {
+ 		usermem = 1;
++#ifndef CONFIG_CRASH_DUMP
+ 		memblock_remove(memblock_start_of_DRAM(),
+ 			memblock_end_of_DRAM() - memblock_start_of_DRAM());
++#endif
+ 	}
+ 	start = 0;
+ 	size = memparse(p, &p);
 -- 
-Best Regards
- Guo Ren
+2.7.0
 
-ML: https://lore.kernel.org/linux-csky/
