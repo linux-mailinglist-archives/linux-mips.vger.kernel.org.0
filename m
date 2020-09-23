@@ -2,157 +2,184 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34537275376
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Sep 2020 10:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CC72754B8
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Sep 2020 11:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgIWImX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Sep 2020 04:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726424AbgIWImS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Sep 2020 04:42:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB242C061755;
-        Wed, 23 Sep 2020 01:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XUajjvVX4H86jnKIk5XMmvtu2ykOTjeXul3/BJu/hwU=; b=vqx/B66IY6FJeZM3oZmg/+Un+I
-        juk4SYQ/onu0T+HuU6X7fOPUIa6l9h67CTBxy3SeH234BxCXwizgdRSm3ioDdv8gF+TwH9O22nczg
-        iqTkLZMjcnlPg/CQhzPF7llJEWqzYy/Dtj1pYfU2/xkQ01m00/IofSzmAb4/u67Eqx5ofz6yzA4Jr
-        k+ENSw1eHzIn/yXomefawgme8b2QPv9bNql8zuIi3CmNCPYqKCAg5yJhl56cZVRivF4fUyQXVfWDV
-        f/qwJzeMoNXuRo68QwZoXhQ3RDUab4cXjbENpYgZ4B+vroJlmNEOdrOdKJLG7gc49cxKVxNJisFa1
-        TLPApaFA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kL0KM-0004t5-Gu; Wed, 23 Sep 2020 08:40:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A998D300455;
-        Wed, 23 Sep 2020 10:40:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6A1AD213DCC80; Wed, 23 Sep 2020 10:40:32 +0200 (CEST)
-Date:   Wed, 23 Sep 2020 10:40:32 +0200
-From:   peterz@infradead.org
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list\:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-Message-ID: <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
-References: <20200919091751.011116649@linutronix.de>
- <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
- <87mu1lc5mp.fsf@nanos.tec.linutronix.de>
- <87k0wode9a.fsf@nanos.tec.linutronix.de>
- <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
- <87eemwcpnq.fsf@nanos.tec.linutronix.de>
- <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
- <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
- <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
- <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
+        id S1726566AbgIWJqD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Sep 2020 05:46:03 -0400
+Received: from relay-us1.mymailcheap.com ([51.81.35.219]:57274 "EHLO
+        relay-us1.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726102AbgIWJqA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Sep 2020 05:46:00 -0400
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
+        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id AA90420E2E
+        for <linux-mips@vger.kernel.org>; Wed, 23 Sep 2020 09:45:58 +0000 (UTC)
+Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [217.182.113.132])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id 70BEB260EB
+        for <linux-mips@vger.kernel.org>; Wed, 23 Sep 2020 09:45:56 +0000 (UTC)
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay2.mymailcheap.com (Postfix) with ESMTPS id 476873EDEC;
+        Wed, 23 Sep 2020 11:45:55 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by filter2.mymailcheap.com (Postfix) with ESMTP id 2798F2A504;
+        Wed, 23 Sep 2020 11:45:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1600854355;
+        bh=WmH4sUX7rMwv7ZEn7Km4FbPWcYkvvAe8oD71hl3hl4k=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=n9Z8MqMYYkXNGr3Md61z/U3KBK3FSOhLt2l9QxLalepTLaaajOiGRtxy4wbuavEgQ
+         9KUrFmndRevTJ93QE2C0fJADHehnze3bBfnoOtzlL5FOWZTsBVsgj3JW7vvXmZgp2z
+         OTBoIoRdOYQSWVhONJz7ZQEE8lOSKYkTP3Ox1MOk=
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 5PwVxNikHEN7; Wed, 23 Sep 2020 11:45:53 +0200 (CEST)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Wed, 23 Sep 2020 11:45:53 +0200 (CEST)
+Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id D6CE440FEF;
+        Wed, 23 Sep 2020 09:45:51 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="SQfxzF4D";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from [127.0.0.1] (114-42-183-127.dynamic-ip.hinet.net [114.42.183.127])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id E8C9640FEF;
+        Wed, 23 Sep 2020 09:44:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
+        s=default; t=1600854252;
+        bh=WmH4sUX7rMwv7ZEn7Km4FbPWcYkvvAe8oD71hl3hl4k=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=SQfxzF4DPFZxSSc3FCY+yhhGaCQmE/LX9tPKaIdfarAjCErdLl6B9Cl+1OvjEaQM4
+         MpyQeMm+UQrTCT9go8IqxEPI9eJWWa/ir9kHNQAiIj/5LKN5t8XbrazI1byBbAQ3/n
+         NmYkdtNU6qp4sCTSLX5ib/AQRFZmvNZfShRK/SGE=
+Date:   Wed, 23 Sep 2020 17:44:02 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>
+CC:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>
+Subject: Re: [PATCH V7 2/3] MIPS: Loongson-3: Enable COP2 usage in kernel
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20200921121554.GA8642@alpha.franken.de>
+References: <1600679548-29154-1-git-send-email-chenhc@lemote.com> <1600679548-29154-2-git-send-email-chenhc@lemote.com> <20200921121554.GA8642@alpha.franken.de>
+Message-ID: <177ADF0C-1633-449F-B589-712EA4857E79@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: D6CE440FEF
+X-Spamd-Result: default: False [-0.10 / 10.00];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         ARC_NA(0.00)[];
+         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
+         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         R_SPF_SOFTFAIL(0.00)[~all];
+         RCPT_COUNT_FIVE(0.00)[5];
+         RECEIVED_SPAMHAUS_PBL(0.00)[114.42.183.127:received];
+         ML_SERVERS(-3.10)[213.133.102.83];
+         DKIM_TRACE(0.00)[flygoat.com:+];
+         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
+         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
+         FREEMAIL_CC(0.00)[vger.kernel.org,lemote.com,gmail.com];
+         MID_RHS_MATCH_FROM(0.00)[];
+         RCVD_COUNT_TWO(0.00)[2]
+X-Rspamd-Server: mail20.mymailcheap.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 09:27:57PM +0200, Thomas Gleixner wrote:
-> On Mon, Sep 21 2020 at 09:24, Linus Torvalds wrote:
-> > On Mon, Sep 21, 2020 at 12:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >>
-> >> If a task is migrated to a different CPU then the mapping address will
-> >> change which will explode in colourful ways.
-> >
-> > Right you are.
-> >
-> > Maybe we really *could* call this new kmap functionality something
-> > like "kmap_percpu()" (or maybe "local" is good enough), and make it
-> > act like your RT code does for spinlocks - not disable preemption, but
-> > only disabling CPU migration.
-> 
-> I"m all for it, but the scheduler people have opinions :)
-
-Right, so I'm concerned. migrate_disable() wrecks pretty much all
-Real-Time scheduler theory we have, and PREEMPRT_RT bringing it in is
-somewhat ironic.
-
-Yes, it allows breaking up non-preemptible regions of non-deterministic
-duration, and thereby both reduce and bound the scheduling latency, the
-cost for doing that is that the theory on CPU utilization/bandwidth go
-out the window.
-
-To easily see this consider an SMP system with a number of tasks equal
-to the number of CPUs. On a regular (preempt_disable) kernel we can
-always run each task, by virtue of always having an idle CPU to take the
-task.
-
-However, with migrate_disable() we can have each task preempted in a
-migrate_disable() region, worse we can stack them all on the _same_ CPU
-(super ridiculous odds, sure). And then we end up only able to run one
-task, with the rest of the CPUs picking their nose.
-
-The end result is that, like with unbounded latency, we will still miss
-our deadline, simply because we got starved for CPU.
 
 
-Now, while we could (with a _lot_ of work) rework the kernel to not rely
-on the implicit per-cpu ness of things like spinlock_t, the moment we
-bring in basic primitives that rely on migrate_disable() we're stuck
-with it.
+=E4=BA=8E 2020=E5=B9=B49=E6=9C=8821=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=888=
+:15:54, Thomas Bogendoerfer <tsbogend@alpha=2Efranken=2Ede> =E5=86=99=E5=88=
+=B0:
+>On Mon, Sep 21, 2020 at 05:12:27PM +0800, Huacai Chen wrote:
+>> Loongson-3's COP2 is Multi-Media coprocessor, it is disabled in kernel
+>> mode by default=2E However, gslq/gssq (16-bytes load/store instructions=
+)
+>> overrides the instruction format of lwc2/swc2=2E If we wan't to use gsl=
+q/
+>> gssq for optimization in kernel, we should enable COP2 usage in kernel=
+=2E
+>>=20
+>> Please pay attention that in this patch we only enable COP2 in kernel,
+>> which means it will lose ST0_CU2 when a process go to user space (try
+>> to use COP2 in user space will trigger an exception and then grab COP2,
+>> which is similar to FPU)=2E And as a result, we need to modify the cont=
+ext
+>> switching code because the new scheduled process doesn't contain ST0_CU=
+2
+>> in its THERAD_STATUS probably=2E
+>>=20
+>> For zboot, we disable gslq/gssq be generated by toolchain=2E
+>>=20
+>> Signed-off-by: Huacai Chen <chenhc@lemote=2Ecom>
+>> ---
+>> V3: Stop using ST0_MM and use ST0_CU2 instead (Thank Thomas and Maciej)=
+=2E
+>> V4: Adopt Thomas's suggestion to improve coding style=2E
+>> V5: Use ST0_KERNEL_CUMASK in all possible places to avoid #ifdefs=2E
+>> V6: Modify switch_to() and don't touch r4k_switch=2ES=2E
+>> V7: For zboot, disable gslq/gssq be generated by toolchain=2E
+>>=20
+>>  arch/mips/boot/compressed/Makefile | 5 +++++
+>>  arch/mips/include/asm/mipsregs=2Eh   | 7 +++++++
+>>  arch/mips/include/asm/stackframe=2Eh | 6 +++---
+>>  arch/mips/kernel/head=2ES            | 2 +-
+>>  arch/mips/kernel/process=2Ec         | 4 ++--
+>>  arch/mips/kernel/traps=2Ec           | 2 +-
+>>  6 files changed, 19 insertions(+), 7 deletions(-)
+>>=20
+>> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compre=
+ssed/Makefile
+>> index 9a9ba77=2E=2E2c491c1 100644
+>> --- a/arch/mips/boot/compressed/Makefile
+>> +++ b/arch/mips/boot/compressed/Makefile
+>> @@ -22,6 +22,11 @@ KBUILD_CFLAGS :=3D $(filter-out -pg, $(KBUILD_CFLAGS=
+))
+>> =20
+>>  KBUILD_CFLAGS :=3D $(filter-out -fstack-protector, $(KBUILD_CFLAGS))
+>> =20
+>> +# Disable lq/sq in zboot
+>> +ifdef CONFIG_CPU_LOONGSON64
+>> +KBUILD_CFLAGS :=3D $(filter-out -march=3Dloongson3a, $(KBUILD_CFLAGS))=
+ -march=3Dmips64r2
+>> +endif
+>> +
+>
+>thanks for doing this, I'm going to apply this later=2E
+>
+>This remind of another question, what about loongson2ef ? I'm getting
+>kbuild failure because of enabled loongson-mmi mails=2E Are we are missin=
+g
+>something like cflags-y +=3D $(call cc-option,-mno-loongson-mmi) in Platf=
+orm
+>file ? Who is taking care of loongson2ef ?
 
+I'll send a patch later=2E Sorry for the inconvenience=2E
 
-The problem is; afaict there's been no research into this problem. There
-might be scheduling (read: balancing) schemes that can mitigate/solve
-this problem, or it might prove to be a 'hard' problem, I just don't
-know. But once we start down this road, it's going to be hell to get rid
-of it.
+I'm taking care of it=2E Just being a little bit busy recently=2E
 
-That's why I've been arguing (for many years) to strictly limit this to
-PREEMPT_RT and only as a gap-stop, not a fundamental primitive to build
-on.
+Thanks=2E
+
+- Jiaxun
+
+>
+>Thomas=2E
+>
