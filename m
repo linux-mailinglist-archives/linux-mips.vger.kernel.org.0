@@ -2,345 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D38D2754D8
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Sep 2020 11:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650BD275574
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Sep 2020 12:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726242AbgIWJyO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Sep 2020 05:54:14 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:54190 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726130AbgIWJyN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 23 Sep 2020 05:54:13 -0400
-Received: from [10.130.0.80] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP91AG2tfmnIXAA--.2289S3;
-        Wed, 23 Sep 2020 17:54:09 +0800 (CST)
-Subject: Re: [PATCH 1/4] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
-To:     WANG Xuerui <git@xen0n.name>, linux-rtc@vger.kernel.org
-References: <20200923075845.360974-1-git@xen0n.name>
- <20200923075845.360974-2-git@xen0n.name>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        Huacai Chen <chenhc@lemote.com>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <2a478254-c4de-49dd-d598-c7553f4672bf@loongson.cn>
-Date:   Wed, 23 Sep 2020 17:54:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726328AbgIWKVO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Sep 2020 06:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgIWKVO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Sep 2020 06:21:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06077C0613CE;
+        Wed, 23 Sep 2020 03:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=O4A3QRP4HEH7pkY19EFh0K5o5RX6GGVTm9jhhlkiNIA=; b=pNi62cLpz5Zta9gkWwEt4lfxLS
+        MvhJOB6wShDmzS61MUaHO4PpqjGN9Sm/CRsoDDzFeOKdB1AsXqzPU0+ObaxataHs7GirJ6ZZrNA29
+        JPWLW2cWAsjQWQbdxWBW0dcBjYBOhFdcukcR730OctenEgtMdnxXFf2H16Xmyh8kGL1vudzudnTWS
+        vgNOihiXykvGZ4JuqnJtzxEEw21LcbXj/0WRtpi2vf37zyqZKGgA0xHxtS+lCluMZDHojS7jgks+j
+        aId3Dnzk0AyXRqRRmekuY3B5xhsSuZTtpZucjls9NPVPsQXWrpdBaC7TpOBBrZeOKsQtIyaebVCjb
+        X6rPNsiw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kL1sU-00033a-DF; Wed, 23 Sep 2020 10:19:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0EA94301124;
+        Wed, 23 Sep 2020 12:19:54 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E35462B79EDA9; Wed, 23 Sep 2020 12:19:53 +0200 (CEST)
+Date:   Wed, 23 Sep 2020 12:19:53 +0200
+From:   peterz@infradead.org
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
+ kmap_atomic & friends
+Message-ID: <20200923101953.GT2674@hirez.programming.kicks-ass.net>
+References: <20200919091751.011116649@linutronix.de>
+ <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
+ <87mu1lc5mp.fsf@nanos.tec.linutronix.de>
+ <87k0wode9a.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
+ <87eemwcpnq.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+ <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
+ <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20200923075845.360974-2-git@xen0n.name>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxP91AG2tfmnIXAA--.2289S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxKF4DuF17ZF1fWw4rtFy3XFb_yoWfJF1UpF
-        s0yasxJFWvyr1Sg3s2gF1DuF1Yvws3tr1j9wsxuw4a9F9xAwn7CFn5Kr4Yyr4DKrZ5JrWa
-        qw1kKw43CFZIk37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
-        02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
-        6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU0cTm3UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/23/2020 03:58 PM, WANG Xuerui wrote:
-> This RTC module is integrated into the Loongson-2K SoC and the LS7A
-> bridge chip. This version is almost entirely rewritten to make use of
-> current kernel API.
->
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
-> ---
->   drivers/rtc/Kconfig    |  11 ++
->   drivers/rtc/Makefile   |   1 +
->   drivers/rtc/rtc-ls2x.c | 225 +++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 237 insertions(+)
->   create mode 100644 drivers/rtc/rtc-ls2x.c
->
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 48c536acd777..41b96633abf3 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1301,6 +1301,17 @@ config RTC_DRV_CROS_EC
->   	  This driver can also be built as a module. If so, the module
->   	  will be called rtc-cros-ec.
->   
-> +config RTC_DRV_LS2X
-> +	tristate "Loongson LS2X RTC"
-> +	depends on MACH_LOONGSON64 || COMPILE_TEST
-> +	select REGMAP_MMIO
-> +	help
-> +	  If you say yes here you get support for the RTC on the Loongson-2K
-> +	  SoC and LS7A bridge, which first appeared on the Loongson-2H.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called rtc-ls2x.
-> +
+On Mon, Sep 21, 2020 at 09:27:57PM +0200, Thomas Gleixner wrote:
+> Alternatively this could of course be solved with per CPU page tables
+> which will come around some day anyway I fear.
 
-Hi Xuerui,
+Previously (with PTI) we looked at making the entire kernel map per-CPU,
+and that takes a 2K copy on switch_mm() (or more general, the user part
+of whatever the top level directory is for architectures that have a
+shared kernel/user page-table setup in the first place).
 
-rtc-ls2x --> rtc-ls2x-ls7a
-RTC_DRV_LS2X --> RTC_DRV_LS2X_LS7A
-Loongson LS2X RTC --> Loongson LS2X/LS7A RTC
+The idea was having a fixed per-cpu kernel page-table, share a bunch of
+(kernel) page-tables between all CPUs and then copy in the user part on
+switch.
 
-Maybe the related names include ls7a or LS7A is better to
-reflect the reality?
+I've forgotten what the plan was for ASID/PCID in that scheme.
 
-Thanks,
-Tiezhu
-
->   comment "on-CPU RTC drivers"
->   
->   config RTC_DRV_ASM9260
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index 880e08a409c3..ade72f6a2435 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -84,6 +84,7 @@ obj-$(CONFIG_RTC_DRV_LOONGSON1)	+= rtc-ls1x.o
->   obj-$(CONFIG_RTC_DRV_LP8788)	+= rtc-lp8788.o
->   obj-$(CONFIG_RTC_DRV_LPC24XX)	+= rtc-lpc24xx.o
->   obj-$(CONFIG_RTC_DRV_LPC32XX)	+= rtc-lpc32xx.o
-> +obj-$(CONFIG_RTC_DRV_LS2X)	+= rtc-ls2x.o
->   obj-$(CONFIG_RTC_DRV_M41T80)	+= rtc-m41t80.o
->   obj-$(CONFIG_RTC_DRV_M41T93)	+= rtc-m41t93.o
->   obj-$(CONFIG_RTC_DRV_M41T94)	+= rtc-m41t94.o
-> diff --git a/drivers/rtc/rtc-ls2x.c b/drivers/rtc/rtc-ls2x.c
-> new file mode 100644
-> index 000000000000..e49cbaceccc2
-> --- /dev/null
-> +++ b/drivers/rtc/rtc-ls2x.c
-> @@ -0,0 +1,225 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Loongson-2K/7A RTC driver
-> + *
-> + * Based on the out-of-tree Loongson-2H RTC driver for Linux 2.6.32, by
-> + * Shaozong Liu <liushaozong@loongson.cn>.
-> + *
-> + * Maintained out-of-tree by Huacai Chen <chenhc@lemote.com>.
-> + *
-> + * Rewritten for mainline by WANG Xuerui <git@xen0n.name>.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/rtc.h>
-> +#include <linux/spinlock.h>
-> +
-> +#define TOY_TRIM_REG   0x20
-> +#define TOY_WRITE0_REG 0x24
-> +#define TOY_WRITE1_REG 0x28
-> +#define TOY_READ0_REG  0x2c
-> +#define TOY_READ1_REG  0x30
-> +#define TOY_MATCH0_REG 0x34
-> +#define TOY_MATCH1_REG 0x38
-> +#define TOY_MATCH2_REG 0x3c
-> +#define RTC_CTRL_REG   0x40
-> +#define RTC_TRIM_REG   0x60
-> +#define RTC_WRITE0_REG 0x64
-> +#define RTC_READ0_REG  0x68
-> +#define RTC_MATCH0_REG 0x6c
-> +#define RTC_MATCH1_REG 0x70
-> +#define RTC_MATCH2_REG 0x74
-> +
-> +#define TOY_MON        GENMASK(31, 26)
-> +#define TOY_MON_SHIFT  26
-> +#define TOY_DAY        GENMASK(25, 21)
-> +#define TOY_DAY_SHIFT  21
-> +#define TOY_HOUR       GENMASK(20, 16)
-> +#define TOY_HOUR_SHIFT 16
-> +#define TOY_MIN        GENMASK(15, 10)
-> +#define TOY_MIN_SHIFT  10
-> +#define TOY_SEC        GENMASK(9, 4)
-> +#define TOY_SEC_SHIFT  4
-> +#define TOY_MSEC       GENMASK(3, 0)
-> +#define TOY_MSEC_SHIFT 0
-> +
-> +struct ls2x_rtc_priv {
-> +	struct regmap *regmap;
-> +	spinlock_t lock;
-> +};
-> +
-> +static const struct regmap_config ls2x_rtc_regmap_config = {
-> +	.reg_bits = 32,
-> +	.val_bits = 32,
-> +	.reg_stride = 4,
-> +};
-> +
-> +struct ls2x_rtc_regs {
-> +	u32 reg0;
-> +	u32 reg1;
-> +};
-> +
-> +static inline void ls2x_rtc_regs_to_time(struct ls2x_rtc_regs *regs,
-> +					 struct rtc_time *tm)
-> +{
-> +	tm->tm_year = regs->reg1;
-> +	tm->tm_sec = (regs->reg0 & TOY_SEC) >> TOY_SEC_SHIFT;
-> +	tm->tm_min = (regs->reg0 & TOY_MIN) >> TOY_MIN_SHIFT;
-> +	tm->tm_hour = (regs->reg0 & TOY_HOUR) >> TOY_HOUR_SHIFT;
-> +	tm->tm_mday = (regs->reg0 & TOY_DAY) >> TOY_DAY_SHIFT;
-> +	tm->tm_mon = ((regs->reg0 & TOY_MON) >> TOY_MON_SHIFT) - 1;
-> +}
-> +
-> +static inline void ls2x_rtc_time_to_regs(struct rtc_time *tm,
-> +					 struct ls2x_rtc_regs *regs)
-> +{
-> +	regs->reg0 = (tm->tm_sec << TOY_SEC_SHIFT) & TOY_SEC;
-> +	regs->reg0 |= (tm->tm_min << TOY_MIN_SHIFT) & TOY_MIN;
-> +	regs->reg0 |= (tm->tm_hour << TOY_HOUR_SHIFT) & TOY_HOUR;
-> +	regs->reg0 |= (tm->tm_mday << TOY_DAY_SHIFT) & TOY_DAY;
-> +	regs->reg0 |= ((tm->tm_mon + 1) << TOY_MON_SHIFT) & TOY_MON;
-> +	regs->reg1 = tm->tm_year;
-> +}
-> +
-> +static int ls2x_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
-> +	struct ls2x_rtc_regs regs;
-> +	int ret;
-> +
-> +	spin_lock_irq(&priv->lock);
-> +
-> +	ret = regmap_read(priv->regmap, TOY_READ1_REG, &regs.reg1);
-> +	if (unlikely(ret)) {
-> +		dev_err(dev, "Failed to read time: %d\n", ret);
-> +		goto fail;
-> +	}
-> +
-> +	ret = regmap_read(priv->regmap, TOY_READ0_REG, &regs.reg0);
-> +	if (unlikely(ret)) {
-> +		dev_err(dev, "Failed to read time: %d\n", ret);
-> +		goto fail;
-> +	}
-> +
-> +	spin_unlock_irq(&priv->lock);
-> +
-> +	ls2x_rtc_regs_to_time(&regs, tm);
-> +
-> +	return 0;
-> +
-> +fail:
-> +	spin_unlock_irq(&priv->lock);
-> +	return ret;
-> +}
-> +
-> +static int ls2x_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
-> +	struct ls2x_rtc_regs regs;
-> +	int ret;
-> +
-> +	ls2x_rtc_time_to_regs(tm, &regs);
-> +
-> +	spin_lock_irq(&priv->lock);
-> +
-> +	ret = regmap_write(priv->regmap, TOY_WRITE0_REG, regs.reg0);
-> +	if (unlikely(ret)) {
-> +		dev_err(dev, "Failed to set time: %d\n", ret);
-> +		goto fail;
-> +	}
-> +
-> +	ret = regmap_write(priv->regmap, TOY_WRITE1_REG, regs.reg1);
-> +	if (unlikely(ret)) {
-> +		dev_err(dev, "Failed to set time: %d\n", ret);
-> +		goto fail;
-> +	}
-> +
-> +	spin_unlock_irq(&priv->lock);
-> +
-> +	return 0;
-> +
-> +fail:
-> +	spin_unlock_irq(&priv->lock);
-> +	return ret;
-> +}
-> +
-> +static struct rtc_class_ops ls2x_rtc_ops = {
-> +	.read_time = ls2x_rtc_read_time,
-> +	.set_time = ls2x_rtc_set_time,
-> +};
-> +
-> +static int ls2x_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct rtc_device *rtc;
-> +	struct ls2x_rtc_priv *priv;
-> +	void __iomem *regs;
-> +	int ret;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (unlikely(!priv))
-> +		return -ENOMEM;
-> +
-> +	spin_lock_init(&priv->lock);
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	regs = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(regs)) {
-> +		ret = PTR_ERR(regs);
-> +		dev_err(dev, "Failed to map rtc registers: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	priv->regmap = devm_regmap_init_mmio(dev, regs,
-> +					     &ls2x_rtc_regmap_config);
-> +	if (IS_ERR(priv->regmap)) {
-> +		ret = PTR_ERR(priv->regmap);
-> +		dev_err(dev, "Failed to init regmap: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	rtc = devm_rtc_allocate_device(dev);
-> +	if (IS_ERR(rtc)) {
-> +		ret = PTR_ERR(rtc);
-> +		dev_err(dev, "Failed to allocate rtc device: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	rtc->ops = &ls2x_rtc_ops;
-> +
-> +	/* Due to hardware erratum, all years multiple of 4 are considered
-> +	 * leap year, so only years 2000 through 2099 are usable.
-> +	 *
-> +	 * Previous out-of-tree versions of this driver wrote tm_year directly
-> +	 * into the year register, so epoch 2000 must be used to preserve
-> +	 * semantics on shipped systems.
-> +	 */
-> +	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	rtc->range_max = RTC_TIMESTAMP_END_2099;
-> +
-> +	return rtc_register_device(rtc);
-> +}
-> +
-> +static const struct of_device_id ls2x_rtc_of_match[] = {
-> +	{ .compatible = "loongson,ls2x-rtc" },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ls2x_rtc_of_match);
-> +
-> +static struct platform_driver ls2x_rtc_driver = {
-> +	.probe		= ls2x_rtc_probe,
-> +	.driver		= {
-> +		.name	= "ls2x-rtc",
-> +		.of_match_table = of_match_ptr(ls2x_rtc_of_match),
-> +	},
-> +};
-> +
-> +module_platform_driver(ls2x_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("LS2X RTC driver");
-> +MODULE_AUTHOR("WANG Xuerui");
-> +MODULE_AUTHOR("Huacai Chen");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:ls2x-rtc");
-
+For x86_64 we've been fearing the performance of that 2k copy, but I
+don't think we've ever actually bit the bullet and implemented it to see
+how bad it really is.
