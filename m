@@ -2,261 +2,183 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64801276645
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 04:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 603CD276868
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 07:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbgIXCP1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Sep 2020 22:15:27 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:36994 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726281AbgIXCP0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 23 Sep 2020 22:15:26 -0400
-Received: from [10.130.0.60] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxmuQsAWxfPKIXAA--.8348S3;
-        Thu, 24 Sep 2020 10:15:09 +0800 (CST)
-Subject: Re: [PATCH 3/3] MIPS: Loongson64: Add kexec/kdump support
-To:     Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <1600828257-31316-1-git-send-email-chenhc@lemote.com>
- <1600828257-31316-3-git-send-email-chenhc@lemote.com>
- <46167e76-3179-825c-606c-fc35fda8eb4e@flygoat.com>
- <CAAhV-H6AD5SufuMgYvVppTKytg9GZ5zydn5JLm4nFD84ONTfkg@mail.gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        kexec@lists.infradead.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Youling Tang <tangyouling@loongson.cn>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <bb6214e3-05e7-9102-6da9-00d5d4f88e05@loongson.cn>
-Date:   Thu, 24 Sep 2020 10:15:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726814AbgIXFbP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Sep 2020 01:31:15 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37902 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726683AbgIXFbO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 24 Sep 2020 01:31:14 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08O59QA8089871;
+        Thu, 24 Sep 2020 01:30:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=RVAYJ1+ohfp4WrP9CGBemRWlu8SvZ6N72YZ4FeIJg+w=;
+ b=k/oKuy0X4KvbZvKMe1Plm0o3m6eX2WobF7jqWWApZdv3Y4eNoqnwXGDUi2VoWQZ7Zbdf
+ R1ZYcDShL6Kr023twP9/VnG12LekGLXq338BIq11xACCnVDWsRbyHGWRNtTbPLaGJcHp
+ XJRUSvGQKa90otmyeHgdJSC4YuMJ8TIp2ULYg4CWo5g2h/cV5s37QSd5q26R++AJULYK
+ sR6KA97x8qqoVwzv4/EusY5ogXPgaVANU29YqOknB43cawM2/TAMsjSaRlCLSGp5lFLM
+ OJ9+JAmEo/+cled0uKkBtVtZEZzZsANhC2sBkmjXH+1Zu6EKuGP2Fb8vkMMEOsLLRio7 Jw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33rn2a8cp2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Sep 2020 01:30:28 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08O5FOTG106863;
+        Thu, 24 Sep 2020 01:30:28 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33rn2a8cn1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Sep 2020 01:30:28 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08O5SeLP001960;
+        Thu, 24 Sep 2020 05:30:25 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 33n9m7thd9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Sep 2020 05:30:25 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08O5UMst28508438
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Sep 2020 05:30:22 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3474552050;
+        Thu, 24 Sep 2020 05:30:22 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.145.65.79])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 43B915205F;
+        Thu, 24 Sep 2020 05:30:21 +0000 (GMT)
+Subject: Re: [PATCH] KVM: Enable hardware before doing arch VM initialization
+To:     Sean Christopherson <sean.j.christopherson@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhc@lemote.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
+        kvm-ppc@vger.kernel.org, Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+References: <20200923185757.1806-1-sean.j.christopherson@intel.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+ nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
+Message-ID: <af0ccfeb-14eb-58c4-724b-bd75532cb6a4@de.ibm.com>
+Date:   Thu, 24 Sep 2020 07:30:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H6AD5SufuMgYvVppTKytg9GZ5zydn5JLm4nFD84ONTfkg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxmuQsAWxfPKIXAA--.8348S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3JFW8XFW3Zr18ZrWDAw47urg_yoW3KFWfp3
-        yUA3WDKF4kGr1Iyw1Fv345ZF4Fq3yrtFZrWa12qr1ru3s0qw1xtrWUWF1fCF97Zr1rtF10
-        9a48Wr1vkF4YkaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbN6pPUUUUU==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+In-Reply-To: <20200923185757.1806-1-sean.j.christopherson@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-24_01:2020-09-24,2020-09-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ adultscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=675
+ clxscore=1011 suspectscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009240036
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/24/2020 09:19 AM, Huacai Chen wrote:
-> Hi, Jiaxun,
->
-> On Wed, Sep 23, 2020 at 9:37 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->>
->>
->> 在 2020/9/23 10:30, Huacai Chen 写道:
->>> Add kexec/kdump support for Loongson64 by:
->>> 1, Provide Loongson-specific kexec functions: loongson_kexec_prepare,
->>>      loongson_kexec_shutdown and loongson_crash_shutdown;
->>> 2, Provide Loongson-specific assembly code in kexec_smp_wait;
->>> 3, Clear mailbox in loongson3_smp_setup() since KEXEC bypass BIOS;
->>> 4, KEXEC always run at boot CPU, but KDUMP may triggered at non-boot
->>>      CPU. Loongson64 assume boot CPU is the first possible cpu, so fix
->>>      boot_cpu_id in prom_init_env();
->>>
->>> To start Loongson64, The boot CPU needs 3 parameters:
->>> fw_arg0: the number of arguments in cmdline (i.e., argc).
->>> fw_arg1: structure holds cmdline such as "root=/dev/sda1 console=tty"
->>>            (i.e., argv).
->>> fw_arg2: environment (i.e., envp, additional boot parameters from LEFI).
->>>
->>> Non-boot CPUs do not need parameters at once. They query their own IPI
->>> mailbox to get PC, SP and GP in a loop until boot CPU brings them up.
->>>
->>> loongson_kexec_prepare(): Setup cmdline for kexec/kdump. The kexec/kdump
->>> cmdline comes from kexec's "append" option string. This structure will
->>> be parsed in fw_init_cmdline() of arch/mips/fw/lib/cmdline.c. Both image
->>> ->control_code_page and the cmdline need to be in a safe memory region
->>> (memory allocated by the old kernel may be corrupted by the new kernel).
->>> In order to maintain compatibility for the old firmware, the low 2MB is
->>> reserverd and safe for Loongson. So let KEXEC_CTRL_CODE and KEXEC_ARGV_
->>> ADDR be here. LEFI parameters may be corrupted at runtime, so backup it
->>> at mips_reboot_setup(), and then restore it at loongson_kexec_shutdown()
->>> /loongson_crash_shutdown().
->>>
->>> loongson_kexec_shutdown(): Wake up all present CPUs and let them go to
->>> reboot_code_buffer. Pass the kexec parameters to kexec_args.
->>>
->>> loongson_crash_shutdown(): Pass the kdump parameters to kexec_args.
->>>
->>> The assembly part in kexec_smp_wait provide a routine as BIOS does, in
->>> order to keep secondary CPUs in a querying loop.
->>>
->>> Cc: Eric Biederman <ebiederm@xmission.com>
->>> Signed-off-by: Huacai Chen <chenhc@lemote.com>
->>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
->>> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
->>> ---
->>>    arch/mips/kernel/relocate_kernel.S |  27 +++++++++
->>>    arch/mips/loongson64/env.c         |   7 +++
->>>    arch/mips/loongson64/reset.c       | 111 +++++++++++++++++++++++++++++++++++++
->>>    arch/mips/loongson64/smp.c         |   5 ++
->>>    4 files changed, 150 insertions(+)
->>>
->>> diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
->>> index ac87089..91b2932 100644
->>> --- a/arch/mips/kernel/relocate_kernel.S
->>> +++ b/arch/mips/kernel/relocate_kernel.S
->>> @@ -133,6 +133,33 @@ LEAF(kexec_smp_wait)
->>>    #else
->>>        sync
->>>    #endif
->> Hi Jingyang, Huacai,
->>
->> Thanks a lot for what you have done on Loongson64 support.
->>
->> Just add my cents here.
->>
->>> +
->>> +#ifdef CONFIG_CPU_LOONGSON64
->>> +#define MAILBOX_BASE 0x900000003ff01000
->>> +     /* s0:prid s1:initfn */
->>> +     /* t0:base t1:cpuid t2:node t9:count */
->>> +     mfc0  t1, CP0_EBASE
->>> +     andi  t1, MIPS_EBASE_CPUNUM
->>> +     dli   t0, MAILBOX_BASE    /* mailbox base */
->>> +     dins  t0, t1, 8, 2        /* insert core id*/
->>> +     dext  t2, t1, 2, 2
->>> +     dins  t0, t2, 44, 2       /* insert node id */
->>> +     mfc0  s0, CP0_PRID
->>> +     andi  s0, s0, 0xf
->>> +     blt   s0, 0x6, 1f         /* Loongson-3A1000 */
->>> +     bgt   s0, 0x7, 1f         /* Loongson-3A2000/3A3000 */
->>> +     dins  t0, t2, 14, 2       /* Loongson-3B1000/3B1500 need bit 15~14 */
->>> +1:   li    t9, 0x100           /* wait for init loop */
->>> +2:   addiu t9, -1              /* limit mailbox access */
->>> +     bnez  t9, 2b
->>> +     ld    s1, 0x20(t0)        /* get PC via mailbox reg0 */
->>> +     beqz  s1, 1b
->>> +     ld    sp, 0x28(t0)        /* get SP via mailbox reg1 */
->>> +     ld    gp, 0x30(t0)        /* get GP via mailbox reg2 */
->>> +     ld    a1, 0x38(t0)
->>> +     jr    s1                  /* jump to initial PC */
->>> +#endif
->>> +
->> I'm just a little bit uncomfortable with this kind of hardcoded address.
->> Is it possible to generate kexec_smp_wait with uasm, or pass the SMP
->> base as a parameter of this function?
-> This is very difficult, and moreover, uasm wrap the assembly in C
-> functions, can it be more beautiful? In my opinion, uasm is only used
-> for performance-critical routines, not for beautiful code. But anyway,
-> 0x900000003ff01000 should be improved.
->
->> Also I do think we can handle kexec_flag in Loongson's platform SMP,
->> or even generic MIPS SMP code just like what cavium did so this kind
->> of platform quirk can be avoided.
-> I doubt this can be done, every CPU has its own method of SMP bringup.
->
->>>        j               s1
->>>        END(kexec_smp_wait)
->>>    #endif
->>> diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
->>> index 134cb8e..e937f31 100644
->>> --- a/arch/mips/loongson64/env.c
->>> +++ b/arch/mips/loongson64/env.c
->>> @@ -120,6 +120,13 @@ void __init prom_init_env(void)
->>>        loongson_sysconf.nr_cpus = ecpu->nr_cpus;
->>>        loongson_sysconf.boot_cpu_id = ecpu->cpu_startup_core_id;
->>>        loongson_sysconf.reserved_cpus_mask = ecpu->reserved_cores_mask;
->>> +#ifdef CONFIG_KEXEC
->>> +     loongson_sysconf.boot_cpu_id = get_ebase_cpunum();
->>> +     loongson_sysconf.reserved_cpus_mask |=
->>> +             (1 << loongson_sysconf.boot_cpu_id) - 1;
->>> +     pr_info("Boot CPU ID is being fixed from %d to %d\n",
->>> +             ecpu->cpu_startup_core_id, loongson_sysconf.boot_cpu_id);
->>> +#endif
->> This could be done unconditionally and split to another patch,
->> "MIPS: Loongson64: Quirk inaccurate bootcore from the firmware"
-> This will be wholly removed.
->
->>>        if (ecpu->nr_cpus > NR_CPUS || ecpu->nr_cpus == 0)
->>>                loongson_sysconf.nr_cpus = NR_CPUS;
->>>        loongson_sysconf.nr_nodes = (loongson_sysconf.nr_cpus +
->>> diff --git a/arch/mips/loongson64/reset.c b/arch/mips/loongson64/reset.c
->>> index 3bb8a1e..b1e71f37 100644
->>> --- a/arch/mips/loongson64/reset.c
->>> +++ b/arch/mips/loongson64/reset.c
->>> @@ -6,9 +6,14 @@
->>>     * Copyright (C) 2009 Lemote, Inc.
->>>     * Author: Zhangjin Wu, wuzhangjin@gmail.com
->>>     */
->>> +#include <linux/cpu.h>
->>> +#include <linux/delay.h>
->>>    #include <linux/init.h>
->>> +#include <linux/kexec.h>
->>>    #include <linux/pm.h>
->>> +#include <linux/slab.h>
->>>
->>> +#include <asm/bootinfo.h>
->>>    #include <asm/idle.h>
->>>    #include <asm/reboot.h>
->>>
->>> @@ -47,12 +52,118 @@ static void loongson_halt(void)
->>>        }
->>>    }
->>>
->>> +#ifdef CONFIG_KEXEC
->>> +
->>> +/* 0X80000000~0X80200000 is safe */
->>> +#define MAX_ARGS     64
->>> +#define KEXEC_CTRL_CODE      0xFFFFFFFF80100000UL
->>> +#define KEXEC_ARGV_ADDR      0xFFFFFFFF80108000UL
->>> +#define KEXEC_ARGV_SIZE      COMMAND_LINE_SIZE
->>> +#define KEXEC_ENVP_SIZE      4800
->> I won't say it's safe.
->> Loongson-2K's PMON may place reboot vector here, also some
->> UEFI firmware may place their suspend stack here.
->> What if we allocate these buffer at runtime?
-> The layout of low 2MB in our design:
-> 0x80000000 the first MB, the first 64K：Exception vector
-> 0x80010000 the first MB, the second 64K：STR(suspend) data
-> 0x80020000 the first MB, the third and fourth 64K：UEFI HOB
-> 0x80040000 the first MB, the fifth 64K：RT-Thread for SMC
-> 0x80100000 the second MB, the first 64K：KEXEC code
-> 0x80108000 the second MB, the second 64K：KEXEC data
 
-Hi, Huacai,
 
-Thank you for your explanation. It's really a safe region.
-What I want to do is similar to other architecture which find a hole
-in Crash kernel. It's also safe if "mem=" limit Capture kernel RAM. "mem="
-is useful and sorry for the wrong comment yesterday. "mem=" excluded
-cmdline segment and elfcorehdr segment. I have an idea that add a segment
-for Loongson64 platform control_code_page. Find the hole by top-down that
-different from common bottom-up way.
-As you said, it's really difficult. More work should be do not only kernel
-but also kexec-tools. At this stage, I am in favor of you that
-control_code_page should point to the safe ragion in low 2MB.
+On 23.09.20 20:57, Sean Christopherson wrote:
+> Swap the order of hardware_enable_all() and kvm_arch_init_vm() to
+> accommodate Intel's Trust Domain Extension (TDX), which needs VMX to be
+> fully enabled during VM init in order to make SEAMCALLs.
+> 
+> This also provides consistent ordering between kvm_create_vm() and
+> kvm_destroy_vm() with respect to calling kvm_arch_destroy_vm() and
+> hardware_disable_all().
+> 
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Julien Thierry <julien.thierry.kdev@gmail.com>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: Huacai Chen <chenhc@lemote.com>
+> Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Paul Mackerras <paulus@ozlabs.org>
+> Cc: kvm-ppc@vger.kernel.org
+> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> Cc: Janosch Frank <frankja@linux.ibm.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Cornelia Huck <cohuck@redhat.com>
+> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Cc: Wanpeng Li <wanpengli@tencent.com>
+> Cc: Jim Mattson <jmattson@google.com>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> ---
+> 
+> Obviously not required until the TDX series comes along, but IMO KVM
+> should be consistent with respect to enabling and disabling virt support
+> in hardware.
+> 
+> Tested only on Intel hardware.  Unless I missed something, this only
+> affects x86, Arm and MIPS as hardware enabling is a nop for s390 and PPC.
 
-> All allocated buffer from the old kernel is not safe, because the new
-> kernel may be larger than the old kernel. Even if the low 2MB is not a
-> perfect place, it is the best place we can choose.
->
-> Huacai
->
->> Thanks.
->>
->> - Jiaxun
->>
+Yes, looks fine from an s390 perspective.
+
+Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
 
