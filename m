@@ -2,147 +2,217 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 884F327710E
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 14:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748B1277118
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 14:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727624AbgIXMct (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Sep 2020 08:32:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55286 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727556AbgIXMcs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 24 Sep 2020 08:32:48 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E4EA205F4;
-        Thu, 24 Sep 2020 12:32:43 +0000 (UTC)
-Date:   Thu, 24 Sep 2020 08:32:41 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     peterz@infradead.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list\:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-Message-ID: <20200924083241.314f2102@gandalf.local.home>
-In-Reply-To: <871riracgf.fsf@nanos.tec.linutronix.de>
-References: <20200919091751.011116649@linutronix.de>
-        <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
-        <87mu1lc5mp.fsf@nanos.tec.linutronix.de>
-        <87k0wode9a.fsf@nanos.tec.linutronix.de>
-        <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
-        <87eemwcpnq.fsf@nanos.tec.linutronix.de>
-        <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
-        <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
-        <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
-        <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
-        <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
-        <20200923115251.7cc63a7e@oasis.local.home>
-        <874kno9pr9.fsf@nanos.tec.linutronix.de>
-        <20200923171234.0001402d@oasis.local.home>
-        <871riracgf.fsf@nanos.tec.linutronix.de>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1727816AbgIXMeW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Sep 2020 08:34:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47731 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727722AbgIXMeW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 24 Sep 2020 08:34:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600950861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XJM2zsAmjHPtnBVFf6cltcdoLV4SPiJ7BDBnMHvxMEQ=;
+        b=Ht4zUUcFI8NnJDTQiaXdh/3X6CUlFV5a65Vtih95kXxjxrUXkrCsZ2YdbvB06E1ZlJ7WOp
+        F6lC+Mg4PX7wjy04WC0IECqsUscQ4aOCGfgPlkKFONkYna8xJacEj1fzJgKXpBwXQktNlY
+        60fbBUQSjKIAVvBPJmmkW2w3l5KgCjs=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-177-bXSLqHAvNBm3sNLCaS_Vxg-1; Thu, 24 Sep 2020 08:34:19 -0400
+X-MC-Unique: bXSLqHAvNBm3sNLCaS_Vxg-1
+Received: by mail-ej1-f71.google.com with SMTP id lx11so1225035ejb.19
+        for <linux-mips@vger.kernel.org>; Thu, 24 Sep 2020 05:34:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=XJM2zsAmjHPtnBVFf6cltcdoLV4SPiJ7BDBnMHvxMEQ=;
+        b=jXdX8lzt7qutJsnXz90dfXhbFtMsLb3OzndtgOBxrrUOczfiC6a9vy08DHdAAIUH2g
+         +X10OWGbgKh5yffQuwU9lUg76iEXIJPKSsb5cLqfUe6QOONTXiosLD87rsQ6NvVEeN8I
+         F01zsxKfK6zccdQlHgeQ3EmK3V4ut1IS++kd9VcUYPy/f2CwS3cbjPA7LzE9O4QhAwML
+         3BJtB2ByQHGUz6MX7Z4GxSGclPbwSVXaTgZbR4eywFB8ywgpnkZSHV4XkuJXkKrxHvPb
+         NVFZNVWIFCaEzuS8MotV0+bc2L+jMLD/00ku+yf8vAxH6slLkkTK7Pl3qxWVaM0PW4O+
+         6Wqg==
+X-Gm-Message-State: AOAM5302ZR9gvK6IZDfJm8ET0Qtlsjdf9Sh8lcw12r/D5aUSLglbb09R
+        i0L8bm6ftN47ANyp/IYI17FwecBTobdVK1BlpsYeiAV32WKRSfom15FRI8F/XpOKmwUgfx3SuBx
+        CMSlMfizIyRrygt/ExdGoMQ==
+X-Received: by 2002:a05:6402:1148:: with SMTP id g8mr775008edw.271.1600950857413;
+        Thu, 24 Sep 2020 05:34:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz9aag4YDAgIGYQ9EHrDOFNyx4QU0hniTeVNf02iQ7RJLkNK/cPK0RyizBQjwquCkPtgxllpw==
+X-Received: by 2002:a05:6402:1148:: with SMTP id g8mr774981edw.271.1600950857170;
+        Thu, 24 Sep 2020 05:34:17 -0700 (PDT)
+Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id t3sm2383180edv.59.2020.09.24.05.34.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2020 05:34:15 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhc@lemote.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
+        kvm-ppc@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: Re: [RFC PATCH 3/3] KVM: x86: Use KVM_BUG/KVM_BUG_ON to handle bugs that are fatal to the VM
+In-Reply-To: <20200923224530.17735-4-sean.j.christopherson@intel.com>
+References: <20200923224530.17735-1-sean.j.christopherson@intel.com> <20200923224530.17735-4-sean.j.christopherson@intel.com>
+Date:   Thu, 24 Sep 2020 14:34:14 +0200
+Message-ID: <878scze4l5.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 24 Sep 2020 08:57:52 +0200
-Thomas Gleixner <tglx@linutronix.de> wrote:
+Sean Christopherson <sean.j.christopherson@intel.com> writes:
 
-> > Now as for migration disabled nesting, at least now we would have
-> > groupings of this, and perhaps the theorists can handle that. I mean,
-> > how is this much different that having a bunch of tasks blocked on a
-> > mutex with the owner is pinned on a CPU?
-> >
-> > migrate_disable() is a BKL of pinning affinity.  
-> 
-> No. That's just wrong. preempt disable is a concurrency control,
+> Add support for KVM_REQ_VM_BUGG in x86, and replace a variety of WARNs
+> with KVM_BUG() and KVM_BUG_ON().  Return -EIO if a KVM_BUG is hit to
+> align with the common KVM behavior of rejecting iocts() with -EIO if the
+> VM is bugged.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> ---
+>  arch/x86/kvm/svm/svm.c |  2 +-
+>  arch/x86/kvm/vmx/vmx.c | 23 ++++++++++++++---------
+>  arch/x86/kvm/x86.c     |  4 ++++
+>  3 files changed, 19 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 3da5b2f1b4a1..e684794c6249 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -1380,7 +1380,7 @@ static void svm_cache_reg(struct kvm_vcpu *vcpu, enum kvm_reg reg)
+>  		load_pdptrs(vcpu, vcpu->arch.walk_mmu, kvm_read_cr3(vcpu));
+>  		break;
+>  	default:
+> -		WARN_ON_ONCE(1);
+> +		KVM_BUG_ON(1, vcpu->kvm);
+>  	}
+>  }
+>  
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 6f9a0c6d5dc5..810d46ab0a47 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2250,7 +2250,7 @@ static void vmx_cache_reg(struct kvm_vcpu *vcpu, enum kvm_reg reg)
+>  		vcpu->arch.cr4 |= vmcs_readl(GUEST_CR4) & guest_owned_bits;
+>  		break;
+>  	default:
+> -		WARN_ON_ONCE(1);
+> +		KVM_BUG_ON(1, vcpu->kvm);
+>  		break;
+>  	}
+>  }
+> @@ -4960,6 +4960,7 @@ static int handle_cr(struct kvm_vcpu *vcpu)
+>  			return kvm_complete_insn_gp(vcpu, err);
+>  		case 3:
+>  			WARN_ON_ONCE(enable_unrestricted_guest);
+> +
+>  			err = kvm_set_cr3(vcpu, val);
+>  			return kvm_complete_insn_gp(vcpu, err);
+>  		case 4:
+> @@ -4985,14 +4986,13 @@ static int handle_cr(struct kvm_vcpu *vcpu)
+>  		}
+>  		break;
+>  	case 2: /* clts */
+> -		WARN_ONCE(1, "Guest should always own CR0.TS");
+> -		vmx_set_cr0(vcpu, kvm_read_cr0_bits(vcpu, ~X86_CR0_TS));
+> -		trace_kvm_cr_write(0, kvm_read_cr0(vcpu));
+> -		return kvm_skip_emulated_instruction(vcpu);
+> +		KVM_BUG(1, vcpu->kvm, "Guest always owns CR0.TS");
+> +		return -EIO;
+>  	case 1: /*mov from cr*/
+>  		switch (cr) {
+>  		case 3:
+>  			WARN_ON_ONCE(enable_unrestricted_guest);
+> +
 
-I think you totally misunderstood what I was saying. The above wasn't about
-comparing preempt_disable to migrate_disable. It was comparing
-migrate_disable to a chain of tasks blocked on mutexes where the top owner
-has preempt_disable set. You still have a bunch of tasks that can't move to
-other CPUs.
+Here, were you intended to replace WARN_ON_ONCE() with KVM_BUG_ON() or
+this is just a stray newline added?
 
+>  			val = kvm_read_cr3(vcpu);
+>  			kvm_register_write(vcpu, reg, val);
+>  			trace_kvm_cr_read(cr, val);
+> @@ -5330,7 +5330,9 @@ static int handle_ept_misconfig(struct kvm_vcpu *vcpu)
+>  
+>  static int handle_nmi_window(struct kvm_vcpu *vcpu)
+>  {
+> -	WARN_ON_ONCE(!enable_vnmi);
+> +	if (KVM_BUG_ON(!enable_vnmi, vcpu->kvm))
+> +		return -EIO;
+> +
+>  	exec_controls_clearbit(to_vmx(vcpu), CPU_BASED_NMI_WINDOW_EXITING);
+>  	++vcpu->stat.nmi_window_exits;
+>  	kvm_make_request(KVM_REQ_EVENT, vcpu);
+> @@ -5908,7 +5910,8 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
+>  	 * below) should never happen as that means we incorrectly allowed a
+>  	 * nested VM-Enter with an invalid vmcs12.
+>  	 */
+> -	WARN_ON_ONCE(vmx->nested.nested_run_pending);
+> +	if (KVM_BUG_ON(vmx->nested.nested_run_pending, vcpu->kvm))
+> +		return -EIO;
+>  
+>  	/* If guest state is invalid, start emulating */
+>  	if (vmx->emulation_required)
+> @@ -6258,7 +6261,9 @@ static int vmx_sync_pir_to_irr(struct kvm_vcpu *vcpu)
+>  	int max_irr;
+>  	bool max_irr_updated;
+>  
+> -	WARN_ON(!vcpu->arch.apicv_active);
+> +	if (KVM_BUG_ON(!vcpu->arch.apicv_active, vcpu->kvm))
+> +		return -EIO;
+> +
+>  	if (pi_test_on(&vmx->pi_desc)) {
+>  		pi_clear_on(&vmx->pi_desc);
+>  		/*
+> @@ -6345,7 +6350,7 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
+>  	gate_desc *desc;
+>  	u32 intr_info = vmx_get_intr_info(vcpu);
+>  
+> -	if (WARN_ONCE(!is_external_intr(intr_info),
+> +	if (KVM_BUG(!is_external_intr(intr_info), vcpu->kvm,
+>  	    "KVM: unexpected VM-Exit interrupt info: 0x%x", intr_info))
+>  		return;
+>  
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 17f4995e80a7..672eb5142b34 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -8363,6 +8363,10 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  	bool req_immediate_exit = false;
+>  
+>  	if (kvm_request_pending(vcpu)) {
+> +		if (kvm_check_request(KVM_REQ_VM_BUGGED, vcpu)) {
 
-> > If we only have local_lock() available (even on !RT), then it makes
-> > the blocking in groups. At least this way you could grep for all the
-> > different local_locks in the system and plug that into the algorithm
-> > for WCS, just like one would with a bunch of mutexes.  
-> 
-> You cannot do that on RT at all where migrate disable is substituting
-> preempt disable in spin and rw locks. The result would be the same as
-> with a !RT kernel just with horribly bad performance.
+Do we want to allow userspace to continue executing the guest or should
+we make KVM_REQ_VM_BUGGED permanent by replacing kvm_check_request()
+with kvm_test_request()?
 
-Note, the spin and rwlocks already have a lock associated with them. Why
-would it be any different on RT? I wasn't suggesting adding another lock
-inside a spinlock. Why would I recommend THAT? I wasn't recommending
-blindly replacing migrate_disable() with local_lock(). I just meant expose
-local_lock() but not migrate_disable().
+> +			r = -EIO;
+> +			goto out;
+> +		}
+>  		if (kvm_check_request(KVM_REQ_GET_VMCS12_PAGES, vcpu)) {
+>  			if (unlikely(!kvm_x86_ops.nested_ops->get_vmcs12_pages(vcpu))) {
+>  				r = 0;
 
-> 
-> That means the stacking problem has to be solved anyway.
-> 
-> So why on earth do you want to create yet another special duct tape case
-> for kamp_local() which proliferates inconsistency instead of aiming for
-> consistency accross all preemption models?
-
-The idea was to help with the scheduling issue.
-
-Anyway, instead of blocking. What about having a counter of number of
-migrate disabled tasks per cpu, and when taking a migrate_disable(), and there's
-already another task with migrate_disabled() set, and the current task has
-an affinity greater than 1, it tries to migrate to another CPU?
-
-This way migrate_disable() is less likely to have a bunch of tasks blocked
-on one CPU serialized by each task exiting the migrate_disable() section.
-
-Yes, there's more overhead, but it only happens if multiple tasks are in a
-migrate disable section on the same CPU.
-
--- Steve
+-- 
+Vitaly
 
