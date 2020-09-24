@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA37276C3B
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 10:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C48276C4D
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 10:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727320AbgIXImp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Sep 2020 04:42:45 -0400
-Received: from mga05.intel.com ([192.55.52.43]:47640 "EHLO mga05.intel.com"
+        id S1727277AbgIXIsz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Sep 2020 04:48:55 -0400
+Received: from mga09.intel.com ([134.134.136.24]:55811 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726064AbgIXImp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 24 Sep 2020 04:42:45 -0400
-IronPort-SDR: aM2di68XctazK/IKMzcoSLcH/wd0aRgFNtzNS7QQ1SN6Dl15hYxB9Q4iNQ4W0R8j5per+ptGiL
- icWfymCdB2Eg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9753"; a="245936920"
+        id S1726710AbgIXIsz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 24 Sep 2020 04:48:55 -0400
+IronPort-SDR: 6o+mOtAf8+B4S+dj9O/KzqPWDrpRsUT3uppIeTcfKSMByGo+H4VJC3e/JQMrNLMggyCsr8KQ9x
+ f4gRvf8Hjzfg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9753"; a="162049882"
 X-IronPort-AV: E=Sophos;i="5.77,296,1596524400"; 
-   d="scan'208";a="245936920"
+   d="scan'208";a="162049882"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2020 01:42:44 -0700
-IronPort-SDR: Km/Iub+VG7BAkmgYwQ3GZCuzH4wGS96ZQqneJlZxSjCA0IN6LlrogODbD0BPzmb6CXYHS7x1q+
- apLXZA1I1E9w==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2020 01:48:54 -0700
+IronPort-SDR: MCNCzghyUlxZznh5lzzkEFFO82hGpdc27QO1MhFlLcS/c0wTg3vGf3p28dBfSdK7uizmSTiMRN
+ VX/hK0JNiTCA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,296,1596524400"; 
-   d="scan'208";a="291962626"
+   d="scan'208";a="291963611"
 Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Sep 2020 01:42:40 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 24 Sep 2020 01:48:50 -0700
 From:   "Ramuthevar,Vadivel MuruganX" 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
 To:     miquel.raynal@bootlin.com, linux-kernel@vger.kernel.org
@@ -41,11 +41,11 @@ Cc:     linux-mtd@lists.infradead.org, richard@nod.at, vigneshr@ti.com,
         Ramuthevar Vadivel Murugan 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
 Subject: [PATCH v14 1/2] dt-bindings: mtd: Add Nand Flash Controller support for Intel LGM SoC
-Date:   Thu, 24 Sep 2020 16:42:31 +0800
-Message-Id: <20200924084232.41631-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+Date:   Thu, 24 Sep 2020 16:48:41 +0800
+Message-Id: <20200924084842.41741-2-vadivel.muruganx.ramuthevar@linux.intel.com>
 X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200924084232.41631-1-vadivel.muruganx.ramuthevar@linux.intel.com>
-References: <20200924084232.41631-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+In-Reply-To: <20200924084842.41741-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+References: <20200924084842.41741-1-vadivel.muruganx.ramuthevar@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -56,6 +56,7 @@ Add YAML file for dt-bindings to support NAND Flash Controller
 on Intel's Lightning Mountain SoC.
 
 Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
  .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 99 ++++++++++++++++++++++
  1 file changed, 99 insertions(+)
