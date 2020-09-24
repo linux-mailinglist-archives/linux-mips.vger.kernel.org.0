@@ -2,62 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 084DF27650E
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 02:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8B42765C6
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 03:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726694AbgIXAbx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Sep 2020 20:31:53 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:46371 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726466AbgIXAbx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Sep 2020 20:31:53 -0400
-Received: by mail-il1-f195.google.com with SMTP id l16so1350130ilt.13
-        for <linux-mips@vger.kernel.org>; Wed, 23 Sep 2020 17:31:52 -0700 (PDT)
+        id S1726466AbgIXBTg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 23 Sep 2020 21:19:36 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:33884 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726381AbgIXBTg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Sep 2020 21:19:36 -0400
+Received: by mail-io1-f66.google.com with SMTP id m17so1614278ioo.1
+        for <linux-mips@vger.kernel.org>; Wed, 23 Sep 2020 18:19:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+lCw31FO/Z011lIYpX+gNYx6ddM7jUPZzKuHVU/rJ3Q=;
-        b=sfgUFOEzOfMsDR69JBmxXe/2WbLFN6gdk3V8DM7nOlngJzT4m4YJocDOwwfXr8tpfb
-         d4EEzUTHEhidQPQanDQoM8gKzMbOovYgTyK0kMsKyf39Ve6IBgLrN/YRBD3aEfd7vvwy
-         v7MDl0UHMiFSy+E8rBcqwDhJCZEHp6wtRmp/jGMwoyvwCHKGMVCdzGTimaygtqaz3NYK
-         ZkFOSREKngwleutD990NlqVUMz0RHlCyV6qq3XiIKa42AJBzhlJrWHBEdx149WobL8Pe
-         AvZfB79Q4SbQF1JmHP7OReXyvFhq4jeiCMY+rvkEcUqHr+cOK/T3GQr5IfcvPtQqaYKs
-         B39Q==
-X-Gm-Message-State: AOAM533di90fr0AcwDmohN4Mhkr1YhFV1/peMAS7teZby84jrLF4Ip/I
-        vtGL3nq/QdAiucvcRFOrx90EtX+FHgF18eWSbCNWgbxONC16rg==
-X-Google-Smtp-Source: ABdhPJy8DkqrqVT6JCPZ0TmqIOkcqJXoGa3iOUdcPI4XF+c+2LMZZvvXHvIEi4eQcN/xyhfjUbCNMGT8nrACUpiNEHw=
-X-Received: by 2002:a92:bf0e:: with SMTP id z14mr990058ilh.171.1600907511567;
- Wed, 23 Sep 2020 17:31:51 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=S2RaXsmtiM1yr56sy40CeOSSU4plHQcoTWiaN92Yfrc=;
+        b=ohnE6+ld6OeMd0+gC0v02+QURyIIzWi43IeD/n4b27xq6S3lcoS7DDLCYgVMzjNvLk
+         T0GQvyP7zbvc+aMbEw/AKXnT4zfRVQjl0NncwHYXsAoHdC3H+i1eupCaViXhHPzS3Y+X
+         dZQrPXp3vOns7wi+IjrUSwFeWmCqo9+G9v+yMYDLQdBv4KXakuypZOEP7zmaYCfBHQVb
+         sgXif7u9yTUQk/NVWX8eJmiv1Ua5EimS8mzgm/aDdE7ylpeUvKZ/BMhnHOUZOX0vfz5+
+         uGGKG4b7t6mQfD09fCTVipYVh4B5FtxtoTE+e4bxHwKJgZyV5Cc4lsQzD2RvziO589pg
+         z4EA==
+X-Gm-Message-State: AOAM532bwQRswOW883YYe+NWqiJnkimlZRAeN9jBV0NoZ2DryP6FSZz9
+        RfxYhmnLmM64UJ2uYN0yxZ0bB68L3GOGACY+qgU=
+X-Google-Smtp-Source: ABdhPJwguCWtgveNYqvScz9Qs7jbLMU+rJlWqO7vqFPVyUGKCHAPIP8cNUQXQ+B228q4oJcnZUVnF+ic6Lw4bzH2GmM=
+X-Received: by 2002:a5d:9483:: with SMTP id v3mr1582708ioj.84.1600910374447;
+ Wed, 23 Sep 2020 18:19:34 -0700 (PDT)
 MIME-Version: 1.0
 References: <1600828257-31316-1-git-send-email-chenhc@lemote.com>
- <1600828257-31316-3-git-send-email-chenhc@lemote.com> <2c8b9035-1ca4-cd46-5039-4e1a4af3a0c6@loongson.cn>
-In-Reply-To: <2c8b9035-1ca4-cd46-5039-4e1a4af3a0c6@loongson.cn>
+ <1600828257-31316-3-git-send-email-chenhc@lemote.com> <46167e76-3179-825c-606c-fc35fda8eb4e@flygoat.com>
+In-Reply-To: <46167e76-3179-825c-606c-fc35fda8eb4e@flygoat.com>
 From:   Huacai Chen <chenhc@lemote.com>
-Date:   Thu, 24 Sep 2020 08:31:39 +0800
-Message-ID: <CAAhV-H6F9yuxwqDENMWxL1X7AGCozp7x+pkPKA10oimTVEso6Q@mail.gmail.com>
+Date:   Thu, 24 Sep 2020 09:19:22 +0800
+Message-ID: <CAAhV-H6AD5SufuMgYvVppTKytg9GZ5zydn5JLm4nFD84ONTfkg@mail.gmail.com>
 Subject: Re: [PATCH 3/3] MIPS: Loongson64: Add kexec/kdump support
-To:     Jinyang He <hejinyang@loongson.cn>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Eric Biederman <ebiederm@xmission.com>,
         Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
         Vivek Goyal <vgoyal@redhat.com>,
         "open list:MIPS" <linux-mips@vger.kernel.org>,
         kexec@lists.infradead.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jinyang He <hejinyang@loongson.cn>,
         Youling Tang <tangyouling@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Jinyang,
+Hi, Jiaxun,
 
-On Wed, Sep 23, 2020 at 11:35 AM Jinyang He <hejinyang@loongson.cn> wrote:
+On Wed, Sep 23, 2020 at 9:37 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
-> Hi, Huacai,
 >
-> On 09/23/2020 10:30 AM, Huacai Chen wrote:
+>
+> 在 2020/9/23 10:30, Huacai Chen 写道:
 > > Add kexec/kdump support for Loongson64 by:
 > > 1, Provide Loongson-specific kexec functions: loongson_kexec_prepare,
 > >     loongson_kexec_shutdown and loongson_crash_shutdown;
@@ -114,6 +115,13 @@ On Wed, Sep 23, 2020 at 11:35 AM Jinyang He <hejinyang@loongson.cn> wrote:
 > >   #else
 > >       sync
 > >   #endif
+>
+> Hi Jingyang, Huacai,
+>
+> Thanks a lot for what you have done on Loongson64 support.
+>
+> Just add my cents here.
+>
 > > +
 > > +#ifdef CONFIG_CPU_LOONGSON64
 > > +#define MAILBOX_BASE 0x900000003ff01000
@@ -130,12 +138,6 @@ On Wed, Sep 23, 2020 at 11:35 AM Jinyang He <hejinyang@loongson.cn> wrote:
 > > +     blt   s0, 0x6, 1f         /* Loongson-3A1000 */
 > > +     bgt   s0, 0x7, 1f         /* Loongson-3A2000/3A3000 */
 > > +     dins  t0, t2, 14, 2       /* Loongson-3B1000/3B1500 need bit 15~14 */
->
-> Here is right, and I have a trivial idea that machine type
-> can be passed by secondary_kexec_args.
-It seems not a good idea, if something is detectable, don't use an argument.
-
->
 > > +1:   li    t9, 0x100           /* wait for init loop */
 > > +2:   addiu t9, -1              /* limit mailbox access */
 > > +     bnez  t9, 2b
@@ -147,6 +149,22 @@ It seems not a good idea, if something is detectable, don't use an argument.
 > > +     jr    s1                  /* jump to initial PC */
 > > +#endif
 > > +
+>
+> I'm just a little bit uncomfortable with this kind of hardcoded address.
+> Is it possible to generate kexec_smp_wait with uasm, or pass the SMP
+> base as a parameter of this function?
+This is very difficult, and moreover, uasm wrap the assembly in C
+functions, can it be more beautiful? In my opinion, uasm is only used
+for performance-critical routines, not for beautiful code. But anyway,
+0x900000003ff01000 should be improved.
+
+>
+> Also I do think we can handle kexec_flag in Loongson's platform SMP,
+> or even generic MIPS SMP code just like what cavium did so this kind
+> of platform quirk can be avoided.
+I doubt this can be done, every CPU has its own method of SMP bringup.
+
+>
 > >       j               s1
 > >       END(kexec_smp_wait)
 > >   #endif
@@ -166,23 +184,9 @@ It seems not a good idea, if something is detectable, don't use an argument.
 > > +             ecpu->cpu_startup_core_id, loongson_sysconf.boot_cpu_id);
 > > +#endif
 >
-> I don't think secondary CPU will go here.
-> At arch/mips/kernel/machine_kexec.c: kexec_reboot(), CPU0 goes
-> relocate_new_kernel() and secondary CPUs go to smp_wait. Why
-> kdump may triggered at non-boot CPU?
-In the past, kexec_reboot() may not be executed on CPU0. For the kexec
-case, kernel_kexec() calls migrate_to_reboot_cpu(), which ensures
-kexec_reboot() executed on CPU0. But for the kdump case, crash_kexec()
-doesn't call migrate_to_reboot_cpu(), so kexec_reboot() may execute on
-any CPU because panic can happen on any CPU. Moreover, crash_kexec()
-shouldn't call migrate_to_reboot_cpu(), because it is in a "dangerous"
-status, which is different from kexec.
-
-However, after commit 62cac480f33f8f9413d609cb1601b0ee5 ("MIPS: kexec:
-Make a framework for both jumping and halting on nonboot CPUs"),
-kexec_reboot() works as you say. So you are right here and the "fixup"
-will be removed in the next version. Since the "fixup" doesn't break
-anything, I have never removed it.
+> This could be done unconditionally and split to another patch,
+> "MIPS: Loongson64: Quirk inaccurate bootcore from the firmware"
+This will be wholly removed.
 
 >
 > >       if (ecpu->nr_cpus > NR_CPUS || ecpu->nr_cpus == 0)
@@ -219,146 +223,26 @@ anything, I have never removed it.
 > > +#define KEXEC_ARGV_ADDR      0xFFFFFFFF80108000UL
 > > +#define KEXEC_ARGV_SIZE      COMMAND_LINE_SIZE
 > > +#define KEXEC_ENVP_SIZE      4800
-> > +
-> > +static int kexec_argc;
-> > +static int kdump_argc;
-> > +static void *kexec_argv;
-> > +static void *kdump_argv;
-> > +static void *kexec_envp;
-> > +
-> > +static int loongson_kexec_prepare(struct kimage *image)
-> > +{
-> > +     int i, argc = 0;
-> > +     unsigned int *argv;
-> > +     char *str, *ptr, *bootloader = "kexec";
-> > +
-> > +     /* argv at offset 0, argv[] at offset KEXEC_ARGV_SIZE/2 */
-> > +     if (image->type == KEXEC_TYPE_DEFAULT)
-> > +             argv = (unsigned int *)kexec_argv;
-> > +     else
-> > +             argv = (unsigned int *)kdump_argv;
-> > +
-> > +     argv[argc++] = (unsigned int)(KEXEC_ARGV_ADDR + KEXEC_ARGV_SIZE/2);
-> > +
-> > +     for (i = 0; i < image->nr_segments; i++) {
-> > +             if (!strncmp(bootloader, (char *)image->segment[i].buf,
-> > +                             strlen(bootloader))) {
-> > +                     /*
-> > +                      * convert command line string to array
-> > +                      * of parameters (as bootloader does).
-> > +                      */
-> > +                     int offt;
-> > +                     str = (char *)argv + KEXEC_ARGV_SIZE/2;
-> > +                     memcpy(str, image->segment[i].buf, KEXEC_ARGV_SIZE/2);
-> > +                     ptr = strchr(str, ' ');
-> > +
-> > +                     while (ptr && (argc < MAX_ARGS)) {
-> > +                             *ptr = '\0';
-> > +                             if (ptr[1] != ' ') {
-> > +                                     offt = (int)(ptr - str + 1);
-> > +                                     argv[argc] = KEXEC_ARGV_ADDR + KEXEC_ARGV_SIZE/2 + offt;
-> > +                                     argc++;
-> > +                             }
-> > +                             ptr = strchr(ptr + 1, ' ');
-> > +                     }
-> > +                     break;
-> > +             }
-> > +     }
-> > +
-> > +     if (image->type == KEXEC_TYPE_DEFAULT)
-> > +             kexec_argc = argc;
-> > +     else
-> > +             kdump_argc = argc;
-> > +
-> > +     /* kexec/kdump need a safe page to save reboot_code_buffer */
-> > +     image->control_code_page = virt_to_page((void *)KEXEC_CTRL_CODE);
->
-> I thought find a hole in Crash Kernel may better than a static position.
-> It just a trivial idea, too.
-It is very difficult, the "safe region" should not be corrupted by
-both the old and new kernel, so the low 2MB is a good place.
+> I won't say it's safe.
+> Loongson-2K's PMON may place reboot vector here, also some
+> UEFI firmware may place their suspend stack here.
+> What if we allocate these buffer at runtime?
+The layout of low 2MB in our design:
+0x80000000 the first MB, the first 64K：Exception vector
+0x80010000 the first MB, the second 64K：STR(suspend) data
+0x80020000 the first MB, the third and fourth 64K：UEFI HOB
+0x80040000 the first MB, the fifth 64K：RT-Thread for SMC
+0x80100000 the second MB, the first 64K：KEXEC code
+0x80108000 the second MB, the second 64K：KEXEC data
 
+All allocated buffer from the old kernel is not safe, because the new
+kernel may be larger than the old kernel. Even if the low 2MB is not a
+perfect place, it is the best place we can choose.
+
+Huacai
 
 >
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void loongson_kexec_shutdown(void)
-> > +{
-> > +#ifdef CONFIG_SMP
-> > +     int cpu;
-> > +
-> > +     /* All CPUs go to reboot_code_buffer */
-> > +     for_each_possible_cpu(cpu)
-> > +             if (!cpu_online(cpu))
-> > +                     cpu_device_up(get_cpu_device(cpu));
-> > +#endif
-> > +     kexec_args[0] = kexec_argc;
-> > +     kexec_args[1] = fw_arg1;
-> > +     kexec_args[2] = fw_arg2;
-> > +     memcpy((void *)fw_arg1, kexec_argv, KEXEC_ARGV_SIZE);
-> > +     memcpy((void *)fw_arg2, kexec_envp, KEXEC_ENVP_SIZE);
-> > +}
-> > +
-> > +static void loongson_crash_shutdown(struct pt_regs *regs)
-> > +{
-> > +     default_machine_crash_shutdown(regs);
-> > +     kexec_args[0] = kdump_argc;
-> > +     kexec_args[1] = fw_arg1;
-> > +     kexec_args[2] = fw_arg2;
-> > +     memcpy((void *)fw_arg1, kdump_argv, KEXEC_ARGV_SIZE);
-> > +     memcpy((void *)fw_arg2, kexec_envp, KEXEC_ENVP_SIZE);
-> > +}
-> > +
-> > +#endif
-> > +
-> >   static int __init mips_reboot_setup(void)
-> >   {
-> >       _machine_restart = loongson_restart;
-> >       _machine_halt = loongson_halt;
-> >       pm_power_off = loongson_poweroff;
-> >
-> > +#ifdef CONFIG_KEXEC
-> > +     kexec_argv = kmalloc(KEXEC_ARGV_SIZE, GFP_KERNEL);
-> > +     kdump_argv = kmalloc(KEXEC_ARGV_SIZE, GFP_KERNEL);
-> > +     kexec_envp = kmalloc(KEXEC_ENVP_SIZE, GFP_KERNEL);
-> > +     fw_arg1 = KEXEC_ARGV_ADDR;
-> > +     memcpy(kexec_envp, (void *)fw_arg2, KEXEC_ENVP_SIZE);
-> > +
-> > +     _machine_kexec_prepare = loongson_kexec_prepare;
-> > +     _machine_kexec_shutdown = loongson_kexec_shutdown;
-> > +     _machine_crash_shutdown = loongson_crash_shutdown;
-> > +#endif
-> > +
-> >       return 0;
-> >   }
-> >
-> > diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-> > index e744e1b..55697ac 100644
-> > --- a/arch/mips/loongson64/smp.c
-> > +++ b/arch/mips/loongson64/smp.c
-> > @@ -420,6 +420,11 @@ static void __init loongson3_smp_setup(void)
-> >       ipi_status0_regs_init();
-> >       ipi_en0_regs_init();
-> >       ipi_mailbox_buf_init();
-> > +
-> > +     /* BIOS clear the mailbox, but KEXEC bypass BIOS so clear here */
-> > +     for (i = 0; i < loongson_sysconf.nr_cpus; i++)
-> > +             loongson3_ipi_write64(0, (void *)(ipi_mailbox_buf[i]+0x0));
-> > +
+> Thanks.
 >
-> Does it need? It take a long time after secondary CPUs geting PC in a loop.
-> Or you can clear it early.
-This is nearly the same story as the above "fixup". In the past, if
-kdump triggered on a non-boot CPU, the boot CPU would go to the query
-loop. So, this will also be removed. Thank you.
-
->
-> Thanks,
-> - Jinyang.
->
-> >       cpu_set_core(&cpu_data[0],
-> >                    cpu_logical_map(0) % loongson_sysconf.cores_per_package);
-> >       cpu_data[0].package = cpu_logical_map(0) / loongson_sysconf.cores_per_package;
+> - Jiaxun
 >
