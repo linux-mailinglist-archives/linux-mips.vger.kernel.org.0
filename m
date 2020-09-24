@@ -2,214 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06734276941
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 08:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6262769DA
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 08:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727049AbgIXGuq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Sep 2020 02:50:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47650 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727048AbgIXGun (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 24 Sep 2020 02:50:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600930240;
+        id S1727050AbgIXG5z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Sep 2020 02:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726902AbgIXG5y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Sep 2020 02:57:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E880C0613CE;
+        Wed, 23 Sep 2020 23:57:54 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600930672;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LIKAioeplGLyiuBbUFdtMjnI7W3D9Z3j5vefA4s4ufw=;
-        b=SZzgS9bLEIxTgi0sBPfv8894zNw3JG1BfHO9HPWPgq4zbMPqPPcJPDOZYvh2FDBn7ckVXF
-        EP8g1rHpBGRMTkpU/joDRxoc7JrEFDgkWfnbMt8yW8A0w6KpGnydzoqqU5m86ko7ScFr7Z
-        QNTf8B3KoXCPnBEKMO0N30bnkDD5yYg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-343-CvMw13eaPMuxdi2EFz-XbA-1; Thu, 24 Sep 2020 02:50:37 -0400
-X-MC-Unique: CvMw13eaPMuxdi2EFz-XbA-1
-Received: by mail-wr1-f70.google.com with SMTP id 33so833918wrk.12
-        for <linux-mips@vger.kernel.org>; Wed, 23 Sep 2020 23:50:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LIKAioeplGLyiuBbUFdtMjnI7W3D9Z3j5vefA4s4ufw=;
-        b=hYF225OJIHO9NgCW6fzx6aBCfZBB8jZE2gGW/HsSnrcVKRgIbNCOA+bwxWOq5OOLfM
-         y6s34BnRFbWOp0THKT44yiTuuwww2r1yWrjFmBwvxfO3uVcsrT3WDSZFQoK9EOEkuivS
-         SQedbuTnhHO4qCOo4GPlEct+7FY1ENz/+WqR1pRfVqJTdiXa1pm4CR6FFVzXX53T8/EF
-         9q7FrIIdzxjQABX1ZpVUvuQBZrWd4M9bB2ZS2eLGvSR96nNcU/dxll71fl2oCIW4Z5HB
-         5FpQKnvVyfVW5l4ugy1Es8qvbwWFzFrNDjGO8D0DXDfL/rLwdrjB1/HZlQ+W1ja8rtSP
-         iFNQ==
-X-Gm-Message-State: AOAM531g1Ywuy/jVy28s81o06WrkfFUV8MA6ht0sCX14CE5oLYGRLwzq
-        8YSMRFwdW7OaF1uiQBNmDu6LiL1cgQdniO4AnMU4NBzQbaFXN9Km/DSy6Dxgflja+29SzeUCb2m
-        tabfufLeHhxn6KORhA9eRdQ==
-X-Received: by 2002:adf:dbc3:: with SMTP id e3mr3333430wrj.1.1600930236327;
-        Wed, 23 Sep 2020 23:50:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzdKgtG8a23gp9sPKCgac/G4/YiS2x4mbujGoCbXj7ZDMRA/eaMcnIrHNWJ/P8aBoLyEtKHFA==
-X-Received: by 2002:adf:dbc3:: with SMTP id e3mr3333401wrj.1.1600930236064;
-        Wed, 23 Sep 2020 23:50:36 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:d80e:a78:c27b:93ed? ([2001:b07:6468:f312:d80e:a78:c27b:93ed])
-        by smtp.gmail.com with ESMTPSA id m18sm2283735wrx.58.2020.09.23.23.50.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2020 23:50:35 -0700 (PDT)
-Subject: Re: [PATCH] KVM: Enable hardware before doing arch VM initialization
-To:     Huacai Chen <chenhuacai@gmail.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>, kvm-ppc@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-References: <20200923185757.1806-1-sean.j.christopherson@intel.com>
- <CAAhV-H6QLRh8kWyt4KfVgS64nsixx_3er+qmeph3csxpq3scdw@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <11d4e52e-6bc2-934d-0487-561033b3ab87@redhat.com>
-Date:   Thu, 24 Sep 2020 08:50:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        bh=5rTYnFSI7MvYdctqS1tc/c91OuHk2uQv9NNDSCQ04XQ=;
+        b=ToSaPZLxQ2AH6wpji2/x8TcisM3A51I/7u6foK9kSTrf7OV6+B/sYvPqQhMtEJrg0N9zIx
+        Cxs2etUyPDaehZQCOzhxH7PpvSyJSfy+zT5nw6FTVB78t6JNp7mDPmryw8BrJtWSznRbjf
+        8WXrnLC1goQovtz1OVkxeDIie+039a2C5Ao2dLue3fpVFSN5R/cBi6m5tXzS9aMxE6UJwX
+        Uwp2HtahcdV3lHGQhtB2rKe1baF/Au/D2y5x0sKC4vrpIL/XuoPxLZOPdKWgIlvAl5aFPa
+        sm2IQ31/n393ddHyPDhkeJ4Ev5cXAXShQDmJK93cRSzGvYG6PFna1CfbOLLbSA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600930672;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5rTYnFSI7MvYdctqS1tc/c91OuHk2uQv9NNDSCQ04XQ=;
+        b=EvF/NhfcVha3UwOSEREyL46c1SondfygAd7QtbHcK6NXwedthX3cPGyjT7D4JChbCJd2jo
+        pNgVY6bwfByW4sDA==
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     peterz@infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
+In-Reply-To: <20200923171234.0001402d@oasis.local.home>
+References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com> <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de> <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com> <87a6xjd1dw.fsf@nanos.tec.linutronix.de> <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com> <87sgbbaq0y.fsf@nanos.tec.linutronix.de> <20200923084032.GU1362448@hirez.programming.kicks-ass.net> <20200923115251.7cc63a7e@oasis.local.home> <874kno9pr9.fsf@nanos.tec.linutronix.de> <20200923171234.0001402d@oasis.local.home>
+Date:   Thu, 24 Sep 2020 08:57:52 +0200
+Message-ID: <871riracgf.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H6QLRh8kWyt4KfVgS64nsixx_3er+qmeph3csxpq3scdw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 24/09/20 08:31, Huacai Chen wrote:
-> Hi, Sean,
-> 
-> On Thu, Sep 24, 2020 at 3:00 AM Sean Christopherson
-> <sean.j.christopherson@intel.com> wrote:
->>
->> Swap the order of hardware_enable_all() and kvm_arch_init_vm() to
->> accommodate Intel's Trust Domain Extension (TDX), which needs VMX to be
->> fully enabled during VM init in order to make SEAMCALLs.
->>
->> This also provides consistent ordering between kvm_create_vm() and
->> kvm_destroy_vm() with respect to calling kvm_arch_destroy_vm() and
->> hardware_disable_all().
-> Do you means that hardware_enable_all() enable VMX, kvm_arch_init_vm()
-> enable TDX, and TDX depends on VMX enabled at first? If so, can TDX be
-> also enabled at hardware_enable_all()?
+On Wed, Sep 23 2020 at 17:12, Steven Rostedt wrote:
+> On Wed, 23 Sep 2020 22:55:54 +0200
+> Then scratch the idea of having anonymous local_lock() and just bring
+> local_lock in directly? Then have a kmap local lock, which would only
+> block those that need to do a kmap.
 
-kvm_arch_init_vm() enables TDX *for the VM*, and to do that it needs VMX
-instructions (specifically SEAMCALL, which is a hypervisor->"ultravisor"
-call).  Because that action is VM-specific it cannot be done in
-hardware_enable_all().
+That's still going to end up in lock ordering nightmares and you lose
+the ability to use kmap_local from arbitrary contexts which was again
+one of the goals of this exercise.
 
-Paolo
+Aside of that you're imposing reentrancy protections on something which
+does not need it in the first place.
 
-> The swapping seems not affect MIPS, but I observed a fact:
-> kvm_arch_hardware_enable() not only be called at
-> hardware_enable_all(), but also be called at kvm_starting_cpu(). Even
-> if you swap the order, new starting CPUs are not enabled VMX before
-> kvm_arch_init_vm(). (Maybe I am wrong because I'm not familiar with
-> VMX/TDX).
-> 
-> Huacai
->>
->> Cc: Marc Zyngier <maz@kernel.org>
->> Cc: James Morse <james.morse@arm.com>
->> Cc: Julien Thierry <julien.thierry.kdev@gmail.com>
->> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: Huacai Chen <chenhc@lemote.com>
->> Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
->> Cc: linux-mips@vger.kernel.org
->> Cc: Paul Mackerras <paulus@ozlabs.org>
->> Cc: kvm-ppc@vger.kernel.org
->> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
->> Cc: Janosch Frank <frankja@linux.ibm.com>
->> Cc: David Hildenbrand <david@redhat.com>
->> Cc: Cornelia Huck <cohuck@redhat.com>
->> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
->> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
->> Cc: Wanpeng Li <wanpengli@tencent.com>
->> Cc: Jim Mattson <jmattson@google.com>
->> Cc: Joerg Roedel <joro@8bytes.org>
->> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
->> ---
->>
->> Obviously not required until the TDX series comes along, but IMO KVM
->> should be consistent with respect to enabling and disabling virt support
->> in hardware.
->>
->> Tested only on Intel hardware.  Unless I missed something, this only
->> affects x86, Arm and MIPS as hardware enabling is a nop for s390 and PPC.
->> Arm looks safe (based on my mostly clueless reading of the code), but I
->> have no idea if this will cause problem for MIPS, which is doing all kinds
->> of things in hardware_enable() that I don't pretend to fully understand.
->>
->>  virt/kvm/kvm_main.c | 16 ++++++++--------
->>  1 file changed, 8 insertions(+), 8 deletions(-)
->>
->> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
->> index cf88233b819a..58fa19bcfc90 100644
->> --- a/virt/kvm/kvm_main.c
->> +++ b/virt/kvm/kvm_main.c
->> @@ -766,7 +766,7 @@ static struct kvm *kvm_create_vm(unsigned long type)
->>                 struct kvm_memslots *slots = kvm_alloc_memslots();
->>
->>                 if (!slots)
->> -                       goto out_err_no_arch_destroy_vm;
->> +                       goto out_err_no_disable;
->>                 /* Generations must be different for each address space. */
->>                 slots->generation = i;
->>                 rcu_assign_pointer(kvm->memslots[i], slots);
->> @@ -776,19 +776,19 @@ static struct kvm *kvm_create_vm(unsigned long type)
->>                 rcu_assign_pointer(kvm->buses[i],
->>                         kzalloc(sizeof(struct kvm_io_bus), GFP_KERNEL_ACCOUNT));
->>                 if (!kvm->buses[i])
->> -                       goto out_err_no_arch_destroy_vm;
->> +                       goto out_err_no_disable;
->>         }
->>
->>         kvm->max_halt_poll_ns = halt_poll_ns;
->>
->> -       r = kvm_arch_init_vm(kvm, type);
->> -       if (r)
->> -               goto out_err_no_arch_destroy_vm;
->> -
->>         r = hardware_enable_all();
->>         if (r)
->>                 goto out_err_no_disable;
->>
->> +       r = kvm_arch_init_vm(kvm, type);
->> +       if (r)
->> +               goto out_err_no_arch_destroy_vm;
->> +
->>  #ifdef CONFIG_HAVE_KVM_IRQFD
->>         INIT_HLIST_HEAD(&kvm->irq_ack_notifier_list);
->>  #endif
->> @@ -815,10 +815,10 @@ static struct kvm *kvm_create_vm(unsigned long type)
->>                 mmu_notifier_unregister(&kvm->mmu_notifier, current->mm);
->>  #endif
->>  out_err_no_mmu_notifier:
->> -       hardware_disable_all();
->> -out_err_no_disable:
->>         kvm_arch_destroy_vm(kvm);
->>  out_err_no_arch_destroy_vm:
->> +       hardware_disable_all();
->> +out_err_no_disable:
->>         WARN_ON_ONCE(!refcount_dec_and_test(&kvm->users_count));
->>         for (i = 0; i < KVM_NR_BUSES; i++)
->>                 kfree(kvm_get_bus(kvm, i));
->> --
->> 2.28.0
->>
-> 
+> Now as for migration disabled nesting, at least now we would have
+> groupings of this, and perhaps the theorists can handle that. I mean,
+> how is this much different that having a bunch of tasks blocked on a
+> mutex with the owner is pinned on a CPU?
+>
+> migrate_disable() is a BKL of pinning affinity.
 
+No. That's just wrong. preempt disable is a concurrency control,
+i.e. protecting against reentrancy on a given CPU. But it's a cpu global
+protection which means that it's not protecting a specific code path.
+
+Contrary to preempt disable, migrate disable is not protecting against
+reentrancy on a given CPU. It's a temporary restriction to the scheduler
+on placement.
+
+The fact that disabling preemption implicitely disables migration does
+not make them semantically equivalent.
+
+> If we only have local_lock() available (even on !RT), then it makes
+> the blocking in groups. At least this way you could grep for all the
+> different local_locks in the system and plug that into the algorithm
+> for WCS, just like one would with a bunch of mutexes.
+
+You cannot do that on RT at all where migrate disable is substituting
+preempt disable in spin and rw locks. The result would be the same as
+with a !RT kernel just with horribly bad performance.
+
+That means the stacking problem has to be solved anyway.
+
+So why on earth do you want to create yet another special duct tape case
+for kamp_local() which proliferates inconsistency instead of aiming for
+consistency accross all preemption models?
+
+Thanks,
+
+        tglx
