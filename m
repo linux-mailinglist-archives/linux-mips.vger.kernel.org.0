@@ -2,52 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FE5277359
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 15:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D4127736E
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 16:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728211AbgIXN7f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Sep 2020 09:59:35 -0400
-Received: from elvis.franken.de ([193.175.24.41]:55130 "EHLO elvis.franken.de"
+        id S1728065AbgIXN75 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Sep 2020 09:59:57 -0400
+Received: from elvis.franken.de ([193.175.24.41]:55133 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728161AbgIXN7W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 24 Sep 2020 09:59:22 -0400
+        id S1728148AbgIXN7Y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 24 Sep 2020 09:59:24 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kLRmK-0005vQ-00; Thu, 24 Sep 2020 15:59:20 +0200
+        id 1kLRmK-0005vQ-01; Thu, 24 Sep 2020 15:59:20 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 8B7EBC1014; Thu, 24 Sep 2020 15:51:46 +0200 (CEST)
-Date:   Thu, 24 Sep 2020 15:51:46 +0200
+        id D22E6C101A; Thu, 24 Sep 2020 15:53:53 +0200 (CEST)
+Date:   Thu, 24 Sep 2020 15:53:53 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, stable@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Loongson2ef: Disable Loongson MMI instructions
-Message-ID: <20200924135146.GA13973@alpha.franken.de>
-References: <20200923103312.55507-1-jiaxun.yang@flygoat.com>
+Cc:     Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>
+Subject: Re: [PATCH V7 2/3] MIPS: Loongson-3: Enable COP2 usage in kernel
+Message-ID: <20200924135353.GB13973@alpha.franken.de>
+References: <1600679548-29154-1-git-send-email-chenhc@lemote.com>
+ <1600679548-29154-2-git-send-email-chenhc@lemote.com>
+ <20200921121554.GA8642@alpha.franken.de>
+ <177ADF0C-1633-449F-B589-712EA4857E79@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200923103312.55507-1-jiaxun.yang@flygoat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <177ADF0C-1633-449F-B589-712EA4857E79@flygoat.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 06:33:12PM +0800, Jiaxun Yang wrote:
-> It was missed when I was forking Loongson2ef from Loongson64 but
-> should be applied to Loongson2ef as march=loongson2f
-> will also enable Loongson MMI in GCC-9+.
+On Wed, Sep 23, 2020 at 05:44:02PM +0800, Jiaxun Yang wrote:
+> 于 2020年9月21日 GMT+08:00 下午8:15:54, Thomas Bogendoerfer <tsbogend@alpha.franken.de> 写到:
+> >thanks for doing this, I'm going to apply this later.
+> >
+> >This remind of another question, what about loongson2ef ? I'm getting
+> >kbuild failure because of enabled loongson-mmi mails. Are we are missing
+> >something like cflags-y += $(call cc-option,-mno-loongson-mmi) in Platform
+> >file ? Who is taking care of loongson2ef ?
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Fixes: 71e2f4dd5a65 ("MIPS: Fork loongson2ef from loongson64")
-> Reported-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: stable@vger.kernel.org # v5.8+
-> ---
->  arch/mips/loongson2ef/Platform | 4 ++++
->  1 file changed, 4 insertions(+)
+> I'll send a patch later. Sorry for the inconvenience.
 
-applied to mips-fixes.
+excellent, thank you.
 
 Thomas.
 
