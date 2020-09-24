@@ -2,217 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 748B1277118
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 14:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08280277146
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 14:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727816AbgIXMeW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Sep 2020 08:34:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47731 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727722AbgIXMeW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 24 Sep 2020 08:34:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600950861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XJM2zsAmjHPtnBVFf6cltcdoLV4SPiJ7BDBnMHvxMEQ=;
-        b=Ht4zUUcFI8NnJDTQiaXdh/3X6CUlFV5a65Vtih95kXxjxrUXkrCsZ2YdbvB06E1ZlJ7WOp
-        F6lC+Mg4PX7wjy04WC0IECqsUscQ4aOCGfgPlkKFONkYna8xJacEj1fzJgKXpBwXQktNlY
-        60fbBUQSjKIAVvBPJmmkW2w3l5KgCjs=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-177-bXSLqHAvNBm3sNLCaS_Vxg-1; Thu, 24 Sep 2020 08:34:19 -0400
-X-MC-Unique: bXSLqHAvNBm3sNLCaS_Vxg-1
-Received: by mail-ej1-f71.google.com with SMTP id lx11so1225035ejb.19
-        for <linux-mips@vger.kernel.org>; Thu, 24 Sep 2020 05:34:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=XJM2zsAmjHPtnBVFf6cltcdoLV4SPiJ7BDBnMHvxMEQ=;
-        b=jXdX8lzt7qutJsnXz90dfXhbFtMsLb3OzndtgOBxrrUOczfiC6a9vy08DHdAAIUH2g
-         +X10OWGbgKh5yffQuwU9lUg76iEXIJPKSsb5cLqfUe6QOONTXiosLD87rsQ6NvVEeN8I
-         F01zsxKfK6zccdQlHgeQ3EmK3V4ut1IS++kd9VcUYPy/f2CwS3cbjPA7LzE9O4QhAwML
-         3BJtB2ByQHGUz6MX7Z4GxSGclPbwSVXaTgZbR4eywFB8ywgpnkZSHV4XkuJXkKrxHvPb
-         NVFZNVWIFCaEzuS8MotV0+bc2L+jMLD/00ku+yf8vAxH6slLkkTK7Pl3qxWVaM0PW4O+
-         6Wqg==
-X-Gm-Message-State: AOAM5302ZR9gvK6IZDfJm8ET0Qtlsjdf9Sh8lcw12r/D5aUSLglbb09R
-        i0L8bm6ftN47ANyp/IYI17FwecBTobdVK1BlpsYeiAV32WKRSfom15FRI8F/XpOKmwUgfx3SuBx
-        CMSlMfizIyRrygt/ExdGoMQ==
-X-Received: by 2002:a05:6402:1148:: with SMTP id g8mr775008edw.271.1600950857413;
-        Thu, 24 Sep 2020 05:34:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz9aag4YDAgIGYQ9EHrDOFNyx4QU0hniTeVNf02iQ7RJLkNK/cPK0RyizBQjwquCkPtgxllpw==
-X-Received: by 2002:a05:6402:1148:: with SMTP id g8mr774981edw.271.1600950857170;
-        Thu, 24 Sep 2020 05:34:17 -0700 (PDT)
-Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id t3sm2383180edv.59.2020.09.24.05.34.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 05:34:15 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Huacai Chen <chenhc@lemote.com>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
-        kvm-ppc@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [RFC PATCH 3/3] KVM: x86: Use KVM_BUG/KVM_BUG_ON to handle bugs that are fatal to the VM
-In-Reply-To: <20200923224530.17735-4-sean.j.christopherson@intel.com>
-References: <20200923224530.17735-1-sean.j.christopherson@intel.com> <20200923224530.17735-4-sean.j.christopherson@intel.com>
-Date:   Thu, 24 Sep 2020 14:34:14 +0200
-Message-ID: <878scze4l5.fsf@vitty.brq.redhat.com>
+        id S1727756AbgIXMnu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Sep 2020 08:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727738AbgIXMnu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Sep 2020 08:43:50 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A01C0613CE;
+        Thu, 24 Sep 2020 05:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SdhPXkSs5ZPBi948PCp3uVHmQU1pxaOPhPPF1KHSOtI=; b=cfpXNMYzVRlId2AJBOa+GyLPt6
+        zTFRf6xk7foaFg4tpi+0P2wk3EKKrMLVo5gmNxHWe7qOcz3Hmx3VWmRHmwVx/FwsBrIZ4LPXgFqji
+        cbVT02P2X6YSp/qAxsPzP7xWma/nd4gLtLGrrxZddBcakdrjDZddjCYlGyyVHu59U4aaO6z8FZ60s
+        49IhfEr0KMLRog0k4Y5qS0akYgifDqnz2qj8WKdCAn3F5dxbkr8x0mpQnMaztMPQpwH5mtFjW59VG
+        NHALCniQ15G9RJsPp0Y7Yvd0LIio3hjjsinuCY0H4Jgz5zGhVlW6aMgLPr7GKSkFGiFv6cxeg9duh
+        Tyn/G/Dw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kLQaG-0005M9-J5; Thu, 24 Sep 2020 12:42:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C0F753007CD;
+        Thu, 24 Sep 2020 14:42:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A98B620297EC5; Thu, 24 Sep 2020 14:42:41 +0200 (CEST)
+Date:   Thu, 24 Sep 2020 14:42:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
+ kmap_atomic & friends
+Message-ID: <20200924124241.GK2628@hirez.programming.kicks-ass.net>
+References: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+ <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
+ <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
+ <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
+ <20200923115251.7cc63a7e@oasis.local.home>
+ <874kno9pr9.fsf@nanos.tec.linutronix.de>
+ <20200923171234.0001402d@oasis.local.home>
+ <871riracgf.fsf@nanos.tec.linutronix.de>
+ <20200924083241.314f2102@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200924083241.314f2102@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Sean Christopherson <sean.j.christopherson@intel.com> writes:
+On Thu, Sep 24, 2020 at 08:32:41AM -0400, Steven Rostedt wrote:
+> Anyway, instead of blocking. What about having a counter of number of
+> migrate disabled tasks per cpu, and when taking a migrate_disable(), and there's
+> already another task with migrate_disabled() set, and the current task has
+> an affinity greater than 1, it tries to migrate to another CPU?
 
-> Add support for KVM_REQ_VM_BUGG in x86, and replace a variety of WARNs
-> with KVM_BUG() and KVM_BUG_ON().  Return -EIO if a KVM_BUG is hit to
-> align with the common KVM behavior of rejecting iocts() with -EIO if the
-> VM is bugged.
->
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> ---
->  arch/x86/kvm/svm/svm.c |  2 +-
->  arch/x86/kvm/vmx/vmx.c | 23 ++++++++++++++---------
->  arch/x86/kvm/x86.c     |  4 ++++
->  3 files changed, 19 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 3da5b2f1b4a1..e684794c6249 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -1380,7 +1380,7 @@ static void svm_cache_reg(struct kvm_vcpu *vcpu, enum kvm_reg reg)
->  		load_pdptrs(vcpu, vcpu->arch.walk_mmu, kvm_read_cr3(vcpu));
->  		break;
->  	default:
-> -		WARN_ON_ONCE(1);
-> +		KVM_BUG_ON(1, vcpu->kvm);
->  	}
->  }
->  
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 6f9a0c6d5dc5..810d46ab0a47 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2250,7 +2250,7 @@ static void vmx_cache_reg(struct kvm_vcpu *vcpu, enum kvm_reg reg)
->  		vcpu->arch.cr4 |= vmcs_readl(GUEST_CR4) & guest_owned_bits;
->  		break;
->  	default:
-> -		WARN_ON_ONCE(1);
-> +		KVM_BUG_ON(1, vcpu->kvm);
->  		break;
->  	}
->  }
-> @@ -4960,6 +4960,7 @@ static int handle_cr(struct kvm_vcpu *vcpu)
->  			return kvm_complete_insn_gp(vcpu, err);
->  		case 3:
->  			WARN_ON_ONCE(enable_unrestricted_guest);
-> +
->  			err = kvm_set_cr3(vcpu, val);
->  			return kvm_complete_insn_gp(vcpu, err);
->  		case 4:
-> @@ -4985,14 +4986,13 @@ static int handle_cr(struct kvm_vcpu *vcpu)
->  		}
->  		break;
->  	case 2: /* clts */
-> -		WARN_ONCE(1, "Guest should always own CR0.TS");
-> -		vmx_set_cr0(vcpu, kvm_read_cr0_bits(vcpu, ~X86_CR0_TS));
-> -		trace_kvm_cr_write(0, kvm_read_cr0(vcpu));
-> -		return kvm_skip_emulated_instruction(vcpu);
-> +		KVM_BUG(1, vcpu->kvm, "Guest always owns CR0.TS");
-> +		return -EIO;
->  	case 1: /*mov from cr*/
->  		switch (cr) {
->  		case 3:
->  			WARN_ON_ONCE(enable_unrestricted_guest);
-> +
+That doesn't solve the problem. On wakeup we should already prefer an
+idle CPU over one running a (RT) task, but you can always wake more
+tasks than there's CPUs around and you'll _have_ to stack at some point.
 
-Here, were you intended to replace WARN_ON_ONCE() with KVM_BUG_ON() or
-this is just a stray newline added?
+The trick is how to unstack them correctly. We need to detect when a
+migrate_disable() task _should_ start running again, and migrate away
+whoever is in the way at that point.
 
->  			val = kvm_read_cr3(vcpu);
->  			kvm_register_write(vcpu, reg, val);
->  			trace_kvm_cr_read(cr, val);
-> @@ -5330,7 +5330,9 @@ static int handle_ept_misconfig(struct kvm_vcpu *vcpu)
->  
->  static int handle_nmi_window(struct kvm_vcpu *vcpu)
->  {
-> -	WARN_ON_ONCE(!enable_vnmi);
-> +	if (KVM_BUG_ON(!enable_vnmi, vcpu->kvm))
-> +		return -EIO;
-> +
->  	exec_controls_clearbit(to_vmx(vcpu), CPU_BASED_NMI_WINDOW_EXITING);
->  	++vcpu->stat.nmi_window_exits;
->  	kvm_make_request(KVM_REQ_EVENT, vcpu);
-> @@ -5908,7 +5910,8 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
->  	 * below) should never happen as that means we incorrectly allowed a
->  	 * nested VM-Enter with an invalid vmcs12.
->  	 */
-> -	WARN_ON_ONCE(vmx->nested.nested_run_pending);
-> +	if (KVM_BUG_ON(vmx->nested.nested_run_pending, vcpu->kvm))
-> +		return -EIO;
->  
->  	/* If guest state is invalid, start emulating */
->  	if (vmx->emulation_required)
-> @@ -6258,7 +6261,9 @@ static int vmx_sync_pir_to_irr(struct kvm_vcpu *vcpu)
->  	int max_irr;
->  	bool max_irr_updated;
->  
-> -	WARN_ON(!vcpu->arch.apicv_active);
-> +	if (KVM_BUG_ON(!vcpu->arch.apicv_active, vcpu->kvm))
-> +		return -EIO;
-> +
->  	if (pi_test_on(&vmx->pi_desc)) {
->  		pi_clear_on(&vmx->pi_desc);
->  		/*
-> @@ -6345,7 +6350,7 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
->  	gate_desc *desc;
->  	u32 intr_info = vmx_get_intr_info(vcpu);
->  
-> -	if (WARN_ONCE(!is_external_intr(intr_info),
-> +	if (KVM_BUG(!is_external_intr(intr_info), vcpu->kvm,
->  	    "KVM: unexpected VM-Exit interrupt info: 0x%x", intr_info))
->  		return;
->  
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 17f4995e80a7..672eb5142b34 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -8363,6 +8363,10 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  	bool req_immediate_exit = false;
->  
->  	if (kvm_request_pending(vcpu)) {
-> +		if (kvm_check_request(KVM_REQ_VM_BUGGED, vcpu)) {
-
-Do we want to allow userspace to continue executing the guest or should
-we make KVM_REQ_VM_BUGGED permanent by replacing kvm_check_request()
-with kvm_test_request()?
-
-> +			r = -EIO;
-> +			goto out;
-> +		}
->  		if (kvm_check_request(KVM_REQ_GET_VMCS12_PAGES, vcpu)) {
->  			if (unlikely(!kvm_x86_ops.nested_ops->get_vmcs12_pages(vcpu))) {
->  				r = 0;
-
--- 
-Vitaly
-
+It turns out, that getting selected for pull-balance is exactly that
+condition, and clearly a migrate_disable() task cannot be pulled, but we
+can use that signal to try and pull away the running task that's in the
+way.
