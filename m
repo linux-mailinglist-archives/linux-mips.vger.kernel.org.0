@@ -2,49 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAEC276E32
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 12:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C16276E37
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Sep 2020 12:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726899AbgIXKIP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Sep 2020 06:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S1726658AbgIXKIx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Sep 2020 06:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726818AbgIXKIO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Sep 2020 06:08:14 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9FAC0613CE
-        for <linux-mips@vger.kernel.org>; Thu, 24 Sep 2020 03:08:14 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d9so1611560pfd.3
-        for <linux-mips@vger.kernel.org>; Thu, 24 Sep 2020 03:08:14 -0700 (PDT)
+        with ESMTP id S1726645AbgIXKIx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Sep 2020 06:08:53 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D97C0613CE
+        for <linux-mips@vger.kernel.org>; Thu, 24 Sep 2020 03:08:53 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id fa1so1444269pjb.0
+        for <linux-mips@vger.kernel.org>; Thu, 24 Sep 2020 03:08:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=0V6+MO40T7RQQa2+6CkybLfijKZrU0OL4srRvkZWkcE=;
-        b=hswEqlH0SF+N7++r+h4NGQajib5t5t3x5/C6Kk2Tj4pxhV9CGzAzRAq7OfWU6wMyXk
-         8mLNUVd2TTXap67aTydcm7DBXKbvwmQ69IwiXjVhQV4SBPySIgrsti2ZI1BnQmUa7/D3
-         56bypUaIAe6JdJboq1/GXO11b0RVmCaKDTL0GnGQYsiHNk92rAMJHlaORjfUC76Qbu5w
-         R+zclSdxgvUQozwflBqateT7VwVnkSsiAZNvUuF69VB3h29OWdkibCKzafiDCJTot4sr
-         jTZVGNCu3hEkdOCHt1yK3yh+TWKk86I1ZnkOecQOE+OSFRYz0MrMdsNXnfjuV9UxRNhZ
-         wGYQ==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=uvJYNtI3Hobw81o476oPUI52UEPmmVfBo/5Mfvs1zmE=;
+        b=FTJlS9AA30Yk9rEl4YQrJIWLFTEgCG5otuRQQDxfLd6Cr9MgULoekakm+/jkUmSgzL
+         jRJiT5mBPXxxdMuDxjCloYiNA6vFwEbTw1u6loNYoV5Z9UuyVHDhKdRm/lHFsP/rrKz8
+         aDJndvVvLO6sKP/Sg5COnEI1w9HgTv+nqYBIvm6nL9paCLJ0VpzrsrpUdpnW8VuqOV30
+         OPWJ9xjzxXjOpM/fWQif63eLt97tlS4c0KSRme2eSMW8tOeIJO4PWa2miZhXriaVzdYL
+         fVqZhL3ItzkhuaMH6KHNi+Lr2flAHmeIIrXDv6cdP3neyCrkNeBjuDuoZOgHSQb5Y4j9
+         Apfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=0V6+MO40T7RQQa2+6CkybLfijKZrU0OL4srRvkZWkcE=;
-        b=Ms0qlWVR39TkjZg+sCCMMY/2/QjQvf5vl6yevqn8lJ4EQYW5uBTfc23zdld+5dr5v4
-         mAfX3G3116hIXzPU1ewRXipCgAoyF5qC8Mlzn8UTmJFkAZdHrfxE0MycYxhVy4MoffpN
-         9c0meZTpTRqK0aWaxcuz+Z0UKGpVk8jkQje9gUOTqfke9UJHhXs/31eIh0oLeLfCfYFY
-         UByNdqVRISEW8trpl8UIG+qoV3GP4Hu8ibKfW7yRZVtQeVr4NlGLcR7x26oiekxCvtKP
-         MjeMff5a5mh2nLUm1NrJLDwXxGwXjJUol+XRhoHnWoDmAdDqi79vDb5439ADZ3OembTU
-         NqHQ==
-X-Gm-Message-State: AOAM531Uuv+A63HSp1jSzMdZh0MVG9VqHa5GiwouNU9aA1ZDfjHX940H
-        BIoVWXLZyUQ8mfdTYya5LT0=
-X-Google-Smtp-Source: ABdhPJxUyQFfW8OhMT9xEvfvuiP4xVQq6dXcdu+DSKoXDbKPNe5BVOkT79rhhAV1R4sINAAXWfJcDw==
-X-Received: by 2002:a65:5a0d:: with SMTP id y13mr3398309pgs.131.1600942094469;
-        Thu, 24 Sep 2020 03:08:14 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references;
+        bh=uvJYNtI3Hobw81o476oPUI52UEPmmVfBo/5Mfvs1zmE=;
+        b=X7bjn/wE8wttKwKzIbd02R3duM4bfJ8q3PAaG2iL7AIPAqj2T60qafXJ/NLUCYiUtM
+         +gkLEtO/qT2Be2aFo9ynJD7qmu99oIACvaPCSU4r3tId2W1SuBz3MGYXSCQz3Is83M3V
+         mXLeDDfxqFNG3v6AHI+HqjKDRnk386F4kMxG1uiJVcggJjdaf86Y82C5lANk7o1t1EOq
+         7DPDOVpoOwyHg3MW+xWsGkCAoXEWKqHpEKKQNjByE/bCgkl5400qsq5GbQ+M2LJsu64k
+         Z6tpwWDKGWphKdWiRhJmSXumnVul4RBxryGlFjasa6vWmGOysLpQqmvqfAnYjkjJVuJ/
+         5hzQ==
+X-Gm-Message-State: AOAM530JLw5nv5oXvmEhVW2tQkJHK7g9Yk+Gf21BCMbMTam86IvpQKxn
+        mEYQ68ClGXFX9J1BIwxobr0=
+X-Google-Smtp-Source: ABdhPJzATR4q0OVFoghY2qt5SQqc2HlSLtpQbslZ1jTtUNRGbOZdbfdgGG01lcUhTyAd44cf4im/QA==
+X-Received: by 2002:a17:90b:1642:: with SMTP id il2mr3169549pjb.93.1600942132920;
+        Thu, 24 Sep 2020 03:08:52 -0700 (PDT)
 Received: from software.domain.org ([45.77.13.216])
-        by smtp.gmail.com with ESMTPSA id p6sm2532716pfn.63.2020.09.24.03.08.09
+        by smtp.gmail.com with ESMTPSA id p6sm2532716pfn.63.2020.09.24.03.08.48
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 24 Sep 2020 03:08:13 -0700 (PDT)
+        Thu, 24 Sep 2020 03:08:52 -0700 (PDT)
 Sender: Huacai Chen <chenhuacai@gmail.com>
 From:   Huacai Chen <chenhc@lemote.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -56,42 +57,136 @@ Cc:     linux-mips@vger.kernel.org, kexec@lists.infradead.org,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH V2 1/3] MIPS: Crash kernel should be able to see old memories
-Date:   Thu, 24 Sep 2020 18:07:57 +0800
-Message-Id: <1600942079-18652-1-git-send-email-chenhc@lemote.com>
+Subject: [PATCH V2 2/3] MIPS: Reserve extra memory for crash dump
+Date:   Thu, 24 Sep 2020 18:07:58 +0800
+Message-Id: <1600942079-18652-2-git-send-email-chenhc@lemote.com>
 X-Mailer: git-send-email 2.7.0
+In-Reply-To: <1600942079-18652-1-git-send-email-chenhc@lemote.com>
+References: <1600942079-18652-1-git-send-email-chenhc@lemote.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Kexec-tools use mem=X@Y to pass usable memories to crash kernel, but in
-commit a94e4f24ec836c8984f83959 ("MIPS: init: Drop boot_mem_map") all
-BIOS passed memories are removed by early_parse_mem(). I think this is
-reasonable for a normal kernel but not for a crash kernel, because a
-crash kernel should be able to see all old memories, even though it is
-not supposed to use them.
+Traditionally, MIPS's contiguous low memory can be as less as 256M, so
+crashkernel=X@Y may be unable to large enough in some cases. Moreover,
+for the "multi numa node + sparse memory model" case, it is attempt to
+allocate section_mem_maps on every node. Thus, if the total memory of a
+node is more than 1GB, we reserve the top 128MB for the crash kernel.
 
-Fixes: a94e4f24ec836c8984f83959 ("MIPS: init: Drop boot_mem_map")
 Signed-off-by: Huacai Chen <chenhc@lemote.com>
 ---
- arch/mips/kernel/setup.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/mips/kernel/setup.c | 63 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
 diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 4c04a86..e2804a2 100644
+index e2804a2..90d4a2e 100644
 --- a/arch/mips/kernel/setup.c
 +++ b/arch/mips/kernel/setup.c
-@@ -392,8 +392,10 @@ static int __init early_parse_mem(char *p)
- 	 */
- 	if (usermem == 0) {
- 		usermem = 1;
-+#ifndef CONFIG_CRASH_DUMP
- 		memblock_remove(memblock_start_of_DRAM(),
- 			memblock_end_of_DRAM() - memblock_start_of_DRAM());
+@@ -29,6 +29,7 @@
+ #include <linux/of_fdt.h>
+ #include <linux/of_reserved_mem.h>
+ #include <linux/dmi.h>
++#include <linux/crash_dump.h>
+ 
+ #include <asm/addrspace.h>
+ #include <asm/bootinfo.h>
+@@ -55,6 +56,10 @@ EXPORT_SYMBOL(cpu_data);
+ struct screen_info screen_info;
+ #endif
+ 
++#ifdef CONFIG_CRASH_DUMP
++static phys_addr_t crashmem_start, crashmem_size;
 +#endif
- 	}
- 	start = 0;
- 	size = memparse(p, &p);
++
+ /*
+  * Setup information
+  *
+@@ -404,6 +409,13 @@ static int __init early_parse_mem(char *p)
+ 
+ 	add_memory_region(start, size, BOOT_MEM_RAM);
+ 
++#ifdef CONFIG_CRASH_DUMP
++	if (start && size) {
++		crashmem_start = start;
++		crashmem_size = size;
++	}
++#endif
++
+ 	return 0;
+ }
+ early_param("mem", early_parse_mem);
+@@ -642,6 +654,48 @@ static void __init bootcmdline_init(void)
+ 		bootcmdline_append(builtin_cmdline, COMMAND_LINE_SIZE);
+ }
+ 
++/* Traditionally, MIPS's contiguous low memory is 256M, so crashkernel=X@Y is
++ * unable to be large enough in some cases. Thus, if the total memory of a node
++ * is more than 1GB, we reserve the top 128MB for the crash kernel */
++static void reserve_crashm_region(int node, unsigned long s0, unsigned long e0)
++{
++#ifdef CONFIG_KEXEC
++	if (crashk_res.start == crashk_res.end)
++		return;
++
++	if ((e0 - s0) <= (SZ_1G >> PAGE_SHIFT))
++		return;
++
++	s0 = e0 - (SZ_128M >> PAGE_SHIFT);
++
++	memblock_reserve(PFN_PHYS(s0), (e0 - s0) << PAGE_SHIFT);
++#endif
++}
++
++static void reserve_oldmem_region(int node, unsigned long s0, unsigned long e0)
++{
++#ifdef CONFIG_CRASH_DUMP
++	unsigned long s1, e1;
++
++	if (!is_kdump_kernel())
++		return;
++
++	if ((e0 - s0) > (SZ_1G >> PAGE_SHIFT))
++		e0 = e0 - (SZ_128M >> PAGE_SHIFT);
++
++	/* crashmem_start is crashk_res reserved by primary kernel */
++	s1 = PFN_UP(crashmem_start);
++	e1 = PFN_DOWN(crashmem_start + crashmem_size);
++
++	if (node == 0) {
++		memblock_reserve(PFN_PHYS(s0), (s1 - s0) << PAGE_SHIFT);
++		memblock_reserve(PFN_PHYS(e1), (e0 - e1) << PAGE_SHIFT);
++	} else {
++		memblock_reserve(PFN_PHYS(s0), (e0 - s0) << PAGE_SHIFT);
++	}
++#endif
++}
++
+ /*
+  * arch_mem_init - initialize memory management subsystem
+  *
+@@ -666,6 +720,9 @@ static void __init bootcmdline_init(void)
+  */
+ static void __init arch_mem_init(char **cmdline_p)
+ {
++	unsigned int node;
++	unsigned long start_pfn, end_pfn;
++
+ 	/* call board setup routine */
+ 	plat_mem_setup();
+ 	memblock_set_bottom_up(true);
+@@ -711,6 +768,12 @@ static void __init arch_mem_init(char **cmdline_p)
+ 	if (crashk_res.start != crashk_res.end)
+ 		memblock_reserve(crashk_res.start, resource_size(&crashk_res));
+ #endif
++	for_each_online_node(node) {
++		get_pfn_range_for_nid(node, &start_pfn, &end_pfn);
++		reserve_crashm_region(node, start_pfn, end_pfn);
++		reserve_oldmem_region(node, start_pfn, end_pfn);
++	}
++
+ 	device_tree_init();
+ 
+ 	/*
 -- 
 2.7.0
 
