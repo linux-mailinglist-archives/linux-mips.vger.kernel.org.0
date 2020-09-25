@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B15F9278F48
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Sep 2020 19:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC18D278F90
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Sep 2020 19:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728212AbgIYRAr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Sep 2020 13:00:47 -0400
-Received: from mga02.intel.com ([134.134.136.20]:2149 "EHLO mga02.intel.com"
+        id S1727521AbgIYRZm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Sep 2020 13:25:42 -0400
+Received: from mga12.intel.com ([192.55.52.136]:56940 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727151AbgIYRAr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 25 Sep 2020 13:00:47 -0400
-IronPort-SDR: HdzKTVl1mHh9/M7UVqUkbo+8YCG0n/AprBsd6UTurIRUNQUVSvTng8ezp0WQAv+oWBEcMsep+x
- AfKroZxOmdDw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9755"; a="149236260"
+        id S1726401AbgIYRZl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 25 Sep 2020 13:25:41 -0400
+IronPort-SDR: l1s3r0WbxLYtXok1tXsAkk5l77ri6PGiu6v87JN3ELxhOm0gEePkb7rVTvwWnBIaOEREeM4NVS
+ SeF+sGjrFlkA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9755"; a="141004363"
 X-IronPort-AV: E=Sophos;i="5.77,302,1596524400"; 
-   d="scan'208";a="149236260"
+   d="scan'208";a="141004363"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 10:00:44 -0700
-IronPort-SDR: 6N8ivLkqnnd2bn5U+j4zqY15q1XntncTtYZH1JiR4NLnvBVXx96w0CnbSmk4HwsES3EEo7c23V
- rfEb4OHh8buw==
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 10:12:35 -0700
+IronPort-SDR: cpapzdKeorbGJAJcicHTqvjLBQC0HcUDOXmfyns5mrzobWjC3ddmjR9HRB2DUcOw18nqoDh4KK
+ uLzfmR0kQukQ==
 X-IronPort-AV: E=Sophos;i="5.77,302,1596524400"; 
-   d="scan'208";a="310885499"
+   d="scan'208";a="336814163"
 Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.160])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 10:00:44 -0700
-Date:   Fri, 25 Sep 2020 10:00:42 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 10:12:35 -0700
+Date:   Fri, 25 Sep 2020 10:12:33 -0700
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Marc Zyngier <maz@kernel.org>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
         Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, James Morse <james.morse@arm.com>,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
         Julien Thierry <julien.thierry.kdev@gmail.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org,
@@ -47,60 +47,91 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         David Hildenbrand <david@redhat.com>,
         Cornelia Huck <cohuck@redhat.com>,
         Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [RFC PATCH 0/3] KVM: Introduce "VM bugged" concept
-Message-ID: <20200925170042.GB31528@linux.intel.com>
+Subject: Re: [RFC PATCH 3/3] KVM: x86: Use KVM_BUG/KVM_BUG_ON to handle bugs
+ that are fatal to the VM
+Message-ID: <20200925171233.GC31528@linux.intel.com>
 References: <20200923224530.17735-1-sean.j.christopherson@intel.com>
- <874knlrf4a.wl-maz@kernel.org>
+ <20200923224530.17735-4-sean.j.christopherson@intel.com>
+ <878scze4l5.fsf@vitty.brq.redhat.com>
+ <20200924181134.GB9649@linux.intel.com>
+ <87k0wichht.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <874knlrf4a.wl-maz@kernel.org>
+In-Reply-To: <87k0wichht.fsf@vitty.brq.redhat.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 05:32:53PM +0100, Marc Zyngier wrote:
-> Hi Sean,
+On Fri, Sep 25, 2020 at 11:50:38AM +0200, Vitaly Kuznetsov wrote:
+> Sean Christopherson <sean.j.christopherson@intel.com> writes:
 > 
-> On Wed, 23 Sep 2020 23:45:27 +0100,
-> Sean Christopherson <sean.j.christopherson@intel.com> wrote:
-> > 
-> > This series introduces a concept we've discussed a few times in x86 land.
-> > The crux of the problem is that x86 has a few cases where KVM could
-> > theoretically encounter a software or hardware bug deep in a call stack
-> > without any sane way to propagate the error out to userspace.
-> > 
-> > Another use case would be for scenarios where letting the VM live will
-> > do more harm than good, e.g. we've been using KVM_BUG_ON for early TDX
-> > enabling as botching anything related to secure paging all but guarantees
-> > there will be a flood of WARNs and error messages because lower level PTE
-> > operations will fail if an upper level operation failed.
-> > 
-> > The basic idea is to WARN_ONCE if a bug is encountered, kick all vCPUs out
-> > to userspace, and mark the VM as bugged so that no ioctls() can be issued
-> > on the VM or its devices/vCPUs.
-> > 
-> > RFC as I've done nowhere near enough testing to verify that rejecting the
-> > ioctls(), evicting running vCPUs, etc... works as intended.
+> > On Thu, Sep 24, 2020 at 02:34:14PM +0200, Vitaly Kuznetsov wrote:
+> >> Sean Christopherson <sean.j.christopherson@intel.com> writes:
+> >> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> >> > index 6f9a0c6d5dc5..810d46ab0a47 100644
+> >> > --- a/arch/x86/kvm/vmx/vmx.c
+> >> > +++ b/arch/x86/kvm/vmx/vmx.c
+> >> > @@ -4985,14 +4986,13 @@ static int handle_cr(struct kvm_vcpu *vcpu)
+> >> >  		}
+> >> >  		break;
+> >> >  	case 2: /* clts */
+> >> > -		WARN_ONCE(1, "Guest should always own CR0.TS");
+> >> > -		vmx_set_cr0(vcpu, kvm_read_cr0_bits(vcpu, ~X86_CR0_TS));
+> >> > -		trace_kvm_cr_write(0, kvm_read_cr0(vcpu));
+> >> > -		return kvm_skip_emulated_instruction(vcpu);
+> >> > +		KVM_BUG(1, vcpu->kvm, "Guest always owns CR0.TS");
+> >> > +		return -EIO;
+> >> >  	case 1: /*mov from cr*/
+> >> >  		switch (cr) {
+> >> >  		case 3:
+> >> >  			WARN_ON_ONCE(enable_unrestricted_guest);
+> >> > +
+> >> 
+> >> Here, were you intended to replace WARN_ON_ONCE() with KVM_BUG_ON() or
+> >> this is just a stray newline added?
+> >
+> > I think it's just a stray newline.  At one point I had converted this to a
+> > KVM_BUG_ON(), but then reversed direction because it's not fatal to the guest,
+> > i.e. KVM should continue to function even though it's spuriously intercepting
+> > CR3 loads.
+> >
+> > Which, rereading this patch, completely contradicts the KVM_BUG() for CLTS.
+> >
+> > That's probably something we should sort out in this RFC: is KVM_BUG() only
+> > to be used if the bug is fatal/dangerous, or should it be used any time the
+> > error is definitely a KVM (or hardware) bug.
 > 
-> I'm quite like the idea. However, I wonder whether preventing the
-> vcpus from re-entering the guest is enough. When something goes really
-> wrong, is it safe to allow the userspace process to terminate normally
-> and free the associated memory?
+> Personally, I'm feeling adventurous so my vote goes to the later :-)
+> Whenever a KVM bug was discovered by a VM it's much safer to stop
+> executing it as who knows what the implications might be?
 
-Yes and no.  Yes, there are potential scenarios where freeing memory is unsafe,
-e.g. with TDX, improper sanitization of memory can lead to machine checks due
-to integrity errors, i.e. freeing memory that wasn't sanitized is not safe.
+Not necessarily, e.g. terminating the VM may corrupt the VM's file system,
+which is less safe, for lack of a better word, from the VM's perspective.
 
-But, our in-development code intentionally leaks pages that couldn't be
-sanitized (with plenty of yelling).  So, "no" in the sense that, IMO, KVM
-should be written such that it's sufficiently paranoid when handling "special"
-memory (or other state).
+> In this particular case I can think of a nested scenario when L1 didn't
+> ask for CR3 intercept but L0 is still injecting it. It is not fatal by
+> itself but probably there is bug in calculating intercepts in L0 so
+> if we're getting something extra maybe we're also missing some? And this
+> doesn't sound good at all.
 
-> And is it still safe to allow new VMs to be started?
+Hmm, but by that argument this scenario would fall into the "dangerous" part
+of "bug is fatal/dangerous".  I guess my opinion is that we should set a
+fairly high bar for using KVM_BUG() so that KVM can be aggressive in shutting
+down.
 
-Hmm, anything that is truly fatal to the host/KVM should probably use BUG()
-or even panic() directly.  E.g. to avoid a userspace bypass by unloading and
-reloading KVM when it's built as a module, we'd have to set a flag in the
-kernel proper.
+> > In theory, it should be impossible to reach this again as "r = -EIO" will
+> > bounce this out to userspace, the common checks to deny all ioctls() will
+> > prevent reinvoking KVM_RUN.
+> 
+> Do we actually want to prevent *all* ioctls? E.g. when 'vm bugged'
+> condition is triggered userspace may want to extract some information to
+> assist debugging but even things like KVM_GET_[S]REGS will just return
+> -EIO. I'm not sure it is generally safe to enable *everything* (except
+> for KVM_RUN which should definitely be forbidden) so maybe your approach
+> is preferable.
+
+The answer to this probably depends on the answer to the first question of
+when it's appropriate to use KVM_BUG().  E.g. if we limit usage to fatal or
+dangrous cases, then blocking all ioctls() is probably the right thing do do.
