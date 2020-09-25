@@ -2,216 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB2A277D88
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Sep 2020 03:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24150277EBA
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Sep 2020 05:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726738AbgIYBQv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Sep 2020 21:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726723AbgIYBQu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Sep 2020 21:16:50 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9413C0613CE
-        for <linux-mips@vger.kernel.org>; Thu, 24 Sep 2020 18:16:50 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id y9so836635ilq.2
-        for <linux-mips@vger.kernel.org>; Thu, 24 Sep 2020 18:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ns6EfoJFmlckygboGDS5ISEczvmUEd8piIBG60/RPnA=;
-        b=tYrMTFS8xQB2lckV846BmkoCO0Cv972MONPP7RLSo64J77ZlOuk0+OkFNT2IwvIXDI
-         CHh6OhEFVncCkxDX5eEoniqtKtLz2VfBhYpyiBjNuFS9EhJLghRXxtcn//5XzJ0bHStW
-         bJr98zDdXaG5IFEDTS0YnJe5YMcsapOUPT1/xfiRh3qZEni0jIDAJSZJsbUjCkAl6Ln+
-         KJS6usmsE4V8MgGnBTIxgJaM7oBBPXAnh5P7KpmT2VR1n1Z/RpAh/EW4HVdOUh0+QnZ+
-         S3hWg9ON6jVsfXW910hfC1sOB9Pqvcsw/WqjvOq6heaKBdqFniAEAsEaRL9CUeTnIH4x
-         JHXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ns6EfoJFmlckygboGDS5ISEczvmUEd8piIBG60/RPnA=;
-        b=RtQaYeKVc/1MwerFSE3bqHCL1BdDeuFwz2VnYmXzW5uWduPps4ToZW1tvLkQXnel7C
-         l7owrDUtKSI14vYBfPGsD6/yNdWmxWbhXs7x7SYWMo8bMwATRcHSMikXdoDc4YXCJRK6
-         BDtO+E5UsPyslr36QZDp+Paoj6wtqEoJRqvdSLAhO2VOOlqzVauo/WwGmYjTy7/z5RpN
-         0Ukzj/3EOwLz7E8RA2I7lJPAv5Rd/arCANV+1dAB4+u/+howMiWFwVAPVN16u/0lDjYi
-         dy0AF9rLkt+swkvCGiJGtlvpX5CliH+gON6RIUqdTv5Gcmofn6Vp8GIB1AZHicSBrqSg
-         dU7g==
-X-Gm-Message-State: AOAM532Pu28r/0h3+qkxy/KQMy+re/FeRyJikoG/XN3FYnqC1UI7hjog
-        TvFt4eTKD8WhJFWthdz4fI8n6Ti1RF1XPriJ+AQ/3aaNlEg=
-X-Google-Smtp-Source: ABdhPJwgiTJ9dsE2n0/+9L38xoHFTLlQGRdoirOef2P6ht4uRab4cVV+a0GIMJC5iO9rOkCkF+Hvj63vn0v+hxGKDS8=
-X-Received: by 2002:a92:a194:: with SMTP id b20mr1192868ill.287.1600996610043;
- Thu, 24 Sep 2020 18:16:50 -0700 (PDT)
+        id S1726925AbgIYDzb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Sep 2020 23:55:31 -0400
+Received: from relay1.mymailcheap.com ([144.217.248.102]:47904 "EHLO
+        relay1.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726758AbgIYDza (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Sep 2020 23:55:30 -0400
+X-Greylist: delayed 136979 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Sep 2020 23:55:29 EDT
+Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
+        by relay1.mymailcheap.com (Postfix) with ESMTPS id 0F7033F1C5;
+        Fri, 25 Sep 2020 03:55:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by filter1.mymailcheap.com (Postfix) with ESMTP id E80C72A3B8;
+        Thu, 24 Sep 2020 23:55:27 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1601006127;
+        bh=1bnZ6qZaVzFKQNiNPYAyMj2T8q5mWYVVBOffi9Mp0FI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=slr7UiNCy5nj4KtI5+h5dGJSAj2vSvbnnrOU9GcJfJTbc5RxVjOP4AIs7Dx/1cRl3
+         kvquiorxwxxYFvMVifISsBJ+oWR0lu9Z1NyO3DRpxzA7PB2J1Cwu6IVltWTM7iGyJf
+         ka0TGs02R4t9U4VX/Y4oVS5kRHUHl8SnHYcPA4yg=
+X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
+Received: from filter1.mymailcheap.com ([127.0.0.1])
+        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IKenFOBDlmen; Thu, 24 Sep 2020 23:55:26 -0400 (EDT)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter1.mymailcheap.com (Postfix) with ESMTPS;
+        Thu, 24 Sep 2020 23:55:26 -0400 (EDT)
+Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id 8599B40EAE;
+        Fri, 25 Sep 2020 03:55:24 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="KcYjIss+";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from [0.0.0.0] (li1197-90.members.linode.com [45.79.98.90])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 546B040FE5;
+        Fri, 25 Sep 2020 03:54:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
+        s=default; t=1601006072;
+        bh=1bnZ6qZaVzFKQNiNPYAyMj2T8q5mWYVVBOffi9Mp0FI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=KcYjIss+5mLJpwlenuukW6Fj9qRPxAqKJFadbjdDuKl5Ydm9p1ZHCP2HbwmaZhC2t
+         LmrzJBeSmt+o+Inp6Vpf3VR3p/8DVgPtjLC/X9/96fM7+dUzTz1KYNx5ocM77e39oz
+         LQ1y/mjg4oNQdTzQvxWq5whw6yTo09qAg6oYthvY=
+Subject: Re: [PATCH 1/2] mips: Add strong UC ordering config
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        "Maciej W . Rozycki" <macro@linux-mips.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200920110010.16796-1-Sergey.Semin@baikalelectronics.ru>
+ <20200920110010.16796-2-Sergey.Semin@baikalelectronics.ru>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <57fb837a-d884-b368-7a72-d010b5e52f2a@flygoat.com>
+Date:   Fri, 25 Sep 2020 11:54:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.0
 MIME-Version: 1.0
-References: <1596190371-17405-1-git-send-email-chenhc@lemote.com>
-In-Reply-To: <1596190371-17405-1-git-send-email-chenhc@lemote.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 25 Sep 2020 09:16:16 +0800
-Message-ID: <CAAhV-H56F2zC35+Gr7X5wu0DQ2PotiB__5L9ZXqvEhKC3kBiww@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mips/mm: Add NUMA balancing support
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200920110010.16796-2-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 8599B40EAE
+X-Spamd-Result: default: False [1.40 / 10.00];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         ARC_NA(0.00)[];
+         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
+         MID_RHS_MATCH_FROM(0.00)[];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         R_SPF_SOFTFAIL(0.00)[~all];
+         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1];
+         ML_SERVERS(-3.10)[213.133.102.83];
+         DKIM_TRACE(0.00)[flygoat.com:+];
+         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
+         RCPT_COUNT_SEVEN(0.00)[9];
+         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
+         FREEMAIL_CC(0.00)[gmail.com,baikalelectronics.ru,linux-mips.org,vger.kernel.org];
+         SUSPICIOUS_RECIPS(1.50)[];
+         RCVD_COUNT_TWO(0.00)[2]
+X-Rspamd-Server: mail20.mymailcheap.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CC linux-mm.
 
-On Fri, Jul 31, 2020 at 6:10 PM Huacai Chen <chenhc@lemote.com> wrote:
+
+ÔÚ 2020/9/20 19:00, Serge Semin Ð´µÀ:
+> In accordance with [1, 2] memory transactions using CCA=2 (Uncached
+> Cacheability and Coherency Attribute) are always strongly ordered. This
+> means the younger memory accesses using CCA=2 are never allowed to be
+> executed before older memory accesses using CCA=2 (no bypassing is
+> allowed), and Loads and Stores using CCA=2 are never speculative. It is
+> expected by the specification that the rest of the system maintains these
+> properties for processor initiated uncached accesses. So the system IO
+> interconnect doesn't reorder uncached transactions once they have left the
+> processor subsystem. Taking into account these properties and what [3]
+> says about the relaxed IO-accessors we can infer that normal Loads and
+> Stores from/to CCA=2 memory and without any additional execution barriers
+> will fully comply with the {read,write}X_relaxed() methods requirements.
 >
-> NUMA balancing is available on nearly all architectures, but MIPS lacks
-> it for a long time. In theory, the current NUMA balancing framework only
-> need a "PROTNONE" page table bit and some APIs to manipulate it. So, it
-> is time for us to add MIPS's NUMA balancing support (Only for 64bit now
-> because NUMA balancing depends on huge page implicitly).
+> Let's convert then currently generated relaxed IO-accessors to being pure
+> Loads and Stores. Seeing the commit 3d474dacae72 ("MIPS: Enforce strong
+> ordering for MMIO accessors") and commit 8b656253a7a4 ("MIPS: Provide
+> actually relaxed MMIO accessors") have already made a preparation in the
+> corresponding macro, we can do that just by replacing the "barrier"
+> parameter utilization with the "relax" one. Note the "barrier" macro
+> argument can be removed, since it isn't fully used anyway other than being
+> always assigned to 1.
 >
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> Of course it would be fullish to believe that all the available MIPS-based
+> CPUs completely follow the denoted specification, especially considering
+> how old the architecture is. Instead we introduced a dedicated kernel
+> config, which when enabled will convert the relaxed IO-accessors to being
+> pure Loads and Stores without any additional barriers around. So if some
+> CPU supports the strongly ordered UC memory access, it can enable that
+> config and use a fully optimized relaxed IO-methods. For instance,
+> Baikal-T1 architecture support code will do that.
+>
+> [1] MIPS Coherence Protocol Specification, Document Number: MD00605,
+>      Revision 01.01. September 14, 2015, 4.2 Execution Order Behavior,
+>      p. 33
+>
+> [2] MIPS Coherence Protocol Specification, Document Number: MD00605,
+>      Revision 01.01. September 14, 2015, 4.8.1 IO Device Access, p. 58
+>
+> [3] "LINUX KERNEL MEMORY BARRIERS", Documentation/memory-barriers.txt,
+>      Section "KERNEL I/O BARRIER EFFECTS"
+>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Maciej W. Rozycki <macro@linux-mips.org>
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+
+Based on #mipslinus discussions, I suspect this option can be selected by
+most modern MIPS processors including all IMG/MTI cores,
+Ingenic and Loongson.
+
+Thanks.
+
+- Jiaxun
+
 > ---
->  arch/mips/Kconfig                    |  1 +
->  arch/mips/include/asm/pgtable-64.h   |  2 +-
->  arch/mips/include/asm/pgtable-bits.h | 17 +++++++++++++++++
->  arch/mips/include/asm/pgtable.h      | 18 +++++++++++++++---
->  4 files changed, 34 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 499a20d..62d2b95 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -9,6 +9,7 @@ config MIPS
->         select ARCH_HAS_PTE_SPECIAL if !(32BIT && CPU_HAS_RIXI)
->         select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->         select ARCH_HAS_UBSAN_SANITIZE_ALL
-> +       select ARCH_SUPPORTS_NUMA_BALANCING if 64BIT
->         select ARCH_SUPPORTS_UPROBES
->         select ARCH_USE_BUILTIN_BSWAP
->         select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
-> diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-> index 1e7d6ce..2aef74b 100644
-> --- a/arch/mips/include/asm/pgtable-64.h
-> +++ b/arch/mips/include/asm/pgtable-64.h
-> @@ -266,7 +266,7 @@ static inline int pmd_present(pmd_t pmd)
->  {
->  #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
->         if (unlikely(pmd_val(pmd) & _PAGE_HUGE))
-> -               return pmd_val(pmd) & _PAGE_PRESENT;
-> +               return pmd_val(pmd) & (_PAGE_PRESENT | _PAGE_PROTNONE);
->  #endif
->
->         return pmd_val(pmd) != (unsigned long) invalid_pte_table;
-> diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
-> index e26dc41..f697c32 100644
-> --- a/arch/mips/include/asm/pgtable-bits.h
-> +++ b/arch/mips/include/asm/pgtable-bits.h
-> @@ -52,6 +52,9 @@ enum pgtable_bits {
->         _PAGE_WRITE_SHIFT,
->         _PAGE_ACCESSED_SHIFT,
->         _PAGE_MODIFIED_SHIFT,
-> +#if defined(CONFIG_ARCH_SUPPORTS_NUMA_BALANCING)
-> +       _PAGE_PROTNONE_SHIFT,
-> +#endif
->  #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
->         _PAGE_SPECIAL_SHIFT,
->  #endif
-> @@ -84,6 +87,9 @@ enum pgtable_bits {
->         _PAGE_WRITE_SHIFT,
->         _PAGE_ACCESSED_SHIFT,
->         _PAGE_MODIFIED_SHIFT,
-> +#if defined(CONFIG_ARCH_SUPPORTS_NUMA_BALANCING)
-> +       _PAGE_PROTNONE_SHIFT,
-> +#endif
->  #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
->         _PAGE_SPECIAL_SHIFT,
->  #endif
-> @@ -102,6 +108,9 @@ enum pgtable_bits {
->         _PAGE_WRITE_SHIFT,
->         _PAGE_ACCESSED_SHIFT,
->         _PAGE_MODIFIED_SHIFT,
-> +#if defined(CONFIG_ARCH_SUPPORTS_NUMA_BALANCING)
-> +       _PAGE_PROTNONE_SHIFT,
-> +#endif
->  #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
->         _PAGE_SPECIAL_SHIFT,
->  #endif
-> @@ -131,6 +140,9 @@ enum pgtable_bits {
->  #if defined(CONFIG_MIPS_HUGE_TLB_SUPPORT)
->         _PAGE_HUGE_SHIFT,
->  #endif
-> +#if defined(CONFIG_ARCH_SUPPORTS_NUMA_BALANCING)
-> +       _PAGE_PROTNONE_SHIFT,
-> +#endif
->  #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
->         _PAGE_SPECIAL_SHIFT,
->  #endif
-> @@ -158,6 +170,11 @@ enum pgtable_bits {
->  #if defined(CONFIG_MIPS_HUGE_TLB_SUPPORT)
->  # define _PAGE_HUGE            (1 << _PAGE_HUGE_SHIFT)
->  #endif
-> +#if defined(CONFIG_ARCH_SUPPORTS_NUMA_BALANCING)
-> +# define _PAGE_PROTNONE                (1 <<_PAGE_PROTNONE_SHIFT)
-> +#else
-> +# define _PAGE_PROTNONE                0
-> +#endif
->  #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
->  # define _PAGE_SPECIAL         (1 << _PAGE_SPECIAL_SHIFT)
->  #else
-> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-> index dd7a0f5..3434073 100644
-> --- a/arch/mips/include/asm/pgtable.h
-> +++ b/arch/mips/include/asm/pgtable.h
-> @@ -25,7 +25,7 @@
->  struct mm_struct;
->  struct vm_area_struct;
->
-> -#define PAGE_NONE      __pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
-> +#define PAGE_NONE      __pgprot(_PAGE_PROTNONE | _PAGE_NO_READ | \
->                                  _page_cachable_default)
->  #define PAGE_SHARED    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
->                                  _page_cachable_default)
-> @@ -188,7 +188,7 @@ static inline void pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *pt
->  #else
->
->  #define pte_none(pte)          (!(pte_val(pte) & ~_PAGE_GLOBAL))
-> -#define pte_present(pte)       (pte_val(pte) & _PAGE_PRESENT)
-> +#define pte_present(pte)       (pte_val(pte) & (_PAGE_PRESENT | _PAGE_PROTNONE))
->  #define pte_no_exec(pte)       (pte_val(pte) & _PAGE_NO_EXEC)
->
->  /*
-> @@ -707,7 +707,7 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
->
->  static inline pmd_t pmd_mkinvalid(pmd_t pmd)
->  {
-> -       pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
-> +       pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_PROTNONE | _PAGE_DIRTY);
->
->         return pmd;
->  }
-> @@ -729,6 +729,18 @@ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
->
->  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->
-> +#ifdef CONFIG_NUMA_BALANCING
-> +static inline long pte_protnone(pte_t pte)
-> +{
-> +       return (pte_val(pte) & _PAGE_PROTNONE);
-> +}
-> +
-> +static inline long pmd_protnone(pmd_t pmd)
-> +{
-> +       return (pmd_val(pmd) & _PAGE_PROTNONE);
-> +}
-> +#endif /* CONFIG_NUMA_BALANCING */
-> +
->  #ifdef _PAGE_HUGE
->  #define pmd_leaf(pmd)  ((pmd_val(pmd) & _PAGE_HUGE) != 0)
->  #define pud_leaf(pud)  ((pud_val(pud) & _PAGE_HUGE) != 0)
-> --
-> 2.7.0
+>   arch/mips/Kconfig          |  8 ++++++++
+>   arch/mips/include/asm/io.h | 20 ++++++++++----------
+>   2 files changed, 18 insertions(+), 10 deletions(-)
 >
