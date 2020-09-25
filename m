@@ -2,75 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA0A278DED
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Sep 2020 18:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A7A278EA6
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Sep 2020 18:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728795AbgIYQSB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Sep 2020 12:18:01 -0400
-Received: from verein.lst.de ([213.95.11.211]:56719 "EHLO verein.lst.de"
+        id S1729353AbgIYQdE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Sep 2020 12:33:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33152 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728524AbgIYQSB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 25 Sep 2020 12:18:01 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 39A7E68AFE; Fri, 25 Sep 2020 18:17:55 +0200 (CEST)
-Date:   Fri, 25 Sep 2020 18:17:54 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org, alsa-devel@alsa-project.org,
-        linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-doc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        netdev@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 08/18] dma-mapping: add a new dma_alloc_noncoherent API
-Message-ID: <20200925161754.GA18721@lst.de>
-References: <20200915155122.1768241-1-hch@lst.de> <20200915155122.1768241-9-hch@lst.de> <c8ea4023-3e19-d63b-d936-46a04f502a61@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c8ea4023-3e19-d63b-d936-46a04f502a61@arm.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        id S1727751AbgIYQdE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 25 Sep 2020 12:33:04 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 47BF620738;
+        Fri, 25 Sep 2020 16:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601051583;
+        bh=7TU9kWw58pJDNUxAQUELKat8AUx/OZ978xRwb3agCpM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Js1A7tFd/oLicRCBqR1juwwr+LzahGXkH9mcYss0ahUwkLD8XI5GX9B1I8D7+jbRe
+         KinG0UfGCDKW9tzCSo++aA8F6dPT6YYt7eKwTKSEPmRf+5RMwtj7cmJ7Z14obKacnw
+         GyuJ+Rm1/1IjepqtXCK1djDtnOxpzEbh5pHJLXRE=
+Received: from [185.69.144.225] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1kLqeb-00Ev7R-9n; Fri, 25 Sep 2020 17:33:01 +0100
+Date:   Fri, 25 Sep 2020 17:32:53 +0100
+Message-ID: <874knlrf4a.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhc@lemote.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
+        kvm-ppc@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: Re: [RFC PATCH 0/3] KVM: Introduce "VM bugged" concept
+In-Reply-To: <20200923224530.17735-1-sean.j.christopherson@intel.com>
+References: <20200923224530.17735-1-sean.j.christopherson@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 EasyPG/1.0.0 Emacs/26.3
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.69.144.225
+X-SA-Exim-Rcpt-To: sean.j.christopherson@intel.com, pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, chenhc@lemote.com, aleksandar.qemu.devel@gmail.com, linux-mips@vger.kernel.org, paulus@ozlabs.org, kvm-ppc@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 12:15:37PM +0100, Robin Murphy wrote:
-> On 2020-09-15 16:51, Christoph Hellwig wrote:
-> [...]
->> +These APIs allow to allocate pages in the kernel direct mapping that are
->> +guaranteed to be DMA addressable.  This means that unlike dma_alloc_coherent,
->> +virt_to_page can be called on the resulting address, and the resulting
->
-> Nit: if we explicitly describe this as if it's a guarantee that can be 
-> relied upon...
->
->> +struct page can be used for everything a struct page is suitable for.
->
-> [...]
->> +This routine allocates a region of <size> bytes of consistent memory.  It
->> +returns a pointer to the allocated region (in the processor's virtual address
->> +space) or NULL if the allocation failed.  The returned memory may or may not
->> +be in the kernels direct mapping.  Drivers must not call virt_to_page on
->> +the returned memory region.
->
-> ...then forbid this document's target audience from relying on it, 
-> something seems off. At the very least it's unhelpfully unclear :/
->
-> Given patch #17, I suspect that the first paragraph is the one that's no 
-> longer true.
+Hi Sean,
 
-Yes.  dma_alloc_pages is the replacement for allocations that need the
-direct mapping.  I'll send a patch to document dma_alloc_pages and
-fixes this up
+On Wed, 23 Sep 2020 23:45:27 +0100,
+Sean Christopherson <sean.j.christopherson@intel.com> wrote:
+> 
+> This series introduces a concept we've discussed a few times in x86 land.
+> The crux of the problem is that x86 has a few cases where KVM could
+> theoretically encounter a software or hardware bug deep in a call stack
+> without any sane way to propagate the error out to userspace.
+> 
+> Another use case would be for scenarios where letting the VM live will
+> do more harm than good, e.g. we've been using KVM_BUG_ON for early TDX
+> enabling as botching anything related to secure paging all but guarantees
+> there will be a flood of WARNs and error messages because lower level PTE
+> operations will fail if an upper level operation failed.
+> 
+> The basic idea is to WARN_ONCE if a bug is encountered, kick all vCPUs out
+> to userspace, and mark the VM as bugged so that no ioctls() can be issued
+> on the VM or its devices/vCPUs.
+> 
+> RFC as I've done nowhere near enough testing to verify that rejecting the
+> ioctls(), evicting running vCPUs, etc... works as intended.
+
+I'm quite like the idea. However, I wonder whether preventing the
+vcpus from re-entering the guest is enough. When something goes really
+wrong, is it safe to allow the userspace process to terminate normally
+and free the associated memory? And is it still safe to allow new VMs
+to be started?
+
+I can't really imagine a case where such extreme measures would be
+necessary on arm64, but I thought I'd ask.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
