@@ -2,126 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0D4279030
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Sep 2020 20:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644A3279105
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Sep 2020 20:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729593AbgIYSSN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Sep 2020 14:18:13 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:49158 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728069AbgIYSSN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Sep 2020 14:18:13 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3C2B7803202A;
-        Fri, 25 Sep 2020 18:18:05 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id M9ydMZeshDge; Fri, 25 Sep 2020 21:18:03 +0300 (MSK)
-Date:   Fri, 25 Sep 2020 21:18:02 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-CC:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        "Maciej W . Rozycki" <macro@linux-mips.org>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] mips: Add strong UC ordering config
-Message-ID: <20200925181802.bfhtu5ozxc6wkt6g@mobilestation>
-References: <20200920110010.16796-1-Sergey.Semin@baikalelectronics.ru>
- <20200920110010.16796-2-Sergey.Semin@baikalelectronics.ru>
- <57fb837a-d884-b368-7a72-d010b5e52f2a@flygoat.com>
+        id S1729733AbgIYSq0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Sep 2020 14:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729691AbgIYSq0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Sep 2020 14:46:26 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10160C0613D4
+        for <linux-mips@vger.kernel.org>; Fri, 25 Sep 2020 11:46:26 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id x14so4708665wrl.12
+        for <linux-mips@vger.kernel.org>; Fri, 25 Sep 2020 11:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AlDiV2I2Pb3l4Sw1FS8MXXmwraDk5F1rgxliXh5N5CM=;
+        b=hNVaqgoiF4i4BUKziRlpXfyKzDqaE2Y0RasEA7QnYZaUqmrhYmxmR65VR3QsZGT0/N
+         elfdI2ZtE21gOt8NsKBS76ANRONmfTntZIUBb37OAepaErQ4mHfX26H/avNX5Om2F5Th
+         iF/y4L9RdXJwUeLTzBdv6H/xNDzBbfk+2GMdQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AlDiV2I2Pb3l4Sw1FS8MXXmwraDk5F1rgxliXh5N5CM=;
+        b=A3fyMMVvHfANDEpAHdw/m+Y2uw07c1F+xEZSUPcHDpusYyjnnVcvF1qL2fgZkcnHDN
+         UzP3atol+oNYk5ElegKRTrOMZWg59c6dqMA8EcOXbAi4FDt/3gaFGNov+LSXjlLqmQjQ
+         RO9OMoZriHOqAFwrZJGNY66Kzbc7xrWHUDOXYve9g9dE3oL3gw8nTc/PqKbEXCHr+/Tn
+         5Q4SHGpmdueEgy6fLPoMm1oSa4sxnDiujPgPcsdGLH2aUOSKBOj1h/rCWa4Oal+Nwl5D
+         VhR6JGU2nizIHVVSV2ZmOSpyvLIxjo8fV+ER+tX0phsMYIT64F1KM4HVZBVUaOwn0AS5
+         R/ZA==
+X-Gm-Message-State: AOAM53278/Q+ECTeXryHjmTsZR20iqiPq5MSWTK9Sj1lLjXbrFbDCWkW
+        6QvciGbABLv1D8+Yy8PiqGT/CQ==
+X-Google-Smtp-Source: ABdhPJywG75RJx/fVTLzqgivIcRb/Gp708YyNw5VwVyHEf689ET8en+rXMvfgfeOwhu5XQytInH4aQ==
+X-Received: by 2002:a5d:56cd:: with SMTP id m13mr5730549wrw.261.1601059584552;
+        Fri, 25 Sep 2020 11:46:24 -0700 (PDT)
+Received: from chromium.org (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
+        by smtp.gmail.com with ESMTPSA id z8sm3728264wrl.11.2020.09.25.11.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 11:46:23 -0700 (PDT)
+Date:   Fri, 25 Sep 2020 18:46:22 +0000
+From:   Tomasz Figa <tfiga@chromium.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        iommu@lists.linux-foundation.org,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 17/18] dma-iommu: implement ->alloc_noncoherent
+Message-ID: <20200925184622.GB3607091@chromium.org>
+References: <20200915155122.1768241-1-hch@lst.de>
+ <20200915155122.1768241-18-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <57fb837a-d884-b368-7a72-d010b5e52f2a@flygoat.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200915155122.1768241-18-hch@lst.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 11:54:20AM +0800, Jiaxun Yang wrote:
-> 
-> 
-> 在 2020/9/20 19:00, Serge Semin 写道:
-> > In accordance with [1, 2] memory transactions using CCA=2 (Uncached
-> > Cacheability and Coherency Attribute) are always strongly ordered. This
-> > means the younger memory accesses using CCA=2 are never allowed to be
-> > executed before older memory accesses using CCA=2 (no bypassing is
-> > allowed), and Loads and Stores using CCA=2 are never speculative. It is
-> > expected by the specification that the rest of the system maintains these
-> > properties for processor initiated uncached accesses. So the system IO
-> > interconnect doesn't reorder uncached transactions once they have left the
-> > processor subsystem. Taking into account these properties and what [3]
-> > says about the relaxed IO-accessors we can infer that normal Loads and
-> > Stores from/to CCA=2 memory and without any additional execution barriers
-> > will fully comply with the {read,write}X_relaxed() methods requirements.
-> > 
-> > Let's convert then currently generated relaxed IO-accessors to being pure
-> > Loads and Stores. Seeing the commit 3d474dacae72 ("MIPS: Enforce strong
-> > ordering for MMIO accessors") and commit 8b656253a7a4 ("MIPS: Provide
-> > actually relaxed MMIO accessors") have already made a preparation in the
-> > corresponding macro, we can do that just by replacing the "barrier"
-> > parameter utilization with the "relax" one. Note the "barrier" macro
-> > argument can be removed, since it isn't fully used anyway other than being
-> > always assigned to 1.
-> > 
-> > Of course it would be fullish to believe that all the available MIPS-based
-> > CPUs completely follow the denoted specification, especially considering
-> > how old the architecture is. Instead we introduced a dedicated kernel
-> > config, which when enabled will convert the relaxed IO-accessors to being
-> > pure Loads and Stores without any additional barriers around. So if some
-> > CPU supports the strongly ordered UC memory access, it can enable that
-> > config and use a fully optimized relaxed IO-methods. For instance,
-> > Baikal-T1 architecture support code will do that.
-> > 
-> > [1] MIPS Coherence Protocol Specification, Document Number: MD00605,
-> >      Revision 01.01. September 14, 2015, 4.2 Execution Order Behavior,
-> >      p. 33
-> > 
-> > [2] MIPS Coherence Protocol Specification, Document Number: MD00605,
-> >      Revision 01.01. September 14, 2015, 4.8.1 IO Device Access, p. 58
-> > 
-> > [3] "LINUX KERNEL MEMORY BARRIERS", Documentation/memory-barriers.txt,
-> >      Section "KERNEL I/O BARRIER EFFECTS"
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Maciej W. Rozycki <macro@linux-mips.org>
+Hi Christoph,
 
-> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+On Tue, Sep 15, 2020 at 05:51:21PM +0200, Christoph Hellwig wrote:
+> Implement the alloc_noncoherent method to provide memory that is neither
+> coherent not contiguous.
 > 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/iommu/dma-iommu.c | 41 +++++++++++++++++++++++++++++++++++----
+>  1 file changed, 37 insertions(+), 4 deletions(-)
 > 
-> Based on #mipslinus discussions, I suspect this option can be selected by
-> most modern MIPS processors including all IMG/MTI cores,
-> Ingenic and Loongson.
 
-Thanks for reviewing the patch.
+Sorry for being late to the party and thanks a lot for the patch. Please see my
+comments inline.
 
-Regarding the option. Alas it's not that easy and we must be very careful
-with assumption whether some processor supports the denoted feature. Even
-if the MIPS cores do imply the strict UC load/stores ordering, the system
-interconnects may still perform the out-of-order requests execution. For
-instance, the P5600 cores installed into our Baikal-T1 SoC do support the
-strong UC ordering, but there is a cascade of the OCP2AXI, AXI2AXI and
-AXI2APB bridges behind the CPU memory interface, each of which is equipped
-with an internal FIFO and some complicated logic of the traffic routing.
-So each platform should be carefully analyzed and tested (if it's
-possible) before enabling the suggested feature, otherwise we'll risk to end
-up with in general working, but at some point buggy, systems. Needless to
-say, that out-of-order exec problems is very hard to track and debug due
-to a random nature of impact on the system.
+[snip]
+> @@ -1052,6 +1055,34 @@ static void *iommu_dma_alloc(struct device *dev, size_t size,
+>  	return cpu_addr;
+>  }
+>  
+> +#ifdef CONFIG_DMA_REMAP
+> +static void *iommu_dma_alloc_noncoherent(struct device *dev, size_t size,
+> +		dma_addr_t *handle, enum dma_data_direction dir, gfp_t gfp)
+> +{
+> +	if (!gfpflags_allow_blocking(gfp)) {
+> +		struct page *page;
+> +
+> +		page = dma_common_alloc_pages(dev, size, handle, dir, gfp);
+> +		if (!page)
+> +			return NULL;
+> +		return page_address(page);
+> +	}
+> +
+> +	return iommu_dma_alloc_remap(dev, size, handle, gfp | __GFP_ZERO,
+> +				     PAGE_KERNEL, 0);
 
--Sergey
+iommu_dma_alloc_remap() makes use of the DMA_ATTR_ALLOC_SINGLE_PAGES attribute
+to optimize the allocations for devices which don't care about how contiguous
+the backing memory is. Do you think we could add an attrs argument to this
+function and pass it there?
 
-> 
-> Thanks.
-> 
-> - Jiaxun
-> 
-> > ---
-> >   arch/mips/Kconfig          |  8 ++++++++
-> >   arch/mips/include/asm/io.h | 20 ++++++++++----------
-> >   2 files changed, 18 insertions(+), 10 deletions(-)
-> > 
+As ARM is being moved to the common iommu-dma layer as well, we'll probably
+make use of the argument to support the DMA_ATTR_NO_KERNEL_MAPPING attribute to
+conserve the vmalloc area.
+
+Best regards,
+Tomasz
