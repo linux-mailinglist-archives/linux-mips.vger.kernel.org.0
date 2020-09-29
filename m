@@ -2,49 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2343627C12D
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Sep 2020 11:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826DF27C131
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Sep 2020 11:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbgI2JbB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Sep 2020 05:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        id S1728051AbgI2JbL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 29 Sep 2020 05:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727880AbgI2JbB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 29 Sep 2020 05:31:01 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0A6C061755;
-        Tue, 29 Sep 2020 02:31:00 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id t14so3373254pgl.10;
-        Tue, 29 Sep 2020 02:31:00 -0700 (PDT)
+        with ESMTP id S1728031AbgI2JbI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 29 Sep 2020 05:31:08 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F04CC0613D1;
+        Tue, 29 Sep 2020 02:31:08 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id a9so2353100pjg.1;
+        Tue, 29 Sep 2020 02:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=hSwJslaiY7gG5qeB+GpcgMpsjHBVemB3hcRhwqdoyIE=;
-        b=TevtkU14EEU9v4x2TjhpA32KpPjD4lpdqbwrVpGhWJRx3CTto97Ao4fzjpPe68cOay
-         29uiROXJHik0jMhMOSE1PoSrn3cloyDjol9YDDjj9oS1YovEFeDr+61Dbl+7VO6UXm2+
-         5Puu9BkjuID4Q6858+cV3oOHptItHJSdXGSvkiEMNI6Vq0JkYjZV2Q8eogGFFiVhQwDF
-         axaQ8r8SHtPDAqdxi0XYW87LkUApeepZb11s2WpPwbUrhf+O/7zbrnOeRwa5j3tLs9pO
-         yV6s9Y9cIGOdAH4jWT9k/WDnIte54NL5UnGYjl2ip4xInA+W+BFwuvJy+NlkbRH9W2KA
-         z/Tg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=CY3K0infSPStetM+I0FUeXcgnHczq+S4Ugozc1bn/9Y=;
+        b=Cg/9drkbmBJTY7T/O5xREjbf17JcQ+APiFnxZxsl+u1aTiSLbLLJNr190TyB2JIV+9
+         /o92Fmi9x3h0d2WKLL44uhfj1DwxsDGCcJb15XidLjyTx8RZsEjjGEUOxpUizfxvyAlX
+         HRnVzioOq6df2fZkGR008JlCp+v0KNCrnRuHwCm34BJafX6CkWLVkfsMRXx4U2oC6Sj1
+         WuB7R0PXQDGhjw92aEwNxaBSPj7wA7WI2F0Bd29t4TfWZc9A3+ytKy4cMb82hSXYFmvH
+         FuVpXrJs1Qtg1Gmss23SyYZPrcqgv/8coPCi6fQrZlR6Mgb4GYGY9PmJfu1sMatyCELI
+         zDYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=hSwJslaiY7gG5qeB+GpcgMpsjHBVemB3hcRhwqdoyIE=;
-        b=GJvsmLd5S+7MzDxQlVCXlj0aqnvwzHR5pSWJxjye5T2Nftf0oJZkC/gH85aM19D/68
-         8na9TiJ9IRswmWnGrAp7lhFgV1DJb6qA/7BBNJFdT2lh0WOf5Cl/NPZtuNHRNn+gDAnA
-         ZEnfvzVoM70P5u+tj8RmtK3CvMvBd31t94s+rrk553XzEcSTvgAZHv3kF+oP5vfUXB/5
-         kMJ7WAkAgtdtL+YdAj/vH5t4+tYYEHxdCNo1ys5HOG09gmvJ5JzxkkIRah2UgsCIUuwk
-         X9y1IZN5YvAYLLYWjPy1LOfyqkO+ydVwOfX5iELZh7f7DEbHUjymbs1fV1z8ZGkGVdlB
-         H/2Q==
-X-Gm-Message-State: AOAM532a8EUDGwuADiM1U5aE/+55wOeZZ5PzIAD5Je+ZiBu3ZwbnDi2r
-        Ju+UafgIx4yIAY6CntrwUQ==
-X-Google-Smtp-Source: ABdhPJwPRP8KgvbJlrlU5TlRkURTL+DtxS6OFXEZwxTFkoLOlVMmvcByHqPH4nyTKPxvRRIsnuAtxQ==
-X-Received: by 2002:a62:545:0:b029:142:2501:35db with SMTP id 66-20020a6205450000b0290142250135dbmr3150198pff.59.1601371859649;
-        Tue, 29 Sep 2020 02:30:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=CY3K0infSPStetM+I0FUeXcgnHczq+S4Ugozc1bn/9Y=;
+        b=BvVRb09uynfx8v3b/O3nSMszqyrRYeoJsEnu+vlfY82RVJ7fP5djyaQL4eAOZKhRXS
+         as5Y6v58jes9wuodNeGpARmI+4KCNB1uZ7wwwds8d9VI0OJFBOMyloGs5o4krza7L2EB
+         hWfQ5S0JZH202G6IHyfFZuVjXPEgtCSjIvXEq/VJAxUUFP+TWJFGLkaNnb5qyOAlRH1V
+         Y+BtIkDJGkbVxClM0IXKg8x2WlJ4o1TqmKZxK4aJPWmDcHXhsl3I0XAT8AXyyx7vcfuG
+         gjMNj0xQkTKbiPEeFRrIaK8acb5cfFjiRJDLiFzwrl6Z2fTR71KxPQi0hfw4NJ/LpyQT
+         kYdQ==
+X-Gm-Message-State: AOAM531aXCmaPShlwhTJqyFN84uGcVUHYy+dlwvo587N5vVTg11QKfSL
+        sRktJWE2y8y8cRcvs9guKA==
+X-Google-Smtp-Source: ABdhPJxUgBgcMXL1t91kfPLzO0RPdhiVCiFx2U2jxerhItTP8z5Y/ggMW1/an8echYtYpxVyIom5wQ==
+X-Received: by 2002:a17:90a:2841:: with SMTP id p1mr3006013pjf.222.1601371867916;
+        Tue, 29 Sep 2020 02:31:07 -0700 (PDT)
 Received: from localhost.localdomain ([47.242.140.181])
-        by smtp.gmail.com with ESMTPSA id e11sm1966179pjr.2.2020.09.29.02.30.57
+        by smtp.gmail.com with ESMTPSA id e11sm1966179pjr.2.2020.09.29.02.31.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 02:30:59 -0700 (PDT)
+        Tue, 29 Sep 2020 02:31:07 -0700 (PDT)
 From:   Pujin Shi <shipujin.t@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     Yousong Zhou <yszhou4tech@gmail.com>,
@@ -54,35 +55,35 @@ Cc:     Yousong Zhou <yszhou4tech@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Pujin Shi <shipujin.t@gmail.com>
-Subject: [PATCH 1/2] MIPS: process: Add prototype for function arch_dup_task_struct
-Date:   Tue, 29 Sep 2020 17:30:46 +0800
-Message-Id: <20200929093047.1425-1-shipujin.t@gmail.com>
+Subject: [PATCH 2/2] MIPS: process: include exec.h header in process.c
+Date:   Tue, 29 Sep 2020 17:30:47 +0800
+Message-Id: <20200929093047.1425-2-shipujin.t@gmail.com>
 X-Mailer: git-send-email 2.18.4
+In-Reply-To: <20200929093047.1425-1-shipujin.t@gmail.com>
+References: <20200929093047.1425-1-shipujin.t@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This commit adds a prototype to fix warning at W=1:
-
-  arch/mips/kernel/process.c:95:5: error: no previous prototype for 'arch_dup_task_struct' [-Werror=missing-prototypes]
+  arch/mips/kernel/process.c:696:15: error: no previous prototype for 'arch_align_stack' [-Werror=missing-prototypes]
 
 Signed-off-by: Pujin Shi <shipujin.t@gmail.com>
 ---
- arch/mips/include/asm/processor.h | 1 +
+ arch/mips/kernel/process.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/include/asm/processor.h b/arch/mips/include/asm/processor.h
-index 856e12f6063d..7834e7c0c78a 100644
---- a/arch/mips/include/asm/processor.h
-+++ b/arch/mips/include/asm/processor.h
-@@ -29,6 +29,7 @@
-  */
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index 37f05c8605c2..75ebd8d7bd5d 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -52,6 +52,7 @@
+ #include <asm/inst.h>
+ #include <asm/stacktrace.h>
+ #include <asm/irq_regs.h>
++#include <asm/exec.h>
  
- extern unsigned int vced_count, vcei_count;
-+extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
- 
- #ifdef CONFIG_32BIT
- #ifdef CONFIG_KVM_GUEST
+ #ifdef CONFIG_HOTPLUG_CPU
+ void arch_cpu_idle_dead(void)
 -- 
 2.18.1
 
