@@ -2,114 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2655A27C115
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Sep 2020 11:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2343627C12D
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Sep 2020 11:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727817AbgI2J2G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Sep 2020 05:28:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54022 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727761AbgI2J2F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 29 Sep 2020 05:28:05 -0400
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1601371683;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pYuc3/1S5yymvfflLAL9MMp/Ok6n0ZAyFbN3sbJRaT0=;
-        b=Jj/USoMBCSfieJHQR6JlxE4ZFYyfJEkT7W+lnGLf9g4i6cpQj3E+HyuIbaW9/EvlTgKFHt
-        CmK98WCW9XLnk4AxKIYN/b6IGN8lPpmOR3GJvS8pHkoo86z7MdLU8q7KCAaR0Taf3TGeyy
-        86MYWsKr3Jz3VXqyCi4M/JOhRUYKU64=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-580-qegXtShCOwWT77D3KJtmZg-1; Tue, 29 Sep 2020 05:27:23 -0400
-X-MC-Unique: qegXtShCOwWT77D3KJtmZg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0D80C801ADD;
-        Tue, 29 Sep 2020 09:27:21 +0000 (UTC)
-Received: from gondolin (ovpn-113-63.ams2.redhat.com [10.36.113.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A67356198B;
-        Tue, 29 Sep 2020 09:27:13 +0000 (UTC)
-Date:   Tue, 29 Sep 2020 11:27:10 +0200
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Huacai Chen <chenhc@lemote.com>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
-        kvm-ppc@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [RFC PATCH 0/3] KVM: Introduce "VM bugged" concept
-Message-ID: <20200929112710.3ce1365f.cohuck@redhat.com>
-In-Reply-To: <20200923224530.17735-1-sean.j.christopherson@intel.com>
-References: <20200923224530.17735-1-sean.j.christopherson@intel.com>
-Organization: Red Hat GmbH
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+        id S1727924AbgI2JbB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 29 Sep 2020 05:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727880AbgI2JbB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 29 Sep 2020 05:31:01 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0A6C061755;
+        Tue, 29 Sep 2020 02:31:00 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id t14so3373254pgl.10;
+        Tue, 29 Sep 2020 02:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=hSwJslaiY7gG5qeB+GpcgMpsjHBVemB3hcRhwqdoyIE=;
+        b=TevtkU14EEU9v4x2TjhpA32KpPjD4lpdqbwrVpGhWJRx3CTto97Ao4fzjpPe68cOay
+         29uiROXJHik0jMhMOSE1PoSrn3cloyDjol9YDDjj9oS1YovEFeDr+61Dbl+7VO6UXm2+
+         5Puu9BkjuID4Q6858+cV3oOHptItHJSdXGSvkiEMNI6Vq0JkYjZV2Q8eogGFFiVhQwDF
+         axaQ8r8SHtPDAqdxi0XYW87LkUApeepZb11s2WpPwbUrhf+O/7zbrnOeRwa5j3tLs9pO
+         yV6s9Y9cIGOdAH4jWT9k/WDnIte54NL5UnGYjl2ip4xInA+W+BFwuvJy+NlkbRH9W2KA
+         z/Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=hSwJslaiY7gG5qeB+GpcgMpsjHBVemB3hcRhwqdoyIE=;
+        b=GJvsmLd5S+7MzDxQlVCXlj0aqnvwzHR5pSWJxjye5T2Nftf0oJZkC/gH85aM19D/68
+         8na9TiJ9IRswmWnGrAp7lhFgV1DJb6qA/7BBNJFdT2lh0WOf5Cl/NPZtuNHRNn+gDAnA
+         ZEnfvzVoM70P5u+tj8RmtK3CvMvBd31t94s+rrk553XzEcSTvgAZHv3kF+oP5vfUXB/5
+         kMJ7WAkAgtdtL+YdAj/vH5t4+tYYEHxdCNo1ys5HOG09gmvJ5JzxkkIRah2UgsCIUuwk
+         X9y1IZN5YvAYLLYWjPy1LOfyqkO+ydVwOfX5iELZh7f7DEbHUjymbs1fV1z8ZGkGVdlB
+         H/2Q==
+X-Gm-Message-State: AOAM532a8EUDGwuADiM1U5aE/+55wOeZZ5PzIAD5Je+ZiBu3ZwbnDi2r
+        Ju+UafgIx4yIAY6CntrwUQ==
+X-Google-Smtp-Source: ABdhPJwPRP8KgvbJlrlU5TlRkURTL+DtxS6OFXEZwxTFkoLOlVMmvcByHqPH4nyTKPxvRRIsnuAtxQ==
+X-Received: by 2002:a62:545:0:b029:142:2501:35db with SMTP id 66-20020a6205450000b0290142250135dbmr3150198pff.59.1601371859649;
+        Tue, 29 Sep 2020 02:30:59 -0700 (PDT)
+Received: from localhost.localdomain ([47.242.140.181])
+        by smtp.gmail.com with ESMTPSA id e11sm1966179pjr.2.2020.09.29.02.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 02:30:59 -0700 (PDT)
+From:   Pujin Shi <shipujin.t@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Yousong Zhou <yszhou4tech@gmail.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pujin Shi <shipujin.t@gmail.com>
+Subject: [PATCH 1/2] MIPS: process: Add prototype for function arch_dup_task_struct
+Date:   Tue, 29 Sep 2020 17:30:46 +0800
+Message-Id: <20200929093047.1425-1-shipujin.t@gmail.com>
+X-Mailer: git-send-email 2.18.4
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 23 Sep 2020 15:45:27 -0700
-Sean Christopherson <sean.j.christopherson@intel.com> wrote:
+This commit adds a prototype to fix warning at W=1:
 
-> This series introduces a concept we've discussed a few times in x86 land.
-> The crux of the problem is that x86 has a few cases where KVM could
-> theoretically encounter a software or hardware bug deep in a call stack
-> without any sane way to propagate the error out to userspace.
-> 
-> Another use case would be for scenarios where letting the VM live will
-> do more harm than good, e.g. we've been using KVM_BUG_ON for early TDX
-> enabling as botching anything related to secure paging all but guarantees
-> there will be a flood of WARNs and error messages because lower level PTE
-> operations will fail if an upper level operation failed.
-> 
-> The basic idea is to WARN_ONCE if a bug is encountered, kick all vCPUs out
-> to userspace, and mark the VM as bugged so that no ioctls() can be issued
-> on the VM or its devices/vCPUs.
+  arch/mips/kernel/process.c:95:5: error: no previous prototype for 'arch_dup_task_struct' [-Werror=missing-prototypes]
 
-I think this makes a lot of sense.
+Signed-off-by: Pujin Shi <shipujin.t@gmail.com>
+---
+ arch/mips/include/asm/processor.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Are there other user space interactions where we want to generate an
-error for a bugged VM, e.g. via eventfd?
-
-And can we make the 'bugged' information available to user space in a
-structured way?
-
-> 
-> RFC as I've done nowhere near enough testing to verify that rejecting the
-> ioctls(), evicting running vCPUs, etc... works as intended.
-> 
-> Sean Christopherson (3):
->   KVM: Export kvm_make_all_cpus_request() for use in marking VMs as
->     bugged
->   KVM: Add infrastructure and macro to mark VM as bugged
->   KVM: x86: Use KVM_BUG/KVM_BUG_ON to handle bugs that are fatal to the
->     VM
-> 
->  arch/x86/kvm/svm/svm.c   |  2 +-
->  arch/x86/kvm/vmx/vmx.c   | 23 ++++++++++++--------
->  arch/x86/kvm/x86.c       |  4 ++++
->  include/linux/kvm_host.h | 45 ++++++++++++++++++++++++++++++++--------
->  virt/kvm/kvm_main.c      | 11 +++++-----
->  5 files changed, 61 insertions(+), 24 deletions(-)
-> 
+diff --git a/arch/mips/include/asm/processor.h b/arch/mips/include/asm/processor.h
+index 856e12f6063d..7834e7c0c78a 100644
+--- a/arch/mips/include/asm/processor.h
++++ b/arch/mips/include/asm/processor.h
+@@ -29,6 +29,7 @@
+  */
+ 
+ extern unsigned int vced_count, vcei_count;
++extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
+ 
+ #ifdef CONFIG_32BIT
+ #ifdef CONFIG_KVM_GUEST
+-- 
+2.18.1
 
