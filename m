@@ -2,25 +2,26 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A9327F629
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Oct 2020 01:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BB127F652
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Oct 2020 01:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731868AbgI3Xr1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Sep 2020 19:47:27 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:60805 "EHLO
+        id S1730806AbgI3XxI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Sep 2020 19:53:08 -0400
+Received: from mout.kundenserver.de ([212.227.17.13]:58405 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbgI3Xr1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Sep 2020 19:47:27 -0400
+        with ESMTP id S1730548AbgI3XxI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Sep 2020 19:53:08 -0400
+X-Greylist: delayed 316 seconds by postgrey-1.27 at vger.kernel.org; Wed, 30 Sep 2020 19:53:06 EDT
 Received: from methusalix.internal.home.lespocky.de ([92.117.51.117]) by
  mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MTiLj-1jyIQs3sRZ-00U2pM; Thu, 01 Oct 2020 01:47:04 +0200
+ id 1MBDrM-1kGeY90zPi-00CgJ0; Thu, 01 Oct 2020 01:47:23 +0200
 Received: from lemmy.internal.home.lespocky.de ([192.168.243.176] helo=lemmy.home.lespocky.de)
         by methusalix.internal.home.lespocky.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94)
         (envelope-from <alex@home.lespocky.de>)
-        id 1kNloJ-0007Ye-6b; Thu, 01 Oct 2020 01:47:00 +0200
-Received: (nullmailer pid 7671 invoked by uid 2001);
-        Wed, 30 Sep 2020 23:46:58 -0000
+        id 1kNlod-0007Z0-T1; Thu, 01 Oct 2020 01:47:21 +0200
+Received: (nullmailer pid 7728 invoked by uid 2001);
+        Wed, 30 Sep 2020 23:47:19 -0000
 From:   Alexander Dahl <post@lespocky.de>
 To:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -32,141 +33,143 @@ Cc:     Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
         Alexander Dahl <ada@thorsis.com>,
         Peter Ujfalusi <peter.ujfalusi@ti.com>,
         Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Alexander Dahl <post@lespocky.de>
-Subject: [PATCH v6 0/7] leds: pwm: Make automatic labels work
-Date:   Thu,  1 Oct 2020 01:46:30 +0200
-Message-Id: <20200930234637.7573-1-post@lespocky.de>
+        Alexander Dahl <post@lespocky.de>,
+        Denis Osterland-Heim <denis.osterland@diehl.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <marek.behun@nic.cz>
+Subject: [PATCH v6 1/7] leds: pwm: Remove platform_data support
+Date:   Thu,  1 Oct 2020 01:46:31 +0200
+Message-Id: <20200930234637.7573-2-post@lespocky.de>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200930234637.7573-1-post@lespocky.de>
+References: <20200930234637.7573-1-post@lespocky.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scan-Signature: a725df07d7ef17d6c9c3b8b0b262d2c4
+X-Scan-Signature: 257374c4a781fc070d55e21f439eb91a
 X-Spam-Score: -2.8 (--)
-X-Provags-ID: V03:K1:1elWBi7e5x3yI9alpARH+EzCpdRWKPCu5CRyf0GlHEX72/7ReQG
- uK+KfSK9bq2XSjeizOMOQ1aX81WAtDM6x33xXmSQR4PGyxTAFe+Gyet5tvr5SsoocF8fkI6
- wSoVyqgv448pDp8oa8pMgpO1/2adBnPHdkc6W+5jqszUFcPSeKSiuI0MNhA2Cm5ImFDpZJd
- CTEWaoq7Zs45webTwlzJg==
+X-Provags-ID: V03:K1:jOBjAF/CkF48hBbOCUr5Z1QgpCLc02GeaEYNbCwJ99PA1LLbkiZ
+ xHzp1rqs9sSPt1xHxyhq4jLizqlO9LFAw++h6YE0LN//pXOKbLHkKBiiiGwmFPlz7CdFDLg
+ JNaqS1r+44GEpZCiXEfTEmJDd8Qp1ji40AAzKG+i3m1nCi1cNdsx/EgsVuJ4zuovoJNDa6y
+ dgbxd+LBEval1wn5/02LQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6alNuLrEGTM=:/JzZgqFL5jcymyQztVcQOq
- FjxmZcvrBOVCPqcnXy+7LRNn5FCV5x5rFniePHKClSKDklFA4XytiJHTWPmRH9scMeoS+B/64
- BlVgHSGulgI65FjtqdOjhileRqNHQIAzBZFbiqQpFNgq202+GikFCy/xaHpOVEh9vg1IajYCg
- Lt2eTnDEB6DJGd0SFFM842tbVSWrI+WNSL360BFHDKFAPPPAVI9v3d8UpyaPR7KXcb1uVYWCt
- Hau+i8KYufRR7C1yX5kkvYa5LTp0YaMb0Ve1AGNoUzRBQwJVhGlY4V3tEcZInhhVHbhgkuL6O
- fOsv227odzxhpVjJUpU/bA4Km556V1smNzzjItRCNc5HuK1IRc2nqpm8rIQC5nekctRbVWoLV
- 3PiWxpx65aIICaHcYPUejEw4aeNO8l2jyzzDzJYsyZ/YYWQ+WhfvfwS6y2CfQk6ZkhJX14JcV
- /PU/XTVQaV931qWbzKdRfR/o4zTOlmBUq7NncVRTHyfAHo7CTLWk/W9RFVVl5jSMjvUgGtAt2
- SRsXkr11xKUT3BEHgNRDwtgfcIzkT1/5lykDr7NRvqX6jQEG82cb2ItZrccHXrWAIUOs8wzHL
- tBNrUqdkqhI4bqoGzIMThGTJB4Q119crVleU9q0AjRzrjwmc8sa6vWnjRXjl4SZLuMSXEaVb7
- BjoIGbdsc8iPEdoPHiSb5o/b+FnAMlKVCgRiiu8Tgr6mU24AjEduYafCSw19DqMnNp6sVjeN1
- QoSC10dCkrDX1VvK7iCze3yiqtIGW+Dyi+QDP7oAR3Dnnubg6HFlDL7Qjm4X5VOwlEL/W9uVb
- srj/mjCZd9wH4qLjLDzrwxLf52R1XcL+nIJENySPlOGCa5beS/UYs1Xpa/UA7Hff+6YMO6W
+X-UI-Out-Filterresults: notjunk:1;V03:K0:20RTxCcrKDE=:+n0gk9ki7IJyX2zv9JYe40
+ WN7rw2RDrnhFlGcWU2MEbSfEj0fFHLR2nLTL5ZYmOt3/zK6jHui6S1j1RdZhcCMCOENBp7LZO
+ /FlqnyIv/1Y/rdH0HfFO7uPTiIJH4Mvv8B7xK0eIncjsiOFaJ2gXscqQExuWTfLgGKpHkUxLD
+ 29JB8wurzTWqXdoYt5jnqTc7JIGWyo0uJ9lSMEPt9b/l6fqyoYgyL6EhTaBsqgNND+HIFPEkx
+ paTjT/2IvhK4O+4lPL3Iz3JvEo9Ys6hKGGhE7VeNnvhzYq/mA9ayUdP8Q5DIw7yFySpXdZBa+
+ uA14pHd7Vx/LxK6j4mu6YQGRsWAIGAfboBDshEAve86rjRttK9LwOhVDOSTx9AljKauwVjFwU
+ IVzvGNjA+34SJ7woKVj8t/yFDNohMI7RwZRx0mPqEl5Z3027aSfe5yJPOSy9iP6fdXg3Ra1Wl
+ b8q0Y3F64Yt9PvtLfGB8QoadE5bdD+5Uj5t5YuYPMH8PQZhhIf+iFGxnRGJQRnPTwWM2l6Ikc
+ d/ciAy30ETEdrqBYWeD0pRjDVeovGPfL30Wa37fRoKQOK4NOdiNQrGRm53IXY1dGwi/dgBIfh
+ LpoLvWkHtp+eteSrICpy4wYXT3a3pn9eugj/GsPlGdqjPpYOxN4Gzqbh/j3yk3CzdLTI0ktfd
+ 6AdtvXkxokw8gMyDRzmIhlFJCqKg6E+RoEU32zTk4dQBVkgTI6J5nvSPlW/UKZ6+Fhr4F80XJ
+ /QaOqVSL5D+ICccmueizfLc8osR5/RJS6qxwKwUYdguMrH86jktTahmk+CY8/YvcL8SGpxEoA
+ fjAZS+32HekzbLyk2H/36TsOsvNR1XSOgmnBbf3457h0mjVQ6u0SNrcqxAWObOM+P4gtA85
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hei hei,
+Since commit 141f15c66d94 ("leds: pwm: remove header") that platform
+interface is not usable from outside and there seems to be no in tree
+user anymore.  All in-tree users of the leds-pwm driver seem to use DT
+currently.  Getting rid of the old platform interface allows the
+leds-pwm driver to switch over from 'devm_led_classdev_register()' to
+'devm_led_classdev_register_ext()'.
 
-for leds-gpio you can use the properties 'function' and 'color' in the
-devicetree node and omit 'label', the label is constructed
-automatically.  This is a common feature supposed to be working for all
-LED drivers.  However it did not yet work for the 'leds-pwm' driver.
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+Cc: Denis Osterland-Heim <denis.osterland@diehl.com>
+Reviewed-by: Marek Behún <marek.behun@nic.cz>
+---
 
-This series removes platform_data support for the leds-pwm driver and
-takes the opportunity to update the leds-pwm dt-bindings accordingly.
+Notes:
+    v5 -> v6:
+      * added Reviewed-by from Marek
+      * minimal commit message rewording, because a later patch was
+        already applied
+    
+    v5:
+      * added this patch to series (replacing another patch with a not
+        working, different approach)
+    
+    v5:
+     * added this patch to series (replacing another patch with a not
+       working, different approach)
 
-After myself being one week on vacation patch 2/3 was already picked by
-Pavel and I gathered some more feedback on the remaining issues.
+ drivers/leds/leds-pwm.c | 30 +++++-------------------------
+ 1 file changed, 5 insertions(+), 25 deletions(-)
 
-v6 was compile tested and dt_bindings_check and dtbs_check were run.
-
-Note: I added some patches to fix DT schema warnings, but I did not put
-every reviewer/supporter/maintainer printed by get_maintainers in Cc to
-keep that list reasonable small.
-
-Series changelog below …
-
-Greets
-Alex
-
-v6:
-- rebased series on recent pavel/for-next
-- added Reviewed-by from Marek to patch 1
-- patch 2 from v5 was picked by Pavel and is already in his for-next
-  branch
-- previous patch 3/3 (now 2/7) was reworked based on feedback by Rob
-- added more dt patches fixing warnings after binding conversion to yaml
-
-v5:
-- replaced patch 1/3 by a new patch removing platform_data support for
-  the leds-pwm driver
-- little rewording of commit message in patch 2/3
-- updated patch 3/3 based on feedback by Rob Herring
-- added Marek Behún to Cc, because he also works on removing
-  platform_data support
-- rebased series on pavel/for-next
-
-v4:
-- added led-class patch handling fwnode passing differently (patch 1/3)
-- adapted leds-pwm patch to new led-class (patch 2/3)
-- contacted original author of leds-pwm dt binding on license issue
-  (patch 3/3)
-
-v3:
-- series rebased on v5.9-rc4
-- changed license of .yaml file to recommended one (patch 2/2)
-- added Acked-by to both patches
-
-v2:
-- series rebased on v5.9-rc3
-- added the dt-bindings update patch (2/2)
-
-v1:
-- based on v5.9-rc2
-- backport on v5.4.59 tested and working
-
-Alexander Dahl (7):
-  leds: pwm: Remove platform_data support
-  dt-bindings: leds: Convert pwm to yaml
-  dt-bindings: mfd: Fix schema warnings for pwm-leds
-  ARM: dts: at91: smartkiz: Reference led node directly
-  ARM: dts: Fix schema warnings for pwm-leds
-  arm64: dts: meson: Fix schema warnings for pwm-leds
-  MIPS: DTS: img: Fix schema warnings for pwm-leds
-
- .../devicetree/bindings/leds/leds-pwm.txt     | 50 -------------
- .../devicetree/bindings/leds/leds-pwm.yaml    | 70 +++++++++++++++++++
- .../devicetree/bindings/mfd/iqs62x.yaml       |  5 +-
- arch/arm/boot/dts/at91-kizbox.dts             | 10 +--
- arch/arm/boot/dts/at91-kizbox2-common.dtsi    |  8 +--
- arch/arm/boot/dts/at91-kizbox3-hs.dts         | 16 ++---
- arch/arm/boot/dts/at91-kizbox3_common.dtsi    | 10 +--
- arch/arm/boot/dts/at91-kizboxmini-common.dtsi |  8 +--
- arch/arm/boot/dts/at91-smartkiz.dts           |  6 +-
- arch/arm/boot/dts/at91sam9m10g45ek.dts        | 10 +--
- arch/arm/boot/dts/at91sam9rlek.dts            | 10 +--
- .../boot/dts/berlin2cd-google-chromecast.dts  |  6 +-
- arch/arm/boot/dts/exynos5422-odroidhc1.dts    |  4 +-
- arch/arm/boot/dts/exynos5422-odroidxu4.dts    |  4 +-
- .../boot/dts/exynos54xx-odroidxu-leds.dtsi    | 11 +--
- arch/arm/boot/dts/imx53-ppd.dts               | 15 ++--
- arch/arm/boot/dts/imx6qdl-cubox-i.dtsi        |  4 +-
- .../boot/dts/imx6sx-softing-vining-2000.dts   |  8 +--
- arch/arm/boot/dts/omap3-beagle-xm.dts         | 10 +--
- arch/arm/boot/dts/omap3-overo-base.dtsi       |  4 +-
- arch/arm/boot/dts/omap4-kc1.dts               |  6 +-
- arch/arm/boot/dts/omap4-sdp.dts               | 26 +++----
- arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts     | 12 ++--
- .../amlogic/meson-gxl-s905x-khadas-vim.dts    |  4 +-
- .../dts/amlogic/meson-gxm-khadas-vim2.dts     |  4 +-
- .../boot/dts/amlogic/meson-sm1-sei610.dts     |  8 +--
- arch/mips/boot/dts/img/pistachio_marduk.dts   |  5 +-
- drivers/leds/leds-pwm.c                       | 30 ++------
- 28 files changed, 184 insertions(+), 180 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-pwm.txt
- create mode 100644 Documentation/devicetree/bindings/leds/leds-pwm.yaml
-
-
-base-commit: 8fd8f94235c2c925d80b2316e0ab2bdd00af9bae
+diff --git a/drivers/leds/leds-pwm.c b/drivers/leds/leds-pwm.c
+index 2a16ae0bf022..f53f9309ca6c 100644
+--- a/drivers/leds/leds-pwm.c
++++ b/drivers/leds/leds-pwm.c
+@@ -24,11 +24,6 @@ struct led_pwm {
+ 	unsigned int	max_brightness;
+ };
+ 
+-struct led_pwm_platform_data {
+-	int		num_leds;
+-	struct led_pwm	*leds;
+-};
+-
+ struct led_pwm_data {
+ 	struct led_classdev	cdev;
+ 	struct pwm_device	*pwm;
+@@ -60,6 +55,7 @@ static int led_pwm_set(struct led_classdev *led_cdev,
+ 	return pwm_apply_state(led_dat->pwm, &led_dat->pwmstate);
+ }
+ 
++__attribute__((nonnull))
+ static int led_pwm_add(struct device *dev, struct led_pwm_priv *priv,
+ 		       struct led_pwm *led, struct fwnode_handle *fwnode)
+ {
+@@ -73,10 +69,7 @@ static int led_pwm_add(struct device *dev, struct led_pwm_priv *priv,
+ 	led_data->cdev.max_brightness = led->max_brightness;
+ 	led_data->cdev.flags = LED_CORE_SUSPENDRESUME;
+ 
+-	if (fwnode)
+-		led_data->pwm = devm_fwnode_pwm_get(dev, fwnode, NULL);
+-	else
+-		led_data->pwm = devm_pwm_get(dev, led->name);
++	led_data->pwm = devm_fwnode_pwm_get(dev, fwnode, NULL);
+ 	if (IS_ERR(led_data->pwm))
+ 		return dev_err_probe(dev, PTR_ERR(led_data->pwm),
+ 				     "unable to request PWM for %s\n",
+@@ -139,15 +132,11 @@ static int led_pwm_create_fwnode(struct device *dev, struct led_pwm_priv *priv)
+ 
+ static int led_pwm_probe(struct platform_device *pdev)
+ {
+-	struct led_pwm_platform_data *pdata = dev_get_platdata(&pdev->dev);
+ 	struct led_pwm_priv *priv;
+-	int count, i;
+ 	int ret = 0;
++	int count;
+ 
+-	if (pdata)
+-		count = pdata->num_leds;
+-	else
+-		count = device_get_child_node_count(&pdev->dev);
++	count = device_get_child_node_count(&pdev->dev);
+ 
+ 	if (!count)
+ 		return -EINVAL;
+@@ -157,16 +146,7 @@ static int led_pwm_probe(struct platform_device *pdev)
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+-	if (pdata) {
+-		for (i = 0; i < count; i++) {
+-			ret = led_pwm_add(&pdev->dev, priv, &pdata->leds[i],
+-					  NULL);
+-			if (ret)
+-				break;
+-		}
+-	} else {
+-		ret = led_pwm_create_fwnode(&pdev->dev, priv);
+-	}
++	ret = led_pwm_create_fwnode(&pdev->dev, priv);
+ 
+ 	if (ret)
+ 		return ret;
 -- 
 2.20.1
 
