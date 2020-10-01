@@ -2,102 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED3A27F65A
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Oct 2020 01:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905EE27FA7A
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Oct 2020 09:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731287AbgI3Xx1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Sep 2020 19:53:27 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:44831 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725372AbgI3Xx1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Sep 2020 19:53:27 -0400
-Received: from methusalix.internal.home.lespocky.de ([92.117.51.117]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MgRYd-1ku3qH3u3T-00hvd8; Thu, 01 Oct 2020 01:47:55 +0200
-Received: from lemmy.internal.home.lespocky.de ([192.168.243.176] helo=lemmy.home.lespocky.de)
-        by methusalix.internal.home.lespocky.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94)
-        (envelope-from <alex@home.lespocky.de>)
-        id 1kNlp9-0007aF-MT; Thu, 01 Oct 2020 01:47:52 +0200
-Received: (nullmailer pid 7817 invoked by uid 2001);
-        Wed, 30 Sep 2020 23:47:51 -0000
-From:   Alexander Dahl <post@lespocky.de>
-To:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org, linux-mips@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexander Dahl <ada@thorsis.com>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Alexander Dahl <post@lespocky.de>
-Subject: [PATCH v6 7/7] MIPS: DTS: img: Fix schema warnings for pwm-leds
-Date:   Thu,  1 Oct 2020 01:46:37 +0200
-Message-Id: <20200930234637.7573-8-post@lespocky.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200930234637.7573-1-post@lespocky.de>
-References: <20200930234637.7573-1-post@lespocky.de>
+        id S1725894AbgJAHqU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Oct 2020 03:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725878AbgJAHqF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Oct 2020 03:46:05 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ABBC0613D0
+        for <linux-mips@vger.kernel.org>; Thu,  1 Oct 2020 00:46:04 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id j2so4585826eds.9
+        for <linux-mips@vger.kernel.org>; Thu, 01 Oct 2020 00:46:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hev-cc.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FrPg4td8G2Qt7V9A77qbswQsY+lnjAcu9L1LEPRn1eQ=;
+        b=FjOZVTlz2oOyZpoARCwXlynA4b81GjjKZGZFE8YJ2UWm//cCeuSy7LKy6L98lCJnBu
+         zmh3EQLBxlT/CDLmFHip+kNeaHdfGzZZPTsSocozxt3c3KOkLGbAJqlf0ukMEWH3f8y2
+         Hy5hDv9inBBT+0w6MjtbMr1KhYMZQ1UlrXd0FG5iJdpZFnt1VJwNfhiZWSHJvyrWveJY
+         WmXZyFQpUHJAhtiL37bN8nzAcHrr/KxkhAz+KuoeF4cgz7PgbMAeL7Mx4EwuVyxiI9r0
+         jdbjK8g7UX2Y5+F9puR5MsWOTpzHDxM/v31SXbNC962vpC9cmPtdqLxR8pviLXq90Y3O
+         x+WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FrPg4td8G2Qt7V9A77qbswQsY+lnjAcu9L1LEPRn1eQ=;
+        b=UgtqDC/+ndXDT3zD9xMSWbH/Gfkk8zHQ2GkU2nc3WW9wc1DpROrmo3iZFcpUmpmn1V
+         JeTiIN1GzR40fKoQbv5FT44o0KeH2UTxGVqjrsDZPl6XQ5H7zl63AVs9WTviPguvW4L0
+         CffzBk0VlmxTwQb4v/DBK/HpVz0xAdhwjsS2EX8cx4npCPyh6aqKPkunpG4gNY9UFLzb
+         GOY3Ahm7IY9rDqdOEpmsI7rU/loXruKdGqqFTDk0Nd7znTk6/2KY8bsRiPe3ySSnaw7R
+         u/ux/o5gRGOR4ex6OI/w32p2N/KUBBpJocm4ifBsfAeaRlKvGoZUTljM7AmvUVeKG4tv
+         o6gw==
+X-Gm-Message-State: AOAM530wcUd8ofnf2L6V+0tT7hijZBoKWTSnUdKoN59ymG2PWxlu3nzu
+        ZIy8kEfXByHfjujupd7HfcUAixzkvw7Y+d+op+r6kg==
+X-Google-Smtp-Source: ABdhPJxbpQG86t5w8S+sGfWvSdUVUnR0wFoLlDs9sx3yHdL+Bt4uyDejsxkJcx6nqbbCs4bcJ3NiwfP4l4dqlzEHvd0=
+X-Received: by 2002:a05:6402:cb4:: with SMTP id cn20mr6815465edb.369.1601538362884;
+ Thu, 01 Oct 2020 00:46:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scan-Signature: 47063c0bd3b0440d119657da58bc7562
-X-Spam-Score: -2.9 (--)
-X-Provags-ID: V03:K1:0IUo1RRU7aAo8lMj4tzZs2tdPUuRWx/DVg9fWHk99XurY6GYSNC
- hi0k4Y+6Rvd2A96ObtnJkZ9b7FaJC8oTKeQjrqDQoiAJi59zcVISDFtcTQC5r9ppEjXMxT5
- 9JZqTtubXCNiBVhQw98FxKkqHLFjh1VvJjlQu5KTRSOTFE3yj4N8WYGh5qJoe9yvg0/N+ST
- 0mF0lowsi3Ph4kHDEtMIg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/ecUuY4q8Gc=:5pdPvjKLRtHGB+jyb6ogsm
- mseida6O/rUXoquHbx//MvOs5Y3069W/7rUsraL6Q8VMaKRBaHaZ9YpMmWMvTvq7Iy/ZM+o1P
- 3ug1TRVxllhD2Tf8UGFiH/2z5Jys0wgCL2GSzGszKKP3N1PNfig4vfq/nyvmChwF+JuMJ9cXi
- Th6iZFSTqG3oNsx0attXL+8KxXvon3FZP4eQJmr8/Et5J51O75T5X0KRiIBRSjA4LJUgZb1Op
- g/VsS4wSzaXKAdJof4lmMye/B0gN5CaIe+2gLLb3VkPuIObK9figRjq6Rj9Mdl/+Ok/sJG/YB
- LLRR0lcEsdHllHueRexDH/OALqq0YIGwrqtVEGAlIrBFTNcSa8Tla3btFaOGKtzEVCL2d6ORl
- gPTJ66cs+0DLQtFRKsN4yrKR5a3dK+uVX9/d/uoSSK9SQZjOmNPj3ThYCtJcehN5SvvfmSx2L
- VxhfphV7Zs3o4iQTJ4PJzeqprgdkiAXlVU2x1clPQyGK36NcJv+QYf1F9jV8lISwkPuhnhBja
- o4T03eH4tGYdIDQN+Ahe13cUIMfbzwJ3ZeE0prSRlgsk4Evdn17hiGjQlpkqHRRGSdxHCatZW
- +hDGpSyzd0OmLDV5iuR0zipb8TfWbpH5qTZPuSdU+lFqpWj7O0Voom3reL9mudWxGaf7Q+kl+
- jNf2QwLABuQSrWYMumMB/VYDcnGPy2+pDucow638wMe9uqLVIDFCR/0lnyR7vhFkiOyyGATJQ
- E4bwN7rKHWjSY83PwK/1sawX7PAx17LdSbR0xxmq6pu4pnWOUVSSJK5BQ82GvuO7ZBILyTfur
- l8ArD43Oi4k8MhDuYj7DkA4tfYESO+SfRmRfY98lwTkUG3Je2r2EAXUsKlUuk+kDbePtWiLgR
- A1kGCdoGG2QarQQTjJ5jYuuAxhO1Qv1JpeThZd+cQh8SHDJAuj/10UMVWYp2LsP9UFk+tEp+X
- PrOR5q7Ml2TqA+ghjTVnru/WeaZ/GJR5u6tvwZjqZXjUmJA5Kx1BMIJ4QgLuJVeJwhiKT6It3
- O3eZkORudcdbpEPydJPUv2JXHfS6U5e3n4zKke+jXQWx
+References: <20200821031228.31231-1-r@hev.cc> <20200930111644.GA19903@alpha.franken.de>
+In-Reply-To: <20200930111644.GA19903@alpha.franken.de>
+From:   Hev <r@hev.cc>
+Date:   Thu, 1 Oct 2020 15:45:52 +0800
+Message-ID: <CAHirt9i06fyHxinkurR-AA8rW2_Qm=UmAFgCPABsj=K9YADT2Q@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Optional SYNC emulation
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Paul Burton <paulburton@kernel.org>,
+        "Maciej W . Rozycki" <macro@linux-mips.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The node names for devices using the pwm-leds driver follow a certain
-naming scheme (now).
+Hello Thomas,
 
-Signed-off-by: Alexander Dahl <post@lespocky.de>
----
+On Wed, Sep 30, 2020 at 8:48 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Fri, Aug 21, 2020 at 11:12:28AM +0800, Heiher wrote:
+> > MIPS ISA defines several types of memory barrier, of which Type-0 (full barrier)
+> > is required, and the others are optional. In some vendor implementation (such as
+> > Loongson), all optional parts are implemented to emit an illegal instruction
+> > exception. Here, emulate to full barrier to ensure the functional semantics.
+> >
+> > If an implementation does not support SYNC 0, it should also not support SMP, so
+> > the `smp_mb()` is only a compilation barrier.
+>
+> I see your point, but isn't taking an exception already more than a
+> compiler barrier ? Does the missing sync hurt in real life ?
 
-Notes:
-    v6:
-      * added this patch to series
+As far as I known, the optional sync instruction has been used in user
+space programs (such as firefox), and the illegal instruction
+exception does not include the semantics of the memory barrier, so if
+the optional sync instruction is not simulated, the memory access
+order of these programs it may be different from the order in the
+code.
 
- arch/mips/boot/dts/img/pistachio_marduk.dts | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+About the compiler barrier, What if the hardware does not support SYNC
+0? I think it does not support SMP, so smp_mb() is only a compiler
+barrier and will not cause infinite recursion in the simulation.
 
-diff --git a/arch/mips/boot/dts/img/pistachio_marduk.dts b/arch/mips/boot/dts/img/pistachio_marduk.dts
-index bf69da96dc8b..a8708783f04b 100644
---- a/arch/mips/boot/dts/img/pistachio_marduk.dts
-+++ b/arch/mips/boot/dts/img/pistachio_marduk.dts
-@@ -46,9 +46,10 @@
- 		regulator-max-microvolt = <1800000>;
- 	};
- 
--	leds {
-+	led-controller {
- 		compatible = "pwm-leds";
--		heartbeat {
-+
-+		led-1 {
- 			label = "marduk:red:heartbeat";
- 			pwms = <&pwm 3 300000>;
- 			max-brightness = <255>;
+Thank you
+
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
+
 -- 
-2.20.1
-
+Best regards!
+Hev
+https://hev.cc
