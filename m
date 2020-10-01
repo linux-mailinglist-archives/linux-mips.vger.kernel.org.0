@@ -2,102 +2,212 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 905EE27FA7A
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Oct 2020 09:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B3827FB00
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Oct 2020 10:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725894AbgJAHqU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Oct 2020 03:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725878AbgJAHqF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Oct 2020 03:46:05 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ABBC0613D0
-        for <linux-mips@vger.kernel.org>; Thu,  1 Oct 2020 00:46:04 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id j2so4585826eds.9
-        for <linux-mips@vger.kernel.org>; Thu, 01 Oct 2020 00:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hev-cc.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FrPg4td8G2Qt7V9A77qbswQsY+lnjAcu9L1LEPRn1eQ=;
-        b=FjOZVTlz2oOyZpoARCwXlynA4b81GjjKZGZFE8YJ2UWm//cCeuSy7LKy6L98lCJnBu
-         zmh3EQLBxlT/CDLmFHip+kNeaHdfGzZZPTsSocozxt3c3KOkLGbAJqlf0ukMEWH3f8y2
-         Hy5hDv9inBBT+0w6MjtbMr1KhYMZQ1UlrXd0FG5iJdpZFnt1VJwNfhiZWSHJvyrWveJY
-         WmXZyFQpUHJAhtiL37bN8nzAcHrr/KxkhAz+KuoeF4cgz7PgbMAeL7Mx4EwuVyxiI9r0
-         jdbjK8g7UX2Y5+F9puR5MsWOTpzHDxM/v31SXbNC962vpC9cmPtdqLxR8pviLXq90Y3O
-         x+WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FrPg4td8G2Qt7V9A77qbswQsY+lnjAcu9L1LEPRn1eQ=;
-        b=UgtqDC/+ndXDT3zD9xMSWbH/Gfkk8zHQ2GkU2nc3WW9wc1DpROrmo3iZFcpUmpmn1V
-         JeTiIN1GzR40fKoQbv5FT44o0KeH2UTxGVqjrsDZPl6XQ5H7zl63AVs9WTviPguvW4L0
-         CffzBk0VlmxTwQb4v/DBK/HpVz0xAdhwjsS2EX8cx4npCPyh6aqKPkunpG4gNY9UFLzb
-         GOY3Ahm7IY9rDqdOEpmsI7rU/loXruKdGqqFTDk0Nd7znTk6/2KY8bsRiPe3ySSnaw7R
-         u/ux/o5gRGOR4ex6OI/w32p2N/KUBBpJocm4ifBsfAeaRlKvGoZUTljM7AmvUVeKG4tv
-         o6gw==
-X-Gm-Message-State: AOAM530wcUd8ofnf2L6V+0tT7hijZBoKWTSnUdKoN59ymG2PWxlu3nzu
-        ZIy8kEfXByHfjujupd7HfcUAixzkvw7Y+d+op+r6kg==
-X-Google-Smtp-Source: ABdhPJxbpQG86t5w8S+sGfWvSdUVUnR0wFoLlDs9sx3yHdL+Bt4uyDejsxkJcx6nqbbCs4bcJ3NiwfP4l4dqlzEHvd0=
-X-Received: by 2002:a05:6402:cb4:: with SMTP id cn20mr6815465edb.369.1601538362884;
- Thu, 01 Oct 2020 00:46:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200821031228.31231-1-r@hev.cc> <20200930111644.GA19903@alpha.franken.de>
-In-Reply-To: <20200930111644.GA19903@alpha.franken.de>
-From:   Hev <r@hev.cc>
-Date:   Thu, 1 Oct 2020 15:45:52 +0800
-Message-ID: <CAHirt9i06fyHxinkurR-AA8rW2_Qm=UmAFgCPABsj=K9YADT2Q@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Optional SYNC emulation
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Paul Burton <paulburton@kernel.org>,
-        "Maciej W . Rozycki" <macro@linux-mips.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1730534AbgJAIG0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Oct 2020 04:06:26 -0400
+Received: from mga01.intel.com ([192.55.52.88]:14393 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725975AbgJAIGZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 1 Oct 2020 04:06:25 -0400
+IronPort-SDR: FcXR+XZSZGDSKau7tUTsnWBBZTCsgfulSBqgQQG60uDtVKpqRgdvzxj69snLreZnwcPEiquKAk
+ Xp/RUiQA3WpQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9760"; a="180818755"
+X-IronPort-AV: E=Sophos;i="5.77,323,1596524400"; 
+   d="scan'208";a="180818755"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2020 01:06:24 -0700
+IronPort-SDR: 6H8+i0K3P4/xvUect3IabH1RRHiUCE5ESqWYukRiKT03IqhcbxI/lr/uja/B9lJFQtAFamjxa4
+ coq/jysOt8PA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,323,1596524400"; 
+   d="scan'208";a="351019127"
+Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Oct 2020 01:06:20 -0700
+From:   "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+To:     miquel.raynal@bootlin.com, linux-kernel@vger.kernel.org
+Cc:     linux-mtd@lists.infradead.org, richard@nod.at, vigneshr@ti.com,
+        boris.brezillon@collabora.com, christophe.kerello@st.com,
+        piotrs@cadence.com, robert.jarzmik@free.fr,
+        brendanhiggins@google.com, devicetree@vger.kernel.org,
+        tglx@linutronix.de, hauke.mehrtens@intel.com, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, arnd@arndb.de,
+        andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
+        qi-ming.wu@intel.com,
+        "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v15 0/2] mtd: rawnand: Add NAND controller support on Intel LGM SoC
+Date:   Thu,  1 Oct 2020 16:06:16 +0800
+Message-Id: <20201001080618.50994-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Thomas,
+This patch adds the new IP of Nand Flash Controller(NFC) support
+on Intel's Lightning Mountain(LGM) SoC.
 
-On Wed, Sep 30, 2020 at 8:48 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Fri, Aug 21, 2020 at 11:12:28AM +0800, Heiher wrote:
-> > MIPS ISA defines several types of memory barrier, of which Type-0 (full barrier)
-> > is required, and the others are optional. In some vendor implementation (such as
-> > Loongson), all optional parts are implemented to emit an illegal instruction
-> > exception. Here, emulate to full barrier to ensure the functional semantics.
-> >
-> > If an implementation does not support SYNC 0, it should also not support SMP, so
-> > the `smp_mb()` is only a compilation barrier.
->
-> I see your point, but isn't taking an exception already more than a
-> compiler barrier ? Does the missing sync hurt in real life ?
+DMA is used for burst data transfer operation, also DMA HW supports
+aligned 32bit memory address and aligned data access by default.
+DMA burst of 8 supported. Data register used to support the read/write
+operation from/to device.
 
-As far as I known, the optional sync instruction has been used in user
-space programs (such as firefox), and the illegal instruction
-exception does not include the semantics of the memory barrier, so if
-the optional sync instruction is not simulated, the memory access
-order of these programs it may be different from the order in the
-code.
+NAND controller also supports in-built HW ECC engine.
 
-About the compiler barrier, What if the hardware does not support SYNC
-0? I think it does not support SMP, so smp_mb() is only a compiler
-barrier and will not cause infinite recursion in the simulation.
+NAND controller driver implements ->exec_op() to replace legacy hooks,
+these specific call-back method to execute NAND operations.
 
-Thank you
+Thanks Miquel, Boris, Andy, Arnd and Rob for the review comments and suggestions.
+---
+v15:
+  - Address Miquel review comments update
+  - add common helper function for status check for
+    ebu_nand_waitrdy()
+v14:
+  - Address Andy's review comments
+  - align the headers and revome Duplicates
+  - replcace numerical const values by HZ_PER_MHZ and USEC_PER_SEC
+    defined macros
+  - add dev_err_probe() api instead of legacy err check
+  - add get_unaligned_le32() api instead of manual endiness
+  - remove redudent check
+  - split the lines logically in between and add require spaces
+v13:
+  - Address Miquel Raynal review comments
+  - update the return type with variable 'ret'
+  - handle err check statement properly
+  - change the naming convention aligned with recently changed the naming
+    around the data interface
+    data structure and function names
+  - replace by div 8 instead of <<4 in ecc calculation better code readability
+  - handle check_only properly like existing drivers
+v12-resend:
+  - No Change
+v12:
+  - address Miquel Raynal review comments update
+  - add/modify the comments for better understanding
+  - handle the check_only variable
+  - update the ecc function based on the existing drivers
+  - add newline
+  - verify that mtd->name is set after nand_set_flash_node()
+  - add the check WARN_ON(ret);
+v11-resend:
+  - Rebase to v5.8-rc1
+v11:
+  - No Change
+v10:
+  - No Change
+v9:
+  - No change
+v8:
+  - fix the kbuild bot warnings
+  - correct the typo's
+v7:
+  - indentation issue is fixed
+  - add error check for retrieve the resource from dt
+v6:
+  - update EBU_ADDR_SELx register base value build it from DT
+  - Add tabs in in Kconfig
+v5:
+  - replace by 'HSNAND_CLE_OFFS | HSNAND_CS_OFFS' to NAND_WRITE_CMD and NAND_WRITE_ADDR
+  - remove the unused macros
+  - update EBU_ADDR_MASK(x) macro
+  - update the EBU_ADDR_SELx register values to be written
+v4:
+  - add ebu_nand_cs structure for multiple-CS support
+  - mask/offset encoding for 0x51 value
+  - update macro HSNAND_CTL_ENABLE_ECC
+  - drop the op argument and un-used macros.
+  - updated the datatype and macros
+  - add function disable nand module
+  - remove ebu_host->dma_rx = NULL;
+  - rename MMIO address range variables to ebu and hsnand
+  - implement ->setup_data_interface()
+  - update label err_cleanup_nand and err_cleanup_dma
+  - add return value check in the nand_remove function
+  - add/remove tabs and spaces as per coding standard
+  - encoded CS ids by reg property
+v3:
+  - Add depends on MACRO in Kconfig
+  - file name update in Makefile
+  - file name update to intel-nand-controller
+  - modification of MACRO divided like EBU, HSNAND and NAND
+  - add NAND_ALE_OFFS, NAND_CLE_OFFS and NAND_CS_OFFS
+  - rename lgm_ to ebu_ and _va suffix is removed in the whole file
+  - rename structure and varaibles as per review comments.
+  - remove lgm_read_byte(), lgm_dev_ready() and cmd_ctrl() un-used function
+  - update in exec_op() as per review comments
+  - rename function lgm_dma_exit() by lgm_dma_cleanup()
+  - hardcoded magic value  for base and offset replaced by MACRO defined
+  - mtd_device_unregister() + nand_cleanup() instead of nand_release()
+v2:
+  - implement the ->exec_op() to replaces the legacy hook-up.
+  - update the commit message
+  - add MIPS maintainers and xway_nand driver author in CC
+v1:
+ - initial version
 
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+
+dt-bindings: mtd: Add Nand Flash Controller support for Intel LGM SoC
+---
+v15:
+  - No change
+v14:
+  - No change
+v13:
+  - No change
+v12-Resend:
+  - No Change
+v12:
+  - No change
+v11-resend:
+  - No change
+v11:
+  - Fixed the compatible issue with example
+10:
+  - fix bot errors
+v9:
+  - Rob's review comments address
+  - dual licensed
+  - compatible change
+  - add reg-names
+  - drop clock-names and clock-cells
+  - correct typo's
+v8:
+  No change
+v7:
+  - Rob's review comments addressed
+  - dt-schema build issue fixed with upgraded dt-schema
+v6:
+  - Rob's review comments addressed in YAML file
+  - add addr_sel0 and addr_sel1 reg-names in YAML example
+v5:
+  - add the example in YAML file
+v4:
+  - No change
+v3:
+  - No change
+v2:
+  YAML compatible string update to intel, lgm-nand-controller
+v1:
+  - initial version
+
+Ramuthevar Vadivel Murugan (2):
+  dt-bindings: mtd: Add Nand Flash Controller support for Intel LGM SoC
+  mtd: rawnand: Add NAND controller support on Intel LGM SoC
+
+ .../devicetree/bindings/mtd/intel,lgm-nand.yaml    |  99 +++
+ drivers/mtd/nand/raw/Kconfig                       |   8 +
+ drivers/mtd/nand/raw/Makefile                      |   1 +
+ drivers/mtd/nand/raw/intel-nand-controller.c       | 737 +++++++++++++++++++++
+ 4 files changed, 845 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+ create mode 100644 drivers/mtd/nand/raw/intel-nand-controller.c
 
 -- 
-Best regards!
-Hev
-https://hev.cc
+2.11.0
+
