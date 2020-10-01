@@ -2,849 +2,970 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A8C27FB06
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Oct 2020 10:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CA42807C9
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Oct 2020 21:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731534AbgJAIGq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Oct 2020 04:06:46 -0400
-Received: from mga09.intel.com ([134.134.136.24]:29085 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725975AbgJAIGp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 1 Oct 2020 04:06:45 -0400
-IronPort-SDR: SKGdxZ4lZs3Ws5VzrG/gsxwszRfcmH+N96FVopelfipncaTLzC0R+KYAIEmt3iRxWkOB6oP9U6
- AeyZiqjAh6PA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9760"; a="163524585"
-X-IronPort-AV: E=Sophos;i="5.77,323,1596524400"; 
-   d="scan'208";a="163524585"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2020 01:06:34 -0700
-IronPort-SDR: z972pMOHVP5M6EQaVBm0oAkbMRRvfCoSFfpSlrQpNaYd9KxQIALk08rr+jdj53XNw88BcTcZqj
- fCuTGq9HRT5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,323,1596524400"; 
-   d="scan'208";a="345974762"
-Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Oct 2020 01:06:30 -0700
-From:   "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-To:     miquel.raynal@bootlin.com, linux-kernel@vger.kernel.org
-Cc:     linux-mtd@lists.infradead.org, richard@nod.at, vigneshr@ti.com,
-        boris.brezillon@collabora.com, christophe.kerello@st.com,
-        piotrs@cadence.com, robert.jarzmik@free.fr,
-        brendanhiggins@google.com, devicetree@vger.kernel.org,
-        tglx@linutronix.de, hauke.mehrtens@intel.com, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, arnd@arndb.de,
-        andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
-        qi-ming.wu@intel.com,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Subject: [PATCH v15 2/2] mtd: rawnand: Add NAND controller support on Intel LGM SoC
-Date:   Thu,  1 Oct 2020 16:06:18 +0800
-Message-Id: <20201001080618.50994-3-vadivel.muruganx.ramuthevar@linux.intel.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20201001080618.50994-1-vadivel.muruganx.ramuthevar@linux.intel.com>
-References: <20201001080618.50994-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+        id S1732836AbgJATcj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Oct 2020 15:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730073AbgJATci (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Oct 2020 15:32:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1FCC0613D0;
+        Thu,  1 Oct 2020 12:32:38 -0700 (PDT)
+Date:   Thu, 1 Oct 2020 21:32:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1601580756;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=bwxAIHeRfARZP9OOa+BxD41bJEOsQkUrNqZWvW7Ttjc=;
+        b=bBoX0O33dUO9i3KEHAqGgO9JbcPhhn2vJt23iKhckLjU6fTIKFnwTjJ4+Hg0iHruksGBQ8
+        nrcSabAozILo+64GKRyLB7HwSMg+gLy73st8rOenqWgqbMnUUEgLxCF/+H6lHXauyVQxvk
+        wu1ymg+xtizFbv+FM5DTh6yzxoVQsKHAfawafvFZa23gtKlPC12UFCl7cnrp2UWQSWtgvF
+        ml9+eF1JVe1XuZsTGeKhW/qaRUxTyzg92dowNIo6sS5dMv0ARatoOnru1gTKVbVkjA6hiy
+        /5jbutneN/dasseW4xLUraEknZYYZhDkefH9Ql1FF+kdJu9auJlPuH8vFxAeHw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1601580756;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=bwxAIHeRfARZP9OOa+BxD41bJEOsQkUrNqZWvW7Ttjc=;
+        b=0GaWQGURcWfvIqH+0nmH5i2sYJHYO3uAfMad1BwcaRZMHSTO5uOiTCQ/1jC8HZoWLE1h5x
+        f1G1AO4zpTSiOfCA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yoichi Yuasa <yuasa@linux-mips.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH REPOST] pcmcia: Remove NEC VRC4173 CARDU
+Message-ID: <20201001193234.gi6fp4vk3dypwifv@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+This driver is the very definition of bitrotting:
+- Introduced in commit
+  79a140932c776 ("[PATCH] mips: vR41xx updates")
+  which is 2.6.11-rc3.
 
-This patch adds the new IP of Nand Flash Controller(NFC) support
-on Intel's Lightning Mountain(LGM) SoC.
+- Provides ->register_callback which was removed in commit
+  7f316b033b36a ("[PATCH] pcmcia: remove socket register_callback")
+  which is v2.6.14-rc3
 
-DMA is used for burst data transfer operation, also DMA HW supports
-aligned 32bit memory address and aligned data access by default.
-DMA burst of 8 supported. Data register used to support the read/write
-operation from/to device.
+- Uses INIT_WORK() with three arguments which was removed in commit
+  65f27f38446e1 ("WorkStruct: Pass the work_struct pointer instead of context data")
+  which is v2.6.20-rc1
 
-NAND controller driver implements ->exec_op() to replace legacy hooks,
-these specific call-back method to execute NAND operations.
+- Provides ->inquire_socket and uses socket_cap_t which was removed in
+  commit
+  b7949fdacbe00 ("[PCMCIA] Remove inquire_socket")
+  which is 2.5.72
 
-Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+- Provides ->get_io_map which was removed in commit
+  d7de1b64a23b9 ("[PCMCIA] pcmcia-2: Remove get_io_map and get_mem_map socket methods.")
+  which is 2.5.66
+
+Remove VRC4173 CARDU from the tree because it never had the luck to be
+successfully compiled. Let it finally find peace in byte heaven.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/mtd/nand/raw/Kconfig                 |   8 +
- drivers/mtd/nand/raw/Makefile                |   1 +
- drivers/mtd/nand/raw/intel-nand-controller.c | 737 +++++++++++++++++++++++++++
- 3 files changed, 746 insertions(+)
- create mode 100644 drivers/mtd/nand/raw/intel-nand-controller.c
 
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index 1203775023ad..dda6e7bf618d 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -461,6 +461,14 @@ config MTD_NAND_ARASAN
- 	  Enables the driver for the Arasan NAND flash controller on
- 	  Zynq Ultrascale+ MPSoC.
+Repost of
+  https://lore.kernel.org/lkml/20200916081629.cfi6svr3yjvzimqs@linutronix.de/
+
+ drivers/pcmcia/Kconfig         |   4 -
+ drivers/pcmcia/Makefile        |   1 -
+ drivers/pcmcia/vrc4173_cardu.c | 591 ---------------------------------
+ drivers/pcmcia/vrc4173_cardu.h | 247 --------------
+ 4 files changed, 843 deletions(-)
+ delete mode 100644 drivers/pcmcia/vrc4173_cardu.c
+ delete mode 100644 drivers/pcmcia/vrc4173_cardu.h
+
+diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+index 82d10b6661c73..35effded335a9 100644
+--- a/drivers/pcmcia/Kconfig
++++ b/drivers/pcmcia/Kconfig
+@@ -244,10 +244,6 @@ config PCMCIA_VRC4171
+ 	tristate "NEC VRC4171 Card Controllers support"
+ 	depends on CPU_VR41XX && ISA && PCMCIA
  
-+config MTD_NAND_INTEL_LGM
-+	tristate "Support for NAND controller on Intel LGM SoC"
-+	depends on OF || COMPILE_TEST
-+	depends on HAS_IOMEM
-+	help
-+	  Enables support for NAND Flash chips on Intel's LGM SoC.
-+	  NAND flash controller interfaced through the External Bus Unit.
-+
- comment "Misc"
- 
- config MTD_SM_COMMON
-diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
-index 2930f5b9015d..9e6037363fc6 100644
---- a/drivers/mtd/nand/raw/Makefile
-+++ b/drivers/mtd/nand/raw/Makefile
-@@ -58,6 +58,7 @@ obj-$(CONFIG_MTD_NAND_STM32_FMC2)	+= stm32_fmc2_nand.o
- obj-$(CONFIG_MTD_NAND_MESON)		+= meson_nand.o
- obj-$(CONFIG_MTD_NAND_CADENCE)		+= cadence-nand-controller.o
- obj-$(CONFIG_MTD_NAND_ARASAN)		+= arasan-nand-controller.o
-+obj-$(CONFIG_MTD_NAND_INTEL_LGM)	+= intel-nand-controller.o
- 
- nand-objs := nand_base.o nand_legacy.o nand_bbt.o nand_timings.o nand_ids.o
- nand-objs += nand_onfi.o
-diff --git a/drivers/mtd/nand/raw/intel-nand-controller.c b/drivers/mtd/nand/raw/intel-nand-controller.c
-new file mode 100644
-index 000000000000..a590cb7de795
---- /dev/null
-+++ b/drivers/mtd/nand/raw/intel-nand-controller.c
-@@ -0,0 +1,737 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/* Copyright (c) 2020 Intel Corporation. */
-+
-+#include <linux/clk.h>
-+#include <linux/completion.h>
-+#include <linux/dmaengine.h>
-+#include <linux/dma-direction.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+
-+#include <linux/mtd/mtd.h>
-+#include <linux/mtd/rawnand.h>
-+#include <linux/mtd/nand_ecc.h>
-+#include <linux/mtd/nand.h>
-+
-+#include <linux/platform_device.h>
-+#include <linux/sched.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <asm/unaligned.h>
-+
-+#define EBU_CLC			0x000
-+#define EBU_CLC_RST		0x00000000u
-+
-+#define EBU_ADDR_SEL(n)		(0x020 + (n) * 4)
-+/* 5 bits 26:22 included for comparison in the ADDR_SELx */
-+#define EBU_ADDR_MASK(x)	((x) << 4)
-+#define EBU_ADDR_SEL_REGEN	0x1
-+
-+#define EBU_BUSCON(n)		(0x060 + (n) * 4)
-+#define EBU_BUSCON_CMULT_V4	0x1
-+#define EBU_BUSCON_RECOVC(n)	((n) << 2)
-+#define EBU_BUSCON_HOLDC(n)	((n) << 4)
-+#define EBU_BUSCON_WAITRDC(n)	((n) << 6)
-+#define EBU_BUSCON_WAITWRC(n)	((n) << 8)
-+#define EBU_BUSCON_BCGEN_CS	0x0
-+#define EBU_BUSCON_SETUP_EN	BIT(22)
-+#define EBU_BUSCON_ALEC		0xC000
-+
-+#define EBU_CON			0x0B0
-+#define EBU_CON_NANDM_EN	BIT(0)
-+#define EBU_CON_NANDM_DIS	0x0
-+#define EBU_CON_CSMUX_E_EN	BIT(1)
-+#define EBU_CON_ALE_P_LOW	BIT(2)
-+#define EBU_CON_CLE_P_LOW	BIT(3)
-+#define EBU_CON_CS_P_LOW	BIT(4)
-+#define EBU_CON_SE_P_LOW	BIT(5)
-+#define EBU_CON_WP_P_LOW	BIT(6)
-+#define EBU_CON_PRE_P_LOW	BIT(7)
-+#define EBU_CON_IN_CS_S(n)	((n) << 8)
-+#define EBU_CON_OUT_CS_S(n)	((n) << 10)
-+#define EBU_CON_LAT_EN_CS_P	((0x3D) << 18)
-+
-+#define EBU_WAIT		0x0B4
-+#define EBU_WAIT_RDBY		BIT(0)
-+#define EBU_WAIT_WR_C		BIT(3)
-+
-+#define HSNAND_CTL1		0x110
-+#define HSNAND_CTL1_ADDR_SHIFT	24
-+
-+#define HSNAND_CTL2		0x114
-+#define HSNAND_CTL2_ADDR_SHIFT	8
-+#define HSNAND_CTL2_CYC_N_V5	(0x2 << 16)
-+
-+#define HSNAND_INT_MSK_CTL	0x124
-+#define HSNAND_INT_MSK_CTL_WR_C	BIT(4)
-+
-+#define HSNAND_INT_STA		0x128
-+#define HSNAND_INT_STA_WR_C	BIT(4)
-+
-+#define HSNAND_CTL		0x130
-+#define HSNAND_CTL_ENABLE_ECC	BIT(0)
-+#define HSNAND_CTL_GO		BIT(2)
-+#define HSNAND_CTL_CE_SEL_CS(n)	BIT(3 + (n))
-+#define HSNAND_CTL_RW_READ	0x0
-+#define HSNAND_CTL_RW_WRITE	BIT(10)
-+#define HSNAND_CTL_ECC_OFF_V8TH	BIT(11)
-+#define HSNAND_CTL_CKFF_EN	0x0
-+#define HSNAND_CTL_MSG_EN	BIT(17)
-+
-+#define HSNAND_PARA0		0x13c
-+#define HSNAND_PARA0_PAGE_V8192	0x3
-+#define HSNAND_PARA0_PIB_V256	(0x3 << 4)
-+#define HSNAND_PARA0_BYP_EN_NP	0x0
-+#define HSNAND_PARA0_BYP_DEC_NP	0x0
-+#define HSNAND_PARA0_TYPE_ONFI	BIT(18)
-+#define HSNAND_PARA0_ADEP_EN	BIT(21)
-+
-+#define HSNAND_CMSG_0		0x150
-+#define HSNAND_CMSG_1		0x154
-+
-+#define HSNAND_ALE_OFFS		BIT(2)
-+#define HSNAND_CLE_OFFS		BIT(3)
-+#define HSNAND_CS_OFFS		BIT(4)
-+
-+#define HSNAND_ECC_OFFSET	0x008
-+
-+#define NAND_DATA_IFACE_CHECK_ONLY	-1
-+
-+#define MAX_CS	2
-+
-+#define HZ_PER_MHZ	1000000L
-+#define USEC_PER_SEC	1000000L
-+
-+struct ebu_nand_cs {
-+	void __iomem *chipaddr;
-+	dma_addr_t nand_pa;
-+	u32 addr_sel;
-+};
-+
-+struct ebu_nand_controller {
-+	struct nand_controller controller;
-+	struct nand_chip chip;
-+	struct device *dev;
-+	void __iomem *ebu;
-+	void __iomem *hsnand;
-+	struct dma_chan *dma_tx;
-+	struct dma_chan *dma_rx;
-+	struct completion dma_access_complete;
-+	unsigned long clk_rate;
-+	struct clk *clk;
-+	u32 nd_para0;
-+	u8 cs_num;
-+	struct ebu_nand_cs cs[MAX_CS];
-+};
-+
-+static inline struct ebu_nand_controller *nand_to_ebu(struct nand_chip *chip)
-+{
-+	return container_of(chip, struct ebu_nand_controller, chip);
-+}
-+
-+static int ebu_nand_waitrdy(struct nand_chip *chip, unsigned int time_out)
-+{
-+	struct ebu_nand_controller *ctrl = nand_to_ebu(chip);
-+	u32 status;
-+
-+	return readl_poll_timeout(ctrl->ebu + EBU_WAIT, status,
-+				  (status & EBU_WAIT_RDBY) ||
-+				  (status & EBU_WAIT_WR_C), 20, time_out);
-+}
-+
-+static u8 ebu_nand_readb(struct nand_chip *chip)
-+{
-+	struct ebu_nand_controller *ebu_host = nand_get_controller_data(chip);
-+	u8 cs_num = ebu_host->cs_num;
-+	u8 val;
-+
-+	val = readb(ebu_host->cs[cs_num].chipaddr + HSNAND_CS_OFFS);
-+	ebu_nand_waitrdy(chip, 1000);
-+	return val;
-+}
-+
-+static void ebu_nand_writeb(struct nand_chip *chip, u32 offset, u8 value)
-+{
-+	struct ebu_nand_controller *ebu_host = nand_get_controller_data(chip);
-+	u8 cs_num = ebu_host->cs_num;
-+
-+	writeb(value, ebu_host->cs[cs_num].chipaddr + offset);
-+	ebu_nand_waitrdy(chip, 1000);
-+}
-+
-+static void ebu_read_buf(struct nand_chip *chip, u_char *buf, unsigned int len)
-+{
-+	int i;
-+
-+	for (i = 0; i < len; i++)
-+		buf[i] = ebu_nand_readb(chip);
-+}
-+
-+static void ebu_write_buf(struct nand_chip *chip, const u_char *buf, int len)
-+{
-+	int i;
-+
-+	for (i = 0; i < len; i++)
-+		ebu_nand_writeb(chip, HSNAND_CS_OFFS, buf[i]);
-+}
-+
-+static void ebu_nand_disable(struct nand_chip *chip)
-+{
-+	struct ebu_nand_controller *ebu_host = nand_get_controller_data(chip);
-+
-+	writel(0, ebu_host->ebu + EBU_CON);
-+}
-+
-+static void ebu_select_chip(struct nand_chip *chip)
-+{
-+	struct ebu_nand_controller *ebu_host = nand_get_controller_data(chip);
-+	void __iomem *nand_con = ebu_host->ebu + EBU_CON;
-+	u32 cs = ebu_host->cs_num;
-+
-+	writel(EBU_CON_NANDM_EN | EBU_CON_CSMUX_E_EN | EBU_CON_CS_P_LOW |
-+	       EBU_CON_SE_P_LOW | EBU_CON_WP_P_LOW | EBU_CON_PRE_P_LOW |
-+	       EBU_CON_IN_CS_S(cs) | EBU_CON_OUT_CS_S(cs) |
-+	       EBU_CON_LAT_EN_CS_P, nand_con);
-+}
-+
-+static void ebu_nand_setup_timing(struct ebu_nand_controller *ctrl,
-+				  const struct nand_sdr_timings *timings)
-+{
-+	unsigned int rate = clk_get_rate(ctrl->clk) / HZ_PER_MHZ;
-+	unsigned int period = DIV_ROUND_UP(USEC_PER_SEC, rate);
-+	u32 trecov, thold, twrwait, trdwait;
-+	u32 reg = 0;
-+
-+	trecov = DIV_ROUND_UP(max(timings->tREA_max, timings->tREH_min),
-+			      period);
-+	reg |= EBU_BUSCON_RECOVC(trecov);
-+
-+	thold = DIV_ROUND_UP(max(timings->tDH_min, timings->tDS_min), period);
-+	reg |= EBU_BUSCON_HOLDC(thold);
-+
-+	trdwait = DIV_ROUND_UP(max(timings->tRC_min, timings->tREH_min),
-+			       period);
-+	reg |= EBU_BUSCON_WAITRDC(trdwait);
-+
-+	twrwait = DIV_ROUND_UP(max(timings->tWC_min, timings->tWH_min), period);
-+	reg |= EBU_BUSCON_WAITWRC(twrwait);
-+
-+	reg |= EBU_BUSCON_CMULT_V4 | EBU_BUSCON_BCGEN_CS | EBU_BUSCON_ALEC |
-+		EBU_BUSCON_SETUP_EN;
-+
-+	writel(reg, ctrl->ebu + EBU_BUSCON(ctrl->cs_num));
-+}
-+
-+static int ebu_nand_set_timings(struct nand_chip *chip, int csline,
-+				const struct nand_interface_config *conf)
-+{
-+	struct ebu_nand_controller *ctrl = nand_to_ebu(chip);
-+	const struct nand_sdr_timings *timings;
-+
-+	timings = nand_get_sdr_timings(conf);
-+	if (IS_ERR(timings))
-+		return PTR_ERR(timings);
-+
-+	if (csline == NAND_DATA_IFACE_CHECK_ONLY)
-+		return 0;
-+
-+	ebu_nand_setup_timing(ctrl, timings);
-+
-+	return 0;
-+}
-+
-+static int ebu_nand_ooblayout_ecc(struct mtd_info *mtd, int section,
-+				  struct mtd_oob_region *oobregion)
-+{
-+	struct nand_chip *chip = mtd_to_nand(mtd);
-+
-+	if (section)
-+		return -ERANGE;
-+
-+	oobregion->offset = HSNAND_ECC_OFFSET;
-+	oobregion->length = chip->ecc.total;
-+
-+	return 0;
-+}
-+
-+static int ebu_nand_ooblayout_free(struct mtd_info *mtd, int section,
-+				   struct mtd_oob_region *oobregion)
-+{
-+	struct nand_chip *chip = mtd_to_nand(mtd);
-+
-+	if (section)
-+		return -ERANGE;
-+
-+	oobregion->offset = chip->ecc.total + HSNAND_ECC_OFFSET;
-+	oobregion->length = mtd->oobsize - oobregion->offset;
-+
-+	return 0;
-+}
-+
-+static const struct mtd_ooblayout_ops ebu_nand_ooblayout_ops = {
-+	.ecc = ebu_nand_ooblayout_ecc,
-+	.free = ebu_nand_ooblayout_free,
-+};
-+
-+static void ebu_dma_rx_callback(void *cookie)
-+{
-+	struct ebu_nand_controller *ebu_host = cookie;
-+
-+	dmaengine_terminate_async(ebu_host->dma_rx);
-+
-+	complete(&ebu_host->dma_access_complete);
-+}
-+
-+static void ebu_dma_tx_callback(void *cookie)
-+{
-+	struct ebu_nand_controller *ebu_host = cookie;
-+
-+	dmaengine_terminate_async(ebu_host->dma_tx);
-+
-+	complete(&ebu_host->dma_access_complete);
-+}
-+
-+static int ebu_dma_start(struct ebu_nand_controller *ebu_host, u32 dir,
-+			 const u8 *buf, u32 len)
-+{
-+	struct dma_async_tx_descriptor *tx;
-+	struct completion *dma_completion;
-+	dma_async_tx_callback callback;
-+	struct dma_chan *chan;
-+	dma_cookie_t cookie;
-+	unsigned long flags = DMA_CTRL_ACK | DMA_PREP_INTERRUPT;
-+	dma_addr_t buf_dma;
-+	int ret;
-+	u32 timeout;
-+
-+	if (dir == DMA_DEV_TO_MEM) {
-+		chan = ebu_host->dma_rx;
-+		dma_completion = &ebu_host->dma_access_complete;
-+		callback = ebu_dma_rx_callback;
-+	} else {
-+		chan = ebu_host->dma_tx;
-+		dma_completion = &ebu_host->dma_access_complete;
-+		callback = ebu_dma_tx_callback;
-+	}
-+
-+	buf_dma = dma_map_single(chan->device->dev, (void *)buf, len, dir);
-+	if (dma_mapping_error(chan->device->dev, buf_dma)) {
-+		dev_err(ebu_host->dev, "Failed to map DMA buffer\n");
-+		ret = -EIO;
-+		goto err_unmap;
-+	}
-+
-+	tx = dmaengine_prep_slave_single(chan, buf_dma, len, dir, flags);
-+	if (!tx)
-+		return -ENXIO;
-+
-+	tx->callback = callback;
-+	tx->callback_param = ebu_host;
-+	cookie = tx->tx_submit(tx);
-+
-+	ret = dma_submit_error(cookie);
-+	if (ret) {
-+		dev_err(ebu_host->dev, "dma_submit_error %d\n", cookie);
-+		ret = -EIO;
-+		goto err_unmap;
-+	}
-+
-+	init_completion(dma_completion);
-+	dma_async_issue_pending(chan);
-+
-+	/* Wait DMA to finish the data transfer.*/
-+	timeout = wait_for_completion_timeout(dma_completion, msecs_to_jiffies(1000));
-+	if (!timeout) {
-+		dev_err(ebu_host->dev, "I/O Error in DMA RX (status %d)\n",
-+			dmaengine_tx_status(chan, cookie, NULL));
-+		dmaengine_terminate_sync(chan);
-+		ret = -ETIMEDOUT;
-+		goto err_unmap;
-+	}
-+
-+	return 0;
-+
-+err_unmap:
-+	dma_unmap_single(ebu_host->dev, buf_dma, len, dir);
-+
-+	return ret;
-+}
-+
-+static void ebu_nand_trigger(struct ebu_nand_controller *ebu_host,
-+			     int page, u32 cmd)
-+{
-+	unsigned int val;
-+
-+	val = cmd | (page & 0xFF) << HSNAND_CTL1_ADDR_SHIFT;
-+	writel(val, ebu_host->hsnand + HSNAND_CTL1);
-+	val = (page & 0xFFFF00) >> 8 | HSNAND_CTL2_CYC_N_V5;
-+	writel(val, ebu_host->hsnand + HSNAND_CTL2);
-+
-+	writel(ebu_host->nd_para0, ebu_host->hsnand + HSNAND_PARA0);
-+
-+	/* clear first, will update later */
-+	writel(0xFFFFFFFF, ebu_host->hsnand + HSNAND_CMSG_0);
-+	writel(0xFFFFFFFF, ebu_host->hsnand + HSNAND_CMSG_1);
-+
-+	writel(HSNAND_INT_MSK_CTL_WR_C,
-+	       ebu_host->hsnand + HSNAND_INT_MSK_CTL);
-+
-+	if (!cmd)
-+		val = HSNAND_CTL_RW_READ;
-+	else
-+		val = HSNAND_CTL_RW_WRITE;
-+
-+	writel(HSNAND_CTL_MSG_EN | HSNAND_CTL_CKFF_EN |
-+	       HSNAND_CTL_ECC_OFF_V8TH | HSNAND_CTL_CE_SEL_CS(ebu_host->cs_num) |
-+	       HSNAND_CTL_ENABLE_ECC | HSNAND_CTL_GO | val,
-+	       ebu_host->hsnand + HSNAND_CTL);
-+}
-+
-+static int ebu_nand_read_page_hwecc(struct nand_chip *chip, u8 *buf,
-+				    int oob_required, int page)
-+{
-+	struct mtd_info *mtd = nand_to_mtd(chip);
-+	struct ebu_nand_controller *ebu_host = nand_get_controller_data(chip);
-+	int ret, reg_data;
-+
-+	ebu_nand_trigger(ebu_host, page, NAND_CMD_READ0);
-+
-+	ret = ebu_dma_start(ebu_host, DMA_DEV_TO_MEM, buf, mtd->writesize);
-+	if (ret)
-+		return ret;
-+
-+	if (oob_required)
-+		chip->ecc.read_oob(chip, page);
-+
-+	reg_data = readl(ebu_host->hsnand + HSNAND_CTL);
-+	reg_data &= ~HSNAND_CTL_GO;
-+	writel(reg_data, ebu_host->hsnand + HSNAND_CTL);
-+
-+	return 0;
-+}
-+
-+static int ebu_nand_write_page_hwecc(struct nand_chip *chip, const u8 *buf,
-+				     int oob_required, int page)
-+{
-+	struct mtd_info *mtd = nand_to_mtd(chip);
-+	struct ebu_nand_controller *ebu_host = nand_get_controller_data(chip);
-+	void __iomem *int_sta = ebu_host->hsnand + HSNAND_INT_STA;
-+	int reg_data, ret, val;
-+	u32 reg;
-+
-+	ebu_nand_trigger(ebu_host, page, NAND_CMD_SEQIN);
-+
-+	ret = ebu_dma_start(ebu_host, DMA_MEM_TO_DEV, buf, mtd->writesize);
-+	if (ret)
-+		return ret;
-+
-+	if (oob_required) {
-+		reg = get_unaligned_le32(chip->oob_poi);
-+		writel(reg, ebu_host->hsnand + HSNAND_CMSG_0);
-+
-+		reg = get_unaligned_le32(chip->oob_poi + 4);
-+		writel(reg, ebu_host->hsnand + HSNAND_CMSG_1);
-+	}
-+
-+	ret = readl_poll_timeout_atomic(int_sta, val, !(val & HSNAND_INT_STA_WR_C),
-+					10, 1000);
-+	if (ret)
-+		return ret;
-+
-+	reg_data = readl(ebu_host->hsnand + HSNAND_CTL);
-+	reg_data &= ~HSNAND_CTL_GO;
-+	writel(reg_data, ebu_host->hsnand + HSNAND_CTL);
-+
-+	return 0;
-+}
-+
-+static const u8 ecc_strength[] = { 1, 1, 4, 8, 24, 32, 40, 60, };
-+
-+static int ebu_nand_attach_chip(struct nand_chip *chip)
-+{
-+	struct mtd_info *mtd = nand_to_mtd(chip);
-+	struct ebu_nand_controller *ebu_host = nand_get_controller_data(chip);
-+	u32 ecc_steps, ecc_bytes, ecc_total, pagesize, pg_per_blk;
-+	u32 ecc_strength_ds = chip->ecc.strength;
-+	u32 ecc_size = chip->ecc.size;
-+	u32 writesize = mtd->writesize;
-+	u32 blocksize = mtd->erasesize;
-+	int bch_algo, start, val;
-+
-+	if (chip->ecc.mode != NAND_ECC_HW)
-+		return 0;
-+
-+	/* Default to an ECC size of 512 */
-+	if (!chip->ecc.size)
-+		chip->ecc.size = 512;
-+
-+	switch (ecc_size) {
-+	case 512:
-+		start = 1;
-+		if (!ecc_strength_ds)
-+			ecc_strength_ds = 4;
-+		break;
-+	case 1024:
-+		start = 4;
-+		if (!ecc_strength_ds)
-+			ecc_strength_ds = 32;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	/* BCH ECC algorithm Settings for number of bits per 512B/1024B */
-+	bch_algo = round_up(start + 1, 4);
-+	for (val = start; val < bch_algo; val++) {
-+		if (ecc_strength_ds == ecc_strength[val])
-+			break;
-+	}
-+	if (val == bch_algo)
-+		return -EINVAL;
-+
-+	if (ecc_strength_ds == 8)
-+		ecc_bytes = 14;
-+	else
-+		ecc_bytes = DIV_ROUND_UP(ecc_strength_ds * fls(8 * ecc_size), 8);
-+
-+	ecc_steps = writesize / ecc_size;
-+	ecc_total = ecc_steps * ecc_bytes;
-+	if ((ecc_total + 8) > mtd->oobsize)
-+		return -ERANGE;
-+
-+	chip->ecc.total = ecc_total;
-+	pagesize = fls(writesize >> 11);
-+	if (pagesize > HSNAND_PARA0_PAGE_V8192)
-+		return -ERANGE;
-+
-+	pg_per_blk = fls((blocksize / writesize) >> 6) / 8;
-+	if (pg_per_blk > HSNAND_PARA0_PIB_V256)
-+		return -ERANGE;
-+
-+	ebu_host->nd_para0 = pagesize | pg_per_blk | HSNAND_PARA0_BYP_EN_NP |
-+			     HSNAND_PARA0_BYP_DEC_NP | HSNAND_PARA0_ADEP_EN |
-+			     HSNAND_PARA0_TYPE_ONFI | (val << 29);
-+
-+	mtd_set_ooblayout(mtd, &ebu_nand_ooblayout_ops);
-+	chip->ecc.read_page = ebu_nand_read_page_hwecc;
-+	chip->ecc.write_page = ebu_nand_write_page_hwecc;
-+
-+	return 0;
-+}
-+
-+static int ebu_nand_exec_op(struct nand_chip *chip,
-+			    const struct nand_operation *op, bool check_only)
-+{
-+	const struct nand_op_instr *instr = NULL;
-+	unsigned int op_id;
-+	int i, time_out, ret = 0;
-+
-+	if (check_only)
-+		return 0;
-+
-+	ebu_select_chip(chip);
-+	for (op_id = 0; op_id < op->ninstrs; op_id++) {
-+		instr = &op->instrs[op_id];
-+
-+		switch (instr->type) {
-+		case NAND_OP_CMD_INSTR:
-+			ebu_nand_writeb(chip, HSNAND_CLE_OFFS | HSNAND_CS_OFFS,
-+					instr->ctx.cmd.opcode);
-+			break;
-+
-+		case NAND_OP_ADDR_INSTR:
-+			for (i = 0; i < instr->ctx.addr.naddrs; i++)
-+				ebu_nand_writeb(chip,
-+						HSNAND_ALE_OFFS | HSNAND_CS_OFFS,
-+						instr->ctx.addr.addrs[i]);
-+			break;
-+
-+		case NAND_OP_DATA_IN_INSTR:
-+			ebu_read_buf(chip, instr->ctx.data.buf.in,
-+				     instr->ctx.data.len);
-+			break;
-+
-+		case NAND_OP_DATA_OUT_INSTR:
-+			ebu_write_buf(chip, instr->ctx.data.buf.out,
-+				      instr->ctx.data.len);
-+			break;
-+
-+		case NAND_OP_WAITRDY_INSTR:
-+			time_out = instr->ctx.waitrdy.timeout_ms * 1000;
-+			ret = ebu_nand_waitrdy(chip, time_out);
-+			break;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct nand_controller_ops ebu_nand_controller_ops = {
-+	.attach_chip = ebu_nand_attach_chip,
-+	.setup_interface = ebu_nand_set_timings,
-+	.exec_op = ebu_nand_exec_op,
-+};
-+
-+static void ebu_dma_cleanup(struct ebu_nand_controller *ebu_host)
-+{
-+	if (ebu_host->dma_rx)
-+		dma_release_channel(ebu_host->dma_rx);
-+
-+	if (ebu_host->dma_tx)
-+		dma_release_channel(ebu_host->dma_tx);
-+}
-+
-+static int ebu_nand_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct ebu_nand_controller *ebu_host;
-+	struct nand_chip *nand;
-+	struct mtd_info *mtd;
-+	struct resource *res;
-+	char *resname;
-+	int ret, i;
-+	u32 reg;
-+
-+	ebu_host = devm_kzalloc(dev, sizeof(*ebu_host), GFP_KERNEL);
-+	if (!ebu_host)
-+		return -ENOMEM;
-+
-+	ebu_host->dev = dev;
-+	nand_controller_init(&ebu_host->controller);
-+
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ebunand");
-+	ebu_host->ebu = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(ebu_host->ebu))
-+		return PTR_ERR(ebu_host->ebu);
-+
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hsnand");
-+	ebu_host->hsnand = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(ebu_host->hsnand))
-+		return PTR_ERR(ebu_host->hsnand);
-+
-+	ret = device_property_read_u32(dev, "nand,cs", &reg);
-+	if (ret) {
-+		dev_err(dev, "failed to get chip select: %d\n", ret);
-+		return ret;
-+	}
-+	ebu_host->cs_num = reg;
-+
-+	for (i = 0; i < MAX_CS; i++) {
-+		resname = devm_kasprintf(dev, GFP_KERNEL, "nand_cs%d", i);
-+		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-+						   resname);
-+		ebu_host->cs[i].chipaddr = devm_ioremap_resource(dev, res);
-+		ebu_host->cs[i].nand_pa = res->start;
-+		if (IS_ERR(ebu_host->cs[i].chipaddr))
-+			return PTR_ERR(ebu_host->cs[i].chipaddr);
-+	}
-+
-+	ebu_host->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(ebu_host->clk))
-+		return dev_err_probe(dev, PTR_ERR(ebu_host->clk),
-+				     "failed to get clock\n");
-+
-+	ret = clk_prepare_enable(ebu_host->clk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable clock: %d\n", ret);
-+		return ret;
-+	}
-+	ebu_host->clk_rate = clk_get_rate(ebu_host->clk);
-+
-+	ebu_host->dma_tx = dma_request_chan(dev, "tx");
-+	if (IS_ERR(ebu_host->dma_tx))
-+		return dev_err_probe(dev, PTR_ERR(ebu_host->dma_tx),
-+				     "failed to request DMA tx chan!.\n");
-+
-+	ebu_host->dma_rx = dma_request_chan(dev, "rx");
-+	if (IS_ERR(ebu_host->dma_rx))
-+		return dev_err_probe(dev, PTR_ERR(ebu_host->dma_rx),
-+				     "failed to request DMA rx chan!.\n");
-+
-+	for (i = 0; i < MAX_CS; i++) {
-+		resname = devm_kasprintf(dev, GFP_KERNEL, "addr_sel%d", i);
-+		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-+						   resname);
-+		if (!res)
-+			return -EINVAL;
-+		ebu_host->cs[i].addr_sel = res->start;
-+		writel(ebu_host->cs[i].addr_sel | EBU_ADDR_MASK(5) |
-+		       EBU_ADDR_SEL_REGEN, ebu_host->ebu + EBU_ADDR_SEL(i));
-+	}
-+
-+	nand_set_flash_node(&ebu_host->chip, dev->of_node);
-+	if (!mtd->name) {
-+		dev_err(ebu_host->dev, "NAND label property is mandatory\n");
-+		return -EINVAL;
-+	}
-+
-+	mtd = nand_to_mtd(&ebu_host->chip);
-+	mtd->dev.parent = dev;
-+	ebu_host->dev = dev;
-+
-+	platform_set_drvdata(pdev, ebu_host);
-+	nand_set_controller_data(&ebu_host->chip, ebu_host);
-+
-+	nand = &ebu_host->chip;
-+	nand->controller = &ebu_host->controller;
-+	nand->controller->ops = &ebu_nand_controller_ops;
-+
-+	/* Scan to find existence of the device */
-+	ret = nand_scan(&ebu_host->chip, 1);
-+	if (ret)
-+		goto err_cleanup_dma;
-+
-+	ret = mtd_device_register(mtd, NULL, 0);
-+	if (ret)
-+		goto err_clean_nand;
-+
-+	return 0;
-+
-+err_clean_nand:
-+	nand_cleanup(&ebu_host->chip);
-+err_cleanup_dma:
-+	ebu_dma_cleanup(ebu_host);
-+	clk_disable_unprepare(ebu_host->clk);
-+
-+	return ret;
-+}
-+
-+static int ebu_nand_remove(struct platform_device *pdev)
-+{
-+	struct ebu_nand_controller *ebu_host = platform_get_drvdata(pdev);
-+	int ret;
-+
-+	ret = mtd_device_unregister(nand_to_mtd(&ebu_host->chip));
-+	WARN_ON(ret);
-+	nand_cleanup(&ebu_host->chip);
-+	ebu_nand_disable(&ebu_host->chip);
-+	ebu_dma_cleanup(ebu_host);
-+	clk_disable_unprepare(ebu_host->clk);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id ebu_nand_match[] = {
-+	{ .compatible = "intel,nand-controller", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, ebu_nand_match);
-+
-+static struct platform_driver ebu_nand_driver = {
-+	.probe = ebu_nand_probe,
-+	.remove = ebu_nand_remove,
-+	.driver = {
-+		.name = "intel-nand-controller",
-+		.of_match_table = ebu_nand_match,
-+	},
-+
-+};
-+module_platform_driver(ebu_nand_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Vadivel Murugan R <vadivel.muruganx.ramuthevar@intel.com>");
-+MODULE_DESCRIPTION("Intel's LGM External Bus NAND Controller driver");
+-config PCMCIA_VRC4173
+-	tristate "NEC VRC4173 CARDU support"
+-	depends on CPU_VR41XX && PCI && PCMCIA
+-
+ config OMAP_CF
+ 	tristate "OMAP CompactFlash Controller"
+ 	depends on PCMCIA && ARCH_OMAP16XX
+diff --git a/drivers/pcmcia/Makefile b/drivers/pcmcia/Makefile
+index 01779c5c45f35..d82c07c4806bd 100644
+--- a/drivers/pcmcia/Makefile
++++ b/drivers/pcmcia/Makefile
+@@ -30,7 +30,6 @@ obj-$(CONFIG_PCMCIA_SA1100)			+= sa1100_cs.o
+ obj-$(CONFIG_PCMCIA_SA1111)			+= sa1111_cs.o
+ obj-$(CONFIG_PCMCIA_BCM63XX)			+= bcm63xx_pcmcia.o
+ obj-$(CONFIG_PCMCIA_VRC4171)			+= vrc4171_card.o
+-obj-$(CONFIG_PCMCIA_VRC4173)			+= vrc4173_cardu.o
+ obj-$(CONFIG_OMAP_CF)				+= omap_cf.o
+ obj-$(CONFIG_AT91_CF)				+= at91_cf.o
+ obj-$(CONFIG_ELECTRA_CF)			+= electra_cf.o
+diff --git a/drivers/pcmcia/vrc4173_cardu.c b/drivers/pcmcia/vrc4173_cardu.c
+deleted file mode 100644
+index 9fb0c3addfd40..0000000000000
+--- a/drivers/pcmcia/vrc4173_cardu.c
++++ /dev/null
+@@ -1,591 +0,0 @@
+-/*
+- * FILE NAME
+- *	drivers/pcmcia/vrc4173_cardu.c
+- *
+- * BRIEF MODULE DESCRIPTION
+- * 	NEC VRC4173 CARDU driver for Socket Services
+- *	(This device doesn't support CardBus. it is supporting only 16bit PC Card.)
+- *
+- * Copyright 2002,2003 Yoichi Yuasa <yuasa@linux-mips.org>
+- *
+- *  This program is free software; you can redistribute it and/or modify it
+- *  under the terms of the GNU General Public License as published by the
+- *  Free Software Foundation; either version 2 of the License, or (at your
+- *  option) any later version.
+- *
+- *  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+- *  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+- *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+- *  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+- *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+- *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- *
+- *  You should have received a copy of the GNU General Public License along
+- *  with this program; if not, write to the Free Software Foundation, Inc.,
+- *  675 Mass Ave, Cambridge, MA 02139, USA.
+- */
+-#include <linux/init.h>
+-#include <linux/module.h>
+-#include <linux/pci.h>
+-#include <linux/spinlock.h>
+-#include <linux/types.h>
+-
+-#include <asm/io.h>
+-
+-#include <pcmcia/ss.h>
+-
+-#include "vrc4173_cardu.h"
+-
+-MODULE_DESCRIPTION("NEC VRC4173 CARDU driver for Socket Services");
+-MODULE_AUTHOR("Yoichi Yuasa <yuasa@linux-mips.org>");
+-MODULE_LICENSE("GPL");
+-
+-static int vrc4173_cardu_slots;
+-
+-static vrc4173_socket_t cardu_sockets[CARDU_MAX_SOCKETS];
+-
+-extern struct socket_info_t *pcmcia_register_socket (int slot,
+-                                                     struct pccard_operations *vtable,
+-                                                     int use_bus_pm);
+-extern void pcmcia_unregister_socket(struct socket_info_t *s);
+-
+-static inline uint8_t exca_readb(vrc4173_socket_t *socket, uint16_t offset)
+-{
+-	return readb(socket->base + EXCA_REGS_BASE + offset);
+-}
+-
+-static inline uint16_t exca_readw(vrc4173_socket_t *socket, uint16_t offset)
+-{
+-	uint16_t val;
+-
+-	val = readb(socket->base + EXCA_REGS_BASE + offset);
+-	val |= (u16)readb(socket->base + EXCA_REGS_BASE + offset + 1) << 8;
+-
+-	return val;
+-}
+-
+-static inline void exca_writeb(vrc4173_socket_t *socket, uint16_t offset, uint8_t val)
+-{
+-	writeb(val, socket->base + EXCA_REGS_BASE + offset);
+-}
+-
+-static inline void exca_writew(vrc4173_socket_t *socket, uint8_t offset, uint16_t val)
+-{
+-	writeb((u8)val, socket->base + EXCA_REGS_BASE + offset);
+-	writeb((u8)(val >> 8), socket->base + EXCA_REGS_BASE + offset + 1);
+-}
+-
+-static inline uint32_t cardbus_socket_readl(vrc4173_socket_t *socket, u16 offset)
+-{
+-	return readl(socket->base + CARDBUS_SOCKET_REGS_BASE + offset);
+-}
+-
+-static inline void cardbus_socket_writel(vrc4173_socket_t *socket, u16 offset, uint32_t val)
+-{
+-	writel(val, socket->base + CARDBUS_SOCKET_REGS_BASE + offset);
+-}
+-
+-static void cardu_pciregs_init(struct pci_dev *dev)
+-{
+-	u32 syscnt;
+-	u16 brgcnt;
+-	u8 devcnt;
+-
+-	pci_write_config_dword(dev, 0x1c, 0x10000000);
+-	pci_write_config_dword(dev, 0x20, 0x17fff000);
+-	pci_write_config_dword(dev, 0x2c, 0);
+-	pci_write_config_dword(dev, 0x30, 0xfffc);
+-
+-	pci_read_config_word(dev, BRGCNT, &brgcnt);
+-	brgcnt &= ~IREQ_INT;
+-	pci_write_config_word(dev, BRGCNT, brgcnt);
+-
+-	pci_read_config_dword(dev, SYSCNT, &syscnt);
+-	syscnt &= ~(BAD_VCC_REQ_DISB|PCPCI_EN|CH_ASSIGN_MASK|SUB_ID_WR_EN|PCI_CLK_RIN);
+-	syscnt |= (CH_ASSIGN_NODMA|ASYN_INT_MODE);
+-	pci_write_config_dword(dev, SYSCNT, syscnt);
+-
+-	pci_read_config_byte(dev, DEVCNT, &devcnt);
+-	devcnt &= ~(ZOOM_VIDEO_EN|SR_PCI_INT_SEL_MASK|PCI_INT_MODE|IRQ_MODE);
+-	devcnt |= (SR_PCI_INT_SEL_NONE|IFG);
+-	pci_write_config_byte(dev, DEVCNT, devcnt);
+-
+-	pci_write_config_byte(dev, CHIPCNT, S_PREF_DISB);
+-
+-	pci_write_config_byte(dev, SERRDIS, 0);
+-}
+-
+-static int cardu_init(unsigned int slot)
+-{
+-	vrc4173_socket_t *socket = &cardu_sockets[slot];
+-
+-	cardu_pciregs_init(socket->dev);
+-
+-	/* CARD_SC bits are cleared by reading CARD_SC. */
+-	exca_writeb(socket, GLO_CNT, 0);
+-
+-	socket->cap.features |= SS_CAP_PCCARD | SS_CAP_PAGE_REGS;
+-	socket->cap.irq_mask = 0;
+-	socket->cap.map_size = 0x1000;
+-	socket->cap.pci_irq  = socket->dev->irq;
+-	socket->events = 0;
+-	spin_lock_init(socket->event_lock);
+-
+-	/* Enable PC Card status interrupts */
+-	exca_writeb(socket, CARD_SCI, CARD_DT_EN|RDY_EN|BAT_WAR_EN|BAT_DEAD_EN);
+-
+-	return 0;
+-}
+-
+-static int cardu_register_callback(unsigned int sock,
+-                                           void (*handler)(void *, unsigned int),
+-                                           void * info)
+-{
+-	vrc4173_socket_t *socket = &cardu_sockets[sock];
+-
+-	socket->handler = handler;
+-	socket->info = info;
+-
+-	return 0;
+-}
+-
+-static int cardu_inquire_socket(unsigned int sock, socket_cap_t *cap)
+-{
+-	vrc4173_socket_t *socket = &cardu_sockets[sock];
+-
+-	*cap = socket->cap;
+-
+-	return 0;
+-}
+-
+-static int cardu_get_status(unsigned int sock, u_int *value)
+-{
+-	vrc4173_socket_t *socket = &cardu_sockets[sock];
+-	uint32_t state;
+-	uint8_t status;
+-	u_int val = 0;
+-
+-	status = exca_readb(socket, IF_STATUS);
+-	if (status & CARD_PWR) val |= SS_POWERON;
+-	if (status & READY) val |= SS_READY;
+-	if (status & CARD_WP) val |= SS_WRPROT;
+-	if ((status & (CARD_DETECT1|CARD_DETECT2)) == (CARD_DETECT1|CARD_DETECT2))
+-		val |= SS_DETECT;
+-	if (exca_readb(socket, INT_GEN_CNT) & CARD_TYPE_IO) {
+-		if (status & STSCHG) val |= SS_STSCHG;
+-	} else {
+-		status &= BV_DETECT_MASK;
+-		if (status != BV_DETECT_GOOD) {
+-			if (status == BV_DETECT_WARN) val |= SS_BATWARN;
+-			else val |= SS_BATDEAD;
+-		}
+-	}
+-
+-	state = cardbus_socket_readl(socket, SKT_PRE_STATE);
+-	if (state & VOL_3V_CARD_DT) val |= SS_3VCARD;
+-	if (state & VOL_XV_CARD_DT) val |= SS_XVCARD;
+-	if (state & CB_CARD_DT) val |= SS_CARDBUS;
+-	if (!(state &
+-	      (VOL_YV_CARD_DT|VOL_XV_CARD_DT|VOL_3V_CARD_DT|VOL_5V_CARD_DT|CCD20|CCD10)))
+-		val |= SS_PENDING;
+-
+-	*value = val;
+-
+-	return 0;
+-}
+-
+-static inline uint8_t set_Vcc_value(u_char Vcc)
+-{
+-	switch (Vcc) {
+-	case 33:
+-		return VCC_3V;
+-	case 50:
+-		return VCC_5V;
+-	}
+-
+-	return VCC_0V;
+-}
+-
+-static inline uint8_t set_Vpp_value(u_char Vpp)
+-{
+-	switch (Vpp) {
+-	case 33:
+-	case 50:
+-		return VPP_VCC;
+-	case 120:
+-		return VPP_12V;
+-	}
+-
+-	return VPP_0V;
+-}
+-
+-static int cardu_set_socket(unsigned int sock, socket_state_t *state)
+-{
+-	vrc4173_socket_t *socket = &cardu_sockets[sock];
+-	uint8_t val;
+-
+-	if (((state->Vpp == 33) || (state->Vpp == 50)) && (state->Vpp != state->Vcc))
+-			return -EINVAL;
+-
+-	val = set_Vcc_value(state->Vcc);
+-	val |= set_Vpp_value(state->Vpp);
+-	if (state->flags & SS_OUTPUT_ENA) val |= CARD_OUT_EN;
+-	exca_writeb(socket, PWR_CNT, val);
+-
+-	val = exca_readb(socket, INT_GEN_CNT) & CARD_REST0;
+-	if (state->flags & SS_RESET) val &= ~CARD_REST0;
+-	else val |= CARD_REST0;
+-	if (state->flags & SS_IOCARD) val |= CARD_TYPE_IO;
+-	exca_writeb(socket, INT_GEN_CNT, val);
+-
+-	return 0;
+-}
+-
+-static int cardu_get_io_map(unsigned int sock, struct pccard_io_map *io)
+-{
+-	vrc4173_socket_t *socket = &cardu_sockets[sock];
+-	uint8_t ioctl, window;
+-	u_char map;
+-
+-	map = io->map;
+-	if (map > 1)
+-		return -EINVAL;
+-
+-	io->start = exca_readw(socket, IO_WIN_SA(map));
+-	io->stop = exca_readw(socket, IO_WIN_EA(map));
+-
+-	ioctl = exca_readb(socket, IO_WIN_CNT);
+-	window = exca_readb(socket, ADR_WIN_EN);
+-	io->flags  = (window & IO_WIN_EN(map)) ? MAP_ACTIVE : 0;
+-	if (ioctl & IO_WIN_DATA_AUTOSZ(map))
+-		io->flags |= MAP_AUTOSZ;
+-	else if (ioctl & IO_WIN_DATA_16BIT(map))
+-		io->flags |= MAP_16BIT;
+-
+-	return 0;
+-}
+-
+-static int cardu_set_io_map(unsigned int sock, struct pccard_io_map *io)
+-{
+-	vrc4173_socket_t *socket = &cardu_sockets[sock];
+-	uint16_t ioctl;
+-	uint8_t window, enable;
+-	u_char map;
+-
+-	map = io->map;
+-	if (map > 1)
+-		return -EINVAL;
+-
+-	window = exca_readb(socket, ADR_WIN_EN);
+-	enable = IO_WIN_EN(map);
+-
+-	if (window & enable) {
+-		window &= ~enable;
+-		exca_writeb(socket, ADR_WIN_EN, window);
+-	}
+-
+-	exca_writew(socket, IO_WIN_SA(map), io->start);
+-	exca_writew(socket, IO_WIN_EA(map), io->stop);
+-
+-	ioctl = exca_readb(socket, IO_WIN_CNT) & ~IO_WIN_CNT_MASK(map);
+-	if (io->flags & MAP_AUTOSZ) ioctl |= IO_WIN_DATA_AUTOSZ(map);
+-	else if (io->flags & MAP_16BIT) ioctl |= IO_WIN_DATA_16BIT(map);
+-	exca_writeb(socket, IO_WIN_CNT, ioctl);
+-
+-	if (io->flags & MAP_ACTIVE)
+-		exca_writeb(socket, ADR_WIN_EN, window | enable);
+-
+-	return 0;
+-}
+-
+-static int cardu_get_mem_map(unsigned int sock, struct pccard_mem_map *mem)
+-{
+-	vrc4173_socket_t *socket = &cardu_sockets[sock];
+-	uint32_t start, stop, offset, page;
+-	uint8_t window;
+-	u_char map;
+-
+-	map = mem->map;
+-	if (map > 4)
+-		return -EINVAL;
+-
+-	window = exca_readb(socket, ADR_WIN_EN);
+-	mem->flags = (window & MEM_WIN_EN(map)) ? MAP_ACTIVE : 0;
+-
+-	start = exca_readw(socket, MEM_WIN_SA(map));
+-	mem->flags |= (start & MEM_WIN_DSIZE) ? MAP_16BIT : 0;
+-	start = (start & 0x0fff) << 12;
+-
+-	stop = exca_readw(socket, MEM_WIN_EA(map));
+-	stop = ((stop & 0x0fff) << 12) + 0x0fff;
+-
+-	offset = exca_readw(socket, MEM_WIN_OA(map));
+-	mem->flags |= (offset & MEM_WIN_WP) ? MAP_WRPROT : 0;
+-	mem->flags |= (offset & MEM_WIN_REGSET) ? MAP_ATTRIB : 0;
+-	offset = ((offset & 0x3fff) << 12) + start;
+-	mem->card_start = offset & 0x03ffffff;
+-
+-	page = exca_readb(socket, MEM_WIN_SAU(map)) << 24;
+-	mem->sys_start = start + page;
+-	mem->sys_stop = start + page;
+-
+-	return 0;
+-}
+-
+-static int cardu_set_mem_map(unsigned int sock, struct pccard_mem_map *mem)
+-{
+-	vrc4173_socket_t *socket = &cardu_sockets[sock];
+-	uint16_t value;
+-	uint8_t window, enable;
+-	u_long sys_start, sys_stop, card_start;
+-	u_char map;
+-
+-	map = mem->map;
+-	sys_start = mem->sys_start;
+-	sys_stop = mem->sys_stop;
+-	card_start = mem->card_start;
+-
+-	if (map > 4 || sys_start > sys_stop || ((sys_start ^ sys_stop) >> 24) ||
+-	    (card_start >> 26))
+-		return -EINVAL;
+-
+-	window = exca_readb(socket, ADR_WIN_EN);
+-	enable = MEM_WIN_EN(map);
+-	if (window & enable) {
+-		window &= ~enable;
+-		exca_writeb(socket, ADR_WIN_EN, window);
+-	}
+-
+-	exca_writeb(socket, MEM_WIN_SAU(map), sys_start >> 24);
+-
+-	value = (sys_start >> 12) & 0x0fff;
+-	if (mem->flags & MAP_16BIT) value |= MEM_WIN_DSIZE;
+-	exca_writew(socket, MEM_WIN_SA(map), value);
+-
+-	value = (sys_stop >> 12) & 0x0fff;
+-	exca_writew(socket, MEM_WIN_EA(map), value);
+-
+-	value = ((card_start - sys_start) >> 12) & 0x3fff;
+-	if (mem->flags & MAP_WRPROT) value |= MEM_WIN_WP;
+-	if (mem->flags & MAP_ATTRIB) value |= MEM_WIN_REGSET;
+-	exca_writew(socket, MEM_WIN_OA(map), value);
+-
+-	if (mem->flags & MAP_ACTIVE)
+-		exca_writeb(socket, ADR_WIN_EN, window | enable);
+-
+-	return 0;
+-}
+-
+-static void cardu_proc_setup(unsigned int sock, struct proc_dir_entry *base)
+-{
+-}
+-
+-static struct pccard_operations cardu_operations = {
+-	.init			= cardu_init,
+-	.register_callback	= cardu_register_callback,
+-	.inquire_socket		= cardu_inquire_socket,
+-	.get_status		= cardu_get_status,
+-	.set_socket		= cardu_set_socket,
+-	.get_io_map		= cardu_get_io_map,
+-	.set_io_map		= cardu_set_io_map,
+-	.get_mem_map		= cardu_get_mem_map,
+-	.set_mem_map		= cardu_set_mem_map,
+-	.proc_setup		= cardu_proc_setup,
+-};
+-
+-static void cardu_bh(void *data)
+-{
+-	vrc4173_socket_t *socket = (vrc4173_socket_t *)data;
+-	uint16_t events;
+-
+-	spin_lock_irq(&socket->event_lock);
+-	events = socket->events;
+-	socket->events = 0;
+-	spin_unlock_irq(&socket->event_lock);
+-
+-	if (socket->handler)
+-		socket->handler(socket->info, events);
+-}
+-
+-static uint16_t get_events(vrc4173_socket_t *socket)
+-{
+-	uint16_t events = 0;
+-	uint8_t csc, status;
+-
+-	status = exca_readb(socket, IF_STATUS);
+-	csc = exca_readb(socket, CARD_SC);
+-	if ((csc & CARD_DT_CHG) &&
+-	    ((status & (CARD_DETECT1|CARD_DETECT2)) == (CARD_DETECT1|CARD_DETECT2)))
+-		events |= SS_DETECT;
+-
+-	if ((csc & RDY_CHG) && (status & READY))
+-		events |= SS_READY;
+-
+-	if (exca_readb(socket, INT_GEN_CNT) & CARD_TYPE_IO) {
+-		if ((csc & BAT_DEAD_ST_CHG) && (status & STSCHG))
+-			events |= SS_STSCHG;
+-	} else {
+-		if (csc & (BAT_WAR_CHG|BAT_DEAD_ST_CHG)) {
+-			if ((status & BV_DETECT_MASK) != BV_DETECT_GOOD) {
+-				if (status == BV_DETECT_WARN) events |= SS_BATWARN;
+-				else events |= SS_BATDEAD;
+-			}
+-		}
+-	}
+-
+-	return events;
+-}
+-
+-static void cardu_interrupt(int irq, void *dev_id)
+-{
+-	vrc4173_socket_t *socket = (vrc4173_socket_t *)dev_id;
+-	uint16_t events;
+-
+-	INIT_WORK(&socket->tq_work, cardu_bh, socket);
+-
+-	events = get_events(socket);
+-	if (events) {
+-		spin_lock(&socket->event_lock);
+-		socket->events |= events;
+-		spin_unlock(&socket->event_lock);
+-		schedule_work(&socket->tq_work);
+-	}
+-}
+-
+-static int vrc4173_cardu_probe(struct pci_dev *dev,
+-                                         const struct pci_device_id *ent)
+-{
+-	vrc4173_socket_t *socket;
+-	unsigned long start, len, flags;
+-	int slot, err, ret;
+-
+-	slot = vrc4173_cardu_slots++;
+-	socket = &cardu_sockets[slot];
+-	if (socket->noprobe != 0)
+-		return -EBUSY;
+-
+-	sprintf(socket->name, "NEC VRC4173 CARDU%1d", slot+1);
+-
+-	if ((err = pci_enable_device(dev)) < 0)
+-		return err;
+-
+-	start = pci_resource_start(dev, 0);
+-	if (start == 0) {
+-		ret = -ENODEV;
+-		goto disable;
+-	}
+-
+-	len = pci_resource_len(dev, 0);
+-	if (len == 0) {
+-		ret = -ENODEV;
+-		goto disable;
+-	}
+-
+-	flags = pci_resource_flags(dev, 0);
+-	if ((flags & IORESOURCE_MEM) == 0) {
+-		ret = -EBUSY;
+-		goto disable;
+-	}
+-
+-	err = pci_request_regions(dev, socket->name);
+-	if (err < 0) {
+-		ret = err;
+-		goto disable;
+-	}
+-
+-	socket->base = ioremap(start, len);
+-	if (socket->base == NULL) {
+-		ret = -ENODEV;
+-		goto release;
+-	}
+-
+-	socket->dev = dev;
+-
+-	socket->pcmcia_socket = pcmcia_register_socket(slot, &cardu_operations, 1);
+-	if (socket->pcmcia_socket == NULL) {
+-		ret =  -ENOMEM;
+-		goto unmap;
+-	}
+-
+-	if (request_irq(dev->irq, cardu_interrupt, IRQF_SHARED, socket->name, socket) < 0) {
+-		ret = -EBUSY;
+-		goto unregister;
+-	}
+-
+-	printk(KERN_INFO "%s at %#08lx, IRQ %d\n", socket->name, start, dev->irq);
+-
+-	return 0;
+-
+-unregister:
+-	pcmcia_unregister_socket(socket->pcmcia_socket);
+-	socket->pcmcia_socket = NULL;
+-unmap:
+-	iounmap(socket->base);
+-	socket->base = NULL;
+-release:
+-	pci_release_regions(dev);
+-disable:
+-	pci_disable_device(dev);
+-	return ret;
+-}
+-
+-static int vrc4173_cardu_setup(char *options)
+-{
+-	if (options == NULL || *options == '\0')
+-		return 1;
+-
+-	if (strncmp(options, "cardu1:", 7) == 0) {
+-		options += 7;
+-		if (*options != '\0') {
+-			if (strncmp(options, "noprobe", 7) == 0) {
+-				cardu_sockets[CARDU1].noprobe = 1;
+-				options += 7;
+-			}
+-
+-			if (*options != ',')
+-				return 1;
+-		} else
+-			return 1;
+-	}
+-
+-	if (strncmp(options, "cardu2:", 7) == 0) {
+-		options += 7;
+-		if ((*options != '\0') && (strncmp(options, "noprobe", 7) == 0))
+-			cardu_sockets[CARDU2].noprobe = 1;
+-	}
+-
+-	return 1;
+-}
+-
+-__setup("vrc4173_cardu=", vrc4173_cardu_setup);
+-
+-static const struct pci_device_id vrc4173_cardu_id_table[] = {
+-	{ PCI_DEVICE(PCI_VENDOR_ID_NEC, PCI_DEVICE_ID_NEC_NAPCCARD) },
+-        {0, }
+-};
+-
+-static struct pci_driver vrc4173_cardu_driver = {
+-	.name		= "NEC VRC4173 CARDU",
+-	.probe		= vrc4173_cardu_probe,
+-	.id_table	= vrc4173_cardu_id_table,
+-};
+-
+-static int vrc4173_cardu_init(void)
+-{
+-	vrc4173_cardu_slots = 0;
+-
+-	return pci_register_driver(&vrc4173_cardu_driver);
+-}
+-
+-static void vrc4173_cardu_exit(void)
+-{
+-	pci_unregister_driver(&vrc4173_cardu_driver);
+-}
+-
+-module_init(vrc4173_cardu_init);
+-module_exit(vrc4173_cardu_exit);
+-MODULE_DEVICE_TABLE(pci, vrc4173_cardu_id_table);
+diff --git a/drivers/pcmcia/vrc4173_cardu.h b/drivers/pcmcia/vrc4173_cardu.h
+deleted file mode 100644
+index a7d96018ed8d4..0000000000000
+--- a/drivers/pcmcia/vrc4173_cardu.h
++++ /dev/null
+@@ -1,247 +0,0 @@
+-/*
+- * FILE NAME
+- *	drivers/pcmcia/vrc4173_cardu.h
+- *
+- * BRIEF MODULE DESCRIPTION
+- *	Include file for NEC VRC4173 CARDU.
+- *
+- * Copyright 2002 Yoichi Yuasa <yuasa@linux-mips.org>
+- *
+- *  This program is free software; you can redistribute it and/or modify it
+- *  under the terms of the GNU General Public License as published by the
+- *  Free Software Foundation; either version 2 of the License, or (at your
+- *  option) any later version.
+- *
+- *  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+- *  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+- *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+- *  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+- *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+- *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- *
+- *  You should have received a copy of the GNU General Public License along
+- *  with this program; if not, write to the Free Software Foundation, Inc.,
+- *  675 Mass Ave, Cambridge, MA 02139, USA.
+- */
+-#ifndef _VRC4173_CARDU_H
+-#define _VRC4173_CARDU_H
+-
+-#include <linux/pci.h>
+-
+-#include <pcmcia/ss.h>
+-
+-#define CARDU_MAX_SOCKETS	2
+-#define CARDU1			0
+-#define CARDU2			1
+-
+-/*
+- * PCI Configuration Registers
+- */
+-#define BRGCNT			0x3e
+- #define POST_WR_EN		0x0400
+- #define MEM1_PREF_EN		0x0200
+- #define MEM0_PREF_EN		0x0100
+- #define IREQ_INT		0x0080
+- #define CARD_RST		0x0040
+- #define MABORT_MODE		0x0020
+- #define VGA_EN			0x0008
+- #define ISA_EN			0x0004
+- #define SERR_EN		0x0002
+- #define PERR_EN		0x0001
+-
+-#define SYSCNT			0x80
+- #define BAD_VCC_REQ_DISB	0x00200000
+- #define PCPCI_EN		0x00080000
+- #define CH_ASSIGN_MASK		0x00070000
+- #define CH_ASSIGN_NODMA	0x00040000
+- #define SUB_ID_WR_EN		0x00000008
+- #define ASYN_INT_MODE		0x00000004
+- #define PCI_CLK_RIN		0x00000002
+-
+-#define DEVCNT			0x91
+- #define ZOOM_VIDEO_EN		0x40
+- #define SR_PCI_INT_SEL_MASK	0x18
+- #define SR_PCI_INT_SEL_NONE	0x00
+- #define PCI_INT_MODE		0x04
+- #define IRQ_MODE		0x02
+- #define IFG			0x01
+-
+-#define CHIPCNT			0x9c
+- #define S_PREF_DISB		0x10
+-
+-#define SERRDIS			0x9f
+- #define SERR_DIS_MAB		0x10
+- #define SERR_DIS_TAB		0x08
+- #define SERR_DIS_DT_PERR	0x04
+-
+-/*
+- * ExCA Registers
+- */
+-#define EXCA_REGS_BASE		0x800
+-#define EXCA_REGS_SIZE		0x800
+-
+-#define ID_REV			0x000
+- #define IF_TYPE_16BIT		0x80
+-
+-#define IF_STATUS		0x001
+- #define CARD_PWR		0x40
+- #define READY			0x20
+- #define CARD_WP		0x10
+- #define CARD_DETECT2		0x08
+- #define CARD_DETECT1		0x04
+- #define BV_DETECT_MASK		0x03
+- #define BV_DETECT_GOOD		0x03	/* Memory card */
+- #define BV_DETECT_WARN		0x02
+- #define BV_DETECT_BAD1		0x01
+- #define BV_DETECT_BAD0		0x00
+- #define STSCHG			0x02	/* I/O card */
+- #define SPKR			0x01
+-
+-#define PWR_CNT			0x002
+- #define CARD_OUT_EN		0x80
+- #define VCC_MASK		0x18
+- #define VCC_3V			0x18
+- #define VCC_5V			0x10
+- #define VCC_0V			0x00
+- #define VPP_MASK		0x03
+- #define VPP_12V		0x02
+- #define VPP_VCC		0x01
+- #define VPP_0V			0x00
+-
+-#define INT_GEN_CNT		0x003
+- #define CARD_REST0		0x40
+- #define CARD_TYPE_MASK		0x20
+- #define CARD_TYPE_IO		0x20
+- #define CARD_TYPE_MEM		0x00
+-
+-#define CARD_SC			0x004
+- #define CARD_DT_CHG		0x08
+- #define RDY_CHG		0x04
+- #define BAT_WAR_CHG		0x02
+- #define BAT_DEAD_ST_CHG	0x01
+-
+-#define CARD_SCI		0x005
+- #define CARD_DT_EN		0x08
+- #define RDY_EN			0x04
+- #define BAT_WAR_EN		0x02
+- #define BAT_DEAD_EN		0x01
+-
+-#define ADR_WIN_EN		0x006
+- #define IO_WIN_EN(x)		(0x40 << (x))
+- #define MEM_WIN_EN(x)		(0x01 << (x))
+-
+-#define IO_WIN_CNT		0x007
+- #define IO_WIN_CNT_MASK(x)	(0x03 << ((x) << 2))
+- #define IO_WIN_DATA_AUTOSZ(x)	(0x02 << ((x) << 2))
+- #define IO_WIN_DATA_16BIT(x)	(0x01 << ((x) << 2))
+-
+-#define IO_WIN_SA(x)		(0x008 + ((x) << 2))
+-#define IO_WIN_EA(x)		(0x00a + ((x) << 2))
+-
+-#define MEM_WIN_SA(x)		(0x010 + ((x) << 3))
+- #define MEM_WIN_DSIZE		0x8000
+-
+-#define MEM_WIN_EA(x)		(0x012 + ((x) << 3))
+-
+-#define MEM_WIN_OA(x)		(0x014 + ((x) << 3))
+- #define MEM_WIN_WP		0x8000
+- #define MEM_WIN_REGSET		0x4000
+-
+-#define GEN_CNT			0x016
+- #define VS2_STATUS		0x80
+- #define VS1_STATUS		0x40
+- #define EXCA_REG_RST_EN	0x02
+-
+-#define GLO_CNT			0x01e
+- #define FUN_INT_LEV		0x08
+- #define INT_WB_CLR		0x04
+- #define CSC_INT_LEV		0x02
+-
+-#define IO_WIN_OAL(x)		(0x036 + ((x) << 1))
+-#define IO_WIN_OAH(x)		(0x037 + ((x) << 1))
+-
+-#define MEM_WIN_SAU(x)		(0x040 + (x))
+-
+-#define IO_SETUP_TIM		0x080
+-#define IO_CMD_TIM		0x081
+-#define IO_HOLD_TIM		0x082
+-#define MEM_SETUP_TIM(x)	(0x084 + ((x) << 2))
+-#define MEM_CMD_TIM(x)		(0x085 + ((x) << 2))
+-#define MEM_HOLD_TIM(x)		(0x086 + ((x) << 2))
+- #define TIM_CLOCKS(x)		((x) - 1)
+-
+-#define MEM_TIM_SEL1		0x08c
+-#define MEM_TIM_SEL2		0x08d
+- #define MEM_WIN_TIMSEL1(x)	(0x03 << (((x) & 3) << 1))
+-
+-#define MEM_WIN_PWEN		0x091
+- #define POSTWEN		0x01
+-
+-/*
+- * CardBus Socket Registers
+- */
+-#define CARDBUS_SOCKET_REGS_BASE	0x000
+-#define CARDBUS_SOCKET_REGS_SIZE	0x800
+-
+-#define SKT_EV			0x000
+- #define POW_CYC_EV		0x00000008
+- #define CCD2_EV		0x00000004
+- #define CCD1_EV		0x00000002
+- #define CSTSCHG_EV		0x00000001
+-
+-#define SKT_MASK		0x004
+- #define POW_CYC_MASK		0x00000008
+- #define CCD_MASK		0x00000006
+- #define CSC_MASK		0x00000001
+-
+-#define SKT_PRE_STATE		0x008
+-#define SKT_FORCE_EV		0x00c
+- #define VOL_3V_SKT		0x20000000
+- #define VOL_5V_SKT		0x10000000
+- #define CVS_TEST		0x00004000
+- #define VOL_YV_CARD_DT		0x00002000
+- #define VOL_XV_CARD_DT		0x00001000
+- #define VOL_3V_CARD_DT		0x00000800
+- #define VOL_5V_CARD_DT		0x00000400
+- #define BAD_VCC_REQ		0x00000200
+- #define DATA_LOST		0x00000100
+- #define NOT_A_CARD		0x00000080
+- #define CREADY			0x00000040
+- #define CB_CARD_DT		0x00000020
+- #define R2_CARD_DT		0x00000010
+- #define POW_UP			0x00000008
+- #define CCD20			0x00000004
+- #define CCD10			0x00000002
+- #define CSTSCHG		0x00000001
+-
+-#define SKT_CNT			0x010
+- #define STP_CLK_EN		0x00000080
+- #define VCC_CNT_MASK		0x00000070
+- #define VCC_CNT_3V		0x00000030
+- #define VCC_CNT_5V		0x00000020
+- #define VCC_CNT_0V		0x00000000
+- #define VPP_CNT_MASK		0x00000007
+- #define VPP_CNT_3V		0x00000003
+- #define VPP_CNT_5V		0x00000002
+- #define VPP_CNT_12V		0x00000001
+- #define VPP_CNT_0V		0x00000000
+-
+-typedef struct vrc4173_socket {
+-	int noprobe;
+-	struct pci_dev *dev;
+-	void *base;
+-	void (*handler)(void *, unsigned int);
+-	void *info;
+-	socket_cap_t cap;
+-	spinlock_t event_lock;
+-	uint16_t events;
+-	struct socket_info_t *pcmcia_socket;
+-	struct work_struct tq_work;
+-	char name[20];
+-} vrc4173_socket_t;
+-
+-#endif /* _VRC4173_CARDU_H */
 -- 
-2.11.0
+2.28.0
 
