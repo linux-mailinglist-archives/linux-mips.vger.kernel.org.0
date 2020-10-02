@@ -2,46 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9D3281050
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Oct 2020 12:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8EA281051
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Oct 2020 12:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387726AbgJBKGp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Oct 2020 06:06:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44192 "EHLO mail.kernel.org"
+        id S1726181AbgJBKHu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Oct 2020 06:07:50 -0400
+Received: from mail.thorsis.com ([92.198.35.195]:37162 "EHLO mail.thorsis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725993AbgJBKGp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 2 Oct 2020 06:06:45 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B5202065D;
-        Fri,  2 Oct 2020 10:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601633204;
-        bh=UJnxaC4M1lOTDgzs586QRSYYhrDCyDplqGq8e17l78E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=zK6KwWMfGx+COYeTiW7XydYPT01P72wNhoDo1SEhefHyCZ2dCm5+bFatWiMRR3iyG
-         pV7fqxOJPOW+mEONS9qBxxAEg/5+9PT+UdMukVhcUctmHwSVNjY1+32RMDdRWy6r9m
-         KaGUN9J4TqtYuUjQJ6SSBLyjrSliBPEQN5WSsiOQ=
-Received: by mail-ed1-f54.google.com with SMTP id 33so1039877edq.13;
-        Fri, 02 Oct 2020 03:06:44 -0700 (PDT)
-X-Gm-Message-State: AOAM532nPoDVjsF2o87zJ6CHXawD5rFczMpZFvF81KWFF1jeBQyw5U82
-        8vdtcDt1+pMYMLozG9HsZbbbgfMKIV/ZkOm+HaQ=
-X-Google-Smtp-Source: ABdhPJyMUEsiLReOne5kMxnk5FpY37kPG9ggO9a1YAGcyv6YS7ZODs7IzG6QmWx9MLtvVFTrSOvy1Y7+WgappyP9AWU=
-X-Received: by 2002:a50:a452:: with SMTP id v18mr350430edb.143.1601633202677;
- Fri, 02 Oct 2020 03:06:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200930234637.7573-1-post@lespocky.de> <20200930234637.7573-6-post@lespocky.de>
- <CAJKOXPfBKnESpRkSDZp5CB3T-t95DXg2dNKQnNNXv6Q_ywck2w@mail.gmail.com> <4533120.poq1GmoeVQ@ada>
-In-Reply-To: <4533120.poq1GmoeVQ@ada>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Fri, 2 Oct 2020 12:06:30 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPd3um-RvcmjexhYbpnbwcd6yKRYdCV1fnmjKoLguVOLKQ@mail.gmail.com>
-Message-ID: <CAJKOXPd3um-RvcmjexhYbpnbwcd6yKRYdCV1fnmjKoLguVOLKQ@mail.gmail.com>
-Subject: Re: [PATCH v6 5/7] ARM: dts: Fix schema warnings for pwm-leds
-To:     Alexander Dahl <ada@thorsis.com>
-Cc:     linux-leds@vger.kernel.org, Alexander Dahl <post@lespocky.de>,
-        devicetree@vger.kernel.org,
+        id S1725993AbgJBKHu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 2 Oct 2020 06:07:50 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.thorsis.com (Postfix) with ESMTP id 4300DF15;
+        Fri,  2 Oct 2020 12:07:47 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
+Received: from mail.thorsis.com ([127.0.0.1])
+        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id be5NQOu1yRPO; Fri,  2 Oct 2020 12:07:47 +0200 (CEST)
+Received: by mail.thorsis.com (Postfix, from userid 109)
+        id 1482C3B69; Fri,  2 Oct 2020 12:07:47 +0200 (CEST)
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.2
+From:   Alexander Dahl <ada@thorsis.com>
+To:     linux-leds@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexander Dahl <post@lespocky.de>, devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         "linux-samsung-soc@vger.kernel.org" 
@@ -52,54 +38,40 @@ Cc:     linux-leds@vger.kernel.org, Alexander Dahl <post@lespocky.de>,
         Rob Herring <robh+dt@kernel.org>,
         Peter Ujfalusi <peter.ujfalusi@ti.com>,
         Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v6 3/7] dt-bindings: mfd: Fix schema warnings for pwm-leds
+Date:   Fri, 02 Oct 2020 12:07:38 +0200
+Message-ID: <1708987.KbI9FDK2aH@ada>
+In-Reply-To: <CAJKOXPewAhZU1Enz9HrdrG5RF==y6Mna=E_vfpD4u2747CVo8A@mail.gmail.com>
+References: <20200930234637.7573-1-post@lespocky.de> <20200930234637.7573-4-post@lespocky.de> <CAJKOXPewAhZU1Enz9HrdrG5RF==y6Mna=E_vfpD4u2747CVo8A@mail.gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 2 Oct 2020 at 11:28, Alexander Dahl <ada@thorsis.com> wrote:
->
-> Hello Krzysztof,
->
-> Am Freitag, 2. Oktober 2020, 11:12:50 CEST schrieb Krzysztof Kozlowski:
-> > On Thu, 1 Oct 2020 at 01:53, Alexander Dahl <post@lespocky.de> wrote:
-> > > The node names for devices using the pwm-leds driver follow a certain
-> > > naming scheme (now).
-> > >
-> > > Signed-off-by: Alexander Dahl <post@lespocky.de>
-> > > ---
-> > >
-> > > Notes:
-> > >     v6:
-> > >       * added this patch to series
-> > >
-> > >  arch/arm/boot/dts/at91-kizbox.dts             | 10 +++----
-> > >  arch/arm/boot/dts/at91-kizbox2-common.dtsi    |  8 +++---
-> > >  arch/arm/boot/dts/at91-kizbox3-hs.dts         | 16 ++++++------
-> > >  arch/arm/boot/dts/at91-kizbox3_common.dtsi    | 10 +++----
-> > >  arch/arm/boot/dts/at91-kizboxmini-common.dtsi |  8 +++---
-> > >  arch/arm/boot/dts/at91sam9m10g45ek.dts        | 10 +++----
-> > >  arch/arm/boot/dts/at91sam9rlek.dts            | 10 +++----
-> > >  .../boot/dts/berlin2cd-google-chromecast.dts  |  6 ++---
-> > >  arch/arm/boot/dts/exynos5422-odroidhc1.dts    |  4 +--
-> > >  arch/arm/boot/dts/exynos5422-odroidxu4.dts    |  4 +--
-> >
-> > Somehow you did not CC the maintainers... please use
-> > scripts/get_maintainers.pl to obtain list of addresses.
->
-> Well, that will be a huge list of Cc then.  What is the policy?  Everybody
-> gets the whole series or different list of receivers per patch?
+Hello Krzysztof,
 
-With git send email and get_maintainers.pl you can simplify it:
-1. Send cover letter to everyone (could be skipped and instead send to
-mailing lists and then link included under --- in each patch).
-2. Send automatically each patch only to maintainers, with adjusted
-in-reply-to to the cover letter already sent. Something like: git
-send-email --cc-cmd "scripts/get_maintainer.pl --no-git --no-roles
---no-rolestats".
+Am Freitag, 2. Oktober 2020, 11:21:10 CEST schrieb Krzysztof Kozlowski:
+> On Thu, 1 Oct 2020 at 01:51, Alexander Dahl <post@lespocky.de> wrote:
+> > The node names for devices using the pwm-leds driver follow a certain
+> > naming scheme (now).
+> 
+> What warning? Please post them here and in every DTS patch.
 
-Probably 1+2 could be even one command if you put manually lists as Cc
-in the cover letter.
+ack
 
-Best regards,
-Krzysztof
+> Your schema does not enforce pwmleds node naming (the main node, not
+> children), or at least I could not see it. You change multiple files
+> in your patchset so are you sure that all these are justified by
+> warnings pointed out by schema?
+
+The rename was suggested by Rob [1], and I think you're right, those names are 
+not (yet) enforced by schema?  So at least the commit message is misleading 
+for now.  I'll have to see if I rather reword or update the schema again.
+
+Greets
+Alex
+
+[1] https://lore.kernel.org/linux-leds/20200922155747.GA2734659@bogus/
+
+
