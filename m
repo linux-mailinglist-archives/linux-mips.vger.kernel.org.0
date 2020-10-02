@@ -2,97 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 855132810C6
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Oct 2020 12:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891552812D5
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Oct 2020 14:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgJBKxJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Oct 2020 06:53:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38644 "EHLO mail.kernel.org"
+        id S1726176AbgJBMfT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Oct 2020 08:35:19 -0400
+Received: from elvis.franken.de ([193.175.24.41]:39975 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725920AbgJBKxH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 2 Oct 2020 06:53:07 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ED1C520874;
-        Fri,  2 Oct 2020 10:53:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601635986;
-        bh=WUSRRX+XBvVTYHzBDRPQz4PtaU7zhX11OBofs03lu7w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=yvX1A3cLWsjS1cWSyIRSg+WJmwZtSfrDcvyV/NeaKNl7GPsIy0voCxFZ/rOk4Gpmn
-         2KaO/nUo6AwHYxAo8duM5tiz9TubUPDXXY5lD8rnJHuHCrD3KuX85XjN3soizDcz8B
-         jOf84bE2XRGR0Trvh3UMgzg0dT6cjmceAFfHiP3o=
-Received: by mail-ej1-f53.google.com with SMTP id qp15so1340345ejb.3;
-        Fri, 02 Oct 2020 03:53:05 -0700 (PDT)
-X-Gm-Message-State: AOAM531uTpfRhMMc+fyakJH6fjIgtpx0vsvhK0xfgJKCC4B/ZYBuPTAC
-        MlIgMtYN4QKyeHjuqKKzXmT9MLkU/ep84CiL9zA=
-X-Google-Smtp-Source: ABdhPJz2njtnLuaxs13sg4hhwWj46P8QK/G+8vH63FlRpE0n16xuRCvITpEi9m8uB+qnlenWJGhPhUHCNrXOYo6xhlo=
-X-Received: by 2002:a17:906:1984:: with SMTP id g4mr1573436ejd.119.1601635984516;
- Fri, 02 Oct 2020 03:53:04 -0700 (PDT)
+        id S1725964AbgJBMfT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 2 Oct 2020 08:35:19 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kOKHI-0003Ro-00; Fri, 02 Oct 2020 14:35:12 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 0FFA5C109A; Fri,  2 Oct 2020 14:35:03 +0200 (CEST)
+Date:   Fri, 2 Oct 2020 14:35:03 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: Re: [PATCH V3] MIPS: make userspace mapping young by default
+Message-ID: <20201002123502.GA11098@alpha.franken.de>
+References: <20200919074731.22372-1-huangpei@loongson.cn>
 MIME-Version: 1.0
-References: <20200930234637.7573-1-post@lespocky.de> <20200930234637.7573-3-post@lespocky.de>
- <CAJKOXPe7Tg+5ESsdPGks_Aqj+zQH4-asC839FseWp0OCJbT4Mw@mail.gmail.com> <9895379.VNsV0mSTfq@ada>
-In-Reply-To: <9895379.VNsV0mSTfq@ada>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Fri, 2 Oct 2020 12:52:52 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPcTstvUuy-CnJbOGxiONLx2V2hfpnR0H4gS=4v+C1udtQ@mail.gmail.com>
-Message-ID: <CAJKOXPcTstvUuy-CnJbOGxiONLx2V2hfpnR0H4gS=4v+C1udtQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/7] dt-bindings: leds: Convert pwm to yaml
-To:     Alexander Dahl <ada@thorsis.com>
-Cc:     linux-leds@vger.kernel.org, Alexander Dahl <post@lespocky.de>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-omap@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org, linux-mips@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200919074731.22372-1-huangpei@loongson.cn>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 2 Oct 2020 at 12:46, Alexander Dahl <ada@thorsis.com> wrote:
->
-> Hei hei,
->
-> Am Freitag, 2. Oktober 2020, 11:31:09 CEST schrieb Krzysztof Kozlowski:
-> > On Thu, 1 Oct 2020 at 01:52, Alexander Dahl <post@lespocky.de> wrote:
-> > > The example was adapted in the following ways:
-> > >
-> > > - make use of the now supported 'function' and 'color' properties
-> > > - remove pwm nodes, those are documented elsewhere
-> > > - tweake node names to be matched by new dtschema rules
-> >
-> > tweak? or align?
->
-> Depends on if schema actually checks it (child nodes) or if it's just DT
-> policy (parent node).  I'll reword in v7.
->
-> > > License was discussed with the original author.
-> >
-> > Since you relicense their work, you need an ack or signed off from
-> > every author. You cannot just say "I discussed" and post it. That way
-> > I could pretend (lie) I talked to Linus and try to relicense Linux to
-> > BSD...
->
-> I know.  Peter promised to give his Ack publicly on the list back when I
-> worked on v2 or v3, so he is in Cc since then, but apparently he did not yet
-> post it. ;-)
->
-> > You need acks/SoB from Peter and Russel.
->
-> Well, I should add Russel in v7, too, then.
+On Sat, Sep 19, 2020 at 03:47:31PM +0800, Huang Pei wrote:
+> MIPS page fault path take 3 exceptions (1 TLB Miss + 2 TLB Invalid), but
+> the second TLB Invalid exception is just triggered by __update_tlb from
+> do_page_fault writing tlb without _PAGE_VALID set. With this patch, it
+> only take 1 TLB Miss + 1 TLB Invalid exceptions
+> 
+> This version removes pte_sw_mkyoung without polluting MM code and makes
+> page fault delay of MIPS on par with other architecture and covers both
+> no-RIXI and RIXI MIPS CPUS
+> 
+> [1]: https://lkml.kernel.org/lkml/1591416169-26666-1-git-send-email
+> -maobibo@loongson.cn/
+> ---
+> V3:
+> - reformat with whitespace cleaned up following Thomas's advice
+> V2:
+> - remove unused asm-generic definition of pte_sw_mkyoung following Mao's
+> advice
+> ---
+> Co-developed-by: Huang Pei <huangpei@loongson.cn>
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> Co-developed-by: Bibo Mao <maobibo@loonson.cn>
+> ---
+>  arch/mips/include/asm/pgtable.h | 10 ++++------
+>  arch/mips/mm/cache.c            | 25 +++++++++++++------------
+>  include/linux/pgtable.h         |  8 --------
+>  mm/memory.c                     |  3 ---
+>  4 files changed, 17 insertions(+), 29 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> index dd7a0f552cac..931fb35730f0 100644
+> --- a/arch/mips/include/asm/pgtable.h
+> +++ b/arch/mips/include/asm/pgtable.h
+> @@ -27,11 +27,11 @@ struct vm_area_struct;
+>  
+>  #define PAGE_NONE	__pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
+>  				 _page_cachable_default)
+> -#define PAGE_SHARED	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+> -				 _page_cachable_default)
+> +#define PAGE_SHARED    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+> +				 __READABLE | _page_cachable_default)
 
-Yes, please.
+you are still doing a white space changes here. 
 
-For the patch itself:
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+>  #define PAGE_COPY	__pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
+> -				 _page_cachable_default)
+> -#define PAGE_READONLY	__pgprot(_PAGE_PRESENT | \
+> +				 __READABLE | _page_cachable_default)
+> +#define PAGE_READONLY	__pgprot(_PAGE_PRESENT |  __READABLE | \
 
-Best regards,
-Krzysztof
+I've grepped for usage of PAGE_SHARED and PAGE_READONLY and found
+arch/mips/kvm/mmu.c and arch/mips/kernel/vdso.c. I wonder
+
+1. Is this usage correct or should we use protection_map[X] ?
+2. Are this still correct after the change in this patch ?
+
+Right now I'm in favour to fist clean up asm/pgtable.h to get rid
+of all unneeded PAGE_XXX defines and make mm/cache.c rixi part
+more readable before applying this patch.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
