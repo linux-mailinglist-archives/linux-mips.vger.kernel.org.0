@@ -2,317 +2,1810 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3FF281F27
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Oct 2020 01:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A60281F3C
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Oct 2020 01:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725616AbgJBXij (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Oct 2020 19:38:39 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:39442 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725497AbgJBXij (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Oct 2020 19:38:39 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 416E7C0344;
-        Fri,  2 Oct 2020 23:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1601681917; bh=qapzN9HB4+vy1w22JrDfOBFqZmDr2rUnd7Kznpv6ccg=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=RXJZDI01+tplf0w6ym3hNOyooEN2giTsiqKqCUo0aQK/7zxdDIS93M4a2HIPvIf+O
-         u5DFsEtL90zrPcxT1KSEsV+mFJGuc/FXznIynxWViE3pzrwB97suGRKvZYcHKVEDK+
-         or4Ju6xP+uUzPgfNBYdm2WV/dVXYnFVbRCsDPVyQztkr3jmhX+EjinT58IiBZJWYhE
-         JYKIrRDjjm6f4lgb+OJ/nE8+O3vuCVQuw5tiB7nWaemxhxvLXRZ/wX4ogjiYPIGaWo
-         QcU/Tq3lFfjqdMSvRqI/FIad2QingD3yJzszZ4p1Lg9q5u6WfrXTRYKKWa19nyPCLl
-         EPAJdefM8fHEw==
-Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 3FDEDA01F1;
-        Fri,  2 Oct 2020 23:38:30 +0000 (UTC)
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2176.outbound.protection.outlook.com [104.47.57.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 8037940139;
-        Fri,  2 Oct 2020 23:38:27 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=vgupta@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="aGR3CnoO";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=keRUfnHXYWLQBzsaOhARJxA7YjVTi2GigokWqzwCJISkVsl/Qt20rn9LvJRvCMFvZ2Jzvz4klbUh7yIyT4auDwOB0VmbMVQucL5GMw6xJY35b88NI9DRTduG9Et2cs1gBA+JIS+c1p0jV4iVF4S0kStc8hfN77v3MxNVgPcLR761JpHvft51+WgQUX5PIHpSHMnrWSh0i9WCAZUf49X9rdYM7hVxd45DLukZn4MCcb8fDCufuKoZ5KIZ280ea2ZHK5mao3I6aUIUQZKt6FEZMoiDOwjJkgrdGjzW2ulYInG4LlpshZyCtVKbflQApwoN0/T+gHid7MOenk9fnFPEvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qapzN9HB4+vy1w22JrDfOBFqZmDr2rUnd7Kznpv6ccg=;
- b=Mg7nsy/f+xxIadKtFOyMQqbVTrHdpJ2xYqKe3YYqvIhWyYPO4pz++H3DO1uGY1JYD24z+KgH52mwmYpz6GQG/cTZUi3fTuwhO+aVeH7mWWaDLpoAOPjD97tc0gHPFWcjFQtXeZTu4YcTeeLqfGHTL4nCsXvSca52Fjgy6tpElr3FbOtHem1F6UKTqUuiBOzaEGLRusiJo1DYEZcovCqcf4GEzA6dtAeYaltNjdM1896OvA4mWdb8VUPF8TDqIVvbVsFudq9JiMqZberHz+EfThkVdHxIkJRq9xzDAwxXfUAf6BAjDgruGYBwcT4zVRuQaHa5htNlpmmmYqmE0pdLKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qapzN9HB4+vy1w22JrDfOBFqZmDr2rUnd7Kznpv6ccg=;
- b=aGR3CnoOOeW6z4Dvv9AnvCUu7CAe/Amp9eDNfRQR/X67nYpmM7JwG9qDAM1YQ6vq5XDrzfpBR/l2KcMM2Fh+4dw55GzswJdHdPGGTkiMku3A5OvPzGQstojx8JwgZTQb2Eg+SI/LbBh9OgSUZfX0PuW3N+Q8UTOqPskJqgCZx60=
-Received: from BYAPR12MB3479.namprd12.prod.outlook.com (2603:10b6:a03:dc::26)
- by BY5PR12MB4226.namprd12.prod.outlook.com (2603:10b6:a03:203::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.36; Fri, 2 Oct
- 2020 23:38:26 +0000
-Received: from BYAPR12MB3479.namprd12.prod.outlook.com
- ([fe80::c962:6a42:6a0b:24e8]) by BYAPR12MB3479.namprd12.prod.outlook.com
- ([fe80::c962:6a42:6a0b:24e8%5]) with mapi id 15.20.3433.039; Fri, 2 Oct 2020
- 23:38:26 +0000
-X-SNPS-Relay: synopsys.com
-From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
-To:     Petr Vorel <petr.vorel@gmail.com>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>
-CC:     Ofer Levi <oferle@nvidia.com>, Guo Ren <guoren@kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "Maciej W . Rozycki" <macro@linux-mips.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        arcml <linux-snps-arc@lists.infradead.org>
-Subject: Re: [PATCH 1/1] cacheflush01: Rewrite into new API
-Thread-Topic: [PATCH 1/1] cacheflush01: Rewrite into new API
-Thread-Index: AQHWmPoPGeaGTq1Upk+kaNHECB1UAamE+EqA
-Date:   Fri, 2 Oct 2020 23:38:26 +0000
-Message-ID: <6b5f52e8-0c0c-f83f-d7aa-6ab307d5621f@synopsys.com>
-References: <20201002202416.28972-1-petr.vorel@gmail.com>
-In-Reply-To: <20201002202416.28972-1-petr.vorel@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [24.4.73.83]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 59de4093-c488-48f5-2b08-08d8672c4274
-x-ms-traffictypediagnostic: BY5PR12MB4226:
-x-microsoft-antispam-prvs: <BY5PR12MB4226236494DF1BE1623AF720B6310@BY5PR12MB4226.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ycJ+M8FMHC4uP0uvUZtHTuoSmaUY10+foK00q+fyt2djDHlWZPzNRT2xspxHvLmyOfLAMAyZZiHm9zQdGx8jM0FYj+dlfT30gBv458V8x9jmpyHTxCHHoYvSqd35QzBhiO7MM6oMJckPZNrTx0EH6xlx5qlY7y4i/d6sfc0gvNVC9293i9PLyWMbC+MOy9XWAxSac3KNUnZICfZoc2oH7pFfxysjIPRVTvrUn6paFwOpg8tRU7KtJqsvVFwXH3Cht25nUNYk3S4LFzDKORnnmelHD8wh0dDRdQMFkLwjU/EntWyu7ItbAQ/keaVzvLpiLk+b7MeaYOhpWn1KlVEBFbr5gZoxWg3OE1ofor6jf333KJ8MP+2WtGEm3qbV92U6mI4bPuUeyvekCDyD4jbAi2/u7BJpaRcWT0Sn5w/QzCaoBUHlTzdnfNrhKv/f03a68I+8Z3LDP05srUXqVJKv0CEj8+r0lcV3G150g2862+A=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3479.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(346002)(376002)(366004)(136003)(6486002)(5660300002)(8936002)(31686004)(71200400001)(2906002)(86362001)(76116006)(64756008)(6506007)(4326008)(66946007)(83380400001)(53546011)(66446008)(31696002)(66476007)(26005)(6512007)(66556008)(8676002)(316002)(54906003)(186003)(110136005)(83080400001)(36756003)(7416002)(2616005)(478600001)(966005)(2004002)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: jrEfblgzxD6JneQLO2Qvi4dMar2e8+pXxAO/ensRi0HXcFHiEaN7X6ryYuVLDF4rJtDGJpq+ji9Hy1HulF4AP0ZvtzE8nIPx+VBpQpaRaWMMdQxxV1bSt/zc4JuVFTkynt0O1MhUMZ3Sqk++LKv2Wv3MClN5vQxC7jcKEKIECNmQCy8oKCqFbfjHSB3gq40De6gI3f86LsBGNll0NNUSe1B1axDoBSl1f5lCGODbbPtWai18o6koq7d3ntmz7VoHeprVX9kIf8QEzDrrVBJVj9awkJN1VVuSlrFV2GIqJ4uUYboBBGEWNOatLrgY71oNZyXzBS5STXFQ56Eo/NXT/4xJY5HQGsjlViTE3ksii80ojGMNMXNN1u9ElSk1ZrCpjNO86afuge9jItfbHVWV530UnTUs9r0KtK6SEB9cpfato/g2uLnW8GJGnVaETv3wVScsjoxmD2Q1JmqoEhsIwiNJlIaSVTJuROxLbwe21ywKdAl9F4q+YIAj1xtjc6eT2fY7sjgAv5lpOLc2+oRepmx/YtSj342WUM/2mT3rrG0eFMTfXNMi1DJSsHzZmsWaQAKVyAfG6CAYkqkmwajp3b5aFuxerpjw9OA9tqhfC/kcFv010OmucSJgVuXw1/0TmXeLYuOCwrntUvSXLunr5A==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <25A5E5A070254D419D27AAB3A2BAE301@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1725767AbgJBXlw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Oct 2020 19:41:52 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43285 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725283AbgJBXlv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Oct 2020 19:41:51 -0400
+Received: by mail-oi1-f195.google.com with SMTP id l85so2946889oih.10;
+        Fri, 02 Oct 2020 16:41:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HGc7tX7DLeaaUChrgI7l/BhbcwzVObNLbwQw2dIgtv8=;
+        b=AvLalkfXuJDIKDaL677hzOe6YqJN0YE4pumJp+BRMrgQB10bfuMsVXS4BGlJMfPjH8
+         XNB5LwyPrDh7CDfbOzOW4fruDEl5FjtKzay4f2QSEdmlUg2K4wRE1MtWnx8NIZEdy4/h
+         qO9vkMNiRml5NhaN/8q+AnnBJuw73GOM9IS3Kys/0k3Qeli88FWz8bTu1aF8Jvj/sVbm
+         aLdLcvj63bnZfG3fIr3GDoSqpoVwcS9mwYbrsUIBJ58XgXWew1E1r5dWAC4ZIUlX0Yuf
+         gtjmXu5ohbngboqnOQShn+nfAry/4JGPR6sEJaFFvtK8CK2ggaAogNQFEwAVwi0PxkTH
+         mZzA==
+X-Gm-Message-State: AOAM5336tGpEnHmH7cNhpC8+HryPDueuVa4hMRG95qeWGtp60IzFYhA0
+        3Ngzlr8JkAcL8K38WJ2bsMGQxahmjgQC
+X-Google-Smtp-Source: ABdhPJzm2FhW0WKDCCbe+0lxpte6bDO6N7mGeO59MGmHqLeq6TPdCpOqLBACOE9kczRzrWmAGIoVWQ==
+X-Received: by 2002:aca:4d44:: with SMTP id a65mr592615oib.144.1601682105817;
+        Fri, 02 Oct 2020 16:41:45 -0700 (PDT)
+Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.googlemail.com with ESMTPSA id b17sm828728oog.25.2020.10.02.16.41.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2020 16:41:45 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: Another round of adding missing 'additionalProperties'
+Date:   Fri,  2 Oct 2020 18:41:43 -0500
+Message-Id: <20201002234143.3570746-1-robh@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3479.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59de4093-c488-48f5-2b08-08d8672c4274
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2020 23:38:26.2177
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NZ/7Or5sGD14nxhR2q6Axf8o4EoDp3lti53w6R4QvlaENzMUZdPuFdKOLo1suQBQcAWl/5YmdsqFawYj4Ilc3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4226
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGkgUGV0ciwNCg0KT24gMTAvMi8yMCAxOjI0IFBNLCBQZXRyIFZvcmVsIHdyb3RlOg0KPiBUaGlz
-IHN5c2NhbGwgaXMgY3VycmVudGx5ICh2NS45KSBzdXBwb3J0ZWQgb24gdGhlc2UgYXJjaGl0ZWN0
-dXJlczoNCj4gYXJjLCBjc2t5LCBtaXBzLCBtNjhrLCBuZHMzMiwgc2gNCj4NCj4gY29uc3RhbnRz
-IGFyZSBtaXNzaW5nIGZvciBtNjhrLCBub3Qgc3VyZSBpZiB0aGUgdGVzdGNhc2UgaXMgdmFsaWQg
-Zm9yIGl0Lg0KPiBVbnRlc3RlZC4NCj4NCj4gVGVzdCBmb3IgX19MVFBfX05SX0lOVkFMSURfU1lT
-Q0FMTCBzYXZlcyBhZGRpbmcgYXV0b3Rvb2xzIGNoZWNrIGZvcg0KPiA8YXNtL2NhY2hlY3RsLmg+
-Lg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBQZXRyIFZvcmVsIDxwZXRyLnZvcmVsQGdtYWlsLmNvbT4N
-Cj4gLS0tDQo+IEhpLA0KPg0KPiBGWUk6IEkgd2FzIGdvaW5nIHRvIGFzayBmb3IgcmVtb3ZhbCBv
-ZiB0aGlzIHRlc3QsIGJ1dCBhbGwgdGhlc2UgYXJjaHMgYXJlDQo+IHN0aWxsIHN1cHBvcnRlZC4g
-VGhpcyB0ZXN0IGNvbXBpbGVzIG9uIGFsbCBhcmNocyBub3csIGJ1dCBJIGhhdmVuJ3QgcnVuDQo+
-IGl0IChJIGRvbid0IGhhdmUgYWNjZXNzIHRvIG5vbmUgb2YgdGhlc2UgYXJjaHMsIG5vdCBzdXJl
-IGlmIExUUCBpcyBldmVuDQo+IHRlc3RlZCBvbiB0aGVzZSBhcmNocykuDQoNCkxUUCBpcyBwcmV0
-dHkgbXVjaCByZWd1bGFybHkgdGVzdGVkIG9uIEFSQyBhbmQgeWVzIHdlIGRvIHN1cHBvcnQvbmVl
-ZCB0aGUNCmNhY2hmbHVzaCBzeXNjYWxsIHRlc3QuDQoNClRoeCwNCi1WaW5lZXQNCg0KPg0KPiBL
-aW5kIHJlZ2FyZHMsDQo+IFBldHINCj4NCj4gIC4uLi9rZXJuZWwvc3lzY2FsbHMvY2FjaGVmbHVz
-aC9jYWNoZWZsdXNoMDEuYyB8IDE3MyArKysrLS0tLS0tLS0tLS0tLS0NCj4gIDEgZmlsZSBjaGFu
-Z2VkLCA0MCBpbnNlcnRpb25zKCspLCAxMzMgZGVsZXRpb25zKC0pDQo+DQo+IGRpZmYgLS1naXQg
-YS90ZXN0Y2FzZXMva2VybmVsL3N5c2NhbGxzL2NhY2hlZmx1c2gvY2FjaGVmbHVzaDAxLmMgYi90
-ZXN0Y2FzZXMva2VybmVsL3N5c2NhbGxzL2NhY2hlZmx1c2gvY2FjaGVmbHVzaDAxLmMNCj4gaW5k
-ZXggMjljZjIwMTRhLi44NTEyNWYyZWUgMTAwNjQ0DQo+IC0tLSBhL3Rlc3RjYXNlcy9rZXJuZWwv
-c3lzY2FsbHMvY2FjaGVmbHVzaC9jYWNoZWZsdXNoMDEuYw0KPiArKysgYi90ZXN0Y2FzZXMva2Vy
-bmVsL3N5c2NhbGxzL2NhY2hlZmx1c2gvY2FjaGVmbHVzaDAxLmMNCj4gQEAgLTEsMTU3ICsxLDY0
-IEBADQo+IC0vKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqLw0KPiAtLyogQ29weXJpZ2h0IChjKSBNYXhp
-biBKb2huIDxtYXhpbi5qb2huQGdtYWlsLmNvbT4sIDIwMDkgICAgICAgICAgICAgICAgICAgICAg
-Ki8NCj4gLS8qIExLTUwgUmVmZXJlbmNlOiBodHRwczovL3VybGRlZmVuc2UuY29tL3YzL19faHR0
-cDovL2xrbWwub3JnL2xrbWwvMjAwOS80LzkvMjAzX187ISFBNEYyUjlHX3BnIU12V3BtckNIUksz
-NlJPWGNQOC1xdzNCMWxDd2loOFJ4SW9qd0tXMTFUSnowaUw3RXZubG9CSUh3STV6cjhtMWMkICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgKi8NCj4gLS8qIFRoaXMgcHJvZ3JhbSBpcyBmcmVlIHNv
-ZnR3YXJlOyAgeW91IGNhbiByZWRpc3RyaWJ1dGUgaXQgYW5kL29yIG1vZGlmeSAgICAgICovDQo+
-IC0vKiBpdCB1bmRlciB0aGUgdGVybXMgb2YgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNl
-IGFzIHB1Ymxpc2hlZCBieSAgICAgICAqLw0KPiAtLyogdGhlIEZyZWUgU29mdHdhcmUgRm91bmRh
-dGlvbjsgZWl0aGVyIHZlcnNpb24gMiBvZiB0aGUgTGljZW5zZSwgb3IgICAgICAgICAgKi8NCj4g
-LS8qIChhdCB5b3VyIG9wdGlvbikgYW55IGxhdGVyIHZlcnNpb24uICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0vKiAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqLw0KPiAt
-LyogVGhpcyBwcm9ncmFtIGlzIGRpc3RyaWJ1dGVkIGluIHRoZSBob3BlIHRoYXQgaXQgd2lsbCBi
-ZSB1c2VmdWwsICAgICAgICAgICAgKi8NCj4gLS8qIGJ1dCBXSVRIT1VUIEFOWSBXQVJSQU5UWTsg
-IHdpdGhvdXQgZXZlbiB0aGUgaW1wbGllZCB3YXJyYW50eSBvZiAgICAgICAgICAgICovDQo+IC0v
-KiBNRVJDSEFOVEFCSUxJVFkgb3IgRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UuICBT
-ZWUgICAgICAgICAgICAgICAgICAqLw0KPiAtLyogdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNl
-bnNlIGZvciBtb3JlIGRldGFpbHMuICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8NCj4gLS8q
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICovDQo+IC0vKiBZb3Ugc2hvdWxkIGhhdmUgcmVjZWl2ZWQgYSBj
-b3B5IG9mIHRoZSBHTlUgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSAgICAgICAgICAqLw0KPiAtLyog
-YWxvbmcgd2l0aCB0aGlzIHByb2dyYW07ICBpZiBub3QsIHdyaXRlIHRvIHRoZSBGcmVlIFNvZnR3
-YXJlICAgICAgICAgICAgICAgKi8NCj4gLS8qIEZvdW5kYXRpb24sIEluYy4sIDUxIEZyYW5rbGlu
-IFN0cmVldCwgRmlmdGggRmxvb3IsIEJvc3RvbiwgTUEgMDIxMTAtMTMwMSBVU0EgICAgKi8NCj4g
-LS8qICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0vKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqLw0KPiAt
-LyoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKi8NCj4gLS8qICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0v
-KiBGaWxlOiAgICAgICAgY2FjaGVmbHVzaDAxLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAqLw0KPiAtLyogICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8NCj4gLS8q
-IERlc2NyaXB0aW9uOiBUaGUgY2FjaGVmbHVzaF9jaGVjaygpIHN5c2NhbGwgICAgICAgICAgICAg
-ICAgICAgICAJICAgICAgKi8NCj4gLS8qCQlUZXN0cyBFSU5WQUwgZXJyb3Igb2YgY2FjaGVmbHVz
-aCBzeXN0ZW0gY2FsbC4JCSAgICAgICovDQo+IC0vKiAJCUl0cyBleHBlY3RlZCBiZWhhdmlvdXIg
-aXMgY2FjaGVmbHVzaCgpIHNob3VsZCByZXR1cm4gLUVJTlZBTCAgKi8NCj4gLS8qCQl3aGVuIGNh
-Y2hlIHBhcmFtZXRlciBpcyBub3Qgb25lIG9mIElDQUNIRSwgRENBQ0hFLCBvciBCQ0FDSEUuICov
-DQo+IC0vKiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAqLw0KPiAtLyogVXNhZ2U6ICA8Zm9yIGNvbW1hbmQt
-bGluZT4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8N
-Cj4gLS8qIGNhY2hlZmx1c2gwMSBbLWMgbl0gWy1lXVstaSBuXSBbLUkgeF0gWy1wIHhdIFstdF0g
-ICAgICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0vKiAgICAgIHdoZXJlLCAgLWMgbiA6IFJ1
-biBuIGNvcGllcyBjb25jdXJyZW50bHkuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqLw0K
-PiAtLyogICAgICAgICAgICAgIC1lICAgOiBUdXJuIG9uIGVycm5vIGxvZ2dpbmcuICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgKi8NCj4gLS8qICAgICAgICAgICAgICAtaSBuIDogRXhl
-Y3V0ZSB0ZXN0IG4gdGltZXMuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICovDQo+
-IC0vKiAgICAgICAgICAgICAgLUkgeCA6IEV4ZWN1dGUgdGVzdCBmb3IgeCBzZWNvbmRzLiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAqLw0KPiAtLyogICAgICAgICAgICAgIC1QIHggOiBQYXVz
-ZSBmb3IgeCBzZWNvbmRzIGJldHdlZW4gaXRlcmF0aW9ucy4gICAgICAgICAgICAgICAgKi8NCj4g
-LS8qICAgICAgICAgICAgICAtdCAgIDogVHVybiBvbiBzeXNjYWxsIHRpbWluZy4gICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0vKiAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqLw0KPiAt
-LyogVG90YWwgVGVzdHM6IDEgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgKi8NCj4gLS8qICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0v
-KiBUZXN0IE5hbWU6ICAgY2FjaGVmbHVzaDAxICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAqLw0KPiAtLyoqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKi8NCj4gKy8v
-IFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9yLWxhdGVyDQo+ICANCj4gLSNpbmNs
-dWRlIDx1bmlzdGQuaD4NCj4gLSNpbmNsdWRlIDxzdGRpby5oPg0KPiAtI2luY2x1ZGUgPHN0ZGxp
-Yi5oPg0KPiAtI2luY2x1ZGUgPGVycm5vLmg+DQo+IC0NCj4gLSNpbmNsdWRlICJ0ZXN0LmgiDQo+
-ICsjaW5jbHVkZSAidHN0X3Rlc3QuaCINCj4gICNpbmNsdWRlICJsYXBpL3N5c2NhbGxzLmgiDQo+
-ICANCj4gICNpZiBfX05SX2NhY2hlZmx1c2ggIT0gX19MVFBfX05SX0lOVkFMSURfU1lTQ0FMTA0K
-PiArDQo+ICAjaW5jbHVkZSA8YXNtL2NhY2hlY3RsLmg+DQo+IC0jZWxzZQ0KPiArDQo+ICsvKg0K
-PiArICogbTY4ayBkb2VzIG5vdCBoYXZlIHRoZXNlIGNvbnN0YW50cw0KPiArICovDQo+ICsNCj4g
-ICNpZm5kZWYgICBJQ0FDSEUNCj4gLSNkZWZpbmUgICBJQ0FDSEUgICAoMTw8MCkJLyogZmx1c2gg
-aW5zdHJ1Y3Rpb24gY2FjaGUgICAgICAgICovDQo+ICsjIGRlZmluZSAgIElDQUNIRSAgICgxPDww
-KQ0KPiAgI2VuZGlmDQo+ICsNCj4gICNpZm5kZWYgICBEQ0FDSEUNCj4gLSNkZWZpbmUgICBEQ0FD
-SEUgICAoMTw8MSkJLyogd3JpdGViYWNrIGFuZCBmbHVzaCBkYXRhIGNhY2hlICovDQo+ICsjIGRl
-ZmluZSAgIERDQUNIRSAgICgxPDwxKQ0KPiAgI2VuZGlmDQo+ICsNCj4gICNpZm5kZWYgICBCQ0FD
-SEUNCj4gLSNkZWZpbmUgICBCQ0FDSEUgICAoSUNBQ0hFfERDQUNIRSkJLyogZmx1c2ggYm90aCBj
-YWNoZXMgICAgICAgICAgICAgICovDQo+IC0jZW5kaWYNCj4gKyMgZGVmaW5lICAgQkNBQ0hFICAg
-KElDQUNIRXxEQ0FDSEUpDQo+ICAjZW5kaWYNCj4gIA0KPiAtY2hhciAqVENJRCA9ICJjYWNoZWZs
-dXNoMDEiOw0KPiAtaW50IFRTVF9UT1RBTCA9IDE7DQo+ICsjZGVmaW5lIENBQ0hFX0RFU0MoeCkg
-LmNhY2hlID0geCwgLmRlc2MgPSAjeA0KPiAgDQo+IC0vKiBFeHRlcm4gR2xvYmFsIEZ1bmN0aW9u
-cyAqLw0KPiAtLyoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKi8NCj4gLS8qICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICovDQo+IC0vKiBGdW5jdGlvbjogICAgY2xlYW51cCAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqLw0KPiAtLyogICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-Ki8NCj4gLS8qIERlc2NyaXB0aW9uOiBQZXJmb3JtcyBhbGwgb25lIHRpbWUgY2xlYW4gdXAgZm9y
-IHRoaXMgdGVzdCBvbiBzdWNjZXNzZnVsICAgICovDQo+IC0vKiAgICAgICAgICAgICAgY29tcGxl
-dGlvbiwgIHByZW1hdHVyZSBleGl0IG9yICBmYWlsdXJlLiBDbG9zZXMgYWxsIHRlbXBvcmFyeSAq
-Lw0KPiAtLyogICAgICAgICAgICAgIGZpbGVzLCByZW1vdmVzIGFsbCB0ZW1wb3JhcnkgZGlyZWN0
-b3JpZXMgZXhpdHMgdGhlIHRlc3Qgd2l0aCAgKi8NCj4gLS8qICAgICAgICAgICAgICBhcHByb3By
-aWF0ZSByZXR1cm4gY29kZSBieSBjYWxsaW5nIHRzdF9leGl0KCkgZnVuY3Rpb24uICAgICAgICov
-DQo+IC0vKiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAqLw0KPiAtLyogSW5wdXQ6ICAgICAgIE5vbmUuICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8N
-Cj4gLS8qICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0vKiBPdXRwdXQ6ICAgICAgTm9uZS4gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqLw0K
-PiAtLyogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgKi8NCj4gLS8qIFJldHVybjogICAgICBPbiBmYWlsdXJl
-IC0gRXhpdHMgY2FsbGluZyB0c3RfZXhpdCgpLiBOb24gJzAnIHJldHVybiBjb2RlLiAgICovDQo+
-IC0vKiAgICAgICAgICAgICAgT24gc3VjY2VzcyAtIEV4aXRzIGNhbGxpbmcgdHN0X2V4aXQoKS4g
-V2l0aCAnMCcgcmV0dXJuIGNvZGUuICAqLw0KPiAtLyogICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8NCj4g
-LS8qKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKiovDQo+IC12b2lkIGNsZWFudXAodm9pZCkNCj4gLXsNCj4g
-K3N0YXRpYyBzdHJ1Y3QgdGVzdF9jYXNlX3Qgew0KPiArCWludCBjYWNoZTsNCj4gKwljb25zdCBj
-aGFyICpkZXNjOw0KPiArfSB0ZXN0X2Nhc2VzW10gPSB7DQo+ICsJeyBDQUNIRV9ERVNDKElDQUNI
-RSkgfSwNCj4gKwl7IENBQ0hFX0RFU0MoRENBQ0hFKSB9LA0KPiArCXsgQ0FDSEVfREVTQyhCQ0FD
-SEUpIH0sDQo+ICt9Ow0KPiAgDQo+IC0JdHN0X3JtZGlyKCk7DQo+IC19DQo+ICtzdGF0aWMgY2hh
-ciAqYWRkcjsNCj4gIA0KPiAtLyogTG9jYWwgIEZ1bmN0aW9ucyAqLw0KPiAtLyoqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKi8NCj4gLS8qICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0vKiBGdW5jdGlvbjog
-ICAgc2V0dXAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAqLw0KPiAtLyogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8NCj4gLS8qIERlc2NyaXB0aW9u
-OiBQZXJmb3JtcyBhbGwgb25lIHRpbWUgc2V0dXAgZm9yIHRoaXMgdGVzdC4gVGhpcyBmdW5jdGlv
-biBpcyAgICovDQo+IC0vKiAgICAgICAgICAgICAgdHlwaWNhbGx5IHVzZWQgdG8gY2FwdHVyZSBz
-aWduYWxzLCBjcmVhdGUgdGVtcG9yYXJ5IGRpcnMgICAgICAqLw0KPiAtLyogICAgICAgICAgICAg
-IGFuZCB0ZW1wb3JhcnkgZmlsZXMgdGhhdCBtYXkgYmUgdXNlZCBpbiB0aGUgY291cnNlIG9mIHRo
-aXMgICAgKi8NCj4gLS8qICAgICAgICAgICAgICB0ZXN0LiAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0vKiAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAqLw0KPiAtLyogSW5wdXQ6ICAgICAgIE5vbmUuICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8NCj4gLS8qICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICovDQo+IC0vKiBPdXRwdXQ6ICAgICAgTm9uZS4gICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqLw0KPiAtLyogICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgKi8NCj4gLS8qIFJldHVybjogICAgICBPbiBmYWlsdXJlIC0gRXhpdHMgYnkgY2FsbGluZyBj
-bGVhbnVwKCkuICAgICAgICAgICAgICAgICAgICAgICovDQo+IC0vKiAgICAgICAgICAgICAgT24g
-c3VjY2VzcyAtIHJldHVybnMgMC4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAqLw0KPiAtLyogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8NCj4gLS8qKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KiovDQo+IC12b2lkIHNldHVwKHZvaWQpDQo+ICtzdGF0aWMgdm9pZCBzZXR1cCh2b2lkKQ0KPiAg
-ew0KPiAtCS8qIENhcHR1cmUgc2lnbmFscyBpZiBhbnkgKi8NCj4gLQkvKiBDcmVhdGUgdGVtcG9y
-YXJ5IGRpcmVjdG9yaWVzICovDQo+IC0JVEVTVF9QQVVTRTsNCj4gLQl0c3RfdG1wZGlyKCk7DQo+
-ICsJYWRkciA9IFNBRkVfTUFMTE9DKGdldHBhZ2VzaXplKCkpOw0KPiAgfQ0KPiAgDQo+IC1pbnQg
-bWFpbihpbnQgYWMsIGNoYXIgKiphdikNCj4gK3N0YXRpYyB2b2lkIHRlc3RfY2FjaGVmbHVzaCh1
-bnNpZ25lZCBpbnQgaSkNCj4gIHsNCj4gKwlzdHJ1Y3QgdGVzdF9jYXNlX3QgKnRjID0gJnRlc3Rf
-Y2FzZXNbaV07DQo+ICANCj4gLQljaGFyICphZGRyID0gTlVMTDsNCj4gLQ0KPiAtCXRzdF9wYXJz
-ZV9vcHRzKGFjLCBhdiwgTlVMTCwgTlVMTCk7DQo+IC0NCj4gLQlzZXR1cCgpOw0KPiAtDQo+IC0J
-dHN0X2NvdW50ID0gMDsNCj4gLQkvKiBDcmVhdGUgc29tZSB1c2VyIGFkZHJlc3MgcmFuZ2UgKi8N
-Cj4gLQlhZGRyID0gbWFsbG9jKGdldHBhZ2VzaXplKCkpOw0KPiAtCWlmIChhZGRyID09IE5VTEwp
-IHsNCj4gLQkJdHN0X2Jya20oVEZBSUwgfCBUVEVSUk5PLCBjbGVhbnVwLCAibWFsbG9jIGZhaWxl
-ZCIpOw0KPiAtCX0NCj4gLQ0KPiAtCS8qIEludm9rZXMgY2FjaGVmbHVzaCgpIHdpdGggcHJvcGVy
-IHBhcmFtZXRlcnMgKi8NCj4gLQlURVNUKGx0cF9zeXNjYWxsKF9fTlJfY2FjaGVmbHVzaCwgYWRk
-ciwgZ2V0cGFnZXNpemUoKSwgSUNBQ0hFKSk7DQo+IC0JaWYgKFRFU1RfUkVUVVJOID09IDApIHsN
-Cj4gLQkJdHN0X3Jlc20oVFBBU1MsICJwYXNzZWQgd2l0aCBubyBlcnJubyIpOw0KPiAtCX0gZWxz
-ZSB7DQo+IC0JCXRzdF9yZXNtKFRGQUlMLCAiZmFpbGVkIHdpdGggdW5leHBlY3RlZCBlcnJubyIp
-Ow0KPiAtCX0NCj4gLQ0KPiAtCVRFU1QobHRwX3N5c2NhbGwoX19OUl9jYWNoZWZsdXNoLCBhZGRy
-LCBnZXRwYWdlc2l6ZSgpLCBEQ0FDSEUpKTsNCj4gLQlpZiAoVEVTVF9SRVRVUk4gPT0gMCkgew0K
-PiAtCQl0c3RfcmVzbShUUEFTUywgInBhc3NlZCB3aXRoIG5vIGVycm5vIik7DQo+ICsJVEVTVCh0
-c3Rfc3lzY2FsbChfX05SX2NhY2hlZmx1c2gsIGFkZHIsIGdldHBhZ2VzaXplKCksIHRjLT5jYWNo
-ZSkpOw0KPiArCWlmIChUU1RfUkVUID09IDApIHsNCj4gKwkJdHN0X3JlcyhUUEFTUywgIiVzIHBh
-c3NlZCIsIHRjLT5kZXNjKTsNCj4gIAl9IGVsc2Ugew0KPiAtCQl0c3RfcmVzbShURkFJTCwgImZh
-aWxlZCB3aXRoIHVuZXhwZWN0ZWQgZXJybm8iKTsNCj4gKwkJdHN0X3JlcyhURkFJTCB8IFRURVJS
-Tk8sICIlcyBmYWlsZWQiLCB0Yy0+ZGVzYyk7DQo+ICAJfQ0KPiArfQ0KPiAgDQo+IC0JVEVTVChs
-dHBfc3lzY2FsbChfX05SX2NhY2hlZmx1c2gsIGFkZHIsIGdldHBhZ2VzaXplKCksIEJDQUNIRSkp
-Ow0KPiAtCWlmIChURVNUX1JFVFVSTiA9PSAwKSB7DQo+IC0JCXRzdF9yZXNtKFRQQVNTLCAicGFz
-c2VkIHdpdGggbm8gZXJybm8iKTsNCj4gLQl9IGVsc2Ugew0KPiAtCQl0c3RfcmVzbShURkFJTCwg
-ImZhaWxlZCB3aXRoIHVuZXhwZWN0ZWQgZXJybm8iKTsNCj4gLQl9DQo+ICtzdGF0aWMgc3RydWN0
-IHRzdF90ZXN0IHRlc3QgPSB7DQo+ICsJLnNldHVwID0gc2V0dXAsDQo+ICsJLnRlc3QgPSB0ZXN0
-X2NhY2hlZmx1c2gsDQo+ICsJLnRjbnQgPSBBUlJBWV9TSVpFKHRlc3RfY2FzZXMpLA0KPiArfTsN
-Cj4gIA0KPiAtCWNsZWFudXAoKTsNCj4gLQl0c3RfZXhpdCgpOw0KPiAtfQ0KPiArI2Vsc2UNCj4g
-KwlUU1RfVEVTVF9UQ09ORigic3lzdGVtIGRvZXNuJ3Qgc3VwcG9ydCBjYWNoZWZsdXNoKCkiKTsN
-Cj4gKyNlbmRpZg0KDQo=
+Another round of wack-a-mole. The json-schema default is additional
+unknown properties are allowed, but for DT all properties should be
+defined.
+
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Baolin Wang <baolin.wang7@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-clk@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-spi@vger.kernel.org
+Cc: linux-gpio@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-iio@vger.kernel.org
+Cc: openipmi-developer@lists.sourceforge.net
+Cc: linux-leds@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: linux-rockchip@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-mips@vger.kernel.org
+Cc: linux-mmc@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: linux-remoteproc@vger.kernel.org
+Cc: linux-serial@vger.kernel.org
+Cc: alsa-devel@alsa-project.org
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+
+I'll take this thru the DT tree.
+
+ .../arm/bcm/raspberrypi,bcm2835-firmware.yaml |  2 ++
+ .../arm/mediatek/mediatek,pericfg.yaml        |  2 ++
+ .../devicetree/bindings/arm/pmu.yaml          |  2 ++
+ .../devicetree/bindings/arm/primecell.yaml    |  3 +++
+ .../bindings/arm/samsung/sysreg.yaml          |  2 ++
+ .../arm/tegra/nvidia,tegra20-pmc.yaml         |  2 ++
+ .../bindings/bus/mti,mips-cdmm.yaml           |  2 ++
+ .../bus/socionext,uniphier-system-bus.yaml    |  7 +++++++
+ .../bindings/clock/arm,syscon-icst.yaml       |  2 ++
+ .../bindings/clock/idt,versaclock5.yaml       | 20 ++++++++++---------
+ .../bindings/clock/imx6q-clock.yaml           |  2 ++
+ .../bindings/clock/imx6sl-clock.yaml          |  2 ++
+ .../bindings/clock/imx6sll-clock.yaml         |  2 ++
+ .../bindings/clock/imx6sx-clock.yaml          |  2 ++
+ .../bindings/clock/imx6ul-clock.yaml          |  2 ++
+ .../bindings/clock/intel,cgu-lgm.yaml         |  2 ++
+ .../bindings/clock/qcom,gcc-sm8250.yaml       |  2 ++
+ .../bindings/clock/sprd,sc9863a-clk.yaml      |  2 ++
+ .../bindings/clock/ti,am654-ehrpwm-tbclk.yaml |  2 ++
+ .../bindings/display/bridge/ite,it6505.yaml   |  5 +++++
+ .../bindings/display/bridge/lvds-codec.yaml   |  3 +++
+ .../devicetree/bindings/display/msm/gmu.yaml  |  2 ++
+ .../devicetree/bindings/edac/dmc-520.yaml     |  2 ++
+ .../devicetree/bindings/fsi/ibm,fsi2spi.yaml  |  2 ++
+ .../gpio/socionext,uniphier-gpio.yaml         |  2 ++
+ .../bindings/hwmon/adi,axi-fan-control.yaml   |  2 ++
+ .../devicetree/bindings/hwmon/adt7475.yaml    |  2 ++
+ .../bindings/iio/accel/kionix,kxsd9.yaml      |  4 ++++
+ .../bindings/iio/adc/maxim,max1238.yaml       |  2 ++
+ .../bindings/iio/adc/maxim,max1363.yaml       |  2 ++
+ .../bindings/iio/adc/qcom,spmi-vadc.yaml      |  4 ++++
+ .../bindings/iio/adc/samsung,exynos-adc.yaml  |  2 ++
+ .../bindings/iio/adc/ti,ads8688.yaml          |  4 ++++
+ .../bindings/iio/amplifiers/adi,hmc425a.yaml  |  2 ++
+ .../bindings/iio/imu/invensense,icm42600.yaml |  6 ++++++
+ .../bindings/iio/light/amstaos,tsl2563.yaml   |  2 ++
+ .../bindings/iio/light/dynaimage,al3010.yaml  |  2 ++
+ .../bindings/iio/light/dynaimage,al3320a.yaml |  2 ++
+ .../bindings/iio/light/sharp,gp2ap002.yaml    |  2 ++
+ .../iio/magnetometer/asahi-kasei,ak8975.yaml  |  2 ++
+ .../iio/proximity/vishay,vcnl3020.yaml        |  2 ++
+ .../interrupt-controller/ingenic,intc.yaml    |  2 ++
+ .../loongson,pch-msi.yaml                     |  2 ++
+ .../loongson,pch-pic.yaml                     |  2 ++
+ .../devicetree/bindings/ipmi/ipmi-smic.yaml   |  2 ++
+ .../devicetree/bindings/leds/leds-lp55xx.yaml |  8 ++++++++
+ .../bindings/media/i2c/chrontel,ch7322.yaml   |  2 ++
+ .../bindings/media/i2c/imi,rdacm2x-gmsl.yaml  |  2 ++
+ .../bindings/media/nxp,imx8mq-vpu.yaml        |  2 ++
+ .../bindings/media/qcom,msm8916-venus.yaml    |  2 ++
+ .../bindings/media/qcom,msm8996-venus.yaml    |  2 ++
+ .../bindings/media/qcom,sc7180-venus.yaml     |  2 ++
+ .../bindings/media/qcom,sdm845-venus-v2.yaml  |  2 ++
+ .../bindings/media/qcom,sdm845-venus.yaml     |  2 ++
+ .../bindings/memory-controllers/fsl/mmdc.yaml |  2 ++
+ .../memory-controllers/st,stm32-fmc2-ebi.yaml |  2 ++
+ .../bindings/mfd/gateworks-gsc.yaml           |  2 ++
+ .../bindings/mfd/xylon,logicvc.yaml           | 14 +++++++++++--
+ .../bindings/mips/ingenic/ingenic,cpu.yaml    |  6 ++++--
+ .../bindings/mips/loongson/rs780e-acpi.yaml   |  2 ++
+ .../bindings/mmc/mmc-pwrseq-emmc.yaml         |  2 ++
+ .../bindings/mmc/mmc-pwrseq-sd8787.yaml       |  2 ++
+ .../bindings/mmc/mmc-pwrseq-simple.yaml       |  2 ++
+ .../devicetree/bindings/net/qcom,ipa.yaml     |  2 ++
+ .../bindings/net/realtek-bluetooth.yaml       |  4 +++-
+ .../net/wireless/microchip,wilc1000.yaml      |  4 ++++
+ .../devicetree/bindings/pci/rcar-pci-ep.yaml  |  2 ++
+ .../phy/amlogic,meson-g12a-usb2-phy.yaml      |  2 ++
+ .../bindings/phy/qcom,ipq806x-usb-phy-hs.yaml |  2 ++
+ .../bindings/phy/qcom,ipq806x-usb-phy-ss.yaml |  2 ++
+ .../bindings/phy/qcom,qusb2-phy.yaml          |  1 +
+ .../bindings/phy/qcom-usb-ipq4019-phy.yaml    |  2 ++
+ .../bindings/pinctrl/cirrus,lochnagar.yaml    |  2 ++
+ .../pinctrl/socionext,uniphier-pinctrl.yaml   |  2 ++
+ .../power/amlogic,meson-sec-pwrc.yaml         |  2 ++
+ .../bindings/power/domain-idle-state.yaml     |  2 ++
+ .../bindings/power/mti,mips-cpc.yaml          |  2 ++
+ .../bindings/power/supply/cw2015_battery.yaml |  2 ++
+ .../bindings/power/supply/rohm,bd99954.yaml   |  8 ++++++++
+ .../bindings/regulator/silergy,sy8827n.yaml   |  2 ++
+ .../bindings/remoteproc/qcom,pil-info.yaml    |  2 ++
+ .../bindings/serial/samsung_uart.yaml         |  2 ++
+ .../serial/socionext,uniphier-uart.yaml       |  2 ++
+ .../devicetree/bindings/serial/sprd-uart.yaml |  2 ++
+ .../bindings/soc/qcom/qcom,geni-se.yaml       |  1 +
+ .../bindings/sound/amlogic,g12a-toacodec.yaml |  2 ++
+ .../bindings/sound/amlogic,gx-sound-card.yaml |  2 ++
+ .../bindings/sound/amlogic,t9015.yaml         |  2 ++
+ .../bindings/sound/cirrus,cs42l51.yaml        |  2 ++
+ .../devicetree/bindings/sound/fsl,easrc.yaml  |  2 ++
+ .../bindings/sound/intel,keembay-i2s.yaml     |  2 ++
+ .../bindings/sound/nvidia,tegra186-dspk.yaml  |  2 ++
+ .../sound/nvidia,tegra210-admaif.yaml         |  2 ++
+ .../bindings/sound/nvidia,tegra210-dmic.yaml  |  2 ++
+ .../bindings/sound/nvidia,tegra210-i2s.yaml   |  2 ++
+ .../bindings/sound/rockchip,rk3328-codec.yaml |  2 ++
+ .../bindings/sound/tlv320adcx140.yaml         |  2 ++
+ .../bindings/thermal/rcar-thermal.yaml        |  5 +++++
+ .../bindings/thermal/sprd-thermal.yaml        |  4 ++++
+ .../bindings/thermal/thermal-idle.yaml        |  2 ++
+ .../bindings/thermal/thermal-zones.yaml       |  2 ++
+ .../devicetree/bindings/timer/cdns,ttc.yaml   |  2 ++
+ .../bindings/usb/nvidia,tegra-xudc.yaml       |  2 ++
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |  2 ++
+ .../devicetree/bindings/usb/ti,j721e-usb.yaml | 18 +++++++++++++++++
+ 105 files changed, 285 insertions(+), 14 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+index 6834f5e8df5f..9fdb319dcf19 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+@@ -54,6 +54,8 @@ required:
+   - compatible
+   - mboxes
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     firmware {
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
+index 1af30174b2d0..8723dfe34bab 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
+@@ -47,6 +47,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     pericfg@10003000 {
+diff --git a/Documentation/devicetree/bindings/arm/pmu.yaml b/Documentation/devicetree/bindings/arm/pmu.yaml
+index 97df36d301c9..693ef3f185a8 100644
+--- a/Documentation/devicetree/bindings/arm/pmu.yaml
++++ b/Documentation/devicetree/bindings/arm/pmu.yaml
+@@ -93,4 +93,6 @@ properties:
+ required:
+   - compatible
+ 
++additionalProperties: false
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/primecell.yaml b/Documentation/devicetree/bindings/arm/primecell.yaml
+index 5aae37f1c563..e15fe00aafb2 100644
+--- a/Documentation/devicetree/bindings/arm/primecell.yaml
++++ b/Documentation/devicetree/bindings/arm/primecell.yaml
+@@ -33,4 +33,7 @@ properties:
+     contains:
+       const: apb_pclk
+     additionalItems: true
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/samsung/sysreg.yaml b/Documentation/devicetree/bindings/arm/samsung/sysreg.yaml
+index 3b7811804cb4..2ac789058eee 100644
+--- a/Documentation/devicetree/bindings/arm/samsung/sysreg.yaml
++++ b/Documentation/devicetree/bindings/arm/samsung/sysreg.yaml
+@@ -32,6 +32,8 @@ properties:
+   reg:
+     maxItems: 1
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     syscon@10010000 {
+diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
+index b71a20af5f70..43fd2f8927d0 100644
+--- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
++++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
+@@ -308,6 +308,8 @@ required:
+   - clocks
+   - '#clock-cells'
+ 
++additionalProperties: false
++
+ dependencies:
+   "nvidia,suspend-mode": ["nvidia,core-pwr-off-time", "nvidia,cpu-pwr-off-time"]
+   "nvidia,core-pwr-off-time": ["nvidia,core-pwr-good-time"]
+diff --git a/Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml b/Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml
+index 9cc2d5f1beef..6a7b26b049f1 100644
+--- a/Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml
++++ b/Documentation/devicetree/bindings/bus/mti,mips-cdmm.yaml
+@@ -26,6 +26,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     cdmm@1bde8000 {
+diff --git a/Documentation/devicetree/bindings/bus/socionext,uniphier-system-bus.yaml b/Documentation/devicetree/bindings/bus/socionext,uniphier-system-bus.yaml
+index a0c6c5d2b70f..49df13fc2f89 100644
+--- a/Documentation/devicetree/bindings/bus/socionext,uniphier-system-bus.yaml
++++ b/Documentation/devicetree/bindings/bus/socionext,uniphier-system-bus.yaml
+@@ -57,6 +57,11 @@ properties:
+       "ranges" property should provide a "reasonable" default that is known to
+       work. The software should initialize the bus controller according to it.
+ 
++patternProperties:
++  "^.*@[1-5],[1-9a-f][0-9a-f]+$":
++    description: Devices attached to chip selects
++    type: object
++
+ required:
+   - compatible
+   - reg
+@@ -64,6 +69,8 @@ required:
+   - "#size-cells"
+   - ranges
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     // In this example,
+diff --git a/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml b/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
+index 444aeea27db8..eb241587efd1 100644
+--- a/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
++++ b/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
+@@ -89,6 +89,8 @@ required:
+   - compatible
+   - clocks
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     vco1: clock {
+diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+index 28c6461b9a9a..2ac1131fd922 100644
+--- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
++++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+@@ -50,6 +50,15 @@ properties:
+   '#clock-cells':
+     const: 1
+ 
++  clock-names:
++    minItems: 1
++    maxItems: 2
++    items:
++      enum: [ xin, clkin ]
++  clocks:
++    minItems: 1
++    maxItems: 2
++
+ patternProperties:
+   "^OUT[1-4]$":
+     type: object
+@@ -93,19 +102,12 @@ allOf:
+           maxItems: 1
+     else:
+       # Devices without builtin crystal
+-      properties:
+-        clock-names:
+-          minItems: 1
+-          maxItems: 2
+-          items:
+-            enum: [ xin, clkin ]
+-        clocks:
+-          minItems: 1
+-          maxItems: 2
+       required:
+         - clock-names
+         - clocks
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clk/versaclock.h>
+diff --git a/Documentation/devicetree/bindings/clock/imx6q-clock.yaml b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+index 92a8e545e212..4f4637eddb8b 100644
+--- a/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+@@ -57,6 +57,8 @@ required:
+   - interrupts
+   - '#clock-cells'
+ 
++additionalProperties: false
++
+ examples:
+   # Clock Control Module node:
+   - |
+diff --git a/Documentation/devicetree/bindings/clock/imx6sl-clock.yaml b/Documentation/devicetree/bindings/clock/imx6sl-clock.yaml
+index c97bf95b4150..b83c8f43d664 100644
+--- a/Documentation/devicetree/bindings/clock/imx6sl-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/imx6sl-clock.yaml
+@@ -33,6 +33,8 @@ required:
+   - interrupts
+   - '#clock-cells'
+ 
++additionalProperties: false
++
+ examples:
+   # Clock Control Module node:
+   - |
+diff --git a/Documentation/devicetree/bindings/clock/imx6sll-clock.yaml b/Documentation/devicetree/bindings/clock/imx6sll-clock.yaml
+index de48924be191..484894a4b23f 100644
+--- a/Documentation/devicetree/bindings/clock/imx6sll-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/imx6sll-clock.yaml
+@@ -49,6 +49,8 @@ required:
+   - clocks
+   - clock-names
+ 
++additionalProperties: false
++
+ examples:
+   # Clock Control Module node:
+   - |
+diff --git a/Documentation/devicetree/bindings/clock/imx6sx-clock.yaml b/Documentation/devicetree/bindings/clock/imx6sx-clock.yaml
+index e50cddee43c3..e6c795657c24 100644
+--- a/Documentation/devicetree/bindings/clock/imx6sx-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/imx6sx-clock.yaml
+@@ -53,6 +53,8 @@ required:
+   - clocks
+   - clock-names
+ 
++additionalProperties: false
++
+ examples:
+   # Clock Control Module node:
+   - |
+diff --git a/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml b/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
+index 36ce7667c972..6a51a3f51cd9 100644
+--- a/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
+@@ -49,6 +49,8 @@ required:
+   - clocks
+   - clock-names
+ 
++additionalProperties: false
++
+ examples:
+   # Clock Control Module node:
+   - |
+diff --git a/Documentation/devicetree/bindings/clock/intel,cgu-lgm.yaml b/Documentation/devicetree/bindings/clock/intel,cgu-lgm.yaml
+index 6dc1414bfb7f..f3e1a700a2ca 100644
+--- a/Documentation/devicetree/bindings/clock/intel,cgu-lgm.yaml
++++ b/Documentation/devicetree/bindings/clock/intel,cgu-lgm.yaml
+@@ -33,6 +33,8 @@ required:
+   - reg
+   - '#clock-cells'
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     cgu: clock-controller@e0200000 {
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
+index a5766ff89082..80bd6caf5bc9 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
+@@ -56,6 +56,8 @@ required:
+   - '#reset-cells'
+   - '#power-domain-cells'
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/qcom,rpmh.h>
+diff --git a/Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml b/Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml
+index c6d091518650..4069e09cb62d 100644
+--- a/Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml
++++ b/Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml
+@@ -73,6 +73,8 @@ else:
+     The 'reg' property for the clock node is also required if there is a sub
+     range of registers for the clocks.
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     ap_clk: clock-controller@21500000 {
+diff --git a/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
+index 869b18ac88d7..6b419a9878f3 100644
+--- a/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
++++ b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
+@@ -26,6 +26,8 @@ required:
+   - "#clock-cells"
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     ehrpwm_tbclk: syscon@4140 {
+diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+index 2c500166c65d..efbb3d0117dc 100644
+--- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+@@ -31,6 +31,9 @@ properties:
+   compatible:
+     const: ite,it6505
+ 
++  reg:
++    maxItems: 1
++
+   ovdd-supply:
+     maxItems: 1
+     description: I/O voltage
+@@ -63,6 +66,8 @@ required:
+   - reset-gpios
+   - extcon
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml b/Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml
+index 68951d56ebba..e8fa8e901c9f 100644
+--- a/Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml
+@@ -83,6 +83,9 @@ required:
+   - compatible
+   - ports
+ 
++additionalProperties: false
++
++
+ examples:
+   - |
+     lvds-encoder {
+diff --git a/Documentation/devicetree/bindings/display/msm/gmu.yaml b/Documentation/devicetree/bindings/display/msm/gmu.yaml
+index 53056dd02597..fe55611d2603 100644
+--- a/Documentation/devicetree/bindings/display/msm/gmu.yaml
++++ b/Documentation/devicetree/bindings/display/msm/gmu.yaml
+@@ -89,6 +89,8 @@ required:
+   - iommus
+   - operating-points-v2
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/qcom,gpucc-sdm845.h>
+diff --git a/Documentation/devicetree/bindings/edac/dmc-520.yaml b/Documentation/devicetree/bindings/edac/dmc-520.yaml
+index 9272d2bd8634..3b6842e92d1b 100644
+--- a/Documentation/devicetree/bindings/edac/dmc-520.yaml
++++ b/Documentation/devicetree/bindings/edac/dmc-520.yaml
+@@ -49,6 +49,8 @@ required:
+   - interrupts
+   - interrupt-names
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     dmc0: dmc@200000 {
+diff --git a/Documentation/devicetree/bindings/fsi/ibm,fsi2spi.yaml b/Documentation/devicetree/bindings/fsi/ibm,fsi2spi.yaml
+index b26d4b4be743..e2ca0b000471 100644
+--- a/Documentation/devicetree/bindings/fsi/ibm,fsi2spi.yaml
++++ b/Documentation/devicetree/bindings/fsi/ibm,fsi2spi.yaml
+@@ -28,6 +28,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     fsi2spi@1c00 {
+diff --git a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+index c58ff9a94f45..1a54db04f29d 100644
+--- a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+@@ -64,6 +64,8 @@ required:
+   - gpio-ranges
+   - socionext,interrupt-ranges
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
+index 7898b9dba5a5..6747b870f297 100644
+--- a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
+@@ -44,6 +44,8 @@ required:
+   - interrupts
+   - pulses-per-revolution
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     fpga_axi: fpga-axi {
+diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+index dfa821c0aacc..ad0ec9f35bd8 100644
+--- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+@@ -65,6 +65,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     i2c {
+diff --git a/Documentation/devicetree/bindings/iio/accel/kionix,kxsd9.yaml b/Documentation/devicetree/bindings/iio/accel/kionix,kxsd9.yaml
+index d61ab4fa3d71..390b87242fcb 100644
+--- a/Documentation/devicetree/bindings/iio/accel/kionix,kxsd9.yaml
++++ b/Documentation/devicetree/bindings/iio/accel/kionix,kxsd9.yaml
+@@ -29,10 +29,14 @@ properties:
+   mount-matrix:
+     description: an optional 3x3 mounting rotation matrix.
+ 
++  spi-max-frequency: true
++
+ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     # include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/iio/adc/maxim,max1238.yaml b/Documentation/devicetree/bindings/iio/adc/maxim,max1238.yaml
+index cccd3033a55b..50bcd72ac9d6 100644
+--- a/Documentation/devicetree/bindings/iio/adc/maxim,max1238.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/maxim,max1238.yaml
+@@ -62,6 +62,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     i2c {
+diff --git a/Documentation/devicetree/bindings/iio/adc/maxim,max1363.yaml b/Documentation/devicetree/bindings/iio/adc/maxim,max1363.yaml
+index 48377549c39a..e04f09f35601 100644
+--- a/Documentation/devicetree/bindings/iio/adc/maxim,max1363.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/maxim,max1363.yaml
+@@ -36,6 +36,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     i2c {
+diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+index 0ca992465a21..7f4f827c57a7 100644
+--- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+@@ -48,6 +48,8 @@ properties:
+     description:
+       End of conversion interrupt.
+ 
++  io-channel-ranges: true
++
+ required:
+   - compatible
+   - reg
+@@ -232,6 +234,8 @@ allOf:
+               enum: [ 1, 2, 4, 8, 16 ]
+               default: 1
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     spmi_bus {
+diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+index cc3c8ea6a894..16d76482b4ff 100644
+--- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+@@ -107,6 +107,8 @@ allOf:
+           items:
+             - const: adc
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     adc: adc@12d10000 {
+diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads8688.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads8688.yaml
+index 97fe6cbb2efa..a0af4b24877f 100644
+--- a/Documentation/devicetree/bindings/iio/adc/ti,ads8688.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/ti,ads8688.yaml
+@@ -25,10 +25,14 @@ properties:
+     description: Optional external reference.  If not supplied, assume
+       REFSEL input tied low to enable the internal reference.
+ 
++  spi-max-frequency: true
++
+ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     spi {
+diff --git a/Documentation/devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml b/Documentation/devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml
+index 5342360e96b1..a557761d8016 100644
+--- a/Documentation/devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml
++++ b/Documentation/devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml
+@@ -33,6 +33,8 @@ required:
+   - compatible
+   - ctrl-gpios
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/iio/imu/invensense,icm42600.yaml b/Documentation/devicetree/bindings/iio/imu/invensense,icm42600.yaml
+index abd8d25e1136..4c1c083d0e92 100644
+--- a/Documentation/devicetree/bindings/iio/imu/invensense,icm42600.yaml
++++ b/Documentation/devicetree/bindings/iio/imu/invensense,icm42600.yaml
+@@ -47,11 +47,17 @@ properties:
+   vddio-supply:
+     description: Regulator that provides power to the bus
+ 
++  spi-max-frequency: true
++  spi-cpha: true
++  spi-cpol: true
++
+ required:
+   - compatible
+   - reg
+   - interrupts
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/iio/light/amstaos,tsl2563.yaml b/Documentation/devicetree/bindings/iio/light/amstaos,tsl2563.yaml
+index e201a06d8fdc..60e76bc035a5 100644
+--- a/Documentation/devicetree/bindings/iio/light/amstaos,tsl2563.yaml
++++ b/Documentation/devicetree/bindings/iio/light/amstaos,tsl2563.yaml
+@@ -32,6 +32,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     i2c {
+diff --git a/Documentation/devicetree/bindings/iio/light/dynaimage,al3010.yaml b/Documentation/devicetree/bindings/iio/light/dynaimage,al3010.yaml
+index f671edda6641..a3a979553e32 100644
+--- a/Documentation/devicetree/bindings/iio/light/dynaimage,al3010.yaml
++++ b/Documentation/devicetree/bindings/iio/light/dynaimage,al3010.yaml
+@@ -26,6 +26,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/iio/light/dynaimage,al3320a.yaml b/Documentation/devicetree/bindings/iio/light/dynaimage,al3320a.yaml
+index 497300239d93..8249be99cff9 100644
+--- a/Documentation/devicetree/bindings/iio/light/dynaimage,al3320a.yaml
++++ b/Documentation/devicetree/bindings/iio/light/dynaimage,al3320a.yaml
+@@ -26,6 +26,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/iio/light/sharp,gp2ap002.yaml b/Documentation/devicetree/bindings/iio/light/sharp,gp2ap002.yaml
+index 12aa16f24772..f8a932be0d10 100644
+--- a/Documentation/devicetree/bindings/iio/light/sharp,gp2ap002.yaml
++++ b/Documentation/devicetree/bindings/iio/light/sharp,gp2ap002.yaml
+@@ -61,6 +61,8 @@ required:
+   - sharp,proximity-far-hysteresis
+   - sharp,proximity-close-hysteresis
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/iio/magnetometer/asahi-kasei,ak8975.yaml b/Documentation/devicetree/bindings/iio/magnetometer/asahi-kasei,ak8975.yaml
+index f0b336ac39c9..a25590a16ba7 100644
+--- a/Documentation/devicetree/bindings/iio/magnetometer/asahi-kasei,ak8975.yaml
++++ b/Documentation/devicetree/bindings/iio/magnetometer/asahi-kasei,ak8975.yaml
+@@ -55,6 +55,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/iio/proximity/vishay,vcnl3020.yaml b/Documentation/devicetree/bindings/iio/proximity/vishay,vcnl3020.yaml
+index 51dba64037f6..fbd3a2e32280 100644
+--- a/Documentation/devicetree/bindings/iio/proximity/vishay,vcnl3020.yaml
++++ b/Documentation/devicetree/bindings/iio/proximity/vishay,vcnl3020.yaml
+@@ -47,6 +47,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     i2c {
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.yaml
+index 02a3cf470518..0a046be8d1cd 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.yaml
+@@ -49,6 +49,8 @@ required:
+   - "#interrupt-cells"
+   - interrupt-controller
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     intc: interrupt-controller@10001000 {
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,pch-msi.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,pch-msi.yaml
+index 1b256d9dd92a..1f6fd73d4624 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/loongson,pch-msi.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,pch-msi.yaml
+@@ -46,6 +46,8 @@ required:
+   - loongson,msi-base-vec
+   - loongson,msi-num-vecs
+ 
++additionalProperties: true #fixme
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,pch-pic.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,pch-pic.yaml
+index a6dcbb2971a9..fdd6a38a31db 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/loongson,pch-pic.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,pch-pic.yaml
+@@ -41,6 +41,8 @@ required:
+   - interrupt-controller
+   - '#interrupt-cells'
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/ipmi/ipmi-smic.yaml b/Documentation/devicetree/bindings/ipmi/ipmi-smic.yaml
+index 58fa76ee6176..898e3267893a 100644
+--- a/Documentation/devicetree/bindings/ipmi/ipmi-smic.yaml
++++ b/Documentation/devicetree/bindings/ipmi/ipmi-smic.yaml
+@@ -49,6 +49,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     smic@fff3a000 {
+diff --git a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
+index b1bb3feb0f4d..cd877e817ad1 100644
+--- a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
+@@ -58,6 +58,12 @@ properties:
+       - 2 # D1~6 with VOUT, D7~9 with VDD
+       - 3 # D1~9 are connected to VOUT
+ 
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
+ patternProperties:
+   "(^led@[0-9a-f]$|led)":
+     type: object
+@@ -98,6 +104,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+    #include <dt-bindings/leds/common.h>
+diff --git a/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
+index daa2869377c5..63e5b89d2e0b 100644
+--- a/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
+@@ -49,6 +49,8 @@ required:
+   - reg
+   - interrupts
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml b/Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml
+index 107c862a7fc7..3dc06c628e64 100644
+--- a/Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml
+@@ -119,6 +119,8 @@ required:
+   - reg
+   - port
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     i2c@e66d8000 {
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+index a2d1cd77c1e2..762be3f96ce9 100644
+--- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
++++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+@@ -55,6 +55,8 @@ required:
+   - clocks
+   - clock-names
+ 
++additionalProperties: false
++
+ examples:
+   - |
+         #include <dt-bindings/clock/imx8mq-clock.h>
+diff --git a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
+index f9606df02d70..59ab16ad12f1 100644
+--- a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
+@@ -92,6 +92,8 @@ required:
+   - video-decoder
+   - video-encoder
+ 
++additionalProperties: false
++
+ examples:
+   - |
+         #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
+index fa0dc6c47f1d..199f45217b4a 100644
+--- a/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
+@@ -119,6 +119,8 @@ required:
+   - video-decoder
+   - video-encoder
+ 
++additionalProperties: false
++
+ examples:
+   - |
+         #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
+index 55f2d67ae34e..3cec6dae1139 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
+@@ -108,6 +108,8 @@ required:
+   - video-decoder
+   - video-encoder
+ 
++additionalProperties: false
++
+ examples:
+   - |
+         #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
+index 157dff8057e9..55f5d439fa61 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
+@@ -103,6 +103,8 @@ required:
+   - video-core0
+   - video-core1
+ 
++additionalProperties: false
++
+ examples:
+   - |
+         #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
+index 084e45e2df62..680f37726fdf 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
+@@ -120,6 +120,8 @@ required:
+   - video-core0
+   - video-core1
+ 
++additionalProperties: false
++
+ examples:
+   - |
+         #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/Documentation/devicetree/bindings/memory-controllers/fsl/mmdc.yaml b/Documentation/devicetree/bindings/memory-controllers/fsl/mmdc.yaml
+index 68484136a510..71547eee9919 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/fsl/mmdc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/fsl/mmdc.yaml
+@@ -33,6 +33,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/imx6qdl-clock.h>
+diff --git a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
+index 70eaf739036b..cba74205846a 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
+@@ -194,6 +194,8 @@ required:
+   - clocks
+   - ranges
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+index 9b6eb50606e8..95e47f317ed2 100644
+--- a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
++++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+@@ -144,6 +144,8 @@ required:
+   - "#address-cells"
+   - "#size-cells"
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/mfd/xylon,logicvc.yaml b/Documentation/devicetree/bindings/mfd/xylon,logicvc.yaml
+index abc9937506e0..8a1a6625c782 100644
+--- a/Documentation/devicetree/bindings/mfd/xylon,logicvc.yaml
++++ b/Documentation/devicetree/bindings/mfd/xylon,logicvc.yaml
+@@ -26,6 +26,12 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 1
++
+ select:
+   properties:
+     compatible:
+@@ -36,15 +42,19 @@ select:
+   required:
+     - compatible
+ 
++patternProperties:
++  "^gpio@[0-9a-f]+$":
++    $ref: /schemas/gpio/xylon,logicvc-gpio.yaml#
++
+ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     logicvc: logicvc@43c00000 {
+       compatible = "xylon,logicvc-3.02.a", "syscon", "simple-mfd";
+       reg = <0x43c00000 0x6000>;
+-      #address-cells = <1>;
+-      #size-cells = <1>;
+     };
+diff --git a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+index 16fa03d65ad5..6df1a9470d8f 100644
+--- a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
++++ b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+@@ -32,12 +32,16 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  device_type: true
++
+ required:
+   - device_type
+   - compatible
+   - reg
+   - clocks
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/jz4780-cgu.h>
+@@ -52,7 +56,6 @@ examples:
+                 reg = <0>;
+ 
+                 clocks = <&cgu JZ4780_CLK_CPU>;
+-                clock-names = "cpu";
+         };
+ 
+         cpu1: cpu@1 {
+@@ -61,7 +64,6 @@ examples:
+                 reg = <1>;
+ 
+                 clocks = <&cgu JZ4780_CLK_CORE1>;
+-                clock-names = "cpu";
+         };
+     };
+ ...
+diff --git a/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml b/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
+index d317897e1115..7c0f9022202c 100644
+--- a/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
++++ b/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
+@@ -23,6 +23,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     isa@0 {
+diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml
+index 77f746f57284..1fc7e620f328 100644
+--- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml
++++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml
+@@ -36,6 +36,8 @@ required:
+   - compatible
+   - reset-gpios
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml
+index a68820d31d50..e0169a285aa2 100644
+--- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml
++++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml
+@@ -28,6 +28,8 @@ required:
+   - powerdown-gpios
+   - reset-gpios
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
+index 449215444723..06bbd8590544 100644
+--- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
++++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
+@@ -50,6 +50,8 @@ properties:
+ required:
+   - compatible
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+index 8594f114f016..4d8464b2676d 100644
+--- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
++++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+@@ -144,6 +144,8 @@ oneOf:
+   - required:
+       - memory-region
+ 
++additionalProperties: false
++
+ examples:
+   - |
+         #include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
+index c488f24ed38f..4f485df69ac3 100644
+--- a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
++++ b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
+@@ -37,6 +37,8 @@ properties:
+ required:
+   - compatible
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+@@ -49,6 +51,6 @@ examples:
+         bluetooth {
+             compatible = "realtek,rtl8723bs-bt";
+             device-wake-gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>; /* PL5 */
+-            host-wakeup-gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>; /* PL6 */
++            host-wake-gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>; /* PL6 */
+         };
+     };
+diff --git a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
+index 2c320eb2a8c4..6c35682377e6 100644
+--- a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
+@@ -18,6 +18,8 @@ properties:
+   compatible:
+     const: microchip,wilc1000
+ 
++  reg: true
++
+   spi-max-frequency: true
+ 
+   interrupts:
+@@ -34,6 +36,8 @@ required:
+   - compatible
+   - interrupts
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     spi {
+diff --git a/Documentation/devicetree/bindings/pci/rcar-pci-ep.yaml b/Documentation/devicetree/bindings/pci/rcar-pci-ep.yaml
+index aa483c7f27fd..53d5952b7e57 100644
+--- a/Documentation/devicetree/bindings/pci/rcar-pci-ep.yaml
++++ b/Documentation/devicetree/bindings/pci/rcar-pci-ep.yaml
+@@ -55,6 +55,8 @@ required:
+   - clock-names
+   - max-functions
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/r8a774c0-cpg-mssr.h>
+diff --git a/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
+index 0d2557bb0bcc..399ebde45409 100644
+--- a/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
+@@ -63,6 +63,8 @@ then:
+   required:
+     - power-domains
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     phy@36000 {
+diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml
+index 23887ebe08fd..17f132ce5516 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml
+@@ -42,6 +42,8 @@ required:
+   - clocks
+   - clock-names
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/qcom,gcc-ipq806x.h>
+diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml
+index fa30c24b4405..17fd7f6b83bb 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml
+@@ -60,6 +60,8 @@ required:
+   - clocks
+   - clock-names
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/qcom,gcc-ipq806x.h>
+diff --git a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
+index ccda92859eca..d457fb6a4779 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
+@@ -158,6 +158,7 @@ required:
+   - vdda-phy-dpdm-supply
+   - resets
+ 
++additionalProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/phy/qcom-usb-ipq4019-phy.yaml b/Documentation/devicetree/bindings/phy/qcom-usb-ipq4019-phy.yaml
+index 1118fe69b611..3e7191b168fb 100644
+--- a/Documentation/devicetree/bindings/phy/qcom-usb-ipq4019-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom-usb-ipq4019-phy.yaml
+@@ -36,6 +36,8 @@ required:
+   - reset-names
+   - "#phy-cells"
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/qcom,gcc-ipq4019.h>
+diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml
+index 420d74856032..a07dd197176a 100644
+--- a/Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml
+@@ -188,3 +188,5 @@ required:
+   - gpio-ranges
+   - pinctrl-0
+   - pinctrl-names
++
++additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
+index f8a93d8680f9..502480a19f49 100644
+--- a/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
+@@ -28,6 +28,8 @@ properties:
+ required:
+   - compatible
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     // The UniPhier pinctrl should be a subnode of a "syscon" compatible node.
+diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+index bc4e037f3f73..5dae04d2936c 100644
+--- a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
++++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+@@ -27,6 +27,8 @@ required:
+   - compatible
+   - "#power-domain-cells"
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     secure-monitor {
+diff --git a/Documentation/devicetree/bindings/power/domain-idle-state.yaml b/Documentation/devicetree/bindings/power/domain-idle-state.yaml
+index dfba1af9abe5..6a12efdf436a 100644
+--- a/Documentation/devicetree/bindings/power/domain-idle-state.yaml
++++ b/Documentation/devicetree/bindings/power/domain-idle-state.yaml
+@@ -50,6 +50,8 @@ patternProperties:
+       - exit-latency-us
+       - min-residency-us
+ 
++additionalProperties: false
++
+ examples:
+   - |
+ 
+diff --git a/Documentation/devicetree/bindings/power/mti,mips-cpc.yaml b/Documentation/devicetree/bindings/power/mti,mips-cpc.yaml
+index ccdeaece169e..be447ccfdcb8 100644
+--- a/Documentation/devicetree/bindings/power/mti,mips-cpc.yaml
++++ b/Documentation/devicetree/bindings/power/mti,mips-cpc.yaml
+@@ -26,6 +26,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     cpc@1bde0000 {
+diff --git a/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml b/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
+index 2036977ecc2f..ee92e6a076ac 100644
+--- a/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
++++ b/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
+@@ -52,6 +52,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     i2c {
+diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+index 7e0f73a898c7..9852d2febf65 100644
+--- a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
++++ b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+@@ -112,6 +112,12 @@ properties:
+ #     threshold, and the current is below this setting (7 in above chart)
+ #   See also Documentation/devicetree/bindings/power/supply/battery.txt
+ 
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
+   monitored-battery:
+     description:
+       phandle of battery characteristics devicetree node
+@@ -137,6 +143,8 @@ properties:
+ required:
+   - compatible
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     i2c {
+diff --git a/Documentation/devicetree/bindings/regulator/silergy,sy8827n.yaml b/Documentation/devicetree/bindings/regulator/silergy,sy8827n.yaml
+index 15983cdc7c28..b222adabc7b4 100644
+--- a/Documentation/devicetree/bindings/regulator/silergy,sy8827n.yaml
++++ b/Documentation/devicetree/bindings/regulator/silergy,sy8827n.yaml
+@@ -31,6 +31,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     i2c {
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml
+index 87c52316ddbd..9282837d64ba 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml
+@@ -25,6 +25,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     imem@146bf000 {
+diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+index 96414ac65d06..21ee627b2ced 100644
+--- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
++++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+@@ -68,6 +68,8 @@ required:
+   - interrupts
+   - reg
+ 
++additionalProperties: false
++
+ allOf:
+   - if:
+       properties:
+diff --git a/Documentation/devicetree/bindings/serial/socionext,uniphier-uart.yaml b/Documentation/devicetree/bindings/serial/socionext,uniphier-uart.yaml
+index 09a30300850c..d490c7c4b967 100644
+--- a/Documentation/devicetree/bindings/serial/socionext,uniphier-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/socionext,uniphier-uart.yaml
+@@ -32,6 +32,8 @@ required:
+   - interrupts
+   - clocks
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     aliases {
+diff --git a/Documentation/devicetree/bindings/serial/sprd-uart.yaml b/Documentation/devicetree/bindings/serial/sprd-uart.yaml
+index e66b2e92a7fc..09f6283f3cae 100644
+--- a/Documentation/devicetree/bindings/serial/sprd-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/sprd-uart.yaml
+@@ -56,6 +56,8 @@ required:
+   - reg
+   - interrupts
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+index bd04fdb57414..84671950ca0d 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+@@ -173,6 +173,7 @@ patternProperties:
+       - compatible
+       - interrupts
+ 
++additionalProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/sound/amlogic,g12a-toacodec.yaml b/Documentation/devicetree/bindings/sound/amlogic,g12a-toacodec.yaml
+index b4b3828c40af..3c3891d17238 100644
+--- a/Documentation/devicetree/bindings/sound/amlogic,g12a-toacodec.yaml
++++ b/Documentation/devicetree/bindings/sound/amlogic,g12a-toacodec.yaml
+@@ -37,6 +37,8 @@ required:
+   - reg
+   - resets
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/reset/amlogic,meson-g12a-audio-reset.h>
+diff --git a/Documentation/devicetree/bindings/sound/amlogic,gx-sound-card.yaml b/Documentation/devicetree/bindings/sound/amlogic,gx-sound-card.yaml
+index fb374c659be1..db61f0731a20 100644
+--- a/Documentation/devicetree/bindings/sound/amlogic,gx-sound-card.yaml
++++ b/Documentation/devicetree/bindings/sound/amlogic,gx-sound-card.yaml
+@@ -84,6 +84,8 @@ required:
+   - model
+   - dai-link-0
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     sound {
+diff --git a/Documentation/devicetree/bindings/sound/amlogic,t9015.yaml b/Documentation/devicetree/bindings/sound/amlogic,t9015.yaml
+index 04014e658c90..c7613ea728d4 100644
+--- a/Documentation/devicetree/bindings/sound/amlogic,t9015.yaml
++++ b/Documentation/devicetree/bindings/sound/amlogic,t9015.yaml
+@@ -42,6 +42,8 @@ required:
+   - clock-names
+   - resets
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/g12a-clkc.h>
+diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml
+index 5bcb643c288f..0d87e2c86a42 100644
+--- a/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml
++++ b/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml
+@@ -46,6 +46,8 @@ required:
+   - reg
+   - "#sound-dai-cells"
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/sound/fsl,easrc.yaml b/Documentation/devicetree/bindings/sound/fsl,easrc.yaml
+index 32d547af9ce7..bdde68a1059c 100644
+--- a/Documentation/devicetree/bindings/sound/fsl,easrc.yaml
++++ b/Documentation/devicetree/bindings/sound/fsl,easrc.yaml
+@@ -74,6 +74,8 @@ required:
+   - fsl,asrc-rate
+   - fsl,asrc-format
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/imx8mn-clock.h>
+diff --git a/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml b/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml
+index 2e0bbc1c868a..6cbdd8857ea2 100644
+--- a/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml
++++ b/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml
+@@ -52,6 +52,8 @@ required:
+   - clock-names
+   - interrupts
+ 
++additionalProperties: false
++
+ examples:
+   - |
+      #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra186-dspk.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra186-dspk.yaml
+index 2f2fcffa65cb..ed2fb32fcdd4 100644
+--- a/Documentation/devicetree/bindings/sound/nvidia,tegra186-dspk.yaml
++++ b/Documentation/devicetree/bindings/sound/nvidia,tegra186-dspk.yaml
+@@ -64,6 +64,8 @@ required:
+   - assigned-clock-parents
+   - sound-name-prefix
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include<dt-bindings/clock/tegra186-clock.h>
+diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-admaif.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-admaif.yaml
+index 41c77f45d2fd..c028b259e822 100644
+--- a/Documentation/devicetree/bindings/sound/nvidia,tegra210-admaif.yaml
++++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-admaif.yaml
+@@ -81,6 +81,8 @@ required:
+   - dmas
+   - dma-names
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     admaif@702d0000 {
+diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-dmic.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-dmic.yaml
+index 8689d9f18c11..2a3207b550e7 100644
+--- a/Documentation/devicetree/bindings/sound/nvidia,tegra210-dmic.yaml
++++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-dmic.yaml
+@@ -64,6 +64,8 @@ required:
+   - assigned-clocks
+   - assigned-clock-parents
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include<dt-bindings/clock/tegra210-car.h>
+diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-i2s.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-i2s.yaml
+index 9bbf18153d63..dfc1bf7b7722 100644
+--- a/Documentation/devicetree/bindings/sound/nvidia,tegra210-i2s.yaml
++++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-i2s.yaml
+@@ -82,6 +82,8 @@ required:
+   - assigned-clocks
+   - assigned-clock-parents
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include<dt-bindings/clock/tegra210-car.h>
+diff --git a/Documentation/devicetree/bindings/sound/rockchip,rk3328-codec.yaml b/Documentation/devicetree/bindings/sound/rockchip,rk3328-codec.yaml
+index 5b85ad5e4834..75b3b33b5f1f 100644
+--- a/Documentation/devicetree/bindings/sound/rockchip,rk3328-codec.yaml
++++ b/Documentation/devicetree/bindings/sound/rockchip,rk3328-codec.yaml
+@@ -53,6 +53,8 @@ required:
+   - rockchip,grf
+   - "#sound-dai-cells"
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
+index f578f17f3e04..1bff53d37118 100644
+--- a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
++++ b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
+@@ -138,6 +138,8 @@ required:
+   - compatible
+   - reg
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+diff --git a/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
+index 0994693d240f..7e9557ac0e4a 100644
+--- a/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
+@@ -59,6 +59,9 @@ properties:
+   resets:
+     maxItems: 1
+ 
++  "#thermal-sensor-cells":
++    const: 0
++
+ if:
+   properties:
+     compatible:
+@@ -79,6 +82,8 @@ else:
+     - power-domains
+     - resets
+ 
++additionalProperties: false
++
+ examples:
+   # Example (non interrupt support)
+   - |
+diff --git a/Documentation/devicetree/bindings/thermal/sprd-thermal.yaml b/Documentation/devicetree/bindings/thermal/sprd-thermal.yaml
+index af2ff930646a..6d65a3cf2af2 100644
+--- a/Documentation/devicetree/bindings/thermal/sprd-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/sprd-thermal.yaml
+@@ -68,6 +68,8 @@ patternProperties:
+       - nvmem-cells
+       - nvmem-cell-names
+ 
++    additionalProperties: false
++
+ required:
+   - compatible
+   - reg
+@@ -79,6 +81,8 @@ required:
+   - "#address-cells"
+   - "#size-cells"
+ 
++additionalProperties: false
++
+ examples:
+   - |
+         ap_thm0: thermal@32200000 {
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-idle.yaml b/Documentation/devicetree/bindings/thermal/thermal-idle.yaml
+index a832d427e9d5..6278ccf16f3f 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-idle.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-idle.yaml
+@@ -44,6 +44,8 @@ properties:
+ required:
+   - '#cooling-cells'
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/thermal/thermal.h>
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+index 3ec9cc87ec50..164f71598c59 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+@@ -218,6 +218,8 @@ patternProperties:
+       - trips
+     additionalProperties: false
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+index c532b60b9c63..8615353f69b4 100644
+--- a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
++++ b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+@@ -36,6 +36,8 @@ required:
+   - interrupts
+   - clocks
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     ttc0: ttc0@f8001000 {
+diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+index 196589c93373..e60e590dbe12 100644
+--- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
++++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+@@ -155,6 +155,8 @@ allOf:
+         clock-names:
+           maxItems: 4
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/tegra210-car.h>
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index dac10848dd7f..2cf525d21e05 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -121,6 +121,8 @@ required:
+   - interrupts
+   - interrupt-names
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/qcom,gcc-sdm845.h>
+diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+index 484fc1091d7c..388245b91a55 100644
+--- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
++++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+@@ -46,6 +46,22 @@ properties:
+       VBUS pin of the SoC via a 1/3 voltage divider.
+     type: boolean
+ 
++  assigned-clocks:
++    maxItems: 1
++
++  assigned-clock-parents:
++    maxItems: 1
++
++  '#address-cells':
++    const: 2
++
++  '#size-cells':
++    const: 2
++
++patternProperties:
++  "^usb@":
++    type: object
++
+ required:
+   - compatible
+   - reg
+@@ -53,6 +69,8 @@ required:
+   - clocks
+   - clock-names
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/soc/ti,sci_pm_domain.h>
+-- 
+2.25.1
+
