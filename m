@@ -2,54 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AE22809C1
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Oct 2020 23:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE2B280DF0
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Oct 2020 09:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732836AbgJAV4J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Oct 2020 17:56:09 -0400
-Received: from elvis.franken.de ([193.175.24.41]:39086 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726855AbgJAV4J (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 1 Oct 2020 17:56:09 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kO6YQ-0005Yq-00; Thu, 01 Oct 2020 23:55:58 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 7C95DC1051; Thu,  1 Oct 2020 23:55:48 +0200 (CEST)
-Date:   Thu, 1 Oct 2020 23:55:48 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: Kernel 5.9-rc regression.
-Message-ID: <20201001215548.GA21328@alpha.franken.de>
-References: <25b6a64b-b5ac-c85a-abde-909fb2d768f9@wanyeetech.com>
+        id S1726259AbgJBHPq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Oct 2020 03:15:46 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:55649 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbgJBHPq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Oct 2020 03:15:46 -0400
+Received: from localhost.localdomain (unknown [91.224.148.103])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 26DBC24000B;
+        Fri,  2 Oct 2020 07:15:42 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        linux-mtd@lists.infradead.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH v3] mtd: physmap: Add Baikal-T1 physically mapped ROM support
+Date:   Fri,  2 Oct 2020 09:15:42 +0200
+Message-Id: <20201002071542.26477-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200920111445.21816-1-Sergey.Semin@baikalelectronics.ru>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25b6a64b-b5ac-c85a-abde-909fb2d768f9@wanyeetech.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b3e79e7682e075326df8041b826b03453acacd0a
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 02, 2020 at 04:15:43AM +0800, Zhou Yanjie wrote:
-> Hi Thomas and list,
+On Sun, 2020-09-20 at 11:14:44 UTC, Serge Semin wrote:
+> Baikal-T1 Boot Controller provides an access to a RO storages, which are
+> physically mapped into the SoC MMIO space. In particularly there are
+> Internal ROM embedded into the SoC with a pre-installed firmware,
+> externally attached SPI flash (also accessed in the read-only mode) and a
+> memory region, which mirrors one of them in accordance with the currently
+> enabled system boot mode (also called Boot ROM).
 > 
-> There is a strange phenomenon in kernel 5.9-rc: when using kernel 5.9-rc
-> with debian 10 and running htop, the memory footprint will be displayed as
-> 3.99T. When the actual memory footprint increases, the displayed value will
-> be reduced to 3.98T, 3.97T etc. These phenomena have been confirmed in
-> X1000, X1830, and JZ4780 (disable SMP), this phenomenon does not seem to
-> affect the SMP processor. When the JZ4780 turn on SMP, the memory footprint
-> will be displayed normally.
+> This commit adds the Internal ROM support to the physmap driver of the MTD
+> kernel subsystem. The driver will create the Internal ROM MTD as long as
+> it is defined in the system dts file. The physically mapped SPI flash
+> region will be used to implement the SPI-mem interface. The mirroring
+> memory region won't be accessible directly since it's redundant due to
+> both bootable regions being exposed anyway.
+> 
+> Note we had to create a dedicated code for the ROMs since read from the
+> corresponding memory regions must be done via the dword-aligned addresses.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: linux-mips@vger.kernel.org
 
-try this fix
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-https://lore.kernel.org/lkml/20201001203931.GD2706729@carbon.DHCP.thefacebook.com/
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Miquel
