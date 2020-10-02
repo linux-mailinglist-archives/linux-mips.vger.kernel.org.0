@@ -2,46 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD02281063
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Oct 2020 12:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545662810B6
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Oct 2020 12:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387705AbgJBKMT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Oct 2020 06:12:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46596 "EHLO mail.kernel.org"
+        id S1726464AbgJBKqQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Oct 2020 06:46:16 -0400
+Received: from mail.thorsis.com ([92.198.35.195]:37725 "EHLO mail.thorsis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726386AbgJBKMQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 2 Oct 2020 06:12:16 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 399BE206FA;
-        Fri,  2 Oct 2020 10:12:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601633535;
-        bh=YMb+SikBzA0kaz01qg1rFRGqMR34IEZDdELzQnvannc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=m+QSecoZOGe8dvzGAzaVLu6djX6wvstSNjTufshrQ7pLbM+zd/i00BMIxk9HtkH36
-         4RGMtD5Y9P1GyZIBAMLBkI9wveIJaHkolhG9ddl4D8wp9XAcl991RL+EtWsjr+8KQt
-         XTGHujSHsO4T0sIxR14eOk8W/1eFzzgroCv9ipS4=
-Received: by mail-ed1-f42.google.com with SMTP id t16so1074147edw.7;
-        Fri, 02 Oct 2020 03:12:15 -0700 (PDT)
-X-Gm-Message-State: AOAM533Qbb6gT6IZ4HG2NMPpbS0Ptqz0nNs6SrvluK/rCdNivT6R0Y5M
-        E4S2ivAyYaJNOlSUkpASU6q31BB19q6M6FuZuBo=
-X-Google-Smtp-Source: ABdhPJyIAzURzd3Z3ZQc9dk3WngtlZ5byJRK3kR//jIcYN1OLykt0UVP1CzVTSlm3oLD4xmvK0KWSQpcyp1ktS9V6aw=
-X-Received: by 2002:aa7:da16:: with SMTP id r22mr1552459eds.132.1601633533817;
- Fri, 02 Oct 2020 03:12:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200930234637.7573-1-post@lespocky.de> <20200930234637.7573-4-post@lespocky.de>
- <CAJKOXPewAhZU1Enz9HrdrG5RF==y6Mna=E_vfpD4u2747CVo8A@mail.gmail.com> <1708987.KbI9FDK2aH@ada>
-In-Reply-To: <1708987.KbI9FDK2aH@ada>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Fri, 2 Oct 2020 12:12:01 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfK_fnyf0bJY_d_pKH0es3C9x07Fc425LPCr323qZkugw@mail.gmail.com>
-Message-ID: <CAJKOXPfK_fnyf0bJY_d_pKH0es3C9x07Fc425LPCr323qZkugw@mail.gmail.com>
-Subject: Re: [PATCH v6 3/7] dt-bindings: mfd: Fix schema warnings for pwm-leds
-To:     Alexander Dahl <ada@thorsis.com>
-Cc:     linux-leds@vger.kernel.org, Alexander Dahl <post@lespocky.de>,
-        devicetree@vger.kernel.org,
+        id S1726181AbgJBKqQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 2 Oct 2020 06:46:16 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.thorsis.com (Postfix) with ESMTP id CDED399;
+        Fri,  2 Oct 2020 12:46:13 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
+Received: from mail.thorsis.com ([127.0.0.1])
+        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ROFvAfO2yA2R; Fri,  2 Oct 2020 12:46:13 +0200 (CEST)
+Received: by mail.thorsis.com (Postfix, from userid 109)
+        id EE74646E1; Fri,  2 Oct 2020 12:46:11 +0200 (CEST)
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.2
+From:   Alexander Dahl <ada@thorsis.com>
+To:     linux-leds@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexander Dahl <post@lespocky.de>, devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         "linux-samsung-soc@vger.kernel.org" 
@@ -52,39 +38,49 @@ Cc:     linux-leds@vger.kernel.org, Alexander Dahl <post@lespocky.de>,
         Rob Herring <robh+dt@kernel.org>,
         Peter Ujfalusi <peter.ujfalusi@ti.com>,
         Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v6 2/7] dt-bindings: leds: Convert pwm to yaml
+Date:   Fri, 02 Oct 2020 12:46:03 +0200
+Message-ID: <9895379.VNsV0mSTfq@ada>
+In-Reply-To: <CAJKOXPe7Tg+5ESsdPGks_Aqj+zQH4-asC839FseWp0OCJbT4Mw@mail.gmail.com>
+References: <20200930234637.7573-1-post@lespocky.de> <20200930234637.7573-3-post@lespocky.de> <CAJKOXPe7Tg+5ESsdPGks_Aqj+zQH4-asC839FseWp0OCJbT4Mw@mail.gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 2 Oct 2020 at 12:07, Alexander Dahl <ada@thorsis.com> wrote:
->
-> Hello Krzysztof,
->
-> Am Freitag, 2. Oktober 2020, 11:21:10 CEST schrieb Krzysztof Kozlowski:
-> > On Thu, 1 Oct 2020 at 01:51, Alexander Dahl <post@lespocky.de> wrote:
-> > > The node names for devices using the pwm-leds driver follow a certain
-> > > naming scheme (now).
-> >
-> > What warning? Please post them here and in every DTS patch.
->
-> ack
->
-> > Your schema does not enforce pwmleds node naming (the main node, not
-> > children), or at least I could not see it. You change multiple files
-> > in your patchset so are you sure that all these are justified by
-> > warnings pointed out by schema?
->
-> The rename was suggested by Rob [1], and I think you're right, those names are
-> not (yet) enforced by schema?  So at least the commit message is misleading
-> for now.  I'll have to see if I rather reword or update the schema again.
+Hei hei,
 
-If schema does not enforce it, then maybe just mention that you align
-the children names with schema and pwmleds node to device tree
-specification guidelines (node name should be generic, reflecting
-function of the device). However in such case changing only pwmleds
-node name in DTS (without changing children) would not be justified,
-IMHO.
+Am Freitag, 2. Oktober 2020, 11:31:09 CEST schrieb Krzysztof Kozlowski:
+> On Thu, 1 Oct 2020 at 01:52, Alexander Dahl <post@lespocky.de> wrote:
+> > The example was adapted in the following ways:
+> > 
+> > - make use of the now supported 'function' and 'color' properties
+> > - remove pwm nodes, those are documented elsewhere
+> > - tweake node names to be matched by new dtschema rules
+> 
+> tweak? or align?
 
-Best regards,
-Krzysztof
+Depends on if schema actually checks it (child nodes) or if it's just DT 
+policy (parent node).  I'll reword in v7.
+
+> > License was discussed with the original author.
+> 
+> Since you relicense their work, you need an ack or signed off from
+> every author. You cannot just say "I discussed" and post it. That way
+> I could pretend (lie) I talked to Linus and try to relicense Linux to
+> BSD...
+
+I know.  Peter promised to give his Ack publicly on the list back when I 
+worked on v2 or v3, so he is in Cc since then, but apparently he did not yet 
+post it. ;-)
+
+> You need acks/SoB from Peter and Russel.
+
+Well, I should add Russel in v7, too, then.
+
+Thanks
+Alex
+
+
+
