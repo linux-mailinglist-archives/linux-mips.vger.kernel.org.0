@@ -2,84 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB64282BC4
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Oct 2020 18:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF71E282D81
+	for <lists+linux-mips@lfdr.de>; Sun,  4 Oct 2020 22:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726230AbgJDQPc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 4 Oct 2020 12:15:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48318 "EHLO mail.kernel.org"
+        id S1726295AbgJDUNl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Oct 2020 16:13:41 -0400
+Received: from elvis.franken.de ([193.175.24.41]:43926 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726083AbgJDQPc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 4 Oct 2020 12:15:32 -0400
-Received: from localhost (unknown [171.61.67.142])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61CEB2068D;
-        Sun,  4 Oct 2020 16:15:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601828131;
-        bh=ipIbwBDHbGx7U/nYVtWvwEV/y7/NQhikV5Ng+1S41wo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BkrFjq5pesVDCZqCgigvVGnAkYU3kAenXEVcy0C+EYf4QSa7nY/PHBghx8c3UJ+K0
-         V7wA5EiZjeOgOA1F0vSfPpr62TK79z4/hmO6HvTvKyMEs+fXYkKqMHx+Zl0SJ9Rz3x
-         kkipw8CWwDYt7zwpufpGFZLd9NoEY63vruFFDBV0=
-Date:   Sun, 4 Oct 2020 21:45:26 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another round of adding missing
- 'additionalProperties'
-Message-ID: <20201004161526.GA2968@vkoul-mobl>
-References: <20201002234143.3570746-1-robh@kernel.org>
+        id S1726288AbgJDUNl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 4 Oct 2020 16:13:41 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kPAO0-0003iy-00; Sun, 04 Oct 2020 22:13:36 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 773EAC10D8; Sun,  4 Oct 2020 22:12:49 +0200 (CEST)
+Date:   Sun, 4 Oct 2020 22:12:49 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        WANG Xuerui <git@xen0n.name>,
+        Paul Burton <paulburton@kernel.org>,
+        =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>,
+        afzal mohammed <afzal.mohd.ma@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Liangliang Huang <huanglllzu@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: cevt-r4k: Enable intimer for Loongson64 CPUs with
+ extimer
+Message-ID: <20201004201249.GA8186@alpha.franken.de>
+References: <20200923110301.58125-1-jiaxun.yang@flygoat.com>
+ <20201002132721.GA12295@alpha.franken.de>
+ <CA420A99-C226-4A22-B3A6-4464DD8CFA1D@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA420A99-C226-4A22-B3A6-4464DD8CFA1D@flygoat.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 02-10-20, 18:41, Rob Herring wrote:
+On Sat, Oct 03, 2020 at 02:25:42PM +0800, Jiaxun Yang wrote:
+> 
+> 
+> 于 2020年10月2日 GMT+08:00 下午9:27:21, Thomas Bogendoerfer <tsbogend@alpha.franken.de> 写到:
+> >On Wed, Sep 23, 2020 at 07:02:54PM +0800, Jiaxun Yang wrote:
+> >>  
+> >> +#ifdef CONFIG_CPU_LOONGSON64
+> >> +static int c0_compare_int_enable(struct clock_event_device *cd)
+> >> +{
+> >> +	if (cpu_has_extimer)
+> >> +		set_c0_config6(LOONGSON_CONF6_INTIMER);
+> >
+> >why are you not simply do this in loognson64 board setup code and avoid
+> >the whole cluttering of #ifdef CONFIG_CPU_LOONGSON64 over common code ?
+> 
+> Because I'm going to add extimer support later that require dynamic
+> switch of cevt-r4k.
 
->  .../phy/amlogic,meson-g12a-usb2-phy.yaml      |  2 ++
->  .../bindings/phy/qcom,ipq806x-usb-phy-hs.yaml |  2 ++
->  .../bindings/phy/qcom,ipq806x-usb-phy-ss.yaml |  2 ++
->  .../bindings/phy/qcom,qusb2-phy.yaml          |  1 +
->  .../bindings/phy/qcom-usb-ipq4019-phy.yaml    |  2 ++
+another case of misdesigned hardware or why does this need to be
+dynamic ?
 
-For phy changes:
+> This callback is required.
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+please find a solution without #ifdef CONFIG_CPU_LOONGSON64. I dislike
+the pollution of common code with all kinds of #ifdefs and in this case
+there are better options.
+
+Thomas.
 
 -- 
-~Vinod
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
