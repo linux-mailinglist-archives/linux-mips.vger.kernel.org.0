@@ -2,70 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE692826B7
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Oct 2020 23:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB64282BC4
+	for <lists+linux-mips@lfdr.de>; Sun,  4 Oct 2020 18:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbgJCVHL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Oct 2020 17:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725897AbgJCVHL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Oct 2020 17:07:11 -0400
-Received: from orcam.me.uk (unknown [IPv6:2001:4190:8020::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 919C3C0613D0
-        for <linux-mips@vger.kernel.org>; Sat,  3 Oct 2020 14:07:11 -0700 (PDT)
-Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
-        by orcam.me.uk (Postfix) with ESMTPS id DD9572BE086;
-        Sat,  3 Oct 2020 22:07:08 +0100 (BST)
-Date:   Sat, 3 Oct 2020 22:07:05 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Baoquan He <bhe@redhat.com>
-cc:     Huacai Chen <chenhc@lemote.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        kexec@lists.infradead.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 1/3] MIPS: Crash kernel should be able to see old
- memories
-In-Reply-To: <20200923030847.GM25604@MiWiFi-R3L-srv>
-Message-ID: <alpine.LFD.2.21.2010032200470.333514@eddie.linux-mips.org>
-References: <1600828257-31316-1-git-send-email-chenhc@lemote.com> <20200923024548.GL25604@MiWiFi-R3L-srv> <CAAhV-H66O77hK7kB8cCcM6XUOc-TFEg_TJG+GrCSEdD89Qxb7g@mail.gmail.com> <20200923030847.GM25604@MiWiFi-R3L-srv>
+        id S1726230AbgJDQPc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Oct 2020 12:15:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48318 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726083AbgJDQPc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 4 Oct 2020 12:15:32 -0400
+Received: from localhost (unknown [171.61.67.142])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 61CEB2068D;
+        Sun,  4 Oct 2020 16:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601828131;
+        bh=ipIbwBDHbGx7U/nYVtWvwEV/y7/NQhikV5Ng+1S41wo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BkrFjq5pesVDCZqCgigvVGnAkYU3kAenXEVcy0C+EYf4QSa7nY/PHBghx8c3UJ+K0
+         V7wA5EiZjeOgOA1F0vSfPpr62TK79z4/hmO6HvTvKyMEs+fXYkKqMHx+Zl0SJ9Rz3x
+         kkipw8CWwDYt7zwpufpGFZLd9NoEY63vruFFDBV0=
+Date:   Sun, 4 Oct 2020 21:45:26 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another round of adding missing
+ 'additionalProperties'
+Message-ID: <20201004161526.GA2968@vkoul-mobl>
+References: <20201002234143.3570746-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 23 Sep 2020, Baoquan He wrote:
+On 02-10-20, 18:41, Rob Herring wrote:
 
-> > > And we don't have mem=X@Y, only mem=nn[KMG].
-> > The relocatable kernel of MIPS is still unusable now, so MIPS should
-> > use mem=X@Y, and the crash kernel is always different from normal
-> > kernel.
-> 
-> Interesting. Seems MIPS does support mem=X@Y, even though the document
-> of 'mem=' says it's used to specify amount of memory, but not memory
-> region. Anyway, leave this to mips reviewers, thanks for replying.
-> 
-> ~~~~~~~~~~~~~~~~~~~
->         mem=nn[KMG]     [KNL,BOOT] Force usage of a specific amount of memory
->                         Amount of memory to be used in cases as follows:
+>  .../phy/amlogic,meson-g12a-usb2-phy.yaml      |  2 ++
+>  .../bindings/phy/qcom,ipq806x-usb-phy-hs.yaml |  2 ++
+>  .../bindings/phy/qcom,ipq806x-usb-phy-ss.yaml |  2 ++
+>  .../bindings/phy/qcom,qusb2-phy.yaml          |  1 +
+>  .../bindings/phy/qcom-usb-ipq4019-phy.yaml    |  2 ++
 
- Yep, I implemented it for the DECstation back in 2000:
+For phy changes:
 
-commit 97b7ae4257ef7ba8ed9b7944a4f56a49af3e8abb
-Author: Ralf Baechle <ralf@linux-mips.org>
-Date:   Mon Dec 11 16:41:05 2000 +0000
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-    Memmap fixes from Maciej.
-
-(from the LMO repo) in line with the x86 syntax.  I don't know why it 
-hasn't ever been documented in "Kernel Parameters" (for any port), but I'm 
-fairly sure it has been somewhere.
-
- FWIW,
-
-  Maciej
+-- 
+~Vinod
