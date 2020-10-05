@@ -2,122 +2,196 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9020F284100
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Oct 2020 22:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8355C28414D
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Oct 2020 22:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729196AbgJEUe2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Oct 2020 16:34:28 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34827 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726935AbgJEUeY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Oct 2020 16:34:24 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n15so5296976wrq.2;
-        Mon, 05 Oct 2020 13:34:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=M4VHJO7NZXzhdbY1PrU7kRksiXBWJAga7ZRKvTmHhdY=;
-        b=n3Mf2RY23M8mYkTF3/u+jtGKqwng7/Asl+N8rEUYCgXx6Z/lGC+Mp9ZuaUIZlSXoWK
-         nprpsmNbfYP+1gp0H0W1yho/Be0+0abcWoHW4E5mChbSbdW4lBO7xzHs/GOHJaKFSamM
-         A0BnNRNkh+fFTx0b7IqYMuMSx1okJWfW3+aP7Srhab05Z2MRfOUMqscirdDG0uDyMONW
-         bOeNKLHhkufizEFFR4LC1bU/Gm4Omue+ry3mY7hrpWMmJNrwfTumOnvWEpZRwcR0Zi/l
-         j1rD5P3efnQNB0G+i6HBv7Py+8zb5bKcqc9Z0FmuK6PbI+zf3eC/Oa/TDDqmoXcvECz5
-         +7eA==
-X-Gm-Message-State: AOAM532bOuy96i9neV55UhyjyC1ZDpKdrnkCvgmJXzUXC9oH84Hn5gPh
-        KqrwNHohSLR1r/J/bM0ROOE=
-X-Google-Smtp-Source: ABdhPJxCxtgn6aaeKulLwuz8wKsCo89p4EM2tZybvC7kIZ+95SJyA3hC3jBlEekC53H0JnM4JTmd2Q==
-X-Received: by 2002:a5d:480a:: with SMTP id l10mr1120451wrq.238.1601930058858;
-        Mon, 05 Oct 2020 13:34:18 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.194])
-        by smtp.googlemail.com with ESMTPSA id a127sm907143wmh.13.2020.10.05.13.34.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 05 Oct 2020 13:34:17 -0700 (PDT)
-Date:   Mon, 5 Oct 2020 22:34:12 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: Explicitly allow additional properties
- in board/SoC schemas
-Message-ID: <20201005203412.GC23742@kozik-lap>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-4-robh@kernel.org>
+        id S1729594AbgJEUgb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Oct 2020 16:36:31 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:49119 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729288AbgJEUgT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Oct 2020 16:36:19 -0400
+Received: from methusalix.internal.home.lespocky.de ([92.117.55.152]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MuDPf-1kfhXm22Jx-00uZ5G; Mon, 05 Oct 2020 22:35:43 +0200
+Received: from lemmy.internal.home.lespocky.de ([192.168.243.176] helo=lemmy.home.lespocky.de)
+        by methusalix.internal.home.lespocky.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <alex@home.lespocky.de>)
+        id 1kPXCp-0004VD-EM; Mon, 05 Oct 2020 22:35:39 +0200
+Received: (nullmailer pid 10292 invoked by uid 2001);
+        Mon, 05 Oct 2020 20:35:35 -0000
+From:   Alexander Dahl <post@lespocky.de>
+To:     Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Alexander Dahl <ada@thorsis.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Alexander Dahl <post@lespocky.de>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org, linux-mips@vger.kernel.org
+Subject: [PATCH v7 00/12] leds: pwm: Make automatic labels work
+Date:   Mon,  5 Oct 2020 22:34:39 +0200
+Message-Id: <20201005203451.9985-1-post@lespocky.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-4-robh@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scan-Signature: 6f2c0cc924172ae0d63df639c2daa6ee
+X-Spam-Score: -2.9 (--)
+X-Provags-ID: V03:K1:a5ux3XXYZajhGPOMpe5UlfXuFD6MtM8x1SXx7hRmMI2VaktPYLL
+ bpOXntySTtH+Ag/ngkdXTAXTFtj/AydJNiMmujznhs04XsefLrYEM0Hq7SgdjRpFEVvurTO
+ RXLWs0ib8iJCApjU+vdotQ1A9uLwBzN3w6Nihr9LfAKMMbsI/Nbh/+0ZDNESTfsCZ86T6zN
+ 0MMM0Xp2efP1KIMW3MpFw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dDqMxTJ8D7M=:Rp8hRovn0iKwlz5TKLVy9k
+ M3Yp0ahNKEJLy8xKp5zLtOssELWI0wmPV885fphX9f6nfEML3n6VJAFLPUQ6sNRZclA0c27A+
+ JUMvVYROEX9PfxzJPaVyPsEhHvB8ysopfTvnOraak8dA2VPCkir5k71VLrcBtQJgBoxX4qqPp
+ AuMgnvObgC1JBKW3d5MGI0COmotuKFHemsXWM7NY2zMPeWamshVdh/+INSiDi/2ewhV0F8cFA
+ l2X8fhe05oCm5Wy4CFbZzxbwpdlDN/MhqIijKGMtWXjVbT1EQrYZ2Yybj90M78NTIVSswB31D
+ kKAndesjQPA7/NTGGaFiGw8t7FU7pkAtKk9KVyQ4A/N05YNE94nSYGnjb8JlWavTodSFTzCnk
+ mf3vTECMd1fLr0EGNZzTkQf4lQy+/8nbRGz7eZfJBHr2B35RlgFOxka1SrgCdr3btDdDu+VTe
+ k2wlB9yJCW9F6zCzF7/AEm8v+B3BVj7sGItnB6feEfVWt/iijbZO20nGmWrqM/Wk+Qz0NybwE
+ iELpxNkXnbSevyryNTMwYs319ut74MeinmJcCJhLYq9V5gJ/oYVw7dG8B52uJYuo8O/bWb3vT
+ zIfbvx5odI5FPswZeKOTCaJu0IbofcIzE+/sf0YOdcpRS+fmwHKfZNDmbRmUQTNuKHu7In/qX
+ 5JKpNBQa0h4ooda5cujKLG0AhJuLnpbpLkR/c4bGe4TcaxDinFTm9L/HtEZB8Igp9+RtCzw+p
+ U9pc5v8itsKIIyRgkKjOlXOtYe6Qa4Vn+7w93dmMchSYjqcNCFifqNjbXwBAmv1SW7g+N3Xkg
+ i6y8UcQOBkCFounHKzYL1eOBMEEqk0tq6WQ8FZ1G5SHv/z8OM4ZaQzPPwm9V1YnPqDKzOTj
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 01:38:29PM -0500, Rob Herring wrote:
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As the top-level
-> board/SoC schemas always have additional properties, add
-> 'additionalProperties: true'.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hei hei,
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+for leds-gpio you can use the properties 'function' and 'color' in the
+devicetree node and omit 'label', the label is constructed
+automatically.  This is a common feature supposed to be working for all
+LED drivers.  However it did not work until recently for the 'leds-pwm'
+driver.
 
-Best regards,
-Krzysztof
+This series removes the no more needed platform_data support from the
+leds-pwm driver, which was a precondition for the already applied patch
+actually making automatic naming work.
+
+The leds-pwm dt-bindings are converted and updated to reflect the
+possibility to use led function and color for naming now.
+
+v7 of this series is basically collecting reviewed-by tags, split old
+patch 5/7 into per arm sub-arch changes for easier maintainer review,
+and rewording commit messages.  See each patch for a detailed changelog.
+
+For the bindings conversion it's now required to explicitly set a
+license.  Peter, Russel, could you please acknowledge that patch?
+
+Series changelog below …
+
+Greets
+Alex
+
+v7:
+- rebased series on recent pavel/for-next
+- split up arm dts patch by arm sub arch (suggested by Krzysztof Kozlowski)
+- added multiple Reviewed-by tags
+- slightly reworded commit messages (suggested by Krzysztof Kozlowski)
+- added actual dtbs_check warnings to commit messages
+- added Russell King to Cc for binding conversion patch (because license)
+
+v6:
+- rebased series on recent pavel/for-next
+- added Reviewed-by from Marek to patch 1
+- patch 2 from v5 was picked by Pavel and is already in his for-next
+  branch
+- previous patch 3/3 (now 2/7) was reworked based on feedback by Rob
+- added more dt patches fixing warnings after binding conversion to yaml
+
+v5:
+- replaced patch 1/3 by a new patch removing platform_data support for
+  the leds-pwm driver
+- little rewording of commit message in patch 2/3
+- updated patch 3/3 based on feedback by Rob Herring
+- added Marek Behún to Cc, because he also works on removing
+  platform_data support
+- rebased series on pavel/for-next
+
+v4:
+- added led-class patch handling fwnode passing differently (patch 1/3)
+- adapted leds-pwm patch to new led-class (patch 2/3)
+- contacted original author of leds-pwm dt binding on license issue
+  (patch 3/3)
+
+v3:
+- series rebased on v5.9-rc4
+- changed license of .yaml file to recommended one (patch 2/2)
+- added Acked-by to both patches
+
+v2:
+- series rebased on v5.9-rc3
+- added the dt-bindings update patch (2/2)
+
+v1:
+- based on v5.9-rc2
+- backport on v5.4.59 tested and working
+
+Cc: linux-leds@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-omap@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-amlogic@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+
+Alexander Dahl (12):
+  leds: pwm: Remove platform_data support
+  dt-bindings: leds: Convert pwm to yaml
+  dt-bindings: mfd: Fix schema warnings for pwm-leds
+  ARM: dts: at91: smartkiz: Reference led node directly
+  ARM: dts: at91: Fix schema warnings for pwm-leds
+  ARM: dts: berlin: Fix schema warnings for pwm-leds
+  ARM: dts: exynos: Fix schema warnings for pwm-leds
+  ARM: dts: imx: Fix schema warnings for pwm-leds
+  ARM: dts: omap: Fix schema warnings for pwm-leds
+  ARM: dts: stm32: Fix schema warnings for pwm-leds
+  arm64: dts: meson: Fix schema warnings for pwm-leds
+  MIPS: DTS: img: Fix schema warnings for pwm-leds
+
+ .../devicetree/bindings/leds/leds-pwm.txt     | 50 -------------
+ .../devicetree/bindings/leds/leds-pwm.yaml    | 70 +++++++++++++++++++
+ .../devicetree/bindings/mfd/iqs62x.yaml       |  5 +-
+ arch/arm/boot/dts/at91-kizbox.dts             | 10 +--
+ arch/arm/boot/dts/at91-kizbox2-common.dtsi    |  8 +--
+ arch/arm/boot/dts/at91-kizbox3-hs.dts         | 16 ++---
+ arch/arm/boot/dts/at91-kizbox3_common.dtsi    | 10 +--
+ arch/arm/boot/dts/at91-kizboxmini-common.dtsi |  8 +--
+ arch/arm/boot/dts/at91-smartkiz.dts           |  6 +-
+ arch/arm/boot/dts/at91sam9m10g45ek.dts        | 10 +--
+ arch/arm/boot/dts/at91sam9rlek.dts            | 10 +--
+ .../boot/dts/berlin2cd-google-chromecast.dts  |  6 +-
+ arch/arm/boot/dts/exynos5422-odroidhc1.dts    |  4 +-
+ arch/arm/boot/dts/exynos5422-odroidxu4.dts    |  4 +-
+ .../boot/dts/exynos54xx-odroidxu-leds.dtsi    | 11 +--
+ arch/arm/boot/dts/imx53-ppd.dts               | 15 ++--
+ arch/arm/boot/dts/imx6qdl-cubox-i.dtsi        |  4 +-
+ .../boot/dts/imx6sx-softing-vining-2000.dts   |  8 +--
+ arch/arm/boot/dts/omap3-beagle-xm.dts         | 10 +--
+ arch/arm/boot/dts/omap3-overo-base.dtsi       |  4 +-
+ arch/arm/boot/dts/omap4-kc1.dts               |  6 +-
+ arch/arm/boot/dts/omap4-sdp.dts               | 26 +++----
+ arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts     | 12 ++--
+ .../amlogic/meson-gxl-s905x-khadas-vim.dts    |  4 +-
+ .../dts/amlogic/meson-gxm-khadas-vim2.dts     |  4 +-
+ .../boot/dts/amlogic/meson-sm1-sei610.dts     |  8 +--
+ arch/mips/boot/dts/img/pistachio_marduk.dts   |  5 +-
+ drivers/leds/leds-pwm.c                       | 30 ++------
+ 28 files changed, 184 insertions(+), 180 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/leds/leds-pwm.txt
+ create mode 100644 Documentation/devicetree/bindings/leds/leds-pwm.yaml
+
+
+base-commit: 4f69e17c87e90f9508f498fa4771a9b77db1174b
+-- 
+2.20.1
+
