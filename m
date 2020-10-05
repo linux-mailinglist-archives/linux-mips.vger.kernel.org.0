@@ -2,58 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8968B282DC0
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Oct 2020 23:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 879E4282E90
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Oct 2020 02:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbgJDV0L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 4 Oct 2020 17:26:11 -0400
-Received: from out28-77.mail.aliyun.com ([115.124.28.77]:34868 "EHLO
-        out28-77.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726313AbgJDV0L (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Oct 2020 17:26:11 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1129661|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.00855663-0.000426929-0.991016;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047193;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=3;RT=3;SR=0;TI=SMTPD_---.IfSdSrU_1601846768;
-Received: from 192.168.10.195(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IfSdSrU_1601846768)
-          by smtp.aliyun-inc.com(10.147.40.233);
-          Mon, 05 Oct 2020 05:26:09 +0800
-Subject: Re: Kernel 5.9-rc regression.
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <25b6a64b-b5ac-c85a-abde-909fb2d768f9@wanyeetech.com>
- <20201001215548.GA21328@alpha.franken.de>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <42898d8c-e95a-bc07-3e6e-0ead4bc9e17d@wanyeetech.com>
-Date:   Mon, 5 Oct 2020 05:26:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1725838AbgJEAkz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Oct 2020 20:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725836AbgJEAkz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Oct 2020 20:40:55 -0400
+Received: from orcam.me.uk (unknown [IPv6:2001:4190:8020::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DBA2C0613CE
+        for <linux-mips@vger.kernel.org>; Sun,  4 Oct 2020 17:40:54 -0700 (PDT)
+Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
+        by orcam.me.uk (Postfix) with ESMTPS id F2C872BE086;
+        Mon,  5 Oct 2020 01:40:51 +0100 (BST)
+Date:   Mon, 5 Oct 2020 01:40:47 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Baoquan He <bhe@redhat.com>
+cc:     Huacai Chen <chenhc@lemote.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kexec@lists.infradead.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 1/3] MIPS: Crash kernel should be able to see old
+ memories
+In-Reply-To: <alpine.LFD.2.21.2010032200470.333514@eddie.linux-mips.org>
+Message-ID: <alpine.LFD.2.21.2010050133330.333514@eddie.linux-mips.org>
+References: <1600828257-31316-1-git-send-email-chenhc@lemote.com> <20200923024548.GL25604@MiWiFi-R3L-srv> <CAAhV-H66O77hK7kB8cCcM6XUOc-TFEg_TJG+GrCSEdD89Qxb7g@mail.gmail.com> <20200923030847.GM25604@MiWiFi-R3L-srv>
+ <alpine.LFD.2.21.2010032200470.333514@eddie.linux-mips.org>
 MIME-Version: 1.0
-In-Reply-To: <20201001215548.GA21328@alpha.franken.de>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Sat, 3 Oct 2020, Maciej W. Rozycki wrote:
 
-ÔÚ 2020/10/2 ÉÏÎç5:55, Thomas Bogendoerfer Ð´µÀ:
-> On Fri, Oct 02, 2020 at 04:15:43AM +0800, Zhou Yanjie wrote:
->> Hi Thomas and list,
->>
->> There is a strange phenomenon in kernel 5.9-rc: when using kernel 5.9-rc
->> with debian 10 and running htop, the memory footprint will be displayed as
->> 3.99T. When the actual memory footprint increases, the displayed value will
->> be reduced to 3.98T, 3.97T etc. These phenomena have been confirmed in
->> X1000, X1830, and JZ4780 (disable SMP), this phenomenon does not seem to
->> affect the SMP processor. When the JZ4780 turn on SMP, the memory footprint
->> will be displayed normally.
-> try this fix
->
-> https://lore.kernel.org/lkml/20201001203931.GD2706729@carbon.DHCP.thefacebook.com/
+> > Interesting. Seems MIPS does support mem=X@Y, even though the document
+> > of 'mem=' says it's used to specify amount of memory, but not memory
+> > region. Anyway, leave this to mips reviewers, thanks for replying.
+> > 
+> > ~~~~~~~~~~~~~~~~~~~
+> >         mem=nn[KMG]     [KNL,BOOT] Force usage of a specific amount of memory
+> >                         Amount of memory to be used in cases as follows:
+> 
+>  Yep, I implemented it for the DECstation back in 2000:
+> 
+> commit 97b7ae4257ef7ba8ed9b7944a4f56a49af3e8abb
+> Author: Ralf Baechle <ralf@linux-mips.org>
+> Date:   Mon Dec 11 16:41:05 2000 +0000
+> 
+>     Memmap fixes from Maciej.
+> 
+> (from the LMO repo) in line with the x86 syntax.  I don't know why it 
+> hasn't ever been documented in "Kernel Parameters" (for any port), but I'm 
+> fairly sure it has been somewhere.
 
+ Self-correction: documentation used to be there, but was removed around 
+Linux 2.5.65:
 
-It works, thanks!
+commit 041a679cb20e4fcb841665b09cf7c6d24ab4ad39
+Author: Ralf Baechle <ralf@linux-mips.org>
+Date:   Thu Jun 5 00:04:28 2003 +0000
 
+    Merge with Linux 2.5.65.
 
-> Thomas.
->
+(same repo) as the parameter was renamed to `memmap=' in the x86 port.  
+Obviously whoever did that did not bother to check other ports, even 
+though the parameter was marked (and `memmap=' still is) generic.
+
+  Maciej
