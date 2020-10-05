@@ -2,102 +2,192 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69487283484
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Oct 2020 13:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8382834ED
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Oct 2020 13:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726439AbgJELB2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Oct 2020 07:01:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50218 "EHLO mail.kernel.org"
+        id S1725843AbgJEL2v (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Oct 2020 07:28:51 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43334 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725891AbgJELB1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 5 Oct 2020 07:01:27 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 831DF20578;
-        Mon,  5 Oct 2020 11:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601895686;
-        bh=zT1ggZQfYdTWKaaKhhfthWc1Wmu2z51MEgqhMdjk+B0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SD/Qgw9FIMuzORoe+m+VTXdFP3akbnWWNU81Odi9c5GKdU7J+GKmby2c8netpfgmA
-         adZ1oHsaoFEdzavqQfYQskxWQibYcQ5HrNcWX5oNl7SvediEUDK9mfzz+po5gPOLGv
-         GYaHousl0JgdpMqFSA4SRgxVcsLFkSnV03Ue+OnE=
-Date:   Mon, 5 Oct 2020 12:00:22 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another round of adding missing
- 'additionalProperties'
-Message-ID: <20201005110022.GB5139@sirena.org.uk>
-References: <20201002234143.3570746-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6sX45UoQRIJXqkqR"
-Content-Disposition: inline
-In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
-X-Cookie: Most of your faults are not your fault.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1725891AbgJEL2v (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 5 Oct 2020 07:28:51 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 4F68CAC8B;
+        Mon,  5 Oct 2020 11:28:49 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: alchemy: Share prom_init implementation
+Date:   Mon,  5 Oct 2020 13:28:45 +0200
+Message-Id: <20201005112846.66430-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+All boards have the same prom_init() function. Move it to common code and
+delete the duplicates.
 
---6sX45UoQRIJXqkqR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/alchemy/board-gpr.c          | 17 -----------------
+ arch/mips/alchemy/board-mtx1.c         | 17 -----------------
+ arch/mips/alchemy/board-xxs1500.c      | 18 ------------------
+ arch/mips/alchemy/common/prom.c        | 20 ++++++++++++++++++++
+ arch/mips/alchemy/devboards/platform.c | 17 -----------------
+ 5 files changed, 20 insertions(+), 69 deletions(-)
 
-On Fri, Oct 02, 2020 at 06:41:43PM -0500, Rob Herring wrote:
+diff --git a/arch/mips/alchemy/board-gpr.c b/arch/mips/alchemy/board-gpr.c
+index 6c47318946e4..f587c40b6d00 100644
+--- a/arch/mips/alchemy/board-gpr.c
++++ b/arch/mips/alchemy/board-gpr.c
+@@ -31,23 +31,6 @@ const char *get_system_type(void)
+ 	return "GPR";
+ }
+ 
+-void __init prom_init(void)
+-{
+-	unsigned char *memsize_str;
+-	unsigned long memsize;
+-
+-	prom_argc = fw_arg0;
+-	prom_argv = (char **)fw_arg1;
+-	prom_envp = (char **)fw_arg2;
+-
+-	prom_init_cmdline();
+-
+-	memsize_str = prom_getenv("memsize");
+-	if (!memsize_str || kstrtoul(memsize_str, 0, &memsize))
+-		memsize = 0x04000000;
+-	add_memory_region(0, memsize, BOOT_MEM_RAM);
+-}
+-
+ void prom_putchar(char c)
+ {
+ 	alchemy_uart_putchar(AU1000_UART0_PHYS_ADDR, c);
+diff --git a/arch/mips/alchemy/board-mtx1.c b/arch/mips/alchemy/board-mtx1.c
+index 23093535399f..68ea57511629 100644
+--- a/arch/mips/alchemy/board-mtx1.c
++++ b/arch/mips/alchemy/board-mtx1.c
+@@ -30,23 +30,6 @@ const char *get_system_type(void)
+ 	return "MTX-1";
+ }
+ 
+-void __init prom_init(void)
+-{
+-	unsigned char *memsize_str;
+-	unsigned long memsize;
+-
+-	prom_argc = fw_arg0;
+-	prom_argv = (char **)fw_arg1;
+-	prom_envp = (char **)fw_arg2;
+-
+-	prom_init_cmdline();
+-
+-	memsize_str = prom_getenv("memsize");
+-	if (!memsize_str || kstrtoul(memsize_str, 0, &memsize))
+-		memsize = 0x04000000;
+-	add_memory_region(0, memsize, BOOT_MEM_RAM);
+-}
+-
+ void prom_putchar(char c)
+ {
+ 	alchemy_uart_putchar(AU1000_UART0_PHYS_ADDR, c);
+diff --git a/arch/mips/alchemy/board-xxs1500.c b/arch/mips/alchemy/board-xxs1500.c
+index c67dfe1f4997..b184baa4e56a 100644
+--- a/arch/mips/alchemy/board-xxs1500.c
++++ b/arch/mips/alchemy/board-xxs1500.c
+@@ -25,24 +25,6 @@ const char *get_system_type(void)
+ 	return "XXS1500";
+ }
+ 
+-void __init prom_init(void)
+-{
+-	unsigned char *memsize_str;
+-	unsigned long memsize;
+-
+-	prom_argc = fw_arg0;
+-	prom_argv = (char **)fw_arg1;
+-	prom_envp = (char **)fw_arg2;
+-
+-	prom_init_cmdline();
+-
+-	memsize_str = prom_getenv("memsize");
+-	if (!memsize_str || kstrtoul(memsize_str, 0, &memsize))
+-		memsize = 0x04000000;
+-
+-	add_memory_region(0, memsize, BOOT_MEM_RAM);
+-}
+-
+ void prom_putchar(char c)
+ {
+ 	alchemy_uart_putchar(AU1000_UART0_PHYS_ADDR, c);
+diff --git a/arch/mips/alchemy/common/prom.c b/arch/mips/alchemy/common/prom.c
+index af312b5e33f6..cfa203064d3c 100644
+--- a/arch/mips/alchemy/common/prom.c
++++ b/arch/mips/alchemy/common/prom.c
+@@ -34,6 +34,8 @@
+  */
+ 
+ #include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/sizes.h>
+ #include <linux/string.h>
+ 
+ #include <asm/bootinfo.h>
+@@ -76,6 +78,24 @@ char *prom_getenv(char *envname)
+ 	return NULL;
+ }
+ 
++void __init prom_init(void)
++{
++	unsigned char *memsize_str;
++	unsigned long memsize;
++
++	prom_argc = (int)fw_arg0;
++	prom_argv = (char **)fw_arg1;
++	prom_envp = (char **)fw_arg2;
++
++	prom_init_cmdline();
++
++	memsize_str = prom_getenv("memsize");
++	if (!memsize_str || kstrtoul(memsize_str, 0, &memsize))
++		memsize = SZ_64M; /* minimum memsize is 64MB RAM */
++
++	add_memory_region(0, memsize, BOOT_MEM_RAM);
++}
++
+ static inline unsigned char str2hexnum(unsigned char c)
+ {
+ 	if (c >= '0' && c <= '9')
+diff --git a/arch/mips/alchemy/devboards/platform.c b/arch/mips/alchemy/devboards/platform.c
+index 8d4b65c3268a..754bdd2ca630 100644
+--- a/arch/mips/alchemy/devboards/platform.c
++++ b/arch/mips/alchemy/devboards/platform.c
+@@ -20,23 +20,6 @@
+ 
+ #include <prom.h>
+ 
+-void __init prom_init(void)
+-{
+-	unsigned char *memsize_str;
+-	unsigned long memsize;
+-
+-	prom_argc = (int)fw_arg0;
+-	prom_argv = (char **)fw_arg1;
+-	prom_envp = (char **)fw_arg2;
+-
+-	prom_init_cmdline();
+-	memsize_str = prom_getenv("memsize");
+-	if (!memsize_str || kstrtoul(memsize_str, 0, &memsize))
+-		memsize = 64 << 20; /* all devboards have at least 64MB RAM */
+-
+-	add_memory_region(0, memsize, BOOT_MEM_RAM);
+-}
+-
+ void prom_putchar(char c)
+ {
+ 	if (alchemy_get_cputype() == ALCHEMY_CPU_AU1300)
+-- 
+2.16.4
 
-> Another round of wack-a-mole. The json-schema default is additional
-> unknown properties are allowed, but for DT all properties should be
-> defined.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---6sX45UoQRIJXqkqR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl96/MYACgkQJNaLcl1U
-h9DVIAf/YahMxzxRA1HRo6CR552Pzfu8pWuFTeWzZTi4iIVW4oR/TUvjaBuMBAZF
-jIi3Kk2yR9lW+bCaPvUIjXsdB31S0iHgXORKR9ByRsx4fZS4MC/x9KFlv/v5dziQ
-nMO+lF+vyZQrYQrfwQmBJ5JdbeM9r2Oh+tUBcsKZkPsvg10glGuisr1mO1CEaEuL
-zcz31MfKpdGbLUEOlPzruZ5uNt0/FHU6FxOusAGW9lkYx+c7GjNWtdDh8h7gzd1n
-SzrDKnBlTWCZ+Owy2r9hJS6ow+fIjoYDT+Xtp6AvrSk9oJ6hggQ6NyxPpesZWbKV
-3Kfe7+KGLuHI4AMEU0u/czJWmNdEJw==
-=5yDb
------END PGP SIGNATURE-----
-
---6sX45UoQRIJXqkqR--
