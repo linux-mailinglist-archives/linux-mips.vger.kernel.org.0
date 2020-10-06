@@ -2,200 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 282AB2843B0
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Oct 2020 03:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A80C284407
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Oct 2020 04:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725981AbgJFBKZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Oct 2020 21:10:25 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:41393 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbgJFBKX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Oct 2020 21:10:23 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20201006011017epoutp0296e01a9602596620fa94cb505b1f2ccc~7QfYIgmPy1813818138epoutp02j;
-        Tue,  6 Oct 2020 01:10:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20201006011017epoutp0296e01a9602596620fa94cb505b1f2ccc~7QfYIgmPy1813818138epoutp02j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1601946617;
-        bh=B4PawtUJM2t4wzU2pvIySnG7we9Bhgj1khiFTd9d9CE=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Rx8RJtC6Yj3KjGbngnY3QrOD1xUh97k2CcjP1L4bTfTZIPheVmtqSJrA4EZdpPPOg
-         trAwp0No0N/0erQYIZqHeGT1O8Y1jJ5bsPfmRbRjm0h8DI5JF5XlW5/vhGg3S/8m9/
-         spUfOkBMrCNoisTG2YOcZI8q4vf8cCSD1/9SF9L8=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20201006011016epcas1p459c312e10a907b7832b22cd23eb9d8a4~7QfXew6HM1279312793epcas1p4Q;
-        Tue,  6 Oct 2020 01:10:16 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4C4zsY6sg8zMqYks; Tue,  6 Oct
-        2020 01:10:09 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        20.E2.09577.1F3CB7F5; Tue,  6 Oct 2020 10:10:09 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20201006011008epcas1p300f9dc6918a008b4b0acf5870f438a2e~7QfP7yysc1939819398epcas1p3e;
-        Tue,  6 Oct 2020 01:10:08 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201006011008epsmtrp151af87c3414c2b6b37057fcba7d215f2~7QfP5fMXI0584005840epsmtrp1N;
-        Tue,  6 Oct 2020 01:10:08 +0000 (GMT)
-X-AuditID: b6c32a39-bfdff70000002569-24-5f7bc3f11c68
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C1.AB.08604.0F3CB7F5; Tue,  6 Oct 2020 10:10:08 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20201006011007epsmtip14dca797b06e6c0e4525f28d6ead67ad0~7QfO-JeoX3017730177epsmtip1d;
-        Tue,  6 Oct 2020 01:10:07 +0000 (GMT)
-Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
- in common schemas
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <0e155728-89b3-5f31-f008-dfd57b6c4f6b@samsung.com>
-Date:   Tue, 6 Oct 2020 10:23:28 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1726670AbgJFCRk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Oct 2020 22:17:40 -0400
+Received: from mail-dm6nam12on2049.outbound.protection.outlook.com ([40.107.243.49]:37344
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725870AbgJFCRk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 5 Oct 2020 22:17:40 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D/h1BWTNuokU7YggvlMnVMq2m955hxdWbCPqWf2LsD7KrLaZvvnVIKl+P9dmiHtK/DJ6ES00//WFwpY/vMjYUG3IZslMEYEwY0k0Nw7uWcszSjid6Gu8WILxe1nFCVptuf85/IqLroZwFiTp+ppjfyr399EOYudkSWvhn80syI19Cb9JxBRMTBc2kO9fW859Q/e05rKmhYc/tnlGqgKHfS195RqyFxY9Do7dg4YtYLD1W8jpmLqb0y5arptJcN8F6ysWSbp+6BavLtZKyuGi0a/JM6cvRVldpGQzMbprStm//TQQK+KwbFZzOnSFcaoEdnuHp4W+coN6vwC8JGASUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wsgKR+uTTyEDf4YuDPnotldBpHzN9BpUWfW/G54U1YE=;
+ b=FjuQmlBqnTS1GD8mk2vtegtgqYV3qIW+Bb7uTLP2dI96BAluzxvbmLCZ81FxdpfHjk/m/Lk/y+ARrfKoYA3lRxBllImfiI5XtbHqV3PTSSYWyDYmjDpR8zT8zcCjI7Bfpz2TllBpgnbu+88FOB38uCe1ZWUdXVZf6m4gl1EuiYFIkoiUeSDn+a100uKq7SEpgIU6EtS6H4GmRDVjas0+icIFzj3OYFZ3my80mq7cBCRT83Hnona1GGL4oMhtsoDtNPZ7gkZvPreAHDdc0lr6x52LKrlWS4D5Ry5cc1JR4pQbmuC2ZdTITYAMrLYLDGyapkZO6YqjzomemtP7JXq/cw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
+ dkim=pass header.d=labundy.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wsgKR+uTTyEDf4YuDPnotldBpHzN9BpUWfW/G54U1YE=;
+ b=eNFIMgmqXXbaSCK/NyTw7LBI6PBX4/0P6kTqjt4uag0BQ7vaXkIDRjV8TM5lQx+V523x5KOjHLI5R/Wiht36U1p3OH6MmEao1AB2f5R7/pgsa3VIjE9lSRp2K8UaCUfcMURVALQh/Mx4uwmttDYKDCW/UGyN1kMQM4R8MHYHFWo=
+Authentication-Results: lespocky.de; dkim=none (message not signed)
+ header.d=none;lespocky.de; dmarc=none action=none header.from=labundy.com;
+Received: from SN6PR08MB5517.namprd08.prod.outlook.com (2603:10b6:805:fb::32)
+ by SN6PR08MB3856.namprd08.prod.outlook.com (2603:10b6:805:1e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.32; Tue, 6 Oct
+ 2020 02:17:36 +0000
+Received: from SN6PR08MB5517.namprd08.prod.outlook.com
+ ([fe80::c989:9cea:baa6:8254]) by SN6PR08MB5517.namprd08.prod.outlook.com
+ ([fe80::c989:9cea:baa6:8254%7]) with mapi id 15.20.3433.044; Tue, 6 Oct 2020
+ 02:17:36 +0000
+Date:   Mon, 5 Oct 2020 21:17:29 -0500
+From:   Jeff LaBundy <jeff@labundy.com>
+To:     Alexander Dahl <post@lespocky.de>
+Cc:     Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexander Dahl <ada@thorsis.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org, linux-mips@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH v7 03/12] dt-bindings: mfd: Fix schema warnings for
+ pwm-leds
+Message-ID: <20201006021729.GA4822@labundy.com>
+References: <20201005203451.9985-1-post@lespocky.de>
+ <20201005203451.9985-4-post@lespocky.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201005203451.9985-4-post@lespocky.de>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [136.49.227.119]
+X-ClientProxiedBy: DM5PR04CA0056.namprd04.prod.outlook.com
+ (2603:10b6:3:ef::18) To SN6PR08MB5517.namprd08.prod.outlook.com
+ (2603:10b6:805:fb::32)
 MIME-Version: 1.0
-In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01UaVBTVxSe+/KWoFKfiOXCVIHYOtUqEhF66KB1lNpXdapVy1hnbIzwBhhD
-        kknAqnQYQMCouFBcSkRgCC5sChGQTVBWaQtBUEQxrmhAFgUEXKA2EJzy7zvnfOd8850z9woF
-        NiahgzBQHsyr5FKZiJ5CFlTOd13UVxkqcU0cXQxpN28zYDBWCCD/vZaBTONRGtIiA+DE43Ya
-        kgZmQ6IhioTkqgYKMk+MUlCZ2oHg1uBLGvbpLtGQ+vJPCiLSmkl4FJlBgMGQw0BjwREK0uKT
-        KTgQl8bAw8FqBEO3NAQcHzlPgP5pCwUZwycE0Bf7gILLySMI9nflI9CMvkZQU/iEgKSqXhLu
-        9g9R0FycSEN+90UEsTn55nl6M6/qw1EEJZHnGKhPqqVh4HAVAqMxA0HBQBQNNZm3aPhHd5iB
-        iL67DKSeixZA68UyBvJLrxFQlFhHwTn9CAGV+8souJR6nIS2iAs0dDbHCiBGOx2Mf1XT8L64
-        hoH4om4EH0oLGWh/fISGC2/N2v+25JLwd0kwxNTUUCvWcNFN50kuKSuU6+7sJLm89LsEV6l5
-        zXBFWiPDpehDuL6mNsSd1iRQnK60k+Ca60M4fcYBmgu/ZiC5+y2lNNfb0MBw6VlZ1AbHrTu9
-        AnipH69y4uW+Cr9Auf8y0dpNklUSdw9X8SKxJ3wtcpJLg/hlIu91GxatDpSZjypy2iWVhZhT
-        G6RqtWjxci+VIiSYdwpQqIOXiXiln0zpqXRRS4PUIXJ/F19F0DdiV9cl7mbi9p0ByRffEUo9
-        uTun+yYVjuoFB5GVELNLcVfXfXQQTRHasIUIv0h5QlqCfoTr4zIoSzCEcElkA/mx5VR1FmMp
-        XEW4sT9lgvUS4aL2B+Osmex2bBpqGxexZbfh2nsvxucK2DRbXN0WO16g2QW4vKOVHsPTWWd8
-        +81TNIat2eX48tk3xBgm2c+x4W3r+NBZrA+uK4ia4MzAdQnt5rxQaMV64Lz0eWNpAWuH77Un
-        ExbsiK/0JArGdDHbPBV3HHuGLBa8cd/pjokNzMQvavMYC3bAnUdjJnAoTq+roi3NGoTzyhsp
-        S8ENl5+NJ8aEBex8fKl4sSXtjIven0EW4U9w72AsNUbBrDXWxNhYKHNx8yMjYcH2WLf/AH0M
-        ibST3GgnWdBOsqD9XywFkRnoU16pDvLn1WKl++Rz69H4i1/gWYhO9bxyqUCEEFUgLBSIbK1d
-        fHZLbKz9pHv28iqFRBUi49UVyN283ziBwyxfhfnLkAdLxO5L3NzcYKnYw10sFtlZP77nJLFh
-        /aXB/E6eV/Kqj32E0MohnHC0Cr9uN/qLx0oUL2mqWLHQ3SDbfHL1g0SvGblX91k3eLY8jFtZ
-        aveqKbs/bsuhz5yPcyafMvsuU3h7j1PY2sK2nxqmrTuUlOzhoBs2Zuderc5N7bmxRRs2tzg1
-        TNMTuGezH/fFwqJ5I4p5Pnsdt//2+/36gNqN+iub1iR8f2rY7dcdmWr7Q93DP288Mnvrm/gz
-        LlFLTaFZTL1uTuY227gn30WXZWWv831rMgavcpL/WCZ7fmdtxNMv7da3vtt1Q/dtzvU5lVKP
-        P2a8HqgxmbxadPLn630Hs4fnS21brSN/uFBSVb4jgV7p/FXjM+81u+0ls+x8o1dPvbk3qCTs
-        pKDj8p3erdPsMsNHRaQ6QCpeIFCppf8BncC7Z3oFAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0xTZxiA851rgRCOBcIB41SGmBHBsTD2uhlisjkO0yWbm2RbdNiMBlBA
-        RmFDWTJA5CaXOQWh0pZLASlYoFCkgIC0sMCklYsExDoRzEDuooCCshayhH9P3u95vvfPy8P5
-        BsqJFxIeJYwMF4Q6U5ZEvdb5Hfd5bWzA+2MaR5D33qfBYGzHQb0qpqHCmEWBPCEYskfHKZAu
-        7oB8QyIBMp2ehIrsNyRoiyYQDLyco+BCcRUFRXO5JMTL+wl4nKDAwGCopuFefSYJ8isyElIv
-        y2n452UHgqWBFAyurpVhoBobJEGxnI3DQvojEmplawiSp9QIUt68QNDZ8AQDqW6WgOHnSyT0
-        N+ZToJ5WIkivVpv+U5k83XoWgqaEUhp6pH9RsJihQ2A0KhDULyZS0FkxQMHd4gwa4heGaSgq
-        vYjDkLKFBnVzGwaa/C4SSlVrGGiTW0ioKrpKwEj8DQom+9NxSBLbgLG7g4LVxk4armimEaw3
-        N9AwPppJwY1Xpt1vB2sI+LspCpI6O8lDX3AX+8oITloZy01PThJcXfkwxmlTXtCcRmykuQJV
-        NLfQN4K46yl5JFfcPIlx/T3RnEqRSnFxbQaCezjYTHGzej3NlVdWkl/t/MHyYKAwNOQXYeR+
-        n1OWwTLlayxCRcRUT/eScagHT0MWPJbxYq91VNJm5jNNiJXmO2/OHdmc3g6TwzOxLavVitKQ
-        pUmZQezsQvJGa8ucYv9dGtlw7JiTbMZzS7ODM0o7dqxRT24GasSup0k2FlCMG9s6MUSZ2YbZ
-        zd5fGUNmtmZ82NqSFczMBOPCGl4NEWa2Z/xZjXwM23S2sV1544R5mQXjzdaVu5rHOLOXXZP2
-        4ZvswD4Yl2GbvJO9NZOP/4FsxVtq8ZZEvCURb0kKEKFAjsIIUVhQmMgzwjNc+KuHSBAmig4P
-        8vjpbJgKbdy823sN6JZi3qMdYTzUjlge7mxn7eEfE8C3DhScOy+MPBsQGR0qFLWj7TzC2cF6
-        6OfCH/lMkCBKeEYojBBG/v+K8Syc4jCL2x+7enjndd+V7Tp/WP9g38D3kuNtCwUdvMRrOcQ9
-        7yn+apJ0wD1G6dLm0i3ZI7F4NhZ3wr/s8Sxhm9r95aef+HgNn9Me8AtE/GFdpo9VwtShE3d6
-        JaV43TbdrmLXiQ+qVlMnjX57vEvOnFzLfrKvde/DY+OF64Xhjwb+DP399NGYcu60+Gn3bnuh
-        Plrqq3E1hF5qIattpkZHu5JKahwor5zrTPqz166tB46VyY+UH92vr/1opWbHN1a+ys7j2tIs
-        q7J5z88Lb4a4bf+u6UO/b8uXvUSWt2fm7hysh9y3n03nGn0dpxoEgQFPL1WnXoiVHL7p9C64
-        X7a30fymDsxaFjW2fO1MiIIFnm54pEjwH6+El7RiBAAA
-X-CMS-MailID: 20201006011008epcas1p300f9dc6918a008b4b0acf5870f438a2e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201005183933epcas1p36d2c9cc1f3ad9180421269ca74330d65
-References: <20201005183830.486085-1-robh@kernel.org>
-        <CGME20201005183933epcas1p36d2c9cc1f3ad9180421269ca74330d65@epcas1p3.samsung.com>
-        <20201005183830.486085-5-robh@kernel.org>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from labundy.com (136.49.227.119) by DM5PR04CA0056.namprd04.prod.outlook.com (2603:10b6:3:ef::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.34 via Frontend Transport; Tue, 6 Oct 2020 02:17:35 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 42d59d84-e4bb-4172-853e-08d8699dfddf
+X-MS-TrafficTypeDiagnostic: SN6PR08MB3856:
+X-Microsoft-Antispam-PRVS: <SN6PR08MB3856E6365371B15C3BF3324FD30D0@SN6PR08MB3856.namprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yyWpBj2mKGtt8BKZ+zMzO4L2kPZS3zA88g8PWH8LfuNPWKz1+wUeQxsHi+ym11FuTnhdbYKCwZJiAO7y48XSViARLIj6dhX1LI6MWHiUOVtHhH5M5axL5LXzG+AvNaBKwv/kP8E22B0WeqpOpfC/DsmWI6sy5dzISQnwfzQTUidHUAMepCOAtL6zOvlovhsl1SbgQvjd+F8sIu2EmE8tn4BTWoPjREwEFpUV2zBM81p7IXG2inaGgMBDU+4IX49NFAmRj742UuVwX2bUu/nnaitB1HpVzn/S1FZVwDsQuP1hOq4iRjwPY0XTtILyfVxV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR08MB5517.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(396003)(366004)(136003)(39830400003)(376002)(66556008)(7416002)(66476007)(66946007)(86362001)(54906003)(1076003)(36756003)(6666004)(5660300002)(2906002)(316002)(4326008)(8886007)(83380400001)(8676002)(2616005)(7696005)(55016002)(16526019)(186003)(6916009)(26005)(33656002)(8936002)(52116002)(956004)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: 1G4pMmpTRQhiz06Dk9nZXscYgIAY4eoGOeHpzrqRT6ls3Tqv6mCfPPv81RPhrIjxIXHbeSp2LqLWtFfO8I3ibA+TrJdDf682M08O5Gxhzb9vTaQob8oQsYffyv1IticXuPTP5RKhYun9VVEMzMTDF+hKP2f+QyMwuBGrenbBJIE8ipRAoF6GEeeijx0gCfIejQZCRvuDZApZcHXU/NCWvR4pq3mDhisGTU7rQiAgLmO2IQcZu6zlMKQR1ZPD8ltEloMiqCjq/iwWxP9d1RFZLr9/CHyp4RUchzpIXKtJr7RGixjDbO9WNr2QIcEjAPVQSXlqrcE+GJodeO0C+MwGxQ+YQLW3AEVV6ugT7oFs5bT+1+IX2df3ge46004vQonU0PB7rtJLY0/3ol785dRjROFfMt/1XDuxWqnSGo7Ll6GTz6RDNol6yBaR7ZPm4sE91VbA44N3PLZEB5cL9fTc850ZV/pzvg7lmvJ6fslOLHA8bw6qmE9F6tuxvUPDDA39nkX9HfH774quACmLhLzAKkUQv3YviZjOym6w4ugWx4qhyT+13lt10rhJMgZengDhlCS0JV/JBF0WFvIeh0cpoKgpHAzy35sd+vL07/El3l6DlvB5hpJRa3wxBfK+p3WhchFC22V2QUBOxOwvSgg9Zw==
+X-OriginatorOrg: labundy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42d59d84-e4bb-4172-853e-08d8699dfddf
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR08MB5517.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2020 02:17:36.5979
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: k2tWd4LckH+4fBsoSEKuig9Vj7+GHsRT7FGleNnuRf6jwF2ylZKHh13YSzxXrchqoaOKV4GFRfFw1ruxLCd7Kg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR08MB3856
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/6/20 3:38 AM, Rob Herring wrote:
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As common/shared
-> schema are included by other schemas, they should always allow for
-> additionalProperties.
+Hi Alexander,
+
+On Mon, Oct 05, 2020 at 10:34:42PM +0200, Alexander Dahl wrote:
+> The node names for devices using the pwm-leds driver follow a certain
+> naming scheme (now).  Parent node name is not enforced, but recommended
+> by DT project.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+>   DTC     Documentation/devicetree/bindings/mfd/iqs62x.example.dt.yaml
+>   CHECK   Documentation/devicetree/bindings/mfd/iqs62x.example.dt.yaml
+> /home/alex/build/linux/Documentation/devicetree/bindings/mfd/iqs62x.example.dt.yaml: pwmleds: 'panel' does not match any of the regexes: '^led(-[0-9a-f]+)?$', 'pinctrl-[0-9]+'
+>         From schema: /home/alex/src/linux/leds/Documentation/devicetree/bindings/leds/leds-pwm.yaml
+> 
+> Signed-off-by: Alexander Dahl <post@lespocky.de>
 > ---
-(snip)
+> 
+> Notes:
+>     v6 -> v7:
+>       * added warning message to commit message (Krzysztof Kozlowski)
+>     
+>     v6:
+>       * added this patch to series
+> 
+>  Documentation/devicetree/bindings/mfd/iqs62x.yaml | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/iqs62x.yaml b/Documentation/devicetree/bindings/mfd/iqs62x.yaml
+> index 541b06d80e73..92dc48a8dfa7 100644
+> --- a/Documentation/devicetree/bindings/mfd/iqs62x.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/iqs62x.yaml
+> @@ -90,10 +90,11 @@ examples:
+>              };
+>      };
+>  
+> -    pwmleds {
+> +    led-controller {
+>              compatible = "pwm-leds";
+>  
+> -            panel {
+> +            led-1 {
+> +                    label = "panel";
+>                      pwms = <&iqs620a_pwm 0 1000000>;
+>                      max-brightness = <255>;
+>              };
+> -- 
+> 2.20.1
+> 
 
->  Documentation/devicetree/bindings/extcon/wlf,arizona.yaml    | 2 ++
-(snip)
+I like the consistency this brings. My only feedback is that in the other
+examples I found (common.yaml and leds-gpio.yaml), the children count off
+from 0 (e.g. led-0) instead of 1 as your series appears to.
 
-For the extcon part,
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+That's not a huge deal; it simply seems more consistent to count from the
+first index allowed by the regex (0). The patch is still fine, and so:
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+Acked-by: Jeff LaBundy <jeff@labundy.com>
+
+Kind regards,
+Jeff LaBundy
