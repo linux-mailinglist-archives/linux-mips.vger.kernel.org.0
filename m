@@ -2,139 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557B5284593
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Oct 2020 07:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C7B28461C
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Oct 2020 08:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726979AbgJFFmh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Oct 2020 01:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726890AbgJFFmc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Oct 2020 01:42:32 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723ECC0613AC
-        for <linux-mips@vger.kernel.org>; Mon,  5 Oct 2020 22:42:31 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id m15so667444pls.8
-        for <linux-mips@vger.kernel.org>; Mon, 05 Oct 2020 22:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FYOEybxQ9Y8nUxVZmzLLg+Qyso2tjlpbGNthFRqblLc=;
-        b=scAXD8YuBk8j/NF0iYDdCeaAVj2lJqU4ekQ7XmxKGRZD9n7rlAL/7uG23DDE1fcZ56
-         zF72mU8P6EdMfXizzEbowAVRT7aqB90B0ZPahldWPyAERYWd6msUiWvIw5u5I68GC10s
-         2mfO8dqRM6oWZLB0Q6RNjtouVvMzAMtCqHytHKbKwrjH25Far6tK8oMk2FL/+Ytm6yFo
-         ix24Oh/3R7FZgjcOmnnbZhO2Rnj4pwkEjTGIWiz4UAhFCmHcKJq5fJPHDGVhMb52+bja
-         GRW+sJiWWq/RfS6N9j6fS0MlegpQS8J4O6R0p/6fHQbNSKo6Dg2SOD+ESIa+qx/GxTp7
-         QQLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FYOEybxQ9Y8nUxVZmzLLg+Qyso2tjlpbGNthFRqblLc=;
-        b=ESF5bgQbp0uqxfdjl80sNCKdihK22WMSlfIor92WM8KFaxwok+r841XnLg7O9oB5K4
-         fjzTFUA/NmfyQrGAqCNpgoWGkRE7VEfhIgKrvCEaDONNFfHxvpAGx94CYO2PUvzEq4aG
-         t6vFhJIEsPZN4MQZdilsxgaPHSIQGuTSZv/rnX9MexON3N8bP2NeS2wF2XwuTfnS7P5d
-         IjvXLYyAQ7JIaQ5bLXljQeMAt8d0SC5F8gCkE81rFenNEDUYiB0zj5435Z39oxWy1yXj
-         S/Tt9dAkBKxoO3ABYqWxRfGcCiUsGc6/a/EVPPbYdxJdc4iA2cV/rVsEzpzPg8moczz/
-         hAJw==
-X-Gm-Message-State: AOAM531Gj4bb5j//vmdHFn5vHD5Wu63PpbapwVvtSqgsvKJVtlrFHjCD
-        e0WiUvhwpREgmouamVV1Bv7wRA==
-X-Google-Smtp-Source: ABdhPJzo+T1F54fl8q16F3SuWBffglk48PEytQu7/wpxM8oR5iYvbOQGglf6EbVoa0EICQ893qG+lw==
-X-Received: by 2002:a17:90b:950:: with SMTP id dw16mr2661711pjb.200.1601962950652;
-        Mon, 05 Oct 2020 22:42:30 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id d145sm2005503pfd.136.2020.10.05.22.42.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Oct 2020 22:42:29 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 11:12:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: Explicitly allow additional properties
- in board/SoC schemas
-Message-ID: <20201006054228.ho3ajzfgpiew32ft@vireshk-i7>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-4-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-4-robh@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S1726875AbgJFGef (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Oct 2020 02:34:35 -0400
+Received: from mail.thorsis.com ([92.198.35.195]:37764 "EHLO mail.thorsis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726022AbgJFGef (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Oct 2020 02:34:35 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.thorsis.com (Postfix) with ESMTP id 500A72A4B;
+        Tue,  6 Oct 2020 08:34:33 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
+Received: from mail.thorsis.com ([127.0.0.1])
+        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id DJmoHkL2M4S2; Tue,  6 Oct 2020 08:34:33 +0200 (CEST)
+Received: by mail.thorsis.com (Postfix, from userid 109)
+        id 2A9803D26; Tue,  6 Oct 2020 08:34:33 +0200 (CEST)
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.2
+From:   Alexander Dahl <ada@thorsis.com>
+To:     Jeff LaBundy <jeff@labundy.com>
+Cc:     Alexander Dahl <post@lespocky.de>, Pavel Machek <pavel@ucw.cz>,
+        Dan Murphy <dmurphy@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org, linux-mips@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH v7 03/12] dt-bindings: mfd: Fix schema warnings for pwm-leds
+Date:   Tue, 06 Oct 2020 08:34:23 +0200
+Message-ID: <3367098.sbkyfNuaKI@ada>
+In-Reply-To: <20201006021729.GA4822@labundy.com>
+References: <20201005203451.9985-1-post@lespocky.de> <20201005203451.9985-4-post@lespocky.de> <20201006021729.GA4822@labundy.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 05-10-20, 13:38, Rob Herring wrote:
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As the top-level
-> board/SoC schemas always have additional properties, add
-> 'additionalProperties: true'.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/arm/spear.yaml               | 3 +++
+Hello Jeff,
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Am Dienstag, 6. Oktober 2020, 04:17:29 CEST schrieb Jeff LaBundy:
+> Hi Alexander,
+>=20
+> On Mon, Oct 05, 2020 at 10:34:42PM +0200, Alexander Dahl wrote:
+> > The node names for devices using the pwm-leds driver follow a certain
+> > naming scheme (now).  Parent node name is not enforced, but recommended
+> > by DT project.
+> >=20
+> >   DTC     Documentation/devicetree/bindings/mfd/iqs62x.example.dt.yaml
+> >   CHECK   Documentation/devicetree/bindings/mfd/iqs62x.example.dt.yaml
+> >=20
+> > /home/alex/build/linux/Documentation/devicetree/bindings/mfd/iqs62x.exa=
+mpl
+> > e.dt.yaml: pwmleds: 'panel' does not match any of the regexes:
+> > '^led(-[0-9a-f]+)?$', 'pinctrl-[0-9]+'>=20
+> >         From schema:
+> >         /home/alex/src/linux/leds/Documentation/devicetree/bindings/led=
+s/
+> >         leds-pwm.yaml>=20
+> > Signed-off-by: Alexander Dahl <post@lespocky.de>
+> > ---
+> >=20
+> > Notes:
+> >     v6 -> v7:
+> >       * added warning message to commit message (Krzysztof Kozlowski)
+> >    =20
+> >     v6:
+> >       * added this patch to series
+> > =20
+> >  Documentation/devicetree/bindings/mfd/iqs62x.yaml | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/mfd/iqs62x.yaml
+> > b/Documentation/devicetree/bindings/mfd/iqs62x.yaml index
+> > 541b06d80e73..92dc48a8dfa7 100644
+> > --- a/Documentation/devicetree/bindings/mfd/iqs62x.yaml
+> > +++ b/Documentation/devicetree/bindings/mfd/iqs62x.yaml
+> >=20
+> > @@ -90,10 +90,11 @@ examples:
+> >              };
+> >     =20
+> >      };
+> >=20
+> > -    pwmleds {
+> > +    led-controller {
+> >=20
+> >              compatible =3D "pwm-leds";
+> >=20
+> > -            panel {
+> > +            led-1 {
+> > +                    label =3D "panel";
+> >=20
+> >                      pwms =3D <&iqs620a_pwm 0 1000000>;
+> >                      max-brightness =3D <255>;
+> >             =20
+> >              };
+>=20
+> I like the consistency this brings. My only feedback is that in the other
+> examples I found (common.yaml and leds-gpio.yaml), the children count off
+> from 0 (e.g. led-0) instead of 1 as your series appears to.
 
--- 
-viresh
+You're right.  And that's also the same in leds-lp50xx.yaml and =E2=80=A6 w=
+ell I did=20
+not look close enough, maybe the numbering scheme on the PCB on my desk=20
+confused me.
+
+Okay, we are already talking about starting index.  What about the parent=20
+node's "led-controller" then in case there are more than one?  IIRC Rob=20
+acknowledged starting from 1 like "led-controller-1", "led-controller-2" an=
+d=20
+so on.
+
+> That's not a huge deal; it simply seems more consistent to count from the
+> first index allowed by the regex (0). The patch is still fine, and so:
+>=20
+> Acked-by: Jeff LaBundy <jeff@labundy.com>
+
+Thanks.
+
+I'm not sure how many more iterations of this series we will need, at least=
+=20
+one for the binding license acks I guess, so I could also adapt the child n=
+ode=20
+indexes in schema and actual dts files in v8 or so.
+
+Greets
+Alex
+
+
+
