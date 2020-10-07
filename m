@@ -2,67 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E203F285D51
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Oct 2020 12:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCB7285DF1
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Oct 2020 13:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728230AbgJGKuE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 7 Oct 2020 06:50:04 -0400
-Received: from mx.metalurgs.lv ([81.198.125.103]:57035 "EHLO mx.metalurgs.lv"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728232AbgJGKuE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 7 Oct 2020 06:50:04 -0400
-Received: from mx.metalurgs.lv (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 042E35C3E8
-        for <linux-mips@vger.kernel.org>; Wed,  7 Oct 2020 13:50:03 +0300 (EEST)
-Received: from kas30pipe.localhost (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id DCA146696B
-        for <linux-mips@vger.kernel.org>; Wed,  7 Oct 2020 13:50:02 +0300 (EEST)
-Received: by mx.metalurgs.lv (Postfix, from userid 1005)
-        id 00E2B66871; Wed,  7 Oct 2020 13:49:56 +0300 (EEST)
-Received: from [100.64.1.74] (unknown [190.15.125.55])
-        (Authenticated sender: admin)
-        by mx.metalurgs.lv (Postfix) with ESMTPA id B2D31660E4;
-        Wed,  7 Oct 2020 13:49:50 +0300 (EEST)
+        id S1727297AbgJGLOo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Oct 2020 07:14:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:41063 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726730AbgJGLOo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Oct 2020 07:14:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602069283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fau/zTN83bMY5VjH/VZJytUEBBQcb23cQqp/EXNoJ6M=;
+        b=K1/QCDET82+bLznZ3YI+48gN+h/6BGxAq7e1mzBVKbGrTqV3hCDCNuhKClpyPoNU4YiRHs
+        3QGQ350S4jYK+fqh7aDxzyV3O88d2IGQxzLxYt7wXuXvbEAp40Y9VRN9cu8MMEIdkgLtuE
+        zeSblGocZyFzBotMtr1dDYQ5smd3VcU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-61-DnkgxBYcOVqodkmnnM_rFA-1; Wed, 07 Oct 2020 07:14:39 -0400
+X-MC-Unique: DnkgxBYcOVqodkmnnM_rFA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A55441015EC4;
+        Wed,  7 Oct 2020 11:14:36 +0000 (UTC)
+Received: from colo-mx.corp.redhat.com (colo-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 524F35D9DD;
+        Wed,  7 Oct 2020 11:14:36 +0000 (UTC)
+Received: from zmail17.collab.prod.int.phx2.redhat.com (zmail17.collab.prod.int.phx2.redhat.com [10.5.83.19])
+        by colo-mx.corp.redhat.com (Postfix) with ESMTP id 59CB8181A869;
+        Wed,  7 Oct 2020 11:14:35 +0000 (UTC)
+Date:   Wed, 7 Oct 2020 07:14:35 -0400 (EDT)
+From:   Jan Stancek <jstancek@redhat.com>
+To:     Petr Vorel <petr.vorel@gmail.com>
+Cc:     ltp@lists.linux.it, Ofer Levi <oferle@nvidia.com>,
+        Rich Felker <dalias@libc.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-sh@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, Guo Ren <guoren@kernel.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        "Maciej W . Rozycki" <macro@linux-mips.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Vincent Chen <deanbo422@gmail.com>
+Message-ID: <1478290725.17134142.1602069275205.JavaMail.zimbra@redhat.com>
+In-Reply-To: <20201002202416.28972-1-petr.vorel@gmail.com>
+References: <20201002202416.28972-1-petr.vorel@gmail.com>
+Subject: Re: [LTP] [PATCH 1/1] cacheflush01: Rewrite into new API
 MIME-Version: 1.0
-Content-Description: Mail message body
-To:     Recipients <financialcapability6@gmail.com>
-From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
-Date:   Wed, 07 Oct 2020 07:49:43 -0300
-Reply-To: hmurrah39@gmail.com
-X-SpamTest-Envelope-From: financialcapability6@gmail.com
-X-SpamTest-Group-ID: 00000000
-X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
-X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
-X-SpamTest-Info: {DATE: unreal year}
-X-SpamTest-Method: none
-X-SpamTest-Rate: 55
-X-SpamTest-Status: Not detected
-X-SpamTest-Status-Extended: not_detected
-X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
-Message-ID: <20201007104957.00E2B66871@mx.metalurgs.lv>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-Subject: Low Rate Loan./mmm,
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20140401 #7726142, check: 20201007 notchecked
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.40.208.2, 10.4.195.10]
+Thread-Topic: cacheflush01: Rewrite into new API
+Thread-Index: tKyuN72r4BqhTqMg7nWcjHRm2QuUYg==
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Dear,
 
 
-We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+----- Original Message -----
+> This syscall is currently (v5.9) supported on these architectures:
+> arc, csky, mips, m68k, nds32, sh
+> 
+> constants are missing for m68k, not sure if the testcase is valid for it.
+> Untested.
+> 
+> Test for __LTP__NR_INVALID_SYSCALL saves adding autotools check for
+> <asm/cachectl.h>.
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+> Hi,
+> 
+> FYI: I was going to ask for removal of this test, but all these archs are
+> still supported. This test compiles on all archs now, but I haven't run
+> it (I don't have access to none of these archs, not sure if LTP is even
+> tested on these archs).
 
+I haven't tested it too, but rewrite looks good.
 
-We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+Acked-by: Jan Stancek <jstancek@redhat.com>
 
-
-Please get back to me if you are interested for more
-
-details.
-
-
-Yours faithfully,
-
-Hashim Murrah
