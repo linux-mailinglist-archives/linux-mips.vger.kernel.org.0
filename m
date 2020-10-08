@@ -2,161 +2,775 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81472287DE1
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 23:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D26287E0A
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 23:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726348AbgJHVUs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Oct 2020 17:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725982AbgJHVUs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Oct 2020 17:20:48 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB9BC0613D2;
-        Thu,  8 Oct 2020 14:20:48 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id 184so8255532lfd.6;
-        Thu, 08 Oct 2020 14:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YswObbWMgxkd2Es/EpjzmF8G0H6kB02USSUo8S+y6kY=;
-        b=GhWLLKljFnCD9BsvCGQFfVvg9nN1pKAj+gmsHPpP1J5jQ6ndC0cMBTf566pqTwupUB
-         KSPGUBbivmFnAI9WHviqhsHWKN8jsTUQts5YFgygnS5vwhBUIZDY128ZSlWHLlq1ACvg
-         6HfALY01xCVJdlaJL3PRMXqLmBcYJu3flOu6/+cjMGKD7TVtlMJnwRp0S/c9hTFJdWnA
-         zL2tXN/acalFvjLMmf0b0hjPPrexNiyuhQ4GnQVR/LIwTtaMFDzrWco2FkbT4DwVZ5Ao
-         wCgrVzgDr0q76HUMPFUARREEmBWNPcK4fM6Fr6+ugBYBy8na7Oyo6htR/XcEJUpN1O2R
-         Nh3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YswObbWMgxkd2Es/EpjzmF8G0H6kB02USSUo8S+y6kY=;
-        b=GpftzZ6mrFPOaG1z1lKqlHEerFinkXRPjN0X7I5swn4YKNqS0gNjMkWEdSPfy6v04a
-         YB5IHkweKvooIL/BPCesmhBft4XVI2cyoGbyQY44lVS1kcrZHRUt1HB4ZNUTWrU5MoJG
-         26BW4CGiPey4ur34eVH567g9wfsP/uvIWn+yQwN7dioB1MOOtl0WGtqx5EgaCkt5os8D
-         6DVxBhL7xlCwC+0PhnQaFr29A+mxx9FLz6oQLB5Vn+M/2+fIyU+Wg48PEsfd+Zl2PqiY
-         PzakWEbDd6b57Lnqbcxmzi3CoKt5yAomy0eiZ5pndJHU6rhJrvzQWj36ddx6zWuA9PG0
-         pY6Q==
-X-Gm-Message-State: AOAM53332bqKDHdhhuTDHyz7Ozck6yzRen1xxPQdJmWp+wC8bZ4G0X7j
-        Gna5jhbGzwle/Q/KfURi8u8=
-X-Google-Smtp-Source: ABdhPJwHl1H1UEj/AqlDCq7iMbPC8W4sohfIJ8YHEtsM2uph7672HBW7Wfr3Tlad05F0BxMgi3q33w==
-X-Received: by 2002:ac2:58d2:: with SMTP id u18mr2050429lfo.390.1602192046634;
-        Thu, 08 Oct 2020 14:20:46 -0700 (PDT)
-Received: from mobilestation ([95.79.141.114])
-        by smtp.gmail.com with ESMTPSA id i11sm1155977ljn.119.2020.10.08.14.20.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2020 14:20:45 -0700 (PDT)
-Date:   Fri, 9 Oct 2020 00:20:43 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     "Maciej W. Rozycki" <macro@linux-mips.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] MIPS: replace add_memory_region with memblock
-Message-ID: <20201008212043.uolf4orh6ctr6ihz@mobilestation>
-References: <20201008084357.42780-1-tsbogend@alpha.franken.de>
- <20201008152006.4khkbzsxqmmz76rw@mobilestation>
- <alpine.LFD.2.21.2010081628100.866917@eddie.linux-mips.org>
- <20201008155454.kaal2bchjq7wusqr@mobilestation>
- <91e52fa1-ecf9-7acc-62f6-16fccfae927c@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <91e52fa1-ecf9-7acc-62f6-16fccfae927c@gmail.com>
+        id S1729743AbgJHVdd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Oct 2020 17:33:33 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59690 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728538AbgJHVdd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 8 Oct 2020 17:33:33 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 5A19EAE30;
+        Thu,  8 Oct 2020 21:33:29 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] MIPS: cpu-probe: move fpu probing/handling into its own file
+Date:   Thu,  8 Oct 2020 23:33:25 +0200
+Message-Id: <20201008213327.11603-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 08, 2020 at 09:49:46AM -0700, Florian Fainelli wrote:
-> 
-> 
-> On 10/8/2020 8:54 AM, Serge Semin wrote:
-> > On Thu, Oct 08, 2020 at 04:30:35PM +0100, Maciej W. Rozycki wrote:
-> > > On Thu, 8 Oct 2020, Serge Semin wrote:
-> > > 
-> > > > At least I don't see a decent reason to preserve them. The memory registration
-> > > > method does nearly the same sanity checks. The memory reservation function
-> > > > defers a bit in adding the being reserved memory first. That seems redundant,
-> > > > since the reserved memory won't be available for the system anyway. Do I miss
-> > > > something?
-> > > 
-> > 
-> > >   At the very least it serves informational purposes as it shows up in
-> > > /proc/iomem.
-> > 
-> > I thought about that, but /proc/iomem prints the System RAM up. Adding the reserved
-> > memory regions to be just memory region first still seem redundant, since
-> > reserving a non-reflected in memory region most likely indicates an erroneous
-> > dts. I failed to find that, but do the kernel or DTC make sure that the reserved
-> > memory regions has actual memory behind? (At least in the framework of the
-> > memblock.memory vs memblock.reserved arrays or in the DT source file)
-> 
-> AFAICT DTC does not do any validation that regions you declare in
-> /memreserve or /reserved-memory are within the 'reg' property defined for
-> the /memory node.
+cpu-probe.c has grown when supporting more and more CPUs and there
+are use cases where probing for all the CPUs isn't useful like
+running on a R3k system. But still the fpu handling is nearly
+the same. For sharing put the fpu code into it's own file.
 
-> Not that it could not but that goes a little beyond is
-> compiler job.
-
-You are probably right, but it does the #{address,size}-cells validations
-against the subnode' "reg" properties. It even does I2C controllers subnodes
-"reg" validation so they wouldn't be greater than 7 or 10 bits wide. It also
-does some magic checks of SPI controllers subnodes. See scripts/dtc/checks.c for
-details. So I thought DTC might do some memory/reserved-memory validations too.
-Apparently it doesn't. On the other hand it would probably be pointless, since a
-system bootloader may change the "memory" node' "reg" value anyway if a platform
-has a variable memory layout. So any validation being passed at the DTS compile
-time wouldn't surely mean the memory/reserved-memory nodes coherency at the
-system boot time.
-
-> 
-> The kernel ought to be able to do that validation through memblock but there
-> could be valid use cases behind declaring a reserved memory region that is
-> not backed by a corresponding DRAM region. For instance if you hotplugged
-> memory through the sysfs probe interface, and that memory was not initially
-> declared in the Device Tree, but there were reserved regions within that
-> hot-plugged range that you would have to be aware of, then this would break.
-
-Yeah, it seems to me all hot-pluggable regions are also marked as reserved. So
-hot-plugging a memory device behind the manually reserved regions (reserved by
-means of the DT reserved-memory/memreserve nodes) will unreserve them, which
-most likely isn't what has been originally wanted.
-
-Alas I don't have any hardware with hot-pluggable memory device to check out the
-problem availability.
-
-> 
-> > 
-> > I also don't see the other platforms doing that, since the MIPS arch only
-> > redefines these methods. So if a problem of adding a reserved memory with
-> > possible no real memory behind exist, it should be fixed in the cross-platform
-> > basis, don't you think?
-> 
-
-> Would we be breaking any use case if we stopped allowing reserved region
-> that are not part of DRAM being declared?
-
-Hm, good question. I don't really know. But AFAICS from the reserved-memory node
-DT bindings the reserved regions can be used to declare both normal RAM and some
-vendor-specific regions. The later one theoretically can be some resource, bus or
-memory-mapped device thing especially if it's marked with "no-map" boolean
-property.
-
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
+Changes in v2:
+	removed #ifdef CONFIG_MIPS_FP_SUPPORT in fpu-probe.c
+	added include fpu-probe.h in fpu-proble.c
 
-Getting back to the topic. In the MIPS-specific early_init_dt_reserve_memory_arch()
-method (which is called for every region declared in reserved-memory/memreserve nodes)
-we currently consider the reserved region as DRAM if 'no-map' property isn't specified.
-The main question here is whether it is correct...
 
--Sergey
+ arch/mips/kernel/Makefile    |   1 +
+ arch/mips/kernel/cpu-probe.c | 326 +------------------------------------------
+ arch/mips/kernel/fpu-probe.c | 319 ++++++++++++++++++++++++++++++++++++++++++
+ arch/mips/kernel/fpu-probe.h |  40 ++++++
+ 4 files changed, 362 insertions(+), 324 deletions(-)
+ create mode 100644 arch/mips/kernel/fpu-probe.c
+ create mode 100644 arch/mips/kernel/fpu-probe.h
 
-> -- 
-> Florian
+diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
+index 13a26d254829..026801c21724 100644
+--- a/arch/mips/kernel/Makefile
++++ b/arch/mips/kernel/Makefile
+@@ -42,6 +42,7 @@ sw-$(CONFIG_CPU_TX39XX)		:= r2300_switch.o
+ sw-$(CONFIG_CPU_CAVIUM_OCTEON)	:= octeon_switch.o
+ obj-y				+= $(sw-y)
+ 
++obj-$(CONFIG_MIPS_FP_SUPPORT)	+= fpu-probe.o
+ obj-$(CONFIG_CPU_R2300_FPU)	+= r2300_fpu.o
+ obj-$(CONFIG_CPU_R4K_FPU)	+= r4k_fpu.o
+ 
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index 6be23f205e74..b8e073772bdb 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -28,336 +28,14 @@
+ #include <asm/spram.h>
+ #include <linux/uaccess.h>
+ 
++#include "fpu-probe.h"
++
+ #include <asm/mach-loongson64/cpucfg-emul.h>
+ 
+ /* Hardware capabilities */
+ unsigned int elf_hwcap __read_mostly;
+ EXPORT_SYMBOL_GPL(elf_hwcap);
+ 
+-#ifdef CONFIG_MIPS_FP_SUPPORT
+-
+-/*
+- * Get the FPU Implementation/Revision.
+- */
+-static inline unsigned long cpu_get_fpu_id(void)
+-{
+-	unsigned long tmp, fpu_id;
+-
+-	tmp = read_c0_status();
+-	__enable_fpu(FPU_AS_IS);
+-	fpu_id = read_32bit_cp1_register(CP1_REVISION);
+-	write_c0_status(tmp);
+-	return fpu_id;
+-}
+-
+-/*
+- * Check if the CPU has an external FPU.
+- */
+-static inline int __cpu_has_fpu(void)
+-{
+-	return (cpu_get_fpu_id() & FPIR_IMP_MASK) != FPIR_IMP_NONE;
+-}
+-
+-/*
+- * Determine the FCSR mask for FPU hardware.
+- */
+-static inline void cpu_set_fpu_fcsr_mask(struct cpuinfo_mips *c)
+-{
+-	unsigned long sr, mask, fcsr, fcsr0, fcsr1;
+-
+-	fcsr = c->fpu_csr31;
+-	mask = FPU_CSR_ALL_X | FPU_CSR_ALL_E | FPU_CSR_ALL_S | FPU_CSR_RM;
+-
+-	sr = read_c0_status();
+-	__enable_fpu(FPU_AS_IS);
+-
+-	fcsr0 = fcsr & mask;
+-	write_32bit_cp1_register(CP1_STATUS, fcsr0);
+-	fcsr0 = read_32bit_cp1_register(CP1_STATUS);
+-
+-	fcsr1 = fcsr | ~mask;
+-	write_32bit_cp1_register(CP1_STATUS, fcsr1);
+-	fcsr1 = read_32bit_cp1_register(CP1_STATUS);
+-
+-	write_32bit_cp1_register(CP1_STATUS, fcsr);
+-
+-	write_c0_status(sr);
+-
+-	c->fpu_msk31 = ~(fcsr0 ^ fcsr1) & ~mask;
+-}
+-
+-/*
+- * Determine the IEEE 754 NaN encodings and ABS.fmt/NEG.fmt execution modes
+- * supported by FPU hardware.
+- */
+-static void cpu_set_fpu_2008(struct cpuinfo_mips *c)
+-{
+-	if (c->isa_level & (MIPS_CPU_ISA_M32R1 | MIPS_CPU_ISA_M64R1 |
+-			    MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
+-			    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
+-			    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6)) {
+-		unsigned long sr, fir, fcsr, fcsr0, fcsr1;
+-
+-		sr = read_c0_status();
+-		__enable_fpu(FPU_AS_IS);
+-
+-		fir = read_32bit_cp1_register(CP1_REVISION);
+-		if (fir & MIPS_FPIR_HAS2008) {
+-			fcsr = read_32bit_cp1_register(CP1_STATUS);
+-
+-			/*
+-			 * MAC2008 toolchain never landed in real world, so we're only
+-			 * testing wether it can be disabled and don't try to enabled
+-			 * it.
+-			 */
+-			fcsr0 = fcsr & ~(FPU_CSR_ABS2008 | FPU_CSR_NAN2008 | FPU_CSR_MAC2008);
+-			write_32bit_cp1_register(CP1_STATUS, fcsr0);
+-			fcsr0 = read_32bit_cp1_register(CP1_STATUS);
+-
+-			fcsr1 = fcsr | FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
+-			write_32bit_cp1_register(CP1_STATUS, fcsr1);
+-			fcsr1 = read_32bit_cp1_register(CP1_STATUS);
+-
+-			write_32bit_cp1_register(CP1_STATUS, fcsr);
+-
+-			if (c->isa_level & (MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2)) {
+-				/*
+-				 * The bit for MAC2008 might be reused by R6 in future,
+-				 * so we only test for R2-R5.
+-				 */
+-				if (fcsr0 & FPU_CSR_MAC2008)
+-					c->options |= MIPS_CPU_MAC_2008_ONLY;
+-			}
+-
+-			if (!(fcsr0 & FPU_CSR_NAN2008))
+-				c->options |= MIPS_CPU_NAN_LEGACY;
+-			if (fcsr1 & FPU_CSR_NAN2008)
+-				c->options |= MIPS_CPU_NAN_2008;
+-
+-			if ((fcsr0 ^ fcsr1) & FPU_CSR_ABS2008)
+-				c->fpu_msk31 &= ~FPU_CSR_ABS2008;
+-			else
+-				c->fpu_csr31 |= fcsr & FPU_CSR_ABS2008;
+-
+-			if ((fcsr0 ^ fcsr1) & FPU_CSR_NAN2008)
+-				c->fpu_msk31 &= ~FPU_CSR_NAN2008;
+-			else
+-				c->fpu_csr31 |= fcsr & FPU_CSR_NAN2008;
+-		} else {
+-			c->options |= MIPS_CPU_NAN_LEGACY;
+-		}
+-
+-		write_c0_status(sr);
+-	} else {
+-		c->options |= MIPS_CPU_NAN_LEGACY;
+-	}
+-}
+-
+-/*
+- * IEEE 754 conformance mode to use.  Affects the NaN encoding and the
+- * ABS.fmt/NEG.fmt execution mode.
+- */
+-static enum { STRICT, LEGACY, STD2008, RELAXED } ieee754 = STRICT;
+-
+-/*
+- * Set the IEEE 754 NaN encodings and the ABS.fmt/NEG.fmt execution modes
+- * to support by the FPU emulator according to the IEEE 754 conformance
+- * mode selected.  Note that "relaxed" straps the emulator so that it
+- * allows 2008-NaN binaries even for legacy processors.
+- */
+-static void cpu_set_nofpu_2008(struct cpuinfo_mips *c)
+-{
+-	c->options &= ~(MIPS_CPU_NAN_2008 | MIPS_CPU_NAN_LEGACY);
+-	c->fpu_csr31 &= ~(FPU_CSR_ABS2008 | FPU_CSR_NAN2008);
+-	c->fpu_msk31 &= ~(FPU_CSR_ABS2008 | FPU_CSR_NAN2008);
+-
+-	switch (ieee754) {
+-	case STRICT:
+-		if (c->isa_level & (MIPS_CPU_ISA_M32R1 | MIPS_CPU_ISA_M64R1 |
+-				    MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
+-				    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
+-				    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6)) {
+-			c->options |= MIPS_CPU_NAN_2008 | MIPS_CPU_NAN_LEGACY;
+-		} else {
+-			c->options |= MIPS_CPU_NAN_LEGACY;
+-			c->fpu_msk31 |= FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
+-		}
+-		break;
+-	case LEGACY:
+-		c->options |= MIPS_CPU_NAN_LEGACY;
+-		c->fpu_msk31 |= FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
+-		break;
+-	case STD2008:
+-		c->options |= MIPS_CPU_NAN_2008;
+-		c->fpu_csr31 |= FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
+-		c->fpu_msk31 |= FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
+-		break;
+-	case RELAXED:
+-		c->options |= MIPS_CPU_NAN_2008 | MIPS_CPU_NAN_LEGACY;
+-		break;
+-	}
+-}
+-
+-/*
+- * Override the IEEE 754 NaN encoding and ABS.fmt/NEG.fmt execution mode
+- * according to the "ieee754=" parameter.
+- */
+-static void cpu_set_nan_2008(struct cpuinfo_mips *c)
+-{
+-	switch (ieee754) {
+-	case STRICT:
+-		mips_use_nan_legacy = !!cpu_has_nan_legacy;
+-		mips_use_nan_2008 = !!cpu_has_nan_2008;
+-		break;
+-	case LEGACY:
+-		mips_use_nan_legacy = !!cpu_has_nan_legacy;
+-		mips_use_nan_2008 = !cpu_has_nan_legacy;
+-		break;
+-	case STD2008:
+-		mips_use_nan_legacy = !cpu_has_nan_2008;
+-		mips_use_nan_2008 = !!cpu_has_nan_2008;
+-		break;
+-	case RELAXED:
+-		mips_use_nan_legacy = true;
+-		mips_use_nan_2008 = true;
+-		break;
+-	}
+-}
+-
+-/*
+- * IEEE 754 NaN encoding and ABS.fmt/NEG.fmt execution mode override
+- * settings:
+- *
+- * strict:  accept binaries that request a NaN encoding supported by the FPU
+- * legacy:  only accept legacy-NaN binaries
+- * 2008:    only accept 2008-NaN binaries
+- * relaxed: accept any binaries regardless of whether supported by the FPU
+- */
+-static int __init ieee754_setup(char *s)
+-{
+-	if (!s)
+-		return -1;
+-	else if (!strcmp(s, "strict"))
+-		ieee754 = STRICT;
+-	else if (!strcmp(s, "legacy"))
+-		ieee754 = LEGACY;
+-	else if (!strcmp(s, "2008"))
+-		ieee754 = STD2008;
+-	else if (!strcmp(s, "relaxed"))
+-		ieee754 = RELAXED;
+-	else
+-		return -1;
+-
+-	if (!(boot_cpu_data.options & MIPS_CPU_FPU))
+-		cpu_set_nofpu_2008(&boot_cpu_data);
+-	cpu_set_nan_2008(&boot_cpu_data);
+-
+-	return 0;
+-}
+-
+-early_param("ieee754", ieee754_setup);
+-
+-/*
+- * Set the FIR feature flags for the FPU emulator.
+- */
+-static void cpu_set_nofpu_id(struct cpuinfo_mips *c)
+-{
+-	u32 value;
+-
+-	value = 0;
+-	if (c->isa_level & (MIPS_CPU_ISA_M32R1 | MIPS_CPU_ISA_M64R1 |
+-			    MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
+-			    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
+-			    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6))
+-		value |= MIPS_FPIR_D | MIPS_FPIR_S;
+-	if (c->isa_level & (MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
+-			    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
+-			    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6))
+-		value |= MIPS_FPIR_F64 | MIPS_FPIR_L | MIPS_FPIR_W;
+-	if (c->options & MIPS_CPU_NAN_2008)
+-		value |= MIPS_FPIR_HAS2008;
+-	c->fpu_id = value;
+-}
+-
+-/* Determined FPU emulator mask to use for the boot CPU with "nofpu".  */
+-static unsigned int mips_nofpu_msk31;
+-
+-/*
+- * Set options for FPU hardware.
+- */
+-static void cpu_set_fpu_opts(struct cpuinfo_mips *c)
+-{
+-	c->fpu_id = cpu_get_fpu_id();
+-	mips_nofpu_msk31 = c->fpu_msk31;
+-
+-	if (c->isa_level & (MIPS_CPU_ISA_M32R1 | MIPS_CPU_ISA_M64R1 |
+-			    MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
+-			    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
+-			    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6)) {
+-		if (c->fpu_id & MIPS_FPIR_3D)
+-			c->ases |= MIPS_ASE_MIPS3D;
+-		if (c->fpu_id & MIPS_FPIR_UFRP)
+-			c->options |= MIPS_CPU_UFR;
+-		if (c->fpu_id & MIPS_FPIR_FREP)
+-			c->options |= MIPS_CPU_FRE;
+-	}
+-
+-	cpu_set_fpu_fcsr_mask(c);
+-	cpu_set_fpu_2008(c);
+-	cpu_set_nan_2008(c);
+-}
+-
+-/*
+- * Set options for the FPU emulator.
+- */
+-static void cpu_set_nofpu_opts(struct cpuinfo_mips *c)
+-{
+-	c->options &= ~MIPS_CPU_FPU;
+-	c->fpu_msk31 = mips_nofpu_msk31;
+-
+-	cpu_set_nofpu_2008(c);
+-	cpu_set_nan_2008(c);
+-	cpu_set_nofpu_id(c);
+-}
+-
+-static int mips_fpu_disabled;
+-
+-static int __init fpu_disable(char *s)
+-{
+-	cpu_set_nofpu_opts(&boot_cpu_data);
+-	mips_fpu_disabled = 1;
+-
+-	return 1;
+-}
+-
+-__setup("nofpu", fpu_disable);
+-
+-#else /* !CONFIG_MIPS_FP_SUPPORT */
+-
+-#define mips_fpu_disabled 1
+-
+-static inline unsigned long cpu_get_fpu_id(void)
+-{
+-	return FPIR_IMP_NONE;
+-}
+-
+-static inline int __cpu_has_fpu(void)
+-{
+-	return 0;
+-}
+-
+-static void cpu_set_fpu_opts(struct cpuinfo_mips *c)
+-{
+-	/* no-op */
+-}
+-
+-static void cpu_set_nofpu_opts(struct cpuinfo_mips *c)
+-{
+-	/* no-op */
+-}
+-
+-#endif /* CONFIG_MIPS_FP_SUPPORT */
+-
+ static inline unsigned long cpu_get_msa_id(void)
+ {
+ 	unsigned long status, msa_id;
+diff --git a/arch/mips/kernel/fpu-probe.c b/arch/mips/kernel/fpu-probe.c
+new file mode 100644
+index 000000000000..f36e1023c286
+--- /dev/null
++++ b/arch/mips/kernel/fpu-probe.c
+@@ -0,0 +1,319 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Processor capabilities determination functions.
++ *
++ * Copyright (C) xxxx  the Anonymous
++ * Copyright (C) 1994 - 2006 Ralf Baechle
++ * Copyright (C) 2003, 2004  Maciej W. Rozycki
++ * Copyright (C) 2001, 2004, 2011, 2012	 MIPS Technologies, Inc.
++ */
++
++#include <linux/init.h>
++#include <linux/kernel.h>
++
++#include <asm/bugs.h>
++#include <asm/cpu.h>
++#include <asm/cpu-features.h>
++#include <asm/cpu-type.h>
++#include <asm/elf.h>
++#include <asm/fpu.h>
++#include <asm/mipsregs.h>
++
++#include "fpu-probe.h"
++
++/*
++ * Get the FPU Implementation/Revision.
++ */
++static inline unsigned long cpu_get_fpu_id(void)
++{
++	unsigned long tmp, fpu_id;
++
++	tmp = read_c0_status();
++	__enable_fpu(FPU_AS_IS);
++	fpu_id = read_32bit_cp1_register(CP1_REVISION);
++	write_c0_status(tmp);
++	return fpu_id;
++}
++
++/*
++ * Check if the CPU has an external FPU.
++ */
++int __cpu_has_fpu(void)
++{
++	return (cpu_get_fpu_id() & FPIR_IMP_MASK) != FPIR_IMP_NONE;
++}
++
++/*
++ * Determine the FCSR mask for FPU hardware.
++ */
++static inline void cpu_set_fpu_fcsr_mask(struct cpuinfo_mips *c)
++{
++	unsigned long sr, mask, fcsr, fcsr0, fcsr1;
++
++	fcsr = c->fpu_csr31;
++	mask = FPU_CSR_ALL_X | FPU_CSR_ALL_E | FPU_CSR_ALL_S | FPU_CSR_RM;
++
++	sr = read_c0_status();
++	__enable_fpu(FPU_AS_IS);
++
++	fcsr0 = fcsr & mask;
++	write_32bit_cp1_register(CP1_STATUS, fcsr0);
++	fcsr0 = read_32bit_cp1_register(CP1_STATUS);
++
++	fcsr1 = fcsr | ~mask;
++	write_32bit_cp1_register(CP1_STATUS, fcsr1);
++	fcsr1 = read_32bit_cp1_register(CP1_STATUS);
++
++	write_32bit_cp1_register(CP1_STATUS, fcsr);
++
++	write_c0_status(sr);
++
++	c->fpu_msk31 = ~(fcsr0 ^ fcsr1) & ~mask;
++}
++
++/*
++ * Determine the IEEE 754 NaN encodings and ABS.fmt/NEG.fmt execution modes
++ * supported by FPU hardware.
++ */
++static void cpu_set_fpu_2008(struct cpuinfo_mips *c)
++{
++	if (c->isa_level & (MIPS_CPU_ISA_M32R1 | MIPS_CPU_ISA_M64R1 |
++			    MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
++			    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
++			    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6)) {
++		unsigned long sr, fir, fcsr, fcsr0, fcsr1;
++
++		sr = read_c0_status();
++		__enable_fpu(FPU_AS_IS);
++
++		fir = read_32bit_cp1_register(CP1_REVISION);
++		if (fir & MIPS_FPIR_HAS2008) {
++			fcsr = read_32bit_cp1_register(CP1_STATUS);
++
++			/*
++			 * MAC2008 toolchain never landed in real world, so we're only
++			 * testing whether it can be disabled and don't try to enabled
++			 * it.
++			 */
++			fcsr0 = fcsr & ~(FPU_CSR_ABS2008 | FPU_CSR_NAN2008 | FPU_CSR_MAC2008);
++			write_32bit_cp1_register(CP1_STATUS, fcsr0);
++			fcsr0 = read_32bit_cp1_register(CP1_STATUS);
++
++			fcsr1 = fcsr | FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
++			write_32bit_cp1_register(CP1_STATUS, fcsr1);
++			fcsr1 = read_32bit_cp1_register(CP1_STATUS);
++
++			write_32bit_cp1_register(CP1_STATUS, fcsr);
++
++			if (c->isa_level & (MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2)) {
++				/*
++				 * The bit for MAC2008 might be reused by R6 in future,
++				 * so we only test for R2-R5.
++				 */
++				if (fcsr0 & FPU_CSR_MAC2008)
++					c->options |= MIPS_CPU_MAC_2008_ONLY;
++			}
++
++			if (!(fcsr0 & FPU_CSR_NAN2008))
++				c->options |= MIPS_CPU_NAN_LEGACY;
++			if (fcsr1 & FPU_CSR_NAN2008)
++				c->options |= MIPS_CPU_NAN_2008;
++
++			if ((fcsr0 ^ fcsr1) & FPU_CSR_ABS2008)
++				c->fpu_msk31 &= ~FPU_CSR_ABS2008;
++			else
++				c->fpu_csr31 |= fcsr & FPU_CSR_ABS2008;
++
++			if ((fcsr0 ^ fcsr1) & FPU_CSR_NAN2008)
++				c->fpu_msk31 &= ~FPU_CSR_NAN2008;
++			else
++				c->fpu_csr31 |= fcsr & FPU_CSR_NAN2008;
++		} else {
++			c->options |= MIPS_CPU_NAN_LEGACY;
++		}
++
++		write_c0_status(sr);
++	} else {
++		c->options |= MIPS_CPU_NAN_LEGACY;
++	}
++}
++
++/*
++ * IEEE 754 conformance mode to use.  Affects the NaN encoding and the
++ * ABS.fmt/NEG.fmt execution mode.
++ */
++static enum { STRICT, LEGACY, STD2008, RELAXED } ieee754 = STRICT;
++
++/*
++ * Set the IEEE 754 NaN encodings and the ABS.fmt/NEG.fmt execution modes
++ * to support by the FPU emulator according to the IEEE 754 conformance
++ * mode selected.  Note that "relaxed" straps the emulator so that it
++ * allows 2008-NaN binaries even for legacy processors.
++ */
++static void cpu_set_nofpu_2008(struct cpuinfo_mips *c)
++{
++	c->options &= ~(MIPS_CPU_NAN_2008 | MIPS_CPU_NAN_LEGACY);
++	c->fpu_csr31 &= ~(FPU_CSR_ABS2008 | FPU_CSR_NAN2008);
++	c->fpu_msk31 &= ~(FPU_CSR_ABS2008 | FPU_CSR_NAN2008);
++
++	switch (ieee754) {
++	case STRICT:
++		if (c->isa_level & (MIPS_CPU_ISA_M32R1 | MIPS_CPU_ISA_M64R1 |
++				    MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
++				    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
++				    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6)) {
++			c->options |= MIPS_CPU_NAN_2008 | MIPS_CPU_NAN_LEGACY;
++		} else {
++			c->options |= MIPS_CPU_NAN_LEGACY;
++			c->fpu_msk31 |= FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
++		}
++		break;
++	case LEGACY:
++		c->options |= MIPS_CPU_NAN_LEGACY;
++		c->fpu_msk31 |= FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
++		break;
++	case STD2008:
++		c->options |= MIPS_CPU_NAN_2008;
++		c->fpu_csr31 |= FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
++		c->fpu_msk31 |= FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
++		break;
++	case RELAXED:
++		c->options |= MIPS_CPU_NAN_2008 | MIPS_CPU_NAN_LEGACY;
++		break;
++	}
++}
++
++/*
++ * Override the IEEE 754 NaN encoding and ABS.fmt/NEG.fmt execution mode
++ * according to the "ieee754=" parameter.
++ */
++static void cpu_set_nan_2008(struct cpuinfo_mips *c)
++{
++	switch (ieee754) {
++	case STRICT:
++		mips_use_nan_legacy = !!cpu_has_nan_legacy;
++		mips_use_nan_2008 = !!cpu_has_nan_2008;
++		break;
++	case LEGACY:
++		mips_use_nan_legacy = !!cpu_has_nan_legacy;
++		mips_use_nan_2008 = !cpu_has_nan_legacy;
++		break;
++	case STD2008:
++		mips_use_nan_legacy = !cpu_has_nan_2008;
++		mips_use_nan_2008 = !!cpu_has_nan_2008;
++		break;
++	case RELAXED:
++		mips_use_nan_legacy = true;
++		mips_use_nan_2008 = true;
++		break;
++	}
++}
++
++/*
++ * IEEE 754 NaN encoding and ABS.fmt/NEG.fmt execution mode override
++ * settings:
++ *
++ * strict:  accept binaries that request a NaN encoding supported by the FPU
++ * legacy:  only accept legacy-NaN binaries
++ * 2008:    only accept 2008-NaN binaries
++ * relaxed: accept any binaries regardless of whether supported by the FPU
++ */
++static int __init ieee754_setup(char *s)
++{
++	if (!s)
++		return -1;
++	else if (!strcmp(s, "strict"))
++		ieee754 = STRICT;
++	else if (!strcmp(s, "legacy"))
++		ieee754 = LEGACY;
++	else if (!strcmp(s, "2008"))
++		ieee754 = STD2008;
++	else if (!strcmp(s, "relaxed"))
++		ieee754 = RELAXED;
++	else
++		return -1;
++
++	if (!(boot_cpu_data.options & MIPS_CPU_FPU))
++		cpu_set_nofpu_2008(&boot_cpu_data);
++	cpu_set_nan_2008(&boot_cpu_data);
++
++	return 0;
++}
++
++early_param("ieee754", ieee754_setup);
++
++/*
++ * Set the FIR feature flags for the FPU emulator.
++ */
++static void cpu_set_nofpu_id(struct cpuinfo_mips *c)
++{
++	u32 value;
++
++	value = 0;
++	if (c->isa_level & (MIPS_CPU_ISA_M32R1 | MIPS_CPU_ISA_M64R1 |
++			    MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
++			    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
++			    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6))
++		value |= MIPS_FPIR_D | MIPS_FPIR_S;
++	if (c->isa_level & (MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
++			    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
++			    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6))
++		value |= MIPS_FPIR_F64 | MIPS_FPIR_L | MIPS_FPIR_W;
++	if (c->options & MIPS_CPU_NAN_2008)
++		value |= MIPS_FPIR_HAS2008;
++	c->fpu_id = value;
++}
++
++/* Determined FPU emulator mask to use for the boot CPU with "nofpu".  */
++static unsigned int mips_nofpu_msk31;
++
++/*
++ * Set options for FPU hardware.
++ */
++void cpu_set_fpu_opts(struct cpuinfo_mips *c)
++{
++	c->fpu_id = cpu_get_fpu_id();
++	mips_nofpu_msk31 = c->fpu_msk31;
++
++	if (c->isa_level & (MIPS_CPU_ISA_M32R1 | MIPS_CPU_ISA_M64R1 |
++			    MIPS_CPU_ISA_M32R2 | MIPS_CPU_ISA_M64R2 |
++			    MIPS_CPU_ISA_M32R5 | MIPS_CPU_ISA_M64R5 |
++			    MIPS_CPU_ISA_M32R6 | MIPS_CPU_ISA_M64R6)) {
++		if (c->fpu_id & MIPS_FPIR_3D)
++			c->ases |= MIPS_ASE_MIPS3D;
++		if (c->fpu_id & MIPS_FPIR_UFRP)
++			c->options |= MIPS_CPU_UFR;
++		if (c->fpu_id & MIPS_FPIR_FREP)
++			c->options |= MIPS_CPU_FRE;
++	}
++
++	cpu_set_fpu_fcsr_mask(c);
++	cpu_set_fpu_2008(c);
++	cpu_set_nan_2008(c);
++}
++
++/*
++ * Set options for the FPU emulator.
++ */
++void cpu_set_nofpu_opts(struct cpuinfo_mips *c)
++{
++	c->options &= ~MIPS_CPU_FPU;
++	c->fpu_msk31 = mips_nofpu_msk31;
++
++	cpu_set_nofpu_2008(c);
++	cpu_set_nan_2008(c);
++	cpu_set_nofpu_id(c);
++}
++
++int mips_fpu_disabled;
++
++static int __init fpu_disable(char *s)
++{
++	cpu_set_nofpu_opts(&boot_cpu_data);
++	mips_fpu_disabled = 1;
++
++	return 1;
++}
++
++__setup("nofpu", fpu_disable);
++
+diff --git a/arch/mips/kernel/fpu-probe.h b/arch/mips/kernel/fpu-probe.h
+new file mode 100644
+index 000000000000..951ce50890d0
+--- /dev/null
++++ b/arch/mips/kernel/fpu-probe.h
+@@ -0,0 +1,40 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#include <linux/kernel.h>
++
++#include <asm/cpu.h>
++#include <asm/cpu-info.h>
++
++#ifdef CONFIG_MIPS_FP_SUPPORT
++
++extern int mips_fpu_disabled;
++
++int __cpu_has_fpu(void);
++void cpu_set_fpu_opts(struct cpuinfo_mips *c);
++void cpu_set_nofpu_opts(struct cpuinfo_mips *c);
++
++#else /* !CONFIG_MIPS_FP_SUPPORT */
++
++#define mips_fpu_disabled 1
++
++static inline unsigned long cpu_get_fpu_id(void)
++{
++	return FPIR_IMP_NONE;
++}
++
++static inline int __cpu_has_fpu(void)
++{
++	return 0;
++}
++
++static inline void cpu_set_fpu_opts(struct cpuinfo_mips *c)
++{
++	/* no-op */
++}
++
++static inline void cpu_set_nofpu_opts(struct cpuinfo_mips *c)
++{
++	/* no-op */
++}
++
++#endif /* CONFIG_MIPS_FP_SUPPORT */
+-- 
+2.16.4
+
