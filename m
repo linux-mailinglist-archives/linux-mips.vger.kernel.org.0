@@ -2,246 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E77162879F4
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 18:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD17287A53
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 18:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729739AbgJHQ1s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Oct 2020 12:27:48 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47940 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728620AbgJHQ1s (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 8 Oct 2020 12:27:48 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DF7A4AC85;
-        Thu,  8 Oct 2020 16:27:45 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] MIPS: cpu-probe: introduce exclusive R3k CPU probe
-Date:   Thu,  8 Oct 2020 18:27:27 +0200
-Message-Id: <20201008162727.4018-2-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20201008162727.4018-1-tsbogend@alpha.franken.de>
-References: <20201008162727.4018-1-tsbogend@alpha.franken.de>
+        id S1730267AbgJHQtu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Oct 2020 12:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728218AbgJHQtu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Oct 2020 12:49:50 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333B2C061755;
+        Thu,  8 Oct 2020 09:49:50 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id h6so4801351pgk.4;
+        Thu, 08 Oct 2020 09:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=etkEQubuil182k3C5BVo92E36PMRBTYONF0xOmMx994=;
+        b=nhUB611p0AMA34WZHbcfv4F8z/HholYpZGUj0swudfsaD8TMmDd0Lv4+Ew3zoYA0pt
+         0paCTIXiHgUFBw2WsfJUjNPpXpWUhzk5ciBDBZc4aEQR1X8sgrD3JOcPQ0Xx2Q+Nmato
+         B4N/wF5ixnS8rmFKUKfUbIH4Z47uAEaHIKwYBsGJBDMG/9OSEhItrS44K9Ui3Rr+cmSM
+         LmF1/kS6fy26Y//OEphaSL+ZkiFChAmWWiluWLVQDcpN08F7IOLqkdxa4lZYUaUuRfRk
+         C5SsexIl66MRf4Z++lTNGAJsMs+fgYNbE4OVxsc1OGrUCerfvZtLT7v6GPK9AXqO3RIb
+         Xfhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=etkEQubuil182k3C5BVo92E36PMRBTYONF0xOmMx994=;
+        b=D1D/bvJgAC3f+ZcMPXd0yy1Oa3amKyBpA1UTj6Ov30dURHk9E3AZGdFIYpxhmaDGgB
+         LoAlH60QnYf0OZYBPHwjIUKuBu+b/LrCn1lTi5RbEYIeNv/OxiKyc5cS5W0kc0lP7sH4
+         7RJS+H7v6E5oFZx38mDQEMVZK+FHIXXfjQIFG6FMiLOwrS5jNZgEXC8LOQnxRu/+6s4+
+         rRjkDKGt7jY5cayP0c+faTt8EaMgSdMfuyEz55bvPPzR8pdeWX/n97paetnbkqUc92uZ
+         tcmb8d3MCIwF/V8eiAmg8rKZFZbB0UHnKeEZ58hVlJbaHigBIu40yv7Z8Dy+7OE4S/wE
+         Wa4w==
+X-Gm-Message-State: AOAM532Lyx8QsNlaHU95lBxIadnR2yqnPVGFoBz9zKgUIdQ/t6FGiIiX
+        xRHACncaOgBakpg4n8SKmE8=
+X-Google-Smtp-Source: ABdhPJw8oO//XgT0mpyq/nBfE7h02sQTemmm7/n2bAm2ae1eWE5Ve3E3ySf2SKmEJCqyM5W8K0cSYg==
+X-Received: by 2002:a17:90a:f198:: with SMTP id bv24mr9135831pjb.230.1602175789695;
+        Thu, 08 Oct 2020 09:49:49 -0700 (PDT)
+Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
+        by smtp.gmail.com with ESMTPSA id q8sm7868758pfl.100.2020.10.08.09.49.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Oct 2020 09:49:48 -0700 (PDT)
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20201008084357.42780-1-tsbogend@alpha.franken.de>
+ <20201008152006.4khkbzsxqmmz76rw@mobilestation>
+ <alpine.LFD.2.21.2010081628100.866917@eddie.linux-mips.org>
+ <20201008155454.kaal2bchjq7wusqr@mobilestation>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH v2] MIPS: replace add_memory_region with memblock
+Message-ID: <91e52fa1-ecf9-7acc-62f6-16fccfae927c@gmail.com>
+Date:   Thu, 8 Oct 2020 09:49:46 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.3.1
+MIME-Version: 1.0
+In-Reply-To: <20201008155454.kaal2bchjq7wusqr@mobilestation>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Running a kernel on a R3k of machine definitly will never see one of
-the newer CPU cores. And since R3k system usually are low on memory
-we could save quite some kbytes:
 
-   text	   data	    bss	    dec	    hex	filename
-  15070	     88	     32	  15190	   3b56	arch/mips/kernel/cpu-probe.o
-    844	      4	     16	    864	    360	arch/mips/kernel/cpu-r3k-probe.o
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/kernel/Makefile        |   8 +-
- arch/mips/kernel/cpu-r3k-probe.c | 171 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 178 insertions(+), 1 deletion(-)
- create mode 100644 arch/mips/kernel/cpu-r3k-probe.c
+On 10/8/2020 8:54 AM, Serge Semin wrote:
+> On Thu, Oct 08, 2020 at 04:30:35PM +0100, Maciej W. Rozycki wrote:
+>> On Thu, 8 Oct 2020, Serge Semin wrote:
+>>
+>>> At least I don't see a decent reason to preserve them. The memory registration
+>>> method does nearly the same sanity checks. The memory reservation function
+>>> defers a bit in adding the being reserved memory first. That seems redundant,
+>>> since the reserved memory won't be available for the system anyway. Do I miss
+>>> something?
+>>
+> 
+>>   At the very least it serves informational purposes as it shows up in
+>> /proc/iomem.
+> 
+> I thought about that, but /proc/iomem prints the System RAM up. Adding the reserved
+> memory regions to be just memory region first still seem redundant, since
+> reserving a non-reflected in memory region most likely indicates an erroneous
+> dts. I failed to find that, but do the kernel or DTC make sure that the reserved
+> memory regions has actual memory behind? (At least in the framework of the
+> memblock.memory vs memblock.reserved arrays or in the DT source file)
 
-diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index 026801c21724..2a05b923f579 100644
---- a/arch/mips/kernel/Makefile
-+++ b/arch/mips/kernel/Makefile
-@@ -5,11 +5,17 @@
- 
- extra-y		:= head.o vmlinux.lds
- 
--obj-y		+= cmpxchg.o cpu-probe.o branch.o elf.o entry.o genex.o idle.o irq.o \
-+obj-y		+= branch.o cmpxchg.o elf.o entry.o genex.o idle.o irq.o \
- 		   process.o prom.o ptrace.o reset.o setup.o signal.o \
- 		   syscall.o time.o topology.o traps.o unaligned.o watch.o \
- 		   vdso.o cacheinfo.o
- 
-+ifdef CONFIG_CPU_R3K_TLB
-+obj-y		+= cpu-r3k-probe.o
-+else
-+obj-y		+= cpu-probe.o
-+endif
-+
- ifdef CONFIG_FUNCTION_TRACER
- CFLAGS_REMOVE_ftrace.o = -pg
- CFLAGS_REMOVE_early_printk.o = -pg
-diff --git a/arch/mips/kernel/cpu-r3k-probe.c b/arch/mips/kernel/cpu-r3k-probe.c
-new file mode 100644
-index 000000000000..abdbbe8c5a43
---- /dev/null
-+++ b/arch/mips/kernel/cpu-r3k-probe.c
-@@ -0,0 +1,171 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Processor capabilities determination functions.
-+ *
-+ * Copyright (C) xxxx  the Anonymous
-+ * Copyright (C) 1994 - 2006 Ralf Baechle
-+ * Copyright (C) 2003, 2004  Maciej W. Rozycki
-+ * Copyright (C) 2001, 2004, 2011, 2012	 MIPS Technologies, Inc.
-+ */
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/ptrace.h>
-+#include <linux/smp.h>
-+#include <linux/stddef.h>
-+#include <linux/export.h>
-+
-+#include <asm/bugs.h>
-+#include <asm/cpu.h>
-+#include <asm/cpu-features.h>
-+#include <asm/cpu-type.h>
-+#include <asm/fpu.h>
-+#include <asm/mipsregs.h>
-+#include <asm/elf.h>
-+
-+#include "fpu-probe.h"
-+
-+/* Hardware capabilities */
-+unsigned int elf_hwcap __read_mostly;
-+EXPORT_SYMBOL_GPL(elf_hwcap);
-+
-+void __init check_bugs32(void)
-+{
-+
-+}
-+
-+/*
-+ * Probe whether cpu has config register by trying to play with
-+ * alternate cache bit and see whether it matters.
-+ * It's used by cpu_probe to distinguish between R3000A and R3081.
-+ */
-+static inline int cpu_has_confreg(void)
-+{
-+#ifdef CONFIG_CPU_R3000
-+	extern unsigned long r3k_cache_size(unsigned long);
-+	unsigned long size1, size2;
-+	unsigned long cfg = read_c0_conf();
-+
-+	size1 = r3k_cache_size(ST0_ISC);
-+	write_c0_conf(cfg ^ R30XX_CONF_AC);
-+	size2 = r3k_cache_size(ST0_ISC);
-+	write_c0_conf(cfg);
-+	return size1 != size2;
-+#else
-+	return 0;
-+#endif
-+}
-+
-+static inline void set_elf_platform(int cpu, const char *plat)
-+{
-+	if (cpu == 0)
-+		__elf_platform = plat;
-+}
-+
-+const char *__cpu_name[NR_CPUS];
-+const char *__elf_platform;
-+const char *__elf_base_platform;
-+
-+void cpu_probe(void)
-+{
-+	struct cpuinfo_mips *c = &current_cpu_data;
-+	unsigned int cpu = smp_processor_id();
-+
-+	/*
-+	 * Set a default elf platform, cpu probe may later
-+	 * overwrite it with a more precise value
-+	 */
-+	set_elf_platform(cpu, "mips");
-+
-+	c->processor_id = PRID_IMP_UNKNOWN;
-+	c->fpu_id	= FPIR_IMP_NONE;
-+	c->cputype	= CPU_UNKNOWN;
-+	c->writecombine = _CACHE_UNCACHED;
-+
-+	c->fpu_csr31	= FPU_CSR_RN;
-+	c->fpu_msk31	= FPU_CSR_RSVD | FPU_CSR_ABS2008 | FPU_CSR_NAN2008 |
-+			  FPU_CSR_CONDX | FPU_CSR_FS;
-+
-+	c->srsets = 1;
-+
-+	c->processor_id = read_c0_prid();
-+	switch (c->processor_id & (PRID_COMP_MASK | PRID_IMP_MASK)) {
-+	case PRID_COMP_LEGACY | PRID_IMP_R2000:
-+		c->cputype = CPU_R2000;
-+		__cpu_name[cpu] = "R2000";
-+		c->options = MIPS_CPU_TLB | MIPS_CPU_3K_CACHE |
-+			     MIPS_CPU_NOFPUEX;
-+		if (__cpu_has_fpu())
-+			c->options |= MIPS_CPU_FPU;
-+		c->tlbsize = 64;
-+		break;
-+	case PRID_COMP_LEGACY | PRID_IMP_R3000:
-+		if ((c->processor_id & PRID_REV_MASK) == PRID_REV_R3000A) {
-+			if (cpu_has_confreg()) {
-+				c->cputype = CPU_R3081E;
-+				__cpu_name[cpu] = "R3081";
-+			} else {
-+				c->cputype = CPU_R3000A;
-+				__cpu_name[cpu] = "R3000A";
-+			}
-+		} else {
-+			c->cputype = CPU_R3000;
-+			__cpu_name[cpu] = "R3000";
-+		}
-+		c->options = MIPS_CPU_TLB | MIPS_CPU_3K_CACHE |
-+			     MIPS_CPU_NOFPUEX;
-+		if (__cpu_has_fpu())
-+			c->options |= MIPS_CPU_FPU;
-+		c->tlbsize = 64;
-+		break;
-+	case PRID_COMP_LEGACY | PRID_IMP_TX39:
-+		c->options = MIPS_CPU_TLB | MIPS_CPU_TX39_CACHE;
-+
-+		if ((c->processor_id & 0xf0) == (PRID_REV_TX3927 & 0xf0)) {
-+			c->cputype = CPU_TX3927;
-+			__cpu_name[cpu] = "TX3927";
-+			c->tlbsize = 64;
-+		} else {
-+			switch (c->processor_id & PRID_REV_MASK) {
-+			case PRID_REV_TX3912:
-+				c->cputype = CPU_TX3912;
-+				__cpu_name[cpu] = "TX3912";
-+				c->tlbsize = 32;
-+				break;
-+			case PRID_REV_TX3922:
-+				c->cputype = CPU_TX3922;
-+				__cpu_name[cpu] = "TX3922";
-+				c->tlbsize = 64;
-+				break;
-+			}
-+		}
-+		break;
-+	}
-+
-+	BUG_ON(!__cpu_name[cpu]);
-+	BUG_ON(c->cputype == CPU_UNKNOWN);
-+
-+	/*
-+	 * Platform code can force the cpu type to optimize code
-+	 * generation. In that case be sure the cpu type is correctly
-+	 * manually setup otherwise it could trigger some nasty bugs.
-+	 */
-+	BUG_ON(current_cpu_type() != c->cputype);
-+
-+	if (mips_fpu_disabled)
-+		c->options &= ~MIPS_CPU_FPU;
-+
-+	if (c->options & MIPS_CPU_FPU)
-+		cpu_set_fpu_opts(c);
-+	else
-+		cpu_set_nofpu_opts(c);
-+}
-+
-+void cpu_report(void)
-+{
-+	struct cpuinfo_mips *c = &current_cpu_data;
-+
-+	pr_info("CPU%d revision is: %08x (%s)\n",
-+		smp_processor_id(), c->processor_id, cpu_name_string());
-+	if (c->options & MIPS_CPU_FPU)
-+		pr_info("FPU revision is: %08x\n", c->fpu_id);
-+}
+AFAICT DTC does not do any validation that regions you declare in 
+/memreserve or /reserved-memory are within the 'reg' property defined 
+for the /memory node. Not that it could not but that goes a little 
+beyond is compiler job.
+
+The kernel ought to be able to do that validation through memblock but 
+there could be valid use cases behind declaring a reserved memory region 
+that is not backed by a corresponding DRAM region. For instance if you 
+hotplugged memory through the sysfs probe interface, and that memory was 
+not initially declared in the Device Tree, but there were reserved 
+regions within that hot-plugged range that you would have to be aware 
+of, then this would break.
+
+> 
+> I also don't see the other platforms doing that, since the MIPS arch only
+> redefines these methods. So if a problem of adding a reserved memory with
+> possible no real memory behind exist, it should be fixed in the cross-platform
+> basis, don't you think?
+
+Would we be breaking any use case if we stopped allowing reserved region 
+that are not part of DRAM being declared?
 -- 
-2.16.4
-
+Florian
