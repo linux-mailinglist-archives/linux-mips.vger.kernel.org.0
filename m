@@ -2,97 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD17287A53
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 18:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10133287A69
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 18:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730267AbgJHQtu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Oct 2020 12:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728218AbgJHQtu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Oct 2020 12:49:50 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333B2C061755;
-        Thu,  8 Oct 2020 09:49:50 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id h6so4801351pgk.4;
-        Thu, 08 Oct 2020 09:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=etkEQubuil182k3C5BVo92E36PMRBTYONF0xOmMx994=;
-        b=nhUB611p0AMA34WZHbcfv4F8z/HholYpZGUj0swudfsaD8TMmDd0Lv4+Ew3zoYA0pt
-         0paCTIXiHgUFBw2WsfJUjNPpXpWUhzk5ciBDBZc4aEQR1X8sgrD3JOcPQ0Xx2Q+Nmato
-         B4N/wF5ixnS8rmFKUKfUbIH4Z47uAEaHIKwYBsGJBDMG/9OSEhItrS44K9Ui3Rr+cmSM
-         LmF1/kS6fy26Y//OEphaSL+ZkiFChAmWWiluWLVQDcpN08F7IOLqkdxa4lZYUaUuRfRk
-         C5SsexIl66MRf4Z++lTNGAJsMs+fgYNbE4OVxsc1OGrUCerfvZtLT7v6GPK9AXqO3RIb
-         Xfhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=etkEQubuil182k3C5BVo92E36PMRBTYONF0xOmMx994=;
-        b=D1D/bvJgAC3f+ZcMPXd0yy1Oa3amKyBpA1UTj6Ov30dURHk9E3AZGdFIYpxhmaDGgB
-         LoAlH60QnYf0OZYBPHwjIUKuBu+b/LrCn1lTi5RbEYIeNv/OxiKyc5cS5W0kc0lP7sH4
-         7RJS+H7v6E5oFZx38mDQEMVZK+FHIXXfjQIFG6FMiLOwrS5jNZgEXC8LOQnxRu/+6s4+
-         rRjkDKGt7jY5cayP0c+faTt8EaMgSdMfuyEz55bvPPzR8pdeWX/n97paetnbkqUc92uZ
-         tcmb8d3MCIwF/V8eiAmg8rKZFZbB0UHnKeEZ58hVlJbaHigBIu40yv7Z8Dy+7OE4S/wE
-         Wa4w==
-X-Gm-Message-State: AOAM532Lyx8QsNlaHU95lBxIadnR2yqnPVGFoBz9zKgUIdQ/t6FGiIiX
-        xRHACncaOgBakpg4n8SKmE8=
-X-Google-Smtp-Source: ABdhPJw8oO//XgT0mpyq/nBfE7h02sQTemmm7/n2bAm2ae1eWE5Ve3E3ySf2SKmEJCqyM5W8K0cSYg==
-X-Received: by 2002:a17:90a:f198:: with SMTP id bv24mr9135831pjb.230.1602175789695;
-        Thu, 08 Oct 2020 09:49:49 -0700 (PDT)
-Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id q8sm7868758pfl.100.2020.10.08.09.49.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Oct 2020 09:49:48 -0700 (PDT)
-To:     Serge Semin <fancer.lancer@gmail.com>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S1731424AbgJHQ4Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Oct 2020 12:56:24 -0400
+Received: from [157.25.102.26] ([157.25.102.26]:55474 "EHLO orcam.me.uk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731415AbgJHQ4V (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 8 Oct 2020 12:56:21 -0400
+Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
+        by orcam.me.uk (Postfix) with ESMTPS id A09E02BE086;
+        Thu,  8 Oct 2020 17:56:18 +0100 (BST)
+Date:   Thu, 8 Oct 2020 17:56:17 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Keguang Zhang <keguang.zhang@gmail.com>,
         John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20201008084357.42780-1-tsbogend@alpha.franken.de>
- <20201008152006.4khkbzsxqmmz76rw@mobilestation>
- <alpine.LFD.2.21.2010081628100.866917@eddie.linux-mips.org>
- <20201008155454.kaal2bchjq7wusqr@mobilestation>
-From:   Florian Fainelli <f.fainelli@gmail.com>
 Subject: Re: [PATCH v2] MIPS: replace add_memory_region with memblock
-Message-ID: <91e52fa1-ecf9-7acc-62f6-16fccfae927c@gmail.com>
-Date:   Thu, 8 Oct 2020 09:49:46 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.3.1
-MIME-Version: 1.0
 In-Reply-To: <20201008155454.kaal2bchjq7wusqr@mobilestation>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Message-ID: <alpine.LFD.2.21.2010081739240.866917@eddie.linux-mips.org>
+References: <20201008084357.42780-1-tsbogend@alpha.franken.de> <20201008152006.4khkbzsxqmmz76rw@mobilestation> <alpine.LFD.2.21.2010081628100.866917@eddie.linux-mips.org> <20201008155454.kaal2bchjq7wusqr@mobilestation>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, 8 Oct 2020, Serge Semin wrote:
 
-
-On 10/8/2020 8:54 AM, Serge Semin wrote:
-> On Thu, Oct 08, 2020 at 04:30:35PM +0100, Maciej W. Rozycki wrote:
->> On Thu, 8 Oct 2020, Serge Semin wrote:
->>
->>> At least I don't see a decent reason to preserve them. The memory registration
->>> method does nearly the same sanity checks. The memory reservation function
->>> defers a bit in adding the being reserved memory first. That seems redundant,
->>> since the reserved memory won't be available for the system anyway. Do I miss
->>> something?
->>
+> > > At least I don't see a decent reason to preserve them. The memory registration
+> > > method does nearly the same sanity checks. The memory reservation function
+> > > defers a bit in adding the being reserved memory first. That seems redundant,
+> > > since the reserved memory won't be available for the system anyway. Do I miss
+> > > something?
+> > 
 > 
->>   At the very least it serves informational purposes as it shows up in
->> /proc/iomem.
+> >  At the very least it serves informational purposes as it shows up in 
+> > /proc/iomem.
 > 
 > I thought about that, but /proc/iomem prints the System RAM up. Adding the reserved
 > memory regions to be just memory region first still seem redundant, since
@@ -101,26 +55,137 @@ On 10/8/2020 8:54 AM, Serge Semin wrote:
 > memory regions has actual memory behind? (At least in the framework of the
 > memblock.memory vs memblock.reserved arrays or in the DT source file)
 
-AFAICT DTC does not do any validation that regions you declare in 
-/memreserve or /reserved-memory are within the 'reg' property defined 
-for the /memory node. Not that it could not but that goes a little 
-beyond is compiler job.
+ Reserved regions need not be RAM or a memory-like device.  They could be 
+floating bus even.  Here's an example from my x86 laptop where all kinds 
+of stuff is marked reserved:
 
-The kernel ought to be able to do that validation through memblock but 
-there could be valid use cases behind declaring a reserved memory region 
-that is not backed by a corresponding DRAM region. For instance if you 
-hotplugged memory through the sysfs probe interface, and that memory was 
-not initially declared in the Device Tree, but there were reserved 
-regions within that hot-plugged range that you would have to be aware 
-of, then this would break.
+00000000-00000fff : Reserved
+00001000-0009cfff : System RAM
+0009d000-0009ffff : Reserved
+000a0000-000bffff : PCI Bus 0000:00
+000c0000-000cebff : Video ROM
+000d0000-000d3fff : pnp 00:0b
+000d8000-000dbfff : pnp 00:0b
+000e0000-000fffff : Reserved
+  000f0000-000fffff : System ROM
+00100000-5f24afff : System RAM
+5f24b000-5f24cfff : Reserved
+5f24d000-5fee5fff : System RAM
+5fee6000-5fee6fff : Reserved
+5fee7000-6daecfff : System RAM
+6daed000-729bafff : Reserved
+729bb000-729bbfff : ACPI Non-volatile Storage
+729bc000-7fefefff : Reserved
+7feff000-7ff99fff : ACPI Non-volatile Storage
+7ff9a000-7fffefff : ACPI Tables
+7ffff000-87ffffff : Reserved
+  80200000-85f7ffff : INT0E0C:00
+88600000-89ffffff : Reserved
+8a000000-efffffff : PCI Bus 0000:00
+  c0000000-d1ffffff : PCI Bus 0000:01
+    c0000000-cfffffff : 0000:01:00.0
+    d0000000-d1ffffff : 0000:01:00.0
+  d4000000-ea0fffff : PCI Bus 0000:05
+  eb000000-ec0fffff : PCI Bus 0000:01
+    eb000000-ebffffff : 0000:01:00.0
+  ec100000-ecafffff : PCI Bus 0000:03
+  ecb00000-ecbfffff : PCI Bus 0000:3f
+    ecb00000-ecb00fff : 0000:3f:00.0
+      ecb00000-ecb00fff : rtsx_pci
+  ecc00000-eccfffff : PCI Bus 0000:3e
+    ecc00000-ecc03fff : 0000:3e:00.0
+      ecc00000-ecc03fff : nvme
+  ecd00000-ecdfffff : PCI Bus 0000:04
+    ecd00000-ecd01fff : 0000:04:00.0
+      ecd00000-ecd01fff : iwlwifi
+  ece00000-ed7fffff : PCI Bus 0000:03
+  ed800000-ed8fffff : PCI Bus 0000:02
+    ed800000-ed803fff : 0000:02:00.0
+      ed800000-ed803fff : nvme
+  ed900000-ed91ffff : 0000:00:1f.6
+    ed900000-ed91ffff : e1000e
+  ed920000-ed92ffff : 0000:00:14.0
+    ed920000-ed92ffff : xhci-hcd
+  ed930000-ed933fff : 0000:00:1f.2
+  effe0000-efffffff : pnp 00:08
+    effe0000-efffffff : pnp 00:0a
+f0000000-f7ffffff : PCI MMCONFIG 0000 [bus 00-7f]
+  f0000000-f7ffffff : Reserved
+    f0000000-f7ffffff : pnp 00:08
+      f0000000-f7ffffff : pnp 00:0a
+fd000000-fe7fffff : Reserved
+  fd000000-fe7fffff : PCI Bus 0000:00
+    fd000000-fdabffff : pnp 00:00
+    fdac0000-fdacffff : INT345D:00
+      fdac0000-fdacffff : INT345D:00
+    fdad0000-fdadffff : pnp 00:00
+    fdae0000-fdaeffff : INT345D:00
+      fdae0000-fdaeffff : INT345D:00
+    fdaf0000-fdafffff : INT345D:00
+      fdaf0000-fdafffff : INT345D:00
+    fdb00000-fdffffff : pnp 00:00
+      fdc6000c-fdc6000f : iTCO_wdt
+        fdc6000c-fdc6000f : iTCO_wdt
+    fe000000-fe01ffff : pnp 00:00
+    fe036000-fe03bfff : pnp 00:00
+    fe03d000-fe3fffff : pnp 00:00
+    fe410000-fe7fffff : pnp 00:00
+feb00000-febfffff : pnp 00:08
+fec00000-fec00fff : Reserved
+  fec00000-fec003ff : IOAPIC 0
+fed00000-fed00fff : Reserved
+  fed00000-fed003ff : HPET 0
+    fed00000-fed003ff : PNP0103:00
+fed10000-fed19fff : Reserved
+  fed10000-fed13fff : pnp 00:08
+  fed18000-fed18fff : pnp 00:08
+    fed18000-fed18fff : pnp 00:0a
+  fed19000-fed19fff : pnp 00:08
+    fed19000-fed19fff : pnp 00:0a
+fed20000-fed3ffff : pnp 00:08
+  fed20000-fed3ffff : pnp 00:0a
+fed84000-fed84fff : Reserved
+fed90000-fed93fff : pnp 00:08
+  fed90000-fed93fff : pnp 00:0a
+fee00000-fee00fff : Local APIC
+  fee00000-fee00fff : Reserved
+ff000000-ffffffff : INT0800:00
+  ff800000-ffffffff : Reserved
+100000000-873ffffff : System RAM
+  4bb200000-4bbc031d0 : Kernel code
+  4bbc031d1-4bc334e7f : Kernel data
+  4bc7b7000-4bc9fffff : Kernel bss
+2000000000-2fffffffff : PCI Bus 0000:00
+  2fd0000000-2ff1ffffff : PCI Bus 0000:05
+  2ff2000000-2ff200ffff : 0000:00:1f.3
+    2ff2000000-2ff200ffff : ICH HD audio
+  2ff2010000-2ff2013fff : 0000:00:1f.3
+    2ff2010000-2ff2013fff : ICH HD audio
+  2ff2014000-2ff20140ff : 0000:00:1f.4
+  2ff2015000-2ff2015fff : 0000:00:16.0
+    2ff2015000-2ff2015fff : mei_me
+  2ff2016000-2ff2016fff : 0000:00:15.0
+    2ff2016000-2ff20161ff : lpss_dev
+      2ff2016000-2ff20161ff : lpss_dev
+    2ff2016200-2ff20162ff : lpss_priv
+    2ff2016800-2ff2016fff : idma64.0
+      2ff2016800-2ff2016fff : idma64.0
+  2ff2017000-2ff2017fff : 0000:00:14.2
+    2ff2017000-2ff2017fff : Intel PCH thermal driver
+  2ff2018000-2ff2018fff : 0000:00:08.0
 
-> 
+Actually another reason to mark regions reserved is to prevent them from 
+being claimed by the wrong driver or, perhaps more importantly, used for 
+assigning bus address ranges to hardware resources (BAR programming).
+
 > I also don't see the other platforms doing that, since the MIPS arch only
 > redefines these methods. So if a problem of adding a reserved memory with
 > possible no real memory behind exist, it should be fixed in the cross-platform
 > basis, don't you think?
 
-Would we be breaking any use case if we stopped allowing reserved region 
-that are not part of DRAM being declared?
--- 
-Florian
+ I think doing things in a generic way where possible is surely desired, 
+however platforms have different ways to discover resources and I can't 
+see offhand how this could be unified.  I haven't look at that code for a 
+while now, so I can't be more specific offhand.
+
+  Maciej
