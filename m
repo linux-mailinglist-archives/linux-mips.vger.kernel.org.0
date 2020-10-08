@@ -2,103 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A98C6287CCD
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 22:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81472287DE1
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 23:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729906AbgJHUEM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Oct 2020 16:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S1726348AbgJHVUs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Oct 2020 17:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729877AbgJHUEL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Oct 2020 16:04:11 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5454FC0613D2;
-        Thu,  8 Oct 2020 13:04:10 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id e23so655163wme.2;
-        Thu, 08 Oct 2020 13:04:10 -0700 (PDT)
+        with ESMTP id S1725982AbgJHVUs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Oct 2020 17:20:48 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB9BC0613D2;
+        Thu,  8 Oct 2020 14:20:48 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id 184so8255532lfd.6;
+        Thu, 08 Oct 2020 14:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=0cpv+tP36ues9zKZvc23gnyV9b7gmZPPP3bWOFay3Z8=;
-        b=soGxHYxnlKP7l3roOE54jwTEMNQqPWr0nj6Hc9h7KhV5a8ASVFMdI1r+dyLbrtgIlV
-         TIdIKxQRLCjI9QAsxQOxc9AHdwu5H5MieylLqbVx15tm0HWBhRKahOO9STQ4r/ARFp+h
-         ag8HAY9rWc6BN+2zEcR6FUdQGjvyCdNf+e4zF7CfRfjQgx/nKr9oj2Lybgq7pNxViRIi
-         URASZFHORPGZxpo8hBuB4alXjoaIhNJqxtu820Z8PwM9/JpM+Y4bxcXu/IKgbPSPefd4
-         G3oQaPWFeqzD9PjBz9F9pBE735mtlMp6IYhU/ubBRRI9qww7GMVCbY7y8MURqzuej0rc
-         GynA==
+        bh=YswObbWMgxkd2Es/EpjzmF8G0H6kB02USSUo8S+y6kY=;
+        b=GhWLLKljFnCD9BsvCGQFfVvg9nN1pKAj+gmsHPpP1J5jQ6ndC0cMBTf566pqTwupUB
+         KSPGUBbivmFnAI9WHviqhsHWKN8jsTUQts5YFgygnS5vwhBUIZDY128ZSlWHLlq1ACvg
+         6HfALY01xCVJdlaJL3PRMXqLmBcYJu3flOu6/+cjMGKD7TVtlMJnwRp0S/c9hTFJdWnA
+         zL2tXN/acalFvjLMmf0b0hjPPrexNiyuhQ4GnQVR/LIwTtaMFDzrWco2FkbT4DwVZ5Ao
+         wCgrVzgDr0q76HUMPFUARREEmBWNPcK4fM6Fr6+ugBYBy8na7Oyo6htR/XcEJUpN1O2R
+         Nh3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=0cpv+tP36ues9zKZvc23gnyV9b7gmZPPP3bWOFay3Z8=;
-        b=SjQ6PFuUbI6yIRkzqHbXAVu60nGqvB15d3dcrUi6s0YLsSa5Lu440bRaVmp5Pub4D/
-         TY7UkNtXYFnfZz5po7TICv79Q363w0cWvewtb7av20OLYO46EbP+/6Rc6kFTAf4jpCsa
-         Y9sl9dLz/Yi0q/w6N1Mea2Tpgp4nkH74T0MMrBe8UdznM52jU1jjtUUA8mCgwftO2b42
-         LLGSpxJdnC9WvPRmol3FY4vfeFQ+X/6mua/QbuIyBH/rtoq1OzVomzcpAgRLPxJ/mTbR
-         kx+Fk58AFJ5sw/G2EKXIMNkYw4ARSEbkY93Z/tQlJxrUIBXc5qmVM7HnWsYAoGuBgYM7
-         XfSg==
-X-Gm-Message-State: AOAM532A0ZCOtrH9qA+avRifr4v9QP8s5QWyyq+I3U7hJqoh7R2ya7F8
-        qyMa+6opGCz9woATL+4mfmg=
-X-Google-Smtp-Source: ABdhPJzbefUFsnEexYnumCuenoA3EWX1ObnpD7vhR0ttyC6Vq9tiw4N7i5bJAYFbq933cEFleHu87Q==
-X-Received: by 2002:a1c:4904:: with SMTP id w4mr9841419wma.99.1602187449021;
-        Thu, 08 Oct 2020 13:04:09 -0700 (PDT)
-Received: from dell5510 ([62.201.25.198])
-        by smtp.gmail.com with ESMTPSA id v2sm9103715wme.19.2020.10.08.13.04.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YswObbWMgxkd2Es/EpjzmF8G0H6kB02USSUo8S+y6kY=;
+        b=GpftzZ6mrFPOaG1z1lKqlHEerFinkXRPjN0X7I5swn4YKNqS0gNjMkWEdSPfy6v04a
+         YB5IHkweKvooIL/BPCesmhBft4XVI2cyoGbyQY44lVS1kcrZHRUt1HB4ZNUTWrU5MoJG
+         26BW4CGiPey4ur34eVH567g9wfsP/uvIWn+yQwN7dioB1MOOtl0WGtqx5EgaCkt5os8D
+         6DVxBhL7xlCwC+0PhnQaFr29A+mxx9FLz6oQLB5Vn+M/2+fIyU+Wg48PEsfd+Zl2PqiY
+         PzakWEbDd6b57Lnqbcxmzi3CoKt5yAomy0eiZ5pndJHU6rhJrvzQWj36ddx6zWuA9PG0
+         pY6Q==
+X-Gm-Message-State: AOAM53332bqKDHdhhuTDHyz7Ozck6yzRen1xxPQdJmWp+wC8bZ4G0X7j
+        Gna5jhbGzwle/Q/KfURi8u8=
+X-Google-Smtp-Source: ABdhPJwHl1H1UEj/AqlDCq7iMbPC8W4sohfIJ8YHEtsM2uph7672HBW7Wfr3Tlad05F0BxMgi3q33w==
+X-Received: by 2002:ac2:58d2:: with SMTP id u18mr2050429lfo.390.1602192046634;
+        Thu, 08 Oct 2020 14:20:46 -0700 (PDT)
+Received: from mobilestation ([95.79.141.114])
+        by smtp.gmail.com with ESMTPSA id i11sm1155977ljn.119.2020.10.08.14.20.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2020 13:04:08 -0700 (PDT)
-Date:   Thu, 8 Oct 2020 22:04:06 +0200
-From:   Petr Vorel <petr.vorel@gmail.com>
-To:     Jan Stancek <jstancek@redhat.com>
-Cc:     ltp@lists.linux.it, Ofer Levi <oferle@nvidia.com>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, Guo Ren <guoren@kernel.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        "Maciej W . Rozycki" <macro@linux-mips.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Vincent Chen <deanbo422@gmail.com>
-Subject: Re: [LTP] [PATCH 1/1] cacheflush01: Rewrite into new API
-Message-ID: <20201008200406.GA18136@dell5510>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-References: <20201002202416.28972-1-petr.vorel@gmail.com>
- <1478290725.17134142.1602069275205.JavaMail.zimbra@redhat.com>
+        Thu, 08 Oct 2020 14:20:45 -0700 (PDT)
+Date:   Fri, 9 Oct 2020 00:20:43 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     "Maciej W. Rozycki" <macro@linux-mips.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] MIPS: replace add_memory_region with memblock
+Message-ID: <20201008212043.uolf4orh6ctr6ihz@mobilestation>
+References: <20201008084357.42780-1-tsbogend@alpha.franken.de>
+ <20201008152006.4khkbzsxqmmz76rw@mobilestation>
+ <alpine.LFD.2.21.2010081628100.866917@eddie.linux-mips.org>
+ <20201008155454.kaal2bchjq7wusqr@mobilestation>
+ <91e52fa1-ecf9-7acc-62f6-16fccfae927c@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1478290725.17134142.1602069275205.JavaMail.zimbra@redhat.com>
+In-Reply-To: <91e52fa1-ecf9-7acc-62f6-16fccfae927c@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jan,
+On Thu, Oct 08, 2020 at 09:49:46AM -0700, Florian Fainelli wrote:
+> 
+> 
+> On 10/8/2020 8:54 AM, Serge Semin wrote:
+> > On Thu, Oct 08, 2020 at 04:30:35PM +0100, Maciej W. Rozycki wrote:
+> > > On Thu, 8 Oct 2020, Serge Semin wrote:
+> > > 
+> > > > At least I don't see a decent reason to preserve them. The memory registration
+> > > > method does nearly the same sanity checks. The memory reservation function
+> > > > defers a bit in adding the being reserved memory first. That seems redundant,
+> > > > since the reserved memory won't be available for the system anyway. Do I miss
+> > > > something?
+> > > 
+> > 
+> > >   At the very least it serves informational purposes as it shows up in
+> > > /proc/iomem.
+> > 
+> > I thought about that, but /proc/iomem prints the System RAM up. Adding the reserved
+> > memory regions to be just memory region first still seem redundant, since
+> > reserving a non-reflected in memory region most likely indicates an erroneous
+> > dts. I failed to find that, but do the kernel or DTC make sure that the reserved
+> > memory regions has actual memory behind? (At least in the framework of the
+> > memblock.memory vs memblock.reserved arrays or in the DT source file)
+> 
+> AFAICT DTC does not do any validation that regions you declare in
+> /memreserve or /reserved-memory are within the 'reg' property defined for
+> the /memory node.
 
-> ----- Original Message -----
-> > This syscall is currently (v5.9) supported on these architectures:
-> > arc, csky, mips, m68k, nds32, sh
+> Not that it could not but that goes a little beyond is
+> compiler job.
 
-> > constants are missing for m68k, not sure if the testcase is valid for it.
-> > Untested.
+You are probably right, but it does the #{address,size}-cells validations
+against the subnode' "reg" properties. It even does I2C controllers subnodes
+"reg" validation so they wouldn't be greater than 7 or 10 bits wide. It also
+does some magic checks of SPI controllers subnodes. See scripts/dtc/checks.c for
+details. So I thought DTC might do some memory/reserved-memory validations too.
+Apparently it doesn't. On the other hand it would probably be pointless, since a
+system bootloader may change the "memory" node' "reg" value anyway if a platform
+has a variable memory layout. So any validation being passed at the DTS compile
+time wouldn't surely mean the memory/reserved-memory nodes coherency at the
+system boot time.
 
-> > Test for __LTP__NR_INVALID_SYSCALL saves adding autotools check for
-> > <asm/cachectl.h>.
+> 
+> The kernel ought to be able to do that validation through memblock but there
+> could be valid use cases behind declaring a reserved memory region that is
+> not backed by a corresponding DRAM region. For instance if you hotplugged
+> memory through the sysfs probe interface, and that memory was not initially
+> declared in the Device Tree, but there were reserved regions within that
+> hot-plugged range that you would have to be aware of, then this would break.
 
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> > ---
-> > Hi,
+Yeah, it seems to me all hot-pluggable regions are also marked as reserved. So
+hot-plugging a memory device behind the manually reserved regions (reserved by
+means of the DT reserved-memory/memreserve nodes) will unreserve them, which
+most likely isn't what has been originally wanted.
 
-> > FYI: I was going to ask for removal of this test, but all these archs are
-> > still supported. This test compiles on all archs now, but I haven't run
-> > it (I don't have access to none of these archs, not sure if LTP is even
-> > tested on these archs).
+Alas I don't have any hardware with hot-pluggable memory device to check out the
+problem availability.
 
-> I haven't tested it too, but rewrite looks good.
+> 
+> > 
+> > I also don't see the other platforms doing that, since the MIPS arch only
+> > redefines these methods. So if a problem of adding a reserved memory with
+> > possible no real memory behind exist, it should be fixed in the cross-platform
+> > basis, don't you think?
+> 
 
-> Acked-by: Jan Stancek <jstancek@redhat.com>
+> Would we be breaking any use case if we stopped allowing reserved region
+> that are not part of DRAM being declared?
 
-Thanks for your review, merged.
+Hm, good question. I don't really know. But AFAICS from the reserved-memory node
+DT bindings the reserved regions can be used to declare both normal RAM and some
+vendor-specific regions. The later one theoretically can be some resource, bus or
+memory-mapped device thing especially if it's marked with "no-map" boolean
+property.
 
-Kind regards,
-Petr
+---
+
+Getting back to the topic. In the MIPS-specific early_init_dt_reserve_memory_arch()
+method (which is called for every region declared in reserved-memory/memreserve nodes)
+we currently consider the reserved region as DRAM if 'no-map' property isn't specified.
+The main question here is whether it is correct...
+
+-Sergey
+
+> -- 
+> Florian
