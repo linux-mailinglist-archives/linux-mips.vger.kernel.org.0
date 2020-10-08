@@ -2,130 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5305E286B38
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 00:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E19286D2A
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Oct 2020 05:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728926AbgJGWsj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Oct 2020 18:48:39 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:38265 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727353AbgJGWsi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Oct 2020 18:48:38 -0400
-X-Greylist: delayed 500 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Oct 2020 18:48:33 EDT
-X-Originating-IP: 90.65.88.165
-Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id D577D1BF203;
-        Wed,  7 Oct 2020 22:48:27 +0000 (UTC)
-Date:   Thu, 8 Oct 2020 00:48:27 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
-Message-ID: <20201007224827.GK2804081@piout.net>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-2-robh@kernel.org>
+        id S1727591AbgJHDbF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Oct 2020 23:31:05 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:59028 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727449AbgJHDbF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 7 Oct 2020 23:31:05 -0400
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.161.192])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxWuTkh35f4UEbAA--.39703S2;
+        Thu, 08 Oct 2020 11:30:46 +0800 (CST)
+Date:   Thu, 8 Oct 2020 11:30:43 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: Re: [PATCH V3] MIPS: make userspace mapping young by default
+Message-ID: <20201008033043.x2fyc354ivjqyfe3@ambrosehua-HP-xw6600-Workstation>
+References: <20200919074731.22372-1-huangpei@loongson.cn>
+ <20201002123502.GA11098@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+In-Reply-To: <20201002123502.GA11098@alpha.franken.de>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9AxWuTkh35f4UEbAA--.39703S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryUJw18XF1DtrWrAryUtrb_yoW5ur48pa
+        s7CF10kr4jqr13ArWfAwnFyr1rJws3KF4vgF93Zw1rZa4av3s5Jrn5KFZ3ZryDXFZ2kFW8
+        urW5WF15WrsIvrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCY02Avz4vE14v_Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JU-miiUUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Fri, Oct 02, 2020 at 02:35:03PM +0200, Thomas Bogendoerfer wrote:
+Hi, 
+> On Sat, Sep 19, 2020 at 03:47:31PM +0800, Huang Pei wrote:
+> > MIPS page fault path take 3 exceptions (1 TLB Miss + 2 TLB Invalid), but
+> > the second TLB Invalid exception is just triggered by __update_tlb from
+> > do_page_fault writing tlb without _PAGE_VALID set. With this patch, it
+> > only take 1 TLB Miss + 1 TLB Invalid exceptions
+> > 
+> > This version removes pte_sw_mkyoung without polluting MM code and makes
+> > page fault delay of MIPS on par with other architecture and covers both
+> > no-RIXI and RIXI MIPS CPUS
+> > 
+> > [1]: https://lkml.kernel.org/lkml/1591416169-26666-1-git-send-email
+> > -maobibo@loongson.cn/
+> > ---
+> > V3:
+> > - reformat with whitespace cleaned up following Thomas's advice
+> > V2:
+> > - remove unused asm-generic definition of pte_sw_mkyoung following Mao's
+> > advice
+> > ---
+> > Co-developed-by: Huang Pei <huangpei@loongson.cn>
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > Co-developed-by: Bibo Mao <maobibo@loonson.cn>
+> > ---
+> >  arch/mips/include/asm/pgtable.h | 10 ++++------
+> >  arch/mips/mm/cache.c            | 25 +++++++++++++------------
+> >  include/linux/pgtable.h         |  8 --------
+> >  mm/memory.c                     |  3 ---
+> >  4 files changed, 17 insertions(+), 29 deletions(-)
+> > 
+> > diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> > index dd7a0f552cac..931fb35730f0 100644
+> > --- a/arch/mips/include/asm/pgtable.h
+> > +++ b/arch/mips/include/asm/pgtable.h
+> > @@ -27,11 +27,11 @@ struct vm_area_struct;
+> >  
+> >  #define PAGE_NONE	__pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
+> >  				 _page_cachable_default)
+> > -#define PAGE_SHARED	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+> > -				 _page_cachable_default)
+> > +#define PAGE_SHARED    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+> > +				 __READABLE | _page_cachable_default)
+> 
+> you are still doing a white space changes here. 
+> 
+> >  #define PAGE_COPY	__pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
+> > -				 _page_cachable_default)
+> > -#define PAGE_READONLY	__pgprot(_PAGE_PRESENT | \
+> > +				 __READABLE | _page_cachable_default)
+> > +#define PAGE_READONLY	__pgprot(_PAGE_PRESENT |  __READABLE | \
+> 
+sorry, my bad
+> I've grepped for usage of PAGE_SHARED and PAGE_READONLY and found
+> arch/mips/kvm/mmu.c and arch/mips/kernel/vdso.c. I wonder
+> 
+for arch/mips/kvm/mmu.c, the comment says:
+...
+	/* Also set valid and dirty, so refill handler doesn't have to */
+	*ptep = pte_mkyoung(pte_mkdirty(pfn_pte(pfn, PAGE_SHARED)));
+...
+the net effect is the same, dirty and valid, so I think it is ok;
 
-On 05/10/2020 13:38:27-0500, Rob Herring wrote:
-> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> index bc2c7e53a28e..60e93e86ad9d 100644
-> --- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> @@ -68,6 +68,8 @@ required:
->    - clocks
->    - clock-names
->  
-> +unevaluatedProperties: false
+for arch/mips/kernel/vdso.c, both mappings are kernel mapping, which
+means the physical memory(or io memory) is already allocated and will not
+be reclaimed by kernel.
+       
+> 1. Is this usage correct or should we use protection_map[X] ?
+> 2. Are this still correct after the change in this patch ?
+> 
+> Right now I'm in favour to fist clean up asm/pgtable.h to get rid
+> of all unneeded PAGE_XXX defines and make mm/cache.c rixi part
+> more readable before applying this patch.
+>
+I think we can clean up rixi part of mm/cache.c after this patch, or
+within V4;
 
-This one could be additionalProperties: false after adding start-year to
-the properties
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
 
-> +
->  examples:
->    - |
->      #include <dt-bindings/clock/jz4740-cgu.h>
-> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> index 76bbf8b7555b..d51b236939bf 100644
-> --- a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> @@ -74,6 +74,8 @@ allOf:
->            items:
->              - const: rtc
->  
-> +unevaluatedProperties: false
-
-This one can be simply additionalProperties: false
-
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
