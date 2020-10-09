@@ -2,159 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6306287ECF
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Oct 2020 00:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42654288096
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Oct 2020 05:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728323AbgJHWvm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Oct 2020 18:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727556AbgJHWvm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Oct 2020 18:51:42 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1912FC0613D2;
-        Thu,  8 Oct 2020 15:51:42 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id c141so1928954lfg.5;
-        Thu, 08 Oct 2020 15:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+VlAI1YSrsYI6fzVFb3g9FcKulcdSQODpndVq6tk5uk=;
-        b=IpMzov0XwVz6y2DN9VpJrCf8gcG44HJ6YkUwVt3g2DMHLVTYxKt4HkK+Ocj9EKaif0
-         z6bqK6aXY9KloOilUcrWnUrIpZLfVq6/UAO7bypcCeAQiUaCyGuRxNsp2dO2Zu9IvG17
-         UTK7/ut3eg0UIkCZyCIqTE1WEfWj61xVyJmkTlLI4E4+xaQi4qILEtSREaSFhg7YckZX
-         Oqenk5GPhrTvjX87AUQoEFJ1XhcU15D+FuFNJJOfP6bfs5GozlVznCNV+o4RmipZD9UJ
-         yiEwgw0ccGWNCj+Wu7qcf3Di6OHpgJPQiUyLvlYXt9/T97HcsSabAPp2Wi4ljcKdIZ7h
-         xzvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+VlAI1YSrsYI6fzVFb3g9FcKulcdSQODpndVq6tk5uk=;
-        b=YOAs+WGzGHtoYdmzmEGrUa7Cab/UG23UaqwTXPrhPNJ5Zoy8JRvO/n0oXlpJLtMUE3
-         6vcOqxJeceFb8Yjh2p02vIgUiLmX7lUCJaG1JtbQJOh5vG7RzMVKa8uudUKclpHP2sAJ
-         tGcgYauZnD9/aM4dPZi7V2sS9YedfO3U4WKoqrJ7H9HnF9eKm0k2Xi0uU57AhzL5gL7Y
-         85hXlvEEhARZZ82axUDp/+so3c1wneO6cY1lLhdJzTMonPLXE6q+YMpFAYMBOYNMtF27
-         H8GcbRXgUQoUkZppel1lEmNc5JcDbutbRGfoL5TOUnKQTUPKFsgX2DCwuqx8wApG3Ygc
-         MbeA==
-X-Gm-Message-State: AOAM532gSWyZPW8oOKDCUBkVBT85P6XiWw364Nz7J3zC9S7zEtbP7e2L
-        fY/jS4hYasXl2BVn268onW4=
-X-Google-Smtp-Source: ABdhPJz8peLdBnw2a3w8E0KNLkKDaDyZrhi00t6H64Vw12F6R9mSo/sp2NbTJj+KC9Ql17fdfHdCbg==
-X-Received: by 2002:a19:ca1e:: with SMTP id a30mr3180759lfg.575.1602197500497;
-        Thu, 08 Oct 2020 15:51:40 -0700 (PDT)
-Received: from mobilestation ([95.79.141.114])
-        by smtp.gmail.com with ESMTPSA id z19sm662792lfr.46.2020.10.08.15.51.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2020 15:51:39 -0700 (PDT)
-Date:   Fri, 9 Oct 2020 01:51:37 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        id S1730126AbgJIDA6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Oct 2020 23:00:58 -0400
+Received: from relay2.mymailcheap.com ([217.182.66.162]:49511 "EHLO
+        relay2.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728854AbgJIDA5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Oct 2020 23:00:57 -0400
+Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
+        by relay2.mymailcheap.com (Postfix) with ESMTPS id 7DE3C3EDEC;
+        Fri,  9 Oct 2020 05:00:54 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by filter1.mymailcheap.com (Postfix) with ESMTP id BDC632A179;
+        Thu,  8 Oct 2020 23:00:53 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1602212453;
+        bh=RlFIh/NoCr3bDbQDOEvj+VzN9rzRRMO64Gn3oOSIA5A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Rqerc93mlqTBRqBdYJvorMPjdCOjY2O3Fc7khodfS4F1ZUhN6LOPrT9UlcC8wxCNR
+         V0rwbimp0x3WSu6CSJHFK02y2D5ccYVUZP7XGwlbCDWLjkgwZ2vEZGF+5ifoPAMeO5
+         qVDknOW6bTefty/cRnYvLrkyhMSShu0kl+5CvO7Y=
+X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
+Received: from filter1.mymailcheap.com ([127.0.0.1])
+        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id eBAvMIH4C6Q0; Thu,  8 Oct 2020 23:00:52 -0400 (EDT)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter1.mymailcheap.com (Postfix) with ESMTPS;
+        Thu,  8 Oct 2020 23:00:52 -0400 (EDT)
+Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id B150A40FED;
+        Fri,  9 Oct 2020 03:00:51 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="s+dypCzG";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from [0.0.0.0] (unknown [146.196.55.70])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 52B4840FEC;
+        Fri,  9 Oct 2020 03:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
+        s=default; t=1602212444;
+        bh=RlFIh/NoCr3bDbQDOEvj+VzN9rzRRMO64Gn3oOSIA5A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=s+dypCzGJCIxfsEkhJ3RFH9JraoliWZWlqJSRihWsMatW+4Me9Agw0FARQwhvR9Dn
+         zNkyEHS94AWBHkjEQRhnWnklPtiEDg/jDODPRX31dZ4DPu0nF+ppnZxXtlMHchFxvo
+         YoO+RBop/H5/Dih6a93nEVRtLtNFIyYtf9OlO4dI=
+Subject: Re: [PATCH v2] MIPS: replace add_memory_region with memblock
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>,
         Keguang Zhang <keguang.zhang@gmail.com>,
         John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] MIPS: replace add_memory_region with memblock
-Message-ID: <20201008225137.rbb7b6rogv3bbvi7@mobilestation>
 References: <20201008084357.42780-1-tsbogend@alpha.franken.de>
  <20201008152006.4khkbzsxqmmz76rw@mobilestation>
- <alpine.LFD.2.21.2010081628100.866917@eddie.linux-mips.org>
- <20201008155454.kaal2bchjq7wusqr@mobilestation>
- <alpine.LFD.2.21.2010081739240.866917@eddie.linux-mips.org>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <631aa35e-2575-3ec0-ec0f-7d45e49b8373@flygoat.com>
+Date:   Fri, 9 Oct 2020 11:00:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LFD.2.21.2010081739240.866917@eddie.linux-mips.org>
+In-Reply-To: <20201008152006.4khkbzsxqmmz76rw@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: B150A40FED
+X-Spamd-Result: default: False [1.40 / 10.00];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         ARC_NA(0.00)[];
+         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
+         MID_RHS_MATCH_FROM(0.00)[];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         R_SPF_SOFTFAIL(0.00)[~all];
+         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1];
+         ML_SERVERS(-3.10)[213.133.102.83];
+         DKIM_TRACE(0.00)[flygoat.com:+];
+         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
+         RCPT_COUNT_TWELVE(0.00)[12];
+         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+         FREEMAIL_TO(0.00)[gmail.com,alpha.franken.de];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
+         FREEMAIL_CC(0.00)[hauke-m.de,gmail.com,broadcom.com,linux-mips.org,phrozen.org,vger.kernel.org,lists.infradead.org];
+         SUSPICIOUS_RECIPS(1.50)[];
+         RCVD_COUNT_TWO(0.00)[2]
+X-Rspamd-Server: mail20.mymailcheap.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 08, 2020 at 05:56:17PM +0100, Maciej W. Rozycki wrote:
-> On Thu, 8 Oct 2020, Serge Semin wrote:
-> 
-> > > > At least I don't see a decent reason to preserve them. The memory registration
-> > > > method does nearly the same sanity checks. The memory reservation function
-> > > > defers a bit in adding the being reserved memory first. That seems redundant,
-> > > > since the reserved memory won't be available for the system anyway. Do I miss
-> > > > something?
-> > > 
-> > 
-> > >  At the very least it serves informational purposes as it shows up in 
-> > > /proc/iomem.
-> > 
-> > I thought about that, but /proc/iomem prints the System RAM up. Adding the reserved
-> > memory regions to be just memory region first still seem redundant, since
-> > reserving a non-reflected in memory region most likely indicates an erroneous
-> > dts. I failed to find that, but do the kernel or DTC make sure that the reserved
-> > memory regions has actual memory behind? (At least in the framework of the
-> > memblock.memory vs memblock.reserved arrays or in the DT source file)
-> 
->  Reserved regions need not be RAM or a memory-like device.  
 
-Agree. My statement about considering as error the situation when the
-reserved-memory is declared with no backed DRAM region was most likely
-wrong. But in this case what we currently do and what Thomas suggest to keep
-doing in the framework of the MIPS-specific early_init_dt_reserve_memory_arch()
-is probably incorrect, since the method makes sure that any added reserved
-memory region is actually backed with DRAM (called both memblock_add() and
-memblock_reserve() for such regions). None of the other platforms is noticed to
-execute the same pattern.
 
-> They could be 
-> floating bus even.  Here's an example from my x86 laptop where all kinds 
-> of stuff is marked reserved:
-> 
-> 00000000-00000fff : Reserved
-> 00001000-0009cfff : System RAM
-> 0009d000-0009ffff : Reserved
+在 2020/10/8 23:20, Serge Semin 写道:
 
-AFAICS from the ./arch/x86/kernel/e820.c code, the regions marked as "Reserved"
-aren't mem-mapped by the kernel, since they are skipped in the method
-e820__memblock_setup(), which is responsible for the x86-specific memory mapping
-data conversion to the memblock. So the system doesn't consider them as a RAM
-resource. Note each normal memory is supposed to be added to the memblock, so to
-be then used by the buddy allocator for normal memory allocations.
-
-Basically the x86-specific "Reserved" regions are similar to the regions added
-by means of the "reserved-memory" DT sub-node with "no-map" property specified.
-The problem in the topic is whether we must or must not make sure that each
-reserved-memory region with no "no-map" property considered as normal memory
-region backed with DRAM. The rest of the platforms currently just register the
-"reserved-memory" regions in memblock.reserved with no checking whether they are
-backed with corresponding DRAM region and with no adding them to the
-memblock.memory pool. So most likely we ought to do the same in MIPS.
-
-> ...
+[...]
 >
-> 
+>> -		add_memory_region(LOONGSON_HIGHMEM_START,
+>> -				  highmemsize << 20, BOOT_MEM_RAM);
+>> -
+>> -	add_memory_region(LOONGSON_PCI_MEM_END + 1, LOONGSON_HIGHMEM_START -
+>> -			  LOONGSON_PCI_MEM_END - 1, BOOT_MEM_RESERVED);
+>> -
+>> +		memblock_add(LOONGSON_HIGHMEM_START, highmemsize << 20);
+> The same question. Is it ok to discard the
+> [LOONGSON_PCI_MEM_END+1:LOONGSON_HIGHMEM_START-LOONGSON_PCI_MEM_END-1] region
+> removal operation?
+Hi all,
 
-> Actually another reason to mark regions reserved is to prevent them from 
-> being claimed by the wrong driver or, perhaps more importantly, used for 
-> assigning bus address ranges to hardware resources (BAR programming).
+I can confirm this reservation can be removed.
+It was used to ensure HIGHMEM won't overlap PCI MMIO region when
+firmware was unreliable.
+But I do think we shouldn't care this case as an unreliable firmware 
+shouldn't
+ship with any devices for end users.
 
-Right, AFAICS that's what the "reserved-memory" DT node has been introduced for.
-By using it we can create a DMA/CMA memory pool fully dedicated for a particular
-device, or just completely remove a memory region from the kernel virtual
-mapping framework if instead of providing an access to the System RAM a region
-is remapped to IO to/from some hardware resource.
+Also it won't affect display of /proc/iomem, now we're on age of 
+DeviceTree :-)
 
--Sergey
+Thanks.
 
-> 
-> > I also don't see the other platforms doing that, since the MIPS arch only
-> > redefines these methods. So if a problem of adding a reserved memory with
-> > possible no real memory behind exist, it should be fixed in the cross-platform
-> > basis, don't you think?
-> 
->  I think doing things in a generic way where possible is surely desired, 
-> however platforms have different ways to discover resources and I can't 
-> see offhand how this could be unified.  I haven't look at that code for a 
-> while now, so I can't be more specific offhand.
-> 
->   Maciej
-> 
+- Jiaxun
+
+>
+> -Sergey
+>
+>>   #endif /* !CONFIG_64BIT */
+>>   }
+>>   
