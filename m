@@ -2,75 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A71528A48A
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Oct 2020 01:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7555F28B253
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Oct 2020 12:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbgJJXsJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 10 Oct 2020 19:48:09 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:36530 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727043AbgJJXsD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 10 Oct 2020 19:48:03 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxGMQrSIJfLfobAA--.13680S6;
-        Sun, 11 Oct 2020 07:47:57 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v2 4/4 RESEND] docs: fs: proc.rst: Add boardinfo description for Loongson64
-Date:   Sun, 11 Oct 2020 07:47:54 +0800
-Message-Id: <1602373674-4579-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1602373674-4579-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1602373674-4579-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxGMQrSIJfLfobAA--.13680S6
-X-Coremail-Antispam: 1UD129KBjvdXoWrKF47WF4xAFWrtF4rWF4DJwb_yoWfJwc_Za
-        47XF48Zr4xZr1rJ3WUtF45WF17ArZ3Kw1UAa13JryUJw15J398JFWDAr17Ar48JrW2kryr
-        CFWkXrnxZF13WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbh8FF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-        F7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJw
-        A2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6FWl42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU0xhLUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S2387595AbgJLKiS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Oct 2020 06:38:18 -0400
+Received: from elvis.franken.de ([193.175.24.41]:58426 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387597AbgJLKiS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 12 Oct 2020 06:38:18 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kRvDc-0008KW-00; Mon, 12 Oct 2020 12:38:16 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 15B15C1129; Mon, 12 Oct 2020 12:01:17 +0200 (CEST)
+Date:   Mon, 12 Oct 2020 12:01:17 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        "Maciej W. Rozycki" <macro@linux-mips.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] MIPS: replace add_memory_region with memblock
+Message-ID: <20201012100117.GA6959@alpha.franken.de>
+References: <20201008084357.42780-1-tsbogend@alpha.franken.de>
+ <20201008152006.4khkbzsxqmmz76rw@mobilestation>
+ <20201009120752.GA10588@alpha.franken.de>
+ <20201009141537.ijj4cr45zqtkh4yz@mobilestation>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201009141537.ijj4cr45zqtkh4yz@mobilestation>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a description for /proc/boardinfo on the Loongson platform.
+On Fri, Oct 09, 2020 at 05:15:37PM +0300, Serge Semin wrote:
+> On Fri, Oct 09, 2020 at 02:07:52PM +0200, Thomas Bogendoerfer wrote:
+> > On Thu, Oct 08, 2020 at 06:20:06PM +0300, Serge Semin wrote:
+> > > > @@ -426,13 +387,14 @@ static int __init early_parse_memmap(char *p)
+> > > >  
+> > > >  	if (*p == '@') {
+> > > >  		start_at = memparse(p+1, &p);
+> > > > -		add_memory_region(start_at, mem_size, BOOT_MEM_RAM);
+> > > > +		memblock_add(start_at, mem_size);
+> > > >  	} else if (*p == '#') {
+> > > >  		pr_err("\"memmap=nn#ss\" (force ACPI data) invalid on MIPS\n");
+> > > >  		return -EINVAL;
+> > > >  	} else if (*p == '$') {
+> > > >  		start_at = memparse(p+1, &p);
+> > > 
+> > > > -		add_memory_region(start_at, mem_size, BOOT_MEM_RESERVED);
+> > > > +		memblock_add(start_at, mem_size);
+> > > > +		memblock_reserve(start_at, mem_size);
+> > > 
+> > > I suppose we could remove the memory addition from here too. What do you think?
+> > 
+> 
+> > I'm not sure about that, add_memory_region() did a memblock_add
+> > and then memblock_reserve for BOOT_MEM_RESERVED, that's why I changed
+> > it that way.
+> 
+> The main question here whether we need to preserve the MIPS-specific semantics
+> of the kernel 'memmap' parameter. Currently the memmap parameter passed with
+> '$' specifier will be perceived as a reserved RAM region, while, for instance, 
+> the same parameter on x86 will be converted to a region, which won't be
+> registered in memblock at all, so the system won't be able to reuse it if it's
+> needed to be (see parse_memmap_one() and e820__memblock_setup() for details).
+> 
+> I don't really know what approach is correct... 
+> Documentation/admin-guide/kernel-parameters.txt isn't certain about that. It
+> says that the region must be reserved, but no words whether it is supposed to be
+> mappable or non-mappable.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
+I leave it as in v3 of the patch for now. If we come to the point what
+the correct semantic should be, we can change it.
 
-v2: new added patch
+Thomas.
 
- Documentation/filesystems/proc.rst | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 533c79e..3c4cb65 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -664,6 +664,7 @@ files are there, and which are missing.
-  File         Content
-  ============ ===============================================================
-  apm          Advanced power management info
-+ boardinfo    Mainboard and BIOS info for Loongson64
-  buddyinfo    Kernel memory allocator information (see text)	(2.5)
-  bus          Directory containing bus specific information
-  cmdline      Kernel command line
 -- 
-2.1.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
