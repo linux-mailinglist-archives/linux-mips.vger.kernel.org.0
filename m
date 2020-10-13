@@ -2,52 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E57DE28CB11
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Oct 2020 11:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5897F28CB0F
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Oct 2020 11:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404215AbgJMJcv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Oct 2020 05:32:51 -0400
-Received: from elvis.franken.de ([193.175.24.41]:60148 "EHLO elvis.franken.de"
+        id S2391065AbgJMJcl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Oct 2020 05:32:41 -0400
+Received: from elvis.franken.de ([193.175.24.41]:60144 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404206AbgJMJcv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 13 Oct 2020 05:32:51 -0400
+        id S2388637AbgJMJcl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 13 Oct 2020 05:32:41 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kSGfg-0003Vf-00; Tue, 13 Oct 2020 11:32:40 +0200
+        id 1kSGfg-0003Vf-01; Tue, 13 Oct 2020 11:32:40 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 87CBDC0188; Tue, 13 Oct 2020 11:31:30 +0200 (CEST)
-Date:   Tue, 13 Oct 2020 11:31:30 +0200
+        id 75A31C01C7; Tue, 13 Oct 2020 11:32:17 +0200 (CEST)
+Date:   Tue, 13 Oct 2020 11:32:17 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        "Maciej W . Rozycki" <macro@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Zhou Yanjie <zhouyanjie@wanyeetech.com>, od@zcrc.me,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: ingenic: Remove CPU_SUPPORTS_HUGEPAGES
-Message-ID: <20201013093130.GA18418@alpha.franken.de>
-References: <20201012143319.GA24291@roeck-us.net>
- <20201012192739.49259-1-paul@crapouillou.net>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: ralink: enable zboot support
+Message-ID: <20201013093217.GB18418@alpha.franken.de>
+References: <20201013020554.1317237-1-gch981213@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201012192739.49259-1-paul@crapouillou.net>
+In-Reply-To: <20201013020554.1317237-1-gch981213@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 09:27:39PM +0200, Paul Cercueil wrote:
-> While it is true that Ingenic SoCs support huge pages, we cannot use
-> them yet as PTEs don't have any single bit that is free. Right now,
-> having that symbol only causes build errors, so remove it until the
-> situation with PTEs is resolved.
+On Tue, Oct 13, 2020 at 10:05:47AM +0800, Chuanhong Guo wrote:
+> Some of these ralink devices come with an ancient u-boot which can't
+> extract LZMA properly when image gets too big.
+> Enable zboot support to get a self-extracting kernel instead of relying
+> on broken u-boot support.
 > 
-> Fixes: f0f4a753079c ("MIPS: generic: Add support for Ingenic SoCs")
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
 > ---
->  arch/mips/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+>  arch/mips/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
 applied to mips-next.
 
