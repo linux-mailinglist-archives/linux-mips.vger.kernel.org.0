@@ -2,93 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E061A28E5E0
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 20:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21E828E60B
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 20:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728885AbgJNSBS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Oct 2020 14:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727071AbgJNSBS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Oct 2020 14:01:18 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D9CC061755;
-        Wed, 14 Oct 2020 11:01:18 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id l2so488521lfk.0;
-        Wed, 14 Oct 2020 11:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SsYRx7SjigbOWh/ctoQI64jtrZPmlNvQiwgdzN2SLlw=;
-        b=T0pdoX75rDmZOTBVg/mlNtt1lVndmXmmpxyjSJhiRfNXvV3f+6UqxGFZESZSa9fSv/
-         rFcf/TSCtzDecMOpT78T5wlAn59Cm2mqrI9n8i2P4DCNZ4znDdiBo6iELgiwLHG3PZAK
-         ey4tjL1iAW25FdPSlb7Bq8XUxFGzbY0BRrJi6VrlwtfuGnX92P5Cxs7gFrpOipHr0DDr
-         PNWfgDgig8CWKtn9zKM03uba3UN6gN1ikF1MInA9/+lT2URhGHttgQF8uaGkjoZPvqLO
-         AxQugC3TBkmSZliKJKIlj9UhybKJFdAUu6dxfYmoNW6fz2jzaOjfv7WSEPVV374iuWy7
-         f7FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SsYRx7SjigbOWh/ctoQI64jtrZPmlNvQiwgdzN2SLlw=;
-        b=OQNmX7QVjh6Lymikig4S8BxsiMgkV43So0HQYP74ft594Gg1HXdxQFSoLtb75SGztr
-         FfuKRl4zgAQnigG3mrNmWzfkhc1Rnqj+6iLtHmJx/NgXAHQegFyUYIC01KtFuiVuIjMp
-         0AsPCN29Y95rWbFmzXpisaqhOVvHlFrZKI4JogkiPVbmXIqs829GUNsoX7a0toGW+l6S
-         hnBTA25EA0++4vCt5KLOPkCq9j0abt1raklgMEf7v+94XXUdkXGEGbB036q1qipOhycJ
-         KN5mKm9UDG3+X/lf10av89aZA0cTjIgNsTXGb0i9xA1ctRllRRcBwfUt7KpWAhpZDA2e
-         I0EA==
-X-Gm-Message-State: AOAM532f9SwMCnJF3L9kgtx4EecgWZYP3v5Nisoads+OBNqkjPHArUmO
-        UBBrTlJ/Sg1B52QVqx733tkGv2+tiDM=
-X-Google-Smtp-Source: ABdhPJwGgjR6U4Ui1Zw/rvZp0VNsyoZ2qXx30dR1L6a/hk3SQ8Lx7ASdCbIqRSgEC9WcEiHksmLI2A==
-X-Received: by 2002:a19:384d:: with SMTP id d13mr152603lfj.102.1602698476682;
-        Wed, 14 Oct 2020 11:01:16 -0700 (PDT)
-Received: from mobilestation ([95.79.141.114])
-        by smtp.gmail.com with ESMTPSA id w26sm144455ljm.11.2020.10.14.11.01.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2020 11:01:16 -0700 (PDT)
-Date:   Wed, 14 Oct 2020 21:01:14 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: DEC: Restore bootmem reservation for firmware
- working memory area
-Message-ID: <20201014180114.fnz5ewt2tzkgxin4@mobilestation>
-References: <alpine.LFD.2.21.2010141123010.866917@eddie.linux-mips.org>
+        id S1727897AbgJNSLp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Oct 2020 14:11:45 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:49752 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727369AbgJNSLo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Oct 2020 14:11:44 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 263C4803073E;
+        Wed, 14 Oct 2020 18:11:42 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Ntl7Ii8wms8a; Wed, 14 Oct 2020 21:11:40 +0300 (MSK)
+Date:   Wed, 14 Oct 2020 21:11:36 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH 18/20] arch: dts: Fix EHCI/OHCI DT nodes name
+Message-ID: <20201014181136.5hwsu77rv3wbxw7w@mobilestation>
+References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
+ <20201014101402.18271-19-Sergey.Semin@baikalelectronics.ru>
+ <ed0221ee-c586-b8f8-a7d1-4a2a190dc41b@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <alpine.LFD.2.21.2010141123010.866917@eddie.linux-mips.org>
+In-Reply-To: <ed0221ee-c586-b8f8-a7d1-4a2a190dc41b@gmail.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Maciej,
-
-On Wed, Oct 14, 2020 at 12:10:09PM +0100, Maciej W. Rozycki wrote:
-> Fix a crash on DEC platforms starting with:
+On Wed, Oct 14, 2020 at 11:00:45AM -0700, Florian Fainelli wrote:
+> On 10/14/20 3:14 AM, Serge Semin wrote:
+> > In accordance with the Generic EHCI/OHCI bindings the corresponding node
+> > name is suppose to comply with the Generic USB HCD DT schema, which
+> > requires the USB nodes to have the name acceptable by the regexp:
+> > "^usb(@.*)?" . Let's fix the DTS files, which have the nodes defined with
+> > incompatible names.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > ---
+> > 
+> > Please, test the patch out to make sure it doesn't brake the dependent DTS
+> > files. I did only a manual grepping of the possible nodes dependencies.
 > 
 
-...
+> Not sure how you envisioned these change to be picked up, but you may
+> need to split these changes between ARM/ARM64, MIPS and PowerPC at
+> least. And within ARM/ARM64 you will most likely have to split according
+> to the various SoC maintainers.
 
-> @@ -146,6 +150,9 @@ void __init plat_mem_setup(void)
->  
->  	ioport_resource.start = ~0UL;
->  	ioport_resource.end = 0UL;
-> +
-> +	/* Stay away from the firmware working memory area for now. */
-
-> +	memblock_reserve(PHYS_OFFSET, __pa_symbol(&_text));
-
-Shouldn't that be:
-+	memblock_reserve(PHYS_OFFSET, __pa_symbol(&_text) - PHYS_OFFSET);
-instead?
+Hmm, I don't really know how it's going to be done in this case, but there must
+be a way to get the cross-platform patches picked up in general. For
+instance, see the patches like:
+714acdbd1c94 arch: rename copy_thread_tls() back to copy_thread()
+140c8180eb7c arch: remove HAVE_COPY_THREAD_TLS
+They touched the files from different files, but still have been merged in.
+Maybe I should have copied these three patches to the "linux-arch@vger.kernel.org"
+list or some other mailing list...
 
 -Sergey
 
->  }
->  
->  /*
-> 
+> -- 
+> Florian
