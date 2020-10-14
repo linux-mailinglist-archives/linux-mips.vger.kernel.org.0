@@ -2,127 +2,218 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C754228DDFA
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 11:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E385528DEB6
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 12:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727378AbgJNJtN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Oct 2020 05:49:13 -0400
-Received: from [157.25.102.26] ([157.25.102.26]:36782 "EHLO orcam.me.uk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726491AbgJNJtN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:49:13 -0400
-Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
-        by orcam.me.uk (Postfix) with ESMTPS id 8FE2A2BE086;
-        Wed, 14 Oct 2020 10:49:08 +0100 (BST)
-Date:   Wed, 14 Oct 2020 10:49:05 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
+        id S1729969AbgJNKPr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Oct 2020 06:15:47 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:45872 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729489AbgJNKON (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Oct 2020 06:14:13 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 96C84803202C;
+        Wed, 14 Oct 2020 10:14:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id b2-7tKniDWXL; Wed, 14 Oct 2020 13:14:06 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Juergen Gross <jgross@suse.com>, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-Subject: Re: [PATCH 04/12] mips: Reserve memory for the kernel image
- resources
-In-Reply-To: <20190522135422.q6w7lcvh5fgpf7a5@mobilestation>
-Message-ID: <alpine.LFD.2.21.2010140244560.866917@eddie.linux-mips.org>
-References: <20190423224748.3765-1-fancer.lancer@gmail.com> <20190423224748.3765-5-fancer.lancer@gmail.com> <CAMuHMdWPmL5Z86cgJ4N-U-3XKr4ys8Y7U85okDcXYEu7z4ybaw@mail.gmail.com> <20190521155309.GB24470@rapoport-lnx> <CAMuHMdWK6-ge-j1NbunDu_Jy7JOwbMfTzNQ767MViuTo4DNf+A@mail.gmail.com>
- <20190522080802.GA31930@rapoport-lnx> <CAMuHMdWS9vMUuWAbgZ9tpNcStXOvP2eRkA7WtPOERA3keLq9Eg@mail.gmail.com> <20190522133402.duhybxf66oubx6ng@mobilestation> <CAMuHMdUR90cabKys=ZAJxyH3okiof-7gu3k8TUer55LA_Nse5A@mail.gmail.com>
- <20190522135422.q6w7lcvh5fgpf7a5@mobilestation>
+        Rob Herring <robh+dt@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/20] dt-bindings: usb: Add generic USB HCD, xHCI, DWC USB3 DT schema
+Date:   Wed, 14 Oct 2020 13:13:42 +0300
+Message-ID: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 22 May 2019, Serge Semin wrote:
+We've performed some work on the Generic USB HCD, xHCI and DWC USB3 DT
+bindings in the framework of the Baikal-T1 SoC support integration into
+the kernel. This patchset is a result of that work.
 
-> > > The problem might be fixed there by the next patch:
-> > > ---
-> > > diff --git a/arch/mips/dec/prom/memory.c b/arch/mips/dec/prom/memory.c
-> > > index 5073d2ed78bb..5a0c734b5d04 100644
-> > > --- a/arch/mips/dec/prom/memory.c
-> > > +++ b/arch/mips/dec/prom/memory.c
-> > > @@ -91,29 +91,14 @@ void __init prom_meminit(u32 magic)
-> > >                 pmax_setup_memory_region();
-> > >         else
-> > >                 rex_setup_memory_region();
-> > > -}
-> > > -
-> > > -void __init prom_free_prom_memory(void)
-> > > -{
-> > > -       unsigned long end;
-> > > -
-> > > -       /*
-> > > -        * Free everything below the kernel itself but leave
-> > > -        * the first page reserved for the exception handlers.
-> > > -        */
-> > >
-> > >  #if IS_ENABLED(CONFIG_DECLANCE)
-> > >         /*
-> > > -        * Leave 128 KB reserved for Lance memory for
-> > > -        * IOASIC DECstations.
-> > > +        * Reserve 128 KB for Lance memory for IOASIC DECstations.
-> > >          *
-> > >          * XXX: save this address for use in dec_lance.c?
-> > >          */
-> > >         if (IOASIC)
-> > > -               end = __pa(&_text) - 0x00020000;
-> > > -       else
-> > > +               memblock_reserve(__pa_symbol(&_text), 0x00020000);
-> > 
-> > Shouldn't that be
-> > 
-> >     memblock_reserve(__pa_symbol(&_text) - 0x00020000, 0x00020000);
-> > 
-> > ?
-> > 
-> 
-> Right. Thanks. The updated version of the patch is attached to this email.
-> 
-> -Sergey
-> 
-> > >  #endif
-> > > -               end = __pa(&_text);
-> > > -
-> > > -       free_init_pages("unused PROM memory", PAGE_SIZE, end);
-> > >  }
-> > > ---
-> > >
-> > > Didn't wanna use prom_FREE_prom_memory to actually reserve a memory
-> > > chunk, so I moved the reservation into the prom_meminit() method.
-> > 
-> > I guess Maciej will test this on real hardware, eventually...
+First of all we moved the generic USB properties from the legacy text
+bindings into the USB HCD DT schema. So now the generic USB HCD-compatible
+DT nodes are validated taking into account the optional properties like:
+maximum-speed, dr_mode, otg-rev, usb-role-switch, etc. We've fixed these
+properties a bit so they would correspond to what functionality kernel
+currently supports.
 
- I finally got to it as I was hit by it the hard way (and I do have kept 
-the thread in my inbox!), however this is the wrong fix.
+Secondly we converted generic USB xHCI text bindings file into the DT
+schema. It had to be split up into two bindings: DT schema with generic
+xHCI properties and a generic xHCI device DT schema. The later will be
+used to validate the pure xHCI-based nodes, while the former can be
+utilized by some vendor-specific versions of xHCI.
 
- With DEC hardware the whole 128KiB region is reserved as firmware working 
-memory area and we call into the firmware throughout bootstrap on several 
-occasions.  Therefore we have to stay away from it until we know we won't 
-need any firmware services any longer, which is at this point.  So this 
-piece has to stay, and the removed reservation has to be reinstated in 
-platform code.  I'll be posting a fix separately.
+Thirdly, what was primarily intended to be done for Baikal-T1 SoC USB we
+converted the legacy text-based DWC USB3 bindings to DT schema and altered
+the result a bit so it would be more coherent with what actually
+controller and its driver support. Since we've now got the DWC USB3 DT
+schema, we made it used to validate the sub-nodes of the Qualcom, TI and
+Amlogic DWC3 DT nodes.
 
- NB I suspect CFE platforms may need a similar fix, but I don't have 
-access to my SWARM now, so I'll verify it on another occasion.
+Finally we've also fixed all the OHCI/EHCI, xHCI and DW USB3 compatible DT
+nodes so they would comply with the nodes naming scema declared in the USB
+HCD DT bindings file.
 
- Other platforms may need it too; at least up to a point an assumption was 
-the kernel load address is just at the end of any firmware working area 
-typically allocated right beyond the exception vector area, hence the 
-reservation.  I realise the assumption may have changed at one point and 
-the oldtimers who have known it may have been away or not paying enough 
-attention while the newcomers did not realise that.
+Link: https://lore.kernel.org/linux-usb/20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Thanks to Sergei Shtylyov for suggesting the commit logs grammar fixes:
+  [PATCH 04/18] dt-bindings: usb: usb-hcd: Add "ulpi/serial/hsic" PHY types
+  [PATCH 05/18] dt-bindings: usb: usb-hcd: Add "tpl-support" property
+  [PATCH 11/18] dt-bindings: usb: dwc3: Add interrupt-names property support
+  [PATCH 13/18] dt-bindings: usb: dwc3: Add Tx De-emphasis restrictions
+  [PATCH 17/18] dt-bindings: usb: keystone-dwc3: Validate DWC3 sub-node
+- Set FL-adj of the amlogiv,meson-g12a-usb controller with value 0x20 instead
+  of completely removing the property.
+- Drop the patch:
+  [PATCH 02/18] dt-bindings: usb: usb-hcd: Add "wireless" maximum-speed
+                property value
+  since "wireless" speed type is depracated due to lack of the device
+  supporting it.
+- Drop quotes from around the compat string constant.
+- Discard '|' from the property descriptions, since we don't need to preserve
+  the text formatting.
+- Convert abbreviated form of the "maximum-speed" enum constraint into
+  the multi-lined version of the list.
+- Fix the DW USB3 "clock-names" prop description to be refererring to the
+  enumerated clock-names instead of the ones from the Databook.
+- Add explicit "additionalProperties: true" to the usb-xhci.yaml schema,
+  since additionalProperties/unevaluatedProperties are going to be mandary
+  for each binding.
+- Use "oneOf: [dwc2.yaml#, snps,dwc3.yaml#]" instead of the bulky "if:
+  properties: compatibe: ..." statement.
+- Discard the "^dwc3@[0-9a-f]+$" nodes from being acceptable as sub-nodes
+  of the Qualcomm DWC3 DT nodes.
+- Add new patches:
+  [PATCH 18/20] arch: dts: Fix EHCI/OHCI DT nodes name
+  [PATCH 19/20] arch: dts: Fix xHCI DT nodes name
+  [PATCH 20/20] arch: dts: Fix DWC USB3 DT nodes name
 
-  Maciej
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Manu Gautam <mgautam@codeaurora.org>
+Cc: Roger Quadros <rogerq@ti.com>
+Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-usb@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (20):
+  dt-bindings: usb: usb-hcd: Convert generic USB properties to DT schema
+  dt-bindings: usb: usb-hcd: Add "otg-rev" property restriction
+  dt-bindings: usb: usb-hcd: Add "ulpi/serial/hsic" PHY types
+  dt-bindings: usb: usb-hcd: Add "tpl-support" property
+  dt-bindings: usb: usb-hcd: Add generic "usb-phy" property
+  dt-bindings: usb: Convert xHCI bindings to DT schema
+  dt-bindings: usb: xhci: Add Broadcom STB v2 compatible device
+  dt-bindings: usb: renesas-xhci: Refer to the usb-xhci.yaml file
+  dt-bindings: usb: Convert DWC USB3 bindings to DT schema
+  dt-bindings: usb: dwc3: Add interrupt-names property support
+  dt-bindings: usb: dwc3: Add synopsys,dwc3 compatible string
+  dt-bindings: usb: dwc3: Add Tx De-emphasis restrictions
+  dt-bindings: usb: dwc3: Add Frame Length Adj restrictions
+  dt-bindings: usb: meson-g12a-usb: Fix FL-adj property value
+  dt-bindings: usb: meson-g12a-usb: Validate DWC2/DWC3 sub-nodes
+  dt-bindings: usb: keystone-dwc3: Validate DWC3 sub-node
+  dt-bindings: usb: qcom,dwc3: Validate DWC3 sub-node
+  arch: dts: Fix EHCI/OHCI DT nodes name
+  arch: dts: Fix xHCI DT nodes name
+  arch: dts: Fix DWC USB3 DT nodes name
+
+ .../usb/amlogic,meson-g12a-usb-ctrl.yaml      |   6 +-
+ .../devicetree/bindings/usb/dwc3.txt          | 125 -------
+ .../devicetree/bindings/usb/generic-xhci.yaml |  65 ++++
+ .../devicetree/bindings/usb/generic.txt       |  57 ----
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |   9 +-
+ .../bindings/usb/renesas,usb-xhci.yaml        |   4 +-
+ .../devicetree/bindings/usb/snps,dwc3.yaml    | 315 ++++++++++++++++++
+ .../bindings/usb/ti,keystone-dwc3.yaml        |   4 +-
+ .../devicetree/bindings/usb/usb-hcd.yaml      | 104 ++++++
+ .../devicetree/bindings/usb/usb-xhci.txt      |  41 ---
+ .../devicetree/bindings/usb/usb-xhci.yaml     |  42 +++
+ arch/arc/boot/dts/axs10x_mb.dtsi              |   4 +-
+ arch/arc/boot/dts/hsdk.dts                    |   4 +-
+ arch/arc/boot/dts/vdk_axs10x_mb.dtsi          |   2 +-
+ arch/arm/boot/dts/armada-375.dtsi             |   2 +-
+ arch/arm/boot/dts/bcm5301x.dtsi               |   6 +-
+ arch/arm/boot/dts/bcm53573.dtsi               |   4 +-
+ arch/arm/boot/dts/exynos5250.dtsi             |   2 +-
+ arch/arm/boot/dts/exynos54xx.dtsi             |   4 +-
+ arch/arm/boot/dts/hisi-x5hd2.dtsi             |   4 +-
+ arch/arm/boot/dts/keystone-k2e.dtsi           |   4 +-
+ arch/arm/boot/dts/keystone.dtsi               |   2 +-
+ arch/arm/boot/dts/lpc18xx.dtsi                |   4 +-
+ arch/arm/boot/dts/ls1021a.dtsi                |   2 +-
+ arch/arm/boot/dts/omap5-l4.dtsi               |   2 +-
+ arch/arm/boot/dts/stih407-family.dtsi         |   2 +-
+ arch/arm/boot/dts/stm32mp151.dtsi             |   4 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  |   2 +-
+ arch/arm64/boot/dts/exynos/exynos5433.dtsi    |   4 +-
+ arch/arm64/boot/dts/exynos/exynos7.dtsi       |   2 +-
+ .../arm64/boot/dts/freescale/fsl-ls1012a.dtsi |   4 +-
+ .../arm64/boot/dts/freescale/fsl-ls1043a.dtsi |   6 +-
+ .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi |   4 +-
+ .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi |   4 +-
+ arch/arm64/boot/dts/hisilicon/hi3660.dtsi     |   2 +-
+ .../arm64/boot/dts/hisilicon/hi3798cv200.dtsi |   4 +-
+ arch/arm64/boot/dts/hisilicon/hip06.dtsi      |   4 +-
+ arch/arm64/boot/dts/hisilicon/hip07.dtsi      |   4 +-
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi |   4 +-
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi  |   4 +-
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi         |   4 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |   4 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/qcs404-evb.dtsi      |   2 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |   4 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   4 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |   2 +-
+ arch/mips/boot/dts/ingenic/jz4740.dtsi        |   2 +-
+ arch/mips/boot/dts/ingenic/jz4770.dtsi        |   2 +-
+ arch/mips/boot/dts/mti/sead3.dts              |   2 +-
+ arch/mips/boot/dts/ralink/mt7628a.dtsi        |   2 +-
+ arch/powerpc/boot/dts/akebono.dts             |   6 +-
+ 53 files changed, 605 insertions(+), 305 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/dwc3.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/generic-xhci.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/generic.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/usb-xhci.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/usb-xhci.yaml
+
+-- 
+2.27.0
+
