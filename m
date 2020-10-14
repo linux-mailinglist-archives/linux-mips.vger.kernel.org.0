@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FAF328DE69
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 12:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BF528DEAE
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 12:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729720AbgJNKOM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Oct 2020 06:14:12 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:45906 "EHLO
+        id S2387990AbgJNKPZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Oct 2020 06:15:25 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:45952 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729461AbgJNKOL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Oct 2020 06:14:11 -0400
+        with ESMTP id S1729669AbgJNKOQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Oct 2020 06:14:16 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 079858001383;
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 1ECCD803073C;
         Wed, 14 Oct 2020 10:14:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HHe-9NaEOJWp; Wed, 14 Oct 2020 13:14:08 +0300 (MSK)
+        with ESMTP id jXLq2i-h9V0q; Wed, 14 Oct 2020 13:14:08 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
@@ -39,9 +39,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 04/20] dt-bindings: usb: usb-hcd: Add "tpl-support" property
-Date:   Wed, 14 Oct 2020 13:13:46 +0300
-Message-ID: <20201014101402.18271-5-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH 05/20] dt-bindings: usb: usb-hcd: Add generic "usb-phy" property
+Date:   Wed, 14 Oct 2020 13:13:47 +0300
+Message-ID: <20201014101402.18271-6-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
 References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -52,39 +52,43 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The host controller device might be designed to work for the particular
-products or applications. In that case its DT node is supposed to be
-equipped with the tpl-support property.
+Even though the Generic PHY framework is the more preferable way of
+setting the USB PHY up, there are still many dts-files and DT bindings
+which rely on having the legacy "usb-phy" specified to attach particular
+USB PHYs to USB cores. Let's have the "usb-phy" property described in
+the generic USB HCD binding file so it would be validated against the
+nodes in which it's specified. Mark the property as deprecated to
+discourage the developers from using it.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
 ---
 
 Changelog v2:
-- Grammar fix: "s/it'/its"
 - Discard '|' from the property description, since we don't need to preserve
   the text formatting.
 ---
- Documentation/devicetree/bindings/usb/usb-hcd.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/devicetree/bindings/usb/usb-hcd.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-index a1a6cde7327d..1f9b40fdea70 100644
+index 1f9b40fdea70..264a660dc6ea 100644
 --- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
 +++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-@@ -101,6 +101,12 @@ properties:
-     enum: [host, peripheral]
-     default: peripheral
+@@ -22,6 +22,13 @@ properties:
+     description:
+       Name specifier for the USB PHY
  
-+  tpl-support:
++  usb-phy:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
 +    description:
-+      Indicates if the Targeted Peripheral List is supported for given
-+      targeted hosts (non-PC hosts).
-+    type: boolean
++      List of all the USB PHYs on this HCD to be accepted by the legacy USB
++      Physical Layer subsystem.
++    deprecated: true
 +
- examples:
-   - |
-     usb {
+   maximum-speed:
+    description:
+      Tells USB controllers we want to work up to a certain speed. In case this
 -- 
 2.27.0
 
