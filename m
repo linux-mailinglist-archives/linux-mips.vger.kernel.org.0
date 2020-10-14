@@ -2,128 +2,164 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EAF28E851
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 23:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4256B28E873
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 23:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730612AbgJNVXK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Oct 2020 17:23:10 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:50576 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727403AbgJNVXK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Oct 2020 17:23:10 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 12B99803073C;
-        Wed, 14 Oct 2020 21:23:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id inYRWRerfTBc; Thu, 15 Oct 2020 00:23:05 +0300 (MSK)
-Date:   Thu, 15 Oct 2020 00:22:59 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh+dt@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Wei Xu <xuwei5@hisilicon.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH 20/20] arch: dts: Fix DWC USB3 DT nodes name
-Message-ID: <20201014212259.ltckcgz2yrola7za@mobilestation>
-References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
- <20201014101402.18271-21-Sergey.Semin@baikalelectronics.ru>
- <878sc8lx0e.fsf@kernel.org>
- <20201014143720.yny3jco5pkb7dr4b@mobilestation>
- <CAL_JsqKNuYS1ojJMCx1whLgynz+cTZ-Hvxn5pEFJc_PUgA1hsg@mail.gmail.com>
+        id S1730928AbgJNVgQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Oct 2020 17:36:16 -0400
+Received: from [157.25.102.26] ([157.25.102.26]:45186 "EHLO orcam.me.uk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726484AbgJNVgQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 14 Oct 2020 17:36:16 -0400
+Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
+        by orcam.me.uk (Postfix) with ESMTPS id 41EE22BE086;
+        Wed, 14 Oct 2020 22:36:14 +0100 (BST)
+Date:   Wed, 14 Oct 2020 22:34:56 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v2] MIPS: DEC: Restore bootmem reservation for firmware
+ working memory area
+Message-ID: <alpine.LFD.2.21.2010142230090.866917@eddie.linux-mips.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKNuYS1ojJMCx1whLgynz+cTZ-Hvxn5pEFJc_PUgA1hsg@mail.gmail.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 01:35:16PM -0500, Rob Herring wrote:
-> On Wed, Oct 14, 2020 at 9:37 AM Serge Semin
-> <Sergey.Semin@baikalelectronics.ru> wrote:
-> >
-> > On Wed, Oct 14, 2020 at 05:09:37PM +0300, Felipe Balbi wrote:
-> > >
-> > > Hi Serge,
-> > >
-> > > Serge Semin <Sergey.Semin@baikalelectronics.ru> writes:
-> > > > In accordance with the DWC USB3 bindings the corresponding node name is
-> > > > suppose to comply with Generic USB HCD DT schema, which requires the USB
-> > >
-> >
-> > > DWC3 is not a simple HDC, though.
-> >
-> > Yeah, strictly speaking it is equipped with a lot of vendor-specific stuff,
-> > which are tuned by the DWC USB3 driver in the kernel. But after that the
-> > controller is registered as xhci-hcd device so it's serviced by the xHCI driver,
-> > which then registers the HCD device so the corresponding DT node is supposed
-> > to be compatible with the next bindings: usb/usb-hcd.yaml, usb/usb-xhci.yaml
-> > and usb/snps,dwc3,yaml. I've created the later one so to validate the denoted
-> > compatibility.
-> >
-> > >
-> > > > nodes to have the name acceptable by the regexp: "^usb(@.*)?" . But a lot
-> > > > of the DWC USB3-compatible nodes defined in the ARM/ARM64 DTS files have
-> > > > name as "^dwc3@.*" or "^usb[1-3]@.*" or even "^dwusb@.*", which will cause
-> > > > the dtbs_check procedure failure. Let's fix the nodes naming to be
-> > > > compatible with the DWC USB3 DT schema to make dtbs_check happy.
-> > > >
-> > > > Note we don't change the DWC USB3-compatible nodes names of
-> > > > arch/arm64/boot/dts/apm/{apm-storm.dtsi,apm-shadowcat.dtsi} since the
-> > > > in-source comment says that the nodes name need to be preserved as
-> > > > "^dwusb@.*" for some backward compatibility.
-> > >
-> >
-> > > interesting, compatibility with what? Some debugfs files, perhaps? :-)
-> >
-> > Don't really know.) In my experience the worst type of such compatibility is
-> > connected with some bootloader magic, which may add/remove/modify properties
-> > to nodes with pre-defined names.
-> 
+Fix a crash on DEC platforms starting with:
 
-> I seriously doubt anyone is using the APM machines with DT (even ACPI
-> is somewhat doubtful). I say change them. Or remove the dts files and
-> see what happens. Either way it can always be reverted.
+VFS: Mounted root (nfs filesystem) on device 0:11.
+Freeing unused PROM memory: 124k freed
+BUG: Bad page state in process swapper  pfn:00001
+page:(ptrval) refcount:0 mapcount:-128 mapping:00000000 index:0x1 pfn:0x1
+flags: 0x0()
+raw: 00000000 00000100 00000122 00000000 00000001 00000000 ffffff7f 00000000
+page dumped because: nonzero mapcount
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper Not tainted 5.9.0-00858-g865c50e1d279 #1
+Stack : 8065dc48 0000000b 8065d2b8 9bc27dcc 80645bfc 9bc259a4 806a1b97 80703124
+        80710000 8064a900 00000001 80099574 806b116c 1000ec00 9bc27d88 806a6f30
+        00000000 00000000 80645bfc 00000000 31232039 80706ba4 2e392e35 8039f348
+        2d383538 00000070 0000000a 35363867 00000000 806c2830 80710000 806b0000
+        80710000 8064a900 00000001 81000000 00000000 00000000 8035af2c 80700000
+        ...
+Call Trace:
+[<8004bc5c>] show_stack+0x34/0x104
+[<8015675c>] bad_page+0xfc/0x128
+[<80157714>] free_pcppages_bulk+0x1f4/0x5dc
+[<801591cc>] free_unref_page+0xc0/0x130
+[<8015cb04>] free_reserved_area+0x144/0x1d8
+[<805abd78>] kernel_init+0x20/0x100
+[<80046070>] ret_from_kernel_thread+0x14/0x1c
+Disabling lock debugging due to kernel taint
 
-Ok. I'll change them in v3.
+caused by an attempt to free bootmem space that as from commit 
+b93ddc4f9156 ("mips: Reserve memory for the kernel image resources") has 
+not been anymore reserved due to the removal of generic MIPS arch code 
+that used to reserve all the memory from the beginning of RAM up to the 
+kernel load address.
 
--Sergey
+This memory does need to be reserved on DEC platforms however as it is 
+used by REX firmware as working area, as per the TURBOchannel firmware 
+specification[1]:
 
-> 
-> Rob
+Table 2-2  REX Memory Regions
+-------------------------------------------------------------------------
+        Starting        Ending
+Region  Address         Address         Use
+-------------------------------------------------------------------------
+0       0xa0000000      0xa000ffff      Restart block, exception vectors,
+                                        REX stack and bss
+1       0xa0010000      0xa0017fff      Keyboard or tty drivers
+
+2       0xa0018000      0xa001f3ff 1)   CRT driver
+
+3       0xa0020000      0xa002ffff      boot, cnfg, init and t objects
+
+4       0xa0020000      0xa002ffff      64KB scratch space
+-------------------------------------------------------------------------
+1) Note that the last 3 Kbytes of region 2 are reserved for backward
+compatibility with previous system software.
+-------------------------------------------------------------------------
+
+(this table uses KSEG2 unmapped virtual addresses, which in the MIPS 
+architecture are offset from physical addresses by a fixed value of 
+0xa0000000 and therefore the regions referred do correspond to the 
+beginning of the physical address space) and we call into the firmware 
+on several occasions throughout the bootstrap process.  It is believed 
+that pre-REX firmware used with non-TURBOchannel DEC platforms has the 
+same requirements, as hinted by note #1 cited.
+
+Recreate the discarded reservation then, in DEC platform code, removing 
+the crash.
+
+References:
+
+[1] "TURBOchannel Firmware Specification", On-line version,
+    EK-TCAAD-FS-004, Digital Equipment Corporation, January 1993, 
+    Chapter 2 "System Module Firmware", p. 2-5
+
+Signed-off-by: Maciej W. Rozycki <macro@linux-mips.org>
+Fixes: b93ddc4f9156 ("mips: Reserve memory for the kernel image resources")
+Cc: stable@vger.kernel.org # v5.2+
+---
+Changes from v1:
+
+- Fix 2nd argument of the call to `memblock_reserve' (thanks Serge!).
+---
+ arch/mips/dec/setup.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+linux-dec-prom-memblock-reserve.diff
+Index: linux-3maxp/arch/mips/dec/setup.c
+===================================================================
+--- linux-3maxp.orig/arch/mips/dec/setup.c
++++ linux-3maxp/arch/mips/dec/setup.c
+@@ -6,7 +6,7 @@
+  * for more details.
+  *
+  * Copyright (C) 1998 Harald Koerfgen
+- * Copyright (C) 2000, 2001, 2002, 2003, 2005  Maciej W. Rozycki
++ * Copyright (C) 2000, 2001, 2002, 2003, 2005, 2020  Maciej W. Rozycki
+  */
+ #include <linux/console.h>
+ #include <linux/export.h>
+@@ -15,6 +15,7 @@
+ #include <linux/ioport.h>
+ #include <linux/irq.h>
+ #include <linux/irqnr.h>
++#include <linux/memblock.h>
+ #include <linux/param.h>
+ #include <linux/percpu-defs.h>
+ #include <linux/sched.h>
+@@ -22,6 +23,7 @@
+ #include <linux/types.h>
+ #include <linux/pm.h>
+ 
++#include <asm/addrspace.h>
+ #include <asm/bootinfo.h>
+ #include <asm/cpu.h>
+ #include <asm/cpu-features.h>
+@@ -29,7 +31,9 @@
+ #include <asm/irq.h>
+ #include <asm/irq_cpu.h>
+ #include <asm/mipsregs.h>
++#include <asm/page.h>
+ #include <asm/reboot.h>
++#include <asm/sections.h>
+ #include <asm/time.h>
+ #include <asm/traps.h>
+ #include <asm/wbflush.h>
+@@ -146,6 +150,9 @@ void __init plat_mem_setup(void)
+ 
+ 	ioport_resource.start = ~0UL;
+ 	ioport_resource.end = 0UL;
++
++	/* Stay away from the firmware working memory area for now. */
++	memblock_reserve(PHYS_OFFSET, __pa_symbol(&_text) - PHYS_OFFSET);
+ }
+ 
+ /*
+
