@@ -2,151 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F103928DEF9
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 12:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7575D28DF9F
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Oct 2020 13:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728663AbgJNKdm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Oct 2020 06:33:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43762 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727381AbgJNKdl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Oct 2020 06:33:41 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9666120878;
-        Wed, 14 Oct 2020 10:33:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602671619;
-        bh=YTNSXcW0k5VpGDP+ALIpIyuW3iLRTmD54rqCQ1oyiyA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sBHnz1yyxbvpzxpccOns8mp5Of03gj29/RNRo3g82Ev+clfKBrk3KB5XrR8yt+GLl
-         pmdEOB8h3WOAsY4KGNHM6cEFI07KwBf89dw+Gj6iqzCXZZziXMohhgdikBTZ5zGwnn
-         ltFgloehCf+cN94VB8NVLy20CDewVMaT7n7srMMg=
-Received: by mail-ej1-f45.google.com with SMTP id p5so1298911ejj.2;
-        Wed, 14 Oct 2020 03:33:39 -0700 (PDT)
-X-Gm-Message-State: AOAM532KgEJ3XGCmU0xda99mxHtSh9lVBBIHW/Ul6I67ftqQ/f3WdKhW
-        YIcsf1kxnY5J9Tuqh6EyMMIdczSlsoucu0rJis0=
-X-Google-Smtp-Source: ABdhPJxZBjfPkS/DAl69mvwOwG4fxUYT0dQEW6rrgGKRXDR2yPgf5o4BRFNdNiVveb84vPHaKXSGoZA2E31iHMoZKKE=
-X-Received: by 2002:a17:906:1a11:: with SMTP id i17mr4430823ejf.381.1602671617348;
- Wed, 14 Oct 2020 03:33:37 -0700 (PDT)
+        id S1730527AbgJNLKN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Oct 2020 07:10:13 -0400
+Received: from [157.25.102.26] ([157.25.102.26]:48394 "EHLO orcam.me.uk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725922AbgJNLKN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 14 Oct 2020 07:10:13 -0400
+Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
+        by orcam.me.uk (Postfix) with ESMTPS id E01212BE086;
+        Wed, 14 Oct 2020 12:10:10 +0100 (BST)
+Date:   Wed, 14 Oct 2020 12:10:09 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] MIPS: DEC: Restore bootmem reservation for firmware working
+ memory area
+Message-ID: <alpine.LFD.2.21.2010141123010.866917@eddie.linux-mips.org>
 MIME-Version: 1.0
-References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru> <20201014101402.18271-21-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20201014101402.18271-21-Sergey.Semin@baikalelectronics.ru>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 14 Oct 2020 12:33:25 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPeErocR5-3xCDqBR3-k3w_2EQ_768d71n229cbzeo4TtQ@mail.gmail.com>
-Message-ID: <CAJKOXPeErocR5-3xCDqBR3-k3w_2EQ_768d71n229cbzeo4TtQ@mail.gmail.com>
-Subject: Re: [PATCH 20/20] arch: dts: Fix DWC USB3 DT nodes name
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Wei Xu <xuwei5@hisilicon.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-omap@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 14 Oct 2020 at 12:23, Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
-> In accordance with the DWC USB3 bindings the corresponding node name is
-> suppose to comply with Generic USB HCD DT schema, which requires the USB
-> nodes to have the name acceptable by the regexp: "^usb(@.*)?" . But a lot
-> of the DWC USB3-compatible nodes defined in the ARM/ARM64 DTS files have
-> name as "^dwc3@.*" or "^usb[1-3]@.*" or even "^dwusb@.*", which will cause
-> the dtbs_check procedure failure. Let's fix the nodes naming to be
-> compatible with the DWC USB3 DT schema to make dtbs_check happy.
->
-> Note we don't change the DWC USB3-compatible nodes names of
-> arch/arm64/boot/dts/apm/{apm-storm.dtsi,apm-shadowcat.dtsi} since the
-> in-source comment says that the nodes name need to be preserved as
-> "^dwusb@.*" for some backward compatibility.
->
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
->
-> ---
->
-> Please, test the patch out to make sure it doesn't brake the dependent DTS
-> files. I did only a manual grepping of the possible nodes dependencies.
+Fix a crash on DEC platforms starting with:
 
-1. It is you who should compare the decompiled DTS, not us. For example:
-$ for i in dts-old/*/*dtb dts-old/*/*/*dtb; do echo $i; crosc64
-scripts/dtc/dtx_diff ${i} dts-new/${i#dts-old/} ; done
+VFS: Mounted root (nfs filesystem) on device 0:11.
+Freeing unused PROM memory: 124k freed
+BUG: Bad page state in process swapper  pfn:00001
+page:(ptrval) refcount:0 mapcount:-128 mapping:00000000 index:0x1 pfn:0x1
+flags: 0x0()
+raw: 00000000 00000100 00000122 00000000 00000001 00000000 ffffff7f 00000000
+page dumped because: nonzero mapcount
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper Not tainted 5.9.0-00858-g865c50e1d279 #1
+Stack : 8065dc48 0000000b 8065d2b8 9bc27dcc 80645bfc 9bc259a4 806a1b97 80703124
+        80710000 8064a900 00000001 80099574 806b116c 1000ec00 9bc27d88 806a6f30
+        00000000 00000000 80645bfc 00000000 31232039 80706ba4 2e392e35 8039f348
+        2d383538 00000070 0000000a 35363867 00000000 806c2830 80710000 806b0000
+        80710000 8064a900 00000001 81000000 00000000 00000000 8035af2c 80700000
+        ...
+Call Trace:
+[<8004bc5c>] show_stack+0x34/0x104
+[<8015675c>] bad_page+0xfc/0x128
+[<80157714>] free_pcppages_bulk+0x1f4/0x5dc
+[<801591cc>] free_unref_page+0xc0/0x130
+[<8015cb04>] free_reserved_area+0x144/0x1d8
+[<805abd78>] kernel_init+0x20/0x100
+[<80046070>] ret_from_kernel_thread+0x14/0x1c
+Disabling lock debugging due to kernel taint
 
-$ for i in dts-old/*/*dtb dts-old/*/*/*dtb; do echo $i; crosc64
-fdtdump ${i} > ${i}.fdt ; crosc64 fdtdump dts-new/${i#dts-old/} >
-dts-new/${i#dts-old/}.fdt ; diff -ubB ${i}.fdt
-dts-new/${i#dts-old/}.fdt ; done
+caused by an attempt to free bootmem space that as from commit 
+b93ddc4f9156 ("mips: Reserve memory for the kernel image resources") has 
+not been anymore reserved due to the removal of generic MIPS arch code 
+that used to reserve all the memory from the beginning of RAM up to the 
+kernel load address.
 
-2. Split it per arm architectures (and proper subject prefix - not
-"arch") and subarchitectures so maintainers can pick it up.
+This memory does need to be reserved on DEC platforms however as it is 
+used by REX firmware as working area, as per the TURBOchannel firmware 
+specification[1]:
 
-3. The subject title could be more accurate - there is no fix here
-because there was no errors in the first place. Requirement of DWC
-node names comes recently, so it is more alignment with dtschema.
-Otherwise automatic-pickup-stable-bot might want to pick up... and it
-should not go to stable.
+Table 2-2  REX Memory Regions
+-------------------------------------------------------------------------
+        Starting        Ending
+Region  Address         Address         Use
+-------------------------------------------------------------------------
+0       0xa0000000      0xa000ffff      Restart block, exception vectors,
+                                        REX stack and bss
+1       0xa0010000      0xa0017fff      Keyboard or tty drivers
 
-Best regards,
-Krzysztof
+2       0xa0018000      0xa001f3ff 1)   CRT driver
 
->  arch/arm/boot/dts/armada-375.dtsi              | 2 +-
->  arch/arm/boot/dts/exynos5250.dtsi              | 2 +-
->  arch/arm/boot/dts/exynos54xx.dtsi              | 4 ++--
->  arch/arm/boot/dts/keystone-k2e.dtsi            | 4 ++--
->  arch/arm/boot/dts/keystone.dtsi                | 2 +-
->  arch/arm/boot/dts/ls1021a.dtsi                 | 2 +-
->  arch/arm/boot/dts/omap5-l4.dtsi                | 2 +-
->  arch/arm/boot/dts/stih407-family.dtsi          | 2 +-
->  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi   | 2 +-
->  arch/arm64/boot/dts/exynos/exynos5433.dtsi     | 4 ++--
->  arch/arm64/boot/dts/exynos/exynos7.dtsi        | 2 +-
->  arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi | 4 ++--
->  arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi | 6 +++---
->  arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 4 ++--
->  arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi | 4 ++--
->  arch/arm64/boot/dts/hisilicon/hi3660.dtsi      | 2 +-
->  arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi   | 4 ++--
->  arch/arm64/boot/dts/qcom/ipq8074.dtsi          | 4 ++--
->  arch/arm64/boot/dts/qcom/msm8996.dtsi          | 4 ++--
->  arch/arm64/boot/dts/qcom/msm8998.dtsi          | 2 +-
->  arch/arm64/boot/dts/qcom/qcs404-evb.dtsi       | 2 +-
->  arch/arm64/boot/dts/qcom/qcs404.dtsi           | 4 ++--
->  arch/arm64/boot/dts/qcom/sc7180.dtsi           | 2 +-
->  arch/arm64/boot/dts/qcom/sdm845.dtsi           | 4 ++--
->  arch/arm64/boot/dts/qcom/sm8150.dtsi           | 2 +-
->  25 files changed, 38 insertions(+), 38 deletions(-)
->
+3       0xa0020000      0xa002ffff      boot, cnfg, init and t objects
+
+4       0xa0020000      0xa002ffff      64KB scratch space
+-------------------------------------------------------------------------
+1) Note that the last 3 Kbytes of region 2 are reserved for backward
+compatibility with previous system software.
+-------------------------------------------------------------------------
+
+(this table uses KSEG2 unmapped virtual addresses, which in the MIPS 
+architecture are offset from physical addresses by a fixed value of 
+0xa0000000 and therefore the regions referred do correspond to the 
+beginning of the physical address space) and we call into the firmware 
+on several occasions throughout the bootstrap process.  It is believed 
+that pre-REX firmware used with non-TURBOchannel DEC platforms has the 
+same requirements, as hinted by note #1 cited.
+
+Recreate the discarded reservation then, in DEC platform code, removing 
+the crash.
+
+References:
+
+[1] "TURBOchannel Firmware Specification", On-line version, 
+    EK-TCAAD-FS-004, Digital Equipment Corporation, January 1993, 
+    Chapter 2 "System Module Firmware", p. 2-5
+
+Signed-off-by: Maciej W. Rozycki <macro@linux-mips.org>
+Fixes: b93ddc4f9156 ("mips: Reserve memory for the kernel image resources")
+Cc: stable@vger.kernel.org # v5.2+
+---
+ arch/mips/dec/setup.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+linux-dec-prom-memblock-reserve.diff
+Index: linux-3maxp/arch/mips/dec/setup.c
+===================================================================
+--- linux-3maxp.orig/arch/mips/dec/setup.c
++++ linux-3maxp/arch/mips/dec/setup.c
+@@ -6,7 +6,7 @@
+  * for more details.
+  *
+  * Copyright (C) 1998 Harald Koerfgen
+- * Copyright (C) 2000, 2001, 2002, 2003, 2005  Maciej W. Rozycki
++ * Copyright (C) 2000, 2001, 2002, 2003, 2005, 2020  Maciej W. Rozycki
+  */
+ #include <linux/console.h>
+ #include <linux/export.h>
+@@ -15,6 +15,7 @@
+ #include <linux/ioport.h>
+ #include <linux/irq.h>
+ #include <linux/irqnr.h>
++#include <linux/memblock.h>
+ #include <linux/param.h>
+ #include <linux/percpu-defs.h>
+ #include <linux/sched.h>
+@@ -22,6 +23,7 @@
+ #include <linux/types.h>
+ #include <linux/pm.h>
+ 
++#include <asm/addrspace.h>
+ #include <asm/bootinfo.h>
+ #include <asm/cpu.h>
+ #include <asm/cpu-features.h>
+@@ -29,7 +31,9 @@
+ #include <asm/irq.h>
+ #include <asm/irq_cpu.h>
+ #include <asm/mipsregs.h>
++#include <asm/page.h>
+ #include <asm/reboot.h>
++#include <asm/sections.h>
+ #include <asm/time.h>
+ #include <asm/traps.h>
+ #include <asm/wbflush.h>
+@@ -146,6 +150,9 @@ void __init plat_mem_setup(void)
+ 
+ 	ioport_resource.start = ~0UL;
+ 	ioport_resource.end = 0UL;
++
++	/* Stay away from the firmware working memory area for now. */
++	memblock_reserve(PHYS_OFFSET, __pa_symbol(&_text));
+ }
+ 
+ /*
