@@ -2,134 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CCD28F9EE
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Oct 2020 22:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0276128F9F0
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Oct 2020 22:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392128AbgJOULW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Oct 2020 16:11:22 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:36067 "EHLO
+        id S2392138AbgJOULZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Oct 2020 16:11:25 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:47315 "EHLO
         wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392062AbgJOULV (ORCPT
+        by vger.kernel.org with ESMTP id S2392062AbgJOULY (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 15 Oct 2020 16:11:21 -0400
+        Thu, 15 Oct 2020 16:11:24 -0400
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 6429A29E;
-        Thu, 15 Oct 2020 16:11:20 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id C9AB29E2;
+        Thu, 15 Oct 2020 16:11:23 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 15 Oct 2020 16:11:20 -0400
+  by compute1.internal (MEProxy); Thu, 15 Oct 2020 16:11:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
-         h=from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm1; bh=p3zu/cefH86xg/aUzHvcWl81VJ
-        wMhU22jPj9AsFjrpQ=; b=BYkc1zAepPy9nxTUnqjK+XkKbBqtx5+c2NWbD1WemR
-        oGhSYqRoOD7KX7l64lnNlzwv1HT2SWC7UpeddEjRVdcJl+Dl94VuqXcSNf55KTxM
-        ndPC1qeu1bvzhu6/AR9XpZtuZpPadpYWC8J1kitHCRhu15xaoKOgJcqZ0ZSN/iq+
-        6e44Rku7Cz4Pr3czzgrjV0MPsEcw/z0WFVtoEFVA34ZbKozMyic1oPBNqABYLtPK
-        NpZKR+tucS+cvNWNsQ0+kYmjXlaItjwQSIU3Lk5BJKKmKJ6DYxQ3fDGmA4qFr4Dd
-        EJGZCiVL2U6jyMOq3MvQsIXX35nsP8fevFs0ATy1n8pw==
+         h=from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=Zsd6A3WINXnSE
+        4TDtzXACX2rQA6Nb3nnjgJZqqBm4Og=; b=lcgxAmdYYv6T8YPEdsa6DM5gr1zkc
+        BjJ4FlXvJgVrEtRYbCfCeUB1f8YArSF2yt7IJlDb+ls4UszB06Rmc/Tt1DJ7JZ5x
+        U9quTCu85Ni1W3P8Z6gcLZAKgplOkU/WIW4gFwjdM91FO22l+FXHfhkpumI/l7MU
+        +ZgBgqxWQ4C6raLAtdSqmX5/nhjsrSQhxjHq7cVRtrBwIZflujvX5R7rxwwM4QXD
+        0kUNskLNk+dDEt5rTteM39LCe/mCpyoDokP0SDQYpZtgkxJDlfxV78tcbKvHaIf9
+        TnMPfbWNJalAq72sRsH9UtOvFqxcRGb1Bhw7BvSyDmh/NJ07NJc61Ah9Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=p3zu/cefH86xg/aUz
-        HvcWl81VJwMhU22jPj9AsFjrpQ=; b=XjEw5+e96GYsX1+lfNwgTHOmayLpY2XAZ
-        Az6lOrw1qm2ONDOZTEuiaX95uyjDYKr2H99Zmv4HiiEBzti96Tj5wIczASCgPXxZ
-        Ef52xhn0eMu+aDRhYpW7aEXst7AErM/4KYdSx4Z5LNgVmK+yNXGgABOcPF5dm+YC
-        U96PbSIZOTzpXScpwedx4E66TsaEmHs3agVDhNTV1oy6yi91MLhjSkAc+YkTHp9S
-        Liquly+lAoNiel8R9cp23DHYZFa1cUwO8dJ4ZyjsDYYoUyILKbgIp/tiPwlyFTeF
-        Gzk5nvr6GZuAYitRhlO79fEf4UzKVV2zxMrS5x52C6E/fdFBNTQ1w==
-X-ME-Sender: <xms:56yIX8o3sqe5oBrgNU2n6TPK_dSVXnG98_dJ0d2ccB5NIY1MesIulA>
-    <xme:56yIXypZL2diovQR8xc2zsMHyD6EDnx_52PbQ4T_G3F_h8x_-BIewHeM3x7OhqVdK
-    iVUQHcisCYpsNi4sQ>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=Zsd6A3WINXnSE4TDtzXACX2rQA6Nb3nnjgJZqqBm4Og=; b=DxW+ivUX
+        KYdbcx5SJwQ2X1YbmalfsmaK8yeOgQX1NNOIzUnCRNMDECZ6aENajrrX/Kk9PvDN
+        8P92SwmhEU2nXAwS1L8fD5pKie7Qigaa4M9TSDerOT6SUHsSi0mOBDpqu0lcOTUR
+        y2SQdWsHXFjVbXx5QZWf33jkgdqKOir9dqeILg4Ie7In8Jgkfqbp/XTC6G0d3c4h
+        M8jwnbQ7EmnhJwsWe+zINar3icmy4+m08ZyHSt1IJuUQT2EgCMmlotm2vuhDou9A
+        7Q2F5tb6ZozKm0UUHVo9LVVxGEosmEVmw5V/QV40L5pKHNtDaUWgUfk7jhKrFQ2n
+        BkpuEB+d88yMrA==
+X-ME-Sender: <xms:66yIXz904_LpVP9ibmaOnHSxgd7IZPDSVs7Qb8GNWSchewdiFH87PQ>
+    <xme:66yIX_s0U9mmKk17Xqt_PF4uqhYAzb2LE0oJgg3Wz6sHyTLe1YXl47XVyEFs66f_X
+    s2nwmGl03RtmDMB2g>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrieefgddugeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflohhhnhcuvfhh
-    ohhmshhonhcuoehgihhtsehjohhhnhhthhhomhhsohhnrdhfrghsthhmrghilhdrtghomh
-    drrghuqeenucggtffrrghtthgvrhhnpeeiheejgeeigfethfeiffekfeegkeefjeeifeeu
-    tefgveejgedtheeuvefgfeefueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukf
-    hppeehkedrudeihedrudeluddrieejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
-    rghmpehmrghilhhfrhhomhepghhithesjhhohhhnthhhohhmshhonhdrfhgrshhtmhgrih
-    hlrdgtohhmrdgruh
-X-ME-Proxy: <xmx:56yIXxMLXQ_ylcFcAdRGXDPE7oVmGD5qNEszuNFXyvbgSdSjP568pw>
-    <xmx:56yIXz41-Ba-hZkTriZ2aumpODWNd0gUBoN4Or6SlwXI7i5MBsJ4gw>
-    <xmx:56yIX74j8NzByD1rwRD6Ujv7SEidclios1Uxyk3ajttDgwHdKsuAJg>
-    <xmx:6KyIX1RqXW5RZRD-oWibg7f_Sfx0fUARESskkMfv3_Pp07UaHt26iA>
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhhnhcu
+    vfhhohhmshhonhcuoehgihhtsehjohhhnhhthhhomhhsohhnrdhfrghsthhmrghilhdrtg
+    homhdrrghuqeenucggtffrrghtthgvrhhnpefgfeffuefgfefghfekgfejhffgvedtfeev
+    keduleethedtgeekffffgfdtfffgveenucffohhmrghinheplhgushdrshgsnecukfhppe
+    ehkedrudeihedrudeluddrieejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
+    pehmrghilhhfrhhomhepghhithesjhhohhhnthhhohhmshhonhdrfhgrshhtmhgrihhlrd
+    gtohhmrdgruh
+X-ME-Proxy: <xmx:66yIXxBpy8JCaWTxMhc0eiZCdhhZd-9Z6pZWDdjDTOTwXWSS5YxOkg>
+    <xmx:66yIX_eHo7CgNQfFJetAWkiplYrt-A3ubH3kafUALymCP0TyqVzhsg>
+    <xmx:66yIX4OSwOdJrNQLHS7x79jTyZLNWPau0gVabj0AVj-IXBH3A4QeqQ>
+    <xmx:66yIXy37kIHrqHCySbZ3lN_ZTfHX3zVquUolpSGikXF8rOhNiORc3A>
 Received: from john.thome.spur.red (unknown [58.165.191.67])
-        by mail.messagingengine.com (Postfix) with ESMTPA id ACAE03280066;
-        Thu, 15 Oct 2020 16:11:17 -0400 (EDT)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 6BF96328005D;
+        Thu, 15 Oct 2020 16:11:21 -0400 (EDT)
 From:   John Thomson <git@johnthomson.fastmail.com.au>
 To:     linux-mips@vger.kernel.org
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-kernel@vger.kernel.org,
         John Thomson <git@johnthomson.fastmail.com.au>
-Subject: [PATCH 1/2] mips: boot compressed: preprocess linker script
-Date:   Fri, 16 Oct 2020 06:10:59 +1000
-Message-Id: <20201015201100.4130-1-git@johnthomson.fastmail.com.au>
+Subject: [PATCH 2/2] mips: boot compressed: add support for vlinuz ELF DTB
+Date:   Fri, 16 Oct 2020 06:11:00 +1000
+Message-Id: <20201015201100.4130-2-git@johnthomson.fastmail.com.au>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201015201100.4130-1-git@johnthomson.fastmail.com.au>
+References: <20201015201100.4130-1-git@johnthomson.fastmail.com.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Preprocess vmlinuz (self-decompressing kernel ELF) linker script
-to avoid using ld -Ttext $(address)
-https://lkml.kernel.org/lkml/20200413153453.zi4jvu3c4ul23e23@google.com/
+For legacy bootloader devices that do not support DTB,
+and only support booting ELF, or have issues booting large ELF files.
+
+vmlinux (objcopy to bytecode then compressed for vmlinuz)
+requires MIPS_RAW_APPENDED_DTB, then
+vmlinuz may use MIPS_ELF_APPENDED_DTB_VMLINUZ, and insert the DTB into
+the ELF:
+
+objcopy --update-section .appended_dtb=<filename>.dtb vmlinuz
 
 Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
 ---
- arch/mips/boot/compressed/.gitignore                   | 1 +
- arch/mips/boot/compressed/Makefile                     | 8 ++++++--
- arch/mips/boot/compressed/{ld.script => vmlinuz.lds.S} | 2 +-
- 3 files changed, 8 insertions(+), 3 deletions(-)
- rename arch/mips/boot/compressed/{ld.script => vmlinuz.lds.S} (96%)
+ arch/mips/Kconfig                       | 21 +++++++++++++++++++++
+ arch/mips/boot/compressed/decompress.c  |  4 ++++
+ arch/mips/boot/compressed/vmlinuz.lds.S |  9 +++++++++
+ 3 files changed, 34 insertions(+)
 
-diff --git a/arch/mips/boot/compressed/.gitignore b/arch/mips/boot/compressed/.gitignore
-index d358395614c..1c367a2efb9 100644
---- a/arch/mips/boot/compressed/.gitignore
-+++ b/arch/mips/boot/compressed/.gitignore
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- ashldi3.c
- bswapsi.c
-+vmlinuz.lds
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index 6e56caef69f..49d1adceade 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -96,11 +96,15 @@ UIMAGE_LOADADDR = $(VMLINUZ_LOAD_ADDRESS)
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 8f328298f8c..2749d46be9e 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3098,6 +3098,27 @@ choice
+ 		  if you don't intend to always append a DTB.
+ endchoice
  
- vmlinuzobjs-y += $(obj)/piggy.o
- 
-+targets += vmlinuz.lds
-+$(obj)/vmlinuz.lds: $(obj)/calc_vmlinuz_load_addr $(obj)/vmlinux.bin
-+CPPFLAGS_vmlinuz.lds = -DVMLINUZ_LOAD_ADDRESS="$(VMLINUZ_LOAD_ADDRESS)"
++config MIPS_ELF_APPENDED_DTB_VMLINUZ
++	bool "vmlinuz (ELF self-decompressing kernel) appended DTB support"
++	depends on MIPS_RAW_APPENDED_DTB && SYS_SUPPORTS_ZBOOT
++	help
++	  With this option, the vmlinuz (self-decompressing kernel ELF binary)
++	  boot code will look for a device tree binary (DTB|FDT) included in
++	  the vmlinux ELF section .appended_dtb. By default it is empty and
++	  the DTB can be appended using binutils command
++	  objcopy:
 +
- quiet_cmd_zld = LD      $@
--      cmd_zld = $(LD) $(KBUILD_LDFLAGS) -Ttext $(VMLINUZ_LOAD_ADDRESS) -T $< $(vmlinuzobjs-y) -o $@
-+      cmd_zld = $(LD) $(KBUILD_LDFLAGS) -T $< $(vmlinuzobjs-y) -o $@
- quiet_cmd_strip = STRIP	  $@
-       cmd_strip = $(STRIP) -s $@
--vmlinuz: $(src)/ld.script $(vmlinuzobjs-y) $(obj)/calc_vmlinuz_load_addr
-+vmlinuz: $(obj)/vmlinuz.lds $(vmlinuzobjs-y) $(obj)/calc_vmlinuz_load_addr
- 	$(call cmd,zld)
- 	$(call cmd,strip)
++	    objcopy --update-section .appended_dtb=<filename>.dtb vmlinuz
++
++	  This is meant as a backward compatiblity convenience for those
++	  systems with a bootloader that can't be upgraded to accommodate
++	  the documented boot protocol using a device tree.
++
++	  vmlinuz uses the compressed vmlinux.bin, thus vmlinux must use
++	  MIPS_RAW_APPENDED_DTB to expect a DTB at the end-of-uncompressed
++	  kernel location. vmlinuz copies the DTB to this location after kernel
++	  decompression.
++
+ choice
+ 	prompt "Kernel command line type" if !CMDLINE_OVERRIDE
+ 	default MIPS_CMDLINE_FROM_DTB if USE_OF && !ATH79 && !MACH_INGENIC && \
+diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
+index 88f5d637b1c..cd1a47c69e3 100644
+--- a/arch/mips/boot/compressed/decompress.c
++++ b/arch/mips/boot/compressed/decompress.c
+@@ -33,7 +33,11 @@ extern void puthex(unsigned long long val);
+ #define puthex(val) do {} while (0)
+ #endif
  
-diff --git a/arch/mips/boot/compressed/ld.script b/arch/mips/boot/compressed/vmlinuz.lds.S
-similarity index 96%
-rename from arch/mips/boot/compressed/ld.script
-rename to arch/mips/boot/compressed/vmlinuz.lds.S
-index 2ed08fbef8e..890c31c55c1 100644
---- a/arch/mips/boot/compressed/ld.script
-+++ b/arch/mips/boot/compressed/vmlinuz.lds.S
-@@ -14,7 +14,7 @@ PHDRS {
- SECTIONS
++#ifdef CONFIG_MIPS_ELF_APPENDED_DTB_VMLINUZ
++unsigned char __section(.appended_dtb) __appended_dtb[0x100000];
++#else
+ extern char __appended_dtb[];
++#endif
+ 
+ void error(char *x)
  {
- 	/* Text and read-only data */
--	/* . = VMLINUZ_LOAD_ADDRESS; */
-+	. = VMLINUZ_LOAD_ADDRESS;
- 	.text : {
- 		*(.text)
- 		*(.rodata)
+diff --git a/arch/mips/boot/compressed/vmlinuz.lds.S b/arch/mips/boot/compressed/vmlinuz.lds.S
+index 890c31c55c1..f5a35b60059 100644
+--- a/arch/mips/boot/compressed/vmlinuz.lds.S
++++ b/arch/mips/boot/compressed/vmlinuz.lds.S
+@@ -31,9 +31,18 @@ SECTIONS
+ 		CONSTRUCTORS
+ 		. = ALIGN(16);
+ 	}
++
++#ifdef CONFIG_MIPS_ELF_APPENDED_DTB_VMLINUZ
++	/* keep the empty unreferenced ELF DTB section */
++	.appended_dtb : {
++		*(.appended_dtb)
++		KEEP(*(.appended_dtb))
++	}
++#else
+ 	__appended_dtb = .;
+ 	/* leave space for appended DTB */
+ 	. += 0x100000;
++#endif /* _APPENDED_DTB */
+ 
+ 	_edata = .;
+ 	/* End of data section */
 -- 
 2.28.0
 
