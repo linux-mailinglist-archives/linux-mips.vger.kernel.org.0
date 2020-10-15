@@ -2,137 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A2A28EE2C
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Oct 2020 10:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02EA828EFF4
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Oct 2020 12:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387423AbgJOIIK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Oct 2020 04:08:10 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:40770 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730385AbgJOIH2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 15 Oct 2020 04:07:28 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09F810KF022265;
-        Thu, 15 Oct 2020 10:05:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=glhTCKVcnbc8lpjOZBjcwL/WddjOBnrvQMsvFgpIX9U=;
- b=0oTWPBOxS3dHCpvop3Yn8LtnhruTiBArA0yscaywKM5jRBukrtlORwr/OlTPsO/MuqpZ
- NxiXz4Nvydwfc6H86n+++QoVfKWlkVK6RwSl08U860IelLWDFi6VfYxV1c49lArFXN0l
- AFDe3yXM7+VozPw8LXqj2LRtKWO4kRrD6cgMmP7U9tLEM1gC6uz4J1P7UBVkolbWZPMC
- 0c23ip1jx4I4AYDVB506N+iPL276OKcmTrJwevYifEHpP48qXDA8TdK71per8cKZVT4H
- PfdxOAWlYV0XFPa9ElhEi0cBzBscOmgtycug9z9NV8KOyMMJP+rSe/YeUgH1QAaLqKx4 LA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34356ekf4q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Oct 2020 10:05:56 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0884E100034;
-        Thu, 15 Oct 2020 10:05:47 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8D2CD20602D;
-        Thu, 15 Oct 2020 10:05:47 +0200 (CEST)
-Received: from lmecxl0995.lme.st.com (10.75.127.49) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 15 Oct
- 2020 10:05:44 +0200
-Subject: Re: [PATCH 18/20] arch: dts: Fix EHCI/OHCI DT nodes name
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        id S2389183AbgJOKPy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Oct 2020 06:15:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60946 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389099AbgJOKPx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 15 Oct 2020 06:15:53 -0400
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2533920BED;
+        Thu, 15 Oct 2020 10:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602756952;
+        bh=Z6L85tl0hUzxc/Wf2yAWwRbRBy0g42YVSMNsAOso/ic=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WCURctuRAO7apKBpnigKSW4w0RrSEIpplBnDIjs+ve/o+8+46MlY5TmxYzakNSnGt
+         wshd18tKRcbQS+ist8JlaxoOpSixojILJcBphDceJNvzEVJ7nc77SPULh7DZu7zIN5
+         MdYW0FZqoioit4bvm377ZfhSD1iKvlH90Ra8372k=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Wei Xu <xuwei5@hisilicon.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Manu Gautam <mgautam@codeaurora.org>,
         Roger Quadros <rogerq@ti.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-mediatek@lists.infradead.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 20/20] arch: dts: Fix DWC USB3 DT nodes name
+In-Reply-To: <20201014143720.yny3jco5pkb7dr4b@mobilestation>
 References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
- <20201014101402.18271-19-Sergey.Semin@baikalelectronics.ru>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <a68552c5-3284-7196-3873-61711aaf5007@st.com>
-Date:   Thu, 15 Oct 2020 10:05:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <20201014101402.18271-21-Sergey.Semin@baikalelectronics.ru>
+ <878sc8lx0e.fsf@kernel.org>
+ <20201014143720.yny3jco5pkb7dr4b@mobilestation>
+Date:   Thu, 15 Oct 2020 13:15:37 +0300
+Message-ID: <875z7blrqu.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20201014101402.18271-19-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG4NODE3.st.com (10.75.127.12) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-15_03:2020-10-14,2020-10-15 signatures=0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Serge,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On 10/14/20 12:14 PM, Serge Semin wrote:
-> In accordance with the Generic EHCI/OHCI bindings the corresponding node
-> name is suppose to comply with the Generic USB HCD DT schema, which
-> requires the USB nodes to have the name acceptable by the regexp:
-> "^usb(@.*)?"  . Let's fix the DTS files, which have the nodes defined with
-> incompatible names.
-> 
-> Signed-off-by: Serge Semin<Sergey.Semin@baikalelectronics.ru>
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-> index bfe29023fbd5..576f7da564c5 100644
-> --- a/arch/arm/boot/dts/stm32mp151.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp151.dtsi
-> @@ -1404,7 +1404,7 @@ ethernet0: ethernet@5800a000 {
->   			status = "disabled";
->   		};
->   
-> -		usbh_ohci: usbh-ohci@5800c000 {
-> +		usbh_ohci: usb@5800c000 {
->   			compatible = "generic-ohci";
->   			reg = <0x5800c000 0x1000>;
->   			clocks = <&rcc USBH>;
-> @@ -1413,7 +1413,7 @@ usbh_ohci: usbh-ohci@5800c000 {
->   			status = "disabled";
->   		};
->   
-> -		usbh_ehci: usbh-ehci@5800d000 {
-> +		usbh_ehci: usb@5800d000 {
->   			compatible = "generic-ehci";
->   			reg = <0x5800d000 0x1000>;
->   			clocks = <&rcc USBH>;
+Serge Semin <Sergey.Semin@baikalelectronics.ru> writes:
 
-For STM32MP151:
+> On Wed, Oct 14, 2020 at 05:09:37PM +0300, Felipe Balbi wrote:
+>>=20
+>> Hi Serge,
+>>=20
+>> Serge Semin <Sergey.Semin@baikalelectronics.ru> writes:
+>> > In accordance with the DWC USB3 bindings the corresponding node name is
+>> > suppose to comply with Generic USB HCD DT schema, which requires the U=
+SB
+>>=20
+>
+>> DWC3 is not a simple HDC, though.
+>
+> Yeah, strictly speaking it is equipped with a lot of vendor-specific stuf=
+f,
+> which are tuned by the DWC USB3 driver in the kernel. But after that the
+> controller is registered as xhci-hcd device so it's serviced by the xHCI =
+driver,
 
-Acked-by: Amelie Delaunay <amelie.delaunay@st.com>
+in Dual-role or host-only builds, that's correct. We can also have
+peripheral-only builds (both SW or HW versions) which means xhci isn't
+even in the picture.
 
-Thanks,
-Amelie
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+IIUoRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZO3Q//SiuQrPc8kbjk55HntU2Nq2ql7KHubHOj
+ZhrcegAbPbzA0vqIIasxjkXAC8Abbz3Bn59kDuu0ohRtTG1sKXMrN1aqkIo1tTh+
+zkF7t+k5cdunzJ19jb0lohFu/eDK0JPuXRoByJfUhbxIZfWbacO7bG8TkClU7zhL
+denO6pfQG1nOetdAaHZV9imMuTKJOrnl+bcHx5tNcV9sH02sC6OVXBn4dN5ZnABf
+/FdDd671tZMcz43t7jm1vNk7yxgZPSqQ6myBeXQ45ZL2mn9i0gyi4eEWy29vLwu9
+kVUhb9nrliaBsf/X/+oh05qRACLg/noIcuSpXMtu8tmR2DIcwDijYG8XOsBaDLEj
+ZYSJju7/JQ2XUmrS2s/xWtjcqQN0ZxVsJx0Vy4JZNRQ404qs2cqjDeUFdclP+fdJ
+90W74TKzXS1/t52pQyG84LSM648I/7PhUWara2RV9jds7XPgFuFCwWTxEKkyQCSW
+ayPWVASHrKX0Kzp77GW2UUILCIo+luyMMd7V/BraTI6L+PMBL6+etB/O72UUXdb9
+E2hQyJojMpg7BZ6dnpLcvbtHetLtW1hLisTOfD3NbPUyJzPJAgLt8D77SN5ncTUy
+nC8/57GA0Bs2uzYEB6TlPV4i7c9tLT3MJrlVE/p4uziQ7R/b34xbHDX3xNcspk9Q
+vO7uMM8lF9I=
+=XrV0
+-----END PGP SIGNATURE-----
+--=-=-=--
