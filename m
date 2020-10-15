@@ -2,106 +2,203 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8EDC28EC9E
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Oct 2020 07:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5207C28ECF8
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Oct 2020 08:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbgJOF1Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Oct 2020 01:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725985AbgJOF1Z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Oct 2020 01:27:25 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B7FC061755;
-        Wed, 14 Oct 2020 22:27:25 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id h4so1238594pjk.0;
-        Wed, 14 Oct 2020 22:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=suwn4Ybo5octRzfTXo8Gwd9DEMEokqAoqQQ/uRbhrPE=;
-        b=b1kxc0/FM0XcnhSkjp/AVmYqOzjbSXwqbvHG/bwvzY8oysMpUBg7wNKfAN6iCVXeI0
-         i7C+mKZRe9ims1zW0zVeWk9Xbwz3rb62ZaWukL69hBZYNTh1K5fqDm99Q2JxAgy01acb
-         bVfk52/rxTuzzU/6EzY++qJcb5cFULMTGeofEO877/swhvauY9kbsJam2X98QDoIDXMl
-         Z4DRm/FKpnLzp+X+reufd0jpcp5JqHiLAOmuEzExPUS2QHbECsv6GWBsGc78n7Hlux3j
-         rH0itX4xij1zrt826BIwY9lpI2eMs064CCdBBcp2r4HjtvpERnETzeUux1T6J60DfpTb
-         Gq6w==
+        id S1728000AbgJOGOu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Oct 2020 02:14:50 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35371 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbgJOGOt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Oct 2020 02:14:49 -0400
+Received: by mail-ed1-f68.google.com with SMTP id cq12so1877028edb.2;
+        Wed, 14 Oct 2020 23:14:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=suwn4Ybo5octRzfTXo8Gwd9DEMEokqAoqQQ/uRbhrPE=;
-        b=QmQAxRP/okVmuoRQeyyLdf7bSo7s7R+9ksFD3MAN534KM+lwgaBjfMFsALMILpXfxf
-         Pwc+5miboF5mnQlNUti4wRH1bKGtIWtjCkmv4w72r8tVQYYBAga7QorzmJYCxDqKXngM
-         u/1+PMJQ8NG5DUd3psPdSv712uX3U6jeNL9J5LvprSbqdXqbBVLfhic5Ndq2j3p5A+W+
-         TfN4KQgGLQBp5oCrI3Qn3wgfP+0ESPvZiOv1Z3haAT4NN4/Th0tN5TzYnTf1c/TfFNaE
-         ntcFODRVAq7OZCoKKN5NJvaq3ZWOLAbN/3d5wGXSmikMaktkISg+tuuLcX3CEC3VqtEg
-         NkKQ==
-X-Gm-Message-State: AOAM533mHxf/vY7s1iyfqt5ZMK3xEBOzRzAopqB2By17Dmb6w3ir9tEK
-        8O23UZWqRwMhvO31qzAqxdOi+qyOWpQ=
-X-Google-Smtp-Source: ABdhPJwSCuwDC/fbWIILvWoz7DaL6bE0i24zwO3oIW6Lh42RR6qBUaiAKx4Xaosxk8MY2KUx7I1KrA==
-X-Received: by 2002:a17:90a:be0e:: with SMTP id a14mr2683387pjs.57.1602739644440;
-        Wed, 14 Oct 2020 22:27:24 -0700 (PDT)
-Received: from guoguo-omen.lan ([240e:379:940:2525:1069:aebf:b411:6781])
-        by smtp.gmail.com with ESMTPSA id u25sm1481931pgl.31.2020.10.14.22.27.15
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1Yh1i1pVwz9B/Ey4Y4vzL4xLN24S+rgzxEnczu+jN+M=;
+        b=s4utGE2ldX5A4a0Pabye4aUFh+rodihSo5V90mq5TuaevguMq+1u+OQSYmOmJk2JqU
+         49hIzOVjeXRYk/QtASbnZ6Pf7kWu83V1UrrL6EQooJwfxkM95qbTBvZFfuNHVAEbVvyN
+         IPVey0yuwXxSkvm7YrMaeWAfO4KxnTqlHewg62mxtAE5k2uCDM6dxj+GMTg/MUdflP97
+         Invt/RQSdlsaJ7IV+icVE/FvbYsBeBJjnarv6lUVccdVFldA89Tvp7YMHFkYz6DjKZhs
+         pC8iYc3pno4Mx26keMSdaUJi8drgdpxIwdMKsSP3RCI/ftgEHi7gCEtlLCTim+G5ediw
+         xYbw==
+X-Gm-Message-State: AOAM531fWTaX2HbH0BqBWdxQKK1sFdjoAsWeatGcbkEvbuEVJQ/voDkl
+        Pt7I+WOJ80YPM2E5x2HjbRA=
+X-Google-Smtp-Source: ABdhPJx/0Dmc4LC7mLB//wjFSeMp2WMfJCq3UaAMSzV7yKFc9sP2yaW4576pAgucyVbatWtI1/sCow==
+X-Received: by 2002:a50:f613:: with SMTP id c19mr2718068edn.81.1602742484585;
+        Wed, 14 Oct 2020 23:14:44 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.171])
+        by smtp.googlemail.com with ESMTPSA id e7sm900601ejm.4.2020.10.14.23.14.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2020 22:27:23 -0700 (PDT)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] mips: ralink: mt7621: add zboot debug console
-Date:   Thu, 15 Oct 2020 13:26:21 +0800
-Message-Id: <20201015052631.138783-1-gch981213@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        Wed, 14 Oct 2020 23:14:43 -0700 (PDT)
+Date:   Thu, 15 Oct 2020 08:14:39 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Wei Xu <xuwei5@hisilicon.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>, linux-omap@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 20/20] arch: dts: Fix DWC USB3 DT nodes name
+Message-ID: <20201015061439.GA2926@kozik-lap>
+References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
+ <20201014101402.18271-21-Sergey.Semin@baikalelectronics.ru>
+ <CAJKOXPeErocR5-3xCDqBR3-k3w_2EQ_768d71n229cbzeo4TtQ@mail.gmail.com>
+ <20201014171640.bup52mgaz4jvhtsy@mobilestation>
+ <CAJKOXPcHi_=jea=0YrPNo4dh6k03+63Tc2Uo+sd0u8+XPdQjOw@mail.gmail.com>
+ <20201014235105.kj4rtwiidph7gyen@mobilestation>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201014235105.kj4rtwiidph7gyen@mobilestation>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-uartlite0 at 0x1e000c00 is a 16550 compatible uart controller. It's
-usually used for debug console and is already configured by u-boot.
-Add ZBOOT_UART16550 and related definitions in uart-16550.c for zboot
-debug output.
+On Thu, Oct 15, 2020 at 02:51:05AM +0300, Serge Semin wrote:
+ > >
+> > > So to speak thanks for suggesting it. I'll try it to validate the proposed
+> > > changes.
+> > >
+> > > Two questions:
+> > > 1) Any advise of a good inliner/command to compile all dtbs at once? Of course I
+> > > can get all the updated dtsi'es, then find out all the dts'es which include
+> > > them, then directly use dtc to compile the found dts'es... On the other hand I
+> > > can just compile all dts'es, then compare old and new ones. The diff of the
+> > > non-modified dtb'es will be just empty...
+> > 
+> 
+> > make dtbs
+> 
+> It's not that easy.) "make dtbs" will build dtbs only for enabled boards, which
+> first need to be enabled in the kernel config. So I'll need to have a config
+> with all the affected dts. The later is the same as if I just found all the
+> affected dts and built them one-by-one by directly calling dtc.
 
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
- arch/mips/boot/compressed/uart-16550.c | 6 ++++++
- arch/mips/ralink/Kconfig               | 1 +
- 2 files changed, 7 insertions(+)
+True. Sometimes allyesconfig for given arch might be helpful but not
+always (e.g. for ARM it does not select all of ARMv4 and ARMv5 boards).
+Most likely your approach is actually faster/more reliable.
 
-diff --git a/arch/mips/boot/compressed/uart-16550.c b/arch/mips/boot/compressed/uart-16550.c
-index aee8d7b8f091..7122df28967a 100644
---- a/arch/mips/boot/compressed/uart-16550.c
-+++ b/arch/mips/boot/compressed/uart-16550.c
-@@ -35,6 +35,12 @@
- #define IOTYPE unsigned int
- #endif
- 
-+#ifdef CONFIG_SOC_MT7621
-+#define UART0_BASE  0x1e000c00
-+#define PORT(offset) (CKSEG1ADDR(UART0_BASE) + (4 * offset))
-+#define IOTYPE unsigned int
-+#endif
-+
- #ifndef IOTYPE
- #define IOTYPE char
- #endif
-diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-index c10d8b233ab1..4c3c6ef330e3 100644
---- a/arch/mips/ralink/Kconfig
-+++ b/arch/mips/ralink/Kconfig
-@@ -52,6 +52,7 @@ choice
- 		select SYS_SUPPORTS_SMP
- 		select SYS_SUPPORTS_MIPS_CPS
- 		select SYS_SUPPORTS_HIGHMEM
-+		select SYS_SUPPORTS_ZBOOT_UART16550
- 		select MIPS_GIC
- 		select COMMON_CLK
- 		select CLKSRC_MIPS_GIC
--- 
-2.26.2
+> 
+> > touch your dts or git stash pop
+> > make dtbs
+> > compare
+> > diff for all unchanged will be simply empty, so easy to spot
+> > 
+> > > 2) What crosc64 is?
+> > 
+> > Ah, just an alias for cross compiling + ccache + kbuild out. I just
+> > copied you my helpers, so you need to tweak them.
+> > 
+> > >
+> > > >
+> > > > 2. Split it per arm architectures (and proper subject prefix - not
+> > > > "arch") and subarchitectures so maintainers can pick it up.
+> > >
+> > > Why? The changes are simple and can be formatted as a single patch. I've seen
+> > > tons of patches submitted like that, accepted and then merged. What you suggest
+> > > is just much more work, which I don't see quite required.
+> > 
+> 
+> > DTS changes go separate between arm64 and arm. There is nothing
+> > unusual here - all changes are submitted like this.
+> > Second topic is to split by subarchitectures which is necessary if you
+> > want it to be picked up by maintainers. It also makes it easier to
+> > review.
+> 
+> The current patches are easy enough for review. The last three patches of the
+> series is a collection of the one-type changes concerning the same type of
+> nodes. So reviewing them won't cause any difficulty. But I assume that's not
+> the main point in this discussion.
+> 
+> > Sure, without split ber subarchitectures this could be picked
+> > up by SoC folks but you did not even CC them. So if you do not want to
+> > split it per subarchitectures for maintainers and you do not CC SoC,
+> > then how do you believe this should be picked up? Out of the regular
+> > patch submission way? That's not how the changes are handled.
+> 
+> AFAIU there are another ways of merging comprehensive patches. If they get to collect
+> all the Acked-by tags, they could be merged in, for instance, through Greg' or Rob'
+> (for dts) repos, if of course they get to agree with doing that. Am I wrong?
+> 
+> My hope was to ask Rob or Greg to get the patches merged in when they get
+> to collect all the ackes, since I thought it was an option in such cases. So if
+> they refuse to do so I'll have no choice but to split the series up into a
+> smaller patches as you say.
+
+This is neither Rob's nor Greg's patch to pick up, but ARM SoC (which was
+not CCed here). And most likely they won't pick it up because judging by
+contents it is obvious it should go via ARM SoC.
+
+Sure, if there are dependencies between some patches they can go with
+acks through unrelated trees, but this not the usual way. This is an
+exception in the process to solve particular dependency problem.  It has
+drawbacks - increases the chances of annoying conflicts.
+
+The case here does not fall into this criteria - there is no dependency
+of this patch on the others  Therefore there is no reason to use the
+unusual/exceptional way of handling patches.  There is no reason why
+this shouldn't go via either specific ARM subarchitecture maintainers or
+via ARM SoC.
+
+> > > > 3. The subject title could be more accurate - there is no fix here
+> > > > because there was no errors in the first place. Requirement of DWC
+> > > > node names comes recently, so it is more alignment with dtschema.
+> > > > Otherwise automatic-pickup-stable-bot might want to pick up... and it
+> > > > should not go to stable.
+> > >
+> > > Actually it is a fix, because the USB DT nodes should have been named with "usb"
+> > > prefix in the first place. Legacy DWC USB3 bindings didn't define the nodes
+> > > naming, but implied to be "usb"-prefixed by the USB HCD schema. The Qualcomm
+> > > DWC3 schema should have defined the sub-nodes as "dwc3@"-prefixed, which was
+> > > wrong in the first place.
+> > 
+> 
+> > Not following the naming convention of DT spec which was loosely
+> > enforced is not an error which should be "fixed". Simply wrong title.
+> > This is an alignment with dtschema or correcting naming convention.
+> > Not fixing errors.
+> 
+> From your perspective it wasn't an error, from mine and most likely Rob' it
+> was.) Anyway as I said I don't care that much about preserving the subject
+> wording, so what about the next one:
+> <arch>: <subarch>: Harmonize DWC USB3 nodes name with DT schema
+> ?
+
+Looks good.
+
+Best regards,
+Krzysztof
 
