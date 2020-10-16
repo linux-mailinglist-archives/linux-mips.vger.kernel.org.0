@@ -2,55 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC118290CD7
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Oct 2020 22:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57030290CD9
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Oct 2020 22:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408082AbgJPUqh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Oct 2020 16:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        id S2408884AbgJPUrP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Oct 2020 16:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408077AbgJPUqh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Oct 2020 16:46:37 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEB3C061755;
-        Fri, 16 Oct 2020 13:46:36 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id md26so5048299ejb.10;
-        Fri, 16 Oct 2020 13:46:36 -0700 (PDT)
+        with ESMTP id S2408853AbgJPUrP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Oct 2020 16:47:15 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE22C061755;
+        Fri, 16 Oct 2020 13:47:14 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id x1so3866548eds.1;
+        Fri, 16 Oct 2020 13:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mAY0QDFqvIDjx5HUOQ+MdvNYA3kylWMqxJWjR23AFzk=;
-        b=Pge7XeimtOGQPWwobIeFhAVFY6hovQZpX0ZLcKzZ8AVgQQQ672h2NV6G4tVk7cpmI+
-         1+gpE/GaiJ6rOXia2sUQl2tkgPYRwpujI/1jI9yUuZbMHNhhdIPSSFFZisDCvdGyMNCm
-         Bv7XKMjurquBEjLiG0g7MIjYLAxlPxapoizFVEWiVkAHI83UW9jV/Zr0Oj+Y0jv0AGkL
-         cttkNhvMmB1Ql9iOu8/GJqu+JOcP+inoZKVjC8g7gRUssTThoHFHguWhzOQMKNXZP0Bi
-         /t44sdZ14d2mGGgRgIH93pq2zHZDD0h2Gi9RGZg69aSc7fX52eFBBVlYAcrwgabfDNox
-         6p+A==
+        bh=cM0Y06ICfSsoQ7UyBgP3+N66oWYmNuuTL9tZcHXPGCQ=;
+        b=YX9YE4prYIppUA6bWnjFZ1SlFrt/2+Clwt/Y2HOaFsDQzC62RsyOpLMDHdZRq05zfT
+         oI/clGG8Wwp2uI3zODlg24vIR8B/Htq8McDYf1W7QK3oGDMpWznzASoFSXWHrH01hjDt
+         9XeAgl969QeMhMjdXEfAEqQaPDHxl/FTduIQvEeC4cnXu5e1kiWb/4hD9M41+uVV4cfe
+         5H3xhmf8eHN0rg93ykx/fi1xUJpSXfnawqwK+EblahRFKhuHpDMu1dcksPXMovgNM1DQ
+         fYO6fnu/GvwZsfRs2OdOMn3qipwnLIl6sZsuRxGMwuzH17TOHn5w7AdnOe24CHKjHgoF
+         ZQdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mAY0QDFqvIDjx5HUOQ+MdvNYA3kylWMqxJWjR23AFzk=;
-        b=po1m8uwegap4OUymmHUBI9SwKOHwckXU2OC+oiIfQhE+ThvXWPpo5k4oN7rLNr72Zt
-         d99Bn9ezles6r2hqXk5bc610CUl5TA7TVO5Pz9NGo3Pg8wu51mlZTbsj4WD8St9qR6Be
-         h3U1sav7E7VSqxNAn+NE0nU98gO3SKATKmFFzbZuVxy+ZiiDSK6DnrWggX1G5keX2Oay
-         zdU5Sj2rYvz2F+hca8SvlOAcOVf5TU7zygVi7aSnWMBTXqHXCNKiXV/30AbaN+OLcTpT
-         /YQJX6LcgiRhDzhgfoaBcKcV/04RKBRkKgtLlz/+QTDHuwgEvJ0wp/h7jqUOHZ9uhbW4
-         YHSA==
-X-Gm-Message-State: AOAM530Tt76x/TK4Bs8Ke5DCe6WyeIN8qMozxEQmk0rN5vpF6whMs7Fx
-        FNCrF2FBXh+k3n2UCGvBvjuh361MEtqB/VT9zsYy7DZgW9c=
-X-Google-Smtp-Source: ABdhPJzZH9WV53owno/ZkjiRehR4EVV/83Ve6RR9ZDeTZs5Z1Fi5I5Jf9JSdZ0IMRjggvROTLl8Mkpi59PwKfkncEXs=
-X-Received: by 2002:a17:906:cc0d:: with SMTP id ml13mr5630435ejb.2.1602881195652;
- Fri, 16 Oct 2020 13:46:35 -0700 (PDT)
+        bh=cM0Y06ICfSsoQ7UyBgP3+N66oWYmNuuTL9tZcHXPGCQ=;
+        b=Usek5IJSl/9VpDgL3uyj82F8sLt3CFc8+UAtLcsVgA0vIVPdhq15S9cLTPH7hux+Cq
+         9vtRFAmzkqBJj06d7Gewpq6r15cOQs8jKOUqV7zV+dG3iUTcv1RCdfJ06iuHwc25K62B
+         6bKTTAHlpeK4Fbt9BrDQP+cyca5+MDfpWvJWzBsnPGUTgZdVLvPyat8wn/fZ6VP4BR26
+         Rn3BG4Ke6L8CB5vQqVca5/y1pVaQSku5wGEHCJO4bUoipDHTkswY99t427RYydy8Tr16
+         uOAuS0DIW3lMG7Fo3KjoB4Z86wdgElif3ysL22Zg0g1YK01iK9ROTOTxiOU+GNn/SHvG
+         2uLg==
+X-Gm-Message-State: AOAM532P/KEC/T+Qma+EsbKLQX3owRSsTBGQkMK6KLcRPC4GoSsmuYW6
+        JP7NipmJPBr0CvCZ7KsBHWCwLSV+E0kzkDHfZdY=
+X-Google-Smtp-Source: ABdhPJyY7U/2059vdl/trPuz5QmTks+M1tCJlzB3pZYDFJT8/0Yi++X7QL+PvBI+5qrHrP47VENdS6ZsuDkZG+Z/RX4=
+X-Received: by 2002:aa7:d690:: with SMTP id d16mr6142313edr.301.1602881233657;
+ Fri, 16 Oct 2020 13:47:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru> <20201014101402.18271-15-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20201014101402.18271-15-Sergey.Semin@baikalelectronics.ru>
+References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru> <20201014101402.18271-16-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201014101402.18271-16-Sergey.Semin@baikalelectronics.ru>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 16 Oct 2020 22:46:24 +0200
-Message-ID: <CAFBinCDYu+C62P37QjY75xG8iXa+MwZEL-agNhoOsaXQ0OQpgQ@mail.gmail.com>
-Subject: Re: [PATCH 14/20] dt-bindings: usb: meson-g12a-usb: Fix FL-adj
- property value
+Date:   Fri, 16 Oct 2020 22:47:02 +0200
+Message-ID: <CAFBinCCRobE1kQhUrh3oorQTKcQZwYEJ_MaHRtr=f=sYFCoD8g@mail.gmail.com>
+Subject: Re: [PATCH 15/20] dt-bindings: usb: meson-g12a-usb: Validate
+ DWC2/DWC3 sub-nodes
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
@@ -81,13 +81,11 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On Wed, Oct 14, 2020 at 12:14 PM Serge Semin
 <Sergey.Semin@baikalelectronics.ru> wrote:
 >
-> An empty snps,quirk-frame-length-adjustment won't cause any change
-> performed by the driver. Moreover the DT schema validation will fail,
-> since it expects the property being assigned with some value. So set
-> fix the example by setting a valid FL-adj value in accordance with
-> Neil Armstrong comment.
+> Amlogic G12A USB DT sub-nodes are supposed to be compatible with the
+> generic DWC USB2 and USB3 devices. Since now we've got DT schemas for
+> both of the later IP cores let's make sure that the Amlogic G12A USB
+> DT nodes are fully evaluated including the DWC sub-nodes.
 >
-> Link: https://lore.kernel.org/linux-usb/20201010224121.12672-16-Sergey.Semin@baikalelectronics.ru/
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+> Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
