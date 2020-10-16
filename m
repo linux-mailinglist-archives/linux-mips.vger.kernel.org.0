@@ -2,93 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A08E4290BCE
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Oct 2020 20:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA69290BD3
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Oct 2020 20:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404046AbgJPSxn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Oct 2020 14:53:43 -0400
-Received: from mail-oo1-f65.google.com ([209.85.161.65]:35047 "EHLO
-        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404031AbgJPSxn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Oct 2020 14:53:43 -0400
-Received: by mail-oo1-f65.google.com with SMTP id f2so865089ooj.2;
-        Fri, 16 Oct 2020 11:53:42 -0700 (PDT)
+        id S2404075AbgJPSyE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Oct 2020 14:54:04 -0400
+Received: from mail-oo1-f68.google.com ([209.85.161.68]:37418 "EHLO
+        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404070AbgJPSyE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Oct 2020 14:54:04 -0400
+Received: by mail-oo1-f68.google.com with SMTP id f19so860755oot.4;
+        Fri, 16 Oct 2020 11:54:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=/BLMOeuNPLg/1+rmux5PnQpwOXbVITQef6gQqf/xRV4=;
-        b=r0iPlj+VgkWzyANF8V4WjDIIEQ9E/r2wKjGV5W69sZZpVfVI9GagmexvAPte4nD9W6
-         bCe4KBKcEaupY21yuGFfgZPmsRReQKHVlRxG/ytUDG0o+LoWfMG+O/1S+bNi7fNWrhBb
-         YOa+rJEY2dzvHh1EQSEI5PrQmyS6fVNfVzYPP50ju8h6T9Jx5R5KJ/IguZKEJoGe3Pdy
-         RRm0sZtS9+KnrnrR6kscEPvOPlKgKPXySMw5PiLLxj7bkXPGz03jX9mcmx5IlsCQVB6R
-         XliQA8xoLIZPpvuMGvPBmROGKNG9u7FhfyzOtZZURcmI4eKOotTBBmIvkHL8R5lqSmWL
-         Lh+w==
-X-Gm-Message-State: AOAM5302JH6V2kihjQbTOiCQrEqUGTGWlQSRQezK6FuZHpeD0RambkC7
-        fF8dAuaPc1n1HT7bukTHug==
-X-Google-Smtp-Source: ABdhPJxtoraofuhC22sxyo8Q42rEuTESh7JvVkC+ACDOtuWNWIg2F8VJBGdmwUM7JkujSl0LOdhDaw==
-X-Received: by 2002:a4a:e93a:: with SMTP id a26mr3885560ooe.58.1602874422546;
-        Fri, 16 Oct 2020 11:53:42 -0700 (PDT)
+        bh=2SJo91FUryiudrvp7hFXXd3itA6M64t3t+PTG337Wos=;
+        b=UwYR9/eipCpCryDb+GPd0Wl0bMmMHodPIrNredQu7j1COmV32PWRdvcBMUni+JKiYn
+         DrwFkPiJU+A5qGaSGWaY0MPqWYQ+TQaF+l+6TDzCZGLZXwLzdH7zVa9jm95GIhTv+rUe
+         CaEwSxEkTERX9C/r21jldKK/UA9fcH9mxslz4+Lu4HICdizZ8FGl2rnhIfesknH3r/YT
+         HllL4shWXD79x0aelSsQdQlHi9OOXGwd8fTVRvxHjVeTYwId4Ksgy6OFSqvJ1sHj1FCh
+         iVe1Iqxupcx6XQi/VwMt9wxOXnBvDCj+IwLKw7Qm9tu/k1M4W/X5s97jmpmQ1TeTr6q3
+         GNiA==
+X-Gm-Message-State: AOAM530d1AbdfEVQbG4CYMz3D/qFK4O1xh2y4UYfMUDTCI5Njooezb+o
+        8s3qcUlukOSZCw0W/lA6OA==
+X-Google-Smtp-Source: ABdhPJxqrZ90dBQRwNY763mNG9iHYX8vq1NLO807gpJ9dzO8ZYI7ue+E+B9W403xLk4jO317PbFvMA==
+X-Received: by 2002:a4a:be14:: with SMTP id l20mr3781334oop.27.1602874443081;
+        Fri, 16 Oct 2020 11:54:03 -0700 (PDT)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 33sm1194275otr.25.2020.10.16.11.53.41
+        by smtp.gmail.com with ESMTPSA id k6sm1204239otp.33.2020.10.16.11.54.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 11:53:41 -0700 (PDT)
-Received: (nullmailer pid 1738434 invoked by uid 1000);
-        Fri, 16 Oct 2020 18:53:40 -0000
-Date:   Fri, 16 Oct 2020 13:53:40 -0500
+        Fri, 16 Oct 2020 11:54:02 -0700 (PDT)
+Received: (nullmailer pid 1739020 invoked by uid 1000);
+        Fri, 16 Oct 2020 18:54:01 -0000
+Date:   Fri, 16 Oct 2020 13:54:01 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-usb@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-mips@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kevin Hilman <khilman@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/20] dt-bindings: usb: dwc3: Add synopsys,dwc3
- compatible string
-Message-ID: <20201016185340.GA1734346@bogus>
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, Roger Quadros <rogerq@ti.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 12/20] dt-bindings: usb: dwc3: Add Tx De-emphasis
+ restrictions
+Message-ID: <20201016185401.GA1738966@bogus>
 References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
- <20201014101402.18271-12-Sergey.Semin@baikalelectronics.ru>
- <20201014201818.GA6926@kozik-lap>
- <20201014213554.turskjyuntk35syj@mobilestation>
+ <20201014101402.18271-13-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201014213554.turskjyuntk35syj@mobilestation>
+In-Reply-To: <20201014101402.18271-13-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 12:35:54AM +0300, Serge Semin wrote:
-> On Wed, Oct 14, 2020 at 10:18:18PM +0200, Krzysztof Kozlowski wrote:
-> > On Wed, Oct 14, 2020 at 01:13:53PM +0300, Serge Semin wrote:
-> > > The DWC USB3 driver and some DTS files like Exynos 5250, Keystone k2e, etc
-> > > expects the DWC USB3 DT node to have the compatible string with the
-> > > "synopsys" vendor prefix. Let's add the corresponding compatible string to
-> > > the controller DT schema, but mark it as deprecated seeing the Synopsys,
-> > > Inc. is presented with just "snps" vendor prefix.
-> > 
+On Wed, 14 Oct 2020 13:13:54 +0300, Serge Semin wrote:
+> In accordance with the driver comments the PIPE3 de-emphasis can be tuned
+> to be either -6dB, -2.5dB or disabled. Let's add the de-emphasis
+> property restriction so the DT schema would make sure the controller DT
+> node is equipped with correct value.
 > 
-> > Instead of adding deprecated schema just correct the DTSes to use snps.
-> > The "synopsys" is not even in vendor prefixes.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> Yeah, it's not, but the driver and some dts'es use it this way. I am not sure
-> that the solution suggested by you is much better than mine. So let's hear the
-> Rob'es opinion out in this matter. @Rob, what do you think?
+> ---
+> 
+> Changelog v2:
+> - Grammar fix: "s/tunned/tuned"
+> - Grammar fix: remove redundant "or" conjunction.
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-I think we should fix the dts files given there's only 5.
-
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>
