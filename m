@@ -2,108 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 008EB293FBE
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Oct 2020 17:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78DC8293FED
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Oct 2020 17:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436686AbgJTPk4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Oct 2020 11:40:56 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42458 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436684AbgJTPk4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Oct 2020 11:40:56 -0400
-Received: by mail-ot1-f65.google.com with SMTP id h62so2092368oth.9;
-        Tue, 20 Oct 2020 08:40:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bPJ41BbXrVBpKagW0AFLuDG820FKrJowO4JL4r2A7Mg=;
-        b=m4MKVE45v8ptwLdXIBne6C7bj0k194iIGvR0uaWxLQdrmz2sXl73ncM8gnWD8D3T/7
-         Xipn/2TG3I+T7sRuOjOBLGhfXgYs4zJVxm/z9qmtcQ24QtsFAUeuq7y48tX/EzHXN4j9
-         1/AEtUth7a3owBen/kGHFWmNH/cxKfavmT/h6zo3KpnCAcpGtP3GQBBfIhPmNDAC5Aty
-         dzFCbHUkkNbLrEtQpr1raAoDRM9g5azcWIozLoV2LIUCCFiFrBqFAjGr48Aq95cqU1Kc
-         sTpew5Qv06Bmd3xXeSccNcTiQ+t8zrIejJmixgtdqPxurMZLkeZTp08p1+XIRX65IfU3
-         3GLA==
-X-Gm-Message-State: AOAM532gYW5KO+cAiSb6r8Jz+3fAhMTYGgeO7s3x5HWKYz/1Dggl+9Dx
-        UidkcgaHJAU+O1hpQMvGPA==
-X-Google-Smtp-Source: ABdhPJxaxCIP6Kd2pnNLtDOo2/dAgOtLCptI3qgvO+i9WOyGybYr0U/8yYzB9sCXkm1PHVRrZpc3zw==
-X-Received: by 2002:a9d:6:: with SMTP id 6mr1983535ota.235.1603208454213;
-        Tue, 20 Oct 2020 08:40:54 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id i14sm515801ota.59.2020.10.20.08.40.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2020 08:40:53 -0700 (PDT)
-Received: (nullmailer pid 889399 invoked by uid 1000);
-        Tue, 20 Oct 2020 15:40:52 -0000
-Date:   Tue, 20 Oct 2020 10:40:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-mips@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Roger Quadros <rogerq@ti.com>, devicetree@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH v3 09/16] dt-bindings: usb: Convert DWC USB3 bindings to
- DT schema
-Message-ID: <20201020154052.GA889228@bogus>
-References: <20201020112101.19077-1-Sergey.Semin@baikalelectronics.ru>
- <20201020112101.19077-10-Sergey.Semin@baikalelectronics.ru>
+        id S2436881AbgJTPvm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Oct 2020 11:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436880AbgJTPvm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Oct 2020 11:51:42 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2670AC061755;
+        Tue, 20 Oct 2020 08:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=xVKeiMQ1XLylJ8rSbId/RCAy2iAQfbZGLGK+XA6rX94=; b=UtVJOPbFEz+23s9lduIazooL87
+        wyK5qqwT/ZkhpfUlFSF2AenPee7/3CibKkGNLxmaIDAvl9lFhYiKR/r9hulwNnAQyYEHbTO12ApcL
+        c2O4G2GaQtKYzJV6PSIJPUlzIeH+Agp8lsakx54ZRrVwopiPUi1oE8WpSRpATr1FekEHFVItUoRXQ
+        2i4DZyaw/Wq43wBLN3/e9eANpJZ0V9P+cnxiapGgazXjb4cUXQS3a4bF418vEArFtI5hs5xl0QbNg
+        h4JhiENXQjY7JIdWdcEK33KuDWKrn+mgr6btmjMs9YNVZLWGCK8FNuZ5YwByRjFfGU3SEMwPUBLLM
+        ln7AjsxQ==;
+Received: from [2601:1c0:6280:3f0::507c]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kUtvF-0004kW-AN; Tue, 20 Oct 2020 15:51:37 +0000
+Subject: Re: [PATCH] PCI: export pci_find_host_bridge() to fix MFD build error
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>
+References: <20201019061453.32295-1-rdunlap@infradead.org>
+ <20201020080219.GA21011@infradead.org>
+ <45b16450-320b-86fd-603e-4fb311c6f4bd@infradead.org>
+Message-ID: <84b55881-21ba-aa5b-7b56-7d8e411771f9@infradead.org>
+Date:   Tue, 20 Oct 2020 08:51:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201020112101.19077-10-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <45b16450-320b-86fd-603e-4fb311c6f4bd@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 20 Oct 2020 14:20:54 +0300, Serge Semin wrote:
-> DWC USB3 DT node is supposed to be compliant with the Generic xHCI
-> Controller schema, but with additional vendor-specific properties, the
-> controller-specific reference clocks and PHYs. So let's convert the
-> currently available legacy text-based DWC USB3 bindings to the DT schema
-> and make sure the DWC USB3 nodes are also validated against the
-> usb-xhci.yaml schema.
+On 10/20/20 7:06 AM, Randy Dunlap wrote:
+> On 10/20/20 1:02 AM, Christoph Hellwig wrote:
+>> On Sun, Oct 18, 2020 at 11:14:53PM -0700, Randy Dunlap wrote:
+>>> Fix a build error in drivers/mfd/ioc.o by exporting
+>>> pci_find_host_bridge().
+>>>
+>>> ERROR: modpost: "pci_find_host_bridge" [drivers/mfd/ioc3.ko] undefined!
+>>
+>> I think the mfd code should be fixed to not depend on such an internal
+>> symbol instead.
+>>
 > 
-> Note we have to discard the nodename restriction of being prefixed with
-> "dwc3@" string, since in accordance with the usb-hcd.yaml schema USB nodes
-> are supposed to be named as "^usb(@.*)".
+> Thanks for commenting. and I am not surprised.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v2:
-> - Discard '|' from the descriptions, since we don't need to preserve
->   the text formatting in any of them.
-> - Drop quotes from around the string constants.
-> - Fix the "clock-names" prop description to be referring the enumerated
->   clock-names instead of the ones from the Databook.
-> 
-> Changelog v3:
-> - Apply usb-xhci.yaml# schema only if the controller is supposed to work
->   as either host or otg.
-> ---
->  .../devicetree/bindings/usb/dwc3.txt          | 125 --------
->  .../devicetree/bindings/usb/snps,dwc3.yaml    | 302 ++++++++++++++++++
->  2 files changed, 302 insertions(+), 125 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> 
+> Adding Cc: for Thomas and Lee.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+BTW, if someone wants to use the MFD ioc3 driver now,
+without any source code patches, they can just build it in
+(SGI_MFD_IOC3=y) instead of building it as a loadable module.
+
+It builds successfully and can use pci_find_host_bridge().
+pci_find_host_bridge() just isn't exported for loadable modules.
+
+So this could be useful (PCI=y):
+
+config SGI_MFD_IOC3
+	tristate "SGI IOC3 core driver"
+	depends on PCI=y && MIPS && 64BIT
+	select MFD_CORE
+
+-- 
+~Randy
+
