@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6AC2939FA
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Oct 2020 13:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014B72939E7
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Oct 2020 13:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406145AbgJTLWr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Oct 2020 07:22:47 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:51286 "EHLO
+        id S2393563AbgJTLV2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Oct 2020 07:21:28 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:51318 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392667AbgJTLVZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Oct 2020 07:21:25 -0400
+        with ESMTP id S2392686AbgJTLV0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Oct 2020 07:21:26 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6B198803073F;
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id A99A58030867;
         Tue, 20 Oct 2020 11:21:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id nLjgCbHIG9FU; Tue, 20 Oct 2020 14:21:22 +0300 (MSK)
+        with ESMTP id S-ECj01RbAp1; Tue, 20 Oct 2020 14:21:22 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
@@ -42,9 +42,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 03/16] dt-bindings: usb: usb-hcd: Add "ulpi/serial/hsic" PHY types
-Date:   Tue, 20 Oct 2020 14:20:48 +0300
-Message-ID: <20201020112101.19077-4-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v3 04/16] dt-bindings: usb: usb-hcd: Add "tpl-support" property
+Date:   Tue, 20 Oct 2020 14:20:49 +0300
+Message-ID: <20201020112101.19077-5-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20201020112101.19077-1-Sergey.Semin@baikalelectronics.ru>
 References: <20201020112101.19077-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -55,9 +55,9 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Aside from the UTMI+ there are also ULPI, Serial and HSIC PHY types
-that can be specified in the phy_type HCD property. Add them to the
-enumeration of the acceptable values.
+The host controller device might be designed to work for the particular
+products or applications. In that case its DT node is supposed to be
+equipped with the tpl-support property.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Reviewed-by: Rob Herring <robh@kernel.org>
@@ -65,34 +65,30 @@ Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 
 Changelog v2:
-- Grammar fix: "s/PHY types can be/PHY types that can be"
-- Drop quotes from around the string constants.
+- Grammar fix: "s/it'/its"
+- Discard '|' from the property description, since we don't need to preserve
+  the text formatting.
 ---
- Documentation/devicetree/bindings/usb/usb-hcd.yaml | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/usb/usb-hcd.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-index e01d8a54971e..a1a6cde7327d 100644
+index a1a6cde7327d..1f9b40fdea70 100644
 --- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
 +++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-@@ -46,11 +46,13 @@ properties:
-   phy_type:
-     description:
-       Tells USB controllers that we want to configure the core to support a
--      UTMI+ PHY with an 8- or 16-bit interface if UTMI+ is selected. In case
--      this isn't passed via DT, USB controllers should default to HW
--      capability.
-+      UTMI+ PHY with an 8- or 16-bit interface if UTMI+ is selected, UTMI+ low
-+      pin interface if ULPI is specified, Serial core/PHY interconnect if
-+      serial is specified and High-Speed Inter-Chip feature if HSIC is
-+      selected. In case this isn't passed via DT, USB controllers should
-+      default to HW capability.
-     $ref: /schemas/types.yaml#/definitions/string
--    enum: [utmi, utmi_wide]
-+    enum: [utmi, utmi_wide, ulpi, serial, hsic]
+@@ -101,6 +101,12 @@ properties:
+     enum: [host, peripheral]
+     default: peripheral
  
-   otg-rev:
-     description:
++  tpl-support:
++    description:
++      Indicates if the Targeted Peripheral List is supported for given
++      targeted hosts (non-PC hosts).
++    type: boolean
++
+ examples:
+   - |
+     usb {
 -- 
 2.27.0
 
