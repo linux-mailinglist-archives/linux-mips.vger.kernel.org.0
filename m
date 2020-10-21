@@ -2,209 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 916F82946CB
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Oct 2020 05:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3BD294874
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Oct 2020 08:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406557AbgJUDAw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Oct 2020 23:00:52 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:32014 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2406510AbgJUDAw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Oct 2020 23:00:52 -0400
-X-UUID: bfdcb39a477d4622842528e573a75b07-20201021
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=/iKtVrC60W8Ht9PLV1xcIWqrBacl7AEML6GCLswWhVg=;
-        b=O5gyu5GO8o7RPPeVjRzKjyxJ3d+NlctHg+//xdF2fPsU2+SMY3lJwMXeeYeG1JiWU4LrByHSq3i6C88irBwEETdQnHDoipxT2bV6It25I1Tckr1C7Oj3IPbOD7XtVT4KzEoRr6vxKOTCoUD1/XD+BWvi7yqbKhVHDHEQIT5Atoc=;
-X-UUID: bfdcb39a477d4622842528e573a75b07-20201021
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1349775153; Wed, 21 Oct 2020 11:00:41 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 21 Oct
- 2020 11:00:37 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 21 Oct 2020 11:00:36 +0800
-Message-ID: <1603249236.31607.9.camel@mhfsdcap03>
-Subject: Re: [PATCH v3 01/16] dt-bindings: usb: usb-hcd: Convert generic USB
- properties to DT schema
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Date:   Wed, 21 Oct 2020 11:00:36 +0800
-In-Reply-To: <20201020112101.19077-2-Sergey.Semin@baikalelectronics.ru>
-References: <20201020112101.19077-1-Sergey.Semin@baikalelectronics.ru>
-         <20201020112101.19077-2-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S2394978AbgJUGp1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Oct 2020 02:45:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38434 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394966AbgJUGp1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 21 Oct 2020 02:45:27 -0400
+Received: from coco.lan (ip5f5ad5a8.dynamic.kabel-deutschland.de [95.90.213.168])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8B8222075B;
+        Wed, 21 Oct 2020 06:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603262726;
+        bh=Wyw5We1ji398r6jEKsyOv1d233CBQmez+NyANTjly/w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=yIfZmq8tDOVAVBY0McNrJzGl5Swv/H/EpWWIBkmQCxhCiH+eVKyXKJITzMWcvTRlt
+         SmbXzzl3/YB4iZjdBJJj4+VO6ZOmzpbh1EfiQSS6N4VjPgEog4Pf0qQpWpKGc0NLA4
+         OJsKcl8Z86Ihu0x+0Kjf/jw7WNL/2KnPTV0d5f9Y=
+Date:   Wed, 21 Oct 2020 08:45:18 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Mackerras <paulus@samba.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-sh@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Subject: Re: [PATCH 2/2] dt: Remove booting-without-of.rst
+Message-ID: <20201021084518.1eab6481@coco.lan>
+In-Reply-To: <20201008142420.2083861-2-robh@kernel.org>
+References: <20201008142420.2083861-1-robh@kernel.org>
+        <20201008142420.2083861-2-robh@kernel.org>
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 3C612C300D75B9D840779466513725D6819DC7FF11D1B86F2C1C754B59618B642000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTEwLTIwIGF0IDE0OjIwICswMzAwLCBTZXJnZSBTZW1pbiB3cm90ZToNCj4g
-VGhlIGdlbmVyaWMgVVNCIEhDRCBwcm9wZXJ0aWVzIGhhdmUgYmVlbiBkZXNjcmliZWQgaW4gdGhl
-IGxlZ2FjeSBiaW5kaW5ncw0KPiB0ZXh0IGZpbGU6IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
-aW5kaW5ncy91c2IvZ2VuZXJpYy50eHQgLiBMZXQncw0KPiBjb252ZXJ0IGl0JyBjb250ZW50IGlu
-dG8gdGhlIFVTQiBIQ0QgRFQgc2NoZW1hIHByb3BlcnRpZXMgc28gYWxsIFVTQiBEVA0KICAgICAg
-ICAgIF4gaXRzPw0KPiBub2RlcyB3b3VsZCBiZSB2YWxpZGF0ZWQgdG8gaGF2ZSB0aGVtIHByb3Bl
-cmx5IHV0aWxpemVkLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogU2VyZ2UgU2VtaW4gPFNlcmdleS5T
-ZW1pbkBiYWlrYWxlbGVjdHJvbmljcy5ydT4NCj4gUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxy
-b2JoQGtlcm5lbC5vcmc+DQo+IA0KPiAtLS0NCj4gDQo+IENoYW5nZWxvZyB2MjoNCj4gLSBEaXNj
-YXJkICd8JyBpbiBhbGwgdGhlIG5ldyBwcm9wZXJ0aWVzLCBzaW5jZSB3ZSBkb24ndCBuZWVkIHRv
-IHByZXNlcnZlDQo+ICAgdGhlIHRleHQgZm9ybWF0dGluZy4NCj4gLSBDb252ZXJ0IGFiYnJldmlh
-dGVkIGZvcm0gb2YgdGhlICJtYXhpbXVtLXNwZWVkIiBlbnVtIHJlc3RyaWN0aW9uIGludG8NCj4g
-ICB0aGUgbXVsdGktbGluZWQgdmVyc2lvbiBvZiB0aGUgbGlzdC4NCj4gLSBEcm9wIHF1b3RlcyBm
-cm9tIGFyb3VuZCB0aGUgc3RyaW5nIGNvbnN0YW50cy4NCj4gLS0tDQo+ICAuLi4vZGV2aWNldHJl
-ZS9iaW5kaW5ncy91c2IvZ2VuZXJpYy50eHQgICAgICAgfCA1NyAtLS0tLS0tLS0tLS0NCj4gIC4u
-Li9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2ItaGNkLnlhbWwgICAgICB8IDg4ICsrKysrKysr
-KysrKysrKysrKysNCkRvIHdlIG5lZWQgY2hhbmdlIHRoZSBmaWxlIG5hbWUgb3IgbW9kaWZ5IGl0
-J3MgdGl0bGU/DQp0aGUgdGl0bGUgaXMgIkdlbmVyaWMgVVNCIEhvc3QgQ29udHJvbGxlciBEZXZp
-Y2UgVHJlZSBCaW5kaW5ncyIsIGJ1dA0Kc29tZSBnZW5lcmljIHByb3BlcnRpZXMsIHN1Y2ggYXMs
-IGRyX21vZGUsIHVzYi1yb2xlLXN3aXRjaCwgb3RnIHJlbGF0ZWQNCm9uZXMsIGFyZSB1c3VhbGx5
-IHVzZWQgYnkgRFJEIGNvbnRyb2xsZXIsIHRoaXMgbWF5IGNhdXNlIHNvbWUgY29uZnVzaW9uLg0K
-DQo+ICAyIGZpbGVzIGNoYW5nZWQsIDg4IGluc2VydGlvbnMoKyksIDU3IGRlbGV0aW9ucygtKQ0K
-PiAgZGVsZXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91
-c2IvZ2VuZXJpYy50eHQNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRy
-ZWUvYmluZGluZ3MvdXNiL2dlbmVyaWMudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL3VzYi9nZW5lcmljLnR4dA0KPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5k
-ZXggYmE0NzJlN2FlZmM5Li4wMDAwMDAwMDAwMDANCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL3VzYi9nZW5lcmljLnR4dA0KPiArKysgL2Rldi9udWxsDQo+IEBAIC0x
-LDU3ICswLDAgQEANCj4gLUdlbmVyaWMgVVNCIFByb3BlcnRpZXMNCj4gLQ0KPiAtT3B0aW9uYWwg
-cHJvcGVydGllczoNCj4gLSAtIG1heGltdW0tc3BlZWQ6IHRlbGxzIFVTQiBjb250cm9sbGVycyB3
-ZSB3YW50IHRvIHdvcmsgdXAgdG8gYSBjZXJ0YWluDQo+IC0JCQlzcGVlZC4gVmFsaWQgYXJndW1l
-bnRzIGFyZSAic3VwZXItc3BlZWQtcGx1cyIsDQo+IC0JCQkic3VwZXItc3BlZWQiLCAiaGlnaC1z
-cGVlZCIsICJmdWxsLXNwZWVkIiBhbmQNCj4gLQkJCSJsb3ctc3BlZWQiLiBJbiBjYXNlIHRoaXMg
-aXNuJ3QgcGFzc2VkIHZpYSBEVCwgVVNCDQo+IC0JCQljb250cm9sbGVycyBzaG91bGQgZGVmYXVs
-dCB0byB0aGVpciBtYXhpbXVtIEhXDQo+IC0JCQljYXBhYmlsaXR5Lg0KPiAtIC0gZHJfbW9kZTog
-dGVsbHMgRHVhbC1Sb2xlIFVTQiBjb250cm9sbGVycyB0aGF0IHdlIHdhbnQgdG8gd29yayBvbiBh
-DQo+IC0JCQlwYXJ0aWN1bGFyIG1vZGUuIFZhbGlkIGFyZ3VtZW50cyBhcmUgImhvc3QiLA0KPiAt
-CQkJInBlcmlwaGVyYWwiIGFuZCAib3RnIi4gSW4gY2FzZSB0aGlzIGF0dHJpYnV0ZSBpc24ndA0K
-PiAtCQkJcGFzc2VkIHZpYSBEVCwgVVNCIERSRCBjb250cm9sbGVycyBzaG91bGQgZGVmYXVsdCB0
-bw0KPiAtCQkJT1RHLg0KPiAtIC0gcGh5X3R5cGU6IHRlbGxzIFVTQiBjb250cm9sbGVycyB0aGF0
-IHdlIHdhbnQgdG8gY29uZmlndXJlIHRoZSBjb3JlIHRvIHN1cHBvcnQNCj4gLQkJCWEgVVRNSSsg
-UEhZIHdpdGggYW4gOC0gb3IgMTYtYml0IGludGVyZmFjZSBpZiBVVE1JKyBpcw0KPiAtCQkJc2Vs
-ZWN0ZWQuIFZhbGlkIGFyZ3VtZW50cyBhcmUgInV0bWkiIGFuZCAidXRtaV93aWRlIi4NCj4gLQkJ
-CUluIGNhc2UgdGhpcyBpc24ndCBwYXNzZWQgdmlhIERULCBVU0IgY29udHJvbGxlcnMgc2hvdWxk
-DQo+IC0JCQlkZWZhdWx0IHRvIEhXIGNhcGFiaWxpdHkuDQo+IC0gLSBvdGctcmV2OiB0ZWxscyB1
-c2IgZHJpdmVyIHRoZSByZWxlYXNlIG51bWJlciBvZiB0aGUgT1RHIGFuZCBFSCBzdXBwbGVtZW50
-DQo+IC0JCQl3aXRoIHdoaWNoIHRoZSBkZXZpY2UgYW5kIGl0cyBkZXNjcmlwdG9ycyBhcmUgY29t
-cGxpYW50LA0KPiAtCQkJaW4gYmluYXJ5LWNvZGVkIGRlY2ltYWwgKGkuZS4gMi4wIGlzIDAyMDBI
-KS4gVGhpcw0KPiAtCQkJcHJvcGVydHkgaXMgdXNlZCBpZiBhbnkgcmVhbCBPVEcgZmVhdHVyZXMo
-SE5QL1NSUC9BRFApDQo+IC0JCQlpcyBlbmFibGVkLCBpZiBBRFAgaXMgcmVxdWlyZWQsIG90Zy1y
-ZXYgc2hvdWxkIGJlDQo+IC0JCQkweDAyMDAgb3IgYWJvdmUuDQo+IC0gLSBjb21wYW5pb246IHBo
-YW5kbGUgb2YgYSBjb21wYW5pb24NCj4gLSAtIGhucC1kaXNhYmxlOiB0ZWxscyBPVEcgY29udHJv
-bGxlcnMgd2Ugd2FudCB0byBkaXNhYmxlIE9URyBITlAsIG5vcm1hbGx5IEhOUA0KPiAtCQkJaXMg
-dGhlIGJhc2ljIGZ1bmN0aW9uIG9mIHJlYWwgT1RHIGV4Y2VwdCB5b3Ugd2FudCBpdA0KPiAtCQkJ
-dG8gYmUgYSBzcnAtY2FwYWJsZSBvbmx5IEIgZGV2aWNlLg0KPiAtIC0gc3JwLWRpc2FibGU6IHRl
-bGxzIE9URyBjb250cm9sbGVycyB3ZSB3YW50IHRvIGRpc2FibGUgT1RHIFNSUCwgU1JQIGlzDQo+
-IC0JCQlvcHRpb25hbCBmb3IgT1RHIGRldmljZS4NCj4gLSAtIGFkcC1kaXNhYmxlOiB0ZWxscyBP
-VEcgY29udHJvbGxlcnMgd2Ugd2FudCB0byBkaXNhYmxlIE9URyBBRFAsIEFEUCBpcw0KPiAtCQkJ
-b3B0aW9uYWwgZm9yIE9URyBkZXZpY2UuDQo+IC0gLSB1c2Itcm9sZS1zd2l0Y2g6IGJvb2xlYW4s
-IGluZGljYXRlcyB0aGF0IHRoZSBkZXZpY2UgaXMgY2FwYWJsZSBvZiBhc3NpZ25pbmcNCj4gLQkJ
-CXRoZSBVU0IgZGF0YSByb2xlIChVU0IgaG9zdCBvciBVU0IgZGV2aWNlKSBmb3IgYSBnaXZlbg0K
-PiAtCQkJVVNCIGNvbm5lY3Rvciwgc3VjaCBhcyBUeXBlLUMsIFR5cGUtQihtaWNybykuDQo+IC0J
-CQlzZWUgY29ubmVjdG9yL3VzYi1jb25uZWN0b3IueWFtbC4NCj4gLSAtIHJvbGUtc3dpdGNoLWRl
-ZmF1bHQtbW9kZTogaW5kaWNhdGluZyBpZiB1c2Itcm9sZS1zd2l0Y2ggaXMgZW5hYmxlZCwgdGhl
-DQo+IC0JCQlkZXZpY2UgZGVmYXVsdCBvcGVyYXRpb24gbW9kZSBvZiBjb250cm9sbGVyIHdoaWxl
-IHVzYg0KPiAtCQkJcm9sZSBpcyBVU0JfUk9MRV9OT05FLiBWYWxpZCBhcmd1bWVudHMgYXJlICJo
-b3N0IiBhbmQNCj4gLQkJCSJwZXJpcGhlcmFsIi4gRGVmYXVsdHMgdG8gInBlcmlwaGVyYWwiIGlm
-IG5vdA0KPiAtCQkJc3BlY2lmaWVkLg0KPiAtDQo+IC0NCj4gLVRoaXMgaXMgYW4gYXR0cmlidXRl
-IHRvIGEgVVNCIGNvbnRyb2xsZXIgc3VjaCBhczoNCj4gLQ0KPiAtZHdjM0A0YTAzMDAwMCB7DQo+
-IC0JY29tcGF0aWJsZSA9ICJzeW5vcHN5cyxkd2MzIjsNCj4gLQlyZWcgPSA8MHg0YTAzMDAwMCAw
-eGNmZmY+Ow0KPiAtCWludGVycnVwdHMgPSA8MCA5MiA0Pg0KPiAtCXVzYi1waHkgPSA8JnVzYjJf
-cGh5PiwgPCZ1c2IzLHBoeT47DQo+IC0JbWF4aW11bS1zcGVlZCA9ICJzdXBlci1zcGVlZCI7DQo+
-IC0JZHJfbW9kZSA9ICJvdGciOw0KPiAtCXBoeV90eXBlID0gInV0bWlfd2lkZSI7DQo+IC0Jb3Rn
-LXJldiA9IDwweDAyMDA+Ow0KPiAtCWFkcC1kaXNhYmxlOw0KPiAtfTsNCj4gZGlmZiAtLWdpdCBh
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1sIGIvRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2ItaGNkLnlhbWwNCj4gaW5kZXgg
-NzI2M2I3ZjJiNTEwLi5lZTdlYTIwNWM3MWQgMTAwNjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1sDQo+ICsrKyBiL0RvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1sDQo+IEBAIC0yMiw5ICsyMiw5
-NyBAQCBwcm9wZXJ0aWVzOg0KPiAgICAgIGRlc2NyaXB0aW9uOg0KPiAgICAgICAgTmFtZSBzcGVj
-aWZpZXIgZm9yIHRoZSBVU0IgUEhZDQo+ICANCj4gKyAgbWF4aW11bS1zcGVlZDoNCj4gKyAgIGRl
-c2NyaXB0aW9uOg0KPiArICAgICBUZWxscyBVU0IgY29udHJvbGxlcnMgd2Ugd2FudCB0byB3b3Jr
-IHVwIHRvIGEgY2VydGFpbiBzcGVlZC4gSW4gY2FzZSB0aGlzDQo+ICsgICAgIGlzbid0IHBhc3Nl
-ZCB2aWEgRFQsIFVTQiBjb250cm9sbGVycyBzaG91bGQgZGVmYXVsdCB0byB0aGVpciBtYXhpbXVt
-IEhXDQo+ICsgICAgIGNhcGFiaWxpdHkuDQo+ICsgICAkcmVmOiAvc2NoZW1hcy90eXBlcy55YW1s
-Iy9kZWZpbml0aW9ucy9zdHJpbmcNCj4gKyAgIGVudW06DQo+ICsgICAgIC0gbG93LXNwZWVkDQo+
-ICsgICAgIC0gZnVsbC1zcGVlZA0KPiArICAgICAtIGhpZ2gtc3BlZWQNCj4gKyAgICAgLSBzdXBl
-ci1zcGVlZA0KPiArICAgICAtIHN1cGVyLXNwZWVkLXBsdXMNCj4gKw0KPiArICBkcl9tb2RlOg0K
-PiArICAgIGRlc2NyaXB0aW9uOg0KPiArICAgICAgVGVsbHMgRHVhbC1Sb2xlIFVTQiBjb250cm9s
-bGVycyB0aGF0IHdlIHdhbnQgdG8gd29yayBvbiBhIHBhcnRpY3VsYXINCj4gKyAgICAgIG1vZGUu
-IEluIGNhc2UgdGhpcyBhdHRyaWJ1dGUgaXNuJ3QgcGFzc2VkIHZpYSBEVCwgVVNCIERSRCBjb250
-cm9sbGVycw0KPiArICAgICAgc2hvdWxkIGRlZmF1bHQgdG8gT1RHLg0KPiArICAgICRyZWY6IC9z
-Y2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3N0cmluZw0KPiArICAgIGVudW06IFtob3N0
-LCBwZXJpcGhlcmFsLCBvdGddDQo+ICsNCj4gKyAgcGh5X3R5cGU6DQo+ICsgICAgZGVzY3JpcHRp
-b246DQo+ICsgICAgICBUZWxscyBVU0IgY29udHJvbGxlcnMgdGhhdCB3ZSB3YW50IHRvIGNvbmZp
-Z3VyZSB0aGUgY29yZSB0byBzdXBwb3J0IGENCj4gKyAgICAgIFVUTUkrIFBIWSB3aXRoIGFuIDgt
-IG9yIDE2LWJpdCBpbnRlcmZhY2UgaWYgVVRNSSsgaXMgc2VsZWN0ZWQuIEluIGNhc2UNCj4gKyAg
-ICAgIHRoaXMgaXNuJ3QgcGFzc2VkIHZpYSBEVCwgVVNCIGNvbnRyb2xsZXJzIHNob3VsZCBkZWZh
-dWx0IHRvIEhXDQo+ICsgICAgICBjYXBhYmlsaXR5Lg0KPiArICAgICRyZWY6IC9zY2hlbWFzL3R5
-cGVzLnlhbWwjL2RlZmluaXRpb25zL3N0cmluZw0KPiArICAgIGVudW06IFt1dG1pLCB1dG1pX3dp
-ZGVdDQo+ICsNCj4gKyAgb3RnLXJldjoNCj4gKyAgICBkZXNjcmlwdGlvbjoNCj4gKyAgICAgIFRl
-bGxzIHVzYiBkcml2ZXIgdGhlIHJlbGVhc2UgbnVtYmVyIG9mIHRoZSBPVEcgYW5kIEVIIHN1cHBs
-ZW1lbnQgd2l0aA0KPiArICAgICAgd2hpY2ggdGhlIGRldmljZSBhbmQgaXRzIGRlc2NyaXB0b3Jz
-IGFyZSBjb21wbGlhbnQsIGluIGJpbmFyeS1jb2RlZA0KPiArICAgICAgZGVjaW1hbCAoaS5lLiAy
-LjAgaXMgMDIwMEgpLiBUaGlzIHByb3BlcnR5IGlzIHVzZWQgaWYgYW55IHJlYWwgT1RHDQo+ICsg
-ICAgICBmZWF0dXJlcyAoSE5QL1NSUC9BRFApIGlzIGVuYWJsZWQuIElmIEFEUCBpcyByZXF1aXJl
-ZCwgb3RnLXJldiBzaG91bGQgYmUNCj4gKyAgICAgIDB4MDIwMCBvciBhYm92ZS4NCj4gKyAgICAk
-cmVmOiAvc2NoZW1hcy90eXBlcy55YW1sIy9kZWZpbml0aW9ucy91aW50MzINCj4gKw0KPiArICBj
-b21wYW5pb246DQo+ICsgICAgZGVzY3JpcHRpb246IFBoYW5kbGUgb2YgYSBjb21wYW5pb24gZGV2
-aWNlDQo+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvcGhhbmRs
-ZQ0KPiArDQo+ICsgIGhucC1kaXNhYmxlOg0KPiArICAgIGRlc2NyaXB0aW9uOg0KPiArICAgICAg
-VGVsbHMgT1RHIGNvbnRyb2xsZXJzIHdlIHdhbnQgdG8gZGlzYWJsZSBPVEcgSE5QLiBOb3JtYWxs
-eSBITlAgaXMgdGhlDQo+ICsgICAgICBiYXNpYyBmdW5jdGlvbiBvZiByZWFsIE9URyBleGNlcHQg
-eW91IHdhbnQgaXQgdG8gYmUgYSBzcnAtY2FwYWJsZSBvbmx5IEINCj4gKyAgICAgIGRldmljZS4N
-Cj4gKyAgICB0eXBlOiBib29sZWFuDQo+ICsNCj4gKyAgc3JwLWRpc2FibGU6DQo+ICsgICAgZGVz
-Y3JpcHRpb246DQo+ICsgICAgICBUZWxscyBPVEcgY29udHJvbGxlcnMgd2Ugd2FudCB0byBkaXNh
-YmxlIE9URyBTUlAuIFNSUCBpcyBvcHRpb25hbCBmb3IgT1RHDQo+ICsgICAgICBkZXZpY2UuDQo+
-ICsgICAgdHlwZTogYm9vbGVhbg0KPiArDQo+ICsgIGFkcC1kaXNhYmxlOg0KPiArICAgIGRlc2Ny
-aXB0aW9uOg0KPiArICAgICAgVGVsbHMgT1RHIGNvbnRyb2xsZXJzIHdlIHdhbnQgdG8gZGlzYWJs
-ZSBPVEcgQURQLiBBRFAgaXMgb3B0aW9uYWwgZm9yIE9URw0KPiArICAgICAgZGV2aWNlLg0KPiAr
-ICAgIHR5cGU6IGJvb2xlYW4NCj4gKw0KPiArICB1c2Itcm9sZS1zd2l0Y2g6DQo+ICsgICAgZGVz
-Y3JpcHRpb246DQo+ICsgICAgICBJbmRpY2F0ZXMgdGhhdCB0aGUgZGV2aWNlIGlzIGNhcGFibGUg
-b2YgYXNzaWduaW5nIHRoZSBVU0IgZGF0YSByb2xlDQo+ICsgICAgICAoVVNCIGhvc3Qgb3IgVVNC
-IGRldmljZSkgZm9yIGEgZ2l2ZW4gVVNCIGNvbm5lY3Rvciwgc3VjaCBhcyBUeXBlLUMsDQo+ICsg
-ICAgICBUeXBlLUIobWljcm8pLiBTZWUgY29ubmVjdG9yL3VzYi1jb25uZWN0b3IueWFtbC4NCj4g
-Kw0KPiArICByb2xlLXN3aXRjaC1kZWZhdWx0LW1vZGU6DQo+ICsgICAgZGVzY3JpcHRpb246DQo+
-ICsgICAgICBJbmRpY2F0ZXMgaWYgdXNiLXJvbGUtc3dpdGNoIGlzIGVuYWJsZWQsIHRoZSBkZXZp
-Y2UgZGVmYXVsdCBvcGVyYXRpb24NCj4gKyAgICAgIG1vZGUgb2YgY29udHJvbGxlciB3aGlsZSB1
-c2Igcm9sZSBpcyBVU0JfUk9MRV9OT05FLg0KPiArICAgICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlh
-bWwjL2RlZmluaXRpb25zL3N0cmluZw0KPiArICAgIGVudW06IFtob3N0LCBwZXJpcGhlcmFsXQ0K
-PiArICAgIGRlZmF1bHQ6IHBlcmlwaGVyYWwNCj4gKw0KPiAgZXhhbXBsZXM6DQo+ICAgIC0gfA0K
-PiAgICAgIHVzYiB7DQo+ICAgICAgICAgIHBoeXMgPSA8JnVzYjJfcGh5MT4sIDwmdXNiM19waHkx
-PjsNCj4gICAgICAgICAgcGh5LW5hbWVzID0gInVzYiI7DQo+ICAgICAgfTsNCj4gKyAgLSB8DQo+
-ICsgICAgdXNiQDRhMDMwMDAwIHsNCj4gKyAgICAgICAgY29tcGF0aWJsZSA9ICJzbnBzLGR3YzMi
-Ow0KPiArICAgICAgICByZWcgPSA8MHg0YTAzMDAwMCAweGNmZmY+Ow0KPiArICAgICAgICBpbnRl
-cnJ1cHRzID0gPDAgOTIgND47DQo+ICsgICAgICAgIHVzYi1waHkgPSA8JnVzYjJfcGh5PiwgPCZ1
-c2IzX3BoeT47DQo+ICsgICAgICAgIG1heGltdW0tc3BlZWQgPSAic3VwZXItc3BlZWQiOw0KPiAr
-ICAgICAgICBkcl9tb2RlID0gIm90ZyI7DQo+ICsgICAgICAgIHBoeV90eXBlID0gInV0bWlfd2lk
-ZSI7DQo+ICsgICAgICAgIG90Zy1yZXYgPSA8MHgwMjAwPjsNCj4gKyAgICAgICAgYWRwLWRpc2Fi
-bGU7DQo+ICsgICAgfTsNCg0K
+Hi Rob,
 
+Em Thu,  8 Oct 2020 09:24:20 -0500
+Rob Herring <robh@kernel.org> escreveu:
+
+> booting-without-of.rstt is an ancient document that first outlined
+> Flattened DeviceTree on PowerPC initially. The DT world has evolved a
+> lot in the 15 years since and booting-without-of.rst is pretty stale.
+> The name of the document itself is confusing if you don't understand the
+> evolution from real 'OpenFirmware'. Most of what booting-without-of.rst
+> contains is now in the DT specification (which evolved out of the
+> ePAPR). The few things that weren't documented in the DT specification
+> are now.
+> 
+> All that remains is the boot entry details, so let's move these to arch
+> specific documents. The exception is arm which already has the same
+> details documented.
+
+Removing this document caused a warning at Documentation/arm/booting.rst:
+
+	$ ./scripts/documentation-file-ref-check 
+	Documentation/arm/booting.rst: Documentation/devicetree/booting-without-of.rst
+
+as it mentions that the DTB format is described on booting-without-of.rst:
+
+	4b. Setup the device tree
+	-------------------------
+
+	The boot loader must load a device tree image (dtb) into system ram
+	at a 64bit aligned address and initialize it with the boot data.  The
+	dtb format is documented in Documentation/devicetree/booting-without-of.rst.
+	The kernel will look for the dtb magic value of 0xd00dfeed at the dtb
+	physical address to determine if a dtb has been passed instead of a
+	tagged list.
+
+So, I guess that such part of the document needs to be moved to booting.rst.
+
+Thanks,
+Mauro
