@@ -2,70 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A35A2969E2
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Oct 2020 08:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC11B296F9E
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Oct 2020 14:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S375402AbgJWGro (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Oct 2020 02:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S375401AbgJWGro (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Oct 2020 02:47:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B64C0613CE;
-        Thu, 22 Oct 2020 23:47:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BpKyPUKBRmupv+ADoXZ2WKJ98lsRlSNLBOv4kS8Twyc=; b=Lo756IB6V4p3RdlJwmiIy6xbvn
-        Ls602AVHxUgwIak6/ZqYxeI7y0RbWN8s3jIOk7Y5uM2tBQIoL2c72xeJSJqcBT2878VgPLWTn4yEG
-        TrBMtrLYvdHyvjwQmX75RuBokNricbhwv/0fJvLK8IB8INKytNNlI+ZoVYSHtxmiajfg9qkknhGWQ
-        m5OdyGXAW0o+4/UvBg4ccCR7DoDm7OMBrzjtVN6FS4mzXUQbGZTyi2AHmGzH+BS68T5/fGoD4d4Fn
-        SRkIWKzZqRZ51LvQnKrpOnBY5u/8trY24u/byG0830jsdz0zaENzwM9NXugPWCh+4TQMHe2l1VFPH
-        P6K4Webg==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kVqrU-00062s-9u; Fri, 23 Oct 2020 06:47:40 +0000
-Date:   Fri, 23 Oct 2020 07:47:40 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH] PCI: export pci_find_host_bridge() to fix MFD build error
-Message-ID: <20201023064740.GB22405@infradead.org>
-References: <20201019061453.32295-1-rdunlap@infradead.org>
- <20201020080219.GA21011@infradead.org>
- <20201021100844.GA3693@alpha.franken.de>
+        id S464013AbgJWMqm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 23 Oct 2020 08:46:42 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:32715 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S464014AbgJWMql (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 23 Oct 2020 08:46:41 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-256-SaM_0Qo5N_as2A7LuQL-Wg-1; Fri, 23 Oct 2020 13:46:37 +0100
+X-MC-Unique: SaM_0Qo5N_as2A7LuQL-Wg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Fri, 23 Oct 2020 13:46:36 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 23 Oct 2020 13:46:36 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Greg KH' <gregkh@linuxfoundation.org>,
+        David Hildenbrand <david@redhat.com>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Thread-Topic: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Thread-Index: AQHWqE5GNDfnH4y9nkGWtfqJueR1KKmjTCJQgAAN4UiAAAD2IIAASOeCgAF+12A=
+Date:   Fri, 23 Oct 2020 12:46:36 +0000
+Message-ID: <134f162d711d466ebbd88906fae35b33@AcuMS.aculab.com>
+References: <df2e0758-b8ed-5aec-6adc-a18f499c0179@redhat.com>
+ <20201022090155.GA1483166@kroah.com>
+ <e04d0c5d-e834-a15b-7844-44dcc82785cc@redhat.com>
+ <a1533569-948a-1d5b-e231-5531aa988047@redhat.com>
+ <bc0a091865f34700b9df332c6e9dcdfd@AcuMS.aculab.com>
+ <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
+ <20201022104805.GA1503673@kroah.com> <20201022121849.GA1664412@kroah.com>
+ <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com>
+ <20201022125759.GA1685526@kroah.com> <20201022135036.GA1787470@kroah.com>
+In-Reply-To: <20201022135036.GA1787470@kroah.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201021100844.GA3693@alpha.franken.de>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 12:08:45PM +0200, Thomas Bogendoerfer wrote:
-> On Tue, Oct 20, 2020 at 09:02:19AM +0100, Christoph Hellwig wrote:
-> > On Sun, Oct 18, 2020 at 11:14:53PM -0700, Randy Dunlap wrote:
-> > > Fix a build error in drivers/mfd/ioc.o by exporting
-> > > pci_find_host_bridge().
-> > > 
-> > > ERROR: modpost: "pci_find_host_bridge" [drivers/mfd/ioc3.ko] undefined!
-> > 
-> > I think the mfd code should be fixed to not depend on such an internal
-> > symbol instead.
-> 
-> are you talking about the EXPORT_SYMBOL or the usage of
-> pci_find_host_bridge() outside of drivers/pci ? If the latter the
-> function is used in arm/arm64 code and pci controller code... so
-> I doesn't look like a pure internal symbol to me.
+From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: 22 October 2020 14:51
 
-All of those are built-in and related bits aren't exported at all, or
-at best EXPORT_SYMBOL_GPL.  I think just not allowing the ioc3 mfd to
-be built modular might be the easiest fix here.  Especially as for IP27
-and co kernel it is everything but optional anyway.
+I've rammed the code into godbolt.
+
+https://godbolt.org/z/9v5PPW
+
+Definitely a clang bug.
+
+Search for [wx]24 in the clang output.
+nr_segs comes in as w2 and the initial bound checks are done on w2.
+w24 is loaded from w2 - I don't believe this changes the high bits.
+There are no references to w24, just x24.
+So the kmalloc_array() is passed 'huge' and will fail.
+The iov_iter_init also gets the 64bit value.
+
+Note that the gcc code has a sign-extend copy of w2.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
