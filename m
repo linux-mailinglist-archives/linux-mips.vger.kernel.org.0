@@ -2,99 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B248297708
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Oct 2020 20:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5022977D0
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Oct 2020 21:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1754984AbgJWSes (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Oct 2020 14:34:48 -0400
-Received: from gate.crashing.org ([63.228.1.57]:46520 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1754809AbgJWSep (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 23 Oct 2020 14:34:45 -0400
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 09NIREDK014153;
-        Fri, 23 Oct 2020 13:27:15 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 09NIRD8Q014147;
-        Fri, 23 Oct 2020 13:27:13 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 23 Oct 2020 13:27:13 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     David Hildenbrand <david@redhat.com>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "'Greg KH'" <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move rw_copy_check_uvector() into lib/iov_iter.c"
-Message-ID: <20201023182713.GG2672@gate.crashing.org>
-References: <bc0a091865f34700b9df332c6e9dcdfd@AcuMS.aculab.com> <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com> <20201022104805.GA1503673@kroah.com> <20201022121849.GA1664412@kroah.com> <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com> <20201022125759.GA1685526@kroah.com> <20201022135036.GA1787470@kroah.com> <134f162d711d466ebbd88906fae35b33@AcuMS.aculab.com> <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com> <20201023175857.GA3576660@ZenIV.linux.org.uk>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201023175857.GA3576660@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.4.2.3i
+        id S1754853AbgJWTox (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Oct 2020 15:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754847AbgJWTox (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Oct 2020 15:44:53 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA29C0613D2;
+        Fri, 23 Oct 2020 12:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=hsGIUb4yucLxGB3KN+5kBK6FXlbisJz2OT8Rmz4D5Zs=; b=Wg3yFwabw2DWOYk8RC1PyxinQI
+        mtZO++ShyMlNEV9tzo2uFUDBkAaHw4lf0EffeW11V45x/I2FzlUFfrroCp8J97fTfWiQspPsCuZJp
+        MRqF93sO5l9ixgqnI7sriKWLX1wsvimQrTzp2IT2bTOtdxwEMi0SGeZiHTNdvJT2QBnXQD/+ZknIG
+        da5yxZAP1wTxlBs7eX3csrnFjSvulbiL1ey0bETpxASWegLVu186qxQA9qIb1A3pfzo5W5dAsWY3k
+        xvqqDgE2pCB+rVDAADttp3Ebkl7SY5cOkAHGuIu6DThA6hVZUIezOvSHwWmzHg4wTxVUcy45XQsoY
+        fdwWW6fA==;
+Received: from [2601:1c0:6280:3f0::507c] (helo=smtpauth.infradead.org)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kW2zX-0008HT-DG; Fri, 23 Oct 2020 19:44:47 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, linux-nvdimm@lists.01.org,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] MIPS: export has_transparent_hugepage() for modules
+Date:   Fri, 23 Oct 2020 12:44:40 -0700
+Message-Id: <20201023194440.13371-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 06:58:57PM +0100, Al Viro wrote:
-> On Fri, Oct 23, 2020 at 03:09:30PM +0200, David Hildenbrand wrote:
-> 
-> > Now, I am not a compiler expert, but as I already cited, at least on
-> > x86-64 clang expects that the high bits were cleared by the caller - in
-> > contrast to gcc. I suspect it's the same on arm64, but again, I am no
-> > compiler expert.
-> > 
-> > If what I said and cites for x86-64 is correct, if the function expects
-> > an "unsigned int", it will happily use 64bit operations without further
-> > checks where valid when assuming high bits are zero. That's why even
-> > converting everything to "unsigned int" as proposed by me won't work on
-> > clang - it assumes high bits are zero (as indicated by Nick).
-> > 
-> > As I am neither a compiler experts (did I mention that already? ;) ) nor
-> > an arm64 experts, I can't tell if this is a compiler BUG or not.
-> 
-> On arm64 when callee expects a 32bit argument, the caller is *not* responsible
-> for clearing the upper half of 64bit register used to pass the value - it only
-> needs to store the actual value into the lower half.  The callee must consider
-> the contents of the upper half of that register as undefined.  See AAPCS64 (e.g.
-> https://github.com/ARM-software/abi-aa/blob/master/aapcs64/aapcs64.rst#parameter-passing-rules
-> ); AFAICS, the relevant bit is
-> 	"Unlike in the 32-bit AAPCS, named integral values must be narrowed by
-> the callee rather than the caller."
+MIPS should export its local version of "has_transparent_hugepage"
+so that loadable modules (dax) can use it.
 
-Or the formal rule:
+Fixes this build error:
+ERROR: modpost: "has_transparent_hugepage" [drivers/dax/dax.ko] undefined!
 
-C.9 	If the argument is an Integral or Pointer Type, the size of the
-	argument is less than or equal to 8 bytes and the NGRN is less
-	than 8, the argument is copied to the least significant bits in
-	x[NGRN]. The NGRN is incremented by one. The argument has now
-	been allocated.
+Fixes: fd8cfd300019 ("arch: fix has_transparent_hugepage()")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: linux-nvdimm@lists.01.org
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+ arch/mips/mm/tlb-r4k.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-
-Segher
+--- linux-next-20201022.orig/arch/mips/mm/tlb-r4k.c
++++ linux-next-20201022/arch/mips/mm/tlb-r4k.c
+@@ -438,6 +438,7 @@ int has_transparent_hugepage(void)
+ 	}
+ 	return mask == PM_HUGE_MASK;
+ }
++EXPORT_SYMBOL(has_transparent_hugepage);
+ 
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE  */
+ 
