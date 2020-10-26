@@ -2,98 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D1D29996F
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Oct 2020 23:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F082999F8
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Oct 2020 23:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392681AbgJZWQh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 26 Oct 2020 18:16:37 -0400
-Received: from aposti.net ([89.234.176.197]:42682 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392335AbgJZWQh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 26 Oct 2020 18:16:37 -0400
-Date:   Mon, 26 Oct 2020 22:16:03 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] MIPS: ingenic: remove unused platform_data header file
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        linux-mips@vger.kernel.org
-Message-Id: <RUXTIQ.Q47O9XR6N4VF@crapouillou.net>
-In-Reply-To: <20201026192040.GA350265@ravnborg.org>
-References: <20201026192040.GA350265@ravnborg.org>
+        id S2394915AbgJZWz1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Oct 2020 18:55:27 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:41721 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394900AbgJZWz0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Oct 2020 18:55:26 -0400
+Received: by mail-ed1-f67.google.com with SMTP id l24so11450344edj.8
+        for <linux-mips@vger.kernel.org>; Mon, 26 Oct 2020 15:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=J/+n1x0TPOHJCTfSVoXlG/q+OLrGnnNxrysZ0ZyIy+Y=;
+        b=JQw5fA5cqXZCTLCd2xkURV07bnYrA8gTT/8l9H7r6P+PgM37GQ7tblZcETghImepsU
+         AcI0oUILLNpw7+Lob5wOxm8oxXKZgdxlvk1iOdkoLk31eLVc1crb3sEhxCSb6bD2V31l
+         b7OGa6zHv0zDl28Z8OMcIxY0WvmVK7pWJSrW3Zs4sWifuxNiQ2iEW7pkdOAgHIEek3Fp
+         L3yESbOX+0gb8ueK46K6rtDj34b55Vtmz8U4fPoQ/Dv2vqBsFOJNMTpbG7mznOfR5TaL
+         kpOlREDICaBo0Xi3+x/a4pHYfGgO73EI5dQFmBZNKgKh2ry9/Y+FL54IAgbsbpnA0Xzm
+         BeOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=J/+n1x0TPOHJCTfSVoXlG/q+OLrGnnNxrysZ0ZyIy+Y=;
+        b=JtgATcRWswX20QjdQd3SeSkeOV+x8qlOEcNl6ER5iRTSlUSnTDCtpjtEZkR2lM4vxe
+         +DcZFa1bipJzNzrNW07UUIc8wMg+UmRTNURWteTat7cnxPBvk6NHaw+ghpqmp6o1XwDc
+         gJUDreRfn+jnOYvoyjTETVJaqj6saFo3b8veankelrPbYF0wZSPE/cx2opN/+Xp8rY69
+         EDCfXysdgacFxh1Zm9IqWOwQmmB+N21xjUmtPtAGmX+LMajJwSOMBeZCR+Vo3P5QhhjO
+         rRxRhlhLROln2yGEnH6ZeYijCM3o8vqVn5ekkVRJo67GadYTivsWuw/37UXZSBFZGhC/
+         tKIw==
+X-Gm-Message-State: AOAM532otRnraMFuLkBDCfCQwkWJxnfF0z1WfOtMiAZJRBwKamlbKVuX
+        OFEaNoQv0aW0YR1L3Z8j7dwf/xBKifP5BxRNIUanTw==
+X-Google-Smtp-Source: ABdhPJyAci+5cM2zXs7C2dh5O8VDIKXSp+LVa6rVM/MPlgy6tZLvyXi43c6iWM9w5BW9l3CIsdr5O5Od75OK4rN9ByQ=
+X-Received: by 2002:aa7:d9ce:: with SMTP id v14mr12828586eds.203.1603752924617;
+ Mon, 26 Oct 2020 15:55:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Mon, 26 Oct 2020 15:55:13 -0700
+Message-ID: <CAP045Aqrsb=CXHDHx4nS-pgg+MUDj14r-kN8_Jcbn-NAUziVag@mail.gmail.com>
+Subject: [REGRESSION] mm: process_vm_readv testcase no longer works after
+ compat_prcoess_vm_readv removed
+To:     open list <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     "Robert O'Callahan" <robert@ocallahan.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        "open list:FILESYSTEMS (VFS and infrastructure)" 
+        <linux-fsdevel@vger.kernel.org>, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+A test program from the rr[0] test suite, vm_readv_writev[1], no
+longer works on 5.10-rc1 when compiled as a 32 bit binary and executed
+on a 64 bit kernel. The first process_vm_readv call (on line 35) now
+fails with EFAULT. I have bisected this to
+c3973b401ef2b0b8005f8074a10e96e3ea093823.
 
-Le lun. 26 oct. 2020 à 20:20, Sam Ravnborg <sam@ravnborg.org> a écrit 
-:
-> There are no users of this headers file in the kernel.
-> All users are likely migrated to device tree which is a good thing.
-> 
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Cercueil <paul@crapouillou.net>
-> Cc: Harvey Hunt <harveyhuntnexus@gmail.com>
-> Cc: linux-mips@vger.kernel.org
-> ---
-> 
-> I noticed this while surfing around in platform_data for no apperant
-> reason. So no fancy tooling or some such involved.
+It should be fairly straightforward to extract the test case from our
+repository into a standalone program.
 
-The jz4740-nand driver has been removed in Linux 5.3. Therefore:
+- Kyle
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> 
-> 	Sam
-> 
->  .../linux/platform_data/jz4740/jz4740_nand.h  | 25 
-> -------------------
->  1 file changed, 25 deletions(-)
->  delete mode 100644 include/linux/platform_data/jz4740/jz4740_nand.h
-> 
-> diff --git a/include/linux/platform_data/jz4740/jz4740_nand.h 
-> b/include/linux/platform_data/jz4740/jz4740_nand.h
-> deleted file mode 100644
-> index b3f066d63059..000000000000
-> --- a/include/linux/platform_data/jz4740/jz4740_nand.h
-> +++ /dev/null
-> @@ -1,25 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0-or-later */
-> -/*
-> - *  Copyright (C) 2009-2010, Lars-Peter Clausen <lars@metafoo.de>
-> - *  JZ4740 SoC NAND controller driver
-> - */
-> -
-> -#ifndef __JZ4740_NAND_H__
-> -#define __JZ4740_NAND_H__
-> -
-> -#include <linux/mtd/rawnand.h>
-> -#include <linux/mtd/partitions.h>
-> -
-> -#define JZ_NAND_NUM_BANKS 4
-> -
-> -struct jz_nand_platform_data {
-> -	int			num_partitions;
-> -	struct mtd_partition	*partitions;
-> -
-> -	unsigned char banks[JZ_NAND_NUM_BANKS];
-> -
-> -	void (*ident_callback)(struct platform_device *, struct mtd_info *,
-> -				struct mtd_partition **, int *num_partitions);
-> -};
-> -
-> -#endif
-> --
-> 2.27.0
-> 
-
-
+[0] https://rr-project.org/
+[1] https://github.com/mozilla/rr/blob/master/src/test/vm_readv_writev.c
