@@ -2,89 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5195D298D89
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Oct 2020 14:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4CD298F12
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Oct 2020 15:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442892AbgJZNMc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Oct 2020 09:12:32 -0400
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:42943 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731134AbgJZNMX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 26 Oct 2020 09:12:23 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 1C116772;
-        Mon, 26 Oct 2020 09:12:22 -0400 (EDT)
-Received: from imap4 ([10.202.2.54])
-  by compute1.internal (MEProxy); Mon, 26 Oct 2020 09:12:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm1; bh=jE/sdEfYYfl7ageh2OP4YHEXIU+y
-        jGIFM8hj9fv1juU=; b=BslkchQbCSUTbY8LXI3nznM8fp+gv0tqDMW0V59wBk11
-        7FhFp5LLlOf8VbYhBRqvPDAE8im8lQWgyamU/JaMcReqQ+ro7wdKERlkB74GbM4G
-        jlKL3d8krkSNkta3zcYc70nn1On5LgJx1saA9rioNlvZ63ovf+2tblFLRsqDEkDs
-        ge1+x4XJQtfJ/N3EIq3wR3WHgtl9PTaTT6Ej15cb2ZX5rArOWPuqtnuOf6jgdLvf
-        Lrx3hax+i5meO5TSJePcDYZ8m43CJuSuWfjhjvOZZrIppmSMoAAQ70RwILFxjwVw
-        odEGhdTU83wz7uIxwHfxBl0rCl/f6jYiJyV7UTrgJQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=jE/sdE
-        fYYfl7ageh2OP4YHEXIU+yjGIFM8hj9fv1juU=; b=TXN289va9ks6UmPy79R3D/
-        rz6doRLzy+uaHQ/1cIFjmrQ3CSdcoydxwwYhxsdH/Ke2zUWwSgSZo/rYEVEllQb7
-        DlXXCka8JkzbqZdom3iqzoKsH5UniM0ImEO+wtoyT+ySRhINCYYHXENhdpkeB1sg
-        bIXiQ5TL/KglU0/egxens/pf4dcxfnFQ2L/qOBnZm9MRdkhKdsF+NP09C+Bg8KD1
-        BhJMm83Ad9I0ATA88foVOxrEVUxscOwhFIeGkR0U3kXDic2dSUUX5i/ZPMjCOom0
-        +NC83/FRomJd6mi1KvUZryDddbBM0B291n2J4SIwVqar2WSnbQyHtjN4Gqz2Xd6Q
-        ==
-X-ME-Sender: <xms:NcuWXxMR5HbvmyWfi2u8X-0YuOVdYwKZSQOVSvkY_PUz25DMK7onKw>
-    <xme:NcuWXz9z7AVi0W1tOzAETMhXiikwA_NqAWR-4clhom_sycXsrBSJ4VrigEeQsiUk2
-    wDKjNUtegZa_bUVYw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrkeejgdduvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedflfhohhhn
-    ucfvhhhomhhsohhnfdcuoehgihhtsehjohhhnhhthhhomhhsohhnrdhfrghsthhmrghilh
-    drtghomhdrrghuqeenucggtffrrghtthgvrhhnpeffuddufeefgeffgffhvdelveduieel
-    leefgefffeegieelkeeifedtvdeuhefftdenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehgihhtsehjohhhnhhthhhomhhsohhnrdhfrghsthhm
-    rghilhdrtghomhdrrghu
-X-ME-Proxy: <xmx:NcuWXwQErMybUNcb4Z1kWitPjV0_cGOQy9wI5iInOgInXo5GodRCnQ>
-    <xmx:NcuWX9u5bCGZI28Mx8zULFuKIHvTTpfK2txJX0QShBYIE6KbD3ZjgQ>
-    <xmx:NcuWX5eobWZkStQCy6BYIYmJcAJ27pUbLzrB9C4VrPyy4PNe-I6k4g>
-    <xmx:NcuWX5EFcdMfsHsxQi2OHzZp9UcZcgkxxl4rmJURCa5q-sS96pDN5g>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3991E3C00A1; Mon, 26 Oct 2020 09:12:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-529-g69105b1-fm-20201021.003-g69105b13
-Mime-Version: 1.0
-Message-Id: <a5b08af5-ed9d-4adc-a311-35f962233f47@www.fastmail.com>
-In-Reply-To: <20201026122926.1774569-1-gch981213@gmail.com>
-References: <20201026122926.1774569-1-gch981213@gmail.com>
-Date:   Mon, 26 Oct 2020 13:11:27 +0000
-From:   "John Thomson" <git@johnthomson.fastmail.com.au>
-To:     "Chuanhong Guo" <gch981213@gmail.com>, linux-mips@vger.kernel.org
-Cc:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "open list" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: zboot: put appended dtb into a section
-Content-Type: text/plain
+        id S1781268AbgJZOUH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Oct 2020 10:20:07 -0400
+Received: from relaygw3-24.mclink.it ([195.78.211.244]:35751 "EHLO
+        relaygw3-24.mclink.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1781257AbgJZOUG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Oct 2020 10:20:06 -0400
+X-Greylist: delayed 900 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Oct 2020 10:20:05 EDT
+Received: from [172.24.30.46] (HELO cgp-esgout03-rm.mail.irds.it)
+  by relaygw3-24.mclink.it (CommuniGate Pro SMTP 6.0.6)
+  with ESMTPS id 179185249 for linux-mips@vger.kernel.org; Mon, 26 Oct 2020 15:05:03 +0100
+X-Envelope-From: <mc5686@mclink.it>
+Received: from cinderella.condarelli.it (host-79-55-229-238.retail.telecomitalia.it [79.55.229.238])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: mc5686@mclink.it)
+        by cgp-esgout03-rm.mail.irds.it (Postfix) with ESMTPSA id 3B29141B14;
+        Mon, 26 Oct 2020 15:04:56 +0100 (CET)
+From:   Mauro Condarelli <mc5686@mclink.it>
+To:     linux-mips@vger.kernel.org
+Cc:     Valeria De Fonzo <valeria.defonzo@gmail.com>,
+        Mauro Condarelli <mc5686@mclink.it>
+Subject: [PATCH] Restore USB-OHCI node
+Date:   Mon, 26 Oct 2020 15:04:55 +0100
+Message-Id: <20201026140455.469444-1-mc5686@mclink.it>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Irideos-Libra-ESVA-Information: Please contact Irideos for more information
+X-Irideos-Libra-ESVA-ID: 3B29141B14.A91D2
+X-Irideos-Libra-ESVA: No virus found
+X-Irideos-Libra-ESVA-From: mc5686@mclink.it
+X-Irideos-Libra-ESVA-Watermark: 1604325897.19996@saOnzGelwmadxJI1VneOwg
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 26 Oct 2020, at 12:29, Chuanhong Guo wrote:
-> This will make a separated section for dtb appear in ELF, and we can
-> then use objcopy to patch a dtb into vmlinuz when RAW_APPENDED_DTB
-> is set in kernel config.
+From: Valeria De Fonzo <valeria.defonzo@gmail.com>
 
-Thank you Chuanhong Guo, this worked for me.
+This node was taken from OpenWRT mt7628an.dtsi
+The OHCI controller described is *not* to be found in "MT7628 DATASHEET",
+but it is needed to have any low-speed USB (e.g.: keyboard) working.
 
-I have successfully network boot tested this change on ath79 hardware:
-- kernel vmlinuz.bin
-  then appended DTB, and packed into a uImage (out of kernel tree)
-- kernel vmlinuz
-  then updated ELF DTB appended_dtb section, and ELF booted
+I am unsure how to handle this situation (undocumented feature).
 
-Cheers,
+Without this patch Linux sees only one USB device:
+  # lsusb
+  Bus 001 Device 001: ID 1d6b:0001
+  # cat /sys/bus/usb/devices/usb1/product
+  EHCI Host Controller
+and low-speed peripherals (I tested with keyboard and a couple of USB
+barcode scanners) are not recognized.
+Moreover pluggin in one of the "unrecognizable" devices seems to block
+USB completely (i.e.: plugging in a "working peripheral like a memory
+device or a USB-serial does *not* work) till next reboot.
+Apparently  EHCI tries to hand-over peripheral to OHCI and gets stuck.
+
+With this patch everything works as expected (kernel was compiled  with
+both OHCI and EHCI support as modules):
+  # lsusb
+  Bus 001 Device 001: ID 1d6b:0001
+  Bus 002 Device 001: ID 1d6b:0002
+  # cat /sys/bus/usb/devices/usb1/product
+  Generic Platform OHCI controller
+  # cat /sys/bus/usb/devices/usb2/product
+  EHCI Host Controller
+  <----- insert keybord
+  [340060.245767] usb 1-1: new low-speed USB device number 3 using ohci-platform
+  [340060.518484] usb 1-1: New USB device found, idVendor=0461, idProduct=0010, bcdDevice= 1.04
+  [340060.527103] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+  [340060.534432] usb 1-1: Product: USB Keyboard
+  [340060.546236] usb 1-1: Manufacturer: NOVATEK
+  [340060.585973] input: NOVATEK USB Keyboard as /devices/platform/101c1000.ohci/usb1/1-1/1-1:1.0/0003:0461:0010.0002/input/input1
+  [340060.677988] hid-generic 0003:0461:0010.0002: input,hidraw0: USB HID v1.10 Keyboard [NOVATEK USB Keyboard] on usb-101c1000.ohci-1/input0
+  [340060.718911] input: NOVATEK USB Keyboard System Control as /devices/platform/101c1000.ohci/usb1/1-1/1-1:1.1/0003:0461:0010.0003/input/input2
+  [340060.797867] input: NOVATEK USB Keyboard Consumer Control as /devices/platform/101c1000.ohci/usb1/1-1/1-1:1.1/0003:0461:0010.0003/input/input3
+  [340060.818325] hid-generic 0003:0461:0010.0003: input,hidraw1: USB HID v1.10 Device [NOVATEK USB Keyboard] on usb-101c1000.ohci-1/input1
+No other changes were made neither to kernel nor rootfs (modules were
+compiled also in kernel without this patch).
+
+
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+---
+ arch/mips/boot/dts/ralink/mt7628a.dtsi | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/mips/boot/dts/ralink/mt7628a.dtsi b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+index bf6b6a459bd6..b4ac008fdfdf 100644
+--- a/arch/mips/boot/dts/ralink/mt7628a.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+@@ -323,6 +323,17 @@ ehci@101c0000 {
+ 		interrupts = <18>;
+ 	};
+ 
++	ohci@101c1000 {
++		compatible = "generic-ohci";
++		reg = <0x101c1000 0x1000>;
++
++		phys = <&usb_phy>;
++		phy-names = "usb";
++
++		interrupt-parent = <&intc>;
++		interrupts = <18>;
++	};
++
+ 	ethernet: ethernet@10100000 {
+ 		compatible = "ralink,rt5350-eth";
+ 		reg = <0x10100000 0x10000>;
 -- 
-  John Thomson
+2.25.1
+
