@@ -2,116 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4CD298F12
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Oct 2020 15:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A9D298F34
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Oct 2020 15:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1781268AbgJZOUH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Oct 2020 10:20:07 -0400
-Received: from relaygw3-24.mclink.it ([195.78.211.244]:35751 "EHLO
-        relaygw3-24.mclink.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1781257AbgJZOUG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Oct 2020 10:20:06 -0400
-X-Greylist: delayed 900 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Oct 2020 10:20:05 EDT
-Received: from [172.24.30.46] (HELO cgp-esgout03-rm.mail.irds.it)
-  by relaygw3-24.mclink.it (CommuniGate Pro SMTP 6.0.6)
-  with ESMTPS id 179185249 for linux-mips@vger.kernel.org; Mon, 26 Oct 2020 15:05:03 +0100
-X-Envelope-From: <mc5686@mclink.it>
-Received: from cinderella.condarelli.it (host-79-55-229-238.retail.telecomitalia.it [79.55.229.238])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: mc5686@mclink.it)
-        by cgp-esgout03-rm.mail.irds.it (Postfix) with ESMTPSA id 3B29141B14;
-        Mon, 26 Oct 2020 15:04:56 +0100 (CET)
-From:   Mauro Condarelli <mc5686@mclink.it>
-To:     linux-mips@vger.kernel.org
-Cc:     Valeria De Fonzo <valeria.defonzo@gmail.com>,
-        Mauro Condarelli <mc5686@mclink.it>
-Subject: [PATCH] Restore USB-OHCI node
-Date:   Mon, 26 Oct 2020 15:04:55 +0100
-Message-Id: <20201026140455.469444-1-mc5686@mclink.it>
-X-Mailer: git-send-email 2.25.1
+        id S1781249AbgJZOZR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Oct 2020 10:25:17 -0400
+Received: from out28-99.mail.aliyun.com ([115.124.28.99]:55025 "EHLO
+        out28-99.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1781389AbgJZOZQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Oct 2020 10:25:16 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1335365|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.250114-0.00270563-0.74718;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.Ioffyb2_1603722310;
+Received: from 192.168.10.195(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Ioffyb2_1603722310)
+          by smtp.aliyun-inc.com(10.147.41.178);
+          Mon, 26 Oct 2020 22:25:11 +0800
+Subject: Re: [PATCH 00/13] MIPS: Convert Ingenic to a generic board
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>,
+        Paul Cercueil <paul@crapouillou.net>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>, od@zcrc.me,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        =?UTF-8?B?5ryG6bmP5oyv?= <aric.pzqi@ingenic.com>,
+        dongsheng.qiu@ingenic.com, rick.tyliu@ingenic.com,
+        yanfei.li@ingenic.com, xuwanhao@wanyeetech.com
+References: <20200803170124.231110-1-paul@crapouillou.net>
+ <ab985296-8441-4006-210d-a71503bd01f0@wanyeetech.com>
+ <L8DPEQ.71Z8YA0QXBJA@crapouillou.net>
+ <alpine.LFD.2.21.2008211949220.3460685@eddie.linux-mips.org>
+ <4SSFFQ.3I498N5I41LP3@crapouillou.net>
+ <alpine.LFD.2.21.2008220310130.3460685@eddie.linux-mips.org>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <0ba67069-499c-7cfe-808e-a465205c4ef9@wanyeetech.com>
+Date:   Mon, 26 Oct 2020 22:25:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
+In-Reply-To: <alpine.LFD.2.21.2008220310130.3460685@eddie.linux-mips.org>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Irideos-Libra-ESVA-Information: Please contact Irideos for more information
-X-Irideos-Libra-ESVA-ID: 3B29141B14.A91D2
-X-Irideos-Libra-ESVA: No virus found
-X-Irideos-Libra-ESVA-From: mc5686@mclink.it
-X-Irideos-Libra-ESVA-Watermark: 1604325897.19996@saOnzGelwmadxJI1VneOwg
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Valeria De Fonzo <valeria.defonzo@gmail.com>
+Hello Maciej & Paul,
 
-This node was taken from OpenWRT mt7628an.dtsi
-The OHCI controller described is *not* to be found in "MT7628 DATASHEET",
-but it is needed to have any low-speed USB (e.g.: keyboard) working.
-
-I am unsure how to handle this situation (undocumented feature).
-
-Without this patch Linux sees only one USB device:
-  # lsusb
-  Bus 001 Device 001: ID 1d6b:0001
-  # cat /sys/bus/usb/devices/usb1/product
-  EHCI Host Controller
-and low-speed peripherals (I tested with keyboard and a couple of USB
-barcode scanners) are not recognized.
-Moreover pluggin in one of the "unrecognizable" devices seems to block
-USB completely (i.e.: plugging in a "working peripheral like a memory
-device or a USB-serial does *not* work) till next reboot.
-Apparently  EHCI tries to hand-over peripheral to OHCI and gets stuck.
-
-With this patch everything works as expected (kernel was compiled  with
-both OHCI and EHCI support as modules):
-  # lsusb
-  Bus 001 Device 001: ID 1d6b:0001
-  Bus 002 Device 001: ID 1d6b:0002
-  # cat /sys/bus/usb/devices/usb1/product
-  Generic Platform OHCI controller
-  # cat /sys/bus/usb/devices/usb2/product
-  EHCI Host Controller
-  <----- insert keybord
-  [340060.245767] usb 1-1: new low-speed USB device number 3 using ohci-platform
-  [340060.518484] usb 1-1: New USB device found, idVendor=0461, idProduct=0010, bcdDevice= 1.04
-  [340060.527103] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-  [340060.534432] usb 1-1: Product: USB Keyboard
-  [340060.546236] usb 1-1: Manufacturer: NOVATEK
-  [340060.585973] input: NOVATEK USB Keyboard as /devices/platform/101c1000.ohci/usb1/1-1/1-1:1.0/0003:0461:0010.0002/input/input1
-  [340060.677988] hid-generic 0003:0461:0010.0002: input,hidraw0: USB HID v1.10 Keyboard [NOVATEK USB Keyboard] on usb-101c1000.ohci-1/input0
-  [340060.718911] input: NOVATEK USB Keyboard System Control as /devices/platform/101c1000.ohci/usb1/1-1/1-1:1.1/0003:0461:0010.0003/input/input2
-  [340060.797867] input: NOVATEK USB Keyboard Consumer Control as /devices/platform/101c1000.ohci/usb1/1-1/1-1:1.1/0003:0461:0010.0003/input/input3
-  [340060.818325] hid-generic 0003:0461:0010.0003: input,hidraw1: USB HID v1.10 Device [NOVATEK USB Keyboard] on usb-101c1000.ohci-1/input1
-No other changes were made neither to kernel nor rootfs (modules were
-compiled also in kernel without this patch).
+ÔÚ 2020/8/22 ÉÏÎç10:29, Maciej W. Rozycki Ð´µÀ:
+> Hi Paul,
+>
+>>> FAOD <cpu-feature-overrides.h> is not a hack, but an optimisation measure
+>>> so that features known to be hardwired for a given machine/CPU do not have
+>>> to be dynamically queried every time referred.  In some cases that results
+>>> in large portions of code being optimised away by the compiler as well.
+>> Fair enough. Bloat-o-meter reports about ~100 KiB saved when that file is
+>> present. But we can't use it in a generic kernel, unfortunately.
+>   Well, run-time patching might be an alternative to get the best of both
+> worlds, but someone would have to reimplement our feature selection system
+> to use it.
+>
+>>> The hardcoded value for a feature defined in <cpu-feature-overrides.h>
+>>> always has to be the same as one in the corresponding bit of the `options'
+>>> member of `struct cpuinfo_mips', in this case MIPS_CPU_TLBINV.
+>> In theory yes, in practice the CPU detection code is lagging behind...
+>   I wasn't aware of that.  In that case it has been a design abuse which
+> has been missed by the maintainer when accepting patches.  It used to be
+> the case that run-time detection was accurate and overrides were rather
+> lazily added.
+>
+>   Also I note Ingenic must have had a CPU erratum if our `decode_configs'
+> doesn't just work, as the interpretation of CP0.Config[5:0] registers has
+> been architectural and mandatory, and that for a reason.  It's only legacy
+> MIPS I-IV processors that should require special attention here.
 
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- arch/mips/boot/dts/ralink/mt7628a.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+I think I found the cause of the problem. Ingenic XBurst2's TLBINV is 
+operate on entire MMU, according to the description of the MD00090 
+document, the IE value in cp0 config4 should be 3 (Ingenic's XBurst2 
+Core PM document also shows that the IE value is indeed 3). But the code 
+in cpu-probe.c only detects the case where the IE value is equal to 2 
+(TLBINV only operate on one TLB entry). Therefore, the kernel mistakenly 
+believes that X2000 does not support TLBINV during detection.
 
-diff --git a/arch/mips/boot/dts/ralink/mt7628a.dtsi b/arch/mips/boot/dts/ralink/mt7628a.dtsi
-index bf6b6a459bd6..b4ac008fdfdf 100644
---- a/arch/mips/boot/dts/ralink/mt7628a.dtsi
-+++ b/arch/mips/boot/dts/ralink/mt7628a.dtsi
-@@ -323,6 +323,17 @@ ehci@101c0000 {
- 		interrupts = <18>;
- 	};
- 
-+	ohci@101c1000 {
-+		compatible = "generic-ohci";
-+		reg = <0x101c1000 0x1000>;
-+
-+		phys = <&usb_phy>;
-+		phy-names = "usb";
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <18>;
-+	};
-+
- 	ethernet: ethernet@10100000 {
- 		compatible = "ralink,rt5350-eth";
- 		reg = <0x10100000 0x10000>;
--- 
-2.25.1
 
+Thanks and best regards!
+
+
+>    Maciej
