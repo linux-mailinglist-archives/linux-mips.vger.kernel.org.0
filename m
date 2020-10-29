@@ -2,40 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9453029F80B
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Oct 2020 23:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC9829F8F7
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Oct 2020 00:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbgJ2Wci (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Oct 2020 18:32:38 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:37884 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725868AbgJ2Wch (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Oct 2020 18:32:37 -0400
-Message-Id: <20201029222652.396632514@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1604010750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=bMLYR+ULvXX0256D4Df+wpxshaXLT7cqrLUawfmTX9Q=;
-        b=VCA691jLGnAZqdkXjZ9aUxRkLnyXLfBMqRSIRGqu4/sp5RVdZI3iAlpz3yv3t1RyGv51sf
-        aj9j5cUxfpMz1aNToNIzkolkGvpz7ly1nZ0wFgpScVGDCVLa9utWAflNggS31P6+Vx5DgO
-        1C8/Ue4XDTwlZf88m6Fw19NheeTWMADwN2TxrPGwBVXeCC/gnrTmhvqU8zHGAfIieyG/Z5
-        i1fEod79b3LJX5Bn5Do/KyPghX9o5UthsAzdPKiEuUUjL0qxS/SNe26GnpIA1NCCeOno1z
-        DFWxF3vPmxWQH5W4OmZ6SbVraqTnScVGk0DBL33R6duvu8JhKTsFJouGGv1nyQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1604010750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=bMLYR+ULvXX0256D4Df+wpxshaXLT7cqrLUawfmTX9Q=;
-        b=STUDCvqBTgV5xXrnXgKMETTb5aOCokIJFCvgDEer9TTJtzFGrKJQw3D5iibPwOcWdvspr/
-        F17h1AXIu/YLuvCg==
-Date:   Thu, 29 Oct 2020 23:18:24 +0100
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
+        id S1725379AbgJ2XRk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Oct 2020 19:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725372AbgJ2XRi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Oct 2020 19:17:38 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE7CC0613CF
+        for <linux-mips@vger.kernel.org>; Thu, 29 Oct 2020 16:17:37 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id k3so6079657ejj.10
+        for <linux-mips@vger.kernel.org>; Thu, 29 Oct 2020 16:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OAaBl/U7PBG+TlUp0N4qfJ0eDW1D/8YEA2bXCC674us=;
+        b=SyS4SffxYsNmj61H9VhYyfV30AKVcQI02I05R1QJ0WmBmFSO+bnQWo+8WU1Xmtdngw
+         /WCUakc82ksJGHGKm7uLpuzRi56V0rh71ThvreQzsj4AGwhIaWOkntvIB7PKONmne7aI
+         RS+5JSoq7Rynp7XqZeCI4Lh5y/aQJhenniqh8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OAaBl/U7PBG+TlUp0N4qfJ0eDW1D/8YEA2bXCC674us=;
+        b=Ac6VlIrSpKYyFEQ1GU0Vna9lspH4GOBz8mhC3xnQ08pB/S90vyY05gU7J9K4CXC5RU
+         njFAGkv506N4Y7dOUhIsEDf8HlGDcOJ46HYHCr5DFUwOA29wbsoQ/WRMk2ikx/5uyD4A
+         3sOmNtj+54vXIk0RuFr1m2BC43T7sHXNt5eKvPiP5hePp7wVjDtgPpF6TP3MnSMwXPR/
+         FhZnFurhHF50w17Rto1/j5hFrKX56H2trQmdba4B4zdMCU6p/t9c4cbuuKGupX3jY9kA
+         7sKei1PkzYFpFPOnN6YuszkMtY35l++PCBp5uB+XReYVNRrF2+g0SEOOQn4WvUqxtke1
+         d8PA==
+X-Gm-Message-State: AOAM5315XLLGbNjTfJEW4U4bHwYh/RkZSIjWC+/UkQ48xqcpdKjsF3KD
+        yqU0PEumlGy3jt6cwxDO3GpZuoxXw5ZZkg==
+X-Google-Smtp-Source: ABdhPJyvosE0Vxzf2nIIK1cqNn7KCC9EI/ZPs/JhHsqNV+oQVAHZz2LiNsNTgZ3spfZ6cuLd5sqvMQ==
+X-Received: by 2002:a17:906:f185:: with SMTP id gs5mr6327678ejb.107.1604013456215;
+        Thu, 29 Oct 2020 16:17:36 -0700 (PDT)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id m11sm2264766edv.14.2020.10.29.16.17.35
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Oct 2020 16:17:36 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id oq3so4243910ejb.7
+        for <linux-mips@vger.kernel.org>; Thu, 29 Oct 2020 16:17:35 -0700 (PDT)
+X-Received: by 2002:a2e:8815:: with SMTP id x21mr3018764ljh.312.1604013088281;
+ Thu, 29 Oct 2020 16:11:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201029221806.189523375@linutronix.de>
+In-Reply-To: <20201029221806.189523375@linutronix.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 29 Oct 2020 16:11:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
+Message-ID: <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Paul McKenney <paulmck@kernel.org>,
         David Airlie <airlied@linux.ie>,
@@ -51,13 +75,17 @@ Cc:     linux-arch@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
-        linux-snps-arc@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
         Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
         Greentime Hu <green.hu@gmail.com>,
@@ -65,85 +93,33 @@ Cc:     linux-arch@vger.kernel.org,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
         linux-xtensa@linux-xtensa.org
-Subject: [patch V2 18/18] io-mapping: Provide iomap_local variant
-References: <20201029221806.189523375@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-transfer-encoding: 8-bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Similar to kmap local provide a iomap local variant which only disables
-migration, but neither disables pagefaults nor preemption.
+On Thu, Oct 29, 2020 at 3:32 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+>
+> Though I wanted to share the current state of affairs before investigating
+> that further. If there is consensus in going forward with this, I'll have a
+> deeper look into this issue.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-V2: Split out from the large combo patch and add the !IOMAP_ATOMIC variants
----
- include/linux/io-mapping.h |   34 ++++++++++++++++++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+Me likee. I think this looks like the right thing to do.
 
---- a/include/linux/io-mapping.h
-+++ b/include/linux/io-mapping.h
-@@ -83,6 +83,23 @@ io_mapping_unmap_atomic(void __iomem *va
- }
- 
- static inline void __iomem *
-+io_mapping_map_local_wc(struct io_mapping *mapping, unsigned long offset)
-+{
-+	resource_size_t phys_addr;
-+
-+	BUG_ON(offset >= mapping->size);
-+	phys_addr = mapping->base + offset;
-+	migrate_disable();
-+	return __iomap_local_pfn_prot(PHYS_PFN(phys_addr), mapping->prot);
-+}
-+
-+static inline void io_mapping_unmap_local(void __iomem *vaddr)
-+{
-+	kunmap_local_indexed((void __force *)vaddr);
-+	migrate_enable();
-+}
-+
-+static inline void __iomem *
- io_mapping_map_wc(struct io_mapping *mapping,
- 		  unsigned long offset,
- 		  unsigned long size)
-@@ -101,7 +118,7 @@ io_mapping_unmap(void __iomem *vaddr)
- 	iounmap(vaddr);
- }
- 
--#else
-+#else  /* HAVE_ATOMIC_IOMAP */
- 
- #include <linux/uaccess.h>
- 
-@@ -166,7 +183,20 @@ io_mapping_unmap_atomic(void __iomem *va
- 	preempt_enable();
- }
- 
--#endif /* HAVE_ATOMIC_IOMAP */
-+static inline void __iomem *
-+io_mapping_map_local_wc(struct io_mapping *mapping, unsigned long offset)
-+{
-+	migrate_disable();
-+	return io_mapping_map_wc(mapping, offset, PAGE_SIZE);
-+}
-+
-+static inline void io_mapping_unmap_local(void __iomem *vaddr)
-+{
-+	io_mapping_unmap(vaddr);
-+	migrate_enable();
-+}
-+
-+#endif /* !HAVE_ATOMIC_IOMAP */
- 
- static inline struct io_mapping *
- io_mapping_create_wc(resource_size_t base,
+I didn't actually apply the patches, but just from reading them it
+_looks_ to me like you do the migrate_disable() unconditionally, even
+if it's not a highmem page..
 
+That sounds like it might be a good thing for debugging, but not
+necessarily great in general.
+
+Or am I misreading things?
+
+                Linus
