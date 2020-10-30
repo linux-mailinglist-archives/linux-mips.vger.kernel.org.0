@@ -2,83 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 646BD29FF08
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Oct 2020 08:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDFB2A0197
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Oct 2020 10:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725808AbgJ3Hqa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Oct 2020 03:46:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55756 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725780AbgJ3Hqa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 30 Oct 2020 03:46:30 -0400
-Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9EF0320719;
-        Fri, 30 Oct 2020 07:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604043989;
-        bh=XbzJCs+1Vbu1sG68hX1A1BQWrwJAMbx09Z0EixXEc0s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mVO09EOEVQDhIxqmOhZvn3m9RP1yKZhwB2NqZzP00ErBPlqSxU8VLeGJL+iVw4kbj
-         DewkGZl/M3Nti9Ore8fBGWeevRbV3MJC+iGEhas49jvcEG/fLOnj8t5ple5dCiw5BW
-         P1ipVg/apt56gRauVDsYN2Vz7SHtae83kdV+RQZ8=
-Date:   Fri, 30 Oct 2020 15:46:17 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Alexander Dahl <post@lespocky.de>
-Cc:     Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexander Dahl <ada@thorsis.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org, linux-mips@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v7 08/12] ARM: dts: imx: Fix schema warnings for pwm-leds
-Message-ID: <20201030074616.GI28755@dragon>
-References: <20201005203451.9985-1-post@lespocky.de>
- <20201005203451.9985-9-post@lespocky.de>
+        id S1726208AbgJ3JjO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Oct 2020 05:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbgJ3JjO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Oct 2020 05:39:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B16C0613CF;
+        Fri, 30 Oct 2020 02:39:13 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1604050752;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EWXvaZJ4n33nUPpVqCcdjcDSYO5R/m7YAVCZo4qnz/w=;
+        b=Ijhg5aiOMjBRx5rip6SYYGDFE2m3YLjbUBNKk+3NGBAB4R2XV1b2EqqlklIKhs9UUNQWQk
+        z/BOQowWvycG+wd7WP6RDL8dKFwe1UJ0MqD2fe1iCRjFdXzP4PF0WPpHnySjM4mSn8TEDZ
+        +rgRtwXuNFbgN3K9VuqJ5Qlvu3gg80bUbRb6nNMR+/JhtI3yWewHHZND9q4GfI+B5nak5E
+        Txo5XRuNfIVvWuFUn8S5xduuQjkyrzj/pylK3pN+rsWG4as9auyvNfq1rB+V6+q9oD9RYg
+        uWDVVgapgL3toLNiaXgwAR/Xo8x02IWniqNGp0tW1Ptti3gNq/7xKk1DGerynA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1604050752;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EWXvaZJ4n33nUPpVqCcdjcDSYO5R/m7YAVCZo4qnz/w=;
+        b=irizuuQYfZdKA41k2RTCVBIm8nOzrSmQrzmbTW+9NWSzofxsL3XYrjHU85eqQdOWzHFOzN
+        nZb9SEwnLnGs5ZBQ==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
+In-Reply-To: <87pn50ob0s.fsf@nanos.tec.linutronix.de>
+References: <20201029221806.189523375@linutronix.de> <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com> <87pn50ob0s.fsf@nanos.tec.linutronix.de>
+Date:   Fri, 30 Oct 2020 10:39:11 +0100
+Message-ID: <87blgknjcw.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201005203451.9985-9-post@lespocky.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 10:34:47PM +0200, Alexander Dahl wrote:
-> The node names for devices using the pwm-leds driver follow a certain
-> naming scheme (now).  Parent node name is not enforced, but recommended
-> by DT project.
-> 
->   DTC     arch/arm/boot/dts/imx53-ppd.dt.yaml
->   CHECK   arch/arm/boot/dts/imx53-ppd.dt.yaml
-> /home/alex/build/linux/arch/arm/boot/dts/imx53-ppd.dt.yaml: leds-brightness: 'alarm-brightness' does not match any of the regexes: '^led(-[0-9a-f]+)?$', 'pinctrl-[0-9]+'
->         From schema: /home/alex/src/linux/leds/Documentation/devicetree/bindings/leds/leds-pwm.yaml
->   DTC     arch/arm/boot/dts/imx6dl-cubox-i.dt.yaml
->   CHECK   arch/arm/boot/dts/imx6dl-cubox-i.dt.yaml
-> /home/alex/build/linux/arch/arm/boot/dts/imx6dl-cubox-i.dt.yaml: pwmleds: 'front' does not match any of the regexes: '^led(-[0-9a-f]+)?$', 'pinctrl-[0-9]+'
->         From schema: /home/alex/src/linux/leds/Documentation/devicetree/bindings/leds/leds-pwm.yaml
->   DTC     arch/arm/boot/dts/imx6dl-cubox-i-emmc-som-v15.dt.yaml
->   CHECK   arch/arm/boot/dts/imx6dl-cubox-i-emmc-som-v15.dt.yaml
-> /home/alex/build/linux/arch/arm/boot/dts/imx6dl-cubox-i-emmc-som-v15.dt.yaml: pwmleds: 'front' does not match any of the regexes: '^led(-[0-9a-f]+)?$', 'pinctrl-[0-9]+'
->         From schema: /home/alex/src/linux/leds/Documentation/devicetree/bindings/leds/leds-pwm.yaml
->   DTC     arch/arm/boot/dts/imx6dl-cubox-i-som-v15.dt.yaml
->   CHECK   arch/arm/boot/dts/imx6dl-cubox-i-som-v15.dt.yaml
-> /home/alex/build/linux/arch/arm/boot/dts/imx6dl-cubox-i-som-v15.dt.yaml: pwmleds: 'front' does not match any of the regexes: '^led(-[0-9a-f]+)?$', 'pinctrl-[0-9]+'
->         From schema: /home/alex/src/linux/leds/Documentation/devicetree/bindings/leds/leds-pwm.yaml
->   DTC     arch/arm/boot/dts/imx6sx-softing-vining-2000.dt.yaml
->   CHECK   arch/arm/boot/dts/imx6sx-softing-vining-2000.dt.yaml
-> /home/alex/build/linux/arch/arm/boot/dts/imx6sx-softing-vining-2000.dt.yaml: pwmleds: 'blue', 'green', 'red' do not match any of the regexes: '^led(-[0-9a-f]+)?$', 'pinctrl-[0-9]+'
->         From schema: /home/alex/src/linux/leds/Documentation/devicetree/bindings/leds/leds-pwm.yaml
-> 
-> Signed-off-by: Alexander Dahl <post@lespocky.de>
+On Fri, Oct 30 2020 at 00:41, Thomas Gleixner wrote:
+> On Thu, Oct 29 2020 at 16:11, Linus Torvalds wrote:
+> No, you're not misreading it, but doing it conditionally would be a
+> complete semantical disaster. kmap_atomic*() also disables preemption
+> and pagefaults unconditionaly.  If that wouldn't be the case then every
+> caller would have to have conditionals like 'if (CONFIG_HIGHMEM)' or
+> worse 'if (PageHighMem(page)'.
+>
+> Let's not go there.
+>
+> Migrate disable is a less horrible plague than preempt and pagefault
+> disable even if the scheduler people disagree due to the lack of theory
+> backing that up :)
+>
+> The charm of the new interface is that users still can rely on per
+> cpuness independent of being on a highmem plagued system. For non
+> highmem systems the extra migrate disable/enable is really a minor
+> nuissance.
 
-Applied, thanks.
+thinking about it some more after having sleep and coffee, we actually
+could hide the migrate disable in the actual highmem part.
+
+But then we really should not name it kmap_local. 'local' suggests
+locality, think local_irq*, local_bh* ... kmap_task would be more
+accurate then.
+
+Toughts?
+
+        tglx
