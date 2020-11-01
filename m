@@ -2,93 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0C12A1BC7
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Nov 2020 04:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDE52A1D91
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Nov 2020 12:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726513AbgKADeV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 31 Oct 2020 23:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726486AbgKADeV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 31 Oct 2020 23:34:21 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBD3C0617A6
-        for <linux-mips@vger.kernel.org>; Sat, 31 Oct 2020 20:34:21 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id t22so5033978plr.9
-        for <linux-mips@vger.kernel.org>; Sat, 31 Oct 2020 20:34:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=/18yX+QhpCHQL7uLlUv4BeS0wQVLShfX8b0wqPUJf8s=;
-        b=u2cnw5ta650ZBY2iOwaZI3I8+LMyu1ASRg8ykjHrtGo19VYyR4ACsePTktCTdHf3lT
-         nyRYnL2guO7YcfOagGpekIJjFe3CFwCuyVHUq5F1XWbL1nHU12SLpC+/Kz51cA4n5Mnw
-         DWdKQrSm1BRFmOQMXSnq3jaanF8wVNfsw+JrrSLcAfYp++uZBfHCImSGb3ITCfi0sd5y
-         RgJd+co9aIkRDio7gCMkGU2zlA62jWes0VrDGNN3SkG9ws3blRLJySFQHN1e5Rb1Km5Y
-         iS24TIU8G9+J1syTzfIr/LmVqMJjaUcQvQaEWbi52yWHrpjFM6UWz4pH++2nxCogq42n
-         qz0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=/18yX+QhpCHQL7uLlUv4BeS0wQVLShfX8b0wqPUJf8s=;
-        b=KlOhSN7hLrhfDlcrx/col4H01syuwI/K9TSloCMRXUSR33T8xge0vaNrvdldBrhSf/
-         aWKCHj1KFzB8IxZ9Ohk2GYaGRI5IzOQnJKO7uoAWWsm78bFohk5sgcEmCgJ2uR3IKD1a
-         VFxkJJ+dsM06U7HAOkDmzHG/2TzDAHVJbr7tCksa7TKJPdtpG3mNDxxekknvt9a7eG2Y
-         3ogjms2hACWacd0ot/rhc43vfBfiyLtM6bnZNGxbjZqFZOHDmGDGvpGtpfjBIN0KCAxy
-         jFnwX6TRg5cQeufYZpLGQd1TxbktV4FQXr2dE+8+T1tnghV2UUz+t+SbtTzKI8Aopwqo
-         mXNg==
-X-Gm-Message-State: AOAM533401CloMDPwYRdFhGGLLHiI8W2/+UFP+tecAG/irXgLK6eLA+0
-        /jh8PMsb+9byPcMrW02VHPvqdEbndYCx3w==
-X-Google-Smtp-Source: ABdhPJw6GWNJm5elvYqJ0zYPJBXf3GUgShmZqsyhRiVBSLilAdstibdlCs/TQsXUBtnni9smZW54aQ==
-X-Received: by 2002:a17:90a:67c7:: with SMTP id g7mr11085927pjm.140.1604201661230;
-        Sat, 31 Oct 2020 20:34:21 -0700 (PDT)
-Received: from software.domain.org ([45.77.13.216])
-        by smtp.gmail.com with ESMTPSA id k8sm9038447pgi.39.2020.10.31.20.34.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 31 Oct 2020 20:34:20 -0700 (PDT)
-Sender: Huacai Chen <chenhuacai@gmail.com>
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mel Gorman <mgorman@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH Resend 3/3] MIPS: Loongson64: Enlarge cross-package node distance
-Date:   Sun,  1 Nov 2020 11:33:58 +0800
-Message-Id: <1604201638-4001-3-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
-In-Reply-To: <1604201638-4001-1-git-send-email-chenhc@lemote.com>
-References: <1604201638-4001-1-git-send-email-chenhc@lemote.com>
+        id S1726339AbgKALSr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Nov 2020 06:18:47 -0500
+Received: from [78.8.192.131] ([78.8.192.131]:11785 "EHLO orcam.me.uk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726282AbgKALSq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 1 Nov 2020 06:18:46 -0500
+X-Greylist: delayed 362 seconds by postgrey-1.27 at vger.kernel.org; Sun, 01 Nov 2020 06:18:46 EST
+Received: from cvs.linux-mips.org (eddie.linux-mips.org [148.251.95.138])
+        by orcam.me.uk (Postfix) with ESMTPS id C974D2BE086;
+        Sun,  1 Nov 2020 11:12:40 +0000 (GMT)
+Date:   Sun, 1 Nov 2020 11:12:36 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+cc:     linux-mips@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [BUG] Crash during futex initialization with gcc 10
+In-Reply-To: <878sbqd4fp.fsf@BL-laptop>
+Message-ID: <alpine.LFD.2.21.2011010925230.3100725@eddie.linux-mips.org>
+References: <878sbqd4fp.fsf@BL-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-NUMA node distances affect the NUMA balancing behaviors. The cost of
-cross-package memory access is very high, and our benchmarks show that
-200 is a more appropriate value than 100 (for cross-package numa node
-distance) on Loongson64 platforms, so enlarge it.
+On Wed, 28 Oct 2020, Gregory CLEMENT wrote:
 
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/loongson64/numa.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> I saw a regression when building a MIPS kernel with gcc 10:
+> 
+> futex hash table entries: 256 (order: 3, 32768 bytes, linear)
+> CPU 0 Unable to handle kernel paging request at virtual address 00000000, epc == 801be4f0, ra == 80993778
+> Oops[#1]:
+> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.9.0-rc8-00006-g6185221cb805 #3
+> $ 0   : 00000000 00000001 00000000 00000000
+> $ 4   : 87831e28 00000000 00000000 00000000
+> $ 8   : 8782c000 87888000 00000100 00000051
+> $12   : 09dcd4c5 87831c69 00000000 00000010
+> $16   : 80960000 00000001 80960000 8095bc90
+> $20   : 809d0000 809b3fc4 80987094 00000002
+> $24   : 00000000 00000000
+> $28   : 87830000 87831df8 809b3fe4 80993778
+> Hi    : 00000010
+> Lo    : 8a3d70e6
+> epc   : 801be4f0 cmpxchg_futex_value_locked+0x2c/0x78
+> ra    : 80993778 futex_init+0xb4/0x124
+> Status: 11008403 KERNEL EXL IE
+> Cause : 00800008 (ExcCode 02)
+> BadVA : 00000000
+> PrId  : 02019654 (MIPS 24KEc)
+> Modules linked in:
+> Process swapper/0 (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=00000000)
+> Stack : ffe4d6e0 001b291f 80963e60 80964fe0 00000000 87831e24 00000000 00000100
+>         00000100 80a00000 00000000 00000008 809b3fe4 0a27934f 87878880 809936c4
+>         87878880 80960000 00000000 80100120 00000000 00000000 00000000 87831e54
+>         87831e54 87878895 8094cecc 80900000 00000000 00000001 80960000 00000001
+>         809629c4 80908380 808ff7ec 80900000 0000007f 87878895 00000000 0a27934f
+>         ...
+> Call Trace:
+> [<801be4f0>] cmpxchg_futex_value_locked+0x2c/0x78
+> Code: 1440000f  00000000  0000000f <c0a30000> 14660005  00000000  00e00825  e0a10000  1020fff9
+> 
+> ---[ end trace e34236d22d7ecc0e ]---
+> Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+> ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+> 
+> 
+> If I use gcc 9.3 or if I disable the futex in the kernel configuration
+> there is no crash anymore.
+> 
+> The crash occurs after that the pagefault was disabled and yet we see a
+> page fault. The exact part where it occurs is here:
+> https://elixir.bootlin.com/linux/latest/source/arch/mips/include/asm/futex.h#L167
+> 
+> But it is too much MIPS assembly for me !
 
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index 901f5be..ee4fedb 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -79,7 +79,7 @@ static int __init compute_node_distance(int row, int col)
- 	else if (package_row == package_col)
- 		return 40;
- 	else
--		return 100;
-+		return 200;
- }
- 
- static void __init init_topology_matrix(void)
--- 
-2.7.0
+ I doubt there is anything wrong with the assembly snippet.  There's a 
+missing clobber for "$1", but it has always been a fixed register, so GCC 
+won't allocate it anyway.
 
+> Does someone has an idea to fix it ?
+
+ Well, the instruction that trapped is:
+
+	c0a30000 	ll	v1,0(a1)
+
+and the problem is a null pointer passed in $a1, so clearly the issue is 
+in the caller.
+
+ We have this:
+
+	if (cmpxchg_futex_value_locked(&curval, NULL, 0, 0) == -EFAULT)
+		futex_cmpxchg_enabled = 1;
+
+in `futex_detect_cmpxchg', and then there is this arrangement:
+
+	pagefault_disable();
+	ret = futex_atomic_cmpxchg_inatomic(curval, uaddr, uval, newval);
+	pagefault_enable();
+
+in `cmpxchg_futex_value_locked', so I'd check what `pagefault_disable' is
+supposed to do and why it does not with GCC 10.
+
+ NB I haven't seen the issue with:
+
+Linux version 5.9.0-00858-g865c50e1d279-dirty (macro@angie) (mipsel-linux-gnu-gcc (GCC) 11.0.0 20200919 (experimental), GNU ld (GNU Binutils) 2.35.50.20201006) #2 Wed Oct 14 04:01:29 CEST 2020
+
+so all I can do is to guide you to find the culprit yourself since you 
+have a reproducer.
+
+  Maciej
