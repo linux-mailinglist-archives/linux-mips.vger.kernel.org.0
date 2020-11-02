@@ -2,84 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E642A22E0
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Nov 2020 03:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8045A2A269B
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Nov 2020 10:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727450AbgKBCE4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Nov 2020 21:04:56 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:35064 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727409AbgKBCEz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 1 Nov 2020 21:04:55 -0500
-Received: from [10.130.0.60] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxKtEyaZ9fYqcDAA--.5264S3;
-        Mon, 02 Nov 2020 10:04:34 +0800 (CST)
-Subject: Re: Kexec on MIPS32R2?
-To:     Mauro Condarelli <mc5686@mclink.it>, linux-mips@vger.kernel.org
-References: <21a8d116-ed18-d1f1-9c72-019a619f7ebc@mclink.it>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <b0332180-2dd8-8eed-8cf1-b34640a8e343@loongson.cn>
-Date:   Mon, 2 Nov 2020 10:04:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1728273AbgKBJID convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 2 Nov 2020 04:08:03 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:27629 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728004AbgKBJIC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Nov 2020 04:08:02 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id uk-mta-2-3gt7SuvxPWOqa-ZpIA1B2g-1;
+ Mon, 02 Nov 2020 09:06:39 +0000
+X-MC-Unique: 3gt7SuvxPWOqa-ZpIA1B2g-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 2 Nov 2020 09:06:38 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 2 Nov 2020 09:06:38 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Greg KH' <gregkh@linuxfoundation.org>
+CC:     'David Hildenbrand' <david@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Thread-Topic: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Thread-Index: AQHWqE5GNDfnH4y9nkGWtfqJueR1KKmjTCJQgAAN4UiAAAD2IIAASOeCgAF+12CAAB+UKYAAAQNg///yIQCAD2i/YA==
+Date:   Mon, 2 Nov 2020 09:06:38 +0000
+Message-ID: <0ab5ac71f28d459db2f350c2e07b88ca@AcuMS.aculab.com>
+References: <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
+ <20201022104805.GA1503673@kroah.com> <20201022121849.GA1664412@kroah.com>
+ <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com>
+ <20201022125759.GA1685526@kroah.com> <20201022135036.GA1787470@kroah.com>
+ <134f162d711d466ebbd88906fae35b33@AcuMS.aculab.com>
+ <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com>
+ <999e2926-9a75-72fd-007a-1de0af341292@redhat.com>
+ <35d0ec90ef4f4a35a75b9df7d791f719@AcuMS.aculab.com>
+ <20201023144718.GA2525489@kroah.com>
+In-Reply-To: <20201023144718.GA2525489@kroah.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-In-Reply-To: <21a8d116-ed18-d1f1-9c72-019a619f7ebc@mclink.it>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9AxKtEyaZ9fYqcDAA--.5264S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr4ftry5WF13GrWkWF43GFg_yoW8Gr1kpF
-        1rCr4Sqrs5XFy0yw18Zw1xurWfZw4Y9Fy3JwnYgr95Ar4Dtryktrn29a129a4jqryrK3Wj
-        qFW3Xay0ka1Yy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Kb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VCY1x0262k0Y48FwI
-        0_Jr0_Gr1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvE
-        wIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxK
-        x2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
-        AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUyXAwDUUUU
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+From: 'Greg KH'
+> Sent: 23 October 2020 15:47
+> 
+> On Fri, Oct 23, 2020 at 02:39:24PM +0000, David Laight wrote:
+> > From: David Hildenbrand
+> > > Sent: 23 October 2020 15:33
+> > ...
+> > > I just checked against upstream code generated by clang 10 and it
+> > > properly discards the upper 32bit via a mov w23 w2.
+> > >
+> > > So at least clang 10 indeed properly assumes we could have garbage and
+> > > masks it off.
+> > >
+> > > Maybe the issue is somewhere else, unrelated to nr_pages ... or clang 11
+> > > behaves differently.
+> >
+> > We'll need the disassembly from a failing kernel image.
+> > It isn't that big to hand annotate.
+> 
+> I've worked around the merge at the moment in the android tree, but it
+> is still quite reproducable, and will try to get a .o file to
+> disassemble on Monday or so...
 
-On 11/02/2020 08:01 AM, Mauro Condarelli wrote:
-> Can someone confirm (or disconfirm, of course) kexec is supposed to work on MIPS32R2?
-> My attempts to use it on a MT7628-based board result in a silent hang (watchdog cuts in)
-> right after:
->
-> [  201.309836] kexec_core: Starting new kernel
-> [  201.318239] Will call new kernel at 004f0000
-> [  201.322581] Bye ...
->
-> Apparently old kernel jumps to `do_kexec()` and just dies; new kernel does not give a peep.
-> This can be completely my fault, of course, but I would like a confirm this is supposed to work.
->
-> Thanks in advance
-> Mauro Condarelli
-I'm not familiar with MIPSR2. I guess your platform (MT7628-based board)
-cannot use the common function. It may not give a machine specific 
-function, too.
+Did this get properly resolved?
 
-How CPU0 do in do_kexec()? Maybe arch/mips/kernel/reloacate_kernel.S 
-gives us
-some useful information. In this file CPU0 goes relocate_new_kernel() 
-and other
-CPUs go kexec_smp_wait() if CONFIG_SMP is enabled. Normally CPU0 will 
-enter the
-kernel_entry() of the new kernel. In my own understanding of the kexec 
-process,
-I find it extremely difficult to pass parameters. Please make sure your 
-platform
-passes the parameters necessary for startup. (See 
-arch/mips/kernel/head.S, such as
-dtb, fw_args* or other necessary parameters, this is what I said 
-"machine specific")
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
