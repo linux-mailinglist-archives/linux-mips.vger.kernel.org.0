@@ -2,65 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A252A22DF
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Nov 2020 03:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E642A22E0
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Nov 2020 03:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727445AbgKBCE0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Nov 2020 21:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727409AbgKBCEZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Nov 2020 21:04:25 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF72C0617A6
-        for <linux-mips@vger.kernel.org>; Sun,  1 Nov 2020 18:04:24 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id x20so11570313ilj.8
-        for <linux-mips@vger.kernel.org>; Sun, 01 Nov 2020 18:04:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YMi4sbS5EayyNfT3+VK+zGYzNb2YLgquW0UaQB7udfA=;
-        b=ifuKNzVFPIVEpptVehyHygKIZHFqCWRgsg/K/mc5wOscEgnyPzewu7d5ICahKze4QU
-         0qXJkyXEqDDzfSY2vZHKWbJ2b4vtynZeL/IkW6xjFjqISsArjH0KP1FVoW/nwj6E33AX
-         O/SAB/ctfn3BV4xM1x7w1Fhy8JuZGQEvFj93CRz//FiluhSwq9cDZcY7aeQ4QufARqtM
-         IYQITKyYvMRQIe6WdZeBC1p2wLkiDv8m78GbR5n731wPJQBQSi/kHTghOZERPfueIvWS
-         W76zPm0C/8HfW3u/mojgrSCkmqrE02AXBqMfq16wjuG4IRO08KBoIMaeDceLfIelf87B
-         9drA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YMi4sbS5EayyNfT3+VK+zGYzNb2YLgquW0UaQB7udfA=;
-        b=EtZ6gMZXU93hvxEh0KS2aol45geofqqCQKSxAN/wLodNeHlq2OxMLpo6nThwIhLCp0
-         aDuLdR+HWtreAY7qibPqjXLYiWro2DTvP0EKTFs4FxNNHzv5kjsDhGCOzc7yI0S/ONSP
-         PrvMN5mCIinVxo8kezeyZDg1MBL5oH/LiVtDZ9H5Crh66hCJnrTMAv7NHRmh+ZmTNzM6
-         E/k9RbaJexXA8lQyfpNYyfG9QKW5VRo17apln8SXeHMTcSdgsxrl5wL6AJybZiMHJK/7
-         f7wFNLv/xww7Qn7f7BmWirjNgsMmytml06/GhnCBWlrgv0ePP61dKmSm3sgpGd0B+Vc8
-         g2EA==
-X-Gm-Message-State: AOAM533KFe3ppAl1ekSJnD1wG3Ob7PHxi/zr7d4JP1mhp+KkKVJtOK/o
-        LqkPHDiB1SSZDzV/oLmMLjXsljbeZ7yzlzvAKvqn2ChfLn39+nAc
-X-Google-Smtp-Source: ABdhPJwZIg9+M8aqagEQIfCa9Okkamw2C8k/KxbGOJZPkHQx4Gh3/cVRH4iZCw9iFTtCwEwPRX8quLDDO/ykfFNxnp4=
-X-Received: by 2002:a92:d908:: with SMTP id s8mr9257300iln.173.1604282663219;
- Sun, 01 Nov 2020 18:04:23 -0800 (PST)
-MIME-Version: 1.0
-References: <21a8d116-ed18-d1f1-9c72-019a619f7ebc@mclink.it>
-In-Reply-To: <21a8d116-ed18-d1f1-9c72-019a619f7ebc@mclink.it>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Mon, 2 Nov 2020 10:04:11 +0800
-Message-ID: <CAAhV-H7sp-Opm1W9H8-bKOBo3U0PnM4khavAtbQ=1c-se2BNRQ@mail.gmail.com>
+        id S1727450AbgKBCE4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Nov 2020 21:04:56 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:35064 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727409AbgKBCEz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 1 Nov 2020 21:04:55 -0500
+Received: from [10.130.0.60] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxKtEyaZ9fYqcDAA--.5264S3;
+        Mon, 02 Nov 2020 10:04:34 +0800 (CST)
 Subject: Re: Kexec on MIPS32R2?
-To:     Mauro Condarelli <mc5686@mclink.it>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Mauro Condarelli <mc5686@mclink.it>, linux-mips@vger.kernel.org
+References: <21a8d116-ed18-d1f1-9c72-019a619f7ebc@mclink.it>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <b0332180-2dd8-8eed-8cf1-b34640a8e343@loongson.cn>
+Date:   Mon, 2 Nov 2020 10:04:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <21a8d116-ed18-d1f1-9c72-019a619f7ebc@mclink.it>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxKtEyaZ9fYqcDAA--.5264S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr4ftry5WF13GrWkWF43GFg_yoW8Gr1kpF
+        1rCr4Sqrs5XFy0yw18Zw1xurWfZw4Y9Fy3JwnYgr95Ar4Dtryktrn29a129a4jqryrK3Wj
+        qFW3Xay0ka1Yy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Kb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VCY1x0262k0Y48FwI
+        0_Jr0_Gr1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvE
+        wIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxK
+        x2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+        AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUyXAwDUUUU
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Mauro,
+Hi,
 
-On Mon, Nov 2, 2020 at 8:02 AM Mauro Condarelli <mc5686@mclink.it> wrote:
->
+On 11/02/2020 08:01 AM, Mauro Condarelli wrote:
 > Can someone confirm (or disconfirm, of course) kexec is supposed to work on MIPS32R2?
 > My attempts to use it on a MT7628-based board result in a silent hang (watchdog cuts in)
 > right after:
@@ -73,9 +63,23 @@ On Mon, Nov 2, 2020 at 8:02 AM Mauro Condarelli <mc5686@mclink.it> wrote:
 > This can be completely my fault, of course, but I would like a confirm this is supposed to work.
 >
 > Thanks in advance
-I think every CPU should add some specific code in
-arch/mips/kernel/relocate_kernel.S
-
-Huacai
-
 > Mauro Condarelli
+I'm not familiar with MIPSR2. I guess your platform (MT7628-based board)
+cannot use the common function. It may not give a machine specific 
+function, too.
+
+How CPU0 do in do_kexec()? Maybe arch/mips/kernel/reloacate_kernel.S 
+gives us
+some useful information. In this file CPU0 goes relocate_new_kernel() 
+and other
+CPUs go kexec_smp_wait() if CONFIG_SMP is enabled. Normally CPU0 will 
+enter the
+kernel_entry() of the new kernel. In my own understanding of the kexec 
+process,
+I find it extremely difficult to pass parameters. Please make sure your 
+platform
+passes the parameters necessary for startup. (See 
+arch/mips/kernel/head.S, such as
+dtb, fw_args* or other necessary parameters, this is what I said 
+"machine specific")
+
