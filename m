@@ -2,53 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E98FC2A227C
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Nov 2020 01:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFFF2A22B0
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Nov 2020 02:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727322AbgKBACD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Nov 2020 19:02:03 -0500
-Received: from relaygw2-20.mclink.it ([195.78.211.234]:34880 "EHLO
-        relaygw2-20.mclink.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727309AbgKBACD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Nov 2020 19:02:03 -0500
-Received: from cgp-esgout01-rm.mail.irds.it ([172.24.30.44] verified)
-  by relaygw2-20.mclink.it (CommuniGate Pro SMTP 6.0.4)
-  with ESMTPS id 182266446 for linux-mips@vger.kernel.org; Mon, 02 Nov 2020 01:02:00 +0100
-X-Envelope-From: <mc5686@mclink.it>
-Received: from [192.168.7.128] (host-87-16-231-187.retail.telecomitalia.it [87.16.231.187])
-        (Authenticated sender: mc5686)
-        by cgp-esgout01-rm.mail.irds.it (Postfix) with ESMTPA id 9C3FA41AF9
-        for <linux-mips@vger.kernel.org>; Mon,  2 Nov 2020 01:01:57 +0100 (CET)
-To:     linux-mips@vger.kernel.org
-From:   Mauro Condarelli <mc5686@mclink.it>
-Subject: Kexec on MIPS32R2?
-Message-ID: <21a8d116-ed18-d1f1-9c72-019a619f7ebc@mclink.it>
-Date:   Mon, 2 Nov 2020 01:01:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727599AbgKBBI0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Nov 2020 20:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727335AbgKBBIZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Nov 2020 20:08:25 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A48CC0617A6;
+        Sun,  1 Nov 2020 17:08:25 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1604279303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4uGtzWR3XDWVzxJPeTJwUrr+92QjqUI1P4Rl6d07MCc=;
+        b=XrgDk26VSw3lMWxT80X6p2BiIELFfSd45uXmpqg40hcbZPvcaSEbWpk3R+GxKbboSmpFo7
+        63BVEl/BSGohNcNmokSUofaOuAyVB8TF4zkcITLfRQimdDp0/NzDabt6xoWCRv1KCKeW7F
+        JBfHL2Zd4jfQiOa73d8ngQE8XEVUJ3AcbNTfvECT7y8NW8OaNw3Ie/CbXJDQBPmopC0hi6
+        3UpqoW4N6M5pY4xkTcBxiJGRWb665zE7gX5m+PKTKEvvjyV6Hoqyt5gxZLMHwAEcjlgo+r
+        WdCkNHrQQLMZuU+RDrUNzqVy0E0MpRf3weVrn07sYqVIDzra4XxQNgHUkZAAnw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1604279303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4uGtzWR3XDWVzxJPeTJwUrr+92QjqUI1P4Rl6d07MCc=;
+        b=w804GlJ3cTjryaWI6xXsdwM5po9NFzF1/LMSPDCaZtr/gWtzM/1QwrA9gqRhs9hURGxtuJ
+        nFG9PzKRhgh+hKBA==
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Matthew Wilcox <willy@infradead.org>
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
+In-Reply-To: <20201029221806.189523375@linutronix.de>
+References: <20201029221806.189523375@linutronix.de>
+Date:   Mon, 02 Nov 2020 02:08:23 +0100
+Message-ID: <87k0v48t14.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Irideos-Libra-ESVA-Information: Please contact Irideos for more information
-X-Irideos-Libra-ESVA-ID: 9C3FA41AF9.A82E2
-X-Irideos-Libra-ESVA: No virus found
-X-Irideos-Libra-ESVA-From: mc5686@mclink.it
-X-Irideos-Libra-ESVA-Watermark: 1604880117.89687@pEhkMU8LNDCNXeY9x+pyWQ
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Can someone confirm (or disconfirm, of course) kexec is supposed to work on MIPS32R2?
-My attempts to use it on a MT7628-based board result in a silent hang (watchdog cuts in)
-right after:
+On Thu, Oct 29 2020 at 23:18, Thomas Gleixner wrote:
+>
+> There is also a still to be investigated question from Linus on the initial
+> posting versus the per cpu / per task mapping stack depth which might need
+> to be made larger due to the ability to take page faults within a mapping
+> region.
 
-[  201.309836] kexec_core: Starting new kernel
-[  201.318239] Will call new kernel at 004f0000
-[  201.322581] Bye ...
+I looked deeper into that and we have a stack depth of 20. That's plenty
+and I couldn't find a way to get above 10 nested ones including faults,
+interrupts, softirqs. With some stress testing I was not able to get over
+a maximum of 6 according to the traceprintk I added.
 
-Apparently old kernel jumps to `do_kexec()` and just dies; new kernel does not give a peep.
-This can be completely my fault, of course, but I would like a confirm this is supposed to work.
+For some obscure reason when CONFIG_DEBUG_HIGHMEM is enabled the stack
+depth is increased from 20 to 41. But the only thing DEBUG_HIGHMEM does
+is to enable a few BUG_ON()'s in the mapping code.
 
-Thanks in advance
-Mauro Condarelli
+That's a leftover from the historical mapping code which had fixed
+entries for various purposes. DEBUG_HIGHMEM inserted guard mappings
+between the map types. But that got all ditched when kmap_atomic()
+switched to a stack based map management. Though the WITH_KM_FENCE magic
+survived without being functional. All the thing does today is to
+increase the stack depth.
+
+I just made that functional again by keeping the stack depth increase
+and utilizing every second slot. That should catch Willy's mapping
+problem nicely if he bothers to test on 32bit :)
+
+Thanks,
+
+        tglx
+
