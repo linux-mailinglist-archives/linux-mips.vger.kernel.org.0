@@ -2,157 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB6D2A3CB7
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Nov 2020 07:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 637692A3D4D
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Nov 2020 08:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725982AbgKCGSE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Nov 2020 01:18:04 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:53550 "EHLO loongson.cn"
+        id S1727948AbgKCHMO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Nov 2020 02:12:14 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:37224 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725958AbgKCGSE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Nov 2020 01:18:04 -0500
-Received: from [10.130.0.80] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxmtAS9qBfy5YEAA--.4195S3;
-        Tue, 03 Nov 2020 14:17:55 +0800 (CST)
-Subject: Re: [PATCH v2 5/6] MIPS: Loongson64: Make sure the PC address is
- correct when 3A4000+ CPU hotplug
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>
-References: <1604373306-3599-1-git-send-email-yangtiezhu@loongson.cn>
- <1604373306-3599-6-git-send-email-yangtiezhu@loongson.cn>
- <b67e3a4b-2f2f-37c5-88fa-24e11ac21cac@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Lu Zeng <zenglu@loongson.cn>, Jun Yi <yijun@loongson.cn>
+        id S1725968AbgKCHMO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Nov 2020 02:12:14 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx79PGAqFfIKEEAA--.12977S2;
+        Tue, 03 Nov 2020 15:12:06 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <f9ca25c7-dc3b-6f2d-9011-166851d1a62a@loongson.cn>
-Date:   Tue, 3 Nov 2020 14:17:54 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <b67e3a4b-2f2f-37c5-88fa-24e11ac21cac@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxmtAS9qBfy5YEAA--.4195S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxGF13AFy5Xw17CF1DXFW5ZFb_yoW5XFyDp3
-        4DA3ZFkFs8WFyUCF1ktw18XFyUJFZ3tFykZry2qw48u3s0gw1a9FyfKryFga4xuFn5Ka4j
-        qryUCFykCFZ8uFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JU-J5rUUUUU=
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH v3 0/6] Modify some registers operations and move decode_cpucfg() to loongson_regs.h
+Date:   Tue,  3 Nov 2020 15:11:59 +0800
+Message-Id: <1604387525-23400-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dx79PGAqFfIKEEAA--.12977S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrWkWw1xKr18Cr43Ar1UZFb_yoW3Krg_Kr
+        y2yF93G3yxW3WfJFykXF4xXrW7XFW8C3y3CFn8tr9av3WYqr98Zr48Cr4UWws8uanF9ry5
+        XF48WFykA3Z7XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VCY1x0262k0Y48FwI0_Jr0_Gr1lYx0Ex4A2jsIE14v26r
+        4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
+        YI8I648v4I1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUj5fQtUUUUU==
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/03/2020 01:28 PM, Jiaxun Yang wrote:
->
->
-> 在 2020/11/3 11:15, Tiezhu Yang 写道:
->> In loongson3_type3_play_dead(), in order to make sure the PC address is
->> correct, use lw to read the low 32 bits first, if the result is not 
->> zero,
->> then use ld to read the whole 64 bits, otherwise there maybe exists 
->> atomic
->> problem due to write high 32 bits first and then low 32 bits, like this:
->>
->> high 32 bits (write done)
->>                                    -- only read high 32-bits which is 
->> wrong
->> low 32 bits (not yet write done)
->>
->> This problem is especially for Loongson 3A4000+ CPU due to using 
->> Mail_Send
->> register which can only send 32 bits data one time. Although it is 
->> hard to
->> reproduce, we can do something at the software level to avoid the 
->> risks for
->> 3A4000+ CPU, this change has no influence on the other Loongson CPUs.
->>
->> Signed-off-by: Lu Zeng <zenglu@loongson.cn>
->> Signed-off-by: Jun Yi <yijun@loongson.cn>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->
-> Hi Tiezhu,
->
-> Sorry that I didn't look this patch carefully in previous rev, here's 
-> my comments,
->
-> Firstly the commit message and code comment looks bogus...
->
-> I'd prefer
+v2: Add some callbacks in csr_ipi probe() for patch #4
+v3: Update the commit message and comment for patch #5
 
-Hi Jiaxun,
+Tiezhu Yang (6):
+  MIPS: Loongson64: Do not write the read only field LPA of CP0_CONFIG3
+  MIPS: Loongson64: Set the field ELPA of CP0_PAGEGRAIN only once
+  MIPS: Loongson64: Set IPI_Enable register per core by itself
+  MIPS: Loongson64: Add Mail_Send support for 3A4000+ CPU
+  MIPS: Loongson64: SMP: Fix up play_dead jump indicator
+  MIPS: Loongson64: Move decode_cpucfg() to loongson_regs.h
 
-Thanks for your detail review, it looks better.
-Let me update it and then send v3.
+ .../asm/mach-loongson64/kernel-entry-init.h        |   8 --
+ .../include/asm/mach-loongson64/loongson_regs.h    |  34 ++++++
+ arch/mips/kernel/cpu-probe.c                       |  31 +-----
+ arch/mips/loongson64/numa.c                        |  20 +---
+ arch/mips/loongson64/smp.c                         | 123 +++++++++++++++++----
+ 5 files changed, 136 insertions(+), 80 deletions(-)
 
-Thanks,
-Tiezhu
-
->
-> ---
-> MIPS: Loongson64: SMP: Fix up play_dead jump indicator
->
-> In play_dead function, the whole 64-bit PC mailbox was used as a 
-> indicator
-> to determine if the master core had written boot jump information.
->
-> However, after we introduced CSR mailsend, the 64-bit PC mailbox won't be
-> written atomicly. Thus we have to use the lower 32-bit, which will be 
-> written at
-> the last, as the jump indicator instead.
-> -- 
->
-> Thanks.
->
->> ---
->>
->> v2: No changes
->>
->>   arch/mips/loongson64/smp.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
->> index 736e98d..e32b46e 100644
->> --- a/arch/mips/loongson64/smp.c
->> +++ b/arch/mips/loongson64/smp.c
->> @@ -764,9 +764,10 @@ static void loongson3_type3_play_dead(int 
->> *state_addr)
->>           "1: li    %[count], 0x100             \n" /* wait for init 
->> loop */
->>           "2: bnez  %[count], 2b                \n" /* limit mailbox 
->> access */
->>           "   addiu %[count], -1                \n"
->> -        "   ld    %[initfunc], 0x20(%[base])  \n" /* get PC via 
->> mailbox */
->> +        "   lw    %[initfunc], 0x20(%[base])  \n" /* get PC (low 32 
->> bits) via mailbox */
->
-> Here you can comment as "Check jump indicator (lower 32-bit of PC 
-> mailbox)"
->
-> Thanks.
->
-> - Jiaxun
->>           "   beqz  %[initfunc], 1b             \n"
->>           "   nop                               \n"
->> +        "   ld    %[initfunc], 0x20(%[base])  \n" /* get PC (whole 
->> 64 bits) via mailbox */
->>           "   ld    $sp, 0x28(%[base])          \n" /* get SP via 
->> mailbox */
->>           "   ld    $gp, 0x30(%[base])          \n" /* get GP via 
->> mailbox */
->>           "   ld    $a1, 0x38(%[base])          \n"
+-- 
+2.1.0
 
