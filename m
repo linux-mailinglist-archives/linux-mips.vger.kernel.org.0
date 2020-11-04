@@ -2,140 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2182A4F88
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Nov 2020 20:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 533ED2A5C88
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Nov 2020 03:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729363AbgKCTAX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Nov 2020 14:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727706AbgKCTAX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Nov 2020 14:00:23 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8B3C0613D1;
-        Tue,  3 Nov 2020 11:00:23 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1604430021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p7vA0Pp8Yw32NcCmeGMglrNZNTsusNNmUR0JbokXn0s=;
-        b=Wh43mnWM8kdYti+K6Ejg70IQfa+GmZ8DCSo20FQE/hkLNmxVT4iphQnlk6m40FPrmWktQO
-        8ayXKz0ztE1cqx/iEhmcbhojQh9yCHEkFANOGr1w8fGEwrPOcrWAWxi/OenSb5evTEILWa
-        oclhRZDu2W0eltn+sc+1j25HCEzKjNSXz+4io/CbYUyMFuxTbNnNJEiCm1jMBn8PGej5s3
-        E3JpbZR0aFWpI6lV+SZv22HUNUyPWbXG8oMYz+BmJikgi+ivLhTWpXqqgXf53DcJR+Ltrn
-        dCfpJUdQQNPCTgPlSMPzbs0whzNCaCVS/fZbTm34UVovthqkFff3qyFpeY0sbA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1604430021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p7vA0Pp8Yw32NcCmeGMglrNZNTsusNNmUR0JbokXn0s=;
-        b=STcwQ6RaI64DeextSGHfCvrA9zLqnmZlfhd6kn3GgHfcpWRfVbJIkhHpoM7lA8B8jXR4lp
-        QBLUYE/euA+zomCg==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-aio@kvack.org, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list\:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>
-Subject: Re: [patch V3 22/37] highmem: High implementation details and document API
-In-Reply-To: <CAHk-=wg2D_yjgKYkXCybD3uf0dtwYh6HxZ9BQJfV5t+EBqLGQQ@mail.gmail.com>
-References: <20201103092712.714480842@linutronix.de> <20201103095858.827582066@linutronix.de> <CAHk-=wg2D_yjgKYkXCybD3uf0dtwYh6HxZ9BQJfV5t+EBqLGQQ@mail.gmail.com>
-Date:   Tue, 03 Nov 2020 20:00:20 +0100
-Message-ID: <87y2ji1d17.fsf@nanos.tec.linutronix.de>
+        id S1728272AbgKDCAY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Nov 2020 21:00:24 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:39434 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725765AbgKDCAY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Nov 2020 21:00:24 -0500
+Received: by mail-io1-f65.google.com with SMTP id p7so20634616ioo.6;
+        Tue, 03 Nov 2020 18:00:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q7LFjEeJrDM+Fx+leScIeW6KxbYUSuFa1TzeyDsXSiA=;
+        b=YtVU1aqch+v9kSIpUxRVjsCVTLFGGpZ8gBcQ+k02JITJStbpI+jeRdIdxejVKtFp0H
+         qrvSNli06QigfAOhLQJ/2ObK+LhHPTXIuZwlQv30eHb7kKU9njVwLx+MpHUOw2oKf0rS
+         K9etz/N28ULhl3Cq0/7SON67t3B/672qILI5Gaf3Ys1yHzPe3ZxCM0zbtVGa3BAjLpsv
+         GlhdeNBrlFlFay01s/nO7BVxq0S6MLUsCJSJ41u+dIyslt1Z17QMPxgTjfAkN/V6gYko
+         0GxhCXdQ0nSM9IOkoBwcFbpgrb1G8XHJpx9ixL5KFP3HtXGHY+u5vAaoXfitHnWlYTuJ
+         kI9A==
+X-Gm-Message-State: AOAM531vNZDfWlL+tOj612UdeaY4h2s6/bi1GdPWrMDNKan5qcoa/9h8
+        qBcSGIYegPnlUvn7qX54ulJUX6qt2hxW84eQqW9Kee4D8Z0qKw==
+X-Google-Smtp-Source: ABdhPJxeigkHoKzdirZZzu0ZiPn/fWy8le1kZl9BwU/cad6newK3owJHQ7FnCSbKbHRWFyT2GOJDKmMuJBOtmzwPzNs=
+X-Received: by 2002:a6b:dc0f:: with SMTP id s15mr15979794ioc.180.1604455222049;
+ Tue, 03 Nov 2020 18:00:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <1604387525-23400-1-git-send-email-yangtiezhu@loongson.cn> <1604387525-23400-2-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1604387525-23400-2-git-send-email-yangtiezhu@loongson.cn>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Wed, 4 Nov 2020 10:00:10 +0800
+Message-ID: <CAAhV-H4WfaCLuCzvCJx-UriqgPAz2b0H6LGwMhyhRaxvuSAMwQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] MIPS: Loongson64: Do not write the read only field
+ LPA of CP0_CONFIG3
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Nov 03 2020 at 09:48, Linus Torvalds wrote:
-> I have no complaints about the patch, but it strikes me that if people
-> want to actually have much better debug coverage, this is where it
-> should be (I like the "every other address" thing too, don't get me
-> wrong).
+Hi, Tiezhu,
+
+On Tue, Nov 3, 2020 at 3:13 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> In particular, instead of these PageHighMem(page) tests, I think
-> something like this would be better:
+> The field LPA of CP0_CONFIG3 register is read only for Loongson64, so the
+> write operations are meaningless, remove them.
 >
->    #ifdef CONFIG_DEBUG_HIGHMEM
->      #define page_use_kmap(page) ((page),1)
->    #else
->      #define page_use_kmap(page) PageHighMem(page)
->    #endif
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
 >
-> adn then replace those "if (!PageHighMem(page))" tests with "if
-> (!page_use_kmap())" instead.
+> v2: No changes
+> v3: No changes
 >
-> IOW, in debug mode, it would _always_ remap the page, whether it's
-> highmem or not. That would really stress the highmem code and find any
-> fragilities.
+>  arch/mips/include/asm/mach-loongson64/kernel-entry-init.h | 8 --------
+>  arch/mips/loongson64/numa.c                               | 3 ---
+>  2 files changed, 11 deletions(-)
+>
+> diff --git a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+> index 87a5bfb..e4d77f4 100644
+> --- a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+> +++ b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+> @@ -19,10 +19,6 @@
+>         .macro  kernel_entry_setup
+>         .set    push
+>         .set    mips64
+> -       /* Set LPA on LOONGSON3 config3 */
+> -       mfc0    t0, CP0_CONFIG3
+> -       or      t0, (0x1 << 7)
+> -       mtc0    t0, CP0_CONFIG3
+Sorry for the late response, I have the same worry as Jiaxun. As you
+know, Loongson's user manuals are not always correct, but the original
+code comes from Loongson are usually better. So, my opinion is "Don't
+change it if it doesn't break anything".
 
-Yes, that makes a lot of sense. We just have to avoid that for the
-architectures with aliasing issues.
+Huacai
 
-> Anyway, this is all sepatrate from the series, which still looks fine
-> to me. Just a reaction to seeing the patch, and Thomas' earlier
-> mention that the highmem debugging doesn't actually do much.
-
-Right, forcing it for both kmap and kmap_local is straight forward. I'll
-cook a patch on top for that.
-
-Thanks,
-
-        tglx
-
-
+>         /* Set ELPA on LOONGSON3 pagegrain */
+>         mfc0    t0, CP0_PAGEGRAIN
+>         or      t0, (0x1 << 29)
+> @@ -54,10 +50,6 @@
+>         .macro  smp_slave_setup
+>         .set    push
+>         .set    mips64
+> -       /* Set LPA on LOONGSON3 config3 */
+> -       mfc0    t0, CP0_CONFIG3
+> -       or      t0, (0x1 << 7)
+> -       mtc0    t0, CP0_CONFIG3
+>         /* Set ELPA on LOONGSON3 pagegrain */
+>         mfc0    t0, CP0_PAGEGRAIN
+>         or      t0, (0x1 << 29)
+> diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+> index cf9459f..c7e3cced 100644
+> --- a/arch/mips/loongson64/numa.c
+> +++ b/arch/mips/loongson64/numa.c
+> @@ -40,9 +40,6 @@ static void enable_lpa(void)
+>         unsigned long value;
+>
+>         value = __read_32bit_c0_register($16, 3);
+> -       value |= 0x00000080;
+> -       __write_32bit_c0_register($16, 3, value);
+> -       value = __read_32bit_c0_register($16, 3);
+>         pr_info("CP0_Config3: CP0 16.3 (0x%lx)\n", value);
+>
+>         value = __read_32bit_c0_register($5, 1);
+> --
+> 2.1.0
+>
