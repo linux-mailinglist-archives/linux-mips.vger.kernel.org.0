@@ -2,110 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7862A655B
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Nov 2020 14:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B51B2A6A13
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Nov 2020 17:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729996AbgKDNj7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Nov 2020 08:39:59 -0500
-Received: from mail-02.mail-europe.com ([51.89.119.103]:41764 "EHLO
-        mail-02.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726527AbgKDNj6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Nov 2020 08:39:58 -0500
-Date:   Wed, 04 Nov 2020 13:39:50 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1604497192; bh=WdLBXEtTB5n+fQsb0z3+UyBitWtDwfM7q0BL1uG5J+4=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=fdNyEqnONVsoXGG9bpasjovquWUEtyw3bjAP49H6fTMBFJA6Y55fCeh316i7tPguh
-         g3oJV0oltLhOhgaDGTWiazuisjbwI2gkRVuCcZovJYyFWdH6O5pHnpcZdMN/wiRU8W
-         gNv3ul9dSOB90b3loNPij/nnh1Fy+4iAXNVMtrId4sJWRkHV6ByJpbOC6vGqaf0D80
-         orzGe/oPhKkoRPE9VAq0MI8zIO4ZOFjtslL+lsOGimpkLDtJlulvv5JyPrdGIt+cf9
-         Xxs+R6eZWhYX3tR0pA9zRRMu3U+t4zmpKckxvPFakL1R2PpaVR3w4CPI33RnFtNay4
-         uhEotKIfwJStg==
-To:     Paul Cercueil <paul@crapouillou.net>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH mips-next 0/2] mips: boot: add support for self-extracting FIT images (vmlinuz.itb)
-Message-ID: <eUfiHt8RGTIlXhRVg9xYtvUalUyxmikudUShCIFKWoo@cp7-web-039.plabs.ch>
-In-Reply-To: <LRR9JQ.VHLICAJG4L2X1@crapouillou.net>
-References: <WnsVNeMB9c330hqKGdZ32JHsKO2ZbTM1BOGv74ZSJ9o@cp4-web-014.plabs.ch> <LRR9JQ.VHLICAJG4L2X1@crapouillou.net>
+        id S1730968AbgKDQm7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Nov 2020 11:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728999AbgKDQm7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Nov 2020 11:42:59 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F54C0613D3;
+        Wed,  4 Nov 2020 08:42:57 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id o20so5031123eds.3;
+        Wed, 04 Nov 2020 08:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qokV2RxYbYIAU1o66x6CCNd234NTvrv3bgBLtZz0JsA=;
+        b=ki4LO36A9IPizrW/JcBKKN6Rm9gJTU1eDBmP3KjzgKShuiJUeJIjtMBDdaIdggAC2I
+         IhwqJrEw7FJQw1COed/2xkmjgqo+wwW7rG23M/d/v3ZQRC2e3h2NI/IyAhPwl1P9lBig
+         vv3gNUvl3o/XenvB5o+Ly03xe5+UEuCXth7E2yhERpCzK+Hf2JfIUHDpEkXVLXVjtqEk
+         Y/JKn11pKFMdIINLcMivdTLICUC5cn0JBSl3AZ+2aWC70HCU/UXlCWSnq9vRiCpyi6c2
+         Tkh6T4BdcEbcKOmzsmXRRgdR5EU5pHxreiih9U5BN81GGo6dY9DCvrPtC6gwARnkdry9
+         tSzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qokV2RxYbYIAU1o66x6CCNd234NTvrv3bgBLtZz0JsA=;
+        b=OWWEeh1TJ4gxkyKzMxWq8c7JTWpdqDxWi7K3ppDoBFSXjFbhhe9Z38y2VspoiFaXmg
+         iT9EL7Hmu1kdxH5XSTJxNudEE2P3tvQtb4yKWCf6UEgRREjEAvabWlvhoW6RqVy5LMV0
+         82cEkpAdhttJo1QOi1AVhBYsrF1kA7208KZBy67iny0ib7iqUgKKqfhUNL6KW+kEz5he
+         oQ6KypBkVKD5XrvoFsHMfMXJvP0GhKdCp6bc9iLMm8j1cYlXxix7X+arjSyZIxxnVMs9
+         UD6HWpVM9pLS2zaqta6Dv48DRor2cibS02eBreFD3/+/Z4bBSrVrCDd4JjTw+GOrQcjV
+         YaWg==
+X-Gm-Message-State: AOAM533yEVsOYgx4NVM71YlKrjPo3PXWU5M9LMITy2JwdsATMa7Kyrbz
+        xvY8Ob/OP70/PEnDHoK6Stg=
+X-Google-Smtp-Source: ABdhPJzKkhz75HD0mdBiVwspHfwnLZRzJvrk0+grAkIYgnh97uadrikghnLYDte0nsZUPOAfQHapGg==
+X-Received: by 2002:a05:6402:287:: with SMTP id l7mr27270752edv.212.1604508176568;
+        Wed, 04 Nov 2020 08:42:56 -0800 (PST)
+Received: from localhost.localdomain ([85.153.228.172])
+        by smtp.gmail.com with ESMTPSA id og19sm1282874ejb.7.2020.11.04.08.42.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2020 08:42:55 -0800 (PST)
+From:   Necip Fazil Yildiran <fazilyildiran@gmail.com>
+To:     hauke@hauke-m.de
+Cc:     szajec5@gmail.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, paul@pgazz.com, jeho@cs.utexas.edu,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Subject: [PATCH] MIPS: BMC47xx: fix kconfig dependency bug for BCM47XX_SSB
+Date:   Wed,  4 Nov 2020 19:41:27 +0300
+Message-Id: <20201104164126.36399-1-fazilyildiran@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD
-        shortcircuit=no autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Wed, 04 Nov 2020 11:26:09 +0000
+When BCM47XX_SSB is enabled and SSB_PCIHOST is disabled, it results in the
+following Kbuild warning:
 
-> Hi Alexander,
+WARNING: unmet direct dependencies detected for SSB_B43_PCI_BRIDGE
+  Depends on [n]: SSB [=y] && SSB_PCIHOST [=n]
+  Selected by [y]:
+  - BCM47XX_SSB [=y] && BCM47XX [=y] && PCI [=y]
 
-Hi Paul!
+The reason is that BCM47XX_SSB selects SSB_B43_PCI_BRIDGE without
+depending on or selecting SSB_PCIHOST while SSB_B43_PCI_BRIDGE depends on
+SSB_PCIHOST. This can also fail building the kernel as demonstrated in a
+bug report.
 
-> Le dim. 1 nov. 2020 =EF=BF=BD 15:11, Alexander Lobakin <alobakin@pm.me> a
-> =C3=A9crit :
->> Commit c3e2ee657418 ("MIPS: generic: Add support for zboot") added
->> support for self-extracting images to Generic MIPS. However, the
->> intended way to boot Generic MIPS kernels is using FIT Images and
->> UHI boot protocol, but currently there's no way to make
->> self-extracting
->> FIT Image (only legacy uzImages).
->>
->> This set consists of two parts:
->> 1) various cleanups in arch/mips/boot/compressed/Makefile as a
->>    prerequisite;
->> 2) a new target named "vmlinuz.itb" for composing self-extracting
->>    FIT Images, which allows to have the advantages of both UHI and
->>    vmlinuz.
->>
->> The second part involves some scenarios duplication, but I think it
->> can be a subject for another series (for constifying and unifying
->> FIT Images rules across the architectures).
->>
->> Alexander Lobakin (2):
->>   mips: boot: clean up self-extracting targets scenarios
->>   mips: boot: add support for self-extracting FIT images (vmlinuz.itb)
->
-> It doesn't break anything on my end, so:
->
-> Acked-by: Paul Cercueil <paul@crapouillou.net>
->
-> for the series.
+Honor the kconfig dependency to remove unmet direct dependency warnings
+and avoid any potential build failures.
 
-Thanks!
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=210051
+Signed-off-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+---
+ arch/mips/bcm47xx/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Why vmlinuz.itb and not vmlinuz.fit or vmlinuz.uhi? Is the .itb suffix
-> already a thing?
-
-As far as I know -- yes, ITB stands for Image Tree Blob (reference
-to Device Tree Blob) and it's a standartized extension for FIT Images
-(you can see that all variants for MIPS have ".itb" at the bottom of
-arch/mips/boot/Makefile).
-
-> Cheers,
-> -Paul
-
-Al
-
->>  arch/mips/Makefile                 |  3 +-
->>  arch/mips/boot/.gitignore          |  1 +
->>  arch/mips/boot/compressed/Makefile | 96
->> +++++++++++++++++++++++++-----
->>  3 files changed, 85 insertions(+), 15 deletions(-)
->>
->> --
->> 2.29.2
+diff --git a/arch/mips/bcm47xx/Kconfig b/arch/mips/bcm47xx/Kconfig
+index 6889f74e06f5..40876654423c 100644
+--- a/arch/mips/bcm47xx/Kconfig
++++ b/arch/mips/bcm47xx/Kconfig
+@@ -9,6 +9,7 @@ config BCM47XX_SSB
+ 	select SSB_DRIVER_MIPS
+ 	select SSB_DRIVER_EXTIF
+ 	select SSB_EMBEDDED
++	select SSB_PCIHOST if PCI
+ 	select SSB_B43_PCI_BRIDGE if PCI
+ 	select SSB_DRIVER_PCICORE if PCI
+ 	select SSB_PCICORE_HOSTMODE if PCI
+-- 
+2.25.1
 
