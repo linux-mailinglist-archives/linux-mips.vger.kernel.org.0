@@ -2,100 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D15612A9134
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Nov 2020 09:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C252A941B
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Nov 2020 11:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726482AbgKFIY5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Nov 2020 03:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726447AbgKFIY4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Nov 2020 03:24:56 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDC2C0613CF;
-        Fri,  6 Nov 2020 00:24:56 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id v144so700410lfa.13;
-        Fri, 06 Nov 2020 00:24:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UYP35iddIaMkoZd1YlyOIfHup33hDp22BB3c4frWXy0=;
-        b=RIKXreLQfPQCv3XE7eqVofzW4L3flinxkd3LI74WnGyJ5z3digeZXVgC+kUW0v5izl
-         +CKik/eO4SFcGavw3GCPe7rkgyflAc37d8yb8mxZ0B0CBANtaeSAgYUz/i0tFIYr0wQF
-         4X/VkNENNihess+nD1v6kZStIzERBL9yLO36RnaS4BM82+JcS0yIlrUV/Fp6zNF25sUO
-         y30QfEI997XXOt+Wx//gOSzEBzAw5xJyOYZK7GyzyLq0dT/FLLafNDRU1MI29NDSpbDF
-         58aUxK2Wu27Fh7kLcJi68dZ0qctARSr4llP8Hl/f5Izu/HIuo1w28jOnfcF2ORKBr9Ff
-         pptw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=UYP35iddIaMkoZd1YlyOIfHup33hDp22BB3c4frWXy0=;
-        b=CEaInOcIoUkhZXJVCK2SzcPqzngyPpDC/KO8E1u/t2P6IG0q93R07K8W/CJ8sBTe4m
-         J5yhFm828zrfjNcC8dv+2BbYxN9C1fzrk3DKp3toBDMnQFZxUt1fIAo0BYrlnKH6/AkS
-         Wh45qqgyxhbf/hf0rqIYF6gKO4/jBhjOtVq6E50WGlMBXsEEqsK5pzDMZzaOHYofHRI7
-         FcD4MAPXfoV4ANgHXwwNWoUvZdZdMCYILaUdXBP8XZulLw129D6mNLZb7R/42LKGJiyK
-         4l8TmL/gCa8O5EdNPYSKXtpv3NB0DPRChAsDaG2bZCVc1Zv2NQP3ur68EFaMJK1/5j1R
-         4XPg==
-X-Gm-Message-State: AOAM533QralQ39nQfEQr4fZvis77n+whEcSC+3WRmk+YoAyJjW4mo3y0
-        /JkCypZp8PgP+ESsjIQcxyo=
-X-Google-Smtp-Source: ABdhPJyOuj0E9VYTPmfhTp7NzPvRTi7AobjrfccJ1r3z8sGiXu+Gpvrn45SyPufinTYr14MA7yITPg==
-X-Received: by 2002:ac2:52b9:: with SMTP id r25mr417616lfm.274.1604651094952;
-        Fri, 06 Nov 2020 00:24:54 -0800 (PST)
-Received: from ?IPv6:2a00:1fa0:283:c116:6015:e10f:1dc8:3b0? ([2a00:1fa0:283:c116:6015:e10f:1dc8:3b0])
-        by smtp.gmail.com with ESMTPSA id u24sm74728lfq.240.2020.11.06.00.24.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Nov 2020 00:24:54 -0800 (PST)
-Subject: Re: [PATCH] MIPS: BMC47xx: fix kconfig dependency bug for BCM47XX_SSB
-To:     Necip Fazil Yildiran <fazilyildiran@gmail.com>, hauke@hauke-m.de
-Cc:     szajec5@gmail.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, paul@pgazz.com, jeho@cs.utexas.edu
-References: <20201104164126.36399-1-fazilyildiran@gmail.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <547e42cd-f39b-1128-4836-82891dd770d1@gmail.com>
-Date:   Fri, 6 Nov 2020 11:24:41 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1726834AbgKFKYk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Nov 2020 05:24:40 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:42834 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726830AbgKFKYk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Nov 2020 05:24:40 -0500
+Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 12F243B0CC7
+        for <linux-mips@vger.kernel.org>; Fri,  6 Nov 2020 10:09:16 +0000 (UTC)
+X-Originating-IP: 91.175.115.186
+Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
+        (Authenticated sender: gregory.clement@bootlin.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 2C44FFF80F;
+        Fri,  6 Nov 2020 10:08:53 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        <Steen.Hegelund@microchip.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: [PATCH 0/9] MIPS: Add support for more mscc SoCs: Luton, Serval and Jaguar2
+Date:   Fri,  6 Nov 2020 11:08:39 +0100
+Message-Id: <20201106100849.969240-1-gregory.clement@bootlin.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20201104164126.36399-1-fazilyildiran@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+Hello,
 
-On 04.11.2020 19:41, Necip Fazil Yildiran wrote:
+Ocelot SoC belongs to a larger family of SoCs called VCoreIII. Luton,
+Serval and Jaguar2 are part of this family and are added with this
+series.
 
-> When BCM47XX_SSB is enabled and SSB_PCIHOST is disabled, it results in the
-> following Kbuild warning:
-> 
-> WARNING: unmet direct dependencies detected for SSB_B43_PCI_BRIDGE
->    Depends on [n]: SSB [=y] && SSB_PCIHOST [=n]
->    Selected by [y]:
->    - BCM47XX_SSB [=y] && BCM47XX [=y] && PCI [=y]
-> 
-> The reason is that BCM47XX_SSB selects SSB_B43_PCI_BRIDGE without
-> depending on or selecting SSB_PCIHOST while SSB_B43_PCI_BRIDGE depends on
-> SSB_PCIHOST. This can also fail building the kernel as demonstrated in a
-> bug report.
-> 
-> Honor the kconfig dependency to remove unmet direct dependency warnings
-> and avoid any potential build failures.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=210051
+To be able to run a linux kernel the irqchip support and the pinctrl
+support are needed. Two series of patches adding this support has been
+posted to their subsystem. However there is no build dependency
+between them.
 
-    Isn't that tag supposed to be used for the patch mail itself? At least
-that's what I'm seeing in the USB patches where it points to the msg with
-a patch...
+Gregory
 
-> Signed-off-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
-[...]
+Gregory CLEMENT (9):
+  dt-bindings: mips: Add Luton
+  dt-bindings: mips: Add Serval and Jaguar2
+  MIPS: mscc: Prepare configuration to handle more SoCs
+  MIPS: mscc: Fix configuration name for ocelot legacy boards
+  MIPS: mscc: Add luton dtsi
+  MIPS: mscc: Add luton PC0B91 device tree
+  MIPS: mscc: build FIT image for Luton
+  MIPS: mscc: Add jaguar2 support
+  MIPS: mscc: Add serval support
 
-MBR, Sergei
+ .../devicetree/bindings/mips/mscc.txt         |   2 +-
+ arch/mips/boot/dts/Makefile                   |   2 +-
+ arch/mips/boot/dts/mscc/Makefile              |  11 +-
+ arch/mips/boot/dts/mscc/jaguar2.dtsi          | 167 +++++++++++
+ arch/mips/boot/dts/mscc/jaguar2_common.dtsi   |  25 ++
+ arch/mips/boot/dts/mscc/jaguar2_pcb110.dts    | 273 ++++++++++++++++++
+ arch/mips/boot/dts/mscc/jaguar2_pcb111.dts    | 109 +++++++
+ arch/mips/boot/dts/mscc/jaguar2_pcb118.dts    |  59 ++++
+ arch/mips/boot/dts/mscc/luton.dtsi            | 116 ++++++++
+ arch/mips/boot/dts/mscc/luton_pcb091.dts      |  30 ++
+ arch/mips/boot/dts/mscc/serval.dtsi           | 153 ++++++++++
+ arch/mips/boot/dts/mscc/serval_common.dtsi    | 127 ++++++++
+ arch/mips/boot/dts/mscc/serval_pcb105.dts     |  17 ++
+ arch/mips/boot/dts/mscc/serval_pcb106.dts     |  17 ++
+ arch/mips/generic/Kconfig                     |  37 ++-
+ arch/mips/generic/Platform                    |   3 +
+ arch/mips/generic/board-jaguar2.its.S         |  40 +++
+ arch/mips/generic/board-luton.its.S           |  23 ++
+ arch/mips/generic/board-serval.its.S          |  24 ++
+ 19 files changed, 1228 insertions(+), 7 deletions(-)
+ create mode 100644 arch/mips/boot/dts/mscc/jaguar2.dtsi
+ create mode 100644 arch/mips/boot/dts/mscc/jaguar2_common.dtsi
+ create mode 100644 arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
+ create mode 100644 arch/mips/boot/dts/mscc/jaguar2_pcb111.dts
+ create mode 100644 arch/mips/boot/dts/mscc/jaguar2_pcb118.dts
+ create mode 100644 arch/mips/boot/dts/mscc/luton.dtsi
+ create mode 100644 arch/mips/boot/dts/mscc/luton_pcb091.dts
+ create mode 100644 arch/mips/boot/dts/mscc/serval.dtsi
+ create mode 100644 arch/mips/boot/dts/mscc/serval_common.dtsi
+ create mode 100644 arch/mips/boot/dts/mscc/serval_pcb105.dts
+ create mode 100644 arch/mips/boot/dts/mscc/serval_pcb106.dts
+ create mode 100644 arch/mips/generic/board-jaguar2.its.S
+ create mode 100644 arch/mips/generic/board-luton.its.S
+ create mode 100644 arch/mips/generic/board-serval.its.S
+
+-- 
+2.28.0
+
