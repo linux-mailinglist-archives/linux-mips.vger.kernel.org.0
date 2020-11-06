@@ -2,57 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE0B2A94CC
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Nov 2020 11:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076D72A94C1
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Nov 2020 11:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727192AbgKFKyM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Nov 2020 05:54:12 -0500
-Received: from elvis.franken.de ([193.175.24.41]:41174 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726642AbgKFKxz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1726867AbgKFKxz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Fri, 6 Nov 2020 05:53:55 -0500
+Received: from elvis.franken.de ([193.175.24.41]:41171 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726757AbgKFKxy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 6 Nov 2020 05:53:54 -0500
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kazNQ-0000vt-00; Fri, 06 Nov 2020 11:53:52 +0100
+        id 1kazNR-0000vt-00; Fri, 06 Nov 2020 11:53:53 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 2895BC4DD9; Fri,  6 Nov 2020 11:48:48 +0100 (CET)
-Date:   Fri, 6 Nov 2020 11:48:48 +0100
+        id 88451C4DDA; Fri,  6 Nov 2020 11:49:15 +0100 (CET)
+Date:   Fri, 6 Nov 2020 11:49:15 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mips@vger.kernel.org,
-        John Thomson <git@johnthomson.fastmail.com.au>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: zboot: put appended dtb into a section
-Message-ID: <20201106104848.GA9806@alpha.franken.de>
-References: <20201026122926.1774569-1-gch981213@gmail.com>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Jiri Kosina <trivial@kernel.org>, linux-mips@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Kconfig: fix a few trivial spelling mistakes
+Message-ID: <20201106104915.GB9806@alpha.franken.de>
+References: <20201027183430.56772-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201026122926.1774569-1-gch981213@gmail.com>
+In-Reply-To: <20201027183430.56772-1-colin.king@canonical.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 08:29:25PM +0800, Chuanhong Guo wrote:
-> This will make a separated section for dtb appear in ELF, and we can
-> then use objcopy to patch a dtb into vmlinuz when RAW_APPENDED_DTB
-> is set in kernel config.
+On Tue, Oct 27, 2020 at 06:34:30PM +0000, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> command to patch a dtb:
-> objcopy --set-section-flags=.appended_dtb=alloc,contents \
->         --update-section=.appended_dtb=<target>.dtb vmlinuz
+> There are a few spelling mistakes in the Kconfig, fix these.
 > 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 > ---
-> Note:
-> This should supersede this patch on linux-mips:
-> [2/2] mips: boot compressed: add support for vlinuz ELF DTB [0]
-> 
-> [0] https://patchwork.kernel.org/project/linux-mips/patch/20201015201100.4130-2-git@johnthomson.fastmail.com.au/
->  
->  arch/mips/boot/compressed/ld.script | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>  arch/mips/Kconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
 applied to mips-next.
 
