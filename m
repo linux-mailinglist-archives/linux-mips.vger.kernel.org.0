@@ -2,55 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 172B22AA480
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Nov 2020 12:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A082AA4CA
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Nov 2020 12:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726665AbgKGLEh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 7 Nov 2020 06:04:37 -0500
-Received: from elvis.franken.de ([193.175.24.41]:44453 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726422AbgKGLEg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 7 Nov 2020 06:04:36 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kbM1K-0001Xd-00; Sat, 07 Nov 2020 12:04:34 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E2D77C4DDA; Sat,  7 Nov 2020 10:40:28 +0100 (CET)
-Date:   Sat, 7 Nov 2020 10:40:28 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: reserve the memblock right after the kernel
-Message-ID: <20201107094028.GA4918@alpha.franken.de>
-References: <20201106141001.57637-1-alexander.sverdlin@nokia.com>
+        id S1727320AbgKGLxb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 7 Nov 2020 06:53:31 -0500
+Received: from out28-217.mail.aliyun.com ([115.124.28.217]:59889 "EHLO
+        out28-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727084AbgKGLxb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Nov 2020 06:53:31 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1092978|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.0151795-0.000579364-0.984241;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047204;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.ItnO01s_1604749999;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.ItnO01s_1604749999)
+          by smtp.aliyun-inc.com(10.147.41.231);
+          Sat, 07 Nov 2020 19:53:25 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     tsbogend@alpha.franken.de, paul@crapouillou.net, robh+dt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, nixiaoming@huawei.com,
+        paulburton@kernel.org, krzk@kernel.org, hns@goldelico.com,
+        ak@linux.intel.com, ebiederm@xmission.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: [PATCH 0/2] Add missing nodes and refresh defconfig for Ingenic SoCs based boards.
+Date:   Sat,  7 Nov 2020 19:52:49 +0800
+Message-Id: <20201107115251.86182-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201106141001.57637-1-alexander.sverdlin@nokia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 03:10:01PM +0100, Alexander A Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> 
-> Linux doesn't own the memory immediately after the kernel image. On Octeon
-> bootloader places a shared structure right close after the kernel _end,
-> refer to "struct cvmx_bootinfo *octeon_bootinfo" in cavium-octeon/setup.c.
-> 
-> If check_kernel_sections_mem() rounds the PFNs up, first memblock_alloc()
-> inside early_init_dt_alloc_memory_arch() <= device_tree_init() returns
-> memory block overlapping with the above octeon_bootinfo structure, which
-> is being overwritten afterwards.
+1.Add missing nodes for Ingenic SoCs and Ingenic SoCs based boards.
+2.Refresh defconfig for Ingenic SoCs based boards.
 
-as this special for Octeon how about added the memblock_reserve
-in octen specific code ?
+周琰杰 (Zhou Yanjie) (2):
+  MIPS: Ingenic: Add missing nodes for Ingenic SoCs and boards.
+  MIPS: Ingenic: Refresh defconfig for Ingenic SoCs based boards.
 
-Thomas.
+ arch/mips/boot/dts/ingenic/ci20.dts       | 16 +++++++++
+ arch/mips/boot/dts/ingenic/cu1000-neo.dts | 60 +++++++++++++++++++++++++++----
+ arch/mips/boot/dts/ingenic/cu1830-neo.dts | 60 +++++++++++++++++++++++++++----
+ arch/mips/boot/dts/ingenic/jz4780.dtsi    | 41 +++++++++++++++++++--
+ arch/mips/boot/dts/ingenic/x1000.dtsi     | 52 ++++++++++++++++++++++++++-
+ arch/mips/boot/dts/ingenic/x1830.dtsi     | 54 +++++++++++++++++++++++++++-
+ arch/mips/configs/ci20_defconfig          | 14 ++++++--
+ arch/mips/configs/cu1000-neo_defconfig    | 28 ++++++++++++---
+ arch/mips/configs/cu1830-neo_defconfig    | 32 +++++++++++++----
+ 9 files changed, 327 insertions(+), 30 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.11.0
+
