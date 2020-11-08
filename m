@@ -2,183 +2,546 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F892AA935
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Nov 2020 06:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 988952AAB03
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Nov 2020 13:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728590AbgKHFSU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Nov 2020 00:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728557AbgKHFSA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Nov 2020 00:18:00 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BC3C0613CF
-        for <linux-mips@vger.kernel.org>; Sat,  7 Nov 2020 21:17:59 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id g12so5320112wrp.10
-        for <linux-mips@vger.kernel.org>; Sat, 07 Nov 2020 21:17:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=googlenew;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fExVMF3x849hpWEoXsiuAej0hbqK5p8nn8Jzl4zYU/s=;
-        b=gw4/zFWoE7j3JEv2zAF276jCJTDR0h2WI8sPwNFAe9ncSoW5leIOk+G3Ntof1hJHUZ
-         oK+kdnTQxDPwcF2Xz/lRhk9wsFuatVWjfEaknaHi+p1aCBgsR4PkP3lS0zJNEN0IgaCp
-         97AaVlQnAkK2SXumNFHYS5q4e457wowEyo1vZ7c9JfdxFvRTNsL4x6sjBfczj6aWGB5h
-         mlpeZPP3ABgak5zXPsyBczg7sHlHQnWwrJMSLXpn1o/HmYUrlqN8fBIzAO9qsIlZAWXv
-         nKgjeUPIlh44fZGZ+OzDvTPD6kazMw9t7rgjw32wCrGCF4gVoxDf6hL+wQR2yDH3l4Mh
-         gwjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fExVMF3x849hpWEoXsiuAej0hbqK5p8nn8Jzl4zYU/s=;
-        b=SMHCRzo5OIYQiqxUwycrOt0sAcQscmBu9nzqSZi+QekJikhfrLquzAmsheeJkcG74L
-         0URUXK4qJ+3+X/iSgHLjFZdZuqd/OAzh2EPQr4F6O0ejY8BS206Rzaf9jN0BaziBDfYi
-         hNubwgME0qx70k5eLTt+9B/oOFvfqr1yIIGNrMkZ3o10RU3XlqCO1RYzP9BySZz5butb
-         /H3T5jXCv3933d5JL43vM9/walErfr3oG+dk2yAGIgJ+fCQ39v6Pay4my8PESHv7T3Na
-         WPrSIKvaMVTcwTw0gUBivw+q3RgA+Uy6Rt03K4Bqlp114rgV7/2fOCB8nMJFdQ1uC0HS
-         /ZrQ==
-X-Gm-Message-State: AOAM532+km4ALmlRbqa1qUUjx5ph8fC9wmQK8Q3IeSpvHEnZk707OxHt
-        xYovyCLs6fBidewROyEHZLftzQ==
-X-Google-Smtp-Source: ABdhPJwR0RODupGrDkZO+RSFDSzVocvmZ/PZzvz2KApdsKzdEe+03QfRRlgX3a3ghm3Lk4zrdOuGvQ==
-X-Received: by 2002:a5d:4207:: with SMTP id n7mr10868421wrq.76.1604812678587;
-        Sat, 07 Nov 2020 21:17:58 -0800 (PST)
-Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id r10sm8378462wmg.16.2020.11.07.21.17.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2020 21:17:58 -0800 (PST)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        Dmitry Safonov <dima@arista.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 19/19] mips/vdso: Migrate to user_landing
-Date:   Sun,  8 Nov 2020 05:17:29 +0000
-Message-Id: <20201108051730.2042693-20-dima@arista.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201108051730.2042693-1-dima@arista.com>
-References: <20201108051730.2042693-1-dima@arista.com>
+        id S1727570AbgKHMrB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Nov 2020 07:47:01 -0500
+Received: from out28-171.mail.aliyun.com ([115.124.28.171]:39790 "EHLO
+        out28-171.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726607AbgKHMq7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Nov 2020 07:46:59 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.111763-0.000827456-0.887409;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.Iu5anf5_1604839609;
+Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Iu5anf5_1604839609)
+          by smtp.aliyun-inc.com(10.147.42.198);
+          Sun, 08 Nov 2020 20:46:50 +0800
+Subject: Re: [PATCH 1/2] MIPS: Ingenic: Add missing nodes for Ingenic SoCs and
+ boards.
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     tsbogend@alpha.franken.de, paul@crapouillou.net,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        nixiaoming@huawei.com, paulburton@kernel.org, krzk@kernel.org,
+        ak@linux.intel.com, ebiederm@xmission.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+References: <20201107115251.86182-1-zhouyanjie@wanyeetech.com>
+ <20201107115251.86182-2-zhouyanjie@wanyeetech.com>
+ <A9536791-F713-4CD8-80B9-4BDA6A136E50@goldelico.com>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <030f234c-d889-9065-eade-7cf5a2b7417d@wanyeetech.com>
+Date:   Sun, 8 Nov 2020 20:46:48 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <A9536791-F713-4CD8-80B9-4BDA6A136E50@goldelico.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Generic way to track the land vma area.
-As a bonus, after unmapping sigpage, kernel won't try to land on its
-previous position.
+Hello Nikolaus,
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- arch/mips/Kconfig         |  1 +
- arch/mips/kernel/signal.c | 11 +++++++----
- arch/mips/kernel/vdso.c   |  2 +-
- arch/mips/vdso/genvdso.c  |  8 --------
- 4 files changed, 9 insertions(+), 13 deletions(-)
+On 2020/11/8 上午3:03, H. Nikolaus Schaller wrote:
+>> Am 07.11.2020 um 12:52 schrieb 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>:
+>>
+>> 1.Add OTG/OTG PHY/RNG nodes for JZ4780, CGU/OTG nodes for CI20.
+>> 2.Add OTG/OTG PHY/RNG/OST nodes for X1000, SSI/CGU/OST/OTG/SC16IS752
+>>   nodes for CU1000-Neo.
+>> 3.Add OTG/OTG PHY/DTRNG/OST nodes for X1830, SSI/CGU/OST/OTG/SC16IS752
+>>   nodes for CU1830-Neo.
+>>
+>> Tested-by: 周正 (Zhou Zheng) <sernia.zhou@foxmail.com>
+> Comments below for CI20 / jz4780 only.
+>
+> I tried to test on top of my v5.10 working tree but the CI20 does not boot any more.
+> Maybe the SMP hacks are in the way and I have to remove them first or try on top
+> of v5.9.y
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 5e696ab80df4..eedb1683ec8e 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -10,6 +10,7 @@ config MIPS
- 	select ARCH_HAS_SETUP_ADDITIONAL_PAGES
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-+	select ARCH_HAS_USER_LANDING
- 	select ARCH_SUPPORTS_UPROBES
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
-diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
-index f1e985109da0..eb79272d3cc2 100644
---- a/arch/mips/kernel/signal.c
-+++ b/arch/mips/kernel/signal.c
-@@ -806,11 +806,13 @@ struct mips_abi mips_abi = {
- 
- static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
- {
-+	unsigned long land = (unsigned long)current->mm->user_landing;
- 	sigset_t *oldset = sigmask_to_save();
--	int ret;
-+	int ret = 1;
- 	struct mips_abi *abi = current->thread.abi;
--	void *vdso = current->mm->context.vdso;
- 
-+	if (land == UNMAPPED_USER_LANDING)
-+		goto err;
- 	/*
- 	 * If we were emulating a delay slot instruction, exit that frame such
- 	 * that addresses in the sigframe are as expected for userland and we
-@@ -843,12 +845,13 @@ static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
- 	rseq_signal_deliver(ksig, regs);
- 
- 	if (sig_uses_siginfo(&ksig->ka, abi))
--		ret = abi->setup_rt_frame(vdso + abi->vdso->off_rt_sigreturn,
-+		ret = abi->setup_rt_frame(land + abi->vdso->off_rt_sigreturn,
- 					  ksig, regs, oldset);
- 	else
--		ret = abi->setup_frame(vdso + abi->vdso->off_sigreturn,
-+		ret = abi->setup_frame(land + abi->vdso->off_sigreturn,
- 				       ksig, regs, oldset);
- 
-+err:
- 	signal_setup_done(ret, ksig, 0);
- }
- 
-diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
-index a4a321252df6..5523ba25ab3d 100644
---- a/arch/mips/kernel/vdso.c
-+++ b/arch/mips/kernel/vdso.c
-@@ -183,7 +183,7 @@ int arch_setup_additional_pages(unsigned long *sysinfo_ehdr)
- 		goto out;
- 	}
- 
--	mm->context.vdso = (void *)vdso_addr;
-+	mm->user_landing = (void __user *)vdso_addr;
- 	*sysinfo_ehdr = vdso_addr;
- 	ret = 0;
- 
-diff --git a/arch/mips/vdso/genvdso.c b/arch/mips/vdso/genvdso.c
-index 0303d30cde03..8f581a2c8578 100644
---- a/arch/mips/vdso/genvdso.c
-+++ b/arch/mips/vdso/genvdso.c
-@@ -259,13 +259,6 @@ int main(int argc, char **argv)
- 	fprintf(out_file, "#include <linux/linkage.h>\n");
- 	fprintf(out_file, "#include <linux/mm.h>\n");
- 	fprintf(out_file, "#include <asm/vdso.h>\n");
--	fprintf(out_file, "static void vdso_mremap(\n");
--	fprintf(out_file, "	const struct vm_special_mapping *sm,\n");
--	fprintf(out_file, "	struct vm_area_struct *new_vma)\n");
--	fprintf(out_file, "{\n");
--	fprintf(out_file, "	current->mm->context.vdso =\n");
--	fprintf(out_file, "	(void *)(new_vma->vm_start);\n");
--	fprintf(out_file, "}\n");
- 
- 	/* Write out the stripped VDSO data. */
- 	fprintf(out_file,
-@@ -290,7 +283,6 @@ int main(int argc, char **argv)
- 	fprintf(out_file, "\t.mapping = {\n");
- 	fprintf(out_file, "\t\t.name = \"[vdso]\",\n");
- 	fprintf(out_file, "\t\t.pages = vdso_pages,\n");
--	fprintf(out_file, "\t\t.mremap = vdso_mremap,\n");
- 	fprintf(out_file, "\t},\n");
- 
- 	/* Calculate and write symbol offsets to <output file> */
--- 
-2.28.0
 
+SMP is not available on the mainline now, so the previous SMP patch 
+needs to be removed. The new SMP patch will take some time because it 
+needs to ensure support for the new X2000 processor.
+
+
+Thanks and best regards!
+
+
+>
+>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>> ---
+>> arch/mips/boot/dts/ingenic/ci20.dts       | 16 +++++++++
+>> arch/mips/boot/dts/ingenic/cu1000-neo.dts | 60 +++++++++++++++++++++++++++----
+>> arch/mips/boot/dts/ingenic/cu1830-neo.dts | 60 +++++++++++++++++++++++++++----
+>> arch/mips/boot/dts/ingenic/jz4780.dtsi    | 41 +++++++++++++++++++--
+>> arch/mips/boot/dts/ingenic/x1000.dtsi     | 52 ++++++++++++++++++++++++++-
+>> arch/mips/boot/dts/ingenic/x1830.dtsi     | 54 +++++++++++++++++++++++++++-
+>> 6 files changed, 267 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+>> index 75f5bfbf2c37..b31054a41754 100644
+>> --- a/arch/mips/boot/dts/ingenic/ci20.dts
+>> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
+>> @@ -93,6 +93,15 @@
+>> 	clock-frequency = <48000000>;
+>> };
+>>
+>> +&cgu {
+>> +	/*
+>> +	 * Use the 32.768 kHz oscillator as the parent of the RTC for a higher
+>> +	 * precision.
+>> +	 */
+>> +	assigned-clocks = <&cgu JZ4780_CLK_RTC>;
+>> +	assigned-clock-parents = <&cgu JZ4780_CLK_RTCLK>;
+>> +};
+>> +
+> ok
+>
+>> &mmc0 {
+>> 	status = "okay";
+>>
+>> @@ -396,6 +405,13 @@
+>> 	status = "okay";
+>> };
+>>
+>> +&otg {
+>> +	status = "okay";
+>> +
+>> +	assigned-clocks = <&cgu JZ4780_CLK_OTGPHY>;
+>> +	assigned-clock-rates = <48000000>;
+>> +};
+>> +
+> ok
+>
+>> &pinctrl {
+>> 	pins_uart0: uart0 {
+>> 		function = "uart0";
+>> diff --git a/arch/mips/boot/dts/ingenic/cu1000-neo.dts b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
+>> index 22a1066d637b..44d47d12db12 100644
+>> --- a/arch/mips/boot/dts/ingenic/cu1000-neo.dts
+>> +++ b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
+>> @@ -3,7 +3,7 @@
+>>
+>> #include "x1000.dtsi"
+>> #include <dt-bindings/gpio/gpio.h>
+>> -#include <dt-bindings/clock/ingenic,tcu.h>
+>> +#include <dt-bindings/clock/ingenic,sysost.h>
+>> #include <dt-bindings/interrupt-controller/irq.h>
+>>
+>> / {
+>> @@ -31,6 +31,18 @@
+>> 		};
+>> 	};
+>>
+>> +	ssi: spi-gpio {
+>> +		compatible = "spi-gpio";
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +		num-chipselects = <1>;
+>> +
+>> +		mosi-gpios = <&gpd 2 GPIO_ACTIVE_HIGH>;
+>> +		miso-gpios = <&gpd 3 GPIO_ACTIVE_HIGH>;
+>> +		sck-gpios = <&gpd 0 GPIO_ACTIVE_HIGH>;
+>> +		cs-gpios = <&gpd 1 GPIO_ACTIVE_HIGH>;
+>> +	};
+>> +
+>> 	wlan_pwrseq: msc1-pwrseq {
+>> 		compatible = "mmc-pwrseq-simple";
+>>
+>> @@ -43,13 +55,19 @@
+>> 	clock-frequency = <24000000>;
+>> };
+>>
+>> -&tcu {
+>> +&cgu {
+>> +	/*
+>> +	 * Use the 32.768 kHz oscillator as the parent of the RTC for a higher
+>> +	 * precision.
+>> +	 */
+>> +	assigned-clocks = <&cgu X1000_CLK_RTC>;
+>> +	assigned-clock-parents = <&cgu X1000_CLK_RTCLK>;
+>> +};
+>> +
+>> +&ost {
+>> 	/* 1500 kHz for the system timer and clocksource */
+>> -	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER2>;
+>> +	assigned-clocks = <&ost OST_CLK_PERCPU_TIMER>, <&ost OST_CLK_GLOBAL_TIMER>;
+>> 	assigned-clock-rates = <1500000>, <1500000>;
+>> -
+>> -	/* Use channel #0 for the system timer channel #2 for the clocksource */
+>> -	ingenic,pwm-channels-mask = <0xfa>;
+>> };
+>>
+>> &uart2 {
+>> @@ -59,6 +77,32 @@
+>> 	pinctrl-0 = <&pins_uart2>;
+>> };
+>>
+>> +&ssi {
+>> +	status = "okay";
+>> +
+>> +	spi-max-frequency = <50000000>;
+>> +
+>> +	sc16is752: expander@0 {
+>> +		compatible = "nxp,sc16is752";
+>> +		reg = <0>; /* CE0 */
+>> +		spi-max-frequency = <4000000>;
+>> +
+>> +		clocks = <&exclk_sc16is752>;
+>> +
+>> +		interrupt-parent = <&gpc>;
+>> +		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
+>> +
+>> +		gpio-controller;
+>> +		#gpio-cells = <2>;
+>> +
+>> +		exclk_sc16is752: sc16is752 {
+>> +			compatible = "fixed-clock";
+>> +			#clock-cells = <0>;
+>> +			clock-frequency = <48000000>;
+>> +		};
+>> +	};
+>> +};
+>> +
+>> &i2c0 {
+>> 	status = "okay";
+>>
+>> @@ -135,6 +179,10 @@
+>> 	};
+>> };
+>>
+>> +&otg {
+>> +	status = "okay";
+>> +};
+>> +
+>> &pinctrl {
+>> 	pins_uart2: uart2 {
+>> 		function = "uart2";
+>> diff --git a/arch/mips/boot/dts/ingenic/cu1830-neo.dts b/arch/mips/boot/dts/ingenic/cu1830-neo.dts
+>> index 640f96c00d63..7a56e344e429 100644
+>> --- a/arch/mips/boot/dts/ingenic/cu1830-neo.dts
+>> +++ b/arch/mips/boot/dts/ingenic/cu1830-neo.dts
+>> @@ -3,7 +3,7 @@
+>>
+>> #include "x1830.dtsi"
+>> #include <dt-bindings/gpio/gpio.h>
+>> -#include <dt-bindings/clock/ingenic,tcu.h>
+>> +#include <dt-bindings/clock/ingenic,sysost.h>
+>> #include <dt-bindings/interrupt-controller/irq.h>
+>>
+>> / {
+>> @@ -31,6 +31,18 @@
+>> 		};
+>> 	};
+>>
+>> +	ssi0: spi-gpio {
+>> +		compatible = "spi-gpio";
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +		num-chipselects = <1>;
+>> +
+>> +		mosi-gpios = <&gpc 12 GPIO_ACTIVE_HIGH>;
+>> +		miso-gpios = <&gpc 11 GPIO_ACTIVE_HIGH>;
+>> +		sck-gpios = <&gpc 15 GPIO_ACTIVE_HIGH>;
+>> +		cs-gpios = <&gpc 16 GPIO_ACTIVE_HIGH>;
+>> +	};
+>> +
+>> 	wlan_pwrseq: msc1-pwrseq {
+>> 		compatible = "mmc-pwrseq-simple";
+>>
+>> @@ -43,13 +55,19 @@
+>> 	clock-frequency = <24000000>;
+>> };
+>>
+>> -&tcu {
+>> +&cgu {
+>> +	/*
+>> +	 * Use the 32.768 kHz oscillator as the parent of the RTC for a higher
+>> +	 * precision.
+>> +	 */
+>> +	assigned-clocks = <&cgu X1830_CLK_RTC>;
+>> +	assigned-clock-parents = <&cgu X1830_CLK_RTCLK>;
+>> +};
+>> +
+>> +&ost {
+>> 	/* 1500 kHz for the system timer and clocksource */
+>> -	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER2>;
+>> +	assigned-clocks = <&ost OST_CLK_PERCPU_TIMER>, <&ost OST_CLK_GLOBAL_TIMER>;
+>> 	assigned-clock-rates = <1500000>, <1500000>;
+>> -
+>> -	/* Use channel #0 for the system timer channel #2 for the clocksource */
+>> -	ingenic,pwm-channels-mask = <0xfa>;
+>> };
+>>
+>> &uart1 {
+>> @@ -59,6 +77,32 @@
+>> 	pinctrl-0 = <&pins_uart1>;
+>> };
+>>
+>> +&ssi0 {
+>> +	status = "okay";
+>> +
+>> +	spi-max-frequency = <50000000>;
+>> +
+>> +	sc16is752: expander@0 {
+>> +		compatible = "nxp,sc16is752";
+>> +		reg = <0>; /* CE0 */
+>> +		spi-max-frequency = <4000000>;
+>> +
+>> +		clocks = <&exclk_sc16is752>;
+>> +
+>> +		interrupt-parent = <&gpb>;
+>> +		interrupts = <18 IRQ_TYPE_EDGE_FALLING>;
+>> +
+>> +		gpio-controller;
+>> +		#gpio-cells = <2>;
+>> +
+>> +		exclk_sc16is752: sc16is752 {
+>> +			compatible = "fixed-clock";
+>> +			#clock-cells = <0>;
+>> +			clock-frequency = <48000000>;
+>> +		};
+>> +	};
+>> +};
+>> +
+>> &i2c0 {
+>> 	status = "okay";
+>>
+>> @@ -135,6 +179,10 @@
+>> 	};
+>> };
+>>
+>> +&otg {
+>> +	status = "okay";
+>> +};
+>> +
+>> &pinctrl {
+>> 	pins_uart1: uart1 {
+>> 		function = "uart1";
+>> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>> index dfb5a7e1bb21..8837147e5a84 100644
+>> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>> @@ -61,13 +61,30 @@
+>> 	};
+>>
+>> 	cgu: jz4780-cgu@10000000 {
+>> -		compatible = "ingenic,jz4780-cgu";
+>> +		compatible = "ingenic,jz4780-cgu", "simple-mfd";
+>> 		reg = <0x10000000 0x100>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0x0 0x10000000 0x100>;
+>> +
+>> +		#clock-cells = <1>;
+>>
+>> 		clocks = <&ext>, <&rtc>;
+>> 		clock-names = "ext", "rtc";
+>>
+>> -		#clock-cells = <1>;
+>> +		otg_phy: usb-phy@3c {
+>> +			compatible = "ingenic,jz4780-phy";
+>> +			reg = <0x3c 0x10>;
+>> +
+>> +			clocks = <&cgu JZ4780_CLK_OTG1>;
+>> +
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>> +		rng: rng@d8 {
+>> +			compatible = "ingenic,jz4780-rng";
+>> +			reg = <0xd8 0x8>;
+>> +		};
+>> 	};
+>>
+>> 	tcu: timer@10002000 {
+>> @@ -494,4 +511,24 @@
+>>
+>> 		status = "disabled";
+>> 	};
+>> +
+>> +	otg: usb@13500000 {
+>> +		compatible = "ingenic,jz4780-otg", "snps,dwc2";
+>> +		reg = <0x13500000 0x40000>;
+>> +
+>> +		interrupt-parent = <&intc>;
+>> +		interrupts = <21>;
+>> +
+>> +		clocks = <&cgu JZ4780_CLK_UHC>;
+>> +		clock-names = "otg";
+>> +
+>> +		phys = <&otg_phy>;
+>> +		phy-names = "usb2-phy";
+>> +
+>> +		g-rx-fifo-size = <768>;
+> I had tested with 256 before and do not see a reason why 768 should not work as well.
+>
+>> +		g-np-tx-fifo-size = <256>;
+>> +		g-tx-fifo-size = <256 256 256 256 256 256 256 512>;
+>> +
+>> +		status = "disabled";
+>> +	};
+>> };
+>> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>> index 1f1f896dd1f7..854fac58f45e 100644
+>> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+>> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>> @@ -52,13 +52,43 @@
+>> 	};
+>>
+>> 	cgu: x1000-cgu@10000000 {
+>> -		compatible = "ingenic,x1000-cgu";
+>> +		compatible = "ingenic,x1000-cgu", "simple-mfd";
+>> 		reg = <0x10000000 0x100>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0x0 0x10000000 0x100>;
+>>
+>> 		#clock-cells = <1>;
+>>
+>> 		clocks = <&exclk>, <&rtclk>;
+>> 		clock-names = "ext", "rtc";
+>> +
+>> +		otg_phy: usb-phy@3c {
+>> +			compatible = "ingenic,x1000-phy";
+>> +			reg = <0x3c 0x10>;
+>> +
+>> +			clocks = <&cgu X1000_CLK_OTGPHY>;
+>> +
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>> +		rng: rng@d8 {
+>> +			compatible = "ingenic,x1000-rng";
+>> +			reg = <0xd8 0x8>;
+>> +		};
+>> +	};
+>> +
+>> +	ost: timer@12000000 {
+>> +		compatible = "ingenic,x1000-ost";
+>> +		reg = <0x12000000 0x3c>;
+>> +
+>> +		#clock-cells = <1>;
+>> +
+>> +		clocks = <&cgu X1000_CLK_OST>;
+>> +		clock-names = "ost";
+>> +
+>> +		interrupt-parent = <&cpuintc>;
+>> +		interrupts = <3>;
+>> 	};
+>>
+>> 	tcu: timer@10002000 {
+>> @@ -323,4 +353,24 @@
+>> 			status = "disabled";
+>> 		};
+>> 	};
+>> +
+>> +	otg: usb@13500000 {
+>> +		compatible = "ingenic,x1000-otg", "snps,dwc2";
+>> +		reg = <0x13500000 0x40000>;
+>> +
+>> +		interrupt-parent = <&intc>;
+>> +		interrupts = <21>;
+>> +
+>> +		clocks = <&cgu X1000_CLK_OTG>;
+>> +		clock-names = "otg";
+>> +
+>> +		phys = <&otg_phy>;
+>> +		phy-names = "usb2-phy";
+>> +
+>> +		g-rx-fifo-size = <768>;
+>> +		g-np-tx-fifo-size = <256>;
+>> +		g-tx-fifo-size = <256 256 256 256 256 256 256 512>;
+>> +
+>> +		status = "disabled";
+>> +	};
+>> };
+>> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi b/arch/mips/boot/dts/ingenic/x1830.dtsi
+>> index b05dac3ae308..4831350efdf2 100644
+>> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+>> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+>> @@ -52,13 +52,38 @@
+>> 	};
+>>
+>> 	cgu: x1830-cgu@10000000 {
+>> -		compatible = "ingenic,x1830-cgu";
+>> +		compatible = "ingenic,x1830-cgu", "simple-mfd";
+>> 		reg = <0x10000000 0x100>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0x0 0x10000000 0x100>;
+>>
+>> 		#clock-cells = <1>;
+>>
+>> 		clocks = <&exclk>, <&rtclk>;
+>> 		clock-names = "ext", "rtc";
+>> +
+>> +		otg_phy: usb-phy@3c {
+>> +			compatible = "ingenic,x1830-phy";
+>> +			reg = <0x3c 0x10>;
+>> +
+>> +			clocks = <&cgu X1830_CLK_OTGPHY>;
+>> +
+>> +			#phy-cells = <0>;
+>> +		};
+>> +	};
+>> +
+>> +	ost: timer@12000000 {
+>> +		compatible = "ingenic,x1830-ost", "ingenic,x1000-ost";
+>> +		reg = <0x12000000 0x3c>;
+>> +
+>> +		#clock-cells = <1>;
+>> +
+>> +		clocks = <&cgu X1830_CLK_OST>;
+>> +		clock-names = "ost";
+>> +
+>> +		interrupt-parent = <&cpuintc>;
+>> +		interrupts = <4>;
+>> 	};
+>>
+>> 	tcu: timer@10002000 {
+>> @@ -236,6 +261,13 @@
+>> 		status = "disabled";
+>> 	};
+>>
+>> +	dtrng: trng@10072000 {
+>> +		compatible = "ingenic,x1830-dtrng";
+>> +		reg = <0x10072000 0xc>;
+>> +
+>> +		clocks = <&cgu X1830_CLK_DTRNG>;
+>> +	};
+>> +
+>> 	pdma: dma-controller@13420000 {
+>> 		compatible = "ingenic,x1830-dma";
+>> 		reg = <0x13420000 0x400
+>> @@ -311,4 +343,24 @@
+>> 			status = "disabled";
+>> 		};
+>> 	};
+>> +
+>> +	otg: usb@13500000 {
+>> +		compatible = "ingenic,x1830-otg", "snps,dwc2";
+>> +		reg = <0x13500000 0x40000>;
+>> +
+>> +		interrupt-parent = <&intc>;
+>> +		interrupts = <21>;
+>> +
+>> +		clocks = <&cgu X1830_CLK_OTG>;
+>> +		clock-names = "otg";
+>> +
+>> +		phys = <&otg_phy>;
+>> +		phy-names = "usb2-phy";
+>> +
+>> +		g-rx-fifo-size = <768>;
+>> +		g-np-tx-fifo-size = <256>;
+>> +		g-tx-fifo-size = <256 256 256 256 256 256 256 512>;
+>> +
+>> +		status = "disabled";
+>> +	};
+>> };
+>> -- 
+>> 2.11.0
+>>
