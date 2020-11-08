@@ -2,310 +2,233 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAA12AA78E
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Nov 2020 20:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6130B2AA921
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Nov 2020 06:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727218AbgKGTL5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 7 Nov 2020 14:11:57 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:10979 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726021AbgKGTL5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Nov 2020 14:11:57 -0500
-X-Greylist: delayed 311 seconds by postgrey-1.27 at vger.kernel.org; Sat, 07 Nov 2020 14:11:55 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1604776314;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=OPRgp9UsREfM7Mmx5OYLnZZb3CUnT2GK/fsquy1v550=;
-        b=lvUkNQ7B5JUxqYoKLlEFep1zNwyPKD1UaX/s4QTJQPEyddj9JxEc/Pr8E9j9ipbrLf
-        bLR47P9hYEcc1fREXStonShzcxllM1usvG+pd4Bwz1QONYpa6OYamLGK0cid05pbY90Z
-        ovPj+PUFWSt/TCMItysCV/fIMeBEszXtdmgRIHBUE/OjDIT+UNEQcS2gJVbd2qZ4/7nR
-        OuWvFCyhMKrsKqt6jj+g3UvYPlpIL5fy7QnY7rsF0upE55ScClrBhMPt3xyn0SpiYjyt
-        x+an5XQz3PhzFDRtFSeMWtAZKdeAWChcd3A1e0L7jvzlo89wTEgYBXv6LdbTr9TlF3uw
-        IsoQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlSVXAgNkQ=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 47.3.3 DYNA|AUTH)
-        with ESMTPSA id d04888wA7J5p7Ts
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Sat, 7 Nov 2020 20:05:51 +0100 (CET)
-Subject: Re: [PATCH 2/2] MIPS: Ingenic: Refresh defconfig for Ingenic SoCs based boards.
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=utf-8
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20201107115251.86182-3-zhouyanjie@wanyeetech.com>
-Date:   Sat, 7 Nov 2020 20:05:50 +0100
-Cc:     tsbogend@alpha.franken.de, paul@crapouillou.net,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        nixiaoming@huawei.com, paulburton@kernel.org, krzk@kernel.org,
-        ak@linux.intel.com, ebiederm@xmission.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4F963CAF-23DA-4798-8948-F3BD89B2D55E@goldelico.com>
-References: <20201107115251.86182-1-zhouyanjie@wanyeetech.com> <20201107115251.86182-3-zhouyanjie@wanyeetech.com>
-To:     =?utf-8?Q?=22=E5=91=A8=E7=90=B0=E6=9D=B0_=28Zhou_Yanjie=29=22?= 
-        <zhouyanjie@wanyeetech.com>
-X-Mailer: Apple Mail (2.3124)
+        id S1726178AbgKHFRe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Nov 2020 00:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbgKHFRe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Nov 2020 00:17:34 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0452EC0613CF
+        for <linux-mips@vger.kernel.org>; Sat,  7 Nov 2020 21:17:33 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id d142so5089971wmd.4
+        for <linux-mips@vger.kernel.org>; Sat, 07 Nov 2020 21:17:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=googlenew;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r9aT3RV5iTBLi6xVKvy9ESdq01vAtIRf9u+RQFLMlk8=;
+        b=ic6PU7pbuoktFwoy5T07opHN2Jhn3G4P+CLIrkN5Iot7hSjoBM4MbhzKWBtuEw0l8J
+         tOGbKQrRQpjrr1WB/I5DSPP844qlDzNTeEFmrps1rOVMS/7qM+s1ufALAo/IyPNjZISR
+         f3dDMTZxdlB2e1a74qz66cT8JvsZi4s6ow7emxlPuEPruAV3/pWTOOiFeuGr78tKOp5D
+         tdL8doiIiYVeM3UeiL6McDVHcYHRq/yvxPeWkP5AY2A5VoV7bubq9cBcyuk0wicvK7Ko
+         6oacU0dqbRoEFt3o/6G5eo+c54ghGy/F7/n0WLFMbXMoFzXjJOIE7WzAyFnaEBYMaXCi
+         nuFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r9aT3RV5iTBLi6xVKvy9ESdq01vAtIRf9u+RQFLMlk8=;
+        b=GOK25kK+j4b4trFOnFhbWAb9bLzaNbY65n/MK1fx9JC4GA8Fw3ABvbTcqmV7Qalqwu
+         +73JFOYDYLe5vLSaDxwtTLImh28XbkCIwZNm828JITxty3OIKNadhYJj/5Ig7L8QLf9H
+         oMGPgCZh7sRytDEODOxk3ovgjvQjZ8pcdBhAR0UxH6zh9g/cguOr7A3+3krMWL2MhS9/
+         OCtAhJiK4XPSRoVyz+Y7kcK82xg6q9nsJqSKND1sH/WeYCVeB5ZfnqCsctqFdz/JYg9Q
+         KAunjZYZx01uk3c+YnTkWmO9bb3EhblCBV3zERUMJoZetovGGQWQLOwIubFyKl6GTGcL
+         kLEw==
+X-Gm-Message-State: AOAM5317PyXvtkBQFaaIayKVcGacwqJo8QUXfs/m4QbDx0Cp1HK8Oe9b
+        E0NUG8RhWxQcxmHXOliojY2+7w==
+X-Google-Smtp-Source: ABdhPJx8kgDcsXzU1GSdZh7iKVRn9ukLbAjTByACEbWQF3Xw3UdIdVxLmbR7qMp+g037hB0U7FwKjQ==
+X-Received: by 2002:a1c:81c9:: with SMTP id c192mr7530377wmd.1.1604812652574;
+        Sat, 07 Nov 2020 21:17:32 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id r10sm8378462wmg.16.2020.11.07.21.17.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Nov 2020 21:17:31 -0800 (PST)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Dmitry Safonov <dima@arista.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-fsdevel@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH 00/19] Add generic user_landing tracking
+Date:   Sun,  8 Nov 2020 05:17:10 +0000
+Message-Id: <20201108051730.2042693-1-dima@arista.com>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Started from discussion [1], where was noted that currently a couple of
+architectures support mremap() for vdso/sigpage, but not munmap().
+If an application maps something on the ex-place of vdso/sigpage,
+later after processing signal it will land there (good luck!)
 
-> Am 07.11.2020 um 12:52 schrieb =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou =
-Yanjie) <zhouyanjie@wanyeetech.com>:
->=20
-> 1.Refresh defconfig of CI20 to support OTG and RNG.
-> 2.Refresh defconfig of CU1000-Neo to support OTG/RNG/OST/SC16IS752.
-> 3.Refresh defconfig of CU1830-Neo to support OTG/DTRNG/OST/SC16IS752.
->=20
-> Tested-by: =E5=91=A8=E6=AD=A3 (Zhou Zheng) <sernia.zhou@foxmail.com>
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) =
-<zhouyanjie@wanyeetech.com>
-> ---
-> arch/mips/configs/ci20_defconfig       | 14 ++++++++++++--
-> arch/mips/configs/cu1000-neo_defconfig | 28 =
-+++++++++++++++++++++++-----
-> arch/mips/configs/cu1830-neo_defconfig | 32 =
-+++++++++++++++++++++++++-------
-> 3 files changed, 60 insertions(+), 14 deletions(-)
->=20
-> diff --git a/arch/mips/configs/ci20_defconfig =
-b/arch/mips/configs/ci20_defconfig
-> index 052c5ad0f2b1..80fbe57d68d4 100644
-> --- a/arch/mips/configs/ci20_defconfig
-> +++ b/arch/mips/configs/ci20_defconfig
-> @@ -49,6 +49,8 @@ CONFIG_MTD_RAW_NAND=3Dy
-> CONFIG_MTD_NAND_JZ4780=3Dy
-> CONFIG_MTD_UBI=3Dy
-> CONFIG_MTD_UBI_FASTMAP=3Dy
-> +CONFIG_SCSI=3Dy
-> +CONFIG_BLK_DEV_SD=3Dy
-> CONFIG_NETDEVICES=3Dy
-> # CONFIG_NET_VENDOR_ARC is not set
-> # CONFIG_NET_VENDOR_BROADCOM is not set
-> @@ -77,7 +79,6 @@ CONFIG_SERIAL_8250_NR_UARTS=3D5
-> CONFIG_SERIAL_8250_RUNTIME_UARTS=3D5
-> CONFIG_SERIAL_8250_INGENIC=3Dy
-> CONFIG_SERIAL_OF_PLATFORM=3Dy
-> -# CONFIG_HW_RANDOM is not set
-> CONFIG_I2C=3Dy
-> CONFIG_I2C_JZ4780=3Dy
-> CONFIG_SPI=3Dy
-> @@ -99,7 +100,12 @@ CONFIG_IR_GPIO_TX=3Dm
-> CONFIG_MEDIA_SUPPORT=3Dm
-> # CONFIG_VGA_CONSOLE is not set
-> # CONFIG_HID is not set
-> -# CONFIG_USB_SUPPORT is not set
-> +CONFIG_USB=3Dy
-> +CONFIG_USB_STORAGE=3Dy
-> +CONFIG_USB_DWC2=3Dy
-> +CONFIG_USB_SERIAL=3Dy
-> +CONFIG_USB_SERIAL_CH341=3Dy
-> +CONFIG_USB_GADGET=3Dy
-> CONFIG_MMC=3Dy
-> CONFIG_MMC_JZ4740=3Dy
-> CONFIG_NEW_LEDS=3Dy
-> @@ -131,8 +137,12 @@ CONFIG_MEMORY=3Dy
-> CONFIG_JZ4780_NEMC=3Dy
-> CONFIG_PWM=3Dy
-> CONFIG_PWM_JZ4740=3Dm
+Patches set is based on linux-next (next-20201106) and it depends on
+changes in x86/cleanups (those reclaim TIF_IA32/TIF_X32) and also
+on my changes in akpm (fixing several mremap() issues).
 
-maybe you can add
+Logically, the patches set divides on:
+- patch       1: cleanup for patches in x86/cleanups
+- patches  2-11: cleanups for arch_setup_additional_pages()
+- patches 12-13: x86 signal changes for unmapped vdso
+- patches 14-19: provide generic user_landing in mm_struct
 
-+CONFIG_JZ4780_EFUSE=3Dy
+In the end, besides cleanups, it's now more predictable what happens for
+applications with unmapped vdso on architectures those support .mremap()
+for vdso/sigpage.
 
-here. It was forgotten when we made the NVRAM for Ethernet working.
+I'm aware of only one user that unmaps vdso - Valgrind [2].
+(there possibly are more, but this one is "special", it unmaps vdso, but
+ not vvar, which confuses CRIU [Checkpoint Restore In Userspace], that's
+ why I'm aware of it)
 
-> +CONFIG_JZ4770_PHY=3Dy
-> CONFIG_EXT4_FS=3Dy
-> # CONFIG_DNOTIFY is not set
-> +CONFIG_AUTOFS_FS=3Dy
-> +CONFIG_VFAT_FS=3Dy
-> +CONFIG_FAT_DEFAULT_UTF8=3Dy
-> CONFIG_PROC_KCORE=3Dy
-> # CONFIG_PROC_PAGE_MONITOR is not set
-> CONFIG_TMPFS=3Dy
-> diff --git a/arch/mips/configs/cu1000-neo_defconfig =
-b/arch/mips/configs/cu1000-neo_defconfig
-> index 55d0690a3ffe..9d75f5b77d5d 100644
-> --- a/arch/mips/configs/cu1000-neo_defconfig
-> +++ b/arch/mips/configs/cu1000-neo_defconfig
-> @@ -25,6 +25,7 @@ CONFIG_HIGHMEM=3Dy
-> CONFIG_HZ_100=3Dy
-> # CONFIG_SECCOMP is not set
-> # CONFIG_SUSPEND is not set
-> +CONFIG_MODULES=3Dy
-> # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-> # CONFIG_COMPACTION is not set
-> CONFIG_CMA=3Dy
-> @@ -32,15 +33,17 @@ CONFIG_NET=3Dy
-> CONFIG_PACKET=3Dy
-> CONFIG_UNIX=3Dy
-> CONFIG_INET=3Dy
-> -CONFIG_CFG80211=3Dy
-> +CONFIG_CFG80211=3Dm
-> CONFIG_UEVENT_HELPER=3Dy
-> CONFIG_UEVENT_HELPER_PATH=3D"/sbin/hotplug"
-> CONFIG_DEVTMPFS=3Dy
-> # CONFIG_ALLOW_DEV_COREDUMP is not set
-> +CONFIG_SCSI=3Dy
-> +CONFIG_BLK_DEV_SD=3Dy
-> CONFIG_NETDEVICES=3Dy
-> CONFIG_STMMAC_ETH=3Dy
-> CONFIG_SMSC_PHY=3Dy
-> -CONFIG_BRCMFMAC=3Dy
-> +CONFIG_BRCMFMAC=3Dm
-> # CONFIG_INPUT_KEYBOARD is not set
-> # CONFIG_INPUT_MOUSE is not set
-> # CONFIG_SERIO is not set
-> @@ -52,16 +55,25 @@ CONFIG_SERIAL_8250_NR_UARTS=3D3
-> CONFIG_SERIAL_8250_RUNTIME_UARTS=3D3
-> CONFIG_SERIAL_8250_INGENIC=3Dy
-> CONFIG_SERIAL_OF_PLATFORM=3Dy
-> -# CONFIG_HW_RANDOM is not set
-> +CONFIG_SERIAL_SC16IS7XX=3Dy
-> +# CONFIG_SERIAL_SC16IS7XX_I2C is not set
-> +CONFIG_SERIAL_SC16IS7XX_SPI=3Dy
-> CONFIG_I2C=3Dy
-> CONFIG_I2C_JZ4780=3Dy
-> +CONFIG_SPI=3Dy
-> +CONFIG_SPI_GPIO=3Dy
-> CONFIG_GPIO_SYSFS=3Dy
-> -CONFIG_SENSORS_ADS7828=3Dy
-> +CONFIG_SENSORS_ADS7828=3Dm
-> CONFIG_WATCHDOG=3Dy
-> CONFIG_JZ4740_WDT=3Dy
-> # CONFIG_VGA_CONSOLE is not set
-> # CONFIG_HID is not set
-> -# CONFIG_USB_SUPPORT is not set
-> +CONFIG_USB=3Dy
-> +CONFIG_USB_STORAGE=3Dy
-> +CONFIG_USB_DWC2=3Dy
-> +CONFIG_USB_SERIAL=3Dy
-> +CONFIG_USB_SERIAL_CH341=3Dy
-> +CONFIG_USB_GADGET=3Dy
-> CONFIG_MMC=3Dy
-> CONFIG_MMC_JZ4740=3Dy
-> CONFIG_NEW_LEDS=3Dy
-> @@ -72,16 +84,22 @@ CONFIG_RTC_CLASS=3Dy
-> CONFIG_RTC_DRV_JZ4740=3Dy
-> CONFIG_DMADEVICES=3Dy
-> CONFIG_DMA_JZ4780=3Dy
-> +# CONFIG_INGENIC_TIMER is not set
-> +CONFIG_INGENIC_SYSOST=3Dy
-> # CONFIG_IOMMU_SUPPORT is not set
-> +CONFIG_JZ4770_PHY=3Dy
-> CONFIG_EXT4_FS=3Dy
-> # CONFIG_DNOTIFY is not set
-> CONFIG_AUTOFS_FS=3Dy
-> +CONFIG_VFAT_FS=3Dy
-> +CONFIG_FAT_DEFAULT_UTF8=3Dy
-> CONFIG_PROC_KCORE=3Dy
-> # CONFIG_PROC_PAGE_MONITOR is not set
-> CONFIG_TMPFS=3Dy
-> CONFIG_CONFIGFS_FS=3Dy
-> CONFIG_NFS_FS=3Dy
-> CONFIG_NLS=3Dy
-> +CONFIG_NLS_CODEPAGE_437=3Dy
-> CONFIG_NLS_CODEPAGE_936=3Dy
-> CONFIG_NLS_CODEPAGE_950=3Dy
-> CONFIG_NLS_ASCII=3Dy
-> diff --git a/arch/mips/configs/cu1830-neo_defconfig =
-b/arch/mips/configs/cu1830-neo_defconfig
-> index e7064851a47a..29decd0003c6 100644
-> --- a/arch/mips/configs/cu1830-neo_defconfig
-> +++ b/arch/mips/configs/cu1830-neo_defconfig
-> @@ -25,6 +25,7 @@ CONFIG_HIGHMEM=3Dy
-> CONFIG_HZ_100=3Dy
-> # CONFIG_SECCOMP is not set
-> # CONFIG_SUSPEND is not set
-> +CONFIG_MODULES=3Dy
-> # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-> # CONFIG_COMPACTION is not set
-> CONFIG_CMA=3Dy
-> @@ -32,18 +33,20 @@ CONFIG_NET=3Dy
-> CONFIG_PACKET=3Dy
-> CONFIG_UNIX=3Dy
-> CONFIG_INET=3Dy
-> -CONFIG_CFG80211=3Dy
-> +CONFIG_CFG80211=3Dm
-> CONFIG_UEVENT_HELPER=3Dy
-> CONFIG_UEVENT_HELPER_PATH=3D"/sbin/hotplug"
-> CONFIG_DEVTMPFS=3Dy
-> # CONFIG_ALLOW_DEV_COREDUMP is not set
-> +CONFIG_SCSI=3Dy
-> +CONFIG_BLK_DEV_SD=3Dy
-> CONFIG_MD=3Dy
-> -CONFIG_BLK_DEV_MD=3Dy
-> -CONFIG_BLK_DEV_DM=3Dy
-> +CONFIG_BLK_DEV_MD=3Dm
-> +CONFIG_BLK_DEV_DM=3Dm
-> CONFIG_NETDEVICES=3Dy
-> CONFIG_STMMAC_ETH=3Dy
-> CONFIG_ICPLUS_PHY=3Dy
-> -CONFIG_BRCMFMAC=3Dy
-> +CONFIG_BRCMFMAC=3Dm
-> # CONFIG_INPUT_KEYBOARD is not set
-> # CONFIG_INPUT_MOUSE is not set
-> # CONFIG_SERIO is not set
-> @@ -55,16 +58,25 @@ CONFIG_SERIAL_8250_NR_UARTS=3D2
-> CONFIG_SERIAL_8250_RUNTIME_UARTS=3D2
-> CONFIG_SERIAL_8250_INGENIC=3Dy
-> CONFIG_SERIAL_OF_PLATFORM=3Dy
-> -# CONFIG_HW_RANDOM is not set
-> +CONFIG_SERIAL_SC16IS7XX=3Dy
-> +# CONFIG_SERIAL_SC16IS7XX_I2C is not set
-> +CONFIG_SERIAL_SC16IS7XX_SPI=3Dy
-> CONFIG_I2C=3Dy
-> CONFIG_I2C_JZ4780=3Dy
-> +CONFIG_SPI=3Dy
-> +CONFIG_SPI_GPIO=3Dy
-> CONFIG_GPIO_SYSFS=3Dy
-> -CONFIG_SENSORS_ADS7828=3Dy
-> +CONFIG_SENSORS_ADS7828=3Dm
-> CONFIG_WATCHDOG=3Dy
-> CONFIG_JZ4740_WDT=3Dy
-> # CONFIG_VGA_CONSOLE is not set
-> # CONFIG_HID is not set
-> -# CONFIG_USB_SUPPORT is not set
-> +CONFIG_USB=3Dy
-> +CONFIG_USB_STORAGE=3Dy
-> +CONFIG_USB_DWC2=3Dy
-> +CONFIG_USB_SERIAL=3Dy
-> +CONFIG_USB_SERIAL_CH341=3Dy
-> +CONFIG_USB_GADGET=3Dy
-> CONFIG_MMC=3Dy
-> CONFIG_MMC_JZ4740=3Dy
-> CONFIG_NEW_LEDS=3Dy
-> @@ -75,16 +87,22 @@ CONFIG_RTC_CLASS=3Dy
-> CONFIG_RTC_DRV_JZ4740=3Dy
-> CONFIG_DMADEVICES=3Dy
-> CONFIG_DMA_JZ4780=3Dy
-> +# CONFIG_INGENIC_TIMER is not set
-> +CONFIG_INGENIC_SYSOST=3Dy
-> # CONFIG_IOMMU_SUPPORT is not set
-> +CONFIG_JZ4770_PHY=3Dy
-> CONFIG_EXT4_FS=3Dy
-> # CONFIG_DNOTIFY is not set
-> CONFIG_AUTOFS_FS=3Dy
-> +CONFIG_VFAT_FS=3Dy
-> +CONFIG_FAT_DEFAULT_UTF8=3Dy
-> CONFIG_PROC_KCORE=3Dy
-> # CONFIG_PROC_PAGE_MONITOR is not set
-> CONFIG_TMPFS=3Dy
-> CONFIG_CONFIGFS_FS=3Dy
-> CONFIG_NFS_FS=3Dy
-> CONFIG_NLS=3Dy
-> +CONFIG_NLS_CODEPAGE_437=3Dy
-> CONFIG_NLS_CODEPAGE_936=3Dy
-> CONFIG_NLS_CODEPAGE_950=3Dy
-> CONFIG_NLS_ASCII=3Dy
-> --=20
-> 2.11.0
->=20
+Patches as a .git branch:
+https://github.com/0x7f454c46/linux/tree/setup_additional_pages
+
+[1]: https://lore.kernel.org/linux-arch/CAJwJo6ZANqYkSHbQ+3b+Fi_VT80MtrzEV5yreQAWx-L8j8x2zA@mail.gmail.com/
+[2]: https://github.com/checkpoint-restore/criu/issues/488
+
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: x86@kernel.org
+
+Dmitry Safonov (19):
+  x86/elf: Check in_x32_syscall() in compat_arch_setup_additional_pages()
+  elf: Move arch_setup_additional_pages() to generic elf.h
+  arm64: Use in_compat_task() in arch_setup_additional_pages()
+  x86: Remove compat_arch_setup_additional_pages()
+  elf: Remove compat_arch_setup_additional_pages()
+  elf/vdso: Reuse arch_setup_additional_pages() parameters
+  elf: Use sysinfo_ehdr in ARCH_DLINFO()
+  arm/vdso: Remove vdso pointer from mm->context
+  s390/vdso: Remove vdso_base pointer from mm->context
+  sparc/vdso: Remove vdso pointer from mm->context
+  mm/mmap: Make vm_special_mapping::mremap return void
+  x86/signal: Land on &frame->retcode when vdso isn't mapped
+  x86/signal: Check if vdso_image_32 is mapped before trying to land on it
+  mm: Add user_landing in mm_struct
+  x86/vdso: Migrate to user_landing
+  arm/vdso: Migrate to user_landing
+  arm64/vdso: Migrate compat signals to user_landing
+  arm64/vdso: Migrate native signals to user_landing
+  mips/vdso: Migrate to user_landing
+
+ arch/alpha/include/asm/elf.h              |  2 +-
+ arch/arm/Kconfig                          |  2 +
+ arch/arm/include/asm/elf.h                | 10 +---
+ arch/arm/include/asm/mmu.h                |  3 -
+ arch/arm/include/asm/vdso.h               |  6 +-
+ arch/arm/kernel/process.c                 | 14 +----
+ arch/arm/kernel/signal.c                  |  6 +-
+ arch/arm/kernel/vdso.c                    | 20 ++-----
+ arch/arm64/Kconfig                        |  2 +
+ arch/arm64/include/asm/elf.h              | 27 ++-------
+ arch/arm64/kernel/signal.c                | 10 +++-
+ arch/arm64/kernel/signal32.c              | 17 ++++--
+ arch/arm64/kernel/vdso.c                  | 47 ++++++---------
+ arch/csky/Kconfig                         |  1 +
+ arch/csky/include/asm/elf.h               |  4 --
+ arch/csky/kernel/vdso.c                   |  3 +-
+ arch/hexagon/Kconfig                      |  1 +
+ arch/hexagon/include/asm/elf.h            |  6 --
+ arch/hexagon/kernel/vdso.c                |  3 +-
+ arch/ia64/include/asm/elf.h               |  2 +-
+ arch/mips/Kconfig                         |  2 +
+ arch/mips/include/asm/elf.h               | 10 +---
+ arch/mips/kernel/signal.c                 | 11 ++--
+ arch/mips/kernel/vdso.c                   |  5 +-
+ arch/mips/vdso/genvdso.c                  |  9 ---
+ arch/nds32/Kconfig                        |  1 +
+ arch/nds32/include/asm/elf.h              |  8 +--
+ arch/nds32/kernel/vdso.c                  |  3 +-
+ arch/nios2/Kconfig                        |  1 +
+ arch/nios2/include/asm/elf.h              |  4 --
+ arch/nios2/mm/init.c                      |  2 +-
+ arch/powerpc/Kconfig                      |  1 +
+ arch/powerpc/include/asm/elf.h            |  9 +--
+ arch/powerpc/kernel/vdso.c                |  3 +-
+ arch/riscv/Kconfig                        |  1 +
+ arch/riscv/include/asm/elf.h              | 10 +---
+ arch/riscv/kernel/vdso.c                  |  9 +--
+ arch/s390/Kconfig                         |  1 +
+ arch/s390/include/asm/elf.h               | 10 +---
+ arch/s390/include/asm/mmu.h               |  1 -
+ arch/s390/kernel/vdso.c                   | 13 +---
+ arch/sh/Kconfig                           |  1 +
+ arch/sh/include/asm/elf.h                 | 16 ++---
+ arch/sh/kernel/vsyscall/vsyscall.c        |  3 +-
+ arch/sparc/Kconfig                        |  1 +
+ arch/sparc/include/asm/elf_64.h           | 11 +---
+ arch/sparc/include/asm/mmu_64.h           |  1 -
+ arch/sparc/vdso/vma.c                     | 18 +++---
+ arch/x86/Kconfig                          |  2 +
+ arch/x86/entry/common.c                   |  8 ++-
+ arch/x86/entry/vdso/vma.c                 | 72 ++++++++++++-----------
+ arch/x86/ia32/ia32_signal.c               | 18 +++---
+ arch/x86/include/asm/compat.h             |  6 ++
+ arch/x86/include/asm/elf.h                | 44 +++++---------
+ arch/x86/include/asm/mmu.h                |  1 -
+ arch/x86/include/asm/vdso.h               |  4 ++
+ arch/x86/kernel/cpu/resctrl/pseudo_lock.c |  3 +-
+ arch/x86/kernel/signal.c                  | 25 ++++----
+ arch/x86/um/asm/elf.h                     |  9 +--
+ arch/x86/um/vdso/vma.c                    |  2 +-
+ fs/Kconfig.binfmt                         |  3 +
+ fs/aio.c                                  |  3 +-
+ fs/binfmt_elf.c                           | 19 +++---
+ fs/binfmt_elf_fdpic.c                     | 17 +++---
+ fs/compat_binfmt_elf.c                    | 12 ----
+ include/linux/elf.h                       | 24 ++++++--
+ include/linux/mm.h                        |  3 +-
+ include/linux/mm_types.h                  | 12 +++-
+ mm/Kconfig                                |  3 +
+ mm/mmap.c                                 | 21 ++++++-
+ mm/mremap.c                               |  2 +-
+ 71 files changed, 308 insertions(+), 356 deletions(-)
+
+
+base-commit: c34f157421f6905e6b4a79a312e9175dce2bc607
+-- 
+2.28.0
 
