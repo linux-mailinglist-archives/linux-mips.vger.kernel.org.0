@@ -2,22 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF432AAB05
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Nov 2020 13:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B7D2AABA2
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Nov 2020 15:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727570AbgKHMsQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Nov 2020 07:48:16 -0500
-Received: from out28-217.mail.aliyun.com ([115.124.28.217]:43863 "EHLO
-        out28-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726607AbgKHMsP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Nov 2020 07:48:15 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0755932|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.235119-0.0038911-0.76099;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047213;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.Iu5FFCC_1604839687;
-Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Iu5FFCC_1604839687)
-          by smtp.aliyun-inc.com(10.147.41.138);
-          Sun, 08 Nov 2020 20:48:08 +0800
-Subject: Re: [PATCH 2/2] MIPS: Ingenic: Refresh defconfig for Ingenic SoCs
- based boards.
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+        id S1728016AbgKHOhR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Nov 2020 09:37:17 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:13708 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727570AbgKHOhR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Nov 2020 09:37:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1604846232;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=0tuYXLinCh6aFQmpzS/CqM6Cat8GZM0t+tYqiSLVGFY=;
+        b=qFzSEFdvGRUmVyVSBKcXQNAWdgpD1HTZ0HM8BB/HE6Qwe3TjMRrZZsi1fTZlSG8FXb
+        GWASmogBAN/ezWgkisCoZB+w8XO2m5xS0r9p8P+Me09vvURnwDI1GDaJZIBb8j4Em6Eq
+        EuMTqqrBBkzMfPy8oPyZCFH9aiUCKlOJVVnq9ZPrUeIFh8JlLOX9ISjSvyi5EfNJKIPR
+        hgSPjwmTwoJn+WJGDF4I3hADsmlWOBwPb5gGov9JEnC/oyelNLiPnLkSW3IMFWF5r5f7
+        /AiPxe42cMw0S2OGOMM0QPgT4QNNuIhGl8Iw7HoELbK855fXi9U+Js9tbFqjssIASgyq
+        NHTg==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlaeXA4Ec+I="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 47.3.3 DYNA|AUTH)
+        with ESMTPSA id d04888wA8EZR8TA
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Sun, 8 Nov 2020 15:35:27 +0100 (CET)
+Subject: Re: [PATCH 1/2] MIPS: Ingenic: Add missing nodes for Ingenic SoCs and boards.
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Content-Type: text/plain; charset=utf-8
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <030f234c-d889-9065-eade-7cf5a2b7417d@wanyeetech.com>
+Date:   Sun, 8 Nov 2020 15:35:26 +0100
 Cc:     tsbogend@alpha.franken.de, paul@crapouillou.net,
         robh+dt@kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
@@ -26,271 +44,566 @@ Cc:     tsbogend@alpha.franken.de, paul@crapouillou.net,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
         rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
         sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-References: <20201107115251.86182-1-zhouyanjie@wanyeetech.com>
- <20201107115251.86182-3-zhouyanjie@wanyeetech.com>
- <4F963CAF-23DA-4798-8948-F3BD89B2D55E@goldelico.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <fea3a4f9-dcd3-296d-6f3e-f45bae763d30@wanyeetech.com>
-Date:   Sun, 8 Nov 2020 20:48:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <4F963CAF-23DA-4798-8948-F3BD89B2D55E@goldelico.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A118B719-F022-4275-B0B6-A122B28B75CF@goldelico.com>
+References: <20201107115251.86182-1-zhouyanjie@wanyeetech.com> <20201107115251.86182-2-zhouyanjie@wanyeetech.com> <A9536791-F713-4CD8-80B9-4BDA6A136E50@goldelico.com> <030f234c-d889-9065-eade-7cf5a2b7417d@wanyeetech.com>
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
+X-Mailer: Apple Mail (2.3124)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Nikolaus,
 
-On 2020/11/8 上午3:05, H. Nikolaus Schaller wrote:
->> Am 07.11.2020 um 12:52 schrieb 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>:
->>
->> 1.Refresh defconfig of CI20 to support OTG and RNG.
->> 2.Refresh defconfig of CU1000-Neo to support OTG/RNG/OST/SC16IS752.
->> 3.Refresh defconfig of CU1830-Neo to support OTG/DTRNG/OST/SC16IS752.
->>
->> Tested-by: 周正 (Zhou Zheng) <sernia.zhou@foxmail.com>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->> arch/mips/configs/ci20_defconfig       | 14 ++++++++++++--
->> arch/mips/configs/cu1000-neo_defconfig | 28 +++++++++++++++++++++++-----
->> arch/mips/configs/cu1830-neo_defconfig | 32 +++++++++++++++++++++++++-------
->> 3 files changed, 60 insertions(+), 14 deletions(-)
->>
->> diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
->> index 052c5ad0f2b1..80fbe57d68d4 100644
->> --- a/arch/mips/configs/ci20_defconfig
->> +++ b/arch/mips/configs/ci20_defconfig
->> @@ -49,6 +49,8 @@ CONFIG_MTD_RAW_NAND=y
->> CONFIG_MTD_NAND_JZ4780=y
->> CONFIG_MTD_UBI=y
->> CONFIG_MTD_UBI_FASTMAP=y
->> +CONFIG_SCSI=y
->> +CONFIG_BLK_DEV_SD=y
->> CONFIG_NETDEVICES=y
->> # CONFIG_NET_VENDOR_ARC is not set
->> # CONFIG_NET_VENDOR_BROADCOM is not set
->> @@ -77,7 +79,6 @@ CONFIG_SERIAL_8250_NR_UARTS=5
->> CONFIG_SERIAL_8250_RUNTIME_UARTS=5
->> CONFIG_SERIAL_8250_INGENIC=y
->> CONFIG_SERIAL_OF_PLATFORM=y
->> -# CONFIG_HW_RANDOM is not set
->> CONFIG_I2C=y
->> CONFIG_I2C_JZ4780=y
->> CONFIG_SPI=y
->> @@ -99,7 +100,12 @@ CONFIG_IR_GPIO_TX=m
->> CONFIG_MEDIA_SUPPORT=m
->> # CONFIG_VGA_CONSOLE is not set
->> # CONFIG_HID is not set
->> -# CONFIG_USB_SUPPORT is not set
->> +CONFIG_USB=y
->> +CONFIG_USB_STORAGE=y
->> +CONFIG_USB_DWC2=y
->> +CONFIG_USB_SERIAL=y
->> +CONFIG_USB_SERIAL_CH341=y
->> +CONFIG_USB_GADGET=y
->> CONFIG_MMC=y
->> CONFIG_MMC_JZ4740=y
->> CONFIG_NEW_LEDS=y
->> @@ -131,8 +137,12 @@ CONFIG_MEMORY=y
->> CONFIG_JZ4780_NEMC=y
->> CONFIG_PWM=y
->> CONFIG_PWM_JZ4740=m
-> maybe you can add
->
-> +CONFIG_JZ4780_EFUSE=y
->
-> here. It was forgotten when we made the NVRAM for Ethernet working.
+> Am 08.11.2020 um 13:46 schrieb Zhou Yanjie =
+<zhouyanjie@wanyeetech.com>:
+>=20
+> Hello Nikolaus,
+>=20
+> On 2020/11/8 =E4=B8=8A=E5=8D=883:03, H. Nikolaus Schaller wrote:
+>>> Am 07.11.2020 um 12:52 schrieb =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou =
+Yanjie) <zhouyanjie@wanyeetech.com>:
+>>>=20
+>>> 1.Add OTG/OTG PHY/RNG nodes for JZ4780, CGU/OTG nodes for CI20.
+>>> 2.Add OTG/OTG PHY/RNG/OST nodes for X1000, SSI/CGU/OST/OTG/SC16IS752
+>>>  nodes for CU1000-Neo.
+>>> 3.Add OTG/OTG PHY/DTRNG/OST nodes for X1830, =
+SSI/CGU/OST/OTG/SC16IS752
+>>>  nodes for CU1830-Neo.
+>>>=20
+>>> Tested-by: =E5=91=A8=E6=AD=A3 (Zhou Zheng) <sernia.zhou@foxmail.com>
+>> Comments below for CI20 / jz4780 only.
+>>=20
+>> I tried to test on top of my v5.10 working tree but the CI20 does not =
+boot any more.
+>> Maybe the SMP hacks are in the way and I have to remove them first or =
+try on top
+>> of v5.9.y
+>=20
+>=20
+> SMP is not available on the mainline now, so the previous SMP patch =
+needs to be removed.
 
+I have tried with CONFIG_SMP disabled and now I can boot my v5.10-rc2 =
+(plus local patches).
+And can confirm that the OTG port works.
 
-Sure, I will add it in the next version.
+(BTW: dm9000 defers probing forever but that is an unrelated issue).
 
+> The new SMP patch will take some time because it needs to ensure =
+support for the new X2000 processor.
 
->> +CONFIG_JZ4770_PHY=y
->> CONFIG_EXT4_FS=y
->> # CONFIG_DNOTIFY is not set
->> +CONFIG_AUTOFS_FS=y
->> +CONFIG_VFAT_FS=y
->> +CONFIG_FAT_DEFAULT_UTF8=y
->> CONFIG_PROC_KCORE=y
->> # CONFIG_PROC_PAGE_MONITOR is not set
->> CONFIG_TMPFS=y
->> diff --git a/arch/mips/configs/cu1000-neo_defconfig b/arch/mips/configs/cu1000-neo_defconfig
->> index 55d0690a3ffe..9d75f5b77d5d 100644
->> --- a/arch/mips/configs/cu1000-neo_defconfig
->> +++ b/arch/mips/configs/cu1000-neo_defconfig
->> @@ -25,6 +25,7 @@ CONFIG_HIGHMEM=y
->> CONFIG_HZ_100=y
->> # CONFIG_SECCOMP is not set
->> # CONFIG_SUSPEND is not set
->> +CONFIG_MODULES=y
->> # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
->> # CONFIG_COMPACTION is not set
->> CONFIG_CMA=y
->> @@ -32,15 +33,17 @@ CONFIG_NET=y
->> CONFIG_PACKET=y
->> CONFIG_UNIX=y
->> CONFIG_INET=y
->> -CONFIG_CFG80211=y
->> +CONFIG_CFG80211=m
->> CONFIG_UEVENT_HELPER=y
->> CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
->> CONFIG_DEVTMPFS=y
->> # CONFIG_ALLOW_DEV_COREDUMP is not set
->> +CONFIG_SCSI=y
->> +CONFIG_BLK_DEV_SD=y
->> CONFIG_NETDEVICES=y
->> CONFIG_STMMAC_ETH=y
->> CONFIG_SMSC_PHY=y
->> -CONFIG_BRCMFMAC=y
->> +CONFIG_BRCMFMAC=m
->> # CONFIG_INPUT_KEYBOARD is not set
->> # CONFIG_INPUT_MOUSE is not set
->> # CONFIG_SERIO is not set
->> @@ -52,16 +55,25 @@ CONFIG_SERIAL_8250_NR_UARTS=3
->> CONFIG_SERIAL_8250_RUNTIME_UARTS=3
->> CONFIG_SERIAL_8250_INGENIC=y
->> CONFIG_SERIAL_OF_PLATFORM=y
->> -# CONFIG_HW_RANDOM is not set
->> +CONFIG_SERIAL_SC16IS7XX=y
->> +# CONFIG_SERIAL_SC16IS7XX_I2C is not set
->> +CONFIG_SERIAL_SC16IS7XX_SPI=y
->> CONFIG_I2C=y
->> CONFIG_I2C_JZ4780=y
->> +CONFIG_SPI=y
->> +CONFIG_SPI_GPIO=y
->> CONFIG_GPIO_SYSFS=y
->> -CONFIG_SENSORS_ADS7828=y
->> +CONFIG_SENSORS_ADS7828=m
->> CONFIG_WATCHDOG=y
->> CONFIG_JZ4740_WDT=y
->> # CONFIG_VGA_CONSOLE is not set
->> # CONFIG_HID is not set
->> -# CONFIG_USB_SUPPORT is not set
->> +CONFIG_USB=y
->> +CONFIG_USB_STORAGE=y
->> +CONFIG_USB_DWC2=y
->> +CONFIG_USB_SERIAL=y
->> +CONFIG_USB_SERIAL_CH341=y
->> +CONFIG_USB_GADGET=y
->> CONFIG_MMC=y
->> CONFIG_MMC_JZ4740=y
->> CONFIG_NEW_LEDS=y
->> @@ -72,16 +84,22 @@ CONFIG_RTC_CLASS=y
->> CONFIG_RTC_DRV_JZ4740=y
->> CONFIG_DMADEVICES=y
->> CONFIG_DMA_JZ4780=y
->> +# CONFIG_INGENIC_TIMER is not set
->> +CONFIG_INGENIC_SYSOST=y
->> # CONFIG_IOMMU_SUPPORT is not set
->> +CONFIG_JZ4770_PHY=y
->> CONFIG_EXT4_FS=y
->> # CONFIG_DNOTIFY is not set
->> CONFIG_AUTOFS_FS=y
->> +CONFIG_VFAT_FS=y
->> +CONFIG_FAT_DEFAULT_UTF8=y
->> CONFIG_PROC_KCORE=y
->> # CONFIG_PROC_PAGE_MONITOR is not set
->> CONFIG_TMPFS=y
->> CONFIG_CONFIGFS_FS=y
->> CONFIG_NFS_FS=y
->> CONFIG_NLS=y
->> +CONFIG_NLS_CODEPAGE_437=y
->> CONFIG_NLS_CODEPAGE_936=y
->> CONFIG_NLS_CODEPAGE_950=y
->> CONFIG_NLS_ASCII=y
->> diff --git a/arch/mips/configs/cu1830-neo_defconfig b/arch/mips/configs/cu1830-neo_defconfig
->> index e7064851a47a..29decd0003c6 100644
->> --- a/arch/mips/configs/cu1830-neo_defconfig
->> +++ b/arch/mips/configs/cu1830-neo_defconfig
->> @@ -25,6 +25,7 @@ CONFIG_HIGHMEM=y
->> CONFIG_HZ_100=y
->> # CONFIG_SECCOMP is not set
->> # CONFIG_SUSPEND is not set
->> +CONFIG_MODULES=y
->> # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
->> # CONFIG_COMPACTION is not set
->> CONFIG_CMA=y
->> @@ -32,18 +33,20 @@ CONFIG_NET=y
->> CONFIG_PACKET=y
->> CONFIG_UNIX=y
->> CONFIG_INET=y
->> -CONFIG_CFG80211=y
->> +CONFIG_CFG80211=m
->> CONFIG_UEVENT_HELPER=y
->> CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
->> CONFIG_DEVTMPFS=y
->> # CONFIG_ALLOW_DEV_COREDUMP is not set
->> +CONFIG_SCSI=y
->> +CONFIG_BLK_DEV_SD=y
->> CONFIG_MD=y
->> -CONFIG_BLK_DEV_MD=y
->> -CONFIG_BLK_DEV_DM=y
->> +CONFIG_BLK_DEV_MD=m
->> +CONFIG_BLK_DEV_DM=m
->> CONFIG_NETDEVICES=y
->> CONFIG_STMMAC_ETH=y
->> CONFIG_ICPLUS_PHY=y
->> -CONFIG_BRCMFMAC=y
->> +CONFIG_BRCMFMAC=m
->> # CONFIG_INPUT_KEYBOARD is not set
->> # CONFIG_INPUT_MOUSE is not set
->> # CONFIG_SERIO is not set
->> @@ -55,16 +58,25 @@ CONFIG_SERIAL_8250_NR_UARTS=2
->> CONFIG_SERIAL_8250_RUNTIME_UARTS=2
->> CONFIG_SERIAL_8250_INGENIC=y
->> CONFIG_SERIAL_OF_PLATFORM=y
->> -# CONFIG_HW_RANDOM is not set
->> +CONFIG_SERIAL_SC16IS7XX=y
->> +# CONFIG_SERIAL_SC16IS7XX_I2C is not set
->> +CONFIG_SERIAL_SC16IS7XX_SPI=y
->> CONFIG_I2C=y
->> CONFIG_I2C_JZ4780=y
->> +CONFIG_SPI=y
->> +CONFIG_SPI_GPIO=y
->> CONFIG_GPIO_SYSFS=y
->> -CONFIG_SENSORS_ADS7828=y
->> +CONFIG_SENSORS_ADS7828=m
->> CONFIG_WATCHDOG=y
->> CONFIG_JZ4740_WDT=y
->> # CONFIG_VGA_CONSOLE is not set
->> # CONFIG_HID is not set
->> -# CONFIG_USB_SUPPORT is not set
->> +CONFIG_USB=y
->> +CONFIG_USB_STORAGE=y
->> +CONFIG_USB_DWC2=y
->> +CONFIG_USB_SERIAL=y
->> +CONFIG_USB_SERIAL_CH341=y
->> +CONFIG_USB_GADGET=y
->> CONFIG_MMC=y
->> CONFIG_MMC_JZ4740=y
->> CONFIG_NEW_LEDS=y
->> @@ -75,16 +87,22 @@ CONFIG_RTC_CLASS=y
->> CONFIG_RTC_DRV_JZ4740=y
->> CONFIG_DMADEVICES=y
->> CONFIG_DMA_JZ4780=y
->> +# CONFIG_INGENIC_TIMER is not set
->> +CONFIG_INGENIC_SYSOST=y
->> # CONFIG_IOMMU_SUPPORT is not set
->> +CONFIG_JZ4770_PHY=y
->> CONFIG_EXT4_FS=y
->> # CONFIG_DNOTIFY is not set
->> CONFIG_AUTOFS_FS=y
->> +CONFIG_VFAT_FS=y
->> +CONFIG_FAT_DEFAULT_UTF8=y
->> CONFIG_PROC_KCORE=y
->> # CONFIG_PROC_PAGE_MONITOR is not set
->> CONFIG_TMPFS=y
->> CONFIG_CONFIGFS_FS=y
->> CONFIG_NFS_FS=y
->> CONFIG_NLS=y
->> +CONFIG_NLS_CODEPAGE_437=y
->> CONFIG_NLS_CODEPAGE_936=y
->> CONFIG_NLS_CODEPAGE_950=y
->> CONFIG_NLS_ASCII=y
->> -- 
->> 2.11.0
->>
+Ok, I see. It is a little sad since it works find until 5.9 but now is =
+broken and means we
+have to test v5.10ff with only one processor. Any hints what should be =
+hacked to make it
+work until a final solution becomes available in upstream?
+
+>=20
+>=20
+> Thanks and best regards!
+
+If you like you can add my
+
+Tested by: H. Nikolaus Schaller <hns@goldelico.com> # CI20/jz4780
+
+to this patch.
+
+>=20
+>=20
+>>=20
+>>> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) =
+<zhouyanjie@wanyeetech.com>
+>>> ---
+>>> arch/mips/boot/dts/ingenic/ci20.dts       | 16 +++++++++
+>>> arch/mips/boot/dts/ingenic/cu1000-neo.dts | 60 =
++++++++++++++++++++++++++++----
+>>> arch/mips/boot/dts/ingenic/cu1830-neo.dts | 60 =
++++++++++++++++++++++++++++----
+>>> arch/mips/boot/dts/ingenic/jz4780.dtsi    | 41 +++++++++++++++++++--
+>>> arch/mips/boot/dts/ingenic/x1000.dtsi     | 52 =
+++++++++++++++++++++++++++-
+>>> arch/mips/boot/dts/ingenic/x1830.dtsi     | 54 =
++++++++++++++++++++++++++++-
+>>> 6 files changed, 267 insertions(+), 16 deletions(-)
+>>>=20
+>>> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts =
+b/arch/mips/boot/dts/ingenic/ci20.dts
+>>> index 75f5bfbf2c37..b31054a41754 100644
+>>> --- a/arch/mips/boot/dts/ingenic/ci20.dts
+>>> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
+>>> @@ -93,6 +93,15 @@
+>>> 	clock-frequency =3D <48000000>;
+>>> };
+>>>=20
+>>> +&cgu {
+>>> +	/*
+>>> +	 * Use the 32.768 kHz oscillator as the parent of the RTC for a =
+higher
+>>> +	 * precision.
+>>> +	 */
+>>> +	assigned-clocks =3D <&cgu JZ4780_CLK_RTC>;
+>>> +	assigned-clock-parents =3D <&cgu JZ4780_CLK_RTCLK>;
+>>> +};
+>>> +
+>> ok
+>>=20
+>>> &mmc0 {
+>>> 	status =3D "okay";
+>>>=20
+>>> @@ -396,6 +405,13 @@
+>>> 	status =3D "okay";
+>>> };
+>>>=20
+>>> +&otg {
+>>> +	status =3D "okay";
+>>> +
+>>> +	assigned-clocks =3D <&cgu JZ4780_CLK_OTGPHY>;
+>>> +	assigned-clock-rates =3D <48000000>;
+>>> +};
+>>> +
+>> ok
+>>=20
+>>> &pinctrl {
+>>> 	pins_uart0: uart0 {
+>>> 		function =3D "uart0";
+>>> diff --git a/arch/mips/boot/dts/ingenic/cu1000-neo.dts =
+b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
+>>> index 22a1066d637b..44d47d12db12 100644
+>>> --- a/arch/mips/boot/dts/ingenic/cu1000-neo.dts
+>>> +++ b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
+>>> @@ -3,7 +3,7 @@
+>>>=20
+>>> #include "x1000.dtsi"
+>>> #include <dt-bindings/gpio/gpio.h>
+>>> -#include <dt-bindings/clock/ingenic,tcu.h>
+>>> +#include <dt-bindings/clock/ingenic,sysost.h>
+>>> #include <dt-bindings/interrupt-controller/irq.h>
+>>>=20
+>>> / {
+>>> @@ -31,6 +31,18 @@
+>>> 		};
+>>> 	};
+>>>=20
+>>> +	ssi: spi-gpio {
+>>> +		compatible =3D "spi-gpio";
+>>> +		#address-cells =3D <1>;
+>>> +		#size-cells =3D <0>;
+>>> +		num-chipselects =3D <1>;
+>>> +
+>>> +		mosi-gpios =3D <&gpd 2 GPIO_ACTIVE_HIGH>;
+>>> +		miso-gpios =3D <&gpd 3 GPIO_ACTIVE_HIGH>;
+>>> +		sck-gpios =3D <&gpd 0 GPIO_ACTIVE_HIGH>;
+>>> +		cs-gpios =3D <&gpd 1 GPIO_ACTIVE_HIGH>;
+>>> +	};
+>>> +
+>>> 	wlan_pwrseq: msc1-pwrseq {
+>>> 		compatible =3D "mmc-pwrseq-simple";
+>>>=20
+>>> @@ -43,13 +55,19 @@
+>>> 	clock-frequency =3D <24000000>;
+>>> };
+>>>=20
+>>> -&tcu {
+>>> +&cgu {
+>>> +	/*
+>>> +	 * Use the 32.768 kHz oscillator as the parent of the RTC for a =
+higher
+>>> +	 * precision.
+>>> +	 */
+>>> +	assigned-clocks =3D <&cgu X1000_CLK_RTC>;
+>>> +	assigned-clock-parents =3D <&cgu X1000_CLK_RTCLK>;
+>>> +};
+>>> +
+>>> +&ost {
+>>> 	/* 1500 kHz for the system timer and clocksource */
+>>> -	assigned-clocks =3D <&tcu TCU_CLK_TIMER0>, <&tcu =
+TCU_CLK_TIMER2>;
+>>> +	assigned-clocks =3D <&ost OST_CLK_PERCPU_TIMER>, <&ost =
+OST_CLK_GLOBAL_TIMER>;
+>>> 	assigned-clock-rates =3D <1500000>, <1500000>;
+>>> -
+>>> -	/* Use channel #0 for the system timer channel #2 for the =
+clocksource */
+>>> -	ingenic,pwm-channels-mask =3D <0xfa>;
+>>> };
+>>>=20
+>>> &uart2 {
+>>> @@ -59,6 +77,32 @@
+>>> 	pinctrl-0 =3D <&pins_uart2>;
+>>> };
+>>>=20
+>>> +&ssi {
+>>> +	status =3D "okay";
+>>> +
+>>> +	spi-max-frequency =3D <50000000>;
+>>> +
+>>> +	sc16is752: expander@0 {
+>>> +		compatible =3D "nxp,sc16is752";
+>>> +		reg =3D <0>; /* CE0 */
+>>> +		spi-max-frequency =3D <4000000>;
+>>> +
+>>> +		clocks =3D <&exclk_sc16is752>;
+>>> +
+>>> +		interrupt-parent =3D <&gpc>;
+>>> +		interrupts =3D <6 IRQ_TYPE_EDGE_FALLING>;
+>>> +
+>>> +		gpio-controller;
+>>> +		#gpio-cells =3D <2>;
+>>> +
+>>> +		exclk_sc16is752: sc16is752 {
+>>> +			compatible =3D "fixed-clock";
+>>> +			#clock-cells =3D <0>;
+>>> +			clock-frequency =3D <48000000>;
+>>> +		};
+>>> +	};
+>>> +};
+>>> +
+>>> &i2c0 {
+>>> 	status =3D "okay";
+>>>=20
+>>> @@ -135,6 +179,10 @@
+>>> 	};
+>>> };
+>>>=20
+>>> +&otg {
+>>> +	status =3D "okay";
+>>> +};
+>>> +
+>>> &pinctrl {
+>>> 	pins_uart2: uart2 {
+>>> 		function =3D "uart2";
+>>> diff --git a/arch/mips/boot/dts/ingenic/cu1830-neo.dts =
+b/arch/mips/boot/dts/ingenic/cu1830-neo.dts
+>>> index 640f96c00d63..7a56e344e429 100644
+>>> --- a/arch/mips/boot/dts/ingenic/cu1830-neo.dts
+>>> +++ b/arch/mips/boot/dts/ingenic/cu1830-neo.dts
+>>> @@ -3,7 +3,7 @@
+>>>=20
+>>> #include "x1830.dtsi"
+>>> #include <dt-bindings/gpio/gpio.h>
+>>> -#include <dt-bindings/clock/ingenic,tcu.h>
+>>> +#include <dt-bindings/clock/ingenic,sysost.h>
+>>> #include <dt-bindings/interrupt-controller/irq.h>
+>>>=20
+>>> / {
+>>> @@ -31,6 +31,18 @@
+>>> 		};
+>>> 	};
+>>>=20
+>>> +	ssi0: spi-gpio {
+>>> +		compatible =3D "spi-gpio";
+>>> +		#address-cells =3D <1>;
+>>> +		#size-cells =3D <0>;
+>>> +		num-chipselects =3D <1>;
+>>> +
+>>> +		mosi-gpios =3D <&gpc 12 GPIO_ACTIVE_HIGH>;
+>>> +		miso-gpios =3D <&gpc 11 GPIO_ACTIVE_HIGH>;
+>>> +		sck-gpios =3D <&gpc 15 GPIO_ACTIVE_HIGH>;
+>>> +		cs-gpios =3D <&gpc 16 GPIO_ACTIVE_HIGH>;
+>>> +	};
+>>> +
+>>> 	wlan_pwrseq: msc1-pwrseq {
+>>> 		compatible =3D "mmc-pwrseq-simple";
+>>>=20
+>>> @@ -43,13 +55,19 @@
+>>> 	clock-frequency =3D <24000000>;
+>>> };
+>>>=20
+>>> -&tcu {
+>>> +&cgu {
+>>> +	/*
+>>> +	 * Use the 32.768 kHz oscillator as the parent of the RTC for a =
+higher
+>>> +	 * precision.
+>>> +	 */
+>>> +	assigned-clocks =3D <&cgu X1830_CLK_RTC>;
+>>> +	assigned-clock-parents =3D <&cgu X1830_CLK_RTCLK>;
+>>> +};
+>>> +
+>>> +&ost {
+>>> 	/* 1500 kHz for the system timer and clocksource */
+>>> -	assigned-clocks =3D <&tcu TCU_CLK_TIMER0>, <&tcu =
+TCU_CLK_TIMER2>;
+>>> +	assigned-clocks =3D <&ost OST_CLK_PERCPU_TIMER>, <&ost =
+OST_CLK_GLOBAL_TIMER>;
+>>> 	assigned-clock-rates =3D <1500000>, <1500000>;
+>>> -
+>>> -	/* Use channel #0 for the system timer channel #2 for the =
+clocksource */
+>>> -	ingenic,pwm-channels-mask =3D <0xfa>;
+>>> };
+>>>=20
+>>> &uart1 {
+>>> @@ -59,6 +77,32 @@
+>>> 	pinctrl-0 =3D <&pins_uart1>;
+>>> };
+>>>=20
+>>> +&ssi0 {
+>>> +	status =3D "okay";
+>>> +
+>>> +	spi-max-frequency =3D <50000000>;
+>>> +
+>>> +	sc16is752: expander@0 {
+>>> +		compatible =3D "nxp,sc16is752";
+>>> +		reg =3D <0>; /* CE0 */
+>>> +		spi-max-frequency =3D <4000000>;
+>>> +
+>>> +		clocks =3D <&exclk_sc16is752>;
+>>> +
+>>> +		interrupt-parent =3D <&gpb>;
+>>> +		interrupts =3D <18 IRQ_TYPE_EDGE_FALLING>;
+>>> +
+>>> +		gpio-controller;
+>>> +		#gpio-cells =3D <2>;
+>>> +
+>>> +		exclk_sc16is752: sc16is752 {
+>>> +			compatible =3D "fixed-clock";
+>>> +			#clock-cells =3D <0>;
+>>> +			clock-frequency =3D <48000000>;
+>>> +		};
+>>> +	};
+>>> +};
+>>> +
+>>> &i2c0 {
+>>> 	status =3D "okay";
+>>>=20
+>>> @@ -135,6 +179,10 @@
+>>> 	};
+>>> };
+>>>=20
+>>> +&otg {
+>>> +	status =3D "okay";
+>>> +};
+>>> +
+>>> &pinctrl {
+>>> 	pins_uart1: uart1 {
+>>> 		function =3D "uart1";
+>>> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi =
+b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>> index dfb5a7e1bb21..8837147e5a84 100644
+>>> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>> @@ -61,13 +61,30 @@
+>>> 	};
+>>>=20
+>>> 	cgu: jz4780-cgu@10000000 {
+>>> -		compatible =3D "ingenic,jz4780-cgu";
+>>> +		compatible =3D "ingenic,jz4780-cgu", "simple-mfd";
+>>> 		reg =3D <0x10000000 0x100>;
+>>> +		#address-cells =3D <1>;
+>>> +		#size-cells =3D <1>;
+>>> +		ranges =3D <0x0 0x10000000 0x100>;
+>>> +
+>>> +		#clock-cells =3D <1>;
+>>>=20
+>>> 		clocks =3D <&ext>, <&rtc>;
+>>> 		clock-names =3D "ext", "rtc";
+>>>=20
+>>> -		#clock-cells =3D <1>;
+>>> +		otg_phy: usb-phy@3c {
+>>> +			compatible =3D "ingenic,jz4780-phy";
+>>> +			reg =3D <0x3c 0x10>;
+>>> +
+>>> +			clocks =3D <&cgu JZ4780_CLK_OTG1>;
+>>> +
+>>> +			#phy-cells =3D <0>;
+>>> +		};
+>>> +
+>>> +		rng: rng@d8 {
+>>> +			compatible =3D "ingenic,jz4780-rng";
+>>> +			reg =3D <0xd8 0x8>;
+>>> +		};
+>>> 	};
+>>>=20
+>>> 	tcu: timer@10002000 {
+>>> @@ -494,4 +511,24 @@
+>>>=20
+>>> 		status =3D "disabled";
+>>> 	};
+>>> +
+>>> +	otg: usb@13500000 {
+>>> +		compatible =3D "ingenic,jz4780-otg", "snps,dwc2";
+>>> +		reg =3D <0x13500000 0x40000>;
+>>> +
+>>> +		interrupt-parent =3D <&intc>;
+>>> +		interrupts =3D <21>;
+>>> +
+>>> +		clocks =3D <&cgu JZ4780_CLK_UHC>;
+>>> +		clock-names =3D "otg";
+>>> +
+>>> +		phys =3D <&otg_phy>;
+>>> +		phy-names =3D "usb2-phy";
+>>> +
+>>> +		g-rx-fifo-size =3D <768>;
+>> I had tested with 256 before and do not see a reason why 768 should =
+not work as well.
+>>=20
+>>> +		g-np-tx-fifo-size =3D <256>;
+>>> +		g-tx-fifo-size =3D <256 256 256 256 256 256 256 512>;
+>>> +
+>>> +		status =3D "disabled";
+>>> +	};
+>>> };
+>>> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi =
+b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>> index 1f1f896dd1f7..854fac58f45e 100644
+>>> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>> @@ -52,13 +52,43 @@
+>>> 	};
+>>>=20
+>>> 	cgu: x1000-cgu@10000000 {
+>>> -		compatible =3D "ingenic,x1000-cgu";
+>>> +		compatible =3D "ingenic,x1000-cgu", "simple-mfd";
+>>> 		reg =3D <0x10000000 0x100>;
+>>> +		#address-cells =3D <1>;
+>>> +		#size-cells =3D <1>;
+>>> +		ranges =3D <0x0 0x10000000 0x100>;
+>>>=20
+>>> 		#clock-cells =3D <1>;
+>>>=20
+>>> 		clocks =3D <&exclk>, <&rtclk>;
+>>> 		clock-names =3D "ext", "rtc";
+>>> +
+>>> +		otg_phy: usb-phy@3c {
+>>> +			compatible =3D "ingenic,x1000-phy";
+>>> +			reg =3D <0x3c 0x10>;
+>>> +
+>>> +			clocks =3D <&cgu X1000_CLK_OTGPHY>;
+>>> +
+>>> +			#phy-cells =3D <0>;
+>>> +		};
+>>> +
+>>> +		rng: rng@d8 {
+>>> +			compatible =3D "ingenic,x1000-rng";
+>>> +			reg =3D <0xd8 0x8>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	ost: timer@12000000 {
+>>> +		compatible =3D "ingenic,x1000-ost";
+>>> +		reg =3D <0x12000000 0x3c>;
+>>> +
+>>> +		#clock-cells =3D <1>;
+>>> +
+>>> +		clocks =3D <&cgu X1000_CLK_OST>;
+>>> +		clock-names =3D "ost";
+>>> +
+>>> +		interrupt-parent =3D <&cpuintc>;
+>>> +		interrupts =3D <3>;
+>>> 	};
+>>>=20
+>>> 	tcu: timer@10002000 {
+>>> @@ -323,4 +353,24 @@
+>>> 			status =3D "disabled";
+>>> 		};
+>>> 	};
+>>> +
+>>> +	otg: usb@13500000 {
+>>> +		compatible =3D "ingenic,x1000-otg", "snps,dwc2";
+>>> +		reg =3D <0x13500000 0x40000>;
+>>> +
+>>> +		interrupt-parent =3D <&intc>;
+>>> +		interrupts =3D <21>;
+>>> +
+>>> +		clocks =3D <&cgu X1000_CLK_OTG>;
+>>> +		clock-names =3D "otg";
+>>> +
+>>> +		phys =3D <&otg_phy>;
+>>> +		phy-names =3D "usb2-phy";
+>>> +
+>>> +		g-rx-fifo-size =3D <768>;
+>>> +		g-np-tx-fifo-size =3D <256>;
+>>> +		g-tx-fifo-size =3D <256 256 256 256 256 256 256 512>;
+>>> +
+>>> +		status =3D "disabled";
+>>> +	};
+>>> };
+>>> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi =
+b/arch/mips/boot/dts/ingenic/x1830.dtsi
+>>> index b05dac3ae308..4831350efdf2 100644
+>>> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+>>> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+>>> @@ -52,13 +52,38 @@
+>>> 	};
+>>>=20
+>>> 	cgu: x1830-cgu@10000000 {
+>>> -		compatible =3D "ingenic,x1830-cgu";
+>>> +		compatible =3D "ingenic,x1830-cgu", "simple-mfd";
+>>> 		reg =3D <0x10000000 0x100>;
+>>> +		#address-cells =3D <1>;
+>>> +		#size-cells =3D <1>;
+>>> +		ranges =3D <0x0 0x10000000 0x100>;
+>>>=20
+>>> 		#clock-cells =3D <1>;
+>>>=20
+>>> 		clocks =3D <&exclk>, <&rtclk>;
+>>> 		clock-names =3D "ext", "rtc";
+>>> +
+>>> +		otg_phy: usb-phy@3c {
+>>> +			compatible =3D "ingenic,x1830-phy";
+>>> +			reg =3D <0x3c 0x10>;
+>>> +
+>>> +			clocks =3D <&cgu X1830_CLK_OTGPHY>;
+>>> +
+>>> +			#phy-cells =3D <0>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	ost: timer@12000000 {
+>>> +		compatible =3D "ingenic,x1830-ost", "ingenic,x1000-ost";
+>>> +		reg =3D <0x12000000 0x3c>;
+>>> +
+>>> +		#clock-cells =3D <1>;
+>>> +
+>>> +		clocks =3D <&cgu X1830_CLK_OST>;
+>>> +		clock-names =3D "ost";
+>>> +
+>>> +		interrupt-parent =3D <&cpuintc>;
+>>> +		interrupts =3D <4>;
+>>> 	};
+>>>=20
+>>> 	tcu: timer@10002000 {
+>>> @@ -236,6 +261,13 @@
+>>> 		status =3D "disabled";
+>>> 	};
+>>>=20
+>>> +	dtrng: trng@10072000 {
+>>> +		compatible =3D "ingenic,x1830-dtrng";
+>>> +		reg =3D <0x10072000 0xc>;
+>>> +
+>>> +		clocks =3D <&cgu X1830_CLK_DTRNG>;
+>>> +	};
+>>> +
+>>> 	pdma: dma-controller@13420000 {
+>>> 		compatible =3D "ingenic,x1830-dma";
+>>> 		reg =3D <0x13420000 0x400
+>>> @@ -311,4 +343,24 @@
+>>> 			status =3D "disabled";
+>>> 		};
+>>> 	};
+>>> +
+>>> +	otg: usb@13500000 {
+>>> +		compatible =3D "ingenic,x1830-otg", "snps,dwc2";
+>>> +		reg =3D <0x13500000 0x40000>;
+>>> +
+>>> +		interrupt-parent =3D <&intc>;
+>>> +		interrupts =3D <21>;
+>>> +
+>>> +		clocks =3D <&cgu X1830_CLK_OTG>;
+>>> +		clock-names =3D "otg";
+>>> +
+>>> +		phys =3D <&otg_phy>;
+>>> +		phy-names =3D "usb2-phy";
+>>> +
+>>> +		g-rx-fifo-size =3D <768>;
+>>> +		g-np-tx-fifo-size =3D <256>;
+>>> +		g-tx-fifo-size =3D <256 256 256 256 256 256 256 512>;
+>>> +
+>>> +		status =3D "disabled";
+>>> +	};
+>>> };
+>>> --=20
+>>> 2.11.0
+>>>=20
+
