@@ -2,53 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7F82AAEBB
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Nov 2020 02:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8BD2AAEBD
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Nov 2020 02:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728038AbgKIBZY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Nov 2020 20:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
+        id S1728038AbgKIB1b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Nov 2020 20:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727979AbgKIBZX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Nov 2020 20:25:23 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE51C0613CF;
-        Sun,  8 Nov 2020 17:25:23 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id d12so5507034wrr.13;
-        Sun, 08 Nov 2020 17:25:23 -0800 (PST)
+        with ESMTP id S1727979AbgKIB1b (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Nov 2020 20:27:31 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB77C0613CF;
+        Sun,  8 Nov 2020 17:27:31 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id d12so5509372wrr.13;
+        Sun, 08 Nov 2020 17:27:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=UOno4LSNAZKVT1XsABm9rHFwDySawnUXCeuDL7Uf5qQ=;
-        b=pvD/+WeSD8QFufLgsIz6Cdu1pCuxiFf4kfR4djnPZV5vzF3kni4hXtO2bXvxwBX4m0
-         AMq8fa0hcKAEk0afBEKYCEcfFRNDhkMRvQxGvn48h6MOhSqjyCiOZZjaBMfRjfSAX7dJ
-         H0/96C8MaekNfwFaugcYVPgb6USa3a9Q1Wc4iUa5QifHvyidz/+BbExjKMAHOHjaBB6s
-         ApMtlUGFXY+xBGgJpHQmDV4ASUfY16dbALOjeZmc2GgAJRhn6d1XUT8CPek/6Vc3ZCDX
-         eN47JXUG79EuH1MS9IILeOlioycrHjzZUAnEHyF3Pv9zVJrMTtJDV8tN5Ea4jMqWdZfJ
-         FRgA==
+        bh=u7fInsN0dgMnu8fAzY3wCxL0kCoLw+dIKIcs/otIlLI=;
+        b=I+fNSTPnsAaAKQZ6jCM216iJlQaqEshpzb1n7Mk0P0CzlKQVMW0yctSJF0EwFXMlTJ
+         xiLFwqnKmh4YBtL+D8FXupnP4Tt4qz8hnFFA+Zi0IxhETDvazYwh8PBeTwEGF0Jbd/MN
+         0KeOnzLJElwt3V54PiLjaXC6sg/kF9o44dqzyg4MH9mIpR6ihoh3sRYnEZpCwBK7EAV+
+         9OjQek2GVeQdyqXRPNWyTxly4jN7Cz4gJNwSWokksnvR/vIrVX4YMEcKVYWlRXyZQI8m
+         f7e7Erjbc7dYLgaqoHqX7av0f3wI/G5yM5xMauv+C2BRKfQHdxgTLYS9nAo6nDzxphoU
+         O1+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=UOno4LSNAZKVT1XsABm9rHFwDySawnUXCeuDL7Uf5qQ=;
-        b=eH99O4qqygKC0MnpNoRJu58dKj+UL8Hof1Dg4pMKGdLOvAeO5JLJC0hEQDPJig0K0r
-         3St6v9Zxt0SDw0yMJ94tbC7zEQqN6vuq7HdskgS0uzp7BHBZ5TvtdE+lWFLG7wc49VEA
-         arW9OOkg9F8y+o6Vow3OMeBCWyrhiJO9aIJjQuaeK8tSU0of7Q8sIxOD8IlZj3RZbehU
-         QaSnIgKxK4t+RcHyC4C2lH2ZjL/HaU6Lge1ECLsN3FZKdvKc9Jl5LsjTdIwXE3AVZluQ
-         GqgrEfhErj8NjvfJM1gHd/6OPzXforsv2Cv6OKP5qQ9LFM5N/8YliyXqj05/vPOU9ii6
-         Jp2g==
-X-Gm-Message-State: AOAM531McLcNv2qyg0zPiKgRgjIkvsx3aeBpGlaCsyvRQZtfvna4TpGP
-        eqj3OKtIw3odPwns1Fe2bWY=
-X-Google-Smtp-Source: ABdhPJyY3/3rkyGLQrbEVKspFz7qTBeyXbIK6oeTyVD+1Sv/dj4N6x/BPUPlS/C33r7zdMUaNYAWzg==
-X-Received: by 2002:a5d:6b8e:: with SMTP id n14mr14491368wrx.238.1604885122239;
-        Sun, 08 Nov 2020 17:25:22 -0800 (PST)
+        bh=u7fInsN0dgMnu8fAzY3wCxL0kCoLw+dIKIcs/otIlLI=;
+        b=DUyckTAsaGuNfI3c8F9erYEyftyQMFuBYIWP+jT7FtaD8n1Cus/CCf7eruPhPA6F5Q
+         v7v9bhuomgx9F9IUKdjf6J6JivVW5MiIEekKWVbG8+ytuWGIwdd7ncPHVOlxSmco+JBt
+         sj+uJUHFsx6Le8TOPrzUKTvq5XHy3tDuOJJccY5UdAOvjIAt3vxxVWE7D/HFj4DARF3F
+         PDa5QwPZV0v41Gw1KqCS/SS+6ARfQF0gIvOb/FYS4JLWKPbdHx1VIYeEVnbD0WRgwIiH
+         6rdFNWpfZFWfS97gRzNWlFYqvCXcGkZAFwgOSsV5MppvSWhXSU+YBztkE3n7y+b+TDd0
+         fkbg==
+X-Gm-Message-State: AOAM533QipIwYde1RofJ8VrTU8/ziwkAXDdCYJjMm/qbyVnsqHIpWKz7
+        XFvGHuk+AZSTYC+/Er3FqO24XYAkF6fYG6yE
+X-Google-Smtp-Source: ABdhPJzVg+gmDJzxRv9nWXxxORjkO64NczFwI57Z0tklrXqaLtacHGCcCQ9AtIipvSYgKtq3GdUBFw==
+X-Received: by 2002:adf:9069:: with SMTP id h96mr15983096wrh.358.1604885249587;
+        Sun, 08 Nov 2020 17:27:29 -0800 (PST)
 Received: from ?IPv6:2a02:8084:e84:2480:228:f8ff:fe6f:83a8? ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id l16sm10945517wrr.83.2020.11.08.17.25.20
+        by smtp.gmail.com with ESMTPSA id g17sm11485885wrw.37.2020.11.08.17.27.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Nov 2020 17:25:21 -0800 (PST)
-Subject: Re: [PATCH 14/19] mm: Add user_landing in mm_struct
+        Sun, 08 Nov 2020 17:27:28 -0800 (PST)
+Subject: Re: [PATCH 00/19] Add generic user_landing tracking
 To:     Andy Lutomirski <luto@kernel.org>, Dmitry Safonov <dima@arista.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -64,17 +64,27 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will@kernel.org>, X86 ML <x86@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
         "open list:MIPS" <linux-mips@vger.kernel.org>
 References: <20201108051730.2042693-1-dima@arista.com>
- <20201108051730.2042693-15-dima@arista.com>
- <CALCETrUYJB3SMFEfD0CiVk9FMAA7uGqescaQLokuPRcPUbYoqg@mail.gmail.com>
+ <CALCETrW-hHyh3nF3ATmy61PCy1iFqVhVYX+-ptBCMP5Bf7aJ0w@mail.gmail.com>
 From:   Dmitry Safonov <0x7f454c46@gmail.com>
-Message-ID: <d028b7ca-f513-64f1-6561-4c8398a274e5@gmail.com>
-Date:   Mon, 9 Nov 2020 01:25:20 +0000
+Message-ID: <9f416ebd-2535-1b57-7033-e1755e906743@gmail.com>
+Date:   Mon, 9 Nov 2020 01:27:27 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CALCETrUYJB3SMFEfD0CiVk9FMAA7uGqescaQLokuPRcPUbYoqg@mail.gmail.com>
+In-Reply-To: <CALCETrW-hHyh3nF3ATmy61PCy1iFqVhVYX+-ptBCMP5Bf7aJ0w@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -82,35 +92,30 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/8/20 7:04 PM, Andy Lutomirski wrote:
-> On Sat, Nov 7, 2020 at 9:18 PM Dmitry Safonov <dima@arista.com> wrote:
+On 11/8/20 7:07 PM, Andy Lutomirski wrote:
+> On Sat, Nov 7, 2020 at 9:17 PM Dmitry Safonov <dima@arista.com> wrote:
 >>
->> Instead of having every architecture to define vdso_base/vdso_addr etc,
->> provide a generic mechanism to track landing in userspace.
->> It'll minimize per-architecture difference, the number of callbacks to
->> provide.
+>> Started from discussion [1], where was noted that currently a couple of
+>> architectures support mremap() for vdso/sigpage, but not munmap().
+>> If an application maps something on the ex-place of vdso/sigpage,
+>> later after processing signal it will land there (good luck!)
 >>
->> Originally, it started from thread [1] where the need for .close()
->> callback on vm_special_mapping was pointed, this generic code besides
->> removing duplicated .mremap() callbacks provides a cheaper way to
->> support munmap() on vdso mappings without introducing .close() callbacks
->> for every architecture (with would bring even more code duplication).
+>> Patches set is based on linux-next (next-20201106) and it depends on
+>> changes in x86/cleanups (those reclaim TIF_IA32/TIF_X32) and also
+>> on my changes in akpm (fixing several mremap() issues).
+>>
+>> Logically, the patches set divides on:
+>> - patch       1: cleanup for patches in x86/cleanups
+>> - patches  2-11: cleanups for arch_setup_additional_pages()
 > 
-> I find the naming odd.  It's called "user_landing", which is
-> presumably a hard-to-understand shorthand for "user mode landing pad
-> for return from a signal handler if SA_RESTORER is not set".  But,
-> looking at the actual code, it's not this at all -- it's just the vDSO
-> base address.
+> I like these cleanups, although I think you should stop using terms
+> like "new-born".  A task being exec'd is not newborn at all -- it's in
+> the middle of a transformation.
 
-Agree. Originally, I tried to track the actual landing address on the
-vdso, but .mremap() seemed simpler when tracking the vma base.
+Thank you for looking at them, Andy :-)
 
-> So how about just calling it vdso_base?  I'm very much in favor of
-> consolidating and cleaning up, and improving the vdso remap/unmap
-> code, but I'm not convinced that we should call it anything other than
-> the vdso base.
-
-Sure.
+Yeah, somehow I thought about new-execed process as a new-born binary.
+I'll try to improve changelogs in v2.
 
 Thanks,
          Dmitry
