@@ -2,119 +2,847 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E04C42AB617
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Nov 2020 12:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBDB2AC128
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Nov 2020 17:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729804AbgKILIM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Nov 2020 06:08:12 -0500
-Received: from mail-db8eur05on2101.outbound.protection.outlook.com ([40.107.20.101]:15425
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729812AbgKILIJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 9 Nov 2020 06:08:09 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BOFUL40UomkH2gBiDQ2BOayTKkF9OyCTWW4YCOQTAA3rhKdfUdJmenSPwW87vo2hnKohiNyRLVSc6IVJH+/X3iTvdumq+Ys+M3VBDN8NbbNF9yBo1lSgTZNavknv+mFVBfRNlG2oKaslwwjh9OdqOFdvZu5tVE3x0RSGfaXLzeuoFGby9YWyN+F35QheRE0esi2kctECkBtAMRuImYsMj+p6XR2YgVavLgA+UYFhKuhFa/ZAy6JLVUfgW+r2/coIr7HKT0PbrWAuNbVdes15YrUjA0H9a/eaOK+3hjkiMQkp+h9i0ovBs4VYmEBqgFlhFpHO61nRl7zoRospko17RA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UaFvSpialcL94jFqE0HtOKmPJviQGVC6NK/Ql221lrs=;
- b=gE9ufJlzWO1ap3rXtX9plGjVr+nhVm1fFaOOyEHa+NSjaCuLdbckkggsyPqL3aj766M76R5YE5zTgtaXmxLHbi8hyWYmkVVMIPWCdfR58RVE3KKSgvnygd662bctg9rtpArb1OM0JfQIEVruAzD/7pTzPUAAjLN60FIQgbDDK1k+NKma11O/z+7eqatG/WwABWt2LZJjkF4/1dLR+ilHORYA4SlEesMKR/Z3t3y2RO4n08LdkzLNl0FgTCDjOvKP5C5kMT6XGf9TGMiss0WSmHHnY9SweHxSkcczBVE0W3psQUr1ueJD6ZUiXfpGbXjL0l2tM1z/PZKRE3/u5Eq11w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UaFvSpialcL94jFqE0HtOKmPJviQGVC6NK/Ql221lrs=;
- b=xZP116hDQZr71JcGV0YlSoSNeSsK11O4PHM9uzYZSuTg9PgOkNtK1IxT7GAQUyJ/T00AKdi8tZH5dJ+fn6dpH/u/CpP7atmwEoZNGCgkjUzpHmGPrxgCL4XEMViNikx9XE8kjBBaggW9QhbUAy8bA32HGPqqgFKCPiw/XqIY2Vk=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=nokia.com;
-Received: from AM0PR07MB4531.eurprd07.prod.outlook.com (2603:10a6:208:6e::15)
- by AM8PR07MB7393.eurprd07.prod.outlook.com (2603:10a6:20b:246::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.14; Mon, 9 Nov
- 2020 11:08:05 +0000
-Received: from AM0PR07MB4531.eurprd07.prod.outlook.com
- ([fe80::d527:e75b:546c:a85b]) by AM0PR07MB4531.eurprd07.prod.outlook.com
- ([fe80::d527:e75b:546c:a85b%6]) with mapi id 15.20.3564.021; Mon, 9 Nov 2020
- 11:08:05 +0000
-Subject: Re: [PATCH] MIPS: reserve the memblock right after the kernel
-From:   Alexander Sverdlin <alexander.sverdlin@nokia.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20201106141001.57637-1-alexander.sverdlin@nokia.com>
- <20201107094028.GA4918@alpha.franken.de>
- <1d6a424e-944e-7f21-1f30-989fb61018a8@nokia.com>
-Message-ID: <27310707-78d5-0f96-7048-749db4959a07@nokia.com>
-Date:   Mon, 9 Nov 2020 12:08:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-In-Reply-To: <1d6a424e-944e-7f21-1f30-989fb61018a8@nokia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [131.228.32.167]
-X-ClientProxiedBy: AM9P191CA0026.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:21c::31) To AM0PR07MB4531.eurprd07.prod.outlook.com
- (2603:10a6:208:6e::15)
+        id S1729982AbgKIQo7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Nov 2020 11:44:59 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:58076 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbgKIQo6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Nov 2020 11:44:58 -0500
+Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 0070B3B2B49
+        for <linux-mips@vger.kernel.org>; Mon,  9 Nov 2020 16:37:16 +0000 (UTC)
+X-Originating-IP: 91.175.115.186
+Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
+        (Authenticated sender: gregory.clement@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id D44B1C0008;
+        Mon,  9 Nov 2020 16:36:52 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen.Hegelund@microchip.com
+Subject: Re: [PATCH 8/9] MIPS: mscc: Add jaguar2 support
+In-Reply-To: <20201106100849.969240-10-gregory.clement@bootlin.com>
+References: <20201106100849.969240-1-gregory.clement@bootlin.com> <20201106100849.969240-10-gregory.clement@bootlin.com>
+Date:   Mon, 09 Nov 2020 17:36:52 +0100
+Message-ID: <87mtzq7ahn.fsf@BL-laptop>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from ulegcpsvhp1.emea.nsn-net.net (131.228.32.167) by AM9P191CA0026.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:21c::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Mon, 9 Nov 2020 11:08:05 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: e92e3848-edb2-4217-b076-08d8849fbb9c
-X-MS-TrafficTypeDiagnostic: AM8PR07MB7393:
-X-Microsoft-Antispam-PRVS: <AM8PR07MB7393F831A1083DA6738DE26088EA0@AM8PR07MB7393.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0B19l6SF4fH8QY/6OuYDpvOpo0kkiPfQLiiYMIEe1aY9kUvRYiY7SOS7UYlNXSxLjtiLSMb7fGvlz5LyHEnpSqm1DMvlfcm13toEap4VbuFcrVjQrtkFJgxFnE5afMpzPqcq9JrHoZwchspe1vLdLmm4clCmhTPiKyp5UnWpqTXqVimetcVXXhEARz6d85OeBv7McvnLnlHbHBF+adFpVODJ8DtAbYtTxRA9DYGMJSRV9oeOzwDmhG0n0zzeZ0NISkcUfBJYNCwOtB+nShQM6Z+ekXWOKd7E9VYxxuIJTMumzlbCsYFOmpKaVjDR7DEkHCSrH+Vw1iQZ2Y2+MQPbNpmvg3LBVHK+Y/1mAqZTUxgUSEkjI/ioRp04ZbIKg6O/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR07MB4531.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(376002)(366004)(346002)(136003)(5660300002)(83380400001)(6486002)(31696002)(66476007)(8676002)(54906003)(478600001)(53546011)(6506007)(26005)(44832011)(956004)(2616005)(52116002)(316002)(31686004)(86362001)(16526019)(186003)(8936002)(6512007)(4326008)(2906002)(6916009)(66556008)(66946007)(36756003)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: XlGUxJ/wrzmtGFN8/tXIIUFvHAuPjUotGpmIzv85UXO/DyXI1SAiqveFcbo0KGZYMfPccuQT0B+QOpJdlyMGXZwdsnAR0hws3BqI3lcHiE/sNLHICgXPJ/ulbC0QEFfvhnFQOTNddktfzQitDpZG9mvGqLfY/jPvNNN+2Vf/42yWu1yPVBmLgLR6HWDg3E9BazcuACuOfVyMHphhFsYq7BlMkB6hm+aaT+Tvy/h61yZLK2yxHZvwzeJx+PgSojLs/V999YxS72j16T//XZP+Jj19BSvkKUtFXjB87LTfBDK9urYUsZA+DQ6NTCR3AQVFh/ERYzq14gJHsSVmyY56W031pJ4i+Sqv6XcpP2/Hu1woeMxklRSfZYV9ybyjjjAV8cdXPC6qXoSH3TYubfvlquxUK1fW0aQnI3BPHaQaO/syX3MGIQmDt87J51/WvEiMISFVZ+Bb8B/kh6OCmrSfhq2x3Il34sIajFyTJ4ephagaRoCT6ZLU1QViiGiQj+46Z0S3dLdzaEHkP3EkdlrXRQZDn/8LrEnXSx2Td8jnAG4zbgM3Q6QdjRO+ejnE+Iv5Iay3fY7EHIFpEg56bCdZBNX1nQuNy0jFKeDFf+4YvkLAfDfgqK05qLUfuctB2kyIQfB/gRjDRh9e/nlvH+ayEEnVP4P+D4gnq1o1PqxCFArbDIfhcPKnRvgjipb3+jLIbYCwaRsjr7PmXwVMHbWSU7bdNW+B5Sjv77z7PNC1yhQyT7vAwtrxu3fVmBRjNf+VUQ5T7CRfC2Nzv8dPrN2B+SsttXwZVSi8qHYEdCNfSGXj97ERUIGMlEoEJutxQRELMV6zHGzMVvNzLtQstObOd4g98PepEyvWuSYJF6abPmZUrGjD7frdLGgyM6EQsmyCtiReorl8rPUSSjkPfF9CQQ==
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e92e3848-edb2-4217-b076-08d8849fbb9c
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR07MB4531.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2020 11:08:05.6617
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y/ubUEsn15/0kc2pqBE3DUGkfJ2DphkEJWQPSHFFx0LSDLChrLgkgUD04vtJLwYvPXX9crkJuLrQ8qRgs13baDOK5AdUo9TPl4rF6w/BZ1w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR07MB7393
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+Hello,
 
-On 09/11/2020 11:34, Alexander Sverdlin wrote:
->>> Linux doesn't own the memory immediately after the kernel image. On Octeon
->>> bootloader places a shared structure right close after the kernel _end,
->>> refer to "struct cvmx_bootinfo *octeon_bootinfo" in cavium-octeon/setup.c.
->>>
->>> If check_kernel_sections_mem() rounds the PFNs up, first memblock_alloc()
->>> inside early_init_dt_alloc_memory_arch() <= device_tree_init() returns
->>> memory block overlapping with the above octeon_bootinfo structure, which
->>> is being overwritten afterwards.
->> as this special for Octeon how about added the memblock_reserve
->> in octen specific code ?
-> while the shared structure which is being corrupted is indeed Octeon-specific,
-> the wrong assumption that the memory right after the kernel can be allocated by memblock
-> allocator and re-used somewhere in Linux is in MIPS-generic check_kernel_sections_mem().
-> 
-> I personally will be fine with repairing Octeon only as I don't have other MIPS
-> targets to care about, but maybe someone else in the MIPS community will find
-> this fix useful...
+> Add a device trees and FIT image support for the Microsemi Jaguar2 SoC
+> which belongs to same family of the Ocelot SoC.
+>
+> It is based on the work of Lars Povlsen <lars.povlsen@microchip.com>.
+>
 
-another reason for not putting that to Octeon platform code was the fact, that one
-would need to put the knowledge about wrong assumption of ARCH (MIPS) code into
-different code area of Octeon platform.
-If at some point in time check_kernel_sections_mem() will be altered/fixed, nobody
-will understand why Octeon still has this workaround.
+The i2c device node name are wrongs, I missed it for this submission and
+will fix it in the next version.
+
+For instance i2c_x2sfp_1_a@0 will be named i2c@0.
+
+Gregory
+
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>  .../devicetree/bindings/mips/mscc.txt         |   2 +-
+>  arch/mips/boot/dts/mscc/Makefile              |   3 +
+>  arch/mips/boot/dts/mscc/jaguar2.dtsi          | 167 +++++++++++
+>  arch/mips/boot/dts/mscc/jaguar2_common.dtsi   |  25 ++
+>  arch/mips/boot/dts/mscc/jaguar2_pcb110.dts    | 273 ++++++++++++++++++
+>  arch/mips/boot/dts/mscc/jaguar2_pcb111.dts    | 109 +++++++
+>  arch/mips/boot/dts/mscc/jaguar2_pcb118.dts    |  59 ++++
+>  arch/mips/generic/Kconfig                     |   8 +
+>  arch/mips/generic/Platform                    |   1 +
+>  arch/mips/generic/board-jaguar2.its.S         |  40 +++
+>  10 files changed, 686 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/mips/boot/dts/mscc/jaguar2.dtsi
+>  create mode 100644 arch/mips/boot/dts/mscc/jaguar2_common.dtsi
+>  create mode 100644 arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
+>  create mode 100644 arch/mips/boot/dts/mscc/jaguar2_pcb111.dts
+>  create mode 100644 arch/mips/boot/dts/mscc/jaguar2_pcb118.dts
+>  create mode 100644 arch/mips/generic/board-jaguar2.its.S
+>
+> diff --git a/Documentation/devicetree/bindings/mips/mscc.txt b/Documentation/devicetree/bindings/mips/mscc.txt
+> index bdbebb525393..cc916eaeed0a 100644
+> --- a/Documentation/devicetree/bindings/mips/mscc.txt
+> +++ b/Documentation/devicetree/bindings/mips/mscc.txt
+> @@ -4,7 +4,7 @@ Boards with a SoC of the Microsemi MIPS family shall have the following
+>  properties:
+>  
+>  Required properties:
+> -- compatible: "mscc,ocelot", "mscc,luton", "mscc,serval" or "mscc,jaguar2"
+> +- compatible: "mscc,ocelot", "mscc,luton", "mscc,serval" or "mscc,jr2"
+>  
+>  
+>  * Other peripherals:
+> diff --git a/arch/mips/boot/dts/mscc/Makefile b/arch/mips/boot/dts/mscc/Makefile
+> index 40699b44ed50..befda72ceb26 100644
+> --- a/arch/mips/boot/dts/mscc/Makefile
+> +++ b/arch/mips/boot/dts/mscc/Makefile
+> @@ -1,5 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  dtb-$(CONFIG_SOC_VCOREIII)	+= \
+> +	jaguar2_pcb110.dtb \
+> +	jaguar2_pcb111.dtb \
+> +	jaguar2_pcb118.dtb \
+>  	luton_pcb091.dtb \
+>  	ocelot_pcb120.dtb \
+>  	ocelot_pcb123.dtb
+> diff --git a/arch/mips/boot/dts/mscc/jaguar2.dtsi b/arch/mips/boot/dts/mscc/jaguar2.dtsi
+> new file mode 100644
+> index 000000000000..717018d75a33
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/mscc/jaguar2.dtsi
+> @@ -0,0 +1,167 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2020 Microsemi Corporation
+> + */
+> +
+> +/ {
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +	compatible = "mscc,jr2";
+> +
+> +	aliases {
+> +		serial0 = &uart0;
+> +		serial1 = &uart2;
+> +		gpio0 = &gpio;
+> +	};
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu@0 {
+> +			compatible = "mips,mips24KEc";
+> +			device_type = "cpu";
+> +			clocks = <&cpu_clk>;
+> +			reg = <0>;
+> +		};
+> +	};
+> +
+> +	cpuintc: interrupt-controller {
+> +		#address-cells = <0>;
+> +		#interrupt-cells = <1>;
+> +		interrupt-controller;
+> +		compatible = "mti,cpu-interrupt-controller";
+> +	};
+> +
+> +	cpu_clk: cpu-clock {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <500000000>;
+> +	};
+> +
+> +	ahb_clk: ahb-clk {
+> +		compatible = "fixed-factor-clock";
+> +		#clock-cells = <0>;
+> +		clocks = <&cpu_clk>;
+> +		clock-div = <2>;
+> +		clock-mult = <1>;
+> +	};
+> +
+> +	ahb: ahb@70000000 {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		interrupt-parent = <&intc>;
+> +
+> +		cpu_ctrl: syscon@70000000 {
+> +			compatible = "mscc,ocelot-cpu-syscon", "syscon";
+> +			reg = <0x70000000 0x2c>;
+> +		};
+> +
+> +		intc: interrupt-controller@70000070 {
+> +			compatible = "mscc,jaguar2-icpu-intr";
+> +			reg = <0x70000070 0x94>;
+> +			#interrupt-cells = <1>;
+> +			interrupt-controller;
+> +			interrupt-parent = <&cpuintc>;
+> +			interrupts = <2>;
+> +		};
+> +
+> +		uart0: serial@70100000 {
+> +			pinctrl-0 = <&uart_pins>;
+> +			pinctrl-names = "default";
+> +			compatible = "ns16550a";
+> +			reg = <0x70100000 0x20>;
+> +			interrupts = <6>;
+> +			clocks = <&ahb_clk>;
+> +			reg-io-width = <4>;
+> +			reg-shift = <2>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		uart2: serial@70100800 {
+> +			pinctrl-0 = <&uart2_pins>;
+> +			pinctrl-names = "default";
+> +			compatible = "ns16550a";
+> +			reg = <0x70100800 0x20>;
+> +			interrupts = <7>;
+> +			clocks = <&ahb_clk>;
+> +			reg-io-width = <4>;
+> +			reg-shift = <2>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		gpio: pinctrl@71070038 {
+> +			compatible = "mscc,jaguar2-pinctrl";
+> +			reg = <0x71010038 0x90>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			gpio-ranges = <&gpio 0 0 64>;
+> +
+> +			uart_pins: uart-pins {
+> +				pins = "GPIO_10", "GPIO_11";
+> +				function = "uart";
+> +			};
+> +
+> +			uart2_pins: uart2-pins {
+> +				pins = "GPIO_24", "GPIO_25";
+> +				function = "uart2";
+> +			};
+> +
+> +			cs1_pins: cs1-pins {
+> +				pins = "GPIO_16";
+> +				function = "si";
+> +			};
+> +
+> +			cs2_pins: cs2-pins {
+> +				pins = "GPIO_17";
+> +				function = "si";
+> +			};
+> +
+> +			cs3_pins: cs3-pins {
+> +				pins = "GPIO_18";
+> +				function = "si";
+> +			};
+> +
+> +			i2c_pins: i2c-pins {
+> +				pins = "GPIO_14", "GPIO_15";
+> +				function = "twi";
+> +			};
+> +
+> +			i2c2_pins: i2c2-pins {
+> +				pins = "GPIO_28", "GPIO_29";
+> +				function = "twi2";
+> +			};
+> +		};
+> +
+> +		i2c0: i2c@70100400 {
+> +			compatible = "mscc,ocelot-i2c", "snps,designware-i2c";
+> +			status = "disabled";
+> +			pinctrl-0 = <&i2c_pins>;
+> +			pinctrl-names = "default";
+> +			reg = <0x70100400 0x100>, <0x700001b8 0x8>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			interrupts = <8>;
+> +			clock-frequency = <100000>;
+> +			clocks = <&ahb_clk>;
+> +		};
+> +
+> +		i2c2: i2c@70100c00 {
+> +			compatible = "mscc,ocelot-i2c", "snps,designware-i2c";
+> +			status = "disabled";
+> +			pinctrl-0 = <&i2c2_pins>;
+> +			pinctrl-names = "default";
+> +			reg = <0x70100c00 0x100>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			interrupts = <8>;
+> +			clock-frequency = <100000>;
+> +			clocks = <&ahb_clk>;
+> +		};
+> +	};
+> +};
+> diff --git a/arch/mips/boot/dts/mscc/jaguar2_common.dtsi b/arch/mips/boot/dts/mscc/jaguar2_common.dtsi
+> new file mode 100644
+> index 000000000000..679ff0d8eda8
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/mscc/jaguar2_common.dtsi
+> @@ -0,0 +1,25 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2020 Microsemi Corporation
+> + */
+> +
+> +#include "jaguar2.dtsi"
+> +
+> +/ {
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +};
+> +
+> +&uart0 {
+> +	status = "okay";
+> +};
+> +
+> +&uart2 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c0 {
+> +	status = "okay";
+> +	i2c-sda-hold-time-ns = <300>;
+> +};
+> diff --git a/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts b/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
+> new file mode 100644
+> index 000000000000..306993ad9b4a
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
+> @@ -0,0 +1,273 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2020 Microsemi Corporation
+> + */
+> +
+> +/dts-v1/;
+> +#include "jaguar2_common.dtsi"
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +/ {
+> +	model = "Jaguar2 Cu8-Sfp16 PCB110 Reference Board";
+> +	compatible = "mscc,jr2-pcb110", "mscc,jr2";
+> +
+> +	aliases {
+> +		i2c0    = &i2c0;
+> +		i2c108  = &i2c108;
+> +		i2c109  = &i2c109;
+> +		i2c110  = &i2c110;
+> +		i2c111  = &i2c111;
+> +		i2c112  = &i2c112;
+> +		i2c113  = &i2c113;
+> +		i2c114  = &i2c114;
+> +		i2c115  = &i2c115;
+> +		i2c116  = &i2c116;
+> +		i2c117  = &i2c117;
+> +		i2c118  = &i2c118;
+> +		i2c119  = &i2c119;
+> +		i2c120  = &i2c120;
+> +		i2c121  = &i2c121;
+> +		i2c122  = &i2c122;
+> +		i2c123  = &i2c123;
+> +		i2c124  = &i2c124;
+> +		i2c125  = &i2c125;
+> +		i2c126  = &i2c126;
+> +		i2c127  = &i2c127;
+> +		i2c128  = &i2c128;
+> +		i2c129  = &i2c129;
+> +		i2c130  = &i2c130;
+> +		i2c131  = &i2c131;
+> +		i2c149  = &i2c149;
+> +		i2c150  = &i2c150;
+> +		i2c151  = &i2c151;
+> +		i2c152  = &i2c152;
+> +	};
+> +};
+> +
+> +&gpio {
+> +	synce_pins: synce-pins {
+> +		// GPIO 16 == SI_nCS1
+> +		pins = "GPIO_16";
+> +		function = "si";
+> +	};
+> +	synce_builtin_pins: synce-builtin-pins {
+> +		// GPIO 49 == SI_nCS13
+> +		pins = "GPIO_49";
+> +		function = "si";
+> +	};
+> +};
+> +
+> +&gpio {
+> +	i2cmux_pins_i: i2cmux-pins-i {
+> +		pins = "GPIO_17", "GPIO_18", "GPIO_20", "GPIO_21";
+> +		function = "twi_scl_m";
+> +		output-low;
+> +	};
+> +	i2cmux_0: i2cmux-0 {
+> +		pins = "GPIO_17";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +	i2cmux_1: i2cmux-1 {
+> +		pins = "GPIO_18";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +	i2cmux_2: i2cmux-2 {
+> +		pins = "GPIO_20";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +	i2cmux_3: i2cmux-3 {
+> +		pins = "GPIO_21";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +};
+> +
+> +&i2c0 {
+> +	pca9545@70 {
+> +		compatible = "nxp,pca9545";
+> +		reg = <0x70>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		i2c-mux-idle-disconnect;
+> +		i2c124: i2c_x2sfp_1_a@0 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <0>;
+> +		};
+> +		i2c125: i2c_x2sfp_1_b@1 {
+> +			/* FMC B */
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <1>;
+> +		};
+> +		i2c126: i2c_x2sfp_1_c@2 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <2>;
+> +		};
+> +		i2c127: i2c_x2sfp_1_d@3 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <3>;
+> +		};
+> +	};
+> +	pca9545@71 {
+> +		compatible = "nxp,pca9545";
+> +		reg = <0x71>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		i2c-mux-idle-disconnect;
+> +		i2c128: i2c_x2sfp_1_a@0 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <0>;
+> +		};
+> +		i2c129: i2c_x2sfp_2_b@1 {
+> +			/* FMC B */
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <1>;
+> +		};
+> +		i2c130: i2c_x2sfp_3_c@2 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <2>;
+> +		};
+> +		i2c131: i2c_x2sfp_4_d@3 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <3>;
+> +		};
+> +	};
+> +};
+> +
+> +&ahb {
+> +	i2c0_emux: i2c0-emux@0 {
+> +		compatible = "i2c-mux-gpio";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		i2c-parent = <&i2c0>;
+> +		mux-gpios = <&gpio 51 GPIO_ACTIVE_HIGH
+> +			     &gpio 52 GPIO_ACTIVE_HIGH
+> +			     &gpio 53 GPIO_ACTIVE_HIGH
+> +			     &gpio 58 GPIO_ACTIVE_HIGH
+> +			     &gpio 59 GPIO_ACTIVE_HIGH>;
+> +		idle-state = <0x0>;
+> +		i2c108: i2c_sfp9@10 {
+> +			reg = <0x10>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c109: i2c_sfp10@11 {
+> +			reg = <0x11>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c110: i2c_sfp11@12 {
+> +			reg = <0x12>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c111: i2c_sfp12@13 {
+> +			reg = <0x13>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c112: i2c_sfp13@14 {
+> +			reg = <0x14>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c113: i2c_sfp14@15 {
+> +			reg = <0x15>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c114: i2c_sfp15@16 {
+> +			reg = <0x16>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c115: i2c_sfp16@17 {
+> +			reg = <0x17>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c116: i2c_sfp17@8 {
+> +			reg = <0x8>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c117: i2c_sfp18@9 {
+> +			reg = <0x9>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c118: i2c_sfp19@a {
+> +			reg = <0xa>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c119: i2c_sfp20@b {
+> +			reg = <0xb>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c120: i2c_sfp21@c {
+> +			reg = <0xc>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c121: i2c_sfp22@d {
+> +			reg = <0xd>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c122: i2c_sfp23@e {
+> +			reg = <0xe>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c123: i2c_sfp24@f {
+> +			reg = <0xf>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +	};
+> +	i2c0_imux: i2c0-imux@0 {
+> +		compatible = "i2c-mux-pinctrl";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		i2c-parent = <&i2c0>;
+> +		pinctrl-names =
+> +			"i2c149", "i2c150", "i2c151", "i2c152", "idle";
+> +		pinctrl-0 = <&i2cmux_0>;
+> +		pinctrl-1 = <&i2cmux_1>;
+> +		pinctrl-2 = <&i2cmux_2>;
+> +		pinctrl-3 = <&i2cmux_3>;
+> +		pinctrl-4 = <&i2cmux_pins_i>;
+> +		i2c149: i2c_sfp_plus_a@0 {
+> +			reg = <0x0>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c150: i2c_sfp_plus_b@1 {
+> +			reg = <0x1>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c151: i2c_sfp_plus_c@2 {
+> +			reg = <0x2>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c152: i2c_sfp_plus_d@3 {
+> +			reg = <0x3>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +	};
+> +};
+> diff --git a/arch/mips/boot/dts/mscc/jaguar2_pcb111.dts b/arch/mips/boot/dts/mscc/jaguar2_pcb111.dts
+> new file mode 100644
+> index 000000000000..df159dbb5a6c
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/mscc/jaguar2_pcb111.dts
+> @@ -0,0 +1,109 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2018 Microsemi Corporation
+> + */
+> +
+> +/dts-v1/;
+> +#include "jaguar2_common.dtsi"
+> +
+> +/ {
+> +	model = "Jaguar2 Cu48 PCB111 Reference Board";
+> +	compatible = "mscc,jr2-pcb111", "mscc,jr2";
+> +
+> +	aliases {
+> +		i2c0    = &i2c0;
+> +		i2c149  = &i2c149;
+> +		i2c150  = &i2c150;
+> +		i2c151  = &i2c151;
+> +		i2c152  = &i2c152;
+> +		i2c203  = &i2c203;
+> +	};
+> +};
+> +
+> +&gpio {
+> +	synce_builtin_pins: synce-builtin-pins {
+> +		// GPIO 49 == SI_nCS13
+> +		pins = "GPIO_49";
+> +		function = "si";
+> +	};
+> +	cpld_pins: cpld-pins {
+> +		// GPIO 50 == SI_nCS14
+> +		pins = "GPIO_50";
+> +		function = "si";
+> +	};
+> +	cpld_fifo_pins: synce-builtin-pins {
+> +		// GPIO 51 == SI_nCS15
+> +		pins = "GPIO_51";
+> +		function = "si";
+> +	};
+> +};
+> +
+> +&gpio {
+> +	i2cmux_pins_i: i2cmux-pins-i {
+> +		pins = "GPIO_17", "GPIO_18";
+> +		function = "twi_scl_m";
+> +		output-low;
+> +	};
+> +	i2cmux_0: i2cmux-0 {
+> +		pins = "GPIO_17";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +	i2cmux_1: i2cmux-1 {
+> +		pins = "GPIO_18";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +	i2cmux_2: i2cmux-2 {
+> +		pins = "GPIO_20";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +	i2cmux_3: i2cmux-3 {
+> +		pins = "GPIO_21";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +};
+> +
+> +&ahb {
+> +	i2c0_imux: i2c0-imux@0 {
+> +		compatible = "i2c-mux-pinctrl";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		i2c-parent = <&i2c0>;
+> +		pinctrl-names =
+> +			"i2c149", "i2c150", "i2c151", "i2c152", "i2c203", "idle";
+> +		pinctrl-0 = <&i2cmux_0>;
+> +		pinctrl-1 = <&i2cmux_1>;
+> +		pinctrl-2 = <&i2cmux_2>;
+> +		pinctrl-3 = <&i2cmux_3>;
+> +		pinctrl-4 = <&i2cmux_pins_i>; // Added by convention for PoE
+> +		pinctrl-5 = <&i2cmux_pins_i>;
+> +		i2c149: i2c_sfp_plus_a@0 {
+> +			reg = <0x0>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c150: i2c_sfp_plus_b@1 {
+> +			reg = <0x1>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c151: i2c_sfp_plus_c@2 {
+> +			reg = <0x2>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c152: i2c_sfp_plus_d@3 {
+> +			reg = <0x3>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c203: i2c_pd69xxx@4 {
+> +			reg = <0x4>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +	};
+> +};
+> diff --git a/arch/mips/boot/dts/mscc/jaguar2_pcb118.dts b/arch/mips/boot/dts/mscc/jaguar2_pcb118.dts
+> new file mode 100644
+> index 000000000000..1b718a7b5ed9
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/mscc/jaguar2_pcb118.dts
+> @@ -0,0 +1,59 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2018 Microsemi Corporation
+> + */
+> +
+> +/dts-v1/;
+> +#include "jaguar2_common.dtsi"
+> +
+> +/ {
+> +	model = "Jaguar2/Aquantia PCB118 Reference Board";
+> +	compatible = "mscc,jr2-pcb118", "mscc,jr2";
+> +
+> +	aliases {
+> +		i2c150  = &i2c150;
+> +		i2c151  = &i2c151;
+> +	};
+> +};
+> +
+> +&gpio {
+> +	i2cmux_pins_i: i2cmux-pins-i {
+> +		pins = "GPIO_17", "GPIO_16";
+> +		function = "twi_scl_m";
+> +		output-low;
+> +	};
+> +	i2cmux_0: i2cmux-0 {
+> +		pins = "GPIO_17";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +	i2cmux_1: i2cmux-1 {
+> +		pins = "GPIO_16";
+> +		function = "twi_scl_m";
+> +		output-high;
+> +	};
+> +};
+> +
+> +&ahb {
+> +	i2c0_imux: i2c0-imux@0 {
+> +		compatible = "i2c-mux-pinctrl";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		i2c-parent = <&i2c0>;
+> +		pinctrl-names =
+> +			"i2c150", "i2c151", "idle";
+> +		pinctrl-0 = <&i2cmux_0>;
+> +		pinctrl-1 = <&i2cmux_1>;
+> +		pinctrl-2 = <&i2cmux_pins_i>;
+> +		i2c150: i2c_sfp_plus_a@0 {
+> +			reg = <0>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +		i2c151: i2c_sfp_plus_b@1 {
+> +			reg = <1>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +	};
+> +};
+> diff --git a/arch/mips/generic/Kconfig b/arch/mips/generic/Kconfig
+> index e5a7a1314e71..c7a840b8eaa6 100644
+> --- a/arch/mips/generic/Kconfig
+> +++ b/arch/mips/generic/Kconfig
+> @@ -86,6 +86,14 @@ config FIT_IMAGE_FDT_LUTON
+>  	  from Microsemi in the FIT kernel image.
+>  	  This requires u-boot on the platform.
+>  
+> +config FIT_IMAGE_FDT_JAGUAR2
+> +	bool "Include FDT for Microsemi Jaguar2 development platforms"
+> +	select SOC_VCOREIII
+> +	help
+> +	  Enable this to include the FDT for the Jaguar2 development platforms
+> +	  from Microsemi in the FIT kernel image.
+> +	  This requires u-boot on the platform.
+> +
+>  config BOARD_INGENIC
+>  	bool "Support boards based on Ingenic SoCs"
+>  	select MACH_INGENIC_GENERIC
+> diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
+> index 4b6905daa39c..3f2055bea596 100644
+> --- a/arch/mips/generic/Platform
+> +++ b/arch/mips/generic/Platform
+> @@ -21,4 +21,5 @@ its-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= board-boston.its.S
+>  its-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= board-ni169445.its.S
+>  its-$(CONFIG_FIT_IMAGE_FDT_OCELOT)	+= board-ocelot.its.S
+>  its-$(CONFIG_FIT_IMAGE_FDT_LUTON)	+= board-luton.its.S
+> +its-$(CONFIG_FIT_IMAGE_FDT_JAGUAR2)	+= board-jaguar2.its.S
+>  its-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+= board-xilfpga.its.S
+> diff --git a/arch/mips/generic/board-jaguar2.its.S b/arch/mips/generic/board-jaguar2.its.S
+> new file mode 100644
+> index 000000000000..fb0e589eeff7
+> --- /dev/null
+> +++ b/arch/mips/generic/board-jaguar2.its.S
+> @@ -0,0 +1,40 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/ {
+> +	images {
+> +		fdt@jaguar2_pcb110 {
+> +			description = "MSCC Jaguar2 PCB110 Device Tree";
+> +			data = /incbin/("boot/dts/mscc/jaguar2_pcb110.dtb");
+> +			type = "flat_dt";
+> +			arch = "mips";
+> +			compression = "none";
+> +			hash@0 {
+> +				algo = "sha1";
+> +			};
+> +		};
+> +		fdt@jaguar2_pcb111 {
+> +			description = "MSCC Jaguar2 PCB111 Device Tree";
+> +			data = /incbin/("boot/dts/mscc/jaguar2_pcb111.dtb");
+> +			type = "flat_dt";
+> +			arch = "mips";
+> +			compression = "none";
+> +			hash@0 {
+> +				algo = "sha1";
+> +			};
+> +		};
+> +	};
+> +
+> +	configurations {
+> +		pcb110 {
+> +			description = "Jaguar2 Linux kernel";
+> +			kernel = "kernel@0";
+> +			fdt = "fdt@jaguar2_pcb110";
+> +			ramdisk = "ramdisk";
+> +		};
+> +		pcb111 {
+> +			description = "Jaguar2 Linux kernel";
+> +			kernel = "kernel@0";
+> +			fdt = "fdt@jaguar2_pcb111";
+> +			ramdisk = "ramdisk";
+> +		};
+> +	};
+> +};
+> -- 
+> 2.28.0
+>
 
 -- 
-Best regards,
-Alexander Sverdlin.
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
