@@ -2,20 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 203672AD58D
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Nov 2020 12:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B972AD5C3
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Nov 2020 12:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729772AbgKJLpX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Nov 2020 06:45:23 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:35727 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726152AbgKJLpW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Nov 2020 06:45:22 -0500
-X-Originating-IP: 82.65.9.182
+        id S1726152AbgKJL65 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Nov 2020 06:58:57 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:56050 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726944AbgKJL65 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Nov 2020 06:58:57 -0500
+Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id B1CE43B2299
+        for <linux-mips@vger.kernel.org>; Tue, 10 Nov 2020 11:45:44 +0000 (UTC)
 Received: from localhost (82-65-9-182.subs.proxad.net [82.65.9.182])
         (Authenticated sender: gregory.clement@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id D23F640008;
-        Tue, 10 Nov 2020 11:45:18 +0000 (UTC)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 70AAA10000B;
+        Tue, 10 Nov 2020 11:45:20 +0000 (UTC)
 From:   Gregory CLEMENT <gregory.clement@bootlin.com>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
@@ -26,9 +28,9 @@ Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Lars Povlsen <lars.povlsen@microchip.com>,
         <Steen.Hegelund@microchip.com>,
         Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v2 5/9] MIPS: mscc: Add luton dtsi
-Date:   Tue, 10 Nov 2020 12:45:04 +0100
-Message-Id: <20201110114508.1197652-6-gregory.clement@bootlin.com>
+Subject: [PATCH v2 6/9] MIPS: mscc: Add luton PC0B91 device tree
+Date:   Tue, 10 Nov 2020 12:45:05 +0100
+Message-Id: <20201110114508.1197652-7-gregory.clement@bootlin.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201110114508.1197652-1-gregory.clement@bootlin.com>
 References: <20201110114508.1197652-1-gregory.clement@bootlin.com>
@@ -38,138 +40,65 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a device tree include file for the Microsemi Luton SoC which
-belongs to same family of the Ocelot SoC.
+Add a device tree for the Microsemi Luton PCB091 evaluation board.
 
 It is based on the work of Lars Povlsen <lars.povlsen@microchip.com>.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- arch/mips/boot/dts/mscc/luton.dtsi | 116 +++++++++++++++++++++++++++++
- 1 file changed, 116 insertions(+)
- create mode 100644 arch/mips/boot/dts/mscc/luton.dtsi
+ arch/mips/boot/dts/mscc/Makefile         |  5 +++-
+ arch/mips/boot/dts/mscc/luton_pcb091.dts | 30 ++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 1 deletion(-)
+ create mode 100644 arch/mips/boot/dts/mscc/luton_pcb091.dts
 
-diff --git a/arch/mips/boot/dts/mscc/luton.dtsi b/arch/mips/boot/dts/mscc/luton.dtsi
+diff --git a/arch/mips/boot/dts/mscc/Makefile b/arch/mips/boot/dts/mscc/Makefile
+index 5015ccbbfb23..40699b44ed50 100644
+--- a/arch/mips/boot/dts/mscc/Makefile
++++ b/arch/mips/boot/dts/mscc/Makefile
+@@ -1,4 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-dtb-$(CONFIG_SOC_VCOREIII)	+= ocelot_pcb123.dtb ocelot_pcb120.dtb
++dtb-$(CONFIG_SOC_VCOREIII)	+= \
++	luton_pcb091.dtb \
++	ocelot_pcb120.dtb \
++	ocelot_pcb123.dtb
+ 
+ obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+diff --git a/arch/mips/boot/dts/mscc/luton_pcb091.dts b/arch/mips/boot/dts/mscc/luton_pcb091.dts
 new file mode 100644
-index 000000000000..2a170b84c5a9
+index 000000000000..26ef6285d71d
 --- /dev/null
-+++ b/arch/mips/boot/dts/mscc/luton.dtsi
-@@ -0,0 +1,116 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/* Copyright (c) 2020 Microsemi Corporation */
++++ b/arch/mips/boot/dts/mscc/luton_pcb091.dts
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2020 Microsemi Corporation
++ */
++
++/dts-v1/;
++
++#include "luton.dtsi"
 +
 +/ {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+	compatible = "mscc,luton";
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			compatible = "mips,mips24KEc";
-+			device_type = "cpu";
-+			clocks = <&cpu_clk>;
-+			reg = <0>;
-+		};
-+	};
++	model = "Luton10 PCB091 Reference Board";
++	compatible = "mscc,luton-pcb091", "mscc,luton";
 +
 +	aliases {
 +		serial0 = &uart0;
 +	};
 +
-+	cpuintc: interrupt-controller {
-+		#address-cells = <0>;
-+		#interrupt-cells = <1>;
-+		interrupt-controller;
-+		compatible = "mti,cpu-interrupt-controller";
++	chosen {
++		stdout-path = "serial0:115200n8";
 +	};
++};
 +
-+	cpu_clk: cpu-clock {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <416666666>;
-+	};
++&uart0 {
++	status = "okay";
++};
 +
-+	ahb_clk: ahb-clk {
-+		compatible = "fixed-factor-clock";
-+		#clock-cells = <0>;
-+		clocks = <&cpu_clk>;
-+		clock-div = <2>;
-+		clock-mult = <1>;
-+	};
-+
-+	ahb@60000000 {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0 0x60000000 0x20000000>;
-+
-+		interrupt-parent = <&intc>;
-+
-+		cpu_ctrl: syscon@10000000 {
-+			compatible = "mscc,ocelot-cpu-syscon", "syscon";
-+			reg = <0x10000000 0x2c>;
-+		};
-+
-+		intc: interrupt-controller@10000084 {
-+			compatible = "mscc,luton-icpu-intr";
-+			reg = <0x10000084 0x70>;
-+			#interrupt-cells = <1>;
-+			interrupt-controller;
-+			interrupt-parent = <&cpuintc>;
-+			interrupts = <2>;
-+		};
-+
-+		uart0: serial@10100000 {
-+			pinctrl-0 = <&uart_pins>;
-+			pinctrl-names = "default";
-+			compatible = "ns16550a";
-+			reg = <0x10100000 0x20>;
-+			interrupts = <6>;
-+			clocks = <&ahb_clk>;
-+			reg-io-width = <4>;
-+			reg-shift = <2>;
-+
-+			status = "disabled";
-+		};
-+
-+		i2c0: i2c@10100400 {
-+			compatible = "mscc,ocelot-i2c", "snps,designware-i2c";
-+			pinctrl-0 = <&i2c_pins>;
-+			pinctrl-names = "default";
-+			reg = <0x10100400 0x100>, <0x100002a4 0x8>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			interrupts = <11>;
-+			clocks = <&ahb_clk>;
-+
-+			status = "disabled";
-+		};
-+
-+		gpio: pinctrl@70068 {
-+			compatible = "mscc,luton-pinctrl";
-+			reg = <0x70068 0x28>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&gpio 0 0 32>;
-+			interrupt-controller;
-+			interrupts = <13>;
-+			#interrupt-cells = <2>;
-+
-+			i2c_pins: i2c-pins {
-+				pins = "GPIO_5", "GPIO_6";
-+				function = "twi";
-+			};
-+
-+			uart_pins: uart-pins {
-+				pins = "GPIO_30", "GPIO_31";
-+				function = "uart";
-+			};
-+
-+		};
-+	};
++&i2c0 {
++	status = "okay";
++	i2c-sda-hold-time-ns = <300>;
 +};
 -- 
 2.28.0
