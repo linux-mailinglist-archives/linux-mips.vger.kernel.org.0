@@ -2,22 +2,20 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D03B52AD5C4
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Nov 2020 12:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02692AD592
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Nov 2020 12:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbgKJL7A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Nov 2020 06:59:00 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:56094 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726861AbgKJL67 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Nov 2020 06:58:59 -0500
-Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id B8EBA3B2376
-        for <linux-mips@vger.kernel.org>; Tue, 10 Nov 2020 11:45:48 +0000 (UTC)
+        id S1729484AbgKJLp2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Nov 2020 06:45:28 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:49743 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729794AbgKJLp1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Nov 2020 06:45:27 -0500
+X-Originating-IP: 82.65.9.182
 Received: from localhost (82-65-9-182.subs.proxad.net [82.65.9.182])
         (Authenticated sender: gregory.clement@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 5A298100005;
-        Tue, 10 Nov 2020 11:45:22 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 3C0C340017;
+        Tue, 10 Nov 2020 11:45:23 +0000 (UTC)
 From:   Gregory CLEMENT <gregory.clement@bootlin.com>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
@@ -28,9 +26,9 @@ Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Lars Povlsen <lars.povlsen@microchip.com>,
         <Steen.Hegelund@microchip.com>,
         Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v2 8/9] MIPS: mscc: Add jaguar2 support
-Date:   Tue, 10 Nov 2020 12:45:07 +0100
-Message-Id: <20201110114508.1197652-9-gregory.clement@bootlin.com>
+Subject: [PATCH v2 9/9] MIPS: mscc: Add serval support
+Date:   Tue, 10 Nov 2020 12:45:08 +0100
+Message-Id: <20201110114508.1197652-10-gregory.clement@bootlin.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201110114508.1197652-1-gregory.clement@bootlin.com>
 References: <20201110114508.1197652-1-gregory.clement@bootlin.com>
@@ -40,64 +38,60 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a device trees and FIT image support for the Microsemi Jaguar2 SoC
+Add a device trees and FIT image support for the Microsemi Serval SoC
 which belongs to same family of the Ocelot SoC.
 
 It is based on the work of Lars Povlsen <lars.povlsen@microchip.com>.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- arch/mips/boot/dts/mscc/Makefile            |   3 +
- arch/mips/boot/dts/mscc/jaguar2.dtsi        | 167 ++++++++++++
- arch/mips/boot/dts/mscc/jaguar2_common.dtsi |  25 ++
- arch/mips/boot/dts/mscc/jaguar2_pcb110.dts  | 267 ++++++++++++++++++++
- arch/mips/boot/dts/mscc/jaguar2_pcb111.dts  | 107 ++++++++
- arch/mips/boot/dts/mscc/jaguar2_pcb118.dts  |  57 +++++
- arch/mips/generic/Kconfig                   |   8 +
- arch/mips/generic/Platform                  |   1 +
- arch/mips/generic/board-jaguar2.its.S       |  40 +++
- 9 files changed, 675 insertions(+)
- create mode 100644 arch/mips/boot/dts/mscc/jaguar2.dtsi
- create mode 100644 arch/mips/boot/dts/mscc/jaguar2_common.dtsi
- create mode 100644 arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
- create mode 100644 arch/mips/boot/dts/mscc/jaguar2_pcb111.dts
- create mode 100644 arch/mips/boot/dts/mscc/jaguar2_pcb118.dts
- create mode 100644 arch/mips/generic/board-jaguar2.its.S
+ arch/mips/boot/dts/mscc/Makefile           |   5 +-
+ arch/mips/boot/dts/mscc/serval.dtsi        | 153 +++++++++++++++++++++
+ arch/mips/boot/dts/mscc/serval_common.dtsi | 127 +++++++++++++++++
+ arch/mips/boot/dts/mscc/serval_pcb105.dts  |  17 +++
+ arch/mips/boot/dts/mscc/serval_pcb106.dts  |  17 +++
+ arch/mips/generic/Kconfig                  |   8 ++
+ arch/mips/generic/Platform                 |   1 +
+ arch/mips/generic/board-serval.its.S       |  24 ++++
+ 8 files changed, 351 insertions(+), 1 deletion(-)
+ create mode 100644 arch/mips/boot/dts/mscc/serval.dtsi
+ create mode 100644 arch/mips/boot/dts/mscc/serval_common.dtsi
+ create mode 100644 arch/mips/boot/dts/mscc/serval_pcb105.dts
+ create mode 100644 arch/mips/boot/dts/mscc/serval_pcb106.dts
+ create mode 100644 arch/mips/generic/board-serval.its.S
 
 diff --git a/arch/mips/boot/dts/mscc/Makefile b/arch/mips/boot/dts/mscc/Makefile
-index 40699b44ed50..befda72ceb26 100644
+index befda72ceb26..eeb6b7aae83b 100644
 --- a/arch/mips/boot/dts/mscc/Makefile
 +++ b/arch/mips/boot/dts/mscc/Makefile
-@@ -1,5 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0-only
- dtb-$(CONFIG_SOC_VCOREIII)	+= \
-+	jaguar2_pcb110.dtb \
-+	jaguar2_pcb111.dtb \
-+	jaguar2_pcb118.dtb \
+@@ -5,6 +5,9 @@ dtb-$(CONFIG_SOC_VCOREIII)	+= \
+ 	jaguar2_pcb118.dtb \
  	luton_pcb091.dtb \
  	ocelot_pcb120.dtb \
- 	ocelot_pcb123.dtb
-diff --git a/arch/mips/boot/dts/mscc/jaguar2.dtsi b/arch/mips/boot/dts/mscc/jaguar2.dtsi
+-	ocelot_pcb123.dtb
++	ocelot_pcb123.dtb \
++	serval_pcb105.dtb \
++	serval_pcb106.dtb
++
+ 
+ obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+diff --git a/arch/mips/boot/dts/mscc/serval.dtsi b/arch/mips/boot/dts/mscc/serval.dtsi
 new file mode 100644
-index 000000000000..42b2b0a51ddc
+index 000000000000..089ce89df190
 --- /dev/null
-+++ b/arch/mips/boot/dts/mscc/jaguar2.dtsi
-@@ -0,0 +1,167 @@
++++ b/arch/mips/boot/dts/mscc/serval.dtsi
+@@ -0,0 +1,153 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Copyright (c) 2020 Microsemi Corporation
++ * Copyright (c) 2018 Microsemi Corporation
 + */
 +
 +/ {
 +	#address-cells = <1>;
 +	#size-cells = <1>;
-+	compatible = "mscc,jr2";
-+
-+	aliases {
-+		serial0 = &uart0;
-+		serial1 = &uart2;
-+		gpio0 = &gpio;
-+	};
++	compatible = "mscc,serval";
 +
 +	cpus {
 +		#address-cells = <1>;
@@ -111,6 +105,11 @@ index 000000000000..42b2b0a51ddc
 +		};
 +	};
 +
++	aliases {
++		serial0 = &uart0;
++		gpio0 = &gpio;
++	};
++
 +	cpuintc: interrupt-controller {
 +		#address-cells = <0>;
 +		#interrupt-cells = <1>;
@@ -121,7 +120,7 @@ index 000000000000..42b2b0a51ddc
 +	cpu_clk: cpu-clock {
 +		compatible = "fixed-clock";
 +		#clock-cells = <0>;
-+		clock-frequency = <500000000>;
++		clock-frequency = <416666666>;
 +	};
 +
 +	ahb_clk: ahb-clk {
@@ -146,8 +145,8 @@ index 000000000000..42b2b0a51ddc
 +		};
 +
 +		intc: interrupt-controller@70000070 {
-+			compatible = "mscc,jaguar2-icpu-intr";
-+			reg = <0x70000070 0x94>;
++			compatible = "mscc,serval-icpu-intr";
++			reg = <0x70000070 0x70>;
 +			#interrupt-cells = <1>;
 +			interrupt-controller;
 +			interrupt-parent = <&cpuintc>;
@@ -180,46 +179,46 @@ index 000000000000..42b2b0a51ddc
 +			status = "disabled";
 +		};
 +
-+		gpio: pinctrl@71010038 {
-+			compatible = "mscc,jaguar2-pinctrl";
-+			reg = <0x71010038 0x90>;
++		gpio: pinctrl@71070034 {
++			compatible = "mscc,serval-pinctrl";
++			reg = <0x71070034 0x28>;
 +			gpio-controller;
 +			#gpio-cells = <2>;
-+			gpio-ranges = <&gpio 0 0 64>;
++			gpio-ranges = <&gpio 0 0 22>;
++
++			sgpio_pins: sgpio-pins {
++				pins = "GPIO_0", "GPIO_2", "GPIO_3", "GPIO_1";
++				function = "sg0";
++			};
++
++			i2c_pins: i2c-pins {
++				pins = "GPIO_6", "GPIO_7";
++				function = "twi";
++			};
 +
 +			uart_pins: uart-pins {
-+				pins = "GPIO_10", "GPIO_11";
++				pins = "GPIO_26", "GPIO_27";
 +				function = "uart";
 +			};
 +
 +			uart2_pins: uart2-pins {
-+				pins = "GPIO_24", "GPIO_25";
++				pins = "GPIO_13", "GPIO_14";
 +				function = "uart2";
 +			};
 +
 +			cs1_pins: cs1-pins {
-+				pins = "GPIO_16";
++				pins = "GPIO_8";
 +				function = "si";
 +			};
 +
-+			cs2_pins: cs2-pins {
-+				pins = "GPIO_17";
-+				function = "si";
++			irqext0_pins: irqext0-pins {
++				pins = "GPIO_28";
++				function = "irq0";
 +			};
 +
-+			cs3_pins: cs3-pins {
-+				pins = "GPIO_18";
-+				function = "si";
-+			};
-+
-+			i2c_pins: i2c-pins {
-+				pins = "GPIO_14", "GPIO_15";
-+				function = "twi";
-+			};
-+
-+			i2c2_pins: i2c2-pins {
-+				pins = "GPIO_28", "GPIO_29";
-+				function = "twi2";
++			irqext1_pins: irqext1-pins {
++				pins = "GPIO_29";
++				function = "irq1";
 +			};
 +		};
 +
@@ -228,20 +227,7 @@ index 000000000000..42b2b0a51ddc
 +			status = "disabled";
 +			pinctrl-0 = <&i2c_pins>;
 +			pinctrl-names = "default";
-+			reg = <0x70100400 0x100>, <0x700001b8 0x8>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			interrupts = <8>;
-+			clock-frequency = <100000>;
-+			clocks = <&ahb_clk>;
-+		};
-+
-+		i2c2: i2c@70100c00 {
-+			compatible = "mscc,ocelot-i2c", "snps,designware-i2c";
-+			status = "disabled";
-+			pinctrl-0 = <&i2c2_pins>;
-+			pinctrl-names = "default";
-+			reg = <0x70100c00 0x100>;
++			reg = <0x70100400 0x100>, <0x70000190 0x8>;
 +			#address-cells = <1>;
 +			#size-cells = <0>;
 +			interrupts = <8>;
@@ -250,23 +236,81 @@ index 000000000000..42b2b0a51ddc
 +		};
 +	};
 +};
-diff --git a/arch/mips/boot/dts/mscc/jaguar2_common.dtsi b/arch/mips/boot/dts/mscc/jaguar2_common.dtsi
+diff --git a/arch/mips/boot/dts/mscc/serval_common.dtsi b/arch/mips/boot/dts/mscc/serval_common.dtsi
 new file mode 100644
-index 000000000000..679ff0d8eda8
+index 000000000000..5b404836db5e
 --- /dev/null
-+++ b/arch/mips/boot/dts/mscc/jaguar2_common.dtsi
-@@ -0,0 +1,25 @@
++++ b/arch/mips/boot/dts/mscc/serval_common.dtsi
+@@ -0,0 +1,127 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2020 Microsemi Corporation
 + */
 +
-+#include "jaguar2.dtsi"
++#include "serval.dtsi"
 +
 +/ {
++	aliases {
++		serial0 = &uart0;
++		i2c104  = &i2c104;
++		i2c105  = &i2c105;
++		i2c106  = &i2c106;
++		i2c107  = &i2c107;
++		i2c108  = &i2c108;
++		i2c109  = &i2c109;
++	};
++
 +	chosen {
 +		stdout-path = "serial0:115200n8";
 +	};
++
++	i2c0_imux: i2c0-imux{
++		compatible = "i2c-mux-pinctrl";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		i2c-parent = <&i2c0>;
++		pinctrl-names =
++		"i2c104", "i2c105", "i2c106", "i2c107",
++		"i2c108", "i2c109", "idle";
++		pinctrl-0 = <&i2cmux_0>;
++		pinctrl-1 = <&i2cmux_1>;
++		pinctrl-2 = <&i2cmux_2>;
++		pinctrl-3 = <&i2cmux_3>;
++		pinctrl-4 = <&i2cmux_4>;
++		pinctrl-5 = <&i2cmux_5>;
++		pinctrl-6 = <&i2cmux_pins_i>;
++		i2c104: i2c_sfp0@0 {
++			reg = <0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++		i2c105: i2c_sfp1@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++		i2c106: i2c_sfp2@2 {
++			reg = <2>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++		i2c107: i2c_sfp3@3 {
++			reg = <3>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++		i2c108: i2c_sfp4@4 {
++			reg = <4>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++		i2c109: i2c_sfp5@5 {
++			reg = <5>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++};
++
 +};
 +
 +&uart0 {
@@ -277,472 +321,113 @@ index 000000000000..679ff0d8eda8
 +	status = "okay";
 +};
 +
++&gpio {
++	i2c_pins: i2c-pins {
++		pins = "GPIO_7"; /* No "default" scl for i2c0 */
++		function = "twi";
++	};
++	i2cmux_pins_i: i2cmux-pins-i {
++		pins = "GPIO_11", "GPIO_12", "GPIO_18", "GPIO_19",
++			"GPIO_20", "GPIO_21";
++		function = "twi_scl_m";
++		output-low;
++	};
++	i2cmux_0: i2cmux-0 {
++		pins = "GPIO_11";
++		function = "twi_scl_m";
++		output-high;
++	};
++	i2cmux_1: i2cmux-1 {
++		pins = "GPIO_12";
++		function = "twi_scl_m";
++		output-high;
++	};
++	i2cmux_2: i2cmux-2 {
++		pins = "GPIO_18";
++		function = "twi_scl_m";
++		output-high;
++	};
++	i2cmux_3: i2cmux-3 {
++		pins = "GPIO_19";
++		function = "twi_scl_m";
++		output-high;
++	};
++	i2cmux_4: i2cmux-4 {
++		pins = "GPIO_20";
++		function = "twi_scl_m";
++		output-high;
++	};
++	i2cmux_5: i2cmux-5 {
++		pins = "GPIO_21";
++		function = "twi_scl_m";
++		output-high;
++	};
++};
++
 +&i2c0 {
 +	status = "okay";
 +	i2c-sda-hold-time-ns = <300>;
 +};
-diff --git a/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts b/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
++
+diff --git a/arch/mips/boot/dts/mscc/serval_pcb105.dts b/arch/mips/boot/dts/mscc/serval_pcb105.dts
 new file mode 100644
-index 000000000000..d80cd6842b2a
+index 000000000000..a1b0012b79d3
 --- /dev/null
-+++ b/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
-@@ -0,0 +1,267 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2020 Microsemi Corporation
-+ */
-+
-+/dts-v1/;
-+#include "jaguar2_common.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/ {
-+	model = "Jaguar2 Cu8-Sfp16 PCB110 Reference Board";
-+	compatible = "mscc,jr2-pcb110", "mscc,jr2";
-+
-+	aliases {
-+		i2c0    = &i2c0;
-+		i2c108  = &i2c108;
-+		i2c109  = &i2c109;
-+		i2c110  = &i2c110;
-+		i2c111  = &i2c111;
-+		i2c112  = &i2c112;
-+		i2c113  = &i2c113;
-+		i2c114  = &i2c114;
-+		i2c115  = &i2c115;
-+		i2c116  = &i2c116;
-+		i2c117  = &i2c117;
-+		i2c118  = &i2c118;
-+		i2c119  = &i2c119;
-+		i2c120  = &i2c120;
-+		i2c121  = &i2c121;
-+		i2c122  = &i2c122;
-+		i2c123  = &i2c123;
-+		i2c124  = &i2c124;
-+		i2c125  = &i2c125;
-+		i2c126  = &i2c126;
-+		i2c127  = &i2c127;
-+		i2c128  = &i2c128;
-+		i2c129  = &i2c129;
-+		i2c130  = &i2c130;
-+		i2c131  = &i2c131;
-+		i2c149  = &i2c149;
-+		i2c150  = &i2c150;
-+		i2c151  = &i2c151;
-+		i2c152  = &i2c152;
-+	};
-+	i2c0_imux: i2c0-imux {
-+		compatible = "i2c-mux-pinctrl";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-parent = <&i2c0>;
-+		pinctrl-names =
-+			"i2c149", "i2c150", "i2c151", "i2c152", "idle";
-+		pinctrl-0 = <&i2cmux_0>;
-+		pinctrl-1 = <&i2cmux_1>;
-+		pinctrl-2 = <&i2cmux_2>;
-+		pinctrl-3 = <&i2cmux_3>;
-+		pinctrl-4 = <&i2cmux_pins_i>;
-+		i2c149: i2c@0 {
-+			reg = <0x0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c150: i2c@1 {
-+			reg = <0x1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c151: i2c@2 {
-+			reg = <0x2>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c152: i2c@3 {
-+			reg = <0x3>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+	i2c0_emux: i2c0-emux {
-+		compatible = "i2c-mux-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-parent = <&i2c0>;
-+		mux-gpios = <&gpio 51 GPIO_ACTIVE_HIGH
-+			     &gpio 52 GPIO_ACTIVE_HIGH
-+			     &gpio 53 GPIO_ACTIVE_HIGH
-+			     &gpio 58 GPIO_ACTIVE_HIGH
-+			     &gpio 59 GPIO_ACTIVE_HIGH>;
-+		idle-state = <0x0>;
-+		i2c108: i2c@10 {
-+			reg = <0x10>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c109: i2c@11 {
-+			reg = <0x11>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c110: i2c@12 {
-+			reg = <0x12>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c111: i2c@13 {
-+			reg = <0x13>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c112: i2c@14 {
-+			reg = <0x14>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c113: i2c@15 {
-+			reg = <0x15>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c114: i2c@16 {
-+			reg = <0x16>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c115: i2c@17 {
-+			reg = <0x17>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c116: i2c@8 {
-+			reg = <0x8>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c117: i2c@9 {
-+			reg = <0x9>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c118: i2c@a {
-+			reg = <0xa>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c119: i2c@b {
-+			reg = <0xb>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c120: i2c@c {
-+			reg = <0xc>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c121: i2c@d {
-+			reg = <0xd>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c122: i2c@e {
-+			reg = <0xe>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c123: i2c@f {
-+			reg = <0xf>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&gpio {
-+	synce_pins: synce-pins {
-+		// GPIO 16 == SI_nCS1
-+		pins = "GPIO_16";
-+		function = "si";
-+	};
-+	synce_builtin_pins: synce-builtin-pins {
-+		// GPIO 49 == SI_nCS13
-+		pins = "GPIO_49";
-+		function = "si";
-+	};
-+	i2cmux_pins_i: i2cmux-pins-i {
-+		pins = "GPIO_17", "GPIO_18", "GPIO_20", "GPIO_21";
-+		function = "twi_scl_m";
-+		output-low;
-+	};
-+	i2cmux_0: i2cmux-0 {
-+		pins = "GPIO_17";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_1: i2cmux-1 {
-+		pins = "GPIO_18";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_2: i2cmux-2 {
-+		pins = "GPIO_20";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_3: i2cmux-3 {
-+		pins = "GPIO_21";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+};
-+
-+&i2c0 {
-+	pca9545@70 {
-+		compatible = "nxp,pca9545";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+		i2c124: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+		i2c125: i2c@1 {
-+			/* FMC B */
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+		i2c126: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+		i2c127: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+	};
-+	pca9545@71 {
-+		compatible = "nxp,pca9545";
-+		reg = <0x71>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+		i2c128: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+		i2c129: i2c@1 {
-+			/* FMC B */
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+		i2c130: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+		i2c131: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+	};
-+};
-diff --git a/arch/mips/boot/dts/mscc/jaguar2_pcb111.dts b/arch/mips/boot/dts/mscc/jaguar2_pcb111.dts
-new file mode 100644
-index 000000000000..813c5e16013c
---- /dev/null
-+++ b/arch/mips/boot/dts/mscc/jaguar2_pcb111.dts
-@@ -0,0 +1,107 @@
++++ b/arch/mips/boot/dts/mscc/serval_pcb105.dts
+@@ -0,0 +1,17 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2018 Microsemi Corporation
 + */
 +
 +/dts-v1/;
-+#include "jaguar2_common.dtsi"
++#include "serval_common.dtsi"
 +
 +/ {
-+	model = "Jaguar2 Cu48 PCB111 Reference Board";
-+	compatible = "mscc,jr2-pcb111", "mscc,jr2";
++	model = "Serval PCB105 Reference Board";
++	compatible = "mscc,serval-pcb105", "mscc,serval";
 +
 +	aliases {
-+		i2c0    = &i2c0;
-+		i2c149  = &i2c149;
-+		i2c150  = &i2c150;
-+		i2c151  = &i2c151;
-+		i2c152  = &i2c152;
-+		i2c203  = &i2c203;
 +	};
 +
-+	i2c0_imux: i2c0-imux {
-+		compatible = "i2c-mux-pinctrl";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-parent = <&i2c0>;
-+		pinctrl-names =
-+			"i2c149", "i2c150", "i2c151", "i2c152", "i2c203", "idle";
-+		pinctrl-0 = <&i2cmux_0>;
-+		pinctrl-1 = <&i2cmux_1>;
-+		pinctrl-2 = <&i2cmux_2>;
-+		pinctrl-3 = <&i2cmux_3>;
-+		pinctrl-4 = <&i2cmux_pins_i>; // Added by convention for PoE
-+		pinctrl-5 = <&i2cmux_pins_i>;
-+		i2c149: i2c@0 {
-+			reg = <0x0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c150: i2c@1 {
-+			reg = <0x1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c151: i2c@2 {
-+			reg = <0x2>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c152: i2c@3 {
-+			reg = <0x3>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c203: i2c@4 {
-+			reg = <0x4>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
 +};
 +
-+&gpio {
-+	synce_builtin_pins: synce-builtin-pins {
-+		// GPIO 49 == SI_nCS13
-+		pins = "GPIO_49";
-+		function = "si";
-+	};
-+	cpld_pins: cpld-pins {
-+		// GPIO 50 == SI_nCS14
-+		pins = "GPIO_50";
-+		function = "si";
-+	};
-+	cpld_fifo_pins: synce-builtin-pins {
-+		// GPIO 51 == SI_nCS15
-+		pins = "GPIO_51";
-+		function = "si";
-+	};
-+};
-+
-+&gpio {
-+	i2cmux_pins_i: i2cmux-pins-i {
-+		pins = "GPIO_17", "GPIO_18";
-+		function = "twi_scl_m";
-+		output-low;
-+	};
-+	i2cmux_0: i2cmux-0 {
-+		pins = "GPIO_17";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_1: i2cmux-1 {
-+		pins = "GPIO_18";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_2: i2cmux-2 {
-+		pins = "GPIO_20";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_3: i2cmux-3 {
-+		pins = "GPIO_21";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+};
-diff --git a/arch/mips/boot/dts/mscc/jaguar2_pcb118.dts b/arch/mips/boot/dts/mscc/jaguar2_pcb118.dts
+diff --git a/arch/mips/boot/dts/mscc/serval_pcb106.dts b/arch/mips/boot/dts/mscc/serval_pcb106.dts
 new file mode 100644
-index 000000000000..27c644f2d17f
+index 000000000000..237be7c8da57
 --- /dev/null
-+++ b/arch/mips/boot/dts/mscc/jaguar2_pcb118.dts
-@@ -0,0 +1,57 @@
++++ b/arch/mips/boot/dts/mscc/serval_pcb106.dts
+@@ -0,0 +1,17 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2018 Microsemi Corporation
 + */
 +
 +/dts-v1/;
-+#include "jaguar2_common.dtsi"
++#include "serval_common.dtsi"
 +
 +/ {
-+	model = "Jaguar2/Aquantia PCB118 Reference Board";
-+	compatible = "mscc,jr2-pcb118", "mscc,jr2";
++	model = "Serval PCB106 Reference Board";
++	compatible = "mscc,serval-pcb106", "mscc,serval";
 +
 +	aliases {
-+		i2c150  = &i2c150;
-+		i2c151  = &i2c151;
 +	};
 +
-+	i2c0_imux: i2c0-imux {
-+		compatible = "i2c-mux-pinctrl";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-parent = <&i2c0>;
-+		pinctrl-names =
-+			"i2c150", "i2c151", "idle";
-+		pinctrl-0 = <&i2cmux_0>;
-+		pinctrl-1 = <&i2cmux_1>;
-+		pinctrl-2 = <&i2cmux_pins_i>;
-+		i2c150: i2c@0 {
-+			reg = <0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+		i2c151: i2c@1 {
-+			reg = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
 +};
 +
-+&gpio {
-+	i2cmux_pins_i: i2cmux-pins-i {
-+		pins = "GPIO_17", "GPIO_16";
-+		function = "twi_scl_m";
-+		output-low;
-+	};
-+	i2cmux_0: i2cmux-0 {
-+		pins = "GPIO_17";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_1: i2cmux-1 {
-+		pins = "GPIO_16";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+};
 diff --git a/arch/mips/generic/Kconfig b/arch/mips/generic/Kconfig
-index e5a7a1314e71..c7a840b8eaa6 100644
+index c7a840b8eaa6..657dd93c5e76 100644
 --- a/arch/mips/generic/Kconfig
 +++ b/arch/mips/generic/Kconfig
-@@ -86,6 +86,14 @@ config FIT_IMAGE_FDT_LUTON
+@@ -94,6 +94,14 @@ config FIT_IMAGE_FDT_JAGUAR2
  	  from Microsemi in the FIT kernel image.
  	  This requires u-boot on the platform.
  
-+config FIT_IMAGE_FDT_JAGUAR2
-+	bool "Include FDT for Microsemi Jaguar2 development platforms"
++config FIT_IMAGE_FDT_SERVAL
++	bool "Include FDT for Microsemi Serval development platforms"
 +	select SOC_VCOREIII
 +	help
-+	  Enable this to include the FDT for the Jaguar2 development platforms
++	  Enable this to include the FDT for the Serval development platforms
 +	  from Microsemi in the FIT kernel image.
 +	  This requires u-boot on the platform.
 +
@@ -750,37 +435,27 @@ index e5a7a1314e71..c7a840b8eaa6 100644
  	bool "Support boards based on Ingenic SoCs"
  	select MACH_INGENIC_GENERIC
 diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
-index 4b6905daa39c..3f2055bea596 100644
+index 3f2055bea596..b871af16b5b6 100644
 --- a/arch/mips/generic/Platform
 +++ b/arch/mips/generic/Platform
-@@ -21,4 +21,5 @@ its-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= board-boston.its.S
- its-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= board-ni169445.its.S
+@@ -22,4 +22,5 @@ its-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= board-ni169445.its.S
  its-$(CONFIG_FIT_IMAGE_FDT_OCELOT)	+= board-ocelot.its.S
  its-$(CONFIG_FIT_IMAGE_FDT_LUTON)	+= board-luton.its.S
-+its-$(CONFIG_FIT_IMAGE_FDT_JAGUAR2)	+= board-jaguar2.its.S
+ its-$(CONFIG_FIT_IMAGE_FDT_JAGUAR2)	+= board-jaguar2.its.S
++its-$(CONFIG_FIT_IMAGE_FDT_SERVAL)	+= board-serval.its.S
  its-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+= board-xilfpga.its.S
-diff --git a/arch/mips/generic/board-jaguar2.its.S b/arch/mips/generic/board-jaguar2.its.S
+diff --git a/arch/mips/generic/board-serval.its.S b/arch/mips/generic/board-serval.its.S
 new file mode 100644
-index 000000000000..fb0e589eeff7
+index 000000000000..4ea4fc9d757f
 --- /dev/null
-+++ b/arch/mips/generic/board-jaguar2.its.S
-@@ -0,0 +1,40 @@
++++ b/arch/mips/generic/board-serval.its.S
+@@ -0,0 +1,24 @@
 +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
 +/ {
 +	images {
-+		fdt@jaguar2_pcb110 {
-+			description = "MSCC Jaguar2 PCB110 Device Tree";
-+			data = /incbin/("boot/dts/mscc/jaguar2_pcb110.dtb");
-+			type = "flat_dt";
-+			arch = "mips";
-+			compression = "none";
-+			hash@0 {
-+				algo = "sha1";
-+			};
-+		};
-+		fdt@jaguar2_pcb111 {
-+			description = "MSCC Jaguar2 PCB111 Device Tree";
-+			data = /incbin/("boot/dts/mscc/jaguar2_pcb111.dtb");
++		fdt@serval_pcb105 {
++			description = "MSCC Serval PCB105 Device Tree";
++			data = /incbin/("boot/dts/mscc/serval_pcb105.dtb");
 +			type = "flat_dt";
 +			arch = "mips";
 +			compression = "none";
@@ -791,16 +466,10 @@ index 000000000000..fb0e589eeff7
 +	};
 +
 +	configurations {
-+		pcb110 {
-+			description = "Jaguar2 Linux kernel";
++		pcb105 {
++			description = "Serval Linux kernel";
 +			kernel = "kernel@0";
-+			fdt = "fdt@jaguar2_pcb110";
-+			ramdisk = "ramdisk";
-+		};
-+		pcb111 {
-+			description = "Jaguar2 Linux kernel";
-+			kernel = "kernel@0";
-+			fdt = "fdt@jaguar2_pcb111";
++			fdt = "fdt@serval_pcb105";
 +			ramdisk = "ramdisk";
 +		};
 +	};
