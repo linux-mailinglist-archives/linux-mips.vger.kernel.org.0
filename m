@@ -2,22 +2,20 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BC12AD5C2
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Nov 2020 12:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203672AD58D
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Nov 2020 12:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbgKJL65 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Nov 2020 06:58:57 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:56030 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726861AbgKJL65 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Nov 2020 06:58:57 -0500
-Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 6AFD03B2261
-        for <linux-mips@vger.kernel.org>; Tue, 10 Nov 2020 11:45:41 +0000 (UTC)
+        id S1729772AbgKJLpX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Nov 2020 06:45:23 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:35727 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726152AbgKJLpW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Nov 2020 06:45:22 -0500
+X-Originating-IP: 82.65.9.182
 Received: from localhost (82-65-9-182.subs.proxad.net [82.65.9.182])
         (Authenticated sender: gregory.clement@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id EBE4B100013;
-        Tue, 10 Nov 2020 11:45:17 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id D23F640008;
+        Tue, 10 Nov 2020 11:45:18 +0000 (UTC)
 From:   Gregory CLEMENT <gregory.clement@bootlin.com>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
@@ -28,9 +26,9 @@ Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Lars Povlsen <lars.povlsen@microchip.com>,
         <Steen.Hegelund@microchip.com>,
         Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v2 4/9] MIPS: mscc: Fix configuration name for ocelot legacy boards
-Date:   Tue, 10 Nov 2020 12:45:03 +0100
-Message-Id: <20201110114508.1197652-5-gregory.clement@bootlin.com>
+Subject: [PATCH v2 5/9] MIPS: mscc: Add luton dtsi
+Date:   Tue, 10 Nov 2020 12:45:04 +0100
+Message-Id: <20201110114508.1197652-6-gregory.clement@bootlin.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201110114508.1197652-1-gregory.clement@bootlin.com>
 References: <20201110114508.1197652-1-gregory.clement@bootlin.com>
@@ -40,28 +38,139 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Ocelots is supported by the generic MIPS build so make it clears that
-LEGACY_BOARD_OCELOT is only needed for legacy boards which didn't have
-bootloader supporting device tree.
+Add a device tree include file for the Microsemi Luton SoC which
+belongs to same family of the Ocelot SoC.
+
+It is based on the work of Lars Povlsen <lars.povlsen@microchip.com>.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- arch/mips/generic/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/boot/dts/mscc/luton.dtsi | 116 +++++++++++++++++++++++++++++
+ 1 file changed, 116 insertions(+)
+ create mode 100644 arch/mips/boot/dts/mscc/luton.dtsi
 
-diff --git a/arch/mips/generic/Kconfig b/arch/mips/generic/Kconfig
-index 45431b88dded..eb2a3fa9fcd7 100644
---- a/arch/mips/generic/Kconfig
-+++ b/arch/mips/generic/Kconfig
-@@ -31,7 +31,7 @@ comment "MSCC Ocelot doesn't work with SEAD3 enabled"
- 	depends on LEGACY_BOARD_SEAD3
- 
- config LEGACY_BOARD_OCELOT
--	bool "Support MSCC Ocelot boards"
-+	bool "Legacy support for Ocelot based boards"
- 	depends on LEGACY_BOARD_SEAD3=n
- 	select LEGACY_BOARDS
- 	select SOC_VCOREIII
+diff --git a/arch/mips/boot/dts/mscc/luton.dtsi b/arch/mips/boot/dts/mscc/luton.dtsi
+new file mode 100644
+index 000000000000..2a170b84c5a9
+--- /dev/null
++++ b/arch/mips/boot/dts/mscc/luton.dtsi
+@@ -0,0 +1,116 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/* Copyright (c) 2020 Microsemi Corporation */
++
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
++	compatible = "mscc,luton";
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu@0 {
++			compatible = "mips,mips24KEc";
++			device_type = "cpu";
++			clocks = <&cpu_clk>;
++			reg = <0>;
++		};
++	};
++
++	aliases {
++		serial0 = &uart0;
++	};
++
++	cpuintc: interrupt-controller {
++		#address-cells = <0>;
++		#interrupt-cells = <1>;
++		interrupt-controller;
++		compatible = "mti,cpu-interrupt-controller";
++	};
++
++	cpu_clk: cpu-clock {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <416666666>;
++	};
++
++	ahb_clk: ahb-clk {
++		compatible = "fixed-factor-clock";
++		#clock-cells = <0>;
++		clocks = <&cpu_clk>;
++		clock-div = <2>;
++		clock-mult = <1>;
++	};
++
++	ahb@60000000 {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0x60000000 0x20000000>;
++
++		interrupt-parent = <&intc>;
++
++		cpu_ctrl: syscon@10000000 {
++			compatible = "mscc,ocelot-cpu-syscon", "syscon";
++			reg = <0x10000000 0x2c>;
++		};
++
++		intc: interrupt-controller@10000084 {
++			compatible = "mscc,luton-icpu-intr";
++			reg = <0x10000084 0x70>;
++			#interrupt-cells = <1>;
++			interrupt-controller;
++			interrupt-parent = <&cpuintc>;
++			interrupts = <2>;
++		};
++
++		uart0: serial@10100000 {
++			pinctrl-0 = <&uart_pins>;
++			pinctrl-names = "default";
++			compatible = "ns16550a";
++			reg = <0x10100000 0x20>;
++			interrupts = <6>;
++			clocks = <&ahb_clk>;
++			reg-io-width = <4>;
++			reg-shift = <2>;
++
++			status = "disabled";
++		};
++
++		i2c0: i2c@10100400 {
++			compatible = "mscc,ocelot-i2c", "snps,designware-i2c";
++			pinctrl-0 = <&i2c_pins>;
++			pinctrl-names = "default";
++			reg = <0x10100400 0x100>, <0x100002a4 0x8>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <11>;
++			clocks = <&ahb_clk>;
++
++			status = "disabled";
++		};
++
++		gpio: pinctrl@70068 {
++			compatible = "mscc,luton-pinctrl";
++			reg = <0x70068 0x28>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&gpio 0 0 32>;
++			interrupt-controller;
++			interrupts = <13>;
++			#interrupt-cells = <2>;
++
++			i2c_pins: i2c-pins {
++				pins = "GPIO_5", "GPIO_6";
++				function = "twi";
++			};
++
++			uart_pins: uart-pins {
++				pins = "GPIO_30", "GPIO_31";
++				function = "uart";
++			};
++
++		};
++	};
++};
 -- 
 2.28.0
 
