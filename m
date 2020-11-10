@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EC92ACF22
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Nov 2020 06:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7F42ACFB6
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Nov 2020 07:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731316AbgKJF1e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Nov 2020 00:27:34 -0500
-Received: from out28-2.mail.aliyun.com ([115.124.28.2]:48738 "EHLO
-        out28-2.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726006AbgKJF1d (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Nov 2020 00:27:33 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.134802-0.000881236-0.864316;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047202;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.Iumnnv9_1604986043;
-Received: from 192.168.1.115(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Iumnnv9_1604986043)
-          by smtp.aliyun-inc.com(10.147.44.145);
-          Tue, 10 Nov 2020 13:27:24 +0800
+        id S1731049AbgKJGbW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Nov 2020 01:31:22 -0500
+Received: from out28-125.mail.aliyun.com ([115.124.28.125]:52968 "EHLO
+        out28-125.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726307AbgKJGbV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Nov 2020 01:31:21 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.134802-0.000881236-0.864316;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.IunzoFH_1604989866;
+Received: from 192.168.88.132(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IunzoFH_1604989866)
+          by smtp.aliyun-inc.com(10.147.41.121);
+          Tue, 10 Nov 2020 14:31:10 +0800
 Subject: Re: [PATCH 1/2] MIPS: Ingenic: Add missing nodes for Ingenic SoCs and
  boards.
 To:     Paul Cercueil <paul@crapouillou.net>
@@ -28,14 +28,14 @@ Cc:     tsbogend@alpha.franken.de, robh+dt@kernel.org,
         sernia.zhou@foxmail.com, zhenwenjin@gmail.com
 References: <20201107115251.86182-1-zhouyanjie@wanyeetech.com>
  <20201107115251.86182-2-zhouyanjie@wanyeetech.com>
- <3MYJJQ.CUZTUWS1VW6P1@crapouillou.net>
+ <TXYJJQ.TVQC48S8AVLH@crapouillou.net>
 From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <4bd44bb8-f5fe-33cf-bf5f-1bd902eb8e91@wanyeetech.com>
-Date:   Tue, 10 Nov 2020 13:27:23 +0800
+Message-ID: <d6ff2579-20bc-2544-ff4d-3d92024694ab@wanyeetech.com>
+Date:   Tue, 10 Nov 2020 14:31:04 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <3MYJJQ.CUZTUWS1VW6P1@crapouillou.net>
+In-Reply-To: <TXYJJQ.TVQC48S8AVLH@crapouillou.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -45,8 +45,8 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Paul,
 
-On 2020/11/10 上午7:30, Paul Cercueil wrote:
-> Hi Zhou,
+On 2020/11/10 上午7:37, Paul Cercueil wrote:
+>
 >
 > Le sam. 7 nov. 2020 à 19:52, 周琰杰 (Zhou Yanjie) 
 > <zhouyanjie@wanyeetech.com> a écrit :
@@ -102,22 +102,6 @@ On 2020/11/10 上午7:30, Paul Cercueil wrote:
 >> +
 >> +    assigned-clocks = <&cgu JZ4780_CLK_OTGPHY>;
 >> +    assigned-clock-rates = <48000000>;
->
-> I think you should put these two lines inside &cgu. While it will also 
-> work here, the assigned-clocks / assigned-clock-rates are defined 
-> Device Tree properties only for clock controller nodes, and so "make 
-> dtbs_check" will complain:
->
-> ci20.dt.yaml: usb@13500000: 'assigned-clock-rates', 'assigned-clocks' 
-> do not match any of the regexes: 'pinctrl-[0-9]+'
->
-> Same in the Neo .dts files.
-
-
-Sure, I will move it into CGU node in the next version.
-
-
->
 >> +};
 >> +
 >>  &pinctrl {
@@ -189,20 +173,6 @@ Sure, I will move it into CGU node in the next version.
 >>  };
 >>
 >> +&ssi {
->
-> "ssi" is defined right above, you can put the expander node and 
-> properties directly there.
->
-
-Sure.
-
-
-Thanks and  best regards!
-
-
-> Cheers,
-> -Paul
->
 >> +    status = "okay";
 >> +
 >> +    spi-max-frequency = <50000000>;
@@ -376,6 +346,26 @@ Thanks and  best regards!
 >> +            clocks = <&cgu JZ4780_CLK_OTG1>;
 >> +
 >> +            #phy-cells = <0>;
+>
+> Something I missed in my first email: you lack the "vcc-supply" 
+> required property here. But I'm not sure what it should be linked to.
+>
+
+I checked the datasheet of JZ4780. There are 3 power pins rekated to 
+USB: VBUS, AVDUSB33, and AVDUSB25, but it is not clearly described on 
+the datasheet whether it is for the USB PHY or the USB controller. And 
+it is strange that now it can works properly without vcc-supply. Maybe 
+vcc-supply is not necessarily required? If so, should we mark it as 
+optional? On the  other hand, if vcc-supply is indeed required, do we 
+need to add two new vccs to ensure one-to-on correspondence with the 
+aforementioned three power supplies?
+
+
+Thanks and best regards!
+
+
+> -Paul
+>
 >> +        };
 >> +
 >> +        rng: rng@d8 {
