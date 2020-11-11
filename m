@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4358B2AECF0
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Nov 2020 10:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E202AECED
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Nov 2020 10:12:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbgKKJMA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Nov 2020 04:12:00 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:39428 "EHLO
+        id S1726915AbgKKJLq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Nov 2020 04:11:46 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:39426 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726614AbgKKJJe (ORCPT
+        with ESMTP id S1726704AbgKKJJe (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Nov 2020 04:09:34 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 908A2803202F;
-        Wed, 11 Nov 2020 09:09:14 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 891DC8000853;
+        Wed, 11 Nov 2020 09:09:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id URHAxb3Z8lke; Wed, 11 Nov 2020 12:09:14 +0300 (MSK)
+        with ESMTP id esJnQ4c3GepC; Wed, 11 Nov 2020 12:09:14 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
@@ -43,9 +43,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 13/18] dt-bindings: usb: dwc3: Add Tx De-emphasis constraints
-Date:   Wed, 11 Nov 2020 12:08:48 +0300
-Message-ID: <20201111090853.14112-14-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v4 14/18] dt-bindings: usb: dwc3: Add Frame Length Adj constraints
+Date:   Wed, 11 Nov 2020 12:08:49 +0300
+Message-ID: <20201111090853.14112-15-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20201111090853.14112-1-Sergey.Semin@baikalelectronics.ru>
 References: <20201111090853.14112-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -56,38 +56,30 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In accordance with the driver comments the PIPE3 de-emphasis can be tuned
-to be either -6dB, -2.5dB or disabled. Let's add the de-emphasis
-property constraints so the DT schema would make sure the controller DT
-node is equipped with correct value.
+In accordance with the IP core databook the
+snps,quirk-frame-length-adjustment property can be set within [0, 0x3F].
+Let's make sure the DT schema applies a correct constraints on the
+property.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Reviewed-by: Rob Herring <robh@kernel.org>
-
 ---
-
-Changelog v2:
-- Grammar fix: "s/tunned/tuned"
-- Grammar fix: remove redundant "or" conjunction.
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index 4f68c5cd7a45..64579aed404f 100644
+index 64579aed404f..cd8527789d64 100644
 --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
 +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -153,6 +153,10 @@ properties:
-       The value driven to the PHY is controlled by the LTSSM during USB3
-       Compliance mode.
-     $ref: /schemas/types.yaml#/definitions/uint8
-+    enum:
-+      - 0 # -6dB de-emphasis
-+      - 1 # -3.5dB de-emphasis
-+      - 2 # No de-emphasis
+@@ -234,6 +234,8 @@ properties:
+       length adjustment when the fladj_30mhz_sdbnd signal is invalid or
+       incorrect.
+     $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 0x3f
  
-   snps,dis_u3_susphy_quirk:
-     description: When set core will disable USB3 suspend phy
+   snps,rx-thr-num-pkt-prd:
+     description:
 -- 
 2.28.0
 
