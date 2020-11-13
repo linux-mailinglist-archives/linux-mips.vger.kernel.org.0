@@ -2,233 +2,178 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 337C62B1725
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Nov 2020 09:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FEE2B17CD
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Nov 2020 10:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbgKMIY7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Nov 2020 03:24:59 -0500
-Received: from relay5.mymailcheap.com ([159.100.241.64]:51321 "EHLO
-        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgKMIY7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Nov 2020 03:24:59 -0500
-Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [151.80.165.199])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id F0AD52008F;
-        Fri, 13 Nov 2020 08:24:54 +0000 (UTC)
-Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
-        by relay2.mymailcheap.com (Postfix) with ESMTPS id 822F53ECD9;
-        Fri, 13 Nov 2020 09:24:52 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by filter2.mymailcheap.com (Postfix) with ESMTP id 5B3D12A7E9;
-        Fri, 13 Nov 2020 09:24:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1605255892;
-        bh=lnbCuScKRwrdOM/77XgCl9+PwaukHhGgIbDHfOe0WTw=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=i4L/lGJPRPyL++5Nh48rnKc0U9ZTvGn7Q6crvxOJH2/K0CscEZHSjhBmcPkE42HjH
-         NOyQypzVJqADt42bXhdv5NRfuuzEhGHSGL6zJ4xHXg8G5OQaA/0ZaMMOPKVZb6sqJ1
-         WrpA11p2ezUXq5nPyaoB2xCjgFpxpWMER6kMJYzs=
-X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
-Received: from filter2.mymailcheap.com ([127.0.0.1])
-        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id lSSjkspKHywM; Fri, 13 Nov 2020 09:24:50 +0100 (CET)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter2.mymailcheap.com (Postfix) with ESMTPS;
-        Fri, 13 Nov 2020 09:24:50 +0100 (CET)
-Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id 246D4400D1;
-        Fri, 13 Nov 2020 08:24:48 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="KQqeHeTN";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [127.0.0.1] (unknown [113.52.132.216])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 2580A41ECA;
-        Fri, 13 Nov 2020 08:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1605255883;
-        bh=lnbCuScKRwrdOM/77XgCl9+PwaukHhGgIbDHfOe0WTw=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=KQqeHeTNrDm/KpErz8k/Say8LAe40ubNv0RcYSGyUaiKdctL6Av1Q7hEcphV59Rng
-         fmg+GoDafDa6jLlbXHnkf9jTZUM7+fPJT4DS5xLLewpxktbTpnjPnjxiZZXPXvL7nY
-         3RUDVDTSpVOEIjTAPDugO/mW2B/QY+k6SGJXx+AY=
-Date:   Fri, 13 Nov 2020 16:24:37 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>
-CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yinglu Yang <yangyinglu@loongson.cn>,
-        WANG Xuerui <git@xen0n.name>
-Subject: Re: [PATCH] MIPS: Loongson64: Add read_persistent_clock64()
-User-Agent: K-9 Mail for Android
-In-Reply-To: <bb0fbd42-07b2-397b-1a63-f7817a1a9d4b@loongson.cn>
-References: <1605169793-10481-1-git-send-email-yangtiezhu@loongson.cn> <8d6ebfe2-e300-3f38-6316-196cba947d36@flygoat.com> <b84fe88b-7527-e88c-1efd-739f6d846518@flygoat.com> <6f0a7a43-4eac-65d8-61ff-778dc13f925c@loongson.cn> <1e01b317-b315-443c-a53b-db360ea17254@flygoat.com> <bb0fbd42-07b2-397b-1a63-f7817a1a9d4b@loongson.cn>
-Message-ID: <C36B1D2E-5642-4399-9165-052EC1070D57@flygoat.com>
+        id S1726270AbgKMJKz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Nov 2020 04:10:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgKMJKv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Nov 2020 04:10:51 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96624C0613D1;
+        Fri, 13 Nov 2020 01:10:50 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id l1so8911105wrb.9;
+        Fri, 13 Nov 2020 01:10:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EICGtdSdBUVTfYQynfx1jthTLvT03AILkfeZoMTfCBA=;
+        b=jw+KiuDr2MCpgnurAjQL+7y/5jqx9CRSCS2W2kR3HJ20amCZ2/0qsVaa2UpLdtFYtz
+         oVhctDoevJXZJJAjVRwzxzFweHPV0g0kMVCmiy+BhGpnI54RdTHUzExCOFETjpQQHd/N
+         XVyGHN02S0hhakUkNc3a1IxM2m7CfvIvDxj2AS/iRKC/7wiviIACJfbhNiQ3x+JG58KQ
+         wZTY1B6qFVshdSo1AmTTzaC9Zlr80r8Vw+gJXRCG8Zr5ImrKk+KcIIrnlXx4Zep5SzFO
+         4TlcWoJvYg/CSCREZwpdA4KyWyznDcKn/WgxscoC+1+e9cTLCBmtjjmAh3jXw14KOAOg
+         N/rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EICGtdSdBUVTfYQynfx1jthTLvT03AILkfeZoMTfCBA=;
+        b=FMavN7UfvJ7wyT2OmTUjhZyxvyFlsYLXDWGJyifs5EunHTzG/bClXDeGVy1NIV01uA
+         yT5uypmJg7/g1ZlLvAHCwI1N75y9Mj0N6RP2hqj8EYfDSM2n3IE8gCalHLJZDZtpLduW
+         e6opzv/jF7I/PzdXzzI0ABltFW5frq0EM78sBNdCSrEXPBHoJY0TYPsPrwo6F4ZXAs9V
+         tkpKOHTYPXb4G2HAAIA0K3EKvZDwcRWb3wjlBvjxuoitEShrKRouyH8L5NLerJKWNAKz
+         v3hWfa7CbL1qhNlYNFckMKfE115fu8wXpVqX98sDOcPdMRMi0/bwB6+2OW3czwCjmMSV
+         moHg==
+X-Gm-Message-State: AOAM530Km/JIAZSEz3p1Izb4AUg/vDOVPgUZQbeg2RUL8k3l2WSQAugB
+        sg6SCbw5Vn9poDKdO0hAYOQ=
+X-Google-Smtp-Source: ABdhPJwARQUWT+LL5qd7cHVha5dx9jUOCqUFoy8FspFQSSJ3cgmhpS3edvtOzv47RdlBZwdtHXXC6A==
+X-Received: by 2002:adf:8284:: with SMTP id 4mr2166748wrc.386.1605258649314;
+        Fri, 13 Nov 2020 01:10:49 -0800 (PST)
+Received: from localhost.localdomain (245.red-79-158-78.dynamicip.rima-tde.net. [79.158.78.245])
+        by smtp.gmail.com with ESMTPSA id 15sm9266183wmg.1.2020.11.13.01.10.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 13 Nov 2020 01:10:48 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     mturquette@baylibre.com
+Cc:     sboyd@kernel.org, robh+dt@kernel.org, tsbogend@alpha.franken.de,
+        john@phrozen.org, gregkh@linuxfoundation.org, gch981213@gmail.com,
+        hackpascal@gmail.com, jiaxun.yang@flygoat.com,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        devel@driverdev.osuosl.org, neil@brown.name
+Subject: [PATCH v2 0/5] MIPS: ralink: add CPU clock detection and clock gate driver for MT7621
+Date:   Fri, 13 Nov 2020 10:10:41 +0100
+Message-Id: <20201113091046.30964-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 246D4400D1
-X-Spamd-Result: default: False [-0.10 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         ARC_NA(0.00)[];
-         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         ML_SERVERS(-3.10)[213.133.102.83];
-         DKIM_TRACE(0.00)[flygoat.com:+];
-         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
-         RCPT_COUNT_SEVEN(0.00)[8];
-         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
-         RCVD_COUNT_TWO(0.00)[2];
-         MID_RHS_MATCH_FROM(0.00)[];
-         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1]
-X-Rspamd-Server: mail20.mymailcheap.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+This patchset ports CPU clock detection for MT7621 from OpenWrt
+and adds a complete clock plan for the mt7621 SOC.
 
+The documentation for this SOC only talks about two registers
+regarding to the clocks:
+* SYSC_REG_CPLL_CLKCFG0 - provides some information about boostrapped
+refclock. PLL and dividers used for CPU and some sort of BUS (AHB?).
+* SYSC_REG_CPLL_CLKCFG1 - a banch of gates to enable/disable clocks for
+all or some ip cores. 
 
-=E4=BA=8E 2020=E5=B9=B411=E6=9C=8813=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=88=
-11:41:01, Tiezhu Yang <yangtiezhu@loongson=2Ecn> =E5=86=99=E5=88=B0:
->On 11/13/2020 10:21 AM, Jiaxun Yang wrote:
->>
->>
->> =E5=9C=A8 2020/11/12 20:03, Tiezhu Yang =E5=86=99=E9=81=93:
->>> On 11/12/2020 06:09 PM, Jiaxun Yang wrote:
->>>>
->>>>
->>>> =E5=9C=A8 2020/11/12 18:04, Jiaxun Yang =E5=86=99=E9=81=93:
->>>>> Hi Tiezhu,
->>>>>
->>>>> =E5=9C=A8 2020/11/12 16:29, Tiezhu Yang =E5=86=99=E9=81=93:
->>>>>> Add read_persistent_clock64() to read the time from the battery=20
->>>>>> backed
->>>>>> persistent clock=2E With this patch, we can fix the wrong time issu=
-e=20
->>>>>> due
->>>>>> to the system clock is not consistent with hardware clock after=20
->>>>>> resume
->>>>>> from sleep state S3 (suspend to RAM), at the same time, the system=
-=20
->>>>>> time
->>>>>> can be right instead of "Thu Jan 1 08:00:00 CST 1970" without rtc=
-=20
->>>>>> driver=2E
->>>>>>
->>>>>> start_kernel()
->>>>>>    timekeeping_init()
->>>>>>      read_persistent_wall_and_boot_offset()
->>>>>>        read_persistent_clock64()
->>>>>>
->>>>>> timekeeping_resume()
->>>>>>    read_persistent_clock64()
->>>>>>
->>>>>> timekeeping_suspend()
->>>>>>    read_persistent_clock64()
->>>>>
->>>>> It is highly discoraged to do anything with bridgetype, which isn't=
-=20
->>>>> probed via
->>>>> devicetree=2E
->>>>>
->>>>> Please check if you can deal with that inside RTC framework, or=20
->>>>> make it as
->>>>> a part of RTC driver (e=2Eg=2E set up a callback)=2E
->>>>>
->>>>> Also you should submit RTC driver at first if you intend to=20
->>>>> complete LS7A support=2E
->>>>
->>>> Oops,
->>>> Just dig it deeper, I guess simply select RTC_HCTOSYS would solve=20
->>>> the issue=2E
->>>> We're trying very hard to decouple all the drivers and conponents,
->>>> DeviceTree for all!
->>>
->>> +cc WANG Xuerui <git@xen0n=2Ename>
->>>
->>> Hi Jiaxun,
->>>
->>> Thanks for your reply=2E
->>>
->>> Xuerui has already submitted the patch of LS7A rtc driver [1],
->>> but not yet been merged into the mainline kernel, I discussed
->>> with him early today=2E
->>>
->>> Do you mean that read_persistent_clock64() can call the function
->>> like rtc_read_time() defined in rtc driver?
->>
->> I do think select RTC_HCTOSYS after getting RTC driver applied can help=
-=2E
->
->Yes, I agree=2E
->
->> What's your point to have read_persistent_clock64 for Loongson64?
->
->(1) Currently, the LS7A RTC driver has not been merged into the
->mainline kernel, read_persistent_clock64() is useful in the following
->call path:
->
->start_kernel()
->    timekeeping_init()
->      read_persistent_wall_and_boot_offset()
->        read_persistent_clock64()
->
->(2) When the LS7A RTC driver is merged into the mainline kernel
->some time later, if RTC_HCTOSYS and RTC_DRV_LS2X are not set,
->read_persistent_clock64() is also useful unless RTC_HCTOSYS
->and RTC_DRV_LS2X are set by default in Kconfig instead of
->loongson3_defconfig=2E
->
->So I think read_persistent_clock64() looks like a backup function=2E
+No documentation about a probably existant set of dividers for each ip
+core is included in the datasheets. So we cannot make anything better,
+AFAICT.
 
-Still can't understand why this kind of backup is necessary=2E
-If you wish to help please help with the RTC driver=2E
+Looking into driver code, and some openWRT patched there are
+another frequences which are used in some drivers (uart, sd...).
+According to all of this information the clock plan for this
+SoC is set as follows:
+- Main top clock "xtal" from where all the rest of the world is
+derived.
+- CPU clock "cpu" derived from "xtal" frequencies and a bunch of
+register reads and predividers.
+- BUS clock "bus" derived from "cpu" and with (cpu / 4) MHz.
+- Fixed clocks from "xtal":
+    * "50m": 50 MHz.
+    * "125m": 125 MHz.
+    * "150m": 150 MHz.
+    * "250m": 250 MHz.
+    * "270m": 270 MHz.
 
-Duplication is not the way we work=2E
-Please try to learn common solutions, all others are doing so=2E
+We also have a buch of gate clocks with their parents:
+ - "hsdma": "150m"
+ - "fe": "250m"
+ - "sp_divtx": "270m"
+ - "timer": "50m"
+ - "pcm": "270m"
+ - "pio": "50m"
+ - "gdma": "bus"
+ - "nand": "125m"
+ - "i2c": "50m"
+ - "i2s": "270m"
+ - "spi": "bus"
+ - "uart1": "50m"
+ - "uart2": "50m"
+ - "uart3": "50m"
+ - "eth": "50m"
+ - "pcie0": "125m"
+ - "pcie1": "125m"
+ - "pcie2": "125m"
+ - "crypto": "250m"
+ - "shxc": "50m"
 
-Thanks
+There was a previous attempt of doing this here[0] but the author
+(Chuanhong Guo) did not wanted to make assumptions of a clock plan
+for the platform that time. It seems that now he has a better idea of
+how the clocks are dispossed for this SoC so he share code[1] where
+some frequencies and clock parents for the gates are coded from a
+real mediatek private clock plan.
+    
+I do really want this to be upstreamed so according to the comments
+in previous attempt[0] from Oleksij Rempel and the frequencies in
+code[1] I have tried to do this by myself.
 
-- Jiaxun
+All of this patches have been tested in a GNUBee PC1 resulting in a
+working platform.
 
+Changes in v2:
+  - Remove the following patches:
+     * dt: bindings: add mt7621-pll device tree binding documentation.
+     * MIPS: ralink: add clock device providing cpu/ahb/apb clock for mt7621.
+  - Move all relevant clock code to 'drivers/clk/ralink/clk-mt7621.c' and
+    unify there previous 'mt7621-pll' and 'mt7621-clk' into a unique driver
+    and binding 'mt7621-clk'.
+  - Driver is not a platform driver anymore and now make use of 'CLK_OF_DECLARE'
+    because we need clocks available in 'plat_time_init' before setting up
+    the timer for the GIC.
+  - Use new fixed clocks as parents for different gates and deriving from 'xtal'
+    using frequencies in[1].
+  - Adapt dts file and bindings header and documentation for new changes.
+  - Change MAINTAINERS file to only contains clk-mt7621.c code and
+    mediatek,mt7621-clk.yaml file.
 
->
->>
->> Thanks
->>
->> - Jiaxun
->>
->>>
->>> Thanks,
->>> Tiezhu
->>>
->>> [1]=20
->>> https://patchwork=2Ekernel=2Eorg/project/linux-mips/patch/202009230758=
-45=2E360974-2-git@xen0n=2Ename/
->>>
->>>>
->>>>>
->>>>> Thanks=2E
->>>>>
->>>>> - Jiaxun
->>>>>
->>>>>>
->>>>>> Signed-off-by: Yinglu Yang <yangyinglu@loongson=2Ecn>
->>>>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson=2Ecn>
->>>>>> ---
->>>>>>
+[0]: https://www.lkml.org/lkml/2019/7/23/1044
+[1]: https://github.com/981213/linux/commit/2eca1f045e4c3db18c941135464c0d7422ad8133
+
+Sergio Paracuellos (5):
+  dt-bindings: clock: add dt binding header for mt7621 clocks
+  dt: bindings: add mt7621-clk device tree binding documentation
+  clk: ralink: add clock driver for mt7621 SoC
+  staging: mt7621-dts: make use of new 'mt7621-clk'
+  MAINTAINERS: add MT7621 CLOCK maintainer
+
+ .../bindings/clock/mediatek,mt7621-clk.yaml   |  61 ++++
+ MAINTAINERS                                   |   6 +
+ drivers/clk/Kconfig                           |   1 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/ralink/Kconfig                    |  14 +
+ drivers/clk/ralink/Makefile                   |   2 +
+ drivers/clk/ralink/clk-mt7621.c               | 345 ++++++++++++++++++
+ drivers/staging/mt7621-dts/gbpc1.dts          |  11 -
+ drivers/staging/mt7621-dts/mt7621.dtsi        |  72 ++--
+ include/dt-bindings/clock/mt7621-clk.h        |  41 +++
+ 10 files changed, 504 insertions(+), 50 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
+ create mode 100644 drivers/clk/ralink/Kconfig
+ create mode 100644 drivers/clk/ralink/Makefile
+ create mode 100644 drivers/clk/ralink/clk-mt7621.c
+ create mode 100644 include/dt-bindings/clock/mt7621-clk.h
+
+-- 
+2.25.1
+
