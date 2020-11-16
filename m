@@ -2,96 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 967F62B3C4E
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Nov 2020 06:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 496672B3F79
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Nov 2020 10:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725814AbgKPFDL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 Nov 2020 00:03:11 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:47336 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725300AbgKPFDK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 16 Nov 2020 00:03:10 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxetAGCLJf4bQPAA--.24654S2;
-        Mon, 16 Nov 2020 13:03:02 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+        id S1728483AbgKPJIe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Nov 2020 04:08:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728379AbgKPJId (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Nov 2020 04:08:33 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09901C0613CF;
+        Mon, 16 Nov 2020 01:08:33 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id e139so4624885lfd.1;
+        Mon, 16 Nov 2020 01:08:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kzUvZq0RkKZk3WfU3fUahsDNWpzd7MnGlgZVNqSYumY=;
+        b=VKdzzi39I3BJCGaAJx31QiXuBZCuWSe28Zh6ePDQs5pI8/oj8UV6c8FDbbmbX++Zlz
+         iO5r0hdrytHg554BDOvcuPA76WldV/JKCFtuJkJgAs6YNCJe7UPOdkV2DTnuX9Eufz2S
+         zz/wwDFTFjI/ylJhHCIVzkY4447aA4RLbFfdghB3CxZO/7ZctQw9VlmZ9Io/ZGp+5T6e
+         fW4kXs7r1q0vPxx0O5Pu3jUkSLploq97YR4RJGT23nl41F1TY7A2eS2NsE9dTHZIVXnS
+         0GwqIGpmlC9AfS8uY8a3RH2tZ8Z3FdaKMoZagZxkMK3iHtU01MfJOM6a+CFEp3ik11Lw
+         Dz1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=kzUvZq0RkKZk3WfU3fUahsDNWpzd7MnGlgZVNqSYumY=;
+        b=tVkGvaS/RxGWY6ovAG6gxOu8dWlIF5QhlyOc3ZFrkipJT1j3xXgto1vwKXpOMalAZ2
+         slqUw5/hV5gl0oS2pW8P5k5dRV64r0sqE7Pa6pfd6pNTGmQlNe8DUZp8EcEvOEF5cP+I
+         x1pwCmil3LoH/dvCh6rc5+X/xARYhyc0ijiq96TjTQ5jnewpcWxRHbKKMAxoA3TKb+kv
+         n8p11YW8yFvaZAJ9uhgbKyuclBRDOh9plOSnxP3aD9/py+JwtEfio2Wlv1R0CgORg10g
+         ET7r5Eg8vZEjAqV/IrmKKzn0NFOSSsQ7s1ZZEVI94/oG1HZBKMg+9nXhflr0/itnty/n
+         r/Eg==
+X-Gm-Message-State: AOAM532X7T25d7e4LzkpCmW4xfBG9B0hhU9uXiVJR7XF3HirRDp7IbpY
+        4P44iA6xSCao/wOAGfBpL/xv7+6vuoo=
+X-Google-Smtp-Source: ABdhPJzjX3Ktbj9rIuoS7M93kmCjOK50JLz6uRplm90LKu1na2zN/uG3cFbnD89Ltln3/XtvrBMGEA==
+X-Received: by 2002:a19:2407:: with SMTP id k7mr5428878lfk.533.1605517711522;
+        Mon, 16 Nov 2020 01:08:31 -0800 (PST)
+Received: from ?IPv6:2a00:1fa0:2fb:950d:1831:3fc8:8cb7:2cac? ([2a00:1fa0:2fb:950d:1831:3fc8:8cb7:2cac])
+        by smtp.gmail.com with ESMTPSA id k23sm2637670ljh.95.2020.11.16.01.08.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Nov 2020 01:08:31 -0800 (PST)
+Subject: Re: [RFC PATCH] MIPS: Kconfig: Select ARCH_WANT_FRAME_POINTERS
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [RFC PATCH] MIPS: Kconfig: Select ARCH_WANT_FRAME_POINTERS
-Date:   Mon, 16 Nov 2020 13:03:00 +0800
-Message-Id: <1605502980-31946-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9AxetAGCLJf4bQPAA--.24654S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFWrAFW3KF4UWF43uryrXrb_yoW8CFWUpw
-        s0k3WDKrW8Way8KF48ArW8ury5X3s3GrW3CFs7t345A3Z5uasYqrnaqF1UWFy2gr1ktay8
-        XF9a934jqF4vk3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        WwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUeHUDDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+References: <1605502980-31946-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <62ea9838-70ce-ca73-7dae-e94620956ab5@gmail.com>
+Date:   Mon, 16 Nov 2020 12:08:26 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.3
+MIME-Version: 1.0
+In-Reply-To: <1605502980-31946-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Select ARCH_WANT_FRAME_POINTERS to fix the following build error under
-CONFIG_DEBUG_ATOMIC_SLEEP:
+Hello!
 
-  CC      arch/mips/kernel/signal.o
-{standard input}: Assembler messages:
-{standard input}:1775: Error: Unable to parse register name $fp
-scripts/Makefile.build:283: recipe for target 'arch/mips/kernel/signal.o' failed
-make[2]: *** [arch/mips/kernel/signal.o] Error 1
-scripts/Makefile.build:500: recipe for target 'arch/mips/kernel' failed
-make[1]: *** [arch/mips/kernel] Error 2
-Makefile:1799: recipe for target 'arch/mips' failed
-make: *** [arch/mips] Error 2
+On 16.11.2020 8:03, Tiezhu Yang wrote:
 
-I think it is useful to get debugging information as described in the
-following texts:
+> Select ARCH_WANT_FRAME_POINTERS to fix the following build error under
+> CONFIG_DEBUG_ATOMIC_SLEEP:
+> 
+>    CC      arch/mips/kernel/signal.o
+> {standard input}: Assembler messages:
+> {standard input}:1775: Error: Unable to parse register name $fp
+> scripts/Makefile.build:283: recipe for target 'arch/mips/kernel/signal.o' failed
+> make[2]: *** [arch/mips/kernel/signal.o] Error 1
+> scripts/Makefile.build:500: recipe for target 'arch/mips/kernel' failed
+> make[1]: *** [arch/mips/kernel] Error 2
+> Makefile:1799: recipe for target 'arch/mips' failed
+> make: *** [arch/mips] Error 2
+> 
+> I think it is useful to get debugging information as described in the
+> following texts:
+> 
+> lib/Kconfig.debug
+> config FRAME_POINTER
+>          bool "Compile the kernel with frame pointers"
+>          ...
+>          default y if (DEBUG_INFO && UML) || ARCH_WANT_FRAME_POINTERS
+>          help
+>            If you say Y here the resulting kernel image will be slightly
+>            larger and slower, but it gives very useful debugging information
+>            in case of kernel bugs. (precise oopses/stacktraces/warnings)
+> 
+> Documentation/dev-tools/kgdb.rst
+> This option inserts code to into the compiled executable which saves
 
-lib/Kconfig.debug
-config FRAME_POINTER
-        bool "Compile the kernel with frame pointers"
-        ...
-        default y if (DEBUG_INFO && UML) || ARCH_WANT_FRAME_POINTERS
-        help
-          If you say Y here the resulting kernel image will be slightly
-          larger and slower, but it gives very useful debugging information
-          in case of kernel bugs. (precise oopses/stacktraces/warnings)
+    So to or into? :-)
 
-Documentation/dev-tools/kgdb.rst
-This option inserts code to into the compiled executable which saves
-the frame information in registers or on the stack at different points
-which allows a debugger such as gdb to more accurately construct stack
-back traces while debugging the kernel.
+> the frame information in registers or on the stack at different points
+> which allows a debugger such as gdb to more accurately construct stack
+> back traces while debugging the kernel.
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+[...]
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index ddaff19..4a4c791 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -15,6 +15,7 @@ config MIPS
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-+	select ARCH_WANT_FRAME_POINTERS
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select BUILDTIME_TABLE_SORT
- 	select CLONE_BACKWARDS
--- 
-2.1.0
-
+MBR, Sergei
