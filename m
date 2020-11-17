@@ -2,67 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5E72B5D17
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Nov 2020 11:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18EE2B5E97
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Nov 2020 12:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727846AbgKQKkl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Nov 2020 05:40:41 -0500
-Received: from elvis.franken.de ([193.175.24.41]:37962 "EHLO elvis.franken.de"
+        id S1727940AbgKQLsG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Nov 2020 06:48:06 -0500
+Received: from elvis.franken.de ([193.175.24.41]:38091 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727811AbgKQKkk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 17 Nov 2020 05:40:40 -0500
+        id S1726853AbgKQLsG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 17 Nov 2020 06:48:06 -0500
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1keyPb-00016U-00; Tue, 17 Nov 2020 11:40:35 +0100
+        id 1kezSu-00020u-00; Tue, 17 Nov 2020 12:48:04 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id DF346C0211; Tue, 17 Nov 2020 11:40:06 +0100 (CET)
-Date:   Tue, 17 Nov 2020 11:40:06 +0100
+        id A39BDC0216; Tue, 17 Nov 2020 12:47:31 +0100 (CET)
+Date:   Tue, 17 Nov 2020 12:47:31 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/4] MIPS: kvm: Use vm_get_page_prot to get protection
- bits
-Message-ID: <20201117104006.GA9345@alpha.franken.de>
-References: <20201113110952.68086-1-tsbogend@alpha.franken.de>
- <20201113110952.68086-2-tsbogend@alpha.franken.de>
- <CAAhV-H7Sc6tmsfRcxOkx3rPk85Ey6XtxqhDB0RWokk+XSGVJ9A@mail.gmail.com>
- <20201116123009.GA7555@alpha.franken.de>
- <CAAhV-H57XNHurOYw8PG4=praXEWQ7h_TKM08cGBVRgAth1Rx1A@mail.gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: kernel: Fix for_each_memblock conversion
+Message-ID: <20201117114731.GA9498@alpha.franken.de>
+References: <20201116174516.144243-1-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAhV-H57XNHurOYw8PG4=praXEWQ7h_TKM08cGBVRgAth1Rx1A@mail.gmail.com>
+In-Reply-To: <20201116174516.144243-1-tsbogend@alpha.franken.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 09:18:15AM +0800, Huacai Chen wrote:
-> Hi, Thomas,
+On Mon, Nov 16, 2020 at 06:45:15PM +0100, Thomas Bogendoerfer wrote:
+> The loop over all memblocks works with PFN numbers and not physical
+> addresses, so we need for_each_mem_pfn_range().
 > 
-> On Mon, Nov 16, 2020 at 8:35 PM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> >
-> > On Sat, Nov 14, 2020 at 03:34:14PM +0800, Huacai Chen wrote:
-> > > Hi, Thomas,
-> > >
-> > > On Fri, Nov 13, 2020 at 7:13 PM Thomas Bogendoerfer
-> > > <tsbogend@alpha.franken.de> wrote:
-> > > >
-> > > > MIPS protection bits are setup during runtime so using defines like
-> > > > PAGE_SHARED ignores this runtime changes. Using vm_get_page_prot
-> > > > to get correct page protection fixes this.
-> > > Is there some visible bugs if without this fix?
-> >
-> > no exec isn't enabled for these mappings, if cpu supports it.
-> The whole series wants to set XI if supported?
+> Fixes: b10d6bca8720 ("arch, drivers: replace for_each_membock() with for_each_mem_range()")
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> ---
+>  arch/mips/kernel/setup.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-that and RI where possible. I want to get rid of the PAGE_* defines,
-because they lead to forgetting about RI and XI protection map setup,
-which doesn't use the defines and would need another set of defines.
-So by using only protection_map[] everything goes via one place.
+applied to mips-fixes.
 
 Thomas.
 
