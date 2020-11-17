@@ -2,81 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21752B55B4
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Nov 2020 01:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2582B5629
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Nov 2020 02:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730772AbgKQA2r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 Nov 2020 19:28:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46656 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730202AbgKQA2q (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 16 Nov 2020 19:28:46 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94E7F2465E;
-        Tue, 17 Nov 2020 00:28:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605572926;
-        bh=6yaImKJKzBRBADUskb41q+3HaRMkDUkwEqn+lqXHavg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=x1o9AuWesC2uZjJPilV7I9Pm7Alcm325vJ3rY/GxL1pBjzoen7daBt+KUGwMjzrkW
-         qfp6Fwl9kl/oVIEctfU7RCnug3TVh7YDRsFi43ERyxFqxyq/UWvUIc/Xz6XEosD/D/
-         ebTcW0+/l5CH0oIPMlyCRCDYVW80GCJFwh6FhAV4=
-Date:   Mon, 16 Nov 2020 16:28:44 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v1 net-next] net: dsa: qca: ar9331: add ethtool stats
- support
-Message-ID: <20201116162844.7b503b13@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201117001005.b7o7fytd2stawrm7@skbuf>
-References: <20201115073533.1366-1-o.rempel@pengutronix.de>
-        <20201116133453.270b8db5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20201116222146.znetv5u2q2q2vk2j@skbuf>
-        <20201116143544.036baf58@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20201116230053.ddub7p6lvvszz7ic@skbuf>
-        <20201116151347.591925ca@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20201116232731.4utpige7fguzghsi@skbuf>
-        <7cb26c4f-0c5d-0e08-5bbe-676f5d66a858@gmail.com>
-        <20201116160213.3de5280c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20201117001005.b7o7fytd2stawrm7@skbuf>
+        id S1726387AbgKQBS2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Nov 2020 20:18:28 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:44032 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726611AbgKQBS2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Nov 2020 20:18:28 -0500
+Received: by mail-io1-f66.google.com with SMTP id o11so19465415ioo.11;
+        Mon, 16 Nov 2020 17:18:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0FWAP333w94hyR1l4hvmRMbP8VukKi52sst6NEV009g=;
+        b=qSjKN1YIIVwcXqoLWCJ9f/reVaI7Vtj4ZzAii+hmXOfSB8ghzEHqCdeDf4pXFcpO8o
+         xHEvUP0JrrcI73NNz9lTKsZpXl0MUZOEGTW47W3FMLuWvhDDrOF3KozTgKYUInSiwKNW
+         59xigv1TGzlzkS4DNBIW5v2HkbB5NhR4+8TH1GTq+iJZd9v3AoVEa7or7noJS59Bw9OR
+         +eqR5BY0LPFnMSOpWMkYNQEaQwJ8vEgWU2sIuHuV8hgj4xm9C4zVsQ4bN6wV2GOPDT07
+         At5xFZPobgSsbpUk6iJ33CIVoJnMuWfqtV3Ou2GbG5sYGWw6i2Bz/d8AfweBtf+pKAaz
+         Hrqw==
+X-Gm-Message-State: AOAM532+B1CfpvAlkl6yfODKkyFFFIlnOpTWaCjLkAJ3dob5QERCVLV+
+        M1oWlM0W446TG+kQM/dnXfI2fsHCrpNi8fqi9sg=
+X-Google-Smtp-Source: ABdhPJx2FY24KGOnWg678c/JvQfGvSMNswqrUSVq4vpE1J1Qku21XhcfegU08YzERDaLb3KcCespJK0dJfWJeV14uq8=
+X-Received: by 2002:a02:9987:: with SMTP id a7mr1896651jal.38.1605575907625;
+ Mon, 16 Nov 2020 17:18:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20201113110952.68086-1-tsbogend@alpha.franken.de>
+ <20201113110952.68086-2-tsbogend@alpha.franken.de> <CAAhV-H7Sc6tmsfRcxOkx3rPk85Ey6XtxqhDB0RWokk+XSGVJ9A@mail.gmail.com>
+ <20201116123009.GA7555@alpha.franken.de>
+In-Reply-To: <20201116123009.GA7555@alpha.franken.de>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Tue, 17 Nov 2020 09:18:15 +0800
+Message-ID: <CAAhV-H57XNHurOYw8PG4=praXEWQ7h_TKM08cGBVRgAth1Rx1A@mail.gmail.com>
+Subject: Re: [PATCH 2/4] MIPS: kvm: Use vm_get_page_prot to get protection bits
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 17 Nov 2020 02:10:05 +0200 Vladimir Oltean wrote:
-> On Mon, Nov 16, 2020 at 04:02:13PM -0800, Jakub Kicinski wrote:
-> > For a while now we have been pushing back on stats which have a proper
-> > interface to be added to ethtool -S. So I'd expect the list of stats
-> > exposed via ethtool will end up being shorter than in this patch.  
-> 
-> Hmm, not sure if that's ever going to be the case. Even with drivers
-> that are going to expose standardized forms of counters, I'm not sure
-> it's going to be nice to remove them from ethtool -S.
+Hi, Thomas,
 
-Not remove, but also not accept adding them to new drivers.
+On Mon, Nov 16, 2020 at 8:35 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Sat, Nov 14, 2020 at 03:34:14PM +0800, Huacai Chen wrote:
+> > Hi, Thomas,
+> >
+> > On Fri, Nov 13, 2020 at 7:13 PM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > >
+> > > MIPS protection bits are setup during runtime so using defines like
+> > > PAGE_SHARED ignores this runtime changes. Using vm_get_page_prot
+> > > to get correct page protection fixes this.
+> > Is there some visible bugs if without this fix?
+>
+> no exec isn't enabled for these mappings, if cpu supports it.
+The whole series wants to set XI if supported?
 
-> Testing teams all
-> over the world have scripts that grep for those. Unfortunately I think
-> ethtool -S will always remain a dumping ground of hell, and the place
-> where you search for a counter based on its name from the hardware block
-> guide as opposed to its standardized name/function. And that might mean
-> there's no reason to not accept Oleksij's patch right away. Even if he
-> might volunteer to actually follow up with a patch where he exposes the
-> .ndo_get_stats64 from DSA towards drivers, as well as implements
-> .ndo_has_offload_stats and .ndo_get_offload_stats within DSA, that will
-> most likely be done as separate patches to this one, and not change in
-> any way how this patch looks.
+Huacai
 
+
+Huacai
+
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
