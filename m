@@ -2,65 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3472B6C76
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Nov 2020 19:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 763882B6EC1
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Nov 2020 20:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728424AbgKQSCE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Nov 2020 13:02:04 -0500
-Received: from elvis.franken.de ([193.175.24.41]:38928 "EHLO elvis.franken.de"
+        id S1729842AbgKQTe3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Nov 2020 14:34:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43492 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729970AbgKQSCD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 17 Nov 2020 13:02:03 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kf5In-0001Ut-00; Tue, 17 Nov 2020 19:02:01 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 50FCAC021B; Tue, 17 Nov 2020 19:01:54 +0100 (CET)
-Date:   Tue, 17 Nov 2020 19:01:54 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v5.10
-Message-ID: <20201117180154.GA21834@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1725613AbgKQTe2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 17 Nov 2020 14:34:28 -0500
+Subject: Re: [GIT PULL] MIPS fixes for v5.10
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605641668;
+        bh=tKEDe5MxwNibbClhcIegT3aKwMfUHeGrIF8LeV0sSDA=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=HgSXRAqHgfDtwLRDIxFxJOn0pzyeN7p30bnF8cv3eMYXty5pmulDuiAkbfzzz4MSG
+         qa8shQ4dVQAj+oC5Y/jX9Yjcao36tWzMIMvO8IxDQXkSv45fZpIWzmaQbcvu6EXJrw
+         eeXoTBP/Xb6GnAl6rZf2S8Csz6G7gx6z57b+Up/8=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20201117180154.GA21834@alpha.franken.de>
+References: <20201117180154.GA21834@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20201117180154.GA21834@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_fixes_5.10_1
+X-PR-Tracked-Commit-Id: ac3b57adf87ad9bac7e33ca26bbbb13fae1ed62b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ed129cd75ac1073f32d04d0f2012ede40e86fb77
+Message-Id: <160564166838.32053.16963618402890344314.pr-tracker-bot@kernel.org>
+Date:   Tue, 17 Nov 2020 19:34:28 +0000
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+The pull request you sent on Tue, 17 Nov 2020 19:01:54 +0100:
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_fixes_5.10_1
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ed129cd75ac1073f32d04d0f2012ede40e86fb77
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_fixes_5.10_1
+Thank you!
 
-for you to fetch changes up to ac3b57adf87ad9bac7e33ca26bbbb13fae1ed62b:
-
-  MIPS: Alchemy: Fix memleak in alchemy_clk_setup_cpu (2020-11-17 12:53:57 +0100)
-
-----------------------------------------------------------------
-- fix bug preventing booting on several platforms
-- fix for build error, when modules need has_transparent_hugepage
-- fix for memleak in alchemy clk setup
-
-----------------------------------------------------------------
-Randy Dunlap (1):
-      MIPS: export has_transparent_hugepage() for modules
-
-Thomas Bogendoerfer (1):
-      MIPS: kernel: Fix for_each_memblock conversion
-
-Zhang Qilong (1):
-      MIPS: Alchemy: Fix memleak in alchemy_clk_setup_cpu
-
- arch/mips/alchemy/common/clock.c | 9 ++++++++-
- arch/mips/kernel/setup.c         | 6 +++---
- arch/mips/mm/tlb-r4k.c           | 1 +
- 3 files changed, 12 insertions(+), 4 deletions(-)
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
