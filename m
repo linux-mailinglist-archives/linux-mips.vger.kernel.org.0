@@ -2,137 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A80A02D098A
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Dec 2020 04:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C5E2D0B42
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Dec 2020 08:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727393AbgLGDsF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 6 Dec 2020 22:48:05 -0500
-Received: from terminus.zytor.com ([198.137.202.136]:52205 "EHLO
-        terminus.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgLGDsF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 6 Dec 2020 22:48:05 -0500
-X-Greylist: delayed 643 seconds by postgrey-1.27 at vger.kernel.org; Sun, 06 Dec 2020 22:48:04 EST
-Received: from [IPv6:2601:646:8680:a581:458a:7aa1:7e4f:150e] ([IPv6:2601:646:8680:a581:458a:7aa1:7e4f:150e])
-        (authenticated bits=0)
-        by mail.zytor.com (8.15.2/8.15.2) with ESMTPSA id 0B73aNsS2299624
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Sun, 6 Dec 2020 19:36:25 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 0B73aNsS2299624
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2020112401; t=1607312188;
-        bh=wbkAToI/itQ/qNYtHwZIZR/QpPQ/3vZmoTo1c2ql5ks=;
-        h=Date:In-Reply-To:References:Subject:To:CC:From:From;
-        b=fCnbIQHXFuq8mQbOol2dRg9W8bNR+/a4dfcteKrs0tvV2zKs/1yPVLpxCdpe8/5+f
-         UStv2U3tuz7je57z+evG7sLms9YlFYyg0ZW/VT5gBv3JS6gpVX/U5U4q8qO8zolcLU
-         iLjO7vk9H8MKQFqWC1/SE3cxavJz+V2TNr4BAwwUuMmu7uP62uJixEn95bHoqrqvoq
-         6GHdVn8rRYYGT+/focPsP8EhIh04YeIN2PNNY1YyUlQWjITGwxOWUrlpaDHJ+JLOAF
-         S8+we7tGZbmOGaw8EJhCXDYftHc2XpYCJNxQ5/b1deQykRgQIuU6oTSyDAO8/YTST2
-         GYX+oi/krzRFg==
-Date:   Sun, 06 Dec 2020 19:36:15 -0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20201206032305.GD3579531@ZenIV.linux.org.uk>
-References: <20201203214529.GB3579531@ZenIV.linux.org.uk> <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com> <20201203230336.GC3579531@ZenIV.linux.org.uk> <20201206032305.GD3579531@ZenIV.linux.org.uk>
+        id S1725918AbgLGHqG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Dec 2020 02:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgLGHqF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Dec 2020 02:46:05 -0500
+X-Greylist: delayed 79644 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Dec 2020 23:45:25 PST
+Received: from orcam.me.uk (unknown [IPv6:2001:4190:8020::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F49DC0613D0
+        for <linux-mips@vger.kernel.org>; Sun,  6 Dec 2020 23:45:25 -0800 (PST)
+Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
+        by orcam.me.uk (Postfix) with ESMTPS id 1CD242BE0EC
+        for <linux-mips@vger.kernel.org>; Mon,  7 Dec 2020 07:45:24 +0000 (GMT)
+Date:   Thu, 19 Nov 2020 13:28:00 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
+cc:     Fredrik Noring <noring@nocrew.org>, linux-mips@vger.kernel.org,
+        Andreas Jaeger <aj@suse.de>, Nick Clifton <nickc@redhat.com>,
+        =?UTF-8?Q?J=C3=BCrgen_Urban?= <JuergenUrban@gmx.de>,
+        libc-help@sourceware.org
+Subject: Re: [PATCH 002/120] MIPS: R5900: Trap the RDHWR instruction as an
+ SQ address exception
+In-Reply-To: <2767f5c3-4e89-6543-34f7-6cd1a1be8c23@amsat.org>
+Message-ID: <alpine.LFD.2.21.2011191241410.656242@eddie.linux-mips.org>
+References: <cover.1567326213.git.noring@nocrew.org> <4f856a5ea2c039c6639df875d11b5bff1bf7ecd2.1567326213.git.noring@nocrew.org> <2767f5c3-4e89-6543-34f7-6cd1a1be8c23@amsat.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCHSET] saner elf compat
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-From:   hpa@zytor.com
-Message-ID: <0FF0E78B-6D38-43BD-8E64-CC9360903B2D@zytor.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On December 5, 2020 7:23:05 PM PST, Al Viro <viro@zeniv=2Elinux=2Eorg=2Euk>=
- wrote:
->On Thu, Dec 03, 2020 at 11:03:36PM +0000, Al Viro wrote:
->> > >  The answer (for mainline) is that mips compat does *NOT* want
->> > > COMPAT_BINFMT_ELF=2E  Not a problem with that series, though, so
->I'd
->> > > retested it (seems to work, both for x86_64 and mips64, execs and
->> > > coredumps for all ABIs alike), with centralization of Kconfig
->logics
->> > > thrown in=2E
->> >=20
->> > Well, the diffstat looks nice:
->> >=20
->> > >  26 files changed, 127 insertions(+), 317 deletions(-)
->> >=20
->> > and the patches didn't trigger anything for me, but how much did
->this
->> > get tested? Do you actually have both kinds of 32-bit elf mips
->> > binaries around and a machine to test on?
->>=20
->> Yes (aptitude install gcc-multilib on debian mips64el/stretch sets
->the toolchain
->> and libraries just fine, and then it's just a matter of -mabi=3Dn32
->passed
->> to gcc)=2E  "Machine" is qemu-system-mips64el -machine malta -m 1024
->-cpu 5KEc
->> and the things appear to work; I hadn't tried that on the actual
->hardware=2E
->> I do have a Loongson-2 box, but it would take a while to dig it out
->and
->> get it up-to-date=2E
->>=20
->> > Linux-mips was cc'd, but I'm adding Thomas B to the cc here
->explicitly
->> > just so that he has a heads-up on this thing and can go and look at
->> > the mailing list in case it goes to a separate mailbox for him=2E=2E
->>=20
->> I would certainly appreciate review and testing - this branch sat
->> around in the "should post it someday" state since June (it was
->> one of the followups grown from regset work back then), and I'm
->> _not_ going to ask pulling it without an explicit OK from mips
->> folks=2E
->
->BTW, there's something curious going on in ELF binary recognition for
->x32=2E  Unlike other 64bit architectures, here we have a 32bit binary
->that successfully passes the native elf_check_arch()=2E  Usually we
->either have different EM_=2E=2E=2E values for 64bit and 32bit (e=2Eg=2E f=
-or ppc
->and sparc) or we have an explicit check for ->e_ident[EI_CLASS]
->having the right value (ELFCLASS32 or ELFCLASS64 for 32bit and 64bit
->binaries resp=2E)
->
->For x32 that's not true - we use EM_X86_64 for ->e_machine and that's
->the only thing the native elf_check_arch() is looking at=2E  IOW,
->it looks like amd64 elf_load_binary() progresses past elf_check_arch()
->for x32 binaries=2E  And gets to load_elf_phdrs(), which would appear
->to have a check of its own that should reject the sucker:
->        /*
->         * If the size of this structure has changed, then punt, since
->         * we will be doing the wrong thing=2E
->         */
->        if (elf_ex->e_phentsize !=3D sizeof(struct elf_phdr))
->                goto out;
->After all, ->e_phentsize is going to be 32 (sizeof(struct elf32_phdr)
->rather than expected 56 (sizeof(struct elf64_phdr)) and off we bugger,
->even though it happens at slightly later point than usual=2E  Except that
->we are looking at struct elf64_hdr ->e_phentsize - in struct elf32_hdr=2E
->I=2Ee=2E at offset 54, two bytes past the end of in-file struct elf32_hdr=
-=2E
->
->Usually we won't find 0x38 0x00 in that location, so everything works,
->but IMO that's too convoluted=2E
->
->Peter, is there any reason not to check ->ei_ident[EI_CLASS] in
->amd64 elf_check_arch()?  It's a 1-byte load from hot cacheline
->(offset 4 and we'd just read the 4 bytes at offsets 0=2E=2E3) +
->compare + branch not taken, so performance impact is pretty much
->nil=2E  I'm not saying it's a security problem or anything of that
->sort, just that it makes the analysis more subtle than it ought
->to be=2E=2E=2E
->
->Is it about some malformed homegrown 64bit binaries with BS value
->at offset 4?  Confused=2E=2E=2E
+On Thu, 19 Nov 2020, Philippe Mathieu-Daudé wrote:
 
-I can't think of any=2E
---=20
-Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
+> > On the R5900, the RDHWR instruction is interpreted as the R5900 specific
+> > SQ instruction[1] that traps into a zero page address exception. Hence
+> > RDHWR can be emulated by emulate_load_store_insn().
+> 
+> Please bare with me because this is not my area, but this does
+> not look the correct way to fix this problem to me.
+> 
+> The R5900 is a MIPS-III, so I don't understand why we have to care
+> about RDHWR.
+
+ The use of RDHWR, actual or emulated, is a part of the MIPS TLS psABI, 
+see: <https://www.linux-mips.org/wiki/NPTL>, in particular starting from: 
+<https://www.linux-mips.org/wiki/NPTL#Design_Choices> and throughout (the 
+expired certificate of the web site is a known issue, but there is 
+currently no way to get it fixed as nobody knows where Ralf Baechle has 
+gone).
+
+> IIRC MIPS TLS support has been added in glibc with MIPS32 ISA in
+> mind in 2005:
+> https://sourceware.org/git/?p=glibc.git;a=commit;h=f850220be6
+> 
+> MIPS16 is handled differently:
+> https://sourceware.org/git/?p=glibc.git;a=blobdiff;f=ports/sysdeps/mips/tls-macros.h;h=3e87e42ea;hp=8fe2e4a150d;hb=43301bd3c2;hpb=85bd816a60
+> 
+> Shouldn't we have a similar set of macros for the R5900?
+
+ The macros are there to support different instructions used to access 
+data within TLS.  However the TLS pointer still has to be fetched with 
+RDHWR, and READ_THREAD_POINTER does exactly that, by calling the 
+`__builtin_thread_pointer' intrinsic in the MIPS16 case.  How it works is 
+explained in GCC sources, in gcc/config/mips/mips.md:
+
+;; In MIPS16 mode, the TLS base pointer is accessed by a
+;; libgcc helper function __mips16_rdhwr(), as 'rdhwr' is not
+;; accessible in MIPS16.
+;;
+;; This is not represented as a call insn, to avoid the
+;; unnecesarry clobbering of caller-save registers by a
+;; function consisting only of: "rdhwr $3,$29; j $31; nop;"
+;;
+;; A $25 clobber is added to cater for a $25 load stub added by the
+;; linker to __mips16_rdhwr when the call is made from non-PIC code.
+
+-- that is a small piece of regular MIPS code is called, which executes 
+RDHWR.
+
+> The problem I have is this break running the binaries built
+> by the Sony Linux Toolkit for Playstation 2 which use the
+> LQ/SQ instruction:
+> 
+>  1b00d5c:       0c6c00d4        jal     0x1b00350
+>  1b00d60:       7fa90020        sq      t1,32(sp)
+>  1b00d64:       a2710000        sb      s1,0(s3)
+>  1b00d68:       26730001        addiu   s3,s3,1
+>  1b00d6c:       10000004        b       0x1b00d80
+>  1b00d70:       7ba90020        lq      t1,32(sp)
+>  1b00d74:       00000000        nop
+>  1b00d78:       2617ffff        addiu   s7,s0,-1
+>  1b00d7c:       25360001        addiu   s6,t1,1
+>  1b00d80:       91220000        lbu     v0,0(t1)
+>  1b00d84:       02e0802d        move    s0,s7
+>  1b00d88:       02c0482d        move    t1,s6
+>  1b00d8c:       a2620000        sb      v0,0(s3)
+>  1b00d90:       1600fff9        bnez    s0,0x1b00d78
+>  1b00d94:       26730001        addiu   s3,s3,1
+>  1b00d98:       10000003        b       0x1b00da8
+>  1b00d9c:       01342026        xor     a0,t1,s4
+>  1b00da0:       253e0003        addiu   s8,t1,3
+>  1b00da4:       01342026        xor     a0,t1,s4
+>  1b00da8:       7fa90020        sq      t1,32(sp)
+>  1b00dac:       2c840001        sltiu   a0,a0,1
+>  1b00db0:       0c6c00d4        jal     0x1b00350
+
+ Where exactly do you see a problem, what are the symptoms?  A bug in the 
+emulation cannot be ruled out of course.
+
+ While there indeed is an unfortunate opcode overlap between RDHWR and SQ, 
+the encoding of the specific operands chosen for TLS pointer access is 
+luckily guaranteed to always trap in the user mode, because the address 
+requested when the encoding is interpreted as SQ rather than RDHWR is 
+within the kernel KSEG2 segment:
+
+$ cat rdhwr.s
+	rdhwr	$3, $29
+$ gcc -march=mips32r2 -c rdhwr.s
+$ objdump -d rdhwr.o
+rdhwr.o:     file format elf32-tradlittlemips
+
+
+Disassembly of section .text:
+
+00000000 <.text>:
+   0:	7c03e83b 	rdhwr	v1,$29
+	...
+$ objdump -m mips:5900 -d rdhwr.o
+
+rdhwr.o:     file format elf32-tradlittlemips
+
+
+Disassembly of section .text:
+
+00000000 <.text>:
+   0:	7c03e83b 	sq	v1,-6085(zero)
+	...
+$ 
+
+This is because the HWR read is encoded in bits 15:11 of the instruction 
+word and $29 has the highest bit set, which lands in bit 15 of the 
+instruction word, meaning that the offset encoded in bits 15:0 used where 
+the instruction word is interpreted as SQ is negative.  And then bits 
+25:21 are hardwired to 0 in the encoding of RDHWR and they correspond to 
+the base register encoding with SQ, meaning that it will be interpreted as 
+$zero.  So the address ultimately requested is -6085 => 0xffffffffffffe83b 
+(the R5900 uses 32-bit addressing and ignores address bits 63:32, but that 
+does not matter here; this is KSEG2 either way).
+
+ Consequently an AdES exception is triggered which we can trap and handle, 
+reinterpreting the encoding according to our needs and return the TLS 
+pointer in $v1 rather than issuing a SIGBUS.  So you are not expected to 
+see any issue unless there is a security erratum in the R5900 as well and 
+the encoding does not cause an exception for some reason.
+
+ This of course disagrees with what Fredrik wrote in the quotation above, 
+as it's the last page rather than the zeroth that is accessed, but the net 
+effect is the same, or even better.
+
+  Maciej
+
