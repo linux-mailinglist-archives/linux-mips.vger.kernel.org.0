@@ -2,82 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BCE2B8EEF
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Nov 2020 10:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7922B8EF6
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Nov 2020 10:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgKSJbn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Nov 2020 04:31:43 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:56604 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726826AbgKSJbm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Nov 2020 04:31:42 -0500
-Received: from [10.130.0.170] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD9N4O7Zfz6kSAA--.38102S3;
-        Thu, 19 Nov 2020 17:31:36 +0800 (CST)
-Subject: Re: [PATCH 3/3] MIPS: KASLR: Make relocation_address can be
- configured
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <1605752954-10368-1-git-send-email-hejinyang@loongson.cn>
- <1605752954-10368-3-git-send-email-hejinyang@loongson.cn>
- <7e6d428d-cf5d-e2ac-93fa-4996adc2defe@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <4c56a146-211d-e2ba-4a77-96680a6d39bc@loongson.cn>
-Date:   Thu, 19 Nov 2020 17:31:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1727066AbgKSJc1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Nov 2020 04:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726599AbgKSJc1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 19 Nov 2020 04:32:27 -0500
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8D6C0613CF;
+        Thu, 19 Nov 2020 01:32:27 -0800 (PST)
+Received: by mail-il1-x143.google.com with SMTP id t13so4757867ilp.2;
+        Thu, 19 Nov 2020 01:32:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KNYi7k+SD7m8Q6dkb27HJ0eAGPSje9gd3Xmj2AuiEfo=;
+        b=a05oe/+RY1dw3WMRMmVe7SMqPBLJcalWI9jZ1o8ofqpMLY6y6RNxi3sNW5B1aQwuv1
+         2SYwdHkESFN72GFEtQnm8umwx9Uuu39WyCykmR8DkGf5w+vHnywzY5M6P4wldYEhdary
+         Fjh7M524CpZ4VTnT2gcBjxJsdh0e10WezDKUf5KikPMOTiLnU8UudCezsF5EFemV9nuy
+         wnlx4TIVPHE5yadPSTDYv0V8mtKE+cSvtXBSdRwoeKseq4a58ZjNbNOfF5gyf60EPQSE
+         QMWfoFRh9y2hYc7xR3mHSCwWhTbUNfEmzzaMbvPaX3qqXfZzeMzJnlCvDI8JPSh5fRP1
+         uP6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KNYi7k+SD7m8Q6dkb27HJ0eAGPSje9gd3Xmj2AuiEfo=;
+        b=BSJyelEuEnxQZsKyMQ0i/qigHmLJQUulvGmJ2NQ/PBbPxZ4BUSOhJDgcMpDPBWORPL
+         GmsIBgNKi7j8Wyf8ljqVMNlbcqAuY527IN8GX6mOKCNOI5EX79J9lueebzVdxPBy4Akr
+         CYy5wUKf0nVOXtceNiGodHbtST4p7i0GyoP1UJgNpX5PSr8JMUg4ad/iVBfNsoAtTX9p
+         hJroV1eANyJnM8f0JkP/mAZzbb9SX3+UVLgwyjgCerqwpQk8AzRKMwnHKumthLOw93uJ
+         IFPYQoRarlkh7pFPL5immtgDrpT8Q7X+2vSbwKmVxCTm2kM0SuCRlipfssohcCaFdrPz
+         3suQ==
+X-Gm-Message-State: AOAM531N3HaZexnhlKv/FQo9Cs8jtMnE4Ue9W4RPx1mS96GbHZCpHEha
+        B215MTlHrf0yvRc7xRlQqj4euo/bNALaImutWx4=
+X-Google-Smtp-Source: ABdhPJyd3hCc/8+RvwRQKTE0igheO/eHL6J48ND6UrkSHz8YgNeJK2v6pndGgRunYTXpv7qCNQZhEr2EkjXIlBsXRgg=
+X-Received: by 2002:a92:7914:: with SMTP id u20mr20826952ilc.203.1605778346666;
+ Thu, 19 Nov 2020 01:32:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <7e6d428d-cf5d-e2ac-93fa-4996adc2defe@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxD9N4O7Zfz6kSAA--.38102S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrWF4xtFyfCw1rXF18Cr4DJwb_yoWxWrXEg3
-        W7WF1vgrs7Ga4xCr15G3yIqry7uayYva17Gry3JwnF9a40ya47tw18Gr1vvay5A3WUWFy5
-        uayfuF1avr9FvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbIkYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
-        02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
-        6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07j4v3bUUUUU=
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+References: <20201113154632.24973-1-sergio.paracuellos@gmail.com> <20201113154632.24973-4-sergio.paracuellos@gmail.com>
+In-Reply-To: <20201113154632.24973-4-sergio.paracuellos@gmail.com>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Thu, 19 Nov 2020 17:32:16 +0800
+Message-ID: <CAJsYDVL1ZYc=OaCS7_NNu27aUKmpHp63nPuVq1V8xp8s6Vguxw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] clk: ralink: add clock driver for mt7621 SoC
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Weijie Gao <hackpascal@gmail.com>, jiaxun.yang@flygoat.com,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        NeilBrown <neil@brown.name>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Hi!
 
-On 11/19/2020 04:06 PM, Sergei Shtylyov wrote:
-> Hello!
->
-> On 19.11.2020 5:29, Jinyang He wrote:
->
->> When CONFIG_RANDOMIZE_BASE is not set, determine_relocation_address()
->> always returns a constant. It is not friendly to users if the address
->> cannot be used. Make it can be configured at Kconfig.
->
->    Make it configurable?
-Oh, yes. Sorry for the expression.
-0xffffffff81000000 cannot be used on Loongson64 if CONFIG_RANDOMIZE_BASE 
-is disabled.
-It's lower than address of _end. It makes relocation_addr_valid() return 
-0 always.
-
-Thanks!
-Jinyang
-
->> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+On Fri, Nov 13, 2020 at 11:46 PM Sergio Paracuellos
+<sergio.paracuellos@gmail.com> wrote:
 > [...]
->
-> MBR, Sergei
+> diff --git a/drivers/clk/ralink/Makefile b/drivers/clk/ralink/Makefile
+> new file mode 100644
+> index 000000000000..cf6f9216379d
+> --- /dev/null
+> +++ b/drivers/clk/ralink/Makefile
 
+Why ralink? The clock design of mt7621 doesn't seem
+to be part of ralink legacy stuff, and ralink is already
+acquired by mediatek anyway.
+I think it should be put in drivers/clk/mediatek instead.
+
+-- 
+Regards,
+Chuanhong Guo
