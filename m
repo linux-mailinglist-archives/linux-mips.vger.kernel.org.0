@@ -2,137 +2,276 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA57B2BBB94
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Nov 2020 02:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5D42BBEFD
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Nov 2020 13:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728849AbgKUBcl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 Nov 2020 20:32:41 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:60052 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728054AbgKUBcl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 20 Nov 2020 20:32:41 -0500
-Received: from [10.130.0.80] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9MwbrhfhyEUAA--.41443S3;
-        Sat, 21 Nov 2020 09:32:32 +0800 (CST)
-Subject: Re: [RFC PATCH] MIPS: Kconfig: Select ARCH_WANT_FRAME_POINTERS
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-References: <1605502980-31946-1-git-send-email-yangtiezhu@loongson.cn>
- <alpine.LFD.2.21.2011202202290.656242@eddie.linux-mips.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <e91a9885-78cc-b23a-d485-8f68fdfb0222@loongson.cn>
-Date:   Sat, 21 Nov 2020 09:32:32 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1727726AbgKUMml (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 21 Nov 2020 07:42:41 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38967 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727531AbgKUMmk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 21 Nov 2020 07:42:40 -0500
+Received: by mail-oi1-f193.google.com with SMTP id f11so13944384oij.6;
+        Sat, 21 Nov 2020 04:42:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LXozwdRHE+FZ/b1kx40K82ndXVnop5+OHYheS/QS4jo=;
+        b=YvqdqjLCCEqwFv32LV7yA6YjEXsxCx9s6yTqWS7V5PtJpsrfihoMX7Go8eIQqq676U
+         q6gJ+Vw73RCLZZ3gR2IKfUtkk0GBGfqTKBzRWxOAMIXaAaT8SMC9V4cz3bpkofOSHoje
+         1K8lMqVtFDAzIIyr9HqgODpS3/kvYB93/vUYUBsxKKfzgjOrb+N9VgOBgfYYDoeP/teK
+         PamppFssgyCQHkzXOYGitu0aa47WD0akqG4ZIKMY3+JXsr2KC1THwxjZ63vC9k9656fw
+         3jyGo0G9INJ81Q2qc3WHsF5U7NNeH8oDTrRFt2PsRsEmR2WfHPlTPzl8VXxovELM2ySz
+         pUWw==
+X-Gm-Message-State: AOAM5313D6hqgXwZ1JrHDc3sIFT+djJez6m1XET3TB/Y5ISp+EPmh6pA
+        Cyi6c+9aUCZF8eDl5Ym/0Q==
+X-Google-Smtp-Source: ABdhPJyZmtH8yI4iwnUoY7nWj64qFOXfpNj0wrhnUYk0B6zYwkPCqh8WJqMVW1w4lXiO0MnHEnfvKg==
+X-Received: by 2002:a54:4394:: with SMTP id u20mr3639506oiv.70.1605962557518;
+        Sat, 21 Nov 2020 04:42:37 -0800 (PST)
+Received: from xps15 ([2607:fb90:5feb:6270:cdf7:680e:59f2:6ccd])
+        by smtp.gmail.com with ESMTPSA id u4sm1581412ote.71.2020.11.21.04.42.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Nov 2020 04:42:36 -0800 (PST)
+Received: (nullmailer pid 2064982 invoked by uid 1000);
+        Sat, 21 Nov 2020 12:42:28 -0000
+Date:   Sat, 21 Nov 2020 06:42:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 10/18] dt-bindings: usb: Convert DWC USB3 bindings to
+ DT schema
+Message-ID: <20201121124228.GA2039998@robh.at.kernel.org>
+References: <20201111090853.14112-1-Sergey.Semin@baikalelectronics.ru>
+ <20201111090853.14112-11-Sergey.Semin@baikalelectronics.ru>
+ <20201111201423.GA1938179@bogus>
+ <20201112102946.ipcsiidty4ut4kap@mobilestation>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LFD.2.21.2011202202290.656242@eddie.linux-mips.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxr9MwbrhfhyEUAA--.41443S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF47Ww4xGrWDuw4kXw1DWrg_yoW5tw13pw
-        4rKws0yr4DJa4xC3WkAw4Ig34fZws5G3yY9anxKryjyw15Wr1FgrWftrW3uas7Wr1kK3Wj
-        v3s0gry0qw4qy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
-        6r4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
-        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
-        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
-        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JUdb18UUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201112102946.ipcsiidty4ut4kap@mobilestation>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/21/2020 06:37 AM, Maciej W. Rozycki wrote:
-> On Mon, 16 Nov 2020, Tiezhu Yang wrote:
->
->> Select ARCH_WANT_FRAME_POINTERS to fix the following build error under
->> CONFIG_DEBUG_ATOMIC_SLEEP:
->>
->>    CC      arch/mips/kernel/signal.o
->> {standard input}: Assembler messages:
->> {standard input}:1775: Error: Unable to parse register name $fp
->> scripts/Makefile.build:283: recipe for target 'arch/mips/kernel/signal.o' failed
->> make[2]: *** [arch/mips/kernel/signal.o] Error 1
->> scripts/Makefile.build:500: recipe for target 'arch/mips/kernel' failed
->> make[1]: *** [arch/mips/kernel] Error 2
->> Makefile:1799: recipe for target 'arch/mips' failed
->> make: *** [arch/mips] Error 2
->   Your change description does not explain to me what is going on here I am
-> afraid, and based on it I am unable to determine if it is fit for purpose.
->
->   It seems to me like your change papers over an issue by changing code
-> generation somehow with the kernel configuration option selected so that
-> invalid assembly is not produced anymore while invalid assembly should not
-> happen in the first place regardless of the configuration.
->
->   In particular `$fp' is a standard assembly alias for `$30' aka `$s8' and
-> it is expected to work where `$30' or indeed any general-purpose register
-> would:
->
-> #define SYMBOLIC_REGISTER_NAMES \
-> [...]
->      {"$s8",	RTYPE_GP | 30}, \
->      {"$fp",	RTYPE_GP | 30}, \
->      {"$ra",	RTYPE_GP | 31}
->
-> (from gas/config/tc-mips.c) so please show us what the assembly line GAS
-> chokes on looks like in your case.
->
->> Documentation/dev-tools/kgdb.rst
->> This option inserts code to into the compiled executable which saves
->> the frame information in registers or on the stack at different points
->> which allows a debugger such as gdb to more accurately construct stack
->> back traces while debugging the kernel.
->   Hmm, this is what DWARF debug information is for in the context of GDB,
-> and I certainly used to use GDB to debug standard MIPS/Linux kernels built
-> without the use of a separate frame pointer register (which there wasn't a
-> kernel configuration option for back then, though which you obviously
-> still could try to enforce with the use of `-fno-omit-frame-pointer' via
-> CFLAGS) using JTAG probes or simulation some 15 years ago.
->
->   And given the variable layout of the MIPS stack frame (unlike with some
-> psABIs, e.g. Power) the use of `$fp' alone does not let you reconstruct a
-> backtrace, because you cannot infer from the value of `$fp' where to
-> retrieve the value of `$ra' from.  For that you need debug information.
->
->   So the information you quote seems misleading or missing the context.
->
->   NB hardly any MIPS software uses the frame pointer register and all is
-> debuggable regardless; the only actual use for $fp is `alloca', VLAs or
-> similar dynamic frame arrangements.
->
->   So what actual problem are you trying to solve, except for the assembly
-> error, and what is your use case for `$fp' with MIPS kernel debugging?
+On Thu, Nov 12, 2020 at 01:29:46PM +0300, Serge Semin wrote:
+> On Wed, Nov 11, 2020 at 02:14:23PM -0600, Rob Herring wrote:
+> > On Wed, Nov 11, 2020 at 12:08:45PM +0300, Serge Semin wrote:
+> > > DWC USB3 DT node is supposed to be compliant with the Generic xHCI
+> > > Controller schema, but with additional vendor-specific properties, the
+> > > controller-specific reference clocks and PHYs. So let's convert the
+> > > currently available legacy text-based DWC USB3 bindings to the DT schema
+> > > and make sure the DWC USB3 nodes are also validated against the
+> > > usb-xhci.yaml schema.
+> > > 
+> > > Note we have to discard the nodename restriction of being prefixed with
+> > > "dwc3@" string, since in accordance with the usb-hcd.yaml schema USB nodes
+> > > are supposed to be named as "^usb(@.*)".
+> > > 
+> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > 
+> > > ---
+> > > 
+> > > Changelog v2:
+> > > - Discard '|' from the descriptions, since we don't need to preserve
+> > >   the text formatting in any of them.
+> > > - Drop quotes from around the string constants.
+> > > - Fix the "clock-names" prop description to be referring the enumerated
+> > >   clock-names instead of the ones from the Databook.
+> > > 
+> > > Changelog v3:
+> > > - Apply usb-xhci.yaml# schema only if the controller is supposed to work
+> > >   as either host or otg.
+> > > 
+> > > Changelog v4:
+> > > - Apply usb-drd.yaml schema first. If the controller is configured
+> > >   to work in a gadget mode only, then apply the usb.yaml schema too,
+> > >   otherwise apply the usb-xhci.yaml schema.
+> > > - Discard the Rob'es Reviewed-by tag. Please review the patch one more
+> > >   time.
+> > > ---
+> > >  .../devicetree/bindings/usb/dwc3.txt          | 125 --------
+> > >  .../devicetree/bindings/usb/snps,dwc3.yaml    | 303 ++++++++++++++++++
+> > >  2 files changed, 303 insertions(+), 125 deletions(-)
+> > >  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3.txt
+> > >  create mode 100644 Documentation/devicetree/bindings/usb/snps,dwc3.yaml
 
-Hi Maciej,
 
-Thank you very much for your reply and detailed explanation.
+> > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > new file mode 100644
+> > > index 000000000000..079617891da6
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > @@ -0,0 +1,303 @@
+> > > +# SPDX-License-Identifier: GPL-2.0
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Synopsys DesignWare USB3 Controller
+> > > +
+> > > +maintainers:
+> > > +  - Felipe Balbi <balbi@kernel.org>
+> > > +
+> > > +description:
+> > > +  This is usually a subnode to DWC3 glue to which it is connected, but can also
+> > > +  be presented as a standalone DT node with an optional vendor-specific
+> > > +  compatible string.
+> > > +
+> 
+> > > +allOf:
+> > > +  - $ref: usb-drd.yaml#
+> > > +  - if:
+> > > +      properties:
+> > > +        dr_mode:
+> > > +          const: peripheral
 
-The initial aim of this patch is to fix the build error.
-I found this build error used with gcc 4.9.4.
-I try it used with gcc 7.3.1 and it has no problem.
-We can use new gcc version to avoid this build error.
+Another thing, this evaluates to true if dr_mode is not present. You 
+need to add 'required'? If dr_mode is otg, then don't you need to apply 
+both usb.yaml and usb-xhci.yaml?
 
-The other commit message about config and kgdb seems no
-related with the above build error, just give more info
-to discuss.
+> > > +    then:
+> > > +      $ref: usb.yaml#
+> > 
+> > This part could be done in usb-drd.yaml?
+> 
+> Originally I was thinking about that, but then in order to minimize
+> the properties validation I've decided to split the properties in
+> accordance with the USB controllers functionality:
+> 
+>             +----- USB Gadget/Peripheral Controller. There is no
+>             |      specific schema for the gadgets since there is no
+>             |      common gadget properties (at least I failed to find
+>             |      ones). So the pure gadget controllers need to be
+>             |      validated just against usb.yaml schema.
+>             |
+> usb.yaml <--+-- usb-hcd.yaml - Generic USB Host Controller. The schema
+>                 ^              turns out to include the OHCI/UHCI/EHCI
+>                 |              properties, which AFAICS are also
+>                 |              applicable for the other host controllers.
+>                 |              So any USB host controller node needs to
+>                 |              be validated against this schema.
+>                 |
+>                 +- usb-xhci.yaml - Generic xHCI Host controller.
+> 
+> usb-drd.yaml -- USB Dual-Role/OTG Controllers. It describes the
+>                 DRD/OTG-specific properties and nothing else. So normally
+>                 it should be applied together with one of the
+>                 schemas described above.
+> 
+> So the use-cases of the suggested schemas is following:
+> 
+> 1) USB Controller is pure gadget? Then:
+>    + allOf:
+>    +  - $ref: usb.yaml#
+> 2) USB Controller is pure USB host (including OHCI/UHCI/EHCI)?
+>    + allOf:
+>    +   - $ref: usb-hcd.yaml#
+>    Note this prevents us from fixing all the currently available USB DT
+>    schemas, which already apply the usb-hcd.yaml schema.
+> 3) USB Controller is pure xHCI host controller? Then:
+>    + allOf:
+>    +   - $ref: usb-xhci.yaml#
+> 4) USB Controller is Dual-Role/OTG controller with USB 2.0 host? Then:
+>    + allOf:
+>    +   - $ref: usb-drd.yaml#
+>    +   - $ref: usb-hcd.yaml#
+> 5) USB Controller is Dual-Role/OTG controller with xHCI host? Then:
+>    + allOf:
+>    +   - $ref: usb-drd.yaml#
+>    +   - $ref: usb-xhci.yaml#
+> 6) USB Controller is Dual-Role/OTG controller which can only be a
+>    gadget? Then:
+>    + allOf:
+>    +   - $ref: usb-drd.yaml#
+>    +   - $ref: usb.yaml#
+> 
+> * Don't know really if controllers like in 6)-th really exist. Most
+> * likely they are still internally capable of dual-roling, but due to
+> * some conditions can be used as gadgets only.
+> 
+> It looks a bit complicated, but at least by having such design we'd minimize
+> the number of properties validation.
+> 
+> Alternatively we could implement a hierarchy like this (as you, Rob,
+> suggested in the comment above): 
+> 
+>             +-- USB Gadget/Peripheral Controller
+>             |
+>             +-- usb-drd.yaml - USB Dual-Role/OTG Controllers
+>             |   
+> usb.yaml <--+-- usb-dcd.yaml - Generic USB Host Controller
+>                 ^
+>                 |
+>                 +- usb-xhci.yaml - Generic xHCI Host controller
+> 
+> But, for instance, if we got to have an OTG controller with USB 2.0
+> host capability, the schema would have needed to be validated as
+> described in 4) in the list above. That would have caused the usb.yaml
+> schema validation twice.
+> 
+> Of course I could have missed or misunderstood something. So any
+> suggestion, any help with making things easier would be very
+> appreciated. I asked Greg what he was thinking in this matter in
+> the previous patchset thread, but he didn't respond.
+> 
+> > 
+> > > +    else:
+> > > +      $ref: usb-xhci.yaml#
+> > 
+> > I'd really prefer if all the schema can just be applied unconditionally. 
+> > Shouldn't someone (like a bootloader) be able to change dr_mode without 
+> > changing anything else to set the mode? That would imply all the 
+> > schemas can be applied.
+> 
+> Theoretically it's possible, but I don't really know whether it can be
+> practically met. Of course I fully agree with you and it's preferable to
+> simplify the schema by getting rid of the condition if it's possible.
+> 
+> My point of using the conditional schema here has been based
+> on the driver implementation. According to the driver code if OTG mode is
+> enabled by means of the dr_mode property, then the controller can work as
+> either host or gadget. If either host or gadget mode is enabled in
+> the dr_mode property, the mode updating won't be supported. So any
+> properties specific to the unsupported mode will be just ignored.
+> 
+> In addition to that DWC USB3 IP-core can be synthesized with different
+> DWC_USB3_MODE parameter value. The controller can be either device
+> (gadget), or host, or DRD, or HUB. In that case the dr_mode should be
+> set in accordance with that parameter value. It means that the
+> DWC USB3 controller will support the features in accordance with the
+> selected parameter.
+> 
+> Should we really bother with all of that? Could we just apply the
+> schema like: allOf: [$ref: usb-drd.yaml#, $ref: usb-hcd.yaml#] and
+> have the things much easier seeing the host-specific properties aren't
+> required anyway? That's the main question. I've decided to bother,
+> since it give us a better hardware description. If you think it's better
+> to keep things easier, I'll be ok with this. It won't be that
+> contradicting to the hardware capabilities after all.
 
-As I see it now, this RFC patch is meaningless, so please
-ignore it and thank you again.
+Okay, it's probably better to keep things like you have them given 
+there's so many combinations of USB controllers.
 
-Thanks,
-Tiezhu
-
->
->    Maciej
-
+Rob
