@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA762C0601
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Nov 2020 13:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C18782C09F9
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Nov 2020 14:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730142AbgKWM03 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Nov 2020 07:26:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36272 "EHLO mail.kernel.org"
+        id S1730934AbgKWNPQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Nov 2020 08:15:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58332 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730146AbgKWM02 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 23 Nov 2020 07:26:28 -0500
+        id S1730931AbgKWMpC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 23 Nov 2020 07:45:02 -0500
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 743BB2076E;
-        Mon, 23 Nov 2020 12:26:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CBA69208C3;
+        Mon, 23 Nov 2020 12:45:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1606134387;
-        bh=frCVka9YuGqxr2RrDANFnW8tkhiq/VbNt2PTcU9GSGs=;
+        s=korg; t=1606135502;
+        bh=IuBWKROP9wFgKP8IK4xuW06+EcTDWeMX+sEi6RZcoU8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=he2CNP2JfSz3SRBG9V7gwEOPOCXY5CvTJCTBpfjMPVN1bbMSkLAwiYPL/3k3FqxmF
-         ICfkFkdY3JWioWoTZQMBC1Yc4y7wlrHkxM4Y5eXIiagCDWy5N+Ii0qv5y3S8VIf705
-         hSI0ex9rdXllik1LxtJRREQaskl6Wk0bMWGWh3is=
+        b=L4uvSdRVw6BlNLOT7AvsRNOjDzFuaCKVwipvOnOAx7a6SIdWRKue+yFZmVT6RWZPJ
+         YLiTRuKpXMDIr+H3TPJRcNO+P6CgLa5gRBQucqfgLcXEYlgJVdkpdLaO42AS0vh0Jn
+         ih4tkpne0BuXc9pmLv/mdJTL4y+OedZG8IM4l178=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hugh Dickins <hughd@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 23/47] MIPS: export has_transparent_hugepage() for modules
-Date:   Mon, 23 Nov 2020 13:22:09 +0100
-Message-Id: <20201123121806.663159108@linuxfoundation.org>
+Subject: [PATCH 5.9 092/252] MIPS: export has_transparent_hugepage() for modules
+Date:   Mon, 23 Nov 2020 13:20:42 +0100
+Message-Id: <20201123121840.031718249@linuxfoundation.org>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201123121805.530891002@linuxfoundation.org>
-References: <20201123121805.530891002@linuxfoundation.org>
+In-Reply-To: <20201123121835.580259631@linuxfoundation.org>
+References: <20201123121835.580259631@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
-index 0596505770dba..11985399c4695 100644
+index 38e2894d5fa32..1b939abbe4caa 100644
 --- a/arch/mips/mm/tlb-r4k.c
 +++ b/arch/mips/mm/tlb-r4k.c
-@@ -424,6 +424,7 @@ int has_transparent_hugepage(void)
+@@ -438,6 +438,7 @@ int has_transparent_hugepage(void)
  	}
  	return mask == PM_HUGE_MASK;
  }
