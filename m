@@ -2,184 +2,196 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C552C1A0B
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Nov 2020 01:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C862C1B14
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Nov 2020 02:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730183AbgKXAaM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Nov 2020 19:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730066AbgKXAaE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Nov 2020 19:30:04 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7155AC0613CF
-        for <linux-mips@vger.kernel.org>; Mon, 23 Nov 2020 16:30:04 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id a65so1202170wme.1
-        for <linux-mips@vger.kernel.org>; Mon, 23 Nov 2020 16:30:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=googlenew;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cvSskL9CFfY+vyKjEB+eZzrUkmIgIFnXEsJVZThZL2o=;
-        b=NhIVxRwhs2JKWCnkvmLk8qDdTuPgqCuRqC9BFw50c/UatHZifVDioxia2kin4mYG+2
-         70+zxCECC9iDFROTM4GUHRFLLnBZv8QFYH0lh4sGffgwenvfCoA6CaCscXIFiE5vHj+T
-         w5R0CxyUnIV6VvZUXvCV/QMb5Fc1LgMGkon//kyAClI9H4Ln3MtlpvzZV/8mFv9wwFsI
-         G2C92SY7ewyZjuLQz09DX9iqQR/RaaBouqMoKiPtXATQCbCNeQeLyAXT1xElWIeTFQYo
-         xPSoaClEo2NBM4hhXZCJmOYZHNJa154nXKSgkgnOGZM6+nLym01WIgTzy0w/GbfqyJo/
-         wLew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cvSskL9CFfY+vyKjEB+eZzrUkmIgIFnXEsJVZThZL2o=;
-        b=rnoc8Tx+v8vzpgfGM3cOn8Bu9vukd4WtBErctdGL0O4P7OBQoOkJVvFhnwfiJVQjH8
-         meUxE45QMHQm27AkwLLGhqSIdv3h3QSB+4JvkWbActQilwWagkNyFAy7+UJM74pB6WU9
-         rJH+Z+wXU9IvzbuP1ea16cUkqbVuwd6xJbsTto9FouvEQl/TMlXTGqcY53lVRnsPNh4K
-         tVr9KikFdzsO1rwK28Ou2ZKPdv1eGHCUqBFocS6FaWyO54JOc+HbtXgzgBWZ5vYs9xSl
-         nfHdIB/DFdCyXGJB9JP6BAAWnhgK8D21OCMaSWB9DyYFLClCfPQg+sWSFF0LIGm3OR0d
-         HKdw==
-X-Gm-Message-State: AOAM5317msKq516/uVVx1HHZXlA1zZbJgpPgUAnAfhrzXXtQiWqw8TTI
-        e7t5P9xAbEdTXDELgN/VnUgfrQ==
-X-Google-Smtp-Source: ABdhPJxGmWySNqrrzht+Ri+YlkVyYZzqQ8flKPJdvTxRK5X9lKIZvpBQwD5F41nlU3qHaQc8hD+gWw==
-X-Received: by 2002:a05:600c:4112:: with SMTP id j18mr1481054wmi.152.1606177803112;
-        Mon, 23 Nov 2020 16:30:03 -0800 (PST)
-Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id c6sm25047360wrh.74.2020.11.23.16.30.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2020 16:30:02 -0800 (PST)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        Dmitry Safonov <dima@arista.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
+        id S1726528AbgKXBzE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Nov 2020 20:55:04 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:42552 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726260AbgKXBzE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 23 Nov 2020 20:55:04 -0500
+Received: from [10.130.0.120] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxytHrZ7xfM7gVAA--.49338S3;
+        Tue, 24 Nov 2020 09:54:53 +0800 (CST)
+Subject: Re: [PATCH 1/3] spi: Loongson: Add Loongson 3A+7A SPI controller
+ driver support
+To:     Mark Brown <broonie@kernel.org>
+References: <1606123148-315-1-git-send-email-zhangqing@loongson.cn>
+ <20201123131023.GC6322@sirena.org.uk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v2 19/19] mips/vdso: Migrate to generic vdso_base
-Date:   Tue, 24 Nov 2020 00:29:32 +0000
-Message-Id: <20201124002932.1220517-20-dima@arista.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201124002932.1220517-1-dima@arista.com>
-References: <20201124002932.1220517-1-dima@arista.com>
+        linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+From:   zhangqing <zhangqing@loongson.cn>
+Message-ID: <d86df590-0091-ea6b-eeaf-a310d5ef6843@loongson.cn>
+Date:   Tue, 24 Nov 2020 09:54:51 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201123131023.GC6322@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxytHrZ7xfM7gVAA--.49338S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr45trykKw17Kw1UXrykGrg_yoWruF4rpF
+        WYya1jqr1fJF1UCrs0qFWDXF1YvryrJF9xJa93t3yUGa4DZw1xWry5WF15Cw4fAFW8AF17
+        ZrW09rWkCF1rWFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Cb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
+        xK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMx
+        C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
+        wI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
+        vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
+        0xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07besqAUUUUU=
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Generic way to track the landing vma area.
-As a bonus, after unmapping sigpage, kernel won't try to land on its
-previous position (due to UNMAPPED_VDSO_BASE check instead of
-context.vdso ?= 0 check).
+Hi Mark,
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- arch/mips/Kconfig         |  1 +
- arch/mips/kernel/signal.c | 11 +++++++----
- arch/mips/kernel/vdso.c   |  2 +-
- arch/mips/vdso/genvdso.c  |  8 --------
- 4 files changed, 9 insertions(+), 13 deletions(-)
+Thank you for your suggestion, I will do it and send the v2  in the future.
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 818a9b2c78f1..70424605710f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -10,6 +10,7 @@ config MIPS
- 	select ARCH_HAS_SETUP_ADDITIONAL_PAGES
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-+	select ARCH_HAS_VDSO_BASE
- 	select ARCH_SUPPORTS_UPROBES
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
-diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
-index f1e985109da0..e0beaf2cdc0f 100644
---- a/arch/mips/kernel/signal.c
-+++ b/arch/mips/kernel/signal.c
-@@ -806,11 +806,13 @@ struct mips_abi mips_abi = {
- 
- static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
- {
-+	void *land = (void *)current->mm->vdso_base;
- 	sigset_t *oldset = sigmask_to_save();
--	int ret;
-+	int ret = 1;
- 	struct mips_abi *abi = current->thread.abi;
--	void *vdso = current->mm->context.vdso;
- 
-+	if (land == (void *)UNMAPPED_VDSO_BASE)
-+		goto err;
- 	/*
- 	 * If we were emulating a delay slot instruction, exit that frame such
- 	 * that addresses in the sigframe are as expected for userland and we
-@@ -843,12 +845,13 @@ static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
- 	rseq_signal_deliver(ksig, regs);
- 
- 	if (sig_uses_siginfo(&ksig->ka, abi))
--		ret = abi->setup_rt_frame(vdso + abi->vdso->off_rt_sigreturn,
-+		ret = abi->setup_rt_frame(land + abi->vdso->off_rt_sigreturn,
- 					  ksig, regs, oldset);
- 	else
--		ret = abi->setup_frame(vdso + abi->vdso->off_sigreturn,
-+		ret = abi->setup_frame(land + abi->vdso->off_sigreturn,
- 				       ksig, regs, oldset);
- 
-+err:
- 	signal_setup_done(ret, ksig, 0);
- }
- 
-diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
-index e124c68322bb..b2b2e596f03b 100644
---- a/arch/mips/kernel/vdso.c
-+++ b/arch/mips/kernel/vdso.c
-@@ -183,7 +183,7 @@ int arch_setup_additional_pages(unsigned long *sysinfo_ehdr)
- 		goto out;
- 	}
- 
--	mm->context.vdso = (void *)vdso_addr;
-+	mm->vdso_base = (void __user *)vdso_addr;
- 	*sysinfo_ehdr = vdso_addr;
- 	ret = 0;
- 
-diff --git a/arch/mips/vdso/genvdso.c b/arch/mips/vdso/genvdso.c
-index 0303d30cde03..8f581a2c8578 100644
---- a/arch/mips/vdso/genvdso.c
-+++ b/arch/mips/vdso/genvdso.c
-@@ -259,13 +259,6 @@ int main(int argc, char **argv)
- 	fprintf(out_file, "#include <linux/linkage.h>\n");
- 	fprintf(out_file, "#include <linux/mm.h>\n");
- 	fprintf(out_file, "#include <asm/vdso.h>\n");
--	fprintf(out_file, "static void vdso_mremap(\n");
--	fprintf(out_file, "	const struct vm_special_mapping *sm,\n");
--	fprintf(out_file, "	struct vm_area_struct *new_vma)\n");
--	fprintf(out_file, "{\n");
--	fprintf(out_file, "	current->mm->context.vdso =\n");
--	fprintf(out_file, "	(void *)(new_vma->vm_start);\n");
--	fprintf(out_file, "}\n");
- 
- 	/* Write out the stripped VDSO data. */
- 	fprintf(out_file,
-@@ -290,7 +283,6 @@ int main(int argc, char **argv)
- 	fprintf(out_file, "\t.mapping = {\n");
- 	fprintf(out_file, "\t\t.name = \"[vdso]\",\n");
- 	fprintf(out_file, "\t\t.pages = vdso_pages,\n");
--	fprintf(out_file, "\t\t.mremap = vdso_mremap,\n");
- 	fprintf(out_file, "\t},\n");
- 
- 	/* Calculate and write symbol offsets to <output file> */
--- 
-2.29.2
+Thanks,
+Qing
+
+
+On 11/23/2020 09:10 PM, Mark Brown wrote:
+> On Mon, Nov 23, 2020 at 05:19:06PM +0800, Qing Zhang wrote:
+>
+>> This module is integrated into the Loongson-3A SoC and the LS7A bridge chip.
+> It looks like this needs quite a bit of update to fit into the SPI
+> subsystem properly, fortunately most of that is cutting code out of the
+> driver so you can use core features so it shouldn't be too bad.  There's
+> also a bunch of pretty minor stylistic issues none of which look too
+> difficult to address.
+>
+>> @@ -968,6 +968,12 @@ config SPI_AMD
+>>   	help
+>>   	  Enables SPI controller driver for AMD SoC.
+>>   
+>> +config SPI_LOONGSON
+>> +        tristate "Loongson SPI Controller Support"
+> Please keep Kconfig and Makefile sorted.
+>
+>> +        depends on CPU_LOONGSON32 || CPU_LOONGSON64
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Loongson3A+7A SPI driver
+>> + *
+> Please make the entire comment a C++ one so things look more
+> intentional.
+>
+>> +#include <linux/pci.h>
+>> +#include <linux/of.h>
+>> +/*define spi register */
+>> +#define	SPCR	0x00
+> Missing blank line.
+>
+>> +#define	SPSR	0x01
+>> +#define FIFO	0x02
+> This indentation is unclear, also all these defines could use some
+> namespacing to avoid collisions with anything that gets defined in a
+> header.
+>
+>> +	hz  = t ? t->speed_hz : spi->max_speed_hz;
+>> +
+>> +	if (!hz)
+>> +		hz = spi->max_speed_hz;
+> Please write normal conditional statements to improve legibility, and
+> note that the core will ensure that the transfer always has a speed set.
+>
+>> +	if ((hz && loongson_spi->hz != hz) || ((spi->mode ^ loongson_spi->mode) & (SPI_CPOL | SPI_CPHA))) {
+> Please try to keep your lines less than 80 columns (there's not a hard
+> limit here but it helps legibility).
+>
+>> +		bit = fls(div) - 1;
+>> +		if ((1<<bit) == div)
+> 1 << bit
+>
+>> +static int loongson_spi_setup(struct spi_device *spi)
+>> +{
+>> +	struct loongson_spi *loongson_spi;
+>> +
+>> +	loongson_spi = spi_master_get_devdata(spi->master);
+>> +	if (spi->bits_per_word % 8)
+>> +		return -EINVAL;
+>> +
+>> +	if (spi->chip_select >= spi->master->num_chipselect)
+>> +		return -EINVAL;
+>> +
+>> +	loongson_spi_update_state(loongson_spi, spi, NULL);
+>> +	set_cs(loongson_spi, spi, 1);
+> The setup() operation shouldn't configure the physical controller state
+> unless there are separate configuration registers per chip select -
+> another device could be active when setup() is called.
+>
+>
+>> +static int loongson_spi_write_read_8bit(struct spi_device *spi,
+>> +		const u8 **tx_buf, u8 **rx_buf, unsigned int num)
+>> +{
+>> +	struct loongson_spi *loongson_spi;
+>> +	loongson_spi = spi_master_get_devdata(spi->master);
+>> +
+>> +	if (tx_buf && *tx_buf) {
+>> +		loongson_spi_write_reg(loongson_spi, FIFO, *((*tx_buf)++));
+>> +		while ((loongson_spi_read_reg(loongson_spi, SPSR) & 0x1) == 1);
+>> +        } else {
+>> +		loongson_spi_write_reg(loongson_spi, FIFO, 0);
+>> +		while ((loongson_spi_read_reg(loongson_spi, SPSR) & 0x1) == 1);
+>> +        }
+> The indentation is messed up here, looks like you have some kind of
+> tab/space confusion.
+>
+>> +	count = xfer->len;
+>> +
+>> +	do {
+>> +		if (loongson_spi_write_read_8bit(spi, &tx, &rx, count) < 0)
+>> +			goto out;
+> This is the only caller of _write_read_8bit(), may sa well inline it?
+>
+>> +static inline int set_cs(struct loongson_spi *loongson_spi, struct spi_device  *spi, int val)
+> Why is this static inline?  This should be an operation provided to the
+> SPI core.
+>
+>> +{
+>> +	int cs = loongson_spi_read_reg(loongson_spi, SFCS) & ~(0x11 << spi->chip_select);
+>> +
+>> +        if (spi->mode  & SPI_CS_HIGH)
+>> +		val = !val;
+>> +	loongson_spi_write_reg(loongson_spi, SFCS,
+>> +                        (val ? (0x11 << spi->chip_select):(0x1 << spi->chip_select)) | cs);
+> There's mult
+>
+>> +static void loongson_spi_work(struct work_struct *work)
+>> +{
+> Drivers shouldn't be open coding a message queue, implement
+> transfer_one_message() and let the core handle it for you.
+>
+>> +static const struct of_device_id loongson_spi_id_table[] = {
+>> +	{ .compatible = "loongson,loongson-spi", },
+>> +	{ },
+>> +};
+> This is introducing a new DT binding, there should also be a new binding
+> document added.
+>
+>> +static int loongson_spi_pci_register(struct pci_dev *pdev,
+>> +		const struct pci_device_id *ent)
+>> +{
+>> +	int ret;
+>> +	unsigned char v8;
+> I would expect the PCI device to be a separate module with a dependency
+> on PCI, I'm kind of surprised that this builds on !PCI systems but I
+> guess it's possible there's stubs.
 
