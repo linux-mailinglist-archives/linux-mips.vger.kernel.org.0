@@ -2,137 +2,227 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6E62C3AB8
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Nov 2020 09:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABE32C3B33
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Nov 2020 09:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725792AbgKYIPZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 Nov 2020 03:15:25 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:38340 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725776AbgKYIPY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 25 Nov 2020 03:15:24 -0500
-Received: from [10.130.0.80] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxatCPEr5fpnMWAA--.36216S3;
-        Wed, 25 Nov 2020 16:15:12 +0800 (CST)
-Subject: Re: [PATCH RESEND 1/2] MIPS: cacheinfo: Add missing VCache
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <20200820004253.3418-1-jiaxun.yang@flygoat.com>
- <20200820004253.3418-2-jiaxun.yang@flygoat.com>
- <20200821165539.GA15948@alpha.franken.de>
- <79476b22-04ef-968b-584a-10aa4357ee6b@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
-        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Paul Burton <paulburton@kernel.org>,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <6133d081-6f80-d438-1004-a7224873c61d@loongson.cn>
-Date:   Wed, 25 Nov 2020 16:15:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726250AbgKYIir (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 Nov 2020 03:38:47 -0500
+Received: from mx.baikalchip.com ([94.125.187.42]:55358 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725287AbgKYIir (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 25 Nov 2020 03:38:47 -0500
+X-Greylist: delayed 397 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Nov 2020 03:38:46 EST
+Date:   Wed, 25 Nov 2020 11:32:02 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Rob Herring <robh@kernel.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 10/18] dt-bindings: usb: Convert DWC USB3 bindings to
+ DT schema
+Message-ID: <20201125083202.ytoyd62bg3s7kvvg@mobilestation>
+References: <20201111090853.14112-1-Sergey.Semin@baikalelectronics.ru>
+ <20201111090853.14112-11-Sergey.Semin@baikalelectronics.ru>
+ <20201111201423.GA1938179@bogus>
+ <20201112102946.ipcsiidty4ut4kap@mobilestation>
+ <20201121124228.GA2039998@robh.at.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <79476b22-04ef-968b-584a-10aa4357ee6b@flygoat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxatCPEr5fpnMWAA--.36216S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxur17uw4UKr4kAr47Ar15CFg_yoW5Gry5pr
-        ZrGFsxGr48ZrZ7C34Sqrn5Xw1ft34rXF18Cw13JayrZw1a9r1UXrykG34F9F9Fvr18GF4f
-        Xw17GF13WFn0yFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCY02Avz4vE14v_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfUe2NtDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20201121124228.GA2039998@robh.at.kernel.org>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/03/2020 01:40 PM, Jiaxun Yang wrote:
->
->
-> 在 2020/8/22 0:55, Thomas Bogendoerfer 写道:
->> On Thu, Aug 20, 2020 at 08:42:49AM +0800, Jiaxun Yang wrote:
->>> Victim Cache is defined by Loongson as per-core unified
->>> private Cache.
->>> Add this into cacheinfo and make cache levels selfincrement
->>> instead of hardcode levels.
->>>
->>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->>> ---
->>>   arch/mips/kernel/cacheinfo.c | 34 ++++++++++++++++++++++++++--------
->>>   1 file changed, 26 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/arch/mips/kernel/cacheinfo.c 
->>> b/arch/mips/kernel/cacheinfo.c
->>> index 47312c529410..83548331ee94 100644
->>> --- a/arch/mips/kernel/cacheinfo.c
->>> +++ b/arch/mips/kernel/cacheinfo.c
->>> @@ -35,6 +35,11 @@ static int __init_cache_level(unsigned int cpu)
->>>         leaves += (c->icache.waysize) ? 2 : 1;
->>>   +    if (c->vcache.waysize) {
->>> +        levels++;
->>> +        leaves++;
->>> +    }
->>> +
->>>       if (c->scache.waysize) {
->>>           levels++;
->>>           leaves++;
->>> @@ -74,25 +79,38 @@ static int __populate_cache_leaves(unsigned int 
->>> cpu)
->>>       struct cpuinfo_mips *c = &current_cpu_data;
->>>       struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
->>>       struct cacheinfo *this_leaf = this_cpu_ci->info_list;
->>> +    int level = 1;
->>>         if (c->icache.waysize) {
->>> -        /* L1 caches are per core */
->>> +        /* D/I caches are per core */
->>>           fill_cpumask_siblings(cpu, &this_leaf->shared_cpu_map);
->>> -        populate_cache(dcache, this_leaf, 1, CACHE_TYPE_DATA);
->>> +        populate_cache(dcache, this_leaf, level, CACHE_TYPE_DATA);
->>>           fill_cpumask_siblings(cpu, &this_leaf->shared_cpu_map);
->>> -        populate_cache(icache, this_leaf, 1, CACHE_TYPE_INST);
->>> +        populate_cache(icache, this_leaf, level, CACHE_TYPE_INST);
->>> +        level++;
->>>       } else {
->>> -        populate_cache(dcache, this_leaf, 1, CACHE_TYPE_UNIFIED);
->>> +        populate_cache(dcache, this_leaf, level, CACHE_TYPE_UNIFIED);
->>> +        level++;
->>> +    }
->>> +
->>> +    if (c->vcache.waysize) {
->> why can't we insert vcache as level 4 and leave the rest of the file
->> alone ?
->
-> Hi Thomas,
->
-> Oops I forgot this patch.
->
-> Because  VCache is physicaly placed between Scache and I/D Cache as per
-> core chahe, it will confuse userspace program otherwise.
->
-> Also I do think the level should be continues.
+On Sat, Nov 21, 2020 at 06:42:28AM -0600, Rob Herring wrote:
+> On Thu, Nov 12, 2020 at 01:29:46PM +0300, Serge Semin wrote:
+> > On Wed, Nov 11, 2020 at 02:14:23PM -0600, Rob Herring wrote:
+> > > On Wed, Nov 11, 2020 at 12:08:45PM +0300, Serge Semin wrote:
+> > > > DWC USB3 DT node is supposed to be compliant with the Generic xHCI
+> > > > Controller schema, but with additional vendor-specific properties, the
+> > > > controller-specific reference clocks and PHYs. So let's convert the
+> > > > currently available legacy text-based DWC USB3 bindings to the DT schema
+> > > > and make sure the DWC USB3 nodes are also validated against the
+> > > > usb-xhci.yaml schema.
+> > > > 
+> > > > Note we have to discard the nodename restriction of being prefixed with
+> > > > "dwc3@" string, since in accordance with the usb-hcd.yaml schema USB nodes
+> > > > are supposed to be named as "^usb(@.*)".
+> > > > 
+> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > > 
+> > > > ---
+> > > > 
+> > > > Changelog v2:
+> > > > - Discard '|' from the descriptions, since we don't need to preserve
+> > > >   the text formatting in any of them.
+> > > > - Drop quotes from around the string constants.
+> > > > - Fix the "clock-names" prop description to be referring the enumerated
+> > > >   clock-names instead of the ones from the Databook.
+> > > > 
+> > > > Changelog v3:
+> > > > - Apply usb-xhci.yaml# schema only if the controller is supposed to work
+> > > >   as either host or otg.
+> > > > 
+> > > > Changelog v4:
+> > > > - Apply usb-drd.yaml schema first. If the controller is configured
+> > > >   to work in a gadget mode only, then apply the usb.yaml schema too,
+> > > >   otherwise apply the usb-xhci.yaml schema.
+> > > > - Discard the Rob'es Reviewed-by tag. Please review the patch one more
+> > > >   time.
+> > > > ---
+> > > >  .../devicetree/bindings/usb/dwc3.txt          | 125 --------
+> > > >  .../devicetree/bindings/usb/snps,dwc3.yaml    | 303 ++++++++++++++++++
+> > > >  2 files changed, 303 insertions(+), 125 deletions(-)
+> > > >  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3.txt
+> > > >  create mode 100644 Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> 
+> 
+> > > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..079617891da6
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > @@ -0,0 +1,303 @@
+> > > > +# SPDX-License-Identifier: GPL-2.0
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Synopsys DesignWare USB3 Controller
+> > > > +
+> > > > +maintainers:
+> > > > +  - Felipe Balbi <balbi@kernel.org>
+> > > > +
+> > > > +description:
+> > > > +  This is usually a subnode to DWC3 glue to which it is connected, but can also
+> > > > +  be presented as a standalone DT node with an optional vendor-specific
+> > > > +  compatible string.
+> > > > +
+> > 
+> > > > +allOf:
+> > > > +  - $ref: usb-drd.yaml#
+> > > > +  - if:
+> > > > +      properties:
+> > > > +        dr_mode:
+> > > > +          const: peripheral
+> 
 
-With this patch, we can see the vcache info as L2 cache
-and scache info as L3 cache on the Loongson 3A3000
-and 3A4000 platform.
+> Another thing, this evaluates to true if dr_mode is not present. You 
+> need to add 'required'?
 
-Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Right. Will something like this do that?
 
->
-> Thanks
->
-> - Jiaxun
->
->>
->> Thomas.
->>
++ allOf:
++  - $ref: usb-drd.yaml#
++  - if:
++      properties:
++        dr_mode:
++          const: peripheral
++ 
++      required:
++        - dr_mode
++    then:
++      $ref: usb.yaml#
++    else
++      $ref: usb-xhci.yaml#
 
+> If dr_mode is otg, then don't you need to apply 
+> both usb.yaml and usb-xhci.yaml?
+
+No I don't. Since there is no peripheral-specific DT schema, then the
+only schema any USB-gadget node needs to pass is usb.yaml, which
+is already included into the usb-xhci.yaml schema. So for pure OTG devices
+with xHCI host and gadget capabilities it's enough to evaluate: allOf:
+[$ref: usb-drd.yaml#, $ref: usb-xhci.yaml#].  Please see the
+sketch/ASCII-figure below and the following text for details.
+
+-Sergey
+
+> 
+> > > > +    then:
+> > > > +      $ref: usb.yaml#
+> > > 
+> > > This part could be done in usb-drd.yaml?
+> > 
+> > Originally I was thinking about that, but then in order to minimize
+> > the properties validation I've decided to split the properties in
+> > accordance with the USB controllers functionality:
+> > 
+> >             +----- USB Gadget/Peripheral Controller. There is no
+> >             |      specific schema for the gadgets since there is no
+> >             |      common gadget properties (at least I failed to find
+> >             |      ones). So the pure gadget controllers need to be
+> >             |      validated just against usb.yaml schema.
+> >             |
+> > usb.yaml <--+-- usb-hcd.yaml - Generic USB Host Controller. The schema
+> >                 ^              turns out to include the OHCI/UHCI/EHCI
+> >                 |              properties, which AFAICS are also
+> >                 |              applicable for the other host controllers.
+> >                 |              So any USB host controller node needs to
+> >                 |              be validated against this schema.
+> >                 |
+> >                 +- usb-xhci.yaml - Generic xHCI Host controller.
+> > 
+> > usb-drd.yaml -- USB Dual-Role/OTG Controllers. It describes the
+> >                 DRD/OTG-specific properties and nothing else. So normally
+> >                 it should be applied together with one of the
+> >                 schemas described above.
+> > 
+> > So the use-cases of the suggested schemas is following:
+> > 
+> > 1) USB Controller is pure gadget? Then:
+> >    + allOf:
+> >    +  - $ref: usb.yaml#
+> > 2) USB Controller is pure USB host (including OHCI/UHCI/EHCI)?
+> >    + allOf:
+> >    +   - $ref: usb-hcd.yaml#
+> >    Note this prevents us from fixing all the currently available USB DT
+> >    schemas, which already apply the usb-hcd.yaml schema.
+> > 3) USB Controller is pure xHCI host controller? Then:
+> >    + allOf:
+> >    +   - $ref: usb-xhci.yaml#
+> > 4) USB Controller is Dual-Role/OTG controller with USB 2.0 host? Then:
+> >    + allOf:
+> >    +   - $ref: usb-drd.yaml#
+> >    +   - $ref: usb-hcd.yaml#
+> > 5) USB Controller is Dual-Role/OTG controller with xHCI host? Then:
+> >    + allOf:
+> >    +   - $ref: usb-drd.yaml#
+> >    +   - $ref: usb-xhci.yaml#
+> > 6) USB Controller is Dual-Role/OTG controller which can only be a
+> >    gadget? Then:
+> >    + allOf:
+> >    +   - $ref: usb-drd.yaml#
+> >    +   - $ref: usb.yaml#
+> > 
+> > * Don't know really if controllers like in 6)-th really exist. Most
+> > * likely they are still internally capable of dual-roling, but due to
+> > * some conditions can be used as gadgets only.
+> > 
+> > It looks a bit complicated, but at least by having such design we'd minimize
+> > the number of properties validation.
+> > 
+
+[...]
