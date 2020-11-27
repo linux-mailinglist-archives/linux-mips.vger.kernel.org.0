@@ -2,60 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F197D2C6104
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Nov 2020 09:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D72892C6106
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Nov 2020 09:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728429AbgK0Ijo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Nov 2020 03:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
+        id S1728963AbgK0Ijs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 27 Nov 2020 03:39:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727301AbgK0Ijn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Nov 2020 03:39:43 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192D7C0613D1
-        for <linux-mips@vger.kernel.org>; Fri, 27 Nov 2020 00:39:43 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id j205so5937167lfj.6
-        for <linux-mips@vger.kernel.org>; Fri, 27 Nov 2020 00:39:43 -0800 (PST)
+        with ESMTP id S1729090AbgK0Ijr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Nov 2020 03:39:47 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD50FC0613D1
+        for <linux-mips@vger.kernel.org>; Fri, 27 Nov 2020 00:39:46 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id a9so5967455lfh.2
+        for <linux-mips@vger.kernel.org>; Fri, 27 Nov 2020 00:39:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VJvzcy7h7t5+J43wnvVJczkQ0LgcB85G7JBKDrFHI7g=;
-        b=w3q+qxNPouWPe6x/o6c77TaTt08SpFNzjr2oWYBx4LxGIT9P+ex8wViAzcDjj+VKqM
-         IVqLZPZRsb+sjnl1VzOKQZRSz0ZBjnzrfZ+n2nxt1n26GC4z6TUuMM7qQIHL6ku5tVAn
-         cotpvTklekXtAT6IDPGrgy6ghLxKmB74ZVtVMWosxEbWwGcNK5+DEqPYQc6l+K6kQVZj
-         mN+OskOisIwFEv1lIcXozcFwbF3fHl3kE6Koq3oA/H1dkc85YK0DuIEyMtZdSts70ANU
-         urhj1+bEBfj+PowcqItOY8hsFTiupNmcN+xT5SW7dReFP7Kxoiif3TV88ROvXrVpieob
-         PcbA==
+        bh=Xq0pZQK9Mol8DOtCUpYSsXSaOdIRPPSzZ/jWHRVV+rU=;
+        b=CA94T8+XM8TcvvUoQEakxsqYSlXPEIxc3/PhGxdQniz14i/PI65DrKnFAy6LvetjDb
+         Vq3ph7kiW6rrK/v3hjv0spHBZmvzAFti8XC6CJhfcVkmDtDzZ/n5VuMkwoTlLh1gEOG8
+         T1YbnzDZLFjeFzNEmRGqQqL812VSsp9pSKwWZ7c+dVOr2Hob3J9H4s/9c9NiX52v8Cen
+         zImTjkRnUVOYV728GV6iYTseZMS1I+oS2Ph/0SiznRG0pMT3O/ZB1NDHvi8pfnwdgFF2
+         M1m0gD6ONVshc3LFG7aj/RpegEeCRyEU7/Zft9hiArRVs/u3K7ogISp8fEhAKaRUYbTM
+         fQyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VJvzcy7h7t5+J43wnvVJczkQ0LgcB85G7JBKDrFHI7g=;
-        b=PTKjPvwMocRzL/sJa2ouqFDtyRga7d1J3fR6saLvJVPin3cNw0Ry6y/7U0yc1kUTkI
-         8pXCrD5nNDs4lEDsEl/foDgBM/L35Q1+xHUuKeUvde+vJUVcks3WHy2ArSuvI3Zx7nPs
-         4m+RYQzTe0/ac8Vj+SQzhIQvGZeL7jg69UR3U+6D00B4Ob8hmufIfoILGHJQjlqSGHfT
-         XBmXesySTFTNUilA/JroAWvX6i2pmX2aEvDwfh4CXziDsYxe5kxKFBN7Q0jdoQbonjEG
-         YKvw1nZn3ilC5OJNqEBqQXKOJabl2AXmE95RjXnoSiUXDf86RzYpEC8DGUA+YKzcRwMU
-         UT4Q==
-X-Gm-Message-State: AOAM53389a3eIF9xsTcw91rhY4F4XFNAY/33BCB/B+wUVWOBtcSd32z2
-        xKMXBKuUU2wGTFlqU0KRXyLf6A==
-X-Google-Smtp-Source: ABdhPJzEhJ3V5UZEyXJY1luOg1HNRaF3x+W7SsS0gUK9mT8lhBWFwSmdGHVA0B9K92mGdaQm478Ecg==
-X-Received: by 2002:a05:6512:1095:: with SMTP id j21mr2739630lfg.309.1606466381557;
-        Fri, 27 Nov 2020 00:39:41 -0800 (PST)
+        bh=Xq0pZQK9Mol8DOtCUpYSsXSaOdIRPPSzZ/jWHRVV+rU=;
+        b=DqTaaprW4xHKPlauxS/LushFWzcNqJeCL76MkDK1Z3epUNZCPgkiBnkgFnlnS66ig/
+         ma2ke90yHRm7+BoHIo2H0BXnTFpKrt0SICIQA8/czCUv+WFx4vR8Bq6ycxpVMkOTHTkq
+         QX1P0u94XrZVv2r5GY2zyCoRpKa9Qqh1jdEAyxADJvjvUJyZqiGo2vFlr6rvg+RuswEB
+         Ax6PfquhZYJwmUgu2+UD6b+mbimtd1Zp2BYmmnGKZjnERSzU+ne0L/xybKLZyb/HbQAl
+         LmvozFovJTcWAaCgsjvi8JdZJMxp+ZXG7ktuOl/x+ikiiFfuHDrQgYbF7jDXvO/xMa99
+         HHAg==
+X-Gm-Message-State: AOAM530oLGW1HZ9YZl7jLl8w7w3M0foQA0aCQmCRN1EMnNl9Sqg/F9Dj
+        csD1fajo1iJmefYiWcNz4bEEdQ==
+X-Google-Smtp-Source: ABdhPJwI0C55bHm/cCa6XfqnxtgJ9+clt+MrNFZJxc3oe39zAsc0UkN+fUEQL3t22cpQrVejyC2FtA==
+X-Received: by 2002:a19:7c9:: with SMTP id 192mr2695383lfh.424.1606466385391;
+        Fri, 27 Nov 2020 00:39:45 -0800 (PST)
 Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
-        by smtp.gmail.com with ESMTPSA id v1sm603194lfp.305.2020.11.27.00.39.41
+        by smtp.gmail.com with ESMTPSA id x11sm603745lfe.96.2020.11.27.00.39.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2020 00:39:41 -0800 (PST)
+        Fri, 27 Nov 2020 00:39:44 -0800 (PST)
 From:   Anders Roxell <anders.roxell@linaro.org>
 To:     tsbogend@alpha.franken.de, natechancellor@gmail.com,
         ndesaulniers@google.com
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         clang-built-linux@googlegroups.com,
         Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH] mips: lib: uncached: fix uninitialized variable 'sp'
-Date:   Fri, 27 Nov 2020 09:39:38 +0100
-Message-Id: <20201127083938.2666770-1-anders.roxell@linaro.org>
+Subject: [PATCH] mips: fix Section mismatch in reference
+Date:   Fri, 27 Nov 2020 09:39:43 +0100
+Message-Id: <20201127083943.2666864-1-anders.roxell@linaro.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -63,37 +63,58 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When building mips tinyconfig with clang the following warning show up:
+When building mips tinyconfig with clang the following error show up:
 
-/tmp/arch/mips/lib/uncached.c:40:18: note: initialize the variable 'sp' to silence this warning
-        register long sp __asm__("$sp");
-                        ^
-                         = 0
+WARNING: modpost: vmlinux.o(.text+0x1940c): Section mismatch in reference from the function r4k_cache_init() to the function .init.text:loongson3_sc_init()
+The function r4k_cache_init() references
+the function __init loongson3_sc_init().
+This is often because r4k_cache_init lacks a __init
+annotation or the annotation of loongson3_sc_init is wrong.
 
-Rework to make an explicit inline move.
+Remove marked __init from function loongson3_sc_init(),
+mips_sc_probe_cm3(), and mips_sc_probe().
 
 Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 ---
- arch/mips/lib/uncached.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/mips/mm/c-r4k.c   | 2 +-
+ arch/mips/mm/sc-mips.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/lib/uncached.c b/arch/mips/lib/uncached.c
-index 09d5deea747f..21a4b94a0558 100644
---- a/arch/mips/lib/uncached.c
-+++ b/arch/mips/lib/uncached.c
-@@ -37,10 +37,11 @@
-  */
- unsigned long run_uncached(void *func)
- {
--	register long sp __asm__("$sp");
- 	register long ret __asm__("$2");
- 	long lfunc = (long)func, ufunc;
- 	long usp;
-+	long sp;
-+	asm ("move %0, $sp" : "=r" (sp));
+diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
+index 99521764c75b..4f976d687ab0 100644
+--- a/arch/mips/mm/c-r4k.c
++++ b/arch/mips/mm/c-r4k.c
+@@ -1609,7 +1609,7 @@ static void __init loongson2_sc_init(void)
+ 	c->options |= MIPS_CPU_INCLUSIVE_CACHES;
+ }
  
- 	if (sp >= (long)CKSEG0 && sp < (long)CKSEG2)
- 		usp = CKSEG1ADDR(sp);
+-static void __init loongson3_sc_init(void)
++static void loongson3_sc_init(void)
+ {
+ 	struct cpuinfo_mips *c = &current_cpu_data;
+ 	unsigned int config2, lsize;
+diff --git a/arch/mips/mm/sc-mips.c b/arch/mips/mm/sc-mips.c
+index dd0a5becaabd..06ec304ad4d1 100644
+--- a/arch/mips/mm/sc-mips.c
++++ b/arch/mips/mm/sc-mips.c
+@@ -146,7 +146,7 @@ static inline int mips_sc_is_activated(struct cpuinfo_mips *c)
+ 	return 1;
+ }
+ 
+-static int __init mips_sc_probe_cm3(void)
++static int mips_sc_probe_cm3(void)
+ {
+ 	struct cpuinfo_mips *c = &current_cpu_data;
+ 	unsigned long cfg = read_gcr_l2_config();
+@@ -180,7 +180,7 @@ static int __init mips_sc_probe_cm3(void)
+ 	return 0;
+ }
+ 
+-static inline int __init mips_sc_probe(void)
++static inline int mips_sc_probe(void)
+ {
+ 	struct cpuinfo_mips *c = &current_cpu_data;
+ 	unsigned int config1, config2;
 -- 
 2.29.2
 
