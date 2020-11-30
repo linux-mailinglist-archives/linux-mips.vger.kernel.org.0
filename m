@@ -2,132 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CA82C71AC
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Nov 2020 23:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79502C87D2
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Nov 2020 16:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387707AbgK1WBE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 28 Nov 2020 17:01:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391325AbgK1WA4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 28 Nov 2020 17:00:56 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA47C0613D2
-        for <linux-mips@vger.kernel.org>; Sat, 28 Nov 2020 14:00:16 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1kj8GF-0005eW-NB; Sat, 28 Nov 2020 23:00:07 +0100
-Subject: Re: [Linux-stm32] [PATCH v8 3/5] ARM: dts: stm32: Fix schema warnings
- for pwm-leds
-To:     Alexander Dahl <post@lespocky.de>, Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, Alexander Dahl <ada@thorsis.com>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org
-References: <20201128215353.3991-1-post@lespocky.de>
- <20201128215353.3991-4-post@lespocky.de>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <044d49be-2016-818e-b1b0-ee50c3b744e7@pengutronix.de>
-Date:   Sat, 28 Nov 2020 23:00:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        id S1728149AbgK3PWf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Nov 2020 10:22:35 -0500
+Received: from mail-eopbgr80122.outbound.protection.outlook.com ([40.107.8.122]:22176
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726769AbgK3PWe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Nov 2020 10:22:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YH2MNBgbN1y//UqnRkt+4+Q8QOHB5J+SrJDlmpbFbRfzh6Rmk9Q1dAmURn492rWqzVLEXnFAWQyNJOihsa4sakbPAib2oryTczf0SZt+BmT8gEkFwHsKWHXNbl3hhzVi9HFTDbgiB3hkx/ljXeI24oc51aSHm38ssWUO0n0sa8FGpues5eQXiFq7KlbfpPvhpVTAqHfKUPaAELvulj/78gYcCZwg87NZb1VZhMhfSOy0E0qBYr+ilPi47w2KmBpI4mnIcKmQgGgTBUKAwNT0URX1OvHZAE+YHVCOXpcAMKHXR+KApKz4cTcrIWeGK4gyYY38/fG7rnBcyt8/dya1qQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JYFF0S35be+pE4+Hs+KM/e13O4Xj03iMy1mvVlKlyMg=;
+ b=fhKz5MblxEMvIAlFMXZzPX1JLYKr0j5QDo3jH/gvVLF0vL1eClrb+5BYzCcKl/NcQS7U5BUA8kui+Q7XqhEt+iBYwOBps0fPuK7tEd8uDgfkRRR4c+GhN3AptHT6V707H+ZKqdFOgdy2PpUfm/05B02U6YDYVPvy0jUvK8pqj1EoDH//c3WNcO15OuVruc1seoSCm+N4MPiTzAEt+eJnCUm+SFNsp4iEoseULQjOZknkgnWh8Ov/a7Qu1OdHtbeg32A8rosSbfoMswKwHjlvPblgFtI1g63S/BdAGwVKCD7s227FZrUouC6AdGBBbVZ6I3Dhv3rB3nqtaDK26E3/Ow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
+ header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JYFF0S35be+pE4+Hs+KM/e13O4Xj03iMy1mvVlKlyMg=;
+ b=smh/9VAdWgcG1D9dJ0gWO6DXa1E4U+VmEpj5NTC/P6Abw2NbB+efRz7VI5jIk/E93kuxq10FaOwVCiEDl6Z59sBmnGRPCaYT3YihPiny8JZGIHJA6S64b7pTlz9Ud2T22NXBFhsRTSnv4EPOOaji627cuY//AditXkHX2Ml3jGM=
+Authentication-Results: armlinux.org.uk; dkim=none (message not signed)
+ header.d=none;armlinux.org.uk; dmarc=none action=none
+ header.from=leica-geosystems.com;
+Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com (2603:10a6:4:9b::11)
+ by DB6PR0602MB2887.eurprd06.prod.outlook.com (2603:10a6:4:9a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Mon, 30 Nov
+ 2020 15:21:44 +0000
+Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com
+ ([fe80::49c3:4b5b:289c:d62c]) by DB6PR0602MB2886.eurprd06.prod.outlook.com
+ ([fe80::49c3:4b5b:289c:d62c%12]) with mapi id 15.20.3611.025; Mon, 30 Nov
+ 2020 15:21:44 +0000
+From:   Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+To:     linux@armlinux.org.uk, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
+        tony@atomide.com, mripard@kernel.org, wens@csie.org,
+        jernej.skrabec@siol.net, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, catalin.marinas@arm.com, will@kernel.org,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, lee.jones@linaro.org, sam@ravnborg.org,
+        emil.l.velikov@gmail.com, daniel.thompson@linaro.org,
+        krzk@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 0/5] drop unused BACKLIGHT_GENERIC option
+Date:   Mon, 30 Nov 2020 15:21:32 +0000
+Message-Id: <20201130152137.24909-1-andrey.zhizhikin@leica-geosystems.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [193.8.40.112]
+X-ClientProxiedBy: ZRAP278CA0002.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:10::12) To DB6PR0602MB2886.eurprd06.prod.outlook.com
+ (2603:10a6:4:9b::11)
 MIME-Version: 1.0
-In-Reply-To: <20201128215353.3991-4-post@lespocky.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.112) by ZRAP278CA0002.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:10::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend Transport; Mon, 30 Nov 2020 15:21:43 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 95d7b698-5292-4930-f51d-08d89543a538
+X-MS-TrafficTypeDiagnostic: DB6PR0602MB2887:
+X-Microsoft-Antispam-PRVS: <DB6PR0602MB2887AD8134FEDEE884AD46CEA6F50@DB6PR0602MB2887.eurprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1169;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Nd3loQ15nj+k6hYQLhmPL9e6smY/UmSaTcWyqEPpv13qIpQHfXiHzpKmYs6yRY88IoM7OA8EI+HInQSY0+DDtLAvWit+QiYWdpsGKxJTeX5U2pkZjvq03zh3TDujFKSB5IMcr3NH8p8c6Pp9HkrgJuvY+qAR3DAWW7u5Ft/oxRZAQMHMNbSxpCfBpbKDHoNdni18QjUyxFT5diCDmw/8NFm/fQm4VBwJeoyPGTbRerF/DcsG8p4qkR3T0tolmusJrEw1Y+JWCi8iT2A891VKG0HsArjY+t3AFkSnoVnD6br7Knj3HjMBXvVvMx5zWqne0cRIBj92zEorv3wzAVExcT6BRWXtEz/xR5uGystDlu7jLgCN/v9mRu1s6xKj0/GE4WbBjPdN667LxTpLcIcrgw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0602MB2886.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(366004)(136003)(396003)(39860400002)(5660300002)(2616005)(1076003)(52116002)(6506007)(16526019)(956004)(26005)(186003)(7406005)(7416002)(36756003)(2906002)(316002)(6666004)(44832011)(86362001)(83380400001)(6486002)(6512007)(921005)(66946007)(478600001)(8676002)(8936002)(66556008)(66476007)(41533002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?kitQGbAHk3EE3Ey9YOYZ7O8FLyJVuIMD1TiiWcmL9t1mNsQjrB4jtGmbTHNl?=
+ =?us-ascii?Q?BMursxnuITuEajAo6wSx6Z9SsYtX4l2T+R+7R2lNDa/81FA+Bo3GMT+NqSWf?=
+ =?us-ascii?Q?dxiKc7Fg7DO3u5sAv37BjM/JiqRiwBy/lfxzQ6wAyiF8uqsZwa8Ji/Kmb6p9?=
+ =?us-ascii?Q?xDbRMAgpNHBHQIHQXqU+4/19o8V3G/T7nK4J9RoRaSGMRgoSON98yvuX2qmR?=
+ =?us-ascii?Q?hyOgfIfExql8V+hBO5mLO5bzK26KWqhXLljT5/+tml4gFV+uIPkDvMWxKDrT?=
+ =?us-ascii?Q?iV4nXHvZTBIeU4u+p9m9k686qgHh20bQnrvHaoULkKpPbye811iNYqvARczh?=
+ =?us-ascii?Q?B9RyPYsB3mP82COFVkIsI7hjdFYNQaXum8+T8LqqUCoiQ1Njlw+kihsqHEmh?=
+ =?us-ascii?Q?g1bIHw0R7zxGmUG5H+03cFMO20XpvbrM/avQ3orGP36/4T1uRT6MQLFb/OK8?=
+ =?us-ascii?Q?LxiEn5z5KvoENpEG5SSjehnRxmUMcSPZuw17yjVAPmArN/shoCI2cvNUPCU5?=
+ =?us-ascii?Q?0IjipO4xhampV+3d3Nw+GiTRpKPmyzeaKSlxgLc0jKtuq6178DTXzM+0WQ//?=
+ =?us-ascii?Q?jdcLDl4KEPjmsshx/4CgCtkMQ6Y4bG8JQh+6ScX+G13uc6flF1KbZDNPnygO?=
+ =?us-ascii?Q?lyC+trjlg298EN6jEliGM3n4mhstypRQoLQJCvq36/4bGcZYDe3W5qTbR+rT?=
+ =?us-ascii?Q?MA5BsGvM6TKrzeGJ+lmboFadqXB/JC6b4g3XAfBZmbA1bPYDxLnjeZ/Uu/Ak?=
+ =?us-ascii?Q?209edxpv6/zl8+Bi2H92im7c7B5dVlAjB9Njif94cFamVeXDRuqg8R2v/EzA?=
+ =?us-ascii?Q?KOLaXTfMvh1Flzjg0nuQFalsliJP1hud6MdceJVmU8L9x0B1JFD3vixKeJKX?=
+ =?us-ascii?Q?fm8GjVbaEQs6oZZuc200FYIzeOPphD9uNY7jJXFMBQSKG8UlIWqzqjNlamdp?=
+ =?us-ascii?Q?20XrACDjUK4kLAkEs5EDustyLpTxtxycPGD0ze1wLgF3KF5AjmX7wPuPuWv1?=
+ =?us-ascii?Q?6MVd?=
+X-OriginatorOrg: leica-geosystems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95d7b698-5292-4930-f51d-08d89543a538
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR0602MB2886.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2020 15:21:44.1425
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z2W1ShaxXCjALLxQbLA6jmqUp8Gi08QpaeQ8KWrj3vdSv3nL/R6SJp8BNxNRSjHk1dDcifGMCRU3GPdULbk7pR062FCDnmHrSD8upGxQrEw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0602MB2887
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 28.11.20 22:53, Alexander Dahl wrote:
-> The node names for devices using the pwm-leds driver follow a certain
-> naming scheme (now).  Parent node name is not enforced, but recommended
-> by DT project.
-> 
->   DTC     arch/arm/boot/dts/stm32mp157c-lxa-mc1.dt.yaml
->   CHECK   arch/arm/boot/dts/stm32mp157c-lxa-mc1.dt.yaml
-> /home/alex/build/linux/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dt.yaml: led-rgb: 'led-blue', 'led-green', 'led-red' do not match any of the regexes: '^led(-[0-9a-f]+)?$', 'pinctrl-[0-9]+'
->         From schema: /home/alex/src/linux/leds/Documentation/devicetree/bindings/leds/leds-pwm.yaml
-> 
-> Signed-off-by: Alexander Dahl <post@lespocky.de>
-> ---
-> 
-> Notes:
->     v7 -> v8:
->       * rebased on v5.10-rc1
->       * updated indexes and added comment (Ahmad Fatoum)
+Since the removal of generic_bl driver from the source tree in commit
+7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is
+unused") BACKLIGHT_GENERIC config option became obsolete as well and
+therefore subject to clean-up from all configuration files.
 
-Acked-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+This series introduces patches to address this removal, separated by
+architectures in the kernel tree.
 
-Thanks,
+Andrey Zhizhikin (5):
+  ARM: configs: drop unused BACKLIGHT_GENERIC option
+  arm64: defconfig: drop unused BACKLIGHT_GENERIC option
+  MIPS: configs: drop unused BACKLIGHT_GENERIC option
+  parisc: configs: drop unused BACKLIGHT_GENERIC option
+  powerpc/configs: drop unused BACKLIGHT_GENERIC option
 
->     
->     v6 -> v7:
->       * split up patch (one per sub arch)
->       * added actual warnings to commit message
-> 
->  arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts b/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts
-> index 1e5333fd437f..5ed58110d963 100644
-> --- a/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts
-> +++ b/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts
-> @@ -36,34 +36,35 @@
->  		stdout-path = &uart4;
->  	};
->  
-> -	led-act {
-> +	led-controller-0 {
->  		compatible = "gpio-leds";
->  
-> -		led-green {
-> +		led-0 {
->  			label = "mc1:green:act";
->  			gpios = <&gpioa 13 GPIO_ACTIVE_LOW>;
->  			linux,default-trigger = "heartbeat";
->  		};
->  	};
->  
-> -	led-rgb {
-> +	led-controller-1 {
->  		compatible = "pwm-leds";
->  
-> -		led-red {
-> +		/* led-1 to led-3 are part of a single RGB led */
-> +		led-1 {
->  			label = "mc1:red:rgb";
->  			pwms = <&leds_pwm 1 1000000 0>;
->  			max-brightness = <255>;
->  			active-low;
->  		};
->  
-> -		led-green {
-> +		led-2 {
->  			label = "mc1:green:rgb";
->  			pwms = <&leds_pwm 2 1000000 0>;
->  			max-brightness = <255>;
->  			active-low;
->  		};
->  
-> -		led-blue {
-> +		led-3 {
->  			label = "mc1:blue:rgb";
->  			pwms = <&leds_pwm 3 1000000 0>;
->  			max-brightness = <255>;
-> 
+ arch/arm/configs/at91_dt_defconfig          | 1 -
+ arch/arm/configs/cm_x300_defconfig          | 1 -
+ arch/arm/configs/colibri_pxa300_defconfig   | 1 -
+ arch/arm/configs/jornada720_defconfig       | 1 -
+ arch/arm/configs/magician_defconfig         | 1 -
+ arch/arm/configs/mini2440_defconfig         | 1 -
+ arch/arm/configs/omap2plus_defconfig        | 1 -
+ arch/arm/configs/pxa3xx_defconfig           | 1 -
+ arch/arm/configs/qcom_defconfig             | 1 -
+ arch/arm/configs/sama5_defconfig            | 1 -
+ arch/arm/configs/sunxi_defconfig            | 1 -
+ arch/arm/configs/tegra_defconfig            | 1 -
+ arch/arm/configs/u8500_defconfig            | 1 -
+ arch/arm64/configs/defconfig                | 1 -
+ arch/mips/configs/gcw0_defconfig            | 1 -
+ arch/mips/configs/gpr_defconfig             | 1 -
+ arch/mips/configs/lemote2f_defconfig        | 1 -
+ arch/mips/configs/loongson3_defconfig       | 1 -
+ arch/mips/configs/mtx1_defconfig            | 1 -
+ arch/mips/configs/rs90_defconfig            | 1 -
+ arch/parisc/configs/generic-64bit_defconfig | 1 -
+ arch/powerpc/configs/powernv_defconfig      | 1 -
+ 22 files changed, 22 deletions(-)
 
+
+base-commit: b65054597872ce3aefbc6a666385eabdf9e288da
+prerequisite-patch-id: bfd382cf1dc021d20204f10ea9403319c1c32b12
+prerequisite-patch-id: 5397c0c8648bb3e0b830207ea867138c11c6e644
+prerequisite-patch-id: a3c284dff5fe6d02828918a886db6a8ed3197e20
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.17.1
+
