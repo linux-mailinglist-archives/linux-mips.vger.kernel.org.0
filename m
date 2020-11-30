@@ -2,140 +2,239 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6D42C87ED
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Nov 2020 16:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B994A2C883E
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Nov 2020 16:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728257AbgK3PXX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Nov 2020 10:23:23 -0500
-Received: from mail-eopbgr80122.outbound.protection.outlook.com ([40.107.8.122]:22176
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728147AbgK3PXW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Nov 2020 10:23:22 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DsP3zkfCwDfYYjb2fv4cATq+tAQWpd0PK3rewpyWNRH98gwga62bZT2OyJJLcZPO9gfEyppC8JZ2ObEk11vQGTUCWNPqFRZDq3nhfeVbm97vVceWYvTOB9NpwxvdbKzd3/c2suNIwDxnc2rRfihzL+dmq0G7E07JclzKXwXmffXE8+tHq92WF7AzCRj88tNyjeSKspMMi8O1R7kY1Bg6x9UMbkarhENfaiuTtQx/Zyg9iULcSxwAs1NINlMohUYRG3IG6Yn9niujIgude3PzOu9gCfYGNM/0tkw5DWlky3T6lAR/LSg+JvGmofEH35X1uEJJEiEC07rntY4r3lQdWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PASe6tc0Bvnd5P1hnlXar0wMMeVaqkBIb+of2OVzPhw=;
- b=mScUhJpIfgHCrHlnq5Vt0dwxODM3fyAUzDCoOt9QTJc5O/omIdVSCZT4fpLmtywVlwXYleEObiAmTywG9reCXRDrV1P7GXzPpfsaZzMOT1GpmezmXYsUTaAwdlIYXRsTfUQwwuL1wSneVN9P94bkd3q4QFrNh5yRdn3jut0a1R+ZLcPrm1cgrszo7KiGL5oOyfIpH7N+LX0gbMl0EiCAnvpsDnM1xJIXKR1yFZOc14CKuOmMZsSh7lbPFEDPaH0TDBAahwZa3fDthIwaGgKgkjfPrXH8zr5OmEw221jj6NUyoxZz10YDfRywK9nc8w+po4CfamZNJWGv/U7g3Bn0SA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
- header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PASe6tc0Bvnd5P1hnlXar0wMMeVaqkBIb+of2OVzPhw=;
- b=W1wYWs2+itm38aJFHdsocsi/GYlX2Tn2WAZqOxxsOxbMcypQCerxRgsx7ejrizFHKeXLnI2WKcpsC0yl2Ed8Kq8ntoLy+2pkchJ7UfLN4H8o8maqGdiMRZUfVWHipHXH4ydfE275WLRVftruCadOhfteiVQDUaRgbx774Okm4zk=
-Authentication-Results: armlinux.org.uk; dkim=none (message not signed)
- header.d=none;armlinux.org.uk; dmarc=none action=none
- header.from=leica-geosystems.com;
-Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com (2603:10a6:4:9b::11)
- by DB6PR0602MB2887.eurprd06.prod.outlook.com (2603:10a6:4:9a::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Mon, 30 Nov
- 2020 15:21:50 +0000
-Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com
- ([fe80::49c3:4b5b:289c:d62c]) by DB6PR0602MB2886.eurprd06.prod.outlook.com
- ([fe80::49c3:4b5b:289c:d62c%12]) with mapi id 15.20.3611.025; Mon, 30 Nov
- 2020 15:21:50 +0000
-From:   Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-To:     linux@armlinux.org.uk, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        tony@atomide.com, mripard@kernel.org, wens@csie.org,
-        jernej.skrabec@siol.net, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, catalin.marinas@arm.com, will@kernel.org,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, lee.jones@linaro.org, sam@ravnborg.org,
-        emil.l.velikov@gmail.com, daniel.thompson@linaro.org,
-        krzk@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 5/5] powerpc/configs: drop unused BACKLIGHT_GENERIC option
-Date:   Mon, 30 Nov 2020 15:21:37 +0000
-Message-Id: <20201130152137.24909-6-andrey.zhizhikin@leica-geosystems.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201130152137.24909-1-andrey.zhizhikin@leica-geosystems.com>
-References: <20201130152137.24909-1-andrey.zhizhikin@leica-geosystems.com>
-Content-Type: text/plain
-X-Originating-IP: [193.8.40.112]
-X-ClientProxiedBy: ZRAP278CA0002.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:10::12) To DB6PR0602MB2886.eurprd06.prod.outlook.com
- (2603:10a6:4:9b::11)
+        id S1728220AbgK3Php (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Nov 2020 10:37:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43360 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728156AbgK3Pho (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Nov 2020 10:37:44 -0500
+Received: from mail.kernel.org (ip5f5ad5b3.dynamic.kabel-deutschland.de [95.90.213.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 15E11208DB;
+        Mon, 30 Nov 2020 15:36:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606750605;
+        bh=Nq7nieU9NxFApiiKqP1AICqSGy1X7FthNYZ1ce3w7kc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uAX1dK/KSSKf4Arojv/EDH+dOAzk9oYTaBF/88x9pGVVKS4rmWxOABF74+EklXubT
+         3+gsW9AXa1g6BYYtD5C2JQEufVOJpgzUdCkv/M3UdVc749uXzTGDSzsP8ZCOpFGEQ1
+         WwhTpLqH+/ozooez/Vwhu2kwSmK5XfW3EFpaJgKI=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kjlEI-00CjvH-B9; Mon, 30 Nov 2020 16:36:42 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Kees Cook <keescook@chromium.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rich Felker <dalias@libc.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, x86@kernel.org
+Subject: [PATCH 0/6] Add documentation for Documentation/features at the built docs
+Date:   Mon, 30 Nov 2020 16:36:29 +0100
+Message-Id: <cover.1606748711.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.112) by ZRAP278CA0002.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:10::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend Transport; Mon, 30 Nov 2020 15:21:49 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 05c7aa9a-e271-4d76-897f-08d89543a8f7
-X-MS-TrafficTypeDiagnostic: DB6PR0602MB2887:
-X-Microsoft-Antispam-PRVS: <DB6PR0602MB28874E2B958FEF2A76647379A6F50@DB6PR0602MB2887.eurprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1284;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EtMIUFO3Cfg7TZRbAD6eYE9/KNyoY37Irjnv5z/sQHEflWAZLH7NTJAXnXoByVigBtefZGRqQ+CRMt/ikZ7BKmqB1jevghEBiNbKQzT4IrvhQTb5jrXELHMKZxpbguPTD0tq5KvLsELdBrPLSJ0zIE8cV8gRTvmufzzF5bYx6xMx9ytqLQ9i+km6pVx15NNO2CE9z4MLY5iB1JqdgH1e0W5ZFXqlhkbhSSS4GHgzp/zwZL0h2b4NdOqBC1phig8uoqLC+RctQTLobzOCbNuTGgofeIFdsVnQexa9fEBj55zHY+7+EmfN71A92S65rl8y78fu7aUTpKqN+hCKjM3DOJIi0fwXnzQzvv4xS+ZOW/taHTMoUwLTk8YLTdIURrvpobxSBr8KWS2ms0hNhyy7og==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0602MB2886.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(366004)(136003)(396003)(39860400002)(5660300002)(2616005)(1076003)(52116002)(6506007)(16526019)(956004)(26005)(186003)(7406005)(7416002)(36756003)(2906002)(316002)(6666004)(4744005)(44832011)(86362001)(83380400001)(6486002)(6512007)(921005)(66946007)(478600001)(8676002)(8936002)(66556008)(66476007)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?WfDKOrYkB6FaKQty1wl/EOFjlYKUWiwVQ5qiKVzRNQ1cpp22rmkTsWfZwhuK?=
- =?us-ascii?Q?YGFF38wDMocxCXSmeUjm81dRTUpvHR5om9dQWhxckdeTugwJs+t43H1krPqq?=
- =?us-ascii?Q?IJZxjqhOcGm2bis2gVb3oLsV0I9sR15auf+eb4W/jPBlnVwTd7vt0rRbG61k?=
- =?us-ascii?Q?zMWO2s7lDXGukeKsHkISHHSFoA0n1JtwSjz3Q+8sUN9XyjFlZeKk6xhHyMOo?=
- =?us-ascii?Q?0mOuubN45561OdTW9NRPo6uLXZyt88CwP4yH/hHEYXTxCD4LVek4fDHi2jpH?=
- =?us-ascii?Q?lE8G5fQr8++6BMmVavAHnRYSHuqOmTicAZMK/0ZMCtrCvZ95vFAwDgrCuHkc?=
- =?us-ascii?Q?b6sqcoUI4AFURyomvhUSUiaLTaMtqfO5El6RMfT3tCZb1r4SJ5ngbu+Nst8W?=
- =?us-ascii?Q?vUlQiRnlYseOBqwoQ4yhyTBXBDFmzpCTuZ4j9KvC/diBrWVFrNPfSMWpVG67?=
- =?us-ascii?Q?goWxKk23af4SxCf+zuYOR2H1EQzjpYoMQNgcPK9GdCLeoR5U2KyzP9bXm+2t?=
- =?us-ascii?Q?ggLE38t0jTNMo2ysAw/8Bm0PesqK0yT9LC7xX6/fVkjkpNGRn2LkMww28Cjh?=
- =?us-ascii?Q?fxqJwqj8Sw/8SPwhSk2ZafNHq44s2bC5kxxiYTYjlHZ06cVrsVlihhAXi3ea?=
- =?us-ascii?Q?QtPqPKtsqhXFLQDL13l4btCL32JIR8jD5MW0qprNW0JwU8RxrYXdG6zyWayV?=
- =?us-ascii?Q?V47MDSA7hFq2LQocMLHzipgrMsbXVRpVbQCidgePAd6rxVn9YPwGmKpqapqf?=
- =?us-ascii?Q?PXojVHWLLEVePScpMQJsHPYGA+J0QY/UCEV4qw2emAM1PkDZ2eoBPi4fGCi4?=
- =?us-ascii?Q?KQy3cEidwiN8t7IeEpsreN2D9VAgGFwt784d4lZypUwkp7ulpWRCZ+AlXFP8?=
- =?us-ascii?Q?4WlDYPyO7My5EPljTKzVE7iIJ4fg+2ZcxKIEtmGljQ/yBxRgEsGfzEkQSZiX?=
- =?us-ascii?Q?eKmcs/4Lpt4rAa2F7cbcweNgi3i1Uv2kd0yvffLjjLZlVraAT7jX3CHb57z5?=
- =?us-ascii?Q?QJYG?=
-X-OriginatorOrg: leica-geosystems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05c7aa9a-e271-4d76-897f-08d89543a8f7
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR0602MB2886.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2020 15:21:50.5036
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mslY1LtSYuJztu1x7vCKv6hSlsi8aVHltnH7lf7hLv6TKXjQqBjs3fmqjz65W4u87DLOsCEhGIjKJ3RUD5ULIOXETzg9AVSdfOKKrdDhTYU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0602MB2887
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is
-unused") removed geenric_bl driver from the tree, together with
-corresponding config option.
+Hi Jon,
 
-Remove BACKLIGHT_GENERIC config item from generic-64bit_defconfig.
+This series got already submitted last year:
 
-Fixes: 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is unused")
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
----
- arch/powerpc/configs/powernv_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+   https://lore.kernel.org/lkml/cover.1561222784.git.mchehab+samsung@kernel.org/
 
-diff --git a/arch/powerpc/configs/powernv_defconfig b/arch/powerpc/configs/powernv_defconfig
-index cf30fc24413b..60a30fffeda0 100644
---- a/arch/powerpc/configs/powernv_defconfig
-+++ b/arch/powerpc/configs/powernv_defconfig
-@@ -208,7 +208,6 @@ CONFIG_FB_MATROX_G=y
- CONFIG_FB_RADEON=m
- CONFIG_FB_IBM_GXT4500=m
- CONFIG_LCD_PLATFORM=m
--CONFIG_BACKLIGHT_GENERIC=m
- # CONFIG_VGA_CONSOLE is not set
- CONFIG_LOGO=y
- CONFIG_HID_A4TECH=m
+Yet, on that time, there were too many other patches related to ReST
+conversion floating around. So, at the end, I guess this one got missed.
+
+So, I did a rebase on the top of upstream, and added a few new changes.
+
+Patch 1 contains the original implementation back then. It adds a
+get_feat.pl script that parses the contents of Documentation/features.
+
+Patch 2 is new: it re-implements the output of the full contents of the
+features table as a set of per-subsystem tables. 
+
+Patch 3 replaces the existing Documentation/features/list-arch.sh
+by a call to the new script, in order to avoid having two scripts
+doing the same thing.
+
+Patch 4 is a sphinx extension to allow generating features output
+via a meta-tag.
+
+Patch 5 adds a complete feature list covering all archs at the
+admin guide.
+
+Patch 6 adds a per-arch feature list on each architecture book.
+
+-
+
+The scripts/get_feat.pl supports several types of output:
+
+- $ scripts/get_feat.pl current
+
+  Outputs the supported feadures by the architecture of the
+  running Kernel, as an ASCII table;
+
+- $  scripts/get_feat.pl list
+
+  Outputs the supported features on an easy to be parsed
+  format. By default, it uses the current architecture as well;
+
+- $  scripts/get_feat.pl rest --feature jump-labels
+
+  Output what architecture supports a given feature
+  (on the above example, "jump-labels" feature)
+
+- $ scripts/get_feat.pl rest --arch um
+
+  Outputs the features support for an specific architecture
+  (on the above example, for "um" architecture.
+
+- $ scripts/get_feat.pl rest
+
+  Outputs a text file with ASCII tables (ReST compatible)
+  with all features, grouped per subsystem.
+
+  E. g. something like:
+	
+        ===================================
+        Feature status on all architectures
+        ===================================
+        
+        Subsystem: core
+        ===============
+        
+        +---------------------+---------------------------------+-------------------------------------------------------------------------+------------+------+
+        |Feature              |Kconfig                          |Description                                                              |Architecture|Status|
+        +=====================+=================================+=========================================================================+============+======+
+        |cBPF-JIT             |HAVE_CBPF_JIT                    |arch supports cBPF JIT optimizations                                     |alpha       |TODO  |
+        |                     |                                 |                                                                         +------------+------+
+        |                     |                                 |                                                                         |arc         |TODO  |
+        |                     |                                 |                                                                         +------------+------+
+        |                     |                                 |                                                                         |arm         |TODO  |
+        |                     |                                 |                                                                         +------------+------+
+        |                     |                                 |                                                                         |arm64       |TODO  |
+        |                     |                                 |                                                                         +------------+------+
+        |                     |                                 |                                                                         |c6x         |TODO  |
+        |                     |                                 |                                                                         +------------+------+
+        |                     |                                 |                                                                         |csky        |TODO  |
+        |                     |                                 |                                                                         +------------+------+
+        |                     |                                 |                                                                         |h8300       |TODO  |
+        |                     |                                 |                                                                         +------------+------+
+        |                     |                                 |                                                                         |hexagon     |TODO  |
+...
+
+Adding those patchsets will basically place the contents of all
+files under Documentation/features (currently, 45 files) at the
+Kernel documentation, which is, IMO, a good thing to do.
+
+Regards,
+Mauro
+
+Mauro Carvalho Chehab (6):
+  scripts: get_feat.pl: add a script to handle Documentation/features
+  scripts: get_feat.pl: improve matrix output
+  scripts: get_feat.pl: use its implementation for list-arch.sh
+  sphinx: kernel_feat.py: add a script to parse feature files
+  docs: admin-guide: add a features list
+  docs: archis: add a per-architecture features list
+
+ Documentation/admin-guide/features.rst |   3 +
+ Documentation/admin-guide/index.rst    |   1 +
+ Documentation/arm/features.rst         |   3 +
+ Documentation/arm/index.rst            |   2 +
+ Documentation/arm64/features.rst       |   3 +
+ Documentation/arm64/index.rst          |   2 +
+ Documentation/conf.py                  |   2 +-
+ Documentation/features/list-arch.sh    |  17 +-
+ Documentation/ia64/features.rst        |   3 +
+ Documentation/ia64/index.rst           |   2 +
+ Documentation/index.rst                |   2 +-
+ Documentation/m68k/features.rst        |   3 +
+ Documentation/m68k/index.rst           |   2 +
+ Documentation/mips/features.rst        |   3 +
+ Documentation/mips/index.rst           |   2 +
+ Documentation/nios2/index.rst          |  12 +
+ Documentation/openrisc/features.rst    |   3 +
+ Documentation/openrisc/index.rst       |   2 +
+ Documentation/parisc/features.rst      |   3 +
+ Documentation/parisc/index.rst         |   2 +
+ Documentation/powerpc/features.rst     |   3 +
+ Documentation/powerpc/index.rst        |   2 +
+ Documentation/riscv/features.rst       |   3 +
+ Documentation/riscv/index.rst          |   2 +
+ Documentation/s390/features.rst        |   3 +
+ Documentation/s390/index.rst           |   2 +
+ Documentation/sh/features.rst          |   3 +
+ Documentation/sh/index.rst             |   2 +
+ Documentation/sparc/features.rst       |   3 +
+ Documentation/sparc/index.rst          |   2 +
+ Documentation/sphinx/kernel_feat.py    | 169 ++++++++
+ Documentation/x86/features.rst         |   3 +
+ Documentation/x86/index.rst            |   1 +
+ Documentation/xtensa/features.rst      |   3 +
+ Documentation/xtensa/index.rst         |   2 +
+ scripts/get_feat.pl                    | 552 +++++++++++++++++++++++++
+ 36 files changed, 810 insertions(+), 17 deletions(-)
+ create mode 100644 Documentation/admin-guide/features.rst
+ create mode 100644 Documentation/arm/features.rst
+ create mode 100644 Documentation/arm64/features.rst
+ create mode 100644 Documentation/ia64/features.rst
+ create mode 100644 Documentation/m68k/features.rst
+ create mode 100644 Documentation/mips/features.rst
+ create mode 100644 Documentation/nios2/index.rst
+ create mode 100644 Documentation/openrisc/features.rst
+ create mode 100644 Documentation/parisc/features.rst
+ create mode 100644 Documentation/powerpc/features.rst
+ create mode 100644 Documentation/riscv/features.rst
+ create mode 100644 Documentation/s390/features.rst
+ create mode 100644 Documentation/sh/features.rst
+ create mode 100644 Documentation/sparc/features.rst
+ create mode 100644 Documentation/sphinx/kernel_feat.py
+ create mode 100644 Documentation/x86/features.rst
+ create mode 100644 Documentation/xtensa/features.rst
+ create mode 100755 scripts/get_feat.pl
+
 -- 
-2.17.1
+2.28.0
+
 
