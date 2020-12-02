@@ -2,53 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A723C2CC326
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Dec 2020 18:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0422CC359
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Dec 2020 18:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbgLBRMw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Dec 2020 12:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
+        id S1730654AbgLBRUN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Dec 2020 12:20:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726514AbgLBRMw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Dec 2020 12:12:52 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA11C0613CF;
-        Wed,  2 Dec 2020 09:12:12 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id m9so1471084pgb.4;
-        Wed, 02 Dec 2020 09:12:12 -0800 (PST)
+        with ESMTP id S1730573AbgLBRUL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Dec 2020 12:20:11 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0221C0613CF;
+        Wed,  2 Dec 2020 09:19:31 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id t37so1474849pga.7;
+        Wed, 02 Dec 2020 09:19:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IZbEoIeyeTlkYBHp4MmdFhJwiumrYisD0E9oge56A+o=;
-        b=ZsnJTK9weEJnTRSQB6kXQvyj/MZ8J5Ol1VhaA6Lc0a3kkTXMVMJADc1f9w3wKEVvMq
-         obwjv63y8jcLqZZJPUCjKuz8ShN3wtoNfy1ly3gHLGDzIvvONF4KeOi7BOlzoLhkv/ir
-         O/7cGLt/yehkWObqor4mEIrgxiA8+r9A+a28AXWEKQLW2WiRej0ABKxkTTuXrLMduEgH
-         Ydhmgl8ko/18ro+Hb9NpGdNjppIe58Wit0bfh/2gzwidgP8jCAUz6VIY43PpkbB98iOX
-         kKg1NLt6BGnNyBBHyz+sRxl0Ir7UeUyJJQmsElWDzgyCH4iP274p1pbzid/BgL3aGJGm
-         bG+g==
+        bh=lb1TixJdDgHpz8VRboBx5x4l5NaR15Ck5CwsssBAGFk=;
+        b=qFyVfFIdKGzxlIXV8iBnn8r33OIZOD4LqVq++WA88m1MBaKJid7qKd25uHpsbypTyj
+         o95OOQqFYWwTaxjmhm49ZsemuZiG2zeEGSaggF4r2Ao6v3jIE4LGskn4ZxwdhmEbVuc7
+         +42h++TVAsSnfF3ntkrPjU6qP+bLZPdRutF26brfIXQZ21WyItU7czgMb9MA2jRTVP+/
+         otZOntbcwKOHVNoc/LbHq/ALhFDbVJE63JzDCSXAue5OStRaRetijDTMRZdy8nA1Px6T
+         lbZD5C7eVRyunV/zP1B+Fv8Ux1divEtSpt4C8kxnRASJorGFfCQJN9ltAecge8MomaB6
+         4yYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=IZbEoIeyeTlkYBHp4MmdFhJwiumrYisD0E9oge56A+o=;
-        b=lUN1U/MfTSLA5IQw3pWsHybFodS8cN4GXdOnMZlkuSxg129mb8ZOxz75SN+v61nDSy
-         rgstcAuAhvjGbhpnRWS9G58O3POuGRBiKr5WG9BVu7mQi5CoLUbUVGfkjMFSan1Tv8Zc
-         GIPWoePbrzmV2CFyq6SpuLzj89XbhSNECh8MeuAS26poHqu6uJQ3O5UxLZ7mb6zr457g
-         agVSB7WfkMWearumy77y6oLqYsuH4dPdJeHQQl4aLoX56OjXvMl13Hmbc2nigCnPCm+j
-         LlHqH7Z+0KhJ79dqpI+8deJkjMjX03Gk/iCTfSVJn7OW9Bo8dtZzc3RNfBVz29rhKcRs
-         HVQg==
-X-Gm-Message-State: AOAM532NGQ/JdE6lwf+l2tykoguwTZDDjUU549HTxRQq8N5ByMQX9skb
-        2QPo5uSGK/SAF2crx2jjos7OfllnvS4=
-X-Google-Smtp-Source: ABdhPJxnHIDsU4Yd9L9VnzzBhgdfKupbQhV0SN+mBgRGcDKFkMf8fIUfvrwu6oi3TAkfMtkTvxpr7Q==
-X-Received: by 2002:a63:f50f:: with SMTP id w15mr705616pgh.403.1606929131046;
-        Wed, 02 Dec 2020 09:12:11 -0800 (PST)
+        bh=lb1TixJdDgHpz8VRboBx5x4l5NaR15Ck5CwsssBAGFk=;
+        b=NvtiVs+fCunj/6i5Q5u6H8VWVYhPVgCW22A/9FmYr2XXYYVdR8zFJov4zuhNcbrYaw
+         J6WdVSetinO7ziNuGTtJFtpBizCtMJtmWXzng2WytgRez2C4eW79WH4KLcpFOy9dUaxh
+         bni4M0Pm/7eS3qpBxi+QPhh7sJW43/I2SkSPuFxkX9r8aSBI47mXq8ye+Cq5Um9XextU
+         N2CcgJR8bFSFJoM0NQQG2zDB+Cu03RRfKunXMWuUwOhuo5ThSz0esn9u0JRdokTI9Xdm
+         XAV9BDu26YlLP/UZTCmcV9b519hK4APx2035YOJB0fGuPbLL4HQaCAFq1Ckqc960fT01
+         FVMA==
+X-Gm-Message-State: AOAM531x+OvuiMXONrX01If5LXPQD5+Gsxj994Wdn8YPml5U+tTFRBO4
+        rrMwbjbz4beiCnXj3eJXXFNwtbytdGg=
+X-Google-Smtp-Source: ABdhPJzfr7hYqKg1Q7LET0QkF+1UOe12/eVTDyIwig8JByRQ5H+mEsvJe9HXsWuGOZp/qA/aPmDwkw==
+X-Received: by 2002:aa7:9387:0:b029:18b:42dd:41c with SMTP id t7-20020aa793870000b029018b42dd041cmr3554296pfe.60.1606929570781;
+        Wed, 02 Dec 2020 09:19:30 -0800 (PST)
 Received: from [10.230.28.242] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x21sm345923pfn.196.2020.12.02.09.12.06
+        by smtp.gmail.com with ESMTPSA id u6sm359059pfb.197.2020.12.02.09.19.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Dec 2020 09:12:07 -0800 (PST)
-Subject: Re: [PATCH v2 1/2] net: dsa: add optional stats64 support
+        Wed, 02 Dec 2020 09:19:29 -0800 (PST)
+Subject: Re: [PATCH v3 net-next 1/2] net: dsa: add optional stats64 support
 To:     Oleksij Rempel <o.rempel@pengutronix.de>,
         Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -59,15 +59,15 @@ To:     Oleksij Rempel <o.rempel@pengutronix.de>,
 Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
-References: <20201202120712.6212-1-o.rempel@pengutronix.de>
- <20201202120712.6212-2-o.rempel@pengutronix.de>
+References: <20201202140904.24748-1-o.rempel@pengutronix.de>
+ <20201202140904.24748-2-o.rempel@pengutronix.de>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <f2f1623f-749e-ea97-a32c-61c49b7e0485@gmail.com>
-Date:   Wed, 2 Dec 2020 09:12:06 -0800
+Message-ID: <222e8546-2bf2-fe0b-871d-7866ed87b54e@gmail.com>
+Date:   Wed, 2 Dec 2020 09:19:27 -0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <20201202120712.6212-2-o.rempel@pengutronix.de>
+In-Reply-To: <20201202140904.24748-2-o.rempel@pengutronix.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,10 +77,11 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 12/2/2020 4:07 AM, Oleksij Rempel wrote:
+On 12/2/2020 6:09 AM, Oleksij Rempel wrote:
 > Allow DSA drivers to export stats64
 > 
 > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
