@@ -2,30 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 834C22CE115
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Dec 2020 22:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD0A2CE113
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Dec 2020 22:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502030AbgLCVr2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Dec 2020 16:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S2501995AbgLCVr0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Dec 2020 16:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2501986AbgLCVr0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 16:47:26 -0500
+        with ESMTP id S2501974AbgLCVrZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 16:47:25 -0500
 Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8935C061A4F;
-        Thu,  3 Dec 2020 13:46:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BA8C08C5F2;
+        Thu,  3 Dec 2020 13:46:44 -0800 (PST)
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kkwQz-00GJS1-Gt; Thu, 03 Dec 2020 21:46:41 +0000
+        id 1kkwQz-00GJS4-OZ; Thu, 03 Dec 2020 21:46:41 +0000
 From:   Al Viro <viro@ZenIV.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 01/10] binfmt_elf: partially sanitize PRSTATUS_SIZE and SET_PR_FPVALID
-Date:   Thu,  3 Dec 2020 21:46:32 +0000
-Message-Id: <20201203214641.3887979-1-viro@ZenIV.linux.org.uk>
+Subject: [PATCH 02/10] elf_prstatus: collect the common part (everything before pr_reg) into a struct
+Date:   Thu,  3 Dec 2020 21:46:33 +0000
+Message-Id: <20201203214641.3887979-2-viro@ZenIV.linux.org.uk>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201203214529.GB3579531@ZenIV.linux.org.uk>
+In-Reply-To: <20201203214641.3887979-1-viro@ZenIV.linux.org.uk>
 References: <20201203214529.GB3579531@ZenIV.linux.org.uk>
+ <20201203214641.3887979-1-viro@ZenIV.linux.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
@@ -35,179 +36,291 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Al Viro <viro@zeniv.linux.org.uk>
 
-On 64bit architectures that support 32bit processes there are
-two possible layouts for NT_PRSTATUS note in ELF coredumps.
-For one thing, several fields are 64bit for native processes
-and 32bit for compat ones (pr_sigpend, etc.).  For another,
-the register dump is obviously different - the size and number
-of registers are not going to be the same for 32bit and 64bit
-variants of processor.
+Preparations to doing i386 compat elf_prstatus sanely - rather than duplicating
+the beginning of compat_elf_prstatus, take these fields into a separate
+structure (compat_elf_prstatus_common), so that it could be reused.  Due to
+the incestous relationship between binfmt_elf.c and compat_binfmt_elf.c we
+need the same shape change done to native struct elf_prstatus, gathering the
+fields prior to pr_reg into a new structure (struct elf_prstatus_common).
 
-Usually that's handled by having two structures - elf_prstatus
-for native layout and compat_elf_prstatus for 32bit one.
-32bit processes are handled by fs/compat_binfmt_elf.c, which
-defines a macro called 'elf_prstatus' that expands to compat_elf_prstatus.
-Then it includes fs/binfmt_elf.c, which makes all references to
-struct elf_prstatus to be textually replaced with struct
-compat_elf_prstatus.  Ugly and somewhat brittle, but it works.
-
-However, amd64 is worse - there are _three_ possible layouts.
-One for native 64bit processes, another for i386 (32bit) processes
-and yet another for x32 (32bit address space with full 64bit
-registers).
-
-Both i386 and x32 processes are handled by fs/compat_binfmt_elf.c,
-with usual compat_binfmt_elf.c trickery.  However, the layouts
-for i386 and x32 are not identical - they have the common beginning,
-but the register dump part (pr_reg) is bigger on x32.  Worse, pr_reg
-is not the last field - it's followed by int pr_fpvalid, so that
-field ends up at different offsets for i386 and x32 layouts.
-
-Fortunately, there's not much code that cares about any of that -
-it's all encapsulated in fill_thread_core_info().  Since x32
-variant is bigger, we define compat_elf_prstatus to match that
-layout.  That way i386 processes have enough space to fit
-their layout into.
-
-Moreover, since these layouts are identical prior to pr_reg,
-we don't need to distinguish x32 and i386 cases when we are
-setting the fields prior to pr_reg.
-
-Filling pr_reg itself is done by calling ->get() method of
-appropriate regset, and that method knows what layout (and size)
-to use.
-
-We do need to distinguish x32 and i386 cases only for two
-things: setting ->pr_fpvalid (offset differs for x32 and
-i386) and choosing the right size for our note.
-
-The way it's done is Not Nice, for the lack of more accurate
-printable description.  There are two macros (PRSTATUS_SIZE and
-SET_PR_FPVALID), that default essentially to sizeof(struct elf_prstatus)
-and (S)->pr_fpvalid = 1.  On x86 asm/compat.h provides its own
-variants.
-
-Unfortunately, quite a few things go wrong there:
-	* PRSTATUS_SIZE doesn't use the normal test for process
-being an x32 one (TIF_X32); it compares the size reported by
-regset with the size of pr_reg.
-	* it hardcodes the sizes of x32 and i386 variants (296 and 144
-resp.), so if some change in includes leads to asm/compat.h pulled
-in by fs/binfmt_elf.c we are in trouble - it will end up using
-the size of x32 variant for 64bit processes.
-	* it's in the wrong place; asm/compat.h couldn't define
-the structure for i386 layout, since it lacks quite a few types
-needed for it.  Hardcoded sizes are largely due to that.
-
-The proper fix would be to have an explicitly defined i386 variant
-of structure and have PRSTATUS_SIZE/SET_PR_FPVALID check for
-TIF_X32 to choose the variant that should be used.  Unfortunately,
-that requires some manipulations of headers; we'll do that later
-in the series, but for now let's go with the minimal variant -
-rename PRSTATUS_SIZE in asm/compat.h to COMPAT_PRSTATUS_SIZE,
-have fs/compat_binfmt_elf.c define PRSTATUS_SIZE to COMPAT_PRSTATUS_SIZE
-and use the normal TIF_X32 check in that macro.  The size of i386 variant
-is kept hardcoded for now.  Similar story for SET_PR_FPVALID.
+Fortunately, offset of pr_reg is always a multiple of 16 with no padding
+right before it, so it's possible to turn all the stuff prior to it into
+a single member without disturbing the layout.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/x86/include/asm/compat.h | 11 +++++++----
- fs/binfmt_elf.c               | 13 +++++--------
- fs/compat_binfmt_elf.c        |  8 ++++++++
- 3 files changed, 20 insertions(+), 12 deletions(-)
+ arch/ia64/kernel/crash.c                   |  2 +-
+ arch/mips/kernel/binfmt_elfn32.c           |  7 ++++++-
+ arch/mips/kernel/binfmt_elfo32.c           |  6 +++++-
+ arch/powerpc/platforms/powernv/opal-core.c |  6 +++---
+ arch/s390/kernel/crash_dump.c              |  2 +-
+ fs/binfmt_elf.c                            |  6 +++---
+ fs/binfmt_elf_fdpic.c                      | 22 +++++-----------------
+ fs/compat_binfmt_elf.c                     |  1 +
+ include/linux/elfcore-compat.h             |  7 ++++++-
+ include/linux/elfcore.h                    |  7 ++++++-
+ kernel/kexec_core.c                        |  2 +-
+ 11 files changed, 38 insertions(+), 30 deletions(-)
 
-diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
-index 0e327a01f50f..1897e1dcbdd2 100644
---- a/arch/x86/include/asm/compat.h
-+++ b/arch/x86/include/asm/compat.h
-@@ -165,10 +165,13 @@ struct compat_shmid64_ds {
- typedef struct user_regs_struct compat_elf_gregset_t;
+diff --git a/arch/ia64/kernel/crash.c b/arch/ia64/kernel/crash.c
+index fec70d662d0c..4f47741005d2 100644
+--- a/arch/ia64/kernel/crash.c
++++ b/arch/ia64/kernel/crash.c
+@@ -43,7 +43,7 @@ crash_save_this_cpu(void)
  
- /* Full regset -- prstatus on x32, otherwise on ia32 */
--#define PRSTATUS_SIZE(S, R) (R != sizeof(S.pr_reg) ? 144 : 296)
--#define SET_PR_FPVALID(S, V, R) \
--  do { *(int *) (((void *) &((S)->pr_reg)) + R) = (V); } \
--  while (0)
-+#define COMPAT_PRSTATUS_SIZE (test_thread_flag(TIF_X32) \
-+	? sizeof(struct compat_elf_prstatus) \
-+	: 144)
-+#define COMPAT_SET_PR_FPVALID(S) \
-+	(*(test_thread_flag(TIF_X32)	\
-+	       ? &(S)->pr_fpvalid	\
-+               : (int *)((void *)(S) + 140)) = 1)
+ 	elf_greg_t *dst = (elf_greg_t *)&(prstatus->pr_reg);
+ 	memset(prstatus, 0, sizeof(*prstatus));
+-	prstatus->pr_pid = current->pid;
++	prstatus->common.pr_pid = current->pid;
  
- #ifdef CONFIG_X86_X32_ABI
- #define COMPAT_USE_64BIT_TIME \
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index b6b3d052ca86..f066882bd270 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1717,11 +1717,11 @@ static void do_thread_regset_writeback(struct task_struct *task,
- }
+ 	ia64_dump_cpu_regs(dst);
+ 	cfm = dst[43];
+diff --git a/arch/mips/kernel/binfmt_elfn32.c b/arch/mips/kernel/binfmt_elfn32.c
+index 6ee3f7218c67..136dc0c9300d 100644
+--- a/arch/mips/kernel/binfmt_elfn32.c
++++ b/arch/mips/kernel/binfmt_elfn32.c
+@@ -44,7 +44,8 @@ typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
+ #include <linux/math64.h>
  
- #ifndef PRSTATUS_SIZE
--#define PRSTATUS_SIZE(S, R) sizeof(S)
-+#define PRSTATUS_SIZE sizeof(struct elf_prstatus)
- #endif
- 
- #ifndef SET_PR_FPVALID
--#define SET_PR_FPVALID(S, V, R) ((S)->pr_fpvalid = (V))
-+#define SET_PR_FPVALID(S) ((S)->pr_fpvalid = 1)
- #endif
- 
- static int fill_thread_core_info(struct elf_thread_core_info *t,
-@@ -1729,7 +1729,6 @@ static int fill_thread_core_info(struct elf_thread_core_info *t,
- 				 long signr, size_t *total)
+ #define elf_prstatus elf_prstatus32
+-struct elf_prstatus32
++#define elf_prstatus_common elf_prstatus32_common
++struct elf_prstatus32_common
  {
- 	unsigned int i;
--	int regset0_size;
+ 	struct elf_siginfo pr_info;	/* Info associated with signal */
+ 	short	pr_cursig;		/* Current signal */
+@@ -58,6 +59,10 @@ struct elf_prstatus32
+ 	struct old_timeval32 pr_stime; /* System time */
+ 	struct old_timeval32 pr_cutime;/* Cumulative user time */
+ 	struct old_timeval32 pr_cstime;/* Cumulative system time */
++};
++struct elf_prstatus32
++{
++	struct elf_prstatus32_common common:
+ 	elf_gregset_t pr_reg;	/* GP registers */
+ 	int pr_fpvalid;		/* True if math co-processor being used.  */
+ };
+diff --git a/arch/mips/kernel/binfmt_elfo32.c b/arch/mips/kernel/binfmt_elfo32.c
+index 6dd103d3cebb..b1f4b8f1dee7 100644
+--- a/arch/mips/kernel/binfmt_elfo32.c
++++ b/arch/mips/kernel/binfmt_elfo32.c
+@@ -49,7 +49,7 @@ typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
+ #include <linux/math64.h>
+ 
+ #define elf_prstatus elf_prstatus32
+-struct elf_prstatus32
++struct elf_prstatus32_common
+ {
+ 	struct elf_siginfo pr_info;	/* Info associated with signal */
+ 	short	pr_cursig;		/* Current signal */
+@@ -63,6 +63,10 @@ struct elf_prstatus32
+ 	struct old_timeval32 pr_stime; /* System time */
+ 	struct old_timeval32 pr_cutime;/* Cumulative user time */
+ 	struct old_timeval32 pr_cstime;/* Cumulative system time */
++};
++struct elf_prstatus32
++{
++	struct elf_prstatus32_common common:
+ 	elf_gregset_t pr_reg;	/* GP registers */
+ 	int pr_fpvalid;		/* True if math co-processor being used.  */
+ };
+diff --git a/arch/powerpc/platforms/powernv/opal-core.c b/arch/powerpc/platforms/powernv/opal-core.c
+index 23571f0b555a..0d9ba70f7251 100644
+--- a/arch/powerpc/platforms/powernv/opal-core.c
++++ b/arch/powerpc/platforms/powernv/opal-core.c
+@@ -119,8 +119,8 @@ static void fill_prstatus(struct elf_prstatus *prstatus, int pir,
+ 	 * As a PIR value could also be '0', add an offset of '100'
+ 	 * to every PIR to avoid misinterpretations in GDB.
+ 	 */
+-	prstatus->pr_pid  = cpu_to_be32(100 + pir);
+-	prstatus->pr_ppid = cpu_to_be32(1);
++	prstatus->common.pr_pid  = cpu_to_be32(100 + pir);
++	prstatus->common.pr_ppid = cpu_to_be32(1);
  
  	/*
- 	 * NT_PRSTATUS is the one special case, because the regset data
-@@ -1738,13 +1737,11 @@ static int fill_thread_core_info(struct elf_thread_core_info *t,
+ 	 * Indicate SIGUSR1 for crash initiated from kernel.
+@@ -130,7 +130,7 @@ static void fill_prstatus(struct elf_prstatus *prstatus, int pir,
+ 		short sig;
+ 
+ 		sig = kernel_initiated ? SIGUSR1 : SIGTERM;
+-		prstatus->pr_cursig = cpu_to_be16(sig);
++		prstatus->common.pr_cursig = cpu_to_be16(sig);
+ 	}
+ }
+ 
+diff --git a/arch/s390/kernel/crash_dump.c b/arch/s390/kernel/crash_dump.c
+index 205b2e2648aa..0e36dfc9ccd6 100644
+--- a/arch/s390/kernel/crash_dump.c
++++ b/arch/s390/kernel/crash_dump.c
+@@ -365,7 +365,7 @@ static void *fill_cpu_elf_notes(void *ptr, int cpu, struct save_area *sa)
+ 	memcpy(&nt_prstatus.pr_reg.gprs, sa->gprs, sizeof(sa->gprs));
+ 	memcpy(&nt_prstatus.pr_reg.psw, sa->psw, sizeof(sa->psw));
+ 	memcpy(&nt_prstatus.pr_reg.acrs, sa->acrs, sizeof(sa->acrs));
+-	nt_prstatus.pr_pid = cpu;
++	nt_prstatus.common.pr_pid = cpu;
+ 	/* Prepare fpregset (floating point) note */
+ 	memset(&nt_fpregset, 0, sizeof(nt_fpregset));
+ 	memcpy(&nt_fpregset.fpc, &sa->fpc, sizeof(sa->fpc));
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index f066882bd270..c76324f647ae 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -1495,7 +1495,7 @@ static void fill_note(struct memelfnote *note, const char *name, int type,
+  * fill up all the fields in prstatus from the given task struct, except
+  * registers which need to be filled up separately.
+  */
+-static void fill_prstatus(struct elf_prstatus *prstatus,
++static void fill_prstatus(struct elf_prstatus_common *prstatus,
+ 		struct task_struct *p, long signr)
+ {
+ 	prstatus->pr_info.si_signo = prstatus->pr_cursig = signr;
+@@ -1736,7 +1736,7 @@ static int fill_thread_core_info(struct elf_thread_core_info *t,
+ 	 * than being the whole note contents.  We fill the reset in here.
  	 * We assume that regset 0 is NT_PRSTATUS.
  	 */
- 	fill_prstatus(&t->prstatus, t->task, signr);
--	regset0_size = regset_get(t->task, &view->regsets[0],
-+	regset_get(t->task, &view->regsets[0],
+-	fill_prstatus(&t->prstatus, t->task, signr);
++	fill_prstatus(&t->prstatus.common, t->task, signr);
+ 	regset_get(t->task, &view->regsets[0],
  		   sizeof(t->prstatus.pr_reg), &t->prstatus.pr_reg);
--	if (regset0_size < 0)
--		return 0;
  
- 	fill_note(&t->notes[0], "CORE", NT_PRSTATUS,
--		  PRSTATUS_SIZE(t->prstatus, regset0_size), &t->prstatus);
-+		  PRSTATUS_SIZE, &t->prstatus);
- 	*total += notesize(&t->notes[0]);
+@@ -1958,7 +1958,7 @@ static int elf_dump_thread_status(long signr, struct elf_thread_status *t)
+ 	struct task_struct *p = t->thread;
+ 	t->num_notes = 0;
  
- 	do_thread_regset_writeback(t->task, &view->regsets[0]);
-@@ -1772,7 +1769,7 @@ static int fill_thread_core_info(struct elf_thread_core_info *t,
- 			continue;
+-	fill_prstatus(&t->prstatus, p, signr);
++	fill_prstatus(&t->prstatus.common, p, signr);
+ 	elf_core_copy_task_regs(p, &t->prstatus.pr_reg);	
+ 	
+ 	fill_note(&t->notes[0], "CORE", NT_PRSTATUS, sizeof(t->prstatus),
+diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+index be4062b8ba75..03d81a14bcbf 100644
+--- a/fs/binfmt_elf_fdpic.c
++++ b/fs/binfmt_elf_fdpic.c
+@@ -1191,18 +1191,7 @@ static int elf_fdpic_map_file_by_direct_mmap(struct elf_fdpic_params *params,
  
- 		if (is_fpreg)
--			SET_PR_FPVALID(&t->prstatus, 1, regset0_size);
-+			SET_PR_FPVALID(&t->prstatus);
+ struct elf_prstatus_fdpic
+ {
+-	struct elf_siginfo pr_info;	/* Info associated with signal */
+-	short	pr_cursig;		/* Current signal */
+-	unsigned long pr_sigpend;	/* Set of pending signals */
+-	unsigned long pr_sighold;	/* Set of held signals */
+-	pid_t	pr_pid;
+-	pid_t	pr_ppid;
+-	pid_t	pr_pgrp;
+-	pid_t	pr_sid;
+-	struct __kernel_old_timeval pr_utime;	/* User time */
+-	struct __kernel_old_timeval pr_stime;	/* System time */
+-	struct __kernel_old_timeval pr_cutime;	/* Cumulative user time */
+-	struct __kernel_old_timeval pr_cstime;	/* Cumulative system time */
++	struct elf_prstatus_common	common;
+ 	elf_gregset_t pr_reg;	/* GP registers */
+ 	/* When using FDPIC, the loadmap addresses need to be communicated
+ 	 * to GDB in order for GDB to do the necessary relocations.  The
+@@ -1301,7 +1290,7 @@ static inline void fill_note(struct memelfnote *note, const char *name, int type
+  * fill up all the fields in prstatus from the given task struct, except
+  * registers which need to be filled up separately.
+  */
+-static void fill_prstatus(struct elf_prstatus_fdpic *prstatus,
++static void fill_prstatus(struct elf_prstatus_common *prstatus,
+ 			  struct task_struct *p, long signr)
+ {
+ 	prstatus->pr_info.si_signo = prstatus->pr_cursig = signr;
+@@ -1332,9 +1321,6 @@ static void fill_prstatus(struct elf_prstatus_fdpic *prstatus,
+ 	}
+ 	prstatus->pr_cutime = ns_to_kernel_old_timeval(p->signal->cutime);
+ 	prstatus->pr_cstime = ns_to_kernel_old_timeval(p->signal->cstime);
+-
+-	prstatus->pr_exec_fdpic_loadmap = p->mm->context.exec_fdpic_loadmap;
+-	prstatus->pr_interp_fdpic_loadmap = p->mm->context.interp_fdpic_loadmap;
+ }
  
- 		fill_note(&t->notes[i], is_fpreg ? "CORE" : "LINUX",
- 			  note_type, ret, data);
+ static int fill_psinfo(struct elf_prpsinfo *psinfo, struct task_struct *p,
+@@ -1405,7 +1391,9 @@ static struct elf_thread_status *elf_dump_thread_status(long signr, struct task_
+ 	if (!t)
+ 		return t;
+ 
+-	fill_prstatus(&t->prstatus, p, signr);
++	fill_prstatus(&t->prstatus.common, p, signr);
++	t->prstatus.pr_exec_fdpic_loadmap = p->mm->context.exec_fdpic_loadmap;
++	t->prstatus.pr_interp_fdpic_loadmap = p->mm->context.interp_fdpic_loadmap;
+ 	regset_get(p, &view->regsets[0],
+ 		   sizeof(t->prstatus.pr_reg), &t->prstatus.pr_reg);
+ 
 diff --git a/fs/compat_binfmt_elf.c b/fs/compat_binfmt_elf.c
-index 2d24c765cbd7..13cd78773700 100644
+index 13cd78773700..a40df32acff5 100644
 --- a/fs/compat_binfmt_elf.c
 +++ b/fs/compat_binfmt_elf.c
-@@ -95,6 +95,14 @@
- #define	ELF_EXEC_PAGESIZE	COMPAT_ELF_EXEC_PAGESIZE
- #endif
+@@ -50,6 +50,7 @@
+  * which requires asm/elf.h to define compat_elf_gregset_t et al.
+  */
+ #define elf_prstatus	compat_elf_prstatus
++#define elf_prstatus_common	compat_elf_prstatus_common
+ #define elf_prpsinfo	compat_elf_prpsinfo
  
-+#ifdef	COMPAT_PRSTATUS_SIZE
-+#define	PRSTATUS_SIZE COMPAT_PRSTATUS_SIZE
-+#endif
+ #undef ns_to_kernel_old_timeval
+diff --git a/include/linux/elfcore-compat.h b/include/linux/elfcore-compat.h
+index 10485f0c9740..4aeda5f1f038 100644
+--- a/include/linux/elfcore-compat.h
++++ b/include/linux/elfcore-compat.h
+@@ -17,7 +17,7 @@ struct compat_elf_siginfo
+ 	compat_int_t			si_errno;
+ };
+ 
+-struct compat_elf_prstatus
++struct compat_elf_prstatus_common
+ {
+ 	struct compat_elf_siginfo	pr_info;
+ 	short				pr_cursig;
+@@ -31,6 +31,11 @@ struct compat_elf_prstatus
+ 	struct old_timeval32		pr_stime;
+ 	struct old_timeval32		pr_cutime;
+ 	struct old_timeval32		pr_cstime;
++};
 +
-+#ifdef	COMPAT_SET_PR_FPVALID
-+#define	SET_PR_FPVALID(S) COMPAT_SET_PR_FPVALID(S)
-+#endif
++struct compat_elf_prstatus
++{
++	struct compat_elf_prstatus_common	common;
+ 	compat_elf_gregset_t		pr_reg;
+ 	compat_int_t			pr_fpvalid;
+ };
+diff --git a/include/linux/elfcore.h b/include/linux/elfcore.h
+index 46c3d691f677..641a9041182d 100644
+--- a/include/linux/elfcore.h
++++ b/include/linux/elfcore.h
+@@ -29,7 +29,7 @@ struct elf_siginfo
+  * the SVR4 structure, but more Linuxy, with things that Linux does
+  * not support and which gdb doesn't really use excluded.
+  */
+-struct elf_prstatus
++struct elf_prstatus_common
+ {
+ 	struct elf_siginfo pr_info;	/* Info associated with signal */
+ 	short	pr_cursig;		/* Current signal */
+@@ -43,6 +43,11 @@ struct elf_prstatus
+ 	struct __kernel_old_timeval pr_stime;	/* System time */
+ 	struct __kernel_old_timeval pr_cutime;	/* Cumulative user time */
+ 	struct __kernel_old_timeval pr_cstime;	/* Cumulative system time */
++};
 +
- #ifdef	COMPAT_ELF_PLAT_INIT
- #undef	ELF_PLAT_INIT
- #define	ELF_PLAT_INIT		COMPAT_ELF_PLAT_INIT
++struct elf_prstatus
++{
++	struct elf_prstatus_common common;
+ 	elf_gregset_t pr_reg;	/* GP registers */
+ 	int pr_fpvalid;		/* True if math co-processor being used.  */
+ };
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 8798a8183974..e61ab826ab18 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -1077,7 +1077,7 @@ void crash_save_cpu(struct pt_regs *regs, int cpu)
+ 	if (!buf)
+ 		return;
+ 	memset(&prstatus, 0, sizeof(prstatus));
+-	prstatus.pr_pid = current->pid;
++	prstatus.common.pr_pid = current->pid;
+ 	elf_core_copy_kernel_regs(&prstatus.pr_reg, regs);
+ 	buf = append_elf_note(buf, KEXEC_CORE_NOTE_NAME, NT_PRSTATUS,
+ 			      &prstatus, sizeof(prstatus));
 -- 
 2.11.0
 
