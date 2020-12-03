@@ -2,206 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 083E32CCDBC
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Dec 2020 05:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 163DC2CCFE8
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Dec 2020 07:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726207AbgLCEHp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Dec 2020 23:07:45 -0500
-Received: from relay5.mymailcheap.com ([159.100.248.207]:55203 "EHLO
-        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726071AbgLCEHp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Dec 2020 23:07:45 -0500
-Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.199.117])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id 4B95D260EC;
-        Thu,  3 Dec 2020 04:06:53 +0000 (UTC)
-Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
-        by relay4.mymailcheap.com (Postfix) with ESMTPS id EF6743F1D0;
-        Thu,  3 Dec 2020 05:05:20 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by filter2.mymailcheap.com (Postfix) with ESMTP id C0BBE2A6DF;
-        Thu,  3 Dec 2020 05:05:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1606968320;
-        bh=XX5cAZ6ApL04S+ctlPnZeQ2tjelEaYSXcOgkF4c+I1E=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ZJRjrmtN8q80lF9OWzDAlXzgYBuUfK+AIHzfpvC028z+xoUNuRFsEdrPDS+hh8ezN
-         a2XlGxsfB52Jik0yR7zVaNHuweeN+rEXypbM/FrO3aSRQZ8fNlb8BLS/tvO6eVyRl2
-         Z55Q/B4BmppqifbdlqAklzfI3TU9Y36Ep8/uFonc=
-X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
-Received: from filter2.mymailcheap.com ([127.0.0.1])
-        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QSXg-aTgmLXV; Thu,  3 Dec 2020 05:05:19 +0100 (CET)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter2.mymailcheap.com (Postfix) with ESMTPS;
-        Thu,  3 Dec 2020 05:05:19 +0100 (CET)
-Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id 25CFF42237;
-        Thu,  3 Dec 2020 04:05:19 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="otLco1Ht";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [0.0.0.0] (li1861-199.members.linode.com [172.105.207.199])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id C8BC44100D;
-        Thu,  3 Dec 2020 04:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1606968316;
-        bh=XX5cAZ6ApL04S+ctlPnZeQ2tjelEaYSXcOgkF4c+I1E=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=otLco1HtBp7RnkPms9lDxmEc9TURYAfmI3YU7eI8g43jkGzermOXEA+i1KkXO2t9A
-         qwEe3kjF8ierr/FWXQrn6mvpJpkayr/rDUV0zZItCpnfDw8KwRq9DDeraeFejlrkTe
-         BvCCnzfEZtOUfGj8rEc08WzxvzOuG30FfzOiR2LM=
-Subject: Re: [PATCH v2 2/2] MIPS: Loongson64: Add KASLR support
-To:     Jinyang He <hejinyang@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1606298866-7086-1-git-send-email-hejinyang@loongson.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <d6e07fad-da7d-065a-3b81-63b4f57f8fc0@flygoat.com>
-Date:   Thu, 3 Dec 2020 12:05:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
+        id S1728798AbgLCG5G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Dec 2020 01:57:06 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8185 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgLCG5F (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 01:57:05 -0500
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Cmmnm0b9qz15WDn;
+        Thu,  3 Dec 2020 14:55:56 +0800 (CST)
+Received: from euler.huawei.com (10.175.124.27) by
+ DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 3 Dec 2020 14:56:15 +0800
+From:   Wei Li <liwei391@huawei.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>
+CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yangyingliang@huawei.com>, <guohanjun@huawei.com>
+Subject: [PATCH] MIPS: SMP-CPS: Add support for irq migration when CPU offline
+Date:   Thu, 3 Dec 2020 14:54:43 +0800
+Message-ID: <20201203065443.11263-1-liwei391@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <1606298866-7086-1-git-send-email-hejinyang@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Rspamd-Queue-Id: 25CFF42237
-X-Spamd-Result: default: False [2.90 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         RECEIVED_SPAMHAUS_XBL(3.00)[172.105.207.199:received];
-         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
-         ARC_NA(0.00)[];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         RCPT_COUNT_FIVE(0.00)[5];
-         ML_SERVERS(-3.10)[148.251.23.173];
-         DKIM_TRACE(0.00)[flygoat.com:+];
-         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
-         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
-         RCVD_COUNT_TWO(0.00)[2];
-         MID_RHS_MATCH_FROM(0.00)[];
-         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
-X-Rspamd-Server: mail20.mymailcheap.com
+Content-Type: text/plain
+X-Originating-IP: [10.175.124.27]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Currently we won't migrate irqs when offline CPUs, which has been
+implemented on most architectures. That will lead to some devices work
+incorrectly if the bound cores are offline.
 
+While that can be easily supported by enabling GENERIC_IRQ_MIGRATION.
+But i don't pretty known the reason it was not supported on all MIPS
+platforms.
 
-ÔÚ 2020/11/25 ÏÂÎç6:07, Jinyang He Ð´µÀ:
-> Provide a weak plat_get_fdt() in relocate.c in case some platform enable
-> USE_OF while plat_get_fdt() is useless.
->
-> 1MB RELOCATION_TABLE_SIZE is small for Loongson64 because too many
-> instructions should be relocated. 2MB is enough in present.
->
-> Add KASLR support for Loongson64.
->
-> KASLR(kernel address space layout randomization)
->
-> To enable KASLR on Loongson64:
-> First, make loongson3_defconfig.
-> Then, enable CONFIG_RELOCATABLE and CONFIG_RANDOMIZE_BASE.
-> Finally, compile the kernel.
->
-> To test KASLR on Loongson64:
-> Start machine with KASLR kernel.
->
-> The first time:
-> # cat /proc/iomem
-> 00200000-0effffff : System RAM
->    02f30000-03895e9f : Kernel code
->    03895ea0-03bc7fff : Kernel data
->    03e30000-04f43f7f : Kernel bss
->
-> The second time:
-> # cat /proc/iomem
-> 00200000-0effffff : System RAM
->    022f0000-02c55e9f : Kernel code
->    02c55ea0-02f87fff : Kernel data
->    031f0000-04303f7f : Kernel bss
->
-> We see that code, data and bss sections become randomize.
->
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> ---
->
-> v2:
-> - Define weak plat_get_fdt() in relocate.c
-> - Add default RELOCATION_TABLE_SIZE for Loongson64
->
->   arch/mips/Kconfig           | 5 ++++-
->   arch/mips/kernel/relocate.c | 7 +++++++
->   2 files changed, 11 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 0f638bf..44a47ad 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -488,6 +488,7 @@ config MACH_LOONGSON64
->   	select SYS_SUPPORTS_HIGHMEM
->   	select SYS_SUPPORTS_LITTLE_ENDIAN
->   	select SYS_SUPPORTS_ZBOOT
-> +	select SYS_SUPPORTS_RELOCATABLE
->   	select ZONE_DMA32
->   	select NUMA
->   	select SMP
-> @@ -2778,7 +2779,8 @@ config RELOCATABLE
->   	depends on CPU_MIPS32_R2 || CPU_MIPS64_R2 || \
->   		   CPU_MIPS32_R5 || CPU_MIPS64_R5 || \
->   		   CPU_MIPS32_R6 || CPU_MIPS64_R6 || \
-> -		   CPU_P5600 || CAVIUM_OCTEON_SOC
-> +		   CPU_P5600 || CAVIUM_OCTEON_SOC || \
-> +		   CPU_LOONGSON64
->   	help
->   	  This builds a kernel image that retains relocation information
->   	  so it can be loaded someplace besides the default 1MB.
-> @@ -2789,6 +2791,7 @@ config RELOCATION_TABLE_SIZE
->   	hex "Relocation table size"
->   	depends on RELOCATABLE
->   	range 0x0 0x01000000
-> +	default "0x00200000" if CPU_LOONGSON64
->   	default "0x00100000"
+This patch add the support for irq migration on MIPS CPS platform, and
+it's tested on the interAptiv processor.
 
-Not relevant to the patch but how would we now if the reloc table is to 
-small?
-Is it possible to have a kind of checking script?
+Signed-off-by: Wei Li <liwei391@huawei.com>
+---
+ arch/mips/Kconfig          | 1 +
+ arch/mips/kernel/smp-cps.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
-Thanks.
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index a48cb9a71471..8ece19ffe255 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2510,6 +2510,7 @@ config MIPS_CPS
+ 	select SYS_SUPPORTS_SCHED_SMT if CPU_MIPSR6
+ 	select SYS_SUPPORTS_SMP
+ 	select WEAK_ORDERING
++	select GENERIC_IRQ_MIGRATION if HOTPLUG_CPU
+ 	help
+ 	  Select this if you wish to run an SMP kernel across multiple cores
+ 	  within a MIPS Coherent Processing System. When this option is
+diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
+index 3ab433a8e871..26f74f7d7604 100644
+--- a/arch/mips/kernel/smp-cps.c
++++ b/arch/mips/kernel/smp-cps.c
+@@ -12,6 +12,7 @@
+ #include <linux/slab.h>
+ #include <linux/smp.h>
+ #include <linux/types.h>
++#include <linux/irq.h>
+ 
+ #include <asm/bcache.h>
+ #include <asm/mips-cps.h>
+@@ -465,6 +466,7 @@ static int cps_cpu_disable(void)
+ 	smp_mb__after_atomic();
+ 	set_cpu_online(cpu, false);
+ 	calculate_cpu_foreign_map();
++	irq_migrate_all_off_this_cpu();
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
 
-- Jiaxun
-
->   	help
->   	  A table of relocation data will be appended to the kernel binary
-> diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-> index 8561c7a..57bdd276 100644
-> --- a/arch/mips/kernel/relocate.c
-> +++ b/arch/mips/kernel/relocate.c
-> @@ -294,6 +294,13 @@ static inline int __init relocation_addr_valid(void *loc_new)
->   	return 1;
->   }
->   
-> +#if defined(CONFIG_USE_OF)
-> +void __weak *plat_get_fdt(void)
-> +{
-> +	return NULL;
-> +}
-> +#endif
-> +
->   void *__init relocate_kernel(void)
->   {
->   	void *loc_new;
