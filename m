@@ -2,106 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B10922CE1E4
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Dec 2020 23:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1A52CE247
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Dec 2020 00:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728636AbgLCWh1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Dec 2020 17:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S1726924AbgLCXEX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Dec 2020 18:04:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727664AbgLCWh1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 17:37:27 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1166C061A51;
-        Thu,  3 Dec 2020 14:36:46 -0800 (PST)
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A638F2204;
-        Thu,  3 Dec 2020 22:36:43 +0000 (UTC)
-Date:   Thu, 3 Dec 2020 15:36:42 -0700
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Kees Cook <keescook@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rich Felker <dalias@libc.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        openrisc@lists.librecores.org, x86@kernel.org
-Subject: Re: [PATCH 0/6] Add documentation for Documentation/features at the
- built docs
-Message-ID: <20201203153642.594afd85@lwn.net>
-In-Reply-To: <cover.1606748711.git.mchehab+huawei@kernel.org>
-References: <cover.1606748711.git.mchehab+huawei@kernel.org>
-Organization: LWN.net
+        with ESMTP id S1726897AbgLCXEW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 18:04:22 -0500
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E52C061A4F;
+        Thu,  3 Dec 2020 15:03:42 -0800 (PST)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kkxdQ-00GKSn-UB; Thu, 03 Dec 2020 23:03:37 +0000
+Date:   Thu, 3 Dec 2020 23:03:36 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCHSET] saner elf compat
+Message-ID: <20201203230336.GC3579531@ZenIV.linux.org.uk>
+References: <20201203214529.GB3579531@ZenIV.linux.org.uk>
+ <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 30 Nov 2020 16:36:29 +0100
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
-
-> This series got already submitted last year:
+On Thu, Dec 03, 2020 at 02:09:04PM -0800, Linus Torvalds wrote:
+> On Thu, Dec 3, 2020 at 1:46 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> >  The answer (for mainline) is that mips compat does *NOT* want
+> > COMPAT_BINFMT_ELF.  Not a problem with that series, though, so I'd
+> > retested it (seems to work, both for x86_64 and mips64, execs and
+> > coredumps for all ABIs alike), with centralization of Kconfig logics
+> > thrown in.
 > 
->    https://lore.kernel.org/lkml/cover.1561222784.git.mchehab+samsung@kernel.org/
+> Well, the diffstat looks nice:
 > 
-> Yet, on that time, there were too many other patches related to ReST
-> conversion floating around. So, at the end, I guess this one got missed.
+> >  26 files changed, 127 insertions(+), 317 deletions(-)
 > 
-> So, I did a rebase on the top of upstream, and added a few new changes.
+> and the patches didn't trigger anything for me, but how much did this
+> get tested? Do you actually have both kinds of 32-bit elf mips
+> binaries around and a machine to test on?
 
-OK, I've gone ahead and applied these; it gains me a new trivial conflict
-with x86, but so be it...
+Yes (aptitude install gcc-multilib on debian mips64el/stretch sets the toolchain
+and libraries just fine, and then it's just a matter of -mabi=n32 passed
+to gcc).  "Machine" is qemu-system-mips64el -machine malta -m 1024 -cpu 5KEc
+and the things appear to work; I hadn't tried that on the actual hardware.
+I do have a Loongson-2 box, but it would take a while to dig it out and
+get it up-to-date.
 
-That said, I think that the RST table formatting could be *way* improved.
-The current tables are all white space and hard to make sense of.  What if
-we condensed the information?  Just looking at the first entry in
-Documentation/admin-guide/features.html, perhaps it could look like:
+> Linux-mips was cc'd, but I'm adding Thomas B to the cc here explicitly
+> just so that he has a heads-up on this thing and can go and look at
+> the mailing list in case it goes to a separate mailbox for him..
 
-    FEATURE	KCONFIG/DESCRIPTION		STATUS
-
-    cBPF-JIT	HAVE_CBPF_JIT			TODO: alpha, arc, arm...
-    						ok: mips, powerpc, ...
-		arch supports cBPF JIT
-		optimizations
-
-The result would be far more compact and easy to read, IMO.  I may get
-around to giving this a try if (hint :) nobody else gets there first.
-
-Thanks,
-
-jon
+I would certainly appreciate review and testing - this branch sat
+around in the "should post it someday" state since June (it was
+one of the followups grown from regset work back then), and I'm
+_not_ going to ask pulling it without an explicit OK from mips
+folks.
