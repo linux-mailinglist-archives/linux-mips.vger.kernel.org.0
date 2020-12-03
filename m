@@ -2,90 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDED42CDD03
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Dec 2020 19:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502612CE107
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Dec 2020 22:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731580AbgLCSCZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Dec 2020 13:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S1727274AbgLCVqR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Dec 2020 16:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728123AbgLCSCX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 13:02:23 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C64C061A4F;
-        Thu,  3 Dec 2020 10:01:43 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id jx16so4769623ejb.10;
-        Thu, 03 Dec 2020 10:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vrkRmpOJdYsv1OTsol1WiI+G5mphp85mQMrcLwt5llw=;
-        b=PJ9U4t7gwpf3L9BXUTtYedcItrGStWV5xXJs2ODQYkKRGmyTk/ommC7rOFYpCnm5iV
-         22e59hG4fPPPjgQFEZ7KPcQOH01jbStQy7JBOgtdUzPLbkyyolx+gggIHehh6+g6RnJ6
-         G0oizsYDh3NTH/wEGp6C+qdgo7sLrKyk6UZZ8jkjEBZ39Rl6qAzU2MSH43pkQVeK2Sfw
-         JSu7LnCNuJBg34p1x7efcBB4qkKYt8IqZ9luWBxl4e5o3fLlqHjjkAuXQO43O+IQuD/R
-         yutk8DTwZ7MPI6P88XSoZI0j8UA4jjbjPUkm06awuloS3PwotYbpkOWYXLsHcSV+ESjE
-         z8Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vrkRmpOJdYsv1OTsol1WiI+G5mphp85mQMrcLwt5llw=;
-        b=OUtawnNGE1410rBtqNWHmdumFQ3l4NCusrWKcSdplHZZ7Wj423fTU/umga8Acpin8o
-         7VyXghYfVH2npMhgVB4HDuK6IDvvpOWQQnbK+jE+p3BpP6z608hR6Ec43fdM8KtzXJMf
-         PeO+EJZptRL3eoiNSya3jbVrw60rkdZPyqWl+DpaPIjrc4ElKwtf9new1GPFr2Q9piQr
-         oiH5D2mIpJZWGw6SwYS74Lef9x7pOvVS0rUJzv4aGp59GjA/C+Rj6eucj2PW3GQsbQ6J
-         gspivDy/Lxq8bhrmzNdQgEtHuNLpU2t0aqPD8aUcHFd9CmQqdEzbq9wqy2UF21EgvF3T
-         m8QA==
-X-Gm-Message-State: AOAM530QT67O37+MDL4pum3Y2n2D3Won0bqFDAfjmzMPwtbnhVE1ObVi
-        BmX6f/3s6vpDxG033g979JCu6nBvzB8=
-X-Google-Smtp-Source: ABdhPJy5BnXOdnLykRHtRKij+0KNQueTx2wcwvxCL9WRMm6a5Yok5Y6dV7Lth9S16iCzuoUv/zclew==
-X-Received: by 2002:a17:906:60c8:: with SMTP id f8mr3552635ejk.14.1607018501762;
-        Thu, 03 Dec 2020 10:01:41 -0800 (PST)
-Received: from skbuf ([188.25.2.120])
-        by smtp.gmail.com with ESMTPSA id y17sm1284342ejq.88.2020.12.03.10.01.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Dec 2020 10:01:41 -0800 (PST)
-Date:   Thu, 3 Dec 2020 20:01:40 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 net-next 2/2] net: dsa: qca: ar9331: export stats64
-Message-ID: <20201203180140.4puwxgailw2iysxz@skbuf>
-References: <20201202140904.24748-1-o.rempel@pengutronix.de>
- <20201202140904.24748-3-o.rempel@pengutronix.de>
- <20201202104207.697cfdbb@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <20201203085011.GA3606@pengutronix.de>
- <20201203083517.3b616782@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <20201203175320.f3fmyaqoxifydwzv@pengutronix.de>
+        with ESMTP id S1726917AbgLCVqQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 16:46:16 -0500
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1B7C061A4F;
+        Thu,  3 Dec 2020 13:45:36 -0800 (PST)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kkwPp-00GJPP-Nl; Thu, 03 Dec 2020 21:45:29 +0000
+Date:   Thu, 3 Dec 2020 21:45:29 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCHSET] saner elf compat
+Message-ID: <20201203214529.GB3579531@ZenIV.linux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201203175320.f3fmyaqoxifydwzv@pengutronix.de>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 06:53:20PM +0100, Oleksij Rempel wrote:
-> It is possible to poll it more frequently, but  it make no reals sense
-> on this low power devices.
+	This series deals with the warts in ELF compat on triarch
+architectures (x86_64 and mips64, that is).
 
-Frankly I thought you understood the implications of periodic polling
-and you're ok with them, just wanting to have _something_. But fine,
-welcome to my world, happy to have you onboard...
+	x86_64 at least does use compat_binfmt_elf.c for both
+32bit ABIs; the way it is done is ugly as hell, though, and more
+than slightly brittle (see asm/compat.h for PRSTATUS_SIZE and SET_PR_FPVALID
+definitions - IMO that kind of magic is too ugly to live).
 
-> What kind of options do we have?
+	mips64, OTOH, does not use compat_binfmt_elf.c for either of its
+32bit ABIs.  It has a couple of analogues (each with include of
+../../../fs/binfmt_elf.c, BTW), with quite a bit of ancient cruft
+accumulated in those.
 
-https://www.spinics.net/lists/netdev/msg703774.html
-https://www.spinics.net/lists/netdev/msg704370.html
+	Fortunately, cleanup of i386/x32 mess (first 3 commits in
+the series) provides a fairly straightforward way for mips64 to use
+fs/compat_binfmt_elf.c for both n32 and o32.
 
-Unfortunately I've been absolutely snowed under with work lately. I hope
-to be able to come back to that during the weekend or something like that.
+	That stuff had been sitting around since June; lately rdd has
+spotted Kconfig problems around COMPAT_BINFMT_ELF selects.  All of them
+had been on configs that had COMPAT_BINFMT_ELF != COMPAT && BINFMT_ELF.
+For most of the architectures that's impossible to achieve, but some
+(sparc, e.g.) can end up with that.  Randy posted a patch adding
+if BINFMT_ELF to selects that lacked it, but that looked wrong to me -
+why not centralize that logics into fs/Kconfig.binfmt?  IOW, what's
+the point of having any such selects in arch/*/Kconfig?
+
+	The answer (for mainline) is that mips compat does *NOT* want
+COMPAT_BINFMT_ELF.  Not a problem with that series, though, so I'd
+retested it (seems to work, both for x86_64 and mips64, execs and
+coredumps for all ABIs alike), with centralization of Kconfig logics
+thrown in.
+
+	It's based at 5.10-rc1 and lives in
+git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git#work.elf-compat
+I'll post the individual patches in followups.
+
+Shortlog:
+      binfmt_elf: partially sanitize PRSTATUS_SIZE and SET_PR_FPVALID
+      elf_prstatus: collect the common part (everything before pr_reg) into a struct
+      [elfcore-compat][amd64] clean PRSTATUS_SIZE/SET_PR_FPVALID up properly
+      mips binfmt_elf*32.c: use elfcore-compat.h
+      mips: kill unused definitions in binfmt_elf[on]32.c
+      mips: KVM_GUEST makes no sense for 64bit builds...
+      mips compat: don't bother with ELF_ET_DYN_BASE
+      mips: don't bother with ELF_CORE_EFLAGS
+      mips compat: switch to compat_binfmt_elf.c
+      Kconfig: regularize selection of CONFIG_BINFMT_ELF
+
+Diffstat:
+ arch/Kconfig                               |   3 +
+ arch/arm64/Kconfig                         |   1 -
+ arch/ia64/kernel/crash.c                   |   2 +-
+ arch/mips/Kconfig                          |   8 +--
+ arch/mips/include/asm/elf.h                |  56 +++++----------
+ arch/mips/include/asm/elfcore-compat.h     |  29 ++++++++
+ arch/mips/kernel/Makefile                  |   4 +-
+ arch/mips/kernel/binfmt_elfn32.c           | 106 ----------------------------
+ arch/mips/kernel/binfmt_elfo32.c           | 109 -----------------------------
+ arch/mips/kernel/scall64-n64.S             |   2 +-
+ arch/parisc/Kconfig                        |   1 -
+ arch/powerpc/Kconfig                       |   1 -
+ arch/powerpc/platforms/powernv/opal-core.c |   6 +-
+ arch/s390/Kconfig                          |   1 -
+ arch/s390/kernel/crash_dump.c              |   2 +-
+ arch/sparc/Kconfig                         |   1 -
+ arch/x86/Kconfig                           |   2 +-
+ arch/x86/include/asm/compat.h              |  11 ---
+ arch/x86/include/asm/elfcore-compat.h      |  31 ++++++++
+ fs/Kconfig.binfmt                          |   2 +-
+ fs/binfmt_elf.c                            |  19 +++--
+ fs/binfmt_elf_fdpic.c                      |  22 ++----
+ fs/compat_binfmt_elf.c                     |   1 +
+ include/linux/elfcore-compat.h             |  15 +++-
+ include/linux/elfcore.h                    |   7 +-
+ kernel/kexec_core.c                        |   2 +-
+ 26 files changed, 127 insertions(+), 317 deletions(-)
+ create mode 100644 arch/mips/include/asm/elfcore-compat.h
+ delete mode 100644 arch/mips/kernel/binfmt_elfn32.c
+ delete mode 100644 arch/mips/kernel/binfmt_elfo32.c
+ create mode 100644 arch/x86/include/asm/elfcore-compat.h
