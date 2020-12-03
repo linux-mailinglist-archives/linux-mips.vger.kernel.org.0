@@ -2,112 +2,212 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 502612CE107
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Dec 2020 22:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 834C22CE115
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Dec 2020 22:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727274AbgLCVqR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Dec 2020 16:46:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
+        id S2502030AbgLCVr2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Dec 2020 16:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726917AbgLCVqQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 16:46:16 -0500
+        with ESMTP id S2501986AbgLCVr0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 16:47:26 -0500
 Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1B7C061A4F;
-        Thu,  3 Dec 2020 13:45:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8935C061A4F;
+        Thu,  3 Dec 2020 13:46:43 -0800 (PST)
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kkwPp-00GJPP-Nl; Thu, 03 Dec 2020 21:45:29 +0000
-Date:   Thu, 3 Dec 2020 21:45:29 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
+        id 1kkwQz-00GJS1-Gt; Thu, 03 Dec 2020 21:46:41 +0000
+From:   Al Viro <viro@ZenIV.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCHSET] saner elf compat
-Message-ID: <20201203214529.GB3579531@ZenIV.linux.org.uk>
+Subject: [PATCH 01/10] binfmt_elf: partially sanitize PRSTATUS_SIZE and SET_PR_FPVALID
+Date:   Thu,  3 Dec 2020 21:46:32 +0000
+Message-Id: <20201203214641.3887979-1-viro@ZenIV.linux.org.uk>
+X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20201203214529.GB3579531@ZenIV.linux.org.uk>
+References: <20201203214529.GB3579531@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-	This series deals with the warts in ELF compat on triarch
-architectures (x86_64 and mips64, that is).
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-	x86_64 at least does use compat_binfmt_elf.c for both
-32bit ABIs; the way it is done is ugly as hell, though, and more
-than slightly brittle (see asm/compat.h for PRSTATUS_SIZE and SET_PR_FPVALID
-definitions - IMO that kind of magic is too ugly to live).
+On 64bit architectures that support 32bit processes there are
+two possible layouts for NT_PRSTATUS note in ELF coredumps.
+For one thing, several fields are 64bit for native processes
+and 32bit for compat ones (pr_sigpend, etc.).  For another,
+the register dump is obviously different - the size and number
+of registers are not going to be the same for 32bit and 64bit
+variants of processor.
 
-	mips64, OTOH, does not use compat_binfmt_elf.c for either of its
-32bit ABIs.  It has a couple of analogues (each with include of
-../../../fs/binfmt_elf.c, BTW), with quite a bit of ancient cruft
-accumulated in those.
+Usually that's handled by having two structures - elf_prstatus
+for native layout and compat_elf_prstatus for 32bit one.
+32bit processes are handled by fs/compat_binfmt_elf.c, which
+defines a macro called 'elf_prstatus' that expands to compat_elf_prstatus.
+Then it includes fs/binfmt_elf.c, which makes all references to
+struct elf_prstatus to be textually replaced with struct
+compat_elf_prstatus.  Ugly and somewhat brittle, but it works.
 
-	Fortunately, cleanup of i386/x32 mess (first 3 commits in
-the series) provides a fairly straightforward way for mips64 to use
-fs/compat_binfmt_elf.c for both n32 and o32.
+However, amd64 is worse - there are _three_ possible layouts.
+One for native 64bit processes, another for i386 (32bit) processes
+and yet another for x32 (32bit address space with full 64bit
+registers).
 
-	That stuff had been sitting around since June; lately rdd has
-spotted Kconfig problems around COMPAT_BINFMT_ELF selects.  All of them
-had been on configs that had COMPAT_BINFMT_ELF != COMPAT && BINFMT_ELF.
-For most of the architectures that's impossible to achieve, but some
-(sparc, e.g.) can end up with that.  Randy posted a patch adding
-if BINFMT_ELF to selects that lacked it, but that looked wrong to me -
-why not centralize that logics into fs/Kconfig.binfmt?  IOW, what's
-the point of having any such selects in arch/*/Kconfig?
+Both i386 and x32 processes are handled by fs/compat_binfmt_elf.c,
+with usual compat_binfmt_elf.c trickery.  However, the layouts
+for i386 and x32 are not identical - they have the common beginning,
+but the register dump part (pr_reg) is bigger on x32.  Worse, pr_reg
+is not the last field - it's followed by int pr_fpvalid, so that
+field ends up at different offsets for i386 and x32 layouts.
 
-	The answer (for mainline) is that mips compat does *NOT* want
-COMPAT_BINFMT_ELF.  Not a problem with that series, though, so I'd
-retested it (seems to work, both for x86_64 and mips64, execs and
-coredumps for all ABIs alike), with centralization of Kconfig logics
-thrown in.
+Fortunately, there's not much code that cares about any of that -
+it's all encapsulated in fill_thread_core_info().  Since x32
+variant is bigger, we define compat_elf_prstatus to match that
+layout.  That way i386 processes have enough space to fit
+their layout into.
 
-	It's based at 5.10-rc1 and lives in
-git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git#work.elf-compat
-I'll post the individual patches in followups.
+Moreover, since these layouts are identical prior to pr_reg,
+we don't need to distinguish x32 and i386 cases when we are
+setting the fields prior to pr_reg.
 
-Shortlog:
-      binfmt_elf: partially sanitize PRSTATUS_SIZE and SET_PR_FPVALID
-      elf_prstatus: collect the common part (everything before pr_reg) into a struct
-      [elfcore-compat][amd64] clean PRSTATUS_SIZE/SET_PR_FPVALID up properly
-      mips binfmt_elf*32.c: use elfcore-compat.h
-      mips: kill unused definitions in binfmt_elf[on]32.c
-      mips: KVM_GUEST makes no sense for 64bit builds...
-      mips compat: don't bother with ELF_ET_DYN_BASE
-      mips: don't bother with ELF_CORE_EFLAGS
-      mips compat: switch to compat_binfmt_elf.c
-      Kconfig: regularize selection of CONFIG_BINFMT_ELF
+Filling pr_reg itself is done by calling ->get() method of
+appropriate regset, and that method knows what layout (and size)
+to use.
 
-Diffstat:
- arch/Kconfig                               |   3 +
- arch/arm64/Kconfig                         |   1 -
- arch/ia64/kernel/crash.c                   |   2 +-
- arch/mips/Kconfig                          |   8 +--
- arch/mips/include/asm/elf.h                |  56 +++++----------
- arch/mips/include/asm/elfcore-compat.h     |  29 ++++++++
- arch/mips/kernel/Makefile                  |   4 +-
- arch/mips/kernel/binfmt_elfn32.c           | 106 ----------------------------
- arch/mips/kernel/binfmt_elfo32.c           | 109 -----------------------------
- arch/mips/kernel/scall64-n64.S             |   2 +-
- arch/parisc/Kconfig                        |   1 -
- arch/powerpc/Kconfig                       |   1 -
- arch/powerpc/platforms/powernv/opal-core.c |   6 +-
- arch/s390/Kconfig                          |   1 -
- arch/s390/kernel/crash_dump.c              |   2 +-
- arch/sparc/Kconfig                         |   1 -
- arch/x86/Kconfig                           |   2 +-
- arch/x86/include/asm/compat.h              |  11 ---
- arch/x86/include/asm/elfcore-compat.h      |  31 ++++++++
- fs/Kconfig.binfmt                          |   2 +-
- fs/binfmt_elf.c                            |  19 +++--
- fs/binfmt_elf_fdpic.c                      |  22 ++----
- fs/compat_binfmt_elf.c                     |   1 +
- include/linux/elfcore-compat.h             |  15 +++-
- include/linux/elfcore.h                    |   7 +-
- kernel/kexec_core.c                        |   2 +-
- 26 files changed, 127 insertions(+), 317 deletions(-)
- create mode 100644 arch/mips/include/asm/elfcore-compat.h
- delete mode 100644 arch/mips/kernel/binfmt_elfn32.c
- delete mode 100644 arch/mips/kernel/binfmt_elfo32.c
- create mode 100644 arch/x86/include/asm/elfcore-compat.h
+We do need to distinguish x32 and i386 cases only for two
+things: setting ->pr_fpvalid (offset differs for x32 and
+i386) and choosing the right size for our note.
+
+The way it's done is Not Nice, for the lack of more accurate
+printable description.  There are two macros (PRSTATUS_SIZE and
+SET_PR_FPVALID), that default essentially to sizeof(struct elf_prstatus)
+and (S)->pr_fpvalid = 1.  On x86 asm/compat.h provides its own
+variants.
+
+Unfortunately, quite a few things go wrong there:
+	* PRSTATUS_SIZE doesn't use the normal test for process
+being an x32 one (TIF_X32); it compares the size reported by
+regset with the size of pr_reg.
+	* it hardcodes the sizes of x32 and i386 variants (296 and 144
+resp.), so if some change in includes leads to asm/compat.h pulled
+in by fs/binfmt_elf.c we are in trouble - it will end up using
+the size of x32 variant for 64bit processes.
+	* it's in the wrong place; asm/compat.h couldn't define
+the structure for i386 layout, since it lacks quite a few types
+needed for it.  Hardcoded sizes are largely due to that.
+
+The proper fix would be to have an explicitly defined i386 variant
+of structure and have PRSTATUS_SIZE/SET_PR_FPVALID check for
+TIF_X32 to choose the variant that should be used.  Unfortunately,
+that requires some manipulations of headers; we'll do that later
+in the series, but for now let's go with the minimal variant -
+rename PRSTATUS_SIZE in asm/compat.h to COMPAT_PRSTATUS_SIZE,
+have fs/compat_binfmt_elf.c define PRSTATUS_SIZE to COMPAT_PRSTATUS_SIZE
+and use the normal TIF_X32 check in that macro.  The size of i386 variant
+is kept hardcoded for now.  Similar story for SET_PR_FPVALID.
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ arch/x86/include/asm/compat.h | 11 +++++++----
+ fs/binfmt_elf.c               | 13 +++++--------
+ fs/compat_binfmt_elf.c        |  8 ++++++++
+ 3 files changed, 20 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
+index 0e327a01f50f..1897e1dcbdd2 100644
+--- a/arch/x86/include/asm/compat.h
++++ b/arch/x86/include/asm/compat.h
+@@ -165,10 +165,13 @@ struct compat_shmid64_ds {
+ typedef struct user_regs_struct compat_elf_gregset_t;
+ 
+ /* Full regset -- prstatus on x32, otherwise on ia32 */
+-#define PRSTATUS_SIZE(S, R) (R != sizeof(S.pr_reg) ? 144 : 296)
+-#define SET_PR_FPVALID(S, V, R) \
+-  do { *(int *) (((void *) &((S)->pr_reg)) + R) = (V); } \
+-  while (0)
++#define COMPAT_PRSTATUS_SIZE (test_thread_flag(TIF_X32) \
++	? sizeof(struct compat_elf_prstatus) \
++	: 144)
++#define COMPAT_SET_PR_FPVALID(S) \
++	(*(test_thread_flag(TIF_X32)	\
++	       ? &(S)->pr_fpvalid	\
++               : (int *)((void *)(S) + 140)) = 1)
+ 
+ #ifdef CONFIG_X86_X32_ABI
+ #define COMPAT_USE_64BIT_TIME \
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index b6b3d052ca86..f066882bd270 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -1717,11 +1717,11 @@ static void do_thread_regset_writeback(struct task_struct *task,
+ }
+ 
+ #ifndef PRSTATUS_SIZE
+-#define PRSTATUS_SIZE(S, R) sizeof(S)
++#define PRSTATUS_SIZE sizeof(struct elf_prstatus)
+ #endif
+ 
+ #ifndef SET_PR_FPVALID
+-#define SET_PR_FPVALID(S, V, R) ((S)->pr_fpvalid = (V))
++#define SET_PR_FPVALID(S) ((S)->pr_fpvalid = 1)
+ #endif
+ 
+ static int fill_thread_core_info(struct elf_thread_core_info *t,
+@@ -1729,7 +1729,6 @@ static int fill_thread_core_info(struct elf_thread_core_info *t,
+ 				 long signr, size_t *total)
+ {
+ 	unsigned int i;
+-	int regset0_size;
+ 
+ 	/*
+ 	 * NT_PRSTATUS is the one special case, because the regset data
+@@ -1738,13 +1737,11 @@ static int fill_thread_core_info(struct elf_thread_core_info *t,
+ 	 * We assume that regset 0 is NT_PRSTATUS.
+ 	 */
+ 	fill_prstatus(&t->prstatus, t->task, signr);
+-	regset0_size = regset_get(t->task, &view->regsets[0],
++	regset_get(t->task, &view->regsets[0],
+ 		   sizeof(t->prstatus.pr_reg), &t->prstatus.pr_reg);
+-	if (regset0_size < 0)
+-		return 0;
+ 
+ 	fill_note(&t->notes[0], "CORE", NT_PRSTATUS,
+-		  PRSTATUS_SIZE(t->prstatus, regset0_size), &t->prstatus);
++		  PRSTATUS_SIZE, &t->prstatus);
+ 	*total += notesize(&t->notes[0]);
+ 
+ 	do_thread_regset_writeback(t->task, &view->regsets[0]);
+@@ -1772,7 +1769,7 @@ static int fill_thread_core_info(struct elf_thread_core_info *t,
+ 			continue;
+ 
+ 		if (is_fpreg)
+-			SET_PR_FPVALID(&t->prstatus, 1, regset0_size);
++			SET_PR_FPVALID(&t->prstatus);
+ 
+ 		fill_note(&t->notes[i], is_fpreg ? "CORE" : "LINUX",
+ 			  note_type, ret, data);
+diff --git a/fs/compat_binfmt_elf.c b/fs/compat_binfmt_elf.c
+index 2d24c765cbd7..13cd78773700 100644
+--- a/fs/compat_binfmt_elf.c
++++ b/fs/compat_binfmt_elf.c
+@@ -95,6 +95,14 @@
+ #define	ELF_EXEC_PAGESIZE	COMPAT_ELF_EXEC_PAGESIZE
+ #endif
+ 
++#ifdef	COMPAT_PRSTATUS_SIZE
++#define	PRSTATUS_SIZE COMPAT_PRSTATUS_SIZE
++#endif
++
++#ifdef	COMPAT_SET_PR_FPVALID
++#define	SET_PR_FPVALID(S) COMPAT_SET_PR_FPVALID(S)
++#endif
++
+ #ifdef	COMPAT_ELF_PLAT_INIT
+ #undef	ELF_PLAT_INIT
+ #define	ELF_PLAT_INIT		COMPAT_ELF_PLAT_INIT
+-- 
+2.11.0
+
