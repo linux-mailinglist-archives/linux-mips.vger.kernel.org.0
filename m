@@ -2,70 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1A52CE247
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Dec 2020 00:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7FB2CE4C3
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Dec 2020 02:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726924AbgLCXEX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Dec 2020 18:04:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726897AbgLCXEW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Dec 2020 18:04:22 -0500
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E52C061A4F;
-        Thu,  3 Dec 2020 15:03:42 -0800 (PST)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kkxdQ-00GKSn-UB; Thu, 03 Dec 2020 23:03:37 +0000
-Date:   Thu, 3 Dec 2020 23:03:36 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCHSET] saner elf compat
-Message-ID: <20201203230336.GC3579531@ZenIV.linux.org.uk>
-References: <20201203214529.GB3579531@ZenIV.linux.org.uk>
- <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+        id S2387572AbgLDBMe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Dec 2020 20:12:34 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:51154 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387531AbgLDBMe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Dec 2020 20:12:34 -0500
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9PTjMlfrogZAA--.50887S2;
+        Fri, 04 Dec 2020 09:11:47 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] MIPS: KASLR: Avoid endless loop in sync_icache when synci_step is zero
+Date:   Fri,  4 Dec 2020 09:11:46 +0800
+Message-Id: <1607044306-4800-1-git-send-email-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxr9PTjMlfrogZAA--.50887S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFykXF48Gr4UKr4DZryUGFg_yoW8GF1xpr
+        sxGw1xKrs8Ww48ta48J3yku343Cas8u3y7GF4Ut3sYvasxZryDtFy5Kw1FgFZavrW8K3Wa
+        vryjvrWrZa17A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_KwCF04k2
+        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU5mQ6tUUUUU==
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 02:09:04PM -0800, Linus Torvalds wrote:
-> On Thu, Dec 3, 2020 at 1:46 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> >  The answer (for mainline) is that mips compat does *NOT* want
-> > COMPAT_BINFMT_ELF.  Not a problem with that series, though, so I'd
-> > retested it (seems to work, both for x86_64 and mips64, execs and
-> > coredumps for all ABIs alike), with centralization of Kconfig logics
-> > thrown in.
-> 
-> Well, the diffstat looks nice:
-> 
-> >  26 files changed, 127 insertions(+), 317 deletions(-)
-> 
-> and the patches didn't trigger anything for me, but how much did this
-> get tested? Do you actually have both kinds of 32-bit elf mips
-> binaries around and a machine to test on?
+Avoid endless loop if synci_step was zero read by rdhwr instruction.
 
-Yes (aptitude install gcc-multilib on debian mips64el/stretch sets the toolchain
-and libraries just fine, and then it's just a matter of -mabi=n32 passed
-to gcc).  "Machine" is qemu-system-mips64el -machine malta -m 1024 -cpu 5KEc
-and the things appear to work; I hadn't tried that on the actual hardware.
-I do have a Loongson-2 box, but it would take a while to dig it out and
-get it up-to-date.
+Most platforms do not need to do synci instruction operations when
+synci_step is 0. But for example, the synci implementation on Loongson64
+platform has some changes. On the one hand, it ensures that the memory
+access instructions have been completed. On the other hand, it guarantees
+that all prefetch instructions need to be fetched again. And its address
+information is useless. Thus, only one synci operation is required when
+synci_step is 0 on Loongson64 platform. I guess that some other platforms
+have similar implementations on synci, so add judgment conditions in
+`while` to ensure that at least all platforms perform synci operations
+once. For those platforms that do not need synci, they just do one more
+operation similar to nop.
 
-> Linux-mips was cc'd, but I'm adding Thomas B to the cc here explicitly
-> just so that he has a heads-up on this thing and can go and look at
-> the mailing list in case it goes to a separate mailbox for him..
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+---
+ arch/mips/kernel/relocate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I would certainly appreciate review and testing - this branch sat
-around in the "should post it someday" state since June (it was
-one of the followups grown from regset work back then), and I'm
-_not_ going to ask pulling it without an explicit OK from mips
-folks.
+diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+index 57bdd276..47aeb33 100644
+--- a/arch/mips/kernel/relocate.c
++++ b/arch/mips/kernel/relocate.c
+@@ -64,7 +64,7 @@ static void __init sync_icache(void *kbase, unsigned long kernel_length)
+ 			: "r" (kbase));
+ 
+ 		kbase += step;
+-	} while (kbase < kend);
++	} while (step && kbase < kend);
+ 
+ 	/* Completion barrier */
+ 	__sync();
+-- 
+2.1.0
+
