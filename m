@@ -2,82 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 222202CEE71
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Dec 2020 13:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E682CEEE8
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Dec 2020 14:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728668AbgLDMzH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Dec 2020 07:55:07 -0500
-Received: from elvis.franken.de ([193.175.24.41]:48216 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730173AbgLDMzH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 4 Dec 2020 07:55:07 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1klAbR-0005vN-00; Fri, 04 Dec 2020 13:54:25 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 2AE1CC02E5; Fri,  4 Dec 2020 13:14:56 +0100 (CET)
-Date:   Fri, 4 Dec 2020 13:14:56 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Jinyang He <hejinyang@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: KASLR: Fix sync_icache() trapped in loop when
- synci_step is zero
-Message-ID: <20201204121456.GA10990@alpha.franken.de>
-References: <1606878005-11427-1-git-send-email-hejinyang@loongson.cn>
- <20201202103943.GA9065@alpha.franken.de>
- <b6e97d2f-6d5a-1dbb-3701-b238709b7345@flygoat.com>
+        id S1730278AbgLDNk7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Dec 2020 08:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730286AbgLDNk6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Dec 2020 08:40:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0653DC061A53
+        for <linux-mips@vger.kernel.org>; Fri,  4 Dec 2020 05:40:18 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1klBJi-0005IX-If; Fri, 04 Dec 2020 14:40:10 +0100
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1klBJh-0004az-2O; Fri, 04 Dec 2020 14:40:09 +0100
+Date:   Fri, 4 Dec 2020 14:40:09 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 net-next 2/2] net: dsa: qca: ar9331: export stats64
+Message-ID: <20201204134009.q6alw6t2pk22saak@pengutronix.de>
+References: <20201202140904.24748-1-o.rempel@pengutronix.de>
+ <20201202140904.24748-3-o.rempel@pengutronix.de>
+ <20201202104207.697cfdbb@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+ <20201203085011.GA3606@pengutronix.de>
+ <20201203083517.3b616782@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+ <20201203175320.f3fmyaqoxifydwzv@pengutronix.de>
+ <20201203180140.4puwxgailw2iysxz@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b6e97d2f-6d5a-1dbb-3701-b238709b7345@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201203180140.4puwxgailw2iysxz@skbuf>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 14:32:17 up 2 days,  3:38, 24 users,  load average: 0.01, 0.02, 0.00
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 12:02:10PM +0800, Jiaxun Yang wrote:
+On Thu, Dec 03, 2020 at 08:01:40PM +0200, Vladimir Oltean wrote:
+> On Thu, Dec 03, 2020 at 06:53:20PM +0100, Oleksij Rempel wrote:
+> > It is possible to poll it more frequently, but  it make no reals sense
+> > on this low power devices.
 > 
+> Frankly I thought you understood the implications of periodic polling
+> and you're ok with them,
+
+I added polling to read out small counters to avoid overflow.
+
+> just wanting to have _something_.
+
+Having something is good, but making it good is better :D
+
+> But fine,
+> welcome to my world, happy to have you onboard...
 > 
-> 在 2020/12/2 下午6:39, Thomas Bogendoerfer 写道:
-> > On Wed, Dec 02, 2020 at 11:00:05AM +0800, Jinyang He wrote:
-> > > Reading synci_step by using rdhwr instruction may return zero if no cache
-> > > need be synchronized. On the one hand, to make sure all load operation and
-> > > store operation finished we do __sync() for every platform. On the other
-> > > hand, some platform need operate synci one time although step is zero.
-> > Should this be someting like: Avoid endless loop, if no synci is needed ?
-> > 
-> > > diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-> > > index 57bdd276..47aeb33 100644
-> > > --- a/arch/mips/kernel/relocate.c
-> > > +++ b/arch/mips/kernel/relocate.c
-> > > @@ -64,7 +64,7 @@ static void __init sync_icache(void *kbase, unsigned long kernel_length)
-> > >   			: "r" (kbase));
-> > >   		kbase += step;
-> > > -	} while (kbase < kend);
-> > > +	} while (step && kbase < kend);
-> > why not do a
-> > 
-> > 	if (step == 0)
-> > 		return;
-> > 
-> > before entering the loop ? According to MIPS32PRA no synci is needed,
-> > if stepi value is zero.
-> > 
-> > Thomas.
-> > 
-> > PS: Does anybody know a reason, why this code doesn't use an old fashioned
-> > dache/icache flushing, which might be slower but would work also on
-> > legecy cores ?
+> > What kind of options do we have?
 > 
-> I thought that's because legacy flush requires much more cares.
+> https://www.spinics.net/lists/netdev/msg703774.html
+> https://www.spinics.net/lists/netdev/msg704370.html
+> 
+> Unfortunately I've been absolutely snowed under with work lately. I hope
+> to be able to come back to that during the weekend or something like that.
 
-that's true. It shouldn't be that hard, but probably has to wait until
-someone needs it.
+Ok, so the strategy is to fix the original issue. Sound good.
 
-Thomas.
+For now I'll resend this patches without accessing mdio regs from the
+stats64 callback. It will give initial play ground, so we can see what
+else should be done for DSA specific use case.
 
+Regards,
+Oleksij
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
