@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F722CFAC4
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Dec 2020 10:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A012CFACB
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Dec 2020 10:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728798AbgLEJGn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Dec 2020 04:06:43 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:39812 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727383AbgLEJFN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Dec 2020 04:05:13 -0500
-Received: by mail-pj1-f67.google.com with SMTP id hk16so4576929pjb.4
-        for <linux-mips@vger.kernel.org>; Sat, 05 Dec 2020 01:04:21 -0800 (PST)
+        id S1726069AbgLEJWH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Dec 2020 04:22:07 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:32778 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726000AbgLEJVy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Dec 2020 04:21:54 -0500
+Received: by mail-io1-f67.google.com with SMTP id o8so8368628ioh.0
+        for <linux-mips@vger.kernel.org>; Sat, 05 Dec 2020 01:21:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
         bh=k1t43WsOCeWkGioi+225McenqDyts5xeyGG10W67SwI=;
-        b=FpxcQkMW1okZJLX5lhalqkDFCi8ak4Luz716GlCMIJGKxKNd6jqMyRBpyuDeRAOGFq
-         9GkoWjEghOZr57dp87E8+9tCx+x3xxSNj15Q5WbXWTXlEGp5CqMjiqp/kXpk6fHSfOvz
-         fh0Iq/DadmjbNPnS/eapNPh4Ba0OBNT1zpmoUPT9RaPtrObLiNtB48Ntrl5pmYQ6Uc80
-         uwfdAMw2hbdD79jHpieaQ6c2/i+oPBw1Zj4Zs/H7SogH8Yxyyxgsu7+h0MZ4y+r9XIet
-         /7BnF2XJCw4C8RpZtstyLYIyxwH0O2OOG/9z93H8mgL/cfwJUeYdG8KOLdDWx73fb8N1
-         UyOg==
-X-Gm-Message-State: AOAM531nxEQ9dvc7TJ5OiV/gqTAdwjRKoeQjxCOJ/7VPMKMdJKIdiVcW
-        tAowQ9AuiE9GXV8LD3Xf6zA=
-X-Google-Smtp-Source: ABdhPJyTDmiKEg0fPHJkTA5P33iLM36BoHrHnGeUAkakTuYZB4awIBAfXNEzzNjyGqUcd0eJMMhrjw==
-X-Received: by 2002:a17:902:aa84:b029:da:1c29:b965 with SMTP id d4-20020a170902aa84b02900da1c29b965mr7613427plr.36.1607159032876;
-        Sat, 05 Dec 2020 01:03:52 -0800 (PST)
-Received: from software.domain.org ([132.145.85.142])
-        by smtp.gmail.com with ESMTPSA id g34sm6212620pgb.33.2020.12.05.01.03.49
+        b=mPhzn+XML/rXfepEr0dPPqEdVsCUEaFbgYFW120Sd0qo/ktEWxMhfxn4KmQrSX5KYA
+         Mu29o8JVwM2dldTF2h/fZVLfIp2c6ECfeIOKIPGE/W2oEzPhMntDD2EZl4Kuad0Q1e3h
+         +21elSV+21j0Xbg/R1q2f9NUpMNIVG83raj+DbWu3WwB8x8QQoYGI8LKieQau6rRImml
+         MmZ0/sBovb/BviQELcDqw2Gfa1Orto0mjfSC8bJ5uYDj34wYHbmYUe8wmQ7doS+e0Hef
+         15IdnKVIrelzN0mYhdBpUcNJA034zzn7Il0+s3cZBYxsST2VilgxWLbfuc3Z+Ycn079s
+         KoSQ==
+X-Gm-Message-State: AOAM530fbMCJgAs3S/gIPNyJ3rQp1sGnmqV0scfDRJhjI12qkL8e2Fdx
+        fgBy4XmBycLR3Nh17H2emc3AD6t0F+HgXVz7
+X-Google-Smtp-Source: ABdhPJy9Xc7j9uimHyVk9eLzq56IaZCP9n/LUoPdqIO0kxMQdODAKJ2jeH4CABqcrthcBFKaVsFDNA==
+X-Received: by 2002:a63:161a:: with SMTP id w26mr10887428pgl.17.1607159634170;
+        Sat, 05 Dec 2020 01:13:54 -0800 (PST)
+Received: from software.domain.org ([45.77.13.216])
+        by smtp.gmail.com with ESMTPSA id q12sm7730836pfc.84.2020.12.05.01.13.50
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 05 Dec 2020 01:03:52 -0800 (PST)
+        Sat, 05 Dec 2020 01:13:53 -0800 (PST)
 From:   Huacai Chen <chenhuacai@kernel.org>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -40,8 +40,8 @@ To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@kernel.org>
 Subject: [PATCH] irqchip/loongson-htpic: Fix build warnings
-Date:   Sat,  5 Dec 2020 17:05:52 +0800
-Message-Id: <1607159152-15958-1-git-send-email-chenhuacai@kernel.org>
+Date:   Sat,  5 Dec 2020 17:15:44 +0800
+Message-Id: <1607159744-995-1-git-send-email-chenhuacai@kernel.org>
 X-Mailer: git-send-email 2.7.0
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
