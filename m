@@ -2,93 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED6B2CF96F
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Dec 2020 06:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A982CFAB1
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Dec 2020 09:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726146AbgLEFGF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Dec 2020 00:06:05 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:33558 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725770AbgLEFGF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 5 Dec 2020 00:06:05 -0500
-Received: from [10.130.0.80] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxutACFctfM90ZAA--.42419S3;
-        Sat, 05 Dec 2020 13:05:06 +0800 (CST)
-Subject: Re: [PATCH 2/2] MIPS: Select ARCH_KEEP_MEMBLOCK to enable sysfs
- memblock debug
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <1606965544-22611-1-git-send-email-yangtiezhu@loongson.cn>
- <1606965544-22611-3-git-send-email-yangtiezhu@loongson.cn>
- <9c9af0de-387b-f113-b0a2-c5767c31c16d@flygoat.com>
- <20201204120816.GC10011@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <727e9b94-0a22-189f-4c65-4a6e8504013f@loongson.cn>
-Date:   Sat, 5 Dec 2020 13:05:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <20201204120816.GC10011@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxutACFctfM90ZAA--.42419S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrtr43AFWxCw1xZF13KFWUtwb_yoWktFb_Wr
-        4jkFnrK3WrJFWqka1vqw4fZFn0g3y0qFy8ury3Wr4Svw18JFW3Gw1kKa93Xrn5Way8Grsx
-        Xr90vr13Krn8KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
-        Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
-        bIxvr21lc2xSY4AK67AK6r4rMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUhdbbUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1726691AbgLEIx4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Dec 2020 03:53:56 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:39335 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726206AbgLEIxs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Dec 2020 03:53:48 -0500
+Received: by mail-pl1-f195.google.com with SMTP id p6so4469302plo.6
+        for <linux-mips@vger.kernel.org>; Sat, 05 Dec 2020 00:53:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Q4s242OUPLGoq21XHrpbfduhW1dxO9cM7RvX9rTcfPU=;
+        b=tAEmxhiiw/B3MVJLdyu/8ZRI1IWSFHezY7dMImu2YhArAIUEDSfB/AgLVte4UNWOpZ
+         dXHwXxaeLYu7ZlX7hODvfOixmcRY9tb969Lg3D1neLJwBtd848P/qW3CHlnIFJQ1hUsP
+         pq5t8Hiwmj++5U1ZcwzO00VN1Yj8us42DRbMhoNyGjBTCu1mcxdaxgnbQVuiCcswDtFo
+         7FSETwCqo4hRsprxJdIaJ6KJnjerq83uCYvjqG3W8iEWf9O0a98Ulvxe9ksWviqzWVYx
+         loB/BlOHHYr+qMsxo72x1gwYXvHl1MZji7PKCuReX2PXgy0pUEZbuo2/PGFA3z92zeMf
+         Fd7A==
+X-Gm-Message-State: AOAM531Gg/Mx6JluuLm5p0MB58UERzz4Avu5yKQZ11sZ+T/RsMwhgSra
+        qMGp+c7724qrm6cCML/+xeuZdPI6xrcr4PMz
+X-Google-Smtp-Source: ABdhPJw8vXs/UdVksYUbMP1lT+rpDZs/23ZFSThr7kOP9sftPGURP+YOVlfuJTTgxUGa8RdQlZ8pyA==
+X-Received: by 2002:a17:90a:6844:: with SMTP id e4mr7703750pjm.151.1607158382258;
+        Sat, 05 Dec 2020 00:53:02 -0800 (PST)
+Received: from software.domain.org ([132.145.85.142])
+        by smtp.gmail.com with ESMTPSA id b28sm7646845pfp.195.2020.12.05.00.52.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 05 Dec 2020 00:53:01 -0800 (PST)
+From:   chenhuacai@kernel.org
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: [PATCH] MAINTAINERS: chenhc@lemote.com -> chenhuacai@kernel.org
+Date:   Sat,  5 Dec 2020 16:55:07 +0800
+Message-Id: <1607158507-11888-1-git-send-email-chenhuacai@kernel.org>
+X-Mailer: git-send-email 2.7.0
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/04/2020 08:08 PM, Thomas Bogendoerfer wrote:
-> On Thu, Dec 03, 2020 at 11:58:51AM +0800, Jiaxun Yang wrote:
->>
->> 在 2020/12/3 上午11:19, Tiezhu Yang 写道:
->>> In the current code, CONFIG_ARCH_KEEP_MEMBLOCK is not set for MIPS arch,
->>> memblock_discard() will discard memory and reserved arrays if they were
->>> allocated, select ARCH_KEEP_MEMBLOCK to give a chance to track "memory"
->>> and "reserved" memblocks after early boot, with this patch, we can see
->>> the following two sysfs interfaces under DEBUG_FS.
->>>
->>> /sys/kernel/debug/memblock/memory
->>> /sys/kernel/debug/memblock/reserved
->> Is this really necessary?
->> memblock data is not really necessary after boot for non-debug purpose.
->>
->> Given that MIPS is widely used in embedded systems which doesn't have much
->> memory, keeping unused data after boot is kinda unconvincing.
-> about how much memory are talking here ?
->
->> If you intend to debug that please do it locally.
-> maybe we can add a
->
-> if DEBUG_KERNEL
->
-> since enabling DEBUG_KERNEL will cost already some memory...
+From: Huacai Chen <chenhuacai@kernel.org>
 
-Yes, that makes sense.
+Use @kernel.org address as the main communications end point. Update the
+corresponding M-entries and .mailmap (for git shortlog translation).
 
-If nobody has any objections, I will send v2 in the next week.
+Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
+---
+ .mailmap    | 1 +
+ MAINTAINERS | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Thanks,
-Tiezhu
-
->
-> Thomas.
->
+diff --git a/.mailmap b/.mailmap
+index d9fb83d6..4e212ff 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -122,6 +122,8 @@ Henk Vergonet <Henk.Vergonet@gmail.com>
+ Henrik Kretzschmar <henne@nachtwindheim.de>
+ Henrik Rydberg <rydberg@bitmath.org>
+ Herbert Xu <herbert@gondor.apana.org.au>
++Huacai Chen <chenhuacai@kernel.org> <chenhc@lemote.com>
++Huacai Chen <chenhuacai@kernel.org> <chenhuacai@loongson.cn>
+ Jacob Shin <Jacob.Shin@amd.com>
+ Jaegeuk Kim <jaegeuk@kernel.org> <jaegeuk@google.com>
+ Jaegeuk Kim <jaegeuk@kernel.org> <jaegeuk.kim@samsung.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ebe4829..34b353e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9622,7 +9622,7 @@ F:	arch/arm64/kvm/
+ F:	include/kvm/arm_*
+ 
+ KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
+-M:	Huacai Chen <chenhc@lemote.com>
++M:	Huacai Chen <chenhuacai@kernel.org>
+ M:	Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+ L:	linux-mips@vger.kernel.org
+ L:	kvm@vger.kernel.org
+@@ -11704,7 +11704,7 @@ F:	drivers/*/*/*loongson2*
+ F:	drivers/*/*loongson2*
+ 
+ MIPS/LOONGSON64 ARCHITECTURE
+-M:	Huacai Chen <chenhc@lemote.com>
++M:	Huacai Chen <chenhuacai@kernel.org>
+ M:	Jiaxun Yang <jiaxun.yang@flygoat.com>
+ L:	linux-mips@vger.kernel.org
+ S:	Maintained
+-- 
+2.7.0
 
