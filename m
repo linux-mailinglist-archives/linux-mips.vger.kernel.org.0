@@ -2,75 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C69F92CF6A1
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Dec 2020 23:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5C12CF92B
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Dec 2020 04:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725933AbgLDWNr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Dec 2020 17:13:47 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:39450 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725885AbgLDWNr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 4 Dec 2020 17:13:47 -0500
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
-        (envelope-from <andrew@lunn.ch>)
-        id 1klJJx-00AGxT-JU; Fri, 04 Dec 2020 23:12:57 +0100
-Date:   Fri, 4 Dec 2020 23:12:57 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     George McCollister <george.mccollister@gmail.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 2/2] net: dsa: qca: ar9331: export stats64
-Message-ID: <20201204221257.GH2400258@lunn.ch>
-References: <20201204145624.11713-1-o.rempel@pengutronix.de>
- <20201204145624.11713-3-o.rempel@pengutronix.de>
- <CAFSKS=Pq9=mNXGeTbcTOL-=rp8wWCS2qtHF38eD1HiN=EK0DOQ@mail.gmail.com>
+        id S1726011AbgLEDZa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Dec 2020 22:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725300AbgLEDZa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Dec 2020 22:25:30 -0500
+Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3773EC0613D1
+        for <linux-mips@vger.kernel.org>; Fri,  4 Dec 2020 19:24:50 -0800 (PST)
+Received: by mail-ua1-x943.google.com with SMTP id g3so2569955uae.7
+        for <linux-mips@vger.kernel.org>; Fri, 04 Dec 2020 19:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=tfgiI/MtyB3mfVa4/SqYhT3TMLeFCpZac744MBYP6T4=;
+        b=d6hcmpIsz9zEVvohEcrZspviFdvv3g7fHVsIlBzwSp2WC26srapR9CrXskchMuptAL
+         6MilkmKDaUKLlHO0MV/nr/VKwly7OjYEPZfz0r+BKhBfWw+Ib+Vi56cDmgW4j6KRi9un
+         OLzOsZioEE1/Ur1QhnoVy9k57/UKfZonRJKxoRtCqRu2ytUfL7kPmFaRLAeeh8EUflzP
+         oilH3W2b7TuWCogFOgxB1GmaYUlAvhUn60Fpkx8Q8rcdKVhy5wtqrJ9K/nGT7G/Lq137
+         c4cFA3a1DinSCS7W4F5T55/pXTnFOnzRUzj7trxyVDE5UTCTYckRr7adUH42Qs/fR8tb
+         29pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=tfgiI/MtyB3mfVa4/SqYhT3TMLeFCpZac744MBYP6T4=;
+        b=A469CPYDt505BIsdpStXVScl2oXjm8miatRfHqwOoy4J1H+wOKyjUQ/uKIVB2P1Iay
+         3Gzle0yZdmGDgwe4172mklSXDVd0xsEJWXXsxe53xSZ5uwovayBLsJRPQcut6fTb+1oE
+         Ourecm/y8vGSAiDzPR8KJvdIrvXPCTm8p+cbsvQ0EMbOVvFb2fhTg0mMSZAVF+4FmfuW
+         4jK5HtMXdecNf8m5pQXY7oSaij4RaTRzXqDuufqbEhKPW6DmKOUyOhcQ8NBzQvcvS/Rg
+         5NyMIjM8dqFEjucQtLrM0wYhlWenaf8BdbjJSKxFBPFyyuTJJut0X0cylJvfwNdBXuJI
+         VdQw==
+X-Gm-Message-State: AOAM5330QKiZpSs3+uH7txj529xrhXOVx2DVcmoVJLpqslq/Gv9mMv7u
+        iwmiHfFffqvY8SvMh+WensiEZt3V6snTB1QWGAM=
+X-Google-Smtp-Source: ABdhPJyQNKUCJmvBZU/8jouCnTgk4CdgRzTvKdPGbZc3GdzEtEstyG1M0rJqh2GYkr3xXUIwhfaLXoja79oL1HwZgnc=
+X-Received: by 2002:ab0:4a4a:: with SMTP id r10mr6746813uae.130.1607138689018;
+ Fri, 04 Dec 2020 19:24:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFSKS=Pq9=mNXGeTbcTOL-=rp8wWCS2qtHF38eD1HiN=EK0DOQ@mail.gmail.com>
+Reply-To: kzakari04@gmail.com
+Sender: salim.ouedra1@gmail.com
+Received: by 2002:a9f:3d82:0:0:0:0:0 with HTTP; Fri, 4 Dec 2020 19:24:48 -0800 (PST)
+From:   Karim Zakari <kariim1960z@gmail.com>
+Date:   Sat, 5 Dec 2020 04:24:48 +0100
+X-Google-Sender-Auth: vvbAS78oyASyAEckScEDlUEo-vo
+Message-ID: <CAPzYosP3=wtQfy_VG2iqfQw7Xu6Ou+rUpmD2dCXxpUpbfOqChA@mail.gmail.com>
+Subject: URGENT REPLY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> > +struct ar9331_sw_stats {
-> > +       u64 rxbroad;
-> > +       u64 rxpause;
-> > +       u64 rxmulti;
-> > +};
+-- 
+Good-Day Friend,
 
-7> > +struct ar9331_sw_port {
-> > +       int idx;
-> > +       struct ar9331_sw_priv *priv;
-> > +       struct delayed_work mib_read;
-> > +       struct ar9331_sw_stats stats;
+      I know that this letter will come to you as surprise, I got your
+contact address while am searching for foreign partner to assist me in
+this business transaction that is present in our favor, My name is Mr.
+KARIM ZAKARI, I am the Bill and Exchange (assistant) Manager (BOA)
+BANK OF AFRICA. I'm proposing to lift in your name (US$16.5 Million
+Dollars) that belong to our later customer, MR. GORPUN VLADIMIR From
+Russia who died in Siber airline that crashed into sea at Israel on
+4th October 2001.
 
+I want to present you to my bank here as the beneficiary to this fund
+and Am waiting for your response for more details, As you are willing
+to execute this business opportunity with me.
 
-> > +static void ar9331_stats_update(struct ar9331_sw_port *port,
-> > +                               struct rtnl_link_stats64 *stats)
-> > +{
-> > +       struct ar9331_sw_stats *s = &port->stats;
-> > +
-> > +       stats->rx_packets = s->rxbroad + s->rxmulti + s->rx64byte +
-> > +               s->rx128byte + s->rx256byte + s->rx512byte + s->rx1024byte +
-> > +               s->rx1518byte + s->rxmaxbyte;
-> 
-> Are all of these port->stats accesses always atomic? I'll need to do
-> something similar in my xrs700x driver and want to make sure there
-> doesn't need to be a lock between here and where they're updated in
-> the delayed work.
-
-Since these are u64, they are not atomic on 32 bit systems.
-
-Take a look at
-
-include/linux/u64_stats_sync.h
-
-	Andrewu
+Yours Sincerely,
+Mr. Karim Zakari.
