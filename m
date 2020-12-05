@@ -2,96 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A012CFACB
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Dec 2020 10:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB25B2CFBA5
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Dec 2020 16:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726069AbgLEJWH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Dec 2020 04:22:07 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:32778 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726000AbgLEJVy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Dec 2020 04:21:54 -0500
-Received: by mail-io1-f67.google.com with SMTP id o8so8368628ioh.0
-        for <linux-mips@vger.kernel.org>; Sat, 05 Dec 2020 01:21:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=k1t43WsOCeWkGioi+225McenqDyts5xeyGG10W67SwI=;
-        b=mPhzn+XML/rXfepEr0dPPqEdVsCUEaFbgYFW120Sd0qo/ktEWxMhfxn4KmQrSX5KYA
-         Mu29o8JVwM2dldTF2h/fZVLfIp2c6ECfeIOKIPGE/W2oEzPhMntDD2EZl4Kuad0Q1e3h
-         +21elSV+21j0Xbg/R1q2f9NUpMNIVG83raj+DbWu3WwB8x8QQoYGI8LKieQau6rRImml
-         MmZ0/sBovb/BviQELcDqw2Gfa1Orto0mjfSC8bJ5uYDj34wYHbmYUe8wmQ7doS+e0Hef
-         15IdnKVIrelzN0mYhdBpUcNJA034zzn7Il0+s3cZBYxsST2VilgxWLbfuc3Z+Ycn079s
-         KoSQ==
-X-Gm-Message-State: AOAM530fbMCJgAs3S/gIPNyJ3rQp1sGnmqV0scfDRJhjI12qkL8e2Fdx
-        fgBy4XmBycLR3Nh17H2emc3AD6t0F+HgXVz7
-X-Google-Smtp-Source: ABdhPJy9Xc7j9uimHyVk9eLzq56IaZCP9n/LUoPdqIO0kxMQdODAKJ2jeH4CABqcrthcBFKaVsFDNA==
-X-Received: by 2002:a63:161a:: with SMTP id w26mr10887428pgl.17.1607159634170;
-        Sat, 05 Dec 2020 01:13:54 -0800 (PST)
-Received: from software.domain.org ([45.77.13.216])
-        by smtp.gmail.com with ESMTPSA id q12sm7730836pfc.84.2020.12.05.01.13.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 05 Dec 2020 01:13:53 -0800 (PST)
-From:   Huacai Chen <chenhuacai@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S1726249AbgLEO5x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Dec 2020 09:57:53 -0500
+Received: from isilmar-4.linta.de ([136.243.71.142]:36790 "EHLO
+        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726610AbgLEO5P (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Dec 2020 09:57:15 -0500
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from light.dominikbrodowski.net (brodo.linta [10.2.0.102])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 08A3D20110C;
+        Sat,  5 Dec 2020 09:05:30 +0000 (UTC)
+Received: by light.dominikbrodowski.net (Postfix, from userid 1000)
+        id 58E7020EC8; Sat,  5 Dec 2020 09:56:14 +0100 (CET)
+Date:   Sat, 5 Dec 2020 09:56:14 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: [PATCH] irqchip/loongson-htpic: Fix build warnings
-Date:   Sat,  5 Dec 2020 17:15:44 +0800
-Message-Id: <1607159744-995-1-git-send-email-chenhuacai@kernel.org>
-X-Mailer: git-send-email 2.7.0
+        Yoichi Yuasa <yuasa@linux-mips.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH REPOST] pcmcia: Remove NEC VRC4173 CARDU
+Message-ID: <X8tLLluXHhrI7SKT@light.dominikbrodowski.net>
+References: <20201113213408.2244169-1-bigeasy@linutronix.de>
+ <20201119170622.yan5bt2chxvoxqgn@linutronix.de>
+ <20201204192009.46w4doqoqqvhgrnh@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201204192009.46w4doqoqqvhgrnh@linutronix.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Fix build warnings as below:
+Am Fri, Dec 04, 2020 at 08:20:09PM +0100 schrieb Sebastian Andrzej Siewior:
+> On 2020-11-19 18:06:24 [+0100], To linux-kernel@vger.kernel.org wrote:
+> > On 2020-11-13 22:34:08 [+0100], To linux-kernel@vger.kernel.org wrote:
+> > > This driver is the very definition of bitrotting:
+> > > - Introduced in commit
+> > >   79a140932c776 ("[PATCH] mips: vR41xx updates")
+> > >   which is 2.6.11-rc3.
+> > > 
+> > > - Provides ->register_callback which was removed in commit
+> > >   7f316b033b36a ("[PATCH] pcmcia: remove socket register_callback")
+> > >   which is v2.6.14-rc3
+> > > 
+> > > - Uses INIT_WORK() with three arguments which was removed in commit
+> > >   65f27f38446e1 ("WorkStruct: Pass the work_struct pointer instead of context data")
+> > >   which is v2.6.20-rc1
+> > > 
+> > > - Provides ->inquire_socket and uses socket_cap_t which was removed in
+> > >   commit
+> > >   b7949fdacbe00 ("[PCMCIA] Remove inquire_socket")
+> > >   which is 2.5.72
+> > > 
+> > > - Provides ->get_io_map which was removed in commit
+> > >   d7de1b64a23b9 ("[PCMCIA] pcmcia-2: Remove get_io_map and get_mem_map socket methods.")
+> > >   which is 2.5.66
+> > > 
+> > > Remove VRC4173 CARDU from the tree because it never had the luck to be
+> > > successfully compiled. Let it finally find peace in byte heaven.
+> > …
+> > > This is a repost of
+> > > 	https://lkml.kernel.org/r/20201001193234.gi6fp4vk3dypwifv@linutronix.de
+> > > 
+> > > which was a repost of
+> > > 	https://lkml.kernel.org/r/20200916081629.cfi6svr3yjvzimqs@linutronix.de
+> > 
+> > Andrew, are you okay with routing this via your tree?
+> > Nobody responded to this and as I documented in the patch description it
+> > never compiled so.
+> 
+> Andrew, any chance?
 
-   drivers/irqchip/irq-loongson-htpic.c: In function 'htpic_reg_init':
->> drivers/irqchip/irq-loongson-htpic.c:62:12: warning: variable 'val' set but not used [-Wunused-but-set-variable]
-      62 |   uint32_t val;
-         |            ^~~
-   drivers/irqchip/irq-loongson-htpic.c: At top level:
->> drivers/irqchip/irq-loongson-htpic.c:84:12: warning: no previous prototype for 'htpic_of_init' [-Wmissing-prototypes]
-      84 | int __init htpic_of_init(struct device_node *node, struct device_node *parent)
-         |            ^~~~~~~~~~~~~
+It's in pcmcia-next now.
 
-Fixes: a93f1d903fa34fc2c5d9fa450bd ("irqchip: Add driver for Loongson-3 HyperTransport PIC controller")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
----
- drivers/irqchip/irq-loongson-htpic.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/irqchip/irq-loongson-htpic.c b/drivers/irqchip/irq-loongson-htpic.c
-index 63f7280..1b801c4 100644
---- a/drivers/irqchip/irq-loongson-htpic.c
-+++ b/drivers/irqchip/irq-loongson-htpic.c
-@@ -59,11 +59,10 @@ static void htpic_reg_init(void)
- 	int i;
- 
- 	for (i = 0; i < HTINT_NUM_VECTORS; i++) {
--		uint32_t val;
--
- 		/* Disable all HT Vectors */
- 		writel(0x0, htpic->base + HTINT_EN_OFF + i * 0x4);
--		val = readl(htpic->base + i * 0x4);
-+		/* Read back to force write */
-+		(void) readl(htpic->base + i * 0x4);
- 		/* Ack all possible pending IRQs */
- 		writel(GENMASK(31, 0), htpic->base + i * 0x4);
- 	}
-@@ -81,7 +80,7 @@ struct syscore_ops htpic_syscore_ops = {
- 	.resume		= htpic_resume,
- };
- 
--int __init htpic_of_init(struct device_node *node, struct device_node *parent)
-+static int __init htpic_of_init(struct device_node *node, struct device_node *parent)
- {
- 	unsigned int parent_irq[4];
- 	int i, err;
--- 
-2.7.0
-
+Thanks,
+	Dominik
