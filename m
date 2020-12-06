@@ -2,109 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3522D007F
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Dec 2020 05:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F06B2D0249
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Dec 2020 10:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727080AbgLFESY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Dec 2020 23:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727071AbgLFESX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Dec 2020 23:18:23 -0500
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6CFC0613D0;
-        Sat,  5 Dec 2020 20:17:43 -0800 (PST)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1klkdd-00Gpbw-Nh; Sun, 06 Dec 2020 03:23:05 +0000
-Date:   Sun, 6 Dec 2020 03:23:05 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCHSET] saner elf compat
-Message-ID: <20201206032305.GD3579531@ZenIV.linux.org.uk>
-References: <20201203214529.GB3579531@ZenIV.linux.org.uk>
- <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com>
- <20201203230336.GC3579531@ZenIV.linux.org.uk>
+        id S1726342AbgLFJic (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 6 Dec 2020 04:38:32 -0500
+Received: from [157.25.102.26] ([157.25.102.26]:44592 "EHLO orcam.me.uk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726134AbgLFJic (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 6 Dec 2020 04:38:32 -0500
+Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
+        by orcam.me.uk (Postfix) with ESMTPS id 0BF622BE0EC;
+        Sun,  6 Dec 2020 09:37:59 +0000 (GMT)
+Date:   Sun, 6 Dec 2020 07:10:22 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+cc:     linux-mips@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        tsbogend@alpha.franken.de, xie.he.0141@gmail.com
+Subject: Re: MIPS + clang-11 + allnoconfig / tinyconfig builds failed
+In-Reply-To: <CA+G9fYtofC2yzWWB4+YmSp2gv-CoG=boZJ4kXbdO250p1d3MBg@mail.gmail.com>
+Message-ID: <alpine.LFD.2.21.2012060706380.656242@eddie.linux-mips.org>
+References: <CA+G9fYtofC2yzWWB4+YmSp2gv-CoG=boZJ4kXbdO250p1d3MBg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201203230336.GC3579531@ZenIV.linux.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 11:03:36PM +0000, Al Viro wrote:
-> > >  The answer (for mainline) is that mips compat does *NOT* want
-> > > COMPAT_BINFMT_ELF.  Not a problem with that series, though, so I'd
-> > > retested it (seems to work, both for x86_64 and mips64, execs and
-> > > coredumps for all ABIs alike), with centralization of Kconfig logics
-> > > thrown in.
-> > 
-> > Well, the diffstat looks nice:
-> > 
-> > >  26 files changed, 127 insertions(+), 317 deletions(-)
-> > 
-> > and the patches didn't trigger anything for me, but how much did this
-> > get tested? Do you actually have both kinds of 32-bit elf mips
-> > binaries around and a machine to test on?
-> 
-> Yes (aptitude install gcc-multilib on debian mips64el/stretch sets the toolchain
-> and libraries just fine, and then it's just a matter of -mabi=n32 passed
-> to gcc).  "Machine" is qemu-system-mips64el -machine malta -m 1024 -cpu 5KEc
-> and the things appear to work; I hadn't tried that on the actual hardware.
-> I do have a Loongson-2 box, but it would take a while to dig it out and
-> get it up-to-date.
-> 
-> > Linux-mips was cc'd, but I'm adding Thomas B to the cc here explicitly
-> > just so that he has a heads-up on this thing and can go and look at
-> > the mailing list in case it goes to a separate mailbox for him..
-> 
-> I would certainly appreciate review and testing - this branch sat
-> around in the "should post it someday" state since June (it was
-> one of the followups grown from regset work back then), and I'm
-> _not_ going to ask pulling it without an explicit OK from mips
-> folks.
+On Wed, 25 Nov 2020, Naresh Kamboju wrote:
 
-BTW, there's something curious going on in ELF binary recognition for
-x32.  Unlike other 64bit architectures, here we have a 32bit binary
-that successfully passes the native elf_check_arch().  Usually we
-either have different EM_... values for 64bit and 32bit (e.g. for ppc
-and sparc) or we have an explicit check for ->e_ident[EI_CLASS]
-having the right value (ELFCLASS32 or ELFCLASS64 for 32bit and 64bit
-binaries resp.)
+> /builds/1kl9SVppm6wRdzlQ3UcQKIBaUrx/arch/mips/lib/uncached.c:45:6:
+> warning: variable 'sp' is uninitialized when used here
+> [-Wuninitialized]
+>         if (sp >= (long)CKSEG0 && sp < (long)CKSEG2)
+>             ^~
+> /builds/1kl9SVppm6wRdzlQ3UcQKIBaUrx/arch/mips/lib/uncached.c:40:18:
+> note: initialize the variable 'sp' to silence this warning
+>         register long sp __asm__("$sp");
+>                         ^
+>                          = 0
 
-For x32 that's not true - we use EM_X86_64 for ->e_machine and that's
-the only thing the native elf_check_arch() is looking at.  IOW,
-it looks like amd64 elf_load_binary() progresses past elf_check_arch()
-for x32 binaries.  And gets to load_elf_phdrs(), which would appear
-to have a check of its own that should reject the sucker:
-        /*
-         * If the size of this structure has changed, then punt, since
-         * we will be doing the wrong thing.
-         */
-        if (elf_ex->e_phentsize != sizeof(struct elf_phdr))
-                goto out;
-After all, ->e_phentsize is going to be 32 (sizeof(struct elf32_phdr)
-rather than expected 56 (sizeof(struct elf64_phdr)) and off we bugger,
-even though it happens at slightly later point than usual.  Except that
-we are looking at struct elf64_hdr ->e_phentsize - in struct elf32_hdr.
-I.e. at offset 54, two bytes past the end of in-file struct elf32_hdr.
+ FWIW this looks like a compiler bug to me, because $sp, by definition, is 
+always initialised.  I suggest that you report it to Clang developers 
+instead.
 
-Usually we won't find 0x38 0x00 in that location, so everything works,
-but IMO that's too convoluted.
+  Maciej
 
-Peter, is there any reason not to check ->ei_ident[EI_CLASS] in
-amd64 elf_check_arch()?  It's a 1-byte load from hot cacheline
-(offset 4 and we'd just read the 4 bytes at offsets 0..3) +
-compare + branch not taken, so performance impact is pretty much
-nil.  I'm not saying it's a security problem or anything of that
-sort, just that it makes the analysis more subtle than it ought
-to be...
-
-Is it about some malformed homegrown 64bit binaries with BS value
-at offset 4?  Confused...
