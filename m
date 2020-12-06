@@ -2,43 +2,208 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9832B2D0580
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Dec 2020 15:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB102D07A0
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Dec 2020 23:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbgLFOex (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 6 Dec 2020 09:34:53 -0500
-Received: from [157.25.102.26] ([157.25.102.26]:54072 "EHLO orcam.me.uk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726203AbgLFOex (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 6 Dec 2020 09:34:53 -0500
-Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
-        by orcam.me.uk (Postfix) with ESMTPS id 0470E2BE0EC;
-        Sun,  6 Dec 2020 14:34:20 +0000 (GMT)
-Date:   Sun, 6 Dec 2020 14:33:33 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Anders Roxell <anders.roxell@linaro.org>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        natechancellor@gmail.com, ndesaulniers@google.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] mips: lib: uncached: fix uninitialized variable 'sp'
-In-Reply-To: <alpine.LFD.2.21.2012060915460.656242@eddie.linux-mips.org>
-Message-ID: <alpine.LFD.2.21.2012061431190.656242@eddie.linux-mips.org>
-References: <20201127083938.2666770-1-anders.roxell@linaro.org> <alpine.LFD.2.21.2012060915460.656242@eddie.linux-mips.org>
+        id S1727664AbgLFWKc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 6 Dec 2020 17:10:32 -0500
+Received: from mail-eopbgr1410103.outbound.protection.outlook.com ([40.107.141.103]:39945
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726400AbgLFWKb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 6 Dec 2020 17:10:31 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gmQwSLuvhWHC1QGCby1ezicfsFt6bnW7RhgvacPJEG16r6IXDsnWFaBV2IfREx063XP8jUoirA3A4LL1dUzQvn4AqfMWzjngPl6t/DsS76sEvLMXzEftKNmgCFH0GkbttxC4duDoQvPblfljMx/krRTnXpsrDgcaPvVs1sWHwgSlnbJq7odM1fo9CrL2S/k+dhl8uxq4CKSi7+WBIXE7N//pxh6Bh5/OkxxbWt/fiEeV/OSeUKMcAxx9G7EqScVgF6lpM85Qt2QAPazG18VBZcKlmsBW4Cmp0eMvQCiD1Sfok1q/R6/U9z0SZ2oTU5gM2Xkyq5C9zBp2bh/rqPDqwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mBCWCA8liMG4RrAS8XeHFIqKmlnmRbMj4R1QgaThGhc=;
+ b=XiEA1OZwDJZLs53isfDasaHt+qsueMXoWJPAlul3+qTvkL3YpWL+SxJr2QnzEp81JjZTuaFJp/LPyVDJYPL0y9DVp781v2wudDHFe+Hp4aljZ4+RJ0G/pYak7dXsbK/2UyypuRpd7C+vvEdtpWGLza+z3Z+y2PlHjHD/H7gFcLjunuJzY7ccROXri8guw0S7dK0HWlBRKP+LrA3ZQmDBHiC4zTGEGGkQFHC/Mq4JMA2Dr9BEa5bKAERKl3oMIvM24MgsLyvxWrjP/3LneXt9cLGW89KAtqxtJw7wDuQbSn1wC3W89h8KUQOB9qHjmFJvpEHujjI2dCBSF423uDpWvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mBCWCA8liMG4RrAS8XeHFIqKmlnmRbMj4R1QgaThGhc=;
+ b=hma4eloNKLn2YQV/35HUsxd8JE1SUCV/djwO2ZP7itW2shihvwy2PJJUZ2wKK81G+BNFU+sjdEJKLedpgqMsfWgNPfP0x6t/H/p3Ko/2/C7VkMaXCn7mtubI8EPpsbz9JjRtyR2EC/g6oYE/1WC+AsFK1x4+5EPgr69d+2eGzNA=
+Received: from OSBPR01MB5048.jpnprd01.prod.outlook.com (2603:1096:604:38::10)
+ by OSBPR01MB3207.jpnprd01.prod.outlook.com (2603:1096:604:22::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17; Sun, 6 Dec
+ 2020 22:09:41 +0000
+Received: from OSBPR01MB5048.jpnprd01.prod.outlook.com
+ ([fe80::18f:c7ea:e9e4:db70]) by OSBPR01MB5048.jpnprd01.prod.outlook.com
+ ([fe80::18f:c7ea:e9e4:db70%3]) with mapi id 15.20.3632.019; Sun, 6 Dec 2020
+ 22:09:41 +0000
+From:   Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: RE: [PATCH v5 09/19] dt-bindings: usb: renesas-xhci: Refer to the
+ usb-xhci.yaml file
+Thread-Topic: [PATCH v5 09/19] dt-bindings: usb: renesas-xhci: Refer to the
+ usb-xhci.yaml file
+Thread-Index: AQHWyxresVcuPKjuRkaonyGzMr8w1Knqohuw
+Date:   Sun, 6 Dec 2020 22:09:41 +0000
+Message-ID: <OSBPR01MB50483D3B3FFA24BFDA10B80CAACF0@OSBPR01MB5048.jpnprd01.prod.outlook.com>
+References: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
+ <20201205152427.29537-10-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201205152427.29537-10-Sergey.Semin@baikalelectronics.ru>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: baikalelectronics.ru; dkim=none (message not signed)
+ header.d=none;baikalelectronics.ru; dmarc=none action=none
+ header.from=bp.renesas.com;
+x-originating-ip: [193.141.220.21]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 3aa26450-ff0b-48da-1088-08d89a33a17a
+x-ms-traffictypediagnostic: OSBPR01MB3207:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <OSBPR01MB3207FAAAAB793BBD5F70ADC3AACF0@OSBPR01MB3207.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WEFD35+EuyipVwwTNg/5nyXpCpriBgslUjyuDHNdCI96zcTedmAbbRfDOQbG9jtivtGDkD0RsDyS+rdDfRHeIHUtRCdn3T9I3nyp4YKdWlp416mi7ie09xWwCL4WXm8YPzgepf05tpjLzsc7u6tCTT8W9wr4ejXDC9mzY2g3GuqqVpYFq0iDsBG8Nzeqr3cKN08M9p1/mr6ZoVKxveAHnrcdRn6yVad/63SOx9t3jNdQHK2h2XVw5e9v5j8/Zayo93aacC90TZP4a/A44hJUFEpKYVILCOuCKvpVwEmsFC6hcN09NJc32FkExgSWI0CsR2WojVJIcnFgi6FS1LDxOg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB5048.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(396003)(346002)(376002)(366004)(136003)(66476007)(9686003)(316002)(110136005)(83380400001)(71200400001)(2906002)(66946007)(55016002)(8676002)(5660300002)(4326008)(6506007)(66556008)(54906003)(66446008)(64756008)(33656002)(76116006)(86362001)(26005)(52536014)(53546011)(7416002)(478600001)(186003)(8936002)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?F7PzEAXNglcbAHhFqXdiak+iyCDVGiuIZo7NKBSnphHRkkaIKHZC9LTe4CUR?=
+ =?us-ascii?Q?w5a6SP7y3UrPxuOWM6mSwY6qhsjmgq9A1OMG1ub9JPPtOi+cbZMIV9IvtWwC?=
+ =?us-ascii?Q?yIIG3cHJEN0Wyi8gnWLw8T9ys3VMi+3cq0Zrb8KJYrt1fFT4iRNxQ2pf5rdV?=
+ =?us-ascii?Q?3Hl/Jxw+4EUdKECS8OZIzg51sgbaA+AYD5kPDVzZgf4Fqcfa00fbD6UBq6p3?=
+ =?us-ascii?Q?XhtnpblLbxL0Dw9tnkBI2j0T5M0x0eznhFWGgFVRp3nZbK34XRACMp56sUK5?=
+ =?us-ascii?Q?nU/C7hZQwCNuicsO3rvyDpQ5kspOZusXUAhaY0NBVvoaIPcwhFaTjN94OAI8?=
+ =?us-ascii?Q?ML6XE+WRyktwOvFORDBW0u1LMrjsmSqAeMX4s/D/Qj6DEsXLuSHZertP6sy5?=
+ =?us-ascii?Q?hW0mdPmSSim2399RKQkOojwT63AyCzFnkrZkjUKKaYqSgHVkqOHSwBh2pxXk?=
+ =?us-ascii?Q?+YruyLqcb3RE4pia7xZRdA+FX/xDnRyjMZmLlzqnpLFKAtaymdFtOpUSZZZl?=
+ =?us-ascii?Q?bT8LXA+hhUJXM9SX94r0KtSk+OnvhrEkKK+FMLqHFETWTw6PwO5QajA9Xwlr?=
+ =?us-ascii?Q?sqUSH7Gwe5DJ32yjrHstAZtMNk8fxivjeaywXfBgCJeUT4yuMNEVIbHkA6Nl?=
+ =?us-ascii?Q?Gifs12ZR9fcjdQ0mTBluDqx+v/KiTvtMXBulAoX//WH6PagHxr/BMJ62TdLt?=
+ =?us-ascii?Q?C+GVoeU1Na3xZVVk1x3DGteIie31dN6tWLL1ZQi28ek3Zmy5ATqQC/jAtQvw?=
+ =?us-ascii?Q?7FGepiq20srvS7t1uSvdlUdIRooP+5tjrgcogdemzqbQRn5xPvYRzUioZW25?=
+ =?us-ascii?Q?DtwsSrGQCp4Y29OIExbgAOxVQTLhc8yFitydeF7QhMDOgJ2wngwJytu1l/ne?=
+ =?us-ascii?Q?B28yDD+RMEcI7Bba/LuhxOz2i1ekg8jxIZJ0/sW3zWM56bjkXF1b4kMrzE2Z?=
+ =?us-ascii?Q?v8nnqWC3hZoYNTUBTscr3Szhpyx2wpW7zKTJ18kbiYs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB5048.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3aa26450-ff0b-48da-1088-08d89a33a17a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2020 22:09:41.3337
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oxUmbn6Gx1Yijr2w1dIzJugdsblbey6avxMFR5E0a7cIgsUqHfETo+jWnmniczv4UqPzfn55WfI0oiCvVyQV56eRazOxpg+r5SzO2A93oAz9hVcMFq8eZ3lAtakEEOuI
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3207
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 6 Dec 2020, Maciej W. Rozycki wrote:
+Hi Serge,
 
->  I think this should be OK once the issues I mentioned here have been 
-> addressed.
+Thank you for the patch.
 
- Or alternatively making the variable global would possibly be a better 
-fix as it would let the compiler decide if to waste another register to 
-keep a copy of $sp.
+> -----Original Message-----
+> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Sent: 05 December 2020 15:24
+> To: Mathias Nyman <mathias.nyman@intel.com>; Felipe Balbi <balbi@kernel.o=
+rg>; Krzysztof Kozlowski
+> <krzk@kernel.org>; Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob H=
+erring <robh+dt@kernel.org>;
+> Chunfeng Yun <chunfeng.yun@mediatek.com>; Prabhakar Mahadev Lad <prabhaka=
+r.mahadev-
+> lad.rj@bp.renesas.com>; Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.c=
+om>
+> Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>; Serge Semin <fancer.=
+lancer@gmail.com>; Alexey
+> Malahov <Alexey.Malahov@baikalelectronics.ru>; Pavel Parkhomenko
+> <Pavel.Parkhomenko@baikalelectronics.ru>; Andy Gross <agross@kernel.org>;=
+ Bjorn Andersson
+> <bjorn.andersson@linaro.org>; Manu Gautam <mgautam@codeaurora.org>; Roger=
+ Quadros <rogerq@ti.com>;
+> Neil Armstrong <narmstrong@baylibre.com>; Kevin Hilman <khilman@baylibre.=
+com>; Martin Blumenstingl
+> <martin.blumenstingl@googlemail.com>; Ahmad Zainie <wan.ahmad.zainie.wan.=
+mohamad@intel.com>; linux-
+> arm-kernel@lists.infradead.org; linux-snps-arc@lists.infradead.org; linux=
+-mips@vger.kernel.org;
+> linuxppc-dev@lists.ozlabs.org; linux-usb@vger.kernel.org; devicetree@vger=
+.kernel.org; linux-
+> kernel@vger.kernel.org; Rob Herring <robh@kernel.org>
+> Subject: [PATCH v5 09/19] dt-bindings: usb: renesas-xhci: Refer to the us=
+b-xhci.yaml file
+>=20
+> With minor peculiarities (like uploading some vendor-specific firmware)
+> these are just Generic xHCI controllers fully compatible with its
+> properties. Make sure the Renesas USB xHCI DT nodes are also validated
+> against the Generic xHCI DT schema.
+>=20
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> ---
+>  Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-  Maciej
+Cheers,
+Prabhakar
+
+> diff --git a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+> b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+> index 0f078bd0a3e5..7e5ed196b52c 100644
+> --- a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+> @@ -11,7 +11,7 @@ maintainers:
+>    - Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+>=20
+>  allOf:
+> -  - $ref: "usb-hcd.yaml"
+> +  - $ref: "usb-xhci.yaml"
+>=20
+>  properties:
+>    compatible:
+> @@ -69,7 +69,7 @@ required:
+>    - power-domains
+>    - resets
+>=20
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>=20
+>  examples:
+>    - |
+> --
+> 2.29.2
 
