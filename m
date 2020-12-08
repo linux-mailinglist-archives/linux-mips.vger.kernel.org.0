@@ -2,141 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4518E2D266B
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Dec 2020 09:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 295562D2930
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Dec 2020 11:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727559AbgLHIlA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Dec 2020 03:41:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726340AbgLHIlA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Dec 2020 03:41:00 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3C7C061793;
-        Tue,  8 Dec 2020 00:40:19 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id q8so18120476ljc.12;
-        Tue, 08 Dec 2020 00:40:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hVOWo+pBoZR2uZ3E/0eQOGPjxtsx6mvaLfulHDkgAOU=;
-        b=Mx72BqfualNQHZXc9k9tHobfNsjEXoO7+T0DfnJ/+r4Dn9bsth98VA+BNxG0x0EEvi
-         wp5vpv7YllmzEWTXRQT5D9qRc8vx4NkPC8hHOfcanETZU4YyTfwBv78fYz56462upoQQ
-         tnESm3QFQdXw91cn9gS9qLM/ZxfS8dYfh5hctndNaSO6lp67Hoy5dvB31pHKg0d5JUC3
-         jwXvw6/KC1Yt38SqHDK1WWO9JxnTCZn7czaZX0k4eJlmNwShQNW/yX3SyNXPl1YF5jgS
-         ug+9LS1K3O6bBYuYmZ3fa6LycSXadzu8gLoBY179cxQT7WcLqV0u9xjGki9HEVcEzTum
-         xCRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=hVOWo+pBoZR2uZ3E/0eQOGPjxtsx6mvaLfulHDkgAOU=;
-        b=V4LHAgTQgdWdGrJc8t/n9liuO9SvuNkrmrgC7K8RHqDW8UuoPe1Zu3wsFEi+ihzVk0
-         +CzoEMh/gLLmk8tU63xhnk3Xm3wEQaKUBqkBQyooSPZftldU1xEnCcTDuzXjbotGMPiD
-         jcIjOs7Z10hKlhcFgutg9s0E9w8eDzoZkJcsl+mhbwdsvUOWBQFfV4VEEXCU3gTuktFO
-         X+tPTSwZJkjiFRMmiOGY3TgkMJxvjj4EenF0s/EyQaP4gePBinQrqHEea3S/YBpLpzYd
-         Kv1DFzKc1ytN8r/0USm5Gg9yhn84o1a+vj/ivCJn4xiZ5LJos+dqRdX2uPlL3sxUD/ma
-         h/Yw==
-X-Gm-Message-State: AOAM531eklrf/ctuckcLwdSDPp4O+e7SFHNPe+EcNTlF2Q1cY8WqMfz9
-        EGDLSZ1FqHELOYJxPZBmIzQ=
-X-Google-Smtp-Source: ABdhPJw+4gdhHVe4TOvyC/W1Zeq5hBs7zZf1xnBizkrqoJ79TIdVD/bLFBRXvQknE/0mB/JixMMWrA==
-X-Received: by 2002:a2e:90c5:: with SMTP id o5mr10454961ljg.136.1607416818275;
-        Tue, 08 Dec 2020 00:40:18 -0800 (PST)
-Received: from [192.168.1.100] ([178.176.72.18])
-        by smtp.gmail.com with ESMTPSA id 8sm3163520lfk.246.2020.12.08.00.40.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Dec 2020 00:40:17 -0800 (PST)
+        id S1728812AbgLHKsD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Dec 2020 05:48:03 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:54492 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728735AbgLHKsD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 8 Dec 2020 05:48:03 -0500
+Received: from [10.130.0.52] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn3+uWc9fcqsaAA--.664S3;
+        Tue, 08 Dec 2020 18:47:12 +0800 (CST)
 Subject: Re: [PATCH v2 2/4] spi: Add devicetree bindings documentation for
  Loongson SPI
-To:     Qing Zhang <zhangqing@loongson.cn>,
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
+ <1607413467-17698-2-git-send-email-zhangqing@loongson.cn>
+ <b97c4d59-3279-f67d-d951-1e9436faa640@gmail.com>
 Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, gaojuxin@loongson.cn,
         yangtiezhu@loongson.cn
-References: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
- <1607413467-17698-2-git-send-email-zhangqing@loongson.cn>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <b97c4d59-3279-f67d-d951-1e9436faa640@gmail.com>
-Date:   Tue, 8 Dec 2020 11:40:07 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+From:   zhangqing <zhangqing@loongson.cn>
+Message-ID: <20e7dafc-8c67-79e4-e64a-a08e21101678@loongson.cn>
+Date:   Tue, 8 Dec 2020 18:47:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <1607413467-17698-2-git-send-email-zhangqing@loongson.cn>
+In-Reply-To: <b97c4d59-3279-f67d-d951-1e9436faa640@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxn3+uWc9fcqsaAA--.664S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF45Gr4UtFy8CF43ZF1rtFb_yoW8ZF48pF
+        1UCF4rtF4ktw1xCa1aqFn7C3W3JF4kuF4UGF4Iqr1jy3s0kFn3tw15KrsrZrZ5WF48AFWI
+        qFZ7CF1fKry2q3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8twCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267
+        AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqeHgUUUUU=
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+Hi Sergei Shtylyov,
 
-On 08.12.2020 10:44, Qing Zhang wrote:
 
-> Add spi-ls7a binding documentation.
-> 
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
->   Documentation/devicetree/bindings/spi/spi-ls7a.txt | 31 ++++++++++++++++++++++
->   1 file changed, 31 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/spi/spi-ls7a.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-ls7a.txt b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
-> new file mode 100644
-> index 0000000..56247b5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
-> @@ -0,0 +1,31 @@
-> +Binding for LOONGSON LS7A SPI controller
-> +
-> +Required properties:
-> +- compatible: should be "pci0014,7a0b.0","pci0014,7a0b","pciclass088000","pciclass0880".
-> +- reg: reference IEEE Std 1275-1994.
-> +- #address-cells: <1>, as required by generic SPI binding.
-> +- #size-cells: <0>, also as required by generic SPI binding.
-> +- #interrupts: No hardware interrupt.
+On 12/08/2020 04:40 PM, Sergei Shtylyov wrote:
+> Hello!
+>
+> On 08.12.2020 10:44, Qing Zhang wrote:
+>
+>> Add spi-ls7a binding documentation.
+>>
+>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>> ---
+>>   Documentation/devicetree/bindings/spi/spi-ls7a.txt | 31 
+>> ++++++++++++++++++++++
+>>   1 file changed, 31 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/spi-ls7a.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/spi-ls7a.txt 
+>> b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
+>> new file mode 100644
+>> index 0000000..56247b5
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
+>> @@ -0,0 +1,31 @@
+>> +Binding for LOONGSON LS7A SPI controller
+>> +
+>> +Required properties:
+>> +- compatible: should be 
+>> "pci0014,7a0b.0","pci0014,7a0b","pciclass088000","pciclass0880".
+>> +- reg: reference IEEE Std 1275-1994.
+>> +- #address-cells: <1>, as required by generic SPI binding.
+>> +- #size-cells: <0>, also as required by generic SPI binding.
+>> +- #interrupts: No hardware interrupt.
+>
+>    You say it's a required prop, yet yuoe example doesn't have it...
+         I want to emphasize here that LS7A SPI has no hardware 
+interrupts, and DT is not actually used.
+>
+>> +
+>> +Child nodes as per the generic SPI binding.
+>> +
+>> +Example:
+>> +
+>> +            spi@16,0 {
+>> +                compatible = "pci0014,7a0b.0",
+>> +                        "pci0014,7a0b",
+>> +                        "pciclass088000",
+>> +                        "pciclass0880";
+>> +
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +                reg = <0xb000 0x0 0x0 0x0 0x0>;
+>> +                num-chipselects = <0>;
+>> +                spiflash: s25fl016k@0 {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <1>;
+>
+>    Once more?
+>
+>> +                compatible ="spansion,s25fl016k","jedec,spi-nor";
+>
+>    Once more?
+>
+>> + spi-max-frequency=<50000000>;
+>> +                reg=<0>;
+>
+>    Once more? Did you mean this for a child node?
+        Yes, these are child node attributes, the child node splash is 
+not necessary.
+>
+>> +                };
+>> +            };
+>
+      Thanks
 
-    You say it's a required prop, yet yuoe example doesn't have it...
+      -Qing
+> MBR, Sergei
 
-> +
-> +Child nodes as per the generic SPI binding.
-> +
-> +Example:
-> +
-> +			spi@16,0 {
-> +				compatible = "pci0014,7a0b.0",
-> +						"pci0014,7a0b",
-> +						"pciclass088000",
-> +						"pciclass0880";
-> +
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				reg = <0xb000 0x0 0x0 0x0 0x0>;
-> +				num-chipselects = <0>;
-> +				spiflash: s25fl016k@0 {
-> +				#address-cells = <1>;
-> +				#size-cells = <1>;
-
-    Once more?
-
-> +				compatible ="spansion,s25fl016k","jedec,spi-nor";
-
-    Once more?
-
-> +				spi-max-frequency=<50000000>;
-> +				reg=<0>;
-
-    Once more? Did you mean this for a child node?
-
-> +				};
-> +			};
-
-MBR, Sergei
