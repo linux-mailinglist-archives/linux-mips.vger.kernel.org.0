@@ -2,138 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 295562D2930
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Dec 2020 11:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 219EC2D2C6E
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Dec 2020 14:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728812AbgLHKsD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Dec 2020 05:48:03 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:54492 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728735AbgLHKsD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 8 Dec 2020 05:48:03 -0500
-Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn3+uWc9fcqsaAA--.664S3;
-        Tue, 08 Dec 2020 18:47:12 +0800 (CST)
-Subject: Re: [PATCH v2 2/4] spi: Add devicetree bindings documentation for
- Loongson SPI
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
- <1607413467-17698-2-git-send-email-zhangqing@loongson.cn>
- <b97c4d59-3279-f67d-d951-1e9436faa640@gmail.com>
-Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        id S1729720AbgLHN5b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Dec 2020 08:57:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58382 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729678AbgLHN5b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 8 Dec 2020 08:57:31 -0500
+Date:   Tue, 8 Dec 2020 13:56:44 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607435810;
+        bh=r+SNDjdn1cT+19+hYK3dnLdSKkvOwWFHhZnR6xbs9b4=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IEU6PrMiyN6gfVyUTtAY/XV2HMYTkelCmMBqubxCwtCpAQAXVCG2GqWZbATIlW1y2
+         tYPwqdXR4ap+x8XbgCT43+vW/isxYFykdEpPinmVsfsfREURAaps9sNPy96G+H88QX
+         JGqWUy0BAE97QyipEjxygtNvXYrAnIEKnJt3YKVTyQXUuY9hb3dTuQ3MmlTv9LdLQl
+         00/IOFheqyhRmQROS2saMaboz9xGgievUiZj06fHP26iRGYOaeJGwydys5T8cKaY3c
+         x2HYpR0PK94eVx/oxF6XP7HVMawe59nIAK3TuDa0W6SHrad7J3i9IWqKbpTSpN9Bs4
+         4CyXFYa/9oGkg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, gaojuxin@loongson.cn,
         yangtiezhu@loongson.cn
-From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <20e7dafc-8c67-79e4-e64a-a08e21101678@loongson.cn>
-Date:   Tue, 8 Dec 2020 18:47:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+Subject: Re: [PATCH v2 1/4] spi: LS7A: Add Loongson LS7A SPI controller
+ driver support
+Message-ID: <20201208135644.GC6686@sirena.org.uk>
+References: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <b97c4d59-3279-f67d-d951-1e9436faa640@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxn3+uWc9fcqsaAA--.664S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF45Gr4UtFy8CF43ZF1rtFb_yoW8ZF48pF
-        1UCF4rtF4ktw1xCa1aqFn7C3W3JF4kuF4UGF4Iqr1jy3s0kFn3tw15KrsrZrZ5WF48AFWI
-        qFZ7CF1fKry2q3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8twCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
-        x2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267
-        AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqeHgUUUUU=
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zCKi3GIZzVBPywwA"
+Content-Disposition: inline
+In-Reply-To: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
+X-Cookie: Do not dry clean.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sergei Shtylyov,
 
+--zCKi3GIZzVBPywwA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 12/08/2020 04:40 PM, Sergei Shtylyov wrote:
-> Hello!
->
-> On 08.12.2020 10:44, Qing Zhang wrote:
->
->> Add spi-ls7a binding documentation.
->>
->> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->> ---
->>   Documentation/devicetree/bindings/spi/spi-ls7a.txt | 31 
->> ++++++++++++++++++++++
->>   1 file changed, 31 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/spi/spi-ls7a.txt
->>
->> diff --git a/Documentation/devicetree/bindings/spi/spi-ls7a.txt 
->> b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
->> new file mode 100644
->> index 0000000..56247b5
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
->> @@ -0,0 +1,31 @@
->> +Binding for LOONGSON LS7A SPI controller
->> +
->> +Required properties:
->> +- compatible: should be 
->> "pci0014,7a0b.0","pci0014,7a0b","pciclass088000","pciclass0880".
->> +- reg: reference IEEE Std 1275-1994.
->> +- #address-cells: <1>, as required by generic SPI binding.
->> +- #size-cells: <0>, also as required by generic SPI binding.
->> +- #interrupts: No hardware interrupt.
->
->    You say it's a required prop, yet yuoe example doesn't have it...
-         I want to emphasize here that LS7A SPI has no hardware 
-interrupts, and DT is not actually used.
->
->> +
->> +Child nodes as per the generic SPI binding.
->> +
->> +Example:
->> +
->> +            spi@16,0 {
->> +                compatible = "pci0014,7a0b.0",
->> +                        "pci0014,7a0b",
->> +                        "pciclass088000",
->> +                        "pciclass0880";
->> +
->> +                #address-cells = <1>;
->> +                #size-cells = <0>;
->> +                reg = <0xb000 0x0 0x0 0x0 0x0>;
->> +                num-chipselects = <0>;
->> +                spiflash: s25fl016k@0 {
->> +                #address-cells = <1>;
->> +                #size-cells = <1>;
->
->    Once more?
->
->> +                compatible ="spansion,s25fl016k","jedec,spi-nor";
->
->    Once more?
->
->> + spi-max-frequency=<50000000>;
->> +                reg=<0>;
->
->    Once more? Did you mean this for a child node?
-        Yes, these are child node attributes, the child node splash is 
-not necessary.
->
->> +                };
->> +            };
->
-      Thanks
+On Tue, Dec 08, 2020 at 03:44:24PM +0800, Qing Zhang wrote:
 
-      -Qing
-> MBR, Sergei
+> v2:
+> - keep Kconfig and Makefile sorted
+> - make the entire comment a C++ one so things look more intentional
 
+You say this but...
+
+> +++ b/drivers/spi/spi-ls7a.c
+> @@ -0,0 +1,324 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Loongson LS7A SPI Controller driver
+> + *
+> + * Copyright (C) 2020 Loongson Technology Corporation Limited
+> + */
+
+=2E..this is still a mix of C and C++ comments?
+
+> +static int set_cs(struct ls7a_spi *ls7a_spi, struct spi_device  *spi, in=
+t val)
+> +{
+> +	int cs =3D ls7a_spi_read_reg(ls7a_spi, SFCS) & ~(0x11 << spi->chip_sele=
+ct);
+> +
+> +	if (spi->mode  & SPI_CS_HIGH)
+> +		val =3D !val;
+> +	ls7a_spi_write_reg(ls7a_spi, SFCS,
+> +		(val ? (0x11 << spi->chip_select):(0x1 << spi->chip_select)) | cs);
+> +
+> +	return 0;
+> +}
+
+Why not just expose this to the core and let it handle things? =20
+
+Please also write normal conditional statements to improve legibility.
+There's quite a lot of coding style issues in this with things like
+missing spaces=20
+
+> +	if (t) {
+> +		hz =3D t->speed_hz;
+> +		if (!hz)
+> +			hz =3D spi->max_speed_hz;
+> +	} else
+> +		hz =3D spi->max_speed_hz;
+
+If one branch of the conditional has braces please use them on both to
+improve legibility.
+
+> +static int  ls7a_spi_transfer_one_message(struct spi_master *master,
+> +                                         struct spi_message *m)
+
+I don't understand why the driver is implementing transfer_one_message()
+- it looks like this is just open coding the standard loop that the
+framework provides and should just be using transfer_one().
+
+> +		r =3D ls7a_spi_write_read(spi, t);
+> +		if (r < 0) {
+> +			status =3D r;
+> +			goto error;
+> +			}
+
+The indentation here isn't following the kernel coding style.
+
+> +	master =3D spi_alloc_master(&pdev->dev, sizeof(struct ls7a_spi));
+> +	if (!master)
+> +		return -ENOMEM;
+
+Why not use devm_ here?
+
+> +	ret =3D devm_spi_register_master(dev, master);
+> +	if (ret)
+> +		goto err_free_master;
+
+The driver uses devm_spi_register_master() here but...
+
+> +static void ls7a_spi_pci_remove(struct pci_dev *pdev)
+> +{
+> +	struct spi_master *master =3D pci_get_drvdata(pdev);
+> +	struct ls7a_spi *spi;
+> +
+> +	spi =3D spi_master_get_devdata(master);
+> +	if (!spi)
+> +		return;
+> +
+> +	pci_release_regions(pdev);
+
+=2E..releases the PCI regions in the remove() function before the SPI
+controller is freed so the controller could still be active.
+
+--zCKi3GIZzVBPywwA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/PhhsACgkQJNaLcl1U
+h9DApAf9FL27ZdJ5EY5dvTCrBunyvu4kKI1aW2smyMKHDqAMCdh/Bx13j76pLcJN
+o3fc67vf4TtI4B8m1IExFSXuZLDlERimQplJSh1eG5KYm+em4ryKK1fDHM6+Rdl0
+kpu946yiVUJ7hF8zFyJof1dgiwrWY7hOsmbhPi3fGCFDqQpx3Pi9+tmUUVj9YgCa
+5ZyVOZH5q88ShNcmCkAvZbK9/9f/nYB9+t6575rvbQlCH6pbGcwoEGuqJ/V0IsFS
+PKqJiP/X9/f5rfb0SNe2HNV6WExewivMg2YnUOEldPNh2NNGx4o2VJaLOPlm9iTz
+8pjE5qTLBCCQeROluQCMEwm2cPf0EQ==
+=xEfq
+-----END PGP SIGNATURE-----
+
+--zCKi3GIZzVBPywwA--
