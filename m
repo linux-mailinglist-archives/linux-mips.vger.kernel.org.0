@@ -2,149 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E87102D2D83
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Dec 2020 15:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A02D2D2E12
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Dec 2020 16:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729914AbgLHOtU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Dec 2020 09:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729471AbgLHOtU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Dec 2020 09:49:20 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5C8C061749;
-        Tue,  8 Dec 2020 06:48:39 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id m12so1857625lfo.7;
-        Tue, 08 Dec 2020 06:48:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TbXfHgxRABflLP1aC/6ag0TWl+8h0+26/ihPZ9uTfG4=;
-        b=DPkyVmkYD3U8jD+HGG+sE+g3Xr2g/0yos9wjbEsIX6f7G8S6/0WQg2U7ZGnb3t7lWz
-         Fw1uHnvj//DvybNt6zNicp5Ayxnw2Xfq9zi1+mvji4J5fpB2DutNRNOcwL/ADl6nyLHo
-         umR0Rn1QEqrREkrUOGkVTn2WiLFsM+lqgeQTw3SOu9prkJZ0bbjJJ+QLD9N9vX5fiAYZ
-         ohUE8AQLku+GeglsYdjMc4C/Y4WxX6c1Hsbf9jmxjQXQOseauw+NiWvMXWK9KyYmdc2s
-         7ZzWdpbnh4QWYWH3ofPA3IlMHW3jK+GSQ9TtO8Nh/knjmakm5tNG8GUguFRHPG8Ip5OJ
-         yqPQ==
+        id S1730006AbgLHPWJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Dec 2020 10:22:09 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34519 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729334AbgLHPWI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Dec 2020 10:22:08 -0500
+Received: by mail-ot1-f66.google.com with SMTP id a109so491728otc.1;
+        Tue, 08 Dec 2020 07:21:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TbXfHgxRABflLP1aC/6ag0TWl+8h0+26/ihPZ9uTfG4=;
-        b=Jfxsniqa/Te9EDJ1kFfvl589LWIPJahLYma6Os+oht1z4hs5CnseXSvELACDZJwnU1
-         df+bEHr8GQMWjiIVkBn/cnWzYWmiqt13Pguwua0Yxvn4QwrLJXyB+HIHqlf2Nxj1RvyE
-         HFZs9e9y21kHmVXPUX8UGsJ+H1Bv2k5fSBVV9211c2ikvne8Mnv//xtQypCBrp/9Oq8Q
-         B1XyGCvwJMTLSIbmPcC2Hl1EqOurYkMPNPty2wNpusg//aUJDabEiZ2qJtUYQaL3vfgc
-         88AYMrbYab3Ms4WYrXLf5HWsNvREvSSNRVA+y3mALxyMi87wsBr8HetB5K21kGFDT+TO
-         TqlQ==
-X-Gm-Message-State: AOAM5316lSgQArHj1JdhcroOesujNT1zc8HEOyqqpCcJ5gCCIWWXgIFX
-        poqmppaIHakL/klnkCrjuXM=
-X-Google-Smtp-Source: ABdhPJy3Y9GsHjwafVrirEQqqVcM4uxApG7yx0gtOT23hD3l4ZG9h642ENbAdUhyWVZYBEmVeQK9/A==
-X-Received: by 2002:a19:750e:: with SMTP id y14mr10536900lfe.417.1607438918236;
-        Tue, 08 Dec 2020 06:48:38 -0800 (PST)
-Received: from [192.168.1.101] ([178.176.78.77])
-        by smtp.gmail.com with ESMTPSA id i5sm3218451lfl.53.2020.12.08.06.48.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Dec 2020 06:48:37 -0800 (PST)
-Subject: Re: [PATCH v2 2/4] spi: Add devicetree bindings documentation for
- Loongson SPI
-To:     zhangqing <zhangqing@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gaojuxin@loongson.cn,
-        yangtiezhu@loongson.cn
-References: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
- <1607413467-17698-2-git-send-email-zhangqing@loongson.cn>
- <b97c4d59-3279-f67d-d951-1e9436faa640@gmail.com>
- <20e7dafc-8c67-79e4-e64a-a08e21101678@loongson.cn>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <3f5a7d26-e78a-b02e-5fc2-c241547c683d@gmail.com>
-Date:   Tue, 8 Dec 2020 17:48:36 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IQ3hrRr5CR/EHc+P2sk3O7yO90fJ2PV9jiKrnTl/JOE=;
+        b=Gb/FuTyn+nNaXeU7lOwcaB4pBKAMoV/igr3nasJEYZdNFWb4VNztcBDxS42qpT45ji
+         RhXa5veknPwRYxAFDQZxvgswRvvFas7YF2dLATvpEV//3r/KSLiOk3wAktB8wxFJPegd
+         /jGZOZGT7Q3rn7aHuVMYNZdAiqf5xLK1tJ4ZRj+vMGSlRylfsr7SV7LUdHS2auc+iajp
+         7CiKeCt0/odUuFgDc1wpQSWKWFb5MNdA3ccp32A9b9R7mo8DtNCjkgZAGiCn0EbdqW7C
+         zTcAHO0dIuj/7yeT0X9Ho+CMsK6XgiVoa5oARzblssGqv+fmDFGWSQOS5YGRa0LZHnO+
+         PGcw==
+X-Gm-Message-State: AOAM531LXgfZsZR5UI9BRKC49e6Cm29pXjjhFpz8cHQbhJHS94/fX+Lp
+        y9Kbn3QjGtjakytnWM9hVw==
+X-Google-Smtp-Source: ABdhPJzmCHNnVAHVBS3T6eGsSQKp+szBNnE+KgDyZOtKt+lyLKF1btlAQoWaO2PnCHLoZUrZlxBiKg==
+X-Received: by 2002:a05:6830:1352:: with SMTP id r18mr16663484otq.73.1607440887454;
+        Tue, 08 Dec 2020 07:21:27 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id u130sm3717886oib.53.2020.12.08.07.21.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Dec 2020 07:21:25 -0800 (PST)
+Received: (nullmailer pid 2539592 invoked by uid 1000);
+        Tue, 08 Dec 2020 15:21:23 -0000
+Date:   Tue, 8 Dec 2020 09:21:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        devicetree@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-arm-kernel@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-snps-arc@lists.infradead.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, Felipe Balbi <balbi@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Roger Quadros <rogerq@ti.com>, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v5 10/19] dt-bindings: usb: Convert DWC USB3 bindings to
+ DT schema
+Message-ID: <20201208152123.GA2539227@robh.at.kernel.org>
+References: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
+ <20201205152427.29537-11-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <20e7dafc-8c67-79e4-e64a-a08e21101678@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201205152427.29537-11-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/8/20 1:47 PM, zhangqing wrote:
-
->>> Add spi-ls7a binding documentation.
->>>
->>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->>> ---
->>>   Documentation/devicetree/bindings/spi/spi-ls7a.txt | 31 ++++++++++++++++++++++
->>>   1 file changed, 31 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/spi/spi-ls7a.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/spi-ls7a.txt b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
->>> new file mode 100644
->>> index 0000000..56247b5
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
->>> @@ -0,0 +1,31 @@
->>> +Binding for LOONGSON LS7A SPI controller
->>> +
->>> +Required properties:
->>> +- compatible: should be "pci0014,7a0b.0","pci0014,7a0b","pciclass088000","pciclass0880".
->>> +- reg: reference IEEE Std 1275-1994.
->>> +- #address-cells: <1>, as required by generic SPI binding.
->>> +- #size-cells: <0>, also as required by generic SPI binding.
->>> +- #interrupts: No hardware interrupt.
->>
->>    You say it's a required prop, yet yuoe example doesn't have it...
->         I want to emphasize here that LS7A SPI has no hardware interrupts, and DT is not actually used.
-
-   The why document the property at all?
-
->>> +
->>> +Child nodes as per the generic SPI binding.
->>> +
->>> +Example:
->>> +
->>> +            spi@16,0 {
->>> +                compatible = "pci0014,7a0b.0",
->>> +                        "pci0014,7a0b",
->>> +                        "pciclass088000",
->>> +                        "pciclass0880";
->>> +
->>> +                #address-cells = <1>;
->>> +                #size-cells = <0>;
->>> +                reg = <0xb000 0x0 0x0 0x0 0x0>;
->>> +                num-chipselects = <0>;
->>> +                spiflash: s25fl016k@0 {
->>> +                #address-cells = <1>;
->>> +                #size-cells = <1>;
->>
->>    Once more?
->>
->>> +                compatible ="spansion,s25fl016k","jedec,spi-nor";
->>
->>    Once more?
->>
->>> + spi-max-frequency=<50000000>;
->>> +                reg=<0>;
->>
->>    Once more? Did you mean this for a child node?
->        Yes, these are child node attributes, the child node splash is not necessary.
-
-   You should indent the child nodes with 1 more tab...
-
->>
->>> +                };
->>> +            };
->>
->      Thanks
+On Sat, 05 Dec 2020 18:24:17 +0300, Serge Semin wrote:
+> DWC USB3 DT node is supposed to be compliant with the Generic xHCI
+> Controller schema, but with additional vendor-specific properties, the
+> controller-specific reference clocks and PHYs. So let's convert the
+> currently available legacy text-based DWC USB3 bindings to the DT schema
+> and make sure the DWC USB3 nodes are also validated against the
+> usb-xhci.yaml schema.
 > 
->      -Qing
+> Note 1. we have to discard the nodename restriction of being prefixed with
+> "dwc3@" string, since in accordance with the usb-hcd.yaml schema USB nodes
+> are supposed to be named as "^usb(@.*)".
+> 
+> Note 2. The clock-related properties are marked as optional to match the
+> DWC USB3 driver expectation and to improve the bindings mainainability
+> so in case if there is a glue-node it would the responsible for the
+> clocks initialization.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v2:
+> - Discard '|' from the descriptions, since we don't need to preserve
+>   the text formatting in any of them.
+> - Drop quotes from around the string constants.
+> - Fix the "clock-names" prop description to be referring the enumerated
+>   clock-names instead of the ones from the Databook.
+> 
+> Changelog v3:
+> - Apply usb-xhci.yaml# schema only if the controller is supposed to work
+>   as either host or otg.
+> 
+> Changelog v4:
+> - Apply usb-drd.yaml schema first. If the controller is configured
+>   to work in a gadget mode only, then apply the usb.yaml schema too,
+>   otherwise apply the usb-xhci.yaml schema.
+> - Discard the Rob'es Reviewed-by tag. Please review the patch one more
+>   time.
+> 
+> Changelog v5:
+> - Add "snps,dis-split-quirk" property to the DWC USB3 DT schema.
+> - Add a commit log text about the clock-related property changes.
+> - Make sure dr_mode exist to apply the USB-gadget-only schema.
+> ---
+>  .../devicetree/bindings/usb/dwc3.txt          | 128 -------
+>  .../devicetree/bindings/usb/snps,dwc3.yaml    | 312 ++++++++++++++++++
+>  2 files changed, 312 insertions(+), 128 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> 
 
-MBR, Sergei
+Reviewed-by: Rob Herring <robh@kernel.org>
