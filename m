@@ -2,174 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9EF2D3EF9
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Dec 2020 10:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBBD2D3FB1
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Dec 2020 11:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729308AbgLIJjr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Dec 2020 04:39:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54148 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729307AbgLIJjp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 9 Dec 2020 04:39:45 -0500
-X-Gm-Message-State: AOAM5327ygBGmuT87qCYawR2XnuGR+wLXSTQNNGg/EU59/+h5bGlVHSR
-        GKLe906K848+smb4KdLiXvFDQ32d2E1NGeFNXAA=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607506743;
-        bh=y0aoGX7ac5Mr8h/RNiVqkNsUM+IeH9kGfjBcLTwNzy4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OjzWr5aeXull7Vf+ynwy2cSazAzNv1p6VjkQOs9EQMARqNjlvdpQIja6k2ikyqaDJ
-         1PUiolMDNlT6sN6ddkPv1YbYLP8YMEdPg+YsydW/zr35JyChzR6BdFbpwqQn/Fdb20
-         BG0sBv9YPsuN00niN4Hknt6khvGa6ODeobSaOa4DYmsQksfshik6l6Q0Kpg7wjNOwZ
-         R1gisM2ZbnWnxO90oXdn7FbDkixiOja1Y+0oHV4QgoFZtba6q90B6vKC3yDWK/KgCa
-         OdYP2VFuA9GSSWEvmZBPtygqB8aq+aLHef+yDFlDjfgKReRZky/hVX50PWldmqTrMU
-         I0pUv9kGlHc3w==
-X-Google-Smtp-Source: ABdhPJytyWJ4vfLyNrGEiaVPvO0xSkRZFoVATwqPf88N6hbIDYzCs7Rs4b8GyCo5gU5NvJS69SwTpHBua5l6jzoSWyQ=
-X-Received: by 2002:aca:5ec2:: with SMTP id s185mr1104855oib.33.1607506742899;
- Wed, 09 Dec 2020 01:39:02 -0800 (PST)
+        id S1729289AbgLIKOr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Dec 2020 05:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729178AbgLIKOr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Dec 2020 05:14:47 -0500
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F645C0617A6
+        for <linux-mips@vger.kernel.org>; Wed,  9 Dec 2020 02:14:07 -0800 (PST)
+Received: by mail-qk1-x742.google.com with SMTP id d14so27969qkc.13
+        for <linux-mips@vger.kernel.org>; Wed, 09 Dec 2020 02:14:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8rjD7IseveSeNkH6VF4Nm3t/LEPLDkcL2AIVZGOLwaQ=;
+        b=bYuZo14ICpkzNIN2VbO0nSMeZMGOGObypWmZnDScE4IKQfy4mYHoZcgftoPAN+UE1A
+         8yEkNLgXB4AFkEeX8yrTLyy7c9I9fsZRmybhtJsMPtb1Gm1sEMn9vITJP8Ht5hW03BcV
+         CTzKi9lp5VbX1ngvVito4r3LNXJ6laM1+JGNM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8rjD7IseveSeNkH6VF4Nm3t/LEPLDkcL2AIVZGOLwaQ=;
+        b=ZVbjRO1teMhvPozMaVPaBHf+kFuwz2ZuyAit+7i/6Skl8/Vjn8JT7eIirOM+BvidMS
+         tFMxWqfyBoDfeLhiRKA4jIkiz0CoBOTwiKle09iZGjzY3DhguG2BU/lG6aHFxNqV5zFB
+         gXO4y9y3vowvV8mSYSr4MqQzXPvXdaEOtvKBSck0rVSIrKwvYK4fhMJ5DCcviDgpYJFf
+         IeDLIozULcKGjndwgU6XQqYr5dL008bB+TZCEhaBttEZFsGDWy2oIi+XH6aJd2KSUUpI
+         x/yZelUyO7zyr+qb5Xf0re6SMtBZ9SE1PO5knc7fObrII3t8By4AGHqSO2hK87Bmt9d9
+         zQBA==
+X-Gm-Message-State: AOAM533HeCAagMDXZe1MO/4i7LFxjpeVW4R0HLRr58D5hSgRzVamZ0Pb
+        +3FDKFEaeD1N5kntVaxFsSyv1YKSjSTuGWLlzRHbyw==
+X-Google-Smtp-Source: ABdhPJwcx3VJ+/O9OTm1VhxGxVov7pwPjx8v0ff+R6oPDxN+CsTklvE1tvNVoov8YhiobB7/4plhzBsdvvM280GFLbM=
+X-Received: by 2002:a37:7c07:: with SMTP id x7mr2165263qkc.159.1607508846374;
+ Wed, 09 Dec 2020 02:14:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20201208164821.2686082-1-paul@crapouillou.net>
-In-Reply-To: <20201208164821.2686082-1-paul@crapouillou.net>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 9 Dec 2020 10:38:51 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGXsTTtPLX0HM3_HYRBTJ8q+w09xgXs9BXMSe8GLtk2YQ@mail.gmail.com>
-Message-ID: <CAMj1kXGXsTTtPLX0HM3_HYRBTJ8q+w09xgXs9BXMSe8GLtk2YQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] if_enabled.h: Add IF_ENABLED_OR_ELSE() and
- IF_ENABLED() macros
+References: <20201208164821.2686082-1-paul@crapouillou.net> <20201208164821.2686082-2-paul@crapouillou.net>
+In-Reply-To: <20201208164821.2686082-2-paul@crapouillou.net>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Wed, 9 Dec 2020 19:13:55 +0900
+Message-ID: <CAFr9PX=EgQSXeATLn++DSHkkQar35rpLGh978J5Lnw9jS8XMrw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pinctrl: ingenic: Only support SoCs enabled in config
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        od@zcrc.me, Linux ARM <linux-arm-kernel@lists.infradead.org>
+        Arnd Bergmann <arnd@kernel.org>, od@zcrc.me,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 8 Dec 2020 at 17:49, Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Introduce a new header <linux/if_enabled.h>, that brings two new macros:
-> IF_ENABLED_OR_ELSE() and IF_ENABLED().
->
-> IF_ENABLED_OR_ELSE(CONFIG_FOO, a, b) evaluates to (a) if CONFIG_FOO is set
-> to 'y' or 'm', (b) otherwise. It is used internally to define the
-> IF_ENABLED() macro. The (a) and (b) arguments must be of the same type.
->
-> IF_ENABLED(CONFIG_FOO, ptr) evaluates to (ptr) if CONFIG_FOO is set to 'y'
-> or 'm', NULL otherwise. The (ptr) argument must be a pointer.
->
-> The IF_ENABLED() macro can be very useful to help GCC drop dead code.
->
-> For instance, consider the following:
->
->     #ifdef CONFIG_FOO_SUSPEND
->     static int foo_suspend(struct device *dev)
->     {
->        ...
->     }
->     #endif
->
->     static struct pm_ops foo_ops = {
->         #ifdef CONFIG_FOO_SUSPEND
->         .suspend = foo_suspend,
->         #endif
->     };
->
-> While this works, the foo_suspend() macro is compiled conditionally,
-> only when CONFIG_FOO_SUSPEND is set. This is problematic, as there could
-> be a build bug in this function, we wouldn't have a way to know unless
-> the config option is set.
->
-> An alternative is to declare foo_suspend() always, but mark it as maybe
-> unused:
->
->     static int __maybe_unused foo_suspend(struct device *dev)
->     {
->        ...
->     }
->
->     static struct pm_ops foo_ops = {
->         #ifdef CONFIG_FOO_SUSPEND
->         .suspend = foo_suspend,
->         #endif
->     };
->
-> Again, this works, but the __maybe_unused attribute is required to
-> instruct the compiler that the function may not be referenced anywhere,
-> and is safe to remove without making a fuss about it. This makes the
-> programmer responsible for tagging the functions that can be
-> garbage-collected.
->
-> With this patch, it is now possible to write the following:
->
->     static int foo_suspend(struct device *dev)
->     {
->        ...
->     }
->
->     static struct pm_ops foo_ops = {
->         .suspend = IF_ENABLED(CONFIG_FOO_SUSPEND, foo_suspend),
->     };
->
-> The foo_suspend() function will now be automatically dropped by the
-> compiler, and it does not require any specific attribute.
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Hi Paul and others,
 
-Hi Paul,
+Sorry to hijack this but I actually want to do something similar to
+this in some other drivers.
+The targets I'm working with have only 64MB of ram so I want to remove
+code wherever possible.
+Is there any reason to do it like this instead of wrapping the whole
+unneeded of_device_id struct in an #ifdef?
+For example there is a rule that the compatible strings have to be
+present even if the driver isn't usable or something?
 
-I understand the issue you are trying to address here, but please note
-that there are many cases where the struct member in question will not
-even be declared if the associated CONFIG option is not set, in which
-case this will cause a compile error.
+Thanks,
 
-
-
-
-
-
-
-
-
-
-> ---
->  include/linux/if_enabled.h | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 include/linux/if_enabled.h
->
-> diff --git a/include/linux/if_enabled.h b/include/linux/if_enabled.h
-> new file mode 100644
-> index 000000000000..8189d1402340
-> --- /dev/null
-> +++ b/include/linux/if_enabled.h
-> @@ -0,0 +1,22 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __LINUX_IF_ENABLED_H
-> +#define __LINUX_IF_ENABLED_H
-> +
-> +#include <linux/build_bug.h>
-> +#include <linux/compiler_types.h>
-> +#include <linux/kconfig.h>
-> +
-> +/*
-> + * IF_ENABLED_OR_ELSE(CONFIG_FOO, a, b) evaluates to (a) if CONFIG_FOO is set
-> + * to 'y' or 'm', (b) otherwise.
-> + */
-> +#define IF_ENABLED_OR_ELSE(option, a, b) \
-> +       (BUILD_BUG_ON_ZERO(__same_type((a), (b))) || IS_ENABLED(option) ? (a) : (b))
-> +
-> +/*
-> + * IF_ENABLED(CONFIG_FOO, ptr) evaluates to (ptr) if CONFIG_FOO is set to 'y'
-> + * or 'm', NULL otherwise.
-> + */
-> +#define IF_ENABLED(option, ptr) IF_ENABLED_OR_ELSE(option, ptr, NULL)
-> +
-> +#endif /* __LINUX_IF_ENABLED_H */
-> --
-> 2.29.2
->
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Daniel
