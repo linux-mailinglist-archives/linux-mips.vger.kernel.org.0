@@ -2,222 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BD12D3C25
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Dec 2020 08:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3A52D3E08
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Dec 2020 10:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727288AbgLIHZI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Dec 2020 02:25:08 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:33170 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726065AbgLIHZH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 9 Dec 2020 02:25:07 -0500
-Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx73+fe9BfHPUaAA--.43847S3;
-        Wed, 09 Dec 2020 15:24:16 +0800 (CST)
-Subject: Re: [PATCH v2 1/4] spi: LS7A: Add Loongson LS7A SPI controller driver
- support
-To:     Mark Brown <broonie@kernel.org>
-References: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
- <20201208135644.GC6686@sirena.org.uk>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gaojuxin@loongson.cn,
-        yangtiezhu@loongson.cn
-From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <c916c525-7308-12a7-824b-7068fcead4cc@loongson.cn>
-Date:   Wed, 9 Dec 2020 15:24:15 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1727536AbgLIJAA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Dec 2020 04:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727218AbgLII75 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Dec 2020 03:59:57 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4E6C0613D6
+        for <linux-mips@vger.kernel.org>; Wed,  9 Dec 2020 00:59:17 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id l11so2093201lfg.0
+        for <linux-mips@vger.kernel.org>; Wed, 09 Dec 2020 00:59:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H4kdQcRfSBCbx7zGvesxGrfsAKDF4OGfaGjXFodrO74=;
+        b=Nb0GkKIAm7dcqrmgsyIwJo38tasdPxkgHvt7bM04JX1NUdKS1KKXWNZ/f1q8kNK1Ak
+         N5piWHNnX1Ci4zcrfsLQfTjHEvJ/nD7wBMuCwCjaCvGv6ziWmZjleawa5O6pjphDSdsx
+         SZHGexSXGx7joKlWC0+GmJadETuk7cE+aZxxI+QktTZNcYwngVb50wGvJgU3u+7U6lCO
+         ZJp9X+6uNncgp5DHiOIlBqPJFb1+PzoLTqIZmqqRtEk7rymNffpILx7NxzchmVAHxMNf
+         cVl7zKsW3ByehxmxckIgQJ7UAl2YrgYuKzEemokel2bLqdnx+H4VEDE0vc799ZVn7PLh
+         XX8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H4kdQcRfSBCbx7zGvesxGrfsAKDF4OGfaGjXFodrO74=;
+        b=iYqBZhQbuyxtx9XQIbiI8ntZK3vcIK56fHlJgD/+M0s39e2C9QyydcaEKnzdmTOP/4
+         13hAlneozuDwZVfvg4fwt9ZjaOLWewL5WP8VsZziSVWJWK9E+NXqhWqdxrcA3G0dJSp0
+         N651XCukVbX3WvLTRNToQgB3tjG/0/nk3D9c4ytKWGG/RkBy70zwDymRQ5C/hWl4/dsA
+         8x+fWdh3jKgYBt/o59yp4SehWoj+aewJEvZLQQz/ZxZ+sKCA3iJXDEhLScP3HlNwoK9E
+         3HeyE0Q8Lau3f0uDyzyVLSZOKoL8pZS6IDj9wgX7lSTjAfWQFq5AT6THtjU2JiIRiUPN
+         6GyQ==
+X-Gm-Message-State: AOAM532p5IGMtn+ZI1oUV0sIHZCaKDDSoFwRwlm4qMay2S8jaH7mBJ+K
+        LUGS7Nx/tzDhCOlWfveQrXbLddG8O/PYZx+c39tZ0w==
+X-Google-Smtp-Source: ABdhPJwHqLtksYEjPqnWu5i18QEvgN1JTjuURx6ecahj7/3lHvD3YQFzYlCPm2SD6tcxLCaRX/CcWXKFnMfDOnQpDeg=
+X-Received: by 2002:a19:6557:: with SMTP id c23mr627191lfj.157.1607504355994;
+ Wed, 09 Dec 2020 00:59:15 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201208135644.GC6686@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dx73+fe9BfHPUaAA--.43847S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF45uF1fZF4xWr48WrW8tFb_yoWrZr4rpa
-        yrWa1rKa1kXF4kZFWDJr4DW34rZw1SqryfGwn7t34xGas8ZF48GF1Fqr1FyrW3tFW7C3W7
-        ZF1jq3yY9F45u3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_GF4l42xK82IYc2Ij64vIr4
-        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
-        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
-        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
-        wI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUffHUUUUUU=
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+References: <20201208164821.2686082-1-paul@crapouillou.net>
+In-Reply-To: <20201208164821.2686082-1-paul@crapouillou.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Dec 2020 09:59:05 +0100
+Message-ID: <CACRpkdZFy8bvsV+HkzWsu0OKjg6i82o-mL+7v3_Ev5h_QR=xiA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] if_enabled.h: Add IF_ENABLED_OR_ELSE() and
+ IF_ENABLED() macros
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Arnd Bergmann <arnd@kernel.org>, od@zcrc.me,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mips@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Brown,
+On Tue, Dec 8, 2020 at 5:48 PM Paul Cercueil <paul@crapouillou.net> wrote:
 
-Thank you for your suggestions, these are achievable, I will send v3 in 
-the soon.
+> Introduce a new header <linux/if_enabled.h>, that brings two new macros:
+> IF_ENABLED_OR_ELSE() and IF_ENABLED().
 
-Before sending v3, I would like to trouble you to see if this is 
-correct. It has been tested locally.
+I understand what the patch is trying to do, but when we already have
+IS_ENABLED() in <linux/kconfig.h> this syntax becomes a big cognitive
+confusion for the mind.
 
-On 12/08/2020 09:56 PM, Mark Brown wrote:
-> On Tue, Dec 08, 2020 at 03:44:24PM +0800, Qing Zhang wrote:
->
->> v2:
->> - keep Kconfig and Makefile sorted
->> - make the entire comment a C++ one so things look more intentional
-> You say this but...
->
->> +++ b/drivers/spi/spi-ls7a.c
->> @@ -0,0 +1,324 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Loongson LS7A SPI Controller driver
->> + *
->> + * Copyright (C) 2020 Loongson Technology Corporation Limited
->> + */
-> ...this is still a mix of C and C++ comments?
-       Replace all with //
+At least the commit needs to explain why it doesn't work to use
+IS_ENABLED() instead so that this is needed.
 
->
->> +static int set_cs(struct ls7a_spi *ls7a_spi, struct spi_device  *spi, int val)
->> +{
->> +	int cs = ls7a_spi_read_reg(ls7a_spi, SFCS) & ~(0x11 << spi->chip_select);
->> +
->> +	if (spi->mode  & SPI_CS_HIGH)
->> +		val = !val;
->> +	ls7a_spi_write_reg(ls7a_spi, SFCS,
->> +		(val ? (0x11 << spi->chip_select):(0x1 << spi->chip_select)) | cs);
->> +
->> +	return 0;
->> +}
-> Why not just expose this to the core and let it handle things?
->
-> Please also write normal conditional statements to improve legibility.
-> There's quite a lot of coding style issues in this with things like
-> missing spaces
-     static void ls7a_spi_set_cs(struct spi_device *spi, bool enable)
-{
-         struct ls7a_spi *ls7a_spi;
+Certainly the build failures must be possible to solve so that this
+can live with the sibling IS_ENABLED() inside <linux/kconfig.h>,
+it can't be too hard.
 
-         int cs = ls7a_spi_read_reg(ls7a_spi, SFCS) & ~(0x11 << 
-spi->chip_select));
-
-         ls7a_spi = spi_master_get_devdata(spi->master);
-
-         if (!!(spi->mode & SPI_CS_HIGH) == enable)
-                 val = (0x11 << spi->chip_select) | cs;
-         else
-                 val = (0x1 << spi->chip_select) | cs;
-
-         ls7a_spi_write_reg(ls7a_spi, SFCS, val);
-}
-
-      static int ls7a_spi_pci_probe---->
-
-      +master->set_cs = ls7a_spi_set_cs;
-
->
->> +	if (t) {
->> +		hz = t->speed_hz;
->> +		if (!hz)
->> +			hz = spi->max_speed_hz;
->> +	} else
->> +		hz = spi->max_speed_hz;
-> If one branch of the conditional has braces please use them on both to
-> improve legibility.
->
->> +static int  ls7a_spi_transfer_one_message(struct spi_master *master,
->> +                                         struct spi_message *m)
-> I don't understand why the driver is implementing transfer_one_message()
-> - it looks like this is just open coding the standard loop that the
-> framework provides and should just be using transfer_one().
-
-static int  ls7a_spi_transfer_one(struct spi_master *master,
-                       struct spi_device *spi,
-                                   struct spi_transfer *t)
-{
-     struct ls7a_spi *ls7a_spi;
-     int param, status;
-
-     ls7a_spi = spi_master_get_devdata(master);
-
-     spin_lock(&ls7a_spi->lock);
-     param = ls7a_spi_read_reg(ls7a_spi, PARA);
-     ls7a_spi_write_reg(ls7a_spi, PARA, param&~1);
-     spin_unlock(&ls7a_spi->lock);
-
-         status = ls7a_spi_do_transfer(ls7a_spi, spi, t);
-         if(status < 0)
-                 return status;
-
-         if(t->len)
-         r = ls7a_spi_write_read(spi, t);
-
-         spin_lock(&ls7a_spi->lock);
-     ls7a_spi_write_reg(ls7a_spi, PARA, param);
-     spin_unlock(&ls7a_spi->lock);
-
-     return status;
-}
-
-   static int ls7a_spi_pci_probe---->
-
-  - master->transfer_one_message = ls7a_spi_transfer_one_message;
-  +master->transfer_one = ls7a_spi_transfer_one;
->
->> +		r = ls7a_spi_write_read(spi, t);
->> +		if (r < 0) {
->> +			status = r;
->> +			goto error;
->> +			}
-> The indentation here isn't following the kernel coding style.
->
->> +	master = spi_alloc_master(&pdev->dev, sizeof(struct ls7a_spi));
->> +	if (!master)
->> +		return -ENOMEM;
-> Why not use devm_ here?
-
-- master = spi_alloc_master(&pdev->dev, sizeof(struct ls7a_spi));
-
-   error:
-- spi_put_master(master);
-
-+ master = devm_spi_alloc_master(&pdev->dev, sizeof(struct ls7a_spi));
-
->
->> +	ret = devm_spi_register_master(dev, master);
->> +	if (ret)
->> +		goto err_free_master;
-> The driver uses devm_spi_register_master() here but...
->
->> +static void ls7a_spi_pci_remove(struct pci_dev *pdev)
->> +{
->> +	struct spi_master *master = pci_get_drvdata(pdev);
->> +	struct ls7a_spi *spi;
->> +
->> +	spi = spi_master_get_devdata(master);
->> +	if (!spi)
->> +		return;
->> +
->> +	pci_release_regions(pdev);
-> ...releases the PCI regions in the remove() function before the SPI
-> controller is freed so the controller could still be active.
-
-      static void ls7a_spi_pci_remove(struct pci_dev *pdev)
-{
-         struct spi_master *master = pci_get_drvdata(pdev);
-
-      + spi_unregister_master(master);
-         pci_release_regions(pdev);
-}
-
-Thanks,
-
--Qing
-
+Yours,
+Linus Walleij
