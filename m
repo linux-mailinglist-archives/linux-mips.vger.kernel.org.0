@@ -2,68 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64CE2D4128
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Dec 2020 12:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578B42D419B
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Dec 2020 13:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729260AbgLILce convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 9 Dec 2020 06:32:34 -0500
-Received: from aposti.net ([89.234.176.197]:33654 "EHLO aposti.net"
+        id S1731193AbgLIMAl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Dec 2020 07:00:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55758 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727970AbgLILce (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 9 Dec 2020 06:32:34 -0500
-Date:   Wed, 09 Dec 2020 11:31:41 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/2] if_enabled.h: Add IF_ENABLED_OR_ELSE()
- =?UTF-8?Q?and=0D=0A?= IF_ENABLED() macros
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>, od@zcrc.me,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <TCL2LQ.PG7DIQPDDGUT1@crapouillou.net>
-In-Reply-To: <CACRpkdZFy8bvsV+HkzWsu0OKjg6i82o-mL+7v3_Ev5h_QR=xiA@mail.gmail.com>
-References: <20201208164821.2686082-1-paul@crapouillou.net>
-        <CACRpkdZFy8bvsV+HkzWsu0OKjg6i82o-mL+7v3_Ev5h_QR=xiA@mail.gmail.com>
+        id S1730997AbgLIMAf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 9 Dec 2020 07:00:35 -0500
+Date:   Wed, 9 Dec 2020 11:59:47 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607515194;
+        bh=OtQ+HPmkmQDc74CDuz84WYDixTdrS25dyzPgEat+594=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QzkIkOkkMX5xeFh8ZiTHIqKMWydjloGqT4FSIkD9U7y0eQPyp3emU+jkizeM/3k/z
+         ykf9EwI1SQpoa9rJwa0h5foDlTvNKfGqEdLZpQOeRmbkDwahe6m7wkbho0/ZmTfyQC
+         xhabwOQu+KqZE2MdQmo8hxlBJcE6lxRJRGlcV64Pb/qtxWerJVImYaT8EEKZR23f5p
+         Vkq6DM3O80NreKUL45Ie/2ovtlvImGypvFIR5AwBeUkV8LNvlWPojFR9CVnnS8wqrE
+         VsIuvVG19MtZS4U8dZlMVniN+y+TweGy4nq7ODEB8pCi0BolnRedm907xoRuluDZvO
+         Zlqn2eFUTtr5w==
+From:   Mark Brown <broonie@kernel.org>
+To:     zhangqing <zhangqing@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gaojuxin@loongson.cn,
+        yangtiezhu@loongson.cn
+Subject: Re: [PATCH v2 1/4] spi: LS7A: Add Loongson LS7A SPI controller
+ driver support
+Message-ID: <20201209115947.GA4790@sirena.org.uk>
+References: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
+ <20201208135644.GC6686@sirena.org.uk>
+ <c916c525-7308-12a7-824b-7068fcead4cc@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LQksG6bCIzRHxTLp"
+Content-Disposition: inline
+In-Reply-To: <c916c525-7308-12a7-824b-7068fcead4cc@loongson.cn>
+X-Cookie: sillema sillema nika su
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Linus,
 
-Le mer. 9 déc. 2020 à 9:59, Linus Walleij <linus.walleij@linaro.org> 
-a écrit :
-> On Tue, Dec 8, 2020 at 5:48 PM Paul Cercueil <paul@crapouillou.net> 
-> wrote:
-> 
->>  Introduce a new header <linux/if_enabled.h>, that brings two new 
->> macros:
->>  IF_ENABLED_OR_ELSE() and IF_ENABLED().
-> 
-> I understand what the patch is trying to do, but when we already have
-> IS_ENABLED() in <linux/kconfig.h> this syntax becomes a big cognitive
-> confusion for the mind.
-> 
-> At least the commit needs to explain why it doesn't work to use
-> IS_ENABLED() instead so that this is needed.
+--LQksG6bCIzRHxTLp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-You can use IS_ENABLED(). Then you'd write:
+On Wed, Dec 09, 2020 at 03:24:15PM +0800, zhangqing wrote:
 
-field = IS_ENABLED(CONFIG_FOO) ? &my_ptr : NULL,
+> > > +static int  ls7a_spi_transfer_one_message(struct spi_master *master,
+> > > +                                         struct spi_message *m)
 
-the IF_ENABLED() macro makes it a bit cleaner by allowing you to write:
+> > I don't understand why the driver is implementing transfer_one_message()
+> > - it looks like this is just open coding the standard loop that the
+> > framework provides and should just be using transfer_one().
 
-field = IF_ENABLED(CONFIG_FOO, &my_ptr),
+> static int  ls7a_spi_transfer_one(struct spi_master *master,
+>                       struct spi_device *spi,
+>                                   struct spi_transfer *t)
+> {
+>     struct ls7a_spi *ls7a_spi;
+>     int param, status;
+>=20
+>     ls7a_spi =3D spi_master_get_devdata(master);
+>=20
+>     spin_lock(&ls7a_spi->lock);
+>     param =3D ls7a_spi_read_reg(ls7a_spi, PARA);
+>     ls7a_spi_write_reg(ls7a_spi, PARA, param&~1);
+>     spin_unlock(&ls7a_spi->lock);
 
-Cheers,
--Paul
+I don't know what this does but is it better split out into a
+prepare_message()?  It was only done once per message in your previous
+implementation.  Or possibly runtime PM would be even better if that's
+what it's doing.
 
-> Certainly the build failures must be possible to solve so that this
-> can live with the sibling IS_ENABLED() inside <linux/kconfig.h>,
-> it can't be too hard.
-> 
-> Yours,
-> Linus Walleij
+> > ...releases the PCI regions in the remove() function before the SPI
+> > controller is freed so the controller could still be active.
+>=20
+>      static void ls7a_spi_pci_remove(struct pci_dev *pdev)
+> {
+>         struct spi_master *master =3D pci_get_drvdata(pdev);
+>=20
+>      + spi_unregister_master(master);
+>         pci_release_regions(pdev);
+> }
 
+You also need to change to using plain spi_register_master() but yes.
+Otherwise everything looked good.
 
+--LQksG6bCIzRHxTLp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/QvDMACgkQJNaLcl1U
+h9CCngf/Rl+jkJ0K2K1xYhjOMzRmzzc33799zyHp4rmIu0ueGJAlFY/K9vtZS5c8
+DafdgOHKUbQpctdpytUVL3kLDFPzI0d2vEYq/PrU98XPVDUrb32j86/07Yk6gHJW
+oahrE1oxXJsGwnFZb1e+OL2w/ambM7WOrBKmA4KCIzyk0jWmp+8X1ej1he/1GTzu
+plO3NH9PuDcRG3qIY2fZdUS/Yh5jsuziZjomINZ84n9qZP/4jHjuVBHyVfST7wGE
+VU2L2WDFrF/GQxuWhL7oP8xvSAkpIB040rBUeMbi/FLcoQVJTWQnRusK0DbHj2Kk
+j7LqNtPQ51k/HEmBitErYhNpLyp3xA==
+=gGOK
+-----END PGP SIGNATURE-----
+
+--LQksG6bCIzRHxTLp--
