@@ -2,73 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBBD2D3FB1
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Dec 2020 11:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547372D40A8
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Dec 2020 12:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729289AbgLIKOr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Dec 2020 05:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729178AbgLIKOr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Dec 2020 05:14:47 -0500
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F645C0617A6
-        for <linux-mips@vger.kernel.org>; Wed,  9 Dec 2020 02:14:07 -0800 (PST)
-Received: by mail-qk1-x742.google.com with SMTP id d14so27969qkc.13
-        for <linux-mips@vger.kernel.org>; Wed, 09 Dec 2020 02:14:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8rjD7IseveSeNkH6VF4Nm3t/LEPLDkcL2AIVZGOLwaQ=;
-        b=bYuZo14ICpkzNIN2VbO0nSMeZMGOGObypWmZnDScE4IKQfy4mYHoZcgftoPAN+UE1A
-         8yEkNLgXB4AFkEeX8yrTLyy7c9I9fsZRmybhtJsMPtb1Gm1sEMn9vITJP8Ht5hW03BcV
-         CTzKi9lp5VbX1ngvVito4r3LNXJ6laM1+JGNM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8rjD7IseveSeNkH6VF4Nm3t/LEPLDkcL2AIVZGOLwaQ=;
-        b=ZVbjRO1teMhvPozMaVPaBHf+kFuwz2ZuyAit+7i/6Skl8/Vjn8JT7eIirOM+BvidMS
-         tFMxWqfyBoDfeLhiRKA4jIkiz0CoBOTwiKle09iZGjzY3DhguG2BU/lG6aHFxNqV5zFB
-         gXO4y9y3vowvV8mSYSr4MqQzXPvXdaEOtvKBSck0rVSIrKwvYK4fhMJ5DCcviDgpYJFf
-         IeDLIozULcKGjndwgU6XQqYr5dL008bB+TZCEhaBttEZFsGDWy2oIi+XH6aJd2KSUUpI
-         x/yZelUyO7zyr+qb5Xf0re6SMtBZ9SE1PO5knc7fObrII3t8By4AGHqSO2hK87Bmt9d9
-         zQBA==
-X-Gm-Message-State: AOAM533HeCAagMDXZe1MO/4i7LFxjpeVW4R0HLRr58D5hSgRzVamZ0Pb
-        +3FDKFEaeD1N5kntVaxFsSyv1YKSjSTuGWLlzRHbyw==
-X-Google-Smtp-Source: ABdhPJwcx3VJ+/O9OTm1VhxGxVov7pwPjx8v0ff+R6oPDxN+CsTklvE1tvNVoov8YhiobB7/4plhzBsdvvM280GFLbM=
-X-Received: by 2002:a37:7c07:: with SMTP id x7mr2165263qkc.159.1607508846374;
- Wed, 09 Dec 2020 02:14:06 -0800 (PST)
+        id S1730180AbgLILGI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Dec 2020 06:06:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58548 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730371AbgLILFw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 9 Dec 2020 06:05:52 -0500
+X-Gm-Message-State: AOAM532FxAIWtrz3GcSyx8ySr6w4NVRAuNl3+Yw2/Go2Qoxe4JcouzN2
+        jqzgKGpF1/Qt2pg2OT7C4FHzxSyrQmnmPBquyy8=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607511910;
+        bh=iHRngC0ANhFxQ/UVZdui4aIYpUOkA29G/4HhBsdC2io=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R3Dmty8vAYJKDiZUPF1JhJ/fkjvu0FhjsyBn5KjqeSujEf6PHTNzyF+WXZ/w76xNg
+         QS+fe+Efir3U1mO7MR1r5psbffnGBO/51pjVdNN2MbZ3G5h5uUNQIx+KsGYuw5KtWU
+         vW0zaQr7ETLlHN8lNEGbzDZ+z543kEozSdv2WDChe55Pnmgrr37nJBqHI6WqI6SHPq
+         y99YomOV0Dk9i8y21F7gJ8XLaIifIlWXOG/j1puForpugoXaf3ekzTHrhVQamBLSfh
+         bjhCYQDhx0hHgqM5nOmG5LstUgXtDzlYhZlc6Bup6iZS5Yo5Rl8C0XFMbjw3hBPKaW
+         ntlLsccWVXYJA==
+X-Google-Smtp-Source: ABdhPJw4nzqzhKDzwtsLZDLztoFI6ZeiCH2UTXAydkS35zR5J+dVfmgmICP5TGbv6BtesRfz9ElkAS+JEn2VttiomRY=
+X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr1211764otm.305.1607511909951;
+ Wed, 09 Dec 2020 03:05:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20201208164821.2686082-1-paul@crapouillou.net> <20201208164821.2686082-2-paul@crapouillou.net>
-In-Reply-To: <20201208164821.2686082-2-paul@crapouillou.net>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Wed, 9 Dec 2020 19:13:55 +0900
-Message-ID: <CAFr9PX=EgQSXeATLn++DSHkkQar35rpLGh978J5Lnw9jS8XMrw@mail.gmail.com>
+References: <20201208164821.2686082-1-paul@crapouillou.net>
+ <20201208164821.2686082-2-paul@crapouillou.net> <CAFr9PX=EgQSXeATLn++DSHkkQar35rpLGh978J5Lnw9jS8XMrw@mail.gmail.com>
+In-Reply-To: <CAFr9PX=EgQSXeATLn++DSHkkQar35rpLGh978J5Lnw9jS8XMrw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 9 Dec 2020 12:04:53 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a37rQz6ihEJBZNkOARJXJE7U9TX7pCUhyQjQn6fJw+jUQ@mail.gmail.com>
+Message-ID: <CAK8P3a37rQz6ihEJBZNkOARJXJE7U9TX7pCUhyQjQn6fJw+jUQ@mail.gmail.com>
 Subject: Re: [PATCH 2/2] pinctrl: ingenic: Only support SoCs enabled in config
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@kernel.org>, od@zcrc.me,
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Linus Walleij <linus.walleij@linaro.org>, od@zcrc.me,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul and others,
+On Wed, Dec 9, 2020 at 11:13 AM Daniel Palmer <daniel@0x0f.com> wrote:
+>
+> Hi Paul and others,
+>
+> Sorry to hijack this but I actually want to do something similar to
+> this in some other drivers.
+> The targets I'm working with have only 64MB of ram so I want to remove
+> code wherever possible.
+> Is there any reason to do it like this instead of wrapping the whole
+> unneeded of_device_id struct in an #ifdef?
+> For example there is a rule that the compatible strings have to be
+> present even if the driver isn't usable or something?
 
-Sorry to hijack this but I actually want to do something similar to
-this in some other drivers.
-The targets I'm working with have only 64MB of ram so I want to remove
-code wherever possible.
-Is there any reason to do it like this instead of wrapping the whole
-unneeded of_device_id struct in an #ifdef?
-For example there is a rule that the compatible strings have to be
-present even if the driver isn't usable or something?
+No, there is no such rule, but adding lots of #ifdef checks in this
+file would be much less readable and more error-prone, as you'd
+have to make sure the two #ifdef blocks around the structure
+match the one for the ID table, and any function that is called
+by more than one SoC has the correct combination of A || B || D
+checks, and nobody ever gets that right.
 
-Thanks,
-
-Daniel
+      Arnd
