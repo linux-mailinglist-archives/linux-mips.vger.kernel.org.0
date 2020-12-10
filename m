@@ -2,14 +2,14 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF982D565F
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Dec 2020 10:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBD62D565A
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Dec 2020 10:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387639AbgLJJNE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S2388635AbgLJJNE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Thu, 10 Dec 2020 04:13:04 -0500
-Received: from mx.baikalelectronics.ru ([94.125.187.42]:36714 "EHLO
+Received: from ns2.baikalelectronics.ru ([94.125.187.42]:36710 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732329AbgLJJMT (ORCPT
+        by vger.kernel.org with ESMTP id S1732085AbgLJJMT (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
         Thu, 10 Dec 2020 04:12:19 -0500
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
@@ -38,9 +38,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 05/19] dt-bindings: usb: usb-hcd: Add "tpl-support" property
-Date:   Thu, 10 Dec 2020 12:09:29 +0300
-Message-ID: <20201210090944.16283-6-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v6 06/19] dt-bindings: usb: Add generic "usb-phy" property
+Date:   Thu, 10 Dec 2020 12:09:30 +0300
+Message-ID: <20201210090944.16283-7-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20201210090944.16283-1-Sergey.Semin@baikalelectronics.ru>
 References: <20201210090944.16283-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -51,40 +51,49 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The host controller device might be designed to work for the particular
-products or applications. In that case its DT node is supposed to be
-equipped with the tpl-support property.
+Even though the Generic PHY framework is the more preferable way of
+setting the USB PHY up, there are still many dts-files and DT bindings
+which rely on having the legacy "usb-phy" specified to attach particular
+USB PHYs to USB cores. Let's have the "usb-phy" property described in
+the generic USB HCD binding file so it would be validated against the
+nodes in which it's specified. Mark the property as deprecated to
+discourage the developers from using it.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 
 ---
 
 Changelog v2:
-- Grammar fix: "s/it'/its"
-- Discard '|' from the property description, since we don't need to preserve
-  the text formatting.
----
- Documentation/devicetree/bindings/usb/usb-hcd.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+- Discard '|' from the property description, since we don't need to
+  preserve the text formatting.
 
-diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-index 52cc84c400c0..9881ac10380d 100644
---- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-+++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-@@ -17,6 +17,12 @@ properties:
-     description: Phandle of a companion device
-     $ref: /schemas/types.yaml#/definitions/phandle
+Changelog v4:
+- Move the "usb-phy" property definition into the usb.yaml schema where
+  all generic USB properties are now defined.
+---
+ Documentation/devicetree/bindings/usb/usb.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/usb.yaml b/Documentation/devicetree/bindings/usb/usb.yaml
+index 53144c4600c0..ebe7f4275c59 100644
+--- a/Documentation/devicetree/bindings/usb/usb.yaml
++++ b/Documentation/devicetree/bindings/usb/usb.yaml
+@@ -24,6 +24,13 @@ properties:
+     description:
+       Name specifier for the USB PHY
  
-+  tpl-support:
++  usb-phy:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
 +    description:
-+      Indicates if the Targeted Peripheral List is supported for given
-+      targeted hosts (non-PC hosts).
-+    type: boolean
++      List of all the USB PHYs on this HCD to be accepted by the legacy USB
++      Physical Layer subsystem.
++    deprecated: true
 +
- additionalProperties: true
- 
- examples:
+   phy_type:
+     description:
+       Tells USB controllers that we want to configure the core to support a
 -- 
 2.29.2
 
