@@ -2,104 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 826752D84F5
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Dec 2020 06:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3EB2D8629
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Dec 2020 12:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732659AbgLLFxW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Dec 2020 00:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725963AbgLLFxM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Dec 2020 00:53:12 -0500
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B51AC0613D3;
-        Fri, 11 Dec 2020 21:52:32 -0800 (PST)
-Received: by mail-io1-xd44.google.com with SMTP id y5so11756313iow.5;
-        Fri, 11 Dec 2020 21:52:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=de8qBW77ez2vG1k7g514vZ/gVwv8ByEiy7/gkUkjT1M=;
-        b=vREtwM0YGPhQ/XD++8S3cVIT38mJng6WEpGZ2IoNGpR1vrFbqwryxq/RwTbzBNeyut
-         ITQ2hlZyPNFcERgd6FfztKl+kQ/i0879wT6u5C4ITw1uPliT0BP3aXC3yGWs3G9l5d0r
-         fHAi+dIC2C1a8TTHFbt5oiAosHDLBP/ZZ+CDZbc88lVkGgG8+y3UMj+sN+eUM/dRxylR
-         g78ILa3OWWHTQjCDEVmfDuTf0B2H5nG03gcsc31nsKGwSrSMKhB4dFJxFy0zP31kFoos
-         jF3WVRVQ3rFgx8b1wQbpPXnzSZKIEF3PRmxRx9afR9zqevYdETq9dJCvgJtBBGHeUepN
-         i+3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=de8qBW77ez2vG1k7g514vZ/gVwv8ByEiy7/gkUkjT1M=;
-        b=fyH8YABECefg61h7ppufZ3WeIv2L57U12TNS7TqHad5ffJ9+gtsUr2x3UZY3gFNIj4
-         7NGfSTJauTa58yjI0PTnTnNrNqZVxMNKOElcrXN2pAzH8QCksZhaZClJMribgsNwFTJx
-         cxDnQWFFE3OXq1GjDjeELAERmhx+IY8XbWneMev75v9rf4t52I4noXHEyKq1RUehfzSw
-         fi/HLpKcykGnSJchT0ZtJDdmlDU3We9a8EctLCe5fRJZJSYaHdFr7sNruQKHH/ekAFxC
-         5/rbYK2mp1xhhkewF2oCVfRpUByK+t2hzO9dS1wmUpM2YTLFM4gws5g9b4Ddj1wTIPb/
-         jkxw==
-X-Gm-Message-State: AOAM532JIp6A+a/4778oCQEZE/wOILB7NIToNHvPg8IB0+bLB7bxdSOc
-        wBllinlloBibU3+ColxgKGc=
-X-Google-Smtp-Source: ABdhPJyIvcNYPBRy8ETgODWko7PYHuwoeJSdT+Ep4FOV4A/DgsWNsQZ/SHxOfg4PptQZ7xHi0/CkOQ==
-X-Received: by 2002:a05:6638:5b2:: with SMTP id b18mr20364316jar.69.1607752351667;
-        Fri, 11 Dec 2020 21:52:31 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id 143sm6795278ila.4.2020.12.11.21.52.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 21:52:30 -0800 (PST)
-Date:   Fri, 11 Dec 2020 22:52:28 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
+        id S2388145AbgLLLJM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Dec 2020 06:09:12 -0500
+Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:33987 "EHLO
+        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730250AbgLLLJF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Dec 2020 06:09:05 -0500
+X-Greylist: delayed 578 seconds by postgrey-1.27 at vger.kernel.org; Sat, 12 Dec 2020 06:09:04 EST
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 97ABE3F896;
+        Sat, 12 Dec 2020 11:58:40 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Flag: NO
+X-Spam-Score: -1.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 tagged_above=-999 required=6.31
+        tests=[BAYES_00=-1.9, NO_RELAYS=-0.001, URIBL_BLOCKED=0.001]
+        autolearn=ham autolearn_force=no
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ze8OC6IahE9v; Sat, 12 Dec 2020 11:58:39 +0100 (CET)
+Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id AA62B3F61B;
+        Sat, 12 Dec 2020 11:58:38 +0100 (CET)
+Date:   Sat, 12 Dec 2020 11:58:38 +0100
+From:   Fredrik Noring <noring@nocrew.org>
 To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        tsbogend@alpha.franken.de, ndesaulniers@google.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v2] mips: lib: uncached: fix non-standard usage of
- variable 'sp'
-Message-ID: <20201212055228.GA823758@ubuntu-m3-large-x86>
-References: <20201211102437.3929348-1-anders.roxell@linaro.org>
- <alpine.LFD.2.21.2012111950290.2104409@eddie.linux-mips.org>
+Cc:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        linux-mips@vger.kernel.org, Andreas Jaeger <aj@suse.de>,
+        Nick Clifton <nickc@redhat.com>,
+        =?utf-8?Q?J=C3=BCrgen?= Urban <JuergenUrban@gmx.de>,
+        libc-help@sourceware.org
+Subject: Re: [PATCH 002/120] MIPS: R5900: Trap the RDHWR instruction as an SQ
+ address exception
+Message-ID: <X9SiXnZJLxDCrKMV@sx9>
+References: <cover.1567326213.git.noring@nocrew.org>
+ <4f856a5ea2c039c6639df875d11b5bff1bf7ecd2.1567326213.git.noring@nocrew.org>
+ <2767f5c3-4e89-6543-34f7-6cd1a1be8c23@amsat.org>
+ <alpine.LFD.2.21.2011191241410.656242@eddie.linux-mips.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <alpine.LFD.2.21.2012111950290.2104409@eddie.linux-mips.org>
+In-Reply-To: <alpine.LFD.2.21.2011191241410.656242@eddie.linux-mips.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Dec 11, 2020 at 07:54:07PM +0000, Maciej W. Rozycki wrote:
-> On Fri, 11 Dec 2020, Anders Roxell wrote:
+Hi Maciej,
+
+On Thu, Nov 19, 2020 at 01:28:00PM +0000, Maciej W. Rozycki wrote:
+>  The use of RDHWR, actual or emulated, is a part of the MIPS TLS psABI, 
+> see: <https://www.linux-mips.org/wiki/NPTL>, in particular starting from: 
+> <https://www.linux-mips.org/wiki/NPTL#Design_Choices> and throughout (the 
+> expired certificate of the web site is a known issue, but there is 
+> currently no way to get it fixed as nobody knows where Ralf Baechle has 
+> gone).
+
+Can the site be wrapped up and published elsewhere?
+
+>  While there indeed is an unfortunate opcode overlap between RDHWR and SQ, 
+> the encoding of the specific operands chosen for TLS pointer access is 
+> luckily guaranteed to always trap in the user mode, because the address 
+> requested when the encoding is interpreted as SQ rather than RDHWR is 
+> within the kernel KSEG2 segment:
 > 
-> > diff --git a/arch/mips/lib/uncached.c b/arch/mips/lib/uncached.c
-> > index 09d5deea747f..f80a67c092b6 100644
-> > --- a/arch/mips/lib/uncached.c
-> > +++ b/arch/mips/lib/uncached.c
-> > @@ -37,10 +37,12 @@
-> >   */
-> >  unsigned long run_uncached(void *func)
-> >  {
-> > -	register long sp __asm__("$sp");
-> >  	register long ret __asm__("$2");
-> >  	long lfunc = (long)func, ufunc;
-> >  	long usp;
-> > +	long sp;
-> > +
-> > +	__asm__("move %0, $sp" : "=r" (sp));
+> $ cat rdhwr.s
+> 	rdhwr	$3, $29
+> $ gcc -march=mips32r2 -c rdhwr.s
+> $ objdump -d rdhwr.o
+> rdhwr.o:     file format elf32-tradlittlemips
 > 
->  I thought it might be better to make `sp' global instead, so that it's 
-> the compiler that chooses how to schedule accesses.  Have you tried that?
 > 
->   Maciej
+> Disassembly of section .text:
+> 
+> 00000000 <.text>:
+>    0:	7c03e83b 	rdhwr	v1,$29
+> 	...
+> $ objdump -m mips:5900 -d rdhwr.o
+> 
+> rdhwr.o:     file format elf32-tradlittlemips
+> 
+> 
+> Disassembly of section .text:
+> 
+> 00000000 <.text>:
+>    0:	7c03e83b 	sq	v1,-6085(zero)
+> 	...
+> $ 
+> 
+> This is because the HWR read is encoded in bits 15:11 of the instruction 
+> word and $29 has the highest bit set, which lands in bit 15 of the 
+> instruction word, meaning that the offset encoded in bits 15:0 used where 
+> the instruction word is interpreted as SQ is negative.  And then bits 
+> 25:21 are hardwired to 0 in the encoding of RDHWR and they correspond to 
+> the base register encoding with SQ, meaning that it will be interpreted as 
+> $zero.  So the address ultimately requested is -6085 => 0xffffffffffffe83b 
+> (the R5900 uses 32-bit addressing and ignores address bits 63:32, but that 
+> does not matter here; this is KSEG2 either way).
+> 
+>  Consequently an AdES exception is triggered which we can trap and handle, 
+> reinterpreting the encoding according to our needs and return the TLS 
+> pointer in $v1 rather than issuing a SIGBUS.  So you are not expected to 
+> see any issue unless there is a security erratum in the R5900 as well and 
+> the encoding does not cause an exception for some reason.
+> 
+>  This of course disagrees with what Fredrik wrote in the quotation above, 
+> as it's the last page rather than the zeroth that is accessed, but the net 
+> effect is the same, or even better.
 
-This will not work, as the LLVM Mips backend does not support using $sp
-as a global register variable:
+The first page could be mapped by the application itself, but what about
+RDHWR registers $0-$3 having mnemonics CPUNum, SYNC1_Step, CC and CCRes[1],
+or in Linux
 
-https://github.com/llvm/llvm-project/commit/1440bb2a26ff13df1b29762658ee122cc0bc47ae
+/* RDHWR register numbers */
+#define MIPS_HWR_CPUNUM		0	/* CPU number */
+#define MIPS_HWR_SYNCISTEP	1	/* SYNCI step size */
+#define MIPS_HWR_CC		2	/* Cycle counter */
+#define MIPS_HWR_CCRES		3	/* Cycle counter resolution */
+#define MIPS_HWR_ULR		29	/* UserLocal */
+#define MIPS_HWR_IMPL1		30	/* Implementation dependent */
+#define MIPS_HWR_IMPL2		31	/* Implementation dependent */
 
-$ make -skj"$(nproc)" ARCH=mips CROSS_COMPILE=mipsel-linux-gnu- LLVM=1 O=out \
-distclean malta_kvm_guest_defconfig vmlinux
-fatal error: error in backend: Invalid register name global variable
-...
+in arch/mips/include/asm/mipsregs.h? They land on the first page, no?
 
-Cheers,
-Nathan
+Fredrik
+
+References:
+
+[1] "MIPS Architecture for programmers Volume II-A: The MIPS32 Instruction
+    Set", revision 5.04, 11 December 2013, p. 248.
