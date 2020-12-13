@@ -2,86 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 349982D8DD3
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Dec 2020 15:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC6F2D8FCF
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Dec 2020 20:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436485AbgLMOLr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 13 Dec 2020 09:11:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395199AbgLMOLL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 13 Dec 2020 09:11:11 -0500
-Date:   Sun, 13 Dec 2020 09:10:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607868630;
-        bh=S0NZCKTHXO1/XgTBibTeHKY2NyaV+jWp9oZjgvuSOZg=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nFttyLKxDFdTzDqG+uV+ZMYwIDraCwmT1csa8RGjNQtB2KNQuC3CWvsr8XvQHFTkX
-         bOVfEZ3hZGq/q87besC+Bjzp/UHT9BZ6/avesb9g234GUTyQ6mz9ZdKVWLvvWayKcR
-         5IsZC3of1cWOok1XpWOR2jKmC5sWYP7UWQbjwfCJNcyT1mEousS3/8Iz7qmQngrF+E
-         UBfwNFX/Xim1w8qNAQxV89tayOf16Xozhta7DOpqMYNyp+n+eIU7Y985xkZoMGJ7UI
-         W/Q6SnFz+H4jXIWSjxGFg8FVH/fANHjQkaleEJRhOabM6QD83DoUX7CgAE554wRsQU
-         Zom91bCLKheaA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org
-Subject: Re: [PATCH AUTOSEL 5.9 27/39] sched/idle: Fix arch_cpu_idle() vs
- tracing
-Message-ID: <20201213141029.GQ643756@sasha-vm>
-References: <20201203132834.930999-1-sashal@kernel.org>
- <20201203132834.930999-27-sashal@kernel.org>
- <20201203145442.GC9994@osiris>
- <20201203171015.GN2414@hirez.programming.kicks-ass.net>
+        id S1727764AbgLMTNU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 13 Dec 2020 14:13:20 -0500
+Received: from out28-98.mail.aliyun.com ([115.124.28.98]:45169 "EHLO
+        out28-98.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726973AbgLMTNN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Dec 2020 14:13:13 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07921612|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.180487-0.000463275-0.81905;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.J6g39E6_1607886743;
+Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.J6g39E6_1607886743)
+          by smtp.aliyun-inc.com(10.147.40.2);
+          Mon, 14 Dec 2020 03:12:24 +0800
+Subject: Re: [PATCH] MIPS: Ingenic: Disable HPTLB for D0 XBurst CPUs too
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Zhou Yanjie <zhouyanjie@zoho.com>, od@zcrc.me,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20201212000354.291665-1-paul@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <b5c0677a-fb8c-f5e8-b0f5-5bcaab00d921@wanyeetech.com>
+Date:   Mon, 14 Dec 2020 03:12:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20201203171015.GN2414@hirez.programming.kicks-ass.net>
+In-Reply-To: <20201212000354.291665-1-paul@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 06:10:15PM +0100, Peter Zijlstra wrote:
->On Thu, Dec 03, 2020 at 03:54:42PM +0100, Heiko Carstens wrote:
->> On Thu, Dec 03, 2020 at 08:28:21AM -0500, Sasha Levin wrote:
->> > From: Peter Zijlstra <peterz@infradead.org>
->> >
->> > [ Upstream commit 58c644ba512cfbc2e39b758dd979edd1d6d00e27 ]
->> >
->> > We call arch_cpu_idle() with RCU disabled, but then use
->> > local_irq_{en,dis}able(), which invokes tracing, which relies on RCU.
->> >
->> > Switch all arch_cpu_idle() implementations to use
->> > raw_local_irq_{en,dis}able() and carefully manage the
->> > lockdep,rcu,tracing state like we do in entry.
->> >
->> > (XXX: we really should change arch_cpu_idle() to not return with
->> > interrupts enabled)
->> >
->> > Reported-by: Sven Schnelle <svens@linux.ibm.com>
->> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> > Reviewed-by: Mark Rutland <mark.rutland@arm.com>
->> > Tested-by: Mark Rutland <mark.rutland@arm.com>
->> > Link: https://lkml.kernel.org/r/20201120114925.594122626@infradead.org
->> > Signed-off-by: Sasha Levin <sashal@kernel.org>
->>
->> This patch broke s390 irq state tracing. A patch to fix this is
->> scheduled to be merged upstream today (hopefully).
->> Therefore I think this patch should not yet go into 5.9 stable.
+Hi Paul,
+
+On 2020/12/12 上午8:03, Paul Cercueil wrote:
+> The JZ4760 has the HPTLB as well, but has a XBurst CPU with a D0 CPUID.
 >
->Agreed.
+> Disable the HPTLB for all XBurst CPUs with a D0 CPUID. In the case where
+> there is no HPTLB (e.g. for older SoCs), this won't have any side
+> effect.
+>
+> Fixes: b02efeb05699 ("MIPS: Ingenic: Disable abandoned HPTLB function.")
+> Cc: <stable@vger.kernel.org> # 5.4
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>   arch/mips/kernel/cpu-probe.c | 15 ++++++++-------
+>   1 file changed, 8 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+> index e6853697a056..31cb9199197c 100644
+> --- a/arch/mips/kernel/cpu-probe.c
+> +++ b/arch/mips/kernel/cpu-probe.c
+> @@ -1830,16 +1830,17 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
+>   		 */
+>   		case PRID_COMP_INGENIC_D0:
+>   			c->isa_level &= ~MIPS_CPU_ISA_M32R2;
+> -			break;
+> +			fallthrough;
+>   
+>   		/*
+>   		 * The config0 register in the XBurst CPUs with a processor ID of
+> -		 * PRID_COMP_INGENIC_D1 has an abandoned huge page tlb mode, this
+> -		 * mode is not compatible with the MIPS standard, it will cause
+> -		 * tlbmiss and into an infinite loop (line 21 in the tlb-funcs.S)
+> -		 * when starting the init process. After chip reset, the default
+> -		 * is HPTLB mode, Write 0xa9000000 to cp0 register 5 sel 4 to
 
-I'll also grab b1cae1f84a0f ("s390: fix irq state tracing"). Thanks!
 
--- 
-Thanks,
-Sasha
+I just noticed that I mistakenly wrote a capital 'W' in the original 
+version.
+
+with that fixed:
+
+Reviewed-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+
+
+BTW: Are you planning to add support for JZ4760 recently? I am currently 
+writing the CGU driver for JZ4775 and X2000. If you plan to add support 
+for JZ4760, I can also write the CGU driver for JZ4760 by the way.
+
+
+Thanks and best regards!
+
+
+> -		 * switch back to VTLB mode to prevent getting stuck.
+> +		 * PRID_COMP_INGENIC_D0 or PRID_COMP_INGENIC_D1 has an abandoned
+> +		 * huge page tlb mode, this mode is not compatible with the MIPS
+> +		 * standard, it will cause tlbmiss and into an infinite loop
+> +		 * (line 21 in the tlb-funcs.S) when starting the init process.
+> +		 * After chip reset, the default is HPTLB mode, Write 0xa9000000
+> +		 * to cp0 register 5 sel 4 to switch back to VTLB mode to prevent
+> +		 * getting stuck.
+>   		 */
+>   		case PRID_COMP_INGENIC_D1:
+>   			write_c0_page_ctrl(XBURST_PAGECTRL_HPTLB_DIS);
