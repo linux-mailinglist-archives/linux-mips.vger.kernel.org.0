@@ -2,105 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A02862D99BB
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Dec 2020 15:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 426B22D9A21
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Dec 2020 15:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440078AbgLNOVh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Dec 2020 09:21:37 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:39612 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440075AbgLNOVg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Dec 2020 09:21:36 -0500
-Received: by mail-ot1-f66.google.com with SMTP id d8so15830847otq.6;
-        Mon, 14 Dec 2020 06:21:20 -0800 (PST)
+        id S2408145AbgLNOjz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Dec 2020 09:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407660AbgLNOjt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Dec 2020 09:39:49 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553A6C0613D6;
+        Mon, 14 Dec 2020 06:39:09 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id r7so16648529wrc.5;
+        Mon, 14 Dec 2020 06:39:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y23uQOHXl8QZ5RIklxR/5d33ikY1eJDu8wcPOna5oh4=;
+        b=L6tz25Dmbm6QTy/RsOTHj5HcD+iVVZXZ9pDv1dXNiPIUjzgZ3vz2s9Jsi8bDGn8OW4
+         2YkyF5rU/HLezWAyBNB6QMCNBG8/HuvpFBX+rz8/VdKBKS5VVt39sWNvga9Q53e7R733
+         0LpK5/rJTUMvJbs3pGlBAzAEqdZmaZgEuaPJc728JO42MKOphAv+uSg7af7zvgoz34P6
+         6UG1aBiBYuu3bKLd+DJXPJTECQWb62n2d9EnSPdqZB5T6BJbifDwfjKDSUo7qDamU66o
+         8VdH2J+YpEYeDoeN7/bocXWlfCox28B/i9OkKwLvgulGEKd96SGHbVV8l6K6rduduooi
+         +7BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bMgE1mV+D84ls7Dep4laRCdXMSux3/HyOQ9lsiQUOHM=;
-        b=RcXQcQ4eZqksuhc5oE4fdr7Q9h7H+hWHIM90e2MnURnlmShLmDg5ZGYDyN//KNaPCV
-         UVccDotSKEFllC8d9MnmPn+xWOFvb4cYLJwTR+pVq6pt1v1FiQsi0vQlDPkPsaGTAveN
-         JmH5VrKfySrU75qUnk6+K624pMuxYX8Uj8LEu1N/MNiRO2s/h2/z8pzJr4Fpeg+kOX6M
-         WmmgBiSvKRe8LOjhdqNHV/w1VQQYRj9Ht0/lwRmbjpfdufHAUpBQExdkkwGUTNhApg8I
-         RZpyc9m41fypRG+QQRKW3jojPSIAD6lmOuX9ASr8DaPPu0v4jynuAhW5qK2HnZQWuMga
-         BckQ==
-X-Gm-Message-State: AOAM533d4hpagIwuu2l9VjbzEyiK6Se7xbqh8gQNrGvk07SxeXZRcGuH
-        xIZmntyFe0b6zN+8GNDhIA==
-X-Google-Smtp-Source: ABdhPJym+56a5b01xOe6vNW8dPKK6TXt7fv9TQK1/yLBNmbfiGcbyYLA7f+sxD5zoNw53DKH1xbsmA==
-X-Received: by 2002:a9d:2065:: with SMTP id n92mr19449009ota.150.1607955654943;
-        Mon, 14 Dec 2020 06:20:54 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id e10sm4336466otl.38.2020.12.14.06.20.53
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y23uQOHXl8QZ5RIklxR/5d33ikY1eJDu8wcPOna5oh4=;
+        b=aHLw8pxdgu0JXPC+gp31XKSnRdQOaGeu0TqiMDeR7tDzNGAswzIGBrpW4bWVgCVSu+
+         d0Uqxm2vdozJaw8vVpe1xhSRjMswzDFsbfgki6vrr6sakAWSHnbYRnJk7D3KWr4SISif
+         /Fu05TuITOi/kyGMbyDp70KpOERrl6PnFYKVWHQCYG/NlTZWpV07Fby9ZzvbhZik2D1B
+         xu1PPUpKcas262R0e89+IoBmOWy0B+XtPul7vMN6XzMSXmi4iTZwlAnTP7kOaNEKMETQ
+         gPn7ov1YoDKKwEf8RaHqMQiJdM0mlHu/bmcNuwVERxOeQmc3mZtRrwmeafLLNsQMj+Ot
+         a2qw==
+X-Gm-Message-State: AOAM530OohmJo4+UzEc7Cfi2YsGzkSKqVvjCVaPCoiWXqmRdKuWwuToy
+        mI9EdzoqfkwfOoNaH1m5GeI=
+X-Google-Smtp-Source: ABdhPJw6FLJ01Z+XyCZT/YG7W+WiJ6p1Di+54cDzlWLY2Y7+ZsEyURKbqB2sn9ipAH3YjqEV1gr5gw==
+X-Received: by 2002:a05:6000:185:: with SMTP id p5mr28298483wrx.403.1607956748086;
+        Mon, 14 Dec 2020 06:39:08 -0800 (PST)
+Received: from debian.vlc ([170.253.51.130])
+        by smtp.gmail.com with ESMTPSA id w18sm12481539wrn.2.2020.12.14.06.39.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 06:20:54 -0800 (PST)
-Received: (nullmailer pid 1864046 invoked by uid 1000);
-        Mon, 14 Dec 2020 14:20:53 -0000
-Date:   Mon, 14 Dec 2020 08:20:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhc@lemote.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
+        Mon, 14 Dec 2020 06:39:07 -0800 (PST)
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+To:     Michael Kerrisk <mtk.manpages@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        linux-man@vger.kernel.org
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] spi: ls7a: Add YAML schemas
-Message-ID: <20201214142053.GA1863733@robh.at.kernel.org>
-References: <1607925534-8312-1-git-send-email-zhangqing@loongson.cn>
- <1607925534-8312-2-git-send-email-zhangqing@loongson.cn>
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>, libc-alpha@sourceware.org
+Subject: [PATCH] cacheflush.2: Document Architecture-specific variants
+Date:   Mon, 14 Dec 2020 15:38:53 +0100
+Message-Id: <20201214143852.16565-1-alx.manpages@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1607925534-8312-2-git-send-email-zhangqing@loongson.cn>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 14 Dec 2020 13:58:52 +0800, Qing Zhang wrote:
-> Switch the DT binding to a YAML schema to enable the DT validation.
-> 
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
->  .../devicetree/bindings/spi/loongson,spi-ls7a.yaml | 49 ++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
-> 
+Signed-off-by: Alejandro Colomar <alx.manpages@gmail.com>
+---
 
+Hi Michael,
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Please apply this patch after
+'[PATCH v5] cacheflush.2: Document __builtin___clear_cache() as a more
+ portable alternative'.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml:10:4: [warning] wrong indentation: expected 2 but found 3 (indentation)
+Thanks,
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: Additional properties are not allowed ('all0f' was unexpected)
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: 'additionalProperties' is a required property
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: Additional properties are not allowed ('all0f' was unexpected)
-./Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/spi/loongson,spi-ls7a.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: ignoring, error in schema: 
-warning: no schema found in file: ./Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dts:25.13-44: Warning (reg_format): /example-0/spi@16,0:reg: property has invalid length (20 bytes) (#address-cells == 1, #size-cells == 1)
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: example-0: spi@16,0:reg:0: [45056, 0, 0, 0, 0] is too long
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
+Alex
 
+ man2/cacheflush.2 | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-See https://patchwork.ozlabs.org/patch/1415811
-
-The base for the patch is generally the last rc1. Any dependencies
-should be noted.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/man2/cacheflush.2 b/man2/cacheflush.2
+index fc35f1a0b..0761b429a 100644
+--- a/man2/cacheflush.2
++++ b/man2/cacheflush.2
+@@ -31,6 +31,10 @@ cacheflush \- flush contents of instruction and/or data cache
+ .PP
+ .BI "int cacheflush(char *" addr ", int "nbytes ", int "cache );
+ .fi
++.PP
++.IR Note :
++On some architectures,
++there is no glibc wrapper for this system call; see NOTES.
+ .SH DESCRIPTION
+ .BR cacheflush ()
+ flushes the contents of the indicated cache(s) for the
+@@ -87,6 +91,44 @@ but nowadays, Linux provides a
+ .BR cacheflush ()
+ system call on some other architectures, but with different arguments.
+ .SH NOTES
++.SS Architecture-specific variants
++Glibc provides a wrapper for this system call,
++with the prototype shown in SYNOPSIS,
++for the following architectures:
++ARC, CSKY, MIPS, and NIOS2.
++.PP
++On some other architectures,
++Linux provides this system call, with different arguments:
++.TP
++M68K:
++.PP
++.in +4n
++.EX
++.BI "int cacheflush(unsigned long " addr ", int " scope ", int " cache ,
++.BI "               unsigned long " len );
++.EE
++.in
++.TP
++SH:
++.PP
++.in +4n
++.EX
++.BI "int cacheflush(unsigned long " addr ", unsigned long " len ", int " op );
++.EE
++.in
++.TP
++NDS32:
++.PP
++.in +4n
++.EX
++.BI "int cacheflush(unsigned int " start ", unsigned int " end ", int " cache );
++.EE
++.in
++.PP
++On the above architectures,
++glibc does not provide a wrapper for this system call; call it using
++.BR syscall (2).
++.SS GCC alternative
+ Unless you need the finer grained control that this system call provides,
+ you probably want to use the GCC built-in function
+ .BR __builtin___clear_cache (),
+-- 
+2.29.2
 
