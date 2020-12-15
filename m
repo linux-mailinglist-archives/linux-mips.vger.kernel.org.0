@@ -2,105 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E292DA3F0
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Dec 2020 00:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2432DA6C7
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Dec 2020 04:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441295AbgLNXGJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Dec 2020 18:06:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45844 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2441285AbgLNXGJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 14 Dec 2020 18:06:09 -0500
-Date:   Mon, 14 Dec 2020 23:05:22 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607987128;
-        bh=5TsguwUz8VJK8ed5bDwSWwfzf/cJOL0KfWWRDjoJhzQ=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UAk4LB1gakF+U6GGpj55Ykx0xhrgf1wtLYgo9r9mFeGtMMIUlQosvriFGgdFwiXeC
-         IMuICyeGuCBx+14A+DqLiEZQP22TONAInVWdM5n49DxlVWfXAhICFXY58y6wpVsqU9
-         +/x+SeHiERi8NqQ18agSEF4pSFmSFlQy5i2Cz8iQpiYgJLYkvasjxZ+mgFNNEpahMT
-         UGmUFefAp3QT9mdbW9QFW/LuG3NPWfVA0lyiu0fI/XKpBCjF35lh0ax0CdwhdD03kG
-         djx8wy94NUek0W0az2sJTnimVI7JdePAliR5FelHiMnIvT+Qyj+PDJcZZDKH9ttMKk
-         rirQyugEJC3JQ==
-From:   Will Deacon <will@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S1727020AbgLOD17 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Dec 2020 22:27:59 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:9177 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726780AbgLOD1v (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Dec 2020 22:27:51 -0500
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Cw3ZW6Y26z15dbZ;
+        Tue, 15 Dec 2020 11:26:27 +0800 (CST)
+Received: from [10.174.178.63] (10.174.178.63) by
+ DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 15 Dec 2020 11:27:01 +0800
+Subject: Re: [PATCH] MIPS: No need to check CPU 0 in
+ {loongson3,bmips,octeon}_cpu_disable()
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 2/3] kbuild: LD_VERSION redenomination
-Message-ID: <20201214230521.GA14124@willie-the-truck>
-References: <20201212165431.150750-1-masahiroy@kernel.org>
- <20201212165431.150750-2-masahiroy@kernel.org>
+        Florian Fainelli <f.fainelli@gmail.com>
+CC:     <linux-mips@vger.kernel.org>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <linux-kernel@vger.kernel.org>, Xuefeng Li <lixuefeng@loongson.cn>
+References: <1606299090-14013-1-git-send-email-yangtiezhu@loongson.cn>
+From:   "liwei (GF)" <liwei391@huawei.com>
+Message-ID: <0aafd8a7-a9ec-524e-7279-d40dbf246375@huawei.com>
+Date:   Tue, 15 Dec 2020 11:26:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201212165431.150750-2-masahiroy@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1606299090-14013-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.63]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Dec 13, 2020 at 01:54:30AM +0900, Masahiro Yamada wrote:
-> Commit ccbef1674a15 ("Kbuild, lto: add ld-version and ld-ifversion
-> macros") introduced scripts/ld-version.sh for GCC LTO.
+Hi,
+
+On 2020/11/25 18:11, Tiezhu Yang wrote:
+> After commit 9cce844abf07 ("MIPS: CPU#0 is not hotpluggable"),
+
+Why CPU#0 is not hotpluggable on MIPS? Does that unrealizable?
+
+> c->hotpluggable is 0 for CPU 0 and it will not generate a control
+> file in sysfs for this CPU:
 > 
-> At that time, this script handled 5 version fields because GCC LTO
-> needed the downstream binutils. (https://lkml.org/lkml/2014/4/8/272)
+> [root@linux loongson]# cat /sys/devices/system/cpu/cpu0/online
+> cat: /sys/devices/system/cpu/cpu0/online: No such file or directory
+> [root@linux loongson]# echo 0 > /sys/devices/system/cpu/cpu0/online
+> bash: /sys/devices/system/cpu/cpu0/online: Permission denied
 > 
-> The code snippet from the submitted patch was as follows:
+> So no need to check CPU 0 in {loongson3,bmips,octeon}_cpu_disable(),
+
+missing cps_cpu_disable()?
+
+Thanks,
+Wei
+
+> just remove them.
 > 
->     # We need HJ Lu's Linux binutils because mainline binutils does not
->     # support mixing assembler and LTO code in the same ld -r object.
->     # XXX check if the gcc plugin ld is the expected one too
->     # XXX some Fedora binutils should also support it. How to check for that?
->     ifeq ($(call ld-ifversion,-ge,22710001,y),y)
->         ...
-> 
-> However, GCC LTO was not merged into the mainline after all.
-> (https://lkml.org/lkml/2014/4/8/272)
-> 
-> So, the 4th and 5th fields were never used, and finally removed by
-> commit 0d61ed17dd30 ("ld-version: Drop the 4th and 5th version
-> components").
-> 
-> Since then, the last 4-digits returned by this script is always zeros.
-> 
-> Remove the meaningless last 4-digits. This makes the version format
-> consistent with GCC_VERSION, CLANG_VERSION, LLD_VERSION.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
+>  arch/mips/cavium-octeon/smp.c | 3 ---
+>  arch/mips/kernel/smp-bmips.c  | 3 ---
+>  arch/mips/loongson64/smp.c    | 3 ---
+>  3 files changed, 9 deletions(-)
 > 
->  arch/arm64/Kconfig            | 2 +-
->  arch/mips/loongson64/Platform | 2 +-
->  arch/mips/vdso/Kconfig        | 2 +-
->  arch/powerpc/Makefile         | 2 +-
->  arch/powerpc/lib/Makefile     | 2 +-
->  scripts/ld-version.sh         | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
+> diff --git a/arch/mips/cavium-octeon/smp.c b/arch/mips/cavium-octeon/smp.c
+> index 076db9a..66ce552 100644
+> --- a/arch/mips/cavium-octeon/smp.c
+> +++ b/arch/mips/cavium-octeon/smp.c
+> @@ -290,9 +290,6 @@ static int octeon_cpu_disable(void)
+>  {
+>  	unsigned int cpu = smp_processor_id();
+>  
+> -	if (cpu == 0)
+> -		return -EBUSY;
+> -
+>  	if (!octeon_bootloader_entry_addr)
+>  		return -ENOTSUPP;
+>  
+> diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
+> index 1dbfb5a..359b176 100644
+> --- a/arch/mips/kernel/smp-bmips.c
+> +++ b/arch/mips/kernel/smp-bmips.c
+> @@ -362,9 +362,6 @@ static int bmips_cpu_disable(void)
+>  {
+>  	unsigned int cpu = smp_processor_id();
+>  
+> -	if (cpu == 0)
+> -		return -EBUSY;
+> -
+>  	pr_info("SMP: CPU%d is offline\n", cpu);
+>  
+>  	set_cpu_online(cpu, false);
+> diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+> index aa0cd72..b8c1fc3 100644
+> --- a/arch/mips/loongson64/smp.c
+> +++ b/arch/mips/loongson64/smp.c
+> @@ -544,9 +544,6 @@ static int loongson3_cpu_disable(void)
+>  	unsigned long flags;
+>  	unsigned int cpu = smp_processor_id();
+>  
+> -	if (cpu == 0)
+> -		return -EBUSY;
+> -
+>  	set_cpu_online(cpu, false);
+>  	calculate_cpu_foreign_map();
+>  	local_irq_save(flags);
 > 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index a6b5b7ef40ae..69d56b21a6ec 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1499,7 +1499,7 @@ config ARM64_PTR_AUTH
->  	depends on (CC_HAS_SIGN_RETURN_ADDRESS || CC_HAS_BRANCH_PROT_PAC_RET) && AS_HAS_PAC
->  	# Modern compilers insert a .note.gnu.property section note for PAC
->  	# which is only understood by binutils starting with version 2.33.1.
-> -	depends on LD_IS_LLD || LD_VERSION >= 233010000 || (CC_IS_GCC && GCC_VERSION < 90100)
-> +	depends on LD_IS_LLD || LD_VERSION >= 23301 || (CC_IS_GCC && GCC_VERSION < 90100)
->  	depends on !CC_IS_CLANG || AS_HAS_CFI_NEGATE_RA_STATE
->  	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_REGS)
->  	help
-
-Acked-by: Will Deacon <will@kernel.org>
-
-Will
