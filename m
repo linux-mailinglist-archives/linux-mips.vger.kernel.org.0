@@ -2,92 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 654B82DADED
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Dec 2020 14:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29CB2DAE02
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Dec 2020 14:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726278AbgLONW5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Dec 2020 08:22:57 -0500
-Received: from elvis.franken.de ([193.175.24.41]:42248 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726580AbgLONW5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 15 Dec 2020 08:22:57 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kpAHO-0001tH-00; Tue, 15 Dec 2020 14:22:14 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id DA36FC0386; Tue, 15 Dec 2020 14:21:23 +0100 (CET)
-Date:   Tue, 15 Dec 2020 14:21:23 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: Re: [PATCH] MIPS: Loongson64: Give chance to build under
- !CONFIG_NUMA and !CONFIG_SMP
-Message-ID: <20201215132123.GA9201@alpha.franken.de>
-References: <1606998772-5904-1-git-send-email-yangtiezhu@loongson.cn>
+        id S1727069AbgLONbY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Dec 2020 08:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726771AbgLONbX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Dec 2020 08:31:23 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C6BC0617B0;
+        Tue, 15 Dec 2020 05:30:43 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id 3so18496924wmg.4;
+        Tue, 15 Dec 2020 05:30:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=hViOtnvGY+4JO9VZW4NA9Ghhzl7JHbPghEwPrt1jtVA=;
+        b=Ef1XRfiw3/YMjfpkmB3NKEy4+KAYGtJ/+5Yxui3w2yjbH1Gt/dX4iseHBTlgLJjd20
+         gYS0onONCVD/HrfoC8e3fMUi6Z3LdJJdGCF4B/Um+kw/DHUDYbWXyXSDS/rrg2YsjBJa
+         qQmJZczHi1Xvg3Ef38xPYQqTMMxHx2unXWexJ8r4hl0VxMxzT5AaZRrfg/UGWaAbZoqA
+         LAp4H6IeS3k6Fghi+mhE06nCPQTbDMpk000kVfv3o5tDuAhUvx/d5hWKWIlxW3V4Qdlz
+         HKZRcpnWLTbEJs3t6OGooiaszoWYFiAuibNR+52c0riuvNqU1tI0DuSKE9CpOLEBU+rE
+         JHXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=hViOtnvGY+4JO9VZW4NA9Ghhzl7JHbPghEwPrt1jtVA=;
+        b=uA/HtLxgnTZeuv4umBn2dFD/QQ87ic/08KMZqwQ6AK8vj2znlkkmovL97a2mia1h6+
+         ioPGwYenin0DC2bUwh63cX+KxZIkK55KwjEipxLAHdSbhilnEYAAN8/J3JttqxXJsf4m
+         nQsLRirBa/BvTZ4eK0lXInR75c19gzvzgJQKNjwQyQ6cvWS7X5AVameE+hjfj5JaXg/r
+         xjtdeNaNjknsVIxU7MuSP3rQHT0bx8pFyoFJ3oF8rohQFtqI6mJHNcRMt444zZntU7kn
+         7sclWVuuzAP1048jxES9kYtvoULmIwlhQ57tNviWqbhxKeZUsLvNj/4Pw+7Lu46+q+Jr
+         XVCw==
+X-Gm-Message-State: AOAM533sQ2Sg6R6nzRc3ZlgOIccuNXD4uPqxMNUNqgxnFGWNb0swSu33
+        10EBGi+fSYTofgFSkeSRIb8=
+X-Google-Smtp-Source: ABdhPJxu0j/rXyBcT8i0pqy+eH/ROTi4+4c71h3L9WrE4dLOb7tZam/y9JAqsyWuoSkrUgKVrypPgQ==
+X-Received: by 2002:a1c:40c:: with SMTP id 12mr32319066wme.40.1608039042332;
+        Tue, 15 Dec 2020 05:30:42 -0800 (PST)
+Received: from debian.vlc ([170.253.51.130])
+        by smtp.gmail.com with ESMTPSA id z8sm36888479wmg.17.2020.12.15.05.30.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Dec 2020 05:30:41 -0800 (PST)
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+To:     Michael Kerrisk <mtk.manpages@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        linux-man@vger.kernel.org, Martin Sebor <msebor@redhat.com>
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>, gcc-patches@gcc.gnu.org,
+        cfe-users@lists.llvm.org, cfe-dev@lists.llvm.org
+Subject: [PATCH v6] cacheflush.2: Document __builtin___clear_cache() as a more portable alternative
+Date:   Tue, 15 Dec 2020 14:30:20 +0100
+Message-Id: <20201215133019.14411-1-alx.manpages@gmail.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <e2424619-2a5a-a44a-2dc0-a16310725250@gmail.com>
+References: <e2424619-2a5a-a44a-2dc0-a16310725250@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1606998772-5904-1-git-send-email-yangtiezhu@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 08:32:52PM +0800, Tiezhu Yang wrote:
-> In the current code, we can not build under !CONFIG_NUMA and !CONFIG_SMP
-> on the Loongson64 platform, it seems bad for the users who just want to
-> use pure single core (not nosmp) to debug, so do the following things to
-> give them a chance:
-> 
-> (1) Do not select NUMA and SMP for MACH_LOONGSON64 in Kconfig, make NUMA
-> depends on SMP, and then just set them in the loongson3_defconfig.
-> (2) Move szmem() from numa.c to init.c and add prom_init_memory() under
-> !CONFIG_NUMA.
-> (3) Clean up szmem() due to the statements of case SYSTEM_RAM_LOW and
-> SYSTEM_RAM_HIGH are the same.
-> (4) Remove the useless declaration of prom_init_memory() and add the
-> declaration of szmem() in loongson.h to avoid build error.
-> 
-> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/mips/Kconfig                                |  3 +-
->  arch/mips/configs/loongson3_defconfig            |  2 +
->  arch/mips/include/asm/mach-loongson64/loongson.h |  2 +-
->  arch/mips/loongson64/init.c                      | 49 ++++++++++++++++++++++
->  arch/mips/loongson64/numa.c                      | 52 +-----------------------
->  5 files changed, 54 insertions(+), 54 deletions(-)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 44a47ad..2034c66 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -490,8 +490,6 @@ config MACH_LOONGSON64
->  	select SYS_SUPPORTS_ZBOOT
->  	select SYS_SUPPORTS_RELOCATABLE
->  	select ZONE_DMA32
-> -	select NUMA
-> -	select SMP
->  	select COMMON_CLK
->  	select USE_OF
->  	select BUILTIN_DTB
-> @@ -2755,6 +2753,7 @@ config ARCH_SPARSEMEM_ENABLE
->  config NUMA
->  	bool "NUMA Support"
->  	depends on SYS_SUPPORTS_NUMA
-> +	depends on SMP
+Reported-by: Heinrich Schuchardt <xypron.glpk@gmx.de>
+Signed-off-by: Alejandro Colomar <alx.manpages@gmail.com>
+Cc: Martin Sebor <msebor@redhat.com>
+Cc: Dave Martin <Dave.Martin@arm.com>
+---
 
-can you solve your problem without this hunk ? I don't want to make NUMA
-depeding on SMP. NUMA just selects memory archtitecture.
+v6:
+- GCC has always exposed 'void *', as Martin Sebor noted.
+  It's Clang (and maybe others) that (following GCC's docs)
+  exposed 'char *'.
 
-Thomas.
+ man2/cacheflush.2 | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
+diff --git a/man2/cacheflush.2 b/man2/cacheflush.2
+index aba625721..7a2eed506 100644
+--- a/man2/cacheflush.2
++++ b/man2/cacheflush.2
+@@ -86,6 +86,30 @@ On Linux, this call first appeared on the MIPS architecture,
+ but nowadays, Linux provides a
+ .BR cacheflush ()
+ system call on some other architectures, but with different arguments.
++.SH NOTES
++Unless you need the finer grained control that this system call provides,
++you probably want to use the GCC built-in function
++.BR __builtin___clear_cache (),
++which provides a portable interface
++across platforms supported by GCC and compatible compilers:
++.PP
++.in +4n
++.EX
++.BI "void __builtin___clear_cache(void *" begin ", void *" end );
++.EE
++.in
++.PP
++On platforms that don't require instruction cache flushes,
++.BR __builtin___clear_cache ()
++has no effect.
++.PP
++.IR Note :
++On some GCC-compatible compilers,
++the prototype for this built-in function uses
++.I char *
++instead of
++.I void *
++for the parameters.
+ .SH BUGS
+ Linux kernels older than version 2.6.11 ignore the
+ .I addr
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.29.2
+
