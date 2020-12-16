@@ -2,54 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F072DC7A3
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Dec 2020 21:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2FE2DC9AB
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Dec 2020 00:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728738AbgLPURN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Dec 2020 15:17:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37056 "EHLO mail.kernel.org"
+        id S1726806AbgLPXkt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Dec 2020 18:40:49 -0500
+Received: from aposti.net ([89.234.176.197]:42568 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728740AbgLPURM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 16 Dec 2020 15:17:12 -0500
-Subject: Re: [GIT PULL] MIPS changes for v5.11
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608149792;
-        bh=1ZIRO/JLFjIU/rGRnebA0VxyVMF2zEJbHUWQdJHlEYw=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=PdWjfAugyHiClUVJ0lSEF5zGXxIR72ip3beRak8toqzPlozgQfwct8FOOmJr+KjoP
-         y1gPLAEMuvN7tssaRfXVloQRJPir0EYKhPHT+7bQYyBKmMlP9kcWMKcHvjywO10Fqk
-         djuvNddw22PgQ0uLDSI3Ka4RWnPXPRE3YTshnK8vx6venTHnDHk34N4NG7hcyGTc/x
-         M1Z2s2CqMB1YWWA0CbhrPJ2+hiyUmNqAZcUIM6QZ6+i0H21msEtQ0fyXybue1sW471
-         lrUfkpbs7MHSBbUxi6rnKaP4Y7iYd7rIGxthbafuES5qzaDV7kgTl5dWruVQWeZy7z
-         0jwrojKSjaVog==
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20201216110634.GA7546@alpha.franken.de>
-References: <20201216110634.GA7546@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20201216110634.GA7546@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.11
-X-PR-Tracked-Commit-Id: ad4fddef5f2345aa9214e979febe2f47639c10d9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8312f41f08edc641aa927d31fb71319694ae9c42
-Message-Id: <160814979248.31129.6242302841839462611.pr-tracker-bot@kernel.org>
-Date:   Wed, 16 Dec 2020 20:16:32 +0000
+        id S1727769AbgLPXkt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Dec 2020 18:40:49 -0500
+From:   Paul Cercueil <paul@crapouillou.net>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>, od@zcrc.me,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
+Subject: [PATCH] MIPS: boot: Fix unaligned access with CONFIG_MIPS_RAW_APPENDED_DTB
+Date:   Wed, 16 Dec 2020 23:39:56 +0000
+Message-Id: <20201216233956.280068-1-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Wed, 16 Dec 2020 12:06:34 +0100:
+The compressed payload is not necesarily 4-byte aligned, at least when
+compiling with Clang. In that case, the 4-byte value appended to the
+compressed payload that corresponds to the uncompressed kernel image
+size must be read using get_unaligned_le().
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.11
+This fixes Clang-built kernels not booting on MIPS (tested on a Ingenic
+JZ4770 board).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8312f41f08edc641aa927d31fb71319694ae9c42
+Fixes: b8f54f2cde78 ("MIPS: ZBOOT: copy appended dtb to the end of the kernel")
+Cc: <stable@vger.kernel.org> # v4.7
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ arch/mips/boot/compressed/decompress.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you!
-
+diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
+index c61c641674e6..47c07990432b 100644
+--- a/arch/mips/boot/compressed/decompress.c
++++ b/arch/mips/boot/compressed/decompress.c
+@@ -117,7 +117,7 @@ void decompress_kernel(unsigned long boot_heap_start)
+ 		dtb_size = fdt_totalsize((void *)&__appended_dtb);
+ 
+ 		/* last four bytes is always image size in little endian */
+-		image_size = le32_to_cpup((void *)&__image_end - 4);
++		image_size = get_unaligned_le32((void *)&__image_end - 4);
+ 
+ 		/* copy dtb to where the booted kernel will expect it */
+ 		memcpy((void *)VMLINUX_LOAD_ADDRESS_ULL + image_size,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.29.2
+
