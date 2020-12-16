@@ -2,80 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D1C2DC0CC
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Dec 2020 14:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 261D22DC234
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Dec 2020 15:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726027AbgLPNKf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Dec 2020 08:10:35 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:9620 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbgLPNKf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Dec 2020 08:10:35 -0500
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CwwSJ1081z15cJm;
-        Wed, 16 Dec 2020 21:09:04 +0800 (CST)
-Received: from ubuntu.network (10.175.138.68) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.498.0; Wed, 16 Dec 2020 21:09:32 +0800
-From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <tsbogend@alpha.franken.de>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: [PATCH -next] mips: pci: convert comma to semicolon
-Date:   Wed, 16 Dec 2020 21:10:04 +0800
-Message-ID: <20201216131004.14284-1-zhengyongjun3@huawei.com>
-X-Mailer: git-send-email 2.22.0
+        id S1726479AbgLPObO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Dec 2020 09:31:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56008 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726398AbgLPObO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Dec 2020 09:31:14 -0500
+Date:   Wed, 16 Dec 2020 11:30:47 -0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608129034;
+        bh=Gm2OmL7sloFp1/bWPP0VoHXKQ0hOgQx7X5GHfkx5RNI=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HKhqYHkkk9WUO+fFdwda3W58t5Hn9VmzMizNQpLl0K/tkIxaOzAzteEPzslvfnX7/
+         ZegbNRtnnk/Qpb1697ZlI41FtvNrCXadYupXMj+x0doMjGSrDA3ysag4jdXGj73Moc
+         qUv6WkBYDAdmC/q/DMRN+jpyb8vhZFCmXQkZBIlGufCjukSc7lazLm7Chy2ZMuV61C
+         Km+TW8Z1G75XWSOW5A6/RTamjsbx7HPovlRf0qs63tpJDFdAxwwdbDCorMSpnwGxdj
+         jHNTV5+pW80FEpGftrRQ0IEZvhyPWNEeLZHIJ0GSWbBVW1JIwPaeYrIDCh+bYrfiiM
+         +OJZ1r4YfN3HA==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ralf Baechle <ralf@linux-mips.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Archer Yan <ayan@wavecomp.com>,
+        David Daney <david.daney@cavium.com>
+Subject: Re: [QUESTION] support perf record --call-graph dwarf for mips
+Message-ID: <20201216143047.GC294100@kernel.org>
+References: <97fb66bf-51f8-a491-9eb4-10b2314cf82f@loongson.cn>
+ <90c7db1a-8e1a-e253-79ca-f93dbac014c2@flygoat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.138.68]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <90c7db1a-8e1a-e253-79ca-f93dbac014c2@flygoat.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Replace a comma between expression statements by a semicolon.
+Em Wed, Dec 16, 2020 at 07:14:02PM +0800, Jiaxun Yang escreveu:
+> 
+> 
+> 在 2020/12/16 下午6:05, Tiezhu Yang 写道:
+> > Hi,
+> > 
+> > In the current upstream mainline kernel, perf record --call-graph dwarf
+> > is not supported for architecture mips64. I find the following related
+> > patches about this feature by David Daney <david.daney@cavium.com> and
+> > Archer Yan <ayan@wavecomp.com> in Sep 2019.
+ 
+> AFAIK ddaney left Cavium at 2018 and Wave Computing Shanghai is defuncted...
+ 
+> Feel free to take over if you like, there is no licenses issue, just
+> remember to credit
+> others properly.
 
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
----
- arch/mips/kernel/vpe-cmp.c | 4 ++--
- arch/mips/pci/pci-ar2315.c | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Ralf, can you take a look at the kernel part? The user space part seems
+ok.
 
-diff --git a/arch/mips/kernel/vpe-cmp.c b/arch/mips/kernel/vpe-cmp.c
-index 9268ebc0f61e..e673603e11e5 100644
---- a/arch/mips/kernel/vpe-cmp.c
-+++ b/arch/mips/kernel/vpe-cmp.c
-@@ -117,8 +117,8 @@ int __init vpe_module_init(void)
- 	}
- 
- 	device_initialize(&vpe_device);
--	vpe_device.class	= &vpe_class,
--	vpe_device.parent	= NULL,
-+	vpe_device.class	= &vpe_class;
-+	vpe_device.parent	= NULL;
- 	dev_set_name(&vpe_device, "vpe_sp");
- 	vpe_device.devt = MKDEV(major, VPE_MODULE_MINOR);
- 	err = device_add(&vpe_device);
-diff --git a/arch/mips/pci/pci-ar2315.c b/arch/mips/pci/pci-ar2315.c
-index 0b15730cef88..f741b8c528e4 100644
---- a/arch/mips/pci/pci-ar2315.c
-+++ b/arch/mips/pci/pci-ar2315.c
-@@ -483,11 +483,11 @@ static int ar2315_pci_probe(struct platform_device *pdev)
- 	apc->io_res.name = "AR2315 IO space";
- 	apc->io_res.start = 0;
- 	apc->io_res.end = 0;
--	apc->io_res.flags = IORESOURCE_IO,
-+	apc->io_res.flags = IORESOURCE_IO;
- 
- 	apc->pci_ctrl.pci_ops = &ar2315_pci_ops;
--	apc->pci_ctrl.mem_resource = &apc->mem_res,
--	apc->pci_ctrl.io_resource = &apc->io_res,
-+	apc->pci_ctrl.mem_resource = &apc->mem_res;
-+	apc->pci_ctrl.io_resource = &apc->io_res;
- 
- 	register_pci_controller(&apc->pci_ctrl);
- 
--- 
-2.22.0
-
+- Arnaldo
+> 
+> > [1/2] Support mips unwinding and dwarf-regs
+> > https://lore.kernel.org/patchwork/patch/1126521/
+> > 
+> > [2/2] Support extracting off-line stack traces from user-space with perf
+> > https://lore.kernel.org/patchwork/patch/1126520/
+> > 
+> > Is this a work in progress?
+> > Could you please give me some feedback?
+> > Thank you for your help.
+> > 
+> > Thanks,
+> > Tiezhu
