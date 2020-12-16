@@ -2,93 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E10562DB760
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Dec 2020 01:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEA72DB956
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Dec 2020 03:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725818AbgLPABd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Dec 2020 19:01:33 -0500
-Received: from sonic305-21.consmr.mail.gq1.yahoo.com ([98.137.64.84]:41714
-        "EHLO sonic305-21.consmr.mail.gq1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726159AbgLOXkh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 15 Dec 2020 18:40:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.ca; s=s2048; t=1608075561; bh=ZkwtcN1Znn8ElcNfcf+qBswC+LM15JB4pYSZu2ijlTk=; h=Date:From:Subject:To:References:In-Reply-To:From:Subject; b=bsOksqOjy08JRuM1vNMYKY63ugniz6HKC1zmUhBC5VKH2e12SAHB008RzBECewMo+icMFJI6NYQhG4/OH7Z/GLk5hLZgxT6F8kZiz5UMvuAYx2D/hINMWnQtozRzOnLfAyfg4lGjSjjFIIidoNVJcMiw2bwjvwedEWRGxpRnyM3Ldt3qrWOgqFbOOiBgI3BZuVeYXjfeaWjeGeT0MBIBWTGZika6x6BAqY+x1IAlvkfZB4WTzvSUQjuyI/HEv0kpieYrUu5GWR9OVUjFxGsut6hwHVFFNYOj3DlUB/PQIYAldTAgtvZgISakZfFzJiNQVM/20ujq6L1prYQ3+1aTYw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1608075561; bh=sa9UqAHRB7t41f/GLWfHt+ZwGcZHRuwzz9vsWaaIuHi=; h=Date:From:Subject:To:From:Subject; b=jBqLOED7uPJH+hPV5WVZNIV/P86RjHeCPnWryS+Z+teP5vUvDvppKa/KgpFjsDGAyX9x5IVqe+MNZRFJB5wO7GjSO7NrcrdbtS1i1Cme4DGBGEmM0jUIHuBXr+OHecGvV7frx91OwbA8b5xY+qrzhHM/5e4s7p781cSM5YNwfIKpYsLgKfnFNg83UyrBfJWg4ioEuMwW13uUB7hTvBTivVGYHzSpMaP5scMnwuPq4A0xgJH7L62FGyU7yxofnHAZEjRZVoCzfy4+YdMpUhltJUNVEe2aZs4O59gIQy2zlFm0AkPZB1YIqvAWU3PE6Sh8JQefZqwhHUv/kiFoAQioAQ==
-X-YMail-OSG: JulUi2QVM1nOM7VAg5vRbxJvcPrCfaXBKUng8mGlePCsxSIq3rtbyl96cSN5qFK
- 7.h4Aa88liq6HVnGOUXcsPeXL74TBWciCtyW_KeIQUDxofTYYXt5IHkQm_umaVImY3W8liebEIU4
- szvNP5o2H3HY3PIhLLi9iNOUkBJ2yguyZZ4umprzcIXvxROcjUkrtUF8dVFU5Y3xwGuCdvPCLPqj
- mLREEVIFTPri8ysQqktoHfLQdaQYt8xV18xWtfZtrMrOK_JzwXGk7SW7sYwSNosu9uwQQJEIYp25
- cTHfIxdQVf4lWmsA.CIzdUsg8QPSpTavYfCr6LO0SfIZRWuzGApiP8U6LWearQZG1UoSMaGOlmvV
- QK3kWN4RGWv9HSH1Hg82mcZreKjG.nLZe.u_SHz2u_rWetzTpPUsB1yRuKpBnteJnWvrO.qum9.z
- mv0L0fE0DATM5I0.NwaT7tn2NiCPFmwsqfsc9.kyWtiASArq.zAo2RpYFPlBPXhEbPBlCENQEQKv
- s5QeeeNSDN1OwLxmgN5B5wiM7K_r72En.FDRAtdIxWMRCAOJKiCjmnzIEoMIk3FFRaoSWD9jNBrW
- Oax9cagl6c79yx1SMZUw7ySAIVUiSnngUQlsee9F1VF7DviJZxvYlHBMNbteIpirbYjbC6Z9rvGd
- uIH6K0NPiK9DtjyFmrZzLewFlF_wE_jjzO.nvjjRG5DkZVtY4xYLtBfRNyfvz.5E4gb6oRmifOoI
- yfzOfhS68sbdmcv.z2QoB95lDfu3Lh2usQc9_iLkRfF2x0fJZKLWl5yMHJXhjqc5CL0OBrD_Quwn
- vlJyTIvFRHi9cuQOYThWQ7mmLMLJno6OSpcAiAh_Ov4rS_62MmN5bX.L_8AtKoD663erfbVNhRAK
- _rkXoHsNSR41yhY_.keMq9DQU_iI2kQWkNUYGpVI5GpnJWjdlBqWagg20f40YxDoPHDa6tXsqhlb
- ZZA.yEr0wXymIX4mjuMRnTLupT1nD4oq_M65fcyBFE.nyrW3Fet4XndSxEbOE.bwMM60PNwxD1Nz
- eJvvTM6.CqVT_feH0fVAhigwiI4l.YfplONEEAyRsLwhS_HH6gbt4JPTz6fLQWku6QOq5lpehXsZ
- KUeYwDTIJkmNzjjmCeg3GbP4xFEhYYaUIg42LJ.97ldAT9iYf8g.c7P.7KUMMArV5ypQrnw1j6CD
- 0JxTjhsdTnF49PUfrYa0s_MEKYvrly5B2WyCbpAcG9EFoTFhU.LWSbdyHz8C.Dcva4VHJIgt8XYf
- Gi5MaKoYfAvOC4MAgTmJ4ZOg0q3eMDsHGs.gyr.XUwV6rOJIFsQkmWHe5rSAMGlXIPUW8t8tg3dJ
- EvwOP9NXlwMJ566bOyAKEwOMCM34ICqvVjQsUOrkPwQ4lyO74vG6CfNeJQLhgtteaNJckXbbMYom
- 0JTVZbosF0m5qEi1TVusHClEGP7Z4xbDXarz8NRWZI_ZNZFL.tIYlsO22EHLzE22YQPFWcWAkth1
- NZ_M2bnWezpO5GVnUliz65SktX_0SpmT5rqk7GR_19caN3LB.MaDOkY4ecZ0XcBRN8uEIFI64YWy
- 1My91erfKvO3oXGTtA7m7jZSqJjGz3K7Il_Tb_XdT8YVxK._qI6DnY0Qp4Yh0m5nj4k9R6JN.Ikx
- VasRMIlnL.xwcgifvV.4GjcKSJahPRp5GpCTEBPcurH1zDt9QwztI3Zv07uC5koUrcwqGNtnc3XD
- gFmL1quC.BGbahu9v8eRrCAEIppDmZO.72mlMtzLhZENeSQiSuo4cPtoMsGBJN_KUy8VeztqYzFD
- EfxCmL21bPq.A4QLIFTpRzDhKirGiOWr0Bq2IHZfHT5ijhUpfqv5K.6JgXPa1IMg7DM_Gow4vzuP
- SeW27Y0P4zHN3SxUy2r61UDe1ZbNJ9k4MwzC6YoC_d6QOi46NjldipKhbIqHo6o71_eEjH9uwL_i
- _zgJQIT_J3itRCrREf451k4iZvlUlSyX5IczmCMYrOsE7cfoqb0Nyc7DTrbKJHMnBwBJix09Ckpz
- .teceLV2ymIU0aOOwiX.44MLRrUl5Wg7YYqY8CI2J7cC3fPw5cIxg5O4UXv7pvPyVvE2W3hJgO9F
- wrGwyKCcY0bXQu3GN6OoCkX6jNSHTPoYu5k7WLYoK7tcL3eS0LE5PG9xVEoyy7oXWUlyZshME2qI
- KO_DK.c_1z4S77qdx7g5kAF.OHVQX6ndSiRlwpiBBGFE2ThKR.xWlfNg8OtjD_wkPzbb8jPOhVmZ
- _pWEzmIMWTGML6UG6XRrr26iSpK.L_5qJkOWiU_JTnF0dRNmoQeW6JpP_jzs8qwn3izwaxkDlldY
- 4.oHtiHpqde8T4uIl9ob33_.aMuSa_PkLK9CJYHa7_B_gmqr37Xx9ToobzNTJjlOlg5SwfFGAHk7
- 3vK2RZcMYwoQjAmf3xX38T1lWinVefLaW4ivnACyz9UikzJX0SBJKjQLkSc_afdyIjXARY_Urvn_
- QMkkwGljA8VbvJ2CWPJ0BMEmUwiCYzPtTyHlmQiOv9yAAxhuCg32.jgPJVuvGU7Iet6xroUXpqsM
- t99A9lEGlYWGE_SBf56PyMeXAk.yv3NBa7T4I43u.X.xjVy7D01r4ED5lpaQ7RCnx.XfVJFK6Btg
- sQRdIz_UER_rNkMUrGDlzs8dnJMpxICv7gh0fSIrB4JgTsIn9g3Oy5eZZvHp5d6lEj6PgrUHyrSu
- qCDbrnZdiqIFiE3TS9ywhnHJKOP31TMCVzhypQtBC9KPedUuZe0GGlqPLWBVgc2E6nm8L4s2b56N
- UlyZdlKFUyeBoFy8vhS8Q1XuFHcLinhhwKHbG8s60WOAZAmRNkYJ1AEtD_trNzcKQ7a8f.oS6a8I
- _UgJD1jFuMJeAjp4Nd2zY.fTu_1t5CBIPBgaVlesmI_6dUDjGS5M6zjHuoD.IHF5YAwJNQW764XX
- hYuc-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.gq1.yahoo.com with HTTP; Tue, 15 Dec 2020 23:39:21 +0000
-Received: by smtp409.mail.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 7f42f66753ff764add4cd34d24e29391;
-          Tue, 15 Dec 2020 23:39:20 +0000 (UTC)
-Date:   Tue, 15 Dec 2020 18:39:17 -0500
-From:   "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
-Subject: Re: [RFC PATCH] treewide: remove bzip2 compression support
-To:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-References: <20201215190315.8681-1-alex_y_xu.ref@yahoo.ca>
-        <20201215190315.8681-1-alex_y_xu@yahoo.ca>
-In-Reply-To: <20201215190315.8681-1-alex_y_xu@yahoo.ca>
+        id S1725837AbgLPCpL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Dec 2020 21:45:11 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:54696 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725841AbgLPCpL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 15 Dec 2020 21:45:11 -0500
+Received: from [10.130.0.80] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax2cmHdNlfQhABAA--.2970S3;
+        Wed, 16 Dec 2020 10:44:24 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Loongson64: Give chance to build under !CONFIG_NUMA
+ and !CONFIG_SMP
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1606998772-5904-1-git-send-email-yangtiezhu@loongson.cn>
+ <20201215132123.GA9201@alpha.franken.de>
+Cc:     Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <3eb215e2-82ae-2834-2837-55f429027840@loongson.cn>
+Date:   Wed, 16 Dec 2020 10:44:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Message-Id: <1608075451.ootu1tx25o.none@localhost>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: WebService/1.1.17278 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/11.0.8)
+In-Reply-To: <20201215132123.GA9201@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Ax2cmHdNlfQhABAA--.2970S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxZrWDGF4UCw4UuFy3Cr1fCrg_yoW5Kw4Dpa
+        nakwsxKr4kWrW5Ars3A34kWry5J3s5JrZxtFWxt34UWF9F9a48Arn5tF18ZF9rArWvq3W0
+        gF93WF12kayIyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
+        bIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+        UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Excerpts from Alex Xu (Hello71)'s message of December 15, 2020 2:03 pm:
-> bzip2 is either slower or larger than every other supported algorithm,
-> according to benchmarks at [0]. It is far slower to decompress than any
-> other algorithm, and still larger than lzma, xz, and zstd.
->=20
-> [0] https://lore.kernel.org/lkml/1588791882.08g1378g67.none@localhost/
->=20
-> Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+On 12/15/2020 09:21 PM, Thomas Bogendoerfer wrote:
+> On Thu, Dec 03, 2020 at 08:32:52PM +0800, Tiezhu Yang wrote:
+>> In the current code, we can not build under !CONFIG_NUMA and !CONFIG_SMP
+>> on the Loongson64 platform, it seems bad for the users who just want to
+>> use pure single core (not nosmp) to debug, so do the following things to
+>> give them a chance:
+>>
+>> (1) Do not select NUMA and SMP for MACH_LOONGSON64 in Kconfig, make NUMA
+>> depends on SMP, and then just set them in the loongson3_defconfig.
+>> (2) Move szmem() from numa.c to init.c and add prom_init_memory() under
+>> !CONFIG_NUMA.
+>> (3) Clean up szmem() due to the statements of case SYSTEM_RAM_LOW and
+>> SYSTEM_RAM_HIGH are the same.
+>> (4) Remove the useless declaration of prom_init_memory() and add the
+>> declaration of szmem() in loongson.h to avoid build error.
+>>
+>> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   arch/mips/Kconfig                                |  3 +-
+>>   arch/mips/configs/loongson3_defconfig            |  2 +
+>>   arch/mips/include/asm/mach-loongson64/loongson.h |  2 +-
+>>   arch/mips/loongson64/init.c                      | 49 ++++++++++++++++++++++
+>>   arch/mips/loongson64/numa.c                      | 52 +-----------------------
+>>   5 files changed, 54 insertions(+), 54 deletions(-)
+>>
+>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>> index 44a47ad..2034c66 100644
+>> --- a/arch/mips/Kconfig
+>> +++ b/arch/mips/Kconfig
+>> @@ -490,8 +490,6 @@ config MACH_LOONGSON64
+>>   	select SYS_SUPPORTS_ZBOOT
+>>   	select SYS_SUPPORTS_RELOCATABLE
+>>   	select ZONE_DMA32
+>> -	select NUMA
+>> -	select SMP
+>>   	select COMMON_CLK
+>>   	select USE_OF
+>>   	select BUILTIN_DTB
+>> @@ -2755,6 +2753,7 @@ config ARCH_SPARSEMEM_ENABLE
+>>   config NUMA
+>>   	bool "NUMA Support"
+>>   	depends on SYS_SUPPORTS_NUMA
+>> +	depends on SMP
+> can you solve your problem without this hunk ? I don't want to make NUMA
+> depeding on SMP. NUMA just selects memory archtitecture.
 
-Upon further research, I found that bzip2 removal was already=20
-implemented as part of zstd addition, but were apparently abandoned in=20
-an effort to get zstd in. I will check those patches and try sending=20
-those instead. Thanks to all reviewers for comments on this patch.
+Hi Thomas,
+
+I have tested the following three configs on the Loongson platform:
+(1) !NUMA and !SMP,
+(2) !NUMA and SMP,
+(3) NUMA and SMP,
+everything is all right.
+
+But there exists the following build error under NUMA and !SMP:
+
+   CC      arch/mips/kernel/asm-offsets.s
+In file included from ./include/linux/gfp.h:9:0,
+                  from ./include/linux/xarray.h:14,
+                  from ./include/linux/radix-tree.h:19,
+                  from ./include/linux/fs.h:15,
+                  from ./include/linux/compat.h:17,
+                  from arch/mips/kernel/asm-offsets.c:12:
+./include/linux/topology.h: In function ‘numa_node_id’:
+./include/linux/topology.h:119:2: error: implicit declaration of 
+function ‘cpu_logical_map’ [-Werror=implicit-function-declaration]
+   return cpu_to_node(raw_smp_processor_id());
+   ^
+cc1: some warnings being treated as errors
+scripts/Makefile.build:117: recipe for target 
+'arch/mips/kernel/asm-offsets.s' failed
+make[1]: *** [arch/mips/kernel/asm-offsets.s] Error 1
+arch/mips/Makefile:396: recipe for target 'archprepare' failed
+make: *** [archprepare] Error 2
+
+I find a patch to fix this kind of build errors [1], but it seems
+meaningless.
+
+According to the NUMA and SMP description in arch/mips/Kconfig,
+we will use only one CPU of a multiprocessor machine if !SMP,
+on single node systems leave NUMA disabled.
+
+So I think there is no need to use NUMA if !SMP, and also we should
+make NUMA depend on SMP to avoid build errors.
+
+Thanks,
+Tiezhu
+
+[1] MIPS: Loongson: Fix complie errors without CONFIG_SMP
+https://lore.kernel.org/patchwork/patch/1295704/
+
+>
+> Thomas.
+>
+
