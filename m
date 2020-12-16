@@ -2,68 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAED32DBDEF
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Dec 2020 10:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6572DBE36
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Dec 2020 11:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725940AbgLPJrQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Dec 2020 04:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbgLPJrP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Dec 2020 04:47:15 -0500
-Received: from orcam.me.uk (unknown [IPv6:2001:4190:8020::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70A4FC0613D6;
-        Wed, 16 Dec 2020 01:46:35 -0800 (PST)
-Received: from bugs.linux-mips.org (eddie.linux-mips.org [IPv6:2a01:4f8:201:92aa::3])
-        by orcam.me.uk (Postfix) with ESMTPS id 8A9112BE0EC;
-        Wed, 16 Dec 2020 09:46:33 +0000 (GMT)
-Date:   Wed, 16 Dec 2020 09:44:53 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCHSET] saner elf compat
-In-Reply-To: <20201216030154.GL3579531@ZenIV.linux.org.uk>
-Message-ID: <alpine.LFD.2.21.2012160924010.2104409@eddie.linux-mips.org>
-References: <20201203214529.GB3579531@ZenIV.linux.org.uk> <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com> <20201203230336.GC3579531@ZenIV.linux.org.uk> <alpine.LFD.2.21.2012071741280.2104409@eddie.linux-mips.org>
- <20201216030154.GL3579531@ZenIV.linux.org.uk>
+        id S1726046AbgLPKG2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Dec 2020 05:06:28 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:36972 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726016AbgLPKG2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Dec 2020 05:06:28 -0500
+Received: from [10.130.0.80] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax+cn129lfUjgBAA--.3304S3;
+        Wed, 16 Dec 2020 18:05:41 +0800 (CST)
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Archer Yan <ayan@wavecomp.com>,
+        David Daney <david.daney@cavium.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [QUESTION] support perf record --call-graph dwarf for mips
+Message-ID: <97fb66bf-51f8-a491-9eb4-10b2314cf82f@loongson.cn>
+Date:   Wed, 16 Dec 2020 18:05:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Ax+cn129lfUjgBAA--.3304S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYT7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0
+        xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s026x
+        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
+        JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+        1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_
+        WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJbIYCTnIWIevJa73UjIFyTuYvjfU52NtDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 16 Dec 2020, Al Viro wrote:
+Hi,
 
-> >  It may be worth pushing through GDB's gdb.threads/tls-core.exp test case, 
-> > making sure no UNSUPPORTED results have been produced due to resource 
-> > limits preventing a core from being dumped (and no FAILs, of course), with 
-> > o32/n32 native GDB.  This should guarantee our output is still as expected 
-> > by an interpreter.  Sadly I'm currently not set up for such testing though 
-> > eventually I mean to.
-> 
-> Umm...  What triple does one use for n32 gdb?
+In the current upstream mainline kernel, perf record --call-graph dwarf
+is not supported for architecture mips64. I find the following related
+patches about this feature by David Daney <david.daney@cavium.com> and
+Archer Yan <ayan@wavecomp.com> in Sep 2019.
 
- I don't think there's a standardised one, just configure with CC/CXX set 
-for n32 compilation, e.g.:
+[1/2] Support mips unwinding and dwarf-regs
+https://lore.kernel.org/patchwork/patch/1126521/
 
-$ /path/to/configure CC="gcc -mabi=n32" CXX="g++ -mabi=n32"
+[2/2] Support extracting off-line stack traces from user-space with perf
+https://lore.kernel.org/patchwork/patch/1126520/
 
-(and any other options set as usually).  This has to be with CC/CXX rather 
-than CFLAGS/CXXFLAGS so that it is guaranteed to be never overridden with 
-any logic that might do any fiddling with compilation options.  This will 
-set up the test suite accordingly.
+Is this a work in progress?
+Could you please give me some feedback?
+Thank you for your help.
 
- NB this may already be the compiler's default, depending on how it was 
-configured, i.e. if `--with-abi=n32' was used, in which case no extra 
-options will be required.  I don't know if any standard MIPS distribution 
-does it though; 64-bit MIPS/Debian might.  This will be reported with `gcc 
---help -v', somewhere along the way.
-
- Let me know if there are issues with this approach.
-
-  Maciej
+Thanks,
+Tiezhu
 
