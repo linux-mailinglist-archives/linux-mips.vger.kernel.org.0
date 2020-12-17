@@ -2,131 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBFF2DCB0A
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Dec 2020 03:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9041F2DCDFE
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Dec 2020 10:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbgLQCgM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 16 Dec 2020 21:36:12 -0500
-Received: from aposti.net ([89.234.176.197]:53254 "EHLO aposti.net"
+        id S1727304AbgLQI7I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Dec 2020 03:59:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32996 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727089AbgLQCgK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 16 Dec 2020 21:36:10 -0500
-Date:   Thu, 17 Dec 2020 02:35:14 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] MIPS: boot: Fix unaligned access with
- CONFIG_MIPS_RAW_APPENDED_DTB
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nathan Chancellor <natechancellor@gmail.com>, od@zcrc.me,
-        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        "# 3.4.x" <stable@vger.kernel.org>
-Message-Id: <QUPGLQ.GMF1AOUMK24W@crapouillou.net>
-In-Reply-To: <CAKwvOdnmt7v=+QdZbVYw9fDTeAhhHn0X++aLBa3uQVp7Gp=New@mail.gmail.com>
-References: <20201216233956.280068-1-paul@crapouillou.net>
-        <CAKwvOdnmt7v=+QdZbVYw9fDTeAhhHn0X++aLBa3uQVp7Gp=New@mail.gmail.com>
+        id S1725950AbgLQI7I (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 17 Dec 2020 03:59:08 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608195507;
+        bh=89Rrw3aBfmj49VIcsFK0hxM3oXxLCW7ouMh8y82kb8c=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=jSM8yIJeNXE2vbVBtrhtHPxiIvg3M2ZUY4PpsQ6HWbzbJ57SHE7Su1WHykBMYxJfv
+         7Oet2owLzFdWUI7lKwBCNx1Vhm0MmL9Qr9p6QM9EcWH3dZSse/NhX0IKLuPCeFhLp/
+         mvXDJARC/IrF++8iS9JIh6MdK/N1yM30FbdQM2hEdXi7HRbTW66pN3dQ7abUhi87a4
+         JhrKcevsI++WNiAtoNs7ZnNFtYOZQN+WlIGNRXSMY4P/zHHz4opdahBPzpfcheuR/V
+         VdAV3dgvfPJeH9QniPA9YLljEidWSb5XcqQchHh5xFooX9LHZni7L1Aknyp94dXP1J
+         w4bk84/dNUniw==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20201122095556.21597-3-sergio.paracuellos@gmail.com>
+References: <20201122095556.21597-1-sergio.paracuellos@gmail.com> <20201122095556.21597-3-sergio.paracuellos@gmail.com>
+Subject: Re: [PATCH v4 2/6] dt: bindings: add mt7621-clk device tree binding documentation
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     robh+dt@kernel.org, john@phrozen.org, tsbogend@alpha.franken.de,
+        gregkh@linuxfoundation.org, gch981213@gmail.com,
+        hackpascal@gmail.com, linux-clk@vger.kernel.org,
+        evicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, devel@driverdev.osuosl.org,
+        neil@brown.name
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        mturquette@baylibre.com
+Date:   Thu, 17 Dec 2020 00:58:26 -0800
+Message-ID: <160819550615.1580929.14234996916739809712@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nick,
+Quoting Sergio Paracuellos (2020-11-22 01:55:52)
+> Adds device tree binding documentation for clocks in the
+> MT7621 SOC.
+>=20
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>  .../bindings/clock/mediatek,mt7621-clk.yaml   | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt76=
+21-clk.yaml
+>=20
 
-Le mer. 16 déc. 2020 à 18:08, Nick Desaulniers 
-<ndesaulniers@google.com> a écrit :
-> On Wed, Dec 16, 2020 at 3:40 PM Paul Cercueil <paul@crapouillou.net> 
-> wrote:
->> 
->>  The compressed payload is not necesarily 4-byte aligned, at least 
->> when
->>  compiling with Clang. In that case, the 4-byte value appended to the
->>  compressed payload that corresponds to the uncompressed kernel image
->>  size must be read using get_unaligned_le().
-> 
-> Should it be get_unaligned_le32()?
+Rob?
 
-Indeed.
+> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.=
+yaml b/Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
+> new file mode 100644
+> index 000000000000..6aca4c1a4a46
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/mediatek,mt7621-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MT7621 Clock Device Tree Bindings
+> +
+> +maintainers:
+> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> +
+> +description: |
+> +  The MT7621 has a PLL controller from where the cpu clock is provided
+> +  as well as derived clocks for the bus and the peripherals. It also
+> +  can gate SoC device clocks.
+> +
+> +  Each clock is assigned an identifier and client nodes use this identif=
+ier
+> +  to specify the clock which they consume.
+> +
+> +  All these identifiers could be found in:
+> +  [1]: <include/dt-bindings/clock/mt7621-clk.h>.
+> +
+> +  The mt7621 clock node should be the child of a syscon node with the
+> +  required property:
+> +
+> +  - compatible: Should be one of the following:
+> +                "mediatek,mt7621-sysc", "syscon"
+> +
+> +  Refer to the bindings described in
+> +  Documentation/devicetree/bindings/mfd/syscon.yaml
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt7621-clk
+> +
+> +  "#clock-cells":
+> +    description:
+> +      The first cell indicates the clock gate number, see [1] for availa=
+ble
+> +      clocks.
+> +    const: 1
+> +
+> +  clock-output-names:
+> +    maxItems: 8
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +  - clock-output-names
 
->> 
->>  This fixes Clang-built kernels not booting on MIPS (tested on a 
->> Ingenic
->>  JZ4770 board).
->> 
->>  Fixes: b8f54f2cde78 ("MIPS: ZBOOT: copy appended dtb to the end of 
->> the kernel")
->>  Cc: <stable@vger.kernel.org> # v4.7
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> 
-> Hi Paul, thanks for the patch (and for testing with Clang)!
-> Alternatively, we could re-align __image_end to the next 4B multiple
-> via:
-> 
-> diff --git a/arch/mips/boot/compressed/ld.script
-> b/arch/mips/boot/compressed/ld.script
-> index 0ebb667274d6..349919eff5fb 100644
-> --- a/arch/mips/boot/compressed/ld.script
-> +++ b/arch/mips/boot/compressed/ld.script
-> @@ -27,6 +27,7 @@ SECTIONS
->                 /* Put the compressed image here */
->                 __image_begin = .;
->                 *(.image)
-> +               . = ALIGN(4);
->                 __image_end = .;
->                 CONSTRUCTORS
->                 . = ALIGN(16);
+Why is clock-output-names required? Hopefully it is not required.
 
-Actually that would not work (I did try that), since the 4-byte size 
-appended to the compressed payload is inside the *(.image) section. The 
-code that appends it (in scripts/Makefile.lib, I think) doesn't seem to 
-take care about aligning it to a 4-byte offset. I have no idea why it 
-does with GCC and doesn't with Clang, and I have no idea why the 
-compressed payload's size isn't aligned either.
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt7621-clk.h>
+> +
+> +    sysc: sysc@0 {
 
-> The tradeoff being up to 3 wasted bytes of padding in the compressed
-> image, vs fetching one value slower (assuming unaligned loads are
-> slower than aligned loads MIPS, IDK).  I doubt decompress_kernel is
-> called repeatedly, so let's take the byte saving approach of yours by
-> using unaligned loads!
-> 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+syscon@0? I don't think sysc is a standard node name.
 
-Thanks.
+> +      compatible =3D "mediatek,mt7621-sysc", "syscon";
+> +      reg =3D <0x0 0x100>;
+> +
+> +      pll {
 
-Cheers,
--Paul
+clock-controller? Why can't the parent device be the clk provider and
+have #clock-cells?
 
->>  ---
->>   arch/mips/boot/compressed/decompress.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->>  diff --git a/arch/mips/boot/compressed/decompress.c 
->> b/arch/mips/boot/compressed/decompress.c
->>  index c61c641674e6..47c07990432b 100644
->>  --- a/arch/mips/boot/compressed/decompress.c
->>  +++ b/arch/mips/boot/compressed/decompress.c
->>  @@ -117,7 +117,7 @@ void decompress_kernel(unsigned long 
->> boot_heap_start)
->>                  dtb_size = fdt_totalsize((void *)&__appended_dtb);
->> 
->>                  /* last four bytes is always image size in little 
->> endian */
->>  -               image_size = le32_to_cpup((void *)&__image_end - 4);
->>  +               image_size = get_unaligned_le32((void 
->> *)&__image_end - 4);
->> 
->>                  /* copy dtb to where the booted kernel will expect 
->> it */
->>                  memcpy((void *)VMLINUX_LOAD_ADDRESS_ULL + 
->> image_size,
->>  --
->>  2.29.2
->> 
-> 
-> 
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
+> +        compatible =3D "mediatek,mt7621-clk";
+> +        #clock-cells =3D <1>;
+> +        clock-output-names =3D "xtal", "cpu", "bus",
+> +                             "50m", "125m", "150m",
+> +                             "250m", "270m";
+> +      };
+> +    };
