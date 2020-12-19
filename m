@@ -2,57 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D4A2DF047
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Dec 2020 16:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4362DF049
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Dec 2020 16:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgLSPsK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 19 Dec 2020 10:48:10 -0500
-Received: from elvis.franken.de ([193.175.24.41]:50498 "EHLO elvis.franken.de"
+        id S1726748AbgLSPsQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 19 Dec 2020 10:48:16 -0500
+Received: from elvis.franken.de ([193.175.24.41]:50499 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726748AbgLSPsK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 19 Dec 2020 10:48:10 -0500
+        id S1726780AbgLSPsL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 19 Dec 2020 10:48:11 -0500
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kqeS8-0004Nk-00; Sat, 19 Dec 2020 16:47:28 +0100
+        id 1kqeS8-0004Nk-01; Sat, 19 Dec 2020 16:47:28 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id A920BC01CC; Sat, 19 Dec 2020 16:26:16 +0100 (CET)
-Date:   Sat, 19 Dec 2020 16:26:16 +0100
+        id 7D200C0279; Sat, 19 Dec 2020 16:39:57 +0100 (CET)
+Date:   Sat, 19 Dec 2020 16:39:57 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Bert Vermeulen <bert@biot.com>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Add support for Realtek RTL838x/RTL839x switch SoCs
-Message-ID: <20201219152616.GA5012@alpha.franken.de>
-References: <20201215183557.646034-1-bert@biot.com>
- <fbd86bc4-5826-5b2b-5818-3ccd39a090fb@rempel-privat.de>
- <a4d89688-347b-21af-ef29-a28cd480d2d9@biot.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     jiaqingtong97@163.com, mark.tomlinson@alliedtelesis.co.nz,
+        paulburton@kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH] MIPS: OCTEON: Add OCTEON II build and configuration
+ option
+Message-ID: <20201219153957.GB5012@alpha.franken.de>
+References: <20201218162845.9317-1-jiaqingtong97@163.com>
+ <c749749f-0d9b-461d-0f9b-f8ac828a7681@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a4d89688-347b-21af-ef29-a28cd480d2d9@biot.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c749749f-0d9b-461d-0f9b-f8ac828a7681@flygoat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Dec 18, 2020 at 12:27:32AM +0100, Bert Vermeulen wrote:
-> On 12/15/20 11:11 PM, Oleksij Rempel wrote:
-> > Hello Bert,
+On Sat, Dec 19, 2020 at 02:08:49PM +0800, Jiaxun Yang wrote:
+> 
+> 
+> 在 2020/12/19 上午12:28, jiaqingtong97@163.com 写道:
+> > From: Jia Qingtong <jiaqingtong97@163.com>
 > > 
-> > thank you for your work. Here are some comments..
+> > If building for OCTEON II only,we can select compiler options that
+> > give better code, but will not run on earlier chips.
 > 
-> Thanks for reviewing. I will send in a V2 with your comments all handled.
 > 
-> > I assume, after applying all needed changes, there will be no files within
-> > arch/mips/include/asm/mach-realtek :)
+> I'd rather add a workaround Kconfig option and default y for it.
+> In case no other optimization can be enabled for OCTANE2, like
 > 
-> I wish! Unfortunately I need somewhere to put the early printk init call,
-> and the SoC family ID checks -- as they are heavily used in various drivers.
+> WORKAROUND_OCTANE_BARRIER
 
-just as a prevention, don't put realtek specific files into mach-realtek,
-but only use realtek as directory name. The mach-xxx directories are
-special and I have a mission on my todo to move the non-special files
-into their own directores...
+please start them with WAR_ like the other workarounds I've converted
+to Kconfig. Something like
+
+WAR_OCTEON_BARRIER
+
+But the description talks about different compiler options, which I don't
+see in the patch ?
 
 Thomas.
 
