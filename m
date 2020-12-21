@@ -2,180 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B905B2DF937
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Dec 2020 07:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C462DF749
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Dec 2020 01:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726644AbgLUGVw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Dec 2020 01:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgLUGVv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Dec 2020 01:21:51 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEE6C0613D3;
-        Sun, 20 Dec 2020 22:21:11 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q18so9875298wrn.1;
-        Sun, 20 Dec 2020 22:21:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=cc:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WU57UDH9iBA+SpWG/JBlCFUVWISWmdR25NDdKT5/S3c=;
-        b=g4p3u8GmrJminYSYCpiWCYBbi6mwQemjkAQModu/zMOx9wAjm6GE9kLEsKYRl7dVEj
-         glKQpshSdTb/svbVodf1zBvONtlM0hqU+/ASJYlrg+GHyf7B3aniYpW6hL5qyFHUe9Ix
-         lyM27/ldSLW+DUqsuukDrn0L532vUYHp1EXmCnYgX8yY/BNGdoCxZMVzQylPJKEXjor0
-         7CUK1uNmLxdxp2HNISAliGLGnmchfPeMMng5PO6Tj+v0H2MsbfbyDzxBkGZdkUPpuhme
-         1cCOQxAuBPoqV1+ohAnY1R29b/umBR0yQxHFIEQ+gjql3qcv9vRJWeIni4JxQlSQhwcX
-         /ntg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WU57UDH9iBA+SpWG/JBlCFUVWISWmdR25NDdKT5/S3c=;
-        b=ccMd8oyhioa8JWnLxJUL60P93UtwZRoezvHiHNERJkH/+CyJHeixnZZrGAaiyC31BL
-         /8I3TTFLOr7EV/OPlUQO1z1R4guoOGy2M1bImjvXZznyJkFJ8H15urOXmXFaf+a3CuBm
-         7EpGmY38uEErIZPT+NI8g28NsRg4B6SafICkXwG1ijK/8ioZ3Ar4+r+SQDsNsf+YwKXS
-         Qr7QvhZxuSEfoubzICJ1EXb16YN/xqrnW/wWc1ThGXaBpEZEViG/mSrR+X9leGferDs3
-         wa6PLktqcPt/d561uHPWF/4oaxEH6MKIGo4MHFb8QY1ORUsEfBUY01uVUKzuseg/dGQD
-         s5lQ==
-X-Gm-Message-State: AOAM533sGzHFQAlavxHOFY7R/N7RtU33tWBBD7w+Ag2Se72x0GDPZ7kD
-        2yXOyPjXkm9t/ge5HyziZf4IUJ7HzZxeLw==
-X-Google-Smtp-Source: ABdhPJwytmEUOzZSF9jWilBV08Nu0od0fJlT0cOl+k5I/CICI8GpuyJTO/fBARjwip72nszUqtF0rQ==
-X-Received: by 2002:adf:d085:: with SMTP id y5mr15571261wrh.41.1608497695921;
-        Sun, 20 Dec 2020 12:54:55 -0800 (PST)
-Received: from ?IPv6:2001:a61:2467:2f01:faca:3d43:5e40:30d1? ([2001:a61:2467:2f01:faca:3d43:5e40:30d1])
-        by smtp.gmail.com with ESMTPSA id l8sm21563534wmf.35.2020.12.20.12.54.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Dec 2020 12:54:55 -0800 (PST)
-Cc:     mtk.manpages@gmail.com, Vineet Gupta <vgupta@synopsys.com>,
-        linux-snps-arc@lists.infradead.org, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>, libc-alpha@sourceware.org
-Subject: Re: [PATCH] cacheflush.2: Document Architecture-specific variants
-To:     Alejandro Colomar <alx.manpages@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        linux-man@vger.kernel.org
-References: <20201214143852.16565-1-alx.manpages@gmail.com>
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <53a3c827-3e83-441b-8192-afdf323ca296@gmail.com>
-Date:   Sun, 20 Dec 2020 21:54:53 +0100
+        id S1726504AbgLUAjQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 20 Dec 2020 19:39:16 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:55377 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725272AbgLUAjP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 20 Dec 2020 19:39:15 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2DE8B5803F2;
+        Sun, 20 Dec 2020 19:38:09 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sun, 20 Dec 2020 19:38:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        subject:to:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=V
+        ebSOKJOTjgaSNitGFxute0whnLIjuICjIxh5PngH4I=; b=iL6DgZ97JhOEot1/I
+        e9AJ8wTCmP8yB6UK5kByRx32wDO+L+gyVxFmF6dcwgfUwkNKsa3dQDhpT6hxoml4
+        mldZuoW8edXLAwbQqoeFRqvCXTjDPx86HV9MwFEJY+MqUAbV91nM4rgH0D1AChDg
+        f6HEjlxl7sA9AChi9vcbbkIUKiTjAWBFmuq7v7hctHdJ0ToTnTjmLBNMCZg2Y5Wk
+        goCiXRcN+FMJlexZ/EI0GpgntqeFAPjwFCSS8QFPQumnS2wqfw/vS9nQYOPoaJkC
+        AZMJ7DTgEJjhx6jjE75lGONmAKexhx76RkKrX1rugCZnHhp4S3JEQc7QaocDV187
+        GBcAg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=VebSOKJOTjgaSNitGFxute0whnLIjuICjIxh5PngH
+        4I=; b=FcoyUwNGvm+AB862qiALXjXNQ1Qwr/VPAq9BzorEj1PBmW5GLL5j8IOvb
+        CXF1mqb7jUAtyOFUXqLCrxI2e5MlkzgGROhEQ6w+673iXr/6aCogp4nwfhSgCJrK
+        9uTjbcOlm7TBN9Y4bcofYDtp3PcHvPTE+++nWmZ34KJx3cJEx42QsFm4VtxifRxb
+        d9J7xLy+aBXLXDx61tM9UwNQOIWMftNtOspUMqL0vxASVgvJtazs7Jt91wGlMpAA
+        Q084KmQyYzRGlEY/VPVREbdYSql3GWA9I8pRnfmI28/fMmktKILnsZCmX1mVhI67
+        OyfcQ2+bTwqsCkhBT9oK96CKvPahA==
+X-ME-Sender: <xms:cO7fXyq-r32f4H2JjiC5COKUDMvZFuB_BcW02QIgh9CfkG0yam2n7Q>
+    <xme:cO7fXwrQW2u6eWbWAWWzbp_MLhLMS0gbq4zJohmpd4Sp506RmagSWkOG5Gkf531F-
+    BiwL_kjlKtXWEgW5Lw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddtuddgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdeftfenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeefleduiedtvdekffeggfeukeejgeeffeetlefghfekffeuteei
+    jeeghefhueffvdenucfkphepgeehrdeffedrhedtrddvheegnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhl
+    hihgohgrthdrtghomh
+X-ME-Proxy: <xmx:cO7fX3PomJ_K55AYDJbvLc-NGkvt8PJ1Qp63SyxVA0mW3vpvvv6bnw>
+    <xmx:cO7fXx632Z0QdCHp7rQqLrNl441EUP6atulpGxx-8yywPAQVyAWjNw>
+    <xmx:cO7fXx6wI-DNSNWed4PBka8KzBFV5ahyULBfDFVRC9Os8E5Cuv9PMQ>
+    <xmx:cO7fXzEEJnlwdZsYEMnpUcvnPLFWE6hit4cP6Fkdr5afnoyjYYzjneyMMyU>
+Received: from [0.0.0.0] (li1000-254.members.linode.com [45.33.50.254])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 5CCBC24005B;
+        Sun, 20 Dec 2020 19:38:07 -0500 (EST)
+Subject: Re: CPUs with EVA support
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+References: <20201220193201.GA3184@alpha.franken.de>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <d45cb374-f3dc-8c26-6b0f-27bec45854a9@flygoat.com>
+Date:   Mon, 21 Dec 2020 08:38:00 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <20201214143852.16565-1-alx.manpages@gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20201220193201.GA3184@alpha.franken.de>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Alex
+ÔÚ 2020/12/21 ÉÏÎç3:32, Thomas Bogendoerfer Ð´µÀ:
+> Hi;
+>
+> I've started looking how to get rid of get_fs/set_fs for MIPS and
+> my current obstacle is EVA support.
+>
+> Looking for CPUs supporting EVA I only found P5600, are there more ?
 
-On 12/14/20 3:38 PM, Alejandro Colomar wrote:
-> Signed-off-by: Alejandro Colomar <alx.manpages@gmail.com>
-> ---
-> 
-> Hi Michael,
-> 
-> Please apply this patch after
-> '[PATCH v5] cacheflush.2: Document __builtin___clear_cache() as a more
->  portable alternative'.
+Hi Thomas,
 
-Thanks. Applied.
+It is a optional feature for M14k but nobody enabled it :-(
 
->  man2/cacheflush.2 | 42 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
-> diff --git a/man2/cacheflush.2 b/man2/cacheflush.2
-> index fc35f1a0b..0761b429a 100644
-> --- a/man2/cacheflush.2
-> +++ b/man2/cacheflush.2
-> @@ -31,6 +31,10 @@ cacheflush \- flush contents of instruction and/or data cache
->  .PP
->  .BI "int cacheflush(char *" addr ", int "nbytes ", int "cache );
->  .fi
-> +.PP
-> +.IR Note :
-> +On some architectures,
-> +there is no glibc wrapper for this system call; see NOTES.
->  .SH DESCRIPTION
->  .BR cacheflush ()
->  flushes the contents of the indicated cache(s) for the
-> @@ -87,6 +91,44 @@ but nowadays, Linux provides a
->  .BR cacheflush ()
->  system call on some other architectures, but with different arguments.
->  .SH NOTES
-> +.SS Architecture-specific variants
-> +Glibc provides a wrapper for this system call,
-> +with the prototype shown in SYNOPSIS,
-> +for the following architectures:
-> +ARC, CSKY, MIPS, and NIOS2.
-> +.PP
-> +On some other architectures,
-> +Linux provides this system call, with different arguments:
-> +.TP
-> +M68K:
-> +.PP
-> +.in +4n
-> +.EX
-> +.BI "int cacheflush(unsigned long " addr ", int " scope ", int " cache ,
-> +.BI "               unsigned long " len );
-> +.EE
-> +.in
+>
+> Does someone sell boards with an EVA enabled CPU ?
 
-I made the formatting rather:
+Baikal-T1 supports EVA.
 
-[[
-.TP
-M68K:
-.nf
-.BI "int cacheflush(unsigned long " addr ", int " scope ", int " cache ,
-.BI "               unsigned long " len );
-.fi
-]]
+>
+> How good is EVA support in qemu ?
 
-That's for consistency wqith the SYNOPSIS sections, where .EX/.EE 
-isn't used.
+EVA is functional in QEMU.
+I had tested it with P5600 malta system.
 
-> +.TP
-> +SH:
-> +.PP
-> +.in +4n
-> +.EX
-> +.BI "int cacheflush(unsigned long " addr ", unsigned long " len ", int " op );
-> +.EE
-> +.in
-> +.TP
-> +NDS32:
-> +.PP
-> +.in +4n
-> +.EX
-> +.BI "int cacheflush(unsigned int " start ", unsigned int " end ", int " cache );
-> +.EE
-> +.in
-> +.PP
-> +On the above architectures,
-> +glibc does not provide a wrapper for this system call; call it using
-> +.BR syscall (2).
-> +.SS GCC alternative
->  Unless you need the finer grained control that this system call provides,
->  you probably want to use the GCC built-in function
->  .BR __builtin___clear_cache (),
+- Jiaxun
 
+>
+> Thomas.
+>
 
-Cheers,
-
-Michael
-
-
-
--- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
