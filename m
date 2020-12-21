@@ -2,130 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 495AA2DF96B
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Dec 2020 08:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB982DF97B
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Dec 2020 08:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725897AbgLUHFT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Dec 2020 02:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726239AbgLUHFT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Dec 2020 02:05:19 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF3BC061282
-        for <linux-mips@vger.kernel.org>; Sun, 20 Dec 2020 23:04:38 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id l11so21261462lfg.0
-        for <linux-mips@vger.kernel.org>; Sun, 20 Dec 2020 23:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Q2FNlZen8Z3CefSVyQlwjKqykMaoBgbJuTLV2rj/z9Q=;
-        b=HcUqFU3kmrArg7OBxP13O7muBazyNSuUfxT+zLtWjCbYaYkK/WQ4/5p6NjoE9m9lLp
-         vm9BJIJipGvS0H3AHnBT3Mo6sdHz1H95hCVc0XcGOWFgMr/7M31bKjRo6MyGZ5jo15Tg
-         oYVs2XUlCyKUhbyA21kEw6TbEDpMqscS2YXBXzkofJfa7H1VigO+2S/jq7gj/9kVssKm
-         vvPBsQUlfTspVK6W7luJvNS45L4KmDDfbTy9daBqfw1z/aEzEBfp4rpOHgkyVAbj/KqZ
-         jkSvVkrDzGoTZuJ1KHYcHuySgum7dIkx1EtzwJkX0NqvRxgAcm+CQhQpKd9YMxS6qgQW
-         Mmsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Q2FNlZen8Z3CefSVyQlwjKqykMaoBgbJuTLV2rj/z9Q=;
-        b=EDf3f+hZxGgObrpSLEgjwH/x9a+k8dqpbn2ER5JTXI/Cl/ba6nqAM64rresHODbkVD
-         naiSqXIsNFqWnRoZQ6GyDjGPhazteraFacPjliIErTRIu5fYVGKtmSAS/dLnHAhEYZtj
-         +8fCf19AvqnbKuuylvqXbrr/8FAlM0Q0fGcDXxamo8GI0FSDqL35nd21XnOMEv0za1lU
-         zhKZEFGPLP8fKvp+SBTkgRAcqLaHj4pXOfNJE3I6TV0Y2l/mACyOTB3ZI2mSNu3rJM8Y
-         NkRz0NGQpO+iCxhJbhGbqifJVI0SW5bL1dr6CPH8Fc+rbuYSZyO/QAdAC2WZlUH58ODc
-         IDBw==
-X-Gm-Message-State: AOAM533HZ2WpO9GEAQST5wBBgDE70YHEY7OGkUWYJsF8YkXt79RDCIy/
-        oBEKzhiVk240Jr/niNw3gAzcREZ63Cs=
-X-Google-Smtp-Source: ABdhPJzz8dGr9ySyrPKkM8Sr+ivzYTC5+pEQnIN2iSE59t8cq5Ak2wVgkZZ/vGfaEHTjPTxw3+/YKQ==
-X-Received: by 2002:a19:85c1:: with SMTP id h184mr5825067lfd.243.1608534277420;
-        Sun, 20 Dec 2020 23:04:37 -0800 (PST)
-Received: from mobilestation ([95.79.141.114])
-        by smtp.gmail.com with ESMTPSA id y20sm2086863lji.86.2020.12.20.23.04.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Dec 2020 23:04:36 -0800 (PST)
-Date:   Mon, 21 Dec 2020 10:04:34 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org
+        id S1725993AbgLUHcE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Dec 2020 02:32:04 -0500
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:43971 "EHLO
+        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725791AbgLUHcD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 21 Dec 2020 02:32:03 -0500
+X-Greylist: delayed 552 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Dec 2020 02:32:03 EST
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 59BA3614;
+        Mon, 21 Dec 2020 02:22:05 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 21 Dec 2020 02:22:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=n
+        B714MSBqlX8wmMNfLsfvDUtwKt9mT5LD90W+DCBA+w=; b=Ofm6aU7m+do/7RKxT
+        Uh4y7Ksj6oJfaLLmGhpX5HSonopYGdRhKMQWjFqLdnzSyvAMa1vYfgGf9AtEkVOH
+        OsE9rXsDx4HVaO0diLU6xH6XOQ/bSK/fNYQ0tfHWvT5czQKbTJ1SXp6RyFcZll6E
+        2hneGThrRRBmV6kSj7yuL/sjx+d/+s2YPCuw+HL+581f3R8bejbWjZqpuo2lMp/7
+        HawLJ+4glEfafPbgoO7WxEiP2x1r/uNEaqaH0w7ed4JHCz1QzMmhhzH6Yj8vtGb3
+        87mbfQw0cT0ShUhgjGEjCCkq9qbvC2JbtuE657aEJcP7YfG681BdHCd2C+WWsWGV
+        wziJg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=nB714MSBqlX8wmMNfLsfvDUtwKt9mT5LD90W+DCBA
+        +w=; b=JYaBIzNi5z0Ht6sS6eDKshdTkwAKSpYXBtXA+yX14b6SjKdSBzrhunxMt
+        2nLA8y/lxKr7sR8kWFANzjrfR/En4WJDF40uEDLY9yet7/L45g/LelCm93ftfCjK
+        F/20MRC53Qu+KnaJ5kX7kURTexkeDg4qQIV3ehwPpS4ncpu99Rgt0A5JSt6M52FC
+        BNx5wLfPGjGzjyQBHBmevJVmjsOX5WwACmSR6yMf3SGjW0Xif2hqQsqBNM90L1Wk
+        /6YsRM9Ze4c7Qeh1DxsWa1qOWvHXWRWuIznT3xzeQ+mRKVm56tXl4Q3FxvCwpAU5
+        zpNO+BEfV7SiiBryJufpqOvHadpLA==
+X-ME-Sender: <xms:G03gX-HKhN0xV0eXVp1ZQWMPX9ri6lxNdKwenxxmT68-Dfne8Eonqg>
+    <xme:G03gX_WjMg3cL5dRNL5OxzvzWUhqselIQujsKLZ6Bd4PV1pffzyfCmmHYVzTeEYBQ
+    u1y8OBzM5skCCNqrOg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddtuddguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepteeghfekffffudejheffuddujeekudfhgeevledtveefkeev
+    ieffkeevgeejieeinecuffhomhgrihhnpegvlhgvtghtrhhonhhitghsfigvvghklhihrd
+    gtohhmnecukfhppeduudeirddvvdekrdekgedrvdenucevlhhushhtvghrufhiiigvpedt
+    necurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorg
+    htrdgtohhm
+X-ME-Proxy: <xmx:G03gX4JFGrFE6nYFHUMaU_qSRNY7G9mvHu_aMILw6aW8p4XqXRgiOA>
+    <xmx:G03gX4HQXRfa3lNR2-aYvVf7HMiQ0eoWBgK09hv8PmU7XMV21qnSpw>
+    <xmx:G03gX0VxdY3BfpCV4FQQdnPAnMQQa7nNrU0lTyA8Oyzct4YUWZdNzA>
+    <xmx:HE3gX9fQpRfa8l894TjQKrv87AXr0Sf913gbpdbuFFZ8JHtIRhl2k2K-swGofoW9>
+Received: from [10.20.194.111] (unknown [116.228.84.2])
+        by mail.messagingengine.com (Postfix) with ESMTPA id AAEC4108005F;
+        Mon, 21 Dec 2020 02:22:02 -0500 (EST)
 Subject: Re: CPUs with EVA support
-Message-ID: <20201221070434.yom3neoeir43ek2k@mobilestation>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, syq@debian.org
 References: <20201220193201.GA3184@alpha.franken.de>
  <d45cb374-f3dc-8c26-6b0f-27bec45854a9@flygoat.com>
+ <20201221070434.yom3neoeir43ek2k@mobilestation>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <60a46e43-10da-f86e-d2b5-827d0e810b6d@flygoat.com>
+Date:   Mon, 21 Dec 2020 15:21:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20201221070434.yom3neoeir43ek2k@mobilestation>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d45cb374-f3dc-8c26-6b0f-27bec45854a9@flygoat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Thomas, Jiaxun
 
-On Mon, Dec 21, 2020 at 08:38:00AM +0800, Jiaxun Yang wrote:
-> 在 2020/12/21 上午3:32, Thomas Bogendoerfer 写道:
-> > Hi;
-> > 
-> > I've started looking how to get rid of get_fs/set_fs for MIPS and
-> > my current obstacle is EVA support.
-> > 
-> > Looking for CPUs supporting EVA I only found P5600, are there more ?
-> 
-> Hi Thomas,
-> 
-> It is a optional feature for M14k but nobody enabled it :-(
-> 
-> > 
-> > Does someone sell boards with an EVA enabled CPU ?
-> 
-> Baikal-T1 supports EVA.
 
-Yeap, Baikal-T1 SoC does support EVA since based on P5600 does.
-Moreover the feature is enabled in my CSP code by default, but
-the segments mapping is initialized to fully match the legacy
-MIPS address space layout. 
-          
-Regarding the boards with Baikal-T1 to purchase. It's available and
-demonstrated on the company site:
-https://www.baikalelectronics.com/products/339/
-        
-Currently a single retailer selling the item is Russian-based:
-https://www.chipdip.ru/product/bfk3.1?from=suggest_product
-(Alas the site doesn't have an English version, so please use the
-Goog-xlate.)
-If for some reason you still won't be able to purchase it from there
-please send me an email directly.
+在 2020/12/21 15:04, Serge Semin 写道:
+> Hello Thomas, Jiaxun
+>
+> On Mon, Dec 21, 2020 at 08:38:00AM +0800, Jiaxun Yang wrote:
+[...]
+> (Today I've got a suspicious message on my corporate inbox from a guy
+> - Yunqiang Su with email domain @cipunited.com, who stated that CIP
+> United wants to purchase one or more of them for you and requested to
+> give them the company sells contacts. I didn't response, because the
+> message structure looked more like a spam, than an official request.
+> It was also strange not to see you in CC.)
 
-(Today I've got a suspicious message on my corporate inbox from a guy
-- Yunqiang Su with email domain @cipunited.com, who stated that CIP
-United wants to purchase one or more of them for you and requested to
-give them the company sells contacts. I didn't response, because the
-message structure looked more like a spam, than an official request.
-It was also strange not to see you in CC.)
++ Yunqiang's Debian mailbox
 
-Regarding the Baikal-T1 boards being finally supported in the kernel.
-I am still working on it. There are several more SoC-device drivers
-to fix and I'll be ready to submit the CSP/BSP code to the MIPS arch
-subsystem.
-    
--Sergey
+Yunqiang is well-known as Debian-MIPS maintainer, I just informed him
+a kernel developer is looking for EVA enabled hardware.
 
-> 
-> > 
-> > How good is EVA support in qemu ?
-> 
-> EVA is functional in QEMU.
-> I had tested it with P5600 malta system.
-> 
-> - Jiaxun
-> 
-> > 
-> > Thomas.
-> > 
-> 
+Probably something went wrong with his company email?
+
+CIP United is running all MIPS business in China[1].
+
+Thanks.
+
+[1]: 
+https://www.electronicsweekly.com/news/business/mips-lands-china-2020-08/
+
+- Jiaxun
+
+>
+> Regarding the Baikal-T1 boards being finally supported in the kernel.
+> I am still working on it. There are several more SoC-device drivers
+> to fix and I'll be ready to submit the CSP/BSP code to the MIPS arch
+> subsystem.
+>      
+> -Sergey
+>
+>>> How good is EVA support in qemu ?
+>> EVA is functional in QEMU.
+>> I had tested it with P5600 malta system.
+>>
+>> - Jiaxun
+>>
+>>> Thomas.
+>>>
+
