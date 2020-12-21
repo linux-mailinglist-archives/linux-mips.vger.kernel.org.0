@@ -2,100 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF422DF8ED
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Dec 2020 06:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495AA2DF96B
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Dec 2020 08:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727670AbgLUFpJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Dec 2020 00:45:09 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:55417 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727066AbgLUFpJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 21 Dec 2020 00:45:09 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CzpLk1qPgz9sVk;
-        Mon, 21 Dec 2020 16:44:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1608529465;
-        bh=8q8pjXmt3fb3/FcKFZZhBpNNcXsp66j8Isw1H4VoFss=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZnWF70NmUxyOGkj7ajnBegDo04rv8gH5Ux9NWJhGuiFgnNMVogs2qsK/JPPvTOxX3
-         hzwMtUhjiDSqvHc4ZZWFFrTwkUdkYXJq/1ML2X0U5qamtbWBfarkCtNAXDelPjKyYu
-         4R5GrwJUkFnZSYIfsBFzv3+C8RVv3a9uzsg9fDjFKnZkRtQDx75FnOmDIw99taeAnd
-         QCskX9h/ngj+6oMYoBPKKaJh3wx/SkbDouSAAbUuPyGD0ebzLrrNquc0B/69DXdzQf
-         fJmTp61f2fzdZls70bVcMCLTyxKnMkjf3NMjT+RK4eF560XOppbITSBixDl2QbJUdX
-         VnJ3dZzhE+mIA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Enrico Weigelt\, metux IT consult" <info@metux.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, msalter@redhat.com,
-        jacquiot.aurelien@gmail.com, gerg@linux-m68k.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "maintainer\:X86 ARCHITECTURE \(32-BIT AND 64-BIT\)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org,
-        linux-c6x-dev@linux-c6x.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        "open list\:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>, linux-s390@vger.kernel.org,
-        Linux-SH <linux-sh@vger.kernel.org>, sparclinux@vger.kernel.org,
-        "open list\:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH 01/23] kernel: irq: irqdescs: warn on spurious IRQ
-In-Reply-To: <CAHp75VfYz_K2BYOxqmSx0q+1F2F9Lp1eb70RrNYzJHs3FX+quQ@mail.gmail.com>
-References: <20201218143122.19459-1-info@metux.net> <20201218143122.19459-2-info@metux.net> <CAHp75VfYz_K2BYOxqmSx0q+1F2F9Lp1eb70RrNYzJHs3FX+quQ@mail.gmail.com>
-Date:   Mon, 21 Dec 2020 16:44:13 +1100
-Message-ID: <87ft3zyaqa.fsf@mpe.ellerman.id.au>
+        id S1725897AbgLUHFT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Dec 2020 02:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726239AbgLUHFT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Dec 2020 02:05:19 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF3BC061282
+        for <linux-mips@vger.kernel.org>; Sun, 20 Dec 2020 23:04:38 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id l11so21261462lfg.0
+        for <linux-mips@vger.kernel.org>; Sun, 20 Dec 2020 23:04:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Q2FNlZen8Z3CefSVyQlwjKqykMaoBgbJuTLV2rj/z9Q=;
+        b=HcUqFU3kmrArg7OBxP13O7muBazyNSuUfxT+zLtWjCbYaYkK/WQ4/5p6NjoE9m9lLp
+         vm9BJIJipGvS0H3AHnBT3Mo6sdHz1H95hCVc0XcGOWFgMr/7M31bKjRo6MyGZ5jo15Tg
+         oYVs2XUlCyKUhbyA21kEw6TbEDpMqscS2YXBXzkofJfa7H1VigO+2S/jq7gj/9kVssKm
+         vvPBsQUlfTspVK6W7luJvNS45L4KmDDfbTy9daBqfw1z/aEzEBfp4rpOHgkyVAbj/KqZ
+         jkSvVkrDzGoTZuJ1KHYcHuySgum7dIkx1EtzwJkX0NqvRxgAcm+CQhQpKd9YMxS6qgQW
+         Mmsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Q2FNlZen8Z3CefSVyQlwjKqykMaoBgbJuTLV2rj/z9Q=;
+        b=EDf3f+hZxGgObrpSLEgjwH/x9a+k8dqpbn2ER5JTXI/Cl/ba6nqAM64rresHODbkVD
+         naiSqXIsNFqWnRoZQ6GyDjGPhazteraFacPjliIErTRIu5fYVGKtmSAS/dLnHAhEYZtj
+         +8fCf19AvqnbKuuylvqXbrr/8FAlM0Q0fGcDXxamo8GI0FSDqL35nd21XnOMEv0za1lU
+         zhKZEFGPLP8fKvp+SBTkgRAcqLaHj4pXOfNJE3I6TV0Y2l/mACyOTB3ZI2mSNu3rJM8Y
+         NkRz0NGQpO+iCxhJbhGbqifJVI0SW5bL1dr6CPH8Fc+rbuYSZyO/QAdAC2WZlUH58ODc
+         IDBw==
+X-Gm-Message-State: AOAM533HZ2WpO9GEAQST5wBBgDE70YHEY7OGkUWYJsF8YkXt79RDCIy/
+        oBEKzhiVk240Jr/niNw3gAzcREZ63Cs=
+X-Google-Smtp-Source: ABdhPJzz8dGr9ySyrPKkM8Sr+ivzYTC5+pEQnIN2iSE59t8cq5Ak2wVgkZZ/vGfaEHTjPTxw3+/YKQ==
+X-Received: by 2002:a19:85c1:: with SMTP id h184mr5825067lfd.243.1608534277420;
+        Sun, 20 Dec 2020 23:04:37 -0800 (PST)
+Received: from mobilestation ([95.79.141.114])
+        by smtp.gmail.com with ESMTPSA id y20sm2086863lji.86.2020.12.20.23.04.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Dec 2020 23:04:36 -0800 (PST)
+Date:   Mon, 21 Dec 2020 10:04:34 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: CPUs with EVA support
+Message-ID: <20201221070434.yom3neoeir43ek2k@mobilestation>
+References: <20201220193201.GA3184@alpha.franken.de>
+ <d45cb374-f3dc-8c26-6b0f-27bec45854a9@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d45cb374-f3dc-8c26-6b0f-27bec45854a9@flygoat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
-> On Fri, Dec 18, 2020 at 4:37 PM Enrico Weigelt, metux IT consult
-> <info@metux.net> wrote:
->
->> +               if (printk_ratelimit())
->> +                       pr_warn("spurious IRQ: irq=%d hwirq=%d nr_irqs=%d\n",
->> +                               irq, hwirq, nr_irqs);
->
-> Perhaps you missed pr_warn_ratelimit() macro which is already in the
-> kernel for a long time.
+Hello Thomas, Jiaxun
 
-pr_warn_ratelimited() which calls printk_ratelimited().
+On Mon, Dec 21, 2020 at 08:38:00AM +0800, Jiaxun Yang wrote:
+> 在 2020/12/21 上午3:32, Thomas Bogendoerfer 写道:
+> > Hi;
+> > 
+> > I've started looking how to get rid of get_fs/set_fs for MIPS and
+> > my current obstacle is EVA support.
+> > 
+> > Looking for CPUs supporting EVA I only found P5600, are there more ?
+> 
+> Hi Thomas,
+> 
+> It is a optional feature for M14k but nobody enabled it :-(
+> 
+> > 
+> > Does someone sell boards with an EVA enabled CPU ?
+> 
+> Baikal-T1 supports EVA.
 
-And see the comment above printk_ratelimit():
+Yeap, Baikal-T1 SoC does support EVA since based on P5600 does.
+Moreover the feature is enabled in my CSP code by default, but
+the segments mapping is initialized to fully match the legacy
+MIPS address space layout. 
+          
+Regarding the boards with Baikal-T1 to purchase. It's available and
+demonstrated on the company site:
+https://www.baikalelectronics.com/products/339/
+        
+Currently a single retailer selling the item is Russian-based:
+https://www.chipdip.ru/product/bfk3.1?from=suggest_product
+(Alas the site doesn't have an English version, so please use the
+Goog-xlate.)
+If for some reason you still won't be able to purchase it from there
+please send me an email directly.
 
-/*
- * Please don't use printk_ratelimit(), because it shares ratelimiting state
- * with all other unrelated printk_ratelimit() callsites.  Instead use
- * printk_ratelimited() or plain old __ratelimit().
- */
+(Today I've got a suspicious message on my corporate inbox from a guy
+- Yunqiang Su with email domain @cipunited.com, who stated that CIP
+United wants to purchase one or more of them for you and requested to
+give them the company sells contacts. I didn't response, because the
+message structure looked more like a spam, than an official request.
+It was also strange not to see you in CC.)
 
+Regarding the Baikal-T1 boards being finally supported in the kernel.
+I am still working on it. There are several more SoC-device drivers
+to fix and I'll be ready to submit the CSP/BSP code to the MIPS arch
+subsystem.
+    
+-Sergey
 
-cheers
+> 
+> > 
+> > How good is EVA support in qemu ?
+> 
+> EVA is functional in QEMU.
+> I had tested it with P5600 malta system.
+> 
+> - Jiaxun
+> 
+> > 
+> > Thomas.
+> > 
+> 
