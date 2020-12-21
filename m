@@ -2,125 +2,278 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E20342DFACC
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Dec 2020 11:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B692DFBB6
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Dec 2020 13:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726080AbgLUKIT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Dec 2020 05:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725804AbgLUKIS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Dec 2020 05:08:18 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E6FC061793;
-        Mon, 21 Dec 2020 02:07:38 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id g1so8376138ilk.7;
-        Mon, 21 Dec 2020 02:07:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qMI1qb6jm5Lag9GLrKzNd8c/nLzIAunUnseb/Ze4wwk=;
-        b=TNketNi86VoSW7yUCz1xJ0TySRbiCNnk6lgZVPNFHRq1Z0hYh2gKvfrjKM7LrvZdfw
-         RQePP3CI0izt8okVH5i0MDqzLe17kJ+gYsfp1t+Ps8IwCEHGQkv7O3PSU8DKD3ZNNffG
-         /JlM0O2eWxUHvRwz8qee/+LJwONqHO0lDu8V6J4W8M+AzN/jgGfMEfd8saM3jRp+ynNl
-         yyNQ52YpnwxSo70pHdjSzvzY1s3U8IilByiBPR9JecD00QG9hEu5BbgRdRErCXzWs2gF
-         45fFo4tr95q3qQ6Y+q0mxPqCFls3IDtt7iuwAPe+p0gTlRoSBsbkFCIhsAdHSkhvZ6+r
-         94Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qMI1qb6jm5Lag9GLrKzNd8c/nLzIAunUnseb/Ze4wwk=;
-        b=YYKLvGl49Km5hp+Bhy6/FVGJ+0Bs1nfjCqWnTl+18srqAkzbUwoRONQZ8fc0oxqVtK
-         K8zasPDI3EpqyiKJ7JGaqivlENoYT2EvhUaGwIeYGnvBldfIKZ4WQJDbI7dajvUJP+jU
-         I2Z1a/71m7Mmmx+UdTauIar3o5BA8H5IUXbnuH2FBrriA58Guqh/yOAQDj9MElWGkHxV
-         ls07dg3f9eF3pMIaOyGd9BmC0b5E3PzeeCtQoWQA/6vOiNpW6rUKLh15DgZa+/sCOyIs
-         2Gv6B683vv1YoKiiU12qLhDmnX9ZndeEtAZqd3BbVx8/yMcn9MrIxPn7osbk0X//571l
-         Mi3A==
-X-Gm-Message-State: AOAM532IJrq3cD4UeWGwIHg1XDotXF8tOTmhme06aQyNCMZoSIRSLQAl
-        SGAqA2+QLJQk0+1+TKBagaaq0zLivqz8H7DQHrQbPzj51EY=
-X-Google-Smtp-Source: ABdhPJxBtvImbDXQFJZFiuLU9iSSxkb054vusc68KLoVKz7M+YJaEYxx6P2xuo8zwNE89O9MkgEk4eONGxpDIef9SqA=
-X-Received: by 2002:a63:74b:: with SMTP id 72mr14619803pgh.4.1608542798518;
- Mon, 21 Dec 2020 01:26:38 -0800 (PST)
+        id S1725972AbgLUMEd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Dec 2020 07:04:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50304 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725771AbgLUMEd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 21 Dec 2020 07:04:33 -0500
+From:   Huacai Chen <chenhuacai@kernel.org>
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>
+Cc:     linux-mips@vger.kernel.org, kexec@lists.infradead.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Youling Tang <tangyouling@loongson.cn>
+Subject: [PATCH V3] MIPS: Loongson64: Add kexec/kdump support
+Date:   Mon, 21 Dec 2020 20:02:20 +0800
+Message-Id: <20201221120220.3186744-1-chenhuacai@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20201218143122.19459-1-info@metux.net> <20201218143122.19459-2-info@metux.net>
- <CAHp75VfYz_K2BYOxqmSx0q+1F2F9Lp1eb70RrNYzJHs3FX+quQ@mail.gmail.com> <87ft3zyaqa.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87ft3zyaqa.fsf@mpe.ellerman.id.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Dec 2020 11:27:27 +0200
-Message-ID: <CAHp75VeGs-x0-XgpLS0uB2oZmxKZREfUKM1ByUwmRquqFc2FPg@mail.gmail.com>
-Subject: Re: [PATCH 01/23] kernel: irq: irqdescs: warn on spurious IRQ
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, msalter@redhat.com,
-        jacquiot.aurelien@gmail.com, gerg@linux-m68k.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org,
-        linux-c6x-dev@linux-c6x.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>, linux-s390@vger.kernel.org,
-        Linux-SH <linux-sh@vger.kernel.org>, sparclinux@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 21, 2020 at 7:44 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
-> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
-> > On Fri, Dec 18, 2020 at 4:37 PM Enrico Weigelt, metux IT consult
-> > <info@metux.net> wrote:
-> >
-> >> +               if (printk_ratelimit())
-> >> +                       pr_warn("spurious IRQ: irq=%d hwirq=%d nr_irqs=%d\n",
-> >> +                               irq, hwirq, nr_irqs);
-> >
-> > Perhaps you missed pr_warn_ratelimit() macro which is already in the
-> > kernel for a long time.
->
-> pr_warn_ratelimited() which calls printk_ratelimited().
+From: Huacai Chen <chenhc@lemote.com>
 
-I stand corrected.
-Right, that's what I had in mind (actually didn't know that there are variants).
+Add kexec/kdump support for Loongson64 by:
+1, Provide Loongson-specific kexec functions: loongson_kexec_prepare(),
+   loongson_kexec_shutdown() and loongson_crash_shutdown();
+2, Provide Loongson-specific assembly code in kexec_smp_wait();
 
-Thanks!
+To start Loongson64, The boot CPU needs 3 parameters:
+fw_arg0: the number of arguments in cmdline (i.e., argc).
+fw_arg1: structure holds cmdline such as "root=/dev/sda1 console=tty"
+         (i.e., argv).
+fw_arg2: environment (i.e., envp, additional boot parameters from LEFI).
 
-> And see the comment above printk_ratelimit():
->
-> /*
->  * Please don't use printk_ratelimit(), because it shares ratelimiting state
->  * with all other unrelated printk_ratelimit() callsites.  Instead use
->  * printk_ratelimited() or plain old __ratelimit().
->  */
+Non-boot CPUs do not need one parameter as the IPI mailbox base address.
+They query their own IPI mailbox to get PC, SP and GP in a loopi, until
+the boot CPU brings them up.
 
+loongson_kexec_prepare(): Setup cmdline for kexec/kdump. The kexec/kdump
+cmdline comes from kexec's "append" option string. This structure will
+be parsed in fw_init_cmdline() of arch/mips/fw/lib/cmdline.c. Both image
+->control_code_page and the cmdline need to be in a safe memory region
+(memory allocated by the old kernel may be corrupted by the new kernel).
+In order to maintain compatibility for the old firmware, the low 2MB is
+reserverd and safe for Loongson. So let KEXEC_CTRL_CODE and KEXEC_ARGV_
+ADDR be here. LEFI parameters may be corrupted at runtime, so backup it
+at mips_reboot_setup(), and then restore it at loongson_kexec_shutdown()
+/loongson_crash_shutdown().
 
+loongson_kexec_shutdown(): Wake up all present CPUs and let them go to
+reboot_code_buffer. Pass the kexec parameters to kexec_args.
+
+loongson_crash_shutdown(): Pass the kdump parameters to kexec_args.
+
+The assembly part in kexec_smp_wait provide a routine as BIOS does, in
+order to keep secondary CPUs in a querying loop.
+
+The layout of low 2MB memory in our design:
+0x80000000, the first MB, the first 64K, Exception vectors
+0x80010000, the first MB, the second 64K, STR (suspend) data
+0x80020000, the first MB, the third and fourth 64K, UEFI HOB
+0x80040000, the first MB, the fifth 64K, RT-Thread for SMC
+0x80100000, the second MB, the first 64K, KEXEC code
+0x80108000, the second MB, the second 64K, KEXEC data
+
+Cc: Eric Biederman <ebiederm@xmission.com>
+Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+---
+ V3: Some minor improvements suggested by Jinyang He.
+
+ arch/mips/kernel/relocate_kernel.S |  28 +++++++
+ arch/mips/loongson64/reset.c       | 113 +++++++++++++++++++++++++++++
+ 2 files changed, 141 insertions(+)
+
+diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
+index ac870893ba2d..f649ffa0f427 100644
+--- a/arch/mips/kernel/relocate_kernel.S
++++ b/arch/mips/kernel/relocate_kernel.S
+@@ -6,6 +6,7 @@
+ 
+ #include <asm/asm.h>
+ #include <asm/asmmacro.h>
++#include <asm/cpu.h>
+ #include <asm/regdef.h>
+ #include <asm/mipsregs.h>
+ #include <asm/stackframe.h>
+@@ -133,6 +134,33 @@ LEAF(kexec_smp_wait)
+ #else
+ 	sync
+ #endif
++
++#ifdef CONFIG_CPU_LOONGSON64
++	/* s0:prid s1:initfn */
++	/* a0:base t1:cpuid t2:node t9:count */
++	mfc0		t1, CP0_EBASE
++	andi		t1, MIPS_EBASE_CPUNUM
++	dins		a0, t1, 8, 2       /* insert core id*/
++	dext		t2, t1, 2, 2
++	dins		a0, t2, 44, 2      /* insert node id */
++	mfc0		s0, CP0_PRID
++	andi		s0, s0, (PRID_IMP_MASK | PRID_REV_MASK)
++	beq		s0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3B_R1), 1f
++	beq		s0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3B_R2), 1f
++	b		2f                 /* Loongson-3A1000/3A2000/3A3000/3A4000 */
++1:	dins		a0, t2, 14, 2      /* Loongson-3B1000/3B1500 need bit 15~14 */
++2:	li		t9, 0x100          /* wait for init loop */
++3:	addiu		t9, -1             /* limit mailbox access */
++	bnez		t9, 3b
++	lw		s1, 0x20(a0)       /* check PC as an indicator */
++	beqz		s1, 2b
++	ld		s1, 0x20(a0)       /* get PC via mailbox reg0 */
++	ld		sp, 0x28(a0)       /* get SP via mailbox reg1 */
++	ld		gp, 0x30(a0)       /* get GP via mailbox reg2 */
++	ld		a1, 0x38(a0)
++	jr		s1                 /* jump to initial PC */
++#endif
++
+ 	j		s1
+ 	END(kexec_smp_wait)
+ #endif
+diff --git a/arch/mips/loongson64/reset.c b/arch/mips/loongson64/reset.c
+index 3bb8a1ed9348..c97bfdc8c922 100644
+--- a/arch/mips/loongson64/reset.c
++++ b/arch/mips/loongson64/reset.c
+@@ -6,9 +6,14 @@
+  * Copyright (C) 2009 Lemote, Inc.
+  * Author: Zhangjin Wu, wuzhangjin@gmail.com
+  */
++#include <linux/cpu.h>
++#include <linux/delay.h>
+ #include <linux/init.h>
++#include <linux/kexec.h>
+ #include <linux/pm.h>
++#include <linux/slab.h>
+ 
++#include <asm/bootinfo.h>
+ #include <asm/idle.h>
+ #include <asm/reboot.h>
+ 
+@@ -47,12 +52,120 @@ static void loongson_halt(void)
+ 	}
+ }
+ 
++#ifdef CONFIG_KEXEC
++
++/* 0X80000000~0X80200000 is safe */
++#define MAX_ARGS	64
++#define KEXEC_CTRL_CODE	0xFFFFFFFF80100000UL
++#define KEXEC_ARGV_ADDR	0xFFFFFFFF80108000UL
++#define KEXEC_ARGV_SIZE	COMMAND_LINE_SIZE
++#define KEXEC_ENVP_SIZE	4800
++
++static int kexec_argc;
++static int kdump_argc;
++static void *kexec_argv;
++static void *kdump_argv;
++static void *kexec_envp;
++
++static int loongson_kexec_prepare(struct kimage *image)
++{
++	int i, argc = 0;
++	unsigned int *argv;
++	char *str, *ptr, *bootloader = "kexec";
++
++	/* argv at offset 0, argv[] at offset KEXEC_ARGV_SIZE/2 */
++	if (image->type == KEXEC_TYPE_DEFAULT)
++		argv = (unsigned int *)kexec_argv;
++	else
++		argv = (unsigned int *)kdump_argv;
++
++	argv[argc++] = (unsigned int)(KEXEC_ARGV_ADDR + KEXEC_ARGV_SIZE/2);
++
++	for (i = 0; i < image->nr_segments; i++) {
++		if (!strncmp(bootloader, (char *)image->segment[i].buf,
++				strlen(bootloader))) {
++			/*
++			 * convert command line string to array
++			 * of parameters (as bootloader does).
++			 */
++			int offt;
++			str = (char *)argv + KEXEC_ARGV_SIZE/2;
++			memcpy(str, image->segment[i].buf, KEXEC_ARGV_SIZE/2);
++			ptr = strchr(str, ' ');
++
++			while (ptr && (argc < MAX_ARGS)) {
++				*ptr = '\0';
++				if (ptr[1] != ' ') {
++					offt = (int)(ptr - str + 1);
++					argv[argc] = KEXEC_ARGV_ADDR + KEXEC_ARGV_SIZE/2 + offt;
++					argc++;
++				}
++				ptr = strchr(ptr + 1, ' ');
++			}
++			break;
++		}
++	}
++
++	if (image->type == KEXEC_TYPE_DEFAULT)
++		kexec_argc = argc;
++	else
++		kdump_argc = argc;
++
++	/* kexec/kdump need a safe page to save reboot_code_buffer */
++	image->control_code_page = virt_to_page((void *)KEXEC_CTRL_CODE);
++
++	return 0;
++}
++
++static void loongson_kexec_shutdown(void)
++{
++#ifdef CONFIG_SMP
++	int cpu;
++
++	/* All CPUs go to reboot_code_buffer */
++	for_each_possible_cpu(cpu)
++		if (!cpu_online(cpu))
++			cpu_device_up(get_cpu_device(cpu));
++#endif
++	kexec_args[0] = kexec_argc;
++	kexec_args[1] = fw_arg1;
++	kexec_args[2] = fw_arg2;
++	secondary_kexec_args[0] = TO_UNCAC(0x3ff01000);
++	memcpy((void *)fw_arg1, kexec_argv, KEXEC_ARGV_SIZE);
++	memcpy((void *)fw_arg2, kexec_envp, KEXEC_ENVP_SIZE);
++}
++
++static void loongson_crash_shutdown(struct pt_regs *regs)
++{
++	default_machine_crash_shutdown(regs);
++	kexec_args[0] = kdump_argc;
++	kexec_args[1] = fw_arg1;
++	kexec_args[2] = fw_arg2;
++	secondary_kexec_args[0] = TO_UNCAC(0x3ff01000);
++	memcpy((void *)fw_arg1, kdump_argv, KEXEC_ARGV_SIZE);
++	memcpy((void *)fw_arg2, kexec_envp, KEXEC_ENVP_SIZE);
++}
++
++#endif
++
+ static int __init mips_reboot_setup(void)
+ {
+ 	_machine_restart = loongson_restart;
+ 	_machine_halt = loongson_halt;
+ 	pm_power_off = loongson_poweroff;
+ 
++#ifdef CONFIG_KEXEC
++	kexec_argv = kmalloc(KEXEC_ARGV_SIZE, GFP_KERNEL);
++	kdump_argv = kmalloc(KEXEC_ARGV_SIZE, GFP_KERNEL);
++	kexec_envp = kmalloc(KEXEC_ENVP_SIZE, GFP_KERNEL);
++	fw_arg1 = KEXEC_ARGV_ADDR;
++	memcpy(kexec_envp, (void *)fw_arg2, KEXEC_ENVP_SIZE);
++
++	_machine_kexec_prepare = loongson_kexec_prepare;
++	_machine_kexec_shutdown = loongson_kexec_shutdown;
++	_machine_crash_shutdown = loongson_crash_shutdown;
++#endif
++
+ 	return 0;
+ }
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.27.0
+
