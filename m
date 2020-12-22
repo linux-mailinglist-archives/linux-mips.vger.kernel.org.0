@@ -2,87 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11ED22E074E
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Dec 2020 09:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1CD2E0BFC
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Dec 2020 15:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbgLVIiY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Dec 2020 03:38:24 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:34650 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725841AbgLVIiY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Dec 2020 03:38:24 -0500
-Received: from localhost.localdomain (unknown [112.20.110.48])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGcpNsOFfAlkDAA--.8814S2;
-        Tue, 22 Dec 2020 16:37:34 +0800 (CST)
-From:   siyanteng@loongson.cn
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        siyanteng <siyanteng@loongson.cn>
-Subject: [PATCH] MIPS: loongson64: smp.c: Fix block comment coding style
-Date:   Tue, 22 Dec 2020 16:37:00 +0800
-Message-Id: <20201222083700.3651527-1-siyanteng@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        id S1727019AbgLVOrT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Dec 2020 09:47:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726949AbgLVOrT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Dec 2020 09:47:19 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050::465:101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81A8C0613D3
+        for <linux-mips@vger.kernel.org>; Tue, 22 Dec 2020 06:46:38 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4D0fL36W0hzQl1t;
+        Tue, 22 Dec 2020 15:46:35 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
+        t=1608648393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EJeauVdSe2HUDrIDQ6WHqqGX3q1vqxpDnz5rect4fMY=;
+        b=Xe9vNn6sKjswRrAcl1YwE+CDfr+SclrR9Q2Xr9MXZ7MHLOftpzOJTzfA3L15uptdipQWwo
+        dTVT2kG28tH7h7afEKkhvv+srrvOQyCAURniwd9Fyti6ubLqROTrBvjO72Y8zl7DA0XXoY
+        ikzS4fwOltBMVTGSDy8jZsj8lpMZnZGq4G1imMk7bNlmH+uT7TDEuze7i+38ha1e3UVhCf
+        AbmODSROq2TFKmTeDd9/1Cn2s/LiWFVIJrjSDTkvg9OD3xmvKlWJlu56iEwilts9lfeN/U
+        9tg04bwHZVWS6XhCwx00F9wZzlMcGcp2jhe9T3huLx950WU89HUU84k303/KFw==
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id UHaOaewiV849; Tue, 22 Dec 2020 15:46:32 +0100 (CET)
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+References: <20201220193201.GA3184@alpha.franken.de>
+From:   Hauke Mehrtens <hauke@hauke-m.de>
+Subject: Re: CPUs with EVA support
+Message-ID: <b6320b6f-ecbd-bd05-1cb2-ac98aa97825b@hauke-m.de>
+Date:   Tue, 22 Dec 2020 15:46:31 +0100
 MIME-Version: 1.0
+In-Reply-To: <20201220193201.GA3184@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxGcpNsOFfAlkDAA--.8814S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFykur4rKFyxur4ruFW7Jwb_yoW8GF4fpr
-        WfZa4DGF45WF10va4fJFyUJry8C39xJF9ruF42qrW5uasxGr12qrW8K3Z8XF47ZFsYgF17
-        W348Cw4Uua1rtwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWUWVWUuwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4kE6xkIj40Ew7xC
-        0wCY02Avz4vE14v_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JU2ZXOUUUUU=
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-MBO-SPAM-Probability: 
+X-Rspamd-Score: -5.13 / 15.00 / 15.00
+X-Rspamd-Queue-Id: A63D01713
+X-Rspamd-UID: da6009
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: siyanteng <siyanteng@loongson.cn>
+On 12/20/20 8:32 PM, Thomas Bogendoerfer wrote:
+> Hi;
+> 
+> I've started looking how to get rid of get_fs/set_fs for MIPS and
+> my current obstacle is EVA support.
+> 
+> Looking for CPUs supporting EVA I only found P5600, are there more ?
+> 
+> Does someone sell boards with an EVA enabled CPU ?
+> 
+> How good is EVA support in qemu ?
+> 
+> Thomas.
+> 
+Hi,
 
-This patch fixes:
-"WARNING: Block comments use a trailing */ on a separate line"
-by checkpatch.pl
+The InterAptiv CPUs used by Lantiq/Intel/MaxLinear are supporting EVA 
+mode and it is used in the default settings of the vendor SDK.
 
-Signed-off-by: siyanteng <siyanteng@loongson.cn>
----
- arch/mips/loongson64/smp.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+The SoCs are not supported by mainline Linux kernel, it was tried to add 
+them some years ago:
+https://lwn.net/Articles/761729/
+https://lwn.net/ml/linux-kernel/20180803030237.3366-2-songjun.wu@linux.intel.com/
 
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index b8c1fc3158fd..459ea5b7a1b0 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -483,7 +483,8 @@ static void __init loongson3_smp_setup(void)
- 	init_cpu_possible(cpu_none_mask);
- 
- 	/* For unified kernel, NR_CPUS is the maximum possible value,
--	 * loongson_sysconf.nr_cpus is the really present value */
-+	 * loongson_sysconf.nr_cpus is the really present value
-+	 */
- 	while (i < loongson_sysconf.nr_cpus) {
- 		if (loongson_sysconf.reserved_cpus_mask & (1<<i)) {
- 			/* Reserved physical CPU cores */
-@@ -567,7 +568,8 @@ static void loongson3_cpu_die(unsigned int cpu)
- /* To shutdown a core in Loongson 3, the target core should go to CKSEG1 and
-  * flush all L1 entries at first. Then, another core (usually Core 0) can
-  * safely disable the clock of the target core. loongson3_play_dead() is
-- * called via CKSEG1 (uncached and unmmaped) */
-+ * called via CKSEG1 (uncached and unmmaped)
-+ */
- static void loongson3_type1_play_dead(int *state_addr)
- {
- 	register int val;
--- 
-2.27.0
-
+Hauke
