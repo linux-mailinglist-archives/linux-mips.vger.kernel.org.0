@@ -2,74 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4502E0F69
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Dec 2020 21:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C0F2E0FDE
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Dec 2020 22:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727245AbgLVUeH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Dec 2020 15:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
+        id S1727691AbgLVVjV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Dec 2020 16:39:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725913AbgLVUeH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Dec 2020 15:34:07 -0500
-Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDA8C0613D3
-        for <linux-mips@vger.kernel.org>; Tue, 22 Dec 2020 12:33:26 -0800 (PST)
-Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1kroLU-009H7L-0o
-        for linux-mips@vger.kernel.org; Tue, 22 Dec 2020 21:33:24 +0100
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on yawp
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.4
-Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8] (helo=sumner.biot.com)
-        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1kroL3-009H6j-J2; Tue, 22 Dec 2020 21:32:57 +0100
-Received: from bert by sumner.biot.com with local (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1kroL3-006FNb-34; Tue, 22 Dec 2020 21:32:57 +0100
-From:   Bert Vermeulen <bert@biot.com>
-To:     Paul Burton <paulburton@kernel.org>,
+        with ESMTP id S1727344AbgLVVjU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Dec 2020 16:39:20 -0500
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32D1C0613D3;
+        Tue, 22 Dec 2020 13:38:39 -0800 (PST)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1krpMZ-003KnC-QC; Tue, 22 Dec 2020 21:38:35 +0000
+Date:   Tue, 22 Dec 2020 21:38:35 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org (open list:MIPS GENERIC PLATFORM),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Bert Vermeulen <bert@biot.com>
-Subject: [PATCH] arch: mips: Remove unused BOARD_INGENIC Kconfig option
-Date:   Tue, 22 Dec 2020 21:32:39 +0100
-Message-Id: <20201222203239.1489040-1-bert@biot.com>
-X-Mailer: git-send-email 2.25.1
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCHSET] saner elf compat
+Message-ID: <20201222213835.GU3579531@ZenIV.linux.org.uk>
+References: <20201203214529.GB3579531@ZenIV.linux.org.uk>
+ <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com>
+ <20201203230336.GC3579531@ZenIV.linux.org.uk>
+ <alpine.LFD.2.21.2012071741280.2104409@eddie.linux-mips.org>
+ <20201216030154.GL3579531@ZenIV.linux.org.uk>
+ <alpine.LFD.2.21.2012160924010.2104409@eddie.linux-mips.org>
+ <20201222200431.GT3579531@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201222200431.GT3579531@ZenIV.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Board support depends on MACH_INGENIC, not BOARD_INGENIC.
+On Tue, Dec 22, 2020 at 08:04:31PM +0000, Al Viro wrote:
 
-Signed-off-by: Bert Vermeulen <bert@biot.com>
----
- arch/mips/generic/Kconfig | 6 ------
- 1 file changed, 6 deletions(-)
+> FWIW, on debian/mips64el (both stretch and buster) the test fails with the
+> distro kernels (4.9- and 4.19-based) as well as with 5.10-rc1 and
+> 5.10-rc1+that series, all in the same way:
+> [Current thread is 1 (LWP 4154)]
+> (gdb) p/x foo
+> Cannot find thread-local storage for LWP 4154, executable file <pathname>
+> Cannot find thread-local variables on this target
+> 
+> buster has libc6-2.28, so that should be fine for the test in question
+> (libthread_db definitely recent enough).  That was n32 gdb; considering
+> how much time it had taken to build that sucker I hadn't tried o32
+> yet.
+> 
+> Note that it's not just with native coredumps - gcore-produced ones give
+> the same result.  That was gdb from binutils-gdb.git; I'm not familiar
+> with gdb guts to start debugging it, so if you have any suggestions
+> in that direction that do not include a full rebuild...  In any case,
+> I won't get around to that until the next week.
+> 
+> Incidentally, build time is bloody awful - 3 days, with qemu-3.1 on
+> 3.5GHz amd64 host, all spent pretty much entirely in userland (both
+> from guest and host POV).  g++-8 is atrociously slow...
+> 
+> That said, I don't see what in that series could possibly mess the
+> things up for tls, while leaving the registers working; the only
+> thing that realistically might've been fucked up is prstatus layout
+> (and possibly size), and that would've screwed the registers as
+> well.
 
-diff --git a/arch/mips/generic/Kconfig b/arch/mips/generic/Kconfig
-index 55d9aed7ced9..5216c850b7e2 100644
---- a/arch/mips/generic/Kconfig
-+++ b/arch/mips/generic/Kconfig
-@@ -73,12 +73,6 @@ config FIT_IMAGE_FDT_OCELOT
- 	  from Microsemi in the FIT kernel image.
- 	  This requires u-boot on the platform.
- 
--config BOARD_INGENIC
--	bool "Support boards based on Ingenic SoCs"
--	select MACH_INGENIC_GENERIC
--	help
--	  Enable support for boards based on Ingenic SoCs.
--
- config VIRT_BOARD_RANCHU
- 	bool "Support Ranchu platform for Android emulator"
- 	help
--- 
-2.25.1
-
+... and it smells like the damn thing needs n32 debug info from libthread_db.so
+and/or libpthread.so.  Which is not packaged by debian libc6 mips64el build.
+Sorry, any debugging of that crap is going to happen in January ;-/
