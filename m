@@ -2,72 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1982E0433
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Dec 2020 03:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D41B2E04B8
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Dec 2020 04:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725961AbgLVCAZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Dec 2020 21:00:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59030 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725850AbgLVCAZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 21 Dec 2020 21:00:25 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9195622B3B;
-        Tue, 22 Dec 2020 01:59:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608602385;
-        bh=MpYfLO66Zem586idWaT6mjA3K0YrVVbMETgKtaR+fnU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ax/o0iayyOnKobbTkdtRrbsmWbuOfUq1MmonmYQEgnA9GCKsweJ31OM02d0pH6GFH
-         QpuvWlEZE9aesiB9si0y0NHdMVLZQgeUrhzJddIOcvmGSvLPG8JdS8+sQgurJ34u+/
-         fPjDpxuemG6+NDVsetQFbvde1/Ueay0LQiG8P4l1aX4RXC29q9muVedpAifc4Z3sRu
-         GgfJJWvLksfDNgoDaHxfLnrbHT1Z4bpdu4YWGePqq/4KTiVPZnHY/Pf7Z5NK8KUTXf
-         +1OGX5qeJkj2U992Okvyycvxyuj17PxLrrXLxU5PlyZsN+wOOuB+y09jw9BIHbCfuY
-         pWIMrvtIk/tpA==
-Date:   Mon, 21 Dec 2020 17:59:43 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S1726111AbgLVDZk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Dec 2020 22:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726108AbgLVDZk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Dec 2020 22:25:40 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405A0C0613D3;
+        Mon, 21 Dec 2020 19:25:00 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id v3so6687033plz.13;
+        Mon, 21 Dec 2020 19:25:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=RaIPy33YYEHJBauFMKe6av1pPOpX7ysWVTHsmm1YmMM=;
+        b=ewOT59Q9HpQla5OCbUNuYsgXbMc8UhzAb+Znyajenyzz8BwWRCoAZgSTwmYWDMkF0W
+         5HMlPZgNEUaUqWG94oTI1QX/x2zNWvpyoFwdmJhNeWJr7ZEOb6v6q3os0P37EXZ+o9Cq
+         Nk54nLNx1tvUUNqyZcDmu5Z0eGsOzS+gRsbXlvkrLfFP2tOB5sdT3nO0kTrfpcLI2PWr
+         UjpRcZ4Z79RM2Ow9kDy1E463PuAByhGGXjmfrmszZO+NiMscBbvnLek9ylz2/nbuW+jy
+         QGMFJNginIEiJVPO5aUVK5hVnU7ALVWMrlu1PUPzFDECCwn6HGgXmagXgyAjOYYZiGno
+         zHUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=RaIPy33YYEHJBauFMKe6av1pPOpX7ysWVTHsmm1YmMM=;
+        b=Ay8YPg8VD9AruaWeiMCd+wGO4grVkl1uvMrXkjqj2G1wZBcxm3zPyYBKd9c7AYR/4X
+         Shl/IaMtDFxvVPrmMThIMUYm2La3P9TwNbHiPcWg5v+p/0LKiKHGhDNGP7BPA0GfLdRi
+         z0BQTH1Yiw/KTmQ+nfeD/jWzpxpJRCeBf4/z+frbfZVZAsKTBifpjMKCo4XJqzaUHnao
+         V3VFBcZYRiJhnF90lv4X2U9Rnbxxj20oeIL4oZCWlB1wBTHmbC3wGsjJTLlKRzHQlqmf
+         kAz5zaBHPn3MzpQI+FUB6QVp81jqW9u0NoUOGOS57iRMXBk5GWPcWvEeF5QvKea/CeKX
+         jjTw==
+X-Gm-Message-State: AOAM530J91ixCtRoDFVtm86Yae0nfpGHG020fNDtiN7evH06ex0oiCpz
+        oUyqFWccQUZb7qHYdo1JBnc=
+X-Google-Smtp-Source: ABdhPJzkTvnjsHxReSw4V5fj0dM0Vu8lxpxM+IrNd8ypuWhbpX9Lip2Ep3vWvroEYcLFo35d/NhuoA==
+X-Received: by 2002:a17:902:778e:b029:da:feef:8f2d with SMTP id o14-20020a170902778eb02900dafeef8f2dmr19315658pll.25.1608607499815;
+        Mon, 21 Dec 2020 19:24:59 -0800 (PST)
+Received: from localhost (193-116-97-30.tpgi.com.au. [193.116.97.30])
+        by smtp.gmail.com with ESMTPSA id c23sm3432480pgc.72.2020.12.21.19.24.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Dec 2020 19:24:59 -0800 (PST)
+Date:   Tue, 22 Dec 2020 13:24:53 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v3 3/3] mm: optimise pte dirty/accessed bit setting by
+ demand based pte insertion
+To:     Hugh Dickins <hughd@google.com>
+Cc:     linux-mm@kvack.org, Bibo Mao <maobibo@loongson.cn>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Huang Pei <huangpei@loongson.cn>, linux-arch@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 2/2] net: dsa: qca: ar9331: export stats64
-Message-ID: <20201221175943.0990ee18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201219195833.29197-3-o.rempel@pengutronix.de>
-References: <20201219195833.29197-1-o.rempel@pengutronix.de>
-        <20201219195833.29197-3-o.rempel@pengutronix.de>
+References: <20201220045535.848591-1-npiggin@gmail.com>
+        <20201220045535.848591-4-npiggin@gmail.com>
+        <alpine.LSU.2.11.2012211000260.1880@eggly.anvils>
+In-Reply-To: <alpine.LSU.2.11.2012211000260.1880@eggly.anvils>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Message-Id: <1608606460.clzumasfvm.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 19 Dec 2020 20:58:33 +0100 Oleksij Rempel wrote:
-> +	stats->rx_nohandler += raw.filtered;
-> +	stats->rx_errors += raw.rxfcserr + raw.rxalignerr + raw.rxrunt +
-> +		raw.rxfragment + raw.rxoverflow + raw.filtered + raw.rxtoolong;
+Excerpts from Hugh Dickins's message of December 22, 2020 4:21 am:
+> Hi Nick,
+>=20
+> On Sun, 20 Dec 2020, Nicholas Piggin wrote:
+>=20
+>> Similarly to the previous patch, this tries to optimise dirty/accessed
+>> bits in ptes to avoid access costs of hardware setting them.
+>>=20
+>> This tidies up a few last cases where dirty/accessed faults can be seen,
+>> and subsumes the pte_sw_mkyoung helper -- it's not just architectures
+>> with explicit software dirty/accessed bits that take expensive faults to
+>> modify ptes.
+>>=20
+>> The vast majority of the remaining dirty/accessed faults on kbuild
+>> workloads after this patch are from NUMA migration, due to
+>> remove_migration_pte inserting old/clean ptes.
+>=20
+> Are you sure about this patch? It looks wrong to me: because isn't
+> _PAGE_ACCESSED (young) already included in the vm_page_prot __S001 etc?
+>=20
+> I haven't checked all instances below, but in general, that's why the
+> existing code tends not to bother to mkyoung, but does sometimes mkold
+> (admittedly confusing).
 
-What happened to my suggestion to report filtered in dropped?
+There might have been one or two cases where it didn't come directly
+from vm_page_prot, but it was a few rebases and updates ago. I did see
+one or two places where powerpc was taking faults. Good point though I=20
+can test again and see, and I might split the patch.
 
-If you repost before -rc1 please post as RFC as net-next is currently
-closed.
+>=20
+> A quick check on x86 and powerpc looks like they do have _PAGE_ACCESSED
+> in there; and IIRC that's true, or ought to be true, of all architectures=
+.
+>=20
+> Maybe not mips, which I see you have singled out: I remember going round
+> this loop a few months ago with mips, where strange changes were being
+> proposed to compensate for not having that bit in their vm_page_prot.
+> I didn't follow through to see how that ended up, but I did suggest
+> mips needed to follow the same convention as the other architectures.
 
---
+Yeah the main thing is to try get all architectures doing the same thing
+and get rid of that sw_mkyoung too. Given the (Intel) x86 result of the
+heavy micro-fault, I don't think anybody is special and we should=20
+require them to follow the same behaviour unless it's proven that one
+needs something different.
 
-# Form letter - net-next is closed
+If we can get all arch to set accessed in vm_page_prot and get rid of=20
+most of these mkyoung()s then all the better. And it actually looks like
+MIPS may be changing direction:
 
-We have already sent the networking pull request for 5.11 and therefore
-net-next is closed for new drivers, features, code refactoring and
-optimizations. We are currently accepting bug fixes only.
+https://lore.kernel.org/linux-arch/20200919074731.22372-1-huangpei@loongson=
+.cn/
 
-Please repost when net-next reopens after 5.11-rc1 is cut.
+What's the chances of that going upstream for the next merge window? It
+seems like the right thing to do.
 
-Look out for the announcement on the mailing list or check:
-http://vger.kernel.org/~davem/net-next.html
-
-RFC patches sent for review only are obviously welcome at any time.
+Thanks,
+Nick
