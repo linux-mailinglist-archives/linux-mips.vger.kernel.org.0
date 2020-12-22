@@ -2,100 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A99082E0F2B
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Dec 2020 21:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E66A2E0F4B
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Dec 2020 21:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbgLVUFU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Dec 2020 15:05:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726039AbgLVUFT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Dec 2020 15:05:19 -0500
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37238C061793;
-        Tue, 22 Dec 2020 12:04:39 -0800 (PST)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1krntX-003JZt-E3; Tue, 22 Dec 2020 20:04:31 +0000
-Date:   Tue, 22 Dec 2020 20:04:31 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1727793AbgLVUSD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Dec 2020 15:18:03 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:55051 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726319AbgLVUSC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Dec 2020 15:18:02 -0500
+Received: from [192.168.1.155] ([95.118.68.26]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N5FtF-1jtguL3EaD-0118EC; Tue, 22 Dec 2020 21:14:24 +0100
+Subject: Re: [PATCH] arch: consolidate pm_power_off callback
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Salter <msalter@redhat.com>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         the arch/x86 maintainers <x86@kernel.org>,
-        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCHSET] saner elf compat
-Message-ID: <20201222200431.GT3579531@ZenIV.linux.org.uk>
-References: <20201203214529.GB3579531@ZenIV.linux.org.uk>
- <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com>
- <20201203230336.GC3579531@ZenIV.linux.org.uk>
- <alpine.LFD.2.21.2012071741280.2104409@eddie.linux-mips.org>
- <20201216030154.GL3579531@ZenIV.linux.org.uk>
- <alpine.LFD.2.21.2012160924010.2104409@eddie.linux-mips.org>
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        alpha <linux-alpha@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        linux-c6x-dev@linux-c6x.org, linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+References: <20201222184510.19415-1-info@metux.net>
+ <CAMuHMdVze3oaWmzvzn8ROjpP6h6Tsv2SFLiV7T1Cnej36X445g@mail.gmail.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Message-ID: <2f1d53e9-0dbb-78ef-22d5-ab230438ddf0@metux.net>
+Date:   Tue, 22 Dec 2020 21:14:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LFD.2.21.2012160924010.2104409@eddie.linux-mips.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <CAMuHMdVze3oaWmzvzn8ROjpP6h6Tsv2SFLiV7T1Cnej36X445g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: tl
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:UpSPX5SjSxB2JTjoTNk4sWDtA2g9Ks1Ix8dKZhB/ESwn1jWfyhx
+ EoQG8feaYKyQLnGwygV2naaePTeCvGl6q4M5FCoVvWDzd5IDw7I4++spAXF1Cn7hlWYDZ9i
+ kl7Eptzr5sffhmk6uqoQvQuMaJH6WbEHZSp8VbRZESTCM8tqF2liTqVeSG60D5ct0JeRFXM
+ C/vRJPf10ZNRyihx6OQ7A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4rmsxPbYFfk=:r6XlGr1qgoUDdOPZvl+EZB
+ Tvvn/+E+IBfJxp8NYxN6kmODEYBvHcxpBa91h8yz4H6rftNQGPPvhJG9K3iz7sa8U3axvH9gb
+ k8MQxF8AkxpsOIqgXUvRf2/UkUWU0UyTVaNY4yxFyPXaJ5HZGvdBlHztqC0ROOQbfPfvuc9EL
+ FxgUfcgonSSkeeYMjRiTB3zJbeFMtXOTHkBa2rvNba1MQtk+fNt8bwxkcg/16D1kNX6CaQa6R
+ /HjaLu8M8eiwjXWLzppTMleqwd3hE1HiIRNtfJF9qFLMDQKH5ELRRUKQxUmk7wwJOm6jAqUoz
+ DxOEn9gjBP8Krn67rCBumevzsK7LiZ8dtcUh+n3F3XTZoxMWvkNcvhbeCfAuF95ukrIWyQBXn
+ H8gIR89lqyF1p5Egw7NhgnSoXyIbQAraihthZryjzaPuyq4jPkP8GrsbXJIV3
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Dec 16, 2020 at 09:44:53AM +0000, Maciej W. Rozycki wrote:
-> On Wed, 16 Dec 2020, Al Viro wrote:
-> 
-> > >  It may be worth pushing through GDB's gdb.threads/tls-core.exp test case, 
-> > > making sure no UNSUPPORTED results have been produced due to resource 
-> > > limits preventing a core from being dumped (and no FAILs, of course), with 
-> > > o32/n32 native GDB.  This should guarantee our output is still as expected 
-> > > by an interpreter.  Sadly I'm currently not set up for such testing though 
-> > > eventually I mean to.
-> > 
-> > Umm...  What triple does one use for n32 gdb?
-> 
->  I don't think there's a standardised one, just configure with CC/CXX set 
-> for n32 compilation, e.g.:
-> 
-> $ /path/to/configure CC="gcc -mabi=n32" CXX="g++ -mabi=n32"
-> 
-> (and any other options set as usually).  This has to be with CC/CXX rather 
-> than CFLAGS/CXXFLAGS so that it is guaranteed to be never overridden with 
-> any logic that might do any fiddling with compilation options.  This will 
-> set up the test suite accordingly.
-> 
->  NB this may already be the compiler's default, depending on how it was 
-> configured, i.e. if `--with-abi=n32' was used, in which case no extra 
-> options will be required.  I don't know if any standard MIPS distribution 
-> does it though; 64-bit MIPS/Debian might.  This will be reported with `gcc 
-> --help -v', somewhere along the way.
-> 
->  Let me know if there are issues with this approach.
+On 22.12.20 19:54, Geert Uytterhoeven wrote:
 
-FWIW, on debian/mips64el (both stretch and buster) the test fails with the
-distro kernels (4.9- and 4.19-based) as well as with 5.10-rc1 and
-5.10-rc1+that series, all in the same way:
-[Current thread is 1 (LWP 4154)]
-(gdb) p/x foo
-Cannot find thread-local storage for LWP 4154, executable file <pathname>
-Cannot find thread-local variables on this target
+Hi,
 
-buster has libc6-2.28, so that should be fine for the test in question
-(libthread_db definitely recent enough).  That was n32 gdb; considering
-how much time it had taken to build that sucker I hadn't tried o32
-yet.
+> On Tue, Dec 22, 2020 at 7:46 PM Enrico Weigelt, metux IT consult
+> <info@metux.net> wrote:
+>> Move the pm_power_off callback into one global place and also add an
+>> function for conditionally calling it (when not NULL), in order to remove
+>> code duplication in all individual archs.
+>>
+>> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
+> 
+> Thanks for your patch!
+> 
+>> --- a/arch/alpha/kernel/process.c
+>> +++ b/arch/alpha/kernel/process.c
+>> @@ -43,12 +43,6 @@
+>>  #include "proto.h"
+>>  #include "pci_impl.h"
+>>
+>> -/*
+>> - * Power off function, if any
+>> - */
+>> -void (*pm_power_off)(void) = machine_power_off;
+> 
+> Assignments like these are lost in the conversion.
 
-Note that it's not just with native coredumps - gcore-produced ones give
-the same result.  That was gdb from binutils-gdb.git; I'm not familiar
-with gdb guts to start debugging it, so if you have any suggestions
-in that direction that do not include a full rebuild...  In any case,
-I won't get around to that until the next week.
+Yes, but this doesn't seem to be ever called anyways. (in arch/alpha)
+And, BTW, letting it point to machine_power_off() doesn't make much
+sense, since it's the arch's machine_power_off() function, who're
+calling pm_power_off().
 
-Incidentally, build time is bloody awful - 3 days, with qemu-3.1 on
-3.5GHz amd64 host, all spent pretty much entirely in userland (both
-from guest and host POV).  g++-8 is atrociously slow...
+Actually, we could remove pm_power_off completely from here, assuming
+nobody would *build* any drivers that register themselves into
+pm_power_off.
 
-That said, I don't see what in that series could possibly mess the
-things up for tls, while leaving the registers working; the only
-thing that realistically might've been fucked up is prstatus layout
-(and possibly size), and that would've screwed the registers as
-well.
+If you feel better with it, I could post a patch that just removes
+pm_power_off from arch/alpha.
+
+
+--mtx
+
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
