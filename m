@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 429602E149B
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5432E148D
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730502AbgLWClY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Dec 2020 21:41:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51404 "EHLO mail.kernel.org"
+        id S1730674AbgLWCkg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Dec 2020 21:40:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51318 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729986AbgLWCXY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:23:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2973F2313F;
-        Wed, 23 Dec 2020 02:23:05 +0000 (UTC)
+        id S1730030AbgLWCXg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:23:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0992E2256F;
+        Wed, 23 Dec 2020 02:23:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690185;
-        bh=1Z2xeE+FnzBDMyXOFEAoZYKo8qjmxghSfR+XpgDDBdM=;
+        s=k20201202; t=1608690196;
+        bh=3ZACMQIcQWnmZL9ULyup2SrmOjvIT27EZp63RBPbbSc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bSAn0E7ztPmpy4rXvbMNfgMscL59mPanSvG7s2YRZXMXeiT1bZClq/i1mWZjUTZAd
-         7fmfP4/ln8GEwK3nK2TsrXadLcNu9fkLn8V9+X1fxmyhvmrOcgpwSaAKIofmi0W33C
-         EtnJHl5j0kfrmQBNnNK6DkvWU8dlcnTivOLMcTU2DCJJ4D40t7CVONxJWN3UuIV1O0
-         J4ZLbfqjw+lx58BypGMrVXoEMUQKw4gAOM/zzasuz0PUu6f2HyyhtLfQ+Z/HU2c973
-         SLYwfukkUUFCy1FoWe4fGtOOT9RwMQ6R4QEVJ+Cpxu+Lt/FzRgNixPNHymqfUYWLn0
-         9bzZLt9wlzg6w==
+        b=FW7RSMKp+isKfpfJ0jsyZsOY250/gnXm7VOZxUd/8RkpZT9NSxeFJCIXc+ZB8gxeo
+         3uNw5MJpcX/HanCte0rgCPZHv9stQsmqTHbHtwse0+v9Z0Dh84hviIFlDplCwTJtkR
+         sWjr/1abZL1GFAW+844NnO01sJFg1CBlt4UJARfDzWl8zufEfMX7mZn2SC68XsL9Cw
+         HjO2KOyiIDuBJ5I4Bzj29t1Lmg8EqpdVvDkZn5S2a52rcs2Vq71VZXQlIhUtNKcB7n
+         PmUojtJlJ05/in0u4qoXl/vCerwo69bXRV09kz4la7XCn/FzsyBVM6nMnjWPDV8jby
+         yxfce1tS5fbNg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qinglang Miao <miaoqinglang@huawei.com>,
+Cc:     Necip Fazil Yildiran <fazilyildiran@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 10/66] mips: cm: add missing iounmap() on error in mips_cm_probe()
-Date:   Tue, 22 Dec 2020 21:21:56 -0500
-Message-Id: <20201223022253.2793452-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 19/66] MIPS: BMC47xx: fix kconfig dependency bug for BCM47XX_SSB
+Date:   Tue, 22 Dec 2020 21:22:05 -0500
+Message-Id: <20201223022253.2793452-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201223022253.2793452-1-sashal@kernel.org>
 References: <20201223022253.2793452-1-sashal@kernel.org>
@@ -42,32 +42,46 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Qinglang Miao <miaoqinglang@huawei.com>
+From: Necip Fazil Yildiran <fazilyildiran@gmail.com>
 
-[ Upstream commit 2673ecf9586551c5bcee499c1cc1949f6f7cc9a1 ]
+[ Upstream commit 09a48cbcd7af9203296938044f1100bb113ce01a ]
 
-Add the missing iounmap() of iounmap(mips_gcr_base) before
-return from mips_cm_probe() in the error handling case.
+When BCM47XX_SSB is enabled and SSB_PCIHOST is disabled, it results in the
+following Kbuild warning:
 
-Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
+WARNING: unmet direct dependencies detected for SSB_B43_PCI_BRIDGE
+  Depends on [n]: SSB [=y] && SSB_PCIHOST [=n]
+  Selected by [y]:
+  - BCM47XX_SSB [=y] && BCM47XX [=y] && PCI [=y]
+
+The reason is that BCM47XX_SSB selects SSB_B43_PCI_BRIDGE without
+depending on or selecting SSB_PCIHOST while SSB_B43_PCI_BRIDGE depends on
+SSB_PCIHOST. This can also fail building the kernel as demonstrated in a
+bug report.
+
+Honor the kconfig dependency to remove unmet direct dependency warnings
+and avoid any potential build failures.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=210051
+Signed-off-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/mips-cm.c | 1 +
+ arch/mips/bcm47xx/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index 50d3d74001cbe..aedd353b9b925 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -228,6 +228,7 @@ int mips_cm_probe(void)
- 	if ((base_reg & CM_GCR_BASE_GCRBASE) != addr) {
- 		pr_err("GCRs appear to have been moved (expected them at 0x%08lx)!\n",
- 		       (unsigned long)addr);
-+		iounmap(mips_gcr_base);
- 		mips_gcr_base = NULL;
- 		return -ENODEV;
- 	}
+diff --git a/arch/mips/bcm47xx/Kconfig b/arch/mips/bcm47xx/Kconfig
+index 29471038d817e..54e79f3047a14 100644
+--- a/arch/mips/bcm47xx/Kconfig
++++ b/arch/mips/bcm47xx/Kconfig
+@@ -9,6 +9,7 @@ config BCM47XX_SSB
+ 	select SSB_DRIVER_MIPS
+ 	select SSB_DRIVER_EXTIF
+ 	select SSB_EMBEDDED
++	select SSB_PCIHOST if PCI
+ 	select SSB_B43_PCI_BRIDGE if PCI
+ 	select SSB_DRIVER_PCICORE if PCI
+ 	select SSB_PCICORE_HOSTMODE if PCI
 -- 
 2.27.0
 
