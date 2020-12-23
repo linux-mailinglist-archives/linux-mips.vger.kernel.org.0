@@ -2,38 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FB72E14F2
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EC52E149E
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729712AbgLWCqC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Dec 2020 21:46:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51348 "EHLO mail.kernel.org"
+        id S1728577AbgLWClc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Dec 2020 21:41:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729715AbgLWCWd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:22:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F577229C5;
-        Wed, 23 Dec 2020 02:22:17 +0000 (UTC)
+        id S1729979AbgLWCXY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:23:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D072225AB;
+        Wed, 23 Dec 2020 02:23:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690138;
-        bh=PZkgTS62SlZ9oyrHhbnmA49Yyl+63TAaiWIp/xvU5dw=;
+        s=k20201202; t=1608690184;
+        bh=w5ONGt/8KxfidV2FLhfW7qk8ftC55R9vQyakaZ64OHQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VV+BAtdOQI21R1SRiMfAmZvnZdp31QEfxJ9yrP5LFR6UdyoqIpFjLCu66optHGXyZ
-         burR5vi6MwiHkKaNfo5z5d9Vmtnbyh7LdR39N6TmJIIzwT5lupMVshdZjkoAg/zVA1
-         bxkloqoVtMxjrQwTqYv+ns71H13A9YVy/zVA7QsNfha4QYHcpGKjcNTwmufVxgyuAm
-         xaRjbxc9N4HxNZZrMYgAzECruR067fzp/wptMIvbc2Pk5m9jwGK85s3r1zuztKDJk1
-         9Rj4ufI5GaoonOPKK8xMWVVSVnJBTuiB3/BgNqTdqLVwGsuYXftq69r41jl0ffKU0J
-         vIBFGY3Ik8KdA==
+        b=GXiVuHD/Uce7lRdiBaizWeFPx2AZp7aUD0cThPHJM+oEoh7JzbmK9NzM6qp2IRv15
+         dsbfH3EFJx6tbpJfybzQo24J0l0x3Ic5PyClTXEuKDfQRCn5RszCkqC6knuhuDIZbn
+         TPBnsBX9wGBzKJtN4I8p/Q22OZqkv+m6zLpL+HFro/UocOgHVBnLfpnul7jU7Tq9Pc
+         p5QhUI/kbsavkxWmnrsMqN+VjEHuDb9nkZTDde620I4prgZTIT0DHV3GuXlcIgYrPb
+         KkjiFqw9TlcArTpoNGVLouwrm/YU9ldRuGgCSK7I91spn+LDhml9QVh4Ybth9YMdFA
+         zMLEbWFXxnOBA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jinyang He <hejinyang@loongson.cn>,
+Cc:     Qinglang Miao <miaoqinglang@huawei.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 60/87] MIPS: KASLR: Avoid endless loop in sync_icache if synci_step is zero
-Date:   Tue, 22 Dec 2020 21:20:36 -0500
-Message-Id: <20201223022103.2792705-60-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 09/66] mips: ar7: add missing iounmap() on error in ar7_gpio_init
+Date:   Tue, 22 Dec 2020 21:21:55 -0500
+Message-Id: <20201223022253.2793452-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022103.2792705-1-sashal@kernel.org>
-References: <20201223022103.2792705-1-sashal@kernel.org>
+In-Reply-To: <20201223022253.2793452-1-sashal@kernel.org>
+References: <20201223022253.2793452-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,42 +42,32 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Jinyang He <hejinyang@loongson.cn>
+From: Qinglang Miao <miaoqinglang@huawei.com>
 
-[ Upstream commit c0aac3a51cb6364bed367ee3e1a96ed414f386b4 ]
+[ Upstream commit 5a5aa912f687204d50455d0db36f94dd8de601c2 ]
 
-Most platforms do not need to do synci instruction operations when
-synci_step is 0. But for example, the synci implementation on Loongson64
-platform has some changes. On the one hand, it ensures that the memory
-access instructions have been completed. On the other hand, it guarantees
-that all prefetch instructions need to be fetched again. And its address
-information is useless. Thus, only one synci operation is required when
-synci_step is 0 on Loongson64 platform. I guess that some other platforms
-have similar implementations on synci, so add judgment conditions in
-`while` to ensure that at least all platforms perform synci operations
-once. For those platforms that do not need synci, they just do one more
-operation similar to nop.
+Add the missing iounmap() of gpch->regs before return from
+ar7_gpio_init() in the error handling case.
 
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/relocate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/ar7/gpio.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-index cbf4cc0b0b6cf..5639c2d5cf0e4 100644
---- a/arch/mips/kernel/relocate.c
-+++ b/arch/mips/kernel/relocate.c
-@@ -64,7 +64,7 @@ static void __init sync_icache(void *kbase, unsigned long kernel_length)
- 			: "r" (kbase));
- 
- 		kbase += step;
--	} while (kbase < kend);
-+	} while (step && kbase < kend);
- 
- 	/* Completion barrier */
- 	__sync();
+diff --git a/arch/mips/ar7/gpio.c b/arch/mips/ar7/gpio.c
+index 4eee7e9e26ee2..3ba58f980fec2 100644
+--- a/arch/mips/ar7/gpio.c
++++ b/arch/mips/ar7/gpio.c
+@@ -332,6 +332,7 @@ int __init ar7_gpio_init(void)
+ 	if (ret) {
+ 		printk(KERN_ERR "%s: failed to add gpiochip\n",
+ 					gpch->chip.label);
++		iounmap(gpch->regs);
+ 		return ret;
+ 	}
+ 	printk(KERN_INFO "%s: registered %d GPIOs\n",
 -- 
 2.27.0
 
