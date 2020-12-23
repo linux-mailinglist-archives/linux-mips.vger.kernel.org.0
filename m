@@ -2,38 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B92D2E1219
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C9C2E122E
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728403AbgLWCS6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Dec 2020 21:18:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45492 "EHLO mail.kernel.org"
+        id S1728740AbgLWCTn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Dec 2020 21:19:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45430 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728391AbgLWCS5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:18:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3548F22573;
-        Wed, 23 Dec 2020 02:18:02 +0000 (UTC)
+        id S1728732AbgLWCTn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:19:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0E5782222D;
+        Wed, 23 Dec 2020 02:19:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608689882;
-        bh=0MXOZf7yd2wC/JO392G22Rc0EIixdSQRG1LJ3EE8zhk=;
+        s=k20201202; t=1608689955;
+        bh=V7rwdwLlU058iCwzKlQQbYplj2Ad9qdqUpMp0PLzKh0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j1XaqcCXQvou592cGc87YFlQmqOKcT2i9TIUofpZbjM91y058aneSW7nw3NmCPvQi
-         OaumLSL+NWy/Nna64lkIBgfMW3FSMqIs5TT0Zyrg84x7FAwlrCREYgHHBnuRaagsRX
-         3TQVlJic3dcxNlaosmPu64NpzRrZxbhuqmdSw2GgkjXfW/hr9sSDqBxkVpvskkW73h
-         tzD0m+0p07lsUAhYL9ujcaH99a0gVO0d3fphXNShadxFTEOntN+KyxutqP0C8B56hx
-         KxGQouVToSwIrhzmPu2s++4MJSNprZ8KNsASf6dPBL9N/QVhWCtPZJ05E0cLJyRvU4
-         Yr/1nFIPEms8Q==
+        b=UyTH5SGTmUQ6w94sJcJXy5Z50Yk9F5umwpX3E7UCt1s2wjlKYX9UTy5hp9iCYDD69
+         C2XEP+9h91vSAu1S0XtlJ21PsquR2PUpXpQk4Woliva8dhURh8OICuYfcLUjiBkdQ7
+         6/wOz7XNvj9hNhjNemeVx8oYKwoLzh2C78kXoX5XXeNb/DR5L1jrD9hiOOygogDmZ2
+         36GuM+pEHPVZNkKXV06fPO9hdlhIjm7uTaFF9Z0tU54SaTKUON+X3asSg2S9mmWoxZ
+         6BHI+2Xrhbh7qFhY4MT6K+t14KZW77fgdZ2p6/1GkA6CU1RrKcfT4IAbAPYQO/PwUs
+         nF3E8dUM3sirg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 072/217] MIPS: BMC47xx: fix kconfig dependency bug for BCM47XX_SSB
-Date:   Tue, 22 Dec 2020 21:14:01 -0500
-Message-Id: <20201223021626.2790791-72-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 048/130] MIPS: vdso: Use vma page protection for remapping
+Date:   Tue, 22 Dec 2020 21:16:51 -0500
+Message-Id: <20201223021813.2791612-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223021626.2790791-1-sashal@kernel.org>
-References: <20201223021626.2790791-1-sashal@kernel.org>
+In-Reply-To: <20201223021813.2791612-1-sashal@kernel.org>
+References: <20201223021813.2791612-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,46 +41,42 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-[ Upstream commit 09a48cbcd7af9203296938044f1100bb113ce01a ]
+[ Upstream commit 724d554a117a0552c2c982f0b5cd1d685274d678 ]
 
-When BCM47XX_SSB is enabled and SSB_PCIHOST is disabled, it results in the
-following Kbuild warning:
+MIPS protection bits are setup during runtime so using defines like
+PAGE_READONLY ignores these runtime changes. To fix this we simply
+use the page protection of the setup vma.
 
-WARNING: unmet direct dependencies detected for SSB_B43_PCI_BRIDGE
-  Depends on [n]: SSB [=y] && SSB_PCIHOST [=n]
-  Selected by [y]:
-  - BCM47XX_SSB [=y] && BCM47XX [=y] && PCI [=y]
-
-The reason is that BCM47XX_SSB selects SSB_B43_PCI_BRIDGE without
-depending on or selecting SSB_PCIHOST while SSB_B43_PCI_BRIDGE depends on
-SSB_PCIHOST. This can also fail building the kernel as demonstrated in a
-bug report.
-
-Honor the kconfig dependency to remove unmet direct dependency warnings
-and avoid any potential build failures.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=210051
-Signed-off-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/bcm47xx/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/kernel/vdso.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/bcm47xx/Kconfig b/arch/mips/bcm47xx/Kconfig
-index 6889f74e06f54..40876654423c6 100644
---- a/arch/mips/bcm47xx/Kconfig
-+++ b/arch/mips/bcm47xx/Kconfig
-@@ -9,6 +9,7 @@ config BCM47XX_SSB
- 	select SSB_DRIVER_MIPS
- 	select SSB_DRIVER_EXTIF
- 	select SSB_EMBEDDED
-+	select SSB_PCIHOST if PCI
- 	select SSB_B43_PCI_BRIDGE if PCI
- 	select SSB_DRIVER_PCICORE if PCI
- 	select SSB_PCICORE_HOSTMODE if PCI
+diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
+index bc35f8499111b..cea83d2866e34 100644
+--- a/arch/mips/kernel/vdso.c
++++ b/arch/mips/kernel/vdso.c
+@@ -157,7 +157,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ 		gic_pfn = virt_to_phys(mips_gic_base + MIPS_GIC_USER_OFS) >> PAGE_SHIFT;
+ 
+ 		ret = io_remap_pfn_range(vma, base, gic_pfn, gic_size,
+-					 pgprot_noncached(PAGE_READONLY));
++					 pgprot_noncached(vma->vm_page_prot));
+ 		if (ret)
+ 			goto out;
+ 	}
+@@ -165,7 +165,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ 	/* Map data page. */
+ 	ret = remap_pfn_range(vma, data_addr,
+ 			      virt_to_phys(vdso_data) >> PAGE_SHIFT,
+-			      PAGE_SIZE, PAGE_READONLY);
++			      PAGE_SIZE, vma->vm_page_prot);
+ 	if (ret)
+ 		goto out;
+ 
 -- 
 2.27.0
 
