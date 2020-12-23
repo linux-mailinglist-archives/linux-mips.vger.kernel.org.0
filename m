@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5D52E13B1
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6272E13A7
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729913AbgLWCdY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Dec 2020 21:33:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55386 "EHLO mail.kernel.org"
+        id S1730202AbgLWCcx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Dec 2020 21:32:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730423AbgLWCZO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:25:14 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4609322273;
-        Wed, 23 Dec 2020 02:24:33 +0000 (UTC)
+        id S1728868AbgLWCZQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:25:16 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 56D922333D;
+        Wed, 23 Dec 2020 02:25:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690273;
-        bh=N30UYS78/kOhKpFvSQP+MyuC+Tc2DEIlgYR6/X9xCq0=;
+        s=k20201202; t=1608690301;
+        bh=q486Ccf37EISGzSH2d4Tt5pJpsZ9Y1IrmDAlGJlUEaA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HVDBc/JZPmzkTlfjY8IaiOrS7QZXXpdX3vyxTLJS/vDJGjK2FrE8vahXjCaAoLtOZ
-         cpZRjfyTQjlJgsUdIMPMiiOWbx9v88Yu36KPTJKF+vLDbnxvQUMsabQsgQDcREKuPu
-         25yc86p+VWn1TKugKYIDzGATf6Bgo9gVi5CrdM8p4NwYcPH9vWHXQ+PSlWc04hZG0c
-         n0eA3jrsN7b6xkx8jPbxwJxPMaHyVLX84aJHW2c7WfqJTS9doG0o9+v5tt7rxOycrU
-         xN2PshcmrnoD74zAyci1Kc6xcGTNLw9lwS2gR7GWxGqqSFfYn/DE+n+/1hUefy2ev1
-         1hgEIUQO75q+g==
+        b=atIL0AdnFa/2z8ewEG0zPBwZGVqtGPC6YJYpMPDAvVXTU/Pb5PGaAbDApaC/fLeno
+         H3CXbg2eofBEWS9ILnpZI9d/RB4NNeDbwf5PRaPQkbBbbiI5YRTJoa4diLh5yE6hw9
+         mRihWJqbCEEz7YOVUwTXGu0ZenG2PhSxZbDby+6L6CQUBNxiVljWDjzrO6NqkyS6I6
+         zYv5ysf2efgnNwa1bBeE7rJRtrxziduGDc5qVCbCtGioaNdmwPfM80u4i+NC9bEVcD
+         oWgkxSpcMPukiz6Dhhw/pb960/BC6hfMJ1T1d/cx1VaPpn6rbEaDK82Viy/5Urunuy
+         BX6kTyzgjHppg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+Cc:     Jinyang He <hejinyang@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 14/48] MIPS: BMC47xx: fix kconfig dependency bug for BCM47XX_SSB
-Date:   Tue, 22 Dec 2020 21:23:42 -0500
-Message-Id: <20201223022417.2794032-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 36/48] MIPS: KASLR: Avoid endless loop in sync_icache if synci_step is zero
+Date:   Tue, 22 Dec 2020 21:24:04 -0500
+Message-Id: <20201223022417.2794032-36-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201223022417.2794032-1-sashal@kernel.org>
 References: <20201223022417.2794032-1-sashal@kernel.org>
@@ -42,46 +42,42 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+From: Jinyang He <hejinyang@loongson.cn>
 
-[ Upstream commit 09a48cbcd7af9203296938044f1100bb113ce01a ]
+[ Upstream commit c0aac3a51cb6364bed367ee3e1a96ed414f386b4 ]
 
-When BCM47XX_SSB is enabled and SSB_PCIHOST is disabled, it results in the
-following Kbuild warning:
+Most platforms do not need to do synci instruction operations when
+synci_step is 0. But for example, the synci implementation on Loongson64
+platform has some changes. On the one hand, it ensures that the memory
+access instructions have been completed. On the other hand, it guarantees
+that all prefetch instructions need to be fetched again. And its address
+information is useless. Thus, only one synci operation is required when
+synci_step is 0 on Loongson64 platform. I guess that some other platforms
+have similar implementations on synci, so add judgment conditions in
+`while` to ensure that at least all platforms perform synci operations
+once. For those platforms that do not need synci, they just do one more
+operation similar to nop.
 
-WARNING: unmet direct dependencies detected for SSB_B43_PCI_BRIDGE
-  Depends on [n]: SSB [=y] && SSB_PCIHOST [=n]
-  Selected by [y]:
-  - BCM47XX_SSB [=y] && BCM47XX [=y] && PCI [=y]
-
-The reason is that BCM47XX_SSB selects SSB_B43_PCI_BRIDGE without
-depending on or selecting SSB_PCIHOST while SSB_B43_PCI_BRIDGE depends on
-SSB_PCIHOST. This can also fail building the kernel as demonstrated in a
-bug report.
-
-Honor the kconfig dependency to remove unmet direct dependency warnings
-and avoid any potential build failures.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=210051
-Signed-off-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/bcm47xx/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/kernel/relocate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/bcm47xx/Kconfig b/arch/mips/bcm47xx/Kconfig
-index e970fd9cf7693..83b80ffe803a0 100644
---- a/arch/mips/bcm47xx/Kconfig
-+++ b/arch/mips/bcm47xx/Kconfig
-@@ -8,6 +8,7 @@ config BCM47XX_SSB
- 	select SSB_DRIVER_MIPS
- 	select SSB_DRIVER_EXTIF
- 	select SSB_EMBEDDED
-+	select SSB_PCIHOST if PCI
- 	select SSB_B43_PCI_BRIDGE if PCI
- 	select SSB_DRIVER_PCICORE if PCI
- 	select SSB_PCICORE_HOSTMODE if PCI
+diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+index 1958910b75c07..f759aae1e1f3d 100644
+--- a/arch/mips/kernel/relocate.c
++++ b/arch/mips/kernel/relocate.c
+@@ -52,7 +52,7 @@ static void __init sync_icache(void *kbase, unsigned long kernel_length)
+ 			: "r" (kbase));
+ 
+ 		kbase += step;
+-	} while (kbase < kend);
++	} while (step && kbase < kend);
+ 
+ 	/* Completion barrier */
+ 	__sync();
 -- 
 2.27.0
 
