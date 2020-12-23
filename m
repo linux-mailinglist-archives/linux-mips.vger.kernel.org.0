@@ -2,36 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 331262E11C9
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B92D2E1219
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Dec 2020 03:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727100AbgLWCRL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Dec 2020 21:17:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44560 "EHLO mail.kernel.org"
+        id S1728403AbgLWCS6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Dec 2020 21:18:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45492 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725300AbgLWCRL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:17:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6893D22202;
-        Wed, 23 Dec 2020 02:16:29 +0000 (UTC)
+        id S1728391AbgLWCS5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:18:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3548F22573;
+        Wed, 23 Dec 2020 02:18:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608689790;
-        bh=H4fX8Jv2Oxuo+GyoGMn6H8Tb6++/vP4bLQ21Kywy0OI=;
+        s=k20201202; t=1608689882;
+        bh=0MXOZf7yd2wC/JO392G22Rc0EIixdSQRG1LJ3EE8zhk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fscbrdx9SlH6wVCrvt3am0BgMGbpLuaCwk36lKijvCchEqZUqIOijbuKc3uzsTgDC
-         Svnz1NaqgefWsEc3ImExOtF8/Lxr+59YfcT4ADw8AEY8YO0uZHmM35gAiCQQopsmpV
-         rX6V0ZEONOH5tgwV9AcIgbNxGIAXjNz6WCbfw5ZJZviaS0T9OaE1us1tpZMilxCAqH
-         ZEMJjnUGd3kpOtJ1vEe26DCKpGPXScMRym2rRObARi6zDoafcG7/2SeTEG0kPFavLv
-         Ls5SUvYXVJgl8tZCn4a87Hem5FdgE6amBrfLRkS9/CDEMNDPZyqpNfAq/eRKFbDPAp
-         /DnXWhks7gEwg==
+        b=j1XaqcCXQvou592cGc87YFlQmqOKcT2i9TIUofpZbjM91y058aneSW7nw3NmCPvQi
+         OaumLSL+NWy/Nna64lkIBgfMW3FSMqIs5TT0Zyrg84x7FAwlrCREYgHHBnuRaagsRX
+         3TQVlJic3dcxNlaosmPu64NpzRrZxbhuqmdSw2GgkjXfW/hr9sSDqBxkVpvskkW73h
+         tzD0m+0p07lsUAhYL9ujcaH99a0gVO0d3fphXNShadxFTEOntN+KyxutqP0C8B56hx
+         KxGQouVToSwIrhzmPu2s++4MJSNprZ8KNsASf6dPBL9N/QVhWCtPZJ05E0cLJyRvU4
+         Yr/1nFIPEms8Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.10 002/217] drm/ingenic: Reset pixclock rate when parent clock rate changes
-Date:   Tue, 22 Dec 2020 21:12:51 -0500
-Message-Id: <20201223021626.2790791-2-sashal@kernel.org>
+Cc:     Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 072/217] MIPS: BMC47xx: fix kconfig dependency bug for BCM47XX_SSB
+Date:   Tue, 22 Dec 2020 21:14:01 -0500
+Message-Id: <20201223021626.2790791-72-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201223021626.2790791-1-sashal@kernel.org>
 References: <20201223021626.2790791-1-sashal@kernel.org>
@@ -43,150 +42,46 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
+From: Necip Fazil Yildiran <fazilyildiran@gmail.com>
 
-[ Upstream commit 33700f6f7d9f6b4e1e6df933ef7fd388889c662c ]
+[ Upstream commit 09a48cbcd7af9203296938044f1100bb113ce01a ]
 
-Old Ingenic SoCs can overclock very well, up to +50% of their nominal
-clock rate, whithout requiring overvolting or anything like that, just
-by changing the rate of the main PLL. Unfortunately, all clocks on the
-system are derived from that PLL, and when the PLL rate is updated, so
-is our pixel clock.
+When BCM47XX_SSB is enabled and SSB_PCIHOST is disabled, it results in the
+following Kbuild warning:
 
-To counter that issue, we make sure that the panel is in VBLANK before
-the rate change happens, and we will then re-set the pixel clock rate
-afterwards, once the PLL has been changed, to be as close as possible to
-the pixel rate requested by the encoder.
+WARNING: unmet direct dependencies detected for SSB_B43_PCI_BRIDGE
+  Depends on [n]: SSB [=y] && SSB_PCIHOST [=n]
+  Selected by [y]:
+  - BCM47XX_SSB [=y] && BCM47XX [=y] && PCI [=y]
 
-v2: Add comment about mutex usage
+The reason is that BCM47XX_SSB selects SSB_B43_PCI_BRIDGE without
+depending on or selecting SSB_PCIHOST while SSB_B43_PCI_BRIDGE depends on
+SSB_PCIHOST. This can also fail building the kernel as demonstrated in a
+bug report.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20200926170501.1109197-2-paul@crapouillou.net
+Honor the kconfig dependency to remove unmet direct dependency warnings
+and avoid any potential build failures.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=210051
+Signed-off-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 61 ++++++++++++++++++++++-
- 1 file changed, 60 insertions(+), 1 deletion(-)
+ arch/mips/bcm47xx/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index a3d1617d7c67e..819744d7d5897 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -10,6 +10,7 @@
- #include <linux/clk.h>
- #include <linux/dma-mapping.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-@@ -68,6 +69,21 @@ struct ingenic_drm {
- 
- 	bool panel_is_sharp;
- 	bool no_vblank;
-+
-+	/*
-+	 * clk_mutex is used to synchronize the pixel clock rate update with
-+	 * the VBLANK. When the pixel clock's parent clock needs to be updated,
-+	 * clock_nb's notifier function will lock the mutex, then wait until the
-+	 * next VBLANK. At that point, the parent clock's rate can be updated,
-+	 * and the mutex is then unlocked. If an atomic commit happens in the
-+	 * meantime, it will lock on the mutex, effectively waiting until the
-+	 * clock update process finishes. Finally, the pixel clock's rate will
-+	 * be recomputed when the mutex has been released, in the pending atomic
-+	 * commit, or a future one.
-+	 */
-+	struct mutex clk_mutex;
-+	bool update_clk_rate;
-+	struct notifier_block clock_nb;
- };
- 
- static const u32 ingenic_drm_primary_formats[] = {
-@@ -111,6 +127,29 @@ static inline struct ingenic_drm *drm_crtc_get_priv(struct drm_crtc *crtc)
- 	return container_of(crtc, struct ingenic_drm, crtc);
- }
- 
-+static inline struct ingenic_drm *drm_nb_get_priv(struct notifier_block *nb)
-+{
-+	return container_of(nb, struct ingenic_drm, clock_nb);
-+}
-+
-+static int ingenic_drm_update_pixclk(struct notifier_block *nb,
-+				     unsigned long action,
-+				     void *data)
-+{
-+	struct ingenic_drm *priv = drm_nb_get_priv(nb);
-+
-+	switch (action) {
-+	case PRE_RATE_CHANGE:
-+		mutex_lock(&priv->clk_mutex);
-+		priv->update_clk_rate = true;
-+		drm_crtc_wait_one_vblank(&priv->crtc);
-+		return NOTIFY_OK;
-+	default:
-+		mutex_unlock(&priv->clk_mutex);
-+		return NOTIFY_OK;
-+	}
-+}
-+
- static void ingenic_drm_crtc_atomic_enable(struct drm_crtc *crtc,
- 					   struct drm_crtc_state *state)
- {
-@@ -276,8 +315,14 @@ static void ingenic_drm_crtc_atomic_flush(struct drm_crtc *crtc,
- 
- 	if (drm_atomic_crtc_needs_modeset(state)) {
- 		ingenic_drm_crtc_update_timings(priv, &state->mode);
-+		priv->update_clk_rate = true;
-+	}
- 
-+	if (priv->update_clk_rate) {
-+		mutex_lock(&priv->clk_mutex);
- 		clk_set_rate(priv->pix_clk, state->adjusted_mode.clock * 1000);
-+		priv->update_clk_rate = false;
-+		mutex_unlock(&priv->clk_mutex);
- 	}
- 
- 	if (event) {
-@@ -934,16 +979,28 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 	if (soc_info->has_osd)
- 		regmap_write(priv->map, JZ_REG_LCD_OSDC, JZ_LCD_OSDC_OSDEN);
- 
-+	mutex_init(&priv->clk_mutex);
-+	priv->clock_nb.notifier_call = ingenic_drm_update_pixclk;
-+
-+	parent_clk = clk_get_parent(priv->pix_clk);
-+	ret = clk_notifier_register(parent_clk, &priv->clock_nb);
-+	if (ret) {
-+		dev_err(dev, "Unable to register clock notifier\n");
-+		goto err_devclk_disable;
-+	}
-+
- 	ret = drm_dev_register(drm, 0);
- 	if (ret) {
- 		dev_err(dev, "Failed to register DRM driver\n");
--		goto err_devclk_disable;
-+		goto err_clk_notifier_unregister;
- 	}
- 
- 	drm_fbdev_generic_setup(drm, 32);
- 
- 	return 0;
- 
-+err_clk_notifier_unregister:
-+	clk_notifier_unregister(parent_clk, &priv->clock_nb);
- err_devclk_disable:
- 	if (priv->lcd_clk)
- 		clk_disable_unprepare(priv->lcd_clk);
-@@ -965,7 +1022,9 @@ static int compare_of(struct device *dev, void *data)
- static void ingenic_drm_unbind(struct device *dev)
- {
- 	struct ingenic_drm *priv = dev_get_drvdata(dev);
-+	struct clk *parent_clk = clk_get_parent(priv->pix_clk);
- 
-+	clk_notifier_unregister(parent_clk, &priv->clock_nb);
- 	if (priv->lcd_clk)
- 		clk_disable_unprepare(priv->lcd_clk);
- 	clk_disable_unprepare(priv->pix_clk);
+diff --git a/arch/mips/bcm47xx/Kconfig b/arch/mips/bcm47xx/Kconfig
+index 6889f74e06f54..40876654423c6 100644
+--- a/arch/mips/bcm47xx/Kconfig
++++ b/arch/mips/bcm47xx/Kconfig
+@@ -9,6 +9,7 @@ config BCM47XX_SSB
+ 	select SSB_DRIVER_MIPS
+ 	select SSB_DRIVER_EXTIF
+ 	select SSB_EMBEDDED
++	select SSB_PCIHOST if PCI
+ 	select SSB_B43_PCI_BRIDGE if PCI
+ 	select SSB_DRIVER_PCICORE if PCI
+ 	select SSB_PCICORE_HOSTMODE if PCI
 -- 
 2.27.0
 
