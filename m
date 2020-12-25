@@ -2,330 +2,412 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2366F2E2BF3
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Dec 2020 18:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA872E2BF0
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Dec 2020 18:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726150AbgLYRFp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Dec 2020 12:05:45 -0500
-Received: from mout.gmx.net ([212.227.15.18]:39507 "EHLO mout.gmx.net"
+        id S1725910AbgLYRFq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Dec 2020 12:05:46 -0500
+Received: from mout.gmx.net ([212.227.15.19]:45269 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbgLYRFo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1726091AbgLYRFo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Fri, 25 Dec 2020 12:05:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1608915850;
-        bh=L3RQrOGSQQMeJpdUKYFS+8IVZLlMP5S50DxJVxCDMS0=;
+        s=badeba3b8450; t=1608915851;
+        bh=cr4PYSAp9GNLzC9cvI+9A9WkW5Oj5yyyqtCSrYvHJoQ=;
         h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=As0vPpO0kUAiPUS9kk8PdtZq8PvENphLt/HoZuLJpsE24ikOm9oegngRQcmuh8FCe
-         qAgWgyC1xe3DdMbZmlkvTh+b7ZHLcZV3YZHcjySskCSJX8cDnzpJOY+vIqL0O7j61X
-         oCmyGOHsRn39fe5qS8nUNp1bevh4OUR/dkfj/qsQ=
+        b=K5ENOiohs1X0ljV2EfqLL9EOw76/TIUXJHDhi4pXCf1+m7GfI7oCLfR9m+YclCCSl
+         o5rvAiiL4fdsEiP8WA+ObTwdvHHbpiBriSjrm4qRVVAwvl+0SiW8Pf1Yor8rTm4/1J
+         DtJvISC/xwnDlNvb/H6jBRoDw3+xfDM7LsnjhjmE=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MrhUE-1kEJ6k0ClY-00nf9S; Fri, 25
- Dec 2020 18:04:10 +0100
-Date:   Fri, 25 Dec 2020 19:00:48 +0200
+Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx004
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MbAcs-1kLyb51Unw-00bYEm; Fri, 25
+ Dec 2020 18:04:11 +0100
+Date:   Fri, 25 Dec 2020 19:01:15 +0200
 From:   Lauri Kasanen <cand@gmx.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de
-Subject: [PATCH 3/6] fbdev: Add n64rdp driver
-Message-Id: <20201225190048.776de55443fd4c953e797d8e@gmx.com>
+Subject: [PATCH 4/6] input: Add N64 controller driver
+Message-Id: <20201225190115.efa38e5a0107bec09f993ed6@gmx.com>
 X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ZRMwGMAHQsqRuY82UxZB/VlykgMPbRnq9wccQKDEM5TgK5iEGa+
- 7sCfr5R5smGyhZXlxKea3rzG3zXolFuqxSgM9tM6zQMyBkeVAxvN/Ck8m4pltJWPXnnRRRe
- XM268PgzxAK8EebA30UgmRmx25p+IYA0ePJBi6VtwLyLyJgbCRJyLtYuGMuvR60HmR/LXKI
- uksVQeQDe3eI35adN+TIg==
+X-Provags-ID: V03:K1:Gj308YDFf3ZDvf+pOrLf+ZRZpCoDJGnmjSzwSCAKGlNBUmoNMq9
+ AU093vdgZG0gTHdeyCR6ZwAlYfYFWnG1MImEaBJhk+qD6PliyGHmgviNjDx7IWLcDE7utHy
+ Il2W0nzTdtxI7IKJh7qyi/AuSeXKA730dm6QsFhSrx+0sY8YR4Jjf9tstSNI/GHK/ituVOx
+ rp1MoHPxwtT5LlX6MA2Rw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CPWejgR/RmM=:s3YXtOQtYlA+q63j5tYdtB
- 6CCdVkl5Hvz9N0mpgs0Xbj4/kmYQKzUWbXXTibzoIJpsp1lytdl/G/gRWHvzd2dpTTBgAKAgQ
- 0WxLV8oeRIQ4tAYSIqzs2BR063JQMANHn56IDz0T9+F11ZLu+3v4yT+iujf8IYVJ3/OPl272I
- IfLaA65YRgXECprjWm2RKVEXb9c53amB1yb4b0UMRdE+MRQHzixVu2A2R8OZmaPWOqNEnQ++3
- 2/afNYPihBLX7n1XjpPLA4C8nfYD4ivDDT31+XnOKC9SptEixsrPL6iV3iSQ9htUV/SxEQr5G
- l7wtjfJUJl+gcxfdUdhBV10W8p2sNkIDvKXFH/HIqFs3p7S/vWdNRQP7fQTNewIaTdWocpWhW
- GxzG64pRv4wX/q36qIH6Yqw5dfq5HPrs6Q/J5faF2dcwgHlrl8Cz9hBkyMen1VYcr0qoJNffz
- ewaMZHFDyTIQWAFel5slVnm6HTkWghykOLa5yTojOPxVvxZah84PhZUzk1gWaJvEMQ64AEtRC
- hpz3yzvV9qm7xmYu6AzFJq7k6m3fWzRXm34OiLZ2VpBaCZWiEp9aRO1sJwepJwHQzyiNHnqb7
- 6WMDkSiezbCGAy1hF5ExrvBjLLlTqTdWgGED80KAcpXDtvwbHEe4U8bBQ5vxfvbwEoUdyKKtT
- 2ULJm0TqoY4bv52mFWwTpz6YH5vCsYvHuuiVfKqsGAE4y7Gs8jDaDBtg2cIcE4vGiGdfRJ1U2
- XPVLmt3PEt0GTHmmqPqntGe2hHVgcu9hcVIg8DBUCM0gW+ozD1SdYdLzBl1m6NJozxt6wM52N
- VY9aZ8HLn9eDSKZqtJn5ZZhbr4ar6CZ+pDtPkQcdGOxKgpwEVcOGl2oyqG2nIJqG7K2o+E1pU
- 8aZUUfLo8nhf6v6gIJGQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MvLAmSbye9Y=:dIEloSbCkJusoICh7x3IVO
+ vdBM8Lcfc/lpobzWNuzku8Tpz/PXhIRi+uenO1zI/lfMiFIcjSUz3H/ug9adwHM6+bYrmJc+c
+ +9okggipaGtooLvW47GjfgZwYZiIrL4GOzHT+8UU9cGleRJ8+RnWwL6U2m4D5VLUAdv9PSNF4
+ 0dz2lnlC6dv1j4ZJ+36iOlzJMTg021mjkg9OLb2Iz0r6NsoUXsJlujK1EKCSfI/m4dsvgfGZ3
+ fz3vz28pSzd2b7vC9NHuTm1IrnKkx6QZz7wh8ymxSeuk4bOMdRg7awn0CRbLar+o0rOiSAN/h
+ k0m6QZWNa2B0KZJtlYpN84gZfwjafHQUqAsnSi42zWhCkYBoWImbIuK5WWZt0fU47daM8L8RK
+ nAxFaUH1ye18HCc3iBYizSwATojbMKYJxEnFH+3QvDFk3R83jjeT1EhtM8Faz28IK7GlYnrZ8
+ /dmZ0U17IUql2J9qxtE2/hUDdSousYzpl1Yd6a73oXMKcAlHaHnE9iEzV+DcrfO7KxpyjcAJA
+ Mg9TC8iVdn6rKT+cfBYgP/k3wMSIToYEku6VPo2LExJbBE+H0ujN9XOPBz/vsH6Afrs8Ouiit
+ 4Rh9qrhgjDdJINWR7ZOV9z4nqByf3X+yFy5O3s5K2lgFiPNSCejU5DfeoZ2lhFI6gQqk1dD1u
+ v4hsJh79Gy/cXOnboIDzMJ5Lqms8UR4fI/BJrwLf5+KTvbyZ/IwOgX1gQb8rXnRqiB9sEbvD7
+ cNrus1jYI9M0eZuH985U3W9+Tjcm6UodDWzoGS5ROlvCdy1ty2GelO++EQhobsVr8TcG35FSf
+ EycbG1mLgxtHAob57O1q3N8sqhIR0oQFNrxsrS32P+7HWhIDqb/SwRS0F/1FEQVggU9UqRD2i
+ sdEBChQbwDdyb9l6Q2vg==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-I'm aware of the drm-fbdev resolution, but CONFIG_DRM adds 100kb, which
-is a complete blocker on a system with 8mb RAM.
-
 Signed-off-by: Lauri Kasanen <cand@gmx.com>
 =2D--
- arch/mips/n64/init.c         |  10 +++
- drivers/video/fbdev/Kconfig  |   9 ++
- drivers/video/fbdev/Makefile |   1 +
- drivers/video/fbdev/n64rdp.c | 190 ++++++++++++++++++++++++++++++++++++++=
+ drivers/input/joystick/Kconfig  |   6 +
+ drivers/input/joystick/Makefile |   2 +-
+ drivers/input/joystick/n64joy.c | 300 +++++++++++++++++++++++++++++++++++=
 +++++
- 4 files changed, 210 insertions(+)
- create mode 100644 drivers/video/fbdev/n64rdp.c
+ 3 files changed, 307 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/input/joystick/n64joy.c
 
-diff --git a/arch/mips/n64/init.c b/arch/mips/n64/init.c
-index 6fb622d..635e9ef 100644
-=2D-- a/arch/mips/n64/init.c
-+++ b/arch/mips/n64/init.c
-@@ -8,6 +8,7 @@
- #include <linux/ioport.h>
- #include <linux/irq.h>
- #include <linux/memblock.h>
-+#include <linux/platform_device.h>
- #include <linux/string.h>
+diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconf=
+ig
+index b080f0c..b5098fb 100644
+=2D-- a/drivers/input/joystick/Kconfig
++++ b/drivers/input/joystick/Kconfig
+@@ -382,4 +382,10 @@ config JOYSTICK_FSIA6B
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called fsia6b.
 
- #include <asm/bootinfo.h>
-@@ -46,6 +47,15 @@ void __init prom_free_prom_memory(void)
- {
- }
-
-+static int __init n64_platform_init(void)
-+{
-+	platform_device_register_simple("n64rdp", -1, NULL, 0);
-+
-+	return 0;
-+}
-+
-+arch_initcall(n64_platform_init);
-+
- void __init plat_mem_setup(void)
- {
- 	iomem_resource_init();
-diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
-index cfb7f56..4dde2c7 100644
-=2D-- a/drivers/video/fbdev/Kconfig
-+++ b/drivers/video/fbdev/Kconfig
-@@ -2206,6 +2206,15 @@ config FB_SIMPLE
- 	  Configuration re: surface address, size, and format must be provided
- 	  through device tree, or plain old platform data.
-
-+config FB_N64RDP
-+	bool "Nintendo 64 RDP support"
-+	depends on (FB =3D y) && MIPS_N64
-+	select FB_CFB_FILLRECT
-+	select FB_CFB_COPYAREA
-+	select FB_CFB_IMAGEBLIT
++config JOYSTICK_N64
++	bool "N64 controller"
++	depends on MIPS_N64
 +	help
-+	  Driver for the N64's display.
++	  Support for the four N64 controllers.
 +
- config FB_SSD1307
- 	tristate "Solomon SSD1307 framebuffer support"
- 	depends on FB && I2C
-diff --git a/drivers/video/fbdev/Makefile b/drivers/video/fbdev/Makefile
-index 477b962..86f1e22 100644
-=2D-- a/drivers/video/fbdev/Makefile
-+++ b/drivers/video/fbdev/Makefile
-@@ -129,6 +129,7 @@ obj-$(CONFIG_FB_MX3)		  +=3D mx3fb.o
- obj-$(CONFIG_FB_DA8XX)		  +=3D da8xx-fb.o
- obj-$(CONFIG_FB_SSD1307)	  +=3D ssd1307fb.o
- obj-$(CONFIG_FB_SIMPLE)           +=3D simplefb.o
-+obj-$(CONFIG_FB_N64RDP)           +=3D n64rdp.o
-
- # the test framebuffer is last
- obj-$(CONFIG_FB_VIRTUAL)          +=3D vfb.o
-diff --git a/drivers/video/fbdev/n64rdp.c b/drivers/video/fbdev/n64rdp.c
+ endif
+diff --git a/drivers/input/joystick/Makefile b/drivers/input/joystick/Make=
+file
+index 58232b3..31d720c 100644
+=2D-- a/drivers/input/joystick/Makefile
++++ b/drivers/input/joystick/Makefile
+@@ -24,6 +24,7 @@ obj-$(CONFIG_JOYSTICK_INTERACT)		+=3D interact.o
+ obj-$(CONFIG_JOYSTICK_JOYDUMP)		+=3D joydump.o
+ obj-$(CONFIG_JOYSTICK_MAGELLAN)		+=3D magellan.o
+ obj-$(CONFIG_JOYSTICK_MAPLE)		+=3D maplecontrol.o
++obj-$(CONFIG_JOYSTICK_N64)		+=3D n64joy.o
+ obj-$(CONFIG_JOYSTICK_PSXPAD_SPI)	+=3D psxpad-spi.o
+ obj-$(CONFIG_JOYSTICK_PXRC)		+=3D pxrc.o
+ obj-$(CONFIG_JOYSTICK_SIDEWINDER)	+=3D sidewinder.o
+@@ -37,4 +38,3 @@ obj-$(CONFIG_JOYSTICK_WARRIOR)		+=3D warrior.o
+ obj-$(CONFIG_JOYSTICK_WALKERA0701)	+=3D walkera0701.o
+ obj-$(CONFIG_JOYSTICK_XPAD)		+=3D xpad.o
+ obj-$(CONFIG_JOYSTICK_ZHENHUA)		+=3D zhenhua.o
+-
+diff --git a/drivers/input/joystick/n64joy.c b/drivers/input/joystick/n64j=
+oy.c
 new file mode 100644
-index 0000000..e5456b6
+index 0000000..fbf3686
 =2D-- /dev/null
-+++ b/drivers/video/fbdev/n64rdp.c
-@@ -0,0 +1,190 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/drivers/input/joystick/n64joy.c
+@@ -0,0 +1,300 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * DRM driver for the N64's RDP
++ * Support for the four N64 controllers.
 + *
 + * Copyright (c) 2020 Lauri Kasanen
-+ *
-+ * Based on simplefb.c, which was:
-+ * Copyright (c) 2013, Stephen Warren
-+ *
-+ * Based on q40fb.c, which was:
-+ * Copyright (C) 2001 Richard Zidlicky <rz@linux-m68k.org>
-+ *
-+ * Also based on offb.c, which was:
-+ * Copyright (C) 1997 Geert Uytterhoeven
-+ * Copyright (C) 1996 Paul Mackerras
 + */
 +
-+#include <linux/dma-mapping.h>
 +#include <linux/errno.h>
-+#include <linux/fb.h>
-+#include <linux/io.h>
++#include <linux/init.h>
++#include <linux/input.h>
++#include <linux/limits.h>
++#include <linux/kernel.h>
 +#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/parser.h>
++#include <linux/mutex.h>
++#include <linux/timer.h>
 +
 +#include <asm/addrspace.h>
++#include <asm/io.h>
 +
-+static const struct fb_fix_screeninfo n64rdp_fix =3D {
-+	.id		=3D "default",
-+	.type		=3D FB_TYPE_PACKED_PIXELS,
-+	.visual		=3D FB_VISUAL_TRUECOLOR,
-+	.accel		=3D FB_ACCEL_NONE,
++MODULE_AUTHOR("Lauri Kasanen <cand@gmx.com>");
++MODULE_DESCRIPTION("Driver for N64 controllers");
++MODULE_LICENSE("GPL");
++
++#define PIF_RAM 0x1fc007c0
++#define REG_BASE ((u32 *) CKSEG1ADDR(0xa4800000))
++
++#define SI_DRAM_REG 0
++#define SI_READ_REG 1
++#define SI_WRITE_REG 4
++#define SI_STATUS_REG 6
++
++#define SI_STATUS_DMA_BUSY  (1 << 0)
++#define SI_STATUS_IO_BUSY   (1 << 1)
++
++#define N64_CONTROLLER_ID 0x0500
++
++static struct input_dev *n64joy_dev[4];
++static const char *n64joy_phys[4] =3D {
++	"n64joy/port0",
++	"n64joy/port1",
++	"n64joy/port2",
++	"n64joy/port3",
 +};
 +
-+static const struct fb_var_screeninfo n64rdp_var =3D {
-+	.height		=3D -1,
-+	.width		=3D -1,
-+	.activate	=3D FB_ACTIVATE_NOW,
-+	.vmode		=3D FB_VMODE_NONINTERLACED,
++static u8 n64joy_opened;
++static DEFINE_MUTEX(n64joy_mutex);
++static struct timer_list timer;
++
++static u64 si_buf[8] ____cacheline_aligned;
++
++struct joydata {
++	unsigned: 16; // unused
++	unsigned err: 2;
++	unsigned: 14; // unused
++
++	union {
++		u32 data;
++
++		struct {
++			unsigned a: 1;
++			unsigned b: 1;
++			unsigned z: 1;
++			unsigned start: 1;
++			unsigned up: 1;
++			unsigned down: 1;
++			unsigned left: 1;
++			unsigned right: 1;
++			unsigned: 2; // unused
++			unsigned l: 1;
++			unsigned r: 1;
++			unsigned c_up: 1;
++			unsigned c_down: 1;
++			unsigned c_left: 1;
++			unsigned c_right: 1;
++			signed x: 8;
++			signed y: 8;
++		};
++	};
 +};
 +
-+#define PSEUDO_PALETTE_SIZE 16
-+
-+static int n64rdp_setcolreg(u_int regno, u_int red, u_int green, u_int bl=
-ue,
-+			      u_int transp, struct fb_info *info)
-+{
-+	u32 *pal =3D info->pseudo_palette;
-+	u32 cr =3D red >> (16 - info->var.red.length);
-+	u32 cg =3D green >> (16 - info->var.green.length);
-+	u32 cb =3D blue >> (16 - info->var.blue.length);
-+	u32 value;
-+
-+	if (regno >=3D PSEUDO_PALETTE_SIZE)
-+		return -EINVAL;
-+
-+	value =3D (cr << info->var.red.offset) |
-+		(cg << info->var.green.offset) |
-+		(cb << info->var.blue.offset);
-+	if (info->var.transp.length > 0) {
-+		u32 mask =3D (1 << info->var.transp.length) - 1;
-+		mask <<=3D info->var.transp.offset;
-+		value |=3D mask;
-+	}
-+	pal[regno] =3D value;
-+
-+	return 0;
-+}
-+
-+static const struct fb_ops n64rdp_ops =3D {
-+	.owner		=3D THIS_MODULE,
-+	.fb_setcolreg	=3D n64rdp_setcolreg,
-+	.fb_fillrect	=3D cfb_fillrect,
-+	.fb_copyarea	=3D cfb_copyarea,
-+	.fb_imageblit	=3D cfb_imageblit,
-+};
-+
-+struct n64rdp_par {
-+	u32 palette[PSEUDO_PALETTE_SIZE];
-+	dma_addr_t physaddr;
-+};
-+
-+#define REG_BASE ((u32 *) CKSEG1ADDR(0xA4400000))
-+
-+static void n64rdp_write_reg(const u8 reg, const u32 value)
++static void n64joy_write_reg(const u8 reg, const u32 value)
 +{
 +	__raw_writel(value, REG_BASE + reg);
 +}
 +
-+#define W 320
-+#define H 240
++static u32 n64joy_read_reg(const u8 reg)
++{
++	return __raw_readl(REG_BASE + reg);
++}
 +
-+static const u32 ntsc_320[] __initconst =3D {
-+	0x00013212, 0x00000000, 0x00000140, 0x00000200,
-+	0x00000000, 0x03e52239, 0x0000020d, 0x00000c15,
-+	0x0c150c15, 0x006c02ec, 0x002501ff, 0x000e0204,
-+	0x00000200, 0x00000400
++static void n64joy_wait_si_dma(void)
++{
++	while (n64joy_read_reg(SI_STATUS_REG) & (SI_STATUS_DMA_BUSY | SI_STATUS_=
+IO_BUSY))
++		;
++}
++
++static void n64joy_exec_pif(const u64 in[8])
++{
++	unsigned long flags;
++
++	dma_cache_wback_inv((unsigned long) in, 8 * 8);
++	dma_cache_inv((unsigned long) si_buf, 8 * 8);
++
++	local_irq_save(flags);
++
++	n64joy_wait_si_dma();
++
++	barrier();
++	n64joy_write_reg(SI_DRAM_REG, virt_to_phys(in));
++	barrier();
++	n64joy_write_reg(SI_WRITE_REG, PIF_RAM);
++	barrier();
++
++	n64joy_wait_si_dma();
++
++	barrier();
++	n64joy_write_reg(SI_DRAM_REG, virt_to_phys(si_buf));
++	barrier();
++	n64joy_write_reg(SI_READ_REG, PIF_RAM);
++	barrier();
++
++	n64joy_wait_si_dma();
++
++	local_irq_restore(flags);
++}
++
++static const u64 polldata[] ____cacheline_aligned =3D {
++	0xff010401ffffffff,
++	0xff010401ffffffff,
++	0xff010401ffffffff,
++	0xff010401ffffffff,
++	0xfe00000000000000,
++	0,
++	0,
++	1
 +};
 +
-+static int __init n64rdp_probe(struct platform_device *pdev)
++static void n64joy_poll(struct timer_list *t)
 +{
-+	int ret;
++	const struct joydata *data;
 +	u32 i;
-+	struct fb_info *info;
-+	struct n64rdp_par *par;
-+	dma_addr_t addr;
 +
-+	info =3D framebuffer_alloc(sizeof(struct n64rdp_par), &pdev->dev);
-+	if (!info)
-+		return -ENOMEM;
-+	platform_set_drvdata(pdev, info);
++	n64joy_exec_pif(polldata);
 +
-+	par =3D info->par;
++	data =3D (struct joydata *) si_buf;
 +
-+	info->fix =3D n64rdp_fix;
-+	info->screen_base =3D dma_alloc_coherent(&pdev->dev, W * H * 2, &addr,
-+					       GFP_DMA | GFP_KERNEL);
-+	if (!info->screen_base)
-+		return -ENOMEM;
++	for (i =3D 0; i < 4; i++) {
++		if (!n64joy_dev[i])
++			continue;
 +
-+	info->fix.smem_start =3D par->physaddr =3D addr;
-+	info->fix.smem_len =3D W * H * 2;
-+	info->fix.line_length =3D W * 2;
++		// d-pad
++		input_report_key(n64joy_dev[i], BTN_DPAD_UP, data[i].up);
++		input_report_key(n64joy_dev[i], BTN_DPAD_DOWN, data[i].down);
++		input_report_key(n64joy_dev[i], BTN_DPAD_LEFT, data[i].left);
++		input_report_key(n64joy_dev[i], BTN_DPAD_RIGHT, data[i].right);
 +
-+	info->var =3D n64rdp_var;
-+	info->var.xres =3D W;
-+	info->var.yres =3D H;
-+	info->var.xres_virtual =3D W;
-+	info->var.yres_virtual =3D H;
-+	info->var.bits_per_pixel =3D 16;
-+	info->var.red =3D (struct fb_bitfield) {11, 5};
-+	info->var.green =3D (struct fb_bitfield) {6, 5};
-+	info->var.blue =3D (struct fb_bitfield) {1, 5};
-+	info->var.transp =3D (struct fb_bitfield) {0, 1};
++		// c buttons
++		input_report_key(n64joy_dev[i], BTN_FORWARD, data[i].c_up);
++		input_report_key(n64joy_dev[i], BTN_BACK, data[i].c_down);
++		input_report_key(n64joy_dev[i], BTN_LEFT, data[i].c_left);
++		input_report_key(n64joy_dev[i], BTN_RIGHT, data[i].c_right);
 +
-+	info->apertures =3D alloc_apertures(1);
-+	if (!info->apertures) {
-+		ret =3D -ENOMEM;
-+		goto error_fb_release;
-+	}
-+	info->apertures->ranges[0].base =3D info->fix.smem_start;
-+	info->apertures->ranges[0].size =3D info->fix.smem_len;
++		// matching buttons
++		input_report_key(n64joy_dev[i], BTN_START, data[i].start);
++		input_report_key(n64joy_dev[i], BTN_Z, data[i].z);
 +
-+	info->fbops =3D &n64rdp_ops;
-+	info->flags =3D FBINFO_DEFAULT;
-+	info->pseudo_palette =3D par->palette;
++		// remaining ones: a, b, l, r
++		input_report_key(n64joy_dev[i], BTN_0, data[i].a);
++		input_report_key(n64joy_dev[i], BTN_1, data[i].b);
++		input_report_key(n64joy_dev[i], BTN_2, data[i].l);
++		input_report_key(n64joy_dev[i], BTN_3, data[i].r);
 +
-+	dev_info(&pdev->dev, "framebuffer at 0x%lx, 0x%x bytes, mapped to 0x%p\n=
-",
-+			     info->fix.smem_start, info->fix.smem_len,
-+			     info->screen_base);
++		input_report_abs(n64joy_dev[i], ABS_X, data[i].x);
++		input_report_abs(n64joy_dev[i], ABS_Y, data[i].y);
 +
-+	ret =3D register_framebuffer(info);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "Unable to register n64rdp: %d\n", ret);
-+		goto error_fb_release;
++		input_sync(n64joy_dev[i]);
 +	}
 +
-+	for (i =3D 0; i < ARRAY_SIZE(ntsc_320); i++) {
-+		if (i =3D=3D 1)
-+			n64rdp_write_reg(i, par->physaddr);
-+		else
-+			n64rdp_write_reg(i, ntsc_320[i]);
++	mod_timer(&timer, jiffies + msecs_to_jiffies(16));
++}
++
++static int n64joy_open(struct input_dev *dev)
++{
++	int err;
++
++	err =3D mutex_lock_interruptible(&n64joy_mutex);
++	if (err)
++		return err;
++
++	if (!n64joy_opened) {
++		// Could use the vblank irq, but it's not important if the poll
++		// point slightly changes.
++		timer_setup(&timer, n64joy_poll, 0);
++		mod_timer(&timer, jiffies + msecs_to_jiffies(16));
 +	}
++
++	n64joy_opened++;
++
++	mutex_unlock(&n64joy_mutex);
++	return err;
++}
++
++static void n64joy_close(struct input_dev *dev)
++{
++	mutex_lock(&n64joy_mutex);
++	if (!--n64joy_opened)
++		del_timer_sync(&timer);
++	mutex_unlock(&n64joy_mutex);
++}
++
++static const u64 __initconst scandata[] ____cacheline_aligned =3D {
++	0xff010300ffffffff,
++	0xff010300ffffffff,
++	0xff010300ffffffff,
++	0xff010300ffffffff,
++	0xfe00000000000000,
++	0,
++	0,
++	1
++};
++
++static int __init n64joy_init(void)
++{
++	const struct joydata *data;
++	int err =3D 0;
++	u32 i, j, found =3D 0;
++
++	// The controllers are not hotpluggable, so we can scan in init
++	n64joy_exec_pif(scandata);
++
++	data =3D (struct joydata *) si_buf;
++
++	memset(n64joy_dev, 0, 4 * sizeof(void *));
++
++	for (i =3D 0; i < 4; i++) {
++		if (!data[i].err && data[i].data >> 16 =3D=3D N64_CONTROLLER_ID) {
++			found++;
++
++			n64joy_dev[i] =3D input_allocate_device();
++			if (!n64joy_dev[i]) {
++				err =3D -ENOMEM;
++				goto fail;
++			}
++
++			n64joy_dev[i]->name =3D "N64 controller";
++			n64joy_dev[i]->phys =3D n64joy_phys[i];
++			n64joy_dev[i]->id.bustype =3D BUS_HOST;
++			n64joy_dev[i]->id.vendor =3D 0;
++			n64joy_dev[i]->id.product =3D data[i].data >> 16;
++			n64joy_dev[i]->id.version =3D 0;
++
++			n64joy_dev[i]->open =3D n64joy_open;
++			n64joy_dev[i]->close =3D n64joy_close;
++
++			n64joy_dev[i]->evbit[0] =3D BIT_MASK(EV_KEY) | BIT_MASK(EV_ABS);
++			n64joy_dev[i]->absbit[0] =3D BIT_MASK(ABS_X) | BIT_MASK(ABS_Y);
++
++			// d-pad
++			n64joy_dev[i]->keybit[BIT_WORD(BTN_DPAD_UP)] =3D BIT_MASK(BTN_DPAD_UP)=
+ |
++				BIT_MASK(BTN_DPAD_DOWN) | BIT_MASK(BTN_DPAD_LEFT) |
++				BIT_MASK(BTN_DPAD_RIGHT);
++			// c buttons
++			n64joy_dev[i]->keybit[BIT_WORD(BTN_LEFT)] |=3D BIT_MASK(BTN_LEFT) |
++				BIT_MASK(BTN_RIGHT) | BIT_MASK(BTN_FORWARD) | BIT_MASK(BTN_BACK);
++			// matching buttons
++			n64joy_dev[i]->keybit[BIT_WORD(BTN_GAMEPAD)] |=3D BIT_MASK(BTN_START) =
+|
++				BIT_MASK(BTN_Z);
++			// remaining ones: a, b, l, r
++			n64joy_dev[i]->keybit[BIT_WORD(BTN_0)] |=3D BIT_MASK(BTN_0) |
++				BIT_MASK(BTN_1) | BIT_MASK(BTN_2) | BIT_MASK(BTN_3);
++
++			for (j =3D 0; j < 2; j++) {
++				input_set_abs_params(n64joy_dev[i], ABS_X + j,
++						     S8_MIN, S8_MAX, 0, 0);
++			}
++
++			err =3D input_register_device(n64joy_dev[i]);
++			if (err) {
++				input_free_device(n64joy_dev[i]);
++				goto fail;
++			}
++		}
++	}
++
++	pr_info("n64joy: %u controller(s) connected\n", found);
++
++	if (!found)
++		return -ENODEV;
 +
 +	return 0;
-+
-+error_fb_release:
-+	framebuffer_release(info);
-+	return ret;
++fail:
++	for (i =3D 0; i < 4; i++) {
++		if (!n64joy_dev[i])
++			continue;
++		input_unregister_device(n64joy_dev[i]);
++	}
++	return err;
 +}
 +
-+static struct platform_driver n64rdp_driver =3D {
-+	.driver =3D {
-+		.name =3D "n64rdp",
-+	},
-+};
-+
-+static int __init n64rdp_init(void)
-+{
-+	int ret;
-+
-+	ret =3D platform_driver_probe(&n64rdp_driver, n64rdp_probe);
-+
-+	return ret;
-+}
-+
-+fs_initcall(n64rdp_init);
-+
-+MODULE_AUTHOR("Lauri Kasanen <cand@gmx.com>");
-+MODULE_DESCRIPTION("Driver for the N64's display");
-+MODULE_LICENSE("GPL v2");
++module_init(n64joy_init);
 =2D-
 2.6.2
 
