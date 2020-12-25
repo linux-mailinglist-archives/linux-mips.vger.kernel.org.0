@@ -2,145 +2,219 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB5A2E2B6F
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Dec 2020 13:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5F02E2BEF
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Dec 2020 18:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729098AbgLYMUm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Dec 2020 07:20:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727426AbgLYMUm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Dec 2020 07:20:42 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BD5C061573;
-        Fri, 25 Dec 2020 04:20:01 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id m25so9782861lfc.11;
-        Fri, 25 Dec 2020 04:20:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NikotG70jV13TXNsF314W0wEbJexz4D5n/k+PZhYUC8=;
-        b=izB5uNyY73TR2b/1o2JN3Wac1R9e4hAoCuxwZkAa0QsyVQ+Ryo66kT61xgr+kiEoSA
-         2+uyLlgux4D72idT/jhtUkkHfl9zMnk67DqqgeoCredoN/G+pcKoCleLeGcpsE76cpr/
-         rwUrOkNPL6G6k/gSEjb1TWN490UdkdREgzEgyMyN5cWJM/56zz2+K05iqCwPGiEpIMLp
-         0w9OO4/jkeXD6Shr0TJ9tw/SsdjL/huK9qs5TiolEgNQCrou5cHleZEX5lHbLAOfo/pM
-         LMtiM4+FM9kEs1k7DOewMjrsimgmkepZoxnGoCGpeUSn6h59gKxYJMHkzZC0dLpCSlx8
-         B+SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NikotG70jV13TXNsF314W0wEbJexz4D5n/k+PZhYUC8=;
-        b=FqJTe49+MyU9xnhVEDPwB/ru2TThESzcMn/7I9DoPstxTXynB8hAg55vPGoVCK7HaY
-         +pBs12m53UAbymPNE6m5fqZhXE7L6QDXVYxXkzdn6DOXDRvejhcEUK1AN0jC47S219xE
-         nRyVsNGmiExS6ElvMJGa3OKBzD/Hh4LGfu9Til0CFVdTxAERRid7PWClwt6Rv9i9qJbX
-         6AWbFtw1JjBh5I0UEXNYmFFaBfpHzrowBQFM/A0mWs+gp9+yBjxEauP4RC7UkDz+5UV1
-         TtBGsWTRiI/GsKidcHY/kje3YuH4Su+Li5C7vdfF5nMbNiZuE3U9INc/wy6I+gaUhaJV
-         +fWw==
-X-Gm-Message-State: AOAM5303b/gOzbpm7s8Fyq2K/awgD4wjKAKELsaxkPDHkGtYJHnqJM6/
-        wUxGzN9ZnJjUMrzZpjGOLAtQ81WBrQ1ILA==
-X-Google-Smtp-Source: ABdhPJx8zUkdiLAPi5Ra5IczX7Wdza6GkCUdYzI+Rx0SyB/axqnTm7VTcLjnQUUcZtzodklo8YajRg==
-X-Received: by 2002:a2e:8113:: with SMTP id d19mr14821087ljg.303.1608898799585;
-        Fri, 25 Dec 2020 04:19:59 -0800 (PST)
-Received: from [192.168.1.101] ([31.173.81.155])
-        by smtp.gmail.com with ESMTPSA id i18sm4533873lja.102.2020.12.25.04.19.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Dec 2020 04:19:59 -0800 (PST)
-Subject: Re: [PATCH v4 2/4] spi: ls7a: Add YAML schemas
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        ThomasBogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1608892552-15457-1-git-send-email-zhangqing@loongson.cn>
- <1608892552-15457-2-git-send-email-zhangqing@loongson.cn>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <99ab96cc-6169-19c2-04ef-d023d4427f55@gmail.com>
-Date:   Fri, 25 Dec 2020 15:19:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
-MIME-Version: 1.0
-In-Reply-To: <1608892552-15457-2-git-send-email-zhangqing@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726082AbgLYRFk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Dec 2020 12:05:40 -0500
+Received: from mout.gmx.net ([212.227.17.21]:41009 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725995AbgLYRFj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 25 Dec 2020 12:05:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1608915847;
+        bh=3lrL2kD5QITsCXXonPHpntTbamWvnsVUUWloW0XvODk=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=Qk0fRjU8bW9uSrip85EMhYJFWNPy5dBqvfhyV4tBtp4LrgBrAqr66clxBfxIo54/r
+         VzcR9RtRiLVVvWUtmrYMi3z0sNjCe4/ydkJg3sk/z05fqH/gl9JqLyZaggyUH23pFp
+         3z2UpOsz/puk8UDwi1mT+CbuxqgDWy/qIpWX8YG8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MOA3F-1kiADn3O4P-00OZGk; Fri, 25
+ Dec 2020 18:04:06 +0100
+Date:   Fri, 25 Dec 2020 18:59:46 +0200
+From:   Lauri Kasanen <cand@gmx.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de
+Subject: [PATCH 1/6] Revert "MIPS: Remove unused R4300 CPU support"
+Message-Id: <20201225185946.d67607fe16e324c56f9a2f46@gmx.com>
+X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:VI7Mn/LMsDzqQ2ZY6gB48XhjLQRFSL5W14/uOZEdG1xZWK3Uf7G
+ uvOD3hrpLj2qsgtfYaXJYPlndbF4sULHq026MuKM+gA0VEyPFaMqOsIkZOtRrjsWBH/ssXj
+ l/KPcGE0GnExzypYpXYOu6zwrhMSFrkPIZdfVhTPZMS5jURixyzYes1qSwvHyasZdX9G15N
+ ghyXQilBZrm2V09GxS83Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kiSofw0U+bs=:/EONNZnPzgJ9nzqaIgMVb3
+ T2zwGz35JiE9XAu26NeMlvq+SbkW6GStwDmCq4zG25uhCwhwBymDvZ1WcSv4KH7BD3IcFNmC4
+ jREU9sHpvjvdtVHJY65GifXoiRDO9LPDnY+/AZevFf7EhDemBxy3uSUDhagIfLeP7vaPlgPqF
+ twe93KL6zfQjLCE+pWIQsJ5pEdsrNrSufh13iZhcBgRYjnAaa7CIcghPh7Wvlj8+xNaf8DYAB
+ cJ4r6YQm1bh7g8PtFUMmJmSCrS40BrJQd0S8Zdk709SD9vQW77hvoUT1RxDUo7JF1UZQaVex9
+ jFssT2VxpQg6ERKboV2redHWWJz0Brh5AZtspA5MhlKr9GT5Cg7WC4D8VnbOUKtVKFFJ3rztk
+ R+tWLz/OXGfcqWxuQ7BGeX7/n8ydAlSjujxGJXmxb9Q2IyUfHFZWQpmQAUqwnnOjtOT8SdWa6
+ VDHVKmPSeYVtSjCH/ftbnO9VL0Pkca1onYqhcvsgeIP3TYq997kf9ZrasJ1Cxc14oj1tlog9C
+ h0phFg4BdXGS3/v4lOiwZd4kjGJK5duKI7kFF/Nz+WNNepL/7AiLpiU5ajDM02MF3g//+87qu
+ Hj90AsHJUVmfPQu+4BmjBV+CcRQlJeYk32bz6/pdxka0Tu24Q3syH0StZ4tnLmeAVVcSxVIie
+ CS4FRAfg/wsws9+w0HVOJAmOkqXNUxGQJ2RaKxxahiv/aj5+QiWI3gDa29yUqVrd7MaMO2qon
+ f1kbKJ8oIzKKACwpnlS0QzLil0nS1IGXuO1jYC657qzT3hj5P2B8L8tXBuagi/qP8ScDWKSv4
+ c/7A2Bx8AXu6ykaAD/q3RMzxhxGyKUsce+khQZFChN9Sytg5xoE2PM2YJqcOmUqWfVNtS1cWK
+ DZa1+rpmC81det08tPqg==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/25/20 1:35 PM, Qing Zhang wrote:
+This reverts commit f9065b54d437c4660e3d974ad9ce5188c068cd76.
 
-> Switch the DT binding to a YAML schema to enable the DT validation.
-> 
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
-> 
-> v4: fix warnings/errors about running 'make dt_binding_check'
-> 
-> ---
->  .../devicetree/bindings/spi/loongson,spi-ls7a.yaml | 46 ++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
-> new file mode 100644
-> index 0000000..8cc9bc5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/loongson,spi-ls7a.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson LS7A PCH SPI Controller
-> +
-> +maintainers:
-> +  - Qing Zhang <zhangqing@loongson.cn>
-> +
-> +description: |
-> +  This controller can be found in Loongson-3 systems with LS7A PCH.
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls7a-spi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - num-chipselects
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pci {
-> +        #address-cells = <3>;
-> +        #size-cells = <2>;
-> +
-> +        spi@16,0 {
-> +        compatible = "pci0014,7a0b.0",
-> +                        "pci0014,7a0b",
-> +                        "pciclass088000",
-> +                        "pciclass0800";
-> +
-> +        reg = <0xb000 0x0 0x0 0x0 0x0>;
-> +        num-chipselects = <0>;
+Signed-off-by: Lauri Kasanen <cand@gmx.com>
+=2D--
+ arch/mips/Kconfig                | 12 ++++++++++++
+ arch/mips/Makefile               |  1 +
+ arch/mips/include/asm/cpu-type.h |  5 +++++
+ arch/mips/include/asm/cpu.h      |  2 +-
+ arch/mips/include/asm/vermagic.h |  2 ++
+ arch/mips/kernel/cpu-probe.c     |  9 +++++++++
+ arch/mips/kernel/idle.c          |  1 +
+ arch/mips/mm/c-r4k.c             |  1 +
+ arch/mips/mm/tlbex.c             |  1 +
+ 9 files changed, 33 insertions(+), 1 deletion(-)
 
-    The above lines after { need extra indentation level.
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 2000bb2..4b52588 100644
+=2D-- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1661,6 +1661,15 @@ config CPU_VR41XX
+ 	  kernel built with this option will not run on any other type of
+ 	  processor or vice versa.
 
-> +        };
-> +    };
-> +
-> +...
++config CPU_R4300
++	bool "R4300"
++	depends on SYS_HAS_CPU_R4300
++	select CPU_SUPPORTS_32BIT_KERNEL
++	select CPU_SUPPORTS_64BIT_KERNEL
++	select CPU_HAS_LOAD_STORE_LR
++	help
++	  MIPS Technologies R4300-series processors.
++
+ config CPU_R4X00
+ 	bool "R4x00"
+ 	depends on SYS_HAS_CPU_R4X00
+@@ -1995,6 +2004,9 @@ config SYS_HAS_CPU_TX39XX
+ config SYS_HAS_CPU_VR41XX
+ 	bool
 
-MBR, Sergei
++config SYS_HAS_CPU_R4300
++	bool
++
+ config SYS_HAS_CPU_R4X00
+ 	bool
+
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index 0d0f29d..d7d8c20 100644
+=2D-- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -141,6 +141,7 @@ cflags-y +=3D -fno-stack-check
+ #
+ cflags-$(CONFIG_CPU_R3000)	+=3D -march=3Dr3000
+ cflags-$(CONFIG_CPU_TX39XX)	+=3D -march=3Dr3900
++cflags-$(CONFIG_CPU_R4300)	+=3D -march=3Dr4300 -Wa,--trap
+ cflags-$(CONFIG_CPU_VR41XX)	+=3D -march=3Dr4100 -Wa,--trap
+ cflags-$(CONFIG_CPU_R4X00)	+=3D -march=3Dr4600 -Wa,--trap
+ cflags-$(CONFIG_CPU_TX49XX)	+=3D -march=3Dr4600 -Wa,--trap
+diff --git a/arch/mips/include/asm/cpu-type.h b/arch/mips/include/asm/cpu-=
+type.h
+index 3288cef..2be5d7b 100644
+=2D-- a/arch/mips/include/asm/cpu-type.h
++++ b/arch/mips/include/asm/cpu-type.h
+@@ -122,6 +122,11 @@ static inline int __pure __get_cpu_type(const int cpu=
+_type)
+ 	case CPU_VR4181A:
+ #endif
+
++#ifdef CONFIG_SYS_HAS_CPU_R4300
++	case CPU_R4300:
++	case CPU_R4310:
++#endif
++
+ #ifdef CONFIG_SYS_HAS_CPU_R4X00
+ 	case CPU_R4000PC:
+ 	case CPU_R4000SC:
+diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
+index c9222cc..9e6211e 100644
+=2D-- a/arch/mips/include/asm/cpu.h
++++ b/arch/mips/include/asm/cpu.h
+@@ -302,7 +302,7 @@ enum cpu_type_enum {
+ 	/*
+ 	 * R4000 class processors
+ 	 */
+-	CPU_R4000PC, CPU_R4000SC, CPU_R4000MC, CPU_R4200,
++	CPU_R4000PC, CPU_R4000SC, CPU_R4000MC, CPU_R4200, CPU_R4300, CPU_R4310,
+ 	CPU_R4400PC, CPU_R4400SC, CPU_R4400MC, CPU_R4600, CPU_R4640, CPU_R4650,
+ 	CPU_R4700, CPU_R5000, CPU_R5500, CPU_NEVADA, CPU_R10000,
+ 	CPU_R12000, CPU_R14000, CPU_R16000, CPU_VR41XX, CPU_VR4111, CPU_VR4121,
+diff --git a/arch/mips/include/asm/vermagic.h b/arch/mips/include/asm/verm=
+agic.h
+index 4d2dae0..371c187 100644
+=2D-- a/arch/mips/include/asm/vermagic.h
++++ b/arch/mips/include/asm/vermagic.h
+@@ -26,6 +26,8 @@
+ #define MODULE_PROC_FAMILY "TX39XX "
+ #elif defined CONFIG_CPU_VR41XX
+ #define MODULE_PROC_FAMILY "VR41XX "
++#elif defined CONFIG_CPU_R4300
++#define MODULE_PROC_FAMILY "R4300 "
+ #elif defined CONFIG_CPU_R4X00
+ #define MODULE_PROC_FAMILY "R4X00 "
+ #elif defined CONFIG_CPU_TX49XX
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index e685369..84f7034 100644
+=2D-- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1154,6 +1154,15 @@ static inline void cpu_probe_legacy(struct cpuinfo_=
+mips *c, unsigned int cpu)
+ 			break;
+ 		}
+ 		break;
++	case PRID_IMP_R4300:
++		c->cputype =3D CPU_R4300;
++		__cpu_name[cpu] =3D "R4300";
++		set_isa(c, MIPS_CPU_ISA_III);
++		c->fpu_msk31 |=3D FPU_CSR_CONDX;
++		c->options =3D R4K_OPTS | MIPS_CPU_FPU | MIPS_CPU_32FPR |
++			     MIPS_CPU_LLSC;
++		c->tlbsize =3D 32;
++		break;
+ 	case PRID_IMP_R4600:
+ 		c->cputype =3D CPU_R4600;
+ 		__cpu_name[cpu] =3D "R4600";
+diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
+index 18e69eb..1aca3b4 100644
+=2D-- a/arch/mips/kernel/idle.c
++++ b/arch/mips/kernel/idle.c
+@@ -151,6 +151,7 @@ void __init check_wait(void)
+ 		cpu_wait =3D r39xx_wait;
+ 		break;
+ 	case CPU_R4200:
++/*	case CPU_R4300: */
+ 	case CPU_R4600:
+ 	case CPU_R4640:
+ 	case CPU_R4650:
+diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
+index 9cede7c..da7796e 100644
+=2D-- a/arch/mips/mm/c-r4k.c
++++ b/arch/mips/mm/c-r4k.c
+@@ -1164,6 +1164,7 @@ static void probe_pcache(void)
+ 	case CPU_R4400PC:
+ 	case CPU_R4400SC:
+ 	case CPU_R4400MC:
++	case CPU_R4300:
+ 		icache_size =3D 1 << (12 + ((config & CONF_IC) >> 9));
+ 		c->icache.linesz =3D 16 << ((config & CONF_IB) >> 5);
+ 		c->icache.ways =3D 1;
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index a7521b8..0fb1db8 100644
+=2D-- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -549,6 +549,7 @@ void build_tlb_write_entry(u32 **p, struct uasm_label =
+**l,
+ 		tlbw(p);
+ 		break;
+
++	case CPU_R4300:
+ 	case CPU_5KC:
+ 	case CPU_TX49XX:
+ 	case CPU_PR4450:
+=2D-
+2.6.2
+
