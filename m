@@ -2,259 +2,427 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4D92E28BD
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Dec 2020 20:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9F42E2B36
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Dec 2020 11:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728679AbgLXTpq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Dec 2020 14:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728266AbgLXTpq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Dec 2020 14:45:46 -0500
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B394C061573;
-        Thu, 24 Dec 2020 11:45:02 -0800 (PST)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ksWXP-003sWr-0X; Thu, 24 Dec 2020 19:44:39 +0000
-Date:   Thu, 24 Dec 2020 19:44:38 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Denys Vlasenko <dvlasenk@redhat.com>
-Subject: [RFC][PATCH] NT_FILE/NT_SIGINFO breakage on mips compat coredumps
-Message-ID: <20201224194438.GY3579531@ZenIV.linux.org.uk>
-References: <20201203214529.GB3579531@ZenIV.linux.org.uk>
- <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com>
- <20201203230336.GC3579531@ZenIV.linux.org.uk>
- <alpine.LFD.2.21.2012071741280.2104409@eddie.linux-mips.org>
- <20201216030154.GL3579531@ZenIV.linux.org.uk>
- <alpine.LFD.2.21.2012160924010.2104409@eddie.linux-mips.org>
- <20201223070320.GW3579531@ZenIV.linux.org.uk>
- <20201223071213.GX3579531@ZenIV.linux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201223071213.GX3579531@ZenIV.linux.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+        id S1729287AbgLYKgr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Dec 2020 05:36:47 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:42926 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728983AbgLYKgq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 25 Dec 2020 05:36:46 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxKcmKwOVfqhwFAA--.6966S2;
+        Fri, 25 Dec 2020 18:35:55 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        ThomasBogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/4] spi: LS7A: Add Loongson LS7A SPI controller driver support
+Date:   Fri, 25 Dec 2020 18:35:49 +0800
+Message-Id: <1608892552-15457-1-git-send-email-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxKcmKwOVfqhwFAA--.6966S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Zw1xJrWUJr4xZFW8Xr43ZFb_yoWDWr15pa
+        18W3yrtF48JFyrAFZrJF4UWFy5Xw4Sv34rX3y3t34IgryYqF4DWF1FqryfArZxJFWxuFyU
+        XFnF9rWYgF45ZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4DMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5qeHPUUUUU==
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Dec 23, 2020 at 07:12:13AM +0000, Al Viro wrote:
-> On Wed, Dec 23, 2020 at 07:03:20AM +0000, Al Viro wrote:
-> 
-> 	Argh....  Wrong commit blamed - the parent of the correct one.
-> It's actually 2aa362c49c31 ("coredump: extend core dump note section to
-> contain file names of mapped files").  My apologies - fat-fingered
-> cut'n'paste...
-> 
-> 	siginfo commit does suffer the same problem, but it becomes an issue
-> only for 32bit processes under mips64 big-endian kernel (there it yields
-> e.g. zero .__sigfault.si_addr in $_siginfo when using gdb with a coredump
-> of 32bit process, whatever the actual faulting address had been).  And
-> b-e mips64 is rather uncommon, so that's less of an issue.
+The SPI controller has the following characteristics:
 
-	FWIW, here's debian/mips image (stretch) booted with
-qemu-system-mips64 -M malta -cpu 5KEc:
-root@mips:~# uname -a
-Linux mips 4.9.0-13-5kc-malta #1 Debian 4.9.228-1 (2020-07-05) mips64 GNU/Linux
-root@mips:~# cat a.c
-main()
-{
-        *(char *)0x0123 = 0;
-}
-root@mips:~# gcc a.c 
-a.c:1:1: warning: return type defaults to ‘int’ [-Wimplicit-int]
- main()
- ^~~~
-root@mips:~# ulimit -c unlimited
-root@mips:~# ./a.out 
-[  519.744983] do_page_fault(): sending SIGSEGV to a.out for invalid write access to 0000000000000123
-[  519.746735] epc = 00000000558477c0 in a.out[55847000+1000]
-[  519.747758] ra  = 000000007792f4a8 in libc-2.24.so[77916000+16a000]
-Segmentation fault (core dumped)
-root@mips:~# gdb a.out core 
-GNU gdb (Debian 7.12-6) 7.12.0.20161007-git
-Copyright (C) 2016 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-and "show warranty" for details.
-This GDB was configured as "mips-linux-gnu".
-Type "show configuration" for configuration details.
-For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>.
-Find the GDB manual and other documentation resources online at:
-<http://www.gnu.org/software/gdb/documentation/>.
-For help, type "help".
-Type "apropos word" to search for commands related to "word"...
-Reading symbols from a.out...(no debugging symbols found)...done.
-[New LWP 1202]
-Core was generated by `./a.out'.
-Program terminated with signal SIGSEGV, Segmentation fault.
-#0  0x55dde7c0 in main ()
-(gdb) print $_siginfo
-$1 = {si_signo = 11, si_errno = 1, si_code = 0, _sifields = {_pad = {0, 0, 
-      291, 0 <repeats 26 times>}, _kill = {si_pid = 0, si_uid = 0}, _timer = {
-      si_tid = 0, si_overrun = 0, si_sigval = {sival_int = 291, 
-        sival_ptr = 0x123}}, _rt = {si_pid = 0, si_uid = 0, si_sigval = {
-        sival_int = 291, sival_ptr = 0x123}}, _sigchld = {si_pid = 0, 
-      si_uid = 0, si_status = 291, si_utime = 0, si_stime = 0}, _sigfault = {
-      si_addr = 0x0}, _sigpoll = {si_band = 0, si_fd = 0}}}
-(gdb) quit
+- Full-duplex synchronous serial data transmission
+- Support up to 4 variable length byte transmission
+- Main mode support
+- Mode failure generates an error flag and issues an interrupt request
+- Double buffer receiver
+- Serial clock with programmable polarity and phase
+- SPI can be controlled in wait mode
+- Support boot from SPI
 
+Use mtd_debug tool to earse/write/read /dev/mtd0 on development.
 
-Note the wrong value in _sigfault.si_addr - it should've been 0x123, not 0.
+eg:
 
-root@mips:~# readelf -n core
+[root@linux mtd-utils-1.0.0]# mtd_debug erase /dev/mtd0 0x20000 0x40000
+Erased 262144 bytes from address 0x00020000 in flash
+[root@linux mtd-utils-1.0.0]# mtd_debug write /dev/mtd0 0x20000 13 1.img
+Copied 13 bytes from 1.img to address 0x00020000 in flash
+[root@linux mtd-utils-1.0.0]# mtd_debug read /dev/mtd0 0x20000 13 2.img
+Copied 13 bytes from address 0x00020000 in flash to 2.img
+[root@linux mtd-utils-1.0.0]# cmp -l 1.img 2.img
 
-Displaying notes found at file offset 0x00000234 with length 0x000005f4:
-  Owner                 Data size       Description
-  CORE                 0x00000100       NT_PRSTATUS (prstatus structure)
-  CORE                 0x00000080       NT_PRPSINFO (prpsinfo structure)
-  CORE                 0x00000080       NT_SIGINFO (siginfo_t data)
-  CORE                 0x00000090       NT_AUXV (auxiliary vector)
-  CORE                 0x000001e1       NT_FILE (mapped files)
-    Page size: 9
-         Start         End Page Offset
-  CORE                 0x00000108       NT_FPREGSET (floating point registers)
-
-For comparison, exact same image booted with qemu-system-mips -M malta:
-
-root@mips:~# uname -a
-Linux mips 4.9.0-13-4kc-malta #1 Debian 4.9.228-1 (2020-07-05) mips GNU/Linux
-root@mips:~# ulimit -c unlimited
-root@mips:~# ./a.out
-[   83.380870] do_page_fault(): sending SIGSEGV to a.out for invalid write access to 00000123
-[   83.390678] epc = 55e0e7c0 in a.out[55e0e000+1000]
-[   83.391525] ra  = 76f644a8 in libc-2.24.so[76f4b000+16a000]
-Segmentation fault (core dumped)
-root@mips:~# gdb a.out core
-GNU gdb (Debian 7.12-6) 7.12.0.20161007-git
-Copyright (C) 2016 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-and "show warranty" for details.
-This GDB was configured as "mips-linux-gnu".
-Type "show configuration" for configuration details.
-For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>.
-Find the GDB manual and other documentation resources online at:
-<http://www.gnu.org/software/gdb/documentation/>.
-For help, type "help".
-Type "apropos word" to search for commands related to "word"...
-Reading symbols from a.out...(no debugging symbols found)...done.
-[New LWP 1184]
-Core was generated by `./a.out'.
-Program terminated with signal SIGSEGV, Segmentation fault.
-#0  0x55e0e7c0 in main ()
-(gdb) print $_siginfo
-$1 = {si_signo = 11, si_errno = 1, si_code = 0, _sifields = {_pad = {291, 
-      0 <repeats 28 times>}, _kill = {si_pid = 291, si_uid = 0}, _timer = {
-      si_tid = 291, si_overrun = 0, si_sigval = {sival_int = 0, 
-        sival_ptr = 0x0}}, _rt = {si_pid = 291, si_uid = 0, si_sigval = {
-        sival_int = 0, sival_ptr = 0x0}}, _sigchld = {si_pid = 291, 
-      si_uid = 0, si_status = 0, si_utime = 0, si_stime = 0}, _sigfault = {
-      si_addr = 0x123}, _sigpoll = {si_band = 291, si_fd = 0}}}
-(gdb) quit
-root@mips:~# readelf -n core
-
-Displaying notes found at file offset 0x00000234 with length 0x00000580:
-  Owner                 Data size       Description
-  CORE                 0x00000100       NT_PRSTATUS (prstatus structure)
-  CORE                 0x00000080       NT_PRPSINFO (prpsinfo structure)
-  CORE                 0x00000080       NT_SIGINFO (siginfo_t data)
-  CORE                 0x00000090       NT_AUXV (auxiliary vector)
-  CORE                 0x0000016d       NT_FILE (mapped files)
-    Page size: 4096
-         Start         End Page Offset
-    0x55e0e000  0x55e0f000  0x00000000
-        /root/a.out
-    0x55e1e000  0x55e1f000  0x00000000
-        /root/a.out
-    0x76f4b000  0x770b5000  0x00000000
-        /lib/mips-linux-gnu/libc-2.24.so
-    0x770b5000  0x770c5000  0x0000016a
-        /lib/mips-linux-gnu/libc-2.24.so
-    0x770c5000  0x770c8000  0x0000016a
-        /lib/mips-linux-gnu/libc-2.24.so
-    0x770c8000  0x770cb000  0x0000016d
-        /lib/mips-linux-gnu/libc-2.24.so
-    0x770cd000  0x770f0000  0x00000000
-        /lib/mips-linux-gnu/ld-2.24.so
-    0x770ff000  0x77100000  0x00000022
-        /lib/mips-linux-gnu/ld-2.24.so
-    0x77100000  0x77101000  0x00000023
-        /lib/mips-linux-gnu/ld-2.24.so
-  CORE                 0x00000108       NT_FPREGSET (floating point registers)
-
-So that's not so theoretical - big-endian mips64 userland is unsupported,
-but booting the big-endian mips32 userland on mips64 hardware is clearly
-meant to work - they even ship a 64bit kernel built for that.
-
-IOW, both O32 and N32 coredumps in 64bit mips kernels have broken
-NT_FILE and NT_SIGINFO.  And while NT_SIGINFO breakage is really
-visible only on b-e, NT_FILE one is common to b-e and l-e.  One of
-the effects of the latter is that current gdb fails to work with
-threaded coredumps of 32bit processes produced on boxen with 64bit
-kernels.  Coredumps generated by gcore(1) are fine...
-
-I think the following ought to be applied.  Comments?
-
-[mips] fix malformed NT_FILE and NT_SIGINFO in 32bit coredumps
-
-	Patches that introduced NT_FILE and NT_SIGINFO notes back in 2012
-had taken care of native (fs/binfmt_elf.c) and compat (fs/compat_binfmt_elf.c)
-coredumps; unfortunately, compat on mips (which does not go through the
-usual compat_binfmt_elf.c) had not been noticed.
-
-	As the result, both N32 and O32 coredumps on 64bit mips kernels
-have those sections malformed enough to confuse the living hell out of
-all gdb and readelf versions (up to and including the tip of binutils-gdb.git).
-
-	Longer term solution is to make both O32 and N32 compat use the
-regular compat_binfmt_elf.c, but that's too much for backports.  The minimal
-solution is to do in arch/mips/kernel/binfmt_elf[on]32.c the same thing
-those patches have done in fs/compat_binfmt_elf.c
-
-Cc: stable@kernel.org # v3.7+
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
 ---
-diff --git a/arch/mips/kernel/binfmt_elfn32.c b/arch/mips/kernel/binfmt_elfn32.c
-index 6ee3f7218c67..c4441416e96b 100644
---- a/arch/mips/kernel/binfmt_elfn32.c
-+++ b/arch/mips/kernel/binfmt_elfn32.c
-@@ -103,4 +103,11 @@ jiffies_to_old_timeval32(unsigned long jiffies, struct old_timeval32 *value)
- #undef ns_to_kernel_old_timeval
- #define ns_to_kernel_old_timeval ns_to_old_timeval32
+
+v2:
+- keep Kconfig and Makefile sorted
+- make the entire comment a C++ one so things look more intentional
+- Fix unclear indentation
+- make conditional statements to improve legibility
+- Don't use static inline
+- the core handle message queue
+- Add a new binding document
+- Fix probe part mixed pdev and PCI
+
+v3:
+- expose set_cs to the core and let it handle things
+- replace transfer_one_message to transfer_one
+- replace spi_alloc_master to devm_spi_alloc_master
+- split out into prepare/unprepare_message
+- releases pci regions before unregister master
+
+v4:
+- names used in the manual
+- rename ls7a_spi_do_transfer to ls7a_spi_setup_transfer
+- change read the spcr and sper outside of this function
+- mode configuration moved to prepare instead
+- remove redundancy code about unprepare/prepare_message
+- used 0x4 instead of 0x1,WFEMPTY instead of RFEMPTY
+
+---
+ drivers/spi/Kconfig    |   7 ++
+ drivers/spi/Makefile   |   1 +
+ drivers/spi/spi-ls7a.c | 283 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 291 insertions(+)
+ create mode 100644 drivers/spi/spi-ls7a.c
+
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index aadaea0..af7c0d4 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -413,6 +413,13 @@ config SPI_LP8841_RTC
+ 	  Say N here unless you plan to run the kernel on an ICP DAS
+ 	  LP-8x4x industrial computer.
  
-+/*
-+ * Some data types as stored in coredump.
-+ */
-+#define user_long_t             compat_long_t
-+#define user_siginfo_t          compat_siginfo_t
-+#define copy_siginfo_to_external        copy_siginfo_to_external32
++config SPI_LS7A
++	tristate "Loongson LS7A SPI Controller Support"
++	depends on CPU_LOONGSON64 || COMPILE_TEST
++	help
++	  This drivers supports the Loongson LS7A SPI controller in master
++	  SPI mode.
 +
- #include "../../../fs/binfmt_elf.c"
-diff --git a/arch/mips/kernel/binfmt_elfo32.c b/arch/mips/kernel/binfmt_elfo32.c
-index 6dd103d3cebb..7b2a23f48c1a 100644
---- a/arch/mips/kernel/binfmt_elfo32.c
-+++ b/arch/mips/kernel/binfmt_elfo32.c
-@@ -106,4 +106,11 @@ jiffies_to_old_timeval32(unsigned long jiffies, struct old_timeval32 *value)
- #undef ns_to_kernel_old_timeval
- #define ns_to_kernel_old_timeval ns_to_old_timeval32
- 
-+/*
-+ * Some data types as stored in coredump.
-+ */
-+#define user_long_t             compat_long_t
-+#define user_siginfo_t          compat_siginfo_t
-+#define copy_siginfo_to_external        copy_siginfo_to_external32
+ config SPI_MPC52xx
+ 	tristate "Freescale MPC52xx SPI (non-PSC) controller support"
+ 	depends on PPC_MPC52xx
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index 6fea582..d015cf2 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -61,6 +61,7 @@ obj-$(CONFIG_SPI_LANTIQ_SSC)		+= spi-lantiq-ssc.o
+ obj-$(CONFIG_SPI_JCORE)			+= spi-jcore.o
+ obj-$(CONFIG_SPI_LM70_LLP)		+= spi-lm70llp.o
+ obj-$(CONFIG_SPI_LP8841_RTC)		+= spi-lp8841-rtc.o
++obj-$(CONFIG_SPI_LS7A)			+= spi-ls7a.o
+ obj-$(CONFIG_SPI_MESON_SPICC)		+= spi-meson-spicc.o
+ obj-$(CONFIG_SPI_MESON_SPIFC)		+= spi-meson-spifc.o
+ obj-$(CONFIG_SPI_MPC512x_PSC)		+= spi-mpc512x-psc.o
+diff --git a/drivers/spi/spi-ls7a.c b/drivers/spi/spi-ls7a.c
+new file mode 100644
+index 0000000..d2be370
+--- /dev/null
++++ b/drivers/spi/spi-ls7a.c
+@@ -0,0 +1,283 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//
++// Loongson LS7A SPI Controller driver
++//
++// Copyright (C) 2020 Loongson Technology Corporation Limited.
++//
 +
- #include "../../../fs/binfmt_elf.c"
++#include <linux/module.h>
++#include <linux/pci.h>
++#include <linux/spi/spi.h>
++
++/* define spi register */
++#define	SPCR		0x00
++#define	SPSR		0x01
++#define	FIFO		0x02
++#define	SPER		0x03
++#define	SFC_PARAM	0x04
++#define	SFC_SOFTCS	0x05
++#define	SFC_TIMING	0x06
++
++struct ls7a_spi {
++	struct spi_master *master;
++	void __iomem *base;
++	unsigned int hz;
++	unsigned int mode;
++};
++
++static void ls7a_spi_write_reg(struct ls7a_spi *spi,
++			       unsigned char reg,
++			       unsigned char data)
++{
++	writeb(data, spi->base + reg);
++}
++
++static char ls7a_spi_read_reg(struct ls7a_spi *spi, unsigned char reg)
++{
++	return readb(spi->base + reg);
++}
++
++static int ls7a_spi_prepare_message(struct spi_master *master,
++				    struct spi_message *msg)
++{
++	struct ls7a_spi *ls7a_spi;
++	struct spi_device *spi = msg->spi;
++	unsigned char val;
++
++	ls7a_spi = spi_master_get_devdata(master);
++
++	if (ls7a_spi->mode != spi->mode) {
++		val = ls7a_spi_read_reg(ls7a_spi, SPCR);
++		val &= ~0xc;
++		if (spi->mode & SPI_CPOL)
++			val |= 8;
++		if (spi->mode & SPI_CPHA)
++			val |= 4;
++		ls7a_spi_write_reg(ls7a_spi, SPCR, val);
++		val = ls7a_spi_read_reg(ls7a_spi, SPER);
++		ls7a_spi_write_reg(ls7a_spi, SPER, val);
++		ls7a_spi->mode = spi->mode;
++	}
++	return 0;
++}
++
++static void ls7a_spi_set_cs(struct spi_device *spi, bool enable)
++{
++	struct ls7a_spi *ls7a_spi;
++	int cs;
++
++	ls7a_spi = spi_master_get_devdata(spi->master);
++
++	cs = ls7a_spi_read_reg(ls7a_spi, SFC_SOFTCS) & ~(0x11 << spi->chip_select);
++
++	if (!!(spi->mode & SPI_CS_HIGH) == enable)
++		ls7a_spi_write_reg(ls7a_spi, SFC_SOFTCS, (0x1 << spi->chip_select) | cs);
++	else
++		ls7a_spi_write_reg(ls7a_spi, SFC_SOFTCS, (0x11 << spi->chip_select) | cs);
++}
++
++static int ls7a_spi_setup_transfer(struct spi_device *spi,
++				   struct spi_transfer *t)
++{
++	unsigned int hz;
++	unsigned int div, div_tmp;
++	unsigned int bit;
++	unsigned long clk;
++	unsigned char val;
++	unsigned char spcr, sper;
++	const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
++	struct ls7a_spi *ls7a_spi;
++
++	ls7a_spi = spi_master_get_devdata(spi->master);
++
++	if (t) {
++		hz = t->speed_hz;
++		if (!hz)
++			hz = spi->max_speed_hz;
++	} else {
++		hz = spi->max_speed_hz;
++	}
++
++	if (hz & (ls7a_spi->hz != hz)) {
++		clk = 100000000;
++
++		div = DIV_ROUND_UP(clk, hz);
++		if (div < 2)
++			div = 2;
++		if (div > 4096)
++			div = 4096;
++
++		bit = fls(div) - 1;
++		if ((1 << bit) == div)
++			bit--;
++		div_tmp = rdiv[bit];
++
++		dev_dbg(&spi->dev, "clk = %ld hz = %d div_tmp = %d bit = %d\n",
++			clk, hz, div_tmp, bit);
++
++		ls7a_spi->hz = hz;
++		spcr = div_tmp & 3;
++		sper = (div_tmp >> 2) & 3;
++
++		val = ls7a_spi_read_reg(ls7a_spi, SPCR);
++		ls7a_spi_write_reg(ls7a_spi, SPCR, (val & ~3) | spcr);
++		val = ls7a_spi_read_reg(ls7a_spi, SPER);
++		ls7a_spi_write_reg(ls7a_spi, SPER, (val & ~3) | sper);
++	}
++	return 0;
++}
++
++static int ls7a_spi_setup(struct spi_device *spi)
++{
++	return	ls7a_spi_setup_transfer(spi, NULL);
++}
++
++static int ls7a_spi_write_read_8bit(struct spi_device *spi,
++				    const u8 **tx_buf, u8 **rx_buf,
++				    unsigned int num)
++{
++	struct ls7a_spi *ls7a_spi;
++
++	ls7a_spi = spi_master_get_devdata(spi->master);
++
++	if (tx_buf && *tx_buf) {
++		ls7a_spi_write_reg(ls7a_spi, FIFO, *((*tx_buf)++));
++
++		while ((ls7a_spi_read_reg(ls7a_spi, SPSR) & 0x4) == 1)
++
++			;
++	} else {
++		ls7a_spi_write_reg(ls7a_spi, FIFO, 0);
++
++		while ((ls7a_spi_read_reg(ls7a_spi, SPSR) & 0x1) == 1)
++
++			;
++	}
++
++	if (rx_buf && *rx_buf)
++		*(*rx_buf)++ = ls7a_spi_read_reg(ls7a_spi, FIFO);
++	else
++		ls7a_spi_read_reg(ls7a_spi, FIFO);
++
++	return 1;
++}
++
++static unsigned int ls7a_spi_write_read(struct spi_device *spi,
++					struct spi_transfer *xfer)
++{
++	unsigned int count;
++	const u8 *tx = xfer->tx_buf;
++
++	u8 *rx = xfer->rx_buf;
++
++	count = xfer->len;
++
++	do {
++		if (ls7a_spi_write_read_8bit(spi, &tx, &rx, count) < 0)
++			goto out;
++		count--;
++	} while (count);
++
++out:
++	return xfer->len - count;
++}
++
++static int  ls7a_spi_transfer_one(struct spi_master *master,
++				  struct spi_device *spi,
++				  struct spi_transfer *t)
++{
++	int status = 0;
++
++	status = ls7a_spi_setup_transfer(spi, t);
++	if (status < 0)
++		return status;
++
++	if (t->len)
++		ls7a_spi_write_read(spi, t);
++
++	return status;
++}
++
++static int ls7a_spi_pci_probe(struct pci_dev *pdev,
++			      const struct pci_device_id *ent)
++{
++	struct spi_master *master;
++	struct ls7a_spi *spi;
++	int ret;
++
++	master = devm_spi_alloc_master(&pdev->dev, sizeof(*spi));
++	if (!master)
++		return -ENOMEM;
++
++	spi = spi_master_get_devdata(master);
++	ret = pcim_enable_device(pdev);
++	if (ret)
++		goto err_free_master;
++
++	ret = pci_request_regions(pdev, "ls7a-spi");
++	if (ret)
++		goto err_free_master;
++
++	spi->base = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
++	if (!spi->base) {
++		ret = -EINVAL;
++		goto err_free_master;
++	}
++	ls7a_spi_write_reg(spi, SPCR, 0x51);
++	ls7a_spi_write_reg(spi, SPER, 0x00);
++	ls7a_spi_write_reg(spi, SFC_TIMING, 0x01);
++	ls7a_spi_write_reg(spi, SFC_PARAM, 0x40);
++	spi->mode = 0;
++
++	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
++	master->set_cs = ls7a_spi_set_cs;
++	master->prepare_message = ls7a_spi_prepare_message;
++	master->setup = ls7a_spi_setup;
++	master->transfer_one = ls7a_spi_transfer_one;
++	master->bits_per_word_mask = SPI_BPW_MASK(8);
++	master->num_chipselect = 4;
++	master->dev.of_node = pdev->dev.of_node;
++
++	spi->master = master;
++
++	pci_set_drvdata(pdev, master);
++
++	ret = spi_register_master(master);
++	if (ret)
++		goto err_free_master;
++
++	return 0;
++
++err_free_master:
++	pci_release_regions(pdev);
++	return ret;
++}
++
++static void ls7a_spi_pci_remove(struct pci_dev *pdev)
++{
++	struct spi_master *master = pci_get_drvdata(pdev);
++
++	spi_unregister_master(master);
++	pci_release_regions(pdev);
++}
++
++static const struct pci_device_id ls7a_spi_pci_id_table[] = {
++	{ PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, 0x7a0b) },
++	{ 0, }
++};
++
++MODULE_DEVICE_TABLE(pci, ls7a_spi_pci_id_table);
++
++static struct pci_driver ls7a_spi_pci_driver = {
++	.name		= "ls7a-spi",
++	.id_table	= ls7a_spi_pci_id_table,
++	.probe		= ls7a_spi_pci_probe,
++	.remove		= ls7a_spi_pci_remove,
++};
++
++module_pci_driver(ls7a_spi_pci_driver);
++
++MODULE_AUTHOR("Juxin Gao <gaojuxin@loongson.cn>");
++MODULE_AUTHOR("Qing Zhang <zhangqing@loongson.cn>");
++MODULE_DESCRIPTION("Loongson LS7A SPI controller driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.1.0
+
