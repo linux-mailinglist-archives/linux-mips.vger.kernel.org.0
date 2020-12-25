@@ -2,85 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A54112E2B3A
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Dec 2020 11:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB5A2E2B6F
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Dec 2020 13:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729222AbgLYKgr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Dec 2020 05:36:47 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:42930 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729226AbgLYKgq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 25 Dec 2020 05:36:46 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxKcmKwOVfqhwFAA--.6966S5;
-        Fri, 25 Dec 2020 18:35:57 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        id S1729098AbgLYMUm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Dec 2020 07:20:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727426AbgLYMUm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Dec 2020 07:20:42 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BD5C061573;
+        Fri, 25 Dec 2020 04:20:01 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id m25so9782861lfc.11;
+        Fri, 25 Dec 2020 04:20:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NikotG70jV13TXNsF314W0wEbJexz4D5n/k+PZhYUC8=;
+        b=izB5uNyY73TR2b/1o2JN3Wac1R9e4hAoCuxwZkAa0QsyVQ+Ryo66kT61xgr+kiEoSA
+         2+uyLlgux4D72idT/jhtUkkHfl9zMnk67DqqgeoCredoN/G+pcKoCleLeGcpsE76cpr/
+         rwUrOkNPL6G6k/gSEjb1TWN490UdkdREgzEgyMyN5cWJM/56zz2+K05iqCwPGiEpIMLp
+         0w9OO4/jkeXD6Shr0TJ9tw/SsdjL/huK9qs5TiolEgNQCrou5cHleZEX5lHbLAOfo/pM
+         LMtiM4+FM9kEs1k7DOewMjrsimgmkepZoxnGoCGpeUSn6h59gKxYJMHkzZC0dLpCSlx8
+         B+SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NikotG70jV13TXNsF314W0wEbJexz4D5n/k+PZhYUC8=;
+        b=FqJTe49+MyU9xnhVEDPwB/ru2TThESzcMn/7I9DoPstxTXynB8hAg55vPGoVCK7HaY
+         +pBs12m53UAbymPNE6m5fqZhXE7L6QDXVYxXkzdn6DOXDRvejhcEUK1AN0jC47S219xE
+         nRyVsNGmiExS6ElvMJGa3OKBzD/Hh4LGfu9Til0CFVdTxAERRid7PWClwt6Rv9i9qJbX
+         6AWbFtw1JjBh5I0UEXNYmFFaBfpHzrowBQFM/A0mWs+gp9+yBjxEauP4RC7UkDz+5UV1
+         TtBGsWTRiI/GsKidcHY/kje3YuH4Su+Li5C7vdfF5nMbNiZuE3U9INc/wy6I+gaUhaJV
+         +fWw==
+X-Gm-Message-State: AOAM5303b/gOzbpm7s8Fyq2K/awgD4wjKAKELsaxkPDHkGtYJHnqJM6/
+        wUxGzN9ZnJjUMrzZpjGOLAtQ81WBrQ1ILA==
+X-Google-Smtp-Source: ABdhPJx8zUkdiLAPi5Ra5IczX7Wdza6GkCUdYzI+Rx0SyB/axqnTm7VTcLjnQUUcZtzodklo8YajRg==
+X-Received: by 2002:a2e:8113:: with SMTP id d19mr14821087ljg.303.1608898799585;
+        Fri, 25 Dec 2020 04:19:59 -0800 (PST)
+Received: from [192.168.1.101] ([31.173.81.155])
+        by smtp.gmail.com with ESMTPSA id i18sm4533873lja.102.2020.12.25.04.19.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Dec 2020 04:19:59 -0800 (PST)
+Subject: Re: [PATCH v4 2/4] spi: ls7a: Add YAML schemas
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         ThomasBogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] MIPS: Loongson: Enable Loongson LS7A SPI in loongson3_defconfig
-Date:   Fri, 25 Dec 2020 18:35:52 +0800
-Message-Id: <1608892552-15457-4-git-send-email-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1608892552-15457-1-git-send-email-zhangqing@loongson.cn>
 References: <1608892552-15457-1-git-send-email-zhangqing@loongson.cn>
-X-CM-TRANSID: AQAAf9AxKcmKwOVfqhwFAA--.6966S5
-X-Coremail-Antispam: 1UD129KBjvdXoWrKw4UXFW7tr4UGr4kKFW3KFg_yoW3Awb_Ja
-        y7Kw18Wr48JrWxu3yxXw4rWrWDCa4UWFn5CF17tr13Xaya9rnxtFWDArWxG3W5ua4a9rW3
-        ZaykJa429F1xtjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbfxYjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7
-        IE14v26r1rM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CE
-        w4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6x
-        kF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY
-        1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4
-        xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCa
-        FVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8twCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8cTQUUUUU=
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+ <1608892552-15457-2-git-send-email-zhangqing@loongson.cn>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <99ab96cc-6169-19c2-04ef-d023d4427f55@gmail.com>
+Date:   Fri, 25 Dec 2020 15:19:57 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <1608892552-15457-2-git-send-email-zhangqing@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is now supported, enable for Loongson systems.
+On 12/25/20 1:35 PM, Qing Zhang wrote:
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
+> Switch the DT binding to a YAML schema to enable the DT validation.
+> 
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+> 
+> v4: fix warnings/errors about running 'make dt_binding_check'
+> 
+> ---
+>  .../devicetree/bindings/spi/loongson,spi-ls7a.yaml | 46 ++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> new file mode 100644
+> index 0000000..8cc9bc5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/loongson,spi-ls7a.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson LS7A PCH SPI Controller
+> +
+> +maintainers:
+> +  - Qing Zhang <zhangqing@loongson.cn>
+> +
+> +description: |
+> +  This controller can be found in Loongson-3 systems with LS7A PCH.
+> +
+> +properties:
+> +  compatible:
+> +    const: loongson,ls7a-spi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - num-chipselects
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pci {
+> +        #address-cells = <3>;
+> +        #size-cells = <2>;
+> +
+> +        spi@16,0 {
+> +        compatible = "pci0014,7a0b.0",
+> +                        "pci0014,7a0b",
+> +                        "pciclass088000",
+> +                        "pciclass0800";
+> +
+> +        reg = <0xb000 0x0 0x0 0x0 0x0>;
+> +        num-chipselects = <0>;
 
-v2:
- - Modify CONFIG_SPI_LOONGSON to CONFIG_SPI_LS7A
+    The above lines after { need extra indentation level.
 
-v3:
- - No changes
+> +        };
+> +    };
+> +
+> +...
 
-v4:
- - No changes
-
----
- arch/mips/configs/loongson3_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 38a817e..28784cb 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -271,6 +271,9 @@ CONFIG_HW_RANDOM=y
- CONFIG_RAW_DRIVER=m
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_PIIX4=y
-+CONFIG_SPI=y
-+CONFIG_SPI_MASTER=y
-+CONFIG_SPI_LS7A=y
- CONFIG_GPIO_LOONGSON=y
- CONFIG_SENSORS_LM75=m
- CONFIG_SENSORS_LM93=m
--- 
-2.1.0
-
+MBR, Sergei
