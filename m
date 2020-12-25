@@ -2,293 +2,330 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0912E2BF4
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Dec 2020 18:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2366F2E2BF3
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Dec 2020 18:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725995AbgLYRFl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Dec 2020 12:05:41 -0500
-Received: from mout.gmx.net ([212.227.15.19]:38059 "EHLO mout.gmx.net"
+        id S1726150AbgLYRFp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Dec 2020 12:05:45 -0500
+Received: from mout.gmx.net ([212.227.15.18]:39507 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbgLYRFl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 25 Dec 2020 12:05:41 -0500
+        id S1725910AbgLYRFo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 25 Dec 2020 12:05:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1608915848;
-        bh=/U79Em2ctFJzT+fmzS0aMR6P888RscDzAKcJlKZEkMI=;
+        s=badeba3b8450; t=1608915850;
+        bh=L3RQrOGSQQMeJpdUKYFS+8IVZLlMP5S50DxJVxCDMS0=;
         h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=OfwXZD3VDU6ppsOJUFsMo6jDlAd0HZlCiHkD87fbUtjHSjoULl23LjlHm4v5Wexlm
-         4ClKIoenMia4BKqOodq+2ExTc9DjZnHnCCGgt5k3jBZSrps5lXaUCqacnXiMnq2vCO
-         t7i9IQktTFW6cnWprNVaVvLxcd4apPFJGjbrRKsU=
+        b=As0vPpO0kUAiPUS9kk8PdtZq8PvENphLt/HoZuLJpsE24ikOm9oegngRQcmuh8FCe
+         qAgWgyC1xe3DdMbZmlkvTh+b7ZHLcZV3YZHcjySskCSJX8cDnzpJOY+vIqL0O7j61X
+         oCmyGOHsRn39fe5qS8nUNp1bevh4OUR/dkfj/qsQ=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MUGe1-1kSGz52YrL-00RIyr; Fri, 25
- Dec 2020 18:04:08 +0100
-Date:   Fri, 25 Dec 2020 19:00:16 +0200
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MrhUE-1kEJ6k0ClY-00nf9S; Fri, 25
+ Dec 2020 18:04:10 +0100
+Date:   Fri, 25 Dec 2020 19:00:48 +0200
 From:   Lauri Kasanen <cand@gmx.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de
-Subject: [PATCH 2/6] mips: Add N64 machine type
-Message-Id: <20201225190016.286a0dfe49385f2bc39d04d4@gmx.com>
+Subject: [PATCH 3/6] fbdev: Add n64rdp driver
+Message-Id: <20201225190048.776de55443fd4c953e797d8e@gmx.com>
 X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:lE4j6cFjs+P1HuonD+3Ey93+YZhCoD5F0s/+T0Xtd4cVGiAOiez
- heD/0W+NnIqYn+PGMvtoUbXg5vGQsrVYEciaYnx7Sq9dBXyOpoGz9F5Vh8eKa+VqCcpua9G
- rAozkgx958W8mA8SQaPT+UuGjpoPntwh8em1CMWo92g5bF/0lffiVc9qMaQPv14FQNyxf18
- pLx94cuY5msLiFENQ3EMQ==
+X-Provags-ID: V03:K1:ZRMwGMAHQsqRuY82UxZB/VlykgMPbRnq9wccQKDEM5TgK5iEGa+
+ 7sCfr5R5smGyhZXlxKea3rzG3zXolFuqxSgM9tM6zQMyBkeVAxvN/Ck8m4pltJWPXnnRRRe
+ XM268PgzxAK8EebA30UgmRmx25p+IYA0ePJBi6VtwLyLyJgbCRJyLtYuGMuvR60HmR/LXKI
+ uksVQeQDe3eI35adN+TIg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yVYlYFcIi/Q=:1FsxoczhuWOk9TYxzy6Lii
- PvakDtd8X39oUvP5kybZWhz/PuIIKnGnGggJtUrxMxdZpdiDd8XWAXs/q/Hn9SEz7JNGlWyPU
- StkfrKpfuIjJ5p8wOc6r1eLBo94qiYkTIDSBZkdy8ureO+sGi/autVbddZwG2TMsw5c71u7vl
- wrD/9PehDUzpo69GZgz87Ro9K/wq1ejPSl869G9ln9bJjWQcmsXmHD6TuGM9iJ1xzLqdPoCpQ
- ZQKQYiTugGhdkIVKfFn7cRevXfvSRZEFX040Y89DLqPBLsbFpKH2Axb9OCKXBvegmGVPfcxNH
- NHZmvDaIJk0WRzJO85v3+hP7XtLpSuEwJmGLiWThkYBZWLaWJUUszvfd5FlvpPMfaX0j0Wc3u
- QFFzqiPTS/Jd0gCaxT2B5F0boNkpsUYz/tkDhsD8erro66AKglV6hjF2/n9ldsrZy+/hnPp0/
- UkYGiWrdMHZ4JYzta9DkiAiXK2uLz/iDiXosP6pMNfUvlhTsaHfDWI69xsraLaDMDShDAhm2v
- wKuofsyqo3WuYEaQGwHfyY5FgipFX1omMbp64Yq347e3vn5VGzEwiwVL8N9hH7Xb5GGy1mSkw
- nnjQRHMxsvpzJT3Hyr6KcJZBUFuxFpel0fXckl7l3zKpufs2RNjLD/pvbD9WFIJ5JtoxIGOhU
- iqlODydFHKdvI8EuhpgDRpKHiLabBDsLwROM8uJ38S7jC3ExtTil1Whml7FGIRyl1dWefMJGj
- yvMBfNSjl/EuGOaaBXPLjsa970KeWlQgXpZ56Wmmkk/bpjg0ymAq7bSdCPRCfbKZhcmhjgosJ
- 9yCGrrW3dDZ1MuTHCPkCwigp26dSPXKm0f9l/2HEAB7JVPt/89XhGbYrlHuviQnXqEHyl7Kw3
- AjGVGATApAIOou/IOAhA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CPWejgR/RmM=:s3YXtOQtYlA+q63j5tYdtB
+ 6CCdVkl5Hvz9N0mpgs0Xbj4/kmYQKzUWbXXTibzoIJpsp1lytdl/G/gRWHvzd2dpTTBgAKAgQ
+ 0WxLV8oeRIQ4tAYSIqzs2BR063JQMANHn56IDz0T9+F11ZLu+3v4yT+iujf8IYVJ3/OPl272I
+ IfLaA65YRgXECprjWm2RKVEXb9c53amB1yb4b0UMRdE+MRQHzixVu2A2R8OZmaPWOqNEnQ++3
+ 2/afNYPihBLX7n1XjpPLA4C8nfYD4ivDDT31+XnOKC9SptEixsrPL6iV3iSQ9htUV/SxEQr5G
+ l7wtjfJUJl+gcxfdUdhBV10W8p2sNkIDvKXFH/HIqFs3p7S/vWdNRQP7fQTNewIaTdWocpWhW
+ GxzG64pRv4wX/q36qIH6Yqw5dfq5HPrs6Q/J5faF2dcwgHlrl8Cz9hBkyMen1VYcr0qoJNffz
+ ewaMZHFDyTIQWAFel5slVnm6HTkWghykOLa5yTojOPxVvxZah84PhZUzk1gWaJvEMQ64AEtRC
+ hpz3yzvV9qm7xmYu6AzFJq7k6m3fWzRXm34OiLZ2VpBaCZWiEp9aRO1sJwepJwHQzyiNHnqb7
+ 6WMDkSiezbCGAy1hF5ExrvBjLLlTqTdWgGED80KAcpXDtvwbHEe4U8bBQ5vxfvbwEoUdyKKtT
+ 2ULJm0TqoY4bv52mFWwTpz6YH5vCsYvHuuiVfKqsGAE4y7Gs8jDaDBtg2cIcE4vGiGdfRJ1U2
+ XPVLmt3PEt0GTHmmqPqntGe2hHVgcu9hcVIg8DBUCM0gW+ozD1SdYdLzBl1m6NJozxt6wM52N
+ VY9aZ8HLn9eDSKZqtJn5ZZhbr4ar6CZ+pDtPkQcdGOxKgpwEVcOGl2oyqG2nIJqG7K2o+E1pU
+ 8aZUUfLo8nhf6v6gIJGQ==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+I'm aware of the drm-fbdev resolution, but CONFIG_DRM adds 100kb, which
+is a complete blocker on a system with 8mb RAM.
+
 Signed-off-by: Lauri Kasanen <cand@gmx.com>
 =2D--
- arch/mips/Kbuild.platforms           |  1 +
- arch/mips/Kconfig                    | 12 ++++++++
- arch/mips/include/asm/mach-n64/irq.h |  9 ++++++
- arch/mips/include/asm/n64/irq.h      | 26 ++++++++++++++++
- arch/mips/n64/Makefile               |  6 ++++
- arch/mips/n64/Platform               |  7 +++++
- arch/mips/n64/init.c                 | 59 +++++++++++++++++++++++++++++++=
+ arch/mips/n64/init.c         |  10 +++
+ drivers/video/fbdev/Kconfig  |   9 ++
+ drivers/video/fbdev/Makefile |   1 +
+ drivers/video/fbdev/n64rdp.c | 190 ++++++++++++++++++++++++++++++++++++++=
 +++++
- arch/mips/n64/irq.c                  | 34 +++++++++++++++++++++
- 8 files changed, 154 insertions(+)
- create mode 100644 arch/mips/include/asm/mach-n64/irq.h
- create mode 100644 arch/mips/include/asm/n64/irq.h
- create mode 100644 arch/mips/n64/Makefile
- create mode 100644 arch/mips/n64/Platform
- create mode 100644 arch/mips/n64/init.c
- create mode 100644 arch/mips/n64/irq.c
+ 4 files changed, 210 insertions(+)
+ create mode 100644 drivers/video/fbdev/n64rdp.c
 
-diff --git a/arch/mips/Kbuild.platforms b/arch/mips/Kbuild.platforms
-index 5483e38..3e39590 100644
-=2D-- a/arch/mips/Kbuild.platforms
-+++ b/arch/mips/Kbuild.platforms
-@@ -18,6 +18,7 @@ platform-$(CONFIG_MACH_LOONGSON2EF)	+=3D loongson2ef/
- platform-$(CONFIG_MACH_LOONGSON32)	+=3D loongson32/
- platform-$(CONFIG_MACH_LOONGSON64)	+=3D loongson64/
- platform-$(CONFIG_MIPS_MALTA)		+=3D mti-malta/
-+platform-$(CONFIG_MIPS_N64)		+=3D n64/
- platform-$(CONFIG_NLM_COMMON)		+=3D netlogic/
- platform-$(CONFIG_PIC32MZDA)		+=3D pic32/
- platform-$(CONFIG_MACH_PISTACHIO)	+=3D pistachio/
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 4b52588..2922bb6 100644
-=2D-- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -605,6 +605,18 @@ config MACH_VR41XX
- 	select SYS_SUPPORTS_MIPS16
- 	select GPIOLIB
-
-+config MIPS_N64
-+	bool "Nintendo 64 console"
-+	select CEVT_R4K
-+	select CSRC_R4K
-+	select SYS_HAS_CPU_R4300
-+	select SYS_SUPPORTS_BIG_ENDIAN
-+	select SYS_SUPPORTS_ZBOOT
-+	select SYS_SUPPORTS_32BIT_KERNEL
-+	select SYS_SUPPORTS_64BIT_KERNEL
-+	select DMA_NONCOHERENT
-+	select IRQ_MIPS_CPU
-+
- config RALINK
- 	bool "Ralink based machines"
- 	select CEVT_R4K
-diff --git a/arch/mips/include/asm/mach-n64/irq.h b/arch/mips/include/asm/=
-mach-n64/irq.h
-new file mode 100644
-index 0000000..4d4a1ea
-=2D-- /dev/null
-+++ b/arch/mips/include/asm/mach-n64/irq.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_MACH_N64_IRQ_H
-+#define __ASM_MACH_N64_IRQ_H
-+
-+#include <asm/n64/irq.h> /* for MIPS_CPU_IRQ_BASE */
-+
-+#include <asm/mach-generic/irq.h>
-+
-+#endif /* __ASM_MACH_N64_IRQ_H */
-diff --git a/arch/mips/include/asm/n64/irq.h b/arch/mips/include/asm/n64/i=
-rq.h
-new file mode 100644
-index 0000000..00f89ca
-=2D-- /dev/null
-+++ b/arch/mips/include/asm/n64/irq.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Interrupt numbers for N64
-+ *
-+ * Copyright (C) 2020 Lauri Kasanen
-+ */
-+#ifndef __N64_IRQ_H
-+#define __N64_IRQ_H
-+
-+#define NR_IRQS 8
-+
-+/*
-+ * CPU core Interrupt Numbers
-+ */
-+#define MIPS_CPU_IRQ_BASE	0
-+#define MIPS_CPU_IRQ(x)		(MIPS_CPU_IRQ_BASE + (x))
-+#define MIPS_SOFTINT0_IRQ	MIPS_CPU_IRQ(0)
-+#define MIPS_SOFTINT1_IRQ	MIPS_CPU_IRQ(1)
-+#define RCP_IRQ			MIPS_CPU_IRQ(2)
-+#define CART_IRQ		MIPS_CPU_IRQ(3)
-+#define PRENMI_IRQ		MIPS_CPU_IRQ(4)
-+#define RDBR_IRQ		MIPS_CPU_IRQ(5)
-+#define RDBW_IRQ		MIPS_CPU_IRQ(6)
-+#define TIMER_IRQ		MIPS_CPU_IRQ(7)
-+
-+#endif /* __N64_IRQ_H */
-diff --git a/arch/mips/n64/Makefile b/arch/mips/n64/Makefile
-new file mode 100644
-index 0000000..b64a05a
-=2D-- /dev/null
-+++ b/arch/mips/n64/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Nintendo 64
-+#
-+
-+obj-y :=3D init.o irq.o
-diff --git a/arch/mips/n64/Platform b/arch/mips/n64/Platform
-new file mode 100644
-index 0000000..bf5edba
-=2D-- /dev/null
-+++ b/arch/mips/n64/Platform
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Nintendo 64
-+#
-+
-+cflags-$(CONFIG_MIPS_N64)    +=3D -I$(srctree)/arch/mips/include/asm/mach=
--n64
-+load-$(CONFIG_MIPS_N64)      +=3D 0xffffffff80101000
 diff --git a/arch/mips/n64/init.c b/arch/mips/n64/init.c
-new file mode 100644
-index 0000000..6fb622d
-=2D-- /dev/null
+index 6fb622d..635e9ef 100644
+=2D-- a/arch/mips/n64/init.c
 +++ b/arch/mips/n64/init.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *  Nintendo 64 init.
-+ *
-+ *  Copyright (C) 2020	Lauri Kasanen
-+ */
-+#include <linux/init.h>
-+#include <linux/ioport.h>
-+#include <linux/irq.h>
-+#include <linux/memblock.h>
-+#include <linux/string.h>
-+
-+#include <asm/bootinfo.h>
-+#include <asm/time.h>
-+
-+#define IO_MEM_RESOURCE_START	0UL
-+#define IO_MEM_RESOURCE_END	0x1fffffffUL
-+
-+static void __init iomem_resource_init(void)
+@@ -8,6 +8,7 @@
+ #include <linux/ioport.h>
+ #include <linux/irq.h>
+ #include <linux/memblock.h>
++#include <linux/platform_device.h>
+ #include <linux/string.h>
+
+ #include <asm/bootinfo.h>
+@@ -46,6 +47,15 @@ void __init prom_free_prom_memory(void)
+ {
+ }
+
++static int __init n64_platform_init(void)
 +{
-+	iomem_resource.start =3D IO_MEM_RESOURCE_START;
-+	iomem_resource.end =3D IO_MEM_RESOURCE_END;
++	platform_device_register_simple("n64rdp", -1, NULL, 0);
++
++	return 0;
 +}
 +
-+const char *get_system_type(void)
-+{
-+	return "Nintendo 64";
-+}
++arch_initcall(n64_platform_init);
 +
-+void __init prom_init(void)
-+{
-+	int argc, i;
-+	const char **argv;
+ void __init plat_mem_setup(void)
+ {
+ 	iomem_resource_init();
+diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+index cfb7f56..4dde2c7 100644
+=2D-- a/drivers/video/fbdev/Kconfig
++++ b/drivers/video/fbdev/Kconfig
+@@ -2206,6 +2206,15 @@ config FB_SIMPLE
+ 	  Configuration re: surface address, size, and format must be provided
+ 	  through device tree, or plain old platform data.
+
++config FB_N64RDP
++	bool "Nintendo 64 RDP support"
++	depends on (FB =3D y) && MIPS_N64
++	select FB_CFB_FILLRECT
++	select FB_CFB_COPYAREA
++	select FB_CFB_IMAGEBLIT
++	help
++	  Driver for the N64's display.
 +
-+	argc =3D fw_arg0;
-+	argv =3D (const char **)fw_arg1;
-+
-+	for (i =3D 1; i < argc; i++) {
-+		strlcat(arcs_cmdline, argv[i], COMMAND_LINE_SIZE);
-+		if (i < (argc - 1))
-+			strlcat(arcs_cmdline, " ", COMMAND_LINE_SIZE);
-+	}
-+}
-+
-+void __init prom_free_prom_memory(void)
-+{
-+}
-+
-+void __init plat_mem_setup(void)
-+{
-+	iomem_resource_init();
-+	memblock_add(0x0, 8 * 1024 * 1024); // Bootloader blocks the 4mb config
-+}
-+
-+void __init plat_time_init(void)
-+{
-+	// 93.75 MHz cpu, count register runs at half rate
-+	mips_hpt_frequency =3D 93750000 / 2;
-+}
-diff --git a/arch/mips/n64/irq.c b/arch/mips/n64/irq.c
+ config FB_SSD1307
+ 	tristate "Solomon SSD1307 framebuffer support"
+ 	depends on FB && I2C
+diff --git a/drivers/video/fbdev/Makefile b/drivers/video/fbdev/Makefile
+index 477b962..86f1e22 100644
+=2D-- a/drivers/video/fbdev/Makefile
++++ b/drivers/video/fbdev/Makefile
+@@ -129,6 +129,7 @@ obj-$(CONFIG_FB_MX3)		  +=3D mx3fb.o
+ obj-$(CONFIG_FB_DA8XX)		  +=3D da8xx-fb.o
+ obj-$(CONFIG_FB_SSD1307)	  +=3D ssd1307fb.o
+ obj-$(CONFIG_FB_SIMPLE)           +=3D simplefb.o
++obj-$(CONFIG_FB_N64RDP)           +=3D n64rdp.o
+
+ # the test framebuffer is last
+ obj-$(CONFIG_FB_VIRTUAL)          +=3D vfb.o
+diff --git a/drivers/video/fbdev/n64rdp.c b/drivers/video/fbdev/n64rdp.c
 new file mode 100644
-index 0000000..3eb0079
+index 0000000..e5456b6
 =2D-- /dev/null
-+++ b/arch/mips/n64/irq.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/drivers/video/fbdev/n64rdp.c
+@@ -0,0 +1,190 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ *  N64 IRQ
++ * DRM driver for the N64's RDP
 + *
-+ *  Copyright (C) 2020 Lauri Kasanen
++ * Copyright (c) 2020 Lauri Kasanen
++ *
++ * Based on simplefb.c, which was:
++ * Copyright (c) 2013, Stephen Warren
++ *
++ * Based on q40fb.c, which was:
++ * Copyright (C) 2001 Richard Zidlicky <rz@linux-m68k.org>
++ *
++ * Also based on offb.c, which was:
++ * Copyright (C) 1997 Geert Uytterhoeven
++ * Copyright (C) 1996 Paul Mackerras
 + */
-+#include <linux/export.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
 +
-+#include <asm/irq_cpu.h>
++#include <linux/dma-mapping.h>
++#include <linux/errno.h>
++#include <linux/fb.h>
++#include <linux/io.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/parser.h>
 +
-+asmlinkage void plat_irq_dispatch(void)
++#include <asm/addrspace.h>
++
++static const struct fb_fix_screeninfo n64rdp_fix =3D {
++	.id		=3D "default",
++	.type		=3D FB_TYPE_PACKED_PIXELS,
++	.visual		=3D FB_VISUAL_TRUECOLOR,
++	.accel		=3D FB_ACCEL_NONE,
++};
++
++static const struct fb_var_screeninfo n64rdp_var =3D {
++	.height		=3D -1,
++	.width		=3D -1,
++	.activate	=3D FB_ACTIVATE_NOW,
++	.vmode		=3D FB_VMODE_NONINTERLACED,
++};
++
++#define PSEUDO_PALETTE_SIZE 16
++
++static int n64rdp_setcolreg(u_int regno, u_int red, u_int green, u_int bl=
+ue,
++			      u_int transp, struct fb_info *info)
 +{
-+	unsigned int pending =3D read_c0_cause() & read_c0_status() & ST0_IM;
++	u32 *pal =3D info->pseudo_palette;
++	u32 cr =3D red >> (16 - info->var.red.length);
++	u32 cg =3D green >> (16 - info->var.green.length);
++	u32 cb =3D blue >> (16 - info->var.blue.length);
++	u32 value;
 +
-+	if (pending & CAUSEF_IP7)
-+		do_IRQ(TIMER_IRQ);
-+	else if (pending & CAUSEF_IP4)
-+		do_IRQ(PRENMI_IRQ);
-+	else if (pending & CAUSEF_IP2)
-+		do_IRQ(RCP_IRQ);
-+	else if (pending & CAUSEF_IP0)
-+		do_IRQ(MIPS_SOFTINT0_IRQ);
-+	else if (pending & CAUSEF_IP1)
-+		do_IRQ(MIPS_SOFTINT1_IRQ);
-+	else
-+		spurious_interrupt();
++	if (regno >=3D PSEUDO_PALETTE_SIZE)
++		return -EINVAL;
++
++	value =3D (cr << info->var.red.offset) |
++		(cg << info->var.green.offset) |
++		(cb << info->var.blue.offset);
++	if (info->var.transp.length > 0) {
++		u32 mask =3D (1 << info->var.transp.length) - 1;
++		mask <<=3D info->var.transp.offset;
++		value |=3D mask;
++	}
++	pal[regno] =3D value;
++
++	return 0;
 +}
 +
-+void __init arch_init_irq(void)
++static const struct fb_ops n64rdp_ops =3D {
++	.owner		=3D THIS_MODULE,
++	.fb_setcolreg	=3D n64rdp_setcolreg,
++	.fb_fillrect	=3D cfb_fillrect,
++	.fb_copyarea	=3D cfb_copyarea,
++	.fb_imageblit	=3D cfb_imageblit,
++};
++
++struct n64rdp_par {
++	u32 palette[PSEUDO_PALETTE_SIZE];
++	dma_addr_t physaddr;
++};
++
++#define REG_BASE ((u32 *) CKSEG1ADDR(0xA4400000))
++
++static void n64rdp_write_reg(const u8 reg, const u32 value)
 +{
-+	mips_cpu_irq_init();
++	__raw_writel(value, REG_BASE + reg);
 +}
++
++#define W 320
++#define H 240
++
++static const u32 ntsc_320[] __initconst =3D {
++	0x00013212, 0x00000000, 0x00000140, 0x00000200,
++	0x00000000, 0x03e52239, 0x0000020d, 0x00000c15,
++	0x0c150c15, 0x006c02ec, 0x002501ff, 0x000e0204,
++	0x00000200, 0x00000400
++};
++
++static int __init n64rdp_probe(struct platform_device *pdev)
++{
++	int ret;
++	u32 i;
++	struct fb_info *info;
++	struct n64rdp_par *par;
++	dma_addr_t addr;
++
++	info =3D framebuffer_alloc(sizeof(struct n64rdp_par), &pdev->dev);
++	if (!info)
++		return -ENOMEM;
++	platform_set_drvdata(pdev, info);
++
++	par =3D info->par;
++
++	info->fix =3D n64rdp_fix;
++	info->screen_base =3D dma_alloc_coherent(&pdev->dev, W * H * 2, &addr,
++					       GFP_DMA | GFP_KERNEL);
++	if (!info->screen_base)
++		return -ENOMEM;
++
++	info->fix.smem_start =3D par->physaddr =3D addr;
++	info->fix.smem_len =3D W * H * 2;
++	info->fix.line_length =3D W * 2;
++
++	info->var =3D n64rdp_var;
++	info->var.xres =3D W;
++	info->var.yres =3D H;
++	info->var.xres_virtual =3D W;
++	info->var.yres_virtual =3D H;
++	info->var.bits_per_pixel =3D 16;
++	info->var.red =3D (struct fb_bitfield) {11, 5};
++	info->var.green =3D (struct fb_bitfield) {6, 5};
++	info->var.blue =3D (struct fb_bitfield) {1, 5};
++	info->var.transp =3D (struct fb_bitfield) {0, 1};
++
++	info->apertures =3D alloc_apertures(1);
++	if (!info->apertures) {
++		ret =3D -ENOMEM;
++		goto error_fb_release;
++	}
++	info->apertures->ranges[0].base =3D info->fix.smem_start;
++	info->apertures->ranges[0].size =3D info->fix.smem_len;
++
++	info->fbops =3D &n64rdp_ops;
++	info->flags =3D FBINFO_DEFAULT;
++	info->pseudo_palette =3D par->palette;
++
++	dev_info(&pdev->dev, "framebuffer at 0x%lx, 0x%x bytes, mapped to 0x%p\n=
+",
++			     info->fix.smem_start, info->fix.smem_len,
++			     info->screen_base);
++
++	ret =3D register_framebuffer(info);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "Unable to register n64rdp: %d\n", ret);
++		goto error_fb_release;
++	}
++
++	for (i =3D 0; i < ARRAY_SIZE(ntsc_320); i++) {
++		if (i =3D=3D 1)
++			n64rdp_write_reg(i, par->physaddr);
++		else
++			n64rdp_write_reg(i, ntsc_320[i]);
++	}
++
++	return 0;
++
++error_fb_release:
++	framebuffer_release(info);
++	return ret;
++}
++
++static struct platform_driver n64rdp_driver =3D {
++	.driver =3D {
++		.name =3D "n64rdp",
++	},
++};
++
++static int __init n64rdp_init(void)
++{
++	int ret;
++
++	ret =3D platform_driver_probe(&n64rdp_driver, n64rdp_probe);
++
++	return ret;
++}
++
++fs_initcall(n64rdp_init);
++
++MODULE_AUTHOR("Lauri Kasanen <cand@gmx.com>");
++MODULE_DESCRIPTION("Driver for the N64's display");
++MODULE_LICENSE("GPL v2");
 =2D-
 2.6.2
 
