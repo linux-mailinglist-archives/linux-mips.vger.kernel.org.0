@@ -2,81 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6859B2E2D9A
-	for <lists+linux-mips@lfdr.de>; Sat, 26 Dec 2020 08:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9B62E2D9D
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Dec 2020 08:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbgLZHdd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 26 Dec 2020 02:33:33 -0500
-Received: from mout.gmx.net ([212.227.15.18]:45331 "EHLO mout.gmx.net"
+        id S1725979AbgLZHlf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 26 Dec 2020 02:41:35 -0500
+Received: from mout.gmx.net ([212.227.15.19]:50979 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725994AbgLZHdd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 26 Dec 2020 02:33:33 -0500
+        id S1725809AbgLZHle (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 26 Dec 2020 02:41:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1608967919;
-        bh=GKptkf0JkwWKAMtKxpxRn+DHyAVBmp8ocwHft54ngq4=;
+        s=badeba3b8450; t=1608968400;
+        bh=aJ029Kf/BwD1o5JDn4C3BBQIw3TZg8P2sPjSc5XidwA=;
         h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=edGoIjbzc9jC6ArRixV24k9oTkS2apcG/kQCqKAsiDOJuqPl2vMvuxpVkbcyJGfhT
-         zOAsi5Q09CxAKwK7t+Ia8ZXj5h8gDZgCW1x+F5qCtMP/YOYy4DJWWSx7AF9Zogs1dM
-         2WDL5n6ENMlcRq5q7scHphU3Je81m3nvP7BpzVuo=
+        b=ERma6e+iPeeWg6UuoAL0wa3yCjtBQaJ8z8QEoKHkaVM6bFYDPcvVhvPEJt2t42jHo
+         FApYiaUM8r1V0zzRX5DIvJAGeFp/b/vZtaWgnNToSQylYes/Kzz8yngdIfsce1pU8M
+         a0q515NUKY4zfCesvWkbhZBtMZeqWgvLISyHRBuY=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MTRR0-1kTfOs2m7A-00Tlma; Sat, 26
- Dec 2020 08:31:58 +0100
-Date:   Sat, 26 Dec 2020 09:33:35 +0200
+Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx004
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MQ5rO-1kfoch3xEO-00M5aQ; Sat, 26
+ Dec 2020 08:40:00 +0100
+Date:   Sat, 26 Dec 2020 09:41:36 +0200
 From:   Lauri Kasanen <cand@gmx.com>
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de
-Subject: Re: [PATCH 3/6] fbdev: Add n64rdp driver
-Message-Id: <20201226093335.b625b3a58a95c04d068e3109@gmx.com>
-In-Reply-To: <06aad685-cea3-bfd3-2cba-492e5cbf322f@flygoat.com>
-References: <20201225190048.776de55443fd4c953e797d8e@gmx.com>
-        <06aad685-cea3-bfd3-2cba-492e5cbf322f@flygoat.com>
+Subject: Re: [PATCH 4/6] input: Add N64 controller driver
+Message-Id: <20201226094136.0559ef9741d95bab38da04f6@gmx.com>
+In-Reply-To: <c1d5fdff-cfee-5252-a9f4-7ea6806a1113@flygoat.com>
+References: <20201225190115.efa38e5a0107bec09f993ed6@gmx.com>
+        <c1d5fdff-cfee-5252-a9f4-7ea6806a1113@flygoat.com>
 X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:L4GIyJP10v9x1znkw2k9jmCqXth6V4xlXE0wosgmK7IF93JGfhP
- zHwIzx+Lf6NoOxiP0fztK1D/hSGhG4aAJ7oUzPnf/fvXoD6G2tbw6b8C8amVp3lSexx0vWp
- aoYwEhmhggyDh6wWHoJhkHZUAwLW+aTNxev834eKvvk/QfNFTXestn44XsIOSRVy7hI+Ufm
- CS6ERolfk9qmZxa3KVetA==
+X-Provags-ID: V03:K1:7YQwsBx/KHl2BYzesc8dTVcFqzVecjpKYj3TvVY15fzKAOHhQXC
+ NrIp/wKEV16UDJ+ynbEVjxwGddJP+nvpgcaRzi5pjVz5aowdkZxmqjlbQBh7eVCPzQ4YGvk
+ Gdm88POUsLvo1pG5Ucoh6Ay3y/bAqt0gD0t414aLHLEV6sTMIDqI8SD1SG6nAVUVYzSEev/
+ rML4SyOWGlR+Z4o/dV2lA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VyqhF6qFl/w=:VlBmzrkZK2Tt582Jp+5WBm
- Wnj6N4ccGIbHjZaDuVH018fdF+1SIfFEBiHyomhrQzZ5nCKtAlMPaoQG5HmDpB1/7X734Voho
- lgUnVmAF/pDlxJMuxIGlva5kK+F6hMSs0+8DFuWawXwq91o1kLqHpj77Lp8/nFKXkKTNfKQ6e
- 4UEd3T2aR3XwPsXJ98shZ/mnMF80upXQgyIOWrPMC5QeuSOeAA6+jW+se89C4bgbi+3bHJYQ3
- yiQE5jeJ9GNvHe4Xrbl8XGtDZF4uCaka7VyAtQAzvdTMvlRFXYYfXHaEgW43FCVIZ55zNb78d
- +VabsmDs4PEUvnUfuih33yv25H0udHhNSaLlze1at8n9WwR5jIEjNnwLjgbJzwcf/1JPGSHb4
- /kaXi7ok4esG7PeT0XxfShi2faX2IUfzijQovwDsO2PcFpq3LDPWKAzK44zZYrL5KBVTljHUW
- zlkMjABQ/wdqJaBMDNiZOKyvgVv6dVJHr2eD2yhyNBR69JC69YJgvhPEMVbiuKUZwjnr3vxvf
- 6/5AAs+0KKTxg/oxaf83XrhyiWfRURIFtUfX1oEJMJstBFy/IxQQv0bH7asG3i0xipvKlIEpR
- VI75JLmXYwAbVtWq5MvVUQlh0rfsucmx+kye3n8zQqoyWzhHjNAD9kUP/zMgcL52RBlKEYjZF
- DbvlguXenJ/X+or8Kxmgcyfv2AWq6ogypi1trCkpdDRr0gRlkxYFMmbERA07QzLWAWFlwSFP/
- 36AkSJMNY73U9CKizNicXL1+n7UR7+PFmqerRLGlh+4qdfAHUO1ClpVJ1rux+KwpLIK0QjGMn
- cKufmlWTQ1qqnFIsQGGQ65PaotwiL8htZ+fqjryW9lkmNxb5MPUj4AZZnKu++wwyKbdN7Dz3w
- OTy59+qwGuhTtLp1TeZA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:u472f+5Mau0=:1sWB+IdUdnNkwdZw94TWQf
+ 5h8VZN+run0fmT8pD6CTpc17v4GCM2dyKeyWWRIjhgXNey5CceImoBvlcVDnzpiyg1rnI0TVV
+ miiELbW0EnFQwOFF357ShlaxOWrRhqtSezxhu7WH4+ZZ7O8tg3SywtfVWPmvFnDBw1S7ZzQnN
+ AUXi+3pWjn9OFujybF6gIhoG7DDYjgIqRgKjSIatFAAD9APV40KNABChkzK3LcwoIBxdOxc8w
+ 4CnRhJnxwO9KFA2enXai8qwnWAggi6vLWpcHGdiNxCrMhGkvrmeNmrKNdMB/AFrKHW54PZgqi
+ PEquPk9UcdlvsTo+ZdBvGTj14lz9hBqMC7psqq8xQrnhw5t0FVXAAE2l1vR8AeWktEufL1WyT
+ OFproIrvsEXOR1GImKMcb4UVz79JOXpEaEdVu9IOQU2dDwgfNb0FgHUlC3QW3m+k3vBaGB5Ng
+ OOB1ND1WoxmDRuNj8mFf7zKkbFdU/rWYZftIQ4nuXtMUZWX5tOuIq6p7/gaiT16BLmunEqKsA
+ ryCfwIN8yqiu+eoippxsp4sr4gyXU72S9emAGj+2e0GH3ATptGlm743hkyoee6XRAj+E1Lawv
+ w3u6sN/N3Hg2FpPsn1DfDENeJb8cmHfdHrsyMxEWBbYk+p2jQQlL0L0peB0v97rRlWTqrsbVl
+ ov5Q1nxvsUoDC1ezj/LvPH7YUKaHflWJLxk2nW61rtgEzQU6yMcDcH49WUieS6te060R9IC1O
+ yQ40/mDob7+vS1/kih6timFikkIhf9rsDzp+YF0mBS8HuL8E2VZUmScvkiH8o2hVUdStBjGgr
+ A+09ik9kCPo3FVGPkxzPkGWtM/3DXinyOQQgoX+CdtF8PB9IuY3zQtJcP8j/SaFJdsdEDz+5x
+ 4J0JkaVNPMwai+ScTjZA==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 26 Dec 2020 11:20:36 +0800
+On Sat, 26 Dec 2020 11:25:49 +0800
 Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 
-> =E5=9C=A8 2020/12/26 =E4=B8=8A=E5=8D=881:00, Lauri Kasanen =E5=86=99=E9=
-=81=93:
-> > I'm aware of the drm-fbdev resolution, but CONFIG_DRM adds 100kb, whic=
-h
-> > is a complete blocker on a system with 8mb RAM.
+> > +#define PIF_RAM 0x1fc007c0
+> > +#define REG_BASE ((u32 *) CKSEG1ADDR(0xa4800000))
 >
-> Hi Lauri,
->
-> AFAIK it's impossible to have a new fbdev driver.
-> However you can workaround it by setup fb memory in platform code or eve=
-n
-> bootloader and register a simplefb platform driver.
+> 0xa4800000 sounds like a KSEG1 addr, I think phys should be 0x14800000?
+> For driver it is common to use ioremap, or at least TO_UNCAC.
 
-It may be that way, but that would preclude adding acceleration
-(clears, blits...). With this driver, if someone finds it too slow,
-it'd be easy to hook up gpu accel. So let's try at least, given DRM is
-way too large.
+TO_UNCAC looks like it wouldn't work for vr4300, the manual says
+uncached 64-bit space is 0xffff ffff a000 0000, when
+include/asm/mach-generic/spaces.h puts the 64bit space start at
+0x9000 0000 0000 0000.
+
+ioremap - it looked like needless overhead. Is this a blocker?
+
+The 0xa uncached prefix being in the address already is harmless, it is
+the same on both 32-bit and 64-bit on this cpu. I left it in because it
+makes it clear to me what kind of address it is, coming from the N64
+side.
 
 - Lauri
