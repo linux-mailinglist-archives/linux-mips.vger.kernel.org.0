@@ -2,124 +2,163 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 753DF2E2DFB
-	for <lists+linux-mips@lfdr.de>; Sat, 26 Dec 2020 11:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D981E2E2E6E
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Dec 2020 16:04:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725924AbgLZKel (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 26 Dec 2020 05:34:41 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:34865 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725823AbgLZKel (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 26 Dec 2020 05:34:41 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 073115802D7;
-        Sat, 26 Dec 2020 05:33:35 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sat, 26 Dec 2020 05:33:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=e
-        b4By+ZVKhaLC7u35jCPtH0+H0jOoSIWvhbUwXu6ur4=; b=NK3wbFfFoXME41frF
-        E+Q5kDvxSpleDPhy8XYtwKn4OpGF8QpFZPg4CkIYN5NF5oGDe8OwNd9cj6s6disD
-        CmtTg8FKGHQ9bU5llvtx1BFtjOCqyYAQD/jK8sr3Jyy8RmJI43+DIhy3Vw2YeStz
-        Bu4LHlknJbsqXYFlpP1w6Hf3+jSl/z1l7u3w6xu0+vFZOmnGRYpkVMjOkTQExcHg
-        Ds39CDA/dfD3KYseerOmTf2fM67Wq3yn+aUeSTK65t6L7QKNX0QQ3Lvsrrs1o+Er
-        1OLk+l3AdtstSL8s77E+4HYZ1l+7NfeoiC02BzQxXmggurcMPeWGiFlrHdyRrbeL
-        ELlAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=eb4By+ZVKhaLC7u35jCPtH0+H0jOoSIWvhbUwXu6u
-        r4=; b=MV+l/YMIvhoq7APRkc/cQckRM7NzhbiIg/1Juoe+TV0YfO9awmipC2YGZ
-        xEhqu5c22p56hvUdOCC9MXdQaVXvOeBA5UCHALFOG+zBU8bXhNLTM+Ae616H9Hyr
-        CT2NBPIt23UW9e6FL7Qk8YLgNDKR2K0vjh7N1rvS440K3eKQwo0DEDK8oKRMuDVW
-        3GX83MZ5xS66vhkf1tBCbc0/dxAA3AKjyr8bocAFZ1QiqmFrvF4WIkidOooMYnY6
-        zCRIK+DSR5GZx1TKok+Uwt391RS3AQxA5DNjYoA2mns3H4REK4Ol6mKustKBCPaI
-        0PTJL0gQt4pQEPw2badyQWeRuiF7Q==
-X-ME-Sender: <xms:fhHnXx6Z-D01ROCBPculbQBQESPKjeJr6SIoX4avOZwp5rE5-m0Ygw>
-    <xme:fhHnX-5BCDCGcmSQjGIwr0eW4x4WcddYawsRH3AiZx4Kri_dG3NO_5edhazTA9v7o
-    cQJRrPWNghshUl6v2A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddufedgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefuvfhfhffkffgfgggjtgfgsehtke
-    ertddtfeejnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
-    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepudehffejkefgkeeije
-    dtjeettdehgfeuiedugeefgfejgefgfeelhfelgfehgeeinecuffhomhgrihhnpehkgidr
-    ihhnpdgthhhiphgusgdrohhrghenucfkphepudduhedrudeliedrudegrddujedunecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhn
-    rdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:fhHnX4c-iAEdPNspA2FCTKXKYjIyKPjKgmMpacxBrQs2puN5dRE2HA>
-    <xmx:fhHnX6JVhwr4pT1AAG3LuqrahnxdUCxTv4ZaTFJ-QwJB9UWKFno0IA>
-    <xmx:fhHnX1LGKrwRcgiZQEJ6JacNDwL1r5Ivg-FpnvGZmwNnEVYbDTvk3A>
-    <xmx:fhHnX4mELRt8kjWvBdh6vrGKjYmWfGebIxhLzUNjymbffH3_AZCRtQ>
-Received: from [192.168.1.203] (unknown [115.196.14.171])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 8268D24005A;
-        Sat, 26 Dec 2020 05:33:32 -0500 (EST)
-Subject: Re: [PATCH 4/6] input: Add N64 controller driver
-To:     Lauri Kasanen <cand@gmx.com>
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de
-References: <20201225190115.efa38e5a0107bec09f993ed6@gmx.com>
- <c1d5fdff-cfee-5252-a9f4-7ea6806a1113@flygoat.com>
- <20201226094136.0559ef9741d95bab38da04f6@gmx.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <c9943e54-935a-7ba8-5dca-7894b80aad3a@flygoat.com>
-Date:   Sat, 26 Dec 2020 18:33:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1726200AbgLZPDv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 26 Dec 2020 10:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726024AbgLZPDv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 26 Dec 2020 10:03:51 -0500
+Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A18C0613C1
+        for <linux-mips@vger.kernel.org>; Sat, 26 Dec 2020 07:03:11 -0800 (PST)
+Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
+        (envelope-from <bert@biot.com>)
+        id 1ktB65-009v9D-Fk
+        for linux-mips@vger.kernel.org; Sat, 26 Dec 2020 16:03:09 +0100
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on yawp
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.4
+Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8]
+        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <bert@biot.com>)
+        id 1ktB5J-009v8T-U4; Sat, 26 Dec 2020 16:02:22 +0100
+Subject: Re: [PATCH v2] Add support for Realtek RTL838x/RTL839x switch SoCs
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>,
+        Shawn Guo <shawnguo@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20201223150648.1633113-1-bert@biot.com>
+ <87o8ikqywn.wl-maz@kernel.org>
+From:   Bert Vermeulen <bert@biot.com>
+Message-ID: <b8c989de-aae3-fa5e-90aa-ebce668c80f2@biot.com>
+Date:   Sat, 26 Dec 2020 16:02:21 +0100
 MIME-Version: 1.0
-In-Reply-To: <20201226094136.0559ef9741d95bab38da04f6@gmx.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <87o8ikqywn.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 12/23/20 5:18 PM, Marc Zyngier wrote:
+
+Marc,
+
+Thanks for reviewing. We will rework as needed, however:
+
+> On Wed, 23 Dec 2020 15:06:24 +0000,
+> Bert Vermeulen <bert@biot.com> wrote:
+[...]
+
+>> +/* Interrupt numbers/bits */
+>> +#define RTL8380_IRQ_UART0		31
+>> +#define RTL8380_IRQ_UART1		30
+>> +#define RTL8380_IRQ_TC0			29
+>> +#define RTL8380_IRQ_TC1			28
+>> +#define RTL8380_IRQ_OCPTO		27
+>> +#define RTL8380_IRQ_HLXTO		26
+>> +#define RTL8380_IRQ_SLXTO		25
+>> +#define RTL8380_IRQ_NIC			24
+>> +#define RTL8380_IRQ_GPIO_ABCD		23
+>> +#define RTL8380_IRQ_GPIO_EFGH		22
+>> +#define RTL8380_IRQ_RTC			21
+>> +#define RTL8380_IRQ_SWCORE		20
+>> +#define RTL8380_IRQ_WDT_IP1		19
+>> +#define RTL8380_IRQ_WDT_IP2		18
+> 
+> Why do we need any of this? The mapping should be explicit in the DT.
+> 
+>> +
+>> +/* Global Interrupt Mask Register */
+>> +#define RTL8380_ICTL_GIMR	0x00
+>> +/* Global Interrupt Status Register */
+>> +#define RTL8380_ICTL_GISR	0x04
+>> +
+>> +/* Cascaded interrupts */
+>> +#define RTL8380_CPU_IRQ_SHARED0		(MIPS_CPU_IRQ_BASE + 2)
+>> +#define RTL8380_CPU_IRQ_UART		(MIPS_CPU_IRQ_BASE + 3)
+>> +#define RTL8380_CPU_IRQ_SWITCH		(MIPS_CPU_IRQ_BASE + 4)
+>> +#define RTL8380_CPU_IRQ_SHARED1		(MIPS_CPU_IRQ_BASE + 5)
+>> +#define RTL8380_CPU_IRQ_EXTERNAL	(MIPS_CPU_IRQ_BASE + 6)
+>> +#define RTL8380_CPU_IRQ_COUNTER		(MIPS_CPU_IRQ_BASE + 7)
+>> +
+>> +
+>> +/* Interrupt routing register */
+>> +#define RTL8380_IRR0		0x08
+>> +#define RTL8380_IRR1		0x0c
+>> +#define RTL8380_IRR2		0x10
+>> +#define RTL8380_IRR3		0x14
+>> +
+>> +/* Cascade map */
+>> +#define RTL8380_IRQ_CASCADE_UART0	2
+>> +#define RTL8380_IRQ_CASCADE_UART1	1
+>> +#define RTL8380_IRQ_CASCADE_TC0		5
+>> +#define RTL8380_IRQ_CASCADE_TC1		1
+>> +#define RTL8380_IRQ_CASCADE_OCPTO	1
+>> +#define RTL8380_IRQ_CASCADE_HLXTO	1
+>> +#define RTL8380_IRQ_CASCADE_SLXTO	1
+>> +#define RTL8380_IRQ_CASCADE_NIC		4
+>> +#define RTL8380_IRQ_CASCADE_GPIO_ABCD	4
+>> +#define RTL8380_IRQ_CASCADE_GPIO_EFGH	4
+>> +#define RTL8380_IRQ_CASCADE_RTC		4
+>> +#define RTL8380_IRQ_CASCADE_SWCORE	3
+>> +#define RTL8380_IRQ_CASCADE_WDT_IP1	4
+>> +#define RTL8380_IRQ_CASCADE_WDT_IP2	5
+>> +
+>> +/* Pack cascade map into interrupt routing registers */
+>> +#define RTL8380_IRR0_SETTING (\
+>> +	(RTL8380_IRQ_CASCADE_UART0	<< 28) | \
+>> +	(RTL8380_IRQ_CASCADE_UART1	<< 24) | \
+>> +	(RTL8380_IRQ_CASCADE_TC0	<< 20) | \
+>> +	(RTL8380_IRQ_CASCADE_TC1	<< 16) | \
+>> +	(RTL8380_IRQ_CASCADE_OCPTO	<< 12) | \
+>> +	(RTL8380_IRQ_CASCADE_HLXTO	<< 8)  | \
+>> +	(RTL8380_IRQ_CASCADE_SLXTO	<< 4)  | \
+>> +	(RTL8380_IRQ_CASCADE_NIC	<< 0))
+>> +#define RTL8380_IRR1_SETTING (\
+>> +	(RTL8380_IRQ_CASCADE_GPIO_ABCD	<< 28) | \
+>> +	(RTL8380_IRQ_CASCADE_GPIO_EFGH	<< 24) | \
+>> +	(RTL8380_IRQ_CASCADE_RTC	<< 20) | \
+>> +	(RTL8380_IRQ_CASCADE_SWCORE	<< 16))
+>> +#define RTL8380_IRR2_SETTING	0
+>> +#define RTL8380_IRR3_SETTING	0
+
+[...]
+
+>> +	/* Set up interrupt routing */
+>> +	writel(RTL8380_IRR0_SETTING, REG(RTL8380_IRR0));
+>> +	writel(RTL8380_IRR1_SETTING, REG(RTL8380_IRR1));
+>> +	writel(RTL8380_IRR2_SETTING, REG(RTL8380_IRR2));
+>> +	writel(RTL8380_IRR3_SETTING, REG(RTL8380_IRR3));
+> 
+> What is this doing?
+
+It's fairly evident considering the comments -- routing of secondary IRQs 
+onto the CPU IRQs. But as to packing this into DTS I'm not sure.
+
+DTS syntax being what it is, this would inevitably get more complex and 
+harder to understand. Do you have an example where this is done in a better way?
+
+thanks,
 
 
-在 2020/12/26 15:41, Lauri Kasanen 写道:
-> On Sat, 26 Dec 2020 11:25:49 +0800
-> Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
->>> +#define PIF_RAM 0x1fc007c0
->>> +#define REG_BASE ((u32 *) CKSEG1ADDR(0xa4800000))
->> 0xa4800000 sounds like a KSEG1 addr, I think phys should be 0x14800000?
->> For driver it is common to use ioremap, or at least TO_UNCAC.
-> TO_UNCAC looks like it wouldn't work for vr4300, the manual says
-> uncached 64-bit space is 0xffff ffff a000 0000, when
-> include/asm/mach-generic/spaces.h puts the 64bit space start at
-> 0x9000 0000 0000 0000.
-
-0x9000 0000 0000 0000 is a part of MIPS ISA defined "XKPHYS" unmapped
-region. Accorading to "NEC VR43xx User’s Manual"[1] pp 134-135
-it does exisit on VR43xx.
-
-If it doesn't work then it means VR43xx doesn't properly implemented
-Status.KX. In this case you shouldn't run a 64bit kernel as many code
-in kernel assumed proper KX implementation.
-
-TO_UNCAC is much more clear than CKSEG1ADDR for readers.
-
->
-> ioremap - it looked like needless overhead. Is this a blocker?
-
-Well I assume it isn't, just a common parctice.
-
->
-> The 0xa uncached prefix being in the address already is harmless, it is
-> the same on both 32-bit and 64-bit on this cpu. I left it in because it
-> makes it clear to me what kind of address it is, coming from the N64
-> side.
-
-Than it is not actual physical address, CKSEG1ADDR makes me confusing.
-
-Thanks.
-
-[1]: http://datasheets.chipdb.org/NEC/Vr-Series/Vr43xx/U10504EJ7V0UMJ1.pdf
-
-- Jiaxun
-
->
-> - Lauri
-
+-- 
+Bert Vermeulen
+bert@biot.com
