@@ -2,58 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4AE2E331B
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Dec 2020 23:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC992E334A
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Dec 2020 01:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbgL0W1g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Dec 2020 17:27:36 -0500
-Received: from elvis.franken.de ([193.175.24.41]:42241 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726194AbgL0W1g (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 27 Dec 2020 17:27:36 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kteV4-00005l-00; Sun, 27 Dec 2020 23:26:54 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0D310C04EC; Sun, 27 Dec 2020 23:26:44 +0100 (CET)
-Date:   Sun, 27 Dec 2020 23:26:43 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org
-Subject: Re: CPUs with EVA support
-Message-ID: <20201227222643.GA5249@alpha.franken.de>
-References: <20201220193201.GA3184@alpha.franken.de>
- <d45cb374-f3dc-8c26-6b0f-27bec45854a9@flygoat.com>
+        id S1726303AbgL1A1U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Dec 2020 19:27:20 -0500
+Received: from mail-il1-f176.google.com ([209.85.166.176]:45352 "EHLO
+        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726226AbgL1A1U (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Dec 2020 19:27:20 -0500
+Received: by mail-il1-f176.google.com with SMTP id w12so8167522ilm.12;
+        Sun, 27 Dec 2020 16:27:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GxF6gjxDj1D5oG9BFZvSKyyiGl1MUnLLDiE1YxgJ6wM=;
+        b=CUePESMrQCqJYogxcY0LfdtCZ57MDKTc/iWIRiIEzMxqAgomh8O3vB7QE4zucM++6G
+         1CtYmxVhnTuQHdR7OA694VOaMyC37OQxEa/JueCKuCYM6/tTP6LdXpXObbZBCzctLOQ1
+         0CPhZf70q/UPAKOkRfWrRpgD893joPdA2bzC0fVPIx82AK2xpa4y3OXIwbTv+rl1Qbvu
+         AxmIgQ8i7ZNFJqTjLSNXr4fJLhkuJZPdUjKTIbPg0/tuk1oqRUuNHhAFts9m4XDaGUPw
+         8xSLYWslOshl2f2awNsbOu33dDmxAchywkkTKhPd3XtS3Ud39tk+D0+018ltspu3tutW
+         f4+g==
+X-Gm-Message-State: AOAM531236MKOBVDQJ3LPXGbDAiHrpIlQhBtjubf8ajnrSl58SWnbuYs
+        GBuIoXFYmx2XYABIn/xZVe02a4UeSt08fpavaYg=
+X-Google-Smtp-Source: ABdhPJwqWQzgWx9rHhJtLVsy+SFYeDCm+6mrk4i78hCJjXkIngpvN6ZcMJqvBVVvccqmAsUPnBG5MBs4U7VGTuwuSEI=
+X-Received: by 2002:a05:6e02:1187:: with SMTP id y7mr42039158ili.143.1609115199086;
+ Sun, 27 Dec 2020 16:26:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d45cb374-f3dc-8c26-6b0f-27bec45854a9@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1608973923-8328-1-git-send-email-zhangqing@loongson.cn> <1608973923-8328-2-git-send-email-zhangqing@loongson.cn>
+In-Reply-To: <1608973923-8328-2-git-send-email-zhangqing@loongson.cn>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Mon, 28 Dec 2020 08:26:27 +0800
+Message-ID: <CAAhV-H5xEf93_OXRLBFkaMhah5keHESiVbPhj0Fs=ajjCgWefg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] spi: ls7a: Add YAML schemas
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        ThomasBogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 21, 2020 at 08:38:00AM +0800, Jiaxun Yang wrote:
-> > How good is EVA support in qemu ?
-> 
-> EVA is functional in QEMU.
-> I had tested it with P5600 malta system.
+Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
-and it's working for you ? I've setup a qemu malta system running
-debian buster. It boots fine when CPU is != P5600, but as soon as
-I enable -cpu P5600 it stops booting:
-
-Run /bin/bash as init process
-request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module binfmt-464c, throttling...
-request_module: modprobe binfmt-464c cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-Kernel panic - not syncing: Requested init /bin/bash failed (error -8).
-
-This happens independant whether EVA enabled or disabled.
-
-Has anybody seen this ?
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+On Sat, Dec 26, 2020 at 5:13 PM Qing Zhang <zhangqing@loongson.cn> wrote:
+>
+> Switch the DT binding to a YAML schema to enable the DT validation.
+>
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+>
+> v4:
+>  - fix warnings/errors about running 'make dt_binding_check'
+>
+> v5:
+>  - remove num-chipelects
+>
+> ---
+>  .../devicetree/bindings/spi/loongson,spi-ls7a.yaml | 44 ++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> new file mode 100644
+> index 0000000..b90b28b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/loongson,spi-ls7a.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson LS7A PCH SPI Controller
+> +
+> +maintainers:
+> +  - Qing Zhang <zhangqing@loongson.cn>
+> +
+> +description: |
+> +  This controller can be found in Loongson-3 systems with LS7A PCH.
+> +
+> +properties:
+> +  compatible:
+> +    const: loongson,ls7a-spi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pci {
+> +        #address-cells = <3>;
+> +        #size-cells = <2>;
+> +
+> +        spi@16,0 {
+> +            compatible = "pci0014,7a0b.0",
+> +                             "pci0014,7a0b",
+> +                             "pciclass088000",
+> +                             "pciclass0800";
+> +
+> +            reg = <0xb000 0x0 0x0 0x0 0x0>;
+> +        };
+> +    };
+> +
+> +...
+> --
+> 2.1.0
+>
