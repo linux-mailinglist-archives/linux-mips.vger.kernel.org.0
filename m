@@ -2,68 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D092E361A
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Dec 2020 11:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085402E3619
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Dec 2020 11:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbgL1Kwy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Dec 2020 05:52:54 -0500
-Received: from elvis.franken.de ([193.175.24.41]:43075 "EHLO elvis.franken.de"
+        id S1727030AbgL1Kwx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Dec 2020 05:52:53 -0500
+Received: from elvis.franken.de ([193.175.24.41]:43077 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727019AbgL1Kwy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 28 Dec 2020 05:52:54 -0500
+        id S1727085AbgL1Kwx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 28 Dec 2020 05:52:53 -0500
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1ktq8K-00054l-00; Mon, 28 Dec 2020 11:52:12 +0100
+        id 1ktq8K-00054l-01; Mon, 28 Dec 2020 11:52:12 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id C06D5C0524; Mon, 28 Dec 2020 11:47:45 +0100 (CET)
-Date:   Mon, 28 Dec 2020 11:47:45 +0100
+        id E06CDC0565; Mon, 28 Dec 2020 11:50:34 +0100 (CET)
+Date:   Mon, 28 Dec 2020 11:50:34 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: CPUs with EVA support
-Message-ID: <20201228104745.GA3606@alpha.franken.de>
-References: <20201220193201.GA3184@alpha.franken.de>
- <d45cb374-f3dc-8c26-6b0f-27bec45854a9@flygoat.com>
- <20201227222643.GA5249@alpha.franken.de>
- <0c24ee90-1872-492d-9bfe-4744aaa87615@www.fastmail.com>
+To:     Lauri Kasanen <cand@gmx.com>
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH 3/6] fbdev: Add n64rdp driver
+Message-ID: <20201228105034.GB3606@alpha.franken.de>
+References: <20201225190048.776de55443fd4c953e797d8e@gmx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0c24ee90-1872-492d-9bfe-4744aaa87615@www.fastmail.com>
+In-Reply-To: <20201225190048.776de55443fd4c953e797d8e@gmx.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 28, 2020 at 09:28:53AM +0800, Jiaxun Yang wrote:
+On Fri, Dec 25, 2020 at 07:00:48PM +0200, Lauri Kasanen wrote:
+> I'm aware of the drm-fbdev resolution, but CONFIG_DRM adds 100kb, which
+> is a complete blocker on a system with 8mb RAM.
 > 
+> Signed-off-by: Lauri Kasanen <cand@gmx.com>
+> ---
+>  arch/mips/n64/init.c         |  10 +++
+>  drivers/video/fbdev/Kconfig  |   9 ++
+>  drivers/video/fbdev/Makefile |   1 +
+>  drivers/video/fbdev/n64rdp.c | 190 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 210 insertions(+)
+>  create mode 100644 drivers/video/fbdev/n64rdp.c
 > 
-> On Mon, Dec 28, 2020, at 6:26 AM, Thomas Bogendoerfer wrote:
-> > On Mon, Dec 21, 2020 at 08:38:00AM +0800, Jiaxun Yang wrote:
-> > > > How good is EVA support in qemu ?
-> > > 
-> > > EVA is functional in QEMU.
-> > > I had tested it with P5600 malta system.
-> > 
-> > and it's working for you ? I've setup a qemu malta system running
-> > debian buster. It boots fine when CPU is != P5600, but as soon as
-> > I enable -cpu P5600 it stops booting:
-> > 
-> > Run /bin/bash as init process
-> > request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), 
-> > for module binfmt-464c, throttling...
-> > request_module: modprobe binfmt-464c cannot be processed, kmod busy 
-> > with 50 threads for more than 5 seconds now
-> > Kernel panic - not syncing: Requested init /bin/bash failed (error -8).
+> diff --git a/arch/mips/n64/init.c b/arch/mips/n64/init.c
+> index 6fb622d..635e9ef 100644
+> --- a/arch/mips/n64/init.c
+> +++ b/arch/mips/n64/init.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/ioport.h>
+>  #include <linux/irq.h>
+>  #include <linux/memblock.h>
+> +#include <linux/platform_device.h>
+>  #include <linux/string.h>
 > 
-> Well you need add "ieee754=relaxed" to cmdline
-> to workaround this.
+>  #include <asm/bootinfo.h>
+> @@ -46,6 +47,15 @@ void __init prom_free_prom_memory(void)
+>  {
+>  }
 > 
-> It's due to NAN2008 mismatch.
+> +static int __init n64_platform_init(void)
+> +{
+> +	platform_device_register_simple("n64rdp", -1, NULL, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +arch_initcall(n64_platform_init);
+> +
+>  void __init plat_mem_setup(void)
+>  {
+>  	iomem_resource_init();
 
-excellent, now it boots. I had to specify "coherentio" as kernel parameter
-to avoid a pcnet32 driver crash the kernel. Looks like creating uncached
-pointers is borken in EVA kernels, is this a known issue ?
+IMHO it would be better to add the platform device creatioasn to the
+MIPS patch. This way there is no dependeny when applying patches by
+different maintainers.
 
 Thomas.
 
