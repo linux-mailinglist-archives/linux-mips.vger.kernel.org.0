@@ -2,102 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4F52E719F
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Dec 2020 16:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459F82E719D
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Dec 2020 16:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726678AbgL2PKZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Dec 2020 10:10:25 -0500
-Received: from elvis.franken.de ([193.175.24.41]:45047 "EHLO elvis.franken.de"
+        id S1726670AbgL2PKY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 29 Dec 2020 10:10:24 -0500
+Received: from elvis.franken.de ([193.175.24.41]:45052 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726664AbgL2PKY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1726281AbgL2PKY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Tue, 29 Dec 2020 10:10:24 -0500
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kuGd4-0006mx-00; Tue, 29 Dec 2020 16:09:42 +0100
+        id 1kuGd4-0006mx-01; Tue, 29 Dec 2020 16:09:42 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 5A6EEC076D; Tue, 29 Dec 2020 16:08:10 +0100 (CET)
-Date:   Tue, 29 Dec 2020 16:08:10 +0100
+        id 0C7C4C07BE; Tue, 29 Dec 2020 16:09:25 +0100 (CET)
+Date:   Tue, 29 Dec 2020 16:09:25 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>, od@zcrc.me,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: boot: Fix unaligned access with??
- CONFIG_MIPS_RAW_APPENDED_DTB
-Message-ID: <20201229150810.GA7832@alpha.franken.de>
-References: <20201216233956.280068-1-paul@crapouillou.net>
- <20201228222532.GA24926@alpha.franken.de>
- <0JM2MQ.PMKIEAOX7SCZ@crapouillou.net>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     "Maciej W. Rozycki" <macro@linux-mips.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Denys Vlasenko <dvlasenk@redhat.com>
+Subject: Re: [RFC][PATCH] NT_FILE/NT_SIGINFO breakage on mips compat coredumps
+Message-ID: <20201229150924.GB7832@alpha.franken.de>
+References: <20201203214529.GB3579531@ZenIV.linux.org.uk>
+ <CAHk-=wiRNT+-ahz2KRUE7buYJMZ84bp=h_vGLrAaOKW3n_xyXQ@mail.gmail.com>
+ <20201203230336.GC3579531@ZenIV.linux.org.uk>
+ <alpine.LFD.2.21.2012071741280.2104409@eddie.linux-mips.org>
+ <20201216030154.GL3579531@ZenIV.linux.org.uk>
+ <alpine.LFD.2.21.2012160924010.2104409@eddie.linux-mips.org>
+ <20201223070320.GW3579531@ZenIV.linux.org.uk>
+ <20201223071213.GX3579531@ZenIV.linux.org.uk>
+ <20201224194438.GY3579531@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0JM2MQ.PMKIEAOX7SCZ@crapouillou.net>
+In-Reply-To: <20201224194438.GY3579531@ZenIV.linux.org.uk>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 28, 2020 at 10:30:36PM +0000, Paul Cercueil wrote:
-> Le lun. 28 déc. 2020 à 23:25, Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> a écrit :
-> > On Wed, Dec 16, 2020 at 11:39:56PM +0000, Paul Cercueil wrote:
-> > >  The compressed payload is not necesarily 4-byte aligned, at least
-> > > when
-> > >  compiling with Clang. In that case, the 4-byte value appended to the
-> > >  compressed payload that corresponds to the uncompressed kernel image
-> > >  size must be read using get_unaligned_le().
-> > > 
-> > >  This fixes Clang-built kernels not booting on MIPS (tested on a
-> > > Ingenic
-> > >  JZ4770 board).
-> > > 
-> > >  Fixes: b8f54f2cde78 ("MIPS: ZBOOT: copy appended dtb to the end of
-> > > the kernel")
-> > >  Cc: <stable@vger.kernel.org> # v4.7
-> > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > >  ---
-> > >   arch/mips/boot/compressed/decompress.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > >  diff --git a/arch/mips/boot/compressed/decompress.c
-> > > b/arch/mips/boot/compressed/decompress.c
-> > >  index c61c641674e6..47c07990432b 100644
-> > >  --- a/arch/mips/boot/compressed/decompress.c
-> > >  +++ b/arch/mips/boot/compressed/decompress.c
-> > >  @@ -117,7 +117,7 @@ void decompress_kernel(unsigned long
-> > > boot_heap_start)
-> > >   		dtb_size = fdt_totalsize((void *)&__appended_dtb);
-> > > 
-> > >   		/* last four bytes is always image size in little endian */
-> > >  -		image_size = le32_to_cpup((void *)&__image_end - 4);
-> > >  +		image_size = get_unaligned_le32((void *)&__image_end - 4);
-> > 
-> > gives me following error
-> > 
-> > arch/mips/boot/compressed/decompress.c:120:16: error: implicit
-> > declaration of function ‘get_unaligned_le32’
-> > [-Werror=implicit-function-declaration]
-> >    image_size = get_unaligned_le32((void *)&__image_end - 4);
-> > 
-> > I've added
-> > 
-> > #include <asm/unaligned.h>
-> > 
-> > which fixes the compile error, but I'm wondering why the patch compiled
-> > for you ?
+On Thu, Dec 24, 2020 at 07:44:38PM +0000, Al Viro wrote:
+> [mips] fix malformed NT_FILE and NT_SIGINFO in 32bit coredumps
 > 
-> No idea - but it does compile fine without the include here. Probably a
-> defconfig difference.
+> 	Patches that introduced NT_FILE and NT_SIGINFO notes back in 2012
+> had taken care of native (fs/binfmt_elf.c) and compat (fs/compat_binfmt_elf.c)
+> coredumps; unfortunately, compat on mips (which does not go through the
+> usual compat_binfmt_elf.c) had not been noticed.
+> 
+> 	As the result, both N32 and O32 coredumps on 64bit mips kernels
+> have those sections malformed enough to confuse the living hell out of
+> all gdb and readelf versions (up to and including the tip of binutils-gdb.git).
+> 
+> 	Longer term solution is to make both O32 and N32 compat use the
+> regular compat_binfmt_elf.c, but that's too much for backports.  The minimal
+> solution is to do in arch/mips/kernel/binfmt_elf[on]32.c the same thing
+> those patches have done in fs/compat_binfmt_elf.c
+> 
+> Cc: stable@kernel.org # v3.7+
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> ---
+> diff --git a/arch/mips/kernel/binfmt_elfn32.c b/arch/mips/kernel/binfmt_elfn32.c
+> index 6ee3f7218c67..c4441416e96b 100644
+> --- a/arch/mips/kernel/binfmt_elfn32.c
+> +++ b/arch/mips/kernel/binfmt_elfn32.c
+> @@ -103,4 +103,11 @@ jiffies_to_old_timeval32(unsigned long jiffies, struct old_timeval32 *value)
+>  #undef ns_to_kernel_old_timeval
+>  #define ns_to_kernel_old_timeval ns_to_old_timeval32
+>  
+> +/*
+> + * Some data types as stored in coredump.
+> + */
+> +#define user_long_t             compat_long_t
+> +#define user_siginfo_t          compat_siginfo_t
+> +#define copy_siginfo_to_external        copy_siginfo_to_external32
+> +
+>  #include "../../../fs/binfmt_elf.c"
+> diff --git a/arch/mips/kernel/binfmt_elfo32.c b/arch/mips/kernel/binfmt_elfo32.c
+> index 6dd103d3cebb..7b2a23f48c1a 100644
+> --- a/arch/mips/kernel/binfmt_elfo32.c
+> +++ b/arch/mips/kernel/binfmt_elfo32.c
+> @@ -106,4 +106,11 @@ jiffies_to_old_timeval32(unsigned long jiffies, struct old_timeval32 *value)
+>  #undef ns_to_kernel_old_timeval
+>  #define ns_to_kernel_old_timeval ns_to_old_timeval32
+>  
+> +/*
+> + * Some data types as stored in coredump.
+> + */
+> +#define user_long_t             compat_long_t
+> +#define user_siginfo_t          compat_siginfo_t
+> +#define copy_siginfo_to_external        copy_siginfo_to_external32
+> +
+>  #include "../../../fs/binfmt_elf.c"
 
-# CONFIG_KERNEL_LZO is not set
-# CONFIG_KERNEL_LZ4 is not set
-
-this makes the difference. Both decompress.c files include asm/unaligned.h.
-
-I've added the #include, fixed the get_unaligned_le32 in the description
-and applied it to mips-fixes.
+LGTM, I've applied it to mips-fixes.
 
 Thomas.
 
