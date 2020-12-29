@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D48C82E70BC
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Dec 2020 13:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC782E70B9
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Dec 2020 13:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726452AbgL2M5W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Dec 2020 07:57:22 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:46500 "EHLO loongson.cn"
+        id S1726352AbgL2M5S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 29 Dec 2020 07:57:18 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:46476 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726002AbgL2M5V (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 29 Dec 2020 07:57:21 -0500
+        id S1726002AbgL2M5S (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 29 Dec 2020 07:57:18 -0500
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx3zZhJ+tfy00HAA--.27S3;
-        Tue, 29 Dec 2020 20:56:07 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx3zZhJ+tfy00HAA--.27S4;
+        Tue, 29 Dec 2020 20:56:12 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -28,48 +28,45 @@ Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         David Daney <david.daney@cavium.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         Archer Yan <ayan@wavecomp.com>
-Subject: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack traces from user-space with perf
-Date:   Tue, 29 Dec 2020 20:55:59 +0800
-Message-Id: <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH 2/3] perf tools: Support mips unwinding and dwarf-regs
+Date:   Tue, 29 Dec 2020 20:56:00 +0800
+Message-Id: <1609246561-5474-3-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Dx3zZhJ+tfy00HAA--.27S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF4rJrW7JryDWF17uF45ZFb_yoW7CryUpr
-        W7Cw1rJw4vqa47C3yfCFy8ur13taykXFZ7ZrWfC343ZrW2van5Xwn2gr13t343Jr1Uta17
-        uFyqqr4UCF1jyw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPG14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-        xKxwCY02Avz4vE14v_Xr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
-        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
-        x2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIF
-        yTuYvjfUj6pBDUUUU
+X-CM-TRANSID: AQAAf9Dx3zZhJ+tfy00HAA--.27S4
+X-Coremail-Antispam: 1UD129KBjvJXoWfJF45Ww43JrWUuw4kuw4fuFg_yoWDXF1UpF
+        47C348Jw48Xa4ak3yrCFWUuF13Gan2vF9avryfKrZrZr47t3WrX392yrn0gw1xXw48Gw4x
+        Wr9Igr4UCw4fJw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPC14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
+        8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
+        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
+        kIwI1lc2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
+        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
+        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
+        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
+        43ZEXa7VUjZa93UUUUU==
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add perf_event_mips_regs/perf_reg_value/perf_reg_validate to support
-features HAVE_PERF_REGS/HAVE_PERF_USER_STACK_DUMP in kernel.
+Map perf APIs(perf_reg_name/get_arch_regstr/unwind__arch_reg_id)
+with MIPS specific registers.
 
-[ayan@wavecomp.com: Repick this patch for unwinding userstack backtrace
- by perf and libunwind on MIPS based CPU.]
+[ayan@wavecomp.com: repick this patch for unwinding userstack
+backtrace by perf and libunwind on MIPS based CPU.]
 
-[ralf@linux-mips.org: Add perf_get_regs_user() which is required after
-'commit 88a7c26af8da ("perf: Move task_pt_regs sampling into arch code")'.]
-
-[yangtiezhu@loongson.cn: Fix build error about perf_get_regs_user() after
-commit 76a4efa80900 ("perf/arch: Remove perf_sample_data::regs_user_copy"),
-and also separate the original patches into two parts (MIPS kernel and perf
-tools) to merge easily.]
+[yangtiezhu@loongson.cn: Add sample_reg_masks[] to fix build
+error, silence some checkpatch errors and warnings, and also
+separate the original patches into two parts (MIPS kernel and
+perf tools) to merge easily.]
 
 The original patches:
 https://lore.kernel.org/patchwork/patch/1126521/
@@ -80,162 +77,292 @@ Signed-off-by: Ralf Baechle <ralf@linux-mips.org>
 Signed-off-by: Archer Yan <ayan@wavecomp.com>
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/mips/Kconfig                      |  2 +
- arch/mips/include/uapi/asm/perf_regs.h | 42 +++++++++++++++++++++
- arch/mips/kernel/Makefile              |  2 +-
- arch/mips/kernel/perf_regs.c           | 68 ++++++++++++++++++++++++++++++++++
- 4 files changed, 113 insertions(+), 1 deletion(-)
- create mode 100644 arch/mips/include/uapi/asm/perf_regs.h
- create mode 100644 arch/mips/kernel/perf_regs.c
+ tools/perf/Makefile.config                      |  6 ++
+ tools/perf/arch/mips/Makefile                   |  4 ++
+ tools/perf/arch/mips/include/dwarf-regs-table.h | 31 +++++++++
+ tools/perf/arch/mips/include/perf_regs.h        | 84 +++++++++++++++++++++++++
+ tools/perf/arch/mips/util/Build                 |  3 +
+ tools/perf/arch/mips/util/dwarf-regs.c          | 38 +++++++++++
+ tools/perf/arch/mips/util/perf_regs.c           |  6 ++
+ tools/perf/arch/mips/util/unwind-libunwind.c    | 22 +++++++
+ tools/perf/util/dwarf-regs.c                    |  3 +
+ 9 files changed, 197 insertions(+)
+ create mode 100644 tools/perf/arch/mips/Makefile
+ create mode 100644 tools/perf/arch/mips/include/dwarf-regs-table.h
+ create mode 100644 tools/perf/arch/mips/include/perf_regs.h
+ create mode 100644 tools/perf/arch/mips/util/Build
+ create mode 100644 tools/perf/arch/mips/util/dwarf-regs.c
+ create mode 100644 tools/perf/arch/mips/util/perf_regs.c
+ create mode 100644 tools/perf/arch/mips/util/unwind-libunwind.c
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 0a17bed..092c876 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -76,6 +76,8 @@ config MIPS
- 	select HAVE_NMI
- 	select HAVE_OPROFILE
- 	select HAVE_PERF_EVENTS
-+	select HAVE_PERF_REGS
-+	select HAVE_PERF_USER_STACK_DUMP
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RSEQ
- 	select HAVE_SPARSE_SYSCALL_NR
-diff --git a/arch/mips/include/uapi/asm/perf_regs.h b/arch/mips/include/uapi/asm/perf_regs.h
-new file mode 100644
-index 0000000..f3cef08
---- /dev/null
-+++ b/arch/mips/include/uapi/asm/perf_regs.h
-@@ -0,0 +1,42 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _ASM_MIPS_PERF_REGS_H
-+#define _ASM_MIPS_PERF_REGS_H
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index ce8516e..e378add 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -87,6 +87,12 @@ ifeq ($(ARCH),s390)
+   CFLAGS += -fPIC -I$(OUTPUT)arch/s390/include/generated
+ endif
+ 
++ifeq ($(ARCH),mips)
++  NO_PERF_REGS := 0
++  CFLAGS += -I../../arch/mips/include/uapi -I../../arch/mips/include/generated/uapi
++  LIBUNWIND_LIBS = -lunwind -lunwind-mips
++endif
 +
-+enum perf_event_mips_regs {
-+	PERF_REG_MIPS_PC,
-+	PERF_REG_MIPS_R1,
-+	PERF_REG_MIPS_R2,
-+	PERF_REG_MIPS_R3,
-+	PERF_REG_MIPS_R4,
-+	PERF_REG_MIPS_R5,
-+	PERF_REG_MIPS_R6,
-+	PERF_REG_MIPS_R7,
-+	PERF_REG_MIPS_R8,
-+	PERF_REG_MIPS_R9,
-+	PERF_REG_MIPS_R10,
-+	PERF_REG_MIPS_R11,
-+	PERF_REG_MIPS_R12,
-+	PERF_REG_MIPS_R13,
-+	PERF_REG_MIPS_R14,
-+	PERF_REG_MIPS_R15,
-+	PERF_REG_MIPS_R16,
-+	PERF_REG_MIPS_R17,
-+	PERF_REG_MIPS_R18,
-+	PERF_REG_MIPS_R19,
-+	PERF_REG_MIPS_R20,
-+	PERF_REG_MIPS_R21,
-+	PERF_REG_MIPS_R22,
-+	PERF_REG_MIPS_R23,
-+	PERF_REG_MIPS_R24,
-+	PERF_REG_MIPS_R25,
-+	/*
-+	 * 26 and 27 are k0 and k1, they are always clobbered thus not
-+	 * stored.
-+	 */
-+	PERF_REG_MIPS_R28,
-+	PERF_REG_MIPS_R29,
-+	PERF_REG_MIPS_R30,
-+	PERF_REG_MIPS_R31,
-+	PERF_REG_MIPS_MAX = PERF_REG_MIPS_R31 + 1,
-+};
-+#endif /* _ASM_MIPS_PERF_REGS_H */
-diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index 2a05b92..120075a 100644
---- a/arch/mips/kernel/Makefile
-+++ b/arch/mips/kernel/Makefile
-@@ -104,7 +104,7 @@ obj-$(CONFIG_MIPSR2_TO_R6_EMULATOR)	+= mips-r2-to-r6-emul.o
- 
- CFLAGS_cpu-bugs64.o	= $(shell if $(CC) $(KBUILD_CFLAGS) -Wa,-mdaddi -c -o /dev/null -x c /dev/null >/dev/null 2>&1; then echo "-DHAVE_AS_SET_DADDI"; fi)
- 
--obj-$(CONFIG_PERF_EVENTS)	+= perf_event.o
-+obj-$(CONFIG_PERF_EVENTS)	+= perf_event.o perf_regs.o
- obj-$(CONFIG_HW_PERF_EVENTS)	+= perf_event_mipsxx.o
- 
- obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
-diff --git a/arch/mips/kernel/perf_regs.c b/arch/mips/kernel/perf_regs.c
+ ifeq ($(NO_PERF_REGS),0)
+   $(call detected,CONFIG_PERF_REGS)
+ endif
+diff --git a/tools/perf/arch/mips/Makefile b/tools/perf/arch/mips/Makefile
 new file mode 100644
-index 0000000..e686780
+index 0000000..6e1106f
 --- /dev/null
-+++ b/arch/mips/kernel/perf_regs.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/tools/perf/arch/mips/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0
++ifndef NO_DWARF
++PERF_HAVE_DWARF_REGS := 1
++endif
+diff --git a/tools/perf/arch/mips/include/dwarf-regs-table.h b/tools/perf/arch/mips/include/dwarf-regs-table.h
+new file mode 100644
+index 0000000..5badbcd
+--- /dev/null
++++ b/tools/perf/arch/mips/include/dwarf-regs-table.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * This file is subject to the terms and conditions of the GNU General Public
-+ * License.  See the file "COPYING" in the main directory of this archive
-+ * for more details.
-+ *
-+ * Some parts derived from x86 version of this file.
++ * dwarf-regs-table.h : Mapping of DWARF debug register numbers into
++ * register names.
 + *
 + * Copyright (C) 2013 Cavium, Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
 + */
 +
-+#include <linux/perf_event.h>
++#ifdef DEFINE_DWARF_REGSTR_TABLE
++#undef REG_DWARFNUM_NAME
++#define REG_DWARFNUM_NAME(reg, idx)	[idx] = "$" #reg
++static const char * const mips_regstr_tbl[] = {
++	"$0", "$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9",
++	"$10", "$11", "$12", "$13", "$14", "$15", "$16", "$17", "$18", "$19",
++	"$20", "$21", "$22", "$23", "$24", "$25", "$26", "$27", "$28", "%29",
++	"$30", "$31",
++	REG_DWARFNUM_NAME(hi, 64),
++	REG_DWARFNUM_NAME(lo, 65),
++};
++#endif
+diff --git a/tools/perf/arch/mips/include/perf_regs.h b/tools/perf/arch/mips/include/perf_regs.h
+new file mode 100644
+index 0000000..7a7908b
+--- /dev/null
++++ b/tools/perf/arch/mips/include/perf_regs.h
+@@ -0,0 +1,84 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef ARCH_PERF_REGS_H
++#define ARCH_PERF_REGS_H
 +
-+#include <asm/ptrace.h>
++#include <stdlib.h>
++#include <linux/types.h>
++#include <asm/perf_regs.h>
 +
-+#ifdef CONFIG_32BIT
-+u64 perf_reg_abi(struct task_struct *tsk)
++#define PERF_REGS_MAX PERF_REG_MIPS_MAX
++#define PERF_REG_IP PERF_REG_MIPS_PC
++#define PERF_REG_SP PERF_REG_MIPS_R29
++
++#define PERF_REGS_MASK ((1ULL << PERF_REG_MIPS_MAX) - 1)
++
++static inline const char *perf_reg_name(int id)
 +{
-+	return PERF_SAMPLE_REGS_ABI_32;
-+}
-+#else /* Must be CONFIG_64BIT */
-+u64 perf_reg_abi(struct task_struct *tsk)
-+{
-+	if (test_tsk_thread_flag(tsk, TIF_32BIT_REGS))
-+		return PERF_SAMPLE_REGS_ABI_32;
-+	else
-+		return PERF_SAMPLE_REGS_ABI_64;
-+}
-+#endif /* CONFIG_32BIT */
-+
-+int perf_reg_validate(u64 mask)
-+{
-+	if (!mask)
-+		return -EINVAL;
-+	if (mask & ~((1ull << PERF_REG_MIPS_MAX) - 1))
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+u64 perf_reg_value(struct pt_regs *regs, int idx)
-+{
-+	long v;
-+
-+	switch (idx) {
++	switch (id) {
 +	case PERF_REG_MIPS_PC:
-+		v = regs->cp0_epc;
-+		break;
-+	case PERF_REG_MIPS_R1 ... PERF_REG_MIPS_R25:
-+		v = regs->regs[idx - PERF_REG_MIPS_R1 + 1];
-+		break;
-+	case PERF_REG_MIPS_R28 ... PERF_REG_MIPS_R31:
-+		v = regs->regs[idx - PERF_REG_MIPS_R28 + 28];
-+		break;
-+
++		return "PC";
++	case PERF_REG_MIPS_R1:
++		return "$1";
++	case PERF_REG_MIPS_R2:
++		return "$2";
++	case PERF_REG_MIPS_R3:
++		return "$3";
++	case PERF_REG_MIPS_R4:
++		return "$4";
++	case PERF_REG_MIPS_R5:
++		return "$5";
++	case PERF_REG_MIPS_R6:
++		return "$6";
++	case PERF_REG_MIPS_R7:
++		return "$7";
++	case PERF_REG_MIPS_R8:
++		return "$8";
++	case PERF_REG_MIPS_R9:
++		return "$9";
++	case PERF_REG_MIPS_R10:
++		return "$10";
++	case PERF_REG_MIPS_R11:
++		return "$11";
++	case PERF_REG_MIPS_R12:
++		return "$12";
++	case PERF_REG_MIPS_R13:
++		return "$13";
++	case PERF_REG_MIPS_R14:
++		return "$14";
++	case PERF_REG_MIPS_R15:
++		return "$15";
++	case PERF_REG_MIPS_R16:
++		return "$16";
++	case PERF_REG_MIPS_R17:
++		return "$17";
++	case PERF_REG_MIPS_R18:
++		return "$18";
++	case PERF_REG_MIPS_R19:
++		return "$19";
++	case PERF_REG_MIPS_R20:
++		return "$20";
++	case PERF_REG_MIPS_R21:
++		return "$21";
++	case PERF_REG_MIPS_R22:
++		return "$22";
++	case PERF_REG_MIPS_R23:
++		return "$23";
++	case PERF_REG_MIPS_R24:
++		return "$24";
++	case PERF_REG_MIPS_R25:
++		return "$25";
++	case PERF_REG_MIPS_R28:
++		return "$28";
++	case PERF_REG_MIPS_R29:
++		return "$29";
++	case PERF_REG_MIPS_R30:
++		return "$30";
++	case PERF_REG_MIPS_R31:
++		return "$31";
 +	default:
-+		WARN_ON_ONCE(1);
-+		return 0;
++		break;
 +	}
-+
-+	return (s64)v; /* Sign extend if 32-bit. */
++	return NULL;
 +}
 +
-+void perf_get_regs_user(struct perf_regs *regs_user,
-+			struct pt_regs *regs)
++#endif /* ARCH_PERF_REGS_H */
+diff --git a/tools/perf/arch/mips/util/Build b/tools/perf/arch/mips/util/Build
+new file mode 100644
+index 0000000..51c8900
+--- /dev/null
++++ b/tools/perf/arch/mips/util/Build
+@@ -0,0 +1,3 @@
++perf-y += perf_regs.o
++perf-$(CONFIG_DWARF) += dwarf-regs.o
++perf-$(CONFIG_LOCAL_LIBUNWIND) += unwind-libunwind.o
+diff --git a/tools/perf/arch/mips/util/dwarf-regs.c b/tools/perf/arch/mips/util/dwarf-regs.c
+new file mode 100644
+index 0000000..25c13a9
+--- /dev/null
++++ b/tools/perf/arch/mips/util/dwarf-regs.c
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * dwarf-regs.c : Mapping of DWARF debug register numbers into register names.
++ *
++ * Copyright (C) 2013 Cavium, Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++
++#include <stdio.h>
++#include <dwarf-regs.h>
++
++static const char *mips_gpr_names[32] = {
++	"$0", "$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9",
++	"$10", "$11", "$12", "$13", "$14", "$15", "$16", "$17", "$18", "$19",
++	"$20", "$21", "$22", "$23", "$24", "$25", "$26", "$27", "$28", "$29",
++	"$30", "$31"
++};
++
++const char *get_arch_regstr(unsigned int n)
 +{
-+	regs_user->regs = task_pt_regs(current);
-+	regs_user->abi = perf_reg_abi(current);
++	if (n < 32)
++		return mips_gpr_names[n];
++	if (n == 64)
++		return "hi";
++	if (n == 65)
++		return "lo";
++	return NULL;
 +}
+diff --git a/tools/perf/arch/mips/util/perf_regs.c b/tools/perf/arch/mips/util/perf_regs.c
+new file mode 100644
+index 0000000..2864e2e
+--- /dev/null
++++ b/tools/perf/arch/mips/util/perf_regs.c
+@@ -0,0 +1,6 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "../../util/perf_regs.h"
++
++const struct sample_reg sample_reg_masks[] = {
++	SMPL_REG_END
++};
+diff --git a/tools/perf/arch/mips/util/unwind-libunwind.c b/tools/perf/arch/mips/util/unwind-libunwind.c
+new file mode 100644
+index 0000000..0d8c99c
+--- /dev/null
++++ b/tools/perf/arch/mips/util/unwind-libunwind.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <errno.h>
++#include <libunwind.h>
++#include "perf_regs.h"
++#include "../../util/unwind.h"
++#include "util/debug.h"
++
++int libunwind__arch_reg_id(int regnum)
++{
++	switch (regnum) {
++	case UNW_MIPS_R1 ... UNW_MIPS_R25:
++		return regnum - UNW_MIPS_R1 + PERF_REG_MIPS_R1;
++	case UNW_MIPS_R28 ... UNW_MIPS_R31:
++		return regnum - UNW_MIPS_R28 + PERF_REG_MIPS_R28;
++	case UNW_MIPS_PC:
++		return PERF_REG_MIPS_PC;
++	default:
++		pr_err("unwind: invalid reg id %d\n", regnum);
++		return -EINVAL;
++	}
++}
+diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
+index 1b49ece..3fa4486 100644
+--- a/tools/perf/util/dwarf-regs.c
++++ b/tools/perf/util/dwarf-regs.c
+@@ -24,6 +24,7 @@
+ #include "../arch/s390/include/dwarf-regs-table.h"
+ #include "../arch/sparc/include/dwarf-regs-table.h"
+ #include "../arch/xtensa/include/dwarf-regs-table.h"
++#include "../arch/mips/include/dwarf-regs-table.h"
+ 
+ #define __get_dwarf_regstr(tbl, n) (((n) < ARRAY_SIZE(tbl)) ? (tbl)[(n)] : NULL)
+ 
+@@ -53,6 +54,8 @@ const char *get_dwarf_regstr(unsigned int n, unsigned int machine)
+ 		return __get_dwarf_regstr(sparc_regstr_tbl, n);
+ 	case EM_XTENSA:
+ 		return __get_dwarf_regstr(xtensa_regstr_tbl, n);
++	case EM_MIPS:
++		return __get_dwarf_regstr(mips_regstr_tbl, n);
+ 	default:
+ 		pr_err("ELF MACHINE %x is not supported.\n", machine);
+ 	}
 -- 
 2.1.0
 
