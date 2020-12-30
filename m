@@ -2,100 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 037572E75DB
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Dec 2020 04:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6AE2E75DD
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Dec 2020 04:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726256AbgL3DlB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Dec 2020 22:41:01 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:45055 "EHLO
+        id S1726221AbgL3Dqs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 29 Dec 2020 22:46:48 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:47153 "EHLO
         wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726138AbgL3DlA (ORCPT
+        by vger.kernel.org with ESMTP id S1726214AbgL3Dqs (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 29 Dec 2020 22:41:00 -0500
+        Tue, 29 Dec 2020 22:46:48 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 68B719F4;
-        Tue, 29 Dec 2020 22:40:14 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 29 Dec 2020 22:40:14 -0500
+        by mailnew.west.internal (Postfix) with ESMTP id 3C0CD98B;
+        Tue, 29 Dec 2020 22:45:42 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 29 Dec 2020 22:45:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=EnbvupgUcqMHn
-        hhla+aVj4XmahMxnztlACAsry5tZ9Y=; b=Cq9jMCIgW/GhuAWEiOp0gghMCPcio
-        j/PCETrkoamqXDgD4Gg0nvmWLwAT7WRSA3My5axhGuTWuF4tkcBtRKT9+sZyOcAM
-        dYuL7OAhdVNi6/TcBP/arls0EiManaoxvj4ycdnIKzWPnOO9fG2A3NJX5FJmpnuD
-        1qudTiZQ4yfhuwEGjvrqZV773QQheUqbNAt8JVSDpthuSmXNp9oYdQrFjz4dngU1
-        WmDBAOiQ5VdeE74eDf2wvNLer/NUxLR92tIFRajG/7cd+CqACkJ3DBowTvpAzZL9
-        YYF85nFZ6t9c88wmOLo3NveEx647iW/t3in3mrQfUs3mLtSd5tCeC7xpg==
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=H
+        BNJAq+tsBj88yciaUpvTE8FaHVwT5JdQMmhYZaI2Ok=; b=j8c6PVuygYI+MSs58
+        D9i9i+UgQCRAiEJpnRiWVR5+n0Wi/GF0LycUUZceI5INJm7foDfK4p+JdCz8rtlv
+        T5QG3WPeO2Ap0OZ3GpfXB8oLq/UUp0QzL5fuU0hiD+yPY5slE+bzkWAuthskxa+0
+        FZfxemk4SmWGr6s3MGnKacLQ4K7weVJKgDBYOPMxkGjwV3Rp2mTE6J7SIXzZYKLj
+        9NqzK+6QJpVOx0+8c3QiGkpo9zC4C4nVcVuD9I5LR9CpTYFql66qKUf0ooYT2wo+
+        6PINyBCmJ/UN+YR1skddLE9H0OwvrhXhbd8SxlUezdo2/vn8+IniEV2YvvPVi85O
+        5DVUA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=EnbvupgUcqMHnhhla+aVj4XmahMxnztlACAsry5tZ9Y=; b=KZZY9JVw
-        hcD7RS73QA7OfBLjKgyswZF/Wc0Dg+KnpiMDcN81cbB4jU+rKavQUTn48V1idIlp
-        /ZT9wFpRH+X5N2U2llPR4MEPl1aGDmF+GiUwAn2YwPJiU/4ygfoXd0HQRivaf9Nx
-        aYBQWGWPQnoLpF8jJNZD4k1d1zP6n0hdC92m0SbkK8xYahvazDt+JvZvrXNW5q9F
-        aSpz6H8eMO9D1qJ3yJqg4087r2XhSiv+Uk6YPtEeaE4e0p829HpCBri2AcU4PHTh
-        P4p9BDlPTeBYcmfVvArFU8iF0PuAMjBOr08e/zlLzwari+SL8ratR+SHltrzVCJG
-        Qa9iRC5FGnA3zw==
-X-ME-Sender: <xms:nfbrX1JtRa0StaiToQLaSgiX54lDZfN4vGVLee1bPtJoKTNIaADIcQ>
-    <xme:nfbrXxJUVVJJc2-ng9jx-ZUjaLinMuuL3la90d43VhX5LghYT7mhX89hBkxj92Aef
-    mQo-1nBqxlyf97vcmU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddvvddgiedvucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=HBNJAq+tsBj88yciaUpvTE8FaHVwT5JdQMmhYZaI2
+        Ok=; b=YkdlIY/oMHlztjDca8654GiMH3/0819EjQkZwfpJBHizuh/HVASlMovHg
+        Le206PpsXPng9v38GX1bwvfjxO3KVWqeOoJcCvhcPivzf4xFFQ3qapGfa4dWNVrM
+        HcZYZBGWaVE+hahUJm5dfLwCDPISa2I6hiWLfxwt/cwErhKhQheQfUnn+f57iQFe
+        wBHGXclhJf7gGPFi+BFQVmTjoS/r6tgGeJhbfdHn2NYbeTc8bfXm3PQpYlJ2oTsj
+        9JAc1fgQoM4NV7ZtIw+8OS2iVMo49GvHG3eMLKiYMmqBKNy3J2ED6vZeCIjzfD/S
+        WfYdbsogzJPK436eR/3Rwl0XAJ1Hw==
+X-ME-Sender: <xms:5PfrX8oDSolNPN6_gxMcIlz2CQc6Dwc49u2t4kxXsbjer8QGHHlsOA>
+    <xme:5PfrXyo1GealQDKQxOnD-FNRrAaeWu_GhOyj6F4LunHvK_p1PTt6zz_qVbhWhdERP
+    ttUzzr81AIRk5_nHdY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddvvddgieefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepjeeihffgteelkeelffdukedtheevudejvdegkeekjeefhffhhfet
-    udetgfdtffeunecukfhppeeitddrudejjedrudekledrudejudenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
-    lhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:nfbrX9tP1csz8Ogqt5tNeq-WhqaLRyQIMMu34v6sixFrEJ8ICIwREA>
-    <xmx:nfbrX2YuWTyGfWmtq1ofyyM18PiKsgRUAfcatp5MFBjuPsWME4xZQg>
-    <xmx:nfbrX8Yp9EfMt4ufnAommHf9mCJR0NaIisz4AvZmAzek56slPdZKqw>
-    <xmx:nfbrX7lp1Ky0pPNStAt_RRdpDlfqyH1wDFpgVwlREcieGPKCp4louIMnDc0>
-Received: from strike.202.net.flygoat.com (unknown [60.177.189.171])
-        by mail.messagingengine.com (Postfix) with ESMTPA id A3A13240057;
-        Tue, 29 Dec 2020 22:40:10 -0500 (EST)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdeftfenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeejueekkedvveduvdevieduveefteelveeihfejteetffejheej
+    jeetffevtedtieenucffohhmrghinhephhgvrggurdhssgenucfkphepgeehrdeffedrhe
+    dtrddvheegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:5PfrXxO3lwQBBOOjscrYv7a3ij02MKR7ZDdE-7tphR0B-0BDI7oMWg>
+    <xmx:5PfrXz5xe8fPEU_Bv4utsbI7EHTtSGbzZs1j4Dig4BpYihG2pOt2GQ>
+    <xmx:5PfrX76vuDzpbOIptK-aYCAeNS6aeOzyDor17oHTbd5w6jw-DDcwTQ>
+    <xmx:5ffrX4iDTz2L8C_X6pkanBe-AeSX_hpAJsmnERhbCgockaLx9tBegqfasKk>
+Received: from [0.0.0.0] (li1000-254.members.linode.com [45.33.50.254])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 258801080057;
+        Tue, 29 Dec 2020 22:45:38 -0500 (EST)
+Subject: Re: [PATCH v2] MIPS: zboot: head.S clean up
 To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
+Cc:     Paul Cercueil <paul@crapouillou.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] MIPS: Loongson64: Set cluster for cores
-Date:   Wed, 30 Dec 2020 11:39:49 +0800
-Message-Id: <20201230033950.13839-2-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20201230033950.13839-1-jiaxun.yang@flygoat.com>
-References: <20201230033950.13839-1-jiaxun.yang@flygoat.com>
+        linux-kernel@vger.kernel.org
+References: <20201230030819.4510-1-jiaxun.yang@flygoat.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <056b674a-ebbd-ca69-2715-425cc282c505@flygoat.com>
+Date:   Wed, 30 Dec 2020 11:45:35 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <20201230030819.4510-1-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-cluster is required for cacheinfo to set shared_cpu_map correctly.
+ÔÚ 2020/12/30 ÉÏÎç11:08, Jiaxun Yang Ð´µÀ:
+> .cprestore is removed as we don't expect Position Independent
+> zboot ELF.
+>
+> .noreorder is also removed and rest instructions are massaged
+> to improve readability.
+>
+> t9 register is used for indirect jump as MIPS ABI requirement.
+>
+> start label is removed as it already defined in LEAF.
+>
+> Reported-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>
+> --
+> v2: Remove start label (paul)
+> ---
+>   arch/mips/boot/compressed/head.S | 17 +++++++----------
+>   1 file changed, 7 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/mips/boot/compressed/head.S b/arch/mips/boot/compressed/head.S
+> index 409cb483a9ff..977218c90bc8 100644
+> --- a/arch/mips/boot/compressed/head.S
+> +++ b/arch/mips/boot/compressed/head.S
+> @@ -15,8 +15,6 @@
+>   #include <asm/asm.h>
+>   #include <asm/regdef.h>
+>   
+> -	.set noreorder
+> -	.cprestore
+>   	LEAF(start)
+>   start:
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Reviewed-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/loongson64/smp.c | 2 ++
- 1 file changed, 2 insertions(+)
+Oops, it's still here, sorry for the noise.
 
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index e744e1bee49e..fae3a97d853c 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -403,6 +403,8 @@ static void __init loongson3_smp_setup(void)
- 			__cpu_number_map[i] = num;
- 			__cpu_logical_map[num] = i;
- 			set_cpu_possible(num, true);
-+			/* Loongson processors are always grouped by 4 */
-+			cpu_set_cluster(&cpu_data[num], i / 4);
- 			num++;
- 		}
- 		i++;
--- 
-2.30.0
+Thanks
+
+- Jiaxun
+
+>   	/* Save boot rom start args */
+> @@ -35,21 +33,20 @@ start:
+>   	PTR_LA	a0, (.heap)	     /* heap address */
+>   	PTR_LA	sp, (.stack + 8192)  /* stack address */
+>   
+> -	PTR_LA	ra, 2f
+> -	PTR_LA	k0, decompress_kernel
+> -	jr	k0
+> -	 nop
+> +	PTR_LA	t9, decompress_kernel
+> +	jalr	t9
+> +
+>   2:
+>   	move	a0, s0
+>   	move	a1, s1
+>   	move	a2, s2
+>   	move	a3, s3
+> -	PTR_LI	k0, KERNEL_ENTRY
+> -	jr	k0
+> -	 nop
+> +	PTR_LI	t9, KERNEL_ENTRY
+> +	jalr	t9
+> +
+>   3:
+>   	b	3b
+> -	 nop
+> +
+>   	END(start)
+>   
+>   	.comm .heap,BOOT_HEAP_SIZE,4
 
