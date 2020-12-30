@@ -2,150 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDC52E75D8
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Dec 2020 04:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037572E75DB
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Dec 2020 04:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726161AbgL3Dk6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Dec 2020 22:40:58 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:54533 "EHLO
+        id S1726256AbgL3DlB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 29 Dec 2020 22:41:01 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:45055 "EHLO
         wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726138AbgL3Dk6 (ORCPT
+        by vger.kernel.org with ESMTP id S1726138AbgL3DlA (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 29 Dec 2020 22:40:58 -0500
+        Tue, 29 Dec 2020 22:41:00 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 33412700;
-        Tue, 29 Dec 2020 22:40:12 -0500 (EST)
+        by mailnew.west.internal (Postfix) with ESMTP id 68B719F4;
+        Tue, 29 Dec 2020 22:40:14 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 29 Dec 2020 22:40:12 -0500
+  by compute6.internal (MEProxy); Tue, 29 Dec 2020 22:40:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm1; bh=AAVrpDmMadjqROimwI2b/EOt+H
-        kVq5eqBpwwbJ/SxYY=; b=oJdCeTqGIbkQ9Qhy12tH6UsyFVh88nphmBbq+6AuE0
-        mtBvrx3T7lMv/HQ5G66/+AWd2ql6cUmd1Trel4ariZZMqZqvkX27BY3CCQ2enA3i
-        LkpAVr2APzGeAGakScV9c4GmnCxb1pXr5Ays7wkHJ/KBo+XnS3TgaNdFVqsa3wda
-        /03MJmJbb/yNejWvgexw3vFbxKLZPv04xANk0bgFF6u/CBmxjrVgj5nxCgJ/UnlK
-        rpg58YK14gNLPnQ6vU2CXLIpzptwLRom8yEL6tV/MZ2q+6mJR/30v/mDEYbMncc5
-        8e0UL+MylDkzgY06up+0sc5x4EyQ5ZWl7aGDft2odK5A==
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=EnbvupgUcqMHn
+        hhla+aVj4XmahMxnztlACAsry5tZ9Y=; b=Cq9jMCIgW/GhuAWEiOp0gghMCPcio
+        j/PCETrkoamqXDgD4Gg0nvmWLwAT7WRSA3My5axhGuTWuF4tkcBtRKT9+sZyOcAM
+        dYuL7OAhdVNi6/TcBP/arls0EiManaoxvj4ycdnIKzWPnOO9fG2A3NJX5FJmpnuD
+        1qudTiZQ4yfhuwEGjvrqZV773QQheUqbNAt8JVSDpthuSmXNp9oYdQrFjz4dngU1
+        WmDBAOiQ5VdeE74eDf2wvNLer/NUxLR92tIFRajG/7cd+CqACkJ3DBowTvpAzZL9
+        YYF85nFZ6t9c88wmOLo3NveEx647iW/t3in3mrQfUs3mLtSd5tCeC7xpg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=AAVrpDmMadjqROimw
-        I2b/EOt+HkVq5eqBpwwbJ/SxYY=; b=M+KbwuUcnsjIZW5OxTypyR6qkPm1+cYGe
-        3PHhC63bbffUdn7kMpF5M0KsmogzgXkxliYLQ28+8jsear+8paze0ixpa2kyKrYY
-        HxO0uGCm83YHiKAIIxq2BEpzJ1bM63nHeBFwEJgL/NwEP7Eu0IxHvoY6kJhsem+S
-        9dYrnuM3Ovoa0k/O9wNlU8QO9inAxUsW1/YiA/okpGwJmBdIPbVMgoCOrZ269elW
-        lovbV8Xl0lRzFBw87I4Dduad0GTiyMQM+a6vBxtaHF74ErC2se2JP/iTPNQM94TD
-        xazSlZl7MAi6otFDRNhJq9NnLxuaR4pJMGPlUNjUQQVp1IqUBpkEA==
-X-ME-Sender: <xms:mfbrX4K2DVfgtlwh7QUNylkn5ffmv8HMALB0OP_nJIsDsalFZJlKeA>
-    <xme:mfbrX4KdnabbL9cGOOZkay4-d6uKAHRHQzzh85vWhztYs7fp1qDbWXxmrg_HDVxWA
-    bBXCClFQEl75eAyDEE>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=EnbvupgUcqMHnhhla+aVj4XmahMxnztlACAsry5tZ9Y=; b=KZZY9JVw
+        hcD7RS73QA7OfBLjKgyswZF/Wc0Dg+KnpiMDcN81cbB4jU+rKavQUTn48V1idIlp
+        /ZT9wFpRH+X5N2U2llPR4MEPl1aGDmF+GiUwAn2YwPJiU/4ygfoXd0HQRivaf9Nx
+        aYBQWGWPQnoLpF8jJNZD4k1d1zP6n0hdC92m0SbkK8xYahvazDt+JvZvrXNW5q9F
+        aSpz6H8eMO9D1qJ3yJqg4087r2XhSiv+Uk6YPtEeaE4e0p829HpCBri2AcU4PHTh
+        P4p9BDlPTeBYcmfVvArFU8iF0PuAMjBOr08e/zlLzwari+SL8ratR+SHltrzVCJG
+        Qa9iRC5FGnA3zw==
+X-ME-Sender: <xms:nfbrX1JtRa0StaiToQLaSgiX54lDZfN4vGVLee1bPtJoKTNIaADIcQ>
+    <xme:nfbrXxJUVVJJc2-ng9jx-ZUjaLinMuuL3la90d43VhX5LghYT7mhX89hBkxj92Aef
+    mQo-1nBqxlyf97vcmU>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddvvddgiedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflihgrgihunhcu
-    jggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecuggftrf
-    grthhtvghrnhephfejtdektdeuhedtieefteekveffteejteefgeekveegffetvddugfel
-    iefhtddunecukfhppeeitddrudejjedrudekledrudejudenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhih
-    ghhorghtrdgtohhm
-X-ME-Proxy: <xmx:mfbrX4s013N-71jbVOWQL-DdM9CZnSwnjoHGAbeFhPHfsPhOCjd6rA>
-    <xmx:mfbrX1at3eqVPj24zIP-Mxk4Frc-bUhqCYjfIZm4j4VnAVLsHCgr7A>
-    <xmx:mfbrX_bVqcV88G4pMHeawWpEsFTypFOuvZKs5dw3urzmbWvY46BGdA>
-    <xmx:m_brX-lrIWrcnVR0iLHdqNlg1XAh-vNbC6U5SRFHe_qeeU4WnChSr3JfsXs>
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepjeeihffgteelkeelffdukedtheevudejvdegkeekjeefhffhhfet
+    udetgfdtffeunecukfhppeeitddrudejjedrudekledrudejudenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:nfbrX9tP1csz8Ogqt5tNeq-WhqaLRyQIMMu34v6sixFrEJ8ICIwREA>
+    <xmx:nfbrX2YuWTyGfWmtq1ofyyM18PiKsgRUAfcatp5MFBjuPsWME4xZQg>
+    <xmx:nfbrX8Yp9EfMt4ufnAommHf9mCJR0NaIisz4AvZmAzek56slPdZKqw>
+    <xmx:nfbrX7lp1Ky0pPNStAt_RRdpDlfqyH1wDFpgVwlREcieGPKCp4louIMnDc0>
 Received: from strike.202.net.flygoat.com (unknown [60.177.189.171])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 9F90124005A;
-        Tue, 29 Dec 2020 22:40:05 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id A3A13240057;
+        Tue, 29 Dec 2020 22:40:10 -0500 (EST)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Tiezhu Yang <yangtiezhu@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Huacai Chen <chenhc@lemote.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND 1/2] MIPS: cacheinfo: Add missing VCache
-Date:   Wed, 30 Dec 2020 11:39:48 +0800
-Message-Id: <20201230033950.13839-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH 2/2] MIPS: Loongson64: Set cluster for cores
+Date:   Wed, 30 Dec 2020 11:39:49 +0800
+Message-Id: <20201230033950.13839-2-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20201230033950.13839-1-jiaxun.yang@flygoat.com>
+References: <20201230033950.13839-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Victim Cache is defined by Loongson as per-core unified
-private Cache.
-Add this into cacheinfo and make cache levels selfincrement
-instead of hardcode levels.
+cluster is required for cacheinfo to set shared_cpu_map correctly.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Reviewed-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/mips/kernel/cacheinfo.c | 34 ++++++++++++++++++++++++++--------
- 1 file changed, 26 insertions(+), 8 deletions(-)
+ arch/mips/loongson64/smp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/kernel/cacheinfo.c b/arch/mips/kernel/cacheinfo.c
-index 47312c529410..83548331ee94 100644
---- a/arch/mips/kernel/cacheinfo.c
-+++ b/arch/mips/kernel/cacheinfo.c
-@@ -35,6 +35,11 @@ static int __init_cache_level(unsigned int cpu)
- 
- 	leaves += (c->icache.waysize) ? 2 : 1;
- 
-+	if (c->vcache.waysize) {
-+		levels++;
-+		leaves++;
-+	}
-+
- 	if (c->scache.waysize) {
- 		levels++;
- 		leaves++;
-@@ -74,25 +79,38 @@ static int __populate_cache_leaves(unsigned int cpu)
- 	struct cpuinfo_mips *c = &current_cpu_data;
- 	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 	struct cacheinfo *this_leaf = this_cpu_ci->info_list;
-+	int level = 1;
- 
- 	if (c->icache.waysize) {
--		/* L1 caches are per core */
-+		/* D/I caches are per core */
- 		fill_cpumask_siblings(cpu, &this_leaf->shared_cpu_map);
--		populate_cache(dcache, this_leaf, 1, CACHE_TYPE_DATA);
-+		populate_cache(dcache, this_leaf, level, CACHE_TYPE_DATA);
- 		fill_cpumask_siblings(cpu, &this_leaf->shared_cpu_map);
--		populate_cache(icache, this_leaf, 1, CACHE_TYPE_INST);
-+		populate_cache(icache, this_leaf, level, CACHE_TYPE_INST);
-+		level++;
- 	} else {
--		populate_cache(dcache, this_leaf, 1, CACHE_TYPE_UNIFIED);
-+		populate_cache(dcache, this_leaf, level, CACHE_TYPE_UNIFIED);
-+		level++;
-+	}
-+
-+	if (c->vcache.waysize) {
-+		/* Vcache is per core as well */
-+		fill_cpumask_siblings(cpu, &this_leaf->shared_cpu_map);
-+		populate_cache(vcache, this_leaf, level, CACHE_TYPE_UNIFIED);
-+		level++;
- 	}
- 
- 	if (c->scache.waysize) {
--		/* L2 cache is per cluster */
-+		/* Scache is per cluster */
- 		fill_cpumask_cluster(cpu, &this_leaf->shared_cpu_map);
--		populate_cache(scache, this_leaf, 2, CACHE_TYPE_UNIFIED);
-+		populate_cache(scache, this_leaf, level, CACHE_TYPE_UNIFIED);
-+		level++;
- 	}
- 
--	if (c->tcache.waysize)
--		populate_cache(tcache, this_leaf, 3, CACHE_TYPE_UNIFIED);
-+	if (c->tcache.waysize) {
-+		populate_cache(tcache, this_leaf, level, CACHE_TYPE_UNIFIED);
-+		level++;
-+	}
- 
- 	this_cpu_ci->cpu_map_populated = true;
- 
+diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+index e744e1bee49e..fae3a97d853c 100644
+--- a/arch/mips/loongson64/smp.c
++++ b/arch/mips/loongson64/smp.c
+@@ -403,6 +403,8 @@ static void __init loongson3_smp_setup(void)
+ 			__cpu_number_map[i] = num;
+ 			__cpu_logical_map[num] = i;
+ 			set_cpu_possible(num, true);
++			/* Loongson processors are always grouped by 4 */
++			cpu_set_cluster(&cpu_data[num], i / 4);
+ 			num++;
+ 		}
+ 		i++;
 -- 
 2.30.0
 
