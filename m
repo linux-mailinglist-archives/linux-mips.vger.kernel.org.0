@@ -2,103 +2,316 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5FF2E9B36
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Jan 2021 17:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C012E9C6A
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Jan 2021 18:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727484AbhADQl7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Jan 2021 11:41:59 -0500
-Received: from mout.gmx.net ([212.227.15.15]:45213 "EHLO mout.gmx.net"
+        id S1726336AbhADR4J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Jan 2021 12:56:09 -0500
+Received: from mout.gmx.net ([212.227.15.15]:43293 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726664AbhADQl7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 4 Jan 2021 11:41:59 -0500
+        id S1726328AbhADR4J (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 4 Jan 2021 12:56:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1609778424;
-        bh=zlbexe1B0b05XFfWpCktzbUsCRk9HtP20jtsuYaFuIE=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=caIPwRstLRT5wbyESNgGb5sNB5zpsyHlYXSpEpr9w6DU6WfnPtJhxd628ifxOUhpv
-         OtOY2fI5/5dYT91eAPADUxTbpvS+S/iQ5cyp9Uz8NgDz0kH9S2GClPhJfPTIUbDQFd
-         qDIb2pmBuoAT4vxMiloa2RVItrRCFNmTNC7lztBQ=
+        s=badeba3b8450; t=1609782873;
+        bh=gjFTTDat1qJgr22nsGdNgz5lA0v+pEyxihvKYIf+G6s=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=L2oEWn0BjsJIhji0r7ATGE6pqLkaVKPaD3EbbBC5qppjyLp3uy/QIsRQ3hoWL4J67
+         a0fNuQHb9XDlspNPsqGtudP+kLXpxe0Tpg8FvcXCOX7VLrCpwCDcLBzzRYn+1H/qg+
+         Kj7TMOpUhU6PzIGb27xsh7KdCoNAyR/KvojN4PQA=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx004
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MhlGk-1kJ1Pj3vW4-00dkvI; Mon, 04
- Jan 2021 17:40:24 +0100
-Date:   Mon, 4 Jan 2021 18:42:01 +0200
+Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx005
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1Mt75H-1k7gtE2P61-00tXT1; Mon, 04
+ Jan 2021 18:54:33 +0100
+Date:   Mon, 4 Jan 2021 19:56:11 +0200
 From:   Lauri Kasanen <cand@gmx.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Keith Busch <kbusch@kernel.org>, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, linux-block@vger.kernel.org
-Subject: Re: [PATCH 6/6] block: Add n64 cart driver
-Message-Id: <20210104184201.d11587798c082c0e6b4e25dd@gmx.com>
-In-Reply-To: <2e65539c-f8f2-d205-527a-0efe2ad8ac95@kernel.dk>
-References: <20210104155031.9b4e39ff48a6d7accc93461d@gmx.com>
-        <20210104154902.GA1024941@dhcp-10-100-145-180.wdc.com>
-        <20210104180115.b1d5438cd4ee21efcd557976@gmx.com>
-        <20210104161332.GC1024941@dhcp-10-100-145-180.wdc.com>
-        <20210104182720.48a9d74b2b55f5978735eaba@gmx.com>
-        <2e65539c-f8f2-d205-527a-0efe2ad8ac95@kernel.dk>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, axboe@kernel.dk,
+        linux-block@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+Subject: [PATCH 6/6 v2] block: Add n64 cart driver
+Message-Id: <20210104195611.61997e86092b3559c95f36fc@gmx.com>
 X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1RHOmLNqtt++e8emm2jPyEExUK8W00kFT6/DdIMpWL1Tgw7L/rf
- nZV37zzsoBYCX4RrLZDE6JXdsR845vbmR4cUa/9QhID8epcHnC5kU53UhQJQKiA15LER2Sm
- pDOcqn2KYYIkzwp/cfJ1HwcEp+4vmyN6ppwNF+SYEOaWnq86N1n/QgXHjwYNevLjPUSByA/
- H9csYnLiU76TmNmuP6TTg==
+X-Provags-ID: V03:K1:XPdh3lN5swXrQl6Lgxsj922itiGDO6wK9cYaYy8X1/ndefp6xIW
+ 3J6J0VQ1KKxWEFynye5gmeVcpUjf8KBvz95euNaswzFHoJ0nogQhYtQK54kJt9zNPpXm+1K
+ rjrC9njGAi4ljRT/9xj9vVXPMVlZJ/TP4HtlKiW2Ky0ptbD0Mxvkv+SvWRvQg194ClhnWfv
+ JyHKJs0ZbrA5/FLwKOYBg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+n/Ln+n434w=:DmHAhPA32kEkuq55bW1ko1
- Xa/LEtKYl88lCRuKer7A6gF/IYhIxI+e1xGL9hXl/USL/bsinJ1NRrtIRWIbprwyraZJM2zIW
- a/4qcmGUWvtFZSaLXnkwGVUxXU66SemVofzJhNAh5VyDVfjxc5bq10l7jSRwpkbZdZyjjhC/a
- AQhhlIO4VqcTRfDlieVPi11LsF01mjcXlh5YIAl+Y5n7VwHGO+UeBEmpfpwyi5K9EXplGLKah
- 8zapZT1ETqEVpDyeAVSgB52n26zQPQKAb8gPSxn4Z3L5PmbuKaoYahDYNhVYqQAPKCu1EE11P
- azD8uJ3iL/3Cooui72JBFtdTrn+8koLCTuj7x4UB+la62S90W4v/2Qgb86oTKsGoiQCJZszIn
- sgIjYGkFruSmMidPz1asq8/DAYGmHsCxQJ+zxeih6O9XB2fhGAAXjG0iFrprOxnIYuDqR2mUx
- w7AGPW0JrtXnm10i1CSHktxzH9KlyMxh+b0oUN1F80AQEHKnOYaJnljcGf6v1DJBcboyR2Uxd
- 4ZynSOvXO6Dc+7Pq4ncxe4Uwzva3adVcFAJ3WTX7B/ZMO94JVcGslywb7AOPwokkW/taZrHsf
- KvnrfJsfVem3A7AOM08eNvw6IUed8l+BhcteXRcYejJhdAQGbfIPicGXjojMqltG7B6M0Jkt0
- SMBYaE5Mzfo9Gk3AniiYinBLMcXcXGST0GaaxA3wK5Gkz36RcU49y1/Nj1o29ibNH/YnXyrzD
- j2GcOCJEPKHpTOmKEYrCKQt3MY89fxNtVq/ZKUxeJjXD3n4vQGhIqodC409uNdt6ANhzo/xWp
- P5i3lt5PdKfteV1c3pl8LMh9K0tpFrH/AK3aAToSHt4LsCn5XgcttFD40OKRAajsduXNF74A6
- XRrD4UcnecFSDCc/hrkA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VIMSl3csASE=:YlQo9aFWfVck0AsIFmf4mU
+ wGSbuU9UX9CZ3E8QbJTopIe2MtDLCdrs82HMUHAqTigDKzdlKJsLHS/Z5kbE4kxDTUvfAS0Pr
+ MJ1VBtuPvC0BR94P2I+XeiOAeB33+roy5pPVKHfJD5iAJwyOcLM4oJpzGlaLUDGqXtNJxWnI2
+ Q7ItenEALF+29jnwG+qiw5qlbH99hoAKi97lstK+LB0uJD1R8WTwT0zvG1f/GZXradviyKXYj
+ RCULsiZBYYnLgL4iZXxnLJmkrDsDcH7NX+sKHi1BUKVbqQ9YoPOaVxhmYKGl9OiSSK89ACESi
+ 280eNyDdM4mie/EZGE/Glk9IGkjLp2dyiV0iW/SJWgbAHDT03HLT9PzgZ4chPheGoi0/CzAN0
+ OP7OFWd4Fo2vZxQ8AliZsb1BWpyEMgLba97htF7laqSzmrahxJhHuf2se9MdsExcBGZw7GT1r
+ Z7wrMbdOTyt9dCPxEIsUY/A9TvAOI9B+47Y4KtqMdG5FyrrICh2xDa14JzSYPHY1mO8QxrcfI
+ ShAdick7RnyadP+AzQdNxTd586ynR88yZqU/dKWJgTZVLXF0u7o6pHAtCZlWgSwRha7KPvxlv
+ UqDyOS+yU5lxJfnBZ+3fEiLVcPQeeiax3ED/IVCRxRP6obF5/Z7Ee7zBdKzb+8scnSS6fKT8X
+ C52uk8wvk5gY6Gz2UPtoKolbV36aOHsPV3y6OlndJiQnQ+TxRQmtGcKhgq17KNTfnws/Njw4d
+ SNAsuXiX3D0X5oQakWcs83YHo3LNQYQPlJNy5cZQHaj7SzyTfnRgrm0RW6LneJK7mbPh8ipZf
+ TpsjvcxTOuR+m4NHmmqbd5p4B+acxJlqAJmVvVRXb2QzRCzZIJ4bmQ04tkTpBNPgoFJA3KsrQ
+ 0cMYb8f1+6bQAD3NRgww==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 4 Jan 2021 09:28:44 -0700
-Jens Axboe <axboe@kernel.dk> wrote:
+This adds support for the Nintendo 64 console's carts.
+Carts are a read-only media ranging from 8mb to 64mb.
 
-> On 1/4/21 9:27 AM, Lauri Kasanen wrote:
-> > On Mon, 4 Jan 2021 08:13:32 -0800
-> > Keith Busch <kbusch@kernel.org> wrote:
-> >
-> >>> The media is read-only (but not runtime removable).
-> >>
-> >> It's been a while, but I could swear we can save state on these carts=
-.
-> >> If so, it sounds like that must be separate from the media this drive=
-r
-> >> is accessing, so is that capability provided through a different driv=
-er?
-> >
-> > Saving uses a separate mechanism, and there are several depending on
-> > what type of cart it is (no saves, flash, eeprom, or sram). If the car=
-t
-> > has no save possibility, there is an optional memory card attached to
-> > the joypad controller.
-> >
-> > Currently there is no driver for any of these.
->
-> Maybe it'd make sense to make this runtime configurable through configfs
-> or similar, requiring boot parameters (and hence a reboot to change
-> them) seems pretty iffy. Similarly, why isn't it available as a module?
+Only one cart can be connected at once, and switching
+it requires a reboot.
 
-You can't change the media without a reboot. What would be the use?
-(it's not possible to have multiple carts, if you're wondering)
+No module support to save RAM, as the target has 8mb RAM.
 
-The lack of a module option is because the target system has 8mb ram.
-The kernel is already very bloated, at one time during testing just
-enabling the smallest IO governor (mq deadline) caused an OOM during
-boot.
+Signed-off-by: Lauri Kasanen <cand@gmx.com>
+=2D--
 
-Same for configfs, debugfs, etc. No such options to save RAM.
+v2:
+cpu relax
+ro
+spinlock gone, queue depth 1
+BLK_MQ_F_BLOCKING
 
-- Lauri
+ drivers/block/Kconfig   |   6 ++
+ drivers/block/Makefile  |   1 +
+ drivers/block/n64cart.c | 197 +++++++++++++++++++++++++++++++++++++++++++=
++++++
+ 3 files changed, 204 insertions(+)
+ create mode 100644 drivers/block/n64cart.c
+
+diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
+index ecceaaa..924d768 100644
+=2D-- a/drivers/block/Kconfig
++++ b/drivers/block/Kconfig
+@@ -72,6 +72,12 @@ config AMIGA_Z2RAM
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called z2ram.
+
++config N64CART
++	bool "N64 cart support"
++	depends on MACH_NINTENDO64
++	help
++	  Support for the N64 cart.
++
+ config CDROM
+ 	tristate
+ 	select BLK_SCSI_REQUEST
+diff --git a/drivers/block/Makefile b/drivers/block/Makefile
+index e1f6311..b9642cf 100644
+=2D-- a/drivers/block/Makefile
++++ b/drivers/block/Makefile
+@@ -17,6 +17,7 @@ obj-$(CONFIG_PS3_DISK)		+=3D ps3disk.o
+ obj-$(CONFIG_PS3_VRAM)		+=3D ps3vram.o
+ obj-$(CONFIG_ATARI_FLOPPY)	+=3D ataflop.o
+ obj-$(CONFIG_AMIGA_Z2RAM)	+=3D z2ram.o
++obj-$(CONFIG_N64CART)		+=3D n64cart.o
+ obj-$(CONFIG_BLK_DEV_RAM)	+=3D brd.o
+ obj-$(CONFIG_BLK_DEV_LOOP)	+=3D loop.o
+ obj-$(CONFIG_XILINX_SYSACE)	+=3D xsysace.o
+diff --git a/drivers/block/n64cart.c b/drivers/block/n64cart.c
+new file mode 100644
+index 0000000..6bcd795
+=2D-- /dev/null
++++ b/drivers/block/n64cart.c
+@@ -0,0 +1,197 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Support for the N64 cart.
++ *
++ * Copyright (c) 2020 Lauri Kasanen
++ */
++
++#include <linux/bitops.h>
++#include <linux/blk-mq.h>
++#include <linux/dma-mapping.h>
++#include <linux/init.h>
++#include <linux/major.h>
++#include <linux/module.h>
++
++#include <asm/addrspace.h>
++#include <asm/io.h>
++
++MODULE_AUTHOR("Lauri Kasanen <cand@gmx.com>");
++MODULE_DESCRIPTION("Driver for the N64 cart");
++MODULE_LICENSE("GPL");
++
++#define BUFSIZE (64 * 1024)
++
++static unsigned int start, size;
++static int major;
++static struct request_queue *queue;
++static struct blk_mq_tag_set tag_set;
++static struct gendisk *disk;
++
++static void *buf;
++static dma_addr_t dma_addr;
++
++#define REG_BASE ((u32 *) TO_UNCAC(0x4600000))
++
++#define PI_DRAM_REG 0
++#define PI_CART_REG 1
++#define PI_READ_REG 2
++#define PI_WRITE_REG 3
++#define PI_STATUS_REG 4
++
++#define PI_STATUS_DMA_BUSY (1 << 0)
++#define PI_STATUS_IO_BUSY (1 << 1)
++
++static void n64cart_write_reg(const u8 reg, const u32 value)
++{
++	__raw_writel(value, REG_BASE + reg);
++}
++
++static u32 n64cart_read_reg(const u8 reg)
++{
++	return __raw_readl(REG_BASE + reg);
++}
++
++static void n64cart_wait_dma(void)
++{
++	while (n64cart_read_reg(PI_STATUS_REG) &
++		(PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY))
++		cpu_relax();
++}
++
++static blk_status_t get_seg(struct request *req)
++{
++	u32 bstart =3D blk_rq_pos(req) * 512;
++	u32 len =3D blk_rq_cur_bytes(req);
++	void *dst =3D bio_data(req->bio);
++
++	if (bstart + len > size)
++		return BLK_STS_IOERR;
++
++	bstart +=3D start;
++
++	while (len) {
++		const u32 curlen =3D len < BUFSIZE ? len : BUFSIZE;
++
++		dma_cache_inv((unsigned long) buf, curlen);
++
++		n64cart_wait_dma();
++
++		barrier();
++		n64cart_write_reg(PI_DRAM_REG, dma_addr);
++		barrier();
++		n64cart_write_reg(PI_CART_REG, (bstart | 0x10000000) & 0x1FFFFFFF);
++		barrier();
++		n64cart_write_reg(PI_WRITE_REG, curlen - 1);
++		barrier();
++
++		n64cart_wait_dma();
++
++		memcpy(dst, buf, curlen);
++
++		len -=3D curlen;
++		dst +=3D curlen;
++		bstart +=3D curlen;
++	}
++
++	return BLK_STS_OK;
++}
++
++static blk_status_t n64cart_queue_rq(struct blk_mq_hw_ctx *hctx,
++				     const struct blk_mq_queue_data *bd)
++{
++	struct request *req =3D bd->rq;
++	blk_status_t err;
++
++	blk_mq_start_request(req);
++
++	do {
++		err =3D get_seg(req);
++	} while (blk_update_request(req, err, blk_rq_cur_bytes(req)));
++
++	blk_mq_end_request(req, BLK_STS_OK);
++	return BLK_STS_OK;
++}
++
++static const struct blk_mq_ops n64cart_mq_ops =3D {
++	.queue_rq =3D n64cart_queue_rq,
++};
++
++static const struct block_device_operations n64cart_fops =3D {
++	.owner		=3D THIS_MODULE,
++};
++
++static int __init n64cart_init(void)
++{
++	int err;
++
++	if (!start || !size) {
++		pr_err("n64cart: start and size not specified\n");
++		return -ENODEV;
++	}
++
++	if (size & 4095) {
++		pr_err("n64cart: size must be a multiple of 4K\n");
++		return -ENODEV;
++	}
++
++	major =3D register_blkdev(0, "n64cart");
++	if (major <=3D 0) {
++		pr_err("n64cart: unable to get major number\n");
++		return -EBUSY;
++	}
++
++	queue =3D blk_mq_init_sq_queue(&tag_set, &n64cart_mq_ops, 1,
++				     BLK_MQ_F_SHOULD_MERGE | BLK_MQ_F_BLOCKING);
++	if (IS_ERR(queue)) {
++		err =3D PTR_ERR(queue);
++		goto fail_reg;
++	}
++
++	buf =3D kmalloc(BUFSIZE, GFP_DMA | GFP_KERNEL);
++	if (!buf) {
++		err =3D -ENOMEM;
++		goto fail_queue;
++	}
++	dma_addr =3D virt_to_phys(buf);
++
++	disk =3D alloc_disk(1);
++	if (!disk) {
++		err =3D -ENOMEM;
++		goto fail_dma;
++	}
++
++	disk->major =3D major;
++	disk->first_minor =3D 0;
++	disk->queue =3D queue;
++	disk->flags =3D GENHD_FL_NO_PART_SCAN;
++	disk->fops =3D &n64cart_fops;
++	strcpy(disk->disk_name, "n64cart");
++
++	set_capacity(disk, size / 512);
++	set_disk_ro(disk, 1);
++
++	blk_queue_flag_set(QUEUE_FLAG_NONROT, queue);
++	blk_queue_physical_block_size(queue, 4096);
++	blk_queue_logical_block_size(queue, 4096);
++
++	add_disk(disk);
++
++	pr_info("n64cart: %u kb disk\n", size / 1024);
++
++	return 0;
++fail_dma:
++	kfree(buf);
++fail_queue:
++	blk_cleanup_queue(queue);
++fail_reg:
++	unregister_blkdev(major, "n64cart");
++	return err;
++}
++
++module_param(start, uint, 0);
++MODULE_PARM_DESC(start, "Start address of the cart block data");
++
++module_param(size, uint, 0);
++MODULE_PARM_DESC(size, "Size of the cart block data, in bytes");
++
++module_init(n64cart_init);
+=2D-
+2.6.2
+
