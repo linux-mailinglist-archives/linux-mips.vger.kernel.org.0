@@ -2,86 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B092E9950
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Jan 2021 16:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F442E9A37
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Jan 2021 17:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726419AbhADP4y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Jan 2021 10:56:54 -0500
-Received: from mout.gmx.net ([212.227.17.20]:48979 "EHLO mout.gmx.net"
+        id S1728530AbhADQBQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Jan 2021 11:01:16 -0500
+Received: from mout.gmx.net ([212.227.17.22]:39545 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727608AbhADP4y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 4 Jan 2021 10:56:54 -0500
+        id S1728511AbhADQBN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 4 Jan 2021 11:01:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1609775721;
-        bh=8NEdpocCLqWu8a3zbI69ejxOfUQa2RG9d9K1rq/1J7A=;
+        s=badeba3b8450; t=1609775978;
+        bh=8dYzMDBKUF2sybRjESev4F3J9T3mj+pyYPcEcjGHCf0=;
         h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=W8TKWXt4mu4rbGIV4KLEC/JU6DQatHce47WJw9Ttm8r+WS/E48fH+8MsUFAfKrsQa
-         iI/jlGGu60CWft5V5Ad9onA8uw72OenD6IUH7VEWLBxcqV+x2HtxkvY1HJ96vlJyCj
-         5HNfPoBLJe+CBPYUxWCvABlXaOsYvnyEr/3Yxgj8=
+        b=kELxTBswtIVyJ+/QfJtofwtpyWUkgh8sQIcONLr0RSeHwA6LsLkGeCeeczzzLhW2/
+         WnhYIt3QoGXS8+S91ti8EUirg6RcSQJ/eFB4lv/Sbm+YIoEDuQWgZ7rLeSgmgLXMYo
+         KVcaFpOjTsyHMXOtp2aLLx/UCyvh51NexF9NSUzs=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MV67y-1kWdqR1dBe-00SAEf; Mon, 04
- Jan 2021 16:55:21 +0100
-Date:   Mon, 4 Jan 2021 17:56:59 +0200
+Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MNKhm-1kc9AJ3B18-00Omz7; Mon, 04
+ Jan 2021 16:59:37 +0100
+Date:   Mon, 4 Jan 2021 18:01:15 +0200
 From:   Lauri Kasanen <cand@gmx.com>
-To:     Jens Axboe <axboe@kernel.dk>
+To:     Keith Busch <kbusch@kernel.org>
 Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        linux-block@vger.kernel.org
+        axboe@kernel.dk, linux-block@vger.kernel.org
 Subject: Re: [PATCH 6/6] block: Add n64 cart driver
-Message-Id: <20210104175659.f5433d55d8e41b3c8b620894@gmx.com>
-In-Reply-To: <db1936b0-a1ab-41b3-be09-ec301ea7ebc3@kernel.dk>
+Message-Id: <20210104180115.b1d5438cd4ee21efcd557976@gmx.com>
+In-Reply-To: <20210104154902.GA1024941@dhcp-10-100-145-180.wdc.com>
 References: <20210104155031.9b4e39ff48a6d7accc93461d@gmx.com>
-        <944dd5af-c5d0-b37c-29ca-0213ea6081db@kernel.dk>
-        <20210104174348.cda010a3af0ec3d989732b37@gmx.com>
-        <db1936b0-a1ab-41b3-be09-ec301ea7ebc3@kernel.dk>
+        <20210104154902.GA1024941@dhcp-10-100-145-180.wdc.com>
 X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3cUFM11+xIOsWHgU9xBN/+reAhgw4yCf1tkxisO4e1K1GZpLocm
- xMJboZWTfkCI7+wbX9qnpY9xbKXp4MWDbSppVe6CYHy93rqgt9i5gZ+lzgyGxK6UrBcKzmT
- cN4421ayY599nwWUAQci7mtz0oMcwdmuTSjKQ2uGQomIJHMHonWra16+JR0I4CsOFlMwfM0
- /2xAIZUPSBF371lDSupuQ==
+X-Provags-ID: V03:K1:6uClOfvhWTGJ72YP4IUDfeJ1Nt2MWOpuMIY8iNkoeeUNdt/xJYF
+ a+RuIY4ryesoovh6UA69IdknEeTEs/V6r4IpqXMG5w7dj5ujOjEmojwzgrWulg3q9RDfAyP
+ Edcvyg3QfcinkNwaNucBPvycXSFsR8dKQm3eg18dRCObIlvqJhXTM/fzZrGl7BMqFNNG7b5
+ q5leAjr5k03tZQ06L4eBA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wvMzhEPuJNI=:44iBeErXwDarRHzJ81DYrH
- xLlrcjTvZE3YrxnZGjIokk78rX9Glo/iQGHepaDMXkkuvypcn5sY65TvlScDHveSO7ZJVl2wr
- Y2qXV07AULBcGPj2QmS63fedmGGAqlIGHHQWeX/xgf6J6ki1CmOGuicvgWGbw6ZMj+/tHD688
- 4Iwx4fxuvBdeJY5Fr2deyHrJoRCV+Ca7crrcibm4D1Ga1In2W6IJfh1q/d3L5gGHo38IOa1t7
- dvtkQAcB6EgK+WvI+LFpxppAxu//hskIndtIDzRpoepW9gyinSmc3uiVpOizFfNaGfWeClLu0
- XXlerI4UdUMSksW5yjnLgcm6J/PJ9SMuU6Lg4fy34zf9RJxa+rvw+ZfJDqLB8bX0PHLOOhlHT
- nKmWWL0/ds7bZmIsqX0O48GuvcvMQO8A3rK7VWf2RKUILB0lo9hdD+3Ngz6hAPKU/auruoD1+
- BlPxOmmc+gNyydn0xeH/NQnvA0Nz3T+dj86Ivahb920hwDj4sKkLYcuGedKpLlFnjM7y2gPQS
- gnR6Yz8+WiWfKycw6W5giUGds/kQJEJavGbh1mzuTUyaOawYEoGFWI586p8d4xQF9sNYRiHiV
- FWP6rz6ZRr0woXRJkT3ZlUJZ3uyfkBldFfIW0UckfLYqP82dwLFIAXqo8PBek/Yj21iZdNZID
- kUWp507YqCdEKp6b4TInZtsbF6ohal13rwgqcXXbLsGzh60KxOMSptLkf6GOUXFJkuE8bVkMO
- h3Hd3xBrpMF2ZlyOgkgHdLxFFU2A3s70fcg5JgSOK0Yatxfs1nAQi3fNyz9D9+iJbIltlQveg
- xNlU/G+wY2+rh8YCBEJ8q59RM8VB2odarg3ukv5bJwMG6PMkswtbsLeysdOaIDE1hRjUtQ/e5
- nwG+pm7TcovFWLduzNlA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8TcCjfE8g28=:MzQilyLcksyyXW8U9Ia++S
+ fV2njqadX7eiT3kJQS2nI+lGkFrxkxl38HrNhJlitJWSl6gqu5gyL25tRMPoyEYDfUMUTZvFw
+ SnKoIV3c6wiLwsw3j7Wz2N4b1k2R28/7kSjhxp9J78A6J3lqpW5cdaqf+GqXMce8ejJnjTyR7
+ WGacmzXlzbdcqB58YL2xQ2Aas2+3jKIAN6dkvXOQ6/OLX0SHG+UXmBd/5GDNcRg70IZVElNVx
+ 4rcjIQLIjUg8Xncd4w61/RNq00xP8iLFRm5+aKWRHVbb5fMmztmfTKvpFouWzmqgy51VGeG4r
+ SjXwbuIbzH+qBTFqMjQvjQEhVY2NmTVBMCKptita7SKIUjlYRXZxgMXnYH/3y0jQkGOec7nbT
+ 5FccdWdBnUeniu49YWzbqB9gpPR0OdwkOa12tz6X7yipXEwq1k0WEbFnZ22tOw1nKT4eytAHe
+ Rwzrt11xgWtBJJuWFIItNok6UUlb7Vo1LUG9yenlbAC42wKO70qbH6UQCDfNNnRF6WJIGCNnS
+ 2CR7W1xG5n9pzAdSQJcHpCSvwTnVgHLt+U1yY3/VFMDkQ2fTTMvrjGha4p7c4FwiuJ/7+EzKP
+ UgCCDNl4GZ31BnoMdtc/DaB7tvrUg2akoe8445khTIkpwo2OTRSgDRInomF/olbDAt5C0amxV
+ Xn+est2kYdsOHukG7+7Ax2oRaakLZ0iodokWLMLZ1bQfi1E27+aSsObzCnnL3Tz+howpf2gVG
+ sENRy+V+5SLPSIIBUMzY3PQb7pTdFZfVLXpzqbnC4mrz9Qd2jgefaRkKIDI0MR6Y+7B9mVhGy
+ 5Wy24Q5qCCItHVax8kyp0GKRXUTz+AilEWpMiLjaI0bTKTUM9qNpPSCH7LX4wnLlPDHNAGRbO
+ wgtZWxhdz+bP+WmTZAvQ==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 4 Jan 2021 08:49:55 -0700
-Jens Axboe <axboe@kernel.dk> wrote:
+On Mon, 4 Jan 2021 07:49:02 -0800
+Keith Busch <kbusch@kernel.org> wrote:
 
-> On 1/4/21 8:43 AM, Lauri Kasanen wrote:
-> > On Mon, 4 Jan 2021 08:40:10 -0700
-> > Jens Axboe <axboe@kernel.dk> wrote:
-> >> It should definitely get reviewed first. One easy question - there's =
-no
-> >> commit message in this one. It's a new driver, it should include some
-> >> documentation on what it is, etc.
-> >
-> > It's already had one (rfc) round on linux-mips. Or do you mean by
-> > others (who?)
+> On Mon, Jan 04, 2021 at 03:50:31PM +0200, Lauri Kasanen wrote:
+> > block folks: rest of the series is on linux-mips. Being a mips-specifi=
+c driver,
+> > not sure which tree it should go to.
 >
-> I mean the actual block driver from the block point of view. From
-> a quick look, looks like there's no irq or anything, so it's
-> strictly polled mode? Probably would make sense to push this out
-> of the app path then, by using BLK_MQ_F_BLOCKING.
+> Probably through mips.
 
-It's very unclear to me what that flag does. I read all the docs
-available, but nothing made it clear (same applies for almost all
-BLK_MQ_*).
+Thanks.
+
+> > +static blk_status_t get_seg(struct request *req)
+> > +{
+> > +	u32 bstart =3D blk_rq_pos(req) * 512;
+> > +	u32 len =3D blk_rq_cur_bytes(req);
+> > +	void *dst =3D bio_data(req->bio);
+> > +
+> > +	if (bstart + len > size || rq_data_dir(req) =3D=3D WRITE)
+> > +		return BLK_STS_IOERR;
+>
+> If you don't support writes (is that limitation temporary?), then you
+> can prevent such operations from reaching the driver by setting the
+> "disk" to read-only during initialization with set_disk_ro(disk, true).
+
+The media is read-only (but not runtime removable).
+
+> > +static int __init n64cart_init(void)
+> > +{
+> > +	int err;
+> > +
+> > +	if (!start || !size) {
+> > +		pr_err("n64cart: start and size not specified\n");
+> > +		return -ENODEV;
+> > +	}
+>
+> Just curious, is it not possible to discover these values from the
+> installed cart? Requiring module parameters seems a bit fragile.
+
+No, it's not possible. Even the cart's size is not discoverable, and
+where the disk image starts and how long it is could only be scanned if
+you knew in advance what FS what used, etc. There is no FS on the cart
+itself, it's just raw data.
+
+The bootloader embeds these values into itself when it's built.
 
 - Lauri
