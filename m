@@ -2,114 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED232E9932
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Jan 2021 16:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B092E9950
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Jan 2021 16:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727317AbhADPwe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Jan 2021 10:52:34 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:37768 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbhADPwc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jan 2021 10:52:32 -0500
-Received: by mail-oi1-f175.google.com with SMTP id l207so32575682oib.4;
-        Mon, 04 Jan 2021 07:52:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vVjwPJDCUg81BDqonylcIszMaRPhAj/6H6ziGF+Xa0Y=;
-        b=EhsAVnLS0wKopYiNuEvHdpF7ZR35QkFhm8N8shu/q+c60yjOYzYFJTIRdVXOpTF8EP
-         6NnA02xE9EJiHOmJJqo56Ar8qW5YHIvSHzp5ndm14skQMuU1Ov5PT5ANG79OpMaJesuJ
-         +STgYzIdJ3PSzkKc+IZ3JKhWG55vLtGXBn4dvQtgj6gK7KoG+4OtlV6oVLkXkGJ4jIAl
-         mlxpDRP/BQ9GH8K+CCzmhLInXQkAEcCOsZYc7T6jM6fyW1TrQvk00P0BeGU5ZWJm5zD6
-         6cNv+cKGrKY5tSSjwWp1tLtrDzL10eWdSr3m9RigIbOKxv1hjNUf9obgEGPzeCcf4ezg
-         5Mfg==
-X-Gm-Message-State: AOAM531E+2veAPY3V0zpXx94edQ+OeMjjS7Wr6Y1QyIJRTxTGS7prhpl
-        9aQVXrvWOoAT3rMwVK7YBUtowTWludAc4tKdTa8=
-X-Google-Smtp-Source: ABdhPJwZhjCivP9QtPb8qVxwEO2Cy4PiA7OI6PKKTpj/tJrpz3Ecy8AxCyYebbUUdxYpGqm99Li9eCELpolcR2xa35c=
-X-Received: by 2002:aca:3cc5:: with SMTP id j188mr18408130oia.54.1609775511464;
- Mon, 04 Jan 2021 07:51:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20201114130921.651882-1-jiaxun.yang@flygoat.com>
- <20201114130921.651882-2-jiaxun.yang@flygoat.com> <CAMuHMdXo9o9af-YBt5g53QHRhuLxdSy_C9n4wdEEh7yzDidr-w@mail.gmail.com>
- <20210104144841.GC3313@piout.net> <CAMuHMdWGnBcYvXLnydSnkxcmG6GksZLfq1aWADuWg8ibZ3V8Lg@mail.gmail.com>
- <20210104154303.GD3313@piout.net>
-In-Reply-To: <20210104154303.GD3313@piout.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 4 Jan 2021 16:51:40 +0100
-Message-ID: <CAMuHMdW2nDwJGmOtoDgOEMgEDaD9nMMCv=Y4nZaDqCM1UNadvQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] rtc: goldfish: Remove GOLDFISH dependency
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726419AbhADP4y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Jan 2021 10:56:54 -0500
+Received: from mout.gmx.net ([212.227.17.20]:48979 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727608AbhADP4y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 4 Jan 2021 10:56:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1609775721;
+        bh=8NEdpocCLqWu8a3zbI69ejxOfUQa2RG9d9K1rq/1J7A=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=W8TKWXt4mu4rbGIV4KLEC/JU6DQatHce47WJw9Ttm8r+WS/E48fH+8MsUFAfKrsQa
+         iI/jlGGu60CWft5V5Ad9onA8uw72OenD6IUH7VEWLBxcqV+x2HtxkvY1HJ96vlJyCj
+         5HNfPoBLJe+CBPYUxWCvABlXaOsYvnyEr/3Yxgj8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MV67y-1kWdqR1dBe-00SAEf; Mon, 04
+ Jan 2021 16:55:21 +0100
+Date:   Mon, 4 Jan 2021 17:56:59 +0200
+From:   Lauri Kasanen <cand@gmx.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH 6/6] block: Add n64 cart driver
+Message-Id: <20210104175659.f5433d55d8e41b3c8b620894@gmx.com>
+In-Reply-To: <db1936b0-a1ab-41b3-be09-ec301ea7ebc3@kernel.dk>
+References: <20210104155031.9b4e39ff48a6d7accc93461d@gmx.com>
+        <944dd5af-c5d0-b37c-29ca-0213ea6081db@kernel.dk>
+        <20210104174348.cda010a3af0ec3d989732b37@gmx.com>
+        <db1936b0-a1ab-41b3-be09-ec301ea7ebc3@kernel.dk>
+X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3cUFM11+xIOsWHgU9xBN/+reAhgw4yCf1tkxisO4e1K1GZpLocm
+ xMJboZWTfkCI7+wbX9qnpY9xbKXp4MWDbSppVe6CYHy93rqgt9i5gZ+lzgyGxK6UrBcKzmT
+ cN4421ayY599nwWUAQci7mtz0oMcwdmuTSjKQ2uGQomIJHMHonWra16+JR0I4CsOFlMwfM0
+ /2xAIZUPSBF371lDSupuQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wvMzhEPuJNI=:44iBeErXwDarRHzJ81DYrH
+ xLlrcjTvZE3YrxnZGjIokk78rX9Glo/iQGHepaDMXkkuvypcn5sY65TvlScDHveSO7ZJVl2wr
+ Y2qXV07AULBcGPj2QmS63fedmGGAqlIGHHQWeX/xgf6J6ki1CmOGuicvgWGbw6ZMj+/tHD688
+ 4Iwx4fxuvBdeJY5Fr2deyHrJoRCV+Ca7crrcibm4D1Ga1In2W6IJfh1q/d3L5gGHo38IOa1t7
+ dvtkQAcB6EgK+WvI+LFpxppAxu//hskIndtIDzRpoepW9gyinSmc3uiVpOizFfNaGfWeClLu0
+ XXlerI4UdUMSksW5yjnLgcm6J/PJ9SMuU6Lg4fy34zf9RJxa+rvw+ZfJDqLB8bX0PHLOOhlHT
+ nKmWWL0/ds7bZmIsqX0O48GuvcvMQO8A3rK7VWf2RKUILB0lo9hdD+3Ngz6hAPKU/auruoD1+
+ BlPxOmmc+gNyydn0xeH/NQnvA0Nz3T+dj86Ivahb920hwDj4sKkLYcuGedKpLlFnjM7y2gPQS
+ gnR6Yz8+WiWfKycw6W5giUGds/kQJEJavGbh1mzuTUyaOawYEoGFWI586p8d4xQF9sNYRiHiV
+ FWP6rz6ZRr0woXRJkT3ZlUJZ3uyfkBldFfIW0UckfLYqP82dwLFIAXqo8PBek/Yj21iZdNZID
+ kUWp507YqCdEKp6b4TInZtsbF6ohal13rwgqcXXbLsGzh60KxOMSptLkf6GOUXFJkuE8bVkMO
+ h3Hd3xBrpMF2ZlyOgkgHdLxFFU2A3s70fcg5JgSOK0Yatxfs1nAQi3fNyz9D9+iJbIltlQveg
+ xNlU/G+wY2+rh8YCBEJ8q59RM8VB2odarg3ukv5bJwMG6PMkswtbsLeysdOaIDE1hRjUtQ/e5
+ nwG+pm7TcovFWLduzNlA==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Alexandre,
+On Mon, 4 Jan 2021 08:49:55 -0700
+Jens Axboe <axboe@kernel.dk> wrote:
 
-On Mon, Jan 4, 2021 at 4:43 PM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
-> On 04/01/2021 16:21:31+0100, Geert Uytterhoeven wrote:
-> > On Mon, Jan 4, 2021 at 3:48 PM Alexandre Belloni
-> > <alexandre.belloni@bootlin.com> wrote:
-> > > On 04/01/2021 14:28:26+0100, Geert Uytterhoeven wrote:
-> > > > On Sat, Nov 14, 2020 at 2:20 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> > > > > Goldfish platform is covered with dust.
-> > > > > However the goldfish-rtc had been used as virtualized RTC
-> > > > > in QEMU for RISC-V virt hw and MIPS loongson3-virt hw, thus
-> > > > > we can drop other parts of goldfish but leave goldfish-rtc here.
-> > > > >
-> > > > > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > > >
-> > > > Thanks for your patch!
-> > > >
-> > > > > --- a/drivers/rtc/Kconfig
-> > > > > +++ b/drivers/rtc/Kconfig
-> > > > > @@ -1935,7 +1935,6 @@ config RTC_DRV_HID_SENSOR_TIME
-> > > > >  config RTC_DRV_GOLDFISH
-> > > > >         tristate "Goldfish Real Time Clock"
-> > > > >         depends on OF && HAS_IOMEM
-> > > > > -       depends on GOLDFISH || COMPILE_TEST
-> > > > >         help
-> > > > >           Say yes to enable RTC driver for the Goldfish based virtual platform.
-> > > >
-> > > > I was just looking to see if someone had already sent a patch to add
-> > > > "depends on GOLDFISH || COMPILE_TEST", before sending one myself, when I
-> > > > noticed your patch had removed it...
-> > > >
-> > > > What about
-> > > >
-> > > >     depends on CPU_LOONGSON64 || GOLDFISH || RISCV || COMPILE_TEST
-> > > >
-> > > > instead?
-> > > >
-> > >
-> > > But this driver also works on ARM, is it really important to restrict to
-> > > a few architectures ?
+> On 1/4/21 8:43 AM, Lauri Kasanen wrote:
+> > On Mon, 4 Jan 2021 08:40:10 -0700
+> > Jens Axboe <axboe@kernel.dk> wrote:
+> >> It should definitely get reviewed first. One easy question - there's =
+no
+> >> commit message in this one. It's a new driver, it should include some
+> >> documentation on what it is, etc.
 > >
-> > Is it used on ARM platforms?
-> > qemu:hw/riscv/Kconfig selects GOLDFISH_RTC, but that's it?
+> > It's already had one (rfc) round on linux-mips. Or do you mean by
+> > others (who?)
 >
-> My understanding is that this was used on the original ARM based goldfish
-> android emulator but I don't think this was ever upstreamed.
+> I mean the actual block driver from the block point of view. From
+> a quick look, looks like there's no irq or anything, so it's
+> strictly polled mode? Probably would make sense to push this out
+> of the app path then, by using BLK_MQ_F_BLOCKING.
 
-Upstream indeed only has GOLDFISH support in arch/x86/Kconfig.
-Still, that would be handled by the dependency on GOLDFISH.
+It's very unclear to me what that flag does. I read all the docs
+available, but nothing made it clear (same applies for almost all
+BLK_MQ_*).
 
-Or do you mean upstream QEMU Goldfish support?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+- Lauri
