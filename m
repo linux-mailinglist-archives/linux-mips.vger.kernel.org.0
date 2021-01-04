@@ -2,76 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D042D2E94B2
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Jan 2021 13:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFFC2E95FE
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Jan 2021 14:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbhADMVm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Jan 2021 07:21:42 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:26930 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726325AbhADMVm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jan 2021 07:21:42 -0500
-Date:   Mon, 04 Jan 2021 12:20:57 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1609762860; bh=FmvdsZCHCCE79sjLAYIX/gq7paKAr3hB9iXFALHlrb4=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=iA7fIKU+iUGl8//KALpAwglGMr5bbfoGRBV0KXWxYGgiY+xJfFF0Uu/ZnFJ3d9zf6
-         F5IzM9pVLffdB9/RrvxNF75hHhZUmHIEDUD4TdEGjqZcwtsgkaMGT/QiwlgjlQz11n
-         WD2k0M/tQeEc6eQZ84AT41ZjdG9o9VQOxJYDkH+unsRuZnRCeJQT4vaBjW80qIFhRZ
-         nvVb1CbKri8IbpOKf6CCbrrvZdGlFuhC3mYue+leQ72E3cAcutiyYjVguTNtb19gOU
-         dzpj9taWqP1L0j8ex9aoneS99+iQixpcPcuzZJ31ZI5wzLlxmkoIUxrKlxnrhtuumv
-         e1Wm73KNVeLcw==
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Alex Smith <alex.smith@imgtec.com>,
-        Markos Chandras <markos.chandras@imgtec.com>,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH mips-next 4/4] MIPS: select ARCH_WANT_LD_ORPHAN_WARN
-Message-ID: <20210104122016.47308-4-alobakin@pm.me>
-In-Reply-To: <20210104122016.47308-1-alobakin@pm.me>
-References: <20210104121729.46981-1-alobakin@pm.me> <20210104122016.47308-1-alobakin@pm.me>
+        id S1727250AbhADN3S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Jan 2021 08:29:18 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:36877 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726640AbhADN3S (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jan 2021 08:29:18 -0500
+Received: by mail-oi1-f178.google.com with SMTP id l207so32092168oib.4;
+        Mon, 04 Jan 2021 05:29:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6T4y+ecTYYYZDM41o/baqi/IkEVhIrJtoe7kFNSajtM=;
+        b=d3OGSDBlUP+1Sam+7Ckl/TZT0pxQessM5UYQUViK865476rnSsL8VurbISEPWHI7/W
+         0VUkpaYPHekOxwJblhnII79QH6Xhcs2/6T8+Z6w66Q0nCzqKGsPa6ip/2IIQVLbZEykK
+         GVGzd1BWFFVExTDjil38HZqyrvkcxpxk2Y6eXXXpIcgsUcSY0NqrpiZORSisTdodRf2x
+         cQwB8UVx6ihQ3OCmNeW2albV5HcFieI+QtrgIV8HWNIyHDYr2TMG2DRvL0lT2f9ge0XB
+         a8/r1i3RzLf+dEMSBFtCX/8i8CTFG43Vh56Nu7J5N1aWGe4jEzikvMNgNIJGXKWZ+9uh
+         i9aw==
+X-Gm-Message-State: AOAM530Hsefis+SNcCAl2C7LWQWLdCVbQP7tkZpL5sg/76NZvGnm45uu
+        5JLTsb9Fl65fHFng0a+Mj0qNEnxAWQ9L1P40S9gyL9gzjv0=
+X-Google-Smtp-Source: ABdhPJzWxDoDdBzpXC3HBt74lcMfT4hgBAR6jPj17GX1lTVdRegfSw2xQy1X8CwJYbTueBtkN9J6R9g7hLcyiq5h49g=
+X-Received: by 2002:aca:4b16:: with SMTP id y22mr17758048oia.148.1609766917308;
+ Mon, 04 Jan 2021 05:28:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+References: <20201114130921.651882-1-jiaxun.yang@flygoat.com> <20201114130921.651882-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20201114130921.651882-2-jiaxun.yang@flygoat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Jan 2021 14:28:26 +0100
+Message-ID: <CAMuHMdXo9o9af-YBt5g53QHRhuLxdSy_C9n4wdEEh7yzDidr-w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] rtc: goldfish: Remove GOLDFISH dependency
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now, after that all the sections are explicitly described and
-declared in vmlinux.lds.S, we can enable ld orphan warnings to
-prevent from missing any new sections in future.
+Hi Jiaxun,
 
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
----
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+On Sat, Nov 14, 2020 at 2:20 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> Goldfish platform is covered with dust.
+> However the goldfish-rtc had been used as virtualized RTC
+> in QEMU for RISC-V virt hw and MIPS loongson3-virt hw, thus
+> we can drop other parts of goldfish but leave goldfish-rtc here.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index d68df1febd25..d3e64cc0932b 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -18,6 +18,7 @@ config MIPS
- =09select ARCH_USE_QUEUED_SPINLOCKS
- =09select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- =09select ARCH_WANT_IPC_PARSE_VERSION
-+=09select ARCH_WANT_LD_ORPHAN_WARN
- =09select BUILDTIME_TABLE_SORT
- =09select CLONE_BACKWARDS
- =09select CPU_NO_EFFICIENT_FFS if (TARGET_ISA_REV < 1)
---=20
-2.30.0
+Thanks for your patch!
 
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -1935,7 +1935,6 @@ config RTC_DRV_HID_SENSOR_TIME
+>  config RTC_DRV_GOLDFISH
+>         tristate "Goldfish Real Time Clock"
+>         depends on OF && HAS_IOMEM
+> -       depends on GOLDFISH || COMPILE_TEST
+>         help
+>           Say yes to enable RTC driver for the Goldfish based virtual platform.
 
+I was just looking to see if someone had already sent a patch to add
+"depends on GOLDFISH || COMPILE_TEST", before sending one myself, when I
+noticed your patch had removed it...
+
+What about
+
+    depends on CPU_LOONGSON64 || GOLDFISH || RISCV || COMPILE_TEST
+
+instead?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
