@@ -2,96 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD592EAFB7
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Jan 2021 17:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564FA2EB3FE
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Jan 2021 21:17:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729152AbhAEQJ2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Jan 2021 11:09:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37918 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726571AbhAEQJ2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 5 Jan 2021 11:09:28 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 519B722C9F;
-        Tue,  5 Jan 2021 16:08:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609862927;
-        bh=wJQJGEVMiFp+U9i3KB68KovC4I4ZjyrsTucyHvp+mYU=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=RAq1XL/BRN8XRTSri4cXSrqvujM81ioR4+GUq1AHhXecaj7QiUWiQ88dIVugFlchl
-         PLj0Tjq2k++ZbgqOoM47jhkKnKK69EB4dWwbb4SWWCCEgHFfJaIdqiA9j1o8CIDFGb
-         VmlHy1C+y878dkjkF4kZd8pHUgF6pphBI9JLc1TNqEr7Y5H/GxrnO2q9j6hXU6/0O6
-         F/BC+FOE5W7Pq7VFBMxUdC2Yx5x5dsQz87UyJo6xH3cai7eqArOI3dLNh6M9KIfFCe
-         bMnxRc9j/jnfB58g5Lt3IlL35kE9dM38IFdhf5NXVGmzl9LHHUkqI+ApfU/oQDMsjA
-         e2FHKR5qKJKMQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-rtc@vger.kernel.org, Matt Mackall <mpm@selenic.com>,
-        linux-mtd@lists.infradead.org, linux-crypto@vger.kernel.org,
-        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        dmaengine@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-mips@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-spi@vger.kernel.org
-In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-Subject: Re: (subset) [PATCH 00/10] Remove support for TX49xx
-Message-Id: <160986289007.50207.17900821173530027212.b4-ty@kernel.org>
-Date:   Tue, 05 Jan 2021 16:08:10 +0000
+        id S1726149AbhAEUQr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Jan 2021 15:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725710AbhAEUQr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jan 2021 15:16:47 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A52BC061574;
+        Tue,  5 Jan 2021 12:16:07 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id u21so611270qtw.11;
+        Tue, 05 Jan 2021 12:16:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+HK9s/29ASBwdsRk66LeB+PVLzLRMTM0MqUqNfbGHfA=;
+        b=NjUIqFehwQf/ZlLfMbBBhKZ9+FcC2BojJtfi4sGTgXPD0SiT3o1ofDdGtMdHhAR8Vm
+         zUBfQkDrVaYTJaah+0zy/sSCzzhVhfitcGEdRNdM/ibc/sZkBBOQlRKBqM5Ect4QE+uh
+         Wv371jDuwQ0L1rUN6x+4JGGAbfnvchwJcZ9SyelsABhTqPoF6Xd8xkAfPqccxKnAQIm4
+         x3CUYXrMv0Fq0S4oWINxo/roKfQpx3x9yAszzhLZtrw/J+VAwiuGTLGPARWQ0S0G01aU
+         6TdPbUeK1EtNdeHnHLUcWckkoUoVytl5Hu9JmUVELeOEmCdUIZW14ZoRwEB72MdfFUm+
+         rn4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+HK9s/29ASBwdsRk66LeB+PVLzLRMTM0MqUqNfbGHfA=;
+        b=V7Yj4drA8cYhysBpXKDp8f83fwVK/1FMlncJ4cqntLC/lxWJHelwB3GYuAUks8ooM0
+         f+fKI4NoqHlp62SanptQ88009sqRSm0JFWb7NWe8jWTCuSRi2i/du5tlkBCv+jws0bP8
+         DlwXS4Huzwy/U9PqmDg+Cx/QEyGYv2hfSYb/Lei1k3D0vZB742Wuq1Zu+9Dr2VVxxtkz
+         ihbo5GO/K4FRBgbA/f0ipVmI2dD8MB3FHQ+Dkgf78yalVjI9DnNbAZ5TIVGz0RhGMZ8G
+         1nNsV5HBGRyMqG+Z4GGzkeEGI1EtkAE+hIncjQZyrvB1S1Jo5TxqdNYxEzwdpX7LXTDq
+         2LEg==
+X-Gm-Message-State: AOAM533nEeNuJ23x6rcuk3EadTFqUm/Vs+NsiRq25OZfjCjusYfxn+GF
+        v09lYOv+lj2AdIX4dSiYAH8=
+X-Google-Smtp-Source: ABdhPJxZ5R0q8axVeGrqJqrhs/4PmYUK6To1x4gtw6IbjXZt5465sXKC/ZeM1393otNKxUtCfy4YfQ==
+X-Received: by 2002:ac8:5ed5:: with SMTP id s21mr1207318qtx.114.1609877766236;
+        Tue, 05 Jan 2021 12:16:06 -0800 (PST)
+Received: from localhost.localdomain ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id y22sm186640qkj.129.2021.01.05.12.16.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jan 2021 12:16:05 -0800 (PST)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Dmitry Golovin <dima@golovin.in>
+Subject: [PATCH] MIPS: lantiq: Explicitly compare LTQ_EBU_PCC_ISTAT against 0
+Date:   Tue,  5 Jan 2021 13:15:48 -0700
+Message-Id: <20210105201548.50920-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 5 Jan 2021 15:02:45 +0100, Thomas Bogendoerfer wrote:
-> I couldn't find any buyable product other than reference boards using
-> TX49xx CPUs. And since nobody showed interest in keeping support for
-> it, it's time to remove it.
-> 
-> I've split up the removal into seperate parts for different maintainers.
-> So if the patch fits your needs, please take it via your tree or
-> give me an ack so I can apply them  the mips-next tree.
-> 
-> [...]
+When building xway_defconfig with clang:
 
-Applied to
+arch/mips/lantiq/irq.c:305:48: error: use of logical '&&' with constant
+operand [-Werror,-Wconstant-logical-operand]
+        if ((irq == LTQ_ICU_EBU_IRQ) && (module == 0) && LTQ_EBU_PCC_ISTAT)
+                                                      ^ ~~~~~~~~~~~~~~~~~
+arch/mips/lantiq/irq.c:305:48: note: use '&' for a bitwise operation
+        if ((irq == LTQ_ICU_EBU_IRQ) && (module == 0) && LTQ_EBU_PCC_ISTAT)
+                                                      ^~
+                                                      &
+arch/mips/lantiq/irq.c:305:48: note: remove constant to silence this
+warning
+        if ((irq == LTQ_ICU_EBU_IRQ) && (module == 0) && LTQ_EBU_PCC_ISTAT)
+                                                     ~^~~~~~~~~~~~~~~~~~~~
+1 error generated.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Explicitly compare the constant LTQ_EBU_PCC_ISTAT against 0 to fix the
+warning. Additionally, remove the unnecessary parentheses as this is a
+simple conditional statement and shorthand '== 0' to '!'.
 
-Thanks!
+Fixes: 3645da0276ae ("OF: MIPS: lantiq: implement irq_domain support")
+Link: https://github.com/ClangBuiltLinux/linux/issues/807
+Reported-by: Dmitry Golovin <dima@golovin.in>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+ arch/mips/lantiq/irq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[04/10] spi: txx9: Remove driver
-        commit: 74523a5dae0c96d6503fe72da66ee37fd23eb8f5
+diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
+index df8eed3875f6..43c2f271e6ab 100644
+--- a/arch/mips/lantiq/irq.c
++++ b/arch/mips/lantiq/irq.c
+@@ -302,7 +302,7 @@ static void ltq_hw_irq_handler(struct irq_desc *desc)
+ 	generic_handle_irq(irq_linear_revmap(ltq_domain, hwirq));
+ 
+ 	/* if this is a EBU irq, we need to ack it or get a deadlock */
+-	if ((irq == LTQ_ICU_EBU_IRQ) && (module == 0) && LTQ_EBU_PCC_ISTAT)
++	if (irq == LTQ_ICU_EBU_IRQ && !module && LTQ_EBU_PCC_ISTAT != 0)
+ 		ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_ISTAT) | 0x10,
+ 			LTQ_EBU_PCC_ISTAT);
+ }
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+base-commit: 36bbbd0e234d817938bdc52121a0f5473b3e58f5
+-- 
+2.30.0
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
