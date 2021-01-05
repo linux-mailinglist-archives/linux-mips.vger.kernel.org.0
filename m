@@ -2,157 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD282EA6D5
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Jan 2021 10:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526452EA876
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Jan 2021 11:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727207AbhAEJAA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Jan 2021 04:00:00 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:42237 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726982AbhAEI77 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jan 2021 03:59:59 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 29A5358049B;
-        Tue,  5 Jan 2021 03:59:13 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Tue, 05 Jan 2021 03:59:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=K
-        wHmlBlSYwHrDiz4lTbH37Kq075cZSKda6f/07inWNs=; b=lV928XRb5T4InzEV6
-        QI7e1C76AIKWbduwZ0Ar2S6JI5ucUPUuZDHyKvMEfnLkyyhGVKFz6FiSmddalZNh
-        t+AFrkWSdUJGxeOM7AodFLYeCpnyxg2N6hvlAGrq8htRBHJecgHAnzo87B5brL50
-        yxzJKRVM3A1cViiAP4/r5DzcmHnaEqoakikE2NNoKqkxCGsIwYXapQ9YW6AKAuxK
-        8QgBBkveKz2jxOd2/zlQ1gfSVlqn7Eb+Yo4zHbER5WZAavtUISCNLSPKJBBF4Ary
-        tmSnBLTN0yQy52sGxSBJYMGuVrOtrerw6iQSvOe8170WCM3qosRVZghyhK4SKowX
-        cM/jw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=KwHmlBlSYwHrDiz4lTbH37Kq075cZSKda6f/07inW
-        Ns=; b=XOm/h1GnqHc3oSkjeXx1xkn2OqdXDdXKuR9O3/BLEXhRnh6i0yAHzabm/
-        7CeMoKY4BS7Ocfg2i3lOc+osz6sMHTSBgfLkrKtJqMULx/38BSClKq/u9racyJgL
-        AO6CgdVwNDkzqGDmTzuf9IgVmxOgBsX3phNHwSpxJEX1GWqEVFiyX8xB40eU+CbQ
-        3lTIkCjSkSfe6kiIuqfWnIOIJ9HNlsZo7fsDNdSFa2+pIyBEBPQVsfBzLQcIQrZp
-        IFZIaXDvqqshAII2R4wCLtUovmmpRD5BQ742omn28fg3VAuFdiBjoBsTIYzO+D7z
-        jlxbnlM2J8Nn/u692SrePewwK9XAQ==
-X-ME-Sender: <xms:YCr0X9IAHI6v1p99QOqApXFazPDtaTi46vR3u42wtozZM5dbo16Y1A>
-    <xme:YCr0X5IhN9DBM61Mwi6r8YYA9mNMKyiaa5EMPLLZr2f4tvAiNmWz7TZnCNcy4zUAb
-    2Noti03fBbZ3Zy1_Ts>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdefgedguddvgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhephffgteehteeuuddtvdeikeduvdeuiedukeeiuddtgeevledt
-    ueekteejfeevffdunecuffhomhgrihhnpehlughsrdhssgdpohhpthhiohhnshdrvghhne
-    cukfhppeeghedrfeefrdehtddrvdehgeenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hm
-X-ME-Proxy: <xmx:YCr0X1vPmrUpd046QM50WwFKiSORi1m3tGPmDLOqlxyRbcwbFiB65w>
-    <xmx:YCr0X-Z3_b_uv_TlP-bMKBA78TFPI1qwyfpidNU9X2GEvSS9SwdUyQ>
-    <xmx:YCr0X0Z18LDcoTLppjyeUMuXoxRrz64ByO3iqnQpCQFYhzV-ovv-uA>
-    <xmx:YCr0X0401DTvDt2GD25Cp1uBzB283PTpc5kkz8yw-3VsxXWVCz9kVvDjIFg>
-Received: from [0.0.0.0] (li1000-254.members.linode.com [45.33.50.254])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 054A1108005B;
-        Tue,  5 Jan 2021 03:59:07 -0500 (EST)
-Subject: Re: [PATCH mips-next 2/4] MIPS: vmlinux.lds.S: add ".rel.dyn" to
- DISCARDS
-To:     =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        Alexander Lobakin <alobakin@pm.me>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>,
+        id S1728951AbhAEKTG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Jan 2021 05:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728687AbhAEKTG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jan 2021 05:19:06 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39C7C061796;
+        Tue,  5 Jan 2021 02:18:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=k9Tv8IK1so2yR0WlHT3NfT9JGq1L6JF4IPupMKVOxNw=; b=MzyWcsePowyQtwpwIKUqkI2K7r
+        VS3r52v8A0fh5aR4ejVwOLTdhzL7keIV3I8mn50nFP0VP4NgNe5bCG+Gk/SVy5S8OTMBNsbtm82WX
+        V3yo1KTzeowwCKbLpWWYWD8keXkmX8NuStrfUgrqWWgx51Dam9NV3HKaHiRN72Im6XSVBucFuRYMG
+        tL6zsfqGvg2Ops0sqGnsFuOY9EEF+Ow5GJK4FD80uGRqmyM4NhMz+xqCJIzLeltucy6PWR+yGKqCY
+        2+LXk7f4SmhQhXLNLRi35DyH92+XpGXCblCs1WaJhQlt8iUbl308PvU1Z4NVntQ4sEjCssTR6RdJz
+        aFm1Qhvg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kwjPl-0006RF-F6; Tue, 05 Jan 2021 10:18:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4358D3013E5;
+        Tue,  5 Jan 2021 11:18:07 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0F7DC2121353E; Tue,  5 Jan 2021 11:18:07 +0100 (CET)
+Date:   Tue, 5 Jan 2021 11:18:06 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        David Daney <david.daney@cavium.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Alex Smith <alex.smith@imgtec.com>,
-        Markos Chandras <markos.chandras@imgtec.com>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20210104121729.46981-1-alobakin@pm.me>
- <20210104122016.47308-1-alobakin@pm.me>
- <20210104122016.47308-2-alobakin@pm.me>
- <CAFP8O3LA87zyi8f64Sk5g+aLFdYhnZqsEbLC_uTsQk3+6Qus3A@mail.gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <2add3f2d-ab2a-1ca3-5e04-d7b66738bfbe@flygoat.com>
-Date:   Tue, 5 Jan 2021 16:59:03 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Archer Yan <ayan@wavecomp.com>, x86@kernel.org
+Subject: Re: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack
+ traces from user-space with perf
+Message-ID: <20210105101806.GG3040@hirez.programming.kicks-ass.net>
+References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
+ <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
+ <20210104105904.GK3021@hirez.programming.kicks-ass.net>
+ <0712b131-715a-a83a-bc9e-61405824ff0e@flygoat.com>
 MIME-Version: 1.0
-In-Reply-To: <CAFP8O3LA87zyi8f64Sk5g+aLFdYhnZqsEbLC_uTsQk3+6Qus3A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <0712b131-715a-a83a-bc9e-61405824ff0e@flygoat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-在 2021/1/5 下午3:39, Fāng-ruì Sòng 写道:
-> On Mon, Jan 4, 2021 at 4:21 AM Alexander Lobakin <alobakin@pm.me> wrote:
->> GCC somehow manages to place some of the symbols from main.c into
->> .rel.dyn section:
->>
->> mips-alpine-linux-musl-ld: warning: orphan section `.rel.dyn'
->> from `init/main.o' being placed in section `.rel.dyn'
->>
->> I couldn't catch up the exact symbol, but seems like it's harmless
->> to discard it from the final vmlinux as kernel doesn't use or
->> support dynamic relocations.
->>
->> Misc: sort DISCARDS section entries alphabetically.
->>
->> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
->> ---
->>   arch/mips/kernel/vmlinux.lds.S | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.lds.S
->> index 83e27a181206..1c3c2e903062 100644
->> --- a/arch/mips/kernel/vmlinux.lds.S
->> +++ b/arch/mips/kernel/vmlinux.lds.S
->> @@ -221,9 +221,10 @@ SECTIONS
->>                  /* ABI crap starts here */
->>                  *(.MIPS.abiflags)
->>                  *(.MIPS.options)
->> +               *(.eh_frame)
->>                  *(.options)
->>                  *(.pdr)
->>                  *(.reginfo)
->> -               *(.eh_frame)
->> +               *(.rel.dyn)
->>          }
->>   }
->> --
->> 2.30.0
->>
->>
-> (I don't know why I am on the CC list since I know little about
-> mips... Anyway, I know the LLD linker's behavior in case that was the
-> intention... )
->
-> I think it'd be good to know the reason why these dynamic relocations
-> are produced and fix the root cause.
->
-> arch/x86/kernel/vmlinux.lds.S asserts no dynamic relocation:
-> ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations
-> (.rela) detected!")
-Hi all,
+On Tue, Jan 05, 2021 at 11:45:37AM +0800, Jiaxun Yang wrote:
+> 在 2021/1/4 下午6:59, Peter Zijlstra 写道:
+> > On Tue, Dec 29, 2020 at 08:55:59PM +0800, Tiezhu Yang wrote:
+> > > +u64 perf_reg_abi(struct task_struct *tsk)
+> > > +{
+> > > +	if (test_tsk_thread_flag(tsk, TIF_32BIT_REGS))
+> > > +		return PERF_SAMPLE_REGS_ABI_32;
+> > > +	else
+> > > +		return PERF_SAMPLE_REGS_ABI_64;
+> > > +}
+> > So we recently changed this on x86 to not rely on TIF flags. IIRC the
+> > problem is that on x86 you can change the mode of a task without the
+> > kernel being aware of it. Is something like that possible on MIPS as
+> > well?
+> 
+> Hi all,
+> 
+> In MIPS world it's impossible to raise a thread to 64bit without kernel
+> aware.
+> Without STATUS.UX set it will trigger reserved instruction exception when
+> trying
+> to run 64bit instructions.
 
-Runtime .rela can't be avoided as MIPS kernel can't be built with fPIC.
-Our relocatable kernel uses another approach, fixup dynamic relocations
-at boot time.
+The other way around is the case on x86, a 64bit program can create and
+execute 32bit code sections without the kernel being aware. But if
+clearing STATUS.UX has the same issue as setting it, that should not be
+a problem for you.
 
-abicalls simply gave us too much overhead on PIC code, which is unacceptable
-for kernel.
+> However it may be possible to run with 32bit ABI without
+> TIF_32BIT_REGS if user program didn't get ELF ABI right. I think
+> that's out of our current consideration.
 
-In my local tests, PIC kernel reduced unix bench results for around 30%.
+Fair enough.
 
-For MIPS Release6 and afterwards, we may utilize new pcrel instructions to
-reduce overhead but for older ISA I don't have any idea.
+> > The thing x86 does today is look at it's pt_regs state to determine the
+> > actual state.
+> It is possible to look at pt_regs Status.UX bit on MIPS. But it seems
+> unnecessary
+> as user can't change it.
 
-Thanks.
-
-- Jiaxun
-
-
+Ok, good. Then no objection, proceed! :-)
