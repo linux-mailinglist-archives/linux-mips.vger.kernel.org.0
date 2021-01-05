@@ -2,459 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA772EB546
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Jan 2021 23:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9962EB573
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Jan 2021 23:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726745AbhAEWQK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Jan 2021 17:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        id S1730671AbhAEWjV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Jan 2021 17:39:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726306AbhAEWQJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jan 2021 17:16:09 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A92CC061574;
-        Tue,  5 Jan 2021 14:15:29 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id e2so483884plt.12;
-        Tue, 05 Jan 2021 14:15:29 -0800 (PST)
+        with ESMTP id S1728071AbhAEWjV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jan 2021 17:39:21 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B176C061574;
+        Tue,  5 Jan 2021 14:38:41 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id x18so530398pln.6;
+        Tue, 05 Jan 2021 14:38:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d70pmQAkUqAzxUKmnpL5+2ZZVE1TsxjThgE1k8mr87c=;
-        b=iMHGAzYZ+Vqb77VxCUxggZGRC1gLiZBccBsWtUooWAkNkOgqlAx6L+BHUAsjDFzflk
-         iqpycHHe7rZpvu83TqcW/6H/3MaIzT7+HPajoqSIZAe15p/w1AtREukrh23/muQtCc8L
-         h2kKRcnF/O/rpdfbjs5hJmLVNqnT2Dsap8FVAMJKJNtr0Iw1bS7I7iAJZ5LUhOof1sH2
-         mGG/W+B8hQYtBCD8hZyL3dJZZcIP8dHxKR8C0n+z9fJ5DPgmMlJsHeidl+Gt7Lbz18cl
-         0fs8kd+cNqcY5aNIEggiIDdbFghebEyUt7ZwPoZLTw8v6Bq4pX6+dV230k7mtVRhyLBv
-         zUaw==
+        h=subject:to:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=TeVt6DaCgiOO/foS8N7qA9R0DEsUGmPZo4sSHqr0pcE=;
+        b=rOiMPkLienvXCQEsNxbQkuyKqO8aRF7c8cYRLqWazAAmUwaIXFJjsj5VjTvsyEAC4t
+         8YMP2aRIWVgEPjR4p1s+g/mrLkLTDJVzhjp3f6zV0Ro548wf+cpKzRpnp/gXtszlOJHh
+         mrHLi0TO7rAf8GEGyQgzPDbUBgpsY+3cp8LrskEEyzqYRRYqBBIzWFhxXwNn3V1k+QxF
+         Rx8Ur9R+qzoJ9kYXCeHh92nlsil5/Ml0Yr6K+Di+ky2w2a3n7C2muk2n5RhLIifPZEws
+         2CiDhQXdvWYVFklIzs3Y1ve8fhhP3Kfegh2an9jpppVd+SYUHWS4KviC7uRSdJJF6PLb
+         HCXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d70pmQAkUqAzxUKmnpL5+2ZZVE1TsxjThgE1k8mr87c=;
-        b=mZsBY5ejH4exHtVRkFmpSECZ1BtCeN01jGsm4tORUwff1UaZRd7p602r1qkAtSHkSR
-         1slhps/EY3iO6UWDSuf1F+jENqsxfR6Uz4fxwWliVI0rjMOqcB+zOP9zobG9fPfA1v+h
-         Z3FsA4ktI/AmFeCLf9n2cRE3GzNPPd5YrSx4ZuqD3yPFKTjNb9gdlC1NlIYvhH2qUWBp
-         XfVR6+9E/o77IgqbsBaneUHM9ItaoJrW0cJ5Lpbj0pawyN4AI2wb11kWTF0SyAUKX+Kz
-         FOeGCCufy/hPzpSY/rBFf0l87ISFsAD/MvzYROS3FdNncY1N/beYNmt76rYO0ilUpM5Y
-         5acw==
-X-Gm-Message-State: AOAM530+NAws1vQkV3yl31pRzDLegsYRw4zVSvdIF0zC63ATNZCkgt2b
-        dlXbC5eJm5Kxnc5HX0kQzQFjY8/KlMc=
-X-Google-Smtp-Source: ABdhPJwyPM3seuJgiWFAK/MsmAEjesPfrJq74j3KCK98Jo5lfjQfUz7pU6P1a1YWH77NmuJkOuTbzg==
-X-Received: by 2002:a17:902:e9d2:b029:db:d4f6:b581 with SMTP id 18-20020a170902e9d2b02900dbd4f6b581mr1482725plk.34.1609884928858;
-        Tue, 05 Jan 2021 14:15:28 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id z23sm348040pfj.143.2021.01.05.14.15.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 14:15:28 -0800 (PST)
-Date:   Tue, 5 Jan 2021 14:15:25 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Lauri Kasanen <cand@gmx.com>
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH 4/6] input: Add N64 controller driver
-Message-ID: <X/Tk/ZrqyPlGriiZ@google.com>
-References: <20210104154811.ced3a894cddc4d309827307c@gmx.com>
+        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TeVt6DaCgiOO/foS8N7qA9R0DEsUGmPZo4sSHqr0pcE=;
+        b=rANRDxMxPSbGCE2lghBy/jzz/faj7o3HqsSb0md3Q8Dyt+h6Xauy9cydCW4wgmm69n
+         JhzjPzJYVMm7tUFZTQ79oPh+a1mmH5Q/to6LAQIo0dnkOb4pXRa62gk9TBhQShO2UWU8
+         BYR5Ofc5mlN8Lxp208LDHW4WfyQHKsfTI4G6cqqslQVB1dKMGZD+hAQ86R1mTAjQrLSX
+         XcfUSXX/9uQv80RQjZPXEzKPTPYo+PWUIDqjU6zDX+mwRcM37b03FW3FaDV4fReem3yz
+         t+i57WiRpCmYA8TCOAhoAePTmwLTHk2ueB5XvdLTxPQkh+tS3PnLBlimsEwmrwEmyT/5
+         2wjg==
+X-Gm-Message-State: AOAM530Zxljickh7+vHNzIhSuGX33Kby1WIU1Cbzm2kyObVo6hkEsFlb
+        w1IeSHhKrBLVM1yKglA1MpM=
+X-Google-Smtp-Source: ABdhPJxl+8xkZnPMBqtPGHKY1Er6bVXX+hawIKQYN068sWDik0nYytUMcFNuroCASXiw7fp1xJyk4A==
+X-Received: by 2002:a17:902:7895:b029:dc:4bf0:2b74 with SMTP id q21-20020a1709027895b02900dc4bf02b74mr1353171pll.32.1609886320653;
+        Tue, 05 Jan 2021 14:38:40 -0800 (PST)
+Received: from [10.67.48.230] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h24sm376219pfq.13.2021.01.05.14.38.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jan 2021 14:38:39 -0800 (PST)
+Subject: Re: [PATCH] MIPS: Remove empty prom_free_prom_memory functions
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Paul Burton <paulburton@kernel.org>,
+        John Crispin <john@phrozen.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        James Hartley <james.hartley@sondrel.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20210105213633.76912-1-tsbogend@alpha.franken.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ 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
+ M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
+Message-ID: <346cd680-bb8a-dca6-dd84-98d503ae44be@gmail.com>
+Date:   Tue, 5 Jan 2021 14:38:29 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210104154811.ced3a894cddc4d309827307c@gmx.com>
+In-Reply-To: <20210105213633.76912-1-tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Lauri,
-
-On Mon, Jan 04, 2021 at 03:48:11PM +0200, Lauri Kasanen wrote:
-> Signed-off-by: Lauri Kasanen <cand@gmx.com>
+On 1/5/21 1:36 PM, Thomas Bogendoerfer wrote:
+> Most of the prom_free_prom_memory functions are empty. With
+> a new weak prom_free_prom_memory() we can remove all of them.
+> 
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > ---
->  drivers/input/joystick/Kconfig  |   6 +
->  drivers/input/joystick/Makefile |   2 +-
->  drivers/input/joystick/n64joy.c | 300 ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 307 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/input/joystick/n64joy.c
-> 
-> input folks: rest of the series is on linux-mips. Being mips-specific,
-> not sure which tree this should go to.
-> 
-> diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconfig
-> index b080f0c..e1a8128 100644
-> --- a/drivers/input/joystick/Kconfig
-> +++ b/drivers/input/joystick/Kconfig
-> @@ -382,4 +382,10 @@ config JOYSTICK_FSIA6B
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called fsia6b.
-> 
-> +config JOYSTICK_N64
-> +	bool "N64 controller"
-> +	depends on MACH_NINTENDO64
-> +	help
-> +	  Support for the four N64 controllers.
-> +
-
-"To compile this driver as a module..."
-
->  endif
-> diff --git a/drivers/input/joystick/Makefile b/drivers/input/joystick/Makefile
-> index 58232b3..31d720c 100644
-> --- a/drivers/input/joystick/Makefile
-> +++ b/drivers/input/joystick/Makefile
-> @@ -24,6 +24,7 @@ obj-$(CONFIG_JOYSTICK_INTERACT)		+= interact.o
->  obj-$(CONFIG_JOYSTICK_JOYDUMP)		+= joydump.o
->  obj-$(CONFIG_JOYSTICK_MAGELLAN)		+= magellan.o
->  obj-$(CONFIG_JOYSTICK_MAPLE)		+= maplecontrol.o
-> +obj-$(CONFIG_JOYSTICK_N64)		+= n64joy.o
->  obj-$(CONFIG_JOYSTICK_PSXPAD_SPI)	+= psxpad-spi.o
->  obj-$(CONFIG_JOYSTICK_PXRC)		+= pxrc.o
->  obj-$(CONFIG_JOYSTICK_SIDEWINDER)	+= sidewinder.o
-> @@ -37,4 +38,3 @@ obj-$(CONFIG_JOYSTICK_WARRIOR)		+= warrior.o
->  obj-$(CONFIG_JOYSTICK_WALKERA0701)	+= walkera0701.o
->  obj-$(CONFIG_JOYSTICK_XPAD)		+= xpad.o
->  obj-$(CONFIG_JOYSTICK_ZHENHUA)		+= zhenhua.o
-> -
-> diff --git a/drivers/input/joystick/n64joy.c b/drivers/input/joystick/n64joy.c
-> new file mode 100644
-> index 0000000..477a4f7
-> --- /dev/null
-> +++ b/drivers/input/joystick/n64joy.c
-> @@ -0,0 +1,300 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Support for the four N64 controllers.
-> + *
-> + * Copyright (c) 2020 Lauri Kasanen
-> + */
-> +
-> +#include <linux/errno.h>
-> +#include <linux/init.h>
-> +#include <linux/input.h>
-> +#include <linux/limits.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/timer.h>
-> +
-> +#include <asm/addrspace.h>
-> +#include <asm/io.h>
-> +
-> +MODULE_AUTHOR("Lauri Kasanen <cand@gmx.com>");
-> +MODULE_DESCRIPTION("Driver for N64 controllers");
-> +MODULE_LICENSE("GPL");
-> +
-> +#define PIF_RAM 0x1fc007c0
-> +#define REG_BASE ((u32 *) TO_UNCAC(0x4800000))
-> +
-> +#define SI_DRAM_REG 0
-> +#define SI_READ_REG 1
-> +#define SI_WRITE_REG 4
-> +#define SI_STATUS_REG 6
-> +
-> +#define SI_STATUS_DMA_BUSY  (1 << 0)
-
-BIT(0)
-
-> +#define SI_STATUS_IO_BUSY   (1 << 1)
-
-BIT(1)
-
-> +
-> +#define N64_CONTROLLER_ID 0x0500
-> +
-> +static struct input_dev *n64joy_dev[4];
-
-Use a #define for 4 please.
-
-> +static const char *n64joy_phys[4] = {
-> +	"n64joy/port0",
-> +	"n64joy/port1",
-> +	"n64joy/port2",
-> +	"n64joy/port3",
-> +};
-> +
-> +static u8 n64joy_opened;
-> +static DEFINE_MUTEX(n64joy_mutex);
-> +static struct timer_list timer;
-> +
-> +static u64 si_buf[8] ____cacheline_aligned;
-
-Even though this is a singleton device, I would prefer if we defined a
-device structure and put these data items there, instead of having
-module-globals.
-
-> +
-> +struct joydata {
-> +	unsigned: 16; // unused
-> +	unsigned err: 2;
-> +	unsigned: 14; // unused
-> +
-> +	union {
-> +		u32 data;
-> +
-> +		struct {
-> +			unsigned a: 1;
-> +			unsigned b: 1;
-> +			unsigned z: 1;
-> +			unsigned start: 1;
-> +			unsigned up: 1;
-> +			unsigned down: 1;
-> +			unsigned left: 1;
-> +			unsigned right: 1;
-> +			unsigned: 2; // unused
-> +			unsigned l: 1;
-> +			unsigned r: 1;
-> +			unsigned c_up: 1;
-> +			unsigned c_down: 1;
-> +			unsigned c_left: 1;
-> +			unsigned c_right: 1;
-> +			signed x: 8;
-> +			signed y: 8;
-> +		};
-> +	};
-> +};
-> +
-> +static void n64joy_write_reg(const u8 reg, const u32 value)
-> +{
-> +	__raw_writel(value, REG_BASE + reg);
-> +}
-> +
-> +static u32 n64joy_read_reg(const u8 reg)
-> +{
-> +	return __raw_readl(REG_BASE + reg);
-> +}
-> +
-> +static void n64joy_wait_si_dma(void)
-> +{
-> +	while (n64joy_read_reg(SI_STATUS_REG) & (SI_STATUS_DMA_BUSY | SI_STATUS_IO_BUSY))
-> +		;
-
-This will give a warning if compiled with -Wempty-body (W=1). Can you
-either add braces, or maybe we should have somethng like cpu_relax()
-here?
-
-> +}
-> +
-> +static void n64joy_exec_pif(const u64 in[8])
-> +{
-> +	unsigned long flags;
-> +
-> +	dma_cache_wback_inv((unsigned long) in, 8 * 8);
-> +	dma_cache_inv((unsigned long) si_buf, 8 * 8);
-> +
-> +	local_irq_save(flags);
-> +
-> +	n64joy_wait_si_dma();
-> +
-> +	barrier();
-> +	n64joy_write_reg(SI_DRAM_REG, virt_to_phys(in));
-> +	barrier();
-> +	n64joy_write_reg(SI_WRITE_REG, PIF_RAM);
-> +	barrier();
-> +
-> +	n64joy_wait_si_dma();
-> +
-> +	barrier();
-> +	n64joy_write_reg(SI_DRAM_REG, virt_to_phys(si_buf));
-> +	barrier();
-> +	n64joy_write_reg(SI_READ_REG, PIF_RAM);
-> +	barrier();
-> +
-> +	n64joy_wait_si_dma();
-> +
-> +	local_irq_restore(flags);
-> +}
-> +
-> +static const u64 polldata[] ____cacheline_aligned = {
-> +	0xff010401ffffffff,
-> +	0xff010401ffffffff,
-> +	0xff010401ffffffff,
-> +	0xff010401ffffffff,
-> +	0xfe00000000000000,
-> +	0,
-> +	0,
-> +	1
-> +};
-> +
-> +static void n64joy_poll(struct timer_list *t)
-> +{
-> +	const struct joydata *data;
-> +	u32 i;
-> +
-> +	n64joy_exec_pif(polldata);
-> +
-> +	data = (struct joydata *) si_buf;
-> +
-> +	for (i = 0; i < 4; i++) {
-> +		if (!n64joy_dev[i])
-> +			continue;
-> +
-> +		// d-pad
-> +		input_report_key(n64joy_dev[i], BTN_DPAD_UP, data[i].up);
-> +		input_report_key(n64joy_dev[i], BTN_DPAD_DOWN, data[i].down);
-> +		input_report_key(n64joy_dev[i], BTN_DPAD_LEFT, data[i].left);
-> +		input_report_key(n64joy_dev[i], BTN_DPAD_RIGHT, data[i].right);
-> +
-> +		// c buttons
-> +		input_report_key(n64joy_dev[i], BTN_FORWARD, data[i].c_up);
-> +		input_report_key(n64joy_dev[i], BTN_BACK, data[i].c_down);
-> +		input_report_key(n64joy_dev[i], BTN_LEFT, data[i].c_left);
-> +		input_report_key(n64joy_dev[i], BTN_RIGHT, data[i].c_right);
-> +
-> +		// matching buttons
-> +		input_report_key(n64joy_dev[i], BTN_START, data[i].start);
-> +		input_report_key(n64joy_dev[i], BTN_Z, data[i].z);
-> +
-> +		// remaining ones: a, b, l, r
-> +		input_report_key(n64joy_dev[i], BTN_0, data[i].a);
-> +		input_report_key(n64joy_dev[i], BTN_1, data[i].b);
-> +		input_report_key(n64joy_dev[i], BTN_2, data[i].l);
-> +		input_report_key(n64joy_dev[i], BTN_3, data[i].r);
-> +
-> +		input_report_abs(n64joy_dev[i], ABS_X, data[i].x);
-> +		input_report_abs(n64joy_dev[i], ABS_Y, data[i].y);
-> +
-> +		input_sync(n64joy_dev[i]);
-> +	}
-> +
-> +	mod_timer(&timer, jiffies + msecs_to_jiffies(16));
-> +}
-> +
-> +static int n64joy_open(struct input_dev *dev)
-> +{
-> +	int err;
-> +
-> +	err = mutex_lock_interruptible(&n64joy_mutex);
-> +	if (err)
-> +		return err;
-> +
-> +	if (!n64joy_opened) {
-> +		// Could use the vblank irq, but it's not important if the poll
-> +		// point slightly changes.
-> +		timer_setup(&timer, n64joy_poll, 0);
-> +		mod_timer(&timer, jiffies + msecs_to_jiffies(16));
-> +	}
-> +
-> +	n64joy_opened++;
-> +
-> +	mutex_unlock(&n64joy_mutex);
-> +	return err;
-> +}
-> +
-> +static void n64joy_close(struct input_dev *dev)
-> +{
-> +	mutex_lock(&n64joy_mutex);
-> +	if (!--n64joy_opened)
-> +		del_timer_sync(&timer);
-> +	mutex_unlock(&n64joy_mutex);
-> +}
-> +
-> +static const u64 __initconst scandata[] ____cacheline_aligned = {
-> +	0xff010300ffffffff,
-> +	0xff010300ffffffff,
-> +	0xff010300ffffffff,
-> +	0xff010300ffffffff,
-> +	0xfe00000000000000,
-> +	0,
-> +	0,
-> +	1
-> +};
-> +
-> +static int __init n64joy_init(void)
-> +{
-> +	const struct joydata *data;
-> +	int err = 0;
-> +	u32 i, j, found = 0;
-> +
-> +	// The controllers are not hotpluggable, so we can scan in init
-> +	n64joy_exec_pif(scandata);
-> +
-> +	data = (struct joydata *) si_buf;
-> +
-> +	memset(n64joy_dev, 0, 4 * sizeof(void *));
-> +
-> +	for (i = 0; i < 4; i++) {
-> +		if (!data[i].err && data[i].data >> 16 == N64_CONTROLLER_ID) {
-> +			found++;
-> +
-> +			n64joy_dev[i] = input_allocate_device();
-> +			if (!n64joy_dev[i]) {
-> +				err = -ENOMEM;
-> +				goto fail;
-> +			}
-> +
-> +			n64joy_dev[i]->name = "N64 controller";
-> +			n64joy_dev[i]->phys = n64joy_phys[i];
-> +			n64joy_dev[i]->id.bustype = BUS_HOST;
-> +			n64joy_dev[i]->id.vendor = 0;
-> +			n64joy_dev[i]->id.product = data[i].data >> 16;
-> +			n64joy_dev[i]->id.version = 0;
-> +
-> +			n64joy_dev[i]->open = n64joy_open;
-> +			n64joy_dev[i]->close = n64joy_close;
-> +
-> +			n64joy_dev[i]->evbit[0] = BIT_MASK(EV_KEY) | BIT_MASK(EV_ABS);
-
-If you switch keys set up to input_set_capability() you would not need
-this.
-
-> +			n64joy_dev[i]->absbit[0] = BIT_MASK(ABS_X) | BIT_MASK(ABS_Y);
-
-This is not needed as you are using input_set_abs_params().
-
-> +
-> +			// d-pad
-> +			n64joy_dev[i]->keybit[BIT_WORD(BTN_DPAD_UP)] = BIT_MASK(BTN_DPAD_UP) |
-> +				BIT_MASK(BTN_DPAD_DOWN) | BIT_MASK(BTN_DPAD_LEFT) |
-> +				BIT_MASK(BTN_DPAD_RIGHT);
-> +			// c buttons
-> +			n64joy_dev[i]->keybit[BIT_WORD(BTN_LEFT)] |= BIT_MASK(BTN_LEFT) |
-> +				BIT_MASK(BTN_RIGHT) | BIT_MASK(BTN_FORWARD) | BIT_MASK(BTN_BACK);
-> +			// matching buttons
-> +			n64joy_dev[i]->keybit[BIT_WORD(BTN_GAMEPAD)] |= BIT_MASK(BTN_START) |
-> +				BIT_MASK(BTN_Z);
-> +			// remaining ones: a, b, l, r
-> +			n64joy_dev[i]->keybit[BIT_WORD(BTN_0)] |= BIT_MASK(BTN_0) |
-> +				BIT_MASK(BTN_1) | BIT_MASK(BTN_2) | BIT_MASK(BTN_3);
-> +
-> +			for (j = 0; j < 2; j++) {
-> +				input_set_abs_params(n64joy_dev[i], ABS_X + j,
-> +						     S8_MIN, S8_MAX, 0, 0);
-> +			}
-> +
-> +			err = input_register_device(n64joy_dev[i]);
-> +			if (err) {
-> +				input_free_device(n64joy_dev[i]);
-> +				goto fail;
-> +			}
-> +		}
-> +	}
-> +
-> +	pr_info("n64joy: %u controller(s) connected\n", found);
-
-Please define
-
-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-
-and you will not need to specify prefixes on individual messages.
-
-> +
-> +	if (!found)
-> +		return -ENODEV;
-> +
-> +	return 0;
-> +fail:
-> +	for (i = 0; i < 4; i++) {
-> +		if (!n64joy_dev[i])
-> +			continue;
-> +		input_unregister_device(n64joy_dev[i]);
-> +	}
-> +	return err;
-> +}
-> +
-> +module_init(n64joy_init);
-
-No option to unload the driver?
-
-Thanks.
-
+>  arch/mips/ar7/memory.c              | 5 -----
+>  arch/mips/bcm47xx/prom.c            | 4 ----
+>  arch/mips/bcm63xx/prom.c            | 4 ----
+>  arch/mips/bmips/setup.c             | 4 ----
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Dmitry
+Florian
