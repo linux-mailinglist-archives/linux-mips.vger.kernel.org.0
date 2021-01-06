@@ -2,49 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BFA2EC604
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 23:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535102EC608
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 23:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727610AbhAFWHu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jan 2021 17:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        id S1727670AbhAFWII (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jan 2021 17:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726877AbhAFWHu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jan 2021 17:07:50 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED561C061575
-        for <linux-mips@vger.kernel.org>; Wed,  6 Jan 2021 14:07:09 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id v1so185462pjr.2
-        for <linux-mips@vger.kernel.org>; Wed, 06 Jan 2021 14:07:09 -0800 (PST)
+        with ESMTP id S1727666AbhAFWIH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jan 2021 17:08:07 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DF5C06179B
+        for <linux-mips@vger.kernel.org>; Wed,  6 Jan 2021 14:07:27 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id j1so2262438pld.3
+        for <linux-mips@vger.kernel.org>; Wed, 06 Jan 2021 14:07:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=97bTCu9/bzmLzrhctga1J2iFmuyfoogQ7hmoxWlzhpk=;
-        b=MHvyLbjHzGYY/d2eSM18499bLDNbuoRUCVJKrih26oS3pMLrwHUwEX0vtpb7g+pbVB
-         zxVYPJi9a/XBs5bgqwr3lP2REnJrpTgQHhRWa6vs8S2i61bGw2bEdgjTJoujUMNT99YQ
-         8KFORDJPn2cFDq9ijNxgxYiL7hwg6YgjTmkLM=
+        bh=7exsSt5huO4DQVvEq7ttYl8C8U4/ph0YHja3ukzLUgQ=;
+        b=ehc+yWdNNWPAfWc/rBlILax1T7u2pUmbWhPgqXjN/axOborgrC6sIPi3tiAD0gALZn
+         6/UM8Ovzaxpanr1CrWS9hlxGLFkO0kYshKTuWL5a2pJu6/MS5SAexihDxyvWHBflj/Ee
+         myiUt6B0QUqSVG/8zfHo3aJFPj/vwqNc3qKkE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=97bTCu9/bzmLzrhctga1J2iFmuyfoogQ7hmoxWlzhpk=;
-        b=gy4Ojo25irQahdqUQdcidv/p2zP8+nUuQkAtr0C/LvpvWyScJgEMP4YBB7/t7Zf+bv
-         q+QP/SSGpA96nWOHKvXhpxpQ8NAmh6sXVhBPoWusM145+//qWWQe0k433zluBe0Ao6nR
-         VghLD5LhFbaWr0iweLqSFbL9+mjvtX+rsJBuhDxCG/cDVNJgaHakbtObOT3vSBHZliaw
-         u8C4g3AAL+He67e/BLtJDB+s85lcKaRFHPflY3S+CLzDeFKZdMzbBTvvYQUwpwkFSfrJ
-         wBrVdL65tYYHHeW8aP7iGeiOPMxYRs2pYMIKQlxLvFikdCbhxzrZ3uCmQQGt+UbD5Z2e
-         +n0Q==
-X-Gm-Message-State: AOAM5312JyMOlDnbTg9nZb1G3WJTzmAtq4czwpuT5eWWUfCC61IqkcMm
-        JlgvcQBQR/rE0EDoS4ABmZFfrw==
-X-Google-Smtp-Source: ABdhPJxKM0L8EziSFUGgh8qzAMXGV2beB7hn7pXRl3sdjvtm+H0Mr16vdfmpvdb+5BX3AFsp79wzdg==
-X-Received: by 2002:a17:90a:6fc7:: with SMTP id e65mr6190115pjk.116.1609970829428;
-        Wed, 06 Jan 2021 14:07:09 -0800 (PST)
+        bh=7exsSt5huO4DQVvEq7ttYl8C8U4/ph0YHja3ukzLUgQ=;
+        b=UwQVJdJqMBgVmVTq5gJj6ZHE8ABN72/M6le/9QLfl3mQiTzI6lvfLOLRTz1/gn3w8B
+         ItL3g/J1IuboicyDjklF+G2fGaWtoAI2kG4YD3+ievioTov4Ge+Jy4Kj3oTzr9U7IEC/
+         JoFqB2fTQp7CTVEPCo9CtJIuVEWxtbVQoyhEKONyfSqBjjvo8JCjXTTgtWULOqxPCFwZ
+         yBHETiHnG/mONJx2IAPmDYRyhq5krhE8ayX6iwiaqoniP1K7tnb8mkOOvN9bk4vGWRNp
+         NvMXVYHqGWDPyEVLmtTJrIPrfTf8y85yG5D76DrbVO0FR9kkOIxE0AVOJvsikdMa92CQ
+         XbNQ==
+X-Gm-Message-State: AOAM5339Sr0TWD+irUxo5U4jUfuEctRkdX4yLk7rLV1xnRHgNzNT1qEs
+        QM52ZQSOc2SMvBo+FgYr/gn1bw==
+X-Google-Smtp-Source: ABdhPJzNfWzBTMCVpT0yILuJWFRJEWWfLibePrvIbop06+FAplpdAilopaPhSjByOtMN0CsG2nWd9A==
+X-Received: by 2002:a17:90a:7485:: with SMTP id p5mr6002683pjk.132.1609970847261;
+        Wed, 06 Jan 2021 14:07:27 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o32sm3821053pgm.10.2021.01.06.14.07.08
+        by smtp.gmail.com with ESMTPSA id p16sm3102487pju.47.2021.01.06.14.07.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 14:07:08 -0800 (PST)
-Date:   Wed, 6 Jan 2021 14:07:07 -0800
+        Wed, 06 Jan 2021 14:07:26 -0800 (PST)
+Date:   Wed, 6 Jan 2021 14:07:25 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Alexander Lobakin <alobakin@pm.me>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -56,68 +56,61 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Markos Chandras <markos.chandras@imgtec.com>,
         linux-mips@vger.kernel.org, stable@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 mips-next 2/4] MIPS: vmlinux.lds.S: add
- ".gnu.attributes" to DISCARDS
-Message-ID: <202101061400.8F83981AE@keescook>
+Subject: Re: [PATCH v2 mips-next 1/4] MIPS: vmlinux.lds.S: add missing
+ PAGE_ALIGNED_DATA() section
+Message-ID: <202101061407.5E63FAB771@keescook>
 References: <20210106200713.31840-1-alobakin@pm.me>
  <20210106200801.31993-1-alobakin@pm.me>
- <20210106200801.31993-2-alobakin@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210106200801.31993-2-alobakin@pm.me>
+In-Reply-To: <20210106200801.31993-1-alobakin@pm.me>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jan 06, 2021 at 08:08:19PM +0000, Alexander Lobakin wrote:
-> Discard GNU attributes at link time as kernel doesn't use it at all.
-> Solves a dozen of the following ld warnings (one per every file):
+On Wed, Jan 06, 2021 at 08:08:14PM +0000, Alexander Lobakin wrote:
+> MIPS uses its own declaration of rwdata, and thus it should be kept
+> in sync with the asm-generic one. Currently PAGE_ALIGNED_DATA() is
+> missing from the linker script, which emits the following ld
+> warnings:
 > 
-> mips-alpine-linux-musl-ld: warning: orphan section `.gnu.attributes'
-> from `arch/mips/kernel/head.o' being placed in section
-> `.gnu.attributes'
-> mips-alpine-linux-musl-ld: warning: orphan section `.gnu.attributes'
-> from `init/main.o' being placed in section `.gnu.attributes'
+> mips-alpine-linux-musl-ld: warning: orphan section
+> `.data..page_aligned' from `arch/mips/kernel/vdso.o' being placed
+> in section `.data..page_aligned'
+> mips-alpine-linux-musl-ld: warning: orphan section
+> `.data..page_aligned' from `arch/mips/vdso/vdso-image.o' being placed
+> in section `.data..page_aligned'
 > 
-> Misc: sort DISCARDS section entries alphabetically.
-
-Hmm, I wonder what is causing the appearance of .eh_frame? With help I
-tracked down all the causes of this on x86, arm, and arm64, so that's
-why it's not in the asm-generic DISCARDS section. I suspect this could
-be cleaned up for mips too?
-
-Similarly for .gnu.attributes. What is generating that? (Or, more
-specifically, why is it both being generated AND discarded?)
-
--Kees
-
+> Add the necessary declaration, so the mentioned structures will be
+> placed in vmlinux as intended:
 > 
+> ffffffff80630580 D __end_once
+> ffffffff80630580 D __start___dyndbg
+> ffffffff80630580 D __start_once
+> ffffffff80630580 D __stop___dyndbg
+> ffffffff80634000 d mips_vdso_data
+> ffffffff80638000 d vdso_data
+> ffffffff80638580 D _gp
+> ffffffff8063c000 T __init_begin
+> ffffffff8063c000 D _edata
+> ffffffff8063c000 T _sinittext
+> 
+> ->
+> 
+> ffffffff805a4000 D __end_init_task
+> ffffffff805a4000 D __nosave_begin
+> ffffffff805a4000 D __nosave_end
+> ffffffff805a4000 d mips_vdso_data
+> ffffffff805a8000 d vdso_data
+> ffffffff805ac000 D mmlist_lock
+> ffffffff805ac080 D tasklist_lock
+> 
+> Fixes: ebb5e78cc634 ("MIPS: Initial implementation of a VDSO")
+> Cc: stable@vger.kernel.org # 4.4+
 > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> ---
->  arch/mips/kernel/vmlinux.lds.S | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.lds.S
-> index 83e27a181206..5d6563970ab2 100644
-> --- a/arch/mips/kernel/vmlinux.lds.S
-> +++ b/arch/mips/kernel/vmlinux.lds.S
-> @@ -221,9 +221,10 @@ SECTIONS
->  		/* ABI crap starts here */
->  		*(.MIPS.abiflags)
->  		*(.MIPS.options)
-> +		*(.eh_frame)
-> +		*(.gnu.attributes)
->  		*(.options)
->  		*(.pdr)
->  		*(.reginfo)
-> -		*(.eh_frame)
->  	}
->  }
-> -- 
-> 2.30.0
-> 
-> 
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
