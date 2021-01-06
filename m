@@ -2,95 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B440E2EBFF9
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 16:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E2C2EC211
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 18:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726786AbhAFO7W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jan 2021 09:59:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35098 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726326AbhAFO7W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 6 Jan 2021 09:59:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5D8723110;
-        Wed,  6 Jan 2021 14:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609945121;
-        bh=fs4tnAAHZc6P9CcCZmtXnqhshJdz+3INo0fDCULFaD8=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=grRap1qACe13qOi+OZcRSFbPBF+dIr/ws3L/0hIw9hJfGzIKvP7l6ogZ4IDw43yGy
-         2LHdh5/KkLIX5OZy0HUphNkwfKucd730v8Tp6LLuzacbNiujVv7S8AcFgKaat4EO7E
-         y+/PvinZw7ISykZaboaWt60Ak3aP6L6FH/2ur96+2LlVa2dRoeg/GHIVTXjbL9m+/N
-         lmUrNwQGiW3vl9pfoybJQC9JwzVTaaO03pya7nRF3kZVYLga8QDzM2brjULMEAV5En
-         tz4bM66daxGgVwHYO/b7ctz5giI8LEijCXhmI8MPhXeH67zs/Q6iAskX79k3QrpAy9
-         gww2PkLy1Faag==
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, Guenter Roeck <linux@roeck-us.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-rtc@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-spi@vger.kernel.org, linux-ide@vger.kernel.org,
-        Jaroslav Kysela <perex@perex.cz>, linux-crypto@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>, dmaengine@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Matt Mackall <mpm@selenic.com>, alsa-devel@alsa-project.org,
-        linux-mips@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>
-In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+        id S1726454AbhAFRYz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jan 2021 12:24:55 -0500
+Received: from mrdf004.ocn.ad.jp ([125.206.160.152]:38233 "EHLO
+        mrdf004.ocn.ad.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbhAFRYy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jan 2021 12:24:54 -0500
+X-Greylist: delayed 4742 seconds by postgrey-1.27 at vger.kernel.org; Wed, 06 Jan 2021 12:24:52 EST
+Received: from mogw6101.ocn.ad.jp (mogw6101.ocn.ad.jp [210.163.236.2])
+        by mrdf004.ocn.ad.jp (Postfix) with ESMTP id 639463801B0;
+        Thu,  7 Jan 2021 01:04:34 +0900 (JST)
+Received: from mf-smf-unw009c1.ocn.ad.jp (mf-smf-unw009c1.ocn.ad.jp [153.138.219.105])
+        by mogw6101.ocn.ad.jp (Postfix) with ESMTP id 8CCA81E002A;
+        Thu,  7 Jan 2021 01:03:15 +0900 (JST)
+Received: from ocn-vc-mts-202c1.ocn.ad.jp ([153.138.219.215])
+        by mf-smf-unw009c1.ocn.ad.jp with ESMTP
+        id xBBQkW5DGUrLKxBHHke1vh; Thu, 07 Jan 2021 01:03:15 +0900
+Received: from smtp.ocn.ne.jp ([153.149.227.167])
+        by ocn-vc-mts-202c1.ocn.ad.jp with ESMTP
+        id xBHGk2ikJIfvlxBHGkV6m2; Thu, 07 Jan 2021 01:03:15 +0900
+Received: from localhost (p1601136-ipoe.ipoe.ocn.ne.jp [114.172.254.135])
+        by smtp.ocn.ne.jp (Postfix) with ESMTPA;
+        Thu,  7 Jan 2021 01:03:14 +0900 (JST)
+Date:   Thu, 07 Jan 2021 01:03:14 +0900 (JST)
+Message-Id: <20210107.010314.1817045693815939591.anemo@mba.ocn.ne.jp>
+To:     geert@linux-m68k.org
+Cc:     tsbogend@alpha.franken.de, mpm@selenic.com,
+        herbert@gondor.apana.org.au, dan.j.williams@intel.com,
+        vkoul@kernel.org, davem@davemloft.net, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, kuba@kernel.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 00/10] Remove support for TX49xx
+From:   Atsushi Nemoto <anemo@mba.ocn.ne.jp>
+In-Reply-To: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
 References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-Subject: Re: (subset) [PATCH 00/10] Remove support for TX49xx
-Message-Id: <160994509314.52132.9683741232298303961.b4-ty@kernel.org>
-Date:   Wed, 06 Jan 2021 14:58:13 +0000
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
+X-Mailer: Mew version 6.7 on Emacs 24.5 / Mule 6.0 (HANACHIRUSATO)
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 5 Jan 2021 15:02:45 +0100, Thomas Bogendoerfer wrote:
-> I couldn't find any buyable product other than reference boards using
-> TX49xx CPUs. And since nobody showed interest in keeping support for
-> it, it's time to remove it.
+Hi Geert!
+
+On Wed, 6 Jan 2021 09:37:11 +0100, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> Hi Thomas,
 > 
-> I've split up the removal into seperate parts for different maintainers.
-> So if the patch fits your needs, please take it via your tree or
-> give me an ack so I can apply them  the mips-next tree.
+> CC Nemoto-san (de-facto TX49XX maintainer)
 > 
-> [...]
+> On Tue, Jan 5, 2021 at 3:03 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+>> I couldn't find any buyable product other than reference boards using
+>> TX49xx CPUs. And since nobody showed interest in keeping support for
+>> it, it's time to remove it.
+> 
+> I have an RBTX4927 development board in my board farm, boot-test every
+> bi-weekly renesas-drivers release on it, and fix kernel issues when they
+> appear.
+> 
+> Is that sufficient to keep it?
 
-Applied to
+It have been about 10 years since last time I see any TX49 board :-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+AFAIK Geert is the last user of TX49 SoC.
+I'm OK with whole TX49xx (and TX39xx) removal if Geert (or any other
+users) agreed.
 
-Thanks!
-
-[10/10] ASoC: txx9: Remove driver
-        commit: a8644292ea46064f990e4a3c4585bdb294c0d89a
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+---
+Atsushi Nemoto
