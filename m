@@ -2,142 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0272EC54D
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 21:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BFA2EC604
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 23:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727252AbhAFUmR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jan 2021 15:42:17 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:39292 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726807AbhAFUmR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jan 2021 15:42:17 -0500
-Received: by mail-ot1-f47.google.com with SMTP id d8so4281674otq.6;
-        Wed, 06 Jan 2021 12:42:00 -0800 (PST)
+        id S1727610AbhAFWHu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jan 2021 17:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726877AbhAFWHu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jan 2021 17:07:50 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED561C061575
+        for <linux-mips@vger.kernel.org>; Wed,  6 Jan 2021 14:07:09 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v1so185462pjr.2
+        for <linux-mips@vger.kernel.org>; Wed, 06 Jan 2021 14:07:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=97bTCu9/bzmLzrhctga1J2iFmuyfoogQ7hmoxWlzhpk=;
+        b=MHvyLbjHzGYY/d2eSM18499bLDNbuoRUCVJKrih26oS3pMLrwHUwEX0vtpb7g+pbVB
+         zxVYPJi9a/XBs5bgqwr3lP2REnJrpTgQHhRWa6vs8S2i61bGw2bEdgjTJoujUMNT99YQ
+         8KFORDJPn2cFDq9ijNxgxYiL7hwg6YgjTmkLM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+nn1mS9duynrGzRRIiFhGe9v+GbfGVRWJu+NZK2hPWU=;
-        b=UDuCsxFJodQ7UtSUWcHcnQKi4acOn3zHTLZODVkQGgcICl8piK2c+ydqsyeyPV4AaM
-         mxCXQxvApj4NHYjswZkKusri1CS+/6E+Ee3Lh7L4gw2lBVVxbRujJWVRSUb//RlKtJig
-         Dh6N7d+x3vclv5zXDmtzv64XLPv7807aoIRs5OjdxJmMjy4bFjklAvBaiXh1DDyj7KoG
-         ibNKXV0CilBaHhan0UQrraOWIQBoxejggaLBlONa8Qp26xD6I69G4UYZkASsCJAG/ZA5
-         p7T769/o0BqRLQi/+SMlQ7q8NZCRkhHcAYANTI/pKdGJ2GDZgARWuftLq2QQ7xS/4hAh
-         y1Mw==
-X-Gm-Message-State: AOAM531MvxeRBdRjaSvpWTDMq2b3idI2cZs6V5V8CIb8K1pipGZtfKZI
-        cxEe/FQlojeigUdOWKj5lulfExQf8dh/JF3rWzs=
-X-Google-Smtp-Source: ABdhPJzU2VNqomItTpW9N5EsZUcSxwbWydRvzmZvuW0h6PN+1EDrO5WVGcImI85plCOq8i6uJPLffPJf+e8BxB/lkhA=
-X-Received: by 2002:a05:6830:1f5a:: with SMTP id u26mr4549619oth.250.1609965695506;
- Wed, 06 Jan 2021 12:41:35 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=97bTCu9/bzmLzrhctga1J2iFmuyfoogQ7hmoxWlzhpk=;
+        b=gy4Ojo25irQahdqUQdcidv/p2zP8+nUuQkAtr0C/LvpvWyScJgEMP4YBB7/t7Zf+bv
+         q+QP/SSGpA96nWOHKvXhpxpQ8NAmh6sXVhBPoWusM145+//qWWQe0k433zluBe0Ao6nR
+         VghLD5LhFbaWr0iweLqSFbL9+mjvtX+rsJBuhDxCG/cDVNJgaHakbtObOT3vSBHZliaw
+         u8C4g3AAL+He67e/BLtJDB+s85lcKaRFHPflY3S+CLzDeFKZdMzbBTvvYQUwpwkFSfrJ
+         wBrVdL65tYYHHeW8aP7iGeiOPMxYRs2pYMIKQlxLvFikdCbhxzrZ3uCmQQGt+UbD5Z2e
+         +n0Q==
+X-Gm-Message-State: AOAM5312JyMOlDnbTg9nZb1G3WJTzmAtq4czwpuT5eWWUfCC61IqkcMm
+        JlgvcQBQR/rE0EDoS4ABmZFfrw==
+X-Google-Smtp-Source: ABdhPJxKM0L8EziSFUGgh8qzAMXGV2beB7hn7pXRl3sdjvtm+H0Mr16vdfmpvdb+5BX3AFsp79wzdg==
+X-Received: by 2002:a17:90a:6fc7:: with SMTP id e65mr6190115pjk.116.1609970829428;
+        Wed, 06 Jan 2021 14:07:09 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o32sm3821053pgm.10.2021.01.06.14.07.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jan 2021 14:07:08 -0800 (PST)
+Date:   Wed, 6 Jan 2021 14:07:07 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Fangrui Song <maskray@google.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alex Smith <alex.smith@imgtec.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Markos Chandras <markos.chandras@imgtec.com>,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 mips-next 2/4] MIPS: vmlinux.lds.S: add
+ ".gnu.attributes" to DISCARDS
+Message-ID: <202101061400.8F83981AE@keescook>
+References: <20210106200713.31840-1-alobakin@pm.me>
+ <20210106200801.31993-1-alobakin@pm.me>
+ <20210106200801.31993-2-alobakin@pm.me>
 MIME-Version: 1.0
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
- <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com> <20210106184839.GA7773@alpha.franken.de>
-In-Reply-To: <20210106184839.GA7773@alpha.franken.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jan 2021 21:41:24 +0100
-Message-ID: <CAMuHMdV86BES7dmWr-7j1jbtoSy0bH1J0e5W41p8evagi0Nqcw@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Remove support for TX49xx
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>, linux-ide@vger.kernel.org,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210106200801.31993-2-alobakin@pm.me>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+On Wed, Jan 06, 2021 at 08:08:19PM +0000, Alexander Lobakin wrote:
+> Discard GNU attributes at link time as kernel doesn't use it at all.
+> Solves a dozen of the following ld warnings (one per every file):
+> 
+> mips-alpine-linux-musl-ld: warning: orphan section `.gnu.attributes'
+> from `arch/mips/kernel/head.o' being placed in section
+> `.gnu.attributes'
+> mips-alpine-linux-musl-ld: warning: orphan section `.gnu.attributes'
+> from `init/main.o' being placed in section `.gnu.attributes'
+> 
+> Misc: sort DISCARDS section entries alphabetically.
 
-On Wed, Jan 6, 2021 at 7:49 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
-> On Wed, Jan 06, 2021 at 09:37:11AM +0100, Geert Uytterhoeven wrote:
-> > On Tue, Jan 5, 2021 at 3:03 PM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > > I couldn't find any buyable product other than reference boards using
-> > > TX49xx CPUs. And since nobody showed interest in keeping support for
-> > > it, it's time to remove it.
-> >
-> > I have an RBTX4927 development board in my board farm, boot-test every
-> > bi-weekly renesas-drivers release on it, and fix kernel issues when they
-> > appear.
-> >
-> > Is that sufficient to keep it?
->
-> for me it is. But now we probaly need some reverts then...
+Hmm, I wonder what is causing the appearance of .eh_frame? With help I
+tracked down all the causes of this on x86, arm, and arm64, so that's
+why it's not in the asm-generic DISCARDS section. I suspect this could
+be cleaned up for mips too?
 
-Indeed. Fortunately not all of it, as some removals were TX4938-only.
+Similarly for .gnu.attributes. What is generating that? (Or, more
+specifically, why is it both being generated AND discarded?)
 
-> I wonder whether you have seen my mail about the removal
->
-> https://lore.kernel.org/linux-mips/20201207105627.GA15866@alpha.franken.de
->
-> and my call for people owning MIPS machines
->
-> https://lore.kernel.org/linux-mips/20200227144910.GA25011@alpha.franken.de/
+-Kees
 
-Sorry, I'm not following the linux-mips list that closely, so I hadn't
-seen them.  It's always a good idea to CC linux-kernel, and perhaps the
-few people who last touched the affected files.
-
-> Still "unclaimed" machines are
->
-> IMG Pistachio SoC based boards (MACH_PISTACHIO(
-> Toshiba TX39 series based machines (MACH_TX39XX)
-> NEC VR4100 series based machines (MACH_VR41XX)
-> Netlogic XLR/XLS based systems (NLM_XLR_BOARD)
-> Netlogic XLP based systems (NLM_XLP_BOARD)
-> Sibyte BCM91120C-CRhine (SIBYTE_CRHINE)
-> Sibyte BCM91120x-Carmel (SIBYTE_CARMEL)
-> Sibyte BCM91125C-CRhone (SIBYTE_CRHONE)
-> Sibyte BCM91125E-Rhone (SIBYTE_RHONE)
-> Sibyte BCM91250C2-LittleSur (SIBYTE_LITTLESUR)
-> Sibyte BCM91250E-Sentosa (SIBYTE_SENTOSA)
->
-> Is there something on this list you also regulary use ?
-
-No, I don't have anything from the list above.
-The RBTX4927 is basically my last MIPS-based system I do boot
-current kernels on.
-
-In active use, not for development:
-  - Ubiquiti EdgeRouter-X (Ralink-based).
-
-Stored in my attic:
-  - NetGear WNDR4300 (AtherOS-based),
-  - MikroTik Routerboard 150 (ADMtek-based, no (longer?) supported upstream),
-  - NEC DDB VRC-5476 (upstream support removed 15 years ago ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
+> 
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
+>  arch/mips/kernel/vmlinux.lds.S | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.lds.S
+> index 83e27a181206..5d6563970ab2 100644
+> --- a/arch/mips/kernel/vmlinux.lds.S
+> +++ b/arch/mips/kernel/vmlinux.lds.S
+> @@ -221,9 +221,10 @@ SECTIONS
+>  		/* ABI crap starts here */
+>  		*(.MIPS.abiflags)
+>  		*(.MIPS.options)
+> +		*(.eh_frame)
+> +		*(.gnu.attributes)
+>  		*(.options)
+>  		*(.pdr)
+>  		*(.reginfo)
+> -		*(.eh_frame)
+>  	}
+>  }
+> -- 
+> 2.30.0
+> 
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Kees Cook
