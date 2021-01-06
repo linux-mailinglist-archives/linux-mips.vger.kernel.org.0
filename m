@@ -2,83 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 561692EC3F0
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 20:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73AD52EC473
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 21:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbhAFTcf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jan 2021 14:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726687AbhAFTcf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jan 2021 14:32:35 -0500
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050::465:202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33040C061575
-        for <linux-mips@vger.kernel.org>; Wed,  6 Jan 2021 11:31:55 -0800 (PST)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4D9zxn2tPlzQlVB;
-        Wed,  6 Jan 2021 20:31:25 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
-        t=1609961483;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g8UBgHVCXyARAjVjDj7JTSFnrZsIy/TpEWnf18DS+lY=;
-        b=ivgpOCmeLVIa1NL0PBu/ICJ3YFe0tJJkYYs8LAA1xjSH7/9KcWLopzR5FNkBexLWqT4XZq
-        8gOoWCdgxnAj+oFGewz/uZKH/HDTX3MmAaw4/kKBSxLhp44+JrrW9NhOhm6ITRSJqvVLEn
-        9hVXd7+sv3HNKYzsd56C6dwB20GN/1S+Wb1h39DRCO/kaFXuz8pygBArTzZwVOmzzHSgj3
-        kxCf7E0ibmYNCduzpzs8VqQ2vq+a4jEHM+JkbHZFDVLOJdiS6h/FXts0xGjG2ax2wN1KD8
-        +PrrYkL1p1IqMQMpPukHzVyti9zQ4zFtqthdgNHKXdJoJS3AlIjrUk1j8p2eig==
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
-        with ESMTP id Ye-c6ipMHu9O; Wed,  6 Jan 2021 20:31:22 +0100 (CET)
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-References: <20200227144910.GA25011@alpha.franken.de>
-From:   Hauke Mehrtens <hauke@hauke-m.de>
-Subject: Re: MIPS Hardware support
-Message-ID: <6a57f435-3b55-d9b5-e0ab-abdb13c01f96@hauke-m.de>
-Date:   Wed, 6 Jan 2021 20:31:21 +0100
+        id S1727056AbhAFUIy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jan 2021 15:08:54 -0500
+Received: from mail-02.mail-europe.com ([51.89.119.103]:57534 "EHLO
+        mail-02.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726981AbhAFUIy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jan 2021 15:08:54 -0500
+Date:   Wed, 06 Jan 2021 20:07:24 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1609963650; bh=y++KTID87p0awo1xB/yYLOezpj3SKaTGHD5nqOFuw5Y=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=ajaFlDaxXHQ/kzg8Z62QRL4gWmvnscFm/2xr9pZ2VlUqSwawmqJRc1A4zTtZyBUI+
+         baiWpEgrPMT6nyubyOwJUf5KJOEZKhVlVXEJTZVSMtV+sNfS0OsgBI52OK7qZbWVv1
+         VwTyplMFf0L6/01GcGHYyn8fts52MEh9Ojj/AwRIJZlD41vnX9ZPFvdRC7C4X58nhJ
+         rkjsvAYHnfBVO1qQmEShAPxqtCoiMT6TJJpXoj/Y1CARUKPiJAA4fvHO5xklIVovQd
+         yvgjQPNOLETD/rTOIHa7ROWPtze+oHfd5agrQFcPa+8TJkhm4rT5iLfpOXOPMZ5nym
+         MuZxO7ikOsE5Q==
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Fangrui Song <maskray@google.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alex Smith <alex.smith@imgtec.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Markos Chandras <markos.chandras@imgtec.com>,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH v2 mips-next 0/4] MIPS: vmlinux.lds.S sections fix & cleanup
+Message-ID: <20210106200713.31840-1-alobakin@pm.me>
 MIME-Version: 1.0
-In-Reply-To: <20200227144910.GA25011@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-MBO-SPAM-Probability: 
-X-Rspamd-Score: -3.81 / 15.00 / 15.00
-X-Rspamd-Queue-Id: 717AE184F
-X-Rspamd-UID: ebc6d9
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2/27/20 3:49 PM, Thomas Bogendoerfer wrote:
-> Hi,
-> 
-> we have 47 MIPS system types and I'd like to get an overview how alive
-> they really are. I've already grouped the 47 systems a little bit by
-> hardware I already own and regulary test kernels. Could you please
-> give me some feedback about the "unclassified" systems ? What systems
-> are supported by qemu (real test not just repeating qemu docs) ?
-> Thank you for your help.
-> 
+This series hunts the problems discovered after manual enabling of
+ARCH_WANT_LD_ORPHAN_WARN, notably the missing PAGE_ALIGNED_DATA()
+section affecting VDSO placement (marked for stable).
 
-> Atheros AR71XX/AR724X/AR913X based boards (ATH79)
+Compile and runtime tested on MIPS32R2 CPS board with no issues.
 
-ath79 is well supported in OpenWrt, you can get devices in normal stores.
+Since v1 [0]:
+ - catch .got entries too as LLD may produce it (Nathan);
+ - check for unwanted sections to be zero-sized instead of
+   discarding (Fangrui).
 
-> Broadcom BCM47XX based boards (BCM47XX)
+[0] https://lore.kernel.org/linux-mips/20210104121729.46981-1-alobakin@pm.m=
+e
 
-BRCM47xx is supported in OpenWrt, you can get devices on ebay.
+Alexander Lobakin (4):
+  MIPS: vmlinux.lds.S: add missing PAGE_ALIGNED_DATA() section
+  MIPS: vmlinux.lds.S: add ".gnu.attributes" to DISCARDS
+  MIPS: vmlinux.lds.S: catch bad .got, .plt and .rel.dyn at link time
+  MIPS: select ARCH_WANT_LD_ORPHAN_WARN
 
-> IMG Pistachio SoC based boards (MACH_PISTACHIO)
+ arch/mips/Kconfig              |  1 +
+ arch/mips/kernel/vmlinux.lds.S | 39 +++++++++++++++++++++++++++++++++-
+ 2 files changed, 39 insertions(+), 1 deletion(-)
 
-I have an IMG Marduk (Creator Ci40) which uses MACH_PISTACHIO.
-This is also supported in upstream OpenWrt, but it does not have many 
-users.
+--=20
+2.30.0
 
-Hauke
+
