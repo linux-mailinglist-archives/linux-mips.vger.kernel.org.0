@@ -2,67 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 026EC2EB9F0
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 07:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07D02EBA6D
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jan 2021 08:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725828AbhAFGSz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jan 2021 01:18:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47556 "EHLO mail.kernel.org"
+        id S1725788AbhAFH0J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jan 2021 02:26:09 -0500
+Received: from mout.gmx.net ([212.227.17.22]:46247 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725562AbhAFGSz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 6 Jan 2021 01:18:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AA573207AB;
-        Wed,  6 Jan 2021 06:18:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609913894;
-        bh=5lp+13jiD6sIpu3g6HHgflH2MeBd+glQhPUXzn5sEb0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CakvhJq/S0InR70KIkE0nT8f4OsK8tazYsMYaSFjfmUD+Huax/XAoFChfqSwh2Ko3
-         O2Yr5kMJTtRg84SKasb5ZjVbjiriRmjXC//Mp6svMTkOguihXcYD8Y7jrNAu5hhU9s
-         NdGVzXNjj+s9GjbUJWIyH+IHiUgF6TmPNadTJjfPC+mngpvbFg7c/5UFpGfay3esh2
-         cYJ3MG2vwyVhJDX/j+RFuMWxX9ZlY7uvVKpUVyQmSjwgaHtsGBtJTIpjBfFO76T5xG
-         lQPLPifs3+qF6HuckWFMEKtmfxytThn8qOgCOh6FZpFqy+bNi0rc5xLf/Si1eeEIi4
-         d5j4VPRJ+OyIg==
-Date:   Wed, 6 Jan 2021 11:48:10 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 05/10] dma: tx49 removal
-Message-ID: <20210106061810.GO2771@vkoul-mobl>
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
- <20210105140305.141401-6-tsbogend@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210105140305.141401-6-tsbogend@alpha.franken.de>
+        id S1725562AbhAFH0J (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 6 Jan 2021 02:26:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1609917876;
+        bh=qmv55JTidpW9XDoGGDekeDfrI3zhxboXsDWJ5aX4p2E=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=L8hP8Kqlnrs7yL5pugy11G/4gcPTmEZ/hcnhv3msOKA0JiLLrwCL9UuKh+7l/iDKZ
+         JLhEjMjiLQKg+Ds5LWgrmu4SWwmesibhWWOsIDdXFyiEsr68TSGVEYRWZC9IOB1L90
+         oU9ZDMzWD9mdYCztBLoPEy4asQYG95CgN+jukFjY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1N95eJ-1jsHGV2B7f-016Bhn; Wed, 06
+ Jan 2021 08:24:36 +0100
+Date:   Wed, 6 Jan 2021 09:26:15 +0200
+From:   Lauri Kasanen <cand@gmx.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH 4/6] input: Add N64 controller driver
+Message-Id: <20210106092615.e72e715bd3817e2f1dc6d55c@gmx.com>
+In-Reply-To: <X/Tk/ZrqyPlGriiZ@google.com>
+References: <20210104154811.ced3a894cddc4d309827307c@gmx.com>
+        <X/Tk/ZrqyPlGriiZ@google.com>
+X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:NhCbZQ8m3X67A4wNfTQbid/oDanPpAoTsdF86+bpsFRGdaxzJCS
+ haHq+tKc2CwlAMyHCwfBBmT/7nHa3hLM/O0InlYAVdytuQJ0DNRCusl6eNswY/YSK9oXkGF
+ zDAVbVvbGllZgc8MfDMjfnvt+b5umzwJYZdyNzGdy/P8e2IR8JPEJ0S9N5p79GmLjKRI9aK
+ xP4qURdEILTCP4Uc1VUYA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SSoQi+2wYBo=:ME7flNZpn52wNW0anOYc4Z
+ 3oDlWMVCuBrya5AtBhIc6zSjkm23LYd5GOd0i6WYf2ht7QK/vom2bHc+q0qEi9GGPru/qpzEr
+ MBKqQh+3wT61GwnDLeEfhMzCIJErDmJsjPVsbAzUuQd+yGoLqQjU9I20cRgpqsZr8FtmSEjV1
+ XBSRf2rhlaEoRYXhvMl7mWMnSgDltN3OnwEpWpYVfmwHtG/q5SiMYKwegUxO34tavQRzDwH67
+ XVPzw5Kh+lmylD3Q4edcNd6kIBUfdcu/S4FccwU/ndS+2oScOq5sdvR+CScakE1iU5lcaKJtb
+ 3nHVJ1AT8vjBr8RZls0FEUkh7HG6wizvXGch2W2XHivawR5laBniBla9s+X3/cQBUxzJkLeJr
+ e+J9NAzx/LnZOTpzyPDSH5w1Jwt8eBXoae+kC77jeh+KXU+Nq+gx8V1fsHohMa8yJvkWWE8/h
+ eUqd2lUhAn1lC9xkUutPaSux0QSJO8H2+JZds9Ql1bqBorKaF4bUa5sVaiqvr/nd+yS2vV4la
+ nKTbWK5QHvtuD9wFLh4p8z1axZfn4Npl30LmnWC8lOSqfsi1Utsyh1itr4UhF1yH0zq3u7wdX
+ vwsdwK2CIkLz+aF5c4JP56vD59sAJYXvhEVzfDSdbwvDpS+hzr7hGczIoDaTz2QkWAItjuJE+
+ FyHguceQ7dAfdqz913HQ6EzApn9+pV8hIzlYg/C1eM7xbGObdjDaqTmHEcmfrYIt2+Em99X6i
+ ylyM0RnfyjMXwF3ETI8m2xaHLzmV9diVfuHGI7yEr/uxmuD5nyBo4q1SBZmV2hW5J5p6fZNE6
+ qGaDk5SbF4XW6d73MQQGw/LS5arog2JONpaA3qeLsdbmUtlUoOnWbPJmKKHwAwNWpjaXbEZfv
+ DMMYDwXxzUkAXarG3Hgg==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 05-01-21, 15:02, Thomas Bogendoerfer wrote:
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+On Tue, 5 Jan 2021 14:15:25 -0800
+Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
 
-Applied after fixing subsystem name, thanks
+> > +config JOYSTICK_N64
+> > +	bool "N64 controller"
+> > +	depends on MACH_NINTENDO64
+> > +	help
+> > +	  Support for the four N64 controllers.
+> > +
+>
+> "To compile this driver as a module..."
+...
+> No option to unload the driver?
 
--- 
-~Vinod
+Yes, no option to build as a module or to unload, on purpose. The target
+system has 8mb RAM, and this is the only input system. It saves RAM,
+and makes no sense to unload your only input possibility.
+
+The driver is specific to the N64. It can't be used on other systems,
+mips or otherwise.
+
+- Lauri
