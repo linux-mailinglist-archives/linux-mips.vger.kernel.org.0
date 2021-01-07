@@ -2,85 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB7E2EC7A9
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Jan 2021 02:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5B62EC8D9
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Jan 2021 04:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726658AbhAGBUK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jan 2021 20:20:10 -0500
-Received: from mrdf0111.ocn.ad.jp ([125.206.160.167]:47912 "EHLO
-        mrdf0111.ocn.ad.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726301AbhAGBUJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jan 2021 20:20:09 -0500
-Received: from mogw5208.ocn.ad.jp (mogw5208.ocn.ad.jp [125.206.161.9])
-        by mrdf0111.ocn.ad.jp (Postfix) with ESMTP id D2B0C3E02EF;
-        Thu,  7 Jan 2021 10:18:51 +0900 (JST)
-Received: from mf-smf-unw005c1.ocn.ad.jp (mf-smf-unw005c1.ocn.ad.jp [153.138.219.78])
-        by mogw5208.ocn.ad.jp (Postfix) with ESMTP id 132CD2A041E;
-        Thu,  7 Jan 2021 10:17:34 +0900 (JST)
-Received: from ocn-vc-mts-201c1.ocn.ad.jp ([153.138.219.212])
-        by mf-smf-unw005c1.ocn.ad.jp with ESMTP
-        id xJu3kE3BKaeryxJvikLBIg; Thu, 07 Jan 2021 10:17:34 +0900
-Received: from smtp.ocn.ne.jp ([153.149.227.165])
-        by ocn-vc-mts-201c1.ocn.ad.jp with ESMTP
-        id xJvhkfc3Tf1TbxJvhkXnKU; Thu, 07 Jan 2021 10:17:34 +0900
-Received: from localhost (p1601136-ipoe.ipoe.ocn.ne.jp [114.172.254.135])
-        by smtp.ocn.ne.jp (Postfix) with ESMTPA;
-        Thu,  7 Jan 2021 10:17:33 +0900 (JST)
-Date:   Thu, 07 Jan 2021 10:17:29 +0900 (JST)
-Message-Id: <20210107.101729.1936921832901251107.anemo@mba.ocn.ne.jp>
-To:     geert@linux-m68k.org
-Cc:     tsbogend@alpha.franken.de, mpm@selenic.com,
-        herbert@gondor.apana.org.au, dan.j.williams@intel.com,
-        vkoul@kernel.org, davem@davemloft.net, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, kuba@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 00/10] Remove support for TX49xx
-From:   Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-In-Reply-To: <CAMuHMdV86BES7dmWr-7j1jbtoSy0bH1J0e5W41p8evagi0Nqcw@mail.gmail.com>
-References: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
-        <20210106184839.GA7773@alpha.franken.de>
-        <CAMuHMdV86BES7dmWr-7j1jbtoSy0bH1J0e5W41p8evagi0Nqcw@mail.gmail.com>
-X-Mailer: Mew version 6.7 on Emacs 24.5 / Mule 6.0 (HANACHIRUSATO)
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1725789AbhAGDH0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jan 2021 22:07:26 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:41696 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725792AbhAGDHZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 6 Jan 2021 22:07:25 -0500
+Received: from localhost.localdomain (unknown [112.20.112.14])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxWL67evZfYKAAAA--.1473S2;
+        Thu, 07 Jan 2021 11:06:35 +0800 (CST)
+From:   Yanteng Si <siyanteng@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, Yanteng Si <siyanteng01@gmail.com>,
+        Yanteng Si <siyanteng@loongson.cn>
+Subject: [PATCH] MIPS: init: move externs to header file
+Date:   Thu,  7 Jan 2021 11:06:45 +0800
+Message-Id: <20210107030645.1844215-1-siyanteng@loongson.cn>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxWL67evZfYKAAAA--.1473S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF13Cw4kCr1UtFyUuFy7GFg_yoW5XFW8pa
+        9rA3Z7GayruF4xXFZxAa4jgr13Ja93JrZ2qay2y3yjq3Wqga4UZrs3trn8Zr1UJrWUKa40
+        9ryFgry7WF42yFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU-_-PUUU
+        UU=
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 6 Jan 2021 21:41:24 +0100, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->> > Is that sufficient to keep it?
->>
->> for me it is. But now we probaly need some reverts then...
-> 
-> Indeed. Fortunately not all of it, as some removals were TX4938-only.
+    This commit fixes the following checkpatch warnings:
 
-These patches should not break RBTX4927:
+    WARNING: externs should be avoided in .c files
 
-  net: tc35815: Drop support for TX49XX boards
-  spi: txx9: Remove driver
-  mtd: Remove drivers used by TX49xx
-  char: hw_random: Remove tx4939 driver
-  rtc: tx4939: Remove driver
-  ide: tx4938ide: Remove driver
+    This is a warning for placing declarations in a ".c" file.
+    This fix removes the declaration in ".c" and adds it to
+    the common header file.
 
-And these patches just break audio-support only.
-
-  dma: tx49 removal
-  ASoC: txx9: Remove driver
-
-I think dma and ASoC drivers are hard to maintain now, and can be
-dropped for basic support for RBTX4927.
-(TX39 boards does not have audio-support, so dma txx9 driver can be
-dropped too)
-
+Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
 ---
-Atsushi Nemoto
+ arch/mips/include/asm/traps.h       | 1 +
+ arch/mips/loongson2ef/common/init.c | 1 -
+ arch/mips/loongson64/init.c         | 1 -
+ arch/mips/mti-malta/malta-init.c    | 1 -
+ arch/mips/pistachio/init.c          | 1 -
+ 5 files changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/arch/mips/include/asm/traps.h b/arch/mips/include/asm/traps.h
+index 6a0864bb604d..6aa8f126a43d 100644
+--- a/arch/mips/include/asm/traps.h
++++ b/arch/mips/include/asm/traps.h
+@@ -24,6 +24,7 @@ extern void (*board_ebase_setup)(void);
+ extern void (*board_cache_error_setup)(void);
+ 
+ extern int register_nmi_notifier(struct notifier_block *nb);
++extern char except_vec_nmi[];
+ 
+ #define nmi_notifier(fn, pri)						\
+ ({									\
+diff --git a/arch/mips/loongson2ef/common/init.c b/arch/mips/loongson2ef/common/init.c
+index ce3f02f75e2a..1469a03c0953 100644
+--- a/arch/mips/loongson2ef/common/init.c
++++ b/arch/mips/loongson2ef/common/init.c
+@@ -19,7 +19,6 @@ unsigned long __maybe_unused _loongson_addrwincfg_base;
+ static void __init mips_nmi_setup(void)
+ {
+ 	void *base;
+-	extern char except_vec_nmi[];
+ 
+ 	base = (void *)(CAC_BASE + 0x380);
+ 	memcpy(base, except_vec_nmi, 0x80);
+diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+index e13f704bef80..cd8e0e0a6104 100644
+--- a/arch/mips/loongson64/init.c
++++ b/arch/mips/loongson64/init.c
+@@ -25,7 +25,6 @@ u32 node_id_offset;
+ static void __init mips_nmi_setup(void)
+ {
+ 	void *base;
+-	extern char except_vec_nmi[];
+ 
+ 	base = (void *)(CAC_BASE + 0x380);
+ 	memcpy(base, except_vec_nmi, 0x80);
+diff --git a/arch/mips/mti-malta/malta-init.c b/arch/mips/mti-malta/malta-init.c
+index 893af377aacc..b03cac5fdc02 100644
+--- a/arch/mips/mti-malta/malta-init.c
++++ b/arch/mips/mti-malta/malta-init.c
+@@ -90,7 +90,6 @@ static void __init console_config(void)
+ static void __init mips_nmi_setup(void)
+ {
+ 	void *base;
+-	extern char except_vec_nmi[];
+ 
+ 	base = cpu_has_veic ?
+ 		(void *)(CAC_BASE + 0xa80) :
+diff --git a/arch/mips/pistachio/init.c b/arch/mips/pistachio/init.c
+index 558995ed6fe8..48bb4ab8839d 100644
+--- a/arch/mips/pistachio/init.c
++++ b/arch/mips/pistachio/init.c
+@@ -83,7 +83,6 @@ phys_addr_t mips_cdmm_phys_base(void)
+ static void __init mips_nmi_setup(void)
+ {
+ 	void *base;
+-	extern char except_vec_nmi[];
+ 
+ 	base = cpu_has_veic ?
+ 		(void *)(CAC_BASE + 0xa80) :
+-- 
+2.27.0
+
