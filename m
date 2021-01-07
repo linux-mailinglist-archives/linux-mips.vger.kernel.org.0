@@ -2,55 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C142ED44F
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Jan 2021 17:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C398B2ED45D
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Jan 2021 17:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728589AbhAGQ3q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Jan 2021 11:29:46 -0500
-Received: from elvis.franken.de ([193.175.24.41]:34726 "EHLO elvis.franken.de"
+        id S1728338AbhAGQaC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Jan 2021 11:30:02 -0500
+Received: from elvis.franken.de ([193.175.24.41]:34750 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726441AbhAGQ3q (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1728131AbhAGQ3q (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Thu, 7 Jan 2021 11:29:46 -0500
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kxY9o-0000Mi-03; Thu, 07 Jan 2021 17:29:04 +0100
+        id 1kxY9o-0000Mi-00; Thu, 07 Jan 2021 17:29:04 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 87160C080E; Thu,  7 Jan 2021 17:27:18 +0100 (CET)
-Date:   Thu, 7 Jan 2021 17:27:18 +0100
+        id BDD96C080C; Thu,  7 Jan 2021 17:25:49 +0100 (CET)
+Date:   Thu, 7 Jan 2021 17:25:49 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] MIPS: c-r4k: Fix section mismatch for loongson2_sc_init
-Message-ID: <20210107162718.GD11882@alpha.franken.de>
-References: <20210105203456.98148-1-natechancellor@gmail.com>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH mips-next] MIPS: UAPI: unexport unistd_nr_{n32,n64,o32}.h
+Message-ID: <20210107162549.GA11882@alpha.franken.de>
+References: <20210104154115.213029-1-alobakin@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210105203456.98148-1-natechancellor@gmail.com>
+In-Reply-To: <20210104154115.213029-1-alobakin@pm.me>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jan 05, 2021 at 01:34:56PM -0700, Nathan Chancellor wrote:
-> When building with clang, the following section mismatch warning occurs:
+On Mon, Jan 04, 2021 at 03:41:48PM +0000, Alexander Lobakin wrote:
+> unistd_nr_{n32,n64,o32}.h are needed only by include/asm/unistd.h,
+> which is a kernel-side header file, and their contents is generally
+> not for userland use.
+> Move their target destination from include/generated/uapi/asm/ to
+> include/generated/asm/ to disable exporting them as UAPI headers.
 > 
-> WARNING: modpost: vmlinux.o(.text+0x24490): Section mismatch in
-> reference from the function r4k_cache_init() to the function
-> .init.text:loongson2_sc_init()
-> 
-> This should have been fixed with commit ad4fddef5f23 ("mips: fix Section
-> mismatch in reference") but it was missed. Remove the improper __init
-> annotation like that commit did.
-> 
-> Fixes: 078a55fc824c ("MIPS: Delete __cpuinit/__CPUINIT usage from MIPS code")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/787
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 > ---
->  arch/mips/mm/c-r4k.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/include/asm/Kbuild       |  4 ++++
+>  arch/mips/include/uapi/asm/Kbuild  |  3 ---
+>  arch/mips/kernel/syscalls/Makefile | 16 ++++++++--------
+>  3 files changed, 12 insertions(+), 11 deletions(-)
 
 applied to mips-next.
 
