@@ -2,76 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4202EF07C
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Jan 2021 11:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F12E12EF082
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Jan 2021 11:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbhAHKO1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Jan 2021 05:14:27 -0500
-Received: from mout.gmx.net ([212.227.17.22]:59319 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725984AbhAHKO1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 Jan 2021 05:14:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1610100739;
-        bh=Y1EXhfy2GX6BKCkkTeeQ3v/7QlyUVQsu2NAr41iu/Sw=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=IyqdIPh+L7MLf3T5FcFxCsAsNeQE0td0a3xbU/ezZiZm/Yc2KbaG9BVD9y8GUxAPb
-         Resm/yrEoYcDzqL/mGXZihEBg6WHRjtOgMCa9sMZ30zk/XsknZE4arczoPJSjn51jI
-         OCpctjBi2zSqwqQGOPTsp6RRqbpLGSl6WDwwWKrE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Valinor ([82.128.181.212]) by mail.gmx.com (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MvsJ5-1k9A0a2c59-00svM8; Fri, 08
- Jan 2021 11:12:19 +0100
-Date:   Fri, 8 Jan 2021 12:13:58 +0200
-From:   Lauri Kasanen <cand@gmx.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        perex@perex.cz, tiwai@suse.com
-Subject: Re: [PATCH 5/6 v2] sound: Add n64 driver
-Message-Id: <20210108121358.72b66c8b82461c981104e172@gmx.com>
-In-Reply-To: <s5hsg7byezb.wl-tiwai@suse.de>
-References: <20210108103513.336e6eb9ad323feff6758e20@gmx.com>
-        <s5hsg7byezb.wl-tiwai@suse.de>
-X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:UmWRWXKCa6/ymFTViCRAeU4M6gEkr/6LUBhT4nyx6zEQWvzG13x
- UThTgjLOVy8iOUfrxZH6dtcF+inN62XbRmiMGLwhRiQfesIUFtED42FgFlW57+KJ/THEDES
- 6yHNCMJzgxnIm8UJrFNUiav2VRmhUWwmmHfDB/3GMJnd2c2AqA00CgHKv2UhPxKZOsfaW+4
- svOOubJqZJLgg+fgMZj/g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rR+wgWwL8DY=:lcuzI0l3bHMFl7fbdXHJ5R
- /QLVNneSYx0aIo5KTt4ezNykLWjxG9pNgZt5t+kXZQzHVKZ4w3LKqNFiKakzKQotB1jbjgBWG
- 7yWNBzjktzCC4NxdvjQZXseUqtmnzSvilP6mETg8Il0Qk5aciHL+DWRmXC7bQ3I9mYL9TReY3
- mZYT0R46ZXC3q6zhGoipu9kvwzb3uobDKOtkB02pvUsteHu7NWPq3busTOj/LdaP2AZhG+Lzv
- 4NN88w993zOxQwbRaZQGAhusguSnIdeiFagM2s25FlYAoT/BaQ3mzjcnUAiYF1qJBJBOZdjwK
- 0ArwxT3gtZGwj6NfhQgXLqUKTBE9Qwip3eD6PXwFG6T9YFYAeLY22yQdRvNlDjq32f+Oz53Kf
- NkQe7KTrxJRla/f8pVgBCQcjPN+aIZiX0mXTnBD2D47MKcEAuNCxlw4v0RhMBPIIRqFU5JY8x
- v+UHADVAtcPYlje/Te9BbI5VyBssEpzLxBJvoNH7XFGq722KdCJohIqrR1m3zi2SdBwkCnQE4
- 1dGWbXvKdv7oviUGIjZkkfasRzCFGqDizRBaPeuCJ45RCT/OxZBrLJ8/5rM0uuZK/VTrpHsVy
- t+htTVzJoGyx9eoBrSF5kigpqOiPg62FBOJFX/YeQQwXzQtSStY+Z+lw97YME3CkFUQqvyYqs
- d35JM4jF9J83eJdrbXt5rpV70qAZcRLztc8eiFY8ZiQnZqDC0SyrNtaya+ZBYw4TOweySBOwJ
- yo52TBzBsQQHtCXP8NLclkkQKsrWRAfbm23QOy/8pPTMaxieK+M7FcI5Kl6PYGYZIdNeustwN
- ID/RGPflsuLepMV5PTVm5EH0S91432jjvnA69DRUy+IjCynhimjzvu9DqLdQQIubfFiEcoL3G
- aUWYhtFy9Guo9MDJARzQ==
+        id S1726735AbhAHKQo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Jan 2021 05:16:44 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:53205 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726205AbhAHKQn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Jan 2021 05:16:43 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 8599958045F;
+        Fri,  8 Jan 2021 05:15:57 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Fri, 08 Jan 2021 05:15:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=C
+        W8/vUms1/XyCsx+VuIeHsDwZMMN8itHJftHRPchypU=; b=Rqa/YK8FzGwcy9LnM
+        IIkIsFBfVVoo72fOfR4i136GiOPN0Hf2nlvOLYJpKaOdqsX4q8l6GsX6iYvCpX5m
+        CnxRaUXnfC2nshkMi1PqFF2SDyx4og7OpuesyDIy2xc6RO3i+fa4ZY4iQK0imJN1
+        cqYlf5Coq8hyFcB2KDhG1LQo8jLIeCzCbVvESLzU1iAEgFPlBp6dqq6C/cBnwm6z
+        vp6xwNo+LCRPBaaeKIyy5eOgbLTg2ymqWoTnnXS0x/3RQTiarEKFexVodo+/INEt
+        orl2KX1HxaJ54EkirQjjnAG9dfnYda8uWq6u6WHVrdwt8UZprImI1+DvwfDpV2gu
+        fxa9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=CW8/vUms1/XyCsx+VuIeHsDwZMMN8itHJftHRPchy
+        pU=; b=Wr6CvXLrieAn8OcNqo3SPbTBvSFLjPLhtAQ1vzt6cwCc2V2AdRVYUMWvX
+        U4XV8GxB+YhxOGbU38eVj4VmnLixoPUz4ZtN4xqt3RnV9pg0dPE4gtNUZk48vgOM
+        qV2A61KzxaVDpVrSwJTt0xtNzNsUlDJOfFU4TTP/6HRRvTCIjdi+T1rI5leWqdEw
+        wdn/kzNJ4LiQlTJuaVHS7C0B/EocoImTg2cTRp72Gvthlj8T27qOyJUQLCtpBVIn
+        W2p2Dd3MYMj+cxa1ui+dip2erCc/eA4m+TVPVvzVL2LuiLGLCd7CS1qFaYY9aW59
+        P64nSuqs6JxWJrZOzTWqXTeikkhjQ==
+X-ME-Sender: <xms:2DD4XzPpZqaDSKa0Je5wa5wzfxKQRPPXv2gj42kt_AyzxLL_ME7uDw>
+    <xme:2DD4X984T8yKC_shl-d4UK0yNPTwyNDJId_-i5kBwI_-t4ZWnEvFeDFNwKpkiXA90
+    nlmcmwsS4PXrkrMybY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdeggedgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpefhgffggeehhfekkeelgfegfedtgeduhefgueehgedttdetueev
+    veeghedvffeutdenucffohhmrghinhepkhgvrhhnvghlrdhssgenucfkphepgeehrdeffe
+    drhedtrddvheegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:2DD4XyTpx_HP4DQLLrQRV8RwAripO8CBqgutKK-JWxzfcgK6ALu5Pw>
+    <xmx:2DD4X3sIqPfwCqXuRFGtU8_7iMo80wRA1-uQDbf4sjvI84aWHHXVAQ>
+    <xmx:2DD4X7fi0SHCi4s6QfUReDu1VvlKlYAMDgJaBD8QbEFVh7h4JkX7iQ>
+    <xmx:3TD4XzQBfYQy-4TMhKnkBUrkEq8DYgw7ctAd-eXupuIoDyK9PkA-Xg>
+Received: from [0.0.0.0] (li1000-254.members.linode.com [45.33.50.254])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 60F66240057;
+        Fri,  8 Jan 2021 05:15:47 -0500 (EST)
+Subject: Re: [PATCH V3] MIPS: Loongson64: Add kexec/kdump support
+To:     Jinyang He <hejinyang@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kexec@lists.infradead.org, Youling Tang <tangyouling@loongson.cn>
+References: <20201221120220.3186744-1-chenhuacai@kernel.org>
+ <a671a323-768b-b461-2ce4-ecc1e92d4cc6@loongson.cn>
+ <CAAhV-H4GDxhg1YqWy-g7VuCeE7BZ0ibaVSr1ibzJqXjuaBn3_w@mail.gmail.com>
+ <20210107172620.GA13201@alpha.franken.de>
+ <1085845b-2c5a-dbb6-62b7-28b55aeacb4c@loongson.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <13b3f842-61e8-db13-67ff-7d2a9d894484@flygoat.com>
+Date:   Fri, 8 Jan 2021 18:15:44 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <1085845b-2c5a-dbb6-62b7-28b55aeacb4c@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 08 Jan 2021 10:06:48 +0100
-Takashi Iwai <tiwai@suse.de> wrote:
-
-> > +static int __init n64audio_probe(struct platform_device *pdev)
+在 2021/1/8 下午6:07, Jinyang He 写道:
+> Hi, Thomas,
 >
-> Usually the probe callback itself shouldn't be __init.
+> On 01/08/2021 01:26 AM, Thomas Bogendoerfer wrote:
+>>>>> --- a/arch/mips/kernel/relocate_kernel.S
+>>>>> +++ b/arch/mips/kernel/relocate_kernel.S
+>>>>> @@ -6,6 +6,7 @@
+>>>>>
+>>>>>    #include <asm/asm.h>
+>>>>>    #include <asm/asmmacro.h>
+>>>>> +#include <asm/cpu.h>
+>>>>>    #include <asm/regdef.h>
+>>>>>    #include <asm/mipsregs.h>
+>>>>>    #include <asm/stackframe.h>
+>>>>> @@ -133,6 +134,33 @@ LEAF(kexec_smp_wait)
+>>>>>    #else
+>>>>>        sync
+>>>>>    #endif
+>>>>> +
+>>>>> +#ifdef CONFIG_CPU_LOONGSON64
+>> Is there a reason why you can't use the already existing infrastructure
+>> the way cavium-octeon is doing it ? If you can't please explain why
+>> so we can find a way to extend it. But having some sort of poking
+>> loongson registers in generic MIPS code is a non starter.
+>>
+>> Thomas.
+>>
 >
-> > +fs_initcall(n64audio_init);
+> Unlike the cavium-octeon platform, the Loongson64 platform needs some 
+> changes. Before the kernel starts, (before entering the kernel_entry), 
+> each CPU has its own state (the SMP system). For Loongson64, only the 
+> boot CPU will enter the kernel_entry, and other CPUs will query their 
+> mailbox value in a loop. This is what the BIOS does for the CPU. Here 
+> is different from cavium-octeon. All CPUs will enter the kernel_entry 
+> on cavium-octeon platform. Then the kernel_entry_setup, the co-CPUs 
+> will enter the query loop. I saw the kernel_entry_setup of other 
+> platforms, such as ip27, malta, and generic. They are not like 
+> cavium-octeon and the co-CPUs entering the loop may be earlier than 
+> entering kernel_entry. So I have reason to guess that most SMP system 
+> platform CPUs are similar to Loongson64.
+
+Hi Jingyang,
+
+As I commented before you may reuse play_dead logic in Loongson's smp.c.
+
 >
-> Does it have to be this initcall?
+> relocate_kernel.S is like BIOS doing s omething for the CPU. It allows 
+> the boot CPU to start from the new kernel_entry and makes the co-CPUs 
+> enter a loop. The already existing infrastructure may be more suitable 
+> for non-smp platforms. Although we can do something with 
+> plat_smp_ops.kexec_nonboot_cpu, more new problems will arise in that 
+> case. The kexec process actually runs on a copy of relocate_kernel.S, 
+> which will bring a lot of problems...
 
-It could be module init instead, nothing specific in fs_initcall. It's
-__init because it can only be compiled in, and removing that run-once
-code saves RAM. The target only has 8mb RAM.
+It won't be a problem as you can keep all data on-stack without external 
+reference.
 
-- Lauri
+Thanks.
+
+- Jiaxun
+
+>
+> Above all just my personal thoughts.
+>
+> Thanks,
+> Jinyang
+>
+
