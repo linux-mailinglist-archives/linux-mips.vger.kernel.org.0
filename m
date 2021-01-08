@@ -2,109 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B66B72EFA40
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Jan 2021 22:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4C22EFBEE
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Jan 2021 00:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729766AbhAHVUD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Jan 2021 16:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728940AbhAHVUD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Jan 2021 16:20:03 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2407C061793;
-        Fri,  8 Jan 2021 13:19:22 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id f26so9827319qka.0;
-        Fri, 08 Jan 2021 13:19:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hnXLl4sHbKEop6wOqXRNzmI1tuKMV2HMaSYRF/O+288=;
-        b=unfNElP7xA2Sx2i4/PYLes/KURdHDgTBaRSIhvDyW1dATgDtcLx8X7bdS3KdW8COcH
-         hq46bxmUjaPgcv5cHp0eTddMSVvu9fj1f772wnAxJwi9gGEhY6aXcHu/rcx/DKMdp4Bt
-         USaMgeXqktWYH8f78nEQv0dP4ftyWtZ1eyVIsZveFCwBwOw/DhqO/Xc8przOBA5FDTjm
-         XehhfkW/vSUFay0ft5eiEvAOMB7MJBXTV99GFXbu7r+4diYhqjJbT6f4bZkQpqf5ifvc
-         UE7pZArnW+Sl+dBeWuqLc6mYCfvzmRCZAoGu4kCdSW4bdq5BZRNdAKvsOwweEPzLdDKw
-         aBlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hnXLl4sHbKEop6wOqXRNzmI1tuKMV2HMaSYRF/O+288=;
-        b=gdv2gPfPejbrZgovXh2iMfzTXDumJTsZpIZrYOJvFPF/OwPMj/pjWcAFJl+lxgLNO4
-         biy+HQSdtmxksit3Gl/KpTgH1YwGj2flxkr5vRyAzI/M1kDnaFpFE34uL4FUIUhwzJ6i
-         JaEcc05UYccKNIgfSlGwwe0JLoHHt3UjPwKxhdazbeGZ2FhRsb/7pdT8Lf5Ol8GoADsR
-         E5mohBIDwb/dniXadVKnubo4H7BCz6GTxwWht7Fq8a9be/Ztml2BQEBgReBmnu4Q9sZK
-         /YwACuUi+GiEH++4M2vmjHtxUFoyl+Fpttpyn2KBWrDczO8jChepfr9kHr+Yauj7K3bO
-         KI/g==
-X-Gm-Message-State: AOAM530dX5nyn4xNiyVAEel9Gb9jRgeK8IL8cWzET8ajmPQ8RB6CFDQx
-        GHOhw5i2Otzq/1w5mNoYJ5E=
-X-Google-Smtp-Source: ABdhPJxdd6u4Oceg1KPjIbdklnamT9CZ5Zdtmx32wCgErkWYrB9pYGhZFRq1edyAuj4fGTauhEeq0Q==
-X-Received: by 2002:a05:620a:ec5:: with SMTP id x5mr5797597qkm.143.1610140761875;
-        Fri, 08 Jan 2021 13:19:21 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id p128sm5732545qkb.101.2021.01.08.13.19.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jan 2021 13:19:21 -0800 (PST)
-Date:   Fri, 8 Jan 2021 14:19:19 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v4 mips-next 7/7] MIPS: select ARCH_WANT_LD_ORPHAN_WARN
-Message-ID: <20210108211919.GG2547542@ubuntu-m3-large-x86>
-References: <20210107123331.354075-1-alobakin@pm.me>
- <20210107132010.463129-1-alobakin@pm.me>
- <20210107132010.463129-4-alobakin@pm.me>
+        id S1726298AbhAHX67 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Jan 2021 18:58:59 -0500
+Received: from elvis.franken.de ([193.175.24.41]:36870 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725763AbhAHX67 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 Jan 2021 18:58:59 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1ky1e2-0007pu-01; Sat, 09 Jan 2021 00:58:14 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 804DDC086F; Sat,  9 Jan 2021 00:58:05 +0100 (CET)
+Date:   Sat, 9 Jan 2021 00:58:05 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     tglx@linutronix.de, airlied@linux.ie, airlied@redhat.com,
+        akpm@linux-foundation.org, arnd@arndb.de, bcrl@kvack.org,
+        bigeasy@linutronix.de, bristot@redhat.com, bsegall@google.com,
+        bskeggs@redhat.com, chris@zankel.net, christian.koenig@amd.com,
+        clm@fb.com, davem@davemloft.net, deanbo422@gmail.com,
+        dietmar.eggemann@arm.com, dri-devel@lists.freedesktop.org,
+        dsterba@suse.com, green.hu@gmail.com, hch@lst.de,
+        intel-gfx@lists.freedesktop.org, jcmvbkbc@gmail.com,
+        josef@toxicpanda.com, juri.lelli@redhat.com, kraxel@redhat.com,
+        linux-aio@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-btrfs@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-graphics-maintainer@vmware.com, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
+        mgorman@suse.de, mingo@kernel.org, monstr@monstr.eu,
+        mpe@ellerman.id.au, nickhu@andestech.com,
+        nouveau@lists.freedesktop.org, paulmck@kernel.org,
+        paulus@samba.org, peterz@infradead.org, ray.huang@amd.com,
+        rodrigo.vivi@intel.com, rostedt@goodmis.org,
+        sparclinux@vger.kernel.org, spice-devel@lists.freedesktop.org,
+        sroland@vmware.com, torvalds@linuxfoundation.org,
+        vgupta@synopsys.com, vincent.guittot@linaro.org,
+        viro@zeniv.linux.org.uk, virtualization@lists.linux-foundation.org,
+        x86@kernel.org
+Subject: Re: [patch V3 13/37] mips/mm/highmem: Switch to generic kmap atomic
+Message-ID: <20210108235805.GA17543@alpha.franken.de>
+References: <JUTMMQ.NNFWKIUV7UUJ1@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210107132010.463129-4-alobakin@pm.me>
+In-Reply-To: <JUTMMQ.NNFWKIUV7UUJ1@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 01:21:02PM +0000, Alexander Lobakin wrote:
-> Now, after that all the sections are explicitly described and
-> declared in vmlinux.lds.S, we can enable ld orphan warnings to
-> prevent from missing any new sections in future.
+On Fri, Jan 08, 2021 at 08:20:43PM +0000, Paul Cercueil wrote:
+> Hi Thomas,
 > 
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> 5.11 does not boot anymore on Ingenic SoCs, I bisected it to this commit.
+> 
+> Any idea what could be happening?
 
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+not yet, kernel crash log of a Malta QEMU is below.
 
-> ---
->  arch/mips/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index d68df1febd25..d3e64cc0932b 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -18,6 +18,7 @@ config MIPS
->  	select ARCH_USE_QUEUED_SPINLOCKS
->  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
->  	select ARCH_WANT_IPC_PARSE_VERSION
-> +	select ARCH_WANT_LD_ORPHAN_WARN
->  	select BUILDTIME_TABLE_SORT
->  	select CLONE_BACKWARDS
->  	select CPU_NO_EFFICIENT_FFS if (TARGET_ISA_REV < 1)
-> -- 
-> 2.30.0
-> 
-> 
+Thomas.
+
+Kernel bug detected[#1]:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.11.0-rc1-00017-gccb21774863a #2
+$ 0   : 00000000 00000001 00000000 00000010
+$ 4   : 00000001 000005cf 9e00059f 00000000
+$ 8   : 00118173 809e6db8 9e00059f 00000000
+$12   : 82023c00 00000001 810da04c 0212422f
+$16   : 810da000 00027800 000005cf 80b4bf9c
+$20   : 809e968c 82602400 810da000 0000000b
+$24   : 021558f9 00000000                  
+$28   : 820e0000 820e3928 80b10000 802710d0
+Hi    : 0000346c
+Lo    : 000002dd
+epc   : 80271114 __kmap_local_pfn_prot+0x78/0x1c0
+ra    : 802710d0 __kmap_local_pfn_prot+0x34/0x1c0
+Status: 1000a403	KERNEL EXL IE 
+Cause : 00800034 (ExcCode 0d)
+PrId  : 0001a800 (MIPS P5600)
+Modules linked in:
+Process swapper/0 (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=00000000)
+Stack : 7fffffff 820c2408 820e3990 ffffff04 ffff0a00 80518224 000081a4 810da000
+        00000001 000005cf fff64000 8011c77c 820e3b26 ffffff04 ffff0a00 80518440
+        80b30000 80b4bf64 9e0005cf 000005cf fff64000 80271188 00000000 820e3a60
+        80b10000 80194478 0000005e 80954406 809e0000 810da000 00000001 000005cf
+        fff68000 8011c77c 8088fd44 809f6074 000000f4 00000000 00000000 80b4bf68
+        ...
+Call Trace:
+[<80271114>] __kmap_local_pfn_prot+0x78/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<8011c77c>] __update_cache+0x16c/0x174
+[<80271188>] __kmap_local_pfn_prot+0xec/0x1c0
+[<802c49a0>] copy_string_kernel+0x168/0x264
+[<802c5d18>] kernel_execve+0xd0/0x164
+[<801006cc>] try_to_run_init_process+0x18/0x5c
+[<80859e0c>] kernel_init+0xd0/0x120
+[<801037f8>] ret_from_kernel_thread+0x14/0x1c
+
+Code: 8c630564  28640010  38840001 <00040336> 8f82000c  2463ffff  00021100  00431021  2403ffbf 
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
