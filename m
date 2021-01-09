@@ -2,93 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 516E82EFF4B
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Jan 2021 12:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 753A52EFF5F
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Jan 2021 13:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726267AbhAIL5z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Jan 2021 06:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbhAIL5z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Jan 2021 06:57:55 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7769C061786
-        for <linux-mips@vger.kernel.org>; Sat,  9 Jan 2021 03:57:14 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 30so9394342pgr.6
-        for <linux-mips@vger.kernel.org>; Sat, 09 Jan 2021 03:57:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/0YyNo1AmSf3T+MSs+WXyvTLad4RHVuVph/CiC/rk1g=;
-        b=D6KNgfj6g2ZodEeEzfdvVBIAjP+Lj6Q018v0XpUnu0canGT5r/Ch74VqGyLxF3TsAR
-         LRb9WakK75cp0zBxa+ORaEysQJar/v4soTX38Qf7ZcBMBrHeLe3s3D9iM9bq4KGN05IS
-         CB9x0kjCqM/hmQm7HEO5KcC4m/HURWU1m42GFmdC2Y7hR1g37vuoEXCGBo+CZxFKuicw
-         ckvzUC/MZXUCSmDfiycJVGVQRbaAPyUfOE7S32KNZpeYr20ckpC/SuQKvW1++EelgmGE
-         Frz7mrDmRrDInx9jHRvU/I94uHLSr8lf9kGOOLYlSNCqPkUfmTRi62yV8gNyBJRJph9o
-         13WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/0YyNo1AmSf3T+MSs+WXyvTLad4RHVuVph/CiC/rk1g=;
-        b=VNMTaWsfCTe1EzfpsTGzXh9VkfBPy6U7cFB+VFTg1s6dx4RkzVedIpmrSgfrIXy7ua
-         KQ3b12AiC114rGXPv88lgYNwHP1UlKM51/FANXQ1cCGB5IwWyIUzzHlnqMmYJZzENP05
-         P1R/ohBiDG7+r1FM5L693arDFk1wxiQhqhmg0/GjRiIi5Qftky4uDU2rE/w7ofBqvxBK
-         36sdln3Es0CGF+S0CnzKIEnx/aGrdS40uqZ7jGpF9x+z0XwP1z/rpw8+748L40qr+5d4
-         3Aappnh+ohjs+r95GODjR7WpUWSGKDf6ng+zDTAEhZEjUs6VLG4ztikKTkEPUKsovVXP
-         mmKQ==
-X-Gm-Message-State: AOAM533Mja7A9kIlRJNXO1kahfdsFnBqKcrFrAvh0AyZo2VE/JNV6G0P
-        o6tcSEy6+JUGK++TS3hdBKM=
-X-Google-Smtp-Source: ABdhPJyuGInHO/JuYAScB/ZRGOCmHA1KYcuVMo3/ZWXjutUOD9EM5akfZPozGqzI+Ef/z80VCLDjcQ==
-X-Received: by 2002:aa7:854f:0:b029:1ae:7062:3a8b with SMTP id y15-20020aa7854f0000b02901ae70623a8bmr7024169pfn.64.1610193434232;
-        Sat, 09 Jan 2021 03:57:14 -0800 (PST)
-Received: from pek-lpggp6.wrs.com (unknown-105-123.windriver.com. [147.11.105.123])
-        by smtp.gmail.com with ESMTPSA id s1sm14506920pjk.1.2021.01.09.03.57.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 09 Jan 2021 03:57:13 -0800 (PST)
-From:   Kevin Hao <haokexin@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: OCTEON: Fix the boot broken when using built-in DTB
-Date:   Sat,  9 Jan 2021 19:49:58 +0800
-Message-Id: <20210109114958.16470-1-haokexin@gmail.com>
-X-Mailer: git-send-email 2.29.2
+        id S1725983AbhAIM2d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Jan 2021 07:28:33 -0500
+Received: from elvis.franken.de ([193.175.24.41]:38220 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725896AbhAIM2d (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 9 Jan 2021 07:28:33 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kyDLP-0005En-00; Sat, 09 Jan 2021 13:27:47 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 492FAC0880; Sat,  9 Jan 2021 12:12:59 +0100 (CET)
+Date:   Sat, 9 Jan 2021 12:12:59 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Pei Huang <huangpei@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, stable@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH v4 mips-next 0/7] MIPS: vmlinux.lds.S sections fixes &
+ cleanup
+Message-ID: <20210109111259.GA4213@alpha.franken.de>
+References: <20210107123331.354075-1-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210107123331.354075-1-alobakin@pm.me>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-For the OCTEON boards, it need to patch the built-in DTB before using
-it. Previously it judges if it is a built-in DTB by checking
-fw_passed_dtb. But after commit 37e5c69ffd41 ("MIPS: head.S: Init
-fw_passed_dtb to builtin DTB", the fw_passed_dtb is initialized even
-when using built-in DTB. This causes the OCTEON boards boot broken due
-to an unpatched built-in DTB is used. Add more checks to judge if we
-really use built-in DTB or not.
+On Thu, Jan 07, 2021 at 12:33:38PM +0000, Alexander Lobakin wrote:
+> This series hunts the problems discovered after manual enabling of
+> ARCH_WANT_LD_ORPHAN_WARN. Notably:
+>  - adds the missing PAGE_ALIGNED_DATA() section affecting VDSO
+>    placement (marked for stable);
+>  - properly stops .eh_frame section generation.
+> 
+> Compile and runtime tested on MIPS32R2 CPS board with no issues
+> using two different toolkits:
+>  - Binutils 2.35.1, GCC 10.2.0;
+>  - LLVM stack 11.0.0.
+> 
+> Since v3 [2]:
+>  - fix the third patch as GNU stack emits .rel.dyn into VDSO for
+>    some reason if .cfi_sections is specified.
+> 
+> Since v2 [1]:
+>  - stop discarding .eh_frame and just prevent it from generating
+>    (Kees);
+>  - drop redundant sections assertions (Fangrui);
+>  - place GOT table in .text instead of asserting as it's not empty
+>    when building with LLVM (Nathan);
+>  - catch compound literals in generic definitions when building with
+>    LD_DEAD_CODE_DATA_ELIMINATION (Kees);
+>  - collect two Reviewed-bys (Kees).
+> 
+> Since v1 [0]:
+>  - catch .got entries too as LLD may produce it (Nathan);
+>  - check for unwanted sections to be zero-sized instead of
+>    discarding (Fangrui).
+> 
+> [0] https://lore.kernel.org/linux-mips/20210104121729.46981-1-alobakin@pm.me
+> [1] https://lore.kernel.org/linux-mips/20210106200713.31840-1-alobakin@pm.me
+> [2] https://lore.kernel.org/linux-mips/20210107115120.281008-1-alobakin@pm.me
+> 
+> Alexander Lobakin (7):
+>   MIPS: vmlinux.lds.S: add missing PAGE_ALIGNED_DATA() section
+>   MIPS: vmlinux.lds.S: add ".gnu.attributes" to DISCARDS
+>   MIPS: properly stop .eh_frame generation
+>   MIPS: vmlinux.lds.S: catch bad .rel.dyn at link time
+>   MIPS: vmlinux.lds.S: explicitly declare .got table
+>   vmlinux.lds.h: catch compound literals into data and BSS
+>   MIPS: select ARCH_WANT_LD_ORPHAN_WARN
 
-Fixed: 37e5c69ffd41 ("MIPS: head.S: Init fw_passed_dtb to builtin DTB")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kevin Hao <haokexin@gmail.com>
----
- arch/mips/cavium-octeon/setup.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+this breaks my builds:
 
-diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
-index 982826ba0ef7..41d9c80e9666 100644
---- a/arch/mips/cavium-octeon/setup.c
-+++ b/arch/mips/cavium-octeon/setup.c
-@@ -1149,7 +1149,8 @@ void __init device_tree_init(void)
- 	bool do_prune;
- 	bool fill_mac;
- 
--	if (fw_passed_dtb) {
-+	if (fw_passed_dtb && (fw_passed_dtb != (ulong)&__dtb_octeon_68xx_begin) &&
-+	    (fw_passed_dtb != (ulong)&__dtb_octeon_3xxx_begin)) {
- 		fdt = (void *)fw_passed_dtb;
- 		do_prune = false;
- 		fill_mac = true;
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+  MODINFO modules.builtin.modinfo
+  GEN     modules.builtin
+  LD      .tmp_vmlinux.kallsyms1
+mips64-linux-gnu-ld: Unexpected run-time relocations (.rel) detected!
+
+
+$ mips64-linux-gnu-ld --version
+GNU ld version 2.27-3.fc24
+
+$ mips64-linux-gnu-gcc --version
+mips64-linux-gnu-gcc (GCC) 6.1.1 20160621 (Red Hat Cross 6.1.1-2)
+
+Thomas.
+
 -- 
-2.29.2
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
