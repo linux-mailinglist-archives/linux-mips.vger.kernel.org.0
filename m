@@ -2,89 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA442EFC15
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Jan 2021 01:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 386302EFC3D
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Jan 2021 01:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbhAIAW1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Jan 2021 19:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbhAIAW1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Jan 2021 19:22:27 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BC7C061573;
-        Fri,  8 Jan 2021 16:21:46 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id h16so12919965edt.7;
-        Fri, 08 Jan 2021 16:21:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SVjrZHS1z9/LfAkQQVlQkPWbRRh+b9cjLLIJ+BUfI/o=;
-        b=ROe310CEXN5w5chetm/q09Ju86rDbg22e9wnb7057rGPXIv9vUBc9VNQFkWyRahK+1
-         OhMTrinNnLr/oI2bVV1dz5qmKB1V6a8XNOMH+YhaJV0z8YmD+75sfoNOnRJvsqgVjE15
-         9czlN0xhzyK/OpEhvL9Tf8EYNfEHyHHMhvQ6DMMI2pR3aKURFrdwxiBx2C8Ftm10L9QY
-         a5hKr50hnd6cg8kMdqZAkEtrGg/XkgrZNnh+a5qKpl6I9qBWVXyBUEZQgWMpFOrCAjlB
-         QpViGMfvL7aF96LF2BRjrB9GfCnSEX8HZOsNQrnrtJ4zkH/09DGDZhNrVB9aq1r/VRZC
-         jj1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SVjrZHS1z9/LfAkQQVlQkPWbRRh+b9cjLLIJ+BUfI/o=;
-        b=huQTBGqOoYTjTjror4zqcEvKlvJfovArUIiz1Fy7kSdfoKQPFhPOvIEq8rfPWcaaId
-         eSQzmMNC320JIc/M/c3WNS+88IcjtPuSVRRfsoPwyuUwdQiwN/Iv3SiyBUgsMzVqSvQR
-         YRvcyLZJNGSkWFNz3Bhr/fb1xFuVO3mOLf3/sFzEty4GBwGMRWXtl7DDh2X3F+T3ledo
-         gCNoWBzuhHLNhw9FYnCaFdVLItcT1pdYsY1WSHRejQ99sVscn6h8FJE/dvat8H3vZBvz
-         Yqg83ln/iSsOZOJLxTUEB1LLUIPW13Rk+WHUUT9SA2kzCtSFKJhLEi+brbuF3APRFISw
-         xInA==
-X-Gm-Message-State: AOAM533wsMM5ZHf1dKkssmO4z8DXB1cIan+Mg0OYECWlldsPptbthYAj
-        wwPkRydYOURrimF9WZTlhz0=
-X-Google-Smtp-Source: ABdhPJx7Tkr3/eQR3Sikolg6+F5j6qjGA0HG++ZdfTMDo7zdnYsts0o0HBYS9twc18lAHRNW53VExQ==
-X-Received: by 2002:a50:fd18:: with SMTP id i24mr7135813eds.146.1610151705460;
-        Fri, 08 Jan 2021 16:21:45 -0800 (PST)
-Received: from skbuf (5-12-227-87.residential.rdsnet.ro. [5.12.227.87])
-        by smtp.gmail.com with ESMTPSA id e27sm4061827ejm.60.2021.01.08.16.21.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jan 2021 16:21:44 -0800 (PST)
-Date:   Sat, 9 Jan 2021 02:21:43 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v7 net-next 2/2] net: dsa: qca: ar9331: export stats64
-Message-ID: <20210109002143.r4aokvewrgwv3qqv@skbuf>
-References: <20210107125613.19046-1-o.rempel@pengutronix.de>
- <20210107125613.19046-3-o.rempel@pengutronix.de>
- <X/ccfY+9a8R6wcJX@lunn.ch>
- <20210108053228.2efctejqxbqijm6l@pengutronix.de>
+        id S1725835AbhAIAfG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Jan 2021 19:35:06 -0500
+Received: from elvis.franken.de ([193.175.24.41]:36963 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725792AbhAIAfG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 Jan 2021 19:35:06 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1ky2D2-0008AZ-01; Sat, 09 Jan 2021 01:34:24 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id AFC99C0870; Sat,  9 Jan 2021 01:33:52 +0100 (CET)
+Date:   Sat, 9 Jan 2021 01:33:52 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     tglx@linutronix.de, airlied@linux.ie, airlied@redhat.com,
+        akpm@linux-foundation.org, arnd@arndb.de, bcrl@kvack.org,
+        bigeasy@linutronix.de, bristot@redhat.com, bsegall@google.com,
+        bskeggs@redhat.com, chris@zankel.net, christian.koenig@amd.com,
+        clm@fb.com, davem@davemloft.net, deanbo422@gmail.com,
+        dietmar.eggemann@arm.com, dri-devel@lists.freedesktop.org,
+        dsterba@suse.com, green.hu@gmail.com, hch@lst.de,
+        intel-gfx@lists.freedesktop.org, jcmvbkbc@gmail.com,
+        josef@toxicpanda.com, juri.lelli@redhat.com, kraxel@redhat.com,
+        linux-aio@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-btrfs@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-graphics-maintainer@vmware.com, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
+        mgorman@suse.de, mingo@kernel.org, monstr@monstr.eu,
+        mpe@ellerman.id.au, nickhu@andestech.com,
+        nouveau@lists.freedesktop.org, paulmck@kernel.org,
+        paulus@samba.org, peterz@infradead.org, ray.huang@amd.com,
+        rodrigo.vivi@intel.com, rostedt@goodmis.org,
+        sparclinux@vger.kernel.org, spice-devel@lists.freedesktop.org,
+        sroland@vmware.com, torvalds@linuxfoundation.org,
+        vgupta@synopsys.com, vincent.guittot@linaro.org,
+        viro@zeniv.linux.org.uk, virtualization@lists.linux-foundation.org,
+        x86@kernel.org
+Subject: Re: [patch V3 13/37] mips/mm/highmem: Switch to generic kmap atomic
+Message-ID: <20210109003352.GA18102@alpha.franken.de>
+References: <JUTMMQ.NNFWKIUV7UUJ1@crapouillou.net>
+ <20210108235805.GA17543@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210108053228.2efctejqxbqijm6l@pengutronix.de>
+In-Reply-To: <20210108235805.GA17543@alpha.franken.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jan 08, 2021 at 06:32:28AM +0100, Oleksij Rempel wrote:
-> May be the "net: dsa: add optional stats64 support" can already be
-> taken?
+On Sat, Jan 09, 2021 at 12:58:05AM +0100, Thomas Bogendoerfer wrote:
+> On Fri, Jan 08, 2021 at 08:20:43PM +0000, Paul Cercueil wrote:
+> > Hi Thomas,
+> > 
+> > 5.11 does not boot anymore on Ingenic SoCs, I bisected it to this commit.
+> > 
+> > Any idea what could be happening?
+> 
+> not yet, kernel crash log of a Malta QEMU is below.
 
-I'm not sure that I see the point. David and Jakub won't cherry-pick
-partial series, and if you resend just patch 1/2, they won't accept new
-code that doesn't have any callers.
+update:
 
-You don't have to wait for my series if you don't want to. If you're
-going to conflict with it anyway (it changes the prototype of
-ndo_get_stats64), you might as well not wait. I don't know when, or if,
-it's going to be over with it. It is going to take at least one more
-respin since it now conflicts with net.git commit 9f9d41f03bb0 ("docs:
-net: fix documentation on .ndo_get_stats") merged a few hours ago into
-net-next. So just say which way it is that you prefer.
+This dirty hack lets the Malta QEMU boot again:
+
+diff --git a/mm/highmem.c b/mm/highmem.c
+index c3a9ea7875ef..190cdda1149d 100644
+--- a/mm/highmem.c
++++ b/mm/highmem.c
+@@ -515,7 +515,7 @@ void *__kmap_local_pfn_prot(unsigned long pfn, pgprot_t prot)
+ 	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
+ 	BUG_ON(!pte_none(*(kmap_pte - idx)));
+ 	pteval = pfn_pte(pfn, prot);
+-	set_pte_at(&init_mm, vaddr, kmap_pte - idx, pteval);
++	set_pte(kmap_pte - idx, pteval);
+ 	arch_kmap_local_post_map(vaddr, pteval);
+ 	current->kmap_ctrl.pteval[kmap_local_idx()] = pteval;
+ 	preempt_enable();
+
+set_pte_at() tries to update cache and could do an kmap_atomic() there.
+Not sure, if this is allowed at this point.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
