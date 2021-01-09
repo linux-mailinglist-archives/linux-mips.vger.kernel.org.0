@@ -2,167 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D97D2F031D
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Jan 2021 20:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DBB2F0336
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Jan 2021 20:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726253AbhAITQW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Jan 2021 14:16:22 -0500
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:50891 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726005AbhAITQW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Jan 2021 14:16:22 -0500
-Date:   Sat, 09 Jan 2021 19:15:31 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1610219739; bh=HTNhGxaumyEfFhC9Rh9YxptEn03qWU8vZ3Aojfr4I3Y=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=efJi1H69hfjRY1dichxq85cJ30sh0bLohwHaOzEbHMfKM/BofFpXOlVhw4wGix8sQ
-         Ydq5ZKEnP0O4JjkQ/IRkxH/Cwkr0+x4tmH8qzJkeeBVGdtYLifRvg7zzAuXPJF5PQ6
-         U8rqimZEaDPUSBIUNW2x5NSFk+W63WkYxFq6fTddAnwEBX8atDxWt32/h7v6P77a+y
-         rp+B8i8AuTrcKx4/67h082VgculI/UbrLmeEeMNRDr9cbVer/6LacAmBePatLKpqAr
-         1hoA1r0tpMIMJ4rH/OpQ6HQFH7hGTrlEx79c2GFKWNUI9AmXKgMjfAm97/HUUfGbxN
-         o77cf55f6nF8g==
-To:     Nick Desaulniers <ndesaulniers@google.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-mips@vger.kernel.org,
+        id S1726013AbhAITpf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Jan 2021 14:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726001AbhAITpf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Jan 2021 14:45:35 -0500
+X-Greylist: delayed 831 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 09 Jan 2021 11:44:54 PST
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF80C06179F;
+        Sat,  9 Jan 2021 11:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:From:Reply-To:Subject:Content-ID:
+        Content-Description:In-Reply-To:References:X-Debbugs-Cc;
+        bh=Va69OFCaPzTyF2nCJ8Ej3Vk2ibZnYCpl6p6y3KC54nE=; b=uTEZa9USiLaUtdOnB5xFSUgzjI
+        fyMrhzbjk1lpRHvsx0BjOpm123MNyU4F/GATAvdoqd8wL7yjFg/aoRbj0hVMCCs69y+wVFlR0GI1C
+        FT39rr3m5a2dp2JafVwQAvrwm2b3gGngLI7VymQxISxs06WNPUX/ECJvDpv5L7gqtA7F1ULOIE+dt
+        aQSyR6cxbWgpfq6p9KJYHP4rIucy2Xik5RBVo3mWJMNotLhcOWJ5o/nLZUyNHQYjzBoijhLI2qbYT
+        /2Mx6VUqAO2WaLtuvnprMmGYNqmhlwoz25FZbneQbOJ6e5nKRp4qCjaDF83V1pUN4MGAF7Ejaozwp
+        gGPVNvwA==;
+Received: from [2a01:e35:2fdd:a4e1:fe91:fc89:bc43:b814] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1kyJws-00088b-5r; Sat, 09 Jan 2021 20:30:54 +0100
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.94)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1kyJwp-0020S8-Pm; Sat, 09 Jan 2021 20:30:51 +0100
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Aurelien Jarno <aurelien@aurel32.net>, stable@vger.kernel.org,
+        YunQiang Su <syq@debian.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [BUG mips llvm] MIPS: malformed R_MIPS_{HI16,LO16} with LLVM
-Message-ID: <20210109191457.786517-1-alobakin@pm.me>
-In-Reply-To: <CAKwvOdmV2tj4Uyz1iDkqCj+snWPpnnAmxJyN+puL33EpMRPzUw@mail.gmail.com>
-References: <20210109171058.497636-1-alobakin@pm.me> <CAKwvOdmV2tj4Uyz1iDkqCj+snWPpnnAmxJyN+puL33EpMRPzUw@mail.gmail.com>
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org (open list:MIPS)
+Subject: [PATCH] MIPS: Support binutils configured with --enable-mips-fix-loongson3-llsc=yes
+Date:   Sat,  9 Jan 2021 20:30:47 +0100
+Message-Id: <20210109193048.478339-1-aurelien@aurel32.net>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Sat, 9 Jan 2021 09:50:44 -0800
+From version 2.35, binutils can be configured with
+--enable-mips-fix-loongson3-llsc=yes, which means it defaults to
+-mfix-loongson3-llsc. This breaks labels which might then point at the
+wrong instruction.
 
-> On Sat, Jan 9, 2021 at 9:11 AM Alexander Lobakin <alobakin@pm.me> wrote:
->>
->> Machine: MIPS32 R2 Big Endian (interAptiv (multi))
->>
->> While testing MIPS with LLVM, I found a weird and very rare bug with
->> MIPS relocs that LLVM emits into kernel modules. It happens on both
->> 11.0.0 and latest git snapshot and applies, as I can see, only to
->> references to static symbols.
->>
->> When the kernel loads the module, it allocates a space for every
->> section and then manually apply the relocations relative to the
->> new address.
->>
->> Let's say we have a function phy_probe() in drivers/net/phy/libphy.ko.
->> It's static and referenced only in phy_register_driver(), where it's
->> used to fill callback pointer in a structure.
->>
->> The real function address after module loading is 0xc06c1444, that
->> is observed in its ELF st_value field.
->> There are two relocs related to this usage in phy_register_driver():
->>
->> R_MIPS_HI16 refers to 0x3c010000
->> R_MIPS_LO16 refers to 0x24339444
->>
->> The address of .text is 0xc06b8000. So the destination is calculated
->> as follows:
->>
->> 0x00000000 from hi16;
->> 0xffff9444 from lo16 (sign extend as it's always treated as signed);
->> 0xc06b8000 from base.
->>
->> =3D 0xc06b1444. The value is lower than the real phy_probe() address
->> (0xc06c1444) by 0x10000 and is lower than the base address of
->> module's .text, so it's 100% incorrect.
->>
->> This results in:
->>
->> [    2.204022] CPU 3 Unable to handle kernel paging request at virtual
->> address c06b1444, epc =3D=3D c06b1444, ra =3D=3D 803f1090
->>
->> The correct instructions should be:
->>
->> R_MIPS_HI16 0x3c010001
->> R_MIPS_LO16 0x24339444
->>
->> so there'll be 0x00010000 from hi16.
->>
->> I tried to catch those bugs in arch/mips/kernel/module.c (by checking
->> if the destination is lower than the base address, which should never
->> happen), and seems like I have only 3 such places in libphy.ko (and
->> one in nf_tables.ko).
->> I don't think it should be handled somehow in mentioned source code
->> as it would look rather ugly and may break kernels build with GNU
->> stack, which seems to not produce such bad codes.
->>
->> If I should report this to any other resources, please let me know.
->> I chose clang-built-linux and LKML as it may not happen with userland
->> (didn't tried to catch).
->
-> Thanks for the report.  Sounds like we may indeed be producing an
-> incorrect relocation.  This is only seen for big endian triples?
+The workaround to explicitly pass -mno-fix-loongson3-llsc has been
+added in Linux version 5.1, but is only enabled when building a Loongson
+64 kernel. As vendors might use a common toolchain for building Loongson
+and non-Loongson kernels, just move that workaround to
+arch/mips/Makefile. At the same time update the comments to reflect the
+current status.
 
-Unfortunately I don't have a LE board to play with, so can confirm
-only Big Endian.
+Cc: stable@vger.kernel.org # 5.1+
+Cc: YunQiang Su <syq@debian.org>
+Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+---
+ arch/mips/Makefile            | 19 +++++++++++++++++++
+ arch/mips/loongson64/Platform | 22 ----------------------
+ 2 files changed, 19 insertions(+), 22 deletions(-)
 
-(BTW, if someone can say if it's possible for MIPS (and how if it is)
-to launch a LE kernel from BE-booted preloader and U-Boot, that would
-be super cool)
-
-> Getting a way for us to deterministically reproduce would be a good
-> first step.  Which config or configs beyond defconfig, and which
-> relocations specifically are you observing this with?
-
-I use `make 32r2_defconfig` which combines several configs from
-arch/mips/configs:
- - generic_defconfig;
- - generic/32r2.config;
- - generic/eb.config.
-
-Aside from that, I enable a bunch of my WIP drivers and the
-Netfilter. On my setup, this bug is always present in libphy.ko,
-so CONFIG_PHYLIB=3Dm (with all deps) should be enough.
-
-The three failed relocs belongs to this part of code: [0]
-
-llvm-readelf on them:
-
-Relocation section '.rel.text' at offset 0xbf60 contains 2281 entries:=
-=C2=AC
-[...]
-00005740  00029305 R_MIPS_HI16            00000000   .text
-00005744  00029306 R_MIPS_LO16            00000000   .text
-00005720  00029305 R_MIPS_HI16            00000000   .text
-00005748  00029306 R_MIPS_LO16            00000000   .text
-0000573c  00029305 R_MIPS_HI16            00000000   .text
-0000574c  00029306 R_MIPS_LO16            00000000   .text
-
-The first pair is the one from my first mail:
-0x3c010000 <-- should be 0x3c010001 to work properly
-0x24339444
-
-I'm planning to hunt for more now, will let you know.
-
-[0] https://elixir.bootlin.com/linux/v5.11-rc2/source/drivers/net/phy/phy_d=
-evice.c#L2989
-
-> Thanks,
-> ~Nick Desaulniers
-
-Thanks,
-Al
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index cd4343edeb11..5ffdd67093bc 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -136,6 +136,25 @@ cflags-$(CONFIG_SB1XXX_CORELIS)	+= $(call cc-option,-mno-sched-prolog) \
+ #
+ cflags-y += -fno-stack-check
+ 
++# binutils from v2.35 when built with --enable-mips-fix-loongson3-llsc=yes,
++# supports an -mfix-loongson3-llsc flag which emits a sync prior to each ll
++# instruction to work around a CPU bug (see __SYNC_loongson3_war in asm/sync.h
++# for a description).
++#
++# We disable this in order to prevent the assembler meddling with the
++# instruction that labels refer to, ie. if we label an ll instruction:
++#
++# 1: ll v0, 0(a0)
++#
++# ...then with the assembler fix applied the label may actually point at a sync
++# instruction inserted by the assembler, and if we were using the label in an
++# exception table the table would no longer contain the address of the ll
++# instruction.
++#
++# Avoid this by explicitly disabling that assembler behaviour.
++#
++cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
++
+ #
+ # CPU-dependent compiler/assembler options for optimization.
+ #
+diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
+index ec42c5085905..e2354e128d9a 100644
+--- a/arch/mips/loongson64/Platform
++++ b/arch/mips/loongson64/Platform
+@@ -5,28 +5,6 @@
+ 
+ cflags-$(CONFIG_CPU_LOONGSON64)	+= -Wa,--trap
+ 
+-#
+-# Some versions of binutils, not currently mainline as of 2019/02/04, support
+-# an -mfix-loongson3-llsc flag which emits a sync prior to each ll instruction
+-# to work around a CPU bug (see __SYNC_loongson3_war in asm/sync.h for a
+-# description).
+-#
+-# We disable this in order to prevent the assembler meddling with the
+-# instruction that labels refer to, ie. if we label an ll instruction:
+-#
+-# 1: ll v0, 0(a0)
+-#
+-# ...then with the assembler fix applied the label may actually point at a sync
+-# instruction inserted by the assembler, and if we were using the label in an
+-# exception table the table would no longer contain the address of the ll
+-# instruction.
+-#
+-# Avoid this by explicitly disabling that assembler behaviour. If upstream
+-# binutils does not merge support for the flag then we can revisit & remove
+-# this later - for now it ensures vendor toolchains don't cause problems.
+-#
+-cflags-$(CONFIG_CPU_LOONGSON64)	+= $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
+-
+ #
+ # binutils from v2.25 on and gcc starting from v4.9.0 treat -march=loongson3a
+ # as MIPS64 R2; older versions as just R1.  This leaves the possibility open
+-- 
+2.29.2
 
