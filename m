@@ -2,77 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD372F034E
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Jan 2021 21:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 806732F0371
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Jan 2021 21:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726005AbhAIUCu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Jan 2021 15:02:50 -0500
-Received: from [78.8.192.131] ([78.8.192.131]:12716 "EHLO orcam.me.uk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725999AbhAIUCu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 9 Jan 2021 15:02:50 -0500
-X-Greylist: delayed 504 seconds by postgrey-1.27 at vger.kernel.org; Sat, 09 Jan 2021 15:02:49 EST
-Received: from cvs.linux-mips.org (eddie.linux-mips.org [148.251.95.138])
-        by orcam.me.uk (Postfix) with ESMTPS id D7E412BE0EC;
-        Sat,  9 Jan 2021 19:53:52 +0000 (GMT)
-Date:   Sat, 9 Jan 2021 19:53:19 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Aurelien Jarno <aurelien@aurel32.net>
-cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        YunQiang Su <syq@debian.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Support binutils configured with
- --enable-mips-fix-loongson3-llsc=yes
-In-Reply-To: <20210109193048.478339-1-aurelien@aurel32.net>
-Message-ID: <alpine.LFD.2.21.2101091944330.1637534@eddie.linux-mips.org>
-References: <20210109193048.478339-1-aurelien@aurel32.net>
+        id S1726013AbhAIUbG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Jan 2021 15:31:06 -0500
+Received: from elvis.franken.de ([193.175.24.41]:39071 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726005AbhAIUbG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 9 Jan 2021 15:31:06 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kyKsT-0000cD-00; Sat, 09 Jan 2021 21:30:25 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 63423C0884; Sat,  9 Jan 2021 18:59:35 +0100 (CET)
+Date:   Sat, 9 Jan 2021 18:59:35 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Jiri Kosina <trivial@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH trivial] MIPS: bitops: Fix reference to ffz location
+Message-ID: <20210109175935.GA7156@alpha.franken.de>
+References: <20210108105526.2028605-1-geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210108105526.2028605-1-geert+renesas@glider.be>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 9 Jan 2021, Aurelien Jarno wrote:
+On Fri, Jan 08, 2021 at 11:55:26AM +0100, Geert Uytterhoeven wrote:
+> Unlike most other architectures, MIPS defines ffz() below ffs().
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  arch/mips/include/asm/bitops.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> index cd4343edeb11..5ffdd67093bc 100644
-> --- a/arch/mips/Makefile
-> +++ b/arch/mips/Makefile
-> @@ -136,6 +136,25 @@ cflags-$(CONFIG_SB1XXX_CORELIS)	+= $(call cc-option,-mno-sched-prolog) \
->  #
->  cflags-y += -fno-stack-check
->  
-> +# binutils from v2.35 when built with --enable-mips-fix-loongson3-llsc=yes,
-> +# supports an -mfix-loongson3-llsc flag which emits a sync prior to each ll
-> +# instruction to work around a CPU bug (see __SYNC_loongson3_war in asm/sync.h
-> +# for a description).
-> +#
-> +# We disable this in order to prevent the assembler meddling with the
-> +# instruction that labels refer to, ie. if we label an ll instruction:
-> +#
-> +# 1: ll v0, 0(a0)
-> +#
-> +# ...then with the assembler fix applied the label may actually point at a sync
-> +# instruction inserted by the assembler, and if we were using the label in an
-> +# exception table the table would no longer contain the address of the ll
-> +# instruction.
+applied to mips-next.
 
- Interesting.  Given that a MIPS assembler is generally free to shuffle 
-instructions as it sees fit in its default reorder mode as long as that 
-does not change the semantics of the code executed, shouldn't we instead 
-place all label/instruction pairs used for exception handling in noreorder 
-blocks so as to make sure the label refers to the instruction an exception 
-handler expects it to?
+Thomas.
 
- E.g. for the case quoted above:
-
-	.set	push
-	.set	noreorder
-1:	ll	v0, 0(a0)
-	.set	pop
-
-  Maciej
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
