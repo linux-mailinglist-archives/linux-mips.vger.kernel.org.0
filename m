@@ -2,98 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4E82F06AE
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Jan 2021 12:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C7D2F06BC
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Jan 2021 12:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726215AbhAJLgR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 10 Jan 2021 06:36:17 -0500
-Received: from aposti.net ([89.234.176.197]:33724 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726069AbhAJLgQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 10 Jan 2021 06:36:16 -0500
-Date:   Sun, 10 Jan 2021 11:35:01 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [patch V3 13/37] mips/mm/highmem: Switch to generic kmap atomic
+        id S1726263AbhAJLyj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Jan 2021 06:54:39 -0500
+Received: from mail-40134.protonmail.ch ([185.70.40.134]:47052 "EHLO
+        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726069AbhAJLyj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jan 2021 06:54:39 -0500
+Date:   Sun, 10 Jan 2021 11:53:50 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1610279636; bh=e+CceW4cTSMaSiEXVZcdatIqUeP8AJi4B5rdzKiTWXc=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=FBoH46m0JJOf+Mn9CgCEuL4rdSIL1n0YXYcAAVT69BLb+xDN7BH68mxBzUtgiOKXB
+         OQYCCc7upTbzvRT4dBDL+Fa8nHH3kYn7rLN/xsyVFkxCTbPc75vWpN9NR9hd9nELkS
+         V/rb0ZpHTYU1UUaqoXuC5diaIqiJHKxamOtdnWuNRWzV4bpI/8ttijqyRtJkDzl/xQ
+         1/srqKG6F0uvhzx7GsDS5/Xxq9Eqh82KAOlzKZkkx72DjPtCCRrG8jjFFFAgy6w7Oe
+         BqFjT2VnsDtF6tWS88RcW+9j3Pq9Jlc5bLXnoyfNulvbq99PrEGA+qgw1M0W7S1ayl
+         k3YYy74DVPnjw==
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     tglx@linutronix.de, airlied@linux.ie, airlied@redhat.com,
-        akpm@linux-foundation.org, arnd@arndb.de, bcrl@kvack.org,
-        bigeasy@linutronix.de, bristot@redhat.com, bsegall@google.com,
-        bskeggs@redhat.com, chris@zankel.net, christian.koenig@amd.com,
-        clm@fb.com, davem@davemloft.net, deanbo422@gmail.com,
-        dietmar.eggemann@arm.com, dri-devel@lists.freedesktop.org,
-        dsterba@suse.com, green.hu@gmail.com, hch@lst.de,
-        intel-gfx@lists.freedesktop.org, jcmvbkbc@gmail.com,
-        josef@toxicpanda.com, juri.lelli@redhat.com, kraxel@redhat.com,
-        linux-aio@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-btrfs@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-graphics-maintainer@vmware.com, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
-        mgorman@suse.de, mingo@kernel.org, monstr@monstr.eu,
-        mpe@ellerman.id.au, nickhu@andestech.com,
-        nouveau@lists.freedesktop.org, paulmck@kernel.org,
-        paulus@samba.org, peterz@infradead.org, ray.huang@amd.com,
-        rodrigo.vivi@intel.com, rostedt@goodmis.org,
-        sparclinux@vger.kernel.org, spice-devel@lists.freedesktop.org,
-        sroland@vmware.com, torvalds@linuxfoundation.org,
-        vgupta@synopsys.com, vincent.guittot@linaro.org,
-        viro@zeniv.linux.org.uk, virtualization@lists.linux-foundation.org,
-        x86@kernel.org
-Message-Id: <DUUPMQ.U53A0W7YJPGM@crapouillou.net>
-In-Reply-To: <20210109003352.GA18102@alpha.franken.de>
-References: <JUTMMQ.NNFWKIUV7UUJ1@crapouillou.net>
-        <20210108235805.GA17543@alpha.franken.de>
-        <20210109003352.GA18102@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Pei Huang <huangpei@loongson.cn>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Fangrui Song <maskray@google.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, stable@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH v5 mips-next 0/9] MIPS: vmlinux.lds.S sections fixes & cleanup
+Message-ID: <20210110115245.30762-1-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+This series hunts the problems discovered after manual enabling of
+ARCH_WANT_LD_ORPHAN_WARN. Notably:
+ - adds the missing PAGE_ALIGNED_DATA() section affecting VDSO
+   placement (marked for stable);
+ - stops blind catching of orphan text sections with .text.*
+   directive;
+ - properly stops .eh_frame section generation.
 
-Le sam. 9 janv. 2021 à 1:33, Thomas Bogendoerfer 
-<tsbogend@alpha.franken.de> a écrit :
-> On Sat, Jan 09, 2021 at 12:58:05AM +0100, Thomas Bogendoerfer wrote:
->>  On Fri, Jan 08, 2021 at 08:20:43PM +0000, Paul Cercueil wrote:
->>  > Hi Thomas,
->>  >
->>  > 5.11 does not boot anymore on Ingenic SoCs, I bisected it to this 
->> commit.
->>  >
->>  > Any idea what could be happening?
->> 
->>  not yet, kernel crash log of a Malta QEMU is below.
-> 
-> update:
-> 
-> This dirty hack lets the Malta QEMU boot again:
-> 
-> diff --git a/mm/highmem.c b/mm/highmem.c
-> index c3a9ea7875ef..190cdda1149d 100644
-> --- a/mm/highmem.c
-> +++ b/mm/highmem.c
-> @@ -515,7 +515,7 @@ void *__kmap_local_pfn_prot(unsigned long pfn, 
-> pgprot_t prot)
->  	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
->  	BUG_ON(!pte_none(*(kmap_pte - idx)));
->  	pteval = pfn_pte(pfn, prot);
-> -	set_pte_at(&init_mm, vaddr, kmap_pte - idx, pteval);
-> +	set_pte(kmap_pte - idx, pteval);
->  	arch_kmap_local_post_map(vaddr, pteval);
->  	current->kmap_ctrl.pteval[kmap_local_idx()] = pteval;
->  	preempt_enable();
-> 
-> set_pte_at() tries to update cache and could do an kmap_atomic() 
-> there.
-> Not sure, if this is allowed at this point.
+Compile and runtime tested on MIPS32R2 CPS board with no issues
+using two different toolkits:
+ - Binutils 2.35.1, GCC 10.2.1 (with Alpine patches);
+ - LLVM stack: 11.0.0 and from latest Git snapshot.
 
-Yes, I can confirm that your workaround works here too.
+Since v4 [3]:
+ - new: drop redundant .text.cps-vec creation and blind inclusion
+   of orphan text sections via .text.* directive in vmlinux.lds.S;
+ - don't assert SIZEOF(.rel.dyn) as it's reported that it may be not
+   empty on certain machines and compilers (Thomas);
+ - align GOT table like it's done for ARM64;
+ - new: catch UBSAN's "unnamed data" sections in generic definitions
+   when building with LD_DEAD_CODE_DATA_ELIMINATION;
+ - collect Reviewed-bys (Kees, Nathan).
 
-Cheers,
--Paul
+Since v3 [2]:
+ - fix the third patch as GNU stack emits .rel.dyn into VDSO for
+   some reason if .cfi_sections is specified.
+
+Since v2 [1]:
+ - stop discarding .eh_frame and just prevent it from generating
+   (Kees);
+ - drop redundant sections assertions (Fangrui);
+ - place GOT table in .text instead of asserting as it's not empty
+   when building with LLVM (Nathan);
+ - catch compound literals in generic definitions when building with
+   LD_DEAD_CODE_DATA_ELIMINATION (Kees);
+ - collect two Reviewed-bys (Kees).
+
+Since v1 [0]:
+ - catch .got entries too as LLD may produce it (Nathan);
+ - check for unwanted sections to be zero-sized instead of
+   discarding (Fangrui).
+
+[0] https://lore.kernel.org/linux-mips/20210104121729.46981-1-alobakin@pm.m=
+e
+[1] https://lore.kernel.org/linux-mips/20210106200713.31840-1-alobakin@pm.m=
+e
+[2] https://lore.kernel.org/linux-mips/20210107115120.281008-1-alobakin@pm.=
+me
+[3] https://lore.kernel.org/linux-mips/20210107123331.354075-1-alobakin@pm.=
+me
+
+Alexander Lobakin (9):
+  MIPS: vmlinux.lds.S: add missing PAGE_ALIGNED_DATA() section
+  MIPS: CPS: don't create redundant .text.cps-vec section
+  MIPS: vmlinux.lds.S: add ".gnu.attributes" to DISCARDS
+  MIPS: properly stop .eh_frame generation
+  MIPS: vmlinux.lds.S: explicitly catch .rel.dyn symbols
+  MIPS: vmlinux.lds.S: explicitly declare .got table
+  vmlinux.lds.h: catch compound literals into data and BSS
+  vmlinux.lds.h: catch UBSAN's "unnamed data" into data
+  MIPS: select ARCH_WANT_LD_ORPHAN_WARN
+
+ arch/mips/Kconfig                 |  1 +
+ arch/mips/include/asm/asm.h       | 18 ++++++++++++++++++
+ arch/mips/kernel/cps-vec.S        |  1 -
+ arch/mips/kernel/vmlinux.lds.S    | 11 +++++++++--
+ include/asm-generic/vmlinux.lds.h |  6 +++---
+ 5 files changed, 31 insertions(+), 6 deletions(-)
+
+--=20
+2.30.0
 
 
