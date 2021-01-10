@@ -2,312 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E832F04A9
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Jan 2021 02:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0842F05D5
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Jan 2021 08:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726195AbhAJBJN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Jan 2021 20:09:13 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:56698 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbhAJBJN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Jan 2021 20:09:13 -0500
-Date:   Sun, 10 Jan 2021 01:08:26 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1610240908; bh=9sBxWmzjqipIQOnoNEK/AoPt0kN5IhdKUZVARrJ77Yc=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=fi2Mc/EUJ3toTJNPll1vN9enBP70B2Wgu2cGDFXDxATR9reAq1cSd5hXggOXZEXZB
-         6WUp27TXd9F2WK/YhF7fIOKw+7Qplh4IAaRliMWKEK+vu25SMcdEykl/CoCEFBrTt0
-         TNQmRXmjpDoNtSK0gq8Ti5h2pVySkFmJvJrE763NYus55AVbyMqfpkEi1bvewILT67
-         pYyxORj5r2MBeL5dotQyXX2VclWsy5Lx9SqoOpZIgNiBMk/t0ytCJu8Rmbmmipc7dl
-         jjt/jfxU96lNpPz+qELtvoafxeglh51b3u/F0SUcPhi3O9TcB3uEpGE3Kz69bTAIqh
-         ZSOHRukoxdJ8g==
-To:     Nick Desaulniers <ndesaulniers@google.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [BUG mips llvm] MIPS: malformed R_MIPS_{HI16,LO16} with LLVM
-Message-ID: <20210110010811.1007005-1-alobakin@pm.me>
-In-Reply-To: <20210109232854.954832-1-alobakin@pm.me>
-References: <20210109171058.497636-1-alobakin@pm.me> <CAKwvOdmV2tj4Uyz1iDkqCj+snWPpnnAmxJyN+puL33EpMRPzUw@mail.gmail.com> <20210109191457.786517-1-alobakin@pm.me> <20210109232854.954832-1-alobakin@pm.me>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S1725783AbhAJHQI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Jan 2021 02:16:08 -0500
+Received: from mout.gmx.net ([212.227.15.15]:47501 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725782AbhAJHQI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 10 Jan 2021 02:16:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1610262842;
+        bh=noDH0ChJmCU03kyt+rN//VJGTe/0j/EzmVstme6oq8A=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=ZM+Zbhp+iVzuzN6vtrRTdRLfkcPYMBK1dLj/mEqbmeBiwA7RTXddcfHZyhRIVUFo7
+         UcYasWeYkPLxU0u/9L1pRP/6Fu3Cdw2mE/XiY25cPqsejSSd7MCBCJnmMtlgN8egIq
+         0ZBZNIBkfLPvXKPlt5W57Ex0yQhWn83TE4ggetps=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Valinor ([82.203.165.132]) by mail.gmx.com (mrgmx004
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1Ma20k-1kUr6r34AG-00W1NS; Sun, 10
+ Jan 2021 08:14:01 +0100
+Date:   Sun, 10 Jan 2021 09:15:36 +0200
+From:   Lauri Kasanen <cand@gmx.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        perex@perex.cz
+Subject: Re: [PATCH 5/6 v2] sound: Add n64 driver
+Message-Id: <20210110091536.b3bc5dce2ef9d6c94d3eb873@gmx.com>
+In-Reply-To: <s5h5z45x24r.wl-tiwai@suse.de>
+References: <20210108103513.336e6eb9ad323feff6758e20@gmx.com>
+        <s5hsg7byezb.wl-tiwai@suse.de>
+        <20210109092303.b9a2a2f678a5d1b19b7f27f3@gmx.com>
+        <s5him86wmnr.wl-tiwai@suse.de>
+        <20210109194601.f94ca38b2b99ddeb15705993@gmx.com>
+        <s5ha6tivutv.wl-tiwai@suse.de>
+        <s5h5z45x24r.wl-tiwai@suse.de>
+X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+X-Provags-ID: V03:K1:inWlwNRlrAlWOHGFu8XN/wEUK9UccYWu0YROa6VtmUm3y+r2qz/
+ dXsZo5XbJXP/9QRE946PgtSdKFGuWZe2qBL82IQOQJQBCFXDrOZP1IvOEByXTg/bxeVahpf
+ E9j65xntfrJIQjuIeh3xtnXDerbfd/SXllQuwXaZrChI8z0PaaBISvWsGJkg8z28/uRF8V6
+ d/r4qASCSRVpfwm+oZKNg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:X3v+72yBUnk=:wXo5hPagcB16fEV8cQE76c
+ TtGGS/xi6ERXwCc+P2owpO5LkQoYP0u6LGf8IsJvY9vPjFnX+PzRjHMBuej1HWbsDUveus82Y
+ n6f3ca3oMbZpDyuRIZqwTIaia038yAXN+17KpkFXEIoeI0fgUbT7rxM//FZcUbCsEd1MxkEku
+ iQMbRl6i/E1SUHtIbUOzc4jpaHUJ8kup34iMzVCLko2w3weCAMO/Ujog/TT6Jg4/zNUihsWUr
+ JBOVy+p546P2hr1wK8UJFxrEFj2p37dpuaWZteGh0y58F5sObCuJ7I0rIeL/QXpTt0KcDatMu
+ eLVU5XoPQ8yEwR3ro5Sajb/Le9fxMUx0IVn6o39kz8W+yilInlnacWRGDJkew6Zzq3KBlzwvO
+ NQcHospw+F6CZb62rl9M8GPB1RX9XH8XLT/eUzW5WqUPzEdGp5o0lfFCN4t5BTSdH8u8XfULx
+ Sf4UVr2iuDDbbk0rTZYe6GoqUXJ7yVMtYHoylaMxta+jdjGK1QuCR0ybnC9iMIBysqfPUt66k
+ l7LrPKGYpLiMM2PFDSW6vpjRdqH/L343DVE2w97lQneUD0CEvPrXZwGIl9pCrE2cnrug2DbwD
+ a+c3/YAHWEl8Lkz9onKG75DoMwSZJBuw0DewCm9/QA4acTkS0hHKDcU4kAa9oEL72VxIa+tf9
+ 6/tTZ547CzQlGDCn5Ht4Ev5/G2Zg036Usy/bg88aRbz+7SJRcmbdUrFX97suOipv7mnFAuDUC
+ 0vQ4d6rs0WiSpui3AuW9MW5lKknPEQEPlxx4lN+zAz659+wha12MTmt9WyMZrrvWu/SwHCuVr
+ KjAUyx2Zd7mtgwwia8BiiDExX+OplN0bVjTLMZ8Z78xV8jqaovhhPmg2N65nCjxDXVwwlP8kY
+ SH6qbhiDw9mIZnfWq+6w==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Alexander Lobakin <alobakin@pm.me>
-Date: Sat, 09 Jan 2021 23:29:26 +0000
+On Sat, 09 Jan 2021 21:54:12 +0100
+Takashi Iwai <tiwai@suse.de> wrote:
 
-> From: Alexander Lobakin <alobakin@pm.me>
-> Date: Sat, 09 Jan 2021 19:15:31 +0000
+> When the start starts, it copies the full period size data, and moves
+> nextpos to period size while keeping pos 0.  And, at this moment, it's
+> even possible that no enough data has been filled for the period
+> size; this is practically a buffer underrun.
+> Usually PCM core can catch the buffer underrun by comparing the
+> current position reported by the pointer callback against the filled
+> size, but in this case, PCM core can't know of it because the driver
+> just tells the position 0.  This is one problem.
 >
->> From: Nick Desaulniers <ndesaulniers@google.com>
->> Date: Sat, 9 Jan 2021 09:50:44 -0800
->>
->>> On Sat, Jan 9, 2021 at 9:11 AM Alexander Lobakin <alobakin@pm.me> wrote=
-:
->>>>
->>>> Machine: MIPS32 R2 Big Endian (interAptiv (multi))
->>>>
->>>> While testing MIPS with LLVM, I found a weird and very rare bug with
->>>> MIPS relocs that LLVM emits into kernel modules. It happens on both
->>>> 11.0.0 and latest git snapshot and applies, as I can see, only to
->>>> references to static symbols.
->>>>
->>>> When the kernel loads the module, it allocates a space for every
->>>> section and then manually apply the relocations relative to the
->>>> new address.
->>>>
->>>> Let's say we have a function phy_probe() in drivers/net/phy/libphy.ko.
->>>> It's static and referenced only in phy_register_driver(), where it's
->>>> used to fill callback pointer in a structure.
->>>>
->>>> The real function address after module loading is 0xc06c1444, that
->>>> is observed in its ELF st_value field.
->>>> There are two relocs related to this usage in phy_register_driver():
->>>>
->>>> R_MIPS_HI16 refers to 0x3c010000
->>>> R_MIPS_LO16 refers to 0x24339444
->>>>
->>>> The address of .text is 0xc06b8000. So the destination is calculated
->>>> as follows:
->>>>
->>>> 0x00000000 from hi16;
->>>> 0xffff9444 from lo16 (sign extend as it's always treated as signed);
->>>> 0xc06b8000 from base.
->>>>
->>>> =3D 0xc06b1444. The value is lower than the real phy_probe() address
->>>> (0xc06c1444) by 0x10000 and is lower than the base address of
->>>> module's .text, so it's 100% incorrect.
->>>>
->>>> This results in:
->>>>
->>>> [    2.204022] CPU 3 Unable to handle kernel paging request at virtual
->>>> address c06b1444, epc =3D=3D c06b1444, ra =3D=3D 803f1090
->>>>
->>>> The correct instructions should be:
->>>>
->>>> R_MIPS_HI16 0x3c010001
->>>> R_MIPS_LO16 0x24339444
->>>>
->>>> so there'll be 0x00010000 from hi16.
->>>>
->>>> I tried to catch those bugs in arch/mips/kernel/module.c (by checking
->>>> if the destination is lower than the base address, which should never
->>>> happen), and seems like I have only 3 such places in libphy.ko (and
->>>> one in nf_tables.ko).
->>>> I don't think it should be handled somehow in mentioned source code
->>>> as it would look rather ugly and may break kernels build with GNU
->>>> stack, which seems to not produce such bad codes.
->>>>
->>>> If I should report this to any other resources, please let me know.
->>>> I chose clang-built-linux and LKML as it may not happen with userland
->>>> (didn't tried to catch).
->>>
->>> Thanks for the report.  Sounds like we may indeed be producing an
->>> incorrect relocation.  This is only seen for big endian triples?
->>
->> Unfortunately I don't have a LE board to play with, so can confirm
->> only Big Endian.
->>
->> (BTW, if someone can say if it's possible for MIPS (and how if it is)
->> to launch a LE kernel from BE-booted preloader and U-Boot, that would
->> be super cool)
->>
->>> Getting a way for us to deterministically reproduce would be a good
->>> first step.  Which config or configs beyond defconfig, and which
->>> relocations specifically are you observing this with?
->>
->> I use `make 32r2_defconfig` which combines several configs from
->> arch/mips/configs:
->>  - generic_defconfig;
->>  - generic/32r2.config;
->>  - generic/eb.config.
->>
->> Aside from that, I enable a bunch of my WIP drivers and the
->> Netfilter. On my setup, this bug is always present in libphy.ko,
->> so CONFIG_PHYLIB=3Dm (with all deps) should be enough.
->>
->> The three failed relocs belongs to this part of code: [0]
->>
->> llvm-readelf on them:
->>
->> Relocation section '.rel.text' at offset 0xbf60 contains 2281 entries:
->> [...]
->> 00005740  00029305 R_MIPS_HI16            00000000   .text
->> 00005744  00029306 R_MIPS_LO16            00000000   .text
->> 00005720  00029305 R_MIPS_HI16            00000000   .text
->> 00005748  00029306 R_MIPS_LO16            00000000   .text
->> 0000573c  00029305 R_MIPS_HI16            00000000   .text
->> 0000574c  00029306 R_MIPS_LO16            00000000   .text
->>
->> The first pair is the one from my first mail:
->> 0x3c010000 <-- should be 0x3c010001 to work properly
->> 0x24339444
->>
->> I'm planning to hunt for more now, will let you know.
+> Then, at the first period IRQ, the next period is copied, then nextpos
+> becomes 2*period_size.  At this moment, pos =3D nextpos, hence it jumps
+> from 0 to 2*periodsize out of sudden.  It's quite confusing behavior
+> for applications.  That's the second problem.
 >
-> Unfortunately, R_MIPS_32 also suffers from that. And unlikely
-> R_MIPS_{HI,LO}16, they can't be handled runtime as the values
-> are pure random.
-> I expanded arch/mips/kernel/module.c a bit, so it tries to find
-> the actual symbol in .symtab after each applied relocation and
-> print the detailed info. Here's an example from nf_defrag_ipv6
-> loading:
->
-> [  429.789793] nf_defrag_ipv6: final section addresses:
-> [  429.795409] =3D090xc07214fc __ksymtab_gpl
-> [  429.799574] =3D090xc0720000 .text
-> [  429.802902] =3D090xc07216b0 .data
-> [  429.806249] =3D090xc0721790 .bss
-> [  429.809474] =3D090xc0721508 __ksymtab_strings
-> [  429.813977] =3D090xc0728000 .init.text
-> [  429.817781] =3D090xc07214c0 .exit.text
-> [  429.821606] =3D090xc0721520 .rodata
-> [  429.825120] =3D090xc0721578 .rodata.str1.1
-> [  429.829322] =3D090xc0721638 .note.Linux
-> [  429.833226] =3D090xc0721800 .gnu.linkonce.this_module
-> [  429.838503] =3D090xc0721650 .MIPS.abiflags
-> [  429.842702] =3D090xc0721668 .reginfo
-> [  429.846326] =3D090xc0721680 .note.gnu.build-id
-> [  429.851129] nf_defrag_ipv6: R_MIPS_32 [0x00000008]: 0xc07216b0 -> 0xc0=
-7216b8 is broken
-> [  429.860017] nf_defrag_ipv6: R_MIPS_32 [0x00000008]: 0xc07216b0 -> 0xc0=
-7216b8 is broken
-> [  429.868875] nf_defrag_ipv6: R_MIPS_32 [0x00000138]: 0xc0720000 -> 0xc0=
-720138 is defrag6_net_exit
-> [  429.878706] nf_defrag_ipv6: R_MIPS_32 [0x000012c8]: 0xc0720000 -> 0xc0=
-7212c8 is nf_ct_net_init
-> [  429.888335] nf_defrag_ipv6: R_MIPS_32 [0x0000142c]: 0xc0720000 -> 0xc0=
-72142c is nf_ct_net_pre_exit
-> [  429.898367] nf_defrag_ipv6: R_MIPS_32 [0x00001440]: 0xc0720000 -> 0xc0=
-721440 is nf_ct_net_exit
-> [  429.907994] nf_defrag_ipv6: R_MIPS_32 [0x00000057]: 0xc0721578 -> 0xc0=
-7215cf is broken
-> [  429.916872] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0x80f297f0 -> 0x80=
-f297f0 is proc_dointvec_jiffies
-> [  429.927177] nf_defrag_ipv6: R_MIPS_32 [0x00000039]: 0xc0721578 -> 0xc0=
-7215b1 is broken
-> [  429.936044] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0x80f29374 -> 0x80=
-f29374 is proc_doulongvec_minmax
-> [  429.946453] nf_defrag_ipv6: R_MIPS_32 [0x00000072]: 0xc0721578 -> 0xc0=
-7215ea is broken
-> [  429.955320] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0x80f29374 -> 0x80=
-f29374 is proc_doulongvec_minmax
-> [  429.965737] nf_defrag_ipv6: R_MIPS_32 [0x000000a4]: 0xc0720000 -> 0xc0=
-7200a4 is ipv6_defrag
-> [  429.975094] nf_defrag_ipv6: R_MIPS_32 [0x000000a4]: 0xc0720000 -> 0xc0=
-7200a4 is ipv6_defrag
-> [  429.984431] nf_defrag_ipv6: R_MIPS_32 [0x0000106c]: 0xc0720000 -> 0xc0=
-72106c is ip6frag_key_hashfn
-> [  429.994470] nf_defrag_ipv6: R_MIPS_32 [0x00001090]: 0xc0720000 -> 0xc0=
-721090 is ip6frag_obj_hashfn
-> [  430.004486] nf_defrag_ipv6: R_MIPS_32 [0x000010b8]: 0xc0720000 -> 0xc0=
-7210b8 is ip6frag_obj_cmpfn
-> [  430.014425] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0xc0720000 -> 0xc0=
-720000 is nf_defrag_ipv6_enable
-> [  430.024742] nf_defrag_ipv6: R_MIPS_32 [0x00000001]: 0xc0721508 -> 0xc0=
-721509 is __kstrtab_nf_defrag_ipv6_enable
-> [  430.036074] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0xc0721508 -> 0xc0=
-721508 is __kstrtabns_nf_defrag_ipv6_enable
-> [  430.047561] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0xc0728000 -> 0xc0=
-728000 is init_module
-> [  430.056930] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0xc07214c0 -> 0xc0=
-7214c0 is cleanup_module
->
-> At least five symbols are broken and lead to nowhere: two from .data
-> and three from .rodata. Values in square braces are initial references
-> that can be observed via `nm -n` -- and for broken ones they really
-> don't correspond to any symbols, mismatching the neighbours' addresses
-> by 0x40-0x50.
+> I guess that both problems could be avoided if n64audio_pointer()
+> reports always nextpos instead of pos.
 
-Oops, my bad. I forgot that they can point to the middle of the struct
-or array or what else. Nevermind, only the problem with R_MIPS_HI16 is
-actual.
+At first there was no nextpos, and _pointer() always reported pos. This
+didn't work, the core played through the audio at chipmunk speed. So
+there must be more that I don't understand here.
 
-With the "add 0x10000 if can't find the symbol" workaround I'm now
-able to run kernel and modules without any visible defects or issues.
-Full list of detected and fixed relocs on my setup:
+Let me describe the hw, perhaps a different approach would be better.
+- the DMA unit requires 8-byte alignment and 8-divisible size (two
+frames at the only supported format, s16be stereo)
+- the DMA unit has errata if (start + len) & 0x3fff =3D=3D 0x2000, this
+must never happen
+- the audio IRQ is not a timer, it fires when the card's internal
+buffers are empty and need immediate refill
 
-libphy: R_MIPS_HI16 [0x3c030000, 0x24639444]: .text -> 0xc06b1444 is broken
-libphy: R_MIPS_HI16 [0x3c030000, 0x24639444]: .text -> 0xc06c1444 is phy_pr=
-obe
-libphy: R_MIPS_HI16 [0x3c020000, 0x2442970c]: .text -> 0xc06b170c is broken
-libphy: R_MIPS_HI16 [0x3c020000, 0x2442970c]: .text -> 0xc06c170c is phy_re=
-move
-libphy: R_MIPS_HI16 [0x3c010000, 0x242197ac]: .text -> 0xc06b17ac is broken
-libphy: R_MIPS_HI16 [0x3c010000, 0x242197ac]: .text -> 0xc06c17ac is phy_sh=
-utdown
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x24218164]: .text -> 0xc07bc164 is bro=
-ken
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x24218164]: .text -> 0xc07cc164 is nf_=
-tables_dump_obj_done
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x243981bc]: .text -> 0xc07bc1bc is bro=
-ken
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x243981bc]: .text -> 0xc07cc1bc is nft=
-_flowtable_parse_hook
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x24398390]: .text -> 0xc07bc390 is bro=
-ken
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x24398390]: .text -> 0xc07cc390 is nft=
-_register_flowtable_net_hooks
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x243981bc]: .text -> 0xc07bc1bc is bro=
-ken
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x243981bc]: .text -> 0xc07cc1bc is nft=
-_flowtable_parse_hook
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x24398390]: .text -> 0xc07bc390 is bro=
-ken
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x24398390]: .text -> 0xc07cc390 is nft=
-_register_flowtable_net_hooks
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x2421866c]: .text -> 0xc07bc66c is bro=
-ken
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x2421866c]: .text -> 0xc07cc66c is nf_=
-tables_dump_flowtable
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x242185b4]: .text -> 0xc07bc5b4 is bro=
-ken
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x242185b4]: .text -> 0xc07cc5b4 is nf_=
-tables_dump_flowtable_start
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x243981bc]: .text -> 0xc07bc1bc is bro=
-ken
-nf_tables: R_MIPS_HI16 [0x3c010001, 0x243981bc]: .text -> 0xc07cc1bc is nft=
-_flowtable_parse_hook
-nf_tables: R_MIPS_HI16 [0x3c020002, 0x24428080]: .text -> 0xc07cc080 is bro=
-ken
-nf_tables: R_MIPS_HI16 [0x3c020002, 0x24428080]: .text -> 0xc07dc080 is nft=
-_rbtree_gc
-nf_conntrack: R_MIPS_HI16 [0x3c010000, 0x24258538]: .text -> 0xc077c538 is =
-broken
-nf_conntrack: R_MIPS_HI16 [0x3c010000, 0x24258538]: .text -> 0xc078c538 is =
-nf_ct_expectation_timed_out
-
-> So for now seems like it's really an LLVM problem and there can't be
-> any simple workaround for it in the kernel.
->
->> [0] https://elixir.bootlin.com/linux/v5.11-rc2/source/drivers/net/phy/ph=
-y_device.c#L2989
->>
->>> Thanks,
->>> ~Nick Desaulniers
->>
->> Thanks,
->> Al
->
-> Al
-
-Al
-
+- Lauri
