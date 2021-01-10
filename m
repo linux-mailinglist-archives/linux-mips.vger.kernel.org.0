@@ -2,126 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41212F0703
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Jan 2021 13:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFB62F0790
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Jan 2021 15:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbhAJMGp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Jan 2021 07:06:45 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:36451 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbhAJMGp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jan 2021 07:06:45 -0500
-X-Greylist: delayed 493 seconds by postgrey-1.27 at vger.kernel.org; Sun, 10 Jan 2021 07:06:43 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1610280231;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:From:
-        Subject:Sender;
-        bh=suxnFiUZXehwYdxu3HHH3yerlSomJchhrhNdK2IYwzY=;
-        b=lLTjhRmhEUaJ8mH9nOuSgFQofOERmvgNdgRjeCdPva6huk5KBiYlK7YoXquh0o3Hge
-        ONKTz4i4i/O2Lzov5hHfvoomU27DzGBuGPGiMAgY1Ujn/LRNRugGFFYOWmKBdenicQWs
-        kfJ5UigOGudgjm/QYPWkPU5sWbuEXGCmMlkZuDPVy4J6Lzy6d4SonNx1+vPhyM7uJv8O
-        DvtYPSm6gGL6G0IrjJhK8Xtr8C28Pux3ZcEL+QHqIdqBWjnm7kIGv1hsFnwoEuxKfSg/
-        P9Zxhdhd7hWGGZ2GMS5jglFy4Tjk955VOVghhjUO3BflKMpccWc1gdq/Otj4PvMMmIg7
-        /hqA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NMGHPrrwDOsPyQ="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 47.12.1 DYNA|AUTH)
-        with ESMTPSA id m056b3x0ABrBL8P
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Sun, 10 Jan 2021 12:53:11 +0100 (CET)
-Subject: Re: [patch V3 13/37] mips/mm/highmem: Switch to generic kmap atomic
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=iso-8859-1
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <DUUPMQ.U53A0W7YJPGM@crapouillou.net>
-Date:   Sun, 10 Jan 2021 12:53:10 +0100
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        tglx@linutronix.de, airlied@linux.ie, airlied@redhat.com,
-        akpm@linux-foundation.org, arnd@arndb.de, bcrl@kvack.org,
-        bigeasy@linutronix.de, bristot@redhat.com, bsegall@google.com,
-        bskeggs@redhat.com, chris@zankel.net, christian.koenig@amd.com,
-        clm@fb.com, davem@davemloft.net, deanbo422@gmail.com,
-        dietmar.eggemann@arm.com,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        dsterba@suse.com, green.hu@gmail.com, hch@lst.de,
-        intel-gfx@lists.freedesktop.org, jcmvbkbc@gmail.com,
-        josef@toxicpanda.com, juri.lelli@redhat.com, kraxel@redhat.com,
-        linux-aio@kvack.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-btrfs@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-graphics-maintainer@vmware.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>, linux-mm@kvack.org,
-        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
-        mgorman@suse.de, mingo@kernel.org, monstr@monstr.eu,
-        mpe@ellerman.id.au, nickhu@andestech.com,
-        nouveau@lists.freedesktop.org, paulmck@kernel.org,
-        paulus@samba.org, peterz@infradead.org, ray.huang@amd.com,
-        rodrigo.vivi@intel.com, rostedt@goodmis.org,
-        sparclinux@vger.kernel.org, spice-devel@lists.freedesktop.org,
-        sroland@vmware.com, torvalds@linuxfoundation.org,
-        vgupta@synopsys.com, vincent.guittot@linaro.org,
-        viro@zeniv.linux.org.uk, virtualization@lists.linux-foundation.org,
-        x86@kernel.org
+        id S1726341AbhAJOVy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Jan 2021 09:21:54 -0500
+Received: from mail1.protonmail.ch ([185.70.40.18]:62764 "EHLO
+        mail1.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726250AbhAJOVx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jan 2021 09:21:53 -0500
+Date:   Sun, 10 Jan 2021 14:21:05 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1610288470; bh=VGX0PRLKNwrqHDEXkOqUUZwUy5aJ1pV/tRE9+Arq0VI=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=aCJf4p3jmFPCVY0b8/vbBTqZ3xWaHVQARclhn/7SqULUBNlcRd7YrCsEeII20qKic
+         wyCP+tV9UrkXGFCCaIfsvE1RfjLMdPUnMDAMVR8e83vUpEDvTyaAqtH3Jzt8y4RxzH
+         35Lz8H1AUueVhTYf5LUxfBuLOjUH9aFOwK5aNohrUoo2Gny26WlhEXNO/Y886SHa9I
+         ukXhmKtx3bdiHyWgYlc5yb+YUzxyXxHfKQzoBCXpaXyrOCRsgKM61nBjBf3+3kJuJB
+         tyHuyuq5vCQL9cMc5QHrRXGIDjOmBPppvwH5BuW87n41bpx4P8igHwH39LV3AzToXu
+         +QqlU4nQ4rJyQ==
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Matt Redfearn <matt.redfearn@mips.com>,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH mips-fixes] MIPS: relocatable: fix possible boot hangup with KASLR enabled
+Message-ID: <20210110142023.185275-1-alobakin@pm.me>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <6B074439-2E91-4FCF-84C8-82AE13D8C7F0@goldelico.com>
-References: <JUTMMQ.NNFWKIUV7UUJ1@crapouillou.net> <20210108235805.GA17543@alpha.franken.de> <20210109003352.GA18102@alpha.franken.de> <DUUPMQ.U53A0W7YJPGM@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3124)
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+LLVM-built Linux triggered a boot hangup with KASLR enabled.
 
-> Am 10.01.2021 um 12:35 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Thomas,
->=20
-> Le sam. 9 janv. 2021 =E0 1:33, Thomas Bogendoerfer =
-<tsbogend@alpha.franken.de> a =E9crit :
->> On Sat, Jan 09, 2021 at 12:58:05AM +0100, Thomas Bogendoerfer wrote:
->>> On Fri, Jan 08, 2021 at 08:20:43PM +0000, Paul Cercueil wrote:
->>> > Hi Thomas,
->>> >
->>> > 5.11 does not boot anymore on Ingenic SoCs, I bisected it to this =
-commit.
+arch/mips/kernel/relocate.c:get_random_boot() uses linux_banner,
+which is a string constant, as a random seed, but accesses it
+as an array of unsigned long (in rotate_xor()).
+When the address of linux_banner is not aligned to sizeof(long),
+such access emits unaligned access exception and hangs the kernel.
 
-Just for completeness, I have no such problems booting CI20/jz4780 or =
-Skytone400/jz4730 (unpublished work) with 5.11-rc2.
-But may depend on board capabilites (ram size, memory layout or =
-something else).
+Use PTR_ALIGN() to align input address to sizeof(long) and also
+align down the input length to prevent possible access-beyond-end.
 
->>> >
->>> > Any idea what could be happening?
->>> not yet, kernel crash log of a Malta QEMU is below.
->> update:
->> This dirty hack lets the Malta QEMU boot again:
->> diff --git a/mm/highmem.c b/mm/highmem.c
->> index c3a9ea7875ef..190cdda1149d 100644
->> --- a/mm/highmem.c
->> +++ b/mm/highmem.c
->> @@ -515,7 +515,7 @@ void *__kmap_local_pfn_prot(unsigned long pfn, =
-pgprot_t prot)
->> 	vaddr =3D __fix_to_virt(FIX_KMAP_BEGIN + idx);
->> 	BUG_ON(!pte_none(*(kmap_pte - idx)));
->> 	pteval =3D pfn_pte(pfn, prot);
->> -	set_pte_at(&init_mm, vaddr, kmap_pte - idx, pteval);
->> +	set_pte(kmap_pte - idx, pteval);
->> 	arch_kmap_local_post_map(vaddr, pteval);
->> 	current->kmap_ctrl.pteval[kmap_local_idx()] =3D pteval;
->> 	preempt_enable();
->> set_pte_at() tries to update cache and could do an kmap_atomic() =
-there.
->> Not sure, if this is allowed at this point.
->=20
-> Yes, I can confirm that your workaround works here too.
->=20
-> Cheers,
-> -Paul
->=20
->=20
+Fixes: 405bc8fd12f5 ("MIPS: Kernel: Implement KASLR using CONFIG_RELOCATABL=
+E")
+Cc: stable@vger.kernel.org # 4.7+
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ arch/mips/kernel/relocate.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+index 47aeb3350a76..0e365b7c742d 100644
+--- a/arch/mips/kernel/relocate.c
++++ b/arch/mips/kernel/relocate.c
+@@ -187,8 +187,14 @@ static int __init relocate_exception_table(long offset=
+)
+ static inline __init unsigned long rotate_xor(unsigned long hash,
+ =09=09=09=09=09      const void *area, size_t size)
+ {
+-=09size_t i;
+-=09unsigned long *ptr =3D (unsigned long *)area;
++=09const typeof(hash) *ptr =3D PTR_ALIGN(area, sizeof(hash));
++=09size_t diff, i;
++
++=09diff =3D (void *)ptr - area;
++=09if (unlikely(size < diff + sizeof(hash)))
++=09=09return hash;
++
++=09size =3D ALIGN_DOWN(size - diff, sizeof(hash));
+=20
+ =09for (i =3D 0; i < size / sizeof(hash); i++) {
+ =09=09/* Rotate by odd number of bits and XOR. */
+--=20
+2.30.0
+
 
