@@ -2,82 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 251452F06F4
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Jan 2021 12:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A41212F0703
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Jan 2021 13:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbhAJL6C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Jan 2021 06:58:02 -0500
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:33498 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbhAJL6C (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jan 2021 06:58:02 -0500
-Date:   Sun, 10 Jan 2021 11:57:01 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1610279826; bh=9X9TtaxhK4MsjM77KJSI8oMJqQq5vrXLNYznXkmw+KE=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=VWdf7Pv7GU3OQbBGG8mq7oifuAMWGLdcebsIIG0VJqMxSXYWA6gYp1trUxbhMZ+5u
-         kVyNdxORjLV6pYYeEAt6F0oaCveQfzOzGwU6VCUm5JY6fBBTKCLG5A+vsbVobGdD1M
-         dw0HwQbsYF+S0LX/wNy5iJpN8AdYDgEjD02cs75IDkccGGttqWhlEaSpRa2g44ibS5
-         8vVFHMj6zFg/wICE8+oFGRAPIIRXwh74CipLniLykFRLxz1VyA398AN4TCfL0eOdbZ
-         o2p6KtspEKAzSMpEB5Kn4e25nYWgS07hV/52/4LIpt5iy+FFGZiuDZJfGy0jrpwtTV
-         70Ox9sSoqMfSg==
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH v5 mips-next 9/9] MIPS: select ARCH_WANT_LD_ORPHAN_WARN
-Message-ID: <20210110115546.30970-9-alobakin@pm.me>
-In-Reply-To: <20210110115546.30970-1-alobakin@pm.me>
-References: <20210110115245.30762-1-alobakin@pm.me> <20210110115546.30970-1-alobakin@pm.me>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S1726379AbhAJMGp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Jan 2021 07:06:45 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:36451 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726263AbhAJMGp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jan 2021 07:06:45 -0500
+X-Greylist: delayed 493 seconds by postgrey-1.27 at vger.kernel.org; Sun, 10 Jan 2021 07:06:43 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1610280231;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:From:
+        Subject:Sender;
+        bh=suxnFiUZXehwYdxu3HHH3yerlSomJchhrhNdK2IYwzY=;
+        b=lLTjhRmhEUaJ8mH9nOuSgFQofOERmvgNdgRjeCdPva6huk5KBiYlK7YoXquh0o3Hge
+        ONKTz4i4i/O2Lzov5hHfvoomU27DzGBuGPGiMAgY1Ujn/LRNRugGFFYOWmKBdenicQWs
+        kfJ5UigOGudgjm/QYPWkPU5sWbuEXGCmMlkZuDPVy4J6Lzy6d4SonNx1+vPhyM7uJv8O
+        DvtYPSm6gGL6G0IrjJhK8Xtr8C28Pux3ZcEL+QHqIdqBWjnm7kIGv1hsFnwoEuxKfSg/
+        P9Zxhdhd7hWGGZ2GMS5jglFy4Tjk955VOVghhjUO3BflKMpccWc1gdq/Otj4PvMMmIg7
+        /hqA==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NMGHPrrwDOsPyQ="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 47.12.1 DYNA|AUTH)
+        with ESMTPSA id m056b3x0ABrBL8P
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Sun, 10 Jan 2021 12:53:11 +0100 (CET)
+Subject: Re: [patch V3 13/37] mips/mm/highmem: Switch to generic kmap atomic
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Content-Type: text/plain; charset=iso-8859-1
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <DUUPMQ.U53A0W7YJPGM@crapouillou.net>
+Date:   Sun, 10 Jan 2021 12:53:10 +0100
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        tglx@linutronix.de, airlied@linux.ie, airlied@redhat.com,
+        akpm@linux-foundation.org, arnd@arndb.de, bcrl@kvack.org,
+        bigeasy@linutronix.de, bristot@redhat.com, bsegall@google.com,
+        bskeggs@redhat.com, chris@zankel.net, christian.koenig@amd.com,
+        clm@fb.com, davem@davemloft.net, deanbo422@gmail.com,
+        dietmar.eggemann@arm.com,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        dsterba@suse.com, green.hu@gmail.com, hch@lst.de,
+        intel-gfx@lists.freedesktop.org, jcmvbkbc@gmail.com,
+        josef@toxicpanda.com, juri.lelli@redhat.com, kraxel@redhat.com,
+        linux-aio@kvack.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-btrfs@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-graphics-maintainer@vmware.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>, linux-mm@kvack.org,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
+        mgorman@suse.de, mingo@kernel.org, monstr@monstr.eu,
+        mpe@ellerman.id.au, nickhu@andestech.com,
+        nouveau@lists.freedesktop.org, paulmck@kernel.org,
+        paulus@samba.org, peterz@infradead.org, ray.huang@amd.com,
+        rodrigo.vivi@intel.com, rostedt@goodmis.org,
+        sparclinux@vger.kernel.org, spice-devel@lists.freedesktop.org,
+        sroland@vmware.com, torvalds@linuxfoundation.org,
+        vgupta@synopsys.com, vincent.guittot@linaro.org,
+        viro@zeniv.linux.org.uk, virtualization@lists.linux-foundation.org,
+        x86@kernel.org
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Message-Id: <6B074439-2E91-4FCF-84C8-82AE13D8C7F0@goldelico.com>
+References: <JUTMMQ.NNFWKIUV7UUJ1@crapouillou.net> <20210108235805.GA17543@alpha.franken.de> <20210109003352.GA18102@alpha.franken.de> <DUUPMQ.U53A0W7YJPGM@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3124)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now, after that all the sections are explicitly described and
-declared in vmlinux.lds.S, we can enable ld orphan warnings to
-prevent from missing any new sections in future.
 
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
----
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+> Am 10.01.2021 um 12:35 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Thomas,
+>=20
+> Le sam. 9 janv. 2021 =E0 1:33, Thomas Bogendoerfer =
+<tsbogend@alpha.franken.de> a =E9crit :
+>> On Sat, Jan 09, 2021 at 12:58:05AM +0100, Thomas Bogendoerfer wrote:
+>>> On Fri, Jan 08, 2021 at 08:20:43PM +0000, Paul Cercueil wrote:
+>>> > Hi Thomas,
+>>> >
+>>> > 5.11 does not boot anymore on Ingenic SoCs, I bisected it to this =
+commit.
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index d68df1febd25..d3e64cc0932b 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -18,6 +18,7 @@ config MIPS
- =09select ARCH_USE_QUEUED_SPINLOCKS
- =09select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- =09select ARCH_WANT_IPC_PARSE_VERSION
-+=09select ARCH_WANT_LD_ORPHAN_WARN
- =09select BUILDTIME_TABLE_SORT
- =09select CLONE_BACKWARDS
- =09select CPU_NO_EFFICIENT_FFS if (TARGET_ISA_REV < 1)
---=20
-2.30.0
+Just for completeness, I have no such problems booting CI20/jz4780 or =
+Skytone400/jz4730 (unpublished work) with 5.11-rc2.
+But may depend on board capabilites (ram size, memory layout or =
+something else).
 
+>>> >
+>>> > Any idea what could be happening?
+>>> not yet, kernel crash log of a Malta QEMU is below.
+>> update:
+>> This dirty hack lets the Malta QEMU boot again:
+>> diff --git a/mm/highmem.c b/mm/highmem.c
+>> index c3a9ea7875ef..190cdda1149d 100644
+>> --- a/mm/highmem.c
+>> +++ b/mm/highmem.c
+>> @@ -515,7 +515,7 @@ void *__kmap_local_pfn_prot(unsigned long pfn, =
+pgprot_t prot)
+>> 	vaddr =3D __fix_to_virt(FIX_KMAP_BEGIN + idx);
+>> 	BUG_ON(!pte_none(*(kmap_pte - idx)));
+>> 	pteval =3D pfn_pte(pfn, prot);
+>> -	set_pte_at(&init_mm, vaddr, kmap_pte - idx, pteval);
+>> +	set_pte(kmap_pte - idx, pteval);
+>> 	arch_kmap_local_post_map(vaddr, pteval);
+>> 	current->kmap_ctrl.pteval[kmap_local_idx()] =3D pteval;
+>> 	preempt_enable();
+>> set_pte_at() tries to update cache and could do an kmap_atomic() =
+there.
+>> Not sure, if this is allowed at this point.
+>=20
+> Yes, I can confirm that your workaround works here too.
+>=20
+> Cheers,
+> -Paul
+>=20
+>=20
 
