@@ -2,148 +2,311 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A82D2F2137
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 21:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A19DE2F2258
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 23:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728885AbhAKU6U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Jan 2021 15:58:20 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:45064 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728704AbhAKU6U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Jan 2021 15:58:20 -0500
-Date:   Mon, 11 Jan 2021 20:57:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1610398657; bh=423czqlXYO6cyt2pvAdEvcmUk4C4FxO/GExpCv7aBhM=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=dKDO7F+tdwzxF97ZxwMYSL4RZdRIfEJ7fdVw7R+H5Yl3BXfxLuchuMdWlPl0VrA4Q
-         ciraikiocq7nnzvIqgDtQra9docDLxlWfsWcj6sKaq54aIm+vLWd2BE39I2KTgOukm
-         cWVg03Mo1ReSb4qU0K9BNE0+PLK8cQBw4Fwmjpw6ARjhxZ/nvOOrhguyZ7Q2PAJXKM
-         6xp1bPRrf+o7skGbTZpnLBXSMRq+ideRn1t06+wSZtoLfjsCo4emJZ/uizqNCqUs1e
-         er8Fsgyp7Fk5VSQifGrHKodyJ9Ah4MohRFqP/cSWJ8P072GPm0npPBigwB7oOqkoKQ
-         cHpLCkjWkYyXA==
-To:     Kees Cook <keescook@chromium.org>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
+        id S1732524AbhAKWAE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Jan 2021 17:00:04 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:41898 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727484AbhAKWAD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Jan 2021 17:00:03 -0500
+Received: by mail-oi1-f178.google.com with SMTP id 15so193732oix.8;
+        Mon, 11 Jan 2021 13:59:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=neicyE0bmSE7XtEGiUy5qH5sWNhjeDoJxOGTdmqaB5g=;
+        b=A5rlfS88l+t/TslAWGH2LClpkIp4Z/7FlsZSUZhqTrG7SZqVLSg4r3XmpX+mLJ4cTx
+         BKPkZQWkQ114jd3o0QRoRG4WsZfGu9/7wSrlmlu1v77+uIMieUjlpqOorDmmanryzTm0
+         JYTvZalnmlpvEalJeSYIggPBHajn14ebtg5WRH1+8FGLoD0tuL5R2AzhC/YMnVo/Feqn
+         /5g9aesn6fB8ABFdJN4RTiTrBaYWqBriD8WDn1wkV4DDR8xVvx4Vti3zlylS4P9hQlHt
+         j35Qv9IwKJBxXJNp+XHmgEdJ9QqAopSptBWB+YKhg5hpEonYLQRq8pJY8/GscybINhlt
+         Dxug==
+X-Gm-Message-State: AOAM533MpUZm9PSg7oLbY3wfj8TcvdkdMCFQF/PkQ+uYSp9DUlbAWZXs
+        nJviF+NYopbkHFVM1qHx1Q==
+X-Google-Smtp-Source: ABdhPJzevo/CCNCRYdP94NcRED0kgTA26btwhv9nQvKZQhV5gp1VX1y6C2fHL6jbfju5LVVZpCFwjw==
+X-Received: by 2002:aca:b656:: with SMTP id g83mr559390oif.6.1610402362661;
+        Mon, 11 Jan 2021 13:59:22 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 73sm227750otv.26.2021.01.11.13.59.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jan 2021 13:59:21 -0800 (PST)
+Received: (nullmailer pid 3132674 invoked by uid 1000);
+        Mon, 11 Jan 2021 21:59:20 -0000
+Date:   Mon, 11 Jan 2021 15:59:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bert Vermeulen <bert@biot.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sander Vanheule <sander@svanheule.net>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH v5 mips-next 0/9] MIPS: vmlinux.lds.S sections fixes & cleanup
-Message-ID: <20210111205649.18263-1-alobakin@pm.me>
-In-Reply-To: <202101111153.AE5123B6@keescook>
-References: <20210110115245.30762-1-alobakin@pm.me> <202101111153.AE5123B6@keescook>
+        devicetree@vger.kernel.org,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        John Crispin <john@phrozen.org>
+Subject: Re: [PATCH v3 1/4] Add support for Realtek RTL838x/RTL839x switch
+ SoCs
+Message-ID: <20210111215920.GA3121911@robh.at.kernel.org>
+References: <20201230212205.2605383-1-bert@biot.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201230212205.2605383-1-bert@biot.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
-Date: Mon, 11 Jan 2021 11:53:39 -0800
+On Wed, Dec 30, 2020 at 10:22:02PM +0100, Bert Vermeulen wrote:
+> The RTL838x/839x family of SoCs are Realtek switches with an embedded
+> MIPS core.
+> 
+> * RTL838x - 500MHz 4kce single core - 1Gbit ports and L2 features
+> * RTL839x - 700MHz 34Kc single core - 1Gbit ports and L2 features
+> 
+> These switches, depending on the exact part number, will have anywhere
+> between 8 and 50 ports. The MIPS core is wired to a switch cpu port which
+> has a tagging feature allowing us to make use of the DSA subsystem.
+> The SoCs are somewhat basic in certain areas, getting better with more
+> advanced features on newer series.
+> 
+> The switch functionality is MMIO-mapped via a large MFD region.
+> 
+> The SoCs have the following peripherals
+> * ethernet
+> * switch
+> * uart - ns16550a
+> * spi-flash interface
+> * gpio
+> * wdt
+> * led
+> 
+> The code was derived from various vendor SDKs based on Linux v2.6
+> kernels.
+> 
+> This patchset allows us to boot RTL838x/RTL839x units with basic support.
+> Most of the other drivers are already written and functional, and work to
+> get them upstream is already in progress.
+> 
+> Signed-off-by: Birger Koblitz <mail@birger-koblitz.de>
+> Signed-off-by: Bert Vermeulen <bert@biot.com>
+> Signed-off-by: John Crispin <john@phrozen.org>
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> ---
+>  .../devicetree/bindings/mips/realtek-rtl.yaml | 24 ++++++
 
-> On Sun, Jan 10, 2021 at 11:53:50AM +0000, Alexander Lobakin wrote:
->> This series hunts the problems discovered after manual enabling of
->> ARCH_WANT_LD_ORPHAN_WARN. Notably:
->>  - adds the missing PAGE_ALIGNED_DATA() section affecting VDSO
->>    placement (marked for stable);
->>  - stops blind catching of orphan text sections with .text.*
->>    directive;
->>  - properly stops .eh_frame section generation.
->>
->> Compile and runtime tested on MIPS32R2 CPS board with no issues
->> using two different toolkits:
->>  - Binutils 2.35.1, GCC 10.2.1 (with Alpine patches);
->>  - LLVM stack: 11.0.0 and from latest Git snapshot.
->>
->> Since v4 [3]:
->>  - new: drop redundant .text.cps-vec creation and blind inclusion
->>    of orphan text sections via .text.* directive in vmlinux.lds.S;
->>  - don't assert SIZEOF(.rel.dyn) as it's reported that it may be not
->>    empty on certain machines and compilers (Thomas);
->>  - align GOT table like it's done for ARM64;
->>  - new: catch UBSAN's "unnamed data" sections in generic definitions
->>    when building with LD_DEAD_CODE_DATA_ELIMINATION;
->>  - collect Reviewed-bys (Kees, Nathan).
->
-> Looks good; which tree will this land through?
+Generally, this should be a separate patch.
 
-linux-mips/mips-next I guess, since 7 of 9 patches are related only
-to this architecture.
-This might need Arnd's Acked-bys or Reviewed-by for the two that
-refer include/asm-generic, let's see what Thomas think.
+>  arch/mips/boot/dts/Makefile                   |  1 +
+>  arch/mips/boot/dts/realtek/rtl838x.dtsi       | 21 +++++
+>  arch/mips/boot/dts/realtek/rtl839x.dtsi       | 21 +++++
+>  arch/mips/boot/dts/realtek/rtl83xx.dtsi       | 83 +++++++++++++++++++
+>  5 files changed, 150 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/realtek-rtl.yaml
+>  create mode 100644 arch/mips/boot/dts/realtek/rtl838x.dtsi
+>  create mode 100644 arch/mips/boot/dts/realtek/rtl839x.dtsi
+>  create mode 100644 arch/mips/boot/dts/realtek/rtl83xx.dtsi
+> 
+> diff --git a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
+> new file mode 100644
+> index 000000000000..aadff8ce0f49
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
+> @@ -0,0 +1,24 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mips/realtek-rtl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Realtek RTL83xx/93xx SoC series device tree bindings
+> +
+> +maintainers:
+> +  - Bert Vermeulen <bert@biot.com>
+> +  - Sander Vanheule <sander@svanheule.net>
+> +
+> +properties:
+> +  $nodename:
+> +    const: "/"
+> +  compatible:
+> +    oneOf:
+> +      # RTL8382-based boards
+> +      - items:
+> +          - enum:
+> +              - cisco,sg220-26
+> +          - const: realtek,rtl8382-soc
+> +
+> +additionalProperties: true
+> diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
+> index 0259238d7a2e..60bd7d2a9ad8 100644
+> --- a/arch/mips/boot/dts/Makefile
+> +++ b/arch/mips/boot/dts/Makefile
+> @@ -14,6 +14,7 @@ subdir-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= ni
+>  subdir-$(CONFIG_MACH_PIC32)		+= pic32
+>  subdir-$(CONFIG_ATH79)			+= qca
+>  subdir-$(CONFIG_RALINK)			+= ralink
+> +subdir-$(CONFIG_MACH_REALTEK_RTL)	+= realtek
+>  subdir-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+= xilfpga
+>  
+>  obj-$(CONFIG_BUILTIN_DTB)	:= $(addsuffix /, $(subdir-y))
+> diff --git a/arch/mips/boot/dts/realtek/rtl838x.dtsi b/arch/mips/boot/dts/realtek/rtl838x.dtsi
+> new file mode 100644
+> index 000000000000..6cc4ff5c0d19
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/realtek/rtl838x.dtsi
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +
+> +/ {
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu@0 {
+> +			compatible = "mips,mips4KEc";
+> +			reg = <0>;
+> +			clocks = <&baseclk 0>;
+> +			clock-names = "cpu";
+> +		};
+> +	};
+> +
+> +	baseclk: baseclk {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <500000000>;
+> +	};
+> +};
+> diff --git a/arch/mips/boot/dts/realtek/rtl839x.dtsi b/arch/mips/boot/dts/realtek/rtl839x.dtsi
+> new file mode 100644
+> index 000000000000..2b5bad8fcf2f
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/realtek/rtl839x.dtsi
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +
+> +/ {
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu@0 {
+> +			compatible = "mips,mips34Kc";
+> +			reg = <0>;
+> +			clocks = <&baseclk 0>;
+> +			clock-names = "cpu";
+> +		};
+> +	};
+> +
+> +	baseclk: baseclk {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <500000000>;
+> +	};
+> +};
+> diff --git a/arch/mips/boot/dts/realtek/rtl83xx.dtsi b/arch/mips/boot/dts/realtek/rtl83xx.dtsi
+> new file mode 100644
+> index 000000000000..17fa90002e00
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/realtek/rtl83xx.dtsi
+> @@ -0,0 +1,83 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +
+> +/ {
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +
+> +	aliases {
+> +		serial0 = &uart0;
+> +		serial1 = &uart1;
+> +	};
+> +
+> +	cpuintc: cpuintc {
+> +		compatible = "mti,cpu-interrupt-controller";
+> +		#address-cells = <0>;
+> +		#interrupt-cells = <1>;
+> +		interrupt-controller;
+> +	};
+> +
+> +	soc {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0x0 0xb8000000 0x10000>;
+> +
+> +		spi: spi@1200 {
+> +			compatible = "realtek,rtl-spi";
 
-> -Kees
->
->>
->> Since v3 [2]:
->>  - fix the third patch as GNU stack emits .rel.dyn into VDSO for
->>    some reason if .cfi_sections is specified.
->>
->> Since v2 [1]:
->>  - stop discarding .eh_frame and just prevent it from generating
->>    (Kees);
->>  - drop redundant sections assertions (Fangrui);
->>  - place GOT table in .text instead of asserting as it's not empty
->>    when building with LLVM (Nathan);
->>  - catch compound literals in generic definitions when building with
->>    LD_DEAD_CODE_DATA_ELIMINATION (Kees);
->>  - collect two Reviewed-bys (Kees).
->>
->> Since v1 [0]:
->>  - catch .got entries too as LLD may produce it (Nathan);
->>  - check for unwanted sections to be zero-sized instead of
->>    discarding (Fangrui).
->>
->> [0] https://lore.kernel.org/linux-mips/20210104121729.46981-1-alobakin@p=
-m.me
->> [1] https://lore.kernel.org/linux-mips/20210106200713.31840-1-alobakin@p=
-m.me
->> [2] https://lore.kernel.org/linux-mips/20210107115120.281008-1-alobakin@=
-pm.me
->> [3] https://lore.kernel.org/linux-mips/20210107123331.354075-1-alobakin@=
-pm.me
->>
->> Alexander Lobakin (9):
->>   MIPS: vmlinux.lds.S: add missing PAGE_ALIGNED_DATA() section
->>   MIPS: CPS: don't create redundant .text.cps-vec section
->>   MIPS: vmlinux.lds.S: add ".gnu.attributes" to DISCARDS
->>   MIPS: properly stop .eh_frame generation
->>   MIPS: vmlinux.lds.S: explicitly catch .rel.dyn symbols
->>   MIPS: vmlinux.lds.S: explicitly declare .got table
->>   vmlinux.lds.h: catch compound literals into data and BSS
->>   vmlinux.lds.h: catch UBSAN's "unnamed data" into data
->>   MIPS: select ARCH_WANT_LD_ORPHAN_WARN
->>
->>  arch/mips/Kconfig                 |  1 +
->>  arch/mips/include/asm/asm.h       | 18 ++++++++++++++++++
->>  arch/mips/kernel/cps-vec.S        |  1 -
->>  arch/mips/kernel/vmlinux.lds.S    | 11 +++++++++--
->>  include/asm-generic/vmlinux.lds.h |  6 +++---
->>  5 files changed, 31 insertions(+), 6 deletions(-)
->>
->> --
->> 2.30.0
->>
->>
->
-> --
-> Kees Cook
+Not documented. Needs to have an SoC specific compatible.
 
-Al
+> +			reg = <0x1200 0x100>;
+> +
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		uart0: uart@2000 {
 
+serial@2000
+
+Build the dtb with W=1 and run 'make dtbs_check' and fix any warnings. 
+The above issue should show up.
+
+> +			compatible = "ns16550a";
+
+No quirks for this? Best to have a more specific compatible in case you 
+do.
+
+> +			reg = <0x2000 0x100>;
+> +
+> +			clock-frequency = <200000000>;
+> +
+> +			interrupt-parent = <&intc>;
+> +			interrupts = <31>;
+> +
+> +			reg-io-width = <1>;
+> +			reg-shift = <2>;
+> +			fifo-size = <1>;
+> +			no-loopback-test;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		uart1: uart@2100 {
+> +			compatible = "ns16550a";
+> +			reg = <0x2100 0x100>;
+> +
+> +			clock-frequency = <200000000>;
+> +
+> +			interrupt-parent = <&intc>;
+> +			interrupts = <30>;
+> +
+> +			reg-io-width = <1>;
+> +			reg-shift = <2>;
+> +			fifo-size = <1>;
+> +			no-loopback-test;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		intc: interrupt-controller@3000 {
+> +			compatible = "realtek,rtl-intc";
+
+Not documented.
+
+> +			#interrupt-cells = <1>;
+> +			interrupt-controller;
+> +			reg = <0x3000 0x20>;
+> +		};
+> +	};
+> +
+> +	switch_bus: switch-bus@bb000000 {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0x0 0xbb000000 0x10000>;
+> +	};
+> +};
+> -- 
+> 2.25.1
+> 
