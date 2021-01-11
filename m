@@ -2,59 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1CA2F1027
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 11:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69012F1073
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 11:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729196AbhAKKdE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 11 Jan 2021 05:33:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        id S1729391AbhAKKsZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Jan 2021 05:48:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728959AbhAKKdD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Jan 2021 05:33:03 -0500
+        with ESMTP id S1729351AbhAKKsZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Jan 2021 05:48:25 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E899BC06179F
-        for <linux-mips@vger.kernel.org>; Mon, 11 Jan 2021 02:32:22 -0800 (PST)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E3DC0617A4
+        for <linux-mips@vger.kernel.org>; Mon, 11 Jan 2021 02:47:06 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1kyuUh-0002Iu-V7; Mon, 11 Jan 2021 11:32:15 +0100
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        id 1kyuix-0005K3-NA; Mon, 11 Jan 2021 11:46:59 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1kyuUg-0007sF-4C; Mon, 11 Jan 2021 11:32:14 +0100
-Date:   Mon, 11 Jan 2021 11:32:14 +0100
+        id 1kyuix-0005if-8R; Mon, 11 Jan 2021 11:46:59 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
+To:     Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: Re: [PATCH v7 net-next 2/2] net: dsa: qca: ar9331: export stats64
-Message-ID: <20210111103214.zsradoj5t6drgp73@pengutronix.de>
-References: <20210107125613.19046-1-o.rempel@pengutronix.de>
- <20210107125613.19046-3-o.rempel@pengutronix.de>
- <X/ccfY+9a8R6wcJX@lunn.ch>
- <20210108053228.2efctejqxbqijm6l@pengutronix.de>
- <20210109002143.r4aokvewrgwv3qqv@skbuf>
+Subject: [PATCH net-next v8 0/2] net: dsa: add stats64 support 
+Date:   Mon, 11 Jan 2021 11:46:56 +0100
+Message-Id: <20210111104658.21930-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20210109002143.r4aokvewrgwv3qqv@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 11:27:20 up 40 days, 33 min, 29 users,  load average: 0.09, 0.10,
- 0.12
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
 X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-mips@vger.kernel.org
@@ -62,29 +48,44 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jan 09, 2021 at 02:21:43AM +0200, Vladimir Oltean wrote:
-> On Fri, Jan 08, 2021 at 06:32:28AM +0100, Oleksij Rempel wrote:
-> > May be the "net: dsa: add optional stats64 support" can already be
-> > taken?
-> 
-> I'm not sure that I see the point. David and Jakub won't cherry-pick
-> partial series, and if you resend just patch 1/2, they won't accept new
-> code that doesn't have any callers.
-> 
-> You don't have to wait for my series if you don't want to. If you're
-> going to conflict with it anyway (it changes the prototype of
-> ndo_get_stats64), you might as well not wait. I don't know when, or if,
-> it's going to be over with it. It is going to take at least one more
-> respin since it now conflicts with net.git commit 9f9d41f03bb0 ("docs:
-> net: fix documentation on .ndo_get_stats") merged a few hours ago into
-> net-next. So just say which way it is that you prefer.
+changes v8:
+- stats.no_handler should not be assigned from HW stats
 
-Ok, thx. If no one is against it, i'll prefer to push this patches now.
+changes v7:
+- move raw.filtered from rx_errors to rx_dropped counter 
 
-Regards,
-Oleksij
+changes v6:
+- move stats64 callback to ethtool section
+- ar9331: diff. fixes
+- ar9331: move stats calculation to the worker
+- ar9331: extend rx/tx error counters
+- use spin lock instead of u64_stats*
+
+changes v5:
+- read all stats in one regmap_bulk_read() request
+- protect stats with u64_stats* helpers.
+
+changes v4:
+- do no read MIBs withing stats64 call
+- change polling frequency to 0.3Hz
+
+changes v3:
+- fix wrong multiplication
+- cancel port workers on remove
+
+changes v2:
+- use stats64 instead of get_ethtool_stats
+- add worked to poll for the stats
+
+Oleksij Rempel (2):
+  net: dsa: add optional stats64 support
+  net: dsa: qca: ar9331: export stats64
+
+ drivers/net/dsa/qca/ar9331.c | 163 ++++++++++++++++++++++++++++++++++-
+ include/net/dsa.h            |   4 +-
+ net/dsa/slave.c              |  14 ++-
+ 3 files changed, 178 insertions(+), 3 deletions(-)
+
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.30.0
+
