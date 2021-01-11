@@ -2,94 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC422F14AF
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 14:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADAFF2F1999
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 16:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732649AbhAKN2d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Jan 2021 08:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732338AbhAKN2c (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Jan 2021 08:28:32 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB97C061786;
-        Mon, 11 Jan 2021 05:27:52 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id v3so9496131plz.13;
-        Mon, 11 Jan 2021 05:27:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=TzGBogmpfFLHSaMXxd8I8+bOPYrX5vXlwh/zl2QbWek=;
-        b=o6BIWUPjq0nRj6t2DXJ+Asf2yC7jcoL9P5ktV2GZ5/3Ivy50RoLqztJyjPgyiNaoHo
-         qVAlSTdwLCzG+cywGjICDzBLZAGSGgLTcervhJukRClZwik3A5vB7raobdJI3HynfJk6
-         m1Liv4HBgVzDTVtpY+2hwjCgT7Bef6p/0eyWwiuztJOSrZ14Be5nj6grroNoJkI3Pzbk
-         3E1ury4WAPOEv3jL2PSPs3DnmzQvAx0bRwPKt5e10WckL6Jbg0dVWv1yDl3ZrXXLgFuY
-         HaQ5oamU2RxVS9udBNHZohriw5isyiha5pIsqejYOw+DK5iZcC9yQGZHIUVZUSuKW/Fc
-         Dl8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=TzGBogmpfFLHSaMXxd8I8+bOPYrX5vXlwh/zl2QbWek=;
-        b=b1h8PZ6uMVcMTjQBEXC7ZuviW+YLZnseIokVCRnKTTJe0ICHMvBf00WSS36twgpcHG
-         R7FdpO0S7qMWxWut44JpmVkeXVWYNqDqxSUVpK3NVlUa3TVIcvDcmOKQjjmn0trTBqPo
-         rQFvPeJoP8tlkcNvh9a04MqjHg1TjBTRu+FNZS+ckovH/cY4sWqQXPpl0IV2LCBkBtnG
-         6qC950HrgMCsbujyWVWYfKr1xDEB7MFOWNaxAwG8kb10tvODDlK2en89LiU6K8QslpL8
-         uovtdZgSArPPEH/ee+yM/LnJIz//DZgipjUD9Ujr+nHJiTx8aqVK3NaWjNoe99vyimf1
-         31ig==
-X-Gm-Message-State: AOAM533qqvRysGyTFus9EYesqm5qoLlMEFuwvNlJOrZWROz4XHvmN0c/
-        7NQYH9ndb9e8hGaBJnT9BIE=
-X-Google-Smtp-Source: ABdhPJxB8Kijes6KXskrbzg0PSiZfoGxblHFzDrlutT3Yg4+rKfUVMmxwSA9igVsPMxPe6E8j3Jukg==
-X-Received: by 2002:a17:902:cb95:b029:dc:3a38:c7df with SMTP id d21-20020a170902cb95b02900dc3a38c7dfmr16303189ply.49.1610371671565;
-        Mon, 11 Jan 2021 05:27:51 -0800 (PST)
-Received: from localhost.localdomain ([178.236.46.205])
-        by smtp.gmail.com with ESMTPSA id v3sm19414640pjn.7.2021.01.11.05.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 05:27:50 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: dong.menglong@zte.com.cn
-To:     alexander.sverdlin@nokia.com, paulburton@kernel.org
-Cc:     tsbogend@alpha.franken.de, gustavo@embeddedor.com,
-        dong.menglong@zte.com.cn, colin.king@canonical.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] MIPS: OCTEON: fix unreachable code in octeon_irq_init_ciu
-Date:   Mon, 11 Jan 2021 05:27:25 -0800
-Message-Id: <20210111132725.4513-1-dong.menglong@zte.com.cn>
-X-Mailer: git-send-email 2.17.1
+        id S1729111AbhAKPZu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Jan 2021 10:25:50 -0500
+Received: from mx2.suse.de ([195.135.220.15]:44668 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728048AbhAKPZu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 11 Jan 2021 10:25:50 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 52799B7BC;
+        Mon, 11 Jan 2021 15:25:08 +0000 (UTC)
+Date:   Mon, 11 Jan 2021 16:25:08 +0100
+Message-ID: <s5hczybts17.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lauri Kasanen <cand@gmx.com>
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        perex@perex.cz
+Subject: Re: [PATCH 5/6 v2] sound: Add n64 driver
+In-Reply-To: <20210111140222.bb15bb75657fbb8a5b6863dd@gmx.com>
+References: <20210108103513.336e6eb9ad323feff6758e20@gmx.com>
+        <s5hsg7byezb.wl-tiwai@suse.de>
+        <20210109092303.b9a2a2f678a5d1b19b7f27f3@gmx.com>
+        <s5him86wmnr.wl-tiwai@suse.de>
+        <20210109194601.f94ca38b2b99ddeb15705993@gmx.com>
+        <s5ha6tivutv.wl-tiwai@suse.de>
+        <s5h5z45x24r.wl-tiwai@suse.de>
+        <20210110091536.b3bc5dce2ef9d6c94d3eb873@gmx.com>
+        <s5hwnwlum21.wl-tiwai@suse.de>
+        <20210110190332.8a818e931975f02b8f3d3881@gmx.com>
+        <s5ho8hwvh91.wl-tiwai@suse.de>
+        <20210110194146.58cf1d6d64a7fbc6d5336210@gmx.com>
+        <s5hk0sjvqz3.wl-tiwai@suse.de>
+        <20210111114323.d522f6e30a705d0731b41b93@gmx.com>
+        <s5h8s8zvl44.wl-tiwai@suse.de>
+        <20210111140222.bb15bb75657fbb8a5b6863dd@gmx.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Menglong Dong <dong.menglong@zte.com.cn>
+On Mon, 11 Jan 2021 13:02:22 +0100,
+Lauri Kasanen wrote:
+> 
+> On Mon, 11 Jan 2021 11:11:39 +0100
+> Takashi Iwai <tiwai@suse.de> wrote:
+> 
+> > > This almost works, speed is correct, but the last part is played twice.
+> >
+> > Oh yes, at the last IRQ, the push should be avoided.
+> > I guess that the code order should be changed to the following way:
+> >
+> >   1. advance the position for a period size
+> >   2. call snd_pcm_period_elapsed()
+> >   3. check if the stream is still running
+> >   4. copy the next chunk and update nextpos
+> 
+> This order gives correct pointer advancing etc, but now it's hitting a
+> new problem: the pcm core is reusing the buffer from under the audio
+> card. It's writing new data to the area that is currently being read by
+> DMA.
 
-The type of 'r' in octeon_irq_init_ciu is 'unsigned int', so 'r < 0'
-can't be true.
+Could you elaborate?  I still don't get what's going on there.
 
-Fix this by change the type of 'r' and 'i' from 'unsigned int'
-to 'int'. As 'i' won't be negative, this change works.
+> I assume the core expects DMA to be instant, but in this card's case
+> it's ondemand, reading bytes as needed.
 
-Fixes: 99fbc70f8547 ("MIPS: Octeon: irq: Alloc desc before configuring IRQ")
-Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
-Reviewed-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
----
-v2:
-- change 'Fixes' from 64b139f97c01 to 99fbc70f8547
----
- arch/mips/cavium-octeon/octeon-irq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+No, PCM core doesn't expect it.  The only expectation is that the data
+from the current pointer to the next period boundary will be
+transferred until the next period-elapsed call.
 
-diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
-index bd47e15d02c7..be5d4afcd30f 100644
---- a/arch/mips/cavium-octeon/octeon-irq.c
-+++ b/arch/mips/cavium-octeon/octeon-irq.c
-@@ -1444,7 +1444,7 @@ static void octeon_irq_setup_secondary_ciu2(void)
- static int __init octeon_irq_init_ciu(
- 	struct device_node *ciu_node, struct device_node *parent)
- {
--	unsigned int i, r;
-+	int i, r;
- 	struct irq_chip *chip;
- 	struct irq_chip *chip_edge;
- 	struct irq_chip *chip_mbox;
--- 
-2.17.1
+> By restoring the memcpy buffer, I get good audio with this new order
+> (sans occasional crackling due to the memcpy taking too long).
 
+The overwriting problem has been already present in the original patch
+version as I already argued.  The driver copies the full next period
+to be updated, but this is never guaranteed to have been filled by the
+application.  Maybe this didn't surface obviously with the original
+version because it essentially gives one more period available on the
+buffer -- i.e. it might be a matter of number of periods.
+
+
+Takashi
