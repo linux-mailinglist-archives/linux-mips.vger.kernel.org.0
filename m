@@ -2,64 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 435492F225F
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 23:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7412F229C
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 23:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730511AbhAKWB5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Jan 2021 17:01:57 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:38145 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731436AbhAKWB4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Jan 2021 17:01:56 -0500
-Received: by mail-oi1-f181.google.com with SMTP id x13so218283oic.5;
-        Mon, 11 Jan 2021 14:01:41 -0800 (PST)
+        id S2388713AbhAKWVX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Jan 2021 17:21:23 -0500
+Received: from mail-oo1-f51.google.com ([209.85.161.51]:46322 "EHLO
+        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728040AbhAKWVX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Jan 2021 17:21:23 -0500
+Received: by mail-oo1-f51.google.com with SMTP id n127so119118ooa.13;
+        Mon, 11 Jan 2021 14:21:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=swMeYjn7bXqKRG/eRayNFSOvBd+XVAGrQ+8GLln8aFU=;
-        b=CrcNrAVOwNysbiR4O01UCx3ro0JdS7IsL/o5jw8+y8OuMx5BQJgz+wOtqlGfkn2hz1
-         AI3rtEi2d+0ITp+XLg7qeYGmf2Mf/cBbNNRXSFLPKhYRYE700PTKDcfD7RM6VOLskycy
-         d32BIQ3y+fVRhrk5oFKXFQRjOH+9hD1MPGCnx/cM6ILKvM+WV4W94TCJU/MhZI9N4CZb
-         XWLV/9p0PWI0zsUuSSfOjfc4E9wVUN2YCLqAnPRZMbsxq0yP/luzcOroOS6DhKtVrFUS
-         Omp21aEN7J+EG3l1gHwLjsw9AW6h9xBCL5aEqdqKBDiMFuNhbzF8JM6Y+BArJotV83Y8
-         Px2w==
-X-Gm-Message-State: AOAM530OD+9dqv1cGOK6cPFUExOvzg4MNcVeqBkQeNb59n++dEa6JuIj
-        6Lh+zuVonXFQmPTvV7gq3A==
-X-Google-Smtp-Source: ABdhPJxFniA6qPNv3KBmaOx3/o/zHYRUuc8SweMVySqIHH9M/ZOASz+ccNp9qYW5Gxcyevxidi6b+g==
-X-Received: by 2002:aca:fc8d:: with SMTP id a135mr552787oii.87.1610402476055;
-        Mon, 11 Jan 2021 14:01:16 -0800 (PST)
+        bh=bHT2GndF6urGRcw0TXxPqVOzZ2j2R9MxCgX11NwVoxE=;
+        b=rBxq0g47b/PfI6ZEx4bj5+eJFikRm/TK/ezZ6JDf2R8WjUDjzLDijfswIzd9GVYnCC
+         L2fcQsg4xM1pzq2Cg3kwCbYXn8RgbGNeToVSoU6IFKc6OcqR3rXrKxlQTRmHJxtx9IrO
+         xxxRd50eIg0oZ/kCMuk4xM1HIc7LQSLv2mfrknWG5Vjze7GpLsJTnFsjaKLpm5FZvrgo
+         z/oVCACQHtzVT7qqvnJOOoXo6RPbAaVdjuf21AKbD42SVcCmr4KXCwclaMzO/niv1ciH
+         OUNhTv9JqsnN7KwewHxo/1sXsEnh1aVezgX8fu01UiydTcyBWNURZOMoViriinAemZnB
+         bwcQ==
+X-Gm-Message-State: AOAM530ynsY/+Wy9If3DATbshWIh+3HrkA/hoS0ERqyOuY3tAWdmlYqt
+        Rsf2HTYy0ePtKo91hJvkNszu8k448A==
+X-Google-Smtp-Source: ABdhPJzJws28Cr0G657g4+VWo5Rnlmi6XMjPUxVc9XMNPuwZrLaC7zBLoW9JNXDuxDIBNr/eDBQJQg==
+X-Received: by 2002:a05:6820:22c:: with SMTP id j12mr902080oob.65.1610403641005;
+        Mon, 11 Jan 2021 14:20:41 -0800 (PST)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q1sm247211oij.9.2021.01.11.14.01.14
+        by smtp.gmail.com with ESMTPSA id a26sm179491oos.46.2021.01.11.14.20.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 14:01:15 -0800 (PST)
-Received: (nullmailer pid 3135296 invoked by uid 1000);
-        Mon, 11 Jan 2021 22:01:14 -0000
-Date:   Mon, 11 Jan 2021 16:01:14 -0600
+        Mon, 11 Jan 2021 14:20:40 -0800 (PST)
+Received: (nullmailer pid 3161297 invoked by uid 1000);
+        Mon, 11 Jan 2021 22:20:39 -0000
+Date:   Mon, 11 Jan 2021 16:20:39 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Bert Vermeulen <bert@biot.com>
-Cc:     linux-mips@vger.kernel.org, Sander Vanheule <sander@svanheule.net>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] dt-bindings: Add Cisco prefix to vendor list
-Message-ID: <20210111220114.GA3135243@robh.at.kernel.org>
-References: <20201230212205.2605383-1-bert@biot.com>
- <20201230212205.2605383-3-bert@biot.com>
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc:     tsbogend@alpha.franken.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, john@phrozen.org,
+        linux-mips@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH] dt-bindings: mips: lantiq: Document Lantiq Xway PMU
+ bindings
+Message-ID: <20210111222039.GA3161126@robh.at.kernel.org>
+References: <20201231163153.4512-1-olek2@wp.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201230212205.2605383-3-bert@biot.com>
+In-Reply-To: <20201231163153.4512-1-olek2@wp.pl>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 30 Dec 2020 22:22:04 +0100, Bert Vermeulen wrote:
-> Signed-off-by: Bert Vermeulen <bert@biot.com>
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+On Thu, 31 Dec 2020 17:31:53 +0100, Aleksander Jan Bajkowski wrote:
+> Document the Lantiq Xway SoC series Power Management Unit (PMU) bindings.
+> 
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 > ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../bindings/mips/lantiq/lantiq,pmu.yaml      | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/lantiq/lantiq,pmu.yaml
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
