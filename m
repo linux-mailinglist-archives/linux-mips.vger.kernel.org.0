@@ -2,123 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 476D52F0C3A
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 06:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BEA2F0D97
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 09:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725536AbhAKFWa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Jan 2021 00:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbhAKFWa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Jan 2021 00:22:30 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFBBC061786;
-        Sun, 10 Jan 2021 21:21:49 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id x15so1370612ilk.3;
-        Sun, 10 Jan 2021 21:21:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4l64O1cL8mld7+QbyRcMbphc6gWq2pCIGE+VaAyHP00=;
-        b=Xr76vSnV0HqEjGmgxVvhNZkeUCAw+BlVtDjqz+mtfAiXv1BsmIPrigVbPZb9JhcLj2
-         fgoNfvChsZkGGMY1ikj3k9dHnqwj5+XnOnafMq0ZXXlIf9bxbNlEpjqLpz8JcAzmAzYg
-         TEYsl3cNQp6CPueNKGQPJpRuZvswBIXDQV3JKx9pn2Zh7liq9YI211UHa9PY1CiDziCg
-         KHo9Sc0V9uEh678sYy+9ol1wQJyMq6aPeeUwemPZa1Aq3wbQW1lk33xSzgHeA8w+SKRI
-         sCdYgwR7+TjjK4bw37uHSpTzR8Ws3ZXNgHdbBgLU26Klpp6YK6AU8GQ2mGYMHpUjrbSN
-         q8KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4l64O1cL8mld7+QbyRcMbphc6gWq2pCIGE+VaAyHP00=;
-        b=fSdhBb4N4ejL0rv5jopC3sDs1f7Cbi9S8dRXNp0j/THkNlXzDysPwasvrIvVvq7lBv
-         4CKyg/9mH5hd+StuuhO6WMXpEg+R19LaOgCkAa4TfC4TrWFQ12McVeEGyAT2MYXLiFNv
-         W2McRH61PyoNPYugMb2P0aNH2X/xC7dyQaa3vM8NAU2pzKZIIs1GqKjwImjBPCD8gLcE
-         zoasNZjYV64g6o6kITz6kuZCM76enX9+dqXmub03PA2CD+l9QE2domn14wX+NUuDre45
-         qLRvjrllCk5aoPvqH50z8R14gFfhvKQR0GOv130DJRUqgDN9FD/89gntZan3NLC4XFNJ
-         eVew==
-X-Gm-Message-State: AOAM531cfghGF0YWLaeOZOba3wtgJr5AWTqqBa6s6dsMN50elI2QSUUJ
-        AIa/Firkn1t2O46tAlvWWuQ=
-X-Google-Smtp-Source: ABdhPJyfStv6on8rG1XJx6IhcZyH437rcGoQf/fNgV2x80K8V17nfkj0KEvchYXzZK4sQgLR2DHocA==
-X-Received: by 2002:a92:41d2:: with SMTP id o201mr13827519ila.117.1610342509012;
-        Sun, 10 Jan 2021 21:21:49 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id z18sm14020189ilb.26.2021.01.10.21.21.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jan 2021 21:21:48 -0800 (PST)
-Date:   Sun, 10 Jan 2021 22:21:46 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Matt Redfearn <matt.redfearn@mips.com>,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH mips-fixes] MIPS: relocatable: fix possible boot hangup
- with KASLR enabled
-Message-ID: <20210111052146.GA1018564@ubuntu-m3-large-x86>
-References: <20210110142023.185275-1-alobakin@pm.me>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210110142023.185275-1-alobakin@pm.me>
+        id S1725843AbhAKIFq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Jan 2021 03:05:46 -0500
+Received: from mx2.suse.de ([195.135.220.15]:32884 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725536AbhAKIFp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 11 Jan 2021 03:05:45 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id CE4E1AD6A;
+        Mon, 11 Jan 2021 08:05:04 +0000 (UTC)
+Date:   Mon, 11 Jan 2021 09:05:04 +0100
+Message-ID: <s5hk0sjvqz3.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lauri Kasanen <cand@gmx.com>
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        perex@perex.cz
+Subject: Re: [PATCH 5/6 v2] sound: Add n64 driver
+In-Reply-To: <20210110194146.58cf1d6d64a7fbc6d5336210@gmx.com>
+References: <20210108103513.336e6eb9ad323feff6758e20@gmx.com>
+        <s5hsg7byezb.wl-tiwai@suse.de>
+        <20210109092303.b9a2a2f678a5d1b19b7f27f3@gmx.com>
+        <s5him86wmnr.wl-tiwai@suse.de>
+        <20210109194601.f94ca38b2b99ddeb15705993@gmx.com>
+        <s5ha6tivutv.wl-tiwai@suse.de>
+        <s5h5z45x24r.wl-tiwai@suse.de>
+        <20210110091536.b3bc5dce2ef9d6c94d3eb873@gmx.com>
+        <s5hwnwlum21.wl-tiwai@suse.de>
+        <20210110190332.8a818e931975f02b8f3d3881@gmx.com>
+        <s5ho8hwvh91.wl-tiwai@suse.de>
+        <20210110194146.58cf1d6d64a7fbc6d5336210@gmx.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Jan 10, 2021 at 02:21:05PM +0000, Alexander Lobakin wrote:
-> LLVM-built Linux triggered a boot hangup with KASLR enabled.
+On Sun, 10 Jan 2021 18:41:46 +0100,
+Lauri Kasanen wrote:
 > 
-> arch/mips/kernel/relocate.c:get_random_boot() uses linux_banner,
-> which is a string constant, as a random seed, but accesses it
-> as an array of unsigned long (in rotate_xor()).
-> When the address of linux_banner is not aligned to sizeof(long),
-> such access emits unaligned access exception and hangs the kernel.
+> On Sun, 10 Jan 2021 18:22:50 +0100
+> Takashi Iwai <tiwai@suse.de> wrote:
 > 
-> Use PTR_ALIGN() to align input address to sizeof(long) and also
-> align down the input length to prevent possible access-beyond-end.
+> > On Sun, 10 Jan 2021 18:03:32 +0100,
+> > Lauri Kasanen wrote:
+> > > On Sun, 10 Jan 2021 11:24:22 +0100
+> > > Takashi Iwai <tiwai@suse.de> wrote:
+> > >
+> > > > > At first there was no nextpos, and _pointer() always reported pos. This
+> > > > > didn't work, the core played through the audio at chipmunk speed. So
+> > > > > there must be more that I don't understand here.
+> > > >
+> > > > Try to set the periods_min=2 and the integer periods hw constraint at
+> > > > first, and change the pointer callback to return nextpos.  Also, at
+> > > > the push function, set runtime->delay = period_size as well.
+> > >
+> > > When I do all this, it still causes the chipmunk speed. Several seconds
+> > > of audio gets played in 0.3s or so. Sorry if this is taking too much of
+> > > your time, I'm a bit lost here at what the alsa core is expecting.
+> > >
+> > > Printks show the following repeats:
+> > > start, period size 1024
+> > > push, bool irq=0
+> > > irq fired
+> > > push, bool irq=1
+> > > pointer at 8192
+> > > stop
+> >
+> > Hm, is the above about the result with the pointer callback returning
+> > pos, not nextpos?  If so,
 > 
-> Fixes: 405bc8fd12f5 ("MIPS: Kernel: Implement KASLR using CONFIG_RELOCATABLE")
-> Cc: stable@vger.kernel.org # 4.7+
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> It was returning nextpos, but the pointer printk was in bytes. 8192
+> bytes = 2048 frames.
 
-Apologies for not being familiar enough with the issue to give a review
-but I did reproduce the hang that the commit mentions with
-malta_kvm_guest_defconfig + CONFIG_RELOCATABLE=y +
-CONFIG_RANDOMIZE_BASE=y and this patch does resolve it so:
+OK, then it must be right.
 
-Tested-by: Nathan Chancellor <natechancellor@gmail.com>
+Then I suppose that the update of pos should be changed in a different
+way; it should always point to the previous nextpos.  That is,
+something like:
 
-> ---
->  arch/mips/kernel/relocate.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+static void n64audio_push(struct n64audio_t *priv, uint8_t irq)
+{
+	....
+	if (irq)
+		priv->chan.pos = priv->chan.nextpos;
+	priv->chan.nextpos += count;
+	priv->chan.nextpos %= priv->chan.bufsize;
+
+If we use nextpos as the position, it'll lead to the double steps at
+the first IRQ handling without snd_pcm_period_elapsed() call (the
+first step missed it), and this may confuse PCM core.
+
+
+> > > start, period size 1024
+> > > push, bool irq=0
+> >
+> > At this moment, nextpos is 1024, and it should take some time until
+> >
+> > > irq fired
+> >
+> > ... this IRQ is triggered; it must be the period time.
+> > Was the reported timing as expected?
 > 
-> diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-> index 47aeb3350a76..0e365b7c742d 100644
-> --- a/arch/mips/kernel/relocate.c
-> +++ b/arch/mips/kernel/relocate.c
-> @@ -187,8 +187,14 @@ static int __init relocate_exception_table(long offset)
->  static inline __init unsigned long rotate_xor(unsigned long hash,
->  					      const void *area, size_t size)
->  {
-> -	size_t i;
-> -	unsigned long *ptr = (unsigned long *)area;
-> +	const typeof(hash) *ptr = PTR_ALIGN(area, sizeof(hash));
-> +	size_t diff, i;
-> +
-> +	diff = (void *)ptr - area;
-> +	if (unlikely(size < diff + sizeof(hash)))
-> +		return hash;
-> +
-> +	size = ALIGN_DOWN(size - diff, sizeof(hash));
->  
->  	for (i = 0; i < size / sizeof(hash); i++) {
->  		/* Rotate by odd number of bits and XOR. */
-> -- 
-> 2.30.0
-> 
-> 
+> It's roughly correct, but timing is not very precise, as printk itself
+> has heavy overhead for the 93 MHz cpu.
+
+OK, that sounds good, at least.
+
+
+thanks,
+
+Takashi
