@@ -2,119 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 096F12F0AF5
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 03:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 476D52F0C3A
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Jan 2021 06:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726720AbhAKCG2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Jan 2021 21:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S1725536AbhAKFWa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Jan 2021 00:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726549AbhAKCG2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jan 2021 21:06:28 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA38AC061794;
-        Sun, 10 Jan 2021 18:05:46 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id q137so16276621iod.9;
-        Sun, 10 Jan 2021 18:05:46 -0800 (PST)
+        with ESMTP id S1725355AbhAKFWa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Jan 2021 00:22:30 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFBBC061786;
+        Sun, 10 Jan 2021 21:21:49 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id x15so1370612ilk.3;
+        Sun, 10 Jan 2021 21:21:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=O1Kg6nMHufkZJeFYAwU5JUMRxW+lQuNTmDBb784fKLc=;
-        b=Vt8cM4sIB7OYJUrgM3yoTwIiJQRgAu2Dznr3/L7+FKAL3xZgwNjPdHWIg6GnZBz2iN
-         sXumGAMQvqR/4bFAFcrCiDJeycEaHCmnDI+yCPtKmZYpWe21aqeI1j5IpbermaSNES6U
-         nxd4taVf1HnNL5Y9nIIpudp7zrgNcp/Rdp8oepy81hPxByCNvhva7GhyG9Eztrx7xIft
-         +hxrEezGPKuYq/PTiV0ZQ632WCGbTlv0QmWT3YyaEj7cYiO3AdYYZtw8A3Yw5l0cZqS2
-         809kJQIAqF9mmoTi9VOpgAG404UJppuLzIkGtG1OpSnEMhvCsw8gYdJ2sGj+3bYlsFeJ
-         g4Kg==
+        bh=4l64O1cL8mld7+QbyRcMbphc6gWq2pCIGE+VaAyHP00=;
+        b=Xr76vSnV0HqEjGmgxVvhNZkeUCAw+BlVtDjqz+mtfAiXv1BsmIPrigVbPZb9JhcLj2
+         fgoNfvChsZkGGMY1ikj3k9dHnqwj5+XnOnafMq0ZXXlIf9bxbNlEpjqLpz8JcAzmAzYg
+         TEYsl3cNQp6CPueNKGQPJpRuZvswBIXDQV3JKx9pn2Zh7liq9YI211UHa9PY1CiDziCg
+         KHo9Sc0V9uEh678sYy+9ol1wQJyMq6aPeeUwemPZa1Aq3wbQW1lk33xSzgHeA8w+SKRI
+         sCdYgwR7+TjjK4bw37uHSpTzR8Ws3ZXNgHdbBgLU26Klpp6YK6AU8GQ2mGYMHpUjrbSN
+         q8KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=O1Kg6nMHufkZJeFYAwU5JUMRxW+lQuNTmDBb784fKLc=;
-        b=MYwwiQ7OnGUF9PVlIxza/r0QupsA1sCY8n/s/aeg1Eo+2vydTO4WFT/nXo7tPpwP+g
-         6rzrHZuqXZpz2pvSIx7dXzg/lcaMnq/uv7jXfnPcRuhACj892IxTrzJqJngBTCLzfpo1
-         7/Z+/szoraATUQ4kxK+j37WYpGQgBJEjLRnncniJFotMmN5kWqNBryNP4GLAqPlqY0u9
-         DJFOI5BuE+ABpg5EDtSahAgH7LAxJCZzdnVdxvBqxmtkfG2paNSp/4LEYJTZBu6QdQ2d
-         pOD25k3EYUbOKITTx0Xc1Kgnx7r8Orky5Z5kA9lNzt/2FXIOLNe5L5nWyzmB8ViBC4fx
-         /v7A==
-X-Gm-Message-State: AOAM532jib8PLJsCEYIL1qu4nGGRDmWFHn3tey3DTn1LAbUoF8FfvHT9
-        gxAftBxApc+cNcaHOJIqhrA=
-X-Google-Smtp-Source: ABdhPJxpGqWV/N6xmJu1TUV1fv4X2+6NSxUeLZ0HWxBbh22Uqr5xRH23rGDIw3wopmDSmfldqAUpgA==
-X-Received: by 2002:a02:8482:: with SMTP id f2mr12628976jai.93.1610330746162;
-        Sun, 10 Jan 2021 18:05:46 -0800 (PST)
+        bh=4l64O1cL8mld7+QbyRcMbphc6gWq2pCIGE+VaAyHP00=;
+        b=fSdhBb4N4ejL0rv5jopC3sDs1f7Cbi9S8dRXNp0j/THkNlXzDysPwasvrIvVvq7lBv
+         4CKyg/9mH5hd+StuuhO6WMXpEg+R19LaOgCkAa4TfC4TrWFQ12McVeEGyAT2MYXLiFNv
+         W2McRH61PyoNPYugMb2P0aNH2X/xC7dyQaa3vM8NAU2pzKZIIs1GqKjwImjBPCD8gLcE
+         zoasNZjYV64g6o6kITz6kuZCM76enX9+dqXmub03PA2CD+l9QE2domn14wX+NUuDre45
+         qLRvjrllCk5aoPvqH50z8R14gFfhvKQR0GOv130DJRUqgDN9FD/89gntZan3NLC4XFNJ
+         eVew==
+X-Gm-Message-State: AOAM531cfghGF0YWLaeOZOba3wtgJr5AWTqqBa6s6dsMN50elI2QSUUJ
+        AIa/Firkn1t2O46tAlvWWuQ=
+X-Google-Smtp-Source: ABdhPJyfStv6on8rG1XJx6IhcZyH437rcGoQf/fNgV2x80K8V17nfkj0KEvchYXzZK4sQgLR2DHocA==
+X-Received: by 2002:a92:41d2:: with SMTP id o201mr13827519ila.117.1610342509012;
+        Sun, 10 Jan 2021 21:21:49 -0800 (PST)
 Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id k9sm9487484iob.13.2021.01.10.18.05.44
+        by smtp.gmail.com with ESMTPSA id z18sm14020189ilb.26.2021.01.10.21.21.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jan 2021 18:05:45 -0800 (PST)
-Date:   Sun, 10 Jan 2021 19:05:43 -0700
+        Sun, 10 Jan 2021 21:21:48 -0800 (PST)
+Date:   Sun, 10 Jan 2021 22:21:46 -0700
 From:   Nathan Chancellor <natechancellor@gmail.com>
 To:     Alexander Lobakin <alobakin@pm.me>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
         Kees Cook <keescook@chromium.org>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jinyang He <hejinyang@loongson.cn>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v5 mips-next 8/9] vmlinux.lds.h: catch UBSAN's "unnamed
- data" into data
-Message-ID: <20210111020543.GB2918900@ubuntu-m3-large-x86>
-References: <20210110115245.30762-1-alobakin@pm.me>
- <20210110115546.30970-1-alobakin@pm.me>
- <20210110115546.30970-8-alobakin@pm.me>
+        Matt Redfearn <matt.redfearn@mips.com>,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: Re: [PATCH mips-fixes] MIPS: relocatable: fix possible boot hangup
+ with KASLR enabled
+Message-ID: <20210111052146.GA1018564@ubuntu-m3-large-x86>
+References: <20210110142023.185275-1-alobakin@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210110115546.30970-8-alobakin@pm.me>
+In-Reply-To: <20210110142023.185275-1-alobakin@pm.me>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Jan 10, 2021 at 11:56:54AM +0000, Alexander Lobakin wrote:
-> When building kernel with both LD_DEAD_CODE_DATA_ELIMINATION and
-> UBSAN, LLVM stack generates lots of "unnamed data" sections:
+On Sun, Jan 10, 2021 at 02:21:05PM +0000, Alexander Lobakin wrote:
+> LLVM-built Linux triggered a boot hangup with KASLR enabled.
 > 
-> ld.lld: warning: net/built-in.a(netfilter/utils.o): (.data.$__unnamed_2)
-> is being placed in '.data.$__unnamed_2'
-> ld.lld: warning: net/built-in.a(netfilter/utils.o): (.data.$__unnamed_3)
-> is being placed in '.data.$__unnamed_3'
-> ld.lld: warning: net/built-in.a(netfilter/utils.o): (.data.$__unnamed_4)
-> is being placed in '.data.$__unnamed_4'
-> ld.lld: warning: net/built-in.a(netfilter/utils.o): (.data.$__unnamed_5)
-> is being placed in '.data.$__unnamed_5'
+> arch/mips/kernel/relocate.c:get_random_boot() uses linux_banner,
+> which is a string constant, as a random seed, but accesses it
+> as an array of unsigned long (in rotate_xor()).
+> When the address of linux_banner is not aligned to sizeof(long),
+> such access emits unaligned access exception and hangs the kernel.
 > 
-> [...]
+> Use PTR_ALIGN() to align input address to sizeof(long) and also
+> align down the input length to prevent possible access-beyond-end.
 > 
-> Also handle this by adding the related sections to generic definitions.
-> 
+> Fixes: 405bc8fd12f5 ("MIPS: Kernel: Implement KASLR using CONFIG_RELOCATABLE")
+> Cc: stable@vger.kernel.org # 4.7+
 > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+Apologies for not being familiar enough with the issue to give a review
+but I did reproduce the hang that the commit mentions with
+malta_kvm_guest_defconfig + CONFIG_RELOCATABLE=y +
+CONFIG_RANDOMIZE_BASE=y and this patch does resolve it so:
+
+Tested-by: Nathan Chancellor <natechancellor@gmail.com>
 
 > ---
->  include/asm-generic/vmlinux.lds.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/kernel/relocate.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index 5f2f5b1db84f..cc659e77fcb0 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -95,7 +95,7 @@
->   */
->  #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
->  #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
-> -#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral*
-> +#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_*
->  #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
->  #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
->  #define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
+> diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+> index 47aeb3350a76..0e365b7c742d 100644
+> --- a/arch/mips/kernel/relocate.c
+> +++ b/arch/mips/kernel/relocate.c
+> @@ -187,8 +187,14 @@ static int __init relocate_exception_table(long offset)
+>  static inline __init unsigned long rotate_xor(unsigned long hash,
+>  					      const void *area, size_t size)
+>  {
+> -	size_t i;
+> -	unsigned long *ptr = (unsigned long *)area;
+> +	const typeof(hash) *ptr = PTR_ALIGN(area, sizeof(hash));
+> +	size_t diff, i;
+> +
+> +	diff = (void *)ptr - area;
+> +	if (unlikely(size < diff + sizeof(hash)))
+> +		return hash;
+> +
+> +	size = ALIGN_DOWN(size - diff, sizeof(hash));
+>  
+>  	for (i = 0; i < size / sizeof(hash); i++) {
+>  		/* Rotate by odd number of bits and XOR. */
 > -- 
 > 2.30.0
 > 
