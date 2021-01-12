@@ -2,92 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7917B2F24DA
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Jan 2021 02:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB2F2F2F18
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Jan 2021 13:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405318AbhALAZV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Jan 2021 19:25:21 -0500
-Received: from elvis.franken.de ([193.175.24.41]:44158 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390474AbhAKWoj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 11 Jan 2021 17:44:39 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kz5uk-0007xs-00; Mon, 11 Jan 2021 23:43:54 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 015D2C0899; Mon, 11 Jan 2021 23:43:05 +0100 (CET)
-Date:   Mon, 11 Jan 2021 23:43:05 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v5 mips-next 0/9] MIPS: vmlinux.lds.S sections fixes &
- cleanup
-Message-ID: <20210111224305.GA22825@alpha.franken.de>
-References: <20210110115245.30762-1-alobakin@pm.me>
- <202101111153.AE5123B6@keescook>
- <20210111205649.18263-1-alobakin@pm.me>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210111205649.18263-1-alobakin@pm.me>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S2387930AbhALMaU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Jan 2021 07:30:20 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:34340 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387420AbhALMaN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:30:13 -0500
+Received: from loongson.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx6L0dlv1fsycDAA--.5569S2;
+        Tue, 12 Jan 2021 20:29:17 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Burton <paulburton@kernel.org>,
+        Jun-Ru Chang <jrjang@realtek.com>
+Subject: [PATCH 0/4] MIPS: process: Some fixes and improvements about get_frame_info()
+Date:   Tue, 12 Jan 2021 20:29:13 +0800
+Message-Id: <1610454557-25867-1-git-send-email-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dx6L0dlv1fsycDAA--.5569S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY07k0a2IF6w1UM7kC6x804xWl14x267AK
+        xVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
+        A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j
+        6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr
+        1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
+        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z2
+        80aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxE
+        wVAFwVW5JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v2
+        6r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+        j7F4iUUUUU=
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 08:57:25PM +0000, Alexander Lobakin wrote:
-> From: Kees Cook <keescook@chromium.org>
-> Date: Mon, 11 Jan 2021 11:53:39 -0800
-> 
-> > On Sun, Jan 10, 2021 at 11:53:50AM +0000, Alexander Lobakin wrote:
-> >> This series hunts the problems discovered after manual enabling of
-> >> ARCH_WANT_LD_ORPHAN_WARN. Notably:
-> >>  - adds the missing PAGE_ALIGNED_DATA() section affecting VDSO
-> >>    placement (marked for stable);
-> >>  - stops blind catching of orphan text sections with .text.*
-> >>    directive;
-> >>  - properly stops .eh_frame section generation.
-> >>
-> >> Compile and runtime tested on MIPS32R2 CPS board with no issues
-> >> using two different toolkits:
-> >>  - Binutils 2.35.1, GCC 10.2.1 (with Alpine patches);
-> >>  - LLVM stack: 11.0.0 and from latest Git snapshot.
-> >>
-> >> Since v4 [3]:
-> >>  - new: drop redundant .text.cps-vec creation and blind inclusion
-> >>    of orphan text sections via .text.* directive in vmlinux.lds.S;
-> >>  - don't assert SIZEOF(.rel.dyn) as it's reported that it may be not
-> >>    empty on certain machines and compilers (Thomas);
-> >>  - align GOT table like it's done for ARM64;
-> >>  - new: catch UBSAN's "unnamed data" sections in generic definitions
-> >>    when building with LD_DEAD_CODE_DATA_ELIMINATION;
-> >>  - collect Reviewed-bys (Kees, Nathan).
-> >
-> > Looks good; which tree will this land through?
-> 
-> linux-mips/mips-next I guess, since 7 of 9 patches are related only
-> to this architecture.
-> This might need Arnd's Acked-bys or Reviewed-by for the two that
-> refer include/asm-generic, let's see what Thomas think.
+Not familiar with microMIPS. Not test on microMIPS.
 
-Looks good from my side and I have it already sitting in branch for
-submission.
+Jinyang He (4):
+  MIPS: process: Reorder header files
+  MIPS: microMIPS: Fix the judgment of mm_jr16_op and mm_jalr_op
+  MIPS: Fix get_frame_info() handing of function size
+  MIPS: Add is_jr_ra_ins() to end the loop early
 
-Arnd, are you ok with the changes in include/asm-generic ?
-
-Thomas.
+ arch/mips/kernel/process.c | 92 +++++++++++++++++++++++++++++++---------------
+ 1 file changed, 62 insertions(+), 30 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.1.0
+
