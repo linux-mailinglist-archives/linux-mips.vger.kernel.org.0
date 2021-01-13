@@ -2,141 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 505FB2F402E
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Jan 2021 01:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CEF82F4328
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Jan 2021 05:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437975AbhAMAnQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Jan 2021 19:43:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48578 "EHLO mail.kernel.org"
+        id S1725934AbhAMEav (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Jan 2021 23:30:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54994 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392371AbhAMA2r (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 12 Jan 2021 19:28:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7C41E23131;
-        Wed, 13 Jan 2021 00:28:06 +0000 (UTC)
+        id S1725372AbhAMEau (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 12 Jan 2021 23:30:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id D4E3223133;
+        Wed, 13 Jan 2021 04:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610497686;
-        bh=l4bVjGN9qa62D6wIsCNthuTsg43yfh9U+sM3Nr9Q01A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NsYNsfscXOjB992DWmXvmkKLILvNkU5uOiJF3LFcW4ab7paVBPn2tk7DKrM86ZjHL
-         WosGC6EhT6ddPy7DX7aRmuGKVrjZv/1JYoEjZeb+9bsGw4EhC1ImJPjV++jZLD6Zts
-         EHhNL4Ioc0wiY/VyGMdzfy05bwsvHwxjiPerMtSrCyf68iC+WvQ0+0Mi4Tq4D9kIdF
-         3N/FPEIFLbf6aJ5UZXv4G39dkVrCgkD8mfReuK6MZiR4UcAYTbH/86mnfHnlUw66aX
-         /3hG2GNTYd0dVdWLkd4bpk4Yo1NE/1Y0uNO5HiLPLebe8QQpQzoaOoM+sXDw6xsO2B
-         8JjkEQyPrJ/JA==
-Received: by mail-io1-f52.google.com with SMTP id u26so659938iof.3;
-        Tue, 12 Jan 2021 16:28:06 -0800 (PST)
-X-Gm-Message-State: AOAM533kJwieoez16PHYrUOVRPmgsA0E6EBQWHXQmEzBgxCeA+iQ4C1T
-        TA2KoJdsasCKP4JKMAsz1I4eUHPQDYDJ4b5i8Gc=
-X-Google-Smtp-Source: ABdhPJyGl93Rw4UJu1ToLzTJj1orHdU7rEc+4tfveQ2c9YxPJzAvtJO+VytyGstWVWin0EBD6hfxhs65LZX7Q9WSNEo=
-X-Received: by 2002:a92:870b:: with SMTP id m11mr1714638ild.134.1610497685872;
- Tue, 12 Jan 2021 16:28:05 -0800 (PST)
+        s=k20201202; t=1610512209;
+        bh=T0Y7fwW8tgG+otKLLykpO5J1sCcN+F6mZHiypDsWC1Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YVBPlvMxj75EofdiFTO43RWAZp3qp8Xgc9FV3NTzNUpdqlCpFIQ/p27nADguyrMPk
+         zu9lS8o6JOZieBDqvipEt/Kt1+sCNwveP7LAV+hyowMpUlhoAdC85TVoy5Admfp7G5
+         JTcWvTu4G7ONy5viBGWCXxPI9RHvu7zKEc/sWZQdU8M9e0A6Y2W24EG8r0TTrRJF/P
+         aVPjAulFVWyolcESsLJgLlEM0sfiQWnHwwNAS3RQIjlsFf4yATcoyTLSgMNt5WsgcM
+         PwajvcdY7Lw/idIqwM706bMiHlHJE1OmC/qtxMAQtCNL6SqH9XGMJwDaRxcnPu2AnR
+         OpdHlQmc6HD/g==
+Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id CEF056025A;
+        Wed, 13 Jan 2021 04:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <1610454557-25867-1-git-send-email-hejinyang@loongson.cn> <1610454557-25867-2-git-send-email-hejinyang@loongson.cn>
-In-Reply-To: <1610454557-25867-2-git-send-email-hejinyang@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 13 Jan 2021 08:27:54 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7Y_iBpr8t-RKghLf=1mb0Z4djxnwfKg8QBnUXgB=+SRQ@mail.gmail.com>
-Message-ID: <CAAhV-H7Y_iBpr8t-RKghLf=1mb0Z4djxnwfKg8QBnUXgB=+SRQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] MIPS: process: Reorder header files
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Jun-Ru Chang <jrjang@realtek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v8 0/2] net: dsa: add stats64 support 
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161051220984.5581.8625610251585628459.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Jan 2021 04:30:09 +0000
+References: <20210111104658.21930-1-o.rempel@pengutronix.de>
+In-Reply-To: <20210111104658.21930-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux@armlinux.org.uk, kernel@pengutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
+Hello:
 
-On Tue, Jan 12, 2021 at 9:07 PM Jinyang He <hejinyang@loongson.cn> wrote:
->
-> Just reorder the header files.
->
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> ---
->  arch/mips/kernel/process.c | 44 ++++++++++++++++++++++----------------------
->  1 file changed, 22 insertions(+), 22 deletions(-)
->
-> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> index d7e288f..361bd28 100644
-> --- a/arch/mips/kernel/process.c
-> +++ b/arch/mips/kernel/process.c
-> @@ -9,28 +9,29 @@
->   * Copyright (C) 2004 Thiemo Seufer
->   * Copyright (C) 2013  Imagination Technologies Ltd.
->   */
-> +#include <linux/completion.h>
-> +#include <linux/cpu.h>
->  #include <linux/errno.h>
-> +#include <linux/export.h>
-> +#include <linux/init.h>
-> +#include <linux/kallsyms.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mm.h>
-> +#include <linux/mman.h>
-> +#include <linux/nmi.h>
-> +#include <linux/personality.h>
-> +#include <linux/ptrace.h>
-> +#include <linux/prctl.h>
-> +#include <linux/random.h>
->  #include <linux/sched.h>
->  #include <linux/sched/debug.h>
->  #include <linux/sched/task.h>
->  #include <linux/sched/task_stack.h>
-> -#include <linux/tick.h>
-> -#include <linux/kernel.h>
-> -#include <linux/mm.h>
->  #include <linux/stddef.h>
-> -#include <linux/unistd.h>
-> -#include <linux/export.h>
-> -#include <linux/ptrace.h>
-> -#include <linux/mman.h>
-> -#include <linux/personality.h>
->  #include <linux/sys.h>
-> -#include <linux/init.h>
-> -#include <linux/completion.h>
-> -#include <linux/kallsyms.h>
-> -#include <linux/random.h>
-> -#include <linux/prctl.h>
-> -#include <linux/nmi.h>
-> -#include <linux/cpu.h>
-> +#include <linux/tick.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/unistd.h>
->
->  #include <asm/abi.h>
->  #include <asm/asm.h>
-> @@ -38,21 +39,20 @@
->  #include <asm/cpu.h>
->  #include <asm/dsemul.h>
->  #include <asm/dsp.h>
-> +#include <asm/elf.h>
-> +#include <asm/exec.h>
->  #include <asm/fpu.h>
-> +#include <asm/inst.h>
-> +#include <asm/io.h>
->  #include <asm/irq.h>
-> +#include <asm/irq_regs.h>
-> +#include <asm/isadep.h>
->  #include <asm/mips-cps.h>
->  #include <asm/msa.h>
->  #include <asm/mipsregs.h>
->  #include <asm/processor.h>
->  #include <asm/reg.h>
-> -#include <linux/uaccess.h>
-> -#include <asm/io.h>
-> -#include <asm/elf.h>
-> -#include <asm/isadep.h>
-> -#include <asm/inst.h>
->  #include <asm/stacktrace.h>
-> -#include <asm/irq_regs.h>
-> -#include <asm/exec.h>
->
->  #ifdef CONFIG_HOTPLUG_CPU
->  void arch_cpu_idle_dead(void)
-> --
-> 2.1.0
->
+This series was applied to netdev/net-next.git (refs/heads/master):
+
+On Mon, 11 Jan 2021 11:46:56 +0100 you wrote:
+> changes v8:
+> - stats.no_handler should not be assigned from HW stats
+> 
+> changes v7:
+> - move raw.filtered from rx_errors to rx_dropped counter
+> 
+> changes v6:
+> - move stats64 callback to ethtool section
+> - ar9331: diff. fixes
+> - ar9331: move stats calculation to the worker
+> - ar9331: extend rx/tx error counters
+> - use spin lock instead of u64_stats*
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v8,1/2] net: dsa: add optional stats64 support
+    https://git.kernel.org/netdev/net-next/c/c2ec5f2ecf6a
+  - [net-next,v8,2/2] net: dsa: qca: ar9331: export stats64
+    https://git.kernel.org/netdev/net-next/c/bf9ce385932b
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
