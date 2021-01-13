@@ -2,329 +2,225 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1AE2F4E48
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Jan 2021 16:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D022F50BC
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Jan 2021 18:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726238AbhAMPPI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Jan 2021 10:15:08 -0500
-Received: from mout.gmx.net ([212.227.17.20]:45289 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726531AbhAMPPG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 13 Jan 2021 10:15:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1610550810;
-        bh=h04l1+sWPKPAwhjVSAZUr5CU46wuJzYkH3K+JynbfOM=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=cphnYPpFTCFu0NbkmAaowLeNV6hQ2vsDZkMqbVzio94z6seVbzeSzYk5T/Eo6Mj5a
-         UZ8quHor+BQoodmUGuf1Hsqhd8Ucg8hAkyejAtA0189iMe0ddRa/q3jdLcU1QlyAuD
-         g3g9wTPSkaiyhz5QuAvyjUTtZ7Nb0cBaBF2AEBFg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Valinor ([82.203.161.65]) by mail.gmx.com (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MLiCu-1kiAzB2u5w-00HgPM; Wed, 13
- Jan 2021 16:13:29 +0100
-Date:   Wed, 13 Jan 2021 17:13:59 +0200
-From:   Lauri Kasanen <cand@gmx.com>
-To:     linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, axboe@kernel.dk,
-        linux-block@vger.kernel.org, Keith Busch <kbusch@kernel.org>
-Subject: [PATCH 6/6 v6] block: Add n64 cart driver
-Message-Id: <20210113171359.489f6a94ecbaa9244f10e26e@gmx.com>
-X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HftX1ENzjFmWj4iceLdAhmGTnD0GerpMr/W7B9mdG3287f5cR4T
- PsnblnEFVT3LD434gyqpjpL8E/+VDbe6tucSRCwyQwFkxxP6wsPT8egvh9xOEHQ5RIRIsou
- QKzl8zlnR3fU7iGMOG/eWtmNLceAbebmxhh0nd3zMM2TgH+LInY+wGPMNFYjROuT534Sj/x
- FbUXS1l7pwqXMrYZbYNaw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/eQoRQHhqwU=:jSrTbdtCLSG6uiSz6kHQgR
- TjQL2GY60BWwr804hzmnhJ+3r+sB9q5IGsi+jcb11KU8clCfCegNpEr1AQn4zgcGLRZ3gQjKz
- aNYorXMdsRTlZacTU4XokDf6eUC+c5FI3Yaoo0w/wcZ207uVysm2TlTCoqbb1JULZyDGuYQlC
- A9+RBpz6LSfjBBt9zlie45AdpGlbc4H38DJpXpSsGQuW5xbTxdzbBhAhpTmOQC6vV9dq95fFX
- c2kNfBvngRYKgqEHrGYf8TXOAPCymkxGgWKpK9cRaOnXd3UMupSHmY+rjzYfOkACZxEK2SxYT
- lQVkAR8chu8rTdA7SO25NTHQ7oogCmFrJ7kzOWAO6gj/2o4Uon1UYeAGHLJh/Arjom7BEDju2
- uCgcVODq7RT6vIA2TS8wxgqpI3rRIu7nrMAeyQ0cD7KzFkdzSjuxeLBOCJ3ApRvMWjGiSZfIY
- ZzGnSEcJoGCyqhZCEY1jixJQOPdFIhhNl+yP4RB/f5n1ZZDhX6LzqHi/SmIh0HM1eUtSGKszZ
- 9v72jvSXsoMbR/Hyut/lk7PCnLIEftxfG8kfr5Hj7fv25apk0vl9+XNQZdNKWxvN07ZGMoS0x
- /y18ShvHcjl0fo2JGKcFk3E4pBIC+1lgV/przQ8CMHdry+mkMDUTkQzUl3mQkawuYhzdsrD/W
- ZfvkxifgmLOYOpPO/VZUSZbOcMi24KMBaVZlr8lH856oVeahUy3BPDXKiy7UM0l1YhKBxKS2X
- 3rh3kUvcRhJ/xWHNcu50KGPAN17Oj1Wr2AemXkqhvkSgnJ1DeHPYzSpaVuynfbGwQzvhzMVIq
- rjqBwHf98jDBj/WZ3bN+pe6AdZU3YW+sTIf07KrNMN9Scy8fLd6CkrCJDQ3LRNg3oCpOLP4kE
- 7RsLGcvDWTv7qOtY1wHA==
+        id S1727763AbhAMRNN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Jan 2021 12:13:13 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8620 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727713AbhAMRNN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 13 Jan 2021 12:13:13 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10DH0fVp005845;
+        Wed, 13 Jan 2021 09:12:10 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=T6pNHeN3c7nS04x/FGaP18p57ZxxbBMCVZUc/tEFFXo=;
+ b=JgBkHkov8GOqBUZlg4X/xCS6yKPu1hVLC4jMNjiPfHMjealyYw25FLJsPVFDQV96GPFy
+ clKTXZDgubHu1VLSxhWagBp+o1UmYJvEYO8Az8xGOB6HuW1y2GzKFCnnBl01/fmxxDqZ
+ fDudYxZyQrmeJHgbQMbfnM9RmK+LCxKaxI8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 361fpue51c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 13 Jan 2021 09:12:09 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.228) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 13 Jan 2021 09:12:08 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LF+36XqzyMx+hNkqgyDJlupsAxlUPnHM2cftAvvSaoLS6ZgxGJZgJACAzu+4Hdc+eh57aUcCTIL/X8EJthD0rgEw1qoCX3zjP2rMP33PDqlan5ERL62IeWUwIw2QyOklPc+y4QsfZB92qAYJMvtgmQVB4v3Jrr0BGqGM5SHp81Y5CfyRxJRmAXMCmaViDxm8xM7oRUvebtNw61CVJtCfu+D4SJUY1+o6Lz+BSYPwevUx0BqiqSbPlD0M5VifXtxHpX9kpOwaIjN0W7zXrnSnkuF5IWd0gatQQ6mOS8jMa04qU5miiroPPvD8FszUWnziL8iMzTRVdC5POVoTmbAcrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T6pNHeN3c7nS04x/FGaP18p57ZxxbBMCVZUc/tEFFXo=;
+ b=g3Cakn2bjEODGbIw0CCv1/rGUOJV6Lsxpsvi6QpSOyytxomv+qoElJ5pLsCeKTJOxTCQHia0XSWvAnHkrFnmIa/fNRiM+OWBm+sU/b5//od9erSpO7e4FkVZsC+ZKYCqQOioOsPoH7rnXRwXpBfE6OA5RmR9ELgypMOIuAeWcfNCzqp5Znd6dWeXFBT7+iCk6WkzNn7Cw4BbaTfVoB3jU1wr5s+TtUkGyr5DSkT5TbRUMPNpNCAVw6fDRP5yMVKZ8wGIhV+Ik2dJ+Q0GCsbZdQnZsJw63VgvwWSIgU81PAobycobYk2uHm1oytvVVFJ8emJmcCXUBfwEU2arMQP/7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T6pNHeN3c7nS04x/FGaP18p57ZxxbBMCVZUc/tEFFXo=;
+ b=OtlTP1/XHL8bik8NmeK1iSEthPNBse4Oiyxi2TO9EUG3vCZIgeqEXD253Tq5wI3RkTQRMWXM8LTiBBenDbB1m9ZSrzz61mc5KGYH9wTCtcYEagu7MkDb17YbDotPmJQHUaxD0GqOUFFNrDmjvHgvcymJpF7OS+5lnAIIQ7nHXyM=
+Authentication-Results: loongson.cn; dkim=none (message not signed)
+ header.d=none;loongson.cn; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB3046.namprd15.prod.outlook.com (2603:10b6:a03:fa::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Wed, 13 Jan
+ 2021 17:12:07 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03%7]) with mapi id 15.20.3742.012; Wed, 13 Jan 2021
+ 17:12:07 +0000
+Subject: Re: [PATCH bpf 1/2] samples/bpf: Set flag __SANE_USERSPACE_TYPES__
+ for MIPS to fix build warnings
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+CC:     <linux-sparse@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <clang-built-linux@googlegroups.com>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+References: <1610535453-2352-1-git-send-email-yangtiezhu@loongson.cn>
+ <1610535453-2352-2-git-send-email-yangtiezhu@loongson.cn>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <e3eb5919-4573-4576-e6aa-bd8ff56409ed@fb.com>
+Date:   Wed, 13 Jan 2021 09:12:03 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.6.1
+In-Reply-To: <1610535453-2352-2-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:e777]
+X-ClientProxiedBy: MW4PR04CA0354.namprd04.prod.outlook.com
+ (2603:10b6:303:8a::29) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21e1::13f6] (2620:10d:c090:400::5:e777) by MW4PR04CA0354.namprd04.prod.outlook.com (2603:10b6:303:8a::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.10 via Frontend Transport; Wed, 13 Jan 2021 17:12:05 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 59cfa8b0-1cfa-44d3-97b2-08d8b7e65b29
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3046:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB3046D3DFB0A6E2281A0D54B9D3A90@BYAPR15MB3046.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:843;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lpEmsJKnbjuY6+6VV1U6X7ihvUe38zMxwqpvBM7j2lMUybp21PezBn+XkqOB8gC7FHuFdt29PLD1KeGzK+UhxkqqIJDkwpJlmCYSr6mHNM701+jq6j2DAgeVzRlgIdZ6k56R6JD44mz6hDgl9F2A0jkdZHi5LGoIrgDrjlNzXYr0sF6/ckNcxsobP1GrT+xpZN55EyQVHDg8QcNN2LFJ+MzQccEar0Y7bIAnlYWDofBe1VQYZZ9JqIU09o7mwswtotikI48EUndx6ZPSLoKfqMvXIWrr1n6CyyBuSCOi9koniLvbvXldY3NA3RYMtgub+K6FKWvH0bcMLpbkl0KMN/X38abwhYS8M27Fa4LjMbJHzg23Xf2Sq0GpfvrLow8c+z2MQ3cMcdQil5mCMa0HAN/5sXWsidGWLltH5FK5qWu86YPcpSk/k63eT5BQw0yP2aE/liqS3Qx2WcJ7HHNBCc8qUl7aqq2OchdstuYQuFYhXASCeOLm4uhzyBrzk4k0
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(136003)(366004)(396003)(376002)(346002)(31686004)(478600001)(66946007)(8676002)(2616005)(53546011)(31696002)(2906002)(66556008)(66476007)(5660300002)(8936002)(921005)(52116002)(36756003)(7416002)(316002)(16526019)(4326008)(186003)(83380400001)(110136005)(6486002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?OXpyazRPUTE4V0lCTXVWbXVkWkdPL3EwRWl5a1RwOTQrN2RyQlhRRE1QYjVB?=
+ =?utf-8?B?TWQ0VTdkcEFLdUFWNFBtREJlWDRBcGVWdXVrSm55dXZTTERSdDdtaWJOTzZ3?=
+ =?utf-8?B?dW5LMEJGb1hRa2JwTjlwSTRjNXYzOFgzWnJ3YlFSNXFSbUlqbDdLbjNtYnBZ?=
+ =?utf-8?B?Um9zMEVjbWJzbFpLQW5TTXdRbnpnMkx2UWNIRkZLSnhFRjdxRE14U0diTHZv?=
+ =?utf-8?B?cHY4dVVoR0dnYnZmaHZWNzRMbkY1emlXb2ovUTlHZjU0UVIzaGpGUG55R0JZ?=
+ =?utf-8?B?MER5WjB4a1ZEV2RTc0xLWTlsNXdOSnFUMUJDQ1dnL2E3ekVDaUFlYmZZbTRk?=
+ =?utf-8?B?M092YXhFbmh1bGFjcmRVNFR3RWRmOEdEbXY0SHF4MUF4RXJSKzlUTURLV2Ez?=
+ =?utf-8?B?eHdiR1djT3RBVlFoZ0x2UGNxUHovZTI5UkcrQUhqOVc0S3hmdDFZa1Q3RUow?=
+ =?utf-8?B?ZUdrQks0UlFCZDdxRkFDSkJpV1Zua3crTUNYR1ZXME1vbnQydlpIZTI4ZXcx?=
+ =?utf-8?B?ak9mc1BzNVR3QnRMaDAxYitaZWxRN28wU0pwZlVOZUVJQUtZSFJGalNjS3la?=
+ =?utf-8?B?WGl2QmhrenBHWW1TUWNUai9FSlNSZVgxa1BmaGZJdVJaQlA2TXdPYXo3Rllo?=
+ =?utf-8?B?ZDBqZFM0aEplYnRZQUM3UHBMU0I4VzR1dC95VVkwVUhOb050emlaVnVqQmlu?=
+ =?utf-8?B?OVhhZDV0UmVZWGxCb05vcjRubm5aWkpIOVpqQWxlK1BWSnBpTlAvSHVtdzVk?=
+ =?utf-8?B?RWpBdm84REZld1NmNE1BMkFuTUNGVnVpa3pkbnh0dVpVM2xTVmpta0ZpYWhM?=
+ =?utf-8?B?L25tUnc3RTZuZzlxVDBkTHZrRkMvZzh2eUxJM0l2eklNWWdLTnNkVlhGTTgr?=
+ =?utf-8?B?NkgyRzh3NHVRYzFKcDdDY3VhMDNsd2pNM3lOSDkxL0hnbTFyM0hWWVNBaWJz?=
+ =?utf-8?B?NXoyaER4SG9GT3NaRWxQdWU1aml3c2o5ZnpKNkliQ3NReW1QZ1FNMlgzbW1w?=
+ =?utf-8?B?c2lGQ1JQSVVpeUR0MndHNDRBUGVDZE9wVE5jNGVxQlB2a1FscXJ1cHhYVTdE?=
+ =?utf-8?B?Qzl1aHZsOGo4V0EwdGRneTVHQXI5WEljZlRLM0RIS1BoQkh0elhIREQ2OWdZ?=
+ =?utf-8?B?Qm5NdjR5eU51eUgzS3AwUjhReGJTUERzNG1GRDJ6NUY3Snh1U0RmOUh2VXQ3?=
+ =?utf-8?B?L0FWQVl2NGFoeTJmNmM0dWZrZFcrc3pmZFBlNkpVOUtZL3NIWml4c0w0REZy?=
+ =?utf-8?B?ckdkZU82Qys0K2NDNFBLM0FhYjROaDZIMjhidG91LzQwTE5hbmo2V3cxNmxY?=
+ =?utf-8?B?YVFJR2gyK3ljRy9IUmlpVE5SWnYyWG01VGhkMzQzSkJqdXJYY1JLSFdBSnVO?=
+ =?utf-8?B?MlhSQTlpR0lnYUE9PQ==?=
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2021 17:12:07.1209
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59cfa8b0-1cfa-44d3-97b2-08d8b7e65b29
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 65BSGNJzbtS0DB5X+2/+85TMmc94ye+wHQEHn8dOO/wSiRoaHlckW2RsWr7TUVgX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3046
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-13_07:2021-01-13,2021-01-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1011
+ adultscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101130103
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This adds support for the Nintendo 64 console's carts.
-Carts are a read-only media ranging from 8mb to 64mb.
 
-Only one cart can be connected at once, and switching
-it requires a reboot.
 
-No module support to save RAM, as the target has 8mb RAM.
+On 1/13/21 2:57 AM, Tiezhu Yang wrote:
+> MIPS needs __SANE_USERSPACE_TYPES__ before <linux/types.h> to select
+> 'int-ll64.h' in arch/mips/include/uapi/asm/types.h and avoid compile
+> warnings when printing __u64 with %llu, %llx or %lld.
 
-Signed-off-by: Lauri Kasanen <cand@gmx.com>
-=2D--
- drivers/block/Kconfig   |   6 ++
- drivers/block/Makefile  |   1 +
- drivers/block/n64cart.c | 217 +++++++++++++++++++++++++++++++++++++++++++=
-+++++
- 3 files changed, 224 insertions(+)
- create mode 100644 drivers/block/n64cart.c
+could you mention which command produces the following warning?
 
-diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
-index ecceaaa..924d768 100644
-=2D-- a/drivers/block/Kconfig
-+++ b/drivers/block/Kconfig
-@@ -72,6 +72,12 @@ config AMIGA_Z2RAM
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called z2ram.
+> 
+>      printf("0x%02x : %llu\n", key, value);
+>                       ~~~^          ~~~~~
+>                       %lu
+>     printf("%s/%llx;", sym->name, addr);
+>                ~~~^               ~~~~
+>                %lx
+>    printf(";%s %lld\n", key->waker, count);
+>                ~~~^                 ~~~~~
+>                %ld
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>   samples/bpf/Makefile        | 4 ++++
+>   tools/include/linux/types.h | 3 +++
+>   2 files changed, 7 insertions(+)
+> 
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index 26fc96c..27de306 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -183,6 +183,10 @@ BPF_EXTRA_CFLAGS := $(ARM_ARCH_SELECTOR)
+>   TPROGS_CFLAGS += $(ARM_ARCH_SELECTOR)
+>   endif
+>   
+> +ifeq ($(ARCH), mips)
+> +TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__
+> +endif
+> +
 
-+config N64CART
-+	bool "N64 cart support"
-+	depends on MACH_NINTENDO64
-+	help
-+	  Support for the N64 cart.
-+
- config CDROM
- 	tristate
- 	select BLK_SCSI_REQUEST
-diff --git a/drivers/block/Makefile b/drivers/block/Makefile
-index e1f6311..b9642cf 100644
-=2D-- a/drivers/block/Makefile
-+++ b/drivers/block/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_PS3_DISK)		+=3D ps3disk.o
- obj-$(CONFIG_PS3_VRAM)		+=3D ps3vram.o
- obj-$(CONFIG_ATARI_FLOPPY)	+=3D ataflop.o
- obj-$(CONFIG_AMIGA_Z2RAM)	+=3D z2ram.o
-+obj-$(CONFIG_N64CART)		+=3D n64cart.o
- obj-$(CONFIG_BLK_DEV_RAM)	+=3D brd.o
- obj-$(CONFIG_BLK_DEV_LOOP)	+=3D loop.o
- obj-$(CONFIG_XILINX_SYSACE)	+=3D xsysace.o
-diff --git a/drivers/block/n64cart.c b/drivers/block/n64cart.c
-new file mode 100644
-index 0000000..f8c17b0
-=2D-- /dev/null
-+++ b/drivers/block/n64cart.c
-@@ -0,0 +1,217 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Support for the N64 cart.
-+ *
-+ * Copyright (c) 2021 Lauri Kasanen
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/blk-mq.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/init.h>
-+#include <linux/major.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+MODULE_AUTHOR("Lauri Kasanen <cand@gmx.com>");
-+MODULE_DESCRIPTION("Driver for the N64 cart");
-+MODULE_LICENSE("GPL");
-+
-+#define BUFSIZE (64 * 1024)
-+
-+static unsigned int start, size;
-+static int major;
-+static struct request_queue *queue;
-+static struct blk_mq_tag_set tag_set;
-+static struct gendisk *disk;
-+
-+static void *buf;
-+static dma_addr_t dma_addr;
-+
-+static u32 __iomem *reg_base;
-+
-+#define PI_DRAM_REG 0
-+#define PI_CART_REG 1
-+#define PI_READ_REG 2
-+#define PI_WRITE_REG 3
-+#define PI_STATUS_REG 4
-+
-+#define PI_STATUS_DMA_BUSY (1 << 0)
-+#define PI_STATUS_IO_BUSY (1 << 1)
-+
-+static void n64cart_write_reg(const u8 reg, const u32 value)
-+{
-+	writel(value, reg_base + reg);
-+}
-+
-+static u32 n64cart_read_reg(const u8 reg)
-+{
-+	return readl(reg_base + reg);
-+}
-+
-+static void n64cart_wait_dma(void)
-+{
-+	while (n64cart_read_reg(PI_STATUS_REG) &
-+		(PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY))
-+		cpu_relax();
-+}
-+
-+static blk_status_t get_seg(struct request *req)
-+{
-+	u32 bstart =3D blk_rq_pos(req) * 512;
-+	u32 len =3D blk_rq_cur_bytes(req);
-+	void *dst =3D bio_data(req->bio);
-+
-+	if (bstart + len > size)
-+		return BLK_STS_IOERR;
-+
-+	bstart +=3D start;
-+
-+	while (len) {
-+		const u32 curlen =3D len < BUFSIZE ? len : BUFSIZE;
-+
-+		dma_cache_inv((unsigned long) buf, curlen);
-+
-+		n64cart_wait_dma();
-+
-+		barrier();
-+		n64cart_write_reg(PI_DRAM_REG, dma_addr);
-+		barrier();
-+		n64cart_write_reg(PI_CART_REG, (bstart | 0x10000000) & 0x1FFFFFFF);
-+		barrier();
-+		n64cart_write_reg(PI_WRITE_REG, curlen - 1);
-+		barrier();
-+
-+		n64cart_wait_dma();
-+
-+		memcpy(dst, buf, curlen);
-+
-+		len -=3D curlen;
-+		dst +=3D curlen;
-+		bstart +=3D curlen;
-+	}
-+
-+	return BLK_STS_OK;
-+}
-+
-+static blk_status_t n64cart_queue_rq(struct blk_mq_hw_ctx *hctx,
-+				     const struct blk_mq_queue_data *bd)
-+{
-+	struct request *req =3D bd->rq;
-+	blk_status_t err;
-+
-+	blk_mq_start_request(req);
-+
-+	do {
-+		err =3D get_seg(req);
-+	} while (blk_update_request(req, err, blk_rq_cur_bytes(req)));
-+
-+	blk_mq_end_request(req, BLK_STS_OK);
-+	return BLK_STS_OK;
-+}
-+
-+static const struct blk_mq_ops n64cart_mq_ops =3D {
-+	.queue_rq =3D n64cart_queue_rq,
-+};
-+
-+static const struct block_device_operations n64cart_fops =3D {
-+	.owner		=3D THIS_MODULE,
-+};
-+
-+/*
-+ * The target device is embedded and RAM-constrained. We save RAM
-+ * by initializing in __init code that gets dropped late in boot.
-+ * For the same reason there is no module or unloading support.
-+ */
-+static int __init n64cart_probe(struct platform_device *pdev)
-+{
-+	struct resource *res;
-+	unsigned long len;
-+	int err;
-+
-+	if (!start || !size) {
-+		pr_err("n64cart: start and size not specified\n");
-+		return -ENODEV;
-+	}
-+
-+	if (size & 4095) {
-+		pr_err("n64cart: size must be a multiple of 4K\n");
-+		return -ENODEV;
-+	}
-+
-+	major =3D register_blkdev(0, "n64cart");
-+	if (major <=3D 0) {
-+		pr_err("n64cart: unable to get major number\n");
-+		return -EBUSY;
-+	}
-+
-+	queue =3D blk_mq_init_sq_queue(&tag_set, &n64cart_mq_ops, 1,
-+				     BLK_MQ_F_SHOULD_MERGE | BLK_MQ_F_BLOCKING);
-+	if (IS_ERR(queue)) {
-+		err =3D PTR_ERR(queue);
-+		goto fail_reg;
-+	}
-+
-+	buf =3D kmalloc(BUFSIZE, GFP_DMA | GFP_KERNEL);
-+	if (!buf) {
-+		err =3D -ENOMEM;
-+		goto fail_queue;
-+	}
-+	dma_addr =3D virt_to_phys(buf);
-+
-+	disk =3D alloc_disk(1);
-+	if (!disk) {
-+		err =3D -ENOMEM;
-+		goto fail_dma;
-+	}
-+
-+	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	len =3D res->end - res->start + 1;
-+	reg_base =3D ioremap(res->start, len);
-+
-+	disk->major =3D major;
-+	disk->first_minor =3D 0;
-+	disk->queue =3D queue;
-+	disk->flags =3D GENHD_FL_NO_PART_SCAN;
-+	disk->fops =3D &n64cart_fops;
-+	strcpy(disk->disk_name, "n64cart");
-+
-+	set_capacity(disk, size / 512);
-+	set_disk_ro(disk, 1);
-+
-+	blk_queue_flag_set(QUEUE_FLAG_NONROT, queue);
-+	blk_queue_physical_block_size(queue, 4096);
-+	blk_queue_logical_block_size(queue, 4096);
-+
-+	add_disk(disk);
-+
-+	pr_info("n64cart: %u kb disk\n", size / 1024);
-+
-+	return 0;
-+fail_dma:
-+	kfree(buf);
-+fail_queue:
-+	blk_cleanup_queue(queue);
-+fail_reg:
-+	unregister_blkdev(major, "n64cart");
-+	return err;
-+}
-+
-+static struct platform_driver n64cart_driver =3D {
-+	.driver =3D {
-+		.name =3D "n64cart",
-+	},
-+};
-+
-+static int __init n64cart_init(void)
-+{
-+	return platform_driver_probe(&n64cart_driver, n64cart_probe);
-+}
-+
-+module_param(start, uint, 0);
-+MODULE_PARM_DESC(start, "Start address of the cart block data");
-+
-+module_param(size, uint, 0);
-+MODULE_PARM_DESC(size, "Size of the cart block data, in bytes");
-+
-+module_init(n64cart_init);
-=2D-
-2.6.2
+This change looks okay based on description in
+arch/mips/include/uapi/asm/types.h
 
+'''
+/*
+  * We don't use int-l64.h for the kernel anymore but still use it for
+  * userspace to avoid code changes.
+  *
+  * However, some user programs (e.g. perf) may not want this. They can
+  * flag __SANE_USERSPACE_TYPES__ to get int-ll64.h here.
+  */
+'''
+
+>   TPROGS_CFLAGS += -Wall -O2
+>   TPROGS_CFLAGS += -Wmissing-prototypes
+>   TPROGS_CFLAGS += -Wstrict-prototypes
+> diff --git a/tools/include/linux/types.h b/tools/include/linux/types.h
+> index 154eb4e..e9c5a21 100644
+> --- a/tools/include/linux/types.h
+> +++ b/tools/include/linux/types.h
+> @@ -6,7 +6,10 @@
+>   #include <stddef.h>
+>   #include <stdint.h>
+>   
+> +#ifndef __SANE_USERSPACE_TYPES__
+>   #define __SANE_USERSPACE_TYPES__	/* For PPC64, to get LL64 types */
+> +#endif
+
+What problem this patch fixed? If this header is used, you can just
+change comment from "PPC64" to "PPC64/MIPS", right?
+
+> +
+>   #include <asm/types.h>
+>   #include <asm/posix_types.h>
+>   
+> 
