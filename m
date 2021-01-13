@@ -2,73 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E58F2F405D
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Jan 2021 01:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505FB2F402E
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Jan 2021 01:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733109AbhALXe3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Jan 2021 18:34:29 -0500
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:36775 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733047AbhALXe2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Jan 2021 18:34:28 -0500
-X-Originating-IP: 86.202.109.140
-Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id A8AE81BF20B;
-        Tue, 12 Jan 2021 23:33:41 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Matt Mackall <mpm@selenic.com>,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mark Brown <broonie@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-crypto@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-ide@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: (subset) [PATCH 00/10] Remove support for TX49xx
-Date:   Wed, 13 Jan 2021 00:33:30 +0100
-Message-Id: <161049432258.352381.2804715824942772218.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+        id S2437975AbhAMAnQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Jan 2021 19:43:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48578 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392371AbhAMA2r (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 12 Jan 2021 19:28:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7C41E23131;
+        Wed, 13 Jan 2021 00:28:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610497686;
+        bh=l4bVjGN9qa62D6wIsCNthuTsg43yfh9U+sM3Nr9Q01A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NsYNsfscXOjB992DWmXvmkKLILvNkU5uOiJF3LFcW4ab7paVBPn2tk7DKrM86ZjHL
+         WosGC6EhT6ddPy7DX7aRmuGKVrjZv/1JYoEjZeb+9bsGw4EhC1ImJPjV++jZLD6Zts
+         EHhNL4Ioc0wiY/VyGMdzfy05bwsvHwxjiPerMtSrCyf68iC+WvQ0+0Mi4Tq4D9kIdF
+         3N/FPEIFLbf6aJ5UZXv4G39dkVrCgkD8mfReuK6MZiR4UcAYTbH/86mnfHnlUw66aX
+         /3hG2GNTYd0dVdWLkd4bpk4Yo1NE/1Y0uNO5HiLPLebe8QQpQzoaOoM+sXDw6xsO2B
+         8JjkEQyPrJ/JA==
+Received: by mail-io1-f52.google.com with SMTP id u26so659938iof.3;
+        Tue, 12 Jan 2021 16:28:06 -0800 (PST)
+X-Gm-Message-State: AOAM533kJwieoez16PHYrUOVRPmgsA0E6EBQWHXQmEzBgxCeA+iQ4C1T
+        TA2KoJdsasCKP4JKMAsz1I4eUHPQDYDJ4b5i8Gc=
+X-Google-Smtp-Source: ABdhPJyGl93Rw4UJu1ToLzTJj1orHdU7rEc+4tfveQ2c9YxPJzAvtJO+VytyGstWVWin0EBD6hfxhs65LZX7Q9WSNEo=
+X-Received: by 2002:a92:870b:: with SMTP id m11mr1714638ild.134.1610497685872;
+ Tue, 12 Jan 2021 16:28:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <1610454557-25867-1-git-send-email-hejinyang@loongson.cn> <1610454557-25867-2-git-send-email-hejinyang@loongson.cn>
+In-Reply-To: <1610454557-25867-2-git-send-email-hejinyang@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 13 Jan 2021 08:27:54 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7Y_iBpr8t-RKghLf=1mb0Z4djxnwfKg8QBnUXgB=+SRQ@mail.gmail.com>
+Message-ID: <CAAhV-H7Y_iBpr8t-RKghLf=1mb0Z4djxnwfKg8QBnUXgB=+SRQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] MIPS: process: Reorder header files
+To:     Jinyang He <hejinyang@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Jun-Ru Chang <jrjang@realtek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 5 Jan 2021 15:02:45 +0100, Thomas Bogendoerfer wrote:
-> I couldn't find any buyable product other than reference boards using
-> TX49xx CPUs. And since nobody showed interest in keeping support for
-> it, it's time to remove it.
-> 
-> I've split up the removal into seperate parts for different maintainers.
-> So if the patch fits your needs, please take it via your tree or
-> give me an ack so I can apply them  the mips-next tree.
-> 
-> [...]
+Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
-Applied, thanks!
-
-[08/10] rtc: tx4939: Remove driver
-        commit: 446667df283002fdda0530523347ffd1cf053373
-
-Best regards,
--- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Tue, Jan 12, 2021 at 9:07 PM Jinyang He <hejinyang@loongson.cn> wrote:
+>
+> Just reorder the header files.
+>
+> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+> ---
+>  arch/mips/kernel/process.c | 44 ++++++++++++++++++++++----------------------
+>  1 file changed, 22 insertions(+), 22 deletions(-)
+>
+> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+> index d7e288f..361bd28 100644
+> --- a/arch/mips/kernel/process.c
+> +++ b/arch/mips/kernel/process.c
+> @@ -9,28 +9,29 @@
+>   * Copyright (C) 2004 Thiemo Seufer
+>   * Copyright (C) 2013  Imagination Technologies Ltd.
+>   */
+> +#include <linux/completion.h>
+> +#include <linux/cpu.h>
+>  #include <linux/errno.h>
+> +#include <linux/export.h>
+> +#include <linux/init.h>
+> +#include <linux/kallsyms.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mm.h>
+> +#include <linux/mman.h>
+> +#include <linux/nmi.h>
+> +#include <linux/personality.h>
+> +#include <linux/ptrace.h>
+> +#include <linux/prctl.h>
+> +#include <linux/random.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/debug.h>
+>  #include <linux/sched/task.h>
+>  #include <linux/sched/task_stack.h>
+> -#include <linux/tick.h>
+> -#include <linux/kernel.h>
+> -#include <linux/mm.h>
+>  #include <linux/stddef.h>
+> -#include <linux/unistd.h>
+> -#include <linux/export.h>
+> -#include <linux/ptrace.h>
+> -#include <linux/mman.h>
+> -#include <linux/personality.h>
+>  #include <linux/sys.h>
+> -#include <linux/init.h>
+> -#include <linux/completion.h>
+> -#include <linux/kallsyms.h>
+> -#include <linux/random.h>
+> -#include <linux/prctl.h>
+> -#include <linux/nmi.h>
+> -#include <linux/cpu.h>
+> +#include <linux/tick.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/unistd.h>
+>
+>  #include <asm/abi.h>
+>  #include <asm/asm.h>
+> @@ -38,21 +39,20 @@
+>  #include <asm/cpu.h>
+>  #include <asm/dsemul.h>
+>  #include <asm/dsp.h>
+> +#include <asm/elf.h>
+> +#include <asm/exec.h>
+>  #include <asm/fpu.h>
+> +#include <asm/inst.h>
+> +#include <asm/io.h>
+>  #include <asm/irq.h>
+> +#include <asm/irq_regs.h>
+> +#include <asm/isadep.h>
+>  #include <asm/mips-cps.h>
+>  #include <asm/msa.h>
+>  #include <asm/mipsregs.h>
+>  #include <asm/processor.h>
+>  #include <asm/reg.h>
+> -#include <linux/uaccess.h>
+> -#include <asm/io.h>
+> -#include <asm/elf.h>
+> -#include <asm/isadep.h>
+> -#include <asm/inst.h>
+>  #include <asm/stacktrace.h>
+> -#include <asm/irq_regs.h>
+> -#include <asm/exec.h>
+>
+>  #ifdef CONFIG_HOTPLUG_CPU
+>  void arch_cpu_idle_dead(void)
+> --
+> 2.1.0
+>
