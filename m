@@ -2,352 +2,394 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6782F77C3
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Jan 2021 12:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC412F77C8
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Jan 2021 12:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725831AbhAOLht (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Jan 2021 06:37:49 -0500
-Received: from mout.gmx.net ([212.227.17.22]:40015 "EHLO mout.gmx.net"
+        id S1725950AbhAOLi2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Jan 2021 06:38:28 -0500
+Received: from mout.gmx.net ([212.227.17.21]:41827 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727111AbhAOLhs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 Jan 2021 06:37:48 -0500
+        id S1725880AbhAOLi2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 Jan 2021 06:38:28 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1610710574;
-        bh=55sDbgjHyH8OG315mZEvs58fDlVnogA73v0CgNMYFNU=;
+        s=badeba3b8450; t=1610710575;
+        bh=eLiByC0IB0I4t5hr6NzccvdkQEfXiw1/D65/IvIaHbQ=;
         h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=SNvAfgWmxCiyojhT+hjadMxkr5i7oPwicB0MQFYxFpZuRU7VWHEigl2cZwL2nRJoR
-         gEncibaLyvJhERY+TQX6GBu7EWT2TyP4itGeh2zDDW1xwVBaSuPeUF45OdfaNmXnm3
-         WYGI7ukwQkEvSZGCYcjFBo6wslNHbPwNaCclWbhM=
+        b=j6L9V+W52/idr+vnrlu2IzcWoPlSJPFlA1BJgD2WxU6tDIhaDGGmVATmPwdHVmKVk
+         UobgZrZDy5Jp7JACKEmKJgPA174bHP81HvEDQQIv1g6qi5Yq641eCTCtUj9MIWjrBZ
+         hD719Ugvsn5Il49M6O/SUlsa4M4nkKqRIRUTYoLQ=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from Valinor ([82.203.161.65]) by mail.gmx.com (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MuDbx-1luFu43eDV-00uYfW; Fri, 15
- Jan 2021 12:36:14 +0100
-Date:   Fri, 15 Jan 2021 13:34:08 +0200
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1Mbir8-1ldXxx24y6-00dGoi; Fri, 15
+ Jan 2021 12:36:15 +0100
+Date:   Fri, 15 Jan 2021 13:35:00 +0200
 From:   Lauri Kasanen <cand@gmx.com>
 To:     linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, dmitry.torokhov@gmail.com,
-        linux-input@vger.kernel.org
-Subject: [PATCH 1/3 v7] input: Add N64 controller driver
-Message-Id: <20210115133408.0acd70163b582b77ad0a029b@gmx.com>
+Cc:     tsbogend@alpha.franken.de, Takashi Iwai <tiwai@suse.de>,
+        perex@perex.cz
+Subject: [PATCH 2/3 v7] sound: Add n64 driver
+Message-Id: <20210115133500.c5affc0131313e1165acb2a1@gmx.com>
 X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2n5fsYMnt8EyAwDKwstxuW4GQI57ALAzkmwEeLoWaBC7fzxp0vr
- mzcBhHKta9cl+D6d2deCaCQAesq44gRBmqy8SxX/YV+n5eWUt23HJPoj+eo4eyjkzoBq3gq
- ZS/r/of18Jj2CP0U5HpYavhLtKUoDHysMu75/df4Q8egolBXy/AVd3BaFm660cZFWph5Rf/
- /WeLCP8xLAQcgrVAs3Svg==
+X-Provags-ID: V03:K1:jGSx8WMqNwe6NCIIDXiaMlbJUFrsm3D5a41pIIy09riqPaBJcIU
+ JsJx5fRe5kteFAu1UFJbgZCQ3gAOFMabl5/o+v5TK92GvvAVyosPOHlNYOsS8OM165LIaxC
+ 9Wsenju29GPnUgUriAIsKxSb2mCT31COjuSOMdAXEu78EunCqKHczEdQhD1+DL1TpCu/FgZ
+ 7WzVfi0hsT40CmdDq0S0Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rjOUcP5Zqec=:NA2JNUhrip5ykat5DRdpzm
- zi9U+BPGy7uCU5n3X0PcWJaCseMzfjWvw5MgX6jAqLfqePcuFFurpDDqD7eNQ22Uz+xDPGVta
- ci7XnWBz/JcAJ8M9r7NtOeGvpbXonR0iiBPT/Xizo9Se1i42c5Bzamz2J6GomiXg3t5kMSRiF
- h+tIBOtqnP4CXrNwLRyIC9ryrUTPZE1MnhpydT2t15mKBXWCjwJGHKLI80nDR5DKPy79XYj2N
- 8v20yUZQDv0maLV90eym6N9CV8jSM125vuTBxl9Bb1LSTswPYhU2IRFSrIjvff+wEsLE4epeu
- 1CU8z+DxLstTzycLzVqZiFZewyEPz159v0+Lwu4H1DyjIivMfbKrCZv7RtITCPdnEOcUhvx7S
- IydN49nfPcgAt+KhXm8DsEuAfWPP2t5mf+ztoSrGpcrZYe820ktq5yw5ECBUekWJfKE3f12Ph
- ttG6ZorkyJ2D9Ywknqwp1XWcf0e1ykQvZ/zqaPGoObD37xkfR0qB3e2khVJtWjuUpZazImig0
- l/yHQQJUOjbgwf6WPhuLUYO+lK2lYdxZPaGZfX7suVu0H14WZe1sPj1qMhCHhu0nfMC59okL+
- 2FXeJ5V/D7LcazThX35VQFO1tiK+yUOqezsBliBSMh6Bf0GWXd+Zcdm/+7yCA1n1K2uGDrtY0
- uQbGqDN/wbk4PBLt94qehaftF9BV88FIlKogNzUCtcMZq2iNM9rRtd6pjTCAxEwRlGRc70Oi6
- rXpE0c7+deTmOT4KaCPO4uAev49tlvDcuEcb4wUfQf/g+S30R9FwPFBvPdMDQnmd4pqZDubXS
- IW43PFpDND2llg4uWIhsa4RAfQKRqv/KG1hg0rETcDV13QiVzhh996ZGgLPW8UaCRn2V+ADRi
- iR/Gw8FEXXfqH1HC+aXg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GTcLADRFUXg=:Ksc5PQPgBYcHriQawRhtL9
+ A6SBiA0zoifUGfVLw02L7Nt3lGveRPKPmij910+R6CDRDGaILH+k/OBJLcsUpd6ztQmM2ObH3
+ EWNfV2eP/hTrcFc3LxUdHajdh89583hzGGMv0pSMEwNifGRb5kh1p2oqAhIkN+0LFZaWrV8Hq
+ DbsI7AYHRXKC5a0QcQneLwvSmPYkIuuQWaF7JtG6WQLo6Gwyiv0O2EpkNYy7SWMAq24qZxibt
+ 4PW1OkAgGneA//KFFwSUpTIPUzojTflQfJQg2EAfu7DiCashA+k9GEg7AVywqbsvrNeg4QSFN
+ 4VDvXZN3UQgpj83bDm7w2qaZXNCMzjllhAGgb7XYP1Sf8Vn5yErPTq1dER0a9e+T4iay4zhkY
+ LvWwY/UBO1aODYLmsLw+rzKNLDJszGX6aoQvLyl5UOFWTY63fo0mHdE92bC10uHq9iwqikmB+
+ 5sp2xIYZ87hD7Fhb9Rao4R8sJoQ3O2Fi50WGC5klijoCneqH9S5rap2+cv781QXy02kbrdvkv
+ ZAPD3EOoipiZfzy77EQmXXqwzTSsAQqVAXshJeLptSkmUQAUxVgvgEGGeuahAd0TNNZ7UoLGM
+ y5PPDNnVwRaD6Zx8iqLu5F/QT5w+nyvUEpDyCd+CgXtPRUzJneFNcUWkrOVcj1boVoq5B7Ynt
+ lKAKtsUYfnM59JeAP36npiTblDKB3cakbr309FSsqG7he6CQrXyaIYB1TA0XAKTb00ZtFziXv
+ bZguaGYwu0zKpt64Mk/6GePCMWF8Id6gnsPv2bThquFCwpEFgQmXtYRbE/mBdf9gMlm+nUUCT
+ /5ItJb2sjMvo6mvi/Fqgs2CfadQP2KXWpOzCdY4W4m+XBdyGag6R2IThy1XBDBoCgF6IqtfbY
+ co7kHFvJvhLcvqsR8DBA==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This adds support for the four built-in controller
-ports on the Nintendo 64 console. The N64 controller
-includes an analog stick, a d-pad, and several buttons.
-
-No module support as the target has only 8mb ram.
+This adds support for the Nintendo 64 console's sound.
 
 Signed-off-by: Lauri Kasanen <cand@gmx.com>
 =2D--
 
-v7: use devm_platform_ioremap_resource
+v7:
+use devm_*
 
- drivers/input/joystick/Kconfig  |   6 +
- drivers/input/joystick/Makefile |   2 +-
- drivers/input/joystick/n64joy.c | 343 +++++++++++++++++++++++++++++++++++=
+ sound/mips/Kconfig   |   7 +
+ sound/mips/Makefile  |   1 +
+ sound/mips/snd-n64.c | 372 ++++++++++++++++++++++++++++++++++++++++++++++=
 +++++
- 3 files changed, 350 insertions(+), 1 deletion(-)
- create mode 100644 drivers/input/joystick/n64joy.c
+ 3 files changed, 380 insertions(+)
+ create mode 100644 sound/mips/snd-n64.c
 
-diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconf=
-ig
-index b080f0c..e1a8128 100644
-=2D-- a/drivers/input/joystick/Kconfig
-+++ b/drivers/input/joystick/Kconfig
-@@ -382,4 +382,10 @@ config JOYSTICK_FSIA6B
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called fsia6b.
+diff --git a/sound/mips/Kconfig b/sound/mips/Kconfig
+index b497b80..c484b1e 100644
+=2D-- a/sound/mips/Kconfig
++++ b/sound/mips/Kconfig
+@@ -24,5 +24,12 @@ config SND_SGI_HAL2
+ 	help
+ 	  Sound support for the SGI Indy and Indigo2 Workstation.
 
-+config JOYSTICK_N64
-+	bool "N64 controller"
-+	depends on MACH_NINTENDO64
++config SND_N64
++	bool "N64 Audio"
++	depends on MACH_NINTENDO64 && SND=3Dy
++	select SND_PCM
 +	help
-+	  Support for the four N64 controllers.
++	  Sound support for the N64.
 +
- endif
-diff --git a/drivers/input/joystick/Makefile b/drivers/input/joystick/Make=
-file
-index 58232b3..31d720c 100644
-=2D-- a/drivers/input/joystick/Makefile
-+++ b/drivers/input/joystick/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_JOYSTICK_INTERACT)		+=3D interact.o
- obj-$(CONFIG_JOYSTICK_JOYDUMP)		+=3D joydump.o
- obj-$(CONFIG_JOYSTICK_MAGELLAN)		+=3D magellan.o
- obj-$(CONFIG_JOYSTICK_MAPLE)		+=3D maplecontrol.o
-+obj-$(CONFIG_JOYSTICK_N64)		+=3D n64joy.o
- obj-$(CONFIG_JOYSTICK_PSXPAD_SPI)	+=3D psxpad-spi.o
- obj-$(CONFIG_JOYSTICK_PXRC)		+=3D pxrc.o
- obj-$(CONFIG_JOYSTICK_SIDEWINDER)	+=3D sidewinder.o
-@@ -37,4 +38,3 @@ obj-$(CONFIG_JOYSTICK_WARRIOR)		+=3D warrior.o
- obj-$(CONFIG_JOYSTICK_WALKERA0701)	+=3D walkera0701.o
- obj-$(CONFIG_JOYSTICK_XPAD)		+=3D xpad.o
- obj-$(CONFIG_JOYSTICK_ZHENHUA)		+=3D zhenhua.o
--
-diff --git a/drivers/input/joystick/n64joy.c b/drivers/input/joystick/n64j=
-oy.c
+ endif	# SND_MIPS
+
+diff --git a/sound/mips/Makefile b/sound/mips/Makefile
+index ccc364e..7c86268 100644
+=2D-- a/sound/mips/Makefile
++++ b/sound/mips/Makefile
+@@ -9,3 +9,4 @@ snd-sgi-hal2-objs :=3D hal2.o
+ # Toplevel Module Dependency
+ obj-$(CONFIG_SND_SGI_O2) +=3D snd-sgi-o2.o
+ obj-$(CONFIG_SND_SGI_HAL2) +=3D snd-sgi-hal2.o
++obj-$(CONFIG_SND_N64) +=3D snd-n64.o
+diff --git a/sound/mips/snd-n64.c b/sound/mips/snd-n64.c
 new file mode 100644
-index 0000000..a4bb247
+index 0000000..ca6b4b9
 =2D-- /dev/null
-+++ b/drivers/input/joystick/n64joy.c
-@@ -0,0 +1,343 @@
++++ b/sound/mips/snd-n64.c
+@@ -0,0 +1,372 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Support for the four N64 controllers.
++ *   Sound driver for Nintendo 64.
 + *
-+ * Copyright (c) 2021 Lauri Kasanen
++ *   Copyright 2021 Lauri Kasanen
 + */
 +
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/errno.h>
++#include <linux/dma-mapping.h>
 +#include <linux/init.h>
-+#include <linux/input.h>
-+#include <linux/limits.h>
-+#include <linux/kernel.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/log2.h>
 +#include <linux/module.h>
-+#include <linux/mutex.h>
 +#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/timer.h>
++#include <linux/spinlock.h>
++
++#include <sound/control.h>
++#include <sound/core.h>
++#include <sound/initval.h>
++#include <sound/pcm.h>
++#include <sound/pcm_params.h>
 +
 +MODULE_AUTHOR("Lauri Kasanen <cand@gmx.com>");
-+MODULE_DESCRIPTION("Driver for N64 controllers");
++MODULE_DESCRIPTION("N64 Audio");
 +MODULE_LICENSE("GPL");
 +
-+#define PIF_RAM 0x1fc007c0
++#define AI_NTSC_DACRATE 48681812
++#define AI_STATUS_BUSY  (1 << 30)
++#define AI_STATUS_FULL  (1 << 31)
 +
-+#define SI_DRAM_REG 0
-+#define SI_READ_REG 1
-+#define SI_WRITE_REG 4
-+#define SI_STATUS_REG 6
++#define AI_ADDR_REG 0
++#define AI_LEN_REG 1
++#define AI_CONTROL_REG 2
++#define AI_STATUS_REG 3
++#define AI_RATE_REG 4
++#define AI_BITCLOCK_REG 5
 +
-+#define SI_STATUS_DMA_BUSY  BIT(0)
-+#define SI_STATUS_IO_BUSY   BIT(1)
++#define MI_INTR_REG 2
++#define MI_MASK_REG 3
 +
-+#define N64_CONTROLLER_ID 0x0500
++#define MI_INTR_AI 0x04
 +
-+#define MAX_CONTROLLERS 4
++#define MI_MASK_CLR_AI 0x0010
++#define MI_MASK_SET_AI 0x0020
 +
-+static const char *n64joy_phys[MAX_CONTROLLERS] =3D {
-+	"n64joy/port0",
-+	"n64joy/port1",
-+	"n64joy/port2",
-+	"n64joy/port3",
++
++struct n64audio {
++	u32 __iomem *ai_reg_base;
++	u32 __iomem *mi_reg_base;
++
++	void *ring_base;
++	dma_addr_t ring_base_dma;
++
++	struct snd_card *card;
++
++	struct {
++		struct snd_pcm_substream *substream;
++		int pos, nextpos;
++		u32 writesize;
++		u32 bufsize;
++		spinlock_t lock;
++	} chan;
 +};
 +
-+struct n64joy_priv {
-+	u64 si_buf[8] ____cacheline_aligned;
-+	struct timer_list timer;
-+	struct mutex n64joy_mutex;
-+	struct input_dev *n64joy_dev[MAX_CONTROLLERS];
-+	u32 __iomem *reg_base;
-+	u8 n64joy_opened;
-+};
-+
-+struct joydata {
-+	unsigned: 16; // unused
-+	unsigned err: 2;
-+	unsigned: 14; // unused
-+
-+	union {
-+		u32 data;
-+
-+		struct {
-+			unsigned a: 1;
-+			unsigned b: 1;
-+			unsigned z: 1;
-+			unsigned start: 1;
-+			unsigned up: 1;
-+			unsigned down: 1;
-+			unsigned left: 1;
-+			unsigned right: 1;
-+			unsigned: 2; // unused
-+			unsigned l: 1;
-+			unsigned r: 1;
-+			unsigned c_up: 1;
-+			unsigned c_down: 1;
-+			unsigned c_left: 1;
-+			unsigned c_right: 1;
-+			signed x: 8;
-+			signed y: 8;
-+		};
-+	};
-+};
-+
-+static void n64joy_write_reg(u32 __iomem *reg_base, const u8 reg, const u=
-32 value)
++static void n64audio_write_reg(struct n64audio *priv, const u8 reg, const=
+ u32 value)
 +{
-+	writel(value, reg_base + reg);
++	writel(value, priv->ai_reg_base + reg);
 +}
 +
-+static u32 n64joy_read_reg(u32 __iomem *reg_base, const u8 reg)
++static void n64mi_write_reg(struct n64audio *priv, const u8 reg, const u3=
+2 value)
 +{
-+	return readl(reg_base + reg);
++	writel(value, priv->mi_reg_base + reg);
 +}
 +
-+static void n64joy_wait_si_dma(u32 __iomem *reg_base)
++static u32 n64mi_read_reg(struct n64audio *priv, const u8 reg)
 +{
-+	while (n64joy_read_reg(reg_base, SI_STATUS_REG) &
-+	       (SI_STATUS_DMA_BUSY | SI_STATUS_IO_BUSY))
-+		cpu_relax();
++	return readl(priv->mi_reg_base + reg);
 +}
 +
-+static void n64joy_exec_pif(struct n64joy_priv *priv, const u64 in[8])
++static void n64audio_push(struct n64audio *priv)
 +{
++	struct snd_pcm_runtime *runtime =3D priv->chan.substream->runtime;
++	unsigned long flags;
++	u32 count;
++
++	spin_lock_irqsave(&priv->chan.lock, flags);
++
++	count =3D priv->chan.writesize;
++
++	memcpy(priv->ring_base + priv->chan.nextpos,
++	       runtime->dma_area + priv->chan.nextpos, count);
++
++	/*
++	 * The hw registers are double-buffered, and the IRQ fires essentially
++	 * one period behind. The core only allows one period's distance, so we
++	 * keep a private DMA buffer to afford two.
++	 */
++	n64audio_write_reg(priv, AI_ADDR_REG, priv->ring_base_dma + priv->chan.n=
+extpos);
++	barrier();
++	n64audio_write_reg(priv, AI_LEN_REG, count);
++
++	priv->chan.nextpos +=3D count;
++	priv->chan.nextpos %=3D priv->chan.bufsize;
++
++	runtime->delay =3D runtime->period_size;
++
++	spin_unlock_irqrestore(&priv->chan.lock, flags);
++}
++
++static irqreturn_t n64audio_isr(int irq, void *dev_id)
++{
++	struct n64audio *priv =3D dev_id;
++	const u32 intrs =3D n64mi_read_reg(priv, MI_INTR_REG);
 +	unsigned long flags;
 +
-+	dma_cache_wback_inv((unsigned long) in, 8 * 8);
-+	dma_cache_inv((unsigned long) priv->si_buf, 8 * 8);
++	// Check it's ours
++	if (!(intrs & MI_INTR_AI))
++		return IRQ_NONE;
 +
-+	local_irq_save(flags);
++	n64audio_write_reg(priv, AI_STATUS_REG, 1);
 +
-+	n64joy_wait_si_dma(priv->reg_base);
++	if (priv->chan.substream && snd_pcm_running(priv->chan.substream)) {
++		spin_lock_irqsave(&priv->chan.lock, flags);
 +
-+	barrier();
-+	n64joy_write_reg(priv->reg_base, SI_DRAM_REG, virt_to_phys(in));
-+	barrier();
-+	n64joy_write_reg(priv->reg_base, SI_WRITE_REG, PIF_RAM);
-+	barrier();
++		priv->chan.pos =3D priv->chan.nextpos;
 +
-+	n64joy_wait_si_dma(priv->reg_base);
++		spin_unlock_irqrestore(&priv->chan.lock, flags);
 +
-+	barrier();
-+	n64joy_write_reg(priv->reg_base, SI_DRAM_REG, virt_to_phys(priv->si_buf)=
-);
-+	barrier();
-+	n64joy_write_reg(priv->reg_base, SI_READ_REG, PIF_RAM);
-+	barrier();
++		snd_pcm_period_elapsed(priv->chan.substream);
++		if (priv->chan.substream && snd_pcm_running(priv->chan.substream))
++			n64audio_push(priv);
++	}
 +
-+	n64joy_wait_si_dma(priv->reg_base);
-+
-+	local_irq_restore(flags);
++	return IRQ_HANDLED;
 +}
 +
-+static const u64 polldata[] ____cacheline_aligned =3D {
-+	0xff010401ffffffff,
-+	0xff010401ffffffff,
-+	0xff010401ffffffff,
-+	0xff010401ffffffff,
-+	0xfe00000000000000,
-+	0,
-+	0,
-+	1
++static const struct snd_pcm_hardware n64audio_pcm_hw =3D {
++	.info =3D (SNDRV_PCM_INFO_MMAP |
++		 SNDRV_PCM_INFO_MMAP_VALID |
++		 SNDRV_PCM_INFO_INTERLEAVED |
++		 SNDRV_PCM_INFO_BLOCK_TRANSFER),
++	.formats =3D          SNDRV_PCM_FMTBIT_S16_BE,
++	.rates =3D            SNDRV_PCM_RATE_8000_48000,
++	.rate_min =3D         8000,
++	.rate_max =3D         48000,
++	.channels_min =3D     2,
++	.channels_max =3D     2,
++	.buffer_bytes_max =3D 32768,
++	.period_bytes_min =3D 1024,
++	.period_bytes_max =3D 32768,
++	.periods_min =3D      3,
++	// 3 periods lets the double-buffering hw read one buffer behind safely
++	.periods_max =3D      128,
 +};
 +
-+static void n64joy_poll(struct timer_list *t)
++static int hw_rule_period_size(struct snd_pcm_hw_params *params,
++			       struct snd_pcm_hw_rule *rule)
 +{
-+	const struct joydata *data;
-+	struct n64joy_priv *priv =3D container_of(t, struct n64joy_priv, timer);
-+	struct input_dev *dev;
-+	u32 i;
++	struct snd_interval *c =3D hw_param_interval(params,
++						   SNDRV_PCM_HW_PARAM_PERIOD_SIZE);
++	int changed =3D 0;
 +
-+	n64joy_exec_pif(priv, polldata);
++	/*
++	 * The DMA unit has errata on (start + len) & 0x3fff =3D=3D 0x2000.
++	 * This constraint makes sure that the period size is not a power of two=
+,
++	 * which combined with dma_alloc_coherent aligning the buffer to the lar=
+gest
++	 * PoT <=3D size guarantees it won't be hit.
++	 */
 +
-+	data =3D (struct joydata *) priv->si_buf;
-+
-+	for (i =3D 0; i < MAX_CONTROLLERS; i++) {
-+		if (!priv->n64joy_dev[i])
-+			continue;
-+
-+		dev =3D priv->n64joy_dev[i];
-+
-+		// d-pad
-+		input_report_key(dev, BTN_DPAD_UP, data[i].up);
-+		input_report_key(dev, BTN_DPAD_DOWN, data[i].down);
-+		input_report_key(dev, BTN_DPAD_LEFT, data[i].left);
-+		input_report_key(dev, BTN_DPAD_RIGHT, data[i].right);
-+
-+		// c buttons
-+		input_report_key(dev, BTN_FORWARD, data[i].c_up);
-+		input_report_key(dev, BTN_BACK, data[i].c_down);
-+		input_report_key(dev, BTN_LEFT, data[i].c_left);
-+		input_report_key(dev, BTN_RIGHT, data[i].c_right);
-+
-+		// matching buttons
-+		input_report_key(dev, BTN_START, data[i].start);
-+		input_report_key(dev, BTN_Z, data[i].z);
-+
-+		// remaining ones: a, b, l, r
-+		input_report_key(dev, BTN_0, data[i].a);
-+		input_report_key(dev, BTN_1, data[i].b);
-+		input_report_key(dev, BTN_2, data[i].l);
-+		input_report_key(dev, BTN_3, data[i].r);
-+
-+		input_report_abs(dev, ABS_X, data[i].x);
-+		input_report_abs(dev, ABS_Y, data[i].y);
-+
-+		input_sync(dev);
++	if (is_power_of_2(c->min)) {
++		c->min +=3D 2;
++		changed =3D 1;
++	}
++	if (is_power_of_2(c->max)) {
++		c->max -=3D 2;
++		changed =3D 1;
++	}
++	if (snd_interval_checkempty(c)) {
++		c->empty =3D 1;
++		return -EINVAL;
 +	}
 +
-+	mod_timer(&priv->timer, jiffies + msecs_to_jiffies(16));
++	return changed;
 +}
 +
-+static int n64joy_open(struct input_dev *dev)
++static int n64audio_pcm_open(struct snd_pcm_substream *substream)
 +{
-+	struct n64joy_priv *priv =3D input_get_drvdata(dev);
++	struct snd_pcm_runtime *runtime =3D substream->runtime;
 +	int err;
 +
-+	err =3D mutex_lock_interruptible(&priv->n64joy_mutex);
-+	if (err)
++	runtime->hw =3D n64audio_pcm_hw;
++	err =3D snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIOD=
+S);
++	if (err < 0)
 +		return err;
 +
-+	if (!priv->n64joy_opened) {
-+		// Could use the vblank irq, but it's not important if the poll
-+		// point slightly changes.
-+		timer_setup(&priv->timer, n64joy_poll, 0);
-+		mod_timer(&priv->timer, jiffies + msecs_to_jiffies(16));
-+	}
++	err =3D snd_pcm_hw_constraint_step(runtime, 0, SNDRV_PCM_HW_PARAM_PERIOD=
+_SIZE, 2);
++	if (err < 0)
++		return err;
 +
-+	priv->n64joy_opened++;
++	err =3D snd_pcm_hw_rule_add(runtime, 0, SNDRV_PCM_HW_PARAM_PERIOD_SIZE,
++			    hw_rule_period_size, NULL, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, -1);
++	if (err < 0)
++		return err;
 +
-+	mutex_unlock(&priv->n64joy_mutex);
-+	return err;
++	return 0;
 +}
 +
-+static void n64joy_close(struct input_dev *dev)
++static int n64audio_pcm_prepare(struct snd_pcm_substream *substream)
 +{
-+	struct n64joy_priv *priv =3D input_get_drvdata(dev);
++	struct snd_pcm_runtime *runtime =3D substream->runtime;
++	struct n64audio *priv =3D substream->pcm->private_data;
++	u32 rate;
 +
-+	mutex_lock(&priv->n64joy_mutex);
-+	if (!--priv->n64joy_opened)
-+		del_timer_sync(&priv->timer);
-+	mutex_unlock(&priv->n64joy_mutex);
++	rate =3D ((2 * AI_NTSC_DACRATE / runtime->rate) + 1) / 2 - 1;
++
++	n64audio_write_reg(priv, AI_RATE_REG, rate);
++
++	rate /=3D 66;
++	if (rate > 16)
++		rate =3D 16;
++	n64audio_write_reg(priv, AI_BITCLOCK_REG, rate - 1);
++
++	spin_lock_irq(&priv->chan.lock);
++
++	/* Setup the pseudo-dma transfer pointers.  */
++	priv->chan.pos =3D 0;
++	priv->chan.nextpos =3D 0;
++	priv->chan.substream =3D substream;
++	priv->chan.writesize =3D snd_pcm_lib_period_bytes(substream);
++	priv->chan.bufsize =3D snd_pcm_lib_buffer_bytes(substream);
++
++	spin_unlock_irq(&priv->chan.lock);
++	return 0;
 +}
 +
-+static const u64 __initconst scandata[] ____cacheline_aligned =3D {
-+	0xff010300ffffffff,
-+	0xff010300ffffffff,
-+	0xff010300ffffffff,
-+	0xff010300ffffffff,
-+	0xfe00000000000000,
-+	0,
-+	0,
-+	1
++static int n64audio_pcm_trigger(struct snd_pcm_substream *substream,
++				int cmd)
++{
++	struct n64audio *priv =3D substream->pcm->private_data;
++
++	switch (cmd) {
++	case SNDRV_PCM_TRIGGER_START:
++		n64audio_push(substream->pcm->private_data);
++		n64audio_write_reg(priv, AI_CONTROL_REG, 1);
++		n64mi_write_reg(priv, MI_MASK_REG, MI_MASK_SET_AI);
++		break;
++	case SNDRV_PCM_TRIGGER_STOP:
++		n64audio_write_reg(priv, AI_CONTROL_REG, 0);
++		n64mi_write_reg(priv, MI_MASK_REG, MI_MASK_CLR_AI);
++		break;
++	default:
++		return -EINVAL;
++	}
++	return 0;
++}
++
++static snd_pcm_uframes_t n64audio_pcm_pointer(struct snd_pcm_substream *s=
+ubstream)
++{
++	struct n64audio *priv =3D substream->pcm->private_data;
++
++	return bytes_to_frames(substream->runtime,
++			       priv->chan.pos);
++}
++
++static int n64audio_pcm_close(struct snd_pcm_substream *substream)
++{
++	struct n64audio *priv =3D substream->pcm->private_data;
++
++	priv->chan.substream =3D NULL;
++
++	return 0;
++}
++
++static const struct snd_pcm_ops n64audio_pcm_ops =3D {
++	.open =3D		n64audio_pcm_open,
++	.prepare =3D	n64audio_pcm_prepare,
++	.trigger =3D	n64audio_pcm_trigger,
++	.pointer =3D	n64audio_pcm_pointer,
++	.close =3D	n64audio_pcm_close,
 +};
 +
 +/*
@@ -355,111 +397,95 @@ index 0000000..a4bb247
 + * by initializing in __init code that gets dropped late in boot.
 + * For the same reason there is no module or unloading support.
 + */
-+static int __init n64joy_probe(struct platform_device *pdev)
++static int __init n64audio_probe(struct platform_device *pdev)
 +{
-+	const struct joydata *data;
-+	struct n64joy_priv *priv;
-+	struct input_dev *dev;
-+	int err =3D 0;
-+	u32 i, j, found =3D 0;
++	struct snd_card *card;
++	struct snd_pcm *pcm;
++	struct n64audio *priv;
++	struct resource *res;
++	int err;
 +
-+	priv =3D kzalloc(sizeof(struct n64joy_priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+	mutex_init(&priv->n64joy_mutex);
++	err =3D snd_card_new(&pdev->dev, SNDRV_DEFAULT_IDX1,
++			   SNDRV_DEFAULT_STR1,
++			   THIS_MODULE, sizeof(*priv), &card);
++	if (err < 0)
++		return err;
 +
-+	priv->reg_base =3D devm_platform_ioremap_resource(pdev, 0);
-+	if (!priv->reg_base) {
++	priv =3D card->private_data;
++
++	spin_lock_init(&priv->chan.lock);
++
++	priv->card =3D card;
++
++	priv->ring_base =3D dma_alloc_coherent(card->dev, 32 * 1024, &priv->ring=
+_base_dma,
++					     GFP_DMA|GFP_KERNEL);
++	if (!priv->ring_base) {
++		err =3D -ENOMEM;
++		goto fail_card;
++	}
++
++	priv->mi_reg_base =3D devm_platform_ioremap_resource(pdev, 0);
++	if (!priv->mi_reg_base) {
 +		err =3D -EINVAL;
-+		goto fail;
++		goto fail_dma_alloc;
 +	}
 +
-+	// The controllers are not hotpluggable, so we can scan in init
-+	n64joy_exec_pif(priv, scandata);
-+
-+	data =3D (struct joydata *) priv->si_buf;
-+
-+	for (i =3D 0; i < MAX_CONTROLLERS; i++) {
-+		if (!data[i].err && data[i].data >> 16 =3D=3D N64_CONTROLLER_ID) {
-+			found++;
-+
-+			dev =3D priv->n64joy_dev[i] =3D input_allocate_device();
-+			if (!priv->n64joy_dev[i]) {
-+				err =3D -ENOMEM;
-+				goto fail;
-+			}
-+
-+			input_set_drvdata(dev, priv);
-+
-+			dev->name =3D "N64 controller";
-+			dev->phys =3D n64joy_phys[i];
-+			dev->id.bustype =3D BUS_HOST;
-+			dev->id.vendor =3D 0;
-+			dev->id.product =3D data[i].data >> 16;
-+			dev->id.version =3D 0;
-+
-+			dev->open =3D n64joy_open;
-+			dev->close =3D n64joy_close;
-+
-+			// d-pad
-+			input_set_capability(dev, EV_KEY, BTN_DPAD_UP);
-+			input_set_capability(dev, EV_KEY, BTN_DPAD_DOWN);
-+			input_set_capability(dev, EV_KEY, BTN_DPAD_LEFT);
-+			input_set_capability(dev, EV_KEY, BTN_DPAD_RIGHT);
-+			// c buttons
-+			input_set_capability(dev, EV_KEY, BTN_LEFT);
-+			input_set_capability(dev, EV_KEY, BTN_RIGHT);
-+			input_set_capability(dev, EV_KEY, BTN_FORWARD);
-+			input_set_capability(dev, EV_KEY, BTN_BACK);
-+			// matching buttons
-+			input_set_capability(dev, EV_KEY, BTN_START);
-+			input_set_capability(dev, EV_KEY, BTN_Z);
-+			// remaining ones: a, b, l, r
-+			input_set_capability(dev, EV_KEY, BTN_0);
-+			input_set_capability(dev, EV_KEY, BTN_1);
-+			input_set_capability(dev, EV_KEY, BTN_2);
-+			input_set_capability(dev, EV_KEY, BTN_3);
-+
-+			for (j =3D 0; j < 2; j++) {
-+				input_set_abs_params(dev, ABS_X + j,
-+						     S8_MIN, S8_MAX, 0, 0);
-+			}
-+
-+			err =3D input_register_device(dev);
-+			if (err) {
-+				input_free_device(dev);
-+				goto fail;
-+			}
-+		}
++	priv->ai_reg_base =3D devm_platform_ioremap_resource(pdev, 1);
++	if (!priv->ai_reg_base) {
++		err =3D -EINVAL;
++		goto fail_dma_alloc;
 +	}
 +
-+	pr_info("%u controller(s) connected\n", found);
++	err =3D snd_pcm_new(card, "N64 Audio", 0, 1, 0, &pcm);
++	if (err < 0)
++		goto fail_dma_alloc;
 +
-+	if (!found)
-+		return -ENODEV;
++	pcm->private_data =3D priv;
++	strcpy(pcm->name, "N64 Audio");
++
++	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &n64audio_pcm_ops);
++	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, card->dev, 0=
+, 0);
++
++	strcpy(card->driver, "N64 Audio");
++	strcpy(card->shortname, "N64 Audio");
++	strcpy(card->longname, "N64 Audio");
++
++	res =3D platform_get_resource(pdev, IORESOURCE_IRQ, 0);
++	if (devm_request_irq(&pdev->dev, res->start, n64audio_isr,
++				IRQF_SHARED, "N64 Audio", priv)) {
++		err =3D -EBUSY;
++		goto fail_dma_alloc;
++	}
++
++	err =3D snd_card_register(card);
++	if (err < 0)
++		goto fail_dma_alloc;
 +
 +	return 0;
-+fail:
-+	for (i =3D 0; i < MAX_CONTROLLERS; i++) {
-+		if (!priv->n64joy_dev[i])
-+			continue;
-+		input_unregister_device(priv->n64joy_dev[i]);
-+	}
++
++fail_dma_alloc:
++	dma_free_coherent(card->dev, 32 * 1024, priv->ring_base, priv->ring_base=
+_dma);
++
++fail_card:
++	snd_card_free(card);
 +	return err;
 +}
 +
-+static struct platform_driver n64joy_driver =3D {
++static struct platform_driver n64audio_driver =3D {
 +	.driver =3D {
-+		.name =3D "n64joy",
++		.name =3D "n64audio",
 +	},
 +};
 +
-+static int __init n64joy_init(void)
++static int __init n64audio_init(void)
 +{
-+	return platform_driver_probe(&n64joy_driver, n64joy_probe);
++	return platform_driver_probe(&n64audio_driver, n64audio_probe);
 +}
 +
-+module_init(n64joy_init);
++module_init(n64audio_init);
 =2D-
 2.6.2
 
