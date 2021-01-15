@@ -2,106 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0ED2F866B
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Jan 2021 21:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 267952F8694
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Jan 2021 21:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732623AbhAOUOf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Jan 2021 15:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S2388768AbhAOUVb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Jan 2021 15:21:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731808AbhAOUOc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Jan 2021 15:14:32 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C37C0613C1
-        for <linux-mips@vger.kernel.org>; Fri, 15 Jan 2021 12:13:51 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id g15so1545363pjd.2
-        for <linux-mips@vger.kernel.org>; Fri, 15 Jan 2021 12:13:51 -0800 (PST)
+        with ESMTP id S1733119AbhAOUVa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Jan 2021 15:21:30 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0437C0613C1
+        for <linux-mips@vger.kernel.org>; Fri, 15 Jan 2021 12:20:49 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id r4so5262649pls.11
+        for <linux-mips@vger.kernel.org>; Fri, 15 Jan 2021 12:20:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Gb2K8a9/AUSvvfvrbCs7WHO9VXw0fMuK9BslVxQRn/0=;
-        b=ox+MuupIi1HIGJ4Lu7BzfYbNnXQ9689uRP0fxZbbYeRWoQWVIv5A6iDzOAv+Lf3ohz
-         qKC1BGqtw2uyD1BjT+l8ymojNpEyo+b+Lw9oYg2TdqBxy1tr+1LUE7aOs/iNVbEOK9W8
-         kkDyCFVqt2JvOJys6pye6c1ZYVf5exnzyJpkR6bVglnp0ZwcBCOIPnQBexksjXQm9bdX
-         JngSmQhIadBHDzWWhbCUMd85gfS/UpogWlts0JfTE0EsWNvOql5q/CE/XbXTaNY2nb0H
-         mggiEJTc7lchKIPK50VZzARpi0MRYNno9SVy+mv0DPMtYZROkiB+ruHYPfIs1rWxcIN0
-         bwAA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5FQr0UCI/MaWdaqFfV2TlbW914Ru2H540vOm4R4tCNg=;
+        b=XHitNSqGdGBzX4wnF2kiAEEigqDAIJf+b2Y0O/qCdnk/L+IB59vOGCOWshd3Ud7+XH
+         76dBfR1PKxJ0CW5nGN8hEQLspA6Gm9ixRKQd5ivDnLbo1V64In44W+aEkYxZAt6guBNQ
+         cNkKAKgDdpMBeL2ixQR73/IDBqCLB/pFWzS0vNPo9bIDcsSh+bNDfthz85SP1n/owfNh
+         qrgqQnsmhb32eSC8kIt3LsW1Oyqhq1lcfOFqM12TIBDif8UfDq55Onq5/MwLAETwZDVM
+         TJpJ5GSkwn1qpjILYhaLD4q9Dn+/cOA92hlB1Z0mb1dV75p4QiTE9txEWubeOwi/zjXI
+         7xZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Gb2K8a9/AUSvvfvrbCs7WHO9VXw0fMuK9BslVxQRn/0=;
-        b=PS7wyTfL6I+6Ni66Ol3C7gLr+3P3+3cVHNhk9qat6QYJa78dXdX1pdfLP3+8g7gG4/
-         UnQXHmzo76V8fuwQe1pcy3ZH0vrKNPByG1QGgEFboDrGoqe3xkvxHhICa+bQvnMKyD0L
-         4STA+Prc79Q4YLmkjxa6M6opBj33upnJhZIBh5sqS9L9NXEn01OexCByRYLSdzjRbZSj
-         6CKrnqZWHLicfxRi2Tt11dBTYpg8fkOjihbmJ/yco6qqUEoukjcYe2YciZRPqq1iRpoZ
-         ZynUf9fE6V+BEZI3qpt2vP0uvIC+cqTzrYDB4P2OSCC4vhmN+4R2tnOxr0A7t4JKS+w5
-         Bzcw==
-X-Gm-Message-State: AOAM530C2zh4Hw5BIh+Ax6v0Fkp5uOeOSZxCYsoEXhGa4yqatVO2X8WL
-        nT1ANrbqX07s2Q5O3zi6O0BsHQ==
-X-Google-Smtp-Source: ABdhPJwEy4qrdpiIwQ69TYq3HbseCL07DGtLTG+q46XfBrmFaDHSGzoORVM5MwqyY0NAdmKJqV1W1A==
-X-Received: by 2002:a17:90a:ac2:: with SMTP id r2mr10180034pje.145.1610741630370;
-        Fri, 15 Jan 2021 12:13:50 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:0:a6ae:11ff:fe11:4abb])
-        by smtp.gmail.com with ESMTPSA id z13sm9163495pjz.42.2021.01.15.12.13.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 12:13:45 -0800 (PST)
-Date:   Fri, 15 Jan 2021 12:13:42 -0800
-From:   Fangrui Song <maskray@google.com>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5FQr0UCI/MaWdaqFfV2TlbW914Ru2H540vOm4R4tCNg=;
+        b=XejGOhbgNvqBd/U6EMMjPEgyli+OJqAq0y0IakHfEXxGVqEvUHXMomv8M+1uLTAsxY
+         ZaXwbpi722ACZKkv8fMapgOt0+vwDL8Y4zrdFTqxz486X/4dFXRVXtY5skwVqjpNG5F+
+         GuRahIEIRt/kigEaPjuSfag46S80Q3WpxWFSxx+WX9FFiwyQDGr4iU9mXBZYVqZnUqUC
+         hh7TyGiGPHrvAVbySwEgqY20I9ZqO7gHLpuUwLeyTMWWMsKYx+ah9kdEMYKSWq/s/4KS
+         l+E7iyCqE6jHs2RSB7nCyIfLm22WV6wa2923z0STAY6kjts6e/oxCXEcEIsaCxEznOlU
+         9utA==
+X-Gm-Message-State: AOAM5325X2OgU/OaQDQeU5A2WqaflKkG/9KHnN0zFWg30VbH5jps1bGg
+        M5ClBUoHr+Weav/gtKX51DGHZwikqmMLCafVZW+/tg==
+X-Google-Smtp-Source: ABdhPJyv0m03B81aOGsnzS5skp35T91GNbgpsPhDMyV35buImCVHa0cTzz6OHrToB+fUT8W6HcRvihOXC4WlsIot3kA=
+X-Received: by 2002:a17:902:ed14:b029:da:9da4:3091 with SMTP id
+ b20-20020a170902ed14b02900da9da43091mr14215466pld.29.1610742049240; Fri, 15
+ Jan 2021 12:20:49 -0800 (PST)
+MIME-Version: 1.0
+References: <20210115191330.2319352-1-anders.roxell@linaro.org>
+ <20210115192803.GA3828660@ubuntu-m3-large-x86> <CADYN=9Kt597LsfW=Aq6v+kWr+ja+55_+Z3s5mFaJULa+9J4EfA@mail.gmail.com>
+ <20210115201342.76nssqtbs4kttgts@google.com>
+In-Reply-To: <20210115201342.76nssqtbs4kttgts@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 15 Jan 2021 12:20:38 -0800
+Message-ID: <CAKwvOdnzxsuSb3LPkuLYMfH0jeh65dFt8BsHPa8wM+6e69Rc_w@mail.gmail.com>
+Subject: Re: [PATCH] mips: vdso: fix DWARF2 warning
+To:     Fangrui Song <maskray@google.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
         linux-mips@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         clang-built-linux <clang-built-linux@googlegroups.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] mips: vdso: fix DWARF2 warning
-Message-ID: <20210115201342.76nssqtbs4kttgts@google.com>
-References: <20210115191330.2319352-1-anders.roxell@linaro.org>
- <20210115192803.GA3828660@ubuntu-m3-large-x86>
- <CADYN=9Kt597LsfW=Aq6v+kWr+ja+55_+Z3s5mFaJULa+9J4EfA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CADYN=9Kt597LsfW=Aq6v+kWr+ja+55_+Z3s5mFaJULa+9J4EfA@mail.gmail.com>
+        "# 3.4.x" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-On 2021-01-15, Anders Roxell wrote:
->On Fri, 15 Jan 2021 at 20:28, Nathan Chancellor
-><natechancellor@gmail.com> wrote:
->>
->> On Fri, Jan 15, 2021 at 08:13:30PM +0100, Anders Roxell wrote:
->> > When building mips tinyconifg the following warning show up
->> >
->> > make --silent --keep-going --jobs=8 O=/home/anders/src/kernel/next/out/builddir ARCH=mips CROSS_COMPILE=mips-linux-gnu- HOSTCC=clang CC=clang
->> > /srv/src/kernel/next/arch/mips/vdso/elf.S:14:1: warning: DWARF2 only supports one section per compilation unit
->> > .pushsection .note.Linux, "a",@note ; .balign 4 ; .long 2f - 1f ; .long 4484f - 3f ; .long 0 ; 1:.asciz "Linux" ; 2:.balign 4 ; 3:
->> > ^
->> > /srv/src/kernel/next/arch/mips/vdso/elf.S:34:2: warning: DWARF2 only supports one section per compilation unit
->> >  .section .mips_abiflags, "a"
->> >  ^
->> >
->> > Rework so the mips vdso Makefile adds flag '-no-integrated-as' unless
->> > LLVM_IAS is defined.
->> >
->> > Link: https://github.com/ClangBuiltLinux/linux/issues/1256
->> > Cc: stable@vger.kernel.org # v4.19+
->> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
->> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
->>
->> I believe this is the better solution:
->>
->> https://lore.kernel.org/r/20210115192622.3828545-1-natechancellor@gmail.com/
+On Fri, Jan 15, 2021 at 12:13 PM Fangrui Song <maskray@google.com> wrote:
 >
->Yes, I agree.
->
->Cheers,
->Anders
+> http://lore.kernel.org/r/20201202010850.jibrjpyu6xgkff5p@google.com
+> Personally I'd drop DWARF v2 as an option.
 
-http://lore.kernel.org/r/20201202010850.jibrjpyu6xgkff5p@google.com
-Personally I'd drop DWARF v2 as an option.
+WIP :P
+
+-- 
+Thanks,
+~Nick Desaulniers
