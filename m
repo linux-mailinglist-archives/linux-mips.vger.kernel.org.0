@@ -2,394 +2,234 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC412F77C8
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Jan 2021 12:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 591B52F77C5
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Jan 2021 12:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbhAOLi2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Jan 2021 06:38:28 -0500
-Received: from mout.gmx.net ([212.227.17.21]:41827 "EHLO mout.gmx.net"
+        id S1727111AbhAOLhz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Jan 2021 06:37:55 -0500
+Received: from mout.gmx.net ([212.227.17.20]:46213 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725880AbhAOLi2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 Jan 2021 06:38:28 -0500
+        id S1726918AbhAOLhy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 Jan 2021 06:37:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1610710575;
-        bh=eLiByC0IB0I4t5hr6NzccvdkQEfXiw1/D65/IvIaHbQ=;
+        s=badeba3b8450; t=1610710578;
+        bh=6/R+MOPQf+TvFBrzGya2wMdpyErzbvc4ip6wJAtA1qk=;
         h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=j6L9V+W52/idr+vnrlu2IzcWoPlSJPFlA1BJgD2WxU6tDIhaDGGmVATmPwdHVmKVk
-         UobgZrZDy5Jp7JACKEmKJgPA174bHP81HvEDQQIv1g6qi5Yq641eCTCtUj9MIWjrBZ
-         hD719Ugvsn5Il49M6O/SUlsa4M4nkKqRIRUTYoLQ=
+        b=Ry3Gq0ZUaC2BIMgYbKi2Wu0V2xsphgQy9e2gFTr6sZMTrcJYT7KkRDBOahJ8QQjh0
+         nt+yJyE/TTFOmPJbaz6uI7N1jYfBHvi3PxZ1KBasUtDHjrrcARRyYuud2IlJU4Ls3m
+         npKsWEyOXxRRsQjqpcu02TZICoxShvMcDcCSgWuo=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Valinor ([82.203.161.65]) by mail.gmx.com (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1Mbir8-1ldXxx24y6-00dGoi; Fri, 15
- Jan 2021 12:36:15 +0100
-Date:   Fri, 15 Jan 2021 13:35:00 +0200
+Received: from Valinor ([82.203.161.65]) by mail.gmx.com (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MvsEx-1lsc102ls7-00syWy; Fri, 15
+ Jan 2021 12:36:17 +0100
+Date:   Fri, 15 Jan 2021 13:35:59 +0200
 From:   Lauri Kasanen <cand@gmx.com>
 To:     linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, Takashi Iwai <tiwai@suse.de>,
-        perex@perex.cz
-Subject: [PATCH 2/3 v7] sound: Add n64 driver
-Message-Id: <20210115133500.c5affc0131313e1165acb2a1@gmx.com>
+Cc:     tsbogend@alpha.franken.de, axboe@kernel.dk,
+        linux-block@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+Subject: [PATCH 3/3 v7] block: Add n64 cart driver
+Message-Id: <20210115133559.84b2997dc326c277c4d91503@gmx.com>
 X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jGSx8WMqNwe6NCIIDXiaMlbJUFrsm3D5a41pIIy09riqPaBJcIU
- JsJx5fRe5kteFAu1UFJbgZCQ3gAOFMabl5/o+v5TK92GvvAVyosPOHlNYOsS8OM165LIaxC
- 9Wsenju29GPnUgUriAIsKxSb2mCT31COjuSOMdAXEu78EunCqKHczEdQhD1+DL1TpCu/FgZ
- 7WzVfi0hsT40CmdDq0S0Q==
+X-Provags-ID: V03:K1:ELM/U8DGftx+Y1TkG0B8k2n8mJVB718kbZbQv8COJJrrfjGlRWH
+ z8jq1zAspSi6y2LFh5wWok9/LQCMqRbZsdwyvYtDDBSPT2lJiSW0C8oy3Mqs14gX2u5mTas
+ GP97g4vLDtdotEO2/wqTfhvFgqm6PWGRDIRAcqrSJWpG13VS7QfwDJRSrFUiNhv16zDYGO/
+ P3EuoZeflondktEkN3YiQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GTcLADRFUXg=:Ksc5PQPgBYcHriQawRhtL9
- A6SBiA0zoifUGfVLw02L7Nt3lGveRPKPmij910+R6CDRDGaILH+k/OBJLcsUpd6ztQmM2ObH3
- EWNfV2eP/hTrcFc3LxUdHajdh89583hzGGMv0pSMEwNifGRb5kh1p2oqAhIkN+0LFZaWrV8Hq
- DbsI7AYHRXKC5a0QcQneLwvSmPYkIuuQWaF7JtG6WQLo6Gwyiv0O2EpkNYy7SWMAq24qZxibt
- 4PW1OkAgGneA//KFFwSUpTIPUzojTflQfJQg2EAfu7DiCashA+k9GEg7AVywqbsvrNeg4QSFN
- 4VDvXZN3UQgpj83bDm7w2qaZXNCMzjllhAGgb7XYP1Sf8Vn5yErPTq1dER0a9e+T4iay4zhkY
- LvWwY/UBO1aODYLmsLw+rzKNLDJszGX6aoQvLyl5UOFWTY63fo0mHdE92bC10uHq9iwqikmB+
- 5sp2xIYZ87hD7Fhb9Rao4R8sJoQ3O2Fi50WGC5klijoCneqH9S5rap2+cv781QXy02kbrdvkv
- ZAPD3EOoipiZfzy77EQmXXqwzTSsAQqVAXshJeLptSkmUQAUxVgvgEGGeuahAd0TNNZ7UoLGM
- y5PPDNnVwRaD6Zx8iqLu5F/QT5w+nyvUEpDyCd+CgXtPRUzJneFNcUWkrOVcj1boVoq5B7Ynt
- lKAKtsUYfnM59JeAP36npiTblDKB3cakbr309FSsqG7he6CQrXyaIYB1TA0XAKTb00ZtFziXv
- bZguaGYwu0zKpt64Mk/6GePCMWF8Id6gnsPv2bThquFCwpEFgQmXtYRbE/mBdf9gMlm+nUUCT
- /5ItJb2sjMvo6mvi/Fqgs2CfadQP2KXWpOzCdY4W4m+XBdyGag6R2IThy1XBDBoCgF6IqtfbY
- co7kHFvJvhLcvqsR8DBA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hTHrhDxLB1Q=:1bYuyTiv30TVB2bgWsBPl6
+ pYeBndfMcWMf8o+klE3NyXKK1V7eEzuNYVPyGjgGpD4a03rZbtKEZRMW5PY9fsBMvqPfKoqhZ
+ XtzpnxU66KWtdhiN8KfQ+Tym48qEW4mFtmE+DFZVmaHvaaeN/ZCk0TA87J8904rEK3fBHya5a
+ fuVy5Gx/uAWrguEq1vFeFZw3ibGMt2DuCtnrOONER1zB+SseUYSjC8eKcjoiwgskTI04DnZdO
+ 12Qon6lCl1HGESjphykPE7Z3s9P9fW18EV1fwSR9kkNZ99G1wp/koJigtDW2u6tZe3MyaZnlo
+ GP9RnndkLAW8mzrKDUQaGrVX0m3HQ0eXNrWvmFlWZqBxuCUx0N4vT1JAKO/zao3vsMYf5/e34
+ gOZJRVxrBkgkYpFsGrik0z+FMzCw2Bw2soU78x0/mduKRO6DKhFSyl4VXGUA1pU98Hx4wxc9n
+ 5ubKU3LYzfW++ok68kJJ15Kyl0UC0KYlB6w9KsSApUFiZnP65esUbE42oU1G5I7e2HAmejxz/
+ bOeIJChXqqKBGfwHuwizVZveIDxmfLrUmRgc8ShheabgC9cPHW4298i4uBrx77n39nEOZJ1G0
+ Zr3Y+nvCKJojESmxi4biZ/7RK/8EReT1vPS1pMM9r+0UMOkoQ37WV1w/gFGJNzqqMIk4Qq64e
+ xuXa68nlHyf6gWXF9Lkr6/oqi2ASXH2m+eVgq54Pjp9bUYpyquX3NFLRgYhKwL69SIr3yfKHG
+ uempujEpwSYX3kG3T+MwJfT53oGD0ZwbUPYK74GoP92eRzLUfLsEGSHDBHnNgD898bQL5+eCZ
+ avosWcYMVCG33QLXDboy+NiI5h4FVWV2ZeEVSfPQIDZxdY38kmHie0m2I1eg2qslZ5Ez1VahX
+ iYRW/hczU363UvM6MdDQ==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This adds support for the Nintendo 64 console's sound.
+This adds support for the Nintendo 64 console's carts.
+Carts are a read-only media ranging from 8mb to 64mb.
+
+Only one cart can be connected at once, and switching
+it requires a reboot.
+
+No module support to save RAM, as the target has 8mb RAM.
 
 Signed-off-by: Lauri Kasanen <cand@gmx.com>
 =2D--
 
 v7:
-use devm_*
+use devm_platform_ioremap_resource
 
- sound/mips/Kconfig   |   7 +
- sound/mips/Makefile  |   1 +
- sound/mips/snd-n64.c | 372 ++++++++++++++++++++++++++++++++++++++++++++++=
+ drivers/block/Kconfig   |   6 ++
+ drivers/block/Makefile  |   1 +
+ drivers/block/n64cart.c | 217 +++++++++++++++++++++++++++++++++++++++++++=
 +++++
- 3 files changed, 380 insertions(+)
- create mode 100644 sound/mips/snd-n64.c
+ 3 files changed, 224 insertions(+)
+ create mode 100644 drivers/block/n64cart.c
 
-diff --git a/sound/mips/Kconfig b/sound/mips/Kconfig
-index b497b80..c484b1e 100644
-=2D-- a/sound/mips/Kconfig
-+++ b/sound/mips/Kconfig
-@@ -24,5 +24,12 @@ config SND_SGI_HAL2
- 	help
- 	  Sound support for the SGI Indy and Indigo2 Workstation.
+diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
+index ecceaaa..924d768 100644
+=2D-- a/drivers/block/Kconfig
++++ b/drivers/block/Kconfig
+@@ -72,6 +72,12 @@ config AMIGA_Z2RAM
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called z2ram.
 
-+config SND_N64
-+	bool "N64 Audio"
-+	depends on MACH_NINTENDO64 && SND=3Dy
-+	select SND_PCM
++config N64CART
++	bool "N64 cart support"
++	depends on MACH_NINTENDO64
 +	help
-+	  Sound support for the N64.
++	  Support for the N64 cart.
 +
- endif	# SND_MIPS
-
-diff --git a/sound/mips/Makefile b/sound/mips/Makefile
-index ccc364e..7c86268 100644
-=2D-- a/sound/mips/Makefile
-+++ b/sound/mips/Makefile
-@@ -9,3 +9,4 @@ snd-sgi-hal2-objs :=3D hal2.o
- # Toplevel Module Dependency
- obj-$(CONFIG_SND_SGI_O2) +=3D snd-sgi-o2.o
- obj-$(CONFIG_SND_SGI_HAL2) +=3D snd-sgi-hal2.o
-+obj-$(CONFIG_SND_N64) +=3D snd-n64.o
-diff --git a/sound/mips/snd-n64.c b/sound/mips/snd-n64.c
+ config CDROM
+ 	tristate
+ 	select BLK_SCSI_REQUEST
+diff --git a/drivers/block/Makefile b/drivers/block/Makefile
+index e1f6311..b9642cf 100644
+=2D-- a/drivers/block/Makefile
++++ b/drivers/block/Makefile
+@@ -17,6 +17,7 @@ obj-$(CONFIG_PS3_DISK)		+=3D ps3disk.o
+ obj-$(CONFIG_PS3_VRAM)		+=3D ps3vram.o
+ obj-$(CONFIG_ATARI_FLOPPY)	+=3D ataflop.o
+ obj-$(CONFIG_AMIGA_Z2RAM)	+=3D z2ram.o
++obj-$(CONFIG_N64CART)		+=3D n64cart.o
+ obj-$(CONFIG_BLK_DEV_RAM)	+=3D brd.o
+ obj-$(CONFIG_BLK_DEV_LOOP)	+=3D loop.o
+ obj-$(CONFIG_XILINX_SYSACE)	+=3D xsysace.o
+diff --git a/drivers/block/n64cart.c b/drivers/block/n64cart.c
 new file mode 100644
-index 0000000..ca6b4b9
+index 0000000..a0c1f1e
 =2D-- /dev/null
-+++ b/sound/mips/snd-n64.c
-@@ -0,0 +1,372 @@
++++ b/drivers/block/n64cart.c
+@@ -0,0 +1,217 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ *   Sound driver for Nintendo 64.
++ * Support for the N64 cart.
 + *
-+ *   Copyright 2021 Lauri Kasanen
++ * Copyright (c) 2021 Lauri Kasanen
 + */
 +
++#include <linux/bitops.h>
++#include <linux/blk-mq.h>
 +#include <linux/dma-mapping.h>
 +#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/log2.h>
++#include <linux/major.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
-+#include <linux/spinlock.h>
-+
-+#include <sound/control.h>
-+#include <sound/core.h>
-+#include <sound/initval.h>
-+#include <sound/pcm.h>
-+#include <sound/pcm_params.h>
 +
 +MODULE_AUTHOR("Lauri Kasanen <cand@gmx.com>");
-+MODULE_DESCRIPTION("N64 Audio");
++MODULE_DESCRIPTION("Driver for the N64 cart");
 +MODULE_LICENSE("GPL");
 +
-+#define AI_NTSC_DACRATE 48681812
-+#define AI_STATUS_BUSY  (1 << 30)
-+#define AI_STATUS_FULL  (1 << 31)
++#define BUFSIZE (64 * 1024)
 +
-+#define AI_ADDR_REG 0
-+#define AI_LEN_REG 1
-+#define AI_CONTROL_REG 2
-+#define AI_STATUS_REG 3
-+#define AI_RATE_REG 4
-+#define AI_BITCLOCK_REG 5
++static unsigned int start, size;
++static int major;
++static struct request_queue *queue;
++static struct blk_mq_tag_set tag_set;
++static struct gendisk *disk;
 +
-+#define MI_INTR_REG 2
-+#define MI_MASK_REG 3
++static void *buf;
++static dma_addr_t dma_addr;
 +
-+#define MI_INTR_AI 0x04
++static u32 __iomem *reg_base;
 +
-+#define MI_MASK_CLR_AI 0x0010
-+#define MI_MASK_SET_AI 0x0020
++#define PI_DRAM_REG 0
++#define PI_CART_REG 1
++#define PI_READ_REG 2
++#define PI_WRITE_REG 3
++#define PI_STATUS_REG 4
 +
++#define PI_STATUS_DMA_BUSY (1 << 0)
++#define PI_STATUS_IO_BUSY (1 << 1)
 +
-+struct n64audio {
-+	u32 __iomem *ai_reg_base;
-+	u32 __iomem *mi_reg_base;
++static void n64cart_write_reg(const u8 reg, const u32 value)
++{
++	writel(value, reg_base + reg);
++}
 +
-+	void *ring_base;
-+	dma_addr_t ring_base_dma;
++static u32 n64cart_read_reg(const u8 reg)
++{
++	return readl(reg_base + reg);
++}
 +
-+	struct snd_card *card;
++static void n64cart_wait_dma(void)
++{
++	while (n64cart_read_reg(PI_STATUS_REG) &
++		(PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY))
++		cpu_relax();
++}
 +
-+	struct {
-+		struct snd_pcm_substream *substream;
-+		int pos, nextpos;
-+		u32 writesize;
-+		u32 bufsize;
-+		spinlock_t lock;
-+	} chan;
++static blk_status_t get_seg(struct request *req)
++{
++	u32 bstart =3D blk_rq_pos(req) * 512;
++	u32 len =3D blk_rq_cur_bytes(req);
++	void *dst =3D bio_data(req->bio);
++
++	if (bstart + len > size)
++		return BLK_STS_IOERR;
++
++	bstart +=3D start;
++
++	while (len) {
++		const u32 curlen =3D len < BUFSIZE ? len : BUFSIZE;
++
++		dma_cache_inv((unsigned long) buf, curlen);
++
++		n64cart_wait_dma();
++
++		barrier();
++		n64cart_write_reg(PI_DRAM_REG, dma_addr);
++		barrier();
++		n64cart_write_reg(PI_CART_REG, (bstart | 0x10000000) & 0x1FFFFFFF);
++		barrier();
++		n64cart_write_reg(PI_WRITE_REG, curlen - 1);
++		barrier();
++
++		n64cart_wait_dma();
++
++		memcpy(dst, buf, curlen);
++
++		len -=3D curlen;
++		dst +=3D curlen;
++		bstart +=3D curlen;
++	}
++
++	return BLK_STS_OK;
++}
++
++static blk_status_t n64cart_queue_rq(struct blk_mq_hw_ctx *hctx,
++				     const struct blk_mq_queue_data *bd)
++{
++	struct request *req =3D bd->rq;
++	blk_status_t err;
++
++	blk_mq_start_request(req);
++
++	do {
++		err =3D get_seg(req);
++	} while (blk_update_request(req, err, blk_rq_cur_bytes(req)));
++
++	blk_mq_end_request(req, BLK_STS_OK);
++	return BLK_STS_OK;
++}
++
++static const struct blk_mq_ops n64cart_mq_ops =3D {
++	.queue_rq =3D n64cart_queue_rq,
 +};
 +
-+static void n64audio_write_reg(struct n64audio *priv, const u8 reg, const=
- u32 value)
-+{
-+	writel(value, priv->ai_reg_base + reg);
-+}
-+
-+static void n64mi_write_reg(struct n64audio *priv, const u8 reg, const u3=
-2 value)
-+{
-+	writel(value, priv->mi_reg_base + reg);
-+}
-+
-+static u32 n64mi_read_reg(struct n64audio *priv, const u8 reg)
-+{
-+	return readl(priv->mi_reg_base + reg);
-+}
-+
-+static void n64audio_push(struct n64audio *priv)
-+{
-+	struct snd_pcm_runtime *runtime =3D priv->chan.substream->runtime;
-+	unsigned long flags;
-+	u32 count;
-+
-+	spin_lock_irqsave(&priv->chan.lock, flags);
-+
-+	count =3D priv->chan.writesize;
-+
-+	memcpy(priv->ring_base + priv->chan.nextpos,
-+	       runtime->dma_area + priv->chan.nextpos, count);
-+
-+	/*
-+	 * The hw registers are double-buffered, and the IRQ fires essentially
-+	 * one period behind. The core only allows one period's distance, so we
-+	 * keep a private DMA buffer to afford two.
-+	 */
-+	n64audio_write_reg(priv, AI_ADDR_REG, priv->ring_base_dma + priv->chan.n=
-extpos);
-+	barrier();
-+	n64audio_write_reg(priv, AI_LEN_REG, count);
-+
-+	priv->chan.nextpos +=3D count;
-+	priv->chan.nextpos %=3D priv->chan.bufsize;
-+
-+	runtime->delay =3D runtime->period_size;
-+
-+	spin_unlock_irqrestore(&priv->chan.lock, flags);
-+}
-+
-+static irqreturn_t n64audio_isr(int irq, void *dev_id)
-+{
-+	struct n64audio *priv =3D dev_id;
-+	const u32 intrs =3D n64mi_read_reg(priv, MI_INTR_REG);
-+	unsigned long flags;
-+
-+	// Check it's ours
-+	if (!(intrs & MI_INTR_AI))
-+		return IRQ_NONE;
-+
-+	n64audio_write_reg(priv, AI_STATUS_REG, 1);
-+
-+	if (priv->chan.substream && snd_pcm_running(priv->chan.substream)) {
-+		spin_lock_irqsave(&priv->chan.lock, flags);
-+
-+		priv->chan.pos =3D priv->chan.nextpos;
-+
-+		spin_unlock_irqrestore(&priv->chan.lock, flags);
-+
-+		snd_pcm_period_elapsed(priv->chan.substream);
-+		if (priv->chan.substream && snd_pcm_running(priv->chan.substream))
-+			n64audio_push(priv);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static const struct snd_pcm_hardware n64audio_pcm_hw =3D {
-+	.info =3D (SNDRV_PCM_INFO_MMAP |
-+		 SNDRV_PCM_INFO_MMAP_VALID |
-+		 SNDRV_PCM_INFO_INTERLEAVED |
-+		 SNDRV_PCM_INFO_BLOCK_TRANSFER),
-+	.formats =3D          SNDRV_PCM_FMTBIT_S16_BE,
-+	.rates =3D            SNDRV_PCM_RATE_8000_48000,
-+	.rate_min =3D         8000,
-+	.rate_max =3D         48000,
-+	.channels_min =3D     2,
-+	.channels_max =3D     2,
-+	.buffer_bytes_max =3D 32768,
-+	.period_bytes_min =3D 1024,
-+	.period_bytes_max =3D 32768,
-+	.periods_min =3D      3,
-+	// 3 periods lets the double-buffering hw read one buffer behind safely
-+	.periods_max =3D      128,
-+};
-+
-+static int hw_rule_period_size(struct snd_pcm_hw_params *params,
-+			       struct snd_pcm_hw_rule *rule)
-+{
-+	struct snd_interval *c =3D hw_param_interval(params,
-+						   SNDRV_PCM_HW_PARAM_PERIOD_SIZE);
-+	int changed =3D 0;
-+
-+	/*
-+	 * The DMA unit has errata on (start + len) & 0x3fff =3D=3D 0x2000.
-+	 * This constraint makes sure that the period size is not a power of two=
-,
-+	 * which combined with dma_alloc_coherent aligning the buffer to the lar=
-gest
-+	 * PoT <=3D size guarantees it won't be hit.
-+	 */
-+
-+	if (is_power_of_2(c->min)) {
-+		c->min +=3D 2;
-+		changed =3D 1;
-+	}
-+	if (is_power_of_2(c->max)) {
-+		c->max -=3D 2;
-+		changed =3D 1;
-+	}
-+	if (snd_interval_checkempty(c)) {
-+		c->empty =3D 1;
-+		return -EINVAL;
-+	}
-+
-+	return changed;
-+}
-+
-+static int n64audio_pcm_open(struct snd_pcm_substream *substream)
-+{
-+	struct snd_pcm_runtime *runtime =3D substream->runtime;
-+	int err;
-+
-+	runtime->hw =3D n64audio_pcm_hw;
-+	err =3D snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIOD=
-S);
-+	if (err < 0)
-+		return err;
-+
-+	err =3D snd_pcm_hw_constraint_step(runtime, 0, SNDRV_PCM_HW_PARAM_PERIOD=
-_SIZE, 2);
-+	if (err < 0)
-+		return err;
-+
-+	err =3D snd_pcm_hw_rule_add(runtime, 0, SNDRV_PCM_HW_PARAM_PERIOD_SIZE,
-+			    hw_rule_period_size, NULL, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, -1);
-+	if (err < 0)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static int n64audio_pcm_prepare(struct snd_pcm_substream *substream)
-+{
-+	struct snd_pcm_runtime *runtime =3D substream->runtime;
-+	struct n64audio *priv =3D substream->pcm->private_data;
-+	u32 rate;
-+
-+	rate =3D ((2 * AI_NTSC_DACRATE / runtime->rate) + 1) / 2 - 1;
-+
-+	n64audio_write_reg(priv, AI_RATE_REG, rate);
-+
-+	rate /=3D 66;
-+	if (rate > 16)
-+		rate =3D 16;
-+	n64audio_write_reg(priv, AI_BITCLOCK_REG, rate - 1);
-+
-+	spin_lock_irq(&priv->chan.lock);
-+
-+	/* Setup the pseudo-dma transfer pointers.  */
-+	priv->chan.pos =3D 0;
-+	priv->chan.nextpos =3D 0;
-+	priv->chan.substream =3D substream;
-+	priv->chan.writesize =3D snd_pcm_lib_period_bytes(substream);
-+	priv->chan.bufsize =3D snd_pcm_lib_buffer_bytes(substream);
-+
-+	spin_unlock_irq(&priv->chan.lock);
-+	return 0;
-+}
-+
-+static int n64audio_pcm_trigger(struct snd_pcm_substream *substream,
-+				int cmd)
-+{
-+	struct n64audio *priv =3D substream->pcm->private_data;
-+
-+	switch (cmd) {
-+	case SNDRV_PCM_TRIGGER_START:
-+		n64audio_push(substream->pcm->private_data);
-+		n64audio_write_reg(priv, AI_CONTROL_REG, 1);
-+		n64mi_write_reg(priv, MI_MASK_REG, MI_MASK_SET_AI);
-+		break;
-+	case SNDRV_PCM_TRIGGER_STOP:
-+		n64audio_write_reg(priv, AI_CONTROL_REG, 0);
-+		n64mi_write_reg(priv, MI_MASK_REG, MI_MASK_CLR_AI);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+static snd_pcm_uframes_t n64audio_pcm_pointer(struct snd_pcm_substream *s=
-ubstream)
-+{
-+	struct n64audio *priv =3D substream->pcm->private_data;
-+
-+	return bytes_to_frames(substream->runtime,
-+			       priv->chan.pos);
-+}
-+
-+static int n64audio_pcm_close(struct snd_pcm_substream *substream)
-+{
-+	struct n64audio *priv =3D substream->pcm->private_data;
-+
-+	priv->chan.substream =3D NULL;
-+
-+	return 0;
-+}
-+
-+static const struct snd_pcm_ops n64audio_pcm_ops =3D {
-+	.open =3D		n64audio_pcm_open,
-+	.prepare =3D	n64audio_pcm_prepare,
-+	.trigger =3D	n64audio_pcm_trigger,
-+	.pointer =3D	n64audio_pcm_pointer,
-+	.close =3D	n64audio_pcm_close,
++static const struct block_device_operations n64cart_fops =3D {
++	.owner		=3D THIS_MODULE,
 +};
 +
 +/*
@@ -397,95 +237,98 @@ ubstream)
 + * by initializing in __init code that gets dropped late in boot.
 + * For the same reason there is no module or unloading support.
 + */
-+static int __init n64audio_probe(struct platform_device *pdev)
++static int __init n64cart_probe(struct platform_device *pdev)
 +{
-+	struct snd_card *card;
-+	struct snd_pcm *pcm;
-+	struct n64audio *priv;
-+	struct resource *res;
 +	int err;
 +
-+	err =3D snd_card_new(&pdev->dev, SNDRV_DEFAULT_IDX1,
-+			   SNDRV_DEFAULT_STR1,
-+			   THIS_MODULE, sizeof(*priv), &card);
-+	if (err < 0)
-+		return err;
++	if (!start || !size) {
++		pr_err("n64cart: start and size not specified\n");
++		return -ENODEV;
++	}
 +
-+	priv =3D card->private_data;
++	if (size & 4095) {
++		pr_err("n64cart: size must be a multiple of 4K\n");
++		return -ENODEV;
++	}
 +
-+	spin_lock_init(&priv->chan.lock);
++	major =3D register_blkdev(0, "n64cart");
++	if (major <=3D 0) {
++		pr_err("n64cart: unable to get major number\n");
++		return -EBUSY;
++	}
 +
-+	priv->card =3D card;
++	queue =3D blk_mq_init_sq_queue(&tag_set, &n64cart_mq_ops, 1,
++				     BLK_MQ_F_SHOULD_MERGE | BLK_MQ_F_BLOCKING);
++	if (IS_ERR(queue)) {
++		err =3D PTR_ERR(queue);
++		goto fail_reg;
++	}
 +
-+	priv->ring_base =3D dma_alloc_coherent(card->dev, 32 * 1024, &priv->ring=
-_base_dma,
-+					     GFP_DMA|GFP_KERNEL);
-+	if (!priv->ring_base) {
++	buf =3D kmalloc(BUFSIZE, GFP_DMA | GFP_KERNEL);
++	if (!buf) {
 +		err =3D -ENOMEM;
-+		goto fail_card;
++		goto fail_queue;
 +	}
++	dma_addr =3D virt_to_phys(buf);
 +
-+	priv->mi_reg_base =3D devm_platform_ioremap_resource(pdev, 0);
-+	if (!priv->mi_reg_base) {
++	reg_base =3D devm_platform_ioremap_resource(pdev, 0);
++	if (!reg_base) {
 +		err =3D -EINVAL;
-+		goto fail_dma_alloc;
++		goto fail_dma;
 +	}
 +
-+	priv->ai_reg_base =3D devm_platform_ioremap_resource(pdev, 1);
-+	if (!priv->ai_reg_base) {
-+		err =3D -EINVAL;
-+		goto fail_dma_alloc;
++	disk =3D alloc_disk(1);
++	if (!disk) {
++		err =3D -ENOMEM;
++		goto fail_dma;
 +	}
 +
-+	err =3D snd_pcm_new(card, "N64 Audio", 0, 1, 0, &pcm);
-+	if (err < 0)
-+		goto fail_dma_alloc;
++	disk->major =3D major;
++	disk->first_minor =3D 0;
++	disk->queue =3D queue;
++	disk->flags =3D GENHD_FL_NO_PART_SCAN;
++	disk->fops =3D &n64cart_fops;
++	strcpy(disk->disk_name, "n64cart");
 +
-+	pcm->private_data =3D priv;
-+	strcpy(pcm->name, "N64 Audio");
++	set_capacity(disk, size / 512);
++	set_disk_ro(disk, 1);
 +
-+	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &n64audio_pcm_ops);
-+	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, card->dev, 0=
-, 0);
++	blk_queue_flag_set(QUEUE_FLAG_NONROT, queue);
++	blk_queue_physical_block_size(queue, 4096);
++	blk_queue_logical_block_size(queue, 4096);
 +
-+	strcpy(card->driver, "N64 Audio");
-+	strcpy(card->shortname, "N64 Audio");
-+	strcpy(card->longname, "N64 Audio");
++	add_disk(disk);
 +
-+	res =3D platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-+	if (devm_request_irq(&pdev->dev, res->start, n64audio_isr,
-+				IRQF_SHARED, "N64 Audio", priv)) {
-+		err =3D -EBUSY;
-+		goto fail_dma_alloc;
-+	}
-+
-+	err =3D snd_card_register(card);
-+	if (err < 0)
-+		goto fail_dma_alloc;
++	pr_info("n64cart: %u kb disk\n", size / 1024);
 +
 +	return 0;
-+
-+fail_dma_alloc:
-+	dma_free_coherent(card->dev, 32 * 1024, priv->ring_base, priv->ring_base=
-_dma);
-+
-+fail_card:
-+	snd_card_free(card);
++fail_dma:
++	kfree(buf);
++fail_queue:
++	blk_cleanup_queue(queue);
++fail_reg:
++	unregister_blkdev(major, "n64cart");
 +	return err;
 +}
 +
-+static struct platform_driver n64audio_driver =3D {
++static struct platform_driver n64cart_driver =3D {
 +	.driver =3D {
-+		.name =3D "n64audio",
++		.name =3D "n64cart",
 +	},
 +};
 +
-+static int __init n64audio_init(void)
++static int __init n64cart_init(void)
 +{
-+	return platform_driver_probe(&n64audio_driver, n64audio_probe);
++	return platform_driver_probe(&n64cart_driver, n64cart_probe);
 +}
 +
-+module_init(n64audio_init);
++module_param(start, uint, 0);
++MODULE_PARM_DESC(start, "Start address of the cart block data");
++
++module_param(size, uint, 0);
++MODULE_PARM_DESC(size, "Size of the cart block data, in bytes");
++
++module_init(n64cart_init);
 =2D-
 2.6.2
 
