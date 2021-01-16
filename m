@@ -2,87 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C4C2F8C48
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Jan 2021 09:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DDE2F8DDE
+	for <lists+linux-mips@lfdr.de>; Sat, 16 Jan 2021 18:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726430AbhAPIkr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 Jan 2021 03:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S1728508AbhAPRLI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 Jan 2021 12:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726375AbhAPIkq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Jan 2021 03:40:46 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FEAC061757;
-        Sat, 16 Jan 2021 00:40:06 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id m5so6591634pjv.5;
-        Sat, 16 Jan 2021 00:40:06 -0800 (PST)
+        with ESMTP id S1728569AbhAPRLF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Jan 2021 12:11:05 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6392C061382;
+        Sat, 16 Jan 2021 06:57:22 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id e15so3682622wme.0;
+        Sat, 16 Jan 2021 06:57:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=8sQuoTWVdmAcRiVvfk4WQsms44SAyXLYRKzzgtc3Wq0=;
-        b=bFghC2Jq54kRJzAY3T1nAoWUw8OJviMk78jsT12ZAZ/S7xT86WriEAIDZe20LGmQD4
-         qockQay+I9lzmQkjv9e13zy0tHJoYliNv+HymjVCkDp9hpmtWjqstKpllrSzz7B91F4Z
-         K476RBcE6e7NHhmTu9+425CfSb0z0njK5Ri8zUp6af44loEjNkXgKvvWZhTq4vm5nbXA
-         F6qHraOH1Ta8poKpQ0E91JaKhC4wj3wMLqyCSSvg88RaNu8swzIDD3Bjo5tl7W2TJ1s2
-         6KEIHqOcYzDLSy/h1PbIgW9ym23LFmlGVh5h0nt0MGp3EMQk1ToC7tAUj6L72i64iIkr
-         QqcQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GBNeTSu04ixKYSzbYAV+880sIV5+lGfcrwYBDcoDztA=;
+        b=Tf7ga7AWLWf2ItsBKMJgzstjS0iQOHyu2Bo5P9Zu7PeqJcTXV5R0QRtWy+fAX6ZziU
+         VTNdIKv1L+KoiYBkGsnBL+BhiCiRriQOW5i2KikBXwHQIALRDeXy+VTiYVnz73jP7DAl
+         27BkEd63K5Hg779deY110KMYRPgeCQDyER+D7mwy7XNpWem3zdNkAXMiD48+24RuYJIU
+         z0RotZ+DEDYaLV7VuLX0fzRCfjekiPoN3LBRk3jP37V7k+/qqLb5EksB0+JOLQGJvkDg
+         zapzPI3f8tN+CN+LVAlIUlwTk5krGCiBKPyZl2T/h3eXWZNQpH9kbeXmx3g503dfLN6x
+         DJ1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=8sQuoTWVdmAcRiVvfk4WQsms44SAyXLYRKzzgtc3Wq0=;
-        b=jQ45wzLfCLmq8IeZXMxTSZv9htk57PICgqrMZHJ6NSalypiHnwFhB+m4K8YVyXS8lG
-         2wcOnErECIPg8yOwlXIQLnMFnrKs/3EvC8BVxc2Ih8csK2b4lfMf/6R3AaDbtc0N26dy
-         KTpyEl6GeyRt0d6gr12jIehHpIgGHMBTFzr7W7RUB3Uky/Ssnd/VVRyELzbJaANiH5mL
-         zKEO9QUpsA1rGvkl3oHyLziuwEU25G/2cD0NpaujJng0+WlxAF2ifXwhbDjo2ye0u0NX
-         FpVvUcrRspkTCbdWST2q83D+klGLWGU19ef6GThF0z/xXSpIz0UvXdE+Fpgh1PqNPXxx
-         1RKA==
-X-Gm-Message-State: AOAM531pKunJ9TvECwS5Z4EAqpoegLUeI+4dQ/FLCzFryYL/v4yWq4Nl
-        nlGkC82JWG1zIdTDiIj/K84=
-X-Google-Smtp-Source: ABdhPJwdfkRQaysFn8SqI8cR9mN7Qm/UQO2OFU2A/P/s1VnkEOCRB+oM1Y9237awfigDtEBT4EGOeg==
-X-Received: by 2002:a17:90a:4b0a:: with SMTP id g10mr14929261pjh.78.1610786405635;
-        Sat, 16 Jan 2021 00:40:05 -0800 (PST)
-Received: from jordon-HP-15-Notebook-PC.domain.name ([122.172.253.184])
-        by smtp.gmail.com with ESMTPSA id l141sm10516247pfd.124.2021.01.16.00.40.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 16 Jan 2021 00:40:05 -0800 (PST)
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-To:     tsbogend@alpha.franken.de, jiaxun.yang@flygoat.com,
-        yangtiezhu@loongson.cn
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Souptick Joarder <jrdr.linux@gmail.com>
-Subject: [PATCH] mips: cacheinfo: Remove unnecessary increment of level
-Date:   Sat, 16 Jan 2021 14:10:00 +0530
-Message-Id: <1610786400-3629-1-git-send-email-jrdr.linux@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GBNeTSu04ixKYSzbYAV+880sIV5+lGfcrwYBDcoDztA=;
+        b=aXAh9xVeFKsTte+Sjp5QQumAvwGc40uGJ7MdwJ+V1cVlQ8LnMseKsp+mwaeZD+1Z8F
+         Ag5c09hM+bMnlz1Fn8bOY7v8LiNfrPmtyqrlFGhv5yWBLO2kjoTXLkLUAuHmvG1yq0Vq
+         rOsOVFh+oAAXBUjaclJtjCEWpcpB+rVfMRGeXGiMb2WIvUdMlAOZVPOBWS5KDh9MGEYt
+         fLeF1H3kVLwm6FxiNPwkODGnrlXGlZirMdbQUNnh4Da7wxYfnPyNxUc4i1jRaKPEg9Az
+         6UQs1XmXQsQKBIhkx5ilQPWs95EVKGEaFgbWFN+CSOrEJZJJF7/SGrb8dozcnNe2yASe
+         ChhQ==
+X-Gm-Message-State: AOAM532usOjPa61kge6iUHluZsCywhqoErea8d5H+tk/I6CvVVY7SL6G
+        O+ees49kwhcWDPcKXwIV4rE=
+X-Google-Smtp-Source: ABdhPJwm71FymYwD2RCaAQe0ruh5XNahsyLNfkIwL+NUnHq8L9JrVeaj5YOOjlfFOQEHLVAB1cN/oQ==
+X-Received: by 2002:a1c:e0d4:: with SMTP id x203mr13318861wmg.160.1610809041319;
+        Sat, 16 Jan 2021 06:57:21 -0800 (PST)
+Received: from debian.vlc ([170.253.51.130])
+        by smtp.gmail.com with ESMTPSA id h83sm17285824wmf.9.2021.01.16.06.57.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Jan 2021 06:57:20 -0800 (PST)
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+To:     mtk.manpages@gmail.com
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        linux-man@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>, libc-alpha@sourceware.org,
+        Dave Martin <Dave.Martin@arm.com>,
+        Martin Sebor <msebor@redhat.com>
+Subject: [PATCH] cacheflush.2: Update SYNOPSIS for glibc wrapper
+Date:   Sat, 16 Jan 2021 15:56:33 +0100
+Message-Id: <20210116145632.7636-1-alx.manpages@gmail.com>
+X-Mailer: git-send-email 2.30.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-kernel test robot throws below warning ->
+Glibc uses 'void *' instead of 'char *'.
+And the prototype is declared in <sys/cacheflush.h>.
 
-arch/mips/kernel/cacheinfo.c:112:3: warning: Variable 'level' is
-modified but its new value is never used. [unreadVariable]
+......
 
-Remove unnecessary increment of level at the end.
+$ syscall='cacheflush';
+$ ret='int';
+$ find glibc/ -type f -name '*.h' \
+  |xargs pcregrep -Mn "(?s)^[\w\s]*${ret}\s*${syscall}\s*\(.*?;";
+glibc/sysdeps/unix/sysv/linux/nios2/sys/cachectl.h:27:
+extern int cacheflush (void *__addr, const int __nbytes, const int __op) __THROW;
+glibc/sysdeps/unix/sysv/linux/mips/sys/cachectl.h:35:
+extern int cacheflush (void *__addr, const int __nbytes, const int __op) __THROW;
+glibc/sysdeps/unix/sysv/linux/arc/sys/cachectl.h:30:
+extern int cacheflush (void *__addr, int __nbytes, int __op) __THROW;
+glibc/sysdeps/unix/sysv/linux/csky/sys/cachectl.h:30:
+extern int cacheflush (void *__addr, const int __nbytes,
+		       const int __op) __THROW;
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
+Signed-off-by: Alejandro Colomar <alx.manpages@gmail.com>
 ---
- arch/mips/kernel/cacheinfo.c | 1 -
- 1 file changed, 1 deletion(-)
+ man2/cacheflush.2 | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/kernel/cacheinfo.c b/arch/mips/kernel/cacheinfo.c
-index 5f9d0eb..c858ae3 100644
---- a/arch/mips/kernel/cacheinfo.c
-+++ b/arch/mips/kernel/cacheinfo.c
-@@ -109,7 +109,6 @@ static int __populate_cache_leaves(unsigned int cpu)
- 
- 	if (c->tcache.waysize) {
- 		populate_cache(tcache, this_leaf, level, CACHE_TYPE_UNIFIED);
--		level++;
- 	}
- 
- 	this_cpu_ci->cpu_map_populated = true;
+diff --git a/man2/cacheflush.2 b/man2/cacheflush.2
+index 2cf624f3a..0496879ca 100644
+--- a/man2/cacheflush.2
++++ b/man2/cacheflush.2
+@@ -27,9 +27,9 @@
+ cacheflush \- flush contents of instruction and/or data cache
+ .SH SYNOPSIS
+ .nf
+-.B #include <asm/cachectl.h>
++.B #inlcude <sys/cacheflush.h>
+ .PP
+-.BI "int cacheflush(char *" addr ", int "nbytes ", int "cache );
++.BI "int cacheflush(void *" addr ", int "nbytes ", int "cache );
+ .fi
+ .PP
+ .IR Note :
 -- 
-1.9.1
+2.30.0
 
