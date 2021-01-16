@@ -2,93 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C277A2F8F3D
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Jan 2021 21:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A749D2F8F47
+	for <lists+linux-mips@lfdr.de>; Sat, 16 Jan 2021 21:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbhAPUfo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 Jan 2021 15:35:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S1726619AbhAPUqJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 Jan 2021 15:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726083AbhAPUfk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Jan 2021 15:35:40 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3533C061573;
-        Sat, 16 Jan 2021 12:34:59 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id d22so2360978edy.1;
-        Sat, 16 Jan 2021 12:34:59 -0800 (PST)
+        with ESMTP id S1726385AbhAPUqI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Jan 2021 15:46:08 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655BBC061573;
+        Sat, 16 Jan 2021 12:45:27 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id i63so10270202wma.4;
+        Sat, 16 Jan 2021 12:45:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=a73n5pAnB+P6IPG8V8MfXs8zF34tD/FahmEduHIQin8=;
-        b=mDehsDSBxWifluWe6tgscuDC8QikOu9YnvTFnvYnSDmOCbPXPuqGrP76Ez2W+y9z3r
-         Ue/NNCgjR9HVnfCfdFYWXPdNNpzOHWF7qpjoOJwBIelCkPYtBsJlI8kVf8CBSZJ05NRX
-         8ozkKrPiSWkejB3AoBnUtSf+wdftD7HD5dCtSfrmFE0xVE2rb6uq/4o5oyYZYCltNmB0
-         SXlMorTPLI2oImft90+5DZ+vNjyL86mFlZ2qoVgCGze2/wY004jXDIiVx6p5atWUczfg
-         l1Q5zNTib3SDXWacBOOqGbWHLP0IY1JHF7irtKHjHxL+AWcs5jJnSV02w0dFM3czDF6y
-         zDcg==
+        bh=1bOdjlQaGWQ8aWyfQJKQhH8VYqrUnQwXrgWi9Mree3I=;
+        b=JVLUSXN/s1nK2Icd010Ugl0WvUG8e2CogSLbdUBFSOCqzl8Viq35eqiCorrawBbqOP
+         lZdjcJr04Wpdfl0I5R5AF5jAS0inbViR+2YrmTTSNV4t668qWTILE5++Nf1XvS2wOCYD
+         LySvYMj2/eickyHPLaVIuS1zfuAn76npFktWUqmNc42VN2bJTPQJC1+B/Mb9IVS8wEoz
+         dqC3FavixxVSFWz1Xc2lbDjdUeBAdmxZX+s+g/mVTNC+9PA3UWodxnfHwcdlFA1zlP11
+         ujZM1QALLVQrEHB2Ire3ONAEyvBYfEeXY0Ulr28zoRfDDobOQ91WYmA/qf8c/Cgiavaq
+         dkAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=a73n5pAnB+P6IPG8V8MfXs8zF34tD/FahmEduHIQin8=;
-        b=qhb2wdhUZn1gKyh3IpMPDN1Qy4ZlhmF9aRhEbZQjXcIw6Md1fqAcALzg0lpVmDaPU+
-         4CAxqsUnUxY9Hp5TZbTmA5GbVig2GLUH7mqbdMlEi2YGyw1qlp9fKJ8nA9CZHUlT7PS3
-         k7hEBWdFml+t6c81KAmA484rIvkGnGuWjaBO+76yqyo9wX4a6GJJbHohHD5XB+nNGQxJ
-         8ayRvrtTwyT6gwouqAWSEDriYUT22em7ev5gBFC0YbiUOLnuFMVSQ2ODEzeocNY7o1cc
-         a8XH5rKkrd8A9pqOv4hUWwrX37TW3tWCG26foIZ5okJNFu6D4eCJ3tZnRV/YFFpXIgAv
-         narw==
-X-Gm-Message-State: AOAM533Jt9dRih357U3QpH/wf4QI9gY+VzE5QnJHi7qrRk3z1i5VxqB1
-        gMndaX3rIb9BbXuDK4/QJCo=
-X-Google-Smtp-Source: ABdhPJzekSyc4UA44U+r1BdsHaXKpFKU6E7EhcOHoru7JjTIgxbV0NhL1BeqbJ1VPGBRkdagBel+3Q==
-X-Received: by 2002:aa7:c652:: with SMTP id z18mr13534552edr.60.1610829298552;
-        Sat, 16 Jan 2021 12:34:58 -0800 (PST)
+        bh=1bOdjlQaGWQ8aWyfQJKQhH8VYqrUnQwXrgWi9Mree3I=;
+        b=cJPexEoi3sbWyFkRztO0P0e9otZK5CN/n7L1iS/YLT1jr9JiUr/NXo+ry6ZEwQE4dd
+         bW0eBXD62j8hHbPtB7wFLNbkTTt7jzy7prCcQoDv5hK2UUT+r1n/3yIXQhHegWMVU0gJ
+         W+bdw+2QLwz2ZVCJq/vfss0vPtb24lV+OHTXoWrC4PdmcVW880jMB2itPGaycfPxCeL4
+         MZfFwiBMarejerkLmUIhKggEp+gYQkRFST1RlSxS6X74P6bTgENOuyCtWWszVHKn+WCq
+         c/r/eEj2xpAXsa7mOOlZgwp3BVlf/yS45MC+pEu4Kg1u3LaUpI9xbqDoLaUstHEw35fr
+         rjTA==
+X-Gm-Message-State: AOAM532tPU4DeIFT7wGnDUO8SSbNg+Rvb29O7lF2GY2cx4xjGZ94bQxt
+        CiTR+gWMtdt6QDWxbEXPjsE=
+X-Google-Smtp-Source: ABdhPJwElVqFppdHo/z59LybTiKhI0iTID9QTEnWtvUWk4UygqYhNQIsB8EmTnF1JLq5RzR48DOtPw==
+X-Received: by 2002:a05:600c:2255:: with SMTP id a21mr14522086wmm.122.1610829925978;
+        Sat, 16 Jan 2021 12:45:25 -0800 (PST)
 Received: from localhost.localdomain (p200300f13723cb00428d5cfffeb99db8.dip0.t-ipconnect.de. [2003:f1:3723:cb00:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id d13sm7751959edx.27.2021.01.16.12.34.57
+        by smtp.googlemail.com with ESMTPSA id c2sm15180609wrt.87.2021.01.16.12.45.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jan 2021 12:34:58 -0800 (PST)
+        Sat, 16 Jan 2021 12:45:25 -0800 (PST)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     olek2@wp.pl
 Cc:     devicetree@vger.kernel.org, john@phrozen.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         robh+dt@kernel.org, tsbogend@alpha.franken.de
-Subject: RE: [PATCH] dt-bindings: mips: lantiq: Document Lantiq Xway EBU bindings
-Date:   Sat, 16 Jan 2021 21:34:46 +0100
-Message-Id: <20210116203446.148603-1-martin.blumenstingl@googlemail.com>
+Subject: RE: [PATCH] dt-bindings: mips: lantiq: Document Lantiq Xway DMA bindings
+Date:   Sat, 16 Jan 2021 21:45:21 +0100
+Message-Id: <20210116204521.150091-1-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210101213759.2070-1-olek2@wp.pl>
-References: <20210101213759.2070-1-olek2@wp.pl>
+In-Reply-To: <20210103101803.2123-1-olek2@wp.pl>
+References: <20210103101803.2123-1-olek2@wp.pl>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-(again, sorry for seeing this patch late)
+(another late reply from me, sorry)
 
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - lantiq,ebu-xway
-I think this compatible string is very generic and with that comes some
-problems.
-There is actually two different versions of this IP: one which has
-support for controlling the interrupt of the PCI controller on some
-SoCs (Danube, xRX100, xRX200). Other SoC variants (Falcon, Amazon-SE)
-don't have that interrupt-controller as they don't have PCI support.
+> +required:
+> +  - compatible
+> +  - reg
+This is actually an older IP variant of what can be found in the Intel
+LGM SoCs. The dt-bindings are currently being upstreamed for that newer
+SoC in [0].
 
-Also there is at least one clock input. I *assume* we need to describe
-it but I am not sure (as this platform doesn't use the common clock
-framework yet).
+Based on "DOs and DON’Ts for designing and writing Devicetree bindings"
+I think some more mandatory properties are needed, even though our
+driver currently uses none of them:
+- interrupts: as far as I know the IP on the Lantiq SoCs has (at least)
+  one interrupt for each DMA channel. That means: 28 interrupts on the
+  xRX200 SoCs
+- I *assume* (but I have not researched if that's really the case) that
+  the Lantiq variant also has at least one clock input and a reset line
+- since we don't have a proper DMA driver yet I can't comment what we
+  should use for #dma-cells
 
-My version of this can be found here [0]. It's still sitting in my
-tree because it has a dependency on an ICU patch in my tree which I
-could not make work properly yet.
+> +examples:
+> +  - |
+> +    dma@e104100 {
+note to self: it seems that both dma@ and dma-controller@ are used in
+existing schemas (the latter having twice as many occurrences though):
+$ grep -R dma@ Documentation/devicetree/bindings/dma/* | wc -l
+20
+$ grep -R dma-controller@ Documentation/devicetree/bindings/dma/* | wc -l
+45
 
 
 Best regards,
 Martin
 
 
-[0] https://github.com/xdarklight/linux/blob/8d5c632e11fe0ca14497efc2f9d99b69f75590ba/Documentation/devicetree/bindings/mips/lantiq/lantiq%2Cebu.yaml
+[0] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/0864b9bfa6e2b8b5e7ad9a7a739ca3274f66493c.1610703653.git.mallikarjunax.reddy@linux.intel.com/
+[1] https://www.kernel.org/doc/html/latest/devicetree/bindings/writing-bindings.html
