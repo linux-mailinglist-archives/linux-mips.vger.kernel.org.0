@@ -2,103 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A749D2F8F47
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Jan 2021 21:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AEE2F906E
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Jan 2021 05:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726619AbhAPUqJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 Jan 2021 15:46:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726385AbhAPUqI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Jan 2021 15:46:08 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655BBC061573;
-        Sat, 16 Jan 2021 12:45:27 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id i63so10270202wma.4;
-        Sat, 16 Jan 2021 12:45:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1bOdjlQaGWQ8aWyfQJKQhH8VYqrUnQwXrgWi9Mree3I=;
-        b=JVLUSXN/s1nK2Icd010Ugl0WvUG8e2CogSLbdUBFSOCqzl8Viq35eqiCorrawBbqOP
-         lZdjcJr04Wpdfl0I5R5AF5jAS0inbViR+2YrmTTSNV4t668qWTILE5++Nf1XvS2wOCYD
-         LySvYMj2/eickyHPLaVIuS1zfuAn76npFktWUqmNc42VN2bJTPQJC1+B/Mb9IVS8wEoz
-         dqC3FavixxVSFWz1Xc2lbDjdUeBAdmxZX+s+g/mVTNC+9PA3UWodxnfHwcdlFA1zlP11
-         ujZM1QALLVQrEHB2Ire3ONAEyvBYfEeXY0Ulr28zoRfDDobOQ91WYmA/qf8c/Cgiavaq
-         dkAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1bOdjlQaGWQ8aWyfQJKQhH8VYqrUnQwXrgWi9Mree3I=;
-        b=cJPexEoi3sbWyFkRztO0P0e9otZK5CN/n7L1iS/YLT1jr9JiUr/NXo+ry6ZEwQE4dd
-         bW0eBXD62j8hHbPtB7wFLNbkTTt7jzy7prCcQoDv5hK2UUT+r1n/3yIXQhHegWMVU0gJ
-         W+bdw+2QLwz2ZVCJq/vfss0vPtb24lV+OHTXoWrC4PdmcVW880jMB2itPGaycfPxCeL4
-         MZfFwiBMarejerkLmUIhKggEp+gYQkRFST1RlSxS6X74P6bTgENOuyCtWWszVHKn+WCq
-         c/r/eEj2xpAXsa7mOOlZgwp3BVlf/yS45MC+pEu4Kg1u3LaUpI9xbqDoLaUstHEw35fr
-         rjTA==
-X-Gm-Message-State: AOAM532tPU4DeIFT7wGnDUO8SSbNg+Rvb29O7lF2GY2cx4xjGZ94bQxt
-        CiTR+gWMtdt6QDWxbEXPjsE=
-X-Google-Smtp-Source: ABdhPJwElVqFppdHo/z59LybTiKhI0iTID9QTEnWtvUWk4UygqYhNQIsB8EmTnF1JLq5RzR48DOtPw==
-X-Received: by 2002:a05:600c:2255:: with SMTP id a21mr14522086wmm.122.1610829925978;
-        Sat, 16 Jan 2021 12:45:25 -0800 (PST)
-Received: from localhost.localdomain (p200300f13723cb00428d5cfffeb99db8.dip0.t-ipconnect.de. [2003:f1:3723:cb00:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id c2sm15180609wrt.87.2021.01.16.12.45.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jan 2021 12:45:25 -0800 (PST)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     olek2@wp.pl
-Cc:     devicetree@vger.kernel.org, john@phrozen.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        robh+dt@kernel.org, tsbogend@alpha.franken.de
-Subject: RE: [PATCH] dt-bindings: mips: lantiq: Document Lantiq Xway DMA bindings
-Date:   Sat, 16 Jan 2021 21:45:21 +0100
-Message-Id: <20210116204521.150091-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210103101803.2123-1-olek2@wp.pl>
-References: <20210103101803.2123-1-olek2@wp.pl>
+        id S1727090AbhAQEZs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 Jan 2021 23:25:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37714 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728138AbhAQEZr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 16 Jan 2021 23:25:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BC7D022DBF
+        for <linux-mips@vger.kernel.org>; Sun, 17 Jan 2021 04:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610857506;
+        bh=KNw+xp5b5SHz2IYFdayTRXUEkjnRZa3lb6AgSo+RQ6o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IAXLPHXn9m5W/wuE88Z0LsgFa0Gw2JI2n/u4btApHMlTdVrzU6UA3A4S6VHeDJrJt
+         p7sZpJDnpkeI1dxqmMo0fcmYexHzH66iz3gxF/OdbE2lDIP+8fz80Q//qkhtVcgvCo
+         O5BwwEdk/uKD92C7CbkbhbbB86cy7x9PCe3U9OujAPdkpUgZyDGt3M3Pi4GzAoD20G
+         K8Zxz9RV2m0w6RE2ku2thWlU/7FrUvQYQV3xnKhizPbn8rBgvroVlSRo/GDby6GBmV
+         U6ElcLl7hAUh2WFKzbDI59nYz4H8V5/V11rCk0KKKX74YTeyNCAflbinH2lw4fP9cy
+         AomgaHD0el1RQ==
+Received: by mail-io1-f44.google.com with SMTP id p72so1604167iod.12
+        for <linux-mips@vger.kernel.org>; Sat, 16 Jan 2021 20:25:06 -0800 (PST)
+X-Gm-Message-State: AOAM532pXWc4ULr29MyozY28t6jMOtqUaZKM4cWu0UZb4YZ9JolChM1S
+        iZmXDSTr5nO1mDQZD9+4MMtU9J3NXFg+lw7+pII=
+X-Google-Smtp-Source: ABdhPJxZOaZfD20xMGVs3XrAoTNGt9vxXTA5dvFuFVKkCnBpUoqIOthaPfQ1wtcQZ9B7Fh9y+RQDBXMp9irgC2hKCzw=
+X-Received: by 2002:a5e:9612:: with SMTP id a18mr13175639ioq.13.1610857506200;
+ Sat, 16 Jan 2021 20:25:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20201221120220.3186744-1-chenhuacai@kernel.org>
+ <a671a323-768b-b461-2ce4-ecc1e92d4cc6@loongson.cn> <CAAhV-H4GDxhg1YqWy-g7VuCeE7BZ0ibaVSr1ibzJqXjuaBn3_w@mail.gmail.com>
+ <20210107172620.GA13201@alpha.franken.de> <1085845b-2c5a-dbb6-62b7-28b55aeacb4c@loongson.cn>
+ <13b3f842-61e8-db13-67ff-7d2a9d894484@flygoat.com> <CAAhV-H5VUY20ADeXjNvOO_aP3ubikgpRJkmHJwDo71HhDGx+3A@mail.gmail.com>
+ <3aed5286-bf91-8e51-7e30-5dbff1ed539c@flygoat.com>
+In-Reply-To: <3aed5286-bf91-8e51-7e30-5dbff1ed539c@flygoat.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sun, 17 Jan 2021 12:24:54 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4cqnFGe+GfV3gBDDttGRfh9zVAjacVS6=Y6wgiOcqz1g@mail.gmail.com>
+Message-ID: <CAAhV-H4cqnFGe+GfV3gBDDttGRfh9zVAjacVS6=Y6wgiOcqz1g@mail.gmail.com>
+Subject: Re: [PATCH V3] MIPS: Loongson64: Add kexec/kdump support
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kexec@lists.infradead.org, Youling Tang <tangyouling@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-(another late reply from me, sorry)
+Hi, Jiaxun,
 
-> +required:
-> +  - compatible
-> +  - reg
-This is actually an older IP variant of what can be found in the Intel
-LGM SoCs. The dt-bindings are currently being upstreamed for that newer
-SoC in [0].
+On Sat, Jan 9, 2021 at 3:38 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> =E5=9C=A8 2021/1/9 =E4=B8=8A=E5=8D=889:36, Huacai Chen =E5=86=99=E9=81=93=
+:
+> > Hi, Jiaxun,
+> >
+> > On Fri, Jan 8, 2021 at 6:15 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wr=
+ote:
+> >> =E5=9C=A8 2021/1/8 =E4=B8=8B=E5=8D=886:07, Jinyang He =E5=86=99=E9=81=
+=93:
+> >>> Hi, Thomas,
+> >>>
+> >>> On 01/08/2021 01:26 AM, Thomas Bogendoerfer wrote:
+> >>>>>>> --- a/arch/mips/kernel/relocate_kernel.S
+> >>>>>>> +++ b/arch/mips/kernel/relocate_kernel.S
+> >>>>>>> @@ -6,6 +6,7 @@
+> >>>>>>>
+> >>>>>>>     #include <asm/asm.h>
+> >>>>>>>     #include <asm/asmmacro.h>
+> >>>>>>> +#include <asm/cpu.h>
+> >>>>>>>     #include <asm/regdef.h>
+> >>>>>>>     #include <asm/mipsregs.h>
+> >>>>>>>     #include <asm/stackframe.h>
+> >>>>>>> @@ -133,6 +134,33 @@ LEAF(kexec_smp_wait)
+> >>>>>>>     #else
+> >>>>>>>         sync
+> >>>>>>>     #endif
+> >>>>>>> +
+> >>>>>>> +#ifdef CONFIG_CPU_LOONGSON64
+> >>>> Is there a reason why you can't use the already existing infrastruct=
+ure
+> >>>> the way cavium-octeon is doing it ? If you can't please explain why
+> >>>> so we can find a way to extend it. But having some sort of poking
+> >>>> loongson registers in generic MIPS code is a non starter.
+> >>>>
+> >>>> Thomas.
+> >>>>
+> >>> Unlike the cavium-octeon platform, the Loongson64 platform needs some
+> >>> changes. Before the kernel starts, (before entering the kernel_entry)=
+,
+> >>> each CPU has its own state (the SMP system). For Loongson64, only the
+> >>> boot CPU will enter the kernel_entry, and other CPUs will query their
+> >>> mailbox value in a loop. This is what the BIOS does for the CPU. Here
+> >>> is different from cavium-octeon. All CPUs will enter the kernel_entry
+> >>> on cavium-octeon platform. Then the kernel_entry_setup, the co-CPUs
+> >>> will enter the query loop. I saw the kernel_entry_setup of other
+> >>> platforms, such as ip27, malta, and generic. They are not like
+> >>> cavium-octeon and the co-CPUs entering the loop may be earlier than
+> >>> entering kernel_entry. So I have reason to guess that most SMP system
+> >>> platform CPUs are similar to Loongson64.
+> >> Hi Jingyang,
+> >>
+> >> As I commented before you may reuse play_dead logic in Loongson's smp.=
+c.
+> >>
+> >>> relocate_kernel.S is like BIOS doing s omething for the CPU. It allow=
+s
+> >>> the boot CPU to start from the new kernel_entry and makes the co-CPUs
+> >>> enter a loop. The already existing infrastructure may be more suitabl=
+e
+> >>> for non-smp platforms. Although we can do something with
+> >>> plat_smp_ops.kexec_nonboot_cpu, more new problems will arise in that
+> >>> case. The kexec process actually runs on a copy of relocate_kernel.S,
+> >>> which will bring a lot of problems...
+> >> It won't be a problem as you can keep all data on-stack without extern=
+al
+> >> reference.
+> >>
+> >> Thanks.
+> > As I said before, only the control page is safe during kexec, so we
+> > cannot reuse smp.c. If BIOS provides play_dead(), that is also a safe
+> > region, but currently there is no runtime service from BIOS.
+>
+> Sorry, ignored the overlap case :-(
+>
+> Jumping to 0xbfc00000 to use firmware boot vector seems a little bit
+> overkill.
+>
+> But we'd better delivery it into platform folder, just like
+> kernel-entry-init.h
+Even if we move something to kernel-entry-init.h, we still need to
+modify arch/mips/kernel/relocate_kernel.S.
 
-Based on "DOs and DON’Ts for designing and writing Devicetree bindings"
-I think some more mandatory properties are needed, even though our
-driver currently uses none of them:
-- interrupts: as far as I know the IP on the Lantiq SoCs has (at least)
-  one interrupt for each DMA channel. That means: 28 interrupts on the
-  xRX200 SoCs
-- I *assume* (but I have not researched if that's really the case) that
-  the Lantiq variant also has at least one clock input and a reset line
-- since we don't have a proper DMA driver yet I can't comment what we
-  should use for #dma-cells
-
-> +examples:
-> +  - |
-> +    dma@e104100 {
-note to self: it seems that both dma@ and dma-controller@ are used in
-existing schemas (the latter having twice as many occurrences though):
-$ grep -R dma@ Documentation/devicetree/bindings/dma/* | wc -l
-20
-$ grep -R dma-controller@ Documentation/devicetree/bindings/dma/* | wc -l
-45
-
-
-Best regards,
-Martin
-
-
-[0] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/0864b9bfa6e2b8b5e7ad9a7a739ca3274f66493c.1610703653.git.mallikarjunax.reddy@linux.intel.com/
-[1] https://www.kernel.org/doc/html/latest/devicetree/bindings/writing-bindings.html
+Huacai
+>
+> Thanks.
+>
+> - Jiaxun
+>
+> >
+> > Huacai
+> >> - Jiaxun
+> >>
+> >>> Above all just my personal thoughts.
+> >>>
+> >>> Thanks,
+> >>> Jinyang
+> >>>
+>
