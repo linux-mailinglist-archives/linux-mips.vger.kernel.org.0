@@ -2,65 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 021642F9CF5
+	by mail.lfdr.de (Postfix) with ESMTP id E0F672F9CF7
 	for <lists+linux-mips@lfdr.de>; Mon, 18 Jan 2021 11:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388423AbhARKjn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Jan 2021 05:39:43 -0500
-Received: from elvis.franken.de ([193.175.24.41]:33126 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388503AbhARJSQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 18 Jan 2021 04:18:16 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1l1Qf1-0004jQ-00; Mon, 18 Jan 2021 10:17:19 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 831F1C0584; Mon, 18 Jan 2021 09:40:02 +0100 (CET)
-Date:   Mon, 18 Jan 2021 09:40:02 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Souptick Joarder <jrdr.linux@gmail.com>
-Cc:     jiaxun.yang@flygoat.com, yangtiezhu@loongson.cn,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mips: cacheinfo: Remove unnecessary increment of level
-Message-ID: <20210118084002.GA5637@alpha.franken.de>
-References: <1610786400-3629-1-git-send-email-jrdr.linux@gmail.com>
+        id S2388764AbhARKkI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Jan 2021 05:40:08 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:46270 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388223AbhARJ1s (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 18 Jan 2021 04:27:48 -0500
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxSL4PVAVguK4GAA--.10639S3;
+        Mon, 18 Jan 2021 17:25:36 +0800 (CST)
+Subject: Re: [PATCH 2/2] compiler.h: Include asm/rwonce.h under ARM64 and
+ ALPHA to fix build errors
+To:     Yonghong Song <yhs@fb.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <1610535453-2352-1-git-send-email-yangtiezhu@loongson.cn>
+ <1610535453-2352-3-git-send-email-yangtiezhu@loongson.cn>
+ <33050fcc-a4a0-af2e-6fba-dca248f5f23b@fb.com>
+Cc:     linux-sparse@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        kernel test robot <lkp@intel.com>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <5663510d-2aa5-c1f2-d0c8-5313cc2a4a18@loongson.cn>
+Date:   Mon, 18 Jan 2021 17:25:35 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1610786400-3629-1-git-send-email-jrdr.linux@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <33050fcc-a4a0-af2e-6fba-dca248f5f23b@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxSL4PVAVguK4GAA--.10639S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw1rtF4UCF4xKw1xJr13Jwb_yoW8GFWxpF
+        4DZr4kKrZ8Wry5JrsYvr12kr43A39xGrW5tF97W348Z3WIqFy7GanYgwn8CF4xWanIqFWI
+        k3W2gry3Jw4jv37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUB014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr4
+        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU83kuDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jan 16, 2021 at 02:10:00PM +0530, Souptick Joarder wrote:
-> kernel test robot throws below warning ->
-> 
-> arch/mips/kernel/cacheinfo.c:112:3: warning: Variable 'level' is
-> modified but its new value is never used. [unreadVariable]
-> 
-> Remove unnecessary increment of level at the end.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
-> ---
->  arch/mips/kernel/cacheinfo.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/mips/kernel/cacheinfo.c b/arch/mips/kernel/cacheinfo.c
-> index 5f9d0eb..c858ae3 100644
-> --- a/arch/mips/kernel/cacheinfo.c
-> +++ b/arch/mips/kernel/cacheinfo.c
-> @@ -109,7 +109,6 @@ static int __populate_cache_leaves(unsigned int cpu)
->  
->  	if (c->tcache.waysize) {
->  		populate_cache(tcache, this_leaf, level, CACHE_TYPE_UNIFIED);
-> -		level++;
+On 01/14/2021 01:14 AM, Yonghong Song wrote:
+> I do not think this fix is correct. x86 does not define its own
+> rwonce.h and still compiles fine.
+>
+> As noted in the above, we have include/asm-generic/rwonce.h.
+> Once you do a proper build, you will have rwonce.h in arch
+> generated directory like
+>
+> -bash-4.4$ find . -name rwonce.h
+> ./include/asm-generic/rwonce.h
+> ./arch/alpha/include/asm/rwonce.h
+> ./arch/arm64/include/asm/rwonce.h
+> ./arch/x86/include/generated/asm/rwonce.h
+>
+> for mips, it should generated in 
+> arch/mips/include/generated/asm/rwonce.h. Please double check why this 
+> does not happen.
 
-please remove the no longer needed braces, too.
+Hi Yonghong,
 
-Thomas.
+Thank you very much for your reply.
+You are right, this patch is meaningless.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+I find this build error when make M=samples/bpf after make clean,
+so the ./arch/mips/include/generated/asm/rwonce.h is not exist.
+
+After rebuild the kernel, this header file can be found when make
+M=samples/bpf due to samples/bpf/Makefile contains $LINUXINCLUDE.
+
+$ find . -name rwonce.h
+./include/asm-generic/rwonce.h
+./arch/arm64/include/asm/rwonce.h
+./arch/mips/include/generated/asm/rwonce.h
+./arch/alpha/include/asm/rwonce.h
+$ cat ./arch/mips/include/generated/asm/rwonce.h
+#include <asm-generic/rwonce.h>
+
+
+Hi Sergei and kernel test robot,
+
+Thank you for your suggestion and report,
+please ignore this patch, sorry for the noise.
+
+Thanks,
+Tiezhu
+
