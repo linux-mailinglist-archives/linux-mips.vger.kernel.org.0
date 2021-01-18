@@ -2,76 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34AF2F976D
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Jan 2021 02:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60B22F9782
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Jan 2021 02:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730535AbhARBwx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 Jan 2021 20:52:53 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:39083 "EHLO
+        id S1730881AbhARBzw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 Jan 2021 20:55:52 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:53047 "EHLO
         wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730458AbhARBww (ORCPT
+        by vger.kernel.org with ESMTP id S1730663AbhARBzu (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 17 Jan 2021 20:52:52 -0500
+        Sun, 17 Jan 2021 20:55:50 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 508371250;
-        Sun, 17 Jan 2021 20:52:06 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sun, 17 Jan 2021 20:52:06 -0500
+        by mailnew.west.internal (Postfix) with ESMTP id 4963F1351;
+        Sun, 17 Jan 2021 20:54:44 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sun, 17 Jan 2021 20:54:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=J
-        9jvrqQqukLeoHwiclTg0SNJ/Z7xF4sIX+lxzXqaRP0=; b=mg2hULcdtRHigRZyY
-        9a5btLXnT3AYoTVCw469gWb7YpFYI7zQaEAwpqnLOtUt5ZxpViXskjW9vBlQRlnN
-        Qe120hFf5I6ADRuOaLWk636mEUUkpZXdtrZLPof4jXDankuDnpYRyHcbc9ylX0Td
-        zPuN/S1lX0sx78WB3gtN7SBpKMbzWZg3C8gRshY1VnDF63ZVMtdjo2nMn2QJ/qoW
-        lGFGpyRb1a34OMKsDqfktwWIihKUoFeKFYqQktbOZnF9/vIBpwFl4GnpZsxopMFd
-        H1uqL7tP8iXkw0pmdHBCuboFP7lABmm3EcUkigIN2XWw3Ohlidg/zf6pypfauft6
-        2QDcQ==
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=H
+        2HkQ0D4cxZbOpysYva81N3lRKykvdF7kSIc0N/Sl9E=; b=p06LBKWonLrx4c0Qu
+        7tX+BoYdZVLRfUfol6q/ViVHuxg2fchCWl0bhHFPqRtcn7DiFMj34fty1poRybR9
+        BRKnYIyLjDY6jRghf8qpUkyPA6wzbJTBtHApf2ZFJ7pEJbfOgic52GYQ0d81k2aM
+        i7++IMqUf/Ydq5hntultFhuYZfEfs/3qgdZ1EIjq1z8DxFs1FdC1Xp64mQduBrmS
+        prDvIFqta+mBRQtDoeeyaxWnn2ZrGrhrpMr7mJ6Jhg4WTRk3xmvyL1qD0pvQx/63
+        cVoms5PFId3+8tfSeLzoUKVY/G1RU5uhhNMcRvSdZedM4YSIqOIGBfQUEOS9l4+P
+        SkBaA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:content-type
         :date:from:in-reply-to:message-id:mime-version:references
         :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=J9jvrqQqukLeoHwiclTg0SNJ/Z7xF4sIX+lxzXqaR
-        P0=; b=okxa47wMNMWq7WkUxtkwP+QrQp/3+D6hRToZwd+4DNwbFmYtaMCHY7/fY
-        g1wMtAmDYbutvPEVmWgSp16Xwii6ieTyY1PYIMg61sf4zqLoSD+OMfsDD8h/gFIU
-        ukofert7oF/VAdiv8AW6nPv1EX1vHewPEj6n6zyi7+KAA16V6ee8xDvl13V+IFAE
-        R6FxwS5+a2ZqxAHWrK4dK+UDRnZPcFG25vQqQn1NNUdTZa+FKwJFN45nQgGWTNo3
-        ts0m87My5EyWDF876aEmsi/oyXf9+p3AMb/5+7BNvLiYlGuW5sB71C7aCA8rSUIc
-        ZR6EYG6kZHE20yboTPZm192yjYpeA==
-X-ME-Sender: <xms:xOkEYOZmVFcJNiZt9gx0Dg0H_qOvepGw8pykU5pvVIiFSMsZccEOiA>
-    <xme:xOkEYBaQYJvfQDdGKvAJtZ1zitCHJWdWMzCgpuC-EitS0gFf37fs9uGJfqNYrb6tM
-    sNHBTkbLEArbKqz6lA>
+        :x-sasl-enc; s=fm1; bh=H2HkQ0D4cxZbOpysYva81N3lRKykvdF7kSIc0N/Sl
+        9E=; b=r+7hV9QRT3tzZCTJko5viu8+wL5CfzgojAUCF3TVkkEMbwUp6vQJGtqDM
+        n9ikdZi7vg7mu0F0hle4V/rSR1FR/Q+o8mW9RL3PTbEJgiG28d5yr+dnpdk/yn21
+        sPN7oSq/wjFrIKsbRXuP1NXUlRmyRgCGCrp+kJbbndiv8ldPDG+cthRKEGeKRCTg
+        zttpTUu5RpjtHghFvE4G5H4SyVLRt68LtWm4rzuWnM+o6ECaPTS1o5CwV7HHKemk
+        DhfmovaY95zNX9GBPyN+mKHQ4S/3+pooBbigNflXm9V3CDZu7o8iEH/i5RbxTFb/
+        SOvEHR9mTKb/G3HPilEMNgnNqymLA==
+X-ME-Sender: <xms:Y-oEYDj4Uoj9nVOuePR8NgTX2PDlh1-u94r-CGMLY_7Um4Ojd7p9xw>
+    <xme:Y-oEYAAc7EFdE6mQBs6dlLOiq2blNS6txQDjcV6uKUbfxVOO7ZXfqdAAHXt9sIic5
+    ewXFd-gyWai9BZ9fdM>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrtdejgdeflecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeftnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepfeeludeitddvkeffgefgueekjeegfeefteelgffhkeffueetieej
-    geehhfeuffdvnecukfhppeeghedrfeefrdehtddrvdehgeenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhih
-    ghhorghtrdgtohhm
-X-ME-Proxy: <xmx:xOkEYI91OcmnbWujb4UXiKgBHoLm_B2IAT093CUXI2eTsmI8rsDxtw>
-    <xmx:xOkEYAr0zPOSMEV1rQCtnjwJU3FBNTFiE-OtpwLmOeUghif2xAGRTw>
-    <xmx:xOkEYJqoANPsjrOuKzxMNCNLcJ84v5fTFVStm8e4PH_6KnVCWXoELQ>
-    <xmx:xekEYAUAwn38QTvim-_TcoP0VXV5j7kH9qaw8y0xpm967FcGSIm4lAWIJUo>
+    uegrihhlohhuthemuceftddtnecunecujfgurhepuffvfhfhkffffgggjggtgfesthekre
+    dttdeftfenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeefleduiedtvdekffeggf
+    eukeejgeeffeetlefghfekffeuteeijeeghefhueffvdenucfkphepgeehrdeffedrhedt
+    rddvheegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
+    epjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:Y-oEYDFEEPpFcZiiRelUJtD97nVtHKEXKxKUrAIQbNQd-h8GQz-Xhg>
+    <xmx:Y-oEYAR7QLYTeWJTtI82PkGXhXffnpZnGkrQa465uFUp76YywXqWAw>
+    <xmx:Y-oEYAy97aPoSLUDVkESzB41Jf9jIdxu1s9J8_w9RsVtSdbx549uzg>
+    <xmx:Y-oEYL_flk20bLHPUnXgfZnARJ2pPcYyX6FQ9UvNxjGXXbg4jit_SsBb8VA>
 Received: from [0.0.0.0] (li1000-254.members.linode.com [45.33.50.254])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 7E740108005B;
-        Sun, 17 Jan 2021 20:52:00 -0500 (EST)
-Subject: Re: [PATCH 0/4] MIPS: process: Some fixes and improvements about
- get_frame_info()
-To:     Jinyang He <hejinyang@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        Jun-Ru Chang <jrjang@realtek.com>
-References: <1610454557-25867-1-git-send-email-hejinyang@loongson.cn>
+        by mail.messagingengine.com (Postfix) with ESMTPA id 11E72240057;
+        Sun, 17 Jan 2021 20:54:40 -0500 (EST)
+Subject: Re: [PATCH] mips: cacheinfo: Remove unnecessary increment of level
+To:     Souptick Joarder <jrdr.linux@gmail.com>, tsbogend@alpha.franken.de,
+        yangtiezhu@loongson.cn
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1610786400-3629-1-git-send-email-jrdr.linux@gmail.com>
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <ab6e4efb-98b5-3ad6-5bad-2338c57d9392@flygoat.com>
-Date:   Mon, 18 Jan 2021 09:51:56 +0800
+Message-ID: <6f86e131-c799-ac6f-83a6-4780f52b38df@flygoat.com>
+Date:   Mon, 18 Jan 2021 09:54:36 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <1610454557-25867-1-git-send-email-hejinyang@loongson.cn>
+In-Reply-To: <1610786400-3629-1-git-send-email-jrdr.linux@gmail.com>
 Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -79,26 +75,33 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-在 2021/1/12 下午8:29, Jinyang He 写道:
-> Not familiar with microMIPS. Not test on microMIPS.
-
-Hi Jinyang,
-
-I was messing around QEMU microMIPS and found kernel stuck
-at loading init process after applied your patches :-(
-
-Thanks.
-
-- Jiaxun
-
+在 2021/1/16 下午4:40, Souptick Joarder 写道:
+> kernel test robot throws below warning ->
 >
-> Jinyang He (4):
->    MIPS: process: Reorder header files
->    MIPS: microMIPS: Fix the judgment of mm_jr16_op and mm_jalr_op
->    MIPS: Fix get_frame_info() handing of function size
->    MIPS: Add is_jr_ra_ins() to end the loop early
+> arch/mips/kernel/cacheinfo.c:112:3: warning: Variable 'level' is
+> modified but its new value is never used. [unreadVariable]
 >
->   arch/mips/kernel/process.c | 92 +++++++++++++++++++++++++++++++---------------
->   1 file changed, 62 insertions(+), 30 deletions(-)
+> Remove unnecessary increment of level at the end.
 >
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
+
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+> ---
+>   arch/mips/kernel/cacheinfo.c | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/arch/mips/kernel/cacheinfo.c b/arch/mips/kernel/cacheinfo.c
+> index 5f9d0eb..c858ae3 100644
+> --- a/arch/mips/kernel/cacheinfo.c
+> +++ b/arch/mips/kernel/cacheinfo.c
+> @@ -109,7 +109,6 @@ static int __populate_cache_leaves(unsigned int cpu)
+>   
+>   	if (c->tcache.waysize) {
+>   		populate_cache(tcache, this_leaf, level, CACHE_TYPE_UNIFIED);
+> -		level++;
+>   	}
+>   
+>   	this_cpu_ci->cpu_map_populated = true;
 
