@@ -2,180 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6E42F9786
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Jan 2021 03:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 839A42F982F
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Jan 2021 04:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730802AbhARCBB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 Jan 2021 21:01:01 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:52001 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730784AbhARCBA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 17 Jan 2021 21:01:00 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7429F580691;
-        Sun, 17 Jan 2021 20:59:53 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sun, 17 Jan 2021 20:59:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=/
-        sgmulDHp9rb7PANJ3YQeT7vYqlzAUl9a9PJU2TOFmU=; b=SBt8i3AAOYoPS+tjZ
-        a+fFzGY9e8jJmmqjZU+Q71NK3b8q/2JOCTc+hu45JQDaFlWojNYOIhrBhHEYfQxp
-        yFVszswjnwlEgYvWu7F7py0Np5jYg0XzqBx6EuEVSM5tSabVfzOFjjfrX3QpiQO7
-        IovmrFRlOApeAiiAiBdYJ/LBlQjUUMfhiYlIBlQzSbTvx3ZVO5oFz17A3+2FpkJh
-        fLpodCI5TZXzF8d05UPKu0FeIgTmKpiIYJu2OGYRpGo3+xzjHMPNXOpSglK5E4a2
-        EL03IiWrzZh97JEaRHCoHEiF3rGD107d5TxVnrKebIZKOr39QkHlTZqJql68jDDD
-        hJhsQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=/sgmulDHp9rb7PANJ3YQeT7vYqlzAUl9a9PJU2TOF
-        mU=; b=Fu9oVD8v9DVMtGCVFAH82kUeTkasi1oQ9IvWAQLpkBMwFGuFII/uKhJCA
-        vCDnAl5WpofkNH3jw5sFZeDoUjxpZDdVTp3r5wX++ZRqJn2POKdUTmBwQHLIiN25
-        fFGRY+eMJ4Hr9CJk42Evx1Jq8nI6mYlnpJHgR5tpbJJIesM2QC/uetLcSHEUkFe4
-        YIL69305CCgiQPvo8qco12LT3hN6sVgQlFLJJC4pWL3o/Rg2uZ11XZ5Y7DDKY2/u
-        Y3dyEJsbiYBggoSFWgZ9INpnCiPUTSp2rAETOnz95GPFVStfis8aNbXKfT/4pFjt
-        uR9JZ8c2lZy5sMRDobR17JHXKBcZQ==
-X-ME-Sender: <xms:l-sEYJCkLZH2UJGzP2vauPOP_nwPhqRBwS-gPvYPrl3EJzxJwWAoPQ>
-    <xme:l-sEYHiN_q4EIFerhwAkJTKdlGgBIseViXndJRDQoFE7GPQCatRtwjbztlHjSWZxY
-    OT6kag8fkpVasACCrM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrtdejgdegtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeftnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepteduueduffeghfefgeetfeevtdfftedugfdtveduudetgfefffel
-    vddtgfelleefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepgeehrdeffe
-    drhedtrddvheegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:l-sEYElkfKcR0HURU7YnX7c3Eioemnj04tRfeRSe9ZPFAochYuzn9Q>
-    <xmx:l-sEYDy1PxiYh387JoY6s3D_ghWw3g85QJuv9mX1M_QsaN9mQGT-rA>
-    <xmx:l-sEYOTWh-c5IJtu0rCvHQGOENBFGPPQvL7uYkxs7gfVaOS7nsgQ4w>
-    <xmx:mesEYFK9Va2bqi9zNc3sMjbUy_AnW_rFTYuRMqUpEfxU1TaY5KOxGzE9yO4>
-Received: from [0.0.0.0] (li1000-254.members.linode.com [45.33.50.254])
-        by mail.messagingengine.com (Postfix) with ESMTPA id BDEFB1080059;
-        Sun, 17 Jan 2021 20:59:44 -0500 (EST)
-Subject: Re: [PATCH RFC 0/4] Fix arm64 crash for accessing unmapped IO port
- regions (reboot)
-To:     John Garry <john.garry@huawei.com>, catalin.marinas@arm.com,
-        will@kernel.org, arnd@arndb.de, akpm@linux-foundation.org,
-        xuwei5@hisilicon.com, lorenzo.pieralisi@arm.com,
-        helgaas@kernel.org, song.bao.hua@hisilicon.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-pci@vger.kernel.org, linuxarm@openeuler.org
-References: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <982ed6eb-6975-aea8-1555-a557633966f5@flygoat.com>
-Date:   Mon, 18 Jan 2021 09:59:40 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S1731535AbhARDXS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 Jan 2021 22:23:18 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:52398 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728664AbhARDXR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 17 Jan 2021 22:23:17 -0500
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxaL7s_gRgPYQGAA--.10491S3;
+        Mon, 18 Jan 2021 11:22:21 +0800 (CST)
+Subject: Re: [PATCH bpf 1/2] samples/bpf: Set flag __SANE_USERSPACE_TYPES__
+ for MIPS to fix build warnings
+To:     Yonghong Song <yhs@fb.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <1610535453-2352-1-git-send-email-yangtiezhu@loongson.cn>
+ <1610535453-2352-2-git-send-email-yangtiezhu@loongson.cn>
+ <e3eb5919-4573-4576-e6aa-bd8ff56409ed@fb.com>
+Cc:     linux-sparse@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <f077bcae-97be-fc7f-c3fa-c6026bfe25d2@loongson.cn>
+Date:   Mon, 18 Jan 2021 11:22:20 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <e3eb5919-4573-4576-e6aa-bd8ff56409ed@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxaL7s_gRgPYQGAA--.10491S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFyfur4fWrW5KF1xZF1rCrg_yoW5uF47pa
+        1vkay8CF4DCry3GFW2yr12vr1fX3yfG34jgFykWryjyF1agas2qr4kGrWa9rn7ur4Iy3y2
+        9FyagFy5AFyrXrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwI
+        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
+        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+        6cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUCeHPUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-ÔÚ 2021/1/16 ÉÏÎç12:58, John Garry Ð´µÀ:
-> This is a reboot of my original series to address the problem of drivers
-> for legacy ISA devices accessing unmapped IO port regions on arm64 systems
-> and causing the system to crash.
+On 01/14/2021 01:12 AM, Yonghong Song wrote:
 >
-> There was another recent report of such an issue [0], and some old ones
-> [1] and [2] for reference.
 >
-> The background is that many systems do not include PCI host controllers,
-> or they do and controller probe may have failed. For these cases, no IO
-> ports are mapped. However, loading drivers for legacy ISA devices can
-> crash the system as there is nothing to stop them accessing those IO
-> ports (which have not been io remap'ed).
+> On 1/13/21 2:57 AM, Tiezhu Yang wrote:
+>> MIPS needs __SANE_USERSPACE_TYPES__ before <linux/types.h> to select
+>> 'int-ll64.h' in arch/mips/include/uapi/asm/types.h and avoid compile
+>> warnings when printing __u64 with %llu, %llx or %lld.
 >
-> My original solution tried to keep the kernel alive in these situations by
-> rejecting logical PIO access to PCI IO regions until PCI IO port regions
-> have been mapped.
->
-> This series goes one step further, by just reserving the complete legacy
-> IO port range in 0x0--0xffff for arm64. The motivation for doing this is
-> to make the request_region() calls for those drivers fail, like this:
->
-> root@ubuntu:/home/john# insmod mk712.ko
->   [ 3415.575800] mk712: unable to get IO region
-> insmod: ERROR: could not insert module mk712.ko: No such device
->
-> Otherwise, in theory, those drivers could initiate rogue accesses to
-> mapped IO port regions for other devices and cause corruptions or
-> side-effects. Indeed, those drivers should not be allowed to access
-> IO ports at all in such a system.
->
-> As a secondary defence, for broken drivers who do not call
-> request_region(), IO port accesses in range 0--0xffff will be ignored,
-> again preserving the system.
->
-> I am sending as an RFC as I am not sure of any problem with reserving
-> first 0x10000 of IO space like this. There is reserve= commandline
-> argument, which does allow this already.
+> could you mention which command produces the following warning?
 
-Hi John,
-
-Is it ok with ACPI? I'm not really familiar with ACPI on arm64 but my 
-impression
-is ACPI would use legacy I/O ports to communicate with kbd controller, 
-EC and
-power management facilities.
-
-We'd better have a method to detect if ISA bus is not present on the system
-instead of reserve them unconditionally.
-
-Thanks.
-
-- Jiaxun
+make M=samples/bpf
 
 >
-> For reference, here's how /proc/ioports looks on my arm64 system with
-> this change:
+>>
+>>      printf("0x%02x : %llu\n", key, value);
+>>                       ~~~^          ~~~~~
+>>                       %lu
+>>     printf("%s/%llx;", sym->name, addr);
+>>                ~~~^               ~~~~
+>>                %lx
+>>    printf(";%s %lld\n", key->waker, count);
+>>                ~~~^                 ~~~~~
+>>                %ld
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   samples/bpf/Makefile        | 4 ++++
+>>   tools/include/linux/types.h | 3 +++
+>>   2 files changed, 7 insertions(+)
+>>
+>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+>> index 26fc96c..27de306 100644
+>> --- a/samples/bpf/Makefile
+>> +++ b/samples/bpf/Makefile
+>> @@ -183,6 +183,10 @@ BPF_EXTRA_CFLAGS := $(ARM_ARCH_SELECTOR)
+>>   TPROGS_CFLAGS += $(ARM_ARCH_SELECTOR)
+>>   endif
+>>   +ifeq ($(ARCH), mips)
+>> +TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__
+>> +endif
+>> +
 >
-> root@ubuntu:/home/john# more /proc/ioports
-> 00010000-0001ffff : PCI Bus 0002:f8
->    00010000-00010fff : PCI Bus 0002:f9
->      00010000-00010007 : 0002:f9:00.0
->        00010000-00010007 : serial
->      00010008-0001000f : 0002:f9:00.1
->        00010008-0001000f : serial
->      00010010-00010017 : 0002:f9:00.2
->      00010018-0001001f : 0002:f9:00.2
-> 00020000-0002ffff : PCI Bus 0004:88
-> 00030000-0003ffff : PCI Bus 0005:78
-> 00040000-0004ffff : PCI Bus 0006:c0
-> 00050000-0005ffff : PCI Bus 0007:90
-> 00060000-0006ffff : PCI Bus 000a:10
-> 00070000-0007ffff : PCI Bus 000c:20
-> 00080000-0008ffff : PCI Bus 000d:30
+> This change looks okay based on description in
+> arch/mips/include/uapi/asm/types.h
 >
-> [0] https://lore.kernel.org/linux-input/20210112055129.7840-1-song.bao.hua@hisilicon.com/T/#mf86445470160c44ac110e9d200b09245169dc5b6
-> [1] https://lore.kernel.org/linux-pci/56F209A9.4040304@huawei.com
-> [2] https://lore.kernel.org/linux-arm-kernel/e6995b4a-184a-d8d4-f4d4-9ce75d8f47c0@huawei.com/
+> '''
+> /*
+>  * We don't use int-l64.h for the kernel anymore but still use it for
+>  * userspace to avoid code changes.
+>  *
+>  * However, some user programs (e.g. perf) may not want this. They can
+>  * flag __SANE_USERSPACE_TYPES__ to get int-ll64.h here.
+>  */
+> '''
 >
-> Difference since v4:
-> https://lore.kernel.org/linux-pci/1560262374-67875-1-git-send-email-john.garry@huawei.com/
-> - Reserve legacy ISA region
+>>   TPROGS_CFLAGS += -Wall -O2
+>>   TPROGS_CFLAGS += -Wmissing-prototypes
+>>   TPROGS_CFLAGS += -Wstrict-prototypes
+>> diff --git a/tools/include/linux/types.h b/tools/include/linux/types.h
+>> index 154eb4e..e9c5a21 100644
+>> --- a/tools/include/linux/types.h
+>> +++ b/tools/include/linux/types.h
+>> @@ -6,7 +6,10 @@
+>>   #include <stddef.h>
+>>   #include <stdint.h>
+>>   +#ifndef __SANE_USERSPACE_TYPES__
+>>   #define __SANE_USERSPACE_TYPES__    /* For PPC64, to get LL64 types */
+>> +#endif
 >
-> John Garry (4):
->    arm64: io: Introduce IO_SPACE_BASE
->    asm-generic/io.h: Add IO_SPACE_BASE
->    kernel/resource: Make ioport_resource.start configurable
->    logic_pio: Warn on and discard accesses to addresses below
->      IO_SPACE_BASE
+> What problem this patch fixed?
+
+If add "TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__" in
+samples/bpf/Makefile, it appears the following error:
+
+Auto-detecting system features:
+...                        libelf: [ on  ]
+...                          zlib: [ on  ]
+...                           bpf: [ OFF ]
+
+BPF API too old
+make[3]: *** [Makefile:293: bpfdep] Error 1
+make[2]: *** [Makefile:156: all] Error 2
+
+With #ifndef __SANE_USERSPACE_TYPES__  in tools/include/linux/types.h,
+the above error has gone.
+
+> If this header is used, you can just
+> change comment from "PPC64" to "PPC64/MIPS", right?
+
+If include <linux/types.h> in the source files which have compile warnings
+when printing __u64 with %llu, %llx or %lld, it has no effect due to 
+actually
+it includes usr/include/linux/types.h instead of 
+tools/include/linux/types.h,
+this is because the include-directories in samples/bpf/Makefile are searched
+in the order, -I./usr/include is in the front of -I./tools/include.
+
+So I think define __SANE_USERSPACE_TYPES__ for MIPS in samples/bpf/Makefile
+is proper, at the same time, add #ifndef __SANE_USERSPACE_TYPES__ in
+tools/include/linux/types.h can avoid build error and have no side effect.
+
+I will send v2 later with mention in the commit message that this is
+mips related.
+
+Thanks,
+Tiezhu
+
 >
->   arch/arm64/include/asm/io.h |  1 +
->   include/asm-generic/io.h    |  4 ++++
->   include/linux/logic_pio.h   |  5 +++++
->   kernel/resource.c           |  2 +-
->   lib/logic_pio.c             | 20 ++++++++++++++------
->   5 files changed, 25 insertions(+), 7 deletions(-)
->
+>> +
+>>   #include <asm/types.h>
+>>   #include <asm/posix_types.h>
+>>
 
