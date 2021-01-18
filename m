@@ -2,179 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 839A42F982F
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Jan 2021 04:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D79B2F9A3D
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Jan 2021 07:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731535AbhARDXS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 Jan 2021 22:23:18 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:52398 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728664AbhARDXR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 17 Jan 2021 22:23:17 -0500
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxaL7s_gRgPYQGAA--.10491S3;
-        Mon, 18 Jan 2021 11:22:21 +0800 (CST)
-Subject: Re: [PATCH bpf 1/2] samples/bpf: Set flag __SANE_USERSPACE_TYPES__
- for MIPS to fix build warnings
-To:     Yonghong Song <yhs@fb.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <1610535453-2352-1-git-send-email-yangtiezhu@loongson.cn>
- <1610535453-2352-2-git-send-email-yangtiezhu@loongson.cn>
- <e3eb5919-4573-4576-e6aa-bd8ff56409ed@fb.com>
-Cc:     linux-sparse@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <f077bcae-97be-fc7f-c3fa-c6026bfe25d2@loongson.cn>
-Date:   Mon, 18 Jan 2021 11:22:20 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1731414AbhARG4E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Jan 2021 01:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731777AbhARGzc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Jan 2021 01:55:32 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD753C061786
+        for <linux-mips@vger.kernel.org>; Sun, 17 Jan 2021 22:54:32 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id gx5so2903008ejb.7
+        for <linux-mips@vger.kernel.org>; Sun, 17 Jan 2021 22:54:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=fDRB4uV7zrbbsbfSb05mW4A9LkdllT0DcRvCp4Muxtg=;
+        b=H0niptT4fWtp7lNB22qUO62vkqQJt9WxHm+TWUG+YQHieH5eq0uRZnm1NP85H8iz9i
+         SGScFmRhGP/8GgUfKlnhrtX6USP50AQDKSDWgv7u0msWLINc560a3KJptq/EpjluoAXC
+         rkvgfwD/9ONjUGdLhs/pad8UrWWkoIShMggdw4DUGt3PLbwgENgvwVbeFVJeWj6z98l0
+         O35Lk1TvtHdfIVQ29QTbvwxNXIbHKmvNRHjfzaBQf5f8zai+gTkrti5ZemnM/GwiUJVk
+         Xv9wpA8iU93KR2/YHQh2XBB5RE2bXSw9/ZQKP6iC4SI5/Jl1HMpPwnSB1dya0iS1gHsh
+         Mlug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=fDRB4uV7zrbbsbfSb05mW4A9LkdllT0DcRvCp4Muxtg=;
+        b=TsWN8EkJSYVLUJKnC+hrdZpGxNJCPEy4YVzJZzq0pTfgDZVdcmfKZADvycC8efV5BH
+         gJotO3B4QHoq6+GJoAPCSYmhYHrrtsv5fPV5mPJDexuXfD4fnVIQ8DeZTyIJDKtK8qNt
+         8Gajy0gTY2bLrLiDFrPO/vwDfyMdrhB0O5J9ZC7YL3HxyEA01np26TLdg+Y4XIu0Aalh
+         +1nbAzZa8fJAH4WWyF50Fgdq6jMTqAfHHNtdBCq2kUCXLX9J9DpJ2TazemBSVrUd4GsJ
+         3thE+owPyKdj9bTKBswiAdbya6keClb9hYS2k6iAiYP9aGwOG5BRUDYh6m1IolcYnR3j
+         6hLQ==
+X-Gm-Message-State: AOAM5332/aSo6aO8kk0BUqA89yVrqz1WcZnbqsgbDaisd6IDlQzRPTGl
+        /BdUYGASy++zYDM2sNfx0uSZuMgKt41k69oTHpiaUrAmsbb6pdsh
+X-Google-Smtp-Source: ABdhPJyue6XUAXFoNhxFDDx2oPowQekK5icF2VlV5e8O9Vt/h/8P3fkkUI6Rf9nDP1vYWJbd5SasSkq+8tmX8oIIjLw=
+X-Received: by 2002:a17:907:104c:: with SMTP id oy12mr16212368ejb.503.1610952870596;
+ Sun, 17 Jan 2021 22:54:30 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <e3eb5919-4573-4576-e6aa-bd8ff56409ed@fb.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxaL7s_gRgPYQGAA--.10491S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFyfur4fWrW5KF1xZF1rCrg_yoW5uF47pa
-        1vkay8CF4DCry3GFW2yr12vr1fX3yfG34jgFykWryjyF1agas2qr4kGrWa9rn7ur4Iy3y2
-        9FyagFy5AFyrXrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUCeHPUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 18 Jan 2021 12:24:19 +0530
+Message-ID: <CA+G9fYvZ1uSTSH1CaedGu9n8bMr7Fstmi5AQ_7jkZomEBNy=5A@mail.gmail.com>
+Subject: MIPS: cavium_octeon_defconfig and nlm_xlp_defconfig builds failed
+To:     linux-mips@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 01/14/2021 01:12 AM, Yonghong Song wrote:
->
->
-> On 1/13/21 2:57 AM, Tiezhu Yang wrote:
->> MIPS needs __SANE_USERSPACE_TYPES__ before <linux/types.h> to select
->> 'int-ll64.h' in arch/mips/include/uapi/asm/types.h and avoid compile
->> warnings when printing __u64 with %llu, %llx or %lld.
->
-> could you mention which command produces the following warning?
+on stable-rc 4.19 and stable-rc 5.4 branch MIPS cavium_octeon_defconfig and
+nlm_xlp_defconfig builds failed recently.
 
-make M=samples/bpf
+Regressions (compared to build v4.19.167-43-g5a52ae31885b)
+Regressions (compared to build v5.4.89-62-ga698e3bcad9e)
 
->
->>
->>      printf("0x%02x : %llu\n", key, value);
->>                       ~~~^          ~~~~~
->>                       %lu
->>     printf("%s/%llx;", sym->name, addr);
->>                ~~~^               ~~~~
->>                %lx
->>    printf(";%s %lld\n", key->waker, count);
->>                ~~~^                 ~~~~~
->>                %ld
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>   samples/bpf/Makefile        | 4 ++++
->>   tools/include/linux/types.h | 3 +++
->>   2 files changed, 7 insertions(+)
->>
->> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
->> index 26fc96c..27de306 100644
->> --- a/samples/bpf/Makefile
->> +++ b/samples/bpf/Makefile
->> @@ -183,6 +183,10 @@ BPF_EXTRA_CFLAGS := $(ARM_ARCH_SELECTOR)
->>   TPROGS_CFLAGS += $(ARM_ARCH_SELECTOR)
->>   endif
->>   +ifeq ($(ARCH), mips)
->> +TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__
->> +endif
->> +
->
-> This change looks okay based on description in
-> arch/mips/include/uapi/asm/types.h
->
-> '''
-> /*
->  * We don't use int-l64.h for the kernel anymore but still use it for
->  * userspace to avoid code changes.
->  *
->  * However, some user programs (e.g. perf) may not want this. They can
->  * flag __SANE_USERSPACE_TYPES__ to get int-ll64.h here.
->  */
-> '''
->
->>   TPROGS_CFLAGS += -Wall -O2
->>   TPROGS_CFLAGS += -Wmissing-prototypes
->>   TPROGS_CFLAGS += -Wstrict-prototypes
->> diff --git a/tools/include/linux/types.h b/tools/include/linux/types.h
->> index 154eb4e..e9c5a21 100644
->> --- a/tools/include/linux/types.h
->> +++ b/tools/include/linux/types.h
->> @@ -6,7 +6,10 @@
->>   #include <stddef.h>
->>   #include <stdint.h>
->>   +#ifndef __SANE_USERSPACE_TYPES__
->>   #define __SANE_USERSPACE_TYPES__    /* For PPC64, to get LL64 types */
->> +#endif
->
-> What problem this patch fixed?
+mips:
+  build:
+    * gcc-10-cavium_octeon_defconfig
+    * gcc-10-nlm_xlp_defconfig
+    * gcc-8-cavium_octeon_defconfig
+    * gcc-8-nlm_xlp_defconfig
+    * gcc-9-cavium_octeon_defconfig
+    * gcc-9-nlm_xlp_defconfig
 
-If add "TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__" in
-samples/bpf/Makefile, it appears the following error:
 
-Auto-detecting system features:
-...                        libelf: [ on  ]
-...                          zlib: [ on  ]
-...                           bpf: [ OFF ]
+Build log :
+---------------
 
-BPF API too old
-make[3]: *** [Makefile:293: bpfdep] Error 1
-make[2]: *** [Makefile:156: all] Error 2
+# to reproduce this build locally:
 
-With #ifndef __SANE_USERSPACE_TYPES__  in tools/include/linux/types.h,
-the above error has gone.
+tuxmake --target-arch=mips --kconfig=cavium_octeon_defconfig
+--toolchain=gcc-8 --wrapper=sccache
+--environment=SCCACHE_BUCKET=sccache.tuxbuild.com --runtime=docker
+--image=public.ecr.aws/tuxmake/mips_gcc-8 config kernel xipkernel
+debugkernel modules dtbs dtbs-legacy
 
-> If this header is used, you can just
-> change comment from "PPC64" to "PPC64/MIPS", right?
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+'HOSTCC=sccache gcc' cavium_octeon_defconfig
 
-If include <linux/types.h> in the source files which have compile warnings
-when printing __u64 with %llu, %llx or %lld, it has no effect due to 
-actually
-it includes usr/include/linux/types.h instead of 
-tools/include/linux/types.h,
-this is because the include-directories in samples/bpf/Makefile are searched
-in the order, -I./usr/include is in the front of -I./tools/include.
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
+In file included from arch/mips/kernel/binfmt_elfn32.c:113:
+arch/mips/kernel/../../../fs/binfmt_elf.c: In function 'fill_siginfo_note':
+arch/mips/kernel/../../../fs/binfmt_elf.c:1599:23: error: passing
+argument 1 of 'copy_siginfo_to_user' from incompatible pointer type
+[-Werror=incompatible-pointer-types]
+  copy_siginfo_to_user((user_siginfo_t __user *) csigdata, siginfo);
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/uapi/linux/elfcore.h:6,
+                 from include/linux/elfcore.h:10,
+                 from arch/mips/kernel/binfmt_elfn32.c:42:
+include/linux/signal.h:24:49: note: expected 'struct siginfo *' but
+argument is of type 'compat_siginfo_t *' {aka 'struct compat_siginfo
+*'}
+ int copy_siginfo_to_user(struct siginfo __user *to, const struct
+siginfo *from);
+                          ~~~~~~~~~~~~~~~~~~~~~~~^~
+cc1: all warnings being treated as errors
 
-So I think define __SANE_USERSPACE_TYPES__ for MIPS in samples/bpf/Makefile
-is proper, at the same time, add #ifndef __SANE_USERSPACE_TYPES__ in
-tools/include/linux/types.h can avoid build error and have no side effect.
+build log link,
+ - https://builds.tuxbuild.com/1nCmFsW7GqWQp1LTwGO5BpU93fy/
+ - https://builds.tuxbuild.com/1nCmFl54F1ONC7hNoPkeO8kBt5o/
 
-I will send v2 later with mention in the commit message that this is
-mips related.
-
-Thanks,
-Tiezhu
-
->
->> +
->>   #include <asm/types.h>
->>   #include <asm/posix_types.h>
->>
-
+Best regards
+Naresh Kamboju
