@@ -2,94 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC592FC44A
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Jan 2021 00:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 184F72FC49C
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Jan 2021 00:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395390AbhASOSK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Jan 2021 09:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
+        id S1727895AbhASXQv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Jan 2021 18:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732586AbhASJWb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Jan 2021 04:22:31 -0500
-Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BD6C0613D6
-        for <linux-mips@vger.kernel.org>; Tue, 19 Jan 2021 01:21:46 -0800 (PST)
-Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1l1nCq-00EDvw-VW
-        for linux-mips@vger.kernel.org; Tue, 19 Jan 2021 10:21:45 +0100
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on yawp
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.4
-Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8] (helo=sumner.biot.com)
-        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1l1nCR-00EDsI-KL; Tue, 19 Jan 2021 10:21:19 +0100
-Received: from bert by sumner.biot.com with local (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1l1nCR-000mDQ-5z; Tue, 19 Jan 2021 10:21:19 +0100
-From:   Bert Vermeulen <bert@biot.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sander Vanheule <sander@svanheule.net>,
-        John Crispin <john@phrozen.org>,
-        Birger Koblitz <mail@birger-koblitz.de>
-Cc:     Bert Vermeulen <bert@biot.com>
-Subject: [PATCH v4 3/5] MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS system
-Date:   Tue, 19 Jan 2021 10:21:07 +0100
-Message-Id: <20210119092109.185282-4-bert@biot.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210119092109.185282-1-bert@biot.com>
-References: <20210119092109.185282-1-bert@biot.com>
+        with ESMTP id S1727768AbhASXPj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Jan 2021 18:15:39 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17BFC061575
+        for <linux-mips@vger.kernel.org>; Tue, 19 Jan 2021 15:14:58 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id f6so17629883ybq.13
+        for <linux-mips@vger.kernel.org>; Tue, 19 Jan 2021 15:14:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Marg7pjTRtpl09VyTT0jCfl3UMPAKnBqUunBe2OgC58=;
+        b=TKSYhYiP2tTGQZc9sbRFcM1T3K1NFpIAC+H5XtvnYTzAlPs2J03WjRiDZruXmEkE+I
+         u6Sug9gorg1W5siqZWi/2KTcL+J6q9lSyN9nkXefRpVu1uZg6NMSBnliNQfz0ZVP+Wvv
+         aZE101jRtqJ/iOghJQP7M7Q1TPeZZKcC1K39LdsiUJ3xA2hrMsVMz1G8HN3oBkpf8WPd
+         IXHJExRPEA84RY7rgPv4SWTUlDawwVJhts+JY7G6wl35gSwe4G0lWwR92mBEdRDRHIr0
+         +AHhZRnr5ULX37uqfagyndXyQaKXEfYSfiDFRAWMexiPCV1n73bON6QKXCr8r4/S3tIo
+         dp3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Marg7pjTRtpl09VyTT0jCfl3UMPAKnBqUunBe2OgC58=;
+        b=Nq2oEUPlgSldXaxhp5naf9ZasWpgYHizTXVLCcaD3GNdnt4BA5mQ3lS6yYeTBZeElz
+         trGaJOm6GJIIEo7V5buMMzQUJLr0LxkKDwVSnYWbQXULFnZhVyWX46ydy589K42Kjmbv
+         N+hqYX77p6xGaw2HOZ3jjALrwE8jvl3TLeIRuhwY2kCiVO0IqmAMuWcC0XvcFpMeFu4l
+         Uarj+IU4Sp/oTaodgafU9pPKnNNE6H+0TzgJwmLtevxTytDkeiCcSHGBQ8Mn2qOuKo4u
+         e+VAgrTvTJvJloRm4laYSkCLTemoM+kA5QJnGH/ZcWScerotGIi+azIGxwg4tdPhI+1P
+         biMA==
+X-Gm-Message-State: AOAM5329ex4IpFaCbKYMomR/Fojlyyz5m/Xr8E3x34RO+ErDTyOxto5m
+        Yvj9mH/oDSsyGO6fVTQvuy+KHKZP7Vtr5tFsP8s=
+X-Google-Smtp-Source: ABdhPJxbiDRHpwt+9UcYayL+Xg1d2kHHfCHdlAMKlBcunBREdjMEkIMfu7mpbjuGoJX+r4G8g2qsx5q5P/s8H+rfoqE=
+X-Received: by 2002:a25:dac6:: with SMTP id n189mr9637303ybf.85.1611098098022;
+ Tue, 19 Jan 2021 15:14:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7110:3311:b029:32:43a0:9516 with HTTP; Tue, 19 Jan 2021
+ 15:14:57 -0800 (PST)
+Reply-To: sroomf70@gmail.com
+From:   "Mrs. Nefi Setu" <mrs.nefisetu@gmail.com>
+Date:   Wed, 20 Jan 2021 00:14:57 +0100
+Message-ID: <CANyAxoY7zEgBBp5j--Qx0Yy=+V+=e8bkmGT+wy1B_Qr7jQXkLg@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is just enough system to boot the kernel with earlycon working.
-
-Signed-off-by: Bert Vermeulen <bert@biot.com>
-Signed-off-by: Sander Vanheule <sander@svanheule.net>
----
- arch/mips/Kconfig | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 0a17bedf4f0d..0986d0c4405f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -627,6 +627,27 @@ config RALINK
- 	select ARCH_HAS_RESET_CONTROLLER
- 	select RESET_CONTROLLER
- 
-+config MACH_REALTEK_RTL
-+	bool "Realtek RTL838x/RTL839x based machines"
-+	select MIPS_GENERIC
-+	select DMA_NONCOHERENT
-+	select IRQ_MIPS_CPU
-+	select CSRC_R4K
-+	select CEVT_R4K
-+	select SYS_HAS_CPU_MIPS32_R1
-+	select SYS_HAS_CPU_MIPS32_R2
-+	select SYS_SUPPORTS_BIG_ENDIAN
-+	select SYS_SUPPORTS_32BIT_KERNEL
-+	select SYS_SUPPORTS_MIPS16
-+	select SYS_SUPPORTS_MULTITHREADING
-+	select SYS_SUPPORTS_VPE_LOADER
-+	select SYS_HAS_EARLY_PRINTK
-+	select SYS_HAS_EARLY_PRINTK_8250
-+	select USE_GENERIC_EARLY_PRINTK_8250
-+	select BOOT_RAW
-+	select PINCTRL
-+	select USE_OF
-+
- config SGI_IP22
- 	bool "SGI IP22 (Indy/Indigo2)"
- 	select ARC_MEMORY
 -- 
-2.25.1
+I'm Mrs. Nefi Setu, did you Receive the (FUND), that was paid to you?
+please, do not hesitate to Let me know with your full name:.. for
+immediate verification notice,
 
+Thanks,
+
+Mrs. Nefi Setu,
+Foreign Remittance Director
+
+Sincerely Yours, Respectfully,
+
+Mr Bill T Winters,
+Group Chief Executive Officer & Executive Director,
