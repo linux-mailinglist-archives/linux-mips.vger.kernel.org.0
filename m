@@ -2,107 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEB52FB925
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Jan 2021 15:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8767F2FC1F0
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Jan 2021 22:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395406AbhASOSY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Jan 2021 09:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391301AbhASLYt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Jan 2021 06:24:49 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66669C061573
-        for <linux-mips@vger.kernel.org>; Tue, 19 Jan 2021 03:24:08 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id q131so1697480pfq.10
-        for <linux-mips@vger.kernel.org>; Tue, 19 Jan 2021 03:24:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WdnFZ7UiJHbYCL32m0l8Nb/dWojdrFU10VBQi4v8Vug=;
-        b=I8YdDEkhA22hrI/y5xwZqMvfsunwXyf7g56aRkhCY8yW3s6iozc50c7B3Fz8VFL6Qb
-         TuTbJ0tU8T+iFldDePsVwohmyvLKiqR1A1+1BRgZehHj3+bC9+VFGlNbZ6pc2nminV+1
-         LMCxdynWe4dMMt4HmLUCuF6/YRZIJoug0F92R2XX5Gv4DLoOdkZGT496LQeHX7L1UT1y
-         pw2r/eHR/i7D3yxZmvA47SMeDVF8Bzmwjr7iPFUcXvTFihEb4fhbyTWU7WkLbRJseHd2
-         ZvrZ8RoSx2Xv0/f+PRe/Lh3h4nXLn0oO5zNCkmEm90ODf0KxSCbVWpskJdHK5jBuc5h7
-         dzsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WdnFZ7UiJHbYCL32m0l8Nb/dWojdrFU10VBQi4v8Vug=;
-        b=A1WIXuHwzwzb8VJQFRS8YlUPaKeSWgrZiHIqgeU80B1A/9O6wvilL5GN66GIjRL9U+
-         ljkR1DecznkqV55A5122oSWs7tqwXHBhuldDHC3ql8wRdeAGpKvHNI34CXDHvm1lxX01
-         rSD10b98V3IX/EYsXhwnScUbk2OU6To7LaNtPDbWJQ+QnCeYEyUcX7FsbCvX+HWkLK8Y
-         YNIi1r9slCeUCsGcZ85gvcBd5j9Q06c5XaqrtSfdtqV06WApdnhxOOoqvpX7RtSjxbMb
-         qDdVIPT4NU9pLOFwssj9+QN5VMoiEBPyIIPfaOoF06DpNymOpp105H8Nz2HVGYByc9lv
-         /U7Q==
-X-Gm-Message-State: AOAM532XltJO8jpNF0KYjULj9sNCcUj9BuZjgLLQgzP373Tf+yCpQMTS
-        fDMAQQteP3UpxjMGaQFgQWc=
-X-Google-Smtp-Source: ABdhPJx1VejAFRbK0F8Fc+QKWQY3CChwYKWpt4Qg9pTA1w5qXsiIsW6jO/7FcbbLMVoDTygtxMPKaA==
-X-Received: by 2002:a63:1047:: with SMTP id 7mr4061929pgq.292.1611055447956;
-        Tue, 19 Jan 2021 03:24:07 -0800 (PST)
-Received: from pek-lpggp6.wrs.com (unknown-105-123.windriver.com. [147.11.105.123])
-        by smtp.gmail.com with ESMTPSA id gt21sm3075285pjb.56.2021.01.19.03.24.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 Jan 2021 03:24:07 -0800 (PST)
-From:   Kevin Hao <haokexin@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Yasha Cherikovsky <yasha.che3@gmail.com>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v2] Revert "MIPS: Octeon: Remove special handling of CONFIG_MIPS_ELF_APPENDED_DTB=y"
-Date:   Tue, 19 Jan 2021 19:15:31 +0800
-Message-Id: <20210119111531.37375-1-haokexin@gmail.com>
-X-Mailer: git-send-email 2.29.2
+        id S1730331AbhASVJi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Jan 2021 16:09:38 -0500
+Received: from elvis.franken.de ([193.175.24.41]:37137 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391788AbhASVJc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 19 Jan 2021 16:09:32 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1l1yEy-0000Vj-00; Tue, 19 Jan 2021 22:08:40 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 05510C09FA; Tue, 19 Jan 2021 22:08:21 +0100 (CET)
+Date:   Tue, 19 Jan 2021 22:08:21 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jinyang He <hejinyang@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        kexec@lists.infradead.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Youling Tang <tangyouling@loongson.cn>
+Subject: Re: [PATCH V3] MIPS: Loongson64: Add kexec/kdump support
+Message-ID: <20210119210821.GA15589@alpha.franken.de>
+References: <20201221120220.3186744-1-chenhuacai@kernel.org>
+ <a671a323-768b-b461-2ce4-ecc1e92d4cc6@loongson.cn>
+ <CAAhV-H4GDxhg1YqWy-g7VuCeE7BZ0ibaVSr1ibzJqXjuaBn3_w@mail.gmail.com>
+ <20210107172620.GA13201@alpha.franken.de>
+ <1085845b-2c5a-dbb6-62b7-28b55aeacb4c@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1085845b-2c5a-dbb6-62b7-28b55aeacb4c@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This reverts commit d9df9fb901d25b941ab2cfb5b570d91fb2abf7a3.
+On Fri, Jan 08, 2021 at 06:07:39PM +0800, Jinyang He wrote:
+> Unlike the cavium-octeon platform, the Loongson64 platform needs some
+> changes. Before the kernel starts, (before entering the kernel_entry), each
+> CPU has its own state (the SMP system). For Loongson64, only the boot CPU
+> will enter the kernel_entry, and other CPUs will query their mailbox value
+> in a loop. This is what the BIOS does for the CPU. Here is different from
+> cavium-octeon. All CPUs will enter the kernel_entry on cavium-octeon
+> platform. Then the kernel_entry_setup, the co-CPUs will enter the query
+> loop. I saw the kernel_entry_setup of other platforms, such as ip27, malta,
+> and generic. They are not like cavium-octeon and the co-CPUs entering the
+> loop may be earlier than entering kernel_entry. So I have reason to guess
+> that most SMP system platform CPUs are similar to Loongson64.
+> 
+> relocate_kernel.S is like BIOS doing s omething for the CPU. It allows the
+> boot CPU to start from the new kernel_entry and makes the co-CPUs enter a
+> loop. The already existing infrastructure may be more suitable for non-smp
+> platforms. Although we can do something with plat_smp_ops.kexec_nonboot_cpu,
+> more new problems will arise in that case. The kexec process actually runs
+> on a copy of relocate_kernel.S, which will bring a lot of problems...
+> 
+> Above all just my personal thoughts.
 
-For the OCTEON boards, it need to patch the built-in DTB before using
-it. Previously it judges if it is a built-in DTB by checking
-fw_passed_dtb. But after commit 37e5c69ffd41 ("MIPS: head.S: Init
-fw_passed_dtb to builtin DTB", the fw_passed_dtb is initialized even
-when using built-in DTB. This causes the OCTEON boards boot broken due
-to an unpatched built-in DTB is used. Revert the commit d9df9fb901d2 to
-restore the codes before the fw_passed_dtb is used and then fix this
-issue.
+thank you for describing current state. So it looks like kexec and SMP
+is probably only working for Octeon and maybe some MIPS VPE based SMP
+systems, but not with "real" cores.
 
-Fixed: 37e5c69ffd41 ("MIPS: head.S: Init fw_passed_dtb to builtin DTB")
-Cc: stable@vger.kernel.org
-Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Kevin Hao <haokexin@gmail.com>
+How about the patch below as preparation for your loongson64 kexec patch ?
+You only need to put write a kexec_smp_wait_final macro and the rest of
+your patch stays the same...
+
+Thomas.
+
+
+From 81d3e1e24a0dae48f310b8d819d625f88139ef9b Mon Sep 17 00:00:00 2001
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Date: Tue, 19 Jan 2021 21:58:55 +0100
+Subject: [PATCH] MIPS: Use macro for kexec_smp_wait specials
+
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- arch/mips/cavium-octeon/setup.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ .../include/asm/mach-cavium-octeon/kernel-entry-init.h   | 8 ++++++++
+ arch/mips/kernel/relocate_kernel.S                       | 9 ++++-----
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
-index 982826ba0ef7..ce4e2806159b 100644
---- a/arch/mips/cavium-octeon/setup.c
-+++ b/arch/mips/cavium-octeon/setup.c
-@@ -1149,12 +1149,15 @@ void __init device_tree_init(void)
- 	bool do_prune;
- 	bool fill_mac;
+diff --git a/arch/mips/include/asm/mach-cavium-octeon/kernel-entry-init.h b/arch/mips/include/asm/mach-cavium-octeon/kernel-entry-init.h
+index c38b38ce5a3d..b071a7353ee1 100644
+--- a/arch/mips/include/asm/mach-cavium-octeon/kernel-entry-init.h
++++ b/arch/mips/include/asm/mach-cavium-octeon/kernel-entry-init.h
+@@ -157,4 +157,12 @@
+ 	.macro	smp_slave_setup
+ 	.endm
  
--	if (fw_passed_dtb) {
--		fdt = (void *)fw_passed_dtb;
-+#ifdef CONFIG_MIPS_ELF_APPENDED_DTB
-+	if (!fdt_check_header(&__appended_dtb)) {
-+		fdt = &__appended_dtb;
- 		do_prune = false;
- 		fill_mac = true;
- 		pr_info("Using appended Device Tree.\n");
--	} else if (octeon_bootinfo->minor_version >= 3 && octeon_bootinfo->fdt_addr) {
-+	} else
-+#endif
-+	if (octeon_bootinfo->minor_version >= 3 && octeon_bootinfo->fdt_addr) {
- 		fdt = phys_to_virt(octeon_bootinfo->fdt_addr);
- 		if (fdt_check_header(fdt))
- 			panic("Corrupt Device Tree passed to kernel.");
++#define USE_KEXEC_SMP_WAIT_FINAL
++	.macro  kexec_smp_wait_final
++	.set push
++	.set noreorder
++	synci		0($0)
++	.set pop
++	.endm
++
+ #endif /* __ASM_MACH_CAVIUM_OCTEON_KERNEL_ENTRY_H */
+diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
+index ac870893ba2d..f3c908abdbb8 100644
+--- a/arch/mips/kernel/relocate_kernel.S
++++ b/arch/mips/kernel/relocate_kernel.S
+@@ -11,6 +11,8 @@
+ #include <asm/stackframe.h>
+ #include <asm/addrspace.h>
+ 
++#include <kernel-entry-init.h>
++
+ LEAF(relocate_new_kernel)
+ 	PTR_L a0,	arg0
+ 	PTR_L a1,	arg1
+@@ -125,11 +127,8 @@ LEAF(kexec_smp_wait)
+ 1:	LONG_L		s0, (t0)
+ 	bne		s0, zero,1b
+ 
+-#ifdef CONFIG_CPU_CAVIUM_OCTEON
+-	.set push
+-	.set noreorder
+-	synci		0($0)
+-	.set pop
++#ifdef USE_KEXEC_SMP_WAIT_FINAL
++	kexec_smp_wait_final
+ #else
+ 	sync
+ #endif
 -- 
 2.29.2
 
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
