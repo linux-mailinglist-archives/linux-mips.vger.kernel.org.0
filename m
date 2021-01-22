@@ -2,71 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 221613004A8
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Jan 2021 15:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3861B300712
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Jan 2021 16:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727732AbhAVN7I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Jan 2021 08:59:08 -0500
-Received: from mout.gmx.net ([212.227.17.22]:36379 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726509AbhAVN7B (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 22 Jan 2021 08:59:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1611323782;
-        bh=0JKZZVgCuhRz/+dZq0rU9uHPhlASFQ8/OAly6xYE6dc=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=Rl4VD9p31kK3wC8V0+6oMjKlAZ5pPMjmPc3pg8lFPUkjBQkKU9cMnUqkSOTpNB/qg
-         ++2EOswptk1Cc7W1NGySCZSv6AVleTBr9nbL0M1XQKQGCwZqFydV60lDzRLuh6yqzv
-         YDx6AfXJoS1VaZwpnRdjpaCSHdZ/SxsE9tYRmkoo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Valinor ([82.203.161.65]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1M3DNt-1l27RY4B49-003gZG; Fri, 22
- Jan 2021 14:56:22 +0100
-Date:   Fri, 22 Jan 2021 15:58:01 +0200
-From:   Lauri Kasanen <cand@gmx.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        axboe@kernel.dk, linux-block@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH v9] block: Add n64 cart driver
-Message-Id: <20210122155801.a24c328b7aefdcffb7d68576@gmx.com>
-In-Reply-To: <20210122111727.GA161970@infradead.org>
-References: <20210122110043.f36cd22df1233754753518c1@gmx.com>
-        <20210122111727.GA161970@infradead.org>
-X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:7wQaoruYUbvPdkxn5JMQAbYZnNhc03+MrlvRzQ34I+QTy//gX9Z
- a785xQ56grOEOAqjoIHfZYntXYN/UDrhzqn0jcPyF6rIlQrM5UnZRtej3Che4E3wYX5FhpQ
- 95jDif4IJGoqi0N0oX4lW9EY2QtktoaITDeTtKKfZRjjxpcrgQ33Rw8fSfcejgtk2g4PjIi
- kxn6RqjwYnW5pvebslvXw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ciSgC7jfFP8=:Xw9iGkhaO18G6e4QrkhVp1
- l1ymSwsfugNNKHkdbNAHaY1AOPV31zv/RkoeVJJvSVPj9lfq3jD3/uryr5ILuhdqP8hOVGB/V
- sqvq1JIKhZbYnKgExJg4HF8jJscZv+nWl0u0AaGaUv9iG8Kps9M/+59eI2sAIMTAqJmo/IYp9
- GxZU7JpYkUNzhCbqc007GeCyC8DQ/3XK9RBjxVkyph2jYvIXFo2oH3OuXUFeNVfBWpGETkkz7
- N7nso6DlzSgDz7Olx9KrNv8y/uc8dzqgbZpyEjmBnTIaictyT2CJ50wdT+w3djRAnpVBc8I6w
- yeiFSDqkIo3iiaVIGRHlVS4Ps0WrNjPzG81KXW8KrNAL0T2vDWiNs/IYdpLN3fHbPyXJXnHlM
- ZP6WHtqckPE9mVtQyL077jiZSJl8eb5zM+jGRA6ErZB0RG2eaTHlag02ZASI4q1ogBG1n8KNq
- N5VEetcxvoWml4VERH5uf/H9zhm+ZCEWOQHJdi716eQGzf4oxGWKOXFys9DzYdrUUKemKB1iU
- x0YEasmLq13h22GnbbswCOyy4qufSs3zrokrDnNIcclJKpjzlCZloelt973+N7QtiuuayW3Kg
- PYKclrHlLo1mMNtdW3gHL37mcdf5wJFjVOs/hprySOqGG/Kg74i6kcVAz9ZPUTdcY+aI3DtQx
- MEaoRp73EuzyIvzEq5cJ7cpo5lXAw9zCF+7X3hrYZ/sCM/ic/sSAsspcDJWqkdAoSuaS6Ldww
- UuWIYVc2bLcOZmxIvoQS5cCz3gyY3+XZp0LoC7/l2APZC6ll0mMcrYDAX1TDLijAwpQQ0aq+h
- aexnIlu6QWjRILj3yHcGNVbt40KUaNqBD8CiHuH3Vqjw6ux9FMdDuGZaN/LlS0UbAvfO5w/bp
- 8HrF4MYKdUj1G4iiHUXQ==
+        id S1728507AbhAVPWm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Jan 2021 10:22:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728659AbhAVPVh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Jan 2021 10:21:37 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9560BC061788
+        for <linux-mips@vger.kernel.org>; Fri, 22 Jan 2021 07:20:56 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id d22so7010507edy.1
+        for <linux-mips@vger.kernel.org>; Fri, 22 Jan 2021 07:20:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aOloNP8QP0eRjNYGwI2LuME4o0nuHEoMMVeWM2V/lRc=;
+        b=sbzgT+ujzjH+zt+7L+xw6IGAcMB2kX9DI9x++kTzcsyjl+GM3mBuDar3l4WnCAT9Dh
+         pgHkdgeP5bEntfbsBTm5TaIwq/wvsdYYHMAY34UNH5be4lg0Gciz0RV2sRZ/DQqoDmMC
+         iQJREvUhqSkXVO6aN3Sl9HAZYe92Z10HZo8S+nniNKTK8RZaVYGf/6j1JlarKS5boZLo
+         W+ggNQ+GVjazd/gpWGm3av8Ua36af3Ult+gnlfxjvnnUEa7qAzSqKbOxeXozmNeDZRH6
+         vZWJtzWLgJ4Yh9kgvlID6jHYbPFZE9SFkZc+X9VBppAiuYmHEDuPHhVJvAoKBWmtwcWU
+         3jKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aOloNP8QP0eRjNYGwI2LuME4o0nuHEoMMVeWM2V/lRc=;
+        b=fy0qkH7QYncM1OfwL2/t5Ce+02uXMa761MN43smvfMGDxTAfP7sHhZZOkyKlLYcmq9
+         OIae8ji+O3vGjA9pd7RoLz/qk+jbkTl+24kn+REB0W2FhMgskOIFFIycGCtv+Kkxc5vi
+         sPMcDX4AWgMNnGzFlZhbxPj/vsJQVwymC4MQF+jIPqtlJ1f3ctYYckdOS4JlkpPJkw2V
+         QGd6zhI2HwT7jivTVfDNAfeaunnNGXIbOl33akx98GArJnrrc8F796SpHrNRiSFr06V2
+         MOdutMVQ3yDfiypppNmM6lsjYuILc13lbEqXeK8JHVUvfXpk+cY0vKgQBk7EIki/ZAtR
+         W2PQ==
+X-Gm-Message-State: AOAM530gQUAYYR8TbRw10LI1ff0VPOTBEOUzp2W1I0TkuZBoDxrSU4OA
+        ML/KAsUUdbidTlfWwZqNE0vwiw93Qbzq8k5wx2MtiA==
+X-Google-Smtp-Source: ABdhPJwlRzpjVufr2v/TA6LbcxJQDXB6wj/lxcM/6k8GjjcGI86de739kHP+7V+WQ9LzcUy/SOnHNJoLFtW38dsCrrE=
+X-Received: by 2002:a05:6402:5107:: with SMTP id m7mr27470edd.52.1611328855234;
+ Fri, 22 Jan 2021 07:20:55 -0800 (PST)
+MIME-Version: 1.0
+References: <20210122135735.176469491@linuxfoundation.org>
+In-Reply-To: <20210122135735.176469491@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 22 Jan 2021 20:50:43 +0530
+Message-ID: <CA+G9fYus+rnoxpZqhn35fMz4ZPQvYjkKFKSCsOhFtrHzbu1pZw@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/50] 4.14.217-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org,
+        linux-stable <stable@vger.kernel.org>, pavel@denx.de,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-mips@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 22 Jan 2021 11:17:27 +0000
-Christoph Hellwig <hch@infradead.org> wrote:
+On Fri, 22 Jan 2021 at 19:45, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.217 release.
+> There are 50 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 24 Jan 2021 13:57:23 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.217-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> Sorry for not noticing this earlier, but why do you need the bounce
-> buffer vs just mapping the data buffer?
+MIPS: cavium_octeon_defconfig and nlm_xlp_defconfig builds breaks
+due to this patch on 4.14, 4.9 and 4.4
 
-I think I've answered this once already a few iterations before. DMA
-alignment restrictions, not sure what guarantees the bio buffer has.
+> Al Viro <viro@zeniv.linux.org.uk>
+>     MIPS: Fix malformed NT_FILE and NT_SIGINFO in 32bit coredumps
 
-- Lauri
+Build error:
+arch/mips/kernel/binfmt_elfo32.c:116:
+/arch/mips/kernel/../../../fs/binfmt_elf.c: In function 'fill_siginfo_note':
+/arch/mips/kernel/../../../fs/binfmt_elf.c:1575:23: error: passing
+argument 1 of 'copy_siginfo_to_user' from incompatible pointer type
+[-Werror=incompatible-pointer-types]
+  copy_siginfo_to_user((user_siginfo_t __user *) csigdata, siginfo);
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+MIPS build failed
+    * gcc-10-cavium_octeon_defconfig - FAILED
+    * gcc-10-nlm_xlp_defconfig - FAILED
+    * gcc-8-cavium_octeon_defconfig - FAILED
+    * gcc-8-nlm_xlp_defconfig - FAILED
+    * gcc-9-cavium_octeon_defconfig - FAILED
+    * gcc-9-nlm_xlp_defconfig - FAILED
+
+Build log link,
+https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/980489009#L162
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
