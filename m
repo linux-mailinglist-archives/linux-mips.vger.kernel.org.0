@@ -2,88 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA63300021
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Jan 2021 11:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0917A300128
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Jan 2021 12:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbhAVKNz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Jan 2021 05:13:55 -0500
-Received: from foss.arm.com ([217.140.110.172]:39546 "EHLO foss.arm.com"
+        id S1728030AbhAVLFr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Jan 2021 06:05:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54416 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727851AbhAVKMq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 22 Jan 2021 05:12:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDA58139F;
-        Fri, 22 Jan 2021 02:12:00 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.41.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 179393F719;
-        Fri, 22 Jan 2021 02:11:59 -0800 (PST)
-Date:   Fri, 22 Jan 2021 10:11:57 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
+        id S1728253AbhAVLDw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 22 Jan 2021 06:03:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D93002376F;
+        Fri, 22 Jan 2021 11:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611313391;
+        bh=c1ltoVhdYo2mnapWxvPYgwklFq//YU8QypVWjUHCFgY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uzaO3R2V7hJkNpOhxfKXrMFjoFljCLJRaQ1EeUqzMwcaDHGTDLKz4zNrHlL09wXVt
+         JLuMKJwyLJc6Y4uyD+pvTY4XvnhnySmRzNdlM7OxbYKM6b8vMd/G1Wo2YCqYuxBayB
+         eZN+cL8yBEWq83+2QWcQLqXKXwZo2Dd3tJWsYm7tMxQmhsrOZNKf9XPmPcSmAxpRoM
+         x6Z7w4vjaAbUBWD+rYXzcdCd2s4+JYH7njGLQMgaOSwi/duNpbk+o7WfFiODx/njoJ
+         /uPEiE/XuT9IncHW2i+mMT25U2RWJ1jucN99PdZBDdlGCZBwj7oBOMuNzqWr63MK0j
+         coNsHCkxCrGKA==
+From:   Arnd Bergmann <arnd@kernel.org>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: mm: abort uaccess retries upon fatal signal
-Message-ID: <20210122101157.GB29124@C02TD0UTHF1T.local>
-References: <20210121160416.111298-1-tsbogend@alpha.franken.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] MIPS: jazz: always allow little-endian builds
+Date:   Fri, 22 Jan 2021 12:02:50 +0100
+Message-Id: <20210122110307.934543-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210121160416.111298-1-tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 05:04:16PM +0100, Thomas Bogendoerfer wrote:
-> When there's a fatal signal pending, MIPS's do_page_fault()
-> implementation returns. The intent is that we'll return to the
-> faulting userspace instruction, delivering the signal on the way.
-> 
-> However, if we take a fatal signal during fixing up a uaccess, this
-> results in a return to the faulting kernel instruction, which will be
-> instantly retried, resulting in the same fault being taken forever. As
-> the task never reaches userspace, the signal is not delivered, and the
-> task is left unkillable. While the task is stuck in this state, it can
-> inhibit the forward progress of the system.
-> 
-> To avoid this, we must ensure that when a fatal signal is pending, we
-> apply any necessary fixup for a faulting kernel instruction. Thus we
-> will return to an error path, and it is up to that code to make forward
-> progress towards delivering the fatal signal.
-> 
-> [ Description taken from commit 746a272e4414 ("ARM: 8692/1: mm: abort
->    uaccess retries upon fatal signal") ]
-> 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From: Arnd Bergmann <arnd@arndb.de>
 
-FWIW, this looks right to me, from a scan of the no_context path. I
-don't have any MIPS system to test on, but FWIW:
+The kernel test robot keeps reporting the same bug when it
+shows up in new files after random unrelated patches:
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+In file included from arch/mips/include/uapi/asm/byteorder.h:13,
+                 from arch/mips/include/asm/bitops.h:20,
+                 from include/linux/bitops.h:26,
+                 from include/linux/kernel.h:12,
+                 from include/linux/clk.h:13,
+                 from drivers/base/regmap/regmap-mmio.c:7:
+include/linux/byteorder/big_endian.h:8:2: warning: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Wcpp]
+    8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
+      |  ^~~~~~~
+drivers/base/regmap/regmap-mmio.c: In function 'regmap_mmio_gen_context':
+>> drivers/base/regmap/regmap-mmio.c:274:2: error: duplicate case value
+  274 |  case REGMAP_ENDIAN_NATIVE:
+      |  ^~~~
+drivers/base/regmap/regmap-mmio.c:246:2: note: previously used here
+  246 |  case REGMAP_ENDIAN_NATIVE:
 
-Thanks for spinning this!
+The problem is that some randconfig builds end up on the MIPS jazz
+platform with neither CONFIG_CPU_BIG_ENDIAN nor CONFIG_CPU_LITTLE_ENDIAN
+because no specific machine is selected. As it turns out, all jazz
+machines support little-endian kernels, so this can simply be allowed
+globally.
 
-Mark.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+The configuration used by lkp here showed two other unrelated bugs,
+one of which I'm addressing in another patch. The one I'm not
+addressing is that 32-bit JAZZ with hugepages and 4K pages triggers
+BUILD_BUG_ON(IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT)).
+---
+ arch/mips/Kconfig      | 1 +
+ arch/mips/jazz/Kconfig | 3 ---
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-> ---
->  arch/mips/mm/fault.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
-> index 7c871b14e74a..e7abda9c013f 100644
-> --- a/arch/mips/mm/fault.c
-> +++ b/arch/mips/mm/fault.c
-> @@ -156,8 +156,11 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
->  	 */
->  	fault = handle_mm_fault(vma, address, flags, regs);
->  
-> -	if (fault_signal_pending(fault, regs))
-> +	if (fault_signal_pending(fault, regs)) {
-> +		if (!user_mode(regs))
-> +			goto no_context;
->  		return;
-> +	}
->  
->  	if (unlikely(fault & VM_FAULT_ERROR)) {
->  		if (fault & VM_FAULT_OOM)
-> -- 
-> 2.29.2
-> 
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 2000bb2b0220..e6bd1eee70f2 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -406,6 +406,7 @@ config MACH_JAZZ
+ 	select SYS_SUPPORTS_32BIT_KERNEL
+ 	select SYS_SUPPORTS_64BIT_KERNEL
+ 	select SYS_SUPPORTS_100HZ
++	select SYS_SUPPORTS_LITTLE_ENDIAN
+ 	help
+ 	  This a family of machines based on the MIPS R4030 chipset which was
+ 	  used by several vendors to build RISC/os and Windows NT workstations.
+diff --git a/arch/mips/jazz/Kconfig b/arch/mips/jazz/Kconfig
+index 06838f80a5d7..42932ca98db9 100644
+--- a/arch/mips/jazz/Kconfig
++++ b/arch/mips/jazz/Kconfig
+@@ -3,7 +3,6 @@ config ACER_PICA_61
+ 	bool "Support for Acer PICA 1 chipset"
+ 	depends on MACH_JAZZ
+ 	select DMA_NONCOHERENT
+-	select SYS_SUPPORTS_LITTLE_ENDIAN
+ 	help
+ 	  This is a machine with a R4400 133/150 MHz CPU. To compile a Linux
+ 	  kernel that runs on these, say Y here. For details about Linux on
+@@ -15,7 +14,6 @@ config MIPS_MAGNUM_4000
+ 	depends on MACH_JAZZ
+ 	select DMA_NONCOHERENT
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+-	select SYS_SUPPORTS_LITTLE_ENDIAN
+ 	help
+ 	  This is a machine with a R4000 100 MHz CPU. To compile a Linux
+ 	  kernel that runs on these, say Y here. For details about Linux on
+@@ -26,7 +24,6 @@ config OLIVETTI_M700
+ 	bool "Support for Olivetti M700-10"
+ 	depends on MACH_JAZZ
+ 	select DMA_NONCOHERENT
+-	select SYS_SUPPORTS_LITTLE_ENDIAN
+ 	help
+ 	  This is a machine with a R4000 100 MHz CPU. To compile a Linux
+ 	  kernel that runs on these, say Y here. For details about Linux on
+-- 
+2.29.2
+
