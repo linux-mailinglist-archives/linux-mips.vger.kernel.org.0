@@ -2,115 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C20C3015DC
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Jan 2021 15:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 221813015E1
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Jan 2021 15:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725923AbhAWO2e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 Jan 2021 09:28:34 -0500
-Received: from aposti.net ([89.234.176.197]:33882 "EHLO aposti.net"
+        id S1726037AbhAWOay (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Jan 2021 09:30:54 -0500
+Received: from aposti.net ([89.234.176.197]:34542 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726021AbhAWO2d (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 23 Jan 2021 09:28:33 -0500
+        id S1725899AbhAWOaw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 23 Jan 2021 09:30:52 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Tony Lindgren <tony@atomide.com>, od@zcrc.me,
-        linux-mips@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [RE-RESEND PATCH 4/4] usb: musb: jz4740: Add missing CR to error strings
-Date:   Sat, 23 Jan 2021 14:25:02 +0000
-Message-Id: <20210123142502.16980-4-paul@crapouillou.net>
-In-Reply-To: <20210123142502.16980-1-paul@crapouillou.net>
-References: <20210123142502.16980-1-paul@crapouillou.net>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     od@zcrc.me, linux-mips@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH] remoteproc: ingenic: Add module parameter 'auto_boot'
+Date:   Sat, 23 Jan 2021 14:29:56 +0000
+Message-Id: <20210123142956.17865-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-If you pass a string that is not terminated with a carriage return to
-dev_err(), it will eventually be printed with a carriage return, but
-not right away, since the kernel will wait for a pr_cont().
+Add a 'auto_boot' module parameter that instructs the remoteproc driver
+whether or not it should auto-boot the remote processor, which will
+default to "false", since the VPU in Ingenic SoCs does not really have
+any predetermined function.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/usb/musb/jz4740.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/remoteproc/ingenic_rproc.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-index c4fe1f4cd17a..5b7d576bf6ee 100644
---- a/drivers/usb/musb/jz4740.c
-+++ b/drivers/usb/musb/jz4740.c
-@@ -116,13 +116,13 @@ static int jz4740_musb_init(struct musb *musb)
- 	if (IS_ERR(musb->xceiv)) {
- 		err = PTR_ERR(musb->xceiv);
- 		if (err != -EPROBE_DEFER)
--			dev_err(dev, "No transceiver configured: %d", err);
-+			dev_err(dev, "No transceiver configured: %d\n", err);
- 		return err;
- 	}
+diff --git a/drivers/remoteproc/ingenic_rproc.c b/drivers/remoteproc/ingenic_rproc.c
+index 26e19e6143b7..e2618c36eaab 100644
+--- a/drivers/remoteproc/ingenic_rproc.c
++++ b/drivers/remoteproc/ingenic_rproc.c
+@@ -27,6 +27,11 @@
+ #define AUX_CTRL_NMI		BIT(1)
+ #define AUX_CTRL_SW_RESET	BIT(0)
  
- 	glue->role_sw = usb_role_switch_register(dev, &role_sw_desc);
- 	if (IS_ERR(glue->role_sw)) {
--		dev_err(dev, "Failed to register USB role switch");
-+		dev_err(dev, "Failed to register USB role switch\n");
- 		return PTR_ERR(glue->role_sw);
- 	}
- 
-@@ -205,26 +205,26 @@ static int jz4740_probe(struct platform_device *pdev)
- 
- 	pdata = of_device_get_match_data(dev);
- 	if (!pdata) {
--		dev_err(dev, "missing platform data");
-+		dev_err(dev, "missing platform data\n");
- 		return -EINVAL;
- 	}
- 
- 	musb = platform_device_alloc("musb-hdrc", PLATFORM_DEVID_AUTO);
- 	if (!musb) {
--		dev_err(dev, "failed to allocate musb device");
-+		dev_err(dev, "failed to allocate musb device\n");
++static bool auto_boot;
++module_param(auto_boot, bool, 0400);
++MODULE_PARM_DESC(auto_boot,
++		 "Auto-boot the remote processor [default=false]");
++
+ struct vpu_mem_map {
+ 	const char *name;
+ 	unsigned int da;
+@@ -172,6 +177,8 @@ static int ingenic_rproc_probe(struct platform_device *pdev)
+ 	if (!rproc)
  		return -ENOMEM;
- 	}
  
- 	clk = devm_clk_get(dev, "udc");
- 	if (IS_ERR(clk)) {
--		dev_err(dev, "failed to get clock");
-+		dev_err(dev, "failed to get clock\n");
- 		ret = PTR_ERR(clk);
- 		goto err_platform_device_put;
- 	}
- 
- 	ret = clk_prepare_enable(clk);
- 	if (ret) {
--		dev_err(dev, "failed to enable clock");
-+		dev_err(dev, "failed to enable clock\n");
- 		goto err_platform_device_put;
- 	}
- 
-@@ -240,19 +240,19 @@ static int jz4740_probe(struct platform_device *pdev)
- 	ret = platform_device_add_resources(musb, pdev->resource,
- 					    pdev->num_resources);
- 	if (ret) {
--		dev_err(dev, "failed to add resources");
-+		dev_err(dev, "failed to add resources\n");
- 		goto err_clk_disable;
- 	}
- 
- 	ret = platform_device_add_data(musb, pdata, sizeof(*pdata));
- 	if (ret) {
--		dev_err(dev, "failed to add platform_data");
-+		dev_err(dev, "failed to add platform_data\n");
- 		goto err_clk_disable;
- 	}
- 
- 	ret = platform_device_add(musb);
- 	if (ret) {
--		dev_err(dev, "failed to register musb device");
-+		dev_err(dev, "failed to register musb device\n");
- 		goto err_clk_disable;
- 	}
- 
++	rproc->auto_boot = auto_boot;
++
+ 	vpu = rproc->priv;
+ 	vpu->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, vpu);
 -- 
 2.29.2
 
