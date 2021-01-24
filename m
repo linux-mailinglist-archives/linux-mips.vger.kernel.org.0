@@ -2,100 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF133016F2
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Jan 2021 17:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1377D301A52
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Jan 2021 08:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbhAWQmq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 Jan 2021 11:42:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725765AbhAWQme (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Jan 2021 11:42:34 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874A4C0613D6;
-        Sat, 23 Jan 2021 08:41:53 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id q12so11855928lfo.12;
-        Sat, 23 Jan 2021 08:41:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=s12qlChk6RemkoIoox1VilM8wjYso4uESt9Y0Hae84M=;
-        b=LGowOONvNPPLaHeSH1bgMM8A2VGqvkBNpkz7QLzz4RW9iK/7IWVlAZbmzpDVfvlHsN
-         9jgB/yInku+DSa9vyzLPXNUJi2zLhR6c/Jujqx5c0Ekqbc7FezSxjQFUvnPf5l73+OnS
-         ZJZ3t1VI4MZYKBL5SwIQ2A7wfZ+kp+mWnp1cHHJkXceelSZ5g8FzZiyi4HXsQtaEZSQ+
-         T2qH6d+hVaFg2FF+NN6zF3JNYNXnKd8//NEjvqlr8ck8DLqYglznZij2V8/S5X2qjn24
-         6+BFo3eXW2KfOVTSWdUDp4GKFpt4WAgI3zV2VC/mfpT1Ni/Wq3v6OS5+JcBGi4QiiyBC
-         CTfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=s12qlChk6RemkoIoox1VilM8wjYso4uESt9Y0Hae84M=;
-        b=N6U2LLFN11BPtGdwHT4ggPlM0BwG22aIRAOtF9nyo7Q3CTNaOZ6s7Wsgaynww1Q/V4
-         bK9sEa++04TQ3EXjZ48FkwSCEVqIbP8Y8kXmGHNeP7Z+VcSqfiarEXyNiOfOeInRZbyN
-         gxHUziOcjyGj89AbL15MkF20u5FSUQNu2q7dEP7VI3SlbzIP/vZTN6ijUBcNTqmz5wAf
-         tgSgLuchsxShQPAS6JC3eL0FTFgBvahjMwOGRJCkweSqztXcq9v2BTfp57f6jWFTWHi/
-         d+1mNR2GNM6fjdHoUDpH/G7cR+uE3kMdxyz6gK0GKwYqwYCtZWAniCxtlDtDEoI4izYg
-         OI4w==
-X-Gm-Message-State: AOAM530Z6sUEb0iTJnYXfJa66O//Hza8UUxCIaXRbZ4e1tbQlee2TUZf
-        rFYxDgxxQxWIX8Inln6WPmnCEvr2QqM=
-X-Google-Smtp-Source: ABdhPJxmFwN9UXnJ/wbEfL8snhwiiwm9PtxZeqECpgG1hIXbnm+C6JVgm0K7OOID/Y5pAqiC0TolEQ==
-X-Received: by 2002:ac2:43c5:: with SMTP id u5mr66347lfl.656.1611420110190;
-        Sat, 23 Jan 2021 08:41:50 -0800 (PST)
-Received: from [192.168.1.101] ([178.176.79.63])
-        by smtp.gmail.com with ESMTPSA id o12sm1130242lfl.249.2021.01.23.08.41.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jan 2021 08:41:49 -0800 (PST)
-Subject: Re: [RE-RESEND PATCH 1/4] usb: musb: Fix runtime PM race in
- musb_queue_resume_work
-To:     Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Tony Lindgren <tony@atomide.com>, od@zcrc.me,
-        linux-mips@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20210123142502.16980-1-paul@crapouillou.net>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <72e48343-f87e-5fed-809c-41995197019e@gmail.com>
-Date:   Sat, 23 Jan 2021 19:41:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1726435AbhAXHi7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 24 Jan 2021 02:38:59 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:56270 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726038AbhAXHi7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 24 Jan 2021 02:38:59 -0500
+Received: from localhost.localdomain (unknown [112.3.197.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxRb3CIw1gZ8cKAA--.13975S2;
+        Sun, 24 Jan 2021 15:37:40 +0800 (CST)
+From:   Yanteng Si <siyanteng@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@gmail.com>, siyanteng01@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org, Yanteng Si <siyanteng@loongson.cn>
+Subject: [PATCH v2] MIPS: mm: remove function __uncached_access()
+Date:   Sun, 24 Jan 2021 15:37:55 +0800
+Message-Id: <20210124073755.1287129-1-siyanteng@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <20210123142502.16980-1-paul@crapouillou.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxRb3CIw1gZ8cKAA--.13975S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFW5tF4rKFyDJF47tF1UWrg_yoW8Zw4Dpa
+        93Aa48GFW09w17Xw47A34UZan3Z3s8t3y2vFW7C34093ZIv3W7ur1fJFy5ur4Yvry3ua1x
+        Zr4rJryUZF4rAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 1/23/21 5:24 PM, Paul Cercueil wrote:
+MIPS uses this logic because loongson2e override the
+definition of unchached. However, now the logic of
+loongson2e has been removed, so MIPS is no longer needed.
 
-> musb_queue_resume_work() would call the provided callback if the runtime
-> PM status was 'active'. Otherwise, it would enqueue the request if the
-> hardware was still suspended (musb->is_runtime_suspended is true).
-> 
-> This causes a race with the runtime PM handlers, as it is possible to be
-> in the case where the runtime PM status is not yet 'active', but the
-> hardware has been awaken (PM resume function has been called).
+Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+---
+ arch/mips/loongson2ef/common/mem.c | 11 -----------
+ arch/mips/mm/cache.c               |  8 --------
+ drivers/char/mem.c                 |  7 -------
+ 3 files changed, 26 deletions(-)
 
-   Awakened. :-)
+diff --git a/arch/mips/loongson2ef/common/mem.c b/arch/mips/loongson2ef/common/mem.c
+index 057d58bb470e..fceb3ee47eb0 100644
+--- a/arch/mips/loongson2ef/common/mem.c
++++ b/arch/mips/loongson2ef/common/mem.c
+@@ -41,14 +41,3 @@ void __init prom_init_memory(void)
+ 		memblock_add(LOONGSON_HIGHMEM_START, highmemsize << 20);
+ #endif /* !CONFIG_64BIT */
+ }
+-
+-/* override of arch/mips/mm/cache.c: __uncached_access */
+-int __uncached_access(struct file *file, unsigned long addr)
+-{
+-	if (file->f_flags & O_DSYNC)
+-		return 1;
+-
+-	return addr >= __pa(high_memory) ||
+-		((addr >= LOONGSON_MMIO_MEM_START) &&
+-		 (addr < LOONGSON_MMIO_MEM_END));
+-}
+diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
+index 23b16bfd97b2..9cfd432d99f6 100644
+--- a/arch/mips/mm/cache.c
++++ b/arch/mips/mm/cache.c
+@@ -207,11 +207,3 @@ void cpu_cache_init(void)
+ 
+ 	setup_protection_map();
+ }
+-
+-int __weak __uncached_access(struct file *file, unsigned long addr)
+-{
+-	if (file->f_flags & O_DSYNC)
+-		return 1;
+-
+-	return addr >= __pa(high_memory);
+-}
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index 43c871dc7477..869b9f5e8e03 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -291,13 +291,6 @@ static int uncached_access(struct file *file, phys_addr_t addr)
+ 	 * attribute aliases.
+ 	 */
+ 	return !(efi_mem_attributes(addr) & EFI_MEMORY_WB);
+-#elif defined(CONFIG_MIPS)
+-	{
+-		extern int __uncached_access(struct file *file,
+-					     unsigned long addr);
+-
+-		return __uncached_access(file, addr);
+-	}
+ #else
+ 	/*
+ 	 * Accessing memory above the top the kernel knows about or through a
+-- 
+2.27.0
 
-> When hitting the race, the resume work was not enqueued, which probably
-> triggered other bugs further down the stack. For instance, a telnet
-> connection on Ingenic SoCs would result in a 50/50 chance of a
-> segmentation fault somewhere in the musb code.
-> 
-> Rework the code so that either we call the callback directly if
-> (musb->is_runtime_suspended == 0), or enqueue the query otherwise.
-> 
-> Fixes: ea2f35c01d5e ("usb: musb: Fix sleeping function called from invalid context for hdrc glue")
-> Cc: stable@vger.kernel.org # v4.9+
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> Tested-by: Tony Lindgren <tony@atomide.com>
-[...]
-
-
-MBR, Sergei
