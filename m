@@ -2,116 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1377D301A52
-	for <lists+linux-mips@lfdr.de>; Sun, 24 Jan 2021 08:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB8B301A5D
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Jan 2021 08:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726435AbhAXHi7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 24 Jan 2021 02:38:59 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:56270 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726038AbhAXHi7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 24 Jan 2021 02:38:59 -0500
-Received: from localhost.localdomain (unknown [112.3.197.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxRb3CIw1gZ8cKAA--.13975S2;
-        Sun, 24 Jan 2021 15:37:40 +0800 (CST)
-From:   Yanteng Si <siyanteng@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@gmail.com>, siyanteng01@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org, Yanteng Si <siyanteng@loongson.cn>
-Subject: [PATCH v2] MIPS: mm: remove function __uncached_access()
-Date:   Sun, 24 Jan 2021 15:37:55 +0800
-Message-Id: <20210124073755.1287129-1-siyanteng@loongson.cn>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxRb3CIw1gZ8cKAA--.13975S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFW5tF4rKFyDJF47tF1UWrg_yoW8Zw4Dpa
-        93Aa48GFW09w17Xw47A34UZan3Z3s8t3y2vFW7C34093ZIv3W7ur1fJFy5ur4Yvry3ua1x
-        Zr4rJryUZF4rAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+        id S1726586AbhAXHpF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 24 Jan 2021 02:45:05 -0500
+Received: from mout.gmx.net ([212.227.15.19]:46765 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726038AbhAXHpC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 24 Jan 2021 02:45:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1611474175;
+        bh=AmAdNnEJzKULs53RYDxUUiXy+9NQ7DRvCygB7DPf9iw=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=Bc9D7Mx40MxEc5ETtPKcwl/VT2Je4d2jCpWj49x26Q3Bw+m/cccm3G4aU4/DAEO9t
+         kik/OqkslITIayAUgrdZsQhhb13O5tMnxo6ldVubaGvpUsWX8qjTcyoka6BgaDjY9d
+         swOAb5bv6zxiT8bxsCWDiNxWoEGTWS9jGEiPLToQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Valinor ([82.203.167.181]) by mail.gmx.net (mrgmx004
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MTzay-1lUZ4v1Gbq-00R2s9; Sun, 24
+ Jan 2021 08:42:55 +0100
+Date:   Sun, 24 Jan 2021 09:44:37 +0200
+From:   Lauri Kasanen <cand@gmx.com>
+To:     Lauri Kasanen <cand@gmx.com>
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        Takashi Iwai <tiwai@suse.de>, perex@perex.cz
+Subject: Re: [PATCH 2/3 v7] sound: Add n64 driver
+Message-Id: <20210124094437.529881d014970d7f3909d76f@gmx.com>
+In-Reply-To: <20210115133500.c5affc0131313e1165acb2a1@gmx.com>
+References: <20210115133500.c5affc0131313e1165acb2a1@gmx.com>
+X-Mailer: Sylpheed 3.5.0 (GTK+ 2.18.6; x86_64-unknown-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:f61DG/HxwsJsH91Eh492Z8e2yLM/JWFbPe0AIGnGQyvkSa5aXlr
+ 18YicU+DYrCV9aNNF1seweI2mSn26bzWJsYZ8k/W/YWQqN8l5vNG6VFCkkH9nNRDCgPKBau
+ eTQBnqLUj/IklRMIrb56ge5o6AzSD1nnNyB4aisIq8K3l+m2YBsqmWp/CVPoeRyBi+F6KgE
+ c2u/Jop5jPA23HWLJqxGw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qkpbs2eeqEM=:lXTo6qLelu+2zf6KX3ie7Z
+ P/oBZ4+5m3322g9QdqfufcYQAmRVThuYHrtY2/zQO9qZEVGV6qd0k4buokPs8vvqB+kQUJNIn
+ 12y7B7GOQmYOj9Py+nLnRMZcX+MBt+HV3JfsdKYOpeIclJZ0WKa8YwBpxFLBDcDl5JlHaSg3c
+ 5LvlRQhuYvXbn/DLvNMQ5/sMixS+9aPESqSWqOIOdl+5C8ntKFhok0eS3/u5lGzcAHpO2OeDg
+ qcKoZw9ZPaDrxfVB0MnEqDK5riy/TzMeI9qxmAEEAZqMxyKCdoSdYzoR46wqeZ5jsgbBYPyMn
+ lTno1hYAKFkVPHuvSgyplTFlkE+RTUFqHNsQegUHCXoO3Qti+Kp8futeHPd2COYDlKwONXDKW
+ yOAi8Z/YajpNlC8Ui3PVb39Ty9SjLkcV/5GNiOE1tyb3unjvSaEs/Hq5cRf775asWoXBxEH1e
+ Wc4sHJuKsFkp/74iXobdKtFfl8o8DDam4KHELN4MB9JHrIVqR+Ioafuwvap4XZMv/X5a7ogaX
+ ZpU+qqVUltcf/ZGouR+90akxUNLgwkfG6ANfQpIq9cY/jRJnbehaPJ4qANvC2b4UDGBSjxc4R
+ pJ+9d0/GSBNfQBtzaLYwaAPtoFEiC/qS38gMFemOhjNLFom3JNp06XHnh5gvfOsDQjOX2DEoP
+ fboi+8FL9XscuFbtEfNdU/VDyhfqAUeI0icAkacahrjtNaY6VOwATGlGiswgcicrgMs7tGon1
+ lAJGsNK+TyEWPLG6O70p16a1r4ufN+ozYMARSKOnvHqtIE3T3gR2yAIhEN6LHEzvRvdJ3SWCF
+ RbkgYeNVF6zlHWEyAhY0paVOvUqsNWT/sNgX9XDu4XjSfhQ74yRpF0JSnqslgyzIC8ohaIFJS
+ SiyEG2BPFpKr5Q39rJOQ==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MIPS uses this logic because loongson2e override the
-definition of unchached. However, now the logic of
-loongson2e has been removed, so MIPS is no longer needed.
+On Fri, 15 Jan 2021 13:35:00 +0200
+Lauri Kasanen <cand@gmx.com> wrote:
 
-Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
----
- arch/mips/loongson2ef/common/mem.c | 11 -----------
- arch/mips/mm/cache.c               |  8 --------
- drivers/char/mem.c                 |  7 -------
- 3 files changed, 26 deletions(-)
+> This adds support for the Nintendo 64 console's sound.
+>
+> Signed-off-by: Lauri Kasanen <cand@gmx.com>
+> ---
+>
+> v7:
+> use devm_*
 
-diff --git a/arch/mips/loongson2ef/common/mem.c b/arch/mips/loongson2ef/common/mem.c
-index 057d58bb470e..fceb3ee47eb0 100644
---- a/arch/mips/loongson2ef/common/mem.c
-+++ b/arch/mips/loongson2ef/common/mem.c
-@@ -41,14 +41,3 @@ void __init prom_init_memory(void)
- 		memblock_add(LOONGSON_HIGHMEM_START, highmemsize << 20);
- #endif /* !CONFIG_64BIT */
- }
--
--/* override of arch/mips/mm/cache.c: __uncached_access */
--int __uncached_access(struct file *file, unsigned long addr)
--{
--	if (file->f_flags & O_DSYNC)
--		return 1;
--
--	return addr >= __pa(high_memory) ||
--		((addr >= LOONGSON_MMIO_MEM_START) &&
--		 (addr < LOONGSON_MMIO_MEM_END));
--}
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index 23b16bfd97b2..9cfd432d99f6 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -207,11 +207,3 @@ void cpu_cache_init(void)
- 
- 	setup_protection_map();
- }
--
--int __weak __uncached_access(struct file *file, unsigned long addr)
--{
--	if (file->f_flags & O_DSYNC)
--		return 1;
--
--	return addr >= __pa(high_memory);
--}
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index 43c871dc7477..869b9f5e8e03 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -291,13 +291,6 @@ static int uncached_access(struct file *file, phys_addr_t addr)
- 	 * attribute aliases.
- 	 */
- 	return !(efi_mem_attributes(addr) & EFI_MEMORY_WB);
--#elif defined(CONFIG_MIPS)
--	{
--		extern int __uncached_access(struct file *file,
--					     unsigned long addr);
--
--		return __uncached_access(file, addr);
--	}
- #else
- 	/*
- 	 * Accessing memory above the top the kernel knows about or through a
--- 
-2.27.0
+Hi Thomas,
 
+Since v6 had Takashi's ack, and you asked for the devm change, does
+this mean v7 is waiting for your review?
+
+- Lauri
