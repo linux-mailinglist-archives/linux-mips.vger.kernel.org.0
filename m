@@ -2,88 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB10F303033
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Jan 2021 00:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB49030303C
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Jan 2021 00:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732727AbhAYXbB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 Jan 2021 18:31:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36722 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732031AbhAYXav (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 25 Jan 2021 18:30:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 68683229EF;
-        Mon, 25 Jan 2021 23:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611617410;
-        bh=VZKmqca2RnpnjckPt116sGS2q2z0bBHhRkk3KOgxZPs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SKVVtj91CRuJCllR7HOOG3YAbqkFV5cQwKBRoVH/3mZnUfeZrO+k/NlW6CdJ6YPWZ
-         rjZBt4enHo30rGbpWyhbPFNurzmf0CLCBg1W3pGgceYUVLslR6hXP0Mkj/qBp9O7aH
-         ko/H2iG8cm0bUtJEh77q1eKAXKgwsxCnUpTzuHPl9XWxrkaB2IwfELpvggebmkD4ar
-         pEQTTYzTBdCLmDWMF+f702X2/ycqUsaJLKQpQ8j8yrcu2fFCjMrUjjUbLeT0jbbODr
-         RbZ0JFZvAxRpj+K4D8huxsQKPajvYBUm4jjtvSeOw8+W80vuAtT5Xg1h7JbU/RFVK4
-         mCYxSrrL5XQsg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 55C9361E45;
-        Mon, 25 Jan 2021 23:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S1732921AbhAYXeC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 Jan 2021 18:34:02 -0500
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:57920 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732907AbhAYXdv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Jan 2021 18:33:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1611617631; x=1643153631;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mPASIDLmjS6/gWOki7jCwozF9YRKuRlJbPJgrKGbESI=;
+  b=DMDQiooA0vQmxfl04dLsXcsvIdmbDRckrFwWTjrpqv8JiOkdfxG0NtFA
+   C/76JRaeCnsVRPRro+ParNDB1QKXiWoySHVV91cgxlBd++qUiOpbSeXTX
+   8N4WpR3LYjEMwJDKGCx23u4pSwVBK2V1Rm7TkKTm1NBKBbfG3YT0Y+GW5
+   FBCEpLPQp7PBIKsrl1+L4W72VYz4FCoUzLEPtAomLKLSlJKR9pCpes5ky
+   fVVwNouINxk6RP3u11sC7LebNxvS2M4dkeEwf2NkvxxxkG72LT+uTEJTT
+   LM5Bs+pGqx1K34uiBmB+PBLqXPThgWG6u1ZpbC80qyneyCe5XiepraxBC
+   A==;
+IronPort-SDR: gERTxdvqBtQItYn3w2gpBJu6ercePY/UKxYI4nl/bQZEu2jIcbi43wmsHe0alv1d/wokF7Tkd8
+ WMcu5PD6t6vkuaf+IStnGP0tR2rVbxPCcuBU0PO2Z3wygbLmIL/p34w/shYuejQlRi4LCbGiDy
+ pVwqXhpc7grzTveOuXO4lmfN/iFook6yrzccZJSBz84OEg6al9umLudf9glElRny2zxmf3lDWX
+ JdeqMBRZ5GRUIC9Yo/MUqRZgAoyEFcyx4FKe3r6Wkd49y6nvdzvYz+Ue5414jGjuJ89wpEi/BS
+ CpE=
+X-IronPort-AV: E=Sophos;i="5.79,374,1602518400"; 
+   d="scan'208";a="268657365"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 26 Jan 2021 07:32:45 +0800
+IronPort-SDR: aXqmzUPScCimblTTfdnShwrtEJgDKkcUsaUdaOk2UmRjEgJv9OtA1BReUZrq4lnMW6k2Hctv72
+ WrGHre5S5QGUj1Zf7OsYNuNie3/B/oPA7jOTYlk5WDlxLYhFBKWPe7coJ14OVMsKWoMxSsAQk1
+ PZevWakdE351E2VnhwpKxA2rwdK6ulOOM94Skgme7bCyZZKZRKcyNeQHp53FXV/8GuOBsq2/Wz
+ 4rvrlXbL3mtxYVLzyGphlSJiuu29gAdzy0ZFJttUWOVBkfzQebeFzeB4moORmpb8re/SOxPaM2
+ N+R2ILzCJC0SXZDb9yKrXT4/
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 15:17:12 -0800
+IronPort-SDR: VAvgenprhQ+K8hfHLxdAbHdvto9J5RhQcw9vdgL+sUmhPhXEPfPKLCY4374QkI+nrZI/C4+XfU
+ SXZhOa699epkurpHpSvHQwDbF2Qcv1KJem4fj+8c5pzI0m/1RSAaKmBDpoJVo1niJ9RpH2qksS
+ TOGBG4B2TBwv4c6QrFdHgOgjks932AzZQoA8IkmvigsZmziS102Ejr69HUREE7Prp4Gv19nXj3
+ 9eQ9+srT3+Ueb3BK6nN0yxW9+lE10WqgxiLrYUdTX2HxU4ixeTdjfOB5WMJKuUEmmtEgJraEvi
+ yyg=
+WDCIronportException: Internal
+Received: from vm.labspan.wdc.com (HELO vm.sc.wdc.com) ([10.6.137.102])
+  by uls-op-cesaip02.wdc.com with ESMTP; 25 Jan 2021 15:32:45 -0800
+From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, axboe@kernel.dk,
+        linux-block@vger.kernel.org, cand@gmx.com,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Subject: [PATCH 0/9] n64: small cleanups
+Date:   Mon, 25 Jan 2021 15:32:34 -0800
+Message-Id: <20210125233243.5982-1-chaitanya.kulkarni@wdc.com>
+X-Mailer: git-send-email 2.22.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] samples/bpf: Set flag __SANE_USERSPACE_TYPES__
- for MIPS to fix build warnings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161161741034.15463.7501053480243714931.git-patchwork-notify@kernel.org>
-Date:   Mon, 25 Jan 2021 23:30:10 +0000
-References: <1611551146-14052-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1611551146-14052-1-git-send-email-yangtiezhu@loongson.cn>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lixuefeng@loongson.cn
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello:
+Hi Lauri,
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+This cleanup series is based on the top of v11 that adds kernel coding
+style fixes in the various places without changing the functionality.
 
-On Mon, 25 Jan 2021 13:05:46 +0800 you wrote:
-> There exists many build warnings when make M=samples/bpf on the Loongson
-> platform, this issue is MIPS related, x86 compiles just fine.
-> 
-> Here are some warnings:
-> 
->   CC  samples/bpf/ibumad_user.o
-> samples/bpf/ibumad_user.c: In function ‘dump_counts’:
-> samples/bpf/ibumad_user.c:46:24: warning: format ‘%llu’ expects argument of type ‘long long unsigned int’, but argument 3 has type ‘__u64’ {aka ‘long unsigned int’} [-Wformat=]
->     printf("0x%02x : %llu\n", key, value);
->                      ~~~^          ~~~~~
->                      %lu
->   CC  samples/bpf/offwaketime_user.o
-> samples/bpf/offwaketime_user.c: In function ‘print_ksym’:
-> samples/bpf/offwaketime_user.c:34:17: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 3 has type ‘__u64’ {aka ‘long unsigned int’} [-Wformat=]
->    printf("%s/%llx;", sym->name, addr);
->               ~~~^               ~~~~
->               %lx
-> samples/bpf/offwaketime_user.c: In function ‘print_stack’:
-> samples/bpf/offwaketime_user.c:68:17: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 3 has type ‘__u64’ {aka ‘long unsigned int’} [-Wformat=]
->   printf(";%s %lld\n", key->waker, count);
->               ~~~^                 ~~~~~
->               %ld
-> 
-> [...]
+Instead of sending a one big patch I've made small patches which are
+easier to review, integrate, blame and revert in case of any error.
 
-Here is the summary with links:
-  - [bpf-next,v2] samples/bpf: Set flag __SANE_USERSPACE_TYPES__ for MIPS to fix build warnings
-    https://git.kernel.org/bpf/bpf-next/c/190d1c921ad0
+I've got the reviewed-by tag from the driver owner offline which
+is added to the series.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+-ck
 
+Chaitanya Kulkarni (9):
+  n64: use pr_fmt to avoid duplicate string
+  n64: move module info at the end
+  n64: move module param at the top
+  n64: use enums for reg
+  n64: use sector SECTOR_SHIFT instead 512
+  n64: remove curly brackets
+  n64: cosmetics changes
+  n64: cleanup n64cart_probe()
+  n64: store dev instance into disk private data
+
+ drivers/block/n64cart.c | 87 ++++++++++++++++++-----------------------
+ 1 file changed, 38 insertions(+), 49 deletions(-)
+
+-- 
+2.22.1
 
