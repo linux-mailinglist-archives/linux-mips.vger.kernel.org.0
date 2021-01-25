@@ -2,377 +2,200 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6417B302A65
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Jan 2021 19:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BB1302B02
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Jan 2021 20:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727306AbhAYSgQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 Jan 2021 13:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727219AbhAYSf5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Jan 2021 13:35:57 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8954FC061756
-        for <linux-mips@vger.kernel.org>; Mon, 25 Jan 2021 10:35:16 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id kx7so127923pjb.2
-        for <linux-mips@vger.kernel.org>; Mon, 25 Jan 2021 10:35:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5li4BVEipLZX5zx8rH4Z99dY7w+ascZy4Y8R2o+aUH8=;
-        b=ntnqgqJh8GrmgSLeIUVSOeq5ocf777yPSTQ/ma0WIPO30h+DKcbkCeMBXaDyu+II4o
-         UMpCUfTJekTMY3vCJYPmquE6msvyiqLQUxnv+Qa3r6AZbHT7+VpLvX6r5Q+OjazjvunH
-         NLPdZTZMV6N7ne6Bxo+VqIYyDyy37rGuL2RgVYOhrRNmdtspPcsGocvHDflOGXXNcL3S
-         m0VpqdXFHPlf1Rbm1QxZIvYNZoPDXUlGf3MUk88oOAMT/kUr0DXhL6pFdWc9nb/CDbjA
-         eukcfxn0wDeFNZPSqccJmj4nhOmZ8T+LYGGk8Gq334rQrt7MJTlhmWa0vzSCOkusKDUq
-         5qfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5li4BVEipLZX5zx8rH4Z99dY7w+ascZy4Y8R2o+aUH8=;
-        b=CIrJcHqy25yGANiHCgZsJeJ2EIomfQKveG+qrXTGsNqfG9J7IS1fff4N6VAl9nwfZB
-         NhCl4ewIIodZOcO10FDvXD2PiJ5b9JEOAVM46IvrnyB/K4NlMt/2ostasuQ2nMR1X3nf
-         3eG7sNCviakx2T4AiSrRpbHl0XH5wkCYUyIeb412ztAapHIrISxS7ovX8CdUOu3LyYp4
-         0WRf8vIgKrWK37PbOoHKa3sphaFxCHYvByxxalNiIJ5cdq/3iypKdjYPE8mzwG9efkmD
-         i7jkeQ/zqmGgUmN3zoFqcmTgn5/MddgjVmAqwfcGXOhrRIVqXo+rgyBXdkuEkMs2Ucpm
-         +1og==
-X-Gm-Message-State: AOAM532fkkDOt5MH4w5VSxMxUj28Tf9H1IU3UWqiEms4XhJu1sYnRgLf
-        hPjUifidyQdbBI9ueY/2RRF7Yw==
-X-Google-Smtp-Source: ABdhPJxgVscQHSmbku17rqN6Nk67IT0OKp5oZGNz41Gx1gtHDQegyJuNc0/nvJi9Q+6qG60UzNty/w==
-X-Received: by 2002:a17:90a:d305:: with SMTP id p5mr1634140pju.33.1611599715885;
-        Mon, 25 Jan 2021 10:35:15 -0800 (PST)
-Received: from google.com ([2620:15c:f:10:1ea0:b8ff:fe73:50f5])
-        by smtp.gmail.com with ESMTPSA id n128sm18157528pga.55.2021.01.25.10.35.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 10:35:15 -0800 (PST)
-Date:   Mon, 25 Jan 2021 10:35:08 -0800
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
-        kvm-ppc@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH] KVM: x86/mmu: consider the hva in mmu_notifer retry
-Message-ID: <YA8PXCEVukW0UzC5@google.com>
-References: <20210125064234.2078146-1-stevensd@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210125064234.2078146-1-stevensd@google.com>
+        id S1731432AbhAYTBP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 Jan 2021 14:01:15 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:18043 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731076AbhAYTAP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Jan 2021 14:00:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1611601030;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+        From:Subject:Sender;
+        bh=ApNZTMIInEBgGEPOK7UkgKyGz/LWwCn7DJKKj6UZaSw=;
+        b=FgjhUANTKMfXY3t7soi9xO6/oVj8VfUO/s3u7vN4F0GHkQLzIDWz2hOb5IO9oMHrsN
+        jl3txrl3n/E6mpWFjRc3tOQ+fWsq4LQAkeFJyFqsl96hvKss9aB7RDRObJNJo/zZw1YZ
+        aBwXaC/YvifZVRdWHxrCH2gcSz0GYd8bQy9DIGty6kO+b4AvpqPq1/ib35rSYphfF6c4
+        EPpEJDED2uFY7rAZkj9bdobWeWMkDY7wwS9O7R/Fzn9HDk7apCxwMpdM3FEFcdtXWlL0
+        DjfqDNjbPVZt2+WUCn7jEO/zxgTJHUNBF8Ud8R/IU7AZfTVWscZFEQquXO4ht6zCm3vi
+        TX5g==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlaVXA4LwHo="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 47.15.1 DYNA|AUTH)
+        with ESMTPSA id Y03f19x0PIul1CV
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Mon, 25 Jan 2021 19:56:47 +0100 (CET)
+Subject: Re: [PATCH v3 4/4] drm/ingenic: Fix non-OSD mode
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Content-Type: text/plain; charset=iso-8859-1
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <2F0C9F5C-7849-458B-B18E-433BA7CFBD92@goldelico.com>
+Date:   Mon, 25 Jan 2021 19:56:46 +0100
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        od@zcrc.me, ML dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>, stable@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F2A3A43E-C9F6-4A64-A167-AD4A20B30BD3@goldelico.com>
+References: <20210124085552.29146-1-paul@crapouillou.net> <20210124085552.29146-5-paul@crapouillou.net> <30F302B6-04A1-472B-B026-009F7665E39C@goldelico.com> <VZMFNQ.C1KORF6E5NCJ1@crapouillou.net> <2F0C9F5C-7849-458B-B18E-433BA7CFBD92@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3124)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+Cc the other architectures, I'm guessing this would be a helpful optimization
-for all archs.
+Hi Paul,
 
-Quite a few comments, but they're all little more than nits.  Nice!
+> Am 24.01.2021 um 10:47 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
+> Hi Paul,
+>=20
+>> Am 24.01.2021 um 10:43 schrieb Paul Cercueil <paul@crapouillou.net>:
+>>=20
+>> Hi Nikolaus,
+>>=20
+>> Le dim. 24 janv. 2021 =E0 10:30, H. Nikolaus Schaller =
+<hns@goldelico.com> a =E9crit :
+>>> Hi Paul,
+>>> we observed the same issue on the jz4730 (which is almost identical
+>>> to the jz4740 wrt. LCDC) and our solution [1] was simpler.
+>>> It leaves the hwdesc f0 and f1 as they are and just takes f1 for =
+really
+>>> programming the first DMA descriptor if there is no OSD.
+>>=20
+>> Disagreed. With your solution, it ends up using priv->f1 plane with =
+hwdesc_f0. That's very confusing.
+>=20
+> It is a tradeoff between code simplicity and confusion. Indeed =
+difficult to decide. Fortunately I don't have to :)
+>=20
+>>=20
+>>> We have tested on jz4730 and jz4780.
+>>=20
+>> Could I get a tested-by then? :)
+>=20
+> I'll test with our tree and test both SoC in the next days and give =
+feedback.
 
-On Mon, Jan 25, 2021, David Stevens wrote:
-> From: David Stevens <stevensd@chromium.org>
-> 
-> Use the range passed to mmu_notifer's invalidate_range_start to prevent
+Ok, works on both devices:
 
-s/mmu_notifer/mmu_notifier.  
+a) Skytone Alpha 400 compatible Letux 400 with not-yet-upstream jz4730 =
+and internal panel
+b) CI20 with external HDMI (tablet) and our not-yet-upstream HDMI code
 
-And maybe avoid calling out invalidate_range_start() by name?  It took me a few
-reads to understand it's referring to the function, i.e. the start of the
-invalidation, not the start of the range.
+So the hwdesc handling is as ok as it was with our patch. I'll keep a =
+copy of yours in our
+tree until it arrives upstream.
 
-> spurious page fault retries due to changes in unrelated host virtual
-> addresses.
+Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
 
-This needs to elaborate on the exact scenario this is handling, as is it sounds
-like KVM is tracking the history of invalidations or something.  Understanding
-this patch requires a priori knowledge of mmu_notifier_count.  Something like:
+BR and thanks,
+Nikolaus
 
-  Track the range being invalidated by mmu_notifier and skip page fault
-  retries if the fault address is not affected by the in-progress
-  invalidation.  Disable the optimization if multiple invalidations are
-  in-progress to keep things simple, as tracking multiple ranges has
-  diminishing returns.
 
-> This has the secondary effect of greatly reducing the likelihood of extreme
+>=20
+> BR and thanks,
+> Nikolaus
+>=20
+>>=20
+>> Cheers,
+>> -Paul
+>>=20
+>>> Maybe you want to consider that. Then I can officially post it.
+>>> [1] =
+https://github.com/goldelico/letux-kernel/commit/3be1de5fdabf2cc1c17f198de=
+d3328cc6e4b9844
+>>>> Am 24.01.2021 um 09:55 schrieb Paul Cercueil =
+<paul@crapouillou.net>:
+>>>> Even though the JZ4740 did not have the OSD mode, it had (according =
+to
+>>>> the documentation) two DMA channels, but there is absolutely no
+>>>> information about how to select the second DMA channel.
+>>>> Make the ingenic-drm driver work in non-OSD mode by using the
+>>>> foreground0 plane (which is bound to the DMA0 channel) as the =
+primary
+>>>> plane, instead of the foreground1 plane, which is the primary plane
+>>>> when in OSD mode.
+>>>> Fixes: 3c9bea4ef32b ("drm/ingenic: Add support for OSD mode")
+>>>> Cc: <stable@vger.kernel.org> # v5.8+
+>>>> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>>>> ---
+>>>> drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 11 +++++++----
+>>>> 1 file changed, 7 insertions(+), 4 deletions(-)
+>>>> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c =
+b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>>>> index b23011c1c5d9..59ce43862e16 100644
+>>>> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>>>> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>>>> @@ -554,7 +554,7 @@ static void =
+ingenic_drm_plane_atomic_update(struct drm_plane *plane,
+>>>> 		height =3D state->src_h >> 16;
+>>>> 		cpp =3D state->fb->format->cpp[0];
+>>>> -		if (priv->soc_info->has_osd && plane->type =3D=3D =
+DRM_PLANE_TYPE_OVERLAY)
+>>>> +		if (!priv->soc_info->has_osd || plane->type =3D=3D =
+DRM_PLANE_TYPE_OVERLAY)
+>>>> 			hwdesc =3D &priv->dma_hwdescs->hwdesc_f0;
+>>>> 		else
+>>>> 			hwdesc =3D &priv->dma_hwdescs->hwdesc_f1;
+>>> we just replace this with
+>>>               if (priv->soc_info->has_osd && plane->type !=3D =
+DRM_PLANE_TYPE_OVERLAY)
+>>>                       hwdesc =3D &priv->dma_hwdescs->hwdesc_f1;
+>>>               else
+>>>                       hwdesc =3D &priv->dma_hwdescs->hwdesc_f0;
+>>> and the remainder can stay as is.
+>>>> @@ -826,6 +826,7 @@ static int ingenic_drm_bind(struct device *dev, =
+bool has_components)
+>>>> 	const struct jz_soc_info *soc_info;
+>>>> 	struct ingenic_drm *priv;
+>>>> 	struct clk *parent_clk;
+>>>> +	struct drm_plane *primary;
+>>>> 	struct drm_bridge *bridge;
+>>>> 	struct drm_panel *panel;
+>>>> 	struct drm_encoder *encoder;
+>>>> @@ -940,9 +941,11 @@ static int ingenic_drm_bind(struct device =
+*dev, bool has_components)
+>>>> 	if (soc_info->has_osd)
+>>>> 		priv->ipu_plane =3D drm_plane_from_index(drm, 0);
+>>>> -	drm_plane_helper_add(&priv->f1, =
+&ingenic_drm_plane_helper_funcs);
+>>>> +	primary =3D priv->soc_info->has_osd ? &priv->f1 : &priv->f0;
+>>>> -	ret =3D drm_universal_plane_init(drm, &priv->f1, 1,
+>>>> +	drm_plane_helper_add(primary, &ingenic_drm_plane_helper_funcs);
+>>>> +
+>>>> +	ret =3D drm_universal_plane_init(drm, primary, 1,
+>>>> 				       &ingenic_drm_primary_plane_funcs,
+>>>> 				       priv->soc_info->formats_f1,
+>>>> 				       priv->soc_info->num_formats_f1,
+>>>> @@ -954,7 +957,7 @@ static int ingenic_drm_bind(struct device *dev, =
+bool has_components)
+>>>> 	drm_crtc_helper_add(&priv->crtc, =
+&ingenic_drm_crtc_helper_funcs);
+>>>> -	ret =3D drm_crtc_init_with_planes(drm, &priv->crtc, &priv->f1,
+>>>> +	ret =3D drm_crtc_init_with_planes(drm, &priv->crtc, primary,
+>>>> 					NULL, &ingenic_drm_crtc_funcs, =
+NULL);
+>>>> 	if (ret) {
+>>>> 		dev_err(dev, "Failed to init CRTC: %i\n", ret);
+>>>> --
+>>>> 2.29.2
+>>> BR and thanks,
+>>> Nikolaus
+>>=20
+>>=20
+>=20
 
-Out of curiosity, is this really the _secondary_ effect?  I would expect this
-change to primarily benefit scenarios where the invalidation has gotten
-waylaid for whatever reason.
-
-> latency when handing a page fault due to another thread having been preempted
-> while modifying host virtual addresses.
-> 
-> Signed-off-by: David Stevens <stevensd@chromium.org>
-> ---
-
-...
-
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 6d16481aa29d..79166288ed03 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3658,8 +3658,8 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  }
->  
->  static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
-> -			 gpa_t cr2_or_gpa, kvm_pfn_t *pfn, bool write,
-> -			 bool *writable)
-> +			 gpa_t cr2_or_gpa, kvm_pfn_t *pfn, hva_t *hva,
-> +			 bool write, bool *writable)
-
-Side topic, I'm all for creating a 'struct kvm_page_fault' or whatever to hold
-all these variables.  The helper functions stacks are getting unwieldy.
-Definitely doesn't need to be addressed here, this just reminded of how ugly
-these stacks are.
-
->  {
->  	struct kvm_memory_slot *slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
->  	bool async;
-> @@ -3672,7 +3672,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
->  	}
->  
->  	async = false;
-> -	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, &async, write, writable);
-> +	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, &async,
-> +				    write, writable, hva);
->  	if (!async)
->  		return false; /* *pfn has correct page already */
->  
-> @@ -3686,7 +3687,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
->  			return true;
->  	}
->  
-> -	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, NULL, write, writable);
-> +	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, NULL,
-> +				    write, writable, hva);
->  	return false;
->  }
->  
-> @@ -3699,6 +3701,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
->  	gfn_t gfn = gpa >> PAGE_SHIFT;
->  	unsigned long mmu_seq;
->  	kvm_pfn_t pfn;
-> +	hva_t hva;
->  	int r;
->  
->  	if (page_fault_handle_page_track(vcpu, error_code, gfn))
-> @@ -3717,7 +3720,8 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
->  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
->  	smp_rmb();
->  
-> -	if (try_async_pf(vcpu, prefault, gfn, gpa, &pfn, write, &map_writable))
-> +	if (try_async_pf(vcpu, prefault, gfn, gpa, &pfn, &hva,
-> +			 write, &map_writable))
->  		return RET_PF_RETRY;
->  
->  	if (handle_abnormal_pfn(vcpu, is_tdp ? 0 : gpa, gfn, pfn, ACC_ALL, &r))
-> @@ -3725,7 +3729,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
->  
->  	r = RET_PF_RETRY;
->  	spin_lock(&vcpu->kvm->mmu_lock);
-> -	if (mmu_notifier_retry(vcpu->kvm, mmu_seq))
-> +	if (mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, hva))
->  		goto out_unlock;
->  	r = make_mmu_pages_available(vcpu);
->  	if (r)
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 50e268eb8e1a..3171784139a4 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -790,6 +790,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
->  	struct guest_walker walker;
->  	int r;
->  	kvm_pfn_t pfn;
-> +	hva_t hva;
->  	unsigned long mmu_seq;
->  	bool map_writable, is_self_change_mapping;
->  	int max_level;
-> @@ -840,8 +841,8 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
->  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
->  	smp_rmb();
->  
-> -	if (try_async_pf(vcpu, prefault, walker.gfn, addr, &pfn, write_fault,
-> -			 &map_writable))
-> +	if (try_async_pf(vcpu, prefault, walker.gfn, addr, &pfn, &hva,
-> +			 write_fault, &map_writable))
->  		return RET_PF_RETRY;
->  
->  	if (handle_abnormal_pfn(vcpu, addr, walker.gfn, pfn, walker.pte_access, &r))
-> @@ -869,7 +870,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
->  
->  	r = RET_PF_RETRY;
->  	spin_lock(&vcpu->kvm->mmu_lock);
-> -	if (mmu_notifier_retry(vcpu->kvm, mmu_seq))
-> +	if (mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, hva))
->  		goto out_unlock;
->  
->  	kvm_mmu_audit(vcpu, AUDIT_PRE_PAGE_FAULT);
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index f3b1013fb22c..b70097685249 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -502,6 +502,8 @@ struct kvm {
->  	struct mmu_notifier mmu_notifier;
->  	unsigned long mmu_notifier_seq;
->  	long mmu_notifier_count;
-> +	unsigned long mmu_notifier_range_start;
-> +	unsigned long mmu_notifier_range_end;
->  #endif
->  	long tlbs_dirty;
->  	struct list_head devices;
-> @@ -729,7 +731,7 @@ kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn);
->  kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn);
->  kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
->  			       bool atomic, bool *async, bool write_fault,
-> -			       bool *writable);
-> +			       bool *writable, hva_t *hva);
->  
->  void kvm_release_pfn_clean(kvm_pfn_t pfn);
->  void kvm_release_pfn_dirty(kvm_pfn_t pfn);
-> @@ -1203,6 +1205,24 @@ static inline int mmu_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
->  		return 1;
->  	return 0;
->  }
-> +
-> +static inline int mmu_notifier_retry_hva(struct kvm *kvm,
-> +					 unsigned long mmu_seq,
-> +					 unsigned long hva)
-> +{
-> +	/*
-> +	 * Unlike mmu_notifier_retry, this function relies on
-> +	 * kvm->mmu_lock for consistency.
-
-mmu_notifier_retry is the outlier due to PPC behavior.  Maybe just add a lockdep
-annonation and call it good?
-
-> +	 */
-
-This needs a comment to explicitly state that 'count > 1' cannot be done at
-this time.  My initial thought is that it would be more intuitive to check for
-'count > 1' here, but that would potentially check the wrong wrange when count
-goes from 2->1.  The comment about persistence in invalidate_range_start() is a
-good hint, but I think it's worth being explicit to avoid bad "cleanup" in the
-future.
-
-> +	if (unlikely(kvm->mmu_notifier_count)) {
-> +		if (kvm->mmu_notifier_range_start <= hva &&
-> +		    hva < kvm->mmu_notifier_range_end)
-
-Combine these into a single statement?  I think the result is easier to read?
-
-	if (unlikely(kvm->mmu_notifier_count) &&
-	    kvm->mmu_notifier_range_start <= hva &&
-	    hva < kvm->mmu_notifier_range_end)
-
-> +			return 1;
-> +	}
-> +	if (kvm->mmu_notifier_seq != mmu_seq)
-> +		return 1;
-> +	return 0;
-> +}
->  #endif
->  
->  #ifdef CONFIG_HAVE_KVM_IRQ_ROUTING
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index fa9e3614d30e..d6e1ef5cb184 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -483,6 +483,18 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->  	 * count is also read inside the mmu_lock critical section.
->  	 */
->  	kvm->mmu_notifier_count++;
-> +	if (likely(kvm->mmu_notifier_count == 1)) {
-> +		kvm->mmu_notifier_range_start = range->start;
-> +		kvm->mmu_notifier_range_end = range->end;
-> +	} else {
-> +		/**
-> +		 * Tracking multiple concurrent ranges has diminishing returns,
-> +		 * so just use the maximum range. This persists until after all
-> +		 * outstanding invalidation operations complete.
-> +		 */
-> +		kvm->mmu_notifier_range_start = 0;
-> +		kvm->mmu_notifier_range_end = ULONG_MAX;
-
-Hrm, I don't think there's a corner case in practice, but ULONG_MAX is a legal
-virtual address and range_end is exclusive.  E.g. passing hva=-1ul would get a
-false negative in mmu_notifier_retry_hva().  It's not an issue as written
-because hva is generated from the gfn, and hva can't be a kernel address.  I'm
-guessing mmu_notifier also doesn't fire on kernel addresses.  I assume that all
-holds true for other architectures, and adding checks in mmu_notifier_retry_hva()
-feels like a waste of cycles, but it still bugs me. :-)
-
-Maybe zero out range_end and explicitly check for that, just to be paranoid?
-
-	if (unlikely(kvm->mmu_notifier_count) &&
-	    (!kvm->mmu_notifier_range_end ||
-            (kvm->mmu_notifier_range_start <= hva &&
-             hva < kvm->mmu_notifier_range_end))
-
-> +	}
->  	need_tlb_flush = kvm_unmap_hva_range(kvm, range->start, range->end,
->  					     range->flags);
->  	/* we've to flush the tlb before the pages can be freed */
-> @@ -2010,9 +2022,11 @@ static kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
->  
->  kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
->  			       bool atomic, bool *async, bool write_fault,
-> -			       bool *writable)
-> +			       bool *writable, hva_t *hva)
-
-Hrm, it feels like we should really split gfn->hva and hva->pfn into separate
-operations, but pretty much every arch needs the hva error handling.  Splitting
-it would probably do more harm than good, at least not without a lot of
-additional refactoring.  Bummer.
-
->  {
->  	unsigned long addr = __gfn_to_hva_many(slot, gfn, NULL, write_fault);
-
-Newline here.
-
-> +	if (hva)
-> +		*hva = addr;
->  
->  	if (addr == KVM_HVA_ERR_RO_BAD) {
->  		if (writable)
-> @@ -2041,19 +2055,19 @@ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
->  		      bool *writable)
->  {
->  	return __gfn_to_pfn_memslot(gfn_to_memslot(kvm, gfn), gfn, false, NULL,
-> -				    write_fault, writable);
-> +				    write_fault, writable, NULL);
->  }
->  EXPORT_SYMBOL_GPL(gfn_to_pfn_prot);
->  
->  kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn)
->  {
-> -	return __gfn_to_pfn_memslot(slot, gfn, false, NULL, true, NULL);
-> +	return __gfn_to_pfn_memslot(slot, gfn, false, NULL, true, NULL, NULL);
->  }
->  EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot);
->  
->  kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn)
->  {
-> -	return __gfn_to_pfn_memslot(slot, gfn, true, NULL, true, NULL);
-> +	return __gfn_to_pfn_memslot(slot, gfn, true, NULL, true, NULL, NULL);
->  }
->  EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot_atomic);
->  
-> -- 
-> 2.30.0.280.ga3ce27912f-goog
-> 
