@@ -2,205 +2,377 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFBE3022DF
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Jan 2021 09:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6417B302A65
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Jan 2021 19:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725923AbhAYIfD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 Jan 2021 03:35:03 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40866 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727061AbhAYHMb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 25 Jan 2021 02:12:31 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10P75dpG004271;
-        Sun, 24 Jan 2021 23:10:26 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=QZZuuAUK608hiDd3Q08/To16meAw6N8oG3WerzhEeq4=;
- b=Cy6aUDi/j38onwxO/ElqcVyqBYGhcz9zs/zfVYCwTlK7rGLHssEuhGbi8EGzCXRVN7Jb
- 6R4C/zXEste8yt8gzvJ4FY7x+YfmZ1xCOTZTDiEn/tO73jaPNT+yeDk+z4hYKfXCJNWU
- KHgWaFNOl8R42D8JTnxZMn4s8kyujoUemBg= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 369509ujhe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sun, 24 Jan 2021 23:10:25 -0800
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Sun, 24 Jan 2021 23:10:24 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zm/Hr9cPohPaYdx8i6YPnv7jIqbk8z47VqmWGP2asYDiN7VEdiZTkuHMf6qsspWls/jLxevwQEPA/48gnrLuSCQGHfby4g7qzrZegrZDv6Iqwu9irKpxgQt24tf7mB1Dz8hR+4tgxNWH8/+TXbfyYIjz1uu+Bl829BEc7Is7q/r3gZrTm8V7+W3J6bdlzjbyD4/njE0h/3oI4/BQbYX9ztGmRxP8jqkmr9suYnmZZumJZWBQebjIWg5d4AcEIQwMEJG6F9bu3MGIFQpGUwtfkT2VFgrlQERCVxf56XjjaLx3O+Zqglbcjl+ojvN0s87l6BYahwcOI8Q7bpKZKP5X7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QZZuuAUK608hiDd3Q08/To16meAw6N8oG3WerzhEeq4=;
- b=SzmQMNTlZCAtq3vYL3PLh5vLXsQdBHdKODauCBGIibAQbW9Gzhjkxfb6wUv1k69UudRMMCoqHsbruKBtxiDgTCoLA8k2YNQmiDCewcdmU5334wzNpjfqrvC3ySGyrfQ+xYEiio5prcN6LkdYQrRGj7bkucS+emZdFax56+/zNRNRdfFcPHL4rnt4bftPSB2emvB2PE7xfVzqQPAf2DK6XxjxQSujisZANkU+I3rbAd3QAonbBzMc5MV1po7yCguhf0N4WGZliiNWNKB+ONNpuExK3KRivScv8YPKGjsFO0FTAMxB1HhEA0hiaZxRiJeDSDvTKsWZuDegY2TSbLbeqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QZZuuAUK608hiDd3Q08/To16meAw6N8oG3WerzhEeq4=;
- b=TyD1zMBQYN9KJZrUDNUTabrYp6eMj82rkP/1R0CmCb/TD1BW3fa2LJIPPTQUIwhSYfvXbyslIZdlG+HzHdB2d8xXNRfikb7GkTTY/ESNHOK49WVogyhV40UF6m6rBPRwak7OVj4iuNPHMpoRfkLw0RRnVbO57PrsJNoV24dnhiE=
-Authentication-Results: loongson.cn; dkim=none (message not signed)
- header.d=none;loongson.cn; dmarc=none action=none header.from=fb.com;
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by BY5PR15MB3714.namprd15.prod.outlook.com (2603:10b6:a03:1f7::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.15; Mon, 25 Jan
- 2021 07:10:22 +0000
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::61d6:781d:e0:ada5]) by BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::61d6:781d:e0:ada5%5]) with mapi id 15.20.3784.017; Mon, 25 Jan 2021
- 07:10:22 +0000
-Subject: Re: [PATCH bpf-next v2] samples/bpf: Set flag
- __SANE_USERSPACE_TYPES__ for MIPS to fix build warnings
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-References: <1611551146-14052-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <831a3003-d617-5eeb-b93b-595e1cad8eea@fb.com>
-Date:   Sun, 24 Jan 2021 23:10:18 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.6.1
-In-Reply-To: <1611551146-14052-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [2620:10d:c090:400::5:c1c3]
-X-ClientProxiedBy: MW4PR03CA0029.namprd03.prod.outlook.com
- (2603:10b6:303:8f::34) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
+        id S1727306AbhAYSgQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 Jan 2021 13:36:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727219AbhAYSf5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Jan 2021 13:35:57 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8954FC061756
+        for <linux-mips@vger.kernel.org>; Mon, 25 Jan 2021 10:35:16 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id kx7so127923pjb.2
+        for <linux-mips@vger.kernel.org>; Mon, 25 Jan 2021 10:35:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5li4BVEipLZX5zx8rH4Z99dY7w+ascZy4Y8R2o+aUH8=;
+        b=ntnqgqJh8GrmgSLeIUVSOeq5ocf777yPSTQ/ma0WIPO30h+DKcbkCeMBXaDyu+II4o
+         UMpCUfTJekTMY3vCJYPmquE6msvyiqLQUxnv+Qa3r6AZbHT7+VpLvX6r5Q+OjazjvunH
+         NLPdZTZMV6N7ne6Bxo+VqIYyDyy37rGuL2RgVYOhrRNmdtspPcsGocvHDflOGXXNcL3S
+         m0VpqdXFHPlf1Rbm1QxZIvYNZoPDXUlGf3MUk88oOAMT/kUr0DXhL6pFdWc9nb/CDbjA
+         eukcfxn0wDeFNZPSqccJmj4nhOmZ8T+LYGGk8Gq334rQrt7MJTlhmWa0vzSCOkusKDUq
+         5qfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5li4BVEipLZX5zx8rH4Z99dY7w+ascZy4Y8R2o+aUH8=;
+        b=CIrJcHqy25yGANiHCgZsJeJ2EIomfQKveG+qrXTGsNqfG9J7IS1fff4N6VAl9nwfZB
+         NhCl4ewIIodZOcO10FDvXD2PiJ5b9JEOAVM46IvrnyB/K4NlMt/2ostasuQ2nMR1X3nf
+         3eG7sNCviakx2T4AiSrRpbHl0XH5wkCYUyIeb412ztAapHIrISxS7ovX8CdUOu3LyYp4
+         0WRf8vIgKrWK37PbOoHKa3sphaFxCHYvByxxalNiIJ5cdq/3iypKdjYPE8mzwG9efkmD
+         i7jkeQ/zqmGgUmN3zoFqcmTgn5/MddgjVmAqwfcGXOhrRIVqXo+rgyBXdkuEkMs2Ucpm
+         +1og==
+X-Gm-Message-State: AOAM532fkkDOt5MH4w5VSxMxUj28Tf9H1IU3UWqiEms4XhJu1sYnRgLf
+        hPjUifidyQdbBI9ueY/2RRF7Yw==
+X-Google-Smtp-Source: ABdhPJxgVscQHSmbku17rqN6Nk67IT0OKp5oZGNz41Gx1gtHDQegyJuNc0/nvJi9Q+6qG60UzNty/w==
+X-Received: by 2002:a17:90a:d305:: with SMTP id p5mr1634140pju.33.1611599715885;
+        Mon, 25 Jan 2021 10:35:15 -0800 (PST)
+Received: from google.com ([2620:15c:f:10:1ea0:b8ff:fe73:50f5])
+        by smtp.gmail.com with ESMTPSA id n128sm18157528pga.55.2021.01.25.10.35.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jan 2021 10:35:15 -0800 (PST)
+Date:   Mon, 25 Jan 2021 10:35:08 -0800
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
+        kvm-ppc@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: Re: [PATCH] KVM: x86/mmu: consider the hva in mmu_notifer retry
+Message-ID: <YA8PXCEVukW0UzC5@google.com>
+References: <20210125064234.2078146-1-stevensd@google.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21cf::1946] (2620:10d:c090:400::5:c1c3) by MW4PR03CA0029.namprd03.prod.outlook.com (2603:10b6:303:8f::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.12 via Frontend Transport; Mon, 25 Jan 2021 07:10:20 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1a2299fe-5330-4bf3-e2f9-08d8c10047a4
-X-MS-TrafficTypeDiagnostic: BY5PR15MB3714:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR15MB37141B81FFBEA4E7997C7EA1D3BD9@BY5PR15MB3714.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MEUbWIRNc+PnzYGMAmkIz74dJ7PR/WwskdCvQb0hiUv78zBAhTdQJhfqshWM6n+/mCrodPEkyS/oOcwDl32z1QnuLldoRwjdAWfJ79FDrbPKGuw0G0GYBnxol8KXZKkP8YkinPQDXmOxPrFEoI53Wx2wVo4JjLQo0szrLJg0E+fio0/C6/wJYnbYbzNFVu8lpSJYk2yG+zcyH1PzvoB/1s0OhKRwyPZ3efjChZOG4SAup7b5JzvlMIMPkHhvKdQPlanmuL8rbOfzWRL8JLXrcfsAef5H8v/NcF0T2to0JU0SKotMeDYAdpNZ1dyB81WM+Z7zx7/XUMlw03+PK7hcR/N/HHjlTbU6RFCokOnjnGaf9Z+v7/6EgoICZK0pX2rl7T/siDQ2ZlJpOUwexGyAZ8FLXxJgPPBMMsQDOLjEWOU6SrXd46XE0Mj2RZfqzwLCIrFa3Eihuq4OR1Xj/P2qgOsgxmIkulUontE/S8s6d0g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(376002)(366004)(39860400002)(136003)(346002)(7416002)(31696002)(66946007)(66476007)(2906002)(86362001)(66556008)(36756003)(478600001)(8676002)(4326008)(83380400001)(31686004)(5660300002)(53546011)(52116002)(110136005)(186003)(16526019)(8936002)(316002)(6486002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?OEVvKzV0ZDV5WWVPMUdWak1SOXhLbkpvQVYvd2JqOUJUNFNpUDVZK3hsV1FG?=
- =?utf-8?B?RHhYVVN5aTdnSEIzSXlPZXFsd1NhY09QMGZTeTdxYm9iTTdYdXFaRWE3anlm?=
- =?utf-8?B?ajBqNlIycXA2cC9SRFVMMElHSVl6RzBSbmdTdmFIcXFkR3VNdVV6VXJxUmhv?=
- =?utf-8?B?RFVtZk12Y2xqWUJkZWwwdUQvT1QzUnBHckJjMnQvbnEyL1FuTjQyMk5xTlA1?=
- =?utf-8?B?Y28rajlzOGh0S3grS1RHWjR2L1htbmpnYTE0bzhMMmZiWWxaSXh4czZSa002?=
- =?utf-8?B?THVpT0lCWWFHVUlyT0hQR25sYWpBekFZQzVEVWJNa2JjbUlSNWFNZm9NS2tz?=
- =?utf-8?B?MjNzNlc1aUlRQmQ0ZzBLbkVBcGd1Q1BWRTZGZTVMZy9tbngzSGRHRWVFdEow?=
- =?utf-8?B?L2JHbWkvengzdHN2MFlnSGJhK1hRQnNWUXhleWNHNWdhMkV6aTQzK1VDSEhE?=
- =?utf-8?B?VW5SeGNpV0diZkxLd3RtVnZBU0dEazFsbzVsY0tnc2MzUmJOaXVFTitoS0Nu?=
- =?utf-8?B?Q0dmOGNtSmtYY0hEUkJWM1RwTUVUMk1rM2ZrRHpnWGVyeUhQNGIyOGp3ODZL?=
- =?utf-8?B?S0l1RU5kUDZZWjllNjVweWdicDJyZExmRVY2MjJBNzZhOW1Pc3JlT0oyRFdX?=
- =?utf-8?B?ell4V1FFMlpWakVGdVc5STZyTWh4NGswL29ja3RPZEl6eFNwckk4bitHVTZV?=
- =?utf-8?B?YkcrSGRIZnM1eDJFNzJhc25FZnJncnQ1QmV1Vk5iVDhCZm5OWWpRQkc3MTVO?=
- =?utf-8?B?RlN0ekF3NnNmZm1WQkc1eDVkSi8vZXRLVEF4UzFiMXdwb0NvZW51TENNdGNS?=
- =?utf-8?B?YVk4dHFnb05va0RleUdUeGQrWWVybzdYNGxJMUtYVnYyVEpsS3YrbExHUHRu?=
- =?utf-8?B?MlZSQzBLZ0hrVFRQbTlheUkrMHU3N21iR09MTkRuVkdWZmltcWsvajh3Rlho?=
- =?utf-8?B?OTdleVpRL1JVWkN4c0EraVVpVjVaWG9OcnBzTWQ0SGYxSDlBdHU5VXBGQTl5?=
- =?utf-8?B?REhQZ01yekdUbDN3c3dBNW9CeGtxcjUvNXNvMFN1L3FFWDJGUGMwbmlqY2Vi?=
- =?utf-8?B?eFJJK0FmcWsxanpGWmhKSFIveGdtWWZVRnF2V2MwRXo3RTJDT1lwQUtNczN6?=
- =?utf-8?B?M3NlRWlqQlhpMmwvWG9ESE92NDd3aHhZY3phcFp2ZVFCNTAzam5BTUVFM1ls?=
- =?utf-8?B?eDhTalFxVWIza0tuSktlRzZkRCtncXFJK2NjaWNuajhVT21wNGdIWnNFM3R0?=
- =?utf-8?B?WDVQVmUzckFIMGRHcWJVV3g2R2lXUnJJdVRLYU8zWEluWllOZ21BNVlpM2F0?=
- =?utf-8?B?ODc4RjUzb0xTc2RpazMvUzk4K25tamR3bC81eldNb2JFN2xudlI0U3M0dVc4?=
- =?utf-8?B?bVlqWkEwUTE0d0RqVmJrSWZUYmNKT0dLd294WmRzc0R5VmdGTHYrSjNLNWlh?=
- =?utf-8?B?cDNqNmgxa1BMdXF2VEVkYk5iZEdTYXpwOXhQNEhIdTBmcUpjYVhreTFqcXlV?=
- =?utf-8?Q?njPIl4=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a2299fe-5330-4bf3-e2f9-08d8c10047a4
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2021 07:10:22.0773
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J6RZC9+turdNMZdS8FJoo9r0dPdCgGEIzWXsx0LZugLyz4JXTJh0nB+K2O6St/BM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3714
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-25_01:2021-01-22,2021-01-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- priorityscore=1501 spamscore=0 clxscore=1015 bulkscore=0 phishscore=0
- impostorscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101250040
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210125064234.2078146-1-stevensd@google.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
++Cc the other architectures, I'm guessing this would be a helpful optimization
+for all archs.
 
+Quite a few comments, but they're all little more than nits.  Nice!
 
-On 1/24/21 9:05 PM, Tiezhu Yang wrote:
-> There exists many build warnings when make M=samples/bpf on the Loongson
-> platform, this issue is MIPS related, x86 compiles just fine.
+On Mon, Jan 25, 2021, David Stevens wrote:
+> From: David Stevens <stevensd@chromium.org>
 > 
-> Here are some warnings:
-> 
->    CC  samples/bpf/ibumad_user.o
-> samples/bpf/ibumad_user.c: In function ‘dump_counts’:
-> samples/bpf/ibumad_user.c:46:24: warning: format ‘%llu’ expects argument of type ‘long long unsigned int’, but argument 3 has type ‘__u64’ {aka ‘long unsigned int’} [-Wformat=]
->      printf("0x%02x : %llu\n", key, value);
->                       ~~~^          ~~~~~
->                       %lu
->    CC  samples/bpf/offwaketime_user.o
-> samples/bpf/offwaketime_user.c: In function ‘print_ksym’:
-> samples/bpf/offwaketime_user.c:34:17: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 3 has type ‘__u64’ {aka ‘long unsigned int’} [-Wformat=]
->     printf("%s/%llx;", sym->name, addr);
->                ~~~^               ~~~~
->                %lx
-> samples/bpf/offwaketime_user.c: In function ‘print_stack’:
-> samples/bpf/offwaketime_user.c:68:17: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 3 has type ‘__u64’ {aka ‘long unsigned int’} [-Wformat=]
->    printf(";%s %lld\n", key->waker, count);
->                ~~~^                 ~~~~~
->                %ld
-> 
-> MIPS needs __SANE_USERSPACE_TYPES__ before <linux/types.h> to select
-> 'int-ll64.h' in arch/mips/include/uapi/asm/types.h, then it can avoid
-> build warnings when printing __u64 with %llu, %llx or %lld.
-> 
-> The header tools/include/linux/types.h defines __SANE_USERSPACE_TYPES__,
-> it seems that we can include <linux/types.h> in the source files which
-> have build warnings, but it has no effect due to actually it includes
-> usr/include/linux/types.h instead of tools/include/linux/types.h, the
-> problem is that "usr/include" is preferred first than "tools/include"
-> in samples/bpf/Makefile, that sounds like a ugly hack to -Itools/include
-> before -Iusr/include.
-> 
-> So define __SANE_USERSPACE_TYPES__ for MIPS in samples/bpf/Makefile
-> is proper, if add "TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__" in
-> samples/bpf/Makefile, it appears the following error:
-> 
-> Auto-detecting system features:
-> ...                        libelf: [ on  ]
-> ...                          zlib: [ on  ]
-> ...                           bpf: [ OFF ]
-> 
-> BPF API too old
-> make[3]: *** [Makefile:293: bpfdep] Error 1
-> make[2]: *** [Makefile:156: all] Error 2
-> 
-> With #ifndef __SANE_USERSPACE_TYPES__  in tools/include/linux/types.h,
-> the above error has gone and this ifndef change does not hurt other
-> compilations.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Use the range passed to mmu_notifer's invalidate_range_start to prevent
 
-Acked-by: Yonghong Song <yhs@fb.com>
+s/mmu_notifer/mmu_notifier.  
+
+And maybe avoid calling out invalidate_range_start() by name?  It took me a few
+reads to understand it's referring to the function, i.e. the start of the
+invalidation, not the start of the range.
+
+> spurious page fault retries due to changes in unrelated host virtual
+> addresses.
+
+This needs to elaborate on the exact scenario this is handling, as is it sounds
+like KVM is tracking the history of invalidations or something.  Understanding
+this patch requires a priori knowledge of mmu_notifier_count.  Something like:
+
+  Track the range being invalidated by mmu_notifier and skip page fault
+  retries if the fault address is not affected by the in-progress
+  invalidation.  Disable the optimization if multiple invalidations are
+  in-progress to keep things simple, as tracking multiple ranges has
+  diminishing returns.
+
+> This has the secondary effect of greatly reducing the likelihood of extreme
+
+Out of curiosity, is this really the _secondary_ effect?  I would expect this
+change to primarily benefit scenarios where the invalidation has gotten
+waylaid for whatever reason.
+
+> latency when handing a page fault due to another thread having been preempted
+> while modifying host virtual addresses.
+> 
+> Signed-off-by: David Stevens <stevensd@chromium.org>
+> ---
+
+...
+
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 6d16481aa29d..79166288ed03 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3658,8 +3658,8 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>  }
+>  
+>  static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
+> -			 gpa_t cr2_or_gpa, kvm_pfn_t *pfn, bool write,
+> -			 bool *writable)
+> +			 gpa_t cr2_or_gpa, kvm_pfn_t *pfn, hva_t *hva,
+> +			 bool write, bool *writable)
+
+Side topic, I'm all for creating a 'struct kvm_page_fault' or whatever to hold
+all these variables.  The helper functions stacks are getting unwieldy.
+Definitely doesn't need to be addressed here, this just reminded of how ugly
+these stacks are.
+
+>  {
+>  	struct kvm_memory_slot *slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
+>  	bool async;
+> @@ -3672,7 +3672,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
+>  	}
+>  
+>  	async = false;
+> -	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, &async, write, writable);
+> +	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, &async,
+> +				    write, writable, hva);
+>  	if (!async)
+>  		return false; /* *pfn has correct page already */
+>  
+> @@ -3686,7 +3687,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
+>  			return true;
+>  	}
+>  
+> -	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, NULL, write, writable);
+> +	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, NULL,
+> +				    write, writable, hva);
+>  	return false;
+>  }
+>  
+> @@ -3699,6 +3701,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
+>  	gfn_t gfn = gpa >> PAGE_SHIFT;
+>  	unsigned long mmu_seq;
+>  	kvm_pfn_t pfn;
+> +	hva_t hva;
+>  	int r;
+>  
+>  	if (page_fault_handle_page_track(vcpu, error_code, gfn))
+> @@ -3717,7 +3720,8 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
+>  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
+>  	smp_rmb();
+>  
+> -	if (try_async_pf(vcpu, prefault, gfn, gpa, &pfn, write, &map_writable))
+> +	if (try_async_pf(vcpu, prefault, gfn, gpa, &pfn, &hva,
+> +			 write, &map_writable))
+>  		return RET_PF_RETRY;
+>  
+>  	if (handle_abnormal_pfn(vcpu, is_tdp ? 0 : gpa, gfn, pfn, ACC_ALL, &r))
+> @@ -3725,7 +3729,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
+>  
+>  	r = RET_PF_RETRY;
+>  	spin_lock(&vcpu->kvm->mmu_lock);
+> -	if (mmu_notifier_retry(vcpu->kvm, mmu_seq))
+> +	if (mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, hva))
+>  		goto out_unlock;
+>  	r = make_mmu_pages_available(vcpu);
+>  	if (r)
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 50e268eb8e1a..3171784139a4 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -790,6 +790,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
+>  	struct guest_walker walker;
+>  	int r;
+>  	kvm_pfn_t pfn;
+> +	hva_t hva;
+>  	unsigned long mmu_seq;
+>  	bool map_writable, is_self_change_mapping;
+>  	int max_level;
+> @@ -840,8 +841,8 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
+>  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
+>  	smp_rmb();
+>  
+> -	if (try_async_pf(vcpu, prefault, walker.gfn, addr, &pfn, write_fault,
+> -			 &map_writable))
+> +	if (try_async_pf(vcpu, prefault, walker.gfn, addr, &pfn, &hva,
+> +			 write_fault, &map_writable))
+>  		return RET_PF_RETRY;
+>  
+>  	if (handle_abnormal_pfn(vcpu, addr, walker.gfn, pfn, walker.pte_access, &r))
+> @@ -869,7 +870,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
+>  
+>  	r = RET_PF_RETRY;
+>  	spin_lock(&vcpu->kvm->mmu_lock);
+> -	if (mmu_notifier_retry(vcpu->kvm, mmu_seq))
+> +	if (mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, hva))
+>  		goto out_unlock;
+>  
+>  	kvm_mmu_audit(vcpu, AUDIT_PRE_PAGE_FAULT);
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index f3b1013fb22c..b70097685249 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -502,6 +502,8 @@ struct kvm {
+>  	struct mmu_notifier mmu_notifier;
+>  	unsigned long mmu_notifier_seq;
+>  	long mmu_notifier_count;
+> +	unsigned long mmu_notifier_range_start;
+> +	unsigned long mmu_notifier_range_end;
+>  #endif
+>  	long tlbs_dirty;
+>  	struct list_head devices;
+> @@ -729,7 +731,7 @@ kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn);
+>  kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn);
+>  kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
+>  			       bool atomic, bool *async, bool write_fault,
+> -			       bool *writable);
+> +			       bool *writable, hva_t *hva);
+>  
+>  void kvm_release_pfn_clean(kvm_pfn_t pfn);
+>  void kvm_release_pfn_dirty(kvm_pfn_t pfn);
+> @@ -1203,6 +1205,24 @@ static inline int mmu_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
+>  		return 1;
+>  	return 0;
+>  }
+> +
+> +static inline int mmu_notifier_retry_hva(struct kvm *kvm,
+> +					 unsigned long mmu_seq,
+> +					 unsigned long hva)
+> +{
+> +	/*
+> +	 * Unlike mmu_notifier_retry, this function relies on
+> +	 * kvm->mmu_lock for consistency.
+
+mmu_notifier_retry is the outlier due to PPC behavior.  Maybe just add a lockdep
+annonation and call it good?
+
+> +	 */
+
+This needs a comment to explicitly state that 'count > 1' cannot be done at
+this time.  My initial thought is that it would be more intuitive to check for
+'count > 1' here, but that would potentially check the wrong wrange when count
+goes from 2->1.  The comment about persistence in invalidate_range_start() is a
+good hint, but I think it's worth being explicit to avoid bad "cleanup" in the
+future.
+
+> +	if (unlikely(kvm->mmu_notifier_count)) {
+> +		if (kvm->mmu_notifier_range_start <= hva &&
+> +		    hva < kvm->mmu_notifier_range_end)
+
+Combine these into a single statement?  I think the result is easier to read?
+
+	if (unlikely(kvm->mmu_notifier_count) &&
+	    kvm->mmu_notifier_range_start <= hva &&
+	    hva < kvm->mmu_notifier_range_end)
+
+> +			return 1;
+> +	}
+> +	if (kvm->mmu_notifier_seq != mmu_seq)
+> +		return 1;
+> +	return 0;
+> +}
+>  #endif
+>  
+>  #ifdef CONFIG_HAVE_KVM_IRQ_ROUTING
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index fa9e3614d30e..d6e1ef5cb184 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -483,6 +483,18 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>  	 * count is also read inside the mmu_lock critical section.
+>  	 */
+>  	kvm->mmu_notifier_count++;
+> +	if (likely(kvm->mmu_notifier_count == 1)) {
+> +		kvm->mmu_notifier_range_start = range->start;
+> +		kvm->mmu_notifier_range_end = range->end;
+> +	} else {
+> +		/**
+> +		 * Tracking multiple concurrent ranges has diminishing returns,
+> +		 * so just use the maximum range. This persists until after all
+> +		 * outstanding invalidation operations complete.
+> +		 */
+> +		kvm->mmu_notifier_range_start = 0;
+> +		kvm->mmu_notifier_range_end = ULONG_MAX;
+
+Hrm, I don't think there's a corner case in practice, but ULONG_MAX is a legal
+virtual address and range_end is exclusive.  E.g. passing hva=-1ul would get a
+false negative in mmu_notifier_retry_hva().  It's not an issue as written
+because hva is generated from the gfn, and hva can't be a kernel address.  I'm
+guessing mmu_notifier also doesn't fire on kernel addresses.  I assume that all
+holds true for other architectures, and adding checks in mmu_notifier_retry_hva()
+feels like a waste of cycles, but it still bugs me. :-)
+
+Maybe zero out range_end and explicitly check for that, just to be paranoid?
+
+	if (unlikely(kvm->mmu_notifier_count) &&
+	    (!kvm->mmu_notifier_range_end ||
+            (kvm->mmu_notifier_range_start <= hva &&
+             hva < kvm->mmu_notifier_range_end))
+
+> +	}
+>  	need_tlb_flush = kvm_unmap_hva_range(kvm, range->start, range->end,
+>  					     range->flags);
+>  	/* we've to flush the tlb before the pages can be freed */
+> @@ -2010,9 +2022,11 @@ static kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
+>  
+>  kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
+>  			       bool atomic, bool *async, bool write_fault,
+> -			       bool *writable)
+> +			       bool *writable, hva_t *hva)
+
+Hrm, it feels like we should really split gfn->hva and hva->pfn into separate
+operations, but pretty much every arch needs the hva error handling.  Splitting
+it would probably do more harm than good, at least not without a lot of
+additional refactoring.  Bummer.
+
+>  {
+>  	unsigned long addr = __gfn_to_hva_many(slot, gfn, NULL, write_fault);
+
+Newline here.
+
+> +	if (hva)
+> +		*hva = addr;
+>  
+>  	if (addr == KVM_HVA_ERR_RO_BAD) {
+>  		if (writable)
+> @@ -2041,19 +2055,19 @@ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
+>  		      bool *writable)
+>  {
+>  	return __gfn_to_pfn_memslot(gfn_to_memslot(kvm, gfn), gfn, false, NULL,
+> -				    write_fault, writable);
+> +				    write_fault, writable, NULL);
+>  }
+>  EXPORT_SYMBOL_GPL(gfn_to_pfn_prot);
+>  
+>  kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn)
+>  {
+> -	return __gfn_to_pfn_memslot(slot, gfn, false, NULL, true, NULL);
+> +	return __gfn_to_pfn_memslot(slot, gfn, false, NULL, true, NULL, NULL);
+>  }
+>  EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot);
+>  
+>  kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn)
+>  {
+> -	return __gfn_to_pfn_memslot(slot, gfn, true, NULL, true, NULL);
+> +	return __gfn_to_pfn_memslot(slot, gfn, true, NULL, true, NULL, NULL);
+>  }
+>  EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot_atomic);
+>  
+> -- 
+> 2.30.0.280.ga3ce27912f-goog
+> 
