@@ -2,97 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD61C3052FE
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Jan 2021 07:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AC93054F6
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Jan 2021 08:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbhA0GOp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Jan 2021 01:14:45 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:57610 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235421AbhA0DQ7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 Jan 2021 22:16:59 -0500
-Received: from localhost.localdomain (unknown [112.3.197.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxdbwB0hBgpJENAA--.18006S3;
-        Wed, 27 Jan 2021 10:37:55 +0800 (CST)
-From:   Yanteng Si <siyanteng@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@gmail.com>, siyanteng01@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org, Yanteng Si <siyanteng@loongson.cn>
-Subject: [PATCH v3 2/2] MIPS: mm:remove function __uncached_access()
-Date:   Wed, 27 Jan 2021 10:38:06 +0800
-Message-Id: <20210127023806.3753812-2-siyanteng@loongson.cn>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210127023806.3753812-1-siyanteng@loongson.cn>
-References: <20210127023806.3753812-1-siyanteng@loongson.cn>
+        id S316411AbhAZX2L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Jan 2021 18:28:11 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2430 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392072AbhAZR6z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Jan 2021 12:58:55 -0500
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4DQDqc26slz67gXH;
+        Wed, 27 Jan 2021 01:53:32 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 26 Jan 2021 18:57:55 +0100
+Received: from [10.47.2.35] (10.47.2.35) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Tue, 26 Jan
+ 2021 17:57:53 +0000
+Subject: Re: [PATCH RFC 0/4] Fix arm64 crash for accessing unmapped IO port
+ regions (reboot)
+To:     Arnd Bergmann <arnd@kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "xuwei (O)" <xuwei5@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "linuxarm@openeuler.org" <linuxarm@openeuler.org>
+References: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a38HsXrebiCdJXJdxdBvS7AUjs+rVEex-0JQ+ZsytTy8A@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <fe18fbe3-e7e6-039d-aaf8-67bfb4cf2375@huawei.com>
+Date:   Tue, 26 Jan 2021 17:56:31 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxdbwB0hBgpJENAA--.18006S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Gw47Xry8Jry3XF47GF4kWFg_yoW8Jr1Upa
-        93A348GFW09w1UXF47A3yUZa1rZasFqa42gay2k348u3Z8Z3W3Xr1rJFy5urZ0qr9a9a17
-        Zw1rAryUZF4UAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9C14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0
-        owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
-        x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
-        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqAp5UUUUU=
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+In-Reply-To: <CAK8P3a38HsXrebiCdJXJdxdBvS7AUjs+rVEex-0JQ+ZsytTy8A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.2.35]
+X-ClientProxiedBy: lhreml717-chm.china.huawei.com (10.201.108.68) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MIPS can now use the default uncached_access like other archs.
+>>
+>> For reference, here's how /proc/ioports looks on my arm64 system with
+>> this change:
+>>
+>> root@ubuntu:/home/john# more /proc/ioports
+>> 00010000-0001ffff : PCI Bus 0002:f8
+>>    00010000-00010fff : PCI Bus 0002:f9
+>>      00010000-00010007 : 0002:f9:00.0
+>>        00010000-00010007 : serial
+>>      00010008-0001000f : 0002:f9:00.1
+>>        00010008-0001000f : serial
+>>      00010010-00010017 : 0002:f9:00.2
+>>      00010018-0001001f : 0002:f9:00.2
+>> 00020000-0002ffff : PCI Bus 0004:88
+>> 00030000-0003ffff : PCI Bus 0005:78
+>> 00040000-0004ffff : PCI Bus 0006:c0
+>> 00050000-0005ffff : PCI Bus 0007:90
+>> 00060000-0006ffff : PCI Bus 000a:10
+>> 00070000-0007ffff : PCI Bus 000c:20
+>> 00080000-0008ffff : PCI Bus 000d:30
 
-Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
----
- arch/mips/mm/cache.c | 8 --------
- drivers/char/mem.c   | 7 -------
- 2 files changed, 15 deletions(-)
+Hi Arnd,
 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index 23b16bfd97b2..9cfd432d99f6 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -207,11 +207,3 @@ void cpu_cache_init(void)
- 
- 	setup_protection_map();
- }
--
--int __weak __uncached_access(struct file *file, unsigned long addr)
--{
--	if (file->f_flags & O_DSYNC)
--		return 1;
--
--	return addr >= __pa(high_memory);
--}
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index 43c871dc7477..869b9f5e8e03 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -291,13 +291,6 @@ static int uncached_access(struct file *file, phys_addr_t addr)
- 	 * attribute aliases.
- 	 */
- 	return !(efi_mem_attributes(addr) & EFI_MEMORY_WB);
--#elif defined(CONFIG_MIPS)
--	{
--		extern int __uncached_access(struct file *file,
--					     unsigned long addr);
--
--		return __uncached_access(file, addr);
--	}
- #else
- 	/*
- 	 * Accessing memory above the top the kernel knows about or through a
--- 
-2.27.0
+> Doesn't this mean we lose the ability to access PCI devices
+> with legacy ISA compatibility? Most importantly, any GPU today
+> should in theory still support VGA frame buffer mode or text
+> console, but both of these stop working if the low I/O ports are
+> not mapped to the corresponding PCI bus.
 
+Hmmm.. so are you saying that there is an expectation that the kernel 
+PIO region assigned for these devices must start at 0x0? If so, I assume 
+it's because fixed IO ports are used.
+
+> There is of course
+> already a problem if you have multiple PCI host bridges, and
+> each one gets its own PIO range, which means that only one
+> of them can have an ISA bridge with working PIO behind it.
+
+The answer to my question, above, seems to be 'yes' now.
+
+> 
+> Another such case would be a BMC that has legacy ISA devices
+> behind a (real or emulated) LPC bus, e.g. a 8250 UART, ps2
+> keyboard, RTC, or an ATA CDROM. Not sure if any of those are
+> ever used on Arm machines.
+> 
+> Regarding the size of the reservation, does this actually need
+> to cover the 0x0fff...0xffff range or just 0x0000...0x0fff? I don't
+> think there are any drivers that hardcode I/O ports beyond 0x0fff
+> because those would not work on ISA buses but require PCI
+> assigned BARs.
+
+I just chose the complete legacy IO port range, that being 0x0--0xffff. 
+If there would be no hardcoded ports beyond 0x0fff, then reserving 
+0x0--0xfff would work.
+
+> 
+> One more thought: There are two common ways in which PCI
+> host bridges map their PIO ports: either each host bridge has
+> its own 0x0...0xffff BAR range but gets remapped to an
+> arbitrary range of port numbers in the kernel, or each host bridge
+> uses a distinct range of port numbers, and the kernel can use
+> a 1:1 mapping between hardware and software port numbers,
+> i.e. the number in the BAR is the same as in the kernel.
+> 
+> If all numbers are shifted by 0x10000, that second case no
+> longer works, and there is always an offset.
+
+Yes, this change would definitely break the second. But does - or could 
+- anyone use it on arm64? I didn't think that it was possible.
+
+Thanks,
+John
