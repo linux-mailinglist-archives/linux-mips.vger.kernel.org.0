@@ -2,156 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21935303ED2
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Jan 2021 14:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AE1303FD6
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Jan 2021 15:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404571AbhAZNfz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Jan 2021 08:35:55 -0500
-Received: from mga06.intel.com ([134.134.136.31]:48273 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392005AbhAZN0n (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 Jan 2021 08:26:43 -0500
-IronPort-SDR: Ksr2gGZ7dn03b/85c1HgNMlPduJ5NJC4EiCDNMkUNQVcrdHtToYzTjEMhgvdUx+T9+FNarGHaf
- N+TpHz0X3cag==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="241429103"
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="241429103"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 05:24:53 -0800
-IronPort-SDR: g4Zswe3qz4zMid/EyEG5xz4WWhFPriWd/t2t5KrG0ShP0j9WNEEJayXNCJQTEkRkM2/IHRNzgx
- zk+bb8SSGplQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="369103591"
-Received: from stinkbox.fi.intel.com (HELO stinkbox) ([10.237.72.174])
-  by orsmga002.jf.intel.com with SMTP; 26 Jan 2021 05:24:36 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 26 Jan 2021 15:24:35 +0200
-Date:   Tue, 26 Jan 2021 15:24:35 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        dri-devel@lists.freedesktop.org, Sandy Huang <hjc@rock-chips.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-tegra@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Marek Vasut <marex@denx.de>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        linux-rockchip@lists.infradead.org,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        freedreno@lists.freedesktop.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-msm@vger.kernel.org,
-        Philippe Cornu <philippe.cornu@st.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        virtualization@lists.linux-foundation.org,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen Feng <puck.chen@hisilicon.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Alison Wang <alison.wang@nxp.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-mediatek@lists.infradead
-Subject: Re: [PATCH v2 10/11] drm: Use state helper instead of the plane
- state pointer
-Message-ID: <YBAYE4YH4bgURmuf@intel.com>
-References: <20210121163537.1466118-1-maxime@cerno.tech>
- <20210121163537.1466118-10-maxime@cerno.tech>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210121163537.1466118-10-maxime@cerno.tech>
-X-Patchwork-Hint: comment
+        id S2405756AbhAZOKF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Jan 2021 09:10:05 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:49896 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2391768AbhAZOGi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 Jan 2021 09:06:38 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxRb2nIRBg_DsNAA--.17412S2;
+        Tue, 26 Jan 2021 22:05:28 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH bpf-next] samples/bpf: Add include dir for MIPS Loongson64 to fix build errors
+Date:   Tue, 26 Jan 2021 22:05:25 +0800
+Message-Id: <1611669925-25315-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxRb2nIRBg_DsNAA--.17412S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrW5Aw1UCFy7uFyxAFWUurg_yoWrXFyDpa
+        1Duw1kWF45WryUAFn8Ar1Ik3y3Jw45G3yjvFy5W34jv3ZIgFyfJrsakr15Gr1ktF4qva18
+        Kry3WrWagr1UZw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE14v_Xryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JUWlksUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 05:35:35PM +0100, Maxime Ripard wrote:
-> Many drivers reference the plane->state pointer in order to get the
-> current plane state in their atomic_update or atomic_disable hooks,
-> which would be the new plane state in the global atomic state since
-> _swap_state happened when those hooks are run.
-> 
-> Use the drm_atomic_get_new_plane_state helper to get that state to make it
-> more obvious.
-> 
-> This was made using the coccinelle script below:
-> 
-> @ plane_atomic_func @
-> identifier helpers;
-> identifier func;
-> @@
-> 
-> (
->  static const struct drm_plane_helper_funcs helpers = {
->  	...,
->  	.atomic_disable = func,
-> 	...,
->  };
-> |
->  static const struct drm_plane_helper_funcs helpers = {
->  	...,
->  	.atomic_update = func,
-> 	...,
->  };
-> )
-> 
-> @ adds_new_state @
-> identifier plane_atomic_func.func;
-> identifier plane, state;
-> identifier new_state;
-> @@
-> 
->  func(struct drm_plane *plane, struct drm_atomic_state *state)
->  {
->  	...
-> -	struct drm_plane_state *new_state = plane->state;
-> +	struct drm_plane_state *new_state = drm_atomic_get_new_plane_state(state, plane);
-> 	...
->  }
-> 
-> @ include depends on adds_new_state @
-> @@
-> 
->  #include <drm/drm_atomic.h>
-> 
-> @ no_include depends on !include && adds_new_state @
-> @@
-> 
-> + #include <drm/drm_atomic.h>
->   #include <drm/...>
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+There exists many build errors when make M=samples/bpf on the Loongson
+platform, this issue is MIPS related, x86 compiles just fine.
 
-Looks great.
+Here are some errors:
 
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+  CLANG-bpf  samples/bpf/sockex2_kern.o
+In file included from samples/bpf/sockex2_kern.c:2:
+In file included from ./include/uapi/linux/in.h:24:
+In file included from ./include/linux/socket.h:8:
+In file included from ./include/linux/uio.h:8:
+In file included from ./include/linux/kernel.h:11:
+In file included from ./include/linux/bitops.h:32:
+In file included from ./arch/mips/include/asm/bitops.h:19:
+In file included from ./arch/mips/include/asm/barrier.h:11:
+./arch/mips/include/asm/addrspace.h:13:10: fatal error: 'spaces.h' file not found
+         ^~~~~~~~~~
+1 error generated.
 
+  CLANG-bpf  samples/bpf/sockex2_kern.o
+In file included from samples/bpf/sockex2_kern.c:2:
+In file included from ./include/uapi/linux/in.h:24:
+In file included from ./include/linux/socket.h:8:
+In file included from ./include/linux/uio.h:8:
+In file included from ./include/linux/kernel.h:11:
+In file included from ./include/linux/bitops.h:32:
+In file included from ./arch/mips/include/asm/bitops.h:22:
+In file included from ./arch/mips/include/asm/cpu-features.h:13:
+In file included from ./arch/mips/include/asm/cpu-info.h:15:
+In file included from ./include/linux/cache.h:6:
+./arch/mips/include/asm/cache.h:12:10: fatal error: 'kmalloc.h' file not found
+         ^~~~~~~~~~~
+1 error generated.
+
+  CLANG-bpf  samples/bpf/sockex2_kern.o
+In file included from samples/bpf/sockex2_kern.c:2:
+In file included from ./include/uapi/linux/in.h:24:
+In file included from ./include/linux/socket.h:8:
+In file included from ./include/linux/uio.h:8:
+In file included from ./include/linux/kernel.h:11:
+In file included from ./include/linux/bitops.h:32:
+In file included from ./arch/mips/include/asm/bitops.h:22:
+./arch/mips/include/asm/cpu-features.h:15:10: fatal error: 'cpu-feature-overrides.h' file not found
+         ^~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+
+$ find arch/mips/include/asm -name spaces.h | sort
+arch/mips/include/asm/mach-ar7/spaces.h
+...
+arch/mips/include/asm/mach-generic/spaces.h
+...
+arch/mips/include/asm/mach-loongson64/spaces.h
+...
+arch/mips/include/asm/mach-tx49xx/spaces.h
+
+$ find arch/mips/include/asm -name kmalloc.h | sort
+arch/mips/include/asm/mach-generic/kmalloc.h
+arch/mips/include/asm/mach-ip32/kmalloc.h
+arch/mips/include/asm/mach-tx49xx/kmalloc.h
+
+$ find arch/mips/include/asm -name cpu-feature-overrides.h | sort
+arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
+...
+arch/mips/include/asm/mach-generic/cpu-feature-overrides.h
+...
+arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
+...
+arch/mips/include/asm/mach-tx49xx/cpu-feature-overrides.h
+
+In the arch/mips/Makefile, there exists the following board-dependent
+options:
+
+include arch/mips/Kbuild.platforms
+cflags-y += -I$(srctree)/arch/mips/include/asm/mach-generic
+
+So we can do the similar things in samples/bpf/Makefile, just add
+platform specific and generic include dir for MIPS Loongson64 to
+fix the build errors.
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ samples/bpf/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 362f314..45ceca4 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -185,6 +185,10 @@ endif
+ 
+ ifeq ($(ARCH), mips)
+ TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__
++ifdef CONFIG_MACH_LOONGSON64
++BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-loongson64
++BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-generic
++endif
+ endif
+ 
+ TPROGS_CFLAGS += -Wall -O2
 -- 
-Ville Syrjälä
-Intel
+2.1.0
+
