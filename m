@@ -2,122 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BC63050CC
+	by mail.lfdr.de (Postfix) with ESMTP id D09F33050CD
 	for <lists+linux-mips@lfdr.de>; Wed, 27 Jan 2021 05:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236703AbhA0E12 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Jan 2021 23:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389675AbhA0AGw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Jan 2021 19:06:52 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B54C061797
-        for <linux-mips@vger.kernel.org>; Tue, 26 Jan 2021 16:04:41 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id 31so27724plb.10
-        for <linux-mips@vger.kernel.org>; Tue, 26 Jan 2021 16:04:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ehN8g8luuF2BKLiZYDz35HTGbUgrzlwEK0VyDMRc1bE=;
-        b=u+tGmLtats3b8HsEfxKVQgMK0GXcYfxMRPArDpxJoYSxVOHzNMkczWTT9UKc+iuL5c
-         1i80Ybhtd+JjjT+hrlRpf+r1Oti1xkqj1SSUkApAb7iuqNc0hAkpN+PYw76+kF30zXuT
-         xKNeJ0v6+/QBYk7eVYWEZTsCW8IasRNlBF9OpHVGxlio9+VdQohz9RpJPqPxKapSecTH
-         XpaQaL94Nfi9thSv44/gpO6nt2eB1Ocr0Vtnc3sPmSduLvYB3U07MvoJrdF3T7Y1+n08
-         NfLW9PKtYmJe5bubHPO75UGFwYTmQBwPme6NriQsLx5/PJNyd+X6U36wepGK/wdj+iNS
-         wuJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ehN8g8luuF2BKLiZYDz35HTGbUgrzlwEK0VyDMRc1bE=;
-        b=nduEQ2Byn9r4AhScpNq5ZEdMie3vT/KMqoKgmisjBKb932ndv2lmn+uxbCzaf5sVOJ
-         ULF7XDcnJAWcK0LlfkIEbDIJ+bSPVGUVM+19sA5xaAIk6DSOAy41FicKu2Lmhs14616B
-         lhKTM1SqTP38/Pm/eBtdGsVUnF00ao1GKfic7BNSt16KTPlb3kFKxvTTmrs2+TwTP1mq
-         /HPDLhRjodPnYsPRsHtC3vi7RIW00m08YHk1yBGbkpPFyhNJxs1+5O/7fyHMN+8hfJrz
-         aAkdHO/Cv2C/ba91YQLqewK36KIkXJzQpBSjx/0qPKuoFjm23nuUEDoe04/eWQEk92h9
-         n7fw==
-X-Gm-Message-State: AOAM530P1f4xYb11uXedJj0dSaeFranMt0xSTdcLeu/ryJcypPCnn/dj
-        YmSFqMSxpAWCAO9ZCW+LqiUrsQ==
-X-Google-Smtp-Source: ABdhPJzzbvfi/5tp5Y0OvbgmuXAJ+a6Aqpa1MNl1ySc5Qa2syXhxmjS34UST5dEuL1LWwufhbGgubw==
-X-Received: by 2002:a17:90b:4a09:: with SMTP id kk9mr2478013pjb.15.1611705881203;
-        Tue, 26 Jan 2021 16:04:41 -0800 (PST)
-Received: from google.com ([2620:15c:f:10:1ea0:b8ff:fe73:50f5])
-        by smtp.gmail.com with ESMTPSA id y4sm75088pji.34.2021.01.26.16.04.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 16:04:40 -0800 (PST)
-Date:   Tue, 26 Jan 2021 16:04:33 -0800
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
-        kvm-ppc@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH] KVM: x86/mmu: consider the hva in mmu_notifer retry
-Message-ID: <YBCuEaxZu0MuD3MW@google.com>
-References: <20210125064234.2078146-1-stevensd@google.com>
- <YA8PXCEVukW0UzC5@google.com>
- <CAD=HUj5YMtSJY6ZO9TRXHDEfWRM1o3Lrm7nkz=G2VJ_oZ-c5mw@mail.gmail.com>
+        id S238657AbhA0E1b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Jan 2021 23:27:31 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:35288 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2392344AbhA0BmB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 Jan 2021 20:42:01 -0500
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxS+ShxBBgWooNAA--.21016S3;
+        Wed, 27 Jan 2021 09:40:50 +0800 (CST)
+Subject: Re: [PATCH bpf-next] samples/bpf: Add include dir for MIPS Loongson64
+ to fix build errors
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <1611669925-25315-1-git-send-email-yangtiezhu@loongson.cn>
+ <67891f2f-a374-54fb-e6e5-44145190934f@iogearbox.net>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <add50f8c-7592-75ec-ffb2-84c4280f2fc7@loongson.cn>
+Date:   Wed, 27 Jan 2021 09:40:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=HUj5YMtSJY6ZO9TRXHDEfWRM1o3Lrm7nkz=G2VJ_oZ-c5mw@mail.gmail.com>
+In-Reply-To: <67891f2f-a374-54fb-e6e5-44145190934f@iogearbox.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxS+ShxBBgWooNAA--.21016S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFyxXrW5ZFW7WFyfWr13XFb_yoW5XrWfpa
+        n3uanrKrWUXry5GayxCryUWr4Yy398G3yYgFWrWr45Aa4qqasagr4ktrW5urZ3GryIya1S
+        yr9xKF98GF1kZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_KwCF04k20xvY0x0EwI
+        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
+        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+        6cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb9mitUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jan 26, 2021, David Stevens wrote:
-> > This needs a comment to explicitly state that 'count > 1' cannot be done at
-> > this time.  My initial thought is that it would be more intuitive to check for
-> > 'count > 1' here, but that would potentially check the wrong wrange when count
-> > goes from 2->1.  The comment about persistence in invalidate_range_start() is a
-> > good hint, but I think it's worth being explicit to avoid bad "cleanup" in the
-> > future.
-> >
-> > > +     if (unlikely(kvm->mmu_notifier_count)) {
-> > > +             if (kvm->mmu_notifier_range_start <= hva &&
-> > > +                 hva < kvm->mmu_notifier_range_end)
-> 
-> I'm not sure I understand what you're suggesting here. How exactly
-> would 'count > 1' be used incorrectly here? I'm fine with adding a
-> comment, but I'm not sure what the comment needs to clarify.
+On 01/27/2021 12:01 AM, Daniel Borkmann wrote:
+> On 1/26/21 3:05 PM, Tiezhu Yang wrote:
+>> There exists many build errors when make M=samples/bpf on the Loongson
+>> platform, this issue is MIPS related, x86 compiles just fine.
+>>
+>> Here are some errors:
+> [...]
+>>
+>> So we can do the similar things in samples/bpf/Makefile, just add
+>> platform specific and generic include dir for MIPS Loongson64 to
+>> fix the build errors.
+>
+> Your patch from [0] said ...
+>
+>   There exists many build warnings when make M=samples/bpf on the 
+> Loongson
+>   platform, this issue is MIPS related, x86 compiles just fine.
+>
+>   Here are some warnings:
+>   [...]
+>
+>   With #ifndef __SANE_USERSPACE_TYPES__  in tools/include/linux/types.h,
+>   the above error has gone and this ifndef change does not hurt other
+>   compilations.
+>
+> ... which ave the impression that all the issues were fixed. What else
+> is needed aside from this patch here? More samples/bpf fixes coming? If
+> yes, please all submit them as a series instead of individual ones.
 
-There's no guarantee that the remaining in-progress invalidation when the count
-goes from 2->1 is the same invalidation call that set range_start/range_end.
+Hi Daniel,
 
-E.g. given two invalidations, A and B, the order of calls could be:
+Thanks for your reply.
 
-  kvm_mmu_notifier_invalidate_range_start(A)
-  kvm_mmu_notifier_invalidate_range_start(B)
-  kvm_mmu_notifier_invalidate_range_end(A)
-  kvm_mmu_notifier_invalidate_range_end(B) <-- ???
+This is the last samples/bpf patch to fix the obvious build issues when
+make M=samples/bpf on the MIPS Loongson64 platform.
 
-or
+There is another MIPS patch to fix the following build error when make
+M=samples/bpf, but it seems a common and known issue when build MIPS
+kernel used with clang [1]:
 
-  kvm_mmu_notifier_invalidate_range_start(A)
-  kvm_mmu_notifier_invalidate_range_start(B)
-  kvm_mmu_notifier_invalidate_range_end(B)
-  kvm_mmu_notifier_invalidate_range_end(A) <-- ???
+./arch/mips/include/asm/checksum.h:161:9: error: unsupported inline asm: 
+input with type 'unsigned long' matching output with type '__wsum' (aka 
+'unsigned int')
+         : "0" ((__force unsigned long)daddr),
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
 
-In the first case, "A" is in-progress when the count goes 2->1, in the second
-case "B" is still in-progress.  Checking for "count > 1" in the consumer instead
-of handling it in the producer (as you did) would lead to the consumer checking
-against the wrong range.  I don't see a way to solve that without adding some
-amount of history, which I agree is unnecessary.
+Because these two patches are independent, this one is bpf-next related,
+the other one is mips-next related, so I submit them sepearately.
+
+[1] 
+https://lore.kernel.org/linux-mips/CAG_fn=W0JHf8QyUX==+rQMp8PoULHrsQCa9Htffws31ga8k-iw@mail.gmail.com/
+
+Thanks,
+Tiezhu
+
+>
+>  [0] 
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=190d1c921ad0862da14807e1670f54020f48e889
+>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   samples/bpf/Makefile | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+>> index 362f314..45ceca4 100644
+>> --- a/samples/bpf/Makefile
+>> +++ b/samples/bpf/Makefile
+>> @@ -185,6 +185,10 @@ endif
+>>     ifeq ($(ARCH), mips)
+>>   TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__
+>> +ifdef CONFIG_MACH_LOONGSON64
+>> +BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-loongson64
+>> +BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-generic
+>> +endif
+>>   endif
+>>     TPROGS_CFLAGS += -Wall -O2
+>>
+
