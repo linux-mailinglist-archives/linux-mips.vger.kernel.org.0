@@ -2,101 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C10143065D3
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Jan 2021 22:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE42C30675A
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 00:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbhA0VQc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Jan 2021 16:16:32 -0500
-Received: from elvis.franken.de ([193.175.24.41]:60530 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231927AbhA0VQb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 Jan 2021 16:16:31 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1l4s9k-0003fj-00; Wed, 27 Jan 2021 22:15:16 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id F222CC0AAF; Wed, 27 Jan 2021 22:15:06 +0100 (CET)
-Date:   Wed, 27 Jan 2021 22:15:06 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        David Daney <david.daney@cavium.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Archer Yan <ayan@wavecomp.com>, x86@kernel.org
-Subject: Re: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack
- traces from user-space with perf
-Message-ID: <20210127211506.GA21163@alpha.franken.de>
-References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
- <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
- <20210104105904.GK3021@hirez.programming.kicks-ass.net>
- <0712b131-715a-a83a-bc9e-61405824ff0e@flygoat.com>
- <20210105101806.GG3040@hirez.programming.kicks-ass.net>
+        id S232658AbhA0W5Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Jan 2021 17:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232158AbhA0W4P (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Jan 2021 17:56:15 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D920AC061756;
+        Wed, 27 Jan 2021 14:32:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ULuGLjzwxtFSy9nTUc2QJKX0McDeCrJVlLHjHSrLJUQ=; b=ekL90Tyh0NH+HZ7P38Jv+7tXVu
+        V0h1SMEmsSa5dYOLQ7mbtrO48frvtn1sBgDUeYc4f4XNC9aKBAmk7KtEedc0z/FUPFs+JDguU9QxY
+        k3mmlLvm60KJEVI6UAG6AQRnHCwu0/Dr7UQYqw4148K4ZlkIsaUXK+YxpGo6tK4yloYl+e/rrCI6B
+        ctAf1mdI8c50oPovdIkjNEHuj3H8v81dfRKlTqXv9PgYI4NTO4WhkobKHigj7092hDLmIwt73cVeJ
+        +E9ZvC6vEdLhnYqb8ZUjb+hUALXQwfc/4kM5/foTO1mrQXOVaAgHztGeXn/DtQiaY66Us2amlQ3wa
+        whBvdWEw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1l4tM6-0006bm-Aw; Wed, 27 Jan 2021 22:32:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 270C83003D8;
+        Wed, 27 Jan 2021 23:32:04 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0E4712BDDF79F; Wed, 27 Jan 2021 23:32:04 +0100 (CET)
+Date:   Wed, 27 Jan 2021 23:32:03 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
+Cc:     Paul Burton <paul.burton@imgtec.com>, linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] MIPS: Octeon: Implement __smp_store_release()
+Message-ID: <YBHp4139X+p+4IZ+@hirez.programming.kicks-ass.net>
+References: <20210127203627.47510-1-alexander.sverdlin@nokia.com>
+ <20210127203627.47510-2-alexander.sverdlin@nokia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210105101806.GG3040@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210127203627.47510-2-alexander.sverdlin@nokia.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jan 05, 2021 at 11:18:06AM +0100, Peter Zijlstra wrote:
-> On Tue, Jan 05, 2021 at 11:45:37AM +0800, Jiaxun Yang wrote:
-> > 在 2021/1/4 下午6:59, Peter Zijlstra 写道:
-> > > On Tue, Dec 29, 2020 at 08:55:59PM +0800, Tiezhu Yang wrote:
-> > > > +u64 perf_reg_abi(struct task_struct *tsk)
-> > > > +{
-> > > > +	if (test_tsk_thread_flag(tsk, TIF_32BIT_REGS))
-> > > > +		return PERF_SAMPLE_REGS_ABI_32;
-> > > > +	else
-> > > > +		return PERF_SAMPLE_REGS_ABI_64;
-> > > > +}
-> > > So we recently changed this on x86 to not rely on TIF flags. IIRC the
-> > > problem is that on x86 you can change the mode of a task without the
-> > > kernel being aware of it. Is something like that possible on MIPS as
-> > > well?
-> > 
-> > Hi all,
-> > 
-> > In MIPS world it's impossible to raise a thread to 64bit without kernel
-> > aware.
-> > Without STATUS.UX set it will trigger reserved instruction exception when
-> > trying
-> > to run 64bit instructions.
+On Wed, Jan 27, 2021 at 09:36:22PM +0100, Alexander A Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 > 
-> The other way around is the case on x86, a 64bit program can create and
-> execute 32bit code sections without the kernel being aware. But if
-> clearing STATUS.UX has the same issue as setting it, that should not be
-> a problem for you.
+> On Octeon smp_mb() translates to SYNC while wmb+rmb translates to SYNCW
+> only. This brings around 10% performance on tight uncontended spinlock
+> loops.
 > 
-> > However it may be possible to run with 32bit ABI without
-> > TIF_32BIT_REGS if user program didn't get ELF ABI right. I think
-> > that's out of our current consideration.
+> Refer to commit 500c2e1fdbcc ("MIPS: Optimize spinlocks.") and the link
+> below.
 > 
-> Fair enough.
+> On 6-core Octeon machine:
+> sysbench --test=mutex --num-threads=64 --memory-scope=local run
 > 
-> > > The thing x86 does today is look at it's pt_regs state to determine the
-> > > actual state.
-> > It is possible to look at pt_regs Status.UX bit on MIPS. But it seems
-> > unnecessary
-> > as user can't change it.
+> w/o patch:	1.60s
+> with patch:	1.51s
 > 
-> Ok, good. Then no objection, proceed! :-)
+> Link: https://lore.kernel.org/lkml/5644D08D.4080206@caviumnetworks.com/
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> ---
+>  arch/mips/include/asm/barrier.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/mips/include/asm/barrier.h b/arch/mips/include/asm/barrier.h
+> index 49ff172..24c3f2c 100644
+> --- a/arch/mips/include/asm/barrier.h
+> +++ b/arch/mips/include/asm/barrier.h
+> @@ -113,6 +113,15 @@ static inline void wmb(void)
+>  					    ".set arch=octeon\n\t"	\
+>  					    "syncw\n\t"			\
+>  					    ".set pop" : : : "memory")
+> +
+> +#define __smp_store_release(p, v)					\
+> +do {									\
+> +	compiletime_assert_atomic_type(*p);				\
+> +	__smp_wmb();							\
+> +	__smp_rmb();							\
+> +	WRITE_ONCE(*p, v);						\
+> +} while (0)
 
-this patch aims more to mips-next, while patch 2 and 3 are targeting
-tools/perf. Should I take them into mips-next, too ?
+This is wrong in general since smp_rmb() will only provide order between
+two loads and smp_store_release() is a store.
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+If this is correct for all MIPS, this needs a giant comment on exactly
+how that smp_rmb() makes sense here.
