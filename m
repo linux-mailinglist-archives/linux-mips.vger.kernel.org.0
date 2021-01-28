@@ -2,97 +2,203 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6683067D8
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 00:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693DA3069C6
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 02:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235729AbhA0XZI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Jan 2021 18:25:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbhA0W41 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Jan 2021 17:56:27 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DD9C06178C;
-        Wed, 27 Jan 2021 14:37:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cvlrAJZnq6IX7KNiUIZWjYdQaLq5TVfCb9k0Y04B5QA=; b=mdyb7VqWn5FMZa/1xxFmi9xuhx
-        XNFizrhQnqrgpWOKZGAF/GUyQ/IcM8+ejDoA4tWBkRuLFJSsF/MGr81LOuekbRSNQ6dHn9hererlK
-        WtCxjnJthi1v/PmX52wi1lMxHuuMlJoggW7hfp4oYJgHQfELT4W2Cupzds5JqKAvdBn+HKDoXR/U2
-        X+Q6lQ+P7bwEJ4muUXonrRF62gx1thcujMZbIldCeHubMPpMgF7ksmw/hlJ/UQAFTZpPVyEQg/Jqx
-        t0t+Z+7qTJ16LYMVOXnXbtvPbIMifaduR33PM5c5CyF49dNdndy+zY2X0bkVMrIGy8D5pUiNgGa6f
-        5WB3wihw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l4tR9-007bYi-Vq; Wed, 27 Jan 2021 22:37:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AC7823010C8;
-        Wed, 27 Jan 2021 23:37:19 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 990062BDDF79D; Wed, 27 Jan 2021 23:37:19 +0100 (CET)
-Date:   Wed, 27 Jan 2021 23:37:19 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-Cc:     Paul Burton <paul.burton@imgtec.com>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] MIPS: cmpxchg: Use cmpxchg_local() for
- {cmp_}xchg_small()
-Message-ID: <YBHrH1Rw/nQqgDK4@hirez.programming.kicks-ass.net>
-References: <20210127203627.47510-1-alexander.sverdlin@nokia.com>
- <20210127203627.47510-7-alexander.sverdlin@nokia.com>
+        id S231752AbhA1BKP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Jan 2021 20:10:15 -0500
+Received: from condef-04.nifty.com ([202.248.20.69]:41741 "EHLO
+        condef-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231688AbhA1BHY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Jan 2021 20:07:24 -0500
+Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-04.nifty.com with ESMTP id 10S0s8h1003440;
+        Thu, 28 Jan 2021 09:54:08 +0900
+Received: from oscar.flets-west.jp (softbank126026094251.bbtec.net [126.26.94.251]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 10S0pjIV024172;
+        Thu, 28 Jan 2021 09:51:45 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 10S0pjIV024172
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1611795106;
+        bh=jQK2la2Ui/cbd7OVnHnnldJT4VCvoMGBdUZ9L0a9brw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RCDhaLrSacWGW2jMoA/CnF0PXcaoEGBb/27Iq340URIjyF5oOdKIioy3xHP3gsabi
+         mw2ZoaQYGVOEzsCJagmyEeYa+/en2HXL/VNwpblpu+H4HmQiy3FuHey7xwIHawrWhz
+         J046GTpD7glj5cXJqXMwWZMnKHaOG7PR+D6EQTv69ORhiD33OFaqqBEEw0u6JdDmdu
+         GOthXjVErdPRXsvNFscEIJJkwb+kD+1TCC1UM6286+BXL8saw9gPf83J7mGkOtYG0m
+         pEFy1183wEobPYroWAor8uPgimvicQp7OOAgunUeDJfA8jTaVxyFcGYh5N2AWxcL+E
+         4y0JIaJgjdFmg==
+X-Nifty-SrcIP: [126.26.94.251]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-arch@vger.kernel.org, x86@kernel.org
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 00/27] arch: syscalls: unifiy all syscalltbl.sh into scripts/syscalltbl.sh
+Date:   Thu, 28 Jan 2021 09:50:42 +0900
+Message-Id: <20210128005110.2613902-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210127203627.47510-7-alexander.sverdlin@nokia.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 09:36:27PM +0100, Alexander A Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> 
-> It makes no sense to fold smp_mb__before_llsc()/smp_llsc_mb() again and
-> again, leave only one barrier pair in the outer function.
-> 
-> This removes one SYNCW from __xchg_small() and brings around 10%
-> performance improvement in a tight spinlock loop with 6 threads on a 6 core
-> Octeon.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> ---
->  arch/mips/kernel/cmpxchg.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/cmpxchg.c b/arch/mips/kernel/cmpxchg.c
-> index 89107de..122e85f 100644
-> --- a/arch/mips/kernel/cmpxchg.c
-> +++ b/arch/mips/kernel/cmpxchg.c
-> @@ -41,7 +41,7 @@ unsigned long __xchg_small(volatile void *ptr, unsigned long val, unsigned int s
->  	do {
->  		old32 = load32;
->  		new32 = (load32 & ~mask) | (val << shift);
-> -		load32 = cmpxchg(ptr32, old32, new32);
-> +		load32 = cmpxchg_local(ptr32, old32, new32);
->  	} while (load32 != old32);
->  
->  	return (load32 & mask) >> shift;
-> @@ -97,7 +97,7 @@ unsigned long __cmpxchg_small(volatile void *ptr, unsigned long old,
->  		 */
->  		old32 = (load32 & ~mask) | (old << shift);
->  		new32 = (load32 & ~mask) | (new << shift);
-> -		load32 = cmpxchg(ptr32, old32, new32);
-> +		load32 = cmpxchg_local(ptr32, old32, new32);
->  		if (load32 == old32)
->  			return old;
->  	}
 
-This is wrong, please use cmpxchg_relaxed() which you've just
-introduced. cmpxchg_local() need not be cross-cpu atomic at all (it is
-on mips by accident of implementation).
+As of v5.11-rc1, 12 architectures duplicate similar shell scripts:
+
+  $ find arch -name syscalltbl.sh | sort
+  arch/alpha/kernel/syscalls/syscalltbl.sh
+  arch/arm/tools/syscalltbl.sh
+  arch/ia64/kernel/syscalls/syscalltbl.sh
+  arch/m68k/kernel/syscalls/syscalltbl.sh
+  arch/microblaze/kernel/syscalls/syscalltbl.sh
+  arch/mips/kernel/syscalls/syscalltbl.sh
+  arch/parisc/kernel/syscalls/syscalltbl.sh
+  arch/powerpc/kernel/syscalls/syscalltbl.sh
+  arch/sh/kernel/syscalls/syscalltbl.sh
+  arch/sparc/kernel/syscalls/syscalltbl.sh
+  arch/x86/entry/syscalls/syscalltbl.sh
+  arch/xtensa/kernel/syscalls/syscalltbl.sh
+
+This patch set unifies all of them into a single file,
+scripts/syscalltbl.sh.
+
+The code-diff is attractive:
+
+ 51 files changed, 254 insertions(+), 674 deletions(-)
+ delete mode 100644 arch/alpha/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/arm/tools/syscalltbl.sh
+ delete mode 100644 arch/ia64/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/m68k/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/microblaze/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/mips/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/parisc/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/powerpc/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/sh/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/sparc/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/x86/entry/syscalls/syscalltbl.sh
+ delete mode 100644 arch/xtensa/kernel/syscalls/syscalltbl.sh
+ create mode 100644 scripts/syscalltbl.sh
+
+Also, this includes Makefile fixes, and some x86 fixes and cleanups.
+
+My question is, how to merge this series.
+
+I am touching all architectures, but the first patch is a prerequisite
+of the rest of this series.
+
+One possibility is to ask the x86 maintainers to pickup the first 5
+patches for v5.12-rc1, and then send the rest for v5.13-rc1,
+splitting per-arch.
+
+I want the x86 maintainers to check the first 5 patches because
+I cleaned up the x32 code.
+
+I know x32 was considered for deprecation, but my motivation is to
+clean-up scripts across the tree without changing the functionality.
+
+
+
+Masahiro Yamada (27):
+  scripts: add generic syscalltbl.sh
+  x86/syscalls: fix -Wmissing-prototypes warnings from COND_SYSCALL()
+  x86/build: add missing FORCE and fix 'targets' to make if_changed work
+  x86/entry/x32: rename __x32_compat_sys_* to __x64_compat_sys_*
+  x86/syscalls: switch to generic syscalltbl.sh
+  ARM: syscalls: switch to generic syscalltbl.sh
+  alpha: add missing FORCE and fix 'targets' to make if_changed work
+  alpha: syscalls: switch to generic syscalltbl.sh
+  ia64: add missing FORCE and fix 'targets' to make if_changed work
+  ia64: syscalls: switch to generic syscalltbl.sh
+  m68k: add missing FORCE and fix 'targets' to make if_changed work
+  m68k: syscalls: switch to generic syscalltbl.sh
+  microblaze: add missing FORCE and fix 'targets' to make if_changed
+    work
+  microblaze: syscalls: switch to generic syscalltbl.sh
+  mips: add missing FORCE and fix 'targets' to make if_changed work
+  mips: syscalls: switch to generic syscalltbl.sh
+  parisc: add missing FORCE and fix 'targets' to make if_changed work
+  parisc: syscalls: switch to generic syscalltbl.sh
+  sh: add missing FORCE and fix 'targets' to make if_changed work
+  sh: syscalls: switch to generic syscalltbl.sh
+  sparc: remove wrong comment from arch/sparc/include/asm/Kbuild
+  sparc: add missing FORCE and fix 'targets' to make if_changed work
+  sparc: syscalls: switch to generic syscalltbl.sh
+  powerpc: add missing FORCE and fix 'targets' to make if_changed work
+  powerpc: syscalls: switch to generic syscalltbl.sh
+  xtensa: add missing FORCE and fix 'targets' to make if_changed work
+  xtensa: syscalls: switch to generic syscalltbl.sh
+
+ arch/alpha/kernel/syscalls/Makefile           | 18 +++----
+ arch/alpha/kernel/syscalls/syscalltbl.sh      | 32 -----------
+ arch/alpha/kernel/systbls.S                   |  3 +-
+ arch/arm/kernel/entry-common.S                |  8 +--
+ arch/arm/tools/Makefile                       |  9 ++--
+ arch/arm/tools/syscalltbl.sh                  | 22 --------
+ arch/ia64/kernel/entry.S                      |  3 +-
+ arch/ia64/kernel/syscalls/Makefile            | 19 +++----
+ arch/ia64/kernel/syscalls/syscalltbl.sh       | 32 -----------
+ arch/m68k/kernel/syscalls/Makefile            | 18 +++----
+ arch/m68k/kernel/syscalls/syscalltbl.sh       | 32 -----------
+ arch/m68k/kernel/syscalltable.S               |  3 +-
+ arch/microblaze/kernel/syscall_table.S        |  3 +-
+ arch/microblaze/kernel/syscalls/Makefile      | 18 +++----
+ arch/microblaze/kernel/syscalls/syscalltbl.sh | 32 -----------
+ arch/mips/include/asm/Kbuild                  |  7 ++-
+ arch/mips/kernel/scall32-o32.S                |  4 +-
+ arch/mips/kernel/scall64-n32.S                |  3 +-
+ arch/mips/kernel/scall64-n64.S                |  3 +-
+ arch/mips/kernel/scall64-o32.S                |  4 +-
+ arch/mips/kernel/syscalls/Makefile            | 53 ++++++++-----------
+ arch/mips/kernel/syscalls/syscalltbl.sh       | 36 -------------
+ arch/parisc/include/asm/Kbuild                |  1 -
+ arch/parisc/kernel/syscall.S                  | 16 +++---
+ arch/parisc/kernel/syscalls/Makefile          | 34 +++++-------
+ arch/parisc/kernel/syscalls/syscalltbl.sh     | 36 -------------
+ arch/powerpc/include/asm/Kbuild               |  1 -
+ arch/powerpc/kernel/syscalls/Makefile         | 39 +++++---------
+ arch/powerpc/kernel/syscalls/syscalltbl.sh    | 36 -------------
+ arch/powerpc/kernel/systbl.S                  |  5 +-
+ arch/powerpc/platforms/cell/spu_callbacks.c   |  2 +-
+ arch/sh/kernel/syscalls/Makefile              | 18 +++----
+ arch/sh/kernel/syscalls/syscalltbl.sh         | 32 -----------
+ arch/sparc/include/asm/Kbuild                 |  3 --
+ arch/sparc/kernel/syscalls/Makefile           | 34 +++++-------
+ arch/sparc/kernel/syscalls/syscalltbl.sh      | 36 -------------
+ arch/sparc/kernel/systbls_32.S                |  4 +-
+ arch/sparc/kernel/systbls_64.S                |  8 +--
+ arch/x86/entry/syscall_32.c                   | 12 +++--
+ arch/x86/entry/syscall_64.c                   |  9 ++--
+ arch/x86/entry/syscall_x32.c                  | 27 ++--------
+ arch/x86/entry/syscalls/Makefile              | 33 +++++++-----
+ arch/x86/entry/syscalls/syscalltbl.sh         | 46 ----------------
+ arch/x86/include/asm/Kbuild                   |  1 +
+ arch/x86/include/asm/syscall_wrapper.h        | 11 ++--
+ arch/x86/um/sys_call_table_32.c               |  8 +--
+ arch/x86/um/sys_call_table_64.c               |  9 ++--
+ arch/xtensa/kernel/syscall.c                  |  3 +-
+ arch/xtensa/kernel/syscalls/Makefile          | 18 +++----
+ arch/xtensa/kernel/syscalls/syscalltbl.sh     | 32 -----------
+ scripts/syscalltbl.sh                         | 52 ++++++++++++++++++
+ 51 files changed, 254 insertions(+), 674 deletions(-)
+ delete mode 100644 arch/alpha/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/arm/tools/syscalltbl.sh
+ delete mode 100644 arch/ia64/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/m68k/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/microblaze/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/mips/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/parisc/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/powerpc/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/sh/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/sparc/kernel/syscalls/syscalltbl.sh
+ delete mode 100644 arch/x86/entry/syscalls/syscalltbl.sh
+ delete mode 100644 arch/xtensa/kernel/syscalls/syscalltbl.sh
+ create mode 100644 scripts/syscalltbl.sh
+
+-- 
+2.27.0
+
