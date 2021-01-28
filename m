@@ -2,42 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92638307599
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 13:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA903075A8
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 13:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbhA1MKd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Jan 2021 07:10:33 -0500
-Received: from mail-eopbgr30136.outbound.protection.outlook.com ([40.107.3.136]:28577
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        id S231140AbhA1MOL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Jan 2021 07:14:11 -0500
+Received: from mail-db8eur05on2135.outbound.protection.outlook.com ([40.107.20.135]:3616
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229817AbhA1MKa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 Jan 2021 07:10:30 -0500
+        id S229683AbhA1MOB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Jan 2021 07:14:01 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PpT1IzfNJuIYFNoZ3CeuZENx+1qzbuTtYsjBmtP0oi5cpQEUkKcd4YaQ0NGIY+bRIgW1T/EOMlfC7pmr9l5XNQ39XQFiAjAeTdLIHTgWNybEcMOBXcUwJNBO1mdCSH+ZsNgclW/iw5GGf9EH0FyRkcz4c+PWBOK3eAG5V+m7l1zPGTp2YpM9kXntJPBRLBHFHUOIu637WC2qiCtWUUVwTiDxLINWKVWce/kwjsmwJ7EtJKl7E6t7+ggWgR2hiCqRLdwFRjT/cLIUYmXJjDl3Gl13XzmO1xpqRfUqVJ7njf18++GSb2kasG81dQ0YmDvJYwA+eh8gQOeiuNJnQAwALg==
+ b=KI+ctgy+VSVP9hJAGhDw/il2yGm+3QMY1HBlMbWK3EN4zXCCVCNsD5yE8AGjMrS1nH6T3+TYja7Bzykh11rFdDPchLZbvXHr9JS162+3R+lw0aHMIopDuHZNiwnT1+koyKsa388qNeQ2zx5PrBZP+QN8bQBLbks6Qw3KSBhVH+OMALyfs1Zu6bYK4dTWIinbBMMWH13bUqnNFnEMmU7V9QNy9omEefvNwA4xKr1zcUPbsHorNPytI2M71A37KiCOIuM6hlLcLKSL/W7p+FYK6AVvUbAzgLFhBZJ2mZT8mQIOTO2ECNJX126AGlqZVlM2alNRbG4aTQZa19QHIxIRRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZO9z5G/GuaoXIA6nSx8XgTqSNFDo5kkVO5YgyaiCM04=;
- b=If38DSwDGE1OabxziKhk3fHG77s2HCsq2zVlHUNLw3TiG1bPXdEdsqCH99xxQHSG4Cytkio6kTFdWDhDSPQOzGYC8rg7ks+xdlqrUsqzehv5IFCcWHKTOz2L9T2CvDcxmIVTuDrLbBOZdlMu7xWq9pkNO1EJ+TAGxxHprFeI2LwZoo7fu3xfLs8HIgAVp7VFPswp0vyUhAAlXgiWaabDuFnrzTqhAn1rqbnFuzciBF6PykPMxggETKCZwjNEU4z/h3nNdtpyFWFyazascCFlVjnLv114q9sdF2y1ME3C/8sX6Eotvi2p0x93UAn2VWxMYAqs9Ijf5HIKJj6zmLPDkg==
+ bh=kEqYar4ex//TFqMfEeHMpRyIrUHhoE64HQ6bVsIia0c=;
+ b=c5nRQUxj8eOMcrp9ibRPe3V5LkezA45wSGGjkQ850rksuiPRj5Io+81BGhP1Nsm4vyoepNI6WY12txpTClw4QRlI68bExsB+IHbaZNRxETcjywh3y8VCpOHJz3pWcG980v4l25pk6lPWkglgjM68U65PEpiZ2kpNgEp4Nd7aR0ZnfYUx/LQemcGAU9ceDv1zGPwySpZcmXC+9ov9vE2SDkZS6llJfj6gi3IaK+kKii2yC0NfsiWbi8A8ldqP1PMwED+VpXrw24ueNSbVWWo08XHbUxg2KrVivv4UPvUXMXJbE83eWKtawuilPd4tohkxFkSabCi+/0zJkg7n/47qBQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
  dkim=pass header.d=nokia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZO9z5G/GuaoXIA6nSx8XgTqSNFDo5kkVO5YgyaiCM04=;
- b=ckccAzoX1Z6Xc069CTq8I2EGJnwf6hnpWHu0bZnqDUD57odw11vExtkglX2OPnPEiODc45u10oTXBTDJ8TdXKj52bALnlQOg7jrtJIj9NpXpo5vdBvqyR5uahYYvT235RAaqd8Dpyx0VWxVgcNXjq2OQWITxhmzlvESRBXrKESU=
+ bh=kEqYar4ex//TFqMfEeHMpRyIrUHhoE64HQ6bVsIia0c=;
+ b=yj6b8DVMVklj1JJv91G2oiB5qKtOyltHD9RoC12YBXQjHTX70jQpfgdokt86Z0Qhx5tdV86xhQyxUaxHujM/JsjLIZDi+XWHl+IHPO/g9iXpeE2nBZe3ObapCtKO9mvYen834Ok7w3/nS8pB0Oo+hJZXE9nFRWE5VfBGKgUUkVQ=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=nokia.com;
 Received: from (2603:10a6:208:6e::15) by
- AM0PR07MB4033.eurprd07.prod.outlook.com (2603:10a6:208:3f::26) with Microsoft
+ AM0PR07MB3875.eurprd07.prod.outlook.com (2603:10a6:208:45::27) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3805.6; Thu, 28 Jan 2021 12:09:42 +0000
+ 15.20.3805.6; Thu, 28 Jan 2021 12:13:12 +0000
 Received: from AM0PR07MB4531.eurprd07.prod.outlook.com
  ([fe80::e965:2884:260b:b29a]) by AM0PR07MB4531.eurprd07.prod.outlook.com
  ([fe80::e965:2884:260b:b29a%3]) with mapi id 15.20.3825.008; Thu, 28 Jan 2021
- 12:09:42 +0000
-Subject: Re: [PATCH 1/6] MIPS: Octeon: Implement __smp_store_release()
+ 12:13:12 +0000
+Subject: Re: [PATCH 3/6] MIPS: Octeon: qspinlock: Flush write buffer
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Paul Burton <paul.burton@imgtec.com>, linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -45,123 +45,92 @@ Cc:     Paul Burton <paul.burton@imgtec.com>, linux-mips@vger.kernel.org,
         Boqun Feng <boqun.feng@gmail.com>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
 References: <20210127203627.47510-1-alexander.sverdlin@nokia.com>
- <20210127203627.47510-2-alexander.sverdlin@nokia.com>
- <YBHp4139X+p+4IZ+@hirez.programming.kicks-ass.net>
- <aace6ff1-9ddf-15af-3c0a-378c53c59acb@nokia.com>
- <YBKhBQQ97f/J6L+u@hirez.programming.kicks-ass.net>
+ <20210127203627.47510-4-alexander.sverdlin@nokia.com>
+ <YBHqeXPMILg+352D@hirez.programming.kicks-ass.net>
+ <f492b29b-32a4-b4d4-a5d3-0d0dd8a56b5a@nokia.com>
+ <YBKha2GRFWyYp+Lz@hirez.programming.kicks-ass.net>
 From:   Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Message-ID: <3c0165d9-1814-df1d-7ec9-bf515a3996b3@nokia.com>
-Date:   Thu, 28 Jan 2021 13:09:39 +0100
+Message-ID: <f8344f35-cdf1-ec3d-dcd0-7bfc392ef6e0@nokia.com>
+Date:   Thu, 28 Jan 2021 13:13:03 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.0
-In-Reply-To: <YBKhBQQ97f/J6L+u@hirez.programming.kicks-ass.net>
+In-Reply-To: <YBKha2GRFWyYp+Lz@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [131.228.32.168]
-X-ClientProxiedBy: AM0P190CA0029.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:208:190::39) To AM0PR07MB4531.eurprd07.prod.outlook.com
+X-Originating-IP: [131.228.32.169]
+X-ClientProxiedBy: AM0PR10CA0018.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:17c::28) To AM0PR07MB4531.eurprd07.prod.outlook.com
  (2603:10a6:208:6e::15)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from ulegcpsvhp1.emea.nsn-net.net (131.228.32.168) by AM0P190CA0029.EURP190.PROD.OUTLOOK.COM (2603:10a6:208:190::39) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend Transport; Thu, 28 Jan 2021 12:09:40 +0000
+Received: from ulegcpsvhp1.emea.nsn-net.net (131.228.32.169) by AM0PR10CA0018.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:17c::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend Transport; Thu, 28 Jan 2021 12:13:10 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 01c6ded0-f484-4d03-e821-08d8c38597ee
-X-MS-TrafficTypeDiagnostic: AM0PR07MB4033:
-X-Microsoft-Antispam-PRVS: <AM0PR07MB403304BAF84E39E63DB5FFA388BA9@AM0PR07MB4033.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:446;
+X-MS-Office365-Filtering-Correlation-Id: e30c2b68-4205-4b38-fb78-08d8c38614f9
+X-MS-TrafficTypeDiagnostic: AM0PR07MB3875:
+X-Microsoft-Antispam-PRVS: <AM0PR07MB38759A93A91AF5F7A267B2D088BA9@AM0PR07MB3875.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L1c2XhArCsXn/0zbQwga6kaf3FS/obzXHR1+yvhrMChuRtmNyUlowvLqKaJGKDehG40q+AQazoc5rGevEUClZxx8aKH9KtzOazN546JSiAECzQJ7+Ck2ZNfV925BYrGpecUxlsaDDKUO9RaNvvbu94vLZswM+c1QiF80ifPPhU3ti7CL+O2aNA3JOjwLvdIiPavLCWOHsdvrxxEVF7f7SAIveJfVOO6PeJiNynH+8a/lRPKwwLJ7SJtNfqfPxzeNJVwHniOAZcgQDo8Lfp3akRaZopSq4qeN6BEtRYIg5CoGR/GfcQsH4Mdp6+HXE2sW26eiHqqyJJqsiyX6b0eJCPafcq+hGkEmoelsqzjgSjMLX3g8WtR1mIjZI3anMq220CdHHrPZtXizqFIgigVnL004KbpVkKzP10z/KkgTXE7AdHFU0e59ekMAGNH7OYUYX0TNYhGShVeo0lgTW4X/W6NGZD9SkBehJunJzeEJ2J1rUfQe7SalhefwGHw5pmhi1t5jB7/vhBVbqd3ruRZLk/z1NzlglpU2H7O+9P8JnwM6+pJ1zJJrGsRo1mpRjFsWjT6E2UDsHZHJJK03QNVKGrqXv+lF4yncrsBvot3s968y+SeXQzLd6oaXuFqCGgKmLLYAUbCTWH1/+27OZS309ZYE3LpALtj5xq5+lxQ5SHEmRKVfhdoLXJEAAEVrvhO6
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR07MB4531.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(366004)(346002)(136003)(39860400002)(66946007)(4326008)(66574015)(478600001)(186003)(66476007)(66556008)(956004)(316002)(2616005)(86362001)(54906003)(52116002)(2906002)(16526019)(8936002)(44832011)(6486002)(8676002)(31686004)(83380400001)(966005)(26005)(6506007)(53546011)(6512007)(5660300002)(36756003)(6916009)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?K2pQTjc1Qk1rTVA4SXc2Q1JoeUh2TjFPN011V1JLUUI2VGxnR0d3ZVkwcG0z?=
- =?utf-8?B?azdnUWhwMHdvUGlZd0JwdWZiVnhPbXVPU2kwS0FzaHNpT2ZzUi9kcytWbDZa?=
- =?utf-8?B?ek5Ub1hHdHRVQVQveVFYR2I4Qjc2em03ZkdTZVhqa1kweGJ5RFE1ZUJuZ3lz?=
- =?utf-8?B?ZUM4UnNRcDBRV2JJbWY2SUtWU2VYUi9udjd4RVk5V1NtZzBHNTlFNG0xUDZv?=
- =?utf-8?B?dFpaaW1WLytpVTNkRjVYUzhVcDk1bWR0UXlOaU4vQmNxZk9oeUtwM3VLWG5H?=
- =?utf-8?B?T0g4blNlQ1ZMUXRJUHYwODliMklvYkpoVW51bnBTakcwYzNmR3Y3VysrYlZQ?=
- =?utf-8?B?T1JtNksxM1N1RzRyUXEzRnBLS0t5cjdJNDZsSGRyU1c2aW8rMWdDRytCaUVT?=
- =?utf-8?B?YTB6VUV6ZVNHMU0rcDlEbjN1SVNMQy9mMHdQenlxcHhNVERweTRHSVNWcmFk?=
- =?utf-8?B?NnRqZmNOS292aGpoWHZyN05aRjdoVHpuS2RQVjU1dzlzYmFjQ1dseUNHK1l6?=
- =?utf-8?B?b3htNUp4MGsxQk12L3JwWU1jTyt4TTRNNTRDL3djS0E5Ym4yK2lMbm5VWjJs?=
- =?utf-8?B?clpnZXpCS0FDVGlzaHB3WVF5QXRtMngrcDNLT2JCZXJRLzNTbldtaGI2YjBl?=
- =?utf-8?B?emc5SDlQUitJbjhlVlN1eWJOS2h5bFlVQVhFb2ZxNTBpcUs3L2NRQ2IveVdr?=
- =?utf-8?B?RXRBWkdMcVQxQXZIb1c4WEZQNTlKbFdSR2F6WnJPUTZxRTQrbkExTmk3Vmxx?=
- =?utf-8?B?Y3BiQ2NGZmdtZnNpSm9CcjdFVXFIOGhOVkpCdW1WZXRFN0ZOSmEvQmFmODhW?=
- =?utf-8?B?dE9EVjhlbVZaTDV3TStzM0EyRU1OZTQxZVFaSmJxRk5BTDR4THBYdlNrekhk?=
- =?utf-8?B?aUgzcTVsZ1A2OXMvTWp0elNTUlJlNzdOaE0rNm5DSTVKYkpscHo4TmVlWEdq?=
- =?utf-8?B?bDVrQWdUVHFlbUhRdzQvMHpaZ1FpSjBzY3B0UjUwUDAybmJoa2RicUh2VkRq?=
- =?utf-8?B?Uko0dFNaZFF1YTJsSWhNOEhPSVE4UG1IbGcrY2gvUjhWZ1VZNDNrNjR5aWlw?=
- =?utf-8?B?MjZLaDVrOTNuU1E5cEN2dm9EbW9Gb1FwRVhNOUxZNzlrbzVuZ3RCM1IyR1pX?=
- =?utf-8?B?QUMyNTE4c3o5MVRZa0NtZTVMTzFBSTFuWVZxTC9RNFRhdWFOWEV3NTA3YWR2?=
- =?utf-8?B?R1ROOU1WYi95UDlNWlhkZVVMN2ZZOU1lcjJFMzJMYURrbkROWFZ0cjFsS2NK?=
- =?utf-8?B?cEFrWFlMNjF0ZmVHR3o4ak5OVTJaRUJpTDdDVjV4Z29aYXhYK0Q3cjlYbWVo?=
- =?utf-8?B?Y1hLem5mcWRUZDhLWDNZbnYrWXFBT0theFFyaGxZMC9JN044Y3QwV1BNSVlR?=
- =?utf-8?B?NS9JMFM0L3prdDZkWlVpa3JGZ2EzV1YrSFRDTjlxN00wMHRBK0Zhazhiam50?=
- =?utf-8?Q?AInEwA4u?=
+X-Microsoft-Antispam-Message-Info: ANuFSTTXw+R87V1XGruwHT5VxwniS/KtJYIYvnxx9u4SBqDWDp4oDkpHp6VUEvfDsrfRh85xKrRixFx71t7vayHqMULZenvFbSGnYiE9wYHBxUzVZNf13K1SgVjn02APFyt92my8mINvSBp0qrTt0GGC1cTlsqkrcpP5wCuKBO9XIQnthlfblkfRx1IBPJCE3soTvg23upHyqalkig8XLYSZMmymLE0VB5rCc33yRIi8QwKnpAjOgPe+cayjJm4x/WMbvNPi+zVCp/29Z5/XCa4IDYVJ7UzSPO0gdq8iIrV1ODEgmtFaaJaZZIDdlVJGujuhM/Sy/1OLOf9sY/yh0jUYOUxWdxUhJEvOzsQBs5nW9kFs/Iu+w1bI4930PiVSMLCHQl330VJk02b9sVjeLGVVCXsXx/vEDuzavJuIPIhIGCe/1shWTMv+Tl6+UsJ1/GsVI9XuFGGWpJDghg9+3M4u2AnEJF2rFSz1IwJy8KEcJSVetSkZ+qlYr2MJlvVJDGflZEgOhvJ56p/16fHOATApi2trxZlUEN5YoJce7MwJLXIZsDZbkmJOEEhL15SbG+T1PaAr1bHvpiX208lHdnGWoQfVSFjkm4cckCQ3oqk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR07MB4531.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(136003)(346002)(366004)(396003)(54906003)(956004)(44832011)(31686004)(52116002)(6916009)(66556008)(6512007)(6486002)(2616005)(36756003)(53546011)(8676002)(8936002)(26005)(2906002)(478600001)(66946007)(83380400001)(186003)(6506007)(16526019)(5660300002)(316002)(66476007)(86362001)(4744005)(31696002)(6666004)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?dWtpVERwOVlmbjBPQ0RnWFlpVlhua2kyUG10YVducURzNVlTVndxUEllY3Rm?=
+ =?utf-8?B?Q1ByRjFQbExxY2lrdXdBdkZWTXI1dUxkQ2NldENYL01PelFHTXZRTGFaL2FY?=
+ =?utf-8?B?TytCY0ZLSVZkQkxRUDBKcXlsTi8rQi9YRS95YjdQZWtkMkx1ejNJbWVkMHNH?=
+ =?utf-8?B?WXVZY2YzazVidlFLamoxQkdsWUZSQW56UlJ0NFA5UDdRK21PU1NKNFpCcjd3?=
+ =?utf-8?B?TTBGOEp2dkZ5KzcrVUl1dGV0bFdhOG5NSGFaeEVOdnRlQllpVjNKYzhDOUQ1?=
+ =?utf-8?B?RExYWGQvTC8yelFmZU5YMkVaVFI0OVoxUXgvaDZHMzVEanlFays1VlJwU3Fo?=
+ =?utf-8?B?MzgzRCtET2JSWWowbEF4V3hiSGVPaUtmSjU4SytQUkN3a3VSU3crVDJMOHY5?=
+ =?utf-8?B?ZTlRd2l6SlFIMjJ6WXZHN3dFajhnQWMvc2tSQnRhSXNPMWdNWjl0bmxJT2tU?=
+ =?utf-8?B?U3JYMUNhbmh2TWdiNC93WkVhR1IrWjBaQk4rZFRUbEM4L0VlRE4rMUNUQnFE?=
+ =?utf-8?B?d2k2LzhXNDl6Rkl6MjQ4c1ZWWFNQVG51US9LOEgreGZzNnd1eHIzbW41Z2Rt?=
+ =?utf-8?B?TndjY0dPQ1JFTTVCb3kyM1RTMnNXM01zVUdNUXFtRTJCd1VqTFUyMkhqQjBC?=
+ =?utf-8?B?WHZPekU5MUFKRVRMVFIvOHFnUUFYYjlLN0d5SFpqWWs2MlZQSWl0dVpraGNG?=
+ =?utf-8?B?TngxVCsvZU13M2xLMDI0S2pqaDFWZ0Z5SlJpOXp0NWNPeWsxUWdrYTk3MkU5?=
+ =?utf-8?B?QTZQY0dOVHpZY3Y4ZUhCWWEvYTI4TGxWYllqTW80MFNSdVcxeURaRnZ3U08r?=
+ =?utf-8?B?VjFtUjU2b29ad2x1WW5WU3ZUUmY3clFhMkduOWZPNWJ1dnNXZkF2R3AzVTBW?=
+ =?utf-8?B?NDNQcWZEU21IaTlLY3pnZzg5Q1Q4d2NLOWxKWm1qZFlZUEpQUGk2L25GcEtr?=
+ =?utf-8?B?bnBxOUVsUk5Gcno2bTJ2bEFFbXFSOTI0ZGN1VEZlS0VmcDkyTnpQQzZOek90?=
+ =?utf-8?B?WjY4dkFnWElLRnhRNHNhQ3E1VlNvUU5PVncwWFhaaDBDR0ZaNi9MSnRac1Jo?=
+ =?utf-8?B?VW9JajFXbWlsYnptaGpmUXpEc3NOM2QyT2poK1hNNDRtaEV5bzYvdEEwTmVE?=
+ =?utf-8?B?OWpMdW1wNXhBYTJMU0k0V3lKWHNMRnlIMzh6Yk1xcTVJWW04aDVGZGVieVk5?=
+ =?utf-8?B?eFliRTYwNGlOZi8wdElZYzYveGFBSkhRUE04T0lBVERSdlJmc2RiOTNuN21B?=
+ =?utf-8?B?QVJMV0MrOTFmSkF2K0JrU0RuVmlsT0VmZnpvbmgydFVSd0p6M3orT3o5c0FW?=
+ =?utf-8?B?VWhaNk9QR1ViM2VmWjFyRUR5akxzRFpZV3dCeHVTU0NjRjVMb0o5dVIyN3ds?=
+ =?utf-8?B?OVNiSTlkS1J0Zlk3L01BUGwyWVYzMy9jZWJpWDUyblErMnJLQ1JFYldnQzlS?=
+ =?utf-8?Q?JHu76x/C?=
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01c6ded0-f484-4d03-e821-08d8c38597ee
+X-MS-Exchange-CrossTenant-Network-Message-Id: e30c2b68-4205-4b38-fb78-08d8c38614f9
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR07MB4531.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2021 12:09:42.1407
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2021 12:13:12.2793
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tyTtZLB5hR8nT2elAX/6I7nhH6H0q5DczNveF5KhZmxBYPNhUYMOBJArrKlJY3FL2PqTfXHD87iHwv33ECQKfUDBkswvc7JWhbLw3VsvYHM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR07MB4033
+X-MS-Exchange-CrossTenant-UserPrincipalName: gfaHKQ4JrLWpZ6G5Y8/94DJcYE4bfr6+Mj2suhUOiNopGM/ro89P69s8QT0NTkbFNVU4wwJtW1n36cc56LIQLpE2Pyga0BwtwESybH9sTCM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR07MB3875
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi!
 
-On 28/01/2021 12:33, Peter Zijlstra wrote:
-> On Thu, Jan 28, 2021 at 08:27:29AM +0100, Alexander Sverdlin wrote:
-> 
->>>> +#define __smp_store_release(p, v)					\
->>>> +do {									\
->>>> +	compiletime_assert_atomic_type(*p);				\
->>>> +	__smp_wmb();							\
->>>> +	__smp_rmb();							\
->>>> +	WRITE_ONCE(*p, v);						\
->>>> +} while (0)
->>> This is wrong in general since smp_rmb() will only provide order between
->>> two loads and smp_store_release() is a store.
->>>
->>> If this is correct for all MIPS, this needs a giant comment on exactly
->>> how that smp_rmb() makes sense here.
->>
->> ... the macro is provided for Octeon only, and __smp_rmb() is actually a NOP
->> there, but I thought to "document" the flow of thoughts from the discussion
->> above by including it anyway.
-> 
-> Random discussions on the internet do not absolve you from having to
-> write coherent comments. Especially so where memory ordering is
-> concerned.
+On 28/01/2021 12:35, Peter Zijlstra wrote:
+>> My point was that original MIPS spinlocks had this write-buffer-flush and
+>> it got lost on the conversion to qspinlocks. The referenced commit just
+>> allows to see the last MIPS-specific implementation before deletion.
+> Hardware that needs a store-buffer flush after release is highly suspect
+> and needs big and explicit comments. Not vague hints.
 
-I actually hoped you will remember the discussion you've participated 5 years
-ago and (in my understanding) actually already agreed that the solution itself
-is not broken:
+I have a feeling that you are not going to suggest the comments for the code
+and one has to guess what is it you have in mind?
 
-https://lore.kernel.org/lkml/20151112180003.GE17308@twins.programming.kicks-ass.net/
-
-Could you please just suggest the proper comment you expect to be added here,
-because there is no doubts, you have much more experience here than me?
-
-> This, from commit 6b07d38aaa52 ("MIPS: Octeon: Use optimized memory
-> barrier primitives."):
-> 
-> 	#define smp_mb__before_llsc() smp_wmb()
-> 	#define __smp_mb__before_llsc() __smp_wmb()
-> 
-> is also dodgy as hell and really wants a comment too. I'm not buying the
-> Changelog of that commit either, __smp_mb__before_llsc should also
-> ensure the LL cannot happen earlier, but SYNCW has no effect on loads.
-> So what stops the load from being speculated?
-> 
-> 
+Do you think the proper approach would be to undelete MIPS spinlocks and
+make these broken qspinlocks a configurable option for MIPS? I don't even
+mind if they will be default option for those not interested in performance
+or latency.
 
 -- 
 Best regards,
