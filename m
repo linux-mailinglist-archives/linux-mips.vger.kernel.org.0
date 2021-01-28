@@ -2,361 +2,190 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07002306D6A
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 07:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F25B306DB1
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 07:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbhA1GG0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Jan 2021 01:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231328AbhA1GGX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Jan 2021 01:06:23 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3A6C06178A
-        for <linux-mips@vger.kernel.org>; Wed, 27 Jan 2021 22:05:43 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id t29so3309024pfg.11
-        for <linux-mips@vger.kernel.org>; Wed, 27 Jan 2021 22:05:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=h5YEggt5lA84c1PH2zTZBT+07Nd+Wthjn+k8lDWe2pw=;
-        b=TX0TeeZfpe1/zoRbFjt0GeaYz6U/SkGhuQPCQ9lupMcqhh6H0ByI9rmuNa/4/4WXDt
-         pRUCdzBBvaAglHOBC6tncbMTAGeQ39Ll6P/O0ohR64kP+uIDp2qvXGm2BG8OnUYqbGkw
-         SPWbXkHJjySFdiBqeWptzGg4um5govcDmHDKQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=h5YEggt5lA84c1PH2zTZBT+07Nd+Wthjn+k8lDWe2pw=;
-        b=f71BzxNafQzETdPxnYFyXv1d/slNVnJ9qSdK6+I0GyvCK5EcUFnuVwuUh3/dkKIhZE
-         2LpMraurHlptsdA13oodbpSOxCTwPyTPSoOjwMJzuteEnbC51qHU4eXBwQeWHTzXj50X
-         IDYreBKKchP3iaoszU3LarFI+jJ6IcaT3jYLlN7SOFMjh0UjgAL/u5L7o+jjk1u8VXbc
-         pXMe5pZCqSIwh6r642lu/uKwz4zBLa5UOber2JYP3Ftv7jSM9Z18cFPlrDnXBRU3Ud5s
-         hUOymFM/r/F86d5OIyoOk/e5foiu3Lf9zIVRuVgKMWFuGNXPBcNMiXsGe4P556nhftD9
-         PdUQ==
-X-Gm-Message-State: AOAM531s9KUmJT7E388hQqiZMbZ6QUHYvVwFzNoc0iDkbOQzqUs5e9a8
-        vm+mx+lSAsqazVRVeWR7VqtPqfprw1IBYg==
-X-Google-Smtp-Source: ABdhPJxg3nC8VDtCsn50hQJjaz2+OFHCKOA5bt6e3zGP6X4yWlqdsqOTPPM50S70dDvVIkRWQDSnZw==
-X-Received: by 2002:a63:1f21:: with SMTP id f33mr15214301pgf.31.1611813943264;
-        Wed, 27 Jan 2021 22:05:43 -0800 (PST)
-Received: from localhost ([2401:fa00:8f:203:919f:d6:7815:52bc])
-        by smtp.gmail.com with ESMTPSA id h3sm4136154pgm.67.2021.01.27.22.05.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jan 2021 22:05:42 -0800 (PST)
-From:   David Stevens <stevensd@chromium.org>
-X-Google-Original-From: David Stevens <stevensd@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
-        kvm-ppc@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Stevens <stevensd@chromium.org>
-Subject: [PATCH v3 2/2] KVM: x86/mmu: Consider the hva in mmu_notifier retry
-Date:   Thu, 28 Jan 2021 15:05:15 +0900
-Message-Id: <20210128060515.1732758-3-stevensd@google.com>
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-In-Reply-To: <20210128060515.1732758-1-stevensd@google.com>
-References: <20210128060515.1732758-1-stevensd@google.com>
+        id S231174AbhA1GkB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Jan 2021 01:40:01 -0500
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:17694 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229709AbhA1GkA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Jan 2021 01:40:00 -0500
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 10S6d02a026741;
+        Thu, 28 Jan 2021 15:39:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 10S6d02a026741
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1611815941;
+        bh=An1vXfAcY7/ecSuLNbnfLuPPKCg2HwdVoldfEosA3zQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UvnRLxTXThaF8IqKtnvHETuoq591e3926XXmHmCe0eUMPGuPKtICb/9vWDlECpKTP
+         hoWrgRZeS5LVcYohwei5xdeUYXff5DgrOpUVlRRiIzz+zm/oOPdBevrlECNDiOBA/M
+         p6fJYPdWRxnL0GpZ6UaAOv76jGFVtPUTXKT6/4k9O5lPmuvLzD4K8BLyqa4NGOhrc6
+         cu/PVrw1DjAbUi1hHvG0CRz71IjPZOtERDw16YIcH85XwRwoco2e9Yveriov2kbto1
+         u0YaEiMBqrcgdtwmxqnivUWfvcqmDEdwl7iXS3bqOemuNV7R00r17WBYTSJ5dmpWXp
+         mRgNA9LkxuapQ==
+X-Nifty-SrcIP: [209.85.214.181]
+Received: by mail-pl1-f181.google.com with SMTP id e9so2792515plh.3;
+        Wed, 27 Jan 2021 22:39:01 -0800 (PST)
+X-Gm-Message-State: AOAM533C9miNcHHTEYt0tLVVMmoyW4DcqEu0rcAViwhMycADWuyY4Aua
+        ooP6Wb+trGNjjdd212Hj9XmYk6Kh57qXLmlPLqA=
+X-Google-Smtp-Source: ABdhPJzIAAkdm7zrETkG4P8+F+BK0pldZ8Y8PLxZ3lAwKPD8rT6XXx3Hm+P5wBHG9v1+hIbpsGCLEBTEP79nb/5oFEo=
+X-Received: by 2002:a17:90a:9a84:: with SMTP id e4mr9713770pjp.87.1611815940370;
+ Wed, 27 Jan 2021 22:39:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201212165431.150750-1-masahiroy@kernel.org> <20201212165431.150750-2-masahiroy@kernel.org>
+In-Reply-To: <20201212165431.150750-2-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 28 Jan 2021 15:38:23 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASvhazuyNyY4QgfWR9=FaYRq_yZc1u4znb=26eg+C0aNg@mail.gmail.com>
+Message-ID: <CAK7LNASvhazuyNyY4QgfWR9=FaYRq_yZc1u4znb=26eg+C0aNg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kbuild: LD_VERSION redenomination
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Dominique Martinet <asmadeus@codewreck.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: David Stevens <stevensd@chromium.org>
+On Sun, Dec 13, 2020 at 1:54 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Commit ccbef1674a15 ("Kbuild, lto: add ld-version and ld-ifversion
+> macros") introduced scripts/ld-version.sh for GCC LTO.
+>
+> At that time, this script handled 5 version fields because GCC LTO
+> needed the downstream binutils. (https://lkml.org/lkml/2014/4/8/272)
+>
+> The code snippet from the submitted patch was as follows:
+>
+>     # We need HJ Lu's Linux binutils because mainline binutils does not
+>     # support mixing assembler and LTO code in the same ld -r object.
+>     # XXX check if the gcc plugin ld is the expected one too
+>     # XXX some Fedora binutils should also support it. How to check for that?
+>     ifeq ($(call ld-ifversion,-ge,22710001,y),y)
+>         ...
+>
+> However, GCC LTO was not merged into the mainline after all.
+> (https://lkml.org/lkml/2014/4/8/272)
+>
+> So, the 4th and 5th fields were never used, and finally removed by
+> commit 0d61ed17dd30 ("ld-version: Drop the 4th and 5th version
+> components").
+>
+> Since then, the last 4-digits returned by this script is always zeros.
+>
+> Remove the meaningless last 4-digits. This makes the version format
+> consistent with GCC_VERSION, CLANG_VERSION, LLD_VERSION.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
 
-Track the range being invalidated by mmu_notifier and skip page fault
-retries if the fault address is not affected by the in-progress
-invalidation. Handle concurrent invalidations by finding the minimal
-range which includes all ranges being invalidated. Although the combined
-range may include unrelated addresses and cannot be shrunk as individual
-invalidation operations complete, it is unlikely the marginal gains of
-proper range tracking are worth the additional complexity.
+Applied to linux-kbuild.
 
-The primary benefit of this change is the reduction in the likelihood of
-extreme latency when handing a page fault due to another thread having
-been preempted while modifying host virtual addresses.
 
-Signed-off-by: David Stevens <stevensd@chromium.org>
----
-v2 -> v3:
- - Removed unnecessary ifdef
- - Style changes
+>  arch/arm64/Kconfig            | 2 +-
+>  arch/mips/loongson64/Platform | 2 +-
+>  arch/mips/vdso/Kconfig        | 2 +-
+>  arch/powerpc/Makefile         | 2 +-
+>  arch/powerpc/lib/Makefile     | 2 +-
+>  scripts/ld-version.sh         | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index a6b5b7ef40ae..69d56b21a6ec 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1499,7 +1499,7 @@ config ARM64_PTR_AUTH
+>         depends on (CC_HAS_SIGN_RETURN_ADDRESS || CC_HAS_BRANCH_PROT_PAC_RET) && AS_HAS_PAC
+>         # Modern compilers insert a .note.gnu.property section note for PAC
+>         # which is only understood by binutils starting with version 2.33.1.
+> -       depends on LD_IS_LLD || LD_VERSION >= 233010000 || (CC_IS_GCC && GCC_VERSION < 90100)
+> +       depends on LD_IS_LLD || LD_VERSION >= 23301 || (CC_IS_GCC && GCC_VERSION < 90100)
+>         depends on !CC_IS_CLANG || AS_HAS_CFI_NEGATE_RA_STATE
+>         depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_REGS)
+>         help
+> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
+> index ec42c5085905..cc0b9c87f9ad 100644
+> --- a/arch/mips/loongson64/Platform
+> +++ b/arch/mips/loongson64/Platform
+> @@ -35,7 +35,7 @@ cflags-$(CONFIG_CPU_LOONGSON64)       += $(call as-option,-Wa$(comma)-mno-fix-loongson
+>  # can't easily be used safely within the kbuild framework.
+>  #
+>  ifeq ($(call cc-ifversion, -ge, 0409, y), y)
+> -  ifeq ($(call ld-ifversion, -ge, 225000000, y), y)
+> +  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
+>      cflags-$(CONFIG_CPU_LOONGSON64)  += \
+>        $(call cc-option,-march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
+>    else
+> diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
+> index 7aec721398d5..a665f6108cb5 100644
+> --- a/arch/mips/vdso/Kconfig
+> +++ b/arch/mips/vdso/Kconfig
+> @@ -12,7 +12,7 @@
+>  # the lack of relocations. As such, we disable the VDSO for microMIPS builds.
+>
+>  config MIPS_LD_CAN_LINK_VDSO
+> -       def_bool LD_VERSION >= 225000000 || LD_IS_LLD
+> +       def_bool LD_VERSION >= 22500 || LD_IS_LLD
+>
+>  config MIPS_DISABLE_VDSO
+>         def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
+> diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+> index 5c8c06215dd4..6a9a852c3d56 100644
+> --- a/arch/powerpc/Makefile
+> +++ b/arch/powerpc/Makefile
+> @@ -65,7 +65,7 @@ UTS_MACHINE := $(subst $(space),,$(machine-y))
+>  ifdef CONFIG_PPC32
+>  KBUILD_LDFLAGS_MODULE += arch/powerpc/lib/crtsavres.o
+>  else
+> -ifeq ($(call ld-ifversion, -ge, 225000000, y),y)
+> +ifeq ($(call ld-ifversion, -ge, 22500, y),y)
+>  # Have the linker provide sfpr if possible.
+>  # There is a corresponding test in arch/powerpc/lib/Makefile
+>  KBUILD_LDFLAGS_MODULE += --save-restore-funcs
+> diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
+> index 69a91b571845..d4efc182662a 100644
+> --- a/arch/powerpc/lib/Makefile
+> +++ b/arch/powerpc/lib/Makefile
+> @@ -31,7 +31,7 @@ obj-$(CONFIG_FUNCTION_ERROR_INJECTION)        += error-inject.o
+>  # 64-bit linker creates .sfpr on demand for final link (vmlinux),
+>  # so it is only needed for modules, and only for older linkers which
+>  # do not support --save-restore-funcs
+> -ifeq ($(call ld-ifversion, -lt, 225000000, y),y)
+> +ifeq ($(call ld-ifversion, -lt, 22500, y),y)
+>  extra-$(CONFIG_PPC64)  += crtsavres.o
+>  endif
+>
+> diff --git a/scripts/ld-version.sh b/scripts/ld-version.sh
+> index f2be0ff9a738..0f8a2c0f9502 100755
+> --- a/scripts/ld-version.sh
+> +++ b/scripts/ld-version.sh
+> @@ -6,6 +6,6 @@
+>         gsub(".*version ", "");
+>         gsub("-.*", "");
+>         split($1,a, ".");
+> -       print a[1]*100000000 + a[2]*1000000 + a[3]*10000;
+> +       print a[1]*10000 + a[2]*100 + a[3];
+>         exit
+>         }
+> --
+> 2.27.0
+>
 
-v1 -> v2: 
- - Improve handling of concurrent invalidation requests by unioning
-   ranges, instead of just giving up and using [0, ULONG_MAX).
- - Add lockdep check
- - Code comments and formatting
 
- arch/powerpc/kvm/book3s_64_mmu_hv.c    |  2 +-
- arch/powerpc/kvm/book3s_64_mmu_radix.c |  2 +-
- arch/x86/kvm/mmu/mmu.c                 | 16 ++++++++------
- arch/x86/kvm/mmu/paging_tmpl.h         |  7 ++++---
- include/linux/kvm_host.h               | 25 +++++++++++++++++++++-
- virt/kvm/kvm_main.c                    | 29 ++++++++++++++++++++++----
- 6 files changed, 65 insertions(+), 16 deletions(-)
-
-diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-index 38ea396a23d6..8e06cd3f759c 100644
---- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
-+++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-@@ -590,7 +590,7 @@ int kvmppc_book3s_hv_page_fault(struct kvm_vcpu *vcpu,
- 	} else {
- 		/* Call KVM generic code to do the slow-path check */
- 		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
--					   writing, &write_ok);
-+					   writing, &write_ok, NULL);
- 		if (is_error_noslot_pfn(pfn))
- 			return -EFAULT;
- 		page = NULL;
-diff --git a/arch/powerpc/kvm/book3s_64_mmu_radix.c b/arch/powerpc/kvm/book3s_64_mmu_radix.c
-index bb35490400e9..e603de7ade52 100644
---- a/arch/powerpc/kvm/book3s_64_mmu_radix.c
-+++ b/arch/powerpc/kvm/book3s_64_mmu_radix.c
-@@ -822,7 +822,7 @@ int kvmppc_book3s_instantiate_page(struct kvm_vcpu *vcpu,
- 
- 		/* Call KVM generic code to do the slow-path check */
- 		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
--					   writing, upgrade_p);
-+					   writing, upgrade_p, NULL);
- 		if (is_error_noslot_pfn(pfn))
- 			return -EFAULT;
- 		page = NULL;
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 9ac0a727015d..8d08e97b2487 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3658,8 +3658,8 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- }
- 
- static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
--			 gpa_t cr2_or_gpa, kvm_pfn_t *pfn, bool write,
--			 bool *writable)
-+			 gpa_t cr2_or_gpa, kvm_pfn_t *pfn, hva_t *hva,
-+			 bool write, bool *writable)
- {
- 	struct kvm_memory_slot *slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
- 	bool async;
-@@ -3672,7 +3672,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
- 	}
- 
- 	async = false;
--	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, &async, write, writable);
-+	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, &async,
-+				    write, writable, hva);
- 	if (!async)
- 		return false; /* *pfn has correct page already */
- 
-@@ -3686,7 +3687,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
- 			return true;
- 	}
- 
--	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, NULL, write, writable);
-+	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, NULL,
-+				    write, writable, hva);
- 	return false;
- }
- 
-@@ -3699,6 +3701,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
- 	gfn_t gfn = gpa >> PAGE_SHIFT;
- 	unsigned long mmu_seq;
- 	kvm_pfn_t pfn;
-+	hva_t hva;
- 	int r;
- 
- 	if (page_fault_handle_page_track(vcpu, error_code, gfn))
-@@ -3717,7 +3720,8 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
- 	mmu_seq = vcpu->kvm->mmu_notifier_seq;
- 	smp_rmb();
- 
--	if (try_async_pf(vcpu, prefault, gfn, gpa, &pfn, write, &map_writable))
-+	if (try_async_pf(vcpu, prefault, gfn, gpa, &pfn, &hva,
-+			 write, &map_writable))
- 		return RET_PF_RETRY;
- 
- 	if (handle_abnormal_pfn(vcpu, is_tdp ? 0 : gpa, gfn, pfn, ACC_ALL, &r))
-@@ -3725,7 +3729,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
- 
- 	r = RET_PF_RETRY;
- 	spin_lock(&vcpu->kvm->mmu_lock);
--	if (!is_noslot_pfn(pfn) && mmu_notifier_retry(vcpu->kvm, mmu_seq))
-+	if (!is_noslot_pfn(pfn) && mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, hva))
- 		goto out_unlock;
- 	r = make_mmu_pages_available(vcpu);
- 	if (r)
-diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index ab54263d857c..5f12f7b24d68 100644
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -790,6 +790,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
- 	struct guest_walker walker;
- 	int r;
- 	kvm_pfn_t pfn;
-+	hva_t hva;
- 	unsigned long mmu_seq;
- 	bool map_writable, is_self_change_mapping;
- 	int max_level;
-@@ -840,8 +841,8 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
- 	mmu_seq = vcpu->kvm->mmu_notifier_seq;
- 	smp_rmb();
- 
--	if (try_async_pf(vcpu, prefault, walker.gfn, addr, &pfn, write_fault,
--			 &map_writable))
-+	if (try_async_pf(vcpu, prefault, walker.gfn, addr, &pfn, &hva,
-+			 write_fault, &map_writable))
- 		return RET_PF_RETRY;
- 
- 	if (handle_abnormal_pfn(vcpu, addr, walker.gfn, pfn, walker.pte_access, &r))
-@@ -869,7 +870,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
- 
- 	r = RET_PF_RETRY;
- 	spin_lock(&vcpu->kvm->mmu_lock);
--	if (!is_noslot_pfn(pfn) && mmu_notifier_retry(vcpu->kvm, mmu_seq))
-+	if (!is_noslot_pfn(pfn) && mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, hva))
- 		goto out_unlock;
- 
- 	kvm_mmu_audit(vcpu, AUDIT_PRE_PAGE_FAULT);
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index f3b1013fb22c..850ff351583d 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -11,6 +11,7 @@
- #include <linux/signal.h>
- #include <linux/sched.h>
- #include <linux/bug.h>
-+#include <linux/minmax.h>
- #include <linux/mm.h>
- #include <linux/mmu_notifier.h>
- #include <linux/preempt.h>
-@@ -502,6 +503,8 @@ struct kvm {
- 	struct mmu_notifier mmu_notifier;
- 	unsigned long mmu_notifier_seq;
- 	long mmu_notifier_count;
-+	unsigned long mmu_notifier_range_start;
-+	unsigned long mmu_notifier_range_end;
- #endif
- 	long tlbs_dirty;
- 	struct list_head devices;
-@@ -729,7 +732,7 @@ kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn);
- kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn);
- kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
- 			       bool atomic, bool *async, bool write_fault,
--			       bool *writable);
-+			       bool *writable, hva_t *hva);
- 
- void kvm_release_pfn_clean(kvm_pfn_t pfn);
- void kvm_release_pfn_dirty(kvm_pfn_t pfn);
-@@ -1203,6 +1206,26 @@ static inline int mmu_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
- 		return 1;
- 	return 0;
- }
-+
-+static inline int mmu_notifier_retry_hva(struct kvm *kvm,
-+					 unsigned long mmu_seq,
-+					 unsigned long hva)
-+{
-+	lockdep_assert_held(&kvm->mmu_lock);
-+	/*
-+	 * If mmu_notifier_count is non-zero, then the range maintained by
-+	 * kvm_mmu_notifier_invalidate_range_start contains all addresses that
-+	 * might be being invalidated. Note that it may include some false
-+	 * positives, due to shortcuts when handing concurrent invalidations.
-+	 */
-+	if (unlikely(kvm->mmu_notifier_count) &&
-+	    hva >= kvm->mmu_notifier_range_start &&
-+	    hva < kvm->mmu_notifier_range_end)
-+		return 1;
-+	if (kvm->mmu_notifier_seq != mmu_seq)
-+		return 1;
-+	return 0;
-+}
- #endif
- 
- #ifdef CONFIG_HAVE_KVM_IRQ_ROUTING
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index fa9e3614d30e..b4b0a1eeb4c5 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -483,6 +483,24 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
- 	 * count is also read inside the mmu_lock critical section.
- 	 */
- 	kvm->mmu_notifier_count++;
-+	if (likely(kvm->mmu_notifier_count == 1)) {
-+		kvm->mmu_notifier_range_start = range->start;
-+		kvm->mmu_notifier_range_end = range->end;
-+	} else {
-+		/*
-+		 * Fully tracking multiple concurrent ranges has dimishing
-+		 * returns. Keep things simple and just find the minimal range
-+		 * which includes the current and new ranges. As there won't be
-+		 * enough information to subtract a range after its invalidate
-+		 * completes, any ranges invalidated concurrently will
-+		 * accumulate and persist until all outstanding invalidates
-+		 * complete.
-+		 */
-+		kvm->mmu_notifier_range_start =
-+			min(kvm->mmu_notifier_range_start, range->start);
-+		kvm->mmu_notifier_range_end =
-+			max(kvm->mmu_notifier_range_end, range->end);
-+	}
- 	need_tlb_flush = kvm_unmap_hva_range(kvm, range->start, range->end,
- 					     range->flags);
- 	/* we've to flush the tlb before the pages can be freed */
-@@ -2010,10 +2028,13 @@ static kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
- 
- kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
- 			       bool atomic, bool *async, bool write_fault,
--			       bool *writable)
-+			       bool *writable, hva_t *hva)
- {
- 	unsigned long addr = __gfn_to_hva_many(slot, gfn, NULL, write_fault);
- 
-+	if (hva)
-+		*hva = addr;
-+
- 	if (addr == KVM_HVA_ERR_RO_BAD) {
- 		if (writable)
- 			*writable = false;
-@@ -2041,19 +2062,19 @@ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
- 		      bool *writable)
- {
- 	return __gfn_to_pfn_memslot(gfn_to_memslot(kvm, gfn), gfn, false, NULL,
--				    write_fault, writable);
-+				    write_fault, writable, NULL);
- }
- EXPORT_SYMBOL_GPL(gfn_to_pfn_prot);
- 
- kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn)
- {
--	return __gfn_to_pfn_memslot(slot, gfn, false, NULL, true, NULL);
-+	return __gfn_to_pfn_memslot(slot, gfn, false, NULL, true, NULL, NULL);
- }
- EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot);
- 
- kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn)
- {
--	return __gfn_to_pfn_memslot(slot, gfn, true, NULL, true, NULL);
-+	return __gfn_to_pfn_memslot(slot, gfn, true, NULL, true, NULL, NULL);
- }
- EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot_atomic);
- 
 -- 
-2.30.0.280.ga3ce27912f-goog
-
+Best Regards
+Masahiro Yamada
