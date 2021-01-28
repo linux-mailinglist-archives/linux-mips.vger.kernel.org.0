@@ -2,190 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F25B306DB1
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 07:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21AD6306F75
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 08:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbhA1GkB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Jan 2021 01:40:01 -0500
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:17694 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbhA1GkA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Jan 2021 01:40:00 -0500
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 10S6d02a026741;
-        Thu, 28 Jan 2021 15:39:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 10S6d02a026741
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1611815941;
-        bh=An1vXfAcY7/ecSuLNbnfLuPPKCg2HwdVoldfEosA3zQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UvnRLxTXThaF8IqKtnvHETuoq591e3926XXmHmCe0eUMPGuPKtICb/9vWDlECpKTP
-         hoWrgRZeS5LVcYohwei5xdeUYXff5DgrOpUVlRRiIzz+zm/oOPdBevrlECNDiOBA/M
-         p6fJYPdWRxnL0GpZ6UaAOv76jGFVtPUTXKT6/4k9O5lPmuvLzD4K8BLyqa4NGOhrc6
-         cu/PVrw1DjAbUi1hHvG0CRz71IjPZOtERDw16YIcH85XwRwoco2e9Yveriov2kbto1
-         u0YaEiMBqrcgdtwmxqnivUWfvcqmDEdwl7iXS3bqOemuNV7R00r17WBYTSJ5dmpWXp
-         mRgNA9LkxuapQ==
-X-Nifty-SrcIP: [209.85.214.181]
-Received: by mail-pl1-f181.google.com with SMTP id e9so2792515plh.3;
-        Wed, 27 Jan 2021 22:39:01 -0800 (PST)
-X-Gm-Message-State: AOAM533C9miNcHHTEYt0tLVVMmoyW4DcqEu0rcAViwhMycADWuyY4Aua
-        ooP6Wb+trGNjjdd212Hj9XmYk6Kh57qXLmlPLqA=
-X-Google-Smtp-Source: ABdhPJzIAAkdm7zrETkG4P8+F+BK0pldZ8Y8PLxZ3lAwKPD8rT6XXx3Hm+P5wBHG9v1+hIbpsGCLEBTEP79nb/5oFEo=
-X-Received: by 2002:a17:90a:9a84:: with SMTP id e4mr9713770pjp.87.1611815940370;
- Wed, 27 Jan 2021 22:39:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20201212165431.150750-1-masahiroy@kernel.org> <20201212165431.150750-2-masahiroy@kernel.org>
-In-Reply-To: <20201212165431.150750-2-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 28 Jan 2021 15:38:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASvhazuyNyY4QgfWR9=FaYRq_yZc1u4znb=26eg+C0aNg@mail.gmail.com>
-Message-ID: <CAK7LNASvhazuyNyY4QgfWR9=FaYRq_yZc1u4znb=26eg+C0aNg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kbuild: LD_VERSION redenomination
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Dominique Martinet <asmadeus@codewreck.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
+        id S231872AbhA1Ha2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Jan 2021 02:30:28 -0500
+Received: from mail-eopbgr80133.outbound.protection.outlook.com ([40.107.8.133]:57316
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231428AbhA1H2W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Jan 2021 02:28:22 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LDJ1bD4Z3OvI/YnoZwzgC9OkrdTiDvn5DCZJIev28n7wZQymiRd7xvdWOWEvd11N/AGTl4MDKqu8sOkOS7YKXz6rI+mGFp0LFk2Us4UGk/sSt6BTTkqBBaKzb3xZpqr18hRN8CCPVSIKkG2NqeYDxNoPMQQxMf6sE67TEQgEh/BRYUthQAy0WQCBxA96lD1t7cxvJ9nC+hOEpiU343TPKkF3LV5ShA54lHZhNiZhtvi1tPZPJqhg8g0lasxAv9Avh7OSQqDOt3bCuycosCd75pyGXuOm3lGxVwpOOfz1yvrYK1Xkm1Hw46lgWatdF+w85yXehKb3PzbKD5aL3xRuZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vOQXJHG73ksNspj9WissaHjPbrWAt6t9zeLPMowU1lY=;
+ b=iLkz294X+wDyrWJptKb5sZerc+EUDjf1+tiPunYvei/b+9SZO/de/c1KT1/Fg2Q6IwJQyEVdqsKyBYuITYM9/4GUXqmLX6hrMk5XzThk0ORrKsMamly4VX/bwAYiL2nSAMDLVoaGf2eCMUts2zBAMtPkeOpaMHH6YQXzHkoE24FACOQjzIEWws4gZcNtvjG2VL9Cx8rHjH83hzyAnIgI4/HmqgC9dotJQm5nivBSvEwxRv7WFAmoMX79c7vYk3ABmqNbs1+ZV/rKX8L05QWuZRiS6DBvCK6WxYrWprCvtd3mEvpnwUk58BIzRqsqqzpBYggyrr9g8FcSdUmElqnyZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vOQXJHG73ksNspj9WissaHjPbrWAt6t9zeLPMowU1lY=;
+ b=Y7zYEYB52XOKUdnHJ7IH5ZejTQGyhm2jHoXpVYiTDQMLTAzAZ78XbE91flfekbOnjv3z/6Bmn5lw3KZfMYhVCHrjQZWBPbFXr1K9haUjb6B1y+Ookju/lzF7w3mdfx1JzZwFMHzUfohxzjLA6rzR3fvsMFVsGJcXzFJeBmHxqaQ=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=nokia.com;
+Received: from (2603:10a6:208:6e::15) by
+ AM0PR07MB4468.eurprd07.prod.outlook.com (2603:10a6:208:7a::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3805.6; Thu, 28 Jan 2021 07:27:33 +0000
+Received: from AM0PR07MB4531.eurprd07.prod.outlook.com
+ ([fe80::e965:2884:260b:b29a]) by AM0PR07MB4531.eurprd07.prod.outlook.com
+ ([fe80::e965:2884:260b:b29a%3]) with mapi id 15.20.3825.008; Thu, 28 Jan 2021
+ 07:27:32 +0000
+Subject: Re: [PATCH 1/6] MIPS: Octeon: Implement __smp_store_release()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Paul Burton <paul.burton@imgtec.com>, linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Will Deacon <will@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+References: <20210127203627.47510-1-alexander.sverdlin@nokia.com>
+ <20210127203627.47510-2-alexander.sverdlin@nokia.com>
+ <YBHp4139X+p+4IZ+@hirez.programming.kicks-ass.net>
+From:   Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Message-ID: <aace6ff1-9ddf-15af-3c0a-378c53c59acb@nokia.com>
+Date:   Thu, 28 Jan 2021 08:27:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+In-Reply-To: <YBHp4139X+p+4IZ+@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [131.228.32.169]
+X-ClientProxiedBy: AM0PR06CA0092.eurprd06.prod.outlook.com
+ (2603:10a6:208:fa::33) To AM0PR07MB4531.eurprd07.prod.outlook.com
+ (2603:10a6:208:6e::15)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from ulegcpsvhp1.emea.nsn-net.net (131.228.32.169) by AM0PR06CA0092.eurprd06.prod.outlook.com (2603:10a6:208:fa::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend Transport; Thu, 28 Jan 2021 07:27:31 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 648ce27d-7315-440e-5dd4-08d8c35e2d48
+X-MS-TrafficTypeDiagnostic: AM0PR07MB4468:
+X-Microsoft-Antispam-PRVS: <AM0PR07MB4468F4A1B65131004088DBC488BA9@AM0PR07MB4468.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bOvlG4cAEHWuvw/aEyZ1molAKWsFkLX3jsEuh+s3fUQ+x7xyoBII+/G9VCYNlNNQtJ/5vk6FpFqpMXmo5hdulu3znRtb/o4T8HQ41k1b0QvMAyLhtDPdnbPzoS5e2oicmEIwtlnrLWT56QZflka0xJsPYCnHvmukC5DyLM6L04LIji96Zedqiw4xzV+nVPuWkykQFlXjuW+UhS6qIGV7mRxuOf6zJeOkP7Wez6RUJ8zlhWRJnn41mkz47TnQSBznCd/PJB2Vj59AUymWObAkBSxMqv7DnSoCCSQKI0I3+AJwxPGtQ9IoeqqJodgUXbZ4Z29DpBsp6A0TK+EMUDGY2a9wWML8hepZNXE0KUi+2vAaQ04ENgJ7Z0J1yEgN5lk0XDrIPQzImSjyohcSw9QXB9ZDGhu428NmTWLC1CRNRJpFIY+3+1i3zyP51yk38p5I3qCqL7j+vt/QZ+SLUaTHJ4eBIpAjhMr66D8LzafPnhTfwBQ31rmYc6evUBLCUi1S+cPaz1m4cXXQ+AzzVVPEve8t4Y0Fg/0KNZYVMP3Ku6zwvYJeP9ZXMs3T8pjoAUdEDwZhyZanelpkhqE+tXt2YbovbAL6tyNKtg0QqISpPqXwUtnbl0riOpVI+0HSi87xkKpWF0Y8UUCfG/txSdcQ9uEOwZxHzvD4xOYJQE3GYyqMLUjPnF4Zkw44h66mCn8e
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR07MB4531.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(396003)(366004)(376002)(346002)(52116002)(6486002)(956004)(966005)(2906002)(186003)(8936002)(2616005)(53546011)(26005)(66556008)(478600001)(66476007)(44832011)(6916009)(316002)(6506007)(31686004)(31696002)(36756003)(5660300002)(66946007)(54906003)(16526019)(86362001)(8676002)(83380400001)(6512007)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?blRFZUZGSEFyckVzR3RxN0VvdGN4S0VNeEhHTjlrbTFMaFJ2dFVwMVdXVVNt?=
+ =?utf-8?B?L0pRRGM1MDk3ZUpvT0o5c2I0blZERTlDZGl2cUlZNGJobUEyNnh5c1gxeWxy?=
+ =?utf-8?B?TFpxaFlsdnMxRTNqcG9LbVhmOGZ0bjloT0t0OUYvOGVjT1NKLzFNbnlGbjdy?=
+ =?utf-8?B?NzRCN3hIWTRkY1lpbkFZdHJOaEFQWGdUSUJOcDJ1UW8vaHQrVG9IVlBaNmlF?=
+ =?utf-8?B?MzFoaEZvbVJIaWNXOENoKzJyRjhqcnBDRUp6eVZ1Ujd5VUpoQ2xUWFhUWTdi?=
+ =?utf-8?B?d1FYbzJwRW9GMFZTWGNBampuZGNOY05WTWpjcjNDT2VmY05PdUUxUHVSOUIz?=
+ =?utf-8?B?NExQZDl1SnByazdGaVBYRVZwdmJKR1RMTUhhMmhyTXFLTDVlZlcvY2ViMCt6?=
+ =?utf-8?B?TGNNTHM1ekprYy96ZjZrbzhheDFTY0xkV1FPQWpxTm9OZFYxZEppNkhRL3N1?=
+ =?utf-8?B?blF1VUl0VXh3M3RMVGVwMy9DYkZBNzhKNkl1N0Frd1U0Mko5c0JjZ1lEbG40?=
+ =?utf-8?B?R2liVFVLOFd2dUc2S0U0ZWZYU3BPdUZQaGo4aDY3RWxrV09EcFVlNVg3UHE5?=
+ =?utf-8?B?aENJbVdBbTZoeWtNZHorOXlBOHVhZWJ3WVJOL2xDUmd1eGdsU3VNRC9JU0RI?=
+ =?utf-8?B?LzkvNWVhRHpscWQyWWZ2VDMvdmV6bGtndUphbW9qMWFybTN5LytVcFlmcTRR?=
+ =?utf-8?B?b2czNDc2Y3YwUWZMZzJUbURldlpOSmowbzcyejdYOWEyN3pVTlkveUkySGxi?=
+ =?utf-8?B?MHFaSkVCZy9pQ005WTZkUWtkSi96dmRoM1VpOUthTWNmdkRGS0V1b1hkeWVh?=
+ =?utf-8?B?cGNZbHd4MzNscm5tVzNaNHF4Q1NleVNuSkprLzhNM0NrSUZxMHcza0N3UEkv?=
+ =?utf-8?B?RVhaaDc3WnFuUldHMlJncUZyMitKRWZUVmQxcWVEOSsvZmdYVmMwYnpYTi9x?=
+ =?utf-8?B?dWdaNmtsVi9SSDBkUk5rMFhhdE9EQUF0WGJyZ1FSU2dIcEF2eDNpMmxlbDRY?=
+ =?utf-8?B?cVdPaVpQZXR1Zmd2aXRtSHFyK0s1YnErek5Kcm1CMU9kakUwQVpZdWdmRGxB?=
+ =?utf-8?B?M0d1c1NiM1JkbU1sN2NOT0VmamRPVmhQOXE4dFNSM0pNczRTb3dDaUV2ajZN?=
+ =?utf-8?B?SzRIa2ZjdVVCVHYrbjZKbjFVY0t0aFE2WWVBNnl4cUxIREhKcllySEFoVWo3?=
+ =?utf-8?B?Ym5ONzJvcXBNblNMMjBGVExTdms5eE41UWpNeUNadm9obUFOZnJ4VTAyUzVa?=
+ =?utf-8?B?T1NKZFlMcGdQazFCdmJNb1pTYkVhcFlIVEh3SEJNYTlCOFlXNVgrdGNQYWV5?=
+ =?utf-8?B?eDFXMmhNaXkxeUxKZkM3RUFRRTg4ZDZNaDZmWmZ1eVBGY3NMMFVtSEpIK1Va?=
+ =?utf-8?B?VHdLalpmQitXMkJUWUpCTmthbnFOSno5VWVvWTRCcHA1czFBMXBxaTlteEJN?=
+ =?utf-8?Q?Hpbb3+4A?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 648ce27d-7315-440e-5dd4-08d8c35e2d48
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR07MB4531.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2021 07:27:32.9533
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 55tYPNn4AvDvOgyrldXpsZoHMGtuOLk9YY9RoYyy85iJ/vgusTQH5MQRm0u9ACGkgSgd8HHKqWj2Ci4wcw5GGEHxsimoz0ZUYhGiVlfZGl4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR07MB4468
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Dec 13, 2020 at 1:54 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Commit ccbef1674a15 ("Kbuild, lto: add ld-version and ld-ifversion
-> macros") introduced scripts/ld-version.sh for GCC LTO.
->
-> At that time, this script handled 5 version fields because GCC LTO
-> needed the downstream binutils. (https://lkml.org/lkml/2014/4/8/272)
->
-> The code snippet from the submitted patch was as follows:
->
->     # We need HJ Lu's Linux binutils because mainline binutils does not
->     # support mixing assembler and LTO code in the same ld -r object.
->     # XXX check if the gcc plugin ld is the expected one too
->     # XXX some Fedora binutils should also support it. How to check for that?
->     ifeq ($(call ld-ifversion,-ge,22710001,y),y)
->         ...
->
-> However, GCC LTO was not merged into the mainline after all.
-> (https://lkml.org/lkml/2014/4/8/272)
->
-> So, the 4th and 5th fields were never used, and finally removed by
-> commit 0d61ed17dd30 ("ld-version: Drop the 4th and 5th version
-> components").
->
-> Since then, the last 4-digits returned by this script is always zeros.
->
-> Remove the meaningless last 4-digits. This makes the version format
-> consistent with GCC_VERSION, CLANG_VERSION, LLD_VERSION.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
+Hello Peter,
 
-Applied to linux-kbuild.
+On 27/01/2021 23:32, Peter Zijlstra wrote:
+>> Link: https://lore.kernel.org/lkml/5644D08D.4080206@caviumnetworks.com/
 
+please, check the discussion pointed by the link above...
 
->  arch/arm64/Kconfig            | 2 +-
->  arch/mips/loongson64/Platform | 2 +-
->  arch/mips/vdso/Kconfig        | 2 +-
->  arch/powerpc/Makefile         | 2 +-
->  arch/powerpc/lib/Makefile     | 2 +-
->  scripts/ld-version.sh         | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index a6b5b7ef40ae..69d56b21a6ec 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1499,7 +1499,7 @@ config ARM64_PTR_AUTH
->         depends on (CC_HAS_SIGN_RETURN_ADDRESS || CC_HAS_BRANCH_PROT_PAC_RET) && AS_HAS_PAC
->         # Modern compilers insert a .note.gnu.property section note for PAC
->         # which is only understood by binutils starting with version 2.33.1.
-> -       depends on LD_IS_LLD || LD_VERSION >= 233010000 || (CC_IS_GCC && GCC_VERSION < 90100)
-> +       depends on LD_IS_LLD || LD_VERSION >= 23301 || (CC_IS_GCC && GCC_VERSION < 90100)
->         depends on !CC_IS_CLANG || AS_HAS_CFI_NEGATE_RA_STATE
->         depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_REGS)
->         help
-> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
-> index ec42c5085905..cc0b9c87f9ad 100644
-> --- a/arch/mips/loongson64/Platform
-> +++ b/arch/mips/loongson64/Platform
-> @@ -35,7 +35,7 @@ cflags-$(CONFIG_CPU_LOONGSON64)       += $(call as-option,-Wa$(comma)-mno-fix-loongson
->  # can't easily be used safely within the kbuild framework.
->  #
->  ifeq ($(call cc-ifversion, -ge, 0409, y), y)
-> -  ifeq ($(call ld-ifversion, -ge, 225000000, y), y)
-> +  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
->      cflags-$(CONFIG_CPU_LOONGSON64)  += \
->        $(call cc-option,-march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
->    else
-> diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
-> index 7aec721398d5..a665f6108cb5 100644
-> --- a/arch/mips/vdso/Kconfig
-> +++ b/arch/mips/vdso/Kconfig
-> @@ -12,7 +12,7 @@
->  # the lack of relocations. As such, we disable the VDSO for microMIPS builds.
->
->  config MIPS_LD_CAN_LINK_VDSO
-> -       def_bool LD_VERSION >= 225000000 || LD_IS_LLD
-> +       def_bool LD_VERSION >= 22500 || LD_IS_LLD
->
->  config MIPS_DISABLE_VDSO
->         def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
-> diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-> index 5c8c06215dd4..6a9a852c3d56 100644
-> --- a/arch/powerpc/Makefile
-> +++ b/arch/powerpc/Makefile
-> @@ -65,7 +65,7 @@ UTS_MACHINE := $(subst $(space),,$(machine-y))
->  ifdef CONFIG_PPC32
->  KBUILD_LDFLAGS_MODULE += arch/powerpc/lib/crtsavres.o
->  else
-> -ifeq ($(call ld-ifversion, -ge, 225000000, y),y)
-> +ifeq ($(call ld-ifversion, -ge, 22500, y),y)
->  # Have the linker provide sfpr if possible.
->  # There is a corresponding test in arch/powerpc/lib/Makefile
->  KBUILD_LDFLAGS_MODULE += --save-restore-funcs
-> diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
-> index 69a91b571845..d4efc182662a 100644
-> --- a/arch/powerpc/lib/Makefile
-> +++ b/arch/powerpc/lib/Makefile
-> @@ -31,7 +31,7 @@ obj-$(CONFIG_FUNCTION_ERROR_INJECTION)        += error-inject.o
->  # 64-bit linker creates .sfpr on demand for final link (vmlinux),
->  # so it is only needed for modules, and only for older linkers which
->  # do not support --save-restore-funcs
-> -ifeq ($(call ld-ifversion, -lt, 225000000, y),y)
-> +ifeq ($(call ld-ifversion, -lt, 22500, y),y)
->  extra-$(CONFIG_PPC64)  += crtsavres.o
->  endif
->
-> diff --git a/scripts/ld-version.sh b/scripts/ld-version.sh
-> index f2be0ff9a738..0f8a2c0f9502 100755
-> --- a/scripts/ld-version.sh
-> +++ b/scripts/ld-version.sh
-> @@ -6,6 +6,6 @@
->         gsub(".*version ", "");
->         gsub("-.*", "");
->         split($1,a, ".");
-> -       print a[1]*100000000 + a[2]*1000000 + a[3]*10000;
-> +       print a[1]*10000 + a[2]*100 + a[3];
->         exit
->         }
-> --
-> 2.27.0
->
+>> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+>> ---
+>>  arch/mips/include/asm/barrier.h | 9 +++++++++
+>>  1 file changed, 9 insertions(+)
+>>
+>> diff --git a/arch/mips/include/asm/barrier.h b/arch/mips/include/asm/barrier.h
+>> index 49ff172..24c3f2c 100644
+>> --- a/arch/mips/include/asm/barrier.h
+>> +++ b/arch/mips/include/asm/barrier.h
+>> @@ -113,6 +113,15 @@ static inline void wmb(void)
+>>  					    ".set arch=octeon\n\t"	\
+>>  					    "syncw\n\t"			\
+>>  					    ".set pop" : : : "memory")
+>> +
+>> +#define __smp_store_release(p, v)					\
+>> +do {									\
+>> +	compiletime_assert_atomic_type(*p);				\
+>> +	__smp_wmb();							\
+>> +	__smp_rmb();							\
+>> +	WRITE_ONCE(*p, v);						\
+>> +} while (0)
+> This is wrong in general since smp_rmb() will only provide order between
+> two loads and smp_store_release() is a store.
+> 
+> If this is correct for all MIPS, this needs a giant comment on exactly
+> how that smp_rmb() makes sense here.
 
+... the macro is provided for Octeon only, and __smp_rmb() is actually a NOP
+there, but I thought to "document" the flow of thoughts from the discussion
+above by including it anyway.
 
 -- 
-Best Regards
-Masahiro Yamada
+Best regards,
+Alexander Sverdlin.
