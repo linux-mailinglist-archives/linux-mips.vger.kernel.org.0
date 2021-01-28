@@ -2,85 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE9E307140
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 09:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A79F3074E2
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 12:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbhA1ISQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Jan 2021 03:18:16 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:44346 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbhA1ISB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Jan 2021 03:18:01 -0500
-Received: by mail-oi1-f181.google.com with SMTP id n7so5156687oic.11;
-        Thu, 28 Jan 2021 00:17:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TL3tp80ch5Ojmt15uhmuDBGqfvQ8YwjAwOvbZ3H5gho=;
-        b=tY3YuKIqmRaJkzI6nyvtPbLy7yOjbbcQeeta0rppuamco2UVGIKwuoYnzU/mS2cuCa
-         Ibamgeb2O5+vQdjjnN696vcSzs8mC7ZXmKlofm53bFYUcaL1+aOq7YvQO+PguzMUch8W
-         yvlkCIm8ATu4GO/qmCHI7dAF1AENN008sW7eJNY1mjmigcole/y8mHbOzYE8wWoLWFDg
-         coeLdrhY2B7iJaFDSxQPGjmmaRf1xGOsuRO+JkmqZG1/0V0Ee0d8bqapmcXHL6awaUYO
-         eicZlAtaA/2pKlzF/fwB6oAt1G507kOpCrW0M1r6L3raHHiTTwFHDTKGo/Z7CYJouJXo
-         PkCQ==
-X-Gm-Message-State: AOAM530ZiPFrc2eXuKfnEVWqVmWGMlkhvzMgONMyEbJTJpybRxE6DULP
-        qnDHyS/Yd+Cepqo4PYhqh8wV12Oi65jHiCdObok=
-X-Google-Smtp-Source: ABdhPJyaplo6/NZAAIS02LBbY6W1dLxYDZ/X0XB3GuIXLfaRgiB9Cco71R6713OCRdUcK2cT17+0m9PEdnGKkCz70nI=
-X-Received: by 2002:aca:1219:: with SMTP id 25mr5943005ois.54.1611821840178;
- Thu, 28 Jan 2021 00:17:20 -0800 (PST)
+        id S231217AbhA1LeS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Jan 2021 06:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229530AbhA1LeP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Jan 2021 06:34:15 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D55C061573;
+        Thu, 28 Jan 2021 03:33:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IUujPNoLJPhaulCTunLzVc+aMIY9llkn0PPsho9EbXg=; b=q3UUj0cFxO4alOPCMS3cjAmR2u
+        wKGu2iv+3Xuhu5QxISZ9ZZJOS0pQ2GtYBzM2WVMeV/OjggbcOPiwNYxDFIMtyPTaQQNEfDT3TiBRa
+        T2jqi9yZtEYNpyo8eWXOLUxU7qpevo/JsbDXxfyfVkLMIGRwvjs2vWY/xyZ4uxlb5nBRtnoEeY/Vz
+        fNXHgwNNCn0CkkC50pTDfRy/lp82nWMy/ehsqAnHAvFgetp5EfxO9fCtX3g4dO9VR1FE8nvUlZ7sr
+        Bn2IZGGGDInHvCbndLjrJ6PQb82695qmeQv5WYiqTsI+D4GBDKWySAoA5Hwf+wgeENaCSuuQq68TP
+        +CCtbJiQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1l55YF-0003Z2-KG; Thu, 28 Jan 2021 11:33:27 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1E9BF300B22;
+        Thu, 28 Jan 2021 12:33:26 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EF281200D4EEC; Thu, 28 Jan 2021 12:33:25 +0100 (CET)
+Date:   Thu, 28 Jan 2021 12:33:25 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Cc:     Paul Burton <paul.burton@imgtec.com>, linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] MIPS: Octeon: Implement __smp_store_release()
+Message-ID: <YBKhBQQ97f/J6L+u@hirez.programming.kicks-ass.net>
+References: <20210127203627.47510-1-alexander.sverdlin@nokia.com>
+ <20210127203627.47510-2-alexander.sverdlin@nokia.com>
+ <YBHp4139X+p+4IZ+@hirez.programming.kicks-ass.net>
+ <aace6ff1-9ddf-15af-3c0a-378c53c59acb@nokia.com>
 MIME-Version: 1.0
-References: <20210128005110.2613902-1-masahiroy@kernel.org> <20210128005110.2613902-13-masahiroy@kernel.org>
-In-Reply-To: <20210128005110.2613902-13-masahiroy@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 28 Jan 2021 09:17:09 +0100
-Message-ID: <CAMuHMdV_AHcnGoVToHLXa95JEd4wcL3eTqYfk6=7Ou0W8VJR5w@mail.gmail.com>
-Subject: Re: [PATCH 12/27] m68k: syscalls: switch to generic syscalltbl.sh
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aace6ff1-9ddf-15af-3c0a-378c53c59acb@nokia.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Yamada-san,
+On Thu, Jan 28, 2021 at 08:27:29AM +0100, Alexander Sverdlin wrote:
 
-On Thu, Jan 28, 2021 at 1:54 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> As of v5.11-rc1, 12 architectures duplicate similar shell scripts in
-> order to generate syscall table headers. My goal is to unify them into
-> the single scripts/syscalltbl.sh.
->
-> This commit converts m68k to use scripts/syscalltbl.sh.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> >> +#define __smp_store_release(p, v)					\
+> >> +do {									\
+> >> +	compiletime_assert_atomic_type(*p);				\
+> >> +	__smp_wmb();							\
+> >> +	__smp_rmb();							\
+> >> +	WRITE_ONCE(*p, v);						\
+> >> +} while (0)
+> > This is wrong in general since smp_rmb() will only provide order between
+> > two loads and smp_store_release() is a store.
+> > 
+> > If this is correct for all MIPS, this needs a giant comment on exactly
+> > how that smp_rmb() makes sense here.
+> 
+> ... the macro is provided for Octeon only, and __smp_rmb() is actually a NOP
+> there, but I thought to "document" the flow of thoughts from the discussion
+> above by including it anyway.
 
-Thanks a lot!
+Random discussions on the internet do not absolve you from having to
+write coherent comments. Especially so where memory ordering is
+concerned.
 
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+This, from commit 6b07d38aaa52 ("MIPS: Octeon: Use optimized memory
+barrier primitives."):
 
-Gr{oetje,eeting}s,
+	#define smp_mb__before_llsc() smp_wmb()
+	#define __smp_mb__before_llsc() __smp_wmb()
 
-                        Geert
+is also dodgy as hell and really wants a comment too. I'm not buying the
+Changelog of that commit either, __smp_mb__before_llsc should also
+ensure the LL cannot happen earlier, but SYNCW has no effect on loads.
+So what stops the load from being speculated?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
