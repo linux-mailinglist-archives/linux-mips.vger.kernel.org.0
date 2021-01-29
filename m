@@ -2,77 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BF130848A
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Jan 2021 05:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041EB308C00
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Jan 2021 18:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbhA2Egn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Jan 2021 23:36:43 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:38482 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229786AbhA2Egm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 Jan 2021 23:36:42 -0500
-Received: from localhost.localdomain (unknown [212.102.50.216])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx79d9kBNgEAEAAA--.5S2;
-        Fri, 29 Jan 2021 12:35:28 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH] MIPS: fix kernel_stack_pointer()
-Date:   Fri, 29 Jan 2021 12:35:07 +0800
-Message-Id: <20210129043507.30488-1-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: AQAAf9Dx79d9kBNgEAEAAA--.5S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr1xXw4rKF1fGFyDAw1DKFg_yoWxAFXE93
-        W2ya109r1rX3s2vry3Wa97XFy2g3y8Wws2vF1xtFZIy3s8Jr4rXa1kJrnrJF47uw4qvF4r
-        uFyktry7CFnIkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoO
-        J5UUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        id S231307AbhA2R44 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Jan 2021 12:56:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41478 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231169AbhA2R4z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 29 Jan 2021 12:56:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D346A64DFD;
+        Fri, 29 Jan 2021 17:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611942974;
+        bh=76vEgkr0lY2H1oivQ80gbBVHfJx1p6xaz5YbZTkVGBQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lHZn6a58VWB2LqQQr4UPdlNExEyqUf4kXBOZELsmazN0vOZemwnz4Uj6sm5JDudG2
+         897MmIqqh8KLoT/4rMYSO2jjWdDlMIyhYRp1cN+0SwZsLl0MZHmcxTa4f8iervQMX1
+         VJgzhP2j/aiLBkIC5g18MKPEnWI3UMlDb2gfD3Tv/ILlJY89L6pz37Kma+Nuu2EQAc
+         rkgeZMldMwVBR2vZKYnoGt5Nd8iHRaswEAhWIATf/04K46xtiVuzTrRlvS4NnPz5w7
+         5r2xoy74WIIan5YpAe3UY/mo9UM6OSYBYIt2e5XP0Dc8HnF9q5cKhia0q+jdgRAM//
+         jLvdm9WEbgf4A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7AC7B40513; Fri, 29 Jan 2021 14:56:10 -0300 (-03)
+Date:   Fri, 29 Jan 2021 14:56:10 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        David Daney <david.daney@cavium.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Archer Yan <ayan@wavecomp.com>, x86@kernel.org
+Subject: Re: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack
+ traces from user-space with perf
+Message-ID: <20210129175610.GC794568@kernel.org>
+References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
+ <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
+ <20210104105904.GK3021@hirez.programming.kicks-ass.net>
+ <0712b131-715a-a83a-bc9e-61405824ff0e@flygoat.com>
+ <20210105101806.GG3040@hirez.programming.kicks-ass.net>
+ <20210127211506.GA21163@alpha.franken.de>
+ <d2035b91-bcb9-bde4-8009-d81d177b2317@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d2035b91-bcb9-bde4-8009-d81d177b2317@loongson.cn>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MIPS always save kernel stack pointer in regs[29]
+Em Fri, Jan 29, 2021 at 10:48:52AM +0800, Tiezhu Yang escreveu:
+> On 01/28/2021 05:15 AM, Thomas Bogendoerfer wrote:
+> > On Tue, Jan 05, 2021 at 11:18:06AM +0100, Peter Zijlstra wrote:
+> > > On Tue, Jan 05, 2021 at 11:45:37AM +0800, Jiaxun Yang wrote:
+> > > > 在 2021/1/4 下午6:59, Peter Zijlstra 写道:
+> > > > > On Tue, Dec 29, 2020 at 08:55:59PM +0800, Tiezhu Yang wrote:
+> > > > > > +u64 perf_reg_abi(struct task_struct *tsk)
+> > > > > > +{
+> > > > > > +	if (test_tsk_thread_flag(tsk, TIF_32BIT_REGS))
+> > > > > > +		return PERF_SAMPLE_REGS_ABI_32;
+> > > > > > +	else
+> > > > > > +		return PERF_SAMPLE_REGS_ABI_64;
+> > > > > > +}
+> > > > > So we recently changed this on x86 to not rely on TIF flags. IIRC the
+> > > > > problem is that on x86 you can change the mode of a task without the
+> > > > > kernel being aware of it. Is something like that possible on MIPS as
+> > > > > well?
+> > > > Hi all,
+> > > > 
+> > > > In MIPS world it's impossible to raise a thread to 64bit without kernel
+> > > > aware.
+> > > > Without STATUS.UX set it will trigger reserved instruction exception when
+> > > > trying
+> > > > to run 64bit instructions.
+> > > The other way around is the case on x86, a 64bit program can create and
+> > > execute 32bit code sections without the kernel being aware. But if
+> > > clearing STATUS.UX has the same issue as setting it, that should not be
+> > > a problem for you.
+> > > 
+> > > > However it may be possible to run with 32bit ABI without
+> > > > TIF_32BIT_REGS if user program didn't get ELF ABI right. I think
+> > > > that's out of our current consideration.
+> > > Fair enough.
+> > > 
+> > > > > The thing x86 does today is look at it's pt_regs state to determine the
+> > > > > actual state.
+> > > > It is possible to look at pt_regs Status.UX bit on MIPS. But it seems
+> > > > unnecessary
+> > > > as user can't change it.
+> > > Ok, good. Then no objection, proceed! :-)
+> > this patch aims more to mips-next, while patch 2 and 3 are targeting
+> > tools/perf. Should I take them into mips-next, too ?
+> 
+> If it is possible, I prefer to merge this three patches together
+> through mips-next tree.
 
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/include/asm/ptrace.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The kernel part should go via the mips-next tree, the tooling I can
+process, that is how these things go in other cases where kernel and
+tooling changes for some new feature are needed.
 
-diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
-index 1e76774b36dd..daf3cf244ea9 100644
---- a/arch/mips/include/asm/ptrace.h
-+++ b/arch/mips/include/asm/ptrace.h
-@@ -53,7 +53,7 @@ struct pt_regs {
- 
- static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
- {
--	return regs->regs[31];
-+	return regs->regs[29];
- }
- 
- static inline void instruction_pointer_set(struct pt_regs *regs,
--- 
-2.17.1
+This helps making sure tooling is not in lockstep with the kernel, one
+should be able to use a new tool in an old kernel and vice-versa.
 
+- Arnaldo
