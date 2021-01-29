@@ -2,113 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 276753079A8
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Jan 2021 16:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B17A63083E6
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Jan 2021 03:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbhA1P04 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Jan 2021 10:26:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbhA1P0r (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Jan 2021 10:26:47 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599F2C0613ED;
-        Thu, 28 Jan 2021 07:26:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9eBIo4Egu97RqbiY6+c7asSiV/ikUF++ZJVD8vqT55E=; b=QDVpDrpKJf8/DSfYuNDmXh7HYF
-        KYDY2sR+VpVKzChju3VATvh5amSGkECv5nzTjbDcjGqmGTKURbJShRz2zGI1FCNP/S5YUdCJiKg5V
-        M8DIMfSWdHcSYORMzBZPisDicbo0OsD4BaqYMtkZZIJSEELUkryYzwjHCaj2QOsUWh8qirjmKYHiX
-        H0J1zVBmSNJWNFj9KswW1EYQaobb+urewFNVZyLKhkx5BUOd0OqlCSfCXe3VBmMU8w/Kk8/Iu7m3L
-        Y+YN/JBK55awnYCQBJI+dC2G4zAnXB3asC00H7baaH/jKfkI1SBOgpPfZznutkq2i6Ig/xNy3O5BG
-        jcx9PHHg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l59BJ-0007D8-TO; Thu, 28 Jan 2021 15:26:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A77F4301A27;
-        Thu, 28 Jan 2021 16:26:00 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8D80721405348; Thu, 28 Jan 2021 16:26:00 +0100 (CET)
-Date:   Thu, 28 Jan 2021 16:26:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Cc:     Paul Burton <paul.burton@imgtec.com>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] MIPS: Octeon: qspinlock: Flush write buffer
-Message-ID: <YBLXiG3UxLNDB5xK@hirez.programming.kicks-ass.net>
-References: <20210127203627.47510-1-alexander.sverdlin@nokia.com>
- <20210127203627.47510-4-alexander.sverdlin@nokia.com>
- <YBHqeXPMILg+352D@hirez.programming.kicks-ass.net>
- <f492b29b-32a4-b4d4-a5d3-0d0dd8a56b5a@nokia.com>
- <YBKha2GRFWyYp+Lz@hirez.programming.kicks-ass.net>
- <f8344f35-cdf1-ec3d-dcd0-7bfc392ef6e0@nokia.com>
+        id S229885AbhA2CuL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Jan 2021 21:50:11 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:41500 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229757AbhA2CuL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Jan 2021 21:50:11 -0500
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxCL6UdxNgWBgPAA--.22932S3;
+        Fri, 29 Jan 2021 10:48:54 +0800 (CST)
+Subject: Re: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack
+ traces from user-space with perf
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
+ <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
+ <20210104105904.GK3021@hirez.programming.kicks-ass.net>
+ <0712b131-715a-a83a-bc9e-61405824ff0e@flygoat.com>
+ <20210105101806.GG3040@hirez.programming.kicks-ass.net>
+ <20210127211506.GA21163@alpha.franken.de>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        David Daney <david.daney@cavium.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Archer Yan <ayan@wavecomp.com>, x86@kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <d2035b91-bcb9-bde4-8009-d81d177b2317@loongson.cn>
+Date:   Fri, 29 Jan 2021 10:48:52 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8344f35-cdf1-ec3d-dcd0-7bfc392ef6e0@nokia.com>
+In-Reply-To: <20210127211506.GA21163@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxCL6UdxNgWBgPAA--.22932S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFy5Ar17JF45GrykGF1kAFb_yoW8CFW3pa
+        yvva1jkF4qqryj9F1Ivwn5Zasayr48Kw4FgFn8tFWIq3yq9F1ftF48t3Wj9as3Zr1fG3W2
+        vr4UXr9rZFn3ZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwI
+        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
+        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+        6cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbU3ktUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 01:13:03PM +0100, Alexander Sverdlin wrote:
-> Hi!
-> 
-> On 28/01/2021 12:35, Peter Zijlstra wrote:
-> >> My point was that original MIPS spinlocks had this write-buffer-flush and
-> >> it got lost on the conversion to qspinlocks. The referenced commit just
-> >> allows to see the last MIPS-specific implementation before deletion.
-> > Hardware that needs a store-buffer flush after release is highly suspect
-> > and needs big and explicit comments. Not vague hints.
-> 
-> I have a feeling that you are not going to suggest the comments for the code
-> and one has to guess what is it you have in mind?
+On 01/28/2021 05:15 AM, Thomas Bogendoerfer wrote:
+> On Tue, Jan 05, 2021 at 11:18:06AM +0100, Peter Zijlstra wrote:
+>> On Tue, Jan 05, 2021 at 11:45:37AM +0800, Jiaxun Yang wrote:
+>>> 在 2021/1/4 下午6:59, Peter Zijlstra 写道:
+>>>> On Tue, Dec 29, 2020 at 08:55:59PM +0800, Tiezhu Yang wrote:
+>>>>> +u64 perf_reg_abi(struct task_struct *tsk)
+>>>>> +{
+>>>>> +	if (test_tsk_thread_flag(tsk, TIF_32BIT_REGS))
+>>>>> +		return PERF_SAMPLE_REGS_ABI_32;
+>>>>> +	else
+>>>>> +		return PERF_SAMPLE_REGS_ABI_64;
+>>>>> +}
+>>>> So we recently changed this on x86 to not rely on TIF flags. IIRC the
+>>>> problem is that on x86 you can change the mode of a task without the
+>>>> kernel being aware of it. Is something like that possible on MIPS as
+>>>> well?
+>>> Hi all,
+>>>
+>>> In MIPS world it's impossible to raise a thread to 64bit without kernel
+>>> aware.
+>>> Without STATUS.UX set it will trigger reserved instruction exception when
+>>> trying
+>>> to run 64bit instructions.
+>> The other way around is the case on x86, a 64bit program can create and
+>> execute 32bit code sections without the kernel being aware. But if
+>> clearing STATUS.UX has the same issue as setting it, that should not be
+>> a problem for you.
+>>
+>>> However it may be possible to run with 32bit ABI without
+>>> TIF_32BIT_REGS if user program didn't get ELF ABI right. I think
+>>> that's out of our current consideration.
+>> Fair enough.
+>>
+>>>> The thing x86 does today is look at it's pt_regs state to determine the
+>>>> actual state.
+>>> It is possible to look at pt_regs Status.UX bit on MIPS. But it seems
+>>> unnecessary
+>>> as user can't change it.
+>> Ok, good. Then no objection, proceed! :-)
+> this patch aims more to mips-next, while patch 2 and 3 are targeting
+> tools/perf. Should I take them into mips-next, too ?
 
-I've no insight in the specific microarch that causes this weirdness, so
-it's very hard for me to suggest something here.
+If it is possible, I prefer to merge this three patches together
+through mips-next tree.
 
-Find inspiration in the loongson commit.
+Thanks,
+Tiezhu
 
-> Do you think the proper approach would be to undelete MIPS spinlocks and
-> make these broken qspinlocks a configurable option for MIPS? I don't even
-> mind if they will be default option for those not interested in performance
-> or latency.
+>
+> Thomas.
+>
 
-qspinlock really isn't the only generic code that relies on this. I
-would seriously consider doing the loongson-v3 thing, possibly also
-adding that nudge_writes() thing to your smp_store_release(), you
-already have it in __clear_bit_unlock().
-
-It would then look something like:
-
-
-/*
- * Octeon is special; it does not do read speculation, therefore an
- * smp_wmb() is sufficient to generate {load,store}->{store} order
- * required for RELEASE. It however has store-buffer weirdness
- * that requires an additional smp_wmb() (which is a completion barrier
- * for them) to flush the store-buffer, otherwise visibility of the
- * store can be arbitrarily delayed, also see __SYNC_loongson3_war.
- */
-#define __smp_store_release(p, v) \
-do { \
-	compiletime_assert_atomic_type(*p); \
-	__smp_wmb(); \
-	WRITE_ONCE(*p, v); \
-	__smp_wmb(); \
-} while (0)
-
-/*
- * Octeon also likes to retain stores, see __SYNC_loongson3_war.
- */
-#define cpu_relax()	__smp_wmb();
-
-
-Or something...
