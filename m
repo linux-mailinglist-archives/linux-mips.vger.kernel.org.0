@@ -2,115 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CA9308C05
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Jan 2021 18:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADEA309B1E
+	for <lists+linux-mips@lfdr.de>; Sun, 31 Jan 2021 09:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbhA2R6u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Jan 2021 12:58:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41974 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229683AbhA2R6t (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 29 Jan 2021 12:58:49 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BBFAF64E07;
-        Fri, 29 Jan 2021 17:58:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611943088;
-        bh=O1kMHmCIAMtpNgKBwX1ZGNj9omrf1C81ck/T7oQqjZg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qfSLujWQ06P9+v81FqjHGaSx7Lt7wkwNrnymvUjYdQ3t4Vd6ii1yJuCZbuoL2W5Qb
-         H4GdTTsCVbf6ZFyPbSJXrYPD8yFGmj6xL07YaU1O2HypX8VSgEq7E8Dd7wqL6mSZ/m
-         TjVDuLEzlAoJswCMpCK/yqd0xYau+l5z+9zjOdcv76+FNXpM2rDD+AiWsQSG8nKlWr
-         ugtbffZtfkuLQGhZH+ebGd+BdvNKJvKd8Lo6wdmm3sx6pTSRbea7ZplNyO3fAKlwmT
-         eJolwE8Wa2KLMeh5eC3yRs9VPaRkTyGfky3F/bFoqnu0SGLaCXULbVoiDOlM96GCYS
-         OFAENuEc6S7GA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8DF4540513; Fri, 29 Jan 2021 14:58:05 -0300 (-03)
-Date:   Fri, 29 Jan 2021 14:58:05 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        id S229765AbhAaIQE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 31 Jan 2021 03:16:04 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:57048 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230035AbhAaIPw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 31 Jan 2021 03:15:52 -0500
+Received: from loongson.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz_PvZhZg1dIAAA--.880S2;
+        Sun, 31 Jan 2021 16:14:39 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     Wu Zhangjin <wuzhangjin@gmail.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        David Daney <david.daney@cavium.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Archer Yan <ayan@wavecomp.com>, x86@kernel.org
-Subject: Re: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack
- traces from user-space with perf
-Message-ID: <20210129175805.GD794568@kernel.org>
-References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
- <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
- <20210104105904.GK3021@hirez.programming.kicks-ass.net>
- <0712b131-715a-a83a-bc9e-61405824ff0e@flygoat.com>
- <20210105101806.GG3040@hirez.programming.kicks-ass.net>
- <20210127211506.GA21163@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210127211506.GA21163@alpha.franken.de>
-X-Url:  http://acmel.wordpress.com
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [PATCH 1/3] MIPS: ftrace: Fix N32 save registers
+Date:   Sun, 31 Jan 2021 16:14:36 +0800
+Message-Id: <1612080878-5426-1-git-send-email-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxz_PvZhZg1dIAAA--.880S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr47uw4fWw4fuFy8KryUJrb_yoWfXrcEg3
+        4Iyw1rWrs3Zr1vqr1qgws8Jr90ya42qwnI9wnrtrWUCr90yrZ8trWkJas5Kas5WF109rsx
+        Xr4rG3429FZ7JjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
+        Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUhdbbUUU
+        UU=
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Em Wed, Jan 27, 2021 at 10:15:06PM +0100, Thomas Bogendoerfer escreveu:
-> On Tue, Jan 05, 2021 at 11:18:06AM +0100, Peter Zijlstra wrote:
-> > On Tue, Jan 05, 2021 at 11:45:37AM +0800, Jiaxun Yang wrote:
-> > > 在 2021/1/4 下午6:59, Peter Zijlstra 写道:
-> > > > On Tue, Dec 29, 2020 at 08:55:59PM +0800, Tiezhu Yang wrote:
-> > > > > +u64 perf_reg_abi(struct task_struct *tsk)
-> > > > > +{
-> > > > > +	if (test_tsk_thread_flag(tsk, TIF_32BIT_REGS))
-> > > > > +		return PERF_SAMPLE_REGS_ABI_32;
-> > > > > +	else
-> > > > > +		return PERF_SAMPLE_REGS_ABI_64;
-> > > > > +}
-> > > > So we recently changed this on x86 to not rely on TIF flags. IIRC the
-> > > > problem is that on x86 you can change the mode of a task without the
-> > > > kernel being aware of it. Is something like that possible on MIPS as
-> > > > well?
-> > > 
-> > > Hi all,
-> > > 
-> > > In MIPS world it's impossible to raise a thread to 64bit without kernel
-> > > aware.
-> > > Without STATUS.UX set it will trigger reserved instruction exception when
-> > > trying
-> > > to run 64bit instructions.
-> > 
-> > The other way around is the case on x86, a 64bit program can create and
-> > execute 32bit code sections without the kernel being aware. But if
-> > clearing STATUS.UX has the same issue as setting it, that should not be
-> > a problem for you.
-> > 
-> > > However it may be possible to run with 32bit ABI without
-> > > TIF_32BIT_REGS if user program didn't get ELF ABI right. I think
-> > > that's out of our current consideration.
-> > 
-> > Fair enough.
-> > 
-> > > > The thing x86 does today is look at it's pt_regs state to determine the
-> > > > actual state.
-> > > It is possible to look at pt_regs Status.UX bit on MIPS. But it seems
-> > > unnecessary
-> > > as user can't change it.
-> > 
-> > Ok, good. Then no objection, proceed! :-)
-> 
-> this patch aims more to mips-next, while patch 2 and 3 are targeting
-> tools/perf. Should I take them into mips-next, too ?
+CONFIG_64BIT is confusing. N32 also pass parameters by a0~a7.
 
-I'll process the tools/perf ones, if you took the time to actually
-review them, please say so and I'll add a Reviewed-by tag stating that.
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+---
+ arch/mips/kernel/mcount.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I've replied to another message in this thread with reasoning about the
-value of processing kernel bits in the relevant arch tree while the
-tooling one via my perf/core branch.
+diff --git a/arch/mips/kernel/mcount.S b/arch/mips/kernel/mcount.S
+index cff52b2..808257a 100644
+--- a/arch/mips/kernel/mcount.S
++++ b/arch/mips/kernel/mcount.S
+@@ -27,7 +27,7 @@
+ 	PTR_S	a1, PT_R5(sp)
+ 	PTR_S	a2, PT_R6(sp)
+ 	PTR_S	a3, PT_R7(sp)
+-#ifdef CONFIG_64BIT
++#if _MIPS_SIM == _MIPS_SIM_ABI64 || _MIPS_SIM == _MIPS_SIM_NABI32
+ 	PTR_S	a4, PT_R8(sp)
+ 	PTR_S	a5, PT_R9(sp)
+ 	PTR_S	a6, PT_R10(sp)
+@@ -42,7 +42,7 @@
+ 	PTR_L	a1, PT_R5(sp)
+ 	PTR_L	a2, PT_R6(sp)
+ 	PTR_L	a3, PT_R7(sp)
+-#ifdef CONFIG_64BIT
++#if _MIPS_SIM == _MIPS_SIM_ABI64 || _MIPS_SIM == _MIPS_SIM_NABI32
+ 	PTR_L	a4, PT_R8(sp)
+ 	PTR_L	a5, PT_R9(sp)
+ 	PTR_L	a6, PT_R10(sp)
+-- 
+2.1.0
 
-- Arnaldo
