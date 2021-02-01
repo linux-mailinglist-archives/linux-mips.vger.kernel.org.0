@@ -2,76 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAC030A93A
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Feb 2021 15:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4DE30A824
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Feb 2021 13:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbhBAN7l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Feb 2021 08:59:41 -0500
-Received: from elvis.franken.de ([193.175.24.41]:43717 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232031AbhBAN7i (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 1 Feb 2021 08:59:38 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1l6ZjC-0001Qe-00; Mon, 01 Feb 2021 14:58:54 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 57C92C0D38; Mon,  1 Feb 2021 13:50:28 +0100 (CET)
-Date:   Mon, 1 Feb 2021 13:50:28 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: relocatable: Provide kaslr_offset() to get the
- kernel offset
-Message-ID: <20210201125028.GA8621@alpha.franken.de>
-References: <1611720745-8256-1-git-send-email-hejinyang@loongson.cn>
+        id S231941AbhBAM5P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Feb 2021 07:57:15 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:59854 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231482AbhBAM5N (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 1 Feb 2021 07:57:13 -0500
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz_Jm+hdgckIBAA--.1466S3;
+        Mon, 01 Feb 2021 20:56:07 +0800 (CST)
+Subject: Re: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack
+ traces from user-space with perf
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
+ <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
+ <20210201104338.GA6484@alpha.franken.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        David Daney <david.daney@cavium.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Archer Yan <ayan@wavecomp.com>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <7c081c6f-bf47-353d-95c0-52e8640dc938@loongson.cn>
+Date:   Mon, 1 Feb 2021 20:56:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1611720745-8256-1-git-send-email-hejinyang@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210201104338.GA6484@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxz_Jm+hdgckIBAA--.1466S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr48Xr4kKFy8XF13tF1UWrg_yoW8CFy5pr
+        y7Gry8J3savay3WrW5WFWUuw13tFy7JF9FgrWfCry7ZrWIyan5Xw1qgF13tw17Jr1xJwsr
+        CFyDWrWUAF1UtrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW5JwCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUID73UUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 12:12:25PM +0800, Jinyang He wrote:
-> Use kimage_vaddr to indicate kernel start address. Provide kaslr_offset()
-> to get the kernel offset when KASLR is enabled. Error may occur before
-> update_kimage_vaddr(), so put it at the end of the offset branch.
-> 
-> Fixes: a307a4ce9ecd ("MIPS: Loongson64: Add KASLR support")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> ---
->  arch/mips/include/asm/page.h |  6 ++++++
->  arch/mips/kernel/relocate.c  | 12 ++++++++++++
->  arch/mips/kernel/setup.c     |  3 +++
->  3 files changed, 21 insertions(+)
-> 
-> diff --git a/arch/mips/include/asm/page.h b/arch/mips/include/asm/page.h
-> index 6a77bc4..9429520 100644
-> --- a/arch/mips/include/asm/page.h
-> +++ b/arch/mips/include/asm/page.h
-> @@ -255,6 +255,12 @@ extern bool __virt_addr_valid(const volatile void *kaddr);
->  
->  #define VM_DATA_DEFAULT_FLAGS	VM_DATA_FLAGS_TSK_EXEC
->  
-> +extern unsigned long kimage_vaddr;
-> +static inline unsigned long kaslr_offset(void)
-> +{
-> +	return kimage_vaddr - VMLINUX_LOAD_ADDRESS;
-> +}
+On 02/01/2021 06:43 PM, Thomas Bogendoerfer wrote:
+> On Tue, Dec 29, 2020 at 08:55:59PM +0800, Tiezhu Yang wrote:
+>> +++ b/arch/mips/include/uapi/asm/perf_regs.h
+>> @@ -0,0 +1,42 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>> +#ifndef _ASM_MIPS_PERF_REGS_H
+>> +#define _ASM_MIPS_PERF_REGS_H
+>> +
+>> +enum perf_event_mips_regs {
+>> +	PERF_REG_MIPS_PC,
+>> +	PERF_REG_MIPS_R1,
+>> +	PERF_REG_MIPS_R2,
+>> +	PERF_REG_MIPS_R3,
+>> +	PERF_REG_MIPS_R4,
+>> +	PERF_REG_MIPS_R5,
+>> +	PERF_REG_MIPS_R6,
+>> +	PERF_REG_MIPS_R7,
+>> +	PERF_REG_MIPS_R8,
+>> +	PERF_REG_MIPS_R9,
+>> +	PERF_REG_MIPS_R10,
+>> +	PERF_REG_MIPS_R11,
+>> +	PERF_REG_MIPS_R12,
+>> +	PERF_REG_MIPS_R13,
+>> +	PERF_REG_MIPS_R14,
+>> +	PERF_REG_MIPS_R15,
+>> +	PERF_REG_MIPS_R16,
+>> +	PERF_REG_MIPS_R17,
+>> +	PERF_REG_MIPS_R18,
+>> +	PERF_REG_MIPS_R19,
+>> +	PERF_REG_MIPS_R20,
+>> +	PERF_REG_MIPS_R21,
+>> +	PERF_REG_MIPS_R22,
+>> +	PERF_REG_MIPS_R23,
+>> +	PERF_REG_MIPS_R24,
+>> +	PERF_REG_MIPS_R25,
+>> +	/*
+>> +	 * 26 and 27 are k0 and k1, they are always clobbered thus not
+>> +	 * stored.
+>> +	 */
+> haveing this hole here make all code more complicated. Does it hurt
+> to have R26 and R27 in the list ?
 
-this breaks for 32bit kernels:
+I think there is no effect if have R26 and R27 in the list.
 
-<command-line>:0:22: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
-/local/tbogendoerfer/korg/linux/arch/mips/kernel/setup.c:87:41: note: in expansion of macro ‘VMLINUX_LOAD_ADDRESS’
- unsigned long kimage_vaddr __initdata = VMLINUX_LOAD_ADDRESS;
-                                         ^~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+In the perf_reg_value(), PERF_REG_MIPS_R{26,27} are default case.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
++u64 perf_reg_value(struct pt_regs *regs, int idx)
++{
++ long v;
++
++ switch (idx) {
++ case PERF_REG_MIPS_PC:
++ v = regs->cp0_epc;
++ break;
++ case PERF_REG_MIPS_R1 ... PERF_REG_MIPS_R25:
++ v = regs->regs[idx - PERF_REG_MIPS_R1 + 1];
++ break;
++ case PERF_REG_MIPS_R28 ... PERF_REG_MIPS_R31:
++ v = regs->regs[idx - PERF_REG_MIPS_R28 + 28];
++ break;
++
++ default:
++ WARN_ON_ONCE(1);
++ return 0;
++ }
++
++ return (s64)v; /* Sign extend if 32-bit. */
++} Should I modify enum perf_event_mips_regs to add R26 and R27,
+and then send v2?
+
+Thanks,
+Tiezhu
+
+>
+> Thomas.
+>
+
