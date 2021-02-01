@@ -2,92 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3545A30A611
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Feb 2021 12:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 409AA30A65B
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Feb 2021 12:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233346AbhBALBM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Feb 2021 06:01:12 -0500
-Received: from elvis.franken.de ([193.175.24.41]:43229 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233145AbhBALAZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 1 Feb 2021 06:00:25 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1l6Wv9-00087b-00; Mon, 01 Feb 2021 11:59:03 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 8C857C0CC6; Mon,  1 Feb 2021 11:43:38 +0100 (CET)
-Date:   Mon, 1 Feb 2021 11:43:38 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        David Daney <david.daney@cavium.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Archer Yan <ayan@wavecomp.com>
-Subject: Re: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack
- traces from user-space with perf
-Message-ID: <20210201104338.GA6484@alpha.franken.de>
-References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
- <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
+        id S233227AbhBALTa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Feb 2021 06:19:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233120AbhBALT0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Feb 2021 06:19:26 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C346C061573;
+        Mon,  1 Feb 2021 03:18:46 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id a12so15756876qkh.10;
+        Mon, 01 Feb 2021 03:18:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gaGvv58JGYagmylyy3D1eubHzQ869JT6Zg0K0j8aoGI=;
+        b=fgD2p6Ajdg7WbtGKKD/YMRqi8XjTTxoA4P1r7JGjGMwDfrIszRdCEdHX3wWRjJtCh9
+         BG/p6Ck7rV1GdrC7dgLVFnj6suteB9PtEodMsQYIIRta+E2CP30XwnLHtQ3k6aSMQl//
+         IIl+4InxJrY6RX2ER0ZD0rrZDCILvHSB+ceS0B6hTpyzcNMkbh3pCoZDRm2KO+VnEiDM
+         MNf3yHgC13oYACpI1ZFgEXBDiSBbJYolxypr0EqEhrP5fvxvqhILIai3DR+Pi15QamPf
+         NDW/QM0lpnbBLwJpT2TZ5HLeIq/+mYcjs+PQ4ePSbcPLpfAxEcKDluPW48NwQJLPxXax
+         mRdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gaGvv58JGYagmylyy3D1eubHzQ869JT6Zg0K0j8aoGI=;
+        b=NSnf/xEIF3gc14aSuFRwGtIvtVpxFMuOsydKrYkzOLlweHq0W13y5coQfwLPC7BOre
+         Mcrz2KivicU8tY0p3GIjZ49ob7KogElmfsMGuu47QBBv1D+h4NBah+KxB+RYX0C3ZtNr
+         sbkKybNL6LYuFeSq5FFRVbeL0e4TVmaIfq1k5wvSxonkRm2AujERFEpwviEmdYebFfBR
+         Fo+X9JkljX+z57jKCRnil7ho4+FCWL4PM+IXTzdy8dE7A+7cRyeyNPmpHeIWbMRKo0Ot
+         fNg1GMO/dbyIRFrfB+ZnbvVx1UGG2edDMBhLK8MpczIiRCo69mAmU2Cu6mgDxsXUYaHl
+         eA0w==
+X-Gm-Message-State: AOAM533R5EXPmyKptUqhOcPBAMQqa6DMKlB1qWs8zVxtYPmD+dzcdNNI
+        Sqe0ndmX8Z8EK1p4H0IkYKg1IP9BZF14Mg==
+X-Google-Smtp-Source: ABdhPJxWPHYEGCRXgsWif6sEHzgiAGg/9VSpUB/pAD52/vb97aRqb/y/sdjkVTWQB0NFvr0ORhED7g==
+X-Received: by 2002:a05:620a:ed8:: with SMTP id x24mr15399556qkm.381.1612178325578;
+        Mon, 01 Feb 2021 03:18:45 -0800 (PST)
+Received: from localhost.localdomain ([156.146.54.77])
+        by smtp.gmail.com with ESMTPSA id p23sm14187541qtu.4.2021.02.01.03.18.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Feb 2021 03:18:44 -0800 (PST)
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     tsbogend@alpha.franken.de, peterz@infradead.org,
+        frederic@kernel.org, mingo@kernel.org, peterx@redhat.com,
+        afzal.mohd.ma@gmail.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     rdunlap@infradead.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Subject: [PATCH] arch: mips: kernel: Made couple of spelling fixes and a sentence construction in smp.c
+Date:   Mon,  1 Feb 2021 16:47:57 +0530
+Message-Id: <20210201111757.8019-1-unixbhaskar@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 29, 2020 at 08:55:59PM +0800, Tiezhu Yang wrote:
-> +++ b/arch/mips/include/uapi/asm/perf_regs.h
-> @@ -0,0 +1,42 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _ASM_MIPS_PERF_REGS_H
-> +#define _ASM_MIPS_PERF_REGS_H
-> +
-> +enum perf_event_mips_regs {
-> +	PERF_REG_MIPS_PC,
-> +	PERF_REG_MIPS_R1,
-> +	PERF_REG_MIPS_R2,
-> +	PERF_REG_MIPS_R3,
-> +	PERF_REG_MIPS_R4,
-> +	PERF_REG_MIPS_R5,
-> +	PERF_REG_MIPS_R6,
-> +	PERF_REG_MIPS_R7,
-> +	PERF_REG_MIPS_R8,
-> +	PERF_REG_MIPS_R9,
-> +	PERF_REG_MIPS_R10,
-> +	PERF_REG_MIPS_R11,
-> +	PERF_REG_MIPS_R12,
-> +	PERF_REG_MIPS_R13,
-> +	PERF_REG_MIPS_R14,
-> +	PERF_REG_MIPS_R15,
-> +	PERF_REG_MIPS_R16,
-> +	PERF_REG_MIPS_R17,
-> +	PERF_REG_MIPS_R18,
-> +	PERF_REG_MIPS_R19,
-> +	PERF_REG_MIPS_R20,
-> +	PERF_REG_MIPS_R21,
-> +	PERF_REG_MIPS_R22,
-> +	PERF_REG_MIPS_R23,
-> +	PERF_REG_MIPS_R24,
-> +	PERF_REG_MIPS_R25,
-> +	/*
-> +	 * 26 and 27 are k0 and k1, they are always clobbered thus not
-> +	 * stored.
-> +	 */
+s/intercpu/inter CPU/
+s/debugees/debuge's/
 
-haveing this hole here make all code more complicated. Does it hurt
-to have R26 and R27 in the list ?
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+---
+ arch/mips/kernel/smp.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thomas.
+diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+index 74b9102fd06e..e8a4ce7330ab 100644
+--- a/arch/mips/kernel/smp.c
++++ b/arch/mips/kernel/smp.c
+@@ -59,7 +59,7 @@ static DECLARE_COMPLETION(cpu_starting);
+ static DECLARE_COMPLETION(cpu_running);
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+ /*
+- * A logcal cpu mask containing only one VPE per core to
++ * A logical cpu mask containing only one VPE per core to
+  * reduce the number of IPIs on large MT systems.
+  */
+ cpumask_t cpu_foreign_map[NR_CPUS] __read_mostly;
+@@ -510,10 +510,10 @@ static inline void smp_on_each_tlb(void (*func) (void *info), void *info)
+  * address spaces, a new context is obtained on the current cpu, and tlb
+  * context on other cpus are invalidated to force a new context allocation
+  * at switch_mm time, should the mm ever be used on other cpus. For
+- * multithreaded address spaces, intercpu interrupts have to be sent.
+- * Another case where intercpu interrupts are required is when the target
++ * multithreaded address spaces, inter CPU interrupts have to be sent.
++ * Another case where inter CPU interrupts are required is when the target
+  * mm might be active on another cpu (eg debuggers doing the flushes on
+- * behalf of debugees, kswapd stealing pages from another process etc).
++ * behalf of debuge's, kswapd stealing pages from another process etc).
+  * Kanoj 07/00.
+  */
+
+--
+2.26.2
+
