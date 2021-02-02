@@ -2,107 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 041D630B4B7
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Feb 2021 02:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F41C130B524
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Feb 2021 03:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbhBBBdc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Feb 2021 20:33:32 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:52066 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230106AbhBBBdc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 1 Feb 2021 20:33:32 -0500
-Received: from ambrosehua-HP-xw6600-Workstation (unknown [222.209.8.92])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax6dWvqxhg55gBAA--.961S2;
-        Tue, 02 Feb 2021 09:32:33 +0800 (CST)
-Date:   Tue, 2 Feb 2021 09:32:31 +0800
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: Re: [PATCH] MIPS: fix kernel_stack_pointer()
-Message-ID: <20210202013231.wzyb7clsu7jsze4v@ambrosehua-HP-xw6600-Workstation>
-References: <20210129043507.30488-1-huangpei@loongson.cn>
- <20210201122352.GA8095@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210201122352.GA8095@alpha.franken.de>
-User-Agent: NeoMutt/20171215
-X-CM-TRANSID: AQAAf9Ax6dWvqxhg55gBAA--.961S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFWUGryUJrWDCr47Kw17KFg_yoW8Ar4fpF
-        ZFy3Z5KFWkKryUGF9rJaySkr1ayrs8GrZ8KFW5JrW7WF9xXF1DXryxGr45Awn7Crsrta48
-        XFWaq3s8CFW7ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        W8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUOMKZDUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        id S231132AbhBBCQX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Feb 2021 21:16:23 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:38178 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230122AbhBBCQV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Feb 2021 21:16:21 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0UNdRSz6_1612232136;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0UNdRSz6_1612232136)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 02 Feb 2021 10:15:36 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     chenhuacai@kernel.org
+Cc:     aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH] KVM: MIPS: remove unneeded semicolon
+Date:   Tue,  2 Feb 2021 10:15:35 +0800
+Message-Id: <1612232135-26683-1-git-send-email-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 01:23:52PM +0100, Thomas Bogendoerfer wrote:
-> On Fri, Jan 29, 2021 at 12:35:07PM +0800, Huang Pei wrote:
-> > MIPS always save kernel stack pointer in regs[29]
-> > 
-> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > ---
-> >  arch/mips/include/asm/ptrace.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
-> > index 1e76774b36dd..daf3cf244ea9 100644
-> > --- a/arch/mips/include/asm/ptrace.h
-> > +++ b/arch/mips/include/asm/ptrace.h
-> > @@ -53,7 +53,7 @@ struct pt_regs {
-> >  
-> >  static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
-> >  {
-> > -	return regs->regs[31];
-> > +	return regs->regs[29];
-> 
-> hmm, I'm still wondering where the trick is... looks like this is used
-> for uprobes, so nobody has ever used uprobes or I'm missing something.
-> 
-> How did you find that ?
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+Eliminate the following coccicheck warning:
+./arch/mips/kvm/mips.c:151:2-3: Unneeded semicolon
 
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ arch/mips/kvm/mips.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Long story for short, 
-
-+. I think I had fix this bug in 2018, when I backported Uprobe from my
-4.4 branch to CentOS 7 3.10. I just knwo it is *not* following MIPS
-ABI, but I do not know how it destroy the cool function of
-Kprobe/Uprobe, since the failure in porting eBPF from upstream to 3.10
-just leave the fix in 3.10, totally forgotten.
-
-+. In 2020, I was told to validate the effect of GNU XHash, and it came
-to me that using Uprobe to count the number of "strcmp" called in ld.so,
-so I found this fix again.
-
-+. With more work on Kprobe/Kprobe_event/Uprobe, I found it hit only when
-accessing arguments of Kprobe/Uprobe, so simple counting numbers of probe
-fired would not trigger it
+diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+index 3d6a7f5..58a8812 100644
+--- a/arch/mips/kvm/mips.c
++++ b/arch/mips/kvm/mips.c
+@@ -148,7 +148,7 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+ 	default:
+ 		/* Unsupported KVM type */
+ 		return -EINVAL;
+-	};
++	}
+ 
+ 	/* Allocate page table to map GPA -> RPA */
+ 	kvm->arch.gpa_mm.pgd = kvm_pgd_alloc();
+-- 
+1.8.3.1
 
