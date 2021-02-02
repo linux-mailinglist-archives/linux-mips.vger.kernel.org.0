@@ -2,113 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0CB30B3A6
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Feb 2021 00:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041D630B4B7
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Feb 2021 02:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbhBAXkt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Feb 2021 18:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbhBAXkr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Feb 2021 18:40:47 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB248C061573;
-        Mon,  1 Feb 2021 15:40:07 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id k193so18179501qke.6;
-        Mon, 01 Feb 2021 15:40:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Z4cc0U8qP2meyL0EtHUXKs1H7awSTevJKAbNY29G1Go=;
-        b=V/+N+2jw1nsdXybBmCM6MRJEYUXsgRbxyLLGs/aTbjbkcBD6fSAzpxNY8uEYbp8Kux
-         oLW5NMIymaWJ4ldyYuySdzGAFK1XsQztPyk9BkOJxN0hnl5R/SBob9Ac78Sf56l/6Jzy
-         EioG3sSxk+amBHjsiKuz35I9LeZ9JDGCpndsc0GsdGTq7ct41voWYv/G/H7W5c/u50t9
-         WxyCrLFE5aT6X5pmG1lf0gOsuXTmCdvAowY2/86X28pIrdjvaEONM6ReM57EKYMsSkYU
-         vUe7CWsmReYWcwOlm6TN/bhYHO1eVDe7Evan250dCBf7wTFSd2ff7cbKDKD9QnSN8j0T
-         ABSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=Z4cc0U8qP2meyL0EtHUXKs1H7awSTevJKAbNY29G1Go=;
-        b=XFqC+k6hf8qAyvhqKv/FFGP8g3YUmPK71iFTtr2DVl45nmqUCE7vI+6X6U/2M27TIZ
-         lr6MLJkVYLeKBMiMunGh6sc+kzE2giYUDRdJNxWAqCIkXH0lesUTRJH6jsf4JryFgvua
-         W5Rhi4gY8cBRCo1dqorg3Y4l4vIG14wvgH4oEJXxvLTXjMWK+D8OmLWdBhz8oLpZxUZ6
-         oTdFx75yjg/nOLDaKgIgbZ55h08HqCbfGqA0H2Z9BeWz5WyKfR7KN1hHoPxnX8iWGif6
-         bZ/9fmlZn9hyBFjlvKhfQiA95glMaOun8J6CU/PrOaZE4bE6CeEngaTld3F0gWfRJBwA
-         rluA==
-X-Gm-Message-State: AOAM532FRRyaEbPBm6v0/tzhTC3US216nX92xJGh76/L9B3vLEfY2OOl
-        o2ZXiXhKevP+lq2ihSkBAWDrQSPjok7jur//
-X-Google-Smtp-Source: ABdhPJyE2bhMjj2y7UuheY+/DllURYvmeRfnFL1w+TOFlQ+VEqprPswyVjfEutDOPfeMu6UvhKSCYg==
-X-Received: by 2002:a37:4ecd:: with SMTP id c196mr18283462qkb.264.1612222807047;
-        Mon, 01 Feb 2021 15:40:07 -0800 (PST)
-Received: from Gentoo ([138.199.10.33])
-        by smtp.gmail.com with ESMTPSA id d9sm15576637qko.84.2021.02.01.15.40.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Feb 2021 15:40:05 -0800 (PST)
-Date:   Tue, 2 Feb 2021 05:09:54 +0530
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Bert Vermeulen <bert@biot.com>, tsbogend@alpha.franken.de,
-        peterz@infradead.org, frederic@kernel.org, mingo@kernel.org,
-        peterx@redhat.com, afzal.mohd.ma@gmail.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arch: mips: kernel: Made couple of spelling fixes and a
- sentence construction in smp.c
-Message-ID: <YBiRSkWH4KMizfRH@Gentoo>
-Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Bert Vermeulen <bert@biot.com>, tsbogend@alpha.franken.de,
-        peterz@infradead.org, frederic@kernel.org, mingo@kernel.org,
-        peterx@redhat.com, afzal.mohd.ma@gmail.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210201111757.8019-1-unixbhaskar@gmail.com>
- <48dfc60a-c03c-f9d8-a9aa-268f6ae252eb@biot.com>
- <5b12db9b-7c06-faf7-1816-09453f48eb1e@infradead.org>
+        id S230380AbhBBBdc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Feb 2021 20:33:32 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:52066 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230106AbhBBBdc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 1 Feb 2021 20:33:32 -0500
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [222.209.8.92])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax6dWvqxhg55gBAA--.961S2;
+        Tue, 02 Feb 2021 09:32:33 +0800 (CST)
+Date:   Tue, 2 Feb 2021 09:32:31 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: Re: [PATCH] MIPS: fix kernel_stack_pointer()
+Message-ID: <20210202013231.wzyb7clsu7jsze4v@ambrosehua-HP-xw6600-Workstation>
+References: <20210129043507.30488-1-huangpei@loongson.cn>
+ <20210201122352.GA8095@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uSVRZ0TZIbzHHegB"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5b12db9b-7c06-faf7-1816-09453f48eb1e@infradead.org>
+In-Reply-To: <20210201122352.GA8095@alpha.franken.de>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9Ax6dWvqxhg55gBAA--.961S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFWUGryUJrWDCr47Kw17KFg_yoW8Ar4fpF
+        ZFy3Z5KFWkKryUGF9rJaySkr1ayrs8GrZ8KFW5JrW7WF9xXF1DXryxGr45Awn7Crsrta48
+        XFWaq3s8CFW7ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        W8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUOMKZDUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, Feb 01, 2021 at 01:23:52PM +0100, Thomas Bogendoerfer wrote:
+> On Fri, Jan 29, 2021 at 12:35:07PM +0800, Huang Pei wrote:
+> > MIPS always save kernel stack pointer in regs[29]
+> > 
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > ---
+> >  arch/mips/include/asm/ptrace.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
+> > index 1e76774b36dd..daf3cf244ea9 100644
+> > --- a/arch/mips/include/asm/ptrace.h
+> > +++ b/arch/mips/include/asm/ptrace.h
+> > @@ -53,7 +53,7 @@ struct pt_regs {
+> >  
+> >  static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
+> >  {
+> > -	return regs->regs[31];
+> > +	return regs->regs[29];
+> 
+> hmm, I'm still wondering where the trick is... looks like this is used
+> for uprobes, so nobody has ever used uprobes or I'm missing something.
+> 
+> How did you find that ?
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
 
---uSVRZ0TZIbzHHegB
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
 
-On 09:51 Mon 01 Feb 2021, Randy Dunlap wrote:
->On 2/1/21 8:51 AM, Bert Vermeulen wrote:
->> On 2/1/21 12:17 PM, Bhaskar Chowdhury wrote:
->>> s/debugees/debuge's/
->>
->> Definitely not.
->>
->
->and preferably "inter-CPU".
->
-Haven't thought about it ..will fix it , Randy!
->--
->~Randy
->netiquette: https://people.kernel.org/tglx/notes-about-netiquette
+Long story for short, 
 
---uSVRZ0TZIbzHHegB
-Content-Type: application/pgp-signature; name="signature.asc"
++. I think I had fix this bug in 2018, when I backported Uprobe from my
+4.4 branch to CentOS 7 3.10. I just knwo it is *not* following MIPS
+ABI, but I do not know how it destroy the cool function of
+Kprobe/Uprobe, since the failure in porting eBPF from upstream to 3.10
+just leave the fix in 3.10, totally forgotten.
 
------BEGIN PGP SIGNATURE-----
++. In 2020, I was told to validate the effect of GNU XHash, and it came
+to me that using Uprobe to count the number of "strcmp" called in ld.so,
+so I found this fix again.
 
-iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAmAYkUoACgkQsjqdtxFL
-KRV44AgAj9mPVL4f6HzRZMi2NLfWzlua1/Q+QpVdAf2LpRP/uKU+ZpoSzLcy8JLv
-iE7rD+p6Tllj9WTyvsgZ9DYT4a6ILrMn7Ak3gfbN/7zuTNnzaXdDZhjMYwC08fzT
-senihtshKX16/H29vZ1A54NRgLGHobTkjjftS5PBryThAguW02agUNEi/esugugb
-tXRh24Eg5xv1kqiGgrp0KmAtUoJcn1J9rQBcP5qAY2QitbgJDb/0YtTtLNK5u8Tb
-cpvZr7fTrqEzTxo0Ah6HvLtWlPdU/PdB1fPhP8e79oc0vNDmz4OoBKYH87eRIky7
-981F1mq3U6Vuhw4h3BMAy3CY8LJAYw==
-=n1Cp
------END PGP SIGNATURE-----
++. With more work on Kprobe/Kprobe_event/Uprobe, I found it hit only when
+accessing arguments of Kprobe/Uprobe, so simple counting numbers of probe
+fired would not trigger it
 
---uSVRZ0TZIbzHHegB--
