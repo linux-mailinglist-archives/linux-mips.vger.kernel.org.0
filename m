@@ -2,98 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D017130D65B
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Feb 2021 10:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D94830D756
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Feb 2021 11:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbhBCJbS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Feb 2021 04:31:18 -0500
-Received: from polaris.svanheule.net ([84.16.241.116]:59660 "EHLO
-        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbhBCJag (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Feb 2021 04:30:36 -0500
-Received: from terra.local.svanheule.net (unknown [IPv6:2a02:a03f:eaff:9701:9f3c:99a2:7251:cce9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id E09C21C8C19;
-        Wed,  3 Feb 2021 10:23:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1612344226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=72bGU27IKTK7uzsu+gYNWJLAfcIFrJlPlB1wOH6GCHs=;
-        b=QLydjcwv3LnxbcHoWxeTSZN2VJ6PmyY4JcYu0MJeX+x17kufLQVFzC8fxEDO6XiQKlgc4t
-        ss7e9+q9AGdQX7SpNDh6VVo2nN4IQK+bd3IkspqxKAZ8Ec4EseREIHhHGjTwjdsHzKqDua
-        jQwigajQakMcSHK/nkKd2RCDps350e25801J8ltzfLGlx7wdOsov1kIkZBvj8OJWTyqkxC
-        Ho0nIXSfweO3DronbGZaDq7Ynd8YETgv08F980/KiTD67Q+TgwLehUl42RigXZ7DBHPj/K
-        6rbwm0z7mjQM7IAlQJCOjqHyPYaaeYMc6HXAFurYgRkEsZiH1dbbDyuvUHbVEw==
-From:   Sander Vanheule <sander@svanheule.net>
-To:     linux-mips@vger.kernel.org
-Cc:     John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org,
-        Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH] MIPS: ralink: manage low reset lines
-Date:   Wed,  3 Feb 2021 10:21:41 +0100
-Message-Id: <20210203092140.12458-1-sander@svanheule.net>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S233745AbhBCKUg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Feb 2021 05:20:36 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:21334 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233488AbhBCKUd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 3 Feb 2021 05:20:33 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4DVyNH4JzGz9tyRt;
+        Wed,  3 Feb 2021 11:19:43 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id y1ydXniTuRI4; Wed,  3 Feb 2021 11:19:43 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4DVyNH3029z9v0hX;
+        Wed,  3 Feb 2021 11:19:43 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9DED48B7DC;
+        Wed,  3 Feb 2021 11:19:44 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 9Hi595iGz4sc; Wed,  3 Feb 2021 11:19:44 +0100 (CET)
+Received: from po16121vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [172.25.230.103])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6ABFD8B7D3;
+        Wed,  3 Feb 2021 11:19:44 +0100 (CET)
+Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id 4390367252; Wed,  3 Feb 2021 10:19:44 +0000 (UTC)
+Message-Id: <f302ef92c48d1f08a0459aaee1c568ca11213814.1612345700.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH] mm/memory.c: Remove pte_sw_mkyoung()
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Bibo Mao <maobibo@loongson.cn>, Jia He <justin.he@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, linux-mips@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Date:   Wed,  3 Feb 2021 10:19:44 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reset lines with indices smaller than 8 are currently considered invalid
-by the rt2880-reset reset controller.
+Commit 83d116c53058 ("mm: fix double page fault on arm64 if PTE_AF
+is cleared") introduced arch_faults_on_old_pte() helper to identify
+platforms that don't set page access bit in HW and require a page
+fault to set it.
 
-The MT7621 SoC uses a number of these low reset lines. The DTS defines
-reset lines "hsdma", "fe", and "mcm" with respective values 5, 6, and 2.
-As a result of the above restriction, these resets cannot be asserted or
-de-asserted by the reset controller. In cases where the bootloader does
-not de-assert these lines, this results in e.g. the MT7621's internal
-switch staying in reset.
+Commit 44bf431b47b4 ("mm/memory.c: Add memory read privilege on page
+fault handling") added pte_sw_mkyoung() which is yet another way to
+manage platforms that don't set page access bit in HW and require a
+page fault to set it.
 
-Change the reset controller to only ignore the system reset, so all
-reset lines with index greater than 0 are considered valid.
+Remove that pte_sw_mkyoung() helper and use the already existing
+arch_faults_on_old_pte() helper together with pte_mkyoung() instead.
 
-Signed-off-by: Sander Vanheule <sander@svanheule.net>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
-This patch was tested on a TP-Link EAP235-Wall, with an MT7621DA SoC.
-The bootloader on this device would leave reset line 2 ("mcm") asserted,
-which caused the internal switch to be unresponsive on an uninterrupted
-boot from flash.
+ arch/mips/include/asm/pgtable.h |  2 --
+ include/linux/pgtable.h         | 16 ----------------
+ mm/memory.c                     |  9 ++++++---
+ 3 files changed, 6 insertions(+), 21 deletions(-)
 
-When tftpboot was used in the bootloader to load an initramfs, it did
-initialise the internal switch, and cleared the mcm reset line. In this
-case the switch could be used from the OS. With this patch applied, the
-switch works both in an initramfs, and when (cold) booting from flash.
-
- arch/mips/ralink/reset.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/ralink/reset.c b/arch/mips/ralink/reset.c
-index 8126f1260407..274d33078c5e 100644
---- a/arch/mips/ralink/reset.c
-+++ b/arch/mips/ralink/reset.c
-@@ -27,7 +27,7 @@ static int ralink_assert_device(struct reset_controller_dev *rcdev,
- {
- 	u32 val;
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 4f9c37616d42..3275495adccb 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -406,8 +406,6 @@ static inline pte_t pte_mkyoung(pte_t pte)
+ 	return pte;
+ }
  
--	if (id < 8)
-+	if (id == 0)
- 		return -1;
+-#define pte_sw_mkyoung	pte_mkyoung
+-
+ #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ static inline int pte_huge(pte_t pte)	{ return pte_val(pte) & _PAGE_HUGE; }
  
- 	val = rt_sysc_r32(SYSC_REG_RESET_CTRL);
-@@ -42,7 +42,7 @@ static int ralink_deassert_device(struct reset_controller_dev *rcdev,
- {
- 	u32 val;
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 8fcdfa52eb4b..70d04931dff4 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -424,22 +424,6 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
+ }
+ #endif
  
--	if (id < 8)
-+	if (id == 0)
- 		return -1;
+-/*
+- * On some architectures hardware does not set page access bit when accessing
+- * memory page, it is responsibilty of software setting this bit. It brings
+- * out extra page fault penalty to track page access bit. For optimization page
+- * access bit can be set during all page fault flow on these arches.
+- * To be differentiate with macro pte_mkyoung, this macro is used on platforms
+- * where software maintains page access bit.
+- */
+-#ifndef pte_sw_mkyoung
+-static inline pte_t pte_sw_mkyoung(pte_t pte)
+-{
+-	return pte;
+-}
+-#define pte_sw_mkyoung	pte_sw_mkyoung
+-#endif
+-
+ #ifndef pte_savedwrite
+ #define pte_savedwrite pte_write
+ #endif
+diff --git a/mm/memory.c b/mm/memory.c
+index feff48e1465a..46fab785f7b3 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2890,7 +2890,8 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		}
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+ 		entry = mk_pte(new_page, vma->vm_page_prot);
+-		entry = pte_sw_mkyoung(entry);
++		if (arch_faults_on_old_pte())
++			entry = pte_mkyoung(entry);
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
  
- 	val = rt_sysc_r32(SYSC_REG_RESET_CTRL);
+ 		/*
+@@ -3548,7 +3549,8 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+ 	__SetPageUptodate(page);
+ 
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
++	if (arch_faults_on_old_pte())
++		entry = pte_mkyoung(entry);
+ 	if (vma->vm_flags & VM_WRITE)
+ 		entry = pte_mkwrite(pte_mkdirty(entry));
+ 
+@@ -3824,7 +3826,8 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct page *page)
+ 
+ 	flush_icache_page(vma, page);
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
++	if (arch_faults_on_old_pte())
++		entry = pte_mkyoung(entry);
+ 	if (write)
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 	/* copy-on-write page */
 -- 
-2.29.2
+2.25.0
 
