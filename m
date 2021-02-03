@@ -2,102 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5B630DA53
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Feb 2021 13:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C870830DAC2
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Feb 2021 14:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbhBCM4V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Feb 2021 07:56:21 -0500
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:33505 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231553AbhBCMyP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Feb 2021 07:54:15 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 99C3F5C01AE;
-        Wed,  3 Feb 2021 07:53:08 -0500 (EST)
-Received: from imap1 ([10.202.2.51])
-  by compute6.internal (MEProxy); Wed, 03 Feb 2021 07:53:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to
-        :subject:content-type; s=fm1; bh=swlZwsUiGBMMZ55mtjzyZ68Ud7VT0bR
-        xEXdD2+J6nAQ=; b=n8nzoGGAQlzHbvCgOVDwVvM5ItyafDJsD0Ry9eHpuiKGOWt
-        Xx2KxvKf0PcJi/Jd9D3HSDp12uw5JQOA1VQBZw+akvclJqKFIss/Di+Ceqm3bHJW
-        0ayVA1hd8o8zrs1XPr4LCCbr0hhVTJAdfAM0fUDCbLcJWgf0o9GWveqPTgAb4psG
-        UkuSnXzFon7xaQPuRdQw8wX90xx45XboNZMJSgvAD1t+tEAS80ru0UTv82ql8aRh
-        P9l8I6i/C/5R4gcoNCUhF3X/fIhpsneC1+kTfcBRja1cO+9ia7uA86gOE3Finoj0
-        lTpu+HplyZjok9loQqj/StFnAJOPE5ZSteqOyuA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=swlZws
-        UiGBMMZ55mtjzyZ68Ud7VT0bRxEXdD2+J6nAQ=; b=YViDdOdPqld+b+RkeetySv
-        qK86yKBvl0MQ6Wl6al1orLC47aYN2qKcrhbo43CRhbH/Yb5dCOh9b9Z2kSe3RJhC
-        zkdDCk9/9QXiCM4p4JehUR7fZdZdM3GVlsjy6UoxsYNwbavmrzMCC+3xdKKu5/9O
-        oQNOIbJpDakJuuPsY0uHsnmIFTw2rNv0gujNV4bFCAc4pb+RDUG+CoTELaZR4loE
-        VHXVx+JCAEC3QymAXOir+yYBjxZFc9LTunEFVwdyUfIUhD4VznpYpmYikjSUmgDd
-        0u6Xob6Dt69V7c8qIIVhGlm/Vhk7pXz1N5xIrbRwNiRs2mTkL60eInXzhW5d08Jw
-        ==
-X-ME-Sender: <xms:tJwaYN1o4g4yE5KlwH0uSwJ0Ehn75rgbPpko--ofqR5Ee-EiGPp3fw>
-    <xme:tJwaYEFQT1o2H0K71SjuAQk464NRS96z0u8mn5RaK2o1lXg27J4dQj8yD__wEpOI9
-    yxk3LwG5GsWcfuAGTk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrgedvgdeggecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedflfhirgig
-    uhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepkeelheethfehffdttdelieevfeeiheeuudeifeeugeeuieel
-    iedtueejheehhedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:tJwaYN7pKweOf34mowL4DvDyNn1fO5qjH_hS3v_ZETeXH7HotugpNw>
-    <xmx:tJwaYK1zW-P7qrg3XpnNWRbGvnHMaizXDn2h37ddZZ-O__lJHua-GQ>
-    <xmx:tJwaYAFznd3BdEbPhTIsujQ6COCNN9Fp45B9FK2vEOadcWpGxLZflw>
-    <xmx:tJwaYDzqOk9h1lliaEpo1_QhzTjce1YGsxvVCXcJ-7QyHeFZ049Jtw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 03212130005D; Wed,  3 Feb 2021 07:53:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-93-gef6c4048e6-fm-20210128.002-gef6c4048
-Mime-Version: 1.0
-Message-Id: <a2a2cfe3-5618-43b1-a6a4-cc768fc1b9fb@www.fastmail.com>
-In-Reply-To: <20210203123425.GA9574@alpha.franken.de>
-References: <20210203123425.GA9574@alpha.franken.de>
-Date:   Wed, 03 Feb 2021 20:52:34 +0800
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: KVM Guest
-Content-Type: text/plain
+        id S230034AbhBCNNf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Feb 2021 08:13:35 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:54220 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229979AbhBCNNd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 3 Feb 2021 08:13:33 -0500
+Received: from [192.168.68.104] (unknown [111.18.92.2])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf_MzoRpglroCAA--.3368S3;
+        Wed, 03 Feb 2021 21:12:21 +0800 (CST)
+Subject: Re: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack
+ traces from user-space with perf
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        David Daney <david.daney@cavium.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Archer Yan <ayan@wavecomp.com>
+References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
+ <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
+ <20210201104338.GA6484@alpha.franken.de>
+ <7c081c6f-bf47-353d-95c0-52e8640dc938@loongson.cn>
+ <20210203104009.GE7586@alpha.franken.de>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <1ba8402b-77a0-a524-b9f0-55e91841cc20@loongson.cn>
+Date:   Wed, 3 Feb 2021 21:12:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20210203104009.GE7586@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf9Dxf_MzoRpglroCAA--.3368S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXryDCFy5CF4UJr13Cw13twb_yoW5Gw1fpr
+        W7Kay8Jws0qay3urWY9ayUur9xtF13JFW3urWfArW7Zr4jy3Z3Xw1kKFyaqwn7Xr18Ja1U
+        urWDKFW8AF1YyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW5GwCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSJP_UUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 2/3/21 6:40 PM, Thomas Bogendoerfer wrote:
+> On Mon, Feb 01, 2021 at 08:56:06PM +0800, Tiezhu Yang wrote:
+>> On 02/01/2021 06:43 PM, Thomas Bogendoerfer wrote:
+>>> On Tue, Dec 29, 2020 at 08:55:59PM +0800, Tiezhu Yang wrote:
+>>>> +++ b/arch/mips/include/uapi/asm/perf_regs.h
+>>>> @@ -0,0 +1,42 @@
+>>>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>>>> +#ifndef _ASM_MIPS_PERF_REGS_H
+>>>> +#define _ASM_MIPS_PERF_REGS_H
+>>>> +
+>>>> +enum perf_event_mips_regs {
+>>>> +	PERF_REG_MIPS_PC,
+>>>> +	PERF_REG_MIPS_R1,
+>>>> +	PERF_REG_MIPS_R2,
+>>>> +	PERF_REG_MIPS_R3,
+>>>> +	PERF_REG_MIPS_R4,
+>>>> +	PERF_REG_MIPS_R5,
+>>>> +	PERF_REG_MIPS_R6,
+>>>> +	PERF_REG_MIPS_R7,
+>>>> +	PERF_REG_MIPS_R8,
+>>>> +	PERF_REG_MIPS_R9,
+>>>> +	PERF_REG_MIPS_R10,
+>>>> +	PERF_REG_MIPS_R11,
+>>>> +	PERF_REG_MIPS_R12,
+>>>> +	PERF_REG_MIPS_R13,
+>>>> +	PERF_REG_MIPS_R14,
+>>>> +	PERF_REG_MIPS_R15,
+>>>> +	PERF_REG_MIPS_R16,
+>>>> +	PERF_REG_MIPS_R17,
+>>>> +	PERF_REG_MIPS_R18,
+>>>> +	PERF_REG_MIPS_R19,
+>>>> +	PERF_REG_MIPS_R20,
+>>>> +	PERF_REG_MIPS_R21,
+>>>> +	PERF_REG_MIPS_R22,
+>>>> +	PERF_REG_MIPS_R23,
+>>>> +	PERF_REG_MIPS_R24,
+>>>> +	PERF_REG_MIPS_R25,
+>>>> +	/*
+>>>> +	 * 26 and 27 are k0 and k1, they are always clobbered thus not
+>>>> +	 * stored.
+>>>> +	 */
+>>> haveing this hole here make all code more complicated. Does it hurt
+>>> to have R26 and R27 in the list ?
+>> I think there is no effect if have R26 and R27 in the list.
+>>
+>> In the perf_reg_value(), PERF_REG_MIPS_R{26,27} are default case.
+> why make them special ? After all they are real registers and are only
+> defined special by current ABIs.
 
 
-On Wed, Feb 3, 2021, at 8:34 PM, Thomas Bogendoerfer wrote:
-> Hi,
-> 
-> Does kvm guest kernel still work ? I'm playing with current mips-next
-> and starting a kvm guest kernel inside an emulated malta system also
-> running a mips-next kernel. The kvm guest kernel starts, but hangs
-> in calibrate_delay (at least that's what info registers in qemu monitor
-> suggests). Ayn ideas ?
+By convention, $26 and $27 are k registers which are reserved for use
+by the OS kernel.
 
-The current KVM guest kernel is actually a Trap-and-emul guest kernel.
-VZ based KVM uses the same binary with the host one, so does TCG.
+Here is an explanation [1]:
 
-TE KVM is current unmaintained. I'll try to get a malta and do some test.
+"An interrupt handler must save any general - purpose registers that
+it is going to use (to be restored at return). But to do so requires
+you to modify at least one register first (something like sw $t0, saved_t0
+expands to two machine instructions using $at).
 
-Thanks.
+This situation is resolved by forbidding user programs from using
+two general - purpose registers, $k0 and $k1 (The k stands for kernel,
+which an exception handler is part of). The interrupt handler is allowed
+to use $k0 and $k1 without having to save or restore their values.
+This allows just enough leeway to start saving registers, as well as
+making returning from the interrupt handler possible."
+
+[1] 
+https://stackoverflow.com/questions/27922315/how-to-use-mips-k0-and-k1-registers
 
 
-- Jiaxun
-
-
-> 
+>
+>> Should I modify enum perf_event_mips_regs to add R26 and R27,
+>> and then send v2?
+> yes please.
+>
 > Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
 >
 
--- 
-- Jiaxun
