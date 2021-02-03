@@ -2,92 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FFF30DB50
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Feb 2021 14:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0DB30DB91
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Feb 2021 14:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbhBCNab (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Feb 2021 08:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbhBCNa1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Feb 2021 08:30:27 -0500
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB384C061573;
-        Wed,  3 Feb 2021 05:29:30 -0800 (PST)
-Received: from [2a04:4540:1401:2ac::c66]
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <john@phrozen.org>)
-        id 1l7IDn-00017Z-Rx; Wed, 03 Feb 2021 14:29:27 +0100
-Subject: Re: [PATCH] MIPS: ralink: manage low reset lines
-To:     Sander Vanheule <sander@svanheule.net>, linux-mips@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org
-References: <20210203092140.12458-1-sander@svanheule.net>
-From:   John Crispin <john@phrozen.org>
-Message-ID: <c531b885-1542-8c4d-64ce-2f9d87cb79a2@phrozen.org>
-Date:   Wed, 3 Feb 2021 14:29:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231428AbhBCNoV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Feb 2021 08:44:21 -0500
+Received: from elvis.franken.de ([193.175.24.41]:49770 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231440AbhBCNoU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 3 Feb 2021 08:44:20 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1l7IQy-0007ZR-00; Wed, 03 Feb 2021 14:43:04 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 38A38C0D4B; Wed,  3 Feb 2021 14:41:49 +0100 (CET)
+Date:   Wed, 3 Feb 2021 14:41:49 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        David Daney <david.daney@cavium.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Archer Yan <ayan@wavecomp.com>
+Subject: Re: [PATCH 1/3] MIPS: kernel: Support extracting off-line stack
+ traces from user-space with perf
+Message-ID: <20210203134149.GA10529@alpha.franken.de>
+References: <1609246561-5474-1-git-send-email-yangtiezhu@loongson.cn>
+ <1609246561-5474-2-git-send-email-yangtiezhu@loongson.cn>
+ <20210201104338.GA6484@alpha.franken.de>
+ <7c081c6f-bf47-353d-95c0-52e8640dc938@loongson.cn>
+ <20210203104009.GE7586@alpha.franken.de>
+ <1ba8402b-77a0-a524-b9f0-55e91841cc20@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <20210203092140.12458-1-sander@svanheule.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ba8402b-77a0-a524-b9f0-55e91841cc20@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, Feb 03, 2021 at 09:12:28PM +0800, Tiezhu Yang wrote:
+> On 2/3/21 6:40 PM, Thomas Bogendoerfer wrote:
+> > On Mon, Feb 01, 2021 at 08:56:06PM +0800, Tiezhu Yang wrote:
+> > > On 02/01/2021 06:43 PM, Thomas Bogendoerfer wrote:
+> > > > On Tue, Dec 29, 2020 at 08:55:59PM +0800, Tiezhu Yang wrote:
+> > > > > +++ b/arch/mips/include/uapi/asm/perf_regs.h
+> > > > > @@ -0,0 +1,42 @@
+> > > > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > > > > +#ifndef _ASM_MIPS_PERF_REGS_H
+> > > > > +#define _ASM_MIPS_PERF_REGS_H
+> > > > > +
+> > > > > +enum perf_event_mips_regs {
+> > > > > +	PERF_REG_MIPS_PC,
+> > > > > +	PERF_REG_MIPS_R1,
+> > > > > +	PERF_REG_MIPS_R2,
+> > > > > +	PERF_REG_MIPS_R3,
+> > > > > +	PERF_REG_MIPS_R4,
+> > > > > +	PERF_REG_MIPS_R5,
+> > > > > +	PERF_REG_MIPS_R6,
+> > > > > +	PERF_REG_MIPS_R7,
+> > > > > +	PERF_REG_MIPS_R8,
+> > > > > +	PERF_REG_MIPS_R9,
+> > > > > +	PERF_REG_MIPS_R10,
+> > > > > +	PERF_REG_MIPS_R11,
+> > > > > +	PERF_REG_MIPS_R12,
+> > > > > +	PERF_REG_MIPS_R13,
+> > > > > +	PERF_REG_MIPS_R14,
+> > > > > +	PERF_REG_MIPS_R15,
+> > > > > +	PERF_REG_MIPS_R16,
+> > > > > +	PERF_REG_MIPS_R17,
+> > > > > +	PERF_REG_MIPS_R18,
+> > > > > +	PERF_REG_MIPS_R19,
+> > > > > +	PERF_REG_MIPS_R20,
+> > > > > +	PERF_REG_MIPS_R21,
+> > > > > +	PERF_REG_MIPS_R22,
+> > > > > +	PERF_REG_MIPS_R23,
+> > > > > +	PERF_REG_MIPS_R24,
+> > > > > +	PERF_REG_MIPS_R25,
+> > > > > +	/*
+> > > > > +	 * 26 and 27 are k0 and k1, they are always clobbered thus not
+> > > > > +	 * stored.
+> > > > > +	 */
+> > > > haveing this hole here make all code more complicated. Does it hurt
+> > > > to have R26 and R27 in the list ?
+> > > I think there is no effect if have R26 and R27 in the list.
+> > > 
+> > > In the perf_reg_value(), PERF_REG_MIPS_R{26,27} are default case.
+> > why make them special ? After all they are real registers and are only
+> > defined special by current ABIs.
+> 
+> 
+> By convention, $26 and $27 are k registers which are reserved for use
+> by the OS kernel.
 
-On 03.02.21 10:21, Sander Vanheule wrote:
-> Reset lines with indices smaller than 8 are currently considered invalid
-> by the rt2880-reset reset controller.
->
-> The MT7621 SoC uses a number of these low reset lines. The DTS defines
-> reset lines "hsdma", "fe", and "mcm" with respective values 5, 6, and 2.
-> As a result of the above restriction, these resets cannot be asserted or
-> de-asserted by the reset controller. In cases where the bootloader does
-> not de-assert these lines, this results in e.g. the MT7621's internal
-> switch staying in reset.
->
-> Change the reset controller to only ignore the system reset, so all
-> reset lines with index greater than 0 are considered valid.
->
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-Acked-by: John Crispin <john@phrozen.org>
-> ---
-> This patch was tested on a TP-Link EAP235-Wall, with an MT7621DA SoC.
-> The bootloader on this device would leave reset line 2 ("mcm") asserted,
-> which caused the internal switch to be unresponsive on an uninterrupted
-> boot from flash.
->
-> When tftpboot was used in the bootloader to load an initramfs, it did
-> initialise the internal switch, and cleared the mcm reset line. In this
-> case the switch could be used from the OS. With this patch applied, the
-> switch works both in an initramfs, and when (cold) booting from flash.
->
->   arch/mips/ralink/reset.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/ralink/reset.c b/arch/mips/ralink/reset.c
-> index 8126f1260407..274d33078c5e 100644
-> --- a/arch/mips/ralink/reset.c
-> +++ b/arch/mips/ralink/reset.c
-> @@ -27,7 +27,7 @@ static int ralink_assert_device(struct reset_controller_dev *rcdev,
->   {
->   	u32 val;
->   
-> -	if (id < 8)
-> +	if (id == 0)
->   		return -1;
->   
->   	val = rt_sysc_r32(SYSC_REG_RESET_CTRL);
-> @@ -42,7 +42,7 @@ static int ralink_deassert_device(struct reset_controller_dev *rcdev,
->   {
->   	u32 val;
->   
-> -	if (id < 8)
-> +	if (id == 0)
->   		return -1;
->   
->   	val = rt_sysc_r32(SYSC_REG_RESET_CTRL);
+believe me, I knew that already. But from a CPU standpoint they are
+just registers.
+
+Anyway I'm fine with just adding R26 and R27 to the enum.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
