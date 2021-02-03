@@ -2,119 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC0A30E26D
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Feb 2021 19:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2A830E3A4
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Feb 2021 20:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbhBCSXy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Feb 2021 13:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S231281AbhBCT4U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Feb 2021 14:56:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbhBCSXv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Feb 2021 13:23:51 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008B1C061573;
-        Wed,  3 Feb 2021 10:23:10 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id m12so165678pjs.4;
-        Wed, 03 Feb 2021 10:23:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yCdeRlqf1Ez5EWdgyadi9rsJ0++scf5qFxbzWDIFxEQ=;
-        b=TPA6w9fp8xhZu5B1ZWQZg7KeOq2w/a+zpOtjxCCpSUKjY0oHscjXdfBi4Org6eRAxg
-         T+PXJPyyD3AjEKVIfSHPwDwNoTPXRlqYBu8jUkCWRpAA+8Fxy3vvO3ZAofd951yU2si2
-         cWbyv0Mm4aVhwNA7pW7OWYAX+zVydbcw0U/zqvLEJju34jyAGcjwxMIyiFKMjBADRu4V
-         34EOLK9Wg1JA2wXAPNZA70VuIh4uQot9dvHFJ1y+HLjMX0gIiADrvcBIzD/7GAg8l1Cz
-         +/pORIcejJxt7D1ilVr8VKd3CC1SH+h0wYmxVUEJm4zWFxTyG6QzZvfYr2tZq5eU94CP
-         9DbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yCdeRlqf1Ez5EWdgyadi9rsJ0++scf5qFxbzWDIFxEQ=;
-        b=I07mdC2f5KfAWBzwwBKChdrdhsr7nETMIQoB/Jj0K5ZQ7wRtg5mF0toduUbKCQzhzM
-         YIny7cgbhjRDVgVaapwksooA3qdlNfkLGgs+3KVbOa2hE7t3oTXWrLdunvLHDbsTef0P
-         jkmkdhwLEwiZDETE4dLGuOOYZ1JtT6MUiye2z41fKW3d5vftQSBJGC5AINCHXEgbkkZb
-         vQiv0Bw2hmVGZ2AqusFxY98X4UnDu3lVICJIG8rtBAyDxVgXjRhiCUmOh7/mkCwwdQ5q
-         ZpwhV6dYUGVAWbab+7rcxKqdA15b6SJ5FVRBU5vo59RNqn0CmEZLrFE+u/zFNdH/H6iL
-         NHMg==
-X-Gm-Message-State: AOAM530D1E2LmAyT+cQE8I0+dJR65kp/JGd0vDUJd8A27SAKD3NdlMTh
-        NuXNWt8ZPX4Qju1ZDyewpo4=
-X-Google-Smtp-Source: ABdhPJy3qm82BJojc5RJI3EB86KaOPfjxImGciD4QhikErRNih/b7hbgmPO2GrUkqP99aSIp1GWg+g==
-X-Received: by 2002:a17:90b:19cb:: with SMTP id nm11mr4198702pjb.168.1612376590515;
-        Wed, 03 Feb 2021 10:23:10 -0800 (PST)
-Received: from [10.67.49.228] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id l3sm3660181pgn.8.2021.02.03.10.23.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Feb 2021 10:23:09 -0800 (PST)
-Subject: Re: [PATCH] MIPS: of: Introduce helper function to get DTB
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
-References: <20210127132431.143374-1-tsbogend@alpha.franken.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
- mQGiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
- xGlkaOSDuu09rxuW+69Y2f1TzjFuGpBk4ysWOR85O2Nx8AJ6fYGCoeTbovrNlGT1M9obSFGQ
- X3IzRnWoqlfudjTO5TKoqkbOgpYqIo5n1QbEjCCwCwCg3DOH/4ug2AUUlcIT9/l3pGvoRJ0E
- AICDzi3l7pmC5IWn2n1mvP5247urtHFs/uusE827DDj3K8Upn2vYiOFMBhGsxAk6YKV6IP0d
- ZdWX6fqkJJlu9cSDvWtO1hXeHIfQIE/xcqvlRH783KrihLcsmnBqOiS6rJDO2x1eAgC8meAX
- SAgsrBhcgGl2Rl5gh/jkeA5ykwbxA/9u1eEuL70Qzt5APJmqVXR+kWvrqdBVPoUNy/tQ8mYc
- nzJJ63ng3tHhnwHXZOu8hL4nqwlYHRa9eeglXYhBqja4ZvIvCEqSmEukfivk+DlIgVoOAJbh
- qIWgvr3SIEuR6ayY3f5j0f2ejUMYlYYnKdiHXFlF9uXm1ELrb0YX4GMHz7QnRmxvcmlhbiBG
- YWluZWxsaSA8Zi5mYWluZWxsaUBnbWFpbC5jb20+iGYEExECACYCGyMGCwkIBwMCBBUCCAME
- FgIDAQIeAQIXgAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2DvCVAJ4u4/bPF4P3jxb4qEY8I2gS
- 6hG0gACffNWlqJ2T4wSSn+3o7CCZNd7SLSC5BA0ESM+4EhAQAL/o09boR9D3Vk1Tt7+gpYr3
- WQ6hgYVON905q2ndEoA2J0dQxJNRw3snabHDDzQBAcqOvdi7YidfBVdKi0wxHhSuRBfuOppu
- pdXkb7zxuPQuSveCLqqZWRQ+Cc2QgF7SBqgznbe6Ngout5qXY5Dcagk9LqFNGhJQzUGHAsIs
- hap1f0B1PoUyUNeEInV98D8Xd/edM3mhO9nRpUXRK9Bvt4iEZUXGuVtZLT52nK6Wv2EZ1TiT
- OiqZlf1P+vxYLBx9eKmabPdm3yjalhY8yr1S1vL0gSA/C6W1o/TowdieF1rWN/MYHlkpyj9c
- Rpc281gAO0AP3V1G00YzBEdYyi0gaJbCEQnq8Vz1vDXFxHzyhgGz7umBsVKmYwZgA8DrrB0M
- oaP35wuGR3RJcaG30AnJpEDkBYHznI2apxdcuTPOHZyEilIRrBGzDwGtAhldzlBoBwE3Z3MY
- 31TOpACu1ZpNOMysZ6xiE35pWkwc0KYm4hJA5GFfmWSN6DniimW3pmdDIiw4Ifcx8b3mFrRO
- BbDIW13E51j9RjbO/nAaK9ndZ5LRO1B/8Fwat7bLzmsCiEXOJY7NNpIEpkoNoEUfCcZwmLrU
- +eOTPzaF6drw6ayewEi5yzPg3TAT6FV3oBsNg3xlwU0gPK3v6gYPX5w9+ovPZ1/qqNfOrbsE
- FRuiSVsZQ5s3AAMFD/9XjlnnVDh9GX/r/6hjmr4U9tEsM+VQXaVXqZuHKaSmojOLUCP/YVQo
- 7IiYaNssCS4FCPe4yrL4FJJfJAsbeyDykMN7wAnBcOkbZ9BPJPNCbqU6dowLOiy8AuTYQ48m
- vIyQ4Ijnb6GTrtxIUDQeOBNuQC/gyyx3nbL/lVlHbxr4tb6YkhkO6shjXhQh7nQb33FjGO4P
- WU11Nr9i/qoV8QCo12MQEo244RRA6VMud06y/E449rWZFSTwGqb0FS0seTcYNvxt8PB2izX+
- HZA8SL54j479ubxhfuoTu5nXdtFYFj5Lj5x34LKPx7MpgAmj0H7SDhpFWF2FzcC1bjiW9mjW
- HaKaX23Awt97AqQZXegbfkJwX2Y53ufq8Np3e1542lh3/mpiGSilCsaTahEGrHK+lIusl6mz
- Joil+u3k01ofvJMK0ZdzGUZ/aPMZ16LofjFA+MNxWrZFrkYmiGdv+LG45zSlZyIvzSiG2lKy
- kuVag+IijCIom78P9jRtB1q1Q5lwZp2TLAJlz92DmFwBg1hyFzwDADjZ2nrDxKUiybXIgZp9
- aU2d++ptEGCVJOfEW4qpWCCLPbOT7XBr+g/4H3qWbs3j/cDDq7LuVYIe+wchy/iXEJaQVeTC
- y5arMQorqTFWlEOgRA8OP47L9knl9i4xuR0euV6DChDrguup2aJVU4hPBBgRAgAPAhsMBQJU
- X9LxBQkeXB3fAAoJEGFXmRW1Y3YOj4UAn3nrFLPZekMeqX5aD/aq/dsbXSfyAKC45Go0YyxV
- HGuUuzv+GKZ6nsysJ7kCDQRXG8fwARAA6q/pqBi5PjHcOAUgk2/2LR5LjjesK50bCaD4JuNc
- YDhFR7Vs108diBtsho3w8WRd9viOqDrhLJTroVckkk74OY8r+3t1E0Dd4wHWHQZsAeUvOwDM
- PQMqTUBFuMi6ydzTZpFA2wBR9x6ofl8Ax+zaGBcFrRlQnhsuXLnM1uuvS39+pmzIjasZBP2H
- UPk5ifigXcpelKmj6iskP3c8QN6x6GjUSmYx+xUfs/GNVSU1XOZn61wgPDbgINJd/THGdqiO
- iJxCLuTMqlSsmh1+E1dSdfYkCb93R/0ZHvMKWlAx7MnaFgBfsG8FqNtZu3PCLfizyVYYjXbV
- WO1A23riZKqwrSJAATo5iTS65BuYxrFsFNPrf7TitM8E76BEBZk0OZBvZxMuOs6Z1qI8YKVK
- UrHVGFq3NbuPWCdRul9SX3VfOunr9Gv0GABnJ0ET+K7nspax0xqq7zgnM71QEaiaH17IFYGS
- sG34V7Wo3vyQzsk7qLf9Ajno0DhJ+VX43g8+AjxOMNVrGCt9RNXSBVpyv2AMTlWCdJ5KI6V4
- KEzWM4HJm7QlNKE6RPoBxJVbSQLPd9St3h7mxLcne4l7NK9eNgNnneT7QZL8fL//s9K8Ns1W
- t60uQNYvbhKDG7+/yLcmJgjF74XkGvxCmTA1rW2bsUriM533nG9gAOUFQjURkwI8jvMAEQEA
- AYkCaAQYEQIACQUCVxvH8AIbAgIpCRBhV5kVtWN2DsFdIAQZAQIABgUCVxvH8AAKCRCH0Jac
- RAcHBIkHD/9nmfog7X2ZXMzL9ktT++7x+W/QBrSTCTmq8PK+69+INN1ZDOrY8uz6htfTLV9+
- e2W6G8/7zIvODuHk7r+yQ585XbplgP0V5Xc8iBHdBgXbqnY5zBrcH+Q/oQ2STalEvaGHqNoD
- UGyLQ/fiKoLZTPMur57Fy1c9rTuKiSdMgnT0FPfWVDfpR2Ds0gpqWePlRuRGOoCln5GnREA/
- 2MW2rWf+CO9kbIR+66j8b4RUJqIK3dWn9xbENh/aqxfonGTCZQ2zC4sLd25DQA4w1itPo+f5
- V/SQxuhnlQkTOCdJ7b/mby/pNRz1lsLkjnXueLILj7gNjwTabZXYtL16z24qkDTI1x3g98R/
- xunb3/fQwR8FY5/zRvXJq5us/nLvIvOmVwZFkwXc+AF+LSIajqQz9XbXeIP/BDjlBNXRZNdo
- dVuSU51ENcMcilPr2EUnqEAqeczsCGpnvRCLfVQeSZr2L9N4svNhhfPOEscYhhpHTh0VPyxI
- pPBNKq+byuYPMyk3nj814NKhImK0O4gTyCK9b+gZAVvQcYAXvSouCnTZeJRrNHJFTgTgu6E0
- caxTGgc5zzQHeX67eMzrGomG3ZnIxmd1sAbgvJUDaD2GrYlulfwGWwWyTNbWRvMighVdPkSF
- 6XFgQaosWxkV0OELLy2N485YrTr2Uq64VKyxpncLh50e2RnyAJ9Za0Dx0yyp44iD1OvHtkEI
- M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
-Message-ID: <7c092a6d-30f5-df2e-fa38-4b5196ce2c2f@gmail.com>
-Date:   Wed, 3 Feb 2021 10:23:08 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S230122AbhBCT4R (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Feb 2021 14:56:17 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906A7C061573;
+        Wed,  3 Feb 2021 11:55:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=lZIM2DPH255woCpuEYzpAbqOgqBRxAkE8W2SBU4ewJE=; b=ceCUCEaJD39WM5gPnzKJ8wCMMB
+        luJoynXfntKH0PrBYD0kV1boOM9EYOyikVf1bjeNLMp+UGrLsgPi/id7egUyvAw1XP2smeHy1aHvB
+        THbPIkej5ErUCXA1NJhHsy9Sy58pIDNM5U1INSPEEMp3hay4Mzyul/jY5dhFLyIux8lRst/i7Xhff
+        eN0djcpHrWSFX4bf2MlxDBJEtxfjmeXnDyZkydj3I+GPHP5y5kGCdEbAbjI/wEBSZpwvhfi7qh6LY
+        ZRkz88wlLjuctiw2HWUek5QMoiFZmg4e630jPWnPaXnaL+b9dY3em0hinWaB7lFlsH9QUOY5EWGWB
+        6Hg+KPqQ==;
+Received: from [2601:1c0:6280:3f0::aec2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1l7OFM-0003dU-EK; Wed, 03 Feb 2021 19:55:28 +0000
+Subject: Re: memory_model.h:64:14: error: implicit declaration of function
+ 'page_to_section'
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, linux-mips@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Pavel Tatashin <pasha.tatashin@oracle.com>
+References: <CA+G9fYv-=GdpLK3-6M9P4J1N-4ypS=GO8T2N15JFWXSmsG1adQ@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <201a2712-d708-7f83-9272-730b32e7a842@infradead.org>
+Date:   Wed, 3 Feb 2021 11:55:22 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <20210127132431.143374-1-tsbogend@alpha.franken.de>
+In-Reply-To: <CA+G9fYv-=GdpLK3-6M9P4J1N-4ypS=GO8T2N15JFWXSmsG1adQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -122,18 +57,84 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 1/27/21 5:24 AM, Thomas Bogendoerfer wrote:
-> Selection of the DTB to be used was burried in more or less readable
-> code in head.S. Move this code into a inline helper function and
-> use it.
+On 2/3/21 7:51 AM, Naresh Kamboju wrote:
+> Linux next tag 20210203 the mips and sh builds failed due to below errors.
+> Following builds failed with gcc-8, gcc-9 and gcc-10,
+>   - mips (cavium_octeon_defconfig)
+>   - sh (defconfig)
+>   - sh (shx3_defconfig)
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
+> CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc' uImage.gz
+> In file included from arch/mips/include/asm/page.h:258,
+>                  from arch/mips/include/asm/io.h:29,
+>                  from include/linux/io.h:13,
+>                  from arch/mips/include/asm/mips-cps.h:10,
+>                  from arch/mips/include/asm/smp-ops.h:16,
+>                  from arch/mips/include/asm/smp.h:21,
+>                  from include/linux/smp.h:84,
+>                  from arch/mips/include/asm/cpu-type.h:12,
+>                  from arch/mips/include/asm/timex.h:19,
+>                  from include/linux/timex.h:65,
+>                  from include/linux/time32.h:13,
+>                  from include/linux/time.h:60,
+>                  from include/linux/compat.h:10,
+>                  from arch/mips/kernel/asm-offsets.c:12:
+> include/linux/mm.h: In function 'is_pinnable_page':
+> include/asm-generic/memory_model.h:64:14: error: implicit declaration
+> of function 'page_to_section'; did you mean 'present_section'?
+> [-Werror=implicit-function-declaration]
+>   int __sec = page_to_section(__pg);   \
+>               ^~~~~~~~~~~~~~~
+> include/asm-generic/memory_model.h:81:21: note: in expansion of macro
+> '__page_to_pfn'
+>  #define page_to_pfn __page_to_pfn
+>                      ^~~~~~~~~~~~~
+> include/linux/mm.h:1135:15: note: in expansion of macro 'page_to_pfn'
+>    is_zero_pfn(page_to_pfn(page));
+>                ^~~~~~~~~~~
+> In file included from arch/mips/kernel/asm-offsets.c:15:
+> include/linux/mm.h: At top level:
+> include/linux/mm.h:1512:29: error: conflicting types for 'page_to_section'
+>  static inline unsigned long page_to_section(const struct page *page)
+>                              ^~~~~~~~~~~~~~~
+> Steps to reproduce:
+> --------------------------
+> # TuxMake is a command line tool and Python library that provides
+> # portable and repeatable Linux kernel builds across a variety of
+> # architectures, toolchains, kernel configurations, and make targets.
+> #
+> # TuxMake supports the concept of runtimes.
+> # See https://docs.tuxmake.org/runtimes/, for that to work it requires
+> # that you install podman or docker on your system.
+> #
+> # To install tuxmake on your system globally:
+> # sudo pip3 install -U tuxmake
+> #
+> # See https://docs.tuxmake.org/ for complete documentation.
+> 
+> 
+> tuxmake --runtime podman --target-arch mips --toolchain gcc-10
+> --kconfig cavium_octeon_defconfig
 
->  arch/mips/bmips/setup.c               |  7 +++---
+Looks to me like this is due to <linux/mm.h>:
 
-^--
+#if defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
+#define SECTION_IN_PAGE_FLAGS
+#endif
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+
+with
+CONFIG_SPARSEMEM=y
+CONFIG_SPARSEMEM_EXTREME=y
+CONFIG_SPARSEMEM_VMEMMAP_ENABLE=y
+# CONFIG_SPARSEMEM_VMEMMAP is not set
+
+
+I'm still digging.
+
 -- 
-Florian
+~Randy
+
