@@ -2,283 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8C430FD06
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 20:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9962D30FEFD
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 22:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238282AbhBDTiV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Feb 2021 14:38:21 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:57480 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238242AbhBDTiT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Feb 2021 14:38:19 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 114JTdwm044841;
-        Thu, 4 Feb 2021 19:33:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2020-01-29;
- bh=1mSbR7UYytrVmb9m+OjsfJQ+ECzLuT5FK3uth4D/hSw=;
- b=uoPRZ4vz6mb4z1gMXMHFvxwBkbXKBRmCy2XhjVbaPw0jNoHu0QaiZnf3j5/B7emztro5
- 0iztbYhLd3vDgay72tQ6v0ij5PSveEkRKdrr3wcjAKxozyU0JID7seBQmz211BJWL3/n
- 21EHOXgDC0bsG30hLvCbhqscoLzqfAVDMG+yD0DGaFTgq86fgtsLcFNTfURcxZlBx5/k
- FJjWBPesneE3gBMvwHtZumwjne8eT2iYPAdxJ5t4GcypklTFE0C6r4ZHlw4l5CMRCBMQ
- jrOMtCxfZphJ9eSlzXIBH5oTU4e6e81X+VeOeNvIRXTOuKTE+Drv6PXP6ARwvuQ25MEv IA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 36cvyb71sb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 04 Feb 2021 19:33:50 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 114JUXk4106088;
-        Thu, 4 Feb 2021 19:31:49 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2103.outbound.protection.outlook.com [104.47.58.103])
-        by userp3020.oracle.com with ESMTP id 36dh7vm7bb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 04 Feb 2021 19:31:49 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JJRX8n8XulXtIXRsy8uGNsuDKgHehZ06tN4hkr9Y6Hpqe8VBz7mF4vuALeeF3RsXj6VV6Ioe+1HMiye4RgatyupMXkb9gZzMwGsHKUkZ8JQ7k3wMjdACflMNZ0QgpRNAf7eE5sQApZzzUksWAz+xfp7Bw9x54qX0YDJgpXdCRCUSpv46iRKsibQnlxkQtfzDayvDW7nfFsCpPC6IEIvHgpYeLLTIrwSqeQ7tfW6aQxULPXNk2ZL1TjCzgXRx3EDggfdVbglGophPcLovgGOrZZtxZdDQgKr83njV6y8JagEv8AMZdCRBsfuoZCLtmu4uh4DFTpLJSEvfJAk/oa+qOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1mSbR7UYytrVmb9m+OjsfJQ+ECzLuT5FK3uth4D/hSw=;
- b=d3fos0Kh39uzd19oyhdNiV5RCgUmtGZXuOsU4vT+3gPP4jy8C91KNWGYCoHRzariSN2dsL+Vn8OvhwROsmBtGp0ZL4SEidWTl1hz1XMIEPA03QlTOSj9ekIKjKXFi2vnzEsT8Lyt3nMrJw/6XTFbduPupuhZxeJp5PR1mQmvxeUfJOLVF4lFBhkNxj0wi5k94K/FuwlN1j0QXl78BmDaALE+Q7Um8K6TtofF9+Fb9lEzBx+/lkqjN8bphoMh15JK+b3890ccbfi++FdQ9kODvO5TaCsKE1YGXcnprZxnuUMGlIshUNfXBBEwrOYXlCN3Lu/cYbqtsQokn+fPuiuB2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1mSbR7UYytrVmb9m+OjsfJQ+ECzLuT5FK3uth4D/hSw=;
- b=nN9hWOh2tdMNz04L6MgzOKjjxEgtPjBcD0ZS7FMUKMpvtLgryAf3qEzi5GMWMiaUjUXtVqLYOx5IDYPB47nY/ZU+80CJmagSSM2aTRJEDxAIf99xx/fjlshMQjyV1BIE5WGD8JbhrwHYs/f2ROVtiJzYXdD8C5Cu0LO/4Sf27Lc=
-Authentication-Results: arm.com; dkim=none (message not signed)
- header.d=none;arm.com; dmarc=none action=none header.from=oracle.com;
-Received: from BYAPR10MB2999.namprd10.prod.outlook.com (2603:10b6:a03:85::27)
- by BYAPR10MB3207.namprd10.prod.outlook.com (2603:10b6:a03:152::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.19; Thu, 4 Feb
- 2021 19:31:44 +0000
-Received: from BYAPR10MB2999.namprd10.prod.outlook.com
- ([fe80::e180:1ba2:d87:456]) by BYAPR10MB2999.namprd10.prod.outlook.com
- ([fe80::e180:1ba2:d87:456%4]) with mapi id 15.20.3825.024; Thu, 4 Feb 2021
- 19:31:44 +0000
-Date:   Thu, 4 Feb 2021 14:31:36 -0500
-From:   Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        iommu@lists.linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nouveau@lists.freedesktop.org,
-        x86@kernel.org, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, adrian.hunter@intel.com,
-        akpm@linux-foundation.org, benh@kernel.crashing.org,
-        bskeggs@redhat.com, bhelgaas@google.com, bp@alien8.de,
-        boris.ostrovsky@oracle.com, chris@chris-wilson.co.uk,
-        daniel@ffwll.ch, airlied@linux.ie, hpa@zytor.com, mingo@kernel.org,
-        mingo@redhat.com, jani.nikula@linux.intel.com,
-        joonas.lahtinen@linux.intel.com, jgross@suse.com,
-        m.szyprowski@samsung.com, matthew.auld@intel.com,
-        mpe@ellerman.id.au, rppt@kernel.org, paulus@samba.org,
-        peterz@infradead.org, rodrigo.vivi@intel.com,
-        sstabellini@kernel.org, bauerman@linux.ibm.com,
-        tsbogend@alpha.franken.de, tglx@linutronix.de,
-        ulf.hansson@linaro.org, joe.jin@oracle.com,
-        thomas.lendacky@amd.com, Claire Chang <tientzu@chromium.org>
-Subject: Re: [PATCH RFC v1 2/6] swiotlb: convert variables to arrays
-Message-ID: <20210204193136.GA333094@fedora>
-References: <20210203233709.19819-1-dongli.zhang@oracle.com>
- <20210203233709.19819-3-dongli.zhang@oracle.com>
- <20210204072947.GA29812@lst.de>
- <b46ddefe-d91a-fa6a-0e0d-cf1edc343c2e@arm.com>
+        id S229750AbhBDVBO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Feb 2021 16:01:14 -0500
+Received: from elvis.franken.de ([193.175.24.41]:52892 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229537AbhBDVBM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Feb 2021 16:01:12 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1l7ljq-0002rO-00; Thu, 04 Feb 2021 22:00:30 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9AC80C0D5E; Thu,  4 Feb 2021 21:57:33 +0100 (CET)
+Date:   Thu, 4 Feb 2021 21:57:33 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Bert Vermeulen <bert@biot.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sander Vanheule <sander@svanheule.net>,
+        John Crispin <john@phrozen.org>,
+        Birger Koblitz <mail@birger-koblitz.de>
+Subject: Re: [PATCH v4 0/5] Add support for Realtek RTL838x/RTL839x switch
+ SoCs
+Message-ID: <20210204205733.GA19460@alpha.franken.de>
+References: <20210119092109.185282-1-bert@biot.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b46ddefe-d91a-fa6a-0e0d-cf1edc343c2e@arm.com>
-X-Originating-IP: [209.6.208.110]
-X-ClientProxiedBy: BL0PR02CA0129.namprd02.prod.outlook.com
- (2603:10b6:208:35::34) To BYAPR10MB2999.namprd10.prod.outlook.com
- (2603:10b6:a03:85::27)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from fedora (209.6.208.110) by BL0PR02CA0129.namprd02.prod.outlook.com (2603:10b6:208:35::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.20 via Frontend Transport; Thu, 4 Feb 2021 19:31:38 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ef55351e-693f-4d96-4932-08d8c943812e
-X-MS-TrafficTypeDiagnostic: BYAPR10MB3207:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR10MB3207426DBD5DE06078DD9EE689B39@BYAPR10MB3207.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uAgalEdYjwOjJHCH2G7vN5tWQtCMtbX0n85NOzjg397fr4HPpL38hU+5XzzeT49OmKLLJVsnwxIpo+to5zKKQGIsK846HRhFER2KPTbPklCujGd8DTLblcPCup5OKFImj7oo9vISCGsDUiJZkiV/3ToqgvCCnZ6B7MuTJOyFbK32wJugnDz83jEY9ajCSyngUqObEoMU3edySoele8YHKMKQs6lZYD+ISVSsalYC0OzhTRXQE4+4oUMREmANuddjCtRwMZYVha7Km7A6VrPYzrIZUTCE+qTKTB/5qMehAd+orN5NztZ/wh0QB0yaOmm5HKNNBXGarBx77cjIGbdqh02HNg3UnBXLSrO3Vlw0yTXHrDNDI2IfSSAHFKYY8deJXB9W2dzWfmTSvLvpo+OPXRc2RGZ951S6BJ1FROzMHQhCJzBIgXYmDz/ZaD2ufs3XKyOOO17e5wOUQtMfLmh7W/1FrwiplQ115y6pFi47ExlWLvcLqtuN7NfidZI4Czy4IotM2VARalMW8UzXklor4Gvk0Bu87CDO0GQd7Z6htWQc5dBRVrO9l/fxVoYdjmAg
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2999.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(39860400002)(346002)(396003)(376002)(136003)(8936002)(26005)(4326008)(9576002)(8676002)(33656002)(86362001)(16526019)(5660300002)(53546011)(186003)(83380400001)(956004)(66556008)(52116002)(66946007)(55016002)(478600001)(7416002)(6496006)(2906002)(6916009)(66476007)(316002)(54906003)(7406005)(33716001)(9686003)(1076003)(21314003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?wawCRNyZ8ljyEuFsDq2wYljIRGRa+x/+LWf2aOYw3EPj/ts+T86ZgSpVrNI1?=
- =?us-ascii?Q?E+hi9N0U+VHnKEi643sfk/lKPgdNcyg1X5dIqfKRQ4obHAugfVLS3yvF9uHA?=
- =?us-ascii?Q?Et/CzMB5IJrQmQCH1De9LLITIdU4HxYUHXWeiyTewys9ZPW92hzJbHRHipFS?=
- =?us-ascii?Q?ZjKreRgS4eenVHSWbXtGKX1RdGwsvFmGUtZmt6RPIQnBG2nQbh6uY1x8XDm+?=
- =?us-ascii?Q?HNlo4+zCXXBRmqVsO/7K9N6zTYffAibVUCmdssjl652dJxDd3pjO60aeIy0D?=
- =?us-ascii?Q?8V+eyWUUKndo85mK1a37h25dT8XAJwF9Su3wjpK6ufcFPfV0VuubOJHsl211?=
- =?us-ascii?Q?eA7BLwTGejgutN/nAwdMSAZkzE2FrKGJS10H0MSnyrk04g7iNLjEZgUdKSG3?=
- =?us-ascii?Q?dbKSyYBKbpp42miUwg9hkS08itIpYL2S9a9RkXNAde3GAtY8hBCh3qcgSHdi?=
- =?us-ascii?Q?6Bwioin/m6tIHwT2fqnyX9f92pWdI4xt6zbdalUgmS0Nn/nWd6UBBXTVIwp3?=
- =?us-ascii?Q?dIIm4w1C7EEb9JRK6Ur4QTI7vS8dkeShTS7EEI0vs2iqliz4Ng9rEm1Ef1AH?=
- =?us-ascii?Q?7oWFim24xrTDWQ5X5aZEq27Kuqu+tHvo+AT6VOmALtiohgErAKdEVxNQZh0x?=
- =?us-ascii?Q?Vml36FCg9b/IZbsngoX9D721PfCaqnU+oC4nPWWIgX0I74A33IcyRGjtiXTn?=
- =?us-ascii?Q?Ia0ZN5cwmDDIGVeJGyG3iNUfqiIqi0y7Zeqhe9JI1OfjSliJO8W+KRBewRsa?=
- =?us-ascii?Q?TWvEmmm8e9DHFLSpnnuNii/MUeYnKoFTiIFdCEn+7nHBcowyz281im4/anKz?=
- =?us-ascii?Q?mlQI4Wr14VzMSyrfRi+QjA7lU5xNQGDgk4P6StAGD+ydA0roF+OAcMIs+Y0B?=
- =?us-ascii?Q?oLhz70asx7ROi582lpwamEJbklY3Udnoslrv910cdfzXvIG+i5kqodTaRA2n?=
- =?us-ascii?Q?H/vSpzVb3icXkkiJQGuwVwDxwg2+AvhseyrxM1QG/HMlrIT4zuO3DAM8Q+Xc?=
- =?us-ascii?Q?WhNd8k33wXZ5x9HqOyUVfSGBgprXrx/AWC7J2VboMq8mp1zfTY0uZ5flkTcc?=
- =?us-ascii?Q?KPICc97M?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef55351e-693f-4d96-4932-08d8c943812e
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2999.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2021 19:31:44.2409
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ezbeptdNGkgwxrYaRP+vWUR9oW8gyl3BZp7dR4e7wHu1eriSLHANm2B5ihfHQRmNh+F5kZ7Hnkdiiin0cMy+PQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB3207
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9885 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- suspectscore=0 spamscore=0 mlxlogscore=999 phishscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102040118
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9885 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 impostorscore=0
- mlxscore=0 spamscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102040118
+In-Reply-To: <20210119092109.185282-1-bert@biot.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Feb 04, 2021 at 11:49:23AM +0000, Robin Murphy wrote:
-> On 2021-02-04 07:29, Christoph Hellwig wrote:
-> > On Wed, Feb 03, 2021 at 03:37:05PM -0800, Dongli Zhang wrote:
-> > > This patch converts several swiotlb related variables to arrays, in
-> > > order to maintain stat/status for different swiotlb buffers. Here are
-> > > variables involved:
-> > > 
-> > > - io_tlb_start and io_tlb_end
-> > > - io_tlb_nslabs and io_tlb_used
-> > > - io_tlb_list
-> > > - io_tlb_index
-> > > - max_segment
-> > > - io_tlb_orig_addr
-> > > - no_iotlb_memory
-> > > 
-> > > There is no functional change and this is to prepare to enable 64-bit
-> > > swiotlb.
-> > 
-> > Claire Chang (on Cc) already posted a patch like this a month ago,
-> > which looks much better because it actually uses a struct instead
-> > of all the random variables.
+On Tue, Jan 19, 2021 at 10:21:04AM +0100, Bert Vermeulen wrote:
+> v4:
+> - Device tree bindings for SoC in separate patch.
+> - Removed ioremap.h, and declare physical address bases in device tree.
 > 
-> Indeed, I skimmed the cover letter and immediately thought that this whole
-> thing is just the restricted DMA pool concept[1] again, only from a slightly
-> different angle.
+> v3:
+> - all code removed, the base system is now only device tree files and docs
+>    and some build config.
+> - ioremap.h restored to the v1 version, with hardcoded I/O ranges, since I
+>    got flak on changing that as suggested. This brings it in line with other
+>    systems in arch/mips/generic.
+> 
+> v2:
+> - Removed all new arch/mips/ code, using arch/mips/generic/ instead.
+> - Use device tree ranges instead of hardcoded addresses for ioremap.
+> - Moved IRQ driver to drivers/irqchip/
+> - Removed reset handling code, will be replaced by device tree config.
+> - All SoC family id code moved to new soc driver.
+> - Header moved to realtek/ instead of mach-realtek/
+> - As more of the base system now depends on device tree, a sample
+>   dts for the Cisco SG220-26 switch is included. This will be further
+>   filled out, and bindings documented, as drivers get merged.
+> 
+> Bert Vermeulen (5):
+>   dt-bindings: mips: Add support for RTL83xx SoC series
+>   Add support for Realtek RTL838x/RTL839x switch SoCs
+>   MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS system
+>   dt-bindings: Add Cisco prefix to vendor list
+>   mips: dts: Add support for Cisco SG220-26 switch
+> 
+>  .../devicetree/bindings/mips/realtek-rtl.yaml | 24 ++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+>  arch/mips/Kconfig                             | 31 ++++++++++
+>  arch/mips/boot/dts/Makefile                   |  1 +
+>  arch/mips/boot/dts/realtek/Makefile           |  2 +
+>  arch/mips/boot/dts/realtek/cisco_sg220-26.dts | 25 ++++++++
+>  arch/mips/boot/dts/realtek/rtl838x.dtsi       | 21 +++++++
+>  arch/mips/boot/dts/realtek/rtl83xx.dtsi       | 59 +++++++++++++++++++
+>  8 files changed, 165 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/realtek-rtl.yaml
+>  create mode 100644 arch/mips/boot/dts/realtek/Makefile
+>  create mode 100644 arch/mips/boot/dts/realtek/cisco_sg220-26.dts
+>  create mode 100644 arch/mips/boot/dts/realtek/rtl838x.dtsi
+>  create mode 100644 arch/mips/boot/dts/realtek/rtl83xx.dtsi
 
+series applied to mips-next.
 
-Kind of. Let me lay out how some of these pieces are right now:
+Thomas.
 
-+-----------------------+      +----------------------+
-|                       |      |                      |
-|                       |      |                      |
-|   a)Xen-SWIOTLB       |      | b)SWIOTLB (for !Xen) |
-|                       |      |                      |
-+-----------XX----------+      +-------X--------------+
-              XXXX             XXXXXXXXX
-                 XXXX     XX XXX
-                    X   XX
-                    XXXX
-         +----------XX-----------+
-         |                       |
-         |                       |
-         |   c) SWIOTLB generic  |
-         |                       |
-         +-----------------------+
-
-Dongli's patches modify the SWIOTLB generic c), and Xen-SWIOTLB a)
-parts.
-
-Also see the IOMMU_INIT logic which lays this a bit more deepth
-(for example how to enable SWIOTLB on AMD boxes, or IBM with Calgary
-IOMMU, etc - see iommu_table.h).
-
-Furtheremore it lays the groundwork to allocate AMD SEV SWIOTLB buffers
-later after boot (so that you can stich different pools together).
-All the bits are kind of inside of the SWIOTLB code. And also it changes
-the Xen-SWIOTLB to do something similar.
-
-The mempool did it similarly by taking the internal parts (aka the
-various io_tlb) of SWIOTLB and exposing them out and having
-other code:
-
-+-----------------------+      +----------------------+
-|                       |      |                      |
-|                       |      |                      |
-| a)Xen-SWIOTLB         |      | b)SWIOTLB (for !Xen) |
-|                       |      |                      |
-+-----------XX----------+      +-------X--------------+
-              XXXX             XXXXXXXXX
-                 XXXX     XX XXX
-                    X   XX
-                    XXXX
-         +----------XX-----------+         +------------------+
-         |                       |         | Device tree      |
-         |                       +<--------+ enabling SWIOTLB |
-         |c) SWIOTLB generic     |         |                  |
-         |                       |         | mempool          |
-         +-----------------------+         +------------------+
-
-What I was suggesting to Clarie to follow Xen model, that is
-do something like this:
-
-+-----------------------+      +----------------------+   +--------------------+
-|                       |      |                      |   |                    |
-|                       |      |                      |   |                    |
-| a)Xen-SWIOTLB         |      | b)SWIOTLB (for !Xen) |   | e) DT-SWIOTLB      |
-|                       |      |                      |   |                    |
-+-----------XX----------+      +-------X--------------+   +----XX-X------------+
-              XXXX             XXXXXXXXX        XXX X X XX X XX
-                 XXXX     XX XXX        XXXXXXXX
-                    X   XX XXXXXXXXXXXXX
-                    XXXXXXXX
-         +----------XXX----------+
-         |                       |
-         |                       |
-         |c) SWIOTLB generic     |
-         |                       |
-         +-----------------------+
-
-
-so using the SWIOTLB generic parts, and then bolt on top
-of the device-tree logic, along with the mempool logic.
-
-
-
-But Christopher has an interesting suggestion which is
-to squash the all the existing code (a, b, c) all together
-and pepper it with various jump-tables.
-
-
-So:
-
-
------------------------------+
-| SWIOTLB:                   |
-|                            |
-|  a) SWIOTLB (for non-Xen)  |
-|  b) Xen-SWIOTLB            |
-|  c) DT-SWIOTLB             |
-|                            |
-|                            |
------------------------------+
-
-
-with all the various bits (M2P/P2M for Xen, mempool for ARM,
-and normal allocation for BM) in one big file.
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
