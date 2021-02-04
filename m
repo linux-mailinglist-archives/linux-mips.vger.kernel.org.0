@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1857930ED5F
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 08:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8777B30EE9E
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 09:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbhBDHag (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Feb 2021 02:30:36 -0500
-Received: from verein.lst.de ([213.95.11.211]:54722 "EHLO verein.lst.de"
+        id S234912AbhBDIlL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Feb 2021 03:41:11 -0500
+Received: from verein.lst.de ([213.95.11.211]:54996 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232977AbhBDHaf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 4 Feb 2021 02:30:35 -0500
+        id S234897AbhBDIlK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Feb 2021 03:41:10 -0500
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id DD16068AFE; Thu,  4 Feb 2021 08:29:47 +0100 (CET)
-Date:   Thu, 4 Feb 2021 08:29:47 +0100
+        id 77E4067373; Thu,  4 Feb 2021 09:40:23 +0100 (CET)
+Date:   Thu, 4 Feb 2021 09:40:23 +0100
 From:   Christoph Hellwig <hch@lst.de>
 To:     Dongli Zhang <dongli.zhang@oracle.com>
 Cc:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
@@ -34,35 +34,29 @@ Cc:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         rodrigo.vivi@intel.com, sstabellini@kernel.org,
         bauerman@linux.ibm.com, tsbogend@alpha.franken.de,
         tglx@linutronix.de, ulf.hansson@linaro.org, joe.jin@oracle.com,
-        thomas.lendacky@amd.com, Claire Chang <tientzu@chromium.org>
-Subject: Re: [PATCH RFC v1 2/6] swiotlb: convert variables to arrays
-Message-ID: <20210204072947.GA29812@lst.de>
-References: <20210203233709.19819-1-dongli.zhang@oracle.com> <20210203233709.19819-3-dongli.zhang@oracle.com>
+        thomas.lendacky@amd.com
+Subject: Re: [PATCH RFC v1 5/6] xen-swiotlb: convert variables to arrays
+Message-ID: <20210204084023.GA32328@lst.de>
+References: <20210203233709.19819-1-dongli.zhang@oracle.com> <20210203233709.19819-6-dongli.zhang@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210203233709.19819-3-dongli.zhang@oracle.com>
+In-Reply-To: <20210203233709.19819-6-dongli.zhang@oracle.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 03:37:05PM -0800, Dongli Zhang wrote:
-> This patch converts several swiotlb related variables to arrays, in
-> order to maintain stat/status for different swiotlb buffers. Here are
-> variables involved:
-> 
-> - io_tlb_start and io_tlb_end
-> - io_tlb_nslabs and io_tlb_used
-> - io_tlb_list
-> - io_tlb_index
-> - max_segment
-> - io_tlb_orig_addr
-> - no_iotlb_memory
-> 
-> There is no functional change and this is to prepare to enable 64-bit
-> swiotlb.
+So one thing that has been on my mind for a while:  I'd really like
+to kill the separate dma ops in Xen swiotlb.  If we compare xen-swiotlb
+to swiotlb the main difference seems to be:
 
-Claire Chang (on Cc) already posted a patch like this a month ago,
-which looks much better because it actually uses a struct instead
-of all the random variables. 
+ - additional reasons to bounce I/O vs the plain DMA capable
+ - the possibility to do a hypercall on arm/arm64
+ - an extra translation layer before doing the phys_to_dma and vice
+   versa
+ - an special memory allocator
+
+I wonder if inbetween a few jump labels or other no overhead enablement
+options and possibly better use of the dma_range_map we could kill
+off most of swiotlb-xen instead of maintaining all this code duplication?
