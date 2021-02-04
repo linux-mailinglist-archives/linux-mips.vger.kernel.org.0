@@ -2,70 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FE230F47E
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 15:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D181730F4B6
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 15:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbhBDOD0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Feb 2021 09:03:26 -0500
-Received: from elvis.franken.de ([193.175.24.41]:52100 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236475AbhBDOBV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 4 Feb 2021 09:01:21 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1l7fBQ-0004tX-00; Thu, 04 Feb 2021 15:00:32 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 1AEF7C0D53; Thu,  4 Feb 2021 14:59:19 +0100 (CET)
-Date:   Thu, 4 Feb 2021 14:59:19 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     linux-mips@vger.kernel.org, John Crispin <john@phrozen.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: ralink: manage low reset lines
-Message-ID: <20210204135919.GA13761@alpha.franken.de>
-References: <20210203092140.12458-1-sander@svanheule.net>
+        id S236381AbhBDOPB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Feb 2021 09:15:01 -0500
+Received: from mail-40136.protonmail.ch ([185.70.40.136]:17018 "EHLO
+        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236558AbhBDOA1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Feb 2021 09:00:27 -0500
+Date:   Thu, 04 Feb 2021 13:59:29 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1612447179; bh=rmmBjANsrPQKuDrbBEFPqO9DZ+qrmSLUVcFP//W9JMY=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=mm4htUZOTZY1dDsuJF1AVE430nlfigwx7F231kg4S+Hg6lHSY1F5qiZWEoGiPvTit
+         JXvjOW5G4pscwjHm579c3AGSBDnzGbCFuh2HOsAjcue3g3IcNEgmB7tFrfO2asqH4w
+         SXTEp3dp4+jyr/0Yax/7MlLHnDr2dTun1UbYvLRgJX8X10yS1c+yn2ZbheZ+bdgcKJ
+         ohoBqgUCFZlW6Zhc2nQSsav/jgXiguAvQ/qRz8ufEDk66knTaNF1jN779Cb+XwQeT5
+         9cvE5+LAanB9sqWoqN76zPSmtg9V3SMG9utUqhmSp3L5kLZ8CrNCKKfR52bYxw4gq7
+         SNuiLH9yN2OBA==
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     James Hartley <james.hartley@sondrel.com>,
+        bibo mao <maobibo@loongson.cn>,
+        Alexander Lobakin <alobakin@pm.me>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH mips-next] MIPS: pistachio: remove obsolete include/asm/mach-pistachio
+Message-ID: <20210204135902.10361-1-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210203092140.12458-1-sander@svanheule.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 10:21:41AM +0100, Sander Vanheule wrote:
-> Reset lines with indices smaller than 8 are currently considered invalid
-> by the rt2880-reset reset controller.
-> 
-> The MT7621 SoC uses a number of these low reset lines. The DTS defines
-> reset lines "hsdma", "fe", and "mcm" with respective values 5, 6, and 2.
-> As a result of the above restriction, these resets cannot be asserted or
-> de-asserted by the reset controller. In cases where the bootloader does
-> not de-assert these lines, this results in e.g. the MT7621's internal
-> switch staying in reset.
-> 
-> Change the reset controller to only ignore the system reset, so all
-> reset lines with index greater than 0 are considered valid.
-> 
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> ---
-> This patch was tested on a TP-Link EAP235-Wall, with an MT7621DA SoC.
-> The bootloader on this device would leave reset line 2 ("mcm") asserted,
-> which caused the internal switch to be unresponsive on an uninterrupted
-> boot from flash.
-> 
-> When tftpboot was used in the bootloader to load an initramfs, it did
-> initialise the internal switch, and cleared the mcm reset line. In this
-> case the switch could be used from the OS. With this patch applied, the
-> switch works both in an initramfs, and when (cold) booting from flash.
-> 
->  arch/mips/ralink/reset.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Since commit 02bd530f888c ("MIPS: generic: Increase NR_IRQS to 256")
+include/asm/mach-pistachio/irq.h just does nothing.
+Remove the file along with mach-pistachio folder and include compiler
+directive.
 
-applied to mips-next.
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ MAINTAINERS                                |  1 -
+ arch/mips/include/asm/mach-pistachio/irq.h | 15 ---------------
+ arch/mips/pistachio/Platform               |  2 --
+ 3 files changed, 18 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-pistachio/irq.h
 
-Thomas.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6add29cb2060..3e58787907d4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14099,7 +14099,6 @@ L:=09linux-mips@vger.kernel.org
+ S:=09Odd Fixes
+ F:=09arch/mips/boot/dts/img/pistachio*
+ F:=09arch/mips/configs/pistachio*_defconfig
+-F:=09arch/mips/include/asm/mach-pistachio/
+ F:=09arch/mips/pistachio/
+=20
+ PKTCDVD DRIVER
+diff --git a/arch/mips/include/asm/mach-pistachio/irq.h b/arch/mips/include=
+/asm/mach-pistachio/irq.h
+deleted file mode 100644
+index 74ac016503ad..000000000000
+--- a/arch/mips/include/asm/mach-pistachio/irq.h
++++ /dev/null
+@@ -1,15 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Pistachio IRQ setup
+- *
+- * Copyright (C) 2014 Google, Inc.
+- */
+-
+-#ifndef __ASM_MACH_PISTACHIO_IRQ_H
+-#define __ASM_MACH_PISTACHIO_IRQ_H
+-
+-#define NR_IRQS 256
+-
+-#include <asm/mach-generic/irq.h>
+-
+-#endif /* __ASM_MACH_PISTACHIO_IRQ_H */
+diff --git a/arch/mips/pistachio/Platform b/arch/mips/pistachio/Platform
+index f73a1a929965..c59de86dbddf 100644
+--- a/arch/mips/pistachio/Platform
++++ b/arch/mips/pistachio/Platform
+@@ -1,8 +1,6 @@
+ #
+ # IMG Pistachio SoC
+ #
+-cflags-$(CONFIG_MACH_PISTACHIO)=09=09+=3D=09=09=09=09\
+-=09=09-I$(srctree)/arch/mips/include/asm/mach-pistachio
+ load-$(CONFIG_MACH_PISTACHIO)=09=09+=3D 0xffffffff80400000
+ zload-$(CONFIG_MACH_PISTACHIO)=09=09+=3D 0xffffffff81000000
+ all-$(CONFIG_MACH_PISTACHIO)=09=09:=3D uImage.gz
+--=20
+2.30.0
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+
