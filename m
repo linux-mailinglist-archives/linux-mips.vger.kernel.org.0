@@ -2,87 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AE230E8E0
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 01:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2191430E98A
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 02:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234349AbhBDAr3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Feb 2021 19:47:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38094 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234623AbhBDArM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 3 Feb 2021 19:47:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F2B564E0F;
-        Thu,  4 Feb 2021 00:46:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1612399591;
-        bh=kk2SY71wQnk+tZMbceKdNvyX71uxBiSYmaBP0zFObxU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Znfo8mm+bA7CbzZMWp7y4jagkqgtum6GzXCuMWyB4pQlg4P8lvhCsyEAMAO+EOxue
-         yTvI9h1kw2TiAh6eNGGKdKJmijF7vS9+Y2iaMJqez0KImdqlAZHGep9DvpLeu+MpEi
-         IXR9tTYaSnutVlWXYYdF6kThEd6bUmxMzFjlwznM=
-Date:   Wed, 3 Feb 2021 16:46:30 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Bibo Mao <maobibo@loongson.cn>, Jia He <justin.he@arm.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, linux-mips@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH] mm/memory.c: Remove pte_sw_mkyoung()
-Message-Id: <20210203164630.ada46d0c84e0e9f0a474b283@linux-foundation.org>
-In-Reply-To: <f302ef92c48d1f08a0459aaee1c568ca11213814.1612345700.git.christophe.leroy@csgroup.eu>
-References: <f302ef92c48d1f08a0459aaee1c568ca11213814.1612345700.git.christophe.leroy@csgroup.eu>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S231879AbhBDBlN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Feb 2021 20:41:13 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:50052 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230090AbhBDBlL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 3 Feb 2021 20:41:11 -0500
+Received: from localhost.localdomain (unknown [222.209.9.63])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxydVkUBtgQSIDAA--.1258S2;
+        Thu, 04 Feb 2021 09:40:10 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH] MIPS: make userspace mapping young by default
+Date:   Thu,  4 Feb 2021 09:39:42 +0800
+Message-Id: <20210204013942.8398-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: AQAAf9AxydVkUBtgQSIDAA--.1258S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur18Gryrur45ur17Gr4xXrb_yoWrtrWfpa
+        s7Ca4xA3yaqw13JryxGw47Zw4rCwsxt3W8Jry7C3WUu3s7X34kKFnrGFWFvrykAFZ0y3yU
+        ZF1UXr45uay7uFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUbNzVUUUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed,  3 Feb 2021 10:19:44 +0000 (UTC) Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss
++ 2 TLB Invalid), butthe second TLB Invalid exception is just
+triggered by __update_tlb from do_page_fault writing tlb without
+_PAGE_VALID set. With this patch, user space mapping prot is made
+young by default (with both _PAGE_VALID and _PAGE_YOUNG set),
+and it only take 1 TLB Miss + 1 TLB Invalid exception
 
-> Commit 83d116c53058 ("mm: fix double page fault on arm64 if PTE_AF
-> is cleared") introduced arch_faults_on_old_pte() helper to identify
-> platforms that don't set page access bit in HW and require a page
-> fault to set it.
-> 
-> Commit 44bf431b47b4 ("mm/memory.c: Add memory read privilege on page
-> fault handling") added pte_sw_mkyoung() which is yet another way to
-> manage platforms that don't set page access bit in HW and require a
-> page fault to set it.
-> 
-> Remove that pte_sw_mkyoung() helper and use the already existing
-> arch_faults_on_old_pte() helper together with pte_mkyoung() instead.
+Remove pte_sw_mkyoung without polluting MM code and make page fault
+delay of MIPS on par with other architecture
 
-This conflicts with mm/memory.c changes in linux-next.  In
-do_set_pte().  Please check my efforts:
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+---
+ arch/mips/mm/cache.c    | 30 ++++++++++++++++--------------
+ include/linux/pgtable.h |  8 --------
+ mm/memory.c             |  3 ---
+ 3 files changed, 16 insertions(+), 25 deletions(-)
 
---- a/arch/mips/include/asm/pgtable.h~mm-memoryc-remove-pte_sw_mkyoung
-+++ a/arch/mips/include/asm/pgtable.h
-@@ -406,8 +406,6 @@ static inline pte_t pte_mkyoung(pte_t pt
- 	return pte;
+diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
+index 23b16bfd97b2..e19cf424bb39 100644
+--- a/arch/mips/mm/cache.c
++++ b/arch/mips/mm/cache.c
+@@ -156,29 +156,31 @@ unsigned long _page_cachable_default;
+ EXPORT_SYMBOL(_page_cachable_default);
+ 
+ #define PM(p)	__pgprot(_page_cachable_default | (p))
++#define PVA(p)	PM(_PAGE_VALID | _PAGE_ACCESSED | (p))
+ 
+ static inline void setup_protection_map(void)
+ {
+ 	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[4]  = PM(_PAGE_PRESENT);
+-	protection_map[5]  = PM(_PAGE_PRESENT);
+-	protection_map[6]  = PM(_PAGE_PRESENT);
+-	protection_map[7]  = PM(_PAGE_PRESENT);
++	protection_map[1]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[2]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
++	protection_map[3]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[4]  = PVA(_PAGE_PRESENT);
++	protection_map[5]  = PVA(_PAGE_PRESENT);
++	protection_map[6]  = PVA(_PAGE_PRESENT);
++	protection_map[7]  = PVA(_PAGE_PRESENT);
+ 
+ 	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
++	protection_map[9]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[10] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
+ 				_PAGE_NO_READ);
+-	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+-	protection_map[12] = PM(_PAGE_PRESENT);
+-	protection_map[13] = PM(_PAGE_PRESENT);
+-	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
+-	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
++	protection_map[11] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
++	protection_map[12] = PVA(_PAGE_PRESENT);
++	protection_map[13] = PVA(_PAGE_PRESENT);
++	protection_map[14] = PVA(_PAGE_PRESENT);
++	protection_map[15] = PVA(_PAGE_PRESENT);
  }
  
--#define pte_sw_mkyoung	pte_mkyoung
--
- #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- static inline int pte_huge(pte_t pte)	{ return pte_val(pte) & _PAGE_HUGE; }
++#undef _PVA
+ #undef PM
  
---- a/include/linux/pgtable.h~mm-memoryc-remove-pte_sw_mkyoung
-+++ a/include/linux/pgtable.h
-@@ -424,22 +424,6 @@ static inline void ptep_set_wrprotect(st
- }
- #endif
- 
--/*
-- * On some architectures hardware does not set page access bit when accessing
-- * memory page, it is responsibilty of software setting this bit. It brings
-- * out extra page fault penalty to track page access bit. For optimization page
-- * access bit can be set during all page fault flow on these arches.
-- * To be differentiate with macro pte_mkyoung, this macro is used on platforms
-- * where software maintains page access bit.
-- */
+ void cpu_cache_init(void)
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 8fcdfa52eb4b..8c042627399a 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -432,14 +432,6 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
+  * To be differentiate with macro pte_mkyoung, this macro is used on platforms
+  * where software maintains page access bit.
+  */
 -#ifndef pte_sw_mkyoung
 -static inline pte_t pte_sw_mkyoung(pte_t pte)
 -{
@@ -94,38 +139,34 @@ do_set_pte().  Please check my efforts:
  #ifndef pte_savedwrite
  #define pte_savedwrite pte_write
  #endif
---- a/mm/memory.c~mm-memoryc-remove-pte_sw_mkyoung
-+++ a/mm/memory.c
-@@ -2902,7 +2902,8 @@ static vm_fault_t wp_page_copy(struct vm
+diff --git a/mm/memory.c b/mm/memory.c
+index feff48e1465a..95718a623884 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2890,7 +2890,6 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
  		}
  		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
  		entry = mk_pte(new_page, vma->vm_page_prot);
 -		entry = pte_sw_mkyoung(entry);
-+		if (arch_faults_on_old_pte())
-+			entry = pte_mkyoung(entry);
  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
  
  		/*
-@@ -3560,7 +3561,8 @@ static vm_fault_t do_anonymous_page(stru
+@@ -3548,7 +3547,6 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
  	__SetPageUptodate(page);
  
  	entry = mk_pte(page, vma->vm_page_prot);
 -	entry = pte_sw_mkyoung(entry);
-+	if (arch_faults_on_old_pte())
-+		entry = pte_mkyoung(entry);
  	if (vma->vm_flags & VM_WRITE)
  		entry = pte_mkwrite(pte_mkdirty(entry));
  
-@@ -3745,8 +3747,8 @@ void do_set_pte(struct vm_fault *vmf, st
+@@ -3824,7 +3822,6 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct page *page)
  
- 	if (prefault && arch_wants_old_prefaulted_pte())
- 		entry = pte_mkold(entry);
--	else
--		entry = pte_sw_mkyoung(entry);
-+	else if (arch_faults_on_old_pte())
-+		entry = pte_mkyoung(entry);
- 
+ 	flush_icache_page(vma, page);
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
  	if (write)
  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-_
+ 	/* copy-on-write page */
+-- 
+2.17.1
 
