@@ -2,72 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C921F30F330
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 13:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FE230F47E
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 15:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbhBDMcA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Feb 2021 07:32:00 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:58470 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235819AbhBDMb5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 4 Feb 2021 07:31:57 -0500
-Received: from [10.130.0.55] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj_IP6RtgbqwEAA--.6216S3;
-        Thu, 04 Feb 2021 20:31:13 +0800 (CST)
-To:     "open list:MIPS" <linux-mips@vger.kernel.org>
-From:   Jinyang He <hejinyang@loongson.cn>
-Subject: [Question] How to save_stack_trace_tsk_reliable() on mips?
-Message-ID: <a0823990-420f-8091-7866-8ad588ef542d@loongson.cn>
-Date:   Thu, 4 Feb 2021 20:31:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S236376AbhBDOD0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Feb 2021 09:03:26 -0500
+Received: from elvis.franken.de ([193.175.24.41]:52100 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236475AbhBDOBV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Feb 2021 09:01:21 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1l7fBQ-0004tX-00; Thu, 04 Feb 2021 15:00:32 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 1AEF7C0D53; Thu,  4 Feb 2021 14:59:19 +0100 (CET)
+Date:   Thu, 4 Feb 2021 14:59:19 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     linux-mips@vger.kernel.org, John Crispin <john@phrozen.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: ralink: manage low reset lines
+Message-ID: <20210204135919.GA13761@alpha.franken.de>
+References: <20210203092140.12458-1-sander@svanheule.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxj_IP6RtgbqwEAA--.6216S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrKr4fXF43AFWUZrykCr17Jrb_yoWDJFb_G3
-        y8AF9rJrsIqa9xArZ7JF18Aayag3yjgFykt3yqqF13Jw1rKF42gFZ2yw1xZryUKw4DKF95
-        tF93X348W34YgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbc8YjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUJVWUXwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUy75rDUUUU
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210203092140.12458-1-sander@svanheule.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, all,
+On Wed, Feb 03, 2021 at 10:21:41AM +0100, Sander Vanheule wrote:
+> Reset lines with indices smaller than 8 are currently considered invalid
+> by the rt2880-reset reset controller.
+> 
+> The MT7621 SoC uses a number of these low reset lines. The DTS defines
+> reset lines "hsdma", "fe", and "mcm" with respective values 5, 6, and 2.
+> As a result of the above restriction, these resets cannot be asserted or
+> de-asserted by the reset controller. In cases where the bootloader does
+> not de-assert these lines, this results in e.g. the MT7621's internal
+> switch staying in reset.
+> 
+> Change the reset controller to only ignore the system reset, so all
+> reset lines with index greater than 0 are considered valid.
+> 
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> ---
+> This patch was tested on a TP-Link EAP235-Wall, with an MT7621DA SoC.
+> The bootloader on this device would leave reset line 2 ("mcm") asserted,
+> which caused the internal switch to be unresponsive on an uninterrupted
+> boot from flash.
+> 
+> When tftpboot was used in the bootloader to load an initramfs, it did
+> initialise the internal switch, and cleared the mcm reset line. In this
+> case the switch could be used from the OS. With this patch applied, the
+> switch works both in an initramfs, and when (cold) booting from flash.
+> 
+>  arch/mips/ralink/reset.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Excuse me. Here is a question mail. How to get a reliable stack
-of tasks on mips?
+applied to mips-next.
 
-First, why save_stack_trace_tsk() to get stack is unreliable? Is it
-because the asm code does not obey with gcc's stack rules, or others?
+Thomas.
 
-Secondly, can we use some methods to make the task stack reliable? For
-example, use the fp register, can this method work? But it seems make
-no sense for asm code unless each asm code do some fp work.
-
-I found that the powerpc implemented save_stack_trace_tsk_reliable(),
-and the x86 and s390 implemented the arch_stack_walk_reliable(). x86
-implemented it through ORC unwind. For powerpc, it may implement it
-through its ABI (I guess, I'm not familiar with them). Do we have a
-chance to implement it in some way?
-
-Finally, I found that some emails related to ORC unwind on ARM from the
-livepatch mail list. It is difficult for me to understand. Is anyone
-interested in ORC unwind on MIPS and have researched it?
-
-Any comment is welcome. :-)
-
-Thanks!
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
