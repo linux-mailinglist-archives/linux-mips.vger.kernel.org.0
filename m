@@ -2,86 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC2E30F2B6
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 12:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C921F30F330
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Feb 2021 13:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbhBDLuT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Feb 2021 06:50:19 -0500
-Received: from foss.arm.com ([217.140.110.172]:56926 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235683AbhBDLuS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 4 Feb 2021 06:50:18 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E69ABD6E;
-        Thu,  4 Feb 2021 03:49:31 -0800 (PST)
-Received: from [10.57.49.26] (unknown [10.57.49.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C76A3F73B;
-        Thu,  4 Feb 2021 03:49:25 -0800 (PST)
-Subject: Re: [PATCH RFC v1 2/6] swiotlb: convert variables to arrays
-To:     Christoph Hellwig <hch@lst.de>,
-        Dongli Zhang <dongli.zhang@oracle.com>
-Cc:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        iommu@lists.linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nouveau@lists.freedesktop.org,
-        x86@kernel.org, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, adrian.hunter@intel.com,
-        akpm@linux-foundation.org, benh@kernel.crashing.org,
-        bskeggs@redhat.com, bhelgaas@google.com, bp@alien8.de,
-        boris.ostrovsky@oracle.com, chris@chris-wilson.co.uk,
-        daniel@ffwll.ch, airlied@linux.ie, hpa@zytor.com, mingo@kernel.org,
-        mingo@redhat.com, jani.nikula@linux.intel.com,
-        joonas.lahtinen@linux.intel.com, jgross@suse.com,
-        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
-        matthew.auld@intel.com, mpe@ellerman.id.au, rppt@kernel.org,
-        paulus@samba.org, peterz@infradead.org, rodrigo.vivi@intel.com,
-        sstabellini@kernel.org, bauerman@linux.ibm.com,
-        tsbogend@alpha.franken.de, tglx@linutronix.de,
-        ulf.hansson@linaro.org, joe.jin@oracle.com,
-        thomas.lendacky@amd.com, Claire Chang <tientzu@chromium.org>
-References: <20210203233709.19819-1-dongli.zhang@oracle.com>
- <20210203233709.19819-3-dongli.zhang@oracle.com>
- <20210204072947.GA29812@lst.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <b46ddefe-d91a-fa6a-0e0d-cf1edc343c2e@arm.com>
-Date:   Thu, 4 Feb 2021 11:49:23 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S236010AbhBDMcA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Feb 2021 07:32:00 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:58470 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235819AbhBDMb5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Feb 2021 07:31:57 -0500
+Received: from [10.130.0.55] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj_IP6RtgbqwEAA--.6216S3;
+        Thu, 04 Feb 2021 20:31:13 +0800 (CST)
+To:     "open list:MIPS" <linux-mips@vger.kernel.org>
+From:   Jinyang He <hejinyang@loongson.cn>
+Subject: [Question] How to save_stack_trace_tsk_reliable() on mips?
+Message-ID: <a0823990-420f-8091-7866-8ad588ef542d@loongson.cn>
+Date:   Thu, 4 Feb 2021 20:31:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <20210204072947.GA29812@lst.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxj_IP6RtgbqwEAA--.6216S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKr4fXF43AFWUZrykCr17Jrb_yoWDJFb_G3
+        y8AF9rJrsIqa9xArZ7JF18Aayag3yjgFykt3yqqF13Jw1rKF42gFZ2yw1xZryUKw4DKF95
+        tF93X348W34YgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbc8YjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUJVWUXwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUy75rDUUUU
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2021-02-04 07:29, Christoph Hellwig wrote:
-> On Wed, Feb 03, 2021 at 03:37:05PM -0800, Dongli Zhang wrote:
->> This patch converts several swiotlb related variables to arrays, in
->> order to maintain stat/status for different swiotlb buffers. Here are
->> variables involved:
->>
->> - io_tlb_start and io_tlb_end
->> - io_tlb_nslabs and io_tlb_used
->> - io_tlb_list
->> - io_tlb_index
->> - max_segment
->> - io_tlb_orig_addr
->> - no_iotlb_memory
->>
->> There is no functional change and this is to prepare to enable 64-bit
->> swiotlb.
-> 
-> Claire Chang (on Cc) already posted a patch like this a month ago,
-> which looks much better because it actually uses a struct instead
-> of all the random variables.
+Hi, all,
 
-Indeed, I skimmed the cover letter and immediately thought that this 
-whole thing is just the restricted DMA pool concept[1] again, only from 
-a slightly different angle.
+Excuse me. Here is a question mail. How to get a reliable stack
+of tasks on mips?
 
-Robin.
+First, why save_stack_trace_tsk() to get stack is unreliable? Is it
+because the asm code does not obey with gcc's stack rules, or others?
 
-[1] 
-https://lore.kernel.org/linux-iommu/20210106034124.30560-1-tientzu@chromium.org/
+Secondly, can we use some methods to make the task stack reliable? For
+example, use the fp register, can this method work? But it seems make
+no sense for asm code unless each asm code do some fp work.
+
+I found that the powerpc implemented save_stack_trace_tsk_reliable(),
+and the x86 and s390 implemented the arch_stack_walk_reliable(). x86
+implemented it through ORC unwind. For powerpc, it may implement it
+through its ABI (I guess, I'm not familiar with them). Do we have a
+chance to implement it in some way?
+
+Finally, I found that some emails related to ORC unwind on ARM from the
+livepatch mail list. It is difficult for me to understand. Is anyone
+interested in ORC unwind on MIPS and have researched it?
+
+Any comment is welcome. :-)
+
+Thanks!
+
