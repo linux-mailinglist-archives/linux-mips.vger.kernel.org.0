@@ -2,95 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B03431027A
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Feb 2021 02:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CB2310340
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Feb 2021 04:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbhBEBzz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Feb 2021 20:55:55 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:35620 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229618AbhBEBzw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 4 Feb 2021 20:55:52 -0500
-Received: from [10.130.0.55] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb_N1pRxgVQAFAA--.6185S3;
-        Fri, 05 Feb 2021 09:55:02 +0800 (CST)
-Subject: Re: [PATCH v2 2/2] MIPS: relocatable: Use __kaslr_offset in
- show_kernel_relocation
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <1612348510-29569-1-git-send-email-hejinyang@loongson.cn>
- <1612348510-29569-2-git-send-email-hejinyang@loongson.cn>
- <20210204153623.GA14818@alpha.franken.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <a2f9868c-707c-6f63-e5e4-956354d241e4@loongson.cn>
-Date:   Fri, 5 Feb 2021 09:55:01 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S230086AbhBEDJc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Feb 2021 22:09:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229742AbhBEDJ0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Feb 2021 22:09:26 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCB8C061794;
+        Thu,  4 Feb 2021 19:08:36 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id m13so5939408wro.12;
+        Thu, 04 Feb 2021 19:08:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=fhPHySbut4dTAWvmnaTXTJM+XUEQ8MW2l8njFAAthh188LYbdzoPC8kI7eWPY/CxiS
+         jsMvnipBXfgyxdX/NSpMo/EW66E+55qlp7OM493EMYVvkq7b3CyzJBwevr8vY6w3zBQG
+         mM6s5ndcQV3U8sMPnieGuwTn5CET3I/BhAHhxZAmpT9+/guwWCYf4o6wMt6FVaC1/Mz+
+         /KT/eiEWNDQjqbKuqil3YCUvKHrBZBPNwmWtUcMAIqzf5K7ZFEv+LCpqZY0dzxf279nm
+         mYOfMs5c8QvmKEFEE6q7gA2zSHyIhwXqoh+U8bHlA/w+eJWdZbzbyx3GZZukk2oIVY+4
+         yjdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=PMn5+7DeVG2YJOUDhVnv8M4TS2JYa13vsHSRYwNLtQMFNzJv+MxbvoHaw/V/51Kjlg
+         HQ7Coq/PvOqP0vGmpL5koiC8WJdg527e5FL+ST46QDhCT7ebWAXKcw6BCrUYCpxymZBb
+         Mo8hrWV1D+igd75MgSXQ1ICeOHNSHtol1QXbCw6M6b4DLl/P0iE6XiBu34dgo7Tpjoqn
+         GtzXH1inTMnmvlugY4I+99RqDSm2r4WwHdV2BMfgvYPlmKqTcj9mVqWfwboXSmz2nhXM
+         vdPd9SRaVk5aufnq9DxGJyrHr2MSFgzM92N+DqmCbkwoShqwTI21/stIW1CGN/gUVx+8
+         /90Q==
+X-Gm-Message-State: AOAM533kCSoyAk56AW4A3YPIqoAgF38mggiXQN8PeuoV1O+50PW1bnor
+        Aoo7dykE6B8S/il4JrwpokzN8WjUjwHzuA==
+X-Google-Smtp-Source: ABdhPJwVSDyzwcKSIGphbs26ptRVznnc9HY+sJTAWfILOOdiRayxAO7YreNbxMj83QPwrMluTti4tg==
+X-Received: by 2002:a5d:5502:: with SMTP id b2mr2426293wrv.245.1612494514742;
+        Thu, 04 Feb 2021 19:08:34 -0800 (PST)
+Received: from [192.168.1.6] ([154.124.28.35])
+        by smtp.gmail.com with ESMTPSA id n9sm10836813wrq.41.2021.02.04.19.08.31
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Thu, 04 Feb 2021 19:08:34 -0800 (PST)
+Message-ID: <601cb6b2.1c69fb81.5ea54.2eab@mx.google.com>
+Sender: Skylar Anderson <barr.markimmbayie@gmail.com>
+From:   calantha camara <sgt.andersonskylar0@gmail.com>
+X-Google-Original-From: calantha camara
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <20210204153623.GA14818@alpha.franken.de>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxb_N1pRxgVQAFAA--.6185S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7try8Jry8uF4kWFy7Ar4DCFg_yoW8XF17pr
-        srJ3WDtFsIgrWDGa9Fq34ku34UX3yqqrWfuFsFk3yrXasavF15Jayrur1rW3y2vFy09F4x
-        ZF98XFW29w4vyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
-        xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU59Z2DUUUUU==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: hi dear
+To:     Recipients <calantha@vger.kernel.org>
+Date:   Fri, 05 Feb 2021 03:08:28 +0000
+Reply-To: calanthac20@gmail.com
+X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 02/04/2021 11:36 PM, Thomas Bogendoerfer wrote:
-
-> On Wed, Feb 03, 2021 at 06:35:10PM +0800, Jinyang He wrote:
->> The type of the VMLINUX_LOAD_ADDRESS macro is the (unsigned long long)
->> in 32bits kernel but (unsigned long) in the 64-bit kernel. Although there
->> is no error here, avoid using it to calculate kaslr_offset. And here we
->> may need is that the address of __kaslr_offset rather than (void *)offset.
->>
->> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
->> ---
->>   arch/mips/kernel/relocate.c | 8 ++------
->>   1 file changed, 2 insertions(+), 6 deletions(-)
->>
->> diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
->> index 95abb9c..52018a3 100644
->> --- a/arch/mips/kernel/relocate.c
->> +++ b/arch/mips/kernel/relocate.c
->> @@ -430,13 +430,9 @@ void *__init relocate_kernel(void)
->>    */
->>   static void show_kernel_relocation(const char *level)
->>   {
->> -	unsigned long offset;
->> -
->> -	offset = __pa_symbol(_text) - __pa_symbol(VMLINUX_LOAD_ADDRESS);
->> -
->> -	if (IS_ENABLED(CONFIG_RELOCATABLE) && offset > 0) {
->> +	if (__kaslr_offset > 0) {
->>   		printk(level);
->> -		pr_cont("Kernel relocated by 0x%pK\n", (void *)offset);
->> +		pr_cont("Kernel relocated by 0x%pK\n", &__kaslr_offset);
-> are you sure ? I would have expected (void *)__kaslr_offset here.
->
-> Thomas.
->
-It is my fault. I misunderstood the meaning of 'by' and '@' because of
-my poor English. Thank you for pointing out my fault. I'll send v3 later.
-
-Thanks,
-Jinyang
-
+do you speak Eglish
