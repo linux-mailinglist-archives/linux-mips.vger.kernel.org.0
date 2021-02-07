@@ -2,110 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F09F031230A
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Feb 2021 10:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117A23125A1
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Feb 2021 16:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbhBGJTc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Feb 2021 04:19:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35408 "EHLO mail.kernel.org"
+        id S229562AbhBGP4v (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Feb 2021 10:56:51 -0500
+Received: from verein.lst.de ([213.95.11.211]:38553 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229522AbhBGJTb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 7 Feb 2021 04:19:31 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2A91D64E22;
-        Sun,  7 Feb 2021 09:18:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612689530;
-        bh=OygoctvNrqCv3+yqvOUhM5F9TdXP26wbyygyZSDx/ME=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X9lHKJWOTcXLEeVJj92+4bOk5plpSBCiUD1AypE5r32Qmh5QsMZIOJbBLHDaT+6HA
-         65APmYOmRlcQFMUwUFN56Zm8pqjfFjF6kTIylEQCqvE4k3S7AclrMV97kTBTgpU31Q
-         u78Oh2yiQzNdaSEg9UozwxOTChRWdLJC+qt+4iRxBbUSBLER233XM299k35/a3f0VM
-         1zWxdnHdyiZyTJGWbQBpe4vdQ2Y6xv37G24qsZWjib2JNuPmWBSyu1aPEkgUUGtBTW
-         cJu0Hir6ci80a3QQg9y5BnvFvCXiJ53IsbUy1P4+xbhmw8kesm6oKn960M4W5JoY4s
-         sWLfjzEwnuGgA==
-Date:   Sun, 7 Feb 2021 11:18:42 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Ivan Khoronzhuk <ikhoronz@cisco.com>
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        linux-kernel@vger.kernel.org, yangtiezhu@loongson.cn,
-        ivan.khoronzhuk@gmail.com
-Subject: Re: [PATCH] mips: kernel: setup: fix crash kernel resource allocation
-Message-ID: <20210207091842.GU242749@kernel.org>
-References: <20210206125940.111766-1-ikhoronz@cisco.com>
+        id S229491AbhBGP4u (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 7 Feb 2021 10:56:50 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 3732F68B02; Sun,  7 Feb 2021 16:56:02 +0100 (CET)
+Date:   Sun, 7 Feb 2021 16:56:01 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Dongli Zhang <dongli.zhang@oracle.com>
+Cc:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, nouveau@lists.freedesktop.org,
+        x86@kernel.org, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, adrian.hunter@intel.com,
+        akpm@linux-foundation.org, benh@kernel.crashing.org,
+        bskeggs@redhat.com, bhelgaas@google.com, bp@alien8.de,
+        boris.ostrovsky@oracle.com, hch@lst.de, chris@chris-wilson.co.uk,
+        daniel@ffwll.ch, airlied@linux.ie, hpa@zytor.com, mingo@kernel.org,
+        mingo@redhat.com, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com, jgross@suse.com,
+        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
+        matthew.auld@intel.com, mpe@ellerman.id.au, rppt@kernel.org,
+        paulus@samba.org, peterz@infradead.org, robin.murphy@arm.com,
+        rodrigo.vivi@intel.com, sstabellini@kernel.org,
+        bauerman@linux.ibm.com, tsbogend@alpha.franken.de,
+        tglx@linutronix.de, ulf.hansson@linaro.org, joe.jin@oracle.com,
+        thomas.lendacky@amd.com
+Subject: Re: [PATCH RFC v1 5/6] xen-swiotlb: convert variables to arrays
+Message-ID: <20210207155601.GA25111@lst.de>
+References: <20210203233709.19819-1-dongli.zhang@oracle.com> <20210203233709.19819-6-dongli.zhang@oracle.com> <20210204084023.GA32328@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210206125940.111766-1-ikhoronz@cisco.com>
+In-Reply-To: <20210204084023.GA32328@lst.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Feb 06, 2021 at 12:59:40PM +0000, Ivan Khoronzhuk wrote:
-> In order to avoid crash kernel corruption, its memory is reserved
-> early in memblock and as result, in time when resources are inited
-> it's not present in memblock.memory, so crash kernel memory is out
-> of ranges listed with for_each_mem_range(). To avoid it and still
-> keep memory reserved lets reseve it out of loop by inserting it in
-> iomem_resource.
-
-Unless I misread the code, the crash kernel memory is actually allocated
-from memblock (memblock_find_in_range + memblock_reserve), but for some
-reason memblock_reserve(<crash kernel>) is called outside
-mips_parse_crashkernel(). So the crash kernel memory is surely in both
-memblock.memory and memblock.reserved and it will be covered by
-for_each_mem_range().
-
-The mips_parse_crashkernel() function and the following reservation of
-crash kernel memory should be merged, IMO, and this can be further
-simplified with memblock_alloc() helpers.
-
-Is there a particular issue you are trying to fix?
- 
-> Fixes: a94e4f24ec83 ("MIPS: init: Drop boot_mem_map")
-> Signed-off-by: Ivan Khoronzhuk <ikhoronz@cisco.com>
-> ---
-> Based on linux-next/master
+On Thu, Feb 04, 2021 at 09:40:23AM +0100, Christoph Hellwig wrote:
+> So one thing that has been on my mind for a while:  I'd really like
+> to kill the separate dma ops in Xen swiotlb.  If we compare xen-swiotlb
+> to swiotlb the main difference seems to be:
 > 
->  arch/mips/kernel/setup.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  - additional reasons to bounce I/O vs the plain DMA capable
+>  - the possibility to do a hypercall on arm/arm64
+>  - an extra translation layer before doing the phys_to_dma and vice
+>    versa
+>  - an special memory allocator
 > 
-> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-> index 3785c72bc3bc..25e376ef2f2a 100644
-> --- a/arch/mips/kernel/setup.c
-> +++ b/arch/mips/kernel/setup.c
-> @@ -473,14 +473,15 @@ static void __init mips_parse_crashkernel(void)
->  	crashk_res.end	 = crash_base + crash_size - 1;
->  }
->  
-> -static void __init request_crashkernel(struct resource *res)
-> +static void __init request_crashkernel(void)
->  {
->  	int ret;
->  
->  	if (crashk_res.start == crashk_res.end)
->  		return;
->  
-> -	ret = request_resource(res, &crashk_res);
-> +	/* The crashk resource shoud be located in normal mem */
-> +	ret = insert_resource(&iomem_resource, &crashk_res);
->  	if (!ret)
->  		pr_info("Reserving %ldMB of memory at %ldMB for crashkernel\n",
->  			(unsigned long)(resource_size(&crashk_res) >> 20),
-> @@ -734,8 +735,9 @@ static void __init resource_init(void)
->  		request_resource(res, &code_resource);
->  		request_resource(res, &data_resource);
->  		request_resource(res, &bss_resource);
-> -		request_crashkernel(res);
->  	}
-> +
-> +	request_crashkernel();
->  }
->  
->  #ifdef CONFIG_SMP
-> -- 
-> 2.23.1
-> 
+> I wonder if inbetween a few jump labels or other no overhead enablement
+> options and possibly better use of the dma_range_map we could kill
+> off most of swiotlb-xen instead of maintaining all this code duplication?
 
--- 
-Sincerely yours,
-Mike.
+So I looked at this a bit more.
+
+For x86 with XENFEAT_auto_translated_physmap (how common is that?)
+pfn_to_gfn is a nop, so plain phys_to_dma/dma_to_phys do work as-is.
+
+xen_arch_need_swiotlb always returns true for x86, and
+range_straddles_page_boundary should never be true for the
+XENFEAT_auto_translated_physmap case.
+
+So as far as I can tell the mapping fast path for the
+XENFEAT_auto_translated_physmap can be trivially reused from swiotlb.
+
+That leaves us with the next more complicated case, x86 or fully cache
+coherent arm{,64} without XENFEAT_auto_translated_physmap.  In that case
+we need to patch in a phys_to_dma/dma_to_phys that performs the MFN
+lookup, which could be done using alternatives or jump labels.
+I think if that is done right we should also be able to let that cover
+the foreign pages in is_xen_swiotlb_buffer/is_swiotlb_buffer, but
+in that worst case that would need another alternative / jump label.
+
+For non-coherent arm{,64} we'd also need to use alternatives or jump
+labels to for the cache maintainance ops, but that isn't a hard problem
+either.
+
+
