@@ -2,46 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9670F313BEC
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 18:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 512BC313D49
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 19:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbhBHR6t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Feb 2021 12:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235061AbhBHR5m (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Feb 2021 12:57:42 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4043EC0617A9;
-        Mon,  8 Feb 2021 09:56:54 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 556E29200B4; Mon,  8 Feb 2021 18:56:53 +0100 (CET)
+        id S235623AbhBHSWY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Feb 2021 13:22:24 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:35234 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235484AbhBHSVQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Feb 2021 13:21:16 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4DZD102Hn6zB09Zb;
+        Mon,  8 Feb 2021 18:44:20 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id CNsTdCz66tzp; Mon,  8 Feb 2021 18:44:20 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4DZD101NMQzB09ZZ;
+        Mon,  8 Feb 2021 18:44:20 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 4E5E49200B3;
-        Mon,  8 Feb 2021 18:56:53 +0100 (CET)
-Date:   Mon, 8 Feb 2021 18:56:53 +0100 (CET)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: vpe: Remove vpe_getcwd
-In-Reply-To: <20210122114449.19423-1-tsbogend@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2102081853330.35623@angie.orcam.me.uk>
-References: <20210122114449.19423-1-tsbogend@alpha.franken.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id ABEFB8B7B3;
+        Mon,  8 Feb 2021 18:44:25 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id Xw3J-TpXLojL; Mon,  8 Feb 2021 18:44:25 +0100 (CET)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D98298B7B2;
+        Mon,  8 Feb 2021 18:44:24 +0100 (CET)
+Subject: Re: [PATCH] MIPS: make userspace mapping young by default
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Huang Pei <huangpei@loongson.cn>, ambrosehua@gmail.com,
+        Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Nicholas Piggin <npiggin@gmail.com>
+References: <20210204013942.8398-1-huangpei@loongson.cn>
+ <20210204152239.GA14292@alpha.franken.de>
+ <20210205154105.32bb13df439aa49b7fc167e7@linux-foundation.org>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <30b3fcb5-a60d-228f-15d2-cd182953de45@csgroup.eu>
+Date:   Mon, 8 Feb 2021 18:44:22 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20210205154105.32bb13df439aa49b7fc167e7@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 22 Jan 2021, Thomas Bogendoerfer wrote:
 
-> I couldn't find any user of the dubious vpe_getcwd so far. So remove it and
-> get rid of another set_fs(KERNEL_DS).
 
- IIRC it served as the path for the SP-side program to load in the AP/SP 
-model.  Or something like that.  There may have been an application note 
-available describing how to use this stuff.  Chances are some of the code 
-may have already been removed in previous cuts.
+Le 06/02/2021 à 00:41, Andrew Morton a écrit :
+> On Thu, 4 Feb 2021 16:22:39 +0100 Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
+> 
+>> On Thu, Feb 04, 2021 at 09:39:42AM +0800, Huang Pei wrote:
+>>> MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss
+>>> + 2 TLB Invalid), butthe second TLB Invalid exception is just
+>>> triggered by __update_tlb from do_page_fault writing tlb without
+>>> _PAGE_VALID set. With this patch, user space mapping prot is made
+>>> young by default (with both _PAGE_VALID and _PAGE_YOUNG set),
+>>> and it only take 1 TLB Miss + 1 TLB Invalid exception
+>>>
+>>> Remove pte_sw_mkyoung without polluting MM code and make page fault
+>>> delay of MIPS on par with other architecture
+>>>
+>>> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+>>> ---
+>>>   arch/mips/mm/cache.c    | 30 ++++++++++++++++--------------
+>>>   include/linux/pgtable.h |  8 --------
+>>>   mm/memory.c             |  3 ---
+>>>   3 files changed, 16 insertions(+), 25 deletions(-)
+>>
+>> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>>
+>> Andrew, can you take this patch through your tree ?
+> 
+> Sure.  I'll drop Christophe's "mm/memory.c: remove pte_sw_mkyoung()"
+> (https://lkml.kernel.org/r/f302ef92c48d1f08a0459aaee1c568ca11213814.1612345700.git.christophe.leroy@csgroup.eu)
+> in favour of this one.
+> 
 
-  Maciej
+Pitty. My patch was improving page faults on powerpc/32. That one is only addressing MIPS.
+
+Any plan to take the series from Nick 
+https://patchwork.kernel.org/project/linux-mm/list/?series=404539 ?
+
+Christophe
