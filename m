@@ -2,226 +2,322 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1723135A8
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 15:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B263135A9
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 15:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbhBHOva (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Feb 2021 09:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S232950AbhBHOvg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Feb 2021 09:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbhBHOvW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Feb 2021 09:51:22 -0500
+        with ESMTP id S233025AbhBHOvX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Feb 2021 09:51:23 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E49EC061797;
-        Mon,  8 Feb 2021 06:50:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09534C0617A7;
+        Mon,  8 Feb 2021 06:50:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=+MpFIGSWgbW0vyKyZJNwqvTHMm0b/1LCjD/m/I6OcLA=; b=l8QZNkyc9h9Gkg7MHmjHOPMmeo
-        q2+IKI1aA+GcPLziFUXAqqgC6CO1mt7+UOS3oc6FeQj8r95Be1RAvxBaC+Rjg+uXJX65Dp6ciFn/w
-        Ub92Uip65LdtI3DY2x3a/YumwGtIjrEFMIVbf29fnydqca8Ez1rtsJFJpIL2VGn7FvKbeNZhlscwK
-        JIgt7E9nMLMt6iJ2OAZZprAVMhY31iQKBRCYduVyV8oR7YXz3roAqihIrYNYr8219uDfTxupvD3Mz
-        PAwB3u52Y4itHru2uLBfAFxmEsfqTa2/cY7rAWOgq6I53rWq7pE+j7x7n46s8imMB83erUpWL0roY
-        wx42sFog==;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=WiQAMeQ0kgFXqaD5iUMdsN7nTVIUxksUiQmYnowcw5A=; b=ook2soWI0Cmcm700GIwpXBWFcN
+        XjPuqUnDG7G7rwpAYSOsnST70emP7hNt/wiiGF5R2zjrjUO6h4uR8f3l0Jpa59LnME+PmkCpGMyJK
+        FCo5VuijlSW9Efl1omBxV22GUTGTrDqUwBPLn+nn1k8P0GlGiDXXP7473mC4O+E4fkO+QjgXFYB8x
+        dV0R5UwBoYk77GChmggBEoYfCvlC9bewv3kyEDNDo73NtQP5KfWNBJhiYGb96MZWTWUWSCRFaFyjp
+        /4HvlDjh++1HsQhOd8Gs276TV2NIFEU2kLpfNszI03dGyieJ0KAR/lanpbIs5WlUCuZJ5aR7UR13H
+        u7Ig5/Sg==;
 Received: from [2001:4bb8:184:7d04:e3ed:f9d6:78e2:6f0f] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l97s4-0066dy-2G; Mon, 08 Feb 2021 14:50:36 +0000
+        id 1l97s8-0066eA-Bc; Mon, 08 Feb 2021 14:50:40 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         iommu@lists.linux-foundation.org
-Subject: [PATCH 4/6] MIPS: refactor the maybe coherent DMA indicators
-Date:   Mon,  8 Feb 2021 15:50:22 +0100
-Message-Id: <20210208145024.3320420-5-hch@lst.de>
+Subject: [PATCH 5/6] driver core: lift dma_default_coherent into common code
+Date:   Mon,  8 Feb 2021 15:50:23 +0100
+Message-Id: <20210208145024.3320420-6-hch@lst.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210208145024.3320420-1-hch@lst.de>
 References: <20210208145024.3320420-1-hch@lst.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Replace the global coherentio enum, and the hw_coherentio (fake) boolean
-variables with a single boolean dma_default_coherent flag.  Only the
-malta setup code needs two additional local boolean variables to
-preserved the command line overrides.
+Lift the dma_default_coherent variable from the mips architecture code
+to the driver core.  This allows an architecture to sdefault all device
+to be DMA coherent at run time, even if the kernel is build with support
+for DMA noncoherent device.  By allowing device_initialize to ѕet the
+->dma_coherent field to this default the amount of arch hooks required
+for this behavior can be greatly reduced.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- arch/mips/alchemy/common/setup.c      |  3 +--
- arch/mips/include/asm/dma-coherence.h | 24 ++++--------------------
- arch/mips/kernel/setup.c              |  8 +++-----
- arch/mips/mm/c-r4k.c                  |  8 ++------
- arch/mips/mti-malta/malta-setup.c     | 24 ++++++++++++++----------
- arch/mips/pci/pci-alchemy.c           |  5 ++---
- 6 files changed, 26 insertions(+), 46 deletions(-)
+ arch/mips/Kconfig                     |  9 ++-------
+ arch/mips/alchemy/common/setup.c      |  2 +-
+ arch/mips/include/asm/dma-coherence.h | 22 ----------------------
+ arch/mips/kernel/setup.c              |  6 ------
+ arch/mips/mm/c-r4k.c                  |  2 +-
+ arch/mips/mm/dma-noncoherent.c        |  1 -
+ arch/mips/mti-malta/malta-setup.c     |  4 ++--
+ arch/mips/pci/pci-alchemy.c           |  2 +-
+ arch/mips/pistachio/init.c            |  1 -
+ drivers/base/core.c                   |  6 ++++++
+ include/linux/dma-map-ops.h           |  5 ++---
+ kernel/dma/Kconfig                    |  3 ---
+ kernel/dma/mapping.c                  |  2 ++
+ 13 files changed, 17 insertions(+), 48 deletions(-)
+ delete mode 100644 arch/mips/include/asm/dma-coherence.h
 
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 0a17bedf4f0dba..1f1603a08a6d2d 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -181,7 +181,7 @@ config MIPS_ALCHEMY
+ 	select CEVT_R4K
+ 	select CSRC_R4K
+ 	select IRQ_MIPS_CPU
+-	select DMA_MAYBE_COHERENT	# Au1000,1500,1100 aren't, rest is
++	select DMA_NONCOHERENT		# Au1000,1500,1100 aren't, rest is
+ 	select MIPS_FIXUP_BIGPHYS_ADDR if PCI
+ 	select SYS_HAS_CPU_MIPS32_R1
+ 	select SYS_SUPPORTS_32BIT_KERNEL
+@@ -546,7 +546,7 @@ config MIPS_MALTA
+ 	select CLKSRC_MIPS_GIC
+ 	select COMMON_CLK
+ 	select CSRC_R4K
+-	select DMA_MAYBE_COHERENT
++	select DMA_NONCOHERENT
+ 	select GENERIC_ISA_DMA
+ 	select HAVE_PCSPKR_PLATFORM
+ 	select HAVE_PCI
+@@ -1127,11 +1127,6 @@ config FW_CFE
+ config ARCH_SUPPORTS_UPROBES
+ 	bool
+ 
+-config DMA_MAYBE_COHERENT
+-	select ARCH_HAS_DMA_COHERENCE_H
+-	select DMA_NONCOHERENT
+-	bool
+-
+ config DMA_PERDEV_COHERENT
+ 	bool
+ 	select ARCH_HAS_SETUP_DMA_OPS
 diff --git a/arch/mips/alchemy/common/setup.c b/arch/mips/alchemy/common/setup.c
-index c2da68e7984450..39e5b9cd882b10 100644
+index 39e5b9cd882b10..2388d68786f4a7 100644
 --- a/arch/mips/alchemy/common/setup.c
 +++ b/arch/mips/alchemy/common/setup.c
-@@ -65,8 +65,7 @@ void __init plat_mem_setup(void)
- 		/* Clear to obtain best system bus performance */
- 		clear_c0_config(1 << 19); /* Clear Config[OD] */
+@@ -28,8 +28,8 @@
+ #include <linux/init.h>
+ #include <linux/ioport.h>
+ #include <linux/mm.h>
++#include <linux/dma-map-ops.h> /* for dma_default_coherent */
  
--	coherentio = alchemy_dma_coherent() ?
--		IO_COHERENCE_ENABLED : IO_COHERENCE_DISABLED;
-+	dma_default_coherent = alchemy_dma_coherent();
+-#include <asm/dma-coherence.h>
+ #include <asm/mipsregs.h>
  
- 	board_setup();	/* board specific setup */
- 
+ #include <au1000.h>
 diff --git a/arch/mips/include/asm/dma-coherence.h b/arch/mips/include/asm/dma-coherence.h
-index 5eaa1fcc878a88..846c5ade30d12d 100644
+deleted file mode 100644
+index 846c5ade30d12d..00000000000000
 --- a/arch/mips/include/asm/dma-coherence.h
-+++ b/arch/mips/include/asm/dma-coherence.h
-@@ -9,30 +9,14 @@
- #ifndef __ASM_DMA_COHERENCE_H
- #define __ASM_DMA_COHERENCE_H
++++ /dev/null
+@@ -1,22 +0,0 @@
+-/*
+- * This file is subject to the terms and conditions of the GNU General Public
+- * License.  See the file "COPYING" in the main directory of this archive
+- * for more details.
+- *
+- * Copyright (C) 2006  Ralf Baechle <ralf@linux-mips.org>
+- *
+- */
+-#ifndef __ASM_DMA_COHERENCE_H
+-#define __ASM_DMA_COHERENCE_H
+-
+-#ifdef CONFIG_DMA_MAYBE_COHERENT
+-extern bool dma_default_coherent;
+-static inline bool dev_is_dma_coherent(struct device *dev)
+-{
+-	return dma_default_coherent;
+-}
+-#else
+-#define dma_default_coherent	(!IS_ENABLED(CONFIG_DMA_NONCOHERENT))
+-#endif
+-
+-#endif
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 85690957525ac9..d95f195dddcb36 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -37,7 +37,6 @@
+ #include <asm/cdmm.h>
+ #include <asm/cpu.h>
+ #include <asm/debug.h>
+-#include <asm/dma-coherence.h>
+ #include <asm/sections.h>
+ #include <asm/setup.h>
+ #include <asm/smp-ops.h>
+@@ -805,8 +804,3 @@ static int __init debugfs_mips(void)
+ }
+ arch_initcall(debugfs_mips);
+ #endif
+-
+-#ifdef CONFIG_DMA_NONCOHERENT
+-bool dma_default_coherent;
+-EXPORT_SYMBOL_GPL(dma_default_coherent);
+-#endif
+diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
+index 58afbc3e4ada03..3c4a50e12cebd4 100644
+--- a/arch/mips/mm/c-r4k.c
++++ b/arch/mips/mm/c-r4k.c
+@@ -19,6 +19,7 @@
+ #include <linux/mm.h>
+ #include <linux/export.h>
+ #include <linux/bitops.h>
++#include <linux/dma-map-ops.h> /* for dma_default_coherent */
  
--enum coherent_io_user_state {
--	IO_COHERENCE_DEFAULT,
--	IO_COHERENCE_ENABLED,
--	IO_COHERENCE_DISABLED,
--};
--
--#if defined(CONFIG_DMA_PERDEV_COHERENT)
--/* Don't provide (hw_)coherentio to avoid misuse */
--#elif defined(CONFIG_DMA_MAYBE_COHERENT)
--extern enum coherent_io_user_state coherentio;
--extern int hw_coherentio;
--
-+#ifdef CONFIG_DMA_MAYBE_COHERENT
+ #include <asm/bcache.h>
+ #include <asm/bootinfo.h>
+@@ -35,7 +36,6 @@
+ #include <asm/war.h>
+ #include <asm/cacheflush.h> /* for run_uncached() */
+ #include <asm/traps.h>
+-#include <asm/dma-coherence.h>
+ #include <asm/mips-cps.h>
+ 
+ /*
+diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
+index 38d3d9143b47fb..90b562753eb892 100644
+--- a/arch/mips/mm/dma-noncoherent.c
++++ b/arch/mips/mm/dma-noncoherent.c
+@@ -10,7 +10,6 @@
+ 
+ #include <asm/cache.h>
+ #include <asm/cpu-type.h>
+-#include <asm/dma-coherence.h>
+ #include <asm/io.h>
+ 
+ /*
+diff --git a/arch/mips/mti-malta/malta-setup.c b/arch/mips/mti-malta/malta-setup.c
+index e98cc977a735b2..f8c9663e7faa10 100644
+--- a/arch/mips/mti-malta/malta-setup.c
++++ b/arch/mips/mti-malta/malta-setup.c
+@@ -13,8 +13,8 @@
+ #include <linux/pci.h>
+ #include <linux/screen_info.h>
+ #include <linux/time.h>
++#include <linux/dma-map-ops.h> /* for dma_default_coherent */
+ 
+-#include <asm/dma-coherence.h>
+ #include <asm/fw/fw.h>
+ #include <asm/mips-cps.h>
+ #include <asm/mips-boards/generic.h>
+@@ -143,7 +143,7 @@ static void __init plat_setup_iocoherency(void)
+ 			pr_crit("IOCU OPERATION DISABLED BY SWITCH - DEFAULTING TO SW IO COHERENCY\n");
+ 	}
+ 
+-	if (supported)
++	if (supported) {
+ 		if (dma_force_noncoherent) {
+ 			pr_info("Hardware DMA cache coherency disabled\n");
+ 			return;
+diff --git a/arch/mips/pci/pci-alchemy.c b/arch/mips/pci/pci-alchemy.c
+index 54c86b40d30498..1c722dd0c1302d 100644
+--- a/arch/mips/pci/pci-alchemy.c
++++ b/arch/mips/pci/pci-alchemy.c
+@@ -17,8 +17,8 @@
+ #include <linux/init.h>
+ #include <linux/syscore_ops.h>
+ #include <linux/vmalloc.h>
++#include <linux/dma-map-ops.h> /* for dma_default_coherent */
+ 
+-#include <asm/dma-coherence.h>
+ #include <asm/mach-au1x00/au1000.h>
+ #include <asm/tlbmisc.h>
+ 
+diff --git a/arch/mips/pistachio/init.c b/arch/mips/pistachio/init.c
+index 558995ed6fe886..7d3057e586d277 100644
+--- a/arch/mips/pistachio/init.c
++++ b/arch/mips/pistachio/init.c
+@@ -13,7 +13,6 @@
+ #include <linux/of_fdt.h>
+ 
+ #include <asm/cacheflush.h>
+-#include <asm/dma-coherence.h>
+ #include <asm/fw/fw.h>
+ #include <asm/mips-boards/generic.h>
+ #include <asm/mips-cps.h>
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 6eb4c7a904c560..7c0406e675e98f 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -28,6 +28,7 @@
+ #include <linux/sched/signal.h>
+ #include <linux/sched/mm.h>
+ #include <linux/sysfs.h>
++#include <linux/dma-map-ops.h> /* for dma_default_coherent */
+ 
+ #include "base.h"
+ #include "power/power.h"
+@@ -2603,6 +2604,11 @@ void device_initialize(struct device *dev)
+ 	INIT_LIST_HEAD(&dev->links.suppliers);
+ 	INIT_LIST_HEAD(&dev->links.defer_sync);
+ 	dev->links.status = DL_DEV_NO_DRIVER;
++#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
++    defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
++    defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
++	dev->dma_coherent = dma_default_coherent;
++#endif
+ }
+ EXPORT_SYMBOL_GPL(device_initialize);
+ 
+diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
+index 70fcd0f610ea48..1e98b8c1e055a9 100644
+--- a/include/linux/dma-map-ops.h
++++ b/include/linux/dma-map-ops.h
+@@ -229,11 +229,10 @@ bool dma_free_from_pool(struct device *dev, void *start, size_t size);
+ int dma_direct_set_offset(struct device *dev, phys_addr_t cpu_start,
+ 		dma_addr_t dma_start, u64 size);
+ 
+-#ifdef CONFIG_ARCH_HAS_DMA_COHERENCE_H
+-#include <asm/dma-coherence.h>
+-#elif defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
++#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+ 	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
+ 	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
 +extern bool dma_default_coherent;
  static inline bool dev_is_dma_coherent(struct device *dev)
  {
--	return coherentio == IO_COHERENCE_ENABLED ||
--		(coherentio == IO_COHERENCE_DEFAULT && hw_coherentio);
-+	return dma_default_coherent;
- }
- #else
--#ifdef CONFIG_DMA_NONCOHERENT
--#define coherentio	IO_COHERENCE_DISABLED
--#else
--#define coherentio	IO_COHERENCE_ENABLED
-+#define dma_default_coherent	(!IS_ENABLED(CONFIG_DMA_NONCOHERENT))
- #endif
--#define hw_coherentio	0
--#endif /* CONFIG_DMA_MAYBE_COHERENT */
+ 	return dev->dma_coherent;
+diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
+index 479fc145acfc16..77b4055087430c 100644
+--- a/kernel/dma/Kconfig
++++ b/kernel/dma/Kconfig
+@@ -33,9 +33,6 @@ config NEED_DMA_MAP_STATE
+ config ARCH_DMA_ADDR_T_64BIT
+ 	def_bool 64BIT || PHYS_ADDR_T_64BIT
  
- #endif
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 8e205a4e18c27b..85690957525ac9 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -806,9 +806,7 @@ static int __init debugfs_mips(void)
- arch_initcall(debugfs_mips);
- #endif
+-config ARCH_HAS_DMA_COHERENCE_H
+-	bool
+-
+ config ARCH_HAS_DMA_SET_MASK
+ 	bool
  
--#ifdef CONFIG_DMA_MAYBE_COHERENT
--/* User defined DMA coherency from command line. */
--enum coherent_io_user_state coherentio = IO_COHERENCE_DEFAULT;
--EXPORT_SYMBOL_GPL(coherentio);
--int hw_coherentio;	/* Actual hardware supported DMA coherency setting. */
-+#ifdef CONFIG_DMA_NONCOHERENT
+diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+index f87a89d086544b..84de6b1c5fab49 100644
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -16,6 +16,8 @@
+ #include "debug.h"
+ #include "direct.h"
+ 
 +bool dma_default_coherent;
-+EXPORT_SYMBOL_GPL(dma_default_coherent);
- #endif
-diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
-index 4f976d687ab007..58afbc3e4ada03 100644
---- a/arch/mips/mm/c-r4k.c
-+++ b/arch/mips/mm/c-r4k.c
-@@ -1913,15 +1913,11 @@ void r4k_cache_init(void)
- 	__local_flush_icache_user_range	= local_r4k_flush_icache_user_range;
- 
- #ifdef CONFIG_DMA_NONCOHERENT
--#ifdef CONFIG_DMA_MAYBE_COHERENT
--	if (coherentio == IO_COHERENCE_ENABLED ||
--	    (coherentio == IO_COHERENCE_DEFAULT && hw_coherentio)) {
-+	if (dma_default_coherent) {
- 		_dma_cache_wback_inv	= (void *)cache_noop;
- 		_dma_cache_wback	= (void *)cache_noop;
- 		_dma_cache_inv		= (void *)cache_noop;
--	} else
--#endif /* CONFIG_DMA_MAYBE_COHERENT */
--	{
-+	} else {
- 		_dma_cache_wback_inv	= r4k_dma_cache_wback_inv;
- 		_dma_cache_wback	= r4k_dma_cache_wback_inv;
- 		_dma_cache_inv		= r4k_dma_cache_inv;
-diff --git a/arch/mips/mti-malta/malta-setup.c b/arch/mips/mti-malta/malta-setup.c
-index 33449a2692c3a3..e98cc977a735b2 100644
---- a/arch/mips/mti-malta/malta-setup.c
-+++ b/arch/mips/mti-malta/malta-setup.c
-@@ -90,9 +90,12 @@ static void __init fd_activate(void)
- }
- #endif
- 
-+static bool dma_force_coherent;
-+static bool dma_force_noncoherent;
 +
- static int __init setcoherentio(char *str)
- {
--	coherentio = IO_COHERENCE_ENABLED;
-+	dma_force_coherent = true;
- 	pr_info("Hardware DMA cache coherency (command line)\n");
- 	return 0;
- }
-@@ -100,7 +103,7 @@ early_param("coherentio", setcoherentio);
- 
- static int __init setnocoherentio(char *str)
- {
--	coherentio = IO_COHERENCE_DISABLED;
-+	dma_force_noncoherent = true;
- 	pr_info("Software DMA cache coherency (command line)\n");
- 	return 0;
- }
-@@ -141,17 +144,18 @@ static void __init plat_setup_iocoherency(void)
- 	}
- 
- 	if (supported)
--		if (coherentio == IO_COHERENCE_DISABLED)
-+		if (dma_force_noncoherent) {
- 			pr_info("Hardware DMA cache coherency disabled\n");
--		else
--			pr_info("Hardware DMA cache coherency enabled\n");
-+			return;
-+		}
-+		pr_info("Hardware DMA cache coherency enabled\n");
-+		dma_default_coherent = true;
-+	} else if (dma_force_coherent) {
-+		pr_info("Hardware DMA cache coherency unsupported, but enabled from command line!\n");
-+		dma_default_coherent = true;
- 	} else {
--		if (coherentio == IO_COHERENCE_ENABLED)
--			pr_info("Hardware DMA cache coherency unsupported, but enabled from command line!\n");
--		else
--			pr_info("Software DMA cache coherency enabled\n");
-+		pr_info("Software DMA cache coherency enabled\n");
- 	}
--	hw_coherentio = supported;
- }
- 
- static void __init pci_clock_check(void)
-diff --git a/arch/mips/pci/pci-alchemy.c b/arch/mips/pci/pci-alchemy.c
-index 7285b5667568ef..54c86b40d30498 100644
---- a/arch/mips/pci/pci-alchemy.c
-+++ b/arch/mips/pci/pci-alchemy.c
-@@ -429,9 +429,8 @@ static int alchemy_pci_probe(struct platform_device *pdev)
- 	ctx->alchemy_pci_ctrl.io_map_base = (unsigned long)virt_io;
- 
- 	/* Au1500 revisions older than AD have borked coherent PCI */
--	if ((alchemy_get_cputype() == ALCHEMY_CPU_AU1500) &&
--	    (read_c0_prid() < 0x01030202) &&
--	    (coherentio == IO_COHERENCE_DISABLED)) {
-+	if (alchemy_get_cputype() == ALCHEMY_CPU_AU1500 &&
-+	    read_c0_prid() < 0x01030202 && !dma_default_coherent) {
- 		val = __raw_readl(ctx->regs + PCI_REG_CONFIG);
- 		val |= PCI_CONFIG_NC;
- 		__raw_writel(val, ctx->regs + PCI_REG_CONFIG);
+ /*
+  * Managed DMA API
+  */
 -- 
 2.29.2
 
