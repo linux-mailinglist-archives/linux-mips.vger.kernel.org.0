@@ -2,94 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB2A313286
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 13:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C21231330F
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 14:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbhBHMjW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Feb 2021 07:39:22 -0500
-Received: from mail-40131.protonmail.ch ([185.70.40.131]:15053 "EHLO
-        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbhBHMiv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Feb 2021 07:38:51 -0500
-Date:   Mon, 08 Feb 2021 12:37:42 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1612787866; bh=koAMeATYJYWKmkFiz3wj+nM7gDgJYPD0x5UJ1gcespo=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=a6WMNoFmMqa0DSoaxn/SdvYQwTY+MQyEcCVxUJ00mURZdp8lg2LUC7OPODuhmmXGw
-         loPJv2L0iKeN7nZQCcXqQ233p7LPNLyZkahtEbf53ALNVmJ4ajiqq1J0KAvgCFTIMN
-         OHbUQy3DQBDTFP6GphtqZFnfex1HhaqFTA5zxrQGangF6SFSn2mIx7K4mv19BeVxzV
-         dSoqb3RvhIn7q/zY1kwVD0/bx1oSLP1zEjt8t35Kbu7YWLTxjxP+mk47YunuCq60wK
-         lDb3wsEzvPpfydmHELCTmQUqHWZiVNTv9GwGP84tH71hIvHY/+w6lRC3B/w4cmmdxT
-         3lDpVmzqX8X7w==
+        id S229752AbhBHNQC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Feb 2021 08:16:02 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:50680 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229766AbhBHNPr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Feb 2021 08:15:47 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxZO1HOSFg4z0IAA--.11298S2;
+        Mon, 08 Feb 2021 21:14:47 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Xingxing Su <suxingxing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Hassan Naveed <hnaveed@wavecomp.com>,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH mips-fixes] MIPS: compressed: fix build with enabled UBSAN
-Message-ID: <20210208123645.101354-1-alobakin@pm.me>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] MIPS: Make check condition for SDBBP consistent with EJTAG spec
+Date:   Mon,  8 Feb 2021 21:14:45 +0800
+Message-Id: <1612790085-14436-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9CxZO1HOSFg4z0IAA--.11298S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZw1xZFWDXw48Gw4xKw1rWFg_yoWfZFg_Kr
+        1Ivws7uw15Jr1avr1293yfGryagw1Fg3Za9w4qqrWYvrn5C3s8A392q3Zaqrn5Wws2vrs0
+        vas8J3ZrJFs7XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbc8FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+        cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ry8MxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUb73vUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit 1e35918ad9d1 ("MIPS: Enable Undefined Behavior Sanitizer
-UBSAN") added a possibility to build the entire kernel with UBSAN
-instrumentation for MIPS, with the exception for VDSO.
-However, self-extracting head wasn't been added to exceptions, so
-this occurs:
+According to MIPS EJTAG Specification [1], a Debug Breakpoint
+exception occurs when an SDBBP instruction is executed, the
+CP0_DEBUG bit DBp indicates that a Debug Breakpoint exception
+occurred, just check bit DBp for SDBBP is more accurate.
 
-mips-alpine-linux-musl-ld: arch/mips/boot/compressed/decompress.o:
-in function `FSE_buildDTable_wksp':
-decompress.c:(.text.FSE_buildDTable_wksp+0x278): undefined reference
-to `__ubsan_handle_shift_out_of_bounds'
-mips-alpine-linux-musl-ld: decompress.c:(.text.FSE_buildDTable_wksp+0x2a8):
-undefined reference to `__ubsan_handle_shift_out_of_bounds'
-mips-alpine-linux-musl-ld: decompress.c:(.text.FSE_buildDTable_wksp+0x2c4):
-undefined reference to `__ubsan_handle_shift_out_of_bounds'
-mips-alpine-linux-musl-ld: arch/mips/boot/compressed/decompress.o:
-decompress.c:(.text.FSE_buildDTable_raw+0x9c): more undefined references
-to `__ubsan_handle_shift_out_of_bounds' follow
+[1] http://www.t-es-t.hu/download/mips/md00047f.pdf
 
-Add UBSAN_SANITIZE :=3D n to mips/boot/compressed/Makefile to exclude
-it from instrumentation scope and fix this issue.
-
-Fixes: 1e35918ad9d1 ("MIPS: Enable Undefined Behavior Sanitizer UBSAN")
-Cc: stable@vger.kernel.org # 5.0+
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/mips/boot/compressed/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/kernel/genex.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed=
-/Makefile
-index 47cd9dc7454a..f93f72bcba97 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -37,6 +37,7 @@ KBUILD_AFLAGS :=3D $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
- # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
- KCOV_INSTRUMENT=09=09:=3D n
- GCOV_PROFILE :=3D n
-+UBSAN_SANITIZE :=3D n
-=20
- # decompressor objects (linked with vmlinuz)
- vmlinuzobjs-y :=3D $(obj)/head.o $(obj)/decompress.o $(obj)/string.o
---=20
-2.30.0
-
+diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+index bcce32a..6336826 100644
+--- a/arch/mips/kernel/genex.S
++++ b/arch/mips/kernel/genex.S
+@@ -349,8 +349,8 @@ NESTED(ejtag_debug_handler, PT_SIZE, sp)
+ 	MTC0	k0, CP0_DESAVE
+ 	mfc0	k0, CP0_DEBUG
+ 
+-	sll	k0, k0, 30	# Check for SDBBP.
+-	bgez	k0, ejtag_return
++	andi	k0, k0, 0x2	# Check for SDBBP.
++	beqz	k0, ejtag_return
+ 
+ #ifdef CONFIG_SMP
+ 1:	PTR_LA	k0, ejtag_debug_buffer_spinlock
+-- 
+2.1.0
 
