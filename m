@@ -2,65 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A86312BBB
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 09:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D57312FBF
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 11:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbhBHIaN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Feb 2021 03:30:13 -0500
-Received: from smtp-18d.idc2.mandic.com.br ([177.70.124.135]:39111 "EHLO
-        smtp-18.idc2.mandic.com.br" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229894AbhBHIaI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Feb 2021 03:30:08 -0500
-Received: by smtp-18.smtp.mandic.prv (Postfix, from userid 491)
-        id 5BC52607E9FB; Mon,  8 Feb 2021 05:29:22 -0300 (-03)
-Received: from smtp-18.idc2.mandic.com.br (ifsmtp2 [192.168.1.38])
-        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPS id C1044607AAA4;
-        Mon,  8 Feb 2021 05:29:16 -0300 (-03)
-Received: from User (unknown [52.235.38.23])
-        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPA id 78375465E268;
-        Mon,  8 Feb 2021 05:26:42 -0300 (-03)
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <stefy@macrometrica.com.br>
-Subject: Re:reply
-Date:   Mon, 8 Feb 2021 08:29:15 -0000
+        id S232547AbhBHKyv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Feb 2021 05:54:51 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:12461 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232347AbhBHKvt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Feb 2021 05:51:49 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4DZ2pn6lkHzjJWd;
+        Mon,  8 Feb 2021 18:49:53 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.24) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 8 Feb 2021 18:50:52 +0800
+From:   Weihang Li <liweihang@huawei.com>
+To:     <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mips@vger.kernel.org>
+CC:     <linuxarm@openeuler.org>, Weihang Li <liweihang@huawei.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH] i2c: busses: Replace spin_lock_irqsave with spin_lock in hard IRQ
+Date:   Mon, 8 Feb 2021 18:48:37 +0800
+Message-ID: <1612781317-51815-1-git-send-email-liweihang@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-Mandic-Auth: DYB6x5JcyVot9snxiAasWC73cfc93V+pC3vUrorm87+eXbqAUeEHL0ZNPgpM50IYQeUbiYx0PkMIK2oavHcOOA==
-X-Mandic-Sender: stefy@macrometrica.com.br
-Message-Id: <20210208082916.C1044607AAA4@smtp-18.smtp.mandic.prv>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+There is no need to do irqsave and irqrestore in context of hard IRQ.
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Weihang Li <liweihang@huawei.com>
+---
+ drivers/i2c/busses/i2c-digicolor.c | 5 ++---
+ drivers/i2c/busses/i2c-jz4780.c    | 5 ++---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
+diff --git a/drivers/i2c/busses/i2c-digicolor.c b/drivers/i2c/busses/i2c-digicolor.c
+index f67639d..60c838c 100644
+--- a/drivers/i2c/busses/i2c-digicolor.c
++++ b/drivers/i2c/busses/i2c-digicolor.c
+@@ -160,12 +160,11 @@ static irqreturn_t dc_i2c_irq(int irq, void *dev_id)
+ {
+ 	struct dc_i2c *i2c = dev_id;
+ 	int cmd_status = dc_i2c_cmd_status(i2c);
+-	unsigned long flags;
+ 	u8 addr_cmd;
+ 
+ 	writeb_relaxed(1, i2c->regs + II_INTFLAG_CLEAR);
+ 
+-	spin_lock_irqsave(&i2c->lock, flags);
++	spin_lock(&i2c->lock);
+ 
+ 	if (cmd_status == II_CMD_STATUS_ACK_BAD
+ 	    || cmd_status == II_CMD_STATUS_ABORT) {
+@@ -207,7 +206,7 @@ static irqreturn_t dc_i2c_irq(int irq, void *dev_id)
+ 	}
+ 
+ out:
+-	spin_unlock_irqrestore(&i2c->lock, flags);
++	spin_unlock(&i2c->lock);
+ 	return IRQ_HANDLED;
+ }
+ 
+diff --git a/drivers/i2c/busses/i2c-jz4780.c b/drivers/i2c/busses/i2c-jz4780.c
+index cb4a25e..8509c5f 100644
+--- a/drivers/i2c/busses/i2c-jz4780.c
++++ b/drivers/i2c/busses/i2c-jz4780.c
+@@ -437,9 +437,8 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void *dev_id)
+ 	unsigned short intst;
+ 	unsigned short intmsk;
+ 	struct jz4780_i2c *i2c = dev_id;
+-	unsigned long flags;
+ 
+-	spin_lock_irqsave(&i2c->lock, flags);
++	spin_lock(&i2c->lock);
+ 	intmsk = jz4780_i2c_readw(i2c, JZ4780_I2C_INTM);
+ 	intst = jz4780_i2c_readw(i2c, JZ4780_I2C_INTST);
+ 
+@@ -551,7 +550,7 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void *dev_id)
+ 	}
+ 
+ done:
+-	spin_unlock_irqrestore(&i2c->lock, flags);
++	spin_unlock(&i2c->lock);
+ 	return IRQ_HANDLED;
+ }
+ 
+-- 
+2.8.1
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
-
-Regards,
-Ms. Reem.
