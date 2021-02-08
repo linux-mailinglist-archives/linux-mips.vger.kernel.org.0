@@ -2,114 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A193128AB
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 02:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC99312926
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 04:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbhBHBOK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Feb 2021 20:14:10 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:37494 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229537AbhBHBOK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 7 Feb 2021 20:14:10 -0500
-Received: from [10.130.0.55] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxOdUpkCBgpgUIAA--.10238S3;
-        Mon, 08 Feb 2021 09:13:14 +0800 (CST)
-Subject: Re: [PATCH v2 2/4] MIPS: microMIPS: Fix the judgment of mm_jr16_op
- and mm_jalr_op
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <1611207098-11381-1-git-send-email-hejinyang@loongson.cn>
- <1611207098-11381-3-git-send-email-hejinyang@loongson.cn>
- <alpine.DEB.2.21.2102072200300.35623@angie.orcam.me.uk>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
-        Jun-Ru Chang <jrjang@realtek.com>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <32bd50ed-c359-0efc-af76-4b77a3fc05ae@loongson.cn>
-Date:   Mon, 8 Feb 2021 09:13:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S229570AbhBHDEf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Feb 2021 22:04:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:55206 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229565AbhBHDEe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 7 Feb 2021 22:04:34 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00ADF1FB;
+        Sun,  7 Feb 2021 19:03:47 -0800 (PST)
+Received: from [192.168.0.130] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 74C8B3F719;
+        Sun,  7 Feb 2021 19:03:42 -0800 (PST)
+Subject: Re: [PATCH] mm/memtest: Add ARCH_USE_MEMTEST
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Chris Zankel <chris@zankel.net>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <1612498242-31579-1-git-send-email-anshuman.khandual@arm.com>
+ <CAMo8BfLXaycXgy-F=TaWzpEZZJKEhbZecxwvBVd6jTo0RJ8atQ@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <dc4c19d2-62e6-389a-bb03-33bf30381a3b@arm.com>
+Date:   Mon, 8 Feb 2021 08:34:11 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.21.2102072200300.35623@angie.orcam.me.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <CAMo8BfLXaycXgy-F=TaWzpEZZJKEhbZecxwvBVd6jTo0RJ8atQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9AxOdUpkCBgpgUIAA--.10238S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJrWUCF15AFWrJr4Dur1rWFg_yoW8Kr13pF
-        WYva9FyF4kJFyrA34kJayrX345Aan5Kay3GF15t345twn8Wr1avFyftw4S9wn7Gr4Yk3WI
-        qFy3XrWUuwnavaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU5s6pJUUUUU==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 02/08/2021 05:31 AM, Maciej W. Rozycki wrote:
 
-> On Thu, 21 Jan 2021, Jinyang He wrote:
->
->> mm16_r5_format.rt is 5 bits, so directly judge the value if equal or not.
->> mm_jalr_op requires 7th to 16th bits. These 10 which bits generated by
->   The minor opcode extension field is comprised of bits 15:6, not 16:7 as
-> your description suggests.  Please be accurate with statements.
->
->> shifting u_format.uimmediate by 6 may be affected by sign extension.
->   Why?  The `uimmediate' bit-field member is unsigned for a reason.  No
-> sign-extension is made on unsigned data with the right-shift operation.
->
->> Thus, take out the 10 bits for comparison.
+
+On 2/5/21 1:05 PM, Max Filippov wrote:
+> On Thu, Feb 4, 2021 at 8:10 PM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
 >>
->> Without this patch, errors may occur, such as these bits are all ones.
->   How did you come to this conclusion?
->
->> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
->> index d737234..74d7fd8 100644
->> --- a/arch/mips/kernel/process.c
->> +++ b/arch/mips/kernel/process.c
->> @@ -292,8 +292,8 @@ static inline int is_jump_ins(union mips_instruction *ip)
->>   	 * microMIPS is kind of more fun...
->>   	 */
->>   	if (mm_insn_16bit(ip->word >> 16)) {
->> -		if ((ip->mm16_r5_format.opcode == mm_pool16c_op &&
->> -		    (ip->mm16_r5_format.rt & mm_jr16_op) == mm_jr16_op))
->> +		if (ip->mm16_r5_format.opcode == mm_pool16c_op &&
->> +		    ip->mm16_r5_format.rt == mm_jr16_op)
->>   			return 1;
->>   		return 0;
->>   	}
->   Code style changes should be submitted on their own as separate patches.
->
->> @@ -305,7 +305,7 @@ static inline int is_jump_ins(union mips_instruction *ip)
->>   	if (ip->r_format.opcode != mm_pool32a_op ||
->>   			ip->r_format.func != mm_pool32axf_op)
->>   		return 0;
->> -	return ((ip->u_format.uimmediate >> 6) & mm_jalr_op) == mm_jalr_op;
->> +	return ((ip->u_format.uimmediate >> 6) & GENMASK(9, 0)) == mm_jalr_op;
->   You've now excluded JALR.HB, JALRS, and JALRS.HB instructions.  The mask
-> was there for a reason.  If you can't be bothered to verify microMIPS
-> changes say with QEMU, then at the very least please check documentation.
-> The intent of this code is clear and these instructions are even spelled
-> out explicitly in the comment at the top.
-It's my fault. :-(
+>> early_memtest() does not get called from all architectures. Hence enabling
+>> CONFIG_MEMTEST and providing a valid memtest=[1..N] kernel command line
+>> option might not trigger the memory pattern tests as would be expected in
+>> normal circumstances. This situation is misleading.
+>>
+>> The change here prevents the above mentioned problem after introducing a
+>> new config option ARCH_USE_MEMTEST that should be subscribed on platforms
+>> that call early_memtest(), in order to enable the config CONFIG_MEMTEST.
+>> Conversely CONFIG_MEMTEST cannot be enabled on platforms where it would
+>> not be tested anyway.
+>>
+>> Cc: Russell King <linux@armlinux.org.uk>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>> Cc: Paul Mackerras <paulus@samba.org>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Chris Zankel <chris@zankel.net>
+>> Cc: Max Filippov <jcmvbkbc@gmail.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-mips@vger.kernel.org
+>> Cc: linuxppc-dev@lists.ozlabs.org
+>> Cc: linux-xtensa@linux-xtensa.org
+>> Cc: linux-mm@kvack.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>> This patch applies on v5.11-rc6 and has been tested on arm64 platform. But
+>> it has been just build tested on all other platforms.
+>>
+>>  arch/arm/Kconfig     | 1 +
+>>  arch/arm64/Kconfig   | 1 +
+>>  arch/mips/Kconfig    | 1 +
+>>  arch/powerpc/Kconfig | 1 +
+>>  arch/x86/Kconfig     | 1 +
+>>  arch/xtensa/Kconfig  | 1 +
+>>  lib/Kconfig.debug    | 9 ++++++++-
+>>  7 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> Anshuman, entries in arch/*/Konfig files are sorted in alphabetical order,
+> please keep them that way.
 
-How amazing the opcode design is!
+Sure, will fix up and resend.
 
-Thanks,
-Jinyang
-
->   Thomas, please revert this change as I can see you've already taken it.
-> It's plain wrong.
->
->    Maciej
-
+> 
+> Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+> 
