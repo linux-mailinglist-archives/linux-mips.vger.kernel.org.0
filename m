@@ -2,48 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC54314B91
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 10:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72DA7314BBB
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 10:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbhBIJ1R (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Feb 2021 04:27:17 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:60554 "EHLO loongson.cn"
+        id S229939AbhBIJfY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Feb 2021 04:35:24 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:34726 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230073AbhBIJX3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 9 Feb 2021 04:23:29 -0500
+        id S230107AbhBIJdQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 9 Feb 2021 04:33:16 -0500
 Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxedRQVCJg54wIAA--.10797S2;
-        Tue, 09 Feb 2021 17:22:25 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxSdSoViJgw40IAA--.11028S2;
+        Tue, 09 Feb 2021 17:32:25 +0800 (CST)
 From:   Qing Zhang <zhangqing@loongson.cn>
 To:     Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        iaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: [PATCH 0/6] Add basic support for Loongson-2K1000
-Date:   Tue,  9 Feb 2021 17:22:18 +0800
-Message-Id: <20210209092224.6922-1-zhangqing@loongson.cn>
+Date:   Tue,  9 Feb 2021 17:32:18 +0800
+Message-Id: <20210209093224.7085-1-zhangqing@loongson.cn>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxedRQVCJg54wIAA--.10797S2
+X-CM-TRANSID: AQAAf9AxSdSoViJgw40IAA--.11028S2
 X-Coremail-Antispam: 1UD129KBjvJXoW7urykAr1DAw4DKryfXFWDJwb_yoW8XrW7pw
         4akw15KF45Cry3Crn3JryUGryrArWfJrZFgF47Xr15WasIqa4Yvr1fJFs8trsFyrykta4j
-        9ry8GFW7GFnrC37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkIb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        9ry8GFW7GFnrC37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvqb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
         0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
         jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
         C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8uwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU00oGPUUUUU==
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1D
+        MxkIecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07jz0PfUUUUU=
 X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
