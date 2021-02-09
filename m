@@ -2,112 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1543145B0
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 02:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 410E931468D
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 03:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbhBIBhO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Feb 2021 20:37:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53934 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229623AbhBIBhK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Feb 2021 20:37:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2781664DF2;
-        Tue,  9 Feb 2021 01:36:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612834589;
-        bh=GeneRGHAa6mtWP0C7hDko1vrvp1LSL3adVABNeZ6jD4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qFlJGIRhgAMU7d3IrGb90w8fBAZFnDMzYHoPUQ/yP1HYUTFUxU+4Lw+tmCZu0HuZM
-         8JVI2vh1zK/7K3A0xRL/K+Yxm+N8NZK9kpPYcklH2cGmEdhShXfqzT8xo4Ptzf9DOo
-         C2c4cKL+dk2yR19trrNMl0DStwPuDuqLBamP9cPPx0DqAVqVRj12hlZETEFXt7eY31
-         Ej5GVQAs/xhEUTNqtB3nbOL/+f46wuVA3MXSnLxtKS35gdQXO5qxNCoD+n5bITNoWi
-         pFC4bj9GBSNaARq9YG58b8RfAM5ER7WvG/5UgayltQJmVEyfichpmSM5yqeLzPcEsC
-         pAT3TK9Pc2WbA==
-Received: by mail-io1-f45.google.com with SMTP id n201so17109941iod.12;
-        Mon, 08 Feb 2021 17:36:29 -0800 (PST)
-X-Gm-Message-State: AOAM530y03JbmV2CwFSD7X1iQ13QNwtH95ILoMA3IQ4HiiEfZ9RnVgQD
-        eUBq8DeQ99CbA1Qa/i9Rue4N/y3Zr8XK1ZqD7bo=
-X-Google-Smtp-Source: ABdhPJxP5beny0HTZjFbw+i6C1OKgk88+dVSmY8J+hKVb39JSxw+ga6AWtvp798tmky4G/ptrT8Bp8w75IINstnUFS0=
-X-Received: by 2002:a05:6638:388e:: with SMTP id b14mr20526766jav.96.1612834588516;
- Mon, 08 Feb 2021 17:36:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20210208145024.3320420-1-hch@lst.de> <20210208145024.3320420-7-hch@lst.de>
-In-Reply-To: <20210208145024.3320420-7-hch@lst.de>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 9 Feb 2021 09:36:16 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5POedAyG97956Zb5U1Ry5HFPWN7Xqhk7ZWHHhuXoNymQ@mail.gmail.com>
-Message-ID: <CAAhV-H5POedAyG97956Zb5U1Ry5HFPWN7Xqhk7ZWHHhuXoNymQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] MIPS: remove CONFIG_DMA_PERDEV_COHERENT
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
+        id S229705AbhBICiF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Feb 2021 21:38:05 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:52223 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229733AbhBIChm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Feb 2021 21:37:42 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id BBDFB5C01DE;
+        Mon,  8 Feb 2021 21:36:34 -0500 (EST)
+Received: from imap1 ([10.202.2.51])
+  by compute6.internal (MEProxy); Mon, 08 Feb 2021 21:36:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm1; bh=Imuik1TGE9YdIuXmmENtdnG1NGZ0AhG
+        fwRsqBCCiPHg=; b=msUmLiiJyeh3xS3YzYg3EhX3fUjCTmir5PgppkgLdVZNDo4
+        isMmSYOmg9CHTmWMkPLbZBBaT7vIRe4s+J1ePv0rJY1IdiUh/+E8H/s2AsZDioFG
+        hWYxjOu5qrcHKd1mbXhPOCTfPjNxHzxfrz2U9D9bXZczMIosYfGVCpRx8ceEMkMO
+        e0XGWPdRLCQ9Ql3ofw90EYLlfPhiA+EXJE1Rc0JljE1zWgfu44+kdPsES1pXu9Vj
+        AW5zpb8gZyN6W0+KDdjCBPwBCJRCdlKoo1Z2otIUhjZ0fKtltpDwUPIgyltRiCdX
+        hqUqsI9Jx3byS9Lcg7ntGqoO+Pab84ujLdStuuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Imuik1
+        TGE9YdIuXmmENtdnG1NGZ0AhGfwRsqBCCiPHg=; b=tL+7XajZUzjlwcyuBGEuY4
+        a6gwxG9Va3eNM7BKGhluZX3C1fZy1QIQDvuz7ZcfuWzfKQG7TM2FMHIzbBsjXIoM
+        mE+B/dakS3lrOwszmsBU7Mvvd6h3Zw7B9QQuTmgOJAa7fuUdck6vPAHsiiHXXvvG
+        ARv+0qmuWa7IesKLnf0Rx/ZZZXLvCZPViQKIC7p7hlNM14nQkki1FPo35onbl4V0
+        0e90tsUqYGTxmMd59hao1c0ef9isbUVxy109UG5NrhXKJZW7xPYyi6s/NcS+c28e
+        wF5uUTm66pHlS9qPU5Zc9CmQOdp2NFU54xBQ3+bQ/pEQ/X9nGenXgA3chU7UUn2A
+        ==
+X-ME-Sender: <xms:MfUhYBMdVpBGqBYwzD2ke1jPhib06xQJXSeC4KbAJBDRsJ01sYZjDw>
+    <xme:MfUhYD-PQ2JnJA0_DZdI3nHn8dMaDpdiKyX5ut6XXBFVWk2uNhm2JdRSA3JMjSFuw
+    XpI223VIUWwhBFUHdc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrheeggdegkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderreejnecuhfhrohhmpedflfhirgig
+    uhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepgefgfeeujeffhedufeehleejleffjefhjedvtedtvdeftdeg
+    ueevjeelleevgfefnecuffhomhgrihhnpehtqdgvshdqthdrhhhupdhgvghnvgigrdhssg
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
+    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:MfUhYATw6jBGGJ9W5WK5hsht-aXP2c3mk2Zpp5MfkcexuNBj4IaEng>
+    <xmx:MfUhYNs1P-h_zAoJ7OMQ5KUdNXTDaVqHkLk8EvpJaLoes2TkgS2W9w>
+    <xmx:MfUhYJd0dHmlZr_hCEbuFZXyVrzcME856IYFfraCEb2ulFYIdRM34Q>
+    <xmx:MvUhYKrdClz1ydrTJa46y97VxjGueb3oPrcWKOWBLeA61r__oD8vAA>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4EC2D130005D; Mon,  8 Feb 2021 21:36:33 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-93-gef6c4048e6-fm-20210128.002-gef6c4048
+Mime-Version: 1.0
+Message-Id: <d2df38f5-0894-44b3-a88c-fe9a7e595284@www.fastmail.com>
+In-Reply-To: <76dbc72a-32fd-4de3-bc36-3eb0d0eebb44@www.fastmail.com>
+References: <1612790085-14436-1-git-send-email-yangtiezhu@loongson.cn>
+ <76dbc72a-32fd-4de3-bc36-3eb0d0eebb44@www.fastmail.com>
+Date:   Tue, 09 Feb 2021 10:36:11 +0800
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, "Xuefeng Li" <lixuefeng@loongson.cn>
+Subject: =?UTF-8?Q?Re:_[PATCH]_MIPS:_Make_check_condition_for_SDBBP_consistent_wi?=
+ =?UTF-8?Q?th_EJTAG_spec?=
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
-On Mon, Feb 8, 2021 at 10:51 PM Christoph Hellwig <hch@lst.de> wrote:
+
+On Tue, Feb 9, 2021, at 12:32 AM, Jiaxun Yang wrote:
+> 
+> 
+> On Mon, Feb 8, 2021, at 9:14 PM, Tiezhu Yang wrote:
+> > According to MIPS EJTAG Specification [1], a Debug Breakpoint
+> > exception occurs when an SDBBP instruction is executed, the
+> > CP0_DEBUG bit DBp indicates that a Debug Breakpoint exception
+> > occurred, just check bit DBp for SDBBP is more accurate.
+> > 
+> > [1] http://www.t-es-t.hu/download/mips/md00047f.pdf
+> > 
+> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > ---
+> >  arch/mips/kernel/genex.S | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+> > index bcce32a..6336826 100644
+> > --- a/arch/mips/kernel/genex.S
+> > +++ b/arch/mips/kernel/genex.S
+> > @@ -349,8 +349,8 @@ NESTED(ejtag_debug_handler, PT_SIZE, sp)
+> >  	MTC0	k0, CP0_DESAVE
+> >  	mfc0	k0, CP0_DEBUG
+> >  
+> > -	sll	k0, k0, 30	# Check for SDBBP.
+> > -	bgez	k0, ejtag_return
+> > +	andi	k0, k0, 0x2	# Check for SDBBP.
+> > +	beqz	k0, ejtag_return
+> 
+> You'd better define a marco for it to prevent further confusion.
+> 
+> Btw I'm curious about how do kernel receive EJTAG exception?
+> In my understanding there are only two possible EJTAG exception vectors,
+> 0xbfc00480 and DSEG one. Both of them are reachable by kernel.
+^ not
+
+> How do this piece of code work?
+> 
+> Thanks.
+> 
+> - Jiaxun
+> 
+> >  
+> >  #ifdef CONFIG_SMP
+> >  1:	PTR_LA	k0, ejtag_debug_buffer_spinlock
+> > -- 
+> > 2.1.0
+> > 
+> >
+> 
+> -- 
+> - Jiaxun
 >
-> Just select DMA_NONCOHERENT and ARCH_HAS_SETUP_DMA_OPS from the
-> MIPS_GENERIC platform instead.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/mips/Kconfig              | 8 ++------
->  arch/mips/mm/dma-noncoherent.c | 2 +-
->  2 files changed, 3 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 1f1603a08a6d2d..fae02b0b9c599a 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -123,6 +123,7 @@ choice
->
->  config MIPS_GENERIC_KERNEL
->         bool "Generic board-agnostic MIPS kernel"
-> +       select ARCH_HAS_SETUP_DMA_OPS
->         select MIPS_GENERIC
->         select BOOT_RAW
->         select BUILTIN_DTB
-> @@ -132,7 +133,7 @@ config MIPS_GENERIC_KERNEL
->         select CPU_MIPSR2_IRQ_EI
->         select CPU_MIPSR2_IRQ_VI
->         select CSRC_R4K
-> -       select DMA_PERDEV_COHERENT
-> +       select DMA_NONCOHERENT
->         select HAVE_PCI
->         select IRQ_MIPS_CPU
->         select MIPS_AUTO_PFN_OFFSET
-> @@ -1127,11 +1128,6 @@ config FW_CFE
->  config ARCH_SUPPORTS_UPROBES
->         bool
->
-> -config DMA_PERDEV_COHERENT
-> -       bool
-> -       select ARCH_HAS_SETUP_DMA_OPS
-> -       select DMA_NONCOHERENT
-> -
->  config DMA_NONCOHERENT
->         bool
->         #
-> diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
-> index 90b562753eb892..212f3ce75a6bd3 100644
-> --- a/arch/mips/mm/dma-noncoherent.c
-> +++ b/arch/mips/mm/dma-noncoherent.c
-> @@ -135,7 +135,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
->  }
->  #endif
->
-> -#ifdef CONFIG_DMA_PERDEV_COHERENT
-> +#ifdef CONFIG_ARCH_HAS_SETUP_DMA_OPS
->  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
->                 const struct iommu_ops *iommu, bool coherent)
->  {
-> --
-> 2.29.2
->
+
+-- 
+- Jiaxun
