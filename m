@@ -2,133 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 410E931468D
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 03:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 436A03146ED
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 04:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbhBICiF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Feb 2021 21:38:05 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:52223 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229733AbhBIChm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Feb 2021 21:37:42 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id BBDFB5C01DE;
-        Mon,  8 Feb 2021 21:36:34 -0500 (EST)
-Received: from imap1 ([10.202.2.51])
-  by compute6.internal (MEProxy); Mon, 08 Feb 2021 21:36:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm1; bh=Imuik1TGE9YdIuXmmENtdnG1NGZ0AhG
-        fwRsqBCCiPHg=; b=msUmLiiJyeh3xS3YzYg3EhX3fUjCTmir5PgppkgLdVZNDo4
-        isMmSYOmg9CHTmWMkPLbZBBaT7vIRe4s+J1ePv0rJY1IdiUh/+E8H/s2AsZDioFG
-        hWYxjOu5qrcHKd1mbXhPOCTfPjNxHzxfrz2U9D9bXZczMIosYfGVCpRx8ceEMkMO
-        e0XGWPdRLCQ9Ql3ofw90EYLlfPhiA+EXJE1Rc0JljE1zWgfu44+kdPsES1pXu9Vj
-        AW5zpb8gZyN6W0+KDdjCBPwBCJRCdlKoo1Z2otIUhjZ0fKtltpDwUPIgyltRiCdX
-        hqUqsI9Jx3byS9Lcg7ntGqoO+Pab84ujLdStuuQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Imuik1
-        TGE9YdIuXmmENtdnG1NGZ0AhGfwRsqBCCiPHg=; b=tL+7XajZUzjlwcyuBGEuY4
-        a6gwxG9Va3eNM7BKGhluZX3C1fZy1QIQDvuz7ZcfuWzfKQG7TM2FMHIzbBsjXIoM
-        mE+B/dakS3lrOwszmsBU7Mvvd6h3Zw7B9QQuTmgOJAa7fuUdck6vPAHsiiHXXvvG
-        ARv+0qmuWa7IesKLnf0Rx/ZZZXLvCZPViQKIC7p7hlNM14nQkki1FPo35onbl4V0
-        0e90tsUqYGTxmMd59hao1c0ef9isbUVxy109UG5NrhXKJZW7xPYyi6s/NcS+c28e
-        wF5uUTm66pHlS9qPU5Zc9CmQOdp2NFU54xBQ3+bQ/pEQ/X9nGenXgA3chU7UUn2A
-        ==
-X-ME-Sender: <xms:MfUhYBMdVpBGqBYwzD2ke1jPhib06xQJXSeC4KbAJBDRsJ01sYZjDw>
-    <xme:MfUhYD-PQ2JnJA0_DZdI3nHn8dMaDpdiKyX5ut6XXBFVWk2uNhm2JdRSA3JMjSFuw
-    XpI223VIUWwhBFUHdc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrheeggdegkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderreejnecuhfhrohhmpedflfhirgig
-    uhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepgefgfeeujeffhedufeehleejleffjefhjedvtedtvdeftdeg
-    ueevjeelleevgfefnecuffhomhgrihhnpehtqdgvshdqthdrhhhupdhgvghnvgigrdhssg
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
-    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:MfUhYATw6jBGGJ9W5WK5hsht-aXP2c3mk2Zpp5MfkcexuNBj4IaEng>
-    <xmx:MfUhYNs1P-h_zAoJ7OMQ5KUdNXTDaVqHkLk8EvpJaLoes2TkgS2W9w>
-    <xmx:MfUhYJd0dHmlZr_hCEbuFZXyVrzcME856IYFfraCEb2ulFYIdRM34Q>
-    <xmx:MvUhYKrdClz1ydrTJa46y97VxjGueb3oPrcWKOWBLeA61r__oD8vAA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4EC2D130005D; Mon,  8 Feb 2021 21:36:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-93-gef6c4048e6-fm-20210128.002-gef6c4048
-Mime-Version: 1.0
-Message-Id: <d2df38f5-0894-44b3-a88c-fe9a7e595284@www.fastmail.com>
-In-Reply-To: <76dbc72a-32fd-4de3-bc36-3eb0d0eebb44@www.fastmail.com>
+        id S230091AbhBIDVs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Feb 2021 22:21:48 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:51972 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230387AbhBIDTU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Feb 2021 22:19:20 -0500
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn_Ls_iFgJW8IAA--.10797S3;
+        Tue, 09 Feb 2021 11:18:04 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Make check condition for SDBBP consistent with
+ EJTAG spec
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 References: <1612790085-14436-1-git-send-email-yangtiezhu@loongson.cn>
  <76dbc72a-32fd-4de3-bc36-3eb0d0eebb44@www.fastmail.com>
-Date:   Tue, 09 Feb 2021 10:36:11 +0800
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Tiezhu Yang" <yangtiezhu@loongson.cn>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+ <d2df38f5-0894-44b3-a88c-fe9a7e595284@www.fastmail.com>
 Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, "Xuefeng Li" <lixuefeng@loongson.cn>
-Subject: =?UTF-8?Q?Re:_[PATCH]_MIPS:_Make_check_condition_for_SDBBP_consistent_wi?=
- =?UTF-8?Q?th_EJTAG_spec?=
-Content-Type: text/plain
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <1bce5614-39bb-2581-f9b0-1178c6339d44@loongson.cn>
+Date:   Tue, 9 Feb 2021 11:18:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <d2df38f5-0894-44b3-a88c-fe9a7e595284@www.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxn_Ls_iFgJW8IAA--.10797S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF17ur47Xw43Aw4fZF1rCrg_yoW8ur4kpr
+        4UKa4vkFWkXr1jvFyjyw4rKrn0v3yDKrWSga1vq34F9F1qgFn5tFn29rWj9ryYgr1Ika40
+        v3WjqFnFyr1SyrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JU2FALUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On Tue, Feb 9, 2021, at 12:32 AM, Jiaxun Yang wrote:
-> 
-> 
-> On Mon, Feb 8, 2021, at 9:14 PM, Tiezhu Yang wrote:
-> > According to MIPS EJTAG Specification [1], a Debug Breakpoint
-> > exception occurs when an SDBBP instruction is executed, the
-> > CP0_DEBUG bit DBp indicates that a Debug Breakpoint exception
-> > occurred, just check bit DBp for SDBBP is more accurate.
-> > 
-> > [1] http://www.t-es-t.hu/download/mips/md00047f.pdf
-> > 
-> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > ---
-> >  arch/mips/kernel/genex.S | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> > index bcce32a..6336826 100644
-> > --- a/arch/mips/kernel/genex.S
-> > +++ b/arch/mips/kernel/genex.S
-> > @@ -349,8 +349,8 @@ NESTED(ejtag_debug_handler, PT_SIZE, sp)
-> >  	MTC0	k0, CP0_DESAVE
-> >  	mfc0	k0, CP0_DEBUG
-> >  
-> > -	sll	k0, k0, 30	# Check for SDBBP.
-> > -	bgez	k0, ejtag_return
-> > +	andi	k0, k0, 0x2	# Check for SDBBP.
-> > +	beqz	k0, ejtag_return
-> 
-> You'd better define a marco for it to prevent further confusion.
-> 
-> Btw I'm curious about how do kernel receive EJTAG exception?
-> In my understanding there are only two possible EJTAG exception vectors,
-> 0xbfc00480 and DSEG one. Both of them are reachable by kernel.
-^ not
-
-> How do this piece of code work?
-> 
-> Thanks.
-> 
-> - Jiaxun
-> 
-> >  
-> >  #ifdef CONFIG_SMP
-> >  1:	PTR_LA	k0, ejtag_debug_buffer_spinlock
-> > -- 
-> > 2.1.0
-> > 
-> >
-> 
-> -- 
-> - Jiaxun
+On 02/09/2021 10:36 AM, Jiaxun Yang wrote:
 >
+> On Tue, Feb 9, 2021, at 12:32 AM, Jiaxun Yang wrote:
+>>
+>> On Mon, Feb 8, 2021, at 9:14 PM, Tiezhu Yang wrote:
+>>> According to MIPS EJTAG Specification [1], a Debug Breakpoint
+>>> exception occurs when an SDBBP instruction is executed, the
+>>> CP0_DEBUG bit DBp indicates that a Debug Breakpoint exception
+>>> occurred, just check bit DBp for SDBBP is more accurate.
+>>>
+>>> [1] http://www.t-es-t.hu/download/mips/md00047f.pdf
+>>>
+>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>>> ---
+>>>   arch/mips/kernel/genex.S | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+>>> index bcce32a..6336826 100644
+>>> --- a/arch/mips/kernel/genex.S
+>>> +++ b/arch/mips/kernel/genex.S
+>>> @@ -349,8 +349,8 @@ NESTED(ejtag_debug_handler, PT_SIZE, sp)
+>>>   	MTC0	k0, CP0_DESAVE
+>>>   	mfc0	k0, CP0_DEBUG
+>>>   
+>>> -	sll	k0, k0, 30	# Check for SDBBP.
+>>> -	bgez	k0, ejtag_return
+>>> +	andi	k0, k0, 0x2	# Check for SDBBP.
+>>> +	beqz	k0, ejtag_return
+>> You'd better define a marco for it to prevent further confusion.
 
--- 
-- Jiaxun
+OK,  thanks, I will do it in v2.
+
+>>
+>> Btw I'm curious about how do kernel receive EJTAG exception?
+>> In my understanding there are only two possible EJTAG exception vectors,
+>> 0xbfc00480 and DSEG one. Both of them are reachable by kernel.
+> ^ not
+>
+>> How do this piece of code work?
+
+We can see some useful explanations from the following comment,
+the firmware needs to make sure jump to except_vec_ejtag_debug.
+
+arch/mips/kernel/genex.S
+/*
+  * EJTAG debug exception handler.
+  * The EJTAG debug exception entry point is 0xbfc00480, which
+  * normally is in the boot PROM, so the boot PROM must do an
+  * unconditional jump to this vector.
+  */
+NESTED(except_vec_ejtag_debug, 0, sp)
+         j       ejtag_debug_handler
+#ifdef CONFIG_CPU_MICROMIPS
+          nop
+#endif
+         END(except_vec_ejtag_debug)
+
+>>
+>> Thanks.
+>>
+>> - Jiaxun
+>>
+>>>   
+>>>   #ifdef CONFIG_SMP
+>>>   1:	PTR_LA	k0, ejtag_debug_buffer_spinlock
+>>> -- 
+>>> 2.1.0
+>>>
+>>>
+>> -- 
+>> - Jiaxun
+>>
+
