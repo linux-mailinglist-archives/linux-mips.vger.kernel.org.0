@@ -2,101 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C40315394
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 17:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E18A315E52
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 05:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbhBIQP7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Feb 2021 11:15:59 -0500
-Received: from elvis.franken.de ([193.175.24.41]:37111 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232412AbhBIQPh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 9 Feb 2021 11:15:37 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1l9VfC-0005wN-00; Tue, 09 Feb 2021 17:14:54 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id AB7E0C0E00; Tue,  9 Feb 2021 17:14:20 +0100 (CET)
-Date:   Tue, 9 Feb 2021 17:14:20 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Jinyang He <hejinyang@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        Jun-Ru Chang <jrjang@realtek.com>
-Subject: Re: [PATCH v2 2/4] MIPS: microMIPS: Fix the judgment of mm_jr16_op
- and mm_jalr_op
-Message-ID: <20210209161420.GA15428@alpha.franken.de>
-References: <1611207098-11381-1-git-send-email-hejinyang@loongson.cn>
- <1611207098-11381-3-git-send-email-hejinyang@loongson.cn>
- <alpine.DEB.2.21.2102072200300.35623@angie.orcam.me.uk>
+        id S230329AbhBJEsL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 9 Feb 2021 23:48:11 -0500
+Received: from spam.auroraoh.com ([24.56.89.101]:44984 "EHLO
+        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230320AbhBJEsK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Feb 2021 23:48:10 -0500
+X-ASG-Debug-ID: 1612932423-112c0d6a799c4e0001-LVkJRb
+Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id M960RLKO2n5aF262; Tue, 09 Feb 2021 23:47:03 -0500 (EST)
+X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
+Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
+ (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
+ 02:44:01 -0500
+Content-Type: text/plain; charset="iso-8859-1"
+X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2102072200300.35623@angie.orcam.me.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: We are a registered Private Loan Investment Company in the United Kingdom,
+ we also registered with the Turkish British Chamber of Commerce and Industry
+ (TBCCI) we have operations in Europe and Asia.
+To:     Recipients <januskad@auroraoh.com>
+X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
+ we also registered with the Turkish British Chamber of Commerce and Industry
+ (TBCCI) we have operations in Europe and Asia.
+From:   <januskad@auroraoh.com>
+Date:   Tue, 9 Feb 2021 15:43:15 +0800
+Reply-To: <cfolimiited@gmail.com>
+X-Priority: 1 (High)
+X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <67115bd0-7ba7-4a38-8269-fd8c74a9c433@COASRV-MAIL2.auroraoh.loc>
+X-Originating-IP: [197.210.29.8]
+X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
+ COASRV-MAIL2.auroraoh.loc (10.3.1.15)
+X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
+X-Barracuda-Start-Time: 1612932423
+X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at auroraoh.com
+X-Barracuda-Scan-Msg-Size: 755
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 1.61
+X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87877
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.00 NO_REAL_NAME           From: does not include a real name
+        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
+        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
+                                   Address
+        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Feb 07, 2021 at 10:31:38PM +0100, Maciej W. Rozycki wrote:
-> On Thu, 21 Jan 2021, Jinyang He wrote:
-> 
-> > mm16_r5_format.rt is 5 bits, so directly judge the value if equal or not.
-> > mm_jalr_op requires 7th to 16th bits. These 10 which bits generated by
-> 
->  The minor opcode extension field is comprised of bits 15:6, not 16:7 as 
-> your description suggests.  Please be accurate with statements.
-> 
-> > shifting u_format.uimmediate by 6 may be affected by sign extension.
-> 
->  Why?  The `uimmediate' bit-field member is unsigned for a reason.  No 
-> sign-extension is made on unsigned data with the right-shift operation.
-> 
-> > Thus, take out the 10 bits for comparison.
-> > 
-> > Without this patch, errors may occur, such as these bits are all ones.
-> 
->  How did you come to this conclusion?
-> 
-> > diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> > index d737234..74d7fd8 100644
-> > --- a/arch/mips/kernel/process.c
-> > +++ b/arch/mips/kernel/process.c
-> > @@ -292,8 +292,8 @@ static inline int is_jump_ins(union mips_instruction *ip)
-> >  	 * microMIPS is kind of more fun...
-> >  	 */
-> >  	if (mm_insn_16bit(ip->word >> 16)) {
-> > -		if ((ip->mm16_r5_format.opcode == mm_pool16c_op &&
-> > -		    (ip->mm16_r5_format.rt & mm_jr16_op) == mm_jr16_op))
-> > +		if (ip->mm16_r5_format.opcode == mm_pool16c_op &&
-> > +		    ip->mm16_r5_format.rt == mm_jr16_op)
-> >  			return 1;
-> >  		return 0;
-> >  	}
-> 
->  Code style changes should be submitted on their own as separate patches.
-> 
-> > @@ -305,7 +305,7 @@ static inline int is_jump_ins(union mips_instruction *ip)
-> >  	if (ip->r_format.opcode != mm_pool32a_op ||
-> >  			ip->r_format.func != mm_pool32axf_op)
-> >  		return 0;
-> > -	return ((ip->u_format.uimmediate >> 6) & mm_jalr_op) == mm_jalr_op;
-> > +	return ((ip->u_format.uimmediate >> 6) & GENMASK(9, 0)) == mm_jalr_op;
-> 
->  You've now excluded JALR.HB, JALRS, and JALRS.HB instructions.  The mask 
-> was there for a reason.  If you can't be bothered to verify microMIPS 
-> changes say with QEMU, then at the very least please check documentation.  
-> The intent of this code is clear and these instructions are even spelled 
-> out explicitly in the comment at the top.
-> 
->  Thomas, please revert this change as I can see you've already taken it.  
-> It's plain wrong.
+We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
 
-It's now reverted in mips-next.
+We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
 
-Thomas.
+Please contact us for more details;
+
+
+Kind regards,
+
+Paul McCann
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
