@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C07314BC6
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 10:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068A4314BCA
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 10:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbhBIJfz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Feb 2021 04:35:55 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:34844 "EHLO loongson.cn"
+        id S230122AbhBIJgM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Feb 2021 04:36:12 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:34850 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230261AbhBIJdb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 9 Feb 2021 04:33:31 -0500
+        id S230334AbhBIJd1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 9 Feb 2021 04:33:27 -0500
 Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxSdSoViJgw40IAA--.11028S7;
-        Tue, 09 Feb 2021 17:32:35 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxSdSoViJgw40IAA--.11028S8;
+        Tue, 09 Feb 2021 17:32:36 +0800 (CST)
 From:   Qing Zhang <zhangqing@loongson.cn>
 To:     Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -24,18 +24,18 @@ Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Xingxing Su <suxingxing@loongson.cn>
-Subject: [PATCH 5/6] irqchip/loongson-liointc: irqchip add 2.0 version.
-Date:   Tue,  9 Feb 2021 17:32:23 +0800
-Message-Id: <20210209093224.7085-6-zhangqing@loongson.cn>
+Subject: [PATCH 6/6] MIPS: Loongson64: Add a Loongson-2k default config file
+Date:   Tue,  9 Feb 2021 17:32:24 +0800
+Message-Id: <20210209093224.7085-7-zhangqing@loongson.cn>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210209093224.7085-1-zhangqing@loongson.cn>
 References: <20210209093224.7085-1-zhangqing@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxSdSoViJgw40IAA--.11028S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr4kJr17tr1DKFW7Gr1xZrb_yoWruw13pa
-        y8C395KFn8GFy7ur4ftFW8Za4avr1S9rsrWa4fCF17CFnxA3s5Aa1rCF1UAr4fC348JFWY
-        yrWrKa4UGF45C3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: AQAAf9AxSdSoViJgw40IAA--.11028S8
+X-Coremail-Antispam: 1UD129KBjvJXoW3uw1kZr43JF4DKrWUAr1rtFb_yoWkGFy7pr
+        n7GrWkJ3y8Jr17trW2yryDGr90qr1DJa9rGF17Ar1UXw1kJa13Xrn0yr1UJr1DXF1UXr48
+        X3Z3Gwn3AFn8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUm014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
         kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
@@ -55,148 +55,375 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add IO interrupt controller support for Loongson 2k1000, different
-from the 3a series is that 2K1000 has 64 interrupt sources, 0-31
-correspond to the device tree liointc0 device node, and the other
-correspond to liointc1 node.
+Add default config for 2K1000.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
 Signed-off-by: Xingxing Su <suxingxing@loongson.cn>
 ---
- drivers/irqchip/irq-loongson-liointc.c | 55 +++++++++++++++++++++-----
- 1 file changed, 46 insertions(+), 9 deletions(-)
+ arch/mips/configs/loongson2k_defconfig | 353 +++++++++++++++++++++++++
+ 1 file changed, 353 insertions(+)
+ create mode 100644 arch/mips/configs/loongson2k_defconfig
 
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index 9ed1bc473663..496e73bde597 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -20,6 +20,7 @@
- 
- #define LIOINTC_CHIP_IRQ	32
- #define LIOINTC_NUM_PARENT 4
-+#define LIOINTC_NUM_CORES	4
- 
- #define LIOINTC_INTC_CHIP_START	0x20
- 
-@@ -42,6 +43,7 @@ struct liointc_handler_data {
- struct liointc_priv {
- 	struct irq_chip_generic		*gc;
- 	struct liointc_handler_data	handler[LIOINTC_NUM_PARENT];
-+	void __iomem			*core_isr[LIOINTC_NUM_CORES];
- 	u8				map_cache[LIOINTC_CHIP_IRQ];
- 	bool				has_lpc_irq_errata;
- };
-@@ -51,11 +53,12 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
- 	struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
- 	struct irq_chip_generic *gc = handler->priv->gc;
-+	int core = get_ebase_cpunum() % LIOINTC_NUM_CORES;
- 	u32 pending;
- 
- 	chained_irq_enter(chip, desc);
- 
--	pending = readl(gc->reg_base + LIOINTC_REG_INTC_STATUS);
-+	pending = readl(handler->priv->core_isr[core]);
- 
- 	if (!pending) {
- 		/* Always blame LPC IRQ if we have that bug */
-@@ -141,6 +144,15 @@ static void liointc_resume(struct irq_chip_generic *gc)
- }
- 
- static const char * const parent_names[] = {"int0", "int1", "int2", "int3"};
-+static const char * const core_reg_names[] = {"isr0", "isr1", "isr2", "isr3"};
-+
-+static void __iomem *liointc_get_reg_byname(struct device_node *node,
-+						const char *name)
-+{
-+	int index = of_property_match_string(node, "reg-names", name);
-+
-+	return of_iomap(node, index);
-+}
- 
- int __init liointc_of_init(struct device_node *node,
- 				struct device_node *parent)
-@@ -159,10 +171,28 @@ int __init liointc_of_init(struct device_node *node,
- 	if (!priv)
- 		return -ENOMEM;
- 
--	base = of_iomap(node, 0);
--	if (!base) {
--		err = -ENODEV;
--		goto out_free_priv;
-+	if (of_device_is_compatible(node, "loongson,liointc-2.0")) {
-+		base = liointc_get_reg_byname(node, "main");
-+		if (!base) {
-+			err = -ENODEV;
-+			goto out_free_priv;
-+		}
-+		for (i = 0; i < LIOINTC_NUM_CORES; i++) {
-+			priv->core_isr[i] =
-+				liointc_get_reg_byname(node, core_reg_names[i]);
-+		}
-+		if (!priv->core_isr[0]) {
-+			err = -ENODEV;
-+			goto out_iounmap_base;
-+		}
-+	} else {
-+		base = of_iomap(node, 0);
-+		if (!base) {
-+			err = -ENODEV;
-+			goto out_free_priv;
-+		}
-+		for (i = 0; i < LIOINTC_NUM_CORES; i++)
-+			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
- 	}
- 
- 	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
-@@ -172,7 +202,7 @@ int __init liointc_of_init(struct device_node *node,
- 	}
- 	if (!have_parent) {
- 		err = -ENODEV;
--		goto out_iounmap;
-+		goto out_iounmap_isr;
- 	}
- 
- 	sz = of_property_read_variable_u32_array(node,
-@@ -183,7 +213,7 @@ int __init liointc_of_init(struct device_node *node,
- 	if (sz < 4) {
- 		pr_err("loongson-liointc: No parent_int_map\n");
- 		err = -ENODEV;
--		goto out_iounmap;
-+		goto out_iounmap_isr;
- 	}
- 
- 	for (i = 0; i < LIOINTC_NUM_PARENT; i++)
-@@ -195,7 +225,7 @@ int __init liointc_of_init(struct device_node *node,
- 	if (!domain) {
- 		pr_err("loongson-liointc: cannot add IRQ domain\n");
- 		err = -EINVAL;
--		goto out_iounmap;
-+		goto out_iounmap_isr;
- 	}
- 
- 	err = irq_alloc_domain_generic_chips(domain, 32, 1,
-@@ -260,7 +290,13 @@ int __init liointc_of_init(struct device_node *node,
- 
- out_free_domain:
- 	irq_domain_remove(domain);
--out_iounmap:
-+out_iounmap_isr:
-+	for (i = 0; i < LIOINTC_NUM_CORES; i++) {
-+		if (!priv->core_isr[i])
-+			continue;
-+		iounmap(priv->core_isr[i]);
-+	}
-+out_iounmap_base:
- 	iounmap(base);
- out_free_priv:
- 	kfree(priv);
-@@ -270,3 +306,4 @@ int __init liointc_of_init(struct device_node *node,
- 
- IRQCHIP_DECLARE(loongson_liointc_1_0, "loongson,liointc-1.0", liointc_of_init);
- IRQCHIP_DECLARE(loongson_liointc_1_0a, "loongson,liointc-1.0a", liointc_of_init);
-+IRQCHIP_DECLARE(loongson_liointc_2_0, "loongson,liointc-2.0", liointc_of_init);
+diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
+new file mode 100644
+index 000000000000..e948ca487e2d
+--- /dev/null
++++ b/arch/mips/configs/loongson2k_defconfig
+@@ -0,0 +1,353 @@
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_KERNEL_LZMA=y
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_AUDIT=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_PREEMPT=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_BSD_PROCESS_ACCT_V3=y
++CONFIG_TASKSTATS=y
++CONFIG_TASK_DELAY_ACCT=y
++CONFIG_TASK_XACCT=y
++CONFIG_TASK_IO_ACCOUNTING=y
++CONFIG_MEMCG=y
++CONFIG_BLK_CGROUP=y
++CONFIG_SCHED_AUTOGROUP=y
++CONFIG_SYSFS_DEPRECATED=y
++CONFIG_RELAY=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_EMBEDDED=y
++CONFIG_MACH_LOONGSON64=y
++# CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION is not set
++CONFIG_HZ_256=y
++CONFIG_MIPS32_O32=y
++CONFIG_MIPS32_N32=y
++CONFIG_MODULES=y
++CONFIG_MODULE_FORCE_LOAD=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODULE_FORCE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_MQ_IOSCHED_DEADLINE=m
++CONFIG_IOSCHED_BFQ=y
++CONFIG_BFQ_GROUP_IOSCHED=y
++CONFIG_BINFMT_MISC=m
++CONFIG_KSM=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_USER=y
++CONFIG_NET_KEY=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_IP_MULTIPLE_TABLES=y
++CONFIG_IP_ROUTE_MULTIPATH=y
++CONFIG_IP_ROUTE_VERBOSE=y
++CONFIG_NETFILTER=y
++CONFIG_NETFILTER_NETLINK_LOG=m
++CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
++CONFIG_NETFILTER_XT_TARGET_MARK=m
++CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
++CONFIG_NETFILTER_XT_MATCH_COMMENT=m
++CONFIG_NETFILTER_XT_MATCH_DCCP=m
++CONFIG_NETFILTER_XT_MATCH_ESP=m
++CONFIG_NETFILTER_XT_MATCH_LENGTH=m
++CONFIG_NETFILTER_XT_MATCH_LIMIT=m
++CONFIG_NETFILTER_XT_MATCH_MAC=m
++CONFIG_NETFILTER_XT_MATCH_MARK=m
++CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
++CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
++CONFIG_NETFILTER_XT_MATCH_QUOTA=m
++CONFIG_NETFILTER_XT_MATCH_REALM=m
++CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
++CONFIG_NETFILTER_XT_MATCH_STRING=m
++CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
++CONFIG_IP_VS=m
++CONFIG_IP_NF_IPTABLES=m
++CONFIG_IP_NF_MATCH_AH=m
++CONFIG_IP_NF_MATCH_ECN=m
++CONFIG_IP_NF_MATCH_TTL=m
++CONFIG_IP_NF_FILTER=m
++CONFIG_IP_NF_TARGET_REJECT=m
++CONFIG_IP_NF_MANGLE=m
++CONFIG_IP_NF_TARGET_ECN=m
++CONFIG_IP_NF_TARGET_TTL=m
++CONFIG_IP_NF_RAW=m
++CONFIG_IP_NF_ARPTABLES=m
++CONFIG_IP_NF_ARPFILTER=m
++CONFIG_IP_NF_ARP_MANGLE=m
++CONFIG_IP_SCTP=m
++CONFIG_L2TP=m
++CONFIG_BRIDGE=m
++CONFIG_CFG80211=m
++CONFIG_CFG80211_WEXT=y
++CONFIG_MAC80211=m
++CONFIG_RFKILL=m
++CONFIG_RFKILL_INPUT=y
++CONFIG_PCIEPORTBUS=y
++CONFIG_HOTPLUG_PCI_PCIE=y
++CONFIG_PCIEASPM_PERFORMANCE=y
++CONFIG_HOTPLUG_PCI=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_MTD=m
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_CRYPTOLOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=8192
++CONFIG_RAID_ATTRS=m
++CONFIG_BLK_DEV_SD=y
++CONFIG_BLK_DEV_SR=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_CHR_DEV_SCH=m
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SPI_ATTRS=m
++CONFIG_SCSI_FC_ATTRS=m
++CONFIG_ISCSI_TCP=m
++CONFIG_MEGARAID_NEWGEN=y
++CONFIG_MEGARAID_MM=y
++CONFIG_MEGARAID_MAILBOX=y
++CONFIG_MEGARAID_LEGACY=y
++CONFIG_MEGARAID_SAS=y
++CONFIG_ATA=y
++CONFIG_SATA_AHCI=y
++CONFIG_PATA_ATIIXP=y
++CONFIG_MD=y
++CONFIG_BLK_DEV_MD=m
++CONFIG_MD_LINEAR=m
++CONFIG_MD_RAID0=m
++CONFIG_MD_RAID1=m
++CONFIG_MD_RAID10=m
++CONFIG_MD_RAID456=m
++CONFIG_MD_MULTIPATH=m
++CONFIG_BLK_DEV_DM=m
++CONFIG_DM_CRYPT=m
++CONFIG_DM_SNAPSHOT=m
++CONFIG_DM_MIRROR=m
++CONFIG_DM_ZERO=m
++CONFIG_TARGET_CORE=m
++CONFIG_TCM_IBLOCK=m
++CONFIG_TCM_FILEIO=m
++CONFIG_TCM_PSCSI=m
++CONFIG_LOOPBACK_TARGET=m
++CONFIG_ISCSI_TARGET=m
++CONFIG_NETDEVICES=y
++CONFIG_TUN=m
++# CONFIG_NET_VENDOR_3COM is not set
++# CONFIG_NET_VENDOR_ADAPTEC is not set
++# CONFIG_NET_VENDOR_ALTEON is not set
++# CONFIG_NET_VENDOR_AMD is not set
++# CONFIG_NET_VENDOR_ARC is not set
++# CONFIG_NET_VENDOR_ATHEROS is not set
++# CONFIG_NET_VENDOR_BROADCOM is not set
++# CONFIG_NET_VENDOR_BROCADE is not set
++# CONFIG_NET_VENDOR_CHELSIO is not set
++# CONFIG_NET_VENDOR_CIRRUS is not set
++# CONFIG_NET_VENDOR_CISCO is not set
++# CONFIG_NET_VENDOR_DEC is not set
++# CONFIG_NET_VENDOR_DLINK is not set
++# CONFIG_NET_VENDOR_EMULEX is not set
++# CONFIG_NET_VENDOR_I825XX is not set
++CONFIG_E1000=y
++CONFIG_E1000E=y
++CONFIG_IGB=y
++CONFIG_IXGB=y
++CONFIG_IXGBE=y
++# CONFIG_NET_VENDOR_MARVELL is not set
++# CONFIG_NET_VENDOR_MELLANOX is not set
++# CONFIG_NET_VENDOR_MICREL is not set
++# CONFIG_NET_VENDOR_MICROCHIP is not set
++# CONFIG_NET_VENDOR_MICROSEMI is not set
++# CONFIG_NET_VENDOR_MYRI is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_NETERION is not set
++# CONFIG_NET_VENDOR_NETRONOME is not set
++# CONFIG_NET_VENDOR_NI is not set
++# CONFIG_NET_VENDOR_NVIDIA is not set
++# CONFIG_NET_VENDOR_OKI is not set
++# CONFIG_NET_VENDOR_PACKET_ENGINES is not set
++# CONFIG_NET_VENDOR_PENSANDO is not set
++# CONFIG_NET_VENDOR_QLOGIC is not set
++# CONFIG_NET_VENDOR_QUALCOMM is not set
++# CONFIG_NET_VENDOR_RDC is not set
++CONFIG_8139CP=y
++CONFIG_8139TOO=y
++# CONFIG_8139TOO_PIO is not set
++CONFIG_R8169=y
++# CONFIG_NET_VENDOR_RENESAS is not set
++# CONFIG_NET_VENDOR_ROCKER is not set
++# CONFIG_NET_VENDOR_SAMSUNG is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++# CONFIG_NET_VENDOR_SOLARFLARE is not set
++# CONFIG_NET_VENDOR_SILAN is not set
++# CONFIG_NET_VENDOR_SIS is not set
++# CONFIG_NET_VENDOR_SMSC is not set
++CONFIG_STMMAC_ETH=y
++# CONFIG_NET_VENDOR_SUN is not set
++# CONFIG_NET_VENDOR_TEHUTI is not set
++# CONFIG_NET_VENDOR_TI is not set
++# CONFIG_NET_VENDOR_TOSHIBA is not set
++# CONFIG_NET_VENDOR_VIA is not set
++# CONFIG_NET_VENDOR_WIZNET is not set
++CONFIG_PPP=m
++CONFIG_PPP_BSDCOMP=m
++CONFIG_PPP_DEFLATE=m
++CONFIG_PPP_FILTER=y
++CONFIG_PPP_MPPE=m
++CONFIG_PPP_MULTILINK=y
++CONFIG_PPPOE=m
++CONFIG_PPPOL2TP=m
++CONFIG_PPP_ASYNC=m
++CONFIG_PPP_SYNC_TTY=m
++CONFIG_ATH9K=m
++CONFIG_HOSTAP=m
++CONFIG_INPUT_LEDS=m
++CONFIG_INPUT_SPARSEKMAP=y
++CONFIG_INPUT_EVDEV=y
++# CONFIG_KEYBOARD_ATKBD is not set
++CONFIG_KEYBOARD_XTKBD=m
++# CONFIG_MOUSE_PS2 is not set
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_UINPUT=m
++# CONFIG_SERIO_I8042 is not set
++CONFIG_SERIO_SERPORT=m
++CONFIG_SERIO_LIBPS2=y
++CONFIG_SERIO_RAW=m
++CONFIG_LEGACY_PTY_COUNT=16
++CONFIG_SERIAL_8250=y
++# CONFIG_SERIAL_8250_16550A_VARIANTS is not set
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_NR_UARTS=16
++CONFIG_SERIAL_8250_EXTENDED=y
++CONFIG_SERIAL_8250_MANY_PORTS=y
++CONFIG_SERIAL_8250_SHARE_IRQ=y
++CONFIG_SERIAL_8250_RSA=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_SERIAL_NONSTANDARD=y
++CONFIG_HW_RANDOM=y
++CONFIG_RAW_DRIVER=m
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_PIIX4=y
++CONFIG_GPIO_LOONGSON=y
++CONFIG_SENSORS_LM75=m
++CONFIG_SENSORS_LM93=m
++CONFIG_SENSORS_W83627HF=m
++# CONFIG_MEDIA_CEC_SUPPORT is not set
++CONFIG_MEDIA_SUPPORT=m
++# CONFIG_MEDIA_CONTROLLER is not set
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=m
++CONFIG_DRM=y
++CONFIG_DRM_RADEON=y
++CONFIG_FB_RADEON=y
++CONFIG_LCD_CLASS_DEVICE=y
++CONFIG_LCD_PLATFORM=m
++# CONFIG_VGA_CONSOLE is not set
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
++CONFIG_LOGO=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_VERBOSE_PRINTK=y
++CONFIG_SND_SEQUENCER=y
++CONFIG_SND_SEQ_DUMMY=m
++# CONFIG_SND_ISA is not set
++CONFIG_SND_HDA_INTEL=y
++CONFIG_SND_HDA_HWDEP=y
++CONFIG_SND_HDA_PATCH_LOADER=y
++CONFIG_SND_HDA_CODEC_REALTEK=y
++CONFIG_SND_HDA_CODEC_ANALOG=y
++CONFIG_SND_HDA_CODEC_SIGMATEL=y
++CONFIG_SND_HDA_CODEC_VIA=y
++CONFIG_SND_HDA_CODEC_CONEXANT=y
++# CONFIG_SND_USB is not set
++CONFIG_SND_SOC=y
++CONFIG_HID_A4TECH=m
++CONFIG_HID_SUNPLUS=m
++CONFIG_USB=y
++CONFIG_USB_MON=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_ROOT_HUB_TT=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_UHCI_HCD=m
++CONFIG_USB_STORAGE=y
++CONFIG_USB_SERIAL=m
++CONFIG_USB_SERIAL_OPTION=m
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_CMOS=y
++CONFIG_DMADEVICES=y
++# CONFIG_CPU_HWMON is not set
++CONFIG_PM_DEVFREQ=y
++CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
++CONFIG_DEVFREQ_GOV_PERFORMANCE=y
++CONFIG_DEVFREQ_GOV_POWERSAVE=y
++CONFIG_DEVFREQ_GOV_USERSPACE=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_XFS_FS=y
++CONFIG_XFS_QUOTA=y
++CONFIG_XFS_POSIX_ACL=y
++CONFIG_QUOTA=y
++# CONFIG_PRINT_QUOTA_WARNING is not set
++CONFIG_AUTOFS4_FS=y
++CONFIG_FUSE_FS=m
++CONFIG_ISO9660_FS=m
++CONFIG_JOLIET=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_FAT_DEFAULT_CODEPAGE=936
++CONFIG_FAT_DEFAULT_IOCHARSET="gb2312"
++CONFIG_PROC_KCORE=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_CONFIGFS_FS=y
++CONFIG_CRAMFS=m
++CONFIG_SQUASHFS=y
++CONFIG_SQUASHFS_XATTR=y
++CONFIG_NFS_FS=m
++CONFIG_NFS_V3_ACL=y
++CONFIG_NFS_V4=m
++CONFIG_NFSD=m
++CONFIG_NFSD_V3_ACL=y
++CONFIG_NFSD_V4=y
++CONFIG_CIFS=m
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_CODEPAGE_936=y
++CONFIG_NLS_ASCII=y
++CONFIG_NLS_UTF8=y
++CONFIG_SECURITY=y
++CONFIG_SECURITYFS=y
++CONFIG_SECURITY_NETWORK=y
++CONFIG_SECURITY_PATH=y
++CONFIG_SECURITY_SELINUX=y
++CONFIG_SECURITY_SELINUX_BOOTPARAM=y
++CONFIG_SECURITY_SELINUX_DISABLE=y
++CONFIG_DEFAULT_SECURITY_DAC=y
++CONFIG_CRYPTO_SEQIV=m
++CONFIG_CRYPTO_HMAC=y
++CONFIG_CRYPTO_MD5=y
++CONFIG_CRYPTO_TGR192=m
++CONFIG_CRYPTO_WP512=m
++CONFIG_CRYPTO_BLOWFISH=m
++CONFIG_CRYPTO_CAST5=m
++CONFIG_CRYPTO_CAST6=m
++CONFIG_CRYPTO_SERPENT=m
++CONFIG_CRYPTO_TWOFISH=m
++CONFIG_CRYPTO_DEFLATE=m
++CONFIG_PRINTK_TIME=y
++CONFIG_FRAME_WARN=1024
++CONFIG_STRIP_ASM_SYMS=y
++CONFIG_MAGIC_SYSRQ=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_DEBUG_PREEMPT is not set
++# CONFIG_FTRACE is not set
 -- 
 2.20.1
 
