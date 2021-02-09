@@ -2,96 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8E53145A9
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 02:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1543145B0
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 02:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbhBIBdg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Feb 2021 20:33:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53248 "EHLO mail.kernel.org"
+        id S229564AbhBIBhO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Feb 2021 20:37:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53934 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229637AbhBIBdf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Feb 2021 20:33:35 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 27D4F64EB1
-        for <linux-mips@vger.kernel.org>; Tue,  9 Feb 2021 01:32:53 +0000 (UTC)
+        id S229623AbhBIBhK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Feb 2021 20:37:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2781664DF2;
+        Tue,  9 Feb 2021 01:36:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612834373;
-        bh=lYqM7/lEWVHAKYtC3FaKyuSyTQEiG+A88HRLRq2L/eY=;
+        s=k20201202; t=1612834589;
+        bh=GeneRGHAa6mtWP0C7hDko1vrvp1LSL3adVABNeZ6jD4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZBQ6ukWtHuipcG3zvrgoT6W4JhM+d6BXfLBdOcB7uPi3OJWrDO8tqXSZ+6hCrvlfW
-         kMGwvRMBjFmnfwOqkS4NR+hlgwtkUb+7nY7PiC/Wr0teXmbh2ZoZ63DhqEOR2rvNwP
-         erzQOKDSqoIjrCnNiaat4IIG1v+0uOxBoxBGh5tPiYIYjFd22TakELSQEelUr8skmT
-         kf46yE/KdtgqcYesUo2c1RidCZbRbEkvAc12afBtuzekGylXPXfCtzvvi7fQ+CSPUn
-         AOmnfTATRufNEIb7kWy3HUAx8raHTowzGKRDVWvm306I1Ms29Hp8CxcUXQ+gE+WPX7
-         rPQQ5C4ZEJ1ew==
-Received: by mail-il1-f180.google.com with SMTP id a16so14683226ilq.5
-        for <linux-mips@vger.kernel.org>; Mon, 08 Feb 2021 17:32:53 -0800 (PST)
-X-Gm-Message-State: AOAM531figYVXN61Hq+Dz82deQxY6vBFlXgQwbYRang0a20hA+BVsmHU
-        sB4y60o2JCs4r5S4cSFbjetiQho4svitlCPAjJ8=
-X-Google-Smtp-Source: ABdhPJwsXfKFk8CbiylVGFHiRMWVw3cJyeC9NSfIWn2FvOnYn7fRHjTkyF40vscRMrbwzWdqsuWk/u83ImQBGqzQLa4=
-X-Received: by 2002:a92:1e12:: with SMTP id e18mr17946547ile.270.1612834372505;
- Mon, 08 Feb 2021 17:32:52 -0800 (PST)
+        b=qFlJGIRhgAMU7d3IrGb90w8fBAZFnDMzYHoPUQ/yP1HYUTFUxU+4Lw+tmCZu0HuZM
+         8JVI2vh1zK/7K3A0xRL/K+Yxm+N8NZK9kpPYcklH2cGmEdhShXfqzT8xo4Ptzf9DOo
+         C2c4cKL+dk2yR19trrNMl0DStwPuDuqLBamP9cPPx0DqAVqVRj12hlZETEFXt7eY31
+         Ej5GVQAs/xhEUTNqtB3nbOL/+f46wuVA3MXSnLxtKS35gdQXO5qxNCoD+n5bITNoWi
+         pFC4bj9GBSNaARq9YG58b8RfAM5ER7WvG/5UgayltQJmVEyfichpmSM5yqeLzPcEsC
+         pAT3TK9Pc2WbA==
+Received: by mail-io1-f45.google.com with SMTP id n201so17109941iod.12;
+        Mon, 08 Feb 2021 17:36:29 -0800 (PST)
+X-Gm-Message-State: AOAM530y03JbmV2CwFSD7X1iQ13QNwtH95ILoMA3IQ4HiiEfZ9RnVgQD
+        eUBq8DeQ99CbA1Qa/i9Rue4N/y3Zr8XK1ZqD7bo=
+X-Google-Smtp-Source: ABdhPJxP5beny0HTZjFbw+i6C1OKgk88+dVSmY8J+hKVb39JSxw+ga6AWtvp798tmky4G/ptrT8Bp8w75IINstnUFS0=
+X-Received: by 2002:a05:6638:388e:: with SMTP id b14mr20526766jav.96.1612834588516;
+ Mon, 08 Feb 2021 17:36:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20210203123425.GA9574@alpha.franken.de> <a2a2cfe3-5618-43b1-a6a4-cc768fc1b9fb@www.fastmail.com>
- <20210207193952.GA21929@alpha.franken.de> <59a9a55c-2866-413f-89e3-b11e274c2d34@www.fastmail.com>
-In-Reply-To: <59a9a55c-2866-413f-89e3-b11e274c2d34@www.fastmail.com>
+References: <20210208145024.3320420-1-hch@lst.de> <20210208145024.3320420-7-hch@lst.de>
+In-Reply-To: <20210208145024.3320420-7-hch@lst.de>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 9 Feb 2021 09:32:40 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6jkQBmr7+_GzUSAUhN035kCzNxoS30H_PdOpKzJO1JWA@mail.gmail.com>
-Message-ID: <CAAhV-H6jkQBmr7+_GzUSAUhN035kCzNxoS30H_PdOpKzJO1JWA@mail.gmail.com>
-Subject: Re: KVM Guest
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date:   Tue, 9 Feb 2021 09:36:16 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5POedAyG97956Zb5U1Ry5HFPWN7Xqhk7ZWHHhuXoNymQ@mail.gmail.com>
+Message-ID: <CAAhV-H5POedAyG97956Zb5U1Ry5HFPWN7Xqhk7ZWHHhuXoNymQ@mail.gmail.com>
+Subject: Re: [PATCH 6/6] MIPS: remove CONFIG_DMA_PERDEV_COHERENT
+To:     Christoph Hellwig <hch@lst.de>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org," <linux-mips@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-I think it can be removed.
+Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
-Huacai
-
-On Tue, Feb 9, 2021 at 12:40 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+On Mon, Feb 8, 2021 at 10:51 PM Christoph Hellwig <hch@lst.de> wrote:
 >
+> Just select DMA_NONCOHERENT and ARCH_HAS_SETUP_DMA_OPS from the
+> MIPS_GENERIC platform instead.
 >
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  arch/mips/Kconfig              | 8 ++------
+>  arch/mips/mm/dma-noncoherent.c | 2 +-
+>  2 files changed, 3 insertions(+), 7 deletions(-)
 >
-> On Mon, Feb 8, 2021, at 3:39 AM, Thomas Bogendoerfer wrote:
-> > On Wed, Feb 03, 2021 at 08:52:34PM +0800, Jiaxun Yang wrote:
-> > >
-> > >
-> > > On Wed, Feb 3, 2021, at 8:34 PM, Thomas Bogendoerfer wrote:
-> > > > Hi,
-> > > >
-> > > > Does kvm guest kernel still work ? I'm playing with current mips-next
-> > > > and starting a kvm guest kernel inside an emulated malta system also
-> > > > running a mips-next kernel. The kvm guest kernel starts, but hangs
-> > > > in calibrate_delay (at least that's what info registers in qemu monitor
-> > > > suggests). Ayn ideas ?
-> > >
-> > > The current KVM guest kernel is actually a Trap-and-emul guest kernel.
-> > > VZ based KVM uses the same binary with the host one, so does TCG.
-> > >
-> > > TE KVM is current unmaintained. I'll try to get a malta and do some test.
-> >
-> > hmm, so it looks broken, is unmaintained, how about removing it ?
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 1f1603a08a6d2d..fae02b0b9c599a 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -123,6 +123,7 @@ choice
 >
-> Probably. I got remote access of a CoreLV malta but no luck to boot kernel as well.
+>  config MIPS_GENERIC_KERNEL
+>         bool "Generic board-agnostic MIPS kernel"
+> +       select ARCH_HAS_SETUP_DMA_OPS
+>         select MIPS_GENERIC
+>         select BOOT_RAW
+>         select BUILTIN_DTB
+> @@ -132,7 +133,7 @@ config MIPS_GENERIC_KERNEL
+>         select CPU_MIPSR2_IRQ_EI
+>         select CPU_MIPSR2_IRQ_VI
+>         select CSRC_R4K
+> -       select DMA_PERDEV_COHERENT
+> +       select DMA_NONCOHERENT
+>         select HAVE_PCI
+>         select IRQ_MIPS_CPU
+>         select MIPS_AUTO_PFN_OFFSET
+> @@ -1127,11 +1128,6 @@ config FW_CFE
+>  config ARCH_SUPPORTS_UPROBES
+>         bool
 >
-> + Huacai as KVM/MIPS Maintainer.
-> + Philippe as QEMU/MIPS Maintainer.
-> + qemu-devel for wider audience.
+> -config DMA_PERDEV_COHERENT
+> -       bool
+> -       select ARCH_HAS_SETUP_DMA_OPS
+> -       select DMA_NONCOHERENT
+> -
+>  config DMA_NONCOHERENT
+>         bool
+>         #
+> diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
+> index 90b562753eb892..212f3ce75a6bd3 100644
+> --- a/arch/mips/mm/dma-noncoherent.c
+> +++ b/arch/mips/mm/dma-noncoherent.c
+> @@ -135,7 +135,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
+>  }
+>  #endif
 >
-> If nobody intended to maintain it probably it's time to remove it.
->
-> >
-> > Thomas.
-> >
-> > --
-> > Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> > good idea.                                                [ RFC1925, 2.3 ]
-> >
->
+> -#ifdef CONFIG_DMA_PERDEV_COHERENT
+> +#ifdef CONFIG_ARCH_HAS_SETUP_DMA_OPS
+>  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+>                 const struct iommu_ops *iommu, bool coherent)
+>  {
 > --
-> - Jiaxun
+> 2.29.2
+>
