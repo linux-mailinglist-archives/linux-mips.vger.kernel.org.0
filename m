@@ -2,104 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2895B313F8D
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Feb 2021 20:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8E53145A9
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Feb 2021 02:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236476AbhBHTvQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Feb 2021 14:51:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45124 "EHLO mail.kernel.org"
+        id S229822AbhBIBdg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Feb 2021 20:33:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53248 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236330AbhBHTtj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Feb 2021 14:49:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 92C1164E56;
-        Mon,  8 Feb 2021 19:48:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1612813738;
-        bh=fiMaPfVra/2zEjkMsZvR8Iyt6gmFiqnTTP4gAMQuARo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MTPknMTmNhE9DO36kKtRa7zJ2V5noBJBWB2U8EeHHO6MU76BZaAVYfbCCxMvHgNBe
-         D9LD+e3ehRFEhc2ZrcI+BLv11Pnzl/dtrwDbc4XJxBZvLi6h/tH+YlaYJANtx/m19P
-         UJTMWWsq4MxVBfXOB4lIOm65+CDZrCHF8dJc4vfc=
-Date:   Mon, 8 Feb 2021 11:48:56 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+        id S229637AbhBIBdf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Feb 2021 20:33:35 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 27D4F64EB1
+        for <linux-mips@vger.kernel.org>; Tue,  9 Feb 2021 01:32:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612834373;
+        bh=lYqM7/lEWVHAKYtC3FaKyuSyTQEiG+A88HRLRq2L/eY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZBQ6ukWtHuipcG3zvrgoT6W4JhM+d6BXfLBdOcB7uPi3OJWrDO8tqXSZ+6hCrvlfW
+         kMGwvRMBjFmnfwOqkS4NR+hlgwtkUb+7nY7PiC/Wr0teXmbh2ZoZ63DhqEOR2rvNwP
+         erzQOKDSqoIjrCnNiaat4IIG1v+0uOxBoxBGh5tPiYIYjFd22TakELSQEelUr8skmT
+         kf46yE/KdtgqcYesUo2c1RidCZbRbEkvAc12afBtuzekGylXPXfCtzvvi7fQ+CSPUn
+         AOmnfTATRufNEIb7kWy3HUAx8raHTowzGKRDVWvm306I1Ms29Hp8CxcUXQ+gE+WPX7
+         rPQQ5C4ZEJ1ew==
+Received: by mail-il1-f180.google.com with SMTP id a16so14683226ilq.5
+        for <linux-mips@vger.kernel.org>; Mon, 08 Feb 2021 17:32:53 -0800 (PST)
+X-Gm-Message-State: AOAM531figYVXN61Hq+Dz82deQxY6vBFlXgQwbYRang0a20hA+BVsmHU
+        sB4y60o2JCs4r5S4cSFbjetiQho4svitlCPAjJ8=
+X-Google-Smtp-Source: ABdhPJwsXfKFk8CbiylVGFHiRMWVw3cJyeC9NSfIWn2FvOnYn7fRHjTkyF40vscRMrbwzWdqsuWk/u83ImQBGqzQLa4=
+X-Received: by 2002:a92:1e12:: with SMTP id e18mr17946547ile.270.1612834372505;
+ Mon, 08 Feb 2021 17:32:52 -0800 (PST)
+MIME-Version: 1.0
+References: <20210203123425.GA9574@alpha.franken.de> <a2a2cfe3-5618-43b1-a6a4-cc768fc1b9fb@www.fastmail.com>
+ <20210207193952.GA21929@alpha.franken.de> <59a9a55c-2866-413f-89e3-b11e274c2d34@www.fastmail.com>
+In-Reply-To: <59a9a55c-2866-413f-89e3-b11e274c2d34@www.fastmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 9 Feb 2021 09:32:40 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6jkQBmr7+_GzUSAUhN035kCzNxoS30H_PdOpKzJO1JWA@mail.gmail.com>
+Message-ID: <CAAhV-H6jkQBmr7+_GzUSAUhN035kCzNxoS30H_PdOpKzJO1JWA@mail.gmail.com>
+Subject: Re: KVM Guest
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huang Pei <huangpei@loongson.cn>, ambrosehua@gmail.com,
-        Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH] MIPS: make userspace mapping young by default
-Message-Id: <20210208114856.e8062823b2e84e1adb1d59bb@linux-foundation.org>
-In-Reply-To: <30b3fcb5-a60d-228f-15d2-cd182953de45@csgroup.eu>
-References: <20210204013942.8398-1-huangpei@loongson.cn>
-        <20210204152239.GA14292@alpha.franken.de>
-        <20210205154105.32bb13df439aa49b7fc167e7@linux-foundation.org>
-        <30b3fcb5-a60d-228f-15d2-cd182953de45@csgroup.eu>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+        "linux-mips@vger.kernel.org," <linux-mips@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 8 Feb 2021 18:44:22 +0100 Christophe Leroy <christophe.leroy@csgrou=
-p.eu> wrote:
+I think it can be removed.
 
->=20
->=20
-> Le 06/02/2021 =E0 00:41, Andrew Morton a =E9crit=A0:
-> > On Thu, 4 Feb 2021 16:22:39 +0100 Thomas Bogendoerfer <tsbogend@alpha.f=
-ranken.de> wrote:
-> >=20
-> >> On Thu, Feb 04, 2021 at 09:39:42AM +0800, Huang Pei wrote:
-> >>> MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss
-> >>> + 2 TLB Invalid), butthe second TLB Invalid exception is just
-> >>> triggered by __update_tlb from do_page_fault writing tlb without
-> >>> _PAGE_VALID set. With this patch, user space mapping prot is made
-> >>> young by default (with both _PAGE_VALID and _PAGE_YOUNG set),
-> >>> and it only take 1 TLB Miss + 1 TLB Invalid exception
-> >>>
-> >>> Remove pte_sw_mkyoung without polluting MM code and make page fault
-> >>> delay of MIPS on par with other architecture
-> >>>
-> >>> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> >>> ---
-> >>>   arch/mips/mm/cache.c    | 30 ++++++++++++++++--------------
-> >>>   include/linux/pgtable.h |  8 --------
-> >>>   mm/memory.c             |  3 ---
-> >>>   3 files changed, 16 insertions(+), 25 deletions(-)
-> >>
-> >> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> >>
-> >> Andrew, can you take this patch through your tree ?
-> >=20
-> > Sure.  I'll drop Christophe's "mm/memory.c: remove pte_sw_mkyoung()"
-> > (https://lkml.kernel.org/r/f302ef92c48d1f08a0459aaee1c568ca11213814.161=
-2345700.git.christophe.leroy@csgroup.eu)
-> > in favour of this one.
-> >=20
->=20
-> Pitty. My patch was improving page faults on powerpc/32.
+Huacai
 
-How does it do that?  By running pte_mkyoung() for powerpc32?  Such a
-change is still valid, isn't it?
-
-> That one is only addressing MIPS.
-
-It cleans up core code nicely, by removing a MIPS wart.  We can still
-add a ppc32 wart?
-
->=20
-> Any plan to take the series from Nick=20
-> https://patchwork.kernel.org/project/linux-mm/list/?series=3D404539 ?
-
-I expect so.  After -rc1, if the churn is settling down and reviewers
-are happy enough.
+On Tue, Feb 9, 2021 at 12:40 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+>
+>
+> On Mon, Feb 8, 2021, at 3:39 AM, Thomas Bogendoerfer wrote:
+> > On Wed, Feb 03, 2021 at 08:52:34PM +0800, Jiaxun Yang wrote:
+> > >
+> > >
+> > > On Wed, Feb 3, 2021, at 8:34 PM, Thomas Bogendoerfer wrote:
+> > > > Hi,
+> > > >
+> > > > Does kvm guest kernel still work ? I'm playing with current mips-next
+> > > > and starting a kvm guest kernel inside an emulated malta system also
+> > > > running a mips-next kernel. The kvm guest kernel starts, but hangs
+> > > > in calibrate_delay (at least that's what info registers in qemu monitor
+> > > > suggests). Ayn ideas ?
+> > >
+> > > The current KVM guest kernel is actually a Trap-and-emul guest kernel.
+> > > VZ based KVM uses the same binary with the host one, so does TCG.
+> > >
+> > > TE KVM is current unmaintained. I'll try to get a malta and do some test.
+> >
+> > hmm, so it looks broken, is unmaintained, how about removing it ?
+>
+> Probably. I got remote access of a CoreLV malta but no luck to boot kernel as well.
+>
+> + Huacai as KVM/MIPS Maintainer.
+> + Philippe as QEMU/MIPS Maintainer.
+> + qemu-devel for wider audience.
+>
+> If nobody intended to maintain it probably it's time to remove it.
+>
+> >
+> > Thomas.
+> >
+> > --
+> > Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> > good idea.                                                [ RFC1925, 2.3 ]
+> >
+>
+> --
+> - Jiaxun
