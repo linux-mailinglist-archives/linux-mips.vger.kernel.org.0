@@ -2,94 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 991F3315F11
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 06:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B3A3161B2
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 10:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbhBJFbF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Feb 2021 00:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbhBJFbE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 00:31:04 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785EFC061756
-        for <linux-mips@vger.kernel.org>; Tue,  9 Feb 2021 21:30:24 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id y9so1701810ejp.10
-        for <linux-mips@vger.kernel.org>; Tue, 09 Feb 2021 21:30:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=MICJlJ29tnK0OfCyoQ6hy5raS8MLx1t0pMdT44oGdyg=;
-        b=nfbBML/4y70ovJ2kiP9RG4GcxYkTO+D3LyhbGrYmbdYX7rKrIpX6minKQOhPHiNfVf
-         ycrDDxo78Yn4BzEYDPu66bkXO+MyRZ+XJfiIEX6eAmCK7Ubo6u6uU+pkzcufzqcgX5HL
-         jsHZlagsshooCK1KC0HIgZYZkvmlZOsbBwCzbrl/ixW7WlnNGy5dGyqqRgjcUdhVmmkT
-         tCQ0O1OyhgTyBA7T9xH1+ABwCHlABqisavBE7ffDIVSYjpOSJWwFBYTyx6g+uvGHkYsu
-         d1Pecs/8/PGPQC06MBB9T1yLCJZ7/KNGEZXAKroDC1N1+fTESJhsrqouMLi+mC/80Pzs
-         DCWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=MICJlJ29tnK0OfCyoQ6hy5raS8MLx1t0pMdT44oGdyg=;
-        b=aKCw0XoYyrOHOEsLg6J8Gie4vsYHPxlW2OLnow3F07Of8MhjVuMNLSe4h6tKz6cboh
-         oHuBhkj//saVYgU/X+km0jrpVAGuYOE1rugBR/K2R6c2ri1ZVLwxpPNkh4lANG/bmpm4
-         lN74tRzp3Rj1KB3MplGA4Haz3T6qz8NawDPaz0EAU5z0ADeZ67Nrc6RH6Qg9vtGYms49
-         4qdLAwyzevbTr4Eym+qa9ptQ46CSGAFT5KZTwKV1EEBx+IRbksH78YEbGbK9ORjCARkb
-         PhaSJPjDLJr3iSSl1Vo8hJwWzEjD/JHuncEG8Fr2r3EoFW520RwtoEu5Sm3b39mYhgT1
-         6OCg==
-X-Gm-Message-State: AOAM533RtwqjTnp8myvbb5NJ+zXaoNs7Sekr2MaA/Lz6dGlZE+oMcU6A
-        /xwOrvpz6dD+kfnRWUEup0ZuJLUy+U3bAPZ0EMHlzOpeC28TtYRT
-X-Google-Smtp-Source: ABdhPJxEoJqFS1/67jseq2Ryw8nAFmbH3a+Jxs2FDMzSngVK9VYGXMqwMiOfqb1G8wgBu2idtECavM8knM8Y8m+9beE=
-X-Received: by 2002:a17:906:a153:: with SMTP id bu19mr1269611ejb.287.1612935022534;
- Tue, 09 Feb 2021 21:30:22 -0800 (PST)
+        id S230064AbhBJJAE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Feb 2021 04:00:04 -0500
+Received: from verein.lst.de ([213.95.11.211]:49933 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230091AbhBJI6M (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Feb 2021 03:58:12 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 37B6B6736F; Wed, 10 Feb 2021 09:57:25 +0100 (CET)
+Date:   Wed, 10 Feb 2021 09:57:24 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Subject: Re: [PATCH 4/6] MIPS: refactor the maybe coherent DMA indicators
+Message-ID: <20210210085724.GA24610@lst.de>
+References: <20210208145024.3320420-1-hch@lst.de> <20210208145024.3320420-5-hch@lst.de> <20210209131237.GB11915@alpha.franken.de>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 10 Feb 2021 11:00:11 +0530
-Message-ID: <CA+G9fYtkWdeL7-nfXW8+VbaCK7swinU_Ksn67RW4FFD+cx8VYg@mail.gmail.com>
-Subject: [next] [mips] spinlock.h:17:28: error: redefinition of 'queued_spin_unlock'
-To:     linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Paul Burton <paul.burton@mips.com>, Will Deacon <will@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210209131237.GB11915@alpha.franken.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-While building Linux next tag 20210209 mips uImage.gz failed with below configs
+On Tue, Feb 09, 2021 at 02:12:37PM +0100, Thomas Bogendoerfer wrote:
+> > +#ifdef CONFIG_DMA_MAYBE_COHERENT
+> > +extern bool dma_default_coherent;
+> >  static inline bool dev_is_dma_coherent(struct device *dev)
+> >  {
+> > -	return coherentio == IO_COHERENCE_ENABLED ||
+> > -		(coherentio == IO_COHERENCE_DEFAULT && hw_coherentio);
+> > +	return dma_default_coherent;
+> 
+> this breaks overriding of coherentio via command line. plat_mem_setup/
+> plat_setup_iocoherency is called before earlyparams are handled. So
+> changing coherentio after that doesn't have any effect.
 
-  - mips (cavium_octeon_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
-  - mips (malta_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
-  - mips (nlm_xlp_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
-  - mips (defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
-
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc' uImage.gz
-In file included from /include/linux/spinlock.h:90,
-                 from /include/linux/ipc.h:5,
-                 from /include/uapi/linux/sem.h:5,
-                 from /include/linux/sem.h:5,
-                 from /include/linux/compat.h:14,
-                 from /arch/mips/kernel/asm-offsets.c:12:
-/arch/mips/include/asm/spinlock.h:17:28: error: redefinition of
-'queued_spin_unlock'
-   17 | #define queued_spin_unlock queued_spin_unlock
-      |                            ^~~~~~~~~~~~~~~~~~
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
-build link,
-https://builds.tuxbuild.com/1oF9lkBAeWM2WvR11O2Yun8ERNT/
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Hmm.  In that case a manual override does actually work for alchemy,
+as that initializes coherentio from plat_mem_setup().  But the
+elaborate sanity checking that malta performs in plat_setup_iocoherency
+is rather pointless then, as coherentio will always be set to
+IO_COHERENCE_DISABLED at this point.
