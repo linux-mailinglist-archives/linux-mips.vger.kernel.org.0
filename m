@@ -2,116 +2,244 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DF7316C0F
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 18:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7C8316CA8
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 18:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbhBJRFs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Feb 2021 12:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbhBJRFo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 12:05:44 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89715C06174A
-        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 09:05:04 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id m13so3351502wro.12
-        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 09:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ep/FDpznCUD5t+mHArGEFOrAw8wvHgkG6nK9cK6sVyI=;
-        b=l0iLHULMd41UjPr3/tt6FiBu7jxjsHje1rxBvDgVRuQgQRgaMGarUFf1xD/MDxG+gg
-         rCuUeSKKiGYcIyloePZCV7fA0OrRCiVevEU5gqZB0n7hFm9XyaA8TnCTCU0TvwPP1xoc
-         wXc7GUoj9EHxBfS99UeFPpPGQtXZ1AJnOVRmbP8EXEroYuNI8jUg/f7Nr8q6EqnkhgdO
-         cTkiVzzYiPpQPm6VxINj7rq+HHZ/oAirO8J6nqVvPXhmjTvVO79KpEaTuGyNW0wr04Si
-         N8ck7xsfI1fXi/iYKVdkBKnXfL068mtCEjzNda6iSuLkQD7VHXH56dncWrrnXZml+sRX
-         gf3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ep/FDpznCUD5t+mHArGEFOrAw8wvHgkG6nK9cK6sVyI=;
-        b=kvGFJTOrSu5/fI9V62O3XD1rHae2XvIlsJic+6NkIqjcY9SlPq3slKTGkd30LQEMyv
-         wC/NTf/V+nmib2ZZdTAoS6cLGq/5H43QwDwUdbRwujVe1l8WbCNkkycevbfzz9Ek9lHx
-         VdF+V1U7qJebQRG/oOgC2kiDYYATVGaJNUSMRoUpDzplssVEqP3nmFsiZjJX+K3iNzG0
-         4NuTjXEdoiLKIPRuzC79zlq8TyT6vGab30Z8yPTh+H3OxjmyJT/1xAdH+zBzxRB8Ts4X
-         YjlOdX8/dKty8NhyFtdIgXxBxmsqwdM76StymBiu+3qk1eFLz2kthBa/GKfQQX4eGYMR
-         I49Q==
-X-Gm-Message-State: AOAM531xGZeNec840YkZan1tpF2klH116u8+S7JzQ9PN8uCvyJFOS6/+
-        9OorNcb3I4/C7GG7MtGqu9RTnGhEDv7DKA==
-X-Google-Smtp-Source: ABdhPJzu1HV7VjUbMAXR0rnJs5YczWEuPmQWyg76b138n5O2o5n62VdmwC0PMMfFUmG2/zltjp8qLg==
-X-Received: by 2002:a5d:42cf:: with SMTP id t15mr4669657wrr.82.1612976703183;
-        Wed, 10 Feb 2021 09:05:03 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id f8sm3816175wrp.65.2021.02.10.09.05.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 09:05:02 -0800 (PST)
-Date:   Wed, 10 Feb 2021 17:05:00 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
+        id S232389AbhBJRaE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Feb 2021 12:30:04 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:34762 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232046AbhBJR3r (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 12:29:47 -0500
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Vineet Gupta <vgupta@synopsys.com>,
+        Rafal Milecki <zajec5@gmail.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Benoit Cousson <bcousson@baylibre.com>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Andy Gross <agross@kernel.org>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
         Paul Cercueil <paul@crapouillou.net>,
-        Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] MIPS: make kgdb depend on FPU support
-Message-ID: <20210210170500.3osd7agp4kpmygwk@maple.lan>
-References: <20210122110307.934543-1-arnd@kernel.org>
- <20210122110307.934543-2-arnd@kernel.org>
- <alpine.DEB.2.21.2102081748280.35623@angie.orcam.me.uk>
- <20210210113830.xeechzpctz5repv5@maple.lan>
- <alpine.DEB.2.21.2102101252580.35623@angie.orcam.me.uk>
- <20210210122929.rgqfkoop4rsso3yo@maple.lan>
- <alpine.DEB.2.21.2102101444140.35623@angie.orcam.me.uk>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Kukjin Kim <kgene@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Tony Lindgren <tony@atomide.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jun Li <lijun.kernel@gmail.com>,
+        <linux-snps-arc@lists.infradead.org>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mips@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v6 00/10] dt-bindings: usb: Harmonize xHCI/EHCI/OHCI/DWC3 nodes name
+Date:   Wed, 10 Feb 2021 20:28:40 +0300
+Message-ID: <20210210172850.20849-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2102101444140.35623@angie.orcam.me.uk>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 03:15:10PM +0100, Maciej W. Rozycki wrote:
-> On Wed, 10 Feb 2021, Daniel Thompson wrote:
-> 
-> > >  NB if GDB sees a register padded out (FAOD it means all-x's rather than a 
-> > > hex string placed throughout the respective slot) in a `g' packet, then it 
-> > > will mark the register internally as "unavailable" and present it to the 
-> > > receiver of the information as such rather than giving any specific value.  
-> > > I don't remember offhand what the syntax for the `G' packet is in that 
-> > > case; possibly GDB just sends all-zeros, and in any case you can't make 
-> > > GDB write any specific value to such a register via any user
-> > > interface.
-> > 
-> > kgdb doesn't track register validity and adding would be a fairly big
-> > change. Everything internally (including some of the interactions with
-> > arch code) is based on updating a binary shadow of register state which
-> > is only bin2hex'ed just before transmitting a packet.
-> 
->  I've had a peek and it doesn't appear to me it would be a big deal.
-> 
->  We have `gdb_regs' defined as an array of longs.  We'd just need a second 
-> array for a register validity bitmap, which could for simplicity just have 
-> a single bit per each byte of `gdb_regs'.  It would then be updated in 
-> `pt_regs_to_gdb_regs' according to the result of `dbg_get_reg' across the 
-> number of bits given by `dbg_reg_def[i].size'.  And then `kgdb_mem2hex' 
-> would interpret the bitmap given as an extra argument accordingly.
-> 
->  It looks to me like a couple of lines of extra code really.
+As the subject states this series is an attempt to harmonize the xHCI,
+EHCI, OHCI and DWC USB3 DT nodes with the DT schema introduced in the
+framework of the patchset [1].
 
-Agree, the core changes aren't too bad.
+Firstly as Krzysztof suggested we've deprecated a support of DWC USB3
+controllers with "synopsys,"-vendor prefix compatible string in favor of
+the ones with valid "snps,"-prefix. It's done in all the DTS files,
+which have been unfortunate to define such nodes.
 
-I was more concerned about whether the validity bits would leak into the
-arch specific code via sleeping_thread_to_gdb_regs() and also noted the
-effort needed to review each architectures dbg_get_reg() implementation
-if we are going to react differently to it's return value.
+Secondly we suggest to fix the snps,quirk-frame-length-adjustment property
+declaration in the Amlogic meson-g12-common.dtsi DTS file, since it has
+been erroneously declared as boolean while having uint32 type. Neil said
+it was ok to init that property with 0x20 value.
 
-It is still not an infeasible amount of work though if someone
-does want to go in this direction.
+Thirdly the main part of the patchset concern fixing the xHCI, EHCI/OHCI
+and DWC USB3 DT nodes name as in accordance with their DT schema the
+corresponding node name is suppose to comply with the Generic USB HCD DT
+schema, which requires the USB nodes to have the name acceptable by the
+regexp: "^usb(@.*)?". Such requirement had been applicable even before we
+introduced the new DT schema in [1], but as we can see it hasn't been
+strictly implemented for a lot the DTS files. Since DT schema is now
+available the automated DTS validation shall make sure that the rule isn't
+violated.
 
+Note most of these patches have been a part of the last three patches of
+[1]. But since there is no way to have them merged in in a combined
+manner, I had to move them to the dedicated series and split them up so to
+be accepted by the corresponding subsystem maintainers one-by-one.
 
-Daniel.
+[1] Link: https://lore.kernel.org/linux-usb/20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v1:
+- As Krzysztof suggested I've created a script which checked whether the
+  node names had been also updated in all the depended dts files. As a
+  result I found two more files which should have been also modified:
+  arch/arc/boot/dts/{axc003.dtsi,axc003_idu.dtsi}
+- Correct the USB DWC3 nodes name found in
+  arch/arm64/boot/dts/apm/{apm-storm.dtsi,apm-shadowcat.dtsi} too.
+
+Link: https://lore.kernel.org/linux-usb/20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru
+Changelog v2:
+- Drop the patch:
+  [PATCH 01/29] usb: dwc3: Discard synopsys,dwc3 compatibility string
+  and get back the one which marks the "synopsys,dwc3" compatible string
+  as deprecated into the DT schema related series.
+- Drop the patches:
+  [PATCH 03/29] arm: dts: am437x: Correct DWC USB3 compatible string
+  [PATCH 04/29] arm: dts: exynos: Correct DWC USB3 compatible string
+  [PATCH 07/29] arm: dts: bcm53x: Harmonize EHCI/OHCI DT nodes name
+  [PATCH 08/29] arm: dts: stm32: Harmonize EHCI/OHCI DT nodes name
+  [PATCH 16/29] arm: dts: bcm5301x: Harmonize xHCI DT nodes name
+  [PATCH 19/29] arm: dts: exynos: Harmonize DWC USB3 DT nodes name
+  [PATCH 21/29] arm: dts: ls1021a: Harmonize DWC USB3 DT nodes name
+  [PATCH 22/29] arm: dts: omap5: Harmonize DWC USB3 DT nodes name
+  [PATCH 24/29] arm64: dts: allwinner: h6: Harmonize DWC USB3 DT nodes name
+  [PATCH 26/29] arm64: dts: exynos: Harmonize DWC USB3 DT nodes name
+  [PATCH 27/29] arm64: dts: layerscape: Harmonize DWC USB3 DT nodes name
+  since they have been applied to the corresponding maintainers repos.
+- Fix drivers/usb/dwc3/dwc3-qcom.c to be looking for the "usb@"-prefixed
+  sub-node and falling back to the "dwc3@"-prefixed one on failure.
+
+Link: https://lore.kernel.org/linux-usb/20201111091552.15593-1-Sergey.Semin@baikalelectronics.ru
+Changelog v3:
+- Drop the patches:
+  [PATCH v2 04/18] arm: dts: hisi-x5hd2: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 06/18] arm64: dts: hisi: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 07/18] mips: dts: jz47x: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 08/18] mips: dts: sead3: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 09/18] mips: dts: ralink: mt7628a: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 11/18] arm64: dts: marvell: cp11x: Harmonize xHCI DT nodes name
+  [PATCH v2 12/18] arm: dts: marvell: armada-375: Harmonize DWC USB3 DT nodes name
+  [PATCH v2 16/18] arm64: dts: hi3660: Harmonize DWC USB3 DT nodes name
+  since they have been applied to the corresponding maintainers repos.
+
+Link: https://lore.kernel.org/linux-usb/20201205155621.3045-1-Sergey.Semin@baikalelectronics.ru
+Changelog v4:
+- Just resend.
+
+Link: https://lore.kernel.org/linux-usb/20201210091756.18057-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v5:
+- Drop the patch:
+  [PATCH v4 02/10] arm64: dts: amlogic: meson-g12: Set FL-adj property value
+  since it has been applied to the corresponding maintainers repos.
+- Get back the patch:
+  [PATCH 21/29] arm: dts: ls1021a: Harmonize DWC USB3 DT nodes name
+  as it has been missing in the kernel 5.11-rc7
+- Rebase onto the kernel 5.11-rc7
+
+Link: https://lore.kernel.org/lkml/20210208135154.6645-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v6:
+- Just resend and add linux-usb.vger.kernel.org to the list of Ccecipients.
+
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Cc: Rafal Milecki <zajec5@gmail.com>
+Cc: Wei Xu <xuwei5@hisilicon.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Jason Cooper <jason@lakedaemon.net>
+Cc: Santosh Shilimkar <ssantosh@kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Benoit Cousson <bcousson@baylibre.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Khuong Dinh <khuong@os.amperecomputing.com>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Hauke Mehrtens <hauke@hauke-m.de>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Amelie Delaunay <amelie.delaunay@st.com>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Gregory Clement <gregory.clement@bootlin.com>
+Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Cc: Kukjin Kim <kgene@kernel.org>
+Cc: Li Yang <leoyang.li@nxp.com>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Jun Li <lijun.kernel@gmail.com>
+Cc: linux-snps-arc@lists.infradead.org
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-omap@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (10):
+  arm: dts: ls1021a: Harmonize DWC USB3 DT nodes name
+  arm: dts: keystone: Correct DWC USB3 compatible string
+  arc: dts: Harmonize EHCI/OHCI DT nodes name
+  arm: dts: lpc18xx: Harmonize EHCI/OHCI DT nodes name
+  powerpc: dts: akebono: Harmonize EHCI/OHCI DT nodes name
+  arm: dts: keystone: Harmonize DWC USB3 DT nodes name
+  arm: dts: stih407-family: Harmonize DWC USB3 DT nodes name
+  arm64: dts: apm: Harmonize DWC USB3 DT nodes name
+  usb: dwc3: qcom: Detect DWC3 DT-nodes with "usb"-prefixed names
+  arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+
+ arch/arc/boot/dts/axc003.dtsi                | 4 ++--
+ arch/arc/boot/dts/axc003_idu.dtsi            | 4 ++--
+ arch/arc/boot/dts/axs10x_mb.dtsi             | 4 ++--
+ arch/arc/boot/dts/hsdk.dts                   | 4 ++--
+ arch/arc/boot/dts/vdk_axs10x_mb.dtsi         | 2 +-
+ arch/arm/boot/dts/keystone-k2e.dtsi          | 6 +++---
+ arch/arm/boot/dts/keystone.dtsi              | 4 ++--
+ arch/arm/boot/dts/lpc18xx.dtsi               | 4 ++--
+ arch/arm/boot/dts/ls1021a.dtsi               | 2 +-
+ arch/arm/boot/dts/stih407-family.dtsi        | 2 +-
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi   | 4 ++--
+ arch/arm64/boot/dts/apm/apm-storm.dtsi       | 6 +++---
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi | 4 ++--
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi        | 4 ++--
+ arch/arm64/boot/dts/qcom/msm8996.dtsi        | 4 ++--
+ arch/arm64/boot/dts/qcom/msm8998.dtsi        | 2 +-
+ arch/arm64/boot/dts/qcom/qcs404-evb.dtsi     | 2 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi         | 4 ++--
+ arch/arm64/boot/dts/qcom/sc7180.dtsi         | 2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi         | 4 ++--
+ arch/arm64/boot/dts/qcom/sm8150.dtsi         | 2 +-
+ arch/powerpc/boot/dts/akebono.dts            | 6 +++---
+ drivers/usb/dwc3/dwc3-qcom.c                 | 3 ++-
+ 23 files changed, 42 insertions(+), 41 deletions(-)
+
+-- 
+2.30.0
+
