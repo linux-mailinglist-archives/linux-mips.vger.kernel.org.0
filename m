@@ -2,106 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C37E316566
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 12:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E83316625
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 13:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbhBJLm3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Feb 2021 06:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S231672AbhBJMKq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Feb 2021 07:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbhBJLkV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 06:40:21 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77B7C061797
-        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 03:38:33 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id q8so2051679wru.13
-        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 03:38:33 -0800 (PST)
+        with ESMTP id S231534AbhBJMIo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 07:08:44 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7802C061222
+        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 04:04:37 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id o10so3582029wmc.1
+        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 04:04:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4rVMlP6gjKEMU63mGD7671tvTyj9ZrG88p6nRruDhD4=;
-        b=p+ZA4r4TVfUrnZEfFnCd4KrXSrjCFPfAoCXkwDVb+g+0YP5QvF640W8kPI8xhn2h/X
-         RaWcQtC8Vv1HKNhNaNO6nBAYIxzVbFCdTwl+ZcCpv4t0J9tybTQJzBNzeZ+v6ERAMNRX
-         nAKrbYTXLfbZwM5EOuj/nQhPIvQX7L5WVtblJHqwlbw4/pGwZTgDpb6r3Se5WwvAEhTI
-         4sMreTWc++yMZ9Cniv2TEy8QnMGe6j0p5DX4CTWekgUsPPRc6gxIY4o3bG98lhRQuuX7
-         2HnGNCQaZVSSYDznUIkyKYM/yHEuZibq8t5AaBwK0zLQgbd2xF6wN3/bMy1MbaOxr9Fa
-         zPkA==
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+9PeUG6v1r8aFGi6ORK3pCJUjeurz7TuWVSE9CMni0c=;
+        b=vefKpoHHE9JY7wsXqdCVcvzKivbYRTXzF+0dgJaRh4tzwGHJlFAPcT6iyCPjtVk/QO
+         2nbSc5689PqMRWiH0mYBu5uUXuBmmxhvZbfVsxAu4AYbT9KkUXLQ8GUARAWnmp4QnaYC
+         qrzOL4EoDzuwTZWyGC0rpjwwcObKmnDgs1a7A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4rVMlP6gjKEMU63mGD7671tvTyj9ZrG88p6nRruDhD4=;
-        b=G5IxHRmFYT1SzmJ6aj3iMeqJHxbfJR0VPkB8tqHMcwO72rlslptgEYDPA23uAGZ0vI
-         DEoWTDHqWlJMHDTOqdY1TaLdMY/TZUrDkWJ5xSFAWhvyXoOG6h5twIkKq/WDzlT7RnCi
-         01QrSC2y9gsGbV01X7qql3ckw+buxG/ikY8LO7kbeIGzcvO1HZYGo4+NyE/QIeCGCjgr
-         3D3fM/t8T3Ttc4+ql6K6FD0qtp8GLQTWu7Mijb45pVXdleRWdygz6Kde8jPdBkkH/4U/
-         VmXIP+SdlBJ5UaJCyOYAJ+ieewe7khLbbt8CwYyAgn8iY40Bt8sycniQfbxe/o11pjp+
-         8Y0w==
-X-Gm-Message-State: AOAM533v4/moZaV1RQnNiZujj1h+e1LMXoJfdWNwoixdlhCyg8qhdp5k
-        9ZOEqzJP2WPS8bdqUBnJNQs2zA==
-X-Google-Smtp-Source: ABdhPJxenO/CxL4IFitEtlZPB+o7QMqk6v4NdIgkJGXMIYWJgtUiJQHJ3TNJZ43z/uypizwijnpCGA==
-X-Received: by 2002:a5d:5010:: with SMTP id e16mr3107436wrt.202.1612957112546;
-        Wed, 10 Feb 2021 03:38:32 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id k11sm2680097wrl.84.2021.02.10.03.38.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+9PeUG6v1r8aFGi6ORK3pCJUjeurz7TuWVSE9CMni0c=;
+        b=amkkAgLr13pgH5cAhBTf2uOR/7OGuQvbXlFflaTP7GbMVXwSRv0aa6XQrxJGTqSBAy
+         TnvB1hl2qoml17A+Vi4bUz+qGUWPwjpSBVk4GfRrgAVpgdzYnSZ2UwvTqmVN+DEHJtCL
+         2YQHLmY+4o55I1+ncqXsBqyYuXrxB8/DqRYB3/8p0bVx/NM2WO9DNMx1/GpKG8fHX7Uy
+         zGQK0l2KyhSB44Y9uOkAhQUc/Lb4SwdMKeNrc/rY6b2NTMHEb84vtGdLndoMduL8yeZm
+         WnmsYXfM7pPAZlyWYgiF06bLCuZPIFrA8E6rKQ3M2pcZuzE54TyvTHWgpluxfe2eE/SI
+         Ha8A==
+X-Gm-Message-State: AOAM5339CmpWiYhwdodkMYXVmaeEN60QtCjdXT0YqjVfUtSOvy3o72PP
+        s19hDq0Oz2y5gddXA+sfYC77wg==
+X-Google-Smtp-Source: ABdhPJwpmZw+y59+QzJHB79z4KhJzeSBdFZ5h0S1sHnxAqBTLAPp1GIONJS8JzIW2wEz2gPnFzl8PA==
+X-Received: by 2002:a1c:9851:: with SMTP id a78mr2600203wme.66.1612958676276;
+        Wed, 10 Feb 2021 04:04:36 -0800 (PST)
+Received: from antares.lan (c.3.c.9.d.d.c.e.0.a.6.8.a.9.e.c.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:ce9a:86a0:ecdd:9c3c])
+        by smtp.gmail.com with ESMTPSA id j7sm2837854wrp.72.2021.02.10.04.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 03:38:31 -0800 (PST)
-Date:   Wed, 10 Feb 2021 11:38:30 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] MIPS: make kgdb depend on FPU support
-Message-ID: <20210210113830.xeechzpctz5repv5@maple.lan>
-References: <20210122110307.934543-1-arnd@kernel.org>
- <20210122110307.934543-2-arnd@kernel.org>
- <alpine.DEB.2.21.2102081748280.35623@angie.orcam.me.uk>
+        Wed, 10 Feb 2021 04:04:35 -0800 (PST)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org
+Subject: [PATCH bpf 0/4] Expose network namespace cookies to user space
+Date:   Wed, 10 Feb 2021 12:04:21 +0000
+Message-Id: <20210210120425.53438-1-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2102081748280.35623@angie.orcam.me.uk>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 08, 2021 at 06:03:08PM +0100, Maciej W. Rozycki wrote:
-> On Fri, 22 Jan 2021, Arnd Bergmann wrote:
-> 
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > kgdb fails to build when the FPU support is disabled:
-> > 
-> > arch/mips/kernel/kgdb.c: In function 'dbg_set_reg':
-> > arch/mips/kernel/kgdb.c:147:35: error: 'struct thread_struct' has no member named 'fpu'
-> >   147 |    memcpy((void *)&current->thread.fpu.fcr31, mem,
-> >       |                                   ^
-> > arch/mips/kernel/kgdb.c:155:34: error: 'struct thread_struct' has no member named 'fpu'
-> >   155 |   memcpy((void *)&current->thread.fpu.fpr[fp_reg], mem,
-> > 
-> > This is only relevant for CONFIG_EXPERT=y, so disallowing it
-> > in Kconfig is an easier workaround than fixing it properly.
-> 
->  Wrapping the relevant parts of this file into #ifdef MIPS_FP_SUPPORT 
-> would be as easy though and would qualify as a proper fix given that we 
-> have no XML description support for the MIPS target (so we need to supply 
-> the inexistent registers in the protocol; or maybe we can return NULL in 
-> `dbg_get_reg' to get them padded out in the RSP packet, I haven't checked 
-> if generic KGDB code supports this feature).
+We're working on a user space control plane for the BPF sk_lookup
+hook [1]. The hook attaches to a network namespace and allows
+control over which socket receives a new connection / packet.
 
-Returning NULL should be fine.
+Roughly, applications can give a socket to our user space component
+to participate in custom bind semantics. This creates an edge case
+where  an application can provide us with a socket that lives in
+a different network namespace than our BPF sk_lookup program.
+We'd like to return an error in this case.
 
-The generic code will cope OK. The values in the f.p. registers may
-act a little odd if gdb uses a 'G' packet to set them to non-zero values
-(since kgdb will cache the values gdb sent it) but the developer
-operating the debugger will probably figure out what is going on without
-too much pain.
+Additionally, we have some user space state that is tied to the
+network namespace. We currently use the inode of the nsfs entry
+in a directory name, but this is suffers from inode reuse.
 
+I'm proposing to fix both of these issues by adding a new
+SO_NETNS_COOKIE socket option as well as a NS_GET_COOKIE ioctl.
+Using these we get a stable, unique identifier for a network
+namespace and check whether a socket belongs to the "correct"
+namespace.
 
-Daniel.
+NS_GET_COOKIE could be renamed to NS_GET_NET_COOKIE. I kept the
+name generic because it seems like other namespace types could
+benefit from a cookie as well.
+
+I'm trying to land this via the bpf tree since this is where the
+netns cookie originated, please let me know if this isn't
+appropriate.
+
+1: https://www.kernel.org/doc/html/latest/bpf/prog_sk_lookup.html
+
+Cc: bpf@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-api@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+
+Lorenz Bauer (4):
+  net: add SO_NETNS_COOKIE socket option
+  nsfs: add an ioctl to discover the network namespace cookie
+  tools/testing: add test for NS_GET_COOKIE
+  tools/testing: add a selftest for SO_NETNS_COOKIE
+
+ arch/alpha/include/uapi/asm/socket.h          |  2 +
+ arch/mips/include/uapi/asm/socket.h           |  2 +
+ arch/parisc/include/uapi/asm/socket.h         |  2 +
+ arch/sparc/include/uapi/asm/socket.h          |  2 +
+ fs/nsfs.c                                     |  9 +++
+ include/linux/sock_diag.h                     | 20 ++++++
+ include/net/net_namespace.h                   | 11 ++++
+ include/uapi/asm-generic/socket.h             |  2 +
+ include/uapi/linux/nsfs.h                     |  2 +
+ net/core/filter.c                             |  9 ++-
+ net/core/sock.c                               |  7 +++
+ tools/testing/selftests/net/.gitignore        |  1 +
+ tools/testing/selftests/net/Makefile          |  2 +-
+ tools/testing/selftests/net/so_netns_cookie.c | 61 +++++++++++++++++++
+ tools/testing/selftests/nsfs/.gitignore       |  1 +
+ tools/testing/selftests/nsfs/Makefile         |  2 +-
+ tools/testing/selftests/nsfs/netns.c          | 57 +++++++++++++++++
+ 17 files changed, 185 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/net/so_netns_cookie.c
+ create mode 100644 tools/testing/selftests/nsfs/netns.c
+
+-- 
+2.27.0
+
