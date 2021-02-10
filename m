@@ -2,121 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFF1316517
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 12:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C37E316566
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 12:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbhBJLV7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Feb 2021 06:21:59 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:41179 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231363AbhBJLTt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 10 Feb 2021 06:19:49 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9C9405C01A8;
-        Wed, 10 Feb 2021 06:18:47 -0500 (EST)
-Received: from imap1 ([10.202.2.51])
-  by compute6.internal (MEProxy); Wed, 10 Feb 2021 06:18:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm1; bh=WCNhaAAaBk9KdSN70j1Xv1565gVpc6V
-        x6H+1sDQrl3g=; b=rAekFHw7nm66D/0P2kTycMJo52xReIKj2V0BF4vYDRVVf+G
-        JY506sn0c5iZ9Q46VBTcsEeSBGUcFfdOScuww6lSsMDaI38QEMeVjQvglzt/uAnU
-        FLmDbp9kFaZ4nbf4qp5wpN/svDFGGJk0NLdyRrr32GtbkTDYVHckYJi1zhy+6FMy
-        CLCcZ2tlbP/GHqPqy/PK9A1DB9H086QiPbCue8JqgktXIWH+31jozMLAmVeZ4DEF
-        et20cEX+lCRW+n92xgxC5Pm2lF2jsLUZuadz7CB/ZfclQn9ElPmqelHZH9MnQSu6
-        RxrV8BZuUcLSAu7HuciPlWUL+aAzBXDpmaCTk2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=WCNhaA
-        AaBk9KdSN70j1Xv1565gVpc6Vx6H+1sDQrl3g=; b=d6jWdK3d1S/AswISiq/HLS
-        nOIJeJwga1VgGPj+1PdoeKRkVywD0XtORFvycKb5G60Dm4dZw/JsiyEDUiIibgk3
-        Ou7JRZj7/CoqXx+lQv14Qm9NWISpFBACRGcOyS/WCn4S4smgbGtD/o0XIzZwNwGB
-        2/jMFX5kj70IvA5PaM43IGUfUu7cV0+hQrq6l55n9DI800zzQCtGXmolEc6dLHyy
-        Ti8IzlqCz9HJzAEsZQQc/33YuJM12GnWaJgGWOtWVq893JIbHTMB3s0q9489UzxL
-        REMak7rS0xtTb0HmHb75e//JneEQzkI5Kdu31I/+JvRsPGfsic23m5s5As2/dwNQ
-        ==
-X-ME-Sender: <xms:F8EjYMLe0_k8WnjZLDlKWiCtOfgvmtMVT5fKI-3APvZOrdjC-Dn5Tg>
-    <xme:F8EjYMJAJpic9VUuasUL7djZIXzfrcQk0OmXuCSTDlV6btag3fwk-W6BeqATYX0dT
-    YwPGSWYsTLLhG22i1I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrheejgddviecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedflfhirgig
-    uhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepkeelheethfehffdttdelieevfeeiheeuudeifeeugeeuieel
-    iedtueejheehhedunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:F8EjYMs2sAwSlo7H4I7PgWyhllXE8DqXv47i6am7-ubPnw21jM2KLg>
-    <xmx:F8EjYJYiSYqZS2Ef48J9pSXLrkXtevbfYMi2I1TNpnTJDfQINtsG4A>
-    <xmx:F8EjYDZCwsjPrWx6G4oUqWY6OXRwRXhTGYdpJ6utlJnqzEj7dYjTuw>
-    <xmx:F8EjYH5_ifj_nRiRHZSC2Yym8MxYDxcmjMHZb4BICJAFQtiXvZGx1Q>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 61E70130005D; Wed, 10 Feb 2021 06:18:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-93-gef6c4048e6-fm-20210128.002-gef6c4048
-Mime-Version: 1.0
-Message-Id: <37a2d6c2-9a56-429e-addc-3e52dd49abc9@www.fastmail.com>
-In-Reply-To: <20210209093224.7085-5-zhangqing@loongson.cn>
-References: <20210209093224.7085-1-zhangqing@loongson.cn>
- <20210209093224.7085-5-zhangqing@loongson.cn>
-Date:   Wed, 10 Feb 2021 19:18:25 +0800
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Qing Zhang" <zhangqing@loongson.cn>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Huacai Chen" <chenhuacai@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "Xingxing Su" <suxingxing@loongson.cn>
-Subject: Re: [PATCH 4/6] MIPS: Loongson64: Add 2K1000 early_printk_port
-Content-Type: text/plain
+        id S230207AbhBJLm3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Feb 2021 06:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230302AbhBJLkV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 06:40:21 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77B7C061797
+        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 03:38:33 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id q8so2051679wru.13
+        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 03:38:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4rVMlP6gjKEMU63mGD7671tvTyj9ZrG88p6nRruDhD4=;
+        b=p+ZA4r4TVfUrnZEfFnCd4KrXSrjCFPfAoCXkwDVb+g+0YP5QvF640W8kPI8xhn2h/X
+         RaWcQtC8Vv1HKNhNaNO6nBAYIxzVbFCdTwl+ZcCpv4t0J9tybTQJzBNzeZ+v6ERAMNRX
+         nAKrbYTXLfbZwM5EOuj/nQhPIvQX7L5WVtblJHqwlbw4/pGwZTgDpb6r3Se5WwvAEhTI
+         4sMreTWc++yMZ9Cniv2TEy8QnMGe6j0p5DX4CTWekgUsPPRc6gxIY4o3bG98lhRQuuX7
+         2HnGNCQaZVSSYDznUIkyKYM/yHEuZibq8t5AaBwK0zLQgbd2xF6wN3/bMy1MbaOxr9Fa
+         zPkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4rVMlP6gjKEMU63mGD7671tvTyj9ZrG88p6nRruDhD4=;
+        b=G5IxHRmFYT1SzmJ6aj3iMeqJHxbfJR0VPkB8tqHMcwO72rlslptgEYDPA23uAGZ0vI
+         DEoWTDHqWlJMHDTOqdY1TaLdMY/TZUrDkWJ5xSFAWhvyXoOG6h5twIkKq/WDzlT7RnCi
+         01QrSC2y9gsGbV01X7qql3ckw+buxG/ikY8LO7kbeIGzcvO1HZYGo4+NyE/QIeCGCjgr
+         3D3fM/t8T3Ttc4+ql6K6FD0qtp8GLQTWu7Mijb45pVXdleRWdygz6Kde8jPdBkkH/4U/
+         VmXIP+SdlBJ5UaJCyOYAJ+ieewe7khLbbt8CwYyAgn8iY40Bt8sycniQfbxe/o11pjp+
+         8Y0w==
+X-Gm-Message-State: AOAM533v4/moZaV1RQnNiZujj1h+e1LMXoJfdWNwoixdlhCyg8qhdp5k
+        9ZOEqzJP2WPS8bdqUBnJNQs2zA==
+X-Google-Smtp-Source: ABdhPJxenO/CxL4IFitEtlZPB+o7QMqk6v4NdIgkJGXMIYWJgtUiJQHJ3TNJZ43z/uypizwijnpCGA==
+X-Received: by 2002:a5d:5010:: with SMTP id e16mr3107436wrt.202.1612957112546;
+        Wed, 10 Feb 2021 03:38:32 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id k11sm2680097wrl.84.2021.02.10.03.38.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Feb 2021 03:38:31 -0800 (PST)
+Date:   Wed, 10 Feb 2021 11:38:30 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] MIPS: make kgdb depend on FPU support
+Message-ID: <20210210113830.xeechzpctz5repv5@maple.lan>
+References: <20210122110307.934543-1-arnd@kernel.org>
+ <20210122110307.934543-2-arnd@kernel.org>
+ <alpine.DEB.2.21.2102081748280.35623@angie.orcam.me.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2102081748280.35623@angie.orcam.me.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On Tue, Feb 9, 2021, at 5:32 PM, Qing Zhang wrote:
-> Distinguish between 3A series CPU and 2K1000 CPU UART0.
+On Mon, Feb 08, 2021 at 06:03:08PM +0100, Maciej W. Rozycki wrote:
+> On Fri, 22 Jan 2021, Arnd Bergmann wrote:
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> Signed-off-by: Xingxing Su <suxingxing@loongson.cn>
-
-Personally I don't like this kind of quirk.
-Probably we should use earlycon as Arm later.
-
-- Jiaxun
-
-> ---
->  arch/mips/loongson64/init.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > kgdb fails to build when the FPU support is disabled:
+> > 
+> > arch/mips/kernel/kgdb.c: In function 'dbg_set_reg':
+> > arch/mips/kernel/kgdb.c:147:35: error: 'struct thread_struct' has no member named 'fpu'
+> >   147 |    memcpy((void *)&current->thread.fpu.fcr31, mem,
+> >       |                                   ^
+> > arch/mips/kernel/kgdb.c:155:34: error: 'struct thread_struct' has no member named 'fpu'
+> >   155 |   memcpy((void *)&current->thread.fpu.fpr[fp_reg], mem,
+> > 
+> > This is only relevant for CONFIG_EXPERT=y, so disallowing it
+> > in Kconfig is an easier workaround than fixing it properly.
 > 
-> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-> index 8bef1ebab72d..a8ad02d8d088 100644
-> --- a/arch/mips/loongson64/init.c
-> +++ b/arch/mips/loongson64/init.c
-> @@ -120,7 +120,10 @@ void __init prom_init(void)
->  #endif
->  
->  	/* Hardcode to CPU UART 0 */
-> -	setup_8250_early_printk_port(TO_UNCAC(LOONGSON_REG_BASE + 0x1e0), 0, 1024);
-> +	if ((read_c0_prid() & PRID_IMP_MASK) == PRID_IMP_LOONGSON_64R)
-> +		setup_8250_early_printk_port(TO_UNCAC(LOONGSON_REG_BASE), 0, 1024);
-> +	else
-> +		setup_8250_early_printk_port(TO_UNCAC(LOONGSON_REG_BASE + 0x1e0), 0, 1024);
->  
->  	register_smp_ops(&loongson3_smp_ops);
->  	board_nmi_handler_setup = mips_nmi_setup;
-> -- 
-> 2.20.1
-> 
->
+>  Wrapping the relevant parts of this file into #ifdef MIPS_FP_SUPPORT 
+> would be as easy though and would qualify as a proper fix given that we 
+> have no XML description support for the MIPS target (so we need to supply 
+> the inexistent registers in the protocol; or maybe we can return NULL in 
+> `dbg_get_reg' to get them padded out in the RSP packet, I haven't checked 
+> if generic KGDB code supports this feature).
 
--- 
-- Jiaxun
+Returning NULL should be fine.
+
+The generic code will cope OK. The values in the f.p. registers may
+act a little odd if gdb uses a 'G' packet to set them to non-zero values
+(since kgdb will cache the values gdb sent it) but the developer
+operating the debugger will probably figure out what is going on without
+too much pain.
+
+
+Daniel.
