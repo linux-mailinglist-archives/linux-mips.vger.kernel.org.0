@@ -2,107 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AC43168EA
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 15:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3BD3168F1
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 15:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbhBJOQi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Feb 2021 09:16:38 -0500
-Received: from angie.orcam.me.uk ([157.25.102.26]:47382 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbhBJOP6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 09:15:58 -0500
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id B1BBB9200B4; Wed, 10 Feb 2021 15:15:10 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id ACC779200B3;
-        Wed, 10 Feb 2021 15:15:10 +0100 (CET)
-Date:   Wed, 10 Feb 2021 15:15:10 +0100 (CET)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-cc:     Arnd Bergmann <arnd@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] MIPS: make kgdb depend on FPU support
-In-Reply-To: <20210210122929.rgqfkoop4rsso3yo@maple.lan>
-Message-ID: <alpine.DEB.2.21.2102101444140.35623@angie.orcam.me.uk>
-References: <20210122110307.934543-1-arnd@kernel.org> <20210122110307.934543-2-arnd@kernel.org> <alpine.DEB.2.21.2102081748280.35623@angie.orcam.me.uk> <20210210113830.xeechzpctz5repv5@maple.lan> <alpine.DEB.2.21.2102101252580.35623@angie.orcam.me.uk>
- <20210210122929.rgqfkoop4rsso3yo@maple.lan>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S230331AbhBJOST (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Feb 2021 09:18:19 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:58681 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229610AbhBJOSQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 09:18:16 -0500
+X-Originating-IP: 86.202.109.140
+Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 399F660019;
+        Wed, 10 Feb 2021 14:17:29 +0000 (UTC)
+Date:   Wed, 10 Feb 2021 15:17:28 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lars Povlsen <lars.povlsen@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] pinctrl: PINCTRL_MICROCHIP_SGPIO should depend on
+ ARCH_SPARX5 || SOC_VCOREIII
+Message-ID: <20210210141728.GO351084@piout.net>
+References: <20210210132751.1422386-1-geert+renesas@glider.be>
+ <87mtwcujd0.fsf@microchip.com>
+ <CAMuHMdVpHUmwfob6t_aWvaVVHpSDpF5HvLe_W5+KY9ky5A-qEw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVpHUmwfob6t_aWvaVVHpSDpF5HvLe_W5+KY9ky5A-qEw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 10 Feb 2021, Daniel Thompson wrote:
-
-> >  NB if GDB sees a register padded out (FAOD it means all-x's rather than a 
-> > hex string placed throughout the respective slot) in a `g' packet, then it 
-> > will mark the register internally as "unavailable" and present it to the 
-> > receiver of the information as such rather than giving any specific value.  
-> > I don't remember offhand what the syntax for the `G' packet is in that 
-> > case; possibly GDB just sends all-zeros, and in any case you can't make 
-> > GDB write any specific value to such a register via any user
-> > interface.
+On 10/02/2021 14:53:01+0100, Geert Uytterhoeven wrote:
+> Hi Lars,
 > 
-> kgdb doesn't track register validity and adding would be a fairly big
-> change. Everything internally (including some of the interactions with
-> arch code) is based on updating a binary shadow of register state which
-> is only bin2hex'ed just before transmitting a packet.
-
- I've had a peek and it doesn't appear to me it would be a big deal.
-
- We have `gdb_regs' defined as an array of longs.  We'd just need a second 
-array for a register validity bitmap, which could for simplicity just have 
-a single bit per each byte of `gdb_regs'.  It would then be updated in 
-`pt_regs_to_gdb_regs' according to the result of `dbg_get_reg' across the 
-number of bits given by `dbg_reg_def[i].size'.  And then `kgdb_mem2hex' 
-would interpret the bitmap given as an extra argument accordingly.
-
- It looks to me like a couple of lines of extra code really.
-
-> It will simply default them to zero and update them on a 'G' packet.
-
- Ack.
-
-> >  The way the unavailability is shown depends on the interface used, i.e. 
-> > it will be different between the `info all-registers'/`info register $reg' 
-> > commands, and the `p $reg' command (or any expression involving `$reg'), 
-> > and the MI interface.  But in any case it will be unambiguous.
+> On Wed, Feb 10, 2021 at 2:45 PM Lars Povlsen <lars.povlsen@microchip.com> wrote:
+> > Geert Uytterhoeven writes:
+> > > the Microsemi/Microchip Serial GPIO device is present only Microsemi
+> > > VCore III and Microchip Sparx5 SoCs.  Hence add a dependency on
+> > > ARCH_SPARX5 || SOC_VCOREIII, to prevent asking the user about this
+> > > driver when configuring a kernel without support for these SoCs.
+> > >
+> > > Fixes: 7e5ea974e61c8dd0 ("pinctrl: pinctrl-microchip-sgpio: Add pinctrl driver for Microsemi Serial GPIO")
+> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > ---
+> > >  drivers/pinctrl/Kconfig | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+> > > index 113073d5f89bbf70..3b75b1d7d3d1f1b0 100644
+> > > --- a/drivers/pinctrl/Kconfig
+> > > +++ b/drivers/pinctrl/Kconfig
+> > > @@ -353,8 +353,8 @@ config PINCTRL_OCELOT
+> > >
+> > >  config PINCTRL_MICROCHIP_SGPIO
+> > >         bool "Pinctrl driver for Microsemi/Microchip Serial GPIO"
+> > > -       depends on OF
+> > > -       depends on HAS_IOMEM
+> > > +       depends on OF && HAS_IOMEM
+> > > +       depends on ARCH_SPARX5 || SOC_VCOREIII || COMPILE_TEST
+> > >         select GPIOLIB
+> > >         select GPIOLIB_IRQCHIP
+> > >         select GENERIC_PINCONF
+> >
+> > Thank you for your patch. Unfortunately, it makes it impossible to use
+> > the driver across PCIe - which is a specifically desired configuration.
+> >
+> > Could you add CONFIG_PCI to the || chain?
 > 
-> I guess this probably does create a technical protocol violation since
-> kgdb will reject per-register read/write for register that its report
-> says are zero rather then invalid.
+> Sure.
+> 
+> Is PCIe the only other transport over which the register can be accessed?
+> Or can this also be done over e.g. SPI, like on Ocelot[1]?
+> 
+> [1] https://lore.kernel.org/linux-gpio/20200511145329.GV34497@piout.net/
+> 
 
- Not a violation, as GDB won't ever issue a `p'/`P' packet for a register 
-that is in the range covered by `g'/`G'.  This is by design.  I'd have to 
-track down the justification, but this is the right thing really.
+Yes, this driver IP is also available on Ocelot (this is SOC_VCOREIII)
+so this is also available over SPI.
 
- Also there is no issue with returning a rubbish value written with `G', 
-as the same already happens with any RSP debug stub (or for that matter 
-native GDB target) that deals with read-only registers.  If you attempt to 
-write one, then all the caches will keep the new value, and you will often 
-have to make the target resume execution before the value reported is 
-reset to the hardwired one.
 
- Debug stubs often cache registers for performance reasons, and may not 
-even write them out unless execution is to be resumed, which often has 
-serious consequences if a write to a hardware registers has side effects.  
-For example I had that with an Intel Atom CPU switching between the real 
-and the protected mode with a CR0 register write issued via a debug probe 
-wired through the JTAG inteface.
-
- Caching is surely what Linux `gdbserver' does, as is what all JTAG debug 
-interfaces do that I have come across, as JTAG access is usually painfully 
-slow.  Therefore in many cases GDB's `flushregs' command won't help as the 
-stub will happily resend what it has previously cached with any updates 
-applied locally only.
-
- FWIW,
-
-  Maciej
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
