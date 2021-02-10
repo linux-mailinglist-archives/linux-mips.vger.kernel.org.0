@@ -2,138 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0231F31696F
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 15:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 732963169B4
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 16:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbhBJOwV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Feb 2021 09:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbhBJOwS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 09:52:18 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEEDC06174A;
-        Wed, 10 Feb 2021 06:51:36 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m1so2069215wml.2;
-        Wed, 10 Feb 2021 06:51:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zjhXKo3lnsUCaAO03EAAKy7XedvCevX8vo7EKjAoj3Q=;
-        b=jJ8LF025NOB5tTRRmh45iSwVNW9BiH2jesDquvAlwBgGfOycUUj9SneIWmt0+ZsKNg
-         G4jfNkdmBdVwNrf6KziMjZyDhDfsh0VTabiZ88CqjMSEyWAAB9KcF0LqWF574ojQJWfB
-         uEcBjTGL5J1sN7VltBi5masq/ykxXWJ71FekRuG1mMOVHDXcYAaB69OZ0pm/EZyGUojM
-         E8ghijNjy9n51CKDhciWDBttcc7mGU9VLnekLrNRsHhHEJw6eo3kNbDjNnFbJryP9S1m
-         HqCjtV55tT0SgA+5jTrOqavLEvYCCRxhlE/v9SL/9kkxp+24Qjc3js9+kLYBwSORR2i+
-         /jyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zjhXKo3lnsUCaAO03EAAKy7XedvCevX8vo7EKjAoj3Q=;
-        b=N0NSqR7UJcDgyWO/9pfk5rjy2qj1WSru0YnBPESxmPdaloVurwSjVrzHn/driXgDQM
-         X8PTlMUwGV+XNd5qs0dXNxnTsJb5M30fE0w1ArsgkhiUCZyzeLEKkWGsNvSNAeZDsDnX
-         ilsW5+XVTDaY3mNDCphDp2uNFHELY4tVL2cXhPNbbLhOnEWaB+BRJQcbq3KNieNy//VO
-         8JjWI6bEwRS/C7W1WLSfxk9xnAtS4qYzAK3/pvxkpZYWoqoGbDSbwTsGVMnr/77IJIis
-         sjUfvH2B6MKjv03KQhYOiSCqc7V+f63nn4HtGvWg4cBZ8VZngZoV4983t1EGrM7v8cd9
-         R7gA==
-X-Gm-Message-State: AOAM531BYnuYLAHIBaTrzjxGkPbQjsCpPNQkflsWWmmPHZW69fhi1GwZ
-        2VZSz06yZmbgh2SjqBfr8yxc40ffyFE=
-X-Google-Smtp-Source: ABdhPJzD1UwIOcK8QlbA/opY/7S8Oipu5m0gukv+y2QgFJwbqk6JJMIT/ifLddt6Wbwu5S+4rtPxqA==
-X-Received: by 2002:a1c:67c3:: with SMTP id b186mr3336454wmc.24.1612968695135;
-        Wed, 10 Feb 2021 06:51:35 -0800 (PST)
-Received: from [192.168.1.101] ([37.170.168.78])
-        by smtp.gmail.com with ESMTPSA id v15sm4054700wra.61.2021.02.10.06.51.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Feb 2021 06:51:34 -0800 (PST)
-Subject: Re: [PATCH bpf 1/4] net: add SO_NETNS_COOKIE socket option
-To:     Lorenz Bauer <lmb@cloudflare.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
+        id S230387AbhBJPEh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Feb 2021 10:04:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47779 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231956AbhBJPEU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Feb 2021 10:04:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612969373;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5MXaPbc/42qFdop710unD1yxd2cY2cL3Z6ntoAVSBA8=;
+        b=UKlGJIUSkH2H6cWNTvKUezqPuA7PSCchVZznyY/1cE4Km7uS/bUeZMwQlAW8MypADr1xT+
+        6KM1bJgO5VKjYESZiDtmlSGka9a6twDeMwVj10j3+CQvBCgEx9P6RS5M5QQ54mvlz69RWU
+        sA0wiVyl9HHqWn241CZsytxnExTwxtE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-222-bQQyr9rGOxeqh9cI2Wqvww-1; Wed, 10 Feb 2021 10:02:45 -0500
+X-MC-Unique: bQQyr9rGOxeqh9cI2Wqvww-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED8B4427CF;
+        Wed, 10 Feb 2021 15:02:42 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-115-20.rdu2.redhat.com [10.10.115.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 470F460C15;
+        Wed, 10 Feb 2021 15:02:41 +0000 (UTC)
+Subject: Re: [next] [mips] spinlock.h:17:28: error: redefinition of
+ 'queued_spin_unlock'
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-mips@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Paul Burton <paul.burton@mips.com>, Will Deacon <will@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     kernel-team@cloudflare.com, linux-api@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <20210210120425.53438-1-lmb@cloudflare.com>
- <20210210120425.53438-2-lmb@cloudflare.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <a922e31d-efce-35c3-c584-cf1bdcf93c5d@gmail.com>
-Date:   Wed, 10 Feb 2021 15:51:32 +0100
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+References: <CA+G9fYtkWdeL7-nfXW8+VbaCK7swinU_Ksn67RW4FFD+cx8VYg@mail.gmail.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <8e1322cf-4498-43b6-1dbd-665b7f016815@redhat.com>
+Date:   Wed, 10 Feb 2021 10:02:40 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <20210210120425.53438-2-lmb@cloudflare.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <CA+G9fYtkWdeL7-nfXW8+VbaCK7swinU_Ksn67RW4FFD+cx8VYg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 2/10/21 12:30 AM, Naresh Kamboju wrote:
+> While building Linux next tag 20210209 mips uImage.gz failed with below configs
+>
+>    - mips (cavium_octeon_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
+>    - mips (malta_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
+>    - mips (nlm_xlp_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
+>    - mips (defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
+>
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
+> CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc' uImage.gz
+> In file included from /include/linux/spinlock.h:90,
+>                   from /include/linux/ipc.h:5,
+>                   from /include/uapi/linux/sem.h:5,
+>                   from /include/linux/sem.h:5,
+>                   from /include/linux/compat.h:14,
+>                   from /arch/mips/kernel/asm-offsets.c:12:
+> /arch/mips/include/asm/spinlock.h:17:28: error: redefinition of
+> 'queued_spin_unlock'
+>     17 | #define queued_spin_unlock queued_spin_unlock
+>        |                            ^~~~~~~~~~~~~~~~~~
+>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>
+> build link,
+> https://builds.tuxbuild.com/1oF9lkBAeWM2WvR11O2Yun8ERNT/
+>
+I have just posted a patch to reorder qspinlock.h and qrwlock.h include 
+ordering. Hopefully that can fix the compilation problem though I don't 
+have a mips building environment to verify that.
 
-
-On 2/10/21 1:04 PM, Lorenz Bauer wrote:
-> We need to distinguish which network namespace a socket belongs to.
-> BPF has the useful bpf_get_netns_cookie helper for this, but accessing
-> it from user space isn't possible. Add a read-only socket option that
-> returns the netns cookie, similar to SO_COOKIE. If network namespaces
-> are disabled, SO_NETNS_COOKIE returns the cookie of init_net.
-> 
-> The BPF helpers change slightly: instead of returning 0 when network
-> namespaces are disabled we return the init_net cookie as for the
-> socket option.
-> 
-> Cc: linux-api@vger.kernel.org
-> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> ---
-
-...
-
->  
-> +static inline u64 __sock_gen_netns_cookie(struct sock *sk)
-> +{
-> +#ifdef CONFIG_NET_NS
-> +	return __net_gen_cookie(sk->sk_net.net);
-> +#else
-> +	return __net_gen_cookie(&init_net);
-> +#endif
-> +}
-> +
-> +static inline u64 sock_gen_netns_cookie(struct sock *sk)
-> +{
-> +	u64 cookie;
-> +
-> +	preempt_disable();
-> +	cookie = __sock_gen_netns_cookie(sk);
-> +	preempt_enable();
-> +
-> +	return cookie;
-> +}
-> +
-> 
-
-I suggest we make net->net_cookie a mere u64 initialized in setup_net(),
-instead of having to preempt_disable() around reading it.
-
-(Here and in your patch 2/4)
-
-Your patches would be much simpler.
-
-Cleanup patch :
-
-https://patchwork.kernel.org/project/netdevbpf/patch/20210210144144.24284-1-eric.dumazet@gmail.com/
-
+Cheers,
+Longman
 
