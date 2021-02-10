@@ -2,236 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B3031663C
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 13:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC13316653
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 13:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbhBJMMi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Feb 2021 07:12:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbhBJMKf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 07:10:35 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CD6C0611C1
-        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 04:04:39 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id t142so1622175wmt.1
-        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 04:04:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7YlFkcwEzuK8xj1bqWFb4J+pbM9jNy7GJX0y3deB8As=;
-        b=syPwiZlFCfO6MHc40aH33LzcMM6KfDmzRv+D2pLSH5QhqhfJeAI8pcSdpGXIuefrhT
-         QANrLqzWqVKdKDRMI9LkGu7/nHBiH+rC1ieNTWfFHSmkspO5VBaxfKVXb2X2Squ8dPwc
-         gqbcZAWKlW0ioCr6UjiF2eRNBO1Q7kMUruhv0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7YlFkcwEzuK8xj1bqWFb4J+pbM9jNy7GJX0y3deB8As=;
-        b=fk3IU8aR/M/UMkrfnpB92snXT3S0/JKHC5XmcqpfqPz7nK2rWGM11hCvaNsUl2tw1m
-         yJdwr0HexPt2EKJLknWE8/sP9Wi9/BtR8Rj2aKk/JK+ffea/kRIMm+iC0MF8MynX3/D/
-         DMWWE2s305U7rJY5f6mz6B/cZAobGhfHK9K6jisxrZ5N+BJMibF+RkKZ4LwwYmF7d1MV
-         bUJhuf0jKLi90zp8JS76M9ZqKoXjRrCdjh7Xs3rOjg109/5Cbi7jJFEtiV/BMnlQWEDt
-         MbMXOI8MPFCuOdQWHhOsaL5kJAt9IaOPZPcJbRP0m++TeowmQiEvDYIUwCOFTmpjAkvw
-         EDcA==
-X-Gm-Message-State: AOAM533XcgagkBQT9Q7cVZLmy49iW9feq/icZCg5spmrXvfXb+GIyKAB
-        1QiBtRT8axfWvLOso4mu37zNXw==
-X-Google-Smtp-Source: ABdhPJzWH8Tw+178GsaKwHlgz0XiwPg9erze0gT5N1I/sfwQGjRhxr9XRlOCiSD9NdzdTDxtpCscUA==
-X-Received: by 2002:a1c:f70c:: with SMTP id v12mr2614677wmh.77.1612958678358;
-        Wed, 10 Feb 2021 04:04:38 -0800 (PST)
-Received: from antares.lan (c.3.c.9.d.d.c.e.0.a.6.8.a.9.e.c.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:ce9a:86a0:ecdd:9c3c])
-        by smtp.gmail.com with ESMTPSA id j7sm2837854wrp.72.2021.02.10.04.04.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 04:04:38 -0800 (PST)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
+        id S231669AbhBJMOU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Feb 2021 07:14:20 -0500
+Received: from angie.orcam.me.uk ([157.25.102.26]:47364 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231243AbhBJMMQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 07:12:16 -0500
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 6D0429200B4; Wed, 10 Feb 2021 13:11:28 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 657BD9200B3;
+        Wed, 10 Feb 2021 13:11:28 +0100 (CET)
+Date:   Wed, 10 Feb 2021 13:11:28 +0100 (CET)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+cc:     Arnd Bergmann <arnd@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S. Miller" <davem@davemloft.net>,
         Arnd Bergmann <arnd@arndb.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-api@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH bpf 1/4] net: add SO_NETNS_COOKIE socket option
-Date:   Wed, 10 Feb 2021 12:04:22 +0000
-Message-Id: <20210210120425.53438-2-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210210120425.53438-1-lmb@cloudflare.com>
-References: <20210210120425.53438-1-lmb@cloudflare.com>
+        kernel test robot <lkp@intel.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] MIPS: make kgdb depend on FPU support
+In-Reply-To: <20210210113830.xeechzpctz5repv5@maple.lan>
+Message-ID: <alpine.DEB.2.21.2102101252580.35623@angie.orcam.me.uk>
+References: <20210122110307.934543-1-arnd@kernel.org> <20210122110307.934543-2-arnd@kernel.org> <alpine.DEB.2.21.2102081748280.35623@angie.orcam.me.uk> <20210210113830.xeechzpctz5repv5@maple.lan>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We need to distinguish which network namespace a socket belongs to.
-BPF has the useful bpf_get_netns_cookie helper for this, but accessing
-it from user space isn't possible. Add a read-only socket option that
-returns the netns cookie, similar to SO_COOKIE. If network namespaces
-are disabled, SO_NETNS_COOKIE returns the cookie of init_net.
+On Wed, 10 Feb 2021, Daniel Thompson wrote:
 
-The BPF helpers change slightly: instead of returning 0 when network
-namespaces are disabled we return the init_net cookie as for the
-socket option.
+> >  Wrapping the relevant parts of this file into #ifdef MIPS_FP_SUPPORT 
+> > would be as easy though and would qualify as a proper fix given that we 
+> > have no XML description support for the MIPS target (so we need to supply 
+> > the inexistent registers in the protocol; or maybe we can return NULL in 
+> > `dbg_get_reg' to get them padded out in the RSP packet, I haven't checked 
+> > if generic KGDB code supports this feature).
+> 
+> Returning NULL should be fine.
+> 
+> The generic code will cope OK. The values in the f.p. registers may
+> act a little odd if gdb uses a 'G' packet to set them to non-zero values
+> (since kgdb will cache the values gdb sent it) but the developer
+> operating the debugger will probably figure out what is going on without
+> too much pain.
 
-Cc: linux-api@vger.kernel.org
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- arch/alpha/include/uapi/asm/socket.h  |  2 ++
- arch/mips/include/uapi/asm/socket.h   |  2 ++
- arch/parisc/include/uapi/asm/socket.h |  2 ++
- arch/sparc/include/uapi/asm/socket.h  |  2 ++
- include/linux/sock_diag.h             | 20 ++++++++++++++++++++
- include/uapi/asm-generic/socket.h     |  2 ++
- net/core/filter.c                     |  9 ++++-----
- net/core/sock.c                       |  7 +++++++
- 8 files changed, 41 insertions(+), 5 deletions(-)
+ Ack, thanks!
 
-diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-index 57420356ce4c..6b3daba60987 100644
---- a/arch/alpha/include/uapi/asm/socket.h
-+++ b/arch/alpha/include/uapi/asm/socket.h
-@@ -127,6 +127,8 @@
- #define SO_PREFER_BUSY_POLL	69
- #define SO_BUSY_POLL_BUDGET	70
- 
-+#define SO_NETNS_COOKIE		71
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-index 2d949969313b..cdf404a831b2 100644
---- a/arch/mips/include/uapi/asm/socket.h
-+++ b/arch/mips/include/uapi/asm/socket.h
-@@ -138,6 +138,8 @@
- #define SO_PREFER_BUSY_POLL	69
- #define SO_BUSY_POLL_BUDGET	70
- 
-+#define SO_NETNS_COOKIE		71
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-index f60904329bbc..5b5351cdcb33 100644
---- a/arch/parisc/include/uapi/asm/socket.h
-+++ b/arch/parisc/include/uapi/asm/socket.h
-@@ -119,6 +119,8 @@
- #define SO_PREFER_BUSY_POLL	0x4043
- #define SO_BUSY_POLL_BUDGET	0x4044
- 
-+#define SO_NETNS_COOKIE		0x4045
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-index 848a22fbac20..ff79db753dce 100644
---- a/arch/sparc/include/uapi/asm/socket.h
-+++ b/arch/sparc/include/uapi/asm/socket.h
-@@ -120,6 +120,8 @@
- #define SO_PREFER_BUSY_POLL	 0x0048
- #define SO_BUSY_POLL_BUDGET	 0x0049
- 
-+#define SO_NETNS_COOKIE		 0x004a
-+
- #if !defined(__KERNEL__)
- 
- 
-diff --git a/include/linux/sock_diag.h b/include/linux/sock_diag.h
-index 0b9ecd8cf979..6e88436097b1 100644
---- a/include/linux/sock_diag.h
-+++ b/include/linux/sock_diag.h
-@@ -38,6 +38,26 @@ static inline u64 sock_gen_cookie(struct sock *sk)
- 	return cookie;
- }
- 
-+static inline u64 __sock_gen_netns_cookie(struct sock *sk)
-+{
-+#ifdef CONFIG_NET_NS
-+	return __net_gen_cookie(sk->sk_net.net);
-+#else
-+	return __net_gen_cookie(&init_net);
-+#endif
-+}
-+
-+static inline u64 sock_gen_netns_cookie(struct sock *sk)
-+{
-+	u64 cookie;
-+
-+	preempt_disable();
-+	cookie = __sock_gen_netns_cookie(sk);
-+	preempt_enable();
-+
-+	return cookie;
-+}
-+
- int sock_diag_check_cookie(struct sock *sk, const __u32 *cookie);
- void sock_diag_save_cookie(struct sock *sk, __u32 *cookie);
- 
-diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-index 4dcd13d097a9..d588c244ec2f 100644
---- a/include/uapi/asm-generic/socket.h
-+++ b/include/uapi/asm-generic/socket.h
-@@ -122,6 +122,8 @@
- #define SO_PREFER_BUSY_POLL	69
- #define SO_BUSY_POLL_BUDGET	70
- 
-+#define SO_NETNS_COOKIE		71
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
-diff --git a/net/core/filter.c b/net/core/filter.c
-index e15d4741719a..51f47b6913f1 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4645,11 +4645,10 @@ static const struct bpf_func_proto bpf_get_socket_cookie_sock_ops_proto = {
- 
- static u64 __bpf_get_netns_cookie(struct sock *sk)
- {
--#ifdef CONFIG_NET_NS
--	return __net_gen_cookie(sk ? sk->sk_net.net : &init_net);
--#else
--	return 0;
--#endif
-+	if (sk)
-+		return __sock_gen_netns_cookie(sk);
-+
-+	return __net_gen_cookie(&init_net);
- }
- 
- BPF_CALL_1(bpf_get_netns_cookie_sock, struct sock *, ctx)
-diff --git a/net/core/sock.c b/net/core/sock.c
-index bbcd4b97eddd..2db201c210ca 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1606,6 +1606,13 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
- 		v.val = sk->sk_bound_dev_if;
- 		break;
- 
-+	case SO_NETNS_COOKIE:
-+		lv = sizeof(u64);
-+		if (len < lv)
-+			return -EINVAL;
-+		v.val64 = sock_gen_netns_cookie(sk);
-+		break;
-+
- 	default:
- 		/* We implement the SO_SNDLOWAT etc to not be settable
- 		 * (1003.1g 7).
--- 
-2.27.0
+ NB if GDB sees a register padded out (FAOD it means all-x's rather than a 
+hex string placed throughout the respective slot) in a `g' packet, then it 
+will mark the register internally as "unavailable" and present it to the 
+receiver of the information as such rather than giving any specific value.  
+I don't remember offhand what the syntax for the `G' packet is in that 
+case; possibly GDB just sends all-zeros, and in any case you can't make 
+GDB write any specific value to such a register via any user interface.
 
+ The way the unavailability is shown depends on the interface used, i.e. 
+it will be different between the `info all-registers'/`info register $reg' 
+commands, and the `p $reg' command (or any expression involving `$reg'), 
+and the MI interface.  But in any case it will be unambiguous.
+
+ In no case however there will be user confusion for such registers.
+
+  Maciej
