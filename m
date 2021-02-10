@@ -2,57 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C2F3163F2
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 11:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C5A316444
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 11:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbhBJKfM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Feb 2021 05:35:12 -0500
-Received: from angie.orcam.me.uk ([157.25.102.26]:47344 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbhBJKc6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 05:32:58 -0500
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 9EE869200B4; Wed, 10 Feb 2021 11:32:11 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 97DB79200B3;
-        Wed, 10 Feb 2021 11:32:11 +0100 (CET)
-Date:   Wed, 10 Feb 2021 11:32:11 +0100 (CET)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@gmail.com>, siyanteng01@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: mm: remove function __uncached_access()
-In-Reply-To: <20210126143705.GA14767@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2102101124390.35623@angie.orcam.me.uk>
-References: <20210124073755.1287129-1-siyanteng@loongson.cn> <20210126143705.GA14767@alpha.franken.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S231206AbhBJKuT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Feb 2021 05:50:19 -0500
+Received: from elvis.franken.de ([193.175.24.41]:39556 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229839AbhBJKsK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Feb 2021 05:48:10 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1l9n1q-00079N-00; Wed, 10 Feb 2021 11:47:26 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 4361AC0E24; Wed, 10 Feb 2021 11:46:51 +0100 (CET)
+Date:   Wed, 10 Feb 2021 11:46:51 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Subject: Re: MIPS noncoherent DMA cleanups v2
+Message-ID: <20210210104651.GA11540@alpha.franken.de>
+References: <20210210095641.23856-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210210095641.23856-1-hch@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 26 Jan 2021, Thomas Bogendoerfer wrote:
-
-> it might help to split this patch into two patches. Put the
-> loogonson2ef stuff into the first patch with the explaination, that
-> we no longer need the MESA workaround (which shouldn't be there in
-> the first place, IMHO)
+On Wed, Feb 10, 2021 at 10:56:35AM +0100, Christoph Hellwig wrote:
+> Hi Thomas,
 > 
-> >  arch/mips/mm/cache.c               |  8 --------
-> >  drivers/char/mem.c                 |  7 -------
+> this series cleans up some of the mips (maybe) noncoherent support.
+> It also remove the need for the special <asm/dma-coherence.h> header only
+> provided by mips.
 > 
-> and the rest into a second patch, with a comment that MIPS can now use
-> the default uncached_access like other archs.
+> Changes since v1:
+>  - fix a bisection issue due to a missing brace
+>  - simplify the parameter parsing given that it happens after
+>    plat_mem_init
 
- It might make sense to mention that effectively this is a revert of 
-commit 24e9d0b96dac ("[MIPS] Hook for platforms to define cachability of 
-/dev/mem regions"), which has become unneeded with the removal of the last 
-user (which in turn ultimately was a descendent of commit 42d226c7248a 
-("[MIPS] New files for lemote fulong mini-PC support")).
+LGTM and passed all tests I did so far. I'll give it a few days for
+others to look at and apply it to mips-next for 5.12.
 
-  Maciej
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
