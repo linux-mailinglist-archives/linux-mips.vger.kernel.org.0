@@ -2,126 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6482D316A16
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 16:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EC5316A87
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Feb 2021 16:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbhBJPZe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Feb 2021 10:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbhBJPZX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Feb 2021 10:25:23 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8850FC06174A
-        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 07:24:41 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id f14so4896534ejc.8
-        for <linux-mips@vger.kernel.org>; Wed, 10 Feb 2021 07:24:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4aW7+bqzSkwg4GkezviAvU8O+1pGE5lGyhjOL2uEFFc=;
-        b=WKu4dVPxki/iRV7Ygrt2fHQ86P6H3AXhQiayLdJf6MXq/7d8tehEzPvBmPLIl4i3mH
-         wGpRzaLUjLW2343x/GoQhNMt/gYQ7Bn/+gOw8ReeaoLq3FsUloHoczUogsPxbuk83aSm
-         pvbYbs3l1C+7ShjE+F/vdiMcCw4/bonOYBWw+UPsWXiHWSgnG7QxL4CwSQYy1qzMyomA
-         x35zoyp2W5pwKRwgNPeRhbLijgjc6Vz6luFnTLarvF71S0pcEyi/8T5xiUho3c9LHS7q
-         E5yy+b6OhQfrk/S/QivJgtsE3LrglQSySi5QGhNxa/kP9BtvUHuxBQHQPXELoftePz6Q
-         IK6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4aW7+bqzSkwg4GkezviAvU8O+1pGE5lGyhjOL2uEFFc=;
-        b=hDwP97kbEnQ3U7SIiFupyw1bKXQOgr5qFR58R6HptJTbTdcbsrFCLOdb4zDBWlbsQy
-         0Pf3zAn6NSzWPyrafAYcA+8B4C7GKnYH1DUq6l7j73ws8bOTCORbr2RL2icW0XKsIDOD
-         WSaC+47RnYirFfuiXTZx37Zb5k9LnpPX8vr8EAKrr50IX94wnk/rc4VNUtqFmw/ugd7i
-         dxLgebznS4DIMUx3C01bc3eT7XmEHHT4hBa04HeCpvkHyo+yBKe5U56phwCsrmOdK55a
-         FG209frFI/llXec7lQpHg1fjoKcO/MVBxoZSDTxjvTXgC+ccLGkiZQYurhvzRfiYpeEs
-         RpGA==
-X-Gm-Message-State: AOAM530hpbZ//nLo1cyYhJEFEymMy2FmcRJeKX+zWOUTldc81KlhyXPL
-        YN58IzMkQ+mlh/EMSed+O/T3u8h+gYOTCN24Dtnsig==
-X-Google-Smtp-Source: ABdhPJxYhVyRhFYeu14oygGNiBEYx0kkZcWCucEoUMbfsyJUNG7oMa6NJWoFfQf6Xigon3DpfILd1rY3a40h4YWsPJE=
-X-Received: by 2002:a17:906:24d1:: with SMTP id f17mr3398125ejb.503.1612970680122;
- Wed, 10 Feb 2021 07:24:40 -0800 (PST)
-MIME-Version: 1.0
-References: <CA+G9fYtkWdeL7-nfXW8+VbaCK7swinU_Ksn67RW4FFD+cx8VYg@mail.gmail.com>
- <8e1322cf-4498-43b6-1dbd-665b7f016815@redhat.com>
-In-Reply-To: <8e1322cf-4498-43b6-1dbd-665b7f016815@redhat.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 10 Feb 2021 20:54:28 +0530
-Message-ID: <CA+G9fYvM7Tv0fe0EEqiW1x3ODSe6cc-aqA9h-BMf+_gFOKL_Lw@mail.gmail.com>
-Subject: Re: [next] [mips] spinlock.h:17:28: error: redefinition of 'queued_spin_unlock'
-To:     Waiman Long <longman@redhat.com>
-Cc:     linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Paul Burton <paul.burton@mips.com>,
-        Will Deacon <will@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ingo Molnar <mingo@redhat.com>,
+        id S230048AbhBJPzg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Feb 2021 10:55:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47499 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230005AbhBJPzf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Feb 2021 10:55:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612972446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/iXYwewC8ykR1ydcobsk8WlvcCmIoiMdSUj9YDWUA9Y=;
+        b=NypVXCy8VPhMFAV2swAyhaPVtctTI1dGXmMj/XOCRo+ShyDpT6FhbMmRpdmPA3JywigY8i
+        BI96p3JfsCQtMVQzuDl0maM/8fclGn3vYMUEaTfu2lVItEDeBWPr68llU9HXt1W7/3Cq5c
+        w3EoY+uTnVfBs5FbWUL++Q2yvJcnBxs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-326-v1nJFLltNMG8bJ8KVCA-_Q-1; Wed, 10 Feb 2021 10:54:02 -0500
+X-MC-Unique: v1nJFLltNMG8bJ8KVCA-_Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C2188801977;
+        Wed, 10 Feb 2021 15:54:00 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-115-20.rdu2.redhat.com [10.10.115.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 41D9A10013D7;
+        Wed, 10 Feb 2021 15:53:59 +0000 (UTC)
+Subject: Re: [PATCH] locking/arch: Move qrwlock.h include after qspinlock.h
+To:     Guenter Roeck <linux@roeck-us.net>,
         Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Ben Gardon <bgardon@google.com>
+References: <20210210144556.10932-1-longman@redhat.com>
+ <401dbbe1-096c-8af5-4e21-e355e602272e@roeck-us.net>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <d8f02a3f-4cef-c5d4-7646-fc435cfc9307@redhat.com>
+Date:   Wed, 10 Feb 2021 10:53:58 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <401dbbe1-096c-8af5-4e21-e355e602272e@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 10 Feb 2021 at 20:32, Waiman Long <longman@redhat.com> wrote:
+On 2/10/21 10:05 AM, Guenter Roeck wrote:
+> On 2/10/21 6:45 AM, Waiman Long wrote:
+>> The queued rwlock code has a dependency on the current spinlock
+>> implementation (likely to be qspinlock), but not vice versa. Including
+>> qrwlock.h before qspinlock.h can be problematic when expanding qrwlock
+>> functionality.
+>>
+>> If both qspinlock.h and qrwlock.h are to be included, the qrwlock.h
+>> include should always be after qspinlock.h. Update the current set of
+>> asm/spinlock.h files to enforce that.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+> There should be a Fixes: tag here. If the SHA of the offending commit is not
+> stable, there should be a better reference than "The queued rwlock code".
+I originally have a Fixes tag when I was modifying the mips' 
+asm/spinlock.h file. After I realize that there are more files to 
+modify, I take that out. Anyway, the problem was exposed by Ben's 
+qrwlock patch. So existing stable releases should still be fine without 
+this patch.
 >
-> On 2/10/21 12:30 AM, Naresh Kamboju wrote:
-> > While building Linux next tag 20210209 mips uImage.gz failed with below configs
-> >
-> >    - mips (cavium_octeon_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
-> >    - mips (malta_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
-> >    - mips (nlm_xlp_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
-> >    - mips (defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
-> >
-> > make --silent --keep-going --jobs=8
-> > O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
-> > CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-> > 'HOSTCC=sccache gcc' uImage.gz
-> > In file included from /include/linux/spinlock.h:90,
-> >                   from /include/linux/ipc.h:5,
-> >                   from /include/uapi/linux/sem.h:5,
-> >                   from /include/linux/sem.h:5,
-> >                   from /include/linux/compat.h:14,
-> >                   from /arch/mips/kernel/asm-offsets.c:12:
-> > /arch/mips/include/asm/spinlock.h:17:28: error: redefinition of
-> > 'queued_spin_unlock'
-> >     17 | #define queued_spin_unlock queued_spin_unlock
-> >        |                            ^~~~~~~~~~~~~~~~~~
-> >
-> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> >
-> > build link,
-> > https://builds.tuxbuild.com/1oF9lkBAeWM2WvR11O2Yun8ERNT/
-> >
-> I have just posted a patch to reorder qspinlock.h and qrwlock.h include
-> ordering. Hopefully that can fix the compilation problem though I don't
-> have a mips building environment to verify that.
+> This patch fixes the build problem I had observed on mips. I also tested
+> xtensa:defconfig and arm64:defconfig with no problems observed.
+>
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
 
+Thanks for the testing as I don't have a build environment to verify that.
 
-That was a global problem now it is getting solved by "tuxmake "
+Cheers,
+Longman
 
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-
-tuxmake --runtime podman --target-arch mips --toolchain gcc-10
---kconfig cavium_octeon_defconfig
-
-build link,
-https://builds.tuxbuild.com/1oF9lkBAeWM2WvR11O2Yun8ERNT/
-
-- Naresh
