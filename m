@@ -2,91 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC2231A61E
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Feb 2021 21:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D587C31AAA5
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Feb 2021 10:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbhBLUhd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 12 Feb 2021 15:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbhBLUhc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Feb 2021 15:37:32 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88894C061574;
-        Fri, 12 Feb 2021 12:36:52 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 83F339200BF; Fri, 12 Feb 2021 21:36:49 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 7FCBB9200BC;
-        Fri, 12 Feb 2021 21:36:49 +0100 (CET)
-Date:   Fri, 12 Feb 2021 21:36:49 +0100 (CET)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-mips@vger.kernel.org,
+        id S229706AbhBMJVI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 13 Feb 2021 04:21:08 -0500
+Received: from elvis.franken.de ([193.175.24.41]:52753 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229671AbhBMJVF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 13 Feb 2021 04:21:05 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lAr4j-0003E3-00; Sat, 13 Feb 2021 10:18:49 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 789BCC02AC; Sat, 13 Feb 2021 10:05:22 +0100 (CET)
+Date:   Sat, 13 Feb 2021 10:05:22 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Tiezhu Yang <kernelpatch@126.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Alexander Potapenko <glider@google.com>
-Subject: Re: [PATCH] MIPS: Fix inline asm input/output type mismatch in
- checksum.h used with Clang
-In-Reply-To: <20210127210757.GF21002@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2102122116230.35623@angie.orcam.me.uk>
-References: <1611722507-12017-1-git-send-email-yangtiezhu@loongson.cn> <20210127210757.GF21002@alpha.franken.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        kernel test robot <lkp@intel.com>,
+        Xingxing Su <suxingxing@loongson.cn>
+Subject: Re: [PATCH v2 RESEND] MIPS: Add basic support for ptrace single step
+Message-ID: <20210213090522.GA4330@alpha.franken.de>
+References: <fb37951.4.177977952f5.Coremail.kernelpatch@126.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fb37951.4.177977952f5.Coremail.kernelpatch@126.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 27 Jan 2021, Thomas Bogendoerfer wrote:
-
-> > Fix the following build error when make M=samples/bpf used with Clang:
-> > 
-> >   CLANG-bpf  samples/bpf/sockex2_kern.o
-> > In file included from samples/bpf/sockex2_kern.c:7:
-> > In file included from ./include/uapi/linux/if_tunnel.h:7:
-> > In file included from ./include/linux/ip.h:16:
-> > In file included from ./include/linux/skbuff.h:28:
-> > In file included from ./include/net/checksum.h:22:
-> > ./arch/mips/include/asm/checksum.h:161:9: error: unsupported inline asm: input with type 'unsigned long' matching output with type '__wsum' (aka 'unsigned int')
-> >         : "0" ((__force unsigned long)daddr),
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 1 error generated.
-> > 
-> > This is a known issue on MIPS [1], the changed code can be compiled
-> > successfully by both GCC and Clang.
-> > 
-> > [1] https://lore.kernel.org/linux-mips/CAG_fn=W0JHf8QyUX==+rQMp8PoULHrsQCa9Htffws31ga8k-iw@mail.gmail.com/
-> > 
-> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > ---
-> >  arch/mips/include/asm/checksum.h | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
+On Sat, Feb 13, 2021 at 02:20:46AM +0800, Tiezhu Yang wrote:
+> From: Tiezhu Yang <yangtiezhu@loongson.cn>
 > 
-> applied to mips-next.
+> In the current code, arch_has_single_step() is not defined on MIPS,
+> that means MIPS does not support instruction single-step for user mode.
+> 
+> Delve is a debugger for the Go programming language, the ptrace syscall
+> PtraceSingleStep() failed [1] on MIPS and then the single step function
+> can not work well, we can see that PtraceSingleStep() definition returns
+> ptrace(PTRACE_SINGLESTEP) [2].
+> 
+> So it is necessary to support ptrace single step on MIPS.
+> 
+> At the beginning, we try to use the Debug Single Step exception on the
+> Loongson 3A4000 platform, but it has no effect when set CP0_DEBUG SSt
+> bit, this is because CP0_DEBUG NoSSt bit is 1 which indicates no
+> single-step feature available [3], so this way which is dependent on the
+> hardware is almost impossible.
+> 
+> With further research, we find out there exists a common way used with
+> break instruction in arch/alpha/kernel/ptrace.c, it is workable.
+> 
+> For the above analysis, define arch_has_single_step(), add the common
+> function user_enable_single_step() and user_disable_single_step(), set
+> flag TIF_SINGLESTEP for child process, use break instruction to set
+> breakpoint.
+> 
+> We can use the following testcase to test it:
+> tools/testing/selftests/breakpoints/step_after_suspend_test.c
+> 
+>  $ make -C tools/testing/selftests TARGETS=breakpoints
+>  $ cd tools/testing/selftests/breakpoints
+> 
+> Without this patch:
+> 
+>  $ ./step_after_suspend_test -n
+>  TAP version 13
+>  1..4
+>  # ptrace(PTRACE_SINGLESTEP) not supported on this architecture: Input/output error
+>  ok 1 # SKIP CPU 0
+>  # ptrace(PTRACE_SINGLESTEP) not supported on this architecture: Input/output error
+>  ok 2 # SKIP CPU 1
+>  # ptrace(PTRACE_SINGLESTEP) not supported on this architecture: Input/output error
+>  ok 3 # SKIP CPU 2
+>  # ptrace(PTRACE_SINGLESTEP) not supported on this architecture: Input/output error
+>  ok 4 # SKIP CPU 3
+>  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:4 error:0
+> 
+> With this patch:
+> 
+>  $ ./step_after_suspend_test -n
+>  TAP version 13
+>  1..4
+>  ok 1 CPU 0
+>  ok 2 CPU 1
+>  ok 3 CPU 2
+>  ok 4 CPU 3
+>  # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> [1] https://github.com/go-delve/delve/blob/master/pkg/proc/native/threads_linux.go#L50
+> [2] https://github.com/go-delve/delve/blob/master/vendor/golang.org/x/sys/unix/syscall_linux.go#L1573
+> [3] http://www.t-es-t.hu/download/mips/md00047f.pdf
+> 
+> Reported-by: Guoqi Chen <chenguoqi@loongson.cn>
+> Signed-off-by: Xingxing Su <suxingxing@loongson.cn>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+> 
+> RESEND due to send to mail list failed, sorry for that.
+> 
+> v2: make union mips_instruction mips_insn = { 0 };
+>     to fix uninitialized build warning used with clang
+>     reported by kernel test robot.
+> 
+>  arch/mips/include/asm/ptrace.h      |   2 +
+>  arch/mips/include/asm/thread_info.h |   5 ++
+>  arch/mips/kernel/ptrace.c           | 108 ++++++++++++++++++++++++++++++++++++
+>  arch/mips/kernel/signal.c           |   2 +-
+>  4 files changed, 116 insertions(+), 1 deletion(-)
 
- This is in a performance-critical path (otherwise it wouldn't have been 
-in the form of inline assembly).  Has it been verified that it does not 
-regress code quality with GCC?
+applied to mips-next.
 
- The semantics is clear here: output is in the same register as in input, 
-but the register holds a different local variable in each case.  There's 
-nothing odd about that and the variables can obviously be of a different 
-type each; that's no different to register usage with code produced by the 
-compiler directly itself from a high-level language.
+Thomas.
 
- I seem to remember discussing the issue before, but I can't remember what 
-the outcome has been WRT filing this as a Clang bug, and archives are not 
-easily available at the moment (I know a mirror exists, but any old links 
-are not relevant there).  Would someone be able to fill me in?
-
- I think ultimately with any critical piece where a Clang workaround does 
-regress code produced with GCC we do want to go with `#ifdef __clang__' so 
-that good use with GCC is not penalised on one hand and we know the places 
-to revert changes at should Clang ever get fixed.
-
- Otherwise I'll start suspecting that Clang supporters try some kind of an 
-unfair game to gain advantage over GCC, by modifying projects such that 
-the competing compiler produces worse code than it could if Clang was not 
-actively supported.
-
-  Maciej
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
