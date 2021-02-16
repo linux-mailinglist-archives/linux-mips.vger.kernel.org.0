@@ -2,61 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA54631CB33
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Feb 2021 14:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D14631CB30
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Feb 2021 14:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbhBPNhJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S229956AbhBPNhJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Tue, 16 Feb 2021 08:37:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbhBPNhE (ORCPT
+        with ESMTP id S229912AbhBPNhE (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Feb 2021 08:37:04 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A16AC06174A;
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E73C061756;
         Tue, 16 Feb 2021 05:36:22 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id b3so13029475wrj.5;
+Received: by mail-wr1-x42f.google.com with SMTP id v15so13032771wrx.4;
         Tue, 16 Feb 2021 05:36:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0Ub3gKGJwLJRaryXIKn0038/d6bzjLaWe3sRPb09LY0=;
-        b=sesjORb50GMvDvoSkJLcf7QPM1HrUkK/0b1vu6Pn999cVgoqbf8e5/KSIiYW60FNIG
-         PuqrZap8lfh9ib85fH/TFbT0JIS14PTa0Nt2L0XxFhAheHygGoass+1ZBRJ1aQUift2a
-         N3wqREMcFF3YJEnoZUmLOfE9lRtlwYgbd+JxfLUsD4Ka6a6XdvkISDGGCtpNMpQRNkcx
-         G14pyMh1majLNxO9uCWLWzg1j0j5gityJKWbAg610eXy/wuJT5ZUNbAaR4ZrlmfHAhOa
-         EZOU/1aEBNSE7ryv7O0bMrxas8BvvIVvK7zRtLtwvJGbE8AxLC/9lzW9k/BjKME9oLdX
-         7MSA==
+        bh=P2+9ZW2sRGm5fV3POd9uic+HKJNg6UuQ8+N4DBVvEOI=;
+        b=HWGwatIq07hbW+612HXdGOayFHLa4+dDZmbtxGlTxFr6jylJun5MeTM0GYVLKNlRbf
+         9tDGXoz6MxOpxl0lYEwDziLavZqBpWEWy2HJTgCVv5ZV4syYf3lR+E22kG5wik7mLKy1
+         +Zs19Ex8gueXOuQHq98RoIIONFFzNkGJuubUDzBkT3gU8AbBWG+3KBq/Rde4qnGSos65
+         zecY/t/hdgCguaAutO4oXuDLPL1/V02kPIV8l2QNOHvHfRHnks1FYyREADc3jJTeYZOi
+         ppzrPu90eUxthkowwO17xqxz2HI1bjnY2aN/nOiN8ykr19baJnukP+hzmPkZONYwxfKk
+         IClg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0Ub3gKGJwLJRaryXIKn0038/d6bzjLaWe3sRPb09LY0=;
-        b=ULHLZsAHCgr3kedmC/s5lmxuGKiovXauvCfK4vz8WNXolf+cT8JCdgyt/Wjwz2qSzf
-         DaPZLokd5HyKDMkji/h+TuprkMO51Da8u7SMl0xvlLubjsysCmQLOAbtiDD2vAK+mh9z
-         aKuCKIUoPXTHpnaYsqOgFhoxGxYwVqKkzjaSSG0GdKfpnG/CWJb5BzdgRW4qwk52Cmds
-         Ln42Wfzv5x76o1IKPg/TtAPgMgEpFoKr6hSdwlYyJsjwoRjbmfROIVjbmyEYwG3i3Tl8
-         S5hDKwcXxnebudrcybaP1jBykg9nKSPMftzsBYxF0RzcA9tIDUAQHPC+7WuIwYRqJyK6
-         IuoA==
-X-Gm-Message-State: AOAM532Gtv+h78qZRIEfsHykAF0F5u4pUpq8HCJ2LGxL7QP2rf877WaO
-        p1CkRaYEhgi3jeEnbqgyzDU=
-X-Google-Smtp-Source: ABdhPJzWPijBYbjHa9q5bZqsUPMJLas6xb5T5yZwRg2HOG+l6D3/tcT97MjWQF6Ultrc/ZcNkLfqsQ==
-X-Received: by 2002:adf:e5d1:: with SMTP id a17mr24393774wrn.260.1613482580464;
-        Tue, 16 Feb 2021 05:36:20 -0800 (PST)
+        bh=P2+9ZW2sRGm5fV3POd9uic+HKJNg6UuQ8+N4DBVvEOI=;
+        b=JaZ5GgR0465NXUr9RSiM+h6MuwmMdTuUPMePq74+KCsP+sCvJ8Wy27UsdY8EPprH1n
+         pl3ffmZuhbGO4hwIOw4iOZRwuPXsrQIetxbs/xHAB7vKa/oKqnZlvd0WYrMssWSfim7g
+         MvvG0840M/QN0J2Limf2aervFd/3R1q51TyQ9d3vBEcUODMpdZN3lDKJFHFVnWgVKMoi
+         4ord439aRpSBzBQnmAF+yO/RrvOVdhzEz7QmCxMeZe1O68kY5etaFlM4guecrkJc4tk7
+         umZtxH3nSWAN4D6jxoK6G5f0A39KsieNa3YHYEqIlixWGFGHigm4ZOtF26FejDBVY5Zc
+         NQdw==
+X-Gm-Message-State: AOAM531BJ9th4RG9Ki47t3ylpvlIg7rqpgD33QL50Bk4C2u7RslwQbWN
+        6zW1CBIsop+pwrTjL/Swutc=
+X-Google-Smtp-Source: ABdhPJw2ZXHFEIaznBcIjuST4+li3pvgdRs6vwuEzrjnTjN+SA8U267FxiwV0OzQw05MRRTUS54IZg==
+X-Received: by 2002:a5d:4d0b:: with SMTP id z11mr9192500wrt.359.1613482581393;
+        Tue, 16 Feb 2021 05:36:21 -0800 (PST)
 Received: from localhost.localdomain (67.red-83-54-30.dynamicip.rima-tde.net. [83.54.30.67])
-        by smtp.gmail.com with ESMTPSA id l7sm28032530wrn.11.2021.02.16.05.36.19
+        by smtp.gmail.com with ESMTPSA id l7sm28032530wrn.11.2021.02.16.05.36.20
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Feb 2021 05:36:20 -0800 (PST)
+        Tue, 16 Feb 2021 05:36:21 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     sboyd@kernel.org
 Cc:     robh+dt@kernel.org, john@phrozen.org, tsbogend@alpha.franken.de,
         gregkh@linuxfoundation.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         devel@driverdev.osuosl.org, neil@brown.name,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 1/6] dt-bindings: clock: add dt binding header for mt7621 clocks
-Date:   Tue, 16 Feb 2021 14:36:12 +0100
-Message-Id: <20210216133617.22333-2-sergio.paracuellos@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 2/6] dt: bindings: add mt7621-clk device tree binding documentation
+Date:   Tue, 16 Feb 2021 14:36:13 +0100
+Message-Id: <20210216133617.22333-3-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210216133617.22333-1-sergio.paracuellos@gmail.com>
 References: <20210216133617.22333-1-sergio.paracuellos@gmail.com>
@@ -66,62 +66,87 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Adds dt binding header for 'mediatek,mt7621-clk' clocks.
+Adds device tree binding documentation for clocks in the
+MT7621 SOC.
 
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- include/dt-bindings/clock/mt7621-clk.h | 41 ++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 include/dt-bindings/clock/mt7621-clk.h
+ .../bindings/clock/mediatek,mt7621-clk.yaml   | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
 
-diff --git a/include/dt-bindings/clock/mt7621-clk.h b/include/dt-bindings/clock/mt7621-clk.h
+diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
 new file mode 100644
-index 000000000000..1422badcf9de
+index 000000000000..842a0f2c9d40
 --- /dev/null
-+++ b/include/dt-bindings/clock/mt7621-clk.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Author: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+ */
++++ b/Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
+@@ -0,0 +1,66 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/mediatek,mt7621-clk.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#ifndef _DT_BINDINGS_CLK_MT7621_H
-+#define _DT_BINDINGS_CLK_MT7621_H
++title: MT7621 Clock Device Tree Bindings
 +
-+#define MT7621_CLK_XTAL		0
-+#define MT7621_CLK_CPU		1
-+#define MT7621_CLK_BUS		2
-+#define MT7621_CLK_50M		3
-+#define MT7621_CLK_125M		4
-+#define MT7621_CLK_150M		5
-+#define MT7621_CLK_250M		6
-+#define MT7621_CLK_270M		7
++maintainers:
++  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
 +
-+#define MT7621_CLK_HSDMA	8
-+#define MT7621_CLK_FE		9
-+#define MT7621_CLK_SP_DIVTX	10
-+#define MT7621_CLK_TIMER	11
-+#define MT7621_CLK_PCM		12
-+#define MT7621_CLK_PIO		13
-+#define MT7621_CLK_GDMA		14
-+#define MT7621_CLK_NAND		15
-+#define MT7621_CLK_I2C		16
-+#define MT7621_CLK_I2S		17
-+#define MT7621_CLK_SPI		18
-+#define MT7621_CLK_UART1	19
-+#define MT7621_CLK_UART2	20
-+#define MT7621_CLK_UART3	21
-+#define MT7621_CLK_ETH		22
-+#define MT7621_CLK_PCIE0	23
-+#define MT7621_CLK_PCIE1	24
-+#define MT7621_CLK_PCIE2	25
-+#define MT7621_CLK_CRYPTO	26
-+#define MT7621_CLK_SHXC		27
++description: |
++  The MT7621 has a PLL controller from where the cpu clock is provided
++  as well as derived clocks for the bus and the peripherals. It also
++  can gate SoC device clocks.
 +
-+#define MT7621_CLK_MAX		28
++  Each clock is assigned an identifier and client nodes use this identifier
++  to specify the clock which they consume.
 +
-+#endif /* _DT_BINDINGS_CLK_MT7621_H */
++  All these identifiers could be found in:
++  [1]: <include/dt-bindings/clock/mt7621-clk.h>.
++
++properties:
++  compatible:
++    const: mediatek,mt7621-clk
++
++  "#clock-cells":
++    description:
++      The first cell indicates the clock number, see [1] for available
++      clocks.
++    const: 1
++
++  ralink,sysctl:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      phandle of syscon used to control system registers
++
++  ralink,memctl:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      phandle of syscon used to control memory registers
++
++  clock-output-names:
++    maxItems: 8
++
++required:
++  - compatible
++  - '#clock-cells'
++  - ralink,sysctl
++  - ralink,memctl
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt7621-clk.h>
++
++    pll {
++      compatible = "mediatek,mt7621-clk";
++      #clock-cells = <1>;
++      ralink,sysctl = <&sysc>;
++      ralink,memctl = <&memc>;
++      clock-output-names = "xtal", "cpu", "bus",
++                           "50m", "125m", "150m",
++                           "250m", "270m";
++    };
 -- 
 2.25.1
 
