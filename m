@@ -2,94 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F5331CB4A
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Feb 2021 14:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0278631CB82
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Feb 2021 14:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbhBPNh4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Feb 2021 08:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbhBPNhm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Feb 2021 08:37:42 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8B0C06178A;
-        Tue, 16 Feb 2021 05:36:26 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id x4so14519158wmi.3;
-        Tue, 16 Feb 2021 05:36:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jiX7X0M+t1Zm8HAFufsMGCFO60ftU2nIQxPg0v/LgAc=;
-        b=dh0TVcFk5TipZh+je3Yb1saPAbf3bXpgLvSW/RGqK4JrroyTmw3zMbAj8I1BJWA5Zv
-         HlzbFBGp7ACXr+lRXPasomLMIToJAhfnI+kue64Cy9rD8sDBKzyYiuRVmpOTioh54Dcp
-         IF86skOMDZ/UyF+ZIPvW1EyaIryJDnYqpv9ncNoWP+OTZcXZfgcjXhHooAqFOdI/7Unu
-         SwFBRPH5ayZ8frAy9JduLtvCioBYlaoh88vcTdf5kMOPYUNHpufTJwFcQ9RQEnecELu7
-         TDGD8HlLds6n7vQElDnHmO57dnKMQfJomo8Hp1x8O08SQkV7fXH252XjaZ2jU3dzOUNt
-         wCBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jiX7X0M+t1Zm8HAFufsMGCFO60ftU2nIQxPg0v/LgAc=;
-        b=iUJM4m6YEX883+PGuYkh7BKUJKJmH9R4h1URNn6+FFYr9OXR9L1agapwGFvoCkhaL2
-         nS8VzcDsrVO4bla4Qk217RpYoHCkntjrpgn2SL/mFC/Nck4QkQKcVAemJhIIfsftkI5R
-         oKVgLo05ZgLuvklVFivSN64HoZrCsweKIr4YYboHh+zBbNo9U8E1xMBwTZp00piUDQCf
-         acXSuiQWehBADK1dkKf7UfiDSJivtDVT/Wkr9k2V1xfRQEjcjddX+Wmh8IF0GhJA0IDz
-         splJcWr0RmDqtV08gIaxMMiKiw+fzejD1x+0rdrzB2gHdgeyIG0iNkpchjeJkTQvKn/l
-         5vzw==
-X-Gm-Message-State: AOAM531ZelyhVTXSdR9xHiC1KMfFyToxEqjW8q0/eQ5bpgh4VWwVa3Ff
-        mOfl0Z/d+8tC6q80YAoSsTY=
-X-Google-Smtp-Source: ABdhPJxvZl5N1RQSXEvtJw2P035XT2xAYee21rE7WC7JbYEQs20JATwlQuPzFedpn1HJ1rgx2XNaZQ==
-X-Received: by 2002:a05:600c:414b:: with SMTP id h11mr3373384wmm.125.1613482585467;
-        Tue, 16 Feb 2021 05:36:25 -0800 (PST)
-Received: from localhost.localdomain (67.red-83-54-30.dynamicip.rima-tde.net. [83.54.30.67])
-        by smtp.gmail.com with ESMTPSA id l7sm28032530wrn.11.2021.02.16.05.36.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Feb 2021 05:36:25 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     sboyd@kernel.org
-Cc:     robh+dt@kernel.org, john@phrozen.org, tsbogend@alpha.franken.de,
-        gregkh@linuxfoundation.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        devel@driverdev.osuosl.org, neil@brown.name,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 6/6] MAINTAINERS: add MT7621 CLOCK maintainer
-Date:   Tue, 16 Feb 2021 14:36:17 +0100
-Message-Id: <20210216133617.22333-7-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210216133617.22333-1-sergio.paracuellos@gmail.com>
-References: <20210216133617.22333-1-sergio.paracuellos@gmail.com>
+        id S229988AbhBPN4X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Feb 2021 08:56:23 -0500
+Received: from angie.orcam.me.uk ([157.25.102.26]:34238 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229713AbhBPN4U (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Feb 2021 08:56:20 -0500
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 799E292009D; Tue, 16 Feb 2021 14:55:36 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 7266592009C;
+        Tue, 16 Feb 2021 14:55:36 +0100 (CET)
+Date:   Tue, 16 Feb 2021 14:55:36 +0100 (CET)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Oleg Nesterov <oleg@redhat.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        kernel test robot <lkp@intel.com>,
+        Xingxing Su <suxingxing@loongson.cn>
+Subject: Re: [PATCH v2] MIPS: Add basic support for ptrace single step
+In-Reply-To: <20210212163335.GA12558@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2102161433520.1521@angie.orcam.me.uk>
+References: <1612939961-8827-1-git-send-email-yangtiezhu@loongson.cn> <20210211102905.GE7985@alpha.franken.de> <20210212163335.GA12558@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Adding myself as maintainer for mt7621 clock driver.
+On Fri, 12 Feb 2021, Thomas Bogendoerfer wrote:
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+> > IMHO ptrace single step is for CPUs supporting single stepping and not
+> > for emulating it in the kernel.
+> 
+> I've checked other arch how they implement single step, and looks like
+> I'm wrong. So I'm ok with applying your patch. Can you resend it again,
+> so I'll get the latest version in patchwork ?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 809a68af5efd..be5ada6b4309 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11288,6 +11288,12 @@ L:	linux-wireless@vger.kernel.org
- S:	Maintained
- F:	drivers/net/wireless/mediatek/mt7601u/
- 
-+MEDIATEK MT7621 CLOCK DRIVER
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
-+F:	drivers/clk/ralink/clk-mt7621.c
-+
- MEDIATEK MT7621/28/88 I2C DRIVER
- M:	Stefan Roese <sr@denx.de>
- L:	linux-i2c@vger.kernel.org
--- 
-2.25.1
+ Huh?  How is that supposed to work?  Skimming over the code it hardcodes 
+the breakpoint instruction, which is ISA-dependent and relies on branches 
+or jumps to have a delay slot, which is not universally true.  The kernel 
+does not know all the exotic branches the MIPS ISA has (BC1ANY4F anyone?) 
+either and IMHO should not.
 
+ This is broken and belongs to the userland anyway.  See how complex the 
+handling is in GDB, specifically `mips16_next_pc', `micromips_next_pc' and 
+`mips32_next_pc' in gdb/mips-tdep.c.
+
+ We do have branch emulation code, but it was intended for a different 
+purpose and is therefore not complete enough for single-stepping 
+emulation.
+
+ And I find it regrettable that the kernel has become so bloated here and 
+attempts are made to make it even more bloated.  All under the original 
+excuse made by FP emulation code, which also should have been made in the 
+userland.  It all really does not belong to the kernel with its elevated 
+privilege.  It does not require the privilege.
+
+ We do need a ptrace(2) request to stop on signal handler invocation 
+though, which is something we have been missing and never got to 
+implementing.
+
+  Maciej
