@@ -2,94 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7B631E6D8
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Feb 2021 08:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3629231EA37
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Feb 2021 14:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbhBRHSY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Feb 2021 02:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbhBRHNo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Feb 2021 02:13:44 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0254C06178C;
-        Wed, 17 Feb 2021 23:07:19 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id l12so1637646wry.2;
-        Wed, 17 Feb 2021 23:07:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jiX7X0M+t1Zm8HAFufsMGCFO60ftU2nIQxPg0v/LgAc=;
-        b=lF85QSD+vYfT7DlSOt6Lh41R38GeGRS80DlSfvCEsrAPEM+asxWsbIPISJseavuhlY
-         zsSCFytWTgoKlDwQfqEGEunVSsm4NPDAdiqaHaJhsm768AK3xAOXZgcufiRv8aj9tgnR
-         DcvS2PhlLweBIVytmX6DUdg7RvEU9ZsNfSHiKJ1BKrQE1bc5FDxQd3bjOW4KLtORohox
-         ypZaqFAtqe4mxX4RMSQivJ16sMxWE+aASBgKTaK7LJvUQwXllBuFMbgUNl+v4FaMCo/P
-         34RSz3M/PTYv4UJlatoLLXTP2jsp/2K8bEXoj3+SNM2aZ3Yv4lc89MdQBPoLg7f3zk0a
-         8LWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jiX7X0M+t1Zm8HAFufsMGCFO60ftU2nIQxPg0v/LgAc=;
-        b=akOQuQLa3+DqEUOfQxqGgtpuKqZZc82/Pj2NbEFsZDQbhM+WQngZAB+yvUv3GSz5fs
-         NHjsQ4DNRzdaOOjSbDsG3SoorUVbvbgrqWHTGvb9pfasWtbAZTASzKt+hl25gHlApBQ2
-         dq3aNif5tND4dJ6lB1+ZNcMHO+GdyoYLh0pe6WwDfoNrGKu5fA9F0A7IdV0NEv9C4JcJ
-         nfG8zhGXH+4KQAx9GLFu219gOePAzmcHrJlzhwWglbB50jB1rq92BzLSndxdkEQhyVzz
-         gE2V+Gm2+E0EqdkR1xopK3mBSFUohEFbF7AdV24i1j3o2e3NYC13yBc5h8XoupfynPiC
-         Bdqw==
-X-Gm-Message-State: AOAM532clVLFdDNNv6TgBVGTYf4DFNcT2/N9aegvsz8JIYH5s6YqX9nO
-        ZYqQcs0MPQ5FqkfFV6+ZERM=
-X-Google-Smtp-Source: ABdhPJzTOnJ2x02hqakckgGgFn+4lopjhaB9yCEKqRGzMSs12Rw6Xn/SU5cQxXjIf3qICSbhlK5vKQ==
-X-Received: by 2002:adf:d20c:: with SMTP id j12mr2872975wrh.76.1613632038781;
-        Wed, 17 Feb 2021 23:07:18 -0800 (PST)
-Received: from localhost.localdomain (67.red-83-54-30.dynamicip.rima-tde.net. [83.54.30.67])
-        by smtp.gmail.com with ESMTPSA id 4sm6136555wma.0.2021.02.17.23.07.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Feb 2021 23:07:18 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     sboyd@kernel.org
-Cc:     robh+dt@kernel.org, john@phrozen.org, tsbogend@alpha.franken.de,
-        gregkh@linuxfoundation.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        devel@driverdev.osuosl.org, neil@brown.name,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v9 6/6] MAINTAINERS: add MT7621 CLOCK maintainer
-Date:   Thu, 18 Feb 2021 08:07:09 +0100
-Message-Id: <20210218070709.11932-7-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210218070709.11932-1-sergio.paracuellos@gmail.com>
-References: <20210218070709.11932-1-sergio.paracuellos@gmail.com>
+        id S231754AbhBRND5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Feb 2021 08:03:57 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37714 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231766AbhBRKpm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 18 Feb 2021 05:45:42 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1613643933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s56Gnw396EhRPm1YevA7eLB2KjutFFHIZPiy2hOTxEM=;
+        b=A9MqyQw+uGhARjd9EqBxsZ4pVorl1rxQ2pnTECvYBMZUd3tcI8ZcXKSNfsXKlEzsZwlgy4
+        kBdzERLSQASsLtQFB/lm5Ifsli67inMrXKgnu8AA9uhsmo259oTESajGpXVylgsoEhb7PR
+        P4QBZEcvbiTdUv8WNCMjQckNPvqvXeQ=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 32F03ADE3;
+        Thu, 18 Feb 2021 10:25:33 +0000 (UTC)
+Date:   Thu, 18 Feb 2021 11:25:31 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
+ prefault/prealloc memory
+Message-ID: <YC5Am6a4KMSA8XoK@dhcp22.suse.cz>
+References: <20210217154844.12392-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210217154844.12392-1-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Adding myself as maintainer for mt7621 clock driver.
+On Wed 17-02-21 16:48:44, David Hildenbrand wrote:
+> When we manage sparse memory mappings dynamically in user space - also
+> sometimes involving MADV_NORESERVE - we want to dynamically populate/
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+Just wondering what is MADV_NORESERVE? I do not see anything like that
+in the Linus tree. Did you mean MAP_NORESERVE?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 809a68af5efd..be5ada6b4309 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11288,6 +11288,12 @@ L:	linux-wireless@vger.kernel.org
- S:	Maintained
- F:	drivers/net/wireless/mediatek/mt7601u/
- 
-+MEDIATEK MT7621 CLOCK DRIVER
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
-+F:	drivers/clk/ralink/clk-mt7621.c
-+
- MEDIATEK MT7621/28/88 I2C DRIVER
- M:	Stefan Roese <sr@denx.de>
- L:	linux-i2c@vger.kernel.org
+> discard memory inside such a sparse memory region. Example users are
+> hypervisors (especially implementing memory ballooning or similar
+> technologies like virtio-mem) and memory allocators. In addition, we want
+> to fail in a nice way if populating does not succeed because we are out of
+> backend memory (which can happen easily with file-based mappings,
+> especially tmpfs and hugetlbfs).
+
+by "fail in a nice way" you mean before a #PF would fail and SIGBUS
+which would be harder to handle?
+
+[...]
+> Because we don't have a proper interface, what applications
+> (like QEMU and databases) end up doing is touching (i.e., writing) all
+> individual pages. However, it requires expensive signal handling (SIGBUS);
+> for example, this is problematic in hypervisors like QEMU where SIGBUS
+> handlers might already be used by other subsystems concurrently to e.g,
+> handle hardware errors. "Simply" doing preallocation from another thread
+> is not that easy.
+
+OK, that clarifies my above question.
+
+> 
+> Let's introduce MADV_POPULATE with the following semantics
+> 1. MADV_POPULATED does not work on PROT_NONE and special VMAs. It works
+>    on everything else.
+
+This would better clarify what "does not work" means. I assume those are
+ignored and do not report any error?
+
+> 2. Errors during MADV_POPULATED (especially OOM) are reported.
+
+How do you want to achieve that? gup/page fault handler will allocate
+memory and trigger the oom without caller noticing that. You would
+somehow have to weaken the allocation context to GFP_RETRY_MAYFAIL or
+NORETRY to achieve the error handling.
+
+>    If we hit
+>    hardware errors on pages, ignore them - nothing we really can or
+>    should do.
+> 3. On errors during MADV_POPULATED, some memory might have been
+>    populated. Callers have to clean up if they care.
+
+How does caller find out? madvise reports 0 on success so how do you
+find out how much has been populated?
+
+> 4. Concurrent changes to the virtual memory layour are tolerated - we
+>    process each and every PFN only once, though.
+
+I do not understand this. madvise is about virtual address space not a
+physical address space.
+
+> 5. If MADV_POPULATE succeeds, all memory in the range can be accessed
+>    without SIGBUS. (of course, not if user space changed mappings in the
+>    meantime or KSM kicked in on anonymous memory).
+
+I do not see how KSM would change anything here and maybe it is not
+really important to mention it. KSM should be really transparent from
+the users space POV. Parallel and destructive virtual address space
+operations are also expected to change the outcome and there is nothing
+kernel do about at and provide any meaningful guarantees. I guess we
+want to assume a reasonable userspace behavior here.
+
+> Although sparse memory mappings are the primary use case, this will
+> also be useful for ordinary preallocations where MAP_POPULATE is not
+> desired (e.g., in QEMU, where users can trigger preallocation of
+> guest RAM after the mapping was created).
+> 
+> Looking at the history, MADV_POPULATE was already proposed in 2013 [1],
+> however, the main motivation back than was performance improvements
+> (which should also still be the case, but it's a seconary concern).
+
+Well, I think it is more of a concern than prior-spectre era when
+syscalls were quite cheap.
 -- 
-2.25.1
-
+Michal Hocko
+SUSE Labs
