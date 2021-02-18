@@ -2,80 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3ADD31DF1F
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Feb 2021 19:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C81831E45D
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Feb 2021 03:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234917AbhBQSdX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Feb 2021 13:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234914AbhBQSdV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Feb 2021 13:33:21 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A15C061574
-        for <linux-mips@vger.kernel.org>; Wed, 17 Feb 2021 10:32:40 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id d20so15948161oiw.10
-        for <linux-mips@vger.kernel.org>; Wed, 17 Feb 2021 10:32:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=3Xng/SYJ/EvDfaWjGYI2omjC51Ent4LbZAYwA70zsec=;
-        b=cK1lpmtBKTRKD82Uzd1PS66R/ni7KUhaS0ltU1zDRt6VWjCzAUc2XR8quCa5dTrZLb
-         EhWw8GIllcKKId0WOLmMhoqskuB+qEVSWBdo1NthEtFNYnMcYNPzsbj4WV3lnS2a6505
-         dlT1dYwMwkrMDEPRFl6Rrknv+8gYx7zmCv/gmgvxGK3AMoyiIgQ0QZeYAeqpWV/65OU4
-         JPzc8kXNQ56VsvDXtg6e3Z5hTww9cn4bu9APVIUPbXbQ/YocBkWDi7aqZ6Al11NuyCo/
-         KJr1YHgAADH5Mz3Ztgx5qf+fiFCVFSi8DXIX45VU1USSIGUKVqlWDkhv8qIjG5N+9MbR
-         l1ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=3Xng/SYJ/EvDfaWjGYI2omjC51Ent4LbZAYwA70zsec=;
-        b=OYnWPfTMcnsQ9TCppUpLiiLbT6OwH3phoIV3zheyIexWtYjN3qhODnIx2v0/iLulDq
-         WBs87dzfJooh9wJ9SipPsFkHhCF+GoFicdbEpaKOwfVp+oKaa0E/kUSoSFqy9gRfFKJz
-         F2y8NqFf4X9t1/Xyzsas0PKZv4e2+6aYbPRTwfWNczgCIxLtGPJz9tIOs4+ocEmzk4kV
-         OCusUG0Ci7Z0OeKT+WOJfGGZUshIImNU2KSh3SjBbRKcy60oZeon1kvvUevlzUsYoo5v
-         CSfIJ4+MruRpQNxpRM4C4O2NQUXb3cuarPTfM+f/8cBqyWeCIrnE6eCckMXAx7RH97t4
-         eM9g==
-X-Gm-Message-State: AOAM533Z8htYnyWHcarP6JyaR/XOxZ2QBqoTNNVBlkuKXEAHHevdyRh+
-        /mdxsC8qNn/ShaoF8b1EjPMAO/pHOJytF2pXIH60HA==
-X-Google-Smtp-Source: ABdhPJye734NIPqGVtdwgyQtZy3eb+AU2hP5rMSqCl0iR/IHi9Uh7p4GertOsQd8ngu1+dV9/iF1jVGKuc1HAaJr8lg=
-X-Received: by 2002:aca:7556:: with SMTP id q83mr146106oic.0.1613586759846;
- Wed, 17 Feb 2021 10:32:39 -0800 (PST)
+        id S229752AbhBRCo4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Feb 2021 21:44:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36144 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229553AbhBRCo4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 17 Feb 2021 21:44:56 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2261564DE0;
+        Thu, 18 Feb 2021 02:44:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613616255;
+        bh=sy8iwMXSGDS2c4e5QxmwRLlBenOB+zXEq/e8dETRyzg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=g/Kr2Fzyuee3+iP5ggZmEmwlj4ttvKXK1fyFZYXDb5BUHpEp7V9zY+MKwJ9mq2WHw
+         a90PJDKAmMjp13RidKhhvX8AHwoBlRpGp17QhsSFWXtW5KzwQ384P80M36mIHqR1dp
+         w8tp+fI0/W+O22CWWyxaPNTF9hoZDW7kxGRn61xAmE5MdMdDVf5M02CGjy/hs1mQs/
+         +vsq1ePu13m7NJbv1lAEYVzRnEsB8aOds+aqvpH5Njwm3JuiqTK8cj1B+kGGce+tmd
+         weNXoaKjUmbw2Pun1O20kDsF8RwruJZbnsBfbP3POkBhHRBcHcvPvEbEIdaqFiZf1M
+         HHUi33L0wpsvg==
+Received: by mail-io1-f42.google.com with SMTP id u8so503087ior.13;
+        Wed, 17 Feb 2021 18:44:15 -0800 (PST)
+X-Gm-Message-State: AOAM531agjwAP6P5BLHV4S3VYdxgIeffI47YdsPWkudPG/xsKmA03zGl
+        a7f0qkIslP0w+XE2Q0dofIl5KAS54VyupfTzzb8=
+X-Google-Smtp-Source: ABdhPJz7XjKIp6zYI6MQB/vAQmLnv0OLQF/zoMf/GQc2JEzoi69wCw8l6Fwgo8FbpsTKdcZrvMov8bTvMN9eHAfjtmY=
+X-Received: by 2002:a5e:9612:: with SMTP id a18mr1808999ioq.13.1613616254599;
+ Wed, 17 Feb 2021 18:44:14 -0800 (PST)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 18 Feb 2021 00:02:28 +0530
-Message-ID: <CA+G9fYtjWiqPaKNmXdyyO-W05BT5+OzG2=VGJyV7jGGah4k2TA@mail.gmail.com>
-Subject: MIPS: net: mscc: ocelot: undefined reference to `packing'
-To:     Netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org, lkft-triage@lists.linaro.org
-Cc:     Jakub Kicinski <kuba@kernel.org>, UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
+References: <20210210095641.23856-1-hch@lst.de> <20210210095641.23856-6-hch@lst.de>
+In-Reply-To: <20210210095641.23856-6-hch@lst.de>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 18 Feb 2021 10:44:02 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4kxyOygLg4_nEqjmO8qS8aW2M5WXn_ia7jO0hLY3_waw@mail.gmail.com>
+Message-ID: <CAAhV-H4kxyOygLg4_nEqjmO8qS8aW2M5WXn_ia7jO0hLY3_waw@mail.gmail.com>
+Subject: Re: [PATCH 5/6] MIPS: remove CONFIG_DMA_MAYBE_COHERENT
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The mips defconfig build failed on today's Linux next 20210217 tag.
+Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc' uImage.gz
-
-mips-linux-gnu-ld: drivers/net/ethernet/mscc/ocelot.o: in function
-`ocelot_xtr_poll_frame':
-drivers/net/ethernet/mscc/ocelot.c:(.text+0x1c08): undefined reference
-to `packing'
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
-build link,
-https://builds.tuxbuild.com/1obrU4klh0OkIctHBFbxIwHO0Gd/build.log
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+On Wed, Feb 10, 2021 at 6:04 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> CONFIG_DMA_MAYBE_COHERENT just guards two early init options now.  Just
+> enable them unconditionally for CONFIG_DMA_NONCOHERENT.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  arch/mips/Kconfig        | 8 ++------
+>  arch/mips/kernel/setup.c | 2 +-
+>  2 files changed, 3 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 0e86162df65541..1f1603a08a6d2d 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -181,7 +181,7 @@ config MIPS_ALCHEMY
+>         select CEVT_R4K
+>         select CSRC_R4K
+>         select IRQ_MIPS_CPU
+> -       select DMA_MAYBE_COHERENT       # Au1000,1500,1100 aren't, rest is
+> +       select DMA_NONCOHERENT          # Au1000,1500,1100 aren't, rest is
+>         select MIPS_FIXUP_BIGPHYS_ADDR if PCI
+>         select SYS_HAS_CPU_MIPS32_R1
+>         select SYS_SUPPORTS_32BIT_KERNEL
+> @@ -546,7 +546,7 @@ config MIPS_MALTA
+>         select CLKSRC_MIPS_GIC
+>         select COMMON_CLK
+>         select CSRC_R4K
+> -       select DMA_MAYBE_COHERENT
+> +       select DMA_NONCOHERENT
+>         select GENERIC_ISA_DMA
+>         select HAVE_PCSPKR_PLATFORM
+>         select HAVE_PCI
+> @@ -1127,10 +1127,6 @@ config FW_CFE
+>  config ARCH_SUPPORTS_UPROBES
+>         bool
+>
+> -config DMA_MAYBE_COHERENT
+> -       select DMA_NONCOHERENT
+> -       bool
+> -
+>  config DMA_PERDEV_COHERENT
+>         bool
+>         select ARCH_HAS_SETUP_DMA_OPS
+> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+> index d6b2ba527f5b81..b25d07675b1ee1 100644
+> --- a/arch/mips/kernel/setup.c
+> +++ b/arch/mips/kernel/setup.c
+> @@ -805,7 +805,7 @@ static int __init debugfs_mips(void)
+>  arch_initcall(debugfs_mips);
+>  #endif
+>
+> -#ifdef CONFIG_DMA_MAYBE_COHERENT
+> +#ifdef CONFIG_DMA_NONCOHERENT
+>  static int __init setcoherentio(char *str)
+>  {
+>         dma_default_coherent = true;
+> --
+> 2.29.2
+>
