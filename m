@@ -2,203 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7723F31EA47
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Feb 2021 14:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E172531EE81
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Feb 2021 19:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbhBRNHr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Feb 2021 08:07:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54323 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232729AbhBRMYI (ORCPT
+        id S230163AbhBRSkG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Feb 2021 13:40:06 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:39243 "EHLO
+        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233774AbhBRQiV (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 18 Feb 2021 07:24:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613650960;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yhLVfX0fB/D8R1zKoQVO+TMTBrUwUHt7HIxasf2kZek=;
-        b=Al081Z3aHbE5jdQK80eTI7QmH5Gpc/UmEcSCSp1N+3NUc118lXFA6lW6iJyXCYP6gcSESU
-        e/egyXlvEUcFkwth4sJUkP+tD1LLTpzJcYdfjrGICmpRH0ilBSE8tjvof/2oSg/OvFyq4w
-        HpxBShX6FYU7dN0k1lgM59mtkZ0I1Lg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-513-nqPI8Ju-OrO5-wTceZ7uYA-1; Thu, 18 Feb 2021 07:22:36 -0500
-X-MC-Unique: nqPI8Ju-OrO5-wTceZ7uYA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7A694835E25;
-        Thu, 18 Feb 2021 12:22:32 +0000 (UTC)
-Received: from t480s.redhat.com (ovpn-114-59.ams2.redhat.com [10.36.114.59])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5A9F02C01F;
-        Thu, 18 Feb 2021 12:22:17 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
-Subject: [PATCH RFC] madvise.2: Document MADV_POPULATE
-Date:   Thu, 18 Feb 2021 13:22:16 +0100
-Message-Id: <20210218122216.12424-1-david@redhat.com>
-In-Reply-To: <20210217154844.12392-1-david@redhat.com>
-References: <20210217154844.12392-1-david@redhat.com>
+        Thu, 18 Feb 2021 11:38:21 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id DF1EFE1F;
+        Thu, 18 Feb 2021 11:35:18 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 18 Feb 2021 11:35:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=9glu1NqYQ89GMrISno2hyWbjb5g
+        /OTCuIq2T05YOits=; b=G6pm+BxV6Dh9oiD6SJUz1xXNJ7zPPCZpBW9AEchzgQY
+        SsCnHwIhIZleE9PczJeaxSABPuNfyZNS1u3Zj2kDGJdZzYOuF3md0m5GftSNoeev
+        ZavMKbuw+WSPSBcY4VpVTBkV/ddPDz1xHbCCETt+RAuJ3CD0g/aAsRM9ST0bJ2+t
+        +6ifUhzBy+1w+NmK0Bu03Ar0ji4npJeGmU9jySby/2b7puTSkKn/YECDpUC+LyuL
+        6Guj5EkOzfnyrZ7fuCEdeNrI7VmN9ZSWN6LpeNmu5/FnzVAUNcjxOj673ayo+RK2
+        5fiMH3d3rCy4RcepJW9kS8GD2lNioOxaP+2WrEFLkFQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=9glu1N
+        qYQ89GMrISno2hyWbjb5g/OTCuIq2T05YOits=; b=F8tizhTRDZ1QmkV4IX/nKz
+        GFGeeljOv0nlv95ycFp0ze5k8JaZwhxcx+uGwtKUsVGuJaf3wBvlVHShQ6AEUuUa
+        nYa/M+CR3Q7nQv96fSu/CfaeIwuzJxRKrhn2B8yNMcGRvghgtZ0Vp/RbSek1ItaO
+        Huq8VE54K1HbMzSfgJ/qk4vTktg7KPqCaeXhHlIBqpyMVIsKqMHjMXcuPGS+ft/T
+        80Nr4qrm62gEv7vJ1wWgcbm6pcoegFAPfttgQ+bfSTEtA0b5vB4AgmFNGzLe9Jjp
+        2mDgst8VHznkjEYhvASc+FuMU+CJuXELKFptery4MIiY6qnvOy5wsWIYxYIQt8qA
+        ==
+X-ME-Sender: <xms:Q5cuYNHGf4DP6s5Yrk94g87bEt9maVsvZUvIZ5_OSwOa3ygXsvSckA>
+    <xme:Q5cuYCWJqVHxc0TBvW8RaM0wSdODYkxfn4yClOKahSKwcF7ZJMIFzdXO9brx_KJON
+    wVOak8LO-iBIzeTj3U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrjeeggdekjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:Q5cuYPL64pGtEXDOIjB2LytBtepgEjTDIlirUSWB4Z_2bk7CHwRyNw>
+    <xmx:Q5cuYDGxFYNq90q1Kozd9_sE8xI5mkNSdlmaFJwB_t_-qpDhKS53yA>
+    <xmx:Q5cuYDU83mA2iruvPx6pKrkqUS3fSvQrhe9kV_x71Rp0kdmagu5q-g>
+    <xmx:RpcuYHmzfxpDFq6rYEjERoNkSWa7GUcR73y9VFLtc6uo7hgIIot_W0suCF8>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id DE99E24005C;
+        Thu, 18 Feb 2021 11:35:14 -0500 (EST)
+Date:   Thu, 18 Feb 2021 17:35:12 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     airlied@linux.ie, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, dri-devel@lists.freedesktop.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2] drm/gem: Move drm_gem_fb_prepare_fb() to GEM atomic
+ helpers
+Message-ID: <20210218163512.arnmixdkygysxrqk@gilmour>
+References: <20210211081636.28311-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qyrmapmaovukaths"
+Content-Disposition: inline
+In-Reply-To: <20210211081636.28311-1-tzimmermann@suse.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Preview of MADV_POPULATE documentation, which is still under discussion:
-https://lkml.kernel.org/r/20210217154844.12392-1-david@redhat.com
 
-Once/if merged, there will be an official patch to man-page folks.
+--qyrmapmaovukaths
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Minchan Kim <minchan@kernel.org>
-Cc: Jann Horn <jannh@google.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Michael S. Tsirkin <mst@redhat.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Richard Henderson <rth@twiddle.net>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Rolf Eike Beer <eike-kernel@sf-tec.de>
-Cc: linux-alpha@vger.kernel.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: linux-xtensa@linux-xtensa.org
-Cc: linux-arch@vger.kernel.org
-Cc: Linux API <linux-api@vger.kernel.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- man2/madvise.2 | 59 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+Hi,
 
-diff --git a/man2/madvise.2 b/man2/madvise.2
-index 2af407212..ff08768a3 100644
---- a/man2/madvise.2
-+++ b/man2/madvise.2
-@@ -469,6 +469,48 @@ If a page is file-backed and dirty, it will be written back to the backing
- storage.
- The advice might be ignored for some pages in the range when it is not
- applicable.
-+.TP
-+.BR MADV_POPULATE " (since Linux 5.13)
-+Populate (prefault) page tables for the whole range.
-+Depending on the underlying mapping, preallocate memory or read the
-+underlying file.
-+Do not generate
-+.B SIGBUS
-+when populating fails, return an error instead.
-+The populate semantics match
-+.BR MAP_POPULATE
-+(see
-+.BR mmap (2))
-+with the exception that
-+.B MADV_POPULATE
-+fails if there is a proplem populating page tables.
-+.B MADV_POPULATE
-+simulates user space access to all pages in the range without actually
-+reading/writing the pages.
-+For private, writable mappings, simulate a write access; for all other
-+mappings, simulate a read access.
-+.IP
-+If
-+.B MADV_POPULATE
-+succeeds, all page tables have been populated (prefaulted) once.
-+If
-+.B MADV_POPULATE
-+fails, some page tables might have been populated.
-+.IP
-+.B MADV_POPULATE
-+cannot be applied to
-+.B PROT_NONE
-+and special mappings marked with the kernel-internal
-+.B VM_PFNMAP
-+and
-+.BR VM_IO .
-+.IP
-+Note that
-+.B MADV_POPULATE
-+will ignore any poisoned pages in the range.
-+Similar to
-+.BR MAP_POPULATE ,
-+it cannot protect from the OOM (Out Of Memory) handler killing the process.
- .SH RETURN VALUE
- On success,
- .BR madvise ()
-@@ -533,6 +575,17 @@ or
- .BR VM_PFNMAP
- ranges.
- .TP
-+.B EINVAL
-+.I advice
-+is
-+.BR MADV_POPULATE ,
-+but the specified address range includes
-+.BR PROT_NONE ,
-+.B VM_IO
-+or
-+.B VM_PFNMAP
-+ranges.
-+.TP
- .B EIO
- (for
- .BR MADV_WILLNEED )
-@@ -548,6 +601,12 @@ Not enough memory: paging in failed.
- Addresses in the specified range are not currently
- mapped, or are outside the address space of the process.
- .TP
-+.B ENOMEM
-+.I advice
-+is
-+.BR MADV_POPULATE ,
-+but populating (prefaulting) page tables failed.
-+.TP
- .B EPERM
- .I advice
- is
--- 
-2.29.2
+On Thu, Feb 11, 2021 at 09:16:36AM +0100, Thomas Zimmermann wrote:
+> diff --git a/include/drm/drm_gem_framebuffer_helper.h b/include/drm/drm_gem_framebuffer_helper.h
+> index 6b013154911d..495d174d9989 100644
+> --- a/include/drm/drm_gem_framebuffer_helper.h
+> +++ b/include/drm/drm_gem_framebuffer_helper.h
+> @@ -9,9 +9,11 @@ struct drm_framebuffer;
+>  struct drm_framebuffer_funcs;
+>  struct drm_gem_object;
+>  struct drm_mode_fb_cmd2;
+> +#if 0
+>  struct drm_plane;
+>  struct drm_plane_state;
+>  struct drm_simple_display_pipe;
+> +#endif
 
+That's probably not what you meant?
+
+With that fixed,
+Acked-by: Maxime Ripard <mripard@kernel.org>
+
+Thanks!
+Maxime
+
+--qyrmapmaovukaths
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYC6XQAAKCRDj7w1vZxhR
+xeYjAQDBp12JMmHuiBCHQBmWyl9fGbmCMg6R9psxq9edd+0vigD+MjBWZAmh8A1d
+2S0DtBQtnfgH07vDxZs1Eb8jJZ+x/QQ=
+=WmxA
+-----END PGP SIGNATURE-----
+
+--qyrmapmaovukaths--
