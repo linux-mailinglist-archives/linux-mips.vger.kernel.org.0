@@ -2,66 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE34731EA40
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Feb 2021 14:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A53631EA3E
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Feb 2021 14:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbhBRNGA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Feb 2021 08:06:00 -0500
-Received: from elvis.franken.de ([193.175.24.41]:35489 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230375AbhBRLTl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 18 Feb 2021 06:19:41 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lCh1t-0003dl-00; Thu, 18 Feb 2021 11:59:29 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 5BF5AC01A0; Thu, 18 Feb 2021 11:57:10 +0100 (CET)
-Date:   Thu, 18 Feb 2021 11:57:10 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Oleg Nesterov <oleg@redhat.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        kernel test robot <lkp@intel.com>,
-        Xingxing Su <suxingxing@loongson.cn>
-Subject: Re: [PATCH v2] MIPS: Add basic support for ptrace single step
-Message-ID: <20210218105710.GA5814@alpha.franken.de>
-References: <1612939961-8827-1-git-send-email-yangtiezhu@loongson.cn>
- <20210211102905.GE7985@alpha.franken.de>
- <20210212163335.GA12558@alpha.franken.de>
- <alpine.DEB.2.21.2102161433520.1521@angie.orcam.me.uk>
+        id S232665AbhBRNFi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Feb 2021 08:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232882AbhBRLPk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Feb 2021 06:15:40 -0500
+X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Feb 2021 03:14:59 PST
+Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA30C0613D6
+        for <linux-mips@vger.kernel.org>; Thu, 18 Feb 2021 03:14:59 -0800 (PST)
+Received: (qmail 5856 invoked from network); 18 Feb 2021 11:07:49 -0000
+Received: from mail.sf-mail.de ([2a01:4f8:1c17:6fae:616d:6c69:616d:6c69]:42702 HELO webmail.sf-mail.de) (auth=eike@sf-mail.de)
+        by mail.sf-mail.de (Qsmtpd 0.37dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
+        for <vbabka@suse.cz>; Thu, 18 Feb 2021 12:07:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2102161433520.1521@angie.orcam.me.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Date:   Thu, 18 Feb 2021 12:07:26 +0100
+From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>
+Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
+ prefault/prealloc memory
+In-Reply-To: <7859a7a0-96e2-72ff-be92-c0af5d642564@suse.cz>
+References: <20210217154844.12392-1-david@redhat.com>
+ <7859a7a0-96e2-72ff-be92-c0af5d642564@suse.cz>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <50f73055950ff7382f2194134ef0f439@sf-tec.de>
+X-Sender: eike-kernel@sf-tec.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 16, 2021 at 02:55:36PM +0100, Maciej W. Rozycki wrote:
-> On Fri, 12 Feb 2021, Thomas Bogendoerfer wrote:
-> 
-> > > IMHO ptrace single step is for CPUs supporting single stepping and not
-> > > for emulating it in the kernel.
-> > 
-> > I've checked other arch how they implement single step, and looks like
-> > I'm wrong. So I'm ok with applying your patch. Can you resend it again,
-> > so I'll get the latest version in patchwork ?
-> 
->  [..]
->  This is broken and belongs to the userland anyway.  See how complex the 
-> handling is in GDB, specifically `mips16_next_pc', `micromips_next_pc' and 
-> `mips32_next_pc' in gdb/mips-tdep.c.
+>> Let's introduce MADV_POPULATE with the following semantics
+>> 1. MADV_POPULATED does not work on PROT_NONE and special VMAs. It 
+>> works
+>>    on everything else.
+>> 2. Errors during MADV_POPULATED (especially OOM) are reported. If we 
+>> hit
+>>    hardware errors on pages, ignore them - nothing we really can or
+>>    should do.
+>> 3. On errors during MADV_POPULATED, some memory might have been
+>>    populated. Callers have to clean up if they care.
+>> 4. Concurrent changes to the virtual memory layour are tolerated - we
+                                                     ^t
+>>    process each and every PFN only once, though.
+>> 5. If MADV_POPULATE succeeds, all memory in the range can be accessed
+>>    without SIGBUS. (of course, not if user space changed mappings in 
+>> the
+>>    meantime or KSM kicked in on anonymous memory).
 
-I should have looked closer how other archs are implementing single
-stepping. It's only alpha, which emulates it by setting breakpoints. All 
-others have some type of cpu cupport for getting traps after a single
-intstruction has been issued. So I'm reverting the commit and supporting
-Maciej's statement about putting that stuff into userland (again).
+You are talking both about MADV_POPULATE and MADV_POPULATED here.
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Eike
