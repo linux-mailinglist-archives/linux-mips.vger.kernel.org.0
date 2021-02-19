@@ -2,247 +2,212 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4CE31FD24
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Feb 2021 17:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71A731FD42
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Feb 2021 17:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbhBSQdd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Feb 2021 11:33:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56494 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229555AbhBSQdc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 19 Feb 2021 11:33:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613752322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I6g+cpj7RA6mdZS10/1lUQilWu28S5qGVK36wellnP0=;
-        b=aP3dCn3CxA93cicdq69XQgZ6gtzA/8q1B2oCvE9oqPMQlME+IJIAFx0hSt1iDzZpJBOeJw
-        3oDY80ea3jxqFF6r1Fw4gKDUfq0LL30ZJDaqUM+MANHFZxkhBUwh6s8g4kXZkkFxWd+Unf
-        3AOFnmPQnM5WLSYSC22TUxnH8mCsaaQ=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-318-SGxTwseANu2fLvWhukVMpw-1; Fri, 19 Feb 2021 11:32:01 -0500
-X-MC-Unique: SGxTwseANu2fLvWhukVMpw-1
-Received: by mail-qk1-f200.google.com with SMTP id z19so3918855qki.3
-        for <linux-mips@vger.kernel.org>; Fri, 19 Feb 2021 08:32:01 -0800 (PST)
+        id S230080AbhBSQil (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Feb 2021 11:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230102AbhBSQi3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Feb 2021 11:38:29 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0D8C06178B
+        for <linux-mips@vger.kernel.org>; Fri, 19 Feb 2021 08:37:48 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id w1so4965169ilm.12
+        for <linux-mips@vger.kernel.org>; Fri, 19 Feb 2021 08:37:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=QopIIrFF742BKqlOh4+TqmLjkxOTaJiQM9hc+/gnVxg=;
+        b=xldRnNMtCqOBtzAdSkbWqDWK1ZbBF6xEYQZCfkn3Y7jcOIl3VVDqypJDMNaSi54KE1
+         w5LVCAGlgEGfzdrZ86fr6IYN3EPax5C50K8P9YGyH/PbZ8Zx/hY+CcxcvvcchvODNXc2
+         WyorXES1uKg5brfvrOuCQ9Ht4vWMeJGjFEO4hmvtMwWoEPHyuh1tfidic+3IF3ctBVet
+         KDCu+30h/EzmrPC3/j8Sqjhcru3Z1CLS3vGB5FZryibLYYvzatBb7tPPkHfEUXFkobqm
+         Q4nit8t2eBFzFSSdjciLL3gsu9vjwjHTERF2kHJrZViI4kb20kuxpp0LRFLcw/GBHMaD
+         BUZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I6g+cpj7RA6mdZS10/1lUQilWu28S5qGVK36wellnP0=;
-        b=t5xNa7iKlsiC+NPuJlQnp1C8o9NLg0pjJBeM5jkyVUnjv4PC/QpGV08GZWphhmZ7q8
-         uHasfPEx5OrlnXAb2WIeijTGZUtraV/fV1J/0zxek2E0YTaLjwv5pbkdgxZVIlDaOgfH
-         6gSwavolS+bYRUWZHQsJ9l8ro8XnH7XZNVX4cfyj3us+VQaqtLBBcbRcN8xbIqBPTMLn
-         qDmJgXFc12GRMVUEBSyLrIcl3LvntF/Gx+RfGtIisOIxblLaYVVNcZ6R7yQ0h2tvCF9b
-         GQC0oe542do4lfFoMaw+JW389pIfmBlLQakgX41hh2ro8bGk8VEWZqDYKfLrmrdf21IY
-         KGAg==
-X-Gm-Message-State: AOAM531JuZJjC1+e1t9d4E4uEwsRyVBMLpfjA5+xMuil4xsd7Ubr/PXG
-        6yxZ3O2h54DIWyQ+tCbEn9ZEge3ZdSmvaDmi18f3U9iXPHMtzIeJELwVRzlGSUbvmnDnjjOb6aj
-        3Megc97CYipZ110EXplHrGg==
-X-Received: by 2002:ac8:6915:: with SMTP id e21mr9609835qtr.120.1613752320504;
-        Fri, 19 Feb 2021 08:32:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz17h/UmznBda/FviRgsPcspG9PJA/b7HVNIyT7PEs084wTMUu4JpVtb4dM6Qne2OeAqIpMYg==
-X-Received: by 2002:ac8:6915:: with SMTP id e21mr9609806qtr.120.1613752320172;
-        Fri, 19 Feb 2021 08:32:00 -0800 (PST)
-Received: from xz-x1 (bras-vprn-toroon474qw-lp130-25-174-95-95-253.dsl.bell.ca. [174.95.95.253])
-        by smtp.gmail.com with ESMTPSA id c126sm6542670qkg.16.2021.02.19.08.31.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Feb 2021 08:31:59 -0800 (PST)
-Date:   Fri, 19 Feb 2021 11:31:57 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
- prefault/prealloc memory
-Message-ID: <20210219163157.GF6669@xz-x1>
-References: <20210217154844.12392-1-david@redhat.com>
- <20210218225904.GB6669@xz-x1>
- <b24996a6-7652-f88c-301e-28417637fd02@redhat.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=QopIIrFF742BKqlOh4+TqmLjkxOTaJiQM9hc+/gnVxg=;
+        b=hk08Pz8aBcpo6g6w8un1v4nnWw3lH/W6WNRi1FmU6I1D8JavZHSjZanKwMDj0F8WYK
+         m8Ag2Z+BOG5fUkgQGxlnWBjIS9c1XI1KMgoQ+ggzB1OeLi2SHMse4M7ZBpmaRaDXxuyf
+         hFi2zlstUlvc+ro5iyxp7DpAA1apgTf32LlMpws/tKhb0uSnl9jghW7ta/kMnGUryZYO
+         /LSrlhR1+rWPZgIEYNL8062ieYauv7eGHbWGNr+ZRwAaVZIQ/y3EQfwCNmjZy27vhGF3
+         mJRI35cc9qtQTVC4Z9fFZcKC6cvZjhAPEkXFc4NFwmC8LnZWzLfnnkOv4vFbHickGHFt
+         NhNQ==
+X-Gm-Message-State: AOAM530zas19DSB5ImTF6sNeVdCrp2OL8wl/SuobDSScTcY4dzRFI3pI
+        g94LMNoC2YBEsqy9PvTwnE3jOA==
+X-Google-Smtp-Source: ABdhPJxaKeetAYFXJydsPreGczSfycYq3Pg3RINKEm67oHsdXLXdiZ/SpgwXBek/ZmbU589cfA+RMQ==
+X-Received: by 2002:a05:6e02:13eb:: with SMTP id w11mr4524720ilj.103.1613752667719;
+        Fri, 19 Feb 2021 08:37:47 -0800 (PST)
+Received: from [192.168.1.30] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id g3sm6741393ile.10.2021.02.19.08.37.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Feb 2021 08:37:47 -0800 (PST)
+Subject: Re: [next]: fs/io_uring.c:6171:10: error: implicit declaration of
+ function 'io_sendmsg_prep_async'; did you mean 'io_req_prep_async'?
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-mips@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        io-uring@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Pavel Begunkov <asml.silence@gmail.com>
+References: <CA+G9fYt1Bk=DW1VoPgWe9ZHHoHu+6OyZi7ndMJHmoR14uJePyQ@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <b4c660b0-ab0e-ec4c-2771-346ca164bf92@kernel.dk>
+Date:   Fri, 19 Feb 2021 09:37:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <CA+G9fYt1Bk=DW1VoPgWe9ZHHoHu+6OyZi7ndMJHmoR14uJePyQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b24996a6-7652-f88c-301e-28417637fd02@redhat.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Feb 19, 2021 at 09:20:16AM +0100, David Hildenbrand wrote:
-> On 18.02.21 23:59, Peter Xu wrote:
-> > Hi, David,
-> > 
-> > On Wed, Feb 17, 2021 at 04:48:44PM +0100, David Hildenbrand wrote:
-> > > When we manage sparse memory mappings dynamically in user space - also
-> > > sometimes involving MADV_NORESERVE - we want to dynamically populate/
-> > > discard memory inside such a sparse memory region. Example users are
-> > > hypervisors (especially implementing memory ballooning or similar
-> > > technologies like virtio-mem) and memory allocators. In addition, we want
-> > > to fail in a nice way if populating does not succeed because we are out of
-> > > backend memory (which can happen easily with file-based mappings,
-> > > especially tmpfs and hugetlbfs).
-> > 
-> > Could you explain a bit more on how do you plan to use this new interface for
-> > the virtio-balloon scenario?
+On 2/19/21 9:08 AM, Naresh Kamboju wrote:
+> Linux next tag 20210219 arm and mips builds failed due to below error.
 > 
-> Sure, that will bring up an interesting point to discuss
-> (MADV_POPULATE_WRITE).
+> Following build configs failed
+> arm (s3c6400_defconfig) with gcc-8
+> arm (s3c6400_defconfig) with gcc-9
+> arm (s3c6400_defconfig) with gcc-10
 > 
-> I'm planning on using it in virtio-mem: whenever the guests requests the
-> hypervisor (via a virtio-mem device) to make specific blocks available
-> ("plug"), I want to have a configurable option ("populate=on" /
-> "prealloc="on") to perform safety checks ("prealloc") and populate page
-> tables.
+> mips (e55_defconfig) with gcc-8
+> mips (e55_defconfig) with gcc-9
+> mips (e55_defconfig) with gcc-10
+> 
+> fs/io_uring.c:6171:10: error: implicit declaration of function
+> 'io_sendmsg_prep_async'; did you mean 'io_req_prep_async'?
+> [-Werror=implicit-function-declaration]
+>    return io_sendmsg_prep_async(req);
+>           ^~~~~~~~~~~~~~~~~~~~~
+>           io_req_prep_async
+> 
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-As you mentioned in the commit message, the original goal for MADV_POPULATE
-should be for performance's sake, which I can understand.  But for safety
-check, I'm curious whether we'd have better way to do that besides populating
-the whole memory.
+This should fix it, cleaning it up a bit at the same time.
 
-E.g., can we simply ask the kernel "how much memory this process can still
-allocate", then get a number out of it?  I'm not sure whether it can be done
-already by either cgroup or any other facilities, or maybe it's still missing.
-But I'd raise this question up, since these two requirements seem to be two
-standalone issues to solve at least to me.  It could be an overkill to populate
-all the memory just for a sanity check.
 
-> 
-> This becomes especially relevant for private/shared hugetlbfs and shared
-> files/shmem where we have a limited pool size (e.g., huge pages, tmpfs size,
-> filesystem size). But it will also come in handy when just preallocating
-> (esp. zeroing) anonymous memory.
-> 
-> For virito-balloon it is not applicable because it really only supports
-> anonymous memory and we cannot fail requests to deflate ...
-> 
-> --- Example ---
-> 
-> Example: Assume the guests requests to make 128 MB available and we're using
-> hugetlbfs. Assume we're out of huge pages in the hypervisor - we want to
-> fail the request - I want to do some kind of preallocation.
-> 
-> So I could do fallocate() on anything that's MAP_SHARED, but not on anything
-> that's MAP_PRIVATE. hugetlbfs via memfd() cannot be preallocated without
-> going via SIGBUS handlers.
-> 
-> --- QEMU memory configurations ---
-> 
-> I see the following combinations relevant in QEMU that I want to support
-> with virito-mem:
-> 
-> 1) MAP_PRIVATE anonymous memory
-> 2) MAP_PRIVATE on hugetlbfs (esp. via memfd)
-> 3) MAP_SHARED on hugetlbfs (esp. via memfd)
-> 4) MAP_SHARED on shmem (file / memfd)
-> 5) MAP_SHARED on some sparse file.
-> 
-> Other MAP_PRIVATE mappings barely make any sense to me - "read the file and
-> write to page cache" is not really applicable to VM RAM (not to mention
-> doing fallocate(PUNCH_HOLE) that invalidates the private copies of all other
-> mappings on that file).
-> 
-> --- Ways to populate/preallocate ---
-> 
-> I see the following ways to populate/preallocate:
-> 
-> a) MADV_POPULATE: write fault on writable MAP_PRIVATE, read fault on
->    MAP_SHARED
-> b) Writing to MAP_PRIVATE | MAP_SHARED from user space.
-> c) (below) MADV_POPULATE_WRITE: write fault on writable MAP_PRIVATE |
->    MAP_SHARED
-> 
-> Especially, 2) is kind of weird as implemented in QEMU
-> (util/oslib-posix.c:do_touch_pages):
-> 
-> "Read & write back the same value, so we don't corrupt existing user/app
-> data ... TODO: get a better solution from kernel so we don't need to write
-> at all so we don't cause wear on the storage backing the region..."
+commit b1c892df32ebf6f30c995e23dcafeae2392ad1bc
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Fri Feb 19 09:35:19 2021 -0700
 
-It's interesting to know about commit 1e356fc14be ("mem-prealloc: reduce large
-guest start-up and migration time.", 2017-03-14).  It seems for speeding up VM
-boot, but what I can't understand is why it would cause the delay of hugetlb
-accounting - I thought we'd fail even earlier at either fallocate() on the
-hugetlb file (when we use /dev/hugepages) or on mmap() of the memfd which
-contains the huge pages.  See hugetlb_reserve_pages() and its callers.  Or did
-I miss something?
+    io_uring: make the !CONFIG_NET helpers a bit more robust
+    
+    With the prep and prep async split, we now have potentially 3 helpers
+    that need to be defined for !CONFIG_NET. Add some helpers to do just
+    that.
+    
+    Fixes the following compile error on !CONFIG_NET:
+    
+    fs/io_uring.c:6171:10: error: implicit declaration of function
+    'io_sendmsg_prep_async'; did you mean 'io_req_prep_async'?
+    [-Werror=implicit-function-declaration]
+       return io_sendmsg_prep_async(req);
+                 ^~~~~~~~~~~~~~~~~~~~~
+                 io_req_prep_async
+    
+    Fixes: 93642ef88434 ("io_uring: split sqe-prep and async setup")
+    Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+    Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-I think there's a special case if QEMU fork() with a MAP_PRIVATE hugetlbfs
-mapping, that could cause the memory accouting to be delayed until COW happens.
-However that's definitely not the case for QEMU since QEMU won't work at all as
-late as that point.
-
-IOW, for hugetlbfs I don't know why we need to populate the pages at all if we
-simply want to know "whether we do still have enough space"..  And IIUC 2)
-above is the major issue you'd like to solve too.
-
-> 
-> So if we have zero, we write zero. We'll COW pages, triggering a write fault
-> - and that's the only good thing about it. For example, similar to
-> MADV_POPULATE, nothing stops KSM from merging anonymous pages again. So for
-> anonymous memory the actual write is not helpful at all. Similarly for
-> hugetlbfs, the actual write is not necessary - but there is no other way to
-> really achieve the goal.
-> 
-> --- How MADV_POPULATE is useful ---
-> 
-> With virito-mem, our VM will usually write to memory before it reads it.
-> 
-> With 1) and 2) it does exactly what I want: trigger COW / allocate memory
-> and trigger a write fault. The only issue with 1) is that KSM might come
-> around and undo our work - but that could only be avoided by writing random
-> numbers to all pages from user space. Or we could simply rather disable KSM
-> in that setup ...
-> 
-> --- How MADV_POPULATE is not perfect ---
-> 
-> KSM can merge anonymous pages again. Just like the current QEMU
-> implementation. The only way around that is writing random numbers to the
-> pages or mlocking all memory. No big news.
-> 
-> Nothing stops reclaim/swap code from depopulating when using files. Again,
-> no big new - we have to mlock.
-> 
-> --- HOW MADV_POPULATE_WRITE might be useful ---
-> 
-> With 3) 4) 5) MADV_POPULATE does partially what I want: preallocate memory
-> and populate page tables. But as it's a read fault, I think we'll have
-> another minor fault on access. Not perfect, but better than failing with
-> SIGBUS. One way around that would be having an additional
-> MADV_POPULATE_WRITE, to use in cases where it makes sense (I think at least
-> 3) and 4), most probably not on actual files like 5) ).
-
-Right, it seems when populating memories we'll read-fault on file-backed.
-However that'll be another performance issue to think about.  So I'd hope we
-can start with the current virtio-mem issue on memory accounting, then we can
-discuss them separately.
-
-Btw, thanks for the long write-up, it definitely helps me to understand what
-you wanted to achieve.
-
-Thanks,
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index b7bae301744b..c9a5c498dc3b 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -5127,56 +5127,32 @@ static int io_connect(struct io_kiocb *req, unsigned int issue_flags)
+ 	return 0;
+ }
+ #else /* !CONFIG_NET */
+-static int io_sendmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int io_send(struct io_kiocb *req, unsigned int issue_flags)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int io_recvmsg_prep(struct io_kiocb *req,
+-			   const struct io_uring_sqe *sqe)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int io_connect_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int io_connect(struct io_kiocb *req, unsigned int issue_flags)
+-{
+-	return -EOPNOTSUPP;
+-}
++#define IO_NETOP_FN(op)							\
++static int io_##op(struct io_kiocb *req, unsigned int issue_flags)	\
++{									\
++	return -EOPNOTSUPP;						\
++}
++
++#define IO_NETOP_PREP(op)						\
++IO_NETOP_FN(op)								\
++static int io_##op##_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe) \
++{									\
++	return -EOPNOTSUPP;						\
++}									\
++
++#define IO_NETOP_PREP_ASYNC(op)						\
++IO_NETOP_PREP(op)							\
++static int io_##op##_prep_async(struct io_kiocb *req)			\
++{									\
++	return -EOPNOTSUPP;						\
++}
++
++IO_NETOP_PREP_ASYNC(sendmsg);
++IO_NETOP_PREP_ASYNC(recvmsg);
++IO_NETOP_PREP_ASYNC(connect);
++IO_NETOP_PREP(accept);
++IO_NETOP_FN(send);
++IO_NETOP_FN(recv);
+ #endif /* CONFIG_NET */
+ 
+ struct io_poll_table {
 
 -- 
-Peter Xu
+Jens Axboe
 
