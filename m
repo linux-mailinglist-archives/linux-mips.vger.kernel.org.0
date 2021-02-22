@@ -2,63 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D62B321447
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Feb 2021 11:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1066B321767
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Feb 2021 13:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbhBVKnD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Feb 2021 05:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhBVKnB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Feb 2021 05:43:01 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26B2BC061574;
-        Mon, 22 Feb 2021 02:42:21 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 5983C92009C; Mon, 22 Feb 2021 11:42:17 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 5002292009B;
-        Mon, 22 Feb 2021 11:42:17 +0100 (CET)
-Date:   Mon, 22 Feb 2021 11:42:17 +0100 (CET)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Christoph Hellwig <hch@lst.de>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org
-Subject: Re: [PATCH 5/6] driver core: lift dma_default_coherent into common
- code
-In-Reply-To: <20210222075937.GA21946@lst.de>
-Message-ID: <alpine.DEB.2.21.2102221140180.1900@angie.orcam.me.uk>
-References: <20210208145024.3320420-1-hch@lst.de> <20210208145024.3320420-6-hch@lst.de> <alpine.DEB.2.21.2102081654060.35623@angie.orcam.me.uk> <20210208161043.GA14083@lst.de> <alpine.DEB.2.21.2102091213070.35623@angie.orcam.me.uk>
- <alpine.DEB.2.21.2102151342050.1521@angie.orcam.me.uk> <alpine.DEB.2.21.2102210407090.2021@angie.orcam.me.uk> <20210222075937.GA21946@lst.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S231268AbhBVMr0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Feb 2021 07:47:26 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:40572 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230481AbhBVMpz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Feb 2021 07:45:55 -0500
+Received: from [192.168.0.114] (unknown [49.207.208.227])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D5C6B20B6C40;
+        Mon, 22 Feb 2021 04:45:10 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D5C6B20B6C40
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1613997914;
+        bh=0cItSrOHNyqAnHmYlMTDJGOB4+40TVteNywMP5altWI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=S3opWeTuHjAN4qY/hX6uq5/M2WjhFUhmr0tuz2c0Py7eyP7QBLEFjbQHSe5KTYoEG
+         qg2ou051HmRjivkRNBMs5ii9KUYdRE4ur3owyF1Hqr9aqEwUuOQ/yDQZS2cx0CvTy6
+         SJTC53nhIk598tm7DvObgpudGc3MEObOHOwwZNzA=
+Subject: Re: [PATCH 1/2] optee: fix tee out of memory failure seen during
+ kexec reboot
+To:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        allen.lkml@gmail.com, jens.wiklander@linaro.org, zajec5@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com
+References: <20210217092714.121297-2-allen.lkml@gmail.com>
+ <20210217092714.121297-2-allen.lkml@gmail.com>
+From:   Allen Pais <apais@linux.microsoft.com>
+Message-ID: <8d87655f-27c6-6a66-6eb0-9244279fbf2c@linux.microsoft.com>
+Date:   Mon, 22 Feb 2021 18:15:08 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20210217092714.121297-2-allen.lkml@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 22 Feb 2021, Christoph Hellwig wrote:
 
-> > I haven't booted Linux on my Malta for a while now, but it turns out to 
-> > work just fine, and your patch set does not regress it booting multi-user 
-> > NFS-rooted over FDDI.
-> > 
-> >  I note however that the system does not reboot properly:
-> > 
-> > sd 0:0:0:0: [sda] Synchronizing SCSI cache
-> > reboot: Restarting system
-> > Reboot failed -- System halted
-> > 
-> > which is a regression, and also the MMIO-mapped discrete CBUS UART (ttyS2) 
-> > does not sign in anymore either:
+> On Wed, 17 Feb 2021 14:57:12 +0530, Allen Pais wrote:
+>> -	/*
+>> -	 * Ask OP-TEE to free all cached shared memory objects to decrease
+>> -	 * reference counters and also avoid wild pointers in secure world
+>> -	 * into the old shared memory range.
+>> -	 */
+>> -	optee_disable_shm_cache(optee);
+>> +	if (shutdown) {
+>> +		optee_disable_shm_cache(optee);
+>> +	} else {
+>> +		/*
+>> +		 * Ask OP-TEE to free all cached shared memory
+>> +		 * objects to decrease reference counters and
+>> +		 * also avoid wild pointers in secure world
+>> +		 * into the old shared memory range.
+>> +		 */
+>> +		optee_disable_shm_cache(optee);
+>   
+> Calling optee_disable_shm_cache() in both if and else. It could be
+> put in front of if().
 > 
-> Do you mean a regression with this series, or just compared to when you
-> last tested?
 
- When last tested.  Years ago, so nothing for you to be concerned.  I'll 
-look into it sometime unless someone beats me to.  Don't hold your breath 
-though.  Sorry to be unclear.
+   Ideally, I could just use optee_remove for shutdown() too.
+But it would not look good. Hence this approach.
 
-  Maciej
+- Allen
