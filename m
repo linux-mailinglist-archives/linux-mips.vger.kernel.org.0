@@ -2,88 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6B03220D9
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Feb 2021 21:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 328EC32210E
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Feb 2021 22:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbhBVUei (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Feb 2021 15:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
+        id S230499AbhBVVAp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Feb 2021 16:00:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbhBVUeh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Feb 2021 15:34:37 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A4EC061574;
-        Mon, 22 Feb 2021 12:33:54 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id f137so461262wmf.3;
-        Mon, 22 Feb 2021 12:33:54 -0800 (PST)
+        with ESMTP id S229934AbhBVVAp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Feb 2021 16:00:45 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F407BC061574;
+        Mon, 22 Feb 2021 13:00:04 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 75so10981097pgf.13;
+        Mon, 22 Feb 2021 13:00:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+J05iBPkWaNdPyV+jMQZJzXzfmTKQmwmnHoTRui72ag=;
-        b=jfiXcNnjlgUCVOV8yCp/kOY78YiYcdKX9t9E7OAl8tiwn6/FAxURq9Um+k7gXQa8uX
-         CdIlmm0zNJP6snVVN/1l77pYHigIdFQuYHYrWWfk897HLcRwpK8aPKJsBR5iuajVOmyE
-         GJDtzW52gVpGIGzd8JuX2jC1qIyogqhtEYtDCewraA4yy0gr6sv0uLB8ej0Y87C7+CqB
-         MJ0hP2KEnJ5OSyiEn0HDSOQ/hvnCuH+bBzyY8OqHrCX/QsGUeDxDxqRk/BP7JwriksA1
-         iT/uWx1JbWTK3Yxg9Ce3LBZ979xNGbkRD/BoBo2NoqS/uHLWr5+mvUzBLEXJ/ozqnREM
-         Q3LA==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=H0Xgyt5coIH+GE4ESBF/DDHxRtz15wSekZzSGidjJ40=;
+        b=Eq4HTBRkpBFEOj3x7npC7iQPImgtay3bpsDwLybwhumfoDXN1/39W57Zwn2MXDFQbX
+         GaLiBMOi5hXAPjmN6ubOC5NrUg2yryw5tC49QyL7nILN4IgmjM/6X4mWpO0oX3tqffT3
+         pSmeu2/1+1mrk4Jhu3fgdw3tpVwbLCi8DuDSfMRgiU8jIWXDt5k9fN6dXk0nlSC2F2fe
+         1bY/HdAA7TAgNjIYmW0KHPPHJIP9X9B/MlmE9CISwGbhxbevpGQv2G1qGcHcPb7JnCIz
+         HbENYeVzIPWicvLA6gPvU/EurE1uS8nMT0XuPxT9E4/VP912Wvot46qQY6hqdXK/pKf0
+         VtOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=+J05iBPkWaNdPyV+jMQZJzXzfmTKQmwmnHoTRui72ag=;
-        b=jMiPOanCucw2n/c6U80xSC+d48JcGHnQoUsqkjbvYQpsggMF42KYa/6BcJWmn3DhV1
-         5OMC2IpmCAvXRIhnZ5ajY79wGsVirsuzgPBKm3OoM7jJAEXSFxl9HXtytjAny2u5SNOr
-         mwppqC+cg9aarnoq22x2jBidJSstOCkf+C4BZbK/n1f/5u/JkZXwM8FWLzfiDTemHXJ8
-         Z8f5SoWpld5BG8QUN5TpaR9l6780FG2w+BQ6cgDvJwIlTf/KHsnDGtblOXRLO4ZdgoBT
-         PJX8HYRKYaJkoB1G+TyiBysZONF26r2PqgEdZRNZyibImJs40GZd4X1vkWBaoa7hvqhJ
-         Mdvw==
-X-Gm-Message-State: AOAM531cEmtUXnN9UtlET5bReSbxsWgXtE/mgc6LtPe7ciA4oesQouJw
-        c9L0uaenG9ngHh70M5XZfMU=
-X-Google-Smtp-Source: ABdhPJwo9eHcA5W16ZGhk1E9OC6ZPII4jKfeVCguHLkvkL+TZsCw/K8FG66HkTz0bMYqw7R9EnDO+g==
-X-Received: by 2002:a1c:dc42:: with SMTP id t63mr21531967wmg.153.1614026032962;
-        Mon, 22 Feb 2021 12:33:52 -0800 (PST)
-Received: from skynet.lan (170.red-88-1-105.dynamicip.rima-tde.net. [88.1.105.170])
-        by smtp.gmail.com with ESMTPSA id d7sm18137380wrm.62.2021.02.22.12.33.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 12:33:51 -0800 (PST)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        bh=H0Xgyt5coIH+GE4ESBF/DDHxRtz15wSekZzSGidjJ40=;
+        b=G3qHfi2Aemrz437ByYTVWSfbb+8MjP7ul2V0+xjAgp4kaE7sjIPuafvOVXnQogLdF/
+         0kopzJWEAYdngz6YqrtPrOyivYYM6oDSJDzKKVNKXKsqewelwNpX0dXvck7qs3E5X4uy
+         sOOtw/2wzrZGNE5bQym1a9oU7hAfsLUnQk47cn6pbmLQaQKWXKDUGdPJkLBzwxuxxxeq
+         aEpMFBFfD+p959mlJiq55Fw/ogcNuqeA/yhiz3fLdCzDJuEht38nC5ivc+eJ1JrfBvc7
+         Lqrpp/Jkhjy4j7P4pKYTRXMEUKfDGW0nyGRmQsaQ2WYbfbt5R96pXOYEQG0fU7a8TVmW
+         784Q==
+X-Gm-Message-State: AOAM533IPwmCdiZ5QrUToEAyKYfq2yDIXNL/rwRKyJKWHXcXhC13ZzXz
+        Vtvh3oKXFrvJm5cOUjpQgzZ8ykrkLkU=
+X-Google-Smtp-Source: ABdhPJyGj9q8+ckK9W3DAnRknkAKgAh/UnyHUCICnA8bG4DJcFr5tlE2ex5p9Rx1U60pSCZm8OYutA==
+X-Received: by 2002:a63:c54c:: with SMTP id g12mr20658056pgd.449.1614027604011;
+        Mon, 22 Feb 2021 13:00:04 -0800 (PST)
+Received: from [10.230.29.30] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id x12sm20587085pfp.214.2021.02.22.13.00.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Feb 2021 13:00:03 -0800 (PST)
+Subject: Re: [PATCH] irqchip/bcm-6345-l1: fix SMP support
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        jonas.gorski@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
         bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH] mips: bmips: init clocks earlier
-Date:   Mon, 22 Feb 2021 21:33:50 +0100
-Message-Id: <20210222203350.4249-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.20.1
+References: <20210222201332.30253-1-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <6169cb21-538b-1066-51cb-dd362f811fa1@gmail.com>
+Date:   Mon, 22 Feb 2021 13:00:01 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20210222201332.30253-1-noltari@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-device_initcall() is too late for bcm63xx.
-We need to call of_clk_init() earlier in order to properly boot.
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
----
- arch/mips/bmips/setup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
-index 95f8f10d8697..31bcfa4e08b9 100644
---- a/arch/mips/bmips/setup.c
-+++ b/arch/mips/bmips/setup.c
-@@ -196,4 +196,4 @@ static int __init plat_dev_init(void)
- 	return 0;
- }
- 
--device_initcall(plat_dev_init);
-+arch_initcall(plat_dev_init);
+On 2/22/2021 12:13 PM, Álvaro Fernández Rojas wrote:
+> Some BCM6358 devices start with Core #1 instead of Core #0.
+> Apart from that, SMP is restricted to 1 CPU since BCM6358 has a shared TLB,
+> which makes it impossible for the current SMP support to start both CPUs.
+> 
+> The problem is that smp_processor_id() returns 0 and then cpu_logical_map()
+> converts that to 1, which accesses an uninitialized position of intc->cpus[],
+> resulting in a kernel panic.
+
+Sounds like you nee to correct the way the cpu_logical_map[] is
+populated then?
 -- 
-2.20.1
-
+Florian
