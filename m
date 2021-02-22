@@ -2,378 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F74B320F87
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Feb 2021 03:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A901F320FD5
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Feb 2021 04:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbhBVCrE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 21 Feb 2021 21:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbhBVCrA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 21 Feb 2021 21:47:00 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E069C0617A7
-        for <linux-mips@vger.kernel.org>; Sun, 21 Feb 2021 18:45:57 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id x129so997164pfx.7
-        for <linux-mips@vger.kernel.org>; Sun, 21 Feb 2021 18:45:57 -0800 (PST)
+        id S230044AbhBVDpc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 21 Feb 2021 22:45:32 -0500
+Received: from mail-eopbgr1310100.outbound.protection.outlook.com ([40.107.131.100]:15252
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229952AbhBVDpb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 21 Feb 2021 22:45:31 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D9s+OH66cuwpApKfOGvyNLLYTXs9qhhLoOK4VHw6DNtGuH7B9kjT6ckcrEmC4782oAGvqm4Y6zr1mYDTAwweKR/mHU0BP3DgaaR+Z6VVXRDTwgky+z1kovpaJoOvdAC/gJ25rl0B87dOSL0m+goK0Fen79FxVG/eFEbho+3q3LaRkMSDrVPlwgY+BJQ2gOi08TDxB/c55E2U71bLsIy7YZBlPB8zWb2U5IMysXm/lDelHepY9ZnQOF4CqTgwePHA/ZbG7DE7j/koZ2EOPMSBQc0sB6EN6CrmWuHH/CNPTG3N+BSGVl/IuUG76gitd+C9LvAWtNjIeaHm4K8d6eptyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0+vJa9hf2XU3IDr49xIraV2wsfTbpeVGRcMLW1wCECM=;
+ b=IPt44M6XXGTbWmDmxeag+4KUp/zpgqbF8ExMk/QcIRwJcgFPzIiOmyQ/4psbxrxCcuWCZaTs3OnJ/XUs1KX9HYH+QGJQn765zv1inMwg+TQ3hP4l5ehe4YNSklZvWiMaiYp3nUWDyDgf2J2f26UNe4KA4OCGUMC2/8j/3zqgOaUxat+qnFUeOGNW1Ul3FWgoCaaKCThduHCc/p2kajIkR4ogZ5nLJDh964shvpvOq4CJMWrooxr2EucZcUoWs4EkCrQMF0qDI1fgmqH4QgucTnppzUsLeGfbMJrOfJh2DLRWQaItFm9bWl5+dTN+wmiAiuWnGr3zmcE2GqK2groa+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cipunited.com; dmarc=pass action=none
+ header.from=cipunited.com; dkim=pass header.d=cipunited.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ss521oD40ZnZ/Nyo5tW+L84EULMrNn4Gw0gjrJuxp1M=;
-        b=jwFgb/QDUW4kzKwp9G2USfUDzhdnenGNye8WO1n6t2LMoEN2pCbtbpWfuAVgzItrx0
-         ACzoVjZvZRU3wJ3t+SO3k8TauTXtaXVoUguMFxqNYto5twkjywEuQXFgmwKOl/CWVanm
-         NfLeYgvoeIF0rtnjepULnjMZEZV32vDGWZaxQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ss521oD40ZnZ/Nyo5tW+L84EULMrNn4Gw0gjrJuxp1M=;
-        b=qSpr4ixwbQt3N9z1OzhT/EcbT69vg0ZFds9wMeGZtbV2Plp8K/pOICG0bonJD9KPJO
-         QOdVxQ6zFmWY7GIeSvXasMKBLl8XeRONN1uxdEpPH6hoyRFQaSXxtfSUAb06iIfd4+Ff
-         3xeCOz96e/1eT8OkhBSFnB2g3TX6QB7EbRpnRMM+UxPnta9CDL9ITwPN5wpenykjfxQV
-         UvKGP+9OWE029i5fOeLFqjalavj/edBCfafgExgdaprSjqbSeUSjabrKjfWtNhqu3TOy
-         9E8eeW7HxGuOW5+7F4jT0Cyis9LEJQcz9/Mea3bL5YLY1CJikrrpjo7F/hIuhmXqKzxe
-         lbmg==
-X-Gm-Message-State: AOAM533qBax2nvyReE27oHU6tZ0fe/itwwa5JNX/jjSYkJ7RwblERLt3
-        LCCTrZoVAQ/x562rVnIeeUdFkw==
-X-Google-Smtp-Source: ABdhPJwNgvHyZmW+/s05ddugGwvWr9Qw9pnLSevD8i66tTa9xzVCqS1ccHwM239iTRUUoYE9KH6RCg==
-X-Received: by 2002:aa7:9356:0:b029:1dd:644a:d904 with SMTP id 22-20020aa793560000b02901dd644ad904mr19753804pfn.18.1613961956628;
-        Sun, 21 Feb 2021 18:45:56 -0800 (PST)
-Received: from localhost ([2401:fa00:8f:203:11b3:5e1a:7cb:7e1f])
-        by smtp.gmail.com with UTF8SMTPSA id 14sm16852882pfy.55.2021.02.21.18.45.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Feb 2021 18:45:56 -0800 (PST)
-From:   David Stevens <stevensd@chromium.org>
-X-Google-Original-From: David Stevens <stevensd@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
-        kvm-ppc@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Stevens <stevensd@chromium.org>
-Subject: [PATCH v4 2/2] KVM: x86/mmu: Consider the hva in mmu_notifier retry
-Date:   Mon, 22 Feb 2021 11:45:22 +0900
-Message-Id: <20210222024522.1751719-3-stevensd@google.com>
-X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
-In-Reply-To: <20210222024522.1751719-1-stevensd@google.com>
-References: <20210222024522.1751719-1-stevensd@google.com>
-MIME-Version: 1.0
+ d=cipunited.onmicrosoft.com; s=selector1-cipunited-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0+vJa9hf2XU3IDr49xIraV2wsfTbpeVGRcMLW1wCECM=;
+ b=iqHW0c0m10kQeTWy2K6v+Ktr5OG1Wmw+3kg9RkwFuROFNT3L/vJC6DxjpdgH3r4/b+7j9Mh64af48wdBA4l7JZm01WUJeYFL8mhGW7K2o/ylFWzRHGvgFdevbSkJy3NpfbjEHCn+YenEV2CJFZ3WT+J2FDWXAolMyVhbQUKp48E=
+Authentication-Results: alpha.franken.de; dkim=none (message not signed)
+ header.d=none;alpha.franken.de; dmarc=none action=none
+ header.from=cipunited.com;
+Received: from HKAPR04MB3956.apcprd04.prod.outlook.com (2603:1096:203:d5::13)
+ by HK0PR04MB2258.apcprd04.prod.outlook.com (2603:1096:203:48::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.29; Mon, 22 Feb
+ 2021 03:43:54 +0000
+Received: from HKAPR04MB3956.apcprd04.prod.outlook.com
+ ([fe80::b5d5:d70f:ed37:984c]) by HKAPR04MB3956.apcprd04.prod.outlook.com
+ ([fe80::b5d5:d70f:ed37:984c%5]) with mapi id 15.20.3868.032; Mon, 22 Feb 2021
+ 03:43:54 +0000
+From:   YunQiang Su <yunqiang.su@cipunited.com>
+To:     tsbogend@alpha.franken.de, jiaxun.yang@flygoat.com,
+        macro@orcam.me.uk
+Cc:     linux-mips@vger.kernel.org,
+        YunQiang Su <yunqiang.su@cipunited.com>, stable@vger.kernel.org
+Subject: [PATCH v4] MIPS: introduce config option to force use FR=0 for FPXX binary
+Date:   Mon, 22 Feb 2021 03:43:42 +0000
+Message-Id: <20210222034342.13136-1-yunqiang.su@cipunited.com>
+X-Mailer: git-send-email 2.20.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [60.247.76.83]
+X-ClientProxiedBy: HK2PR0401CA0018.apcprd04.prod.outlook.com
+ (2603:1096:202:2::28) To HKAPR04MB3956.apcprd04.prod.outlook.com
+ (2603:1096:203:d5::13)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (60.247.76.83) by HK2PR0401CA0018.apcprd04.prod.outlook.com (2603:1096:202:2::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27 via Frontend Transport; Mon, 22 Feb 2021 03:43:54 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2447c640-cd5e-46f9-6d82-08d8d6e413b6
+X-MS-TrafficTypeDiagnostic: HK0PR04MB2258:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <HK0PR04MB2258A0960A44AD09281B5D72F2819@HK0PR04MB2258.apcprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1002;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jpHg8ClxLxU6TjyiJwFerqaVLRpKShom0/ba2TgqbvOrp8GAwNLVRx24PnYQX3zvL+cbbqQFa4n1Z5FLni2pCPFZl6BhRfXx6ucyWIDoylKrw9NZvfuTuNL05qVPWJ6pbmotg9w18HiznD9RmOtH3TSMTSPbGDwaeaY9mciXDoQ2iOq/GwrmVPGoTuLbwnlIGJifwdalHMWXZ+gU7Qf+62RYx7y4E3Qs6YEXAcCHWF5xCsVJniceqfqyva2ckK6C2wvVhEarLLhRvCjaOssXAwKrpBiy0q0+wtXsIZqUJSoY5QKYVdQymnsq0QAZjTagufco+S2xRPz5yk1pxeXx4/0vLuxd8MVrCw5vp69bLoCLUvPANIhLKGPwPeUSHirZuC2mEc2Y/NalcO6T1GtSv2zBWk9G0x4NOYJgXSnZb9/nOnVjdaMpUqWInnz/fcSXtDOrXMZWccF6YREMYXoV/JDGv06NR3i5d3qzN1D203NaJWRKNmNrFsR/yB2X59P3gJyHaXz6qgN4nyEIFX8WExuLtgztqCMmnyFnpNPBXUjocHmWEI0kkOIZaeHsie7MEwPBSQmLTX4zozUJprkb0KH2WPOVBp+Y/Kt4v82G5syn2N9Cf7AoBBjLMA4eCoK85Kba5LMu69l6CE8LK2wWCg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HKAPR04MB3956.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(39830400003)(346002)(136003)(396003)(376002)(69590400012)(86362001)(2906002)(186003)(26005)(16526019)(52116002)(478600001)(6506007)(966005)(4326008)(8936002)(6486002)(83380400001)(8676002)(316002)(36756003)(1076003)(2616005)(66556008)(956004)(66476007)(66946007)(5660300002)(6666004)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: f34dXcLbQoGZSmW18NYid1a63FTsEX5qDN1/zVjvlmD+VfqK9y2Oq1UtiwrQJgdlIPOcfbsvHJ07Z7Z3SPxeo0VZWFDlfiEu8S+YEJmQXAfubD0q6hvmEVnjWrxGecyLb+yLN7I1nxOrvwoeI8mZOIqUJ4OAqCB0f3MKS42yRvhXOuF/t0GRwq3BvFO3wTM/on7V1fuNoBipuz7DZdEnTcRTbNpiUlnghCA30DZbyr1paLbSEfgfnfSWqjaJOxiNQ0feynyUBGALLT9XfExSP5F9DwPt94tcVmfgOtGec5vk6CjRi22JAPlW8r4ZiIsbPdlVwt1deh3GgXVyJP5lr8KQluHGEpn60RDFc423A1jUmADMtAzeLQUl4ZlJBCkvvGapi3xpB4GTsLd7WOOi99z5Dg9pcUdyAdQnaLiQMLtcv4kk49+LDNgCvWNmtqQkj05XIS8ceMp7OsCwjs5xWbO4lMPZ/U5ZjNN2k0jlD+XGztbLDLhiC2sYtD0lPtmRIv/rnGblJxfy5oM9M/WAy5jgMXM8jk/eG8R1gQgOqqb9PXB2MbdN8Btmf90mxcbf9OOpe0t+1Lc7bPj4TZEybvsuAc415WoYhW2nz3pbra70I6p5jxnrrn7OmoR2bzJ035RshEDQvJpthuGljt91ZREieNMYhE6GrRE4DM4kPPkWzvD0P46Fs3MXV8Dy7c7ufLhsPBJy3Gbsh95SKbPW5Umh6Cz2KbhmYL1eo/O/rB0s8TWkGLy5XMsXZuxJFLD+
+X-OriginatorOrg: cipunited.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2447c640-cd5e-46f9-6d82-08d8d6e413b6
+X-MS-Exchange-CrossTenant-AuthSource: HKAPR04MB3956.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2021 03:43:54.5809
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e31cf5b5-ee69-4d5f-9c69-edeeda2458c0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: om7AwsUjGByX1V1p/O9UlkrC5ib9lL1k0kiATXJDve597LykOjkBtaWeUVK2oix5HIslNWu83+GSQDa+2+TMYtS/DXQEU3ik8aJdHwcNQvQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR04MB2258
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: David Stevens <stevensd@chromium.org>
+some binary, for example the output of golang, may be mark as FPXX,
+while in fact they are still FP32.
 
-Track the range being invalidated by mmu_notifier and skip page fault
-retries if the fault address is not affected by the in-progress
-invalidation. Handle concurrent invalidations by finding the minimal
-range which includes all ranges being invalidated. Although the combined
-range may include unrelated addresses and cannot be shrunk as individual
-invalidation operations complete, it is unlikely the marginal gains of
-proper range tracking are worth the additional complexity.
+Since FPXX binary can work with both FR=1 and FR=0, we introduce a
+config option CONFIG_MIPS_O32_FPXX_USE_FR0 to force it to use FR=0 here.
 
-The primary benefit of this change is the reduction in the likelihood of
-extreme latency when handing a page fault due to another thread having
-been preempted while modifying host virtual addresses.
+https://go-review.googlesource.com/c/go/+/239217
+https://go-review.googlesource.com/c/go/+/237058
 
-Signed-off-by: David Stevens <stevensd@chromium.org>
+v3->v4:
+	introduce a config option: CONFIG_MIPS_O32_FPXX_USE_FR0
+
+v2->v3:
+	commit message: add Signed-off-by and Cc to stable.
+
+v1->v2:
+	Fix bad commit message: in fact, we are switching to FR=0
+
+Signed-off-by: YunQiang Su <yunqiang.su@cipunited.com>
+Cc: stable@vger.kernel.org # 4.19+
 ---
-v3 -> v4:
- - Skip prefetch while invalidations are in progress
+ arch/mips/Kconfig      | 11 +++++++++++
+ arch/mips/kernel/elf.c | 13 ++++++++++---
+ 2 files changed, 21 insertions(+), 3 deletions(-)
 
-v2 -> v3:
- - Removed unnecessary ifdef
- - Style changes
-
-v1 -> v2:
- - Improve handling of concurrent invalidation requests by unioning
-   ranges, instead of just giving up and using [0, ULONG_MAX).
- - Add lockdep check
- - Code comments and formatting
-
- arch/powerpc/kvm/book3s_64_mmu_hv.c    |  2 +-
- arch/powerpc/kvm/book3s_64_mmu_radix.c |  2 +-
- arch/x86/kvm/mmu/mmu.c                 | 23 ++++++++++++++------
- arch/x86/kvm/mmu/paging_tmpl.h         |  7 ++++---
- include/linux/kvm_host.h               | 25 +++++++++++++++++++++-
- virt/kvm/kvm_main.c                    | 29 ++++++++++++++++++++++----
- 6 files changed, 72 insertions(+), 16 deletions(-)
-
-diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-index 38ea396a23d6..8e06cd3f759c 100644
---- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
-+++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-@@ -590,7 +590,7 @@ int kvmppc_book3s_hv_page_fault(struct kvm_vcpu *vcpu,
- 	} else {
- 		/* Call KVM generic code to do the slow-path check */
- 		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
--					   writing, &write_ok);
-+					   writing, &write_ok, NULL);
- 		if (is_error_noslot_pfn(pfn))
- 			return -EFAULT;
- 		page = NULL;
-diff --git a/arch/powerpc/kvm/book3s_64_mmu_radix.c b/arch/powerpc/kvm/book3s_64_mmu_radix.c
-index bb35490400e9..e603de7ade52 100644
---- a/arch/powerpc/kvm/book3s_64_mmu_radix.c
-+++ b/arch/powerpc/kvm/book3s_64_mmu_radix.c
-@@ -822,7 +822,7 @@ int kvmppc_book3s_instantiate_page(struct kvm_vcpu *vcpu,
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 0a17bedf4f0d..442db620636f 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3100,6 +3100,17 @@ config MIPS_O32_FP64_SUPPORT
  
- 		/* Call KVM generic code to do the slow-path check */
- 		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
--					   writing, upgrade_p);
-+					   writing, upgrade_p, NULL);
- 		if (is_error_noslot_pfn(pfn))
- 			return -EFAULT;
- 		page = NULL;
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 9ac0a727015d..f6aaac729667 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2758,6 +2758,13 @@ static void direct_pte_prefetch(struct kvm_vcpu *vcpu, u64 *sptep)
- 	if (sp->role.level > PG_LEVEL_4K)
- 		return;
+ 	  If unsure, say N.
  
-+	/*
-+	 * If addresses are being invalidated, skip prefetching to avoid
-+	 * accidentally prefetching those addresses.
-+	 */
-+	if (unlikely(vcpu->kvm->mmu_notifier_count))
-+		return;
++config MIPS_O32_FPXX_USE_FR0
++	bool "Use FR=0 mode for O32 FPXX binaries" if !CPU_MIPSR6
++	depends on MIPS_O32_FP64_SUPPORT
++	help
++	  O32 FPXX can works on both FR=0 and FR=1 mode, so by default, the
++	  mode preferred by hardware is used.
 +
- 	__direct_pte_prefetch(vcpu, sp, sptep);
- }
- 
-@@ -3658,8 +3665,8 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- }
- 
- static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
--			 gpa_t cr2_or_gpa, kvm_pfn_t *pfn, bool write,
--			 bool *writable)
-+			 gpa_t cr2_or_gpa, kvm_pfn_t *pfn, hva_t *hva,
-+			 bool write, bool *writable)
- {
- 	struct kvm_memory_slot *slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
- 	bool async;
-@@ -3672,7 +3679,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
- 	}
- 
- 	async = false;
--	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, &async, write, writable);
-+	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, &async,
-+				    write, writable, hva);
- 	if (!async)
- 		return false; /* *pfn has correct page already */
- 
-@@ -3686,7 +3694,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
- 			return true;
- 	}
- 
--	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, NULL, write, writable);
-+	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, NULL,
-+				    write, writable, hva);
- 	return false;
- }
- 
-@@ -3699,6 +3708,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
- 	gfn_t gfn = gpa >> PAGE_SHIFT;
- 	unsigned long mmu_seq;
- 	kvm_pfn_t pfn;
-+	hva_t hva;
- 	int r;
- 
- 	if (page_fault_handle_page_track(vcpu, error_code, gfn))
-@@ -3717,7 +3727,8 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
- 	mmu_seq = vcpu->kvm->mmu_notifier_seq;
- 	smp_rmb();
- 
--	if (try_async_pf(vcpu, prefault, gfn, gpa, &pfn, write, &map_writable))
-+	if (try_async_pf(vcpu, prefault, gfn, gpa, &pfn, &hva,
-+			 write, &map_writable))
- 		return RET_PF_RETRY;
- 
- 	if (handle_abnormal_pfn(vcpu, is_tdp ? 0 : gpa, gfn, pfn, ACC_ALL, &r))
-@@ -3725,7 +3736,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u32 error_code,
- 
- 	r = RET_PF_RETRY;
- 	spin_lock(&vcpu->kvm->mmu_lock);
--	if (!is_noslot_pfn(pfn) && mmu_notifier_retry(vcpu->kvm, mmu_seq))
-+	if (!is_noslot_pfn(pfn) && mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, hva))
- 		goto out_unlock;
- 	r = make_mmu_pages_available(vcpu);
- 	if (r)
-diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index ab54263d857c..5f12f7b24d68 100644
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -790,6 +790,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
- 	struct guest_walker walker;
- 	int r;
- 	kvm_pfn_t pfn;
-+	hva_t hva;
- 	unsigned long mmu_seq;
- 	bool map_writable, is_self_change_mapping;
- 	int max_level;
-@@ -840,8 +841,8 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
- 	mmu_seq = vcpu->kvm->mmu_notifier_seq;
- 	smp_rmb();
- 
--	if (try_async_pf(vcpu, prefault, walker.gfn, addr, &pfn, write_fault,
--			 &map_writable))
-+	if (try_async_pf(vcpu, prefault, walker.gfn, addr, &pfn, &hva,
-+			 write_fault, &map_writable))
- 		return RET_PF_RETRY;
- 
- 	if (handle_abnormal_pfn(vcpu, addr, walker.gfn, pfn, walker.pte_access, &r))
-@@ -869,7 +870,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, gpa_t addr, u32 error_code,
- 
- 	r = RET_PF_RETRY;
- 	spin_lock(&vcpu->kvm->mmu_lock);
--	if (!is_noslot_pfn(pfn) && mmu_notifier_retry(vcpu->kvm, mmu_seq))
-+	if (!is_noslot_pfn(pfn) && mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, hva))
- 		goto out_unlock;
- 
- 	kvm_mmu_audit(vcpu, AUDIT_PRE_PAGE_FAULT);
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index f3b1013fb22c..850ff351583d 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -11,6 +11,7 @@
- #include <linux/signal.h>
- #include <linux/sched.h>
- #include <linux/bug.h>
-+#include <linux/minmax.h>
- #include <linux/mm.h>
- #include <linux/mmu_notifier.h>
- #include <linux/preempt.h>
-@@ -502,6 +503,8 @@ struct kvm {
- 	struct mmu_notifier mmu_notifier;
- 	unsigned long mmu_notifier_seq;
- 	long mmu_notifier_count;
-+	unsigned long mmu_notifier_range_start;
-+	unsigned long mmu_notifier_range_end;
- #endif
- 	long tlbs_dirty;
- 	struct list_head devices;
-@@ -729,7 +732,7 @@ kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn);
- kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn);
- kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
- 			       bool atomic, bool *async, bool write_fault,
--			       bool *writable);
-+			       bool *writable, hva_t *hva);
- 
- void kvm_release_pfn_clean(kvm_pfn_t pfn);
- void kvm_release_pfn_dirty(kvm_pfn_t pfn);
-@@ -1203,6 +1206,26 @@ static inline int mmu_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
- 		return 1;
- 	return 0;
- }
++	  While some binaries may be marked as FPXX by mistake, for example
++	  output of golang: they are in fact FP32 mode. To compatiable with
++	  these binaries, we should use FR=0 mode for them.
 +
-+static inline int mmu_notifier_retry_hva(struct kvm *kvm,
-+					 unsigned long mmu_seq,
-+					 unsigned long hva)
-+{
-+	lockdep_assert_held(&kvm->mmu_lock);
-+	/*
-+	 * If mmu_notifier_count is non-zero, then the range maintained by
-+	 * kvm_mmu_notifier_invalidate_range_start contains all addresses that
-+	 * might be being invalidated. Note that it may include some false
-+	 * positives, due to shortcuts when handing concurrent invalidations.
-+	 */
-+	if (unlikely(kvm->mmu_notifier_count) &&
-+	    hva >= kvm->mmu_notifier_range_start &&
-+	    hva < kvm->mmu_notifier_range_end)
-+		return 1;
-+	if (kvm->mmu_notifier_seq != mmu_seq)
-+		return 1;
-+	return 0;
-+}
- #endif
- 
- #ifdef CONFIG_HAVE_KVM_IRQ_ROUTING
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 8367d88ce39b..4a69bc13680c 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -483,6 +483,24 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
- 	 * count is also read inside the mmu_lock critical section.
+ config USE_OF
+ 	bool
+ 	select OF
+diff --git a/arch/mips/kernel/elf.c b/arch/mips/kernel/elf.c
+index 7b045d2a0b51..443ced26ee60 100644
+--- a/arch/mips/kernel/elf.c
++++ b/arch/mips/kernel/elf.c
+@@ -234,9 +234,10 @@ int arch_check_elf(void *_ehdr, bool has_interpreter, void *_interp_ehdr,
+ 	 *   fpxx case. This is because, in any-ABI (or no-ABI) we have no FPU
+ 	 *   instructions so we don't care about the mode. We will simply use
+ 	 *   the one preferred by the hardware. In fpxx case, that ABI can
+-	 *   handle both FR=1 and FR=0, so, again, we simply choose the one
+-	 *   preferred by the hardware. Next, if we only use single-precision
+-	 *   FPU instructions, and the default ABI FPU mode is not good
++	 *   handle both FR=1 and FR=0. Here, we may need to use FR=0, because
++	 *   some binaries may be mark as FPXX by mistake (ie, output of golang).
++	 * - If we only use single-precision FPU instructions,
++	 *   and the default ABI FPU mode is not good
+ 	 *   (ie single + any ABI combination), we set again the FPU mode to the
+ 	 *   one is preferred by the hardware. Next, if we know that the code
+ 	 *   will only use single-precision instructions, shown by single being
+@@ -248,8 +249,14 @@ int arch_check_elf(void *_ehdr, bool has_interpreter, void *_interp_ehdr,
  	 */
- 	kvm->mmu_notifier_count++;
-+	if (likely(kvm->mmu_notifier_count == 1)) {
-+		kvm->mmu_notifier_range_start = range->start;
-+		kvm->mmu_notifier_range_end = range->end;
-+	} else {
-+		/*
-+		 * Fully tracking multiple concurrent ranges has dimishing
-+		 * returns. Keep things simple and just find the minimal range
-+		 * which includes the current and new ranges. As there won't be
-+		 * enough information to subtract a range after its invalidate
-+		 * completes, any ranges invalidated concurrently will
-+		 * accumulate and persist until all outstanding invalidates
-+		 * complete.
-+		 */
-+		kvm->mmu_notifier_range_start =
-+			min(kvm->mmu_notifier_range_start, range->start);
-+		kvm->mmu_notifier_range_end =
-+			max(kvm->mmu_notifier_range_end, range->end);
-+	}
- 	need_tlb_flush = kvm_unmap_hva_range(kvm, range->start, range->end,
- 					     range->flags);
- 	/* we've to flush the tlb before the pages can be freed */
-@@ -2011,10 +2029,13 @@ static kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
- 
- kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
- 			       bool atomic, bool *async, bool write_fault,
--			       bool *writable)
-+			       bool *writable, hva_t *hva)
- {
- 	unsigned long addr = __gfn_to_hva_many(slot, gfn, NULL, write_fault);
- 
-+	if (hva)
-+		*hva = addr;
-+
- 	if (addr == KVM_HVA_ERR_RO_BAD) {
- 		if (writable)
- 			*writable = false;
-@@ -2042,19 +2063,19 @@ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
- 		      bool *writable)
- {
- 	return __gfn_to_pfn_memslot(gfn_to_memslot(kvm, gfn), gfn, false, NULL,
--				    write_fault, writable);
-+				    write_fault, writable, NULL);
- }
- EXPORT_SYMBOL_GPL(gfn_to_pfn_prot);
- 
- kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn)
- {
--	return __gfn_to_pfn_memslot(slot, gfn, false, NULL, true, NULL);
-+	return __gfn_to_pfn_memslot(slot, gfn, false, NULL, true, NULL, NULL);
- }
- EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot);
- 
- kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn)
- {
--	return __gfn_to_pfn_memslot(slot, gfn, true, NULL, true, NULL);
-+	return __gfn_to_pfn_memslot(slot, gfn, true, NULL, true, NULL, NULL);
- }
- EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot_atomic);
- 
+ 	if (prog_req.fre && !prog_req.frdefault && !prog_req.fr1)
+ 		state->overall_fp_mode = FP_FRE;
++#if CONFIG_MIPS_O32_FPXX_USE_FR0
++	else if (prog_req.fr1 && prog_req.frdefault)
++		state->overall_fp_mode = FP_FR0;
++	else if (prog_req.single && !prog_req.frdefault)
++#else
+ 	else if ((prog_req.fr1 && prog_req.frdefault) ||
+ 		 (prog_req.single && !prog_req.frdefault))
++#endif
+ 		/* Make sure 64-bit MIPS III/IV/64R1 will not pick FR1 */
+ 		state->overall_fp_mode = ((raw_current_cpu_data.fpu_id & MIPS_FPIR_F64) &&
+ 					  cpu_has_mips_r2_r6) ?
 -- 
-2.30.0.617.g56c4b15f3c-goog
+2.20.1
 
