@@ -2,158 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4669A321B7C
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Feb 2021 16:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93477321CAC
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Feb 2021 17:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbhBVPc6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Feb 2021 10:32:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56595 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230437AbhBVPcg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 22 Feb 2021 10:32:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614007867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ibOntcfVMPryl4chcvMDuXiG7DIYwm8AcKE8thK3PgA=;
-        b=cIvH5qanO4rs6m/6gvQ6zSJNZAb/ITTzkE2KVXTu+vdCoj15WJMWhdqwZQusgeKKinX67A
-        1mlJBIEzZF+8htSzWYzXDZOtSFaTgro9Go/D79gpe6ZYkQ+LPHFD3TaEaX3rXDuWWQEQ+W
-        jSXZa0GCdaVQFGngCyjszSurGMqr8k8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-73-_pzbSEXUPpu-KGQl-y-UQQ-1; Mon, 22 Feb 2021 10:31:02 -0500
-X-MC-Unique: _pzbSEXUPpu-KGQl-y-UQQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EB5D0801965;
-        Mon, 22 Feb 2021 15:30:57 +0000 (UTC)
-Received: from [10.36.115.16] (ovpn-115-16.ams2.redhat.com [10.36.115.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0F3CC5C1BD;
-        Mon, 22 Feb 2021 15:30:48 +0000 (UTC)
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
-References: <20210217154844.12392-1-david@redhat.com>
- <640738b5-a47e-448b-586d-a1fb80131891@redhat.com>
- <YDOqA9nQHiuIrKBu@dhcp22.suse.cz>
- <73f73cf2-1b4e-bfa9-9a4c-3192d7b7a5ec@redhat.com>
- <YDOvRv8sCVcgF6yC@dhcp22.suse.cz>
- <3b5cd68d-c4ac-c6be-8824-34c541d5377b@redhat.com>
- <YDO5d+pbPBsjv13T@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
- prefault/prealloc memory
-Message-ID: <7d7d2213-92a4-0419-20ad-bba7071a279c@redhat.com>
-Date:   Mon, 22 Feb 2021 16:30:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <YDO5d+pbPBsjv13T@dhcp22.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+        id S231253AbhBVQU3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Feb 2021 11:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231244AbhBVQUZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Feb 2021 11:20:25 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B67C061574;
+        Mon, 22 Feb 2021 08:19:42 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id w1so30212044ejf.11;
+        Mon, 22 Feb 2021 08:19:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=jrKMxz76VrtujF1xTtdvcqWh/FiUwzdqgqPn8MABZcQ=;
+        b=tbCF6H7dNXWERfQSXS6cEb8eXbKZ4q0uTOEsLLhVC/ayjIosiu3ZdXWK3X6QJJpfTO
+         oP5eo1+Ja+BAy5CLSQIdpeEA69xPIckoipNbGE8SiK6P9ZpgTlESyb+DsYXapjzbzVi0
+         Psi4XvMUK6Zm8WwdD8/jVbGflL/RD3XZh2jY8FlNoDsxsfN/54xgI0mUW9Jm3jS8QJ6O
+         DoC//YlzI54ErTJ6HEHWpVCiIJ4k+pDXx4DAdNf2ZMUHfPcGdaDisB6IjQaE3CYT4c29
+         9pcqs6IicpJQvVRkY+tI7SsPqNeoXgRHZdsw+ET/Fa2YebRI82TOmwWxTDrXmNNsQLhB
+         c0hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=jrKMxz76VrtujF1xTtdvcqWh/FiUwzdqgqPn8MABZcQ=;
+        b=GnMH0O+GHTZhQQbrdaZ9Qwogg/ofAiFbr0R7xFh2wcj2nmUR4DS9TvbHIYhlSeBkXL
+         eWNlhLxaXbvmEUpoNFQVdEFInCLwk7X2yvC4GuRtbPb7KuwXnEAgo/6OLbr4BMwO9wz5
+         nLiYCYpy8JCmxgLHMYP+d5T454my+BdBe9JLKo6O3daXjDp9+vO2Hq0ZyMaRG5QPfq/X
+         Am59DjR9GDXXwFnVW3zip4Nos4mnotm6nJ8Fs9GBwgn9hv83KSCdC9DG316YBDIr4FTr
+         M7n96esAJ3IT/I5F4ytIxSYIwYTiBFKOmsK4t+uW6DGbJ/9C+IneciKaMOoPGs2H2Y4W
+         k8VQ==
+X-Gm-Message-State: AOAM531DfsZrQYGCnQcw49OmrE5n3WbYdVs4PiUjMJABOb+slC7/xpBI
+        p20BrNmH0rSMrUlMViC0xFY=
+X-Google-Smtp-Source: ABdhPJymsCglaF9UgI/Qnjwt/XNzwiLp23cWL9gxOA1KKbBrbEkowNuvAZGKz41lNo2Ny8QHbHP8RA==
+X-Received: by 2002:a17:906:3850:: with SMTP id w16mr22079770ejc.286.1614010781593;
+        Mon, 22 Feb 2021 08:19:41 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2d6b:2000:6504:2c93:2a67:f7e2])
+        by smtp.gmail.com with ESMTPSA id i7sm67876ejf.59.2021.02.22.08.19.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Feb 2021 08:19:40 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>, Willy Tarreau <w@1wt.eu>,
+        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH 0/5] Remove dead linux-mips.org references
+Date:   Mon, 22 Feb 2021 17:19:00 +0100
+Message-Id: <20210222161905.1153-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22.02.21 15:02, Michal Hocko wrote:
-> On Mon 22-02-21 14:22:37, David Hildenbrand wrote:
->>>> Exactly. But for hugetlbfs/shmem ("!RAM-backed files") this is not what we
->>>> want.
->>>
->>> OK, then I must have misread your requirements. Maybe I just got lost in
->>> all the combinations you have listed.
->>
->> Another special case could be dax/pmem I think. You might want to fault it
->> in readable/writable but not perform an actual read/write unless really
->> required.
->>
->> QEMU phrases this as "don't cause wear on the storage backing".
-> 
-> Sorry for being dense here but I still do not follow. If you do not want
-> to read then what do you want to populate from? Only map if it is in the
+Dear all,
 
-In the context of VMs it's usually rather a mean to preallocate backend 
-storage - which would also happen on read access. See below on case 4).
+The domain lookup for linux-mips.org fails for quite some time now.
+Hence, webpages, the patchwork instance and Ralf Baechle's email there is
+not reachable anymore.
 
-> page cache?
+First, I updated all sections in MAINTAINERS for references with linux-mips.org.
+Then, I also quickly scanned through the whole git tree for linux-mips.org
+references, and step-wise filtered out obvious copyright holder lines and
+references to old email addresses.
 
-Let's try to untangle my thoughts regarding VMs. We could have as 
-backend storage for our VM:
-
-1) Anonymous memory
-2) hugetlbfs (private/shared)
-3) tmpfs/shmem (private/shared)
-4) Ordinary files (shared)
-5) DAX/PMEM (shared)
-
-Excluding special cases (hypervisor upgrades with 2) and 3) ), we expect 
-to have pre-existing content in files only in 4) and 5). 4) and 5) might 
-be used as NVDIMM backend for a guest, or as DIMM backend.
-
-The first access of our VM to memory could be
-a) Write: the usual case when exposed as RAM/DIMM to out guest.
-b) Read: possible case when exposed as an NVDIMM to our guest (we don't
-    know). But eventually, we might write to (parts of) NVDIMMs later.
-
-We "preallocate"/"populate" memory of our VM so that
-- We know we have sufficient backend storage (esp. hugetlbfs, shmem,
-   files) - so we don't randomly crash the VM. My most important use
-   case.
-- We avoid page faults (including page zeroing!) at runtime. Especially
-   relevant for RT workloads.
-
-With 1), 2), and 3) we want to have pages faulted in writable - we 
-expect that our guest will write to that memory. MADV_POPULATE would do 
-that only for 1), and MAP_PRIVATE of 2). For the shared parts, we would 
-want MADV_POPULATE_WRITE semantics.
-
-With 5), we already had complaints that preallcoation in QEMU takes a 
-long time - because we end up actually reading/writing slow PMEM 
-(libvirt now disables preallcoation for that reason, which makes sense). 
-However, MADV_POPULATE_WRITE would help to prefault without actually 
-reading/writing pmem - if we want to avoid any minor faults.
-
-With 4), I think we primarily prealloc/prefault to make sure we have 
-sufficient backend storage. fallocate() might do a better job just for 
-the allocation. But if there is sufficient RAM it might make sense to 
-prefault all guest RAM at least readable - then we only have a minor 
-fault when the VM writes to it and might avoid having to go to disk. 
-Prefaulting everything writable means that we *have to* write back all 
-guest RAM even if the guest never accessed it. So I think there are 
-cases where MADV_POPULATE_READ (current MADV_POPULATE) semantics could 
-make sense.
+  git ls-files | xargs grep "linux-mips.org" | \
+    grep -v -i "Copyright" | grep -v -i "MODULE_AUTHOR" | grep -v -i "written" | \
+    grep -v "Ralf" | grep -v "Maciej" | grep -v "Yoichi" | grep -v "Ladislav"
 
 
--- 
+I removed dead references or replaced them with their living counterparts if
+available. However, these two cases remain and somebody might want to have a look:
+
+  1. case in ./arch/mips/include/asm/page.h:
+
+<snip>
+/*
+ * RELOC_HIDE was originally added by 6007b903dfe5f1d13e0c711ac2894bdd4a61b1ad
+ * (lmo) rsp. 8431fd094d625b94d364fe393076ccef88e6ce18 (kernel.org).  The
+ * discussion can be found in
+ * https://lore.kernel.org/lkml/a2ebde260608230500o3407b108hc03debb9da6e62c@mail.gmail.com
+ *
+ * It is unclear if the misscompilations mentioned in
+ * https://lore.kernel.org/lkml/1281303490-390-1-git-send-email-namhyung@gmail.com
+ * also affect MIPS so we keep this one until GCC 3.x has been retired
+ * before we can apply https://patchwork.linux-mips.org/patch/1541/
+ */
+</snip>
+
+  Decision: Keep as is. Although GCC 3.x is long retired, it is unclear what
+  https://patchwork.linux-mips.org/patch/1541/ is and if it has been already
+  applied or not.
+  Question: does anyone know how to identify this patch?
+
+
+  2. case in ./drivers/parport/parport_ip32.c:
+
+    linux-mips.org tree is referred to in an old To do item:
+
+<snip>
+ * To do:
+ *
+ *      Fully implement ECP mode.
+ *      EPP and ECP mode need to be tested.  I currently do not own any
+ *      peripheral supporting these extended mode, and cannot test them.
+ *      If DMA mode works well, decide if support for PIO FIFO modes should be
+ *      dropped.
+ *      Use the io{read,write} family functions when they become available in
+ *      the linux-mips.org tree.  Note: the MIPS specific functions readsb()
+ *      and writesb() are to be translated by ioread8_rep() and iowrite8_rep()
+ *      respectively.
+</snip>
+
+  Decision: Keep as is; anyone that wants to follow up on this will probably
+  understand that the reference is outdated anyway.
+
+
+Please comment on these clean-up patches on this administrative topic.
+
+Patch set applies cleanly on next-20210222.
+
 Thanks,
 
-David / dhildenb
+Lukas
+
+
+Lukas Bulwahn (5):
+  MAINTAINERS: mark sections from Ralf Baechle orphan
+  MAINTAINERS: remove linux-mips.org references
+  arch: mips: update references to current linux-mips list
+  arch: mips: remove dead references
+  MIPS: SGI-IP27: fix spelling in Copyright
+
+ MAINTAINERS                     | 20 ++++++--------------
+ arch/mips/Kconfig               |  8 +-------
+ arch/mips/jazz/Kconfig          | 12 +++---------
+ arch/mips/kernel/r4k-bugs64.c   |  2 +-
+ arch/mips/lib/iomap-pci.c       |  2 +-
+ arch/mips/sgi-ip27/ip27-timer.c |  4 ++--
+ arch/mips/sgi-ip32/ip32-irq.c   |  2 +-
+ tools/include/nolibc/nolibc.h   |  3 +--
+ 8 files changed, 16 insertions(+), 37 deletions(-)
+
+-- 
+2.17.1
 
