@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF651322828
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Feb 2021 10:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5568E322881
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Feb 2021 11:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbhBWJyF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Feb 2021 04:54:05 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:33519 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbhBWJvd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Feb 2021 04:51:33 -0500
-Received: by mail-ot1-f51.google.com with SMTP id c16so14999377otp.0;
-        Tue, 23 Feb 2021 01:51:18 -0800 (PST)
+        id S232133AbhBWKCI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Feb 2021 05:02:08 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:44846 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232387AbhBWKAh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Feb 2021 05:00:37 -0500
+Received: by mail-ot1-f50.google.com with SMTP id f33so1705705otf.11;
+        Tue, 23 Feb 2021 02:00:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fkJl15U+2Mk0ZQUoUk6PEnWKifrGtnCFFXE6R5dUFh0=;
-        b=qyMAevV2MqbdqsjxRe+NBZ0XpIR0v3km1RbN1KkTu4xzAtl2h9zR3pjRr5uCaGdiIc
-         N7yYRdfbx8rVn3AJe1vQooq0mAh8O17hcoYzDG0u+uR7bH5JwTIkvKkZsC3qqIval27o
-         Dr2uGg1cRzg3fmxL3H7+X+KjPD4nJt57144LtD9a/y36R07nDgjyanNMWslp+4YM39o8
-         NYtKfQproAHNww36ig/QveBi9f+DxHA5gHLMz/aC7WTLFeoc1wcCXZtDkwFgkXZnZRlQ
-         khy387vLmIPl+48T/BbI3KqrXzDTulYHNgJauXEIR/6CXku0Ckw5f3dEHUIBx2R8TLlG
-         ShzA==
-X-Gm-Message-State: AOAM530L9f3C+ceVj3/n4iA3nEs0o28py4jzZSNUjbd2FXN6C3jf8Ogj
-        yxIJolTwQx2uv7ECvWBi9hEXpoeuqpp16b6ar0rS0sSE
-X-Google-Smtp-Source: ABdhPJwNrkfw8bbvZFNVFFIr78KJa/f7hmHkcCunpE71+KFJwY2ZtQJdzC+FjkIxoZx6Vw9QoE/Ys3WH7zqHsYWB6XI=
-X-Received: by 2002:a9d:4a8e:: with SMTP id i14mr20288040otf.37.1614073852621;
- Tue, 23 Feb 2021 01:50:52 -0800 (PST)
+        bh=LWxe0P8DZYYU1z4RUHaP48wKAlVYUnjj2L7rokBCJ0s=;
+        b=APPzSCus5OikqsUSK00T2XdhJlrq1l+YwJEh0gX/U5FYd1VT69nRynQblkvhqcUyIV
+         B7r+nmOQxvejMze5uYAEE0R6j/TTIZy5xH6SpSGIXja+azGuW5E69Lnsdg3RQnr9kcb0
+         a1P6jZOeHK11liqc2QABDPD8PfwyUV6YSuJKBJqFHnY6sIUlESAW6bYrWoRcuuxpSTui
+         cyHpuhDWophwVUPI0ZgMl3Z6xpL4ny0JGicrPtKWc0nY3pg5iYtmyYoCoM60/ctLZf3G
+         cEYLL1QED8KQZBgn1XwnsiZNKn3k/4G3LJrMi3/yEuPc1xIMoF3XcoTpWuB79Zk0ZD8q
+         Z8pw==
+X-Gm-Message-State: AOAM532f2V8MulRa1oLtsrvDcHhZqxui1/oNKSteVFA55r40GhpWKaGN
+        y+OQ4uQzbkslsrZvB9YBSfimEI4kPE14hoOqHew=
+X-Google-Smtp-Source: ABdhPJxqhTOmb+J2f7WHRsWK1hNdeG2LJuMbyL0sTISsxlaAKuhBEJtQxKAtMf8KWocNXDSnntOz/G4ujTJDxOdUTzA=
+X-Received: by 2002:a9d:4a8e:: with SMTP id i14mr20306399otf.37.1614074395126;
+ Tue, 23 Feb 2021 01:59:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20210222161905.1153-1-lukas.bulwahn@gmail.com> <20210222161905.1153-6-lukas.bulwahn@gmail.com>
-In-Reply-To: <20210222161905.1153-6-lukas.bulwahn@gmail.com>
+References: <20210222161905.1153-1-lukas.bulwahn@gmail.com> <20210222161905.1153-5-lukas.bulwahn@gmail.com>
+In-Reply-To: <20210222161905.1153-5-lukas.bulwahn@gmail.com>
 From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Tue, 23 Feb 2021 10:50:41 +0100
-Message-ID: <CAAdtpL5yU0-0hR76zV5hDHWd7NOxa1E0g5=eteHvman1f7cWhQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] MIPS: SGI-IP27: fix spelling in Copyright
+Date:   Tue, 23 Feb 2021 10:59:44 +0100
+Message-ID: <CAAdtpL7tj2CvK9w8PNofu1C6Do0gojwWgupJmB_XEYto+EEf3A@mail.gmail.com>
+Subject: Re: [PATCH 4/5] arch: mips: remove dead references
 To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
@@ -51,30 +51,22 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Mon, Feb 22, 2021 at 5:22 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 >
-> This is a Copyright line, and just a typo slipped through.
+> The domain lookup for linux-mips.org fails for quite some time now.
+> Further, the two links:
+>
+>   http://decstation.unix-ag.org/
+
+https://web.archive.org/web/20070609185805/http://decstation.unix-ag.org/
+
+>   http://www.computer-refuge.org/classiccmp/ftp.digital.com/pub/DEC/TriAdd/
+>
+> refer to old webpages or contain no further technical information.
+>
+> Remove all those dead references.
 >
 > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
->  arch/mips/sgi-ip27/ip27-timer.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/sgi-ip27/ip27-timer.c b/arch/mips/sgi-ip27/ip27-timer.c
-> index 79c434fece52..444b5e0e935f 100644
-> --- a/arch/mips/sgi-ip27/ip27-timer.c
-> +++ b/arch/mips/sgi-ip27/ip27-timer.c
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * Copytight (C) 1999, 2000, 05, 06 Ralf Baechle (ralf@linux-mips.org)
-> - * Copytight (C) 1999, 2000 Silicon Graphics, Inc.
-> + * Copyright (C) 1999, 2000, 05, 06 Ralf Baechle (ralf@linux-mips.org)
-
-If the email isn't valid anymore, why keep it?
-
-> + * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
->   */
->  #include <linux/bcd.h>
->  #include <linux/clockchips.h>
-> --
-> 2.17.1
->
+>  arch/mips/Kconfig             |  8 +-------
+>  arch/mips/jazz/Kconfig        | 12 +++---------
+>  tools/include/nolibc/nolibc.h |  3 +--
+>  3 files changed, 5 insertions(+), 18 deletions(-)
