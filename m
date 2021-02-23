@@ -2,79 +2,204 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1420322B86
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Feb 2021 14:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF0E322CA5
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Feb 2021 15:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232812AbhBWNeg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 23 Feb 2021 08:34:36 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:43757 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbhBWNeg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Feb 2021 08:34:36 -0500
-Received: by mail-ot1-f51.google.com with SMTP id l23so15508657otn.10;
-        Tue, 23 Feb 2021 05:34:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=W1FTBNiyBbbmPU7r9FwLGrJDR2sXQdMfcOeR069zcPk=;
-        b=TRwmgpdFuphVAuVf8CMl9ZH9MMr1gOHJheBmTtHHAbcUk6jYOIp4TrUhiKKXjTAtmM
-         EIE3SvWgnTNu5cizvinWqpsz5V+Z9Jp5QJVrElp6CNRq6cvAJJoSnq3/pl78FoEKx6Fi
-         vcojHUO62BybC3KZRlDPf9rziLd4W7KlDRU1Z6B3Kb4pZjPjwRddo8NROxR0n7ZhUERY
-         SoWxmCe2UohR3YtVwSi++N3t4eQtJrCsoay51XS/aYNdf345267FDa2dNWHLdc9eheJm
-         pGv9YVW1F22DTiHjDg28nX/6FQkWPUA7V3/KndhvTNKNczdtfcGPtaEDXfS6V4Vp5nzy
-         3qrQ==
-X-Gm-Message-State: AOAM532OSytx5N8Qld6OzZ2DyMUPmIc+sSZlROP3mJzM/+IUjXh0brfO
-        xYyAvNN2NAHiFPdLLsZJl8cG9kjLHK2ySfEYlDg=
-X-Google-Smtp-Source: ABdhPJxjkNrWvxSoaC7JsMeEuhHWcisA7wpJjF/HrLOxSfP7dHYrKwtA5+I3iEpYSkzSOYmRV5MKU5jJZwIg36sU74U=
-X-Received: by 2002:a9d:4a8e:: with SMTP id i14mr20834879otf.37.1614087235498;
- Tue, 23 Feb 2021 05:33:55 -0800 (PST)
+        id S232520AbhBWOmX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Feb 2021 09:42:23 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:36871 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232424AbhBWOmO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 23 Feb 2021 09:42:14 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 8A11E580292;
+        Tue, 23 Feb 2021 09:41:22 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 23 Feb 2021 09:41:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=W5Ow9fvH75ZU0EulrQV4vENorU9
+        mrOKzv5PjfArajy8=; b=GU22XeFWKMGcAZu6NWqRYgkFYnXryfc3+rlB2tk1nhN
+        zH1yO4BroV86D8Wj+siHaUgnYeJECPYuoxUrrb83MoTFpzJSJphB7CNYaw5EteJZ
+        Rfe2uUFGY6BHcoPSg4DF4SQKrsvwPDYYdobiTIUwMYND4GTIu0kbe2QDQrUJz9Ys
+        XL+8v06HcJxiYtSVO/5pD1twtzjjYfm8ikS3vacu5DbMHaCdJ/0Bb0eQOCqUJ+xJ
+        NIaaer0XVasP54dsztAiOD81TbYaNwUKzT83ztyWAR6aGwJqfbXvuoSxWKtBKTYP
+        sX/HgxIZrBTwnzz8GG1ss6/7GOr1ivxZ14BClrGyHWQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=W5Ow9f
+        vH75ZU0EulrQV4vENorU9mrOKzv5PjfArajy8=; b=qgr4AecZXNy49Pwwcr3zO7
+        TdV+JR/XzKNcIDbvGOHn1gyMulZmqUgjZE15uY4QiiJDSs5yNTNDlDvrT8aqmBBw
+        m+TXy7tppkYi/athZQuOT688uMOAKQ7dD0wKr2fATxKmEcNhGq/hRsEf67pAYWel
+        CW2ClVZEj/WtvMd8w9vOaLZF4/vbQKAGVKEf5TRK7VzsxG4xPY/90O6t9lIKeVT/
+        1DcSLdifDN3mbzrRQzXSpVMVk4u14TpKcyvkgpa1j+tLel53b9ATvGlQIXWSFb9A
+        HU6MQUGYedLJ6xeOJ9x1CoCFAY6BRqNMM/TVvqlknPHnkpZPBT690jCUju/aYCIQ
+        ==
+X-ME-Sender: <xms:DxQ1YHcwLkacrL4buHESnYHKnUzjsYIPVVlJYBMfFvRDM6MqeiMrAw>
+    <xme:DxQ1YNINX6ny7m8oyXghU1wTT_mRfZ_k9-vxor2IQNCD8oH5QjnGopn2JvmXfufFs
+    FrwJdNAWEr_OSJSzjU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrkeehgdeijecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeduvdduhfekkeehgffftefflefgffdtheffudffgeevteffheeuiedvvdejvdfg
+    veenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:DxQ1YNaDoP46QK6II2Npge5z11oEm9Qdi527yfK1TS9XQKwgMuLiVQ>
+    <xmx:DxQ1YAtTvX9P0b2VSBPnZpGywjzTaKaYjRz8OjAsZ4ZT-xr086WGuA>
+    <xmx:DxQ1YCtHW6OQizQezuGIpR8i1BG7bAFrv_z_qt-lNwGn9thFMHtHFQ>
+    <xmx:EhQ1YGbmP5bQbsmz_bNtZPrY7XxwA4fy1g0NHauspJh91sPMYVo-bw>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 74C8124005D;
+        Tue, 23 Feb 2021 09:41:19 -0500 (EST)
+Date:   Tue, 23 Feb 2021 15:41:17 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v3 06/11] drm: Use state helper instead of plane state
+ pointer in atomic_check
+Message-ID: <20210223144117.6lhuizr2zrutbkzi@gilmour>
+References: <20210219120032.260676-1-maxime@cerno.tech>
+ <20210219120032.260676-6-maxime@cerno.tech>
+ <e6e8191d-08d9-7144-bb1a-ddaa6c21eccb@suse.de>
 MIME-Version: 1.0
-References: <20210222161905.1153-1-lukas.bulwahn@gmail.com>
- <20210222161905.1153-6-lukas.bulwahn@gmail.com> <CAAdtpL5yU0-0hR76zV5hDHWd7NOxa1E0g5=eteHvman1f7cWhQ@mail.gmail.com>
- <alpine.DEB.2.21.2102231330410.1900@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2102231330410.1900@angie.orcam.me.uk>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Tue, 23 Feb 2021 14:33:44 +0100
-Message-ID: <CAAdtpL4M68ton_YkEYPZPL-+Onm5+LL35pbtpRA4U6oA2gC-TA@mail.gmail.com>
-Subject: Re: [PATCH 5/5] MIPS: SGI-IP27: fix spelling in Copyright
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>, Willy Tarreau <w@1wt.eu>,
-        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="etokcv6rtvultpe4"
+Content-Disposition: inline
+In-Reply-To: <e6e8191d-08d9-7144-bb1a-ddaa6c21eccb@suse.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 1:33 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
-> On Tue, 23 Feb 2021, Philippe Mathieu-Daudé wrote:
->
-> > > diff --git a/arch/mips/sgi-ip27/ip27-timer.c b/arch/mips/sgi-ip27/ip27-timer.c
-> > > index 79c434fece52..444b5e0e935f 100644
-> > > --- a/arch/mips/sgi-ip27/ip27-timer.c
-> > > +++ b/arch/mips/sgi-ip27/ip27-timer.c
-> > > @@ -1,7 +1,7 @@
-> > >  // SPDX-License-Identifier: GPL-2.0
-> > >  /*
-> > > - * Copytight (C) 1999, 2000, 05, 06 Ralf Baechle (ralf@linux-mips.org)
-> > > - * Copytight (C) 1999, 2000 Silicon Graphics, Inc.
-> > > + * Copyright (C) 1999, 2000, 05, 06 Ralf Baechle (ralf@linux-mips.org)
-> >
-> > If the email isn't valid anymore, why keep it?
->
->  As I noted in an earlier reply and Kurt further confirmed site recovery
-> is under way.
 
-Great. Alternatively the authorship is preserved without the author
-email (but IANAL):
+--etokcv6rtvultpe4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Copyright (C) 1999, 2000, 05, 06 Ralf Baechle
+Hi Thomas,
 
->
->   Maciej
+On Mon, Feb 22, 2021 at 10:12:49AM +0100, Thomas Zimmermann wrote:
+> Am 19.02.21 um 13:00 schrieb Maxime Ripard:
+> > Many drivers reference the plane->state pointer in order to get the
+> > current plane state in their atomic_check hook, which would be the old
+> > plane state in the global atomic state since _swap_state hasn't happened
+> > when atomic_check is run.
+> >=20
+> > Use the drm_atomic_get_old_plane_state helper to get that state to make
+> > it more obvious.
+> >=20
+> > This was made using the coccinelle script below:
+> >=20
+> > @ plane_atomic_func @
+> > identifier helpers;
+> > identifier func;
+> > @@
+> >=20
+> > static struct drm_plane_helper_funcs helpers =3D {
+> > 	...,
+> > 	.atomic_check =3D func,
+> > 	...,
+> > };
+> >=20
+> > @ replaces_old_state @
+> > identifier plane_atomic_func.func;
+> > identifier plane, state, plane_state;
+> > @@
+> >=20
+> >   func(struct drm_plane *plane, struct drm_atomic_state *state) {
+> >   	...
+> > -	struct drm_plane_state *plane_state =3D plane->state;
+> > +	struct drm_plane_state *plane_state =3D drm_atomic_get_old_plane_stat=
+e(state, plane);
+> >   	...
+> >   }
+> >=20
+> > @@
+> > identifier plane_atomic_func.func;
+> > identifier plane, state, plane_state;
+> > @@
+> >=20
+> >   func(struct drm_plane *plane, struct drm_atomic_state *state) {
+> >   	struct drm_plane_state *plane_state =3D drm_atomic_get_old_plane_sta=
+te(state, plane);
+> >   	<...
+> > -	plane->state
+> > +	plane_state
+> >   	...>
+> >   }
+> >=20
+> > @ adds_old_state @
+> > identifier plane_atomic_func.func;
+> > identifier plane, state;
+> > @@
+> >=20
+> >   func(struct drm_plane *plane, struct drm_atomic_state *state) {
+> > +	struct drm_plane_state *old_plane_state =3D drm_atomic_get_old_plane_=
+state(state, plane);
+> >   	<...
+> > -	plane->state
+> > +	old_plane_state
+> >   	...>
+> >   }
+> >=20
+> > @ include depends on adds_old_state || replaces_old_state @
+> > @@
+> >=20
+> >   #include <drm/drm_atomic.h>
+> >=20
+> > @ no_include depends on !include && (adds_old_state || replaces_old_sta=
+te) @
+> > @@
+> >=20
+> > + #include <drm/drm_atomic.h>
+> >    #include <drm/...>
+> >=20
+> > Reviewed-by: Ville Syrj=E4l=E4 <ville.syrjala@linux.intel.com>
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>=20
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+>=20
+> However, I find 'old plane state' somewhat confusing in this context,
+> because it's actually the current plane state. Would it make sense to use
+> drm_atomic_get_existing_plane_state() instead?
+
+drm_atomic_get_existing_plane_state is deprecated nowadays, in favour of ei=
+ther
+drm_atomic_get_old_plane_state or drm_atomic_get_new_plane_state
+
+Maxime
+
+--etokcv6rtvultpe4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYDUUDQAKCRDj7w1vZxhR
+xRvbAP9dHjMFrJJN6sPJ07XtwTqAGn3EfEWhkDvhKpwZr1R6KQEAq1fU0dcu291f
+xFwjCPWCaX5tqUHCQKox185muDdxKgU=
+=fkaC
+-----END PGP SIGNATURE-----
+
+--etokcv6rtvultpe4--
