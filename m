@@ -2,117 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28721322B49
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Feb 2021 14:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBB2322B61
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Feb 2021 14:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbhBWNOk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Feb 2021 08:14:40 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:21109 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbhBWNOj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Feb 2021 08:14:39 -0500
-Date:   Tue, 23 Feb 2021 13:13:54 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1614086036; bh=fVREGtDZlRjjJkL9uhXE3RDAzTG8hC2fglNi1DMvQA4=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=BAYhGg3SzAYoUUg1nZmClD4ia7Y7W1Nl3XHD1ohq5b+ciOFfTCwP57Ch3mubKf+cx
-         AaFFP0n1bV52v+DYyCUt7EWqKKUEdl/LialUGEkIiZ8yTHbcI3sb8z1eS9T/t2bsnO
-         NyCqW2LrRMsYFkoNet48VbpnvvViEz3BRZpkKmSuIsV3msyK8zusFw13lBti9puvVW
-         Xxi0Km7t0CSshNUy4JGW2VhheT5mDafC4ezWFoxopa7LadRHoHeVzpPL2hdbgFaaom
-         Covu3GXw/217Jc35ik8nY3IjOKFGJ5SLZTb1BnBiXsobnO2n6WCmuperKcroF/R0sQ
-         4viw4pVMNVTEA==
+        id S232752AbhBWNZT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Feb 2021 08:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232671AbhBWNZS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Feb 2021 08:25:18 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E14BC061574;
+        Tue, 23 Feb 2021 05:24:37 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 2425092009C; Tue, 23 Feb 2021 14:24:36 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 1671092009B;
+        Tue, 23 Feb 2021 14:24:36 +0100 (CET)
+Date:   Tue, 23 Feb 2021 14:24:36 +0100 (CET)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Kees Cook <keescook@chromium.org>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH mips-fixes] vmlinux.lds.h: catch even more instrumentation symbols into .data
-Message-ID: <20210223131327.218285-1-alobakin@pm.me>
-In-Reply-To: <20210223122144.GA7765@alpha.franken.de>
-References: <20210223113600.7009-1-alobakin@pm.me> <20210223113600.7009-2-alobakin@pm.me> <20210223122144.GA7765@alpha.franken.de>
+cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-mips@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Willy Tarreau <w@1wt.eu>, linux-edac@vger.kernel.org,
+        linux-hams@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] arch: mips: update references to current linux-mips
+ list
+In-Reply-To: <20210223122928.GD7765@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2102231423070.1900@angie.orcam.me.uk>
+References: <20210222161905.1153-1-lukas.bulwahn@gmail.com> <20210222161905.1153-4-lukas.bulwahn@gmail.com> <20210223122928.GD7765@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date: Tue, 23 Feb 2021 13:21:44 +0100
+On Tue, 23 Feb 2021, Thomas Bogendoerfer wrote:
 
-> On Tue, Feb 23, 2021 at 11:36:41AM +0000, Alexander Lobakin wrote:
-> > > LKP caught another bunch of orphaned instrumentation symbols [0]:
-> > >
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/main.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/main.o' being placed in section `.data.$LPBX0'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/do_mounts.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/do_mounts.o' being placed in section `.data.$LPBX0'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/do_mounts_initrd.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/do_mounts_initrd.o' being placed in section `.data.$LPBX0'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/initramfs.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/initramfs.o' being placed in section `.data.$LPBX0'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/calibrate.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/calibrate.o' being placed in section `.data.$LPBX0'
-> > >
-> > > [...]
-> > >
-> > > Soften the wildcard to .data.$L* to grab these ones into .data too.
-> > >
-> > > [0] https://lore.kernel.org/lkml/202102231519.lWPLPveV-lkp@intel.com
-> > >
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> > > ---
-> > >  include/asm-generic/vmlinux.lds.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > Hi Thomas,
-> >
-> > This applies on top of mips-next or Linus' tree, so you may need to
-> > rebase mips-fixes before taking it.
-> > It's not for mips-next as it should go into this cycle as a [hot]fix.
-> > I haven't added any "Fixes:" tag since these warnings is a result
-> > of merging several sets and of certain build configurations that
-> > almost couldn't be tested separately.
->
-> no worries, mips-fixes is defunct during merge windows. I'll send another
-> pull request to Linus and will add this patch to it.
+> For the other patches I'll wait for how the resolution for linux-mips.org
+> looks like.
 
-Ah, thank you!
+ FWIW I think the typo fix in 5/5 is obviously correct and can go in right 
+away.  We can deal with the LMO reference later on should it be needed.
 
-> Thomas.
-
-Al
-
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
-
+  Maciej
