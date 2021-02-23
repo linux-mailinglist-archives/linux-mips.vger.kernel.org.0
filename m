@@ -2,86 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 328EC32210E
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Feb 2021 22:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B73E32236C
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Feb 2021 02:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbhBVVAp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Feb 2021 16:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbhBVVAp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Feb 2021 16:00:45 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F407BC061574;
-        Mon, 22 Feb 2021 13:00:04 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 75so10981097pgf.13;
-        Mon, 22 Feb 2021 13:00:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=H0Xgyt5coIH+GE4ESBF/DDHxRtz15wSekZzSGidjJ40=;
-        b=Eq4HTBRkpBFEOj3x7npC7iQPImgtay3bpsDwLybwhumfoDXN1/39W57Zwn2MXDFQbX
-         GaLiBMOi5hXAPjmN6ubOC5NrUg2yryw5tC49QyL7nILN4IgmjM/6X4mWpO0oX3tqffT3
-         pSmeu2/1+1mrk4Jhu3fgdw3tpVwbLCi8DuDSfMRgiU8jIWXDt5k9fN6dXk0nlSC2F2fe
-         1bY/HdAA7TAgNjIYmW0KHPPHJIP9X9B/MlmE9CISwGbhxbevpGQv2G1qGcHcPb7JnCIz
-         HbENYeVzIPWicvLA6gPvU/EurE1uS8nMT0XuPxT9E4/VP912Wvot46qQY6hqdXK/pKf0
-         VtOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=H0Xgyt5coIH+GE4ESBF/DDHxRtz15wSekZzSGidjJ40=;
-        b=G3qHfi2Aemrz437ByYTVWSfbb+8MjP7ul2V0+xjAgp4kaE7sjIPuafvOVXnQogLdF/
-         0kopzJWEAYdngz6YqrtPrOyivYYM6oDSJDzKKVNKXKsqewelwNpX0dXvck7qs3E5X4uy
-         sOOtw/2wzrZGNE5bQym1a9oU7hAfsLUnQk47cn6pbmLQaQKWXKDUGdPJkLBzwxuxxxeq
-         aEpMFBFfD+p959mlJiq55Fw/ogcNuqeA/yhiz3fLdCzDJuEht38nC5ivc+eJ1JrfBvc7
-         Lqrpp/Jkhjy4j7P4pKYTRXMEUKfDGW0nyGRmQsaQ2WYbfbt5R96pXOYEQG0fU7a8TVmW
-         784Q==
-X-Gm-Message-State: AOAM533IPwmCdiZ5QrUToEAyKYfq2yDIXNL/rwRKyJKWHXcXhC13ZzXz
-        Vtvh3oKXFrvJm5cOUjpQgzZ8ykrkLkU=
-X-Google-Smtp-Source: ABdhPJyGj9q8+ckK9W3DAnRknkAKgAh/UnyHUCICnA8bG4DJcFr5tlE2ex5p9Rx1U60pSCZm8OYutA==
-X-Received: by 2002:a63:c54c:: with SMTP id g12mr20658056pgd.449.1614027604011;
-        Mon, 22 Feb 2021 13:00:04 -0800 (PST)
-Received: from [10.230.29.30] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x12sm20587085pfp.214.2021.02.22.13.00.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Feb 2021 13:00:03 -0800 (PST)
-Subject: Re: [PATCH] irqchip/bcm-6345-l1: fix SMP support
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        jonas.gorski@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210222201332.30253-1-noltari@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <6169cb21-538b-1066-51cb-dd362f811fa1@gmail.com>
-Date:   Mon, 22 Feb 2021 13:00:01 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.1
+        id S230420AbhBWBRc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Feb 2021 20:17:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36912 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229863AbhBWBRa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Feb 2021 20:17:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A40E960232;
+        Tue, 23 Feb 2021 01:16:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614043009;
+        bh=kDwba0vVgoevzJZ1ejp9aIx55kGXux65+VE5+XPArvQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dA0KMovrh4BCRgSKtyWZoXGvYaCHiHdqidrfcXpCsgCrKKGraOYgOGjlR87xeK9qV
+         w9kDmHR0Wgs1Hclsrb0kvsQTHtLGB/XGkgZF5cKW07ejaibXyE6Kgif5hGJvZrmhht
+         rUpJ8+IJBD8cBEYpwp472yOW71w9lomxM4kSoBttML7MiRDODkvV1/YFVPQSn9I5Pw
+         YHY3tJPjXtMI2DObywS+ZHRVjMQ5NT5CD5eVKOwZA9DaZYcPJD6g+KQ0v87UdsXxBW
+         jBaQIxpw6JKXvG9iEVtPlMxMCW+ljIV3M0v1IgOxIv7hdzYaol45Fy8YhZtyZNooLK
+         pjtKMQW08QPSg==
+Received: by mail-io1-f49.google.com with SMTP id k17so7582216ioc.5;
+        Mon, 22 Feb 2021 17:16:49 -0800 (PST)
+X-Gm-Message-State: AOAM531TNgWIYBpib6uTfp/JobczAEA/lQ3GzFHf3jGURHI5b0g92W49
+        yR9WHGbUqwlxCzNs/Gx6+hUlHYKNm1LtToDLTjM=
+X-Google-Smtp-Source: ABdhPJz7+GwyctOMH/oDlyMU8gM2QH44bFdcRoMYUvEOB/ALHXlwc5LneLHjIs6q9qKW0qDTbUKcXjoS+cBpMdiJhb8=
+X-Received: by 2002:a6b:6603:: with SMTP id a3mr17348843ioc.148.1614043009025;
+ Mon, 22 Feb 2021 17:16:49 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210222201332.30253-1-noltari@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210222161905.1153-1-lukas.bulwahn@gmail.com> <20210222161905.1153-3-lukas.bulwahn@gmail.com>
+In-Reply-To: <20210222161905.1153-3-lukas.bulwahn@gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 23 Feb 2021 09:16:37 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5aKEOFr32G3BZJofUQaRtqM7zsy6fX-gPCwxFhKBqa2w@mail.gmail.com>
+Message-ID: <CAAhV-H5aKEOFr32G3BZJofUQaRtqM7zsy6fX-gPCwxFhKBqa2w@mail.gmail.com>
+Subject: Re: [PATCH 2/5] MAINTAINERS: remove linux-mips.org references
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>, Willy Tarreau <w@1wt.eu>,
+        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
-
-On 2/22/2021 12:13 PM, Álvaro Fernández Rojas wrote:
-> Some BCM6358 devices start with Core #1 instead of Core #0.
-> Apart from that, SMP is restricted to 1 CPU since BCM6358 has a shared TLB,
-> which makes it impossible for the current SMP support to start both CPUs.
-> 
-> The problem is that smp_processor_id() returns 0 and then cpu_logical_map()
-> converts that to 1, which accesses an uninitialized position of intc->cpus[],
-> resulting in a kernel panic.
-
-Sounds like you nee to correct the way the cpu_logical_map[] is
-populated then?
--- 
-Florian
+On Tue, Feb 23, 2021 at 12:22 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+>
+> The domain lookup for linux-mips.org fails for quite some time now. Hence,
+> webpages, the patchwork instance and Ralf Baechle's email there is not
+> reachable anymore.
+>
+> Remove all references of webpages from linux-mips.org in MAINTAINERS, and
+> refer to the kernel.org's linux-mips patchwork instance instead.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  MAINTAINERS | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e949e561867d..703a50183301 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4980,7 +4980,6 @@ DECSTATION PLATFORM SUPPORT
+>  M:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+>  L:     linux-mips@vger.kernel.org
+>  S:     Maintained
+> -W:     http://www.linux-mips.org/wiki/DECstation
+>  F:     arch/mips/dec/
+>  F:     arch/mips/include/asm/dec/
+>  F:     arch/mips/include/asm/mach-dec/
+> @@ -11932,7 +11931,6 @@ MIPS
+>  M:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>  L:     linux-mips@vger.kernel.org
+>  S:     Maintained
+> -W:     http://www.linux-mips.org/
+>  Q:     https://patchwork.kernel.org/project/linux-mips/list/
+>  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
+>  F:     Documentation/devicetree/bindings/mips/
+> @@ -18248,10 +18246,9 @@ F:     arch/um/os-Linux/drivers/
+>
+>  TURBOCHANNEL SUBSYSTEM
+>  M:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+> -M:     Ralf Baechle <ralf@linux-mips.org>
+>  L:     linux-mips@vger.kernel.org
+>  S:     Maintained
+> -Q:     http://patchwork.linux-mips.org/project/linux-mips/list/
+> +Q:     https://patchwork.kernel.org/project/linux-mips/list/
+>  F:     drivers/tc/
+>  F:     include/linux/tc.h
+>
+> --
+> 2.17.1
+>
