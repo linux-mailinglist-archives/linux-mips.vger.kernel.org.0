@@ -2,179 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CF83225EB
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Feb 2021 07:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B39A322705
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Feb 2021 09:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbhBWG3X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Feb 2021 01:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
+        id S232082AbhBWIUg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Feb 2021 03:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbhBWG2m (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Feb 2021 01:28:42 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9ADC06174A;
-        Mon, 22 Feb 2021 22:28:01 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id h8so15207496qkk.6;
-        Mon, 22 Feb 2021 22:28:01 -0800 (PST)
+        with ESMTP id S232075AbhBWIUc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Feb 2021 03:20:32 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41896C06174A
+        for <linux-mips@vger.kernel.org>; Tue, 23 Feb 2021 00:19:52 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id c8so62014709ljd.12
+        for <linux-mips@vger.kernel.org>; Tue, 23 Feb 2021 00:19:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZAXVcgl6x9yI+qM37vgapLbBz+FqNZMLl50ftKO4zUU=;
-        b=dPJAF4aP/hkaWTwlV23Rui3hxrzYgDLnTWPj7pwYDrSte184D1UCN8e2/ZuuKjXfJ3
-         CKkhSpdvvElaYDiNnfm0ZNpRt8KpVTox/XK5/wIeIGUCMsYpVfupGbmXJKYMKIGK3MAt
-         9vmd0FnTLRBwOOU/ZAKjXCNsukLbz1DqwCkI39YoGxYquasWJfcnrkapiwNnpExzkXN8
-         lAmVFY1CmuovfftX659//CpvX43Lnicw8EJIvJwVo8Jh8pWJ2m0QXeClMkmxY8Ggc19D
-         eowKC17aNry7YT3U39JwIO6A+UuHzaAh8sNPGKoNRJRHQduSZQxj3lGzpVO9RmRuEi/B
-         xjQQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ziKu9fCgZMMDJu51DNLFllZqOxNQ3wrYaiXyRSckVtY=;
+        b=p/MGW4fux+raA1lacKYcNWVbXKqUFMqEe0TZK1tdZDrw65OmouBhYUWRNnbftp0AZ5
+         Z2xQeEZrpQ9wiZ7TIx/SaoVrxllrVkk7x3V9ISEnPEpAm92ZYAVQ5CyprTuHT1V3c7QS
+         6nx92MGt5IIOY1/tCVUk0z8+x8YwJjnSS72dWlM/2iV+v3TpjAiBrQIctSpFAeZasSjA
+         tZXBl3P9/y8i+sLakv+sWS9V2afmWMt9OzmqjE8E3I3etPOFQOiG2SqSYyiIm/aT/BaO
+         pdeQRVcay/Kq/i8h4WWePbUdBmnlflnKAWiqGRq6dm7u9B2oWHjhcBmK+wdjBD1mkitI
+         o/ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZAXVcgl6x9yI+qM37vgapLbBz+FqNZMLl50ftKO4zUU=;
-        b=b2ZMJunyxRrjzSf2nvC2QmdrBUpvL/civOEhgLyOw1478Mfj/S1a4TlNO7pmb0BV7C
-         4S5NvoT8WB2CD+BQSBvJXJ+g9GJlh4IZgvzxgN501AZPwqXwkjiJxpnh5X+5DBjaq4Dd
-         uqpcVWM+CSW0uFUfiMkZCeFplsK30HH2VJ4EnWudvGcXTaxXHdozugS5eQWgO1isMwob
-         AIRg20RRlZhl7OQSpOb0q+hPJ+YWKTU4euFnXACnrsxjoBWqXo9fqA0jLXVW4e21yHzQ
-         S4WMYmXbOz/CGYtPUl+/aipeuIoDn+wz8ffNe1+9QjdlVx9kWvtdXSdKbsy4H6ho82IB
-         WX1A==
-X-Gm-Message-State: AOAM530487fTKDuSy1TYr6lY20qa6rHNgWmOado+5TIcueKZ0+AY14/p
-        vV6nyPIztNPBOKMUWQ6hGbXIyToqFrd7bfD1bzD4VhuaD8wd8w==
-X-Google-Smtp-Source: ABdhPJz6FkjH1xdJKTqEl8zYEkQU2J5XXjqCfQhRz2XIj4bVjzTbnulUiKvObIE4qKl04P+E8ymB1cOsbJ4Hqq3AdxQ=
-X-Received: by 2002:a37:4d09:: with SMTP id a9mr8617635qkb.469.1614061680873;
- Mon, 22 Feb 2021 22:28:00 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ziKu9fCgZMMDJu51DNLFllZqOxNQ3wrYaiXyRSckVtY=;
+        b=JoqFhn/13toQfanS6ipslXtD4KWhcUCzVh9vlnZhoPAGuQvpfJ/ZHc5SiSAYWw5bpl
+         +3ApuF1H0IG+PdlQGGgVKSncPEofI9VzXJY1v6SmkzJzwEfILwRkUesUuRnAeqfe9ikZ
+         Qs+ZyJ2e/ak2Z0h+OMs7WvZae3S8eOsyduBuF301kg/4qGmibWre6dhEUZhtoxQ1VpNJ
+         L0Ub+drc1ILPnizogh3R1mLORbs/6H0Igobzm0gfpeWuds2RgqtNupRBgf6rEJiGr/6h
+         hpAahcGvS9qO9uk9+A7XC4n+pvok0X31B3LikpXM0PfeUofLqFH0yzxBMymJlKZYF4sr
+         Lbiw==
+X-Gm-Message-State: AOAM531TseyxFhAg1v2aJtOvAz94eAVLczzpaemiEFZbUm4Gue0tr3UF
+        3ypPXnNyebc8LI7HF7lm98R4Vg==
+X-Google-Smtp-Source: ABdhPJwJ9JpH7dAZolmZr9u0otMtqyysvc+TS7zWZCkH2j9OhjcmRyz/GZb6SqB2dv7txM9yYrb9JA==
+X-Received: by 2002:a2e:b051:: with SMTP id d17mr24922ljl.255.1614068390673;
+        Tue, 23 Feb 2021 00:19:50 -0800 (PST)
+Received: from jade (h-249-223.A175.priv.bahnhof.se. [98.128.249.223])
+        by smtp.gmail.com with ESMTPSA id r16sm2474986lfr.223.2021.02.23.00.19.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Feb 2021 00:19:50 -0800 (PST)
+Date:   Tue, 23 Feb 2021 09:19:48 +0100
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     Allen Pais <apais@linux.microsoft.com>
+Cc:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        allen.lkml@gmail.com, zajec5@gmail.com,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com
+Subject: Re: [PATCH 1/2] optee: fix tee out of memory failure seen during
+ kexec reboot
+Message-ID: <20210223081948.GA1836717@jade>
+References: <20210217092714.121297-2-allen.lkml@gmail.com>
+ <20210217092714.121297-2-allen.lkml@gmail.com>
+ <8d87655f-27c6-6a66-6eb0-9244279fbf2c@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20210222034342.13136-1-yunqiang.su@cipunited.com>
-In-Reply-To: <20210222034342.13136-1-yunqiang.su@cipunited.com>
-From:   YunQiang Su <wzssyqa@gmail.com>
-Date:   Tue, 23 Feb 2021 14:29:38 +0800
-Message-ID: <CAKcpw6UgEUUCG2=9E9KFpTYF23fWshdcFtmB_O+YT0xEoS3swA@mail.gmail.com>
-Subject: Re: [PATCH v4] MIPS: introduce config option to force use FR=0 for
- FPXX binary
-To:     YunQiang Su <yunqiang.su@cipunited.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-mips <linux-mips@vger.kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8d87655f-27c6-6a66-6eb0-9244279fbf2c@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-YunQiang Su <yunqiang.su@cipunited.com> =E4=BA=8E2021=E5=B9=B42=E6=9C=8822=
-=E6=97=A5=E5=91=A8=E4=B8=80 =E4=B8=8A=E5=8D=8811:45=E5=86=99=E9=81=93=EF=BC=
-=9A
->
-> some binary, for example the output of golang, may be mark as FPXX,
-> while in fact they are still FP32.
->
-> Since FPXX binary can work with both FR=3D1 and FR=3D0, we introduce a
-> config option CONFIG_MIPS_O32_FPXX_USE_FR0 to force it to use FR=3D0 here=
-.
+On Mon, Feb 22, 2021 at 06:15:08PM +0530, Allen Pais wrote:
+> 
+> > On Wed, 17 Feb 2021 14:57:12 +0530, Allen Pais wrote:
+> > > -	/*
+> > > -	 * Ask OP-TEE to free all cached shared memory objects to decrease
+> > > -	 * reference counters and also avoid wild pointers in secure world
+> > > -	 * into the old shared memory range.
+> > > -	 */
+> > > -	optee_disable_shm_cache(optee);
+> > > +	if (shutdown) {
+> > > +		optee_disable_shm_cache(optee);
+> > > +	} else {
+> > > +		/*
+> > > +		 * Ask OP-TEE to free all cached shared memory
+> > > +		 * objects to decrease reference counters and
+> > > +		 * also avoid wild pointers in secure world
+> > > +		 * into the old shared memory range.
+> > > +		 */
+> > > +		optee_disable_shm_cache(optee);
+> > Calling optee_disable_shm_cache() in both if and else. It could be
+> > put in front of if().
+> > 
+> 
+>   Ideally, I could just use optee_remove for shutdown() too.
+> But it would not look good. Hence this approach.
 
-As the diffination, .gnu.attribution 4,0 is the same as no
-.gnu.attribution section.
-Its meaning is that the binary has no float operation at all.
+What is the problem with using optee_remove() for shutdown()?
 
-I worry about that if we force 4,0 as 4,1, it may cause some
-compatible problems.
-
->
-> https://go-review.googlesource.com/c/go/+/239217
-> https://go-review.googlesource.com/c/go/+/237058
->
-> v3->v4:
->         introduce a config option: CONFIG_MIPS_O32_FPXX_USE_FR0
->
-> v2->v3:
->         commit message: add Signed-off-by and Cc to stable.
->
-> v1->v2:
->         Fix bad commit message: in fact, we are switching to FR=3D0
->
-> Signed-off-by: YunQiang Su <yunqiang.su@cipunited.com>
-> Cc: stable@vger.kernel.org # 4.19+
-> ---
->  arch/mips/Kconfig      | 11 +++++++++++
->  arch/mips/kernel/elf.c | 13 ++++++++++---
->  2 files changed, 21 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 0a17bedf4f0d..442db620636f 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -3100,6 +3100,17 @@ config MIPS_O32_FP64_SUPPORT
->
->           If unsure, say N.
->
-> +config MIPS_O32_FPXX_USE_FR0
-> +       bool "Use FR=3D0 mode for O32 FPXX binaries" if !CPU_MIPSR6
-> +       depends on MIPS_O32_FP64_SUPPORT
-> +       help
-> +         O32 FPXX can works on both FR=3D0 and FR=3D1 mode, so by defaul=
-t, the
-> +         mode preferred by hardware is used.
-> +
-> +         While some binaries may be marked as FPXX by mistake, for examp=
-le
-> +         output of golang: they are in fact FP32 mode. To compatiable wi=
-th
-> +         these binaries, we should use FR=3D0 mode for them.
-> +
->  config USE_OF
->         bool
->         select OF
-> diff --git a/arch/mips/kernel/elf.c b/arch/mips/kernel/elf.c
-> index 7b045d2a0b51..443ced26ee60 100644
-> --- a/arch/mips/kernel/elf.c
-> +++ b/arch/mips/kernel/elf.c
-> @@ -234,9 +234,10 @@ int arch_check_elf(void *_ehdr, bool has_interpreter=
-, void *_interp_ehdr,
->          *   fpxx case. This is because, in any-ABI (or no-ABI) we have n=
-o FPU
->          *   instructions so we don't care about the mode. We will simply=
- use
->          *   the one preferred by the hardware. In fpxx case, that ABI ca=
-n
-> -        *   handle both FR=3D1 and FR=3D0, so, again, we simply choose t=
-he one
-> -        *   preferred by the hardware. Next, if we only use single-preci=
-sion
-> -        *   FPU instructions, and the default ABI FPU mode is not good
-> +        *   handle both FR=3D1 and FR=3D0. Here, we may need to use FR=
-=3D0, because
-> +        *   some binaries may be mark as FPXX by mistake (ie, output of =
-golang).
-> +        * - If we only use single-precision FPU instructions,
-> +        *   and the default ABI FPU mode is not good
->          *   (ie single + any ABI combination), we set again the FPU mode=
- to the
->          *   one is preferred by the hardware. Next, if we know that the =
-code
->          *   will only use single-precision instructions, shown by single=
- being
-> @@ -248,8 +249,14 @@ int arch_check_elf(void *_ehdr, bool has_interpreter=
-, void *_interp_ehdr,
->          */
->         if (prog_req.fre && !prog_req.frdefault && !prog_req.fr1)
->                 state->overall_fp_mode =3D FP_FRE;
-> +#if CONFIG_MIPS_O32_FPXX_USE_FR0
-> +       else if (prog_req.fr1 && prog_req.frdefault)
-> +               state->overall_fp_mode =3D FP_FR0;
-> +       else if (prog_req.single && !prog_req.frdefault)
-> +#else
->         else if ((prog_req.fr1 && prog_req.frdefault) ||
->                  (prog_req.single && !prog_req.frdefault))
-> +#endif
->                 /* Make sure 64-bit MIPS III/IV/64R1 will not pick FR1 */
->                 state->overall_fp_mode =3D ((raw_current_cpu_data.fpu_id =
-& MIPS_FPIR_F64) &&
->                                           cpu_has_mips_r2_r6) ?
-> --
-> 2.20.1
->
-
-
---=20
-YunQiang Su
+Cheers,
+Jens
