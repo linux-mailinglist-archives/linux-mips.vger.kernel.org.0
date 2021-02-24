@@ -2,97 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0732B3242A1
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Feb 2021 17:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CB0324330
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Feb 2021 18:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbhBXQzx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Feb 2021 11:55:53 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:57816 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235762AbhBXQy3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Feb 2021 11:54:29 -0500
-Received: from [192.168.0.114] (unknown [49.207.206.154])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 70D7320B6C40;
-        Wed, 24 Feb 2021 08:53:37 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 70D7320B6C40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1614185620;
-        bh=8YbxFx9Hocxmd6u3Eq78VVDiouONns5HyeEedD7A2HU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kMq11BtNKsvhQGtuYMUpR5yK7YNhjYofyHUhgYloHkmWl9wsOQwWELn1DMa8gwW+I
-         /iNsyGAc2l5/wXLxAktg6W8KzgRlF9fmcW4M1Z9w4+4DaJ6Ru/FPHQ8xhViFGVyfGK
-         sE5dixBwUAGcZsOCGIB4dJhxkhwWxg351zSRxG74=
-Subject: Re: [PATCH 1/2] optee: fix tee out of memory failure seen during
- kexec reboot
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        allen.lkml@gmail.com, zajec5@gmail.com,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com
-References: <20210217092714.121297-2-allen.lkml@gmail.com>
- <20210217092714.121297-2-allen.lkml@gmail.com>
- <8d87655f-27c6-6a66-6eb0-9244279fbf2c@linux.microsoft.com>
- <20210223081948.GA1836717@jade>
- <cbc963d5-6c4b-7e69-4a9b-3d66b95affab@linux.microsoft.com>
- <20210224081553.GB2653493@jade>
-From:   Allen Pais <apais@linux.microsoft.com>
-Message-ID: <9f4b44c1-cf86-a061-a9c6-726c4e23f99b@linux.microsoft.com>
-Date:   Wed, 24 Feb 2021 22:23:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S234736AbhBXRb3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Feb 2021 12:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234570AbhBXRb2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Feb 2021 12:31:28 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 257FEC061574
+        for <linux-mips@vger.kernel.org>; Wed, 24 Feb 2021 09:30:48 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id C461592009C; Wed, 24 Feb 2021 18:30:45 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id B59DD92009B;
+        Wed, 24 Feb 2021 18:30:45 +0100 (CET)
+Date:   Wed, 24 Feb 2021 18:30:45 +0100 (CET)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        binutils@sourceware.org, gcc@gcc.gnu.org, syq@debian.org,
+        Matthew Fortune <mfortune@gmail.com>
+Subject: Re: HELP: MIPS PC Relative Addressing
+In-Reply-To: <3ddc0595-c443-868e-c0a4-08ae8934f116@flygoat.com>
+Message-ID: <alpine.DEB.2.21.2102241813420.1900@angie.orcam.me.uk>
+References: <3ddc0595-c443-868e-c0a4-08ae8934f116@flygoat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20210224081553.GB2653493@jade>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, 24 Feb 2021, Jiaxun Yang wrote:
 
->>>>>> -	/*
->>>>>> -	 * Ask OP-TEE to free all cached shared memory objects to decrease
->>>>>> -	 * reference counters and also avoid wild pointers in secure world
->>>>>> -	 * into the old shared memory range.
->>>>>> -	 */
->>>>>> -	optee_disable_shm_cache(optee);
->>>>>> +	if (shutdown) {
->>>>>> +		optee_disable_shm_cache(optee);
->>>>>> +	} else {
->>>>>> +		/*
->>>>>> +		 * Ask OP-TEE to free all cached shared memory
->>>>>> +		 * objects to decrease reference counters and
->>>>>> +		 * also avoid wild pointers in secure world
->>>>>> +		 * into the old shared memory range.
->>>>>> +		 */
->>>>>> +		optee_disable_shm_cache(optee);
->>>>> Calling optee_disable_shm_cache() in both if and else. It could be
->>>>> put in front of if().
->>>>>
->>>>
->>>>     Ideally, I could just use optee_remove for shutdown() too.
->>>> But it would not look good. Hence this approach.
->>>
->>> What is the problem with using optee_remove() for shutdown()?
->>>
->>
->>   There is no problem, I just thought it would be more cleaner/readable
->> with this approach. If you'd like to keep it simple by just calling
->> optee_remove() for shutdown() too, I could quickly send out V2.
+> For RISC-V, %pcrel_lo shall point to the label of corresponding %pcrel_hi,
+> like
 > 
-> In the patch you posted it looks like you'd like to call
-> only optee_disable_shm_cache() in the case of shutdown. Like:
-> 
-> static void optee_shutdown(struct platform_device *pdev)
-> {
->          optee_disable_shm_cache(platform_get_drvdata(pdev));
-> }
-> 
-> and optee_remove() kept as it was before this patch.
-> 
+> .LA0:
+>     auipc    a0, %pcrel_hi(sym)
+>     addi      a0, a0, %pcrel_lo(.LA0)
 
-  Sure, Will have it fixed and send out V2.
+ I commented on it once, in the course of the FDPIC design project, and I 
+find it broken by design.  Sadly it has made it into the RISC-V psABI and 
+it is hard to revert at this time, too many places have started relying on 
+it.
 
-Thanks.
+> However, for MIPS %pcrel_lo simply calculate LO16 of the symbol to current
+> PC, thus PC relative addressing will look like:
+> 
+> .LA0:
+>     auipc  a0, %pcrel_hi(sym)
+> .LA1:
+>     addi    a0, %pcrel_lo(sym + (.LA1 - .LA0))
+> 
+> I found it's very difficult for GCC to generate this kind of pcrel_lo
+> expression,
+> RTX label_ref can't be lower into such LOW_SUM expression.
+
+ You may want to use composed relocations to refer to .LA1 (R_MIPS_32) and 
+.LA0 (R_MIPS_SUB).  There may or may not be linker updates needed; unlike 
+the RISC-V one the MIPS BFD backend already supports composed relocations 
+with the usual ELF gABI semantics.  It would be good to switch to RELA at 
+this point universally too; none of new stuff will work with old linkers 
+anyway.
+
+ HTH,
+
+  Maciej
