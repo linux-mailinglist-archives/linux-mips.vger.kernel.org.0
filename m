@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 296613239AC
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Feb 2021 10:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E873239B0
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Feb 2021 10:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234706AbhBXJjv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Feb 2021 04:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S234497AbhBXJke (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Feb 2021 04:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234682AbhBXJjo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Feb 2021 04:39:44 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068BBC06178B;
+        with ESMTP id S234722AbhBXJkW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Feb 2021 04:40:22 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05955C06178C;
+        Wed, 24 Feb 2021 01:39:05 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id p3so1197397wmc.2;
         Wed, 24 Feb 2021 01:39:04 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id f137so1218154wmf.3;
-        Wed, 24 Feb 2021 01:39:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=trQPgYOyii8s2BvWdiWhLT50g607rLG7EDemXs+w3BQ=;
-        b=fgjWIn9jFmAzaICAlnOUBKnXr1O3poghNsLjreb26ciJRgYSTkvBxqaw3GXwxrxRm/
-         vdx/4HZIeCpqxNxzv8w1OFRNqyw8HjtMUgs6nZYHeUHn5R9/gl4b/ZFdQMz3e3nrXtwp
-         Y8jRBavhva90zajoPmABiL7DhSBmE4yb9t3V2KKzl5jdszV9t5ZxJwrtPURREBRe8k9t
-         31n7MneKzro3LXtUmotGoBja6iIGM053BqMdYHHIe/kHbF9uPtF7bqDbRqycDwY5+th/
-         poN6x9xz8z9hfi9OUKlB0bhR5/Q/3D0QQbgu7WuYTKh3yj9XbQaWusRKkw33BZ0BTr0z
-         5XnQ==
+        bh=UvtwaCbdOeATVHcZU9nUlIZ/xhmS1zi6+GSO2Sfa4q4=;
+        b=GvHedvrhXwB1ZdlxYt4YVejnkjMatS6l/dn/FSNa8YT4MkL7F+Mran3RVaVoLoeJIX
+         Io1CFP2uK7QI6VNrOErGGlTsLCYJClB34bnPjLH72oqCBEKWEoWboFuIuv+JBwZ0WEDz
+         f+zEa+FRtDABCB3gftzTD8sDAAdkv94neqDC0TbqB27xa4/cqG/yLYcGQJ3uWtW5+kCA
+         7ySA6Eyz01SEy99f21ocjVrnkMVwBvsKMtc5OZwdYocmFmwZzLeM4JOCeJUgeEwpfXaY
+         Q3GdorvNdSh0OiirKopitY/OM7S3vifjeBHGfD9Pw0C20S8c5qHHChl9UYYXCnNmxlUC
+         63pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=trQPgYOyii8s2BvWdiWhLT50g607rLG7EDemXs+w3BQ=;
-        b=ir0iHmZbWNud9WoxOjlCSRPQMoG+XoZXJcYJtFUc+55DFYuc77BZXxkDGeP3k37BlG
-         H65CxDzHuL3IQH+XrZwU9tTD3OvQqq+RMOjAUIahE/KMUAcAiHz96LRk4+TVVR5vPIUb
-         UK/tY16LyNAMGSgGeAyZmNabExL6LYD0F3re/nShYccYTeWjz9+5ANfO8fgYGsoC96Rr
-         auoZToxS438L/dxPKIcoysmGC/fQbfVThp1bYFTaSvWTbWM7BZGd0PCUywml/3ZyqLeP
-         o7jycIBq9e2YGGZ2tEXOjK3iOfaIm2Pr2Mj1Mnxn/ksVKMOU2fqaUiinCEhP7PnAgstR
-         Jz6g==
-X-Gm-Message-State: AOAM532r1vVPfofHBeT0JB+Il2INT/MSxXV3m6vwkDBJY6mv3RXyp5rz
-        weF/ZPQ+xKDxhpBcGgqCEAI=
-X-Google-Smtp-Source: ABdhPJzzSqQXRgWRUgmq+sEDqwOHekKWXBIhhhaqz4jNvYGGPOWaSmrepLxPUbz8UmEiwP6PfUT3jg==
-X-Received: by 2002:a05:600c:3546:: with SMTP id i6mr2975822wmq.24.1614159542752;
-        Wed, 24 Feb 2021 01:39:02 -0800 (PST)
+        bh=UvtwaCbdOeATVHcZU9nUlIZ/xhmS1zi6+GSO2Sfa4q4=;
+        b=l00mQ2F7Ncuxw2ef9v6akGTb0NtsbHiMCliF/E9HVk3ZT/orLqDXZ6cJ08tLP9eXoX
+         VHiXjh/M6HqIv7E5ykut6Yo0qXUwrLRxacBkOFHVFwDZ/OQdf3CfzX+0nrI9QcaoL+7E
+         EL81NzYtndL3nH74cca/wUGbiUYIPVvmnqO8keZhv5TAhbi+oqHNgAuhUDB6IEI8Lga5
+         RVsc30HIIxI7VDUcilw0OQdQJCWYIgATvsTHDACfKO86FQnImWVVSV0oTlyArurx/PCK
+         VYK+mBB76qvFvVEnDb/qz8J6Aecnu0YfN00Eob/8R3CIoT/ES2Q6xQBAZUKjZ02gKtRW
+         btFw==
+X-Gm-Message-State: AOAM530rhbmFihSrPU/O/otSh1w5yxRvqBrBsV57yEp49ICey4YLrI7Q
+        0a9KWY1WsvJpXHovvsfX1Xg=
+X-Google-Smtp-Source: ABdhPJz+eBmJ86ox7AfGupA1zaD0KT4BnxytDzx1XmQjOs8kkSQznj5TrlCKkjWcd0XrSZTw3YYCNw==
+X-Received: by 2002:a7b:ce98:: with SMTP id q24mr2977988wmj.42.1614159543799;
+        Wed, 24 Feb 2021 01:39:03 -0800 (PST)
 Received: from skynet.lan (170.red-88-1-105.dynamicip.rima-tde.net. [88.1.105.170])
-        by smtp.gmail.com with ESMTPSA id y18sm2223919wrq.61.2021.02.24.01.39.01
+        by smtp.gmail.com with ESMTPSA id y18sm2223919wrq.61.2021.02.24.01.39.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Feb 2021 01:39:02 -0800 (PST)
+        Wed, 24 Feb 2021 01:39:03 -0800 (PST)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     jonas.gorski@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
@@ -56,9 +56,9 @@ To:     jonas.gorski@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH 3/7] mips: bmips: bcm6328: include dt-bindings
-Date:   Wed, 24 Feb 2021 10:38:52 +0100
-Message-Id: <20210224093856.2021-4-noltari@gmail.com>
+Subject: [PATCH 4/7] mips: bmips: bcm6358: include dt-bindings
+Date:   Wed, 24 Feb 2021 10:38:53 +0100
+Message-Id: <20210224093856.2021-5-noltari@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210224093856.2021-1-noltari@gmail.com>
 References: <20200812063129.361862-1-noltari@gmail.com>
@@ -77,19 +77,18 @@ Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
  v2: remove irqs header, add more bindings.
 
- arch/mips/boot/dts/brcm/bcm6328.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/mips/boot/dts/brcm/bcm6358.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/mips/boot/dts/brcm/bcm6328.dtsi b/arch/mips/boot/dts/brcm/bcm6328.dtsi
-index 9dc558763c46..fe93f2692281 100644
---- a/arch/mips/boot/dts/brcm/bcm6328.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm6328.dtsi
-@@ -1,4 +1,9 @@
+diff --git a/arch/mips/boot/dts/brcm/bcm6358.dtsi b/arch/mips/boot/dts/brcm/bcm6358.dtsi
+index 9d93e7f5e6fc..f8753becc164 100644
+--- a/arch/mips/boot/dts/brcm/bcm6358.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6358.dtsi
+@@ -1,4 +1,8 @@
  // SPDX-License-Identifier: GPL-2.0
 +
-+#include "dt-bindings/clock/bcm6328-clock.h"
-+#include "dt-bindings/reset/bcm6328-reset.h"
-+#include "dt-bindings/soc/bcm6328-pm.h"
++#include "dt-bindings/clock/bcm6358-clock.h"
++#include "dt-bindings/reset/bcm6358-reset.h"
 +
  / {
  	#address-cells = <1>;
