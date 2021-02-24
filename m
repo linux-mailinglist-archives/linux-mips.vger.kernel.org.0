@@ -2,258 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCE3324120
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Feb 2021 17:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1747832419F
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Feb 2021 17:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235432AbhBXPmD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Feb 2021 10:42:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31288 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233713AbhBXPIN (ORCPT
+        id S234766AbhBXQFf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Feb 2021 11:05:35 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:55471 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235321AbhBXPmE (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Feb 2021 10:08:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614179169;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hE/JW8Dw5e6ABCMHC+aiwNgbhT17E1ZqRTDBWqvHAHE=;
-        b=cfyexALChXT7zf6RREJ6miqZmVm7cMzstEPTMK/60c0vQpYfudYhR/1wnmhOp1U8bOmvlw
-        iMfhOLHmwQWwHCQmdt8KONIfQeSZDG+NCNYjOnt4rsadI0dpuWps7iNJt4Tsr7vUqoaQZi
-        j3SyFP/HVH0FdusxSM6519z7aILY9HY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-237-WeJ4SY0uNIOI_e9AL1yUkw-1; Wed, 24 Feb 2021 10:06:05 -0500
-X-MC-Unique: WeJ4SY0uNIOI_e9AL1yUkw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A17918C6C52;
-        Wed, 24 Feb 2021 14:38:34 +0000 (UTC)
-Received: from [10.36.114.83] (ovpn-114-83.ams2.redhat.com [10.36.114.83])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B293D19D9C;
-        Wed, 24 Feb 2021 14:38:25 +0000 (UTC)
-Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
- prefault/prealloc memory
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
-References: <20210217154844.12392-1-david@redhat.com>
- <4bb9071b-e6c1-a732-0ed6-46aff0eaa70c@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <0f1c6f39-6a51-f8a6-8542-be1eb9c6fa0a@redhat.com>
-Date:   Wed, 24 Feb 2021 15:38:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <4bb9071b-e6c1-a732-0ed6-46aff0eaa70c@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Wed, 24 Feb 2021 10:42:04 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 460855C01C1;
+        Wed, 24 Feb 2021 10:40:52 -0500 (EST)
+Received: from imap1 ([10.202.2.51])
+  by compute6.internal (MEProxy); Wed, 24 Feb 2021 10:40:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm1; bh=pAiG3XWYnlEZcI6S9irEA4KEy1T4LoM
+        z/fCPiuVlZFk=; b=uOtGb5bfa8FTLQDWaYp6zB5RHIu7jK0IymDRMfatiGQJKWb
+        w/WTWHgMDfLcVzJ2ZdqemXUCUvej1kAEXVW4+LzEqoX8snDjOw2pqEb6t0DNKb7l
+        qyosZKMx6PLwYyojPBE0h/D7RFUta4k2Hw6oKyqhFHN5nabr28Qr1cOxAgBRM2Q9
+        7clKpOmVepl9dnsRCxQPZCznWw2h9Q9sDFtHtYjoEqfDAVeoHLw8lc/68XOFgWz9
+        ch2qiWeCSFPVn7q+K8QOhPOXT8N2AjQQ8M856Kg3rmO/j66YURk+9+7Ca8PjMUsv
+        pvusF/mDkm+r3YmOI9VBbxHz6o0N4ca+2psHMsQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=pAiG3X
+        WYnlEZcI6S9irEA4KEy1T4LoMz/fCPiuVlZFk=; b=f9YqKFQEtbpkJNVhS4v+Nt
+        MGavQOt+wdXIrLI5V8BXevX6NahE7Dn/Jg701oBFrxKYnVy0VT26/FjATxXoHRXC
+        ogNvCDjaJk8Aap7ojfpb85xByR17qKIVhFwaYaHNALIuFFhLFCpXL3IGdRfsdPFh
+        hVewIYtaiESmys3Ldmyt0Us1FLLx5tmdeMOMSp7lcv9z+VU/sJLolYITPqZ26Zrq
+        PJWKDatxKc5VkNiTft7B2DzJ4TDEjGVhvknviphTuee2e1WOKh3JOh37FjlW+V59
+        zFGpK7ylakjFAPI6pXzjMglU1iAhCecustQyTvv9mknjtNJgdyzHMKsh4ROLrYYg
+        ==
+X-ME-Sender: <xms:gnM2YH1qs7ZiA5hMnVr3w4-FXqktRSFMC8PxvZ1IuKsN9HeiZcSrkw>
+    <xme:gnM2YGHBQtVUA82EpxVPDetAzM8vKig2nZS5a-ZlAb7RADpCWEfIi_bTPNaqeMvWN
+    gHgb70nvNE-EVlGCcg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrkeejgdejkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedflfhirgig
+    uhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepkeelheethfehffdttdelieevfeeiheeuudeifeeugeeuieel
+    iedtueejheehhedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:gnM2YH7U9SGJgSeRh-7r8bld1MRKX0V79wlLinTgaKclbtl4iYo-7Q>
+    <xmx:gnM2YM0ZoL95rMisBxSc7lTO09eYyZg46i-l6jrsRnaa0FZ9pNmlnQ>
+    <xmx:gnM2YKHumDmbLskRFlQV-2Aoss8_TKITM9UQAZLv1ibzbhzKJi_oUA>
+    <xmx:hHM2YPTO_KEPcvPfy2jhL8Iho1thdUDgVQCOwHHD1JX7mKwMbKLxZQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5E8E4130005D; Wed, 24 Feb 2021 10:40:50 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-141-gf094924a34-fm-20210210.001-gf094924a
+Mime-Version: 1.0
+Message-Id: <987b0dc5-9306-4271-afc0-7c44dba644b7@www.fastmail.com>
+In-Reply-To: <1614171720-13221-1-git-send-email-hejinyang@loongson.cn>
+References: <1614171720-13221-1-git-send-email-hejinyang@loongson.cn>
+Date:   Wed, 24 Feb 2021 23:40:28 +0800
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Jinyang He" <hejinyang@loongson.cn>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "John Crispin" <john@phrozen.org>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] MIPS: Remove detect_memory_region()
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 24.02.21 15:25, David Hildenbrand wrote:
->> +		tmp_end = min_t(unsigned long, end, vma->vm_end);
->> +		pages = populate_vma_page_range(vma, start, tmp_end, &locked);
->> +		if (!locked) {
->> +			mmap_read_lock(mm);
->> +			*prev = NULL;
->> +			vma = NULL;
-> 
-> ^ locked = 1; is missing here.
-> 
-> 
-> --- Simple benchmark ---
-> 
-> I implemented MADV_POPULATE_READ and MADV_POPULATE_WRITE and performed
-> some simple measurements to simulate memory preallocation with empty files:
-> 
-> 1) mmap a 2 MiB/128 MiB/4 GiB region (anonymous, memfd, memfd hugetlb)
-> 2) Discard all memory using fallocate/madvise
-> 3) Prefault memory using different approaches and measure the time this
->      takes.
-> 
-> I repeat 2)+3) 10 times and compute the average. I only use a single thread.
-> 
-> Read: Read from each page a byte.
-> Write: Write one byte of each page (0).
-> Read/Write: Read one byte and write the value back for each page
-> POPULATE: MADV_POPULATE (this patch)
-> POPULATE_READ: MADV_POPULATE_READ
-> POPULATE_WRITE: MADV_POPULATE_WRITE
-> 
-> --- Benchmark results ---
-> 
-> Measuring 10 iterations each:
-> ==================================================
-> 2 MiB MAP_PRIVATE:
-> **************************************************
-> Anonymous      : Read           :     0.159 ms
-> Anonymous      : Write          :     0.244 ms
-> Anonymous      : Read+Write     :     0.383 ms
-> Anonymous      : POPULATE       :     0.167 ms
-> Anonymous      : POPULATE_READ  :     0.064 ms
-> Anonymous      : POPULATE_WRITE :     0.165 ms
-> Memfd 4 KiB    : Read           :     0.401 ms
-> Memfd 4 KiB    : Write          :     0.056 ms
-> Memfd 4 KiB    : Read+Write     :     0.075 ms
-> Memfd 4 KiB    : POPULATE       :     0.057 ms
-> Memfd 4 KiB    : POPULATE_READ  :     0.337 ms
-> Memfd 4 KiB    : POPULATE_WRITE :     0.056 ms
-> Memfd 2 MiB    : Read           :     0.041 ms
-> Memfd 2 MiB    : Write          :     0.030 ms
-> Memfd 2 MiB    : Read+Write     :     0.031 ms
-> Memfd 2 MiB    : POPULATE       :     0.031 ms
-> Memfd 2 MiB    : POPULATE_READ  :     0.031 ms
-> Memfd 2 MiB    : POPULATE_WRITE :     0.031 ms
-> **************************************************
-> 2 MiB MAP_SHARED:
-> **************************************************
-> Anonymous      : Read           :     0.071 ms
-> Anonymous      : Write          :     0.181 ms
-> Anonymous      : Read+Write     :     0.081 ms
-> Anonymous      : POPULATE       :     0.069 ms
-> Anonymous      : POPULATE_READ  :     0.069 ms
-> Anonymous      : POPULATE_WRITE :     0.115 ms
-> Memfd 4 KiB    : Read           :     0.401 ms
-> Memfd 4 KiB    : Write          :     0.351 ms
-> Memfd 4 KiB    : Read+Write     :     0.414 ms
-> Memfd 4 KiB    : POPULATE       :     0.338 ms
-> Memfd 4 KiB    : POPULATE_READ  :     0.339 ms
-> Memfd 4 KiB    : POPULATE_WRITE :     0.279 ms
-> Memfd 2 MiB    : Read           :     0.031 ms
-> Memfd 2 MiB    : Write          :     0.031 ms
-> Memfd 2 MiB    : Read+Write     :     0.031 ms
-> Memfd 2 MiB    : POPULATE       :     0.031 ms
-> Memfd 2 MiB    : POPULATE_READ  :     0.031 ms
-> Memfd 2 MiB    : POPULATE_WRITE :     0.031 ms
-> **************************************************
-> 128 MiB MAP_PRIVATE:
-> **************************************************
-> Anonymous      : Read           :     7.517 ms
-> Anonymous      : Write          :    22.503 ms
-> Anonymous      : Read+Write     :    33.186 ms
-> Anonymous      : POPULATE       :    18.381 ms
-> Anonymous      : POPULATE_READ  :     3.952 ms
-> Anonymous      : POPULATE_WRITE :    18.354 ms
-> Memfd 4 KiB    : Read           :    34.300 ms
-> Memfd 4 KiB    : Write          :     4.659 ms
-> Memfd 4 KiB    : Read+Write     :     6.531 ms
-> Memfd 4 KiB    : POPULATE       :     5.219 ms
-> Memfd 4 KiB    : POPULATE_READ  :    29.744 ms
-> Memfd 4 KiB    : POPULATE_WRITE :     5.244 ms
-> Memfd 2 MiB    : Read           :    10.228 ms
-> Memfd 2 MiB    : Write          :    10.130 ms
-> Memfd 2 MiB    : Read+Write     :    10.190 ms
-> Memfd 2 MiB    : POPULATE       :    10.007 ms
-> Memfd 2 MiB    : POPULATE_READ  :    10.008 ms
-> Memfd 2 MiB    : POPULATE_WRITE :    10.010 ms
-> **************************************************
-> 128 MiB MAP_SHARED:
-> **************************************************
-> Anonymous      : Read           :     7.295 ms
-> Anonymous      : Write          :    15.234 ms
-> Anonymous      : Read+Write     :     7.460 ms
-> Anonymous      : POPULATE       :     5.196 ms
-> Anonymous      : POPULATE_READ  :     5.190 ms
-> Anonymous      : POPULATE_WRITE :     8.245 ms
-> Memfd 4 KiB    : Read           :    34.412 ms
-> Memfd 4 KiB    : Write          :    30.586 ms
-> Memfd 4 KiB    : Read+Write     :    35.157 ms
-> Memfd 4 KiB    : POPULATE       :    29.643 ms
-> Memfd 4 KiB    : POPULATE_READ  :    29.691 ms
-> Memfd 4 KiB    : POPULATE_WRITE :    25.790 ms
-> Memfd 2 MiB    : Read           :    10.210 ms
-> Memfd 2 MiB    : Write          :    10.074 ms
-> Memfd 2 MiB    : Read+Write     :    10.068 ms
-> Memfd 2 MiB    : POPULATE       :    10.034 ms
-> Memfd 2 MiB    : POPULATE_READ  :    10.037 ms
-> Memfd 2 MiB    : POPULATE_WRITE :    10.031 ms
-> **************************************************
-> 4096 MiB MAP_PRIVATE:
-> **************************************************
-> Anonymous      : Read           :   240.947 ms
-> Anonymous      : Write          :   712.941 ms
-> Anonymous      : Read+Write     :  1027.636 ms
-> Anonymous      : POPULATE       :   571.816 ms
-> Anonymous      : POPULATE_READ  :   120.215 ms
-> Anonymous      : POPULATE_WRITE :   570.750 ms
-> Memfd 4 KiB    : Read           :  1054.739 ms
-> Memfd 4 KiB    : Write          :   145.534 ms
-> Memfd 4 KiB    : Read+Write     :   202.275 ms
-> Memfd 4 KiB    : POPULATE       :   162.597 ms
-> Memfd 4 KiB    : POPULATE_READ  :   914.747 ms
-> Memfd 4 KiB    : POPULATE_WRITE :   161.281 ms
-> Memfd 2 MiB    : Read           :   351.818 ms
-> Memfd 2 MiB    : Write          :   352.357 ms
-> Memfd 2 MiB    : Read+Write     :   352.762 ms
-> Memfd 2 MiB    : POPULATE       :   351.471 ms
-> Memfd 2 MiB    : POPULATE_READ  :   351.553 ms
-> Memfd 2 MiB    : POPULATE_WRITE :   351.931 ms
-> **************************************************
-> 4096 MiB MAP_SHARED:
-> **************************************************
-> Anonymous      : Read           :   229.338 ms
-> Anonymous      : Write          :   478.964 ms
-> Anonymous      : Read+Write     :   234.546 ms
-> Anonymous      : POPULATE       :   161.635 ms
-> Anonymous      : POPULATE_READ  :   160.943 ms
-> Anonymous      : POPULATE_WRITE :   252.686 ms
-> Memfd 4 KiB    : Read           :  1052.828 ms
-> Memfd 4 KiB    : Write          :   929.237 ms
-> Memfd 4 KiB    : Read+Write     :  1074.494 ms
-> Memfd 4 KiB    : POPULATE       :   915.663 ms
-> Memfd 4 KiB    : POPULATE_READ  :   915.001 ms
-> Memfd 4 KiB    : POPULATE_WRITE :   787.388 ms
-> Memfd 2 MiB    : Read           :   353.580 ms
-> Memfd 2 MiB    : Write          :   353.197 ms
-> Memfd 2 MiB    : Read+Write     :   353.172 ms
-> Memfd 2 MiB    : POPULATE       :   353.686 ms
-> Memfd 2 MiB    : POPULATE_READ  :   353.465 ms
-> Memfd 2 MiB    : POPULATE_WRITE :   352.776 ms
-> **************************************************
-> 
-> 
-> --- Discussion ---
-> 
-> 1) With huge pages, the performance benefit is negligible with the sizes
-> I tried, because there are little actual page faults. Most time is spent
-> zeroing huge pages I guess. It will take quite a lot of memory to pay off.
-> 
-> 2) In all 4k cases, the POPULATE_READ/POPULATE_WRITE variants are faster
-> than manually reading or writing from user space.
 
-Forgot to mention one case: Except on Memfd 4 KiB with MAP_PRIVATE: 
-POPULATE_WRITE is slower than a simple write. And a read fault is 
-exceptionally slower than a write fault (what?).
 
--- 
-Thanks,
+On Wed, Feb 24, 2021, at 9:02 PM, Jinyang He wrote:
+> detect_memory_region() was committed by Commit 4d9f77d25268 ("MIPS: add
+> detect_memory_region()"). Then it was equipped by Commit dd63b00804a5
+> ("MIPS: ralink: make use of the new memory detection code") and
+> Commit 9b75733b7b5e ("MIPS: ath79: make use of the new memory detection
+> code"). Its code is based on early ath79 platform code.
+> 
+> What puzzles me is that how memcmp() detect the memory region. If `break`
+> was touched, the function could make sense. That means memcmp() should
+> return zero. Otherwise, the loop will be end by size > sz_max.
+> 
+> I have tested detect_memory_region() on Loongson64 3A3000. On our design,
+> kseg0 low 256MB maps real memory and kseg0 high 256MB maps IO/PCI. The
+> function runs and last stopped on kseg1 where is uncached. In this process
+> memcmp also returned non-zero when detected kseg0 high 256MB. Then I did
+> another thing. memcpy first and test memcmp then (after &_end). It works
+> well on 3A3000 but badly on 3A4000. Maybe because kseg0 high 256MB maps
+> IO/PCI and it is dangerous to write like write memory.
+> 
+> At last, read memory from where is not memory region may always return 0.
+> (Or trigger exception.) This function have been used several years and
+> seems no error occur. Maybe it's a fallback way.
 
-David / dhildenb
+That is not true for other platforms like ath79 or mtk.
+They'll wrap around or return 0xffffffff for out of boundary accessing.
 
+Loongson does not apply to this case as it have special "Address Window"
+design to accurately describe address regions.
+Any access beyond described windows will be handled by MC and return 0 or random stuff.
+
+Again, please don't make changes because you can.
+
+Thanks.
+
+- Jiaxun
