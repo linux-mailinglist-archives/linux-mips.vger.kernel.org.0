@@ -2,171 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 692FF323B9D
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Feb 2021 12:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23C5323FC0
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Feb 2021 16:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbhBXLyH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Feb 2021 06:54:07 -0500
-Received: from mail1.protonmail.ch ([185.70.40.18]:43633 "EHLO
-        mail1.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbhBXLxr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Feb 2021 06:53:47 -0500
-Date:   Wed, 24 Feb 2021 11:52:55 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1614167582; bh=rmj4Lly7e2yo/vYcUEKGFZzDAc6rnvVPqHCHhRIbwaY=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=PHXSzMSxRmaLS7MFt4ays/6/dt4JDFe5JXd4QbAhZJD6fATGc+zxzepIz+xytiIiY
-         7fbgrezmNQVEUiH3H+5zFFsddUnnkbvoHRxiz73XXXcXb0ntv7dtlonrzeA7j8ro7P
-         NvllO0TctJngE0dpAOynsPLIvyZr1QeLx1zOZbEd6l+Y2aY3FaTcJAKkA0FzuO2iHp
-         rdubg4dtxfLOUKpAVyjsQvKCIGcwGSlQS/CwMz+99nwW7j5jADkmM/AHhMYifIPjCf
-         CNSs2nfPmijLAAFSg9AW1X+D4djCWNncusfMIusXRcIG4OT8pSC3eJ0dKjv2iC+XBM
-         quf+AFX18tPPw==
-To:     Yury Norov <yury.norov@gmail.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH] arm64: enable  GENERIC_FIND_FIRST_BIT
-Message-ID: <20210224115247.1618-1-alobakin@pm.me>
-In-Reply-To: <20201205165406.108990-1-yury.norov@gmail.com>
-References: <20201205165406.108990-1-yury.norov@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+        id S233115AbhBXOTf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Feb 2021 09:19:35 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:58252 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235458AbhBXNC5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Feb 2021 08:02:57 -0500
+Received: from loongson.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP_FKTjZgNJ0OAA--.1828S2;
+        Wed, 24 Feb 2021 21:02:03 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RFC] MIPS: Remove detect_memory_region()
+Date:   Wed, 24 Feb 2021 21:02:00 +0800
+Message-Id: <1614171720-13221-1-git-send-email-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxP_FKTjZgNJ0OAA--.1828S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFy3Xr4UJryfAFWrCryDWrg_yoWrAFy8p3
+        9xAF97Gr4UWr97Z3yrAw1kZrW5Zwn5GFWa9FW7CrykZ3Wqqr1kAF4rX3srAFyktrZYq3W0
+        g3WFqry0qa1vkaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_Xr4l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU5_b15UUUUU==
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
-Date: Sat, 5 Dec 2020 08:54:06 -0800
+detect_memory_region() was committed by Commit 4d9f77d25268 ("MIPS: add
+detect_memory_region()"). Then it was equipped by Commit dd63b00804a5
+("MIPS: ralink: make use of the new memory detection code") and
+Commit 9b75733b7b5e ("MIPS: ath79: make use of the new memory detection
+code"). Its code is based on early ath79 platform code.
 
-Hi,
+What puzzles me is that how memcmp() detect the memory region. If `break`
+was touched, the function could make sense. That means memcmp() should
+return zero. Otherwise, the loop will be end by size > sz_max.
 
-> ARM64 doesn't implement find_first_{zero}_bit in arch code and doesn't
-> enable it in config. It leads to using find_next_bit() which is less
-> efficient:
->
-> 0000000000000000 <find_first_bit>:
->    0:=09aa0003e4 =09mov=09x4, x0
->    4:=09aa0103e0 =09mov=09x0, x1
->    8:=09b4000181 =09cbz=09x1, 38 <find_first_bit+0x38>
->    c:=09f9400083 =09ldr=09x3, [x4]
->   10:=09d2800802 =09mov=09x2, #0x40                  =09// #64
->   14:=0991002084 =09add=09x4, x4, #0x8
->   18:=09b40000c3 =09cbz=09x3, 30 <find_first_bit+0x30>
->   1c:=0914000008 =09b=093c <find_first_bit+0x3c>
->   20:=09f8408483 =09ldr=09x3, [x4], #8
->   24:=0991010045 =09add=09x5, x2, #0x40
->   28:=09b50000c3 =09cbnz=09x3, 40 <find_first_bit+0x40>
->   2c:=09aa0503e2 =09mov=09x2, x5
->   30:=09eb02001f =09cmp=09x0, x2
->   34:=0954ffff68 =09b.hi=0920 <find_first_bit+0x20>  // b.pmore
->   38:=09d65f03c0 =09ret
->   3c:=09d2800002 =09mov=09x2, #0x0                   =09// #0
->   40:=09dac00063 =09rbit=09x3, x3
->   44:=09dac01063 =09clz=09x3, x3
->   48:=098b020062 =09add=09x2, x3, x2
->   4c:=09eb02001f =09cmp=09x0, x2
->   50:=099a829000 =09csel=09x0, x0, x2, ls  // ls =3D plast
->   54:=09d65f03c0 =09ret
->
->   ...
->
-> 0000000000000118 <_find_next_bit.constprop.1>:
->  118:=09eb02007f =09cmp=09x3, x2
->  11c:=09540002e2 =09b.cs=09178 <_find_next_bit.constprop.1+0x60>  // b.hs=
-, b.nlast
->  120:=09d346fc66 =09lsr=09x6, x3, #6
->  124:=09f8667805 =09ldr=09x5, [x0, x6, lsl #3]
->  128:=09b4000061 =09cbz=09x1, 134 <_find_next_bit.constprop.1+0x1c>
->  12c:=09f8667826 =09ldr=09x6, [x1, x6, lsl #3]
->  130:=098a0600a5 =09and=09x5, x5, x6
->  134:=09ca0400a6 =09eor=09x6, x5, x4
->  138:=0992800005 =09mov=09x5, #0xffffffffffffffff    =09// #-1
->  13c:=099ac320a5 =09lsl=09x5, x5, x3
->  140:=09927ae463 =09and=09x3, x3, #0xffffffffffffffc0
->  144:=09ea0600a5 =09ands=09x5, x5, x6
->  148:=0954000120 =09b.eq=0916c <_find_next_bit.constprop.1+0x54>  // b.no=
-ne
->  14c:=091400000e =09b=09184 <_find_next_bit.constprop.1+0x6c>
->  150:=09d346fc66 =09lsr=09x6, x3, #6
->  154:=09f8667805 =09ldr=09x5, [x0, x6, lsl #3]
->  158:=09b4000061 =09cbz=09x1, 164 <_find_next_bit.constprop.1+0x4c>
->  15c:=09f8667826 =09ldr=09x6, [x1, x6, lsl #3]
->  160:=098a0600a5 =09and=09x5, x5, x6
->  164:=09eb05009f =09cmp=09x4, x5
->  168:=09540000c1 =09b.ne=09180 <_find_next_bit.constprop.1+0x68>  // b.an=
-y
->  16c:=0991010063 =09add=09x3, x3, #0x40
->  170:=09eb03005f =09cmp=09x2, x3
->  174:=0954fffee8 =09b.hi=09150 <_find_next_bit.constprop.1+0x38>  // b.pm=
-ore
->  178:=09aa0203e0 =09mov=09x0, x2
->  17c:=09d65f03c0 =09ret
->  180:=09ca050085 =09eor=09x5, x4, x5
->  184:=09dac000a5 =09rbit=09x5, x5
->  188:=09dac010a5 =09clz=09x5, x5
->  18c:=098b0300a3 =09add=09x3, x5, x3
->  190:=09eb03005f =09cmp=09x2, x3
->  194:=099a839042 =09csel=09x2, x2, x3, ls  // ls =3D plast
->  198:=09aa0203e0 =09mov=09x0, x2
->  19c:=09d65f03c0 =09ret
->
->  ...
->
-> 0000000000000238 <find_next_bit>:
->  238:=09a9bf7bfd =09stp=09x29, x30, [sp, #-16]!
->  23c:=09aa0203e3 =09mov=09x3, x2
->  240:=09d2800004 =09mov=09x4, #0x0                   =09// #0
->  244:=09aa0103e2 =09mov=09x2, x1
->  248:=09910003fd =09mov=09x29, sp
->  24c:=09d2800001 =09mov=09x1, #0x0                   =09// #0
->  250:=0997ffffb2 =09bl=09118 <_find_next_bit.constprop.1>
->  254:=09a8c17bfd =09ldp=09x29, x30, [sp], #16
->  258:=09d65f03c0 =09ret
->
-> Enabling this functions would also benefit for_each_{set,clear}_bit().
-> Would it make sense to enable this config for all such architectures by
-> default?
+I have tested detect_memory_region() on Loongson64 3A3000. On our design,
+kseg0 low 256MB maps real memory and kseg0 high 256MB maps IO/PCI. The
+function runs and last stopped on kseg1 where is uncached. In this process
+memcmp also returned non-zero when detected kseg0 high 256MB. Then I did
+another thing. memcpy first and test memcmp then (after &_end). It works
+well on 3A3000 but badly on 3A4000. Maybe because kseg0 high 256MB maps
+IO/PCI and it is dangerous to write like write memory.
 
-I confirm that GENERIC_FIND_FIRST_BIT also produces more optimized and
-fast code on MIPS (32 R2) where there is also no architecture-specific
-bitsearching routines.
-So, if it's okay for other folks, I'd suggest to go for it and enable
-for all similar arches.
+At last, read memory from where is not memory region may always return 0.
+(Or trigger exception.) This function have been used several years and
+seems no error occur. Maybe it's a fallback way.
 
-(otherwise, I'll publish a separate entry for mips-next after 5.12-rc1
- release and mention you in "Suggested-by:")
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+---
+ arch/mips/ath79/setup.c          |  2 +-
+ arch/mips/include/asm/bootinfo.h |  2 --
+ arch/mips/kernel/setup.c         | 21 ---------------------
+ arch/mips/ralink/of.c            |  5 ++---
+ 4 files changed, 3 insertions(+), 27 deletions(-)
 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
->
-> ---
->  arch/arm64/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 1515f6f153a0..2b90ef1f548e 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -106,6 +106,7 @@ config ARM64
->  =09select GENERIC_CPU_AUTOPROBE
->  =09select GENERIC_CPU_VULNERABILITIES
->  =09select GENERIC_EARLY_IOREMAP
-> +=09select GENERIC_FIND_FIRST_BIT
->  =09select GENERIC_IDLE_POLL_SETUP
->  =09select GENERIC_IRQ_IPI
->  =09select GENERIC_IRQ_MULTI_HANDLER
-> --
-> 2.25.1
-
-Thanks,
-Al
+diff --git a/arch/mips/ath79/setup.c b/arch/mips/ath79/setup.c
+index 891f495..d2a41fb 100644
+--- a/arch/mips/ath79/setup.c
++++ b/arch/mips/ath79/setup.c
+@@ -232,7 +232,7 @@ void __init plat_mem_setup(void)
+ 	ath79_detect_sys_type();
+ 	ath79_ddr_ctrl_init();
+ 
+-	detect_memory_region(0, ATH79_MEM_SIZE_MIN, ATH79_MEM_SIZE_MAX);
++	memblock_add(0, ATH79_MEM_SIZE_MAX);
+ 
+ 	_machine_restart = ath79_restart;
+ 	_machine_halt = ath79_halt;
+diff --git a/arch/mips/include/asm/bootinfo.h b/arch/mips/include/asm/bootinfo.h
+index 5be10ece..0d5637e 100644
+--- a/arch/mips/include/asm/bootinfo.h
++++ b/arch/mips/include/asm/bootinfo.h
+@@ -90,8 +90,6 @@ const char *get_system_type(void);
+ 
+ extern unsigned long mips_machtype;
+ 
+-extern void detect_memory_region(phys_addr_t start, phys_addr_t sz_min,  phys_addr_t sz_max);
+-
+ extern void prom_init(void);
+ extern void prom_free_prom_memory(void);
+ extern void prom_cleanup(void);
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 279be01..fbbc51e 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -86,32 +86,11 @@ static struct resource bss_resource = { .name = "Kernel bss", };
+ unsigned long __kaslr_offset __ro_after_init;
+ EXPORT_SYMBOL(__kaslr_offset);
+ 
+-static void *detect_magic __initdata = detect_memory_region;
+-
+ #ifdef CONFIG_MIPS_AUTO_PFN_OFFSET
+ unsigned long ARCH_PFN_OFFSET;
+ EXPORT_SYMBOL(ARCH_PFN_OFFSET);
+ #endif
+ 
+-void __init detect_memory_region(phys_addr_t start, phys_addr_t sz_min, phys_addr_t sz_max)
+-{
+-	void *dm = &detect_magic;
+-	phys_addr_t size;
+-
+-	for (size = sz_min; size < sz_max; size <<= 1) {
+-		if (!memcmp(dm, dm + size, sizeof(detect_magic)))
+-			break;
+-	}
+-
+-	pr_debug("Memory: %lluMB of RAM detected at 0x%llx (min: %lluMB, max: %lluMB)\n",
+-		((unsigned long long) size) / SZ_1M,
+-		(unsigned long long) start,
+-		((unsigned long long) sz_min) / SZ_1M,
+-		((unsigned long long) sz_max) / SZ_1M);
+-
+-	memblock_add(start, size);
+-}
+-
+ /*
+  * Manage initrd
+  */
+diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
+index 8286c35..2de0075 100644
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -81,9 +81,8 @@ void __init plat_mem_setup(void)
+ 	else if (soc_info.mem_size)
+ 		memblock_add(soc_info.mem_base, soc_info.mem_size * SZ_1M);
+ 	else
+-		detect_memory_region(soc_info.mem_base,
+-				     soc_info.mem_size_min * SZ_1M,
+-				     soc_info.mem_size_max * SZ_1M);
++		memblock_add(soc_info.mem_base,
++			     soc_info.mem_size_max * SZ_1M);
+ }
+ 
+ static int __init plat_of_setup(void)
+-- 
+2.1.0
 
