@@ -2,65 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B29B0325128
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Feb 2021 15:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6CC32534A
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Feb 2021 17:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbhBYOC7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Feb 2021 09:02:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44572 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229845AbhBYOCx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 25 Feb 2021 09:02:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BB72664F11;
-        Thu, 25 Feb 2021 14:02:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614261732;
-        bh=218syAtxT4zx3HGAu9Wl85gzsByTob2ufpdJw7lYcrg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ec68jktne3YuJIrm7fi+NhV7SBpTe13byIL7GY/2iuClUrX7kSUgcEYz34SdnnTCP
-         7Y7nF04RLJloZp1nmg+uITKuUHzw4yDw37IDQuVDKO1PTr2CZjVVIZOhd0HA4CRCTW
-         3sHtd+W6UC8pN8EfCctI7Y3Py3QKGsADTqvXrwGOI9FhTFNtXWzpILIO8Ey2Z3giWD
-         mN/kGEOs8TAea0rUxGibeo+gJdjwSWJYvU9lfjaLtH3epvBr3hGf+xrZdAZiWi69m9
-         hReIb1+wMoi+EcrbYSlHJ7qHSKn1IJEYZPtSKaKUswk+5OVsxs8u6iJaUnyw1/Omn3
-         Kz4FV4lXDGl3Q==
-Date:   Thu, 25 Feb 2021 14:02:06 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [RESEND PATCH 1/2] ARM64: enable GENERIC_FIND_FIRST_BIT
-Message-ID: <20210225140205.GA13297@willie-the-truck>
-References: <20210225135700.1381396-1-yury.norov@gmail.com>
- <20210225135700.1381396-2-yury.norov@gmail.com>
+        id S231721AbhBYQNU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Feb 2021 11:13:20 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:49483 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233755AbhBYQKl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Feb 2021 11:10:41 -0500
+Received: from buildfff.adridolf.com ([178.26.242.49]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MeTwY-1lnH1E2Hki-00aReA; Thu, 25 Feb 2021 17:07:56 +0100
+From:   Adrian Schmutzler <freifunk@adrianschmutzler.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     Roman Kuzmitskii <damex.pp@icloud.com>
+Subject: [PATCH] mips: octeon: Add Ubiquiti E300 board
+Date:   Thu, 25 Feb 2021 17:07:13 +0100
+Message-Id: <20210225160713.41828-1-freifunk@adrianschmutzler.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210225135700.1381396-2-yury.norov@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:Zn6lEm2Ldprtt5SNH/eTw9XU9oBZ6uEIJnSHIhaQZqxpkBhLjUc
+ 26hRAiyJ8dhXXJb9+QosPsL9vpdpzGaqQYQ/DxTM51M3HZwkJJN9HFn4fDdr39BWA/mWZ60
+ 46F/BfaVseR3tlXjnNxPwg4iBvm28lXlj0acyltfTjc41IWq9aZPtY8SktqcUDl0hbsJvUt
+ qZLmAMRZYsLO1kVXcIRzg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9lSXKT3wJCw=:lbm5v6sVCQQuC5R0YIAcYo
+ 0IAUxaPpuZ7boSpbxy/af+scVbvUdAmemUuuJMsftFxSK/M+ahj0gJjSlNtCOM+fQclv4MmPD
+ VH41GamPRRb0qSYNE8aJ1fYPuj0s4oA3uUcZkG59VgFhnhJEAmbqnuiTvaOr/1qYt0zg8hGxT
+ fauuvIFFND1IFEPsZXohFwH6iQjMqG6Gjc4rFhK00FXKgV2VKJePTWCTFeTCp4WsAjUFJtNbg
+ 69OtsdYruGytSPfwLVYdjlPP+CfXYCRf4cRgzUnSQzgD8MfzICN/3F87Q7qbE/Ft9oitVWb/w
+ q4ycPpHJCiKICAJk1A2X5SLIUkNRIFKAmluYEL/rWLcM0bXTKkK9ZIUn0YvcpNcg5ksJ5HVg9
+ Tu4w+vBl1oE6yaBr90WrJ1VD272mzj0D/KsCX2NQMHWWMXUg0v5+h8r+K4dWaDWnQ738idRfA
+ s0o0wq3Tbg==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Feb 25, 2021 at 05:56:59AM -0800, Yury Norov wrote:
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 31bd885b79eb..5596eab04092 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -108,6 +108,7 @@ config ARM64
->  	select GENERIC_CPU_AUTOPROBE
->  	select GENERIC_CPU_VULNERABILITIES
->  	select GENERIC_EARLY_IOREMAP
-> +	select GENERIC_FIND_FIRST_BIT
->  	select GENERIC_IDLE_POLL_SETUP
->  	select GENERIC_IRQ_IPI
->  	select GENERIC_IRQ_MULTI_HANDLER
+This board is used in Ubiquiti EdgeRouter 4.
 
-Acked-by: Will Deacon <will@kernel.org>
+Signed-off-by: Adrian Schmutzler <freifunk@adrianschmutzler.de>
+---
+ arch/mips/include/asm/octeon/cvmx-bootinfo.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Catalin can pick this up later in the cycle.
+diff --git a/arch/mips/include/asm/octeon/cvmx-bootinfo.h b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
+index c114a7ba0bad..0e6bf220db61 100644
+--- a/arch/mips/include/asm/octeon/cvmx-bootinfo.h
++++ b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
+@@ -298,6 +298,7 @@ enum cvmx_board_types_enum {
+ 	CVMX_BOARD_TYPE_UBNT_E200 = 20003,
+ 	CVMX_BOARD_TYPE_UBNT_E220 = 20005,
+ 	CVMX_BOARD_TYPE_CUST_DSR1000N = 20006,
++	CVMX_BOARD_TYPE_UBNT_E300 = 20300,
+ 	CVMX_BOARD_TYPE_KONTRON_S1901 = 21901,
+ 	CVMX_BOARD_TYPE_CUST_PRIVATE_MAX = 30000,
+ 
+@@ -401,6 +402,7 @@ static inline const char *cvmx_board_type_to_string(enum
+ 		ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_UBNT_E200)
+ 		ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_UBNT_E220)
+ 		ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_DSR1000N)
++		ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_UBNT_E300)
+ 		ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_KONTRON_S1901)
+ 		ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_PRIVATE_MAX)
+ 	}
+-- 
+2.20.1
 
-Will
