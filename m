@@ -2,157 +2,279 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0346324941
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Feb 2021 04:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC16324C2B
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Feb 2021 09:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbhBYDKy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Feb 2021 22:10:54 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:51353 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236990AbhBYDKv (ORCPT
+        id S235313AbhBYIm5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Feb 2021 03:42:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:24181 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235965AbhBYIm4 (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Feb 2021 22:10:51 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 21E49871;
-        Wed, 24 Feb 2021 22:10:04 -0500 (EST)
-Received: from imap1 ([10.202.2.51])
-  by compute6.internal (MEProxy); Wed, 24 Feb 2021 22:10:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type:content-transfer-encoding; s=fm1; bh=b9MLn
-        QeWZM3iFL8vshIAM7UnQzdMiPWckfdA7QRQCnI=; b=Blm+WmHH6+L5a2V1V32fT
-        w2BSgdxoj3ShgcVNocMPDTgqqwJDOg/jtSE0nNk4FEoqMx+7xSHwMAPEKMJLxneg
-        S8W/5ffdA8+I3RfnxcnHZR0bNFQV8fkpxrwwYxx651wEi2TNqSThUe/sYWRPlyMP
-        erUdsP2hIzl7RB9dzbyEP3vFTNhBkEZO06JR4iqaqqap/zn+mYKvAFxAt9Dgza0d
-        4EY0LsOnufEp5SGJSSl5JIg2kTPbCpf/tMszMy+3AOTBBKrsP0HhpG7CG7KbDQaA
-        nITy6TX7ZJOlPCxopgIbogTHC43M1rT5YRx65kVoomEM0p/cgT1c2ztAVlVMZfJE
-        Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=b9MLnQeWZM3iFL8vshIAM7UnQzdMiPWckfdA7QRQC
-        nI=; b=DAQSGR4Ej3Hi+oDOVhNFOoBcDhj5Ocf1WbNAk0d2WUQN1iUF0IKMao9TV
-        pObbKiNQIoYJCYenOMFgIIPxBHfeaAkdE0s7ep0I01DmjquMexSAHTUejT6nNfWc
-        0CY3ncJJo6I6nlOqmj50tYvGQyUI+PSV2cVZR/MbM/ZnVOTG0E6wtBa6buxXClE/
-        x2HZXli1Br0fKU0RNfsDaLkP2gOG3oNrlT+yQfuoU9TL6jpzGGDodqmf0JTfxCXh
-        lroeHd/JzDTbJn+e8+1rBVAtvn7Shs2nvDMvn72bdrD3jP5RoVZqdrnQzKpHKUqr
-        iecmykf8pvdsL04wXc/sBxh6fMKmA==
-X-ME-Sender: <xms:ChU3YDMgBFnV00Gpc9BVzohG4o-7hA7lJ7WyOO9oi-KQKI7SUryGZQ>
-    <xme:ChU3YN-jqczTz9hM5Uyprd_RK4itxsJKYmdUbK6E6AqH6RftLelalKcsQscXKRf3f
-    HFJdnHD7S6mnr-FrWA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrkeekgdehhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdflihgr
-    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeefteegkeevfeethffgudehgedvueduvdeifedvvdelhfef
-    heekteefueektdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:ChU3YCR4afhTSPmkGEbV2EsUq3_rU320U8jHXNgQXXjHGepB1hHERw>
-    <xmx:ChU3YHvr68RJlHxyX6tlPwvwrOsf4YMJeUzkuk4vzDv8QlkckFsjaA>
-    <xmx:ChU3YLeJq8kzwGgmFZ-Jn9uyi5VBl0L9uSs3wnp5FbfmLAwn8Q6ZNg>
-    <xmx:CxU3YC6urz0kPM5MNrQJwqqwPwAglUN_vTz5CyjvyAHlhSN3TA0oXQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7866C130005D; Wed, 24 Feb 2021 22:10:02 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-141-gf094924a34-fm-20210210.001-gf094924a
-Mime-Version: 1.0
-Message-Id: <9f1b8ad3-77cc-468c-8f95-28af52616756@www.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2102250344270.1900@angie.orcam.me.uk>
-References: <3ddc0595-c443-868e-c0a4-08ae8934f116@flygoat.com>
- <CAFyWVab4Z4BH5RxZWXJnxerjAYDNnCndMvksCHsKkFUU1q1w9g@mail.gmail.com>
- <db8c2df9-9487-8bfd-e205-3f88854dfa12@flygoat.com>
- <alpine.DEB.2.21.2102250344270.1900@angie.orcam.me.uk>
-Date:   Thu, 25 Feb 2021 11:09:39 +0800
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     "Jim Wilson" <jimw@sifive.com>,
-        "GCC Development" <gcc@gcc.gnu.org>, syq@debian.org,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Matthew Fortune" <mfortune@gmail.com>,
-        Binutils <binutils@sourceware.org>
-Subject: Re: HELP: MIPS PC Relative Addressing
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Thu, 25 Feb 2021 03:42:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1614242489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fqVSsomUJyTIz0gYNIicWiu4aghYekNv2Fcx+hAQcqI=;
+        b=T/FSs6fsgWB7zg1Z1FqW7cO1Xgn003odA4qxCdaLaanCk0z7B/l/Nw7S4zSayOlhxvdrFD
+        XZ1/liRqA4z56Phi8EVIKohBU78dSNu/mhbsMg9pMRWuw8kl6QvGgViCf2ssYpCdGyy1Ey
+        7gdnSlkH6ROavcWJs9MSjPIb5rW8JAQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-598-PdpzTNHiPv2rFA2I1NLbbQ-1; Thu, 25 Feb 2021 03:41:24 -0500
+X-MC-Unique: PdpzTNHiPv2rFA2I1NLbbQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 007DA100CCC3;
+        Thu, 25 Feb 2021 08:41:19 +0000 (UTC)
+Received: from [10.36.114.58] (ovpn-114-58.ams2.redhat.com [10.36.114.58])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F11318A9E;
+        Thu, 25 Feb 2021 08:41:07 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
+References: <20210217154844.12392-1-david@redhat.com>
+ <4bb9071b-e6c1-a732-0ed6-46aff0eaa70c@redhat.com>
+Organization: Red Hat GmbH
+Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
+ prefault/prealloc memory
+Message-ID: <e78dfe59-3552-91f1-e234-5f37d2600eb6@redhat.com>
+Date:   Thu, 25 Feb 2021 09:41:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
+MIME-Version: 1.0
+In-Reply-To: <4bb9071b-e6c1-a732-0ed6-46aff0eaa70c@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 24.02.21 15:25, David Hildenbrand wrote:
+>> +		tmp_end = min_t(unsigned long, end, vma->vm_end);
+>> +		pages = populate_vma_page_range(vma, start, tmp_end, &locked);
+>> +		if (!locked) {
+>> +			mmap_read_lock(mm);
+>> +			*prev = NULL;
+>> +			vma = NULL;
+> 
+> ^ locked = 1; is missing here.
+> 
+> 
+> --- Simple benchmark ---
+> 
+> I implemented MADV_POPULATE_READ and MADV_POPULATE_WRITE and performed
+> some simple measurements to simulate memory preallocation with empty files:
+> 
+> 1) mmap a 2 MiB/128 MiB/4 GiB region (anonymous, memfd, memfd hugetlb)
+> 2) Discard all memory using fallocate/madvise
+> 3) Prefault memory using different approaches and measure the time this
+>      takes.
+> 
+> I repeat 2)+3) 10 times and compute the average. I only use a single thread.
+> 
+> Read: Read from each page a byte.
+> Write: Write one byte of each page (0).
+> Read/Write: Read one byte and write the value back for each page
+> POPULATE: MADV_POPULATE (this patch)
+> POPULATE_READ: MADV_POPULATE_READ
+> POPULATE_WRITE: MADV_POPULATE_WRITE
+> 
+> --- Benchmark results ---
+> 
+> Measuring 10 iterations each:
+> ==================================================
+> 2 MiB MAP_PRIVATE:
+> **************************************************
+> Anonymous      : Read           :     0.159 ms
+> Anonymous      : Write          :     0.244 ms
+> Anonymous      : Read+Write     :     0.383 ms
+> Anonymous      : POPULATE       :     0.167 ms
+> Anonymous      : POPULATE_READ  :     0.064 ms
+> Anonymous      : POPULATE_WRITE :     0.165 ms
+> Memfd 4 KiB    : Read           :     0.401 ms
+> Memfd 4 KiB    : Write          :     0.056 ms
+> Memfd 4 KiB    : Read+Write     :     0.075 ms
+> Memfd 4 KiB    : POPULATE       :     0.057 ms
+> Memfd 4 KiB    : POPULATE_READ  :     0.337 ms
+> Memfd 4 KiB    : POPULATE_WRITE :     0.056 ms
+> Memfd 2 MiB    : Read           :     0.041 ms
+> Memfd 2 MiB    : Write          :     0.030 ms
+> Memfd 2 MiB    : Read+Write     :     0.031 ms
+> Memfd 2 MiB    : POPULATE       :     0.031 ms
+> Memfd 2 MiB    : POPULATE_READ  :     0.031 ms
+> Memfd 2 MiB    : POPULATE_WRITE :     0.031 ms
+> **************************************************
+> 2 MiB MAP_SHARED:
+> **************************************************
+> Anonymous      : Read           :     0.071 ms
+> Anonymous      : Write          :     0.181 ms
+> Anonymous      : Read+Write     :     0.081 ms
+> Anonymous      : POPULATE       :     0.069 ms
+> Anonymous      : POPULATE_READ  :     0.069 ms
+> Anonymous      : POPULATE_WRITE :     0.115 ms
+> Memfd 4 KiB    : Read           :     0.401 ms
+> Memfd 4 KiB    : Write          :     0.351 ms
+> Memfd 4 KiB    : Read+Write     :     0.414 ms
+> Memfd 4 KiB    : POPULATE       :     0.338 ms
+> Memfd 4 KiB    : POPULATE_READ  :     0.339 ms
+> Memfd 4 KiB    : POPULATE_WRITE :     0.279 ms
+> Memfd 2 MiB    : Read           :     0.031 ms
+> Memfd 2 MiB    : Write          :     0.031 ms
+> Memfd 2 MiB    : Read+Write     :     0.031 ms
+> Memfd 2 MiB    : POPULATE       :     0.031 ms
+> Memfd 2 MiB    : POPULATE_READ  :     0.031 ms
+> Memfd 2 MiB    : POPULATE_WRITE :     0.031 ms
+> **************************************************
+> 128 MiB MAP_PRIVATE:
+> **************************************************
+> Anonymous      : Read           :     7.517 ms
+> Anonymous      : Write          :    22.503 ms
+> Anonymous      : Read+Write     :    33.186 ms
+> Anonymous      : POPULATE       :    18.381 ms
+> Anonymous      : POPULATE_READ  :     3.952 ms
+> Anonymous      : POPULATE_WRITE :    18.354 ms
+> Memfd 4 KiB    : Read           :    34.300 ms
+> Memfd 4 KiB    : Write          :     4.659 ms
+> Memfd 4 KiB    : Read+Write     :     6.531 ms
+> Memfd 4 KiB    : POPULATE       :     5.219 ms
+> Memfd 4 KiB    : POPULATE_READ  :    29.744 ms
+> Memfd 4 KiB    : POPULATE_WRITE :     5.244 ms
+> Memfd 2 MiB    : Read           :    10.228 ms
+> Memfd 2 MiB    : Write          :    10.130 ms
+> Memfd 2 MiB    : Read+Write     :    10.190 ms
+> Memfd 2 MiB    : POPULATE       :    10.007 ms
+> Memfd 2 MiB    : POPULATE_READ  :    10.008 ms
+> Memfd 2 MiB    : POPULATE_WRITE :    10.010 ms
+> **************************************************
+> 128 MiB MAP_SHARED:
+> **************************************************
+> Anonymous      : Read           :     7.295 ms
+> Anonymous      : Write          :    15.234 ms
+> Anonymous      : Read+Write     :     7.460 ms
+> Anonymous      : POPULATE       :     5.196 ms
+> Anonymous      : POPULATE_READ  :     5.190 ms
+> Anonymous      : POPULATE_WRITE :     8.245 ms
+> Memfd 4 KiB    : Read           :    34.412 ms
+> Memfd 4 KiB    : Write          :    30.586 ms
+> Memfd 4 KiB    : Read+Write     :    35.157 ms
+> Memfd 4 KiB    : POPULATE       :    29.643 ms
+> Memfd 4 KiB    : POPULATE_READ  :    29.691 ms
+> Memfd 4 KiB    : POPULATE_WRITE :    25.790 ms
+> Memfd 2 MiB    : Read           :    10.210 ms
+> Memfd 2 MiB    : Write          :    10.074 ms
+> Memfd 2 MiB    : Read+Write     :    10.068 ms
+> Memfd 2 MiB    : POPULATE       :    10.034 ms
+> Memfd 2 MiB    : POPULATE_READ  :    10.037 ms
+> Memfd 2 MiB    : POPULATE_WRITE :    10.031 ms
+> **************************************************
+> 4096 MiB MAP_PRIVATE:
+> **************************************************
+> Anonymous      : Read           :   240.947 ms
+> Anonymous      : Write          :   712.941 ms
+> Anonymous      : Read+Write     :  1027.636 ms
+> Anonymous      : POPULATE       :   571.816 ms
+> Anonymous      : POPULATE_READ  :   120.215 ms
+> Anonymous      : POPULATE_WRITE :   570.750 ms
+> Memfd 4 KiB    : Read           :  1054.739 ms
+> Memfd 4 KiB    : Write          :   145.534 ms
+> Memfd 4 KiB    : Read+Write     :   202.275 ms
+> Memfd 4 KiB    : POPULATE       :   162.597 ms
+> Memfd 4 KiB    : POPULATE_READ  :   914.747 ms
+> Memfd 4 KiB    : POPULATE_WRITE :   161.281 ms
+> Memfd 2 MiB    : Read           :   351.818 ms
+> Memfd 2 MiB    : Write          :   352.357 ms
+> Memfd 2 MiB    : Read+Write     :   352.762 ms
+> Memfd 2 MiB    : POPULATE       :   351.471 ms
+> Memfd 2 MiB    : POPULATE_READ  :   351.553 ms
+> Memfd 2 MiB    : POPULATE_WRITE :   351.931 ms
+> **************************************************
+> 4096 MiB MAP_SHARED:
+> **************************************************
+> Anonymous      : Read           :   229.338 ms
+> Anonymous      : Write          :   478.964 ms
+> Anonymous      : Read+Write     :   234.546 ms
+> Anonymous      : POPULATE       :   161.635 ms
+> Anonymous      : POPULATE_READ  :   160.943 ms
+> Anonymous      : POPULATE_WRITE :   252.686 ms
+> Memfd 4 KiB    : Read           :  1052.828 ms
+> Memfd 4 KiB    : Write          :   929.237 ms
+> Memfd 4 KiB    : Read+Write     :  1074.494 ms
+> Memfd 4 KiB    : POPULATE       :   915.663 ms
+> Memfd 4 KiB    : POPULATE_READ  :   915.001 ms
+> Memfd 4 KiB    : POPULATE_WRITE :   787.388 ms
+> Memfd 2 MiB    : Read           :   353.580 ms
+> Memfd 2 MiB    : Write          :   353.197 ms
+> Memfd 2 MiB    : Read+Write     :   353.172 ms
+> Memfd 2 MiB    : POPULATE       :   353.686 ms
+> Memfd 2 MiB    : POPULATE_READ  :   353.465 ms
+> Memfd 2 MiB    : POPULATE_WRITE :   352.776 ms
+> **************************************************
+> 
+> 
+> --- Discussion ---
+> 
+> 1) With huge pages, the performance benefit is negligible with the sizes
+> I tried, because there are little actual page faults. Most time is spent
+> zeroing huge pages I guess. It will take quite a lot of memory to pay off.
+> 
+> 2) In all 4k cases, the POPULATE_READ/POPULATE_WRITE variants are faster
+> than manually reading or writing from user space.
+> 
+> 
+> What sticks out a bit is:
+> 
+> 3) For MAP_SHARED on anonymous memory, it is fastest to first read and
+> then write memory. It's slightly faster than POPULATE_WRITE and quite a
+> lot faster than a simple write - what?!. It's even faster than
+> POPULATE_WRITE - what?! I assume with the read access we prepare a fresh
+> zero page and with the write access we only have to change PTE access
+> rights. But why is this faster than writing directly?
+
+Okay, MADV_DONTNEED does not seem to really work on MAP_SHARED of 
+anonymous memory. If I use a fresh mmap for each and every iteration the 
+numbers make more sense:
+
+**************************************************
+4096 MiB MAP_SHARED:
+**************************************************
+Anonymous      : Read           :  1054.154 ms
+Anonymous      : Write          :   924.572 ms
+Anonymous      : Read+Write     :  1075.215 ms
+Anonymous      : POPULATE       :   911.386 ms
+Anonymous      : POPULATE_READ  :   909.392 ms
+Anonymous      : POPULATE_WRITE :   793.143 ms
 
 
-On Thu, Feb 25, 2021, at 10:57 AM, Maciej W. Rozycki wrote:
-> On Thu, 25 Feb 2021, Jiaxun Yang wrote:
->=20
-> > > There is a far easier way to do this, which is to just emit an ass=
-embler
-> > > macro, and let the assembler generate the labels and relocs.=C2=A0=
- This is what
-> > > the RISC-V GCC port does by default.=C2=A0 This prevents some opti=
-mizations like
-> > > scheduling the two instructions, but enables some other optimizati=
-ons like
-> > > loop unrolling.=C2=A0 So it is a tossup.=C2=A0 Sometimes we get be=
-tter code with the
-> > > assembler macro, and sometimes we get better code by emitting the =
-auipc and
-> > > addi separately.
-> >=20
-> > Thanks all,
-> >=20
-> > I'll take this approach first, add "lla, dlla" pseudo-instructions t=
-o
-> > assembler and seeking optimization
-> > in future.
->=20
->  The DLA and LA macros are supposed to do that already, no need to inv=
-ent=20
-> new names.
+-- 
+Thanks,
 
-Hmm, how could we tell if the symbol is local?
-Global symbols still needs to be load from GOT.
-I saw RISC-V dealt that by =E2=80=9Clla=E2=80=9D pesudo-op which indicat=
-e the symbol is local.
+David / dhildenb
 
->=20
->  They may not have been implemented for R6, but I'm not sure.  There w=
-as=20
-> some resistance against macros at one point as the new generation came=
- to=20
-> work on the MIPS assembler and consequently inconsistencies resulted i=
-n=20
-> the language that may not have b"en removed to date.
->=20
->  In any case you need to use `-mno-explicit-relocs' with GCC then so a=
-s=20
-> not to break the compiler's semantics or assumptions.
->=20
-> > Btw I found we don't have any document for MIPS pseudo-instructions.=
- RISC-V
-> > put them in ISA manual
-> > but it is not the case for MIPS. Is it possible to have one in binut=
-ils?
->=20
->  There are MIPS assembly language books available; I'm fairly sure Dom=
-inic=20
-> Sweetman's "See MIPS Run" has a chapter (I don't have the book at hand=
-). =20
-> I don't think GNU binutils documentation is supposed to describe the=20=
-
-> assembly dialects supported, except maybe for GNU extensions (pseudo-o=
-ps).
-
-Yeah I saw See MIPS Run, but it's not a mandatory specification.
-Without a specification we may have different implementation across tool=
-chains and trouble users.
-
-Thanks.
-
-- Jiaxun
-
->=20
->   Maciej
->
-
---=20
-- Jiaxun
