@@ -2,33 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3259326DF0
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Feb 2021 17:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD25326EA0
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Feb 2021 19:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbhB0QqN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 27 Feb 2021 11:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
+        id S230063AbhB0Sen (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 Feb 2021 13:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbhB0QqJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Feb 2021 11:46:09 -0500
+        with ESMTP id S229999AbhB0Sej (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Feb 2021 13:34:39 -0500
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B03E2C06174A
-        for <linux-mips@vger.kernel.org>; Sat, 27 Feb 2021 08:45:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01E50C06174A;
+        Sat, 27 Feb 2021 10:33:58 -0800 (PST)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id B813E92009C; Sat, 27 Feb 2021 17:45:24 +0100 (CET)
+        id BB9BE92009C; Sat, 27 Feb 2021 19:33:57 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B61E292009B;
-        Sat, 27 Feb 2021 17:45:24 +0100 (CET)
-Date:   Sat, 27 Feb 2021 17:45:24 +0100 (CET)
+        by angie.orcam.me.uk (Postfix) with ESMTP id AE2C292009B;
+        Sat, 27 Feb 2021 19:33:57 +0100 (CET)
+Date:   Sat, 27 Feb 2021 19:33:57 +0100 (CET)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        binutils@sourceware.org, gcc@gcc.gnu.org, syq@debian.org,
-        Matthew Fortune <mfortune@gmail.com>
-Subject: Re: HELP: MIPS PC Relative Addressing
-In-Reply-To: <b5fcec4c-799f-fb68-6db8-a330b7c84099@flygoat.com>
-Message-ID: <alpine.DEB.2.21.2102271503050.44210@angie.orcam.me.uk>
-References: <3ddc0595-c443-868e-c0a4-08ae8934f116@flygoat.com> <alpine.DEB.2.21.2102241813420.1900@angie.orcam.me.uk> <b5fcec4c-799f-fb68-6db8-a330b7c84099@flygoat.com>
+To:     Christoph Hellwig <hch@lst.de>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Subject: Re: [PATCH 5/6] driver core: lift dma_default_coherent into common
+ code
+In-Reply-To: <alpine.DEB.2.21.2102221140180.1900@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2102271927430.44210@angie.orcam.me.uk>
+References: <20210208145024.3320420-1-hch@lst.de> <20210208145024.3320420-6-hch@lst.de> <alpine.DEB.2.21.2102081654060.35623@angie.orcam.me.uk> <20210208161043.GA14083@lst.de> <alpine.DEB.2.21.2102091213070.35623@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2102151342050.1521@angie.orcam.me.uk> <alpine.DEB.2.21.2102210407090.2021@angie.orcam.me.uk> <20210222075937.GA21946@lst.de> <alpine.DEB.2.21.2102221140180.1900@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -36,43 +39,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 25 Feb 2021, Jiaxun Yang wrote:
+On Mon, 22 Feb 2021, Maciej W. Rozycki wrote:
 
-> >   You may want to use composed relocations to refer to .LA1 (R_MIPS_32) and
-> > .LA0 (R_MIPS_SUB).  There may or may not be linker updates needed; unlike
-> > the RISC-V one the MIPS BFD backend already supports composed relocations
-> > with the usual ELF gABI semantics.  It would be good to switch to RELA at
-> > this point universally too; none of new stuff will work with old linkers
-> > anyway.
+> > > I haven't booted Linux on my Malta for a while now, but it turns out to 
+> > > work just fine, and your patch set does not regress it booting multi-user 
+> > > NFS-rooted over FDDI.
+> > > 
+> > >  I note however that the system does not reboot properly:
+> > > 
+> > > sd 0:0:0:0: [sda] Synchronizing SCSI cache
+> > > reboot: Restarting system
+> > > Reboot failed -- System halted
+> > > 
+> > > which is a regression, and also the MMIO-mapped discrete CBUS UART (ttyS2) 
+> > > does not sign in anymore either:
+> > 
+> > Do you mean a regression with this series, or just compared to when you
+> > last tested?
 > 
-> Thanks for your hint;-)
-> 
-> I'm unsure about how should we express composed relocations in assembly :-/
+>  When last tested.  Years ago, so nothing for you to be concerned.  I'll 
+> look into it sometime unless someone beats me to.  Don't hold your breath 
+> though.  Sorry to be unclear.
 
- Just like we already do; R_MIPS_SUB could be easily produced directly 
-from the `-' operator.
+ For the record, Malta reboot requires:
 
- I note too that $pc is effectively used twice in the calculation, 
-cancelling itself, so I think we can do better, though it seems to me the 
-original semantics of %pcrel_hi/%pcrel_lo pseudo-ops wasn't thought well 
-(I guess it was just blindly copied from %hi/%lo by adding PC-relative 
-interpretation with no further thinking as to whether it is usable in 
-reality).  It seems to me that we could overload the semantics of these 
-pseudo-ops in a compatible manner though.
+CONFIG_POWER_RESET=y
+CONFIG_POWER_RESET_SYSCON=y
 
- Also are you concerned about linker relaxation you're possibly working on 
-here?  I'm asking because a calculation like (.LA1 - .LA0) works out as an 
-assembly constant normally, so it's not a concern really.  And as I recall 
-existing MIPS linker relaxation does not rely on label symbols anyway (and 
-is probably not defined for plain R6 anyway as I reckon there is nothing 
-to relax at the link stage for that ISA).
+to work these days, which wasn't picked automatically on an older config 
+regeneration for me.  Sorry for the noise then, although ISTM that these 
+would better be picked up automatically by reverse dependencies.  What's 
+the point of omitting reboot support?
 
- Where it might start to matter is the microMIPS ISA however; offhand I 
-don't remember what exactly it looks like at R6 though.
-
-> MIPS N32/N64 ABI is already using RELA, do you mean switch to RELA for o32
-> as well?
-
- Yes, with "universally" I meant: "across all the ABIs".
+ Still looking into the CBUS UART issue.
 
   Maciej
