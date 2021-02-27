@@ -2,71 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A90A3326D24
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Feb 2021 14:41:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2203326D72
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Feb 2021 15:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbhB0Nlh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 27 Feb 2021 08:41:37 -0500
-Received: from angie.orcam.me.uk ([157.25.102.26]:36996 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbhB0Nlg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Feb 2021 08:41:36 -0500
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 1379E92009C; Sat, 27 Feb 2021 14:40:55 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 06EF692009B;
-        Sat, 27 Feb 2021 14:40:55 +0100 (CET)
-Date:   Sat, 27 Feb 2021 14:40:54 +0100 (CET)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        George Cherian <gcherian@marvell.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH] MIPS: select CPU_MIPS64 for remaining MIPS64 CPUs
-In-Reply-To: <20210227122605.2680138-1-Jason@zx2c4.com>
-Message-ID: <alpine.DEB.2.21.2102271424100.44210@angie.orcam.me.uk>
-References: <20210227122605.2680138-1-Jason@zx2c4.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S230010AbhB0Ozr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 Feb 2021 09:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229999AbhB0Ozq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Feb 2021 09:55:46 -0500
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3303CC06174A
+        for <linux-mips@vger.kernel.org>; Sat, 27 Feb 2021 06:55:06 -0800 (PST)
+Received: by mail-ot1-x343.google.com with SMTP id e45so11984253ote.9
+        for <linux-mips@vger.kernel.org>; Sat, 27 Feb 2021 06:55:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=bFEY7+rk+rYGeSyfJ5YVszzYI0ABCt2L5kpIMgQv62c=;
+        b=NuvT1QN+fK9R/OdyQqvS3j5kzYL3psmcBPHtuzorvfdtw3/rQ6C+NKF4cDqDkIp6+N
+         ZuQs+13rvRee/kcn89S9GXufB2ANO3r3zEpsO9AGqTa4LJdEIm1IT9GaBUQyCdhOkcLD
+         ukjD251aaCh3FTSwitbEJ0Ox7ceomEYyGzxNXhtB3w2ShrfQ19o+m4M+po82CaEUdyos
+         YaALM/hCNoEwT4kp9T889Eu7qNffs8nau9EAqjmVFISSCeQccY+lW6cOW1/UhieNrNVe
+         9gLtVEeSW2l/bsAWPO685vJoRiM29e+Aj9nvL7qKRMNR84o/aTqOKs5/Pv2faGjDeBwD
+         ATmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=bFEY7+rk+rYGeSyfJ5YVszzYI0ABCt2L5kpIMgQv62c=;
+        b=uihu57hLRvc3MvcabnL3AfLLpF9ywK8rH9IcGd1vZl8bJtmcqagWhDW4FxuSyar//r
+         P+5cOX7lSVD6Ccur2HAqzxI39uweky+m6Bl0aLEkwZwrZ6Mk67zI/lU3E2MMzvZ3jnx+
+         P9pjkq6csUAZ+XfY2N7YHn0xu5PaFKAsT+gxyLRcTKMKOWXaIsvJfsjlyB7uspFJPdhp
+         2M0GTG/2YONSt0Hg2RC/mLbHFjX6u8SNKwWK3Lw97Pz/U4pEpp2kxFEqbc5XofVV6PAf
+         45sG/VSVnWNEj41iSl6VeYL1/abgQlJHlXNww+4PhzlNX6cwYkMVb5JofYLbK43EVjSS
+         PWyw==
+X-Gm-Message-State: AOAM532oZVfsPnkIFR3QtoueOHSz3jhPLgA7dAzACrSshG0rALlmzIEx
+        LwOW8UnOBHDu13kb9OQ4Nbcpzv9Gjxzk7OGd+z4=
+X-Google-Smtp-Source: ABdhPJx/JYOgXp+3h3ZFj0iBlQvad+v8BmRuaN3GQUSQKo45sy6H/calXEZW8SRoEV9hdGwx/uHpxSh6IlBGBHFjjM4=
+X-Received: by 2002:a05:6830:1d41:: with SMTP id p1mr6439389oth.126.1614437705395;
+ Sat, 27 Feb 2021 06:55:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Received: by 2002:a05:6838:5501:0:0:0:0 with HTTP; Sat, 27 Feb 2021 06:55:05
+ -0800 (PST)
+Reply-To: missfavour99@gmail.com
+From:   "miss.favour" <khushalkokate9999@gmail.com>
+Date:   Sat, 27 Feb 2021 06:55:05 -0800
+Message-ID: <CAOvKh72SxYvRKa9+Eu29ZtroKpapMRivDh98EkmZtqpSaidc=g@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 27 Feb 2021, Jason A. Donenfeld wrote:
+hello,
 
-> The CPU_MIPS64 and CPU_MIPS32 variables are supposed to be able to
-> distinguish broadly between 64-bit and 32-bit MIPS CPUs. However, they
+I came across your email address through the google sites and I have
+much feeling over it. Apologies for my surprising email to you.I want
+to chat with you. My age is 23 years old . I am an interesting and
+kind girl. I can write that I am a romantic person. I dream of finding
+a decent person with whom I can share this wonderful life! I am
+looking for a reliable person for a future together. If you might
+think we are suitable for each other, I look forward to hearing from
+you. Friendship doesn't think distance,age or color. Friendship is
+hearing each other's voice from the heart. A friend is a gift of love
+from God and someone who cares as much as you do. I'm Miss Favour,I
+want to be your friend. I'll be glad to read from you and I will reply
+with my picture as we get to know better. Kindly reply me to
 
- That is not true.  The purpose of these options is to identify MIPS64 and 
-MIPS32 ISA processors respectively (and the generic features these ISAs 
-imply).  There are 64-bit and 32-bit MIPS processors which do not qualify, 
-specifically all MIPS I, MIPS II, MIPS III, and MIPS IV implementations.
+(missfavour99@gmail.com)
 
-> weren't selected by the specialty CPUs, Octeon and Loongson, which meant
-> it was possible to hit a weird state of:
-> 
->     MIPS=y, CONFIG_64BIT=y, CPU_MIPS64=n
+Best regards
 
- This is a correct combination for MIPS III and MIPS IV processors.
-
-> This commit rectifies the issue by having CPU_MIPS64 be selected when
-> the missing Octeon or Loongson models are selected.
-
- From the description and/or other options selected by CPU_LOONGSON64 and 
-CPU_CAVIUM_OCTEON I infer the change itself is correct, so you only need 
-to rewrite the change description.
-
- Though overall it seems we have quite a mess here, several other CPUs, 
-such as at the very least CPU_XLR and CPU_XLP, do not select this option 
-either, and then we have say CPU_MIPSR2 that is selected by some CPUs 
-while being conditional on other ones.  All this stuff asks for being 
-rewritten in a consistent manner.
-
- In any case your change may have to be run-time verified though with the 
-respective processors.
-
-  Maciej
+Miss Favour.
