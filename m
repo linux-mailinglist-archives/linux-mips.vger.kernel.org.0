@@ -2,110 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF4C3271A0
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Feb 2021 09:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C423C327247
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Feb 2021 13:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbhB1Inx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Feb 2021 03:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbhB1Inv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Feb 2021 03:43:51 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CB1C06174A;
-        Sun, 28 Feb 2021 00:43:10 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id k9so649560lfo.12;
-        Sun, 28 Feb 2021 00:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OFyGOtSWzDrjV/94yIkSczgXO+fv1Av7VC7qHGGIZTc=;
-        b=YJ1sEPS/er2MDdeZGD6TNU/9C7bWuBe8s2GkkQLn4EDUvQ+YG8Q+GfJ/o/ANy+JHJs
-         myBz+norrZcGBMBR9dHibEl2jwat1MkebmMh7lmxgkNdsBZ1XvIRXaoVztZfmfaHOcH9
-         n4SPv5zyzzZm00bkBdSeVuvUhrAjhurilfbnnSqKnYOHeUnrt/2Ahx85rFRHS4aH2w9l
-         65jad1z5Hqii4YrdlRgwOcTrBfJM2lDyE7ni/4VRxDV5qOf8IOUROpvsx3l5OsOlD4o0
-         Q80SRCtQNFLs0akX1M/DQmvEi1VteQ1Uiia9iKuAGmuaIK/QY83ykPw+eYqnbTGCLOKi
-         UBRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=OFyGOtSWzDrjV/94yIkSczgXO+fv1Av7VC7qHGGIZTc=;
-        b=S40t6l7aVDMwMlF35oZPkutfIvEsUJTz5R+yHAqeSFf6/JbvifHpTQpn7uK00hrJuK
-         pgfVQO2qzHzfkMRC6Zbo9vsbn+qYPTXOddmu+DQw50KpB5VN+9AKnx56PHwfUq/BVqt2
-         l4akQBM60RfwikUp53+UInoiQ1GaGghf7U5rj7Wa+jo7NY4kP/Zk30UvpFTe51HtDEDj
-         fhVfSFmeyrCtMVoYpqXk0PM5KTRf1oKK+RixQCDBTGUyeZ+V7k3hqggghbc5PRjtMpDv
-         xicXxf+3KprI3FsoRIJLdEbIpXnUBKSfhmNVSRVCKruYRJUSlIxwLLHReRIevC/D+0NQ
-         i7NQ==
-X-Gm-Message-State: AOAM531Lge2NnpvDL7U1KA2K/YkQGhNC4XXwNmClJfJW4VH6V4EBityM
-        g83RRnM0gyKmv3ejBJF+d7n+YwtGXbNE9w==
-X-Google-Smtp-Source: ABdhPJzyTfCWiZYth3RfZ0g3RViHE993pYqXeg3HFbdSb9OKcXrbSaqZM1T33df8b++dh625MLQL1A==
-X-Received: by 2002:a05:6512:208:: with SMTP id a8mr6028858lfo.397.1614501788683;
-        Sun, 28 Feb 2021 00:43:08 -0800 (PST)
-Received: from [192.168.1.100] ([31.173.86.90])
-        by smtp.gmail.com with ESMTPSA id s3sm2021193ljp.23.2021.02.28.00.43.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Feb 2021 00:43:08 -0800 (PST)
-Subject: Re: [PATCH] MIPS: loongson64: alloc pglist_data at run time
-To:     Huang Pei <huangpei@loongson.cn>,
+        id S229982AbhB1MuE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Feb 2021 07:50:04 -0500
+Received: from angie.orcam.me.uk ([157.25.102.26]:37084 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229654AbhB1MuE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Feb 2021 07:50:04 -0500
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 19BBF92009C; Sun, 28 Feb 2021 13:49:22 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 1385C92009B;
+        Sun, 28 Feb 2021 13:49:22 +0100 (CET)
+Date:   Sun, 28 Feb 2021 13:49:21 +0100 (CET)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     YunQiang Su <wzssyqa@gmail.com>
+cc:     YunQiang Su <yunqiang.su@cipunited.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>
-References: <20210227062957.269156-1-huangpei@loongson.cn>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <a56885eb-a6dc-75dc-8061-491de73ab462@gmail.com>
-Date:   Sun, 28 Feb 2021 11:43:04 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips <linux-mips@vger.kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH v4] MIPS: introduce config option to force use FR=0 for
+ FPXX binary
+In-Reply-To: <alpine.DEB.2.21.2102280217220.44210@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2102281340310.44210@angie.orcam.me.uk>
+References: <20210222034342.13136-1-yunqiang.su@cipunited.com> <CAKcpw6UgEUUCG2=9E9KFpTYF23fWshdcFtmB_O+YT0xEoS3swA@mail.gmail.com> <alpine.DEB.2.21.2102280217220.44210@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20210227062957.269156-1-huangpei@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+On Sun, 28 Feb 2021, Maciej W. Rozycki wrote:
 
-On 27.02.2021 9:29, Huang Pei wrote:
-
-> It can make some metadata of MM, like pglist_data and zone
-> NUMA-aware
+>  Nope, quoting include/elf/mips.h from GNU binutils:
 > 
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->   arch/mips/loongson64/numa.c | 18 +++++++++++++++---
->   1 file changed, 15 insertions(+), 3 deletions(-)
+>   /* Not tagged or not using any ABIs affected by the differences.  */
+>   Val_GNU_MIPS_ABI_FP_ANY = 0,
 > 
-> diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-> index cf9459f79f9b..5912b2e7b10c 100644
-> --- a/arch/mips/loongson64/numa.c
-> +++ b/arch/mips/loongson64/numa.c
-[...]
-> @@ -183,6 +194,7 @@ static void __init node_mem_init(unsigned int node)
->   			memblock_reserve((node_addrspace_offset | 0xfe000000),
->   					 32 << 20);
->   	}
-> +
+> which means that the object file *either* does not use FP *or* has not 
+> been tagged at all, as the GNU linker does not tell these two cases apart 
+> internally (yes, quite useless semantics, but there you go; I think the 
+> enumeration constant of 0 shouldn't have been chosen for any explicit tag, 
+> or possibly for double float instead, so this is an ABI design mistake).
 
-    Unrelated whitespace change?
+ FAOD I think the original intent was to make non-tagged legacy objects 
+link-compatible with any FP ABI under the assumption that the user knows 
+what he's doing.  While that is acceptable, it shouldn't have implied the 
+absence of FP code in such legacy objects.  Instead legacy properties 
+should have been implied, that is double FP and likewise legacy NaN.  It 
+would have been easier if a non-zero enumeration constant was assigned to 
+Val_GNU_MIPS_ABI_FP_ANY, as generic GNU linker code considers the absence 
+of a given tag equivalent to that tag being equal zero.  This still can be 
+handled, but complicates matters.
 
->   }
->   
->   static __init void prom_meminit(void)
-
-MBR, Sergei
+  Maciej
