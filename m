@@ -2,34 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C30AA32727B
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Feb 2021 14:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C48327506
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Mar 2021 00:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbhB1Nkb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Feb 2021 08:40:31 -0500
-Received: from angie.orcam.me.uk ([157.25.102.26]:37100 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbhB1Nkb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Feb 2021 08:40:31 -0500
-X-Greylist: delayed 3027 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Feb 2021 08:40:30 EST
+        id S230412AbhB1XBM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Feb 2021 18:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230200AbhB1XBM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Feb 2021 18:01:12 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A61CDC06174A
+        for <linux-mips@vger.kernel.org>; Sun, 28 Feb 2021 15:00:31 -0800 (PST)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 0C10392009C; Sun, 28 Feb 2021 14:39:48 +0100 (CET)
+        id 7BF6892009C; Mon,  1 Mar 2021 00:00:28 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id F208092009B;
-        Sun, 28 Feb 2021 14:39:48 +0100 (CET)
-Date:   Sun, 28 Feb 2021 14:39:48 +0100 (CET)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 6D2F992009B;
+        Mon,  1 Mar 2021 00:00:28 +0100 (CET)
+Date:   Mon, 1 Mar 2021 00:00:28 +0100 (CET)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     yunqiang.su@cipunited.com
-cc:     'YunQiang Su' <wzssyqa@gmail.com>,
-        'Thomas Bogendoerfer' <tsbogend@alpha.franken.de>,
-        'Jiaxun Yang' <jiaxun.yang@flygoat.com>,
-        'linux-mips' <linux-mips@vger.kernel.org>, stable@vger.kernel.org
-Subject: =?UTF-8?Q?Re=3A_=E5=9B=9E=E5=A4=8D=3A_=5BPATCH_v4=5D_MIPS=3A_in?=
- =?UTF-8?Q?troduce_config_option_to_force_use_FR=3D0_for_F?=
- =?UTF-8?Q?PXX_binary?=
-In-Reply-To: <000501d70da5$0ffd6a70$2ff83f50$@cipunited.com>
-Message-ID: <alpine.DEB.2.21.2102281407590.44210@angie.orcam.me.uk>
-References: <20210222034342.13136-1-yunqiang.su@cipunited.com> <CAKcpw6UgEUUCG2=9E9KFpTYF23fWshdcFtmB_O+YT0xEoS3swA@mail.gmail.com> <alpine.DEB.2.21.2102280217220.44210@angie.orcam.me.uk> <000501d70da5$0ffd6a70$2ff83f50$@cipunited.com>
+To:     Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: Re: [PATCH] MIPS: clean up CONFIG_MIPS_PGD_C0_CONTEXT handling
+In-Reply-To: <20210227061944.266415-2-huangpei@loongson.cn>
+Message-ID: <alpine.DEB.2.21.2102282346400.44210@angie.orcam.me.uk>
+References: <20210227061944.266415-1-huangpei@loongson.cn> <20210227061944.266415-2-huangpei@loongson.cn>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -37,61 +44,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 28 Feb 2021, yunqiang.su@cipunited.com wrote:
+On Sat, 27 Feb 2021, Huang Pei wrote:
 
-> >  This is also the correct interpretation for objects produced by Golang, which I
-> > have concluded are actually just fine according to the traditional psABI
-> > definition.  It looks to me like the bug is solely in the linker, due to this weird
-> > interpretation quoted above and unforeseen consequences for FPXX links
-> > invented much later.
-> > 
-> 
-> Yes. This a bug of linker, and we should fix it.
-> While for pre-existing binaries, we need a solution to make it workable, especially for the
-> generic Linux distributions, just like Debian.
-> 
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=962485
+> index 2000bb2b0220..517509ad8596 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -2142,6 +2142,7 @@ config CPU_SUPPORTS_HUGEPAGES
+>  	depends on !(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))
+>  config MIPS_PGD_C0_CONTEXT
+>  	bool
+> +	depends on 64BIT
+>  	default y if 64BIT && (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
 
- Thanks for the pointer.
+ I guess you want:
 
- After a bit of thinking and having fully understood what the issue 
-actually is I conclude a change like your original one (with no 
-configuration option; we've got too many of them already) will be OK so 
-long as it keeps the current arrangement for R6, which has the FR mode 
-hardwired, because, as you say, for genuine FPXX binaries the actual FR 
-setting does not matter, so the change in the fixed form won't break what 
-hasn't been broken already.
+	default y if (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
 
- Please keep the history of changes in the comment section rather that the 
-change description though.  Also I think the change description needs to 
-be more elaborate on the motivation, so that someone who looks at it say 
-10 years from now can figure out what is going on here.  You can reuse 
-bits of our discussion for that purpose.
+at the same time too.  Otherwise you have cruft left behind.
 
- Sadly I can see many changes going in where the description hardly says 
-anything, and while the matter may seem obvious right now, it surely won't 
-be for someone trying to unbreak things years from now while keeping the 
-intent of the original change where it did the right thing.  Especially as 
-secondary sources of information may not be easily available (anymore) and 
-the test environment may not be easily reproducible.  Notice how often I 
-need to refer to changes that were made many years ago and were not always 
-correct.
+> diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+> index a7521b8f7658..5bb9724578f7 100644
+> --- a/arch/mips/mm/tlbex.c
+> +++ b/arch/mips/mm/tlbex.c
+> @@ -1106,6 +1106,7 @@ struct mips_huge_tlb_info {
+>  	bool need_reload_pte;
+>  };
+>  
+> +#ifdef CONFIG_64BIT
+>  static struct mips_huge_tlb_info
+>  build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
+>  			       struct uasm_reloc **r, unsigned int tmp,
 
- NB the real problem are not programs included with the distribution 
-(which as I say can and ought to be fixed up with a script automatically; 
-a distribution needs to have provisions for such workarounds as problems 
-with the toolchain inevitably do happen from time to time), but programs 
-built by users of the distribution who we cannot reasonably expect to be 
-aware of every single quirk out there.
+ Does it actually build without a warning for !CONFIG_64BIT given the 
+reference below?
 
- Observe however that this does not solve the issue of a link-time or 
-load-time incompatibility between FP32 modules incorrectly marked FPXX and 
-FP64 or FP64A modules.  These will be let through and depending on usage 
-likely eventually fail.
+> @@ -1164,8 +1165,8 @@ build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
+>  
+>  	if (pgd_reg == -1) {
+>  		vmalloc_branch_delay_filled = 1;
+> -		/* 1 0	1 0 1  << 6  xkphys cached */
+> -		uasm_i_ori(p, ptr, ptr, 0x540);
+> +		/* insert bit[63:59] of CAC_BASE into bit[11:6] of ptr */
+> +		uasm_i_ori(p, ptr, ptr, (CAC_BASE >> 53));
 
- You might be able to come up with a wrapper script in place of whatever 
-the Golang invocation command is to postprocess modules produced in user 
-compilations as well, and have it distributed until the linker issue has 
-been fixed upstream and the changes propagated back to the distribution.
+ Instead I'd paper the issue over by casting the constant to `s64'.
+
+ Or better yet fixed it properly by defining CAC_BASE, etc. as `unsigned
+long long' long rather than `unsigned long' to stop all this nonsense 
+(e.g. PHYS_TO_XKPHYS already casts the result to `s64').  Thomas, WDYT?
 
   Maciej
