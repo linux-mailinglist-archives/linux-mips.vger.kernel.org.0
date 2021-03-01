@@ -2,34 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A29A5327AA3
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Mar 2021 10:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D2D327B13
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Mar 2021 10:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbhCAJXg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Mar 2021 04:23:36 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:43058 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbhCAJXf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Mar 2021 04:23:35 -0500
-Date:   Mon, 1 Mar 2021 12:22:41 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
+        id S234033AbhCAJq5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Mar 2021 04:46:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50178 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234147AbhCAJqe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 1 Mar 2021 04:46:34 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D11CF64DEE;
+        Mon,  1 Mar 2021 09:45:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614591952;
+        bh=aG4uuUZ0w7ZSRKSVJdeCsJ8UVIZRf6kb7VnGUopdSqk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k4GV/Uxs5wNzkXzHjYoZWIY3WG4np42G5szWlM+bD25bq57UhbTiperHROA2OT/1f
+         ILFsTkQtOm1nWPUgIzyLKAi0de1A3+RI6NxdemY+SckNXKE3crmj1YwS3af+0nuXQz
+         RscH4I4t9rgIh81pLTBoTg1iE48CUAflhIVzxgmuyANhuqtKDATQVb1vUJ7k1YtZZj
+         QaUD2lc/3ig01cp9IGaV4EZ6NI0t1Brdi17xhS0fOFe2JfS9CLY6g3jTdIbw2zlkSE
+         ZMi/ezK6wQ8FLI7jiEDOfqK4bxnF9in1gdPKQqtRBj4aPs+Fd3zRqJdr6qhTMLRz7C
+         UxvOZd28wtgMA==
+Date:   Mon, 1 Mar 2021 11:45:42 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        <iamjoonsoo.kim@lge.com>, <riel@surriel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, iamjoonsoo.kim@lge.com,
+        riel@surriel.com, Michal Hocko <mhocko@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
         "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
         <linux-mips@vger.kernel.org>
 Subject: Re: [PATCH v2 2/2] memblock: do not start bottom-up allocations with
  kernel_end
-Message-ID: <20210301092241.i7dxo7zbg3ar55d6@mobilestation>
+Message-ID: <YDy3xo3bMCqFtDhI@kernel.org>
 References: <20201217201214.3414100-1-guro@fb.com>
  <20201217201214.3414100-2-guro@fb.com>
  <23fc1ef9-7342-8bc2-d184-d898107c52b2@gmail.com>
@@ -38,10 +49,9 @@ References: <20201217201214.3414100-1-guro@fb.com>
  <20210228230811.wdae7oaaf3mbpgwl@mobilestation>
  <2e973fa8-5f2b-6840-0874-9c15fa0ebea0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <2e973fa8-5f2b-6840-0874-9c15fa0ebea0@gmail.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -179,173 +189,9 @@ On Sun, Feb 28, 2021 at 07:50:45PM -0800, Florian Fainelli wrote:
 > >> [    0.000000] memblock_alloc_try_nid: 25 bytes align=0x4 nid=-1
 > >> from=0x00000000 max_addr=0x00000000
 > >> early_init_dt_alloc_memory_arch+0x40/0x84
-> >> [    0.000000] memblock_reserve: [0x0000ba4c-0x0000ba64]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_reserve: [0x0096a000-0x00969fff]
-> >> setup_arch+0x3fc/0x69c
-> >> [    0.000000] memblock_alloc_try_nid: 32 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 setup_arch+0x4e0/0x69c
-> >> [    0.000000] memblock_reserve: [0x0000ba80-0x0000ba9f]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 32 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 setup_arch+0x4e0/0x69c
-> >> [    0.000000] memblock_reserve: [0x0000bb00-0x0000bb1f]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 32 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 setup_arch+0x4e0/0x69c
-> >> [    0.000000] memblock_reserve: [0x0000bb80-0x0000bb9f]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] Primary instruction cache 32kB, VIPT, 4-way, linesize 64
-> >> bytes.
-> >> [    0.000000] Primary data cache 32kB, 4-way, VIPT, no aliases,
-> >> linesize 32 bytes
-> >> [    0.000000] MIPS secondary cache 512kB, 8-way, linesize 128 bytes.
-> >> [    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1
-> >> from=0x00000000 max_addr=0xffffffff fixrange_init+0x90/0xf4
-> >> [    0.000000] memblock_reserve: [0x0000c000-0x0000cfff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1
-> >> from=0x00000000 max_addr=0xffffffff fixrange_init+0x90/0xf4
-> >> [    0.000000] memblock_reserve: [0x0000d000-0x0000dfff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1
-> >> from=0x00000000 max_addr=0xffffffff fixrange_init+0x90/0xf4
-> >> [    0.000000] memblock_reserve: [0x0000e000-0x0000efff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] Zone ranges:
-> >> [    0.000000]   Normal   [mem 0x0000000000000000-0x000000000fffffff]
-> >> [    0.000000]   HighMem  [mem 0x0000000010000000-0x00000000cfffffff]
-> >> [    0.000000] Movable zone start for each node
-> >> [    0.000000] Early memory node ranges
-> >> [    0.000000]   node   0: [mem 0x0000000000000000-0x000000000fffffff]
-> >> [    0.000000]   node   0: [mem 0x0000000020000000-0x000000004fffffff]
-> >> [    0.000000]   node   0: [mem 0x0000000090000000-0x00000000cfffffff]
-> >> [    0.000000] Initmem setup node 0 [mem
-> >> 0x0000000000000000-0x00000000cfffffff]
-> >> [    0.000000] memblock_alloc_try_nid: 27262976 bytes align=0x80 nid=0
-> >> from=0x00000000 max_addr=0x00000000
-> >> alloc_node_mem_map.constprop.135+0x6c/0xc8
-> >> [    0.000000] memblock_reserve: [0x01831400-0x032313ff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 32 bytes align=0x80 nid=0
-> >> from=0x00000000 max_addr=0x00000000 setup_usemap+0x64/0x98
-> >> [    0.000000] memblock_reserve: [0x0000bc00-0x0000bc1f]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 384 bytes align=0x80 nid=0
-> >> from=0x00000000 max_addr=0x00000000 setup_usemap+0x64/0x98
-> >> [    0.000000] memblock_reserve: [0x0000bc80-0x0000bdff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] MEMBLOCK configuration:
-> >> [    0.000000]  memory size = 0x80000000 reserved size = 0x0322f032
-> >> [    0.000000]  memory.cnt  = 0x3
-> >> [    0.000000]  memory[0x0]     [0x00000000-0x0fffffff], 0x10000000
-> >> bytes flags: 0x0
-> >> [    0.000000]  memory[0x1]     [0x20000000-0x4fffffff], 0x30000000
-> >> bytes flags: 0x0
-> >> [    0.000000]  memory[0x2]     [0x90000000-0xcfffffff], 0x40000000
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved.cnt  = 0xa
-> >> [    0.000000]  reserved[0x0]   [0x00001000-0x00003aa0], 0x00002aa1
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved[0x1]   [0x00003aa4-0x0000ba64], 0x00007fc1
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved[0x2]   [0x0000ba80-0x0000ba9f], 0x00000020
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved[0x3]   [0x0000bb00-0x0000bb1f], 0x00000020
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved[0x4]   [0x0000bb80-0x0000bb9f], 0x00000020
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved[0x5]   [0x0000bc00-0x0000bc1f], 0x00000020
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved[0x6]   [0x0000bc80-0x0000bdff], 0x00000180
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved[0x7]   [0x0000c000-0x0000efff], 0x00003000
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved[0x8]   [0x00010000-0x018313cf], 0x018213d0
-> >> bytes flags: 0x0
-> >> [    0.000000]  reserved[0x9]   [0x01831400-0x032313ff], 0x01a00000
-> >> bytes flags: 0x0
-> >> [    0.000000] memblock_alloc_try_nid: 30 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 start_kernel+0x12c/0x654
-> >> [    0.000000] memblock_reserve: [0x0000be00-0x0000be1d]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 30 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 start_kernel+0x150/0x654
-> >> [    0.000000] memblock_reserve: [0x0000be80-0x0000be9d]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x3b0/0x884
-> >> [    0.000000] memblock_reserve: [0x0000f000-0x0000ffff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x5a4/0x884
-> >> [    0.000000] memblock_reserve: [0x03231400-0x032323ff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 294912 bytes align=0x1000 nid=-1
-> >> from=0x01000000 max_addr=0x00000000 pcpu_dfl_fc_alloc+0x24/0x30
-> >> [    0.000000] memblock_reserve: [0x03233000-0x0327afff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_free: [0x03245000-0x03244fff]
-> >> pcpu_embed_first_chunk+0x7a0/0x884
-> >> [    0.000000] memblock_free: [0x03257000-0x03256fff]
-> >> pcpu_embed_first_chunk+0x7a0/0x884
-> >> [    0.000000] memblock_free: [0x03269000-0x03268fff]
-> >> pcpu_embed_first_chunk+0x7a0/0x884
-> >> [    0.000000] memblock_free: [0x0327b000-0x0327afff]
-> >> pcpu_embed_first_chunk+0x7a0/0x884
-> >> [    0.000000] percpu: Embedded 18 pages/cpu s50704 r0 d23024 u73728
-> >> [    0.000000] memblock_alloc_try_nid: 4 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x178/0x6ec
-> >> [    0.000000] memblock_reserve: [0x0000bf00-0x0000bf03]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 4 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x1a8/0x6ec
-> >> [    0.000000] memblock_reserve: [0x0000bf80-0x0000bf83]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 16 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x1dc/0x6ec
-> >> [    0.000000] memblock_reserve: [0x03232400-0x0323240f]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 16 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x20c/0x6ec
-> >> [    0.000000] memblock_reserve: [0x03232480-0x0323248f]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 128 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x558/0x6ec
-> >> [    0.000000] memblock_reserve: [0x03232500-0x0323257f]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 92 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x8c/0x294
-> >> [    0.000000] memblock_reserve: [0x03232580-0x032325db]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 768 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xe0/0x294
-> >> [    0.000000] memblock_reserve: [0x03232600-0x032328ff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 772 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x124/0x294
-> >> [    0.000000] memblock_reserve: [0x03232900-0x03232c03]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_alloc_try_nid: 192 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x158/0x294
-> >> [    0.000000] memblock_reserve: [0x03232c80-0x03232d3f]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] memblock_free: [0x0000f000-0x0000ffff]
-> >> pcpu_embed_first_chunk+0x838/0x884
-> >> [    0.000000] memblock_free: [0x03231400-0x032323ff]
-> >> pcpu_embed_first_chunk+0x850/0x884
-> >> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 523776
-> >> [    0.000000] Kernel command line: console=ttyS0,115200 earlycon
-> >> [    0.000000] memblock_alloc_try_nid: 131072 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1f8/0x33c
-> >> [    0.000000] memblock_reserve: [0x0327b000-0x0329afff]
-> >> memblock_alloc_range_nid+0xf8/0x198
-> >> [    0.000000] Dentry cache hash table entries: 32768 (order: 5, 131072
-> >> bytes, linear)
-> >> [    0.000000] memblock_alloc_try_nid: 65536 bytes align=0x80 nid=-1
-> >> from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1f8/0x33c
-> >> [    0.000000] memblock_reserve: [0x0329b000-0x032aafff]
-> >> memblock_alloc_range_nid+0xf8/0x198
+
+...
+
 > >> [    0.000000] Inode-cache hash table entries: 16384 (order: 4, 65536
 > >> bytes, linear)
 > > 
@@ -409,72 +255,10 @@ On Sun, Feb 28, 2021 at 07:50:45PM -0800, Florian Fainelli wrote:
 > >  		if (of_flat_dt_is_compatible(of_get_flat_dt_root(),
 > >  					     q->compatible)) {
 > 
-
 > This patch works, thanks a lot for the troubleshooting and analysis! How
 > about the following which would be more generic and works as well and
 > should be more universal since it does not require each architecture to
 > provide an appropriate call to memblock_reserve():
-
-Hm, are you sure it's working? If so, my analysis hasn't been quite
-correct. My suggestion was based on the memory initializations,
-allocations and reservations trace. So here is the sequence of most
-crucial of them:
-1) Memblock initialization:
-   start_kernel()->setup_arch()->arch_mem_init()->plat_mem_setup()->__dt_setup_arch()
-   (At this point I suggested to place the exceptions memory
-    reservation.)
-2) Base FDT memory reservation:
-   start_kernel()->setup_arch()->arch_mem_init()->early_init_fdt_reserve_self()
-3) FDT "reserved-memory" nodes parsing and corresponding memory ranges
-   reservation:
-   start_kernel()->setup_arch()->arch_mem_init()->early_init_fdt_scan_reserved_mem()
-4) Reserve kernel itself, some critical sections like initrd and
-   crash-kernel:
-   start_kernel()->setup_arch()->arch_mem_init()->bootmem_init()...
-5) Copy and unflatten the built-into the kernel device tree
-   (BMIPS-platform code):
-   start_kernel()->setup_arch()->arch_mem_init()->device_tree_init()
-   This is the very first time an allocation from the memblock pool
-   is performed. Since we haven't reserved a memory for the exception
-   vectors yet, the memblock allocator is free to return that memory
-   range for any other use. Needless to say if we try to use that memory
-   later without consulting with memblock, we may and in our case
-   will get into troubles.
-6) Many random early memblock allocations for kernel use before
-   buddy and sl*b allocators are up and running...
-   Note if for some fortunate reason the allocations made in 5) didn't
-   overlap the exceptions memory, here we have much more chances to
-   do that with obviously fatal consequences of the ranges independent
-   usage.
-7) Trap/exception vectors initialization and !memory reservation! for
-   them:
-   start_kernel()->trap_init()
-   Only at this point we get to reserve the memory for the vectors.
-8) Init and run buddy/sl*b allocators:
-   start_kernel()->mm_init()->...mem_init()...
-
-There are a lot of allocations done in 5) and 6) before the
-trap_init() is called in 7). You can see that in your log. That's why
-I have doubts that your patch worked well. Most likely you've
-forgotten to revert the workaround suggested by me in the previous
-message. Could you make sure that you didn't and re-test your patch
-again? If it still works then I might have confused something and it's
-strange that my patch worked in the first place...
-
-A food for thoughts for everyone (Thomas, Mark, please join the
-discussion). What we've got here is a bit bigger problem. AFAICS
-if bottom-up allocation is enabled (it's our case) memblock_find_in_range_node()
-performs the allocation above the very first PAGE_SIZE memory chunk
-(see that method code for details). So we are currently on a safe side
-for some older MIPS platforms. But the platform with VEIC/VINT may get
-into the same troubles here if they didn't reserve exception memory
-early enough before the kernel starts random allocations from
-memblock. So we either need to provide a generic workaround for that
-or make sure each platform gets to reserve vectors itself for instance
-in the plat_mem_setup() method.
-
--Sergey
-
 > 
 > diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
 > index e0352958e2f7..b0a173b500e8 100644
@@ -503,7 +287,23 @@ in the plat_mem_setup() method.
 > +               ebase_pa = virt_to_phys((void *)ebase);
 > +               memblock_reserve(ebase_pa, vec_size);
 > +       }
+
+With this it's still possible to have memblock allocations around ebase_pa
+before it is reserved.
+
+I think we have two options here to solve it in more or less generic way:
+
+* split the reservation of ebase from traps_init() and move it earlier to
+setup_arch(). I didn't check what board_ebase_setup() do, if they need to
+allocate memory it would not work.
+
+* add an API to memblock to set lower limit for allocations and then set
+the lower limit, to e.g. kernel load address in arch_mem_init(). This may
+add complexity for configurations with relocatable kernel and kaslr.
+
 >         per_cpu_trap_init(true);
 >         memblock_set_bottom_up(false);
-> -- 
-> Florian
+
+-- 
+Sincerely yours,
+Mike.
