@@ -2,41 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C48327506
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Mar 2021 00:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40D132757E
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Mar 2021 01:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbhB1XBM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Feb 2021 18:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbhB1XBM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Feb 2021 18:01:12 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A61CDC06174A
-        for <linux-mips@vger.kernel.org>; Sun, 28 Feb 2021 15:00:31 -0800 (PST)
+        id S231185AbhCAALB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Feb 2021 19:11:01 -0500
+Received: from angie.orcam.me.uk ([157.25.102.26]:37156 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230167AbhCAALB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Feb 2021 19:11:01 -0500
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 7BF6892009C; Mon,  1 Mar 2021 00:00:28 +0100 (CET)
+        id 800F692009C; Mon,  1 Mar 2021 01:10:19 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 6D2F992009B;
-        Mon,  1 Mar 2021 00:00:28 +0100 (CET)
-Date:   Mon, 1 Mar 2021 00:00:28 +0100 (CET)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 79F5B92009B;
+        Mon,  1 Mar 2021 01:10:19 +0100 (CET)
+Date:   Mon, 1 Mar 2021 01:10:19 +0100 (CET)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Huang Pei <huangpei@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: Re: [PATCH] MIPS: clean up CONFIG_MIPS_PGD_C0_CONTEXT handling
-In-Reply-To: <20210227061944.266415-2-huangpei@loongson.cn>
-Message-ID: <alpine.DEB.2.21.2102282346400.44210@angie.orcam.me.uk>
-References: <20210227061944.266415-1-huangpei@loongson.cn> <20210227061944.266415-2-huangpei@loongson.cn>
+To:     Jinyang He <hejinyang@loongson.cn>
+cc:     "open list:MIPS" <linux-mips@vger.kernel.org>
+Subject: Re: [Question] How to save_stack_trace_tsk_reliable() on mips?
+In-Reply-To: <a0823990-420f-8091-7866-8ad588ef542d@loongson.cn>
+Message-ID: <alpine.DEB.2.21.2103010043260.44210@angie.orcam.me.uk>
+References: <a0823990-420f-8091-7866-8ad588ef542d@loongson.cn>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -44,53 +31,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 27 Feb 2021, Huang Pei wrote:
+On Thu, 4 Feb 2021, Jinyang He wrote:
 
-> index 2000bb2b0220..517509ad8596 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -2142,6 +2142,7 @@ config CPU_SUPPORTS_HUGEPAGES
->  	depends on !(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))
->  config MIPS_PGD_C0_CONTEXT
->  	bool
-> +	depends on 64BIT
->  	default y if 64BIT && (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
+> Excuse me. Here is a question mail. How to get a reliable stack
+> of tasks on mips?
 
- I guess you want:
+ You need stack unwinding information.  High-level programming language 
+exception handling uses that too.  The information is in the DWARF format, 
+also used for debugging, and stored in a separate section within the ELF 
+module in question (for debugging it can be stored separately, but for 
+exception handling obviously it cannot, as the runtime needs to have it 
+mapped in memory and accessible without referring to other files).
 
-	default y if (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
+> First, why save_stack_trace_tsk() to get stack is unreliable? Is it
+> because the asm code does not obey with gcc's stack rules, or others?
 
-at the same time too.  Otherwise you have cruft left behind.
+ The stack frame as specified by the MIPS psABI does not have a fixed 
+format, so it is not possible to interpret its contents by just examining 
+them without additional information.
 
-> diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-> index a7521b8f7658..5bb9724578f7 100644
-> --- a/arch/mips/mm/tlbex.c
-> +++ b/arch/mips/mm/tlbex.c
-> @@ -1106,6 +1106,7 @@ struct mips_huge_tlb_info {
->  	bool need_reload_pte;
->  };
->  
-> +#ifdef CONFIG_64BIT
->  static struct mips_huge_tlb_info
->  build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
->  			       struct uasm_reloc **r, unsigned int tmp,
+> Secondly, can we use some methods to make the task stack reliable? For
+> example, use the fp register, can this method work? But it seems make
+> no sense for asm code unless each asm code do some fp work.
 
- Does it actually build without a warning for !CONFIG_64BIT given the 
-reference below?
+ The use of a hard frame pointer register does not change anything, 
+because the variable stack frame format does not provide the information 
+as to where exactly the previous frame pointer or the return address have 
+been stored.  You still need additional information.
 
-> @@ -1164,8 +1165,8 @@ build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
->  
->  	if (pgd_reg == -1) {
->  		vmalloc_branch_delay_filled = 1;
-> -		/* 1 0	1 0 1  << 6  xkphys cached */
-> -		uasm_i_ori(p, ptr, ptr, 0x540);
-> +		/* insert bit[63:59] of CAC_BASE into bit[11:6] of ptr */
-> +		uasm_i_ori(p, ptr, ptr, (CAC_BASE >> 53));
+> I found that the powerpc implemented save_stack_trace_tsk_reliable(),
+> and the x86 and s390 implemented the arch_stack_walk_reliable(). x86
+> implemented it through ORC unwind. For powerpc, it may implement it
+> through its ABI (I guess, I'm not familiar with them). Do we have a
+> chance to implement it in some way?
 
- Instead I'd paper the issue over by casting the constant to `s64'.
+ I worked with the Power psABI and it has a fixed stack frame format where 
+you can figure out the location of the previous frame pointer and the link 
+register from the current frame pointer.  This is enough information to be 
+able to backtrace.  ISTR x86 has a similar stack frame design, though I'm 
+not sure offhand how the case of `-fomit-frame-pointer' code is handled.  
+No idea as to the S/390, but I guess it follows the pattern.
 
- Or better yet fixed it properly by defining CAC_BASE, etc. as `unsigned
-long long' long rather than `unsigned long' to stop all this nonsense 
-(e.g. PHYS_TO_XKPHYS already casts the result to `s64').  Thomas, WDYT?
+> Finally, I found that some emails related to ORC unwind on ARM from the
+> livepatch mail list. It is difficult for me to understand. Is anyone
+> interested in ORC unwind on MIPS and have researched it?
+
+ I can't comment on this part, I don't know what ORC is.
+
+ HTH,
 
   Maciej
