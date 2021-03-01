@@ -2,52 +2,657 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 529863281BE
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Mar 2021 16:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7181332827E
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Mar 2021 16:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236895AbhCAPEV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Mar 2021 10:04:21 -0500
-Received: from elvis.franken.de ([193.175.24.41]:33721 "EHLO elvis.franken.de"
+        id S237021AbhCAPbA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Mar 2021 10:31:00 -0500
+Received: from mx2.suse.de ([195.135.220.15]:43774 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236876AbhCAPEB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 1 Mar 2021 10:04:01 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lGk4s-00041h-03; Mon, 01 Mar 2021 16:03:18 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 516F0C03C2; Mon,  1 Mar 2021 15:51:01 +0100 (CET)
-Date:   Mon, 1 Mar 2021 15:51:01 +0100
+        id S236640AbhCAPa4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 1 Mar 2021 10:30:56 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id A4CD4ACD4;
+        Mon,  1 Mar 2021 15:30:13 +0000 (UTC)
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mips: cavium: Replace DEFINE_SIMPLE_ATTRIBUTE with
- DEFINE_DEBUGFS_ATTRIBUTE
-Message-ID: <20210301145101.GF11261@alpha.franken.de>
-References: <1614154206-19069-1-git-send-email-yang.lee@linux.alibaba.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
+Subject: [PATCH 1/2] MIPS: Remove KVM_GUEST support
+Date:   Mon,  1 Mar 2021 16:29:56 +0100
+Message-Id: <20210301152958.3480-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1614154206-19069-1-git-send-email-yang.lee@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 04:10:06PM +0800, Yang Li wrote:
-> Fix the following coccicheck warning:
-> ./arch/mips/cavium-octeon/oct_ilm.c:65:0-23: WARNING:
-> reset_statistics_ops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  arch/mips/cavium-octeon/oct_ilm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+KVM_GUEST is broken and unmaintained, so let's remove it.
 
-applied to mips-next.
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/Kconfig                           |  17 -
+ arch/mips/configs/malta_kvm_guest_defconfig | 436 --------------------
+ arch/mips/include/asm/mach-generic/spaces.h |  12 -
+ arch/mips/include/asm/processor.h           |   5 -
+ arch/mips/include/asm/uaccess.h             |   9 -
+ arch/mips/kernel/cevt-r4k.c                 |   4 -
+ arch/mips/mti-malta/Platform                |   6 +-
+ arch/mips/mti-malta/malta-time.c            |   5 -
+ 8 files changed, 1 insertion(+), 493 deletions(-)
+ delete mode 100644 arch/mips/configs/malta_kvm_guest_defconfig
 
-Thomas.
-
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index f0d412a04f09..c7637506c953 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2220,23 +2220,6 @@ config 64BIT
+ 
+ endchoice
+ 
+-config KVM_GUEST
+-	bool "KVM Guest Kernel"
+-	depends on CPU_MIPS32_R2
+-	depends on !64BIT && BROKEN_ON_SMP
+-	help
+-	  Select this option if building a guest kernel for KVM (Trap & Emulate)
+-	  mode.
+-
+-config KVM_GUEST_TIMER_FREQ
+-	int "Count/Compare Timer Frequency (MHz)"
+-	depends on KVM_GUEST
+-	default 100
+-	help
+-	  Set this to non-zero if building a guest kernel for KVM to skip RTC
+-	  emulation when determining guest CPU Frequency. Instead, the guest's
+-	  timer frequency is specified directly.
+-
+ config MIPS_VA_BITS_48
+ 	bool "48 bits virtual memory"
+ 	depends on 64BIT
+diff --git a/arch/mips/configs/malta_kvm_guest_defconfig b/arch/mips/configs/malta_kvm_guest_defconfig
+deleted file mode 100644
+index 9185e0a0aa45..000000000000
+--- a/arch/mips/configs/malta_kvm_guest_defconfig
++++ /dev/null
+@@ -1,436 +0,0 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_LOG_BUF_SHIFT=15
+-CONFIG_NAMESPACES=y
+-CONFIG_RELAY=y
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_EXPERT=y
+-# CONFIG_COMPAT_BRK is not set
+-CONFIG_SLAB=y
+-CONFIG_MIPS_MALTA=y
+-CONFIG_CPU_LITTLE_ENDIAN=y
+-CONFIG_CPU_MIPS32_R2=y
+-CONFIG_KVM_GUEST=y
+-CONFIG_PAGE_SIZE_16KB=y
+-# CONFIG_MIPS_MT_SMP is not set
+-CONFIG_HZ_100=y
+-CONFIG_PCI=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODVERSIONS=y
+-CONFIG_MODULE_SRCVERSION_ALL=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_XFRM_USER=m
+-CONFIG_NET_KEY=y
+-CONFIG_NET_KEY_MIGRATE=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_ADVANCED_ROUTER=y
+-CONFIG_IP_MULTIPLE_TABLES=y
+-CONFIG_IP_ROUTE_MULTIPATH=y
+-CONFIG_IP_ROUTE_VERBOSE=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-CONFIG_IP_PNP_BOOTP=y
+-CONFIG_NET_IPIP=m
+-CONFIG_IP_MROUTE=y
+-CONFIG_IP_PIMSM_V1=y
+-CONFIG_IP_PIMSM_V2=y
+-CONFIG_SYN_COOKIES=y
+-CONFIG_INET_AH=m
+-CONFIG_INET_ESP=m
+-CONFIG_INET_IPCOMP=m
+-CONFIG_INET_XFRM_MODE_TRANSPORT=m
+-CONFIG_INET_XFRM_MODE_TUNNEL=m
+-CONFIG_TCP_MD5SIG=y
+-CONFIG_IPV6_ROUTER_PREF=y
+-CONFIG_IPV6_ROUTE_INFO=y
+-CONFIG_IPV6_OPTIMISTIC_DAD=y
+-CONFIG_INET6_AH=m
+-CONFIG_INET6_ESP=m
+-CONFIG_INET6_IPCOMP=m
+-CONFIG_IPV6_TUNNEL=m
+-CONFIG_IPV6_MROUTE=y
+-CONFIG_IPV6_PIMSM_V2=y
+-CONFIG_NETWORK_SECMARK=y
+-CONFIG_NETFILTER=y
+-CONFIG_NF_CONNTRACK=m
+-CONFIG_NF_CONNTRACK_SECMARK=y
+-CONFIG_NF_CONNTRACK_EVENTS=y
+-CONFIG_NF_CONNTRACK_AMANDA=m
+-CONFIG_NF_CONNTRACK_FTP=m
+-CONFIG_NF_CONNTRACK_H323=m
+-CONFIG_NF_CONNTRACK_IRC=m
+-CONFIG_NF_CONNTRACK_PPTP=m
+-CONFIG_NF_CONNTRACK_SANE=m
+-CONFIG_NF_CONNTRACK_SIP=m
+-CONFIG_NF_CONNTRACK_TFTP=m
+-CONFIG_NF_CT_NETLINK=m
+-CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
+-CONFIG_NETFILTER_XT_TARGET_CONNMARK=m
+-CONFIG_NETFILTER_XT_TARGET_MARK=m
+-CONFIG_NETFILTER_XT_TARGET_NFLOG=m
+-CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
+-CONFIG_NETFILTER_XT_TARGET_TPROXY=m
+-CONFIG_NETFILTER_XT_TARGET_TRACE=m
+-CONFIG_NETFILTER_XT_TARGET_SECMARK=m
+-CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
+-CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP=m
+-CONFIG_NETFILTER_XT_MATCH_COMMENT=m
+-CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
+-CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
+-CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+-CONFIG_NETFILTER_XT_MATCH_DCCP=m
+-CONFIG_NETFILTER_XT_MATCH_ESP=m
+-CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_HELPER=m
+-CONFIG_NETFILTER_XT_MATCH_IPRANGE=m
+-CONFIG_NETFILTER_XT_MATCH_LENGTH=m
+-CONFIG_NETFILTER_XT_MATCH_LIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_MAC=m
+-CONFIG_NETFILTER_XT_MATCH_MARK=m
+-CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
+-CONFIG_NETFILTER_XT_MATCH_OWNER=m
+-CONFIG_NETFILTER_XT_MATCH_POLICY=m
+-CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
+-CONFIG_NETFILTER_XT_MATCH_QUOTA=m
+-CONFIG_NETFILTER_XT_MATCH_RATEEST=m
+-CONFIG_NETFILTER_XT_MATCH_REALM=m
+-CONFIG_NETFILTER_XT_MATCH_RECENT=m
+-CONFIG_NETFILTER_XT_MATCH_SOCKET=m
+-CONFIG_NETFILTER_XT_MATCH_STATE=m
+-CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+-CONFIG_NETFILTER_XT_MATCH_STRING=m
+-CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
+-CONFIG_NETFILTER_XT_MATCH_TIME=m
+-CONFIG_NETFILTER_XT_MATCH_U32=m
+-CONFIG_IP_VS=m
+-CONFIG_IP_VS_IPV6=y
+-CONFIG_IP_VS_PROTO_TCP=y
+-CONFIG_IP_VS_PROTO_UDP=y
+-CONFIG_IP_VS_PROTO_ESP=y
+-CONFIG_IP_VS_PROTO_AH=y
+-CONFIG_IP_VS_RR=m
+-CONFIG_IP_VS_WRR=m
+-CONFIG_IP_VS_LC=m
+-CONFIG_IP_VS_WLC=m
+-CONFIG_IP_VS_LBLC=m
+-CONFIG_IP_VS_LBLCR=m
+-CONFIG_IP_VS_DH=m
+-CONFIG_IP_VS_SH=m
+-CONFIG_IP_VS_SED=m
+-CONFIG_IP_VS_NQ=m
+-CONFIG_IP_NF_IPTABLES=m
+-CONFIG_IP_NF_MATCH_AH=m
+-CONFIG_IP_NF_MATCH_ECN=m
+-CONFIG_IP_NF_MATCH_TTL=m
+-CONFIG_IP_NF_FILTER=m
+-CONFIG_IP_NF_TARGET_REJECT=m
+-CONFIG_IP_NF_MANGLE=m
+-CONFIG_IP_NF_TARGET_CLUSTERIP=m
+-CONFIG_IP_NF_TARGET_ECN=m
+-CONFIG_IP_NF_TARGET_TTL=m
+-CONFIG_IP_NF_RAW=m
+-CONFIG_IP_NF_ARPTABLES=m
+-CONFIG_IP_NF_ARPFILTER=m
+-CONFIG_IP_NF_ARP_MANGLE=m
+-CONFIG_IP6_NF_MATCH_AH=m
+-CONFIG_IP6_NF_MATCH_EUI64=m
+-CONFIG_IP6_NF_MATCH_FRAG=m
+-CONFIG_IP6_NF_MATCH_OPTS=m
+-CONFIG_IP6_NF_MATCH_HL=m
+-CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+-CONFIG_IP6_NF_MATCH_MH=m
+-CONFIG_IP6_NF_MATCH_RT=m
+-CONFIG_IP6_NF_TARGET_HL=m
+-CONFIG_IP6_NF_FILTER=m
+-CONFIG_IP6_NF_TARGET_REJECT=m
+-CONFIG_IP6_NF_MANGLE=m
+-CONFIG_IP6_NF_RAW=m
+-CONFIG_BRIDGE_NF_EBTABLES=m
+-CONFIG_BRIDGE_EBT_BROUTE=m
+-CONFIG_BRIDGE_EBT_T_FILTER=m
+-CONFIG_BRIDGE_EBT_T_NAT=m
+-CONFIG_BRIDGE_EBT_802_3=m
+-CONFIG_BRIDGE_EBT_AMONG=m
+-CONFIG_BRIDGE_EBT_ARP=m
+-CONFIG_BRIDGE_EBT_IP=m
+-CONFIG_BRIDGE_EBT_IP6=m
+-CONFIG_BRIDGE_EBT_LIMIT=m
+-CONFIG_BRIDGE_EBT_MARK=m
+-CONFIG_BRIDGE_EBT_PKTTYPE=m
+-CONFIG_BRIDGE_EBT_STP=m
+-CONFIG_BRIDGE_EBT_VLAN=m
+-CONFIG_BRIDGE_EBT_ARPREPLY=m
+-CONFIG_BRIDGE_EBT_DNAT=m
+-CONFIG_BRIDGE_EBT_MARK_T=m
+-CONFIG_BRIDGE_EBT_REDIRECT=m
+-CONFIG_BRIDGE_EBT_SNAT=m
+-CONFIG_BRIDGE_EBT_LOG=m
+-CONFIG_BRIDGE_EBT_NFLOG=m
+-CONFIG_IP_SCTP=m
+-CONFIG_BRIDGE=m
+-CONFIG_VLAN_8021Q=m
+-CONFIG_VLAN_8021Q_GVRP=y
+-CONFIG_ATALK=m
+-CONFIG_DEV_APPLETALK=m
+-CONFIG_IPDDP=m
+-CONFIG_IPDDP_ENCAP=y
+-CONFIG_PHONET=m
+-CONFIG_NET_SCHED=y
+-CONFIG_NET_SCH_CBQ=m
+-CONFIG_NET_SCH_HTB=m
+-CONFIG_NET_SCH_HFSC=m
+-CONFIG_NET_SCH_PRIO=m
+-CONFIG_NET_SCH_RED=m
+-CONFIG_NET_SCH_SFQ=m
+-CONFIG_NET_SCH_TEQL=m
+-CONFIG_NET_SCH_TBF=m
+-CONFIG_NET_SCH_GRED=m
+-CONFIG_NET_SCH_DSMARK=m
+-CONFIG_NET_SCH_NETEM=m
+-CONFIG_NET_SCH_INGRESS=m
+-CONFIG_NET_CLS_BASIC=m
+-CONFIG_NET_CLS_TCINDEX=m
+-CONFIG_NET_CLS_ROUTE4=m
+-CONFIG_NET_CLS_FW=m
+-CONFIG_NET_CLS_U32=m
+-CONFIG_NET_CLS_RSVP=m
+-CONFIG_NET_CLS_RSVP6=m
+-CONFIG_NET_CLS_FLOW=m
+-CONFIG_NET_CLS_ACT=y
+-CONFIG_NET_ACT_POLICE=y
+-CONFIG_NET_ACT_GACT=m
+-CONFIG_GACT_PROB=y
+-CONFIG_NET_ACT_MIRRED=m
+-CONFIG_NET_ACT_IPT=m
+-CONFIG_NET_ACT_NAT=m
+-CONFIG_NET_ACT_PEDIT=m
+-CONFIG_NET_ACT_SIMP=m
+-CONFIG_NET_ACT_SKBEDIT=m
+-CONFIG_CFG80211=m
+-CONFIG_MAC80211=m
+-CONFIG_MAC80211_MESH=y
+-CONFIG_RFKILL=m
+-CONFIG_DEVTMPFS=y
+-CONFIG_CONNECTOR=m
+-CONFIG_MTD=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_OOPS=m
+-CONFIG_MTD_CFI=y
+-CONFIG_MTD_CFI_INTELEXT=y
+-CONFIG_MTD_CFI_AMDSTD=y
+-CONFIG_MTD_CFI_STAA=y
+-CONFIG_MTD_PHYSMAP_OF=y
+-CONFIG_MTD_UBI=m
+-CONFIG_MTD_UBI_GLUEBI=m
+-CONFIG_BLK_DEV_FD=m
+-CONFIG_BLK_DEV_UMEM=m
+-CONFIG_BLK_DEV_LOOP=m
+-CONFIG_BLK_DEV_CRYPTOLOOP=m
+-CONFIG_BLK_DEV_NBD=m
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+-CONFIG_ATA_OVER_ETH=m
+-CONFIG_VIRTIO_BLK=y
+-CONFIG_IDE=y
+-CONFIG_BLK_DEV_IDECD=y
+-CONFIG_BLK_DEV_TC86C001=m
+-CONFIG_RAID_ATTRS=m
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_CHR_DEV_ST=m
+-CONFIG_CHR_DEV_OSST=m
+-CONFIG_BLK_DEV_SR=y
+-CONFIG_CHR_DEV_SG=m
+-CONFIG_SCSI_CONSTANTS=y
+-CONFIG_SCSI_LOGGING=y
+-CONFIG_SCSI_SCAN_ASYNC=y
+-CONFIG_SCSI_FC_ATTRS=m
+-CONFIG_ISCSI_TCP=m
+-CONFIG_BLK_DEV_3W_XXXX_RAID=m
+-CONFIG_SCSI_3W_9XXX=m
+-CONFIG_SCSI_ACARD=m
+-CONFIG_SCSI_AACRAID=m
+-CONFIG_SCSI_AIC7XXX=m
+-CONFIG_AIC7XXX_RESET_DELAY_MS=15000
+-# CONFIG_AIC7XXX_DEBUG_ENABLE is not set
+-CONFIG_ATA=y
+-CONFIG_ATA_PIIX=y
+-CONFIG_PATA_IT8213=m
+-CONFIG_PATA_OLDPIIX=y
+-CONFIG_PATA_MPIIX=y
+-CONFIG_ATA_GENERIC=y
+-CONFIG_PATA_LEGACY=y
+-CONFIG_MD=y
+-CONFIG_BLK_DEV_MD=m
+-CONFIG_MD_LINEAR=m
+-CONFIG_MD_RAID0=m
+-CONFIG_MD_RAID1=m
+-CONFIG_MD_RAID10=m
+-CONFIG_MD_RAID456=m
+-CONFIG_MD_MULTIPATH=m
+-CONFIG_MD_FAULTY=m
+-CONFIG_BLK_DEV_DM=m
+-CONFIG_DM_CRYPT=m
+-CONFIG_DM_SNAPSHOT=m
+-CONFIG_DM_MIRROR=m
+-CONFIG_DM_ZERO=m
+-CONFIG_DM_MULTIPATH=m
+-CONFIG_NETDEVICES=y
+-CONFIG_BONDING=m
+-CONFIG_DUMMY=m
+-CONFIG_EQUALIZER=m
+-CONFIG_IFB=m
+-CONFIG_MACVLAN=m
+-CONFIG_TUN=m
+-CONFIG_VETH=m
+-CONFIG_VIRTIO_NET=y
+-CONFIG_PCNET32=y
+-CONFIG_CHELSIO_T3=m
+-CONFIG_AX88796=m
+-CONFIG_NETXEN_NIC=m
+-CONFIG_TC35815=m
+-CONFIG_BROADCOM_PHY=m
+-CONFIG_CICADA_PHY=m
+-CONFIG_DAVICOM_PHY=m
+-CONFIG_ICPLUS_PHY=m
+-CONFIG_LXT_PHY=m
+-CONFIG_MARVELL_PHY=m
+-CONFIG_QSEMI_PHY=m
+-CONFIG_REALTEK_PHY=m
+-CONFIG_SMSC_PHY=m
+-CONFIG_VITESSE_PHY=m
+-CONFIG_ATMEL=m
+-CONFIG_PCI_ATMEL=m
+-CONFIG_IPW2100=m
+-CONFIG_IPW2100_MONITOR=y
+-CONFIG_HOSTAP=m
+-CONFIG_HOSTAP_FIRMWARE=y
+-CONFIG_HOSTAP_FIRMWARE_NVRAM=y
+-CONFIG_HOSTAP_PLX=m
+-CONFIG_HOSTAP_PCI=m
+-CONFIG_PRISM54=m
+-CONFIG_LIBERTAS=m
+-CONFIG_INPUT_MOUSEDEV=y
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_POWER_RESET=y
+-CONFIG_POWER_RESET_PIIX4_POWEROFF=y
+-CONFIG_POWER_RESET_SYSCON=y
+-# CONFIG_HWMON is not set
+-CONFIG_FB=y
+-CONFIG_FB_CIRRUS=y
+-# CONFIG_VGA_CONSOLE is not set
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_HID=m
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_CMOS=y
+-CONFIG_UIO=m
+-CONFIG_UIO_CIF=m
+-CONFIG_VIRTIO_PCI=y
+-CONFIG_VIRTIO_BALLOON=y
+-CONFIG_VIRTIO_MMIO=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
+-CONFIG_REISERFS_FS=m
+-CONFIG_REISERFS_PROC_INFO=y
+-CONFIG_REISERFS_FS_XATTR=y
+-CONFIG_REISERFS_FS_POSIX_ACL=y
+-CONFIG_REISERFS_FS_SECURITY=y
+-CONFIG_JFS_FS=m
+-CONFIG_JFS_POSIX_ACL=y
+-CONFIG_JFS_SECURITY=y
+-CONFIG_XFS_FS=m
+-CONFIG_XFS_QUOTA=y
+-CONFIG_XFS_POSIX_ACL=y
+-CONFIG_QUOTA=y
+-CONFIG_QFMT_V2=y
+-CONFIG_FUSE_FS=m
+-CONFIG_ISO9660_FS=m
+-CONFIG_JOLIET=y
+-CONFIG_ZISOFS=y
+-CONFIG_UDF_FS=m
+-CONFIG_MSDOS_FS=m
+-CONFIG_VFAT_FS=m
+-CONFIG_PROC_KCORE=y
+-CONFIG_TMPFS=y
+-CONFIG_AFFS_FS=m
+-CONFIG_HFS_FS=m
+-CONFIG_HFSPLUS_FS=m
+-CONFIG_BEFS_FS=m
+-CONFIG_BFS_FS=m
+-CONFIG_EFS_FS=m
+-CONFIG_JFFS2_FS=m
+-CONFIG_JFFS2_FS_XATTR=y
+-CONFIG_JFFS2_COMPRESSION_OPTIONS=y
+-CONFIG_JFFS2_RUBIN=y
+-CONFIG_CRAMFS=m
+-CONFIG_VXFS_FS=m
+-CONFIG_MINIX_FS=m
+-CONFIG_ROMFS_FS=m
+-CONFIG_SYSV_FS=m
+-CONFIG_UFS_FS=m
+-CONFIG_NFS_FS=y
+-CONFIG_ROOT_NFS=y
+-CONFIG_NFSD=y
+-CONFIG_NFSD_V3=y
+-CONFIG_NLS_CODEPAGE_437=m
+-CONFIG_NLS_CODEPAGE_737=m
+-CONFIG_NLS_CODEPAGE_775=m
+-CONFIG_NLS_CODEPAGE_850=m
+-CONFIG_NLS_CODEPAGE_852=m
+-CONFIG_NLS_CODEPAGE_855=m
+-CONFIG_NLS_CODEPAGE_857=m
+-CONFIG_NLS_CODEPAGE_860=m
+-CONFIG_NLS_CODEPAGE_861=m
+-CONFIG_NLS_CODEPAGE_862=m
+-CONFIG_NLS_CODEPAGE_863=m
+-CONFIG_NLS_CODEPAGE_864=m
+-CONFIG_NLS_CODEPAGE_865=m
+-CONFIG_NLS_CODEPAGE_866=m
+-CONFIG_NLS_CODEPAGE_869=m
+-CONFIG_NLS_CODEPAGE_936=m
+-CONFIG_NLS_CODEPAGE_950=m
+-CONFIG_NLS_CODEPAGE_932=m
+-CONFIG_NLS_CODEPAGE_949=m
+-CONFIG_NLS_CODEPAGE_874=m
+-CONFIG_NLS_ISO8859_8=m
+-CONFIG_NLS_CODEPAGE_1250=m
+-CONFIG_NLS_CODEPAGE_1251=m
+-CONFIG_NLS_ASCII=m
+-CONFIG_NLS_ISO8859_1=m
+-CONFIG_NLS_ISO8859_2=m
+-CONFIG_NLS_ISO8859_3=m
+-CONFIG_NLS_ISO8859_4=m
+-CONFIG_NLS_ISO8859_5=m
+-CONFIG_NLS_ISO8859_6=m
+-CONFIG_NLS_ISO8859_7=m
+-CONFIG_NLS_ISO8859_9=m
+-CONFIG_NLS_ISO8859_13=m
+-CONFIG_NLS_ISO8859_14=m
+-CONFIG_NLS_ISO8859_15=m
+-CONFIG_NLS_KOI8_R=m
+-CONFIG_NLS_KOI8_U=m
+-CONFIG_CRYPTO_CRYPTD=m
+-CONFIG_CRYPTO_LRW=m
+-CONFIG_CRYPTO_PCBC=m
+-CONFIG_CRYPTO_HMAC=y
+-CONFIG_CRYPTO_XCBC=m
+-CONFIG_CRYPTO_MD4=m
+-CONFIG_CRYPTO_SHA512=m
+-CONFIG_CRYPTO_TGR192=m
+-CONFIG_CRYPTO_WP512=m
+-CONFIG_CRYPTO_ANUBIS=m
+-CONFIG_CRYPTO_BLOWFISH=m
+-CONFIG_CRYPTO_CAMELLIA=m
+-CONFIG_CRYPTO_CAST5=m
+-CONFIG_CRYPTO_CAST6=m
+-CONFIG_CRYPTO_FCRYPT=m
+-CONFIG_CRYPTO_KHAZAD=m
+-CONFIG_CRYPTO_SERPENT=m
+-CONFIG_CRYPTO_TEA=m
+-CONFIG_CRYPTO_TWOFISH=m
+diff --git a/arch/mips/include/asm/mach-generic/spaces.h b/arch/mips/include/asm/mach-generic/spaces.h
+index c3ac06a6acd2..b247575c5e69 100644
+--- a/arch/mips/include/asm/mach-generic/spaces.h
++++ b/arch/mips/include/asm/mach-generic/spaces.h
+@@ -30,11 +30,7 @@
+ #endif /* __ASSEMBLY__ */
+ 
+ #ifdef CONFIG_32BIT
+-#ifdef CONFIG_KVM_GUEST
+-#define CAC_BASE		_AC(0x40000000, UL)
+-#else
+ #define CAC_BASE		_AC(0x80000000, UL)
+-#endif
+ #ifndef IO_BASE
+ #define IO_BASE			_AC(0xa0000000, UL)
+ #endif
+@@ -43,12 +39,8 @@
+ #endif
+ 
+ #ifndef MAP_BASE
+-#ifdef CONFIG_KVM_GUEST
+-#define MAP_BASE		_AC(0x60000000, UL)
+-#else
+ #define MAP_BASE		_AC(0xc0000000, UL)
+ #endif
+-#endif
+ 
+ /*
+  * Memory above this physical address will be considered highmem.
+@@ -100,11 +92,7 @@
+ #endif
+ 
+ #ifndef FIXADDR_TOP
+-#ifdef CONFIG_KVM_GUEST
+-#define FIXADDR_TOP		((unsigned long)(long)(int)0x7ffe0000)
+-#else
+ #define FIXADDR_TOP		((unsigned long)(long)(int)0xfffe0000)
+ #endif
+-#endif
+ 
+ #endif /* __ASM_MACH_GENERIC_SPACES_H */
+diff --git a/arch/mips/include/asm/processor.h b/arch/mips/include/asm/processor.h
+index 7834e7c0c78a..8e69e0a35ee9 100644
+--- a/arch/mips/include/asm/processor.h
++++ b/arch/mips/include/asm/processor.h
+@@ -32,16 +32,11 @@ extern unsigned int vced_count, vcei_count;
+ extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
+ 
+ #ifdef CONFIG_32BIT
+-#ifdef CONFIG_KVM_GUEST
+-/* User space process size is limited to 1GB in KVM Guest Mode */
+-#define TASK_SIZE	0x3fff8000UL
+-#else
+ /*
+  * User space process size: 2GB. This is hardcoded into a few places,
+  * so don't change it unless you know what you are doing.
+  */
+ #define TASK_SIZE	0x80000000UL
+-#endif
+ 
+ #define STACK_TOP_MAX	TASK_SIZE
+ 
+diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
+index 61fc01f177a6..d273a3857809 100644
+--- a/arch/mips/include/asm/uaccess.h
++++ b/arch/mips/include/asm/uaccess.h
+@@ -25,11 +25,7 @@
+  */
+ #ifdef CONFIG_32BIT
+ 
+-#ifdef CONFIG_KVM_GUEST
+-#define __UA_LIMIT 0x40000000UL
+-#else
+ #define __UA_LIMIT 0x80000000UL
+-#endif
+ 
+ #define __UA_ADDR	".word"
+ #define __UA_LA		"la"
+@@ -61,13 +57,8 @@ extern u64 __ua_limit;
+  * address in this range it's the process's problem, not ours :-)
+  */
+ 
+-#ifdef CONFIG_KVM_GUEST
+-#define KERNEL_DS	((mm_segment_t) { 0x80000000UL })
+-#define USER_DS		((mm_segment_t) { 0xC0000000UL })
+-#else
+ #define KERNEL_DS	((mm_segment_t) { 0UL })
+ #define USER_DS		((mm_segment_t) { __UA_LIMIT })
+-#endif
+ 
+ #define get_fs()	(current_thread_info()->addr_limit)
+ #define set_fs(x)	(current_thread_info()->addr_limit = (x))
+diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
+index 995ad9e69ded..32ec67c9ab67 100644
+--- a/arch/mips/kernel/cevt-r4k.c
++++ b/arch/mips/kernel/cevt-r4k.c
+@@ -195,10 +195,6 @@ int c0_compare_int_usable(void)
+ 	unsigned int delta;
+ 	unsigned int cnt;
+ 
+-#ifdef CONFIG_KVM_GUEST
+-    return 1;
+-#endif
+-
+ 	/*
+ 	 * IP7 already pending?	 Try to clear it by acking the timer.
+ 	 */
+diff --git a/arch/mips/mti-malta/Platform b/arch/mips/mti-malta/Platform
+index 41e0d2a2d325..f4616934d950 100644
+--- a/arch/mips/mti-malta/Platform
++++ b/arch/mips/mti-malta/Platform
+@@ -2,9 +2,5 @@
+ # MIPS Malta board
+ #
+ cflags-$(CONFIG_MIPS_MALTA)	+= -I$(srctree)/arch/mips/include/asm/mach-malta
+-ifdef CONFIG_KVM_GUEST
+-    load-$(CONFIG_MIPS_MALTA)	+= 0x0000000040100000
+-else
+-    load-$(CONFIG_MIPS_MALTA)	+= 0xffffffff80100000
+-endif
++load-$(CONFIG_MIPS_MALTA)	+= 0xffffffff80100000
+ all-$(CONFIG_MIPS_MALTA)	:= $(COMPRESSION_FNAME).bin
+diff --git a/arch/mips/mti-malta/malta-time.c b/arch/mips/mti-malta/malta-time.c
+index 567720374d57..bbf1e38e1431 100644
+--- a/arch/mips/mti-malta/malta-time.c
++++ b/arch/mips/mti-malta/malta-time.c
+@@ -66,11 +66,6 @@ static void __init estimate_frequencies(void)
+ 	int secs;
+ 	u64 giccount = 0, gicstart = 0;
+ 
+-#if defined(CONFIG_KVM_GUEST) && CONFIG_KVM_GUEST_TIMER_FREQ
+-	mips_hpt_frequency = CONFIG_KVM_GUEST_TIMER_FREQ * 1000000;
+-	return;
+-#endif
+-
+ 	local_irq_save(flags);
+ 
+ 	if (mips_gic_present())
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.29.2
+
