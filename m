@@ -2,161 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0F432AF74
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 04:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9BB32AF7B
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 04:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237368AbhCCAW6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 2 Mar 2021 19:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239808AbhCBH4G (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Mar 2021 02:56:06 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2A8C06178A;
-        Mon,  1 Mar 2021 23:44:45 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id k12so13708032ljg.9;
-        Mon, 01 Mar 2021 23:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gZNTatbnHb+7B3cifLvu1nq4X6pcmEEmjpKFoMb/vdM=;
-        b=veyh53ntviSLpdEMoBgWaX81jpp5Z5M40bdVat+k0hrZxC1K7QftkvE5LYiCpZH4lO
-         HRaoEtTrY/yAe/gcoByU+9de1fYwZXVHvJ72j5hEr/10dL2FOj2spoG9fxfAj1uCZ3UU
-         iKHnmUrfVsKensHxhw8pM5aPC5WagNMRTZ3mAfZxZYppBGLh63T3CuYwxKGKBS+vdrJE
-         XUkzZyoa9RqbIPTjCj1hDMJNDcIkv60n1vusMsRVfqwnyCZzQP8QRssrauL5RSuy7m6N
-         368MAm97lWLGpQpZD4UPRC++8vJbOiLI7kZHmSjk15BxcW1s53rqECzyBdHjOTuxvN9V
-         kdpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gZNTatbnHb+7B3cifLvu1nq4X6pcmEEmjpKFoMb/vdM=;
-        b=JEt2WU9Wjw1gnVRYUtmuC7qr1xhiqDN8VM8A/6eJ/Re0VOARmkDFh89kt/6CL2gzGH
-         SPhV2tfG0AQWXSni/Rcbx6UbOtRa2O95tuUk3MacGum4FDlnO3J1bvwvkro5B3RZBwxB
-         LnwAWDhyFGSYpCz7CfQNgFSLAEaCHnV3TbHxtk3olKAGclmixjVPTWZI22mvrzOVh23r
-         Vm1LTpDofXqVJKapQs9B9SiAINi7v7sYYY2mwroWStK7EgpbeGrCvImW+kSkiNsvooPF
-         5qDPW+RBDfUmreh+0jt8nqC79S/LxXDEWXddfb/87D0huBmTvQBudUlrWnW2OdTik5yN
-         KoRw==
-X-Gm-Message-State: AOAM533NPR45NvAlH9l4aNMB/M/2yB+fC5NY+Tk0Tje8dSp1KiSDUq8e
-        MZfWpA382PjYse4PUmynHwE=
-X-Google-Smtp-Source: ABdhPJy5WZKx8Db12jFNbVaHP3Fz1Red+MdnyuyzuB4bQ3KfRZmKcM41nCu17nw2QIiZIENKiPhvqQ==
-X-Received: by 2002:a2e:140e:: with SMTP id u14mr11582726ljd.413.1614671083925;
-        Mon, 01 Mar 2021 23:44:43 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id e15sm2552600lfs.83.2021.03.01.23.44.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 23:44:43 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Vivek Unune <npcomplete13@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH stblinux.git 2/2] firmware: bcm47xx_nvram: support platform device "brcm,nvram"
-Date:   Tue,  2 Mar 2021 08:44:05 +0100
-Message-Id: <20210302074405.18998-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210302074405.18998-1-zajec5@gmail.com>
-References: <20210302074405.18998-1-zajec5@gmail.com>
+        id S237562AbhCCAYc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 2 Mar 2021 19:24:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46540 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236028AbhCBILu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 2 Mar 2021 03:11:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 315116146D;
+        Tue,  2 Mar 2021 08:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614672569;
+        bh=b7MRmgm5OlBAwHlkF3g3dXoVjRXEXsxIMOfK1akZc6A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LeOStWJeirYyUSKXEVj1C91TXQyyc75dmOuQ+MqpKvL9FsqFUdgTDwc1ZJrMr4j0X
+         +mNjdNVL0vI0a4Kpl4Z5vmsdixvN2SUnzRRTlaU4Fh+4GUTFh7cb7gmeN2j9YCRC8m
+         cWqV23ljMqm3tnYs+ZM3LzIPFWtNZxu4DfdOzLx1cYJ+WiCGCfJyWMGFtmp1SLo+zN
+         MUmafnfGuOgldn/WPPRsGCJ13XvNHyQMEom0RCEvLJ9DpzUFVcXKM8vxFSoNhWVeL/
+         yRHjzCBB82l9t1sQCEoOcU8PrKlYb1h60hS0/EBacHb+1k6iXi0HfbzwEh8NrPkfaC
+         cfuhc/uaWAljA==
+Date:   Tue, 2 Mar 2021 10:09:20 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mips@vger.kernel.org, fancer.lancer@gmail.com, guro@fb.com,
+        akpm@linux-foundation.org, paul@crapouillou.net,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: BMIPS: Reserve exception base to prevent corruption
+Message-ID: <YD3ysGd86zRjOLQa@kernel.org>
+References: <20210301092241.i7dxo7zbg3ar55d6@mobilestation>
+ <20210302041940.3663823-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210302041940.3663823-1-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Mon, Mar 01, 2021 at 08:19:38PM -0800, Florian Fainelli wrote:
+> BMIPS is one of the few platforms that do change the exception base.
+> After commit 2dcb39645441 ("memblock: do not start bottom-up allocations
+> with kernel_end") we started seeing BMIPS boards fail to boot with the
+> built-in FDT being corrupted.
+> 
+> Before the cited commit, early allocations would be in the [kernel_end,
+> RAM_END] range, but after commit they would be within [RAM_START +
+> PAGE_SIZE, RAM_END].
+> 
+> The custom exception base handler that is installed by
+> bmips_ebase_setup() done for BMIPS5000 CPUs ends-up trampling on the
+> memory region allocated by unflatten_and_copy_device_tree() thus
+> corrupting the FDT used by the kernel.
+> 
+> To fix this, we need to perform an early reservation of the custom
+> exception that is going to be installed and this needs to happen at
+> plat_mem_setup() time to ensure that unflatten_and_copy_device_tree()
+> finds a space that is suitable, away from reserved memory.
+> 
+> Huge thanks to Serget for analysing and proposing a solution to this
+> issue.
+> 
+> Fixes: Fixes: 2dcb39645441 ("memblock: do not start bottom-up allocations with kernel_end")
+> Debugged-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reported-by: Kamal Dasu <kdasu.kdev@gmail.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Add support for platform device providing mapping resource. This allows
-reading NVRAM based on DT mapping binding. It's required for devices
-that boot depending on NVRAM stored setup and provides early access to
-NVRAM data.
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-bcm47xx_nvram driver was originally added through MIPS tree, but this
-change doesn't affect BCM47XX (MIPS) as it doesn't use DT. It targets
-ARCH_BCM_5301X so I suggest this goes through the stblinux.git tree.
----
- drivers/firmware/broadcom/bcm47xx_nvram.c | 55 +++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+> ---
+> Thomas,
+> 
+> This is intended as a stop-gap solution for 5.12-rc1 and to be picked up
+> by the stable team for 5.11. We should find a safer way to avoid these
+> problems for 5.13 maybe.
+> 
+>  arch/mips/bmips/setup.c       | 22 ++++++++++++++++++++++
+>  arch/mips/include/asm/traps.h |  2 ++
+>  2 files changed, 24 insertions(+)
+> 
+> diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
+> index 31bcfa4e08b9..0088bd45b892 100644
+> --- a/arch/mips/bmips/setup.c
+> +++ b/arch/mips/bmips/setup.c
+> @@ -149,6 +149,26 @@ void __init plat_time_init(void)
+>  	mips_hpt_frequency = freq;
+>  }
+>  
+> +static void __init bmips_ebase_reserve(void)
+> +{
+> +	phys_addr_t base, size = VECTORSPACING * 64;
+> +
+> +	switch (current_cpu_type()) {
+> +	default:
+> +	case CPU_BMIPS4350:
+> +		return;
+> +	case CPU_BMIPS3300:
+> +	case CPU_BMIPS4380:
+> +		base = 0x0400;
+> +		break;
+> +	case CPU_BMIPS5000:
+> +		base = 0x1000;
+> +		break;
+> +	}
+> +
+> +	memblock_reserve(base, size);
+> +}
+> +
+>  void __init plat_mem_setup(void)
+>  {
+>  	void *dtb;
+> @@ -169,6 +189,8 @@ void __init plat_mem_setup(void)
+>  
+>  	__dt_setup_arch(dtb);
+>  
+> +	bmips_ebase_reserve();
+> +
+>  	for (q = bmips_quirk_list; q->quirk_fn; q++) {
+>  		if (of_flat_dt_is_compatible(of_get_flat_dt_root(),
+>  					     q->compatible)) {
+> diff --git a/arch/mips/include/asm/traps.h b/arch/mips/include/asm/traps.h
+> index 6aa8f126a43d..0ba6bb7f9618 100644
+> --- a/arch/mips/include/asm/traps.h
+> +++ b/arch/mips/include/asm/traps.h
+> @@ -14,6 +14,8 @@
+>  #define MIPS_BE_FIXUP	1		/* return to the fixup code */
+>  #define MIPS_BE_FATAL	2		/* treat as an unrecoverable error */
+>  
+> +#define VECTORSPACING 0x100	/* for EI/VI mode */
+> +
+>  extern void (*board_be_init)(void);
+>  extern int (*board_be_handler)(struct pt_regs *regs, int is_fixup);
+>  
+> -- 
+> 2.25.1
+> 
 
-diff --git a/drivers/firmware/broadcom/bcm47xx_nvram.c b/drivers/firmware/broadcom/bcm47xx_nvram.c
-index 835ece9c00f1..d5d19dd1b9e1 100644
---- a/drivers/firmware/broadcom/bcm47xx_nvram.c
-+++ b/drivers/firmware/broadcom/bcm47xx_nvram.c
-@@ -13,6 +13,7 @@
- #include <linux/kernel.h>
- #include <linux/string.h>
- #include <linux/mtd/mtd.h>
-+#include <linux/platform_device.h>
- #include <linux/bcm47xx_nvram.h>
- 
- #define NVRAM_MAGIC			0x48534C46	/* 'FLSH' */
-@@ -162,6 +163,60 @@ static int nvram_init(void)
- 	return -ENXIO;
- }
- 
-+static int brcm_nvram_probe(struct platform_device *pdev)
-+{
-+	struct nvram_header __iomem *header;
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	void __iomem *mmio;
-+	size_t copy_len;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res) {
-+		dev_err(dev, "Failed to get resource\n");
-+		return -ENODEV;
-+	}
-+
-+	mmio = ioremap(res->start, resource_size(res));
-+	if (!mmio)
-+		return -ENOMEM;
-+
-+	header = (struct nvram_header *)mmio;
-+	copy_len = DIV_ROUND_UP(sizeof(*header) + header->len, 4);
-+	if (header->magic != NVRAM_MAGIC) {
-+		dev_err(dev, "No NVRAM found at %pR\n", res);
-+		return -EPROTO;
-+	} else if (copy_len > resource_size(res)) {
-+		dev_err(dev, "NVRAM size exceeds %pR\n", res);
-+		return -ERANGE;
-+	} else if (copy_len >= NVRAM_SPACE) {
-+		dev_err(dev, "NVRAM size exceeds buffer size %d\n", NVRAM_SPACE);
-+		return -ENOMEM;
-+	}
-+
-+	__ioread32_copy(nvram_buf, mmio, copy_len);
-+	nvram_buf[NVRAM_SPACE - 1] = '\0';
-+
-+	iounmap(mmio);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id brcm_nvram_of_match[] = {
-+	{ .compatible = "brcm,nvram "},
-+	{},
-+};
-+
-+static struct platform_driver brcm_nvram_driver = {
-+	.driver = {
-+		.name = "brcm_nvram",
-+		.of_match_table = brcm_nvram_of_match,
-+	},
-+	.probe	= brcm_nvram_probe,
-+};
-+
-+module_platform_driver(brcm_nvram_driver);
-+
- int bcm47xx_nvram_getenv(const char *name, char *val, size_t val_len)
- {
- 	char *var, *value, *end, *eq;
 -- 
-2.26.2
-
+Sincerely yours,
+Mike.
