@@ -2,71 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E3D32AF6E
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 04:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B70532AF70
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 04:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237102AbhCCAVJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 2 Mar 2021 19:21:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49268 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1576079AbhCBEXq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 1 Mar 2021 23:23:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 49F8961606;
-        Tue,  2 Mar 2021 04:23:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614658986;
-        bh=lQk2rTXCk0WoSO85QnZVV+AZivhTIPVK5TKCRy8JuT4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=N3sjDOEAZWFF5uENes1moJyRCf305IUwklhn7alihIjl5RZdaBrzcFz/obK2RHcB1
-         egWTtCbU+2/5/ynj/D9UouOA77MEEf57FXLOyp7FxyoSatBD9ShHSZ6hCn8EeIpjx3
-         nMgxwON3a9opJ4CHVee1EPW8LbXurKs9q/a0mE0zXG1/ZagJQLpzMDjfJVvBmbR5ob
-         EsbGOQ18q4U78lvz3NxUkmv62RmGQdi5/HnfnfbJUOHMdIW8uqnLufnlIFGa6Q0rdu
-         ihrwkAepqKjzh1mu/4gV8oFo3BWIb4T3ALUhArR7blWuMHMALf0ErLtg6hbbeXVNwK
-         mQFyRdPV1ZxBg==
-Received: by mail-io1-f44.google.com with SMTP id n14so20350623iog.3;
-        Mon, 01 Mar 2021 20:23:06 -0800 (PST)
-X-Gm-Message-State: AOAM530fDiEwV9k9SWK+7iRsP0Njx+jz65KVXWByX+FHPlYAHUAwQp3f
-        JFtCfmjHHr1kh+RtDx1ckgSGy0T8JDaKjMl5KL8=
-X-Google-Smtp-Source: ABdhPJwCuxTDWMNec7LxiBGqzBgbI4uXzRfU9Oqbf5M3iq1aslJwzVH6Bma13jrgfm6LkNLgMLVTYlhUGGGa2l6FIg4=
-X-Received: by 2002:a5e:a508:: with SMTP id 8mr7170210iog.135.1614658985755;
- Mon, 01 Mar 2021 20:23:05 -0800 (PST)
+        id S237180AbhCCAWG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 2 Mar 2021 19:22:06 -0500
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:59013 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1837117AbhCBHZE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Mar 2021 02:25:04 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id E47CC1012;
+        Tue,  2 Mar 2021 02:23:47 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 02 Mar 2021 02:23:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=Q
+        UkkO+HUiTfmvEyeYQhKr2uoeDkoPgcnYhHr2cEfPXA=; b=Cc5HaU7R3g6VjxLuG
+        +JprjgLje7gFtX/yfFXjY9DBvWZ5jzcFfb6nA0A4DPTbwE1z8HfpmIgZErUxmW+u
+        5Utpnt5bS3wxZHtFmFdo6UoA8IAPJiNsiFDF6yaMziph2Kn+a5C7Yap4Qt3Ycl3h
+        AV6Ahd7xKBwu/gqvTCbdKEjRybWiNgaxqVkICn+34tXcwyFxzFN47XGTwQWD8Aas
+        5F+1bCev1cw6z/dqAP739dqdljWtC6KKQH/lFKIFKhQgPmUpFIP0Y34SBVC6HCBw
+        9f8o15aYVBD8yEh+0t+IkbQXYgVSXUucXOz2gZ0+DSf/gLX9nYiiCQY+T6evYk/F
+        IdIkQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=QUkkO+HUiTfmvEyeYQhKr2uoeDkoPgcnYhHr2cEfP
+        XA=; b=j1pH85GaFMTdCywjPQBLushGk6qOSC1OPiItzyt3JBmOZI8Ze/f1roeAr
+        lDS4au5JRb4vEitGSLT2QYouANq9Do6qPTVKYWA2C3/MuzC+ZUWAJpIY1waH/T+2
+        jRl2fkSeAqIpoUGAX3UrDLHRPf2+1yC0jJDnzujstn+zvgpBA5BKMC9Q8+DNDpCO
+        0kHqfxs0aArptHtXZ3uo4UgSTSTD5PIQSfJMWzEXhWUMQIk1gTPjGGy25XNFvN4W
+        rmQNbPXkncHW0aUfVGEWbeg4RfVii7FbYsz7eAww53lWn0MqpU7EgMUgd0cwmhK3
+        ygSc/J7kLtV5FmMPxa8OR6Lo0yXvg==
+X-ME-Sender: <xms:A-g9YNwPuJfVkrHIaara2nn92HxpMQMSyvAsTALOFLNzP8XkiBm7oQ>
+    <xme:A-g9YNSEZKbA-YamUePkCkOOneLRuxdwPZYKXc23AeMZhnACUV_Q0_fB8RieKav9T
+    jeiZ7uklYt6pTYBP5U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrleelgddutdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeeihffghfeikedugeejvefgffevgeevgeehfffhudeiieffffev
+    ffeugeevfefgfeenucfkphepgeehrdeffedrhedtrddvheegnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhl
+    hihgohgrthdrtghomh
+X-ME-Proxy: <xmx:A-g9YHVe82pGwHdnCHF2dPwdXgthb39O2pkqKH4whhhh_ZHs_nbbTw>
+    <xmx:A-g9YPjBO__Qcm22dmfYrnexKfONBXb8QnujKklniJdhPV1g8qU3pA>
+    <xmx:A-g9YPAqmnlb8gEc6JI8O43WlWGjkF-7S-ma0fJL4-TnHuNyP4MbBA>
+    <xmx:A-g9YGM47ulyk4SdtMByHND1qTb8sYSmufD4v8bLWcLj1LW6Mks9DQ>
+Received: from [127.0.0.1] (li1000-254.members.linode.com [45.33.50.254])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 01895108005F;
+        Tue,  2 Mar 2021 02:23:44 -0500 (EST)
+Subject: Re: HELP: MIPS PC Relative Addressing
+To:     Jim Wilson <jimw@sifive.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Binutils <binutils@sourceware.org>,
+        GCC Development <gcc@gcc.gnu.org>, mfortune@gmail.com,
+        syq@debian.org
+References: <3ddc0595-c443-868e-c0a4-08ae8934f116@flygoat.com>
+ <CAFyWVab4Z4BH5RxZWXJnxerjAYDNnCndMvksCHsKkFUU1q1w9g@mail.gmail.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <7494335f-703e-f9f8-30dd-6e41249c3873@flygoat.com>
+Date:   Tue, 2 Mar 2021 15:23:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-References: <20210301152958.3480-1-tsbogend@alpha.franken.de> <6a746cc8-0a72-c73b-c6bf-780c6ed68d0c@flygoat.com>
-In-Reply-To: <6a746cc8-0a72-c73b-c6bf-780c6ed68d0c@flygoat.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 2 Mar 2021 12:22:53 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6fke1AnCSLC39qTgKbKGLheHO=qQZ=MUCVMvegBvop9g@mail.gmail.com>
-Message-ID: <CAAhV-H6fke1AnCSLC39qTgKbKGLheHO=qQZ=MUCVMvegBvop9g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] MIPS: Remove KVM_GUEST support
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAFyWVab4Z4BH5RxZWXJnxerjAYDNnCndMvksCHsKkFUU1q1w9g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
-On Tue, Mar 2, 2021 at 10:27 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote=
-:
->
->
->
-> =E5=9C=A8 2021/3/1 =E4=B8=8B=E5=8D=8811:29, Thomas Bogendoerfer =E5=86=99=
-=E9=81=93:
-> > KVM_GUEST is broken and unmaintained, so let's remove it.
-> >
-> > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->
-> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->
-> I'll prepare a patch for KVM side removal.
->
-> Thanks.
->
-> - Jiaxun
+
+在 2021/2/25 上午5:40, Jim Wilson 写道:
+> On Wed, Feb 24, 2021 at 6:18 AM Jiaxun Yang <jiaxun.yang@flygoat.com 
+> <mailto:jiaxun.yang@flygoat.com>> wrote:
+> 
+>     I found it's very difficult for GCC to generate this kind of pcrel_lo
+>     expression,
+>     RTX label_ref can't be lower into such LOW_SUM expression.
+> 
+> 
+> Yes, it is difficult.  You need to generate a label, and put the label 
+> number in an unspec in the auipc pattern, and then create a label_ref to 
+> put in the addi.  The fact that we have an unspec and a label_ref means 
+> a number of optimizations get disabled, like basic block duplication and 
+> loop unrolling, because they can't make a copy of an instruction that 
+> uses a label as data, as they have no way to know how to duplicate the 
+> label itself.  Or at least RISC-V needs to create one label.  You 
+> probably need to create two labels.
+> 
+> There is a far easier way to do this, which is to just emit an assembler 
+> macro, and let the assembler generate the labels and relocs.  This is 
+> what the RISC-V GCC port does by default.  This prevents some 
+> optimizations like scheduling the two instructions, but enables some 
+> other optimizations like loop unrolling.  So it is a tossup.  Sometimes 
+> we get better code with the assembler macro, and sometimes we get better 
+> code by emitting the auipc and addi separately.
+> 
+> The RISC-V gcc port can emit the auipc/addi with 
+> -mexplicit-relocs -mcode-model=medany, but this is known to sometimes 
+> fail.  The problem is that if you have an 8-byte variable with 8-byte 
+> alignment, and try to load it with 2 4-byte loads, gcc knows that 
+> offset+4 must be safe from overflow because the data is 8-byte aligned.  
+> However, when you use a pc-relative offset that is data address-code 
+> address, the offset is only as aligned as the code is.  RISC-V has 
+> 2-byte instruction alignment with the C extension.  So if you have 
+> offset+4 and offset is only 2-byte aligned, it is possible that offset+4 
+> may overflow the add immediate field.  The same thing can happen with 
+> 16-byte data that is 16-byte aligned, accessed with two 8-byte loads.  
+> There is no easy software solution.  We just emit a linker error in that 
+> case as we can't do anything else.  I think this would work better if 
+> auipc cleared some low bits of the result, in which case the pc-relative 
+> offset would have enough alignment to prevent overflow when adding small 
+> offsets, but it is far too late to change how the RISC-V auipc works.
+> 
+
+Hi all,
+
+After spending days poking with AUIPC, I suddenly found we indeed have 
+ALUIPC
+instruction in MIPS R6, which will clear low 16bit of AUIPC result.
+
+So the whole thing now looks easier, we can have R_MIPS_PC_PAGE and 
+R_MIPS_PC_OFST and avoid  all mess we met in RISC-V.
+
+A pcrel loading could be as simple as:
+aluipc     a0, %pcrel_page(sym)
+addiu      a0, %pcrel_ofst(sym)
+
+Thanks.
+
+- Jiaxun
+
