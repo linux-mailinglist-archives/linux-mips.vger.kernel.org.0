@@ -2,34 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AC632AF85
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 04:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7951132AF86
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 04:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237928AbhCCAZv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 2 Mar 2021 19:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
+        id S237960AbhCCAZ7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 2 Mar 2021 19:25:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448710AbhCBPeW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Mar 2021 10:34:22 -0500
+        with ESMTP id S1446811AbhCBQPt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Mar 2021 11:15:49 -0500
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA6A7C061A32
-        for <linux-mips@vger.kernel.org>; Tue,  2 Mar 2021 07:30:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 057FEC06178A;
+        Tue,  2 Mar 2021 08:14:02 -0800 (PST)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id EC24992009C; Tue,  2 Mar 2021 16:30:06 +0100 (CET)
+        id 13B8A92009C; Tue,  2 Mar 2021 17:14:01 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id E428892009B;
-        Tue,  2 Mar 2021 16:30:06 +0100 (CET)
-Date:   Tue, 2 Mar 2021 16:30:06 +0100 (CET)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 05E9692009B;
+        Tue,  2 Mar 2021 17:14:00 +0100 (CET)
+Date:   Tue, 2 Mar 2021 17:14:00 +0100 (CET)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc:     Jim Wilson <jimw@sifive.com>, GCC Development <gcc@gcc.gnu.org>,
-        syq@debian.org, "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Matthew Fortune <mfortune@gmail.com>,
-        Binutils <binutils@sourceware.org>
-Subject: Re: HELP: MIPS PC Relative Addressing
-In-Reply-To: <7494335f-703e-f9f8-30dd-6e41249c3873@flygoat.com>
-Message-ID: <alpine.DEB.2.21.2103021335450.19637@angie.orcam.me.uk>
-References: <3ddc0595-c443-868e-c0a4-08ae8934f116@flygoat.com> <CAFyWVab4Z4BH5RxZWXJnxerjAYDNnCndMvksCHsKkFUU1q1w9g@mail.gmail.com> <7494335f-703e-f9f8-30dd-6e41249c3873@flygoat.com>
+To:     YunQiang Su <yunqiang.su@cipunited.com>
+cc:     tsbogend@alpha.franken.de, jiaxun.yang@flygoat.com,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v6] MIPS: force use FR=0 for FPXX binary
+In-Reply-To: <20210302022907.1835-1-yunqiang.su@cipunited.com>
+Message-ID: <alpine.DEB.2.21.2103021645120.19637@angie.orcam.me.uk>
+References: <20210302022907.1835-1-yunqiang.su@cipunited.com>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -37,34 +35,55 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 2 Mar 2021, Jiaxun Yang wrote:
+On Tue, 2 Mar 2021, YunQiang Su wrote:
 
-> After spending days poking with AUIPC, I suddenly found we indeed have ALUIPC
-> instruction in MIPS R6, which will clear low 16bit of AUIPC result.
+> The MIPS FPU may have 2 mode:
+>   FR=0: MIPS I style, odd-FPR can only be single,
+>         and even-FPR can be double.
+
+ Depending on the ISA level FR=0 may or may not allow single arithmetic 
+with odd-numbered FPRs.  Compare the FP64A ABI.
+
+>   FR=1: all 32 FPR can be double.
+
+ I think it's best to describe the FR=0 mode as one where the FP registers 
+are 32-bit and the FR=1 mode as one where the FP registers are 64-bit 
+(this mode is also needed for the paired-single format).  See:
+
+<https://dmz-portal.mips.com/wiki/MIPS_O32_ABI_-_FR0_and_FR1_Interlinking#1._Introduction>
+
+> The binary may have 3 mode:
+>   FP32: can only work with FR=0 mode
+>   FPXX: can work with both FR=0 and FR=1 mode.
+>   FP64: can only work with FR=1 mode
 > 
-> So the whole thing now looks easier, we can have R_MIPS_PC_PAGE and
-> R_MIPS_PC_OFST and avoid  all mess we met in RISC-V.
+> Some binary, for example the output of golang, may be mark as FPXX,
+> while in fact they are FP32.
 > 
-> A pcrel loading could be as simple as:
-> aluipc     a0, %pcrel_page(sym)
-> addiu      a0, %pcrel_ofst(sym)
+> Currently, FR=1 mode is used for all FPXX binary, it makes some wrong
+> behivour of the binaries. Since FPXX binary can work with both FR=1 and FR=0,
+> we force it to use FR=0.
 
- Yes, it should work, but you'll have to 64KiB-align the module in the 
-static link.
+ I think you need to document here what we discussed, that is the linker 
+bug exposed in the context of FPXX annotation by legacy modules that lack 
+FP mode annotation, which is the underlying problem.
 
- You may not need a new relocation for the low part as it looks to me like 
-the semantics of plain LO16 fits (though its REL handling peculiarities 
-may indeed favour an entirely new "clean" relocation"), but it's a design 
-detail and the general principle seems right to me.
+> v5->v6:
+> 	Rollback to V3, aka remove config option.
 
- I'm not sure though why you try to avoid composed relocations given we've
-had them for 20+ years now.  Relocations are just calculation operators 
-for expressions evaluated at link time rather than assembly or high-level 
-language compilation time.  And just like we don't invent single operators 
-for complex combinations of `+', `&', `%', `<<', etc. and instead compose 
-the exiting ones in expressions used in various programming languages to 
-get the desired calculation, we don't need to do that for relocation and 
-we can just have a collection of simple relocation operators to choose 
-from and combine.
+ You can't reuse v3 as it stands because it breaks R6 as we previously 
+discussed.  You need to tell R6 and earlier ISAs apart and set the FR bit 
+accordingly.
+
+ It would be more proper I suppose if we actually checked at the boot time 
+whether the bit is writable, just like we handle NAN2008, but I don't see 
+it as a prerequisite for this workaround since we currently don't do this 
+either (it would also be good to check if the FP emulation code gets the 
+read-only FR bit right for R6 for FPU-less operation).
+
+ Also you need to put the history in the comment section and not the 
+commit description, so that the change can be directly applied and does 
+not have to be hand-edited by the maintainer.  You don't want to overload 
+him with mechanical work.
 
   Maciej
