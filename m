@@ -2,142 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B70532AF70
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 04:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5763332AF77
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 04:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237180AbhCCAWG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 2 Mar 2021 19:22:06 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:59013 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1837117AbhCBHZE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Mar 2021 02:25:04 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id E47CC1012;
-        Tue,  2 Mar 2021 02:23:47 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Tue, 02 Mar 2021 02:23:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=Q
-        UkkO+HUiTfmvEyeYQhKr2uoeDkoPgcnYhHr2cEfPXA=; b=Cc5HaU7R3g6VjxLuG
-        +JprjgLje7gFtX/yfFXjY9DBvWZ5jzcFfb6nA0A4DPTbwE1z8HfpmIgZErUxmW+u
-        5Utpnt5bS3wxZHtFmFdo6UoA8IAPJiNsiFDF6yaMziph2Kn+a5C7Yap4Qt3Ycl3h
-        AV6Ahd7xKBwu/gqvTCbdKEjRybWiNgaxqVkICn+34tXcwyFxzFN47XGTwQWD8Aas
-        5F+1bCev1cw6z/dqAP739dqdljWtC6KKQH/lFKIFKhQgPmUpFIP0Y34SBVC6HCBw
-        9f8o15aYVBD8yEh+0t+IkbQXYgVSXUucXOz2gZ0+DSf/gLX9nYiiCQY+T6evYk/F
-        IdIkQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=QUkkO+HUiTfmvEyeYQhKr2uoeDkoPgcnYhHr2cEfP
-        XA=; b=j1pH85GaFMTdCywjPQBLushGk6qOSC1OPiItzyt3JBmOZI8Ze/f1roeAr
-        lDS4au5JRb4vEitGSLT2QYouANq9Do6qPTVKYWA2C3/MuzC+ZUWAJpIY1waH/T+2
-        jRl2fkSeAqIpoUGAX3UrDLHRPf2+1yC0jJDnzujstn+zvgpBA5BKMC9Q8+DNDpCO
-        0kHqfxs0aArptHtXZ3uo4UgSTSTD5PIQSfJMWzEXhWUMQIk1gTPjGGy25XNFvN4W
-        rmQNbPXkncHW0aUfVGEWbeg4RfVii7FbYsz7eAww53lWn0MqpU7EgMUgd0cwmhK3
-        ygSc/J7kLtV5FmMPxa8OR6Lo0yXvg==
-X-ME-Sender: <xms:A-g9YNwPuJfVkrHIaara2nn92HxpMQMSyvAsTALOFLNzP8XkiBm7oQ>
-    <xme:A-g9YNSEZKbA-YamUePkCkOOneLRuxdwPZYKXc23AeMZhnACUV_Q0_fB8RieKav9T
-    jeiZ7uklYt6pTYBP5U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrleelgddutdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeeihffghfeikedugeejvefgffevgeevgeehfffhudeiieffffev
-    ffeugeevfefgfeenucfkphepgeehrdeffedrhedtrddvheegnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhl
-    hihgohgrthdrtghomh
-X-ME-Proxy: <xmx:A-g9YHVe82pGwHdnCHF2dPwdXgthb39O2pkqKH4whhhh_ZHs_nbbTw>
-    <xmx:A-g9YPjBO__Qcm22dmfYrnexKfONBXb8QnujKklniJdhPV1g8qU3pA>
-    <xmx:A-g9YPAqmnlb8gEc6JI8O43WlWGjkF-7S-ma0fJL4-TnHuNyP4MbBA>
-    <xmx:A-g9YGM47ulyk4SdtMByHND1qTb8sYSmufD4v8bLWcLj1LW6Mks9DQ>
-Received: from [127.0.0.1] (li1000-254.members.linode.com [45.33.50.254])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 01895108005F;
-        Tue,  2 Mar 2021 02:23:44 -0500 (EST)
-Subject: Re: HELP: MIPS PC Relative Addressing
-To:     Jim Wilson <jimw@sifive.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Binutils <binutils@sourceware.org>,
-        GCC Development <gcc@gcc.gnu.org>, mfortune@gmail.com,
-        syq@debian.org
-References: <3ddc0595-c443-868e-c0a4-08ae8934f116@flygoat.com>
- <CAFyWVab4Z4BH5RxZWXJnxerjAYDNnCndMvksCHsKkFUU1q1w9g@mail.gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <7494335f-703e-f9f8-30dd-6e41249c3873@flygoat.com>
-Date:   Tue, 2 Mar 2021 15:23:42 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S237521AbhCCAYB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 2 Mar 2021 19:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376386AbhCBH4G (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Mar 2021 02:56:06 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2AAC061788;
+        Mon,  1 Mar 2021 23:44:41 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id r25so21736735ljk.11;
+        Mon, 01 Mar 2021 23:44:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3TtSrnXBguUPTi71hdOlnm4h8qMyGVSuM0R08lOrQW4=;
+        b=uots3Sxm9SoiIi+QE2AQP6TZSdeyhTt/s5Xh/05aX+PTwfgq0Mm1+r1XygmqDKXg1v
+         aidObKrhOU7m/gSqHRqUjOcBYCbjrn8SQUlhIRKPehAaZmxR7phXvLt3XAYGwhciak5m
+         3rrbNzKEDtMxygnR+Nao6WjEd9Z3xyW8eQXz9oLuE0NGqphifmyVF2jd6fcT2Usom8kB
+         mYhRpgnGbB4oanr4KvJdBRxA/yoprN29gi7c8H3tMJRw20ONETkNSjRBeff/Inke4jWl
+         o5XpzcwvReYXJ0sjZmIjb1FermlSQX4tAdZ/b7CcyxlxgnGJwC30JCXMPKyWXcAZdsDA
+         gkyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3TtSrnXBguUPTi71hdOlnm4h8qMyGVSuM0R08lOrQW4=;
+        b=af7RAlnBp01/VPfLscy+GShMwDdCsAZKN4+H+xQcR1oF09EUInV4BARFoGvf6ViDDh
+         xJ0iK90s6MedkjWBqPE0vDSTg5DNPCEorl9EwkCxE+gzDv/Y1IxZpPlD6/E79HfFFO/A
+         G1vCi95XYVi0dA4O3mIzm1zzN3RO1VvCofqeGao9Xes69HN9YhZKnEviiZzCngr/Rcqj
+         BrsgMsr4eeiu009VD8nXgmcXV1dzIM7q6cuQm2hI96AKSYIa3C5IPX5chMARb0/FhfDo
+         8D/YcbeazpogLnfLP4PUPXEiYpNRZLNMocBVlrNCsefP7kVqXaB5uonJN0hDw/P6T+La
+         2W6A==
+X-Gm-Message-State: AOAM531DuDhuF20TXX33+zCj0Na17c6m+qpji2/rP9jTQ1e9ovI9ad5s
+        t2B8LO6i9F6wyZQQVXHLT4U=
+X-Google-Smtp-Source: ABdhPJzj5bJtO4TF9wl6Qz1I7getHrofm1x9Oh+YQo5fkpbR6AtYw3Jw8p0DBAzHIs5abIwxraiWwQ==
+X-Received: by 2002:a05:651c:1022:: with SMTP id w2mr10340293ljm.455.1614671080079;
+        Mon, 01 Mar 2021 23:44:40 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id e15sm2552600lfs.83.2021.03.01.23.44.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Mar 2021 23:44:39 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Vivek Unune <npcomplete13@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH stblinux.git 1/2] dt-bindings: firmware: add Broadcom's NVRAM memory mapping
+Date:   Tue,  2 Mar 2021 08:44:04 +0100
+Message-Id: <20210302074405.18998-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <CAFyWVab4Z4BH5RxZWXJnxerjAYDNnCndMvksCHsKkFUU1q1w9g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Rafał Miłecki <rafal@milecki.pl>
 
+NVRAM structure contains device data and can be accessed using MMIO.
 
-在 2021/2/25 上午5:40, Jim Wilson 写道:
-> On Wed, Feb 24, 2021 at 6:18 AM Jiaxun Yang <jiaxun.yang@flygoat.com 
-> <mailto:jiaxun.yang@flygoat.com>> wrote:
-> 
->     I found it's very difficult for GCC to generate this kind of pcrel_lo
->     expression,
->     RTX label_ref can't be lower into such LOW_SUM expression.
-> 
-> 
-> Yes, it is difficult.  You need to generate a label, and put the label 
-> number in an unspec in the auipc pattern, and then create a label_ref to 
-> put in the addi.  The fact that we have an unspec and a label_ref means 
-> a number of optimizations get disabled, like basic block duplication and 
-> loop unrolling, because they can't make a copy of an instruction that 
-> uses a label as data, as they have no way to know how to duplicate the 
-> label itself.  Or at least RISC-V needs to create one label.  You 
-> probably need to create two labels.
-> 
-> There is a far easier way to do this, which is to just emit an assembler 
-> macro, and let the assembler generate the labels and relocs.  This is 
-> what the RISC-V GCC port does by default.  This prevents some 
-> optimizations like scheduling the two instructions, but enables some 
-> other optimizations like loop unrolling.  So it is a tossup.  Sometimes 
-> we get better code with the assembler macro, and sometimes we get better 
-> code by emitting the auipc and addi separately.
-> 
-> The RISC-V gcc port can emit the auipc/addi with 
-> -mexplicit-relocs -mcode-model=medany, but this is known to sometimes 
-> fail.  The problem is that if you have an 8-byte variable with 8-byte 
-> alignment, and try to load it with 2 4-byte loads, gcc knows that 
-> offset+4 must be safe from overflow because the data is 8-byte aligned.  
-> However, when you use a pc-relative offset that is data address-code 
-> address, the offset is only as aligned as the code is.  RISC-V has 
-> 2-byte instruction alignment with the C extension.  So if you have 
-> offset+4 and offset is only 2-byte aligned, it is possible that offset+4 
-> may overflow the add immediate field.  The same thing can happen with 
-> 16-byte data that is 16-byte aligned, accessed with two 8-byte loads.  
-> There is no easy software solution.  We just emit a linker error in that 
-> case as we can't do anything else.  I think this would work better if 
-> auipc cleared some low bits of the result, in which case the pc-relative 
-> offset would have enough alignment to prevent overflow when adding small 
-> offsets, but it is far too late to change how the RISC-V auipc works.
-> 
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../bindings/firmware/brcm,nvram.yaml         | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/firmware/brcm,nvram.yaml
 
-Hi all,
-
-After spending days poking with AUIPC, I suddenly found we indeed have 
-ALUIPC
-instruction in MIPS R6, which will clear low 16bit of AUIPC result.
-
-So the whole thing now looks easier, we can have R_MIPS_PC_PAGE and 
-R_MIPS_PC_OFST and avoid  all mess we met in RISC-V.
-
-A pcrel loading could be as simple as:
-aluipc     a0, %pcrel_page(sym)
-addiu      a0, %pcrel_ofst(sym)
-
-Thanks.
-
-- Jiaxun
+diff --git a/Documentation/devicetree/bindings/firmware/brcm,nvram.yaml b/Documentation/devicetree/bindings/firmware/brcm,nvram.yaml
+new file mode 100644
+index 000000000000..12af8e2e7c9c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/firmware/brcm,nvram.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/firmware/brcm,nvram.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Broadcom's NVRAM
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++description: |
++  NVRAM is a structure containing device specific environment variables.
++  It is used for storing device configuration, booting parameters and
++  calibration data.
++
++  It's required very early in booting process and so is made available
++  using memory mapping.
++
++  NVRAM can be found on Broadcom BCM47xx MIPS, Northstar ARM Cortex-A9
++  and some more devices.
++
++properties:
++  compatible:
++    const: brcm,nvram
++
++  reg:
++    description: memory region with NVRAM data
++    maxItems: 1
++
++required:
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    nvram@1e000000 {
++         compatible = "brcm,nvram";
++         reg = <0x1e000000 0x10000>;
++    };
+-- 
+2.26.2
 
