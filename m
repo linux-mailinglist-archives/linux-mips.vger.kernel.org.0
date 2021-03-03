@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D21AB32BD8E
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 23:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B390032BD92
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 23:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239013AbhCCQPS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Mar 2021 11:15:18 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:47254 "EHLO loongson.cn"
+        id S1345498AbhCCQQo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Mar 2021 11:16:44 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:47270 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1353400AbhCCG0I (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1355136AbhCCG0I (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Wed, 3 Mar 2021 01:26:08 -0500
 Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxOdSiKz9gd7ATAA--.25147S7;
-        Wed, 03 Mar 2021 14:24:42 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxOdSiKz9gd7ATAA--.25147S8;
+        Wed, 03 Mar 2021 14:24:43 +0800 (CST)
 From:   Qing Zhang <zhangqing@loongson.cn>
 To:     Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -22,184 +22,78 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xingxing Su <suxingxing@loongson.cn>
-Subject: [PATCH v2 5/7] irqchip/loongson-liointc: irqchip add 2.0 version
-Date:   Wed,  3 Mar 2021 14:24:32 +0800
-Message-Id: <20210303062434.22280-6-zhangqing@loongson.cn>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 6/7] dt-bindings: interrupt-controller: Add Loongson-2K1000 LIOINTC
+Date:   Wed,  3 Mar 2021 14:24:33 +0800
+Message-Id: <20210303062434.22280-7-zhangqing@loongson.cn>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210303062434.22280-1-zhangqing@loongson.cn>
 References: <20210303062434.22280-1-zhangqing@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxOdSiKz9gd7ATAA--.25147S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr4kJr17tr1DKFW7Gr1xZrb_yoWrtF18pa
-        y8urZ8KFn8Ga47ur4ftFWkZa4avr1SgrZrWa4fGFy7CFnxA3s5Aa1ruF1UAr4Sk348JFWY
-        vr4rKa4UGa15C3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUm014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE
-        3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
-        x0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8
-        JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2
-        ka0xkIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-        AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE
-        2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
-        vEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
-        vjDU0xZFpf9x0JUwNVkUUUUU=
+X-CM-TRANSID: AQAAf9AxOdSiKz9gd7ATAA--.25147S8
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw47JF18XrW3trW3uFWkCrg_yoW8XFWxpF
+        srCanIgF4jqF13uay8ta40ka15Zr98AwnrGwsFy3y7GFnrtw4jqw4agF1kJayYkFWIqa4q
+        vryF9a10gasIyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBSb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+        8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28C
+        jxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI
+        8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2
+        z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0V
+        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1l
+        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8AwCF04k20x
+        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF
+        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
+        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIhiSDUUUU
 X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add IO interrupt controller support for Loongson 2k1000, different
-from the 3a series is that 2K1000 has 64 interrupt sources, 0-31
-correspond to the device tree liointc0 device node, and the other
-correspond to liointc1 node.
+Add liointc-2.0 properties support, so update the maxItems and description.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-Signed-off-by: Xingxing Su <suxingxing@loongson.cn>
 ---
 
 v2:
-- No changes
+- Add new patch
 
- drivers/irqchip/irq-loongson-liointc.c | 55 +++++++++++++++++++++-----
- 1 file changed, 46 insertions(+), 9 deletions(-)
+ .../bindings/interrupt-controller/loongson,liointc.yaml  | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index 09b91b81851c..1c3c80f7f9f5 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -20,6 +20,7 @@
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+index f38e0113f360..96162b9d227c 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+@@ -10,9 +10,9 @@ maintainers:
+   - Jiaxun Yang <jiaxun.yang@flygoat.com>
  
- #define LIOINTC_CHIP_IRQ	32
- #define LIOINTC_NUM_PARENT 4
-+#define LIOINTC_NUM_CORES	4
+ description: |
+-  This interrupt controller is found in the Loongson-3 family of chips as the primary
+-  package interrupt controller which can route local I/O interrupt to interrupt lines
+-  of cores.
++  This interrupt controller is found in the Loongson-3 family of chips and
++  Loongson-2K1000 chip, as the primary package interrupt controller which
++  can route local I/O interrupt to interrupt lines of cores.
  
- #define LIOINTC_INTC_CHIP_START	0x20
+ allOf:
+   - $ref: /schemas/interrupt-controller.yaml#
+@@ -22,9 +22,10 @@ properties:
+     oneOf:
+       - const: loongson,liointc-1.0
+       - const: loongson,liointc-1.0a
++      - const: loongson,liointc-2.0
  
-@@ -42,6 +43,7 @@ struct liointc_handler_data {
- struct liointc_priv {
- 	struct irq_chip_generic		*gc;
- 	struct liointc_handler_data	handler[LIOINTC_NUM_PARENT];
-+	void __iomem			*core_isr[LIOINTC_NUM_CORES];
- 	u8				map_cache[LIOINTC_CHIP_IRQ];
- 	bool				has_lpc_irq_errata;
- };
-@@ -51,11 +53,12 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
- 	struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
- 	struct irq_chip_generic *gc = handler->priv->gc;
-+	int core = get_ebase_cpunum() % LIOINTC_NUM_CORES;
- 	u32 pending;
+   reg:
+-    maxItems: 1
++    maxItems: 3
  
- 	chained_irq_enter(chip, desc);
+   interrupt-controller: true
  
--	pending = readl(gc->reg_base + LIOINTC_REG_INTC_STATUS);
-+	pending = readl(handler->priv->core_isr[core]);
- 
- 	if (!pending) {
- 		/* Always blame LPC IRQ if we have that bug */
-@@ -141,6 +144,15 @@ static void liointc_resume(struct irq_chip_generic *gc)
- }
- 
- static const char * const parent_names[] = {"int0", "int1", "int2", "int3"};
-+static const char * const core_reg_names[] = {"isr0", "isr1", "isr2", "isr3"};
-+
-+static void __iomem *liointc_get_reg_byname(struct device_node *node,
-+						const char *name)
-+{
-+	int index = of_property_match_string(node, "reg-names", name);
-+
-+	return of_iomap(node, index);
-+}
- 
- static int __init liointc_of_init(struct device_node *node,
- 				  struct device_node *parent)
-@@ -159,10 +171,28 @@ static int __init liointc_of_init(struct device_node *node,
- 	if (!priv)
- 		return -ENOMEM;
- 
--	base = of_iomap(node, 0);
--	if (!base) {
--		err = -ENODEV;
--		goto out_free_priv;
-+	if (of_device_is_compatible(node, "loongson,liointc-2.0")) {
-+		base = liointc_get_reg_byname(node, "main");
-+		if (!base) {
-+			err = -ENODEV;
-+			goto out_free_priv;
-+		}
-+		for (i = 0; i < LIOINTC_NUM_CORES; i++) {
-+			priv->core_isr[i] =
-+				liointc_get_reg_byname(node, core_reg_names[i]);
-+		}
-+		if (!priv->core_isr[0]) {
-+			err = -ENODEV;
-+			goto out_iounmap_base;
-+		}
-+	} else {
-+		base = of_iomap(node, 0);
-+		if (!base) {
-+			err = -ENODEV;
-+			goto out_free_priv;
-+		}
-+		for (i = 0; i < LIOINTC_NUM_CORES; i++)
-+			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
- 	}
- 
- 	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
-@@ -172,7 +202,7 @@ static int __init liointc_of_init(struct device_node *node,
- 	}
- 	if (!have_parent) {
- 		err = -ENODEV;
--		goto out_iounmap;
-+		goto out_iounmap_isr;
- 	}
- 
- 	sz = of_property_read_variable_u32_array(node,
-@@ -183,7 +213,7 @@ static int __init liointc_of_init(struct device_node *node,
- 	if (sz < 4) {
- 		pr_err("loongson-liointc: No parent_int_map\n");
- 		err = -ENODEV;
--		goto out_iounmap;
-+		goto out_iounmap_isr;
- 	}
- 
- 	for (i = 0; i < LIOINTC_NUM_PARENT; i++)
-@@ -195,7 +225,7 @@ static int __init liointc_of_init(struct device_node *node,
- 	if (!domain) {
- 		pr_err("loongson-liointc: cannot add IRQ domain\n");
- 		err = -EINVAL;
--		goto out_iounmap;
-+		goto out_iounmap_isr;
- 	}
- 
- 	err = irq_alloc_domain_generic_chips(domain, 32, 1,
-@@ -260,7 +290,13 @@ static int __init liointc_of_init(struct device_node *node,
- 
- out_free_domain:
- 	irq_domain_remove(domain);
--out_iounmap:
-+out_iounmap_isr:
-+	for (i = 0; i < LIOINTC_NUM_CORES; i++) {
-+		if (!priv->core_isr[i])
-+			continue;
-+		iounmap(priv->core_isr[i]);
-+	}
-+out_iounmap_base:
- 	iounmap(base);
- out_free_priv:
- 	kfree(priv);
-@@ -270,3 +306,4 @@ static int __init liointc_of_init(struct device_node *node,
- 
- IRQCHIP_DECLARE(loongson_liointc_1_0, "loongson,liointc-1.0", liointc_of_init);
- IRQCHIP_DECLARE(loongson_liointc_1_0a, "loongson,liointc-1.0a", liointc_of_init);
-+IRQCHIP_DECLARE(loongson_liointc_2_0, "loongson,liointc-2.0", liointc_of_init);
 -- 
 2.20.1
 
