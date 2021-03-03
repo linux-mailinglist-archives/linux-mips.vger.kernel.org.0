@@ -2,99 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F4632BDA0
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 23:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB9D32BD9A
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Mar 2021 23:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346281AbhCCQRv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Mar 2021 11:17:51 -0500
-Received: from elvis.franken.de ([193.175.24.41]:39192 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349800AbhCCLfS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 3 Mar 2021 06:35:18 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lHO0q-0005hN-00; Wed, 03 Mar 2021 10:41:48 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 4E8B9C0477; Wed,  3 Mar 2021 10:41:34 +0100 (CET)
-Date:   Wed, 3 Mar 2021 10:41:34 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mips@vger.kernel.org, rppt@kernel.org,
-        fancer.lancer@gmail.com, guro@fb.com, akpm@linux-foundation.org,
-        paul@crapouillou.net,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: BMIPS: Reserve exception base to prevent corruption
-Message-ID: <20210303094134.GA18354@alpha.franken.de>
-References: <20210301092241.i7dxo7zbg3ar55d6@mobilestation>
- <20210302041940.3663823-1-f.fainelli@gmail.com>
- <20210302235411.GA3897@alpha.franken.de>
- <4e3640d4-7fc2-96dc-de00-599b3ac80757@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e3640d4-7fc2-96dc-de00-599b3ac80757@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1345994AbhCCQRa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Mar 2021 11:17:30 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:36092 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240974AbhCCKSx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Mar 2021 05:18:53 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UQDd3dc_1614765742;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UQDd3dc_1614765742)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 03 Mar 2021 18:02:28 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] Uprobe: Assign boolean values to a bool variable
+Date:   Wed,  3 Mar 2021 18:02:21 +0800
+Message-Id: <1614765741-35207-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 05:30:18PM -0800, Florian Fainelli wrote:
-> 
-> 
-> On 3/2/2021 3:54 PM, Thomas Bogendoerfer wrote:
-> > On Mon, Mar 01, 2021 at 08:19:38PM -0800, Florian Fainelli wrote:
-> >> BMIPS is one of the few platforms that do change the exception base.
-> >> After commit 2dcb39645441 ("memblock: do not start bottom-up allocations
-> >> with kernel_end") we started seeing BMIPS boards fail to boot with the
-> >> built-in FDT being corrupted.
-> >>
-> >> Before the cited commit, early allocations would be in the [kernel_end,
-> >> RAM_END] range, but after commit they would be within [RAM_START +
-> >> PAGE_SIZE, RAM_END].
-> >>
-> >> The custom exception base handler that is installed by
-> >> bmips_ebase_setup() done for BMIPS5000 CPUs ends-up trampling on the
-> >> memory region allocated by unflatten_and_copy_device_tree() thus
-> >> corrupting the FDT used by the kernel.
-> >>
-> >> To fix this, we need to perform an early reservation of the custom
-> >> exception that is going to be installed and this needs to happen at
-> >> plat_mem_setup() time to ensure that unflatten_and_copy_device_tree()
-> >> finds a space that is suitable, away from reserved memory.
-> >>
-> >> Huge thanks to Serget for analysing and proposing a solution to this
-> >> issue.
-> >>
-> >> Fixes: Fixes: 2dcb39645441 ("memblock: do not start bottom-up allocations with kernel_end")
-> >> Debugged-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> >> Reported-by: Kamal Dasu <kdasu.kdev@gmail.com>
-> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >> ---
-> >> Thomas,
-> >>
-> >> This is intended as a stop-gap solution for 5.12-rc1 and to be picked up
-> >> by the stable team for 5.11. We should find a safer way to avoid these
-> >> problems for 5.13 maybe.
-> > 
-> > let's try to make it in one ago. Hwo about reserving vector space in
-> > cpu_probe, if it's known there and leave the rest to trap_init() ?
-> > 
-> > Below patch got a quick test on IP22 (real hardware) and malta (qemu).
-> > Not sure, if I got all BMIPS parts correct, so please check/test.
-> 
-> Works for me here:
+Fix the following coccicheck warnings:
 
-perfect, I only forgot about R3k... I'll submit a formal patch submission
-later today.
+./arch/mips/kernel/uprobes.c:78:10-11: WARNING: return of 0/1 in
+function 'is_trap_insn' with return type bool.
 
-Thomas.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ arch/mips/kernel/uprobes.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/arch/mips/kernel/uprobes.c b/arch/mips/kernel/uprobes.c
+index 6dbe4ea..e66c032 100644
+--- a/arch/mips/kernel/uprobes.c
++++ b/arch/mips/kernel/uprobes.c
+@@ -75,7 +75,7 @@ bool is_trap_insn(uprobe_opcode_t *insn)
+ 		case tlt_op:
+ 		case tltu_op:
+ 		case tne_op:
+-			return 1;
++			return true;
+ 		}
+ 		break;
+ 
+@@ -87,12 +87,12 @@ bool is_trap_insn(uprobe_opcode_t *insn)
+ 		case tlti_op:
+ 		case tltiu_op:
+ 		case tnei_op:
+-			return 1;
++			return true;
+ 		}
+ 		break;
+ 	}
+ 
+-	return 0;
++	return false;
+ }
+ 
+ #define UPROBE_TRAP_NR	ULONG_MAX
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+1.8.3.1
+
