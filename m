@@ -2,32 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BEC32C898
+	by mail.lfdr.de (Postfix) with ESMTP id 7251432C899
 	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 02:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbhCDAup (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Mar 2021 19:50:45 -0500
-Received: from angie.orcam.me.uk ([157.25.102.26]:37282 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242964AbhCCRai (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Mar 2021 12:30:38 -0500
+        id S238764AbhCDAuq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Mar 2021 19:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386150AbhCCRqs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Mar 2021 12:46:48 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5DD7C0613DD;
+        Wed,  3 Mar 2021 09:45:55 -0800 (PST)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 84E5292009C; Wed,  3 Mar 2021 18:29:52 +0100 (CET)
+        id 5731792009C; Wed,  3 Mar 2021 18:45:52 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 7703292009B;
-        Wed,  3 Mar 2021 18:29:52 +0100 (CET)
-Date:   Wed, 3 Mar 2021 18:29:52 +0100 (CET)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 4E6A992009B;
+        Wed,  3 Mar 2021 18:45:52 +0100 (CET)
+Date:   Wed, 3 Mar 2021 18:45:52 +0100 (CET)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     yunqiang.su@cipunited.com
-cc:     'Thomas Bogendoerfer' <tsbogend@alpha.franken.de>,
-        jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
-Subject: =?UTF-8?Q?Re=3A_=E5=9B=9E=E5=A4=8D=3A_=E5=9B=9E=E5=A4=8D=3A_=5BPATC?=
- =?UTF-8?Q?H_v6=5D_MIPS=3A_force_use_FR=3D0_for_FPXX_binar?=
- =?UTF-8?Q?y?=
-In-Reply-To: <000b01d70fdb$c7b74450$5725ccf0$@cipunited.com>
-Message-ID: <alpine.DEB.2.21.2103031800130.19637@angie.orcam.me.uk>
-References: <20210302022907.1835-1-yunqiang.su@cipunited.com> <alpine.DEB.2.21.2103021645120.19637@angie.orcam.me.uk> <000701d70fd0$ecbb21a0$c63164e0$@cipunited.com> <alpine.DEB.2.21.2103030321240.19637@angie.orcam.me.uk>
- <000b01d70fdb$c7b74450$5725ccf0$@cipunited.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-mips@vger.kernel.org, rppt@kernel.org,
+        fancer.lancer@gmail.com, guro@fb.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        paul@crapouillou.net,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: BMIPS: Reserve exception base to prevent
+ corruption
+In-Reply-To: <20210303094134.GA18354@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2103031844510.19637@angie.orcam.me.uk>
+References: <20210301092241.i7dxo7zbg3ar55d6@mobilestation> <20210302041940.3663823-1-f.fainelli@gmail.com> <20210302235411.GA3897@alpha.franken.de> <4e3640d4-7fc2-96dc-de00-599b3ac80757@gmail.com> <20210303094134.GA18354@alpha.franken.de>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -35,87 +46,11 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 3 Mar 2021, yunqiang.su@cipunited.com wrote:
+On Wed, 3 Mar 2021, Thomas Bogendoerfer wrote:
 
-> >  The FRE mode causes a severe performance regression for single FP
-> > operations, so we shouldn't use it for FPXX software.
-> > 
-> 
-> If we need to run pre-R6 FPXX/FP32 app on r6 CPU, it may be the only choice
-> for us.
+> perfect, I only forgot about R3k... I'll submit a formal patch submission
+> later today.
 
- Nope, FPXX doesn't require FRE, and FPXX is all this change is about.
-
-> Any way, in this case we need lots of T&E, the problem of FRE won't be a big
-> problem.
-
- The R6 instruction set has been designed such as to minimise traps and 
-emulations, so there is no point to make it worse for everyone for the 
-sake of a broken corner case.
-
-> >  As a matter of interest: do you have figures available as to how many
-> > software packages are affected in Debian?
-> > 
-> 
-> Almost all packages built with Golang in buster.
-
- How many is that though?  Two?  Ten?  A thousand?
-
-> >  Also it has now struck me that another userland workaround should be
-> > possible, by setting LD_PRELOAD in the environment system-wide to a
-> > dummy FR=0 DSO (e.g. via /etc/environment or /etc/initscript; I reckon
-> > systemd has its own way too), which will force the right mode the normal
-> way.
-> > All the distribution has been built for FPXX I presume, right?
-> > 
-> 
-> It is not acceptable for "stable" branch of distributions.
-
- I'd say the chosen policy of any distribution is said distribution's 
-problem, not the upstream kernel's.  You can have a local patch for the 
-kernel too if you consider a kernel solution the only one that works for 
-you.  From the discussion so far it looks to me like the least involving 
-solution which will make everyone happy.
-
-> >  Or I guess you could just rebuild libc as FR=0 instead, or is there a
-> Golang
-> > standard library that every Golang program uses?  And then have people
-> > upgrade that package instead.
-> > 
-> 
-> Rebuiding libc to FP32 is not acceptable, since we want to do is to support
-> MSA,
-> Which require FR=1 and all the result is FP64.
-
- Do you have any software build for MSA with your distribution already, 
-or do you just plan it?  How is it expected work with non-MSA hardware, 
-which I believe is still predominant?
-
- Also I'll repeat myself: is there a Golang standard library that every 
-Golang program uses?
-
-> In fact we found this problem when we try to enable MIPS_O32_FP64_SUPPORT,
-> Without this option is enabled, all FPXX binaries are still use FR=0 mode:
-> See: function mips_set_personality_fp()
-> 
-> So, here, we doesn't introduce the rollback to FR=0.
-
- So keep MIPS_O32_FP64_SUPPORT disabled then until the environment has 
-been fixed?
-
-> >  It seems to me like there are still a couple of alternatives available.
-> > You might be able to come up with yet more if you continued looking for
-> them.
-> > I consider putting any workaround into the kernel the last resort really.
-> The
-> > problem is in the userland, so let's try hard to deal with it there.
-> > 
-> 
-> Yes. It is problem of userland, while it has no way to fix in for the
-> pre-exist binaries in userland.
-
- I gave you examples.  It appears the problem instead is with the 
-distribution's policy, and the kernel is not there to work it around, 
-sorry.
+ What's up with the R3k (the usual trigger for me) here?
 
   Maciej
