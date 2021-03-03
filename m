@@ -2,92 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 135C232C896
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 02:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BEC32C898
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 02:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239385AbhCDAuq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Mar 2021 19:50:46 -0500
-Received: from 3.mo3.mail-out.ovh.net ([46.105.44.175]:58907 "EHLO
-        3.mo3.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbhCCSTg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Mar 2021 13:19:36 -0500
-X-Greylist: delayed 22190 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Mar 2021 13:19:35 EST
-Received: from player739.ha.ovh.net (unknown [10.108.35.103])
-        by mo3.mail-out.ovh.net (Postfix) with ESMTP id 84CD827C877
-        for <linux-mips@vger.kernel.org>; Wed,  3 Mar 2021 12:44:18 +0100 (CET)
-Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player739.ha.ovh.net (Postfix) with ESMTPSA id 4FE5D1798D8E0;
-        Wed,  3 Mar 2021 11:44:07 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-103G0058af54b4d-f3b4-44dc-ac9e-34a2a880a68e,
-                    26C1B780A21ED05C344A0C24DEC46BA2B7EA0698) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Subject: Re: [PATCH stblinux.git 2/2] firmware: bcm47xx_nvram: support
- platform device "brcm,nvram"
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     Vivek Unune <npcomplete13@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org
-References: <20210302074405.18998-1-zajec5@gmail.com>
- <20210302074405.18998-2-zajec5@gmail.com>
- <8e17b978-a527-97df-3f31-1fb2123a23e9@gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Message-ID: <d09c9e49-d7c7-cc71-1437-48d82e14843b@milecki.pl>
-Date:   Wed, 3 Mar 2021 12:44:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S238703AbhCDAup (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Mar 2021 19:50:45 -0500
+Received: from angie.orcam.me.uk ([157.25.102.26]:37282 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242964AbhCCRai (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Mar 2021 12:30:38 -0500
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 84E5292009C; Wed,  3 Mar 2021 18:29:52 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 7703292009B;
+        Wed,  3 Mar 2021 18:29:52 +0100 (CET)
+Date:   Wed, 3 Mar 2021 18:29:52 +0100 (CET)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     yunqiang.su@cipunited.com
+cc:     'Thomas Bogendoerfer' <tsbogend@alpha.franken.de>,
+        jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
+Subject: =?UTF-8?Q?Re=3A_=E5=9B=9E=E5=A4=8D=3A_=E5=9B=9E=E5=A4=8D=3A_=5BPATC?=
+ =?UTF-8?Q?H_v6=5D_MIPS=3A_force_use_FR=3D0_for_FPXX_binar?=
+ =?UTF-8?Q?y?=
+In-Reply-To: <000b01d70fdb$c7b74450$5725ccf0$@cipunited.com>
+Message-ID: <alpine.DEB.2.21.2103031800130.19637@angie.orcam.me.uk>
+References: <20210302022907.1835-1-yunqiang.su@cipunited.com> <alpine.DEB.2.21.2103021645120.19637@angie.orcam.me.uk> <000701d70fd0$ecbb21a0$c63164e0$@cipunited.com> <alpine.DEB.2.21.2103030321240.19637@angie.orcam.me.uk>
+ <000b01d70fdb$c7b74450$5725ccf0$@cipunited.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <8e17b978-a527-97df-3f31-1fb2123a23e9@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 8543891444003212823
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledruddtvddgfeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepvedttefgueffvefgvdejleeivddvjefhkeffgeeugeelieefteevffdvuedvgfefnecuffhomhgrihhnpehlkhhmlhdrohhrghenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeefledrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 02.03.2021 17:59, Florian Fainelli wrote:
-> On 3/1/21 11:44 PM, Rafał Miłecki wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->>
->> Add support for platform device providing mapping resource. This allows
->> reading NVRAM based on DT mapping binding. It's required for devices
->> that boot depending on NVRAM stored setup and provides early access to
->> NVRAM data.
->>
->> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->> ---
->> bcm47xx_nvram driver was originally added through MIPS tree, but this
->> change doesn't affect BCM47XX (MIPS) as it doesn't use DT. It targets
->> ARCH_BCM_5301X so I suggest this goes through the stblinux.git tree.
+On Wed, 3 Mar 2021, yunqiang.su@cipunited.com wrote:
+
+> >  The FRE mode causes a severe performance regression for single FP
+> > operations, so we shouldn't use it for FPXX software.
+> > 
 > 
-> Can you see if this change can be replaced by the nvmem-rmem work that
-> Nicolas recently did to support something similar for the Raspberry Pi 4:
+> If we need to run pre-R6 FPXX/FP32 app on r6 CPU, it may be the only choice
+> for us.
+
+ Nope, FPXX doesn't require FRE, and FPXX is all this change is about.
+
+> Any way, in this case we need lots of T&E, the problem of FRE won't be a big
+> problem.
+
+ The R6 instruction set has been designed such as to minimise traps and 
+emulations, so there is no point to make it worse for everyone for the 
+sake of a broken corner case.
+
+> >  As a matter of interest: do you have figures available as to how many
+> > software packages are affected in Debian?
+> > 
 > 
-> https://lkml.org/lkml/2021/1/29/235
+> Almost all packages built with Golang in buster.
 
-I don't think it fits my case.
+ How many is that though?  Two?  Ten?  A thousand?
 
-It's a reserved memory binding/driver which refers to the system memory.
-In NVRAM case we need to do a mapping. I think it's different?
+> >  Also it has now struck me that another userland workaround should be
+> > possible, by setting LD_PRELOAD in the environment system-wide to a
+> > dummy FR=0 DSO (e.g. via /etc/environment or /etc/initscript; I reckon
+> > systemd has its own way too), which will force the right mode the normal
+> way.
+> > All the distribution has been built for FPXX I presume, right?
+> > 
+> 
+> It is not acceptable for "stable" branch of distributions.
 
-nvmem-rmem registers NVMEM device without providing any cells. It also
-doesn't understand NVRAM data structure. I guess nvmem-rmem only exposes
-NVMEM for user-space access. I need to access NVRAM to e.g. detect boot
-parameters in kernel code.
+ I'd say the chosen policy of any distribution is said distribution's 
+problem, not the upstream kernel's.  You can have a local patch for the 
+kernel too if you consider a kernel solution the only one that works for 
+you.  From the discussion so far it looks to me like the least involving 
+solution which will make everyone happy.
 
-I was thinking for a moment about treating NVRAM like a NVMEM but NVRAM
-doesn't seem to fit current design and kernel API. NVMEM assumes that
-every cell has a specific offset and size. Reading NVRAM should be
-based on string keys (nof offsets). See nvmem_reg_read_t for details.
+> >  Or I guess you could just rebuild libc as FR=0 instead, or is there a
+> Golang
+> > standard library that every Golang program uses?  And then have people
+> > upgrade that package instead.
+> > 
+> 
+> Rebuiding libc to FP32 is not acceptable, since we want to do is to support
+> MSA,
+> Which require FR=1 and all the result is FP64.
 
-This won't make a huge difference I think, but for a slightly cleaner
-design I could probably have NVRAM devices without cells and make it
-setup NVRAM. Let me see if I can code that.
+ Do you have any software build for MSA with your distribution already, 
+or do you just plan it?  How is it expected work with non-MSA hardware, 
+which I believe is still predominant?
+
+ Also I'll repeat myself: is there a Golang standard library that every 
+Golang program uses?
+
+> In fact we found this problem when we try to enable MIPS_O32_FP64_SUPPORT,
+> Without this option is enabled, all FPXX binaries are still use FR=0 mode:
+> See: function mips_set_personality_fp()
+> 
+> So, here, we doesn't introduce the rollback to FR=0.
+
+ So keep MIPS_O32_FP64_SUPPORT disabled then until the environment has 
+been fixed?
+
+> >  It seems to me like there are still a couple of alternatives available.
+> > You might be able to come up with yet more if you continued looking for
+> them.
+> > I consider putting any workaround into the kernel the last resort really.
+> The
+> > problem is in the userland, so let's try hard to deal with it there.
+> > 
+> 
+> Yes. It is problem of userland, while it has no way to fix in for the
+> pre-exist binaries in userland.
+
+ I gave you examples.  It appears the problem instead is with the 
+distribution's policy, and the kernel is not there to work it around, 
+sorry.
+
+  Maciej
