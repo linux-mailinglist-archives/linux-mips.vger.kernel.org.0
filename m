@@ -2,67 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FE032CBAC
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 05:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678E832CBCC
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 06:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbhCDEvf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Mar 2021 23:51:35 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:13051 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbhCDEvD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Mar 2021 23:51:03 -0500
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DrdfL2XlKzMfbV;
-        Thu,  4 Mar 2021 12:48:10 +0800 (CST)
-Received: from localhost.localdomain (10.175.102.38) by
- DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 4 Mar 2021 12:50:11 +0800
-From:   'Wei Yongjun <weiyongjun1@huawei.com>
-To:     <weiyongjun1@huawei.com>, Paul Cercueil <paul@crapouillou.net>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     <linux-mips@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] watchdog: jz4740: Fix return value check in jz4740_wdt_probe()
-Date:   Thu, 4 Mar 2021 04:59:09 +0000
-Message-ID: <20210304045909.945799-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S234095AbhCDFTv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Mar 2021 00:19:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58560 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234076AbhCDFTh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Mar 2021 00:19:37 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DAA6964EE1;
+        Thu,  4 Mar 2021 05:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614835137;
+        bh=ks396mxGbJMDwWqDM77TaVb8yzjRnPxdJhthci3VPbk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cfhmrj4+vqKGW5GDt2BkhI6povBO+2MCsBi0yGxi3sIo4iCIaBED9PpT9H+e9+Sjw
+         18EDHsRpCWUxblIOEQBG3YoK0CwQ4S5yg3jGakpRXzobsW4DonxGRu+Fg4pS3c09py
+         zUryEzu4Elq+LGHXUhTG0xi6Hgoof4c2aNSAZmIOvFDtR/pw7UGW0DfOPzMR1hPQFb
+         7D2uIUwghEvyMB0rDlhRFTpSJWwjxTu8UKMSpUaSNbib0z1R3OfdaBhcoq3HZQu8Yq
+         0I4A+N+lB8zh09X38nWyDSt8owVluIIDjhppRtQmUDKcolcSVE8s6csleQdSwLcOD7
+         zEdFsLRSK2eAA==
+Date:   Wed, 3 Mar 2021 22:18:52 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH] MIPS: Add comment about CONFIG_MIPS32_O32 in
+ loongson3_defconfig when build with Clang
+Message-ID: <20210304051852.6gf7ry26n3fct3ud@archlinux-ax161>
+References: <1614820544-10686-1-git-send-email-yangtiezhu@loongson.cn>
+ <20210304020244.pza6xd4ixziysrom@archlinux-ax161>
+ <958c5df5-76aa-9161-9519-07a03ee864a0@loongson.cn>
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.102.38]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <958c5df5-76aa-9161-9519-07a03ee864a0@loongson.cn>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+On Thu, Mar 04, 2021 at 11:48:09AM +0800, Tiezhu Yang wrote:
+> On 03/04/2021 10:02 AM, Nathan Chancellor wrote:
+> > On Thu, Mar 04, 2021 at 09:15:44AM +0800, Tiezhu Yang wrote:
+> > > When build kernel with Clang [1]:
+> > > 
+> > > $ make CC=clang loongson3_defconfig
+> > > $ make CC=clang
+> 
+> [snip]
+> 
+> > I think this might be a better solution. I know that I personally never
+> > read defconfig files if a build fails.
+> > 
+> > If CONFIG_MIPS32_O32 is broken with clang and the MIPS backend
+> > maintainer has said that it will not be supported due to lack of
+> > resources, then the config should not even be selectable in my opinion.
+> > 
+> > Cheers,
+> > Nathan
+> > 
+> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> > index d89efba3d8a4..ed35318a759d 100644
+> > --- a/arch/mips/Kconfig
+> > +++ b/arch/mips/Kconfig
+> > @@ -3315,6 +3315,8 @@ config SYSVIPC_COMPAT
+> >   config MIPS32_O32
+> >   	bool "Kernel support for o32 binaries"
+> >   	depends on 64BIT
+> > +	# https://bugs.llvm.org/show_bug.cgi?id=38063
+> > +	depends on $(success,$(CC) $(CLANG_FLAGS) -march=mips64 -o32 -c -x c /dev/null -o /dev/null)
+> >   	select ARCH_WANT_OLD_COMPAT_IPC
+> >   	select COMPAT
+> >   	select MIPS32_COMPAT
+> 
+> Hi Nathan,
+> 
+> Thank you very much for your reply and suggestion, maybe the following
+> change is simple, clear and better? If yes, I will send v2 later.
 
-In case of error, the function device_node_to_regmap() returns
-ERR_PTR() and never returns NULL. The NULL test in the return
-value check should be replaced with IS_ERR().
+Hi Tiezhu,
 
-Fixes: 6d532143c915 ("watchdog: jz4740: Use regmap provided by TCU driver")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/watchdog/jz4740_wdt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I think that the change is simpler but better is subjective. I tend to
+prefer tests like mine so that it is not dependent on someone going "oh
+hey, this LLVM bug has been fixed so we can turn this config on!".
+Instead, the config will just turn on automatically as soon as that bug
+is fixed.
 
-diff --git a/drivers/watchdog/jz4740_wdt.c b/drivers/watchdog/jz4740_wdt.c
-index bdf9564efa29..395bde79e292 100644
---- a/drivers/watchdog/jz4740_wdt.c
-+++ b/drivers/watchdog/jz4740_wdt.c
-@@ -176,9 +176,9 @@ static int jz4740_wdt_probe(struct platform_device *pdev)
- 	watchdog_set_drvdata(jz4740_wdt, drvdata);
- 
- 	drvdata->map = device_node_to_regmap(dev->parent->of_node);
--	if (!drvdata->map) {
-+	if (IS_ERR(drvdata->map)) {
- 		dev_err(dev, "regmap not found\n");
--		return -EINVAL;
-+		return PTR_ERR(drvdata->map);
- 	}
- 
- 	return devm_watchdog_register_device(dev, &drvdata->wdt);
+However, in this particular case, it does not seem like that will happen
+unless someone steps but there have been times where an independent
+party will implement some change that benefits them and nobody notices
+for a while. Plus, I periodically grep the tree for CC_IS_CLANG to see
+if there are any configuration options that can be re-enabled..
 
+Regardless, if Thomas is happy with the below change, so am I, as it
+will allow us to test more 64-bit MIPS configurations. I can add an ack
+or review at that point in time.
+
+Cheers,
+Nathan
+
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 3a38d27..f6ba59f 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -3318,6 +3318,8 @@ config SYSVIPC_COMPAT
+>  config MIPS32_O32
+>         bool "Kernel support for o32 binaries"
+>         depends on 64BIT
+> +       # https://bugs.llvm.org/show_bug.cgi?id=38063
+> +       depends on !CC_IS_CLANG
+>         select ARCH_WANT_OLD_COMPAT_IPC
+>         select COMPAT
+>         select MIPS32_COMPAT
+> 
+> Thanks,
+> Tiezhu
+> 
