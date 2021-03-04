@@ -2,88 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A6A32DB58
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 21:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3CB32DB6B
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 21:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234257AbhCDUsY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Mar 2021 15:48:24 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:38830 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233528AbhCDUsM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Mar 2021 15:48:12 -0500
-Received: by mail-ot1-f46.google.com with SMTP id a17so3989840oto.5;
-        Thu, 04 Mar 2021 12:47:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=NbeMtBQiE3kffLypkBD6RcFRyGfZub8d74bpmkMkLts=;
-        b=ag+FGpkaBLFmRAo9sExLZ45PLg87ZSd4bzd9+yBlI+In3qM1o3G7qPS4wpxuEb/UEG
-         Li20UaHlLGhJ31wD262HW55EbHbQm/IaaO5x1ICx39DIItM07bXEAsNCr5p4HVyzvr0w
-         J4I1gmeWmG81Mb0Kr++A8OLuz4xKUr7UhbSLsThRjEskILbvJIQdpHfna+SLHGJ7OWeW
-         jvjebjsyuw5QEGbxotwtc+7YOjKiYf/iL+u7om2unZzkoRkUmQg4HvT4eQO06Yev+eGC
-         1VGPfGbOaSABqVJZWmDzTUy9Or4da5qD69Nol/esd1v7w1bP1oOQMq9EaSCnalE68fCk
-         yA6Q==
-X-Gm-Message-State: AOAM530d5Ixsftep4dSmRt87rvPxK4HWgoFbBEPQOclXJR+cXxXg1fWj
-        +0M5tDrjtlLIizB8HeTL5ZLbUNyQpg==
-X-Google-Smtp-Source: ABdhPJwIl2l7nLvpxXrcDxLfvNin9yGFjw49oUR2S1ec31zo0UEznVu5/tJZ7VnvEzPfLmFT6jPN5Q==
-X-Received: by 2002:a05:6830:3152:: with SMTP id c18mr4914113ots.191.1614890852137;
-        Thu, 04 Mar 2021 12:47:32 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id r20sm146415otd.26.2021.03.04.12.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Mar 2021 12:47:30 -0800 (PST)
-Received: (nullmailer pid 2778950 invoked by uid 1000);
-        Thu, 04 Mar 2021 20:47:28 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-In-Reply-To: <20210303062434.22280-7-zhangqing@loongson.cn>
-References: <20210303062434.22280-1-zhangqing@loongson.cn> <20210303062434.22280-7-zhangqing@loongson.cn>
-Subject: Re: [PATCH v2 6/7] dt-bindings: interrupt-controller: Add Loongson-2K1000 LIOINTC
-Date:   Thu, 04 Mar 2021 14:47:28 -0600
-Message-Id: <1614890848.971360.2778949.nullmailer@robh.at.kernel.org>
+        id S235648AbhCDUt2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Mar 2021 15:49:28 -0500
+Received: from rcdn-iport-7.cisco.com ([173.37.86.78]:42469 "EHLO
+        rcdn-iport-7.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238317AbhCDUtM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Mar 2021 15:49:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=2263; q=dns/txt; s=iport;
+  t=1614890952; x=1616100552;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GjLbEy4mzc1GE+5Hnhb3oU35QJXDVH6Er8mIRNVDXJg=;
+  b=aDpcGJfqeMyD/Yj6nCt6jiMPGT+r039JkrAUN/6LkvI/ay/NFguqJigF
+   RlKVv1AlnReDfO5ZCYoxF62HFwjllXC7sXozOKUZ6/yx5MCrL0RNR4jfc
+   +r76M6bkK6dCTP3GVYz3brS1v6H6j9O+cejs121EqeFxWndosfAoaJ6QT
+   s=;
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0DHAABGRkFg/4wNJK1iHAEBAQEBAQc?=
+ =?us-ascii?q?BARIBAQQEAQFAgT4EAQELAYIqgUwBOTGWHY96Fow7CwEBAQ0BATQEAQGETQK?=
+ =?us-ascii?q?BegIlNwYOAgMBAQsBAQUBAQECAQYEcYVuhkUBBTo/EAsYLjwbBhOFeK4YdIE?=
+ =?us-ascii?q?0iR+BRBQOgRYBjUImHIFJQoQrPoQVhh4EgkAHgQ57gS0Sk3sBii2be4MGgR+?=
+ =?us-ascii?q?acjEQo0a2cgIEBgUCFoFqJIFXMxoIGxWDJFAZDY4qF45HIAMvOAIGCgEBAwm?=
+ =?us-ascii?q?JT4JEAQE?=
+X-IronPort-AV: E=Sophos;i="5.81,223,1610409600"; 
+   d="scan'208";a="855671246"
+Received: from alln-core-7.cisco.com ([173.36.13.140])
+  by rcdn-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 04 Mar 2021 20:48:31 +0000
+Received: from zorba ([10.24.1.42])
+        by alln-core-7.cisco.com (8.15.2/8.15.2) with ESMTPS id 124KmTRL023920
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 4 Mar 2021 20:48:30 GMT
+Date:   Thu, 4 Mar 2021 12:48:23 -0800
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        X86 ML <x86@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        xe-linux-external@cisco.com,
+        Ruslan Ruslichenko <rruslich@cisco.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/5] CMDLINE: drivers: of: ifdef out cmdline section
+Message-ID: <20210304204823.GI109100@zorba>
+References: <20210304044803.812204-2-danielwa@cisco.com>
+ <CAL_JsqKnAMp0bkXzU-B8b8xx5fPC1R1NdOBn9Kpk=SONJL5paQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqKnAMp0bkXzU-B8b8xx5fPC1R1NdOBn9Kpk=SONJL5paQ@mail.gmail.com>
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.24.1.42, [10.24.1.42]
+X-Outbound-Node: alln-core-7.cisco.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 03 Mar 2021 14:24:33 +0800, Qing Zhang wrote:
-> Add liointc-2.0 properties support, so update the maxItems and description.
+On Thu, Mar 04, 2021 at 08:32:37AM -0600, Rob Herring wrote:
+> On Wed, Mar 3, 2021 at 10:48 PM Daniel Walker <danielwa@cisco.com> wrote:
+> >
+> > It looks like there's some seepage of cmdline stuff into
+> > the generic device tree code. This conflicts with the
+> > generic cmdline implementation so I remove it in the case
+> > when that's enabled.
+> >
+> > Cc: xe-linux-external@cisco.com
+> > Signed-off-by: Ruslan Ruslichenko <rruslich@cisco.com>
+> > Signed-off-by: Daniel Walker <danielwa@cisco.com>
+> > ---
+> >  drivers/of/fdt.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> > index feb0f2d67fc5..cfe4f8d3c9f5 100644
+> > --- a/drivers/of/fdt.c
+> > +++ b/drivers/of/fdt.c
+> > @@ -25,6 +25,7 @@
+> >  #include <linux/serial_core.h>
+> >  #include <linux/sysfs.h>
+> >  #include <linux/random.h>
+> > +#include <linux/cmdline.h>
+> >
+> >  #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
+> >  #include <asm/page.h>
+> > @@ -1048,8 +1049,18 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
+> >
+> >         early_init_dt_check_for_initrd(node);
+> >
+> > +#ifdef CONFIG_GENERIC_CMDLINE
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
+> What I like about Christophe's version is it removes the old DT
+> implementation. Who's going to convert the rest of the DT based
+> arches? That's arm, arm64, hexagon, microblaze, nios2, openrisc,
+> riscv, sh, and xtensa. Either separate the common code from the config
+> like Christophe's version or these all need converting. Though it's
+> fine to hash out patch 1 with a couple of arches first.
+ 
+I'm limited in what I can test, so I can't know for sure that I have something
+which works on those architectures. Even powerpc 64 is part of this series but
+I can't really test it at this time. Also Cisco's needs out strip the
+implementation of extend or override.
+
+I have un-tested conversions for arm32, arm64, c6x, microblaze, nios2, and
+openrisc. These could go into -next and we can see who complains. The
+implementation on these architectures isn't all uniform.
+
+> >         /* Retrieve command line */
+> >         p = of_get_flat_dt_prop(node, "bootargs", &l);
 > 
-> v2:
-> - Add new patch
-> 
->  .../bindings/interrupt-controller/loongson,liointc.yaml  | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
+> This needs to be outside the ifdef.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Ok ..
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.example.dt.yaml: interrupt-controller@3ff01400: reg: [[1072698368, 100]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-
-See https://patchwork.ozlabs.org/patch/1446855
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Daniel
