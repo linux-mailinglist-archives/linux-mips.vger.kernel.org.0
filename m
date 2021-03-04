@@ -2,124 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7671C32C9E6
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 02:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B5032C9F3
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 02:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239808AbhCDBPW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Mar 2021 20:15:22 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:35286 "EHLO loongson.cn"
+        id S232593AbhCDBQ5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Mar 2021 20:16:57 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:37894 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1450754AbhCDBHY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 3 Mar 2021 20:07:24 -0500
-Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.162.140])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax6dWPMkBg7hMUAA--.6296S2;
-        Thu, 04 Mar 2021 09:06:25 +0800 (CST)
-Date:   Thu, 4 Mar 2021 09:06:23 +0800
-From:   Huang Pei <huangpei@loongson.cn>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: Re: [PATCH] MIPS: clean up CONFIG_MIPS_PGD_C0_CONTEXT handling
-Message-ID: <20210304010623.4tyzpzgllsdy3ssg@ambrosehua-HP-xw6600-Workstation>
-References: <20210227061944.266415-1-huangpei@loongson.cn>
- <20210227061944.266415-2-huangpei@loongson.cn>
- <alpine.DEB.2.21.2102282346400.44210@angie.orcam.me.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2102282346400.44210@angie.orcam.me.uk>
-User-Agent: NeoMutt/20171215
-X-CM-TRANSID: AQAAf9Ax6dWPMkBg7hMUAA--.6296S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFyxXrWUXFW8ZryxCr1xXwb_yoW8ur1xpa
-        95t3WkGr4jvryjgrZIvFZ8Xr4Fqw4qk3s0vFnFqF9xtFWjgFyrGFs7Gr1S9rn8AFs2ya17
-        WryYgFy5uF1Iyw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        id S232727AbhCDBQl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 3 Mar 2021 20:16:41 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz_HBNEBgqhQUAA--.8724S2;
+        Thu, 04 Mar 2021 09:15:45 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] MIPS: Add comment about CONFIG_MIPS32_O32 in loongson3_defconfig when build with Clang
+Date:   Thu,  4 Mar 2021 09:15:44 +0800
+Message-Id: <1614820544-10686-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxz_HBNEBgqhQUAA--.8724S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr4rtr17JF4kKF1rWry8Zrb_yoW8XFyfpw
+        48Ja1DKrWrGr1rGF4kuryDWr4FyFZxJFyxXw4UJr15ZasxZayUZrnakF17ZrW7WrZaya18
+        urZ3Gr17Jay7C3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUbLiSPUUUUU==
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK
+        6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbLiSPUUUU
+        U==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, 
-On Mon, Mar 01, 2021 at 12:00:28AM +0100, Maciej W. Rozycki wrote:
-> On Sat, 27 Feb 2021, Huang Pei wrote:
-> 
-> > index 2000bb2b0220..517509ad8596 100644
-> > --- a/arch/mips/Kconfig
-> > +++ b/arch/mips/Kconfig
-> > @@ -2142,6 +2142,7 @@ config CPU_SUPPORTS_HUGEPAGES
-> >  	depends on !(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))
-> >  config MIPS_PGD_C0_CONTEXT
-> >  	bool
-> > +	depends on 64BIT
-> >  	default y if 64BIT && (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
-> 
->  I guess you want:
-> 
-> 	default y if (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
-> 
-> at the same time too.  Otherwise you have cruft left behind.
-> 
-Yes, it is much better
-> > diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-> > index a7521b8f7658..5bb9724578f7 100644
-> > --- a/arch/mips/mm/tlbex.c
-> > +++ b/arch/mips/mm/tlbex.c
-> > @@ -1106,6 +1106,7 @@ struct mips_huge_tlb_info {
-> >  	bool need_reload_pte;
-> >  };
-> >  
-> > +#ifdef CONFIG_64BIT
-> >  static struct mips_huge_tlb_info
-> >  build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
-> >  			       struct uasm_reloc **r, unsigned int tmp,
-> 
->  Does it actually build without a warning for !CONFIG_64BIT given the 
-> reference below?
+When build kernel with Clang [1]:
 
-No, my bad, my first reaction when seeing "IS_ENABLED(CONFIG_64BIT)" is
-"#ifdef CONFIG_64BIT"
-> 
-> > @@ -1164,8 +1165,8 @@ build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
-> >  
-> >  	if (pgd_reg == -1) {
-> >  		vmalloc_branch_delay_filled = 1;
-> > -		/* 1 0	1 0 1  << 6  xkphys cached */
-> > -		uasm_i_ori(p, ptr, ptr, 0x540);
-> > +		/* insert bit[63:59] of CAC_BASE into bit[11:6] of ptr */
-> > +		uasm_i_ori(p, ptr, ptr, (CAC_BASE >> 53));
-> 
->  Instead I'd paper the issue over by casting the constant to `s64'.
-> 
->  Or better yet fixed it properly by defining CAC_BASE, etc. as `unsigned
-> long long' long rather than `unsigned long' to stop all this nonsense 
-> (e.g. PHYS_TO_XKPHYS already casts the result to `s64').  Thomas, WDYT?
-Sorry, I do not get it , on MIPS32, how can CAC_BASE be unsigned long
-long ?
+$ make CC=clang loongson3_defconfig
+$ make CC=clang
 
+there exists the following error:
 
-If this did not work, how about one step back, just explicit comment
-wihtout "(CAC_BASE << 53)" ?
-> 
->   Maciej
+  Checking missing-syscalls for O32
+  CALL    scripts/checksyscalls.sh
+error: ABI 'o32' is not supported on CPU 'mips64r2'
+make[1]: *** [Kbuild:48: missing-syscalls] Error 1
+make: *** [arch/mips/Makefile:419: archprepare] Error 2
+
+This is a known bug [2] with Clang, as Simon Atanasyan said,
+"There is no plan on support O32 for MIPS64 due to lack of
+resources".
+
+It is not a good idea to remove this config due to GCC works
+well, so add comment to point out this bug and suggest the
+users to remove CONFIG_MIPS32_O32=y in defconfig when build
+kernel with Clang.
+
+[1] https://www.kernel.org/doc/html/latest/kbuild/llvm.html
+[2] https://bugs.llvm.org/show_bug.cgi?id=38063
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/configs/loongson3_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 0e79f81..cacf9dd 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -35,6 +35,9 @@ CONFIG_NUMA=y
+ CONFIG_SMP=y
+ CONFIG_HZ_256=y
+ CONFIG_KEXEC=y
++# Please remove CONFIG_MIPS32_O32=y when build with Clang
++# due to "ABI 'o32' is not supported on CPU 'mips64r2'",
++# https://bugs.llvm.org/show_bug.cgi?id=38063
+ CONFIG_MIPS32_O32=y
+ CONFIG_MIPS32_N32=y
+ CONFIG_VIRTUALIZATION=y
+-- 
+2.1.0
 
