@@ -2,157 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E3832D895
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 18:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9461F32D8B4
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 18:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbhCDR0M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Mar 2021 12:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
+        id S231831AbhCDRjB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Mar 2021 12:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239319AbhCDRZu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Mar 2021 12:25:50 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87715C061760
-        for <linux-mips@vger.kernel.org>; Thu,  4 Mar 2021 09:25:09 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id x9so4146084edd.0
-        for <linux-mips@vger.kernel.org>; Thu, 04 Mar 2021 09:25:09 -0800 (PST)
+        with ESMTP id S239335AbhCDRic (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Mar 2021 12:38:32 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CF9C061756
+        for <linux-mips@vger.kernel.org>; Thu,  4 Mar 2021 09:37:52 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id z11so44519057lfb.9
+        for <linux-mips@vger.kernel.org>; Thu, 04 Mar 2021 09:37:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dd7KDNO7pXIdpuZcWLRKydfKVZxOAkBI513NtjiUXYg=;
-        b=Mm9ylSDEP1rqfd0aVL1Di4z7YCAEZYd/dpG3P6vR3IkqX8ZMMiFfgYAKG3A43crKUc
-         wf1HqeMvDdrAxM00Ku1xpoPGq5dxO8bnXVjID5DBG5NsoHu2LeFZQdDhG4DEOZayGpEm
-         yU+2tmol8R+C7UYNI4+rBwOBDEW4CpIDfRb/KKjXZiH+c6ukV80gPtKr4wfOSPewRDue
-         NFSRfJaRRY3TKHLizFYcOSszDHS5zA7o+NiLkWIr65TG8+RPZwFir8s9xrPjxFg4exSU
-         dXLrzbLNpiHV1moyridKAushV2o6onEzhTsdoAX7VBQpoosJFMpzHNvzklAohMguka07
-         w5Kw==
+        bh=UUm+wrU+zPffvuvuqzEDrb7B5867dCk2K+ib6TOEEgo=;
+        b=Tqlqhenucz2QG4wNMNGaEQoVzwsa6uUxO3Tn3Pm+6mLEMjIivih5jOlMx7ShK8K+7m
+         33Ytd+lIXipxsDGnCEE4YDXHzk38MnHRXL1GAy4IMxRta8sBCLdr1Ml6QgQuXrODDLtB
+         PJszG5y5Ezwiv6P7nU+lrCT1xeHwAvmzrgZxLgLUmMzpj4CfSswO57NjBXPOLepT5PN0
+         S8awmk6PptvzgKxpb3+ReItihc+6C0IJo7jQeEC/yeqP9qchkMkAybA9ZxB9fRHExTPe
+         9IjKyLrWv9BsBIWsdXjCZ+N+YKmZhP5WFhIY6wyZPfyDBt9UDjft/OBM6ieQjau87I32
+         pTfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dd7KDNO7pXIdpuZcWLRKydfKVZxOAkBI513NtjiUXYg=;
-        b=bb6S2Dbew6ycfC2/NlGN33gzuzlOYlvJ2c9h8GqiU1bF4oE6poLSg0B/GIhgQxsD/K
-         hN5sFEpJfL8ESIjCRIDZM8dJPejfUJzVqe6qjUWF7tOlDux7WQldBRXoW80bo4PI5XSa
-         bGigAXdD7l9YKs6W1G7gzozfuR2X8EXdz2vB/+N3RlXdtN0gNSKbiNmZ+OmhrpYuPRE1
-         0vtxrTHkbw2C650d/cgIt/1ptphSFYZBk0yvZlaRPHpVlu1L40yIFgp+H8UaFW2XgdR/
-         /rs+qBHjs07/jdPnaCbHoh72QrbViyuNniLkv8SRGJpAbmcrIowM5/XokxMqOe+YCSKV
-         F9pw==
-X-Gm-Message-State: AOAM531hkvkcJ9T1Ll1Sgfw8/hnAC6UU5ryED7jwcuYjMV5LL3hCIKAq
-        USOOdKNtp8o4ngyudYGpprXcnWixDBB1G+7r4QG3qg==
-X-Google-Smtp-Source: ABdhPJysnDIHieJcbdfHeNgL/sMVb+rIR8ooa1wFRpFL2X9KykSKEnKjaXWf1t6w7e5hqXA2FugzD+PsQVjqmfHVstE=
-X-Received: by 2002:aa7:dd99:: with SMTP id g25mr5459320edv.230.1614878707950;
- Thu, 04 Mar 2021 09:25:07 -0800 (PST)
+        bh=UUm+wrU+zPffvuvuqzEDrb7B5867dCk2K+ib6TOEEgo=;
+        b=iwU5NIb0P4uZ0OqX1JL3E0Wo+O6ym/WdBhW/r0WBp3dINkxamnIA/0Ca7JuzvqIhRt
+         XMShIV2HWZe1W74twQxG6BpxPkJkPEdk4LtGhSrZg4N7jGLFpXIsFmAiqdl6JgSP3dsw
+         KgC2krU13vQ1UG3KQLdx4zBJw9hSAfTosd5HdUk1aVmmqB6IOHwToiRp4le7x7xuXkrZ
+         C2N5/I3rTMz9bRKKfxJZkMFrOmos0T8TbcDVpM2rPV2Kk2AwQeO06P9KhKtuADRoq3W8
+         byuHMs2y6tdmYSts3cxq/ELYANEABGK45DStqRsfkYRfRkqn0hZs32m80RZLRaGsp6Vc
+         iHEQ==
+X-Gm-Message-State: AOAM530BXb5bGOGq1xPEiXFzAgVWttKgV5/FRdXdehNzDqsvWODwFuZY
+        tkn4jtZ3aTcM2rxvP9dJZ4/h3u7500LWjv6jHvVSGA==
+X-Google-Smtp-Source: ABdhPJxuTcNbs/XcwFkEzxoSAdn3uzst20zCqqf3nCkdUYwm3Qpq6+NCw0B3jFq9xaaCX3UOKfLFjvvOPWj+1+QaYoU=
+X-Received: by 2002:a19:da19:: with SMTP id r25mr2737199lfg.368.1614879470392;
+ Thu, 04 Mar 2021 09:37:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20210222115149.3606776-1-raychi@google.com> <20210222115149.3606776-2-raychi@google.com>
-In-Reply-To: <20210222115149.3606776-2-raychi@google.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 4 Mar 2021 22:54:56 +0530
-Message-ID: <CA+G9fYvVdQ7t3AkguKXJDG5iNEpSXfF=U189ZPVz21tWQ3r+dg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: dwc3: add a power supply for current control
-To:     Ray Chi <raychi@google.com>, linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>, kyletso@google.com,
-        badhri@google.com, lkft-triage@lists.linaro.org
+References: <1614845040-12995-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1614845040-12995-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 4 Mar 2021 09:37:39 -0800
+Message-ID: <CAKwvOd=TXBzBb-nJsAMHO99P7y7eOZRJB=veDtesPFNDPuhy2w@mail.gmail.com>
+Subject: Re: [PATCH v3] MIPS: Make MIPS32_O32 depends on !CC_IS_CLANG
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Xuefeng Li <lixuefeng@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-While building linux next 20210304 the following builds failed,
- - mips (cavium_octeon_defconfig) with gcc-8
- - mips (cavium_octeon_defconfig) with gcc-9
- - mips (cavium_octeon_defconfig) with gcc-10
+On Thu, Mar 4, 2021 at 12:04 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> When building with Clang [1]:
+>
+> $ make CC=clang loongson3_defconfig
+> $ make CC=clang
+>
+> there exists the following error:
+>
+>   Checking missing-syscalls for O32
+>   CALL    scripts/checksyscalls.sh
+> error: ABI 'o32' is not supported on CPU 'mips64r2'
+> make[1]: *** [Kbuild:48: missing-syscalls] Error 1
+> make: *** [arch/mips/Makefile:419: archprepare] Error 2
+>
+> This is a known bug [2] with Clang, as Simon Atanasyan said,
+> "There is no plan on support O32 for MIPS64 due to lack of
+> resources".
 
-On Mon, 22 Feb 2021 at 17:24, Ray Chi <raychi@google.com> wrote:
+It's my hope we will fix the resourcing issue.  I'm working on that;
+it's a non-technical challenge though.
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+
 >
-> Currently, VBUS draw callback does no action when the
-> generic PHYs are used. This patch adds an additional
-> path to control charging current through power supply
-> interface.
+> It is not a good idea to remove CONFIG_MIPS32_O32=y directly
+> in defconfig because GCC works, as Nathan said, the config
+> should not even be selectable when building with Clang, so
+> just make MIPS32_O32 depends on !CC_IS_CLANG.
 >
-> Signed-off-by: Ray Chi <raychi@google.com>
+> [1] https://www.kernel.org/doc/html/latest/kbuild/llvm.html
+> [2] https://bugs.llvm.org/show_bug.cgi?id=38063
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Acked-by: Nathan Chancellor <nathan@kernel.org>
 > ---
->  drivers/usb/dwc3/core.c | 15 +++++++++++++++
->  drivers/usb/dwc3/core.h |  4 ++++
->  2 files changed, 19 insertions(+)
 >
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index f2448d0a9d39..d15f065849cd 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1238,6 +1238,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->         u8                      rx_max_burst_prd;
->         u8                      tx_thr_num_pkt_prd;
->         u8                      tx_max_burst_prd;
-> +       const char              *usb_psy_name;
-> +       int                     ret;
+> v3: Update the commit message suggested by Nathan, thank you!
 >
->         /* default to highest possible threshold */
->         lpm_nyet_threshold = 0xf;
-> @@ -1263,6 +1265,13 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->         else
->                 dwc->sysdev = dwc->dev;
+>  arch/mips/Kconfig | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> +       ret = device_property_read_string(dev, "usb-psy-name", &usb_psy_name);
-> +       if (ret >= 0) {
-> +               dwc->usb_psy = power_supply_get_by_name(usb_psy_name);
-> +               if (!dwc->usb_psy)
-> +                       dev_err(dev, "couldn't get usb power supply\n");
-> +       }
-> +
->         dwc->has_lpm_erratum = device_property_read_bool(dev,
->                                 "snps,has-lpm-erratum");
->         device_property_read_u8(dev, "snps,lpm-nyet-threshold",
-> @@ -1619,6 +1628,9 @@ static int dwc3_probe(struct platform_device *pdev)
->  assert_reset:
->         reset_control_assert(dwc->reset);
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 3a38d27..f6ba59f 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -3318,6 +3318,8 @@ config SYSVIPC_COMPAT
+>  config MIPS32_O32
+>         bool "Kernel support for o32 binaries"
+>         depends on 64BIT
+> +       # https://bugs.llvm.org/show_bug.cgi?id=38063
+> +       depends on !CC_IS_CLANG
+>         select ARCH_WANT_OLD_COMPAT_IPC
+>         select COMPAT
+>         select MIPS32_COMPAT
+> --
+> 2.1.0
 >
-> +       if (!dwc->usb_psy)
-> +               power_supply_put(dwc->usb_psy);
-> +
->         return ret;
->  }
->
-> @@ -1641,6 +1653,9 @@ static int dwc3_remove(struct platform_device *pdev)
->         dwc3_free_event_buffers(dwc);
->         dwc3_free_scratch_buffers(dwc);
->
-> +       if (!dwc->usb_psy)
-> +               power_supply_put(dwc->usb_psy);
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/1614845040-12995-1-git-send-email-yangtiezhu%40loongson.cn.
 
-# to reproduce this build locally:
 
- tuxmake --target-arch=mips --kconfig=cavium_octeon_defconfig
---toolchain=gcc-8 --wrapper=sccache
---environment=SCCACHE_BUCKET=sccache.tuxbuild.com --runtime=podman
---image=public.ecr.aws/tuxmake/mips_gcc-8 config default kernel
-xipkernel modules dtbs dtbs-legacy debugkernel headers
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc' cavium_octeon_defconfig
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-kernel/sched/fair.c:8384:13: warning: 'update_nohz_stats' defined but
-not used [-Wunused-function]
- static bool update_nohz_stats(struct rq *rq)
-             ^~~~~~~~~~~~~~~~~
-mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_remove':
-drivers/usb/dwc3/core.c:1657: undefined reference to `power_supply_put'
-mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_properties':
-drivers/usb/dwc3/core.c:1270: undefined reference to `power_supply_get_by_name'
-mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_probe':
-drivers/usb/dwc3/core.c:1632: undefined reference to `power_supply_put'
-
-Build link,
-https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/1071668201#L146
 
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+Thanks,
+~Nick Desaulniers
