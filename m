@@ -2,45 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C075332CBB0
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 05:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C7532CBB2
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 05:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbhCDE57 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Mar 2021 23:57:59 -0500
-Received: from rcdn-iport-3.cisco.com ([173.37.86.74]:26213 "EHLO
-        rcdn-iport-3.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbhCDE5x (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Mar 2021 23:57:53 -0500
-X-Greylist: delayed 540 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Mar 2021 23:57:52 EST
+        id S233854AbhCDE6b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Mar 2021 23:58:31 -0500
+Received: from rcdn-iport-4.cisco.com ([173.37.86.75]:49435 "EHLO
+        rcdn-iport-4.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233908AbhCDE6C (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Mar 2021 23:58:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=6395; q=dns/txt; s=iport;
-  t=1614833872; x=1616043472;
+  d=cisco.com; i=@cisco.com; l=1665; q=dns/txt; s=iport;
+  t=1614833882; x=1616043482;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=nvJpEND9kOGoIR+3S0EgBmAZax9IS2XBul8csiRffVQ=;
-  b=RDRO0Wkx/DUuzFRwT2OtqcHI2gNl/OjlxkmBmYuK66aH9WRJ8ruSWgwG
-   s03+DpfuOfP2+Rco6bF3KcNfrhZ6SKcUZK11yY+scFdjAyLfz2gIfBGmw
-   EO3br9c5uLLWEVcADM2Ja/Lv+Q0oh7g2Rq6ViY/9otHqw+3n6qUi8v65s
-   w=;
+  bh=JPxIpWSiHwMYUhrJK0/YYj5eo6XXFdrmnrzClDHMFxg=;
+  b=iFwTg7VLl8dV3lUL1YFrLdKVb6q+wkEhRJJ6PKGeSt2HvHp33ad5UQ6y
+   8TX31H+sQhrntFgv0laLfpUoip6b6qqyUYzLK2Hfe+4WU9bEve2OBAali
+   78jWDKICgLBVlyV2jVPPyIFJHAO4X5pA0qofkSQ9swsOJ0yezwc3CcyHz
+   U=;
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0CaBABRZkBg/40NJK1iHQEBAQEJARI?=
+ =?us-ascii?q?BBQUBgg+CK4FMATkxsmkLAQEBDzQEAQGETYF8AiU4EwIDAQELAQEFAQEBAgE?=
+ =?us-ascii?q?GBHGFboZ9AUaBPgESgnCDCK4cgiiJH4FEFIEkiFx0hBkcgUlCgRGDWIozBIJ?=
+ =?us-ascii?q?AB4EOgigSnimbe4MGgR+acg8io1aUVaJGgWsjgVczGggbFYMkUBkNnCsBXCA?=
+ =?us-ascii?q?DLzgCBgoBAQMJjBMBAQ?=
 X-IronPort-AV: E=Sophos;i="5.81,221,1610409600"; 
-   d="scan'208";a="843437001"
+   d="scan'208";a="844460945"
 Received: from alln-core-8.cisco.com ([173.36.13.141])
-  by rcdn-iport-3.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 04 Mar 2021 04:48:10 +0000
+  by rcdn-iport-4.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 04 Mar 2021 04:48:10 +0000
 Received: from zorba.cisco.com ([10.24.7.178])
-        by alln-core-8.cisco.com (8.15.2/8.15.2) with ESMTP id 1244m4Wv015988;
-        Thu, 4 Mar 2021 04:48:07 GMT
+        by alln-core-8.cisco.com (8.15.2/8.15.2) with ESMTP id 1244m4Ww015988;
+        Thu, 4 Mar 2021 04:48:09 GMT
 From:   Daniel Walker <danielwa@cisco.com>
 To:     Will Deacon <will@kernel.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         ob Herring <robh@kernel.org>,
         Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
         Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     xe-linux-external@cisco.com, Ruslan Bilovol <rbilovol@cisco.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] CMDLINE: add generic builtin command line
-Date:   Wed,  3 Mar 2021 20:47:58 -0800
-Message-Id: <20210304044803.812204-1-danielwa@cisco.com>
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     xe-linux-external@cisco.com,
+        Ruslan Ruslichenko <rruslich@cisco.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/5] CMDLINE: drivers: of: ifdef out cmdline section
+Date:   Wed,  3 Mar 2021 20:47:59 -0800
+Message-Id: <20210304044803.812204-2-danielwa@cisco.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,186 +59,57 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This code allows architectures to use a generic builtin command line.
-The state of the builtin command line options across architecture is
-diverse. On x86 and mips they have pretty much the same code and the
-code prepends the builtin command line onto the boot loader provided
-one. On powerpc there is only a builtin override and nothing else.
-
-The code in this commit unifies the code into a generic
-header file under the CONFIG_GENERIC_CMDLINE option. When this
-option is enabled the architecture can call the cmdline_add_builtin()
-to add the builtin command line.
+It looks like there's some seepage of cmdline stuff into
+the generic device tree code. This conflicts with the
+generic cmdline implementation so I remove it in the case
+when that's enabled.
 
 Cc: xe-linux-external@cisco.com
-Signed-off-by: Ruslan Bilovol <rbilovol@cisco.com>
+Signed-off-by: Ruslan Ruslichenko <rruslich@cisco.com>
 Signed-off-by: Daniel Walker <danielwa@cisco.com>
 ---
- include/linux/cmdline.h | 75 +++++++++++++++++++++++++++++++++++++++++
- init/Kconfig            | 68 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 143 insertions(+)
- create mode 100644 include/linux/cmdline.h
+ drivers/of/fdt.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/include/linux/cmdline.h b/include/linux/cmdline.h
-new file mode 100644
-index 000000000000..f44011d1a9ee
---- /dev/null
-+++ b/include/linux/cmdline.h
-@@ -0,0 +1,75 @@
-+#ifndef _LINUX_CMDLINE_H
-+#define _LINUX_CMDLINE_H
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index feb0f2d67fc5..cfe4f8d3c9f5 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -25,6 +25,7 @@
+ #include <linux/serial_core.h>
+ #include <linux/sysfs.h>
+ #include <linux/random.h>
++#include <linux/cmdline.h>
+ 
+ #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
+ #include <asm/page.h>
+@@ -1048,8 +1049,18 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
+ 
+ 	early_init_dt_check_for_initrd(node);
+ 
++#ifdef CONFIG_GENERIC_CMDLINE
+ 	/* Retrieve command line */
+ 	p = of_get_flat_dt_prop(node, "bootargs", &l);
 +
-+/*
-+ *
-+ * Copyright (C) 2006,2021. Cisco Systems, Inc.
-+ *
-+ * Generic Append/Prepend cmdline support.
-+ */
-+
-+#if defined(CONFIG_GENERIC_CMDLINE) && defined(CONFIG_CMDLINE_BOOL)
-+
-+#ifndef CONFIG_CMDLINE_OVERRIDE
-+/*
-+ * This function will append or prepend a builtin command line to the command
-+ * line provided by the bootloader. Kconfig options can be used to alter
-+ * the behavior of this builtin command line.
-+ * @dest: The destination of the final appended/prepended string
-+ * @src: The starting string or NULL if there isn't one.
-+ * @tmp: temporary space used for prepending
-+ * @length: the maximum length of the strings above.
-+ */
-+static inline void
-+__cmdline_add_builtin(char *dest, const char *src, char *tmp, unsigned long length,
-+		size_t (*strlcpy)(char *dest, const char *src, size_t size),
-+		size_t (*strlcat)(char *dest, const char *src, size_t count)
-+		)
-+{
-+	if (src != dest && src != NULL) {
-+		strlcpy(dest, " ", length);
-+		strlcat(dest, src, length);
-+	}
-+
-+	if (sizeof(CONFIG_CMDLINE_APPEND) > 1)
-+		strlcat(dest, " " CONFIG_CMDLINE_APPEND, length);
-+
-+	if (sizeof(CONFIG_CMDLINE_PREPEND) > 1) {
-+		strlcpy(tmp, CONFIG_CMDLINE_PREPEND " ", length);
-+		strlcat(tmp, dest, length);
-+		strlcpy(dest, tmp, length);
-+	}
-+}
-+
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) 			\
-+{ 												\
-+	if (sizeof(CONFIG_CMDLINE_PREPEND) > 1) { 						\
-+		static label char cmdline_tmp_space[length]; 					\
-+		__cmdline_add_builtin(dest, src, cmdline_tmp_space, length, strlcpy, strlcat); 	\
-+	} else if (sizeof(CONFIG_CMDLINE_APPEND) > 1) { 					\
-+		__cmdline_add_builtin(dest, src, NULL, length, strlcpy, strlcat); 		\
-+	} 											\
-+}
-+#define cmdline_add_builtin(dest, src, length)	                           \
-+	cmdline_add_builtin_custom(dest, src, length, __initdata, &strlcpy, &strlcat)
++	/*
++	 * The builtin command line will be added here, or it can override
++	 * with the DT bootargs.
++	 */
++	cmdline_add_builtin(data,
++			    ((p != NULL && l > 0) ? p : NULL), /* This is sanity checking */
++			    COMMAND_LINE_SIZE);
 +#else
-+#define cmdline_add_builtin(dest, src, length)				   \
-+{								  	   \
-+	strlcpy(dest, CONFIG_CMDLINE_PREPEND " " CONFIG_CMDLINE_APPEND,    \
-+		length);		   				   \
-+}
-+#endif /* !CONFIG_CMDLINE_OVERRIDE */
-+
-+#else
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) { \
-+	if (src != NULL) 							 \
-+		strlcpy(dest, src, length);	 				 \
-+}
-+
-+#define cmdline_add_builtin(dest, src, length) { 				\
-+	cmdline_add_builtin_custom(dest, src, length, strlcpy, strlcat); 	\
-+}
+ 	if (p != NULL && l > 0)
+ 		strlcpy(data, p, min(l, COMMAND_LINE_SIZE));
+ 
+@@ -1070,6 +1081,7 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
+ 		strlcpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+ #endif
+ #endif /* CONFIG_CMDLINE */
 +#endif /* CONFIG_GENERIC_CMDLINE */
-+
-+
-+#endif /* _LINUX_CMDLINE_H */
-diff --git a/init/Kconfig b/init/Kconfig
-index 29ad68325028..28363ab07cd4 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2032,6 +2032,74 @@ config PROFILING
- config TRACEPOINTS
- 	bool
  
-+config GENERIC_CMDLINE
-+	bool
-+
-+if GENERIC_CMDLINE
-+
-+config CMDLINE_BOOL
-+	bool "Built-in kernel command line"
-+	help
-+	  Allow for specifying boot arguments to the kernel at
-+	  build time.  On some systems (e.g. embedded ones), it is
-+	  necessary or convenient to provide some or all of the
-+	  kernel boot arguments with the kernel itself (that is,
-+	  to not rely on the boot loader to provide them.)
-+
-+	  To compile command line arguments into the kernel,
-+	  set this option to 'Y', then fill in the
-+	  the boot arguments in CONFIG_CMDLINE.
-+
-+	  Systems with fully functional boot loaders (i.e. non-embedded)
-+	  should leave this option set to 'N'.
-+
-+config CMDLINE_APPEND
-+	string "Built-in kernel command string append"
-+	depends on CMDLINE_BOOL
-+	default ""
-+	help
-+	  Enter arguments here that should be compiled into the kernel
-+	  image and used at boot time.  If the boot loader provides a
-+	  command line at boot time, this string is appended to it to
-+	  form the full kernel command line, when the system boots.
-+
-+	  However, you can use the CONFIG_CMDLINE_OVERRIDE option to
-+	  change this behavior.
-+
-+	  In most cases, the command line (whether built-in or provided
-+	  by the boot loader) should specify the device for the root
-+	  file system.
-+
-+config CMDLINE_PREPEND
-+	string "Built-in kernel command string prepend"
-+	depends on CMDLINE_BOOL
-+	default ""
-+	help
-+	  Enter arguments here that should be compiled into the kernel
-+	  image and used at boot time.  If the boot loader provides a
-+	  command line at boot time, this string is prepended to it to
-+	  form the full kernel command line, when the system boots.
-+
-+	  However, you can use the CONFIG_CMDLINE_OVERRIDE option to
-+	  change this behavior.
-+
-+	  In most cases, the command line (whether built-in or provided
-+	  by the boot loader) should specify the device for the root
-+	  file system.
-+
-+config CMDLINE_OVERRIDE
-+	bool "Built-in command line overrides boot loader arguments"
-+	depends on CMDLINE_BOOL
-+	help
-+	  Set this option to 'Y' to have the kernel ignore the boot loader
-+	  command line, and use ONLY the built-in command line. In this case
-+	  append and prepend strings are concatenated to form the full
-+	  command line.
-+
-+	  This is used to work around broken boot loaders.  This should
-+	  be set to 'N' under normal conditions.
-+endif
-+
- endmenu		# General setup
+ 	pr_debug("Command line is: %s\n", (char *)data);
  
- source "arch/Kconfig"
 -- 
 2.25.1
 
