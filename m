@@ -2,418 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB3C32CDD6
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 08:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E6F32CE17
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 09:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbhCDHlt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Mar 2021 02:41:49 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:63930 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233554AbhCDHlV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 4 Mar 2021 02:41:21 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4DrjTL1D2fz9txlV;
-        Thu,  4 Mar 2021 08:40:38 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id oIxs5nt3m7TD; Thu,  4 Mar 2021 08:40:38 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4DrjTK2SSXz9txlT;
-        Thu,  4 Mar 2021 08:40:37 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7C97B8B7F9;
-        Thu,  4 Mar 2021 08:40:38 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id NzB03jS9KVhy; Thu,  4 Mar 2021 08:40:38 +0100 (CET)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7682A8B773;
-        Thu,  4 Mar 2021 08:40:37 +0100 (CET)
-Subject: Re: [PATCH 1/5] CMDLINE: add generic builtin command line
-To:     Daniel Walker <danielwa@cisco.com>, Will Deacon <will@kernel.org>,
-        ob Herring <robh@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     xe-linux-external@cisco.com, Ruslan Bilovol <rbilovol@cisco.com>,
-        linux-kernel@vger.kernel.org
-References: <20210304044803.812204-1-danielwa@cisco.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <b8a5d908-4c1d-c183-e0c8-64e432a4bbff@csgroup.eu>
-Date:   Thu, 4 Mar 2021 08:40:36 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <20210304044803.812204-1-danielwa@cisco.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+        id S235368AbhCDIFR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Mar 2021 03:05:17 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:44336 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235412AbhCDIFA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Mar 2021 03:05:00 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr_BwlEBgYTwUAA--.9025S2;
+        Thu, 04 Mar 2021 16:04:01 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH v3] MIPS: Make MIPS32_O32 depends on !CC_IS_CLANG
+Date:   Thu,  4 Mar 2021 16:04:00 +0800
+Message-Id: <1614845040-12995-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxr_BwlEBgYTwUAA--.9025S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr4rtr17JF4kKF1rWry8Zrb_yoW8XF1rp3
+        ykKa1DKrs8GFyrJFWkWrykWr1av3ykJayFvF9ayw17ZasrZa409r1SkF1IvFW7Ars2qay0
+        grZ3W347JayjyFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSeHgUUU
+        UU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+When building with Clang [1]:
 
+$ make CC=clang loongson3_defconfig
+$ make CC=clang
 
-Le 04/03/2021 à 05:47, Daniel Walker a écrit :
-> This code allows architectures to use a generic builtin command line.
-> The state of the builtin command line options across architecture is
-> diverse. On x86 and mips they have pretty much the same code and the
-> code prepends the builtin command line onto the boot loader provided
-> one. On powerpc there is only a builtin override and nothing else.
-> 
-> The code in this commit unifies the code into a generic
-> header file under the CONFIG_GENERIC_CMDLINE option. When this
-> option is enabled the architecture can call the cmdline_add_builtin()
-> to add the builtin command line.
+there exists the following error:
 
-WARNING:SPDX_LICENSE_TAG: Missing or malformed SPDX-License-Identifier tag in line 1
-#32: FILE: include/linux/cmdline.h:1:
-+#ifndef _LINUX_CMDLINE_H
+  Checking missing-syscalls for O32
+  CALL    scripts/checksyscalls.sh
+error: ABI 'o32' is not supported on CPU 'mips64r2'
+make[1]: *** [Kbuild:48: missing-syscalls] Error 1
+make: *** [arch/mips/Makefile:419: archprepare] Error 2
 
-CHECK:PARENTHESIS_ALIGNMENT: Alignment should match open parenthesis
-#56: FILE: include/linux/cmdline.h:25:
-+__cmdline_add_builtin(char *dest, const char *src, char *tmp, unsigned long length,
-+		size_t (*strlcpy)(char *dest, const char *src, size_t size),
+This is a known bug [2] with Clang, as Simon Atanasyan said,
+"There is no plan on support O32 for MIPS64 due to lack of
+resources".
 
-WARNING:STRLCPY: Prefer strscpy over strlcpy - see: 
-https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-#61: FILE: include/linux/cmdline.h:30:
-+		strlcpy(dest, " ", length);
+It is not a good idea to remove CONFIG_MIPS32_O32=y directly
+in defconfig because GCC works, as Nathan said, the config
+should not even be selectable when building with Clang, so
+just make MIPS32_O32 depends on !CC_IS_CLANG.
 
-WARNING:STRLCPY: Prefer strscpy over strlcpy - see: 
-https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-#69: FILE: include/linux/cmdline.h:38:
-+		strlcpy(tmp, CONFIG_CMDLINE_PREPEND " ", length);
+[1] https://www.kernel.org/doc/html/latest/kbuild/llvm.html
+[2] https://bugs.llvm.org/show_bug.cgi?id=38063
 
-WARNING:STRLCPY: Prefer strscpy over strlcpy - see: 
-https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-#71: FILE: include/linux/cmdline.h:40:
-+		strlcpy(dest, tmp, length);
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+---
 
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#75: FILE: include/linux/cmdline.h:44:
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) ^I^I^I\$
+v3: Update the commit message suggested by Nathan, thank you!
 
-CHECK:MACRO_ARG_REUSE: Macro argument reuse 'dest' - possible side-effects?
-#75: FILE: include/linux/cmdline.h:44:
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) 			\
-+{ 												\
-+	if (sizeof(CONFIG_CMDLINE_PREPEND) > 1) { 						\
-+		static label char cmdline_tmp_space[length]; 					\
-+		__cmdline_add_builtin(dest, src, cmdline_tmp_space, length, strlcpy, strlcat); 	\
-+	} else if (sizeof(CONFIG_CMDLINE_APPEND) > 1) { 					\
-+		__cmdline_add_builtin(dest, src, NULL, length, strlcpy, strlcat); 		\
-+	} 											\
-+}
+ arch/mips/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-CHECK:MACRO_ARG_REUSE: Macro argument reuse 'src' - possible side-effects?
-#75: FILE: include/linux/cmdline.h:44:
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) 			\
-+{ 												\
-+	if (sizeof(CONFIG_CMDLINE_PREPEND) > 1) { 						\
-+		static label char cmdline_tmp_space[length]; 					\
-+		__cmdline_add_builtin(dest, src, cmdline_tmp_space, length, strlcpy, strlcat); 	\
-+	} else if (sizeof(CONFIG_CMDLINE_APPEND) > 1) { 					\
-+		__cmdline_add_builtin(dest, src, NULL, length, strlcpy, strlcat); 		\
-+	} 											\
-+}
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 3a38d27..f6ba59f 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3318,6 +3318,8 @@ config SYSVIPC_COMPAT
+ config MIPS32_O32
+ 	bool "Kernel support for o32 binaries"
+ 	depends on 64BIT
++	# https://bugs.llvm.org/show_bug.cgi?id=38063
++	depends on !CC_IS_CLANG
+ 	select ARCH_WANT_OLD_COMPAT_IPC
+ 	select COMPAT
+ 	select MIPS32_COMPAT
+-- 
+2.1.0
 
-CHECK:MACRO_ARG_REUSE: Macro argument reuse 'length' - possible side-effects?
-#75: FILE: include/linux/cmdline.h:44:
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) 			\
-+{ 												\
-+	if (sizeof(CONFIG_CMDLINE_PREPEND) > 1) { 						\
-+		static label char cmdline_tmp_space[length]; 					\
-+		__cmdline_add_builtin(dest, src, cmdline_tmp_space, length, strlcpy, strlcat); 	\
-+	} else if (sizeof(CONFIG_CMDLINE_APPEND) > 1) { 					\
-+		__cmdline_add_builtin(dest, src, NULL, length, strlcpy, strlcat); 		\
-+	} 											\
-+}
-
-CHECK:MACRO_ARG_REUSE: Macro argument reuse 'strlcpy' - possible side-effects?
-#75: FILE: include/linux/cmdline.h:44:
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) 			\
-+{ 												\
-+	if (sizeof(CONFIG_CMDLINE_PREPEND) > 1) { 						\
-+		static label char cmdline_tmp_space[length]; 					\
-+		__cmdline_add_builtin(dest, src, cmdline_tmp_space, length, strlcpy, strlcat); 	\
-+	} else if (sizeof(CONFIG_CMDLINE_APPEND) > 1) { 					\
-+		__cmdline_add_builtin(dest, src, NULL, length, strlcpy, strlcat); 		\
-+	} 											\
-+}
-
-CHECK:MACRO_ARG_REUSE: Macro argument reuse 'strlcat' - possible side-effects?
-#75: FILE: include/linux/cmdline.h:44:
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) 			\
-+{ 												\
-+	if (sizeof(CONFIG_CMDLINE_PREPEND) > 1) { 						\
-+		static label char cmdline_tmp_space[length]; 					\
-+		__cmdline_add_builtin(dest, src, cmdline_tmp_space, length, strlcpy, strlcat); 	\
-+	} else if (sizeof(CONFIG_CMDLINE_APPEND) > 1) { 					\
-+		__cmdline_add_builtin(dest, src, NULL, length, strlcpy, strlcat); 		\
-+	} 											\
-+}
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#76: FILE: include/linux/cmdline.h:45:
-+{ ^I^I^I^I^I^I^I^I^I^I^I^I\$
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#77: FILE: include/linux/cmdline.h:46:
-+^Iif (sizeof(CONFIG_CMDLINE_PREPEND) > 1) { ^I^I^I^I^I^I\$
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#78: FILE: include/linux/cmdline.h:47:
-+^I^Istatic label char cmdline_tmp_space[length]; ^I^I^I^I^I\$
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#79: FILE: include/linux/cmdline.h:48:
-+^I^I__cmdline_add_builtin(dest, src, cmdline_tmp_space, length, strlcpy, strlcat); ^I\$
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#80: FILE: include/linux/cmdline.h:49:
-+^I} else if (sizeof(CONFIG_CMDLINE_APPEND) > 1) { ^I^I^I^I^I\$
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#81: FILE: include/linux/cmdline.h:50:
-+^I^I__cmdline_add_builtin(dest, src, NULL, length, strlcpy, strlcat); ^I^I\$
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#82: FILE: include/linux/cmdline.h:51:
-+^I} ^I^I^I^I^I^I^I^I^I^I^I\$
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#88: FILE: include/linux/cmdline.h:57:
-+{^I^I^I^I^I^I^I^I  ^I   \$
-
-WARNING:STRLCPY: Prefer strscpy over strlcpy - see: 
-https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-#89: FILE: include/linux/cmdline.h:58:
-+	strlcpy(dest, CONFIG_CMDLINE_PREPEND " " CONFIG_CMDLINE_APPEND,    \
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#90: FILE: include/linux/cmdline.h:59:
-+^I^Ilength);^I^I   ^I^I^I^I   \$
-
-CHECK:MACRO_ARG_REUSE: Macro argument reuse 'src' - possible side-effects?
-#95: FILE: include/linux/cmdline.h:64:
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) { \
-+	if (src != NULL) 							 \
-+		strlcpy(dest, src, length);	 				 \
-+}
-
-CHECK:MACRO_ARG_PRECEDENCE: Macro argument 'src' may be better as '(src)' to avoid precedence issues
-#95: FILE: include/linux/cmdline.h:64:
-+#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) { \
-+	if (src != NULL) 							 \
-+		strlcpy(dest, src, length);	 				 \
-+}
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#96: FILE: include/linux/cmdline.h:65:
-+^Iif (src != NULL) ^I^I^I^I^I^I^I \$
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#97: FILE: include/linux/cmdline.h:66:
-+^I^Istrlcpy(dest, src, length);^I ^I^I^I^I \$
-
-WARNING:STRLCPY: Prefer strscpy over strlcpy - see: 
-https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-#97: FILE: include/linux/cmdline.h:66:
-+		strlcpy(dest, src, length);	 				 \
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#100: FILE: include/linux/cmdline.h:69:
-+#define cmdline_add_builtin(dest, src, length) { ^I^I^I^I\$
-
-WARNING:SPACE_BEFORE_TAB: please, no space before tabs
-#101: FILE: include/linux/cmdline.h:70:
-+^Icmdline_add_builtin_custom(dest, src, length, strlcpy, strlcat); ^I\$
-
-total: 0 errors, 20 warnings, 8 checks, 149 lines checked
-
-NOTE: For some of the reported defects, checkpatch may be able to
-       mechanically convert to the typical style using --fix or --fix-inplace.
-
-the.patch has style problems, please review.
-
-NOTE: Ignored message types: ARCH_INCLUDE_LINUX BIT_MACRO COMPARISON_TO_NULL DT_SPLIT_BINDING_PATCH 
-EMAIL_SUBJECT FILE_PATH_CHANGES GLOBAL_INITIALISERS LINE_SPACING MULTIPLE_ASSIGNMENTS
-
-NOTE: If any of the errors are false positives, please report
-       them to the maintainer, see CHECKPATCH in MAINTAINERS.
-
-
-> 
-> Cc: xe-linux-external@cisco.com
-> Signed-off-by: Ruslan Bilovol <rbilovol@cisco.com>
-> Signed-off-by: Daniel Walker <danielwa@cisco.com>
-> ---
->   include/linux/cmdline.h | 75 +++++++++++++++++++++++++++++++++++++++++
->   init/Kconfig            | 68 +++++++++++++++++++++++++++++++++++++
->   2 files changed, 143 insertions(+)
->   create mode 100644 include/linux/cmdline.h
-> 
-> diff --git a/include/linux/cmdline.h b/include/linux/cmdline.h
-> new file mode 100644
-> index 000000000000..f44011d1a9ee
-> --- /dev/null
-> +++ b/include/linux/cmdline.h
-> @@ -0,0 +1,75 @@
-> +#ifndef _LINUX_CMDLINE_H
-> +#define _LINUX_CMDLINE_H
-> +
-> +/*
-> + *
-> + * Copyright (C) 2006,2021. Cisco Systems, Inc.
-> + *
-> + * Generic Append/Prepend cmdline support.
-> + */
-> +
-> +#if defined(CONFIG_GENERIC_CMDLINE) && defined(CONFIG_CMDLINE_BOOL)
-> +
-> +#ifndef CONFIG_CMDLINE_OVERRIDE
-> +/*
-> + * This function will append or prepend a builtin command line to the command
-> + * line provided by the bootloader. Kconfig options can be used to alter
-> + * the behavior of this builtin command line.
-> + * @dest: The destination of the final appended/prepended string
-> + * @src: The starting string or NULL if there isn't one.
-> + * @tmp: temporary space used for prepending
-> + * @length: the maximum length of the strings above.
-> + */
-> +static inline void
-> +__cmdline_add_builtin(char *dest, const char *src, char *tmp, unsigned long length,
-> +		size_t (*strlcpy)(char *dest, const char *src, size_t size),
-> +		size_t (*strlcat)(char *dest, const char *src, size_t count)
-> +		)
-> +{
-> +	if (src != dest && src != NULL) {
-> +		strlcpy(dest, " ", length);
-> +		strlcat(dest, src, length);
-> +	}
-> +
-> +	if (sizeof(CONFIG_CMDLINE_APPEND) > 1)
-> +		strlcat(dest, " " CONFIG_CMDLINE_APPEND, length);
-> +
-> +	if (sizeof(CONFIG_CMDLINE_PREPEND) > 1) {
-> +		strlcpy(tmp, CONFIG_CMDLINE_PREPEND " ", length);
-> +		strlcat(tmp, dest, length);
-> +		strlcpy(dest, tmp, length);
-> +	}
-> +}
-> +
-> +#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) 			\
-> +{ 												\
-> +	if (sizeof(CONFIG_CMDLINE_PREPEND) > 1) { 						\
-> +		static label char cmdline_tmp_space[length]; 					\
-> +		__cmdline_add_builtin(dest, src, cmdline_tmp_space, length, strlcpy, strlcat); 	\
-> +	} else if (sizeof(CONFIG_CMDLINE_APPEND) > 1) { 					\
-> +		__cmdline_add_builtin(dest, src, NULL, length, strlcpy, strlcat); 		\
-> +	} 											\
-> +}
-> +#define cmdline_add_builtin(dest, src, length)	                           \
-> +	cmdline_add_builtin_custom(dest, src, length, __initdata, &strlcpy, &strlcat)
-> +#else
-> +#define cmdline_add_builtin(dest, src, length)				   \
-> +{								  	   \
-> +	strlcpy(dest, CONFIG_CMDLINE_PREPEND " " CONFIG_CMDLINE_APPEND,    \
-> +		length);		   				   \
-> +}
-> +#endif /* !CONFIG_CMDLINE_OVERRIDE */
-> +
-> +#else
-> +#define cmdline_add_builtin_custom(dest, src, length, label, strlcpy, strlcat) { \
-> +	if (src != NULL) 							 \
-> +		strlcpy(dest, src, length);	 				 \
-> +}
-> +
-> +#define cmdline_add_builtin(dest, src, length) { 				\
-> +	cmdline_add_builtin_custom(dest, src, length, strlcpy, strlcat); 	\
-> +}
-> +#endif /* CONFIG_GENERIC_CMDLINE */
-> +
-> +
-> +#endif /* _LINUX_CMDLINE_H */
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 29ad68325028..28363ab07cd4 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -2032,6 +2032,74 @@ config PROFILING
->   config TRACEPOINTS
->   	bool
->   
-> +config GENERIC_CMDLINE
-> +	bool
-> +
-> +if GENERIC_CMDLINE
-> +
-> +config CMDLINE_BOOL
-> +	bool "Built-in kernel command line"
-> +	help
-> +	  Allow for specifying boot arguments to the kernel at
-> +	  build time.  On some systems (e.g. embedded ones), it is
-> +	  necessary or convenient to provide some or all of the
-> +	  kernel boot arguments with the kernel itself (that is,
-> +	  to not rely on the boot loader to provide them.)
-> +
-> +	  To compile command line arguments into the kernel,
-> +	  set this option to 'Y', then fill in the
-> +	  the boot arguments in CONFIG_CMDLINE.
-> +
-> +	  Systems with fully functional boot loaders (i.e. non-embedded)
-> +	  should leave this option set to 'N'.
-> +
-> +config CMDLINE_APPEND
-> +	string "Built-in kernel command string append"
-> +	depends on CMDLINE_BOOL
-> +	default ""
-> +	help
-> +	  Enter arguments here that should be compiled into the kernel
-> +	  image and used at boot time.  If the boot loader provides a
-> +	  command line at boot time, this string is appended to it to
-> +	  form the full kernel command line, when the system boots.
-> +
-> +	  However, you can use the CONFIG_CMDLINE_OVERRIDE option to
-> +	  change this behavior.
-> +
-> +	  In most cases, the command line (whether built-in or provided
-> +	  by the boot loader) should specify the device for the root
-> +	  file system.
-> +
-> +config CMDLINE_PREPEND
-> +	string "Built-in kernel command string prepend"
-> +	depends on CMDLINE_BOOL
-> +	default ""
-> +	help
-> +	  Enter arguments here that should be compiled into the kernel
-> +	  image and used at boot time.  If the boot loader provides a
-> +	  command line at boot time, this string is prepended to it to
-> +	  form the full kernel command line, when the system boots.
-> +
-> +	  However, you can use the CONFIG_CMDLINE_OVERRIDE option to
-> +	  change this behavior.
-> +
-> +	  In most cases, the command line (whether built-in or provided
-> +	  by the boot loader) should specify the device for the root
-> +	  file system.
-> +
-> +config CMDLINE_OVERRIDE
-> +	bool "Built-in command line overrides boot loader arguments"
-> +	depends on CMDLINE_BOOL
-> +	help
-> +	  Set this option to 'Y' to have the kernel ignore the boot loader
-> +	  command line, and use ONLY the built-in command line. In this case
-> +	  append and prepend strings are concatenated to form the full
-> +	  command line.
-> +
-> +	  This is used to work around broken boot loaders.  This should
-> +	  be set to 'N' under normal conditions.
-> +endif
-> +
->   endmenu		# General setup
->   
->   source "arch/Kconfig"
-> 
