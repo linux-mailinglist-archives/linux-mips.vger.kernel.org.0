@@ -2,240 +2,236 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FD732CD93
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 08:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6FF32CDCD
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 08:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbhCDH0V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Mar 2021 02:26:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbhCDH0I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Mar 2021 02:26:08 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD39C061574;
-        Wed,  3 Mar 2021 23:25:28 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id d3so41494375lfg.10;
-        Wed, 03 Mar 2021 23:25:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nk4Sm/a2W5mKT2nJYes9ly+Sao6uPhVPqbljVOlCzEA=;
-        b=YGe1pLbcDy9iGlLPxpGgiMve+O6mIeQu6LznERUOxaibs69e9Rx9UgdFjeav4z9gSk
-         0zSsvGS986wHchDcnvHaMaU4T5Nx4dt4hYlype6tTLag/YY72cDdd7WsOwrSUBhf2KNG
-         qB4NK0FyfaziqiyeDm2tfOry1iOq/jTFFS3eGI1Dp0V3ZnJOqBqXrHfEvYubbKwL7RwX
-         JhqIba5HS6MhXrPYJP1qhrWZuvNwQUo8wx0Fj849ZOKXHrcEDeHH7A+JYa25jL5s/zBs
-         aXE+6p7KNcyB4y5MAIEW53IEpuylhzE+OA8Nzg63BoorfQMXqnoBq+eILmhlHYXauyfc
-         Yb1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nk4Sm/a2W5mKT2nJYes9ly+Sao6uPhVPqbljVOlCzEA=;
-        b=eLgtcYyAIHKjl7q6IC+25mKNh9Zt2rWUkL490SGFH7nAnVs2MB9SOrSxnts+qXn11J
-         V2rVyyXHldaJxhk5YhuzhntZF7iusX/UL3iItwUob//buj3cdEemoaR+BSKmKqmmiQxz
-         1KiCqb7dgpI4HIJhSw58srkZ91GRHnN+Sw8b4M50SFKdfHkE3/UxQhEA8F3aCx8ERZkK
-         cFCzNDUtqKfURn31vnqoGCZxjAuVLGs5ydyygs4Hu1uKERDZtX/qG3dDTFg/BEXJzrc3
-         QV07oE4yYpc3HByjlYmDd9cp830yK0H0RtjnNhUTELO5ViZuEbPmWb0eUsQp4d+A8YHl
-         xuPQ==
-X-Gm-Message-State: AOAM530jxZs+yDCsxgY3R/OUNkPQskheESr2mZh6idxzTf181EDPzEQQ
-        vsfo0iU7Ut59RqaimrMiMm0=
-X-Google-Smtp-Source: ABdhPJz2khWmNxscc0ERLdSOh2Q+id8b975F4AJmiGMFSOHorOtt/PpqniUqDP7ooPDk43ChftDQDA==
-X-Received: by 2002:ac2:5e9d:: with SMTP id b29mr1519869lfq.31.1614842726984;
-        Wed, 03 Mar 2021 23:25:26 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id q3sm1105989lfp.233.2021.03.03.23.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 23:25:26 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivek Unune <npcomplete13@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH mips/linux.git] firmware: bcm47xx_nvram: refactor finding & reading NVRAM
-Date:   Thu,  4 Mar 2021 08:23:57 +0100
-Message-Id: <20210304072357.31108-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        id S231355AbhCDHjl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Mar 2021 02:39:41 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:3576 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233254AbhCDHjV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Mar 2021 02:39:21 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4DrjQx2mZjz9tvrS;
+        Thu,  4 Mar 2021 08:38:33 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id DHqGWtfSMOLu; Thu,  4 Mar 2021 08:38:33 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4DrjQx0RNtz9tvrL;
+        Thu,  4 Mar 2021 08:38:33 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 78A6D8B7F6;
+        Thu,  4 Mar 2021 08:38:34 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 0KzNR-gx8ayW; Thu,  4 Mar 2021 08:38:34 +0100 (CET)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7B1D18B773;
+        Thu,  4 Mar 2021 08:38:33 +0100 (CET)
+Subject: Re: [PATCH 3/5] CMDLINE: powerpc: convert to generic builtin command
+ line
+To:     Daniel Walker <danielwa@cisco.com>, Will Deacon <will@kernel.org>,
+        ob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     xe-linux-external@cisco.com,
+        Ruslan Ruslichenko <rruslich@cisco.com>,
+        Ruslan Bilovol <rbilovol@cisco.com>,
+        linux-kernel@vger.kernel.org
+References: <20210304044803.812204-3-danielwa@cisco.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <29d9fd14-7910-e0d6-1ee5-c95e643f7a00@csgroup.eu>
+Date:   Thu, 4 Mar 2021 08:38:32 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20210304044803.812204-3-danielwa@cisco.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
 
-1. Use meaningful variable names (e.g. "flash_start", "res_size" instead
-   of e.g. "iobase", "end")
-2. Always operate on "offset" instead of mix of start, end, size, etc.
-3. Add helper checking for NVRAM to avoid duplicating code
-4. Use "found" variable instead of goto
-5. Use simpler checking of offsets and sizes (2 nested loops with
-   trivial check instead of extra function)
 
-This change has been tested on BCM4706. Updated code checks the same
-offsets as before. Driver still finds & copies NVRAM content.
+Le 04/03/2021 à 05:48, Daniel Walker a écrit :
+> This updates the powerpc code to use the CONFIG_GENERIC_CMDLINE
+> option.
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- drivers/firmware/broadcom/bcm47xx_nvram.c | 111 ++++++++++++----------
- 1 file changed, 63 insertions(+), 48 deletions(-)
+In file included from arch/powerpc/kernel/prom_init.c:30:
+arch/powerpc/kernel/prom_init.c: In function 'early_cmdline_parse':
+arch/powerpc/kernel/prom_init.c:788:17: error: lvalue required as unary '&' operand
+   788 |      __prombss, &prom_strlcpy, &prom_strlcat);
+       |                 ^
+./include/linux/cmdline.h:66:3: note: in definition of macro 'cmdline_add_builtin_custom'
+    66 |   strlcpy(dest, src, length);       \
+       |   ^~~~~~~
+At top level:
+arch/powerpc/kernel/prom_init.c:312:22: error: 'prom_strlcat' defined but not used 
+[-Werror=unused-function]
+   312 | static size_t __init prom_strlcat(char *dest, const char *src, size_t count)
+       |                      ^~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:279: arch/powerpc/kernel/prom_init.o] Error 1
+make[1]: *** [scripts/Makefile.build:496: arch/powerpc/kernel] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1805: arch/powerpc] Error 2
+make: *** Waiting for unfinished jobs....
 
-diff --git a/drivers/firmware/broadcom/bcm47xx_nvram.c b/drivers/firmware/broadcom/bcm47xx_nvram.c
-index 835ece9c00f1..7cfe857b3e98 100644
---- a/drivers/firmware/broadcom/bcm47xx_nvram.c
-+++ b/drivers/firmware/broadcom/bcm47xx_nvram.c
-@@ -34,26 +34,47 @@ static char nvram_buf[NVRAM_SPACE];
- static size_t nvram_len;
- static const u32 nvram_sizes[] = {0x6000, 0x8000, 0xF000, 0x10000};
- 
--static u32 find_nvram_size(void __iomem *end)
-+/**
-+ * bcm47xx_nvram_validate - check for a valid NVRAM at specified memory
-+ */
-+static bool bcm47xx_nvram_is_valid(void __iomem *nvram)
- {
--	struct nvram_header __iomem *header;
--	int i;
-+	return ((struct nvram_header *)nvram)->magic == NVRAM_MAGIC;
-+}
- 
--	for (i = 0; i < ARRAY_SIZE(nvram_sizes); i++) {
--		header = (struct nvram_header *)(end - nvram_sizes[i]);
--		if (header->magic == NVRAM_MAGIC)
--			return nvram_sizes[i];
-+/**
-+ * bcm47xx_nvram_copy - copy NVRAM to internal buffer
-+ */
-+static void bcm47xx_nvram_copy(void __iomem *nvram_start, size_t res_size)
-+{
-+	struct nvram_header __iomem *header = nvram_start;
-+	size_t copy_size;
-+
-+	copy_size = header->len;
-+	if (copy_size > res_size) {
-+		pr_err("The nvram size according to the header seems to be bigger than the partition on flash\n");
-+		copy_size = res_size;
-+	}
-+	if (copy_size >= NVRAM_SPACE) {
-+		pr_err("nvram on flash (%zu bytes) is bigger than the reserved space in memory, will just copy the first %i bytes\n",
-+		       copy_size, NVRAM_SPACE - 1);
-+		copy_size = NVRAM_SPACE - 1;
- 	}
- 
--	return 0;
-+	__ioread32_copy(nvram_buf, nvram_start, DIV_ROUND_UP(copy_size, 4));
-+	nvram_buf[NVRAM_SPACE - 1] = '\0';
-+	nvram_len = copy_size;
- }
- 
--/* Probe for NVRAM header */
--static int nvram_find_and_copy(void __iomem *iobase, u32 lim)
-+/**
-+ * bcm47xx_nvram_find_and_copy - find NVRAM on flash mapping & copy it
-+ */
-+static int bcm47xx_nvram_find_and_copy(void __iomem *flash_start, size_t res_size)
- {
--	struct nvram_header __iomem *header;
--	u32 off;
--	u32 size;
-+	size_t flash_size;
-+	size_t offset;
-+	bool found;
-+	int i;
- 
- 	if (nvram_len) {
- 		pr_warn("nvram already initialized\n");
-@@ -61,49 +82,43 @@ static int nvram_find_and_copy(void __iomem *iobase, u32 lim)
- 	}
- 
- 	/* TODO: when nvram is on nand flash check for bad blocks first. */
--	off = FLASH_MIN;
--	while (off <= lim) {
--		/* Windowed flash access */
--		size = find_nvram_size(iobase + off);
--		if (size) {
--			header = (struct nvram_header *)(iobase + off - size);
--			goto found;
-+
-+	found = false;
-+
-+	/* Try every possible flash size and check for NVRAM at its end */
-+	for (flash_size = FLASH_MIN; flash_size <= res_size; flash_size <<= 1) {
-+		for (i = 0; i < ARRAY_SIZE(nvram_sizes); i++) {
-+			offset = flash_size - nvram_sizes[i];
-+			if (bcm47xx_nvram_is_valid(flash_start + offset)) {
-+				found = true;
-+				break;
-+			}
- 		}
--		off <<= 1;
-+
-+		if (found)
-+			break;
- 	}
- 
- 	/* Try embedded NVRAM at 4 KB and 1 KB as last resorts */
--	header = (struct nvram_header *)(iobase + 4096);
--	if (header->magic == NVRAM_MAGIC) {
--		size = NVRAM_SPACE;
--		goto found;
--	}
- 
--	header = (struct nvram_header *)(iobase + 1024);
--	if (header->magic == NVRAM_MAGIC) {
--		size = NVRAM_SPACE;
--		goto found;
-+	if (!found) {
-+		offset = 4096;
-+		if (bcm47xx_nvram_is_valid(flash_start + offset))
-+			found = true;
- 	}
- 
--	pr_err("no nvram found\n");
--	return -ENXIO;
--
--found:
--	__ioread32_copy(nvram_buf, header, sizeof(*header) / 4);
--	nvram_len = ((struct nvram_header *)(nvram_buf))->len;
--	if (nvram_len > size) {
--		pr_err("The nvram size according to the header seems to be bigger than the partition on flash\n");
--		nvram_len = size;
-+	if (!found) {
-+		offset = 1024;
-+		if (bcm47xx_nvram_is_valid(flash_start + offset))
-+			found = true;
- 	}
--	if (nvram_len >= NVRAM_SPACE) {
--		pr_err("nvram on flash (%zu bytes) is bigger than the reserved space in memory, will just copy the first %i bytes\n",
--		       nvram_len, NVRAM_SPACE - 1);
--		nvram_len = NVRAM_SPACE - 1;
-+
-+	if (!found) {
-+		pr_err("no nvram found\n");
-+		return -ENXIO;
- 	}
--	/* proceed reading data after header */
--	__ioread32_copy(nvram_buf + sizeof(*header), header + 1,
--			DIV_ROUND_UP(nvram_len, 4));
--	nvram_buf[NVRAM_SPACE - 1] = '\0';
-+
-+	bcm47xx_nvram_copy(flash_start + offset, res_size - offset);
- 
- 	return 0;
- }
-@@ -124,7 +139,7 @@ int bcm47xx_nvram_init_from_mem(u32 base, u32 lim)
- 	if (!iobase)
- 		return -ENOMEM;
- 
--	err = nvram_find_and_copy(iobase, lim);
-+	err = bcm47xx_nvram_find_and_copy(iobase, lim);
- 
- 	iounmap(iobase);
- 
--- 
-2.26.2
-
+> 
+> Cc: xe-linux-external@cisco.com
+> Signed-off-by: Ruslan Ruslichenko <rruslich@cisco.com>
+> Signed-off-by: Ruslan Bilovol <rbilovol@cisco.com>
+> Signed-off-by: Daniel Walker <danielwa@cisco.com>
+> ---
+>   arch/powerpc/Kconfig            | 37 +--------------------------------
+>   arch/powerpc/kernel/prom.c      |  1 +
+>   arch/powerpc/kernel/prom_init.c | 31 +++++++++++++++------------
+>   3 files changed, 20 insertions(+), 49 deletions(-)
+> 
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index 107bb4319e0e..276b06d5c961 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -167,6 +167,7 @@ config PPC
+>   	select EDAC_SUPPORT
+>   	select GENERIC_ATOMIC64			if PPC32
+>   	select GENERIC_CLOCKEVENTS_BROADCAST	if SMP
+> +	select GENERIC_CMDLINE
+>   	select GENERIC_CMOS_UPDATE
+>   	select GENERIC_CPU_AUTOPROBE
+>   	select GENERIC_CPU_VULNERABILITIES	if PPC_BARRIER_NOSPEC
+> @@ -906,42 +907,6 @@ config PPC_DENORMALISATION
+>   	  Add support for handling denormalisation of single precision
+>   	  values.  Useful for bare metal only.  If unsure say Y here.
+>   
+> -config CMDLINE
+> -	string "Initial kernel command string"
+> -	default ""
+> -	help
+> -	  On some platforms, there is currently no way for the boot loader to
+> -	  pass arguments to the kernel. For these platforms, you can supply
+> -	  some command-line options at build time by entering them here.  In
+> -	  most cases you will need to specify the root device here.
+> -
+> -choice
+> -	prompt "Kernel command line type" if CMDLINE != ""
+> -	default CMDLINE_FROM_BOOTLOADER
+> -
+> -config CMDLINE_FROM_BOOTLOADER
+> -	bool "Use bootloader kernel arguments if available"
+> -	help
+> -	  Uses the command-line options passed by the boot loader. If
+> -	  the boot loader doesn't provide any, the default kernel command
+> -	  string provided in CMDLINE will be used.
+> -
+> -config CMDLINE_EXTEND
+> -	bool "Extend bootloader kernel arguments"
+> -	help
+> -	  The command-line arguments provided by the boot loader will be
+> -	  appended to the default kernel command string.
+> -
+> -config CMDLINE_FORCE
+> -	bool "Always use the default kernel command string"
+> -	help
+> -	  Always use the default kernel command string, even if the boot
+> -	  loader passes other arguments to the kernel.
+> -	  This is useful if you cannot or don't want to change the
+> -	  command-line options your boot loader passes to the kernel.
+> -
+> -endchoice
+> -
+>   config EXTRA_TARGETS
+>   	string "Additional default image types"
+>   	help
+> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+> index ae3c41730367..96d0a01be1b4 100644
+> --- a/arch/powerpc/kernel/prom.c
+> +++ b/arch/powerpc/kernel/prom.c
+> @@ -27,6 +27,7 @@
+>   #include <linux/irq.h>
+>   #include <linux/memblock.h>
+>   #include <linux/of.h>
+> +#include <linux/cmdline.h>
+>   #include <linux/of_fdt.h>
+>   #include <linux/libfdt.h>
+>   #include <linux/cpu.h>
+> diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
+> index e9d4eb6144e1..d752be688b62 100644
+> --- a/arch/powerpc/kernel/prom_init.c
+> +++ b/arch/powerpc/kernel/prom_init.c
+> @@ -27,6 +27,7 @@
+>   #include <linux/initrd.h>
+>   #include <linux/bitops.h>
+>   #include <linux/pgtable.h>
+> +#include <linux/cmdline.h>
+>   #include <asm/prom.h>
+>   #include <asm/rtas.h>
+>   #include <asm/page.h>
+> @@ -242,15 +243,6 @@ static int __init prom_strcmp(const char *cs, const char *ct)
+>   	return 0;
+>   }
+>   
+> -static char __init *prom_strcpy(char *dest, const char *src)
+> -{
+> -	char *tmp = dest;
+> -
+> -	while ((*dest++ = *src++) != '\0')
+> -		/* nothing */;
+> -	return tmp;
+> -}
+> -
+>   static int __init prom_strncmp(const char *cs, const char *ct, size_t count)
+>   {
+>   	unsigned char c1, c2;
+> @@ -276,6 +268,19 @@ static size_t __init prom_strlen(const char *s)
+>   	return sc - s;
+>   }
+>   
+> +static size_t __init prom_strlcpy(char *dest, const char *src, size_t size)
+> +{
+> +	size_t ret = prom_strlen(src);
+> +
+> +	if (size) {
+> +		size_t len = (ret >= size) ? size - 1 : ret;
+> +		memcpy(dest, src, len);
+> +		dest[len] = '\0';
+> +	}
+> +	return ret;
+> +}
+> +
+> +
+>   static int __init prom_memcmp(const void *cs, const void *ct, size_t count)
+>   {
+>   	const unsigned char *su1, *su2;
+> @@ -778,9 +783,9 @@ static void __init early_cmdline_parse(void)
+>   	if (!IS_ENABLED(CONFIG_CMDLINE_FORCE) && (long)prom.chosen > 0)
+>   		l = prom_getprop(prom.chosen, "bootargs", p, COMMAND_LINE_SIZE-1);
+>   
+> -	if (IS_ENABLED(CONFIG_CMDLINE_EXTEND) || l <= 0 || p[0] == '\0')
+> -		prom_strlcat(prom_cmd_line, " " CONFIG_CMDLINE,
+> -			     sizeof(prom_cmd_line));
+> +	if (l <= 0 || p[0] == '\0') /* dbl check */
+> +		cmdline_add_builtin_custom(prom_cmd_line, NULL, sizeof(prom_cmd_line),
+> +					__prombss, &prom_strlcpy, &prom_strlcat);
+>   
+>   	prom_printf("command line: %s\n", prom_cmd_line);
+>   
+> @@ -2706,7 +2711,7 @@ static void __init flatten_device_tree(void)
+>   
+>   	/* Add "phandle" in there, we'll need it */
+>   	namep = make_room(&mem_start, &mem_end, 16, 1);
+> -	prom_strcpy(namep, "phandle");
+> +	prom_strlcpy(namep, "phandle", 8);
+>   	mem_start = (unsigned long)namep + prom_strlen(namep) + 1;
+>   
+>   	/* Build string array */
+> 
