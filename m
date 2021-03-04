@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0353C32DD65
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Mar 2021 23:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B72B32DD9A
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 00:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbhCDWxI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Mar 2021 17:53:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhCDWxH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Mar 2021 17:53:07 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F5F9C061574;
-        Thu,  4 Mar 2021 14:53:07 -0800 (PST)
+        id S232146AbhCDXIb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Mar 2021 18:08:31 -0500
+Received: from angie.orcam.me.uk ([157.25.102.26]:37442 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230403AbhCDXIb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Mar 2021 18:08:31 -0500
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id B91D092009C; Thu,  4 Mar 2021 23:53:03 +0100 (CET)
+        id B42C392009C; Fri,  5 Mar 2021 00:08:29 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B608E92009B;
-        Thu,  4 Mar 2021 23:53:03 +0100 (CET)
-Date:   Thu, 4 Mar 2021 23:53:03 +0100 (CET)
+        by angie.orcam.me.uk (Postfix) with ESMTP id ADE1C92009B;
+        Fri,  5 Mar 2021 00:08:29 +0100 (CET)
+Date:   Fri, 5 Mar 2021 00:08:29 +0100 (CET)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Rob Herring <robh@kernel.org>
-cc:     Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>, od@zcrc.me,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: boot/compressed: Copy DTB to aligned address
-In-Reply-To: <CAL_JsqLfkjC4c4PYfm6yJLZMH-5WaKA_mr9ziJ1J63UohcgRCw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2103042349390.51127@angie.orcam.me.uk>
-References: <20210303193305.924384-1-paul@crapouillou.net> <CAL_JsqLfkjC4c4PYfm6yJLZMH-5WaKA_mr9ziJ1J63UohcgRCw@mail.gmail.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH] MIPS: Add comment about CONFIG_MIPS32_O32 in
+ loongson3_defconfig when build with Clang
+In-Reply-To: <1614820544-10686-1-git-send-email-yangtiezhu@loongson.cn>
+Message-ID: <alpine.DEB.2.21.2103042356150.51127@angie.orcam.me.uk>
+References: <1614820544-10686-1-git-send-email-yangtiezhu@loongson.cn>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -37,15 +37,22 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 3 Mar 2021, Rob Herring wrote:
+On Thu, 4 Mar 2021, Tiezhu Yang wrote:
 
-> > Since 5.12-rc1, the Device Tree blob must now be properly aligned.
-> 
-> I had checked the other built-in cases as microblaze broke too, but
-> missed some of the many ways MIPS can have a dtb. Appended and
-> built-in DTBs were supposed to be temporary. :(
+> This is a known bug [2] with Clang, as Simon Atanasyan said,
+> "There is no plan on support O32 for MIPS64 due to lack of
+> resources".
 
- How is it supposed to work otherwise when all that a piece of firmware 
-loads is an SREC image (over TFTP)?
+ Huh?  Is that a joke?  From the o32 psABI's point of view a MIPS64 CPU is 
+exactly the same as a MIPS32 one (for whatever ISA revision), so there's 
+nothing to support there really other than the CPU/ISA name.
+
+ As much as I dislike all the hacks the Clang community seems to come up 
+with for the shortcomings of their tool there has to be a saner workaround 
+available rather than forcibly disabling support for the o32 ABI with 
+CONFIG_64BIT kernels, but the report is missing the compiler invocation 
+line triggering the issue (V=1 perhaps?), which should be included with 
+any commit description anyway, so I can't suggest anything based on the 
+limited information provided.
 
   Maciej
