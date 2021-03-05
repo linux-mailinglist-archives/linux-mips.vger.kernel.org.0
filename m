@@ -2,76 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4CC32DFBD
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 03:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6380532E0A4
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 05:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbhCECqd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Mar 2021 21:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhCECqd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Mar 2021 21:46:33 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09A0BC061574;
-        Thu,  4 Mar 2021 18:46:33 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 9FBF692009C; Fri,  5 Mar 2021 03:46:31 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 9AAB592009B;
-        Fri,  5 Mar 2021 03:46:31 +0100 (CET)
-Date:   Fri, 5 Mar 2021 03:46:31 +0100 (CET)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH] MIPS: Add comment about CONFIG_MIPS32_O32 in
- loongson3_defconfig when build with Clang
-In-Reply-To: <d4802e65-52a0-f927-3e7c-80044c5bba80@flygoat.com>
-Message-ID: <alpine.DEB.2.21.2103050324151.51127@angie.orcam.me.uk>
-References: <1614820544-10686-1-git-send-email-yangtiezhu@loongson.cn> <alpine.DEB.2.21.2103042356150.51127@angie.orcam.me.uk> <d4802e65-52a0-f927-3e7c-80044c5bba80@flygoat.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S229813AbhCEEW5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Mar 2021 23:22:57 -0500
+Received: from smtp.h3c.com ([60.191.123.50]:4132 "EHLO h3cspam02-ex.h3c.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229463AbhCEEW5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 4 Mar 2021 23:22:57 -0500
+X-Greylist: delayed 4144 seconds by postgrey-1.27 at vger.kernel.org; Thu, 04 Mar 2021 23:22:56 EST
+Received: from h3cspam02-ex.h3c.com (localhost [127.0.0.2] (may be forged))
+        by h3cspam02-ex.h3c.com with ESMTP id 1253Dpjk075701;
+        Fri, 5 Mar 2021 11:13:51 +0800 (GMT-8)
+        (envelope-from deng.hongjie@h3c.com)
+Received: from DAG2EX05-BASE.srv.huawei-3com.com ([10.8.0.68])
+        by h3cspam02-ex.h3c.com with ESMTP id 1253D5Q3072525;
+        Fri, 5 Mar 2021 11:13:05 +0800 (GMT-8)
+        (envelope-from deng.hongjie@h3c.com)
+Received: from localhost.localdomain (10.114.40.30) by
+ DAG2EX05-BASE.srv.huawei-3com.com (10.8.0.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Fri, 5 Mar 2021 11:13:06 +0800
+From:   HongJieDeng <deng.hongjie@h3c.com>
+To:     <tsbogend@alpha.franken.de>
+CC:     <paulburton@kernel.org>, <chenhc@lemote.com>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <liulichao@loongson.cn>, <denghongjie@h3c.com>,
+        Hongjie Deng <deng.hongjie@h3c.com>
+Subject: [PATCH] MIPS: Support large stack.
+Date:   Fri, 5 Mar 2021 11:12:57 +0800
+Message-ID: <20210305031257.14936-1-deng.hongjie@h3c.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
+X-Originating-IP: [10.114.40.30]
+X-ClientProxiedBy: BJSMTP02-EX.srv.huawei-3com.com (10.63.20.133) To
+ DAG2EX05-BASE.srv.huawei-3com.com (10.8.0.68)
+X-DNSRBL: 
+X-MAIL: h3cspam02-ex.h3c.com 1253D5Q3072525
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 5 Mar 2021, Jiaxun Yang wrote:
+From: Hongjie Deng <deng.hongjie@h3c.com>
 
-> >   Huh?  Is that a joke?  From the o32 psABI's point of view a MIPS64 CPU is
-> > exactly the same as a MIPS32 one (for whatever ISA revision), so there's
-> > nothing to support there really other than the CPU/ISA name.
-> 
-> Clang treat MIPS32 as a different backend so we may need some extra effort....
-> 
-> TBH it is a toolchain issue and kernel workaround seems bogus.
-> 
-> From my point view we can "s/mips64r2/mips32r2" when doing syscall checks
-> to workaround clang issue instead of disable it for kernel.
+We need more stack space, xori/ori no longer apply when
+ _THREAD_MASK exceeds 16 bits
 
- I had something like this in mind, but obviously that has to be done in a 
-consistent manner across all the possible 64-bit `-march=...' selections, 
-as I suppose that is where the problem comes from.  So we'd have to handle 
-things like say `octeon'.  But I'd like to see the invocation line to be 
-sure (I could try and check that myself, but I don't have Clang and it's 
-the patch submitter's job anyway to explain things and not the reviewer's 
-to chase them).
+Signed-off-by: Hongjie Deng <deng.hongjie@h3c.com>
+---
+ arch/mips/include/asm/stackframe.h | 8 ++++++++
+ arch/mips/kernel/genex.S           | 6 ++++++
+ 2 files changed, 14 insertions(+)
 
- Maybe we could cheat and wire everything to a single setting so as to 
-keep the hack to the minimum, but we need to know what the right setting 
-is from the Clang people.
+diff --git a/arch/mips/include/asm/stackframe.h b/arch/mips/include/asm/stackframe.h
+index aa430a6..6ebc39f 100644
+--- a/arch/mips/include/asm/stackframe.h
++++ b/arch/mips/include/asm/stackframe.h
+@@ -278,8 +278,16 @@
+ 		sll	k0, 3		/* extract cu0 bit */
+ 		bltz	k0, 9f
+ 
++#if    _THREAD_MASK  < (1 << 16 - 1)
+ 		ori	$28, sp, _THREAD_MASK
+ 		xori	$28, _THREAD_MASK
++#else
++		li      $28,   _THREAD_MASK
++		or  $28,  sp,  $28
++		li  $24, _THREAD_MASK
++		xor   $28, $28, $24
++#endif
++
+ #ifdef CONFIG_CPU_CAVIUM_OCTEON
+ 		.set    mips64
+ 		pref    0, 0($28)       /* Prefetch the current pointer */
+diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+index bcce32a..5ea4fe4 100644
+--- a/arch/mips/kernel/genex.S
++++ b/arch/mips/kernel/genex.S
+@@ -662,8 +662,14 @@ isrdhwr:
+ #endif
+ 	MTC0	k0, CP0_EPC
+ 	/* I hope three instructions between MTC0 and ERET are enough... */
++#if    _THREAD_MASK  < (1 << 16 - 1)
+ 	ori	k1, _THREAD_MASK
+ 	xori	k1, _THREAD_MASK
++#else
++	li  $24 ,_THREAD_MASK
++	or   k1, k1, $24
++	xor   k1, k1, $24
++#endif
+ 	LONG_L	v1, TI_TP_VALUE(k1)
+ 	.set	push
+ 	.set	arch=r4000
+-- 
+1.8.3.1
 
- NB only MIPS IV is special in that it has 32-bit extensions beyond MIPS 
-III but not a corresponding 32-bit ISA.  The corresponding 32-bit ISA for 
-MIPS III is MIPS II, and obviously all the modern MIPS ISAs come in pairs.  
-So it's only MIPS IV where o32 may want special support (at the hardware 
-level the ISA had the CP0.Status.XX bit to control the ISA extensions), 
-and I guess only a few people care at this point, though some are present 
-on this mailing list.
-
-  Maciej
