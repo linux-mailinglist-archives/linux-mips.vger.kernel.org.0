@@ -2,100 +2,213 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B7132E7A3
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 13:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0401032E9BD
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 13:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbhCEMGQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Mar 2021 07:06:16 -0500
-Received: from 9.mo69.mail-out.ovh.net ([46.105.56.78]:56638 "EHLO
-        9.mo69.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbhCEMGH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Mar 2021 07:06:07 -0500
-X-Greylist: delayed 541 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Mar 2021 07:06:07 EST
-Received: from player770.ha.ovh.net (unknown [10.108.54.72])
-        by mo69.mail-out.ovh.net (Postfix) with ESMTP id 8506AB1451
-        for <linux-mips@vger.kernel.org>; Fri,  5 Mar 2021 12:57:05 +0100 (CET)
-Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player770.ha.ovh.net (Postfix) with ESMTPSA id A22C81BD061BF;
-        Fri,  5 Mar 2021 11:56:56 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-106R006577b0174-6f62-420a-bf23-b30c47fa0076,
-                    4F7D11A3904BD8E553EC742B87CBB6774FEDAA0F) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Subject: Re: [PATCH V2 mips/linux.git] firmware: bcm47xx_nvram: refactor
- finding & reading NVRAM
-To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivek Unune <npcomplete13@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-References: <20210304072357.31108-1-zajec5@gmail.com>
- <20210305055501.13099-1-zajec5@gmail.com>
- <CAAdtpL7iWiumiOwMOH1xiBZvyOB0HB7W-9MMHoPPxkb3Srme=w@mail.gmail.com>
- <f4045af5-4866-6fc9-f34a-d789a7febb77@milecki.pl>
- <CAAdtpL5CMTaB6qCR=nZj+1MoGC97_BVd-r30E2RRYOhiktOiZQ@mail.gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Message-ID: <c66d6d99-affd-f833-1689-32394bc6a548@milecki.pl>
-Date:   Fri, 5 Mar 2021 12:56:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S231497AbhCEMeg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Mar 2021 07:34:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45548 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232173AbhCEMd7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Mar 2021 07:33:59 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1FFA964F23;
+        Fri,  5 Mar 2021 12:33:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1614947639;
+        bh=FTAW4QqHvb29GyAjqVidyQcYMxSOuWoKsmGr0LTjH3g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gGgH44xV6yfgcOAWf6dJaFm+QA5mz5TPkCMe0eV8pK4TQiKQoeJCOMgHXuRvclPOx
+         p9p9jdO1xC5KrMUTwmoftMFC9gzLlNy6IXEFtSoyw+oP/y+Rc1DXcRQhgNysd+yNwk
+         aYJN/b2JO7j6StDgCaiXTbHqrEjJhK1AljQNfnEo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        linux-mips@vger.kernel.org, Florian Westphal <fw@strlen.de>
+Subject: [PATCH 5.4 23/72] MIPS: Drop 32-bit asm string functions
+Date:   Fri,  5 Mar 2021 13:21:25 +0100
+Message-Id: <20210305120858.481470995@linuxfoundation.org>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210305120857.341630346@linuxfoundation.org>
+References: <20210305120857.341630346@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-In-Reply-To: <CAAdtpL5CMTaB6qCR=nZj+1MoGC97_BVd-r30E2RRYOhiktOiZQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 2058426506957786736
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledruddtiedgfeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepkeduheejheffudefhffghfegjeejleetkeevueelveegkefhhfffieehleelgfevnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejjedtrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 05.03.2021 12:47, Philippe Mathieu-Daudé wrote:
-> On Fri, Mar 5, 2021 at 11:16 AM Rafał Miłecki <rafal@milecki.pl> wrote:
->> On 05.03.2021 10:58, Philippe Mathieu-Daudé wrote:
->>> On Fri, Mar 5, 2021 at 6:55 AM Rafał Miłecki <zajec5@gmail.com> wrote:
->>>>
->>>> From: Rafał Miłecki <rafal@milecki.pl>
->>>>
->>>> 1. Use meaningful variable names (e.g. "flash_start", "res_size" instead
->>>>      of e.g. "iobase", "end")
->>>> 2. Always operate on "offset" instead of mix of start, end, size, etc.
->>>
->>> "instead of a mix"
->>>
->>>> 3. Add helper checking for NVRAM to avoid duplicating code
->>>> 4. Use "found" variable instead of goto
->>>> 5. Use simpler checking of offsets and sizes (2 nested loops with
->>>>      trivial check instead of extra function)
->>>
->>> This could be a series of trivial patches, why did you choose to make a mixed
->>> bag harder to review?
->>
->> It's a subjective thing and often a matter of maintainer taste. I can
->> say that after contributing to various Linux subsystems. If you split a
->> similar patch for MTD subsystem you'll get complains about making
->> changes too small & too hard to review (sic!).
-> 
-> Fine. MTD subsystem developers are probably smarter than I'm :)
-> 
->> This isn't a bomb really: 63 insertions(+), 48 deletions(-)
-> 
-> Too many changes at once for my brain stack doesn't mean others are
-> willing to review it. But to me that means each time I'll have to pass over
-> it while bisecting or reviewing git history I'll suffer the same overflow.
-> Anyway, matter of taste as you said.
+From: Paul Burton <paul.burton@mips.com>
 
-If I hear another voice for splitting this change into smaller patches
-I'm 100% happy to do so. Honestly!
+commit 3c0be5849259b729580c23549330973a2dd513a2 upstream.
 
-I just don't know if by splitting I won't annoy other people by making
-changes too small.
+We have assembly implementations of strcpy(), strncpy(), strcmp() &
+strncmp() which:
 
-Please speak up! :)
+ - Are simple byte-at-a-time loops with no particular optimizations. As
+   a comment in the code describes, they're "rather naive".
+
+ - Offer no clear performance advantage over the generic C
+   implementations - in microbenchmarks performed by Alexander Lobakin
+   the asm functions sometimes win & sometimes lose, but generally not
+   by large margins in either direction.
+
+ - Don't support 64-bit kernels, where we already make use of the
+   generic C implementations.
+
+ - Tend to bloat kernel code size due to inlining.
+
+ - Don't support CONFIG_FORTIFY_SOURCE.
+
+ - Won't support nanoMIPS without rework.
+
+For all of these reasons, delete the asm implementations & make use of
+the generic C implementations for 32-bit kernels just like we already do
+for 64-bit kernels.
+
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+URL: https://lore.kernel.org/linux-mips/a2a35f1cf58d6db19eb4af9b4ae21e35@dlink.ru/
+Cc: Alexander Lobakin <alobakin@dlink.ru>
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/mips/include/asm/string.h |  121 -----------------------------------------
+ 1 file changed, 121 deletions(-)
+
+--- a/arch/mips/include/asm/string.h
++++ b/arch/mips/include/asm/string.h
+@@ -10,127 +10,6 @@
+ #ifndef _ASM_STRING_H
+ #define _ASM_STRING_H
+ 
+-
+-/*
+- * Most of the inline functions are rather naive implementations so I just
+- * didn't bother updating them for 64-bit ...
+- */
+-#ifdef CONFIG_32BIT
+-
+-#ifndef IN_STRING_C
+-
+-#define __HAVE_ARCH_STRCPY
+-static __inline__ char *strcpy(char *__dest, __const__ char *__src)
+-{
+-  char *__xdest = __dest;
+-
+-  __asm__ __volatile__(
+-	".set\tnoreorder\n\t"
+-	".set\tnoat\n"
+-	"1:\tlbu\t$1,(%1)\n\t"
+-	"addiu\t%1,1\n\t"
+-	"sb\t$1,(%0)\n\t"
+-	"bnez\t$1,1b\n\t"
+-	"addiu\t%0,1\n\t"
+-	".set\tat\n\t"
+-	".set\treorder"
+-	: "=r" (__dest), "=r" (__src)
+-	: "0" (__dest), "1" (__src)
+-	: "memory");
+-
+-  return __xdest;
+-}
+-
+-#define __HAVE_ARCH_STRNCPY
+-static __inline__ char *strncpy(char *__dest, __const__ char *__src, size_t __n)
+-{
+-  char *__xdest = __dest;
+-
+-  if (__n == 0)
+-    return __xdest;
+-
+-  __asm__ __volatile__(
+-	".set\tnoreorder\n\t"
+-	".set\tnoat\n"
+-	"1:\tlbu\t$1,(%1)\n\t"
+-	"subu\t%2,1\n\t"
+-	"sb\t$1,(%0)\n\t"
+-	"beqz\t$1,2f\n\t"
+-	"addiu\t%0,1\n\t"
+-	"bnez\t%2,1b\n\t"
+-	"addiu\t%1,1\n"
+-	"2:\n\t"
+-	".set\tat\n\t"
+-	".set\treorder"
+-	: "=r" (__dest), "=r" (__src), "=r" (__n)
+-	: "0" (__dest), "1" (__src), "2" (__n)
+-	: "memory");
+-
+-  return __xdest;
+-}
+-
+-#define __HAVE_ARCH_STRCMP
+-static __inline__ int strcmp(__const__ char *__cs, __const__ char *__ct)
+-{
+-  int __res;
+-
+-  __asm__ __volatile__(
+-	".set\tnoreorder\n\t"
+-	".set\tnoat\n\t"
+-	"lbu\t%2,(%0)\n"
+-	"1:\tlbu\t$1,(%1)\n\t"
+-	"addiu\t%0,1\n\t"
+-	"bne\t$1,%2,2f\n\t"
+-	"addiu\t%1,1\n\t"
+-	"bnez\t%2,1b\n\t"
+-	"lbu\t%2,(%0)\n\t"
+-#if defined(CONFIG_CPU_R3000)
+-	"nop\n\t"
+-#endif
+-	"move\t%2,$1\n"
+-	"2:\tsubu\t%2,$1\n"
+-	"3:\t.set\tat\n\t"
+-	".set\treorder"
+-	: "=r" (__cs), "=r" (__ct), "=r" (__res)
+-	: "0" (__cs), "1" (__ct));
+-
+-  return __res;
+-}
+-
+-#endif /* !defined(IN_STRING_C) */
+-
+-#define __HAVE_ARCH_STRNCMP
+-static __inline__ int
+-strncmp(__const__ char *__cs, __const__ char *__ct, size_t __count)
+-{
+-	int __res;
+-
+-	__asm__ __volatile__(
+-	".set\tnoreorder\n\t"
+-	".set\tnoat\n"
+-	"1:\tlbu\t%3,(%0)\n\t"
+-	"beqz\t%2,2f\n\t"
+-	"lbu\t$1,(%1)\n\t"
+-	"subu\t%2,1\n\t"
+-	"bne\t$1,%3,3f\n\t"
+-	"addiu\t%0,1\n\t"
+-	"bnez\t%3,1b\n\t"
+-	"addiu\t%1,1\n"
+-	"2:\n\t"
+-#if defined(CONFIG_CPU_R3000)
+-	"nop\n\t"
+-#endif
+-	"move\t%3,$1\n"
+-	"3:\tsubu\t%3,$1\n\t"
+-	".set\tat\n\t"
+-	".set\treorder"
+-	: "=r" (__cs), "=r" (__ct), "=r" (__count), "=r" (__res)
+-	: "0" (__cs), "1" (__ct), "2" (__count));
+-
+-	return __res;
+-}
+-#endif /* CONFIG_32BIT */
+-
+ #define __HAVE_ARCH_MEMSET
+ extern void *memset(void *__s, int __c, size_t __count);
+ 
+
 
