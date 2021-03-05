@@ -2,106 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A16732E68E
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 11:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F87D32E721
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 12:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbhCEKkS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Mar 2021 05:40:18 -0500
-Received: from 3.mo5.mail-out.ovh.net ([46.105.40.108]:50038 "EHLO
-        3.mo5.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbhCEKjs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Mar 2021 05:39:48 -0500
-X-Greylist: delayed 1055 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Mar 2021 05:39:48 EST
-Received: from player787.ha.ovh.net (unknown [10.108.20.147])
-        by mo5.mail-out.ovh.net (Postfix) with ESMTP id 6E15E2B3EE0
-        for <linux-mips@vger.kernel.org>; Fri,  5 Mar 2021 11:39:47 +0100 (CET)
-Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player787.ha.ovh.net (Postfix) with ESMTPSA id 46D2E1BE6FC32;
-        Fri,  5 Mar 2021 10:39:37 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-97G002147fd398-b58b-41e1-ab1a-00ab95efaa5d,
-                    4F7D11A3904BD8E553EC742B87CBB6774FEDAA0F) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Subject: Re: [PATCH 2/2] nvmem: iomap: new driver exposing NVMEM accessible
- using I/O mapping
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivek Unune <npcomplete13@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
-References: <20210304144132.24098-1-zajec5@gmail.com>
- <20210304144132.24098-2-zajec5@gmail.com>
- <047bced8-6c20-4a0a-c7ea-e0ad83318461@linaro.org>
- <93708a21-3444-f68e-c834-a4f769a0acba@milecki.pl>
- <35e498b6-3b2c-d154-db00-d755af339b60@linaro.org>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Message-ID: <ba4e4376-7d75-4b0e-9d59-26e32dbe2029@milecki.pl>
-Date:   Fri, 5 Mar 2021 11:39:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S229562AbhCELVA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Mar 2021 06:21:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44684 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229494AbhCELUy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Mar 2021 06:20:54 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5E8B65015;
+        Fri,  5 Mar 2021 11:20:52 +0000 (UTC)
+Date:   Fri, 5 Mar 2021 11:20:49 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [RESEND PATCH 1/2] ARM64: enable GENERIC_FIND_FIRST_BIT
+Message-ID: <20210305112049.GB23855@arm.com>
+References: <20210225135700.1381396-1-yury.norov@gmail.com>
+ <20210225135700.1381396-2-yury.norov@gmail.com>
+ <20210225140205.GA13297@willie-the-truck>
+ <20210303221741.GA2013084@yury-ThinkPad>
 MIME-Version: 1.0
-In-Reply-To: <35e498b6-3b2c-d154-db00-d755af339b60@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 752945565747678743
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledruddtiedgudekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepkeduheejheffudefhffghfegjeejleetkeevueelveegkefhhfffieehleelgfevnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejkeejrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210303221741.GA2013084@yury-ThinkPad>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 05.03.2021 11:33, Srinivas Kandagatla wrote:
-> On 05/03/2021 10:24, Rafał Miłecki wrote:
->>>>
->>>> +static int iomap_read(void *context, unsigned int offset, void *val,
->>>> +              size_t bytes)
->>>> +{
->>>> +    struct iomap *priv = context;
->>>> +    u8 *src = priv->base + offset;
->>>> +    u8 *dst = val;
->>>> +    size_t tmp;
->>>> +
->>>> +    tmp = offset % 4;
->>>> +    memcpy_fromio(dst, src, tmp);
->>>> +    dst += tmp;
->>>> +    src += tmp;
->>>> +    bytes -= tmp;
->>>> +
->>>> +    tmp = rounddown(bytes, 4);
->>>> +    __ioread32_copy(dst, src, tmp / 4);
->>>> +    dst += tmp;
->>>> +    src += tmp;
->>>> +    bytes -= tmp;
->>>> +
->>>> +    memcpy_fromio(dst, src, bytes);
->>>> +
->>>
->>>
->>> You could just do this!
->>>
->>>      while (bytes--)
->>>          *val++ = readb(priv->base + offset + i++);
->>
->> Do you mean that as replacement for "memcpy_fromio" or the whole
->> function code?
+On Wed, Mar 03, 2021 at 02:17:41PM -0800, Yury Norov wrote:
+> On Thu, Feb 25, 2021 at 02:02:06PM +0000, Will Deacon wrote:
+> > On Thu, Feb 25, 2021 at 05:56:59AM -0800, Yury Norov wrote:
+> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > > index 31bd885b79eb..5596eab04092 100644
+> > > --- a/arch/arm64/Kconfig
+> > > +++ b/arch/arm64/Kconfig
+> > > @@ -108,6 +108,7 @@ config ARM64
+> > >  	select GENERIC_CPU_AUTOPROBE
+> > >  	select GENERIC_CPU_VULNERABILITIES
+> > >  	select GENERIC_EARLY_IOREMAP
+> > > +	select GENERIC_FIND_FIRST_BIT
+> > >  	select GENERIC_IDLE_POLL_SETUP
+> > >  	select GENERIC_IRQ_IPI
+> > >  	select GENERIC_IRQ_MULTI_HANDLER
+> > 
+> > Acked-by: Will Deacon <will@kernel.org>
+> > 
+> > Catalin can pick this up later in the cycle.
+> > 
+> > Will
 > 
-> Yes please!
-> 
->> The reason for using __ioread32_copy() was to improve reading
->> performance (using aligned 32 bit access where possible). I'm not sure
->> if that really matters?
-> 
-> Just simple while loop is much readable than the previous code TBH!
-> 
->>
-> 
->> P.S.
->> Please don't yell at me in every sentence :( Makes me a bit sad :(
-> Sorry!! I did not mean anything as such! :-)
+> Ping?
 
-All clear (I hope)! Thanks for your review!
+It's on my list for 5.13 but I'll only start queuing patches after -rc3.
+
+-- 
+Catalin
