@@ -2,85 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB3B32E6C9
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 11:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EAF32E67E
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 11:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbhCEKw3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Mar 2021 05:52:29 -0500
-Received: from 3.mo4.mail-out.ovh.net ([46.105.57.129]:59607 "EHLO
-        3.mo4.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbhCEKwP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Mar 2021 05:52:15 -0500
-X-Greylist: delayed 1205 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Mar 2021 05:52:14 EST
-Received: from player728.ha.ovh.net (unknown [10.108.35.211])
-        by mo4.mail-out.ovh.net (Postfix) with ESMTP id D1F7E26B2FB
-        for <linux-mips@vger.kernel.org>; Fri,  5 Mar 2021 11:16:50 +0100 (CET)
-Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player728.ha.ovh.net (Postfix) with ESMTPSA id B27BF1BA2AFF5;
-        Fri,  5 Mar 2021 10:16:41 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-104R0053d2b67e1-52e4-4304-9239-db9d36a7935d,
-                    4F7D11A3904BD8E553EC742B87CBB6774FEDAA0F) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Subject: Re: [PATCH V2 mips/linux.git] firmware: bcm47xx_nvram: refactor
- finding & reading NVRAM
-To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        id S229597AbhCEKeO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Mar 2021 05:34:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229497AbhCEKdi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Mar 2021 05:33:38 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AB7C061574
+        for <linux-mips@vger.kernel.org>; Fri,  5 Mar 2021 02:33:38 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id h98so1481020wrh.11
+        for <linux-mips@vger.kernel.org>; Fri, 05 Mar 2021 02:33:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=e/f2HBL5HAx1NUma9mvmRmVDl3EiEhBl3GuuJNNNQY8=;
+        b=Ps57ex3qdSjN6SajeH2qheQ5Uuljya8Hy8/Ycu6qOMJj1gTIuVJxai8xYZUiVeVwzw
+         AuQpt1mGs74K7Gz7SLXAqT1ZCpyAAT8n6mISxvSuzKIqyddGdJAtDgt9BSI5vUTzWaUo
+         qz79tdXz6shT6kc4vqMhoOV53bYXDIEWWE+M6YemL6q8AnbzX6MsCvziHgSzusyAtevp
+         bX1bZOxbxL1Wd4dzXEJ/O/Sp2WFi4C8lHDU7tuVhQ6siwreNzJTuH01bQH8Znt1VxQDX
+         DwEx45cieHNDHDSoGN1afR8ACVb2B1aQvdU9t4rMSAT6nkDw9vlZRNKFywIgPvEI7hbe
+         1qCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=e/f2HBL5HAx1NUma9mvmRmVDl3EiEhBl3GuuJNNNQY8=;
+        b=Hot6+KdO7Ng4+bxLC7uk38w7nxivjDynKlIpKwWyF/o/V3Zp+mDhTueEeCNwgkClSV
+         41VXR/wkw6nE28M1PGqFreORxuYOZnqCpIirqOo1fnjOVsh+7hzGR6ZvetfR7s6tNz+G
+         WVsZX9x5kaIL3r6ch6oA/WCz4u5K+I/G2Epz8lwqMhRqD+oFBbuf9a2NYsdVbIpkUo5X
+         GhHuwzK4guR/T6Wacix3WUMf8a/kQvWoww89T+xS7XZE/Y5971NXHl9Ga7et5DYlRJzl
+         tjgyb+tP9YvhebjJGULrHD6Ko8LZ+K3wM6ivfScUsxW8YhwZVl3n9lCprLBo8DoiWept
+         0FhA==
+X-Gm-Message-State: AOAM532+TdYG3S7sOMdJCfwqoHTqMgde2rAaeBceBhShb73/L/L2LbfE
+        7IgWbM7ZWeE1lDpRiSTW6OR5Og==
+X-Google-Smtp-Source: ABdhPJzkzTcQAx9qG/Sr55DSWp5FisqN0cMPXYb8CAL1I9wDHEa8kQ0XSjJTOBtJnVulk4nUetim9Q==
+X-Received: by 2002:a5d:6810:: with SMTP id w16mr8729907wru.333.1614940416762;
+        Fri, 05 Mar 2021 02:33:36 -0800 (PST)
+Received: from [192.168.86.34] (cpc86377-aztw32-2-0-cust226.18-1.cable.virginm.net. [92.233.226.227])
+        by smtp.googlemail.com with ESMTPSA id x6sm3975204wmj.32.2021.03.05.02.33.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Mar 2021 02:33:36 -0800 (PST)
+Subject: Re: [PATCH 2/2] nvmem: iomap: new driver exposing NVMEM accessible
+ using I/O mapping
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Vivek Unune <npcomplete13@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-References: <20210304072357.31108-1-zajec5@gmail.com>
- <20210305055501.13099-1-zajec5@gmail.com>
- <CAAdtpL7iWiumiOwMOH1xiBZvyOB0HB7W-9MMHoPPxkb3Srme=w@mail.gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Message-ID: <f4045af5-4866-6fc9-f34a-d789a7febb77@milecki.pl>
-Date:   Fri, 5 Mar 2021 11:16:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
+References: <20210304144132.24098-1-zajec5@gmail.com>
+ <20210304144132.24098-2-zajec5@gmail.com>
+ <047bced8-6c20-4a0a-c7ea-e0ad83318461@linaro.org>
+ <93708a21-3444-f68e-c834-a4f769a0acba@milecki.pl>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Message-ID: <35e498b6-3b2c-d154-db00-d755af339b60@linaro.org>
+Date:   Fri, 5 Mar 2021 10:33:35 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <CAAdtpL7iWiumiOwMOH1xiBZvyOB0HB7W-9MMHoPPxkb3Srme=w@mail.gmail.com>
+In-Reply-To: <93708a21-3444-f68e-c834-a4f769a0acba@milecki.pl>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 365354524052524656
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledruddtiedgudefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepkeduheejheffudefhffghfegjeejleetkeevueelveegkefhhfffieehleelgfevnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejvdekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
 
-On 05.03.2021 10:58, Philippe Mathieu-Daudé wrote:
-> On Fri, Mar 5, 2021 at 6:55 AM Rafał Miłecki <zajec5@gmail.com> wrote:
+
+On 05/03/2021 10:24, Rafał Miłecki wrote:
+>>>
+>>> +static int iomap_read(void *context, unsigned int offset, void *val,
+>>> +              size_t bytes)
+>>> +{
+>>> +    struct iomap *priv = context;
+>>> +    u8 *src = priv->base + offset;
+>>> +    u8 *dst = val;
+>>> +    size_t tmp;
+>>> +
+>>> +    tmp = offset % 4;
+>>> +    memcpy_fromio(dst, src, tmp);
+>>> +    dst += tmp;
+>>> +    src += tmp;
+>>> +    bytes -= tmp;
+>>> +
+>>> +    tmp = rounddown(bytes, 4);
+>>> +    __ioread32_copy(dst, src, tmp / 4);
+>>> +    dst += tmp;
+>>> +    src += tmp;
+>>> +    bytes -= tmp;
+>>> +
+>>> +    memcpy_fromio(dst, src, bytes);
+>>> +
 >>
->> From: Rafał Miłecki <rafal@milecki.pl>
 >>
->> 1. Use meaningful variable names (e.g. "flash_start", "res_size" instead
->>     of e.g. "iobase", "end")
->> 2. Always operate on "offset" instead of mix of start, end, size, etc.
+>> You could just do this!
+>>
+>>      while (bytes--)
+>>          *val++ = readb(priv->base + offset + i++);
 > 
-> "instead of a mix"
+> Do you mean that as replacement for "memcpy_fromio" or the whole
+> function code?
+
+Yes please!
+
+> The reason for using __ioread32_copy() was to improve reading
+> performance (using aligned 32 bit access where possible). I'm not sure
+> if that really matters?
+
+Just simple while loop is much readable than the previous code TBH!
+
 > 
->> 3. Add helper checking for NVRAM to avoid duplicating code
->> 4. Use "found" variable instead of goto
->> 5. Use simpler checking of offsets and sizes (2 nested loops with
->>     trivial check instead of extra function)
-> 
-> This could be a series of trivial patches, why did you choose to make a mixed
-> bag harder to review?
 
-It's a subjective thing and often a matter of maintainer taste. I can
-say that after contributing to various Linux subsystems. If you split a
-similar patch for MTD subsystem you'll get complains about making
-changes too small & too hard to review (sic!).
+> P.S.
+> Please don't yell at me in every sentence :( Makes me a bit sad :(
+Sorry!! I did not mean anything as such! :-)
 
-This isn't a bomb really: 63 insertions(+), 48 deletions(-)
-
-That said I admit I don't know MIPS tree habits. Thomas: do you prefer
-smaller patches in case like this?
+--srini
