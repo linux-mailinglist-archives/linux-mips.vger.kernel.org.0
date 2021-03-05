@@ -2,85 +2,267 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5AE632E613
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 11:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730F532E624
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 11:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbhCEKTg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Mar 2021 05:19:36 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:48894 "EHLO loongson.cn"
+        id S229848AbhCEKUk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Mar 2021 05:20:40 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:49264 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229615AbhCEKTT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 5 Mar 2021 05:19:19 -0500
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx__KaBUJgMMwUAA--.26130S2;
-        Fri, 05 Mar 2021 18:19:06 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wangming01@loongson.cn
-Subject: [PATCH v3 0/7] Add basic support for Loongson-2K1000
-Date:   Fri,  5 Mar 2021 18:18:59 +0800
-Message-Id: <20210305101906.28971-1-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        id S229709AbhCEKUX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Mar 2021 05:20:23 -0500
+Received: from localhost.localdomain (unknown [182.149.161.105])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9fCBUJgPcwUAA--.6604S2;
+        Fri, 05 Mar 2021 18:19:51 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [RFC]: MIPS: new ftrace implementation
+Date:   Fri,  5 Mar 2021 18:19:29 +0800
+Message-Id: <20210305101933.9799-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dx__KaBUJgMMwUAA--.26130S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7urykAr1DAw4DKryfXFWDJwb_yoW8Wr4kpw
-        43Cw15KF45Cry3Crn3JryUWryrArWfJrZrWF47Xr15GasIqa4Yvr1fJFs8Jr42vrykta4j
-        9ry8WrW7GFnrC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+X-CM-TRANSID: AQAAf9Dxr9fCBUJgPcwUAA--.6604S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF4UWw1rKF4fuFyfZF4kCrg_yoW5Zw1DpF
+        W3XwnFqr48X3yqkr1jv3y5Zr1Sgry5CrZ7uFn5Gw1rJ3Z8CF4Sya48Wa18X347Gr9xArWj
+        vF1j9ryUuFW5Kw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
         6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
         Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gw1l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbo5l5UUUUU==
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE14v_Gw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUFg4SDUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-These patches support single-core DTS boot to the serial port login
-interface, which can be operated using conventional commands.
+This series add DYNAMC_FTRACE_WITH_REGS support without depending _mcount
+and -pg, and try to address following issue
 
-I have successfully tested it on the Loongson 2K1000 machine.
-pmon: http://cgit.loongnix.org/cgit/pmon-loongson3/
++. _mcount stub size is 3 insns in vmlinux  and  4 insns in .ko, too much
 
-Qing Zhang (7):
-  MIPS: Loongson64: DeviceTree for 2K1000
-  MIPS: Loongson64: Distinguish firmware dependencies DTB/LEFI
-  MIPS: Loongson64: Add support for the 2K1000 to get cpu_clock_freq
-  MIPS: Loongson64: Add 2K1000 early_printk_port
-  irqchip/loongson-liointc: irqchip add 2.0 version
-  dt-bindings: interrupt-controller: Add Loongson-2K1000 LIOINTC
-  MIPS: Loongson64: Add a Loongson-2k default config file
++. complex handing MIPS32 and MIPS64 in _mcount, especially sp pointer in
+MIPS32
 
- .../loongson,liointc.yaml                     |   7 +-
- arch/mips/boot/dts/loongson/Makefile          |   1 +
- .../boot/dts/loongson/loongson64-2k1000.dtsi  | 243 ++++++++++++
- .../dts/loongson/loongson64_2core_2k1000.dts  |  10 +
- arch/mips/configs/loongson2k_defconfig        | 353 ++++++++++++++++++
- .../include/asm/mach-loongson64/boot_param.h  |   6 +
- .../asm/mach-loongson64/builtin_dtbs.h        |   1 +
- .../include/asm/mach-loongson64/loongson.h    |   3 +-
- arch/mips/loongson64/env.c                    |  13 +-
- arch/mips/loongson64/init.c                   |  21 +-
- arch/mips/loongson64/time.c                   |  20 +
- drivers/irqchip/irq-loongson-liointc.c        |  55 ++-
- 12 files changed, 716 insertions(+), 17 deletions(-)
- create mode 100644 arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
- create mode 100644 arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dts
- create mode 100644 arch/mips/configs/loongson2k_defconfig
++. _mcount is called with sp adjusted in Callee(the traced function), which
+is hard for livepatch to restore the sp pointer
 
--- 
-2.20.1
+
+GCC
+#########
+
++. gcc 8 add -fpatchable-function-entry=N[, M] support to insert N 
+nops before real start, for more info, see gcc 8 manual
+
++. gcc/mips has two bug: 93242 (fixed in gcc 10), 99217 (with a fix, but
+not accepted) about this option. With fixes applyed in gcc 8.3, vmlinux is OK
+
+
+Design
+#########
+
++. Caller A calls Callee B, with -fpatchable-function-entry=3, B has 
+three nops at its entry
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+
+		B:
+			nop
+			nop
+			nop
+
+		#B: real start 
+			INSN_B_first
+
++. With ftrace initialized or module loaded, this three nop got
+replaced,
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			nop
+			li	t0, 0
+
+		#B: real start 
+			INSN_B_first
+
+Obviously, ftrace_regs_caller is 64KB aligned, thanks He Jinyang
+<hejinyang@loongson.cn>
+	
++. To enable tracing , take nop into "jalr at, at“,
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			jalr	at, at
+			li	t0, 0
+
+		#B: real start 
+			INSN_B_first
+	
+
++. To disable tracing, take "jalr at, at" into nop
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			nop
+			li	t0, 0
+
+		#B: real start 
+			INSN_B_first
+	
++. when tracing without regs, replace "li t0, 0' with "li t0, 1"
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			jalr	at, at
+			li	t0, 1
+		#B: real start 
+			INSN_B_first
+
+With only one instruction modified, it is atomic and no sync needed (
+_mcount need sync between two writes) on both MIPS32 and MIPS64, I got 
+this from ARM64.
+
+we need transfrom from tracing disabled into tracing without regs, first
+replace "li t0, 0" with "li t0, 1", then "nop" with "jalr at, at", still
+no sync between
+
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			jalr	at, at
+			li	t0, 1
+
+		#B: real start 
+			INSN_B_first
+
++. When B is ok to be patched, replace first four instruction with new 
+function B'
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+		B:
+			lui	at, %hi(B')	// second, fill new B'high
+			addiu	at, %lo(B')	// first, fill nop
+						// third, fill new B' low
+			jr	at		// at last, fill jr
+		#B: real start 
+			nop			//forth, fill nop
+						//Watch Out! 
+						//first instruction 
+						// clobbered. we
+						//need to save it somewhere
+						//or we must use four nops
+
+if tracing enabled, we need to disable tracing first, and we need sync 
+before fill "jr"
+	
+Patches
+###########
+
+Patch 1 - Patch 3 
+
+This make new MIPS/ftrace with DYNAMIC_FTRACE_WITH_REGS in parallel with 
+old MIPS/Ftrace 
+
+Patch 4
+
+Add DYNAMC_FTRACE_WITH_REGS support 
+
+Remaining Issues
+################
+
++. reserve three nops or four nops for <= MIPS R5 ?
+
+Without direct call, three nops is enough. With direct call, we need to 
+hack ftrace to save the first instruction somewhere. Four nops is enough 
+for all cases
+
+MIPS R6 only need three nops without hacking, but this version does not
+support MIPS R6
+
++. MIPS32 support, working on it
+
++. checking for gcc version, can previous two bug back porting to gcc 8.5?
+We should check gcc's version
+
++. stack backstrace
+
 
