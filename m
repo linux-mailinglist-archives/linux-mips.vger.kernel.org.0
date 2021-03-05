@@ -2,207 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C9432F2BA
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 19:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E9D32F615
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 23:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbhCESfr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Mar 2021 13:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbhCESfV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Mar 2021 13:35:21 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6696FC061764;
-        Fri,  5 Mar 2021 10:32:56 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id 18so5232762lff.6;
-        Fri, 05 Mar 2021 10:32:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PjTLZM8e0f8v+1gejOLEjQVfC8/951TSPeQCDviKHHE=;
-        b=c8F10EakFYE4/GxV/Ief/dUTChUo0NchyO0rnDhbLxOyUZfkKNYBftoGuYnc36qNMJ
-         r1XcWF+15ill/E+3tHDr25e/llt/sx6YWztfmXDm/mkU7JISLDy00OFAbT93OFB7uJUL
-         BR+3e5PcxLZx90OYTyt0GEmqaDaLaPcV6DwYkHxWnXgrffPTHd7RkCq60EZ2oMnJm4uO
-         ZjyhZWe1Ci8+rKxdI3+OHSKhi1Gz0843TQXjNkV9WC4rSq86g/SKuivYJW0N0dUVmVWP
-         Hf3aYuls75QFDoObpxEDQmMaq6aSZeOI8/wGjJoNl03jfI7aTbGR1Yb8hD1MJfad/Fcs
-         HdvA==
+        id S229851AbhCEWsM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Mar 2021 17:48:12 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:36585 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229642AbhCEWr6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Mar 2021 17:47:58 -0500
+Received: by mail-oi1-f177.google.com with SMTP id j1so4289751oiw.3;
+        Fri, 05 Mar 2021 14:47:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PjTLZM8e0f8v+1gejOLEjQVfC8/951TSPeQCDviKHHE=;
-        b=bqVjfXTlKKGBJPIuTq7KFiV/cIJPtrqj3ZLI2ZF8pWtzYWHvsTwg48rRh6EL/jXq3x
-         9M7kRxoeCTJpbINa6ca6fN6EwEFMaM+9iENLFGOfpZxNgMI8F++6JJCAAx8L7AzVV1lX
-         XAPiCVuQPX2lfvzHWOL21hzOhY+5N9l7TPazTTTydqhdkIystep8lqiytQFIkSYRumWx
-         7hIItNDJr7Joa/Xn5KOvlWNu0ELPvS63PMJ+C7AxE+Bqd5ltrNjN2zbMM1bDqaPzMqxE
-         K4IDYS5uRUzh7HnNqBuifqh6cKR2Nj8iKsmuxoZsvhMODnd/AmVv/AnahALghy5esFGF
-         4wSw==
-X-Gm-Message-State: AOAM533PngwPxma5nQ1CMWp3ZSN6xxK6WP77R/a1vM3UuUYJNqrfTtM3
-        qdpPgxwRnMnkfOjkMSKfz+U=
-X-Google-Smtp-Source: ABdhPJxSdmXgEv6uNaFa3yqkiHSVOFdEspqIMjmdF5gYiieNZhHq+zLsvUcH7B5w/GDeXtbkwcvLYA==
-X-Received: by 2002:a19:4c41:: with SMTP id z62mr6035631lfa.360.1614969174885;
-        Fri, 05 Mar 2021 10:32:54 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id a10sm396571lfu.263.2021.03.05.10.32.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3PmDH/3Q7mXi/NObz8TJWT61R8BEoKRpXo3ei3eRvmA=;
+        b=ClHwpWS2y3XmZ0lh5LDvBreh5FT6dE8zzO/2vOxKU4gpyyServR7s08VKQ3flFAkR5
+         i8DV0f5u5HuFEBjD4+eqyaBGhfmrxrOzO8MhX2S4iT7zVfscjBV5dCoU9SvI6qF5ZYUP
+         p+hZNnl6EI9GHpD9D8OsfhiySz5gtP7DhjIC0RqOxRpe7OhggONnI/x0g61Uv9kB54+y
+         o5zqLdGlDhmUTTO5oUbt/wS8s1E6Cd9KFUavJ0r5LTO3tPDrFndRemgZwrnIr87QSYCD
+         UyB3txAHwo4Szh7g8odE0qbt6tbHD8jy5tF5WTK25+s3fC8CehLYLi1Llr+hSPqIe+/Z
+         Kqjw==
+X-Gm-Message-State: AOAM53377WzXryj7b1eBc0xbxbThfZa6CheoKeurzqS3568jVQlM20rF
+        vQEMb/QrdOEqCnpt5A5tgQ==
+X-Google-Smtp-Source: ABdhPJzomuI9sDgyHbhIt5jV1MXkZ7U7EFJoQTpae3ngwH/RvlkfOIyLVNgz7qXsVpfAgk13hlzUBg==
+X-Received: by 2002:aca:4d55:: with SMTP id a82mr8749226oib.23.1614984478279;
+        Fri, 05 Mar 2021 14:47:58 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id t145sm842835oie.10.2021.03.05.14.47.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Mar 2021 10:32:54 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivek Unune <npcomplete13@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2 2/2] nvmem: brcm_nvram: new driver exposing Broadcom's NVRAM
-Date:   Fri,  5 Mar 2021 19:32:36 +0100
-Message-Id: <20210305183236.11784-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210305183236.11784-1-zajec5@gmail.com>
-References: <20210305183236.11784-1-zajec5@gmail.com>
+        Fri, 05 Mar 2021 14:47:57 -0800 (PST)
+Received: (nullmailer pid 784017 invoked by uid 1000);
+        Fri, 05 Mar 2021 22:47:56 -0000
+Date:   Fri, 5 Mar 2021 16:47:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     sboyd@kernel.org, john@phrozen.org, tsbogend@alpha.franken.de,
+        gregkh@linuxfoundation.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        devel@driverdev.osuosl.org, neil@brown.name,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 2/6] dt: bindings: add mt7621-clk device tree binding
+ documentation
+Message-ID: <20210305224756.GA777984@robh.at.kernel.org>
+References: <20210218070709.11932-1-sergio.paracuellos@gmail.com>
+ <20210218070709.11932-3-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210218070709.11932-3-sergio.paracuellos@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Thu, Feb 18, 2021 at 08:07:05AM +0100, Sergio Paracuellos wrote:
+> Adds device tree binding documentation for clocks in the
+> MT7621 SOC.
+> 
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>  .../bindings/clock/mediatek,mt7621-clk.yaml   | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
+> new file mode 100644
+> index 000000000000..842a0f2c9d40
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/mediatek,mt7621-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MT7621 Clock Device Tree Bindings
+> +
+> +maintainers:
+> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> +
+> +description: |
+> +  The MT7621 has a PLL controller from where the cpu clock is provided
+> +  as well as derived clocks for the bus and the peripherals. It also
+> +  can gate SoC device clocks.
+> +
+> +  Each clock is assigned an identifier and client nodes use this identifier
+> +  to specify the clock which they consume.
+> +
+> +  All these identifiers could be found in:
+> +  [1]: <include/dt-bindings/clock/mt7621-clk.h>.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt7621-clk
+> +
+> +  "#clock-cells":
+> +    description:
+> +      The first cell indicates the clock number, see [1] for available
+> +      clocks.
+> +    const: 1
+> +
+> +  ralink,sysctl:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle of syscon used to control system registers
+> +
+> +  ralink,memctl:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle of syscon used to control memory registers
 
-This driver provides access to Broadcom's NVRAM.
+I assume one of these phandles are the main registers for the clocks? 
+Make this a child node and drop that phandle.
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-V2: Applied Srinivas's suggestions:
-    * Simplified brcm_nvram_read
-    * Drop unneeded check & prints from probe
-    * Fixed MODULE_LICENSE
-    * Switched to Broadcom specific binding & driver. This is such a trivial
-      driver that even if we get another similar one, it probably won't be worth
-      it to share their code.
-    Thank you Srinivas!
----
- drivers/nvmem/Kconfig      |  9 +++++
- drivers/nvmem/Makefile     |  2 +
- drivers/nvmem/brcm_nvram.c | 78 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 89 insertions(+)
- create mode 100644 drivers/nvmem/brcm_nvram.c
-
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 75d2594c16e1..d2a848fab82a 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -278,4 +278,13 @@ config NVMEM_RMEM
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called nvmem-rmem.
-+
-+config NVMEM_BRCM_NVRAM
-+	tristate "Broadcom's NVRAM support"
-+	depends on ARCH_BCM_5301X || COMPILE_TEST
-+	depends on HAS_IOMEM
-+	help
-+	  This driver provides support for Broadcom's NVRAM that can be accessed
-+	  using I/O mapping.
-+
- endif
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index 5376b8e0dae5..bbea1410240a 100644
---- a/drivers/nvmem/Makefile
-+++ b/drivers/nvmem/Makefile
-@@ -57,3 +57,5 @@ obj-$(CONFIG_SPRD_EFUSE)	+= nvmem_sprd_efuse.o
- nvmem_sprd_efuse-y		:= sprd-efuse.o
- obj-$(CONFIG_NVMEM_RMEM) 	+= nvmem-rmem.o
- nvmem-rmem-y			:= rmem.o
-+obj-$(CONFIG_NVMEM_BRCM_NVRAM)	+= nvmem_brcm_nvram.o
-+nvmem_brcm_nvram-y		:= brcm_nvram.o
-diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
-new file mode 100644
-index 000000000000..bd2ecaaf4585
---- /dev/null
-+++ b/drivers/nvmem/brcm_nvram.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2021 Rafał Miłecki <rafal@milecki.pl>
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-provider.h>
-+#include <linux/platform_device.h>
-+
-+struct brcm_nvram {
-+	struct device *dev;
-+	void __iomem *base;
-+};
-+
-+static int brcm_nvram_read(void *context, unsigned int offset, void *val,
-+			   size_t bytes)
-+{
-+	struct brcm_nvram *priv = context;
-+	u8 *dst = val;
-+
-+	while (bytes--)
-+		*dst++ = readb(priv->base + offset++);
-+
-+	return 0;
-+}
-+
-+static int brcm_nvram_probe(struct platform_device *pdev)
-+{
-+	struct nvmem_config config = {
-+		.name = "brcm-nvram",
-+		.reg_read = brcm_nvram_read,
-+	};
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	struct brcm_nvram *priv;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+	priv->dev = dev;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	priv->base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	config.dev = dev;
-+	config.priv = priv;
-+	config.size = resource_size(res);
-+
-+	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &config));
-+}
-+
-+static const struct of_device_id brcm_nvram_of_match_table[] = {
-+	{ .compatible = "brcm,nvram", },
-+	{},
-+};
-+
-+static struct platform_driver brcm_nvram_driver = {
-+	.probe = brcm_nvram_probe,
-+	.driver = {
-+		.name = "brcm_nvram",
-+		.of_match_table = brcm_nvram_of_match_table,
-+	},
-+};
-+
-+static int __init brcm_nvram_init(void)
-+{
-+	return platform_driver_register(&brcm_nvram_driver);
-+}
-+
-+subsys_initcall_sync(brcm_nvram_init);
-+
-+MODULE_AUTHOR("Rafał Miłecki");
-+MODULE_LICENSE("GPL");
-+MODULE_DEVICE_TABLE(of, brcm_nvram_of_match_table);
--- 
-2.26.2
-
+> +
+> +  clock-output-names:
+> +    maxItems: 8
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +  - ralink,sysctl
+> +  - ralink,memctl
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt7621-clk.h>
+> +
+> +    pll {
+> +      compatible = "mediatek,mt7621-clk";
+> +      #clock-cells = <1>;
+> +      ralink,sysctl = <&sysc>;
+> +      ralink,memctl = <&memc>;
+> +      clock-output-names = "xtal", "cpu", "bus",
+> +                           "50m", "125m", "150m",
+> +                           "250m", "270m";
+> +    };
+> -- 
+> 2.25.1
+> 
