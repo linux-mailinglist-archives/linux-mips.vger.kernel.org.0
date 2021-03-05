@@ -2,38 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0401032E9BD
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 13:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5D132F2B8
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Mar 2021 19:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbhCEMeg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Mar 2021 07:34:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45548 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232173AbhCEMd7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 5 Mar 2021 07:33:59 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1FFA964F23;
-        Fri,  5 Mar 2021 12:33:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1614947639;
-        bh=FTAW4QqHvb29GyAjqVidyQcYMxSOuWoKsmGr0LTjH3g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gGgH44xV6yfgcOAWf6dJaFm+QA5mz5TPkCMe0eV8pK4TQiKQoeJCOMgHXuRvclPOx
-         p9p9jdO1xC5KrMUTwmoftMFC9gzLlNy6IXEFtSoyw+oP/y+Rc1DXcRQhgNysd+yNwk
-         aYJN/b2JO7j6StDgCaiXTbHqrEjJhK1AljQNfnEo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Alexander Lobakin <alobakin@dlink.ru>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        linux-mips@vger.kernel.org, Florian Westphal <fw@strlen.de>
-Subject: [PATCH 5.4 23/72] MIPS: Drop 32-bit asm string functions
-Date:   Fri,  5 Mar 2021 13:21:25 +0100
-Message-Id: <20210305120858.481470995@linuxfoundation.org>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210305120857.341630346@linuxfoundation.org>
-References: <20210305120857.341630346@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S229797AbhCESfr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Mar 2021 13:35:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230426AbhCESfV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Mar 2021 13:35:21 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F21C061763;
+        Fri,  5 Mar 2021 10:32:53 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id q14so4001725ljp.4;
+        Fri, 05 Mar 2021 10:32:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yCWtEFyrceH7BJ6AukIJ81DQ9V6t6R7qk/KayCrGAnE=;
+        b=IwjMsHqY0DBH5/GX0MF09rd8LLvvJZArlEX+lXLd7JDgWs4ZfESNowujUiqKdWwPu0
+         PglTOEeijYt0rq+5tBZ8LDE2oW06KcKOlmBffkhibSn9eS/CFqKU/knEbnAdoP0sqKNH
+         0+w4647siaUVFtvf5FX4VZNzEgtOR4Yc6/DSHYfdtxrXq1hTilZP/tTuOD4VVhMIWKPv
+         0yOzKeQJ3IVXJM5XjwgZL81gNZO9UGjZcns2DDW9ikyl3NdiNuS12ebbAyrXpMJWzqKT
+         GKrKOdcWVYq37VmUdfFyLb1itwQvtPaqRIjsAeeGRY5KsaPNgNyvjmXLdFMaSR1NpHxI
+         wNPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yCWtEFyrceH7BJ6AukIJ81DQ9V6t6R7qk/KayCrGAnE=;
+        b=GwMmGgEErNh8kmka/G4MhN7rDxk/uK4sYK6LrjTyJuhba00x2h5WLFmElEyweyokGx
+         ax3jYRy3C5ls9a4lFJKGsEzO6JQIkxILUKTsP1nh2cE3BE2DZFIDhTMwNHypcKqTekNp
+         SkK2ioQbJ0Jo/p+AuKAPI7/D4O/JTrNZB3ouYosLyFLSwcWx94Qa5oFAmiQ/nlHGADi+
+         3qI9/b4LARJjwqIhe34HZkyaZ0oTPo2QT+wIFT2gR1LDX2JT3uzjXNlqYVUiWEIAdl4B
+         6vIXO+Kw/ZazRvMAU2qboxKmvkJGzS45kKztffTb7jXDPynSEjo5brB7j3ja2OCxulg5
+         Du1w==
+X-Gm-Message-State: AOAM532XDcPogS8n5XxF99VFOozoquSYvil9kSKCIPn9Ird5SxObSZvo
+        9Gw0FJWDKiw8ACRJiZZhWI4=
+X-Google-Smtp-Source: ABdhPJyxr9PnPzpKcN7Pkw/wsx3UbzX9kFmZsLiHylfTvjTD1rjrTAiozInXXb3SfwdQIijlVCvKPw==
+X-Received: by 2002:a2e:a48f:: with SMTP id h15mr6002521lji.234.1614969172315;
+        Fri, 05 Mar 2021 10:32:52 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id a10sm396571lfu.263.2021.03.05.10.32.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Mar 2021 10:32:51 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivek Unune <npcomplete13@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V2 1/2] dt-bindings: nvmem: add Broadcom's NVRAM
+Date:   Fri,  5 Mar 2021 19:32:35 +0100
+Message-Id: <20210305183236.11784-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -41,174 +68,60 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Burton <paul.burton@mips.com>
+From: Rafał Miłecki <rafal@milecki.pl>
 
-commit 3c0be5849259b729580c23549330973a2dd513a2 upstream.
+Broadcom's NVRAM structure contains device data and can be accessed
+using I/O mapping.
 
-We have assembly implementations of strcpy(), strncpy(), strcmp() &
-strncmp() which:
-
- - Are simple byte-at-a-time loops with no particular optimizations. As
-   a comment in the code describes, they're "rather naive".
-
- - Offer no clear performance advantage over the generic C
-   implementations - in microbenchmarks performed by Alexander Lobakin
-   the asm functions sometimes win & sometimes lose, but generally not
-   by large margins in either direction.
-
- - Don't support 64-bit kernels, where we already make use of the
-   generic C implementations.
-
- - Tend to bloat kernel code size due to inlining.
-
- - Don't support CONFIG_FORTIFY_SOURCE.
-
- - Won't support nanoMIPS without rework.
-
-For all of these reasons, delete the asm implementations & make use of
-the generic C implementations for 32-bit kernels just like we already do
-for 64-bit kernels.
-
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-URL: https://lore.kernel.org/linux-mips/a2a35f1cf58d6db19eb4af9b4ae21e35@dlink.ru/
-Cc: Alexander Lobakin <alobakin@dlink.ru>
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
- arch/mips/include/asm/string.h |  121 -----------------------------------------
- 1 file changed, 121 deletions(-)
+V2: Use Broadcom's NVRAM specific binding. Generic "nvmem-iomap" binding
+    didn't make much sense. Thanks Srinivas!
+---
+ .../devicetree/bindings/nvmem/brcm,nvram.yaml | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
 
---- a/arch/mips/include/asm/string.h
-+++ b/arch/mips/include/asm/string.h
-@@ -10,127 +10,6 @@
- #ifndef _ASM_STRING_H
- #define _ASM_STRING_H
- 
--
--/*
-- * Most of the inline functions are rather naive implementations so I just
-- * didn't bother updating them for 64-bit ...
-- */
--#ifdef CONFIG_32BIT
--
--#ifndef IN_STRING_C
--
--#define __HAVE_ARCH_STRCPY
--static __inline__ char *strcpy(char *__dest, __const__ char *__src)
--{
--  char *__xdest = __dest;
--
--  __asm__ __volatile__(
--	".set\tnoreorder\n\t"
--	".set\tnoat\n"
--	"1:\tlbu\t$1,(%1)\n\t"
--	"addiu\t%1,1\n\t"
--	"sb\t$1,(%0)\n\t"
--	"bnez\t$1,1b\n\t"
--	"addiu\t%0,1\n\t"
--	".set\tat\n\t"
--	".set\treorder"
--	: "=r" (__dest), "=r" (__src)
--	: "0" (__dest), "1" (__src)
--	: "memory");
--
--  return __xdest;
--}
--
--#define __HAVE_ARCH_STRNCPY
--static __inline__ char *strncpy(char *__dest, __const__ char *__src, size_t __n)
--{
--  char *__xdest = __dest;
--
--  if (__n == 0)
--    return __xdest;
--
--  __asm__ __volatile__(
--	".set\tnoreorder\n\t"
--	".set\tnoat\n"
--	"1:\tlbu\t$1,(%1)\n\t"
--	"subu\t%2,1\n\t"
--	"sb\t$1,(%0)\n\t"
--	"beqz\t$1,2f\n\t"
--	"addiu\t%0,1\n\t"
--	"bnez\t%2,1b\n\t"
--	"addiu\t%1,1\n"
--	"2:\n\t"
--	".set\tat\n\t"
--	".set\treorder"
--	: "=r" (__dest), "=r" (__src), "=r" (__n)
--	: "0" (__dest), "1" (__src), "2" (__n)
--	: "memory");
--
--  return __xdest;
--}
--
--#define __HAVE_ARCH_STRCMP
--static __inline__ int strcmp(__const__ char *__cs, __const__ char *__ct)
--{
--  int __res;
--
--  __asm__ __volatile__(
--	".set\tnoreorder\n\t"
--	".set\tnoat\n\t"
--	"lbu\t%2,(%0)\n"
--	"1:\tlbu\t$1,(%1)\n\t"
--	"addiu\t%0,1\n\t"
--	"bne\t$1,%2,2f\n\t"
--	"addiu\t%1,1\n\t"
--	"bnez\t%2,1b\n\t"
--	"lbu\t%2,(%0)\n\t"
--#if defined(CONFIG_CPU_R3000)
--	"nop\n\t"
--#endif
--	"move\t%2,$1\n"
--	"2:\tsubu\t%2,$1\n"
--	"3:\t.set\tat\n\t"
--	".set\treorder"
--	: "=r" (__cs), "=r" (__ct), "=r" (__res)
--	: "0" (__cs), "1" (__ct));
--
--  return __res;
--}
--
--#endif /* !defined(IN_STRING_C) */
--
--#define __HAVE_ARCH_STRNCMP
--static __inline__ int
--strncmp(__const__ char *__cs, __const__ char *__ct, size_t __count)
--{
--	int __res;
--
--	__asm__ __volatile__(
--	".set\tnoreorder\n\t"
--	".set\tnoat\n"
--	"1:\tlbu\t%3,(%0)\n\t"
--	"beqz\t%2,2f\n\t"
--	"lbu\t$1,(%1)\n\t"
--	"subu\t%2,1\n\t"
--	"bne\t$1,%3,3f\n\t"
--	"addiu\t%0,1\n\t"
--	"bnez\t%3,1b\n\t"
--	"addiu\t%1,1\n"
--	"2:\n\t"
--#if defined(CONFIG_CPU_R3000)
--	"nop\n\t"
--#endif
--	"move\t%3,$1\n"
--	"3:\tsubu\t%3,$1\n\t"
--	".set\tat\n\t"
--	".set\treorder"
--	: "=r" (__cs), "=r" (__ct), "=r" (__count), "=r" (__res)
--	: "0" (__cs), "1" (__ct), "2" (__count));
--
--	return __res;
--}
--#endif /* CONFIG_32BIT */
--
- #define __HAVE_ARCH_MEMSET
- extern void *memset(void *__s, int __c, size_t __count);
- 
-
+diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
+new file mode 100644
+index 000000000000..58ff6b0bdb1a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
+@@ -0,0 +1,34 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/brcm,nvram.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom's NVRAM
++
++description: |
++  Broadcom's NVRAM is a structure containing device specific environment
++  variables. It is used for storing device configuration, booting parameters
++  and calibration data.
++
++  NVRAM can be accessed on Broadcom BCM47xx MIPS and Northstar ARM Cortex-A9
++  devices usiong I/O mapped memory.
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++allOf:
++  - $ref: "nvmem.yaml#"
++
++properties:
++  compatible:
++    const: brcm,nvram
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    nvram@1eff0000 {
++            compatible = "brcm,nvram";
++            reg = <0x1eff0000 0x10000>;
++    };
+-- 
+2.26.2
 
