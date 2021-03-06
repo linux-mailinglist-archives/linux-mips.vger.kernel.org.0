@@ -2,138 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C09C532F8B5
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Mar 2021 08:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F96B32F8BE
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Mar 2021 08:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbhCFHNS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 6 Mar 2021 02:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbhCFHMz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 6 Mar 2021 02:12:55 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F417C06175F;
-        Fri,  5 Mar 2021 23:12:55 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id f3so5135509oiw.13;
-        Fri, 05 Mar 2021 23:12:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CTkltZ77nL3kaQcEgltQYwF2jxJLi5wxQebdJjXmF/k=;
-        b=nYDeG1fly5e1DSLkyZ91GtQWjAeAyZggxB2youoPLZrI0GOi/kYvLhgjxp3do6jC8F
-         nN+EnosdVjYb8V7/DDAlO8PKGtDMdEjL0CEPq25B4Tva+3LrR4tehxoYhDZ6jf8abEB2
-         aYiRxkDaxSrdximMfsuCZvuKshsfp8dBpV5f3xhS0DC6Rk2U9UfwRDyWoOsuHPHo/Lsj
-         td8Vgu3bI5AytpDwBHoPiJpgnMvpyclg1/LRiFTD2RW0KJoYUyrGxcrM5VKcd9j0tlmK
-         t6+AuyOwCCdJPyIPghXe7u9QeNMbS0szafiVwxnh8VmsdT1QJDex4Y9tTKzZ28oVaWFp
-         bN1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CTkltZ77nL3kaQcEgltQYwF2jxJLi5wxQebdJjXmF/k=;
-        b=PCrBw2aGeeXH/3w97HYA/7HLDv/E7UqiFG9/suvmrbvMUpuMbf3jieNsFiBX8AI2GO
-         VOUPq8+iw6stMh9Rysqxh8iaVHb/eN3oGYtkI1YN5g1t8UA+XvzZpXib3Hq1b5H6ehPl
-         a+sw6+XzK8HaeBMcO0djaNmPnGC2NDths4pigMX7pbyOG2IHP4T9MnaHcQdrPQUCHhJU
-         ZoaYI2NTPUh+c3YifXOXE9vtoy37N9g8y5LEHEYqgbpjOUTLeIXYgUaVSxPsWV+DYylT
-         ybNf3QlF8+PBruIBU6+kYWljhO0TVGRFkEWmvDS4WAtSxV3/fPFI6fX4hCCmLUQvwG0d
-         ObrQ==
-X-Gm-Message-State: AOAM5320uY1tCHhGHr04SU+gEfkpT0t1ae/Wm0+2rPtHM9aYAq4p3JQ+
-        PaqZpHoZWiiGFEq0ECPIztSYSXQuB8o/iH0A5HgleU98CEfRyA==
-X-Google-Smtp-Source: ABdhPJzMrIW4Fxvb5eM7Cg7PpNPo2Ldi/VTWDPinGxzlo+n7ORohSk6mdfbm9pIhz6Eq8/ChP/NrOXh/Bm9mLwQx/4c=
-X-Received: by 2002:a05:6808:97:: with SMTP id s23mr10041419oic.23.1615014774477;
- Fri, 05 Mar 2021 23:12:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20210218070709.11932-1-sergio.paracuellos@gmail.com>
- <20210218070709.11932-3-sergio.paracuellos@gmail.com> <20210305224756.GA777984@robh.at.kernel.org>
-In-Reply-To: <20210305224756.GA777984@robh.at.kernel.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Sat, 6 Mar 2021 08:12:43 +0100
-Message-ID: <CAMhs-H_RoA-JvT9Q1K+8tEA1vqS6HWuE-D4=kWVsoOWTwjTGbw@mail.gmail.com>
-Subject: Re: [PATCH v9 2/6] dt: bindings: add mt7621-clk device tree binding documentation
-To:     Rob Herring <robh@kernel.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>, John Crispin <john@phrozen.org>,
+        id S229626AbhCFHX7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 6 Mar 2021 02:23:59 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:44656 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229581AbhCFHXh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 6 Mar 2021 02:23:37 -0500
+Received: from localhost.localdomain (unknown [10.180.13.54])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb_LtLUNgtToVAA--.9958S3;
+        Sat, 06 Mar 2021 15:23:26 +0800 (CST)
+Subject: Re: [PATCH v3 1/7] MIPS: Loongson64: DeviceTree for 2K1000
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
-        NeilBrown <neil@brown.name>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+References: <20210306023633.9579-1-zhangqing@loongson.cn>
+ <20210306023633.9579-2-zhangqing@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Ming Wang <wangming01@loongson.cn>
+Message-ID: <7ad5c56f-7d89-bb99-57fe-887def12153c@loongson.cn>
+Date:   Sat, 6 Mar 2021 15:23:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <20210306023633.9579-2-zhangqing@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxb_LtLUNgtToVAA--.9958S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYP7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAa
+        Y2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4
+        A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0
+        II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2
+        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+        42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbveHDUUUUU==
+X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
+On 03/06/2021 10:36 AM, Qing Zhang wrote:
 
-On Fri, Mar 5, 2021 at 11:47 PM Rob Herring <robh@kernel.org> wrote:
-[snip]
-> > +
-> > +  ralink,sysctl:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      phandle of syscon used to control system registers
-> > +
-> > +  ralink,memctl:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      phandle of syscon used to control memory registers
+> Add DeviceTree files for Loongson 2K1000 processor,currently only
+> supports single-core boot.
 >
-> I assume one of these phandles are the main registers for the clocks?
-> Make this a child node and drop that phandle.
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+Tested-by: Ming Wang <wangming01@loongson.cn>
 
-The 'ralink,sysctl' phandle is to read bootstrap register to be able
-to derive xtal and a clk gate register for the peripherals.
-The 'ralink,memctl' phandle is to read the cpu clock frequency from
-the memory controller.
+Thanks,
+Ming
 
-So there is not "main registers". I already put this as a child node
-in v4 and I was told to get rid of child nodes. I need this as a
-regmap to other DT node registers (sysctl, and memctl) to be able to
-use the driver without specific architecture operations and properly
-enable for COMPILE_TEST without dirty Makefile arch flags. Both sysctl
-and memctl has no other child nodes, and I think that's why I was told
-to avoid child nodes at the end. I explained here [0] current sysctl
-and memctl in the mt7621 device tree and my view of the need for this
-two syscons:
-
-[0]: https://lkml.org/lkml/2021/1/2/9
-
-So to avoid to send again "a previous version" on this patch, please
-guide me in the correct thing to do. Stephen, Rob, I will be really
-happy with your help :)
-
-Best regards,
-    Sergio Paracuellos
->
-> > +
-> > +  clock-output-names:
-> > +    maxItems: 8
-> > +
-> > +required:
-> > +  - compatible
-> > +  - '#clock-cells'
-> > +  - ralink,sysctl
-> > +  - ralink,memctl
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/mt7621-clk.h>
-> > +
-> > +    pll {
-> > +      compatible = "mediatek,mt7621-clk";
-> > +      #clock-cells = <1>;
-> > +      ralink,sysctl = <&sysc>;
-> > +      ralink,memctl = <&memc>;
-> > +      clock-output-names = "xtal", "cpu", "bus",
-> > +                           "50m", "125m", "150m",
-> > +                           "250m", "270m";
-> > +    };
-> > --
-> > 2.25.1
-> >
