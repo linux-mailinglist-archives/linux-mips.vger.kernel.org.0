@@ -2,205 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A916132F7F4
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Mar 2021 04:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F9832F7F6
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Mar 2021 04:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbhCFDHb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Mar 2021 22:07:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58210 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229597AbhCFDHE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 5 Mar 2021 22:07:04 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BA0B065014;
-        Sat,  6 Mar 2021 03:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615000023;
-        bh=zn0JFhWLOx0WKJo1sTK7pkbGvSLJIhKUGcL1D3bVCD8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bEVVbEpTudN8Y2ipurYkBGUn4RvhuwNINHyTxFqxGPRuYxhCmwZZkgJLcdZwbds8u
-         dgQJWFbdwmbaYVTCDkL60yjtpETVcR36dVKFb5sLh0XETFNGMx45WypasWGI7dsvb+
-         qLjU5wazV1qfS2IWO09NtzYHbfk3J4qGf91ofr4pdYi0T9pv3KAsexIkeVWUWoXcJm
-         yYkIGJJxAcSOWxSqH0RoA3LUDCccTCmfInByyx+CBGDTETLPPvw+JZqbQFC5DfAfI7
-         l8IZ2OXmfj0Q+YR1yO7XGT1UpkD402MkLsmCLthTU9+blgEB8Xmg3KyKuZIOrsEm9+
-         2G/X2gz83gf4A==
-Received: by mail-il1-f182.google.com with SMTP id g9so3847761ilc.3;
-        Fri, 05 Mar 2021 19:07:03 -0800 (PST)
-X-Gm-Message-State: AOAM531f2cPdbvI3GfZXE+UCOJDZsuun69/kRgtjka4vIEa2dyChzabX
-        2H9e37os5fRFr6+XDeymnwhxWXiOsq+EN2ttqbU=
-X-Google-Smtp-Source: ABdhPJwU2xZ1RY207vdVebt1O7FNVEfwrFz4GeIUIch52Xl3MSqUGTVF8NpNxvoTFd9J7zH42cxwsrtTlcglABgmUA8=
-X-Received: by 2002:a05:6e02:b2c:: with SMTP id e12mr11142438ilu.143.1615000023173;
- Fri, 05 Mar 2021 19:07:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20210306023633.9579-1-zhangqing@loongson.cn> <20210306023633.9579-6-zhangqing@loongson.cn>
-In-Reply-To: <20210306023633.9579-6-zhangqing@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 6 Mar 2021 11:06:51 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7vrq2GRL0m7ZAhvK2XOELx_3s8-VjmkMJn1ZkL28fwfQ@mail.gmail.com>
-Message-ID: <CAAhV-H7vrq2GRL0m7ZAhvK2XOELx_3s8-VjmkMJn1ZkL28fwfQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/7] irqchip/loongson-liointc: irqchip add 2.0 version
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        id S229576AbhCFDNC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Mar 2021 22:13:02 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:59728 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229597AbhCFDM2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Mar 2021 22:12:28 -0500
+Received: from [10.130.0.65] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb_EL80JgriAVAA--.9737S3;
+        Sat, 06 Mar 2021 11:12:12 +0800 (CST)
+Subject: Re: [PATCH 2/2] MIPS: Loongson64: Move loongson_system_configuration
+ to loongson.h
+To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+References: <20210304110057.22144-1-zhangqing@loongson.cn>
+ <20210304110057.22144-3-zhangqing@loongson.cn>
+ <CAAdtpL6xDyYgDdHFkZPjtbbX4tV4K=7YehEoeGSgHdw-rXtURw@mail.gmail.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wangming01@loongson.cn
-Content-Type: text/plain; charset="UTF-8"
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+From:   zhangqing <zhangqing@loongson.cn>
+Message-ID: <b93973ff-eff1-e159-d396-8d375d1dd2d8@loongson.cn>
+Date:   Sat, 6 Mar 2021 11:12:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <CAAdtpL6xDyYgDdHFkZPjtbbX4tV4K=7YehEoeGSgHdw-rXtURw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxb_EL80JgriAVAA--.9737S3
+X-Coremail-Antispam: 1UD129KBjvJXoWrZr1rWw1rWrWUtF13CrWrGrg_yoW8Jr4fpa
+        1Sg340ga1DGr1fuF1fKrW8uFyfA3WrtFsxGFy2q3WYkr9xXr18tF1Y9F4I93W7Arn5CF9r
+        Z34I9r1xKan8CF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvqb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
+        xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr
+        0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
+        r21lc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+        xVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2
+        jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07j7xhLUUUUU=
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Qing,
 
-On Sat, Mar 6, 2021 at 10:36 AM Qing Zhang <zhangqing@loongson.cn> wrote:
->
-> Add IO interrupt controller support for Loongson 2k1000, different
-> from the 3a series is that 2K1000 has 64 interrupt sources, 0-31
-> correspond to the device tree liointc0 device node, and the other
-> correspond to liointc1 node.
-Use the formal name (Loongson-2K1000, Loongson-3A series), please.
 
-Huacai
+On 03/05/2021 06:01 PM, Philippe Mathieu-Daudé wrote:
+> Hi,
 >
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
+> On Thu, Mar 4, 2021 at 5:35 PM Qing Zhang <zhangqing@loongson.cn> wrote:
+>> The purpose of separating loongson_system_configuration from boot_param.h
+>> is to keep the other structure consistent with the firmware.
+> This is supposed to be a trivial patch, but the description actually
+> confuses me.
 >
-> v2-v3: No change
->
->  drivers/irqchip/irq-loongson-liointc.c | 55 +++++++++++++++++++++-----
->  1 file changed, 46 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-> index 09b91b81851c..1c3c80f7f9f5 100644
-> --- a/drivers/irqchip/irq-loongson-liointc.c
-> +++ b/drivers/irqchip/irq-loongson-liointc.c
-> @@ -20,6 +20,7 @@
->
->  #define LIOINTC_CHIP_IRQ       32
->  #define LIOINTC_NUM_PARENT 4
-> +#define LIOINTC_NUM_CORES      4
->
->  #define LIOINTC_INTC_CHIP_START        0x20
->
-> @@ -42,6 +43,7 @@ struct liointc_handler_data {
->  struct liointc_priv {
->         struct irq_chip_generic         *gc;
->         struct liointc_handler_data     handler[LIOINTC_NUM_PARENT];
-> +       void __iomem                    *core_isr[LIOINTC_NUM_CORES];
->         u8                              map_cache[LIOINTC_CHIP_IRQ];
->         bool                            has_lpc_irq_errata;
->  };
-> @@ -51,11 +53,12 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
->         struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
->         struct irq_chip *chip = irq_desc_get_chip(desc);
->         struct irq_chip_generic *gc = handler->priv->gc;
-> +       int core = get_ebase_cpunum() % LIOINTC_NUM_CORES;
->         u32 pending;
->
->         chained_irq_enter(chip, desc);
->
-> -       pending = readl(gc->reg_base + LIOINTC_REG_INTC_STATUS);
-> +       pending = readl(handler->priv->core_isr[core]);
->
->         if (!pending) {
->                 /* Always blame LPC IRQ if we have that bug */
-> @@ -141,6 +144,15 @@ static void liointc_resume(struct irq_chip_generic *gc)
->  }
->
->  static const char * const parent_names[] = {"int0", "int1", "int2", "int3"};
-> +static const char * const core_reg_names[] = {"isr0", "isr1", "isr2", "isr3"};
-> +
-> +static void __iomem *liointc_get_reg_byname(struct device_node *node,
-> +                                               const char *name)
-> +{
-> +       int index = of_property_match_string(node, "reg-names", name);
-> +
-> +       return of_iomap(node, index);
-> +}
->
->  static int __init liointc_of_init(struct device_node *node,
->                                   struct device_node *parent)
-> @@ -159,10 +171,28 @@ static int __init liointc_of_init(struct device_node *node,
->         if (!priv)
->                 return -ENOMEM;
->
-> -       base = of_iomap(node, 0);
-> -       if (!base) {
-> -               err = -ENODEV;
-> -               goto out_free_priv;
-> +       if (of_device_is_compatible(node, "loongson,liointc-2.0")) {
-> +               base = liointc_get_reg_byname(node, "main");
-> +               if (!base) {
-> +                       err = -ENODEV;
-> +                       goto out_free_priv;
-> +               }
-> +               for (i = 0; i < LIOINTC_NUM_CORES; i++) {
-> +                       priv->core_isr[i] =
-> +                               liointc_get_reg_byname(node, core_reg_names[i]);
-> +               }
-> +               if (!priv->core_isr[0]) {
-> +                       err = -ENODEV;
-> +                       goto out_iounmap_base;
-> +               }
-> +       } else {
-> +               base = of_iomap(node, 0);
-> +               if (!base) {
-> +                       err = -ENODEV;
-> +                       goto out_free_priv;
-> +               }
-> +               for (i = 0; i < LIOINTC_NUM_CORES; i++)
-> +                       priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
->         }
->
->         for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
-> @@ -172,7 +202,7 @@ static int __init liointc_of_init(struct device_node *node,
->         }
->         if (!have_parent) {
->                 err = -ENODEV;
-> -               goto out_iounmap;
-> +               goto out_iounmap_isr;
->         }
->
->         sz = of_property_read_variable_u32_array(node,
-> @@ -183,7 +213,7 @@ static int __init liointc_of_init(struct device_node *node,
->         if (sz < 4) {
->                 pr_err("loongson-liointc: No parent_int_map\n");
->                 err = -ENODEV;
-> -               goto out_iounmap;
-> +               goto out_iounmap_isr;
->         }
->
->         for (i = 0; i < LIOINTC_NUM_PARENT; i++)
-> @@ -195,7 +225,7 @@ static int __init liointc_of_init(struct device_node *node,
->         if (!domain) {
->                 pr_err("loongson-liointc: cannot add IRQ domain\n");
->                 err = -EINVAL;
-> -               goto out_iounmap;
-> +               goto out_iounmap_isr;
->         }
->
->         err = irq_alloc_domain_generic_chips(domain, 32, 1,
-> @@ -260,7 +290,13 @@ static int __init liointc_of_init(struct device_node *node,
->
->  out_free_domain:
->         irq_domain_remove(domain);
-> -out_iounmap:
-> +out_iounmap_isr:
-> +       for (i = 0; i < LIOINTC_NUM_CORES; i++) {
-> +               if (!priv->core_isr[i])
-> +                       continue;
-> +               iounmap(priv->core_isr[i]);
-> +       }
-> +out_iounmap_base:
->         iounmap(base);
->  out_free_priv:
->         kfree(priv);
-> @@ -270,3 +306,4 @@ static int __init liointc_of_init(struct device_node *node,
->
->  IRQCHIP_DECLARE(loongson_liointc_1_0, "loongson,liointc-1.0", liointc_of_init);
->  IRQCHIP_DECLARE(loongson_liointc_1_0a, "loongson,liointc-1.0a", liointc_of_init);
-> +IRQCHIP_DECLARE(loongson_liointc_2_0, "loongson,liointc-2.0", liointc_of_init);
-> --
-> 2.20.1
->
+> Why is the move out of "boot_param.h" keeping it consistent with fw?
+Hi, PhilippeMathieu-Daudé
+
+Thank you for your reply.
+
+The boot_param.h file must be consistent in the kernel and the firmware 
+pmon/cmds/bootparam.h
+In env.c, the loongson_system_configuration structure member gets the 
+value passed to the firmware.
+eg:
+struct boot_params *boot_p;
+
+          loongson_sysconf.restart_addr = boot_p->reset_system.ResetWarm;
+          loongson_sysconf.poweroff_addr = boot_p->reset_system.Shutdown;
+          loongson_sysconf.suspend_addr = boot_p->reset_system.DoSuspend;
+
+The boot_params structure is consistent with the firmware,
+The loongson_system_configuration is filled in the kernel, and there is 
+no such structure in pmon-loongson3, it is actually defined in the kernel.
+
+So, remove its definition from boot_param.h.
+
+Thanks,
+Qing
+
+
