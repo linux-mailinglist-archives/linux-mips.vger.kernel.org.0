@@ -2,66 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D711D32F8CB
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Mar 2021 08:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BA632F8E1
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Mar 2021 09:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbhCFH3P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 6 Mar 2021 02:29:15 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:45676 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229635AbhCFH24 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 6 Mar 2021 02:28:56 -0500
-Received: from localhost.localdomain (unknown [10.180.13.54])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD_MwL0NgODsVAA--.28338S3;
-        Sat, 06 Mar 2021 15:28:48 +0800 (CST)
-Subject: Re: [PATCH v3 7/7] MIPS: Loongson64: Add a Loongson-2k default config
- file
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-References: <20210306023633.9579-1-zhangqing@loongson.cn>
- <20210306023633.9579-8-zhangqing@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Ming Wang <wangming01@loongson.cn>
-Message-ID: <0d8fcebe-6776-b859-aa89-f00a7afbd5cf@loongson.cn>
-Date:   Sat, 6 Mar 2021 15:28:48 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S230034AbhCFIHA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 6 Mar 2021 03:07:00 -0500
+Received: from elvis.franken.de ([193.175.24.41]:48065 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229982AbhCFIGV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 6 Mar 2021 03:06:21 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lIRx3-0004K9-00; Sat, 06 Mar 2021 09:06:17 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id D25A9C0F9F; Sat,  6 Mar 2021 08:47:11 +0100 (CET)
+Date:   Sat, 6 Mar 2021 08:47:11 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Subject: Re: [PATCH 1/3] MIPS: sync arrangement of pt_regs with user_pt_regs
+ and regoffset_table
+Message-ID: <20210306074711.GA4744@alpha.franken.de>
+References: <20210305100310.26627-1-huangpei@loongson.cn>
+ <20210305100310.26627-2-huangpei@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <20210306023633.9579-8-zhangqing@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxD_MwL0NgODsVAA--.28338S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYm7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87
-        Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvE
-        ncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I
-        8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0E
-        jII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK6svPMxAIw28Icx
-        kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
-        IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r4j6FyUMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqFALUUUUU=
-X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210305100310.26627-2-huangpei@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/06/2021 10:36 AM, Qing Zhang wrote:
+On Fri, Mar 05, 2021 at 06:03:08PM +0800, Huang Pei wrote:
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> ---
+>  arch/mips/include/asm/ptrace.h | 10 +++++-----
+>  arch/mips/kernel/asm-offsets.c |  6 +++---
+>  arch/mips/kernel/ptrace.c      | 10 +++++-----
+>  3 files changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
+> index 1e76774b36dd..e51691f2b7af 100644
+> --- a/arch/mips/include/asm/ptrace.h
+> +++ b/arch/mips/include/asm/ptrace.h
+> @@ -34,16 +34,16 @@ struct pt_regs {
+>  	/* Saved main processor registers. */
+>  	unsigned long regs[32];
+>  
+> +	unsigned long lo;
+> +	unsigned long hi;
+>  	/* Saved special registers. */
+> +	unsigned long cp0_epc;
+> +	unsigned long cp0_badvaddr;
+>  	unsigned long cp0_status;
+> -	unsigned long hi;
+> -	unsigned long lo;
+> +	unsigned long cp0_cause;
+>  #ifdef CONFIG_CPU_HAS_SMARTMIPS
+>  	unsigned long acx;
+>  #endif
+> -	unsigned long cp0_badvaddr;
+> -	unsigned long cp0_cause;
+> -	unsigned long cp0_epc;
+>  #ifdef CONFIG_CPU_CAVIUM_OCTEON
+>  	unsigned long long mpl[6];        /* MTM{0-5} */
+>  	unsigned long long mtp[6];        /* MTP{0-5} */
 
-> Add default config for 2K1000.
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-Tested-by: Ming Wang <wangming01@loongson.cn>
+sorry this is pointless, I'm not taking this.
 
-Thanks,
-Ming
+Thomas.
 
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
