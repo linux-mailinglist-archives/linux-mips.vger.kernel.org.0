@@ -2,54 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A3C32F809
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Mar 2021 04:19:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A7932F814
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Mar 2021 04:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbhCFDTK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Mar 2021 22:19:10 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:60826 "EHLO loongson.cn"
+        id S229629AbhCFDZM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Mar 2021 22:25:12 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:33632 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229642AbhCFDS6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 5 Mar 2021 22:18:58 -0500
+        id S229669AbhCFDZK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Mar 2021 22:25:10 -0500
 Received: from [10.130.0.65] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx__CW9EJgJiEVAA--.9853S3;
-        Sat, 06 Mar 2021 11:18:47 +0800 (CST)
-Subject: Re: [PATCH 1/2] MIPS: Loongson64: Remove unused sysconf members
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx3_EN9kJgxiEVAA--.9962S3;
+        Sat, 06 Mar 2021 11:25:02 +0800 (CST)
+Subject: Re: [PATCH v3 5/7] irqchip/loongson-liointc: irqchip add 2.0 version
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <20210306023633.9579-1-zhangqing@loongson.cn>
+ <20210306023633.9579-6-zhangqing@loongson.cn>
+ <CAAhV-H7vrq2GRL0m7ZAhvK2XOELx_3s8-VjmkMJn1ZkL28fwfQ@mail.gmail.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-References: <20210304110057.22144-1-zhangqing@loongson.cn>
- <20210304110057.22144-2-zhangqing@loongson.cn>
- <67d0389d-9df4-066d-2c8d-2eda967fb2fc@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+        Marc Zyngier <maz@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, wangming01@loongson.cn
 From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <d2f51232-7fd7-a655-c041-9e0e42bbe221@loongson.cn>
-Date:   Sat, 6 Mar 2021 11:18:46 +0800
+Message-ID: <ba049da3-8227-47ed-7576-319e9fb5cc98@loongson.cn>
+Date:   Sat, 6 Mar 2021 11:25:01 +0800
 User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
  Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <67d0389d-9df4-066d-2c8d-2eda967fb2fc@flygoat.com>
+In-Reply-To: <CAAhV-H7vrq2GRL0m7ZAhvK2XOELx_3s8-VjmkMJn1ZkL28fwfQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dx__CW9EJgJiEVAA--.9853S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw43GFy3ZFyrJFWDKryfWFg_yoWxurg_CF
-        4FywsrC3W8Cr4vyFs8KF4v9r97urZ7JFWDZ34vqr1Fq3sFkF9Fqa4xGrn2ka43AFW8Zr9r
-        urnY9w4Fk3yDAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbsxYjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487
-        MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-        JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
-        vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2
-        jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
-        ZFpf9x07j7xhLUUUUU=
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dx3_EN9kJgxiEVAA--.9962S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFWxJFyDKF48Gw4xAw47Arb_yoWxuFXE9F
+        ZYgaykAa48JFyIyr9Ikr4293sIq3y7K3y2kryDGr18Z3yFkFyYqF4DCw10qF1SqFWkZrn3
+        ur4DKw4Skry8ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbVAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
+        bIxvr21lc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAI
+        cVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JUco7NUUUUU=
 X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -57,34 +58,27 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 03/05/2021 10:32 AM, Jiaxun Yang wrote:
+On 03/06/2021 11:06 AM, Huacai Chen wrote:
+> Hi, Qing,
 >
->
-> 在 2021/3/4 下午7:00, Qing Zhang 写道:
->> We don't need them anymore, They are uniform on all Loongson64 systems
->> and have been fixed in DeviceTree.loongson3_platform_init is replaced
->> with DTS + driver.
->>
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->
-> Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->
-> Hmm, why it comes with my sign-off?
-> I assue it's my patch somewhere off the tree?
-Hi, Jiaxun
+> On Sat, Mar 6, 2021 at 10:36 AM Qing Zhang <zhangqing@loongson.cn> wrote:
+>> Add IO interrupt controller support for Loongson 2k1000, different
+>> from the 3a series is that 2K1000 has 64 interrupt sources, 0-31
+>> correspond to the device tree liointc0 device node, and the other
+>> correspond to liointc1 node.
+> Use the formal name (Loongson-2K1000, Loongson-3A series), please.
+
+Hi, Huacai
 
 Thank you very much for your reply.
 
-Yes, it is like this.out of tree provides good ideas, and clean up 
-others by the way.
+I will modify the submission information,
+Use the formal name (Loongson-2K1000, Loongson-3A series) in v4,
+Before that, I will wait for other people's opinions about this series.
 
 Thanks,
 Qing
 
 >
-> Thanks.
->
-> - Jiaxun
->
+> Huacai
 
