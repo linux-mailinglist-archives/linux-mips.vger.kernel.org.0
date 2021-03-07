@@ -2,100 +2,195 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A59E32FEF7
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 06:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C758D32FF40
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 07:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbhCGFOt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Mar 2021 00:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S229971AbhCGG2A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Mar 2021 01:28:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbhCGFOa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Mar 2021 00:14:30 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEAAC06174A;
-        Sat,  6 Mar 2021 21:14:30 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id n9so3260726pgi.7;
-        Sat, 06 Mar 2021 21:14:30 -0800 (PST)
+        with ESMTP id S229619AbhCGG1g (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Mar 2021 01:27:36 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427FDC06174A;
+        Sat,  6 Mar 2021 22:27:36 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id d9so6060912ote.12;
+        Sat, 06 Mar 2021 22:27:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F+YVVQrR9usFwFHLHDb8DCk5WVuJFinX4Whwvzf0h2k=;
-        b=XTluanGcbF7jemYSMsJxw2LT7WcYCYC32MimrKVb62MIdeGohABL0zEoX70nzGmuaf
-         Be9RLVoQnpmf+Txzy0uznUUkc7E+6RbiSmf7eyKjnQV657T1RW2ya+yUdsBmjOXnGrCh
-         3YR+6sKA0J9rTwvXsG9a3RXlUkeriRYvyJ9GuLpgiyLKMt9zJvM6B91KS5968jrW1hoB
-         87nlbjjOI1cknUBneksI2M/b+ieM8OC845Ubo2h5RppFXu3cRhUf4igD4Niw3OqNFSqN
-         fH7HU6n+hGXEeu9VhS5SO1yrCq2kuZz980sauhziJXAUe/OJ2LoJK4ZZU4HjBTmYnobf
-         Lxng==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GPRWwy3SL7jcLoSJyifJgoFoz/VF4yU3PDUSUbMzaaA=;
+        b=iE1WxHNV/cAQQJFlugY+hOfG2m+juVr2ls7rZSssGr2po4ncWgx83fb8YwMUVv8szg
+         mY55UPdH8fUrwKo8+tkSjRkI4z2ojQgSAeKf5RdxUn7FCFEv2atykcKPod/YZ0q1sHTZ
+         1hafjxBp+mtY3iDmXrP0nHe47Cg/wfEECzhAoYp8z3ySrLFLIPaQB4B9P04N1bECSDC7
+         1V5UoNgm23vNGgFRKC+gWem+QP+I6LIKeQEZMkdgA5Oa0iaQi/X8vDfQVOVlbyHWDEoT
+         Z/6uwt9WMxe14JINfpwTRcyko9lb5FXKhydeabg4Ps7ra1pFZgkUwNbXx9Efpd2t9fUr
+         a8nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F+YVVQrR9usFwFHLHDb8DCk5WVuJFinX4Whwvzf0h2k=;
-        b=ZURxbTzPgpIEHyYnPRGS2oeXVOhvyR3Uy1gwVMqlc2Goci+u9y1zY6vdkxauRaSM4B
-         8UABrNLJ3x3sVAej8vLEwj637Ef49KFy9Dju8dlNRJJBn9qBFt89gNOl/6hcweEaWDfN
-         itxhJfbF8CZYXKqOVuJbap1TXK2OujWXvLdmat95+uZTXJJKxZEs1xfxTsJ+HV0wdPo7
-         oRpXpky7X41IEndxqHtHSyGPEHZ4oVILwFDlTafZnGDuFzAtpr2SKWgDMckvuwVis9bZ
-         XK/KCIVhYSGeMIpbHu/J2pLvfGf7KwTYQJipLPvU/+FmUGOEW8QuRmYsmUMSFP70aEwR
-         CmvQ==
-X-Gm-Message-State: AOAM532VHeEbkWI829cpf5OR/87IExY8MsIq1yGIBfOwOHGjgviyjkWU
-        GB0GWwnfhxt3B/2nHpNH3mM=
-X-Google-Smtp-Source: ABdhPJydvcw4whi+IUZqFP+fBiY9iwqOT/QsSxnG/IfeJpveaZNmrppJWAf7DwYMgE6y9HkzfjBpSw==
-X-Received: by 2002:aa7:86d9:0:b029:1ef:4f40:4bba with SMTP id h25-20020aa786d90000b02901ef4f404bbamr12799065pfo.54.1615094068923;
-        Sat, 06 Mar 2021 21:14:28 -0800 (PST)
-Received: from z640-arch.lan ([2602:3f:e6a6:5d00::678])
-        by smtp.gmail.com with ESMTPSA id 2sm6546318pfi.116.2021.03.06.21.14.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Mar 2021 21:14:28 -0800 (PST)
-From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>
-Cc:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: ralink: make RALINK_ILL_ACC symbol visible
-Date:   Sat,  6 Mar 2021 21:14:16 -0800
-Message-Id: <20210307051416.3197109-1-ilya.lipnitskiy@gmail.com>
-X-Mailer: git-send-email 2.30.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GPRWwy3SL7jcLoSJyifJgoFoz/VF4yU3PDUSUbMzaaA=;
+        b=VwrrWrOY8YpIn313hWH2uhU68DnW7GnZfMEY4nKE+bij+fkV+7LyU7aZR7+GuR4S48
+         Twu+6kc/9O0SMGZqh/iriYnUg2A6UcFcizZwdU1oMu13cIWN9D3tVOO2wLlSzMcWxQm3
+         sPxOG4zub7AAJYIFdeDac1uUeBopg9VjpM5lNQzJwlKwlc5TM0OdXxskcFBDLJLa7Tm+
+         OsDnCcmrPNXyk6CS9G7o8HWXlwVcfEPomyF3LAlr36j7d3RNhKkcStiMbsj6sWyMeLiT
+         TJ2wWeuQPyTliZ0Q8xn5NV8i39fUv837ZpSx1uMe0g0PjBVd7z8V5OwJDtJw1Qi3axcP
+         KROQ==
+X-Gm-Message-State: AOAM531RAHuQvmTMN2on0qxbiXrFPhVEitbdIttIxQiljc2uwHvMd8WM
+        1QClKI4Fv2Bg1HCILtxL7Lca1g+y+DitXI44S4DPTT/+ra2E7g==
+X-Google-Smtp-Source: ABdhPJznN+lTfux7Cc4YRNsPIKCO52lpic3NYapKNgcZC3QExZ+SX0v3mWaUsv7/zbK3TQIJuRa0ykn9H5hi3ijjJ5Q=
+X-Received: by 2002:a9d:6013:: with SMTP id h19mr1366500otj.72.1615098455733;
+ Sat, 06 Mar 2021 22:27:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210218070709.11932-1-sergio.paracuellos@gmail.com>
+ <20210218070709.11932-3-sergio.paracuellos@gmail.com> <20210305224756.GA777984@robh.at.kernel.org>
+ <CAMhs-H_RoA-JvT9Q1K+8tEA1vqS6HWuE-D4=kWVsoOWTwjTGbw@mail.gmail.com> <CAMhs-H9noK84G_PgLdL1kTS9YuEa=bKojrOojYTBtOeKy+L7RA@mail.gmail.com>
+In-Reply-To: <CAMhs-H9noK84G_PgLdL1kTS9YuEa=bKojrOojYTBtOeKy+L7RA@mail.gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sun, 7 Mar 2021 07:27:24 +0100
+Message-ID: <CAMhs-H_AgFdTd7r6sSz+=mXxCf9n5AjpxrRhkjGX-RYjhyzWrw@mail.gmail.com>
+Subject: Re: [PATCH v9 2/6] dt: bindings: add mt7621-clk device tree binding documentation
+To:     Rob Herring <robh@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        NeilBrown <neil@brown.name>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The illegal access driver is optional - it is informational and does not
-provide critical functionality. Furthermore, it is currently not
-functional on RT5350 SoCs, so a user may choose to omit non-functional
-code on that platform. The default is kept at 'y' for backwards
-compatibility. This change only makes the symbol visible and adds a
-brief description.
+Hi,
+On Sat, Mar 6, 2021 at 10:54 AM Sergio Paracuellos
+<sergio.paracuellos@gmail.com> wrote:
+>
+> Hi again,
+>
+> On Sat, Mar 6, 2021 at 8:12 AM Sergio Paracuellos
+> <sergio.paracuellos@gmail.com> wrote:
+> >
+> > Hi Rob,
+> >
+> > On Fri, Mar 5, 2021 at 11:47 PM Rob Herring <robh@kernel.org> wrote:
+> > [snip]
+> > > > +
+> > > > +  ralink,sysctl:
+> > > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > > +    description:
+> > > > +      phandle of syscon used to control system registers
+> > > > +
+> > > > +  ralink,memctl:
+> > > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > > +    description:
+> > > > +      phandle of syscon used to control memory registers
+> > >
+> > > I assume one of these phandles are the main registers for the clocks?
+> > > Make this a child node and drop that phandle.
+> >
+> > The 'ralink,sysctl' phandle is to read bootstrap register to be able
+> > to derive xtal and a clk gate register for the peripherals.
+> > The 'ralink,memctl' phandle is to read the cpu clock frequency from
+> > the memory controller.
+> >
+> > So there is not "main registers". I already put this as a child node
+> > in v4 and I was told to get rid of child nodes. I need this as a
+> > regmap to other DT node registers (sysctl, and memctl) to be able to
+> > use the driver without specific architecture operations and properly
+> > enable for COMPILE_TEST without dirty Makefile arch flags. Both sysctl
+> > and memctl has no other child nodes, and I think that's why I was told
+> > to avoid child nodes at the end. I explained here [0] current sysctl
+> > and memctl in the mt7621 device tree and my view of the need for this
+> > two syscons:
+> >
+> > [0]: https://lkml.org/lkml/2021/1/2/9
+> >
+> > So to avoid to send again "a previous version" on this patch, please
+> > guide me in the correct thing to do. Stephen, Rob, I will be really
+> > happy with your help :)
+>
+> Since there are no other child nodes for this sysc, should merge clock
+> properties
+> with this node in the following way a valid approach:
+>
+>  sysc: sysc@0 {
+>      compatible = "mediatek,mt7621-sysc", "syscon";
+>      reg = <0x0 0x100>;
+>      #clock-cells = <1>;
+>      ralink,memctl = <&memc>;
+>      clock-output-names = "xtal", "cpu", "bus",
+>                                         "50m", "125m", "150m",
+>                                         "250m", "270m";
+> };
+>
+> Consumer clock:
+>
+> node: node@0 {
+>   ...
+>   clocks = <&sysc MT7621_CLK_WHATEVER>;
+>  ...
+> };
 
-Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- arch/mips/ralink/Kconfig | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+I have been reviewing bindings review comments along the time and I
+was already suggested to do this I am saying here (see [0]) but my
+mind seems that filtered it for any reason I don't really understand.
+Maybe I should sleep a bit more :).
 
-diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-index c10d8b233ab1..c20c44788b62 100644
---- a/arch/mips/ralink/Kconfig
-+++ b/arch/mips/ralink/Kconfig
-@@ -9,9 +9,14 @@ config CLKEVT_RT3352
- 	select CLKSRC_MMIO
- 
- config RALINK_ILL_ACC
--	bool
-+	bool "Illegal memory access IRQ driver"
- 	depends on SOC_RT305X
- 	default y
-+	help
-+	  This enables notifications of illegal memory access events.
-+
-+	  RT305x/RT5350 SoCs have a special IRQ that fires upon an illegal memory
-+	  access.
- 
- config IRQ_INTC
- 	bool
--- 
-2.30.1
+I will send v10 with these changes that hopefully will be the correct ones.
 
+Thanks and sorry for bothering you with already suggested things.
+
+Best regards,
+    Sergio Paracuellos
+
+[0]: https://lkml.org/lkml/2020/12/31/206
+
+>
+> If that is the case... and since 'sysc' is used as system control
+> registers for all the rest of the world, where should be the yaml file
+> with bindings placed?
+>
+> Thanks in advance again for your help.
+>
+> Best regards,
+>     Sergio Paracuellos
+>
+> >
+> > Best regards,
+> >     Sergio Paracuellos
+> > >
+> > > > +
+> > > > +  clock-output-names:
+> > > > +    maxItems: 8
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - '#clock-cells'
+> > > > +  - ralink,sysctl
+> > > > +  - ralink,memctl
+> > > > +
+> > > > +additionalProperties: false
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +    #include <dt-bindings/clock/mt7621-clk.h>
+> > > > +
+> > > > +    pll {
+> > > > +      compatible = "mediatek,mt7621-clk";
+> > > > +      #clock-cells = <1>;
+> > > > +      ralink,sysctl = <&sysc>;
+> > > > +      ralink,memctl = <&memc>;
+> > > > +      clock-output-names = "xtal", "cpu", "bus",
+> > > > +                           "50m", "125m", "150m",
+> > > > +                           "250m", "270m";
+> > > > +    };
+> > > > --
+> > > > 2.25.1
+> > > >
