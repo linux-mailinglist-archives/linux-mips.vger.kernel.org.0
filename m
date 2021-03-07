@@ -2,61 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA43D32FF58
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 08:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A27332FF5B
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 08:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbhCGHE5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Mar 2021 02:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S230217AbhCGHE6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Mar 2021 02:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbhCGHEb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Mar 2021 02:04:31 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBB7C06174A;
-        Sat,  6 Mar 2021 23:04:30 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 124-20020a1c00820000b029010b871409cfso1849723wma.4;
-        Sat, 06 Mar 2021 23:04:30 -0800 (PST)
+        with ESMTP id S230023AbhCGHEc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Mar 2021 02:04:32 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1D0C06174A;
+        Sat,  6 Mar 2021 23:04:31 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id b18so7835503wrn.6;
+        Sat, 06 Mar 2021 23:04:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0Ub3gKGJwLJRaryXIKn0038/d6bzjLaWe3sRPb09LY0=;
-        b=AmB7IwiFXx0W13v8S9Z2zbPBM7+n887S+jm3NBBFN2lfZiaLPdECQRuUviS2w7wFOB
-         lfnxNHM7crl+YYuytYu9kMdbYXk+/1hAfwuN0dyE6tDZxNf9qe+LvS6m8eSKMcF4aDlr
-         WmlDmxGP9I/W75pwwP7GrLXpQAnA9YspWj1wYS9NKw/+TX0UCG/ypkjpoqEZtwAEu1PG
-         m0voZoS6zB0Pm/VsKV07sIur4MOdVFTL3tNxttVZed2zdPgHHI1IVSvUa7bxDOSZNdU3
-         GEr1sQfciYwpDA40lmawQ/Izsv57GkFB7jAQiz5bc/VVT0YB84/usK3zxDTRXtkuEccY
-         DqPw==
+        bh=+4put77zvWkbAq7p9W7RkFBT+N9LdQEWztn2bykM+dQ=;
+        b=j0zWpsa/gayzQcRkqn1TPbYerYny+Qaq2VBhPEsUdG6qG9WgmeFw+7BOF8VysbRacY
+         lwObp4O0qamLO6g7qQL4qV7YVm2AOjefupQo/5vNxp29lg8oT/9t5IewZcTRZgHSfWh+
+         GKjPPBRAeHB0iGzXlUUOE2bBbtd4+unecFBSUqJUih1Dq5ey4feOCOlwETRQ7a2RxFYC
+         KU1uqR56BQtxLjzjf3fxh+Fq1yHjTiPY5/gNyf3feMouq42kZFxJB3638k4iq0xim6zR
+         +oPr321O41jU8mGHFETTX543z+Fh7MAENfAbc00p4HeZriKMXAnekYSWmPIVARu/G+Pk
+         F3SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0Ub3gKGJwLJRaryXIKn0038/d6bzjLaWe3sRPb09LY0=;
-        b=L3fIQEcbcZaCDkyOzXKp2/P0FK2H+9B2M5Byaw1N9NhOY6uZL87OOoy3bJCht/ZYGY
-         A+gTLd5jefQqzrkSRlstbRUgRnEanGQ4UlQ6iU5vvMDMjCyuZuM7B1CfT2+lGZrANwSP
-         YX0kZtMIyril6PiByleQFxtQuz60pC08zHpJcPYjM0Taaix7qgGoO2Q7pxXQf/6FQT4h
-         XtrcUNIL/UF/d+3FaDgTMhQRAsfsm089eKPDLxqeESIklhmeBDdMqQ8gSvziYEUiD97M
-         EyOnU7+OJERr+cL8SaJTJNDY5/NFaWLqkmP9aQfPz4Lik63P+jr6K8eidlbuYPckrSN0
-         7BAQ==
-X-Gm-Message-State: AOAM530odZviaD7cGqgXZfEccaerc6yZ/cFhcJI1spwfud4sC9ID9SbH
-        G52UYhHIVSCWzQqoctnjcRA=
-X-Google-Smtp-Source: ABdhPJyfKAoQsPOxQOdi2EBax2XgOCjp2YAIO/dGDM9G4jHSQUDuK5/fBT+8oLKopuFZb1bbS/3wAQ==
-X-Received: by 2002:a7b:c0c4:: with SMTP id s4mr16866001wmh.9.1615100669632;
-        Sat, 06 Mar 2021 23:04:29 -0800 (PST)
+        bh=+4put77zvWkbAq7p9W7RkFBT+N9LdQEWztn2bykM+dQ=;
+        b=Tz1+vwJ3TPRSUb+4tVb07i41HpzjdwPdG7xbpEe4IEd8QQ223Ol9ZC/TZ1lRrgUmjl
+         SvkYaWP35u3uMQsN+MVHM8j1WC1f3B0S011sEbDFA/jbRo5N/HNFtin1dKJ3Lz0uF28M
+         D+Fg7w+z7eimaNOgrBpf0WTKFAeUzCEkUtE1p1H8mH4LQYayOHaevA+Dtf688GodX6l9
+         UKHvlc8wPhNg3ZyZPBbGbGo1bwtg0e3V+pM7Ft9sVdq2QowsKn79CuvG0BHbSKQfu4LJ
+         BszfhNGxlmbRiAUBeDPhU88whF2axDPsi1WmyV9/hUwuIKbwu+c8+XGVFbc8bqvOhbmh
+         hKCA==
+X-Gm-Message-State: AOAM531GoUAJo6Tiy4kITp4bkTTfC9kUiXImofi9eyxi7ujS27/WmEFe
+        xmgP9IPkFm3i4z72NdA1D+8=
+X-Google-Smtp-Source: ABdhPJx5anhLHtuwZJ35GutGutDkvSApUcSdd+GOoolyFWaE52xNkXpmslTdGPbaj8STtRoE+IpWHg==
+X-Received: by 2002:adf:e603:: with SMTP id p3mr17312337wrm.360.1615100670672;
+        Sat, 06 Mar 2021 23:04:30 -0800 (PST)
 Received: from localhost.localdomain (67.red-83-54-30.dynamicip.rima-tde.net. [83.54.30.67])
-        by smtp.gmail.com with ESMTPSA id j9sm12162533wmi.24.2021.03.06.23.04.28
+        by smtp.gmail.com with ESMTPSA id j9sm12162533wmi.24.2021.03.06.23.04.29
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 06 Mar 2021 23:04:29 -0800 (PST)
+        Sat, 06 Mar 2021 23:04:30 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     sboyd@kernel.org
 Cc:     robh+dt@kernel.org, john@phrozen.org, tsbogend@alpha.franken.de,
         gregkh@linuxfoundation.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         devel@driverdev.osuosl.org, neil@brown.name,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v10 1/6] dt-bindings: clock: add dt binding header for mt7621 clocks
-Date:   Sun,  7 Mar 2021 08:04:21 +0100
-Message-Id: <20210307070426.15933-2-sergio.paracuellos@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v10 2/6] dt: bindings: add mt7621-sysc device tree binding documentation
+Date:   Sun,  7 Mar 2021 08:04:22 +0100
+Message-Id: <20210307070426.15933-3-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210307070426.15933-1-sergio.paracuellos@gmail.com>
 References: <20210307070426.15933-1-sergio.paracuellos@gmail.com>
@@ -66,62 +66,89 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Adds dt binding header for 'mediatek,mt7621-clk' clocks.
+Adds device tree binding documentation for clocks in the
+MT7621 SOC.
 
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- include/dt-bindings/clock/mt7621-clk.h | 41 ++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 include/dt-bindings/clock/mt7621-clk.h
+ .../bindings/clock/mediatek,mt7621-sysc.yaml  | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt7621-sysc.yaml
 
-diff --git a/include/dt-bindings/clock/mt7621-clk.h b/include/dt-bindings/clock/mt7621-clk.h
+diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt7621-sysc.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt7621-sysc.yaml
 new file mode 100644
-index 000000000000..1422badcf9de
+index 000000000000..ef2d71b23ba0
 --- /dev/null
-+++ b/include/dt-bindings/clock/mt7621-clk.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Author: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+ */
++++ b/Documentation/devicetree/bindings/clock/mediatek,mt7621-sysc.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/mediatek,mt7621-sysc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#ifndef _DT_BINDINGS_CLK_MT7621_H
-+#define _DT_BINDINGS_CLK_MT7621_H
++title: MT7621 Clock Device Tree Bindings
 +
-+#define MT7621_CLK_XTAL		0
-+#define MT7621_CLK_CPU		1
-+#define MT7621_CLK_BUS		2
-+#define MT7621_CLK_50M		3
-+#define MT7621_CLK_125M		4
-+#define MT7621_CLK_150M		5
-+#define MT7621_CLK_250M		6
-+#define MT7621_CLK_270M		7
++maintainers:
++  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
 +
-+#define MT7621_CLK_HSDMA	8
-+#define MT7621_CLK_FE		9
-+#define MT7621_CLK_SP_DIVTX	10
-+#define MT7621_CLK_TIMER	11
-+#define MT7621_CLK_PCM		12
-+#define MT7621_CLK_PIO		13
-+#define MT7621_CLK_GDMA		14
-+#define MT7621_CLK_NAND		15
-+#define MT7621_CLK_I2C		16
-+#define MT7621_CLK_I2S		17
-+#define MT7621_CLK_SPI		18
-+#define MT7621_CLK_UART1	19
-+#define MT7621_CLK_UART2	20
-+#define MT7621_CLK_UART3	21
-+#define MT7621_CLK_ETH		22
-+#define MT7621_CLK_PCIE0	23
-+#define MT7621_CLK_PCIE1	24
-+#define MT7621_CLK_PCIE2	25
-+#define MT7621_CLK_CRYPTO	26
-+#define MT7621_CLK_SHXC		27
++description: |
++  The MT7621 has a PLL controller from where the cpu clock is provided
++  as well as derived clocks for the bus and the peripherals. It also
++  can gate SoC device clocks.
 +
-+#define MT7621_CLK_MAX		28
++  Each clock is assigned an identifier and client nodes use this identifier
++  to specify the clock which they consume.
 +
-+#endif /* _DT_BINDINGS_CLK_MT7621_H */
++  All these identifiers could be found in:
++  [1]: <include/dt-bindings/clock/mt7621-clk.h>.
++
++  The clocks are provided inside a system controller node.
++
++properties:
++  compatible:
++    items:
++      - const: mediatek,mt7621-sysc
++      - const: syscon
++
++  reg:
++    maxItems: 1
++
++  "#clock-cells":
++    description:
++      The first cell indicates the clock number, see [1] for available
++      clocks.
++    const: 1
++
++  ralink,memctl:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      phandle of syscon used to control memory registers
++
++  clock-output-names:
++    maxItems: 8
++
++required:
++  - compatible
++  - reg
++  - '#clock-cells'
++  - ralink,memctl
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt7621-clk.h>
++
++    sysc: sysc@0 {
++      compatible = "mediatek,mt7621-sysc", "syscon";
++      reg = <0x0 0x100>;
++      #clock-cells = <1>;
++      ralink,memctl = <&memc>;
++      clock-output-names = "xtal", "cpu", "bus",
++                           "50m", "125m", "150m",
++                           "250m", "270m";
++    };
 -- 
 2.25.1
 
