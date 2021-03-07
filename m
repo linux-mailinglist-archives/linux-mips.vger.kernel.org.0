@@ -2,15 +2,15 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA48433048A
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 21:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3A633048D
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 21:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbhCGU3B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Mar 2021 15:29:01 -0500
-Received: from aposti.net ([89.234.176.197]:49564 "EHLO aposti.net"
+        id S232880AbhCGU3e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Mar 2021 15:29:34 -0500
+Received: from aposti.net ([89.234.176.197]:49602 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232858AbhCGU3B (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 7 Mar 2021 15:29:01 -0500
+        id S232858AbhCGU3H (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 7 Mar 2021 15:29:07 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -20,53 +20,148 @@ To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
 Cc:     Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 0/5] Add option to mmap GEM buffers cached
-Date:   Sun,  7 Mar 2021 20:28:30 +0000
-Message-Id: <20210307202835.253907-1-paul@crapouillou.net>
+Subject: [PATCH v2 1/5] drm: Add and export function drm_gem_cma_create_noncoherent
+Date:   Sun,  7 Mar 2021 20:28:31 +0000
+Message-Id: <20210307202835.253907-2-paul@crapouillou.net>
+In-Reply-To: <20210307202835.253907-1-paul@crapouillou.net>
+References: <20210307202835.253907-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Rework of my previous patchset which added support for GEM buffers
-backed by non-coherent memory to the ingenic-drm driver.
+This function can be used by drivers that need to create a GEM object
+with non-coherent backing memory.
 
-Having GEM buffers backed by non-coherent memory is interesting in
-the particular case where it is faster to render to a non-coherent
-buffer then sync the data cache, than to render to a write-combine
-buffer, and (by extension) much faster than using a shadow buffer.
-This is true for instance on some Ingenic SoCs, where even simple
-blits (e.g. memcpy) are about three times faster using this method.
+Creating non-coherent CMA objects is useful on architectures where
+writing to a buffer with the non-coherent cache attribute set then
+invalidating the cache is faster than writing to the same buffer with
+the write-combine cache attribute set. This is the case for instance on
+some Ingenic SoCs.
 
-For the record, the previous patchset was accepted for 5.10 then had
-to be reverted, as it conflicted with some changes made to the DMA API.
+v2: Add inline doc about why we need this, and improve commit message
 
-This new patchset is pretty different as it adds the functionality to
-the DRM core. The first three patches add variants to existing functions
-but with the "non-coherent memory" twist, exported as GPL symbols. The
-fourth patch adds a function to be used with the damage helpers.
-Finally, the last patch adds support for non-coherent GEM buffers to the
-ingenic-drm driver. The functionality is enabled through a module
-parameter, and is disabled by default.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/gpu/drm/drm_gem_cma_helper.c | 76 +++++++++++++++++++++-------
+ include/drm/drm_gem_cma_helper.h     |  2 +
+ 2 files changed, 61 insertions(+), 17 deletions(-)
 
-Cheers,
--Paul
-
-Paul Cercueil (5):
-  drm: Add and export function drm_gem_cma_create_noncoherent
-  drm: Add and export function drm_gem_cma_dumb_create_noncoherent
-  drm: Add and export function drm_gem_cma_mmap_noncoherent
-  drm: Add and export function drm_gem_cma_sync_data
-  drm/ingenic: Add option to alloc cached GEM buffers
-
- drivers/gpu/drm/drm_gem_cma_helper.c      | 223 +++++++++++++++++++---
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c |  49 ++++-
- drivers/gpu/drm/ingenic/ingenic-drm.h     |   4 +
- drivers/gpu/drm/ingenic/ingenic-ipu.c     |  14 +-
- include/drm/drm_gem_cma_helper.h          |  13 ++
- 5 files changed, 273 insertions(+), 30 deletions(-)
-
+diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
+index 7942cf05cd93..917b092b23c2 100644
+--- a/drivers/gpu/drm/drm_gem_cma_helper.c
++++ b/drivers/gpu/drm/drm_gem_cma_helper.c
+@@ -90,21 +90,10 @@ __drm_gem_cma_create(struct drm_device *drm, size_t size)
+ 	return ERR_PTR(ret);
+ }
+ 
+-/**
+- * drm_gem_cma_create - allocate an object with the given size
+- * @drm: DRM device
+- * @size: size of the object to allocate
+- *
+- * This function creates a CMA GEM object and allocates a contiguous chunk of
+- * memory as backing store. The backing memory has the writecombine attribute
+- * set.
+- *
+- * Returns:
+- * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
+- * error code on failure.
+- */
+-struct drm_gem_cma_object *drm_gem_cma_create(struct drm_device *drm,
+-					      size_t size)
++static struct drm_gem_cma_object *
++drm_gem_cma_create_with_cache_param(struct drm_device *drm,
++				    size_t size,
++				    bool noncoherent)
+ {
+ 	struct drm_gem_cma_object *cma_obj;
+ 	int ret;
+@@ -115,8 +104,16 @@ struct drm_gem_cma_object *drm_gem_cma_create(struct drm_device *drm,
+ 	if (IS_ERR(cma_obj))
+ 		return cma_obj;
+ 
+-	cma_obj->vaddr = dma_alloc_wc(drm->dev, size, &cma_obj->paddr,
+-				      GFP_KERNEL | __GFP_NOWARN);
++	if (noncoherent) {
++		cma_obj->vaddr = dma_alloc_noncoherent(drm->dev, size,
++						       &cma_obj->paddr,
++						       DMA_TO_DEVICE,
++						       GFP_KERNEL | __GFP_NOWARN);
++
++	} else {
++		cma_obj->vaddr = dma_alloc_wc(drm->dev, size, &cma_obj->paddr,
++					      GFP_KERNEL | __GFP_NOWARN);
++	}
+ 	if (!cma_obj->vaddr) {
+ 		drm_dbg(drm, "failed to allocate buffer with size %zu\n",
+ 			 size);
+@@ -130,6 +127,51 @@ struct drm_gem_cma_object *drm_gem_cma_create(struct drm_device *drm,
+ 	drm_gem_object_put(&cma_obj->base);
+ 	return ERR_PTR(ret);
+ }
++
++/**
++ * drm_gem_cma_create_noncoherent - allocate an object with the given size
++ *     and non-coherent cache attribute
++ * @drm: DRM device
++ * @size: size of the object to allocate
++ *
++ * This function creates a CMA GEM object and allocates a contiguous chunk of
++ * memory as backing store. The backing memory has the noncoherent attribute
++ * set.
++ *
++ * Creating non-coherent CMA objects is useful on architectures where writing
++ * to a buffer with the non-coherent cache attribute set then invalidating the
++ * cache is faster than writing to the same buffer with the write-combine cache
++ * attribute set. This is the case for instance on some Ingenic SoCs.
++ *
++ * Returns:
++ * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
++ * error code on failure.
++ */
++struct drm_gem_cma_object *
++drm_gem_cma_create_noncoherent(struct drm_device *drm, size_t size)
++{
++	return drm_gem_cma_create_with_cache_param(drm, size, true);
++}
++EXPORT_SYMBOL_GPL(drm_gem_cma_create_noncoherent);
++
++/**
++ * drm_gem_cma_create - allocate an object with the given size
++ * @drm: DRM device
++ * @size: size of the object to allocate
++ *
++ * This function creates a CMA GEM object and allocates a contiguous chunk of
++ * memory as backing store. The backing memory has the writecombine attribute
++ * set.
++ *
++ * Returns:
++ * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
++ * error code on failure.
++ */
++struct drm_gem_cma_object *drm_gem_cma_create(struct drm_device *drm,
++					      size_t size)
++{
++	return drm_gem_cma_create_with_cache_param(drm, size, false);
++}
+ EXPORT_SYMBOL_GPL(drm_gem_cma_create);
+ 
+ /**
+diff --git a/include/drm/drm_gem_cma_helper.h b/include/drm/drm_gem_cma_helper.h
+index 0a9711caa3e8..360771f5f485 100644
+--- a/include/drm/drm_gem_cma_helper.h
++++ b/include/drm/drm_gem_cma_helper.h
+@@ -79,6 +79,8 @@ int drm_gem_cma_dumb_create(struct drm_file *file_priv,
+ /* allocate physical memory */
+ struct drm_gem_cma_object *drm_gem_cma_create(struct drm_device *drm,
+ 					      size_t size);
++struct drm_gem_cma_object *
++drm_gem_cma_create_noncoherent(struct drm_device *drm, size_t size);
+ 
+ extern const struct vm_operations_struct drm_gem_cma_vm_ops;
+ 
 -- 
 2.30.1
 
