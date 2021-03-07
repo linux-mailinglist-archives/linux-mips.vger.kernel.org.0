@@ -2,111 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5A232FEA3
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 05:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE40032FEA9
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 05:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhCGEOg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 6 Mar 2021 23:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S230078AbhCGESU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 6 Mar 2021 23:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbhCGEOK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 6 Mar 2021 23:14:10 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B144C06174A;
-        Sat,  6 Mar 2021 20:13:59 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id nh23-20020a17090b3657b02900c0d5e235a8so1293386pjb.0;
-        Sat, 06 Mar 2021 20:13:59 -0800 (PST)
+        with ESMTP id S230059AbhCGERx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 6 Mar 2021 23:17:53 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DBBC06174A;
+        Sat,  6 Mar 2021 20:17:52 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id p21so4172362pgl.12;
+        Sat, 06 Mar 2021 20:17:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=aNQ8It84bE/zbP5TAlSKFSi5Ijz+ILHaleTfFj87zv0=;
-        b=bSux60A6elleCiFzeCr4s8KQuPi7mdyvy0RZdt+5FzTgDmhGOBJiogOYnAKSOXgc9J
-         eMGSZ/RY9nb8wnt2wZITIsW1uE4LbpKZsOxD5iEKexjn/3JoG2IuBjeVtC/+ryaaZH3H
-         hZAxPQoRedZHBc0QiZ5Xel96sox+6V3EdXd4tYryEon7p43//Nn9xsuUyvB9WVU27n4B
-         4tgavUy36u0XVQgdU3opx/9BZdF/CP1g1Kbx4Pxs7cypMBDNPv9+ZnobXo8deJ6PJJ/L
-         49rXBV2lq1d+qGSNoWhjEVfuog2iroFUu9pcswmu8Yt+Q6Xaa6MWrErLmMv5jwrozcvs
-         1rUg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BwSr78t+B2LUeJacm/isuxGQ5VeOpmr80Bmxx6BZVJo=;
+        b=as0fSSEQ1NH7aMWnQJdht3ERxBRoYl7zromvnpBnG5ajSrMlb8rmFESSDKeHSZjzzy
+         tMjAGVm7JrPUrlgks3ZZN95V4PCjjZpHiGJeow1D+uLgD2YpjbH6QsN24WuXveF8OglL
+         wTn1e2wj+a3CMGLfOwOXu1LQQrk98KtjFUMAJVEgFXYeW1YMoB9oSHbE5JSDr6/jbYnH
+         UYwXNuf+V66jORDBKDQ2nzgySvZktKUESK1EfFS9suQRJxxPc1M+y6uxkWRfxDozgexc
+         hgQx6MxapEWZwFNQ9FLVihY0euCGT2J+sSCUUGjr6+XLKdPIxeBnhtNtLgHUtzjhYVqU
+         vo0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=aNQ8It84bE/zbP5TAlSKFSi5Ijz+ILHaleTfFj87zv0=;
-        b=cUEyq71I9dleK7UadenXTAn5oZZF4EJYnXWxIv8pC5J4l1pegr2sZzIIPS83CyZlf3
-         xxYF3F+S1uSpLKh+FgLkJTHh7N7c73nq9TzughvQWiuRiETstT/2UJLUO6bB6GQp2olv
-         udXRjWUdFhRhZQ6tqPowkhM9Je5LyTwk88VdzACgVIc8neJ4/iieqqSxADiiYzYSeR6a
-         tgO4vUEKTTPoElXc67XXooRzaLKUg5ho9uHJJtpeIlPS1NmsirEKXTqP6b644IiS+9Xr
-         ZvUs+1McuzKQRpjRWaTfyU+kppcpNATwmwBODJkue/3yHjPWw9aOcxBrbjnBHK4B/MIc
-         YJ2Q==
-X-Gm-Message-State: AOAM532gGRVqXDOFnLbxOnOdpZGIbE3UZnXyqgokSJsAZB5pDNkD+Bzq
-        1uL/15RjuY9bEcSCsgABVRvyZe1iWAs=
-X-Google-Smtp-Source: ABdhPJxhsxF98tFFRzIb4w2pba4v2qI4qDw3ZSu5ZEdqJdjYJDIYjeYUPXlgOGZkG9eePU5xgnDKqQ==
-X-Received: by 2002:a17:902:b711:b029:e3:71f1:e08e with SMTP id d17-20020a170902b711b02900e371f1e08emr15459859pls.18.1615090438531;
-        Sat, 06 Mar 2021 20:13:58 -0800 (PST)
-Received: from [10.230.29.30] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s27sm6150227pgk.77.2021.03.06.20.13.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Mar 2021 20:13:57 -0800 (PST)
-Subject: Re: [PATCH v2] MIPS: kernel: Reserve exception base early to prevent
- corruption
+        bh=BwSr78t+B2LUeJacm/isuxGQ5VeOpmr80Bmxx6BZVJo=;
+        b=i5TEVSKUM7KC142QvWLD826wUQ90r4PZKdy7jQ7+Sl24u4PpBPacpdJstCccbR8UPn
+         nQccG2GEKBMxxLOOIQSpRUa7mzXTIchiZQqGAmJqpxfw1T3nooOOa8n2bghO4FVECk8T
+         cGFce72IPnpoHPZwT6XeO1U9BdfowX1mRuw7MWINTo+fju3vJTVQqzDlWdjdasm9aGvG
+         kROfRHtawGxfQ2chbrQn4o3Ghu8jIJ2pY2O2cAqmRGknBrvMvhBDE/nN1yPVyKOnsGUM
+         Hmofdre2poYxBwIIzrFeTLFnf8C/aH404Y7CrkNdg5tiM7Xk+7WVmhA9h2e3YltaQsqA
+         FV2w==
+X-Gm-Message-State: AOAM532SWRE2imtDNcY+6ex+BoYm2SGiNVB3P5gGsu1VJj+UcmebJiDI
+        ABvhGULDH4SwecB5fIJkUnk=
+X-Google-Smtp-Source: ABdhPJxLQpQr+02pM9SlbvqEMAX/ywdeetyk6A67y+MpRa93jDqkPyR1VEHC5c4FGKmWfQkpS9UHzg==
+X-Received: by 2002:a62:43:0:b029:1cd:2de2:5a24 with SMTP id 64-20020a6200430000b02901cd2de25a24mr15382313pfa.27.1615090672295;
+        Sat, 06 Mar 2021 20:17:52 -0800 (PST)
+Received: from z640-arch.lan ([2602:3f:e6a6:5d00::678])
+        by smtp.gmail.com with ESMTPSA id l3sm6406619pfc.81.2021.03.06.20.17.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Mar 2021 20:17:51 -0800 (PST)
+From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-References: <20210306082910.3472-1-tsbogend@alpha.franken.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <b11d87e6-6665-7579-6334-f9e280dbf20b@gmail.com>
-Date:   Sat, 6 Mar 2021 20:13:53 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.0
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH] MIPS: pci-mt7620: fix PLL lock check
+Date:   Sat,  6 Mar 2021 20:17:24 -0800
+Message-Id: <20210307041724.3185139-1-ilya.lipnitskiy@gmail.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-In-Reply-To: <20210306082910.3472-1-tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Upstream a long-standing OpenWrt patch [0] that fixes MT7620 PCIe PLL
+lock check. The existing code checks the wrong register bit: PPLL_SW_SET
+is not defined in PPLL_CFG1 and bit 31 of PPLL_CFG1 is marked as reserved
+in the MT7620 Programming Guide. The correct bit to check for PLL lock
+is PPLL_LD (bit 23).
 
+Also reword the error message for clarity.
 
-On 3/6/2021 12:29 AM, Thomas Bogendoerfer wrote:
-> BMIPS is one of the few platforms that do change the exception base.
-> After commit 2dcb39645441 ("memblock: do not start bottom-up allocations
-> with kernel_end") we started seeing BMIPS boards fail to boot with the
-> built-in FDT being corrupted.
-> 
-> Before the cited commit, early allocations would be in the [kernel_end,
-> RAM_END] range, but after commit they would be within [RAM_START +
-> PAGE_SIZE, RAM_END].
-> 
-> The custom exception base handler that is installed by
-> bmips_ebase_setup() done for BMIPS5000 CPUs ends-up trampling on the
-> memory region allocated by unflatten_and_copy_device_tree() thus
-> corrupting the FDT used by the kernel.
-> 
-> To fix this, we need to perform an early reservation of the custom
-> exception space. So we reserve it already in cpu_probe() for the CPUs
-> where this is fixed. For CPU with an ebase config register allocation
-> of exception space will be done in trap_init().
-> 
-> Huge thanks to Serget for analysing and proposing a solution to this
-> issue.
+Without this change it is unlikely that this driver ever worked with
+mainline kernel.
 
-I made a typo on Sergey's name in my original version here.
+[0]: https://lists.infradead.org/pipermail/lede-commits/2017-July/004441.html
 
-> 
-> Fixes: 2dcb39645441 ("memblock: do not start bottom-up allocations with kernel_end")
-> Reported-by: Kamal Dasu <kdasu.kdev@gmail.com>
-> Debugged-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Cc: John Crispin <john@phrozen.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+---
+ arch/mips/pci/pci-mt7620.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Thanks!
+diff --git a/arch/mips/pci/pci-mt7620.c b/arch/mips/pci/pci-mt7620.c
+index d36061603752..e032932348d6 100644
+--- a/arch/mips/pci/pci-mt7620.c
++++ b/arch/mips/pci/pci-mt7620.c
+@@ -30,6 +30,7 @@
+ #define RALINK_GPIOMODE			0x60
+ 
+ #define PPLL_CFG1			0x9c
++#define PPLL_LD				BIT(23)
+ 
+ #define PPLL_DRV			0xa0
+ #define PDRV_SW_SET			BIT(31)
+@@ -239,8 +240,8 @@ static int mt7620_pci_hw_init(struct platform_device *pdev)
+ 	rt_sysc_m32(0, RALINK_PCIE0_CLK_EN, RALINK_CLKCFG1);
+ 	mdelay(100);
+ 
+-	if (!(rt_sysc_r32(PPLL_CFG1) & PDRV_SW_SET)) {
+-		dev_err(&pdev->dev, "MT7620 PPLL unlock\n");
++	if (!(rt_sysc_r32(PPLL_CFG1) & PPLL_LD)) {
++		dev_err(&pdev->dev, "pcie PLL not locked, aborting init\n");
+ 		reset_control_assert(rstpcie0);
+ 		rt_sysc_m32(RALINK_PCIE0_CLK_EN, 0, RALINK_CLKCFG1);
+ 		return -1;
 -- 
-Florian
+2.30.1
+
