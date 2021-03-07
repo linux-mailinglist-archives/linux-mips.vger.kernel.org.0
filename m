@@ -2,15 +2,15 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5813301F7
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 15:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7C03301FB
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 15:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbhCGOS7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S232195AbhCGOS7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Sun, 7 Mar 2021 09:18:59 -0500
-Received: from aposti.net ([89.234.176.197]:51684 "EHLO aposti.net"
+Received: from aposti.net ([89.234.176.197]:51724 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230439AbhCGOSm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 7 Mar 2021 09:18:42 -0500
+        id S232169AbhCGOSt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 7 Mar 2021 09:18:49 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -19,9 +19,9 @@ To:     Michael Turquette <mturquette@baylibre.com>,
 Cc:     od@zcrc.me, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 4/6] clk: ingenic: Remove pll_info.no_bypass_bit
-Date:   Sun,  7 Mar 2021 14:17:57 +0000
-Message-Id: <20210307141759.30426-5-paul@crapouillou.net>
+Subject: [PATCH 5/6] clk: ingenic: Support overriding PLLs M/N/OD calc algorithm
+Date:   Sun,  7 Mar 2021 14:17:58 +0000
+Message-Id: <20210307141759.30426-6-paul@crapouillou.net>
 In-Reply-To: <20210307141759.30426-1-paul@crapouillou.net>
 References: <20210307141759.30426-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -30,81 +30,89 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We can express that a PLL has no bypass bit by simply setting the
-.bypass_bit field to a negative value.
+SoC-specific code can now provide a callback if they need to compute the
+M/N/OD values in a specific way.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/clk/ingenic/cgu.c        | 4 ++--
- drivers/clk/ingenic/cgu.h        | 7 +++----
- drivers/clk/ingenic/jz4770-cgu.c | 3 +--
- 3 files changed, 6 insertions(+), 8 deletions(-)
+ drivers/clk/ingenic/cgu.c | 40 ++++++++++++++++++++++++++-------------
+ drivers/clk/ingenic/cgu.h |  3 +++
+ 2 files changed, 30 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-index 7686072aff8f..58f7ab5cf0fe 100644
+index 58f7ab5cf0fe..266c7595d330 100644
 --- a/drivers/clk/ingenic/cgu.c
 +++ b/drivers/clk/ingenic/cgu.c
-@@ -99,7 +99,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	od_enc = ctl >> pll_info->od_shift;
- 	od_enc &= GENMASK(pll_info->od_bits - 1, 0);
+@@ -119,28 +119,42 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+ 		n * od);
+ }
  
--	if (!pll_info->no_bypass_bit) {
-+	if (pll_info->bypass_bit >= 0) {
- 		ctl = readl(cgu->base + pll_info->bypass_reg);
+-static unsigned long
+-ingenic_pll_calc(const struct ingenic_cgu_clk_info *clk_info,
+-		 unsigned long rate, unsigned long parent_rate,
+-		 unsigned *pm, unsigned *pn, unsigned *pod)
++static void
++ingenic_pll_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
++			unsigned long rate, unsigned long parent_rate,
++			unsigned int *pm, unsigned int *pn, unsigned int *pod)
+ {
+-	const struct ingenic_cgu_pll_info *pll_info;
+-	unsigned m, n, od;
+-
+-	pll_info = &clk_info->pll;
+-	od = 1;
++	unsigned int m, n, od = 1;
  
- 		bypass = !!(ctl & BIT(pll_info->bypass_bit));
-@@ -226,7 +226,7 @@ static int ingenic_pll_enable(struct clk_hw *hw)
- 	u32 ctl;
+ 	/*
+ 	 * The frequency after the input divider must be between 10 and 50 MHz.
+ 	 * The highest divider yields the best resolution.
+ 	 */
+ 	n = parent_rate / (10 * MHZ);
+-	n = min_t(unsigned, n, 1 << clk_info->pll.n_bits);
+-	n = max_t(unsigned, n, pll_info->n_offset);
++	n = min_t(unsigned int, n, 1 << pll_info->n_bits);
++	n = max_t(unsigned int, n, pll_info->n_offset);
  
- 	spin_lock_irqsave(&cgu->lock, flags);
--	if (!pll_info->no_bypass_bit) {
-+	if (pll_info->bypass_bit >= 0) {
- 		ctl = readl(cgu->base + pll_info->bypass_reg);
+ 	m = (rate / MHZ) * od * n / (parent_rate / MHZ);
+-	m = min_t(unsigned, m, 1 << clk_info->pll.m_bits);
+-	m = max_t(unsigned, m, pll_info->m_offset);
++	m = min_t(unsigned int, m, 1 << pll_info->m_bits);
++	m = max_t(unsigned int, m, pll_info->m_offset);
++
++	*pm = m;
++	*pn = n;
++	*pod = od;
++}
++
++static unsigned long
++ingenic_pll_calc(const struct ingenic_cgu_clk_info *clk_info,
++		 unsigned long rate, unsigned long parent_rate,
++		 unsigned int *pm, unsigned int *pn, unsigned int *pod)
++{
++	const struct ingenic_cgu_pll_info *pll_info = &clk_info->pll;
++	unsigned int m, n, od;
++
++	if (pll_info->calc_m_n_od)
++		(*pll_info->calc_m_n_od)(pll_info, rate, parent_rate, &m, &n, &od);
++	else
++		ingenic_pll_calc_m_n_od(pll_info, rate, parent_rate, &m, &n, &od);
  
- 		ctl &= ~BIT(pll_info->bypass_bit);
+ 	if (pm)
+ 		*pm = m;
 diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
-index 44d97a259692..10521d1b7b12 100644
+index 10521d1b7b12..bfc2b9c38a41 100644
 --- a/drivers/clk/ingenic/cgu.h
 +++ b/drivers/clk/ingenic/cgu.h
-@@ -39,10 +39,10 @@
-  *               their encoded values in the PLL control register, or -1 for
-  *               unsupported values
-  * @bypass_reg: the offset of the bypass control register within the CGU
-- * @bypass_bit: the index of the bypass bit in the PLL control register
-+ * @bypass_bit: the index of the bypass bit in the PLL control register, or
-+ *              -1 if there is no bypass bit
-  * @enable_bit: the index of the enable bit in the PLL control register
-  * @stable_bit: the index of the stable bit in the PLL control register
-- * @no_bypass_bit: if set, the PLL has no bypass functionality
-  */
- struct ingenic_cgu_pll_info {
- 	unsigned reg;
-@@ -52,10 +52,9 @@ struct ingenic_cgu_pll_info {
- 	u8 n_shift, n_bits, n_offset;
- 	u8 od_shift, od_bits, od_max;
- 	unsigned bypass_reg;
--	u8 bypass_bit;
-+	s8 bypass_bit;
+@@ -55,6 +55,9 @@ struct ingenic_cgu_pll_info {
+ 	s8 bypass_bit;
  	u8 enable_bit;
  	u8 stable_bit;
--	bool no_bypass_bit;
++	void (*calc_m_n_od)(const struct ingenic_cgu_pll_info *pll_info,
++			    unsigned long rate, unsigned long parent_rate,
++			    unsigned int *m, unsigned int *n, unsigned int *od);
  };
  
  /**
-diff --git a/drivers/clk/ingenic/jz4770-cgu.c b/drivers/clk/ingenic/jz4770-cgu.c
-index 381a27f20b51..2321742b3471 100644
---- a/drivers/clk/ingenic/jz4770-cgu.c
-+++ b/drivers/clk/ingenic/jz4770-cgu.c
-@@ -139,8 +139,7 @@ static const struct ingenic_cgu_clk_info jz4770_cgu_clocks[] = {
- 			.od_bits = 2,
- 			.od_max = 8,
- 			.od_encoding = pll_od_encoding,
--			.bypass_reg = CGU_REG_CPPCR1,
--			.no_bypass_bit = true,
-+			.bypass_bit = -1,
- 			.enable_bit = 7,
- 			.stable_bit = 6,
- 		},
 -- 
 2.30.1
 
