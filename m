@@ -2,209 +2,199 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D920932FF75
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 08:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3564B33000D
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 11:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbhCGHVc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Mar 2021 02:21:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49938 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230390AbhCGHUw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 7 Mar 2021 02:20:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2785765015;
-        Sun,  7 Mar 2021 07:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615101651;
-        bh=v9O/9s2c/T6FOkPxcEi7kBADpgM081nbxSddhFLI9wY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FGOfNc+C61bQljCWUO9i7SoOadDK9R+ZYnoZnwevQM149jH6erWJFpT8gt5xYUZUJ
-         kVni/Xo1E0SKP3CK1UR0xjSJQkL4OFZaVWUUCBOlQqVIN/esSoT3QMiA1y4OONSb/9
-         yIJei+rTpP/99L4p0AY5DU8VXG8JgVeKO2mXyaWJRXin5ckSc7oh0mj3wPUlXr6jwe
-         QGlsT0rac9eaOxMa2QzO+IZTl8DS6RgglfiRn9EaTBr9kXmODaAZ2eQPAkRXDg71FL
-         AowHf+OrcavIIV/LdlB3lsikSE6NJ7sS1zoJProY5snbTHZuslKDd80kDfBIUcnS1q
-         8tzLaytFCxrNw==
-Date:   Sun, 7 Mar 2021 09:20:44 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH v2] MIPS: kernel: Reserve exception base early to prevent
- corruption
-Message-ID: <YER+zN0C8dvR41IS@kernel.org>
-References: <20210306082910.3472-1-tsbogend@alpha.franken.de>
+        id S231579AbhCGKNF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Mar 2021 05:13:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231521AbhCGKM6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Mar 2021 05:12:58 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F821C06174A;
+        Sun,  7 Mar 2021 02:12:58 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id r15-20020a05600c35cfb029010e639ca09eso2003665wmq.1;
+        Sun, 07 Mar 2021 02:12:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3TyMkmxOQJC06CnnXdLtP1kErcHt4cRYBk9nQQy+GeI=;
+        b=uxyeYM8AUgSlp920JR9NYDFKLPqhUH5yf9AsNbuMlXsJLnAr+ez8kZbh7dpd9E3b0L
+         yUCIs5vlLGCf6z+wNoJxf5ZxQaSNZDi1TCzmVVxzb0WlBTXa3WwEh2+qPcAwwKywgPPD
+         nBYnkKZ1vY+USShFP/OYIRGnVEuNhJw584SajEYHplJgL/G6GlZ5SpjYB/1CeNY19WJS
+         14wtWsu27Z579i33uS07F9Z1UyZp19xXqJCKn5hyV8KoueIkp4K44/+4MipR2NsUqI82
+         F9wlLuXGSPK4L0NhGPgVMIG0+jpLhRcQv578EKuIegRw2EBFV2es2DGBRls5qMjhH+03
+         YWrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3TyMkmxOQJC06CnnXdLtP1kErcHt4cRYBk9nQQy+GeI=;
+        b=NvTVftR9dWBcRqtT7DBFDTByByHSdNhUEb/kQEumoFlzKS5StIvCwn+M69up3s4uKT
+         OS3I20UIM0miLoe09dS+Gw3Hz5FYH9a9i8X0YAjAMiK7fjQNSn34MKMYiBliq93Mi6Dl
+         zch+lGLjje8FbVjn8Bv5kH7yfyXQCziBcysHfxpTAuVgCZVasg/KfFDdINQ2+MINyPNR
+         I0jUTb9ND+joAO9rcYn0NOKm/DHL3IE5RbCXw3Ri4KP8ZnAd2B8olcXawc3cOo5ubz5e
+         J8Ko3iNKD/jufwQMvAEZU1H0pcdZiLWvBfjS5a3vTUMk6/ANtIHAnUX9eYIjes7yL3XK
+         hLLw==
+X-Gm-Message-State: AOAM533gD/RggJFLClnDwSnmBQ2+YwE4WhgNy5wA7sE7wIh8N68O70on
+        Q7Q3giscXUfENCjuMobIZHXfh4puR8VbxA==
+X-Google-Smtp-Source: ABdhPJzf0o08F5ddr6PfN7/kVgikpHIOXR+G4FuQokr3vP6H99fCBlDIGqxxTBuStCrVj7wNJsKjmA==
+X-Received: by 2002:a1c:318b:: with SMTP id x133mr17274165wmx.154.1615111976756;
+        Sun, 07 Mar 2021 02:12:56 -0800 (PST)
+Received: from [192.168.1.10] (224.red-2-138-103.dynamicip.rima-tde.net. [2.138.103.224])
+        by smtp.gmail.com with ESMTPSA id f22sm12665506wmb.31.2021.03.07.02.12.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Mar 2021 02:12:56 -0800 (PST)
+Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: document
+ BCM6345 external interrupt controller
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org
+References: <20210223204340.312-1-noltari@gmail.com>
+ <20210224075640.20465-1-noltari@gmail.com>
+ <20210224075640.20465-2-noltari@gmail.com>
+ <20210306201404.GB1137882@robh.at.kernel.org>
+From:   =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>
+Message-ID: <889b9814-40d4-e012-ff7c-39b00f8c623a@gmail.com>
+Date:   Sun, 7 Mar 2021 11:12:55 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210306082910.3472-1-tsbogend@alpha.franken.de>
+In-Reply-To: <20210306201404.GB1137882@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Mar 06, 2021 at 09:29:09AM +0100, Thomas Bogendoerfer wrote:
-> BMIPS is one of the few platforms that do change the exception base.
-> After commit 2dcb39645441 ("memblock: do not start bottom-up allocations
-> with kernel_end") we started seeing BMIPS boards fail to boot with the
-> built-in FDT being corrupted.
-> 
-> Before the cited commit, early allocations would be in the [kernel_end,
-> RAM_END] range, but after commit they would be within [RAM_START +
-> PAGE_SIZE, RAM_END].
-> 
-> The custom exception base handler that is installed by
-> bmips_ebase_setup() done for BMIPS5000 CPUs ends-up trampling on the
-> memory region allocated by unflatten_and_copy_device_tree() thus
-> corrupting the FDT used by the kernel.
-> 
-> To fix this, we need to perform an early reservation of the custom
-> exception space. So we reserve it already in cpu_probe() for the CPUs
-> where this is fixed. For CPU with an ebase config register allocation
-> of exception space will be done in trap_init().
-> 
-> Huge thanks to Serget for analysing and proposing a solution to this
-> issue.
-> 
-> Fixes: 2dcb39645441 ("memblock: do not start bottom-up allocations with kernel_end")
-> Reported-by: Kamal Dasu <kdasu.kdev@gmail.com>
-> Debugged-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Hi Rob,
 
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+El 06/03/2021 a las 21:14, Rob Herring escribió:
+> On Wed, Feb 24, 2021 at 08:56:39AM +0100, Álvaro Fernández Rojas wrote:
+>> Document the binding for the BCM6345 external interrupt controller.
+>>
+>> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+>> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+>> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>>   v3: pass dt_binding_check.
+>>   v2: fix title typo.
+>>
+>>   .../brcm,bcm6345-ext-intc.yaml                | 78 +++++++++++++++++++
+>>   1 file changed, 78 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm6345-ext-intc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm6345-ext-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm6345-ext-intc.yaml
+>> new file mode 100644
+>> index 000000000000..a691510e78b7
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm6345-ext-intc.yaml
+>> @@ -0,0 +1,78 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/interrupt-controller/brcm,bcm6345-ext-intc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Broadcom BCM6345 external interrupt controller
+>> +
+>> +maintainers:
+>> +  - Álvaro Fernández Rojas <noltari@gmail.com>
+>> +  - Jonas Gorski <jonas.gorski@gmail.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - brcm,bcm6318-ext-intc
+>> +      - brcm,bcm6345-ext-intc
+>> +
+>> +  "#interrupt-cells":
+>> +    const: 2
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  "#address-cells":
+>> +    const: 0
+>> +
+>> +  interrupt-controller: true
+>> +
+>> +  interrupts:
+>> +    description: Specifies the interrupt line(s) in the interrupt-parent
+>> +      controller node. Valid values depend on the type of parent interrupt
+>> +      controller.
+>> +    maxItems: 4
+>> +
+>> +  brcm,field-width:
+>> +    description: Interrupt controller field width (the default is 4).
+> 
+> default: 4
+> 
+>> +    maxItems: 1
+> 
+> All uint32's are 1 item.
 
-> ---
-> Changes in v2:
->  - do only memblock reservation in reserve_exception_space()
->  - reserve 0..0x400 for all CPUs without ebase register and
->    to addtional reserve_exception_space for BMIPS CPUs
-> 
->  arch/mips/include/asm/traps.h    |  3 +++
->  arch/mips/kernel/cpu-probe.c     |  7 +++++++
->  arch/mips/kernel/cpu-r3k-probe.c |  3 +++
->  arch/mips/kernel/traps.c         | 10 +++++-----
->  4 files changed, 18 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/traps.h b/arch/mips/include/asm/traps.h
-> index 6aa8f126a43d..b710e76c9c65 100644
-> --- a/arch/mips/include/asm/traps.h
-> +++ b/arch/mips/include/asm/traps.h
-> @@ -24,8 +24,11 @@ extern void (*board_ebase_setup)(void);
->  extern void (*board_cache_error_setup)(void);
->  
->  extern int register_nmi_notifier(struct notifier_block *nb);
-> +extern void reserve_exception_space(phys_addr_t addr, unsigned long size);
->  extern char except_vec_nmi[];
->  
-> +#define VECTORSPACING 0x100	/* for EI/VI mode */
-> +
->  #define nmi_notifier(fn, pri)						\
->  ({									\
->  	static struct notifier_block fn##_nb = {			\
-> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> index 9a89637b4ecf..b565bc4b900d 100644
-> --- a/arch/mips/kernel/cpu-probe.c
-> +++ b/arch/mips/kernel/cpu-probe.c
-> @@ -26,6 +26,7 @@
->  #include <asm/elf.h>
->  #include <asm/pgtable-bits.h>
->  #include <asm/spram.h>
-> +#include <asm/traps.h>
->  #include <linux/uaccess.h>
->  
->  #include "fpu-probe.h"
-> @@ -1628,6 +1629,7 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
->  		c->cputype = CPU_BMIPS3300;
->  		__cpu_name[cpu] = "Broadcom BMIPS3300";
->  		set_elf_platform(cpu, "bmips3300");
-> +		reserve_exception_space(0x400, VECTORSPACING * 64);
->  		break;
->  	case PRID_IMP_BMIPS43XX: {
->  		int rev = c->processor_id & PRID_REV_MASK;
-> @@ -1638,6 +1640,7 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
->  			__cpu_name[cpu] = "Broadcom BMIPS4380";
->  			set_elf_platform(cpu, "bmips4380");
->  			c->options |= MIPS_CPU_RIXI;
-> +			reserve_exception_space(0x400, VECTORSPACING * 64);
->  		} else {
->  			c->cputype = CPU_BMIPS4350;
->  			__cpu_name[cpu] = "Broadcom BMIPS4350";
-> @@ -1654,6 +1657,7 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
->  			__cpu_name[cpu] = "Broadcom BMIPS5000";
->  		set_elf_platform(cpu, "bmips5000");
->  		c->options |= MIPS_CPU_ULRI | MIPS_CPU_RIXI;
-> +		reserve_exception_space(0x1000, VECTORSPACING * 64);
->  		break;
->  	}
->  }
-> @@ -2133,6 +2137,9 @@ void cpu_probe(void)
->  	if (cpu == 0)
->  		__ua_limit = ~((1ull << cpu_vmbits) - 1);
->  #endif
-> +
-> +	if (cpu_has_mips_r2_r6)
-> +		reserve_exception_space(0, 0x400);
->  }
->  
->  void cpu_report(void)
-> diff --git a/arch/mips/kernel/cpu-r3k-probe.c b/arch/mips/kernel/cpu-r3k-probe.c
-> index abdbbe8c5a43..af654771918c 100644
-> --- a/arch/mips/kernel/cpu-r3k-probe.c
-> +++ b/arch/mips/kernel/cpu-r3k-probe.c
-> @@ -21,6 +21,7 @@
->  #include <asm/fpu.h>
->  #include <asm/mipsregs.h>
->  #include <asm/elf.h>
-> +#include <asm/traps.h>
->  
->  #include "fpu-probe.h"
->  
-> @@ -158,6 +159,8 @@ void cpu_probe(void)
->  		cpu_set_fpu_opts(c);
->  	else
->  		cpu_set_nofpu_opts(c);
-> +
-> +	reserve_exception_space(0, 0x400);
->  }
->  
->  void cpu_report(void)
-> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-> index e0352958e2f7..808b8b61ded1 100644
-> --- a/arch/mips/kernel/traps.c
-> +++ b/arch/mips/kernel/traps.c
-> @@ -2009,13 +2009,16 @@ void __noreturn nmi_exception_handler(struct pt_regs *regs)
->  	nmi_exit();
->  }
->  
-> -#define VECTORSPACING 0x100	/* for EI/VI mode */
-> -
->  unsigned long ebase;
->  EXPORT_SYMBOL_GPL(ebase);
->  unsigned long exception_handlers[32];
->  unsigned long vi_handlers[64];
->  
-> +void reserve_exception_space(phys_addr_t addr, unsigned long size)
-> +{
-> +	memblock_reserve(addr, size);
-> +}
-> +
->  void __init *set_except_vector(int n, void *addr)
->  {
->  	unsigned long handler = (unsigned long) addr;
-> @@ -2367,10 +2370,7 @@ void __init trap_init(void)
->  
->  	if (!cpu_has_mips_r2_r6) {
->  		ebase = CAC_BASE;
-> -		ebase_pa = virt_to_phys((void *)ebase);
->  		vec_size = 0x400;
-> -
-> -		memblock_reserve(ebase_pa, vec_size);
->  	} else {
->  		if (cpu_has_veic || cpu_has_vint)
->  			vec_size = 0x200 + VECTORSPACING*64;
-> -- 
-> 2.29.2
-> 
+Ok, so I should remove this :)
 
--- 
-Sincerely yours,
-Mike.
+> 
+> What's the set or range of values?
+
+Only BCM6348 needs to set this value to 5, other BCM63xx use the default 
+value of 4 (BCM3368, BCM6318, BCM6328, BCM6338, BCM6345, BCM6358, 
+BCM6362, BCM6368, BCM63268).
+
+> 
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +required:
+>> +  - "#address-cells"
+>> +  - compatible
+>> +  - reg
+>> +  - "#interrupt-cells"
+>> +  - interrupt-controller
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    interrupt-controller@10000018 {
+>> +      #address-cells = <0>;
+>> +      compatible = "brcm,bcm6345-ext-intc";
+>> +      reg = <0x10000018 0x4>;
+>> +
+>> +      interrupt-parent = <&periph_intc>;
+>> +      #interrupt-cells = <2>;
+>> +
+>> +      interrupt-controller;
+>> +      interrupts = <24>, <25>, <26>, <27>;
+>> +    };
+>> +
+>> +  - |
+>> +    interrupt-controller@fffe0014 {
+>> +      #address-cells = <0>;
+>> +      compatible = "brcm,bcm6345-ext-intc";
+>> +      reg = <0xfffe0014 0x4>;
+>> +
+>> +      interrupt-controller;
+>> +      #interrupt-cells = <2>;
+>> +
+>> +      interrupt-parent = <&cpu_intc>;
+>> +      interrupts = <3>, <4>, <5>, <6>;
+>> +
+>> +      brcm,field-width = <5>;
+>> +    };
+>> -- 
+>> 2.20.1
+>>
+
+Best regards,
+Álvaro.
