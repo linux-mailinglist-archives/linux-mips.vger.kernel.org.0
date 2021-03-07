@@ -2,140 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F2D32FE59
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 02:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5A232FEA3
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Mar 2021 05:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbhCGBhG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sat, 6 Mar 2021 20:37:06 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:46620 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229788AbhCGBgh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 6 Mar 2021 20:36:37 -0500
-Received: from [127.0.0.1] (unknown [101.206.168.69])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9cQLkRgpMcVAA--.6957S2;
-        Sun, 07 Mar 2021 09:36:20 +0800 (CST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-Mailer: BlackBerry Email (10.3.3.3216)
-Message-ID: <20210307013618.5783639.28921.9491@loongson.cn>
-Date:   Sun, 07 Mar 2021 09:36:18 +0800
-Subject: Re: [PATCH 1/3] MIPS: sync arrangement of pt_regs with user_pt_regs and regoffset_table
-From:   =?utf-8?b?6buE5rKb?= <huangpei@loongson.cn>
-In-Reply-To: <20210306074711.GA4744@alpha.franken.de>
-References: <20210305100310.26627-1-huangpei@loongson.cn>
- <20210305100310.26627-2-huangpei@loongson.cn>
- <20210306074711.GA4744@alpha.franken.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        id S230045AbhCGEOg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 6 Mar 2021 23:14:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229964AbhCGEOK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 6 Mar 2021 23:14:10 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B144C06174A;
+        Sat,  6 Mar 2021 20:13:59 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id nh23-20020a17090b3657b02900c0d5e235a8so1293386pjb.0;
+        Sat, 06 Mar 2021 20:13:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aNQ8It84bE/zbP5TAlSKFSi5Ijz+ILHaleTfFj87zv0=;
+        b=bSux60A6elleCiFzeCr4s8KQuPi7mdyvy0RZdt+5FzTgDmhGOBJiogOYnAKSOXgc9J
+         eMGSZ/RY9nb8wnt2wZITIsW1uE4LbpKZsOxD5iEKexjn/3JoG2IuBjeVtC/+ryaaZH3H
+         hZAxPQoRedZHBc0QiZ5Xel96sox+6V3EdXd4tYryEon7p43//Nn9xsuUyvB9WVU27n4B
+         4tgavUy36u0XVQgdU3opx/9BZdF/CP1g1Kbx4Pxs7cypMBDNPv9+ZnobXo8deJ6PJJ/L
+         49rXBV2lq1d+qGSNoWhjEVfuog2iroFUu9pcswmu8Yt+Q6Xaa6MWrErLmMv5jwrozcvs
+         1rUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aNQ8It84bE/zbP5TAlSKFSi5Ijz+ILHaleTfFj87zv0=;
+        b=cUEyq71I9dleK7UadenXTAn5oZZF4EJYnXWxIv8pC5J4l1pegr2sZzIIPS83CyZlf3
+         xxYF3F+S1uSpLKh+FgLkJTHh7N7c73nq9TzughvQWiuRiETstT/2UJLUO6bB6GQp2olv
+         udXRjWUdFhRhZQ6tqPowkhM9Je5LyTwk88VdzACgVIc8neJ4/iieqqSxADiiYzYSeR6a
+         tgO4vUEKTTPoElXc67XXooRzaLKUg5ho9uHJJtpeIlPS1NmsirEKXTqP6b644IiS+9Xr
+         ZvUs+1McuzKQRpjRWaTfyU+kppcpNATwmwBODJkue/3yHjPWw9aOcxBrbjnBHK4B/MIc
+         YJ2Q==
+X-Gm-Message-State: AOAM532gGRVqXDOFnLbxOnOdpZGIbE3UZnXyqgokSJsAZB5pDNkD+Bzq
+        1uL/15RjuY9bEcSCsgABVRvyZe1iWAs=
+X-Google-Smtp-Source: ABdhPJxhsxF98tFFRzIb4w2pba4v2qI4qDw3ZSu5ZEdqJdjYJDIYjeYUPXlgOGZkG9eePU5xgnDKqQ==
+X-Received: by 2002:a17:902:b711:b029:e3:71f1:e08e with SMTP id d17-20020a170902b711b02900e371f1e08emr15459859pls.18.1615090438531;
+        Sat, 06 Mar 2021 20:13:58 -0800 (PST)
+Received: from [10.230.29.30] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id s27sm6150227pgk.77.2021.03.06.20.13.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Mar 2021 20:13:57 -0800 (PST)
+Subject: Re: [PATCH v2] MIPS: kernel: Reserve exception base early to prevent
+ corruption
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxr9cQLkRgpMcVAA--.6957S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1DZr1fWrWDurWUXr18Zrb_yoW8uFy5pF
-        srCa1DKF4Ig348K3y7urZ5uryUJr1DG392gFZrt340qa4Yv3WfWrWSyw1DJr48ArWvqa48
-        Cayavwn8CrZFva7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8JV
-        W8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUChFxUUUUU=
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        Roman Gushchin <guro@fb.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+References: <20210306082910.3472-1-tsbogend@alpha.franken.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <b11d87e6-6665-7579-6334-f9e280dbf20b@gmail.com>
+Date:   Sat, 6 Mar 2021 20:13:53 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.0
+MIME-Version: 1.0
+In-Reply-To: <20210306082910.3472-1-tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-What about other two patches? 
 
 
-Current ftrace implementation is not safe on MIPS/SMP,
-
-When disabling  tracing, we need to change 
-
-Jal 
-Addiu sp,sp,-offset
-
-Into 
-
-Nop
-Nop
-
-Atomically, but mips issue two writes, no 
-matter ‎ in what order these writes are seen by
-other cpu, ‎ it is wrecked in  these two case
-
-Jal 
-Nop
-
-Or,
-
-Nop
-‎addiu sp,sp, _offset
-
-‎Huang Pei
-
-
-  Original Message  
-From: Thomas Bogendoerfer
-Sent: 2021年3月6日星期六 16:06
-To: Huang Pei
-Cc: ambrosehua@gmail.com; Bibo Mao; Andrew Morton; linux-mips@vger.kernel.org; linux-arch@vger.kernel.org; linux-mm@kvack.org; Jiaxun Yang; Paul Burton; Li Xuefeng; Yang Tiezhu; Gao Juxin; Huacai Chen; Jinyang He
-Subject: Re: [PATCH 1/3] MIPS: sync arrangement of pt_regs with user_pt_regs and regoffset_table
-
-On Fri, Mar 05, 2021 at 06:03:08PM +0800, Huang Pei wrote:
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
-> arch/mips/include/asm/ptrace.h | 10 +++++-----
-> arch/mips/kernel/asm-offsets.c | 6 +++---
-> arch/mips/kernel/ptrace.c | 10 +++++-----
-> 3 files changed, 13 insertions(+), 13 deletions(-)
+On 3/6/2021 12:29 AM, Thomas Bogendoerfer wrote:
+> BMIPS is one of the few platforms that do change the exception base.
+> After commit 2dcb39645441 ("memblock: do not start bottom-up allocations
+> with kernel_end") we started seeing BMIPS boards fail to boot with the
+> built-in FDT being corrupted.
 > 
-> diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
-> index 1e76774b36dd..e51691f2b7af 100644
-> --- a/arch/mips/include/asm/ptrace.h
-> +++ b/arch/mips/include/asm/ptrace.h
-> @@ -34,16 +34,16 @@ struct pt_regs {
-> /* Saved main processor registers. */
-> unsigned long regs[32];
+> Before the cited commit, early allocations would be in the [kernel_end,
+> RAM_END] range, but after commit they would be within [RAM_START +
+> PAGE_SIZE, RAM_END].
 > 
-> +	unsigned long lo;
-> +	unsigned long hi;
-> /* Saved special registers. */
-> +	unsigned long cp0_epc;
-> +	unsigned long cp0_badvaddr;
-> unsigned long cp0_status;
-> -	unsigned long hi;
-> -	unsigned long lo;
-> +	unsigned long cp0_cause;
-> #ifdef CONFIG_CPU_HAS_SMARTMIPS
-> unsigned long acx;
-> #endif
-> -	unsigned long cp0_badvaddr;
-> -	unsigned long cp0_cause;
-> -	unsigned long cp0_epc;
-> #ifdef CONFIG_CPU_CAVIUM_OCTEON
-> unsigned long long mpl[6]; /* MTM{0-5} */
-> unsigned long long mtp[6]; /* MTP{0-5} */
+> The custom exception base handler that is installed by
+> bmips_ebase_setup() done for BMIPS5000 CPUs ends-up trampling on the
+> memory region allocated by unflatten_and_copy_device_tree() thus
+> corrupting the FDT used by the kernel.
+> 
+> To fix this, we need to perform an early reservation of the custom
+> exception space. So we reserve it already in cpu_probe() for the CPUs
+> where this is fixed. For CPU with an ebase config register allocation
+> of exception space will be done in trap_init().
+> 
+> Huge thanks to Serget for analysing and proposing a solution to this
+> issue.
 
-sorry this is pointless, I'm not taking this.
+I made a typo on Sergey's name in my original version here.
 
-Thomas.
+> 
+> Fixes: 2dcb39645441 ("memblock: do not start bottom-up allocations with kernel_end")
+> Reported-by: Kamal Dasu <kdasu.kdev@gmail.com>
+> Debugged-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+
+Thanks!
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea. [ RFC1925, 2.3 ]
-
+Florian
