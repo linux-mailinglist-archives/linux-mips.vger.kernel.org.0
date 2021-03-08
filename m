@@ -2,200 +2,209 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D07330FD2
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 14:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AEE331130
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 15:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbhCHNqW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Mar 2021 08:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbhCHNqF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Mar 2021 08:46:05 -0500
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF9CC06174A
-        for <linux-mips@vger.kernel.org>; Mon,  8 Mar 2021 05:46:05 -0800 (PST)
-Received: from miraculix.mork.no (fwa153.mork.no [192.168.9.153])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 128DjvQl025472
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Mon, 8 Mar 2021 14:45:57 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1615211157; bh=g8t3Kwr2yBg29PmpsGfghJSnCh3nRpE2B5pHrb0jdpk=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=WGTkwZM0222jtGoRNHZcKPrWpHRSnemPaY0JBgLc92Ma92IbUS+DN8klLE3llfkLh
-         t6c6pKOFKy9JLgfUH71hXtj04G65tCpRCEDrKQ+x6wK7Jv4FruxdbylgUBgzsMa6z3
-         uKEhTnJCeO/ygA56OVGAm+JipZjunIiT9N/vvu1s=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
-        (envelope-from <bjorn@mork.no>)
-        id 1lJGCr-000DeF-9D; Mon, 08 Mar 2021 14:45:57 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH] MIPS: vmlinux.lds.S: align raw appended dtb to 8 bytes
-Organization: m
-References: <20210307182301.20710-1-bjorn@mork.no>
-        <20210308105550.GC6622@alpha.franken.de>
-        <87h7llc34m.fsf@miraculix.mork.no>
-        <20210308125348.GA7976@alpha.franken.de>
-Date:   Mon, 08 Mar 2021 14:45:57 +0100
-In-Reply-To: <20210308125348.GA7976@alpha.franken.de> (Thomas Bogendoerfer's
-        message of "Mon, 8 Mar 2021 13:53:49 +0100")
-Message-ID: <878s6xbvxm.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S229797AbhCHOrV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 8 Mar 2021 09:47:21 -0500
+Received: from aposti.net ([89.234.176.197]:47378 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229697AbhCHOq5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Mar 2021 09:46:57 -0500
+Date:   Mon, 08 Mar 2021 14:46:26 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 2/2] mmc: jz4740: Add support for monitoring PLL clock
+ rate changes
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     od@zcrc.me, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Message-Id: <EPNNPQ.GYRRY95IUVFU@crapouillou.net>
+In-Reply-To: <20210307170742.70949-3-paul@crapouillou.net>
+References: <20210307170742.70949-1-paul@crapouillou.net>
+        <20210307170742.70949-3-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-X-Virus-Scanned: clamav-milter 0.102.4 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Thomas Bogendoerfer <tsbogend@alpha.franken.de> writes:
-
-> I see
->
-> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.ld=
-s.S
-> index c1c345be04ff..4b4e39b7c79b 100644
-> --- a/arch/mips/kernel/vmlinux.lds.S
-> +++ b/arch/mips/kernel/vmlinux.lds.S
-> @@ -145,6 +145,7 @@ SECTIONS
->         }
->=20=20
->  #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
-> +       STRUCT_ALIGN();
->         .appended_dtb : AT(ADDR(.appended_dtb) - LOAD_OFFSET) {
->                 *(.appended_dtb)
->                 KEEP(*(.appended_dtb))
-> @@ -172,6 +173,7 @@ SECTIONS
->  #endif
->=20=20
->  #ifdef CONFIG_MIPS_RAW_APPENDED_DTB
-> +       STRUCT_ALIGN();
->         __appended_dtb =3D .;
->         /* leave space for appended DTB */
->         . +=3D 0x100000;
->
-> in that patch, and IMHO this does align the appended_dtb. What do I miss ?
-
-I'll not pretend I know anything about this subject, so feel free to
-adjust as necessary.
-
-The problem with that patch is that it doesn't pad the image to the
-aligment.   So you can't do
-
- cat my.dtb >> arch/mips/boot/vmlinux.bin
-
-anymore.  This used to work before commit 79edff12060f.
-
-This is an image build with that patch and an initramfs:
-
- bjorn@canardo:/usr/local/src/build-tmp/linux$ ls -l arch/mips/boot/vmlinux=
-.bin
- -rwxr-xr-x 1 bjorn src 15724964 Mar  8 14:21 arch/mips/boot/vmlinux.bin
-
-So that's aligned to 4 bytes, because it's terminated by the 32bit
-length of the initramfs:
-=20
- 15724964/8
- 1965620.50000000000000000000
 
 
-Building with the attached patch results in:
+Le dim. 7 mars 2021 à 17:07, Paul Cercueil <paul@crapouillou.net> a 
+écrit :
+> The main PLL can have its rate changed at any moment. To keep the MMC
+> clock running at a rate that fits the specifications, we need to
+> recompute the MMC clock rate every time the PLL rate changes.
+> 
+> Use a mutex to ensure that the MMC is idle before performing the PLL 
+> and
+> MMC rate changes.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/mmc/host/jz4740_mmc.c | 70 
+> ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 69 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mmc/host/jz4740_mmc.c 
+> b/drivers/mmc/host/jz4740_mmc.c
+> index b3c636edbb46..1197b8c6b6ed 100644
+> --- a/drivers/mmc/host/jz4740_mmc.c
+> +++ b/drivers/mmc/host/jz4740_mmc.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/mmc/host.h>
+>  #include <linux/mmc/slot-gpio.h>
+>  #include <linux/module.h>
+> +#include <linux/mutex.h>
+>  #include <linux/of_device.h>
+>  #include <linux/pinctrl/consumer.h>
+>  #include <linux/platform_device.h>
+> @@ -149,6 +150,10 @@ struct jz4740_mmc_host {
+>  	struct platform_device *pdev;
+>  	struct clk *clk;
+> 
+> +	atomic_t clk_mutex_count;
+> +	struct mutex clk_mutex;
+> +	struct notifier_block clock_nb;
+> +
+>  	enum jz4740_mmc_version version;
+> 
+>  	int irq;
+> @@ -338,6 +343,9 @@ static void jz4740_mmc_pre_request(struct 
+> mmc_host *mmc,
+>  	struct jz4740_mmc_host *host = mmc_priv(mmc);
+>  	struct mmc_data *data = mrq->data;
+> 
+> +	if (atomic_inc_and_test(&host->clk_mutex_count))
+> +		mutex_lock(&host->clk_mutex);
 
- bjorn@canardo:/usr/local/src/build-tmp/linux$ ls -l arch/mips/boot/vmlinux=
-.bin
- -rwxr-xr-x 1 bjorn src 15724992 Mar  8 14:29 arch/mips/boot/vmlinux.bin
+There's an obvious race here, let me rewrite this using the proper 
+locking mechanism.
 
-Which is aligned to the 32 bytes expected after STRUCT_ALIGN():
+-Paul
 
-15724992/8
-1965624.00000000000000000000
+> +
+>  	if (!host->use_dma)
+>  		return;
+> 
+> @@ -353,6 +361,9 @@ static void jz4740_mmc_post_request(struct 
+> mmc_host *mmc,
+>  	struct jz4740_mmc_host *host = mmc_priv(mmc);
+>  	struct mmc_data *data = mrq->data;
+> 
+> +	if (atomic_dec_return(&host->clk_mutex_count) == -1)
+> +		mutex_unlock(&host->clk_mutex);
+> +
+>  	if (data && data->host_cookie != COOKIE_UNMAPPED)
+>  		jz4740_mmc_dma_unmap(host, data);
+> 
+> @@ -955,6 +966,48 @@ static const struct mmc_host_ops jz4740_mmc_ops 
+> = {
+>  	.enable_sdio_irq = jz4740_mmc_enable_sdio_irq,
+>  };
+> 
+> +static inline struct jz4740_mmc_host *
+> +jz4740_mmc_nb_get_priv(struct notifier_block *nb)
+> +{
+> +	return container_of(nb, struct jz4740_mmc_host, clock_nb);
+> +}
+> +
+> +static struct clk *jz4740_mmc_get_parent_clk(struct clk *clk)
+> +{
+> +	/*
+> +	 * Return the first clock above the one that will effectively modify
+> +	 * its rate when clk_set_rate(clk) is called.
+> +	 */
+> +	clk = clk_get_first_to_set_rate(clk);
+> +
+> +	return clk_get_parent(clk);
+> +}
+> +
+> +static int jz4740_mmc_update_clk(struct notifier_block *nb,
+> +				 unsigned long action,
+> +				 void *data)
+> +{
+> +	struct jz4740_mmc_host *host = jz4740_mmc_nb_get_priv(nb);
+> +
+> +	/*
+> +	 * PLL may have changed its frequency; our clock may be running 
+> above
+> +	 * spec. Wait until MMC is idle (using host->clk_mutex) before 
+> changing
+> +	 * the PLL clock, and after it's done, reset our clock rate.
+> +	 */
+> +
+> +	switch (action) {
+> +	case PRE_RATE_CHANGE:
+> +		mutex_lock(&host->clk_mutex);
+> +		break;
+> +	default:
+> +		clk_set_rate(host->clk, host->mmc->f_max);
+> +		mutex_unlock(&host->clk_mutex);
+> +		break;
+> +	}
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>  static const struct of_device_id jz4740_mmc_of_match[] = {
+>  	{ .compatible = "ingenic,jz4740-mmc", .data = (void *) 
+> JZ_MMC_JZ4740 },
+>  	{ .compatible = "ingenic,jz4725b-mmc", .data = (void 
+> *)JZ_MMC_JZ4725B },
+> @@ -971,6 +1024,7 @@ static int jz4740_mmc_probe(struct 
+> platform_device* pdev)
+>  	struct mmc_host *mmc;
+>  	struct jz4740_mmc_host *host;
+>  	const struct of_device_id *match;
+> +	struct clk *parent_clk;
+> 
+>  	mmc = mmc_alloc_host(sizeof(struct jz4740_mmc_host), &pdev->dev);
+>  	if (!mmc) {
+> @@ -1058,12 +1112,24 @@ static int jz4740_mmc_probe(struct 
+> platform_device* pdev)
+>  		goto err_free_irq;
+>  	host->use_dma = !ret;
+> 
+> +	atomic_set(&host->clk_mutex_count, -1);
+> +	mutex_init(&host->clk_mutex);
+> +	host->clock_nb.notifier_call = jz4740_mmc_update_clk;
+> +
+> +	parent_clk = jz4740_mmc_get_parent_clk(host->clk);
+> +
+> +	ret = clk_notifier_register(parent_clk, &host->clock_nb);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Unable to register clock notifier\n");
+> +		goto err_release_dma;
+> +	}
+> +
+>  	platform_set_drvdata(pdev, host);
+>  	ret = mmc_add_host(mmc);
+> 
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "Failed to add mmc host: %d\n", ret);
+> -		goto err_release_dma;
+> +		goto err_unregister_clk_notifier;
+>  	}
+>  	dev_info(&pdev->dev, "Ingenic SD/MMC card driver registered\n");
+> 
+> @@ -1074,6 +1140,8 @@ static int jz4740_mmc_probe(struct 
+> platform_device* pdev)
+> 
+>  	return 0;
+> 
+> +err_unregister_clk_notifier:
+> +	clk_notifier_unregister(parent_clk, &host->clock_nb);
+>  err_release_dma:
+>  	if (host->use_dma)
+>  		jz4740_mmc_release_dma_channels(host);
+> --
+> 2.30.1
+> 
 
-The tail of the image shows the cpio trailer and cpio length
-(0x0061f400) followed by enough padding to align an appended DTB to 32
-bytes:
 
- bjorn@canardo:/usr/local/src/build-tmp/linux$ ls -l arch/mips/boot/vmlinux=
-.bin
- -rwxr-xr-x 1 bjorn src 15724992 Mar  8 14:29 arch/mips/boot/vmlinux.bin
- bjorn@canardo:/usr/local/src/build-tmp/linux$ hexdump -C arch/mips/boot/vm=
-linux.bin|tail
- 00eff090  30 30 30 30 30 30 30 30  30 31 30 30 30 30 30 30  |0000000001000=
-000|
- 00eff0a0  30 30 30 30 30 30 30 30  30 30 30 30 30 30 30 30  |0000000000000=
-000|
- *
- 00eff0d0  30 42 30 30 30 30 30 30  30 30 54 52 41 49 4c 45  |0B00000000TRA=
-ILE|
- 00eff0e0  52 21 21 21 00 00 00 00  00 00 00 00 00 00 00 00  |R!!!.........=
-...|
- 00eff0f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |.............=
-...|
- *
- 00eff1a0  00 61 f4 00 00 00 00 00  00 00 00 00 00 00 00 00  |.a...........=
-...|
- 00eff1b0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |.............=
-...|
- 00eff1c0
-
-
-
-Yes, you can always pad the image yourself if you know about this
-alignment requirement.  But it gets more complicated.  And it breaks my
-home grown hackish build script. I know I'm not the only one...
-
-
-Bj=C3=B8rn
-
-
---=-=-=
-Content-Type: text/x-diff; charset=utf-8
-Content-Disposition: inline;
- filename=0001-MIPS-vmlinux.lds.S-fill-vmlinux.bin-to-DTB-alignment.patch
-Content-Transfer-Encoding: quoted-printable
-
-From c1bd611ae62db46db12d86196cade2613a291400 Mon Sep 17 00:00:00 2001
-From: =3D?UTF-8?q?Bj=3DC3=3DB8rn=3D20Mork?=3D <bjorn@mork.no>
-Date: Mon, 8 Mar 2021 14:24:17 +0100
-Subject: [PATCH] MIPS: vmlinux.lds.S: fill vmlinux.bin to DTB alignment
-MIME-Version: 1.0
-Content-Type: text/plain; charset=3DUTF-8
-Content-Transfer-Encoding: 8bit
-
-Padding the binary to the required alignment for raw appended
-DTBs so that it is possible to append one without detailed
-knowledge of this requirement.
-
-Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
----
- arch/mips/kernel/vmlinux.lds.S | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.lds.S
-index 4b4e39b7c79b..1f98947fe715 100644
---- a/arch/mips/kernel/vmlinux.lds.S
-+++ b/arch/mips/kernel/vmlinux.lds.S
-@@ -173,7 +173,11 @@ SECTIONS
- #endif
-=20
- #ifdef CONFIG_MIPS_RAW_APPENDED_DTB
--	STRUCT_ALIGN();
-+	.fill : {
-+		FILL(0);
-+		BYTE(0);
-+		STRUCT_ALIGN();
-+	}
- 	__appended_dtb =3D .;
- 	/* leave space for appended DTB */
- 	. +=3D 0x100000;
---=20
-2.20.1
-
-
---=-=-=--
