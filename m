@@ -2,124 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 773E6330869
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 07:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C066F33095C
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 09:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbhCHGsw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Mar 2021 01:48:52 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:49886 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229551AbhCHGsX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Mar 2021 01:48:23 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf9eyyEVgtMcWAA--.11836S2;
-        Mon, 08 Mar 2021 14:48:18 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH] MIPS: Enable some missed configs in loongson3_defconfig to support bpftrace
-Date:   Mon,  8 Mar 2021 14:48:18 +0800
-Message-Id: <1615186098-2643-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxf9eyyEVgtMcWAA--.11836S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZr13GFW7JFy7AF4xXFy5urg_yoW5Gr1Upr
-        18Jr4kXay8Jr1rArWfCryDGrZ5tFs5JrW7Gr1UAr15A3s5Aw47Xr48tr1UJrsrX39rtrWr
-        ZF93Cr13AFW7C37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF1l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUU38nUUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S230453AbhCHI1g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Mar 2021 03:27:36 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:60311 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231825AbhCHI1G (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Mar 2021 03:27:06 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N14xe-1lm92r3ngI-012ZXy; Mon, 08 Mar 2021 09:26:56 +0100
+Received: by mail-ot1-f49.google.com with SMTP id f8so3375432otp.8;
+        Mon, 08 Mar 2021 00:26:54 -0800 (PST)
+X-Gm-Message-State: AOAM531LaElb2wKXlmPxBPFispTGcWriwK2bx+4Msgh5GKbIpqkdM+pZ
+        xDzIhUbYlo+WZX3TpFepct/1/NXGTZ9y1Jzo+58=
+X-Google-Smtp-Source: ABdhPJz7WzRENGkqrJauNt4Eu43tE41OHtOy5Pi18b4rc5onlz+3B0QPZSg6kqLhqT6QwccMllOlz9JudYJqhcYI0w4=
+X-Received: by 2002:a9d:2f24:: with SMTP id h33mr8386599otb.305.1615192013989;
+ Mon, 08 Mar 2021 00:26:53 -0800 (PST)
+MIME-Version: 1.0
+References: <1615185706-24342-1-git-send-email-anshuman.khandual@arm.com> <1615185706-24342-7-git-send-email-anshuman.khandual@arm.com>
+In-Reply-To: <1615185706-24342-7-git-send-email-anshuman.khandual@arm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 8 Mar 2021 09:26:37 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3Jp6wgGWJ9UDoiN5joOYSONaoHoH=S--i=3SQpm_f4JQ@mail.gmail.com>
+Message-ID: <CAK8P3a3Jp6wgGWJ9UDoiN5joOYSONaoHoH=S--i=3SQpm_f4JQ@mail.gmail.com>
+Subject: Re: [PATCH 6/6] mm: Drop redundant HAVE_ARCH_TRANSPARENT_HUGEPAGE
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ac4dihqGbl6+jEr5hvaPprARfRMzuV5tBYOBcFJxgQ6aBn/E5bB
+ GXJneuWlAVcyxI+vkcYXKvB59uv/eQ/yEWQvV6WRLKsNnEdMV5MskvBED6sSsQ8qHPsIH8i
+ y6VJacjLbXY0SqD78Sae+4qmfdMIGK+K98OMV41tNtw4SHA0l5PG6NwGxEv0snlgh6NxhFf
+ SZxZyOLGtxotQuru+ZhsA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TKJ0E/7wbKk=:Fdb8DFUaXWhjSNhmzGd9sT
+ 2Oskqmgzab+15xMwBwvePuCPlbxv5TQSAFFU2I/KB7Yi3nUJuGSP/1HzArwwnLSDS2ouNNzxP
+ AT4xNWkrH/VUqa1YSKKUWz79eAhjJeIrJ7GdIgGd6H7ko0taezSY4Q6PxHTY0uN5MsW8Uc1lS
+ pNp7n7EEWFKqXbJO8ob0V466m/8bL3U8Aex43XxNtnJhkeSfU8w42bIRmIKxlMUGA9Sb5+lT7
+ snIDbhue2uQNnyUZASM2Tmf4Xr8gf2SgHUH++IMIP9LVevIJRZxX87pAUkWrgKLRpeJeWtDFz
+ m4kFsbkxzrCu1U6vI1+odbEHJD8fGQfyiUp7E8vqld1Ccv6hUGPYfMP4PfjCLo50NSlYqe5Ea
+ 4tJO8A/es+NhTOyAw4HUh/qt4+foFDfenv9YX7FhxF21WJKcv4w6z3/lAbwnw
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-bpftrace is a high-level tracing language for Linux enhanced Berkeley
-Packet Filter (eBPF) available in recent Linux kernels (4.x). bpftrace
-uses LLVM as a backend to compile scripts to BPF-bytecode and makes use
-of BCC for interacting with the Linux BPF system, as well as existing
-Linux tracing capabilities: kernel dynamic tracing (kprobes), user-level
-dynamic tracing (uprobes), and tracepoints.
+On Mon, Mar 8, 2021 at 7:41 AM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+>
+> HAVE_ARCH_TRANSPARENT_HUGEPAGE has duplicate definitions on platforms that
+> subscribe it. Drop these reduntant definitions and instead just select it
+> on applicable platforms.
+>
+> Cc: Vineet Gupta <vgupta@synopsys.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: linux-snps-arc@lists.infradead.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-According to Linux Kernel Requirements in bpftrace/INSTALL.md [1], the
-kernel needs to be built with the following options:
-
-CONFIG_BPF=y
-CONFIG_BPF_SYSCALL=y
-CONFIG_BPF_JIT=y
-CONFIG_HAVE_EBPF_JIT=y
-CONFIG_BPF_EVENTS=y
-CONFIG_FTRACE_SYSCALLS=y
-CONFIG_FUNCTION_TRACER=y
-CONFIG_HAVE_DYNAMIC_FTRACE=y
-CONFIG_DYNAMIC_FTRACE=y
-CONFIG_HAVE_KPROBES=y
-CONFIG_KPROBES=y
-CONFIG_KPROBE_EVENTS=y
-CONFIG_ARCH_SUPPORTS_UPROBES=y
-CONFIG_UPROBES=y
-CONFIG_UPROBE_EVENTS=y
-CONFIG_DEBUG_FS=y
-
-So enable some missed configs in loongson3_defconfig to make sure
-the above configs are set after make loongson3_defconfig.
-
-[1] https://github.com/iovisor/bpftrace/blob/master/INSTALL.md
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/configs/loongson3_defconfig | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 0e79f81..1b8f693 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -26,6 +26,7 @@ CONFIG_SCHED_AUTOGROUP=y
- CONFIG_SYSFS_DEPRECATED=y
- CONFIG_RELAY=y
- CONFIG_BLK_DEV_INITRD=y
-+CONFIG_BPF_SYSCALL=y
- CONFIG_EMBEDDED=y
- CONFIG_PERF_EVENTS=y
- CONFIG_MACH_LOONGSON64=y
-@@ -40,6 +41,7 @@ CONFIG_MIPS32_N32=y
- CONFIG_VIRTUALIZATION=y
- CONFIG_KVM=m
- CONFIG_KVM_MIPS_VZ=y
-+CONFIG_KPROBES=y
- CONFIG_MODULES=y
- CONFIG_MODULE_FORCE_LOAD=y
- CONFIG_MODULE_UNLOAD=y
-@@ -129,6 +131,7 @@ CONFIG_L2TP=m
- CONFIG_BRIDGE=m
- CONFIG_VSOCKETS=m
- CONFIG_VIRTIO_VSOCKETS=m
-+CONFIG_BPF_JIT=y
- CONFIG_CFG80211=m
- CONFIG_CFG80211_WEXT=y
- CONFIG_MAC80211=m
-@@ -405,8 +408,10 @@ CONFIG_CRYPTO_DEFLATE=m
- CONFIG_PRINTK_TIME=y
- CONFIG_STRIP_ASM_SYMS=y
- CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
- # CONFIG_SCHED_DEBUG is not set
- # CONFIG_DEBUG_PREEMPT is not set
--# CONFIG_FTRACE is not set
-+CONFIG_FUNCTION_TRACER=y
-+CONFIG_FTRACE_SYSCALLS=y
- CONFIG_CMDLINE_BOOL=y
- CONFIG_CMDLINE="ieee754=relaxed"
--- 
-2.1.0
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
