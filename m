@@ -2,88 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84715330A58
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 10:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F08330A8A
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 10:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbhCHJfB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Mar 2021 04:35:01 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:35530 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbhCHJeY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Mar 2021 04:34:24 -0500
-Received: by mail-ot1-f46.google.com with SMTP id j22so2713434otp.2;
-        Mon, 08 Mar 2021 01:34:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CfKvzPwrH09K3mfPL9rn9TytiECVIszpkadXFP26McQ=;
-        b=aa1gzwFYhl99SRQkmyuPXEWSLKixlSasT+e2EscW2OYcIwZ+epWSDBJBhemKF1dwTG
-         ja0qsLa+Bi3UcSSk4W+Oc82yVbsJTA04xy1RfYArozngqQDYKtAqcLkKWuwdsb/Izxwj
-         8e0Lk/axRF0tRzZHiJrbt+jVrtSieKy58irvACK0uITRrPlnn+qA6c6A/NfxKVEGydW9
-         oUXm2x46Z1aKzaCqLwE9yPcjxpqlaXG2yyE/yhJEj3ic6PX6VBAdK5exfLzR0WsTnrEp
-         wqOFtSeGVLqivqpS61GP+gbt7XxuGPkTC8C1AkX5t7eb+PrHndJN027E2rd/rtw3hHbB
-         RPAA==
-X-Gm-Message-State: AOAM5335gjWvQQzQGtWfg8PSoAjsCWDnuJ947MsSgRlIZO00xgqffvO0
-        9gMCoPL/l8FiiE7JhKkk8L15cyQbl9uoo07vm0c=
-X-Google-Smtp-Source: ABdhPJyzdAZmgfcrWP8548AHWQjq2RF6/CTxvu69rzOJaWC4yKA8+jXeva7i28g8zHVIRmTV0UGy6Mp6C/Rb9dfUr8Y=
-X-Received: by 2002:a9d:4a8e:: with SMTP id i14mr19333580otf.37.1615196063615;
- Mon, 08 Mar 2021 01:34:23 -0800 (PST)
+        id S230439AbhCHJuu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Mar 2021 04:50:50 -0500
+Received: from elvis.franken.de ([193.175.24.41]:57382 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230455AbhCHJuT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Mar 2021 04:50:19 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lJCWn-0002nE-00; Mon, 08 Mar 2021 10:50:17 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 96E91C1214; Mon,  8 Mar 2021 10:49:47 +0100 (CET)
+Date:   Mon, 8 Mar 2021 10:49:47 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Qing Zhang <zhangqing@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] MIPS: Loongson64: Move loongson_system_configuration
+ to loongson.h
+Message-ID: <20210308094947.GA4924@alpha.franken.de>
+References: <20210304110057.22144-1-zhangqing@loongson.cn>
+ <20210304110057.22144-3-zhangqing@loongson.cn>
+ <20210306080337.GC4744@alpha.franken.de>
+ <d1072504-514b-4be0-85ba-69a6d885de58@www.fastmail.com>
+ <20210306095308.GA5751@alpha.franken.de>
+ <3a5481f9-d1d5-4439-9679-ad7615ba8009@www.fastmail.com>
 MIME-Version: 1.0
-References: <20210305020535.25006-1-unixbhaskar@gmail.com>
-In-Reply-To: <20210305020535.25006-1-unixbhaskar@gmail.com>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Mon, 8 Mar 2021 10:34:11 +0100
-Message-ID: <CAAdtpL7jEQQ2TQAHEObWC_uDGDYtxTr3=Sb-MVQ=V6PNZvVJbg@mail.gmail.com>
-Subject: Re: [PATCH] arch: mips: bcm63xx: Spello fix in the file clk.c
-To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a5481f9-d1d5-4439-9679-ad7615ba8009@www.fastmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Bhaskar,
+On Sat, Mar 06, 2021 at 06:55:41PM +0800, Jiaxun Yang wrote:
+> 
+> 
+> On Sat, Mar 6, 2021, at 5:53 PM, Thomas Bogendoerfer wrote:
+> [...]
+> > Just to understand you, you want
+> > 
+> > arch/mips/include/asm/loongson/2ef
+> > arch/mips/include/asm/loongson/32
+> > arch/mips/include/asm/loongson/64
+> 
+> Yeah it looks reasonable but from my point of view doing these movement
+> brings no actual benefit :-(
 
-On Fri, Mar 5, 2021 at 3:06 AM Bhaskar Chowdhury <unixbhaskar@gmail.com> wrote:
->
->
->
-> s/revelant/relevant/
+oh it does for sure. There will no more build errors for non loogson
+configs for things like
 
-Let me recommend you this great post explaining why and how you could
-improve your patch subject and description:
-https://www.freecodecamp.org/news/writing-good-commit-messages-a-practical-guide/#how-to-write-good-commit-messages
+#include <loongson_regs.h>
 
-Regards,
+because it will not work for loongson either. And it will be clear,
+which of the 3 loongson.h is used. Which then gives chances for even
+more cleanups.
 
-Phil.
+Thomas.
 
->
-> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
-> ---
->  arch/mips/bcm63xx/clk.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
-> index 164115944a7f..5a3e325275d0 100644
-> --- a/arch/mips/bcm63xx/clk.c
-> +++ b/arch/mips/bcm63xx/clk.c
-> @@ -76,7 +76,7 @@ static struct clk clk_enet_misc = {
->  };
->
->  /*
-> - * Ethernet MAC clocks: only revelant on 6358, silently enable misc
-> + * Ethernet MAC clocks: only relevant on 6358, silently enable misc
->   * clocks
->   */
->  static void enetx_set(struct clk *clk, int enable)
-> --
-> 2.30.1
->
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
