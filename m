@@ -2,80 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C066F33095C
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 09:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F74330992
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 09:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbhCHI1g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Mar 2021 03:27:36 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:60311 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbhCHI1G (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Mar 2021 03:27:06 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N14xe-1lm92r3ngI-012ZXy; Mon, 08 Mar 2021 09:26:56 +0100
-Received: by mail-ot1-f49.google.com with SMTP id f8so3375432otp.8;
-        Mon, 08 Mar 2021 00:26:54 -0800 (PST)
-X-Gm-Message-State: AOAM531LaElb2wKXlmPxBPFispTGcWriwK2bx+4Msgh5GKbIpqkdM+pZ
-        xDzIhUbYlo+WZX3TpFepct/1/NXGTZ9y1Jzo+58=
-X-Google-Smtp-Source: ABdhPJz7WzRENGkqrJauNt4Eu43tE41OHtOy5Pi18b4rc5onlz+3B0QPZSg6kqLhqT6QwccMllOlz9JudYJqhcYI0w4=
-X-Received: by 2002:a9d:2f24:: with SMTP id h33mr8386599otb.305.1615192013989;
- Mon, 08 Mar 2021 00:26:53 -0800 (PST)
+        id S231639AbhCHIlc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Mar 2021 03:41:32 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51102 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231719AbhCHIlW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Mar 2021 03:41:22 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 1BE4FAD21;
+        Mon,  8 Mar 2021 08:41:21 +0000 (UTC)
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20210307202835.253907-1-paul@crapouillou.net>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v2 0/5] Add option to mmap GEM buffers cached
+Message-ID: <ab488f52-f93d-ff50-efc5-bbdceec99ecb@suse.de>
+Date:   Mon, 8 Mar 2021 09:41:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-References: <1615185706-24342-1-git-send-email-anshuman.khandual@arm.com> <1615185706-24342-7-git-send-email-anshuman.khandual@arm.com>
-In-Reply-To: <1615185706-24342-7-git-send-email-anshuman.khandual@arm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 8 Mar 2021 09:26:37 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3Jp6wgGWJ9UDoiN5joOYSONaoHoH=S--i=3SQpm_f4JQ@mail.gmail.com>
-Message-ID: <CAK8P3a3Jp6wgGWJ9UDoiN5joOYSONaoHoH=S--i=3SQpm_f4JQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] mm: Drop redundant HAVE_ARCH_TRANSPARENT_HUGEPAGE
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ac4dihqGbl6+jEr5hvaPprARfRMzuV5tBYOBcFJxgQ6aBn/E5bB
- GXJneuWlAVcyxI+vkcYXKvB59uv/eQ/yEWQvV6WRLKsNnEdMV5MskvBED6sSsQ8qHPsIH8i
- y6VJacjLbXY0SqD78Sae+4qmfdMIGK+K98OMV41tNtw4SHA0l5PG6NwGxEv0snlgh6NxhFf
- SZxZyOLGtxotQuru+ZhsA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TKJ0E/7wbKk=:Fdb8DFUaXWhjSNhmzGd9sT
- 2Oskqmgzab+15xMwBwvePuCPlbxv5TQSAFFU2I/KB7Yi3nUJuGSP/1HzArwwnLSDS2ouNNzxP
- AT4xNWkrH/VUqa1YSKKUWz79eAhjJeIrJ7GdIgGd6H7ko0taezSY4Q6PxHTY0uN5MsW8Uc1lS
- pNp7n7EEWFKqXbJO8ob0V466m/8bL3U8Aex43XxNtnJhkeSfU8w42bIRmIKxlMUGA9Sb5+lT7
- snIDbhue2uQNnyUZASM2Tmf4Xr8gf2SgHUH++IMIP9LVevIJRZxX87pAUkWrgKLRpeJeWtDFz
- m4kFsbkxzrCu1U6vI1+odbEHJD8fGQfyiUp7E8vqld1Ccv6hUGPYfMP4PfjCLo50NSlYqe5Ea
- 4tJO8A/es+NhTOyAw4HUh/qt4+foFDfenv9YX7FhxF21WJKcv4w6z3/lAbwnw
+In-Reply-To: <20210307202835.253907-1-paul@crapouillou.net>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="vCAFos3ArVUElPWBfRykBthcMcwIbnSYQ"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 7:41 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
-> HAVE_ARCH_TRANSPARENT_HUGEPAGE has duplicate definitions on platforms that
-> subscribe it. Drop these reduntant definitions and instead just select it
-> on applicable platforms.
->
-> Cc: Vineet Gupta <vgupta@synopsys.com>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--vCAFos3ArVUElPWBfRykBthcMcwIbnSYQ
+Content-Type: multipart/mixed; boundary="hAsOKY0EVgusrQ8CVoyBxdQSCrgitxGoq";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Paul Cercueil <paul@crapouillou.net>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org
+Message-ID: <ab488f52-f93d-ff50-efc5-bbdceec99ecb@suse.de>
+Subject: Re: [PATCH v2 0/5] Add option to mmap GEM buffers cached
+References: <20210307202835.253907-1-paul@crapouillou.net>
+In-Reply-To: <20210307202835.253907-1-paul@crapouillou.net>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+--hAsOKY0EVgusrQ8CVoyBxdQSCrgitxGoq
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+Hi Paul,
+
+having individual functions for each mode only makes sense if the=20
+decision is at compile time. But in patch 5, you're working around your=20
+earlier design by introducing in-driver helpers that select the correct=20
+CMA function.
+
+In SHMEM helpers we have the flag map_wc in the GEM structure that=20
+selects the pages caching mode (wc vs uncached). I think CMA should use=20
+this design as well. Have a map_noncoherent flag in the CMA GEM object=20
+and set it from the driver's implementation of gem_create_object.
+
+And in the long run, we could try to consolidate all drivers/helpers=20
+mapping flags in struct drm_gem_object.
+
+Best regards
+Thomas
+
+Am 07.03.21 um 21:28 schrieb Paul Cercueil:
+> Rework of my previous patchset which added support for GEM buffers
+> backed by non-coherent memory to the ingenic-drm driver.
+>=20
+> Having GEM buffers backed by non-coherent memory is interesting in
+> the particular case where it is faster to render to a non-coherent
+> buffer then sync the data cache, than to render to a write-combine
+> buffer, and (by extension) much faster than using a shadow buffer.
+> This is true for instance on some Ingenic SoCs, where even simple
+> blits (e.g. memcpy) are about three times faster using this method.
+>=20
+> For the record, the previous patchset was accepted for 5.10 then had
+> to be reverted, as it conflicted with some changes made to the DMA API.=
+
+>=20
+> This new patchset is pretty different as it adds the functionality to
+> the DRM core. The first three patches add variants to existing function=
+s
+> but with the "non-coherent memory" twist, exported as GPL symbols. The
+> fourth patch adds a function to be used with the damage helpers.
+> Finally, the last patch adds support for non-coherent GEM buffers to th=
+e
+> ingenic-drm driver. The functionality is enabled through a module
+> parameter, and is disabled by default.
+>=20
+> Cheers,
+> -Paul
+>=20
+> Paul Cercueil (5):
+>    drm: Add and export function drm_gem_cma_create_noncoherent
+>    drm: Add and export function drm_gem_cma_dumb_create_noncoherent
+>    drm: Add and export function drm_gem_cma_mmap_noncoherent
+>    drm: Add and export function drm_gem_cma_sync_data
+>    drm/ingenic: Add option to alloc cached GEM buffers
+>=20
+>   drivers/gpu/drm/drm_gem_cma_helper.c      | 223 +++++++++++++++++++--=
+-
+>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c |  49 ++++-
+>   drivers/gpu/drm/ingenic/ingenic-drm.h     |   4 +
+>   drivers/gpu/drm/ingenic/ingenic-ipu.c     |  14 +-
+>   include/drm/drm_gem_cma_helper.h          |  13 ++
+>   5 files changed, 273 insertions(+), 30 deletions(-)
+>=20
+
+--=20
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+(HRB 36809, AG N=C3=BCrnberg)
+Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+
+
+--hAsOKY0EVgusrQ8CVoyBxdQSCrgitxGoq--
+
+--vCAFos3ArVUElPWBfRykBthcMcwIbnSYQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmBF4y8FAwAAAAAACgkQlh/E3EQov+C1
+dA/+KIMFQ+rriBUPeo1eB07iNl9uspD2AZu03sWj+ZpRBIsrzznTDkEVccL5EUYa5jxvpfiORFCQ
+wiJf4J9WfReL5EEnk8bCSFMbsQyD0Vqq+MdzlLeI8RcD1m2rjEKeMWiBaeMIWjxlxeLmY9wzutnG
+jbEODyxNDhVHaAZAty5OkgRLKY6FwtYfCXCsBw5z5lqlTXeb11f3+a263kZ23Lp6tGOGgWWIDYZl
+5rTtmE4G5rj+YzB5Lo8sAADvbQQaZGkc/A26v7vDQVInxMhVbkYTkP46KZcOUx4dLUfBN4PgTLb6
+wYbt1tzNz9DcZsNObI4FWrbSEtjTQKp/rNK1i7QWsyOha63vRGCg5wC+Fz7VaWOkwqGdNCaL4ndt
+SGaOV/m8L8t9ZpqDphLsWQm0Ku0duPbEdGP2Qd9Kh3umDKo11eVsk1W2xZaXwcNFIEKAhSvuYEhv
+JuPZyBhCmF7IdUh6JQB8VWlIYXhUVPFX0ntFtS1agJoETqPzX0hQj8b+OSmx+wlOioaPFnDIf9jW
+naxPEtgUQnmowFFt/lpP+E0AlGeYIipaxp4HJvVlkY1aNetiK0sz6ALhW5xHABwZLsELSXyLH3cm
+mhtqW2hbC3+geE5PzLzMBLZCWZ1SIhgm3KcZFCkSnLGkvfUrkCO77kTgRRjFFLa/iIvJaZmHybVX
+6yo=
+=Oi6k
+-----END PGP SIGNATURE-----
+
+--vCAFos3ArVUElPWBfRykBthcMcwIbnSYQ--
