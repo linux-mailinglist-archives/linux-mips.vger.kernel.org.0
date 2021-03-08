@@ -2,192 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 757C7330A3E
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 10:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84715330A58
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 10:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbhCHJZO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Mar 2021 04:25:14 -0500
-Received: from mx2.suse.de ([195.135.220.15]:55400 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230192AbhCHJYu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Mar 2021 04:24:50 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 09460AC0C;
-        Mon,  8 Mar 2021 09:24:49 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Mike Rapoport <rppt@kernel.org>, Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: [PATCH v3] MIPS: kernel: Reserve exception base early to prevent corruption
-Date:   Mon,  8 Mar 2021 10:24:47 +0100
-Message-Id: <20210308092447.13073-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
+        id S229671AbhCHJfB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Mar 2021 04:35:01 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:35530 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229468AbhCHJeY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Mar 2021 04:34:24 -0500
+Received: by mail-ot1-f46.google.com with SMTP id j22so2713434otp.2;
+        Mon, 08 Mar 2021 01:34:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CfKvzPwrH09K3mfPL9rn9TytiECVIszpkadXFP26McQ=;
+        b=aa1gzwFYhl99SRQkmyuPXEWSLKixlSasT+e2EscW2OYcIwZ+epWSDBJBhemKF1dwTG
+         ja0qsLa+Bi3UcSSk4W+Oc82yVbsJTA04xy1RfYArozngqQDYKtAqcLkKWuwdsb/Izxwj
+         8e0Lk/axRF0tRzZHiJrbt+jVrtSieKy58irvACK0uITRrPlnn+qA6c6A/NfxKVEGydW9
+         oUXm2x46Z1aKzaCqLwE9yPcjxpqlaXG2yyE/yhJEj3ic6PX6VBAdK5exfLzR0WsTnrEp
+         wqOFtSeGVLqivqpS61GP+gbt7XxuGPkTC8C1AkX5t7eb+PrHndJN027E2rd/rtw3hHbB
+         RPAA==
+X-Gm-Message-State: AOAM5335gjWvQQzQGtWfg8PSoAjsCWDnuJ947MsSgRlIZO00xgqffvO0
+        9gMCoPL/l8FiiE7JhKkk8L15cyQbl9uoo07vm0c=
+X-Google-Smtp-Source: ABdhPJyzdAZmgfcrWP8548AHWQjq2RF6/CTxvu69rzOJaWC4yKA8+jXeva7i28g8zHVIRmTV0UGy6Mp6C/Rb9dfUr8Y=
+X-Received: by 2002:a9d:4a8e:: with SMTP id i14mr19333580otf.37.1615196063615;
+ Mon, 08 Mar 2021 01:34:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210305020535.25006-1-unixbhaskar@gmail.com>
+In-Reply-To: <20210305020535.25006-1-unixbhaskar@gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Mon, 8 Mar 2021 10:34:11 +0100
+Message-ID: <CAAdtpL7jEQQ2TQAHEObWC_uDGDYtxTr3=Sb-MVQ=V6PNZvVJbg@mail.gmail.com>
+Subject: Re: [PATCH] arch: mips: bcm63xx: Spello fix in the file clk.c
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-BMIPS is one of the few platforms that do change the exception base.
-After commit 2dcb39645441 ("memblock: do not start bottom-up allocations
-with kernel_end") we started seeing BMIPS boards fail to boot with the
-built-in FDT being corrupted.
+Hi Bhaskar,
 
-Before the cited commit, early allocations would be in the [kernel_end,
-RAM_END] range, but after commit they would be within [RAM_START +
-PAGE_SIZE, RAM_END].
+On Fri, Mar 5, 2021 at 3:06 AM Bhaskar Chowdhury <unixbhaskar@gmail.com> wrote:
+>
+>
+>
+> s/revelant/relevant/
 
-The custom exception base handler that is installed by
-bmips_ebase_setup() done for BMIPS5000 CPUs ends-up trampling on the
-memory region allocated by unflatten_and_copy_device_tree() thus
-corrupting the FDT used by the kernel.
+Let me recommend you this great post explaining why and how you could
+improve your patch subject and description:
+https://www.freecodecamp.org/news/writing-good-commit-messages-a-practical-guide/#how-to-write-good-commit-messages
 
-To fix this, we need to perform an early reservation of the custom
-exception space. Additional we reserve the first 4k (1k for R3k) for
-either normal exception vector space (legacy CPUs) or special vectors
-like cache exceptions.
+Regards,
 
-Huge thanks to Serge for analysing and proposing a solution to this
-issue.
+Phil.
 
-Fixes: 2dcb39645441 ("memblock: do not start bottom-up allocations with kernel_end")
-Reported-by: Kamal Dasu <kdasu.kdev@gmail.com>
-Debugged-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
-Changes in v3:
- - always reserve the first 4k for all CPUs (1k for R3k)
-
-Changes in v2:
- - do only memblock reservation in reserve_exception_space()
- - reserve 0..0x400 for all CPUs without ebase register and
-   to addtional reserve_exception_space for BMIPS CPUs
-
- arch/mips/include/asm/traps.h    |  3 +++
- arch/mips/kernel/cpu-probe.c     |  6 ++++++
- arch/mips/kernel/cpu-r3k-probe.c |  3 +++
- arch/mips/kernel/traps.c         | 10 +++++-----
- 4 files changed, 17 insertions(+), 5 deletions(-)
-
-diff --git a/arch/mips/include/asm/traps.h b/arch/mips/include/asm/traps.h
-index 6aa8f126a43d..b710e76c9c65 100644
---- a/arch/mips/include/asm/traps.h
-+++ b/arch/mips/include/asm/traps.h
-@@ -24,8 +24,11 @@ extern void (*board_ebase_setup)(void);
- extern void (*board_cache_error_setup)(void);
- 
- extern int register_nmi_notifier(struct notifier_block *nb);
-+extern void reserve_exception_space(phys_addr_t addr, unsigned long size);
- extern char except_vec_nmi[];
- 
-+#define VECTORSPACING 0x100	/* for EI/VI mode */
-+
- #define nmi_notifier(fn, pri)						\
- ({									\
- 	static struct notifier_block fn##_nb = {			\
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 9a89637b4ecf..b71892064f27 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -26,6 +26,7 @@
- #include <asm/elf.h>
- #include <asm/pgtable-bits.h>
- #include <asm/spram.h>
-+#include <asm/traps.h>
- #include <linux/uaccess.h>
- 
- #include "fpu-probe.h"
-@@ -1628,6 +1629,7 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
- 		c->cputype = CPU_BMIPS3300;
- 		__cpu_name[cpu] = "Broadcom BMIPS3300";
- 		set_elf_platform(cpu, "bmips3300");
-+		reserve_exception_space(0x400, VECTORSPACING * 64);
- 		break;
- 	case PRID_IMP_BMIPS43XX: {
- 		int rev = c->processor_id & PRID_REV_MASK;
-@@ -1638,6 +1640,7 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
- 			__cpu_name[cpu] = "Broadcom BMIPS4380";
- 			set_elf_platform(cpu, "bmips4380");
- 			c->options |= MIPS_CPU_RIXI;
-+			reserve_exception_space(0x400, VECTORSPACING * 64);
- 		} else {
- 			c->cputype = CPU_BMIPS4350;
- 			__cpu_name[cpu] = "Broadcom BMIPS4350";
-@@ -1654,6 +1657,7 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
- 			__cpu_name[cpu] = "Broadcom BMIPS5000";
- 		set_elf_platform(cpu, "bmips5000");
- 		c->options |= MIPS_CPU_ULRI | MIPS_CPU_RIXI;
-+		reserve_exception_space(0x1000, VECTORSPACING * 64);
- 		break;
- 	}
- }
-@@ -2133,6 +2137,8 @@ void cpu_probe(void)
- 	if (cpu == 0)
- 		__ua_limit = ~((1ull << cpu_vmbits) - 1);
- #endif
-+
-+	reserve_exception_space(0, 0x1000);
- }
- 
- void cpu_report(void)
-diff --git a/arch/mips/kernel/cpu-r3k-probe.c b/arch/mips/kernel/cpu-r3k-probe.c
-index abdbbe8c5a43..af654771918c 100644
---- a/arch/mips/kernel/cpu-r3k-probe.c
-+++ b/arch/mips/kernel/cpu-r3k-probe.c
-@@ -21,6 +21,7 @@
- #include <asm/fpu.h>
- #include <asm/mipsregs.h>
- #include <asm/elf.h>
-+#include <asm/traps.h>
- 
- #include "fpu-probe.h"
- 
-@@ -158,6 +159,8 @@ void cpu_probe(void)
- 		cpu_set_fpu_opts(c);
- 	else
- 		cpu_set_nofpu_opts(c);
-+
-+	reserve_exception_space(0, 0x400);
- }
- 
- void cpu_report(void)
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index e0352958e2f7..808b8b61ded1 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -2009,13 +2009,16 @@ void __noreturn nmi_exception_handler(struct pt_regs *regs)
- 	nmi_exit();
- }
- 
--#define VECTORSPACING 0x100	/* for EI/VI mode */
--
- unsigned long ebase;
- EXPORT_SYMBOL_GPL(ebase);
- unsigned long exception_handlers[32];
- unsigned long vi_handlers[64];
- 
-+void reserve_exception_space(phys_addr_t addr, unsigned long size)
-+{
-+	memblock_reserve(addr, size);
-+}
-+
- void __init *set_except_vector(int n, void *addr)
- {
- 	unsigned long handler = (unsigned long) addr;
-@@ -2367,10 +2370,7 @@ void __init trap_init(void)
- 
- 	if (!cpu_has_mips_r2_r6) {
- 		ebase = CAC_BASE;
--		ebase_pa = virt_to_phys((void *)ebase);
- 		vec_size = 0x400;
--
--		memblock_reserve(ebase_pa, vec_size);
- 	} else {
- 		if (cpu_has_veic || cpu_has_vint)
- 			vec_size = 0x200 + VECTORSPACING*64;
--- 
-2.29.2
-
+>
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+> ---
+>  arch/mips/bcm63xx/clk.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
+> index 164115944a7f..5a3e325275d0 100644
+> --- a/arch/mips/bcm63xx/clk.c
+> +++ b/arch/mips/bcm63xx/clk.c
+> @@ -76,7 +76,7 @@ static struct clk clk_enet_misc = {
+>  };
+>
+>  /*
+> - * Ethernet MAC clocks: only revelant on 6358, silently enable misc
+> + * Ethernet MAC clocks: only relevant on 6358, silently enable misc
+>   * clocks
+>   */
+>  static void enetx_set(struct clk *clk, int enable)
+> --
+> 2.30.1
+>
