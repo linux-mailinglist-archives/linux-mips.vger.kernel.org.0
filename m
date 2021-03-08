@@ -2,209 +2,216 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AEE331130
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 15:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB62A33138C
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 17:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbhCHOrV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 8 Mar 2021 09:47:21 -0500
-Received: from aposti.net ([89.234.176.197]:47378 "EHLO aposti.net"
+        id S230165AbhCHQhg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Mar 2021 11:37:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229697AbhCHOq5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Mar 2021 09:46:57 -0500
-Date:   Mon, 08 Mar 2021 14:46:26 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 2/2] mmc: jz4740: Add support for monitoring PLL clock
- rate changes
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     od@zcrc.me, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Message-Id: <EPNNPQ.GYRRY95IUVFU@crapouillou.net>
-In-Reply-To: <20210307170742.70949-3-paul@crapouillou.net>
-References: <20210307170742.70949-1-paul@crapouillou.net>
-        <20210307170742.70949-3-paul@crapouillou.net>
+        id S229893AbhCHQhc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Mar 2021 11:37:32 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D86E16522B;
+        Mon,  8 Mar 2021 16:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615221451;
+        bh=kJCunVGM1TBj1N64Q0ZF1IN7cKIi5a8hQqvKg2XDJb8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fK0mveEwkgVSvMug0eRJCXShqkJXO9pv7KJUz9MKdHs/E98UiQT57yHC9OCalX+t2
+         bRWdQf2HLWuvWb1pvGJq92HBLpflc+As8Pn07/1mnrvmC/GrbsdmkV3+BvVB8yCDll
+         Y/B68UkgObRuQA9dp79cVFo1JTIWBwV53DkbsCJHsQ4mw3bqidCFPjAcVSpwy198f9
+         K1sRv3X/oB2yEttRa7GBKJQX0HXw4UmNuURizJosg/KPUey5kTIWiWHbIfmEDezbwt
+         ZMGwMqywByeoBlf+WkpheVl6wE0moJuMEh60/wN+5HNGbtfEYk2s/3R7tzeuSHnCXX
+         Ub6XDHzEA8hkg==
+Date:   Mon, 8 Mar 2021 18:37:25 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Roman Gushchin <guro@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v3] MIPS: kernel: Reserve exception base early to prevent
+ corruption
+Message-ID: <YEZSxQwkQdsfzWy6@kernel.org>
+References: <20210308092447.13073-1-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210308092447.13073-1-tsbogend@alpha.franken.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-Le dim. 7 mars 2021 à 17:07, Paul Cercueil <paul@crapouillou.net> a 
-écrit :
-> The main PLL can have its rate changed at any moment. To keep the MMC
-> clock running at a rate that fits the specifications, we need to
-> recompute the MMC clock rate every time the PLL rate changes.
+On Mon, Mar 08, 2021 at 10:24:47AM +0100, Thomas Bogendoerfer wrote:
+> BMIPS is one of the few platforms that do change the exception base.
+> After commit 2dcb39645441 ("memblock: do not start bottom-up allocations
+> with kernel_end") we started seeing BMIPS boards fail to boot with the
+> built-in FDT being corrupted.
 > 
-> Use a mutex to ensure that the MMC is idle before performing the PLL 
-> and
-> MMC rate changes.
+> Before the cited commit, early allocations would be in the [kernel_end,
+> RAM_END] range, but after commit they would be within [RAM_START +
+> PAGE_SIZE, RAM_END].
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> The custom exception base handler that is installed by
+> bmips_ebase_setup() done for BMIPS5000 CPUs ends-up trampling on the
+> memory region allocated by unflatten_and_copy_device_tree() thus
+> corrupting the FDT used by the kernel.
+> 
+> To fix this, we need to perform an early reservation of the custom
+> exception space. Additional we reserve the first 4k (1k for R3k) for
+> either normal exception vector space (legacy CPUs) or special vectors
+> like cache exceptions.
+
+Just a side note, memblock always skips the first 4k when allocating
+memory, but explicitly reserving the exception space is The Right Thing To
+Do anyway :)
+ 
+> Huge thanks to Serge for analysing and proposing a solution to this
+> issue.
+> 
+> Fixes: 2dcb39645441 ("memblock: do not start bottom-up allocations with kernel_end")
+> Reported-by: Kamal Dasu <kdasu.kdev@gmail.com>
+> Debugged-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+
 > ---
->  drivers/mmc/host/jz4740_mmc.c | 70 
-> ++++++++++++++++++++++++++++++++++-
->  1 file changed, 69 insertions(+), 1 deletion(-)
+> Changes in v3:
+>  - always reserve the first 4k for all CPUs (1k for R3k)
 > 
-> diff --git a/drivers/mmc/host/jz4740_mmc.c 
-> b/drivers/mmc/host/jz4740_mmc.c
-> index b3c636edbb46..1197b8c6b6ed 100644
-> --- a/drivers/mmc/host/jz4740_mmc.c
-> +++ b/drivers/mmc/host/jz4740_mmc.c
-> @@ -18,6 +18,7 @@
->  #include <linux/mmc/host.h>
->  #include <linux/mmc/slot-gpio.h>
->  #include <linux/module.h>
-> +#include <linux/mutex.h>
->  #include <linux/of_device.h>
->  #include <linux/pinctrl/consumer.h>
->  #include <linux/platform_device.h>
-> @@ -149,6 +150,10 @@ struct jz4740_mmc_host {
->  	struct platform_device *pdev;
->  	struct clk *clk;
+> Changes in v2:
+>  - do only memblock reservation in reserve_exception_space()
+>  - reserve 0..0x400 for all CPUs without ebase register and
+>    to addtional reserve_exception_space for BMIPS CPUs
 > 
-> +	atomic_t clk_mutex_count;
-> +	struct mutex clk_mutex;
-> +	struct notifier_block clock_nb;
-> +
->  	enum jz4740_mmc_version version;
+>  arch/mips/include/asm/traps.h    |  3 +++
+>  arch/mips/kernel/cpu-probe.c     |  6 ++++++
+>  arch/mips/kernel/cpu-r3k-probe.c |  3 +++
+>  arch/mips/kernel/traps.c         | 10 +++++-----
+>  4 files changed, 17 insertions(+), 5 deletions(-)
 > 
->  	int irq;
-> @@ -338,6 +343,9 @@ static void jz4740_mmc_pre_request(struct 
-> mmc_host *mmc,
->  	struct jz4740_mmc_host *host = mmc_priv(mmc);
->  	struct mmc_data *data = mrq->data;
-> 
-> +	if (atomic_inc_and_test(&host->clk_mutex_count))
-> +		mutex_lock(&host->clk_mutex);
-
-There's an obvious race here, let me rewrite this using the proper 
-locking mechanism.
-
--Paul
-
+> diff --git a/arch/mips/include/asm/traps.h b/arch/mips/include/asm/traps.h
+> index 6aa8f126a43d..b710e76c9c65 100644
+> --- a/arch/mips/include/asm/traps.h
+> +++ b/arch/mips/include/asm/traps.h
+> @@ -24,8 +24,11 @@ extern void (*board_ebase_setup)(void);
+>  extern void (*board_cache_error_setup)(void);
+>  
+>  extern int register_nmi_notifier(struct notifier_block *nb);
+> +extern void reserve_exception_space(phys_addr_t addr, unsigned long size);
+>  extern char except_vec_nmi[];
+>  
+> +#define VECTORSPACING 0x100	/* for EI/VI mode */
 > +
->  	if (!host->use_dma)
->  		return;
-> 
-> @@ -353,6 +361,9 @@ static void jz4740_mmc_post_request(struct 
-> mmc_host *mmc,
->  	struct jz4740_mmc_host *host = mmc_priv(mmc);
->  	struct mmc_data *data = mrq->data;
-> 
-> +	if (atomic_dec_return(&host->clk_mutex_count) == -1)
-> +		mutex_unlock(&host->clk_mutex);
-> +
->  	if (data && data->host_cookie != COOKIE_UNMAPPED)
->  		jz4740_mmc_dma_unmap(host, data);
-> 
-> @@ -955,6 +966,48 @@ static const struct mmc_host_ops jz4740_mmc_ops 
-> = {
->  	.enable_sdio_irq = jz4740_mmc_enable_sdio_irq,
->  };
-> 
-> +static inline struct jz4740_mmc_host *
-> +jz4740_mmc_nb_get_priv(struct notifier_block *nb)
-> +{
-> +	return container_of(nb, struct jz4740_mmc_host, clock_nb);
-> +}
-> +
-> +static struct clk *jz4740_mmc_get_parent_clk(struct clk *clk)
-> +{
-> +	/*
-> +	 * Return the first clock above the one that will effectively modify
-> +	 * its rate when clk_set_rate(clk) is called.
-> +	 */
-> +	clk = clk_get_first_to_set_rate(clk);
-> +
-> +	return clk_get_parent(clk);
-> +}
-> +
-> +static int jz4740_mmc_update_clk(struct notifier_block *nb,
-> +				 unsigned long action,
-> +				 void *data)
-> +{
-> +	struct jz4740_mmc_host *host = jz4740_mmc_nb_get_priv(nb);
-> +
-> +	/*
-> +	 * PLL may have changed its frequency; our clock may be running 
-> above
-> +	 * spec. Wait until MMC is idle (using host->clk_mutex) before 
-> changing
-> +	 * the PLL clock, and after it's done, reset our clock rate.
-> +	 */
-> +
-> +	switch (action) {
-> +	case PRE_RATE_CHANGE:
-> +		mutex_lock(&host->clk_mutex);
-> +		break;
-> +	default:
-> +		clk_set_rate(host->clk, host->mmc->f_max);
-> +		mutex_unlock(&host->clk_mutex);
-> +		break;
-> +	}
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
->  static const struct of_device_id jz4740_mmc_of_match[] = {
->  	{ .compatible = "ingenic,jz4740-mmc", .data = (void *) 
-> JZ_MMC_JZ4740 },
->  	{ .compatible = "ingenic,jz4725b-mmc", .data = (void 
-> *)JZ_MMC_JZ4725B },
-> @@ -971,6 +1024,7 @@ static int jz4740_mmc_probe(struct 
-> platform_device* pdev)
->  	struct mmc_host *mmc;
->  	struct jz4740_mmc_host *host;
->  	const struct of_device_id *match;
-> +	struct clk *parent_clk;
-> 
->  	mmc = mmc_alloc_host(sizeof(struct jz4740_mmc_host), &pdev->dev);
->  	if (!mmc) {
-> @@ -1058,12 +1112,24 @@ static int jz4740_mmc_probe(struct 
-> platform_device* pdev)
->  		goto err_free_irq;
->  	host->use_dma = !ret;
-> 
-> +	atomic_set(&host->clk_mutex_count, -1);
-> +	mutex_init(&host->clk_mutex);
-> +	host->clock_nb.notifier_call = jz4740_mmc_update_clk;
-> +
-> +	parent_clk = jz4740_mmc_get_parent_clk(host->clk);
-> +
-> +	ret = clk_notifier_register(parent_clk, &host->clock_nb);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Unable to register clock notifier\n");
-> +		goto err_release_dma;
-> +	}
-> +
->  	platform_set_drvdata(pdev, host);
->  	ret = mmc_add_host(mmc);
-> 
->  	if (ret) {
->  		dev_err(&pdev->dev, "Failed to add mmc host: %d\n", ret);
-> -		goto err_release_dma;
-> +		goto err_unregister_clk_notifier;
+>  #define nmi_notifier(fn, pri)						\
+>  ({									\
+>  	static struct notifier_block fn##_nb = {			\
+> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+> index 9a89637b4ecf..b71892064f27 100644
+> --- a/arch/mips/kernel/cpu-probe.c
+> +++ b/arch/mips/kernel/cpu-probe.c
+> @@ -26,6 +26,7 @@
+>  #include <asm/elf.h>
+>  #include <asm/pgtable-bits.h>
+>  #include <asm/spram.h>
+> +#include <asm/traps.h>
+>  #include <linux/uaccess.h>
+>  
+>  #include "fpu-probe.h"
+> @@ -1628,6 +1629,7 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
+>  		c->cputype = CPU_BMIPS3300;
+>  		__cpu_name[cpu] = "Broadcom BMIPS3300";
+>  		set_elf_platform(cpu, "bmips3300");
+> +		reserve_exception_space(0x400, VECTORSPACING * 64);
+>  		break;
+>  	case PRID_IMP_BMIPS43XX: {
+>  		int rev = c->processor_id & PRID_REV_MASK;
+> @@ -1638,6 +1640,7 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
+>  			__cpu_name[cpu] = "Broadcom BMIPS4380";
+>  			set_elf_platform(cpu, "bmips4380");
+>  			c->options |= MIPS_CPU_RIXI;
+> +			reserve_exception_space(0x400, VECTORSPACING * 64);
+>  		} else {
+>  			c->cputype = CPU_BMIPS4350;
+>  			__cpu_name[cpu] = "Broadcom BMIPS4350";
+> @@ -1654,6 +1657,7 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
+>  			__cpu_name[cpu] = "Broadcom BMIPS5000";
+>  		set_elf_platform(cpu, "bmips5000");
+>  		c->options |= MIPS_CPU_ULRI | MIPS_CPU_RIXI;
+> +		reserve_exception_space(0x1000, VECTORSPACING * 64);
+>  		break;
 >  	}
->  	dev_info(&pdev->dev, "Ingenic SD/MMC card driver registered\n");
-> 
-> @@ -1074,6 +1140,8 @@ static int jz4740_mmc_probe(struct 
-> platform_device* pdev)
-> 
->  	return 0;
-> 
-> +err_unregister_clk_notifier:
-> +	clk_notifier_unregister(parent_clk, &host->clock_nb);
->  err_release_dma:
->  	if (host->use_dma)
->  		jz4740_mmc_release_dma_channels(host);
-> --
-> 2.30.1
+>  }
+> @@ -2133,6 +2137,8 @@ void cpu_probe(void)
+>  	if (cpu == 0)
+>  		__ua_limit = ~((1ull << cpu_vmbits) - 1);
+>  #endif
+> +
+> +	reserve_exception_space(0, 0x1000);
+>  }
+>  
+>  void cpu_report(void)
+> diff --git a/arch/mips/kernel/cpu-r3k-probe.c b/arch/mips/kernel/cpu-r3k-probe.c
+> index abdbbe8c5a43..af654771918c 100644
+> --- a/arch/mips/kernel/cpu-r3k-probe.c
+> +++ b/arch/mips/kernel/cpu-r3k-probe.c
+> @@ -21,6 +21,7 @@
+>  #include <asm/fpu.h>
+>  #include <asm/mipsregs.h>
+>  #include <asm/elf.h>
+> +#include <asm/traps.h>
+>  
+>  #include "fpu-probe.h"
+>  
+> @@ -158,6 +159,8 @@ void cpu_probe(void)
+>  		cpu_set_fpu_opts(c);
+>  	else
+>  		cpu_set_nofpu_opts(c);
+> +
+> +	reserve_exception_space(0, 0x400);
+>  }
+>  
+>  void cpu_report(void)
+> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+> index e0352958e2f7..808b8b61ded1 100644
+> --- a/arch/mips/kernel/traps.c
+> +++ b/arch/mips/kernel/traps.c
+> @@ -2009,13 +2009,16 @@ void __noreturn nmi_exception_handler(struct pt_regs *regs)
+>  	nmi_exit();
+>  }
+>  
+> -#define VECTORSPACING 0x100	/* for EI/VI mode */
+> -
+>  unsigned long ebase;
+>  EXPORT_SYMBOL_GPL(ebase);
+>  unsigned long exception_handlers[32];
+>  unsigned long vi_handlers[64];
+>  
+> +void reserve_exception_space(phys_addr_t addr, unsigned long size)
+> +{
+> +	memblock_reserve(addr, size);
+> +}
+> +
+>  void __init *set_except_vector(int n, void *addr)
+>  {
+>  	unsigned long handler = (unsigned long) addr;
+> @@ -2367,10 +2370,7 @@ void __init trap_init(void)
+>  
+>  	if (!cpu_has_mips_r2_r6) {
+>  		ebase = CAC_BASE;
+> -		ebase_pa = virt_to_phys((void *)ebase);
+>  		vec_size = 0x400;
+> -
+> -		memblock_reserve(ebase_pa, vec_size);
+>  	} else {
+>  		if (cpu_has_veic || cpu_has_vint)
+>  			vec_size = 0x200 + VECTORSPACING*64;
+> -- 
+> 2.29.2
 > 
 
-
+-- 
+Sincerely yours,
+Mike.
