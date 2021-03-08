@@ -2,99 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C20A73313DD
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 17:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA0533140B
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Mar 2021 18:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbhCHQwg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 8 Mar 2021 11:52:36 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:34730 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230135AbhCHQw0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Mar 2021 11:52:26 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-282-p8F5T5RLMuythNy9As2n-g-1; Mon, 08 Mar 2021 16:52:23 +0000
-X-MC-Unique: p8F5T5RLMuythNy9As2n-g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Mon, 8 Mar 2021 16:52:24 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Mon, 8 Mar 2021 16:52:24 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Tiezhu Yang' <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: RE: [PATCH] MIPS: Check __clang__ to avoid performance influence with
- GCC in csum_tcpudp_nofold()
-Thread-Topic: [PATCH] MIPS: Check __clang__ to avoid performance influence
- with GCC in csum_tcpudp_nofold()
-Thread-Index: AQHXFBmyTl3JNAv/2UywLmyfFV7Ivap6TYNg
-Date:   Mon, 8 Mar 2021 16:52:24 +0000
-Message-ID: <8d61574e815a4cf098d21eb4d749be0f@AcuMS.aculab.com>
-References: <1615207807-29972-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1615207807-29972-1-git-send-email-yangtiezhu@loongson.cn>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S230002AbhCHREe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Mar 2021 12:04:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54602 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229904AbhCHRE3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Mar 2021 12:04:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0382B6522C;
+        Mon,  8 Mar 2021 17:04:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615223069;
+        bh=jTPd/R2IcG/q8yWtov6si/pOz9VHOAJXbe8eW4LlU+Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=T1efKG2784L/un1cdV6OCA2fxfIJ5Z071EsgFzk5a2rbjZFoqMILbv8C3XrykkjvL
+         TRJm/PYRe1lNbcPAtXU0gFG8pDGB6LscEgn6c44axqR76/xyVo0pQ+OZq5U8b373tY
+         SJWy+Pqyxf/9zVSZnA8DOY3ZGeCHBid1+kH0HWspsaEX+YzRGJRvN/4n4mjKkQWO+/
+         IOek8ZgqOGx7lg3xezv9nnfJ9tZ0jvMEicFcUz7uz2KGk2xWm9k9LybfkC8kvvkK6/
+         T/IDtxzRI5zoR04yRP4Dnc4RFQfJdjEK89dbiiny5ehfe0FNk2INEkaeilvhYp+tr5
+         GEMa9/ZTlA53A==
+Received: by mail-ed1-f47.google.com with SMTP id m9so15785852edd.5;
+        Mon, 08 Mar 2021 09:04:28 -0800 (PST)
+X-Gm-Message-State: AOAM5312B7y28jd08HgQcr0RHB7jXJJswp3EC4uW/x+8ywsaho8xveOa
+        tPVU8hdBQ91CmjyNwgN3gbL++pokSoJXQonYfQ==
+X-Google-Smtp-Source: ABdhPJxczdvK/qV3FEN5Qjf5LIKC2Y4tY0TDZ07L6U+SSEImjQdZGi6RQyutAsEb2IrV9+zVcIueWtbphsShO/EfFJA=
+X-Received: by 2002:a50:fe17:: with SMTP id f23mr23703776edt.258.1615223067558;
+ Mon, 08 Mar 2021 09:04:27 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20210303193305.924384-1-paul@crapouillou.net> <CAL_JsqLfkjC4c4PYfm6yJLZMH-5WaKA_mr9ziJ1J63UohcgRCw@mail.gmail.com>
+ <20210306084513.GA5453@alpha.franken.de> <CAL_JsqK0_M18gnoYFyTyf_OaQgbmbYYyoAr-WaFCzzsmFuFeFg@mail.gmail.com>
+ <20210306225855.GA3574@alpha.franken.de>
+In-Reply-To: <20210306225855.GA3574@alpha.franken.de>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 8 Mar 2021 10:04:15 -0700
+X-Gmail-Original-Message-ID: <CAL_Jsq+m0uwgo_-phR_zAz6ZfiSAr=JMXMaFsW-tPv_kXV+3fA@mail.gmail.com>
+Message-ID: <CAL_Jsq+m0uwgo_-phR_zAz6ZfiSAr=JMXMaFsW-tPv_kXV+3fA@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: boot/compressed: Copy DTB to aligned address
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Paul Cercueil <paul@crapouillou.net>, od@zcrc.me,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Tiezhu Yang
-> Sent: 08 March 2021 12:50
-> 
-> The asm code in csum_tcpudp_nofold() is performance-critical, I am sorry
-> for the poorly considered implementation about the performance influence
-> with GCC in the commit 198688edbf77 ("MIPS: Fix inline asm input/output
-> type mismatch in checksum.h used with Clang").
-> 
-> With this patch, we can build successfully by both GCC and Clang,
-> at the same time, we can avoid the potential performance influence
-> with GCC.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/mips/include/asm/checksum.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/mips/include/asm/checksum.h b/arch/mips/include/asm/checksum.h
-> index 1e6c135..64d353e 100644
-> --- a/arch/mips/include/asm/checksum.h
-> +++ b/arch/mips/include/asm/checksum.h
-> @@ -130,7 +130,9 @@ static inline __wsum csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
->  					__u32 len, __u8 proto,
->  					__wsum sum)
->  {
-> +#ifdef __clang__
->  	unsigned long tmp = (__force unsigned long)sum;
-> +#endif
+On Sat, Mar 6, 2021 at 3:59 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Sat, Mar 06, 2021 at 02:35:21PM -0700, Rob Herring wrote:
+> > On Sat, Mar 6, 2021 at 1:45 AM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > >
+> > > On Wed, Mar 03, 2021 at 02:37:55PM -0600, Rob Herring wrote:
+> > > > On Wed, Mar 3, 2021 at 1:33 PM Paul Cercueil <paul@crapouillou.net> wrote:
+> > > > >
+> > > > > Since 5.12-rc1, the Device Tree blob must now be properly aligned.
+> > > >
+> > > > I had checked the other built-in cases as microblaze broke too, but
+> > > > missed some of the many ways MIPS can have a dtb. Appended and
+> > > > built-in DTBs were supposed to be temporary. :(
+> > >
+> > > and a fdt can also be provided by firmware. And according to spec
+> > > there is no aligmnet requirement. So this whole change will break
+> > > then. What was the reason for the whole churn ?
 
-What happens if you make the above:
-#ifdef __clang__
-	unsigned long tmp = (__force unsigned long)sum;
-#else
-	__wsum tmp = sum;
-#endif
-	
-and then leave the rest of the function the same for both compilers.
-Maybe do s/sum/sum_in/,s/tmp/sum/ to reduce the changes.
+Actually, that is wrong. The spec defines the alignment (from
+flattened format appendix):
 
-	David
+"Alignment
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+For the data in the memory reservation and structure blocks to be used
+without unaligned memory accesses, they shall lie at suitably aligned
+memory addresses. Specifically, the memory reservation block shall be
+aligned to an 8-byte boundary and the structure block to a 4-byte
+boundary.
 
+Furthermore, the devicetree blob as a whole can be relocated without
+destroying the alignment of the subblocks.
+
+As described in the previous sections, the structure and strings
+blocks shall have aligned offsets from the beginning of the devicetree
+blob. To ensure the in-memory alignment of the blocks, it is
+sufficient to ensure that the devicetree as a whole is loaded at an
+address aligned to the largest alignment of any of the subblocks, that
+is, to an 8-byte boundary. A |spec| compliant boot program shall load
+the devicetree blob at such an aligned address before passing it to
+the client program. If an |spec| client program relocates the
+devicetree blob in memory, it should only do so to another 8-byte
+aligned address."
+
+
+> > There was a long discussion on devicetree-compiler list a few months
+> > ago. In summary, a while back libfdt switched to accessors from raw
+> > pointer accesses to avoid any possible unaligned accesses (is MIPS
+> > always okay with unaligned accesses?).
+>
+> no, it will trap unaligned accesses, that's the reason for Paul's problem.
+>
+> > This was determined to be a
+> > performance regression and an overkill as the DT structure itself
+> > should always be naturally aligned if the dtb is 64-bit aligned. I
+> > think 32-bit aligned has some possible misaligned accesses.
+>
+> the access macros are using *(unsigned long long *), which isn't
+> even nice for 32bit CPUs...
+
+Where are those?
+
+> > As part of this, a dtb alignment check was added. So worst case, we
+> > could disable that if need be.
+>
+> yeah, or override fdt32/64_to_cpu, if I understood the code correctly.
+
+No, fdt32/64_to_cpu don't dereference the pointer.
+
+Rob
