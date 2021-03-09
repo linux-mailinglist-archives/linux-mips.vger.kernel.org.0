@@ -2,113 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FC0332093
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Mar 2021 09:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAECC33209F
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Mar 2021 09:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbhCIIbh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Mar 2021 03:31:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:20019 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229553AbhCIIbg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Mar 2021 03:31:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615278696;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GfRwAlMZCg89ixlFNqb8ULyiVLWTEnJ0ZTo2SVvckic=;
-        b=MiYQ6rnLtbe6gyrKStwD19ZC7zd7UV6fViyryKiskbK4+QnA/abn+sVUOQeY8Eq63pKOlg
-        9hAawSiX9/iR7SO1alwqb/aXqeD3dM8X59BXk1li5Fr2vFH83tv8Of8g/gkdkJQYoaFvb+
-        jNEb71lB6RK0y3AI1GWdrZH1PAK0RdQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-564-MC5HpSYcPlGBNWdwQsIzjw-1; Tue, 09 Mar 2021 03:31:34 -0500
-X-MC-Unique: MC5HpSYcPlGBNWdwQsIzjw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1B8C580432D;
-        Tue,  9 Mar 2021 08:31:30 +0000 (UTC)
-Received: from [10.36.114.143] (ovpn-114-143.ams2.redhat.com [10.36.114.143])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0D1BF6062F;
-        Tue,  9 Mar 2021 08:31:14 +0000 (UTC)
-Subject: Re: [PATCH RFCv2] mm/madvise: introduce MADV_POPULATE_(READ|WRITE) to
- prefault/prealloc memory
-To:     Rolf Eike Beer <eike-kernel@sf-tec.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>
-References: <20210308164520.18323-1-david@redhat.com>
- <6ecd754406fffe851be6543025203b6b@sf-tec.de>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <00fcfc37-e288-8ffe-a443-c2f5054deee9@redhat.com>
-Date:   Tue, 9 Mar 2021 09:31:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
-MIME-Version: 1.0
-In-Reply-To: <6ecd754406fffe851be6543025203b6b@sf-tec.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+        id S229840AbhCIIdM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Mar 2021 03:33:12 -0500
+Received: from foss.arm.com ([217.140.110.172]:49386 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229881AbhCIIct (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 9 Mar 2021 03:32:49 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32FEED6E;
+        Tue,  9 Mar 2021 00:32:49 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.66.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BCE853F71B;
+        Tue,  9 Mar 2021 00:32:44 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>, x86@kernel.org,
+        linux-ia64@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] mm: some config cleanups
+Date:   Tue,  9 Mar 2021 14:03:04 +0530
+Message-Id: <1615278790-18053-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09.03.21 08:35, Rolf Eike Beer wrote:
->> diff --git a/mm/internal.h b/mm/internal.h
->> index 9902648f2206..a5c4ed23b1db 100644
->> --- a/mm/internal.h
->> +++ b/mm/internal.h
->> @@ -340,6 +340,9 @@ void __vma_unlink_list(struct mm_struct *mm,
->> struct vm_area_struct *vma);
->>   #ifdef CONFIG_MMU
->>   extern long populate_vma_page_range(struct vm_area_struct *vma,
->>   		unsigned long start, unsigned long end, int *nonblocking);
->> +extern long faultin_vma_page_range(struct vm_area_struct *vma,
->> +				   unsigned long start, unsigned long end,
->> +				   bool write, int *nonblocking);
->>   extern void munlock_vma_pages_range(struct vm_area_struct *vma,
->>   			unsigned long start, unsigned long end);
->>   static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
-> 
-> The parameter name does not match the one in the implementation.
-> 
-> Otherwise the implementation looks fine AFAICT.
+This series contains config cleanup patches which reduces code duplication
+across platforms and also improves maintainability. There is no functional
+change intended with this series. This has been boot tested on arm64 but
+only build tested on some other platforms.
 
-Hehe, you can tell how I copy-pasted from populate_vma_page_range(), 
-because there, the variable names are messed up, too :)
+This applies on 5.12-rc2
 
-Will fix (most probably populate_vma_page_range() as well in a cleanup 
-patch), thanks!
+Cc: x86@kernel.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (6):
+  mm: Generalize ARCH_HAS_CACHE_LINE_SIZE
+  mm: Generalize SYS_SUPPORTS_HUGETLBFS (rename as ARCH_SUPPORTS_HUGETLBFS)
+  mm: Generalize ARCH_ENABLE_MEMORY_[HOTPLUG|HOTREMOVE]
+  mm: Drop redundant ARCH_ENABLE_[HUGEPAGE|THP]_MIGRATION
+  mm: Drop redundant ARCH_ENABLE_SPLIT_PMD_PTLOCK
+  mm: Drop redundant HAVE_ARCH_TRANSPARENT_HUGEPAGE
+
+ arch/arc/Kconfig                       |  9 ++------
+ arch/arm/Kconfig                       | 10 ++-------
+ arch/arm64/Kconfig                     | 30 ++++++--------------------
+ arch/ia64/Kconfig                      |  8 ++-----
+ arch/mips/Kconfig                      |  6 +-----
+ arch/parisc/Kconfig                    |  5 +----
+ arch/powerpc/Kconfig                   | 11 ++--------
+ arch/powerpc/platforms/Kconfig.cputype | 16 +++++---------
+ arch/riscv/Kconfig                     |  5 +----
+ arch/s390/Kconfig                      | 12 +++--------
+ arch/sh/Kconfig                        |  7 +++---
+ arch/sh/mm/Kconfig                     |  8 -------
+ arch/x86/Kconfig                       | 29 ++++++-------------------
+ fs/Kconfig                             |  5 ++++-
+ mm/Kconfig                             |  9 ++++++++
+ 15 files changed, 48 insertions(+), 122 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.20.1
 
