@@ -2,98 +2,200 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFE6331F4A
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Mar 2021 07:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BB2331F7B
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Mar 2021 07:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhCIGd0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Mar 2021 01:33:26 -0500
-Received: from out28-100.mail.aliyun.com ([115.124.28.100]:43762 "EHLO
-        out28-100.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhCIGdP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Mar 2021 01:33:15 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1749291|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0121347-0.000267848-0.987597;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.JiMa0r5_1615271589;
-Received: from 192.168.1.112(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.JiMa0r5_1615271589)
-          by smtp.aliyun-inc.com(10.147.42.198);
-          Tue, 09 Mar 2021 14:33:10 +0800
-Subject: Re: [PATCH 0/6] clk: Ingenic JZ4760(B) support
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     od@zcrc.me, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20210307141759.30426-1-paul@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <feef3ac6-1df3-1e81-950d-e11886ee7ae2@wanyeetech.com>
-Date:   Tue, 9 Mar 2021 14:31:01 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S229740AbhCIGnU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Mar 2021 01:43:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50910 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229649AbhCIGnN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 9 Mar 2021 01:43:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A59B652A4;
+        Tue,  9 Mar 2021 06:43:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615272192;
+        bh=8aTJOb41W71/iAYGorZ+HicoBt7LRkfCHw2dKRKP5H8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PsLPWBfOWhe/SUGxap6rvsZXtVzh2EiQf7EnxMZZDhpQSHp8pryRMfdjo1ePU9uGy
+         4csLHWUbFWNa4SbM9RJy5TLnV8zAXHZsDPq7VibDYGiOO9WeEKpZk43SZkX2Dzscbq
+         J6XlTSnbzEzvxSjunZA94vLnZZFlPy05/xBtkormCNi3dRDH0kFD4xlFRXcMezlx5c
+         nKVb2CCGGlOUKlwyPdAQXKlocouJZrF+4dIrw8QP+Smis35zhLbmdw1hhheRDkoh+l
+         /zlsT1zEYpG/vD1wZu7C2rqmHTUh6fkkvnFdzvAV4HiOskAlhWePGPVxORbsCM6zwi
+         oZfa4b9vwf92w==
+Received: by mail-ot1-f54.google.com with SMTP id h22so11832640otr.6;
+        Mon, 08 Mar 2021 22:43:12 -0800 (PST)
+X-Gm-Message-State: AOAM5311Ad3G5pXMwx/SeL3TI2v1wrx17gfLProVSlDl6+LObIGBm7/O
+        hlhaswIYSRlGzebt47VOiPWT+YsccUAiPfB4mgA=
+X-Google-Smtp-Source: ABdhPJwwErlMGgTI6W9kWVTWXyRRpA2pqUCTwdh7w26x7CXw7TkH69DIf3SOIwcUVKSsFK4w6gv5mpplcLA5Tjexcsk=
+X-Received: by 2002:a9d:7512:: with SMTP id r18mr23355920otk.90.1615272191490;
+ Mon, 08 Mar 2021 22:43:11 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210307141759.30426-1-paul@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20210309000247.2989531-8-danielwa@cisco.com>
+In-Reply-To: <20210309000247.2989531-8-danielwa@cisco.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 9 Mar 2021 07:43:01 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXF9k2J5eZdn6R6bn4ChRVyuGYHM7bOtycf1QKrakrua_g@mail.gmail.com>
+Message-ID: <CAMj1kXF9k2J5eZdn6R6bn4ChRVyuGYHM7bOtycf1QKrakrua_g@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] CMDLINE: x86: convert to generic builtin command line
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        X86 ML <x86@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>, xe-linux-external@cisco.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ruslan Ruslichenko <rruslich@cisco.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
-
-On 2021/3/7 下午10:17, Paul Cercueil wrote:
-> Hi,
+On Tue, 9 Mar 2021 at 01:03, Daniel Walker <danielwa@cisco.com> wrote:
 >
-> Here are a set of patches to add support for the Ingenic JZ4760(B) SoCs.
+> This updates the x86 code to use the CONFIG_GENERIC_CMDLINE
+> option.
 >
-> One thing to note is that the ingenic,jz4760-tcu is undocumented for now,
-> as I will update the TCU documentation in a different patchset.
+> Cc: xe-linux-external@cisco.com
+> Signed-off-by: Ruslan Ruslichenko <rruslich@cisco.com>
+> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> Signed-off-by: Daniel Walker <danielwa@cisco.com>
+> ---
+>  arch/x86/Kconfig                        | 44 +------------------------
+>  arch/x86/kernel/setup.c                 | 18 ++--------
+>  drivers/firmware/efi/libstub/x86-stub.c |  2 +-
+>  3 files changed, 4 insertions(+), 60 deletions(-)
 >
-> Zhou: the CGU code now supports overriding the PLL M/N/OD calc
-> algorithm, please tell me if it works for you.
-
-
-After set "od = 1;", the overriding works, but I think we still need 
-some further improvements related to OD,
-
-because there is no OD bits in the I2S PLL, this will cause error in 
-"ingenic_pll_recalc_rate()", and may cause
-
-"ingenic_pll_calc()" to also have error(if we will introduce support for 
-non 1 od values).
-
-
-I think maybe we can add codes to detect if there is an 
-"pll_od_encoding". If it is NULL, it means no OD bits, then
-
-do some corresponding processing( for example, setting corresponding 
-variable to 1) to ensure proper calculation.
-
-
-Thanks and best regards!
-
-
-> Cheers,
-> -Paul
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 21f851179ff0..3950f9bf9855 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -115,6 +115,7 @@ config X86
+>         select EDAC_SUPPORT
+>         select GENERIC_CLOCKEVENTS_BROADCAST    if X86_64 || (X86_32 && X86_LOCAL_APIC)
+>         select GENERIC_CLOCKEVENTS_MIN_ADJUST
+> +       select GENERIC_CMDLINE
+>         select GENERIC_CMOS_UPDATE
+>         select GENERIC_CPU_AUTOPROBE
+>         select GENERIC_CPU_VULNERABILITIES
+> @@ -2368,49 +2369,6 @@ choice
 >
-> Paul Cercueil (6):
->    dt-bindings: clock: ingenic: Add ingenic,jz4760{,b}-cgu compatibles
->    clk: Support bypassing dividers
->    clk: ingenic: Read bypass register only when there is one
->    clk: ingenic: Remove pll_info.no_bypass_bit
->    clk: ingenic: Support overriding PLLs M/N/OD calc algorithm
->    clk: ingenic: Add support for the JZ4760
+>  endchoice
 >
->   .../bindings/clock/ingenic,cgu.yaml           |   4 +
->   drivers/clk/ingenic/Kconfig                   |  10 +
->   drivers/clk/ingenic/Makefile                  |   1 +
->   drivers/clk/ingenic/cgu.c                     |  92 ++--
->   drivers/clk/ingenic/cgu.h                     |  12 +-
->   drivers/clk/ingenic/jz4725b-cgu.c             |  12 +-
->   drivers/clk/ingenic/jz4740-cgu.c              |  12 +-
->   drivers/clk/ingenic/jz4760-cgu.c              | 433 ++++++++++++++++++
->   drivers/clk/ingenic/jz4770-cgu.c              |  15 +-
->   drivers/clk/ingenic/tcu.c                     |   2 +
->   include/dt-bindings/clock/jz4760-cgu.h        |  54 +++
->   11 files changed, 591 insertions(+), 56 deletions(-)
->   create mode 100644 drivers/clk/ingenic/jz4760-cgu.c
->   create mode 100644 include/dt-bindings/clock/jz4760-cgu.h
+> -config CMDLINE_BOOL
+> -       bool "Built-in kernel command line"
+> -       help
+> -         Allow for specifying boot arguments to the kernel at
+> -         build time.  On some systems (e.g. embedded ones), it is
+> -         necessary or convenient to provide some or all of the
+> -         kernel boot arguments with the kernel itself (that is,
+> -         to not rely on the boot loader to provide them.)
+> -
+> -         To compile command line arguments into the kernel,
+> -         set this option to 'Y', then fill in the
+> -         boot arguments in CONFIG_CMDLINE.
+> -
+> -         Systems with fully functional boot loaders (i.e. non-embedded)
+> -         should leave this option set to 'N'.
+> -
+> -config CMDLINE
+> -       string "Built-in kernel command string"
+> -       depends on CMDLINE_BOOL
+> -       default ""
+> -       help
+> -         Enter arguments here that should be compiled into the kernel
+> -         image and used at boot time.  If the boot loader provides a
+> -         command line at boot time, it is appended to this string to
+> -         form the full kernel command line, when the system boots.
+> -
+> -         However, you can use the CONFIG_CMDLINE_OVERRIDE option to
+> -         change this behavior.
+> -
+> -         In most cases, the command line (whether built-in or provided
+> -         by the boot loader) should specify the device for the root
+> -         file system.
+> -
+> -config CMDLINE_OVERRIDE
+> -       bool "Built-in command line overrides boot loader arguments"
+> -       depends on CMDLINE_BOOL && CMDLINE != ""
+> -       help
+> -         Set this option to 'Y' to have the kernel ignore the boot loader
+> -         command line, and use ONLY the built-in command line.
+> -
+> -         This is used to work around broken boot loaders.  This should
+> -         be set to 'N' under normal conditions.
+> -
+>  config MODIFY_LDT_SYSCALL
+>         bool "Enable the LDT (local descriptor table)" if EXPERT
+>         default y
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index 740f3bdb3f61..e748c3e5c1ae 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -48,6 +48,7 @@
+>  #include <asm/unwind.h>
+>  #include <asm/vsyscall.h>
+>  #include <linux/vmalloc.h>
+> +#include <linux/cmdline.h>
+>
+>  /*
+>   * max_low_pfn_mapped: highest directly mapped pfn < 4 GB
+> @@ -162,9 +163,6 @@ unsigned long saved_video_mode;
+>  #define RAMDISK_LOAD_FLAG              0x4000
+>
+>  static char __initdata command_line[COMMAND_LINE_SIZE];
+> -#ifdef CONFIG_CMDLINE_BOOL
+> -static char __initdata builtin_cmdline[COMMAND_LINE_SIZE] = CONFIG_CMDLINE;
+> -#endif
+>
+>  #if defined(CONFIG_EDD) || defined(CONFIG_EDD_MODULE)
+>  struct edd edd;
+> @@ -884,19 +882,7 @@ void __init setup_arch(char **cmdline_p)
+>         bss_resource.start = __pa_symbol(__bss_start);
+>         bss_resource.end = __pa_symbol(__bss_stop)-1;
+>
+> -#ifdef CONFIG_CMDLINE_BOOL
+> -#ifdef CONFIG_CMDLINE_OVERRIDE
+> -       strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+> -#else
+> -       if (builtin_cmdline[0]) {
+> -               /* append boot loader cmdline to builtin */
+> -               strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
+> -               strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+> -               strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+> -       }
+> -#endif
+> -#endif
+> -
+> +       cmdline_add_builtin(boot_command_line, NULL, COMMAND_LINE_SIZE);
+>         strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+>         *cmdline_p = command_line;
+>
+> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> index f14c4ff5839f..9538c9d4a0bc 100644
+> --- a/drivers/firmware/efi/libstub/x86-stub.c
+> +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> @@ -736,7 +736,7 @@ unsigned long efi_main(efi_handle_t handle,
+>         }
+>
+>  #ifdef CONFIG_CMDLINE_BOOL
+
+Does this CMDLINE_BOOL check need to be dropped as well?
+
+> -       status = efi_parse_options(CONFIG_CMDLINE);
+> +       status = efi_parse_options(CONFIG_CMDLINE_PREPEND " " CONFIG_CMDLINE_APPEND);
+>         if (status != EFI_SUCCESS) {
+>                 efi_err("Failed to parse options\n");
+>                 goto fail;
+> --
+> 2.25.1
 >
