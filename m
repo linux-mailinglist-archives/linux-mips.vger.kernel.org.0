@@ -2,149 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C3D334509
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 18:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B1533452C
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 18:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbhCJRWe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Mar 2021 12:22:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48078 "EHLO mail.kernel.org"
+        id S233065AbhCJRcZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Mar 2021 12:32:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49358 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233146AbhCJRWI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 10 Mar 2021 12:22:08 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5E9264FCB;
-        Wed, 10 Mar 2021 17:22:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615396928;
-        bh=SK+6Zfd8qFN5HrEWQ1Qexu/sh62jiznyOdEEtUWkUUY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=giCFhb5jS/L5dNA9p3aqvol1FdK8R28L26bYoL7uSQ9C13PN+eZn4tHjyo6Cisx/i
-         XSGnsWchcmB7ndb+aZuvUGjy7i62Yim5gYt+YoCYybjN4aHHcQiEFt27UCivB2RM70
-         WFleWF122tfECk2R2pave7DgNclBcUOmeeX0AdyxymGAsI7VnNPuxxGtFjHVSdF7KD
-         sVA+mrRzQ7MiY17oHe8ERHLLL8tPYhpzZZ/P2wZ/2E9a1QzDQ+7tzRwia/3IEQ+1qE
-         sdAiwxnkxiss6WJMiNzf59KwbSO3RtEM59wioRKswSPo+L1G7meCnNeQVxJOybWN+V
-         hNuoUKO3QinAQ==
-Received: by mail-qk1-f174.google.com with SMTP id m186so985433qke.12;
-        Wed, 10 Mar 2021 09:22:07 -0800 (PST)
-X-Gm-Message-State: AOAM53158945bEbV3cIjpDuf9DgxHj/TeQm2zJmfpkPsgbKPBlyYCEGV
-        ctCU95GeGbE88fwCPwgYWk9vio5aR6WFwz0w+Q==
-X-Google-Smtp-Source: ABdhPJx8ZortjSvtESnDKmJbd7shsjiK7JG0zR24gC3xumihDFvY1IhcQ5GWdem+N4oMsJv19bHuG9wUbdLlpAmjB5g=
-X-Received: by 2002:a05:620a:b02:: with SMTP id t2mr3822126qkg.128.1615396927087;
- Wed, 10 Mar 2021 09:22:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20210223204340.312-1-noltari@gmail.com> <20210224075640.20465-1-noltari@gmail.com>
- <20210224075640.20465-2-noltari@gmail.com> <20210306201404.GB1137882@robh.at.kernel.org>
- <889b9814-40d4-e012-ff7c-39b00f8c623a@gmail.com>
-In-Reply-To: <889b9814-40d4-e012-ff7c-39b00f8c623a@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 10 Mar 2021 10:21:56 -0700
-X-Gmail-Original-Message-ID: <CAL_JsqJzFJvwTEk3u+g3Fjv_K2Te9F3hyZnEPWurWjxgs2dShg@mail.gmail.com>
-Message-ID: <CAL_JsqJzFJvwTEk3u+g3Fjv_K2Te9F3hyZnEPWurWjxgs2dShg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: document
- BCM6345 external interrupt controller
-To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S232697AbhCJRcH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Mar 2021 12:32:07 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8038E600EF;
+        Wed, 10 Mar 2021 17:32:06 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lK2gm-000oge-8P; Wed, 10 Mar 2021 17:32:04 +0000
+Date:   Wed, 10 Mar 2021 17:31:56 +0000
+Message-ID: <871rcmhq43.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Linux MIPS <linux-mips@vger.kernel.org>,
+        KVM PPC <kvm-ppc@vger.kernel.org>,
+        Linux S390 <linux-s390@vger.kernel.org>,
+        Linux kselftest <linux-kselftest@vger.kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics in binary format
+In-Reply-To: <2749fe68-acbb-8f4d-dc76-4cb23edb9b35@redhat.com>
+References: <20210310003024.2026253-1-jingzhangos@google.com>
+        <20210310003024.2026253-4-jingzhangos@google.com>
+        <875z1zxb11.wl-maz@kernel.org>
+        <a475d935-e404-93dd-4c6d-a5f8038d8f4d@redhat.com>
+        <8735x3x7lu.wl-maz@kernel.org>
+        <2749fe68-acbb-8f4d-dc76-4cb23edb9b35@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, jingzhangos@google.com, kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, will@kernel.org, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, seanjc@google.com, vkuznets@redhat.com, jmattson@google.com, pshier@google.com, oupton@google.com, rientjes@google.com, eesposit@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Mar 7, 2021 at 3:12 AM =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gm=
-ail.com> wrote:
->
-> Hi Rob,
->
-> El 06/03/2021 a las 21:14, Rob Herring escribi=C3=B3:
-> > On Wed, Feb 24, 2021 at 08:56:39AM +0100, =C3=81lvaro Fern=C3=A1ndez Ro=
-jas wrote:
-> >> Document the binding for the BCM6345 external interrupt controller.
-> >>
-> >> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> >> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-> >> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> >> ---
-> >>   v3: pass dt_binding_check.
-> >>   v2: fix title typo.
-> >>
-> >>   .../brcm,bcm6345-ext-intc.yaml                | 78 +++++++++++++++++=
-++
-> >>   1 file changed, 78 insertions(+)
-> >>   create mode 100644 Documentation/devicetree/bindings/interrupt-contr=
-oller/brcm,bcm6345-ext-intc.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/interrupt-controller/br=
-cm,bcm6345-ext-intc.yaml b/Documentation/devicetree/bindings/interrupt-cont=
-roller/brcm,bcm6345-ext-intc.yaml
-> >> new file mode 100644
-> >> index 000000000000..a691510e78b7
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm6=
-345-ext-intc.yaml
-> >> @@ -0,0 +1,78 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/interrupt-controller/brcm,bcm6345-=
-ext-intc.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Broadcom BCM6345 external interrupt controller
-> >> +
-> >> +maintainers:
-> >> +  - =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> >> +  - Jonas Gorski <jonas.gorski@gmail.com>
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - brcm,bcm6318-ext-intc
-> >> +      - brcm,bcm6345-ext-intc
-> >> +
-> >> +  "#interrupt-cells":
-> >> +    const: 2
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >> +
-> >> +  "#address-cells":
-> >> +    const: 0
-> >> +
-> >> +  interrupt-controller: true
-> >> +
-> >> +  interrupts:
-> >> +    description: Specifies the interrupt line(s) in the interrupt-par=
-ent
-> >> +      controller node. Valid values depend on the type of parent inte=
-rrupt
-> >> +      controller.
-> >> +    maxItems: 4
-> >> +
-> >> +  brcm,field-width:
-> >> +    description: Interrupt controller field width (the default is 4).
-> >
-> > default: 4
-> >
-> >> +    maxItems: 1
-> >
-> > All uint32's are 1 item.
->
-> Ok, so I should remove this :)
->
-> >
-> > What's the set or range of values?
->
-> Only BCM6348 needs to set this value to 5, other BCM63xx use the default
-> value of 4 (BCM3368, BCM6318, BCM6328, BCM6338, BCM6345, BCM6358,
-> BCM6362, BCM6368, BCM63268).
+On Wed, 10 Mar 2021 17:11:47 +0000,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
+> 
+> On 10/03/21 18:05, Marc Zyngier wrote:
+> > On Wed, 10 Mar 2021 16:03:42 +0000,
+> > Paolo Bonzini <pbonzini@redhat.com> wrote:
+> >> 
+> >> On 10/03/21 16:51, Marc Zyngier wrote:
+> >>>> +	kvm_for_each_vcpu(j, vcpu, kvm) {
+> >>>> +		pdata = data + VM_STAT_COUNT;
+> >>>> +		for (i = 0; i < VCPU_STAT_COUNT; i++, pdata++)
+> >>>> +			*pdata += *((u64 *)&vcpu->stat + i);
+> >>> Do you really need the in-kernel copy? Why not directly organise the
+> >>> data structures in a way that would allow a bulk copy using
+> >>> copy_to_user()?
+> >> 
+> >> The result is built by summing per-vCPU counters, so that the counter
+> >> updates are fast and do not require a lock.  So consistency basically
+> >> cannot be guaranteed.
+> > 
+> > Sure, but I wonder whether there is scope for VM-global counters to be
+> > maintained in parallel with per-vCPU counters if speed/efficiency is
+> > of the essence (and this seems to be how it is sold in the cover
+> > letter).
+> 
+> Maintaining VM-global counters would require an atomic instruction and
+> would suffer lots of cacheline bouncing even on architectures that
+> have relaxed atomic memory operations.
 
-So:
+Which is why we have per-cpu counters already. Making use of them
+doesn't seem that outlandish.
 
-enum: [ 4, 5 ]
+> Speed/efficiency of retrieving statistics is important, but let's keep
+> in mind that the baseline for comparison is hundreds of syscalls and
+> filesystem lookups.
+
+Having that baseline in the cover letter would be a good start, as
+well as an indication of the frequency this is used at.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
