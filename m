@@ -2,130 +2,171 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72508334099
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 15:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7D53340DA
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 15:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbhCJOnC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Mar 2021 09:43:02 -0500
-Received: from out28-147.mail.aliyun.com ([115.124.28.147]:51366 "EHLO
-        out28-147.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232975AbhCJOmr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Mar 2021 09:42:47 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436317|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.193297-0.00363244-0.80307;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.Jj1IsSD_1615387362;
-Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Jj1IsSD_1615387362)
-          by smtp.aliyun-inc.com(10.147.42.22);
-          Wed, 10 Mar 2021 22:42:43 +0800
-Subject: Re: [PATCH 5/6] clk: ingenic: Support overriding PLLs M/N/OD calc
- algorithm
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     od@zcrc.me, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20210307141759.30426-1-paul@crapouillou.net>
- <20210307141759.30426-6-paul@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <14fe0eed-5657-c555-f8eb-6e6b8b367b44@wanyeetech.com>
-Date:   Wed, 10 Mar 2021 22:42:42 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S231880AbhCJOz1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Mar 2021 09:55:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54884 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229790AbhCJOzG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Mar 2021 09:55:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615388105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LPQFDLvKrDj5V75j3OST6UCIU/ZY4HfSALPlvqp1Wfg=;
+        b=JBQodNiSVTOD8WK+XF92kJgQOQsg0mrLMja1K6+unw7ek5h4CxkL3kuW20cbyqyO0uCQYs
+        eR3kMo5QInPxwYuMoK2gx11dWiZeHWfN8bUOm3cjcCIwC9LnUYZSkaj8ZmAKUEXBTtfKYP
+        aVYuKddiSIFCEYS7ei48HVc97+iaags=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-340-_q-UDJRqO0u18hwA7k2OdA-1; Wed, 10 Mar 2021 09:55:04 -0500
+X-MC-Unique: _q-UDJRqO0u18hwA7k2OdA-1
+Received: by mail-wr1-f72.google.com with SMTP id p12so5515746wrn.18
+        for <linux-mips@vger.kernel.org>; Wed, 10 Mar 2021 06:55:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LPQFDLvKrDj5V75j3OST6UCIU/ZY4HfSALPlvqp1Wfg=;
+        b=lzPlH4Vy+ZwlqJBRakYlTrWenaL7NsGVGgpB6/cJ9aDbIvQYiFnqn2H7NGJQChOKMT
+         hCmPyHYWiotTJuJu6a1aiHepeWmAsJMCrlTSgEV9gEw7LltIIVfzy63Vx9BixRfUwdms
+         VixR5SXHKF9G0OpwBtuO3pCpYf7FUJBCkuvxRGHQkMpzBYgITq22mr0e9nuftqPgSSEc
+         NwyRTKvBSfXvX2Kgtwml7ix1PgScAGo81H6RUD/XpAnkrDtNFphHDSXjoLddWAn0idUn
+         a9vW8UW4xPt9cymn99t6nwIm2TchOgB2xpWYcx3c6bbbpF/5DLoOjXHzVdLYk/vgiJK2
+         kNZQ==
+X-Gm-Message-State: AOAM5313N/RST2gWRpiLtz7gtjC6UXcMGz7DRcXBu5rqVH/YS5SOnkYt
+        +lMN5VIfFhaME+ULsDDM85yKLGxTiC8lyOpIeBoN/hViFR6ft0xtDrO/VWcznJr7Auu+SFbmMiz
+        Bjhmnm+dluN5x8afuFTenQA==
+X-Received: by 2002:adf:b642:: with SMTP id i2mr3865643wre.8.1615388103108;
+        Wed, 10 Mar 2021 06:55:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwp8IPvog+z5u0xHa71sLbhjUTN4LuYnyJQMDL+lgzE2lfZRrpnQ7PMYA0UId6FUANQ1ovE/g==
+X-Received: by 2002:adf:b642:: with SMTP id i2mr3865612wre.8.1615388102915;
+        Wed, 10 Mar 2021 06:55:02 -0800 (PST)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id s8sm30974435wrn.97.2021.03.10.06.55.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Mar 2021 06:55:02 -0800 (PST)
+Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
+ in binary format
+To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Linux MIPS <linux-mips@vger.kernel.org>,
+        KVM PPC <kvm-ppc@vger.kernel.org>,
+        Linux S390 <linux-s390@vger.kernel.org>,
+        Linux kselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+References: <20210310003024.2026253-1-jingzhangos@google.com>
+ <20210310003024.2026253-4-jingzhangos@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
+Date:   Wed, 10 Mar 2021 15:55:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <20210307141759.30426-6-paul@crapouillou.net>
+In-Reply-To: <20210310003024.2026253-4-jingzhangos@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
-
-On 2021/3/7 下午10:17, Paul Cercueil wrote:
-> SoC-specific code can now provide a callback if they need to compute the
-> M/N/OD values in a specific way.
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->   drivers/clk/ingenic/cgu.c | 40 ++++++++++++++++++++++++++-------------
->   drivers/clk/ingenic/cgu.h |  3 +++
->   2 files changed, 30 insertions(+), 13 deletions(-)
-
-
-Tested-by: 周琰杰 (Zhou Yanjie)<zhouyanjie@wanyeetech.com>   # on CU1000-neo/X1000E
-
-
-> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-> index 58f7ab5cf0fe..266c7595d330 100644
-> --- a/drivers/clk/ingenic/cgu.c
-> +++ b/drivers/clk/ingenic/cgu.c
-> @@ -119,28 +119,42 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
->   		n * od);
->   }
->   
-> -static unsigned long
-> -ingenic_pll_calc(const struct ingenic_cgu_clk_info *clk_info,
-> -		 unsigned long rate, unsigned long parent_rate,
-> -		 unsigned *pm, unsigned *pn, unsigned *pod)
-> +static void
-> +ingenic_pll_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
-> +			unsigned long rate, unsigned long parent_rate,
-> +			unsigned int *pm, unsigned int *pn, unsigned int *pod)
->   {
-> -	const struct ingenic_cgu_pll_info *pll_info;
-> -	unsigned m, n, od;
-> -
-> -	pll_info = &clk_info->pll;
-> -	od = 1;
-> +	unsigned int m, n, od = 1;
->   
->   	/*
->   	 * The frequency after the input divider must be between 10 and 50 MHz.
->   	 * The highest divider yields the best resolution.
->   	 */
->   	n = parent_rate / (10 * MHZ);
-> -	n = min_t(unsigned, n, 1 << clk_info->pll.n_bits);
-> -	n = max_t(unsigned, n, pll_info->n_offset);
-> +	n = min_t(unsigned int, n, 1 << pll_info->n_bits);
-> +	n = max_t(unsigned int, n, pll_info->n_offset);
->   
->   	m = (rate / MHZ) * od * n / (parent_rate / MHZ);
-> -	m = min_t(unsigned, m, 1 << clk_info->pll.m_bits);
-> -	m = max_t(unsigned, m, pll_info->m_offset);
-> +	m = min_t(unsigned int, m, 1 << pll_info->m_bits);
-> +	m = max_t(unsigned int, m, pll_info->m_offset);
+On 10/03/21 01:30, Jing Zhang wrote:
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 383df23514b9..87dd62516c8b 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -3464,6 +3464,51 @@ static long kvm_vcpu_ioctl(struct file *filp,
+>   		r = kvm_arch_vcpu_ioctl_set_fpu(vcpu, fpu);
+>   		break;
+>   	}
+> +	case KVM_STATS_GET_INFO: {
+> +		struct kvm_stats_info stats_info;
 > +
-> +	*pm = m;
-> +	*pn = n;
-> +	*pod = od;
-> +}
+> +		r = -EFAULT;
+> +		stats_info.num_stats = VCPU_STAT_COUNT;
+> +		if (copy_to_user(argp, &stats_info, sizeof(stats_info)))
+> +			goto out;
+> +		r = 0;
+> +		break;
+> +	}
+> +	case KVM_STATS_GET_NAMES: {
+> +		struct kvm_stats_names stats_names;
 > +
-> +static unsigned long
-> +ingenic_pll_calc(const struct ingenic_cgu_clk_info *clk_info,
-> +		 unsigned long rate, unsigned long parent_rate,
-> +		 unsigned int *pm, unsigned int *pn, unsigned int *pod)
-> +{
-> +	const struct ingenic_cgu_pll_info *pll_info = &clk_info->pll;
-> +	unsigned int m, n, od;
+> +		r = -EFAULT;
+> +		if (copy_from_user(&stats_names, argp, sizeof(stats_names)))
+> +			goto out;
+> +		r = -EINVAL;
+> +		if (stats_names.size < VCPU_STAT_COUNT * KVM_STATS_NAME_LEN)
+> +			goto out;
 > +
-> +	if (pll_info->calc_m_n_od)
-> +		(*pll_info->calc_m_n_od)(pll_info, rate, parent_rate, &m, &n, &od);
-> +	else
-> +		ingenic_pll_calc_m_n_od(pll_info, rate, parent_rate, &m, &n, &od);
->   
->   	if (pm)
->   		*pm = m;
-> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
-> index 10521d1b7b12..bfc2b9c38a41 100644
-> --- a/drivers/clk/ingenic/cgu.h
-> +++ b/drivers/clk/ingenic/cgu.h
-> @@ -55,6 +55,9 @@ struct ingenic_cgu_pll_info {
->   	s8 bypass_bit;
->   	u8 enable_bit;
->   	u8 stable_bit;
-> +	void (*calc_m_n_od)(const struct ingenic_cgu_pll_info *pll_info,
-> +			    unsigned long rate, unsigned long parent_rate,
-> +			    unsigned int *m, unsigned int *n, unsigned int *od);
->   };
->   
->   /**
+> +		r = -EFAULT;
+> +		if (copy_to_user(argp + sizeof(stats_names),
+> +				kvm_vcpu_stat_strings,
+> +				VCPU_STAT_COUNT * KVM_STATS_NAME_LEN))
+
+The only reason to separate the strings in patch 1 is to pass them here. 
+  But this is a poor API because it imposes a limit on the length of the 
+statistics, and makes that length part of the binary interface.
+
+I would prefer a completely different interface, where you have a file 
+descriptor that can be created and associated to a vCPU or VM (or even 
+to /dev/kvm).  Having a file descriptor is important because the fd can 
+be passed to a less-privileged process that takes care of gathering the 
+metrics
+
+The result of reading the file descriptor could be either ASCII or 
+binary.  IMO the real cost lies in opening and reading a multitude of 
+files rather than in the ASCII<->binary conversion.
+
+The format could be one of the following:
+
+* binary:
+
+4 bytes flags (always zero)
+4 bytes number of statistics
+4 bytes offset of the first stat description
+4 bytes offset of the first stat value
+stat descriptions:
+   - 4 bytes for the type (for now always zero: uint64_t)
+   - 4 bytes for the flags (for now always zero)
+   - length of name
+   - name
+statistics in 64-bit format
+
+* text:
+
+stat1_name uint64 123
+stat2_name uint64 456
+...
+
+What do you think?
+
+Paolo
+
