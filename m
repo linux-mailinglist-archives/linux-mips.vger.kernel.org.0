@@ -2,253 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2B433311B
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Mar 2021 22:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E09833325F
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 01:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbhCIVlT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Mar 2021 16:41:19 -0500
-Received: from rcdn-iport-1.cisco.com ([173.37.86.72]:52092 "EHLO
-        rcdn-iport-1.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbhCIVky (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Mar 2021 16:40:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=7313; q=dns/txt; s=iport;
-  t=1615326054; x=1616535654;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=rW2dGFdz1Viogy9BvbMFOe3/vVZakbjcs4YVqhr4xkM=;
-  b=hC3NS+4UidjxHgpMH8jEkOJbz5YU5RwNCxnFJxPRyV9BdmUb5YNT2yUw
-   gifH1GCXYCbyi/6MtgHVeHETl1ns3oaUg+g1kxTO1crB/8Tiar1Qcymn+
-   Ic5bDAbSDdXa8bZpfpP2S6krh8ENXFVDbwcWbM04WcfMJWQU47LS2YTHG
-   w=;
-X-IronPort-AV: E=Sophos;i="5.81,236,1610409600"; 
-   d="scan'208";a="861832335"
-Received: from alln-core-6.cisco.com ([173.36.13.139])
-  by rcdn-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 09 Mar 2021 21:40:54 +0000
-Received: from zorba ([10.24.4.5])
-        by alln-core-6.cisco.com (8.15.2/8.15.2) with ESMTPS id 129Lepbs004030
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 9 Mar 2021 21:40:52 GMT
-Date:   Tue, 9 Mar 2021 13:40:51 -0800
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        xe-linux-external@cisco.com, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ruslan Ruslichenko <rruslich@cisco.com>,
-        Ruslan Bilovol <rbilovol@cisco.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/7] CMDLINE: powerpc: convert to generic builtin
- command line
-Message-ID: <20210309214051.GS109100@zorba>
-References: <20210309000247.2989531-5-danielwa@cisco.com>
- <c5c8b57e-7954-ec02-188a-7f85cb0af731@csgroup.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c5c8b57e-7954-ec02-188a-7f85cb0af731@csgroup.eu>
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.24.4.5, [10.24.4.5]
-X-Outbound-Node: alln-core-6.cisco.com
+        id S231473AbhCJAbO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Mar 2021 19:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230490AbhCJAam (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Mar 2021 19:30:42 -0500
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F78C06175F
+        for <linux-mips@vger.kernel.org>; Tue,  9 Mar 2021 16:30:42 -0800 (PST)
+Received: by mail-io1-xd4a.google.com with SMTP id a1so816718iow.17
+        for <linux-mips@vger.kernel.org>; Tue, 09 Mar 2021 16:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=1BcHrgVIevscHGOPbP9Sxwife20LoA3ZZqd9CRbz5Bw=;
+        b=DKv71NfHgZl9K+3WTTgnMIMFhTJhw0KdiZ+0DsSSoWMbruSU8JYpotmsteHcMpFnKP
+         p3oJl9d7poG/uNqx9QVjZxRsDg84eU0xeqR/z3zNbVYX8v/8Pqaq2D2o6XtuLtoQIAWn
+         XZIko6RjucQT9l8eCAbgMb2o84jv4v0MYqAUW+gbWQ/6DAdn7cgT09hkIvc7uvV40U3/
+         OXNI1psrB1fZwZO3xGQK35hCSkEnWUaO1l3/peXbxmeOQdZwn1Qj3XsVRuxh8uptWwNf
+         ZpoGFHSOUGyGujS8e+ldyI4tL/z2BcdRYhlTSsMqOPaw7n36OXxIcUJIiplu0hMkQaNX
+         IFPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=1BcHrgVIevscHGOPbP9Sxwife20LoA3ZZqd9CRbz5Bw=;
+        b=ftl3+hUIC+QEJ6o0+nwOzXXZTsMZ9l7+Yk18X1hQt9lyYI0R9i7x/dQpYhEPJz+8XV
+         IGgXXWBRGK2hjmFG7BXNxkfHo3bD5oxqu+lQ3vJZL4uHiYdKCc+DcGQrfojzXVvI5mw+
+         IaheBD0HTJkgFcuRiuqO9g4UpCIB7YvToAaeYZe1FQyhGlItclcPiK8d+IeMxYMgnsb/
+         cxq7nAjDAI1CmXGk3Dc1OJOO2kIFxh1lAN2R7vh+9qutwBwV0cSUNeesifg2X50FTM6D
+         a+4KsXUSEhktfJW2zDo5qkSoYOlvUm4vYyDEIe5jGQt8U/AWFKxDBM/A4A9xYTriQAYD
+         FbAg==
+X-Gm-Message-State: AOAM533SW4a7BmbfdyohqW5sHgI0j71hP/pg7vSexTUx+D291wtmrFyH
+        aAw0yrh4/4sViUxrVKKnaCsDUn8Ezm4ECJ8LgQ==
+X-Google-Smtp-Source: ABdhPJzu6oYBav/oVxbZg4DkYFlYy8mfxqu7QjB5WE/gplPDgic3NrLr6r8qLWmnqz7/bt/7iNP/OuQ+NB4k0O9fnQ==
+X-Received: from jingzhangos.c.googlers.com ([fda3:e722:ac3:10:2b:ff92:c0a8:513])
+ (user=jingzhangos job=sendgmr) by 2002:a92:b00d:: with SMTP id
+ x13mr708430ilh.128.1615336242003; Tue, 09 Mar 2021 16:30:42 -0800 (PST)
+Date:   Wed, 10 Mar 2021 00:30:20 +0000
+Message-Id: <20210310003024.2026253-1-jingzhangos@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
+Subject: [RFC PATCH 0/4] KVM: stats: Retrieve statistics data in binary format
+From:   Jing Zhang <jingzhangos@google.com>
+To:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Linux MIPS <linux-mips@vger.kernel.org>,
+        KVM PPC <kvm-ppc@vger.kernel.org>,
+        Linux S390 <linux-s390@vger.kernel.org>,
+        Linux kselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     Jing Zhang <jingzhangos@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 09, 2021 at 08:56:47AM +0100, Christophe Leroy wrote:
-> 
-> 
-> Le 09/03/2021 à 01:02, Daniel Walker a écrit :
-> > This updates the powerpc code to use the CONFIG_GENERIC_CMDLINE
-> > option.
-> > 
-> > Cc: xe-linux-external@cisco.com
-> > Signed-off-by: Ruslan Ruslichenko <rruslich@cisco.com>
-> > Signed-off-by: Ruslan Bilovol <rbilovol@cisco.com>
-> > Signed-off-by: Daniel Walker <danielwa@cisco.com>
-> > ---
-> >   arch/powerpc/Kconfig            | 37 +--------------------------------
-> >   arch/powerpc/kernel/prom.c      |  1 +
-> >   arch/powerpc/kernel/prom_init.c | 35 ++++++++++++++++++-------------
-> >   3 files changed, 23 insertions(+), 50 deletions(-)
-> > 
-> > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > index 107bb4319e0e..276b06d5c961 100644
-> > --- a/arch/powerpc/Kconfig
-> > +++ b/arch/powerpc/Kconfig
-> > @@ -167,6 +167,7 @@ config PPC
-> >   	select EDAC_SUPPORT
-> >   	select GENERIC_ATOMIC64			if PPC32
-> >   	select GENERIC_CLOCKEVENTS_BROADCAST	if SMP
-> > +	select GENERIC_CMDLINE
-> >   	select GENERIC_CMOS_UPDATE
-> >   	select GENERIC_CPU_AUTOPROBE
-> >   	select GENERIC_CPU_VULNERABILITIES	if PPC_BARRIER_NOSPEC
-> > @@ -906,42 +907,6 @@ config PPC_DENORMALISATION
-> >   	  Add support for handling denormalisation of single precision
-> >   	  values.  Useful for bare metal only.  If unsure say Y here.
-> > -config CMDLINE
-> > -	string "Initial kernel command string"
-> > -	default ""
-> > -	help
-> > -	  On some platforms, there is currently no way for the boot loader to
-> > -	  pass arguments to the kernel. For these platforms, you can supply
-> > -	  some command-line options at build time by entering them here.  In
-> > -	  most cases you will need to specify the root device here.
-> > -
-> > -choice
-> > -	prompt "Kernel command line type" if CMDLINE != ""
-> > -	default CMDLINE_FROM_BOOTLOADER
-> > -
-> > -config CMDLINE_FROM_BOOTLOADER
-> > -	bool "Use bootloader kernel arguments if available"
-> > -	help
-> > -	  Uses the command-line options passed by the boot loader. If
-> > -	  the boot loader doesn't provide any, the default kernel command
-> > -	  string provided in CMDLINE will be used.
-> > -
-> > -config CMDLINE_EXTEND
-> > -	bool "Extend bootloader kernel arguments"
-> > -	help
-> > -	  The command-line arguments provided by the boot loader will be
-> > -	  appended to the default kernel command string.
-> > -
-> > -config CMDLINE_FORCE
-> > -	bool "Always use the default kernel command string"
-> > -	help
-> > -	  Always use the default kernel command string, even if the boot
-> > -	  loader passes other arguments to the kernel.
-> > -	  This is useful if you cannot or don't want to change the
-> > -	  command-line options your boot loader passes to the kernel.
-> > -
-> > -endchoice
-> > -
-> >   config EXTRA_TARGETS
-> >   	string "Additional default image types"
-> >   	help
-> > diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> > index ae3c41730367..96d0a01be1b4 100644
-> > --- a/arch/powerpc/kernel/prom.c
-> > +++ b/arch/powerpc/kernel/prom.c
-> > @@ -27,6 +27,7 @@
-> >   #include <linux/irq.h>
-> >   #include <linux/memblock.h>
-> >   #include <linux/of.h>
-> > +#include <linux/cmdline.h>
-> 
-> Why is this needed in prom.c ?
- 
-Must have been a mistake, I don't think it's needed.
+This patchset extends IOCTL interface to retrieve KVM statistics data
+in aggregated binary format.
+It is meant to provide a lightweight, flexible, scalable and efficient 
+lock-free solution for userspace telemetry applications to pull the
+statistics data periodically for large scale systems.
+The capability is indicated by KVM_CAP_STATS_BINARY_FORM.
+Ioctl KVM_STATS_GET_INFO is used to get the information about VM or
+vCPU statistics data (The number of supported statistics data which is
+used for buffer allocation).
+Ioctl KVM_STATS_GET_NAMES is used to get the list of name strings of
+all supported statistics data.
+Ioctl KVM_STATS_GET_DATA is used to get the aggregated statistics data
+per VM or vCPU in the same order as the list of name strings. This is
+the ioctl which would be called periodically to retrieve statistics
+data per VM or vCPU.
+
+Jing Zhang (4):
+  KVM: stats: Separate statistics name strings from debugfs code
+  KVM: stats: Define APIs for aggregated stats retrieval in binary
+    format
+  KVM: stats: Add ioctl commands to pull statistics in binary format
+  KVM: selftests: Add selftest for KVM binary form statistics interface
+
+ Documentation/virt/kvm/api.rst                |  79 +++++
+ arch/arm64/kvm/guest.c                        |  47 ++-
+ arch/mips/kvm/mips.c                          | 114 +++++--
+ arch/powerpc/kvm/book3s.c                     | 107 ++++--
+ arch/powerpc/kvm/booke.c                      |  84 +++--
+ arch/s390/kvm/kvm-s390.c                      | 320 ++++++++++++------
+ arch/x86/kvm/x86.c                            | 127 ++++---
+ include/linux/kvm_host.h                      |  30 +-
+ include/uapi/linux/kvm.h                      |  60 ++++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../selftests/kvm/kvm_bin_form_stats.c        |  89 +++++
+ virt/kvm/kvm_main.c                           | 115 +++++++
+ 13 files changed, 935 insertions(+), 241 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
 
 
-> >   #include <linux/of_fdt.h>
-> >   #include <linux/libfdt.h>
-> >   #include <linux/cpu.h>
-> > diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
-> > index e9d4eb6144e1..657241534d69 100644
-> > --- a/arch/powerpc/kernel/prom_init.c
-> > +++ b/arch/powerpc/kernel/prom_init.c
-> > @@ -27,6 +27,7 @@
-> >   #include <linux/initrd.h>
-> >   #include <linux/bitops.h>
-> >   #include <linux/pgtable.h>
-> > +#include <linux/cmdline.h>
-> >   #include <asm/prom.h>
-> >   #include <asm/rtas.h>
-> >   #include <asm/page.h>
-> > @@ -242,15 +243,6 @@ static int __init prom_strcmp(const char *cs, const char *ct)
-> >   	return 0;
-> >   }
-> > -static char __init *prom_strcpy(char *dest, const char *src)
-> > -{
-> > -	char *tmp = dest;
-> > -
-> > -	while ((*dest++ = *src++) != '\0')
-> > -		/* nothing */;
-> > -	return tmp;
-> > -}
-> > -
-> 
-> This game with prom_strcpy() should go a separate preceeding patch.
-> 
-> Also, it looks like checkpatch.pl recommends to use strscpy() instead of strlcpy().
+base-commit: 357ad203d45c0f9d76a8feadbd5a1c5d460c638b
+-- 
+2.30.1.766.gb4fecdf3b7-goog
 
-strscpy() is very large. I'm not sure it's compatible with this prom_init.c
-environment.
-
-> >   static int __init prom_strncmp(const char *cs, const char *ct, size_t count)
-> >   {
-> >   	unsigned char c1, c2;
-> > @@ -276,6 +268,20 @@ static size_t __init prom_strlen(const char *s)
-> >   	return sc - s;
-> >   }
-> > +static size_t __init prom_strlcpy(char *dest, const char *src, size_t size)
-> > +{
-> > +	size_t ret = prom_strlen(src);
-> > +
-> > +	if (size) {
-> > +		size_t len = (ret >= size) ? size - 1 : ret;
-> > +
-> > +		memcpy(dest, src, len);
-> > +		dest[len] = '\0';
-> > +	}
-> > +	return ret;
-> > +}
-> > +
-> > +
-> >   static int __init prom_memcmp(const void *cs, const void *ct, size_t count)
-> >   {
-> >   	const unsigned char *su1, *su2;
-> > @@ -304,6 +310,7 @@ static char __init *prom_strstr(const char *s1, const char *s2)
-> >   	return NULL;
-> >   }
-> > +#ifdef GENERIC_CMDLINE_NEED_STRLCAT
-> >   static size_t __init prom_strlcat(char *dest, const char *src, size_t count)
-> >   {
-> >   	size_t dsize = prom_strlen(dest);
-> > @@ -323,6 +330,7 @@ static size_t __init prom_strlcat(char *dest, const char *src, size_t count)
-> >   	return res;
-> >   }
-> > +#endif
-> >   #ifdef CONFIG_PPC_PSERIES
-> >   static int __init prom_strtobool(const char *s, bool *res)
-> > @@ -775,12 +783,11 @@ static void __init early_cmdline_parse(void)
-> >   	prom_cmd_line[0] = 0;
-> >   	p = prom_cmd_line;
-> > -	if (!IS_ENABLED(CONFIG_CMDLINE_FORCE) && (long)prom.chosen > 0)
-> > +	if ((long)prom.chosen > 0)
-> >   		l = prom_getprop(prom.chosen, "bootargs", p, COMMAND_LINE_SIZE-1);
-> > -	if (IS_ENABLED(CONFIG_CMDLINE_EXTEND) || l <= 0 || p[0] == '\0')
-> > -		prom_strlcat(prom_cmd_line, " " CONFIG_CMDLINE,
-> > -			     sizeof(prom_cmd_line));
-> > +	cmdline_add_builtin_custom(prom_cmd_line, (l > 0 ? p : NULL), sizeof(prom_cmd_line),
-> > +					__prombss, prom_strlcpy, prom_strlcat);
-> 
-> So we are referencing a function that doesn't exist (namely prom_strlcat).
-> But it works because cmdline_add_builtin_custom() looks like a function but
-> is in fact an obscure macro that doesn't use prom_strlcat() unless
-> GENERIC_CMDLINE_NEED_STRLCAT is defined.
-> 
-> IMHO that's awful for readability and code maintenance.
-
-powerpc is a special case, there's no other users like this. The reason is
-because of all the difficulty in this prom_init.c code. A lot of the generic
-code has similar kind of changes to work across architectures.
-
-
-> >   	prom_printf("command line: %s\n", prom_cmd_line);
-> > @@ -2706,7 +2713,7 @@ static void __init flatten_device_tree(void)
-> >   	/* Add "phandle" in there, we'll need it */
-> >   	namep = make_room(&mem_start, &mem_end, 16, 1);
-> > -	prom_strcpy(namep, "phandle");
-> > +	prom_strlcpy(namep, "phandle", 8);
-> 
-> Should be in a separate patch.
-
-I can move it, I missed that from the first round.
-
-Daniel
