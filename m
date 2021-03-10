@@ -2,63 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5CE334818
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 20:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB293349F7
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 22:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233698AbhCJThG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Mar 2021 14:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
+        id S231994AbhCJVmR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Mar 2021 16:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbhCJTgw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Mar 2021 14:36:52 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FA4C061761
-        for <linux-mips@vger.kernel.org>; Wed, 10 Mar 2021 11:36:51 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id i26so15521428ljn.1
-        for <linux-mips@vger.kernel.org>; Wed, 10 Mar 2021 11:36:51 -0800 (PST)
+        with ESMTP id S232021AbhCJVl7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Mar 2021 16:41:59 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80752C061574
+        for <linux-mips@vger.kernel.org>; Wed, 10 Mar 2021 13:41:59 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id v2so23068185lft.9
+        for <linux-mips@vger.kernel.org>; Wed, 10 Mar 2021 13:41:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OvV6VLMTy2cQ72nIiRt8RKCJxHSvSwTj/dq7tmzrgvY=;
-        b=ZsbKSq4Hp4ZcA3sY0++kdfFmm1N/pCis9Pxoe36/SvHvxeN8g8nz3mLZqj8PgOGJlJ
-         AmiGQ2ahKV6rvITVB8x3LSyXi1WUyjpux1trLHntjrNGcCiXZ4i2UE95lLygkp7qKCtu
-         Qj4Gb6hi0F89tYy2eGuoOpha3CqmaijvEZ0xdSsT/LMTLaLMxFvy2oCc9xa/1/oJ/u7E
-         i67+1G4tyuE18oo5vb7LvtUVXIrIRv8fyNqARwrw30qI1hPitpRCmRvgMUU73g303WsB
-         DIsv1FLaT/uu2Y1u07cn3nhUxsynTGlUGmhCpFrzetUBAE0gh3dY0/dFHt9QVJt1SZnS
-         bFAw==
+        bh=1aCWly0eHYOBMX2QbB2MVQEtisRq+kLH3ylpaLZI0cc=;
+        b=BwXgkRlIC4KTvskQmfIRT1UpL8FUSVcbmMR/10Xjal9SvwnJMSNCtMz4ebGfjZEpwl
+         HCKgLGqmaBchqQkax5bvx+rjJAcaO8g0WZ2ZWmXxQ4vS1uLC6HEi952fLlwgPn3Wd4/q
+         vqoybvVvV+lDlyFafHyb1AQmj59H1UWu6vilft7PMlZn1CkgPU9esxjzW1aIIW+ywWBj
+         Udj5I9gR1kMtWjutL1NRbhChAuUHbUnPbNGqzqbYkjkbI7sy94gi6OuNkgkvUFI0515F
+         8abSIYRh9W1om06VP1Y1rY1/9BRsh8VfgJuLmZ+BZIgJ3nbpC1hAYP0ed0rHqB2zazZ5
+         +JZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OvV6VLMTy2cQ72nIiRt8RKCJxHSvSwTj/dq7tmzrgvY=;
-        b=gqY8fMq7fkbMYMfbZjyOZ1ARN/OBzJAnUG8yCXRnjbb5f4PqE5VsBqQX0ZKPyqLvu1
-         p3S56SAPIhpYXJMnCwL/yS3+8ARaiMwPKbZ1HB02hKxNPUrVkn2RwMnsU4OIgyuZ+pM/
-         s3HuS+PmTGpISPnZwtTB4WZIxnc2HF49EB2DeE//1/drL/I1HiPTcoqTnm0bCYKWUax9
-         opfhFgYGQDS0C7wu8he9KFndH4+bviwk8VZgCBXj/sxLAILXlbXb/xVhqcgMAmT4s+c4
-         iEAFrIjtsy1Mj25JM31IPSftx3RaRFrKweey0QdWm9ig/4/uYIcBbIxYZv1L1xk5gv5O
-         /5ig==
-X-Gm-Message-State: AOAM532rBwP2HttznzpbBEo18wJxL0eWE5Pc6TM8I+usz+Hcg+gXYNJe
-        WgPUwJ+U7mGWASg/kue+KUTRZAOok/k3duRaHZYQrQ==
-X-Google-Smtp-Source: ABdhPJyi0EpYoQZeT12rvgt0ivdWvKvDg/Zfay6Zmq8jyRfkRgKS6lxf3OCYRlLodZpCnDNaNpzM1Yr7crDfQVFeizw=
-X-Received: by 2002:a2e:8e75:: with SMTP id t21mr2724430ljk.216.1615405009536;
- Wed, 10 Mar 2021 11:36:49 -0800 (PST)
+        bh=1aCWly0eHYOBMX2QbB2MVQEtisRq+kLH3ylpaLZI0cc=;
+        b=AdMTJv74qg/uOSdi+u5iOhRTRfcHDlRh1lHh1E01NZFTJyffwKTrto/Ppopef3/93G
+         0FGE5MF0wz/3N/It2pXxjCacQOMlY1lQNmM4cSQutNRMwPA+CWRY0pt8EJ9J8HZgmKSZ
+         wMdUg05rbVNgnE93SBP4ATdyEt3Qn/FTp1kY+aPAUYK9g2mduVrPJ56z601ujIHIDjMs
+         Vk8gWmaSL6DBb+w1ngNplcrCHcPZkn8Mv6l6YU4I9dR2pNICcD6EHkmvy2FYAawV4iod
+         QoAzROz4LHTVGdJbX8W+06zjz1LjpXLLtDnpSHHu1fNN8uqP7PVih290mDnpqIMRWkLr
+         THzg==
+X-Gm-Message-State: AOAM530OuvvYZe1+EQVUNVQYzNxSPrayW9o1yntnwgpQe4SaXAQEiTLc
+        hWgdIdjNRd30iWWwK7pSQk5Z88vd4u4H5n7+0mS3tQ==
+X-Google-Smtp-Source: ABdhPJzddr7Z3ChXsEeTaXJHTGvoL/NEnML3O1DtWcsC2600kv1w2ebi95vsyLg0smm0e43j3ORQP/5lcH5lDtVqU9E=
+X-Received: by 2002:a05:6512:32ab:: with SMTP id q11mr306450lfe.106.1615412517738;
+ Wed, 10 Mar 2021 13:41:57 -0800 (PST)
 MIME-Version: 1.0
 References: <20210310003024.2026253-1-jingzhangos@google.com>
- <20210310003024.2026253-3-jingzhangos@google.com> <877dmfxdgp.wl-maz@kernel.org>
-In-Reply-To: <877dmfxdgp.wl-maz@kernel.org>
+ <20210310003024.2026253-4-jingzhangos@google.com> <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
+In-Reply-To: <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
 From:   Jing Zhang <jingzhangos@google.com>
-Date:   Wed, 10 Mar 2021 13:36:38 -0600
-Message-ID: <CAAdAUthRp-6v9eOkf0nJp0GFXmyB0PeQe2cWp1Sb1W0k68k1SQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/4] KVM: stats: Define APIs for aggregated stats
- retrieval in binary format
-To:     Marc Zyngier <maz@kernel.org>
+Date:   Wed, 10 Mar 2021 15:41:46 -0600
+Message-ID: <CAAdAUtjj52+cAhD4KUzAaqrMSJXHD0g=ecQNG-a92Mqn3BCxiQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
+ in binary format
+To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
         Linux MIPS <linux-mips@vger.kernel.org>,
         KVM PPC <kvm-ppc@vger.kernel.org>,
         Linux S390 <linux-s390@vger.kernel.org>,
         Linux kselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
         James Morse <james.morse@arm.com>,
         Julien Thierry <julien.thierry.kdev@gmail.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -84,272 +84,101 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Marc,
+Hi Paolo,
 
-On Wed, Mar 10, 2021 at 8:58 AM Marc Zyngier <maz@kernel.org> wrote:
+On Wed, Mar 10, 2021 at 8:55 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> On Wed, 10 Mar 2021 00:30:22 +0000,
-> Jing Zhang <jingzhangos@google.com> wrote:
-> >
-> > Define ioctl commands for VM/vCPU aggregated statistics data retrieval
-> > in binary format and update corresponding API documentation.
-> >
-> > The capability and ioctl are not enabled for now.
-> > No functional change intended.
-> >
-> > Signed-off-by: Jing Zhang <jingzhangos@google.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst | 79 ++++++++++++++++++++++++++++++++++
-> >  include/linux/kvm_host.h       |  1 -
-> >  include/uapi/linux/kvm.h       | 60 ++++++++++++++++++++++++++
-> >  3 files changed, 139 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> > index 1a2b5210cdbf..aa4b5270c966 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -4938,6 +4938,76 @@ see KVM_XEN_VCPU_SET_ATTR above.
-> >  The KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADJUST type may not be used
-> >  with the KVM_XEN_VCPU_GET_ATTR ioctl.
-> >
-> > +4.131 KVM_STATS_GET_INFO
-> > +------------------------
+> On 10/03/21 01:30, Jing Zhang wrote:
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 383df23514b9..87dd62516c8b 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -3464,6 +3464,51 @@ static long kvm_vcpu_ioctl(struct file *filp,
+> >               r = kvm_arch_vcpu_ioctl_set_fpu(vcpu, fpu);
+> >               break;
+> >       }
+> > +     case KVM_STATS_GET_INFO: {
+> > +             struct kvm_stats_info stats_info;
 > > +
-> > +:Capability: KVM_CAP_STATS_BINARY_FORM
-> > +:Architectures: all
-> > +:Type: vm ioctl, vcpu ioctl
-> > +:Parameters: struct kvm_stats_info (out)
-> > +:Returns: 0 on success, < 0 on error
+> > +             r = -EFAULT;
+> > +             stats_info.num_stats = VCPU_STAT_COUNT;
+> > +             if (copy_to_user(argp, &stats_info, sizeof(stats_info)))
+> > +                     goto out;
+> > +             r = 0;
+> > +             break;
+> > +     }
+> > +     case KVM_STATS_GET_NAMES: {
+> > +             struct kvm_stats_names stats_names;
+> > +
+> > +             r = -EFAULT;
+> > +             if (copy_from_user(&stats_names, argp, sizeof(stats_names)))
+> > +                     goto out;
+> > +             r = -EINVAL;
+> > +             if (stats_names.size < VCPU_STAT_COUNT * KVM_STATS_NAME_LEN)
+> > +                     goto out;
+> > +
+> > +             r = -EFAULT;
+> > +             if (copy_to_user(argp + sizeof(stats_names),
+> > +                             kvm_vcpu_stat_strings,
+> > +                             VCPU_STAT_COUNT * KVM_STATS_NAME_LEN))
 >
+> The only reason to separate the strings in patch 1 is to pass them here.
+>   But this is a poor API because it imposes a limit on the length of the
+> statistics, and makes that length part of the binary interface.
+Agreed. I am considering returning the length of stats name strings in
+the kvm_stats_info structure instead of exporting it as a constant in uapi,
+which would put no limit on the length of the stats name strings.
 >
-> Missing description of the errors (this is throughout the document).
-Will add errors description.
+> I would prefer a completely different interface, where you have a file
+> descriptor that can be created and associated to a vCPU or VM (or even
+> to /dev/kvm).  Having a file descriptor is important because the fd can
+> be passed to a less-privileged process that takes care of gathering the
+> metrics
+Separate file descriptor solution is very tempting. We are still considering it
+seriously. Our biggest concern is that the metrics gathering/handling process
+is not necessary running on the same node as the one file descriptor belongs to.
+It scales better to pass metrics data directly than to pass file descriptors.
 >
-> > +
-> > +::
-> > +
-> > +  struct kvm_stats_info {
-> > +        __u32 num_stats;
-> > +  };
-> > +
-> > +This ioctl is used to get the information about VM or vCPU statistics data.
-> > +The number of statistics data would be returned in field num_stats in
-> > +struct kvm_stats_info. This ioctl only needs to be called once on running
-> > +VMs on the same architecture.
+> The result of reading the file descriptor could be either ASCII or
+> binary.  IMO the real cost lies in opening and reading a multitude of
+> files rather than in the ASCII<->binary conversion.
+Agreed.
 >
-> Is this allowed to be variable across VMs? Or is that a constant for a
-> given host system boot?
-It is a constant for a given host system boot.
+> The format could be one of the following:
 >
-> Given that this returns a single field, is there any value in copying
-> this structure across? Could it be returned by the ioctl itself
-> instead, at the expense of only being a 31bit value?
-It is done in this way for potential information we need in the future.
-One candidate is the length of stats names. I am considering to return
-the length of name string in this info structure instead of as a constant
-exported by uapi, which would be more flexible and put no limit on the
-length of stats names.
+> * binary:
 >
-> > +
-> > +4.132 KVM_STATS_GET_NAMES
-> > +-------------------------
-> > +
-> > +:Capability: KVM_CAP_STATS_BINARY_FORM
-> > +:Architectures: all
-> > +:Type: vm ioctl, vcpu ioctl
-> > +:Parameters: struct kvm_stats_names (in/out)
-> > +:Returns: 0 on success, < 0 on error
-> > +
-> > +::
-> > +
-> > +  #define KVM_STATS_NAME_LEN         32
-> > +  struct kvm_stats_names {
-> > +     __u32 size;
-> > +     __u8  names[0];
-> > +  };
-> > +
-> > +This ioctl is used to get the string names of all the statistics data for VM
-> > +or vCPU. Users must use KVM_STATS_GET_INFO to find the number of statistics.
-> > +They must allocate a buffer of the size num_stats * KVM_STATS_NAME_LEN
-> > +immediately following struct kvm_stats_names. The size field of kvm_stats_name
-> > +must contain the buffer size as an input.
+> 4 bytes flags (always zero)
+> 4 bytes number of statistics
+> 4 bytes offset of the first stat description
+> 4 bytes offset of the first stat value
+> stat descriptions:
+>    - 4 bytes for the type (for now always zero: uint64_t)
+>    - 4 bytes for the flags (for now always zero)
+>    - length of name
+>    - name
+> statistics in 64-bit format
 >
-> What is the unit for the buffer size? bytes? or number of "names"?
-The unit for the buffer size is bytes. Will clearly indicate the unit.
+> * text:
 >
-> > +The buffer can be treated like a string array, each name string is null-padded
-> > +to a size of KVM_STATS_NAME_LEN;
+> stat1_name uint64 123
+> stat2_name uint64 456
+> ...
 >
-> Is this allowed to query fewer strings than described by
-> kvm_stats_info? If it isn't, I question the need for the "size"
-> field. Either there is enough space in the buffer passed by userspace,
-> or -EFAULT is returned.
-It isn't. Will remove the size field.
+> What do you think?
+The binary format presented above is very flexible. I understand why it is
+organized this way.
+In our situation, the metrics data could be pulled periodically as short as
+half second. They are used by different kinds of monitors/triggers/alerts.
+To enhance efficiency and reduce traffic caused by metrics passing, we
+treat all metrics info/data as two kinds. One is immutable information,
+which doesn't change in a given system boot. The other is mutable
+data (statistics data), which is pulled/transferred periodically at a high
+frequency.
+
 >
-> > +This ioclt only needs to be called once on running VMs on the same architecture.
+> Paolo
 >
-> Same question about the immutability of these names.
-The names are immutable for a given system boot.
->
-> > +
-> > +4.133 KVM_STATS_GET_DATA
-> > +-------------------------
-> > +
-> > +:Capability: KVM_CAP_STATS_BINARY_FORM
-> > +:Architectures: all
-> > +:Type: vm ioctl, vcpu ioctl
-> > +:Parameters: struct kvm_stats_data (in/out)
-> > +:Returns: 0 on success, < 0 on error
-> > +
-> > +::
-> > +
-> > +  struct kvm_stats_data {
-> > +     __u32 size;
->
-> Same question about the actual need for this field.
-Will remove size field.
->
-> > +     __u64 data[0];
->
-> So userspace always sees a 64bit quantify per stat. My earlier comment
-> about the ulong/u64 discrepancy stands! ;-)
-Yes, userspace always sees a 64 bit, but the ulong in KVM would be
-64bit or 32bit.
->
-> > +  };
-> > +
-> > +This ioctl is used to get the aggregated statistics data for VM or vCPU.
-> > +Users must use KVM_STATS_GET_INFO to find the number of statistics.
-> > +They must allocate a buffer of the appropriate size num_stats * sizeof(data[0])
-> > +immediately following struct kvm_stats_data. The size field of kvm_stats_data
-> > +must contain the buffer size as an input.
-> > +The data buffer 1-1 maps to name strings buffer in sequential order.
-> > +This ioctl is usually called periodically to pull statistics data.
->
-> Is there any provision to reset the counters on read?
-Nope.
->
-> > +
-> >  5. The kvm_run structure
-> >  ========================
-> >
-> > @@ -6721,3 +6791,12 @@ vcpu_info is set.
-> >  The KVM_XEN_HVM_CONFIG_RUNSTATE flag indicates that the runstate-related
-> >  features KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADDR/_CURRENT/_DATA/_ADJUST are
-> >  supported by the KVM_XEN_VCPU_SET_ATTR/KVM_XEN_VCPU_GET_ATTR ioctls.
-> > +
-> > +8.31 KVM_CAP_STATS_BINARY_FORM
-> > +------------------------------
-> > +
-> > +:Architectures: all
-> > +
-> > +This capability indicates that KVM supports retrieving aggregated statistics
-> > +data in binary format with corresponding VM/VCPU ioctl KVM_STATS_GET_INFO,
-> > +KVM_STATS_GET_NAMES and KVM_STATS_GET_DATA.
->
-> nit: for ease of reviewing, consider splitting the documentation in a
-> separate patch.
-Will do.
->
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index 1ea297458306..f2dabf457717 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -1164,7 +1164,6 @@ static inline bool kvm_is_error_gpa(struct kvm *kvm, gpa_t gpa)
-> >
-> >  #define VM_STAT_COUNT                (sizeof(struct kvm_vm_stat)/sizeof(ulong))
-> >  #define VCPU_STAT_COUNT              (sizeof(struct kvm_vcpu_stat)/sizeof(u64))
-> > -#define KVM_STATS_NAME_LEN   32
-> >
-> >  /* Make sure it is synced with fields in struct kvm_vm_stat. */
-> >  extern const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN];
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index f6afee209620..ad185d4c5e42 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -1078,6 +1078,7 @@ struct kvm_ppc_resize_hpt {
-> >  #define KVM_CAP_DIRTY_LOG_RING 192
-> >  #define KVM_CAP_X86_BUS_LOCK_EXIT 193
-> >  #define KVM_CAP_PPC_DAWR1 194
-> > +#define KVM_CAP_STATS_BINARY_FORM 195
-> >
-> >  #ifdef KVM_CAP_IRQ_ROUTING
-> >
-> > @@ -1853,4 +1854,63 @@ struct kvm_dirty_gfn {
-> >  #define KVM_BUS_LOCK_DETECTION_OFF             (1 << 0)
-> >  #define KVM_BUS_LOCK_DETECTION_EXIT            (1 << 1)
-> >
-> > +/* Available with KVM_CAP_STATS_BINARY_FORM */
-> > +
-> > +#define KVM_STATS_NAME_LEN           32
-> > +
-> > +/**
-> > + * struct kvm_stats_info - statistics information
-> > + *
-> > + * Used as parameter for ioctl %KVM_STATS_GET_INFO.
-> > + *
-> > + * @num_stats: On return, the number of statistics data of vm or vcpu.
-> > + *
-> > + */
-> > +struct kvm_stats_info {
-> > +     __u32 num_stats;
-> > +};
-> > +
-> > +/**
-> > + * struct kvm_stats_names - string list of statistics names
-> > + *
-> > + * Used as parameter for ioctl %KVM_STATS_GET_NAMES.
-> > + *
-> > + * @size: Input from user, indicating the size of buffer after the struture.
-> > + * @names: Buffer of name string list for vm or vcpu. Each string is
-> > + *   null-padded to a size of %KVM_STATS_NAME_LEN.
-> > + *
-> > + * Users must use %KVM_STATS_GET_INFO to find the number of
-> > + * statistics. They must allocate a buffer of the appropriate
-> > + * size (>= &struct kvm_stats_info @num_stats * %KVM_STATS_NAME_LEN)
-> > + * immediately following this struture.
-> > + */
-> > +struct kvm_stats_names {
-> > +     __u32 size;
-> > +     __u8  names[0];
-> > +};
-> > +
-> > +/**
-> > + * struct kvm_stats_data - statistics data array
-> > + *
-> > + * Used as parameter for ioctl %KVM_STATS_GET_DATA.
-> > + *
-> > + * @size: Input from user, indicating the size of buffer after the struture.
-> > + * @data: Buffer of statistics data for vm or vcpu.
-> > + *
-> > + * Users must use %KVM_STATS_GET_INFO to find the number of
-> > + * statistics. They must allocate a buffer of the appropriate
-> > + * size (>= &struct kvm_stats_info @num_stats * sizeof(@data[0])
-> > + * immediately following this structure.
-> > + * &struct kvm_stats_names @names 1-1 maps to &structkvm_stats_data
-> > + * @data in sequential order.
-> > + */
-> > +struct kvm_stats_data {
-> > +     __u32 size;
-> > +     __u64 data[0];
-> > +};
-> > +
-> > +#define KVM_STATS_GET_INFO           _IOR(KVMIO, 0xcc, struct kvm_stats_info)
-> > +#define KVM_STATS_GET_NAMES          _IOR(KVMIO, 0xcd, struct kvm_stats_names)
-> > +#define KVM_STATS_GET_DATA           _IOR(KVMIO, 0xce, struct kvm_stats_data)
-> > +
-> >  #endif /* __LINUX_KVM_H */
-> > --
-> > 2.30.1.766.gb4fecdf3b7-goog
-> >
-> >
->
-> Thanks,
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
 
 Thanks,
 Jing
