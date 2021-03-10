@@ -2,137 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2733337D1
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 09:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960333337F6
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 09:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbhCJIuy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Mar 2021 03:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbhCJIuc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Mar 2021 03:50:32 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E64C06174A;
-        Wed, 10 Mar 2021 00:50:32 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id 18so32115967lff.6;
-        Wed, 10 Mar 2021 00:50:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cXAwMKtrLhlTAKUm2JyzSR52zFEvTMF+n/fM4EEcXZQ=;
-        b=T2jCzDOwOsOEX5EXpPC0yhOaXyo1+YjI/JSOIKQno+1XWayLhBq/5zb3bZ7jGiTWfM
-         uMOdZUkqLNE74RY/+2Ge7iiQe/2z6+bVULEGHr6185ThcKjRY5YOzQ1gLPPentIvtOjY
-         pwi1/DMr1CBWCWBkF2qL8lFcHHw3LpWWAN0AhtW8DxsnlkQxHNBItzTMSICkcnj4KqVT
-         +MQWgllGArl0+S8xKUuQ2tN438CTTJ886Wb91ehPse8sYCLB8GIKzFU3DNjaHDVH8LWd
-         IOh4KHjnLoHFIw7TIz5yluxCBrZkbvWJ4AYMwjoCxnDoi2Sx5qf6peWZmYFLh3yv7qxm
-         w50g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=cXAwMKtrLhlTAKUm2JyzSR52zFEvTMF+n/fM4EEcXZQ=;
-        b=JMgxdtd6lO3E+eRzQl6lbxlQQkEE4yqn51ObfTHrtEEsgoFKKAZJedJEe+4OuuvFw1
-         QBC6iaxc1NPokk9a1KT2ctG1y/ByIO1nfWpucmArrNXReyV/gkWAvdm+rs6FiVKqGdX2
-         JNNR3lY02H+KCfirEcJAsAiQX1z9I/UxhoZxMy9B7NU/nqqlbU1ud/9hlRCCosII1YFZ
-         UFk0b5EUvcDOofH1T4JykdCg4lXJUEGtkj/iFWdb34khw1mjthaWzrw9RZTReCh3E0MY
-         agWrQe34Lcq1ioXNDR+iQwM8eCvk0AJW1d3V5/k7Fyk7jqKt04jwfhAqXQcg0WM04T66
-         a2XA==
-X-Gm-Message-State: AOAM531TZuXecaWNo45Ff2i/MmkWJkglrYvtOxedccGxXswEznshCpNQ
-        evjT+51Y4Wgf6cm9xERBgpo=
-X-Google-Smtp-Source: ABdhPJzsFIEKJlb4GU7aZlayDwJj3SBRl3sio62s2wScFkSnGweomCVVKSqggJcQc02nYk8rWJBa6Q==
-X-Received: by 2002:a05:6512:31d3:: with SMTP id j19mr1438210lfe.495.1615366230885;
-        Wed, 10 Mar 2021 00:50:30 -0800 (PST)
-Received: from [192.168.1.100] ([178.176.74.161])
-        by smtp.gmail.com with ESMTPSA id k6sm2672986lfg.28.2021.03.10.00.50.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Mar 2021 00:50:30 -0800 (PST)
-Subject: Re: [PATCH v4 3/7] MIPS: Loongson64: Add support for the
- Loongson-2K1000 to get cpu_clock_freq
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Ming Wang <wangming01@loongson.cn>
-References: <20210310075639.20372-1-zhangqing@loongson.cn>
- <20210310075639.20372-4-zhangqing@loongson.cn>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <cb549804-4ee1-79ab-d872-3e95bf0cbe55@gmail.com>
-Date:   Wed, 10 Mar 2021 11:50:20 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S232327AbhCJI4t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Mar 2021 03:56:49 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:46684 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230156AbhCJI4e (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Mar 2021 03:56:34 -0500
+Received: from [10.130.0.55] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxqdS7iUhgea4XAA--.30118S3;
+        Wed, 10 Mar 2021 16:56:28 +0800 (CST)
+Subject: Re: [PATCH RFC] MIPS: livepatch: Add LIVEPATCH basic code
+To:     Miroslav Benes <mbenes@suse.cz>
+References: <1614598201-17858-1-git-send-email-hejinyang@loongson.cn>
+ <alpine.LSU.2.21.2103100912590.13355@pobox.suse.cz>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <07945438-05b9-b62a-28eb-b91729ebf637@loongson.cn>
+Date:   Wed, 10 Mar 2021 16:56:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <20210310075639.20372-4-zhangqing@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <alpine.LSU.2.21.2103100912590.13355@pobox.suse.cz>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxqdS7iUhgea4XAA--.30118S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF4fKryxKF47XF45Zw4xJFb_yoW8Ar43pF
+        W5KFn3tw4DAr929rs7Zw4xWr15Z397Kr9xW3W8Wr1UZ3WDWw1SkFs2yw4qya45X34kKay3
+        Z3y8tF1kZ3WkZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
+        Y487MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73Uj
+        IFyTuYvjfUeHUDDUUUU
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+On 03/10/2021 04:18 PM, Miroslav Benes wrote:
 
-On 10.03.2021 10:56, Qing Zhang wrote:
+> Hi,
+>
+> I cannot really comment on mips arch specifics but few words from the live
+> patching perspective.
+Thanks for your reply. :-)
 
-> Get the fixed-clock from the CPU0 node of the device tree.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> Tested-by: Ming Wang <wangming01@loongson.cn>
-> ---
-> 
-> v3-v4: Standard submission of information
->         Add return after error
-> 
->   arch/mips/loongson64/time.c | 24 ++++++++++++++++++++++++
->   1 file changed, 24 insertions(+)
-> 
-> diff --git a/arch/mips/loongson64/time.c b/arch/mips/loongson64/time.c
-> index 91e842b58365..2d84f9b20a9b 100644
-> --- a/arch/mips/loongson64/time.c
-> +++ b/arch/mips/loongson64/time.c
-> @@ -11,9 +11,33 @@
->   #include <asm/hpet.h>
->   
->   #include <loongson.h>
-> +#include <linux/clk.h>
-> +#include <linux/of_clk.h>
->   
->   void __init plat_time_init(void)
->   {
-> +	struct clk *clk = NULL;
+>
+> On Mon, 1 Mar 2021, Jinyang He wrote:
+>
+>> Add the basic code of livepatch. livepatch is temporarily unavailable.
+>> Two core functions are missing, one is DYNAMIC_FTRACE_WITH_REGS, and
+>> another is save_stack_trace_tsk_reliable().
+>> `Huang Pei <huangpei@loongson.cn>` is doing for ftrace. He will use
+>> `-fpatchable-function-entry` to achieve more complete ftrace.
+> DYNAMIC_FTRACE_WITH_ARGS has been introduced recently, so you might also
+> look at that. As far as the live patching is concerned,
+> DYNAMIC_FTRACE_WITH_ARGS is sufficient.
+Huang Pei had told me, and the follow link explains it detaily.
+He is doing this work on mips arch now.
 
-    You don't seem to need this initializer.
+http://mpe.github.io/posts/2016/05/23/kernel-live-patching-for-ppc64le/
 
-> +	struct device_node *np;
-> +
-> +	if (loongson_sysconf.fw_interface == LOONGSON_DTB) {
-> +		of_clk_init(NULL);
-> +
-> +		np = of_get_cpu_node(0, NULL);
-> +		if (!np) {
-> +			pr_err("Failed to get CPU node\n");
-> +			return;
-> +		}
-> +
-> +		clk = of_clk_get(np, 0);
-> +		if (IS_ERR(clk)) {
-> +			pr_err("Failed to get CPU clock: %ld\n", PTR_ERR(clk));
-> +			return;
-> +		}
-> +
-> +		cpu_clock_freq = clk_get_rate(clk);
-> +		clk_put(clk);
-> +	}
-> +
->   	/* setup mips r4k timer */
->   	mips_hpt_frequency = cpu_clock_freq / 2;
->   
-> 
+>> save_stack_trace_tsk_reliable() currently has difficulties. This function
+>> may be improved in the future, but that seems to be a long time away.
+>> This is also the reason for delivering this RFC. Hope to get any help.
+> You may want to look at Documentation/livepatch/reliable-stacktrace.rst
+> which nicely describes the requirements for the reliable stacktraces.
+And Maciej answered many questions for me about reliable stacktrace.
+I thought Documentation/livepatch/reliable-stacktrace.rst is important, too.
+I noticed that arm64 has submitted objtool patches before, and it seems that
+MIPS may use this method (ORC) to achieve reliable stack traceback. It looks
+complicated to me. Drawf, compiler, abi and so on.
+
+> Regards
+> Miroslav
+Thanks,
+Jinyang
 
