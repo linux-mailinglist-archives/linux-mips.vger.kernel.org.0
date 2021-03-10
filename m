@@ -2,94 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 960333337F6
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 09:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407C33338BC
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 10:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbhCJI4t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Mar 2021 03:56:49 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:46684 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230156AbhCJI4e (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 10 Mar 2021 03:56:34 -0500
-Received: from [10.130.0.55] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxqdS7iUhgea4XAA--.30118S3;
-        Wed, 10 Mar 2021 16:56:28 +0800 (CST)
-Subject: Re: [PATCH RFC] MIPS: livepatch: Add LIVEPATCH basic code
-To:     Miroslav Benes <mbenes@suse.cz>
-References: <1614598201-17858-1-git-send-email-hejinyang@loongson.cn>
- <alpine.LSU.2.21.2103100912590.13355@pobox.suse.cz>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <07945438-05b9-b62a-28eb-b91729ebf637@loongson.cn>
-Date:   Wed, 10 Mar 2021 16:56:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <alpine.LSU.2.21.2103100912590.13355@pobox.suse.cz>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9AxqdS7iUhgea4XAA--.30118S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF4fKryxKF47XF45Zw4xJFb_yoW8Ar43pF
-        W5KFn3tw4DAr929rs7Zw4xWr15Z397Kr9xW3W8Wr1UZ3WDWw1SkFs2yw4qya45X34kKay3
-        Z3y8tF1kZ3WkZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73Uj
-        IFyTuYvjfUeHUDDUUUU
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+        id S230397AbhCJJag (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Mar 2021 04:30:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52450 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229643AbhCJJaP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Mar 2021 04:30:15 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B34A864FE2;
+        Wed, 10 Mar 2021 09:30:14 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lJvAS-000iq4-G4; Wed, 10 Mar 2021 09:30:12 +0000
+Date:   Wed, 10 Mar 2021 09:30:11 +0000
+Message-ID: <87blbrxsnw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     zhangqing <zhangqing@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangming01@loongson.cn
+Subject: Re: [PATCH v3 5/7] irqchip/loongson-liointc: irqchip add 2.0 version
+In-Reply-To: <5c5b2593-b07c-cd20-cd08-1d6542471260@loongson.cn>
+References: <20210306023633.9579-1-zhangqing@loongson.cn>
+        <20210306023633.9579-6-zhangqing@loongson.cn>
+        <87wnugy9oe.wl-maz@kernel.org>
+        <5c5b2593-b07c-cd20-cd08-1d6542471260@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: zhangqing@loongson.cn, chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tsbogend@alpha.franken.de, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, wangming01@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/10/2021 04:18 PM, Miroslav Benes wrote:
+On Wed, 10 Mar 2021 02:26:24 +0000,
+zhangqing <zhangqing@loongson.cn> wrote:
+> 
+> 
+> On 03/09/2021 05:10 PM, Marc Zyngier wrote:
+> > 
+> >> +
+> >> +static void __iomem *liointc_get_reg_byname(struct device_node *node,
+> >> +						const char *name)
+> >> +{
+> >> +	int index = of_property_match_string(node, "reg-names", name);
+> >> +
+> >> +	return of_iomap(node, index);
+> > So if of_property_match_string() returns an error, you feed that error
+> > to of_iomap()? Somehow, I don't think that's a good idea.
+> 
+> Hi, Marc
+> 
+> Thank you for your suggestion, error handling is missing here,
+> 
+>      +    if (index <0)
+>      +           return NULL;
+> 
+>             return of_iomap(node, index);
+> 
+> It has been fixed in the fourth version, and I will send V4 soon.
+> 
+> > +	if (of_device_is_compatible(node, "loongson,liointc-2.0")) {
+> > +		base = liointc_get_reg_byname(node, "main");
+> > +		if (!base) {
+> > +			err = -ENODEV;
+> > +			goto out_free_priv;
+> > +		}
+> > +		for (i = 0; i < LIOINTC_NUM_CORES; i++) {
+> > +			priv->core_isr[i] =
+> > +				liointc_get_reg_byname(node, core_reg_names[i]);
+> > Please write assignments on a single line.
+> 
+> In addition, write assignments on a single line
+> 
+>                  for (i = 0; i <LIOINTC_NUM_CORES; i++)
+>                          priv->core_isr[i] =
+> liointc_get_reg_byname(node, core_reg_names[i]);
+> 
+>     It is 92 characters, more than 80 characters...
 
-> Hi,
->
-> I cannot really comment on mips arch specifics but few words from the live
-> patching perspective.
-Thanks for your reply. :-)
+I really don't care about whatever arbitrary limit people think there
+is. Please put it on a single line.
 
->
-> On Mon, 1 Mar 2021, Jinyang He wrote:
->
->> Add the basic code of livepatch. livepatch is temporarily unavailable.
->> Two core functions are missing, one is DYNAMIC_FTRACE_WITH_REGS, and
->> another is save_stack_trace_tsk_reliable().
->> `Huang Pei <huangpei@loongson.cn>` is doing for ftrace. He will use
->> `-fpatchable-function-entry` to achieve more complete ftrace.
-> DYNAMIC_FTRACE_WITH_ARGS has been introduced recently, so you might also
-> look at that. As far as the live patching is concerned,
-> DYNAMIC_FTRACE_WITH_ARGS is sufficient.
-Huang Pei had told me, and the follow link explains it detaily.
-He is doing this work on mips arch now.
-
-http://mpe.github.io/posts/2016/05/23/kernel-live-patching-for-ppc64le/
-
->> save_stack_trace_tsk_reliable() currently has difficulties. This function
->> may be improved in the future, but that seems to be a long time away.
->> This is also the reason for delivering this RFC. Hope to get any help.
-> You may want to look at Documentation/livepatch/reliable-stacktrace.rst
-> which nicely describes the requirements for the reliable stacktraces.
-And Maciej answered many questions for me about reliable stacktrace.
-I thought Documentation/livepatch/reliable-stacktrace.rst is important, too.
-I noticed that arm64 has submitted objtool patches before, and it seems that
-MIPS may use this method (ORC) to achieve reliable stack traceback. It looks
-complicated to me. Drawf, compiler, abi and so on.
-
-> Regards
-> Miroslav
 Thanks,
-Jinyang
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
