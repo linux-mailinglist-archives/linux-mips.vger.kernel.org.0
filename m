@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E673338BE1
+	by mail.lfdr.de (Postfix) with ESMTP id AFEC1338BE3
 	for <lists+linux-mips@lfdr.de>; Fri, 12 Mar 2021 12:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbhCLLwk convert rfc822-to-8bit (ORCPT
+        id S231725AbhCLLwk convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-mips@lfdr.de>); Fri, 12 Mar 2021 06:52:40 -0500
-Received: from aposti.net ([89.234.176.197]:38758 "EHLO aposti.net"
+Received: from aposti.net ([89.234.176.197]:38764 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231352AbhCLLwP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 12 Mar 2021 06:52:15 -0500
-Date:   Thu, 11 Mar 2021 13:40:47 +0000
+        id S231611AbhCLLwW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 12 Mar 2021 06:52:22 -0500
+Date:   Thu, 11 Mar 2021 16:12:55 +0000
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 5/5] drm/ingenic: Add option to alloc cached GEM
- buffers
+Subject: Re: [PATCH v2 3/5] drm: Add and export function
+ drm_gem_cma_mmap_noncoherent
 To:     Christoph Hellwig <hch@infradead.org>
 Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -24,11 +24,13 @@ Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
-Message-Id: <ZN4TPQ.4G2MK5P8EC4W2@crapouillou.net>
-In-Reply-To: <20210311123040.GD1739082@infradead.org>
+Message-Id: <JPBTPQ.TL10VUKPUBL23@crapouillou.net>
+In-Reply-To: <20210311123642.GA1741910@infradead.org>
 References: <20210307202835.253907-1-paul@crapouillou.net>
-        <20210307202835.253907-6-paul@crapouillou.net>
-        <20210311123040.GD1739082@infradead.org>
+        <20210307202835.253907-4-paul@crapouillou.net>
+        <20210311122642.GB1739082@infradead.org>
+        <3I1TPQ.E55GRWWDYVRG@crapouillou.net>
+        <20210311123642.GA1741910@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: 8BIT
@@ -38,26 +40,38 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-Le jeu. 11 mars 2021 à 12:30, Christoph Hellwig <hch@infradead.org> a 
+Le jeu. 11 mars 2021 à 12:36, Christoph Hellwig <hch@infradead.org> a 
 écrit :
-> On Sun, Mar 07, 2021 at 08:28:35PM +0000, Paul Cercueil wrote:
->>  With the module parameter ingenic-drm.cached_gem_buffers, it is 
->> possible
->>  to specify that we want GEM buffers backed by non-coherent memory.
+> On Thu, Mar 11, 2021 at 12:32:27PM +0000, Paul Cercueil wrote:
+>>  > dma_to_phys must not be used by drivers.
+>>  >
+>>  > I have a proper helper for this waiting for users:
+>>  >
+>>  > 
+>> http://git.infradead.org/users/hch/misc.git/commitdiff/96a546e7229ec53aadbdb7936d1e5e6cb5958952
+>>  >
+>>  > If you can confirm the helpers works for you I can try to still 
+>> sneak
+>>  > it to Linus for 5.12 to ease the merge pain.
+>> 
+>>  I can try. How do I get a page pointer from a dma_addr_t?
 > 
-> Shouldn't there be a way to discover this through a DT property?
+> You don't - you get it from using virt_to_page on the pointer returned
+> from dma_alloc_noncoherent.  That beind said to keep the API sane I
+> should probably add a wrapper that does that for you.
 
-Good question. My original way of thinking was that as this feature 
-speeds up only software rendering, this is really 
-application-dependent: a modern desktop where everything is rendered 
-via the GPU wouldn't benefit much from it. With that in mind, it is 
-fine as a module option.
+I tested using:
 
-On the other hand... the "software rendering is faster with 
-non-coherent buffers" really is a SoC property, since it is only true 
-for some generations of Ingenic SoCs and not others. So it would make 
-sense to have a DT property for it.
+ret = dma_mmap_pages(cma_obj->base.dev->dev,
+                     vma, vma->vm_end - vma->vm_start,
+                     virt_to_page(cma_obj->vaddr));
 
+It works fine.
+
+I think I can use remap_pfn_range() for now, and switch to your new API 
+once it's available in drm-misc-next.
+
+Cheers,
 -Paul
 
 
