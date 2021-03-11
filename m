@@ -2,118 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5E2334A00
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Mar 2021 22:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 474D93369DA
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Mar 2021 02:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbhCJVoZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Mar 2021 16:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbhCJVoG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Mar 2021 16:44:06 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206EDC061574
-        for <linux-mips@vger.kernel.org>; Wed, 10 Mar 2021 13:44:06 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id e7so36149860lft.2
-        for <linux-mips@vger.kernel.org>; Wed, 10 Mar 2021 13:44:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+At1OFsJvT0JOYczrtSDaeg1RlqRvgFnN9ibJip5xME=;
-        b=qkR47YAxd7W+12meJHOokTY86zM5TK5Wusnmh13Uxu6NKYuWOWiLQGc+P2AFImuiLA
-         ORloLJ5jSdrdT/bdHqp0DqklfhSIS7mEsK7M0vc6oJuwRJflhTJDhz132bRJTuHxQ+kO
-         RInZN11KZCoVG6SxxC7xs6XJmagTxp4jzMdyWhd7EKrDtUQBY/A2tTYflsQ1uYhuPyd3
-         zAAkVHP8jzsjKtNt8i07AloD2E4Y+rbcN6P6aA+VHiEEec2aQ0pLVAnU5FG2ZdTYiTPl
-         Vuh0I/S8kIlI0b/tAdley4Z5qQ9yZunB4iev6lY8EGMaF3EkJrMb2vFP3F+H3DRihlGh
-         rj2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+At1OFsJvT0JOYczrtSDaeg1RlqRvgFnN9ibJip5xME=;
-        b=gTV2+ITLuzvOF5h1sKZQ63LkqPiFbgIyeSB7c36FeCt1v6lteCLcDzw/fdWtKMobrC
-         m6I98pRDZU5HeZdciWZSteJKo5jM62Zy4zf6eR2psJi8PgaVqb1R+1jK/4i4dOukEbML
-         U+b5dZ/B4AU6fVSPu9puKuXnAHOCtOG6pdz8BC3DkFuZtNEatsQsDPofXQY7ky9FnRGn
-         wBn8Y1/opHvM2H/x/dKUO+tdynFebj6nkJKVd3X4H+ZrprnJqAK9ZrmacH3ON6+X33sI
-         i0y3AZoGoC8av8lWFZZcyg0wN6B6h2ktko03C5pGOl9pqF7W40s9p5rorXHzlhGio8N2
-         5m/g==
-X-Gm-Message-State: AOAM5328AZMtoDhAv+GROjGRyrtvze72Og8SyPP/+oyd5TsHFIBFlHAW
-        Tj5gitqaKuXG3TIntfDLHn7ICHzG2l8CXk3CzPVoJg==
-X-Google-Smtp-Source: ABdhPJzfPcaCkdhotikZXLd9A3857WsFY8DpxVP062dOT18HhG4a9S9hO0jkkklXHezJ/dUgXnUVkP98iZMz90iTzX0=
-X-Received: by 2002:a19:4345:: with SMTP id m5mr302440lfj.178.1615412644377;
- Wed, 10 Mar 2021 13:44:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20210310003024.2026253-1-jingzhangos@google.com>
- <20210310003024.2026253-4-jingzhangos@google.com> <875z1zxb11.wl-maz@kernel.org>
- <a475d935-e404-93dd-4c6d-a5f8038d8f4d@redhat.com> <8735x3x7lu.wl-maz@kernel.org>
- <2749fe68-acbb-8f4d-dc76-4cb23edb9b35@redhat.com> <871rcmhq43.wl-maz@kernel.org>
- <fd37d21f-f3ae-d370-f8e1-cf552be3b2ee@redhat.com>
-In-Reply-To: <fd37d21f-f3ae-d370-f8e1-cf552be3b2ee@redhat.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Wed, 10 Mar 2021 15:43:53 -0600
-Message-ID: <CAAdAUtjQHh3CEedcjZ5qQ72JZiacjogPoaKBO03vNbiQo=u5+g@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
- in binary format
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, KVM <kvm@vger.kernel.org>,
-        KVM ARM <kvmarm@lists.cs.columbia.edu>,
-        Linux MIPS <linux-mips@vger.kernel.org>,
-        KVM PPC <kvm-ppc@vger.kernel.org>,
-        Linux S390 <linux-s390@vger.kernel.org>,
-        Linux kselftest <linux-kselftest@vger.kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
+        id S229483AbhCKBnm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Mar 2021 20:43:42 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:33562 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229468AbhCKBnZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 10 Mar 2021 20:43:25 -0500
+Received: from [10.130.0.65] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD_KzdUlgUuoXAA--.13819S3;
+        Thu, 11 Mar 2021 09:43:15 +0800 (CST)
+Subject: Re: [PATCH v4 6/7] dt-bindings: interrupt-controller: Add
+ Loongson-2K1000 LIOINTC
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+References: <20210310075639.20372-1-zhangqing@loongson.cn>
+ <20210310075639.20372-7-zhangqing@loongson.cn>
+ <da399bdd-9454-4d63-a549-546c049c1a29@www.fastmail.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Ming Wang <wangming01@loongson.cn>
+From:   zhangqing <zhangqing@loongson.cn>
+Message-ID: <8bd4f6c3-f2cf-4f36-879b-9755117cdac7@loongson.cn>
+Date:   Thu, 11 Mar 2021 09:43:14 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <da399bdd-9454-4d63-a549-546c049c1a29@www.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxD_KzdUlgUuoXAA--.13819S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF4rXw47KF1UXr13tr45GFg_yoW8Zw15pr
+        ZrCanFgF48tr13Cayxta40ka15Zr98AwnrKrsFv3y7GFnrKw1UXr1a9F1rZFZ5uFWIqF4j
+        vF1F9a4UWasIyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
+        zVAYIcxG8wCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfUFVyIUUUUU
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 11:44 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+On 03/10/2021 08:04 PM, Jiaxun Yang wrote:
 >
-> On 10/03/21 18:31, Marc Zyngier wrote:
-> >> Maintaining VM-global counters would require an atomic instruction and
-> >> would suffer lots of cacheline bouncing even on architectures that
-> >> have relaxed atomic memory operations.
-> > Which is why we have per-cpu counters already. Making use of them
-> > doesn't seem that outlandish.
+> On Wed, Mar 10, 2021, at 3:56 PM, Qing Zhang wrote:
+>> Add liointc-2.0 properties support, so update the maxItems and description.
+>>
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ^ I have nothing todo with this patch so please drop me for this one :-)
 >
-> But you wouldn't be able to guarantee consistency anyway, would you?
-> You *could* copy N*M counters to userspace, but there's no guarantee
-> that they are consistent, neither within a single vCPU nor within a
-> single counter.
+>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>> Tested-by: Ming Wang <wangming01@loongson.cn>
+>> ---
+>>
+>> v3-v4: Standard submission of information
+> ^ It's called commit message.
 >
-> >> Speed/efficiency of retrieving statistics is important, but let's keep
-> >> in mind that the baseline for comparison is hundreds of syscalls and
-> >> filesystem lookups.
-> >
-> > Having that baseline in the cover letter would be a good start, as
-> > well as an indication of the frequency this is used at.
->
-> Can't disagree, especially on the latter which I have no idea about.
->
-> Paolo
->
-Marc, Paolo, thanks for the comments. I will add some more information
-in the cover letter.
+>>   .../bindings/interrupt-controller/loongson,liointc.yaml    | 7 ++++---
+>>   1 file changed, 4 insertions(+), 3 deletions(-)
+>>
+>> diff --git
+>> a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+>> index f38e0113f360..5280cf60a9a7 100644
+>> ---
+>> a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+>> +++
+>> b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+>> @@ -10,9 +10,9 @@ maintainers:
+>>     - Jiaxun Yang <jiaxun.yang@flygoat.com>
+>>   
+>>   description: |
+>> -  This interrupt controller is found in the Loongson-3 family of chips
+>> as the primary
+>> -  package interrupt controller which can route local I/O interrupt to
+>> interrupt lines
+>> -  of cores.
+>> +  This interrupt controller is found in the Loongson-3 family of chips
+>> and
+>> +  Loongson-2K1000 chip, as the primary package interrupt controller
+>> which
+>> +  can route local I/O interrupt to interrupt lines of cores.
+>>   
+>>   allOf:
+>>     - $ref: /schemas/interrupt-controller.yaml#
+>> @@ -22,6 +22,7 @@ properties:
+>>       oneOf:
+>>         - const: loongson,liointc-1.0
+>>         - const: loongson,liointc-1.0a
+>> +      - const: loongson,liointc-2.0
+>>   
+>>     reg:
+>>       maxItems: 1
+> ^ Please document multiple reg prop change as well.
+   Hi, Jiaxun
 
-Thanks,
-Jing
+   Thank you for your reply,
+
+   I will do it and send v5.
+
+   Thanks,
+   -Qing
+>
+> Thanks.
+>
+> - Jiaxun
+>
+>> -- 
+>> 2.20.1
+>>
+>>
+
