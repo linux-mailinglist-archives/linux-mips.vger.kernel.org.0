@@ -2,70 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2183372CC
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Mar 2021 13:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586BA3376F3
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Mar 2021 16:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbhCKMh3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 Mar 2021 07:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbhCKMhY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Mar 2021 07:37:24 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FE6C061574;
-        Thu, 11 Mar 2021 04:37:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vJSr/GMFzS2IPyn11BIby5mlM7bzUpTd/5u2QdjX24c=; b=LASDnO6q08S6flHgSsiq/NgLoc
-        WMh3mPClSKCdYGCN1uG60ilkiCplcvrphwvmYkS1Ityfs4vVhZePIp+cJ8rdqNqWBuJnfxPm7NdTz
-        kQvx5QqDg47ZxUvcDHii6bzPHleHomTd6kuICU4oNXihW1G+GjppTR6T1kdzIIIsfjseZxt5YEleJ
-        G7hdVlO8xgzBnFWgzjAm3wAUyF2p9BUaHYy3bVDGdVgcqDHyH/eG2fM6+pk1kSzM9Xv2wSOok7CNb
-        6iG+sEWL8B8aU34S9UfR3lwLU/jl3dhgIwNLGRY9QS7SENly3ysT+C2jM0nNjWhQbXkhOXogGjaBe
-        e5Hgnz7g==;
-Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lKKYU-007JMi-2f; Thu, 11 Mar 2021 12:36:48 +0000
-Date:   Thu, 11 Mar 2021 12:36:42 +0000
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] drm: Add and export function
- drm_gem_cma_mmap_noncoherent
-Message-ID: <20210311123642.GA1741910@infradead.org>
-References: <20210307202835.253907-1-paul@crapouillou.net>
- <20210307202835.253907-4-paul@crapouillou.net>
- <20210311122642.GB1739082@infradead.org>
- <3I1TPQ.E55GRWWDYVRG@crapouillou.net>
+        id S234140AbhCKPWn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 Mar 2021 10:22:43 -0500
+Received: from out28-99.mail.aliyun.com ([115.124.28.99]:37775 "EHLO
+        out28-99.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233985AbhCKPWg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Mar 2021 10:22:36 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2231162|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00557219-1.95912e-05-0.994408;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047188;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.JjZCudb_1615476138;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.JjZCudb_1615476138)
+          by smtp.aliyun-inc.com(10.147.41.120);
+          Thu, 11 Mar 2021 23:22:25 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linus.walleij@linaro.org, robh+dt@kernel.org, paul@crapouillou.net
+Cc:     linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        hns@goldelico.com, paul@boddie.org.uk, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, sernia.zhou@foxmail.com
+Subject: [PATCH v2 0/6] Fix bugs and add support for new Ingenic SoCs.
+Date:   Thu, 11 Mar 2021 23:21:46 +0800
+Message-Id: <1615476112-113101-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3I1TPQ.E55GRWWDYVRG@crapouillou.net>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 12:32:27PM +0000, Paul Cercueil wrote:
-> > dma_to_phys must not be used by drivers.
-> > 
-> > I have a proper helper for this waiting for users:
-> > 
-> > http://git.infradead.org/users/hch/misc.git/commitdiff/96a546e7229ec53aadbdb7936d1e5e6cb5958952
-> > 
-> > If you can confirm the helpers works for you I can try to still sneak
-> > it to Linus for 5.12 to ease the merge pain.
-> 
-> I can try. How do I get a page pointer from a dma_addr_t?
+v1->v2:
+1.Split [1/3] in v1 to [1/6] [2/6] [3/6] [4/6] in v2.
+2.Fix the uninitialized warning.
 
-You don't - you get it from using virt_to_page on the pointer returned
-from dma_alloc_noncoherent.  That beind said to keep the API sane I
-should probably add a wrapper that does that for you.
+周琰杰 (Zhou Yanjie) (6):
+  pinctrl: Ingenic: Add missing pins to the JZ4770 MAC MII group.
+  pinctrl: Ingenic: Add support for read the pin configuration of X1830.
+  pinctrl: Ingenic: Adjust the sequence of X1830 SSI pin groups.
+  pinctrl: Ingenic: Reformat the code.
+  dt-bindings: pinctrl: Add bindings for new Ingenic SoCs.
+  pinctrl: Ingenic: Add support for new Ingenic SoCs.
+
+ .../bindings/pinctrl/ingenic,pinctrl.yaml          |   23 +-
+ drivers/pinctrl/pinctrl-ingenic.c                  | 1423 ++++++++++++++++++--
+ 2 files changed, 1353 insertions(+), 93 deletions(-)
+
+-- 
+2.7.4
+
