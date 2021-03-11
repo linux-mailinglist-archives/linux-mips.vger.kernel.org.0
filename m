@@ -2,128 +2,220 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 474D93369DA
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Mar 2021 02:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D981336D4F
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Mar 2021 08:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbhCKBnm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Mar 2021 20:43:42 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:33562 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229468AbhCKBnZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 10 Mar 2021 20:43:25 -0500
-Received: from [10.130.0.65] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD_KzdUlgUuoXAA--.13819S3;
-        Thu, 11 Mar 2021 09:43:15 +0800 (CST)
-Subject: Re: [PATCH v4 6/7] dt-bindings: interrupt-controller: Add
- Loongson-2K1000 LIOINTC
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-References: <20210310075639.20372-1-zhangqing@loongson.cn>
- <20210310075639.20372-7-zhangqing@loongson.cn>
- <da399bdd-9454-4d63-a549-546c049c1a29@www.fastmail.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Ming Wang <wangming01@loongson.cn>
-From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <8bd4f6c3-f2cf-4f36-879b-9755117cdac7@loongson.cn>
-Date:   Thu, 11 Mar 2021 09:43:14 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S229829AbhCKHwe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 Mar 2021 02:52:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:44486 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229702AbhCKHwa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 11 Mar 2021 02:52:30 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E67CDAB8C;
+        Thu, 11 Mar 2021 07:52:28 +0000 (UTC)
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20210307202835.253907-1-paul@crapouillou.net>
+ <ab488f52-f93d-ff50-efc5-bbdceec99ecb@suse.de>
+ <YVORPQ.MCVK409VD57J2@crapouillou.net>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v2 0/5] Add option to mmap GEM buffers cached
+Message-ID: <5246f93f-b383-03be-4d5c-53cd530df079@suse.de>
+Date:   Thu, 11 Mar 2021 08:52:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <da399bdd-9454-4d63-a549-546c049c1a29@www.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxD_KzdUlgUuoXAA--.13819S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF4rXw47KF1UXr13tr45GFg_yoW8Zw15pr
-        ZrCanFgF48tr13Cayxta40ka15Zr98AwnrKrsFv3y7GFnrKw1UXr1a9F1rZFZ5uFWIqF4j
-        vF1F9a4UWasIyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
-        zVAYIcxG8wCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
-        73UjIFyTuYvjfUFVyIUUUUU
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+In-Reply-To: <YVORPQ.MCVK409VD57J2@crapouillou.net>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="KNoks9VeZAPFoGM1bz0Bm3NPD06xo4uk4"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/10/2021 08:04 PM, Jiaxun Yang wrote:
->
-> On Wed, Mar 10, 2021, at 3:56 PM, Qing Zhang wrote:
->> Add liointc-2.0 properties support, so update the maxItems and description.
->>
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ^ I have nothing todo with this patch so please drop me for this one :-)
->
->> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->> Tested-by: Ming Wang <wangming01@loongson.cn>
->> ---
->>
->> v3-v4: Standard submission of information
-> ^ It's called commit message.
->
->>   .../bindings/interrupt-controller/loongson,liointc.yaml    | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git
->> a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
->> index f38e0113f360..5280cf60a9a7 100644
->> ---
->> a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
->> +++
->> b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
->> @@ -10,9 +10,9 @@ maintainers:
->>     - Jiaxun Yang <jiaxun.yang@flygoat.com>
->>   
->>   description: |
->> -  This interrupt controller is found in the Loongson-3 family of chips
->> as the primary
->> -  package interrupt controller which can route local I/O interrupt to
->> interrupt lines
->> -  of cores.
->> +  This interrupt controller is found in the Loongson-3 family of chips
->> and
->> +  Loongson-2K1000 chip, as the primary package interrupt controller
->> which
->> +  can route local I/O interrupt to interrupt lines of cores.
->>   
->>   allOf:
->>     - $ref: /schemas/interrupt-controller.yaml#
->> @@ -22,6 +22,7 @@ properties:
->>       oneOf:
->>         - const: loongson,liointc-1.0
->>         - const: loongson,liointc-1.0a
->> +      - const: loongson,liointc-2.0
->>   
->>     reg:
->>       maxItems: 1
-> ^ Please document multiple reg prop change as well.
-   Hi, Jiaxun
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--KNoks9VeZAPFoGM1bz0Bm3NPD06xo4uk4
+Content-Type: multipart/mixed; boundary="oLrJJkeRxpp4RiGgNAPrS23pgef1an46J";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Paul Cercueil <paul@crapouillou.net>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Sam Ravnborg <sam@ravnborg.org>,
+ od@zcrc.me, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org
+Message-ID: <5246f93f-b383-03be-4d5c-53cd530df079@suse.de>
+Subject: Re: [PATCH v2 0/5] Add option to mmap GEM buffers cached
+References: <20210307202835.253907-1-paul@crapouillou.net>
+ <ab488f52-f93d-ff50-efc5-bbdceec99ecb@suse.de>
+ <YVORPQ.MCVK409VD57J2@crapouillou.net>
+In-Reply-To: <YVORPQ.MCVK409VD57J2@crapouillou.net>
 
-   Thank you for your reply,
+--oLrJJkeRxpp4RiGgNAPrS23pgef1an46J
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-   I will do it and send v5.
+Hi
 
-   Thanks,
-   -Qing
->
-> Thanks.
->
-> - Jiaxun
->
->> -- 
->> 2.20.1
+Am 10.03.21 um 20:02 schrieb Paul Cercueil:
+> Hi Thomas,
+>=20
+> Le lun. 8 mars 2021 =C3=A0 9:41, Thomas Zimmermann <tzimmermann@suse.de=
+> a=20
+> =C3=A9crit :
+>> Hi Paul,
 >>
+>> having individual functions for each mode only makes sense if the=20
+>> decision is at compile time. But in patch 5, you're working around=20
+>> your earlier design by introducing in-driver helpers that select the=20
+>> correct CMA function.
 >>
+>> In SHMEM helpers we have the flag map_wc in the GEM structure that=20
+>> selects the pages caching mode (wc vs uncached). I think CMA should=20
 
+Re-reading this, it should rather be WC and cached.
+
+>> use this design as well. Have a map_noncoherent flag in the CMA GEM=20
+>> object and set it from the driver's implementation of gem_create_objec=
+t.
+>=20
+> Is that a new addition? That severely reduces the patchset size, which =
+
+> is perfect.
+
+It was added a few months ago, around the time you send the first=20
+version of the patches at hand.
+
+Originally, SHMEM uses write combining by default. And several drivers=20
+used default mapping flags instead (so usually cached). IIRC I=20
+streamlined everything and flipped the default. Most drivers can use=20
+cached mappings and only some require WC.
+
+Recently there was also a patchset that added support for cached video=20
+RAM (or something like that). So at some point we could store these=20
+flags in drm_gem_object. For now, I'd just put a flag into=20
+drm_gem_cma_object.
+
+>=20
+> I'll send a V3 then.
+
+Great!
+
+Best regards
+Thomas
+
+>=20
+> Cheers,
+> -Paul
+>=20
+>> And in the long run, we could try to consolidate all drivers/helpers=20
+>> mapping flags in struct drm_gem_object.
+>>
+>> Best regards
+>> Thomas
+>>
+>> Am 07.03.21 um 21:28 schrieb Paul Cercueil:
+>>> Rework of my previous patchset which added support for GEM buffers
+>>> backed by non-coherent memory to the ingenic-drm driver.
+>>>
+>>> Having GEM buffers backed by non-coherent memory is interesting in
+>>> the particular case where it is faster to render to a non-coherent
+>>> buffer then sync the data cache, than to render to a write-combine
+>>> buffer, and (by extension) much faster than using a shadow buffer.
+>>> This is true for instance on some Ingenic SoCs, where even simple
+>>> blits (e.g. memcpy) are about three times faster using this method.
+>>>
+>>> For the record, the previous patchset was accepted for 5.10 then had
+>>> to be reverted, as it conflicted with some changes made to the DMA AP=
+I.
+>>>
+>>> This new patchset is pretty different as it adds the functionality to=
+
+>>> the DRM core. The first three patches add variants to existing functi=
+ons
+>>> but with the "non-coherent memory" twist, exported as GPL symbols. Th=
+e
+>>> fourth patch adds a function to be used with the damage helpers.
+>>> Finally, the last patch adds support for non-coherent GEM buffers to =
+the
+>>> ingenic-drm driver. The functionality is enabled through a module
+>>> parameter, and is disabled by default.
+>>>
+>>> Cheers,
+>>> -Paul
+>>>
+>>> Paul Cercueil (5):
+>>> =C2=A0=C2=A0 drm: Add and export function drm_gem_cma_create_noncoher=
+ent
+>>> =C2=A0=C2=A0 drm: Add and export function drm_gem_cma_dumb_create_non=
+coherent
+>>> =C2=A0=C2=A0 drm: Add and export function drm_gem_cma_mmap_noncoheren=
+t
+>>> =C2=A0=C2=A0 drm: Add and export function drm_gem_cma_sync_data
+>>> =C2=A0=C2=A0 drm/ingenic: Add option to alloc cached GEM buffers
+>>>
+>>> =C2=A0 drivers/gpu/drm/drm_gem_cma_helper.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 | 223 +++++++++++++++++++---
+>>> =C2=A0 drivers/gpu/drm/ingenic/ingenic-drm-drv.c |=C2=A0 49 ++++-
+>>> =C2=A0 drivers/gpu/drm/ingenic/ingenic-drm.h=C2=A0=C2=A0=C2=A0=C2=A0 =
+|=C2=A0=C2=A0 4 +
+>>> =C2=A0 drivers/gpu/drm/ingenic/ingenic-ipu.c=C2=A0=C2=A0=C2=A0=C2=A0 =
+|=C2=A0 14 +-
+>>> =C2=A0 include/drm/drm_gem_cma_helper.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 13 ++
+>>> =C2=A0 5 files changed, 273 insertions(+), 30 deletions(-)
+>>>
+>>
+>> --=20
+>> Thomas Zimmermann
+>> Graphics Driver Developer
+>> SUSE Software Solutions Germany GmbH
+>> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+>> (HRB 36809, AG N=C3=BCrnberg)
+>> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+>>
+>=20
+>=20
+
+--=20
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+(HRB 36809, AG N=C3=BCrnberg)
+Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+
+
+--oLrJJkeRxpp4RiGgNAPrS23pgef1an46J--
+
+--KNoks9VeZAPFoGM1bz0Bm3NPD06xo4uk4
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmBJzDsFAwAAAAAACgkQlh/E3EQov+B7
+JxAAxcuL3q6SHtclQBjch43wGJvyugcQFie4RBcl0SpfF5XgBBxn6+BkF34vHT1tWzIiJVCBMqdy
+Dv7QPMnIiIVJy/mO4rvAYdYQe+tnhl7wki0dActkMo+jBYddJEjTIbsB8eskezFpf/7fvA30GmxL
+mjSL9/tX0a1LNVyTecOJ7vgk3G7ITjc5RLRqEVq0B9wOS0XP2zoNTbtlnkvIPIdamUlGYzJWT8eD
+na3h/Xp0WZfYzRTKjrhXESOH9urNFTPeMVVwlCbIeMufS+Kt1oMjUC2iLOW4s6EKtDTPWUXIOAzq
+HajhQ/wWJj2f+8gVGU0BFm7Zbdgy2vhEcezJXTUSvwIZzY5Es5KX8YeKVuDXBPptL6FAkmywGRg4
+/YdYZW7IQxns3OUM8NxihkvDRGbErAbCd0Pompwy2jeN3rUKsOn0SEA0UQR9QVekv9xUTFvUqXB+
+yYG3RCvxd9qLmWLPA5P9Wb0ZqStJ++K65+ifthzcE0Mcj85JjMj4/j02dQp/ri5chp3svyJPFi5d
+23+eewAMPiNJK7F5Ux+5mJu6a0KptSNT0jKZtczBmKefsW8ZgvR7dM1xlfM+wYxLY4Ml0wZWI2RF
+nnMPXeg8oTTzrCf3hUoMbseAbsWoyG5fHngPUAfHEley3DV405pcofUg9pDq0uMTUI+TFTR5EuYH
+5Bo=
+=RZlk
+-----END PGP SIGNATURE-----
+
+--KNoks9VeZAPFoGM1bz0Bm3NPD06xo4uk4--
