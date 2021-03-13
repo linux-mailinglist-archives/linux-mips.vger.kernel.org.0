@@ -2,21 +2,21 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 895B4339CBF
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Mar 2021 09:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A6B339CC5
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Mar 2021 09:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbhCMIHi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 13 Mar 2021 03:07:38 -0500
-Received: from out28-5.mail.aliyun.com ([115.124.28.5]:43082 "EHLO
+        id S233219AbhCMIHj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 13 Mar 2021 03:07:39 -0500
+Received: from out28-5.mail.aliyun.com ([115.124.28.5]:44549 "EHLO
         out28-5.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbhCMIHJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 Mar 2021 03:07:09 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07466728|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.112501-0.000359083-0.88714;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.JkQU1yY_1615622823;
-Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.JkQU1yY_1615622823)
-          by smtp.aliyun-inc.com(10.147.41.137);
-          Sat, 13 Mar 2021 16:07:04 +0800
-Subject: Re: [PATCH v2 1/6] pinctrl: Ingenic: Add missing pins to the JZ4770
- MAC MII group.
+        with ESMTP id S230349AbhCMIHU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 Mar 2021 03:07:20 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07513224|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0594387-0.000246833-0.940315;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.JkQuWRa_1615622835;
+Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.JkQuWRa_1615622835)
+          by smtp.aliyun-inc.com(10.147.42.241);
+          Sat, 13 Mar 2021 16:07:16 +0800
+Subject: Re: [PATCH v2 2/6] pinctrl: Ingenic: Add support for read the pin
+ configuration of X1830.
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
         linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
@@ -24,15 +24,15 @@ Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
         hns@goldelico.com, paul@boddie.org.uk, dongsheng.qiu@ingenic.com,
         aric.pzqi@ingenic.com, sernia.zhou@foxmail.com
 References: <1615476112-113101-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1615476112-113101-2-git-send-email-zhouyanjie@wanyeetech.com>
- <HOXUPQ.U0CJV6YXUOYX2@crapouillou.net>
+ <1615476112-113101-3-git-send-email-zhouyanjie@wanyeetech.com>
+ <XWYUPQ.9202CFTWWMJ6@crapouillou.net>
 From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <f9b18c6d-1d56-7ad3-a7e4-4a52d92b4671@wanyeetech.com>
-Date:   Sat, 13 Mar 2021 16:07:02 +0800
+Message-ID: <aad601fb-3266-eb4d-3bfd-11bc35e78ad7@wanyeetech.com>
+Date:   Sat, 13 Mar 2021 16:07:15 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <HOXUPQ.U0CJV6YXUOYX2@crapouillou.net>
+In-Reply-To: <XWYUPQ.9202CFTWWMJ6@crapouillou.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -42,22 +42,20 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Paul,
 
-On 2021/3/12 下午9:05, Paul Cercueil wrote:
-> Hi,
+On 2021/3/12 下午9:31, Paul Cercueil wrote:
+> Hi Zhou,
 >
 > Le jeu. 11 mars 2021 à 23:21, 周琰杰 (Zhou Yanjie) 
 > <zhouyanjie@wanyeetech.com> a écrit :
->> The MII group of JZ4770's MAC should have 7 pins, add missing
->> pins to the MII group.
+>> Add X1830 support in "ingenic_pinconf_get()", so that it can read the
+>> configuration of X1830 SoC correctly.
 >>
 >> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 >
-> No Fixes: tag?
-> And if the bug wasn't introduced in 5.12-rc1 you'll need to Cc 
-> linux-stable as well.
+> This is a fix, so it needs a Fixes: tag, and you need to Cc linux-stable.
 >
 
-Sure, I will add it.
+Sure.
 
 
 >> ---
@@ -66,35 +64,158 @@ Sure, I will add it.
 >>     v2:
 >>     New patch.
 >>
->>  drivers/pinctrl/pinctrl-ingenic.c | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>  drivers/pinctrl/pinctrl-ingenic.c | 76 
+>> +++++++++++++++++++++++++++++----------
+>>  1 file changed, 57 insertions(+), 19 deletions(-)
 >>
 >> diff --git a/drivers/pinctrl/pinctrl-ingenic.c 
 >> b/drivers/pinctrl/pinctrl-ingenic.c
->> index f274612..05dfa0a 100644
+>> index 05dfa0a..0a88aab 100644
 >> --- a/drivers/pinctrl/pinctrl-ingenic.c
 >> +++ b/drivers/pinctrl/pinctrl-ingenic.c
->> @@ -667,7 +667,9 @@ static int jz4770_pwm_pwm7_pins[] = { 0x6b, };
->>  static int jz4770_mac_rmii_pins[] = {
->>      0xa9, 0xab, 0xaa, 0xac, 0xa5, 0xa4, 0xad, 0xae, 0xa6, 0xa8,
->>  };
->> -static int jz4770_mac_mii_pins[] = { 0xa7, 0xaf, };
->> +static int jz4770_mac_mii_pins[] = {
->> +    0x7b, 0x7a, 0x7d, 0x7c, 0xa7, 0x24, 0xaf,
+>> @@ -2109,31 +2109,69 @@ static int ingenic_pinconf_get(struct 
+>> pinctrl_dev *pctldev,
+>>      enum pin_config_param param = pinconf_to_config_param(*config);
+>>      unsigned int idx = pin % PINS_PER_GPIO_CHIP;
+>>      unsigned int offt = pin / PINS_PER_GPIO_CHIP;
+>> +    unsigned int bias;
+>>      bool pull;
+>>
+>> -    if (jzpc->info->version >= ID_JZ4770)
+>> -        pull = !ingenic_get_pin_config(jzpc, pin, JZ4770_GPIO_PEN);
+>> -    else
+>> -        pull = !ingenic_get_pin_config(jzpc, pin, 
+>> JZ4740_GPIO_PULL_DIS);
+>> +    if (jzpc->info->version >= ID_X1830) {
+>> +        unsigned int half = PINS_PER_GPIO_CHIP / 2;
+>> +        unsigned int idxh = pin % half * 2;
+>>
+>> -    switch (param) {
+>> -    case PIN_CONFIG_BIAS_DISABLE:
+>> -        if (pull)
+>> -            return -EINVAL;
+>> -        break;
+>> +        if (idx < half)
+>> +            regmap_read(jzpc->map, offt * jzpc->info->reg_offset +
+>> +                    X1830_GPIO_PEL, &bias);
+>> +        else
+>> +            regmap_read(jzpc->map, offt * jzpc->info->reg_offset +
+>> +                    X1830_GPIO_PEH, &bias);
+>>
+>> -    case PIN_CONFIG_BIAS_PULL_UP:
+>> -        if (!pull || !(jzpc->info->pull_ups[offt] & BIT(idx)))
+>> -            return -EINVAL;
+>> -        break;
+>> +        bias = (bias >> idxh) & 3;
 >
-> Maybe list them in order?
+> You can do:
+>
+> u32 mask = GENMASK(idxh + 1, idxh);
+>
+> bias = FIELD_GET(mask, bias);
+>
+> (macros in <linux/bitfield.h>)
 >
 
-I ordered them in the order of rxd3, rxd2, txd3, txd2, rxclk, crs, col.
+Sure.
 
 
-> And are you sure that's the whole list? The PM (section 12.2 in 
-> jz4770_pm_part3.pdf) lists more pins.
+>>
+>> -    case PIN_CONFIG_BIAS_PULL_DOWN:
+>> -        if (!pull || !(jzpc->info->pull_downs[offt] & BIT(idx)))
+>> -            return -EINVAL;
+>> -        break;
+>> +        switch (param) {
+>> +        case PIN_CONFIG_BIAS_DISABLE:
+>> +            if (bias)
+>> +                return -EINVAL;
+>> +            break;
+>>
+>> -    default:
+>> -        return -ENOTSUPP;
+>> +        case PIN_CONFIG_BIAS_PULL_UP:
+>> +            if ((bias != PIN_CONFIG_BIAS_PULL_UP) ||
+>> +                    !(jzpc->info->pull_ups[offt] & BIT(idx)))
+>
+> "bias" is a 2-bit value (because of the & 3 mask), and 
+> PIN_CONFIG_BIAS_PULL_UP == 5.
+>
+> So this clearly won't work. You are comparing hardware values with 
+> public API enums.
+
+
+OK, I will fix it in the next version.
+
+
+>
+>> +                return -EINVAL;
+>> +            break;
+>> +
+>> +        case PIN_CONFIG_BIAS_PULL_DOWN:
+>> +            if ((bias != PIN_CONFIG_BIAS_PULL_DOWN) ||
+>> +                    !(jzpc->info->pull_downs[offt] & BIT(idx)))
+>> +                return -EINVAL;
+>> +            break;
+>> +
+>> +        default:
+>> +            return -ENOTSUPP;
+>> +        }
+>> +
+>> +    } else {
+>> +        if (jzpc->info->version >= ID_JZ4770)
+>> +            pull = !ingenic_get_pin_config(jzpc, pin, JZ4770_GPIO_PEN);
+>> +        else
+>> +            pull = !ingenic_get_pin_config(jzpc, pin, 
+>> JZ4740_GPIO_PULL_DIS);
+>
+> I think you can keep the switch outside the if/else block, if you use 
+> pullup/pulldown variables.
+>
+> These can be initialized (in the non-X1830 case) to:
+>
+> pullup = pull && (jzpc->info->pull_ups[offt] & BIT(idx));
+> pulldown = pull && (jzpc->info->pull_downs[offt] & BIT(idx));
+>
+> In the X1830 case you'd initialize these variables from 'bias'.
+
+
+Sure, I will do this in the next version.
+
+
+>
+>> +
+>> +        switch (param) {
+>> +        case PIN_CONFIG_BIAS_DISABLE:
+>> +            if (pull)
+>
+> Here would change to if (pullup || pulldown)
 >
 
-Here is the way to imitate the MMC. Use only RMII group when using RMII 
-function, use both RMII and MII groups when using MII function. If you 
-think it is necessary, I can redefine the MII group.
+OK.
+
+
+>> +                return -EINVAL;
+>> +            break;
+>> +
+>> +        case PIN_CONFIG_BIAS_PULL_UP:
+>> +            if (!pull || !(jzpc->info->pull_ups[offt] & BIT(idx)))
+>
+> if (!pullup)
+>
+
+Sure.
+
+
+>> +                return -EINVAL;
+>> +            break;
+>> +
+>> +        case PIN_CONFIG_BIAS_PULL_DOWN:
+>> +            if (!pull || !(jzpc->info->pull_downs[offt] & BIT(idx)))
+>
+> if (!pulldown)
+>
+
+Sure.
 
 
 Thanks and best regards!
@@ -103,10 +224,15 @@ Thanks and best regards!
 > Cheers,
 > -Paul
 >
->> +};
+>> +                return -EINVAL;
+>> +            break;
+>> +
+>> +        default:
+>> +            return -ENOTSUPP;
+>> +        }
+>>      }
 >>
->>  static const struct group_desc jz4770_groups[] = {
->>      INGENIC_PIN_GROUP("uart0-data", jz4770_uart0_data, 0),
+>>      *config = pinconf_to_config_packed(param, 1);
 >> -- 
 >> 2.7.4
 >>
