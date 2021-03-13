@@ -2,149 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 009A8339AE9
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Mar 2021 02:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36489339B90
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Mar 2021 04:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbhCMBkb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 12 Mar 2021 20:40:31 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:55520 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232942AbhCMBkB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 12 Mar 2021 20:40:01 -0500
-Received: from localhost.localdomain (unknown [222.209.9.50])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxKdbcF0xgiakYAA--.9125S3;
-        Sat, 13 Mar 2021 09:39:49 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
+        id S233129AbhCMDeG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 12 Mar 2021 22:34:06 -0500
+Received: from mail-m17635.qiye.163.com ([59.111.176.35]:38060 "EHLO
+        mail-m17635.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233156AbhCMDdz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Mar 2021 22:33:55 -0500
+Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.251.74.231])
+        by mail-m17635.qiye.163.com (Hmail) with ESMTPA id ABBB440012F;
+        Sat, 13 Mar 2021 11:33:53 +0800 (CST)
+From:   Wang Qing <wangqing@vivo.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: [PATCH] MIPS: clean up CONFIG_MIPS_PGD_C0_CONTEXT handling
-Date:   Sat, 13 Mar 2021 09:39:27 +0800
-Message-Id: <20210313013927.26733-2-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210313013927.26733-1-huangpei@loongson.cn>
-References: <20210313013927.26733-1-huangpei@loongson.cn>
-X-CM-TRANSID: AQAAf9AxKdbcF0xgiakYAA--.9125S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrWfAF47Zr1xCw48ZFykuFg_yoW5Xr43p3
-        92q3WkGr47Zr98Zry5Aa4kXr4rta90y390vF4DKr909FWqqFn0934rJwnIyF1DGFs7Ga1x
-        Xrs0gFW5Jr9F9w7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPG14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
-        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
-        x2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIF
-        yTuYvjfU8BMKDUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        Wang Qing <wangqing@vivo.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mips: kernel: use DEFINE_DEBUGFS_ATTRIBUTE with debugfs_create_file_unsafe()
+Date:   Sat, 13 Mar 2021 11:33:48 +0800
+Message-Id: <1615606429-2568-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZGBgZQktNQh8aGEoYVkpNSk5NS01PSEhCSkhVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0hNSlVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PSI6Cyo5Mz8LPVEBEREhLi05
+        Lk8aCxdVSlVKTUpOTUtNT0hPSU9LVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
+        SU5KVUxPVUlISllXWQgBWUFJSk5KNwY+
+X-HM-Tid: 0a7829a5c826d991kuwsabbb440012f
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+. LOONGSON64 use 0x98xx_xxxx_xxxx_xxxx as xphys cached, instread of
-0xa8xx_xxxx_xxxx_xxxx
+debugfs_create_file_unsafe does not protect the fops handed to it
+against file removal. DEFINE_DEBUGFS_ATTRIBUTE makes the fops aware of
+the file lifetime and thus protects it against removal.
 
-+. let CONFIG_MIPS_PGD_C0_CONTEXT depend on 64bit
-
-+. cast CAC_BASE into u64 to silence warning on MIPS32
-
-CP0 Context has enough room for wraping pgd into its 41-bit PTEBase field.
-
-+. For XPHYS, the trick is that pgd is 4kB aligned, and the PABITS <= 53,
-only save 53 - 12 = 41 bits, aka :
-
-   bit[63:59] | 0000 00 |  bit[53:12] | 0000 0000 0000
-
-+. for CKSEG0, only save 29 - 12 = 17 bits
-
-when switching pgd, only need to save bit[53:12] or bit[28:12] into
-CP0 Context's bit[63:23], see folling asm generated at run time
-
-tlbmiss_handler_setup_pgd:
-	.set	push
-	.set	noreorder
-
-	dsra	a2, a0, 29
-	move	a3, a0
-	dins	a0, zero, 29, 35
-	daddiu	a2, a2, 4	//for CKSEG0, a2 from 0xfffffffffffffffc
-				//into 0
-
-	movn	a0, a3, a2
-	dsll	a0, a0, 11
-	jr	ra
-	dmtc0	a0, CP0_CONTEXT
-
-	.set	pop
-
-when using it on page walking
-
-	dmfc0	k0, CP0_CONTEXT
-	dins	k0, zero, 0, 23	         // zero badv2
-	ori	k0, k0, (CAC_BASE >> 53) // *prefix* with bit[63:59]
-	drotr	k0, k0, 11		 // kick it in the right place
-
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
+Signed-off-by: Wang Qing <wangqing@vivo.com>
 ---
- arch/mips/Kconfig    | 3 ++-
- arch/mips/mm/tlbex.c | 9 +++++----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ arch/mips/kernel/spinlock_test.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 2000bb2b0220..5741dae35b74 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2142,7 +2142,8 @@ config CPU_SUPPORTS_HUGEPAGES
- 	depends on !(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))
- config MIPS_PGD_C0_CONTEXT
- 	bool
--	default y if 64BIT && (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
-+	depends on 64BIT
-+	default y if (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
+diff --git a/arch/mips/kernel/spinlock_test.c b/arch/mips/kernel/spinlock_test.c
+index ab4e3e1..90f53e0
+--- a/arch/mips/kernel/spinlock_test.c
++++ b/arch/mips/kernel/spinlock_test.c
+@@ -35,7 +35,7 @@ static int ss_get(void *data, u64 *val)
+ 	return 0;
+ }
  
- #
- # Set to y for ptrace access to watch registers.
-diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-index a7521b8f7658..cfaf710096c9 100644
---- a/arch/mips/mm/tlbex.c
-+++ b/arch/mips/mm/tlbex.c
-@@ -848,8 +848,8 @@ void build_get_pmde64(u32 **p, struct uasm_label **l, struct uasm_reloc **r,
- 		/* Clear lower 23 bits of context. */
- 		uasm_i_dins(p, ptr, 0, 0, 23);
+-DEFINE_SIMPLE_ATTRIBUTE(fops_ss, ss_get, NULL, "%llu\n");
++DEFINE_DEBUGFS_ATTRIBUTE(fops_ss, ss_get, NULL, "%llu\n");
  
--		/* 1 0	1 0 1  << 6  xkphys cached */
--		uasm_i_ori(p, ptr, ptr, 0x540);
-+		/* insert bit[63:59] of CAC_BASE into bit[11:6] of ptr */
-+		uasm_i_ori(p, ptr, ptr, ((u64)(CAC_BASE) >> 53));
- 		uasm_i_drotr(p, ptr, ptr, 11);
- #elif defined(CONFIG_SMP)
- 		UASM_i_CPUID_MFC0(p, ptr, SMP_CPUID_REG);
-@@ -1164,8 +1164,9 @@ build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
  
- 	if (pgd_reg == -1) {
- 		vmalloc_branch_delay_filled = 1;
--		/* 1 0	1 0 1  << 6  xkphys cached */
--		uasm_i_ori(p, ptr, ptr, 0x540);
-+		/* insert bit[63:59] of CAC_BASE into bit[11:6] of ptr */
-+		uasm_i_ori(p, ptr, ptr, ((u64)(CAC_BASE) >> 53));
-+
- 		uasm_i_drotr(p, ptr, ptr, 11);
- 	}
  
+@@ -114,13 +114,13 @@ static int multi_get(void *data, u64 *val)
+ 	return 0;
+ }
+ 
+-DEFINE_SIMPLE_ATTRIBUTE(fops_multi, multi_get, NULL, "%llu\n");
++DEFINE_DEBUGFS_ATTRIBUTE(fops_multi, multi_get, NULL, "%llu\n");
+ 
+ static int __init spinlock_test(void)
+ {
+-	debugfs_create_file("spin_single", S_IRUGO, mips_debugfs_dir, NULL,
++	debugfs_create_file_unsafe("spin_single", S_IRUGO, mips_debugfs_dir, NULL,
+ 			    &fops_ss);
+-	debugfs_create_file("spin_multi", S_IRUGO, mips_debugfs_dir, NULL,
++	debugfs_create_file_unsafe("spin_multi", S_IRUGO, mips_debugfs_dir, NULL,
+ 			    &fops_multi);
+ 	return 0;
+ }
 -- 
-2.17.1
+2.7.4
 
