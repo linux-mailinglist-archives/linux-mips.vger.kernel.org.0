@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A33FB33A6C1
+	by mail.lfdr.de (Postfix) with ESMTP id 05FB533A6BD
 	for <lists+linux-mips@lfdr.de>; Sun, 14 Mar 2021 17:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbhCNQoX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 Mar 2021 12:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S233894AbhCNQoV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 Mar 2021 12:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbhCNQnz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Mar 2021 12:43:55 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF82C061574;
+        with ESMTP id S232431AbhCNQn4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Mar 2021 12:43:56 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47D9C061762;
         Sun, 14 Mar 2021 09:43:55 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id m20-20020a7bcb940000b029010cab7e5a9fso18820070wmi.3;
+Received: by mail-wm1-x331.google.com with SMTP id d191so6724293wmd.2;
         Sun, 14 Mar 2021 09:43:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZGPjlZ3z0iXHQbgOKcnyBMwe3feJrOyy+y2zWfZeH8Q=;
-        b=AO/qcESlKKsnWnsVSJ3QJ/Ia2G5HoTdPpgcPgtsAI+2iuO5hRQyyxl8p0ySfv82td8
-         VSiMyLBch1/5T5D1yOvX/cT/J3olL1MpK0noCYVTD6lh2v5bDnhL2UlDU1JaQerphRWj
-         CHDx3SFdDjoHzABegG7Ay90TdcfyLL4+AlYkVspszfKN8OHtvoBelYcJvbrfufA46ffI
-         4wN8uqdxtWAvDCdGzvyluuiF8XyySV0Pk9FfdI+ekP02ySKRPV/sQkXFUCydyPCszF4K
-         4sQxjIoIakk1qFQ/hfmt9iYCervW8ETM3OWw7OToJD8k8vRnrxY8+9qekDwdZtZ2oMPQ
-         oUWA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gfOjFyDGtIdshAQfWcv71Eun/1WNG6VID4FSDjM59qk=;
+        b=K4mIVR8CsRmJ21MjOmpueRCEBTL5xwjtxTWsbtSY5A1Pg1QD5Ayh6UnXaX+QOI32T1
+         fAoWqgGLIGhrc4nQuLIy9I3eoZ2CYvqms9QIaD7x5QKdaJjooaJw/0u+rR/ddevV304g
+         H5b2fwRhO5hhH/e5yZ5bLPjngwgCTZlnTz8qPwMxgZu2U1JDWSeS+XGIs8fL4rBB7PhT
+         azaS8U9a1rg6440Qsh0pCYnMqAmwfxaMGcDy6ETRcoAda55deswBm8MK65ia6/6XvwEU
+         w1MZwjN6IpC/JicMiv3J824+ZBpfGZohf+TsFVw+yh/k+AEV1Rlm/gegDYqs2Nv42lio
+         24+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZGPjlZ3z0iXHQbgOKcnyBMwe3feJrOyy+y2zWfZeH8Q=;
-        b=bbTF60Jay5dzGxKQrYbqQFqd6JXnhR18D4m0EqN8UyO//wsg8RsphK4RBmCZsCWJIU
-         HP5T9deSbVuKOyDRbZ4gIHdZAvyaaycidneygyGIOW34OAgSChwEhru92Rd3EQMqr6W0
-         vsAdwa1hWH8xDdEiGV1p8u9xOM1nZ90p+Vx8CVGazjhkUnivMCnnVlIeRPfNbI36WGGW
-         X86do0djK/Hk4906LUcrr9puwN9XyFhjiID3eodfXm+RHytYiAJt6YZQTmfz6sMMfuyH
-         0NefaK3HMe1wps01ZSXqQnPmjT25DtNdQPWb3EUVHHppyeGXom95DoeHJPOUMXCJVFz3
-         B9Xw==
-X-Gm-Message-State: AOAM530hr4uVAMXixA5tVnSvDkPfDAYPwW0/vLyqQRwDtOKPHysf1JX4
-        tJY9iGdmiLfVsvd0equrkQ4=
-X-Google-Smtp-Source: ABdhPJwA2RvjSL6O5aWPID5G40urpELEgdzEBwnG9qhMn2FBbZtUpJpt1Zyuw4fGOz7jp5pA4BuPTw==
-X-Received: by 2002:a05:600c:290b:: with SMTP id i11mr22790061wmd.129.1615740233737;
-        Sun, 14 Mar 2021 09:43:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gfOjFyDGtIdshAQfWcv71Eun/1WNG6VID4FSDjM59qk=;
+        b=IhP2peIwgN35v/qDmp6rU4GtA36BeoOLGFSRju+Phof/jrTeolfvMDRBotvgoGVaHD
+         jlmhnATeFRNQbSkL1qBZA3llABjq1IUyKOVh2j4ChwdS/b9G7KyGkkdxqavpylsUDmD0
+         V8Db6SeogOIBhQQLGS4bUlZJk29x6PLifAIHwc4/P9lhKcawG92goGb3bOcWfOQo0pPi
+         mSjgsRf6nfZPawzy5pRBDyktJorwpET+O4TdsiRPCReAW83LwAHDnkucxfEXuVRNU7A2
+         eszrPxMjFG55WpCja06JAD9WK8SG3iwBXdNuwVmGI50bTXYMWU+3Q+PeWdsVTdlK6ZqM
+         GYsg==
+X-Gm-Message-State: AOAM532MIOXwfv9prO84kZkK8dshsKxFZ27M5kSXLB8PIVg/FmcIpHQE
+        rGnM8rdmL9bczeLq80HooQk=
+X-Google-Smtp-Source: ABdhPJwqs1Fa5G+sBjX2qlYzgfDPJg8DqzQ2xjShI3cYRPxGbB23qlYoPnsz2JGJpD9yCPDi3xoLYA==
+X-Received: by 2002:a1c:4382:: with SMTP id q124mr22698781wma.16.1615740234615;
+        Sun, 14 Mar 2021 09:43:54 -0700 (PDT)
 Received: from skynet.lan ([80.31.204.166])
-        by smtp.gmail.com with ESMTPSA id a12sm15146071wrx.5.2021.03.14.09.43.52
+        by smtp.gmail.com with ESMTPSA id a12sm15146071wrx.5.2021.03.14.09.43.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Mar 2021 09:43:53 -0700 (PDT)
+        Sun, 14 Mar 2021 09:43:54 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -59,10 +59,12 @@ To:     Florian Fainelli <f.fainelli@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH v2 0/6] mips: bmips: fix and improve reboot nodes
-Date:   Sun, 14 Mar 2021 17:43:45 +0100
-Message-Id: <20210314164351.24665-1-noltari@gmail.com>
+Subject: [PATCH v2 1/6] mips: bmips: fix syscon-reboot nodes
+Date:   Sun, 14 Mar 2021 17:43:46 +0100
+Message-Id: <20210314164351.24665-2-noltari@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210314164351.24665-1-noltari@gmail.com>
+References: <20210314164351.24665-1-noltari@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -70,26 +72,86 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-These patches improve bmips bcm63xx device tree nodes.
+Commit a23c4134955e added the clock controller nodes, incorrectly changing the
+syscon-reboot nodes addresses.
 
-v2: add missing BCM63268 patch.
+Fixes: a23c4134955e ("MIPS: BMIPS: add clock controller nodes")
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+---
+ v2: no changes
 
-Álvaro Fernández Rojas (6):
-  mips: bmips: fix syscon-reboot nodes
-  mips: bmips: bcm6328: populate device tree nodes
-  mips: bmips: bcm6358: populate device tree nodes
-  mips: bmips: bcm6362: populate device tree nodes
-  mips: bmips: bcm6368: populate device tree nodes
-  mips: bmips: bcm63268: populate device tree nodes
+ arch/mips/boot/dts/brcm/bcm3368.dtsi  | 2 +-
+ arch/mips/boot/dts/brcm/bcm63268.dtsi | 2 +-
+ arch/mips/boot/dts/brcm/bcm6358.dtsi  | 2 +-
+ arch/mips/boot/dts/brcm/bcm6362.dtsi  | 2 +-
+ arch/mips/boot/dts/brcm/bcm6368.dtsi  | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
- arch/mips/boot/dts/brcm/bcm3368.dtsi  |   2 +-
- arch/mips/boot/dts/brcm/bcm63268.dtsi | 132 +++++++++++++++++++++++---
- arch/mips/boot/dts/brcm/bcm6328.dtsi  | 119 ++++++++++++++++++++---
- arch/mips/boot/dts/brcm/bcm6358.dtsi  |  85 ++++++++++++++---
- arch/mips/boot/dts/brcm/bcm6362.dtsi  | 129 ++++++++++++++++++++++---
- arch/mips/boot/dts/brcm/bcm6368.dtsi  | 129 ++++++++++++++++++++++---
- 6 files changed, 530 insertions(+), 66 deletions(-)
-
+diff --git a/arch/mips/boot/dts/brcm/bcm3368.dtsi b/arch/mips/boot/dts/brcm/bcm3368.dtsi
+index db7e801dad55..883ca8bed8e7 100644
+--- a/arch/mips/boot/dts/brcm/bcm3368.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm3368.dtsi
+@@ -62,7 +62,7 @@
+ 
+ 		periph_cntl: syscon@fff8c008 {
+ 			compatible = "syscon";
+-			reg = <0xfff8c000 0x4>;
++			reg = <0xfff8c008 0x4>;
+ 			native-endian;
+ 		};
+ 
+diff --git a/arch/mips/boot/dts/brcm/bcm63268.dtsi b/arch/mips/boot/dts/brcm/bcm63268.dtsi
+index 575c9d3eb4c8..052d2032d4e4 100644
+--- a/arch/mips/boot/dts/brcm/bcm63268.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm63268.dtsi
+@@ -64,7 +64,7 @@
+ 
+ 		periph_cntl: syscon@10000008 {
+ 			compatible = "syscon";
+-			reg = <0x10000000 0xc>;
++			reg = <0x10000008 0x4>;
+ 			native-endian;
+ 		};
+ 
+diff --git a/arch/mips/boot/dts/brcm/bcm6358.dtsi b/arch/mips/boot/dts/brcm/bcm6358.dtsi
+index f8753becc164..f5549a056bff 100644
+--- a/arch/mips/boot/dts/brcm/bcm6358.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6358.dtsi
+@@ -63,7 +63,7 @@
+ 
+ 		periph_cntl: syscon@fffe0008 {
+ 			compatible = "syscon";
+-			reg = <0xfffe0000 0x4>;
++			reg = <0xfffe0008 0x4>;
+ 			native-endian;
+ 		};
+ 
+diff --git a/arch/mips/boot/dts/brcm/bcm6362.dtsi b/arch/mips/boot/dts/brcm/bcm6362.dtsi
+index a2dbbf062cd8..50c287bedc37 100644
+--- a/arch/mips/boot/dts/brcm/bcm6362.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6362.dtsi
+@@ -64,7 +64,7 @@
+ 
+ 		periph_cntl: syscon@10000008 {
+ 			compatible = "syscon";
+-			reg = <0x10000000 0xc>;
++			reg = <0x10000008 0x4>;
+ 			native-endian;
+ 		};
+ 
+diff --git a/arch/mips/boot/dts/brcm/bcm6368.dtsi b/arch/mips/boot/dts/brcm/bcm6368.dtsi
+index c4eb4b67ecbd..4837b1436714 100644
+--- a/arch/mips/boot/dts/brcm/bcm6368.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6368.dtsi
+@@ -63,7 +63,7 @@
+ 
+ 		periph_cntl: syscon@100000008 {
+ 			compatible = "syscon";
+-			reg = <0x10000000 0xc>;
++			reg = <0x10000008 0x4>;
+ 			native-endian;
+ 		};
+ 
 -- 
 2.20.1
 
