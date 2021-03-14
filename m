@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CBC33A66F
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Mar 2021 17:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C0F33A677
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Mar 2021 17:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234580AbhCNQfc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 Mar 2021 12:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        id S234595AbhCNQfe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 Mar 2021 12:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbhCNQex (ORCPT
+        with ESMTP id S234111AbhCNQex (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Mar 2021 12:34:53 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5991C061574;
-        Sun, 14 Mar 2021 09:34:51 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id g25so6721887wmh.0;
-        Sun, 14 Mar 2021 09:34:51 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B6AC061763;
+        Sun, 14 Mar 2021 09:34:52 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id a18so7450231wrc.13;
+        Sun, 14 Mar 2021 09:34:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mVOZaCx8DEtNn99HLWoL7tuZLw1L8TaYhsCI+LeWDX0=;
-        b=bIds6aiFDK2J0SMqCKgGoJPJia8bIilg9c3eLHeo2/t68d5KxRIy5wfF3+uYjm42Ty
-         U4AE8eT6QEyMwWaasvm9uKYmZleQJ8MM/2vdT+j9BGaAGpE6q4XZY6DfYAxZB3D0WQad
-         hKEH/HMW4tVyZHVE+HlRjI1Te2cQ/u81k6KRuZZJ/sAgcb+WPcNatwUw4gfdbRc6NvB6
-         gTgfWtXqdQcjflKYkYNuOeEiTi856etvsE2ioVsuPfK3RCXScpR/5agbHVYj3STed+3a
-         TmhUIQKwz/msevGzfU78L6mGIobn5GBUPt59VFnFlJpbCHXUomQ2LHuqh3Zw7Se7xzIQ
-         xRUQ==
+        bh=yuT5VsbT1XGZlBuSRTVfvPqDGzQ8TwuOuNgGTDNgoVM=;
+        b=LrtesDCMSBSj+fLmZD/pZn0KeyoxWK4z0G/jjbJ/Fx/f1m2O5v0d6nOHy2iEa3lXEF
+         I6fla+bKanEiXjSKLglsnaxhQK2rlPlGbeylns+luwwVgQgn+3l7KeQ6iXXD5dGVqWyK
+         gUsnJrFzF1EeRQrdxl/i+XU3ipmEo1Hi63fW7Zz4jK4VFjyVpbmDfw/12wJ6TSZfEE2J
+         BJ9PJz7YFbHY1q9XCeV6HGQs5mPfRyGFbirhKpAp+1yT+nYwTaIyz8TjMskMXXnyCH0+
+         od5lioI9Uky+dtVPwvz8a/7SOmq9smmgLjpLPcw9LKWxwyjGIidDJlzjNifRXy7tzwwd
+         yRYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mVOZaCx8DEtNn99HLWoL7tuZLw1L8TaYhsCI+LeWDX0=;
-        b=fL6MFlr4EW+F8p2u0YLVWoIIfSPVdUt6cLpR4h1WXdJ7scHtzXM70+xdGgzBPb2EKZ
-         LbNlbgPZLQjk+pSzqqvosZHjsDQmt9LQTShGDrFd93qnJ1XIXwGJcF0g7aeDhqsb2KuT
-         8pAmvT22MeRwGmt77Ys48bULz7BIlzFMhwC6DAv9PWMigkCdmrw+Iq5vUy6z13YACzCn
-         dYgstmHCZmRAZwZpY4XTOVIKSgaxwffmVtYlZIJyQxu0Srqu+so1+/PGL42Bep+L6DJH
-         hbOX76CcBOvF/Q97kJfMp+fORx30VhXHRuSRNnnTXnMtyoS8TY2wxjZGrKxrkbfo6EiO
-         LEcg==
-X-Gm-Message-State: AOAM530cRI6VDSAM6cDCTPkVaj5JpgE6Nk1oGWl0kVifPb7gA4TivvlY
-        2gX1Ch3+ZsNHoEwxwxmioMc=
-X-Google-Smtp-Source: ABdhPJxHUVhUZ+4hD9GrKNFOG/ygDXMV76TqtwR4CA+mxKpRRln6eOn9Q2n0wr3glYSrL3h9k+NW7w==
-X-Received: by 2002:a7b:c750:: with SMTP id w16mr22679695wmk.184.1615739690633;
-        Sun, 14 Mar 2021 09:34:50 -0700 (PDT)
+        bh=yuT5VsbT1XGZlBuSRTVfvPqDGzQ8TwuOuNgGTDNgoVM=;
+        b=gWHwyvxKWPZGWQjvBnXuBk3lOXjzp/gOhcJCtAiI6AbyHaHe1chRtnuWNqbRK36jNI
+         +jsIV1dqmV6YdXEEjR63zHyhkGnD7cSOFkS2Kw1wlV9dVBa6xGAzcy6YPsoqisJVfJJQ
+         vzrd0rZdIlb0o7ME0RgJm++IJwlqQb6doeq9FTO5AD4u2UiSIHueOCe0FsJwXWNTVNQx
+         VG840P+r67mDSNOJ+DIQbSStYoOq4VQhCn5w17KVtuctcO3DXT+yJmK4AH6m/Y1YkBTK
+         ZVZtQWwYSdKin2qrb/fEqEstL07QjMp+ak+ilhS7PztsLc8SlaKBZqVpgNZq2GlOLZbO
+         dyLw==
+X-Gm-Message-State: AOAM530DK3bXjc7xENNNmqempYMIOwGT7Mm5/cBsaJAirPgDxhd7WenL
+        krQFLkb/lLSH1YRHj08ymBg=
+X-Google-Smtp-Source: ABdhPJxPZxW5eX1KbEVKMSvxTlMSUXVM2Geo+ctUXwFcac+VczEUizqc85OgIdfYkR3Hjpa+DlhypQ==
+X-Received: by 2002:adf:fe48:: with SMTP id m8mr23232338wrs.135.1615739691444;
+        Sun, 14 Mar 2021 09:34:51 -0700 (PDT)
 Received: from skynet.lan ([80.31.204.166])
-        by smtp.gmail.com with ESMTPSA id h62sm10547804wmf.37.2021.03.14.09.34.49
+        by smtp.gmail.com with ESMTPSA id h62sm10547804wmf.37.2021.03.14.09.34.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Mar 2021 09:34:50 -0700 (PDT)
+        Sun, 14 Mar 2021 09:34:51 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -59,9 +59,9 @@ To:     Florian Fainelli <f.fainelli@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH 3/5] mips: bmips: bcm6358: populate device tree nodes
-Date:   Sun, 14 Mar 2021 17:34:43 +0100
-Message-Id: <20210314163445.6976-4-noltari@gmail.com>
+Subject: [PATCH 4/5] mips: bmips: bcm6362: populate device tree nodes
+Date:   Sun, 14 Mar 2021 17:34:44 +0100
+Message-Id: <20210314163445.6976-5-noltari@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210314163445.6976-1-noltari@gmail.com>
 References: <20210314163445.6976-1-noltari@gmail.com>
@@ -75,21 +75,23 @@ X-Mailing-List: linux-mips@vger.kernel.org
 - Rename periph_clk to periph_osc.
 - Rename clkctl to periph_clk.
 - Move syscon-reboot to subnode.
+- Add hsspi-osc clock.
 - Add watchdog.
 - Add SPI controller.
+- Add HS SPI controller.
+- Add NAND controller.
 - Add USBH PHY.
-- Add cfi-flash.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 ---
- arch/mips/boot/dts/brcm/bcm6358.dtsi | 83 ++++++++++++++++++++++++----
- 1 file changed, 72 insertions(+), 11 deletions(-)
+ arch/mips/boot/dts/brcm/bcm6362.dtsi | 127 ++++++++++++++++++++++++---
+ 1 file changed, 116 insertions(+), 11 deletions(-)
 
-diff --git a/arch/mips/boot/dts/brcm/bcm6358.dtsi b/arch/mips/boot/dts/brcm/bcm6358.dtsi
-index f5549a056bff..777c4379ed03 100644
---- a/arch/mips/boot/dts/brcm/bcm6358.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm6358.dtsi
-@@ -28,16 +28,19 @@
+diff --git a/arch/mips/boot/dts/brcm/bcm6362.dtsi b/arch/mips/boot/dts/brcm/bcm6362.dtsi
+index 50c287bedc37..d74021925c53 100644
+--- a/arch/mips/boot/dts/brcm/bcm6362.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6362.dtsi
+@@ -29,16 +29,29 @@
  	};
  
  	clocks {
@@ -99,36 +101,46 @@ index f5549a056bff..777c4379ed03 100644
  			#clock-cells = <0>;
  			clock-frequency = <50000000>;
 +			clock-output-names = "periph";
++		};
++
++		hsspi_osc: hsspi-osc {
++			compatible = "fixed-clock";
++
++			#clock-cells = <0>;
++
++			clock-frequency = <400000000>;
++			clock-output-names = "hsspi_osc";
  		};
  	};
  
  	aliases {
-+		pflash = &pflash;
++		nflash = &nflash;
  		serial0 = &uart0;
  		serial1 = &uart1;
 +		spi0 = &lsspi;
++		spi1 = &hsspi;
  	};
  
  	cpu_intc: interrupt-controller {
-@@ -55,23 +58,22 @@
+@@ -56,23 +69,22 @@
  		compatible = "simple-bus";
  		ranges;
  
--		clkctl: clock-controller@fffe0004 {
-+		periph_clk: clock-controller@fffe0004 {
- 			compatible = "brcm,bcm6358-clocks";
- 			reg = <0xfffe0004 0x4>;
+-		clkctl: clock-controller@10000004 {
++		periph_clk: clock-controller@10000004 {
+ 			compatible = "brcm,bcm6362-clocks";
+ 			reg = <0x10000004 0x4>;
  			#clock-cells = <1>;
  		};
  
--		periph_cntl: syscon@fffe0008 {
-+		pll_cntl: syscon@fffe0008 {
+-		periph_cntl: syscon@10000008 {
++		pll_cntl: syscon@10000008 {
  			compatible = "syscon";
- 			reg = <0xfffe0008 0x4>;
+ 			reg = <0x10000008 0x4>;
  			native-endian;
 -		};
  
--		reboot: syscon-reboot@fffe0008 {
+-		reboot: syscon-reboot@10000008 {
 -			compatible = "syscon-reboot";
 -			regmap = <&periph_cntl>;
 -			offset = <0x0>;
@@ -140,14 +152,14 @@ index f5549a056bff..777c4379ed03 100644
 +			};
  		};
  
- 		periph_intc: interrupt-controller@fffe000c {
-@@ -92,6 +94,16 @@
- 			#reset-cells = <1>;
+ 		periph_rst: reset-controller@10000010 {
+@@ -93,6 +105,16 @@
+ 			interrupts = <2>, <3>;
  		};
  
-+		wdt: watchdog@fffe005c {
++		wdt: watchdog@1000005c {
 +			compatible = "brcm,bcm7038-wdt";
-+			reg = <0xfffe005c 0xc>;
++			reg = <0x1000005c 0xc>;
 +
 +			clocks = <&periph_osc>;
 +			clock-names = "refclk";
@@ -155,19 +167,10 @@ index f5549a056bff..777c4379ed03 100644
 +			timeout-sec = <30>;
 +		};
 +
- 		leds0: led-controller@fffe00d0 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -108,7 +120,7 @@
- 			interrupt-parent = <&periph_intc>;
- 			interrupts = <2>;
- 
--			clocks = <&periph_clk>;
-+			clocks = <&periph_osc>;
- 			clock-names = "refclk";
- 
- 			status = "disabled";
-@@ -121,18 +133,41 @@
+ 		uart0: serial@10000100 {
+ 			compatible = "brcm,bcm6345-uart";
+ 			reg = <0x10000100 0x18>;
+@@ -100,7 +122,7 @@
  			interrupt-parent = <&periph_intc>;
  			interrupts = <3>;
  
@@ -176,76 +179,117 @@ index f5549a056bff..777c4379ed03 100644
  			clock-names = "refclk";
  
  			status = "disabled";
+@@ -113,12 +135,72 @@
+ 			interrupt-parent = <&periph_intc>;
+ 			interrupts = <4>;
+ 
+-			clocks = <&periph_clk>;
++			clocks = <&periph_osc>;
+ 			clock-names = "refclk";
+ 
+ 			status = "disabled";
  		};
  
-+		lsspi: spi@fffe0800 {
++		nflash: nand@10000200 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "brcm,nand-bcm6368",
++				     "brcm,brcmnand-v2.2",
++				     "brcm,brcmnand";
++			reg = <0x10000200 0x180>,
++			      <0x10000600 0x200>,
++			      <0x10000070 0x10>;
++			reg-names = "nand",
++				    "nand-cache",
++				    "nand-int-base";
++
++			interrupt-parent = <&periph_intc>;
++			interrupts = <12>;
++
++			clocks = <&periph_clk BCM6362_CLK_NAND>;
++			clock-names = "nand";
++
++			status = "disabled";
++		};
++
++		lsspi: spi@10000800 {
 +			#address-cells = <1>;
 +			#size-cells = <0>;
 +			compatible = "brcm,bcm6358-spi";
-+			reg = <0xfffe0800 0x70c>;
++			reg = <0x10000800 0x70c>;
 +
 +			interrupt-parent = <&periph_intc>;
-+			interrupts = <1>;
++			interrupts = <2>;
 +
-+			clocks = <&periph_clk BCM6358_CLK_SPI>;
++			clocks = <&periph_clk BCM6362_CLK_SPI>;
 +			clock-names = "spi";
 +
-+			resets = <&periph_rst BCM6358_RST_SPI>;
++			resets = <&periph_rst BCM6362_RST_SPI>;
 +			reset-names = "spi";
 +
 +			status = "disabled";
 +		};
 +
- 		ehci: usb@fffe1300 {
- 			compatible = "brcm,bcm6358-ehci", "generic-ehci";
- 			reg = <0xfffe1300 0x100>;
- 			big-endian;
++		hsspi: spi@10001000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "brcm,bcm6328-hsspi";
++			reg = <0x10001000 0x600>;
 +
++			interrupt-parent = <&periph_intc>;
++			interrupts = <5>;
++
++			clocks = <&periph_clk BCM6362_CLK_HSSPI>,
++				 <&hsspi_osc>;
++			clock-names = "hsspi",
++				      "pll";
++
++			resets = <&periph_rst BCM6362_RST_SPI>;
++			reset-names = "hsspi";
++
++			status = "disabled";
++		};
++
+ 		periph_pwr: power-controller@10001848 {
+ 			compatible = "brcm,bcm6362-power-controller";
+ 			reg = <0x10001848 0x4>;
+@@ -142,6 +224,9 @@
  			interrupt-parent = <&periph_intc>;
  			interrupts = <10>;
-+
+ 
 +			phys = <&usbh 0>;
 +			phy-names = "usb";
 +
  			status = "disabled";
  		};
  
-@@ -141,9 +176,35 @@
- 			reg = <0xfffe1400 0x100>;
- 			big-endian;
- 			no-big-frame-no;
-+
+@@ -154,6 +239,26 @@
  			interrupt-parent = <&periph_intc>;
- 			interrupts = <5>;
-+
+ 			interrupts = <9>;
+ 
 +			phys = <&usbh 0>;
 +			phy-names = "usb";
 +
 +			status = "disabled";
 +		};
 +
-+		usbh: usb-phy@fffe1500 {
-+			compatible = "brcm,bcm6358-usbh-phy";
-+			reg = <0xfffe1500 0x38>;
++		usbh: usb-phy@10002700 {
++			compatible = "brcm,bcm6362-usbh-phy";
++			reg = <0x10002700 0x38>;
++
 +			#phy-cells = <1>;
 +
-+			resets = <&periph_rst BCM6358_RST_USBH>;
++			clocks = <&periph_clk BCM6362_CLK_USBH>;
++			clock-names = "usbh";
++
++			power-domains = <&periph_pwr BCM6362_POWER_DOMAIN_USBH>;
++
++			resets = <&periph_rst BCM6362_RST_USBH>;
 +			reset-names = "usbh";
 +
  			status = "disabled";
  		};
  	};
-+
-+	pflash: nor@1e000000 {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "cfi-flash";
-+		reg = <0x1e000000 0x2000000>;
-+		bank-width = <2>;
-+
-+		status = "disabled";
-+	};
- };
 -- 
 2.20.1
 
