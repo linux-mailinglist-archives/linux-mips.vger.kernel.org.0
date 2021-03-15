@@ -2,127 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4751133C1C0
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Mar 2021 17:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085EB33C370
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Mar 2021 18:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbhCOQ3W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Mar 2021 12:29:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:26057 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230021AbhCOQ3D (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Mar 2021 12:29:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615825743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nl1+WY2yc35r8DKGgQPrYO8xQPdF6BvZlTPgaL/G56k=;
-        b=Vy9uNIFp5GkvQua/FEpKRTiBfckxT4X/drsuy2F0vD8j8Hp1L/wCDCcJXh1ValaBCMJKu2
-        7kDkyoBE++6VBIympbnQMkYIJx4TH5HWwXfE/hZwhPN91IvFn9rCyrI3HiOPDNBLY8DTfe
-        PXXz6AAfr6J+5HvncwgoZXebO5sLgc4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-418-gaY_ODU1M2SL4P00G20Vrw-1; Mon, 15 Mar 2021 12:29:01 -0400
-X-MC-Unique: gaY_ODU1M2SL4P00G20Vrw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 491E9107ACCD;
-        Mon, 15 Mar 2021 16:28:57 +0000 (UTC)
-Received: from [10.36.112.200] (ovpn-112-200.ams2.redhat.com [10.36.112.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DDB8F5D755;
-        Mon, 15 Mar 2021 16:28:41 +0000 (UTC)
-Subject: Re: [PATCH RFCv2] mm/madvise: introduce MADV_POPULATE_(READ|WRITE) to
- prefault/prealloc memory
-From:   David Hildenbrand <david@redhat.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
-References: <20210308164520.18323-1-david@redhat.com>
- <20210315122213.k52wtlbbhsw42pks@box>
- <7d607d1c-efd5-3888-39bb-9e5f8bc08185@redhat.com>
- <20210315130353.iqnwsnp2c2wpt4y2@box>
- <e59d6301-6ba8-1d7f-5c15-60364eec3fe1@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <df583cb8-ed13-92a1-811f-46d193ab4ae7@redhat.com>
-Date:   Mon, 15 Mar 2021 17:28:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S235128AbhCORHU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Mar 2021 13:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235003AbhCORG7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Mar 2021 13:06:59 -0400
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B5EC06175F
+        for <linux-mips@vger.kernel.org>; Mon, 15 Mar 2021 10:06:59 -0700 (PDT)
+Received: by mail-ua1-x942.google.com with SMTP id g26so4420966uam.9
+        for <linux-mips@vger.kernel.org>; Mon, 15 Mar 2021 10:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=IeztSHzwFXmZolftCfjFRG56pGeDsims74ZNrOy69DoxsYWGoDOf8BTYU1oihzpMjs
+         /UI0k2L0Qw3uMk8fxnCnza7S4kxuw+JHz2cJfu6pTZ0sITqTYvWJGTtVh2KwWkmjRaJy
+         oTsqALi8i98UbsZJ68pP2yxOMTP8DzeoQ8F9tJSRTRKzr7Z/qLAW+V3UqNTj4H1X6nI/
+         PmV4gS2F9+luv8LVHd613zQz/YI0VKn4OQSm+awZ9Ty028cbDK+a/CGJDynN7FOkoDYO
+         LOVsaPRK7onH069em311RQlabQWfJu0IClqpKWhZmgRyNcuRh2wyGe9w6vsdywtZEkI6
+         +lwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=PcoraXyjzCbvgDwZXCvh0obWrSUtWBAZrrRRfS+xYKs2YrKZAa2s2VA29EQ0wKwsks
+         5C3hYMrGxQl1YnElvnNV/5opQOq1kHpeUlxQqccgYZHgSIrnBWL3sy2dPVhIkwzLCJTe
+         WyW16cQtQE2Z7Nx5jWHOebEC/NXQZkF1d7GmCGxW2TPDi3QQtZQCJ9NeLjvKql6JAXCa
+         MhoHDYgkgc0SzpgSoXyOgtT/nHxOMtpg/1n2SR7YkFhce6qQlg4/nUpcIwCghW2/Eb0e
+         WYVUROALVp9xJKcfwBgt7JY5f9NHZJXGpHtZYJRAFuJfxKcd/6DCpNAS3i5fGWhZIZpW
+         0YSQ==
+X-Gm-Message-State: AOAM532N111PVb1o63CEgfuw9++CpK1ebjnA9M3tbvEpc8hOOXQ8b8mn
+        l2f1AcL6uEd4qmtdYzRWy9hfvikxe/KCo380CWs=
+X-Google-Smtp-Source: ABdhPJwEfkQ2Vj8T+Ow2okUm+JjAfQUJvyZL+X+WzN8tH7luDQmnBYiNeC3HSx9EJovMuQf3n7FVpZyzmlmraCcCLv0=
+X-Received: by 2002:ab0:32cf:: with SMTP id f15mr5321130uao.68.1615828018158;
+ Mon, 15 Mar 2021 10:06:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <e59d6301-6ba8-1d7f-5c15-60364eec3fe1@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Mon, 15 Mar 2021 10:06:57
+ -0700 (PDT)
+Reply-To: ezbtg22@gmail.com
+From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
+Date:   Mon, 15 Mar 2021 10:06:57 -0700
+Message-ID: <CAH16wSN_QM_RAUGGsZ7LC8VTEKhCu3+VnJoNqqTumu2QA95yEg@mail.gmail.com>
+Subject: From Mrs.Glenn
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 15.03.21 14:26, David Hildenbrand wrote:
-> On 15.03.21 14:03, Kirill A. Shutemov wrote:
->> On Mon, Mar 15, 2021 at 01:25:40PM +0100, David Hildenbrand wrote:
->>> On 15.03.21 13:22, Kirill A. Shutemov wrote:
->>>> On Mon, Mar 08, 2021 at 05:45:20PM +0100, David Hildenbrand wrote:
->>>>> +			case -EHWPOISON: /* Skip over any poisoned pages. */
->>>>> +				start += PAGE_SIZE;
->>>>> +				continue;
->>>>
->>>> Why is it good approach? It's not abvious to me.
->>>
->>> My main motivation was to simplify return code handling. I don't want to
->>> return -EHWPOISON to user space
->>
->> Why? Hiding the problem under the rug doesn't help anybody. SIGBUS later
->> is not better than an error upfront.
-> 
-> Well, if you think about "prefaulting page tables", the first intuition
-> is certainly not to check for poisoned pages, right? After all, you are
-> not actually accessing memory, you are allocating memory if required and
-> fill page tables. OTOH, mlock() will also choke on poisoned pages.
-> 
-> With the current semantics, you can start and run a VM just fine.
-> Preallocation/prefaulting succeeded after all. On access you will get a
-> SIGBUS, from which e.g., QEMU can recover by injecting an MCE into the
-> guest - just like if you would hit a poisoned page later.
-> 
-> The problem we are talking about is most probably very rare, especially
-> when using MADV_POPULATE_ for actual preallocation.
-> 
-> I don't have a strong opinion; not bailing out on poisoned pages felt
-> like the right thing to do.
-
-I'll switch to propagating -EHWPOISON, it matches how e.g., mlock() 
-behaves -- not ignoring poisoned pages. Thanks!
-
 -- 
-Thanks,
+Dear Beloved,
 
-David / dhildenb
+I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
+in a hospital bed in Israel. I am 59 years and childless; my husband
+is dead. I was diagnosed with terminal cancer. And my doctor just
+predicted that I have but very limited time to live due to damages in
+my system and as a result of that I decided to dispose my 10.5 million
+US dollars to a God-fearing one for the continuation of charitable
+work. This is why I located you.
 
+My guess about you may not be accurate because I came across your
+contact at the humanitarian calendar event of the year but I believe
+in God who divinely directed me to you for this solemn proposal of
+charitable work.
+
+Therefore I wholeheartedly wish to bequeath my fortune to you as a
+God-fearing person for the continuation of charitable work anywhere
+around the world.
+
+I shall be going in for a surgery operations soonest and desire this
+money to be transferred to you as I do not wish to leave this money in
+the bank because bankers might misuse it for their own interest after
+my death.
+
+As soon as I receive your quick reply assuring me that you will
+utilize the money as I instructed you for the benefit of the less
+privilege, I shall give you more details and also instruct my bank to
+release the money to you for the charity project. I hope you receive
+this mail in good health.
+
+Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
+know what will be my situation in next minute,
+
+I am waiting for your reply.
+
+Yours sincerely,
+Mrs Elizabet Glenn.
