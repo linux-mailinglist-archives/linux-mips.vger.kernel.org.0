@@ -2,152 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A519333AC6E
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Mar 2021 08:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 970B533ACAB
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Mar 2021 08:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbhCOHoD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Mar 2021 03:44:03 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42650 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229939AbhCOHnb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Mar 2021 03:43:31 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id F0660ABD7;
-        Mon, 15 Mar 2021 07:43:29 +0000 (UTC)
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20210307202835.253907-1-paul@crapouillou.net>
- <20210307202835.253907-5-paul@crapouillou.net>
- <20210311122846.GC1739082@infradead.org>
- <VJ1TPQ.L5I3WNCQNB982@crapouillou.net>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v2 4/5] drm: Add and export function drm_gem_cma_sync_data
-Message-ID: <9c3c8e15-9e8c-4413-e75b-de989a750954@suse.de>
-Date:   Mon, 15 Mar 2021 08:43:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S230476AbhCOHuo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Mar 2021 03:50:44 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:41278 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230280AbhCOHuU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Mar 2021 03:50:20 -0400
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxydSsEU9gcqMZAA--.1167S2;
+        Mon, 15 Mar 2021 15:50:05 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v5 0/7] Add basic support for Loongson-2K1000
+Date:   Mon, 15 Mar 2021 15:49:57 +0800
+Message-Id: <20210315075004.15465-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <VJ1TPQ.L5I3WNCQNB982@crapouillou.net>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="7x3zcl9GuxkElcs3Yao3OfSmPIusCl604"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxydSsEU9gcqMZAA--.1167S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urykAr1DAw4DKryfXFWDJwb_yoW8Ww13pw
+        43Cw13Krs8Cry7Crn3JFyUur15ZrWrJrZrWF43Xr15G3sIqa4Yvr1fJFs8Jw47Zry8ta4j
+        vryrGFW7GFnrC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4xMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4sXODUUUU
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---7x3zcl9GuxkElcs3Yao3OfSmPIusCl604
-Content-Type: multipart/mixed; boundary="1d80S5GLvRs1vi8HdXnlPyfLzdbqxjsE0";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Paul Cercueil <paul@crapouillou.net>,
- Christoph Hellwig <hch@infradead.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Sam Ravnborg <sam@ravnborg.org>,
- od@zcrc.me, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org
-Message-ID: <9c3c8e15-9e8c-4413-e75b-de989a750954@suse.de>
-Subject: Re: [PATCH v2 4/5] drm: Add and export function drm_gem_cma_sync_data
-References: <20210307202835.253907-1-paul@crapouillou.net>
- <20210307202835.253907-5-paul@crapouillou.net>
- <20210311122846.GC1739082@infradead.org>
- <VJ1TPQ.L5I3WNCQNB982@crapouillou.net>
-In-Reply-To: <VJ1TPQ.L5I3WNCQNB982@crapouillou.net>
+These patches support single-core DTS boot to the serial port login
+interface, which can be operated using conventional commands.
 
---1d80S5GLvRs1vi8HdXnlPyfLzdbqxjsE0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+I have successfully tested it on the Loongson 2K1000 machine.
+pmon: http://cgit.loongnix.org/cgit/pmon-loongson3/
 
-Hi
+Note:
+After the basic support is merged,
+I will commit SMP and other driver support in the future.
 
-Am 11.03.21 um 13:33 schrieb Paul Cercueil:
->=20
->=20
-> Le jeu. 11 mars 2021 =C3=A0 12:28, Christoph Hellwig <hch@infradead.org=
-> a=20
-> =C3=A9crit :
->> On Sun, Mar 07, 2021 at 08:28:34PM +0000, Paul Cercueil wrote:
->>> =C2=A0+=C2=A0=C2=A0=C2=A0 drm_atomic_for_each_plane_damage(&iter, &cl=
-ip) {
->>> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < f=
-info->num_planes; i++) {
->>> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 daddr =3D drm_fb_cma_get_gem_addr(state->fb, state, i);
->>> =C2=A0+
->>> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 /* Ignore x1/x2 values, invalidate complete lines */
->>> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 offset =3D clip.y1 * state->fb->pitches[i];
->>> =C2=A0+
->>> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 dma_sync_single_for_device(dev, daddr + offset,
->>> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (cl=
-ip.y2 - clip.y1) * state->fb->pitches[i],
->>> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 DMA=
-_TO_DEVICE);
->>
->> Are these helpers only ever used to transfer data to the device and
->> never from it?=C2=A0 If so please clearly document that.
->=20
-> Yes. In the DRM world, are there cases where we transfer data from the =
+Qing Zhang (7):
+  MIPS: Loongson64: DeviceTree for Loongson-2K1000
+  MIPS: Loongson64: Distinguish firmware dependencies DTB/LEFI
+  MIPS: Loongson64: Add support for the Loongson-2K1000 to get
+    cpu_clock_freq
+  MIPS: Loongson64: Add Loongson-2K1000 early_printk_port
+  irqchip/loongson-liointc: irqchip add 2.0 version
+  dt-bindings: interrupt-controller: Add Loongson-2K1000 LIOINTC
+  MIPS: Loongson64: Add a Loongson-2K1000 default config file
 
-> device? I assume these cases are handled by v4l2 instead.
+ .../loongson,liointc.yaml                     |  36 +-
+ arch/mips/boot/dts/loongson/Makefile          |   1 +
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  | 243 ++++++++++++
+ .../dts/loongson/loongson64_2core_2k1000.dts  |  10 +
+ arch/mips/configs/loongson2k_defconfig        | 353 ++++++++++++++++++
+ .../asm/mach-loongson64/builtin_dtbs.h        |   1 +
+ .../include/asm/mach-loongson64/loongson.h    |   9 +-
+ arch/mips/loongson64/env.c                    |  13 +-
+ arch/mips/loongson64/init.c                   |  21 +-
+ arch/mips/loongson64/time.c                   |  24 ++
+ drivers/irqchip/irq-loongson-liointc.c        |  58 ++-
+ 11 files changed, 751 insertions(+), 18 deletions(-)
+ create mode 100644 arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dts
+ create mode 100644 arch/mips/configs/loongson2k_defconfig
 
-Software rendering (i.e., anything wrt dumb buffers) likely reads back=20
-framebuffer content during blit operations. For devices where this is a=20
-slow operation (e.g., PCI read) we set struct=20
-drm_mode_config.prefer_shadow to hint renderers to use shadow buffering.
+-- 
+2.20.1
 
-Best regards
-Thomas
-
->=20
-> -Paul
->=20
->=20
-
---=20
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-(HRB 36809, AG N=C3=BCrnberg)
-Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
-
-
---1d80S5GLvRs1vi8HdXnlPyfLzdbqxjsE0--
-
---7x3zcl9GuxkElcs3Yao3OfSmPIusCl604
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmBPECAFAwAAAAAACgkQlh/E3EQov+BQ
-OhAAo+n7QqrhXKWvVH/Re+piCvHUYFBgain+soNQJDbYOq5pZEaXmM+a/338ukTX/+kHDcJ6YbgW
-x72JTZ4v7mKWvoqcby3a1e0BPsiD3NEHSxctuvkK6JK1ujCujtDTbx7DLjS0oigSPToNe0JUZtR9
-Ck4yQWEccXejAETaKU0h9+tQ/+aylFrxX6zqffgivOYPG3BIhqNUa5OZo0QoSsRkx5sUncLz3b1F
-gIMV8OPxp8N2a5QHKkcylnmnjOZZgNMtz0a4N7dR8p8p179+w4DN7L6Yj6ctBW6bvMEAaWA0zJCC
-7TeE0//ENN57/74fvZq5Q2G23n5F5ImTF/yDanAzvfF9gsu6Mc7tceLEWMqh2msZBDOvfD2p7dOi
-wuuB1bEFzIUQ1xXQx2lhy3CoXnU+T+QIub/HkIoVKvgfv//AEWlli9+cvZKo6hv32GDHLQRtlrOy
-NV+imFnm79gKkB/B6Z7JuDrAcU49VY0wOoJqLQesPzRaLQkXtABF6WzKPmIyF67IZz/U2PtQ+RU9
-35UhNCbffnhPtz3PEqap8b5Tt11mMrr3hY3vK7gbajPdzcPNoXX/J+L7kCTuxpU3wpnMtiG8ssu2
-qJ613e5iGyxVlAGP/7cgopCx57GhzoTOOnpfberi7sY7giiy/0cyjNY89zRCpFWiHrDN84hApatz
-mWY=
-=0TxZ
------END PGP SIGNATURE-----
-
---7x3zcl9GuxkElcs3Yao3OfSmPIusCl604--
