@@ -2,95 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 085EB33C370
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Mar 2021 18:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5AF33C69D
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Mar 2021 20:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbhCORHU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Mar 2021 13:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235003AbhCORG7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Mar 2021 13:06:59 -0400
-Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B5EC06175F
-        for <linux-mips@vger.kernel.org>; Mon, 15 Mar 2021 10:06:59 -0700 (PDT)
-Received: by mail-ua1-x942.google.com with SMTP id g26so4420966uam.9
-        for <linux-mips@vger.kernel.org>; Mon, 15 Mar 2021 10:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
-        b=IeztSHzwFXmZolftCfjFRG56pGeDsims74ZNrOy69DoxsYWGoDOf8BTYU1oihzpMjs
-         /UI0k2L0Qw3uMk8fxnCnza7S4kxuw+JHz2cJfu6pTZ0sITqTYvWJGTtVh2KwWkmjRaJy
-         oTsqALi8i98UbsZJ68pP2yxOMTP8DzeoQ8F9tJSRTRKzr7Z/qLAW+V3UqNTj4H1X6nI/
-         PmV4gS2F9+luv8LVHd613zQz/YI0VKn4OQSm+awZ9Ty028cbDK+a/CGJDynN7FOkoDYO
-         LOVsaPRK7onH069em311RQlabQWfJu0IClqpKWhZmgRyNcuRh2wyGe9w6vsdywtZEkI6
-         +lwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
-        b=PcoraXyjzCbvgDwZXCvh0obWrSUtWBAZrrRRfS+xYKs2YrKZAa2s2VA29EQ0wKwsks
-         5C3hYMrGxQl1YnElvnNV/5opQOq1kHpeUlxQqccgYZHgSIrnBWL3sy2dPVhIkwzLCJTe
-         WyW16cQtQE2Z7Nx5jWHOebEC/NXQZkF1d7GmCGxW2TPDi3QQtZQCJ9NeLjvKql6JAXCa
-         MhoHDYgkgc0SzpgSoXyOgtT/nHxOMtpg/1n2SR7YkFhce6qQlg4/nUpcIwCghW2/Eb0e
-         WYVUROALVp9xJKcfwBgt7JY5f9NHZJXGpHtZYJRAFuJfxKcd/6DCpNAS3i5fGWhZIZpW
-         0YSQ==
-X-Gm-Message-State: AOAM532N111PVb1o63CEgfuw9++CpK1ebjnA9M3tbvEpc8hOOXQ8b8mn
-        l2f1AcL6uEd4qmtdYzRWy9hfvikxe/KCo380CWs=
-X-Google-Smtp-Source: ABdhPJwEfkQ2Vj8T+Ow2okUm+JjAfQUJvyZL+X+WzN8tH7luDQmnBYiNeC3HSx9EJovMuQf3n7FVpZyzmlmraCcCLv0=
-X-Received: by 2002:ab0:32cf:: with SMTP id f15mr5321130uao.68.1615828018158;
- Mon, 15 Mar 2021 10:06:58 -0700 (PDT)
+        id S231858AbhCOTOd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Mar 2021 15:14:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32778 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231502AbhCOTOE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Mar 2021 15:14:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 542F764E6B;
+        Mon, 15 Mar 2021 19:14:02 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yury Norov <yury.norov@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Alexey Klimov <aklimov@redhat.com>, linux-arch@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: (subset) [PATCH 0/2] arch: enable GENERIC_FIND_FIRST_BIT for MIPS and ARM64
+Date:   Mon, 15 Mar 2021 19:14:00 +0000
+Message-Id: <161583561181.30130.15256425173316985861.b4-ty@arm.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210225135700.1381396-1-yury.norov@gmail.com>
+References: <20210225135700.1381396-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Mon, 15 Mar 2021 10:06:57
- -0700 (PDT)
-Reply-To: ezbtg22@gmail.com
-From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
-Date:   Mon, 15 Mar 2021 10:06:57 -0700
-Message-ID: <CAH16wSN_QM_RAUGGsZ7LC8VTEKhCu3+VnJoNqqTumu2QA95yEg@mail.gmail.com>
-Subject: From Mrs.Glenn
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, 25 Feb 2021 05:56:58 -0800, Yury Norov wrote:
+> MIPS and ARM64 don't implement find_first_{zero}_bit in arch code and
+> don't enable it in config. It leads to using find_next_bit() which is
+> less efficient:
+> 
+> It's beneficial to enable GENERIC_FIND_FIRST_BIT as this functionality
+> is not new at all and well-tested. It provides more optimized code and
+> saves .text memory:
+> 
+> [...]
+
+Applied to arm64 (for-next/misc), thanks!
+
+[1/2] ARM64: enable GENERIC_FIND_FIRST_BIT
+      https://git.kernel.org/arm64/c/98c5ec77c7c5
+
 -- 
-Dear Beloved,
+Catalin
 
-I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
-in a hospital bed in Israel. I am 59 years and childless; my husband
-is dead. I was diagnosed with terminal cancer. And my doctor just
-predicted that I have but very limited time to live due to damages in
-my system and as a result of that I decided to dispose my 10.5 million
-US dollars to a God-fearing one for the continuation of charitable
-work. This is why I located you.
-
-My guess about you may not be accurate because I came across your
-contact at the humanitarian calendar event of the year but I believe
-in God who divinely directed me to you for this solemn proposal of
-charitable work.
-
-Therefore I wholeheartedly wish to bequeath my fortune to you as a
-God-fearing person for the continuation of charitable work anywhere
-around the world.
-
-I shall be going in for a surgery operations soonest and desire this
-money to be transferred to you as I do not wish to leave this money in
-the bank because bankers might misuse it for their own interest after
-my death.
-
-As soon as I receive your quick reply assuring me that you will
-utilize the money as I instructed you for the benefit of the less
-privilege, I shall give you more details and also instruct my bank to
-release the money to you for the charity project. I hope you receive
-this mail in good health.
-
-Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
-know what will be my situation in next minute,
-
-I am waiting for your reply.
-
-Yours sincerely,
-Mrs Elizabet Glenn.
