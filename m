@@ -2,72 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF31F33BF3A
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Mar 2021 16:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4751133C1C0
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Mar 2021 17:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbhCOO71 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Mar 2021 10:59:27 -0400
-Received: from elvis.franken.de ([193.175.24.41]:60567 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232141AbhCOO7I (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Mar 2021 10:59:08 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lLogP-0003dk-00; Mon, 15 Mar 2021 15:59:01 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 04BF7C0791; Mon, 15 Mar 2021 15:58:50 +0100 (CET)
-Date:   Mon, 15 Mar 2021 15:58:50 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     YunQiang Su <yunqiang.su@cipunited.com>
-Cc:     linux-mips@vger.kernel.org, macro@orcam.me.uk,
-        jiaxun.yang@flygoat.com, f4bug@amsat.org, stable@vger.kernel.org
-Subject: Re: [PATCH v7 RESEND] MIPS: force use FR=0 or FRE for FPXX binaries
-Message-ID: <20210315145850.GA12494@alpha.franken.de>
-References: <20210312104859.16337-1-yunqiang.su@cipunited.com>
+        id S231391AbhCOQ3W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Mar 2021 12:29:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:26057 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230021AbhCOQ3D (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Mar 2021 12:29:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615825743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nl1+WY2yc35r8DKGgQPrYO8xQPdF6BvZlTPgaL/G56k=;
+        b=Vy9uNIFp5GkvQua/FEpKRTiBfckxT4X/drsuy2F0vD8j8Hp1L/wCDCcJXh1ValaBCMJKu2
+        7kDkyoBE++6VBIympbnQMkYIJx4TH5HWwXfE/hZwhPN91IvFn9rCyrI3HiOPDNBLY8DTfe
+        PXXz6AAfr6J+5HvncwgoZXebO5sLgc4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-418-gaY_ODU1M2SL4P00G20Vrw-1; Mon, 15 Mar 2021 12:29:01 -0400
+X-MC-Unique: gaY_ODU1M2SL4P00G20Vrw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 491E9107ACCD;
+        Mon, 15 Mar 2021 16:28:57 +0000 (UTC)
+Received: from [10.36.112.200] (ovpn-112-200.ams2.redhat.com [10.36.112.200])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DDB8F5D755;
+        Mon, 15 Mar 2021 16:28:41 +0000 (UTC)
+Subject: Re: [PATCH RFCv2] mm/madvise: introduce MADV_POPULATE_(READ|WRITE) to
+ prefault/prealloc memory
+From:   David Hildenbrand <david@redhat.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
+References: <20210308164520.18323-1-david@redhat.com>
+ <20210315122213.k52wtlbbhsw42pks@box>
+ <7d607d1c-efd5-3888-39bb-9e5f8bc08185@redhat.com>
+ <20210315130353.iqnwsnp2c2wpt4y2@box>
+ <e59d6301-6ba8-1d7f-5c15-60364eec3fe1@redhat.com>
+Organization: Red Hat GmbH
+Message-ID: <df583cb8-ed13-92a1-811f-46d193ab4ae7@redhat.com>
+Date:   Mon, 15 Mar 2021 17:28:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210312104859.16337-1-yunqiang.su@cipunited.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <e59d6301-6ba8-1d7f-5c15-60364eec3fe1@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 10:48:59AM +0000, YunQiang Su wrote:
-> The MIPS FPU may have 3 mode:
->   FR=0: MIPS I style, all of the FPR are single.
->   FR=1: all 32 FPR can be double.
->   FRE: redirecting the rw of odd-FPR to the upper 32bit of even-double FPR.
+On 15.03.21 14:26, David Hildenbrand wrote:
+> On 15.03.21 14:03, Kirill A. Shutemov wrote:
+>> On Mon, Mar 15, 2021 at 01:25:40PM +0100, David Hildenbrand wrote:
+>>> On 15.03.21 13:22, Kirill A. Shutemov wrote:
+>>>> On Mon, Mar 08, 2021 at 05:45:20PM +0100, David Hildenbrand wrote:
+>>>>> +			case -EHWPOISON: /* Skip over any poisoned pages. */
+>>>>> +				start += PAGE_SIZE;
+>>>>> +				continue;
+>>>>
+>>>> Why is it good approach? It's not abvious to me.
+>>>
+>>> My main motivation was to simplify return code handling. I don't want to
+>>> return -EHWPOISON to user space
+>>
+>> Why? Hiding the problem under the rug doesn't help anybody. SIGBUS later
+>> is not better than an error upfront.
 > 
-> The binary may have 3 mode:
->   FP32: can only work with FR=0 and FRE mode
->   FPXX: can work with all of FR=0/FR=1/FRE mode.
->   FP64: can only work with FR=1 mode
+> Well, if you think about "prefaulting page tables", the first intuition
+> is certainly not to check for poisoned pages, right? After all, you are
+> not actually accessing memory, you are allocating memory if required and
+> fill page tables. OTOH, mlock() will also choke on poisoned pages.
 > 
-> Some binary, for example the output of golang, may be mark as FPXX,
-> while in fact they are FP32. It is caused by the bug of design and linker:
->   Object produced by pure Go has no FP annotation while in fact they are FP32;
->   if we link them with the C module which marked as FPXX,
->   the result will be marked as FPXX. If these fake-FPXX binaries is executed
->   in FR=1 mode, some problem will happen.
+> With the current semantics, you can start and run a VM just fine.
+> Preallocation/prefaulting succeeded after all. On access you will get a
+> SIGBUS, from which e.g., QEMU can recover by injecting an MCE into the
+> guest - just like if you would hit a poisoned page later.
 > 
-> In Golang, now we add the FP32 annotation, so the future golang programs
-> won't have this problem. While for the existing binaries, we need a
-> kernel workaround.
+> The problem we are talking about is most probably very rare, especially
+> when using MADV_POPULATE_ for actual preallocation.
+> 
+> I don't have a strong opinion; not bailing out on poisoned pages felt
+> like the right thing to do.
 
-what about just rebuilding them ? They are broken, so why should we fix
-broken user binaries with kernel hacks ?
-
-> Currently, FR=1 mode is used for all FPXX binary, it makes some wrong
-> behivour of the binaries. Since FPXX binary can work with both FR=1 and FR=0,
-> we force it to use FR=0 or FRE (for R6 CPU).
-
-I'm not sure, if I want to take this patch.
-
-Maciej, what's your take on this ?
-
-Thomas.
+I'll switch to propagating -EHWPOISON, it matches how e.g., mlock() 
+behaves -- not ignoring poisoned pages. Thanks!
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Thanks,
+
+David / dhildenb
+
