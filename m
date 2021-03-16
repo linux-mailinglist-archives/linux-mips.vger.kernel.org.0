@@ -2,141 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BECA433DB9B
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Mar 2021 18:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C07BC33DBBE
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Mar 2021 18:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239375AbhCPRzX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Mar 2021 13:55:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54881 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239414AbhCPRy5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Mar 2021 13:54:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615917296;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q+nIYLcJsbNrOQJXNJzvpf/dZa2SR4YCfI1fCwdaCUY=;
-        b=WsvcAM/DVZVN+35RQG4SU18F0p3n/dpdLxLxWAAmKFjaqnh3e65gERW6qfIO7IqkCxJQ8q
-        qGH3g4UIkk5SlcSS6KQOmSYkXOMz25ctOFCeD3iIaRz7PMkb+aczhGLtHdL3gNhmH9DLcY
-        LB0dVH2+spXH+ePpC9hSAz8ozFvlNls=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-288-QuVom0HdM9WbPXAT00tysw-1; Tue, 16 Mar 2021 13:54:54 -0400
-X-MC-Unique: QuVom0HdM9WbPXAT00tysw-1
-Received: by mail-wr1-f69.google.com with SMTP id h21so16895705wrc.19
-        for <linux-mips@vger.kernel.org>; Tue, 16 Mar 2021 10:54:54 -0700 (PDT)
+        id S236180AbhCPR7F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Mar 2021 13:59:05 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:55421 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239399AbhCPR6s (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Mar 2021 13:58:48 -0400
+Received: from mail-ej1-f72.google.com ([209.85.218.72])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lMDxu-0003iX-6l
+        for linux-mips@vger.kernel.org; Tue, 16 Mar 2021 17:58:46 +0000
+Received: by mail-ej1-f72.google.com with SMTP id bg7so7979167ejb.12
+        for <linux-mips@vger.kernel.org>; Tue, 16 Mar 2021 10:58:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=q+nIYLcJsbNrOQJXNJzvpf/dZa2SR4YCfI1fCwdaCUY=;
-        b=SOr2CijFl/7Eh6bNFL4NogSmP/7jyS48IP1EF0YRnN71Z/HQcFaV1pAjE31cRZwYw3
-         vuV1KHxY1rVojwD6mlGnd0Be5HwYKXTIdJ+RpnoUx1DDevTWKTJLoDEN2ou+9N8ty+K9
-         vsYAU2L2wqhb+WcLRZ7yOrKEy81m2APwf/oy0WCJT38qxt657Britdbn12CSI4uZRzfw
-         kfjDh0mAQpwupOEo0+5PtJywqSZ3pFjbbKDBCyeJS9u/Wk1YWDY9r0jl0zz/pkXHzzrh
-         TuXGWocGe6yXx8Yy+YvpQVqTZHxurEHwxlb+T4+gUf7M6797pbwPYq1pjIPkc0gpE/Ia
-         dMzg==
-X-Gm-Message-State: AOAM533dcw3JXPCpoQrRWUJ7UEueWvRfuHkhwYpgilvuBUaQ8Br7NyrL
-        +z+2mNkX8HHVPb61HE+YfMNgdHCe+xPx8GCBgRIxtvh0LWCYXKn8v6U44PbbLr4ePiZcEsovZvF
-        BNJ+BMDDdJ3AFUGRgInXNJw==
-X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr100846wmk.30.1615917293666;
-        Tue, 16 Mar 2021 10:54:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyhx2jdBpeYlHU1yJBLoi471Tl00503kY5ZdmFFXsMHSMA2gpxqqBKYhTriICrO+/ourTLAQg==
-X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr100818wmk.30.1615917293485;
-        Tue, 16 Mar 2021 10:54:53 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id s83sm7994wms.16.2021.03.16.10.54.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Mar 2021 10:54:52 -0700 (PDT)
-To:     Jing Zhang <jingzhangos@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
-        Linux MIPS <linux-mips@vger.kernel.org>,
-        KVM PPC <kvm-ppc@vger.kernel.org>,
-        Linux S390 <linux-s390@vger.kernel.org>,
-        Linux kselftest <linux-kselftest@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        bh=6yF86hItxVjdF00mkSd3V9reGH3tNOZvxmWSGP21D5c=;
+        b=shWmcw1aW+p4LFV9avgpilJp/+xSU7DtgfjyHXN6FqJt6J295uM5ONoZOlRnwG4TvK
+         kXARyiFn1KdfQx2GJWNrcYyzC7BjZ+imAfgQFNaniSFCutlan8iTE8FLo7jbV1P17SWv
+         K5/yKgUTfx2cHk+aOsPeqKr5ROjms8tMwB30J8QixkBuXTSRmoC4xeiv9yZxS+YHgrc3
+         zyZqSF31SFIMckNEOgXTFrejOJlh0fLn6fbR9JebwZ+uokGWkvQCEtR5PyAGDRnYlYbW
+         smoknYf7/ojpoonKSK1klVh9ob/fJRXBjT9w4Ihc6akdBJlKnFzOPLQjoHMyQUJbwvxT
+         tOlA==
+X-Gm-Message-State: AOAM5317R3rVz1I7ZmmVuc0QEsO07lcltEXKplf1UTsG70kgf4/vF1Re
+        6N4TmV9sD1IUKVUrzTwN4gZwTOIyErKzT+CPpIp00B9jjt14yJRgvrWkpMDMewkLPEgOFCMfmNh
+        6hd20SbHakXkUR8rG0L1g/Anr311NtOcV9aBcKvg=
+X-Received: by 2002:a05:6402:8d7:: with SMTP id d23mr38353358edz.256.1615917525834;
+        Tue, 16 Mar 2021 10:58:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxizmFWFc7QpRfLd8R4IVOXUZ7C6tYUXVLXOgwdmYrenYqYy0+6m8vxkgzfJFApBbM5vwKsHA==
+X-Received: by 2002:a05:6402:8d7:: with SMTP id d23mr38353340edz.256.1615917525678;
+        Tue, 16 Mar 2021 10:58:45 -0700 (PDT)
+Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id bm6sm9927848ejb.50.2021.03.16.10.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 10:58:45 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     John Crispin <john@phrozen.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-References: <20210310003024.2026253-1-jingzhangos@google.com>
- <20210310003024.2026253-4-jingzhangos@google.com>
- <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
- <CAAdAUth0J6z7fFpOkkmzKc83Bj+MST-jhsZ0uU0iYdRcE_-gMA@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
- in binary format
-Message-ID: <26035a80-3cce-9872-ab1d-b25b5817d512@redhat.com>
-Date:   Tue, 16 Mar 2021 18:54:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     thierry.reding@gmail.com, linux-tegra@vger.kernel.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org, digetx@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] MIPS: ralink: define stubs for clk_set_parent to fix compile testing
+Date:   Tue, 16 Mar 2021 18:57:25 +0100
+Message-Id: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAAdAUth0J6z7fFpOkkmzKc83Bj+MST-jhsZ0uU0iYdRcE_-gMA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 15/03/21 23:31, Jing Zhang wrote:
-> We are considering about how to create the file descriptor. It might be risky
-> to create an extra fd for every vCPU. It will easily hit the fd limit for the
-> process or the system for machines running a ton of small VMs.
+The Ralink MIPS platform does not use Common Clock Framework and does
+not define certain clock operations leading to compile test failures:
 
-You already have a file descriptor for every vCPU, but I agree that 
-having twice as many is not very good.
+    /usr/bin/mips-linux-gnu-ld: drivers/usb/phy/phy-tegra-usb.o: in function `tegra_usb_phy_init':
+    phy-tegra-usb.c:(.text+0x1dd4): undefined reference to `clk_get_parent'
 
-> Looks like creating an extra file descriptor for every VM is a better option.
-> And then we can check per vCPU stats through Ioctl of this VM fd by
-> passing the vCPU index.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ arch/mips/ralink/clk.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-The file descriptor idea is not really infeasible I think (not just 
-because the # of file descriptors is "only" doubled, but also because 
-most of the time I think you'd only care of per-VM stats).
-
-If you really believe it's not usable for you, you can use two ioctls to 
-fill the description and the data respectively (i.e. ioctl(fd, 
-KVM_GET_STATS_{DESCRIPTION,VALUES}, pdata) using the same layout as 
-below.  If called with NULL argument, the ioctl returns how much data 
-they will fill in.
-
-The (always zero) global flags can be replaced by the value returned by 
-KVM_CHECK_EXTENSION.
-
-The number of statistics can be obtained by ioctl(fd, 
-KVM_GET_STATS_VALUES, NULL), just divide the returned value by 8.
-
-Paolo
-
->> 4 bytes flags (always zero)
->> 4 bytes number of statistics
->> 4 bytes offset of the first stat description
->> 4 bytes offset of the first stat value
->> stat descriptions:
->>     - 4 bytes for the type (for now always zero: uint64_t)
->>     - 4 bytes for the flags (for now always zero)
->>     - length of name
->>     - name
->> statistics in 64-bit format
+diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
+index 2f9d5acb38ea..8387177a47ef 100644
+--- a/arch/mips/ralink/clk.c
++++ b/arch/mips/ralink/clk.c
+@@ -70,6 +70,20 @@ long clk_round_rate(struct clk *clk, unsigned long rate)
+ }
+ EXPORT_SYMBOL_GPL(clk_round_rate);
+ 
++int clk_set_parent(struct clk *clk, struct clk *parent)
++{
++	WARN_ON(clk);
++	return -1;
++}
++EXPORT_SYMBOL(clk_set_parent);
++
++struct clk *clk_get_parent(struct clk *clk)
++{
++	WARN_ON(clk);
++	return NULL;
++}
++EXPORT_SYMBOL(clk_get_parent);
++
+ void __init plat_time_init(void)
+ {
+ 	struct clk *clk;
+-- 
+2.25.1
 
