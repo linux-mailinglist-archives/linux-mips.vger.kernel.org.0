@@ -2,63 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F24F133DA26
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Mar 2021 18:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BECA433DB9B
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Mar 2021 18:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238059AbhCPRCq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Mar 2021 13:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237156AbhCPRCU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Mar 2021 13:02:20 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4522EC06174A;
-        Tue, 16 Mar 2021 10:02:19 -0700 (PDT)
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9e:a108:162d:5d96:d792:df29])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 12GH2BPZ032267
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Tue, 16 Mar 2021 18:02:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1615914132; bh=vp/GA9v/KL3JbZxcyD1G+bDAmVCA+mobz6mk5cdWMDQ=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=aO80HNtEntVZG3jsr+2F1tJDI2mlfxFYrDf3ENv/LheAubO0YpileTFd8VyXaRyPh
-         bb4Nsm0RRVy2VfeOSc7FcItoEAZaUU7QatRTZR36yBiTqmfu7vIVJubS8sJE8KEbyx
-         YV7UUuAPznMEa+nTk1/88wCdWM9f2Y8P75vU0bSk=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
-        (envelope-from <bjorn@mork.no>)
-        id 1lMD58-001Iip-O9; Tue, 16 Mar 2021 18:02:10 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>, od@zcrc.me,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: vmlinux.lds.S: Fix appended dtb not properly aligned
-Organization: m
-References: <20210316154515.171543-1-paul@crapouillou.net>
-Date:   Tue, 16 Mar 2021 18:02:10 +0100
-In-Reply-To: <20210316154515.171543-1-paul@crapouillou.net> (Paul Cercueil's
-        message of "Tue, 16 Mar 2021 15:45:15 +0000")
-Message-ID: <87r1kfnib1.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S239375AbhCPRzX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Mar 2021 13:55:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54881 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239414AbhCPRy5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Mar 2021 13:54:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615917296;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q+nIYLcJsbNrOQJXNJzvpf/dZa2SR4YCfI1fCwdaCUY=;
+        b=WsvcAM/DVZVN+35RQG4SU18F0p3n/dpdLxLxWAAmKFjaqnh3e65gERW6qfIO7IqkCxJQ8q
+        qGH3g4UIkk5SlcSS6KQOmSYkXOMz25ctOFCeD3iIaRz7PMkb+aczhGLtHdL3gNhmH9DLcY
+        LB0dVH2+spXH+ePpC9hSAz8ozFvlNls=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-288-QuVom0HdM9WbPXAT00tysw-1; Tue, 16 Mar 2021 13:54:54 -0400
+X-MC-Unique: QuVom0HdM9WbPXAT00tysw-1
+Received: by mail-wr1-f69.google.com with SMTP id h21so16895705wrc.19
+        for <linux-mips@vger.kernel.org>; Tue, 16 Mar 2021 10:54:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=q+nIYLcJsbNrOQJXNJzvpf/dZa2SR4YCfI1fCwdaCUY=;
+        b=SOr2CijFl/7Eh6bNFL4NogSmP/7jyS48IP1EF0YRnN71Z/HQcFaV1pAjE31cRZwYw3
+         vuV1KHxY1rVojwD6mlGnd0Be5HwYKXTIdJ+RpnoUx1DDevTWKTJLoDEN2ou+9N8ty+K9
+         vsYAU2L2wqhb+WcLRZ7yOrKEy81m2APwf/oy0WCJT38qxt657Britdbn12CSI4uZRzfw
+         kfjDh0mAQpwupOEo0+5PtJywqSZ3pFjbbKDBCyeJS9u/Wk1YWDY9r0jl0zz/pkXHzzrh
+         TuXGWocGe6yXx8Yy+YvpQVqTZHxurEHwxlb+T4+gUf7M6797pbwPYq1pjIPkc0gpE/Ia
+         dMzg==
+X-Gm-Message-State: AOAM533dcw3JXPCpoQrRWUJ7UEueWvRfuHkhwYpgilvuBUaQ8Br7NyrL
+        +z+2mNkX8HHVPb61HE+YfMNgdHCe+xPx8GCBgRIxtvh0LWCYXKn8v6U44PbbLr4ePiZcEsovZvF
+        BNJ+BMDDdJ3AFUGRgInXNJw==
+X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr100846wmk.30.1615917293666;
+        Tue, 16 Mar 2021 10:54:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyhx2jdBpeYlHU1yJBLoi471Tl00503kY5ZdmFFXsMHSMA2gpxqqBKYhTriICrO+/ourTLAQg==
+X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr100818wmk.30.1615917293485;
+        Tue, 16 Mar 2021 10:54:53 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id s83sm7994wms.16.2021.03.16.10.54.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Mar 2021 10:54:52 -0700 (PDT)
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Linux MIPS <linux-mips@vger.kernel.org>,
+        KVM PPC <kvm-ppc@vger.kernel.org>,
+        Linux S390 <linux-s390@vger.kernel.org>,
+        Linux kselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+References: <20210310003024.2026253-1-jingzhangos@google.com>
+ <20210310003024.2026253-4-jingzhangos@google.com>
+ <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
+ <CAAdAUth0J6z7fFpOkkmzKc83Bj+MST-jhsZ0uU0iYdRcE_-gMA@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
+ in binary format
+Message-ID: <26035a80-3cce-9872-ab1d-b25b5817d512@redhat.com>
+Date:   Tue, 16 Mar 2021 18:54:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.102.4 at canardo
-X-Virus-Status: Clean
+In-Reply-To: <CAAdAUth0J6z7fFpOkkmzKc83Bj+MST-jhsZ0uU0iYdRcE_-gMA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Paul Cercueil <paul@crapouillou.net> writes:
+On 15/03/21 23:31, Jing Zhang wrote:
+> We are considering about how to create the file descriptor. It might be risky
+> to create an extra fd for every vCPU. It will easily hit the fd limit for the
+> process or the system for machines running a ton of small VMs.
 
-> Commit 6654111c893f ("MIPS: vmlinux.lds.S: align raw appended dtb to 8
-> bytes") changed the alignment from STRUCT_ALIGNMENT bytes to 8 bytes.
+You already have a file descriptor for every vCPU, but I agree that 
+having twice as many is not very good.
 
-Ouch.  That was not my intention.  I see that there was a mixup with my
-initial patch. My last version used STRUCT_ALIGNMENT, but might have
-been lost since I sent it only as an attachment during the discussion.
+> Looks like creating an extra file descriptor for every VM is a better option.
+> And then we can check per vCPU stats through Ioctl of this VM fd by
+> passing the vCPU index.
 
-Sorry for not catching this.  And thanks for fixing.
+The file descriptor idea is not really infeasible I think (not just 
+because the # of file descriptors is "only" doubled, but also because 
+most of the time I think you'd only care of per-VM stats).
 
+If you really believe it's not usable for you, you can use two ioctls to 
+fill the description and the data respectively (i.e. ioctl(fd, 
+KVM_GET_STATS_{DESCRIPTION,VALUES}, pdata) using the same layout as 
+below.  If called with NULL argument, the ioctl returns how much data 
+they will fill in.
 
-Bj=C3=B8rn
+The (always zero) global flags can be replaced by the value returned by 
+KVM_CHECK_EXTENSION.
+
+The number of statistics can be obtained by ioctl(fd, 
+KVM_GET_STATS_VALUES, NULL), just divide the returned value by 8.
+
+Paolo
+
+>> 4 bytes flags (always zero)
+>> 4 bytes number of statistics
+>> 4 bytes offset of the first stat description
+>> 4 bytes offset of the first stat value
+>> stat descriptions:
+>>     - 4 bytes for the type (for now always zero: uint64_t)
+>>     - 4 bytes for the flags (for now always zero)
+>>     - length of name
+>>     - name
+>> statistics in 64-bit format
+
