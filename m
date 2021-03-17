@@ -2,161 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF38433E887
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 05:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93B533E8CB
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 06:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbhCQEof (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Mar 2021 00:44:35 -0400
-Received: from conssluserg-03.nifty.com ([210.131.2.82]:48089 "EHLO
-        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbhCQEoJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Mar 2021 00:44:09 -0400
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 12H4hhMh018472;
-        Wed, 17 Mar 2021 13:43:44 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 12H4hhMh018472
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1615956224;
-        bh=Gfyz85RTqTFXns0z8x3WiH97tujx4/ltbOEQlYyxU58=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CZ+teX+Y0QU1wdtR8uEt/lu54OQF5ttU4T8PA+eJpQ1+ULaDv73PRTFrdemr1lzdy
-         ucC91akrGCLZdj2Rhs0Y9lKQAKxn4iHI1UgeYmE38Tq01TXyxYlzxhaKL0sJtZSrO+
-         12QhYcdZZU1EeOMgC8A3bi0FL2RxkBEaKnOgI+FaVLZfiAm94YJSk8CUOrm2NrEcIN
-         DifvHOBU1PdR+Pp/Lw/uBfXbQNvpTBvmj8hH5C59jC/JWJL7ssUzJfU3cLPq/GNFci
-         L9V3vyTHonk0SOvax4EYk78iv6uC7YCgH/fXO0BMA51w29JYBXQakBHbTGIJEryjbg
-         +2pshxfbFE3Gw==
-X-Nifty-SrcIP: [209.85.216.53]
-Received: by mail-pj1-f53.google.com with SMTP id f2-20020a17090a4a82b02900c67bf8dc69so2542761pjh.1;
-        Tue, 16 Mar 2021 21:43:44 -0700 (PDT)
-X-Gm-Message-State: AOAM533//6BOP8wI/AZeTq7cK0JLKWTJQk/pVHbb4H1GiBqoy5dfityY
-        RubwaLq3LU5bosKqYo6yDbPb+EMlEj4IngJ25Z4=
-X-Google-Smtp-Source: ABdhPJwJ71Q2VUrFGijNY8p0zmnxBOAs/6nlC6HRhz3ebSM0QZipQxYpnH3jV8LwrYBWxjfpDVvvwUu9s4fjWmy6PP4=
-X-Received: by 2002:a17:90a:fb54:: with SMTP id iq20mr2384489pjb.153.1615956218322;
- Tue, 16 Mar 2021 21:43:38 -0700 (PDT)
+        id S229791AbhCQFKw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Mar 2021 01:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbhCQFKc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Mar 2021 01:10:32 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A52C06174A;
+        Tue, 16 Mar 2021 22:10:21 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id w11so13932805iol.13;
+        Tue, 16 Mar 2021 22:10:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cNLwJfGbNynxup/obYAsvOvgiuDkV2f8BaYfNVcffPM=;
+        b=YAk5/MfvHIGS7MkYlXyTvIO+qdfu8BBV+rneab67kW/2ZCQackKZeZZf/DIr8CjCDV
+         Bh8Blj3fvftJ4EoSWw+oilpWj4kX1mTWL1qYvc7dBQKEwQVAIgZD8Qb5+KXMT1/ufKl3
+         iowZhk7htmgM4tsh9ebKCEts0EkobI4Xxc5WlIK10GIRTKq+sZfZxHCFPqI0lOs5CHrM
+         191XwZsobT3genR1BokEcQsONxxg8TTTdDo7g0gt/9DVj7OkGQH/CRoed76wnAlfc3S0
+         X3j4Hemwqt5CeefXjUwHCDg3bZza2IOMaa2mJLLzePbRiN7k5wsN15tH0EUxbabhDP4m
+         8MoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cNLwJfGbNynxup/obYAsvOvgiuDkV2f8BaYfNVcffPM=;
+        b=rEUe75pXG79bbLJBf0gn9cb1DktJ8L9nFbF8oRLPPR2865cIf4oEBDjJsDEZRvjQR9
+         iANg3LFwWxFR+2rxY8EgSVfinzHk10Q7h8ppx9fV2qF0VlIx9khMHsnvcz6rQvp9hHoC
+         0YlHxMKKxMs6VaeC+G1rtgi02g9AnSCGvJVnh48hwWgOhorUZ/mh4tApU+6LbPx568if
+         Zp/gDjHoFdr0z2BIPAGBfZtVzyWVh87spT00vPvV3NK5q4ydryNXymdMlFZza7krcqyR
+         tV4Gk6Fr2WzFttyMBCgRjgeqCCPd7RHlCsGebtZmi5HFTHOjAqRkH7hitMviFjdihujJ
+         eWoA==
+X-Gm-Message-State: AOAM531aw9mgyzIOJc82Z8Nr7ANvsPPMHBIfD8VD/q7H8B45y8Ycz+pD
+        2//QJEi5wnuDkGYUJF5n5zNowRHzaNhH5ojk4PM=
+X-Google-Smtp-Source: ABdhPJypXsjxePYqCHgTaK6qLrOWAykSLOcbTfiGgwTA+1EUVIL1Js3JhmAO71gdE78+I+htFFWVRj3cmUZ0MLeWdx0=
+X-Received: by 2002:a05:6638:11c8:: with SMTP id g8mr1629159jas.38.1615957820860;
+ Tue, 16 Mar 2021 22:10:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210223141901.1652-1-timo@rothenpieler.org> <20210316222514.erlng3lsgmqgpcv4@archlinux-ax161>
-In-Reply-To: <20210316222514.erlng3lsgmqgpcv4@archlinux-ax161>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 17 Mar 2021 13:43:01 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATFwpzmLJc0YFRBG-kUhgatWvG1SWp-kgLyzjix=8J3pQ@mail.gmail.com>
-Message-ID: <CAK7LNATFwpzmLJc0YFRBG-kUhgatWvG1SWp-kgLyzjix=8J3pQ@mail.gmail.com>
-Subject: Re: [PATCH] nfs: fix PNFS_FLEXFILE_LAYOUT Kconfig default
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Timo Rothenpieler <timo@rothenpieler.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
+References: <20210307194030.8007-1-ilya.lipnitskiy@gmail.com> <20210312151934.GA4209@alpha.franken.de>
+In-Reply-To: <20210312151934.GA4209@alpha.franken.de>
+From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Date:   Tue, 16 Mar 2021 22:10:09 -0700
+Message-ID: <CALCv0x1AEZanNsVcNuUrbHuLyWYNegEVuye9Gso-Ou9xX8JEAg@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: fix memory reservation for non-usermem setups
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Mike Rapoport <rppt@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Tobias Wolf <dev-NTEO@vplace.de>,
+        Marcin Nowakowski <marcin.nowakowski@mips.com>,
+        linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 7:25 AM Nathan Chancellor <nathan@kernel.org> wrote:
+Hi Thomas,
+
+On Fri, Mar 12, 2021 at 7:19 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
 >
-> On Tue, Feb 23, 2021 at 03:19:01PM +0100, Timo Rothenpieler wrote:
-> > This follows what was done in 8c2fabc6542d9d0f8b16bd1045c2eda59bdcde13.
-> > With the default being m, it's impossible to build the module into the
-> > kernel.
+> On Sun, Mar 07, 2021 at 11:40:30AM -0800, Ilya Lipnitskiy wrote:
+> > From: Tobias Wolf <dev-NTEO@vplace.de>
 > >
-> > Signed-off-by: Timo Rothenpieler <timo@rothenpieler.org>
-> > ---
-> >  fs/nfs/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/fs/nfs/Kconfig b/fs/nfs/Kconfig
-> > index e2a488d403a6..14a72224b657 100644
-> > --- a/fs/nfs/Kconfig
-> > +++ b/fs/nfs/Kconfig
-> > @@ -127,7 +127,7 @@ config PNFS_BLOCK
-> >  config PNFS_FLEXFILE_LAYOUT
-> >       tristate
-> >       depends on NFS_V4_1 && NFS_V3
-> > -     default m
-> > +     default NFS_V4
-> >
-> >  config NFS_V4_1_IMPLEMENTATION_ID_DOMAIN
-> >       string "NFSv4.1 Implementation ID Domain"
-> > --
-> > 2.25.1
-> >
+> > Commit 67a3ba25aa95 ("MIPS: Fix incorrect mem=X@Y handling") introduced a new
+> > issue for rt288x where "PHYS_OFFSET" is 0x0 but the calculated "ramstart" is
+> > not. As the prerequisite of custom memory map has been removed, this results
+> > in the full memory range of 0x0 - 0x8000000 to be marked as reserved for this
+> > platform.
 >
-> Hi all,
->
-> I bisected a new modpost warning that I see with 5.12-rc3 to this commit:
->
-> $ make -skj"$(nproc)" ARCH=mips CROSS_COMPILE=mipsel-linux- O=build/mipsel distclean defconfig all
-> ...
-> WARNING: modpost: Symbol info of vmlinux is missing. Unresolved symbol check will be entirely skipped.
-> ...
+> and where is the problem here ?
+Turns out this was already attempted to be upstreamed - not clear why
+it wasn't merged. Context:
+https://lore.kernel.org/linux-mips/6504517.U6H5IhoIOn@loki/
 
-Thanks for the report.
-
-MIPS defconfig enables CONFIG_TRIM_UNUSED_KSYMS.
-
-Presumably with a0590473c5e6c4ef17,
-MIPS defconfig enables CONFIG_MODULES,
-but actually builds no module.
-
-So, all symbols in vmlinux have been trimmed,
-and vmlinux.symvers gets empty.
-
-That is the reason for the warning.
-
-I will consider how to fix this corner case.
-
-
-
-
-
-
-
-
-
+I hope the thread above helps you understand the problem.
 
 >
-> $ git bisect log
-> # bad: [1e28eed17697bcf343c6743f0028cc3b5dd88bf0] Linux 5.12-rc3
-> # good: [a38fd8748464831584a19438cbb3082b5a2dab15] Linux 5.12-rc2
-> git bisect start 'v5.12-rc3' 'v5.12-rc2'
-> # good: [f78d76e72a4671ea52d12752d92077788b4f5d50] Merge tag 'drm-fixes-2021-03-12-1' of git://anongit.freedesktop.org/drm/drm
-> git bisect good f78d76e72a4671ea52d12752d92077788b4f5d50
-> # bad: [420623430a7015ae9adab8a087de82c186bc9989] Merge tag 'erofs-for-5.12-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs
-> git bisect bad 420623430a7015ae9adab8a087de82c186bc9989
-> # good: [261410082d01f2f2d4fcd19abee6b8e84f399c51] Merge tag 'devprop-5.12-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-> git bisect good 261410082d01f2f2d4fcd19abee6b8e84f399c51
-> # good: [ce307084c96d0ec92c04fcc38b107241b168df11] Merge tag 'block-5.12-2021-03-12-v2' of git://git.kernel.dk/linux-block
-> git bisect good ce307084c96d0ec92c04fcc38b107241b168df11
-> # bad: [f296bfd5cd04cbb49b8fc9585adc280ab2b58624] Merge tag 'nfs-for-5.12-2' of git://git.linux-nfs.org/projects/anna/linux-nfs
-> git bisect bad f296bfd5cd04cbb49b8fc9585adc280ab2b58624
-> # good: [9afc1163794707a304f107bf21b8b37e5c6c34f4] Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
-> git bisect good 9afc1163794707a304f107bf21b8b37e5c6c34f4
-> # bad: [fd6d3feed041e96b84680d0bfc1e7abc8f65de92] NFS: Clean up function nfs_mark_dir_for_revalidate()
-> git bisect bad fd6d3feed041e96b84680d0bfc1e7abc8f65de92
-> # bad: [f0940f4b3284a00f38a5d42e6067c2aaa20e1f2e] SUNRPC: Set memalloc_nofs_save() for sync tasks
-> git bisect bad f0940f4b3284a00f38a5d42e6067c2aaa20e1f2e
-> # bad: [ad3dbe35c833c2d4d0bbf3f04c785d32f931e7c9] NFS: Correct size calculation for create reply length
-> git bisect bad ad3dbe35c833c2d4d0bbf3f04c785d32f931e7c9
-> # bad: [a0590473c5e6c4ef17c3132ad08fbad170f72d55] nfs: fix PNFS_FLEXFILE_LAYOUT Kconfig default
-> git bisect bad a0590473c5e6c4ef17c3132ad08fbad170f72d55
-> # first bad commit: [a0590473c5e6c4ef17c3132ad08fbad170f72d55] nfs: fix PNFS_FLEXFILE_LAYOUT Kconfig default
+> Thomas.
 >
-> $ mipsel-linux-gcc --version
-> mipsel-linux-gcc (GCC) 10.2.0
-> Copyright (C) 2020 Free Software Foundation, Inc.
-> This is free software; see the source for copying conditions.  There is NO
-> warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
->
-> I doubt this is a bug with this specific commit but I am not sure so I
-> have added Masahiro and the kbuild list as well as the MIPS list even
-> though it might not be MIPS specific (although I only see it with the
-> 32-bit MIPS configs)
->
-> Cheers,
-> Nathan
-
-
-
---
-Best Regards
-Masahiro Yamada
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
+Ilya
