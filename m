@@ -2,238 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 846FE33E29B
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 01:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C65033E361
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 01:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbhCQA1H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Mar 2021 20:27:07 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:39840 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229460AbhCQA0b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Mar 2021 20:26:31 -0400
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Bxw+SvTFFgvB0BAA--.4349S3;
-        Wed, 17 Mar 2021 08:26:23 +0800 (CST)
-Subject: Re: [PATCH v2] MIPS: Check __clang__ to avoid performance influence
- with GCC in csum_tcpudp_nofold()
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-References: <1615263493-10609-1-git-send-email-yangtiezhu@loongson.cn>
- <alpine.DEB.2.21.2103142140000.33195@angie.orcam.me.uk>
- <bdfe753d-0ef2-8f66-7716-acadfc3917a5@loongson.cn>
- <913665e71fd44c5d810d006cd179725c@AcuMS.aculab.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <5ee86b3b-81d2-790c-f67b-e250f60272fd@loongson.cn>
-Date:   Wed, 17 Mar 2021 08:26:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S230497AbhCQA4f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Mar 2021 20:56:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33250 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230365AbhCQA4O (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Mar 2021 20:56:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D32E64F8F;
+        Wed, 17 Mar 2021 00:56:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615942573;
+        bh=06AdV+JkCI79bqE8VrXjJjhz6t24lXG9Wq7P9wAxE/M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PCv43EQmKr1jhTeTNFcS23zvmdyUFpUlBi+Va2x097SZYsh2SGWWe66j8gA28lWUt
+         2QrzwlNm1aPrHos20+uBR9g8zPtVZVPGaX5n8EB0TXv4IG9UsxK+FV/mNUWfDBhORD
+         n3VILbSRgtqH56xabMqltlBPwA7jwMYAPi7q6dYH8Ka+tQOVTk4+eWkTW7vgqb4HGG
+         NbGIqT3Gm6YqmFzm0yazdlVqS6J0pdUdNGfzz+x4ZvdyCbw35M3eu+wZOmKRHDszwO
+         mdKlxWAJNIUpS9V5TB01esWTRHlHTtWkaaynp9sfNfifYB+mf2CTiaj2kghzb7a7DN
+         0xOCbMJRbovgQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 30/61] irqchip/ingenic: Add support for the JZ4760
+Date:   Tue, 16 Mar 2021 20:55:04 -0400
+Message-Id: <20210317005536.724046-30-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210317005536.724046-1-sashal@kernel.org>
+References: <20210317005536.724046-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <913665e71fd44c5d810d006cd179725c@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Bxw+SvTFFgvB0BAA--.4349S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxKFWxJr4rXw48GFW7Zw47Arb_yoWxAFy3pr
-        W8JFWjyF4YqryxWry5Gry5XrW5trn8A3WUAFs3Jw15uFyDWF1xJrW5Gan7CrnrJr1rAF1I
-        qFyDKr48Jw45KaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
-        bIxvr21lc2xSY4AK67AK6w1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUjg18DUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/15/2021 08:42 PM, David Laight wrote:
-> From: Tiezhu Yang <yangtiezhu@loongson.cn>
->> Sent: 15 March 2021 12:26
->> On 03/15/2021 04:49 AM, Maciej W. Rozycki wrote:
->>> On Tue, 9 Mar 2021, Tiezhu Yang wrote:
->>>
->>>> diff --git a/arch/mips/include/asm/checksum.h b/arch/mips/include/asm/checksum.h
->>>> index 1e6c135..80eddd4 100644
->>>> --- a/arch/mips/include/asm/checksum.h
->>>> +++ b/arch/mips/include/asm/checksum.h
->>>> @@ -128,9 +128,13 @@ static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
->>>>
->>>>    static inline __wsum csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
->>>>    					__u32 len, __u8 proto,
->>>> -					__wsum sum)
->>>> +					__wsum sum_in)
->>>>    {
->>>> -	unsigned long tmp = (__force unsigned long)sum;
->>>> +#ifdef __clang__
->>>> +	unsigned long sum = (__force unsigned long)sum_in;
->>>> +#else
->>>> +	__wsum sum = sum_in;
->>>> +#endif
->>>    This looks much better to me, but I'd keep the variable names unchanged
->>> as `sum_in' isn't used beyond the initial assignment anyway (you'll have
->>> to update the references with asm operands accordingly of course).
->>>
->>>    Have you verified that code produced by GCC remains the same with your
->>> change in place as it used to be up to commit 198688edbf77?  I can see no
->>> such information in the commit description whether here or in the said
->>> commit.
->>>
->>>     Maciej
->> Hi Maciej,
->>
->> Thanks for your reply.
->>
->> gcc --version
->> gcc (Debian 10.2.1-6) 10.2.1 20210110
->>
->> net/ipv4/tcp_ipv4.c
->> tcp_v4_send_reset()
->>     csum_tcpudp_nofold()
->>
->> objdump -d vmlinux > vmlinux.dump
->>
->> (1) Before commit 198688edbf77
->> ("MIPS: Fix inline asm input/output type mismatch in checksum.h used
->> with Clang"):
->>
->> ffffffff80aa835c:       00004025        move    a4,zero
->> ffffffff80aa8360:       92020012        lbu     v0,18(s0)
->> ffffffff80aa8364:       de140030        ld      s4,48(s0)
->> ffffffff80aa8368:       0064182d        daddu   v1,v1,a0
->> ffffffff80aa836c:       304200ff        andi    v0,v0,0xff
->> ffffffff80aa8370:       9c64000c        lwu     a0,12(v1)
->> ffffffff80aa8374:       9c660010        lwu     a2,16(v1)
->> ffffffff80aa8378:       afa70038        sw      a3,56(sp)
->> ffffffff80aa837c:       24071a00        li      a3,6656
->> ffffffff80aa8380:       0086202d        daddu   a0,a0,a2
->> ffffffff80aa8384:       0087202d        daddu   a0,a0,a3
->> ffffffff80aa8388:       0088202d        daddu   a0,a0,a4
->> ffffffff80aa838c:       0004083c        dsll32  at,a0,0x0
->> ffffffff80aa8390:       0081202d        daddu   a0,a0,at
->> ffffffff80aa8394:       0081082b        sltu    at,a0,at
->> ffffffff80aa8398:       0004203f        dsra32  a0,a0,0x0
->> ffffffff80aa839c:       00812021        addu    a0,a0,at
->>
->> (2) After commit 198688edbf77
->> ("MIPS: Fix inline asm input/output type mismatch in checksum.h used
->> with Clang"):
->>
->> ffffffff80aa836c:       00004025        move    a4,zero
->> ffffffff80aa8370:       92040012        lbu     a0,18(s0)
->> ffffffff80aa8374:       de140030        ld      s4,48(s0)
->> ffffffff80aa8378:       0062182d        daddu   v1,v1,v0
->> ffffffff80aa837c:       308400ff        andi    a0,a0,0xff
->> ffffffff80aa8380:       9c62000c        lwu     v0,12(v1)
->> ffffffff80aa8384:       9c660010        lwu     a2,16(v1)
->> ffffffff80aa8388:       afa70038        sw      a3,56(sp)
->> ffffffff80aa838c:       24071a00        li      a3,6656
->> ffffffff80aa8390:       0046102d        daddu   v0,v0,a2
->> ffffffff80aa8394:       0047102d        daddu   v0,v0,a3
->> ffffffff80aa8398:       0048102d        daddu   v0,v0,a4
->> ffffffff80aa839c:       0002083c        dsll32  at,v0,0x0
->> ffffffff80aa83a0:       0041102d        daddu   v0,v0,at
->> ffffffff80aa83a4:       0041082b        sltu    at,v0,at
->> ffffffff80aa83a8:       0002103f        dsra32  v0,v0,0x0
->> ffffffff80aa83ac:       00411021        addu    v0,v0,at
->>
->> (3) With this patch:
->>
->> ffffffff80aa835c:       00004025        move    a4,zero
->> ffffffff80aa8360:       92020012        lbu     v0,18(s0)
->> ffffffff80aa8364:       de140030        ld      s4,48(s0)
->> ffffffff80aa8368:       0064182d        daddu   v1,v1,a0
->> ffffffff80aa836c:       304200ff        andi    v0,v0,0xff
->> ffffffff80aa8370:       9c64000c        lwu     a0,12(v1)
->> ffffffff80aa8374:       9c660010        lwu     a2,16(v1)
->> ffffffff80aa8378:       afa70038        sw      a3,56(sp)
->> ffffffff80aa837c:       24071a00        li      a3,6656
->> ffffffff80aa8380:       0086202d        daddu   a0,a0,a2
->> ffffffff80aa8384:       0087202d        daddu   a0,a0,a3
->> ffffffff80aa8388:       0088202d        daddu   a0,a0,a4
->> ffffffff80aa838c:       0004083c        dsll32  at,a0,0x0
->> ffffffff80aa8390:       0081202d        daddu   a0,a0,at
->> ffffffff80aa8394:       0081082b        sltu    at,a0,at
->> ffffffff80aa8398:       0004203f        dsra32  a0,a0,0x0
->> ffffffff80aa839c:       00812021        addu    a0,a0,at
->>
->> (4) With the following changes based on commit 198688edbf77
->> ("MIPS: Fix inline asm input/output type mismatch in checksum.h used
->> with Clang"):
->>
->> diff --git a/arch/mips/include/asm/checksum.h
->> b/arch/mips/include/asm/checksum.h
->> index 1e6c135..e1f80407 100644
->> --- a/arch/mips/include/asm/checksum.h
->> +++ b/arch/mips/include/asm/checksum.h
->> @@ -130,7 +130,11 @@ static inline __wsum csum_tcpudp_nofold(__be32
->> saddr, __be32 daddr,
->>                        __u32 len, __u8 proto,
->>                        __wsum sum)
->>    {
->> +#ifdef __clang__
->>        unsigned long tmp = (__force unsigned long)sum;
->> +#else
->> +    __wsum tmp = sum;
->> +#endif
->>
->>        __asm__(
->>        "    .set    push        # csum_tcpudp_nofold\n"
->>
->> ffffffff80aa835c:       00004025        move    a4,zero
->> ffffffff80aa8360:       92020012        lbu     v0,18(s0)
->> ffffffff80aa8364:       de140030        ld      s4,48(s0)
->> ffffffff80aa8368:       0064182d        daddu   v1,v1,a0
->> ffffffff80aa836c:       304200ff        andi    v0,v0,0xff
->> ffffffff80aa8370:       9c64000c        lwu     a0,12(v1)
->> ffffffff80aa8374:       9c660010        lwu     a2,16(v1)
->> ffffffff80aa8378:       afa70038        sw      a3,56(sp)
->> ffffffff80aa837c:       24071a00        li      a3,6656
->> ffffffff80aa8380:       0086202d        daddu   a0,a0,a2
->> ffffffff80aa8384:       0087202d        daddu   a0,a0,a3
->> ffffffff80aa8388:       0088202d        daddu   a0,a0,a4
->> ffffffff80aa838c:       0004083c        dsll32  at,a0,0x0
->> ffffffff80aa8390:       0081202d        daddu   a0,a0,at
->> ffffffff80aa8394:       0081082b        sltu    at,a0,at
->> ffffffff80aa8398:       0004203f        dsra32  a0,a0,0x0
->> ffffffff80aa839c:       00812021        addu    a0,a0,at
->>
->> The code produced by GCC remains the same between (1), (3) and (4),
->> the last changes looks like better (with less changes based on commit
->> 198688edbf77), so I will send v3 later.
-> Aren't those all the same - apart from register selection.
-> Not that I grok the mips opcodes.
-> But that code has horridness on its side.
->
-> The only obvious difference is that something else changes the
-> code offset from xxxx5c to xxxx6c.
->
-> 	David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+From: Paul Cercueil <paul@crapouillou.net>
 
-Hi David,
+[ Upstream commit 5fbecd2389f48e1415799c63130d0cdce1cf3f60 ]
 
-Yes, it seems no much obvious differences.
-Let me wait for other feedback.
+Add support for the interrupt controller found in the JZ4760 SoC, which
+works exactly like the one in the JZ4770.
 
-Hi Thomas and Maciej,
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20210307172014.73481-2-paul@crapouillou.net
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/irqchip/irq-ingenic-tcu.c | 1 +
+ drivers/irqchip/irq-ingenic.c     | 1 +
+ 2 files changed, 2 insertions(+)
 
-Is this patch necessary? If no, we can ignore it.
-If yes, I will send v3 with the above (4) changes.
-
-Thanks,
-Tiezhu
+diff --git a/drivers/irqchip/irq-ingenic-tcu.c b/drivers/irqchip/irq-ingenic-tcu.c
+index 7a7222d4c19c..b938d1d04d96 100644
+--- a/drivers/irqchip/irq-ingenic-tcu.c
++++ b/drivers/irqchip/irq-ingenic-tcu.c
+@@ -179,5 +179,6 @@ static int __init ingenic_tcu_irq_init(struct device_node *np,
+ }
+ IRQCHIP_DECLARE(jz4740_tcu_irq, "ingenic,jz4740-tcu", ingenic_tcu_irq_init);
+ IRQCHIP_DECLARE(jz4725b_tcu_irq, "ingenic,jz4725b-tcu", ingenic_tcu_irq_init);
++IRQCHIP_DECLARE(jz4760_tcu_irq, "ingenic,jz4760-tcu", ingenic_tcu_irq_init);
+ IRQCHIP_DECLARE(jz4770_tcu_irq, "ingenic,jz4770-tcu", ingenic_tcu_irq_init);
+ IRQCHIP_DECLARE(x1000_tcu_irq, "ingenic,x1000-tcu", ingenic_tcu_irq_init);
+diff --git a/drivers/irqchip/irq-ingenic.c b/drivers/irqchip/irq-ingenic.c
+index b61a8901ef72..ea36bb00be80 100644
+--- a/drivers/irqchip/irq-ingenic.c
++++ b/drivers/irqchip/irq-ingenic.c
+@@ -155,6 +155,7 @@ static int __init intc_2chip_of_init(struct device_node *node,
+ {
+ 	return ingenic_intc_of_init(node, 2);
+ }
++IRQCHIP_DECLARE(jz4760_intc, "ingenic,jz4760-intc", intc_2chip_of_init);
+ IRQCHIP_DECLARE(jz4770_intc, "ingenic,jz4770-intc", intc_2chip_of_init);
+ IRQCHIP_DECLARE(jz4775_intc, "ingenic,jz4775-intc", intc_2chip_of_init);
+ IRQCHIP_DECLARE(jz4780_intc, "ingenic,jz4780-intc", intc_2chip_of_init);
+-- 
+2.30.1
 
