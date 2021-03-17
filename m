@@ -2,117 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6535933E15B
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Mar 2021 23:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E812C33E285
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 01:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbhCPWZ3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Mar 2021 18:25:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57056 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231232AbhCPWZT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Mar 2021 18:25:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F86464F04;
-        Tue, 16 Mar 2021 22:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615933518;
-        bh=Lw+Pm12xKhQpijkih3hmvXmUdOgzse16pCczA5XoNsM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GRcarp4Mi8j4LqQGS41QnoBtc7qdGD4Nbp+FAT3gsqkkIB0SP1TJPnpw8631mi1P/
-         O1oxXBa9XiyTXXewBgBGUWxEJvV4llLHmpyaWEkvmaM7vpcmozLNlBmux/Vv8kbURS
-         1UMgU4+edlqcWNQ2TcZTkyN7/Otvi+HVXteDD75iOcAYy9weTT7uKg0ATcB1esKtEH
-         C6zuuumw1X/ax716wC4K/7uKaMjvfNdCDELejOE72dg0qX5yyqhy/AHAGit6GsFnuc
-         qiLWCY95YyIm/yLCZYIgLiI7h3HjuBFCFYv+MZ9osKtJwOUyDoGQUrzneapbj7X5oZ
-         Zs22WkjXyn0AA==
-Date:   Tue, 16 Mar 2021 15:25:14 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Timo Rothenpieler <timo@rothenpieler.org>
-Cc:     linux-nfs@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
+        id S229607AbhCQAKU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Mar 2021 20:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229588AbhCQAKH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Mar 2021 20:10:07 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC16AC06174A;
+        Tue, 16 Mar 2021 17:10:06 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id r20so1016984ljk.4;
+        Tue, 16 Mar 2021 17:10:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=AL2V8ZWV46qlhc0ml5uYpEwu/MvbJHiNjsNGUT8atiA=;
+        b=Agdag1tBJMN2CcCDWRaycmcZsxlpQCsykGn/xj/L8ZF7pmtY1He3O4QBRdXKxYuAYn
+         /Quk8pRXS25wLV7qB1Rlf66XSgfBwkon1wvPb20rNMcz+P+OV1T0E290UqzyNGrBtq3A
+         fby84G56vIyDqKcjZ9kONJidstWPxVTknRhA2IGDm/gxgQtQrloh68PQdFNwGFcsGSJq
+         /t7wtpliOOyFRQkcN0RNQxI4DbBG5nzESRCAtb71IuXe3/oVM7b243DNlltQSZqgMyCc
+         LdxoMYo49u4Oaoqa05eMZjPyswO5BgwHMlluDYcnsu7ikc5lBXhK5LFID1gmvS37StZg
+         jtrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AL2V8ZWV46qlhc0ml5uYpEwu/MvbJHiNjsNGUT8atiA=;
+        b=TuQ8Ux1XTt51wJUVLu+dK3tMhxm561lBt1k8/bXlmuqmCzv/s1gLIAzcS3DmxfVEdY
+         gTQhByok5ewdbtjH453g/1jme8h9mVvpHo0KsiiGES1K21l3LUK80d+LPPjuBLOWpl2k
+         Js9EVmbfS9vazDGAhx6BLTZjCJNqQDW0DK7oCr4sOTNd+ciuQUNpuiOETJIVWiPrrQUU
+         zv4B8T0XXPUkgxNgEPIP7Ilgq9GqYHVvFsNaMAmWnHtAl2FhW89ncsVW97xMdyif/hHk
+         H2cUYKT5fA0jHJgj/ukn+qdWj5hiiHjuPo7pZ2qwGKLXtm8ApEjRoAvxzooEGh+6CO/r
+         /mXA==
+X-Gm-Message-State: AOAM532ZQLJYSMHTPZNMpcG/XlSevGUN5flWT0qeMnLGbTMUZ6aOSWBp
+        ED8WI0jvnww3KWQ96WerVwE=
+X-Google-Smtp-Source: ABdhPJwRzvkNlUJpiFNF69aoxvvhbSsqtWtPRIf5DO9f16I5A+wX666iLi+smMVA7+bdshV2OAnwFQ==
+X-Received: by 2002:a2e:9e8e:: with SMTP id f14mr783096ljk.140.1615939804827;
+        Tue, 16 Mar 2021 17:10:04 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.googlemail.com with ESMTPSA id 194sm3228320lfd.116.2021.03.16.17.10.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Mar 2021 17:10:04 -0700 (PDT)
+Subject: Re: [PATCH] MIPS: ralink: define stubs for clk_set_parent to fix
+ compile testing
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        John Crispin <john@phrozen.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] nfs: fix PNFS_FLEXFILE_LAYOUT Kconfig default
-Message-ID: <20210316222514.erlng3lsgmqgpcv4@archlinux-ax161>
-References: <20210223141901.1652-1-timo@rothenpieler.org>
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     thierry.reding@gmail.com, linux-tegra@vger.kernel.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <44ce8a32-91ff-bb6c-adba-f85c2edf3c18@gmail.com>
+Date:   Wed, 17 Mar 2021 03:10:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210223141901.1652-1-timo@rothenpieler.org>
+In-Reply-To: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 03:19:01PM +0100, Timo Rothenpieler wrote:
-> This follows what was done in 8c2fabc6542d9d0f8b16bd1045c2eda59bdcde13.
-> With the default being m, it's impossible to build the module into the
-> kernel.
+16.03.2021 20:57, Krzysztof Kozlowski пишет:
+> The Ralink MIPS platform does not use Common Clock Framework and does
+> not define certain clock operations leading to compile test failures:
 > 
-> Signed-off-by: Timo Rothenpieler <timo@rothenpieler.org>
+>     /usr/bin/mips-linux-gnu-ld: drivers/usb/phy/phy-tegra-usb.o: in function `tegra_usb_phy_init':
+>     phy-tegra-usb.c:(.text+0x1dd4): undefined reference to `clk_get_parent'
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  fs/nfs/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/ralink/clk.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> diff --git a/fs/nfs/Kconfig b/fs/nfs/Kconfig
-> index e2a488d403a6..14a72224b657 100644
-> --- a/fs/nfs/Kconfig
-> +++ b/fs/nfs/Kconfig
-> @@ -127,7 +127,7 @@ config PNFS_BLOCK
->  config PNFS_FLEXFILE_LAYOUT
->  	tristate
->  	depends on NFS_V4_1 && NFS_V3
-> -	default m
-> +	default NFS_V4
+> diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
+> index 2f9d5acb38ea..8387177a47ef 100644
+> --- a/arch/mips/ralink/clk.c
+> +++ b/arch/mips/ralink/clk.c
+> @@ -70,6 +70,20 @@ long clk_round_rate(struct clk *clk, unsigned long rate)
+>  }
+>  EXPORT_SYMBOL_GPL(clk_round_rate);
 >  
->  config NFS_V4_1_IMPLEMENTATION_ID_DOMAIN
->  	string "NFSv4.1 Implementation ID Domain"
-> -- 
-> 2.25.1
-> 
+> +int clk_set_parent(struct clk *clk, struct clk *parent)
+> +{
+> +	WARN_ON(clk);
+> +	return -1;
+> +}
+> +EXPORT_SYMBOL(clk_set_parent);
+> +
+> +struct clk *clk_get_parent(struct clk *clk)
+> +{
+> +	WARN_ON(clk);
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL(clk_get_parent);
 
-Hi all,
+I'm wondering whether symbols should be GPL or it doesn't matter in this
+case. Otherwise this looks good to me.
 
-I bisected a new modpost warning that I see with 5.12-rc3 to this commit:
-
-$ make -skj"$(nproc)" ARCH=mips CROSS_COMPILE=mipsel-linux- O=build/mipsel distclean defconfig all
-...
-WARNING: modpost: Symbol info of vmlinux is missing. Unresolved symbol check will be entirely skipped.
-...
-
-$ git bisect log
-# bad: [1e28eed17697bcf343c6743f0028cc3b5dd88bf0] Linux 5.12-rc3
-# good: [a38fd8748464831584a19438cbb3082b5a2dab15] Linux 5.12-rc2
-git bisect start 'v5.12-rc3' 'v5.12-rc2'
-# good: [f78d76e72a4671ea52d12752d92077788b4f5d50] Merge tag 'drm-fixes-2021-03-12-1' of git://anongit.freedesktop.org/drm/drm
-git bisect good f78d76e72a4671ea52d12752d92077788b4f5d50
-# bad: [420623430a7015ae9adab8a087de82c186bc9989] Merge tag 'erofs-for-5.12-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs
-git bisect bad 420623430a7015ae9adab8a087de82c186bc9989
-# good: [261410082d01f2f2d4fcd19abee6b8e84f399c51] Merge tag 'devprop-5.12-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-git bisect good 261410082d01f2f2d4fcd19abee6b8e84f399c51
-# good: [ce307084c96d0ec92c04fcc38b107241b168df11] Merge tag 'block-5.12-2021-03-12-v2' of git://git.kernel.dk/linux-block
-git bisect good ce307084c96d0ec92c04fcc38b107241b168df11
-# bad: [f296bfd5cd04cbb49b8fc9585adc280ab2b58624] Merge tag 'nfs-for-5.12-2' of git://git.linux-nfs.org/projects/anna/linux-nfs
-git bisect bad f296bfd5cd04cbb49b8fc9585adc280ab2b58624
-# good: [9afc1163794707a304f107bf21b8b37e5c6c34f4] Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
-git bisect good 9afc1163794707a304f107bf21b8b37e5c6c34f4
-# bad: [fd6d3feed041e96b84680d0bfc1e7abc8f65de92] NFS: Clean up function nfs_mark_dir_for_revalidate()
-git bisect bad fd6d3feed041e96b84680d0bfc1e7abc8f65de92
-# bad: [f0940f4b3284a00f38a5d42e6067c2aaa20e1f2e] SUNRPC: Set memalloc_nofs_save() for sync tasks
-git bisect bad f0940f4b3284a00f38a5d42e6067c2aaa20e1f2e
-# bad: [ad3dbe35c833c2d4d0bbf3f04c785d32f931e7c9] NFS: Correct size calculation for create reply length
-git bisect bad ad3dbe35c833c2d4d0bbf3f04c785d32f931e7c9
-# bad: [a0590473c5e6c4ef17c3132ad08fbad170f72d55] nfs: fix PNFS_FLEXFILE_LAYOUT Kconfig default
-git bisect bad a0590473c5e6c4ef17c3132ad08fbad170f72d55
-# first bad commit: [a0590473c5e6c4ef17c3132ad08fbad170f72d55] nfs: fix PNFS_FLEXFILE_LAYOUT Kconfig default
-
-$ mipsel-linux-gcc --version
-mipsel-linux-gcc (GCC) 10.2.0
-Copyright (C) 2020 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-I doubt this is a bug with this specific commit but I am not sure so I
-have added Masahiro and the kbuild list as well as the MIPS list even
-though it might not be MIPS specific (although I only see it with the
-32-bit MIPS configs)
-
-Cheers,
-Nathan
+Also, I guess it should be possible to create a generic clk stubs that
+will use weak functions, allowing platforms to override only the wanted
+stubs and then we won't need to worry about the missing stubs for each
+platform individually. But of course that will be a much bigger change.
+Just wanted to share my thoughts.
