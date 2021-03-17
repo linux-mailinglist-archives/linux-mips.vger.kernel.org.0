@@ -2,69 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC9433FBAD
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Mar 2021 00:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF8833FBBC
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Mar 2021 00:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbhCQXJA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Mar 2021 19:09:00 -0400
-Received: from elvis.franken.de ([193.175.24.41]:38983 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229472AbhCQXI3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 17 Mar 2021 19:08:29 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lMfHA-0002xB-00; Thu, 18 Mar 2021 00:08:28 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 491F7C0CF7; Thu, 18 Mar 2021 00:08:08 +0100 (CET)
-Date:   Thu, 18 Mar 2021 00:08:08 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-mips@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH] MIPS/bpf: Enable bpf_probe_read{, str}() on MIPS again
-Message-ID: <20210317230808.GA22680@alpha.franken.de>
-References: <1615965307-6926-1-git-send-email-yangtiezhu@loongson.cn>
- <6b239565-8fbb-d183-6a4d-13fc90af3e27@iogearbox.net>
+        id S229472AbhCQXP2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Mar 2021 19:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229644AbhCQXPX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Mar 2021 19:15:23 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A396DC06174A;
+        Wed, 17 Mar 2021 16:15:23 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 7439192009C; Thu, 18 Mar 2021 00:15:21 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 6E68B92009B;
+        Thu, 18 Mar 2021 00:15:21 +0100 (CET)
+Date:   Thu, 18 Mar 2021 00:15:21 +0100 (CET)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     YunQiang Su <yunqiang.su@cipunited.com>,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        f4bug@amsat.org, stable@vger.kernel.org
+Subject: Re: [PATCH v7 RESEND] MIPS: force use FR=0 or FRE for FPXX
+ binaries
+In-Reply-To: <20210315145850.GA12494@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2103172345020.21463@angie.orcam.me.uk>
+References: <20210312104859.16337-1-yunqiang.su@cipunited.com> <20210315145850.GA12494@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b239565-8fbb-d183-6a4d-13fc90af3e27@iogearbox.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 11:18:48PM +0100, Daniel Borkmann wrote:
-> On 3/17/21 8:15 AM, Tiezhu Yang wrote:
-> > After commit 0ebeea8ca8a4 ("bpf: Restrict bpf_probe_read{, str}() only to
-> > archs where they work"), bpf_probe_read{, str}() functions were not longer
-> > available on MIPS, so there exists some errors when running bpf program:
-> > 
-> > root@linux:/home/loongson/bcc# python examples/tracing/task_switch.py
-> > bpf: Failed to load program: Invalid argument
-> > [...]
-> > 11: (85) call bpf_probe_read#4
-> > unknown func bpf_probe_read#4
-> > [...]
-> > Exception: Failed to load BPF program count_sched: Invalid argument
-> > 
-> > So select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE in arch/mips/Kconfig,
-> > otherwise the bpf old helper bpf_probe_read() will not be available.
-> > 
-> > This is similar with the commit d195b1d1d1196 ("powerpc/bpf: Enable
-> > bpf_probe_read{, str}() on powerpc again").
-> > 
-> > Fixes: 0ebeea8ca8a4 ("bpf: Restrict bpf_probe_read{, str}() only to archs where they work")
-> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+On Mon, 15 Mar 2021, Thomas Bogendoerfer wrote:
+
+> > In Golang, now we add the FP32 annotation, so the future golang programs
+> > won't have this problem. While for the existing binaries, we need a
+> > kernel workaround.
 > 
-> Thomas, I presume you pick this up via mips tree (with typos fixed)? Or do you
-> want us to route the fix via bpf with your ACK? (I'm fine either way.)
+> what about just rebuilding them ? They are broken, so why should we fix
+> broken user binaries with kernel hacks ?
 
-I'll take it via mips tree.
+ I agree.
 
-Thomas.
+ I went ahead and double-checked myself what the situation is here since I 
+could not have otherwise obtained the answer to the question I asked, and 
+indeed as I suspected even the simplest Go program will include a dynamic 
+libgo reference (`libgo.so.17' with the snapshot of GCC 11 I have built 
+for the MIPS target).  So a userland workaround is as simple as relinking 
+this single library for the FP32 model.  This will make the dynamic loader 
+force the FR=0 mode for all the executables that load the library.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+ Since as YunQiang says they're going to rebuild Golang with FP32 
+annotation anyway, which will naturally apply to the dynamic libgo library 
+as well, this will fix the problem with the existing binaries in the 
+current distribution.  Given that this is actually a correct fix (another 
+one is required for the linker bug) I see no reason to clutter the kernel 
+with a hack.  Especially as users will have to update a component anyway, 
+in this case the Go runtime rather than the kernel (which is better even, 
+as you don't have to reboot).
+
+ Once Golang has been modernised to use the FPXX mode the problem will go 
+away, and given the frequent version bumps in libgo's soname the current 
+breakage won't be an issue for whatever future version of Debian includes 
+it as the whole distribution will of course have been rebuilt against the 
+new library and any old broken executables kept by the user with a system 
+upgrade will continue using the old FP32 dynamic library.
+
+> > Currently, FR=1 mode is used for all FPXX binary, it makes some wrong
+> > behivour of the binaries. Since FPXX binary can work with both FR=1 and FR=0,
+> > we force it to use FR=0 or FRE (for R6 CPU).
+> 
+> I'm not sure, if I want to take this patch.
+> 
+> Maciej, what's your take on this ?
+
+ Given what I have written previously and especially above I maintain my 
+objection.  I don't understand why we're supposed to do people's homework 
+though and solve their problems.
+
+  Maciej
