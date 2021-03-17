@@ -2,87 +2,238 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5642C33E28B
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 01:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 846FE33E29B
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 01:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbhCQAPL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Mar 2021 20:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbhCQAOr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Mar 2021 20:14:47 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526B7C06174A;
-        Tue, 16 Mar 2021 17:14:36 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id t18so301795lfl.3;
-        Tue, 16 Mar 2021 17:14:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Se+k86qVq28AGxozo9NP0RKLSb8RZQ9UE/ENvuehTHc=;
-        b=vDmUXEiObHe8Wx7S8hXtFQWsdgrM/9R86oeFX7Plt+/BgzRV0XauNamnyTQ4TKDz96
-         jyiFcujN6A8rkonhxtHg9vSU8iRCj/2HoyOvDV0Vm6C8HyVg8F9aM49F8heixdGaExzT
-         beTUCApIheUADYHq0pUjfzbkVT/GeZ/uxgiY7zRX3/YxhJRXzu/WQvOoTE/sxcdvnjyi
-         va/7D/j15v01tEbVERXAMKPI0TZv8gRW3IfS9D+NoeFX64RLh73GZOxHEQ6BWMFxoR8P
-         1FjsSS9d1jKt6itBUN1p6ideDNbbP3h8snht+k/MpW4XAkZ27IPJuX0C67Oilj4tkkVW
-         9/RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Se+k86qVq28AGxozo9NP0RKLSb8RZQ9UE/ENvuehTHc=;
-        b=S1Cm5k6BpG5Kre5e3FvjQfdDrmBk2FJO3pm6tZqj+C1Jd5vamQniKVFlMGmDn5OskU
-         KtLh47L79N7yBDVed906CqZp1U9hk+Q7oquKr+fEq54BBM9vzCsoxBY+OsIr5hEeNKcd
-         +oVVCL5jl9rODSPknJ4sDi1oXiIJ+f7TNOBsPmytmO6p6Ru3TUSUDlFvAyeTRqeRMKOA
-         3LVyyFkk8IJIDayYq/Hf+ZQ7D4d++Uc8NwI0vceNdj/EaSrPFEAeTEoKI9ah/JapHR0A
-         tsrub5FdqFTQoJKRydfEAONSAN0ZN1HxQCONXvzPtiEQCbVEAY7DC10E+7uBa4pWPbHn
-         oZRw==
-X-Gm-Message-State: AOAM532jo4kF3zIdMEctLFT/8b9FbIkqh6kv5eQmy2HLtlU3pmAcnMn8
-        1pis+gLI3jS9jdgOdfv4uHY=
-X-Google-Smtp-Source: ABdhPJwX67dIPjJqXDGkeuX8J2ZBS9z/STB8L5aJgJXsuz2EfaJ5A6ssXVAI7JfM6DGDpqvKlBsP6g==
-X-Received: by 2002:a05:6512:1051:: with SMTP id c17mr711959lfb.418.1615940074789;
-        Tue, 16 Mar 2021 17:14:34 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.googlemail.com with ESMTPSA id x4sm3325644ljj.91.2021.03.16.17.14.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Mar 2021 17:14:34 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: ralink: define stubs for clk_set_parent to fix
- compile testing
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thierry.reding@gmail.com,
-        linux-tegra@vger.kernel.org, balbi@kernel.org,
-        linux-usb@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
- <20210316215820.GA18064@alpha.franken.de>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <9448ab97-44de-b19f-1a3b-f6c38113f415@gmail.com>
-Date:   Wed, 17 Mar 2021 03:14:33 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S229469AbhCQA1H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Mar 2021 20:27:07 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:39840 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229460AbhCQA0b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Mar 2021 20:26:31 -0400
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Bxw+SvTFFgvB0BAA--.4349S3;
+        Wed, 17 Mar 2021 08:26:23 +0800 (CST)
+Subject: Re: [PATCH v2] MIPS: Check __clang__ to avoid performance influence
+ with GCC in csum_tcpudp_nofold()
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+References: <1615263493-10609-1-git-send-email-yangtiezhu@loongson.cn>
+ <alpine.DEB.2.21.2103142140000.33195@angie.orcam.me.uk>
+ <bdfe753d-0ef2-8f66-7716-acadfc3917a5@loongson.cn>
+ <913665e71fd44c5d810d006cd179725c@AcuMS.aculab.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <5ee86b3b-81d2-790c-f67b-e250f60272fd@loongson.cn>
+Date:   Wed, 17 Mar 2021 08:26:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <20210316215820.GA18064@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <913665e71fd44c5d810d006cd179725c@AcuMS.aculab.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Bxw+SvTFFgvB0BAA--.4349S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxKFWxJr4rXw48GFW7Zw47Arb_yoWxAFy3pr
+        W8JFWjyF4YqryxWry5Gry5XrW5trn8A3WUAFs3Jw15uFyDWF1xJrW5Gan7CrnrJr1rAF1I
+        qFyDKr48Jw45KaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
+        bIxvr21lc2xSY4AK67AK6w1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUjg18DUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-17.03.2021 00:58, Thomas Bogendoerfer пишет:
-> On Tue, Mar 16, 2021 at 06:57:25PM +0100, Krzysztof Kozlowski wrote:
->> The Ralink MIPS platform does not use Common Clock Framework and does
->> not define certain clock operations leading to compile test failures:
+On 03/15/2021 08:42 PM, David Laight wrote:
+> From: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> Sent: 15 March 2021 12:26
+>> On 03/15/2021 04:49 AM, Maciej W. Rozycki wrote:
+>>> On Tue, 9 Mar 2021, Tiezhu Yang wrote:
+>>>
+>>>> diff --git a/arch/mips/include/asm/checksum.h b/arch/mips/include/asm/checksum.h
+>>>> index 1e6c135..80eddd4 100644
+>>>> --- a/arch/mips/include/asm/checksum.h
+>>>> +++ b/arch/mips/include/asm/checksum.h
+>>>> @@ -128,9 +128,13 @@ static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
+>>>>
+>>>>    static inline __wsum csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
+>>>>    					__u32 len, __u8 proto,
+>>>> -					__wsum sum)
+>>>> +					__wsum sum_in)
+>>>>    {
+>>>> -	unsigned long tmp = (__force unsigned long)sum;
+>>>> +#ifdef __clang__
+>>>> +	unsigned long sum = (__force unsigned long)sum_in;
+>>>> +#else
+>>>> +	__wsum sum = sum_in;
+>>>> +#endif
+>>>    This looks much better to me, but I'd keep the variable names unchanged
+>>> as `sum_in' isn't used beyond the initial assignment anyway (you'll have
+>>> to update the references with asm operands accordingly of course).
+>>>
+>>>    Have you verified that code produced by GCC remains the same with your
+>>> change in place as it used to be up to commit 198688edbf77?  I can see no
+>>> such information in the commit description whether here or in the said
+>>> commit.
+>>>
+>>>     Maciej
+>> Hi Maciej,
 >>
->>     /usr/bin/mips-linux-gnu-ld: drivers/usb/phy/phy-tegra-usb.o: in function `tegra_usb_phy_init':
->>     phy-tegra-usb.c:(.text+0x1dd4): undefined reference to `clk_get_parent'
-> 
-> hmm, why not make it use common clock framework ? And shouldn't 
-> include/linux/clk.h provide what you need, if CONFIG_HAVE_CLK is not set ?
+>> Thanks for your reply.
+>>
+>> gcc --version
+>> gcc (Debian 10.2.1-6) 10.2.1 20210110
+>>
+>> net/ipv4/tcp_ipv4.c
+>> tcp_v4_send_reset()
+>>     csum_tcpudp_nofold()
+>>
+>> objdump -d vmlinux > vmlinux.dump
+>>
+>> (1) Before commit 198688edbf77
+>> ("MIPS: Fix inline asm input/output type mismatch in checksum.h used
+>> with Clang"):
+>>
+>> ffffffff80aa835c:       00004025        move    a4,zero
+>> ffffffff80aa8360:       92020012        lbu     v0,18(s0)
+>> ffffffff80aa8364:       de140030        ld      s4,48(s0)
+>> ffffffff80aa8368:       0064182d        daddu   v1,v1,a0
+>> ffffffff80aa836c:       304200ff        andi    v0,v0,0xff
+>> ffffffff80aa8370:       9c64000c        lwu     a0,12(v1)
+>> ffffffff80aa8374:       9c660010        lwu     a2,16(v1)
+>> ffffffff80aa8378:       afa70038        sw      a3,56(sp)
+>> ffffffff80aa837c:       24071a00        li      a3,6656
+>> ffffffff80aa8380:       0086202d        daddu   a0,a0,a2
+>> ffffffff80aa8384:       0087202d        daddu   a0,a0,a3
+>> ffffffff80aa8388:       0088202d        daddu   a0,a0,a4
+>> ffffffff80aa838c:       0004083c        dsll32  at,a0,0x0
+>> ffffffff80aa8390:       0081202d        daddu   a0,a0,at
+>> ffffffff80aa8394:       0081082b        sltu    at,a0,at
+>> ffffffff80aa8398:       0004203f        dsra32  a0,a0,0x0
+>> ffffffff80aa839c:       00812021        addu    a0,a0,at
+>>
+>> (2) After commit 198688edbf77
+>> ("MIPS: Fix inline asm input/output type mismatch in checksum.h used
+>> with Clang"):
+>>
+>> ffffffff80aa836c:       00004025        move    a4,zero
+>> ffffffff80aa8370:       92040012        lbu     a0,18(s0)
+>> ffffffff80aa8374:       de140030        ld      s4,48(s0)
+>> ffffffff80aa8378:       0062182d        daddu   v1,v1,v0
+>> ffffffff80aa837c:       308400ff        andi    a0,a0,0xff
+>> ffffffff80aa8380:       9c62000c        lwu     v0,12(v1)
+>> ffffffff80aa8384:       9c660010        lwu     a2,16(v1)
+>> ffffffff80aa8388:       afa70038        sw      a3,56(sp)
+>> ffffffff80aa838c:       24071a00        li      a3,6656
+>> ffffffff80aa8390:       0046102d        daddu   v0,v0,a2
+>> ffffffff80aa8394:       0047102d        daddu   v0,v0,a3
+>> ffffffff80aa8398:       0048102d        daddu   v0,v0,a4
+>> ffffffff80aa839c:       0002083c        dsll32  at,v0,0x0
+>> ffffffff80aa83a0:       0041102d        daddu   v0,v0,at
+>> ffffffff80aa83a4:       0041082b        sltu    at,v0,at
+>> ffffffff80aa83a8:       0002103f        dsra32  v0,v0,0x0
+>> ffffffff80aa83ac:       00411021        addu    v0,v0,at
+>>
+>> (3) With this patch:
+>>
+>> ffffffff80aa835c:       00004025        move    a4,zero
+>> ffffffff80aa8360:       92020012        lbu     v0,18(s0)
+>> ffffffff80aa8364:       de140030        ld      s4,48(s0)
+>> ffffffff80aa8368:       0064182d        daddu   v1,v1,a0
+>> ffffffff80aa836c:       304200ff        andi    v0,v0,0xff
+>> ffffffff80aa8370:       9c64000c        lwu     a0,12(v1)
+>> ffffffff80aa8374:       9c660010        lwu     a2,16(v1)
+>> ffffffff80aa8378:       afa70038        sw      a3,56(sp)
+>> ffffffff80aa837c:       24071a00        li      a3,6656
+>> ffffffff80aa8380:       0086202d        daddu   a0,a0,a2
+>> ffffffff80aa8384:       0087202d        daddu   a0,a0,a3
+>> ffffffff80aa8388:       0088202d        daddu   a0,a0,a4
+>> ffffffff80aa838c:       0004083c        dsll32  at,a0,0x0
+>> ffffffff80aa8390:       0081202d        daddu   a0,a0,at
+>> ffffffff80aa8394:       0081082b        sltu    at,a0,at
+>> ffffffff80aa8398:       0004203f        dsra32  a0,a0,0x0
+>> ffffffff80aa839c:       00812021        addu    a0,a0,at
+>>
+>> (4) With the following changes based on commit 198688edbf77
+>> ("MIPS: Fix inline asm input/output type mismatch in checksum.h used
+>> with Clang"):
+>>
+>> diff --git a/arch/mips/include/asm/checksum.h
+>> b/arch/mips/include/asm/checksum.h
+>> index 1e6c135..e1f80407 100644
+>> --- a/arch/mips/include/asm/checksum.h
+>> +++ b/arch/mips/include/asm/checksum.h
+>> @@ -130,7 +130,11 @@ static inline __wsum csum_tcpudp_nofold(__be32
+>> saddr, __be32 daddr,
+>>                        __u32 len, __u8 proto,
+>>                        __wsum sum)
+>>    {
+>> +#ifdef __clang__
+>>        unsigned long tmp = (__force unsigned long)sum;
+>> +#else
+>> +    __wsum tmp = sum;
+>> +#endif
+>>
+>>        __asm__(
+>>        "    .set    push        # csum_tcpudp_nofold\n"
+>>
+>> ffffffff80aa835c:       00004025        move    a4,zero
+>> ffffffff80aa8360:       92020012        lbu     v0,18(s0)
+>> ffffffff80aa8364:       de140030        ld      s4,48(s0)
+>> ffffffff80aa8368:       0064182d        daddu   v1,v1,a0
+>> ffffffff80aa836c:       304200ff        andi    v0,v0,0xff
+>> ffffffff80aa8370:       9c64000c        lwu     a0,12(v1)
+>> ffffffff80aa8374:       9c660010        lwu     a2,16(v1)
+>> ffffffff80aa8378:       afa70038        sw      a3,56(sp)
+>> ffffffff80aa837c:       24071a00        li      a3,6656
+>> ffffffff80aa8380:       0086202d        daddu   a0,a0,a2
+>> ffffffff80aa8384:       0087202d        daddu   a0,a0,a3
+>> ffffffff80aa8388:       0088202d        daddu   a0,a0,a4
+>> ffffffff80aa838c:       0004083c        dsll32  at,a0,0x0
+>> ffffffff80aa8390:       0081202d        daddu   a0,a0,at
+>> ffffffff80aa8394:       0081082b        sltu    at,a0,at
+>> ffffffff80aa8398:       0004203f        dsra32  a0,a0,0x0
+>> ffffffff80aa839c:       00812021        addu    a0,a0,at
+>>
+>> The code produced by GCC remains the same between (1), (3) and (4),
+>> the last changes looks like better (with less changes based on commit
+>> 198688edbf77), so I will send v3 later.
+> Aren't those all the same - apart from register selection.
+> Not that I grok the mips opcodes.
+> But that code has horridness on its side.
+>
+> The only obvious difference is that something else changes the
+> code offset from xxxx5c to xxxx6c.
+>
+> 	David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
-That should increase kernel size by a couple kbytes. If size isn't
-important, then somebody should dedicate time and energy on creating the
-patches.
+Hi David,
+
+Yes, it seems no much obvious differences.
+Let me wait for other feedback.
+
+Hi Thomas and Maciej,
+
+Is this patch necessary? If no, we can ignore it.
+If yes, I will send v3 with the above (4) changes.
+
+Thanks,
+Tiezhu
+
