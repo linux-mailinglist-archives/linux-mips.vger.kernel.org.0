@@ -2,38 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C65033E361
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 01:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFC933E412
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 02:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbhCQA4f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Mar 2021 20:56:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33250 "EHLO mail.kernel.org"
+        id S232106AbhCQA6g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Mar 2021 20:58:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35252 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230365AbhCQA4O (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Mar 2021 20:56:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D32E64F8F;
-        Wed, 17 Mar 2021 00:56:12 +0000 (UTC)
+        id S231685AbhCQA5b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Mar 2021 20:57:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 57EC664F8F;
+        Wed, 17 Mar 2021 00:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615942573;
+        s=k20201202; t=1615942651;
         bh=06AdV+JkCI79bqE8VrXjJjhz6t24lXG9Wq7P9wAxE/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PCv43EQmKr1jhTeTNFcS23zvmdyUFpUlBi+Va2x097SZYsh2SGWWe66j8gA28lWUt
-         2QrzwlNm1aPrHos20+uBR9g8zPtVZVPGaX5n8EB0TXv4IG9UsxK+FV/mNUWfDBhORD
-         n3VILbSRgtqH56xabMqltlBPwA7jwMYAPi7q6dYH8Ka+tQOVTk4+eWkTW7vgqb4HGG
-         NbGIqT3Gm6YqmFzm0yazdlVqS6J0pdUdNGfzz+x4ZvdyCbw35M3eu+wZOmKRHDszwO
-         mdKlxWAJNIUpS9V5TB01esWTRHlHTtWkaaynp9sfNfifYB+mf2CTiaj2kghzb7a7DN
-         0xOCbMJRbovgQ==
+        b=hiu0QVDIXB6Zk4tYqAZ/Wf/VWDnXMBqiLm54n+wXP006vH9LQSHec9AhWdVYigmzv
+         poIuoIyUt3YYCZqKbGjYBE1FICpD0siFSbF1jytohMhNv2sTE1iccS5gMoySh738p1
+         NynY3lBaTGUcX0zKZGkhB4aI6YZAF0+wLzf1kKtKblf6NZonkkEGzBFl9cywWMAFmk
+         Vq9NGgWpn6mJDGdOIB+7yZFa7rotvhnICjgmtjsAMcPcr7HQJHpusM/TEqxKcwmpGj
+         235iE4tHxGjWunr9hfAZ9fpZC++/XnC6Od6GZxEm0JIVtxlywFDmN39GZrCrlEUFI1
+         H3aZEzNyCqydQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Paul Cercueil <paul@crapouillou.net>,
         Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 30/61] irqchip/ingenic: Add support for the JZ4760
-Date:   Tue, 16 Mar 2021 20:55:04 -0400
-Message-Id: <20210317005536.724046-30-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 29/54] irqchip/ingenic: Add support for the JZ4760
+Date:   Tue, 16 Mar 2021 20:56:28 -0400
+Message-Id: <20210317005654.724862-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210317005536.724046-1-sashal@kernel.org>
-References: <20210317005536.724046-1-sashal@kernel.org>
+In-Reply-To: <20210317005654.724862-1-sashal@kernel.org>
+References: <20210317005654.724862-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
