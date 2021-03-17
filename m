@@ -2,488 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA3C33E66B
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 02:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF38433E887
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Mar 2021 05:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbhCQBus (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Mar 2021 21:50:48 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:14355 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbhCQBuQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Mar 2021 21:50:16 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4F0Y2q0RTVz8yR6;
-        Wed, 17 Mar 2021 09:48:19 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Wed, 17 Mar 2021 09:50:03 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Guo Ren <guoren@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-alpha@vger.kernel.org>,
-        <linux-snps-arc@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-csky@vger.kernel.org>, <linux-hexagon@vger.kernel.org>,
-        <linux-ia64@vger.kernel.org>, <linux-m68k@lists.linux-m68k.org>,
-        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
-        <linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-        <linux-um@lists.infradead.org>, <linux-xtensa@linux-xtensa.org>,
-        <linux-mm@kvack.org>, Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v2] mm: Move mem_init_print_info() into mm_init()
-Date:   Wed, 17 Mar 2021 09:52:10 +0800
-Message-ID: <20210317015210.33641-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <4d488195-7281-9238-b30d-9f89a6100fb9@csgroup.eu>
-References: <4d488195-7281-9238-b30d-9f89a6100fb9@csgroup.eu>
+        id S229540AbhCQEof (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Mar 2021 00:44:35 -0400
+Received: from conssluserg-03.nifty.com ([210.131.2.82]:48089 "EHLO
+        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbhCQEoJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Mar 2021 00:44:09 -0400
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 12H4hhMh018472;
+        Wed, 17 Mar 2021 13:43:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 12H4hhMh018472
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1615956224;
+        bh=Gfyz85RTqTFXns0z8x3WiH97tujx4/ltbOEQlYyxU58=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CZ+teX+Y0QU1wdtR8uEt/lu54OQF5ttU4T8PA+eJpQ1+ULaDv73PRTFrdemr1lzdy
+         ucC91akrGCLZdj2Rhs0Y9lKQAKxn4iHI1UgeYmE38Tq01TXyxYlzxhaKL0sJtZSrO+
+         12QhYcdZZU1EeOMgC8A3bi0FL2RxkBEaKnOgI+FaVLZfiAm94YJSk8CUOrm2NrEcIN
+         DifvHOBU1PdR+Pp/Lw/uBfXbQNvpTBvmj8hH5C59jC/JWJL7ssUzJfU3cLPq/GNFci
+         L9V3vyTHonk0SOvax4EYk78iv6uC7YCgH/fXO0BMA51w29JYBXQakBHbTGIJEryjbg
+         +2pshxfbFE3Gw==
+X-Nifty-SrcIP: [209.85.216.53]
+Received: by mail-pj1-f53.google.com with SMTP id f2-20020a17090a4a82b02900c67bf8dc69so2542761pjh.1;
+        Tue, 16 Mar 2021 21:43:44 -0700 (PDT)
+X-Gm-Message-State: AOAM533//6BOP8wI/AZeTq7cK0JLKWTJQk/pVHbb4H1GiBqoy5dfityY
+        RubwaLq3LU5bosKqYo6yDbPb+EMlEj4IngJ25Z4=
+X-Google-Smtp-Source: ABdhPJwJ71Q2VUrFGijNY8p0zmnxBOAs/6nlC6HRhz3ebSM0QZipQxYpnH3jV8LwrYBWxjfpDVvvwUu9s4fjWmy6PP4=
+X-Received: by 2002:a17:90a:fb54:: with SMTP id iq20mr2384489pjb.153.1615956218322;
+ Tue, 16 Mar 2021 21:43:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+References: <20210223141901.1652-1-timo@rothenpieler.org> <20210316222514.erlng3lsgmqgpcv4@archlinux-ax161>
+In-Reply-To: <20210316222514.erlng3lsgmqgpcv4@archlinux-ax161>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 17 Mar 2021 13:43:01 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATFwpzmLJc0YFRBG-kUhgatWvG1SWp-kgLyzjix=8J3pQ@mail.gmail.com>
+Message-ID: <CAK7LNATFwpzmLJc0YFRBG-kUhgatWvG1SWp-kgLyzjix=8J3pQ@mail.gmail.com>
+Subject: Re: [PATCH] nfs: fix PNFS_FLEXFILE_LAYOUT Kconfig default
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Timo Rothenpieler <timo@rothenpieler.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-mem_init_print_info() is called in mem_init() on each architecture,
-and pass NULL argument, so using void argument and move it into mm_init().
+On Wed, Mar 17, 2021 at 7:25 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Tue, Feb 23, 2021 at 03:19:01PM +0100, Timo Rothenpieler wrote:
+> > This follows what was done in 8c2fabc6542d9d0f8b16bd1045c2eda59bdcde13.
+> > With the default being m, it's impossible to build the module into the
+> > kernel.
+> >
+> > Signed-off-by: Timo Rothenpieler <timo@rothenpieler.org>
+> > ---
+> >  fs/nfs/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/fs/nfs/Kconfig b/fs/nfs/Kconfig
+> > index e2a488d403a6..14a72224b657 100644
+> > --- a/fs/nfs/Kconfig
+> > +++ b/fs/nfs/Kconfig
+> > @@ -127,7 +127,7 @@ config PNFS_BLOCK
+> >  config PNFS_FLEXFILE_LAYOUT
+> >       tristate
+> >       depends on NFS_V4_1 && NFS_V3
+> > -     default m
+> > +     default NFS_V4
+> >
+> >  config NFS_V4_1_IMPLEMENTATION_ID_DOMAIN
+> >       string "NFSv4.1 Implementation ID Domain"
+> > --
+> > 2.25.1
+> >
+>
+> Hi all,
+>
+> I bisected a new modpost warning that I see with 5.12-rc3 to this commit:
+>
+> $ make -skj"$(nproc)" ARCH=mips CROSS_COMPILE=mipsel-linux- O=build/mipsel distclean defconfig all
+> ...
+> WARNING: modpost: Symbol info of vmlinux is missing. Unresolved symbol check will be entirely skipped.
+> ...
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
-v2:
-- Cleanup 'str' line suggested by Christophe and ACK
+Thanks for the report.
 
- arch/alpha/mm/init.c             |  1 -
- arch/arc/mm/init.c               |  1 -
- arch/arm/mm/init.c               |  2 --
- arch/arm64/mm/init.c             |  2 --
- arch/csky/mm/init.c              |  1 -
- arch/h8300/mm/init.c             |  2 --
- arch/hexagon/mm/init.c           |  1 -
- arch/ia64/mm/init.c              |  1 -
- arch/m68k/mm/init.c              |  1 -
- arch/microblaze/mm/init.c        |  1 -
- arch/mips/loongson64/numa.c      |  1 -
- arch/mips/mm/init.c              |  1 -
- arch/mips/sgi-ip27/ip27-memory.c |  1 -
- arch/nds32/mm/init.c             |  1 -
- arch/nios2/mm/init.c             |  1 -
- arch/openrisc/mm/init.c          |  2 --
- arch/parisc/mm/init.c            |  2 --
- arch/powerpc/mm/mem.c            |  1 -
- arch/riscv/mm/init.c             |  1 -
- arch/s390/mm/init.c              |  2 --
- arch/sh/mm/init.c                |  1 -
- arch/sparc/mm/init_32.c          |  2 --
- arch/sparc/mm/init_64.c          |  1 -
- arch/um/kernel/mem.c             |  1 -
- arch/x86/mm/init_32.c            |  2 --
- arch/x86/mm/init_64.c            |  2 --
- arch/xtensa/mm/init.c            |  1 -
- include/linux/mm.h               |  2 +-
- init/main.c                      |  1 +
- mm/page_alloc.c                  | 10 +++++-----
- 30 files changed, 7 insertions(+), 42 deletions(-)
+MIPS defconfig enables CONFIG_TRIM_UNUSED_KSYMS.
 
-diff --git a/arch/alpha/mm/init.c b/arch/alpha/mm/init.c
-index 3c42b3147fd6..a97650a618f1 100644
---- a/arch/alpha/mm/init.c
-+++ b/arch/alpha/mm/init.c
-@@ -282,5 +282,4 @@ mem_init(void)
- 	set_max_mapnr(max_low_pfn);
- 	high_memory = (void *) __va(max_low_pfn * PAGE_SIZE);
- 	memblock_free_all();
--	mem_init_print_info(NULL);
- }
-diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
-index ce07e697916c..33832e36bdb7 100644
---- a/arch/arc/mm/init.c
-+++ b/arch/arc/mm/init.c
-@@ -194,7 +194,6 @@ void __init mem_init(void)
- {
- 	memblock_free_all();
- 	highmem_init();
--	mem_init_print_info(NULL);
- }
- 
- #ifdef CONFIG_HIGHMEM
-diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
-index 828a2561b229..7022b7b5c400 100644
---- a/arch/arm/mm/init.c
-+++ b/arch/arm/mm/init.c
-@@ -316,8 +316,6 @@ void __init mem_init(void)
- 
- 	free_highpages();
- 
--	mem_init_print_info(NULL);
--
- 	/*
- 	 * Check boundaries twice: Some fundamental inconsistencies can
- 	 * be detected at build time already.
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index 3685e12aba9b..e8f29a0bb2f1 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -491,8 +491,6 @@ void __init mem_init(void)
- 	/* this will put all unused low memory onto the freelists */
- 	memblock_free_all();
- 
--	mem_init_print_info(NULL);
--
- 	/*
- 	 * Check boundaries twice: Some fundamental inconsistencies can be
- 	 * detected at build time already.
-diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-index 894050a8ce09..bf2004aa811a 100644
---- a/arch/csky/mm/init.c
-+++ b/arch/csky/mm/init.c
-@@ -107,7 +107,6 @@ void __init mem_init(void)
- 			free_highmem_page(page);
- 	}
- #endif
--	mem_init_print_info(NULL);
- }
- 
- void free_initmem(void)
-diff --git a/arch/h8300/mm/init.c b/arch/h8300/mm/init.c
-index 1f3b345d68b9..f7bf4693e3b2 100644
---- a/arch/h8300/mm/init.c
-+++ b/arch/h8300/mm/init.c
-@@ -98,6 +98,4 @@ void __init mem_init(void)
- 
- 	/* this will put all low memory onto the freelists */
- 	memblock_free_all();
--
--	mem_init_print_info(NULL);
- }
-diff --git a/arch/hexagon/mm/init.c b/arch/hexagon/mm/init.c
-index f2e6c868e477..f01e91e10d95 100644
---- a/arch/hexagon/mm/init.c
-+++ b/arch/hexagon/mm/init.c
-@@ -55,7 +55,6 @@ void __init mem_init(void)
- {
- 	/*  No idea where this is actually declared.  Seems to evade LXR.  */
- 	memblock_free_all();
--	mem_init_print_info(NULL);
- 
- 	/*
- 	 *  To-Do:  someone somewhere should wipe out the bootmem map
-diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
-index 16d0d7d22657..83280e2df807 100644
---- a/arch/ia64/mm/init.c
-+++ b/arch/ia64/mm/init.c
-@@ -659,7 +659,6 @@ mem_init (void)
- 	set_max_mapnr(max_low_pfn);
- 	high_memory = __va(max_low_pfn * PAGE_SIZE);
- 	memblock_free_all();
--	mem_init_print_info(NULL);
- 
- 	/*
- 	 * For fsyscall entrpoints with no light-weight handler, use the ordinary
-diff --git a/arch/m68k/mm/init.c b/arch/m68k/mm/init.c
-index 14c1e541451c..1759ab875d47 100644
---- a/arch/m68k/mm/init.c
-+++ b/arch/m68k/mm/init.c
-@@ -153,5 +153,4 @@ void __init mem_init(void)
- 	/* this will put all memory onto the freelists */
- 	memblock_free_all();
- 	init_pointer_tables();
--	mem_init_print_info(NULL);
- }
-diff --git a/arch/microblaze/mm/init.c b/arch/microblaze/mm/init.c
-index 05cf1fb3f5ff..ab55c70380a5 100644
---- a/arch/microblaze/mm/init.c
-+++ b/arch/microblaze/mm/init.c
-@@ -131,7 +131,6 @@ void __init mem_init(void)
- 	highmem_setup();
- #endif
- 
--	mem_init_print_info(NULL);
- 	mem_init_done = 1;
- }
- 
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index 8315c871c435..fa9b4a487a47 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -178,7 +178,6 @@ void __init mem_init(void)
- 	high_memory = (void *) __va(get_num_physpages() << PAGE_SHIFT);
- 	memblock_free_all();
- 	setup_zero_pages();	/* This comes from node 0 */
--	mem_init_print_info(NULL);
- }
- 
- /* All PCI device belongs to logical Node-0 */
-diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
-index 5cb73bf74a8b..c36358758969 100644
---- a/arch/mips/mm/init.c
-+++ b/arch/mips/mm/init.c
-@@ -467,7 +467,6 @@ void __init mem_init(void)
- 	memblock_free_all();
- 	setup_zero_pages();	/* Setup zeroed pages.  */
- 	mem_init_free_highmem();
--	mem_init_print_info(NULL);
- 
- #ifdef CONFIG_64BIT
- 	if ((unsigned long) &_text > (unsigned long) CKSEG0)
-diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-index 87bb6945ec25..6173684b5aaa 100644
---- a/arch/mips/sgi-ip27/ip27-memory.c
-+++ b/arch/mips/sgi-ip27/ip27-memory.c
-@@ -420,5 +420,4 @@ void __init mem_init(void)
- 	high_memory = (void *) __va(get_num_physpages() << PAGE_SHIFT);
- 	memblock_free_all();
- 	setup_zero_pages();	/* This comes from node 0 */
--	mem_init_print_info(NULL);
- }
-diff --git a/arch/nds32/mm/init.c b/arch/nds32/mm/init.c
-index fa86f7b2f416..f63f839738c4 100644
---- a/arch/nds32/mm/init.c
-+++ b/arch/nds32/mm/init.c
-@@ -191,7 +191,6 @@ void __init mem_init(void)
- 
- 	/* this will put all low memory onto the freelists */
- 	memblock_free_all();
--	mem_init_print_info(NULL);
- 
- 	pr_info("virtual kernel memory layout:\n"
- 		"    fixmap  : 0x%08lx - 0x%08lx   (%4ld kB)\n"
-diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
-index 61862dbb0e32..613fcaa5988a 100644
---- a/arch/nios2/mm/init.c
-+++ b/arch/nios2/mm/init.c
-@@ -71,7 +71,6 @@ void __init mem_init(void)
- 
- 	/* this will put all memory onto the freelists */
- 	memblock_free_all();
--	mem_init_print_info(NULL);
- }
- 
- void __init mmu_init(void)
-diff --git a/arch/openrisc/mm/init.c b/arch/openrisc/mm/init.c
-index bf9b2310fc93..d5641198b90c 100644
---- a/arch/openrisc/mm/init.c
-+++ b/arch/openrisc/mm/init.c
-@@ -211,8 +211,6 @@ void __init mem_init(void)
- 	/* this will put all low memory onto the freelists */
- 	memblock_free_all();
- 
--	mem_init_print_info(NULL);
--
- 	printk("mem_init_done ...........................................\n");
- 	mem_init_done = 1;
- 	return;
-diff --git a/arch/parisc/mm/init.c b/arch/parisc/mm/init.c
-index 9ca4e4ff6895..591a4e939415 100644
---- a/arch/parisc/mm/init.c
-+++ b/arch/parisc/mm/init.c
-@@ -573,8 +573,6 @@ void __init mem_init(void)
- #endif
- 		parisc_vmalloc_start = SET_MAP_OFFSET(MAP_START);
- 
--	mem_init_print_info(NULL);
--
- #if 0
- 	/*
- 	 * Do not expose the virtual kernel memory layout to userspace.
-diff --git a/arch/powerpc/mm/mem.c b/arch/powerpc/mm/mem.c
-index 4e8ce6d85232..7e11c4cb08b8 100644
---- a/arch/powerpc/mm/mem.c
-+++ b/arch/powerpc/mm/mem.c
-@@ -312,7 +312,6 @@ void __init mem_init(void)
- 		(mfspr(SPRN_TLB1CFG) & TLBnCFG_N_ENTRY) - 1;
- #endif
- 
--	mem_init_print_info(NULL);
- #ifdef CONFIG_PPC32
- 	pr_info("Kernel virtual memory layout:\n");
- #ifdef CONFIG_KASAN
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 7f5036fbee8c..3c5ee3b7d811 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -102,7 +102,6 @@ void __init mem_init(void)
- 	high_memory = (void *)(__va(PFN_PHYS(max_low_pfn)));
- 	memblock_free_all();
- 
--	mem_init_print_info(NULL);
- 	print_vm_layout();
- }
- 
-diff --git a/arch/s390/mm/init.c b/arch/s390/mm/init.c
-index 0e76b2127dc6..8ac710de1ab1 100644
---- a/arch/s390/mm/init.c
-+++ b/arch/s390/mm/init.c
-@@ -209,8 +209,6 @@ void __init mem_init(void)
- 	setup_zero_pages();	/* Setup zeroed pages. */
- 
- 	cmma_init_nodat();
--
--	mem_init_print_info(NULL);
- }
- 
- void free_initmem(void)
-diff --git a/arch/sh/mm/init.c b/arch/sh/mm/init.c
-index 0db6919af8d3..168d7d4dd735 100644
---- a/arch/sh/mm/init.c
-+++ b/arch/sh/mm/init.c
-@@ -359,7 +359,6 @@ void __init mem_init(void)
- 
- 	vsyscall_init();
- 
--	mem_init_print_info(NULL);
- 	pr_info("virtual kernel memory layout:\n"
- 		"    fixmap  : 0x%08lx - 0x%08lx   (%4ld kB)\n"
- 		"    vmalloc : 0x%08lx - 0x%08lx   (%4ld MB)\n"
-diff --git a/arch/sparc/mm/init_32.c b/arch/sparc/mm/init_32.c
-index 6139c5700ccc..1e9f577f084d 100644
---- a/arch/sparc/mm/init_32.c
-+++ b/arch/sparc/mm/init_32.c
-@@ -292,8 +292,6 @@ void __init mem_init(void)
- 
- 		map_high_region(start_pfn, end_pfn);
- 	}
--
--	mem_init_print_info(NULL);
- }
- 
- void sparc_flush_page_to_ram(struct page *page)
-diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
-index 182bb7bdaa0a..e454f179cf5d 100644
---- a/arch/sparc/mm/init_64.c
-+++ b/arch/sparc/mm/init_64.c
-@@ -2520,7 +2520,6 @@ void __init mem_init(void)
- 	}
- 	mark_page_reserved(mem_map_zero);
- 
--	mem_init_print_info(NULL);
- 
- 	if (tlb_type == cheetah || tlb_type == cheetah_plus)
- 		cheetah_ecache_flush_init();
-diff --git a/arch/um/kernel/mem.c b/arch/um/kernel/mem.c
-index 9242dc91d751..9019ff5905b1 100644
---- a/arch/um/kernel/mem.c
-+++ b/arch/um/kernel/mem.c
-@@ -54,7 +54,6 @@ void __init mem_init(void)
- 	memblock_free_all();
- 	max_low_pfn = totalram_pages();
- 	max_pfn = max_low_pfn;
--	mem_init_print_info(NULL);
- 	kmalloc_ok = 1;
- }
- 
-diff --git a/arch/x86/mm/init_32.c b/arch/x86/mm/init_32.c
-index da31c2635ee4..21ffb03f6c72 100644
---- a/arch/x86/mm/init_32.c
-+++ b/arch/x86/mm/init_32.c
-@@ -755,8 +755,6 @@ void __init mem_init(void)
- 	after_bootmem = 1;
- 	x86_init.hyper.init_after_bootmem();
- 
--	mem_init_print_info(NULL);
--
- 	/*
- 	 * Check boundaries twice: Some fundamental inconsistencies can
- 	 * be detected at build time already.
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index 5430c81eefc9..aa8387aab9c1 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -1350,8 +1350,6 @@ void __init mem_init(void)
- 		kclist_add(&kcore_vsyscall, (void *)VSYSCALL_ADDR, PAGE_SIZE, KCORE_USER);
- 
- 	preallocate_vmalloc_pages();
--
--	mem_init_print_info(NULL);
- }
- 
- #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-diff --git a/arch/xtensa/mm/init.c b/arch/xtensa/mm/init.c
-index 2daeba9e454e..6a32b2cf2718 100644
---- a/arch/xtensa/mm/init.c
-+++ b/arch/xtensa/mm/init.c
-@@ -119,7 +119,6 @@ void __init mem_init(void)
- 
- 	memblock_free_all();
- 
--	mem_init_print_info(NULL);
- 	pr_info("virtual kernel memory layout:\n"
- #ifdef CONFIG_KASAN
- 		"    kasan   : 0x%08lx - 0x%08lx  (%5lu MB)\n"
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 89314651dd62..c2e0b3495c5a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2373,7 +2373,7 @@ extern unsigned long free_reserved_area(void *start, void *end,
- 					int poison, const char *s);
- 
- extern void adjust_managed_page_count(struct page *page, long count);
--extern void mem_init_print_info(const char *str);
-+extern void mem_init_print_info(void);
- 
- extern void reserve_bootmem_region(phys_addr_t start, phys_addr_t end);
- 
-diff --git a/init/main.c b/init/main.c
-index 53b278845b88..5581af5b4cb7 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -830,6 +830,7 @@ static void __init mm_init(void)
- 	report_meminit();
- 	stack_depot_init();
- 	mem_init();
-+	mem_init_print_info();
- 	/* page_owner must be initialized after buddy is ready */
- 	page_ext_init_flatmem_late();
- 	kmem_cache_init();
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 55d938297ce6..b5fe5962837c 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -7728,7 +7728,7 @@ unsigned long free_reserved_area(void *start, void *end, int poison, const char
- 	return pages;
- }
- 
--void __init mem_init_print_info(const char *str)
-+void __init mem_init_print_info(void)
- {
- 	unsigned long physpages, codesize, datasize, rosize, bss_size;
- 	unsigned long init_code_size, init_data_size;
-@@ -7767,17 +7767,17 @@ void __init mem_init_print_info(const char *str)
- #ifdef	CONFIG_HIGHMEM
- 		", %luK highmem"
- #endif
--		"%s%s)\n",
-+		")\n",
- 		nr_free_pages() << (PAGE_SHIFT - 10),
- 		physpages << (PAGE_SHIFT - 10),
- 		codesize >> 10, datasize >> 10, rosize >> 10,
- 		(init_data_size + init_code_size) >> 10, bss_size >> 10,
- 		(physpages - totalram_pages() - totalcma_pages) << (PAGE_SHIFT - 10),
--		totalcma_pages << (PAGE_SHIFT - 10),
-+		totalcma_pages << (PAGE_SHIFT - 10)
- #ifdef	CONFIG_HIGHMEM
--		totalhigh_pages() << (PAGE_SHIFT - 10),
-+		, totalhigh_pages() << (PAGE_SHIFT - 10)
- #endif
--		str ? ", " : "", str ? str : "");
-+		);
- }
- 
- /**
--- 
-2.26.2
+Presumably with a0590473c5e6c4ef17,
+MIPS defconfig enables CONFIG_MODULES,
+but actually builds no module.
 
+So, all symbols in vmlinux have been trimmed,
+and vmlinux.symvers gets empty.
+
+That is the reason for the warning.
+
+I will consider how to fix this corner case.
+
+
+
+
+
+
+
+
+
+
+>
+> $ git bisect log
+> # bad: [1e28eed17697bcf343c6743f0028cc3b5dd88bf0] Linux 5.12-rc3
+> # good: [a38fd8748464831584a19438cbb3082b5a2dab15] Linux 5.12-rc2
+> git bisect start 'v5.12-rc3' 'v5.12-rc2'
+> # good: [f78d76e72a4671ea52d12752d92077788b4f5d50] Merge tag 'drm-fixes-2021-03-12-1' of git://anongit.freedesktop.org/drm/drm
+> git bisect good f78d76e72a4671ea52d12752d92077788b4f5d50
+> # bad: [420623430a7015ae9adab8a087de82c186bc9989] Merge tag 'erofs-for-5.12-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs
+> git bisect bad 420623430a7015ae9adab8a087de82c186bc9989
+> # good: [261410082d01f2f2d4fcd19abee6b8e84f399c51] Merge tag 'devprop-5.12-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+> git bisect good 261410082d01f2f2d4fcd19abee6b8e84f399c51
+> # good: [ce307084c96d0ec92c04fcc38b107241b168df11] Merge tag 'block-5.12-2021-03-12-v2' of git://git.kernel.dk/linux-block
+> git bisect good ce307084c96d0ec92c04fcc38b107241b168df11
+> # bad: [f296bfd5cd04cbb49b8fc9585adc280ab2b58624] Merge tag 'nfs-for-5.12-2' of git://git.linux-nfs.org/projects/anna/linux-nfs
+> git bisect bad f296bfd5cd04cbb49b8fc9585adc280ab2b58624
+> # good: [9afc1163794707a304f107bf21b8b37e5c6c34f4] Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+> git bisect good 9afc1163794707a304f107bf21b8b37e5c6c34f4
+> # bad: [fd6d3feed041e96b84680d0bfc1e7abc8f65de92] NFS: Clean up function nfs_mark_dir_for_revalidate()
+> git bisect bad fd6d3feed041e96b84680d0bfc1e7abc8f65de92
+> # bad: [f0940f4b3284a00f38a5d42e6067c2aaa20e1f2e] SUNRPC: Set memalloc_nofs_save() for sync tasks
+> git bisect bad f0940f4b3284a00f38a5d42e6067c2aaa20e1f2e
+> # bad: [ad3dbe35c833c2d4d0bbf3f04c785d32f931e7c9] NFS: Correct size calculation for create reply length
+> git bisect bad ad3dbe35c833c2d4d0bbf3f04c785d32f931e7c9
+> # bad: [a0590473c5e6c4ef17c3132ad08fbad170f72d55] nfs: fix PNFS_FLEXFILE_LAYOUT Kconfig default
+> git bisect bad a0590473c5e6c4ef17c3132ad08fbad170f72d55
+> # first bad commit: [a0590473c5e6c4ef17c3132ad08fbad170f72d55] nfs: fix PNFS_FLEXFILE_LAYOUT Kconfig default
+>
+> $ mipsel-linux-gcc --version
+> mipsel-linux-gcc (GCC) 10.2.0
+> Copyright (C) 2020 Free Software Foundation, Inc.
+> This is free software; see the source for copying conditions.  There is NO
+> warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+>
+> I doubt this is a bug with this specific commit but I am not sure so I
+> have added Masahiro and the kbuild list as well as the MIPS list even
+> though it might not be MIPS specific (although I only see it with the
+> 32-bit MIPS configs)
+>
+> Cheers,
+> Nathan
+
+
+
+--
+Best Regards
+Masahiro Yamada
