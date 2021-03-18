@@ -2,53 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9813402C4
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Mar 2021 11:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 684673402F2
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Mar 2021 11:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbhCRKJN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Mar 2021 06:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        id S229618AbhCRKMZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Mar 2021 06:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbhCRKJC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Mar 2021 06:09:02 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFF2C06175F;
-        Thu, 18 Mar 2021 03:09:02 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 75so3623920lfa.2;
-        Thu, 18 Mar 2021 03:09:02 -0700 (PDT)
+        with ESMTP id S230082AbhCRKMT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Mar 2021 06:12:19 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACFFC06174A;
+        Thu, 18 Mar 2021 03:12:19 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id x28so3649969lfu.6;
+        Thu, 18 Mar 2021 03:12:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jMxhISu+COlRrHc/EVrqMnT5LVw2161ovhdA7IBtSGw=;
-        b=N+Q0LUNoyVaDPJ1eJrZ67FhUa77q/Fz02On4l9bg9QACSIgykCKqUmFdsf53Ojgnbf
-         eyumUdx/TwjbtDOLgwCYAB7RDOtR57TMCBeyNSAY//ay7Tl2lccP2Ssym94kRXjxfYRe
-         lulL4E/vgpp41CghUdWNrhQunOsNpbRkQh1Z5uA9cr4OPAdKTqKspV2wEkOPVcm1LmJR
-         yZKXoXYlgW/Aj82akuKLiTGE5Fox66wxjP6rcBsCJbwoniHR5/N5xRjjkVjAEfQdY1MW
-         wabHvQrtRlGBXU/oemiBE0fxxY0J0doyEwDn/K3ybrpVrl7lPm8K8TOwVCHW7Z8VfYJf
-         AzpA==
+        bh=fj+8CF0xEa6bOzXqxjtIYrEA5HoToR1DJW5/Q9q9jmw=;
+        b=h+XOb1GsQ2w8fLoRZPzFbHuKl4PLZbrg1n3NNXlB+1pwKaDpv3IYeBwNMYTnaAe/dv
+         53qY2HQRgJloO7YPpYoaazxwB0LyW9cda/3XqephYo6XWuKffw2EvNS/BeW8bu2CjhLn
+         YWTP2x1H0eEBDgDtwckTaScppt8aK7lt+V3njf7QJpXzuiT7grarbWs5GRfMMbxHi5hx
+         sbbCxsAJNuzngqg7yz9ZWUT+6eIJtzHyMp4aZtClTbLq39j781dflkTtZN7C5T1u2Nwq
+         xymOipVtMZt0XepUbRaIZljM2iUOt+cNzBqUcJW9l5gvLHs6joBPpTbT1tLMNxHlVuyX
+         KLDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=jMxhISu+COlRrHc/EVrqMnT5LVw2161ovhdA7IBtSGw=;
-        b=IG0AFNQ4WIC7kIb1oqhO0NDJK4IpvBYtQMoHOV9DKFOKi5oYNqDC/BV9Gtr3IoH2cm
-         FMs+fvSr2r42szRdjBPArkOki56V6+y780HZ3xrW6yfFyKEi0qH0qiSI896Z5F/SCDWD
-         ywvmmefUjva1eWKcciuSJvoS6NdenabVMNcsg1d8HYaxGNWsyi9Xt1aa+qEHr4TnD6wH
-         an9cXBxh/pCVUaM1/Pr6Aho5lINHP7y0Ugv7D63w2LHAIaFUmQ0Lp14Sbf7tY7fYwmtz
-         IdX2/sg635XMHgnoc2K33eKSEoNXkHFZ3pV+ht+R7Yd3WIRao7tSSwmpDuvelJQKDFD1
-         81fA==
-X-Gm-Message-State: AOAM533B0nqqsdjnFA3SuMjAMpcZxmYRRvil0HpuTdKptUaWI6YivoUR
-        nH2jPe16oyAGQmh2VUFkPZLMuey11I6fmA==
-X-Google-Smtp-Source: ABdhPJx2/i763YoZT8agJf/e8IcPTQBDi5fhHCqQUnQpQ0jOlOdRn9E3L+UaYKsqgqqx/61KeZhUWQ==
-X-Received: by 2002:a05:6512:32ab:: with SMTP id q11mr4934722lfe.106.1616062140994;
-        Thu, 18 Mar 2021 03:09:00 -0700 (PDT)
+        bh=fj+8CF0xEa6bOzXqxjtIYrEA5HoToR1DJW5/Q9q9jmw=;
+        b=HUCNz4GlwqZgU+TK0qPxyR4jdJJ+lHsiaAAyJQHSS5CSDIl7cge4W1n1bU3z5RFA3N
+         qlZvbj9UwUIbBFpidDUW1bom21so2OhGcLlUZIPAj+mq+MtLIUScm7pJqEDPr+e3m+sE
+         Gr//733uEoLYmFsaI5aqk97kyi5S0gS2qyzjvYByiWzCdT1xvAqjKHGc8jw4DJ+ti7LQ
+         S5P/GKoG9PfsSHFO8b8hwahTNIv+1VGpMN6EdNTTV+/m8es+ytg/dO6VXCKRX1NOVqJ3
+         QfJ9ZGMaKAovEJgLRojC3cpZa0k090THsDN9c+jR7e2vovZt1905VoJ3ufvW7fLhVu3y
+         Z0bw==
+X-Gm-Message-State: AOAM531xYL+TkUY0pLfwmCgC570IvuKETDFyriUveloCSWrKHdsljRbS
+        a7QCvdwbo5sRmbVzFlX1Gqk=
+X-Google-Smtp-Source: ABdhPJw0WKNmAy7eGUCvhofce6ngmswkk73bpXDn/HaCVJQto32NE95sJGLkJZuXS7ucQeT6WnUpaw==
+X-Received: by 2002:a05:6512:238c:: with SMTP id c12mr69712lfv.200.1616062337968;
+        Thu, 18 Mar 2021 03:12:17 -0700 (PDT)
 Received: from [192.168.1.101] ([178.176.78.3])
-        by smtp.gmail.com with ESMTPSA id z21sm173661ljh.104.2021.03.18.03.08.59
+        by smtp.gmail.com with ESMTPSA id p22sm168167lfh.113.2021.03.18.03.12.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Mar 2021 03:09:00 -0700 (PDT)
-Subject: Re: [PATCH 07/10] MIPS: disable CONFIG_IDE in bigsur_defconfig
+        Thu, 18 Mar 2021 03:12:17 -0700 (PDT)
+Subject: Re: [PATCH 08/10] MIPS: disable CONFIG_IDE in malta*_defconfig
 To:     Christoph Hellwig <hch@lst.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jens Axboe <axboe@kernel.dk>,
@@ -65,14 +65,14 @@ Cc:     Richard Henderson <rth@twiddle.net>,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
 References: <20210318045706.200458-1-hch@lst.de>
- <20210318045706.200458-8-hch@lst.de>
+ <20210318045706.200458-9-hch@lst.de>
 From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <53035511-c140-b51a-dd1d-874b1041039a@gmail.com>
-Date:   Thu, 18 Mar 2021 13:08:58 +0300
+Message-ID: <5b0f503e-a27c-a241-c705-b2a9ccd6d0a2@gmail.com>
+Date:   Thu, 18 Mar 2021 13:12:16 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <20210318045706.200458-8-hch@lst.de>
+In-Reply-To: <20210318045706.200458-9-hch@lst.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -80,17 +80,16 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi!
-
 On 3/18/21 7:57 AM, Christoph Hellwig wrote:
 
-> bigsur_defconfig enables CONFIG_IDE for the tc86c001 ide driver, which
-> is a Toshiba plug in card that does not make much sense to use on bigsur
-    ^ for
+> Various malta defconfigs enable CONFIG_IDE for the tc86c001 ide driver,
+> hich is a Toshiba plug in card that does not make much sense to use on
+  ^ which is for
 
-   Else that doesn't make much sense. :-)
+> bigsur platforms.  For all other ATA cards libata support is already
+  ^ Malta.
 
-> platforms.  For all other ATA cards libata support is already enabled.
+> enabled.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 [...]
