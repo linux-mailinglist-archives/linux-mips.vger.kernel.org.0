@@ -2,34 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE33C34007A
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Mar 2021 08:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9813402C4
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Mar 2021 11:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbhCRHzA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Mar 2021 03:55:00 -0400
-Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:58887 "EHLO
-        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229634AbhCRHy5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 18 Mar 2021 03:54:57 -0400
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1lMnUZ-002BtB-BB; Thu, 18 Mar 2021 08:54:51 +0100
-Received: from p5b13a966.dip0.t-ipconnect.de ([91.19.169.102] helo=[192.168.178.139])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1lMnUZ-001WwY-3q; Thu, 18 Mar 2021 08:54:51 +0100
-Subject: Re: [PATCH 01/10] alpha: use libata instead of the legacy ide driver
-To:     Al Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+        id S229949AbhCRKJN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Mar 2021 06:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229600AbhCRKJC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Mar 2021 06:09:02 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFF2C06175F;
+        Thu, 18 Mar 2021 03:09:02 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 75so3623920lfa.2;
+        Thu, 18 Mar 2021 03:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jMxhISu+COlRrHc/EVrqMnT5LVw2161ovhdA7IBtSGw=;
+        b=N+Q0LUNoyVaDPJ1eJrZ67FhUa77q/Fz02On4l9bg9QACSIgykCKqUmFdsf53Ojgnbf
+         eyumUdx/TwjbtDOLgwCYAB7RDOtR57TMCBeyNSAY//ay7Tl2lccP2Ssym94kRXjxfYRe
+         lulL4E/vgpp41CghUdWNrhQunOsNpbRkQh1Z5uA9cr4OPAdKTqKspV2wEkOPVcm1LmJR
+         yZKXoXYlgW/Aj82akuKLiTGE5Fox66wxjP6rcBsCJbwoniHR5/N5xRjjkVjAEfQdY1MW
+         wabHvQrtRlGBXU/oemiBE0fxxY0J0doyEwDn/K3ybrpVrl7lPm8K8TOwVCHW7Z8VfYJf
+         AzpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jMxhISu+COlRrHc/EVrqMnT5LVw2161ovhdA7IBtSGw=;
+        b=IG0AFNQ4WIC7kIb1oqhO0NDJK4IpvBYtQMoHOV9DKFOKi5oYNqDC/BV9Gtr3IoH2cm
+         FMs+fvSr2r42szRdjBPArkOki56V6+y780HZ3xrW6yfFyKEi0qH0qiSI896Z5F/SCDWD
+         ywvmmefUjva1eWKcciuSJvoS6NdenabVMNcsg1d8HYaxGNWsyi9Xt1aa+qEHr4TnD6wH
+         an9cXBxh/pCVUaM1/Pr6Aho5lINHP7y0Ugv7D63w2LHAIaFUmQ0Lp14Sbf7tY7fYwmtz
+         IdX2/sg635XMHgnoc2K33eKSEoNXkHFZ3pV+ht+R7Yd3WIRao7tSSwmpDuvelJQKDFD1
+         81fA==
+X-Gm-Message-State: AOAM533B0nqqsdjnFA3SuMjAMpcZxmYRRvil0HpuTdKptUaWI6YivoUR
+        nH2jPe16oyAGQmh2VUFkPZLMuey11I6fmA==
+X-Google-Smtp-Source: ABdhPJx2/i763YoZT8agJf/e8IcPTQBDi5fhHCqQUnQpQ0jOlOdRn9E3L+UaYKsqgqqx/61KeZhUWQ==
+X-Received: by 2002:a05:6512:32ab:: with SMTP id q11mr4934722lfe.106.1616062140994;
+        Thu, 18 Mar 2021 03:09:00 -0700 (PDT)
+Received: from [192.168.1.101] ([178.176.78.3])
+        by smtp.gmail.com with ESMTPSA id z21sm173661ljh.104.2021.03.18.03.08.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Mar 2021 03:09:00 -0700 (PDT)
+Subject: Re: [PATCH 07/10] MIPS: disable CONFIG_IDE in bigsur_defconfig
+To:     Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Jens Axboe <axboe@kernel.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Richard Henderson <rth@twiddle.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Richard Henderson <rth@twiddle.net>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
@@ -41,61 +65,34 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
 References: <20210318045706.200458-1-hch@lst.de>
- <20210318045706.200458-2-hch@lst.de> <YFLrLwjZubWUvA2J@zeniv-ca.linux.org.uk>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Message-ID: <3a752e8c-b518-6d61-75e7-3549e9906f83@physik.fu-berlin.de>
-Date:   Thu, 18 Mar 2021 08:54:49 +0100
+ <20210318045706.200458-8-hch@lst.de>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <53035511-c140-b51a-dd1d-874b1041039a@gmail.com>
+Date:   Thu, 18 Mar 2021 13:08:58 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <YFLrLwjZubWUvA2J@zeniv-ca.linux.org.uk>
+In-Reply-To: <20210318045706.200458-8-hch@lst.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.169.102
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Al!
+Hi!
 
-On 3/18/21 6:54 AM, Al Viro wrote:
-> On Thu, Mar 18, 2021 at 05:56:57AM +0100, Christoph Hellwig wrote:
->> Switch the alpha defconfig from the legacy ide driver to libata.
+On 3/18/21 7:57 AM, Christoph Hellwig wrote:
+
+> bigsur_defconfig enables CONFIG_IDE for the tc86c001 ide driver, which
+> is a Toshiba plug in card that does not make much sense to use on bigsur
+    ^ for
+
+   Else that doesn't make much sense. :-)
+
+> platforms.  For all other ATA cards libata support is already enabled.
 > 
-> Umm...  I don't have an IDE alpha box in a usable shape (fans on
-> CPU module shat themselves), and it would take a while to resurrect
-> it, but I remember the joy it used to cause in some versions.
-> 
-> Do you have reports of libata variants of drivers actually tested on
-> those?
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+[...]
 
-At least pata_cypress works fine on my AlphaStation XP1000:
-
-root@tsunami:~> lspci
-0000:00:07.0 ISA bridge: Contaq Microsystems 82c693
-0000:00:07.1 IDE interface: Contaq Microsystems 82c693
-0000:00:07.2 IDE interface: Contaq Microsystems 82c693
-0000:00:07.3 USB controller: Contaq Microsystems 82c693
-0000:00:0d.0 VGA compatible controller: Texas Instruments TVP4020 [Permedia 2] (rev 01)
-0001:01:03.0 Ethernet controller: Digital Equipment Corporation DECchip 21142/43 (rev 41)
-0001:01:06.0 SCSI storage controller: QLogic Corp. ISP1020 Fast-wide SCSI (rev 06)
-0001:01:08.0 PCI bridge: Digital Equipment Corporation DECchip 21152 (rev 03)
-0001:02:09.0 Ethernet controller: Intel Corporation 82541PI Gigabit Ethernet Controller (rev 05)
-root@tsunami:~> lsmod|grep pata
-pata_cypress            3595  3
-libata                235071  2 ata_generic,pata_cypress
-root@tsunami:~>
-
-I also have two AlphaStation 233 currently in storage which I assume use
-different IDE chipset which I could test as well.
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
-
+MBR, Sergei
