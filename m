@@ -2,91 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9411E33FD38
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Mar 2021 03:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97F533FE61
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Mar 2021 05:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbhCRC3j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Mar 2021 22:29:39 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:59686 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230245AbhCRC3X (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 17 Mar 2021 22:29:23 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxY+X9ulJggeUBAA--.6154S2;
-        Thu, 18 Mar 2021 10:29:17 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v2] MIPS/bpf: Enable bpf_probe_read{, str}() on MIPS again
-Date:   Thu, 18 Mar 2021 10:29:17 +0800
-Message-Id: <1616034557-5844-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9BxY+X9ulJggeUBAA--.6154S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw4rWFy3KF4xJF13Zw17GFg_yoW8WF47pa
-        nYyasxKr4UWrWDGF1vy3yxuryrJrs7GrWagF4rtF4Fva98ur98Xr4fta13tryUZr4DJ3W3
-        W34xua47KaykCrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK
-        6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUatC7UUU
-        UU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S229664AbhCRE6K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Mar 2021 00:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229512AbhCRE6B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Mar 2021 00:58:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D826C06174A;
+        Wed, 17 Mar 2021 21:57:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=wEy5NunwrZKXnkhywjB0DIEFLxRmlhSa94tBcP+tKjE=; b=bv913LM0lvcD8Id3k3odeou8wR
+        1UvHd2GaSV+awelY4zndccdEi1o98SvR0osHU7YT2lzvxPSgn9S+llRvYFYZl0NqxKr6JPY5h6ZqC
+        /VHtYLrSrsc3G0fU/qqnWT2IZ/W4XWIdxAZ8719My3Pmb4XVeFuT7ZtRtwHvPpDffcuPFktVt74Ci
+        iKFsp0yleZWPZWxf14Mw2w5Vhlql3ikursfJEfoBHUEAclgryE05eVjtWYzyYdxxKWdARDOzxutBe
+        fAU3lk4ETNL1tXb+E/S9a3A6KawIpnvinkS/iDrdzoMGs3YMF+h+OAjuVTBRk+TeCrfcJQuHQYqF9
+        rlZkW62w==;
+Received: from [2001:4bb8:18c:bb3:e1cf:ad2f:7ff7:7a0b] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lMkiZ-002ZB3-Ks; Thu, 18 Mar 2021 04:57:10 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-ide@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: remove the legacy ide driver
+Date:   Thu, 18 Mar 2021 05:56:56 +0100
+Message-Id: <20210318045706.200458-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit 0ebeea8ca8a4 ("bpf: Restrict bpf_probe_read{, str}() only to
-archs where they work"), bpf_probe_read{, str}() functions were no longer
-available on MIPS, so there exist some errors when running bpf program:
+Hi all,
 
-root@linux:/home/loongson/bcc# python examples/tracing/task_switch.py
-bpf: Failed to load program: Invalid argument
-[...]
-11: (85) call bpf_probe_read#4
-unknown func bpf_probe_read#4
-[...]
-Exception: Failed to load BPF program count_sched: Invalid argument
+we've been trying to get rid of the legacy ide driver for a while now,
+and finally scheduled a removal for 2021, which is three month old now.
 
-So select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE in arch/mips/Kconfig,
-otherwise the bpf old helper bpf_probe_read() will not be available.
+In general distros and most defconfigs have switched to libata long ago,
+but there are a few exceptions.  This series first switches over all
+remaining defconfigs to use libata and then removes the legacy ide
+driver.
 
-This is similar with the commit d195b1d1d119 ("powerpc/bpf: Enable
-bpf_probe_read{, str}() on powerpc again").
-
-Fixes: 0ebeea8ca8a4 ("bpf: Restrict bpf_probe_read{, str}() only to archs where they work")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-
-v2: update the commit message to fix typos found by
-    Sergei Shtylyov, thank you!
-
-    not longer --> no longer
-    there exists --> there exist
-
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 160b3a8..4b94ec7 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -6,6 +6,7 @@ config MIPS
- 	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_KCOV
-+	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
- 	select ARCH_HAS_PTE_SPECIAL if !(32BIT && CPU_HAS_RIXI)
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--- 
-2.1.0
-
+libata mostly covers all hardware supported by the legacy ide driver.
+There are three mips drivers that are not supported, but the linux-mips
+list could not identify any users of those.  There also are two m68k
+drivers that do not have libata equivalents, which might or might not
+have users, so we'll need some input and possibly help from the m68k
+community here.
