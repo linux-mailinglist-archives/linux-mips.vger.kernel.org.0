@@ -2,55 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F2A3414FB
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Mar 2021 06:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 296E734162D
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Mar 2021 07:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233894AbhCSFna (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Mar 2021 01:43:30 -0400
-Received: from verein.lst.de ([213.95.11.211]:44427 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233870AbhCSFnY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 19 Mar 2021 01:43:24 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id EFE6A68BEB; Fri, 19 Mar 2021 06:43:19 +0100 (CET)
-Date:   Fri, 19 Mar 2021 06:43:19 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Finn Thain <fthain@telegraphics.com.au>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-ide@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: remove the legacy ide driver
-Message-ID: <20210319054319.GA9880@lst.de>
-References: <20210318045706.200458-1-hch@lst.de> <c1fa8e6-a05d-9ea1-f47e-9e85ea6ea65e@telegraphics.com.au>
+        id S234043AbhCSG6e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Mar 2021 02:58:34 -0400
+Received: from out28-2.mail.aliyun.com ([115.124.28.2]:51983 "EHLO
+        out28-2.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234068AbhCSG6Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Mar 2021 02:58:25 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08128843|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0126591-0.000135465-0.987205;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.JnAP104_1616137096;
+Received: from 192.168.88.129(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.JnAP104_1616137096)
+          by smtp.aliyun-inc.com(10.147.42.22);
+          Fri, 19 Mar 2021 14:58:18 +0800
+Subject: Re: [PATCH] I2C: JZ4780: Fix bug for Ingenic X1000.
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     paul@crapouillou.net, stable@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, sernia.zhou@foxmail.com
+References: <1616084743-112402-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1616084743-112402-2-git-send-email-zhouyanjie@wanyeetech.com>
+ <20210318170623.GA1961@ninjato>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <644d19d8-9444-4dde-a891-c9dfd523389e@wanyeetech.com>
+Date:   Fri, 19 Mar 2021 14:58:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1fa8e6-a05d-9ea1-f47e-9e85ea6ea65e@telegraphics.com.au>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20210318170623.GA1961@ninjato>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 19, 2021 at 12:43:48PM +1100, Finn Thain wrote:
-> A few months ago I wrote another patch to move some more platforms away 
-> from macide but it has not been tested yet. That is not to say you should 
-> wait. However, my patch does have some changes that are missing from your 
-> patch series, relating to ide platform devices in arch/m68k/mac/config.c. 
-> I hope to be able to test this patch before the 5.13 merge window closes.
+Hi Wolfram,
 
-Normally we do not remove drivers for hardware that is still used.  So
-at leat for macide my plan was not to take it away unless the users 
-are sufficiently happy.  Or in other words:  I think waiting it the
-right choice, but hopefully we can make that wait as short as possible.
+
+Sorry, please forgive my carefulness, I wrongly sent the version that 
+did not clean up, resulting in missing the reporter's information and 
+some errors in formats.
+
+
+On 2021/3/19 上午1:06, Wolfram Sang wrote:
+> On Fri, Mar 19, 2021 at 12:25:43AM +0800, 周琰杰 (Zhou Yanjie) wrote:
+>> Only send "X1000_I2C_DC_STOP" when last byte, or it will cause
+>> error when I2C write operation.
+> Any write operation? I wonder then why nobody noticed before?
+
+
+The standard I2C communication should look like this:
+
+Read:
+
+device_addr + w, reg_addr, device_addr + r, data;
+
+Write:
+
+device_addr + w, reg_addr, data;
+
+
+But without this patch, it looks like this:
+
+Read:
+
+device_addr + w, reg_addr, device_addr + r, data;
+
+Write:
+
+device_addr + w, reg_addr, device_addr + w, data;
+
+This is clearly not correct.
+
+
+When I added support for X1000 to this driver, the hardware used was 
+CU1000-Neo. On this hardware, there was an ADS7830 that communicated 
+through I2C, but the operation of ADS7830 only involved read operations, 
+so I was at that time failed to realize the problem with the write 
+operation.
+In addition, because X1000 did not implement relatively complete support 
+in the mainline until the second half of 2020, there are still a large 
+number of users who are still using the old SDK (kernel 3.10 and 
+kernel4.4) provided by Ingenics, which may also be indirectly delayed 
+exposure of this problem.
+
+
+>> -			while ((i2c_sta & JZ4780_I2C_STA_TFNF) &&
+>> -					(i2c->wt_len > 0)) {
+>> +			while ((i2c_sta & JZ4780_I2C_STA_TFNF) && (i2c->wt_len > 0)) {
+> This is a cosmetic change only IIUC. Shouldn't be in a bugfix.
+>
+
+My fault, I will remove it in the next version.
+
+
+Thanks and best regards!
+
+
