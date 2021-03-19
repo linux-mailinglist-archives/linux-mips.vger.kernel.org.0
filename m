@@ -2,71 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD913419A0
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Mar 2021 11:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D21341CFB
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Mar 2021 13:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbhCSKMl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Mar 2021 06:12:41 -0400
-Received: from out28-74.mail.aliyun.com ([115.124.28.74]:59393 "EHLO
-        out28-74.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbhCSKM3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Mar 2021 06:12:29 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08010255|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00528173-0.000297908-0.99442;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.JnFD7JF_1616148736;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.JnFD7JF_1616148736)
-          by smtp.aliyun-inc.com(10.147.41.187);
-          Fri, 19 Mar 2021 18:12:23 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     wsa@kernel.org, paul@crapouillou.net
-Cc:     linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, ywltyut@sina.cn, sernia.zhou@foxmail.com
-Subject: [PATCH v2] I2C: JZ4780: Fix bug for Ingenic X1000.
-Date:   Fri, 19 Mar 2021 18:12:13 +0800
-Message-Id: <1616148733-15154-2-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1616148733-15154-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1616148733-15154-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S229805AbhCSMel (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Mar 2021 08:34:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37230 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229766AbhCSMeU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 19 Mar 2021 08:34:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C25964EB6;
+        Fri, 19 Mar 2021 12:34:15 +0000 (UTC)
+Date:   Fri, 19 Mar 2021 12:34:12 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] mm/memtest: Add ARCH_USE_MEMTEST
+Message-ID: <20210319123412.GB6832@arm.com>
+References: <1614573126-7740-1-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1614573126-7740-1-git-send-email-anshuman.khandual@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Only send "X1000_I2C_DC_STOP" when last byte, or it will cause
-error when I2C write operation.
+On Mon, Mar 01, 2021 at 10:02:06AM +0530, Anshuman Khandual wrote:
+> early_memtest() does not get called from all architectures. Hence enabling
+> CONFIG_MEMTEST and providing a valid memtest=[1..N] kernel command line
+> option might not trigger the memory pattern tests as would be expected in
+> normal circumstances. This situation is misleading.
+> 
+> The change here prevents the above mentioned problem after introducing a
+> new config option ARCH_USE_MEMTEST that should be subscribed on platforms
+> that call early_memtest(), in order to enable the config CONFIG_MEMTEST.
+> Conversely CONFIG_MEMTEST cannot be enabled on platforms where it would
+> not be tested anyway.
+> 
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Chris Zankel <chris@zankel.net>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-xtensa@linux-xtensa.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Fixes: 21575a7a8d4c ("I2C: JZ4780: Add support for the X1000.")
+For arm64:
 
-Reported-by: 杨文龙 (Yang Wenlong) <ywltyut@sina.cn>
-Tested-by: 杨文龙 (Yang Wenlong) <ywltyut@sina.cn>
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
-
-Notes:
-    v1->v2:
-    1.Add missing Reported-by and Tested-by.
-    2.Remove change which not related to the bugfix.
-
- drivers/i2c/busses/i2c-jz4780.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-jz4780.c b/drivers/i2c/busses/i2c-jz4780.c
-index 8509c5f..55177eb 100644
---- a/drivers/i2c/busses/i2c-jz4780.c
-+++ b/drivers/i2c/busses/i2c-jz4780.c
-@@ -525,8 +525,8 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void *dev_id)
- 				i2c_sta = jz4780_i2c_readw(i2c, JZ4780_I2C_STA);
- 				data = *i2c->wbuf;
- 				data &= ~JZ4780_I2C_DC_READ;
--				if ((!i2c->stop_hold) && (i2c->cdata->version >=
--						ID_X1000))
-+				if ((i2c->wt_len == 1) && (!i2c->stop_hold) &&
-+						(i2c->cdata->version >= ID_X1000))
- 					data |= X1000_I2C_DC_STOP;
- 				jz4780_i2c_writew(i2c, JZ4780_I2C_DC, data);
- 				i2c->wbuf++;
--- 
-2.7.4
-
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
