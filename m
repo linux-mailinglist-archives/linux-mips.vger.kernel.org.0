@@ -2,97 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F352C342BEA
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Mar 2021 12:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969743431DA
+	for <lists+linux-mips@lfdr.de>; Sun, 21 Mar 2021 10:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbhCTLQN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 20 Mar 2021 07:16:13 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:42910 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230079AbhCTLQB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 20 Mar 2021 07:16:01 -0400
-Received: from [10.130.0.65] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Bxs+VOwFVgOXMDAA--.9919S3;
-        Sat, 20 Mar 2021 17:28:47 +0800 (CST)
-Subject: Re: [PATCH v5 0/7] Add basic support for Loongson-2K1000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20210315075004.15465-1-zhangqing@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <6756d6e3-2fc4-36db-3aed-173e016ca657@loongson.cn>
-Date:   Sat, 20 Mar 2021 17:28:46 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S230127AbhCUJVQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 21 Mar 2021 05:21:16 -0400
+Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:48191 "EHLO
+        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229990AbhCUJUr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 21 Mar 2021 05:20:47 -0400
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.94)
+          with esmtps (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1lNuGE-003lHF-1r; Sun, 21 Mar 2021 10:20:38 +0100
+Received: from p57bd9a6f.dip0.t-ipconnect.de ([87.189.154.111] helo=[192.168.178.139])
+          by inpost2.zedat.fu-berlin.de (Exim 4.94)
+          with esmtpsa (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1lNuGD-001TwM-Dq; Sun, 21 Mar 2021 10:20:37 +0100
+Subject: Re: remove the legacy ide driver
+To:     Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-ide@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+References: <20210318045706.200458-1-hch@lst.de>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Message-ID: <4ac2f934-fa64-f8c2-8a4d-4b15c8a421a6@physik.fu-berlin.de>
+Date:   Sun, 21 Mar 2021 10:20:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210315075004.15465-1-zhangqing@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20210318045706.200458-1-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Bxs+VOwFVgOXMDAA--.9919S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFyUurW7CF45Jw1xWw18Grg_yoW8AF4rpw
-        43C3Z8Kr45uFy7Crn3Jry8Wr15ArWrJrZrWF43Xr13Gasaqa4Yvr13JFs5JrsFvryIya4j
-        vryrWrW7GFnrCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
-        02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU0eVb3UUUUU==
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.154.111
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hello Christoph!
 
-ping
+On 3/18/21 5:56 AM, Christoph Hellwig wrote:
+> libata mostly covers all hardware supported by the legacy ide driver.
+> There are three mips drivers that are not supported, but the linux-mips
+> list could not identify any users of those.  There also are two m68k
+> drivers that do not have libata equivalents, which might or might not
+> have users, so we'll need some input and possibly help from the m68k
+> community here.
 
-On 03/15/2021 03:49 PM, Qing Zhang wrote:
-> These patches support single-core DTS boot to the serial port login
-> interface, which can be operated using conventional commands.
->
-> I have successfully tested it on the Loongson 2K1000 machine.
-> pmon: http://cgit.loongnix.org/cgit/pmon-loongson3/
->
-> Note:
-> After the basic support is merged,
-> I will commit SMP and other driver support in the future.
->
-> Qing Zhang (7):
->    MIPS: Loongson64: DeviceTree for Loongson-2K1000
->    MIPS: Loongson64: Distinguish firmware dependencies DTB/LEFI
->    MIPS: Loongson64: Add support for the Loongson-2K1000 to get
->      cpu_clock_freq
->    MIPS: Loongson64: Add Loongson-2K1000 early_printk_port
->    irqchip/loongson-liointc: irqchip add 2.0 version
->    dt-bindings: interrupt-controller: Add Loongson-2K1000 LIOINTC
->    MIPS: Loongson64: Add a Loongson-2K1000 default config file
->
->   .../loongson,liointc.yaml                     |  36 +-
->   arch/mips/boot/dts/loongson/Makefile          |   1 +
->   .../boot/dts/loongson/loongson64-2k1000.dtsi  | 243 ++++++++++++
->   .../dts/loongson/loongson64_2core_2k1000.dts  |  10 +
->   arch/mips/configs/loongson2k_defconfig        | 353 ++++++++++++++++++
->   .../asm/mach-loongson64/builtin_dtbs.h        |   1 +
->   .../include/asm/mach-loongson64/loongson.h    |   9 +-
->   arch/mips/loongson64/env.c                    |  13 +-
->   arch/mips/loongson64/init.c                   |  21 +-
->   arch/mips/loongson64/time.c                   |  24 ++
->   drivers/irqchip/irq-loongson-liointc.c        |  58 ++-
->   11 files changed, 751 insertions(+), 18 deletions(-)
->   create mode 100644 arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->   create mode 100644 arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dts
->   create mode 100644 arch/mips/configs/loongson2k_defconfig
->
+I think those drivers were the Q60 driver and the MacIDE driver, weren't they?
+
+Either way, I have so far been unsuccessful in obtaining access to these machines
+but I assume once we gain access to such machines, Bartlomiej could convert the
+drivers the same way he already converted the falcon, gayle and buddha drivers,
+for example.
+
+One could also just convert the drivers to libata and include them untested, the
+conversion itself seems pretty little work for someone experienced with libata.
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
