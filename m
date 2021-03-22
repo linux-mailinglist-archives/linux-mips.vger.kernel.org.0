@@ -2,89 +2,172 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC55334406B
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 13:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2E03446D9
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 15:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbhCVMFD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Mar 2021 08:05:03 -0400
-Received: from mail2.protonmail.ch ([185.70.40.22]:31664 "EHLO
-        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbhCVMEx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Mar 2021 08:04:53 -0400
-Date:   Mon, 22 Mar 2021 12:04:43 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1616414690; bh=AFgCbLguriV3CwFF1nhSPTfmyyoAQpRcEnd0zBssKuA=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=R2bsUqhAg7Fb96oKF1Og1ulpJbeTnxg9Y4uLtwnit83vvh+9uG8Nj3KGjQyjUaZLT
-         ikLY5u/4aOVlDvfJARcJxogpArdlynErRRX8V5/fp561LEUK8LeB2dn8E7MAR0hxsS
-         xBwLtBEqYJ508r6yD5t1DYRVXjGprSBF/Yqt/KZ7zEywTVG/GMbC9+ATTmQ7/uNtHA
-         eFC7xLk5UUIO/0GHIFgmbR8smuGILktzsL545NR2h+78m1pQfSabQ1CF/oWLuDRP2K
-         ETKrOCCrmL8qkf/qeRziA0e8cL0VbN1Da+8EyJpoGAglypHPZAjhog9mXW+FumsQDE
-         k+5sAKgbGuR4w==
-To:     Paul Cercueil <paul@crapouillou.net>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, od@zcrc.me,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH] MIPS: generic: Support linking with LLVM ld.lld
-Message-ID: <20210322120429.3706-1-alobakin@pm.me>
-In-Reply-To: <20210321131805.98422-1-paul@crapouillou.net>
-References: <20210321131805.98422-1-paul@crapouillou.net>
+        id S230173AbhCVOOZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Mar 2021 10:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230131AbhCVOOS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Mar 2021 10:14:18 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF0FC061574
+        for <linux-mips@vger.kernel.org>; Mon, 22 Mar 2021 07:14:17 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u21so3574524ejo.13
+        for <linux-mips@vger.kernel.org>; Mon, 22 Mar 2021 07:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+4yh4MCaMjCQZ43lV2b3NMY6HnAMnpQQHM0Vz8ZLtI8=;
+        b=ks6UgnX43wsvsZOr+tvl4pF7ZmWygwrO3DHEgdKqCXz+YQxpFvXH2tP8ZNAeqC+QcP
+         QGFYnM0MwEG6yrWilism7U6AEteYYQ7/R5FHokF9NzzfbwCbNw4vUTnYUP3lb70JI0Cr
+         dfB60Y38wPG80kD4YInbugTSZF09sR8E3aBIUtJ58v44JDl3yMcvyOEj+ljZu9hge1ur
+         akjI5xrobOdNTyEElrEb6zJr4NABzOCSBOWlqvevdnBe3UbOAr3NPOLX64hmjmd5Tx8I
+         l85+hHhdrf4fLKk0oNgUFEDi6y4KzFIZUJ0M0+dLzLq1I3ox9yLr6aXQ1jd3ZDh7ub5B
+         B53w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+4yh4MCaMjCQZ43lV2b3NMY6HnAMnpQQHM0Vz8ZLtI8=;
+        b=eRoWmdxnpPI0s2Nfk+9hpxID0XpDQ7D/T7iFxkTnLyUF+gopSdWAJgtRWdIvBqjXZA
+         4qiSXnyaA1W4n4R2LqF5emk7UAP8kPZih0F9U8sRgDX2B6f5q9rtKSYwdizzg1KxUDFU
+         FnFy1yovCRPJmlmoo4B79op45TNyevHw4J2Ubgy8WRGBbimCR2SmltOdReldvfe49vuO
+         j9+VJ8LEQdgWubYMMaKHhrL259Eg7Zq2LaoPS5DgKbElhncwtA48l3j6Ar70lrA34egN
+         E5niVKPTI+drxDVQ4CT5V3pygLibjZMM1Zj4e8lSDoWjjvtPO/XJLQlTvqK8hyuuPRn4
+         rUSQ==
+X-Gm-Message-State: AOAM5307hGnaI64mpGoTbEyfP5AJLxtr8A9NhzTCht9mHXW6NXEjLrcB
+        3Ma4zTqr/H9z+6TXb7r0cJK9Ebc9HHQC21yoCWl35g==
+X-Google-Smtp-Source: ABdhPJxtrbtv7CNwA1UI5v7Ipmfc6jya2hFUTvNiJoK0oHZMpmXsnK+fBBudUF7c8CwvUThB5YW1qnlEQFmoX/Um/Lg=
+X-Received: by 2002:a17:907:720a:: with SMTP id dr10mr11853474ejc.375.1616422456310;
+ Mon, 22 Mar 2021 07:14:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+References: <20210322121933.746237845@linuxfoundation.org> <20210322121937.040307268@linuxfoundation.org>
+In-Reply-To: <20210322121937.040307268@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 22 Mar 2021 19:44:05 +0530
+Message-ID: <CA+G9fYuSdE7U-D+mn82bR3e33NzpDEFsD9B6EgXAj3sKMLxfeQ@mail.gmail.com>
+Subject: Re: [PATCH 5.10 103/157] MIPS: kernel: Reserve exception base early
+ to prevent corruption
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Serge Semin <fancer.lancer@gmail.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        lkft-triage@lists.linaro.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Sun, 21 Mar 2021 13:18:05 +0000
-
-> LLVM's ld.lld chokes on the 64-bit sign-extended load addresses. Use
-> 32-bit addresses if the linker is LLVM's ld.lld.
+On Mon, 22 Mar 2021 at 18:14, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>
+> [ Upstream commit bd67b711bfaa02cf19e88aa2d9edae5c1c1d2739 ]
+>
+> BMIPS is one of the few platforms that do change the exception base.
+> After commit 2dcb39645441 ("memblock: do not start bottom-up allocations
+> with kernel_end") we started seeing BMIPS boards fail to boot with the
+> built-in FDT being corrupted.
+>
+> Before the cited commit, early allocations would be in the [kernel_end,
+> RAM_END] range, but after commit they would be within [RAM_START +
+> PAGE_SIZE, RAM_END].
+>
+> The custom exception base handler that is installed by
+> bmips_ebase_setup() done for BMIPS5000 CPUs ends-up trampling on the
+> memory region allocated by unflatten_and_copy_device_tree() thus
+> corrupting the FDT used by the kernel.
+>
+> To fix this, we need to perform an early reservation of the custom
+> exception space. Additional we reserve the first 4k (1k for R3k) for
+> either normal exception vector space (legacy CPUs) or special vectors
+> like cache exceptions.
+>
+> Huge thanks to Serge for analysing and proposing a solution to this
+> issue.
+>
+> Fixes: 2dcb39645441 ("memblock: do not start bottom-up allocations with kernel_end")
+> Reported-by: Kamal Dasu <kdasu.kdev@gmail.com>
+> Debugged-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  arch/mips/generic/Platform | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
-> index b871af16b5b6..19b7d92a4ca7 100644
-> --- a/arch/mips/generic/Platform
-> +++ b/arch/mips/generic/Platform
-> @@ -12,8 +12,8 @@
->  cflags-$(CONFIG_MACH_INGENIC_SOC)=09+=3D -I$(srctree)/arch/mips/include/=
-asm/mach-ingenic
->  cflags-$(CONFIG_MIPS_GENERIC)=09+=3D -I$(srctree)/arch/mips/include/asm/=
-mach-generic
->
-> -load-$(CONFIG_MIPS_GENERIC)=09+=3D 0xffffffff80100000
-> -zload-$(CONFIG_MIPS_GENERIC)=09+=3D 0xffffffff81000000
-> +load-$(CONFIG_MIPS_GENERIC)=09=09+=3D $(if $(CONFIG_LD_IS_LLD),0x8010000=
-0,0xffffffff80100000)
-> +zload-$(CONFIG_MIPS_GENERIC)=09+=3D $(if $(CONFIG_LD_IS_LLD),0x81000000,=
-0xffffffff81000000)
->  all-$(CONFIG_MIPS_GENERIC)=09:=3D vmlinux.gz.itb
+>  arch/mips/include/asm/traps.h    |  3 +++
+>  arch/mips/kernel/cpu-probe.c     |  6 ++++++
+>  arch/mips/kernel/cpu-r3k-probe.c |  3 +++
+>  arch/mips/kernel/traps.c         | 10 +++++-----
 
-For load-y, it's handled in arch/mips/Makefile:289 arch-wide.
-For zload-y, it's not handled at all, but the proper way to do this
-is to add a similar to load-ld logics in
-arch/mips/boot/compressed/Makefile.
+mipc tinyconfig and allnoconfig builds failed on stable-rc 5.10 branch
 
->  its-y=09=09=09=09=09:=3D vmlinux.its.S
-> --
-> 2.30.2
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
+WARNING: modpost: vmlinux.o(.text+0x6a88): Section mismatch in
+reference from the function reserve_exception_space() to the function
+.meminit.text:memblock_reserve()
+The function reserve_exception_space() references
+the function __meminit memblock_reserve().
+This is often because reserve_exception_space lacks a __meminit
+annotation or the annotation of memblock_reserve is wrong.
 
-Thanks,
-Al
+FATAL: modpost: Section mismatches detected.
+Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
+make[2]: *** [/builds/linux/scripts/Makefile.modpost:59:
+vmlinux.symvers] Error 1
 
+Here is the list of build failed,
+ - gcc-8-allnoconfig
+ - gcc-8-tinyconfig
+ - gcc-9-allnoconfig
+ - gcc-9-tinyconfig
+ - gcc-10-allnoconfig
+ - gcc-10-tinyconfig
+ - clang-10-tinyconfig
+ - clang-10-allnoconfig
+ - clang-11-allnoconfig
+ - clang-11-tinyconfig
+ - clang-12-tinyconfig
+ - clang-12-allnoconfig
+
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+link:
+https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/1117167411#L142
+
+steps to reproduce:
+---------------------------
+# TuxMake is a command line tool and Python library that provides
+# portable and repeatable Linux kernel builds across a variety of
+# architectures, toolchains, kernel configurations, and make targets.
+#
+# TuxMake supports the concept of runtimes.
+# See https://docs.tuxmake.org/runtimes/, for that to work it requires
+# that you install podman or docker on your system.
+#
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+
+
+tuxmake --runtime podman --target-arch mips --toolchain gcc-10
+--kconfig tinyconfig
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
