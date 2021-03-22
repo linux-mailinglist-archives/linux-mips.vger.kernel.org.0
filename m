@@ -2,217 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6373447D4
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 15:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB2134483D
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 15:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbhCVOt0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Mar 2021 10:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbhCVOs5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Mar 2021 10:48:57 -0400
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85536C0613E5
-        for <linux-mips@vger.kernel.org>; Mon, 22 Mar 2021 07:48:54 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:250b:f16c:c5e2:505d])
-        by michel.telenet-ops.be with bizsmtp
-        id jSot240062HDxaV06Sotq1; Mon, 22 Mar 2021 15:48:53 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1lOLrQ-009ZWV-LC; Mon, 22 Mar 2021 15:48:52 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1lOLrQ-004T6u-1L; Mon, 22 Mar 2021 15:48:52 +0100
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH 17/17] auxdisplay: ht16k33: Add segment display LED support
-Date:   Mon, 22 Mar 2021 15:48:48 +0100
-Message-Id: <20210322144848.1065067-18-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210322144848.1065067-1-geert@linux-m68k.org>
-References: <20210322144848.1065067-1-geert@linux-m68k.org>
+        id S230051AbhCVOyi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Mar 2021 10:54:38 -0400
+Received: from verein.lst.de ([213.95.11.211]:56129 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231366AbhCVOyI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Mar 2021 10:54:08 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id A32F268BEB; Mon, 22 Mar 2021 15:54:03 +0100 (CET)
+Date:   Mon, 22 Mar 2021 15:54:03 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-ide@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 02/10] ARM: disable CONFIG_IDE in footbridge_defconfig
+Message-ID: <20210322145403.GA30942@lst.de>
+References: <20210318045706.200458-1-hch@lst.de> <20210318045706.200458-3-hch@lst.de> <20210319170753.GV1463@shell.armlinux.org.uk> <20210319175311.GW1463@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210319175311.GW1463@shell.armlinux.org.uk>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Instantiate a single LED for a segment display.  This allows the user to
-control display brightness and blinking through the LED class API and
-triggers, and exposes the display color.
+On Fri, Mar 19, 2021 at 05:53:12PM +0000, Russell King - ARM Linux admin wrote:
+> If I extend the arch/arm/kernel/bios32.c code to kill BARs 2/3 (which
+> actually are not present on the CY82C693) then the IDE driver works
+> for me, but the PATA driver does not:
+> 
+> cy82c693 0000:00:06.1: IDE controller (0x1080:0xc693 rev 0x00)
+> cy82c693 0000:00:06.1: not 100% native mode: will probe irqs later
+> legacy IDE will be removed in 2021, please switch to libata
+> Report any missing HW support to linux-ide@vger.kernel.org
+>     ide0: BM-DMA at 0x1080-0x1087
+>     ide1: BM-DMA at 0x1088-0x108f
+> Probing IDE interface ide0...
+> hda: PIONEER DVD-RW DVR-105, ATAPI CD/DVD-ROM drive
+> hda: host max PIO4 wanted PIO255(auto-tune) selected PIO4
+> ...
+> 
+> (unbind Cypress_IDE and try binding pata_cypress)
+> 
+> pata_cypress 0000:00:06.1: no available native port
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
-For setting display brightness, this could use the existing backlight
-support for frame buffer devices instantiated for dot-matrix displays.
-However, using the leds subsystem instead has the advantage that the
-driver can make use of the HT16K33's hardware blinking support, and can
-expose the display color.
----
- drivers/auxdisplay/ht16k33.c | 81 ++++++++++++++++++++++++++++++++++--
- 1 file changed, 77 insertions(+), 4 deletions(-)
+This comes from ata_pci_sff_init_host when it tails to initialize
+a port.  There are three cases why it can't initialize the port:
 
-diff --git a/drivers/auxdisplay/ht16k33.c b/drivers/auxdisplay/ht16k33.c
-index 0b502a6039f89c6b..5821addd9aec5633 100644
---- a/drivers/auxdisplay/ht16k33.c
-+++ b/drivers/auxdisplay/ht16k33.c
-@@ -29,6 +29,7 @@
- #include <asm/unaligned.h>
- 
- #include "line-display.h"
-+#include "../leds/leds.h"		/* for led_colors[] */
- 
- /* Registers */
- #define REG_SYSTEM_SETUP		0x20
-@@ -36,6 +37,10 @@
- 
- #define REG_DISPLAY_SETUP		0x80
- #define REG_DISPLAY_SETUP_ON		BIT(0)
-+#define REG_DISPLAY_SETUP_BLINK_OFF	(0 << 1)
-+#define REG_DISPLAY_SETUP_BLINK_2HZ	(1 << 1)
-+#define REG_DISPLAY_SETUP_BLINK_1HZ	(2 << 1)
-+#define REG_DISPLAY_SETUP_BLINK_0HZ5	(3 << 1)
- 
- #define REG_ROWINT_SET			0xA0
- #define REG_ROWINT_SET_INT_EN		BIT(0)
-@@ -57,6 +62,8 @@
- #define BYTES_PER_ROW		(HT16K33_MATRIX_LED_MAX_ROWS / 8)
- #define HT16K33_FB_SIZE		(HT16K33_MATRIX_LED_MAX_COLS * BYTES_PER_ROW)
- 
-+#define COLOR_DEFAULT		LED_COLOR_ID_RED
-+
- enum display_type {
- 	DISP_MATRIX = 0,
- 	DISP_QUAD_7SEG,
-@@ -85,6 +92,7 @@ struct ht16k33_fbdev {
- 
- struct ht16k33_seg {
- 	struct linedisp linedisp;
-+	struct led_classdev led;
- 	union {
- 		struct seg7_conversion_map seg7;
- 		struct seg14_conversion_map seg14;
-@@ -102,6 +110,7 @@ struct ht16k33_priv {
- 		struct ht16k33_seg seg;
- 	};
- 	enum display_type type;
-+	uint8_t blink;
- };
- 
- static const struct fb_fix_screeninfo ht16k33_fb_fix = {
-@@ -160,7 +169,7 @@ static DEVICE_ATTR(map_seg14, 0644, map_seg_show, map_seg_store);
- 
- static int ht16k33_display_on(struct ht16k33_priv *priv)
- {
--	uint8_t data = REG_DISPLAY_SETUP | REG_DISPLAY_SETUP_ON;
-+	uint8_t data = REG_DISPLAY_SETUP | REG_DISPLAY_SETUP_ON | priv->blink;
- 
- 	return i2c_smbus_write_byte(priv->client, data);
- }
-@@ -175,8 +184,11 @@ static int ht16k33_brightness_set(struct ht16k33_priv *priv,
- {
- 	int error;
- 
--	if (brightness == 0)
-+	if (brightness == 0) {
-+		// Disable blink mode
-+		priv->blink = REG_DISPLAY_SETUP_BLINK_OFF;
- 		return ht16k33_display_off(priv);
-+	}
- 
- 	error = ht16k33_display_on(priv);
- 	if (error)
-@@ -186,6 +198,49 @@ static int ht16k33_brightness_set(struct ht16k33_priv *priv,
- 				    REG_BRIGHTNESS | (brightness - 1));
- }
- 
-+static int ht16k33_brightness_set_blocking(struct led_classdev *led_cdev,
-+					   enum led_brightness brightness)
-+{
-+	struct ht16k33_priv *priv = container_of(led_cdev, struct ht16k33_priv,
-+						 seg.led);
-+
-+	return ht16k33_brightness_set(priv, brightness);
-+}
-+
-+static int ht16k33_blink_set(struct led_classdev *led_cdev,
-+			     unsigned long *delay_on, unsigned long *delay_off)
-+{
-+	struct ht16k33_priv *priv = container_of(led_cdev, struct ht16k33_priv,
-+						 seg.led);
-+	unsigned int delay;
-+	uint8_t blink;
-+	int error;
-+
-+	if (!*delay_on && !*delay_off) {
-+		blink = REG_DISPLAY_SETUP_BLINK_1HZ;
-+		delay = 1000;
-+	} else if (*delay_on <= 750) {
-+		blink = REG_DISPLAY_SETUP_BLINK_2HZ;
-+		delay = 500;
-+	} else if (*delay_on <= 1500) {
-+		blink = REG_DISPLAY_SETUP_BLINK_1HZ;
-+		delay = 1000;
-+	} else {
-+		blink = REG_DISPLAY_SETUP_BLINK_0HZ5;
-+		delay = 2000;
-+	}
-+
-+	error = i2c_smbus_write_byte(priv->client,
-+				     REG_DISPLAY_SETUP | REG_DISPLAY_SETUP_ON |
-+				     blink);
-+	if (error)
-+		return error;
-+
-+	priv->blink = blink;
-+	*delay_on = *delay_off = delay;
-+	return 0;
-+}
-+
- static void ht16k33_fb_queue(struct ht16k33_priv *priv)
- {
- 	struct ht16k33_fbdev *fbdev = &priv->fbdev;
-@@ -578,11 +633,29 @@ static int ht16k33_fbdev_probe(struct i2c_client *client,
- static int ht16k33_seg_probe(struct i2c_client *client,
- 			     struct ht16k33_priv *priv, uint32_t brightness)
- {
--	struct ht16k33_seg *seg = &priv->seg;
- 	struct device *dev = &client->dev;
-+	struct device_node *node = dev->of_node;
-+	struct ht16k33_seg *seg = &priv->seg;
-+	u32 color = COLOR_DEFAULT;
- 	int err;
- 
--	err = ht16k33_brightness_set(priv, MAX_BRIGHTNESS);
-+	of_property_read_u32(node, "color", &color);
-+	seg->led.name = devm_kasprintf(dev, GFP_KERNEL,
-+			DRIVER_NAME ":%s:" LED_FUNCTION_BACKLIGHT,
-+			color < LED_COLOR_ID_MAX ? led_colors[color] : "");
-+	seg->led.brightness_set_blocking = ht16k33_brightness_set_blocking;
-+	seg->led.blink_set = ht16k33_blink_set;
-+	seg->led.flags = LED_CORE_SUSPENDRESUME;
-+	seg->led.brightness = brightness;
-+	seg->led.max_brightness = MAX_BRIGHTNESS;
-+
-+	err = devm_led_classdev_register(dev, &seg->led);
-+	if (err) {
-+		dev_err(dev, "Failed to register LED\n");
-+		return err;
-+	}
-+
-+	err = ht16k33_brightness_set(priv, seg->led.brightness);
- 	if (err)
- 		return err;
- 
--- 
-2.25.1
+ 1) because it is marked as dummy, which is the case for the second
+    port of the cypress controller, but you're not using that even
+    with the old ide driver, and we'd still not get that message just
+    because of that second port.
+ 2) when ata_resources_present returns false because the BAR has
+    a zero start or length
+ 3) because pcim_iomap_regions() fails.  This prints a warning to the
+    log ("failed to request/iomap BARs for port %d (errno=%d)") that you
+    should have seen
 
+So the problem here has to be number two.  The legacy ide driver OTOH
+seems to lack a lot of these checks, although I'm not sure how it
+manages to actually work without those.
+
+Can you show how the BAR assignment for the device looks using lscpi
+or a tool of your choice?
