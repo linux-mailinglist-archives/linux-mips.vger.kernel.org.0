@@ -2,152 +2,183 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 440CD344CDD
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 18:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE829344D89
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 18:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbhCVRK3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Mar 2021 13:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbhCVRKN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Mar 2021 13:10:13 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF8AC061574;
-        Mon, 22 Mar 2021 10:10:13 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id q5so11385280pfh.10;
-        Mon, 22 Mar 2021 10:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fiyXOeQWEig0s6UT1FT5pCXalIidRHvGHYc/I0I86U4=;
-        b=QKCSek145JEuRPcVGh+jry7eSFRT7rDliJdVjjDPerK0DFdLuxLHuth+sgT617W5Mm
-         jecfEAMmOTZUwEtOT3NVkAuqnrRYhKJ/CPAWXtEAfpcv5KG+ByG0IJxfzUFn3hGP6OsW
-         oPWtBEalIpy+zv0CWGZlMW8GxXXGV7ADUru4p65y9tx2V70fFVPGVCDw2XknH9W9/seH
-         rGXSeCTpJaVlOEifvnGhW30lT6qTGVC8HeDy6eR1kA3bHZjb4uNfitWtT0tuQ4nhlZPN
-         JOrlTpcixGngqPjLmXcVOVdlhvxtSuD9Os696fAhe93PNbZoIWZPQiMeHjELruNKLkUN
-         u7Rw==
+        id S230335AbhCVRi7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Mar 2021 13:38:59 -0400
+Received: from mail-io1-f45.google.com ([209.85.166.45]:34336 "EHLO
+        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229764AbhCVRi3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Mar 2021 13:38:29 -0400
+Received: by mail-io1-f45.google.com with SMTP id x16so14814662iob.1;
+        Mon, 22 Mar 2021 10:38:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fiyXOeQWEig0s6UT1FT5pCXalIidRHvGHYc/I0I86U4=;
-        b=e6MMktrDdCoTNtGegQcQFUMgR9FqHo4oZK4DjO0H0/ky4VtjScGgtbREDgDEJCOY9y
-         ObaszwJqkYdND/mLQOYMvm/h4VWTNR/yiE7kcVBvkqouvuDg74KfV2m/oIpqGOLn6ygw
-         mduUbj+WtKvgvpfvtkcig4o1oJAwkvhnFjjL0MEa+ZHfgMFQpwGMgCJPEVztOGp2/Vq0
-         59/srjQEWrxKRU4ZFFm3DvF86c0pPG7PG7u3K4jfrQlOUR4kq57AwGnfE/ga2rZfZSTR
-         ux9F2J1gEBeziS4kZQL1zJK935p0Gvlen8Jn4q9PkbdZ/6yHQiZakta+zvxeVCb9B3Iu
-         N4Hw==
-X-Gm-Message-State: AOAM532XA6xIyDMk/DQm605wrMerOw0A6Fx18EtIAwG2TZuDLBgTZvYm
-        4RlvbubYwex51RWWcii7CnbRsHpafH7SovGHusU=
-X-Google-Smtp-Source: ABdhPJyo1TSVtrx9+IOM2nIeFXCEIk7pxXeayGexYBlLGasNOgy9jn+8roBBPwJzj7t1TMvI/kT0tl7xmg8I5hxgK3k=
-X-Received: by 2002:a63:cc:: with SMTP id 195mr493605pga.282.1616433012697;
- Mon, 22 Mar 2021 10:10:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210318045706.200458-1-hch@lst.de> <20210318045706.200458-3-hch@lst.de>
- <20210319170753.GV1463@shell.armlinux.org.uk> <20210319175311.GW1463@shell.armlinux.org.uk>
- <20210322145403.GA30942@lst.de> <20210322151503.GX1463@shell.armlinux.org.uk>
- <224b110e-7c42-4e19-800e-e0fa23d3bf7f@physik.fu-berlin.de> <20210322170338.GZ1463@shell.armlinux.org.uk>
-In-Reply-To: <20210322170338.GZ1463@shell.armlinux.org.uk>
-From:   Cye Borg <cyborgyn@gmail.com>
-Date:   Mon, 22 Mar 2021 18:10:01 +0100
-Message-ID: <CAD4NMuZWoV0m85OyBDHLt+J8NYCV5wYx7fFZaivBNEgDnrN5xw@mail.gmail.com>
-Subject: Re: [PATCH 02/10] ARM: disable CONFIG_IDE in footbridge_defconfig
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-ide@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=plEDx3yODuuc0oDuUUpuI2VfkI3CKfscVxs+yXbJJYw=;
+        b=G0p1hrLm23ypgOeRLAqVVNtZSp7za21DcFXtXb/7pG3XPm6FvVWd5xWTCORtCyMKXw
+         2tg0WCQiaZ01hVeQ1OHHz/x7VyeDdAn+JpJmp4QpBfds23fpekuAN3pk+n/qcTcRjFCf
+         1lKr+dmMJxLcuagoAGr0eMkkSLZMKmVy0ncYl8/vUnXHrU6v3CMSaGxZ7fQ9j6HuDz3O
+         V1MuZLypnBwbhkPlukaWe8bbG7yuBmWlR0V5owsCp14cWZOXrVRcMhD1xQa16Ox77Ygi
+         KiBSNLwcSY5X1yshJQ2CjxTQRsSNUXNn6NqI8964xkUCys/O9rGfsEiCeXs9qZUo3O9G
+         kIpg==
+X-Gm-Message-State: AOAM531i2XQNodXB2KRIBuuV6TVH17AsqWQJDKFcUGJA5Xr0YYFe6C+Q
+        ueim/sBjIodHYi4xUF696A==
+X-Google-Smtp-Source: ABdhPJyewsMNUula+4VN8UXChdp+DNLqtLdxAkqFQimXzm+foycbj2gxhUuukwaAaSLd+7g4S8ZNiQ==
+X-Received: by 2002:a5d:93c2:: with SMTP id j2mr728270ioo.166.1616434709207;
+        Mon, 22 Mar 2021 10:38:29 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id c19sm8270300ile.17.2021.03.22.10.38.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 10:38:28 -0700 (PDT)
+Received: (nullmailer pid 2887760 invoked by uid 1000);
+        Mon, 22 Mar 2021 17:38:18 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robin van der Gracht <robin@protonic.nl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20210322144848.1065067-3-geert@linux-m68k.org>
+References: <20210322144848.1065067-1-geert@linux-m68k.org> <20210322144848.1065067-3-geert@linux-m68k.org>
+Subject: Re: [PATCH 02/17] dt-bindings: auxdisplay: ht16k33: Document Adafruit segment displays
+Date:   Mon, 22 Mar 2021 11:38:18 -0600
+Message-Id: <1616434698.367681.2887759.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-PWS 500au:
+On Mon, 22 Mar 2021 15:48:33 +0100, Geert Uytterhoeven wrote:
+> The Holtek HT16K33 LED controller is not only used for driving
+> dot-matrix displays, but also for driving segment displays.
+> 
+> Document compatible values for the Adafruit 7-segment[1] and
+> 14-segment[2] FeatherWing expansion boards with red displays.  According
+> to the schematics, all other Adafruit 7-segment and 14-segment display
+> backpack and FeatherWing expansion boards (including bare boards and
+> boards fitted with displays) are compatible with these two boards.
+> Add a "color" property to support the different color variants.
+> 
+> [1] https://www.adafruit.com/product/3108
+> [2] https://www.adafruit.com/product/3130
+> 
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+> Alternatives I considered:
+>   1. Document the attached display type in a child node.
+>      I.e. specify segment type, number of characters, and wiring.
+>      Especially the latter would become really complex, due to the sheer
+>      amount of possible wiring combinations.
+>      Using this method, you also loose the ability to just connect a
+>      display to an i2c bus, and instantiate the device from sysfs,
+>      without using DT:
+> 
+> 	echo adafruit,3130 0x70 > /sys/class/i2c/i2c-adapter/.../new_device
+> 
+>   2. Do not use the "color" property, but document all Adafruit
+>      7-segment and 14-segment display backpack and FeatherWing expansion
+>      boards.
+>      This would lead to a myriad of compatible values:
+> 
+>       - items:
+> 	  - enum:
+> 	      - adafruit,878      # 0.56" 4-Digit 7-Segment Display Backpack (Red)
+> 	      - adafruit,879      # 0.56" 4-Digit 7-Segment Display Backpack (Yellow)
+> 	      - adafruit,880      # 0.56" 4-Digit 7-Segment Display Backpack (Green)
+> 	      - adafruit,881      # 0.56" 4-Digit 7-Segment Display Backpack (Blue)
+> 	      - adafruit,1002     # 0.56" 4-Digit 7-Segment Display Backpack (White)
+> 	  - const: adafruit,877   # 0.56" 4-Digit 7-Segment Backpack
+> 	  - const: holtek,ht16k33
+> 
+>       - items:
+> 	  - enum:
+> 	      - adafruit,1268     # 1.2" 4-Digit 7-Segment Display Backpack (Green)
+> 	      - adafruit,1269     # 1.2" 4-Digit 7-Segment Display Backpack (Yellow)
+> 	      - adafruit,1270     # 1.2" 4-Digit 7-Segment Display Backpack (Red)
+> 	  - const: adafruit,1271  # 1.2" 4-Digit 7-Segment Backpack
+> 	  - const: holtek,ht16k33
+> 
+>       - items:
+> 	  - enum:
+> 	      - adafruit,1911     # 0.54" Quad Alphanumeric Display Backpack (Red)
+> 	      - adafruit,1912     # 0.54" Quad Alphanumeric Display Backpack (Blue)
+> 	      - adafruit,2157     # 0.54" Quad Alphanumeric Display Backpack (White)
+> 	      - adafruit,2158     # 0.54" Quad Alphanumeric Display Backpack (Yellow)
+> 	      - adafruit,2159     # 0.54" Quad Alphanumeric Display Backpack (Yellow-Green)
+> 	      - adafruit,2160     # 0.54" Quad Alphanumeric Display Backpack (Green)
+> 	  - const: adafruit,1910  # 0.54" Quad 14-segment Alphanumeric Backpack
+> 	  - const: holtek,ht16k33
+> 
+>       - items:
+> 	  - enum:
+> 	      - adafruit,3106     # 0.56" 4-Digit 7-Segment FeatherWing Display (Blue)
+> 	      - adafruit,3107     # 0.56" 4-Digit 7-Segment FeatherWing Display (Green)
+> 	      - adafruit,3108     # 0.56" 4-Digit 7-Segment FeatherWing Display (Red)
+> 	      - adafruit,3109     # 0.56" 4-Digit 7-Segment FeatherWing Display (White)
+> 	      - adafruit,3110     # 0.56" 4-Digit 7-Segment FeatherWing Display (Yellow)
+> 	  - const: adafruit,3088  # 0.56" 4-Digit 7-Segment FeatherWing
+> 	  - const: holtek,ht16k33
+> 
+>       - items:
+> 	  - enum:
+> 	      - adafruit,3127     # 0.54" Quad Alphanumeric FeatherWing Display (White)
+> 	      - adafruit,3128     # 0.54" Quad Alphanumeric FeatherWing Display (Blue)
+> 	      - adafruit,3129     # 0.54" Quad Alphanumeric FeatherWing Display (Green)
+> 	      - adafruit,3130     # 0.54" Quad Alphanumeric FeatherWing Display (Red)
+> 	      - adafruit,3131     # 0.54" Quad Alphanumeric FeatherWing Display (Yellow)
+> 	      - adafruit,3132     # 0.54" Quad Alphanumeric FeatherWing Display (Yellow-Green)
+> 	  - const: adafruit,3089  # 0.54" Quad 14-segment Alphanumeric FeatherWing
+> 	  - const: holtek,ht16k33
+> ---
+>  .../bindings/auxdisplay/holtek,ht16k33.yaml   | 22 ++++++++++++++++---
+>  1 file changed, 19 insertions(+), 3 deletions(-)
+> 
 
-snow / # lspci -vvx -s 7.1
-00:07.1 IDE interface: Contaq Microsystems 82c693 (prog-if 80 [ISA
-Compatibility mode-only controller, supports bus mastering])
-        Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop-
-ParErr+ Stepping- SERR- FastB2B- DisINTx-
-        Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium
->TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-        Latency: 0
-        Interrupt: pin A routed to IRQ 0
-        Region 0: I/O ports at 01f0 [size=8]
-        Region 1: I/O ports at 03f4
-        Region 4: I/O ports at 9080 [size=16]
-        Kernel driver in use: pata_cypress
-        Kernel modules: pata_cypress
-00: 80 10 93 c6 45 00 80 02 00 80 01 01 00 00 80 00
-10: f1 01 00 00 f5 03 00 00 00 00 00 00 00 00 00 00
-20: 81 90 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-30: 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00
+My bot found errors running 'make dt_binding_check' on your patch:
 
-snow / # lspci -vvx -s 7.2
-00:07.2 IDE interface: Contaq Microsystems 82c693 (prog-if 00 [ISA
-Compatibility mode-only controller])
-        Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop-
-ParErr+ Stepping- SERR- FastB2B- DisINTx-
-        Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium
->TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-        Latency: 0
-        Interrupt: pin B routed to IRQ 0
-        Region 0: I/O ports at 0170 [size=8]
-        Region 1: I/O ports at 0374
-        Region 4: Memory at 0c240000 (32-bit, non-prefetchable)
-[disabled] [size=64K]
-        Kernel modules: pata_cypress
-00: 80 10 93 c6 45 00 80 02 00 00 01 01 00 00 80 00
-10: 71 01 00 00 75 03 00 00 00 00 00 00 00 00 00 00
-20: 00 00 24 0c 00 00 00 00 00 00 00 00 00 00 00 00
-30: 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml:54:16: [error] syntax error: mapping values are not allowed here (syntax)
 
-On Mon, Mar 22, 2021 at 6:04 PM Russell King - ARM Linux admin
-<linux@armlinux.org.uk> wrote:
->
-> On Mon, Mar 22, 2021 at 05:09:13PM +0100, John Paul Adrian Glaubitz wrote:
-> > On 3/22/21 4:15 PM, Russell King - ARM Linux admin wrote:
-> > > I'm quite surprised that the CY82C693 even works on Alpha - I've
-> > > asked for a lspci for that last week but nothing has yet been
-> > > forthcoming from whoever responded to your patch for Alpha - so I
-> > > can't compare what I'm seeing with what's happening with Alpha.
-> >
-> > Here is lspci on my DEC Alpha XP-1000:
-> >
-> > root@tsunami:~> lspci
-> > 0000:00:07.0 ISA bridge: Contaq Microsystems 82c693
-> > 0000:00:07.1 IDE interface: Contaq Microsystems 82c693
-> > 0000:00:07.2 IDE interface: Contaq Microsystems 82c693
-> > 0000:00:07.3 USB controller: Contaq Microsystems 82c693
-> > 0000:00:0d.0 VGA compatible controller: Texas Instruments TVP4020 [Permedia 2] (rev 01)
-> > 0001:01:03.0 Ethernet controller: Digital Equipment Corporation DECchip 21142/43 (rev 41)
-> > 0001:01:06.0 SCSI storage controller: QLogic Corp. ISP1020 Fast-wide SCSI (rev 06)
-> > 0001:01:08.0 PCI bridge: Digital Equipment Corporation DECchip 21152 (rev 03)
-> > 0001:02:09.0 Ethernet controller: Intel Corporation 82541PI Gigabit Ethernet Controller (rev 05)
-> > root@tsunami:~>
->
-> This is no good. What I asked last Thursday was:
->
-> "Could you send me the output of lspci -vvx -s 7.1 and lspci -vvx -s 7.2
-> please?"
->
-> so I can see the resources the kernel is using and a dump of the PCI
-> config space to see what the hardware is using.
->
-> Thanks.
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.example.dts'
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 45, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 343, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 111, in get_single_data
+    node = self.composer.get_single_node()
+  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 891, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
+  in "<unicode string>", line 54, column 16
+make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml:  mapping values are not allowed in this context
+  in "<unicode string>", line 54, column 16
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml: ignoring, error parsing file
+warning: no schema found in file: ./Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+make: *** [Makefile:1380: dt_binding_check] Error 2
+
+See https://patchwork.ozlabs.org/patch/1456639
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
