@@ -2,73 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3345344C81
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 18:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C517344C8A
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 18:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbhCVQ7k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Mar 2021 12:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S231579AbhCVRAP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Mar 2021 13:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbhCVQ7c (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Mar 2021 12:59:32 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BC4C061574;
-        Mon, 22 Mar 2021 09:59:30 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id g38so7308989ybi.12;
-        Mon, 22 Mar 2021 09:59:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MzN/sXQ/XVj/NfU+6jTmm5tb6uOktbF1W0iQRoG8Y7A=;
-        b=TJNZDtQK2o1+m7Mu3JT2bmqRgA/Rc0Dae5WKN+20czRJI167N6a5JxozNzp+Su6Cp/
-         rt9L981xUs8ZVBxDmrAG9vdRLP3NkT7Rwj/FaGvkQ3vRa5mGeEdsW+pTFYveHet77Hm4
-         LC6VLvv+ZbQEd6dHkKFoccEeQgX/6RIMHZUHXUZe97dtLHvbXP7CEN2ugp7Ti4zxfzNx
-         xa+q/GbjOQXVX5M7tqj62srB34xRL4eWo747HPSh6CN+FjZL9UqKTLcgnrXkoB0umkNz
-         pOeL+3vvVG4cS+8+7MaTFoJn9pO9Rabn3yKHxKZH/r36lMm9KJH/MzFPxoDrDtfXvB1z
-         u/0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MzN/sXQ/XVj/NfU+6jTmm5tb6uOktbF1W0iQRoG8Y7A=;
-        b=YjGYkfM1RcVOve08q/jDjn1YQ0aSAgS++vMZJK2rLFLesCD8ZhrKIr7Miacl+iwzCc
-         jf/jFn+8/ouGbap3PUzF65Dxx2z6Q7KD51J4U0IHehW3vh4IDQ2NJ00mXeLhjHdGfbbj
-         R65OM7JoCo8LMnqU6Uvl2I9K4mD/BErqQbHKVlriy4q6VExLprrzaZK8AF58p7EDzi3b
-         I4EJGTu4JUryaDfJiYksNTu30hHSt3NZdTRWaZs2TZE4kI7WRRp8fmRsRPn0PIWtJtTU
-         9s+agH5I82/5KzkngCAGS6afOLlQ9sH3LpMY+P7FveknCFWUmCNOFocev9XEmoKQJQs2
-         qcsw==
-X-Gm-Message-State: AOAM5328pfIVKuamEewRrM1U2RZoc1dfZD7QKiQ94VO5cIKVsDzOcaz6
-        9rsW/AoOvCQaHC4N0AVcePaceHZiNqqghq0t4MY=
-X-Google-Smtp-Source: ABdhPJxPyS6kdjPud5OaFu3PW0Uo+y4VdJsXNi1XID1XDH6tzg4XLJgbelzfxwFfGXLY9WfLOI1cTvfQelmOFjI1LMs=
-X-Received: by 2002:a25:844a:: with SMTP id r10mr728925ybm.26.1616432370141;
- Mon, 22 Mar 2021 09:59:30 -0700 (PDT)
+        with ESMTP id S230297AbhCVRAH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Mar 2021 13:00:07 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9D6C061574;
+        Mon, 22 Mar 2021 10:00:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=/wzJhKM6WR08BxO9Rx9F+4jrBkWZ2G6YTLOBTI0aOD0=; b=UkTSwJFrJA41g1Jpc9MQFy2W/
+        3nnqiHqPlY4LT6afefhGXkSe38OlG4Cj6N+5xVV14AJBJMevjOhRDBP5Y3UOkxdynEVHg/OYNa8R9
+        k1/Nszw3tb5VViTAXoO8RddWSZ2JAGCMwtfo7bPOdavpFJB531CmzgpFgVkNHM5D/nlPV8yMZMbPB
+        jx251IdjkhlJbqWh8gNG9EgWx+ciuVMhdCeGv8/y6BoKRw/c8QrVMWOfCmb5xLEBSqjRksgFiN0j7
+        oAzOcBF7RbmQ1Hf2ihsxu7hF9Hfsxg7Dzj4O0i88qDZM0GQrqiY+kBQSCFMb1WkgPYx6Cg9N9lZeE
+        hSdnyA1hg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51588)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1lONuJ-0006jh-97; Mon, 22 Mar 2021 16:59:59 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1lONuG-0003Nx-T6; Mon, 22 Mar 2021 16:59:56 +0000
+Date:   Mon, 22 Mar 2021 16:59:56 +0000
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-ide@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 02/10] ARM: disable CONFIG_IDE in footbridge_defconfig
+Message-ID: <20210322165956.GY1463@shell.armlinux.org.uk>
+References: <20210318045706.200458-1-hch@lst.de>
+ <20210318045706.200458-3-hch@lst.de>
+ <20210319170753.GV1463@shell.armlinux.org.uk>
+ <20210319175311.GW1463@shell.armlinux.org.uk>
+ <20210322145403.GA30942@lst.de>
+ <20210322151503.GX1463@shell.armlinux.org.uk>
+ <20210322151823.GA2764@lst.de>
 MIME-Version: 1.0
-References: <20210322144848.1065067-1-geert@linux-m68k.org> <20210322144848.1065067-5-geert@linux-m68k.org>
-In-Reply-To: <20210322144848.1065067-5-geert@linux-m68k.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 22 Mar 2021 17:59:19 +0100
-Message-ID: <CANiq72ng1J210QwAGO_qFQrJ_1REizLGkejieuxbpOJ0Bmm_Cg@mail.gmail.com>
-Subject: Re: [PATCH 04/17] auxdisplay: img-ascii-lcd: Add helper variable dev
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210322151823.GA2764@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 3:48 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> +       struct device *dev = &pdev->dev;
+On Mon, Mar 22, 2021 at 04:18:23PM +0100, Christoph Hellwig wrote:
+> On Mon, Mar 22, 2021 at 03:15:03PM +0000, Russell King - ARM Linux admin wrote:
+> > It gets worse than that though - due to a change to remove
+> > pcibios_min_io from the generic code, moving it into the ARM
+> > architecture code, this has caused a regression that prevents the
+> > legacy resources being registered against the bus resource. So even
+> > if they are there, they cause probe failures. I haven't found a
+> > reasonable way to solve this yet, but until there is, there is no
+> > way that the PATA driver can be used as the "legacy mode" support
+> > is effectively done via the PCI code assigning virtual IO port
+> > resources.
+> > 
+> > I'm quite surprised that the CY82C693 even works on Alpha - I've
+> > asked for a lspci for that last week but nothing has yet been
+> > forthcoming from whoever responded to your patch for Alpha - so I
+> > can't compare what I'm seeing with what's happening with Alpha.
+> 
+> That sounds like something we could fix with a quirk for function 2
+> in the PCI resource assignment code.  Can you show what vendor and
+> device ID function 2 has so that I could try to come up with one?
 
-Do we want helpers like this to be `*const` (assuming they can)? (same
-for patch 12).
+I already have a quirk in arch/arm/kernel/bios32.c for this - but it
+is no longer sufficient due to changes in the PCI layer, where much
+of this is documented.
 
-Cheers,
-Miguel
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
