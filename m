@@ -2,22 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE1534494B
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 16:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C98344AB1
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Mar 2021 17:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbhCVPdd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Mar 2021 11:33:33 -0400
-Received: from verein.lst.de ([213.95.11.211]:56320 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230263AbhCVPdW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 22 Mar 2021 11:33:22 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 69F4568BEB; Mon, 22 Mar 2021 16:33:15 +0100 (CET)
-Date:   Mon, 22 Mar 2021 16:33:14 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S231213AbhCVQJ5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Mar 2021 12:09:57 -0400
+Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:46709 "EHLO
+        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231807AbhCVQJX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Mar 2021 12:09:23 -0400
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.94)
+          with esmtps (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1lON7D-002n34-BF; Mon, 22 Mar 2021 17:09:15 +0100
+Received: from p57bd9564.dip0.t-ipconnect.de ([87.189.149.100] helo=[192.168.178.139])
+          by inpost2.zedat.fu-berlin.de (Exim 4.94)
+          with esmtpsa (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1lON7D-000xth-3u; Mon, 22 Mar 2021 17:09:15 +0100
+Subject: Re: [PATCH 02/10] ARM: disable CONFIG_IDE in footbridge_defconfig
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Jens Axboe <axboe@kernel.dk>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Richard Henderson <rth@twiddle.net>,
@@ -30,85 +40,59 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         linux-arm-kernel@lists.infradead.org,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 02/10] ARM: disable CONFIG_IDE in footbridge_defconfig
-Message-ID: <20210322153314.GA3440@lst.de>
-References: <20210318045706.200458-1-hch@lst.de> <20210318045706.200458-3-hch@lst.de> <20210319170753.GV1463@shell.armlinux.org.uk> <20210319175311.GW1463@shell.armlinux.org.uk> <20210322145403.GA30942@lst.de> <20210322151503.GX1463@shell.armlinux.org.uk> <20210322151823.GA2764@lst.de>
+References: <20210318045706.200458-1-hch@lst.de>
+ <20210318045706.200458-3-hch@lst.de>
+ <20210319170753.GV1463@shell.armlinux.org.uk>
+ <20210319175311.GW1463@shell.armlinux.org.uk> <20210322145403.GA30942@lst.de>
+ <20210322151503.GX1463@shell.armlinux.org.uk>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Message-ID: <224b110e-7c42-4e19-800e-e0fa23d3bf7f@physik.fu-berlin.de>
+Date:   Mon, 22 Mar 2021 17:09:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210322151823.GA2764@lst.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20210322151503.GX1463@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.149.100
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 04:18:23PM +0100, Christoph Hellwig wrote:
-> On Mon, Mar 22, 2021 at 03:15:03PM +0000, Russell King - ARM Linux admin wrote:
-> > It gets worse than that though - due to a change to remove
-> > pcibios_min_io from the generic code, moving it into the ARM
-> > architecture code, this has caused a regression that prevents the
-> > legacy resources being registered against the bus resource. So even
-> > if they are there, they cause probe failures. I haven't found a
-> > reasonable way to solve this yet, but until there is, there is no
-> > way that the PATA driver can be used as the "legacy mode" support
-> > is effectively done via the PCI code assigning virtual IO port
-> > resources.
-> > 
-> > I'm quite surprised that the CY82C693 even works on Alpha - I've
-> > asked for a lspci for that last week but nothing has yet been
-> > forthcoming from whoever responded to your patch for Alpha - so I
-> > can't compare what I'm seeing with what's happening with Alpha.
-> 
-> That sounds like something we could fix with a quirk for function 2
-> in the PCI resource assignment code.  Can you show what vendor and
-> device ID function 2 has so that I could try to come up with one?
+On 3/22/21 4:15 PM, Russell King - ARM Linux admin wrote:
+> I'm quite surprised that the CY82C693 even works on Alpha - I've
+> asked for a lspci for that last week but nothing has yet been
+> forthcoming from whoever responded to your patch for Alpha - so I
+> can't compare what I'm seeing with what's happening with Alpha.
 
-Something like this:
+Here is lspci on my DEC Alpha XP-1000:
 
+root@tsunami:~> lspci
+0000:00:07.0 ISA bridge: Contaq Microsystems 82c693
+0000:00:07.1 IDE interface: Contaq Microsystems 82c693
+0000:00:07.2 IDE interface: Contaq Microsystems 82c693
+0000:00:07.3 USB controller: Contaq Microsystems 82c693
+0000:00:0d.0 VGA compatible controller: Texas Instruments TVP4020 [Permedia 2] (rev 01)
+0001:01:03.0 Ethernet controller: Digital Equipment Corporation DECchip 21142/43 (rev 41)
+0001:01:06.0 SCSI storage controller: QLogic Corp. ISP1020 Fast-wide SCSI (rev 06)
+0001:01:08.0 PCI bridge: Digital Equipment Corporation DECchip 21152 (rev 03)
+0001:02:09.0 Ethernet controller: Intel Corporation 82541PI Gigabit Ethernet Controller (rev 05)
+root@tsunami:~>
 
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 953f15abc850ac..851918206c4f2d 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -1855,7 +1855,7 @@ int pci_setup_device(struct pci_dev *dev)
- 		 * addresses. These are not always echoed in BAR0-3, and
- 		 * BAR0-3 in a few cases contain junk!
- 		 */
--		if (class == PCI_CLASS_STORAGE_IDE) {
-+		if (class == PCI_CLASS_STORAGE_IDE && !dev->no_legacy_ide_bars) {
- 			u8 progif;
- 			pci_read_config_byte(dev, PCI_CLASS_PROG, &progif);
- 			if ((progif & 1) == 0) {
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 653660e3ba9ef1..c661462d894a5b 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5612,3 +5612,16 @@ static void apex_pci_fixup_class(struct pci_dev *pdev)
- }
- DECLARE_PCI_FIXUP_CLASS_HEADER(0x1ac1, 0x089a,
- 			       PCI_CLASS_NOT_DEFINED, 8, apex_pci_fixup_class);
-+
-+/*
-+ * CY82C693 splits the primary and secondar IDE channels over 2 functions, which
-+ * causes the PCI resource assignment algorithm to assign the legacy IDE I/O
-+ * regions to both of them.  Disable that assignment for function 2 here.
-+ */
-+static void quirk_cy82c693_legacy_resources(struct pci_dev *pdev)
-+{
-+	if (PCI_FUNC(pdev->devfn) == 2)
-+		pdev->no_legacy_ide_bars = 1;
-+}
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_CONTAQ, PCI_DEVICE_ID_CONTAQ_82C693,
-+		quirk_cy82c693_legacy_resources);
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 86c799c97b7796..7ca3f5ebbfade7 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -453,6 +453,7 @@ struct pci_dev {
- 	unsigned int	link_active_reporting:1;/* Device capable of reporting link active */
- 	unsigned int	no_vf_scan:1;		/* Don't scan for VFs after IOV enablement */
- 	unsigned int	no_command_memory:1;	/* No PCI_COMMAND_MEMORY */
-+	unsigned int	no_legacy_ide_bars:1;	/* do not assign legacy IDE BARs */
- 	pci_dev_flags_t dev_flags;
- 	atomic_t	enable_cnt;	/* pci_enable_device has been called */
- 
+It's using pata_cypress:
+
+root@tsunami:~> lsmod|grep cypress
+pata_cypress            3595  3
+libata                235071  2 ata_generic,pata_cypress
+root@tsunami:~
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+
