@@ -2,82 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CE8347019
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Mar 2021 04:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9946A347139
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Mar 2021 06:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234990AbhCXDZm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Mar 2021 23:25:42 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:37088 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234999AbhCXDZN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Mar 2021 23:25:13 -0400
-Received: from localhost.localdomain (unknown [182.149.161.110])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxqckDsVpgywsAAA--.7S2;
-        Wed, 24 Mar 2021 11:24:56 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-arch@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: [PATCH] MIPS: loongson64: fix bug when PAGE_SIZE > 16KB
-Date:   Wed, 24 Mar 2021 11:24:51 +0800
-Message-Id: <20210324032451.27569-1-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: AQAAf9CxqckDsVpgywsAAA--.7S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF4xKr4ruF43XFWUZr15XFb_yoWkGFgEgF
-        W7tw4IgryFkrn7Ca47XrW7WF4a9a48GF4fuFyUJr9ag3sYvFnxJF4rurWjk3W3XrnYvryr
-        Gw4rKry0yw1S9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VUjQBMtUUUUU==
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        id S235383AbhCXFrl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Mar 2021 01:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232971AbhCXFrh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Mar 2021 01:47:37 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E707CC061763;
+        Tue, 23 Mar 2021 22:47:36 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id j25so16533361pfe.2;
+        Tue, 23 Mar 2021 22:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3/V/wb+c7o+naCxYjw0DGXPXFDsGm4gbTHC17MJ5eDA=;
+        b=UORtWm7q81uVrGPPQlVIZPbeeLQ5Ne8SaeD8lCdBTGsiDw082WEG6F9ZzA44U7U20R
+         nV0g4QOZ3cVOGF1M34wItVLRDN6BWKP0dJcPaWHuOGdYTwmQc+ERekjLVjS75urj56/E
+         +hMTzpYLp2A3QEQEX5ppZPuGBaX5V/7rL+E1Jv1OGi9gnA7+cBlLdMcbIGTE+DShJwDC
+         valenRD79ZEs1slQeOKxDhcyC61Tb+Guz7lezNct2UqXfTHxPDfhxICDye2shpCqalF8
+         vULIh21cEGxjhmCP/NP68GNRFUgz+siJXtxwVQFLLrfq4gHPcJ0a2joISY4EfZduxX5i
+         Ytjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3/V/wb+c7o+naCxYjw0DGXPXFDsGm4gbTHC17MJ5eDA=;
+        b=oscFlj4XeavLqFj8WHkMOw9P/1X+sbv0I4JdLls2hYOYLx7+DHZNZ23hy5VGcNoB/x
+         QM6Gz6S2UaedA/OP6cGx0gqnDnkd4fI0aX94ttfWkGR9m7arZnT7P/NlJ4jae3dBsvvu
+         3VRRmX50xhNTZbaCk+xb59Kh3+bfmSkPd3icaj1pZYHhLA+9H4J/WJKtXDaXc9wyjVTi
+         AH3NEaURI6SAIDkayqmQi0hJFbaIn5q3ecOK95K1qrgvysh4Sfjyj64vtEmt67w1GotC
+         dv4rKBhwKGZOrqz9uiClzPIt3ZW1Vq0FVx5WNXUZKLZV0uVIM5Jsv/8mimr2SRO3RD1/
+         X/xw==
+X-Gm-Message-State: AOAM5313HS0tSB9gPlQXqv2AbCOsRyyUgWXtwGLr9yzVcvmuYa4d3MCu
+        7MB+kGo/QQZlMqeEvdTa25kyMK0KXXToMjsj5pw=
+X-Google-Smtp-Source: ABdhPJyRFizO8aX0S/3g4GodbO0+twLfEMtbSN263NpOZxooLbeo3ay8YVAxGGNOSILNHDlAEwauCjMZR6X+p8NNLe8=
+X-Received: by 2002:a63:fa4c:: with SMTP id g12mr1614518pgk.205.1616564856232;
+ Tue, 23 Mar 2021 22:47:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210318045706.200458-1-hch@lst.de> <20210318045706.200458-3-hch@lst.de>
+ <20210319170753.GV1463@shell.armlinux.org.uk> <20210319175311.GW1463@shell.armlinux.org.uk>
+ <20210322145403.GA30942@lst.de> <20210322151503.GX1463@shell.armlinux.org.uk>
+ <224b110e-7c42-4e19-800e-e0fa23d3bf7f@physik.fu-berlin.de>
+ <20210322170338.GZ1463@shell.armlinux.org.uk> <CAD4NMuZWoV0m85OyBDHLt+J8NYCV5wYx7fFZaivBNEgDnrN5xw@mail.gmail.com>
+ <20210323184321.GE1463@shell.armlinux.org.uk>
+In-Reply-To: <20210323184321.GE1463@shell.armlinux.org.uk>
+From:   Cye Borg <cyborgyn@gmail.com>
+Date:   Wed, 24 Mar 2021 06:47:25 +0100
+Message-ID: <CAD4NMubOZ019ESLVXbZXVYf1UGC7z9tQ4655TS68tSdwG9TTWA@mail.gmail.com>
+Subject: Re: [PATCH 02/10] ARM: disable CONFIG_IDE in footbridge_defconfig
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-ide@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When page size larger than 16KB, arguments "vaddr + size(16KB)" in
-"ioremap_page_range(vaddr, vaddr + size,...)" called by
-"add_legacy_isa_io" is not page-aligned.
+Sure, here it is:
+snow / # lspci -vxxx -s 7.0
+00:07.0 ISA bridge: Contaq Microsystems 82c693
+        Flags: bus master, medium devsel, latency 0
+        Kernel modules: pata_cypress
+00: 80 10 93 c6 47 00 80 02 00 00 01 06 00 00 80 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+40: 03 02 00 00 26 60 00 01 f0 60 00 80 80 71 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-As loongson64 needs at least page size 16KB to get rid of cache alias,
-and "vaddr" is 64KB-aligned, and 64KB is largest page size supported,
-rounding "size" up to PAGE_SIZE is enough for all page size supported.
+Best regards,
+Barnabas
 
-Fixes: 6d0068ad15e4 ("MIPS: Loongson64: Process ISA Node in DeviceTree")
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/loongson64/init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ps.: let me know, if anything else I can do.
 
-diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-index ed75f7971261..052cce6a8a99 100644
---- a/arch/mips/loongson64/init.c
-+++ b/arch/mips/loongson64/init.c
-@@ -82,7 +82,7 @@ static int __init add_legacy_isa_io(struct fwnode_handle *fwnode, resource_size_
- 		return -ENOMEM;
- 
- 	range->fwnode = fwnode;
--	range->size = size;
-+	range->size = size = round_up(size, PAGE_SIZE);
- 	range->hw_start = hw_start;
- 	range->flags = LOGIC_PIO_CPU_MMIO;
- 
--- 
-2.17.1
-
+On Tue, Mar 23, 2021 at 7:43 PM Russell King - ARM Linux admin
+<linux@armlinux.org.uk> wrote:
+>
+> On Mon, Mar 22, 2021 at 06:10:01PM +0100, Cye Borg wrote:
+> > PWS 500au:
+> >
+> > snow / # lspci -vvx -s 7.1
+> > 00:07.1 IDE interface: Contaq Microsystems 82c693 (prog-if 80 [ISA
+> > Compatibility mode-only controller, supports bus mastering])
+> >         Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop-
+> > ParErr+ Stepping- SERR- FastB2B- DisINTx-
+> >         Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium
+> > >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+> >         Latency: 0
+> >         Interrupt: pin A routed to IRQ 0
+> >         Region 0: I/O ports at 01f0 [size=8]
+> >         Region 1: I/O ports at 03f4
+> >         Region 4: I/O ports at 9080 [size=16]
+> >         Kernel driver in use: pata_cypress
+> >         Kernel modules: pata_cypress
+> > 00: 80 10 93 c6 45 00 80 02 00 80 01 01 00 00 80 00
+> > 10: f1 01 00 00 f5 03 00 00 00 00 00 00 00 00 00 00
+> > 20: 81 90 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > 30: 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00
+> >
+> > snow / # lspci -vvx -s 7.2
+> > 00:07.2 IDE interface: Contaq Microsystems 82c693 (prog-if 00 [ISA
+> > Compatibility mode-only controller])
+> >         Control: I/O+ Mem- BusMaster+ SpecCycle- MemWINV- VGASnoop-
+> > ParErr+ Stepping- SERR- FastB2B- DisINTx-
+> >         Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium
+> > >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+> >         Latency: 0
+> >         Interrupt: pin B routed to IRQ 0
+> >         Region 0: I/O ports at 0170 [size=8]
+> >         Region 1: I/O ports at 0374
+> >         Region 4: Memory at 0c240000 (32-bit, non-prefetchable)
+> > [disabled] [size=64K]
+> >         Kernel modules: pata_cypress
+> > 00: 80 10 93 c6 45 00 80 02 00 00 01 01 00 00 80 00
+> > 10: 71 01 00 00 75 03 00 00 00 00 00 00 00 00 00 00
+> > 20: 00 00 24 0c 00 00 00 00 00 00 00 00 00 00 00 00
+> > 30: 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00
+>
+> Thanks very much.
+>
+> Could I also ask for the output of:
+>
+> # lspci -vxxx -s 7.0
+>
+> as well please - this will dump all 256 bytes for the ISA bridge, which
+> contains a bunch of configuration registers. Thanks.
+>
+> --
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
