@@ -2,93 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A8B346F8F
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Mar 2021 03:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CE8347019
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Mar 2021 04:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbhCXCdL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Mar 2021 22:33:11 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:50618 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbhCXCcw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Mar 2021 22:32:52 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 507D8580;
-        Wed, 24 Mar 2021 03:32:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1616553171;
-        bh=SPT6PlC2qxMevfzY2I/dHdE0/CO5UmBJp6xZzw8hxQw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OYOlaFZOtr5vJuMlYTG/Ji3sqhclbrRzX8VDYSZuW4NB8bsNPWn3nq2G+Crd1aZd/
-         bcznrGviJr0/F3309SLpJK9LfpqrpHo/z60Sn7RjHEyLq53XZbwQujdV9ZalUXcTgd
-         VKBIXk07KAXxn2aYQ3Ka/3hEE33Uhj0aqnp44zs4=
-Date:   Wed, 24 Mar 2021 04:32:09 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        od@zcrc.me, Sam Ravnborg <sam@ravnborg.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] Fixes to bridge/panel and ingenic-drm
-Message-ID: <YFqkqQnTNvb0/Ng3@pendragon.ideasonboard.com>
-References: <20210124085552.29146-1-paul@crapouillou.net>
- <DUC1PQ.KO33KJE3BP5L@crapouillou.net>
- <09JFQQ.5A8HP2TTVT5Z1@crapouillou.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <09JFQQ.5A8HP2TTVT5Z1@crapouillou.net>
+        id S234990AbhCXDZm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Mar 2021 23:25:42 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:37088 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234999AbhCXDZN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 23 Mar 2021 23:25:13 -0400
+Received: from localhost.localdomain (unknown [182.149.161.110])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxqckDsVpgywsAAA--.7S2;
+        Wed, 24 Mar 2021 11:24:56 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-arch@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Subject: [PATCH] MIPS: loongson64: fix bug when PAGE_SIZE > 16KB
+Date:   Wed, 24 Mar 2021 11:24:51 +0800
+Message-Id: <20210324032451.27569-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: AQAAf9CxqckDsVpgywsAAA--.7S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF4xKr4ruF43XFWUZr15XFb_yoWkGFgEgF
+        W7tw4IgryFkrn7Ca47XrW7WF4a9a48GF4fuFyUJr9ag3sYvFnxJF4rurWjk3W3XrnYvryr
+        Gw4rKry0yw1S9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUjQBMtUUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 04:03:00PM +0000, Paul Cercueil wrote:
-> Le mer. 24 févr. 2021 à 13:44, Paul Cercueil a écrit :
-> > Hi,
-> > 
-> > Some feedback for patches 1-3? Laurent?
-> 
-> 1-month anniversary ping :)
+When page size larger than 16KB, arguments "vaddr + size(16KB)" in
+"ioremap_page_range(vaddr, vaddr + size,...)" called by
+"add_legacy_isa_io" is not page-aligned.
 
-Haaappy birth-day toooo youuuuuuu :-)
+As loongson64 needs at least page size 16KB to get rid of cache alias,
+and "vaddr" is 64KB-aligned, and 64KB is largest page size supported,
+rounding "size" up to PAGE_SIZE is enough for all page size supported.
 
-Patches reviewed.
+Fixes: 6d0068ad15e4 ("MIPS: Loongson64: Process ISA Node in DeviceTree")
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+---
+ arch/mips/loongson64/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Le dim. 24 janv. 2021 à 8:55, Paul Cercueil a  écrit :
-> >> Hi,
-> >> 
-> >> Here are three independent fixes. The first one addresses a
-> >> use-after-free in bridge/panel.c; the second one addresses a
-> >> use-after-free in the ingenic-drm driver; finally, the third one makes
-> >> the ingenic-drm driver work again on older Ingenic SoCs.
-> >> 
-> >> Changes from v2:
-> >> - patch [1/4] added a FIXME.
-> >> - patch [2/4] is new. It introduces a drmm_plain_simple_encoder_alloc()
-> >>   macro that will be used in patch [3/4].
-> >> - patch [3/4] uses the macro introduced in patch [2/4].
-> >> - patch [4/4] is unmodified.
-> >> 
-> >> Note to linux-stable guys: patch [v2 2/3] will only apply on the current
-> >> drm-misc-next branch, to fix it for v5.11 and older kernels, use the V1
-> >> of that patch.
-> >> 
-> >> Cheers,
-> >> -Paul
-> >> 
-> >> Paul Cercueil (4):
-> >>   drm: bridge/panel: Cleanup connector on bridge detach
-> >>   drm/simple_kms_helper: Add macro drmm_plain_simple_encoder_alloc()
-> >>   drm/ingenic: Register devm action to cleanup encoders
-> >>   drm/ingenic: Fix non-OSD mode
-> >> 
-> >>  drivers/gpu/drm/bridge/panel.c            | 12 +++++++++++
-> >>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 26 +++++++++++------------
-> >>  include/drm/drm_simple_kms_helper.h       | 17 +++++++++++++++
-> >>  3 files changed, 42 insertions(+), 13 deletions(-)
-> >> 
-
+diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+index ed75f7971261..052cce6a8a99 100644
+--- a/arch/mips/loongson64/init.c
++++ b/arch/mips/loongson64/init.c
+@@ -82,7 +82,7 @@ static int __init add_legacy_isa_io(struct fwnode_handle *fwnode, resource_size_
+ 		return -ENOMEM;
+ 
+ 	range->fwnode = fwnode;
+-	range->size = size;
++	range->size = size = round_up(size, PAGE_SIZE);
+ 	range->hw_start = hw_start;
+ 	range->flags = LOGIC_PIO_CPU_MMIO;
+ 
 -- 
-Regards,
+2.17.1
 
-Laurent Pinchart
