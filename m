@@ -2,139 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04544347F63
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Mar 2021 18:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0383F348615
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Mar 2021 01:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237055AbhCXRc7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Mar 2021 13:32:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52552 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236428AbhCXRcn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Mar 2021 13:32:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 37D33619DC;
-        Wed, 24 Mar 2021 17:32:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616607163;
-        bh=vwFmLhIbpBit7slP5Tgq8iugG6lF7uxqcxCcj5anb1s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=T66PHbzA4HZLyDpwGOkX+dflulPJCr9OD+q4niugzUsfMiI9RRAGz5n7CWXc2WtXR
-         XbuhrFmqKLpIwxKmUJDvEVxs0mhwEIxcXsqNURnI1d7/3eFvgOm8abHDCM49/H3Bcf
-         qvL2xptThHPDmYcaGptEqEHOkGjiA6p0x7zd8Yv9Vcd68HCUOSUZFJDQAGNgtHdf8Q
-         rRu34o4uRbPglSg1LqlwqUB3wXov+O83CJ50wVik8yYYAo0m4PxVbBJR5qtZ7tTQ46
-         E7J01J6cM1sxGhyKXm6t2MC4vKiuIMFxUa4kcLH4QmvCSF/wB32I2fLk7RvUSZZCGe
-         Poh8Mv+K1J1hw==
-Received: by mail-ed1-f48.google.com with SMTP id w18so28625267edc.0;
-        Wed, 24 Mar 2021 10:32:43 -0700 (PDT)
-X-Gm-Message-State: AOAM530Q+K5XB9HE+hwauwMO1z7JeCszeKEkWuze4JFAQEb4T0CeuhUR
-        6MavYDV1BrnnREluyatFMCuGD1oaKoaxjTU4mg==
-X-Google-Smtp-Source: ABdhPJy7YCVuRWwXQo13DaEdS0eUAv22DscISVepsqz2isMzM1EIDsAzWe5iU1QCiAYfFd5rzpKJR8h0mAzTPfMAUrg=
-X-Received: by 2002:aa7:d3d8:: with SMTP id o24mr4667708edr.165.1616607161795;
- Wed, 24 Mar 2021 10:32:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210309000247.2989531-4-danielwa@cisco.com> <5f865584-09c9-d21f-ffb7-23cf07cf058e@csgroup.eu>
- <20210309212944.GR109100@zorba> <e4899874-1684-fa1b-443e-f4e478e05e31@csgroup.eu>
-In-Reply-To: <e4899874-1684-fa1b-443e-f4e478e05e31@csgroup.eu>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 24 Mar 2021 11:32:30 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKm76jRQYDcu3rGyUWKPLspoO=EZW_WFy=zAK+m_JYCTg@mail.gmail.com>
-Message-ID: <CAL_JsqKm76jRQYDcu3rGyUWKPLspoO=EZW_WFy=zAK+m_JYCTg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] powerpc: convert config files to generic cmdline
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Daniel Walker <danielwa@cisco.com>, Will Deacon <will@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        X86 ML <x86@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        xe-linux-external@cisco.com, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S239419AbhCYAvf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Mar 2021 20:51:35 -0400
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:54253 "EHLO
+        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239410AbhCYAvF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Mar 2021 20:51:05 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id E4CF71525;
+        Wed, 24 Mar 2021 20:50:58 -0400 (EDT)
+Received: from imap1 ([10.202.2.51])
+  by compute6.internal (MEProxy); Wed, 24 Mar 2021 20:50:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm1; bh=zjatyvvSSE46LUdl98TXIwR6kX6pq3G
+        UAfknNyuutZM=; b=xGbs5TbNM2wBAWrIdMOdRUUzzyVyoMLN5O+H/tc8f0qX0mO
+        9C+jUVpckEclXRJHD2JStmJNFMB8loOwo6NuAl6SKwx+T/LGlQRewcPlXQOfCR8F
+        dGDYKIXUk2w3U0HoUJZ49kVsmXB0AM+FlsgdPQj5/FeodaFmGcvK8Ogi1LfW+OMa
+        39GVevwPrtH8zvrS51w9qGmzepWV9LR7Ve4ZKGKX0ShbFHR3jgY3ivKF2HPZ01GR
+        IE8KM6yaQ/LF71ZHFrw7YP86Ay0FJ9KiOsDF+oKLPLqk+rmzMcVhnvV0G9MeLUUq
+        5PPICBHUOQZXSl09SjaNeeI9a/oVZA64jcSH7bQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=zjatyv
+        vSSE46LUdl98TXIwR6kX6pq3GUAfknNyuutZM=; b=kdwzp3nrbVsWe/nv5dw2Ef
+        WW7UtbSqn+9uy6LIZ0aty8nfNxnrQnOKD76YkgrghN2smYklAmmJaJ1h5k8F3oR5
+        aYcRvuGgmnyciZpLbKb6ykdYUUGEqcKTf53XPG8yMvu2StrYv/qdkRCRvSoKDWlC
+        OrR7bii0xe8I+sOE72h41riSa3g3jP1Fwq5TSFjkpyj52dcnmSpGB3ZR1I5STlx9
+        hNAW6xejxiWXMVf9/Rvc4O2ulRV6gKXoqeTxFhPc6LWC9EeoxHOWA71k8UnWADBJ
+        AzO28cnixDNhZF5hkvaxmcS9APd6xKc8ZCzZsqEy8K0wdmDuH9bxpb4s28XKWOPA
+        ==
+X-ME-Sender: <xms:cN5bYPg0Rj_s_VWytEEsgni7esOPIdIje8tIqNoVSH5cYZEpaRlgxA>
+    <xme:cN5bYMB5ETEm2vTvfaqxGIje5h1TMqrCOHaWce2pOhnU9Azzd5x3vc-lqWdwrkctw
+    SJiYG97nladjL0xEjI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudegledgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdflihgr
+    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeekleehtefhhefftddtleeiveefieehueduieefueegueei
+    leeitdeujeehheehudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:cd5bYPGuM0yKVk7jb9M7l1Dz4UZuqLOWVqmzep4KTwUB14iFEmy0tw>
+    <xmx:cd5bYMRuPWrb3JAMdKKtMrTiTGFzdwBn5chm92CiJG1CePBm9FIzzw>
+    <xmx:cd5bYMwFoL4di2U1Q6WkhAm02DK_n1M3oOSI2wSkR5xK-PB6mROC0w>
+    <xmx:ct5bYIfIW0Kba--7zmV3uWGLw-6ztj-bbh0tc3lZZTe9nHU32yz94gb5ciw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DA81313004BF; Wed, 24 Mar 2021 20:50:56 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-273-g8500d2492d-fm-20210323.002-g8500d249
+Mime-Version: 1.0
+Message-Id: <6e8521f8-80e3-49c8-b85c-ccb2c7f349b5@www.fastmail.com>
+In-Reply-To: <20210324032451.27569-1-huangpei@loongson.cn>
+References: <20210324032451.27569-1-huangpei@loongson.cn>
+Date:   Thu, 25 Mar 2021 08:50:36 +0800
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Huang Pei" <huangpei@loongson.cn>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     "Bibo Mao" <maobibo@loongson.cn>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        "paulburton@kernel.org" <paulburton@kernel.org>,
+        "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+        "Gao Juxin" <gaojuxin@loongson.cn>,
+        "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Jinyang He" <hejinyang@loongson.cn>
+Subject: Re: [PATCH] MIPS: loongson64: fix bug when PAGE_SIZE > 16KB
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 11:01 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 09/03/2021 =C3=A0 22:29, Daniel Walker a =C3=A9crit :
-> > On Tue, Mar 09, 2021 at 08:47:09AM +0100, Christophe Leroy wrote:
-> >>
-> >>
-> >> Le 09/03/2021 =C3=A0 01:02, Daniel Walker a =C3=A9crit :
-> >>> This is a scripted mass convert of the config files to use
-> >>> the new generic cmdline. There is a bit of a trim effect here.
-> >>> It would seems that some of the config haven't been trimmed in
-> >>> a while.
-> >>
-> >> If you do that in a separate patch, you loose bisectability.
-> >>
-> >> I think it would have been better to do things in a different way, mor=
-e or less like I did in my series:
-> >> 1/ Provide GENERIC cmdline at the same functionnality level as what is
-> >> spread in the different architectures
-> >> 2/ Convert architectures to the generic with least churn.
-> >> 3/ Add new features to the generic
-> >
-> > You have to have the churn eventually, no matter how you do it. The onl=
-y way you
-> > don't have churn is if you never upgrade the feature set.
-> >
-> >
-> >>>
-> >>> The bash script used to convert is as follows,
-> >>>
-> >>> if [[ -z "$1" || -z "$2" ]]; then
-> >>>           echo "Two arguments are needed."
-> >>>           exit 1
-> >>> fi
-> >>> mkdir $1
-> >>> cp $2 $1/.config
-> >>> sed -i 's/CONFIG_CMDLINE=3D/CONFIG_CMDLINE_BOOL=3Dy\nCONFIG_CMDLINE_P=
-REPEND=3D/g' $1/.config
-> >>
-> >> This is not correct.
-> >>
-> >> By default, on powerpc the provided command line is used only if the b=
-ootloader doesn't provide one.
-> >>
-> >> Otherwise:
-> >> - the builtin command line is appended to the one provided by the boot=
-loader
-> >> if CONFIG_CMDLINE_EXTEND is selected
-> >> - the builtin command line replaces to the one provided by the bootloa=
-der if
-> >> CONFIG_CMDLINE_FORCE is selected
-> >
-> > I think my changes maintain most of this due to the override of
-> > CONFIG_CMDLINE_PREPEND. This is an upgrade and the inflexibility in pow=
-erpc is
-> > an example of why these changes were created in the first place.
->
-> "inflexibility in powerpc" : Can you elaborate ?
->
-> >
-> > For example , say the default command line is "root=3D/dev/issblk0" fro=
-m iss476
-> > platform. And the bootloader adds "root=3D/dev/sda1"
-> >
-> > The result is <prepend><bootloader><append>.
->
->
-> I'm still having hard time understanding the benefit of having both <prep=
-end> and <append>.
-> Could you please provide a complete exemple from real life, ie what exact=
-ly the problem is and what
-> it solves ?
 
-It doesn't matter. We already have both cases and 'extend' has meant either=
- one.
 
-What someone wants is policy and the kernel shouldn't be defining the polic=
-y.
+On Wed, Mar 24, 2021, at 11:24 AM, Huang Pei wrote:
+> When page size larger than 16KB, arguments "vaddr + size(16KB)" in
+> "ioremap_page_range(vaddr, vaddr + size,...)" called by
+> "add_legacy_isa_io" is not page-aligned.
+> 
+> As loongson64 needs at least page size 16KB to get rid of cache alias,
+> and "vaddr" is 64KB-aligned, and 64KB is largest page size supported,
+> rounding "size" up to PAGE_SIZE is enough for all page size supported.
+> 
+> Fixes: 6d0068ad15e4 ("MIPS: Loongson64: Process ISA Node in DeviceTree")
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
 
-Rob
+Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+> ---
+>  arch/mips/loongson64/init.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+> index ed75f7971261..052cce6a8a99 100644
+> --- a/arch/mips/loongson64/init.c
+> +++ b/arch/mips/loongson64/init.c
+> @@ -82,7 +82,7 @@ static int __init add_legacy_isa_io(struct 
+> fwnode_handle *fwnode, resource_size_
+>  		return -ENOMEM;
+>  
+>  	range->fwnode = fwnode;
+> -	range->size = size;
+> +	range->size = size = round_up(size, PAGE_SIZE);
+>  	range->hw_start = hw_start;
+>  	range->flags = LOGIC_PIO_CPU_MMIO;
+>  
+> -- 
+> 2.17.1
+> 
+>
+
+-- 
+- Jiaxun
