@@ -2,96 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DBA349265
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Mar 2021 13:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BF6349341
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Mar 2021 14:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbhCYMuK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Mar 2021 08:50:10 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34996 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229524AbhCYMuG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 25 Mar 2021 08:50:06 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxGcr6hlxgELMAAA--.2323S2;
-        Thu, 25 Mar 2021 20:50:03 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v3] MIPS/bpf: Enable bpf_probe_read{, str}() on MIPS again
-Date:   Thu, 25 Mar 2021 20:50:01 +0800
-Message-Id: <1616676601-14478-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9CxGcr6hlxgELMAAA--.2323S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw4rWFy3KF4fJF4kuFWUtwb_yoW8CF4xpa
-        nYyas3Kr4UWrW5GF4vy3yxuryrJrZ7CrW3WF4ftF4Fvas09r98Xr4xKa13tryUZr4vqw1a
-        93yUZa4UGaykCrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xr1l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU1L0eDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S230101AbhCYNq1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Mar 2021 09:46:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56918 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230250AbhCYNp5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 25 Mar 2021 09:45:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C67A061A26;
+        Thu, 25 Mar 2021 13:45:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616679957;
+        bh=Wa6/rM9ja442iXJV64DujnU8oEP6I6Jf3CVDtM9/i+g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R92Bx0fqbzYkm8Er3iQNKVrTeQmKU6F6bj3hicyw3raObpYhvb1Q36/30NF+6Jls1
+         r2qRxcrX5cZWBw41nb5fpAEdOsRCRz7lwltRpAxL5hDLahItz+E7A5oZSUsStWWjSO
+         mUbAUu5h7IycV2aQau/SEyRKXAJWNEFHCDaDt2d/E6F9b2jPTxSwwi620R/eXr28xK
+         ofxuAmNzm1wcohZoxMiPKZXvTahzlWDYLFVraXZzUnmUiEerLpmtUz/brzNbaB9Muk
+         Jl41LObyMgGMcUR25NAEnSFk46QOmcoBLUKsR0CmoLYqNHF3wbsmd2pm7NrIxshYNz
+         GDtyTXqXof6hg==
+Received: by mail-ej1-f41.google.com with SMTP id u21so2951119ejo.13;
+        Thu, 25 Mar 2021 06:45:56 -0700 (PDT)
+X-Gm-Message-State: AOAM531sLb03pKPZD4kmQRX/M+cMXcQ02ndBlzz1psCjUcwwTVd/sWgl
+        xyVZyIdMLT6aiOl/IEAbBmGVWrwaKh/ZiXXQGw==
+X-Google-Smtp-Source: ABdhPJzrbmmUIm7f4YUAYsUZkVYauIE7ktUpFHMRo4/PQoiQ4okxsC+M9Sv9SxDungP1jD6RUs8DIYlDznCvrylYJ5Q=
+X-Received: by 2002:a17:906:7f84:: with SMTP id f4mr9338699ejr.525.1616679955249;
+ Thu, 25 Mar 2021 06:45:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210309000247.2989531-4-danielwa@cisco.com> <5f865584-09c9-d21f-ffb7-23cf07cf058e@csgroup.eu>
+ <20210309212944.GR109100@zorba> <e4899874-1684-fa1b-443e-f4e478e05e31@csgroup.eu>
+ <CAL_JsqKm76jRQYDcu3rGyUWKPLspoO=EZW_WFy=zAK+m_JYCTg@mail.gmail.com> <20fd7d44-8c39-48bc-25c3-990be9d9d911@csgroup.eu>
+In-Reply-To: <20fd7d44-8c39-48bc-25c3-990be9d9d911@csgroup.eu>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 25 Mar 2021 07:45:41 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKmUF_obwojLF1ia9+w7ba3yva2Vax=nth-BqKnirt99A@mail.gmail.com>
+Message-ID: <CAL_JsqKmUF_obwojLF1ia9+w7ba3yva2Vax=nth-BqKnirt99A@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] powerpc: convert config files to generic cmdline
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Daniel Walker <danielwa@cisco.com>, Will Deacon <will@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        X86 ML <x86@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        xe-linux-external@cisco.com, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit 0ebeea8ca8a4 ("bpf: Restrict bpf_probe_read{, str}() only to
-archs where they work"), bpf_probe_read{, str}() functions were no longer
-available on MIPS, so there exist some errors when running bpf program:
+On Thu, Mar 25, 2021 at 6:06 AM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 24/03/2021 =C3=A0 18:32, Rob Herring a =C3=A9crit :
+> > On Wed, Mar 24, 2021 at 11:01 AM Christophe Leroy
+> > <christophe.leroy@csgroup.eu> wrote:
+> >>
+> >>
+> >>
+> >> Le 09/03/2021 =C3=A0 22:29, Daniel Walker a =C3=A9crit :
+> >>> On Tue, Mar 09, 2021 at 08:47:09AM +0100, Christophe Leroy wrote:
+> >>>>
+> >>>>
+> >>>> Le 09/03/2021 =C3=A0 01:02, Daniel Walker a =C3=A9crit :
+> >>>>> This is a scripted mass convert of the config files to use
+> >>>>> the new generic cmdline. There is a bit of a trim effect here.
+> >>>>> It would seems that some of the config haven't been trimmed in
+> >>>>> a while.
+> >>>>
+> >>>> If you do that in a separate patch, you loose bisectability.
+> >>>>
+> >>>> I think it would have been better to do things in a different way, m=
+ore or less like I did in my series:
+> >>>> 1/ Provide GENERIC cmdline at the same functionnality level as what =
+is
+> >>>> spread in the different architectures
+> >>>> 2/ Convert architectures to the generic with least churn.
+> >>>> 3/ Add new features to the generic
+> >>>
+> >>> You have to have the churn eventually, no matter how you do it. The o=
+nly way you
+> >>> don't have churn is if you never upgrade the feature set.
+> >>>
+> >>>
+> >>>>>
+> >>>>> The bash script used to convert is as follows,
+> >>>>>
+> >>>>> if [[ -z "$1" || -z "$2" ]]; then
+> >>>>>            echo "Two arguments are needed."
+> >>>>>            exit 1
+> >>>>> fi
+> >>>>> mkdir $1
+> >>>>> cp $2 $1/.config
+> >>>>> sed -i 's/CONFIG_CMDLINE=3D/CONFIG_CMDLINE_BOOL=3Dy\nCONFIG_CMDLINE=
+_PREPEND=3D/g' $1/.config
+> >>>>
+> >>>> This is not correct.
+> >>>>
+> >>>> By default, on powerpc the provided command line is used only if the=
+ bootloader doesn't provide one.
+> >>>>
+> >>>> Otherwise:
+> >>>> - the builtin command line is appended to the one provided by the bo=
+otloader
+> >>>> if CONFIG_CMDLINE_EXTEND is selected
+> >>>> - the builtin command line replaces to the one provided by the bootl=
+oader if
+> >>>> CONFIG_CMDLINE_FORCE is selected
+> >>>
+> >>> I think my changes maintain most of this due to the override of
+> >>> CONFIG_CMDLINE_PREPEND. This is an upgrade and the inflexibility in p=
+owerpc is
+> >>> an example of why these changes were created in the first place.
+> >>
+> >> "inflexibility in powerpc" : Can you elaborate ?
+> >>
+> >>>
+> >>> For example , say the default command line is "root=3D/dev/issblk0" f=
+rom iss476
+> >>> platform. And the bootloader adds "root=3D/dev/sda1"
+> >>>
+> >>> The result is <prepend><bootloader><append>.
+> >>
+> >>
+> >> I'm still having hard time understanding the benefit of having both <p=
+repend> and <append>.
+> >> Could you please provide a complete exemple from real life, ie what ex=
+actly the problem is and what
+> >> it solves ?
+> >
+> > It doesn't matter. We already have both cases and 'extend' has meant ei=
+ther one.
+> >
+> > What someone wants is policy and the kernel shouldn't be defining the p=
+olicy.
+> >
+>
+> Ok, so you agree we don't need to provide two CMDLINE, one to be appended=
+ and one to be prepended.
 
-root@linux:/home/loongson/bcc# python examples/tracing/task_switch.py
-bpf: Failed to load program: Invalid argument
-[...]
-11: (85) call bpf_probe_read#4
-unknown func bpf_probe_read#4
-[...]
-Exception: Failed to load BPF program count_sched: Invalid argument
+Well, I wasn't thinking about that part of it, but yes as long as no
+arch currently needs that.
 
-ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE should be restricted to archs
-with non-overlapping address ranges, but they can overlap in EVA mode
-on MIPS, so select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA in
-arch/mips/Kconfig, otherwise the bpf old helper bpf_probe_read() will
-not be available.
+> Let's only provide once CMDLINE as of today, and ask the user to select w=
+hether he wants it appended
+> or prepended or replacee. Then no need to change all existing config to r=
+ename CONFIG_CMDLINE into
+> either of the new ones.
+>
+> That's the main difference between my series and Daniel's series. So I'll=
+ finish taking Will's
+> comment into account and we'll send out a v3 soon.
 
-This is similar with the commit d195b1d1d119 ("powerpc/bpf: Enable
-bpf_probe_read{, str}() on powerpc again").
+Great.
 
-Fixes: 0ebeea8ca8a4 ("bpf: Restrict bpf_probe_read{, str}() only to archs where they work")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-
-v3: Select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA
-    on MIPS.
-
-v2: update the commit message to fix typos found by
-    Sergei Shtylyov, thank you!
-
-    not longer --> no longer
-    there exists --> there exist
-
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 160b3a8..32158c2 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -6,6 +6,7 @@ config MIPS
- 	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_KCOV
-+	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA
- 	select ARCH_HAS_PTE_SPECIAL if !(32BIT && CPU_HAS_RIXI)
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--- 
-2.1.0
-
+Rob
