@@ -2,113 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC95F34ADC6
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 18:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEEB34AE73
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 19:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbhCZRqI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Mar 2021 13:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbhCZRpr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Mar 2021 13:45:47 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0636BC0613AA;
-        Fri, 26 Mar 2021 10:45:47 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id bx7so7214234edb.12;
-        Fri, 26 Mar 2021 10:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HP9NF/F/VoCDRFLsA2MzGotnBAMPYRt3VzYsF38PQ/I=;
-        b=KgCnW/aAUlyl+biTmFWMzPhlT5dnB6BQEgvjtJ0TdcnGeX+GOUNR0p/HufpvHpNXMZ
-         NtBq5gqL8cBaoOfnpz2023+lKFAinFqV2/Wz+j1xEzoMihRaMYBAqZbL16Svysj6ep3X
-         HNcnG7ImlOsL0LG0I3Vk8DsZ/VIXMTpPFp8+5rjuwXnQOt0eTUANZ8HXJKRPpD88yZlk
-         ody6n0Ierft1cNi0sHkZLspIyx9snYvkEbaGb7mEtDmuGdEmgAtZru5hZihvvqIowF21
-         a3garIDz86jCm9NvgLFlerAgCV/TdjLypMXvvJJLZMHmgEC6BId4QXmbmV09n4thaeEv
-         4txw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HP9NF/F/VoCDRFLsA2MzGotnBAMPYRt3VzYsF38PQ/I=;
-        b=q+dxgkfM2PqC7gDKOuBOv0aopaCJVuAyjyd0yOpbGCZTvTbMUalPv97JWyB7pI/6Vy
-         M4NXAYSPVcDxm+jH1L/p0/j9KE+EL3pKwKN02ts1phINdB5BdSA/mxrvr6Y7Zk7G2LJQ
-         IVYOIngun2eGskYnjZzw2HS/nl8Y/xMQwuhA7Wg5ryKbmiHP32s5+Hjj9kcK0w712FlJ
-         SolaqeAmO8rTKnLNi0RAQ7FM0E+P4t6ZfaadViYcKrJHWVnsjOfvVJXleDmMa3cZcMbK
-         Jv4A+qJ8S/aohVpzsQm9+N2PXK/7RtTbxqJPr225HPWgx5AturL5bw84+PHQyH/kibVE
-         keDg==
-X-Gm-Message-State: AOAM532ETpP2O56H6rLSTLVYAoXw4pIRgf+7Comgmjn7NkrfaedmMyBQ
-        3fOnbvqJzEgNH1MPzHBRd4lTNqSsUak=
-X-Google-Smtp-Source: ABdhPJxsyOw8OHy5rn980YHIsaB99WG4lxL+wVbCSSFSpGf0ASAx1p8HsagEsST8sIRvRdK3FaYMQg==
-X-Received: by 2002:aa7:dad7:: with SMTP id x23mr16397200eds.292.1616780745354;
-        Fri, 26 Mar 2021 10:45:45 -0700 (PDT)
-Received: from [10.230.29.202] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id ga28sm4018738ejc.82.2021.03.26.10.45.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Mar 2021 10:45:44 -0700 (PDT)
-Subject: Re: [PATCH v2] MIPS: Add support for CONFIG_DEBUG_VIRTUAL
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Liangliang Huang <huanglllzu@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yousong Zhou <yszhou4tech@gmail.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Michel Lespinasse <walken@google.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20210323222103.34225-1-f.fainelli@gmail.com>
- <20210325095739.GB5775@alpha.franken.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <439e06b6-d26a-e43d-1e09-c8fd41aea6ed@gmail.com>
-Date:   Fri, 26 Mar 2021 10:45:39 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.9.0
+        id S230187AbhCZSW2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Mar 2021 14:22:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33874 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230213AbhCZSWT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 26 Mar 2021 14:22:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E74AC61A42;
+        Fri, 26 Mar 2021 18:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616782938;
+        bh=jLGR+NyehSUNZVl5kh+mHpluJzlAfSJXFMkJ5QFHPLQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FGNMBA2S+sqoHCfdgN2xPFLdvY7w1ubfGycnYplAm5Xuh33eTfteivyAovekbWA9w
+         yfld9bMxHjPtk6Hhklpu7oYZIbdFL1ljaGBXqC5JDt9yKBlTX7kAx1myFZ7wuAQTTU
+         jVdlWWeH+3FguNaGmIau3X7NuPSKeRLNaH0udlAHqHLaTI2Nh59I0ILOAppKs8o8/D
+         19qHEC4fCaQI1gejM6rW9sLEbEJ8sx1EuiN8eQS9UBjNdK2v5TM+H9geJCe0fg2Uua
+         hTXju+20flSq1dpCUtji3RjvYCP8L0pwpr+4Ldr1Bi1ZJpawqdb9WedZVTTF9eqZAI
+         +O7oIbfohruuw==
+Received: by mail-ed1-f43.google.com with SMTP id z1so7357057edb.8;
+        Fri, 26 Mar 2021 11:22:17 -0700 (PDT)
+X-Gm-Message-State: AOAM531NN1LxYZLJOxCneNWdSgtk6d+MKHDjSzrgTmSVmvn9CQTFQ7W7
+        qmCMJiyxN2fCYXZ7HmhCfaumQr7mc30XpZJJ6Q==
+X-Google-Smtp-Source: ABdhPJzge00Chol2o+zcxsCiGngmRlWpn0gXJpTNd7PjgqCsH3Y9wanEoRXm0NadwDvEZ6TqBdnoQxNSvLg0UG9tpaw=
+X-Received: by 2002:a05:6402:c0f:: with SMTP id co15mr16452718edb.373.1616782936426;
+ Fri, 26 Mar 2021 11:22:16 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210325095739.GB5775@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1616765869.git.christophe.leroy@csgroup.eu>
+ <7362e4f6a5f5b79e6ad3fd3cec3183a4a283f7fc.1616765870.git.christophe.leroy@csgroup.eu>
+ <CAL_Jsq+LF-s5K4Jwd5jCHrU8271L5WCiGb0tR7aTUa8ddHF1YQ@mail.gmail.com> <c18ef8f7-8e79-a9d3-3853-f8b992a4fc93@csgroup.eu>
+In-Reply-To: <c18ef8f7-8e79-a9d3-3853-f8b992a4fc93@csgroup.eu>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 26 Mar 2021 12:22:04 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJOFHmfRNAXgm6Gbe3qTUwnUTroxPzPmmLJUN7ciM2z9g@mail.gmail.com>
+Message-ID: <CAL_JsqJOFHmfRNAXgm6Gbe3qTUwnUTroxPzPmmLJUN7ciM2z9g@mail.gmail.com>
+Subject: Re: [PATCH v3 05/17] arm: Convert to GENERIC_CMDLINE
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicolas Pitre <nico@fluxnic.net>
+Cc:     Will Deacon <will@kernel.org>, Daniel Walker <danielwa@cisco.com>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>, devicetree@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        microblaze <monstr@monstr.eu>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        nios2 <ley.foon.tan@intel.com>,
+        Openrisc <openrisc@lists.librecores.org>,
+        linux-hexagon@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org,
+        SH-Linux <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
++Nico who added the line in question.
 
+On Fri, Mar 26, 2021 at 9:50 AM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 26/03/2021 =C3=A0 16:47, Rob Herring a =C3=A9crit :
+> > On Fri, Mar 26, 2021 at 7:44 AM Christophe Leroy
+> > <christophe.leroy@csgroup.eu> wrote:
+> >>
+> >> This converts the architecture to GENERIC_CMDLINE.
+> >>
+> >> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> >> ---
+> >>   arch/arm/Kconfig              | 38 +--------------------------------=
+--
+> >>   arch/arm/kernel/atags_parse.c | 15 +++++---------
+> >>   2 files changed, 6 insertions(+), 47 deletions(-)
+> >>
+> >> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> >> index 5da96f5df48f..67bc75f2da81 100644
+> >> --- a/arch/arm/Kconfig
+> >> +++ b/arch/arm/Kconfig
+> >> @@ -50,6 +50,7 @@ config ARM
+> >>          select GENERIC_ARCH_TOPOLOGY if ARM_CPU_TOPOLOGY
+> >>          select GENERIC_ATOMIC64 if CPU_V7M || CPU_V6 || !CPU_32v6K ||=
+ !AEABI
+> >>          select GENERIC_CLOCKEVENTS_BROADCAST if SMP
+> >> +       select GENERIC_CMDLINE if ATAGS
+> >
+> > Don't we need this enabled for !ATAGS (i.e. DT boot)?
+> >
+> > Can we always enable GENERIC_CMDLINE for OF_EARLY_FLATTREE?
+> >
+>
+> Don't know.
+>
+> Today ARM has:
+>
+> choice
+>         prompt "Kernel command line type" if CMDLINE !=3D ""
+>         default CMDLINE_FROM_BOOTLOADER
+>         depends on ATAGS
 
-On 3/25/2021 2:57 AM, Thomas Bogendoerfer wrote:
-> On Tue, Mar 23, 2021 at 03:20:43PM -0700, Florian Fainelli wrote:
->> Provide hooks to intercept bad usages of virt_to_phys() and
->> __pa_symbol() throughout the kernel. To make this possible, we need to
->> rename the current implement of virt_to_phys() into
->> __virt_to_phys_nodebug() and wrap it around depending on
->> CONFIG_DEBUG_VIRTUAL.
->>
->> A similar thing is needed for __pa_symbol() which is now aliased to
->> __phys_addr_symbol() whose implementation is either the direct return of
->> RELOC_HIDE or goes through the debug version.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->> Changes in v2:
->> - fixed sparse warning in arch/mips/kernel/vdso.c
-> 
-> checkpatch warns about a missing SPDX license in arch/mips/mm/physaddr.c,
-> can you please add one ?
+I think that's a mistake. In a DT only case (no ATAGS), we'll get
+different behaviour (in fdt.c) depending if CONFIG_ATAGS is enabled or
+not. Note that at the time (2012) the above was added, the DT code
+only supported CONFIG_CMDLINE and CONFIG_CMDLINE_FORCE.
+CONFIG_CMDLINE_EXTEND was only added in 2016. And that has different
+behavior for ATAGS vs. DT. In summary, it's a mess. We should drop the
+depends either before this patch or just as part of this patch IMO.
+I'd go with the latter given CONFIG_ATAGS is default y and enabled for
+common configs. Without that, it looks like CONFIG_CMDLINE disappears
+from menuconfig for at91_dt_defconfig.
 
-Yes.
+Also, I think this code should be refactored a bit to eliminate
+default_command_line. Instead, we should just save a pointer to the
+ATAGS command line string, and then call cmdline_build here instead of
+doing the extra copy:
 
-> 
-> And as checkpatch is also unhappy about the volatiles, do we really
-> need them here ?
+        /* parse_early_param needs a boot_command_line */
+        strlcpy(boot_command_line, from, COMMAND_LINE_SIZE);
 
-This is just following the existing prototypes for virt_to_phys()
-declared in arch/mips/include/asm/io.h. This can be changed to unsigned
-long if you prefer?
--- 
-Florian
+Rob
