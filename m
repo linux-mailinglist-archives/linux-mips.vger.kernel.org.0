@@ -2,79 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65773349CE7
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 00:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CB3349D8E
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 01:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbhCYXaJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Mar 2021 19:30:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54934 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231309AbhCYX36 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 25 Mar 2021 19:29:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6AC1161A27;
-        Thu, 25 Mar 2021 23:29:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616714997;
-        bh=1So/sDC1qFPREyegXHFcy7/VmRkzeq/fmOvYjRI/LkM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ays7TH2UlrPjYT2EhVKB9kfoPA5X87la04AArIOH/b/tNiVyioalV2c0dN8bICOoL
-         7VJtPJyCS9xna9DctRH8KPmi55ZNcoYl6ih9TRaL9tTERYwV06i8f7RN/lu6xMqld9
-         e2l8Of2a/O3BXNaZZgjWqjkX0LVObsYgCGTtH+ZCr2VaXRrIItdTzF93vAGrcWB7z3
-         Ewo07B3N41P6QiPOcmR96/pdF1SZpaj3tHf5XQrXzYYKBM0F01axjY0X5FWxjIwrJt
-         cDmzFK//Fa80+AgrWa/Pscxi8j3sI2x8kQO05VvBQdTX/SWhTViEySY6kw5g9Bhi0R
-         UVP/O02On5eaw==
-Received: by mail-ej1-f46.google.com with SMTP id u5so5688866ejn.8;
-        Thu, 25 Mar 2021 16:29:57 -0700 (PDT)
-X-Gm-Message-State: AOAM533CTzxUXZ/VCW+V7wgGq4B7txnOhWtKz301rrA1qEdkakUx+sWB
-        +yxmEUHF+RiuI7v0C/L7kDc0DzkUYBhQWjR3Jw==
-X-Google-Smtp-Source: ABdhPJyp90At2ic5zxJIDhb11Bg7kKraVHtULioYfIts4QYqWxOJiucuvniDhV6Uc0L1MCJm0RL6y9lW3E+JgBiBtTE=
-X-Received: by 2002:a17:906:5e01:: with SMTP id n1mr12293198eju.359.1616714996020;
- Thu, 25 Mar 2021 16:29:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210309000247.2989531-4-danielwa@cisco.com> <5f865584-09c9-d21f-ffb7-23cf07cf058e@csgroup.eu>
- <20210309212944.GR109100@zorba> <e4899874-1684-fa1b-443e-f4e478e05e31@csgroup.eu>
- <CAL_JsqKm76jRQYDcu3rGyUWKPLspoO=EZW_WFy=zAK+m_JYCTg@mail.gmail.com>
- <20fd7d44-8c39-48bc-25c3-990be9d9d911@csgroup.eu> <20210325195956.GM109100@zorba>
-In-Reply-To: <20210325195956.GM109100@zorba>
+        id S229764AbhCZAS2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Mar 2021 20:18:28 -0400
+Received: from mail-il1-f170.google.com ([209.85.166.170]:37377 "EHLO
+        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbhCZASV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Mar 2021 20:18:21 -0400
+Received: by mail-il1-f170.google.com with SMTP id z9so3677341ilb.4;
+        Thu, 25 Mar 2021 17:18:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=cQ49/BRSpA+BrnKpvm9V5uM5O4PaTolvQUFp43C9TjE=;
+        b=Lx4zxwTsln31qDgC3f3MULddvhpcLsYldL+ZQbnp6/tgiVRoUPCEqm+YlxATBE6BXs
+         yTzoPrBi6q082NdoESLSB0wyViU1pyg/X3nrDmpZo4rXlhWGTgHj5UAtoQQL8BEErNtB
+         VQrL3oqgbax/BvDY+JD+enPKaLEW3rNj1cNIuz1CXtZEUW0OzOwyYrdKZiAKalbm1T8/
+         a3qrQty5mnt0xaG5GW6K4YWZaNbrksdTCE5tuL1NdtYhfvCJWuYPrD4JbADqSXa3jfK3
+         m2JYRp5t0HPqZXG4dvg/ll4qP+CvjHHpDREc9U3xfrS3Fug6xNT47rPq34Bh4C5+YdcX
+         tHcQ==
+X-Gm-Message-State: AOAM533kuKjGEgdojMkWpmWZeeZKY20X4bX56hEGwI9LkSr7NsfHgxlI
+        3sCpheRaUSw7WXPO/48xhQ==
+X-Google-Smtp-Source: ABdhPJy4NEO7Ki88utGVy0098DnNN27W98R3hyOzTwTO4wxccpgj8OFq6ByDXObkcCOy2yDZaHkd+g==
+X-Received: by 2002:a05:6e02:219e:: with SMTP id j30mr8461778ila.196.1616717900908;
+        Thu, 25 Mar 2021 17:18:20 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id w9sm3489521iox.20.2021.03.25.17.18.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Mar 2021 17:18:20 -0700 (PDT)
+Received: (nullmailer pid 2016095 invoked by uid 1000);
+        Fri, 26 Mar 2021 00:18:17 -0000
+Date:   Thu, 25 Mar 2021 18:18:17 -0600
 From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 25 Mar 2021 17:29:44 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+10nucQSRkrTKe9BD5wBScqEb7-Rdg=9TsPiKuiuPG7w@mail.gmail.com>
-Message-ID: <CAL_Jsq+10nucQSRkrTKe9BD5wBScqEb7-Rdg=9TsPiKuiuPG7w@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] powerpc: convert config files to generic cmdline
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Will Deacon <will@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        X86 ML <x86@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        xe-linux-external@cisco.com, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     robh+dt@kernel.org, hns@goldelico.com, paul@boddie.org.uk,
+        linux-gpio@vger.kernel.org, paul@crapouillou.net,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        linux-kernel@vger.kernel.org, sernia.zhou@foxmail.com,
+        linux-mips@vger.kernel.org, andy.shevchenko@gmail.com,
+        devicetree@vger.kernel.org, linus.walleij@linaro.org
+Subject: Re: [PATCH v3 05/10] dt-bindings: pinctrl: Add bindings for new
+ Ingenic SoCs.
+Message-ID: <20210326001817.GA2016065@robh.at.kernel.org>
+References: <1615975084-68203-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1615975084-68203-6-git-send-email-zhouyanjie@wanyeetech.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1615975084-68203-6-git-send-email-zhouyanjie@wanyeetech.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 2:00 PM Daniel Walker <danielwa@cisco.com> wrote:
->
-> On Thu, Mar 25, 2021 at 01:03:55PM +0100, Christophe Leroy wrote:
-> >
-> > Ok, so you agree we don't need to provide two CMDLINE, one to be appended and one to be prepended.
-> >
-> > Let's only provide once CMDLINE as of today, and ask the user to select
-> > whether he wants it appended or prepended or replacee. Then no need to
-> > change all existing config to rename CONFIG_CMDLINE into either of the new
-> > ones.
-> >
-> > That's the main difference between my series and Daniel's series. So I'll
-> > finish taking Will's comment into account and we'll send out a v3 soon.
->
-> It doesn't solve the needs of Cisco, I've stated many times your changes have
-> little value. Please stop submitting them.
+On Wed, 17 Mar 2021 17:57:59 +0800, 周琰杰 (Zhou Yanjie) wrote:
+> Add the pinctrl bindings for the JZ4730 SoC, the JZ4750 SoC,
+> the JZ4755 SoC, the JZ4775 SoC and the X2000 SoC from Ingenic.
+> 
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> ---
+> 
+> Notes:
+>     v2:
+>     New patch.
+> 
+>     v2->v3:
+>     No change.
+> 
+>  .../bindings/pinctrl/ingenic,pinctrl.yaml          | 23 ++++++++++++++++++----
+>  1 file changed, 19 insertions(+), 4 deletions(-)
+> 
 
-Can you please outline what those needs are which aren't met?
-
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>
