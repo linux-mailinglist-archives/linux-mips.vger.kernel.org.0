@@ -2,102 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F47349FE6
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 03:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 404B534A0D1
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 06:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbhCZCpi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Mar 2021 22:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
+        id S229497AbhCZFVD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Mar 2021 01:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbhCZCpf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Mar 2021 22:45:35 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C064DC06174A;
-        Thu, 25 Mar 2021 19:45:35 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id d10so3893796ils.5;
-        Thu, 25 Mar 2021 19:45:35 -0700 (PDT)
+        with ESMTP id S229463AbhCZFUn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Mar 2021 01:20:43 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B47FC0613AA;
+        Thu, 25 Mar 2021 22:20:43 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id g24so3496422qts.6;
+        Thu, 25 Mar 2021 22:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c3TyjwBJft9+viqfPrXWUpurNVXIQ9MInz6FpBne7QA=;
-        b=RIfYo3knm7rJ8Fy8qNuU48hZbeapTu2tF4cGnlZCR9F4ZM5I03eDXqSPCxZswfhI4l
-         MwbKKrTK1YKNYgACEJe9pUUNyG5HMN8ryvKud2Fjqah03zduTN5V/1+v67R6vsnRJNMM
-         nxMvA3yka48mUXKmlr7P4msktvTVkphxiZIah2a8ahljfjtlWJDfLIWo71A1/WnXAYQV
-         lUajAY31CYG3Br2ftZguq4q4SIkHodu3W5vE4URjTyfPVKeI1Pzcgh6EE3CVdIvd3s4v
-         +vsLvxgQnGw2SpR/EGq5vS5BiEw6U9sU3y8f+zMcfT+mNIovxWztZKTwmCpC2AT6iTxU
-         Ma7g==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YKpE25UiGOpkOs2MOY32phVCun3lMkaAw7Uz7QAedb0=;
+        b=IljPKYzK7gOVM7DHUHI5y/mpwSJ7xbEpUYmKYWtAgw/SE5vjfjLJ2NzLtWFSVeVlGV
+         I1zeUINeQSgQ5Y/ygVpDGHwAI4OJpCjOKQihLYoHLKzwO0VKEf2jt20gAhXZe+pOy3di
+         bkkeaAt4g8ZOKKUS9rGu8zo721N7/lQp9JkPN+lGymrz+hH5V5llNm5xCb9Z1G19GSjU
+         H/PvW4LEQoCwJG99Qcactg2VMuIB+kN99Bq+ujXqsfS/MuHGywPmVsxJ/j/2nHOOznlO
+         srpMFqyGccfSNPm9UOLf/TMhRQ0X56qkNaUdjQY3dy8mt6aUoyPkOYdva1aSfvTQ/xlP
+         o7xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c3TyjwBJft9+viqfPrXWUpurNVXIQ9MInz6FpBne7QA=;
-        b=BY03CRWvEv+FsW58/zSQzcMIYZ9EaWmfOyg7JdsG3h3y75bLcjshjIePQhkcKnzZZ8
-         HO1qQ8uMxuxBreRmynKNg6k0pJtAMx9jnIbdlBrX23KLPF7fzgGWxvRPbSqvlwdN7VSp
-         aFSFpvbVt24OCsjLOkeI927GIYwN4StUUwVYCGmGMCnPzgSZFTh4RPQFNqYy1f1c/ngL
-         sT1oBzPl2zIE5qqSmRj4nVPTT/0uZLuyWjxhqSw/zm/1Qbmu+xxIZQYIswrSxY5GRILY
-         lf3Jremq6sSRnrJ0FK708xqSmYfsJTRa7QibK5dM+y6jHZAkz/uBWCgubp7nE9JUBzFy
-         44iQ==
-X-Gm-Message-State: AOAM530/g3If8PpnqWBLfXIcPuOSg3+rNBJxctmocpP89ErT2oFudhw7
-        8XIUnzFRL/jfN1fDKL28hF3/Fc/a5fXq0sFWNBw=
-X-Google-Smtp-Source: ABdhPJw17Oub2hHuFs6ahjRk6K43qQvnSr86/UUcgndqJ+RYESwqNNNP+pspx19ljyZykhlcDwPmFlcnawKA7sCm4Mk=
-X-Received: by 2002:a92:c842:: with SMTP id b2mr8936041ilq.179.1616726735262;
- Thu, 25 Mar 2021 19:45:35 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=YKpE25UiGOpkOs2MOY32phVCun3lMkaAw7Uz7QAedb0=;
+        b=YyNWJ6zD0jrUx9yOSD4B1iLd4frlHdTi7u26Y6czY1D1XnshGNf0KUv/EulGLAPw7K
+         OA3rY7h7faD068qJFew7uFhfsGoRkQBXWRJ6W/V1LRlTRMX9MQH92cLfpFU/cHznoLlJ
+         yZXMs0LDnmNjOq/KKTGdI9bkDCmRwT8BNrQJM3Vb9zxq40WrBaryeou1zl5Bs3nT00kB
+         I8OChqvCe5IPUtyM7/GHabvzOdngiU9Mj2BLdFjmSZYF31lSzoW7xo98NAsUeBx+rwY/
+         2xMh1P8GGLp5V2/8KaCIdBMGmrUlJ2NhHB9UVq/P4DZWtHmiA9djUgf8lqStGYOIei/m
+         f3ig==
+X-Gm-Message-State: AOAM530lgQ5+fGVhxZXAITlsKFQbmOnL5h7hwqm9/8WwR6Iy1TGdiyD5
+        iE8pt8j5ICqn9sFqVd2GD53jz4SOjNTg+HJ9
+X-Google-Smtp-Source: ABdhPJyeNdP9wda/CcLsHAnj/tLP2o+GphZonGBl59sv1GQK1/J54b5AUsYKdHXUcHTJaFhmidgKUw==
+X-Received: by 2002:a05:622a:216:: with SMTP id b22mr10811177qtx.263.1616736042199;
+        Thu, 25 Mar 2021 22:20:42 -0700 (PDT)
+Received: from kde-neon-desktop.orld.fl.wtsky.net ([208.64.158.251])
+        by smtp.gmail.com with ESMTPSA id d24sm5702504qkl.49.2021.03.25.22.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Mar 2021 22:20:41 -0700 (PDT)
+Sender: Julian Braha <julian.braha@gmail.com>
+From:   Julian Braha <julianbraha@gmail.com>
+To:     tsbogend@alpha.franken.de
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        fazilyildiran@gmail.com
+Subject: [PATCH] arch: mips: fix unmet dependency for DEBUG_INFO
+Date:   Fri, 26 Mar 2021 01:20:33 -0400
+Message-Id: <20210326052033.35001-1-julianbraha@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210317055902.506773-1-ilya.lipnitskiy@gmail.com> <20210325095529.GA5775@alpha.franken.de>
-In-Reply-To: <20210325095529.GA5775@alpha.franken.de>
-From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Date:   Thu, 25 Mar 2021 19:45:23 -0700
-Message-ID: <CALCv0x2ni97mLEar6M9boWCrXzdsqM3JJNMbe=cDitHj+npanw@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: ralink: mt7621: add memory detection support
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 3:01 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Tue, Mar 16, 2021 at 10:59:02PM -0700, Ilya Lipnitskiy wrote:
-> > From: Chuanhong Guo <gch981213@gmail.com>
-> >
-> > mt7621 has the following memory map:
-> > 0x0-0x1c000000: lower 448m memory
-> > 0x1c000000-0x2000000: peripheral registers
-> > 0x20000000-0x2400000: higher 64m memory
-> >
-> > detect_memory_region in arch/mips/kernel/setup.c only adds the first
-> > memory region and isn't suitable for 512m memory detection because
-> > it may accidentally read the memory area for peripheral registers.
-> >
-> > This commit adds memory detection capability for mt7621:
-> >   1. Add the highmem area when 512m is detected.
-> >   2. Guard memcmp from accessing peripheral registers:
-> >      This only happens when a user decided to change kernel load address
-> >      to 256m or higher address. Since this is a quite unusual case, we
-> >      just skip 512m testing and return 256m as memory size.
-> >
-> > [...]
->
-> I get
->
-> WARNING: modpost: vmlinux.o(.text+0x132c): Section mismatch in reference from the function prom_soc_init() to the function .init.text:mt7621_memory_detect()
-> The function prom_soc_init() references
-> the function __init mt7621_memory_detect().
-> This is often because prom_soc_init lacks a __init
-> annotation or the annotation of mt7621_memory_detect is wrong.
->
-> Can you please fix this ?
-Thanks, I will fix it. Having trouble reproducing the error, but I
-clearly see the issue. Are you building on a MIPS target or
-cross-compiling (I'm cross-compiling and no errors).
+When SB1XXX_CORELIS is enabled, COMPILE_TEST is disabled,
+and DEBUG_KERNEL is disabled, Kbuild gives the
+following warning:
 
-Ilya
+WARNING: unmet direct dependencies detected for DEBUG_INFO
+  Depends on [n]: DEBUG_KERNEL [=n] && !COMPILE_TEST [=n]
+  Selected by [y]:
+  - SB1XXX_CORELIS [=y] && SIBYTE_SB1xxx_SOC [=y] && !COMPILE_TEST [=n]
+
+This is because SB1XXX_CORELIS selects DEBUG_INFO without
+selecting or depending on DEBUG_KERNEL, despite DEBUG_INFO
+depending on DEBUG_KERNEL.
+
+Signed-off-by: Julian Braha <julianbraha@gmail.com>
+---
+ arch/mips/Kconfig.debug | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/mips/Kconfig.debug b/arch/mips/Kconfig.debug
+index 7a8d94cdd493..f5832a49a881 100644
+--- a/arch/mips/Kconfig.debug
++++ b/arch/mips/Kconfig.debug
+@@ -77,6 +77,7 @@ config CMDLINE_OVERRIDE
+ config SB1XXX_CORELIS
+ 	bool "Corelis Debugger"
+ 	depends on SIBYTE_SB1xxx_SOC
++	select DEBUG_KERNEL if !COMPILE_TEST
+ 	select DEBUG_INFO if !COMPILE_TEST
+ 	help
+ 	  Select compile flags that produce code that can be processed by the
+-- 
+2.25.1
+
