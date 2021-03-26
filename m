@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9246E349F89
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 03:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE2A349F92
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 03:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbhCZCUz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S231470AbhCZCUz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Thu, 25 Mar 2021 22:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbhCZCUh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Mar 2021 22:20:37 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD49C0613D7
-        for <linux-mips@vger.kernel.org>; Thu, 25 Mar 2021 19:20:36 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id a19so2612984ybg.10
-        for <linux-mips@vger.kernel.org>; Thu, 25 Mar 2021 19:20:36 -0700 (PDT)
+        with ESMTP id S231235AbhCZCUj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Mar 2021 22:20:39 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AFDC061761
+        for <linux-mips@vger.kernel.org>; Thu, 25 Mar 2021 19:20:39 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id w8so2246713qtk.3
+        for <linux-mips@vger.kernel.org>; Thu, 25 Mar 2021 19:20:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=ToXMoL2Kd2/SJp5pLlSeXZUeldhyd8WTEWaSFPITIQY=;
-        b=vYbzZt6VuoT8/2gGGWgm9PSqd3t+FSwTciToxgXXhjE1y1MU3KJy6WkEJlNfLXLkie
-         xxjVqRA8DnUzeGhmNepWRZgzCCLRKgZfM3tzRBzdMvH3AWYBsGv5yrxAG+SBFJukd0hd
-         YqDCDfmPyTv539NQ8Eoac3EKcUNCn+s1nxvUy/gUtRUV6xCYJOzHX+nzP140CEy8tBSX
-         jRQoy57NNEizpyKOft/OFh9r4JweTh++5JzyP6or14BiU622LYfnszXiecStaeCwN7Nc
-         pXPJ3mVCknAxAAGQ9Dej38P4WhmWVmCo0W/vHWm91ZJPQGCwtrHKID5jq7bvw40c7SFt
-         eU4Q==
+        bh=xpO0R+6AZcVTsryAmfa1csIhFbdIpj6scMCyrGXKA2A=;
+        b=uQMp99nW6RHB2f3cTnLRvct0FzbjC1V4VwapmMNa65kI5zh0Epe6k/+qnHl8c3g8XI
+         e+074i6mSZD8oxFjqCkK5zLR1cZfynVaB3eyCkzjeytIhfBHuUzJZL1sNBHnGCSHySCb
+         gqwIe0mkUcqzZHZbNRRFPQ2+K7MWmTXsScaQdxvetXfBiYptWDMmPvMzOCAlfll1mbAs
+         NbHnAtChhSnK32WHWUvzYwrT2Dn+3HYLcIO7c93cikxTnn3anhGE7PKj43vC0iOMSt+t
+         4y5TRJe0rxO98n7YswSmBa8pY1cxaoRDJJFukkwjscg/G4XY1gweSfbik6p/N31wcvHF
+         FAvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=ToXMoL2Kd2/SJp5pLlSeXZUeldhyd8WTEWaSFPITIQY=;
-        b=AckSglGpopbYz8EKWDUmKxNMif77MyLHzh5fNfbkd7genbQIu8prtDXMvkCLeCyW1k
-         3tsYbDzgu3XN4b7vxz3MwwEzZZjVk1BaZZ33mkomgd7fLfq3atL4pklG7RIuNTIsMVC4
-         V8xEcM7UtjL9/q2KiKL+cYEdV8xPlsYiTkcPpWZChetu0q3DafKrCOGIe5HZXIYFTkeM
-         yZO/g31u4AdJ0s7wl8VZ90vISgNbfkRnGPBasaPX64e2JK7t0w54FSgE0DHJXXUlQDdi
-         NqB9nHy1YTIDwdCo2Tz3L7b2u34h/Sbg75EZjNyAy/mV9ly6zyanh843o0CDnGJQLb9X
-         o9WQ==
-X-Gm-Message-State: AOAM530brDSOiFISUMUqEJDDtzeCvUL3TXrsbMvd8FCVJBJ2lEnm6y1e
-        bo1zB5iQGP/eDOfn909E45P3bzkXGIs=
-X-Google-Smtp-Source: ABdhPJzRVG48z8ZzycjiKCLwPZNN1glmgxA8blrqx2t14Bkqo8S2FlN8ubmdHUNXp/9csQMMt5MyDjtbz7k=
+        bh=xpO0R+6AZcVTsryAmfa1csIhFbdIpj6scMCyrGXKA2A=;
+        b=GvbGyysM7YqiJGS69NpwUpKYhmxGptmM3vVXsyZuDr7JTzptxb31p8vV7vkX2JPxea
+         Ftjmk1RkdRc0r1AiZeUU48ZJNnsnrOEY40aUb8NrFYfkDSPA9jaMpErs9DX2V9JbhxFt
+         CP+TDk1jg0GKoj06+k4JmEt9DROM1XKZAziQd+Arw8zvp5TP96ODtryV+PDgmEM/6cEd
+         ZmI63ApZFu1FJLNmxQKlpQso5jL5lCGdhmADzoYiEAcPFxmlDlGKxCRsGl73pHELH8LC
+         vDo2azqsVa1PnrOLCNjfAzsEkUZtvaeMyxTb0U8mpI1u+Bi40CWOqS6tfbUcynAKKqUs
+         ZWjw==
+X-Gm-Message-State: AOAM532QwxTdyh+AUZv2v76av7J2dQtDWxeFyMKHIu7v1lnUpUQ4OdaN
+        VW5FZQ4OVGuPQjWva8/HQ60n9pV7LpU=
+X-Google-Smtp-Source: ABdhPJxBd8XQox7hj6Ay7ePLmzDoNDRNC6Ku6UeU/xYURVhIi+zWH8AcpMshGJmfzY+BzyCGVqg0RjgGsVQ=
 X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:f:10:b1bb:fab2:7ef5:fc7d])
- (user=seanjc job=sendgmr) by 2002:a25:aa63:: with SMTP id s90mr13063680ybi.393.1616725236043;
- Thu, 25 Mar 2021 19:20:36 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a0c:cd8b:: with SMTP id v11mr4012312qvm.60.1616725238277;
+ Thu, 25 Mar 2021 19:20:38 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 25 Mar 2021 19:19:50 -0700
+Date:   Thu, 25 Mar 2021 19:19:51 -0700
 In-Reply-To: <20210326021957.1424875-1-seanjc@google.com>
-Message-Id: <20210326021957.1424875-12-seanjc@google.com>
+Message-Id: <20210326021957.1424875-13-seanjc@google.com>
 Mime-Version: 1.0
 References: <20210326021957.1424875-1-seanjc@google.com>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH 11/18] KVM: arm64: Convert to the gfn-based MMU notifier callbacks
+Subject: [PATCH 12/18] KVM: MIPS/MMU: Convert to the gfn-based MMU notifier callbacks
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -74,56 +74,50 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Move arm64 to the gfn-base MMU notifier APIs, which do the hva->gfn
-lookup in common code.
+Move MIPS to the gfn-based MMU notifier APIs, which do the hva->gfn
+lookup in common code, and whose code is nearly identical to MIPS'
+lookup.
 
-Note, due to arch code being called if and only if a memslot is found,
-the clean_dcache_guest_page() call in kvm_set_spte_*() is will no longer
-be called for addresses that are not found in the guest memslots.
+No meaningful functional change intended, though the exact order of
+operations is slightly different since the memslot lookups occur before
+calling into arch code.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/arm64/include/asm/kvm_host.h |   1 +
- arch/arm64/kvm/mmu.c              | 117 ++++++++----------------------
- 2 files changed, 33 insertions(+), 85 deletions(-)
+ arch/mips/include/asm/kvm_host.h |  1 +
+ arch/mips/kvm/mmu.c              | 97 ++++++--------------------------
+ 2 files changed, 17 insertions(+), 81 deletions(-)
 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 72e6b4600264..1ad729cf7b0d 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -582,6 +582,7 @@ int __kvm_arm_vcpu_set_events(struct kvm_vcpu *vcpu,
- 			      struct kvm_vcpu_events *events);
+diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+index feaa77036b67..374a3c8806e8 100644
+--- a/arch/mips/include/asm/kvm_host.h
++++ b/arch/mips/include/asm/kvm_host.h
+@@ -967,6 +967,7 @@ enum kvm_mips_fault_result kvm_trap_emul_gva_fault(struct kvm_vcpu *vcpu,
+ 						   bool write);
  
  #define KVM_ARCH_WANT_MMU_NOTIFIER
 +#define KVM_ARCH_WANT_NEW_MMU_NOTIFIER_APIS
  
- void kvm_arm_halt_guest(struct kvm *kvm);
- void kvm_arm_resume_guest(struct kvm *kvm);
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index 4b7e1e327337..35728231e9a0 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -839,7 +839,7 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
- 	 * gfn_to_pfn_prot (which calls get_user_pages), so that we don't risk
- 	 * the page we just got a reference to gets unmapped before we have a
- 	 * chance to grab the mmu_lock, which ensure that if the page gets
--	 * unmapped afterwards, the call to kvm_unmap_hva will take it away
-+	 * unmapped afterwards, the call to kvm_unmap_gfn will take it away
- 	 * from us again properly. This smp_rmb() interacts with the smp_wmb()
- 	 * in kvm_mmu_notifier_invalidate_<page|range_end>.
- 	 */
-@@ -1064,123 +1064,70 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
- 	return ret;
+ /* Emulation */
+ int kvm_get_inst(u32 *opc, struct kvm_vcpu *vcpu, u32 *out);
+diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+index 3dabeda82458..3dc885df2e32 100644
+--- a/arch/mips/kvm/mmu.c
++++ b/arch/mips/kvm/mmu.c
+@@ -439,85 +439,36 @@ static int kvm_mips_mkold_gpa_pt(struct kvm *kvm, gfn_t start_gfn,
+ 				  end_gfn << PAGE_SHIFT);
  }
  
 -static int handle_hva_to_gpa(struct kvm *kvm,
 -			     unsigned long start,
 -			     unsigned long end,
--			     int (*handler)(struct kvm *kvm,
--					    gpa_t gpa, u64 size,
+-			     int (*handler)(struct kvm *kvm, gfn_t gfn,
+-					    gpa_t gfn_end,
+-					    struct kvm_memory_slot *memslot,
 -					    void *data),
 -			     void *data)
--{
++bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
 -	struct kvm_memslots *slots;
 -	struct kvm_memory_slot *memslot;
 -	int ret = 0;
@@ -133,7 +127,7 @@ index 4b7e1e327337..35728231e9a0 100644
 -	/* we only care about the pages that the guest sees */
 -	kvm_for_each_memslot(memslot, slots) {
 -		unsigned long hva_start, hva_end;
--		gfn_t gpa;
+-		gfn_t gfn, gfn_end;
 -
 -		hva_start = max(start, memslot->userspace_addr);
 -		hva_end = min(end, memslot->userspace_addr +
@@ -141,132 +135,122 @@ index 4b7e1e327337..35728231e9a0 100644
 -		if (hva_start >= hva_end)
 -			continue;
 -
--		gpa = hva_to_gfn_memslot(hva_start, memslot) << PAGE_SHIFT;
--		ret |= handler(kvm, gpa, (u64)(hva_end - hva_start), data);
+-		/*
+-		 * {gfn(page) | page intersects with [hva_start, hva_end)} =
+-		 * {gfn_start, gfn_start+1, ..., gfn_end-1}.
+-		 */
+-		gfn = hva_to_gfn_memslot(hva_start, memslot);
+-		gfn_end = hva_to_gfn_memslot(hva_end + PAGE_SIZE - 1, memslot);
+-
+-		ret |= handler(kvm, gfn, gfn_end, memslot, data);
 -	}
 -
 -	return ret;
 -}
 -
--static int kvm_unmap_hva_handler(struct kvm *kvm, gpa_t gpa, u64 size, void *data)
--{
--	unsigned flags = *(unsigned *)data;
--	bool may_block = flags & MMU_NOTIFIER_RANGE_BLOCKABLE;
 -
--	__unmap_stage2_range(&kvm->arch.mmu, gpa, size, may_block);
--	return 0;
+-static int kvm_unmap_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+-				 struct kvm_memory_slot *memslot, void *data)
+-{
+-	kvm_mips_flush_gpa_pt(kvm, gfn, gfn_end);
+-	return 1;
 -}
 -
--int kvm_unmap_hva_range(struct kvm *kvm,
--			unsigned long start, unsigned long end, unsigned flags)
-+bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
- {
- 	if (!kvm->arch.mmu.pgt)
- 		return 0;
- 
--	handle_hva_to_gpa(kvm, start, end, &kvm_unmap_hva_handler, &flags);
--	return 0;
--}
-+	__unmap_stage2_range(&kvm->arch.mmu, range->start << PAGE_SHIFT,
-+			     (range->end - range->start) << PAGE_SHIFT,
-+			     range->may_block);
- 
--static int kvm_set_spte_handler(struct kvm *kvm, gpa_t gpa, u64 size, void *data)
+-int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end,
+-			unsigned flags)
 -{
--	kvm_pfn_t *pfn = (kvm_pfn_t *)data;
--
--	WARN_ON(size != PAGE_SIZE);
--
--	/*
--	 * The MMU notifiers will have unmapped a huge PMD before calling
--	 * ->change_pte() (which in turn calls kvm_set_spte_hva()) and
--	 * therefore we never need to clear out a huge PMD through this
--	 * calling path and a memcache is not required.
--	 */
--	kvm_pgtable_stage2_map(kvm->arch.mmu.pgt, gpa, PAGE_SIZE,
--			       __pfn_to_phys(*pfn), KVM_PGTABLE_PROT_R, NULL);
+-	handle_hva_to_gpa(kvm, start, end, &kvm_unmap_hva_handler, NULL);
++	kvm_mips_flush_gpa_pt(kvm, range->start, range->end);
+ 
+ 	kvm_mips_callbacks->flush_shadow_all(kvm);
  	return 0;
+ }
+ 
+-static int kvm_set_spte_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+-				struct kvm_memory_slot *memslot, void *data)
++static bool __kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+-	gpa_t gpa = gfn << PAGE_SHIFT;
+-	pte_t hva_pte = *(pte_t *)data;
++	gpa_t gpa = range->start << PAGE_SHIFT;
++	pte_t hva_pte = range->pte;
+ 	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
+ 	pte_t old_pte;
+ 
+ 	if (!gpa_pte)
+-		return 0;
++		return false;
+ 
+ 	/* Mapping may need adjusting depending on memslot flags */
+ 	old_pte = *gpa_pte;
+-	if (memslot->flags & KVM_MEM_LOG_DIRTY_PAGES && !pte_dirty(old_pte))
++	if (range->slot->flags & KVM_MEM_LOG_DIRTY_PAGES && !pte_dirty(old_pte))
+ 		hva_pte = pte_mkclean(hva_pte);
+-	else if (memslot->flags & KVM_MEM_READONLY)
++	else if (range->slot->flags & KVM_MEM_READONLY)
+ 		hva_pte = pte_wrprotect(hva_pte);
+ 
+ 	set_pte(gpa_pte, hva_pte);
+ 
+ 	/* Replacing an absent or old page doesn't need flushes */
+ 	if (!pte_present(old_pte) || !pte_young(old_pte))
+-		return 0;
++		return false;
+ 
+ 	/* Pages swapped, aged, moved, or cleaned require flushes */
+ 	return !pte_present(hva_pte) ||
+@@ -526,27 +477,21 @@ static int kvm_set_spte_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+ 	       (pte_dirty(old_pte) && !pte_dirty(hva_pte));
  }
  
 -int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte)
 +bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
  {
 -	unsigned long end = hva + PAGE_SIZE;
--	kvm_pfn_t pfn = pte_pfn(pte);
-+	kvm_pfn_t pfn = pte_pfn(range->pte);
- 
- 	if (!kvm->arch.mmu.pgt)
- 		return 0;
- 
-+	WARN_ON(range->end - range->start != 1);
-+
- 	/*
- 	 * We've moved a page around, probably through CoW, so let's treat it
- 	 * just like a translation fault and clean the cache to the PoC.
- 	 */
- 	clean_dcache_guest_page(pfn, PAGE_SIZE);
--	handle_hva_to_gpa(kvm, hva, end, &kvm_set_spte_handler, &pfn);
-+
-+	/*
-+	 * The MMU notifiers will have unmapped a huge PMD before calling
-+	 * ->change_pte() (which in turn calls kvm_set_spte_gfn()) and
-+	 * therefore we never need to clear out a huge PMD through this
-+	 * calling path and a memcache is not required.
-+	 */
-+	kvm_pgtable_stage2_map(kvm->arch.mmu.pgt, range->start << PAGE_SHIFT,
-+			       PAGE_SIZE, __pfn_to_phys(pfn),
-+			       KVM_PGTABLE_PROT_R, NULL);
-+
- 	return 0;
+-	int ret;
+-
+-	ret = handle_hva_to_gpa(kvm, hva, end, &kvm_set_spte_handler, &pte);
+-	if (ret)
++	if (__kvm_set_spte_gfn(kvm, range))
+ 		kvm_mips_callbacks->flush_shadow_all(kvm);
+-	return 0;
++	return false;
  }
  
--static int kvm_age_hva_handler(struct kvm *kvm, gpa_t gpa, u64 size, void *data)
+-static int kvm_age_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+-			       struct kvm_memory_slot *memslot, void *data)
 +bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
  {
--	pte_t pte;
-+	u64 size = (range->end - range->start) << PAGE_SHIFT;
- 	kvm_pte_t kpte;
-+	pte_t pte;
-+
-+	if (!kvm->arch.mmu.pgt)
-+		return 0;
- 
- 	WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PUD_SIZE);
--	kpte = kvm_pgtable_stage2_mkold(kvm->arch.mmu.pgt, gpa);
-+
-+	kpte = kvm_pgtable_stage2_mkold(kvm->arch.mmu.pgt,
-+					range->start << PAGE_SHIFT);
- 	pte = __pte(kpte);
- 	return pte_valid(pte) && pte_young(pte);
+-	return kvm_mips_mkold_gpa_pt(kvm, gfn, gfn_end);
++	return kvm_mips_mkold_gpa_pt(kvm, range->start, range->end);
  }
  
--static int kvm_test_age_hva_handler(struct kvm *kvm, gpa_t gpa, u64 size, void *data)
--{
--	WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PUD_SIZE);
--	return kvm_pgtable_stage2_is_young(kvm->arch.mmu.pgt, gpa);
--}
--
+-static int kvm_test_age_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+-				    struct kvm_memory_slot *memslot, void *data)
++bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+-	gpa_t gpa = gfn << PAGE_SHIFT;
++	gpa_t gpa = range->start << PAGE_SHIFT;
+ 	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
+ 
+ 	if (!gpa_pte)
+@@ -554,16 +499,6 @@ static int kvm_test_age_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+ 	return pte_young(*gpa_pte);
+ }
+ 
 -int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end)
 -{
--	if (!kvm->arch.mmu.pgt)
--		return 0;
--
 -	return handle_hva_to_gpa(kvm, start, end, kvm_age_hva_handler, NULL);
 -}
 -
 -int kvm_test_age_hva(struct kvm *kvm, unsigned long hva)
-+bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- {
- 	if (!kvm->arch.mmu.pgt)
- 		return 0;
- 
--	return handle_hva_to_gpa(kvm, hva, hva + PAGE_SIZE,
--				 kvm_test_age_hva_handler, NULL);
-+	return kvm_pgtable_stage2_is_young(kvm->arch.mmu.pgt,
-+					   range->start << PAGE_SHIFT);
- }
- 
- phys_addr_t kvm_mmu_get_httbr(void)
+-{
+-	return handle_hva_to_gpa(kvm, hva, hva, kvm_test_age_hva_handler, NULL);
+-}
+-
+ /**
+  * _kvm_mips_map_page_fast() - Fast path GPA fault handler.
+  * @vcpu:		VCPU pointer.
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
