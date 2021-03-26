@@ -2,151 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6723349FAD
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 03:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F47349FE6
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 03:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbhCZCVW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Mar 2021 22:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
+        id S230516AbhCZCpi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Mar 2021 22:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbhCZCUw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Mar 2021 22:20:52 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B107C06174A
-        for <linux-mips@vger.kernel.org>; Thu, 25 Mar 2021 19:20:52 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 19so2462540ybn.20
-        for <linux-mips@vger.kernel.org>; Thu, 25 Mar 2021 19:20:52 -0700 (PDT)
+        with ESMTP id S230487AbhCZCpf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Mar 2021 22:45:35 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C064DC06174A;
+        Thu, 25 Mar 2021 19:45:35 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id d10so3893796ils.5;
+        Thu, 25 Mar 2021 19:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=EpijQ6V8FeVDkD7HX5egdlZ4dc07ENH1xKoxF44zfAY=;
-        b=vurensVFR3hrXyY1NMdpbwaru8VIWvzupZGNxIORfKUkaj6cZcAwrW4S7ZbldvFW0e
-         1pj7Sjtemz800HdNKoZvFp6F7/aMexhzotPHhhv54wbWGG2b5JKTkMRv9BDbN2E4Ey9T
-         8eW4Z03xVOLOX0hzRddgLv1Chs8SDkxnX6z2o6MpxhGggyvr5FcOq858GvWl6ZoPED7P
-         ykGFvoJ6wUIWXZYSEL8RaJGkOTiUZy0E1yO+uZS3qT3g2YOPbNYhWH0rLNLhU1rTGhtk
-         ls/hhgkUIDYTaauJwhgRarI2uGASQOz/snbsTpI3O7d7JXOpGXiLwzhMRARvAh1o2E/F
-         NZog==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c3TyjwBJft9+viqfPrXWUpurNVXIQ9MInz6FpBne7QA=;
+        b=RIfYo3knm7rJ8Fy8qNuU48hZbeapTu2tF4cGnlZCR9F4ZM5I03eDXqSPCxZswfhI4l
+         MwbKKrTK1YKNYgACEJe9pUUNyG5HMN8ryvKud2Fjqah03zduTN5V/1+v67R6vsnRJNMM
+         nxMvA3yka48mUXKmlr7P4msktvTVkphxiZIah2a8ahljfjtlWJDfLIWo71A1/WnXAYQV
+         lUajAY31CYG3Br2ftZguq4q4SIkHodu3W5vE4URjTyfPVKeI1Pzcgh6EE3CVdIvd3s4v
+         +vsLvxgQnGw2SpR/EGq5vS5BiEw6U9sU3y8f+zMcfT+mNIovxWztZKTwmCpC2AT6iTxU
+         Ma7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=EpijQ6V8FeVDkD7HX5egdlZ4dc07ENH1xKoxF44zfAY=;
-        b=LOv48uIVHNyQFG6Cyx9wEGueoI4oSyW2HL16TpPFDCPuJCqOgyCCAhKfMyr0XChcrT
-         IBYSTG4z6TP+r6G8Yq1YVf37+oCzCghsLydcG1bkv47VrarxG6gIt3avdY00aWZp0hk2
-         IfUATNKc0IuXu6JLZbIJaScqzsbQ/od7N5MPL8+7gYlBi3tc0lux+xdWpQ6PiHTYN4cf
-         hqLRtkHoeeWMxKa1JIBeorSqrA2qhKMJsY3AJAx5uOt4NX3Xv6fELw/UlRnAV8LgY/Tq
-         O0SH92WIpNr2CABgfZoHZ0V+A8QbqLaF019+li3nWLdbVSvOkXxxnkSFDFSAIL1atBxQ
-         JuYg==
-X-Gm-Message-State: AOAM531/eBFhc+NUsBz1/wYy6112Bb7PYtUHFl8nz77ueqYDChxtVa7x
-        oVzox6XEHLYlsVuNPfwMFQLspue4iY4=
-X-Google-Smtp-Source: ABdhPJzbNsIM618ZsZ/2M+kNXws+VM2rkDgsqZ/Jk+w2Zs+6fUW+W9XFuUI0Kj8VYAgdnJCOOVd45R9L9lU=
-X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:f:10:b1bb:fab2:7ef5:fc7d])
- (user=seanjc job=sendgmr) by 2002:a25:adc5:: with SMTP id d5mr15715734ybe.361.1616725251714;
- Thu, 25 Mar 2021 19:20:51 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 25 Mar 2021 19:19:57 -0700
-In-Reply-To: <20210326021957.1424875-1-seanjc@google.com>
-Message-Id: <20210326021957.1424875-19-seanjc@google.com>
-Mime-Version: 1.0
-References: <20210326021957.1424875-1-seanjc@google.com>
-X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH 18/18] KVM: x86/mmu: Drop trace_kvm_age_page() tracepoint
-From:   Sean Christopherson <seanjc@google.com>
-To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c3TyjwBJft9+viqfPrXWUpurNVXIQ9MInz6FpBne7QA=;
+        b=BY03CRWvEv+FsW58/zSQzcMIYZ9EaWmfOyg7JdsG3h3y75bLcjshjIePQhkcKnzZZ8
+         HO1qQ8uMxuxBreRmynKNg6k0pJtAMx9jnIbdlBrX23KLPF7fzgGWxvRPbSqvlwdN7VSp
+         aFSFpvbVt24OCsjLOkeI927GIYwN4StUUwVYCGmGMCnPzgSZFTh4RPQFNqYy1f1c/ngL
+         sT1oBzPl2zIE5qqSmRj4nVPTT/0uZLuyWjxhqSw/zm/1Qbmu+xxIZQYIswrSxY5GRILY
+         lf3Jremq6sSRnrJ0FK708xqSmYfsJTRa7QibK5dM+y6jHZAkz/uBWCgubp7nE9JUBzFy
+         44iQ==
+X-Gm-Message-State: AOAM530/g3If8PpnqWBLfXIcPuOSg3+rNBJxctmocpP89ErT2oFudhw7
+        8XIUnzFRL/jfN1fDKL28hF3/Fc/a5fXq0sFWNBw=
+X-Google-Smtp-Source: ABdhPJw17Oub2hHuFs6ahjRk6K43qQvnSr86/UUcgndqJ+RYESwqNNNP+pspx19ljyZykhlcDwPmFlcnawKA7sCm4Mk=
+X-Received: by 2002:a92:c842:: with SMTP id b2mr8936041ilq.179.1616726735262;
+ Thu, 25 Mar 2021 19:45:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210317055902.506773-1-ilya.lipnitskiy@gmail.com> <20210325095529.GA5775@alpha.franken.de>
+In-Reply-To: <20210325095529.GA5775@alpha.franken.de>
+From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Date:   Thu, 25 Mar 2021 19:45:23 -0700
+Message-ID: <CALCv0x2ni97mLEar6M9boWCrXzdsqM3JJNMbe=cDitHj+npanw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: ralink: mt7621: add memory detection support
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        John Crispin <john@phrozen.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove x86's trace_kvm_age_page() tracepoint.  It's mostly redundant with
-the common trace_kvm_age_hva() tracepoint, and if there is a need for the
-extra details, e.g. gfn, referenced, etc... those details should be added
-to the common tracepoint so that all architectures and MMUs benefit from
-the info.
+On Thu, Mar 25, 2021 at 3:01 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Tue, Mar 16, 2021 at 10:59:02PM -0700, Ilya Lipnitskiy wrote:
+> > From: Chuanhong Guo <gch981213@gmail.com>
+> >
+> > mt7621 has the following memory map:
+> > 0x0-0x1c000000: lower 448m memory
+> > 0x1c000000-0x2000000: peripheral registers
+> > 0x20000000-0x2400000: higher 64m memory
+> >
+> > detect_memory_region in arch/mips/kernel/setup.c only adds the first
+> > memory region and isn't suitable for 512m memory detection because
+> > it may accidentally read the memory area for peripheral registers.
+> >
+> > This commit adds memory detection capability for mt7621:
+> >   1. Add the highmem area when 512m is detected.
+> >   2. Guard memcmp from accessing peripheral registers:
+> >      This only happens when a user decided to change kernel load address
+> >      to 256m or higher address. Since this is a quite unusual case, we
+> >      just skip 512m testing and return 256m as memory size.
+> >
+> > [...]
+>
+> I get
+>
+> WARNING: modpost: vmlinux.o(.text+0x132c): Section mismatch in reference from the function prom_soc_init() to the function .init.text:mt7621_memory_detect()
+> The function prom_soc_init() references
+> the function __init mt7621_memory_detect().
+> This is often because prom_soc_init lacks a __init
+> annotation or the annotation of mt7621_memory_detect is wrong.
+>
+> Can you please fix this ?
+Thanks, I will fix it. Having trouble reproducing the error, but I
+clearly see the issue. Are you building on a MIPS target or
+cross-compiling (I'm cross-compiling and no errors).
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c     |  1 -
- arch/x86/kvm/mmu/tdp_mmu.c |  2 --
- include/trace/events/kvm.h | 24 ------------------------
- 3 files changed, 27 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 2070c7a91fdd..9eded46785b5 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -1467,7 +1467,6 @@ static bool kvm_age_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 	for_each_rmap_spte(rmap_head, &iter, sptep)
- 		young |= mmu_spte_age(sptep);
- 
--	trace_kvm_age_page(gfn, level, slot, young);
- 	return young;
- }
- 
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 21bb8b68a553..2941beb6559a 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -949,8 +949,6 @@ static bool age_gfn_range(struct kvm *kvm, struct tdp_iter *iter,
- 
- 	tdp_mmu_set_spte_no_acc_track(kvm, iter, new_spte);
- 
--	trace_kvm_age_page(iter->gfn, iter->level, range->slot, true);
--
- 	return true;
- }
- 
-diff --git a/include/trace/events/kvm.h b/include/trace/events/kvm.h
-index 200eb7465530..37e1e1a2d67d 100644
---- a/include/trace/events/kvm.h
-+++ b/include/trace/events/kvm.h
-@@ -255,30 +255,6 @@ TRACE_EVENT(kvm_fpu,
- 	TP_printk("%s", __print_symbolic(__entry->load, kvm_fpu_load_symbol))
- );
- 
--TRACE_EVENT(kvm_age_page,
--	TP_PROTO(ulong gfn, int level, struct kvm_memory_slot *slot, int ref),
--	TP_ARGS(gfn, level, slot, ref),
--
--	TP_STRUCT__entry(
--		__field(	u64,	hva		)
--		__field(	u64,	gfn		)
--		__field(	u8,	level		)
--		__field(	u8,	referenced	)
--	),
--
--	TP_fast_assign(
--		__entry->gfn		= gfn;
--		__entry->level		= level;
--		__entry->hva		= ((gfn - slot->base_gfn) <<
--					    PAGE_SHIFT) + slot->userspace_addr;
--		__entry->referenced	= ref;
--	),
--
--	TP_printk("hva %llx gfn %llx level %u %s",
--		  __entry->hva, __entry->gfn, __entry->level,
--		  __entry->referenced ? "YOUNG" : "OLD")
--);
--
- #ifdef CONFIG_KVM_ASYNC_PF
- DECLARE_EVENT_CLASS(kvm_async_get_page_class,
- 
--- 
-2.31.0.291.g576ba9dcdaf-goog
-
+Ilya
