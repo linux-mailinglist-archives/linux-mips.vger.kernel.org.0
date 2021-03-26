@@ -2,80 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CB3349D8E
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 01:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7CC349F08
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Mar 2021 02:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbhCZAS2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Mar 2021 20:18:28 -0400
-Received: from mail-il1-f170.google.com ([209.85.166.170]:37377 "EHLO
-        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbhCZASV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Mar 2021 20:18:21 -0400
-Received: by mail-il1-f170.google.com with SMTP id z9so3677341ilb.4;
-        Thu, 25 Mar 2021 17:18:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cQ49/BRSpA+BrnKpvm9V5uM5O4PaTolvQUFp43C9TjE=;
-        b=Lx4zxwTsln31qDgC3f3MULddvhpcLsYldL+ZQbnp6/tgiVRoUPCEqm+YlxATBE6BXs
-         yTzoPrBi6q082NdoESLSB0wyViU1pyg/X3nrDmpZo4rXlhWGTgHj5UAtoQQL8BEErNtB
-         VQrL3oqgbax/BvDY+JD+enPKaLEW3rNj1cNIuz1CXtZEUW0OzOwyYrdKZiAKalbm1T8/
-         a3qrQty5mnt0xaG5GW6K4YWZaNbrksdTCE5tuL1NdtYhfvCJWuYPrD4JbADqSXa3jfK3
-         m2JYRp5t0HPqZXG4dvg/ll4qP+CvjHHpDREc9U3xfrS3Fug6xNT47rPq34Bh4C5+YdcX
-         tHcQ==
-X-Gm-Message-State: AOAM533kuKjGEgdojMkWpmWZeeZKY20X4bX56hEGwI9LkSr7NsfHgxlI
-        3sCpheRaUSw7WXPO/48xhQ==
-X-Google-Smtp-Source: ABdhPJy4NEO7Ki88utGVy0098DnNN27W98R3hyOzTwTO4wxccpgj8OFq6ByDXObkcCOy2yDZaHkd+g==
-X-Received: by 2002:a05:6e02:219e:: with SMTP id j30mr8461778ila.196.1616717900908;
-        Thu, 25 Mar 2021 17:18:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id w9sm3489521iox.20.2021.03.25.17.18.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 17:18:20 -0700 (PDT)
-Received: (nullmailer pid 2016095 invoked by uid 1000);
-        Fri, 26 Mar 2021 00:18:17 -0000
-Date:   Thu, 25 Mar 2021 18:18:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     robh+dt@kernel.org, hns@goldelico.com, paul@boddie.org.uk,
-        linux-gpio@vger.kernel.org, paul@crapouillou.net,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        linux-kernel@vger.kernel.org, sernia.zhou@foxmail.com,
-        linux-mips@vger.kernel.org, andy.shevchenko@gmail.com,
-        devicetree@vger.kernel.org, linus.walleij@linaro.org
-Subject: Re: [PATCH v3 05/10] dt-bindings: pinctrl: Add bindings for new
- Ingenic SoCs.
-Message-ID: <20210326001817.GA2016065@robh.at.kernel.org>
-References: <1615975084-68203-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1615975084-68203-6-git-send-email-zhouyanjie@wanyeetech.com>
+        id S230269AbhCZBsw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Mar 2021 21:48:52 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:57574 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230226AbhCZBsp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 25 Mar 2021 21:48:45 -0400
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.160.162])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxQ+BTPV1gi+MAAA--.881S2;
+        Fri, 26 Mar 2021 09:48:05 +0800 (CST)
+Date:   Fri, 26 Mar 2021 09:48:03 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH 1/6] MIPS: replace -pg with CC_FLAGS_FTRACE
+Message-ID: <20210326014802.fkdiggo3tak6j5it@ambrosehua-HP-xw6600-Workstation>
+References: <20210313064149.29276-1-huangpei@loongson.cn>
+ <20210313064149.29276-2-huangpei@loongson.cn>
+ <20210325153814.098a5d32@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1615975084-68203-6-git-send-email-zhouyanjie@wanyeetech.com>
+In-Reply-To: <20210325153814.098a5d32@gandalf.local.home>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9CxQ+BTPV1gi+MAAA--.881S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFW8tr1fArWkJF1UZw4Dtwb_yoW5CFy3pa
+        n2kF1DJw4xXry8KryftFy5ZrsrArZYqrW0gFnFgryUtF9xZFnYgr1xtry5XF95WryxA34x
+        Wa48WF17Aryava7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JUWa0PUUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 17 Mar 2021 17:57:59 +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Add the pinctrl bindings for the JZ4730 SoC, the JZ4750 SoC,
-> the JZ4755 SoC, the JZ4775 SoC and the X2000 SoC from Ingenic.
+On Thu, Mar 25, 2021 at 03:38:14PM -0400, Steven Rostedt wrote:
+> On Sat, 13 Mar 2021 14:41:44 +0800
+> Huang Pei <huangpei@loongson.cn> wrote:
 > 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
 > 
-> Notes:
->     v2:
->     New patch.
+> Even simple changes require change logs. For example:
 > 
->     v2->v3:
->     No change.
+> "Enabling ftrace may require more than just the -pg flags today. As ftrace
+> enables more flags, use the $(CC_FLAGS_FTRACE) in the make file instead of
+> hard coding "-pg"."
 > 
->  .../bindings/pinctrl/ingenic,pinctrl.yaml          | 23 ++++++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
+> Other than that:
 > 
+> Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> 
+> -- Steve
+> 
+Got it, much better than mine, thank you
+> 
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > ---
+> >  arch/mips/boot/compressed/Makefile | 2 +-
+> >  arch/mips/kernel/Makefile          | 8 ++++----
+> >  arch/mips/vdso/Makefile            | 4 ++--
+> >  3 files changed, 7 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+> > index d66511825fe1..8fc9ceeec709 100644
+> > --- a/arch/mips/boot/compressed/Makefile
+> > +++ b/arch/mips/boot/compressed/Makefile
+> > @@ -18,7 +18,7 @@ include $(srctree)/arch/mips/Kbuild.platforms
+> >  BOOT_HEAP_SIZE := 0x400000
+> >  
+> >  # Disable Function Tracer
+> > -KBUILD_CFLAGS := $(filter-out -pg, $(KBUILD_CFLAGS))
+> > +KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE), $(KBUILD_CFLAGS))
+> >  
+> >  KBUILD_CFLAGS := $(filter-out -fstack-protector, $(KBUILD_CFLAGS))
+> >  
+> > diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
+> > index 2a05b923f579..33e31ea10234 100644
+> > --- a/arch/mips/kernel/Makefile
+> > +++ b/arch/mips/kernel/Makefile
+> > @@ -17,10 +17,10 @@ obj-y		+= cpu-probe.o
+> >  endif
+> >  
+> >  ifdef CONFIG_FUNCTION_TRACER
+> > -CFLAGS_REMOVE_ftrace.o = -pg
+> > -CFLAGS_REMOVE_early_printk.o = -pg
+> > -CFLAGS_REMOVE_perf_event.o = -pg
+> > -CFLAGS_REMOVE_perf_event_mipsxx.o = -pg
+> > +CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
+> > +CFLAGS_REMOVE_early_printk.o = $(CC_FLAGS_FTRACE)
+> > +CFLAGS_REMOVE_perf_event.o = $(CC_FLAGS_FTRACE)
+> > +CFLAGS_REMOVE_perf_event_mipsxx.o = $(CC_FLAGS_FTRACE)
+> >  endif
+> >  
+> >  obj-$(CONFIG_CEVT_BCM1480)	+= cevt-bcm1480.o
+> > diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+> > index 5810cc12bc1d..f21cf88f7ae3 100644
+> > --- a/arch/mips/vdso/Makefile
+> > +++ b/arch/mips/vdso/Makefile
+> > @@ -49,7 +49,7 @@ CFLAGS_vgettimeofday-o32.o = -include $(srctree)/$(src)/config-n32-o32-env.c -in
+> >  CFLAGS_vgettimeofday-n32.o = -include $(srctree)/$(src)/config-n32-o32-env.c -include $(c-gettimeofday-y)
+> >  endif
+> >  
+> > -CFLAGS_REMOVE_vgettimeofday.o = -pg
+> > +CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE)
+> >  
+> >  ifdef CONFIG_MIPS_DISABLE_VDSO
+> >    ifndef CONFIG_MIPS_LD_CAN_LINK_VDSO
+> > @@ -63,7 +63,7 @@ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
+> >  	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
+> >  	-G 0 --eh-frame-hdr --hash-style=sysv --build-id=sha1 -T
+> >  
+> > -CFLAGS_REMOVE_vdso.o = -pg
+> > +CFLAGS_REMOVE_vdso.o = $(CC_FLAGS_FTRACE)
+> >  
+> >  GCOV_PROFILE := n
+> >  UBSAN_SANITIZE := n
 
-Reviewed-by: Rob Herring <robh@kernel.org>
