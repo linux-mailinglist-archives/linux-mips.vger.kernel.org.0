@@ -2,785 +2,452 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B922034B93B
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Mar 2021 21:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35ECC34B966
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Mar 2021 22:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbhC0T73 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sat, 27 Mar 2021 15:59:29 -0400
-Received: from aposti.net ([89.234.176.197]:35594 "EHLO aposti.net"
+        id S230139AbhC0VG2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 Mar 2021 17:06:28 -0400
+Received: from elvis.franken.de ([193.175.24.41]:55819 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230002AbhC0T7C (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 27 Mar 2021 15:59:02 -0400
-Date:   Sat, 27 Mar 2021 19:58:40 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 10/10] pinctrl: Ingenic: Add pinctrl driver for X2000.
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        hns@goldelico.com, paul@boddie.org.uk, andy.shevchenko@gmail.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        sernia.zhou@foxmail.com
-Message-Id: <ST8NQQ.Z7KD5NE5UKZR3@crapouillou.net>
-In-Reply-To: <fc1019bb-86c7-072a-b60c-3511c38858d2@wanyeetech.com>
-References: <1615975084-68203-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1615975084-68203-11-git-send-email-zhouyanjie@wanyeetech.com>
-        <6UVDQQ.U3HDKVEJU8JA3@crapouillou.net>
-        <fc1019bb-86c7-072a-b60c-3511c38858d2@wanyeetech.com>
+        id S230015AbhC0VGM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 27 Mar 2021 17:06:12 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lQG8H-0006kh-00; Sat, 27 Mar 2021 22:06:09 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 161D5C1D8D; Sat, 27 Mar 2021 21:39:17 +0100 (CET)
+Date:   Sat, 27 Mar 2021 21:39:17 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        John Crispin <john@phrozen.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: ralink: mt7621: add memory detection support
+Message-ID: <20210327203916.GA4991@alpha.franken.de>
+References: <20210317055902.506773-1-ilya.lipnitskiy@gmail.com>
+ <20210325095529.GA5775@alpha.franken.de>
+ <CALCv0x2ni97mLEar6M9boWCrXzdsqM3JJNMbe=cDitHj+npanw@mail.gmail.com>
+ <20210327094620.GA4320@alpha.franken.de>
+ <CALCv0x23kmm5=PN_aS3L4fpEf8F9g7ay5ouX9AnCvf0uu6HM-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/mixed; boundary="y0ulUmNC+osPPQO6"
+Content-Disposition: inline
+In-Reply-To: <CALCv0x23kmm5=PN_aS3L4fpEf8F9g7ay5ouX9AnCvf0uu6HM-g@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Zhou,
 
-Le jeu. 25 mars 2021 à 17:03, Zhou Yanjie <zhouyanjie@wanyeetech.com> 
-a écrit :
-> Hi Paul,
-> 
-> On 2021/3/23 上午2:39, Paul Cercueil wrote:
->> 
->> 
->>  Le mer. 17 mars 2021 à 17:58, 周琰杰 (Zhou Yanjie) 
->> <zhouyanjie@wanyeetech.com> a écrit :
->>> Add support for probing the pinctrl-ingenic driver on the
->>>  X2000 SoC from Ingenic.
->>> 
->>>  Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->>>  ---
->>> 
->>>  Notes:
->>>      v3:
->>>      New patch.
->>> 
->>>   drivers/pinctrl/pinctrl-ingenic.c | 502 
->>> +++++++++++++++++++++++++++++++++++++-
->>>   1 file changed, 493 insertions(+), 9 deletions(-)
->>> 
->>>  diff --git a/drivers/pinctrl/pinctrl-ingenic.c 
->>> b/drivers/pinctrl/pinctrl-ingenic.c
->>>  index eb4912d..538d1b5 100644
->>>  --- a/drivers/pinctrl/pinctrl-ingenic.c
->>>  +++ b/drivers/pinctrl/pinctrl-ingenic.c
->>>  @@ -57,6 +57,10 @@
->>>   #define X1830_GPIO_PEL                0x110
->>>   #define X1830_GPIO_PEH                0x120
->>> 
->>>  +#define X2000_GPIO_EDG                0x70
->>>  +#define X2000_GPIO_PEPU                0x80
->>>  +#define X2000_GPIO_PEPD                0x90
->>>  +
->>>   #define REG_SET(x)                    ((x) + 0x4)
->>>   #define REG_CLEAR(x)                ((x) + 0x8)
->>> 
->>>  @@ -94,6 +98,7 @@ enum jz_version {
->>>       ID_X1000,
->>>       ID_X1500,
->>>       ID_X1830,
->>>  +    ID_X2000,
->>>   };
->>> 
->>>   struct ingenic_chip_info {
->>>  @@ -2273,6 +2278,439 @@ static const struct ingenic_chip_info 
->>> x1830_chip_info = {
->>>       .pull_downs = x1830_pull_downs,
->>>   };
->>> 
->>>  +static const u32 x2000_pull_ups[5] = {
->>>  +    0x0003ffff, 0xffffffff, 0x1ff0ffff, 0xc7fe3f3f, 0x8fff003f,
->>>  +};
->>>  +
->>>  +static const u32 x2000_pull_downs[5] = {
->>>  +    0x0003ffff, 0xffffffff, 0x1ff0ffff, 0x00000000, 0x8fff003f,
->>>  +};
->>>  +
->>>  +static int x2000_uart0_data_pins[] = { 0x77, 0x78, };
->>>  +static int x2000_uart0_hwflow_pins[] = { 0x79, 0x7a, };
->>>  +static int x2000_uart1_data_pins[] = { 0x57, 0x58, };
->>>  +static int x2000_uart1_hwflow_pins[] = { 0x55, 0x56, };
->>>  +static int x2000_uart2_data_pins[] = { 0x7e, 0x7f, };
->>>  +static int x2000_uart3_data_c_pins[] = { 0x59, 0x5a, };
->>>  +static int x2000_uart3_data_d_pins[] = { 0x62, 0x63, };
->>>  +static int x2000_uart3_hwflow_c_pins[] = { 0x5b, 0x5c, };
->>>  +static int x2000_uart3_hwflow_d_pins[] = { 0x60, 0x61, };
->>>  +static int x2000_uart4_data_a_pins[] = { 0x02, 0x03, };
->>>  +static int x2000_uart4_data_c_pins[] = { 0x4b, 0x4c, };
->>>  +static int x2000_uart4_hwflow_a_pins[] = { 0x00, 0x01, };
->>>  +static int x2000_uart4_hwflow_c_pins[] = { 0x49, 0x4a, };
->>>  +static int x2000_uart5_data_a_pins[] = { 0x04, 0x05, };
->>>  +static int x2000_uart5_data_c_pins[] = { 0x45, 0x46, };
->>>  +static int x2000_uart6_data_a_pins[] = { 0x06, 0x07, };
->>>  +static int x2000_uart6_data_c_pins[] = { 0x47, 0x48, };
->>>  +static int x2000_uart7_data_a_pins[] = { 0x08, 0x09, };
->>>  +static int x2000_uart7_data_c_pins[] = { 0x41, 0x42, };
->>>  +static int x2000_uart8_data_pins[] = { 0x3c, 0x3d, };
->>>  +static int x2000_uart9_data_pins[] = { 0x3e, 0x3f, };
->>>  +static int x2000_sfc0_d_pins[] = { 0x73, 0x74, 0x75, 0x76, 0x71, 
->>> 0x72, };
->>>  +static int x2000_sfc0_e_pins[] = { 0x92, 0x93, 0x94, 0x95, 0x90, 
->>> 0x91, };
->>>  +static int x2000_sfc1_pins[] = { 0x77, 0x78, 0x79, 0x7a, };
->>>  +static int x2000_ssi0_dt_b_pins[] = { 0x3e, };
->>>  +static int x2000_ssi0_dt_d_pins[] = { 0x69, };
->>>  +static int x2000_ssi0_dr_b_pins[] = { 0x3d, };
->>>  +static int x2000_ssi0_dr_d_pins[] = { 0x6a, };
->>>  +static int x2000_ssi0_clk_b_pins[] = { 0x3f, };
->>>  +static int x2000_ssi0_clk_d_pins[] = { 0x68, };
->>>  +static int x2000_ssi0_ce0_b_pins[] = { 0x3c, };
->>>  +static int x2000_ssi0_ce0_d_pins[] = { 0x6d, };
->>>  +static int x2000_ssi1_dt_c_pins[] = { 0x4b, };
->>>  +static int x2000_ssi1_dt_d_pins[] = { 0x72, };
->>>  +static int x2000_ssi1_dt_e_pins[] = { 0x91, };
->>>  +static int x2000_ssi1_dr_c_pins[] = { 0x4a, };
->>>  +static int x2000_ssi1_dr_d_pins[] = { 0x73, };
->>>  +static int x2000_ssi1_dr_e_pins[] = { 0x92, };
->>>  +static int x2000_ssi1_clk_c_pins[] = { 0x4c, };
->>>  +static int x2000_ssi1_clk_d_pins[] = { 0x71, };
->>>  +static int x2000_ssi1_clk_e_pins[] = { 0x90, };
->>>  +static int x2000_ssi1_ce0_c_pins[] = { 0x49, };
->>>  +static int x2000_ssi1_ce0_d_pins[] = { 0x76, };
->>>  +static int x2000_ssi1_ce0_e_pins[] = { 0x95, };
->>>  +static int x2000_mmc0_1bit_pins[] = { 0x71, 0x72, 0x73, };
->>>  +static int x2000_mmc0_4bit_pins[] = { 0x74, 0x75, 0x75, };
->>>  +static int x2000_mmc0_8bit_pins[] = { 0x77, 0x78, 0x79, 0x7a, };
->>>  +static int x2000_mmc1_1bit_pins[] = { 0x68, 0x69, 0x6a, };
->>>  +static int x2000_mmc1_4bit_pins[] = { 0x6b, 0x6c, 0x6d, };
->>>  +static int x2000_mmc2_1bit_pins[] = { 0x80, 0x81, 0x82, };
->>>  +static int x2000_mmc2_4bit_pins[] = { 0x83, 0x84, 0x85, };
->>>  +static int x2000_emc_8bit_data_pins[] = {
->>>  +    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
->>>  +};
->>>  +static int x2000_emc_16bit_data_pins[] = {
->>>  +    0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f,
->>>  +};
->>>  +static int x2000_emc_addr_pins[] = {
->>>  +    0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
->>>  +    0x28, 0x29, 0x2a, 0x2b, 0x2c,
->>>  +};
->>>  +static int x2000_emc_rd_we_pins[] = { 0x2d, 0x2e, };
->>>  +static int x2000_emc_wait_pins[] = { 0x2f, };
->>>  +static int x2000_emc_cs1_pins[] = { 0x57, };
->>>  +static int x2000_emc_cs2_pins[] = { 0x58, };
->>>  +static int x2000_i2c0_pins[] = { 0x4e, 0x4d, };
->>>  +static int x2000_i2c1_c_pins[] = { 0x58, 0x57, };
->>>  +static int x2000_i2c1_d_pins[] = { 0x6c, 0x6b, };
->>>  +static int x2000_i2c2_b_pins[] = { 0x37, 0x36, };
->>>  +static int x2000_i2c2_d_pins[] = { 0x75, 0x74, };
->>>  +static int x2000_i2c2_e_pins[] = { 0x94, 0x93, };
->>>  +static int x2000_i2c3_a_pins[] = { 0x11, 0x10, };
->>>  +static int x2000_i2c3_d_pins[] = { 0x7f, 0x7e, };
->>>  +static int x2000_i2c4_c_pins[] = { 0x5a, 0x59, };
->>>  +static int x2000_i2c4_d_pins[] = { 0x61, 0x60, };
->>>  +static int x2000_i2c5_c_pins[] = { 0x5c, 0x5b, };
->>>  +static int x2000_i2c5_d_pins[] = { 0x65, 0x64, };
->>>  +static int x2000_i2s1_data_tx_pins[] = { 0x47, };
->>>  +static int x2000_i2s1_data_rx_pins[] = { 0x44, };
->>>  +static int x2000_i2s1_clk_tx_pins[] = { 0x45, 0x46, };
->>>  +static int x2000_i2s1_clk_rx_pins[] = { 0x42, 0x43, };
->>>  +static int x2000_i2s1_sysclk_tx_pins[] = { 0x48, };
->>>  +static int x2000_i2s1_sysclk_rx_pins[] = { 0x41, };
->>>  +static int x2000_i2s2_data_rx0_pins[] = { 0x0a, };
->>>  +static int x2000_i2s2_data_rx1_pins[] = { 0x0b, };
->>>  +static int x2000_i2s2_data_rx2_pins[] = { 0x0c, };
->>>  +static int x2000_i2s2_data_rx3_pins[] = { 0x0d, };
->>>  +static int x2000_i2s2_clk_rx_pins[] = { 0x11, 0x09, };
->>>  +static int x2000_i2s2_sysclk_rx_pins[] = { 0x07, };
->>>  +static int x2000_i2s3_data_tx0_pins[] = { 0x03, };
->>>  +static int x2000_i2s3_data_tx1_pins[] = { 0x04, };
->>>  +static int x2000_i2s3_data_tx2_pins[] = { 0x05, };
->>>  +static int x2000_i2s3_data_tx3_pins[] = { 0x06, };
->>>  +static int x2000_i2s3_clk_tx_pins[] = { 0x10, 0x02, };
->>>  +static int x2000_i2s3_sysclk_tx_pins[] = { 0x00, };
->>>  +static int x2000_cim_8bit_pins[] = {
->>>  +    0x0e, 0x0c, 0x0d, 0x4f,
->>>  +    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
->>>  +};
->>>  +static int x2000_cim_12bit_pins[] = { 0x08, 0x09, 0x0a, 0x0b, };
->>>  +static int x2000_lcd_rgb_24bit_pins[] = {
->>>  +    0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
->>>  +    0x38, 0x3b, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d,
->>>  +    0x2e, 0x2f, 0x3a, 0x39, 0x30, 0x31, 0x32, 0x33,
->>>  +    0x34, 0x35, 0x36, 0x37,
->>>  +};
->>>  +static int x2000_lcd_slcd_8bit_pins[] = {
->>>  +    0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
->>>  +    0x3a, 0x38, 0x3b, 0x30, 0x39,
->>>  +};
->>>  +static int x2000_lcd_slcd_16bit_pins[] = {
->>>  +    0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f,
->>>  +};
->> 
->>  Your LCD groups shouldn't overlap. See how it's done for the 
->> JZ4725B.
->> 
-> 
-> The LCD controller of X2000 is similar to that of X1830, but is very 
-> different from the previous JZ47 series SoCs. It essentially makes 
-> two independent parts, which are used to control the LCD of the 
-> universal RGB interface and the so-called smart LCD (LCD with 
-> controller, compatible with the 8080 interface or 6800 interface). 
-> The RGB part is more like the LCD controller in the jz47 series with 
-> special pins and serial mode removed, the Smart LCD part is inherited 
-> from X1000 (X1000's LCD controller does not support RGB interface, 
-> and for the first time introduce this interface that compatible with 
-> 8080 or 6800 called as SLCD by Ingenic). So it may be more 
-> appropriate to distinguish them. However, the RGB part can follow the 
-> way of the jz47 series and split it into a combination of 16bit, 
-> 18bit, and 24bit.
-> 
-> What is your opinion?
-> 
-In case of the X2000 (and maybe X1830 - didn't check), the RGB and SLCD 
-modules have pins in common, but with a different function number. As 
-such they don't actually share any group of pins, and should be 
-distinguised, yes.
+--y0ulUmNC+osPPQO6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-You can split the RGB part the same way it's done for the JZ47xx SoCs. 
-For the SLCD, according to the PM it supports 1-bit, 8-bit, 9-bit, 
-16-bit, 18-bit and 24-bit, so you should have groups for these.
+On Sat, Mar 27, 2021 at 09:35:43AM -0700, Ilya Lipnitskiy wrote:
+> On Sat, Mar 27, 2021 at 2:46 AM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > On Thu, Mar 25, 2021 at 07:45:23PM -0700, Ilya Lipnitskiy wrote:
+> > > On Thu, Mar 25, 2021 at 3:01 AM Thomas Bogendoerfer
+> > > <tsbogend@alpha.franken.de> wrote:
+> > > >
+> > > > On Tue, Mar 16, 2021 at 10:59:02PM -0700, Ilya Lipnitskiy wrote:
+> > > > > From: Chuanhong Guo <gch981213@gmail.com>
+> > > > >
+> > > > > mt7621 has the following memory map:
+> > > > > 0x0-0x1c000000: lower 448m memory
+> > > > > 0x1c000000-0x2000000: peripheral registers
+> > > > > 0x20000000-0x2400000: higher 64m memory
+> > > > >
+> > > > > detect_memory_region in arch/mips/kernel/setup.c only adds the first
+> > > > > memory region and isn't suitable for 512m memory detection because
+> > > > > it may accidentally read the memory area for peripheral registers.
+> > > > >
+> > > > > This commit adds memory detection capability for mt7621:
+> > > > >   1. Add the highmem area when 512m is detected.
+> > > > >   2. Guard memcmp from accessing peripheral registers:
+> > > > >      This only happens when a user decided to change kernel load address
+> > > > >      to 256m or higher address. Since this is a quite unusual case, we
+> > > > >      just skip 512m testing and return 256m as memory size.
+> > > > >
+> > > > > [...]
+> > > >
+> > > > I get
+> > > >
+> > > > WARNING: modpost: vmlinux.o(.text+0x132c): Section mismatch in reference from the function prom_soc_init() to the function .init.text:mt7621_memory_detect()
+> > > > The function prom_soc_init() references
+> > > > the function __init mt7621_memory_detect().
+> > > > This is often because prom_soc_init lacks a __init
+> > > > annotation or the annotation of mt7621_memory_detect is wrong.
+> > > >
+> > > > Can you please fix this ?
+> > > Thanks, I will fix it. Having trouble reproducing the error, but I
+> > > clearly see the issue. Are you building on a MIPS target or
+> > > cross-compiling (I'm cross-compiling and no errors).
+> >
+> > I'm cross compiling, I can provide you the .config, if you want.
+> Yeah, that would help. I spent quite a bit of time trying to reproduce
+> - tried different options with GCC 8 and GCC 10 to no avail. Maybe you
+> are using clang?
 
-> Thanks and best regards!
-> 
-Cheers,
--Paul
+no, but an older gcc (gcc version 6.1.1 20160621 (Red Hat Cross 6.1.1-2) (GCC)).
+config is attached.
 
->>> +static int x2000_pwm_pwm0_c_pins[] = { 0x40, };
->>>  +static int x2000_pwm_pwm0_d_pins[] = { 0x7e, };
->>>  +static int x2000_pwm_pwm1_c_pins[] = { 0x41, };
->>>  +static int x2000_pwm_pwm1_d_pins[] = { 0x7f, };
->>>  +static int x2000_pwm_pwm2_c_pins[] = { 0x42, };
->>>  +static int x2000_pwm_pwm2_e_pins[] = { 0x80, };
->>>  +static int x2000_pwm_pwm3_c_pins[] = { 0x43, };
->>>  +static int x2000_pwm_pwm3_e_pins[] = { 0x81, };
->>>  +static int x2000_pwm_pwm4_c_pins[] = { 0x44, };
->>>  +static int x2000_pwm_pwm4_e_pins[] = { 0x82, };
->>>  +static int x2000_pwm_pwm5_c_pins[] = { 0x45, };
->>>  +static int x2000_pwm_pwm5_e_pins[] = { 0x83, };
->>>  +static int x2000_pwm_pwm6_c_pins[] = { 0x46, };
->>>  +static int x2000_pwm_pwm6_e_pins[] = { 0x84, };
->>>  +static int x2000_pwm_pwm7_c_pins[] = { 0x47, };
->>>  +static int x2000_pwm_pwm7_e_pins[] = { 0x85, };
->>>  +static int x2000_pwm_pwm8_pins[] = { 0x48, };
->>>  +static int x2000_pwm_pwm9_pins[] = { 0x49, };
->>>  +static int x2000_pwm_pwm10_pins[] = { 0x4a, };
->>>  +static int x2000_pwm_pwm11_pins[] = { 0x4b, };
->>>  +static int x2000_pwm_pwm12_pins[] = { 0x4c, };
->>>  +static int x2000_pwm_pwm13_pins[] = { 0x4d, };
->>>  +static int x2000_pwm_pwm14_pins[] = { 0x4e, };
->>>  +static int x2000_pwm_pwm15_pins[] = { 0x4f, };
->>>  +static int x2000_mac0_rmii_pins[] = {
->>>  +    0x4b, 0x47, 0x46, 0x4a, 0x43, 0x42, 0x4c, 0x4d, 0x4e, 0x41,
->>>  +};
->>>  +static int x2000_mac0_rgmii_pins[] = {
->>>  +    0x4b, 0x49, 0x48, 0x47, 0x46, 0x4a, 0x45, 0x44, 0x43, 0x42,
->>>  +    0x4c, 0x4d, 0x4f, 0x4e, 0x41,
->>>  +};
->>>  +static int x2000_mac1_rmii_pins[] = {
->>>  +    0x32, 0x2d, 0x2c, 0x31, 0x29, 0x28, 0x33, 0x34, 0x35, 0x37,
->>>  +};
->>>  +static int x2000_mac1_rgmii_pins[] = {
->>>  +    0x32, 0x2f, 0x2e, 0x2d, 0x2c, 0x31, 0x2b, 0x2a, 0x29, 0x28,
->>>  +    0x33, 0x34, 0x36, 0x35, 0x37,
->>>  +};
->>>  +static int x2000_otg_pins[] = { 0x96, };
->>>  +
->>>  +static u8 x2000_cim_8bit_funcs[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 
->>> 0, 0, 2, };
->>>  +
->>>  +static const struct group_desc x2000_groups[] = {
->>>  +    INGENIC_PIN_GROUP("uart0-data", x2000_uart0_data, 2),
->>>  +    INGENIC_PIN_GROUP("uart0-hwflow", x2000_uart0_hwflow, 2),
->>>  +    INGENIC_PIN_GROUP("uart1-data", x2000_uart1_data, 1),
->>>  +    INGENIC_PIN_GROUP("uart1-hwflow", x2000_uart1_hwflow, 1),
->>>  +    INGENIC_PIN_GROUP("uart2-data", x2000_uart2_data, 0),
->>>  +    INGENIC_PIN_GROUP("uart3-data-c", x2000_uart3_data_c, 0),
->>>  +    INGENIC_PIN_GROUP("uart3-data-d", x2000_uart3_data_d, 1),
->>>  +    INGENIC_PIN_GROUP("uart3-hwflow-c", x2000_uart3_hwflow_c, 0),
->>>  +    INGENIC_PIN_GROUP("uart3-hwflow-d", x2000_uart3_hwflow_d, 1),
->>>  +    INGENIC_PIN_GROUP("uart4-data-a", x2000_uart4_data_a, 1),
->>>  +    INGENIC_PIN_GROUP("uart4-data-c", x2000_uart4_data_c, 3),
->>>  +    INGENIC_PIN_GROUP("uart4-hwflow-a", x2000_uart4_hwflow_a, 1),
->>>  +    INGENIC_PIN_GROUP("uart4-hwflow-c", x2000_uart4_hwflow_c, 3),
->>>  +    INGENIC_PIN_GROUP("uart5-data-a", x2000_uart5_data_a, 1),
->>>  +    INGENIC_PIN_GROUP("uart5-data-c", x2000_uart5_data_c, 3),
->>>  +    INGENIC_PIN_GROUP("uart6-data-a", x2000_uart6_data_a, 1),
->>>  +    INGENIC_PIN_GROUP("uart6-data-c", x2000_uart6_data_c, 3),
->>>  +    INGENIC_PIN_GROUP("uart7-data-a", x2000_uart7_data_a, 1),
->>>  +    INGENIC_PIN_GROUP("uart7-data-c", x2000_uart7_data_c, 3),
->>>  +    INGENIC_PIN_GROUP("uart8-data", x2000_uart8_data, 3),
->>>  +    INGENIC_PIN_GROUP("uart9-data", x2000_uart9_data, 3),
->>>  +    INGENIC_PIN_GROUP("sfc0-d", x2000_sfc0_d, 1),
->>>  +    INGENIC_PIN_GROUP("sfc0-e", x2000_sfc0_e, 0),
->>>  +    INGENIC_PIN_GROUP("sfc1", x2000_sfc1, 1),
->>>  +    INGENIC_PIN_GROUP("ssi0-dt-b", x2000_ssi0_dt_b, 1),
->>>  +    INGENIC_PIN_GROUP("ssi0-dt-d", x2000_ssi0_dt_d, 1),
->>>  +    INGENIC_PIN_GROUP("ssi0-dr-b", x2000_ssi0_dr_b, 1),
->>>  +    INGENIC_PIN_GROUP("ssi0-dr-d", x2000_ssi0_dr_d, 1),
->>>  +    INGENIC_PIN_GROUP("ssi0-clk-b", x2000_ssi0_clk_b, 1),
->>>  +    INGENIC_PIN_GROUP("ssi0-clk-d", x2000_ssi0_clk_d, 1),
->>>  +    INGENIC_PIN_GROUP("ssi0-ce0-b", x2000_ssi0_ce0_b, 1),
->>>  +    INGENIC_PIN_GROUP("ssi0-ce0-d", x2000_ssi0_ce0_d, 1),
->>>  +    INGENIC_PIN_GROUP("ssi1-dt-c", x2000_ssi1_dt_c, 2),
->>>  +    INGENIC_PIN_GROUP("ssi1-dt-d", x2000_ssi1_dt_d, 2),
->>>  +    INGENIC_PIN_GROUP("ssi1-dt-e", x2000_ssi1_dt_e, 1),
->>>  +    INGENIC_PIN_GROUP("ssi1-dr-c", x2000_ssi1_dr_c, 2),
->>>  +    INGENIC_PIN_GROUP("ssi1-dr-d", x2000_ssi1_dr_d, 2),
->>>  +    INGENIC_PIN_GROUP("ssi1-dr-e", x2000_ssi1_dr_e, 1),
->>>  +    INGENIC_PIN_GROUP("ssi1-clk-c", x2000_ssi1_clk_c, 2),
->>>  +    INGENIC_PIN_GROUP("ssi1-clk-d", x2000_ssi1_clk_d, 2),
->>>  +    INGENIC_PIN_GROUP("ssi1-clk-e", x2000_ssi1_clk_e, 1),
->>>  +    INGENIC_PIN_GROUP("ssi1-ce0-c", x2000_ssi1_ce0_c, 2),
->>>  +    INGENIC_PIN_GROUP("ssi1-ce0-d", x2000_ssi1_ce0_d, 2),
->>>  +    INGENIC_PIN_GROUP("ssi1-ce0-e", x2000_ssi1_ce0_e, 1),
->>>  +    INGENIC_PIN_GROUP("mmc0-1bit", x2000_mmc0_1bit, 0),
->>>  +    INGENIC_PIN_GROUP("mmc0-4bit", x2000_mmc0_4bit, 0),
->>>  +    INGENIC_PIN_GROUP("mmc0-8bit", x2000_mmc0_8bit, 0),
->>>  +    INGENIC_PIN_GROUP("mmc1-1bit", x2000_mmc1_1bit, 0),
->>>  +    INGENIC_PIN_GROUP("mmc1-4bit", x2000_mmc1_4bit, 0),
->>>  +    INGENIC_PIN_GROUP("mmc2-1bit", x2000_mmc2_1bit, 0),
->>>  +    INGENIC_PIN_GROUP("mmc2-4bit", x2000_mmc2_4bit, 0),
->>>  +    INGENIC_PIN_GROUP("emc-8bit-data", x2000_emc_8bit_data, 0),
->>>  +    INGENIC_PIN_GROUP("emc-16bit-data", x2000_emc_16bit_data, 0),
->>>  +    INGENIC_PIN_GROUP("emc-addr", x2000_emc_addr, 0),
->>>  +    INGENIC_PIN_GROUP("emc-rd-we", x2000_emc_rd_we, 0),
->>>  +    INGENIC_PIN_GROUP("emc-wait", x2000_emc_wait, 0),
->>>  +    INGENIC_PIN_GROUP("emc-cs1", x2000_emc_cs1, 3),
->>>  +    INGENIC_PIN_GROUP("emc-cs2", x2000_emc_cs2, 3),
->>>  +    INGENIC_PIN_GROUP("i2c0-data", x2000_i2c0, 3),
->>>  +    INGENIC_PIN_GROUP("i2c1-data-c", x2000_i2c1_c, 2),
->>>  +    INGENIC_PIN_GROUP("i2c1-data-d", x2000_i2c1_d, 1),
->>>  +    INGENIC_PIN_GROUP("i2c2-data-b", x2000_i2c2_b, 2),
->>>  +    INGENIC_PIN_GROUP("i2c2-data-d", x2000_i2c2_d, 2),
->>>  +    INGENIC_PIN_GROUP("i2c2-data-e", x2000_i2c2_e, 1),
->>>  +    INGENIC_PIN_GROUP("i2c3-data-a", x2000_i2c3_a, 0),
->>>  +    INGENIC_PIN_GROUP("i2c3-data-d", x2000_i2c3_d, 1),
->>>  +    INGENIC_PIN_GROUP("i2c4-data-c", x2000_i2c4_c, 1),
->>>  +    INGENIC_PIN_GROUP("i2c4-data-d", x2000_i2c4_d, 2),
->>>  +    INGENIC_PIN_GROUP("i2c5-data-c", x2000_i2c5_c, 1),
->>>  +    INGENIC_PIN_GROUP("i2c5-data-d", x2000_i2c5_d, 1),
->>>  +    INGENIC_PIN_GROUP("i2s1-data-tx", x2000_i2s1_data_tx, 2),
->>>  +    INGENIC_PIN_GROUP("i2s1-data-rx", x2000_i2s1_data_rx, 2),
->>>  +    INGENIC_PIN_GROUP("i2s1-clk-tx", x2000_i2s1_clk_tx, 2),
->>>  +    INGENIC_PIN_GROUP("i2s1-clk-rx", x2000_i2s1_clk_rx, 2),
->>>  +    INGENIC_PIN_GROUP("i2s1-sysclk-tx", x2000_i2s1_sysclk_tx, 2),
->>>  +    INGENIC_PIN_GROUP("i2s1-sysclk-rx", x2000_i2s1_sysclk_rx, 2),
->>>  +    INGENIC_PIN_GROUP("i2s2-data-rx0", x2000_i2s2_data_rx0, 2),
->>>  +    INGENIC_PIN_GROUP("i2s2-data-rx1", x2000_i2s2_data_rx1, 2),
->>>  +    INGENIC_PIN_GROUP("i2s2-data-rx2", x2000_i2s2_data_rx2, 2),
->>>  +    INGENIC_PIN_GROUP("i2s2-data-rx3", x2000_i2s2_data_rx3, 2),
->>>  +    INGENIC_PIN_GROUP("i2s2-clk-rx", x2000_i2s2_clk_rx, 2),
->>>  +    INGENIC_PIN_GROUP("i2s2-sysclk-rx", x2000_i2s2_sysclk_rx, 2),
->>>  +    INGENIC_PIN_GROUP("i2s3-data-tx0", x2000_i2s3_data_tx0, 2),
->>>  +    INGENIC_PIN_GROUP("i2s3-data-tx1", x2000_i2s3_data_tx1, 2),
->>>  +    INGENIC_PIN_GROUP("i2s3-data-tx2", x2000_i2s3_data_tx2, 2),
->>>  +    INGENIC_PIN_GROUP("i2s3-data-tx3", x2000_i2s3_data_tx3, 2),
->>>  +    INGENIC_PIN_GROUP("i2s3-clk-tx", x2000_i2s3_clk_tx, 2),
->>>  +    INGENIC_PIN_GROUP("i2s3-sysclk-tx", x2000_i2s3_sysclk_tx, 2),
->>>  +    INGENIC_PIN_GROUP_FUNCS("cim-data-8bit", x2000_cim_8bit,
->>>  +                x2000_cim_8bit_funcs),
->>>  +    INGENIC_PIN_GROUP("cim-data-12bit", x2000_cim_12bit, 0),
->>>  +    INGENIC_PIN_GROUP("lcd-rgb-24bit", x2000_lcd_rgb_24bit, 1),
->>>  +    INGENIC_PIN_GROUP("lcd-slcd-8bit", x2000_lcd_slcd_8bit, 2),
->>>  +    INGENIC_PIN_GROUP("lcd-slcd-16bit", x2000_lcd_slcd_16bit, 2),
->> 
->>  You should have these groups: lcd-8bit, lcd-16bit, lcd-18bit, 
->> lcd-24bit, lcd-generic, lcd-special.
->> 
->>  Your lcd-slcd-16bit would then be lcd-8bit + lcd-16bit. (non-SLCD 
->> panels would need lcd-generic as well).
->> 
->>> +    { "lcd-no-pins", },
->> 
->>  Like on the other patches, please drop this.
->> 
->>  Cheers,
->>  -Paul
->> 
->>> +    INGENIC_PIN_GROUP("pwm0-c", x2000_pwm_pwm0_c, 0),
->>>  +    INGENIC_PIN_GROUP("pwm0-d", x2000_pwm_pwm0_d, 2),
->>>  +    INGENIC_PIN_GROUP("pwm1-c", x2000_pwm_pwm1_c, 0),
->>>  +    INGENIC_PIN_GROUP("pwm1-d", x2000_pwm_pwm1_d, 2),
->>>  +    INGENIC_PIN_GROUP("pwm2-c", x2000_pwm_pwm2_c, 0),
->>>  +    INGENIC_PIN_GROUP("pwm2-e", x2000_pwm_pwm2_e, 1),
->>>  +    INGENIC_PIN_GROUP("pwm3-c", x2000_pwm_pwm3_c, 0),
->>>  +    INGENIC_PIN_GROUP("pwm3-e", x2000_pwm_pwm3_e, 1),
->>>  +    INGENIC_PIN_GROUP("pwm4-c", x2000_pwm_pwm4_c, 0),
->>>  +    INGENIC_PIN_GROUP("pwm4-e", x2000_pwm_pwm4_e, 1),
->>>  +    INGENIC_PIN_GROUP("pwm5-c", x2000_pwm_pwm5_c, 0),
->>>  +    INGENIC_PIN_GROUP("pwm5-e", x2000_pwm_pwm5_e, 1),
->>>  +    INGENIC_PIN_GROUP("pwm6-c", x2000_pwm_pwm6_c, 0),
->>>  +    INGENIC_PIN_GROUP("pwm6-e", x2000_pwm_pwm6_e, 1),
->>>  +    INGENIC_PIN_GROUP("pwm7-c", x2000_pwm_pwm7_c, 0),
->>>  +    INGENIC_PIN_GROUP("pwm7-e", x2000_pwm_pwm7_e, 1),
->>>  +    INGENIC_PIN_GROUP("pwm8", x2000_pwm_pwm8, 0),
->>>  +    INGENIC_PIN_GROUP("pwm9", x2000_pwm_pwm9, 0),
->>>  +    INGENIC_PIN_GROUP("pwm10", x2000_pwm_pwm10, 0),
->>>  +    INGENIC_PIN_GROUP("pwm11", x2000_pwm_pwm11, 0),
->>>  +    INGENIC_PIN_GROUP("pwm12", x2000_pwm_pwm12, 0),
->>>  +    INGENIC_PIN_GROUP("pwm13", x2000_pwm_pwm13, 0),
->>>  +    INGENIC_PIN_GROUP("pwm14", x2000_pwm_pwm14, 0),
->>>  +    INGENIC_PIN_GROUP("pwm15", x2000_pwm_pwm15, 0),
->>>  +    INGENIC_PIN_GROUP("mac0-rmii", x2000_mac0_rmii, 1),
->>>  +    INGENIC_PIN_GROUP("mac0-rgmii", x2000_mac0_rgmii, 1),
->>>  +    INGENIC_PIN_GROUP("mac1-rmii", x2000_mac1_rmii, 3),
->>>  +    INGENIC_PIN_GROUP("mac1-rgmii", x2000_mac1_rgmii, 3),
->>>  +    INGENIC_PIN_GROUP("otg-vbus", x2000_otg, 0),
->>>  +};
->>>  +
->>>  +static const char *x2000_uart0_groups[] = { "uart0-data", 
->>> "uart0-hwflow", };
->>>  +static const char *x2000_uart1_groups[] = { "uart1-data", 
->>> "uart1-hwflow", };
->>>  +static const char *x2000_uart2_groups[] = { "uart2-data", };
->>>  +static const char *x2000_uart3_groups[] = {
->>>  +    "uart3-data-c", "uart3-data-d", "uart3-hwflow-c", 
->>> "uart3-hwflow-d",
->>>  +};
->>>  +static const char *x2000_uart4_groups[] = {
->>>  +    "uart4-data-a", "uart4-data-c", "uart4-hwflow-a", 
->>> "uart4-hwflow-c",
->>>  +};
->>>  +static const char *x2000_uart5_groups[] = { "uart5-data-a", 
->>> "uart5-data-c", };
->>>  +static const char *x2000_uart6_groups[] = { "uart6-data-a", 
->>> "uart6-data-c", };
->>>  +static const char *x2000_uart7_groups[] = { "uart7-data-a", 
->>> "uart7-data-c", };
->>>  +static const char *x2000_uart8_groups[] = { "uart8-data", };
->>>  +static const char *x2000_uart9_groups[] = { "uart9-data", };
->>>  +static const char *x2000_sfc_groups[] = { "sfc0-d", "sfc0-e", 
->>> "sfc1", };
->>>  +static const char *x2000_ssi0_groups[] = {
->>>  +    "ssi0-dt-b", "ssi0-dt-d",
->>>  +    "ssi0-dr-b", "ssi0-dr-d",
->>>  +    "ssi0-clk-b", "ssi0-clk-d",
->>>  +    "ssi0-ce0-b", "ssi0-ce0-d",
->>>  +};
->>>  +static const char *x2000_ssi1_groups[] = {
->>>  +    "ssi1-dt-c", "ssi1-dt-d", "ssi1-dt-e",
->>>  +    "ssi1-dr-c", "ssi1-dr-d", "ssi1-dr-e",
->>>  +    "ssi1-clk-c", "ssi1-clk-d", "ssi1-clk-e",
->>>  +    "ssi1-ce0-c", "ssi1-ce0-d", "ssi1-ce0-e",
->>>  +};
->>>  +static const char *x2000_mmc0_groups[] = { "mmc0-1bit", 
->>> "mmc0-4bit", "mmc0-8bit", };
->>>  +static const char *x2000_mmc1_groups[] = { "mmc1-1bit", 
->>> "mmc1-4bit", };
->>>  +static const char *x2000_mmc2_groups[] = { "mmc2-1bit", 
->>> "mmc2-4bit", };
->>>  +static const char *x2000_emc_groups[] = {
->>>  +    "emc-8bit-data", "emc-16bit-data",
->>>  +    "emc-addr", "emc-rd-we", "emc-wait",
->>>  +};
->>>  +static const char *x2000_cs1_groups[] = { "emc-cs1", };
->>>  +static const char *x2000_cs2_groups[] = { "emc-cs2", };
->>>  +static const char *x2000_i2c0_groups[] = { "i2c0-data", };
->>>  +static const char *x2000_i2c1_groups[] = { "i2c1-data-c", 
->>> "i2c1-data-d", };
->>>  +static const char *x2000_i2c2_groups[] = { "i2c2-data-b", 
->>> "i2c2-data-d", };
->>>  +static const char *x2000_i2c3_groups[] = { "i2c3-data-a", 
->>> "i2c3-data-d", };
->>>  +static const char *x2000_i2c4_groups[] = { "i2c4-data-c", 
->>> "i2c4-data-d", };
->>>  +static const char *x2000_i2c5_groups[] = { "i2c5-data-c", 
->>> "i2c5-data-d", };
->>>  +static const char *x2000_i2s1_groups[] = {
->>>  +    "i2s1-data-tx", "i2s1-data-rx",
->>>  +    "i2s1-clk-tx", "i2s1-clk-rx",
->>>  +    "i2s1-sysclk-tx", "i2s1-sysclk-rx",
->>>  +};
->>>  +static const char *x2000_i2s2_groups[] = {
->>>  +    "i2s2-data-rx0", "i2s2-data-rx1", "i2s2-data-rx2", 
->>> "i2s2-data-rx3",
->>>  +    "i2s2-clk-rx", "i2s2-sysclk-rx",
->>>  +};
->>>  +static const char *x2000_i2s3_groups[] = {
->>>  +    "i2s3-data-tx0", "i2s3-data-tx1", "i2s3-data-tx2", 
->>> "i2s3-data-tx3",
->>>  +    "i2s3-clk-tx", "i2s3-sysclk-tx",
->>>  +};
->>>  +static const char *x2000_cim_groups[] = { "cim-data-8bit", 
->>> "cim-data-12bit", };
->>>  +static const char *x2000_lcd_groups[] = {
->>>  +    "lcd-rgb-24bit", "lcd-slcd-8bit", "lcd-slcd-16bit", 
->>> "lcd-no-pins",
->>>  +};
->>>  +static const char *x2000_pwm0_groups[] = { "pwm0-c", "pwm0-d", };
->>>  +static const char *x2000_pwm1_groups[] = { "pwm1-c", "pwm1-d", };
->>>  +static const char *x2000_pwm2_groups[] = { "pwm2-c", "pwm2-e", };
->>>  +static const char *x2000_pwm3_groups[] = { "pwm3-c", "pwm3-r", };
->>>  +static const char *x2000_pwm4_groups[] = { "pwm4-c", "pwm4-e", };
->>>  +static const char *x2000_pwm5_groups[] = { "pwm5-c", "pwm5-e", };
->>>  +static const char *x2000_pwm6_groups[] = { "pwm6-c", "pwm6-e", };
->>>  +static const char *x2000_pwm7_groups[] = { "pwm7-c", "pwm7-e", };
->>>  +static const char *x2000_pwm8_groups[] = { "pwm8", };
->>>  +static const char *x2000_pwm9_groups[] = { "pwm9", };
->>>  +static const char *x2000_pwm10_groups[] = { "pwm10", };
->>>  +static const char *x2000_pwm11_groups[] = { "pwm11", };
->>>  +static const char *x2000_pwm12_groups[] = { "pwm12", };
->>>  +static const char *x2000_pwm13_groups[] = { "pwm13", };
->>>  +static const char *x2000_pwm14_groups[] = { "pwm14", };
->>>  +static const char *x2000_pwm15_groups[] = { "pwm15", };
->>>  +static const char *x2000_mac0_groups[] = { "mac0-rmii", 
->>> "mac0-rgmii", };
->>>  +static const char *x2000_mac1_groups[] = { "mac1-rmii", 
->>> "mac1-rgmii", };
->>>  +static const char *x2000_otg_groups[] = { "otg-vbus", };
->>>  +
->>>  +static const struct function_desc x2000_functions[] = {
->>>  +    { "uart0", x2000_uart0_groups, 
->>> ARRAY_SIZE(x2000_uart0_groups), },
->>>  +    { "uart1", x2000_uart1_groups, 
->>> ARRAY_SIZE(x2000_uart1_groups), },
->>>  +    { "uart2", x2000_uart2_groups, 
->>> ARRAY_SIZE(x2000_uart2_groups), },
->>>  +    { "uart3", x2000_uart3_groups, 
->>> ARRAY_SIZE(x2000_uart3_groups), },
->>>  +    { "uart4", x2000_uart4_groups, 
->>> ARRAY_SIZE(x2000_uart4_groups), },
->>>  +    { "uart5", x2000_uart5_groups, 
->>> ARRAY_SIZE(x2000_uart5_groups), },
->>>  +    { "uart6", x2000_uart6_groups, 
->>> ARRAY_SIZE(x2000_uart6_groups), },
->>>  +    { "uart7", x2000_uart7_groups, 
->>> ARRAY_SIZE(x2000_uart7_groups), },
->>>  +    { "uart8", x2000_uart8_groups, 
->>> ARRAY_SIZE(x2000_uart8_groups), },
->>>  +    { "uart9", x2000_uart9_groups, 
->>> ARRAY_SIZE(x2000_uart9_groups), },
->>>  +    { "sfc", x2000_sfc_groups, ARRAY_SIZE(x2000_sfc_groups), },
->>>  +    { "ssi0", x2000_ssi0_groups, ARRAY_SIZE(x2000_ssi0_groups), },
->>>  +    { "ssi1", x2000_ssi1_groups, ARRAY_SIZE(x2000_ssi1_groups), },
->>>  +    { "mmc0", x2000_mmc0_groups, ARRAY_SIZE(x2000_mmc0_groups), },
->>>  +    { "mmc1", x2000_mmc1_groups, ARRAY_SIZE(x2000_mmc1_groups), },
->>>  +    { "mmc2", x2000_mmc2_groups, ARRAY_SIZE(x2000_mmc2_groups), },
->>>  +    { "emc", x2000_emc_groups, ARRAY_SIZE(x2000_emc_groups), },
->>>  +    { "emc-cs1", x2000_cs1_groups, ARRAY_SIZE(x2000_cs1_groups), 
->>> },
->>>  +    { "emc-cs2", x2000_cs2_groups, ARRAY_SIZE(x2000_cs2_groups), 
->>> },
->>>  +    { "i2c0", x2000_i2c0_groups, ARRAY_SIZE(x2000_i2c0_groups), },
->>>  +    { "i2c1", x2000_i2c1_groups, ARRAY_SIZE(x2000_i2c1_groups), },
->>>  +    { "i2c2", x2000_i2c2_groups, ARRAY_SIZE(x2000_i2c2_groups), },
->>>  +    { "i2c3", x2000_i2c3_groups, ARRAY_SIZE(x2000_i2c3_groups), },
->>>  +    { "i2c4", x2000_i2c4_groups, ARRAY_SIZE(x2000_i2c4_groups), },
->>>  +    { "i2c5", x2000_i2c5_groups, ARRAY_SIZE(x2000_i2c5_groups), },
->>>  +    { "i2s1", x2000_i2s1_groups, ARRAY_SIZE(x2000_i2s1_groups), },
->>>  +    { "i2s2", x2000_i2s2_groups, ARRAY_SIZE(x2000_i2s2_groups), },
->>>  +    { "i2s3", x2000_i2s3_groups, ARRAY_SIZE(x2000_i2s3_groups), },
->>>  +    { "cim", x2000_cim_groups, ARRAY_SIZE(x2000_cim_groups), },
->>>  +    { "lcd", x2000_lcd_groups, ARRAY_SIZE(x2000_lcd_groups), },
->>>  +    { "pwm0", x2000_pwm0_groups, ARRAY_SIZE(x2000_pwm0_groups), },
->>>  +    { "pwm1", x2000_pwm1_groups, ARRAY_SIZE(x2000_pwm1_groups), },
->>>  +    { "pwm2", x2000_pwm2_groups, ARRAY_SIZE(x2000_pwm2_groups), },
->>>  +    { "pwm3", x2000_pwm3_groups, ARRAY_SIZE(x2000_pwm3_groups), },
->>>  +    { "pwm4", x2000_pwm4_groups, ARRAY_SIZE(x2000_pwm4_groups), },
->>>  +    { "pwm5", x2000_pwm5_groups, ARRAY_SIZE(x2000_pwm5_groups), },
->>>  +    { "pwm6", x2000_pwm6_groups, ARRAY_SIZE(x2000_pwm6_groups), },
->>>  +    { "pwm7", x2000_pwm7_groups, ARRAY_SIZE(x2000_pwm7_groups), },
->>>  +    { "pwm8", x2000_pwm8_groups, ARRAY_SIZE(x2000_pwm8_groups), },
->>>  +    { "pwm9", x2000_pwm9_groups, ARRAY_SIZE(x2000_pwm9_groups), },
->>>  +    { "pwm10", x2000_pwm10_groups, 
->>> ARRAY_SIZE(x2000_pwm10_groups), },
->>>  +    { "pwm11", x2000_pwm11_groups, 
->>> ARRAY_SIZE(x2000_pwm11_groups), },
->>>  +    { "pwm12", x2000_pwm12_groups, 
->>> ARRAY_SIZE(x2000_pwm12_groups), },
->>>  +    { "pwm13", x2000_pwm13_groups, 
->>> ARRAY_SIZE(x2000_pwm13_groups), },
->>>  +    { "pwm14", x2000_pwm14_groups, 
->>> ARRAY_SIZE(x2000_pwm14_groups), },
->>>  +    { "pwm15", x2000_pwm15_groups, 
->>> ARRAY_SIZE(x2000_pwm15_groups), },
->>>  +    { "mac0", x2000_mac0_groups, ARRAY_SIZE(x2000_mac0_groups), },
->>>  +    { "mac1", x2000_mac1_groups, ARRAY_SIZE(x2000_mac1_groups), },
->>>  +    { "otg", x2000_otg_groups, ARRAY_SIZE(x2000_otg_groups), },
->>>  +};
->>>  +
->>>  +static const struct ingenic_chip_info x2000_chip_info = {
->>>  +    .num_chips = 5,
->>>  +    .reg_offset = 0x100,
->>>  +    .version = ID_X2000,
->>>  +    .groups = x2000_groups,
->>>  +    .num_groups = ARRAY_SIZE(x2000_groups),
->>>  +    .functions = x2000_functions,
->>>  +    .num_functions = ARRAY_SIZE(x2000_functions),
->>>  +    .pull_ups = x2000_pull_ups,
->>>  +    .pull_downs = x2000_pull_downs,
->>>  +};
->>>  +
->>>   static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, 
->>> u8 reg)
->>>   {
->>>       unsigned int val;
->>>  @@ -2355,23 +2793,28 @@ static void irq_set_type(struct 
->>> ingenic_gpio_chip *jzgc,
->>>           u8 offset, unsigned int type)
->>>   {
->>>       u8 reg1, reg2;
->>>  -    bool val1, val2;
->>>  +    bool val1, val2, val3;
->> 
->>  val3 = type == IRQ_TYPE_EDGE_BOTH;
->> 
->>  then you don't need to initialize val3 on each case of the switch.
->> 
->>> 
->>>       switch (type) {
->>>  +    case IRQ_TYPE_EDGE_BOTH:
->>>  +        val1 = val2 = false;
->>>  +        val3 = true;
->>>  +        break;
->>>       case IRQ_TYPE_EDGE_RISING:
->>>           val1 = val2 = true;
->>>  +        val3 = false;
->>>           break;
->>>       case IRQ_TYPE_EDGE_FALLING:
->>>  -        val1 = false;
->>>  +        val1 = val3 = false;
->>>           val2 = true;
->>>           break;
->>>       case IRQ_TYPE_LEVEL_HIGH:
->>>           val1 = true;
->>>  -        val2 = false;
->>>  +        val2 = val3 = false;
->>>           break;
->>>       case IRQ_TYPE_LEVEL_LOW:
->>>       default:
->>>  -        val1 = val2 = false;
->>>  +        val1 = val2 = val3 = false;
->>>           break;
->>>       }
->>> 
->>>  @@ -2389,7 +2832,12 @@ static void irq_set_type(struct 
->>> ingenic_gpio_chip *jzgc,
->>>           return;
->>>       }
->>> 
->>>  -    if (jzgc->jzpc->info->version >= ID_X1000) {
->>>  +    if (jzgc->jzpc->info->version >= ID_X2000) {
->>>  +        ingenic_gpio_shadow_set_bit(jzgc, reg2, offset, val1);
->>>  +        ingenic_gpio_shadow_set_bit(jzgc, reg1, offset, val2);
->>>  +        ingenic_gpio_shadow_set_bit_load(jzgc);
->>>  +        ingenic_gpio_set_bit(jzgc, X2000_GPIO_EDG, offset, val3);
->>>  +    } else if (jzgc->jzpc->info->version >= ID_X1000) {
->>>           ingenic_gpio_shadow_set_bit(jzgc, reg2, offset, val1);
->>>           ingenic_gpio_shadow_set_bit(jzgc, reg1, offset, val2);
->>>           ingenic_gpio_shadow_set_bit_load(jzgc);
->>>  @@ -2462,7 +2910,8 @@ static void ingenic_gpio_irq_ack(struct 
->>> irq_data *irqd)
->>>       int irq = irqd->hwirq;
->>>       bool high;
->>> 
->>>  -    if (irqd_get_trigger_type(irqd) == IRQ_TYPE_EDGE_BOTH) {
->>>  +    if ((irqd_get_trigger_type(irqd) == IRQ_TYPE_EDGE_BOTH) &&
->>>  +        (jzgc->jzpc->info->version < ID_X2000)) {
->>>           /*
->>>            * Switch to an interrupt for the opposite edge to the 
->>> one that
->>>            * triggered the interrupt being ACKed.
->>>  @@ -2501,7 +2950,7 @@ static int ingenic_gpio_irq_set_type(struct 
->>> irq_data *irqd, unsigned int type)
->>>           irq_set_handler_locked(irqd, handle_bad_irq);
->>>       }
->>> 
->>>  -    if (type == IRQ_TYPE_EDGE_BOTH) {
->>>  +    if ((type == IRQ_TYPE_EDGE_BOTH) && 
->>> (jzgc->jzpc->info->version < ID_X2000)) {
->>>           /*
->>>            * The hardware does not support interrupts on both 
->>> edges. The
->>>            * best we can do is to set up a single-edge interrupt 
->>> and then
->>>  @@ -2803,7 +3252,15 @@ static int ingenic_pinconf_get(struct 
->>> pinctrl_dev *pctldev,
->>>       unsigned int bias;
->>>       bool pull, pullup, pulldown;
->>> 
->>>  -    if (jzpc->info->version >= ID_X1830) {
->>>  +    if (jzpc->info->version >= ID_X2000) {
->>>  +        pullup = ingenic_get_pin_config(jzpc, pin, 
->>> X2000_GPIO_PEPU) &&
->>>  +                !ingenic_get_pin_config(jzpc, pin, 
->>> X2000_GPIO_PEPD) &&
->>>  +                (jzpc->info->pull_ups[offt] & BIT(idx));
->>>  +        pulldown = ingenic_get_pin_config(jzpc, pin, 
->>> X2000_GPIO_PEPD) &&
->>>  +                !ingenic_get_pin_config(jzpc, pin, 
->>> X2000_GPIO_PEPU) &&
->>>  +                (jzpc->info->pull_downs[offt] & BIT(idx));
->>>  +
->>>  +    } else if (jzpc->info->version >= ID_X1830) {
->>>           unsigned int half = PINS_PER_GPIO_CHIP / 2;
->>>           unsigned int idxh = pin % half * 2;
->>> 
->>>  @@ -2858,7 +3315,25 @@ static int ingenic_pinconf_get(struct 
->>> pinctrl_dev *pctldev,
->>>   static void ingenic_set_bias(struct ingenic_pinctrl *jzpc,
->>>           unsigned int pin, unsigned int bias)
->>>   {
->>>  -    if (jzpc->info->version >= ID_X1830) {
->>>  +    if (jzpc->info->version >= ID_X2000) {
->>>  +        switch (bias) {
->>>  +        case PIN_CONFIG_BIAS_PULL_UP:
->> 
->>  Was that even tested? Your "bias" value is one of GPIO_PULL_DIS, 
->> GPIO_PULL_UP or GPIO_PULL_DOWN, you can't match it against values of 
->> the pin_config_param enum and expect it to work.
->> 
->>  Cheers,
->>  -Paul
->> 
->>> +            ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPD, false);
->>>  +            ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPU, true);
->>>  +            break;
->>>  +
->>>  +        case PIN_CONFIG_BIAS_PULL_DOWN:
->>>  +            ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPU, false);
->>>  +            ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPD, true);
->>>  +            break;
->>>  +
->>>  +        case PIN_CONFIG_BIAS_DISABLE:
->>>  +        default:
->>>  +            ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPU, false);
->>>  +            ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPD, false);
->>>  +        }
->>>  +
->>>  +    } else if (jzpc->info->version >= ID_X1830) {
->>>           unsigned int idx = pin % PINS_PER_GPIO_CHIP;
->>>           unsigned int half = PINS_PER_GPIO_CHIP / 2;
->>>           unsigned int idxh = pin % half * 2;
->>>  @@ -3033,6 +3508,7 @@ static const struct of_device_id 
->>> ingenic_gpio_of_match[] __initconst = {
->>>       { .compatible = "ingenic,jz4780-gpio", },
->>>       { .compatible = "ingenic,x1000-gpio", },
->>>       { .compatible = "ingenic,x1830-gpio", },
->>>  +    { .compatible = "ingenic,x2000-gpio", },
->>>       {},
->>>   };
->>> 
->>>  @@ -3275,6 +3751,14 @@ static const struct of_device_id 
->>> ingenic_pinctrl_of_match[] = {
->>>           .compatible = "ingenic,x1830-pinctrl",
->>>           .data = IF_ENABLED(CONFIG_MACH_X1830, &x1830_chip_info)
->>>       },
->>>  +    {
->>>  +        .compatible = "ingenic,x2000-pinctrl",
->>>  +        .data = IF_ENABLED(CONFIG_MACH_X2000, &x2000_chip_info)
->>>  +    },
->>>  +    {
->>>  +        .compatible = "ingenic,x2000e-pinctrl",
->>>  +        .data = IF_ENABLED(CONFIG_MACH_X2000, &x2000_chip_info)
->>>  +    },
->>>       { /* sentinel */ },
->>>   };
->>> 
->>>  --
->>>  2.7.4
->>> 
->> 
+Thomas.
 
 
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
+
+--y0ulUmNC+osPPQO6
+Content-Type: application/gzip
+Content-Disposition: attachment; filename="ralink-config.gz"
+Content-Transfer-Encoding: base64
+
+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
+
+--y0ulUmNC+osPPQO6--
