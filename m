@@ -2,15 +2,15 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCEE34B6EA
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Mar 2021 12:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BB134B6EE
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Mar 2021 12:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbhC0L6H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 27 Mar 2021 07:58:07 -0400
-Received: from aposti.net ([89.234.176.197]:58558 "EHLO aposti.net"
+        id S231602AbhC0L6O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 Mar 2021 07:58:14 -0400
+Received: from aposti.net ([89.234.176.197]:58582 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230322AbhC0L6G (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 27 Mar 2021 07:58:06 -0400
+        id S230322AbhC0L6N (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 27 Mar 2021 07:58:13 -0400
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Andrzej Hajda <a.hajda@samsung.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
@@ -19,13 +19,10 @@ To:     Andrzej Hajda <a.hajda@samsung.com>,
 Cc:     Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>, od@zcrc.me,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        stable@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v4 1/3] drm: bridge/panel: Cleanup connector on bridge detach
-Date:   Sat, 27 Mar 2021 11:57:40 +0000
-Message-Id: <20210327115742.18986-2-paul@crapouillou.net>
+        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v4 2/3] drm/encoder: Add macro drmm_plain_encoder_alloc()
+Date:   Sat, 27 Mar 2021 11:57:41 +0000
+Message-Id: <20210327115742.18986-3-paul@crapouillou.net>
 In-Reply-To: <20210327115742.18986-1-paul@crapouillou.net>
 References: <20210327115742.18986-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -34,56 +31,47 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-If we don't call drm_connector_cleanup() manually in
-panel_bridge_detach(), the connector will be cleaned up with the other
-DRM objects in the call to drm_mode_config_cleanup(). However, since our
-drm_connector is devm-allocated, by the time drm_mode_config_cleanup()
-will be called, our connector will be long gone. Therefore, the
-connector must be cleaned up when the bridge is detached to avoid
-use-after-free conditions.
+This performs the same operation as drmm_encoder_alloc(), but
+only allocates and returns a struct drm_encoder instance.
 
-v2: Cleanup connector only if it was created
+v4: Rename macro drmm_plain_encoder_alloc() and move to
+    <drm/drm_encoder.h>. Since it's not "simple" anymore it
+    will now take funcs/name arguments as well.
 
-v3: Add FIXME
-
-v4: (Use connector->dev) directly in if() block
-
-Fixes: 13dfc0540a57 ("drm/bridge: Refactor out the panel wrapper from the lvds-encoder bridge.")
-Cc: <stable@vger.kernel.org> # 4.12+
-Cc: Andrzej Hajda <a.hajda@samsung.com>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Jonas Karlman <jonas@kwiboo.se>
-Cc: Jernej Skrabec <jernej.skrabec@siol.net>
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/gpu/drm/bridge/panel.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ include/drm/drm_encoder.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/panel.c b/drivers/gpu/drm/bridge/panel.c
-index 0ddc37551194..c916f4b8907e 100644
---- a/drivers/gpu/drm/bridge/panel.c
-+++ b/drivers/gpu/drm/bridge/panel.c
-@@ -87,6 +87,18 @@ static int panel_bridge_attach(struct drm_bridge *bridge,
+diff --git a/include/drm/drm_encoder.h b/include/drm/drm_encoder.h
+index 5bf78b5bcb2b..6e91a0280f31 100644
+--- a/include/drm/drm_encoder.h
++++ b/include/drm/drm_encoder.h
+@@ -224,6 +224,24 @@ void *__drmm_encoder_alloc(struct drm_device *dev,
+ 				      offsetof(type, member), funcs, \
+ 				      encoder_type, name, ##__VA_ARGS__))
  
- static void panel_bridge_detach(struct drm_bridge *bridge)
- {
-+	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-+	struct drm_connector *connector = &panel_bridge->connector;
++/**
++ * drmm_plain_encoder_alloc - Allocate and initialize an encoder
++ * @dev: drm device
++ * @funcs: callbacks for this encoder (optional)
++ * @encoder_type: user visible type of the encoder
++ * @name: printf style format string for the encoder name, or NULL for default name
++ *
++ * This is a simplified version of drmm_encoder_alloc(), which only allocates
++ * and returns a struct drm_encoder instance, with no subclassing.
++ *
++ * Returns:
++ * Pointer to the new drm_encoder struct, or ERR_PTR on failure.
++ */
++#define drmm_plain_encoder_alloc(dev, funcs, encoder_type, name, ...) \
++	((struct drm_encoder *) \
++	 __drmm_encoder_alloc(dev, sizeof(struct drm_encoder), \
++			      0, funcs, encoder_type, name, ##__VA_ARGS__))
 +
-+	/*
-+	 * Cleanup the connector if we know it was initialized.
-+	 *
-+	 * FIXME: This wouldn't be needed if the panel_bridge structure was
-+	 * allocated with drmm_kzalloc(). This might be tricky since the
-+	 * drm_device pointer can only be retrieved when the bridge is attached.
-+	 */
-+	if (connector->dev)
-+		drm_connector_cleanup(connector);
- }
- 
- static void panel_bridge_pre_enable(struct drm_bridge *bridge)
+ /**
+  * drm_encoder_index - find the index of a registered encoder
+  * @encoder: encoder to find index for
 -- 
 2.30.2
 
