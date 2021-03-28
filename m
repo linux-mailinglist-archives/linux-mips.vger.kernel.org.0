@@ -2,62 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 708B434BE09
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Mar 2021 20:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6566034BF27
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Mar 2021 23:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbhC1SHd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Mar 2021 14:07:33 -0400
-Received: from mail.hanoi.gov.vn ([113.160.32.33]:31610 "EHLO
-        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbhC1SHR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Mar 2021 14:07:17 -0400
-X-Greylist: delayed 474 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:01 EDT
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30259EC3D8;
-        Mon, 29 Mar 2021 00:57:51 +0700 (+07)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
-        s=default; t=1616954272;
-        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
-        b=R9blPfqJCHUsZAyZxsyyryS61fl4krmBjYKWM6eGGwB8ZdbTBVPL1mmKOmZXMqNlA
-         7CEqA0MXgUAy+X4oK/wthh4vC9Xoov1Ce8tjf/qJvnL7KGsGNVg9ic0krGeHrdNzGM
-         5cIEKsz0emmHL/izbEfCtadst3HYllOJWdonlm5o=
-X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 50FCBEC3DD;
-        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
-        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
-Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 02AFC7F41B42;
-        Mon, 29 Mar 2021 00:57:44 +0700 (+07)
+        id S231477AbhC1VGl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Mar 2021 17:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231446AbhC1VGL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Mar 2021 17:06:11 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0650AC061756;
+        Sun, 28 Mar 2021 14:06:10 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id A295D92009C; Sun, 28 Mar 2021 23:06:08 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 08FE47F41B5D;
-        Mon, 29 Mar 2021 00:57:41 +0700 (+07)
-Received: from mail.hanoi.gov.vn ([127.0.0.1])
-        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1D3oZsOAVsx3; Mon, 29 Mar 2021 00:57:36 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 478CE7F41B59;
-        Mon, 29 Mar 2021 00:57:33 +0700 (+07)
-Date:   Mon, 29 Mar 2021 00:57:33 +0700 (ICT)
-From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
-Reply-To: Mackenzie Scott <propack@propck.net>
-Message-ID: <354204758.25920932.1616954253215.JavaMail.zimbra@hanoi.gov.vn>
-Subject: Congratulations ($ 100,800,000.00)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 9B44B92009B;
+        Sun, 28 Mar 2021 23:06:08 +0200 (CEST)
+Date:   Sun, 28 Mar 2021 23:06:08 +0200 (CEST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v2] MIPS/bpf: Enable bpf_probe_read{, str}() on MIPS
+ again
+In-Reply-To: <38cf6f7c-28dd-20a0-8193-776fa7bdb83a@loongson.cn>
+Message-ID: <alpine.DEB.2.21.2103282240420.18977@angie.orcam.me.uk>
+References: <1616034557-5844-1-git-send-email-yangtiezhu@loongson.cn> <alpine.DEB.2.21.2103220540591.21463@angie.orcam.me.uk> <f36f4ca6-a3bb-8db9-01e6-65fec0916b58@loongson.cn> <20210325101712.GA6893@alpha.franken.de>
+ <38cf6f7c-28dd-20a0-8193-776fa7bdb83a@loongson.cn>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [185.107.80.217]
-X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
-Thread-Index: ao/APhyKX+JH1nE2Rn/kAmnh2LEgkw==
-Thread-Topic: Congratulations ($ 100,800,000.00)
-To:     undisclosed-recipients:;
-X-TM-AS-GCONF: 00
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, 25 Mar 2021, Tiezhu Yang wrote:
 
+> > > I wonder whether MIPS EVA will generate overlapping address ranges?
+> > they can overlap in EVA mode.
+> > 
+> > > If yes, it is better to make ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE depend
+> > > on !EVA on MIPS.
+> > Could please add the change ?
+> 
+> OK, thank you, I will do it soon.
 
-Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
+ For the record this is clearly described and accompanied with a drawing 
+[1][2] in the architecture specification.  I do encourage you and anyone 
+serious about contributing to the MIPS/Linux project to make yourselves 
+familiar with the architecture beyond the area of your immediate interest 
+so as to offload the maintainers who are often overloaded and sometimes do 
+their work in their precious free time.  There are so many contributors 
+and so few maintainers, so please help everyone and spread the work.
+
+ Also please pay attention to quality change descriptions.  It's your task 
+to convince the maintainer your work is worth including, and in your best 
+interest to make the decision easy to make for the maintainer.  Think in 
+terms of an exam at the university and what you would do to persuade your 
+professor to give you a good score.  This is what the change description 
+is for, beyond the quality of the change itself of course.
+
+ This general rule of course applies to any community-maintained projects 
+and not only MIPS/Linux.
+
+References:
+
+[1] "MIPS Architecture For Programmers, Vol. III: MIPS32/microMIPS32
+    Privileged Resource Architecture", Document Number: MD00090, Revision 
+    5.05, November 14, 2014, Figure 4.5 "EVA addressability", p. 51, 
+    <https://wavecomp.ai/mips-technology/>
+
+[2] "MIPS Architecture For Programmers, Volume III: The MIPS64 and 
+    microMIPS64 Privileged Resource Architecture", Document Number: 
+    MD00091, Revision 5.04, January 15, 2014, Figure 4.5 "EVA 
+    addressability", p. 58, <https://wavecomp.ai/mips-technology/>
+
+  Maciej
