@@ -2,63 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9088734BA5E
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Mar 2021 03:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EA934BA67
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Mar 2021 03:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbhC1Bk5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 27 Mar 2021 21:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S231205AbhC1Bvw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 Mar 2021 21:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbhC1Bk5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Mar 2021 21:40:57 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96F5C0613B1;
-        Sat, 27 Mar 2021 18:40:56 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id cl21-20020a17090af695b02900c61ac0f0e9so6926062pjb.1;
-        Sat, 27 Mar 2021 18:40:56 -0700 (PDT)
+        with ESMTP id S231182AbhC1Bv2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Mar 2021 21:51:28 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0478C0613B1;
+        Sat, 27 Mar 2021 18:51:27 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id 11so7479382pfn.9;
+        Sat, 27 Mar 2021 18:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EYlwxcDk4ihQ5s3x3P7ksmY5Gg85jPzumVOLCa8dw0M=;
-        b=o1Fc+wj4hv6iR8+09o6x3h0lu6UgGFnCqykm7zGC6oKgvj1d3pAk4ZGy7V2PAfJ7lA
-         enKq88Wj5vpdBPLqpUz7fwaNBvsBZEMvAE9xAm21iXiwNXIxGE49Gcd96DvuTX97qBEg
-         duKeSA0Yt/vgV7mMrwTktXrdXXoX4IOiPdzKy1BRjD2ruQj9D8wXEbah5jaGJx0dWuyQ
-         T5hehJaX6TQFUce6XRXMIlZ568ApRk7QA62mTXOHaxpVZjdwRtBqtoMhghAIQuHUe8fo
-         7jrrOFVyX2nZpz6OdLcWtmOj26EQ79ZOyr6u8nY5NITEPLlcx772b46ArwgYF0xizZ1/
-         87oA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ltty5SJ2LY2RYq7s8cHOh4rUOt7Z1AfLLrBG/U0fphY=;
+        b=UlM83tvQDDWa5wui+K+jgGCOiCv01D8B6XsyjeHu9639KFwcbpPaUKcXqFU36e5A6F
+         6pNg6g+hjXRQNoYO5KRje5BXRN/TGEPgoNKHDNYxRageUsgFxZ+gRCAzEpneB8nGF8w/
+         YBplowRA+kQRyOfm/iqrz7Ap7NcLeOtBVGgNGGYDkFvm5WVp8irnODFfpap1MVvJL3mN
+         jaYbRYgD1ulIjVePyBiZVfnLNIaQQRzgibHPYCW78arI4qAwgz2qSPRr+urCXh7JakdQ
+         uQOcit5fwRXY8Ml9vqjzxMhvob2jPkx0QKviW0A9BYt7GcuWXdF9AMmAPz+mDS6wL8pt
+         Pk6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EYlwxcDk4ihQ5s3x3P7ksmY5Gg85jPzumVOLCa8dw0M=;
-        b=sGdUa5ylgAQQ35Uy1anBFFDxjjZemo/sB1XSd0uQYDA0YhLOvI/fh1VbUJVrDP4Yd5
-         h5Igbu3SUFWpBvkPDki7d4s+4gGt2zF4uysPyxjjIqRmGvRCdf7BQmBcPsovCEYtWXuv
-         qFeTzVjIDsCcIh7IDu24ehBRy7ebJeZeoHic0zCeRiYFrXq6la2nLKhwC5J21cgNbVWA
-         kdRHUkR37TKVbBq56riu/4aQXnCpt2abYSKA3ZNcVC5++5+TTtFPwbfNpKKF8bciwsZf
-         iQUECSq88xBTInkgPtxn/HgSxCw92pK6Yp8tSlNqh1rx+MIDw9xp6WnQOEDC68/kBz4x
-         XJqg==
-X-Gm-Message-State: AOAM533HWIFAq1IKSjI8AOjaptQ45FL3rz7xCUw3Hqkjn4BcURb+Q7/b
-        EZHFVGgwmanM7h7q0sxJa4ohO8+Q/SWZozmY
-X-Google-Smtp-Source: ABdhPJz9ViHiVzmx5Hcb5TBLwpVFQooCzsrwwjUY+1aG18ShcUakO4gHC8rgIJjJM+ihDMsJWxkUkA==
-X-Received: by 2002:a17:902:c60b:b029:e7:3b60:34ad with SMTP id r11-20020a170902c60bb02900e73b6034admr2614094plr.7.1616895655852;
-        Sat, 27 Mar 2021 18:40:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ltty5SJ2LY2RYq7s8cHOh4rUOt7Z1AfLLrBG/U0fphY=;
+        b=nZrhcHvmsBQCd2i8kARlp8JDVA25Flnlo7IjYgyO6TTHOjjLvPDzIzp9LvNrpazNnN
+         OBZRyZ8xqIMi+MggKKnDEjMU02QpVxbewhgEyH1aOrOAsegJkPhKG1JM33ZeLie/PMX+
+         QASiUQH646EeKE2IDMLBdIEjNGCEF6XKDxrM/yGeI+jOY0ngP9NA8n/aZXvr+25drIGM
+         nww829Xnb6/GX3fFkSkg7jAMWYG2aK5AxqMK+g81lwizytc1s/LmLoCYs4i+QnoRT5g+
+         dGaoETWqBBiVKYdnaRIzOk/RQLDOE+w8fl0vxDVUp0qAXFS1O6EESAGBYOoHCzwxsw9U
+         bRXA==
+X-Gm-Message-State: AOAM530NPCKa25vmR43N53pK4TZsVep/R9EQdvRjhR32fdq9raxJI0BV
+        S/eKQSe1wpfctKTUeKwA9/0=
+X-Google-Smtp-Source: ABdhPJzzRjxFW0V/4Q2VzWsjfy+WHrIEQfZHojCvDxfBeEZhqercxBhPI9onxsxq47z/1E82meXMHA==
+X-Received: by 2002:a62:2a83:0:b029:21a:d3a4:80f2 with SMTP id q125-20020a622a830000b029021ad3a480f2mr19013440pfq.47.1616896287260;
+        Sat, 27 Mar 2021 18:51:27 -0700 (PDT)
 Received: from z640-arch.lan ([2602:61:7344:f100::678])
-        by smtp.gmail.com with ESMTPSA id 27sm13477476pgq.51.2021.03.27.18.40.55
+        by smtp.gmail.com with ESMTPSA id 6sm13209028pfv.179.2021.03.27.18.51.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Mar 2021 18:40:55 -0700 (PDT)
+        Sat, 27 Mar 2021 18:51:26 -0700 (PDT)
 From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH] crypto: mips: add poly1305-core.S to .gitignore
-Date:   Sat, 27 Mar 2021 18:40:52 -0700
-Message-Id: <20210328014052.8645-1-ilya.lipnitskiy@gmail.com>
+To:     ilya.lipnitskiy@gmail.com
+Cc:     ardb@kernel.org, davem@davemloft.net, herbert@gondor.apana.org.au,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, tsbogend@alpha.franken.de
+Subject: [PATCH v2] crypto: mips: add poly1305-core.S to .gitignore
+Date:   Sat, 27 Mar 2021 18:50:52 -0700
+Message-Id: <20210328015052.10789-1-ilya.lipnitskiy@gmail.com>
 X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20210328014052.8645-1-ilya.lipnitskiy@gmail.com>
+References: <20210328014052.8645-1-ilya.lipnitskiy@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -67,6 +66,7 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 poly1305-core.S is an auto-generated file, so it should be ignored.
 
+Fixes: a11d055e7a64 ("crypto: mips/poly1305 - incorporate OpenSSL/CRYPTOGAMS optimized implementation")
 Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
 Cc: Ard Biesheuvel <ardb@kernel.org>
 ---
