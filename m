@@ -2,86 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B73634BA7E
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Mar 2021 04:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708B434BE09
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Mar 2021 20:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbhC1CkM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 27 Mar 2021 22:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbhC1Cjs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Mar 2021 22:39:48 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC7FC0613B1;
-        Sat, 27 Mar 2021 19:39:48 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id t20so2752816plr.13;
-        Sat, 27 Mar 2021 19:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KY07dtiSbQ3SbfmuZCvFR/go4sGKiptIa+i0kD0WZqc=;
-        b=tdjkd1nOHESNUMfs/T4ucw6BA6QQBvW/f5fplya6uOf0fq/Xmw3o38e5XnxDdwcsGb
-         Wf9pTIaUsK0LvpWrAlkwhOY2xG+5IRRq9tWRUJoyQHM+Q/SEJRfjKd1mrwlWpXeVf4PY
-         Kn5e9vs+FefkbLun0kGdJRUslQ+83PuitX2yMPl34WdFrUar2vsONQRicMiK9bafb+hm
-         ioTW9D4xG8XMC8uRQQk+pwI1B/wAZuTXGE6OhlAjGfi8lxaQqS1yyoeXtE2FDCb8+9/S
-         aenuPQGzaO1BOKM2/Qzwr0rxpD87QQDg8eJ93+w/B1AO3kcsJf1FHa11vgEEZzRJXmAT
-         FMyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KY07dtiSbQ3SbfmuZCvFR/go4sGKiptIa+i0kD0WZqc=;
-        b=Tig+vymru3jep8HgpkdDV17eqYNv77d0JSzWhDh0i6sInbEkG1SvLaHS4Y3fituOEp
-         D8QQuzonB5JlEx+4fgu7Xzq7ruLjOTG16XmQbeuK+iOrTMBHs52x09reSJETgZiyW7Z1
-         nf5W65eDTW40gkmdTOKKhWLv6jA2O4NgoO3qG1r4qBXSon837f7Wm6h789WMk8oUutJI
-         5DGpKa+oNsJcIYdVBxj5AyPGIE2U6rib8wC/N9eKgPE8p1cs3VnO8T3kRay93Jm19i2L
-         CD7fu2lgSiBebPK21tcaIoLk7EQLEpt25PbzeDfq0Q/LMbbV3QBrM1+V7heMIl69KqeL
-         N5Ng==
-X-Gm-Message-State: AOAM5329wumBNvudfABJS0O6xhZjHwNWenfGJkPjwBDHhv6KoUryLYYY
-        c+udtDNoMEFqLATmg1t964k=
-X-Google-Smtp-Source: ABdhPJxh7tUNCHZD2GFQe0k6tjBkNKtK98QJ158nUaZyll9zaON5o/PeyEk5/WE0c9bYkn7F7pZSwQ==
-X-Received: by 2002:a17:90a:2c4b:: with SMTP id p11mr21428264pjm.75.1616899187997;
-        Sat, 27 Mar 2021 19:39:47 -0700 (PDT)
-Received: from z640-arch.lan ([2602:61:7344:f100::678])
-        by smtp.gmail.com with ESMTPSA id c128sm13209952pfc.76.2021.03.27.19.39.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Mar 2021 19:39:47 -0700 (PDT)
-From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-To:     davem@davemloft.net, herbert@gondor.apana.org.au,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, tsbogend@alpha.franken.de
-Cc:     ilya.lipnitskiy@gmail.com, ardb@kernel.org
-Subject: [PATCH v3] crypto: mips: add poly1305-core.S to .gitignore
-Date:   Sat, 27 Mar 2021 19:39:43 -0700
-Message-Id: <20210328023943.15540-1-ilya.lipnitskiy@gmail.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20210328014052.8645-1-ilya.lipnitskiy@gmail.com>
-References: <20210328014052.8645-1-ilya.lipnitskiy@gmail.com>
+        id S231522AbhC1SHd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Mar 2021 14:07:33 -0400
+Received: from mail.hanoi.gov.vn ([113.160.32.33]:31610 "EHLO
+        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229647AbhC1SHR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Mar 2021 14:07:17 -0400
+X-Greylist: delayed 474 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:01 EDT
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30259EC3D8;
+        Mon, 29 Mar 2021 00:57:51 +0700 (+07)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
+        s=default; t=1616954272;
+        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
+        b=R9blPfqJCHUsZAyZxsyyryS61fl4krmBjYKWM6eGGwB8ZdbTBVPL1mmKOmZXMqNlA
+         7CEqA0MXgUAy+X4oK/wthh4vC9Xoov1Ce8tjf/qJvnL7KGsGNVg9ic0krGeHrdNzGM
+         5cIEKsz0emmHL/izbEfCtadst3HYllOJWdonlm5o=
+X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 50FCBEC3DD;
+        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
+        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
+Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 02AFC7F41B42;
+        Mon, 29 Mar 2021 00:57:44 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 08FE47F41B5D;
+        Mon, 29 Mar 2021 00:57:41 +0700 (+07)
+Received: from mail.hanoi.gov.vn ([127.0.0.1])
+        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1D3oZsOAVsx3; Mon, 29 Mar 2021 00:57:36 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 478CE7F41B59;
+        Mon, 29 Mar 2021 00:57:33 +0700 (+07)
+Date:   Mon, 29 Mar 2021 00:57:33 +0700 (ICT)
+From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
+Reply-To: Mackenzie Scott <propack@propck.net>
+Message-ID: <354204758.25920932.1616954253215.JavaMail.zimbra@hanoi.gov.vn>
+Subject: Congratulations ($ 100,800,000.00)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [185.107.80.217]
+X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
+Thread-Index: ao/APhyKX+JH1nE2Rn/kAmnh2LEgkw==
+Thread-Topic: Congratulations ($ 100,800,000.00)
+To:     undisclosed-recipients:;
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-poly1305-core.S is an auto-generated file, so it should be ignored.
 
-Fixes: a11d055e7a64 ("crypto: mips/poly1305 - incorporate OpenSSL/CRYPTOGAMS optimized implementation")
-Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
----
- arch/mips/crypto/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 arch/mips/crypto/.gitignore
 
-diff --git a/arch/mips/crypto/.gitignore b/arch/mips/crypto/.gitignore
-new file mode 100644
-index 000000000000..0d47d4f21c6d
---- /dev/null
-+++ b/arch/mips/crypto/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+poly1305-core.S
--- 
-2.31.0
-
+Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
