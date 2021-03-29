@@ -2,46 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D7034D01E
+	by mail.lfdr.de (Postfix) with ESMTP id 61F2334D01D
 	for <lists+linux-mips@lfdr.de>; Mon, 29 Mar 2021 14:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbhC2Mct (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Mar 2021 08:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S230526AbhC2Mcu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Mar 2021 08:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbhC2McZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Mar 2021 08:32:25 -0400
+        with ESMTP id S231135AbhC2Mc2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Mar 2021 08:32:28 -0400
 Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901FBC061574
-        for <linux-mips@vger.kernel.org>; Mon, 29 Mar 2021 05:32:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A09C061574
+        for <linux-mips@vger.kernel.org>; Mon, 29 Mar 2021 05:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
          s=20161220; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=g8Xxl3VkACp1/s0i7ysFwqAfxLiDM5o6HAGYwiBVYf8=; b=qn4QWaaJfDgdOdpQPiK3cd9Tg/
-        YMwup0Zc2Bm1tOXbzY5tt1fYhhoPScLrk7aR6HcWLVz6qyDlyl2C1OsDUGZc7pQta+DFL+e97+8J5
-        Qo90FBOeM5BR6tZePnUQrEDSf3beSy/MPR5GnXDVeutXO3z6X5QQWC3kbaUhOfsjxXx96RffMm97K
-        8GdW6xdix6cLPyaekCvV16NU5r2fTyulP3VyP2tU4qfRliTf/YsW711bRLH7yfcdsD/Yu09NyJDwF
-        s1u6hAscTAR+U8Robn1B1zBZzQ/1A1D/2zcQ5a7y3G0i1J4l9qglNK5xsP9gIf/yVB5/SRTU3K2Xm
-        c3VEuj/Q==;
+        bh=D2TJPlo2OHltmofm98E9gZJltjlJbGBrIhNtsQI8lhU=; b=kcbOyjCpPXSR15U73BPECXGTtc
+        cvP2hBnsmYtgewk4P5tKgvOIZumieMVse374pPHwBEn+IA9/fSpsaQj3KVYuddkKetDuHJu8/2G0g
+        Bj1ubZIo3i2Szt/4N+hR9PfXjyCSqQc5+NATgqrPLL4Xv4eAlQd4YSRJjWMgS2iHjTboL7LNRQD59
+        QlZdPLcMet41vdt0eanydWH6zObYZDWNWKdO+TdoStN2eXOqX4cWxMxvLPaSmTnWnw4wO334uyHEw
+        EgZrLACiuMcPUCMMEiNEFj+yfbIDHsx5ky496YfDoHI+dW31kC2je73TIe38W3EpT7XKtuUP0c9AZ
+        9O9mdJdA==;
 Received: from 97-173-191-90.dyn.estpak.ee ([90.191.173.97] helo=ubuntu)
         by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <sandberg@mailfence.com>)
-        id 1lQr46-0008Uc-KO; Mon, 29 Mar 2021 15:32:19 +0300
-Received: by ubuntu (sSMTP sendmail emulation); Mon, 29 Mar 2021 15:32:13 +0300
+        id 1lQr4A-0008VV-QC; Mon, 29 Mar 2021 15:32:23 +0300
+Received: by ubuntu (sSMTP sendmail emulation); Mon, 29 Mar 2021 15:32:17 +0300
 From:   Mauri Sandberg <sandberg@mailfence.com>
 To:     sandberg@mailfence.com
 Cc:     f.fainelli@gmail.com, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de
-Subject: [PATCH v3 0/1] MIPS: fix compilation error
-Date:   Mon, 29 Mar 2021 15:31:35 +0300
-Message-Id: <20210329123136.3717-1-sandberg@mailfence.com>
+        tsbogend@alpha.franken.de, trivial@kernel.org
+Subject: [PATCH v3 1/1] MIPS: kernel: setup.c: fix compilation error
+Date:   Mon, 29 Mar 2021 15:31:36 +0300
+Message-Id: <20210329123136.3717-2-sandberg@mailfence.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210326134158.268164-1-sandberg@mailfence.com>
+In-Reply-To: <20210329123136.3717-1-sandberg@mailfence.com>
 References: <20210326134158.268164-1-sandberg@mailfence.com>
+ <20210329123136.3717-1-sandberg@mailfence.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 90.191.173.97
@@ -51,66 +52,50 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+With ath79_defconfig enabling CONFIG_MIPS_ELF_APPENDED_DTB gives a
+compilation error. This patch fixes it.
 
-Cleaned up the commit message and added reviewed-by, tested-by and Cc: tags.
+Build log:
+...
+  CC      kernel/locking/percpu-rwsem.o
+../arch/mips/kernel/setup.c:46:39: error: conflicting types for
+'__appended_dtb'
+ const char __section(".appended_dtb") __appended_dtb[0x100000];
+                                       ^~~~~~~~~~~~~~
+In file included from ../arch/mips/kernel/setup.c:34:
+../arch/mips/include/asm/bootinfo.h:118:13: note: previous declaration
+of '__appended_dtb' was here
+ extern char __appended_dtb[];
+             ^~~~~~~~~~~~~~
+  CC      fs/attr.o
+make[4]: *** [../scripts/Makefile.build:271: arch/mips/kernel/setup.o]
+ Error 1
+...
 
-Cheers,
-Mauri
+Root cause seems to be:
+Fixes: b83ba0b9df56 ("MIPS: of: Introduce helper function to get DTB")
 
---
-
-Notes
- v2:
-  - errorneous proposal to revert whole commit. withdrawn.
- v3:
-  - as v1.
-  - Added Reviewed-by: and Tested-By for Thomas Bogendoerfer
-  - reworded commit message
-  - added Cc: trivial@kernel.org
-
-rangediff v1...v3
-1:  cff3565c8f48 ! 1:  e4e83543be07 MIPS: kernel: setup.c: fix compilation error
-    @@ Metadata
-      ## Commit message ##
-         MIPS: kernel: setup.c: fix compilation error
-     
-    -    Developing against mips/mips-next I get a compilation error.
-    -    With the attached patch compilation succeeds.
-    +    With ath79_defconfig enabling CONFIG_MIPS_ELF_APPENDED_DTB gives a
-    +    compilation error. This patch fixes it.
-     
-         Build log:
-         ...
-    @@ Commit message
-           CC      fs/attr.o
-         make[4]: *** [../scripts/Makefile.build:271: arch/mips/kernel/setup.o]
-          Error 1
-    -    make[3]: *** [../scripts/Makefile.build:514: arch/mips/kernel] Error 2
-    -    make[2]: *** [/home/ubuntu/git/linux/Makefile:1849: arch/mips] Error 2
-    -    make[2]: *** Waiting for unfinished jobs....
-         ...
-     
-         Root cause seems to be:
-    -    commit b83ba0b9df56 ("MIPS: of: Introduce helper function to get DTB")
-    +    Fixes: b83ba0b9df56 ("MIPS: of: Introduce helper function to get DTB")
-     
-         Signed-off-by: Mauri Sandberg <sandberg@mailfence.com>
-    +    Reviewed-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-    +    Tested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-    +    Cc: trivial@kernel.org
-     
-      ## arch/mips/kernel/setup.c ##
-     @@
-
-Mauri Sandberg (1):
-  MIPS: kernel: setup.c: fix compilation error
-
+Signed-off-by: Mauri Sandberg <sandberg@mailfence.com>
+Reviewed-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Tested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: trivial@kernel.org
+---
  arch/mips/kernel/setup.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-base-commit: 19f0e8cddf0f136112acaaf02dab2cee35b56439
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 279be0153f8b..23a140327a0b 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -43,7 +43,7 @@
+ #include <asm/prom.h>
+ 
+ #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
+-const char __section(".appended_dtb") __appended_dtb[0x100000];
++char __section(".appended_dtb") __appended_dtb[0x100000];
+ #endif /* CONFIG_MIPS_ELF_APPENDED_DTB */
+ 
+ struct cpuinfo_mips cpu_data[NR_CPUS] __read_mostly;
 -- 
 2.25.1
 
