@@ -2,94 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C410734C4B4
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Mar 2021 09:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCFA34C4F2
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Mar 2021 09:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbhC2HQU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Mar 2021 03:16:20 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:45336 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230466AbhC2HQG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 29 Mar 2021 03:16:06 -0400
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx38uufmFgeuMBAA--.5162S2;
-        Mon, 29 Mar 2021 15:15:59 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Loongson64: enable CONFIG_USB_SERIAL_PL2303
-Date:   Mon, 29 Mar 2021 15:15:58 +0800
-Message-Id: <20210329071558.3492-1-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.31.0
+        id S231128AbhC2HaZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Mar 2021 03:30:25 -0400
+Received: from protonic.xs4all.nl ([83.163.252.89]:46670 "EHLO
+        protonic.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230503AbhC2HaK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Mar 2021 03:30:10 -0400
+Received: from fiber.protonic.nl (edge2.prtnl [192.168.1.170])
+        by sparta.prtnl (Postfix) with ESMTP id D864544A022C;
+        Mon, 29 Mar 2021 09:30:08 +0200 (CEST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dx38uufmFgeuMBAA--.5162S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFWUGFW3CFykuF1fKFWrGrg_yoW8Ww43pF
-        93XFW8GF48Gr18CFWv9F4kGr40kFZ8Kr97Ca1jyr15tFn3Xw4Yvw1Yyw1xGws2qr95J3W8
-        ua4kK3yxJFW7C37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8CwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcRwZUUUUU
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+Date:   Mon, 29 Mar 2021 09:30:08 +0200
+From:   Robin van der Gracht <robin@protonic.nl>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 16/17] auxdisplay: ht16k33: Add support for segment
+ displays
+Reply-To: robin@protonic.nl
+In-Reply-To: <CAMuHMdXJV3duE=uhCD3XSVn35Y5=iafOOUu5_57-1TtW062ZJg@mail.gmail.com>
+References: <20210322144848.1065067-1-geert@linux-m68k.org>
+ <20210322144848.1065067-17-geert@linux-m68k.org>
+ <2868cd091dc6ff0cab14b5da07f89984@protonic.nl>
+ <CAMuHMdXJV3duE=uhCD3XSVn35Y5=iafOOUu5_57-1TtW062ZJg@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.8
+Message-ID: <8376c4a183971aef9631c1bc64f9222c@protonic.nl>
+X-Sender: robin@protonic.nl
+Organization: Protonic Holland
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When using the Loongson-3A4000 machine for serial port debugging,
-there is no /dev/ttyUSB* output, which makes the serial port unavailable,
-For convenience, we open this configuration.
+On 2021-03-29 09:15, Geert Uytterhoeven wrote:
+> Hoi Robin,
+> 
+> On Mon, Mar 29, 2021 at 9:09 AM Robin van der Gracht 
+> <robin@protonic.nl> wrote:
+>> On 2021-03-22 15:48, Geert Uytterhoeven wrote:
+>> > The Holtek HT16K33 LED controller is not only used for driving
+>> > dot-matrix displays, but also for driving segment displays.
+>> >
+>> > Add support for 4-digit 7-segment and quad 14-segment alphanumeric
+>> > displays, like the Adafruit 7-segment and 14-segment display backpack
+>> > and FeatherWing expansion boards.  Use the character line display core
+>> > support to display a message, which will be scrolled if it doesn't fit.
+>> >
+>> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>> > ---
+>> > The 7-segment support is based on schematics, and untested on actual
+>> > hardware.
+>> > ---
+>> >  drivers/auxdisplay/ht16k33.c | 198 +++++++++++++++++++++++++++++++++--
+>> >  1 file changed, 191 insertions(+), 7 deletions(-)
+>> >
+>> ...
+>> >
+>> > +static int ht16k33_seg_probe(struct i2c_client *client,
+>> > +                          struct ht16k33_priv *priv, uint32_t brightness)
+>> > +{
+>> > +     struct ht16k33_seg *seg = &priv->seg;
+>> > +     struct device *dev = &client->dev;
+>> > +     int err;
+>> > +
+>> > +     err = ht16k33_brightness_set(priv, MAX_BRIGHTNESS);
+>> > +     if (err)
+>> > +             return err;
+>> > +
+>> > +     switch (priv->type) {
+>> > +     case DISP_MATRIX:
+>> > +             /* not handled here */
+>> > +             break;
+>> 
+>> This 'case' shouldn't happen. Having said that, the break here will
+>> still
+>> cause the linedisp_register() function to be called for the 
+>> DISP_MATRIX
+>> type.
+>> If you'd like to handle this case, a return (or setting 'err') should
+>> prevent this.
+> 
+> This function is never called if priv->type == DISP_MATRIX, so this
+> cannot happen.  However, gcc complains if not all enum values are
+> handled in a switch() statement, hence the dummy case.
 
-zhangqing@loongson-pc:~$ cat /sys/firmware/lefi/boardinfo
-Board Info
-Manufacturer		: THTF
-Board Name		: THTF-LS3A4000-7A1000-ML4A
-Family			: LOONGSON3
+I see. But if it's there it should work right? :P
 
-BIOS Info
-Vendor			: ZD tech
-Version			: ZD tech-V2.1.1
-ROM Size		: 4 KB
-Release Date		: 2020-06-29
+> Is there a better way to handle this?
 
-zhangqing@loongson-pc:~$ lsusb
-Bus 006 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 005 Device 003: ID 093a:2510 Pixart Imaging, Inc. Optical Mouse
-Bus 005 Device 002: ID 0c45:760b Microdia USB Keyboard
-Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 003 Device 003: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port
-Bus 003 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+How about adding the default case:
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/mips/configs/loongson3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+default:
+     /* not handled */
+     err = -EINVAL;
 
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 77f6a3551f46..a18609cf0e5e 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -320,6 +320,7 @@ CONFIG_USB_OHCI_HCD=y
- CONFIG_USB_UHCI_HCD=m
- CONFIG_USB_STORAGE=m
- CONFIG_USB_SERIAL=m
-+CONFIG_USB_SERIAL_PL2303=m
- CONFIG_USB_SERIAL_OPTION=m
- CONFIG_RTC_CLASS=y
- CONFIG_RTC_DRV_CMOS=y
+Groetjes/Kind regards,
+Robin van der Gracht
+
 -- 
-2.31.0
-
+Protonic Holland
+Factorij 36
+1689AL Zwaag
++31 (0)229 212928
+https://www.protonic.nl
