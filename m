@@ -2,81 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9A734D348
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Mar 2021 17:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5907134D4AA
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Mar 2021 18:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbhC2PFx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Mar 2021 11:05:53 -0400
-Received: from angie.orcam.me.uk ([157.25.102.26]:38156 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhC2PFl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Mar 2021 11:05:41 -0400
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 1CE7692009C; Mon, 29 Mar 2021 17:05:40 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 19CA892009B;
-        Mon, 29 Mar 2021 17:05:40 +0200 (CEST)
-Date:   Mon, 29 Mar 2021 17:05:40 +0200 (CEST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     yunqiang.su@cipunited.com
-cc:     'YunQiang Su' <wzssyqa@gmail.com>,
-        'Thomas Bogendoerfer' <tsbogend@alpha.franken.de>,
-        'linux-mips' <linux-mips@vger.kernel.org>,
-        'Jiaxun Yang' <jiaxun.yang@flygoat.com>,
-        =?UTF-8?Q?'Philippe_Mathieu-Daud=C3=A9'?= <f4bug@amsat.org>,
-        stable@vger.kernel.org
-Subject: =?UTF-8?Q?Re=3A_=E5=9B=9E=E5=A4=8D=3A_=5BPATCH_v7_RESEND=5D_MIP?=
- =?UTF-8?Q?S=3A_force_use_FR=3D0_or_FRE_for_FPXX_binaries?=
-In-Reply-To: <000b01d71eb6$0c210250$246306f0$@cipunited.com>
-Message-ID: <alpine.DEB.2.21.2103291246290.18977@angie.orcam.me.uk>
-References: <20210312104859.16337-1-yunqiang.su@cipunited.com> <20210315145850.GA12494@alpha.franken.de> <alpine.DEB.2.21.2103172345020.21463@angie.orcam.me.uk> <CAKcpw6UwYXYMCGw1C+nrRQLcqouxXCgdkDLZfK4fNFz+nVwZiQ@mail.gmail.com>
- <alpine.DEB.2.21.2103191500040.21463@angie.orcam.me.uk> <000b01d71eb6$0c210250$246306f0$@cipunited.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S230358AbhC2QP5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 29 Mar 2021 12:15:57 -0400
+Received: from aposti.net ([89.234.176.197]:40924 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229479AbhC2QPz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 29 Mar 2021 12:15:55 -0400
+Date:   Mon, 29 Mar 2021 17:15:37 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v4 2/3] drm/encoder: Add macro drmm_plain_encoder_alloc()
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, od@zcrc.me,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Message-Id: <1UNQQQ.C8BL9EPXOLHR2@crapouillou.net>
+In-Reply-To: <YF+6HY9dQbUBbXXG@pendragon.ideasonboard.com>
+References: <20210327115742.18986-1-paul@crapouillou.net>
+        <20210327115742.18986-3-paul@crapouillou.net>
+        <YF+6HY9dQbUBbXXG@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 22 Mar 2021, yunqiang.su@cipunited.com wrote:
 
-> >  I don't know why Google choose not to have their runtime support library
-> > (the Go library) as a dynamic shared object 20-something years on, but it
-> > comes at a price.  So you either have to relink (recompile) all the
-> affected
-> > applications like in the old days or find a feasible workaround.
-> > 
+
+Le dim. 28 mars 2021 à 1:05, Laurent Pinchart 
+<laurent.pinchart@ideasonboard.com> a écrit :
+> Hi Paul,
 > 
-> I also have no idea why (even hate).
-> While there do be some program languages created in recently years, prefer
-> static link.
-
- Hmm, lost wisdom, or an orchestrated effort?  Or a false illusion that 
-since we're virtually fully open source now, we can always rebuild the 
-world?  Well, indeed this is technically possible, but whether it is 
-feasible is another matter.  Your case serves as a counterexample.
-
-> >  As I noted in the discussion the use of FR=0 would be acceptable for FPXX
-> > binaries as far as I am concerned for R2 through R5, but not the FRE mode
-> for
-> > R6.
+> Thank you for the patch.
 > 
-> There will no FPXX for r6. All of (if not mistake) R6 O32 is FP64.
-> FRE here is only for compatible with pre-R6 objects.
+> On Sat, Mar 27, 2021 at 11:57:41AM +0000, Paul Cercueil wrote:
+>>  This performs the same operation as drmm_encoder_alloc(), but
+>>  only allocates and returns a struct drm_encoder instance.
+>> 
+>>  v4: Rename macro drmm_plain_encoder_alloc() and move to
+>>      <drm/drm_encoder.h>. Since it's not "simple" anymore it
+>>      will now take funcs/name arguments as well.
+>> 
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
- That doesn't seem like a good choice to me.
+Patchset applied to drm-misc-next.
 
- While R6 programs are indeed best built as FP64, libraries are best built 
-as FPXX, so that users can link or load with whatever binary modules they 
-have, including pre-R6 ones.  As much as we may dislike it sources will 
-not always be available or rebuilding them may be beyond the capabilities 
-of whoever has the binaries, so I think the system should be as permissive 
-as possible.  So you may end up with running code that is largely R6 
-(libraries), and partly pre-R6 (application code) that ends up linked as 
-FPXX.
+Thanks!
 
- And the kernel has to support it in the best way possible too and avoid 
-slow emulation where not necessary e.g. in R6 libm code used in the FPXX 
-arrangement, which the FRE mode will inevitably lead to.
+-Paul
 
-  Maciej
+>>  ---
+>>   include/drm/drm_encoder.h | 18 ++++++++++++++++++
+>>   1 file changed, 18 insertions(+)
+>> 
+>>  diff --git a/include/drm/drm_encoder.h b/include/drm/drm_encoder.h
+>>  index 5bf78b5bcb2b..6e91a0280f31 100644
+>>  --- a/include/drm/drm_encoder.h
+>>  +++ b/include/drm/drm_encoder.h
+>>  @@ -224,6 +224,24 @@ void *__drmm_encoder_alloc(struct drm_device 
+>> *dev,
+>>   				      offsetof(type, member), funcs, \
+>>   				      encoder_type, name, ##__VA_ARGS__))
+>> 
+>>  +/**
+>>  + * drmm_plain_encoder_alloc - Allocate and initialize an encoder
+>>  + * @dev: drm device
+>>  + * @funcs: callbacks for this encoder (optional)
+>>  + * @encoder_type: user visible type of the encoder
+>>  + * @name: printf style format string for the encoder name, or NULL 
+>> for default name
+>>  + *
+>>  + * This is a simplified version of drmm_encoder_alloc(), which 
+>> only allocates
+>>  + * and returns a struct drm_encoder instance, with no subclassing.
+>>  + *
+>>  + * Returns:
+>>  + * Pointer to the new drm_encoder struct, or ERR_PTR on failure.
+>>  + */
+>>  +#define drmm_plain_encoder_alloc(dev, funcs, encoder_type, name, 
+>> ...) \
+>>  +	((struct drm_encoder *) \
+>>  +	 __drmm_encoder_alloc(dev, sizeof(struct drm_encoder), \
+>>  +			      0, funcs, encoder_type, name, ##__VA_ARGS__))
+>>  +
+>>   /**
+>>    * drm_encoder_index - find the index of a registered encoder
+>>    * @encoder: encoder to find index for
+> 
+> --
+> Regards,
+> 
+> Laurent Pinchart
+
+
