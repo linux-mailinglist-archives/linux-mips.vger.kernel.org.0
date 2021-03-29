@@ -2,73 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E43634CD18
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Mar 2021 11:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A0334CD11
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Mar 2021 11:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbhC2Jaq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Mar 2021 05:30:46 -0400
-Received: from elvis.franken.de ([193.175.24.41]:33835 "EHLO elvis.franken.de"
+        id S231881AbhC2Jao (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Mar 2021 05:30:44 -0400
+Received: from elvis.franken.de ([193.175.24.41]:33837 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231853AbhC2JaX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S231776AbhC2JaX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Mon, 29 Mar 2021 05:30:23 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lQoE1-0003qb-01; Mon, 29 Mar 2021 11:30:21 +0200
+        id 1lQoE1-0003qb-02; Mon, 29 Mar 2021 11:30:21 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 9A93BC1D90; Mon, 29 Mar 2021 11:24:49 +0200 (CEST)
-Date:   Mon, 29 Mar 2021 11:24:49 +0200
+        id 4A2A7C1D90; Mon, 29 Mar 2021 11:25:07 +0200 (CEST)
+Date:   Mon, 29 Mar 2021 11:25:07 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH v3] MIPS/bpf: Enable bpf_probe_read{, str}() on MIPS again
-Message-ID: <20210329092449.GA8484@alpha.franken.de>
-References: <1616676601-14478-1-git-send-email-yangtiezhu@loongson.cn>
+To:     Julian Braha <julianbraha@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        fazilyildiran@gmail.com
+Subject: Re: [PATCH] arch: mips: fix unmet dependency for DEBUG_INFO
+Message-ID: <20210329092507.GB8484@alpha.franken.de>
+References: <20210326052033.35001-1-julianbraha@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1616676601-14478-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <20210326052033.35001-1-julianbraha@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 08:50:01PM +0800, Tiezhu Yang wrote:
-> After commit 0ebeea8ca8a4 ("bpf: Restrict bpf_probe_read{, str}() only to
-> archs where they work"), bpf_probe_read{, str}() functions were no longer
-> available on MIPS, so there exist some errors when running bpf program:
+On Fri, Mar 26, 2021 at 01:20:33AM -0400, Julian Braha wrote:
+> When SB1XXX_CORELIS is enabled, COMPILE_TEST is disabled,
+> and DEBUG_KERNEL is disabled, Kbuild gives the
+> following warning:
 > 
-> root@linux:/home/loongson/bcc# python examples/tracing/task_switch.py
-> bpf: Failed to load program: Invalid argument
-> [...]
-> 11: (85) call bpf_probe_read#4
-> unknown func bpf_probe_read#4
-> [...]
-> Exception: Failed to load BPF program count_sched: Invalid argument
+> WARNING: unmet direct dependencies detected for DEBUG_INFO
+>   Depends on [n]: DEBUG_KERNEL [=n] && !COMPILE_TEST [=n]
+>   Selected by [y]:
+>   - SB1XXX_CORELIS [=y] && SIBYTE_SB1xxx_SOC [=y] && !COMPILE_TEST [=n]
 > 
-> ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE should be restricted to archs
-> with non-overlapping address ranges, but they can overlap in EVA mode
-> on MIPS, so select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA in
-> arch/mips/Kconfig, otherwise the bpf old helper bpf_probe_read() will
-> not be available.
+> This is because SB1XXX_CORELIS selects DEBUG_INFO without
+> selecting or depending on DEBUG_KERNEL, despite DEBUG_INFO
+> depending on DEBUG_KERNEL.
 > 
-> This is similar with the commit d195b1d1d119 ("powerpc/bpf: Enable
-> bpf_probe_read{, str}() on powerpc again").
-> 
-> Fixes: 0ebeea8ca8a4 ("bpf: Restrict bpf_probe_read{, str}() only to archs where they work")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Signed-off-by: Julian Braha <julianbraha@gmail.com>
 > ---
-> 
-> v3: Select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA
->     on MIPS.
-> 
-> v2: update the commit message to fix typos found by
->     Sergei Shtylyov, thank you!
-> 
->     not longer --> no longer
->     there exists --> there exist
-> 
->  arch/mips/Kconfig | 1 +
+>  arch/mips/Kconfig.debug | 1 +
 >  1 file changed, 1 insertion(+)
 
 applied to mips-next.
