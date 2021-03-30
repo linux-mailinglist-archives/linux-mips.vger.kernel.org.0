@@ -2,169 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F81534EDE8
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 18:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE9F34EEE6
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 19:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbhC3QcI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Mar 2021 12:32:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52811 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232134AbhC3QcE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 30 Mar 2021 12:32:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617121924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5DxGbfaWBQohyHUg4T2hAugoPQ+5ugb6cQ8DhRFqjyc=;
-        b=iDyNlZ/seVctelY43CCT4EPpSCK5tUoC/t8D5FWhZbD64YRtP8H9eA6DGIT/d1e1Bzxq7w
-        /SEDn4InCr2Qu2vyAGkR8DnxrguXAdaQ+qWZEMK/NU4pi6H9y6besiiUa0fhniohllMUXN
-        vpERlPyVgCisT5isl0gBb7MERA1dBfk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-332-4doft93uOSKqpQWwdKTZlg-1; Tue, 30 Mar 2021 12:32:02 -0400
-X-MC-Unique: 4doft93uOSKqpQWwdKTZlg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F06F184BA40;
-        Tue, 30 Mar 2021 16:31:58 +0000 (UTC)
-Received: from [10.36.114.210] (ovpn-114-210.ams2.redhat.com [10.36.114.210])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 12B9B10016DB;
-        Tue, 30 Mar 2021 16:31:42 +0000 (UTC)
-Subject: Re: [PATCH v1 2/5] mm/madvise: introduce MADV_POPULATE_(READ|WRITE)
- to prefault/prealloc memory
-From:   David Hildenbrand <david@redhat.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
+        id S232599AbhC3RDl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Mar 2021 13:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232608AbhC3RCy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Mar 2021 13:02:54 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30F9C0613DA;
+        Tue, 30 Mar 2021 10:02:20 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id gb6so8097803pjb.0;
+        Tue, 30 Mar 2021 10:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=VZ7hPMfkkH0ClkPZrlLHv0WaV7eFxnm7svjyAEo3eSA=;
+        b=aN1+dAsUo/o/qwn6zz/8bJmkfICFTI0Fb8ueK8UmCji2EK2452V6bKSRAIO4/jUj60
+         Gj6vk/ssTwmCpoLkWLW6XTL3csEG8eRBRlfKK+qy+JnYblK6g1Rw77ebQfF9tw8JmMy6
+         c2wxI76UFz2AvepjXZTtgKeL7Txp2ZhFpQTdeKIVbZWn3yOP4UU7WSdvzSYPG9clj+q1
+         loWRlJzlnMQLsDyHBtQbTKFlIU3IQpQzOVFGodmuY+M1A5ODw1g2Z3X8q9m8a7G+Bb/z
+         uZlhlg89RzCAcCzqSZdd2uhSpHEit9CUNzAboe/7utL4HBadHUj+CSLfZpx4H+baaCAy
+         IicQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VZ7hPMfkkH0ClkPZrlLHv0WaV7eFxnm7svjyAEo3eSA=;
+        b=Quohzjtn3zxayzxUh3xJEH77KE2uxjZLcQZbMWIREZt87Eu6iSSp3Z33nZ/OHP39Ch
+         00vOzU3tWAbpWRqLvbtBc3hfkdjhZQey8ZwN4tZq7ygVHN8V2VApQEQuWrBXs2cixzvP
+         esXIyAeqUMKolL0lalhzVhLui+6FYnT32ofiUHSlZKVGqJ7VJ5X2U7jD7UzMK8D54Ktb
+         wMrmaoobdDHYpAGlDDTRRziqZeOkNKzethUfjzEXQAQO5nKX3ASUq1vG+7ysd23hoAc5
+         Q+SsaQNW4CecaQHxkG//c7qpbRCvhOYBFzr8c7GebGBp6nJ2RWmt74pxG+kCV6DJNlsi
+         k35g==
+X-Gm-Message-State: AOAM532FbXLmgQ2kCwjJVsO/jM1FjrUjTprfuZAmf6R8F+oJPXi+Er9t
+        2AncpdSv4JuAwWWAnBjRZMymB00Yn7c=
+X-Google-Smtp-Source: ABdhPJxDfQB3ZfQXm1ZS29uvkL7YqpNtHkHIN11UDP+eTFtwxIM+9SC9wx2gkvGY5DfdhFJ3B7m2jA==
+X-Received: by 2002:a17:90a:488a:: with SMTP id b10mr5222218pjh.2.1617123739964;
+        Tue, 30 Mar 2021 10:02:19 -0700 (PDT)
+Received: from [10.67.49.104] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 4sm3235448pjl.51.2021.03.30.10.02.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Mar 2021 10:02:19 -0700 (PDT)
+Subject: Re: [PATCH v2 1/6] mips: bmips: fix syscon-reboot nodes
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>
-References: <20210317110644.25343-1-david@redhat.com>
- <20210317110644.25343-3-david@redhat.com>
- <CAG48ez0BQ3Vd3nDLEvyiSU0XALgUQ=c-fAwcFVScUkgo_9qVuQ@mail.gmail.com>
- <2bab28c7-08c0-7ff0-c70e-9bf94da05ce1@redhat.com>
- <CAG48ez20rLRNPZj6hLHQ_PLT8H60kTac-uXRiLByD70Q7+qsdQ@mail.gmail.com>
- <26227fc6-3e7b-4e69-f69d-4dc2a67ecfe8@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <54165ffe-dbf7-377a-a710-d15be4701f20@redhat.com>
-Date:   Tue, 30 Mar 2021 18:31:41 +0200
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210314164351.24665-1-noltari@gmail.com>
+ <20210314164351.24665-2-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <cd7be816-1d88-23de-615c-ae217dda284b@gmail.com>
+Date:   Tue, 30 Mar 2021 10:02:17 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <26227fc6-3e7b-4e69-f69d-4dc2a67ecfe8@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210314164351.24665-2-noltari@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 30.03.21 18:30, David Hildenbrand wrote:
-> On 30.03.21 18:21, Jann Horn wrote:
->> On Tue, Mar 30, 2021 at 5:01 PM David Hildenbrand <david@redhat.com> wrote:
->>>>> +long faultin_vma_page_range(struct vm_area_struct *vma, unsigned long start,
->>>>> +                           unsigned long end, bool write, int *locked)
->>>>> +{
->>>>> +       struct mm_struct *mm = vma->vm_mm;
->>>>> +       unsigned long nr_pages = (end - start) / PAGE_SIZE;
->>>>> +       int gup_flags;
->>>>> +
->>>>> +       VM_BUG_ON(!PAGE_ALIGNED(start));
->>>>> +       VM_BUG_ON(!PAGE_ALIGNED(end));
->>>>> +       VM_BUG_ON_VMA(start < vma->vm_start, vma);
->>>>> +       VM_BUG_ON_VMA(end > vma->vm_end, vma);
->>>>> +       mmap_assert_locked(mm);
->>>>> +
->>>>> +       /*
->>>>> +        * FOLL_HWPOISON: Return -EHWPOISON instead of -EFAULT when we hit
->>>>> +        *                a poisoned page.
->>>>> +        * FOLL_POPULATE: Always populate memory with VM_LOCKONFAULT.
->>>>> +        * !FOLL_FORCE: Require proper access permissions.
->>>>> +        */
->>>>> +       gup_flags = FOLL_TOUCH | FOLL_POPULATE | FOLL_MLOCK | FOLL_HWPOISON;
->>>>> +       if (write)
->>>>> +               gup_flags |= FOLL_WRITE;
->>>>> +
->>>>> +       /*
->>>>> +        * See check_vma_flags(): Will return -EFAULT on incompatible mappings
->>>>> +        * or with insufficient permissions.
->>>>> +        */
->>>>> +       return __get_user_pages(mm, start, nr_pages, gup_flags,
->>>>> +                               NULL, NULL, locked);
->>>>
->>>> You mentioned in the commit message that you don't want to actually
->>>> dirty all the file pages and force writeback; but doesn't
->>>> POPULATE_WRITE still do exactly that? In follow_page_pte(), if
->>>> FOLL_TOUCH and FOLL_WRITE are set, we mark the page as dirty:
->>>
->>> Well, I mention that POPULATE_READ explicitly doesn't do that. I
->>> primarily set it because populate_vma_page_range() also sets it.
->>>
->>> Is it safe to *not* set it? IOW, fault something writable into a page
->>> table (where the CPU could dirty it without additional page faults)
->>> without marking it accessed? For me, this made logically sense. Thus I
->>> also understood why populate_vma_page_range() set it.
->>
->> FOLL_TOUCH doesn't have anything to do with installing the PTE - it
->> essentially means "the caller of get_user_pages wants to read/write
->> the contents of the returned page, so please do the same things you
->> would do if userspace was accessing the page". So in particular, if
->> you look up a page via get_user_pages() with FOLL_WRITE|FOLL_TOUCH,
->> that tells the MM subsystem "I will be writing into this page directly
->> from the kernel, bypassing the userspace page tables, so please mark
->> it as dirty now so that it will be properly written back later". Part
->> of that is that it marks the page as recently used, which has an
->> effect on LRU pageout behavior, I think - as far as I understand, that
->> is why populate_vma_page_range() uses FOLL_TOUCH.
->>
->> If you look at __get_user_pages(), you can see that it is split up
->> into two major parts: faultin_page() for creating PTEs, and
->> follow_page_mask() for grabbing pages from PTEs. faultin_page()
->> ignores FOLL_TOUCH completely; only follow_page_mask() uses it.
->>
->> In a way I guess maybe you do want the "mark as recently accessed"
->> part that FOLL_TOUCH would give you without FOLL_WRITE? But I think
->> you very much don't want the dirtying that FOLL_TOUCH|FOLL_WRITE leads
->> to. Maybe the ideal approach would be to add a new FOLL flag to say "I
->> only want to mark as recently used, I don't want to dirty". Or maybe
->> it's enough to just leave out the FOLL_TOUCH entirely, I don't know.
+On 3/14/21 9:43 AM, Álvaro Fernández Rojas wrote:
+> Commit a23c4134955e added the clock controller nodes, incorrectly changing the
+> syscon-reboot nodes addresses.
 > 
-> Any thoughts why populate_vma_page_range() does it?
+> Fixes: a23c4134955e ("MIPS: BMIPS: add clock controller nodes")
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 
-Sorry, I missed the explanation above - thanks!
-
-
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Thanks,
-
-David / dhildenb
-
+Florian
