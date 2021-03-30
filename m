@@ -2,119 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD28534F1CC
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 21:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CBE34F1E4
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 21:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbhC3Tt7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Mar 2021 15:49:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57338 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233254AbhC3Tt1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 30 Mar 2021 15:49:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0ACA761919;
-        Tue, 30 Mar 2021 19:49:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617133767;
-        bh=Ck1XHsPMXKddkO7/YY+lWQc5sW8Ayvngr37xovx4Afg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gEcNh7zo1605nJ8Hjwu4y4qAZxIi22sCNRw5bFtvEBODv+GcaOmodshXmLvXjV/t4
-         yDViKbTiOEZs8Xg7AxAUYTWED/fmy1qnnrA6cnzJVkJU5ys2Fm9MoVyedghkW76SwD
-         FCOVQBFKbAQQ986t/02MAQqbdli2694er9Ec9kjMM7c5EVZRW8UCgbTQQ2vQMM8dbT
-         cimawJ7XvGtVIF9UwsSj9od7XaLHi9WEre1AKUaxPm6rzJc/+RlXz9yJaWBASK3oYK
-         OhmRDT63nchAo7rm+sZqwAUBD4bVS10/D/ito1bQGxYshGgyNTN6AZm36Wic4i6V/d
-         1lysvtPWpYsDA==
-Received: by mail-ej1-f43.google.com with SMTP id e14so26541621ejz.11;
-        Tue, 30 Mar 2021 12:49:26 -0700 (PDT)
-X-Gm-Message-State: AOAM531mFG1fBVx0Jn4FbCpJeTYrw9hLavDElHtfHsQwzNKTne9ME212
-        0EoSH7Wn63FB4exHxl/z4GYXBwJT5N8k8/jqZw==
-X-Google-Smtp-Source: ABdhPJwtsu4GSSCTGvon7NUuoXgbKxlglqptEfp3lbXOUs7+wjr+Z+gLBfdBRTrJqyuy+lFVou3niNRuxiswKCsp+tY=
-X-Received: by 2002:a17:906:c405:: with SMTP id u5mr35182498ejz.341.1617133765515;
- Tue, 30 Mar 2021 12:49:25 -0700 (PDT)
+        id S233293AbhC3T6a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Mar 2021 15:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233239AbhC3T6Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Mar 2021 15:58:25 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0349BC061574
+        for <linux-mips@vger.kernel.org>; Tue, 30 Mar 2021 12:58:25 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id t140so5155591pgb.13
+        for <linux-mips@vger.kernel.org>; Tue, 30 Mar 2021 12:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wTEyxuaapP4d1SHF7RcerzFayP475kgkIctZEDORCvY=;
+        b=envgQwKOhZLGzYbrjTo3+nEI/ILCJz7AV2GNZ37sA4tCFJ/jO9jwiK5voJwg3r/eds
+         n/zOAXzsVLcOacfLuS5VHUc/Z+MqB19zQ52tsRetZLD7hBDRRdqbtww6YeIzEisRIyMw
+         UnfTrppUFQicAdk3Yb3QZQbrg/qIsNA3dGPVEIftHW0s1SOq7Hgyee3Ke9l4JB7cfcim
+         WfxyAvKImmJ2KZPyBj2tHvhaebrjJjZxU5509A9Ch4WA/EkIVJwDkd6/BmVOdrShBU9j
+         tfeAKC2/dsPTX8UPAidLNUSrGVz0OIl962YLH0QZ9VroDrpQvyJk5f+1O5KmnTp/LVWY
+         h0QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wTEyxuaapP4d1SHF7RcerzFayP475kgkIctZEDORCvY=;
+        b=uXZ5xfDK2sCkw1X7201i30/Hrvm9LbrR/54USeobRR4wDu6HmeX7aKjaNVf3oNpDFF
+         TUvI1oByEQnJFJNWOdBv2BRig6/trKeftw3PkPXAiLF/BrqRDE0q4WumRB4QpXrC4bix
+         bI4xW6wtKdL0aXMYQt67Wu7uNJISp8NrV4DD9aGalhbm+6RYTAUu74O3qxjUXH8Lntik
+         2TBoKv+LbjjUpAgQQqnHtcyl9zsDbJbItFBixnBgrRBRjhIBRnFsAOpmFyiM7Wc9ylI1
+         RFYuatS8LPfJd75/uOA/ga7CAEVxOEFA8DP69I5PWoLxtl5AT/eW2nIQNG8hzdiEsDQZ
+         WbwQ==
+X-Gm-Message-State: AOAM533QG3kazfUS1+LJUcpjMYORie8rHkMk5zIPQ6Q5e2IIFqPhf9iu
+        7hCllxvj2qq2OLXvgoIQ0+H26g==
+X-Google-Smtp-Source: ABdhPJy/H3xYrm77zteXXmXwOlrnRIg3rQpdyEYIba7syOVncG/8FqBI2t2hNnALYH3MbklxzEVjZA==
+X-Received: by 2002:a63:5361:: with SMTP id t33mr29952003pgl.439.1617134304318;
+        Tue, 30 Mar 2021 12:58:24 -0700 (PDT)
+Received: from google.com (240.111.247.35.bc.googleusercontent.com. [35.247.111.240])
+        by smtp.gmail.com with ESMTPSA id f16sm10723866pfj.220.2021.03.30.12.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Mar 2021 12:58:23 -0700 (PDT)
+Date:   Tue, 30 Mar 2021 19:58:19 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm <kvm@vger.kernel.org>,
+        kvm-ppc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/18] KVM: Consolidate and optimize MMU notifiers
+Message-ID: <YGOC2wqn5k9WkY39@google.com>
+References: <20210326021957.1424875-1-seanjc@google.com>
+ <CANgfPd_gpWsa4F3VdcpoBYqPR4dSBWNYCW1YdeOnu1wQdUz+0A@mail.gmail.com>
 MIME-Version: 1.0
-References: <41021d66db2ab427c14255d2a24bb4517c8b58fd.1617126961.git.danielwa@cisco.com>
- <0c4b839f023f87c451c8aa3c4f7a8d92729c2f02.1617126961.git.danielwa@cisco.com>
-In-Reply-To: <0c4b839f023f87c451c8aa3c4f7a8d92729c2f02.1617126961.git.danielwa@cisco.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 30 Mar 2021 14:49:13 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+_gF9Cy7H6ic2q8dxnPf4+FsBa5pFYYRydJsEmDhnNhA@mail.gmail.com>
-Message-ID: <CAL_Jsq+_gF9Cy7H6ic2q8dxnPf4+FsBa5pFYYRydJsEmDhnNhA@mail.gmail.com>
-Subject: Re: [PATCH 2/8] CMDLINE: drivers: of: ifdef out cmdline section
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        X86 ML <x86@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        xe-linux-external@cisco.com,
-        Ruslan Ruslichenko <rruslich@cisco.com>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANgfPd_gpWsa4F3VdcpoBYqPR4dSBWNYCW1YdeOnu1wQdUz+0A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 12:57 PM Daniel Walker <danielwa@cisco.com> wrote:
->
-> It looks like there's some seepage of cmdline stuff into
-> the generic device tree code. This conflicts with the
-> generic cmdline implementation so I remove it in the case
-> when that's enabled.
->
-> Cc: xe-linux-external@cisco.com
-> Signed-off-by: Ruslan Ruslichenko <rruslich@cisco.com>
-> Signed-off-by: Daniel Walker <danielwa@cisco.com>
-> ---
->  drivers/of/fdt.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> index dcc1dd96911a..d8805cd9717a 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -25,6 +25,7 @@
->  #include <linux/serial_core.h>
->  #include <linux/sysfs.h>
->  #include <linux/random.h>
-> +#include <linux/cmdline.h>
->
->  #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
->  #include <asm/page.h>
-> @@ -1050,6 +1051,18 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
->
->         /* Retrieve command line */
->         p = of_get_flat_dt_prop(node, "bootargs", &l);
-> +
-> +#if defined(CONFIG_GENERIC_CMDLINE) && defined(CONFIG_GENERIC_CMDLINE_OF)
+On Tue, Mar 30, 2021, Ben Gardon wrote:
+> On Thu, Mar 25, 2021 at 7:20 PM Sean Christopherson <seanjc@google.com> wrote:
+> > Patch 10 moves x86's memslot walkers into common KVM.  I chose x86 purely
+> > because I could actually test it.  All architectures use nearly identical
+> > code, so I don't think it actually matters in the end.
+> 
+> I'm still reviewing 10 and 14-18. 10 is a huge change and the diff is
+> pretty hard to parse.
 
-Moving in the wrong direction... This code already has too many
-#ifdef's. I like Christophe's version as it gets rid of all the code
-here.
+Ya :-/  I don't see an easy way to break it up without creating a massive diff,
+e.g. it could be staged in x86 and moved to common, but I don't think that would
+fundamentally change the diff.  Although I admittedly didn't spend _that_ much
+time thinking about how to break it up.
 
-> +       /*
-> +        * The builtin command line will be added here, or it can override
-> +        * with the DT bootargs.
-> +        */
-> +       cmdline_add_builtin(data,
-> +                           (l > 0 ? p : NULL), /* This is sanity checking */
-> +                           COMMAND_LINE_SIZE);
-> +#elif defined(CONFIG_GENERIC_CMDLINE)
-> +       strlcpy(data, p, COMMAND_LINE_SIZE);
-> +#else
->         if (p != NULL && l > 0)
->                 strlcpy(data, p, min(l, COMMAND_LINE_SIZE));
->
-> @@ -1070,6 +1083,7 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
->                 strlcpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
->  #endif
->  #endif /* CONFIG_CMDLINE */
-> +#endif /* CONFIG_GENERIC_CMDLINE */
->
->         pr_debug("Command line is: %s\n", (char *)data);
->
-> --
-> 2.25.1
->
+> > Patches 11-13 move arm64, MIPS, and PPC to the new APIs.
+> >
+> > Patch 14 yanks out the old APIs.
+> >
+> > Patch 15 adds the mmu_lock elision, but only for unpaired notifications.
+> 
+> Reading through all this code and considering the changes I'm
+> preparing for the TDP MMU have me wondering if it might help to have a
+> more general purpose MMU lock context struct which could be embedded
+> in the structs added in this patch. I'm thinking something like:
+> enum kvm_mmu_lock_mode {
+>     KVM_MMU_LOCK_NONE,
+>     KVM_MMU_LOCK_READ,
+>     KVM_MMU_LOCK_WRITE,
+> };
+> 
+> struct kvm_mmu_lock_context {
+>     enum kvm_mmu_lock_mode lock_mode;
+>     bool can_block;
+>     bool can_yield;
+
+Not that it matters right now, but can_block and can_yield are the same thing.
+I considered s/can_yield/can_block to make it all consistent, but that felt like
+unnecessary thrash.
+
+>     bool flush;
+
+Drat.  This made me realize that the 'struct kvm_gfn_range' passed to arch code
+isn't tagged 'const'.  I thought I had done that, but obviously not.
+
+Anyways, what I was going to say before that realization is that the downside to
+putting flush into kvm_gfn_range is that it would have to lose its 'const'
+qualifier.  That's all a moot point if it's not easily constified though.
+
+Const aside, my gut reaction is that it will probably be cleaner to keep the
+flush stuff in arch code, separate from the kvm_gfn_range passed in by common
+KVM.  Looping 'flush' back into the helpers is x86 specific at this point, and
+AFAICT that's not likely to change any time soon.
+
+For rwlock support, if we get to the point where kvm_age_gfn() and/or
+kvm_test_age_gfn() can take mmu_lock for read, then it definitely makes sense to
+track locking in kvm_gfn_range, assuming it isn't the sole entity that prevents
+consifying kvm_range_range.
+
+> };
+> 
+> This could yield some grossly long lines, but it would also have
+> potential to unify a bunch of ad-hoc handling.
+> The above struct could also fit into a single byte, so it'd be pretty
+> easy to pass it around.
