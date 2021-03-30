@@ -2,109 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2245A34E1E2
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 09:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5BB34E219
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 09:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbhC3HNj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Mar 2021 03:13:39 -0400
-Received: from mail-m118208.qiye.163.com ([115.236.118.208]:38074 "EHLO
-        mail-m118208.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbhC3HND (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Mar 2021 03:13:03 -0400
-Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.251.74.232])
-        by mail-m118208.qiye.163.com (Hmail) with ESMTPA id B6735E02FA;
-        Tue, 30 Mar 2021 15:05:49 +0800 (CST)
-From:   Wang Qing <wangqing@vivo.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Luis de Bethencourt <luisbg@kernel.org>,
-        Salah Triki <salah.triki@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wang Qing <wangqing@vivo.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-hams@vger.kernel.org,
-        netdev@vger.kernel.org, linux-decnet-user@lists.sourceforge.net
-Cc:     gregkh@linuxfoundation.org
-Subject: [PATCH 6/6] net/decnet: Delete obsolete TODO file
-Date:   Tue, 30 Mar 2021 15:02:49 +0800
-Message-Id: <1617087773-7183-7-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1617087773-7183-1-git-send-email-wangqing@vivo.com>
-References: <1617087773-7183-1-git-send-email-wangqing@vivo.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZTk0fTkJNGE8eTExMVkpNSkxLQ0xCTktDTkhVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
-        FZT0tIVUpKS09ISFVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PCI6CAw*Tz8UAjcXPh88TgE8
-        Ej0aCk5VSlVKTUpMS0NMQk5KSkxKVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
-        SU5KVUxPVUlISVlXWQgBWUFPS0xNNwY+
-X-HM-Tid: 0a7881f3eed02c17kusnb6735e02fa
+        id S231131AbhC3HXv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Mar 2021 03:23:51 -0400
+Received: from mail1.protonmail.ch ([185.70.40.18]:64207 "EHLO
+        mail1.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231420AbhC3HXb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Mar 2021 03:23:31 -0400
+Date:   Tue, 30 Mar 2021 07:23:12 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
+        s=protonmail3; t=1617089008;
+        bh=uyxiiNlmIpUqH5pV51j68OH6R9OIx2NMn7HBlqoxjWA=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=rmdyZIi1rI9f6E7lkoqWOHQnEjeuf+fMw8xGgnB1pafJJytQTJHD08d6TnZpwCV1H
+         wn50aEcMlFQFsPnYEiQDxK6CeQLGIgJW6Qi8nTjEeVHD9tF33Gy87vur4wU7cEIPRQ
+         IdYxvkfa1ksytU6Lw2iGx/qHe60sKXHcaQIsJUKjjVh1LvKVeCiQOYzF++BXrLvqty
+         7XyzUWtBa1ijJ2T3m+BY32SwGVYvwjc47hrmQBMRYbUYt+fHRoB2bDouMO6Mh3zCcc
+         oE8jjvWgpnJsV+Chm84hVMT9LjE3vpqIQ9T7v30RoNto1nezDwANJEBqW7gffXtGaw
+         ylJdCpXAOvwZA==
+To:     Paul Cercueil <paul@crapouillou.net>
+From:   Simon Ser <contact@emersion.fr>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Reply-To: Simon Ser <contact@emersion.fr>
+Subject: Re: [PATCH 1/2] drm/ingenic: Switch IPU plane to type OVERLAY
+Message-ID: <BH3N8QICMyp64pmUQyXLwYMnCNBvXxThwvKJIOmyMU0XIgTtorcGd7s7AjnIFXQrLGEoJMuvPcWTiv38syiYOTCDv-bSxswFBX6y3UYqTwE=@emersion.fr>
+In-Reply-To: <20210329175046.214629-2-paul@crapouillou.net>
+References: <20210329175046.214629-1-paul@crapouillou.net> <20210329175046.214629-2-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The TODO file here has not been updated from 2005, and the function 
-development described in the file have been implemented or abandoned.
+> It should have been an OVERLAY from the beginning. The documentation
+> stipulates that there should be an unique PRIMARY plane per CRTC.
 
-Its existence will mislead developers seeking to view outdated information.
+Thanks for the quick patch! One comment below=E2=80=A6
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- net/decnet/TODO | 40 ----------------------------------------
- 1 file changed, 40 deletions(-)
- delete mode 100644 net/decnet/TODO
+> Fixes: fc1acf317b01 ("drm/ingenic: Add support for the IPU")
+> Cc: <stable@vger.kernel.org> # 5.8+
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 11 +++++------
+>  drivers/gpu/drm/ingenic/ingenic-ipu.c     |  2 +-
+>  2 files changed, 6 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/=
+ingenic/ingenic-drm-drv.c
+> index 29742ec5ab95..09225b770bb8 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -419,7 +419,7 @@ static void ingenic_drm_plane_enable(struct ingenic_d=
+rm *priv,
+>  =09unsigned int en_bit;
+>
+>  =09if (priv->soc_info->has_osd) {
+> -=09=09if (plane->type =3D=3D DRM_PLANE_TYPE_PRIMARY)
+> +=09=09if (plane !=3D &priv->f0)
 
-diff --git a/net/decnet/TODO b/net/decnet/TODO
-deleted file mode 100644
-index 358e9eb..0000000
---- a/net/decnet/TODO
-+++ /dev/null
-@@ -1,40 +0,0 @@
--Steve's quick list of things that need finishing off:
--[they are in no particular order and range from the trivial to the long winded]
--
-- o Proper timeouts on each neighbour (in routing mode) rather than
--   just the 60 second On-Ethernet cache value.
--
-- o Support for X.25 linklayer
--
-- o Support for DDCMP link layer
--
-- o The DDCMP device itself
--
-- o PPP support (rfc1762)
--
-- o Lots of testing with real applications
--
-- o Verify errors etc. against POSIX 1003.1g (draft)
--
-- o Using send/recvmsg() to get at connect/disconnect data (POSIX 1003.1g)
--   [maybe this should be done at socket level... the control data in the
--    send/recvmsg() calls should simply be a vector of set/getsockopt()
--    calls]
--
-- o check MSG_CTRUNC is set where it should be.
--
-- o Find all the commonality between DECnet and IPv4 routing code and extract
--   it into a small library of routines. [probably a project for 2.7.xx]
--
-- o Add perfect socket hashing - an idea suggested by Paul Koning. Currently
--   we have a half-way house scheme which seems to work reasonably well, but
--   the full scheme is still worth implementing, its not not top of my list
--   right now.
--
-- o Add session control message flow control
--
-- o Add NSP message flow control
--
-- o DECnet sendpages() function
--
-- o AIO for DECnet
--- 
-2.7.4
+I don't know about this driver but=E2=80=A6 is this really the same as the =
+previous
+condition? The previous condition would match two planes, this one seems to
+match only a single plane. What am I missing?
 
