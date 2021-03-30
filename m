@@ -2,105 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 477A434F1C8
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 21:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD28534F1CC
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 21:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbhC3Tt0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Mar 2021 15:49:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47202 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233240AbhC3Ts4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 30 Mar 2021 15:48:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617133735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OzWHBGLRQSImyi4e0nOZKdQoWKxewGVgAE+CFb4wwPc=;
-        b=iSlCGRs6VCjQoCeBwC0vXZ0lDdqTqqW3cQT5ZJy9e9xTJ2Hp9tMYBi+gH4uaHVycwz2wQC
-        0SgkHVHjJFNnhaWQLAgOU++Cdhi5uNX/riq3rBL00yFO37amxwAzIu5uEiDhZPEtebPK0U
-        7KAq4R3SdvXRzm85kUAmme1vH0pLPyM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-425-QpnaE_z8NU6DHys1Ct9RWw-1; Tue, 30 Mar 2021 15:48:54 -0400
-X-MC-Unique: QpnaE_z8NU6DHys1Ct9RWw-1
-Received: by mail-wm1-f69.google.com with SMTP id i14so1035757wmq.7
-        for <linux-mips@vger.kernel.org>; Tue, 30 Mar 2021 12:48:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OzWHBGLRQSImyi4e0nOZKdQoWKxewGVgAE+CFb4wwPc=;
-        b=Zdmj+Act8p2NxTYWlSIm6fNYKaq8rp61ju86l9+9rvqm4hMljvQ1veu/vcJES8y8XO
-         tnX6mpuFJ5ggPv35gRyZH4SZLFFERzeNr1+xHCeuwXU5J6n099oGumUSZCUt8qb3lyQV
-         8w7P7MU84ZOWft4c7UZQjG/R5da01AeRHsxFcNTvmT3hVy/TjdXftzaDSq9n/Hsbk2ud
-         jlU95HPmy4S3PFQ68/OEJBIWK0FNRA3lXi3NBMRWg0Aj4i+MKpFboKPyJe7oJTKh3O1q
-         VgJjbjG6LLd+v/cmcmZLunobsV+19WhtwhoOKtmwcS88kzPq61FO60ifEJJqEQBybnSo
-         or3g==
-X-Gm-Message-State: AOAM533YEHngoDoMDvuPEmJX8vS+yGfLBAl2Yz+i3fYPNiFzu395EVpY
-        kyv3p55KPYY5IIcxYFJXFY3/0KB0IYcW/qtUlXGAqaKqSkqw7MUF36xMkp8bDEM+qtlcVG6uhqc
-        68/zk3gEVK5kcYGrPAWqgIQ==
-X-Received: by 2002:a7b:c0c3:: with SMTP id s3mr5514388wmh.11.1617133732278;
-        Tue, 30 Mar 2021 12:48:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzrWDuYw2HfRbOt7weQUpuJCXUwrbqFmeFadK3gLejd+/RrcU8+0Fo4iU0Fj3iEAf2A+hbNXA==
-X-Received: by 2002:a7b:c0c3:: with SMTP id s3mr5514373wmh.11.1617133732072;
-        Tue, 30 Mar 2021 12:48:52 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id w11sm37459472wrv.88.2021.03.30.12.48.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Mar 2021 12:48:50 -0700 (PDT)
-Subject: Re: [PATCH 00/18] KVM: Consolidate and optimize MMU notifiers
-To:     Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm <kvm@vger.kernel.org>,
-        kvm-ppc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <20210326021957.1424875-1-seanjc@google.com>
- <CANgfPd_gpWsa4F3VdcpoBYqPR4dSBWNYCW1YdeOnu1wQdUz+0A@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <3a1dd877-7421-7628-4214-30483c4de10f@redhat.com>
-Date:   Tue, 30 Mar 2021 21:48:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S233204AbhC3Tt7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Mar 2021 15:49:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57338 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233254AbhC3Tt1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 30 Mar 2021 15:49:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0ACA761919;
+        Tue, 30 Mar 2021 19:49:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617133767;
+        bh=Ck1XHsPMXKddkO7/YY+lWQc5sW8Ayvngr37xovx4Afg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gEcNh7zo1605nJ8Hjwu4y4qAZxIi22sCNRw5bFtvEBODv+GcaOmodshXmLvXjV/t4
+         yDViKbTiOEZs8Xg7AxAUYTWED/fmy1qnnrA6cnzJVkJU5ys2Fm9MoVyedghkW76SwD
+         FCOVQBFKbAQQ986t/02MAQqbdli2694er9Ec9kjMM7c5EVZRW8UCgbTQQ2vQMM8dbT
+         cimawJ7XvGtVIF9UwsSj9od7XaLHi9WEre1AKUaxPm6rzJc/+RlXz9yJaWBASK3oYK
+         OhmRDT63nchAo7rm+sZqwAUBD4bVS10/D/ito1bQGxYshGgyNTN6AZm36Wic4i6V/d
+         1lysvtPWpYsDA==
+Received: by mail-ej1-f43.google.com with SMTP id e14so26541621ejz.11;
+        Tue, 30 Mar 2021 12:49:26 -0700 (PDT)
+X-Gm-Message-State: AOAM531mFG1fBVx0Jn4FbCpJeTYrw9hLavDElHtfHsQwzNKTne9ME212
+        0EoSH7Wn63FB4exHxl/z4GYXBwJT5N8k8/jqZw==
+X-Google-Smtp-Source: ABdhPJwtsu4GSSCTGvon7NUuoXgbKxlglqptEfp3lbXOUs7+wjr+Z+gLBfdBRTrJqyuy+lFVou3niNRuxiswKCsp+tY=
+X-Received: by 2002:a17:906:c405:: with SMTP id u5mr35182498ejz.341.1617133765515;
+ Tue, 30 Mar 2021 12:49:25 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CANgfPd_gpWsa4F3VdcpoBYqPR4dSBWNYCW1YdeOnu1wQdUz+0A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <41021d66db2ab427c14255d2a24bb4517c8b58fd.1617126961.git.danielwa@cisco.com>
+ <0c4b839f023f87c451c8aa3c4f7a8d92729c2f02.1617126961.git.danielwa@cisco.com>
+In-Reply-To: <0c4b839f023f87c451c8aa3c4f7a8d92729c2f02.1617126961.git.danielwa@cisco.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 30 Mar 2021 14:49:13 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+_gF9Cy7H6ic2q8dxnPf4+FsBa5pFYYRydJsEmDhnNhA@mail.gmail.com>
+Message-ID: <CAL_Jsq+_gF9Cy7H6ic2q8dxnPf4+FsBa5pFYYRydJsEmDhnNhA@mail.gmail.com>
+Subject: Re: [PATCH 2/8] CMDLINE: drivers: of: ifdef out cmdline section
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        X86 ML <x86@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        xe-linux-external@cisco.com,
+        Ruslan Ruslichenko <rruslich@cisco.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 30/03/21 20:32, Ben Gardon wrote:
->> Patches 1-7 are x86 specific prep patches to play nice with moving
->> the hva->gfn memslot lookups into common code.  There ended up being waaay
->> more of these than I expected/wanted, but I had a hell of a time getting
->> the flushing logic right when shuffling the memslot and address space
->> loops.  In the end, I was more confident I got things correct by batching
->> the flushes.
->>
->> Patch 8 moves the existing API prototypes into common code.  It could
->> technically be dropped since the old APIs are gone in the end, but I
->> thought the switch to the new APIs would suck a bit less this way.
-> Patches 1-8 look good to me. Feel free to add my Reviewed-by tag to those.
-> I appreciate the care you took to make all those changes tiny and reviewable.
-> 
+On Tue, Mar 30, 2021 at 12:57 PM Daniel Walker <danielwa@cisco.com> wrote:
+>
+> It looks like there's some seepage of cmdline stuff into
+> the generic device tree code. This conflicts with the
+> generic cmdline implementation so I remove it in the case
+> when that's enabled.
+>
+> Cc: xe-linux-external@cisco.com
+> Signed-off-by: Ruslan Ruslichenko <rruslich@cisco.com>
+> Signed-off-by: Daniel Walker <danielwa@cisco.com>
+> ---
+>  drivers/of/fdt.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index dcc1dd96911a..d8805cd9717a 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/serial_core.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/random.h>
+> +#include <linux/cmdline.h>
+>
+>  #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
+>  #include <asm/page.h>
+> @@ -1050,6 +1051,18 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
+>
+>         /* Retrieve command line */
+>         p = of_get_flat_dt_prop(node, "bootargs", &l);
+> +
+> +#if defined(CONFIG_GENERIC_CMDLINE) && defined(CONFIG_GENERIC_CMDLINE_OF)
 
-Just finished reviewing that part too, they were very nice and I've 
-queued them.  I'll continue tomorrow with the rest.
+Moving in the wrong direction... This code already has too many
+#ifdef's. I like Christophe's version as it gets rid of all the code
+here.
 
-Paolo
-
+> +       /*
+> +        * The builtin command line will be added here, or it can override
+> +        * with the DT bootargs.
+> +        */
+> +       cmdline_add_builtin(data,
+> +                           (l > 0 ? p : NULL), /* This is sanity checking */
+> +                           COMMAND_LINE_SIZE);
+> +#elif defined(CONFIG_GENERIC_CMDLINE)
+> +       strlcpy(data, p, COMMAND_LINE_SIZE);
+> +#else
+>         if (p != NULL && l > 0)
+>                 strlcpy(data, p, min(l, COMMAND_LINE_SIZE));
+>
+> @@ -1070,6 +1083,7 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
+>                 strlcpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+>  #endif
+>  #endif /* CONFIG_CMDLINE */
+> +#endif /* CONFIG_GENERIC_CMDLINE */
+>
+>         pr_debug("Command line is: %s\n", (char *)data);
+>
+> --
+> 2.25.1
+>
