@@ -2,81 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F23AB34E6EC
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 13:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CD734E789
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 14:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbhC3Lxt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 30 Mar 2021 07:53:49 -0400
-Received: from aposti.net ([89.234.176.197]:58464 "EHLO aposti.net"
+        id S231910AbhC3MfD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Mar 2021 08:35:03 -0400
+Received: from elvis.franken.de ([193.175.24.41]:37610 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231434AbhC3Lxb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 30 Mar 2021 07:53:31 -0400
-Date:   Tue, 30 Mar 2021 12:53:04 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/2] drm/ingenic: Switch IPU plane to type OVERLAY
-To:     Simon Ser <contact@emersion.fr>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Message-Id: <GC6SQQ.1R937FBY9A9A1@crapouillou.net>
-In-Reply-To: <BH3N8QICMyp64pmUQyXLwYMnCNBvXxThwvKJIOmyMU0XIgTtorcGd7s7AjnIFXQrLGEoJMuvPcWTiv38syiYOTCDv-bSxswFBX6y3UYqTwE=@emersion.fr>
-References: <20210329175046.214629-1-paul@crapouillou.net>
-        <20210329175046.214629-2-paul@crapouillou.net>
-        <BH3N8QICMyp64pmUQyXLwYMnCNBvXxThwvKJIOmyMU0XIgTtorcGd7s7AjnIFXQrLGEoJMuvPcWTiv38syiYOTCDv-bSxswFBX6y3UYqTwE=@emersion.fr>
+        id S230369AbhC3Meb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 30 Mar 2021 08:34:31 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lRDZl-0003nX-00; Tue, 30 Mar 2021 14:34:29 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 64DA4C1D90; Tue, 30 Mar 2021 14:24:37 +0200 (CEST)
+Date:   Tue, 30 Mar 2021 14:24:37 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     YunQiang Su <wzssyqa@gmail.com>
+Cc:     YunQiang Su <yunqiang.su@cipunited.com>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v9] MIPS: force use FR=0 for FPXX binaries
+Message-ID: <20210330122437.GA10355@alpha.franken.de>
+References: <20210322015902.18451-1-yunqiang.su@cipunited.com>
+ <CAKcpw6UPQFOt2DyY9EbKxziWyJXOsUwcf4khrAyFC=yTX1EuAg@mail.gmail.com>
+ <20210329090058.GA6564@alpha.franken.de>
+ <CAKcpw6Vd6pCT2PB4pZATnEq8Y4pSj4cwNFZgg6yK6VjoeY+N-Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKcpw6Vd6pCT2PB4pZATnEq8Y4pSj4cwNFZgg6yK6VjoeY+N-Q@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Simon,
-
-Le mar. 30 mars 2021 à 7:23, Simon Ser <contact@emersion.fr> a écrit :
->>  It should have been an OVERLAY from the beginning. The documentation
->>  stipulates that there should be an unique PRIMARY plane per CRTC.
+On Mon, Mar 29, 2021 at 06:28:40PM +0800, YunQiang Su wrote:
+> Thomas Bogendoerfer <tsbogend@alpha.franken.de> 于2021年3月29日周一 下午5:30写道：
+> >
+> > On Mon, Mar 29, 2021 at 01:09:18PM +0800, YunQiang Su wrote:
+> > > YunQiang Su <yunqiang.su@cipunited.com> 于2021年3月22日周一 上午10:00写道：
+> > > >
+> > > > The MIPS FPU may have 3 mode:
+> > > >   FR=0: MIPS I style, all of the FPR are single.
+> > > >   FR=1: all 32 FPR can be double.
+> > > >   FRE: redirecting the rw of odd-FPR to the upper 32bit of even-double FPR.
+> > > >
+> > > > The binary may have 3 mode:
+> > > >   FP32: can only work with FR=0 and FRE mode
+> > > >   FPXX: can work with all of FR=0/FR=1/FRE mode.
+> > > >   FP64: can only work with FR=1 mode
+> > > >
+> > > > Some binary, for example the output of golang, may be mark as FPXX,
+> > > > while in fact they are FP32. It is caused by the bug of design and linker:
+> > > >   Object produced by pure Go has no FP annotation while in fact they are FP32;
+> > > >   if we link them with the C module which marked as FPXX,
+> > > >   the result will be marked as FPXX. If these fake-FPXX binaries is executed
+> > > >   in FR=1 mode, some problem will happen.
+> > > >
+> > > > In Golang, now we add the FP32 annotation, so the future golang programs
+> > > > won't have this problem. While for the existing binaries, we need a
+> > > > kernel workaround.
+> > > >
+> > >
+> > > We meet a new problem in Debian: with the O32_FP64 enabled kernel,
+> > > mips64el may also be affected.
+> > > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=983583
+> >
+> > hmm, raising this issue in this context before knowing more details,
+> > feels very trigger happy to me and this doesn't help accepting anything,
+> > jfyi...
+> >
+> > Could you please provide a link for downloading a golang binary, which
+> > would need this patch to run ?
+> >
 > 
-> Thanks for the quick patch! One comment below…
+> For rootfs, you can download
+>    http://58.246.137.130:20180/debian-from/rootfs/buster-mipsel.tar.xz
+> or create by:
+>     sudo debootstrap --arch mipsel  --include golang-1.11-go \
+>                      buster buster-mipsel http://deb.debian.org/debian
 > 
->>  Fixes: fc1acf317b01 ("drm/ingenic: Add support for the IPU")
->>  Cc: <stable@vger.kernel.org> # 5.8+
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 11 +++++------
->>   drivers/gpu/drm/ingenic/ingenic-ipu.c     |  2 +-
->>   2 files changed, 6 insertions(+), 7 deletions(-)
->> 
->>  diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
->> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
->>  index 29742ec5ab95..09225b770bb8 100644
->>  --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
->>  +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
->>  @@ -419,7 +419,7 @@ static void ingenic_drm_plane_enable(struct 
->> ingenic_drm *priv,
->>   	unsigned int en_bit;
->> 
->>   	if (priv->soc_info->has_osd) {
->>  -		if (plane->type == DRM_PLANE_TYPE_PRIMARY)
->>  +		if (plane != &priv->f0)
+> For binary packages, you can download:
+>     https://packages.debian.org/buster/mipsel/golang-1.11-go/download
 > 
-> I don't know about this driver but… is this really the same as the 
-> previous
-> condition? The previous condition would match two planes, this one 
-> seems to
-> match only a single plane. What am I missing?
+> just chroot the rootfs and run:
+>     /usr/lib/go-1.11/bin/go
+> It will crash if kernel's O32_FP64 option is enabled.
 
-There are three planes, which we will call here f0, f1, and ipu.
+now I'm confused. Do go binaries crash the kernel ? Or is this just
+the issue _not_ related to this patch ?
 
-Previously, the "plane->type == DRM_PLANE_TYPE_PRIMARY" matched f1 and 
-ipu. Since ipu is now OVERLAY we have to change the condition or the 
-behaviour will be different, as otherwise it would only match the f1 
-plane.
+I want a single go binary, which I can inspect about the FPXX thing and
+see how easy it would be to just patch the binary and make it run without
+this patch.
 
-Cheers,
--Paul
+Thomas.
 
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
