@@ -2,104 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CD734E789
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 14:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037E634E844
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 15:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbhC3MfD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Mar 2021 08:35:03 -0400
-Received: from elvis.franken.de ([193.175.24.41]:37610 "EHLO elvis.franken.de"
+        id S229633AbhC3NDF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Mar 2021 09:03:05 -0400
+Received: from elvis.franken.de ([193.175.24.41]:37666 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230369AbhC3Meb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 30 Mar 2021 08:34:31 -0400
+        id S232129AbhC3NDC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 30 Mar 2021 09:03:02 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lRDZl-0003nX-00; Tue, 30 Mar 2021 14:34:29 +0200
+        id 1lRE1N-00043F-00; Tue, 30 Mar 2021 15:03:01 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 64DA4C1D90; Tue, 30 Mar 2021 14:24:37 +0200 (CEST)
-Date:   Tue, 30 Mar 2021 14:24:37 +0200
+        id 4A4C5C1D9A; Tue, 30 Mar 2021 14:53:47 +0200 (CEST)
+Date:   Tue, 30 Mar 2021 14:53:47 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     YunQiang Su <wzssyqa@gmail.com>
-Cc:     YunQiang Su <yunqiang.su@cipunited.com>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v9] MIPS: force use FR=0 for FPXX binaries
-Message-ID: <20210330122437.GA10355@alpha.franken.de>
-References: <20210322015902.18451-1-yunqiang.su@cipunited.com>
- <CAKcpw6UPQFOt2DyY9EbKxziWyJXOsUwcf4khrAyFC=yTX1EuAg@mail.gmail.com>
- <20210329090058.GA6564@alpha.franken.de>
- <CAKcpw6Vd6pCT2PB4pZATnEq8Y4pSj4cwNFZgg6yK6VjoeY+N-Q@mail.gmail.com>
+To:     Mauri Sandberg <sandberg@mailfence.com>
+Cc:     f.fainelli@gmail.com, linux-mips@vger.kernel.org,
+        trivial@kernel.org
+Subject: Re: [PATCH v3 1/1] MIPS: kernel: setup.c: fix compilation error
+Message-ID: <20210330125347.GA10767@alpha.franken.de>
+References: <20210326134158.268164-1-sandberg@mailfence.com>
+ <20210329123136.3717-1-sandberg@mailfence.com>
+ <20210329123136.3717-2-sandberg@mailfence.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKcpw6Vd6pCT2PB4pZATnEq8Y4pSj4cwNFZgg6yK6VjoeY+N-Q@mail.gmail.com>
+In-Reply-To: <20210329123136.3717-2-sandberg@mailfence.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 06:28:40PM +0800, YunQiang Su wrote:
-> Thomas Bogendoerfer <tsbogend@alpha.franken.de> 于2021年3月29日周一 下午5:30写道：
-> >
-> > On Mon, Mar 29, 2021 at 01:09:18PM +0800, YunQiang Su wrote:
-> > > YunQiang Su <yunqiang.su@cipunited.com> 于2021年3月22日周一 上午10:00写道：
-> > > >
-> > > > The MIPS FPU may have 3 mode:
-> > > >   FR=0: MIPS I style, all of the FPR are single.
-> > > >   FR=1: all 32 FPR can be double.
-> > > >   FRE: redirecting the rw of odd-FPR to the upper 32bit of even-double FPR.
-> > > >
-> > > > The binary may have 3 mode:
-> > > >   FP32: can only work with FR=0 and FRE mode
-> > > >   FPXX: can work with all of FR=0/FR=1/FRE mode.
-> > > >   FP64: can only work with FR=1 mode
-> > > >
-> > > > Some binary, for example the output of golang, may be mark as FPXX,
-> > > > while in fact they are FP32. It is caused by the bug of design and linker:
-> > > >   Object produced by pure Go has no FP annotation while in fact they are FP32;
-> > > >   if we link them with the C module which marked as FPXX,
-> > > >   the result will be marked as FPXX. If these fake-FPXX binaries is executed
-> > > >   in FR=1 mode, some problem will happen.
-> > > >
-> > > > In Golang, now we add the FP32 annotation, so the future golang programs
-> > > > won't have this problem. While for the existing binaries, we need a
-> > > > kernel workaround.
-> > > >
-> > >
-> > > We meet a new problem in Debian: with the O32_FP64 enabled kernel,
-> > > mips64el may also be affected.
-> > > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=983583
-> >
-> > hmm, raising this issue in this context before knowing more details,
-> > feels very trigger happy to me and this doesn't help accepting anything,
-> > jfyi...
-> >
-> > Could you please provide a link for downloading a golang binary, which
-> > would need this patch to run ?
-> >
+On Mon, Mar 29, 2021 at 03:31:36PM +0300, Mauri Sandberg wrote:
+> With ath79_defconfig enabling CONFIG_MIPS_ELF_APPENDED_DTB gives a
+> compilation error. This patch fixes it.
 > 
-> For rootfs, you can download
->    http://58.246.137.130:20180/debian-from/rootfs/buster-mipsel.tar.xz
-> or create by:
->     sudo debootstrap --arch mipsel  --include golang-1.11-go \
->                      buster buster-mipsel http://deb.debian.org/debian
+> Build log:
+> ...
+>   CC      kernel/locking/percpu-rwsem.o
+> ../arch/mips/kernel/setup.c:46:39: error: conflicting types for
+> '__appended_dtb'
+>  const char __section(".appended_dtb") __appended_dtb[0x100000];
+>                                        ^~~~~~~~~~~~~~
+> In file included from ../arch/mips/kernel/setup.c:34:
+> ../arch/mips/include/asm/bootinfo.h:118:13: note: previous declaration
+> of '__appended_dtb' was here
+>  extern char __appended_dtb[];
+>              ^~~~~~~~~~~~~~
+>   CC      fs/attr.o
+> make[4]: *** [../scripts/Makefile.build:271: arch/mips/kernel/setup.o]
+>  Error 1
+> ...
 > 
-> For binary packages, you can download:
->     https://packages.debian.org/buster/mipsel/golang-1.11-go/download
+> Root cause seems to be:
+> Fixes: b83ba0b9df56 ("MIPS: of: Introduce helper function to get DTB")
 > 
-> just chroot the rootfs and run:
->     /usr/lib/go-1.11/bin/go
-> It will crash if kernel's O32_FP64 option is enabled.
+> Signed-off-by: Mauri Sandberg <sandberg@mailfence.com>
+> Reviewed-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Tested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: trivial@kernel.org
+> ---
+>  arch/mips/kernel/setup.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-now I'm confused. Do go binaries crash the kernel ? Or is this just
-the issue _not_ related to this patch ?
-
-I want a single go binary, which I can inspect about the FPXX thing and
-see how easy it would be to just patch the binary and make it run without
-this patch.
+applied to mips-fixes. I dropped the Tested-by as this would imply
+for me booting that kernel, which I didn't.
 
 Thomas.
 
