@@ -2,72 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2785D34E832
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 15:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5070C34E845
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Mar 2021 15:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbhC3NAY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Mar 2021 09:00:24 -0400
-Received: from mail-40136.protonmail.ch ([185.70.40.136]:55911 "EHLO
-        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbhC3NAS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Mar 2021 09:00:18 -0400
-Date:   Tue, 30 Mar 2021 12:59:54 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail3; t=1617109216;
-        bh=nQumvZO7k2adxWbuuWRUUjrAO0hDimI1WyGmzZ72k6Y=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=MXEFZuKv9U1YOGPmBHoOT1TB7fu7j1AXDA20G3PQzfLp1iei5Diip2TDX2yZDLwtg
-         tXfYzD/Rsk0PXApszamq4O4HVVjHSeRbSbZb6v4/Z9A9/33mIflziROwyxbT0LPDcE
-         YoLZvbgqDlS8jINRANGrVJnEOa46QKDPNZOJyEUk4H8Mwg2UmIWOZZJLJ7iN2LDsbt
-         BWJOuH8q4lj0Pjj7f7j3BNcFX38hU12lEXdIjcY/Jd+Zv0XTR5QlAv4CiMYbpCSsc7
-         Dnfv7n4LFoe3xLAN/0JgBH2S7H95LAG42GL6pduD0lUEcmlEs8s5Lyrn7qYwYFEH+G
-         R47kopOnny1nQ==
-To:     Paul Cercueil <paul@crapouillou.net>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: [PATCH 1/2] drm/ingenic: Switch IPU plane to type OVERLAY
-Message-ID: <X2G0dUjYzRbISgSRQgMfjkybzYl-AXZR8nUGHdzBk6Wi_aQFCiir_c9fmBM2fV9N9FIxYl5emBtyGrDk0AfpFx4RRNys4Grco3CKsNZsxPU=@emersion.fr>
-In-Reply-To: <GC6SQQ.1R937FBY9A9A1@crapouillou.net>
-References: <20210329175046.214629-1-paul@crapouillou.net> <20210329175046.214629-2-paul@crapouillou.net> <BH3N8QICMyp64pmUQyXLwYMnCNBvXxThwvKJIOmyMU0XIgTtorcGd7s7AjnIFXQrLGEoJMuvPcWTiv38syiYOTCDv-bSxswFBX6y3UYqTwE=@emersion.fr> <GC6SQQ.1R937FBY9A9A1@crapouillou.net>
+        id S231968AbhC3NDG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Mar 2021 09:03:06 -0400
+Received: from elvis.franken.de ([193.175.24.41]:37664 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232019AbhC3NDC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 30 Mar 2021 09:03:02 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lRE1N-00043F-01; Tue, 30 Mar 2021 15:03:01 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 2AC11C1DF5; Tue, 30 Mar 2021 15:02:19 +0200 (CEST)
+Date:   Tue, 30 Mar 2021 15:02:19 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes for v5.12
+Message-ID: <20210330130219.GA10841@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tuesday, March 30th, 2021 at 1:53 PM, Paul Cercueil <paul@crapouillou.ne=
-t> wrote:
+The following changes since commit 3f6c515d723480bc8afd456b0a52438fe79128a8:
 
-> > I don't know about this driver but=E2=80=A6 is this really the same as =
-the
-> > previous
-> > condition? The previous condition would match two planes, this one
-> > seems to
-> > match only a single plane. What am I missing?
->
-> There are three planes, which we will call here f0, f1, and ipu.
-> Previously, the "plane->type =3D=3D DRM_PLANE_TYPE_PRIMARY" matched f1 an=
-d
-> ipu. Since ipu is now OVERLAY we have to change the condition or the
-> behaviour will be different, as otherwise it would only match the f1
-> plane.
+  MIPS: vmlinux.lds.S: Fix appended dtb not properly aligned (2021-03-16 22:53:08 +0100)
 
-Oh okay, I thought f0 was one of the primary planes, but it's not.
-Thanks for the explanation.
+are available in the Git repository at:
 
-For the user-space visible change:
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.12_3
 
-Acked-by: Simon Ser <contact@emersion.fr>
+for you to fetch changes up to 9ae31e2ab293bf4d9c42e7079b156072f8a7f8ca:
+
+  MIPS: kernel: setup.c: fix compilation error (2021-03-30 14:51:23 +0200)
+
+----------------------------------------------------------------
+- fixed compile error with option MIPS_ELF_APPENDED_DTB
+
+----------------------------------------------------------------
+Mauri Sandberg (1):
+      MIPS: kernel: setup.c: fix compilation error
+
+ arch/mips/kernel/setup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
