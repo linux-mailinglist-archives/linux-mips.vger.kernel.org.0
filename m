@@ -2,177 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB75B350645
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 20:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A06AF350793
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 21:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234623AbhCaSZc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 31 Mar 2021 14:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
+        id S236144AbhCaTrx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 31 Mar 2021 15:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235033AbhCaSZS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 31 Mar 2021 14:25:18 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA91BC06175F
-        for <linux-mips@vger.kernel.org>; Wed, 31 Mar 2021 11:25:17 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id w28so9515908lfn.2
-        for <linux-mips@vger.kernel.org>; Wed, 31 Mar 2021 11:25:17 -0700 (PDT)
+        with ESMTP id S235926AbhCaTrb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 31 Mar 2021 15:47:31 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE39DC061574
+        for <linux-mips@vger.kernel.org>; Wed, 31 Mar 2021 12:47:30 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id l76so50768pga.6
+        for <linux-mips@vger.kernel.org>; Wed, 31 Mar 2021 12:47:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EUROjIty2NzS2SHfb9lyXkeZUcLtaaw5q8IvGawS+KQ=;
-        b=Cv3eemlBA0UIiUYZSJZApVgErFnAzwy297tWHCLspxrUc3409vyFWfsoQj4AHYTzGr
-         porRwt8ySCCl8J1BYMaYOGMqFaJh5hPIUj4I0OoYK1X+OF6+yRKg3nzrRp91WqrS/a+N
-         +S7KtcXpYH/r9oNFk7i45s2TTNGBV2Gdbu78eLOSTluIWCQWTK+x+pN6Dbo0Lx+p0slQ
-         JPSc58RTLxOxDK2Gcl9B2cOVtH1TelIDIvaHvNREvKNN2S3fgfMz3EXlwHY9FrvEAU0D
-         En38XqZpFhOzvchOPgSqsUVPV8p0+UKi9ninS2hXuhfZ7fEG0aDUeemJ8pGqGZ614meN
-         sDpg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rXm/nrr7cYYIlQJb0K7kNX2znqQaRXVsKWhpXjS7Y2I=;
+        b=CDypuGGrGw60J4khFNkq4AEV9gEEkbaVaUqFpR2D7gf8tSeMlwyf6nUvLGw5rNTBh2
+         90XQzii0SYEovLXzoVaQjvGeQeHndrQULcF0QWkSZbcoJwB5ql9Ob5Gl0OkYvOMObYXM
+         PwQIir8z4T4I0j/bFveoAqjDn6togPwkzvrmQkFjCtgGWwq8oscdeBxw+lhkNUgr0hWm
+         HXKb2gq5qA41y4lLmIaRntCJ35FzXcivETY+ele6LdBo5hR9Rdw5GU8WKZABZWs5l5fj
+         8JlgLggRkFrPzsokWbabc+GXcvYWIYDIVvThpt0UqySXiDlCUpLG+W2dOsggjxgt560h
+         NTmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EUROjIty2NzS2SHfb9lyXkeZUcLtaaw5q8IvGawS+KQ=;
-        b=k5df1Ff6feWDB/jOVlhXUDXszF8AkOUyXaSsxfvVNCT9acv1BZhZIdLLT6BG8kHf5f
-         +IlWhBsMZxeLwvhTnGP6t91EZvcwt005ibuTk8CO/lSV6wQCvTEjLPyLtxbDWKTfZn0c
-         Ufm46iZVb4iBPhhx833G5XsN7aYKM2+8zJDsyadY8qZO3DYSsWahYZgBA57XK7cwUhq0
-         J8KplEkWAqFVMNqWRV10Q4fYnFfceb3h7DqjY8xG4WXVbctOnDlQQRlQU8J1TMq34S03
-         do7K9qCLnzl7TukA7vwZg+rbKM7KjY+OMk50xLdO03gBAnt8KrlingHjGmSryRK8+Kls
-         XTZg==
-X-Gm-Message-State: AOAM532MwQmD+WGdOSeV48EDbmTldMeRsuDaD9ElXUauR8InJIoOYhJV
-        je8Vo0jWgeJujAewInJfBG0qBXwXAr6mDdn9fpNIsg==
-X-Google-Smtp-Source: ABdhPJykjNivctx6j/+LzGnw6RtTp1CizNpD4QFE0jeLrM6ZlxoxoWZ8X0fW/Um2vItIxDoaUJGJP8FFyzChWaLsRQU=
-X-Received: by 2002:a19:5055:: with SMTP id z21mr2933000lfj.297.1617215115896;
- Wed, 31 Mar 2021 11:25:15 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rXm/nrr7cYYIlQJb0K7kNX2znqQaRXVsKWhpXjS7Y2I=;
+        b=ktC9U248rO+MMkW/6Tqn2UxLQi6zmgSaVcjMdxNNKGRzUOHioNIHrPrsCZC3Fsji8t
+         FJ8KEMjWmF/Izev/DU4dVWcIfyujxzmKbsZfJbEF89yWZxh8J+abbf9PEZUuDqnVugwd
+         AMmtZEegJNRozvBwNGYe6nQx+17372XDiBgIlZ1HEdd5dyPuCV2VAq3SAVCGSalNCJLf
+         EQWc9eQxz1can1B0TdoF0tRWCyIgSHuYXYw1gjhlxVTSv4JG7GXc3MCPLSqw7ioABW/A
+         OFt8khX4/+jaKr1wWpvbovh54iIIbyOr2MDjWp5C0PmQ9ow4zHpwIvNhP4ilKWYqSN4U
+         NDww==
+X-Gm-Message-State: AOAM533PmxGPxEepL1wWep6JEwN7Yw3YSbWq+d797fbrxR143q58Ipex
+        FbJ74swAwcAA2qurhStSBP0xZw==
+X-Google-Smtp-Source: ABdhPJxre3DS307rwPCOHwWEZe4TtjFTW40vfmhoKbdPXBUPZaU3Ljhlizc9oUjhXKKagxfqerxWhA==
+X-Received: by 2002:aa7:8814:0:b029:21d:d2ce:7be with SMTP id c20-20020aa788140000b029021dd2ce07bemr4305854pfo.80.1617220049616;
+        Wed, 31 Mar 2021 12:47:29 -0700 (PDT)
+Received: from google.com (240.111.247.35.bc.googleusercontent.com. [35.247.111.240])
+        by smtp.gmail.com with ESMTPSA id r2sm3226686pgv.50.2021.03.31.12.47.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Mar 2021 12:47:28 -0700 (PDT)
+Date:   Wed, 31 Mar 2021 19:47:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 16/18] KVM: Don't take mmu_lock for range invalidation
+ unless necessary
+Message-ID: <YGTRzf/4i9Y8XR2c@google.com>
+References: <20210326021957.1424875-1-seanjc@google.com>
+ <20210326021957.1424875-17-seanjc@google.com>
+ <6e7dc7d0-f5dc-85d9-1c50-d23b761b5ff3@redhat.com>
+ <YGSmMeSOPcjxRwf6@google.com>
+ <56ea69fe-87b0-154b-e286-efce9233864e@redhat.com>
 MIME-Version: 1.0
-References: <20210313194836.372585-1-masahiroy@kernel.org> <20210313194836.372585-11-masahiroy@kernel.org>
- <20210331171238.GA141362@roeck-us.net>
-In-Reply-To: <20210331171238.GA141362@roeck-us.net>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 31 Mar 2021 11:25:04 -0700
-Message-ID: <CAKwvOdmNUMJTjyc7hAhNRzmWmRQa5TCayTSpwiiVnO4HH-YTOQ@mail.gmail.com>
-Subject: Re: [PATCH 11/13] kconfig: do not use allnoconfig_y option
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        KP Singh <kpsingh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Terrell <terrelln@fb.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <56ea69fe-87b0-154b-e286-efce9233864e@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 10:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Sun, Mar 14, 2021 at 04:48:34AM +0900, Masahiro Yamada wrote:
-> > allnoconfig_y is a bad hack that sets a symbol to 'y' by allnoconfig.
-> >
-> > allnoconfig does not mean a minimum set of CONFIG options because a
-> > bunch of prompts are hidden by 'if EMBEDDED' or 'if EXPERT', but I do
-> > not like to do a workaround this way.
-> >
-> > Use the pre-existing feature, KCONFIG_ALLCONFIG, to provide a one
-> > liner config fragment. CONFIG_EMBEDDED=y is still forced under
-> > allnoconfig.
-> >
-> > No change in the .config file produced by 'make tinyconfig'.
-> >
-> > The output of 'make allnoconfig' will be changed; we will get
-> > CONFIG_EMBEDDED=n because allnoconfig literally sets all symbols to n.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> With this patch in place, mips:allnoconfig fails to build with
-> the following error.
->
-> Error log:
-> WARNING: modpost: vmlinux.o(.text+0x9c70): Section mismatch in reference from the function reserve_exception_space() to the function .meminit.text:memblock_reserve()
-> The function reserve_exception_space() references
-> the function __meminit memblock_reserve().
-> This is often because reserve_exception_space lacks a __meminit
-> annotation or the annotation of memblock_reserve is wrong.
-> ERROR: modpost: Section mismatches detected.
-> Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-> make[2]: *** [scripts/Makefile.modpost:62: vmlinux.symvers] Error 1
-> make[2]: *** Deleting file 'vmlinux.symvers'
-> make[1]: *** [Makefile:1292: vmlinux] Error 2
-> make: *** [Makefile:222: __sub-make] Error 2
+On Wed, Mar 31, 2021, Paolo Bonzini wrote:
+> On 31/03/21 18:41, Sean Christopherson wrote:
+> > > That said, the easiest way to avoid this would be to always update
+> > > mmu_notifier_count.
+> > Updating mmu_notifier_count requires taking mmu_lock, which would defeat the
+> > purpose of these shenanigans.
+> 
+> Okay; I wasn't sure if the problem was contention with page faults in
+> general, or just the long critical sections from the MMU notifier callbacks.
+> Still updating mmu_notifier_count unconditionally is a good way to break up
+> the patch in two and keep one commit just for the rwsem nastiness.
 
-Thanks for the report. I suspect this is related to allnoconfig
-disabling CONFIG_ARCH_KEEP_MEMBLOCK, which changes the definition of
-__init_memblock in include/linux/memblock.h.
+Rereading things, a small chunk of the rwsem nastiness can go away.  I don't see
+any reason to use rw_semaphore instead of rwlock_t.  install_new_memslots() only
+holds the lock for a handful of instructions.  Readers could get queued up
+behind a writer, but since install_new_memslots() is serialized by slots_lock
+(the existing mutex), there is no chance of multiple writers, i.e. the worst
+case wait duration is bounded at the length of an in-flight notification.  And
+that's _already_ the worst case since notifications are currently serialized by
+mmu_lock.  In practice, the existing worst case is probably far worse since
+there can be far more writers trying to acquire mmu_lock.
 
-So allnoconfig would unselect CONFIG_ARCH_KEEP_MEMBLOCK, making
-__init_memblock equivalent to __meminit triggering the above warning.
+In other words, there's no strong argument for sleeping instead of busy waiting
+in the notifiers.
 
-arch/mips/Kconfig
-14:     select ARCH_KEEP_MEMBLOCK if DEBUG_KERNEL
+By switching to rwlock_t, taking mmu_notifier_slots_lock doesn't have to depend
+on mmu_notifier_range_blockable(), and the must_lock path also goes away.
 
-so DEBUG_KERNEL is probably also disabled by allnoconfig.
+> > > > +#if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+> > > > +	down_write(&kvm->mmu_notifier_slots_lock);
+> > > > +#endif
+> > > >   	rcu_assign_pointer(kvm->memslots[as_id], slots);
+> > > > +#if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+> > > > +	up_write(&kvm->mmu_notifier_slots_lock);
+> > > > +#endif
+> > > Please do this unconditionally, the cost is minimal if the rwsem is not
+> > > contended (as is the case if the architecture doesn't use MMU notifiers at
+> > > all).
+> > It's not the cost, it's that mmu_notifier_slots_lock doesn't exist.  That's an
+> > easily solved problem, but then the lock wouldn't be initialized since
+> > kvm_init_mmu_notifier() is a nop.  That's again easy to solve, but IMO would
+> > look rather weird.  I guess the counter argument is that __kvm_memslots()
+> > wouldn't need #ifdeffery.
+> 
+> Yep.  Less #ifdefs usually wins. :)
+> 
+> > These are the to ideas I've come up with:
+> > 
+> > Option 1:
+> > 	static int kvm_init_mmu_notifier(struct kvm *kvm)
+> > 	{
+> > 		init_rwsem(&kvm->mmu_notifier_slots_lock);
+> > 
+> > 	#if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+> > 		kvm->mmu_notifier.ops = &kvm_mmu_notifier_ops;
+> > 		return mmu_notifier_register(&kvm->mmu_notifier, current->mm);
+> > 	#else
+> > 		return 0;
+> > 	#endif
+> > 	}
+> 
+> Option 2 is also okay I guess, but the simplest is option 1 + just init it
+> in kvm_create_vm.
 
-commit a8c0f1c634507 ("MIPS: Select ARCH_KEEP_MEMBLOCK if DEBUG_KERNEL
-to enable sysfs memblock debug")
-
-probably should drop the `if DEBUG_KERNEL` part.
-
->
-> Guenter
->
-> > ---
-> >
-> >  init/Kconfig                    | 1 -
-> >  kernel/configs/tiny-base.config | 1 +
-> >  scripts/kconfig/Makefile        | 3 ++-
-> >  3 files changed, 3 insertions(+), 2 deletions(-)
-> >  create mode 100644 kernel/configs/tiny-base.config
-> >
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 46b87ad73f6a..beb8314fdf96 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1769,7 +1769,6 @@ config DEBUG_RSEQ
-> >
-> >  config EMBEDDED
-> >       bool "Embedded system"
-> > -     option allnoconfig_y
-> >       select EXPERT
-> >       help
-> >         This option should be enabled if compiling the kernel for
-> > diff --git a/kernel/configs/tiny-base.config b/kernel/configs/tiny-base.config
-> > new file mode 100644
-> > index 000000000000..2f0e6bf6db2c
-> > --- /dev/null
-> > +++ b/kernel/configs/tiny-base.config
-> > @@ -0,0 +1 @@
-> > +CONFIG_EMBEDDED=y
-> > diff --git a/scripts/kconfig/Makefile b/scripts/kconfig/Makefile
-> > index 7df3c0e4c52e..46f2465177f0 100644
-> > --- a/scripts/kconfig/Makefile
-> > +++ b/scripts/kconfig/Makefile
-> > @@ -102,7 +102,8 @@ configfiles=$(wildcard $(srctree)/kernel/configs/$@ $(srctree)/arch/$(SRCARCH)/c
-> >
-> >  PHONY += tinyconfig
-> >  tinyconfig:
-> > -     $(Q)$(MAKE) -f $(srctree)/Makefile allnoconfig tiny.config
-> > +     $(Q)KCONFIG_ALLCONFIG=kernel/configs/tiny-base.config $(MAKE) -f $(srctree)/Makefile allnoconfig
-> > +     $(Q)$(MAKE) -f $(srctree)/Makefile tiny.config
-> >
-> >  # CHECK: -o cache_dir=<path> working?
-> >  PHONY += testconfig
-> > --
-> > 2.27.0
-> >
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Arr.  I'll play around with it to try and purge the #ifdefs.
