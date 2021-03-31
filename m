@@ -2,87 +2,273 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0508234F9AC
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 09:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C8134FA96
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 09:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233999AbhCaHTW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 31 Mar 2021 03:19:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233973AbhCaHSz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 31 Mar 2021 03:18:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5DEF861968;
-        Wed, 31 Mar 2021 07:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617175135;
-        bh=N2JjB3jNqEmrn0NuKsX95DfSg268p13rhdllb3wldik=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wjy46zLz0XIEREnbAeDaBmvBDTxx3EBV9yIgOAqA0HDXtwFj+85m457xFPqwUO16i
-         6yqqYg60onx8RaVMa+4yTNkLpex4dAzJF9NBvrCWUsGjHCe5OmUDvQ0iwrtY+m8lqm
-         koQjJjrm4ZeYwoNq1Cc/0mWXx6RKxlR3hjtN5l4m8GYOW+on1xGK3vFzji2XYXkx8v
-         Oh2NtNtNa2xF3I107g1vfnI406nNtvwFsBSe0109OmXsJ8DnbDzJFVL/6SucuXN+7T
-         sEaaL3b0BPXeibEqcXKBTd7zXz1TD9MvXTLtY1RAYoNC3TU+epHiP9T0VleUugV5w1
-         KK0PXs1/5di3g==
-Date:   Wed, 31 Mar 2021 09:18:52 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     paul@crapouillou.net, linux-mips@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com, ywltyut@sina.cn,
-        sernia.zhou@foxmail.com
-Subject: Re: [PATCH v2] I2C: JZ4780: Fix bug for Ingenic X1000.
-Message-ID: <20210331071852.GC1025@ninjato>
-References: <1616148733-15154-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1616148733-15154-2-git-send-email-zhouyanjie@wanyeetech.com>
+        id S234171AbhCaHmb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 31 Mar 2021 03:42:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:51381 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234327AbhCaHmX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 31 Mar 2021 03:42:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617176542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HCixOYNQFJEmCwNjkKeRd8lCZMOXCEBzJPf2kb2CuW8=;
+        b=h4MJeym0pQC58EWxdfbCrpqhZJh7EReaizmu8gFJBuT+9wMqmeyfdkO1WfNK0ytwWuqZA4
+        9Xufpt2PJeA6QK45I/7jmLio5D4h6qXL/kSIbX2ie7okhvSP6j6cxqxQJCyOOdWifBf5WJ
+        Iot8M3UbofT4aKEC1jeTampm/8P0MrQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-271-uq3v2G1ON7azl6lRl_uxHQ-1; Wed, 31 Mar 2021 03:41:41 -0400
+X-MC-Unique: uq3v2G1ON7azl6lRl_uxHQ-1
+Received: by mail-wm1-f69.google.com with SMTP id c9so115087wme.5
+        for <linux-mips@vger.kernel.org>; Wed, 31 Mar 2021 00:41:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HCixOYNQFJEmCwNjkKeRd8lCZMOXCEBzJPf2kb2CuW8=;
+        b=VIoD4ygHXy9aeuaGr5FG5zcclrbzCwWXFb7LmW7FU4V0CsSMYZicl+NQvvSXVoAqAI
+         EpPQ09a8tI3OUn53jPQhI+/3mUnrTBf4oJWRv04NhC4HwihnbSJzm7mETD1sVqi9aTpJ
+         92bDxSL1aeEdU+EoQ5Lhs6B2vNEBD0EUJgzvUF/ShNekEeCUq+1e73w/gRw2TreDzsVb
+         w1EQZBmHCTZL2RRXJwfn/sC5aAJgN1Wnde1jmuLPfgw3VBNlTd6ykPsNUyZvGLA5Om9M
+         nT4Vrs0F6bnRIE7VOAOP5wHNLv9GIOhrF06WqdHgpUcOkJRavVvnqL99H62XslWpvDFv
+         Ur4Q==
+X-Gm-Message-State: AOAM530Vc2ijQGdRB2y78+xx2GF/3BgLt59WBlX0YSdqlu9hNNKUgjL5
+        /zWCaD37dVLmHcspp7BPtV8lhc8C24SmZA9FxH/puGQYoKAYtRDsndTqEtrKEaFvUTwXvtFlJbv
+        0knfpHyjC05DbQIYZw/PVxg==
+X-Received: by 2002:a1c:b789:: with SMTP id h131mr1904514wmf.106.1617176499784;
+        Wed, 31 Mar 2021 00:41:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxiHmYD2Le+p2rRCHafUQsuCWJvR5BP1vyRx1fx+QhpZoWEEC9/7YIvjmyyJZB+n8xVLiTOmA==
+X-Received: by 2002:a1c:b789:: with SMTP id h131mr1904488wmf.106.1617176499531;
+        Wed, 31 Mar 2021 00:41:39 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.gmail.com with ESMTPSA id a131sm2662492wmc.48.2021.03.31.00.41.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Mar 2021 00:41:38 -0700 (PDT)
+Subject: Re: [PATCH 12/18] KVM: MIPS/MMU: Convert to the gfn-based MMU
+ notifier callbacks
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+References: <20210326021957.1424875-1-seanjc@google.com>
+ <20210326021957.1424875-13-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <26c87b3e-7a89-6cfa-1410-25486b114f32@redhat.com>
+Date:   Wed, 31 Mar 2021 09:41:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wxDdMuZNg1r63Hyj"
-Content-Disposition: inline
-In-Reply-To: <1616148733-15154-2-git-send-email-zhouyanjie@wanyeetech.com>
+In-Reply-To: <20210326021957.1424875-13-seanjc@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 26/03/21 03:19, Sean Christopherson wrote:
+> Move MIPS to the gfn-based MMU notifier APIs, which do the hva->gfn
+> lookup in common code, and whose code is nearly identical to MIPS'
+> lookup.
+> 
+> No meaningful functional change intended, though the exact order of
+> operations is slightly different since the memslot lookups occur before
+> calling into arch code.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
---wxDdMuZNg1r63Hyj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'll post a couple patches to enable more coalescing of the flushes, but 
+this particular patch is okay.
 
-On Fri, Mar 19, 2021 at 06:12:13PM +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
- Yanjie) wrote:
-> Only send "X1000_I2C_DC_STOP" when last byte, or it will cause
-> error when I2C write operation.
->=20
-> Fixes: 21575a7a8d4c ("I2C: JZ4780: Add support for the X1000.")
->=20
-> Reported-by: =E6=9D=A8=E6=96=87=E9=BE=99 (Yang Wenlong) <ywltyut@sina.cn>
-> Tested-by: =E6=9D=A8=E6=96=87=E9=BE=99 (Yang Wenlong) <ywltyut@sina.cn>
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech.com>
+Paolo
 
-Applied to for-current with updated commit message, thanks!
+> ---
+>   arch/mips/include/asm/kvm_host.h |  1 +
+>   arch/mips/kvm/mmu.c              | 97 ++++++--------------------------
+>   2 files changed, 17 insertions(+), 81 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index feaa77036b67..374a3c8806e8 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -967,6 +967,7 @@ enum kvm_mips_fault_result kvm_trap_emul_gva_fault(struct kvm_vcpu *vcpu,
+>   						   bool write);
+>   
+>   #define KVM_ARCH_WANT_MMU_NOTIFIER
+> +#define KVM_ARCH_WANT_NEW_MMU_NOTIFIER_APIS
+>   
+>   /* Emulation */
+>   int kvm_get_inst(u32 *opc, struct kvm_vcpu *vcpu, u32 *out);
+> diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+> index 3dabeda82458..3dc885df2e32 100644
+> --- a/arch/mips/kvm/mmu.c
+> +++ b/arch/mips/kvm/mmu.c
+> @@ -439,85 +439,36 @@ static int kvm_mips_mkold_gpa_pt(struct kvm *kvm, gfn_t start_gfn,
+>   				  end_gfn << PAGE_SHIFT);
+>   }
+>   
+> -static int handle_hva_to_gpa(struct kvm *kvm,
+> -			     unsigned long start,
+> -			     unsigned long end,
+> -			     int (*handler)(struct kvm *kvm, gfn_t gfn,
+> -					    gpa_t gfn_end,
+> -					    struct kvm_memory_slot *memslot,
+> -					    void *data),
+> -			     void *data)
+> +bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+>   {
+> -	struct kvm_memslots *slots;
+> -	struct kvm_memory_slot *memslot;
+> -	int ret = 0;
+> -
+> -	slots = kvm_memslots(kvm);
+> -
+> -	/* we only care about the pages that the guest sees */
+> -	kvm_for_each_memslot(memslot, slots) {
+> -		unsigned long hva_start, hva_end;
+> -		gfn_t gfn, gfn_end;
+> -
+> -		hva_start = max(start, memslot->userspace_addr);
+> -		hva_end = min(end, memslot->userspace_addr +
+> -					(memslot->npages << PAGE_SHIFT));
+> -		if (hva_start >= hva_end)
+> -			continue;
+> -
+> -		/*
+> -		 * {gfn(page) | page intersects with [hva_start, hva_end)} =
+> -		 * {gfn_start, gfn_start+1, ..., gfn_end-1}.
+> -		 */
+> -		gfn = hva_to_gfn_memslot(hva_start, memslot);
+> -		gfn_end = hva_to_gfn_memslot(hva_end + PAGE_SIZE - 1, memslot);
+> -
+> -		ret |= handler(kvm, gfn, gfn_end, memslot, data);
+> -	}
+> -
+> -	return ret;
+> -}
+> -
+> -
+> -static int kvm_unmap_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+> -				 struct kvm_memory_slot *memslot, void *data)
+> -{
+> -	kvm_mips_flush_gpa_pt(kvm, gfn, gfn_end);
+> -	return 1;
+> -}
+> -
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end,
+> -			unsigned flags)
+> -{
+> -	handle_hva_to_gpa(kvm, start, end, &kvm_unmap_hva_handler, NULL);
+> +	kvm_mips_flush_gpa_pt(kvm, range->start, range->end);
+>   
+>   	kvm_mips_callbacks->flush_shadow_all(kvm);
+>   	return 0;
+>   }
+>   
+> -static int kvm_set_spte_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+> -				struct kvm_memory_slot *memslot, void *data)
+> +static bool __kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+>   {
+> -	gpa_t gpa = gfn << PAGE_SHIFT;
+> -	pte_t hva_pte = *(pte_t *)data;
+> +	gpa_t gpa = range->start << PAGE_SHIFT;
+> +	pte_t hva_pte = range->pte;
+>   	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
+>   	pte_t old_pte;
+>   
+>   	if (!gpa_pte)
+> -		return 0;
+> +		return false;
+>   
+>   	/* Mapping may need adjusting depending on memslot flags */
+>   	old_pte = *gpa_pte;
+> -	if (memslot->flags & KVM_MEM_LOG_DIRTY_PAGES && !pte_dirty(old_pte))
+> +	if (range->slot->flags & KVM_MEM_LOG_DIRTY_PAGES && !pte_dirty(old_pte))
+>   		hva_pte = pte_mkclean(hva_pte);
+> -	else if (memslot->flags & KVM_MEM_READONLY)
+> +	else if (range->slot->flags & KVM_MEM_READONLY)
+>   		hva_pte = pte_wrprotect(hva_pte);
+>   
+>   	set_pte(gpa_pte, hva_pte);
+>   
+>   	/* Replacing an absent or old page doesn't need flushes */
+>   	if (!pte_present(old_pte) || !pte_young(old_pte))
+> -		return 0;
+> +		return false;
+>   
+>   	/* Pages swapped, aged, moved, or cleaned require flushes */
+>   	return !pte_present(hva_pte) ||
+> @@ -526,27 +477,21 @@ static int kvm_set_spte_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+>   	       (pte_dirty(old_pte) && !pte_dirty(hva_pte));
+>   }
+>   
+> -int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte)
+> +bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+>   {
+> -	unsigned long end = hva + PAGE_SIZE;
+> -	int ret;
+> -
+> -	ret = handle_hva_to_gpa(kvm, hva, end, &kvm_set_spte_handler, &pte);
+> -	if (ret)
+> +	if (__kvm_set_spte_gfn(kvm, range))
+>   		kvm_mips_callbacks->flush_shadow_all(kvm);
+> -	return 0;
+> +	return false;
+>   }
+>   
+> -static int kvm_age_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+> -			       struct kvm_memory_slot *memslot, void *data)
+> +bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+>   {
+> -	return kvm_mips_mkold_gpa_pt(kvm, gfn, gfn_end);
+> +	return kvm_mips_mkold_gpa_pt(kvm, range->start, range->end);
+>   }
+>   
+> -static int kvm_test_age_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+> -				    struct kvm_memory_slot *memslot, void *data)
+> +bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+>   {
+> -	gpa_t gpa = gfn << PAGE_SHIFT;
+> +	gpa_t gpa = range->start << PAGE_SHIFT;
+>   	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
+>   
+>   	if (!gpa_pte)
+> @@ -554,16 +499,6 @@ static int kvm_test_age_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+>   	return pte_young(*gpa_pte);
+>   }
+>   
+> -int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end)
+> -{
+> -	return handle_hva_to_gpa(kvm, start, end, kvm_age_hva_handler, NULL);
+> -}
+> -
+> -int kvm_test_age_hva(struct kvm *kvm, unsigned long hva)
+> -{
+> -	return handle_hva_to_gpa(kvm, hva, hva, kvm_test_age_hva_handler, NULL);
+> -}
+> -
+>   /**
+>    * _kvm_mips_map_page_fast() - Fast path GPA fault handler.
+>    * @vcpu:		VCPU pointer.
+> 
 
-
---wxDdMuZNg1r63Hyj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBkIlwACgkQFA3kzBSg
-Kba/7g/+IZVhVSJWA/1RcD9OjQRJmbGOXo8QkVyU3swFMIyPEqIVHyE8LFDs9De9
-ayTZd9+FYDQrEBtyryKSQzmmCBZk3d0WtCQSE7JhK3Mz97RMhh2a6D2x5Jm9FlH0
-O+6IV9ba1uCxm+7bT+c4mBwNUZSSWbWWf/mFzfKfMTz8G5/lKmcIdrxitlt80lVW
-+mK+IHl1uAvhbaW+vLXS9PAii82vYmzWZYEwCmWoNBR00YIsF+tzUivSdX3BS25S
-AHsatMqm7CiZXt6AD6E59si2vYYqmDqh1Ql/hDoNHgz2NmvrYYmdsiCVl07Bx1Qa
-vmSzGVA0TM9Cy815ZgxRsdPlEGcv/lCUwMuX+2MC7f/+rasHbB4WBCRZ8cEvgQH9
-3u94guNNbzS0CQVJv2pEA+P4C8LJEwpSktrHA3VnHux5Cx1nuVa2/PoX1qh7HZPP
-Tijl1X35Jxzlp6/9G4gP/lcfA33FCmYKZABf9p8OB7jlsk7sN7A/k0PXSpme6tU3
-/+K8oOpjVJfVnsE+Ux8UN04Z/AbGguxOcew0989EtV4AiW6VHiYyw7KEkUHfPg0K
-ZQL1CLx70j7s4gIW4sMyGH2XHTUgBVCM72B+iDSpdOpwuftbikW4Ju4/BLJZ7FmF
-BaPn7Z0vPmPQ7kCIB8RUoRxYrOmpXldnaXTrmHXOyE1BWnf2/SM=
-=xRou
------END PGP SIGNATURE-----
-
---wxDdMuZNg1r63Hyj--
