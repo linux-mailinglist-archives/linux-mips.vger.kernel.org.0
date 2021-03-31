@@ -2,67 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C13F34FFAD
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 13:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51FC34FFC0
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 13:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235265AbhCaLrU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 31 Mar 2021 07:47:20 -0400
-Received: from elvis.franken.de ([193.175.24.41]:40552 "EHLO elvis.franken.de"
+        id S235019AbhCaLwn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 31 Mar 2021 07:52:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58676 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235140AbhCaLrE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 31 Mar 2021 07:47:04 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lRZJO-0002SS-00; Wed, 31 Mar 2021 13:47:02 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id BB939C2047; Wed, 31 Mar 2021 13:41:19 +0200 (CEST)
-Date:   Wed, 31 Mar 2021 13:41:19 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] MIPS: Remove get_fs/set_fs
-Message-ID: <20210331114119.GA10555@alpha.franken.de>
-References: <20210330172702.146909-1-tsbogend@alpha.franken.de>
- <20210330172702.146909-4-tsbogend@alpha.franken.de>
- <20210330175417.GC15145@lst.de>
+        id S235035AbhCaLwZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 31 Mar 2021 07:52:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AA0DA61983;
+        Wed, 31 Mar 2021 11:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617191545;
+        bh=oYPoYBISW1U3nwgz67Ee8rLPsIXaiLi1AKK4azFtrDs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V81QxCaXo5BcqEzeHs7BvlqPDdaEyjYVePPvs3WuSN5I5bEH0xng7LgAfNS9RfWjH
+         iQb661c3nrs6KSXN8KzZi+gsZXvqVwGfws61NxzyZ0PiolDJekDMKkN2Y5b63obGTD
+         QfDIYE2lR9LIeqTaOSahYqZMycWBFJKGp9lA2IsXsHDpi/cB2soRcGp2zBuZeUMMca
+         ltiOLrzkRGV5aQu6ZJFM9fIl1iUgXSLj+Nc93kBEkO4Dk9ZU9evLoNrLlMa2OLs+6x
+         ORQGKSadN3jra5Itw8ipgu58ptTFpSTqDQHowhddnVIA9q60kt/sv2Gqa0WpqkXvWY
+         FnRKu0K/+eWdg==
+Date:   Wed, 31 Mar 2021 12:52:19 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        X86 ML <x86@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        xe-linux-external@cisco.com, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/7] powerpc: convert config files to generic cmdline
+Message-ID: <20210331115218.GB7626@willie-the-truck>
+References: <20210309000247.2989531-4-danielwa@cisco.com>
+ <5f865584-09c9-d21f-ffb7-23cf07cf058e@csgroup.eu>
+ <20210309212944.GR109100@zorba>
+ <e4899874-1684-fa1b-443e-f4e478e05e31@csgroup.eu>
+ <CAL_JsqKm76jRQYDcu3rGyUWKPLspoO=EZW_WFy=zAK+m_JYCTg@mail.gmail.com>
+ <20fd7d44-8c39-48bc-25c3-990be9d9d911@csgroup.eu>
+ <20210325195956.GM109100@zorba>
+ <20210329100750.GB3207@willie-the-truck>
+ <20210330173521.GT109100@zorba>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210330175417.GC15145@lst.de>
+In-Reply-To: <20210330173521.GT109100@zorba>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 07:54:17PM +0200, Christoph Hellwig wrote:
-> > -	if (likely(access_ok( __gu_ptr, size))) {		\
-> > -		if (eva_kernel_access())				\
-> > -			__get_kernel_common((x), size, __gu_ptr);	\
+On Tue, Mar 30, 2021 at 10:35:21AM -0700, Daniel Walker wrote:
+> On Mon, Mar 29, 2021 at 11:07:51AM +0100, Will Deacon wrote:
+> > On Thu, Mar 25, 2021 at 12:59:56PM -0700, Daniel Walker wrote:
+> > > On Thu, Mar 25, 2021 at 01:03:55PM +0100, Christophe Leroy wrote:
+> > > > 
+> > > > Ok, so you agree we don't need to provide two CMDLINE, one to be appended and one to be prepended.
+> > > > 
+> > > > Let's only provide once CMDLINE as of today, and ask the user to select
+> > > > whether he wants it appended or prepended or replacee. Then no need to
+> > > > change all existing config to rename CONFIG_CMDLINE into either of the new
+> > > > ones.
+> > > > 
+> > > > That's the main difference between my series and Daniel's series. So I'll
+> > > > finish taking Will's comment into account and we'll send out a v3 soon.
+> > > 
+> > > It doesn't solve the needs of Cisco, I've stated many times your changes have
+> > > little value. Please stop submitting them.
+> > 
+> > FWIW, they're useful for arm64 and I will gladly review the updated series.
+> > 
+> > I don't think asking people to stop submitting patches is ever the right
+> > answer. Please don't do that.
 > 
-> FYI, it might be a good idea to fold __{get,put}_kernel_common into
-> __{get,put}_kernel_nofault now that these are the only callers left.
+> Why ? It's me nacking his series, is that not allowed anymore ?
 
-__get_data macro used it, but I rewrote it, so I could fold in
-__get/__put_kernel_common.
+If you're that way inclined then you can "nack" whatever you want, but
+please allow the rest of us to continue reviewing the patches. You don't
+have any basis on which to veto other people's contributions and so
+demanding that somebody stops posting code is neither constructive nor
+meaningful.
 
-> Similarly __get_user_common and __put_user_common should probably also
-> go away.
-
-__get_user_common is used 3 times and __put_user_common twice. So I
-left them as they are.
-
-> >  static inline unsigned long
-> >  raw_copy_to_user(void __user *to, const void *from, unsigned long n)
-> >  {
-> > +	return __invoke_copy_to_user(to, from, n);
-> 
-> I think __invoke_copy_to_user, __invoke_copy_from_user and
-> ___invoke_copy_in_user can go away now as well.
-
-done.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Will
