@@ -2,138 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5AA3504FB
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 18:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5661350548
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 19:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbhCaQr4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 31 Mar 2021 12:47:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31660 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234139AbhCaQrs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 31 Mar 2021 12:47:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617209267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0ix2mfUcEg/DOypNDwaacoOT966lSJ+UT8pzFrJ6uHI=;
-        b=VTPeHIDD/uPp9CsY4tysGMAe6xtFzZpTYWx0dq2IW5mjsKc0ik6xI/z80di2ozirgxoLIx
-        yRy7fPZdZLv0MHj0BeVxgg0rTjImk8q2TzW2nIoG+JogbTZMW5Upyg4IW1FOVXn1mtZR2J
-        /3ZEI6JPQoVRtn39GxAzebkkrjrwRM4=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-245-bpwBgiX5Pg2zrRY4VIuUrw-1; Wed, 31 Mar 2021 12:47:45 -0400
-X-MC-Unique: bpwBgiX5Pg2zrRY4VIuUrw-1
-Received: by mail-ej1-f71.google.com with SMTP id kx22so1057695ejc.17
-        for <linux-mips@vger.kernel.org>; Wed, 31 Mar 2021 09:47:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0ix2mfUcEg/DOypNDwaacoOT966lSJ+UT8pzFrJ6uHI=;
-        b=c1PSk+6yhLZviKKLW4XWOcSoSbbHQs8ggSBc0kBFa+DLfDF0TU6y2fjhj0HtqRjgy6
-         e9cV/ldl6qcGjMZPaZPeUUiQEd38r0LGwz6l8YyXdcpViZNlAvCYABg/T2RuYxW+sdYb
-         lv2P05k9IUBGGKdrS4TX/745s1GfBpEngBDLporSoiZFgIdgN14WCFKH3KJuy+FSGd91
-         g+ZjAks+0WBbi8ji+e89KC2kPI/CM47FYlCw/ujSWAPHuqCxK3y317U0nnAyQTS83KbS
-         spiNjMAJRuY0B7lWjbstIq2ak+gx4lo6r0irFLyY1bhqRpaaSmtUMdQr/bIlaJFh412X
-         adTg==
-X-Gm-Message-State: AOAM533v6nQpQgTc6HNS/EIIRFmTubWvCpSxo7QO16nLLwKBxWX1V6rk
-        RGWr/Lsiojf3QCBuUPFsuH8SJWOG3Z36tx0Ck002P5fdhf/7UJTrn34Mkfe0nSMmova5RH+0OGR
-        ++27NY3u0pxvn5KxX72Yeaw==
-X-Received: by 2002:a17:906:1182:: with SMTP id n2mr4597698eja.234.1617209264755;
-        Wed, 31 Mar 2021 09:47:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJymG2hf8oxiTqtfGgyXFzM/nXfYjs4CdYmJnVTC5zNGPoNEIpchzu0nS+pvIuCk4GHAjhT9jA==
-X-Received: by 2002:a17:906:1182:: with SMTP id n2mr4597673eja.234.1617209264605;
-        Wed, 31 Mar 2021 09:47:44 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id p24sm2057269edt.5.2021.03.31.09.47.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Mar 2021 09:47:43 -0700 (PDT)
-Subject: Re: [PATCH 16/18] KVM: Don't take mmu_lock for range invalidation
- unless necessary
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>
-References: <20210326021957.1424875-1-seanjc@google.com>
- <20210326021957.1424875-17-seanjc@google.com>
- <6e7dc7d0-f5dc-85d9-1c50-d23b761b5ff3@redhat.com>
- <YGSmMeSOPcjxRwf6@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <56ea69fe-87b0-154b-e286-efce9233864e@redhat.com>
-Date:   Wed, 31 Mar 2021 18:47:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S229968AbhCaROi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 31 Mar 2021 13:14:38 -0400
+Received: from rcdn-iport-4.cisco.com ([173.37.86.75]:40210 "EHLO
+        rcdn-iport-4.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229787AbhCaROM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 31 Mar 2021 13:14:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=2143; q=dns/txt; s=iport;
+  t=1617210852; x=1618420452;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XBXiV/KZU9RAJFyY2sfCpxX3SMZ3qudvdd8J5wHAY+k=;
+  b=dAR6GbyjVmMiBGE3MVUtiLqRiGDJn4lhDije+Bp5cFgz0adRaHMCkueh
+   yx+Qxa4Ud7YFELJrlsW2eQoIZtKPuv77vj54vNRaxOWL7FbJ+Jj8WUwxK
+   QdfNfaA06YFF7v3C62FrBwdV8erKhCk6hvyU4VyM0bzYxA6wbhmP3TFJl
+   Y=;
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AtSp+ZKM2+fmgyMBcT5r155DYdL4zR+YMi2?=
+ =?us-ascii?q?QD/UoZc3NoW+afkN2jm+le+B/vkTAKWGwhn9foAtjkfVr385lp7Y4NeYqzRQ?=
+ =?us-ascii?q?WOghrLEKhO5ZbvqgeLJwTQ7ehYvJ0MT4FfD5nKAUF+nYLG5mCDYrId6f2m1I?=
+ =?us-ascii?q?ztuuvE1XdqSmhRGsJdxiN0EBySHEEzZCQuP/sEPaGR7MZGuDasEE5/Bq+GL0?=
+ =?us-ascii?q?IIUOTZq9rAmIiOW347LiQ64wqDhy7A0tDHOiWfty1zbxp/hZ8/7G6AqADi/6?=
+ =?us-ascii?q?Olqf3+8APEznTe9Y4+oqqH9vJzQOqRl8MSNjLgziGvaYgJYcz6gBkF5Mey9V?=
+ =?us-ascii?q?0tjN7A5y0FAv02wXbQcmapyCGdvTXd7A=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0DUAgB8rWRg/5ldJa1aGwEBAQEBAQE?=
+ =?us-ascii?q?BBQEBARIBAQEDAwEBAUCBUIIrgUgEATmWRQOQCBaKWYFoCwEBAQ0BATQEAQG?=
+ =?us-ascii?q?EUAKBewIlOBMCAwEBDAEBBQEBAQIBBgRxhW6GRQEFOj8QCxgVGTwbBoYMqnV?=
+ =?us-ascii?q?1gTSJDoFEFA6BF41KJhyBSUKBEoMcPoN5gQaDDIIJIgSBZWEuYoIEOR8UL5E?=
+ =?us-ascii?q?BgkCKUJwjgxGBI5s5MRCDOIpwliC4GwIEBgUCFoFrI4FZMxoIGxWDJU8ZDZ0?=
+ =?us-ascii?q?IIQNnAgYKAQEDCY8JAQE?=
+X-IronPort-AV: E=Sophos;i="5.81,293,1610409600"; 
+   d="scan'208";a="855046290"
+Received: from rcdn-core-2.cisco.com ([173.37.93.153])
+  by rcdn-iport-4.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 31 Mar 2021 17:14:11 +0000
+Received: from zorba ([10.24.8.227])
+        by rcdn-core-2.cisco.com (8.15.2/8.15.2) with ESMTPS id 12VHE8Ja029161
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 31 Mar 2021 17:14:10 GMT
+Date:   Wed, 31 Mar 2021 10:14:08 -0700
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        X86 ML <x86@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        xe-linux-external@cisco.com, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/7] powerpc: convert config files to generic cmdline
+Message-ID: <20210331171408.GC2469518@zorba>
+References: <20210309000247.2989531-4-danielwa@cisco.com>
+ <5f865584-09c9-d21f-ffb7-23cf07cf058e@csgroup.eu>
+ <20210309212944.GR109100@zorba>
+ <e4899874-1684-fa1b-443e-f4e478e05e31@csgroup.eu>
+ <CAL_JsqKm76jRQYDcu3rGyUWKPLspoO=EZW_WFy=zAK+m_JYCTg@mail.gmail.com>
+ <20fd7d44-8c39-48bc-25c3-990be9d9d911@csgroup.eu>
+ <20210325195956.GM109100@zorba>
+ <20210329100750.GB3207@willie-the-truck>
+ <20210330173521.GT109100@zorba>
+ <20210331115218.GB7626@willie-the-truck>
 MIME-Version: 1.0
-In-Reply-To: <YGSmMeSOPcjxRwf6@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210331115218.GB7626@willie-the-truck>
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.24.8.227, [10.24.8.227]
+X-Outbound-Node: rcdn-core-2.cisco.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 31/03/21 18:41, Sean Christopherson wrote:
->> That said, the easiest way to avoid this would be to always update
->> mmu_notifier_count.
-> Updating mmu_notifier_count requires taking mmu_lock, which would defeat the
-> purpose of these shenanigans.
-
-Okay; I wasn't sure if the problem was contention with page faults in 
-general, or just the long critical sections from the MMU notifier 
-callbacks.  Still updating mmu_notifier_count unconditionally is a good 
-way to break up the patch in two and keep one commit just for the rwsem 
-nastiness.
-
->>> +#if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
->>> +	down_write(&kvm->mmu_notifier_slots_lock);
->>> +#endif
->>>   	rcu_assign_pointer(kvm->memslots[as_id], slots);
->>> +#if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
->>> +	up_write(&kvm->mmu_notifier_slots_lock);
->>> +#endif
->> Please do this unconditionally, the cost is minimal if the rwsem is not
->> contended (as is the case if the architecture doesn't use MMU notifiers at
->> all).
-> It's not the cost, it's that mmu_notifier_slots_lock doesn't exist.  That's an
-> easily solved problem, but then the lock wouldn't be initialized since
-> kvm_init_mmu_notifier() is a nop.  That's again easy to solve, but IMO would
-> look rather weird.  I guess the counter argument is that __kvm_memslots()
-> wouldn't need #ifdeffery.
-
-Yep.  Less #ifdefs usually wins. :)
-
-> These are the to ideas I've come up with:
+On Wed, Mar 31, 2021 at 12:52:19PM +0100, Will Deacon wrote:
+> On Tue, Mar 30, 2021 at 10:35:21AM -0700, Daniel Walker wrote:
+> > On Mon, Mar 29, 2021 at 11:07:51AM +0100, Will Deacon wrote:
+> > > On Thu, Mar 25, 2021 at 12:59:56PM -0700, Daniel Walker wrote:
+> > > > On Thu, Mar 25, 2021 at 01:03:55PM +0100, Christophe Leroy wrote:
+> > > > > 
+> > > > > Ok, so you agree we don't need to provide two CMDLINE, one to be appended and one to be prepended.
+> > > > > 
+> > > > > Let's only provide once CMDLINE as of today, and ask the user to select
+> > > > > whether he wants it appended or prepended or replacee. Then no need to
+> > > > > change all existing config to rename CONFIG_CMDLINE into either of the new
+> > > > > ones.
+> > > > > 
+> > > > > That's the main difference between my series and Daniel's series. So I'll
+> > > > > finish taking Will's comment into account and we'll send out a v3 soon.
+> > > > 
+> > > > It doesn't solve the needs of Cisco, I've stated many times your changes have
+> > > > little value. Please stop submitting them.
+> > > 
+> > > FWIW, they're useful for arm64 and I will gladly review the updated series.
+> > > 
+> > > I don't think asking people to stop submitting patches is ever the right
+> > > answer. Please don't do that.
+> > 
+> > Why ? It's me nacking his series, is that not allowed anymore ?
 > 
-> Option 1:
-> 	static int kvm_init_mmu_notifier(struct kvm *kvm)
-> 	{
-> 		init_rwsem(&kvm->mmu_notifier_slots_lock);
-> 
-> 	#if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
-> 		kvm->mmu_notifier.ops = &kvm_mmu_notifier_ops;
-> 		return mmu_notifier_register(&kvm->mmu_notifier, current->mm);
-> 	#else
-> 		return 0;
-> 	#endif
-> 	}
+> If you're that way inclined then you can "nack" whatever you want, but
+> please allow the rest of us to continue reviewing the patches. You don't
+> have any basis on which to veto other people's contributions and so
+> demanding that somebody stops posting code is neither constructive nor
+> meaningful.
 
-Option 2 is also okay I guess, but the simplest is option 1 + just init 
-it in kvm_create_vm.
+I understand , but that's not what's happening. I've dealt with Christophe on
+these changes repeatedly, and he's demonstrated he doesn't understand the feature set or
+the motivation of the changes. I've tried to work with him in the past, but it
+doesn't work unless he's giving me comments on my changes.
 
-Paolo
+His changes don't solve Cisco problems, and likely never will regardless of
+feedback. Maybe that could change, but I don't see that happening.
 
+Daniel
