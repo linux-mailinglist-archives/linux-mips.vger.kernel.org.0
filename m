@@ -2,237 +2,164 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4298E350436
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 18:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6802350460
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Mar 2021 18:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233433AbhCaQKg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 31 Mar 2021 12:10:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233622AbhCaQKV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 31 Mar 2021 12:10:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 672BF61040;
-        Wed, 31 Mar 2021 16:10:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617207020;
-        bh=/1ZfUq/hSkP8vyLmN2wN3gF/K+0R8P1I95At/e2yk3o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MPCLn42gcnWhwN/zKbA8+c1PbkFnwg8YwYyuVGUM+PRQBAaqJailiFH6ekOnlpoCz
-         f/gDaJ8Qq+HQLeaUhLP/jmgd9+Ue0CK/lohnrM2laPXY7/BFGINxJLz9kDlyuXG7yD
-         PsUQMmNfnEhkD9y74gOqg3x+FCJQ2b7NTHEPZot9bGc6QEmDWRxdrLXrpcgJyM+VH4
-         g1MFlnNSURc2Wti4P0kBL/M42y5bIj4CjxCGtcNcC5UlVKT0zrbISi6OplZuuHrQPa
-         D9Sv+PSbuf1rNFDLO0ndktG+dsTlTWzCLE1OksBrdBB+UAVvYv0atkgWJVXgOp5RB9
-         zwZF7FS+jZj5A==
-Received: by mail-oi1-f170.google.com with SMTP id c16so20518324oib.3;
-        Wed, 31 Mar 2021 09:10:20 -0700 (PDT)
-X-Gm-Message-State: AOAM530qi/nxP/zvCNGTjZcXgQL0xy7w8ykd+iViOR3OfL2RbqfLmxe5
-        OwgsVxhrgA9nLzqnebqPF6NoywnoJVeXu0KkRaE=
-X-Google-Smtp-Source: ABdhPJzyQnLqutk8wJtGUcalgJX2yCNn0BLIq/ju4C/c+FzWFIriO7+Ss7TW+wiuTsHll9sO+01CXGbsemmBHeRSmAk=
-X-Received: by 2002:aca:1a01:: with SMTP id a1mr2775869oia.33.1617207019681;
- Wed, 31 Mar 2021 09:10:19 -0700 (PDT)
+        id S233727AbhCaQU6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 31 Mar 2021 12:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233305AbhCaQU0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 31 Mar 2021 12:20:26 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E8DC06175F
+        for <linux-mips@vger.kernel.org>; Wed, 31 Mar 2021 09:20:25 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id i6so7379467pgs.1
+        for <linux-mips@vger.kernel.org>; Wed, 31 Mar 2021 09:20:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hbFgBS0tsmLZecdBb34MxnZHD2vsOnYlgFmBhEC+AGM=;
+        b=W6gYHfyq+FLodOWhD9srXTh8aaio7ufLJGiEJEiMEepafRE4jD5CPt2u6zyCqNkmEf
+         RBW97ptdPXvm5UekA+1t/rKsqmWK0oYE75ZvbG8qPcwUeH2CNY8N2JYzQdJbcC/FqLox
+         DcD9DWu45srgtpcHvYUIYloa787DwMs9RQszqMJAGT7a/cdNDkSzvp8GETRb/h8dEjgP
+         8s6cZSDU08hOz+njpFIAcEg7jI2UFPlQ/B0ogtWJ4tAdwpEoVAvBIo0c7kJY+qV4PKbI
+         5JrEg5cZ6lg6SU1xy6TAmWN7lx027fNcjkiELq9jkPTEPVzyTbPPJIMZcf+zN1WRmx+V
+         ubUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hbFgBS0tsmLZecdBb34MxnZHD2vsOnYlgFmBhEC+AGM=;
+        b=DbAXPeGLsaMB2gjRl03zQpjjEauo0SFsXg6EIwna1E9A1vjyawhRG/3SIsdkg+doib
+         oro4XFnqZ2aaHT+gLM0YIOihIz0Nru4TlPEMCg0ba6uqhYdh6TuWV0P4fD2Orp3kLXbO
+         7euCLMLYejb2trZGaf9NQ6hJ62TDzku7K0RIMq/ev+MADCmKfglz2qamIG1I9ASZ3e6t
+         IMkFKmUhPUFITpXgtr6PpwK3MbQvdcXZIkAQbifNcN3z9st/wau71xpzaDIw9kHV83Lw
+         rSMR3JnWPZHBC3P2JkpRXV2PyA+LSmfDLb6b4e4VRE9IlGhSq3ct6LDH9PVNAsnFvxVf
+         RQ/w==
+X-Gm-Message-State: AOAM533kz9bciFEmLBTr/RQ0D5PRso0AvqRIfhkLPHqZiTtDkugipJVf
+        s+zc3PmXzQurZfv6G1Ose1unaw==
+X-Google-Smtp-Source: ABdhPJyEnoIvLhWAi7NNGEWROpPtFz0kvkUm7Uq+sDDKk3AwLz6Jre1P4F3JOHb9hmWMRVWQ5USifw==
+X-Received: by 2002:a65:428b:: with SMTP id j11mr3941343pgp.47.1617207624928;
+        Wed, 31 Mar 2021 09:20:24 -0700 (PDT)
+Received: from google.com (240.111.247.35.bc.googleusercontent.com. [35.247.111.240])
+        by smtp.gmail.com with ESMTPSA id h19sm2862436pfc.172.2021.03.31.09.20.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Mar 2021 09:20:24 -0700 (PDT)
+Date:   Wed, 31 Mar 2021 16:20:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 10/18] KVM: Move x86's MMU notifier memslot walkers to
+ generic code
+Message-ID: <YGShRP9E49p3vcos@google.com>
+References: <20210326021957.1424875-1-seanjc@google.com>
+ <20210326021957.1424875-11-seanjc@google.com>
+ <ba3f7a9c-0b59-cbeb-5d46-4236cde2c51f@redhat.com>
 MIME-Version: 1.0
-References: <41021d66db2ab427c14255d2a24bb4517c8b58fd.1617126961.git.danielwa@cisco.com>
- <e5d98d566c38d6f8516b8d9d1fd603ec1f131037.1617126961.git.danielwa@cisco.com>
-In-Reply-To: <e5d98d566c38d6f8516b8d9d1fd603ec1f131037.1617126961.git.danielwa@cisco.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 31 Mar 2021 18:10:08 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXG_rRLU2Hp_GaZyayxx6J+HaWyPHPmE-hEZawuxzZ4JXw@mail.gmail.com>
-Message-ID: <CAMj1kXG_rRLU2Hp_GaZyayxx6J+HaWyPHPmE-hEZawuxzZ4JXw@mail.gmail.com>
-Subject: Re: [PATCH 6/8] drivers: firmware: efi: libstub: enable generic commandline
-To:     Daniel Walker <danielwa@cisco.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>
-Cc:     Will Deacon <will@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        ob Herring <robh@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        X86 ML <x86@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>, xe-linux-external@cisco.com,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba3f7a9c-0b59-cbeb-5d46-4236cde2c51f@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-(+ Arvind)
+On Wed, Mar 31, 2021, Paolo Bonzini wrote:
+> On 26/03/21 03:19, Sean Christopherson wrote:
+> > +#ifdef KVM_ARCH_WANT_NEW_MMU_NOTIFIER_APIS
+> > +	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
+> > +#else
+> >   	struct kvm *kvm = mmu_notifier_to_kvm(mn);
+> >   	int idx;
+> >  	trace_kvm_set_spte_hva(address);
+> > 	idx = srcu_read_lock(&kvm->srcu);
+> > 
+> > 	KVM_MMU_LOCK(kvm);
+> > 
+> > 	kvm->mmu_notifier_seq++;
+> > 
+> > 	if (kvm_set_spte_hva(kvm, address, pte))
+> > 		kvm_flush_remote_tlbs(kvm);
+> > 
+> >   	KVM_MMU_UNLOCK(kvm);
+> >   	srcu_read_unlock(&kvm->srcu, idx);
+> > +#endif
+> 
+> The kvm->mmu_notifier_seq is missing in the new API side.  I guess you can
+> add an argument to __kvm_handle_hva_range and handle it also in patch 15
+> ("KVM: Take mmu_lock when handling MMU notifier iff the hva hits a
+> memslot").
 
-On Tue, 30 Mar 2021 at 19:57, Daniel Walker <danielwa@cisco.com> wrote:
->
-> This adds code to handle the generic command line changes.
-> The efi code appears that it doesn't benefit as much from this design
-> as it could.
->
-> For example, if you had a prepend command line with "nokaslr" then
-> you might be helpful to re-enable it in the boot loader or dts,
-> but there appears to be no way to re-enable kaslr or some of the
-> other options.
->
-> Cc: xe-linux-external@cisco.com
-> Signed-off-by: Daniel Walker <danielwa@cisco.com>
-> ---
->  .../firmware/efi/libstub/efi-stub-helper.c    | 35 +++++++++++++++++++
->  drivers/firmware/efi/libstub/efi-stub.c       |  7 ++++
->  drivers/firmware/efi/libstub/efistub.h        |  1 +
->  drivers/firmware/efi/libstub/x86-stub.c       | 13 +++++--
->  4 files changed, 54 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
-> index aa8da0a49829..c155837cedc9 100644
-> --- a/drivers/firmware/efi/libstub/efi-stub-helper.c
-> +++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
-> @@ -13,6 +13,7 @@
->  #include <linux/efi.h>
->  #include <linux/kernel.h>
->  #include <linux/printk.h> /* For CONSOLE_LOGLEVEL_* */
-> +#include <linux/cmdline.h>
->  #include <asm/efi.h>
->  #include <asm/setup.h>
->
-> @@ -172,6 +173,40 @@ int efi_printk(const char *fmt, ...)
->         return printed;
->  }
->
-> +/**
-> + * efi_handle_cmdline() - handle adding in building parts of the command line
-> + * @cmdline:   kernel command line
-> + *
-> + * Add in the generic parts of the commandline and start the parsing of the
-> + * command line.
-> + *
-> + * Return:     status code
-> + */
-> +efi_status_t efi_handle_cmdline(char const *cmdline)
-> +{
-> +       efi_status_t status;
-> +
-> +       status = efi_parse_options(CMDLINE_PREPEND);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Failed to parse options\n");
-> +               return status;
-> +       }
+Yikes.  Superb eyes!
 
-Even though I am not a fan of the 'success handling' pattern,
-duplicating the exact same error handling three times is not great
-either. Could we reuse more of the code here?
+That does bring up an oddity I discovered when digging into this.  Every call
+to .change_pte() is bookended by .invalidate_range_{start,end}(), i.e. the above
+missing kvm->mmu_notifier_seq++ is benign because kvm->mmu_notifier_count is
+guaranteed to be non-zero.
 
-> +
-> +       status = efi_parse_options(IS_ENABLED(CONFIG_CMDLINE_OVERRIDE) ? "" : cmdline);
+I'm also fairly certain it means kvm_set_spte_gfn() is effectively dead code on
+_all_ architectures.  x86 and MIPS are clearcut nops if the old SPTE is
+not-present, and that's guaranteed due to the prior invalidation.  PPC simply
+unmaps the SPTE, which again should be a nop due to the invalidation.  arm64 is
+a bit murky, but if I'm reading the code correctly, it's also a nop because
+kvm_pgtable_stage2_map() is called without a cache pointer, which I think means
+it will map an entry if and only if an existing PTE was found.
 
-What is the point of calling efi_parse_options() with an empty string?
+I haven't actually tested the above analysis, e.g. by asserting that
+kvm->mmu_notifier_count is indeed non-zero.  I'll do that sooner than later.
+But, given the shortlog of commit:
 
+  6bdb913f0a70 ("mm: wrap calls to set_pte_at_notify with invalidate_range_start
+                 and invalidate_range_end")
 
+I'm fairly confident my analysis is correct.  And if so, it also means that the
+whole point of adding .change_pte() in the first place (for KSM, commit
+828502d30073, "ksm: add mmu_notifier set_pte_at_notify()"), has since been lost.
 
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Failed to parse options\n");
-> +               return status;
-> +       }
-> +
-> +       status = efi_parse_options(CMDLINE_APPEND);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Failed to parse options\n");
-> +               return status;
-> +       }
-> +
-> +       return EFI_SUCCESS;
-> +}
-> +
->  /**
->   * efi_parse_options() - Parse EFI command line options
->   * @cmdline:   kernel command line
-> diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
-> index 26e69788f27a..760480248adf 100644
-> --- a/drivers/firmware/efi/libstub/efi-stub.c
-> +++ b/drivers/firmware/efi/libstub/efi-stub.c
-> @@ -172,6 +172,12 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
->                 goto fail;
->         }
->
-> +#ifdef CONFIG_GENERIC_CMDLINE
-> +       status = efi_handle_cmdline(cmdline_ptr);
-> +       if (status != EFI_SUCCESS) {
-> +               goto fail_free_cmdline;
-> +       }
-> +#else
->         if (IS_ENABLED(CONFIG_CMDLINE_EXTEND) ||
->             IS_ENABLED(CONFIG_CMDLINE_FORCE) ||
+When it was originally added, .change_pte() was a pure alternative to
+invalidating the entry.
 
-Does this mean CONFIG_GENERIC_CMDLINE does not replace CMDLINE_EXTEND
-/ CMDLINE_FORCE etc, but introduces yet another variant on top of
-those?
+  void __mmu_notifier_change_pte(struct mm_struct *mm, unsigned long address,
+                               pte_t pte)
+  {
+        struct mmu_notifier *mn;
+        struct hlist_node *n;
 
-That does not seem like an improvement to me. I think it is great that
-you are cleaning this up, but only if it means we can get rid of the
-old implementation.
+        rcu_read_lock();
+        hlist_for_each_entry_rcu(mn, n, &mm->mmu_notifier_mm->list, hlist) {
+                if (mn->ops->change_pte)
+                        mn->ops->change_pte(mn, mm, address, pte);
+                /*
+                 * Some drivers don't have change_pte,
+                 * so we must call invalidate_page in that case.
+                 */
+                else if (mn->ops->invalidate_page)
+                        mn->ops->invalidate_page(mn, mm, address);
+        }
+        rcu_read_unlock();
+  }
 
->             cmdline_size == 0) {
-> @@ -189,6 +195,7 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
->                         goto fail_free_cmdline;
->                 }
->         }
-> +#endif
->
->         efi_info("Booting Linux Kernel...\n");
->
-> diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-> index cde0a2ef507d..07c7f9fdfffc 100644
-> --- a/drivers/firmware/efi/libstub/efistub.h
-> +++ b/drivers/firmware/efi/libstub/efistub.h
-> @@ -800,6 +800,7 @@ efi_status_t efi_relocate_kernel(unsigned long *image_addr,
->                                  unsigned long alignment,
->                                  unsigned long min_addr);
->
-> +efi_status_t efi_handle_cmdline(char const *cmdline);
->  efi_status_t efi_parse_options(char const *cmdline);
->
->  void efi_parse_option_graphics(char *option);
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index f14c4ff5839f..30ad8fb7122d 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -673,6 +673,8 @@ unsigned long efi_main(efi_handle_t handle,
->         unsigned long bzimage_addr = (unsigned long)startup_32;
->         unsigned long buffer_start, buffer_end;
->         struct setup_header *hdr = &boot_params->hdr;
-> +       unsigned long cmdline_paddr = ((u64)hdr->cmd_line_ptr |
-> +                                      ((u64)boot_params->ext_cmd_line_ptr << 32));
->         efi_status_t status;
->
->         efi_system_table = sys_table_arg;
-> @@ -735,6 +737,14 @@ unsigned long efi_main(efi_handle_t handle,
->                 image_offset = 0;
->         }
->
-> +#ifdef CONFIG_GENERIC_CMDLINE
-> +       status = efi_handle_cmdline((char *)cmdline_paddr);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Failed to parse options\n");
-> +               goto fail;
-> +       }
-> +#else /* CONFIG_GENERIC_CMDLINE */
-> +
->  #ifdef CONFIG_CMDLINE_BOOL
->         status = efi_parse_options(CONFIG_CMDLINE);
->         if (status != EFI_SUCCESS) {
-> @@ -743,8 +753,6 @@ unsigned long efi_main(efi_handle_t handle,
->         }
->  #endif
->         if (!IS_ENABLED(CONFIG_CMDLINE_OVERRIDE)) {
-> -               unsigned long cmdline_paddr = ((u64)hdr->cmd_line_ptr |
-> -                                              ((u64)boot_params->ext_cmd_line_ptr << 32));
->                 status = efi_parse_options((char *)cmdline_paddr);
->                 if (status != EFI_SUCCESS) {
->                         efi_err("Failed to parse options\n");
-> @@ -752,6 +760,7 @@ unsigned long efi_main(efi_handle_t handle,
->                 }
->         }
->
-> +#endif
->         /*
->          * At this point, an initrd may already have been loaded by the
->          * bootloader and passed via bootparams. We permit an initrd loaded
-> --
-> 2.25.1
->
+The aforementioned commit 6bdb913f0a70 wrapped set_pte_at_notify() with
+invalidate_range_{start,end}() so that .invalidate_page() implementations could
+sleep.  But, no one noticed that in doing so, .change_pte() was completely
+neutered.
+
+Assuming all of the above is correct, I'm very tempted to rip out .change_pte()
+entirely.  It's been dead weight for 8+ years and no one has complained about
+KSM+KVM performance (I'd also be curious to know how much performance was gained
+by shaving VM-Exits).  As KVM is the only user of .change_pte(), dropping it in
+KVM would mean the entire MMU notifier could also go away.
