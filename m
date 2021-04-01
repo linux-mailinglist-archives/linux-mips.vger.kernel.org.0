@@ -2,196 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3888351230
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Apr 2021 11:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C0F351905
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Apr 2021 19:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233866AbhDAJ0M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Apr 2021 05:26:12 -0400
-Received: from foss.arm.com ([217.140.110.172]:34688 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233504AbhDAJ0D (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 1 Apr 2021 05:26:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC6DF31B;
-        Thu,  1 Apr 2021 02:26:02 -0700 (PDT)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.70.228])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9E3BB3F719;
-        Thu,  1 Apr 2021 02:25:56 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 RESEND] mm/memtest: Add ARCH_USE_MEMTEST
-Date:   Thu,  1 Apr 2021 14:56:33 +0530
-Message-Id: <1617269193-22294-1-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
+        id S234884AbhDARtA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Apr 2021 13:49:00 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:43914 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234959AbhDARq4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 1 Apr 2021 13:46:56 -0400
+Received: from loongson.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX8s0ymVgtFkDAA--.7389S2;
+        Thu, 01 Apr 2021 21:27:16 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RFC 0/3] Some update for relocate
+Date:   Thu,  1 Apr 2021 21:27:10 +0800
+Message-Id: <1617283633-18598-1-git-send-email-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxX8s0ymVgtFkDAA--.7389S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF4kZw4DCr4ftr48Kw4Durg_yoWrAw48pw
+        s7Cw1xtw4vgrW8tw4fJryj9w13Jr95J3yYgFnrKryrJ3WagFn7Xr1SkrnxWrWUJryFqa9Y
+        934qgrWxCr4SyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6ry8MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IUY8nY7UUUUU==
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-early_memtest() does not get called from all architectures. Hence enabling
-CONFIG_MEMTEST and providing a valid memtest=[1..N] kernel command line
-option might not trigger the memory pattern tests as would be expected in
-normal circumstances. This situation is misleading.
+Two questions at least here,
 
-The change here prevents the above mentioned problem after introducing a
-new config option ARCH_USE_MEMTEST that should be subscribed on platforms
-that call early_memtest(), in order to enable the config CONFIG_MEMTEST.
-Conversely CONFIG_MEMTEST cannot be enabled on platforms where it would
-not be tested anyway.
+1. cavium-octeon platform seems start with smp cpus, it may broke this function
+2. Commit 15ad838d281b ("[MIPS] Always do the ARC64_TWIDDLE_PC thing."), I don't
+   know whether broken it.
 
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mips@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-xtensa@linux-xtensa.org
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Acked-by: Catalin Marinas <catalin.marinas@arm.com> (arm64)
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This patch applies on v5.12-rc5 and has been tested on arm64 platform.
-But it has been just build tested on all other platforms.
+So RFC to get helps. Thanks!
 
-Changes in V2:
+And Patch3 can be tested by vmlinuz. e.g. Use the follow patch,
 
-https://patchwork.kernel.org/project/linux-mm/patch/1614573126-7740-1-git-send-email-anshuman.khandual@arm.com/
-
-- Added ARCH_USE_MEMTEST in the sorted alphabetical order on platforms
-
-Changes in V1:
-
-https://patchwork.kernel.org/project/linux-mm/patch/1612498242-31579-1-git-send-email-anshuman.khandual@arm.com/
-
- arch/arm/Kconfig     | 1 +
- arch/arm64/Kconfig   | 1 +
- arch/mips/Kconfig    | 1 +
- arch/powerpc/Kconfig | 1 +
- arch/x86/Kconfig     | 1 +
- arch/xtensa/Kconfig  | 1 +
- lib/Kconfig.debug    | 9 ++++++++-
- 7 files changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 5da96f5df48f..49878877df88 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -33,6 +33,7 @@ config ARM
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF
-+	select ARCH_USE_MEMTEST
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select ARCH_WANT_LD_ORPHAN_WARN
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index e4e1b6550115..63c380587a77 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -67,6 +67,7 @@ config ARM64
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_USE_GNU_PROPERTY
-+	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_USE_SYM_ANNOTATIONS
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index d89efba3d8a4..93a4f502f962 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -14,6 +14,7 @@ config MIPS
- 	select ARCH_SUPPORTS_UPROBES
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
-+	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 386ae12d8523..3778ad17f56a 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -149,6 +149,7 @@ config PPC
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC	if PPC32 || PPC_BOOK3S_64
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF		if PPC64
-+	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS		if PPC_QUEUED_SPINLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS	if PPC_QUEUED_SPINLOCKS
- 	select ARCH_WANT_IPC_PARSE_VERSION
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2792879d398e..2cb76fd5258e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -100,6 +100,7 @@ config X86
- 	select ARCH_SUPPORTS_LTO_CLANG		if X86_64
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN	if X86_64
- 	select ARCH_USE_BUILTIN_BSWAP
-+	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_USE_SYM_ANNOTATIONS
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 9ad6b7b82707..524413aabbc4 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -7,6 +7,7 @@ config XTENSA
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU if MMU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if MMU
- 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
-+	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_WANT_FRAME_POINTERS
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 2779c29d9981..a3fd69e6f6af 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2515,11 +2515,18 @@ config TEST_FPU
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index f93f72b..499b38d 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -28,12 +28,11 @@ KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) -march=mips64
+ endif
  
- endif # RUNTIME_TESTING_MENU
+ KBUILD_CFLAGS := $(KBUILD_CFLAGS) -D__KERNEL__ -D__DISABLE_EXPORTS \
+-	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
+-
+-KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+-	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
++	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"	\
+ 	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
  
-+config ARCH_USE_MEMTEST
-+	bool
-+	help
-+	  An architecture should select this when it uses early_memtest()
-+	  during boot process.
++KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ -DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE)
 +
- config MEMTEST
- 	bool "Memtest"
-+	depends on ARCH_USE_MEMTEST
- 	help
- 	  This option adds a kernel parameter 'memtest', which allows memtest
--	  to be set.
-+	  to be set and executed.
- 	        memtest=0, mean disabled; -- default
- 	        memtest=1, mean do 1 test pattern;
- 	        ...
+ # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
+ KCOV_INSTRUMENT		:= n
+ GCOV_PROFILE := n
+diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
+index 3d70d15..3f5cac9 100644
+--- a/arch/mips/boot/compressed/decompress.c
++++ b/arch/mips/boot/compressed/decompress.c
+@@ -85,9 +85,11 @@ void __stack_chk_fail(void)
+ 	error("stack-protector: Kernel stack is corrupted\n");
+ }
+ 
+-void decompress_kernel(unsigned long boot_heap_start)
++unsigned long decompress_kernel(unsigned long boot_heap_start)
+ {
+ 	unsigned long zimage_start, zimage_size;
++	unsigned long offset = 0x8000000;
++	unsigned long long load_address = VMLINUX_LOAD_ADDRESS_ULL + offset;
+ 
+ 	zimage_start = (unsigned long)(&__image_begin);
+ 	zimage_size = (unsigned long)(&__image_end) -
+@@ -105,12 +107,12 @@ void decompress_kernel(unsigned long boot_heap_start)
+ 
+ 	/* Display standard Linux/MIPS boot prompt */
+ 	puts("Uncompressing Linux at load address ");
+-	puthex(VMLINUX_LOAD_ADDRESS_ULL);
++	puthex(load_address);
+ 	puts("\n");
+ 
+ 	/* Decompress the kernel with according algorithm */
+ 	__decompress((char *)zimage_start, zimage_size, 0, 0,
+-		   (void *)VMLINUX_LOAD_ADDRESS_ULL, 0, 0, error);
++		   (void *)load_address, 0, 0, error);
+ 
+ 	if (IS_ENABLED(CONFIG_MIPS_RAW_APPENDED_DTB) &&
+ 	    fdt_magic((void *)&__appended_dtb) == FDT_MAGIC) {
+@@ -125,14 +127,16 @@ void decompress_kernel(unsigned long boot_heap_start)
+ 		image_size = ALIGN(image_size, STRUCT_ALIGNMENT);
+ 
+ 		puts("Copy device tree to address  ");
+-		puthex(VMLINUX_LOAD_ADDRESS_ULL + image_size);
++		puthex(load_address + image_size);
+ 		puts("\n");
+ 
+ 		/* copy dtb to where the booted kernel will expect it */
+-		memcpy((void *)VMLINUX_LOAD_ADDRESS_ULL + image_size,
++		memcpy((void *)load_address + image_size,
+ 		       __appended_dtb, dtb_size);
+ 	}
+ 
+ 	/* FIXME: should we flush cache here? */
+ 	puts("Now, booting the kernel...\n");
++
++	return (KERNEL_ENTRY + offset);
+ }
+diff --git a/arch/mips/boot/compressed/head.S b/arch/mips/boot/compressed/head.S
+index 5795d0a..36c5809 100644
+--- a/arch/mips/boot/compressed/head.S
++++ b/arch/mips/boot/compressed/head.S
+@@ -40,8 +40,7 @@
+ 	move	a1, s1
+ 	move	a2, s2
+ 	move	a3, s3
+-	PTR_LI	t9, KERNEL_ENTRY
+-	jalr	t9
++	jalr	v0
+ 
+ 3:
+ 	b	3b
+
+Jinyang He (3):
+  MIPS: relocate: Only compile relocs when CONFIG_RELOCATABLE is enabled
+  MIPS: relocate: Use CONFIG_RANDOMIZE_BASE to configure kaslr
+  MIPS: relocate: Add support to relocate kernel auto
+
+ arch/mips/Makefile                                 |   2 +
+ arch/mips/cavium-octeon/smp.c                      |   8 +-
+ arch/mips/generic/init.c                           |   4 +-
+ arch/mips/include/asm/bootinfo.h                   |   4 +-
+ .../asm/mach-cavium-octeon/kernel-entry-init.h     |   4 +-
+ arch/mips/kernel/Makefile                          |   2 +-
+ arch/mips/kernel/head.S                            | 155 ++++++++++++++++++++-
+ arch/mips/kernel/{relocate.c => kaslr.c}           |  15 --
+ 8 files changed, 165 insertions(+), 29 deletions(-)
+ rename arch/mips/kernel/{relocate.c => kaslr.c} (97%)
+
 -- 
-2.20.1
+2.1.0
 
