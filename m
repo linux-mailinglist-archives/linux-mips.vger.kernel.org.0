@@ -2,73 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D4C351E0F
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Apr 2021 20:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F3E351E0E
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Apr 2021 20:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbhDASeI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Apr 2021 14:34:08 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53828 "EHLO mx2.suse.de"
+        id S238021AbhDASeC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Apr 2021 14:34:02 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53818 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236067AbhDASXj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S235309AbhDASXj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Thu, 1 Apr 2021 14:23:39 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id D037CB1E9;
-        Thu,  1 Apr 2021 12:56:44 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 1DABFB1E5;
+        Thu,  1 Apr 2021 12:56:45 +0000 (UTC)
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     hch@lst.de
-Subject: [PATCH v3 0/4] MIPS: Remove get_fs/set_fs
-Date:   Thu,  1 Apr 2021 14:56:33 +0200
-Message-Id: <20210401125639.42963-1-tsbogend@alpha.franken.de>
+Subject: [PATCH v3 1/4] MIPS: kernel: Remove not needed set_fs calls
+Date:   Thu,  1 Apr 2021 14:56:34 +0200
+Message-Id: <20210401125639.42963-2-tsbogend@alpha.franken.de>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210401125639.42963-1-tsbogend@alpha.franken.de>
+References: <20210401125639.42963-1-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This series replaces get_fs/set_fs and removes it from MIPS arch code.
+flush_icache_range always does flush kernel address ranges, so no
+need to do the set_fs dance.
 
-Changes in v3:
-- use get_user/get_kernel_nofault for helper functions
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/kernel/ftrace.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-Changes in v2:
-- added copy_from_kernel_nofault_allowed() for !EVA to restrict
-  access of __get/__put_kernel_nofault
-- replaced __get_data macro by helper functions
-- removed leftover set_fs calls in ftrace.c
-- further cleanup uaccess.h
-
-Thomas Bogendoerfer (4):
-  MIPS: kernel: Remove not needed set_fs calls
-  MIPS: uaccess: Added __get/__put_kernel_nofault
-  MIPS: uaccess: Remove get_fs/set_fs call sites
-  MIPS: Remove get_fs/set_fs
-
- arch/mips/Kconfig                   |   1 -
- arch/mips/include/asm/processor.h   |   4 -
- arch/mips/include/asm/thread_info.h |   6 -
- arch/mips/include/asm/uaccess.h     | 436 +++++++++++-----------------
- arch/mips/kernel/access-helper.h    |  18 ++
- arch/mips/kernel/asm-offsets.c      |   1 -
- arch/mips/kernel/ftrace.c           |   8 -
- arch/mips/kernel/process.c          |   2 -
- arch/mips/kernel/scall32-o32.S      |   4 +-
- arch/mips/kernel/traps.c            | 105 +++----
- arch/mips/kernel/unaligned.c        | 199 +++++--------
- arch/mips/lib/memcpy.S              |  28 +-
- arch/mips/lib/memset.S              |   3 -
- arch/mips/lib/strncpy_user.S        |  48 +--
- arch/mips/lib/strnlen_user.S        |  44 +--
- arch/mips/mm/Makefile               |   4 +
- arch/mips/mm/maccess.c              |  10 +
- 17 files changed, 357 insertions(+), 564 deletions(-)
- create mode 100644 arch/mips/kernel/access-helper.h
- create mode 100644 arch/mips/mm/maccess.c
-
+diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
+index 666b9969c1bd..8c401e42301c 100644
+--- a/arch/mips/kernel/ftrace.c
++++ b/arch/mips/kernel/ftrace.c
+@@ -90,7 +90,6 @@ static int ftrace_modify_code_2(unsigned long ip, unsigned int new_code1,
+ 				unsigned int new_code2)
+ {
+ 	int faulted;
+-	mm_segment_t old_fs;
+ 
+ 	safe_store_code(new_code1, ip, faulted);
+ 	if (unlikely(faulted))
+@@ -102,10 +101,7 @@ static int ftrace_modify_code_2(unsigned long ip, unsigned int new_code1,
+ 		return -EFAULT;
+ 
+ 	ip -= 4;
+-	old_fs = get_fs();
+-	set_fs(KERNEL_DS);
+ 	flush_icache_range(ip, ip + 8);
+-	set_fs(old_fs);
+ 
+ 	return 0;
+ }
+@@ -114,7 +110,6 @@ static int ftrace_modify_code_2r(unsigned long ip, unsigned int new_code1,
+ 				 unsigned int new_code2)
+ {
+ 	int faulted;
+-	mm_segment_t old_fs;
+ 
+ 	ip += 4;
+ 	safe_store_code(new_code2, ip, faulted);
+@@ -126,10 +121,7 @@ static int ftrace_modify_code_2r(unsigned long ip, unsigned int new_code1,
+ 	if (unlikely(faulted))
+ 		return -EFAULT;
+ 
+-	old_fs = get_fs();
+-	set_fs(KERNEL_DS);
+ 	flush_icache_range(ip, ip + 8);
+-	set_fs(old_fs);
+ 
+ 	return 0;
+ }
 -- 
 2.29.2
 
