@@ -2,25 +2,25 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 634FE351E10
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Apr 2021 20:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8209F351E09
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Apr 2021 20:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238064AbhDASeJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Apr 2021 14:34:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54736 "EHLO mx2.suse.de"
+        id S236621AbhDASeA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Apr 2021 14:34:00 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53804 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239246AbhDASZk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 1 Apr 2021 14:25:40 -0400
+        id S234473AbhDASXj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 1 Apr 2021 14:23:39 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 5CAFCB1EB;
-        Thu,  1 Apr 2021 12:56:46 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id A2545B1EE;
+        Thu,  1 Apr 2021 12:56:47 +0000 (UTC)
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     hch@lst.de
-Subject: [PATCH v3 3/4] MIPS: uaccess: Remove get_fs/set_fs call sites
-Date:   Thu,  1 Apr 2021 14:56:36 +0200
-Message-Id: <20210401125639.42963-4-tsbogend@alpha.franken.de>
+Subject: [PATCH v3 4/4] MIPS: Remove get_fs/set_fs
+Date:   Thu,  1 Apr 2021 14:56:37 +0200
+Message-Id: <20210401125639.42963-5-tsbogend@alpha.franken.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210401125639.42963-1-tsbogend@alpha.franken.de>
 References: <20210401125639.42963-1-tsbogend@alpha.franken.de>
@@ -30,911 +30,909 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use new helpers to access user/kernel for functions, which are used with
-user/kernel pointers. Instead of dealing with get_fs/set_fs select
-user/kernel access via parameter.
+All get_fs/set_fs calls in MIPS code are gone, so remove implementation
+of it.  With the clear separation of user/kernel space access we no
+longer need the EVA special handling, so get rid of that, too.
 
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- arch/mips/kernel/access-helper.h |  18 +++
- arch/mips/kernel/traps.c         | 105 +++++++---------
- arch/mips/kernel/unaligned.c     | 199 +++++++++++--------------------
- 3 files changed, 136 insertions(+), 186 deletions(-)
- create mode 100644 arch/mips/kernel/access-helper.h
+ arch/mips/Kconfig                   |   1 -
+ arch/mips/include/asm/processor.h   |   4 -
+ arch/mips/include/asm/thread_info.h |   6 -
+ arch/mips/include/asm/uaccess.h     | 426 ++++++++++------------------
+ arch/mips/kernel/asm-offsets.c      |   1 -
+ arch/mips/kernel/process.c          |   2 -
+ arch/mips/kernel/scall32-o32.S      |   4 +-
+ arch/mips/lib/memcpy.S              |  28 +-
+ arch/mips/lib/memset.S              |   3 -
+ arch/mips/lib/strncpy_user.S        |  48 +---
+ arch/mips/lib/strnlen_user.S        |  44 +--
+ 11 files changed, 190 insertions(+), 377 deletions(-)
 
-diff --git a/arch/mips/kernel/access-helper.h b/arch/mips/kernel/access-helper.h
-new file mode 100644
-index 000000000000..dd5b502813b8
---- /dev/null
-+++ b/arch/mips/kernel/access-helper.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/uaccess.h>
-+
-+static inline int __get_addr(unsigned long *a, unsigned long *p, bool user)
-+{
-+	return user ? get_user(*a, p) : get_kernel_nofault(*a, p);
-+}
-+
-+static inline int __get_inst16(u16 *i, u16 *p, bool user)
-+{
-+	return user ? get_user(*i, p) : get_kernel_nofault(*i, p);
-+}
-+
-+static inline int __get_inst32(u32 *i, u32 *p, bool user)
-+{
-+	return user ? get_user(*i, p) : get_kernel_nofault(*i, p);
-+}
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 808b8b61ded1..0b4e06303c55 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -72,6 +72,8 @@
- 
- #include <asm/mach-loongson64/cpucfg-emul.h>
- 
-+#include "access-helper.h"
-+
- extern void check_wait(void);
- extern asmlinkage void rollback_handle_int(void);
- extern asmlinkage void handle_int(void);
-@@ -108,7 +110,8 @@ void (*board_bind_eic_interrupt)(int irq, int regset);
- void (*board_ebase_setup)(void);
- void(*board_cache_error_setup)(void);
- 
--static void show_raw_backtrace(unsigned long reg29, const char *loglvl)
-+static void show_raw_backtrace(unsigned long reg29, const char *loglvl,
-+			       bool user)
- {
- 	unsigned long *sp = (unsigned long *)(reg29 & ~3);
- 	unsigned long addr;
-@@ -118,9 +121,7 @@ static void show_raw_backtrace(unsigned long reg29, const char *loglvl)
- 	printk("%s\n", loglvl);
- #endif
- 	while (!kstack_end(sp)) {
--		unsigned long __user *p =
--			(unsigned long __user *)(unsigned long)sp++;
--		if (__get_user(addr, p)) {
-+		if (__get_addr(&addr, sp++, user)) {
- 			printk("%s (Bad stack address)", loglvl);
- 			break;
- 		}
-@@ -141,7 +142,7 @@ __setup("raw_show_trace", set_raw_show_trace);
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index b72458215d20..70faa0686444 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -93,7 +93,6 @@ config MIPS
+ 	select PERF_USE_VMALLOC
+ 	select PCI_MSI_ARCH_FALLBACKS if PCI_MSI
+ 	select RTC_LIB
+-	select SET_FS
+ 	select SYSCTL_EXCEPTION_TRACE
+ 	select VIRT_TO_BUS
+ 	select ARCH_HAS_ELFCORE_COMPAT
+diff --git a/arch/mips/include/asm/processor.h b/arch/mips/include/asm/processor.h
+index 8e69e0a35ee9..0c3550c82b72 100644
+--- a/arch/mips/include/asm/processor.h
++++ b/arch/mips/include/asm/processor.h
+@@ -221,10 +221,6 @@ struct nlm_cop2_state {
+ #define COP2_INIT
  #endif
  
- static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
--			   const char *loglvl)
-+			   const char *loglvl, bool user)
- {
- 	unsigned long sp = regs->regs[29];
- 	unsigned long ra = regs->regs[31];
-@@ -151,7 +152,7 @@ static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
- 		task = current;
- 
- 	if (raw_show_trace || user_mode(regs) || !__kernel_text_address(pc)) {
--		show_raw_backtrace(sp, loglvl);
-+		show_raw_backtrace(sp, loglvl, user);
- 		return;
- 	}
- 	printk("%sCall Trace:\n", loglvl);
-@@ -167,12 +168,12 @@ static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
-  * with at least a bit of error checking ...
-  */
- static void show_stacktrace(struct task_struct *task,
--	const struct pt_regs *regs, const char *loglvl)
-+	const struct pt_regs *regs, const char *loglvl, bool user)
- {
- 	const int field = 2 * sizeof(unsigned long);
--	long stackdata;
-+	unsigned long stackdata;
- 	int i;
--	unsigned long __user *sp = (unsigned long __user *)regs->regs[29];
-+	unsigned long *sp = (unsigned long *)regs->regs[29];
- 
- 	printk("%sStack :", loglvl);
- 	i = 0;
-@@ -186,7 +187,7 @@ static void show_stacktrace(struct task_struct *task,
- 			break;
- 		}
- 
--		if (__get_user(stackdata, sp++)) {
-+		if (__get_addr(&stackdata, sp++, user)) {
- 			pr_cont(" (Bad stack address)");
- 			break;
- 		}
-@@ -195,13 +196,12 @@ static void show_stacktrace(struct task_struct *task,
- 		i++;
- 	}
- 	pr_cont("\n");
--	show_backtrace(task, regs, loglvl);
-+	show_backtrace(task, regs, loglvl, user);
+-typedef struct {
+-	unsigned long seg;
+-} mm_segment_t;
+-
+ #ifdef CONFIG_CPU_HAS_MSA
+ # define ARCH_MIN_TASKALIGN	16
+ # define FPU_ALIGN		__aligned(16)
+diff --git a/arch/mips/include/asm/thread_info.h b/arch/mips/include/asm/thread_info.h
+index e2c352da3877..0b17aaa9e012 100644
+--- a/arch/mips/include/asm/thread_info.h
++++ b/arch/mips/include/asm/thread_info.h
+@@ -28,11 +28,6 @@ struct thread_info {
+ 	unsigned long		tp_value;	/* thread pointer */
+ 	__u32			cpu;		/* current CPU */
+ 	int			preempt_count;	/* 0 => preemptable, <0 => BUG */
+-	mm_segment_t		addr_limit;	/*
+-						 * thread address space limit:
+-						 * 0x7fffffff for user-thead
+-						 * 0xffffffff for kernel-thread
+-						 */
+ 	struct pt_regs		*regs;
+ 	long			syscall;	/* syscall number */
+ };
+@@ -46,7 +41,6 @@ struct thread_info {
+ 	.flags		= _TIF_FIXADE,		\
+ 	.cpu		= 0,			\
+ 	.preempt_count	= INIT_PREEMPT_COUNT,	\
+-	.addr_limit	= KERNEL_DS,		\
  }
  
- void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
- {
- 	struct pt_regs regs;
--	mm_segment_t old_fs = get_fs();
+ /*
+diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
+index c5cab0b8f902..d341228b907a 100644
+--- a/arch/mips/include/asm/uaccess.h
++++ b/arch/mips/include/asm/uaccess.h
+@@ -16,13 +16,6 @@
+ #include <asm/asm-eva.h>
+ #include <asm/extable.h>
  
- 	regs.cp0_status = KSU_KERNEL;
- 	if (sp) {
-@@ -217,33 +217,41 @@ void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
- 			prepare_frametrace(&regs);
- 		}
- 	}
--	/*
--	 * show_stack() deals exclusively with kernel mode, so be sure to access
--	 * the stack in the kernel (not user) address space.
--	 */
--	set_fs(KERNEL_DS);
--	show_stacktrace(task, &regs, loglvl);
--	set_fs(old_fs);
-+	show_stacktrace(task, &regs, loglvl, false);
+-/*
+- * The fs value determines whether argument validity checking should be
+- * performed or not.  If get_fs() == USER_DS, checking is performed, with
+- * get_fs() == KERNEL_DS, checking is bypassed.
+- *
+- * For historical reasons, these macros are grossly misnamed.
+- */
+ #ifdef CONFIG_32BIT
+ 
+ #define __UA_LIMIT 0x80000000UL
+@@ -49,38 +42,6 @@ extern u64 __ua_limit;
+ 
+ #endif /* CONFIG_64BIT */
+ 
+-/*
+- * USER_DS is a bitmask that has the bits set that may not be set in a valid
+- * userspace address.  Note that we limit 32-bit userspace to 0x7fff8000 but
+- * the arithmetic we're doing only works if the limit is a power of two, so
+- * we use 0x80000000 here on 32-bit kernels.  If a process passes an invalid
+- * address in this range it's the process's problem, not ours :-)
+- */
+-
+-#define KERNEL_DS	((mm_segment_t) { 0UL })
+-#define USER_DS		((mm_segment_t) { __UA_LIMIT })
+-
+-#define get_fs()	(current_thread_info()->addr_limit)
+-#define set_fs(x)	(current_thread_info()->addr_limit = (x))
+-
+-#define uaccess_kernel()	(get_fs().seg == KERNEL_DS.seg)
+-
+-/*
+- * eva_kernel_access() - determine whether kernel memory access on an EVA system
+- *
+- * Determines whether memory accesses should be performed to kernel memory
+- * on a system using Extended Virtual Addressing (EVA).
+- *
+- * Return: true if a kernel memory access on an EVA system, else false.
+- */
+-static inline bool eva_kernel_access(void)
+-{
+-	if (!IS_ENABLED(CONFIG_EVA))
+-		return false;
+-
+-	return uaccess_kernel();
+-}
+-
+ /*
+  * Is a address valid? This does a straightforward calculation rather
+  * than tests.
+@@ -118,7 +79,7 @@ static inline bool eva_kernel_access(void)
+ static inline int __access_ok(const void __user *p, unsigned long size)
+ {
+ 	unsigned long addr = (unsigned long)p;
+-	return (get_fs().seg & (addr | (addr + size) | __ua_size(size))) == 0;
++	return (__UA_LIMIT & (addr | (addr + size) | __ua_size(size))) == 0;
  }
  
--static void show_code(unsigned int __user *pc)
-+static void show_code(void *pc, bool user)
- {
- 	long i;
--	unsigned short __user *pc16 = NULL;
-+	unsigned short *pc16 = NULL;
+ #define access_ok(addr, size)					\
+@@ -215,43 +176,6 @@ static inline int __access_ok(const void __user *p, unsigned long size)
+ struct __large_struct { unsigned long buf[100]; };
+ #define __m(x) (*(struct __large_struct __user *)(x))
  
- 	printk("Code:");
- 
- 	if ((unsigned long)pc & 1)
--		pc16 = (unsigned short __user *)((unsigned long)pc & ~1);
-+		pc16 = (u16 *)((unsigned long)pc & ~1);
-+
- 	for(i = -3 ; i < 6 ; i++) {
--		unsigned int insn;
--		if (pc16 ? __get_user(insn, pc16 + i) : __get_user(insn, pc + i)) {
--			pr_cont(" (Bad address in epc)\n");
--			break;
-+		if (pc16) {
-+			u16 insn16;
-+
-+			if (__get_inst16(&insn16, pc16 + i, user))
-+				goto bad_address;
-+
-+			pr_cont("%c%04x%c", (i?' ':'<'), insn16, (i?' ':'>'));
-+		} else {
-+			u32 insn32;
-+
-+			if (__get_inst32(&insn32, (u32 *)pc + i, user))
-+				goto bad_address;
-+
-+			pr_cont("%c%08x%c", (i?' ':'<'), insn32, (i?' ':'>'));
- 		}
--		pr_cont("%c%0*x%c", (i?' ':'<'), pc16 ? 4 : 8, insn, (i?' ':'>'));
- 	}
- 	pr_cont("\n");
-+	return;
-+
-+bad_address:
-+	pr_cont(" (Bad address in epc)\n\n");
- }
- 
- static void __show_regs(const struct pt_regs *regs)
-@@ -356,7 +364,6 @@ void show_regs(struct pt_regs *regs)
- void show_registers(struct pt_regs *regs)
- {
- 	const int field = 2 * sizeof(unsigned long);
--	mm_segment_t old_fs = get_fs();
- 
- 	__show_regs(regs);
- 	print_modules();
-@@ -371,13 +378,9 @@ void show_registers(struct pt_regs *regs)
- 			printk("*HwTLS: %0*lx\n", field, tls);
- 	}
- 
--	if (!user_mode(regs))
--		/* Necessary for getting the correct stack content */
--		set_fs(KERNEL_DS);
--	show_stacktrace(current, regs, KERN_DEFAULT);
--	show_code((unsigned int __user *) regs->cp0_epc);
-+	show_stacktrace(current, regs, KERN_DEFAULT, user_mode(regs));
-+	show_code((void *)regs->cp0_epc, user_mode(regs));
- 	printk("\n");
--	set_fs(old_fs);
- }
- 
- static DEFINE_RAW_SPINLOCK(die_lock);
-@@ -1022,18 +1025,14 @@ asmlinkage void do_bp(struct pt_regs *regs)
- 	unsigned long epc = msk_isa16_mode(exception_epc(regs));
- 	unsigned int opcode, bcode;
- 	enum ctx_state prev_state;
--	mm_segment_t seg;
--
--	seg = get_fs();
--	if (!user_mode(regs))
--		set_fs(KERNEL_DS);
-+	bool user = user_mode(regs);
- 
- 	prev_state = exception_enter();
- 	current->thread.trap_nr = (regs->cp0_cause >> 2) & 0x1f;
- 	if (get_isa16_mode(regs->cp0_epc)) {
- 		u16 instr[2];
- 
--		if (__get_user(instr[0], (u16 __user *)epc))
-+		if (__get_inst16(&instr[0], (u16 *)epc, user))
- 			goto out_sigsegv;
- 
- 		if (!cpu_has_mmips) {
-@@ -1044,13 +1043,13 @@ asmlinkage void do_bp(struct pt_regs *regs)
- 			bcode = instr[0] & 0xf;
- 		} else {
- 			/* 32-bit microMIPS BREAK */
--			if (__get_user(instr[1], (u16 __user *)(epc + 2)))
-+			if (__get_inst16(&instr[1], (u16 *)(epc + 2), user))
- 				goto out_sigsegv;
- 			opcode = (instr[0] << 16) | instr[1];
- 			bcode = (opcode >> 6) & ((1 << 20) - 1);
- 		}
- 	} else {
--		if (__get_user(opcode, (unsigned int __user *)epc))
-+		if (__get_inst32(&opcode, (u32 *)epc, user))
- 			goto out_sigsegv;
- 		bcode = (opcode >> 6) & ((1 << 20) - 1);
- 	}
-@@ -1100,7 +1099,6 @@ asmlinkage void do_bp(struct pt_regs *regs)
- 	do_trap_or_bp(regs, bcode, TRAP_BRKPT, "Break");
- 
- out:
--	set_fs(seg);
- 	exception_exit(prev_state);
- 	return;
- 
-@@ -1114,25 +1112,21 @@ asmlinkage void do_tr(struct pt_regs *regs)
- 	u32 opcode, tcode = 0;
- 	enum ctx_state prev_state;
- 	u16 instr[2];
--	mm_segment_t seg;
-+	bool user = user_mode(regs);
- 	unsigned long epc = msk_isa16_mode(exception_epc(regs));
- 
--	seg = get_fs();
--	if (!user_mode(regs))
--		set_fs(KERNEL_DS);
--
- 	prev_state = exception_enter();
- 	current->thread.trap_nr = (regs->cp0_cause >> 2) & 0x1f;
- 	if (get_isa16_mode(regs->cp0_epc)) {
--		if (__get_user(instr[0], (u16 __user *)(epc + 0)) ||
--		    __get_user(instr[1], (u16 __user *)(epc + 2)))
-+		if (__get_inst16(&instr[0], (u16 *)(epc + 0), user) ||
-+		    __get_inst16(&instr[1], (u16 *)(epc + 2), user))
- 			goto out_sigsegv;
- 		opcode = (instr[0] << 16) | instr[1];
- 		/* Immediate versions don't provide a code.  */
- 		if (!(opcode & OPCODE))
- 			tcode = (opcode >> 12) & ((1 << 4) - 1);
- 	} else {
--		if (__get_user(opcode, (u32 __user *)epc))
-+		if (__get_inst32(&opcode, (u32 *)epc, user))
- 			goto out_sigsegv;
- 		/* Immediate versions don't provide a code.  */
- 		if (!(opcode & OPCODE))
-@@ -1142,7 +1136,6 @@ asmlinkage void do_tr(struct pt_regs *regs)
- 	do_trap_or_bp(regs, tcode, 0, "Trap");
- 
- out:
--	set_fs(seg);
- 	exception_exit(prev_state);
- 	return;
- 
-@@ -1591,7 +1584,6 @@ asmlinkage void do_mcheck(struct pt_regs *regs)
- {
- 	int multi_match = regs->cp0_status & ST0_TS;
- 	enum ctx_state prev_state;
--	mm_segment_t old_fs = get_fs();
- 
- 	prev_state = exception_enter();
- 	show_regs(regs);
-@@ -1602,12 +1594,7 @@ asmlinkage void do_mcheck(struct pt_regs *regs)
- 		dump_tlb_all();
- 	}
- 
--	if (!user_mode(regs))
--		set_fs(KERNEL_DS);
--
--	show_code((unsigned int __user *) regs->cp0_epc);
--
--	set_fs(old_fs);
-+	show_code((void *)regs->cp0_epc, user_mode(regs));
- 
- 	/*
- 	 * Some chips may have other causes of machine check (e.g. SB1
-diff --git a/arch/mips/kernel/unaligned.c b/arch/mips/kernel/unaligned.c
-index 126a5f3f4e4c..1f3b20a8c377 100644
---- a/arch/mips/kernel/unaligned.c
-+++ b/arch/mips/kernel/unaligned.c
-@@ -93,6 +93,8 @@
- #include <asm/mmu_context.h>
- #include <linux/uaccess.h>
- 
-+#include "access-helper.h"
-+
- enum {
- 	UNALIGNED_ACTION_QUIET,
- 	UNALIGNED_ACTION_SIGNAL,
-@@ -112,9 +114,8 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 	unsigned long origpc, orig31, value;
- 	union mips_instruction insn;
- 	unsigned int res;
--#ifdef	CONFIG_EVA
--	mm_segment_t seg;
+-/*
+- * Yuck.  We need two variants, one for 64bit operation and one
+- * for 32 bit mode and old iron.
+- */
+-#ifndef CONFIG_EVA
+-#define __get_kernel_common(val, size, ptr) __get_user_common(val, size, ptr)
+-#else
+-/*
+- * Kernel specific functions for EVA. We need to use normal load instructions
+- * to read data from kernel when operating in EVA mode. We use these macros to
+- * avoid redefining __get_user_asm for EVA.
+- */
+-#undef _loadd
+-#undef _loadw
+-#undef _loadh
+-#undef _loadb
+-#ifdef CONFIG_32BIT
+-#define _loadd			_loadw
+-#else
+-#define _loadd(reg, addr)	"ld " reg ", " addr
 -#endif
-+	bool user = user_mode(regs);
-+
- 	origpc = (unsigned long)pc;
- 	orig31 = regs->regs[31];
- 
-@@ -123,7 +124,7 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 	/*
- 	 * This load never faults.
- 	 */
--	__get_user(insn.word, pc);
-+	__get_inst32(&insn.word, pc, user);
- 
- 	switch (insn.i_format.opcode) {
- 		/*
-@@ -163,7 +164,7 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 		if (insn.dsp_format.func == lx_op) {
- 			switch (insn.dsp_format.op) {
- 			case lwx_op:
--				if (!access_ok(addr, 4))
-+				if (user && !access_ok(addr, 4))
- 					goto sigbus;
- 				LoadW(addr, value, res);
- 				if (res)
-@@ -172,7 +173,7 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 				regs->regs[insn.dsp_format.rd] = value;
- 				break;
- 			case lhx_op:
--				if (!access_ok(addr, 2))
-+				if (user && !access_ok(addr, 2))
- 					goto sigbus;
- 				LoadHW(addr, value, res);
- 				if (res)
-@@ -191,93 +192,66 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 			 * memory, so we need to "switch" the address limit to
- 			 * user space, so that address check can work properly.
- 			 */
--			seg = force_uaccess_begin();
- 			switch (insn.spec3_format.func) {
- 			case lhe_op:
--				if (!access_ok(addr, 2)) {
--					force_uaccess_end(seg);
-+				if (!access_ok(addr, 2))
- 					goto sigbus;
--				}
- 				LoadHWE(addr, value, res);
--				if (res) {
--					force_uaccess_end(seg);
-+				if (res)
- 					goto fault;
--				}
- 				compute_return_epc(regs);
- 				regs->regs[insn.spec3_format.rt] = value;
- 				break;
- 			case lwe_op:
--				if (!access_ok(addr, 4)) {
--					force_uaccess_end(seg);
-+				if (!access_ok(addr, 4))
- 					goto sigbus;
--				}
- 				LoadWE(addr, value, res);
--				if (res) {
--					force_uaccess_end(seg);
-+				if (res)
- 					goto fault;
--				}
- 				compute_return_epc(regs);
- 				regs->regs[insn.spec3_format.rt] = value;
- 				break;
- 			case lhue_op:
--				if (!access_ok(addr, 2)) {
--					force_uaccess_end(seg);
-+				if (!access_ok(addr, 2))
- 					goto sigbus;
--				}
- 				LoadHWUE(addr, value, res);
--				if (res) {
--					force_uaccess_end(seg);
-+				if (res)
- 					goto fault;
--				}
- 				compute_return_epc(regs);
- 				regs->regs[insn.spec3_format.rt] = value;
- 				break;
- 			case she_op:
--				if (!access_ok(addr, 2)) {
--					force_uaccess_end(seg);
-+				if (!access_ok(addr, 2))
- 					goto sigbus;
--				}
- 				compute_return_epc(regs);
- 				value = regs->regs[insn.spec3_format.rt];
- 				StoreHWE(addr, value, res);
--				if (res) {
--					force_uaccess_end(seg);
-+				if (res)
- 					goto fault;
--				}
- 				break;
- 			case swe_op:
--				if (!access_ok(addr, 4)) {
--					force_uaccess_end(seg);
-+				if (!access_ok(addr, 4))
- 					goto sigbus;
--				}
- 				compute_return_epc(regs);
- 				value = regs->regs[insn.spec3_format.rt];
- 				StoreWE(addr, value, res);
--				if (res) {
--					force_uaccess_end(seg);
-+				if (res)
- 					goto fault;
--				}
- 				break;
- 			default:
--				force_uaccess_end(seg);
- 				goto sigill;
- 			}
--			force_uaccess_end(seg);
- 		}
+-#define _loadw(reg, addr)	"lw " reg ", " addr
+-#define _loadh(reg, addr)	"lh " reg ", " addr
+-#define _loadb(reg, addr)	"lb " reg ", " addr
+-
+-#define __get_kernel_common(val, size, ptr)				\
+-do {									\
+-	switch (size) {							\
+-	case 1: __get_data_asm(val, _loadb, ptr); break;		\
+-	case 2: __get_data_asm(val, _loadh, ptr); break;		\
+-	case 4: __get_data_asm(val, _loadw, ptr); break;		\
+-	case 8: __GET_DW(val, _loadd, ptr); break;			\
+-	default: __get_user_unknown(); break;				\
+-	}								\
+-} while (0)
+-#endif
+-
+ #ifdef CONFIG_32BIT
+ #define __GET_DW(val, insn, ptr) __get_data_asm_ll32(val, insn, ptr)
  #endif
- 		break;
- 	case lh_op:
--		if (!access_ok(addr, 2))
-+		if (user && !access_ok(addr, 2))
- 			goto sigbus;
+@@ -276,12 +200,9 @@ do {									\
+ ({									\
+ 	int __gu_err;							\
+ 									\
+-	if (eva_kernel_access()) {					\
+-		__get_kernel_common((x), size, ptr);			\
+-	} else {							\
+-		__chk_user_ptr(ptr);					\
+-		__get_user_common((x), size, ptr);			\
+-	}								\
++	__chk_user_ptr(ptr);						\
++	__get_user_common((x), size, ptr);				\
++									\
+ 	__gu_err;							\
+ })
  
--		if (IS_ENABLED(CONFIG_EVA)) {
--			if (uaccess_kernel())
--				LoadHW(addr, value, res);
--			else
--				LoadHWE(addr, value, res);
--		} else {
-+		if (IS_ENABLED(CONFIG_EVA) && user)
-+			LoadHWE(addr, value, res);
-+		else
- 			LoadHW(addr, value, res);
--		}
+@@ -291,11 +212,8 @@ do {									\
+ 	const __typeof__(*(ptr)) __user * __gu_ptr = (ptr);		\
+ 									\
+ 	might_fault();							\
+-	if (likely(access_ok( __gu_ptr, size))) {		\
+-		if (eva_kernel_access())				\
+-			__get_kernel_common((x), size, __gu_ptr);	\
+-		else							\
+-			__get_user_common((x), size, __gu_ptr);		\
++	if (likely(access_ok(__gu_ptr, size))) {			\
++		__get_user_common((x), size, __gu_ptr);			\
+ 	} else								\
+ 		(x) = 0;						\
+ 									\
+@@ -361,46 +279,31 @@ do {									\
+ do {									\
+ 	int __gu_err;							\
+ 									\
+-	__get_kernel_common(*((type *)(dst)), sizeof(type),		\
+-			    (__force type *)(src));			\
++	switch (sizeof(type)) {						\
++	case 1:								\
++		__get_data_asm(*(type *)(dst), kernel_lb,		\
++			       (__force type *)(src));			\
++		break;							\
++	case 2:								\
++		__get_data_asm(*(type *)(dst), kernel_lh,		\
++			       (__force type *)(src));			\
++		break;							\
++	case 4:								\
++		 __get_data_asm(*(type *)(dst), kernel_lw,		\
++			       (__force type *)(src));			\
++		break;							\
++	case 8:								\
++		__GET_DW(*(type *)(dst), kernel_ld,			\
++			 (__force type *)(src));			\
++		break;							\
++	default:							\
++		__get_user_unknown();					\
++		break;							\
++	}								\
+ 	if (unlikely(__gu_err))						\
+ 		goto err_label;						\
+ } while (0)
  
- 		if (res)
- 			goto fault;
-@@ -286,17 +260,13 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 		break;
+-#ifndef CONFIG_EVA
+-#define __put_kernel_common(ptr, size) __put_user_common(ptr, size)
+-#else
+-/*
+- * Kernel specific functions for EVA. We need to use normal load instructions
+- * to read data from kernel when operating in EVA mode. We use these macros to
+- * avoid redefining __get_data_asm for EVA.
+- */
+-#undef _stored
+-#undef _storew
+-#undef _storeh
+-#undef _storeb
+-#ifdef CONFIG_32BIT
+-#define _stored			_storew
+-#else
+-#define _stored(reg, addr)	"ld " reg ", " addr
+-#endif
+-
+-#define _storew(reg, addr)	"sw " reg ", " addr
+-#define _storeh(reg, addr)	"sh " reg ", " addr
+-#define _storeb(reg, addr)	"sb " reg ", " addr
+-
+-#define __put_kernel_common(ptr, size)					\
+-do {									\
+-	switch (size) {							\
+-	case 1: __put_data_asm(_storeb, ptr); break;			\
+-	case 2: __put_data_asm(_storeh, ptr); break;			\
+-	case 4: __put_data_asm(_storew, ptr); break;			\
+-	case 8: __PUT_DW(_stored, ptr); break;				\
+-	default: __put_user_unknown(); break;				\
+-	}								\
+-} while(0)
+-#endif
+-
+ /*
+  * Yuck.  We need two variants, one for 64bit operation and one
+  * for 32 bit mode and old iron.
+@@ -429,12 +332,9 @@ do {									\
+ 	int __pu_err = 0;						\
+ 									\
+ 	__pu_val = (x);							\
+-	if (eva_kernel_access()) {					\
+-		__put_kernel_common(ptr, size);				\
+-	} else {							\
+-		__chk_user_ptr(ptr);					\
+-		__put_user_common(ptr, size);				\
+-	}								\
++	__chk_user_ptr(ptr);						\
++	__put_user_common(ptr, size);					\
++									\
+ 	__pu_err;							\
+ })
  
- 	case lw_op:
--		if (!access_ok(addr, 4))
-+		if (user && !access_ok(addr, 4))
- 			goto sigbus;
+@@ -445,11 +345,8 @@ do {									\
+ 	int __pu_err = -EFAULT;						\
+ 									\
+ 	might_fault();							\
+-	if (likely(access_ok( __pu_addr, size))) {	\
+-		if (eva_kernel_access())				\
+-			__put_kernel_common(__pu_addr, size);		\
+-		else							\
+-			__put_user_common(__pu_addr, size);		\
++	if (likely(access_ok(__pu_addr, size))) {			\
++		__put_user_common(__pu_addr, size);			\
+ 	}								\
+ 									\
+ 	__pu_err;							\
+@@ -501,7 +398,23 @@ do {									\
+ 	int __pu_err = 0;						\
+ 									\
+ 	__pu_val = *(__force type *)(src);				\
+-	__put_kernel_common(((type *)(dst)), sizeof(type));		\
++	switch (sizeof(type)) {						\
++	case 1:								\
++		__put_data_asm(kernel_sb, (type *)(dst));		\
++		break;							\
++	case 2:								\
++		__put_data_asm(kernel_sh, (type *)(dst));		\
++		break;							\
++	case 4:								\
++		__put_data_asm(kernel_sw, (type *)(dst))		\
++		break;							\
++	case 8:								\
++		__PUT_DW(kernel_sd, (type *)(dst));			\
++		break;							\
++	default:							\
++		__put_user_unknown();					\
++		break;							\
++	}								\
+ 	if (unlikely(__pu_err))						\
+ 		goto err_label;						\
+ } while (0)
+@@ -529,8 +442,6 @@ do {									\
+ #define DADDI_SCRATCH "$0"
+ #endif
  
--		if (IS_ENABLED(CONFIG_EVA)) {
--			if (uaccess_kernel())
--				LoadW(addr, value, res);
--			else
--				LoadWE(addr, value, res);
--		} else {
-+		if (IS_ENABLED(CONFIG_EVA) && user)
-+			LoadWE(addr, value, res);
-+		else
- 			LoadW(addr, value, res);
--		}
+-extern size_t __copy_user(void *__to, const void *__from, size_t __n);
+-
+ #define __invoke_copy_from(func, to, from, n)				\
+ ({									\
+ 	register void *__cu_to_r __asm__("$4");				\
+@@ -554,99 +465,85 @@ extern size_t __copy_user(void *__to, const void *__from, size_t __n);
+ 	__cu_len_r;							\
+ })
  
- 		if (res)
- 			goto fault;
-@@ -305,17 +275,13 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 		break;
+-#define __invoke_copy_to(func, to, from, n)				\
+-({									\
+-	register void __user *__cu_to_r __asm__("$4");			\
+-	register const void *__cu_from_r __asm__("$5");			\
+-	register long __cu_len_r __asm__("$6");				\
+-									\
+-	__cu_to_r = (to);						\
+-	__cu_from_r = (from);						\
+-	__cu_len_r = (n);						\
+-	__asm__ __volatile__(						\
+-	__MODULE_JAL(func)						\
+-	: "+r" (__cu_to_r), "+r" (__cu_from_r), "+r" (__cu_len_r)	\
+-	:								\
+-	: "$8", "$9", "$10", "$11", "$12", "$14", "$15", "$24", "$31",	\
+-	  DADDI_SCRATCH, "memory");					\
+-	__cu_len_r;							\
+-})
+-
+-#define __invoke_copy_from_kernel(to, from, n)				\
+-	__invoke_copy_from(__copy_user, to, from, n)
+-
+-#define __invoke_copy_to_kernel(to, from, n)				\
+-	__invoke_copy_to(__copy_user, to, from, n)
+-
+-#define ___invoke_copy_in_kernel(to, from, n)				\
+-	__invoke_copy_from(__copy_user, to, from, n)
+-
+-#ifndef CONFIG_EVA
+-#define __invoke_copy_from_user(to, from, n)				\
+-	__invoke_copy_from(__copy_user, to, from, n)
+-
+-#define __invoke_copy_to_user(to, from, n)				\
+-	__invoke_copy_to(__copy_user, to, from, n)
+-
+-#define ___invoke_copy_in_user(to, from, n)				\
+-	__invoke_copy_from(__copy_user, to, from, n)
+-
+-#else
+-
+-/* EVA specific functions */
+-
+-extern size_t __copy_from_user_eva(void *__to, const void *__from,
+-				   size_t __n);
+-extern size_t __copy_to_user_eva(void *__to, const void *__from,
+-				 size_t __n);
+-extern size_t __copy_in_user_eva(void *__to, const void *__from, size_t __n);
+-
+-/*
+- * Source or destination address is in userland. We need to go through
+- * the TLB
+- */
+-#define __invoke_copy_from_user(to, from, n)				\
+-	__invoke_copy_from(__copy_from_user_eva, to, from, n)
+-
+-#define __invoke_copy_to_user(to, from, n)				\
+-	__invoke_copy_to(__copy_to_user_eva, to, from, n)
+-
+-#define ___invoke_copy_in_user(to, from, n)				\
+-	__invoke_copy_from(__copy_in_user_eva, to, from, n)
+-
+-#endif /* CONFIG_EVA */
++extern size_t __raw_copy_from_user(void *__to, const void *__from, size_t __n);
++extern size_t __raw_copy_to_user(void *__to, const void *__from, size_t __n);
++extern size_t __raw_copy_in_user(void *__to, const void *__from, size_t __n);
  
- 	case lhu_op:
--		if (!access_ok(addr, 2))
-+		if (user && !access_ok(addr, 2))
- 			goto sigbus;
- 
--		if (IS_ENABLED(CONFIG_EVA)) {
--			if (uaccess_kernel())
--				LoadHWU(addr, value, res);
--			else
--				LoadHWUE(addr, value, res);
--		} else {
-+		if (IS_ENABLED(CONFIG_EVA) && user)
-+			LoadHWUE(addr, value, res);
-+		else
- 			LoadHWU(addr, value, res);
--		}
- 
- 		if (res)
- 			goto fault;
-@@ -332,7 +298,7 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 		 * would blow up, so for now we don't handle unaligned 64-bit
- 		 * instructions on 32-bit kernels.
- 		 */
--		if (!access_ok(addr, 4))
-+		if (user && !access_ok(addr, 4))
- 			goto sigbus;
- 
- 		LoadWU(addr, value, res);
-@@ -355,7 +321,7 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 		 * would blow up, so for now we don't handle unaligned 64-bit
- 		 * instructions on 32-bit kernels.
- 		 */
--		if (!access_ok(addr, 8))
-+		if (user && !access_ok(addr, 8))
- 			goto sigbus;
- 
- 		LoadDW(addr, value, res);
-@@ -370,40 +336,32 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 		goto sigill;
- 
- 	case sh_op:
--		if (!access_ok(addr, 2))
-+		if (user && !access_ok(addr, 2))
- 			goto sigbus;
- 
- 		compute_return_epc(regs);
- 		value = regs->regs[insn.i_format.rt];
- 
--		if (IS_ENABLED(CONFIG_EVA)) {
--			if (uaccess_kernel())
--				StoreHW(addr, value, res);
--			else
--				StoreHWE(addr, value, res);
--		} else {
-+		if (IS_ENABLED(CONFIG_EVA) && user)
-+			StoreHWE(addr, value, res);
-+		else
- 			StoreHW(addr, value, res);
--		}
- 
- 		if (res)
- 			goto fault;
- 		break;
- 
- 	case sw_op:
--		if (!access_ok(addr, 4))
-+		if (user && !access_ok(addr, 4))
- 			goto sigbus;
- 
- 		compute_return_epc(regs);
- 		value = regs->regs[insn.i_format.rt];
- 
--		if (IS_ENABLED(CONFIG_EVA)) {
--			if (uaccess_kernel())
--				StoreW(addr, value, res);
--			else
--				StoreWE(addr, value, res);
--		} else {
-+		if (IS_ENABLED(CONFIG_EVA) && user)
-+			StoreWE(addr, value, res);
-+		else
- 			StoreW(addr, value, res);
--		}
- 
- 		if (res)
- 			goto fault;
-@@ -418,7 +376,7 @@ static void emulate_load_store_insn(struct pt_regs *regs,
- 		 * would blow up, so for now we don't handle unaligned 64-bit
- 		 * instructions on 32-bit kernels.
- 		 */
--		if (!access_ok(addr, 8))
-+		if (user && !access_ok(addr, 8))
- 			goto sigbus;
- 
- 		compute_return_epc(regs);
-@@ -626,6 +584,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 	unsigned long origpc, contpc;
- 	union mips_instruction insn;
- 	struct mm_decoded_insn mminsn;
-+	bool user = user_mode(regs);
- 
- 	origpc = regs->cp0_epc;
- 	orig31 = regs->regs[31];
-@@ -689,7 +648,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 			if (reg == 31)
- 				goto sigbus;
- 
--			if (!access_ok(addr, 8))
-+			if (user && !access_ok(addr, 8))
- 				goto sigbus;
- 
- 			LoadW(addr, value, res);
-@@ -708,7 +667,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 			if (reg == 31)
- 				goto sigbus;
- 
--			if (!access_ok(addr, 8))
-+			if (user && !access_ok(addr, 8))
- 				goto sigbus;
- 
- 			value = regs->regs[reg];
-@@ -728,7 +687,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 			if (reg == 31)
- 				goto sigbus;
- 
--			if (!access_ok(addr, 16))
-+			if (user && !access_ok(addr, 16))
- 				goto sigbus;
- 
- 			LoadDW(addr, value, res);
-@@ -751,7 +710,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 			if (reg == 31)
- 				goto sigbus;
- 
--			if (!access_ok(addr, 16))
-+			if (user && !access_ok(addr, 16))
- 				goto sigbus;
- 
- 			value = regs->regs[reg];
-@@ -774,10 +733,10 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 			if ((rvar > 9) || !reg)
- 				goto sigill;
- 			if (reg & 0x10) {
--				if (!access_ok(addr, 4 * (rvar + 1)))
-+				if (user && !access_ok(addr, 4 * (rvar + 1)))
- 					goto sigbus;
- 			} else {
--				if (!access_ok(addr, 4 * rvar))
-+				if (user && !access_ok(addr, 4 * rvar))
- 					goto sigbus;
- 			}
- 			if (rvar == 9)
-@@ -810,10 +769,10 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 			if ((rvar > 9) || !reg)
- 				goto sigill;
- 			if (reg & 0x10) {
--				if (!access_ok(addr, 4 * (rvar + 1)))
-+				if (user && !access_ok(addr, 4 * (rvar + 1)))
- 					goto sigbus;
- 			} else {
--				if (!access_ok(addr, 4 * rvar))
-+				if (user && !access_ok(addr, 4 * rvar))
- 					goto sigbus;
- 			}
- 			if (rvar == 9)
-@@ -847,10 +806,10 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 			if ((rvar > 9) || !reg)
- 				goto sigill;
- 			if (reg & 0x10) {
--				if (!access_ok(addr, 8 * (rvar + 1)))
-+				if (user && !access_ok(addr, 8 * (rvar + 1)))
- 					goto sigbus;
- 			} else {
--				if (!access_ok(addr, 8 * rvar))
-+				if (user && !access_ok(addr, 8 * rvar))
- 					goto sigbus;
- 			}
- 			if (rvar == 9)
-@@ -888,10 +847,10 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 			if ((rvar > 9) || !reg)
- 				goto sigill;
- 			if (reg & 0x10) {
--				if (!access_ok(addr, 8 * (rvar + 1)))
-+				if (user && !access_ok(addr, 8 * (rvar + 1)))
- 					goto sigbus;
- 			} else {
--				if (!access_ok(addr, 8 * rvar))
-+				if (user && !access_ok(addr, 8 * rvar))
- 					goto sigbus;
- 			}
- 			if (rvar == 9)
-@@ -1010,7 +969,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 		case mm_lwm16_op:
- 			reg = insn.mm16_m_format.rlist;
- 			rvar = reg + 1;
--			if (!access_ok(addr, 4 * rvar))
-+			if (user && !access_ok(addr, 4 * rvar))
- 				goto sigbus;
- 
- 			for (i = 16; rvar; rvar--, i++) {
-@@ -1030,7 +989,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 		case mm_swm16_op:
- 			reg = insn.mm16_m_format.rlist;
- 			rvar = reg + 1;
--			if (!access_ok(addr, 4 * rvar))
-+			if (user && !access_ok(addr, 4 * rvar))
- 				goto sigbus;
- 
- 			for (i = 16; rvar; rvar--, i++) {
-@@ -1084,7 +1043,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 	}
- 
- loadHW:
--	if (!access_ok(addr, 2))
-+	if (user && !access_ok(addr, 2))
- 		goto sigbus;
- 
- 	LoadHW(addr, value, res);
-@@ -1094,7 +1053,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 	goto success;
- 
- loadHWU:
--	if (!access_ok(addr, 2))
-+	if (user && !access_ok(addr, 2))
- 		goto sigbus;
- 
- 	LoadHWU(addr, value, res);
-@@ -1104,7 +1063,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 	goto success;
- 
- loadW:
--	if (!access_ok(addr, 4))
-+	if (user && !access_ok(addr, 4))
- 		goto sigbus;
- 
- 	LoadW(addr, value, res);
-@@ -1122,7 +1081,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 	 * would blow up, so for now we don't handle unaligned 64-bit
- 	 * instructions on 32-bit kernels.
- 	 */
--	if (!access_ok(addr, 4))
-+	if (user && !access_ok(addr, 4))
- 		goto sigbus;
- 
- 	LoadWU(addr, value, res);
-@@ -1144,7 +1103,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 	 * would blow up, so for now we don't handle unaligned 64-bit
- 	 * instructions on 32-bit kernels.
- 	 */
--	if (!access_ok(addr, 8))
-+	if (user && !access_ok(addr, 8))
- 		goto sigbus;
- 
- 	LoadDW(addr, value, res);
-@@ -1158,7 +1117,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 	goto sigill;
- 
- storeHW:
--	if (!access_ok(addr, 2))
-+	if (user && !access_ok(addr, 2))
- 		goto sigbus;
- 
- 	value = regs->regs[reg];
-@@ -1168,7 +1127,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 	goto success;
- 
- storeW:
--	if (!access_ok(addr, 4))
-+	if (user && !access_ok(addr, 4))
- 		goto sigbus;
- 
- 	value = regs->regs[reg];
-@@ -1186,7 +1145,7 @@ static void emulate_load_store_microMIPS(struct pt_regs *regs,
- 	 * would blow up, so for now we don't handle unaligned 64-bit
- 	 * instructions on 32-bit kernels.
- 	 */
--	if (!access_ok(addr, 8))
-+	if (user && !access_ok(addr, 8))
- 		goto sigbus;
- 
- 	value = regs->regs[reg];
-@@ -1243,6 +1202,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- 	union mips16e_instruction mips16inst, oldinst;
- 	unsigned int opcode;
- 	int extended = 0;
-+	bool user = user_mode(regs);
- 
- 	origpc = regs->cp0_epc;
- 	orig31 = regs->regs[31];
-@@ -1344,7 +1304,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- 		goto sigbus;
- 
- 	case MIPS16e_lh_op:
--		if (!access_ok(addr, 2))
-+		if (user && !access_ok(addr, 2))
- 			goto sigbus;
- 
- 		LoadHW(addr, value, res);
-@@ -1355,7 +1315,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- 		break;
- 
- 	case MIPS16e_lhu_op:
--		if (!access_ok(addr, 2))
-+		if (user && !access_ok(addr, 2))
- 			goto sigbus;
- 
- 		LoadHWU(addr, value, res);
-@@ -1368,7 +1328,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- 	case MIPS16e_lw_op:
- 	case MIPS16e_lwpc_op:
- 	case MIPS16e_lwsp_op:
--		if (!access_ok(addr, 4))
-+		if (user && !access_ok(addr, 4))
- 			goto sigbus;
- 
- 		LoadW(addr, value, res);
-@@ -1387,7 +1347,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- 		 * would blow up, so for now we don't handle unaligned 64-bit
- 		 * instructions on 32-bit kernels.
- 		 */
--		if (!access_ok(addr, 4))
-+		if (user && !access_ok(addr, 4))
- 			goto sigbus;
- 
- 		LoadWU(addr, value, res);
-@@ -1411,7 +1371,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- 		 * would blow up, so for now we don't handle unaligned 64-bit
- 		 * instructions on 32-bit kernels.
- 		 */
--		if (!access_ok(addr, 8))
-+		if (user && !access_ok(addr, 8))
- 			goto sigbus;
- 
- 		LoadDW(addr, value, res);
-@@ -1426,7 +1386,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- 		goto sigill;
- 
- 	case MIPS16e_sh_op:
--		if (!access_ok(addr, 2))
-+		if (user && !access_ok(addr, 2))
- 			goto sigbus;
- 
- 		MIPS16e_compute_return_epc(regs, &oldinst);
-@@ -1439,7 +1399,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- 	case MIPS16e_sw_op:
- 	case MIPS16e_swsp_op:
- 	case MIPS16e_i8_op:	/* actually - MIPS16e_swrasp_func */
--		if (!access_ok(addr, 4))
-+		if (user && !access_ok(addr, 4))
- 			goto sigbus;
- 
- 		MIPS16e_compute_return_epc(regs, &oldinst);
-@@ -1459,7 +1419,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- 		 * would blow up, so for now we don't handle unaligned 64-bit
- 		 * instructions on 32-bit kernels.
- 		 */
--		if (!access_ok(addr, 8))
-+		if (user && !access_ok(addr, 8))
- 			goto sigbus;
- 
- 		MIPS16e_compute_return_epc(regs, &oldinst);
-@@ -1516,7 +1476,6 @@ asmlinkage void do_ade(struct pt_regs *regs)
+ static inline unsigned long
+-raw_copy_to_user(void __user *to, const void *from, unsigned long n)
++raw_copy_from_user(void *to, const void __user *from, unsigned long n)
  {
- 	enum ctx_state prev_state;
- 	unsigned int __user *pc;
--	mm_segment_t seg;
+-	if (eva_kernel_access())
+-		return __invoke_copy_to_kernel(to, from, n);
+-	else
+-		return __invoke_copy_to_user(to, from, n);
++	register void *__cu_to_r __asm__("$4");
++	register const void __user *__cu_from_r __asm__("$5");
++	register long __cu_len_r __asm__("$6");
++
++	__cu_to_r = to;
++	__cu_from_r = from;
++	__cu_len_r = n;
++
++	__asm__ __volatile__(
++		".set\tnoreorder\n\t"
++		__MODULE_JAL(__raw_copy_from_user)
++		".set\tnoat\n\t"
++		__UA_ADDU "\t$1, %1, %2\n\t"
++		".set\tat\n\t"
++		".set\treorder"
++		: "+r" (__cu_to_r), "+r" (__cu_from_r), "+r" (__cu_len_r)
++		:
++		: "$8", "$9", "$10", "$11", "$12", "$14", "$15", "$24", "$31",
++		  DADDI_SCRATCH, "memory");
++
++	return __cu_len_r;
+ }
  
- 	prev_state = exception_enter();
- 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS,
-@@ -1551,24 +1510,14 @@ asmlinkage void do_ade(struct pt_regs *regs)
- 			show_registers(regs);
+ static inline unsigned long
+-raw_copy_from_user(void *to, const void __user *from, unsigned long n)
++raw_copy_to_user(void __user *to, const void *from, unsigned long n)
+ {
+-	if (eva_kernel_access())
+-		return __invoke_copy_from_kernel(to, from, n);
+-	else
+-		return __invoke_copy_from_user(to, from, n);
++	register void __user *__cu_to_r __asm__("$4");
++	register const void *__cu_from_r __asm__("$5");
++	register long __cu_len_r __asm__("$6");
++
++	__cu_to_r = (to);
++	__cu_from_r = (from);
++	__cu_len_r = (n);
++
++	__asm__ __volatile__(
++		__MODULE_JAL(__raw_copy_to_user)
++		: "+r" (__cu_to_r), "+r" (__cu_from_r), "+r" (__cu_len_r)
++		:
++		: "$8", "$9", "$10", "$11", "$12", "$14", "$15", "$24", "$31",
++		  DADDI_SCRATCH, "memory");
++
++	return __cu_len_r;
+ }
  
- 		if (cpu_has_mmips) {
--			seg = get_fs();
--			if (!user_mode(regs))
--				set_fs(KERNEL_DS);
- 			emulate_load_store_microMIPS(regs,
- 				(void __user *)regs->cp0_badvaddr);
--			set_fs(seg);
+ #define INLINE_COPY_FROM_USER
+ #define INLINE_COPY_TO_USER
+ 
+ static inline unsigned long
+-raw_copy_in_user(void __user*to, const void __user *from, unsigned long n)
++raw_copy_in_user(void __user *to, const void __user *from, unsigned long n)
+ {
+-	if (eva_kernel_access())
+-		return ___invoke_copy_in_kernel(to, from, n);
+-	else
+-		return ___invoke_copy_in_user(to, from,	n);
++	register void __user *__cu_to_r __asm__("$4");
++	register const void __user *__cu_from_r __asm__("$5");
++	register long __cu_len_r __asm__("$6");
++
++	__cu_to_r = to;
++	__cu_from_r = from;
++	__cu_len_r = n;
++
++	__asm__ __volatile__(
++		".set\tnoreorder\n\t"
++		__MODULE_JAL(__raw_copy_in_user)
++		".set\tnoat\n\t"
++		__UA_ADDU "\t$1, %1, %2\n\t"
++		".set\tat\n\t"
++		".set\treorder"
++		: "+r" (__cu_to_r), "+r" (__cu_from_r), "+r" (__cu_len_r)
++		:
++		: "$8", "$9", "$10", "$11", "$12", "$14", "$15", "$24", "$31",
++		  DADDI_SCRATCH, "memory");
++	return __cu_len_r;
+ }
+ 
+-extern __kernel_size_t __bzero_kernel(void __user *addr, __kernel_size_t size);
+ extern __kernel_size_t __bzero(void __user *addr, __kernel_size_t size);
+ 
+ /*
+@@ -672,28 +569,16 @@ __clear_user(void __user *addr, __kernel_size_t size)
+ #define bzero_clobbers "$4", "$5", "$6", __UA_t0, __UA_t1, "$31"
+ #endif /* CONFIG_CPU_MICROMIPS */
+ 
+-	if (eva_kernel_access()) {
+-		__asm__ __volatile__(
+-			"move\t$4, %1\n\t"
+-			"move\t$5, $0\n\t"
+-			"move\t$6, %2\n\t"
+-			__MODULE_JAL(__bzero_kernel)
+-			"move\t%0, $6"
+-			: "=r" (res)
+-			: "r" (addr), "r" (size)
+-			: bzero_clobbers);
+-	} else {
+-		might_fault();
+-		__asm__ __volatile__(
+-			"move\t$4, %1\n\t"
+-			"move\t$5, $0\n\t"
+-			"move\t$6, %2\n\t"
+-			__MODULE_JAL(__bzero)
+-			"move\t%0, $6"
+-			: "=r" (res)
+-			: "r" (addr), "r" (size)
+-			: bzero_clobbers);
+-	}
++	might_fault();
++	__asm__ __volatile__(
++		"move\t$4, %1\n\t"
++		"move\t$5, $0\n\t"
++		"move\t$6, %2\n\t"
++		__MODULE_JAL(__bzero)
++		"move\t%0, $6"
++		: "=r" (res)
++		: "r" (addr), "r" (size)
++		: bzero_clobbers);
+ 
+ 	return res;
+ }
+@@ -707,7 +592,6 @@ __clear_user(void __user *addr, __kernel_size_t size)
+ 	__cl_size;							\
+ })
+ 
+-extern long __strncpy_from_kernel_asm(char *__to, const char __user *__from, long __len);
+ extern long __strncpy_from_user_asm(char *__to, const char __user *__from, long __len);
+ 
+ /*
+@@ -733,33 +617,23 @@ strncpy_from_user(char *__to, const char __user *__from, long __len)
+ {
+ 	long res;
+ 
+-	if (eva_kernel_access()) {
+-		__asm__ __volatile__(
+-			"move\t$4, %1\n\t"
+-			"move\t$5, %2\n\t"
+-			"move\t$6, %3\n\t"
+-			__MODULE_JAL(__strncpy_from_kernel_asm)
+-			"move\t%0, $2"
+-			: "=r" (res)
+-			: "r" (__to), "r" (__from), "r" (__len)
+-			: "$2", "$3", "$4", "$5", "$6", __UA_t0, "$31", "memory");
+-	} else {
+-		might_fault();
+-		__asm__ __volatile__(
+-			"move\t$4, %1\n\t"
+-			"move\t$5, %2\n\t"
+-			"move\t$6, %3\n\t"
+-			__MODULE_JAL(__strncpy_from_user_asm)
+-			"move\t%0, $2"
+-			: "=r" (res)
+-			: "r" (__to), "r" (__from), "r" (__len)
+-			: "$2", "$3", "$4", "$5", "$6", __UA_t0, "$31", "memory");
+-	}
++	if (!access_ok(__from, __len))
++		return -EFAULT;
++
++	might_fault();
++	__asm__ __volatile__(
++		"move\t$4, %1\n\t"
++		"move\t$5, %2\n\t"
++		"move\t$6, %3\n\t"
++		__MODULE_JAL(__strncpy_from_user_asm)
++		"move\t%0, $2"
++		: "=r" (res)
++		: "r" (__to), "r" (__from), "r" (__len)
++		: "$2", "$3", "$4", "$5", "$6", __UA_t0, "$31", "memory");
+ 
+ 	return res;
+ }
+ 
+-extern long __strnlen_kernel_asm(const char __user *s, long n);
+ extern long __strnlen_user_asm(const char __user *s, long n);
+ 
+ /*
+@@ -779,26 +653,18 @@ static inline long strnlen_user(const char __user *s, long n)
+ {
+ 	long res;
+ 
++	if (!access_ok(s, n))
++		return -0;
++
+ 	might_fault();
+-	if (eva_kernel_access()) {
+-		__asm__ __volatile__(
+-			"move\t$4, %1\n\t"
+-			"move\t$5, %2\n\t"
+-			__MODULE_JAL(__strnlen_kernel_asm)
+-			"move\t%0, $2"
+-			: "=r" (res)
+-			: "r" (s), "r" (n)
+-			: "$2", "$4", "$5", __UA_t0, "$31");
+-	} else {
+-		__asm__ __volatile__(
+-			"move\t$4, %1\n\t"
+-			"move\t$5, %2\n\t"
+-			__MODULE_JAL(__strnlen_user_asm)
+-			"move\t%0, $2"
+-			: "=r" (res)
+-			: "r" (s), "r" (n)
+-			: "$2", "$4", "$5", __UA_t0, "$31");
+-	}
++	__asm__ __volatile__(
++		"move\t$4, %1\n\t"
++		"move\t$5, %2\n\t"
++		__MODULE_JAL(__strnlen_user_asm)
++		"move\t%0, $2"
++		: "=r" (res)
++		: "r" (s), "r" (n)
++		: "$2", "$4", "$5", __UA_t0, "$31");
+ 
+ 	return res;
+ }
+diff --git a/arch/mips/kernel/asm-offsets.c b/arch/mips/kernel/asm-offsets.c
+index aebfda81120a..5735b2cd6f2a 100644
+--- a/arch/mips/kernel/asm-offsets.c
++++ b/arch/mips/kernel/asm-offsets.c
+@@ -98,7 +98,6 @@ void output_thread_info_defines(void)
+ 	OFFSET(TI_TP_VALUE, thread_info, tp_value);
+ 	OFFSET(TI_CPU, thread_info, cpu);
+ 	OFFSET(TI_PRE_COUNT, thread_info, preempt_count);
+-	OFFSET(TI_ADDR_LIMIT, thread_info, addr_limit);
+ 	OFFSET(TI_REGS, thread_info, regs);
+ 	DEFINE(_THREAD_SIZE, THREAD_SIZE);
+ 	DEFINE(_THREAD_MASK, THREAD_MASK);
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index 7efa0d1a4c2b..bff080db0294 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -124,7 +124,6 @@ int copy_thread(unsigned long clone_flags, unsigned long usp,
+ 		/* kernel thread */
+ 		unsigned long status = p->thread.cp0_status;
+ 		memset(childregs, 0, sizeof(struct pt_regs));
+-		ti->addr_limit = KERNEL_DS;
+ 		p->thread.reg16 = usp; /* fn */
+ 		p->thread.reg17 = kthread_arg;
+ 		p->thread.reg29 = childksp;
+@@ -145,7 +144,6 @@ int copy_thread(unsigned long clone_flags, unsigned long usp,
+ 	childregs->regs[2] = 0; /* Child gets zero as return value */
+ 	if (usp)
+ 		childregs->regs[29] = usp;
+-	ti->addr_limit = USER_DS;
+ 
+ 	p->thread.reg29 = (unsigned long) childregs;
+ 	p->thread.reg31 = (unsigned long) ret_from_fork;
+diff --git a/arch/mips/kernel/scall32-o32.S b/arch/mips/kernel/scall32-o32.S
+index 84e8624e83a2..b1b2e106f711 100644
+--- a/arch/mips/kernel/scall32-o32.S
++++ b/arch/mips/kernel/scall32-o32.S
+@@ -48,10 +48,8 @@ NESTED(handle_sys, PT_SIZE, sp)
+ 	 * We intentionally keep the kernel stack a little below the top of
+ 	 * userspace so we don't have to do a slower byte accurate check here.
+ 	 */
+-	lw	t5, TI_ADDR_LIMIT($28)
+ 	addu	t4, t0, 32
+-	and	t5, t4
+-	bltz	t5, bad_stack		# -> sp is bad
++	bltz	t4, bad_stack		# -> sp is bad
+ 
+ 	/*
+ 	 * Ok, copy the args from the luser stack to the kernel stack.
+diff --git a/arch/mips/lib/memcpy.S b/arch/mips/lib/memcpy.S
+index 88065ee433cd..e19fb98b5d38 100644
+--- a/arch/mips/lib/memcpy.S
++++ b/arch/mips/lib/memcpy.S
+@@ -661,8 +661,14 @@ LEAF(memcpy)					/* a0=dst a1=src a2=len */
+ EXPORT_SYMBOL(memcpy)
+ 	move	v0, dst				/* return value */
+ .L__memcpy:
+-FEXPORT(__copy_user)
+-EXPORT_SYMBOL(__copy_user)
++#ifndef CONFIG_EVA
++FEXPORT(__raw_copy_from_user)
++EXPORT_SYMBOL(__raw_copy_from_user)
++FEXPORT(__raw_copy_to_user)
++EXPORT_SYMBOL(__raw_copy_to_user)
++FEXPORT(__raw_copy_in_user)
++EXPORT_SYMBOL(__raw_copy_in_user)
++#endif
+ 	/* Legacy Mode, user <-> user */
+ 	__BUILD_COPY_USER LEGACY_MODE USEROP USEROP
+ 
+@@ -681,10 +687,10 @@ EXPORT_SYMBOL(__copy_user)
+  * __copy_from_user (EVA)
+  */
+ 
+-LEAF(__copy_from_user_eva)
+-EXPORT_SYMBOL(__copy_from_user_eva)
++LEAF(__raw_copy_from_user)
++EXPORT_SYMBOL(__raw_copy_from_user)
+ 	__BUILD_COPY_USER EVA_MODE USEROP KERNELOP
+-END(__copy_from_user_eva)
++END(__raw_copy_from_user)
+ 
+ 
+ 
+@@ -692,18 +698,18 @@ END(__copy_from_user_eva)
+  * __copy_to_user (EVA)
+  */
+ 
+-LEAF(__copy_to_user_eva)
+-EXPORT_SYMBOL(__copy_to_user_eva)
++LEAF(__raw_copy_to_user)
++EXPORT_SYMBOL(__raw_copy_to_user)
+ __BUILD_COPY_USER EVA_MODE KERNELOP USEROP
+-END(__copy_to_user_eva)
++END(__raw_copy_to_user)
+ 
+ /*
+  * __copy_in_user (EVA)
+  */
+ 
+-LEAF(__copy_in_user_eva)
+-EXPORT_SYMBOL(__copy_in_user_eva)
++LEAF(__raw_copy_in_user)
++EXPORT_SYMBOL(__raw_copy_in_user)
+ __BUILD_COPY_USER EVA_MODE USEROP USEROP
+-END(__copy_in_user_eva)
++END(__raw_copy_in_user)
+ 
+ #endif
+diff --git a/arch/mips/lib/memset.S b/arch/mips/lib/memset.S
+index d5449e8a3dfc..b0baa3c79fad 100644
+--- a/arch/mips/lib/memset.S
++++ b/arch/mips/lib/memset.S
+@@ -314,9 +314,6 @@ EXPORT_SYMBOL(memset)
+ #ifndef CONFIG_EVA
+ FEXPORT(__bzero)
+ EXPORT_SYMBOL(__bzero)
+-#else
+-FEXPORT(__bzero_kernel)
+-EXPORT_SYMBOL(__bzero_kernel)
+ #endif
+ 	__BUILD_BZERO LEGACY_MODE
+ 
+diff --git a/arch/mips/lib/strncpy_user.S b/arch/mips/lib/strncpy_user.S
+index acdff66bd5d2..556acf684d7b 100644
+--- a/arch/mips/lib/strncpy_user.S
++++ b/arch/mips/lib/strncpy_user.S
+@@ -29,19 +29,17 @@
+  * it happens at most some bytes of the exceptions handlers will be copied.
+  */
+ 
+-	.macro __BUILD_STRNCPY_ASM func
+-LEAF(__strncpy_from_\func\()_asm)
+-	LONG_L		v0, TI_ADDR_LIMIT($28)	# pointer ok?
+-	and		v0, a1
+-	bnez		v0, .Lfault\@
 -
- 			return;
- 		}
++LEAF(__strncpy_from_user_asm)
+ 	move		t0, zero
+ 	move		v1, a1
+-.ifeqs "\func","kernel"
+-1:	EX(lbu, v0, (v1), .Lfault\@)
+-.else
+-1:	EX(lbue, v0, (v1), .Lfault\@)
+-.endif
++#ifdef CONFIG_EVA
++	.set push
++	.set eva
++1:	EX(lbue, v0, (v1), .Lfault)
++	.set pop
++#else
++1:	EX(lbu, v0, (v1), .Lfault)
++#endif
+ 	PTR_ADDIU	v1, 1
+ 	R10KCBARRIER(0(ra))
+ 	sb		v0, (a0)
+@@ -51,35 +49,17 @@ LEAF(__strncpy_from_\func\()_asm)
+ 	bne		t0, a2, 1b
+ 2:	PTR_ADDU	v0, a1, t0
+ 	xor		v0, a1
+-	bltz		v0, .Lfault\@
++	bltz		v0, .Lfault
+ 	move		v0, t0
+ 	jr		ra			# return n
+-	END(__strncpy_from_\func\()_asm)
++	END(__strncpy_from_user_asm)
  
- 		if (cpu_has_mips16) {
--			seg = get_fs();
--			if (!user_mode(regs))
--				set_fs(KERNEL_DS);
- 			emulate_load_store_MIPS16e(regs,
- 				(void __user *)regs->cp0_badvaddr);
--			set_fs(seg);
+-.Lfault\@:
++.Lfault:
+ 	li		v0, -EFAULT
+ 	jr		ra
+ 
+ 	.section	__ex_table,"a"
+-	PTR		1b, .Lfault\@
++	PTR		1b, .Lfault
+ 	.previous
+ 
+-	.endm
 -
- 			return;
- 		}
+-#ifndef CONFIG_EVA
+-	/* Set aliases */
+-	.global __strncpy_from_user_asm
+-	.set __strncpy_from_user_asm, __strncpy_from_kernel_asm
+-EXPORT_SYMBOL(__strncpy_from_user_asm)
+-#endif
+-
+-__BUILD_STRNCPY_ASM kernel
+-EXPORT_SYMBOL(__strncpy_from_kernel_asm)
+-
+-#ifdef CONFIG_EVA
+-	.set push
+-	.set eva
+-__BUILD_STRNCPY_ASM user
+-	.set pop
+-EXPORT_SYMBOL(__strncpy_from_user_asm)
+-#endif
++	EXPORT_SYMBOL(__strncpy_from_user_asm)
+diff --git a/arch/mips/lib/strnlen_user.S b/arch/mips/lib/strnlen_user.S
+index e1bacf5a3abe..92b63f20ec05 100644
+--- a/arch/mips/lib/strnlen_user.S
++++ b/arch/mips/lib/strnlen_user.S
+@@ -26,12 +26,7 @@
+  *	 bytes.	 There's nothing secret there.	On 64-bit accessing beyond
+  *	 the maximum is a tad hairier ...
+  */
+-	.macro __BUILD_STRNLEN_ASM func
+-LEAF(__strnlen_\func\()_asm)
+-	LONG_L		v0, TI_ADDR_LIMIT($28)	# pointer ok?
+-	and		v0, a0
+-	bnez		v0, .Lfault\@
+-
++LEAF(__strnlen_user_asm)
+ 	move		v0, a0
+ 	PTR_ADDU	a1, a0			# stop pointer
+ 1:
+@@ -40,11 +35,14 @@ LEAF(__strnlen_\func\()_asm)
+ 	li		AT, 1
+ #endif
+ 	beq		v0, a1, 1f		# limit reached?
+-.ifeqs "\func", "kernel"
+-	EX(lb, t0, (v0), .Lfault\@)
+-.else
+-	EX(lbe, t0, (v0), .Lfault\@)
+-.endif
++#ifdef CONFIG_EVA
++	.set push
++	.set eva
++	EX(lbe, t0, (v0), .Lfault)
++	.set pop
++#else
++	EX(lb, t0, (v0), .Lfault)
++#endif
+ 	.set		noreorder
+ 	bnez		t0, 1b
+ 1:
+@@ -57,28 +55,10 @@ LEAF(__strnlen_\func\()_asm)
+ 	.set		reorder
+ 	PTR_SUBU	v0, a0
+ 	jr		ra
+-	END(__strnlen_\func\()_asm)
++	END(__strnlen_user_asm)
  
-@@ -1579,11 +1528,7 @@ asmlinkage void do_ade(struct pt_regs *regs)
- 		show_registers(regs);
- 	pc = (unsigned int __user *)exception_epc(regs);
+-.Lfault\@:
++.Lfault:
+ 	move		v0, zero
+ 	jr		ra
+-	.endm
+-
+-#ifndef CONFIG_EVA
+-	/* Set aliases */
+-	.global __strnlen_user_asm
+-	.set __strnlen_user_asm, __strnlen_kernel_asm
+-EXPORT_SYMBOL(__strnlen_user_asm)
+-#endif
+-
+-__BUILD_STRNLEN_ASM kernel
+-EXPORT_SYMBOL(__strnlen_kernel_asm)
+-
+-#ifdef CONFIG_EVA
  
--	seg = get_fs();
--	if (!user_mode(regs))
--		set_fs(KERNEL_DS);
- 	emulate_load_store_insn(regs, (void __user *)regs->cp0_badvaddr, pc);
--	set_fs(seg);
- 
- 	return;
- 
+-	.set push
+-	.set eva
+-__BUILD_STRNLEN_ASM user
+-	.set pop
+-EXPORT_SYMBOL(__strnlen_user_asm)
+-#endif
++	EXPORT_SYMBOL(__strnlen_user_asm)
 -- 
 2.29.2
 
