@@ -2,224 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F71F352E86
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 19:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F9F353137
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Apr 2021 00:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234652AbhDBRhA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Apr 2021 13:37:00 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:57595 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234361AbhDBRg7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 2 Apr 2021 13:36:59 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4FBnKy4WWlz9v3qS;
-        Fri,  2 Apr 2021 19:36:54 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id jNzMP97qRsnX; Fri,  2 Apr 2021 19:36:54 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4FBnKy36stz9v3qR;
-        Fri,  2 Apr 2021 19:36:54 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 95F468BB77;
-        Fri,  2 Apr 2021 19:36:56 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id AmiRaLq6LC2w; Fri,  2 Apr 2021 19:36:56 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D381B8BB6F;
-        Fri,  2 Apr 2021 19:36:55 +0200 (CEST)
-Subject: Re: [PATCH 6/8] drivers: firmware: efi: libstub: enable generic
- commandline
-To:     Daniel Walker <danielwa@cisco.com>, Will Deacon <will@kernel.org>,
-        ob Herring <robh@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     xe-linux-external@cisco.com, Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <41021d66db2ab427c14255d2a24bb4517c8b58fd.1617126961.git.danielwa@cisco.com>
- <e5d98d566c38d6f8516b8d9d1fd603ec1f131037.1617126961.git.danielwa@cisco.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <72fbd293-1d83-a558-4d7a-141576371864@csgroup.eu>
-Date:   Fri, 2 Apr 2021 19:36:53 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
-MIME-Version: 1.0
-In-Reply-To: <e5d98d566c38d6f8516b8d9d1fd603ec1f131037.1617126961.git.danielwa@cisco.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+        id S234207AbhDBWoT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Apr 2021 18:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233665AbhDBWoQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Apr 2021 18:44:16 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376D4C0613E6
+        for <linux-mips@vger.kernel.org>; Fri,  2 Apr 2021 15:44:14 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 131so10814495ybp.16
+        for <linux-mips@vger.kernel.org>; Fri, 02 Apr 2021 15:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=irIfy9SDJhrUqaDE5ZN6w1PVEQaG5IbsoR3bDTu0jl4=;
+        b=oINmMmgMmoW/oyIcAkt+qHnpbVapAHO0BtBXorG5hnuc57P8B5zKJ7zBvQRstcANLe
+         g5n4RamBX4W+J0lM7mec5Dp6K9/13ohk6ZXhVLCPFigMH64M84+iBExfaQf9hmAzQUiH
+         bZY7VNQunFlIiJhRNQFdKfJbFOB0Z5ctHSCkx6H0TH0GoqpNH18oGgLzf1ZN153zxYSn
+         am8EWHgEB72tVSDwUwtxKSTamIpb7vD/rP8Huv89Yo4aqk6V3/tf8JCDm3oqnXL+hCsQ
+         02z6sYthCN9r+ritpQhL7w8X3C0Qqdj7AVHhTJsVELFIHoQjykQwl0v9h8r/bTrDVKjH
+         X99w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=irIfy9SDJhrUqaDE5ZN6w1PVEQaG5IbsoR3bDTu0jl4=;
+        b=VbNEBWS6Jfk1peat1fJJibZfk/QjY64UJjzvw3W+aLck5JmDnbgcnBc86l0B9n1bLY
+         wYhOzibFde+zjpRuHWcSqAIU7qBxS+FU86XiCNmvbYSAWh0vN3YBT8Ag6fi+jNMkNxjS
+         g1/ecAsbfLAU+v2YhHaXrdNBQ1Vp8YlY3pOe4ymgoiq5OYP1fZkNA5VKSi0njcnA1r1n
+         AJR3n0tVkTq3VDRuDxWSWkVZ061MM8h0DOYZQrb6oNQJpsdAzl6gMXCHn6ZIUF264WNo
+         Gzper8KfbE6xnCts3WAjLPkQ8fG9faZOuGa/Jd9UVBufPoICrZDFQHTiT18chPAPyaup
+         KXSA==
+X-Gm-Message-State: AOAM531x75THY+Y+C3Eiuy+lH5fx+DBEroQN8rLjOrsTyONCFuN20ll3
+        ZKGmDerMfPjG8MIR1WCqBvby6ldnpqNHCkDwVw==
+X-Google-Smtp-Source: ABdhPJyjY/9bgZ4cfSTi5H9NxDPqiTmNCSs6veZkAE2t6SvpxZwTxmf38XzA4gMlvXfjJgmYTh/5eLdnr+RrZ8+4Rw==
+X-Received: from jingzhangos.c.googlers.com ([fda3:e722:ac3:10:2b:ff92:c0a8:513])
+ (user=jingzhangos job=sendgmr) by 2002:a25:4dc4:: with SMTP id
+ a187mr21783146ybb.78.1617403453215; Fri, 02 Apr 2021 15:44:13 -0700 (PDT)
+Date:   Fri,  2 Apr 2021 22:43:55 +0000
+Message-Id: <20210402224359.2297157-1-jingzhangos@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
+Subject: [PATCH 0/4] KVM statistics data fd-based binary interface
+From:   Jing Zhang <jingzhangos@google.com>
+To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     Jing Zhang <jingzhangos@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+This patchset provides a file descriptor for every VM and VCPU to read
+KVM statistics data in binary format.
+It is meant to provide a lightweight, flexible, scalable and efficient
+lock-free solution for user space telemetry applications to pull the
+statistics data periodically for large scale systems. The pulling
+frequency could be as high as a few times per second.
+In this patchset, every statistics data are treated to have some
+attributes as below:
+  * architecture dependent or common
+  * VM statistics data or VCPU statistics data
+  * type: cumulative, instantaneous,
+  * unit: none for simple counter, nanosecond, microsecond,
+    millisecond, second, Byte, KiByte, MiByte, GiByte. Clock Cycles
+Since no lock/synchronization is used, the consistency between all
+the statistics data is not guaranteed. That means not all statistics
+data are read out at the exact same time, since the statistics date
+are still being updated by KVM subsystems while they are read out.
+
+Jing Zhang (4):
+  KVM: stats: Separate common stats from architecture specific ones
+  KVM: stats: Add fd-based API to read binary stats data
+  KVM: stats: Add documentation for statistics data binary interface
+  KVM: selftests: Add selftest for KVM statistics data binary interface
+
+ Documentation/virt/kvm/api.rst                | 169 ++++++++
+ arch/arm64/include/asm/kvm_host.h             |   9 +-
+ arch/arm64/kvm/guest.c                        |  42 +-
+ arch/mips/include/asm/kvm_host.h              |   9 +-
+ arch/mips/kvm/mips.c                          |  67 +++-
+ arch/powerpc/include/asm/kvm_host.h           |   9 +-
+ arch/powerpc/kvm/book3s.c                     |  68 +++-
+ arch/powerpc/kvm/book3s_hv.c                  |  12 +-
+ arch/powerpc/kvm/book3s_pr.c                  |   2 +-
+ arch/powerpc/kvm/book3s_pr_papr.c             |   2 +-
+ arch/powerpc/kvm/booke.c                      |  63 ++-
+ arch/s390/include/asm/kvm_host.h              |   9 +-
+ arch/s390/kvm/kvm-s390.c                      | 133 ++++++-
+ arch/x86/include/asm/kvm_host.h               |   9 +-
+ arch/x86/kvm/x86.c                            |  71 +++-
+ include/linux/kvm_host.h                      | 132 ++++++-
+ include/linux/kvm_types.h                     |  12 +
+ include/uapi/linux/kvm.h                      |  48 +++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   3 +
+ .../selftests/kvm/kvm_bin_form_stats.c        | 370 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  11 +
+ virt/kvm/kvm_main.c                           | 237 ++++++++++-
+ 24 files changed, 1401 insertions(+), 90 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
 
 
-Le 30/03/2021 à 19:57, Daniel Walker a écrit :
-> This adds code to handle the generic command line changes.
-> The efi code appears that it doesn't benefit as much from this design
-> as it could.
-> 
-> For example, if you had a prepend command line with "nokaslr" then
-> you might be helpful to re-enable it in the boot loader or dts,
-> but there appears to be no way to re-enable kaslr or some of the
-> other options.
-> 
-> Cc: xe-linux-external@cisco.com
-> Signed-off-by: Daniel Walker <danielwa@cisco.com>
-> ---
->   .../firmware/efi/libstub/efi-stub-helper.c    | 35 +++++++++++++++++++
->   drivers/firmware/efi/libstub/efi-stub.c       |  7 ++++
->   drivers/firmware/efi/libstub/efistub.h        |  1 +
->   drivers/firmware/efi/libstub/x86-stub.c       | 13 +++++--
->   4 files changed, 54 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
-> index aa8da0a49829..c155837cedc9 100644
-> --- a/drivers/firmware/efi/libstub/efi-stub-helper.c
-> +++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
-> @@ -13,6 +13,7 @@
->   #include <linux/efi.h>
->   #include <linux/kernel.h>
->   #include <linux/printk.h> /* For CONSOLE_LOGLEVEL_* */
-> +#include <linux/cmdline.h>
->   #include <asm/efi.h>
->   #include <asm/setup.h>
->   
-> @@ -172,6 +173,40 @@ int efi_printk(const char *fmt, ...)
->   	return printed;
->   }
->   
-> +/**
-> + * efi_handle_cmdline() - handle adding in building parts of the command line
-> + * @cmdline:	kernel command line
-> + *
-> + * Add in the generic parts of the commandline and start the parsing of the
-> + * command line.
-> + *
-> + * Return:	status code
-> + */
-> +efi_status_t efi_handle_cmdline(char const *cmdline)
-> +{
-> +	efi_status_t status;
-> +
-> +	status = efi_parse_options(CMDLINE_PREPEND);
-> +	if (status != EFI_SUCCESS) {
-> +		efi_err("Failed to parse options\n");
-> +		return status;
-> +	}
-> +
-> +	status = efi_parse_options(IS_ENABLED(CONFIG_CMDLINE_OVERRIDE) ? "" : cmdline);
-> +	if (status != EFI_SUCCESS) {
-> +		efi_err("Failed to parse options\n");
-> +		return status;
-> +	}
-> +
-> +	status = efi_parse_options(CMDLINE_APPEND);
-> +	if (status != EFI_SUCCESS) {
-> +		efi_err("Failed to parse options\n");
-> +		return status;
-> +	}
-> +
-> +	return EFI_SUCCESS;
-> +}
+base-commit: f96be2deac9bca3ef5a2b0b66b71fcef8bad586d
+-- 
+2.31.0.208.g409f899ff0-goog
 
-I think we can refactor to first build the final command line, then call efi_parse_options() only 
-once after that.
-
-The big advantage of GENERIC_CMDLINE should be to not address anymore CONFIG_CMDLINE_XXX options at 
-all outside of linux/cmdline.h
-
-> +
->   /**
->    * efi_parse_options() - Parse EFI command line options
->    * @cmdline:	kernel command line
-> diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
-> index 26e69788f27a..760480248adf 100644
-> --- a/drivers/firmware/efi/libstub/efi-stub.c
-> +++ b/drivers/firmware/efi/libstub/efi-stub.c
-> @@ -172,6 +172,12 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
->   		goto fail;
->   	}
->   
-> +#ifdef CONFIG_GENERIC_CMDLINE
-> +	status = efi_handle_cmdline(cmdline_ptr);
-> +	if (status != EFI_SUCCESS) {
-> +		goto fail_free_cmdline;
-> +	}
-> +#else
-
-Why an alternative ?
-
->   	if (IS_ENABLED(CONFIG_CMDLINE_EXTEND) ||
->   	    IS_ENABLED(CONFIG_CMDLINE_FORCE) ||
->   	    cmdline_size == 0) {
-> @@ -189,6 +195,7 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
->   			goto fail_free_cmdline;
->   		}
->   	}
-> +#endif
->   
->   	efi_info("Booting Linux Kernel...\n");
->   
-> diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-> index cde0a2ef507d..07c7f9fdfffc 100644
-> --- a/drivers/firmware/efi/libstub/efistub.h
-> +++ b/drivers/firmware/efi/libstub/efistub.h
-> @@ -800,6 +800,7 @@ efi_status_t efi_relocate_kernel(unsigned long *image_addr,
->   				 unsigned long alignment,
->   				 unsigned long min_addr);
->   
-> +efi_status_t efi_handle_cmdline(char const *cmdline);
->   efi_status_t efi_parse_options(char const *cmdline);
->   
->   void efi_parse_option_graphics(char *option);
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index f14c4ff5839f..30ad8fb7122d 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -673,6 +673,8 @@ unsigned long efi_main(efi_handle_t handle,
->   	unsigned long bzimage_addr = (unsigned long)startup_32;
->   	unsigned long buffer_start, buffer_end;
->   	struct setup_header *hdr = &boot_params->hdr;
-> +	unsigned long cmdline_paddr = ((u64)hdr->cmd_line_ptr |
-> +				       ((u64)boot_params->ext_cmd_line_ptr << 32));
->   	efi_status_t status;
->   
->   	efi_system_table = sys_table_arg;
-> @@ -735,6 +737,14 @@ unsigned long efi_main(efi_handle_t handle,
->   		image_offset = 0;
->   	}
->   
-> +#ifdef CONFIG_GENERIC_CMDLINE
-> +	status = efi_handle_cmdline((char *)cmdline_paddr);
-> +	if (status != EFI_SUCCESS) {
-> +		efi_err("Failed to parse options\n");
-> +		goto fail;
-> +	}
-> +#else /* CONFIG_GENERIC_CMDLINE */
-> +
->   #ifdef CONFIG_CMDLINE_BOOL
->   	status = efi_parse_options(CONFIG_CMDLINE);
->   	if (status != EFI_SUCCESS) {
-> @@ -743,8 +753,6 @@ unsigned long efi_main(efi_handle_t handle,
->   	}
->   #endif
->   	if (!IS_ENABLED(CONFIG_CMDLINE_OVERRIDE)) {
-> -		unsigned long cmdline_paddr = ((u64)hdr->cmd_line_ptr |
-> -					       ((u64)boot_params->ext_cmd_line_ptr << 32));
->   		status = efi_parse_options((char *)cmdline_paddr);
->   		if (status != EFI_SUCCESS) {
->   			efi_err("Failed to parse options\n");
-> @@ -752,6 +760,7 @@ unsigned long efi_main(efi_handle_t handle,
->   		}
->   	}
->   
-> +#endif
->   	/*
->   	 * At this point, an initrd may already have been loaded by the
->   	 * bootloader and passed via bootparams. We permit an initrd loaded
-> 
