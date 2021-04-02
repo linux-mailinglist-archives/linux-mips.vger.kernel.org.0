@@ -2,126 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0882B35205D
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Apr 2021 22:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3763524B8
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 02:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234377AbhDAUIS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Apr 2021 16:08:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52500 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234153AbhDAUIR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 1 Apr 2021 16:08:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 524B9610E9;
-        Thu,  1 Apr 2021 20:08:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617307697;
-        bh=leXRGFCaTe62iNXS9w44O42W8yxC/IB8Rcab5IVMEdo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZkxjcrpVIoR0UEZPAPwcCGRNCr9cnaA8ap9gvRp4jG0hf1ImuQrB2wy7jdHBNp4J8
-         +B6DTRenJaqRuVw182uynS3O32+RWy36NHQ4NVmOs0uERUsoS0z0YIuCVKtIezpQaf
-         ar8zPs7y24q5Srof2D/yE6kT+20NEcXp6C2mI5SQ7X6r3aN/FP+ATmxolsyxP5MpYT
-         7NCJo48UM5HYxI/NGZmIbO5BI7lz6QHAEg6D/9PyVuj/nEJF3OsBF99i626YiF29DE
-         grEk3QDd2ku4LB6wDx6iQIOep2wLfsf2NpExyi99i3NsqyYF/Nc2kd3WGauqNfXcpi
-         sqcEd4bpv2hVA==
-Received: by mail-ej1-f49.google.com with SMTP id ce10so4641863ejb.6;
-        Thu, 01 Apr 2021 13:08:17 -0700 (PDT)
-X-Gm-Message-State: AOAM530mt8jJuY2h1OQXS/Cq50IeumxeWjMXKWNjDm9mZD/pM+q5ikak
-        BR1xKz2jJIyC0TLWfyQd6OeCFf5wB8iVb9RYpw==
-X-Google-Smtp-Source: ABdhPJwo4ozd5r/I3vDcht4+RN+4+j5bUHW3XwFV21OlpcnhU71wdknH6GNYfELodycCl347pJJo+2xFYHlBdNJZ9TM=
-X-Received: by 2002:a17:906:5e01:: with SMTP id n1mr10940420eju.359.1617307695709;
- Thu, 01 Apr 2021 13:08:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210309000247.2989531-4-danielwa@cisco.com> <5f865584-09c9-d21f-ffb7-23cf07cf058e@csgroup.eu>
- <20210309212944.GR109100@zorba> <e4899874-1684-fa1b-443e-f4e478e05e31@csgroup.eu>
- <CAL_JsqKm76jRQYDcu3rGyUWKPLspoO=EZW_WFy=zAK+m_JYCTg@mail.gmail.com>
- <20fd7d44-8c39-48bc-25c3-990be9d9d911@csgroup.eu> <20210325195956.GM109100@zorba>
- <CAL_Jsq+10nucQSRkrTKe9BD5wBScqEb7-Rdg=9TsPiKuiuPG7w@mail.gmail.com>
- <20210330173254.GS109100@zorba> <CAL_JsqJKBeAgaHQJwOL9G2qLbQSh32L5LtN+cSUgn5sV_P8How@mail.gmail.com>
- <20210330233137.GB2469518@zorba>
-In-Reply-To: <20210330233137.GB2469518@zorba>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 1 Apr 2021 15:08:04 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL8bJrxnJgs4doQ0L7YTF0vrDZLOoPOBdJzwTgMhXm-dw@mail.gmail.com>
-Message-ID: <CAL_JsqL8bJrxnJgs4doQ0L7YTF0vrDZLOoPOBdJzwTgMhXm-dw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] powerpc: convert config files to generic cmdline
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Will Deacon <will@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        X86 ML <x86@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        xe-linux-external@cisco.com, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        id S231168AbhDBA5D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Apr 2021 20:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233258AbhDBA5C (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Apr 2021 20:57:02 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA7DC06178A
+        for <linux-mips@vger.kernel.org>; Thu,  1 Apr 2021 17:57:01 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id w5so1274720ybs.22
+        for <linux-mips@vger.kernel.org>; Thu, 01 Apr 2021 17:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=FViJNMuAQXVG92IcJ9ASyfw+gqYDqmookinTy4APMz8=;
+        b=tM5HW6/xk4O5sMn2fgKiWu76aEhiiETLruJpg/eDqJDR4WtSvS9+XoKICGLJgo/aR9
+         PHUygm3nt6Iyd9H+hRkE+aN2uWXSniHsrGAukhueCHEWKNiGLvDdvm/C35c51KL7qq/J
+         fgt3utJuyw2N+OiFjKc36bNdeTZMCG2OXJjHEkQxFIqyXipTvjAOsKRQR3H93WpjXiTJ
+         zZlKgCHu1/48AstcZ0TNb2v8J6l74NmyyCG68O3osE84/6JpVuFsdO2EgEGawRt1qn/R
+         MTRQMS94V9rHBAev+i0CHpGE75U1N9vbPoIhstygJ3ud1d//b6oFND6DleWTsUfEpKQo
+         REdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=FViJNMuAQXVG92IcJ9ASyfw+gqYDqmookinTy4APMz8=;
+        b=CAkpEPOqRYpiSXC1XJ27QwhqfjFuNf1xkbvU+WKTQzkz5Vqn76NiACcvE2AH29nKah
+         puMzeV9beXw3g4lRmH/z0fi9KxybHGMQ20oyNPNtsOou2CTgrwdHsJlI6lJzYe/f0fB2
+         CLewLDpnRpiuNPSqrN/fF81cmTgqDnyNYnrk+Q1pFY7dgyg8AuPsScjUB2wH8z4ogivW
+         KPLvlFTDK/3Qg0DdecVScrsKTeXHJBVVtmqifu8c7WYP2vXLSqZelYB2eXb2WoYTQ830
+         rZFT6vEoE8sldud960P8n2/V7k8o6+kLaS4Rb7lxLrJg0AIs2xPaz6+iuHzqMYSYn306
+         KxRQ==
+X-Gm-Message-State: AOAM532w9S9ezVzilKYcjuQ13ELJaiFFz08u/Nc8yD3+ynMazyteWrK5
+        WmJ8F/OgANdNGvxZ8gu12uTYexnKjis=
+X-Google-Smtp-Source: ABdhPJzX9kzo85wBh2DvMcR2Y9UxX/gVfIA/wY1qXyxNt7lm9J3jjA4HAyWrYbcDrQf6yDOm390BaT3pn8k=
+X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:f:10:c0b4:8b8:bb34:6a56])
+ (user=seanjc job=sendgmr) by 2002:a25:a187:: with SMTP id a7mr8464267ybi.377.1617325020964;
+ Thu, 01 Apr 2021 17:57:00 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu,  1 Apr 2021 17:56:48 -0700
+Message-Id: <20210402005658.3024832-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
+Subject: [PATCH v2 00/10] KVM: Consolidate and optimize MMU notifiers
+From:   Sean Christopherson <seanjc@google.com>
+To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 6:31 PM Daniel Walker <danielwa@cisco.com> wrote:
->
-> On Tue, Mar 30, 2021 at 03:13:04PM -0500, Rob Herring wrote:
-> > On Tue, Mar 30, 2021 at 12:33 PM Daniel Walker <danielwa@cisco.com> wrote:
-> > >
-> > > On Thu, Mar 25, 2021 at 05:29:44PM -0600, Rob Herring wrote:
-> > > > On Thu, Mar 25, 2021 at 2:00 PM Daniel Walker <danielwa@cisco.com> wrote:
-> > > > >
-> > > > > On Thu, Mar 25, 2021 at 01:03:55PM +0100, Christophe Leroy wrote:
-> > > > > >
-> > > > > > Ok, so you agree we don't need to provide two CMDLINE, one to be appended and one to be prepended.
-> > > > > >
-> > > > > > Let's only provide once CMDLINE as of today, and ask the user to select
-> > > > > > whether he wants it appended or prepended or replacee. Then no need to
-> > > > > > change all existing config to rename CONFIG_CMDLINE into either of the new
-> > > > > > ones.
-> > > > > >
-> > > > > > That's the main difference between my series and Daniel's series. So I'll
-> > > > > > finish taking Will's comment into account and we'll send out a v3 soon.
-> > > > >
-> > > > > It doesn't solve the needs of Cisco, I've stated many times your changes have
-> > > > > little value. Please stop submitting them.
-> > > >
-> > > > Can you please outline what those needs are which aren't met?
-> > >
-> > > append AND prepend at the same time on all architectures. Christophe doesn't
-> > > understand the need, and hence tries to minimize the feature set which is
-> > > incompatible with Cisco needs and all the other out of tree users.
-> >
-> > Okay, but that's never been a feature in upstream. For upstream, we
-> > refactor first and add features 2nd. In this case, the difference is
-> > largely the kconfig and it would be better to not change the options
-> > twice, but that's not a blocker for taking the refactoring. You won't
-> > find a maintainer that's going to take adding a feature over cleanups
-> > and unification.
->
-> It kind of is a feature in upstream, it's a matter of opinion. Some platform
-> used append and some use prepend, and it's likely because the maintainers needed
-> one or the other for development.
+The end goal of this series is to optimize the MMU notifiers to take
+mmu_lock if and only if the notification is relevant to KVM, i.e. the hva
+range overlaps a memslot.   Large VMs (hundreds of vCPUs) are very
+sensitive to mmu_lock being taken for write at inopportune times, and
+such VMs also tend to be "static", e.g. backed by HugeTLB with minimal
+page shenanigans.  The vast majority of notifications for these VMs will
+be spurious (for KVM), and eliding mmu_lock for spurious notifications
+avoids an otherwise unacceptable disruption to the guest.
 
-Which arch/platform upstream does both prepend and append at the same time?
+To get there without potentially degrading performance, e.g. due to
+multiple memslot lookups, especially on non-x86 where the use cases are
+largely unknown (from my perspective), first consolidate the MMU notifier
+logic by moving the hva->gfn lookups into common KVM.
 
-> I'm not sure why you think I can't add the features in one go. It would be
-> horrid to take Christophe's changes, then have to do basically all the same work
-> a second time which is what Christophe's changes would force me to do.
+Based on kvm/queue, commit 5f986f748438 ("KVM: x86: dump_vmcs should
+include the autoload/autostore MSR lists").
 
-I didn't say it couldn't be done. In fact, I said it would be better
-all at once: "it would be better to not change the options twice"
+Well tested on Intel and AMD.  Compile tested for arm64, MIPS, PPC,
+PPC e500, and s390.  Absolutely needs to be tested for real on non-x86,
+I give it even odds that I introduced an off-by-one bug somewhere.
 
-But both of you ignoring comments and continuing to post competing
-series is not going to get us there. TBC, I think Christophe's series
-is much closer to being in shape to merge upstream.
+v2:
+ - Drop the patches that have already been pushed to kvm/queue.
+ - Drop two selftest changes that had snuck in via "git commit -a".
+ - Add a patch to assert that mmu_notifier_count is elevated when
+   .change_pte() runs. [Paolo]
+ - Split out moving KVM_MMU_(UN)LOCK() to __kvm_handle_hva_range() to a
+   separate patch.  Opted not to squash it with the introduction of the
+   common hva walkers (patch 02), as that prevented sharing code between
+   the old and new APIs. [Paolo]
+ - Tweak the comment in kvm_vm_destroy() above the smashing of the new
+   slots lock. [Paolo]
+ - Make mmu_notifier_slots_lock unconditional to avoid #ifdefs. [Paolo]
 
-> Say for example I implement this change only on one architecture. In that case
-> the maintainer would be accepting a feature enhancement , but there would be no
-> stopping it. I shouldn't have to go two strokes on one architecture, but each
-> change I'm making is essentially a single architecture. They can go in all
-> together or one at a time.
+v1:
+ - https://lkml.kernel.org/r/20210326021957.1424875-1-seanjc@google.com
 
-Features do get implemented all the time on one arch. And then maybe a
-2nd and 3rd. At some point we decide no more copying, it needs to be
-common and refactored. We're at that point for cmdline handling IMO.
+Sean Christopherson (10):
+  KVM: Assert that notifier count is elevated in .change_pte()
+  KVM: Move x86's MMU notifier memslot walkers to generic code
+  KVM: arm64: Convert to the gfn-based MMU notifier callbacks
+  KVM: MIPS/MMU: Convert to the gfn-based MMU notifier callbacks
+  KVM: PPC: Convert to the gfn-based MMU notifier callbacks
+  KVM: Kill off the old hva-based MMU notifier callbacks
+  KVM: Move MMU notifier's mmu_lock acquisition into common helper
+  KVM: Take mmu_lock when handling MMU notifier iff the hva hits a
+    memslot
+  KVM: Don't take mmu_lock for range invalidation unless necessary
+  KVM: x86/mmu: Allow yielding during MMU notifier unmap/zap, if
+    possible
 
-Rob
+ arch/arm64/kvm/mmu.c                   | 117 +++------
+ arch/mips/kvm/mmu.c                    |  97 ++------
+ arch/powerpc/include/asm/kvm_book3s.h  |  12 +-
+ arch/powerpc/include/asm/kvm_ppc.h     |   9 +-
+ arch/powerpc/kvm/book3s.c              |  18 +-
+ arch/powerpc/kvm/book3s.h              |  10 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c    |  98 ++------
+ arch/powerpc/kvm/book3s_64_mmu_radix.c |  25 +-
+ arch/powerpc/kvm/book3s_hv.c           |  12 +-
+ arch/powerpc/kvm/book3s_pr.c           |  56 ++---
+ arch/powerpc/kvm/e500_mmu_host.c       |  27 +-
+ arch/x86/kvm/mmu/mmu.c                 | 127 ++++------
+ arch/x86/kvm/mmu/tdp_mmu.c             | 245 +++++++------------
+ arch/x86/kvm/mmu/tdp_mmu.h             |  14 +-
+ include/linux/kvm_host.h               |  22 +-
+ virt/kvm/kvm_main.c                    | 325 +++++++++++++++++++------
+ 16 files changed, 552 insertions(+), 662 deletions(-)
+
+-- 
+2.31.0.208.g409f899ff0-goog
+
