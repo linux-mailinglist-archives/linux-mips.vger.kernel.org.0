@@ -2,62 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D213B352A87
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 14:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D81352C02
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 18:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbhDBMRx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Apr 2021 08:17:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50581 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234448AbhDBMRw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Apr 2021 08:17:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617365870;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Muwx+qawsLcE0Xkj8kzlIVuDAwSyy9qsNyKVPtLvlps=;
-        b=HZSAyiwAUqB52KGI0S8JoX9rhjlNj2PlC8kb2tysRAKr2y5AEQ6DR2nMx+VwAPTfikc6hG
-        19ssD2UVmV1m8B0XoKnMpLw2KzRO0SHNZmBWTCtXa6G739mUWjyvV72CZv9V5BeLOiv1Ij
-        RCAPXJSxdHEHL70qBIry8+eXleMSFJE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-230-5RfQXgYyOTSVclXH7cofKA-1; Fri, 02 Apr 2021 08:17:49 -0400
-X-MC-Unique: 5RfQXgYyOTSVclXH7cofKA-1
-Received: by mail-wr1-f70.google.com with SMTP id x9so4246085wro.9
-        for <linux-mips@vger.kernel.org>; Fri, 02 Apr 2021 05:17:49 -0700 (PDT)
+        id S235122AbhDBO7Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Apr 2021 10:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234968AbhDBO7Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Apr 2021 10:59:24 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF35C0613E6
+        for <linux-mips@vger.kernel.org>; Fri,  2 Apr 2021 07:59:23 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id a12so3755383pfc.7
+        for <linux-mips@vger.kernel.org>; Fri, 02 Apr 2021 07:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hrWlBAMIox9uyp5vA/6pgwPUQG03jLxXChap4JWk798=;
+        b=Wis80br4QxI0udXSM5bgb12ub29OxkCYgsG+Q5MaHbKjRYNZTxX2dKGqJxK+5x27Ec
+         bCjK5MvvUurkyJh+2dVl5bUVlOF+S5kkzM86t1vFaJEMUN3T8Kr2U41JVg3ikRq9VsY9
+         bmvTxU20lmUiRhm6QGV5OSagHM6CMIS3zcbQPID23xudkFfFOfaNfDFrfAAV9MBGBCbG
+         4fo9i95YmINHH5yrkVF5nSKywYI/L+Mv9lKQ9OfuRtFbwYvD08rHo26eFSvgUFwVqUjF
+         9D9+2OjiT3WWi7P0x9fBHYTDN17PeeBVM5FGjv80+DwDvYvLLhKy7ATI6OvoR6zd0tW3
+         xYMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Muwx+qawsLcE0Xkj8kzlIVuDAwSyy9qsNyKVPtLvlps=;
-        b=cr4Mdbsy1Jh7PSzyhpLINDiN4WzubjM8BC2nJmxFVq9s3WDyWu31dGiULQbmrLG2Ci
-         uVURtMSfz4oT6x5LA/D15lcLAos+o7XlqPpEUwugZNtCrXykXS8IiK3pUMapAA6w20EY
-         Iwt/rj1Nkc3r0T+AuQIFYu+F1f9v6UzUOFNhkZjLQegTFsujLrwFPuWrkSaxbJfiEPCZ
-         T4j+pedkpfPFTR694P2xllvQNSoJRol4wAWqpYcHNhFD7wqwzQGZhASx+G6FtlEiAbNh
-         nPd4l10rj1YExkjFsY6+CS+wLsIHzLVrMOj4+4csryj1MMrPD61AA/dM3iNZUD+OBFGK
-         SVDQ==
-X-Gm-Message-State: AOAM530fu6AuXVDbRLsh0zCUrby4Fjw3uMcmapd6AkRh0iGfgAc9TlZF
-        zXUor620E/T2+MM5TEabD4GnQlUer3CoAmAN+Yx6E5EZz4WSfjdNqFFXOeDenyS29Yjj/tcibzm
-        JDcv5WEzFHDiML5dsqn3O9Q==
-X-Received: by 2002:a05:6000:362:: with SMTP id f2mr15172718wrf.141.1617365868288;
-        Fri, 02 Apr 2021 05:17:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzLaJxTI8QPBvKFmAdjnuuObyL8/ENWh8opXUP0PYyDWSCUQKuWQD6mlne9MO5n6MrTzGeeiQ==
-X-Received: by 2002:a05:6000:362:: with SMTP id f2mr15172680wrf.141.1617365868029;
-        Fri, 02 Apr 2021 05:17:48 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.gmail.com with ESMTPSA id n9sm14323662wrx.46.2021.04.02.05.17.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Apr 2021 05:17:47 -0700 (PDT)
-Subject: Re: [PATCH v2 00/10] KVM: Consolidate and optimize MMU notifiers
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hrWlBAMIox9uyp5vA/6pgwPUQG03jLxXChap4JWk798=;
+        b=D28gCS5X3eVOWaDBJYHhlK8uTYJD1xqG8QP9J25Fi9IeNs0gdurdwOv7Tx6MhwJSJQ
+         j00YXTxYb4HFU2UhkdW2nD0OOLMMAaNfP738bPO7EuJFd5ItoAFNOqbRqxA95TqS9Syy
+         MjNPkylDUGZGzrELzz1mesNXxB9PRuCQKxhyoPULdftcxlzmMHnWfTKik8SBDTLr2eoS
+         GCw/cOefcVIliI4GBaf7cy3ZsA3DOcF+r30XUCrE5w+HP10c46RCD3y3znb4+BNSDzhr
+         nOs9w1m+RF8HJOxZttaO+NZEvPUrhO1RnmGcc21D+8QaGXkV1YT0Yhto0dPB7IX+AQZx
+         Pedg==
+X-Gm-Message-State: AOAM5322eD+n1PqKKQ83rvJ6pPCpnG816wCgNrqoktkavGR7QVu3mjz4
+        ychiFt3WXtDeR0kp9seZ+i4FYA==
+X-Google-Smtp-Source: ABdhPJwt/NANo8uiyFDGCSZL9IUa09CiSHlR3SZWQT4n9NqXGj8DMBBrtVhreCbJVQp+DfbrA8SQSg==
+X-Received: by 2002:a62:7708:0:b029:1ee:f656:51d5 with SMTP id s8-20020a6277080000b02901eef65651d5mr12750775pfc.59.1617375562873;
+        Fri, 02 Apr 2021 07:59:22 -0700 (PDT)
+Received: from google.com (240.111.247.35.bc.googleusercontent.com. [35.247.111.240])
+        by smtp.gmail.com with ESMTPSA id b186sm8540014pfb.170.2021.04.02.07.59.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Apr 2021 07:59:22 -0700 (PDT)
+Date:   Fri, 2 Apr 2021 14:59:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>
-Cc:     James Morse <james.morse@arm.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        James Morse <james.morse@arm.com>,
         Julien Thierry <julien.thierry.kdev@gmail.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -68,100 +64,70 @@ Cc:     James Morse <james.morse@arm.com>,
         linux-mips@vger.kernel.org, kvm@vger.kernel.org,
         kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 09/10] KVM: Don't take mmu_lock for range invalidation
+ unless necessary
+Message-ID: <YGcxRmzbEr3kPsWE@google.com>
 References: <20210402005658.3024832-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <9376b453-be3a-f8b7-d53a-7e54c25161ce@redhat.com>
-Date:   Fri, 2 Apr 2021 14:17:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+ <20210402005658.3024832-10-seanjc@google.com>
+ <417bd6b5-b7d0-ed22-adae-02150cdbfebe@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20210402005658.3024832-1-seanjc@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <417bd6b5-b7d0-ed22-adae-02150cdbfebe@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 02/04/21 02:56, Sean Christopherson wrote:
-> The end goal of this series is to optimize the MMU notifiers to take
-> mmu_lock if and only if the notification is relevant to KVM, i.e. the hva
-> range overlaps a memslot.   Large VMs (hundreds of vCPUs) are very
-> sensitive to mmu_lock being taken for write at inopportune times, and
-> such VMs also tend to be "static", e.g. backed by HugeTLB with minimal
-> page shenanigans.  The vast majority of notifications for these VMs will
-> be spurious (for KVM), and eliding mmu_lock for spurious notifications
-> avoids an otherwise unacceptable disruption to the guest.
+On Fri, Apr 02, 2021, Paolo Bonzini wrote:
+> On 02/04/21 02:56, Sean Christopherson wrote:
+> > Avoid taking mmu_lock for unrelated .invalidate_range_{start,end}()
+> > notifications.  Because mmu_notifier_count must be modified while holding
+> > mmu_lock for write, and must always be paired across start->end to stay
+> > balanced, lock elision must happen in both or none.  To meet that
+> > requirement, add a rwsem to prevent memslot updates across range_start()
+> > and range_end().
+> > 
+> > Use a rwsem instead of a rwlock since most notifiers _allow_ blocking,
+> > and the lock will be endl across the entire start() ... end() sequence.
+> > If anything in the sequence sleeps, including the caller or a different
+> > notifier, holding the spinlock would be disastrous.
+> > 
+> > For notifiers that _disallow_ blocking, e.g. OOM reaping, simply go down
+> > the slow path of unconditionally acquiring mmu_lock.  The sane
+> > alternative would be to try to acquire the lock and force the notifier
+> > to retry on failure.  But since OOM is currently the _only_ scenario
+> > where blocking is disallowed attempting to optimize a guest that has been
+> > marked for death is pointless.
+> > 
+> > Unconditionally define and use mmu_notifier_slots_lock in the memslots
+> > code, purely to avoid more #ifdefs.  The overhead of acquiring the lock
+> > is negligible when the lock is uncontested, which will always be the case
+> > when the MMU notifiers are not used.
+> > 
+> > Note, technically flag-only memslot updates could be allowed in parallel,
+> > but stalling a memslot update for a relatively short amount of time is
+> > not a scalability issue, and this is all more than complex enough.
 > 
-> To get there without potentially degrading performance, e.g. due to
-> multiple memslot lookups, especially on non-x86 where the use cases are
-> largely unknown (from my perspective), first consolidate the MMU notifier
-> logic by moving the hva->gfn lookups into common KVM.
-> 
-> Based on kvm/queue, commit 5f986f748438 ("KVM: x86: dump_vmcs should
-> include the autoload/autostore MSR lists").
-> 
-> Well tested on Intel and AMD.  Compile tested for arm64, MIPS, PPC,
-> PPC e500, and s390.  Absolutely needs to be tested for real on non-x86,
-> I give it even odds that I introduced an off-by-one bug somewhere.
-> 
-> v2:
->   - Drop the patches that have already been pushed to kvm/queue.
->   - Drop two selftest changes that had snuck in via "git commit -a".
->   - Add a patch to assert that mmu_notifier_count is elevated when
->     .change_pte() runs. [Paolo]
->   - Split out moving KVM_MMU_(UN)LOCK() to __kvm_handle_hva_range() to a
->     separate patch.  Opted not to squash it with the introduction of the
->     common hva walkers (patch 02), as that prevented sharing code between
->     the old and new APIs. [Paolo]
->   - Tweak the comment in kvm_vm_destroy() above the smashing of the new
->     slots lock. [Paolo]
->   - Make mmu_notifier_slots_lock unconditional to avoid #ifdefs. [Paolo]
-> 
-> v1:
->   - https://lkml.kernel.org/r/20210326021957.1424875-1-seanjc@google.com
-> 
-> Sean Christopherson (10):
->    KVM: Assert that notifier count is elevated in .change_pte()
->    KVM: Move x86's MMU notifier memslot walkers to generic code
->    KVM: arm64: Convert to the gfn-based MMU notifier callbacks
->    KVM: MIPS/MMU: Convert to the gfn-based MMU notifier callbacks
->    KVM: PPC: Convert to the gfn-based MMU notifier callbacks
->    KVM: Kill off the old hva-based MMU notifier callbacks
->    KVM: Move MMU notifier's mmu_lock acquisition into common helper
->    KVM: Take mmu_lock when handling MMU notifier iff the hva hits a
->      memslot
->    KVM: Don't take mmu_lock for range invalidation unless necessary
->    KVM: x86/mmu: Allow yielding during MMU notifier unmap/zap, if
->      possible
-> 
->   arch/arm64/kvm/mmu.c                   | 117 +++------
->   arch/mips/kvm/mmu.c                    |  97 ++------
->   arch/powerpc/include/asm/kvm_book3s.h  |  12 +-
->   arch/powerpc/include/asm/kvm_ppc.h     |   9 +-
->   arch/powerpc/kvm/book3s.c              |  18 +-
->   arch/powerpc/kvm/book3s.h              |  10 +-
->   arch/powerpc/kvm/book3s_64_mmu_hv.c    |  98 ++------
->   arch/powerpc/kvm/book3s_64_mmu_radix.c |  25 +-
->   arch/powerpc/kvm/book3s_hv.c           |  12 +-
->   arch/powerpc/kvm/book3s_pr.c           |  56 ++---
->   arch/powerpc/kvm/e500_mmu_host.c       |  27 +-
->   arch/x86/kvm/mmu/mmu.c                 | 127 ++++------
->   arch/x86/kvm/mmu/tdp_mmu.c             | 245 +++++++------------
->   arch/x86/kvm/mmu/tdp_mmu.h             |  14 +-
->   include/linux/kvm_host.h               |  22 +-
->   virt/kvm/kvm_main.c                    | 325 +++++++++++++++++++------
->   16 files changed, 552 insertions(+), 662 deletions(-)
-> 
+> Proposal for the locking documentation:
 
-For MIPS, I am going to post a series that simplifies TLB flushing 
-further.  I applied it, and rebased this one on top, to 
-kvm/mmu-notifier-queue.
+Argh, sorry!  Looks great, I owe you.
 
-Architecture maintainers, please look at the branch and review/test/ack 
-your parts.
-
-Thanks!
-
-Paolo
-
+> diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
+> index b21a34c34a21..3e4ad7de36cb 100644
+> --- a/Documentation/virt/kvm/locking.rst
+> +++ b/Documentation/virt/kvm/locking.rst
+> @@ -16,6 +16,13 @@ The acquisition orders for mutexes are as follows:
+>  - kvm->slots_lock is taken outside kvm->irq_lock, though acquiring
+>    them together is quite rare.
+> +- The kvm->mmu_notifier_slots_lock rwsem ensures that pairs of
+> +  invalidate_range_start() and invalidate_range_end() callbacks
+> +  use the same memslots array.  kvm->slots_lock is taken outside the
+> +  write-side critical section of kvm->mmu_notifier_slots_lock, so
+> +  MMU notifiers must not take kvm->slots_lock.  No other write-side
+> +  critical sections should be added.
+> +
+>  On x86, vcpu->mutex is taken outside kvm->arch.hyperv.hv_lock.
+>  Everything else is a leaf: no other lock is taken inside the critical
+> 
+> Paolo
+> 
