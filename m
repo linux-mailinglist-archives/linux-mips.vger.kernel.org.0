@@ -2,89 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE08035290B
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 11:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03ED33529B7
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 12:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbhDBJsz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Apr 2021 05:48:55 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:33790 "EHLO fornost.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234217AbhDBJsz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 2 Apr 2021 05:48:55 -0400
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1lSGOu-0003UO-NG; Fri, 02 Apr 2021 20:47:37 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Apr 2021 20:47:36 +1100
-Date:   Fri, 2 Apr 2021 20:47:36 +1100
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH] crypto: poly1305: fix poly1305_core_setkey() declaration
-Message-ID: <20210402094736.GC24509@gondor.apana.org.au>
-References: <20210322170542.1791154-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210322170542.1791154-1-arnd@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S229924AbhDBK1Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Apr 2021 06:27:25 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:49634 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229605AbhDBK1Z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 2 Apr 2021 06:27:25 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxycmI8WZgY6cDAA--.7636S2;
+        Fri, 02 Apr 2021 18:27:21 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH v3] MIPS: Check __clang__ to avoid performance influence with GCC in csum_tcpudp_nofold()
+Date:   Fri,  2 Apr 2021 18:27:20 +0800
+Message-Id: <1617359240-16609-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9CxycmI8WZgY6cDAA--.7636S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKF4UJr17ZFW3Kr15Jr4rAFb_yoW7GF1kpF
+        nrtr18Wr4UXry5Ca40k3y8WFy5Ww45GrZxua4rAr9akr98Zr18X3ZYgFy5CrsFkrs2q3W7
+        ZrWrtrsrKFyDt3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gw1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUVHq7UUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 06:05:15PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> gcc-11 points out a mismatch between the declaration and the definition
-> of poly1305_core_setkey():
-> 
-> lib/crypto/poly1305-donna32.c:13:67: error: argument 2 of type ‘const u8[16]’ {aka ‘const unsigned char[16]’} with mismatched bound [-Werror=array-parameter=]
->    13 | void poly1305_core_setkey(struct poly1305_core_key *key, const u8 raw_key[16])
->       |                                                          ~~~~~~~~~^~~~~~~~~~~
-> In file included from lib/crypto/poly1305-donna32.c:11:
-> include/crypto/internal/poly1305.h:21:68: note: previously declared as ‘const u8 *’ {aka ‘const unsigned char *’}
->    21 | void poly1305_core_setkey(struct poly1305_core_key *key, const u8 *raw_key);
-> 
-> This is harmless in principle, as the calling conventions are the same,
-> but the more specific prototype allows better type checking in the
-> caller.
-> 
-> Change the declaration to match the actual function definition.
-> The poly1305_simd_init() is a bit suspicious here, as it previously
-> had a 32-byte argument type, but looks like it needs to take the
-> 16-byte POLY1305_BLOCK_SIZE array instead.
-> 
-> Fixes: 1c08a104360f ("crypto: poly1305 - add new 32 and 64-bit generic versions")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/crypto/poly1305-glue.c    | 2 +-
->  arch/arm64/crypto/poly1305-glue.c  | 2 +-
->  arch/mips/crypto/poly1305-glue.c   | 2 +-
->  arch/x86/crypto/poly1305_glue.c    | 6 +++---
->  include/crypto/internal/poly1305.h | 3 ++-
->  include/crypto/poly1305.h          | 6 ++++--
->  lib/crypto/poly1305-donna32.c      | 3 ++-
->  lib/crypto/poly1305-donna64.c      | 3 ++-
->  lib/crypto/poly1305.c              | 3 ++-
->  9 files changed, 18 insertions(+), 12 deletions(-)
+The asm code in csum_tcpudp_nofold() is performance critical, I am sorry
+for the poorly considered implementation about the performance influence
+with GCC in the commit 198688edbf77 ("MIPS: Fix inline asm input/output
+type mismatch in checksum.h used with Clang").
 
-Patch applied.  Thanks.
+Using __clang__ instead of CC_IS_CLANG as check condition, because it
+still occurs build error under CC_IS_GCC when make M=samples/bpf which
+used with Clang compiler.
+
+With this patch, we can build successfully by both GCC and Clang,
+at the same time, the logic is much clear to avoid the potential
+performance influence with GCC.
+
+Here are some test data, the config file is loongson3_defconfig, the gcc
+version is 10.2.1, we can see that the size has no differences between (1)
+and (3).
+
+(1) linux-5.12-rc5.nopatch:
+without commit 198688edbf77 ("MIPS: Fix inline asm input/output type
+mismatch in checksum.h used with Clang").
+
+(2) linux-5.12-rc5:
+with commit 198688edbf77 ("MIPS: Fix inline asm input/output type
+mismatch in checksum.h used with Clang").
+
+(3) linux-5.12-rc5.newpatch:
+with this patch based on linux-5.12-rc5.
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5.nopatch/vmlinux
+      text       data        bss      total filename
+  10273312    3489518   17865568   31628398 linux-5.12-rc5.nopatch/vmlinux
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5/vmlinux
+      text       data        bss      total filename
+  10273536    3489550   17865568   31628654 linux-5.12-rc5/vmlinux
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5.newpatch/vmlinux
+      text       data        bss      total filename
+  10273312    3489518   17865568   31628398 linux-5.12-rc5.newpatch/vmlinux
+
+As far as I can tell, the differences between (1) and (2) is due to the
+following affected objects:
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5.nopatch/net/ipv4/tcp_ipv4.o
+      text       data        bss      total filename
+     20684       2268        576      23528 linux-5.12-rc5.nopatch/net/ipv4/tcp_ipv4.o
+loongson@linux:~$ size --format=GNU linux-5.12-rc5/net/ipv4/tcp_ipv4.o
+      text       data        bss      total filename
+     20700       2268        576      23544 linux-5.12-rc5/net/ipv4/tcp_ipv4.o
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5.nopatch/net/ipv4/tcp_offload.o
+      text       data        bss      total filename
+      3584        167          0       3751 linux-5.12-rc5.nopatch/net/ipv4/tcp_offload.o
+loongson@linux:~$ size --format=GNU linux-5.12-rc5/net/ipv4/tcp_offload.o
+      text       data        bss      total filename
+      3600        167          0       3767 linux-5.12-rc5/net/ipv4/tcp_offload.o
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5.nopatch/net/ipv4/udp.o
+      text       data        bss      total filename
+     30068       3018         32      33118 linux-5.12-rc5.nopatch/net/ipv4/udp.o
+loongson@linux:~$ size --format=GNU linux-5.12-rc5/net/ipv4/udp.o
+      text       data        bss      total filename
+     30100       3018         32      33150 linux-5.12-rc5/net/ipv4/udp.o
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5.nopatch/net/ipv4/udp_offload.o
+      text       data        bss      total filename
+      6624        311          0       6935 linux-5.12-rc5.nopatch/net/ipv4/udp_offload.o
+loongson@linux:~$ size --format=GNU linux-5.12-rc5/net/ipv4/udp_offload.o
+      text       data        bss      total filename
+      6640        311          0       6951 linux-5.12-rc5/net/ipv4/udp_offload.o
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5.nopatch/net/netfilter/nf_nat.o
+      text       data        bss      total filename
+     20804       2102       4112      27018 linux-5.12-rc5.nopatch/net/netfilter/nf_nat.o
+loongson@linux:~$ size --format=GNU linux-5.12-rc5/net/netfilter/nf_nat.o
+      text       data        bss      total filename
+     20820       2102       4112      27034 linux-5.12-rc5/net/netfilter/nf_nat.o
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5.nopatch/net/netfilter/nf_nat_proto.o
+      text       data        bss      total filename
+      7392        770          0       8162 linux-5.12-rc5.nopatch/net/netfilter/nf_nat_proto.o
+loongson@linux:~$ size --format=GNU linux-5.12-rc5/net/netfilter/nf_nat_proto.o
+      text       data        bss      total filename
+      7408        770          0       8178 linux-5.12-rc5/net/netfilter/nf_nat_proto.o
+
+loongson@linux:~$ size --format=GNU linux-5.12-rc5.nopatch/net/ipv4/netfilter/nf_reject_ipv4.o
+      text       data        bss      total filename
+      3776        429          0       4205 linux-5.12-rc5.nopatch/net/ipv4/netfilter/nf_reject_ipv4.o
+loongson@linux:~$ size --format=GNU linux-5.12-rc5/net/ipv4/netfilter/nf_reject_ipv4.o
+      text       data        bss      total filename
+      3792        429          0       4221 linux-5.12-rc5/net/ipv4/netfilter/nf_reject_ipv4.o
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/include/asm/checksum.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/mips/include/asm/checksum.h b/arch/mips/include/asm/checksum.h
+index 1e6c135..e1f80407 100644
+--- a/arch/mips/include/asm/checksum.h
++++ b/arch/mips/include/asm/checksum.h
+@@ -130,7 +130,11 @@ static inline __wsum csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
+ 					__u32 len, __u8 proto,
+ 					__wsum sum)
+ {
++#ifdef __clang__
+ 	unsigned long tmp = (__force unsigned long)sum;
++#else
++	__wsum tmp = sum;
++#endif
+ 
+ 	__asm__(
+ 	"	.set	push		# csum_tcpudp_nofold\n"
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.1.0
+
