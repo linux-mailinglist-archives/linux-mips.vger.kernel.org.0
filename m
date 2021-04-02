@@ -2,96 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0143528E5
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 11:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE08035290B
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 11:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234831AbhDBJfn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Apr 2021 05:35:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:45011 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234991AbhDBJfn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Apr 2021 05:35:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617356140;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pp7i/Rq4quxGmDckgflEr0uWdxRmtTCzqRhgMxNYmVI=;
-        b=QwJc8X/XP04YAyJlDVJO6cE8IY6jhHnvsVxbPU5cXWcSZQ4wsogMxZUk9AnVEnj912FQvl
-        kmLgdSzxb7oe19EWbm/RhVtwiBuysiDROIsX3JTnoJ72Jbrc5dzbHwfglUzRn8P8Kpa2kf
-        qkOnl2Wne5+RoP47rjX7TXDwpotofSg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-604-2aQ6wayoNSqKK1eYfCg97Q-1; Fri, 02 Apr 2021 05:35:39 -0400
-X-MC-Unique: 2aQ6wayoNSqKK1eYfCg97Q-1
-Received: by mail-wr1-f71.google.com with SMTP id e10so4083266wru.13
-        for <linux-mips@vger.kernel.org>; Fri, 02 Apr 2021 02:35:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Pp7i/Rq4quxGmDckgflEr0uWdxRmtTCzqRhgMxNYmVI=;
-        b=LVKQMsLwdWmJE0qM/Wna3nD2Dy1J1/2Y0fvzE1fBMYmR6SO7cz8LgwbyQN7ARcNq2z
-         CMkt5VdDOsrdr6aLimNO1j94BSc1motQk0y/xh25OIAoIFk8l4OqIU/iMW4SNvYJkCOx
-         2Ff2P5P2KsYjSoSbOPx+7O+EAgUZwW4+6qjZznnwHJeOZB7LWVvafrFaJAl7rwfXDq/+
-         BG66hhT3mVZU30YeW72NDq+TZxo3Ys3Bp4d1mQcwJZPxs94fon/qpz2LEgMSBGOByMgB
-         5DY2iseEsNGQhRt8yGeesnbTbdmJYV5eHLb0WqhY2ZXM3rXnEavIY/yc4xzrn7Az63bH
-         wCAA==
-X-Gm-Message-State: AOAM531Jz/2bfyT7G7yCl9X92xdBFvjQ0flnQleyGGFjVMXEt8UIt7qp
-        1ygPxoc9/WNssAZXscH1W9/j3W8Fvg6DphYz2kK7pUYNl1xiJJfeqfuevh/hOvn8915CyY/5LbW
-        MoyKIXZR1CT97jmEQGBNZAg==
-X-Received: by 2002:a05:6000:1a8a:: with SMTP id f10mr14051215wry.232.1617356138340;
-        Fri, 02 Apr 2021 02:35:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy3IM+fWBMIWWC0dXiX9SYqbGiBYCoQN4BHK3a4+s4pude6jmvmdlBwOmMacbQNHjcYC5pL4Q==
-X-Received: by 2002:a05:6000:1a8a:: with SMTP id f10mr14051180wry.232.1617356138121;
-        Fri, 02 Apr 2021 02:35:38 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.gmail.com with ESMTPSA id x6sm11605403wmj.32.2021.04.02.02.35.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Apr 2021 02:35:37 -0700 (PDT)
-Subject: Re: [PATCH v2 07/10] KVM: Move MMU notifier's mmu_lock acquisition
- into common helper
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>
-Cc:     James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>
-References: <20210402005658.3024832-1-seanjc@google.com>
- <20210402005658.3024832-8-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <a30f556a-40b2-f703-f0ee-b985989ee4b7@redhat.com>
-Date:   Fri, 2 Apr 2021 11:35:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S229722AbhDBJsz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Apr 2021 05:48:55 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:33790 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234217AbhDBJsz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 2 Apr 2021 05:48:55 -0400
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1lSGOu-0003UO-NG; Fri, 02 Apr 2021 20:47:37 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Apr 2021 20:47:36 +1100
+Date:   Fri, 2 Apr 2021 20:47:36 +1100
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH] crypto: poly1305: fix poly1305_core_setkey() declaration
+Message-ID: <20210402094736.GC24509@gondor.apana.org.au>
+References: <20210322170542.1791154-1-arnd@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210402005658.3024832-8-seanjc@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210322170542.1791154-1-arnd@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 02/04/21 02:56, Sean Christopherson wrote:
-> +		.handler	= (void *)kvm_null_fn,
-> +		.on_lock	= kvm_dec_notifier_count,
-> +		.flush_on_ret	= true,
+On Mon, Mar 22, 2021 at 06:05:15PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> gcc-11 points out a mismatch between the declaration and the definition
+> of poly1305_core_setkey():
+> 
+> lib/crypto/poly1305-donna32.c:13:67: error: argument 2 of type ‘const u8[16]’ {aka ‘const unsigned char[16]’} with mismatched bound [-Werror=array-parameter=]
+>    13 | void poly1305_core_setkey(struct poly1305_core_key *key, const u8 raw_key[16])
+>       |                                                          ~~~~~~~~~^~~~~~~~~~~
+> In file included from lib/crypto/poly1305-donna32.c:11:
+> include/crypto/internal/poly1305.h:21:68: note: previously declared as ‘const u8 *’ {aka ‘const unsigned char *’}
+>    21 | void poly1305_core_setkey(struct poly1305_core_key *key, const u8 *raw_key);
+> 
+> This is harmless in principle, as the calling conventions are the same,
+> but the more specific prototype allows better type checking in the
+> caller.
+> 
+> Change the declaration to match the actual function definition.
+> The poly1305_simd_init() is a bit suspicious here, as it previously
+> had a 32-byte argument type, but looks like it needs to take the
+> 16-byte POLY1305_BLOCK_SIZE array instead.
+> 
+> Fixes: 1c08a104360f ("crypto: poly1305 - add new 32 and 64-bit generic versions")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/crypto/poly1305-glue.c    | 2 +-
+>  arch/arm64/crypto/poly1305-glue.c  | 2 +-
+>  arch/mips/crypto/poly1305-glue.c   | 2 +-
+>  arch/x86/crypto/poly1305_glue.c    | 6 +++---
+>  include/crypto/internal/poly1305.h | 3 ++-
+>  include/crypto/poly1305.h          | 6 ++++--
+>  lib/crypto/poly1305-donna32.c      | 3 ++-
+>  lib/crypto/poly1305-donna64.c      | 3 ++-
+>  lib/crypto/poly1305.c              | 3 ++-
+>  9 files changed, 18 insertions(+), 12 deletions(-)
 
-Doesn't really matter since the handler is null, but I think it's 
-cleaner to have false here.
-
-Paolo
-
+Patch applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
