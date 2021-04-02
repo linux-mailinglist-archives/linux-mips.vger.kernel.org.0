@@ -2,123 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EA7352C6F
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 18:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E6E352D2B
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 18:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235256AbhDBPgS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Apr 2021 11:36:18 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:19745 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229553AbhDBPgR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 2 Apr 2021 11:36:17 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4FBkfh6syMz9v2m9;
-        Fri,  2 Apr 2021 17:36:12 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id SsC2ob6kJi6G; Fri,  2 Apr 2021 17:36:12 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4FBkfh5PDlz9v2m8;
-        Fri,  2 Apr 2021 17:36:12 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A97528BB77;
-        Fri,  2 Apr 2021 17:36:14 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id dzRgT34PMsr4; Fri,  2 Apr 2021 17:36:14 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BA9038BB6F;
-        Fri,  2 Apr 2021 17:36:13 +0200 (CEST)
-Subject: Re: [PATCH v3 12/17] sh: Convert to GENERIC_CMDLINE
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     will@kernel.org, danielwa@cisco.com, robh@kernel.org,
-        daniel@gimpelevich.san-francisco.ca.us
-Cc:     linux-arch@vger.kernel.org, devicetree@vger.kernel.org,
-        microblaze <monstr@monstr.eu>, linux-xtensa@linux-xtensa.org,
-        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        nios2 <ley.foon.tan@intel.com>, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-References: <cover.1616765869.git.christophe.leroy@csgroup.eu>
- <6b76649009943f2893fdfded22becd41db2fe1f7.1616765870.git.christophe.leroy@csgroup.eu>
-Message-ID: <d672dec1-6fcb-d5dc-a551-2a99e6dd6976@csgroup.eu>
-Date:   Fri, 2 Apr 2021 17:36:12 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S235535AbhDBP6M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Apr 2021 11:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235304AbhDBP6M (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Apr 2021 11:58:12 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA15C0613E6;
+        Fri,  2 Apr 2021 08:58:10 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id v11so5098183wro.7;
+        Fri, 02 Apr 2021 08:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S0QE5Nife2NIX13JY3vSkhHVDcNV6ya5TJk20SNgM60=;
+        b=NC+pT0qgC9xQpmNaSTJsqEc39jCvteZfOcGp7rQ8n19dtPtGdd30thQtLIPM5zqE74
+         tqh9aqT/1FDmBkauXsR1FiRphQ/jL6Qq8T74rCSJgDAEYvnkvWr0QJ/uIPVYEoPh1ykT
+         E8Jrm6YjqW/7qPJ6kvrWfoeihZzpLEENP4W3MYJgHwKHALs9PY1d5t+b/joXrF8KzBgn
+         +VqgT1AE1Y72XP2vwQ40S9W8h6a20LU1ST9qcY5+AMvOhIiOLPw0w0LxkLG1b6GueSDX
+         NQIMWBSxeG2Q4sYNMMNKM/h3s5f9V4fCowB0tghpxfohDglC36GsrtkvlydeL2HEzMZk
+         g7FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=S0QE5Nife2NIX13JY3vSkhHVDcNV6ya5TJk20SNgM60=;
+        b=IbjS3MPudPV3vKsz9g7OBkL6twqWTb01INRcZUjSBHVmBgi1D8pJ6wVjgSKw+J/0fO
+         jOPYfYvUx2vKzPfhZZ/V8uNPkId+YTPB5pWs3DmKUsOifd2icfIatysbW+tvM5rHvPuw
+         FFoV4YZ1cLIfo2DNlwgpKBLvsXh2fIEB052VDVAOOS821Lq13V3BN+zME9Sx5gYkjBqH
+         gSQrGca8QO6ep9BS0rjHsEy9Zdu6aCMMaUOxnDOHBdbwIv/jattu1wOy6cx7uRkt5QAz
+         o/izq+GzLimhqkJrdeaYZBYX7KchXFrLHK+t71s9/R7JScwFjKBOsxz+/V2vk17C6+2I
+         qO/w==
+X-Gm-Message-State: AOAM532gYF1dzG9D6Dare2OMwQt7hbZ8q44wTvBFT3fybBgV7R98VlXd
+        Xt6BahwOEe3MBYxJSKZytlNZA6SXxBQ=
+X-Google-Smtp-Source: ABdhPJwNkDphDY/S8Bx896Z9h9IrXl46gV4kgtBZUbxfi2p8nYXB6gnA9bVu/jBYmNF4nAZvBgVXgw==
+X-Received: by 2002:adf:8562:: with SMTP id 89mr16125989wrh.101.1617379089568;
+        Fri, 02 Apr 2021 08:58:09 -0700 (PDT)
+Received: from avogadro.lan ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id w11sm2293625wmb.35.2021.04.02.08.58.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Apr 2021 08:58:09 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com,
+        seanjc@google.com, linux-mips@vger.kernel.org
+Subject: [PATCH 0/4] KVM: MIPS: cleanup TLB flushing callbacks
+Date:   Fri,  2 Apr 2021 17:58:03 +0200
+Message-Id: <20210402155807.49976-1-pbonzini@redhat.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-In-Reply-To: <6b76649009943f2893fdfded22becd41db2fe1f7.1616765870.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+This series cleans up the flush_shadow_all and flush_shadow_memslot
+callbacks, turning them into a single function that can be called from
+kvm_arch_flush_remote_tlb.  This lets MIPS use the generic TLB flushing
+code in the MMU notifiers.  With the upcoming refactoring of generic
+MMU notifier code, without this patch MIPS would not be able to
+coalesce TLB flushes anymore across multiple memslots.
 
+Patch 1 is an unrelated cleanup that is needed for the rest to compile
+(due to a call to kvm_arch_flush_remote_tlbs_memslot with a const
+argument).
 
-Le 26/03/2021 à 14:44, Christophe Leroy a écrit :
-> This converts the architecture to GENERIC_CMDLINE.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
+Paolo
 
-> diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-> index e798e55915c2..fab84f62448c 100644
-> --- a/arch/sh/Kconfig
-> +++ b/arch/sh/Kconfig
-> @@ -16,6 +16,7 @@ config SUPERH
->   	select CPU_NO_EFFICIENT_FFS
->   	select DMA_DECLARE_COHERENT
->   	select GENERIC_ATOMIC64
-> +	select GENERIC_CMDLINE
->   	select GENERIC_CMOS_UPDATE if SH_SH03 || SH_DREAMCAST
->   	select GENERIC_IDLE_POLL_SETUP
->   	select GENERIC_IRQ_SHOW
-> @@ -742,35 +743,6 @@ config ROMIMAGE_MMCIF
->   	  first part of the romImage which in turn loads the rest the kernel
->   	  image to RAM using the MMCIF hardware block.
->   
-> -choice
-> -	prompt "Kernel command line"
-> -	optional
-> -	default CMDLINE_OVERWRITE
-> -	help
-> -	  Setting this option allows the kernel command line arguments
-> -	  to be set.
-> -
-> -config CMDLINE_OVERWRITE
-> -	bool "Overwrite bootloader kernel arguments"
-> -	help
-> -	  Given string will overwrite any arguments passed in by
-> -	  a bootloader.
-> -
-> -config CMDLINE_EXTEND
-> -	bool "Extend bootloader kernel arguments"
-> -	help
-> -	  Given string will be concatenated with arguments passed in
-> -	  by a bootloader.
-> -
-> -endchoice
-> -
-> -config CMDLINE
-> -	string "Kernel command line arguments string"
-> -	depends on CMDLINE_OVERWRITE || CMDLINE_EXTEND
-> -	default "console=ttySC1,115200"
-> -
-> -endmenu
-> -
+Paolo Bonzini (4):
+  KVM: constify kvm_arch_flush_remote_tlbs_memslot
+  KVM: MIPS: rework flush_shadow_* callbacks into one that prepares the
+    flush
+  KVM: MIPS: let generic code call prepare_flush_shadow
+  KVM: MIPS: defer flush to generic MMU notifier code
 
-That "endmenu" shall not be removed.
+ arch/arm64/kvm/arm.c             |  2 +-
+ arch/mips/include/asm/kvm_host.h | 12 ++++--------
+ arch/mips/kvm/mips.c             | 21 +++++++++++----------
+ arch/mips/kvm/mmu.c              | 12 ++----------
+ arch/mips/kvm/trap_emul.c        | 13 ++-----------
+ arch/mips/kvm/vz.c               | 19 ++++---------------
+ arch/x86/kvm/mmu/mmu.c           |  2 +-
+ include/linux/kvm_host.h         |  2 +-
+ 8 files changed, 26 insertions(+), 57 deletions(-)
 
-Fixed in v4,
+-- 
+2.30.1
 
-Thanks to Rob L. for the report.
-Christophe
-
->   menu "Bus options"
->   
->   config SUPERHYWAY
