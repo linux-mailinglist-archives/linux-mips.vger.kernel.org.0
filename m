@@ -2,89 +2,226 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39934352C07
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 18:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981FC352C39
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Apr 2021 18:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234479AbhDBO7u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Apr 2021 10:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbhDBO7t (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Apr 2021 10:59:49 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3F2C06178A
-        for <linux-mips@vger.kernel.org>; Fri,  2 Apr 2021 07:59:47 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id il9-20020a17090b1649b0290114bcb0d6c2so4735422pjb.0
-        for <linux-mips@vger.kernel.org>; Fri, 02 Apr 2021 07:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XauO+Tpx/QqvLfsNf0EieVcjgezYHlrLlZApCjoCcwc=;
-        b=Tzgme0UQBGKuB+zSlD0xeHc77Hy6oWyrRyYiRZQFSKSope2ZlQuprlNPAFIGno9HCF
-         19mRDkj5ZlfoNjs328k6GhD8eNbfCsQBcei3BTgXY+lndiulxllK9urmRZpNbnawPSHF
-         1VntLWcNLRE/v2TUKfmWJP3RUU9JLl2aM0LmT3koOB9K6//ZWjl40DmwLdcbMuXOftRy
-         vY7bpTZFLIxlRDiIvxlrah94VXX6FYPLZOMp+MPalyOIzbjG3+pDcx1vJhHFGSEmzlRs
-         VifckWbHZsxI2muXBZVeIADxXGgNHUOjgsjNw0sHYg1S4nsynZoWCREOXUk86kfL7DYo
-         Pc7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XauO+Tpx/QqvLfsNf0EieVcjgezYHlrLlZApCjoCcwc=;
-        b=p1qAmCagj+5frx79n4QTBkH/gl4WdXC+4pd0aQslsFHEZ9NNgdMy2tfEHMp8IacXkh
-         TlYPe3iOVZhfvQ7CuEXEjtB6KAhTe8ORAHzjmqnho1CWjggt3st8bGK58g1yD4er2VO9
-         1N8uHqeS9J6kcoUGeeoCdfcck8DFI0EBvtEbpezUTmPLJ5M8LdAmOLQBNEckmkKrxt45
-         pY0iHs/RFQLh2XMndc7Vb6mmmK/kh+OAYxtrJFo4UevtePuULvwXYGEyivJQLgVuQv+d
-         M4GeEd589sLL34nJ3iIuI9l7lJ+qzIewutgVjcF5tDb2sRLUJz2kqF3S487VUtYY8OYF
-         musw==
-X-Gm-Message-State: AOAM530PWCs9kKpfK6w+24YQNOTGpWthseiL36x979YFqUA0Lisro94y
-        IpQkR8NUrOo8UnrtCfR6BOZRkA==
-X-Google-Smtp-Source: ABdhPJxioQlQNRTARxdEppiGDcKbsI4noyv87TJnoDznkG+oVESSh/n5TV8EGFMcsMJo2RSOZZ0Vdg==
-X-Received: by 2002:a17:90a:b889:: with SMTP id o9mr14181347pjr.97.1617375586898;
-        Fri, 02 Apr 2021 07:59:46 -0700 (PDT)
-Received: from google.com (240.111.247.35.bc.googleusercontent.com. [35.247.111.240])
-        by smtp.gmail.com with ESMTPSA id n24sm8673883pgl.27.2021.04.02.07.59.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Apr 2021 07:59:46 -0700 (PDT)
-Date:   Fri, 2 Apr 2021 14:59:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2 07/10] KVM: Move MMU notifier's mmu_lock acquisition
- into common helper
-Message-ID: <YGcxXvrluFJ+7o9X@google.com>
-References: <20210402005658.3024832-1-seanjc@google.com>
- <20210402005658.3024832-8-seanjc@google.com>
- <a30f556a-40b2-f703-f0ee-b985989ee4b7@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a30f556a-40b2-f703-f0ee-b985989ee4b7@redhat.com>
+        id S235015AbhDBPSH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Apr 2021 11:18:07 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:51941 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234717AbhDBPSG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 2 Apr 2021 11:18:06 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4FBkFh5XNLz9v2lv;
+        Fri,  2 Apr 2021 17:18:00 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id MktCNdTeHFtr; Fri,  2 Apr 2021 17:18:00 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FBkFh4M9Fz9v2ls;
+        Fri,  2 Apr 2021 17:18:00 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4E5858BB79;
+        Fri,  2 Apr 2021 17:18:02 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id TLVHNmtRjBbO; Fri,  2 Apr 2021 17:18:02 +0200 (CEST)
+Received: from po16121vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9B1828BB7B;
+        Fri,  2 Apr 2021 17:18:01 +0200 (CEST)
+Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id 600FB67989; Fri,  2 Apr 2021 15:18:01 +0000 (UTC)
+Message-Id: <cover.1617375802.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH v4 00/20] Implement GENERIC_CMDLINE
+To:     will@kernel.org, danielwa@cisco.com, robh@kernel.org,
+        daniel@gimpelevich.san-francisco.ca.us, arnd@kernel.org,
+        akpm@linux-foundation.org
+Cc:     linux-arch@vger.kernel.org, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        microblaze <monstr@monstr.eu>, linux-mips@vger.kernel.org,
+        nios2 <ley.foon.tan@intel.com>, openrisc@lists.librecores.org,
+        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-mm@kvack.org
+Date:   Fri,  2 Apr 2021 15:18:01 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 02, 2021, Paolo Bonzini wrote:
-> On 02/04/21 02:56, Sean Christopherson wrote:
-> > +		.handler	= (void *)kvm_null_fn,
-> > +		.on_lock	= kvm_dec_notifier_count,
-> > +		.flush_on_ret	= true,
-> 
-> Doesn't really matter since the handler is null, but I think it's cleaner to
-> have false here.
+The purpose of this series is to improve and enhance the
+handling of kernel boot arguments.
 
-Agreed.
+Current situation is that most if not all architectures are using
+similar options to do some manupulation on command line arguments:
+- Prepend built-in arguments in front of bootloader provided arguments
+- Append built-in arguments after bootloader provided arguments
+- Replace bootloader provided arguments by built-in arguments
+- Use built-in arguments when none is provided by bootloader.
+
+On some architectures, all the options are possible. On other ones,
+only a subset are available.
+
+The purpose of this series is to refactor and enhance the
+handling of kernel boot arguments so that every architecture can
+benefit from all possibilities.
+
+It is first focussed on powerpc but also extends the capability
+for other arches.
+
+The work has been focussed on minimising the churn in architectures
+by keeping the most commonly used namings.
+
+Main changes in V4:
+- Included patch from Daniel to replace powerpc's strcpy() by strlcpy()
+- Using strlcpy() instead of zeroing first char + strlcat() (idea taken frm Daniel's series)
+- Reworked the convertion of EFI which was wrong in V3
+- Added "too long" command line handling
+- Changed cmdline macro into a function
+- Done a few fixes in arch (NIOS2, SH, ARM)
+- Taken comments into account (see individual responses for details)
+- Tested on powerpc, build tested on ARM64, X86_64.
+
+Main changes in V3:
+- Also accept destination equal to source in cmdline_build() by setting a tmp buffer in __initdata. Powerpc provides different source and destination and call __cmdline_build() directly.
+- Taken comments received from Will and Rob
+- Converted all architectures (Only tested on powerpc)
+
+Christophe Leroy (19):
+  cmdline: Add generic function to build command line.
+  drivers: of: use cmdline building function
+  x86/efi: Replace CONFIG_CMDLINE_OVERRIDE by CONFIG_CMDLINE_FORCE
+  drivers: firmware: efi: use cmdline building function
+  cmdline: Gives architectures opportunity to use generically defined
+    boot cmdline manipulation
+  powerpc: Convert to GENERIC_CMDLINE
+  arm: Convert to GENERIC_CMDLINE
+  arm64: Convert to GENERIC_CMDLINE
+  hexagon: Convert to GENERIC_CMDLINE
+  microblaze: Convert to GENERIC_CMDLINE
+  nios2: Convert to GENERIC_CMDLINE
+  openrisc: Convert to GENERIC_CMDLINE
+  riscv: Convert to GENERIC_CMDLINE
+  sh: Convert to GENERIC_CMDLINE
+  sparc: Convert to GENERIC_CMDLINE
+  xtensa: Convert to GENERIC_CMDLINE
+  x86: Convert to GENERIC_CMDLINE
+  mips: Convert to GENERIC_CMDLINE
+  cmdline: Remove CONFIG_CMDLINE_EXTEND
+
+Daniel Walker (1):
+  powerpc: convert strcpy to strlcpy in prom_init
+
+ arch/arm/Kconfig                              | 38 +--------
+ arch/arm/kernel/atags_parse.c                 | 13 +--
+ arch/arm64/Kconfig                            | 33 +-------
+ arch/arm64/kernel/idreg-override.c            |  9 +--
+ arch/hexagon/Kconfig                          | 11 +--
+ arch/hexagon/kernel/setup.c                   | 10 +--
+ arch/microblaze/Kconfig                       | 24 +-----
+ arch/microblaze/configs/mmu_defconfig         |  2 +-
+ arch/microblaze/kernel/head.S                 |  4 +-
+ arch/mips/Kconfig                             |  1 +
+ arch/mips/Kconfig.debug                       | 44 -----------
+ arch/mips/configs/ar7_defconfig               |  1 -
+ arch/mips/configs/bcm47xx_defconfig           |  1 -
+ arch/mips/configs/bcm63xx_defconfig           |  1 -
+ arch/mips/configs/bmips_be_defconfig          |  1 -
+ arch/mips/configs/bmips_stb_defconfig         |  1 -
+ arch/mips/configs/capcella_defconfig          |  1 -
+ arch/mips/configs/ci20_defconfig              |  1 -
+ arch/mips/configs/cu1000-neo_defconfig        |  1 -
+ arch/mips/configs/cu1830-neo_defconfig        |  1 -
+ arch/mips/configs/e55_defconfig               |  1 -
+ arch/mips/configs/generic_defconfig           |  1 -
+ arch/mips/configs/gpr_defconfig               |  1 -
+ arch/mips/configs/loongson3_defconfig         |  1 -
+ arch/mips/configs/mpc30x_defconfig            |  1 -
+ arch/mips/configs/rt305x_defconfig            |  1 -
+ arch/mips/configs/tb0219_defconfig            |  1 -
+ arch/mips/configs/tb0226_defconfig            |  1 -
+ arch/mips/configs/tb0287_defconfig            |  1 -
+ arch/mips/configs/workpad_defconfig           |  1 -
+ arch/mips/configs/xway_defconfig              |  1 -
+ arch/mips/kernel/relocate.c                   |  4 +-
+ arch/mips/kernel/setup.c                      | 40 +---------
+ arch/mips/pic32/pic32mzda/early_console.c     |  2 +-
+ arch/mips/pic32/pic32mzda/init.c              |  2 -
+ arch/nios2/Kconfig                            | 25 +-----
+ arch/nios2/kernel/setup.c                     | 13 +--
+ arch/openrisc/Kconfig                         | 10 +--
+ arch/powerpc/Kconfig                          | 37 +--------
+ arch/powerpc/kernel/prom_init.c               | 46 ++++++-----
+ arch/riscv/Kconfig                            | 44 +----------
+ arch/riscv/kernel/setup.c                     |  7 +-
+ arch/sh/Kconfig                               | 28 +------
+ arch/sh/configs/ap325rxa_defconfig            |  2 +-
+ arch/sh/configs/dreamcast_defconfig           |  2 +-
+ arch/sh/configs/ecovec24-romimage_defconfig   |  2 +-
+ arch/sh/configs/ecovec24_defconfig            |  2 +-
+ arch/sh/configs/edosk7760_defconfig           |  2 +-
+ arch/sh/configs/espt_defconfig                |  2 +-
+ arch/sh/configs/j2_defconfig                  |  2 +-
+ arch/sh/configs/kfr2r09-romimage_defconfig    |  2 +-
+ arch/sh/configs/kfr2r09_defconfig             |  2 +-
+ arch/sh/configs/lboxre2_defconfig             |  2 +-
+ arch/sh/configs/microdev_defconfig            |  2 +-
+ arch/sh/configs/migor_defconfig               |  2 +-
+ arch/sh/configs/polaris_defconfig             |  2 +-
+ arch/sh/configs/r7780mp_defconfig             |  2 +-
+ arch/sh/configs/r7785rp_defconfig             |  2 +-
+ arch/sh/configs/rsk7201_defconfig             |  2 +-
+ arch/sh/configs/rsk7203_defconfig             |  2 +-
+ arch/sh/configs/rts7751r2d1_defconfig         |  2 +-
+ arch/sh/configs/rts7751r2dplus_defconfig      |  2 +-
+ arch/sh/configs/sdk7780_defconfig             |  2 +-
+ arch/sh/configs/sdk7786_defconfig             |  2 +-
+ arch/sh/configs/se7206_defconfig              |  2 +-
+ arch/sh/configs/se7343_defconfig              |  2 +-
+ arch/sh/configs/se7712_defconfig              |  2 +-
+ arch/sh/configs/se7721_defconfig              |  2 +-
+ arch/sh/configs/se7724_defconfig              |  2 +-
+ arch/sh/configs/se7751_defconfig              |  2 +-
+ arch/sh/configs/se7780_defconfig              |  2 +-
+ arch/sh/configs/sh03_defconfig                |  2 +-
+ arch/sh/configs/sh2007_defconfig              |  2 +-
+ arch/sh/configs/sh7757lcr_defconfig           |  2 +-
+ arch/sh/configs/sh7763rdp_defconfig           |  2 +-
+ arch/sh/configs/shmin_defconfig               |  2 +-
+ arch/sh/configs/shx3_defconfig                |  2 +-
+ arch/sh/configs/titan_defconfig               |  2 +-
+ arch/sh/configs/ul2_defconfig                 |  2 +-
+ arch/sh/kernel/setup.c                        | 11 +--
+ arch/sparc/Kconfig                            | 18 +----
+ arch/sparc/prom/bootstr_64.c                  |  2 +-
+ arch/x86/Kconfig                              | 45 +----------
+ arch/x86/kernel/setup.c                       | 17 +---
+ arch/xtensa/Kconfig                           | 15 +---
+ arch/xtensa/configs/audio_kc705_defconfig     |  1 -
+ arch/xtensa/configs/common_defconfig          |  1 -
+ arch/xtensa/configs/generic_kc705_defconfig   |  1 -
+ arch/xtensa/configs/iss_defconfig             |  1 -
+ arch/xtensa/configs/nommu_kc705_defconfig     |  1 -
+ arch/xtensa/configs/smp_lx200_defconfig       |  1 -
+ arch/xtensa/configs/virt_defconfig            |  1 -
+ arch/xtensa/configs/xip_kc705_defconfig       |  1 -
+ arch/xtensa/kernel/setup.c                    | 10 +--
+ .../firmware/efi/libstub/efi-stub-helper.c    | 35 ++++----
+ drivers/firmware/efi/libstub/efi-stub.c       | 23 ++----
+ drivers/firmware/efi/libstub/efistub.h        |  2 +-
+ drivers/firmware/efi/libstub/x86-stub.c       | 18 +----
+ drivers/of/fdt.c                              | 23 +-----
+ include/linux/cmdline.h                       | 79 +++++++++++++++++++
+ init/Kconfig                                  | 46 +++++++++++
+ usr/Kconfig                                   |  2 +-
+ 102 files changed, 265 insertions(+), 628 deletions(-)
+ create mode 100644 include/linux/cmdline.h
+
+-- 
+2.25.0
+
