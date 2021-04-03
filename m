@@ -2,156 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E4A3532CE
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Apr 2021 08:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB963532EB
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Apr 2021 09:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbhDCGTU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Apr 2021 02:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbhDCGTU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Apr 2021 02:19:20 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227A7C0613E6;
-        Fri,  2 Apr 2021 23:19:18 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id f17so3405549plr.0;
-        Fri, 02 Apr 2021 23:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CBCIQHgUyAG2ZGSKzfcjypqTPr8Hjug+h1YTnKY5wjs=;
-        b=etTmaMG/X35UknYs65i78HG3uAez5LaE097mDlhRe4dJsujsEPlNTBIxs0GUv9ryCH
-         OJEAWEH2S58EBcd72jum8klzXCke0zQPaJlpFUqWhVpi1PZmyLNKlTWg1vHjZbVhsBhS
-         s/R3+5n3kp3pkF7EcWSDy7SswrKs927B4MJc0njNYDWX29PzixubDUq7ILsqNQU26/w4
-         95R1AW4amePmNvDCWkALRcziiR6g4edrsXhazDOwOqnjn2atSBDdRGH7UBL2q2mRxZjg
-         Bz5FEw9wj/wtu0EpXWk5HopwYbKxOFteyDd2u8YKIYR7IJxv17T8Dj1Tw16rhUHQidWd
-         GwHw==
+        id S236109AbhDCHJE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Apr 2021 03:09:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:49549 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232161AbhDCHJD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Apr 2021 03:09:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617433741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wnHJ7PNuNi/MgLZsBS26NgmPxT4+w6+zr4G3AhXM1uo=;
+        b=e0xG4bEXRPNl+v+nmlhK1unHSEnuimOv386GNO+CPzxSkqJcZR91W6/nOH5OUm6wjv64Fb
+        FE5RSgU0VRwXSK87MnDwhv6Di9KzXooUx2V1fzt7pxT2whLQkTifyN+0rjRoNHfFll2V2Q
+        +VqR1aikIERBWdTHAuEqnOmUdOErvJI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-508-2QTva0zrPN-nbDDOf0B4TQ-1; Sat, 03 Apr 2021 03:09:00 -0400
+X-MC-Unique: 2QTva0zrPN-nbDDOf0B4TQ-1
+Received: by mail-wm1-f69.google.com with SMTP id k132so2632394wma.1
+        for <linux-mips@vger.kernel.org>; Sat, 03 Apr 2021 00:08:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=CBCIQHgUyAG2ZGSKzfcjypqTPr8Hjug+h1YTnKY5wjs=;
-        b=KoO571I9A2WARUD/4kVXjhesBZ5nVYmLrx9V6Fu1orOCCWyvs6mQ7pcC8M82Ts5sZN
-         FkrpJUJtgtidBE3JHYOlRtAI5DlMWdvTXj0F4X1wZ0V2/fuAIz3hS8QFOHf7xeKYgfAN
-         yMXD/bkVLzPs8AcCgkDy5UJ+Tq/cLdJVbakwipkjWzFpAeCVq+ImkfxxulwfVpoiTz+9
-         uKsVsNR8Lh51c8Ck/2XVe07ZOaMwQwIHDPW9CS9l0+FdYqbR8x1hAgCedE8RXxJyUZkB
-         fjOdBnEQfh35dzPmIpp0jPZoJ8V4Q+AlgYRBp+3dTEB/6GT83BrxTbHNPU29NlhG1M88
-         2oKg==
-X-Gm-Message-State: AOAM531iZwFheb7ZNGSsBjjjLrApHtdUknhTkSJmg1OdwczF9COrWjXq
-        46AF+rCKGADkid9MUb4aJDk=
-X-Google-Smtp-Source: ABdhPJzBvu4vNX3rq+Sr9fLDESRf+liLR4Ve21s0wdbMVPiZ8RDtaz9hNeI6G66m9jvKmmkDEcRZeQ==
-X-Received: by 2002:a17:90b:3692:: with SMTP id mj18mr16606663pjb.44.1617430757530;
-        Fri, 02 Apr 2021 23:19:17 -0700 (PDT)
-Received: from z640-arch.lan ([2602:61:7344:f100::678])
-        by smtp.gmail.com with ESMTPSA id n25sm9436174pff.154.2021.04.02.23.19.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Apr 2021 23:19:16 -0700 (PDT)
-From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Wei Li <liwei391@huawei.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Felix Fietkau <nbd@nbd.name>
-Subject: [PATCH] MIPS: add support for buggy MT7621S core detection
-Date:   Fri,  2 Apr 2021 23:19:12 -0700
-Message-Id: <20210403061912.1012509-1-ilya.lipnitskiy@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        bh=wnHJ7PNuNi/MgLZsBS26NgmPxT4+w6+zr4G3AhXM1uo=;
+        b=jcoY1pY91Sy0R6o61cmTd1tNdrXyrYQ/3ohpt6bWl2EzpGXlIjHPo1SlsE/LlMdLb2
+         XEBHCrg5bFnH+aBpYkDPsE/yFC6fk4OhjtYZ0zA+MLyNvc/k0HOy56wGA1eqLy2FjbQK
+         8cMYe22oGENMcKB5z52QgZXTA0lDMbgJDiHXcTRuIoSpwk9Ll9swKPSjJ5rMN4PrC6u9
+         yw5WbjTnlDhUyCGuVPKQ97EIMTTAHQ5pUsgNQKT5PoGSPFp0cphToAj7wGKRjS2dnFNS
+         cXsWGcHHINHJDztKjF2rnem6HyEpRERJi7jDXd0P6zXWXgDRZ7On/fBlcOoLi0D1za2C
+         WUaw==
+X-Gm-Message-State: AOAM5338fuBeVWlkVTynqWNe69OM63AwQ7NAXn5E6XH0bfhFLxEMQpvx
+        7dBq4rk8WkoBGJxPUc5q8yS40SqtgbhwFUe9D8vS43ocTrbVQ3lPcxSUQdkocD+lgJSNkbIBHmZ
+        F959FNcNPJZVr7ZTt7p5Jd4+XsLam6XsIlMnc3H/w+fmbKr87jQOw+ur3PioYSe6xbm3Tfi3eQA
+        ==
+X-Received: by 2002:a05:600c:4c95:: with SMTP id g21mr5493554wmp.132.1617433738545;
+        Sat, 03 Apr 2021 00:08:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwKKg6FYFR9/URCAc/S96/zR2Mwi57fYr/pcZK0d8tw1j+m5cU+rIHUFxcv6ps3Tjv0ZNzEmg==
+X-Received: by 2002:a05:600c:4c95:: with SMTP id g21mr5493540wmp.132.1617433738355;
+        Sat, 03 Apr 2021 00:08:58 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id e8sm14835032wme.14.2021.04.03.00.08.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Apr 2021 00:08:57 -0700 (PDT)
+Subject: Re: [PATCH 2/4] KVM: MIPS: rework flush_shadow_* callbacks into one
+ that prepares the flush
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        seanjc@google.com, "open list:MIPS" <linux-mips@vger.kernel.org>
+References: <20210402155807.49976-1-pbonzini@redhat.com>
+ <20210402155807.49976-3-pbonzini@redhat.com>
+ <CAAhV-H4wskLvGD1hhuS2ZDOBNenCcTd_K8GkYn1GOzwnEvTDXQ@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <3cd7114b-9980-4b4a-bf31-2818c7eb4a15@redhat.com>
+Date:   Sat, 3 Apr 2021 09:08:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H4wskLvGD1hhuS2ZDOBNenCcTd_K8GkYn1GOzwnEvTDXQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Most MT7621 SoCs have 2 cores, which is detected and supported properly
-by CPS.
+On 03/04/21 04:31, Huacai Chen wrote:
+> Hi, Paolo,
+> 
+> TE mode has been removed in the MIPS tree, can we also remove it in
+> KVM tree before this rework?
 
-Unfortunately, MT7621 SoC has a less common S variant with only one core.
-On MT7621S, GCR_CONFIG still reports 2 cores, which leads to hangs when
-starting SMP. CPULAUNCH registers can be used in that case to detect the
-absence of the second core and override the GCR_CONFIG PCORES field.
+Fortunately I can pull the exact commit that was applied to the MIPS 
+tree, as it was the first patch that was applied to the tree, but next 
+time please send KVM changes through the KVM tree.
 
-Rework a long-standing OpenWrt patch to override the value of
-mips_cps_numcores on single-core MT7621 systems.
-
-Tested on a dual-core MT7621 device (Ubiquiti ER-X) and a single-core
-MT7621 device (Netgear R6220).
-
-Original 4.14 OpenWrt patch:
-Link: https://git.openwrt.org/?p=openwrt/openwrt.git;a=commitdiff;h=4cdbc90a376dd0555201c1434a2081e055e9ceb7
-Current 5.10 OpenWrt patch:
-Link: https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/ramips/patches-5.10/320-mt7621-core-detect-hack.patch;h=c63f0f4c1ec742e24d8480e80553863744b58f6a;hb=10267e17299806f9885d086147878f6c492cb904
-
-Suggested-by: Felix Fietkau <nbd@nbd.name>
-Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
----
- arch/mips/include/asm/bugs.h | 18 ++++++++++++++++++
- arch/mips/kernel/smp-cps.c   |  3 +++
- 2 files changed, 21 insertions(+)
-
-diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
-index d72dc6e1cf3c..d32f0c4e61f7 100644
---- a/arch/mips/include/asm/bugs.h
-+++ b/arch/mips/include/asm/bugs.h
-@@ -16,6 +16,7 @@
- 
- #include <asm/cpu.h>
- #include <asm/cpu-info.h>
-+#include <asm/mips-boards/launch.h>
- 
- extern int daddiu_bug;
- 
-@@ -50,4 +51,21 @@ static inline int r4k_daddiu_bug(void)
- 	return daddiu_bug != 0;
- }
- 
-+static inline void cm_gcr_pcores_bug(unsigned int *ncores)
-+{
-+	struct cpulaunch *launch;
-+
-+	if (!IS_ENABLED(CONFIG_SOC_MT7621) || !ncores)
-+		return;
-+
-+	/*
-+	 * Ralink MT7621S SoC is single core, but GCR_CONFIG always reports 2 cores.
-+	 * Use legacy amon method to detect if the second core is missing.
-+	 */
-+	launch = (struct cpulaunch *)CKSEG0ADDR(CPULAUNCH);
-+	launch += 2; /* MT7621 has 2 VPEs per core */
-+	if (!(launch->flags & LAUNCH_FREADY))
-+		*ncores = 1;
-+}
-+
- #endif /* _ASM_BUGS_H */
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index bcd6a944b839..e1e9c11e8a7c 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -15,6 +15,7 @@
- #include <linux/irq.h>
- 
- #include <asm/bcache.h>
-+#include <asm/bugs.h>
- #include <asm/mips-cps.h>
- #include <asm/mips_mt.h>
- #include <asm/mipsregs.h>
-@@ -60,6 +61,7 @@ static void __init cps_smp_setup(void)
- 		pr_cont("{");
- 
- 		ncores = mips_cps_numcores(cl);
-+		cm_gcr_pcores_bug(&ncores);
- 		for (c = 0; c < ncores; c++) {
- 			core_vpes = core_vpe_count(cl, c);
- 
-@@ -170,6 +172,7 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
- 
- 	/* Allocate core boot configuration structs */
- 	ncores = mips_cps_numcores(0);
-+	cm_gcr_pcores_bug(&ncores);
- 	mips_cps_core_bootcfg = kcalloc(ncores, sizeof(*mips_cps_core_bootcfg),
- 					GFP_KERNEL);
- 	if (!mips_cps_core_bootcfg) {
--- 
-2.31.1
+Paolo
 
