@@ -2,132 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A2035348F
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Apr 2021 17:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F356C3534BE
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Apr 2021 18:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236728AbhDCPbg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Apr 2021 11:31:36 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:32884 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236615AbhDCPbg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 3 Apr 2021 11:31:36 -0400
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
-        (envelope-from <andrew@lunn.ch>)
-        id 1lSiFE-00EeF7-TB; Sat, 03 Apr 2021 17:31:28 +0200
-Date:   Sat, 3 Apr 2021 17:31:28 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
+        id S236855AbhDCQiR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Apr 2021 12:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236808AbhDCQiQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Apr 2021 12:38:16 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6B0C0613E6;
+        Sat,  3 Apr 2021 09:38:13 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id mh7so1235327ejb.12;
+        Sat, 03 Apr 2021 09:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=r7z9PZUHOLRPlsyUlJgKqk0kSJfJAIYpWl69+JjFgoI=;
+        b=p8w9WxO9mvUwXBifb2jC2gia/2IL49GV/IWNE5RhAElRlHOgGbSXCqd1uAt1T/l/oi
+         E3sFN57uNk9+2vPl14W42U1SuSDkpsguH1laX6/SqMJR3fs8Vh8JhITNq0q0it5qIUqR
+         uTI9b4iohZCAhanWrLlDBSjLkp4mZBu+zfXTrxnHRzv0KTCEuyIQ7JUyLnOzKfRneOO4
+         uGMLS+ffJwPngqL7xw3QnhTxga+cO6HQgPpAXZXrtFrNBk2XPAamIF0jeUKygQcL8hGB
+         Oq/CJN9nFXtndK6CJUStRUy4SNQxBpP5RxqAoPbMuWOAcY5MJjBSnCncwiJOeewCl4Ij
+         34CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=r7z9PZUHOLRPlsyUlJgKqk0kSJfJAIYpWl69+JjFgoI=;
+        b=fapy+BLT1Qx2a1NiOddrxjbEaK3S7hmau16mXPWFotWcIvJFIY7Eq6DKOa97qgRAEa
+         Si5lU603NluOJMw9vxYU2mr1IqeaZv3YiF6aa8k98z/XfK+CcSGkk9/urCiJc8UzjFHJ
+         Q5SfNDVmzW5+dr2PACOpaQCC/WJO1ILHNpKuPIlRggwNVCr9aIljTxgYbMD7+R01Edrc
+         Zs3AZJaB2/ZRD19YpJp00G87IiI+8RgCBR3Yq7n+AY9We+wmaztUukb3rkIcp4u+yVxN
+         aYe1UQhWW8qZS2g+Iny853+udWrayWO09uBTJvYltogJrVh1JTj1YtwlEKX0YGlHi3Cm
+         L8Hg==
+X-Gm-Message-State: AOAM531/6XLCJ8Wg9eeBT4a98uF2qI4RLvyfr9ZYkYO4jlg0o9NqdgZX
+        TDhxXGkUn63EStbonauzdgE=
+X-Google-Smtp-Source: ABdhPJwKerWFa1OIrj6ZrGjYJSLBWDSIIdqGH0oppIu0Bp8FChk2eAUw95BXiDLpqmFvTj8rh4zO2g==
+X-Received: by 2002:a17:906:7c4:: with SMTP id m4mr20098498ejc.63.1617467892122;
+        Sat, 03 Apr 2021 09:38:12 -0700 (PDT)
+Received: from skbuf (5-12-16-165.residential.rdsnet.ro. [5.12.16.165])
+        by smtp.gmail.com with ESMTPSA id r25sm7345698edv.78.2021.04.03.09.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Apr 2021 09:38:11 -0700 (PDT)
+Date:   Sat, 3 Apr 2021 19:38:10 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
 To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+Cc:     Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
+        netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        linux-mips@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH net-next v1 7/9] net: dsa: qca: ar9331: add bridge support
-Message-ID: <YGiKUMMm4oKNFUSs@lunn.ch>
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v1 2/9] net: dsa: tag_ar9331: detect IGMP and
+ MLD packets
+Message-ID: <20210403163810.xut2oilz4d7zuqli@skbuf>
 References: <20210403114848.30528-1-o.rempel@pengutronix.de>
- <20210403114848.30528-8-o.rempel@pengutronix.de>
+ <20210403114848.30528-3-o.rempel@pengutronix.de>
+ <20210403130318.lqkd6id7gehg3bin@skbuf>
+ <20210403132636.h7ghwk2eaekskx2b@pengutronix.de>
+ <20210403134606.tm7dyy3gt2nop2sj@skbuf>
+ <20210403152224.u7vbehkijg2wzxon@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210403114848.30528-8-o.rempel@pengutronix.de>
+In-Reply-To: <20210403152224.u7vbehkijg2wzxon@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Apr 03, 2021 at 01:48:46PM +0200, Oleksij Rempel wrote:
-> This switch is providing forwarding matrix, with it we can configure
-> individual bridges. Potentially we can configure more then one not VLAN
-> based bridge on this HW.
+On Sat, Apr 03, 2021 at 05:22:24PM +0200, Oleksij Rempel wrote:
+> Off-topic question, this patch set stops to work after rebasing against
+> latest netdev. I get following warning:
+> ip l s lan0 master test
+> RTNETLINK answers: Invalid argumen
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/net/dsa/qca/ar9331.c | 73 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 73 insertions(+)
-> 
-> diff --git a/drivers/net/dsa/qca/ar9331.c b/drivers/net/dsa/qca/ar9331.c
-> index b2c22ba924f0..bf9588574205 100644
-> --- a/drivers/net/dsa/qca/ar9331.c
-> +++ b/drivers/net/dsa/qca/ar9331.c
-> @@ -40,6 +40,7 @@
->   */
->  
->  #include <linux/bitfield.h>
-> +#include <linux/if_bridge.h>
->  #include <linux/module.h>
->  #include <linux/of_irq.h>
->  #include <linux/of_mdio.h>
-> @@ -1134,6 +1135,76 @@ static int ar9331_sw_set_ageing_time(struct dsa_switch *ds,
->  				  val);
->  }
->  
-> +static int ar9331_sw_port_bridge_join(struct dsa_switch *ds, int port,
-> +				      struct net_device *br)
-> +{
-> +	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
-> +	struct regmap *regmap = priv->regmap;
-> +	int port_mask = BIT(priv->cpu_port);
-> +	int i, ret;
-> +	u32 val;
-> +
-> +	for (i = 0; i < ds->num_ports; i++) {
-> +		if (dsa_to_port(ds, i)->bridge_dev != br)
-> +			continue;
-> +
-> +		if (!dsa_is_user_port(ds, port))
-> +			continue;
-> +
-> +		val = FIELD_PREP(AR9331_SW_PORT_VLAN_PORT_VID_MEMBER, BIT(port));
-> +		ret = regmap_set_bits(regmap, AR9331_SW_REG_PORT_VLAN(i), val);
-> +		if (ret)
-> +			goto error;
-> +
-> +		if (i != port)
-> +			port_mask |= BIT(i);
-> +	}
-> +
-> +	val = FIELD_PREP(AR9331_SW_PORT_VLAN_PORT_VID_MEMBER, port_mask);
-> +	ret = regmap_update_bits(regmap, AR9331_SW_REG_PORT_VLAN(port),
-> +				 AR9331_SW_PORT_VLAN_PORT_VID_MEMBER, val);
-> +	if (ret)
-> +		goto error;
-> +
-> +	return 0;
-> +error:
-> +	dev_err_ratelimited(priv->dev, "%s: error: %i\n", __func__, ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static void ar9331_sw_port_bridge_leave(struct dsa_switch *ds, int port,
-> +					struct net_device *br)
-> +{
-> +	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
-> +	struct regmap *regmap = priv->regmap;
-> +	int i, ret;
-> +	u32 val;
-> +
-> +	for (i = 0; i < ds->num_ports; i++) {
-> +		if (dsa_to_port(ds, i)->bridge_dev != br)
-> +			continue;
-> +
-> +		if (!dsa_is_user_port(ds, port))
-> +			continue;
-> +
-> +		val = FIELD_PREP(AR9331_SW_PORT_VLAN_PORT_VID_MEMBER, BIT(port));
-> +		ret = regmap_clear_bits(regmap, AR9331_SW_REG_PORT_VLAN(i), val);
-> +		if (ret)
-> +			goto error;
-> +	}
+> Are there some API changes?
 
-Join and leave only seems to differ by:
-
-> +		if (i != port)
-> +			port_mask |= BIT(i);
-
-Maybe refactor the code to add a helper for the identical parts?
-
-      Andrew
+Yes, it's likely that you are returning -EINVAL to some of the functions
+with which DSA calls you at .port_bridge_join time, see dsa_port_switchdev_sync.
