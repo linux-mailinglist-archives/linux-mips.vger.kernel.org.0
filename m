@@ -2,140 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC121353827
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Apr 2021 14:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21AEF353909
+	for <lists+linux-mips@lfdr.de>; Sun,  4 Apr 2021 19:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbhDDM6a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 4 Apr 2021 08:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbhDDM63 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Apr 2021 08:58:29 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612A7C061756;
-        Sun,  4 Apr 2021 05:58:25 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id o19so9967539edc.3;
-        Sun, 04 Apr 2021 05:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ay9dt9s+rxe7/URKnqqWaJeeSbzYzuIksXL2L2LVjNQ=;
-        b=Jvak9k8nNNVLT9LAYa4z8166l+W02ZeGsWYjzOVYzcphx8RkXEb29qxrUPxm1D96Mx
-         4QQOMHppKQlvplvcjHvFydvToarvMXcErPy3us8vKENqkRU2qyDsB2cJ/VXCSydK4h2a
-         XH5L6GfzJZkL0jKMxOwKRz+mgCG0/r8dWYhNNdVzTnONyvDLfBilceypoTSxxXnktwdC
-         jYZJL9Q4yvACiXkfNemgSfPYIp6zvxL8rJvo7HBswD43AbPELrtzTHhxK26yZifTbsAx
-         mvoFdlRwsQXuVydo0/Uwn62gywqOrQWtW0ZYvbElaWV6vL9ViPvTyYUBUO2JmeXPGo4m
-         mT1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ay9dt9s+rxe7/URKnqqWaJeeSbzYzuIksXL2L2LVjNQ=;
-        b=Mjl+zXZuNjuIvIFrjYjlAlJ1nZztCjllVsp0YArfOPXSoYUQEKOINvIeuB5R0ixMNS
-         N45KtlZ0p2V39TUmHgCPTFapjijsulRxGEdxqHKPA/3uOySzuGV6WXogBKGS4El4tjED
-         Dw+050d+IWr5RchBbNY6LOQOLNJhZJxcXTtbqY3D3C6oWY+cmX3p1Bm8ikRuXrX/jxjZ
-         N7znL5zBcG6DmOl/sX+NL1Bd8iTqsDj2lJiVHW2rK6DBIDalh/x+lTJImCebw0zhgf9x
-         sSN0tK7/G/R9j5kAqolTcW87FHhmG1TgfWkVHTnwMIMYGh+0XWEj/STg8vVzWLwAOwrw
-         xUqQ==
-X-Gm-Message-State: AOAM53361oe2t9t4VzZZ3eid1sZWG3EKgv1kAr+B/lGp4LPLIYSCGgoJ
-        eL8ud7TFeSOSmC0wrtsI5Nw=
-X-Google-Smtp-Source: ABdhPJyOrZmCwxPKnAcnjqfpM5XQRpIy2A3RIqUxDaSkVjCUofI8UcnEP5sdQKOUvi1tNGsjm05Kuw==
-X-Received: by 2002:a05:6402:3592:: with SMTP id y18mr25566610edc.360.1617541103947;
-        Sun, 04 Apr 2021 05:58:23 -0700 (PDT)
-Received: from skbuf (5-12-16-165.residential.rdsnet.ro. [5.12.16.165])
-        by smtp.gmail.com with ESMTPSA id p24sm8634745edt.5.2021.04.04.05.58.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Apr 2021 05:58:23 -0700 (PDT)
-Date:   Sun, 4 Apr 2021 15:58:22 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <linux@rempel-privat.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH net-next v1 2/9] net: dsa: tag_ar9331: detect IGMP and
- MLD packets
-Message-ID: <20210404125822.yr6tsrxxvskkvuq6@skbuf>
-References: <20210403114848.30528-1-o.rempel@pengutronix.de>
- <20210403114848.30528-3-o.rempel@pengutronix.de>
- <YGiAjngOfDVWz/D7@lunn.ch>
- <f4856601-4219-09c7-2933-2161afd03abe@rempel-privat.de>
- <20210404000204.kujappopdi3aqjsn@skbuf>
- <ab493cae-e8a5-e03a-3929-649e9ff46816@rempel-privat.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ab493cae-e8a5-e03a-3929-649e9ff46816@rempel-privat.de>
+        id S231290AbhDDRU5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Apr 2021 13:20:57 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:63707 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231272AbhDDRU4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 4 Apr 2021 13:20:56 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4FD0tP1t4vz9tymG;
+        Sun,  4 Apr 2021 19:20:45 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id ffq992l6CBkv; Sun,  4 Apr 2021 19:20:45 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FD0tP0d2fz9tymF;
+        Sun,  4 Apr 2021 19:20:45 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9F2F08B78E;
+        Sun,  4 Apr 2021 19:20:48 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id b-KtXSnASDF0; Sun,  4 Apr 2021 19:20:48 +0200 (CEST)
+Received: from po16121vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4454D8B76A;
+        Sun,  4 Apr 2021 19:20:48 +0200 (CEST)
+Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id 06D3A67685; Sun,  4 Apr 2021 17:20:48 +0000 (UTC)
+Message-Id: <34d20d1dbb88f26d418b33985557b0475374a1a5.1617556785.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [RFC PATCH v6 1/1] cmdline: Add capability to both append and prepend at
+ the same time
+To:     will@kernel.org, danielwa@cisco.com, robh@kernel.org,
+        daniel@gimpelevich.san-francisco.ca.us, arnd@kernel.org,
+        akpm@linux-foundation.org
+Cc:     linux-arch@vger.kernel.org, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        microblaze <monstr@monstr.eu>, linux-mips@vger.kernel.org,
+        nios2 <ley.foon.tan@intel.com>, openrisc@lists.librecores.org,
+        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-mm@kvack.org
+Date:   Sun,  4 Apr 2021 17:20:48 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Apr 04, 2021 at 07:35:26AM +0200, Oleksij Rempel wrote:
-> Am 04.04.21 um 02:02 schrieb Vladimir Oltean:
-> > On Sat, Apr 03, 2021 at 07:14:56PM +0200, Oleksij Rempel wrote:
-> >> Am 03.04.21 um 16:49 schrieb Andrew Lunn:
-> >>>> @@ -31,6 +96,13 @@ static struct sk_buff *ar9331_tag_xmit(struct sk_buff *skb,
-> >>>>  	__le16 *phdr;
-> >>>>  	u16 hdr;
-> >>>>
-> >>>> +	if (dp->stp_state == BR_STATE_BLOCKING) {
-> >>>> +		/* TODO: should we reflect it in the stats? */
-> >>>> +		netdev_warn_once(dev, "%s:%i dropping blocking packet\n",
-> >>>> +				 __func__, __LINE__);
-> >>>> +		return NULL;
-> >>>> +	}
-> >>>> +
-> >>>>  	phdr = skb_push(skb, AR9331_HDR_LEN);
-> >>>>
-> >>>>  	hdr = FIELD_PREP(AR9331_HDR_VERSION_MASK, AR9331_HDR_VERSION);
-> >>>
-> >>> Hi Oleksij
-> >>>
-> >>> This change does not seem to fit with what this patch is doing.
-> >>
-> >> done
-> >>
-> >>> I also think it is wrong. You still need BPDU to pass through a
-> >>> blocked port, otherwise spanning tree protocol will be unstable.
-> >>
-> >> We need a better filter, otherwise, in case of software based STP, we are leaking packages on
-> >> blocked port. For example DHCP do trigger lots of spam in the kernel log.
-> >
-> > I have no idea whatsoever what 'software based STP' is, if you have
-> > hardware-accelerated forwarding.
-> 
-> I do not mean hardware-accelerated forwarding, i mean
-> hardware-accelerated STP port state helpers.
+One user has expressed the need to both append and prepend some
+built-in parameters to the command line provided by the bootloader.
 
-Still no clue what you mean, sorry.
+Allthough it is a corner case, it is easy to implement so let's do it.
 
-> >> I'll drop STP patch for now, it will be better to make a generic soft STP for all switches without
-> >> HW offloading. For example ksz9477 is doing SW based STP in similar way.
-> >
-> > How about we discuss first about what your switch is not doing properly?
-> > Have you debugged more than just watching the bridge change port states?
-> > As Andrew said, a port needs to accept and send link-local frames
-> > regardless of the STP state. In the BLOCKING state it must send no other
-> > frames and have address learning disabled. Is this what's happening, is
-> > the switch forwarding frames towards a BLOCKING port?
-> 
-> The switch is not forwarding BPDU frame to the CPU port. So, the linux
-> bridge will stack by cycling different state of the port where loop was
-> detected.
+When the user chooses to prepend the bootloader provided command line
+with the built-in command line, he is offered the possibility to enter
+an additionnal built-in command line to be appended after the
+bootloader provided command line.
 
-The switch should not be 'forwarding' BPDU frames to the CPU port, it
-should be 'trapping' them. The difference is subtle but important. Often
-times switches have an Access Control List which allows them to steal
-packets from the normal FDB-based forwarding path. It is probably the
-case that your switch needs to be told to treat STP BPDUs specially and
-not just 'forward' them.
-To confirm whether I'm right or wrong, if you disable STP and send a
-packet with MAC DA 01:80:c2:00:00:00 to the switch, will it flood it
-towards all ports or will it only send them to the CPU?
+It is a complementary feature which has no impact on the already
+existing ones and/or the existing defconfig.
+
+Suggested-by: Daniel Walker <danielwa@cisco.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+Sending this out as an RFC, applies on top of the series
+("Implement GENERIC_CMDLINE"). I will add it to the series next spin
+unless someone is against it.
+---
+ include/linux/cmdline.h |  3 +++
+ init/Kconfig            | 12 +++++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/cmdline.h b/include/linux/cmdline.h
+index 020028e2bdf0..fb274a4d5519 100644
+--- a/include/linux/cmdline.h
++++ b/include/linux/cmdline.h
+@@ -36,6 +36,9 @@ static __always_inline bool __cmdline_build(char *dst, const char *src)
+ 
+ 	len = cmdline_strlcat(dst, src, COMMAND_LINE_SIZE);
+ 
++	if (IS_ENABLED(CONFIG_CMDLINE_PREPEND))
++		len = cmdline_strlcat(dst, " " CONFIG_CMDLINE_MORE, COMMAND_LINE_SIZE);
++
+ 	if (IS_ENABLED(CONFIG_CMDLINE_APPEND))
+ 		len = cmdline_strlcat(dst, " " CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+ 
+diff --git a/init/Kconfig b/init/Kconfig
+index fa002e3765ab..cd3087ff4f28 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -128,6 +128,14 @@ config CMDLINE
+ 	  If this string is not empty, additional choices are proposed
+ 	  below to determine how it will be used by the kernel.
+ 
++config CMDLINE_MORE
++	string "Additional default kernel command string" if GENERIC_CMDLINE && CMDLINE_PREPEND
++	default ""
++	help
++	  Defines an additional default kernel command string.
++	  If this string is not empty, it is appended to the
++	  command-line arguments provided by the bootloader
++
+ choice
+ 	prompt "Kernel command line type" if CMDLINE != ""
+ 	default CMDLINE_PREPEND if ARCH_WANT_CMDLINE_PREPEND_BY_DEFAULT
+@@ -154,7 +162,9 @@ config CMDLINE_PREPEND
+ 	bool "Prepend to the bootloader kernel arguments"
+ 	help
+ 	  The default kernel command string will be prepended to the
+-	  command-line arguments provided by the bootloader.
++	  command-line arguments provided by the bootloader. When this
++	  option is selected, another string can be added which will
++	  be appended.
+ 
+ config CMDLINE_FORCE
+ 	bool "Always use the default kernel command string"
+-- 
+2.25.0
+
