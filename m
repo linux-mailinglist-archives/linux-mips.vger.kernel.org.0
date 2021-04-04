@@ -2,57 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A25D353635
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Apr 2021 04:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7783536F9
+	for <lists+linux-mips@lfdr.de>; Sun,  4 Apr 2021 07:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236641AbhDDCdN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Apr 2021 22:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236618AbhDDCdN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Apr 2021 22:33:13 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89D5C061756;
-        Sat,  3 Apr 2021 19:33:09 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id i81so8609042oif.6;
-        Sat, 03 Apr 2021 19:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9kK4JLftKzlx8Dd9WsCAD10DkpUFDpGIS6PjT+XywEg=;
-        b=B6gGGFGhaC1KefgVKVBye+qwFkxvOzewH3KW6fIbSLw2tLYGss+OPaUlkLzTuWpoOb
-         Jbm3dHMKyeJnIOlzZiD9OFEYswE5tPps4NJsQMoRDpElr+mfAxGp2UjMb9Lr+IUWQVIg
-         p7v6xjerEfqhnr/pcy6Zh7Cdnx7bIrQIeVTnoq/J+Dg6No3iDHnmxTmDeZY68WcQmCt9
-         Udr9R8EOTLoE2Q+e3D84imq+Z8y2vXsziBiOiKJZod1I4u3FtU6MSJ9nJ11NCLAt5Lbl
-         FJ/MrX2E6Q2v4KdAJnnZ9Nr4Z3rDY79rYk371iZJoVfJuhWeQJCOELeO/kDYQpO3F16v
-         1+ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9kK4JLftKzlx8Dd9WsCAD10DkpUFDpGIS6PjT+XywEg=;
-        b=eCUFEpNuZqkIIe+R720kXC2+EZaLTYNDBtFtNwxu5YKvcc+Efwx9Dys7/IUUG3Wnjy
-         ag2br44LqInScWnlFnr48q9sKKQONARRwQ+01I/E3BCxbZPPSboF4SFgm9K+dkhE8OJ7
-         mP3jQcvrJGKItc+jvXX3rKCerNk4s55QNwN3pbLQodHc5Z7OaqZdVWUK6iV88qZtBOjm
-         aLItdqF9iEVqJPyKTk9LuyD8oJ3qPD2hZ4uMG3Yq11Gc9LMNKiqA44PkEMKo+NelaIrA
-         2c4gCqvOyBeO22DjYW8SDxoF1p03U/g2lfNReUdQV40Y/8viepX86OjtRA+xjXEdETNA
-         CyRw==
-X-Gm-Message-State: AOAM533xIbOurgdVe2giEToErsFIeQNLHV68n/Pxnsjj3mkNz42otvdH
-        bzqkneSB9+65n1P6BSPzDLMTbRdc3fE=
-X-Google-Smtp-Source: ABdhPJzC3HWE2ylpgtXM5qJiE/qVb1ttVbl9OIJRl6FWVl814rQ0ZMfEcz+952a3lS4sYl5pV2HHHw==
-X-Received: by 2002:aca:4e83:: with SMTP id c125mr13911341oib.38.1617503588787;
-        Sat, 03 Apr 2021 19:33:08 -0700 (PDT)
-Received: from ?IPv6:2600:1700:dfe0:49f0:d9ea:8934:6811:fd93? ([2600:1700:dfe0:49f0:d9ea:8934:6811:fd93])
-        by smtp.gmail.com with ESMTPSA id n10sm2940225otj.36.2021.04.03.19.32.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Apr 2021 19:33:08 -0700 (PDT)
-Subject: Re: [PATCH net-next v1 1/9] net: dsa: add rcv_post call back
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
+        id S229587AbhDDFfv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Apr 2021 01:35:51 -0400
+Received: from mout.gmx.net ([212.227.15.18]:45531 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229517AbhDDFfu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 4 Apr 2021 01:35:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1617514530;
+        bh=spnXF9bitaRpIdUoYH0Zqs8FB9jy9Hn4K39Rt8w46BY=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Bq17cyiE51QPI5XOTEe2o70zo8e8Q32XJItNhcRqbfCfp0p5W+57SXhUppr1HwTX3
+         0anlTczL6KDRU9BRpkZe8LOkUVpImFjImQR1pFsyHMH9oe+HgwaNgWATPGRVDceZkN
+         ywTtcvB89oWd12LF7krT9igJfIBmoF9jNLFlD55g=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.44] ([95.91.192.147]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Md6Mj-1m2XU92nz9-00aEC7; Sun, 04
+ Apr 2021 07:35:30 +0200
+Subject: Re: [PATCH net-next v1 2/9] net: dsa: tag_ar9331: detect IGMP and MLD
+ packets
+To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
         Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
@@ -60,101 +36,102 @@ Cc:     Andrew Lunn <andrew@lunn.ch>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
 References: <20210403114848.30528-1-o.rempel@pengutronix.de>
- <20210403114848.30528-2-o.rempel@pengutronix.de>
- <20210403140534.c4ydlgu5hqh7bmcq@skbuf>
- <20210403232116.knf6d7gdrvamk2lj@skbuf>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <53d84140-c072-f4ab-2f5c-af5c62abce2d@gmail.com>
-Date:   Sat, 3 Apr 2021 19:32:48 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+ <20210403114848.30528-3-o.rempel@pengutronix.de> <YGiAjngOfDVWz/D7@lunn.ch>
+ <f4856601-4219-09c7-2933-2161afd03abe@rempel-privat.de>
+ <20210404000204.kujappopdi3aqjsn@skbuf>
+From:   Oleksij Rempel <linux@rempel-privat.de>
+Message-ID: <ab493cae-e8a5-e03a-3929-649e9ff46816@rempel-privat.de>
+Date:   Sun, 4 Apr 2021 07:35:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <20210403232116.knf6d7gdrvamk2lj@skbuf>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210404000204.kujappopdi3aqjsn@skbuf>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:9p/coZq9wZCmxGXl0mqGGX+ODJYTNv+5wpDnyDKmzh/QY3x7NYq
+ Y7zm8poDMRy1j/cGtHaffrWn/f+2uRyfmlIFLrXN6IQ3Hq1nuwNfDcME1+yO3ybxSXx4OSn
+ aHK7aQVyn5pfyDWr5Z+YsvjMSqRDJ+LAOqtOaXiPjgjwx9EazjC87/q0Yt7QPEYAqYQRflo
+ vD5dLzJi6d8q653VrF7rA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:h0x5UH8Rwxs=:7gDkdZV1X2owpN2qm5xMaT
+ 5Q/CNaiW5CNCPTcXP/7yltdtUK601fXnXLQPS+XJXQJFhb7tn6zeIw4eEdVomvC3Aq4/9qIC+
+ RpbPuD9XfGIJTd1j/GJ8o+8vxOrhMPViJYKfRGSJ7jV0PNZqlsUKlQxX0hYAssJD82i8hYvLD
+ 7/OJaXmJVUfKxSUUriMuG2gzVVdHSBuel/W1eTzRWmSZeAql8E8vtdN6mo/ZI9mVTYnGGPRDg
+ mKzPcHytXTamUOWxbyjncFAMbtoGyByahh9o2Loz7KcuYFGzwCF5s7brmca5GyG2yVWms9CEz
+ qofNUUAV4UydgVEGiZI4qiIJrsE5aoY/uJRgVKanvdr14o9SqXYPjoPelZFwDQnCbllogRc0A
+ 7a4occ333cqv/Irqcyet+KzXi1vJZbSSPHsddUTenY7dVs80TaOeKk4YLKdHIlaUj1Z/jr/gB
+ mffXLZQ5vjOVqJN2x2BtuMUnH6Km4O0YundpVXfQi9hdkDd9ku3g+ghZDMGc134jed7JUBNC7
+ IupzVJ4ER/IzPIAjteTS8VNTZbfkDYt4W5yqQO4F8KnQAcAP2ETafzYLSetxDwwKrFEaFe2EH
+ aYETczAeDq+A8a96FLpVq1FSd1pnCxy+wnhdDgIlr6oCMpCUvuk+VHXuWBDzyHksYaOxdkZav
+ Sd70TIfBfYvuifNoBHXJiPF7GLcYHJopyqS0S+z9cERMPjlqf7pflYL2qnNciZTDPqqNThiMN
+ EPj1fgPkrm1c3BOYsuC5RJpObFlyVOYepQnXeqYo7UH8Fy7Bd/Tsp8jyvRpjkYEheOUALo2x4
+ vV4TjT381aWjkF5/caS2pl/FJuDqhkw3JN8Kbnu5yvPsRCJ29G0Vi15fgR1gwrm3GYAFwcrzQ
+ Fm8WetD83xLmSKMc8iqhvkvYpODFsS59yHWOswg5yM4naPlCxWPkFqJoI/gAEqU++xBuXyFvl
+ R0Ta5sSQjmNGzCaDriM4+hBHKwA/8qnKKHEnRxZFRSsJqIVNkKYW7JGCkG2dikHtOL6RL1unO
+ Fadn06CU57BkqCbyx5yAkIFleZOxezPI7eMzV/VH+dChN4ezbj7Shc7Ie2aPOS02yVyHEy7JB
+ 076zIPDOzHHny7RbDo54D8V6azKh67tgvmi7RCPI3jXnA/g4+ZwVOj/M7mRnTmdvArKcwcdn6
+ NyEwbfKNQTOSx2c0RmmT4RUDpw9v+7c14DbPquLZGXBpJzOG0upQlPElaIVXdCDk6sjEs6bOA
+ C2CsfZ3T1gATQypsM
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 4/3/2021 16:21, Vladimir Oltean wrote:
-> On Sat, Apr 03, 2021 at 05:05:34PM +0300, Vladimir Oltean wrote:
->> On Sat, Apr 03, 2021 at 01:48:40PM +0200, Oleksij Rempel wrote:
->>> Some switches (for example ar9331) do not provide enough information
->>> about forwarded packets. If the switch decision was made based on IPv4
->>> or IPv6 header, we need to analyze it and set proper flag.
+Am 04.04.21 um 02:02 schrieb Vladimir Oltean:
+> On Sat, Apr 03, 2021 at 07:14:56PM +0200, Oleksij Rempel wrote:
+>> Am 03.04.21 um 16:49 schrieb Andrew Lunn:
+>>>> @@ -31,6 +96,13 @@ static struct sk_buff *ar9331_tag_xmit(struct sk_b=
+uff *skb,
+>>>>  	__le16 *phdr;
+>>>>  	u16 hdr;
+>>>>
+>>>> +	if (dp->stp_state =3D=3D BR_STATE_BLOCKING) {
+>>>> +		/* TODO: should we reflect it in the stats? */
+>>>> +		netdev_warn_once(dev, "%s:%i dropping blocking packet\n",
+>>>> +				 __func__, __LINE__);
+>>>> +		return NULL;
+>>>> +	}
+>>>> +
+>>>>  	phdr =3D skb_push(skb, AR9331_HDR_LEN);
+>>>>
+>>>>  	hdr =3D FIELD_PREP(AR9331_HDR_VERSION_MASK, AR9331_HDR_VERSION);
 >>>
->>> Potentially we can do it in existing rcv path, on other hand we can
->>> avoid part of duplicated work and let the dsa framework set skb header
->>> pointers and then use preprocessed skb one step later withing the rcv_post
->>> call back.
+>>> Hi Oleksij
 >>>
->>> This patch is needed for ar9331 switch.
->>>
->>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
->>> ---
+>>> This change does not seem to fit with what this patch is doing.
 >>
->> I don't necessarily disagree with this, perhaps we can even move
->> Florian's dsa_untag_bridge_pvid() call inside a rcv_post() method
->> implemented by the DSA_TAG_PROTO_BRCM_LEGACY, DSA_TAG_PROTO_BRCM_PREPEND
->> and DSA_TAG_PROTO_BRCM taggers. Or even better, because Oleksij's
->> rcv_post is already prototype-compatible with dsa_untag_bridge_pvid, we
->> can already do:
+>> done
 >>
->> 	.rcv_post = dsa_untag_bridge_pvid,
+>>> I also think it is wrong. You still need BPDU to pass through a
+>>> blocked port, otherwise spanning tree protocol will be unstable.
 >>
->> This should be generally useful for stuff that DSA taggers need to do
->> which is easiest done after eth_type_trans() was called.
-> 
-> I had some fun with an alternative method of parsing the frame for IGMP
-> so that you can clear skb->offload_fwd_mark, which doesn't rely on the
-> introduction of a new method in DSA. It should also have several other
-> advantages compared to your solution such as the fact that it should
-> work with VLAN-tagged packets.
-> 
-> Background: we made Receive Packet Steering work on DSA master interfaces
-> (echo 3 > /sys/class/net/eth0/queues/rx-1/rps_cpus) even when the DSA
-> tag shifts to the right the IP headers and everything that comes
-> afterwards. The flow dissector had to be patched for that, just grep for
-> DSA in net/core/flow_dissector.c.
-> 
-> The problem you're facing is that you can't parse the IP and IGMP
-> headers in the tagger's rcv() method, since the network header,
-> transport header offsets and skb->protocol are all messed up, since
-> eth_type_trans hasn't been called yet.
-> 
-> And that's the trick right there, you're between a rock and a hard
-> place: too early because eth_type_trans wasn't called yet, and too late
-> because skb->dev was changed and no longer points to the DSA master, so
-> the flow dissector adjustment we made doesn't apply.
-> 
-> But if you call the flow dissector _before_ you call "skb->dev =
-> dsa_master_find_slave" (and yes, while the DSA tag is still there), then
-> it's virtually as if you had called that while the skb belonged to the
-> DSA master, so it should work with __skb_flow_dissect.
-> 
-> In fact I prototyped this idea below. I wanted to check whether I can
-> match something as fine-grained as an IGMPv2 Membership Report message,
-> and I could.
-> 
-> I prototyped it inside the ocelot tagging protocol driver because that's
-> what I had handy. I used __skb_flow_dissect with my own flow dissector
-> which had to be initialized at the tagger module_init time, even though
-> I think I could have probably just called skb_flow_dissect_flow_keys
-> with a standard dissector, and that would have removed the need for the
-> custom module_init in tag_ocelot.c. One thing that is interesting is
-> that I had to add the bits for IGMP parsing to the flow dissector
-> myself (based on the existing ICMP code). I was too lazy to do that for
-> MLD as well, but it is really not hard. Or even better, if you don't
-> need to look at all inside the IGMP/MLD header, I think you can even
-> omit adding this parsing code to the flow dissector and just look at
-> basic.n_proto and basic.ip_proto.
-> 
-> See the snippet below. Hope it helps.
+>> We need a better filter, otherwise, in case of software based STP, we a=
+re leaking packages on
+>> blocked port. For example DHCP do trigger lots of spam in the kernel lo=
+g.
+>
+> I have no idea whatsoever what 'software based STP' is, if you have
+> hardware-accelerated forwarding.
 
-This looks a lot better than introducing hooks at various points in 
-dsa_switch_rcv().
--- 
-Florian
+I do not mean hardware-accelerated forwarding, i mean
+hardware-accelerated STP port state helpers.
+
+>> I'll drop STP patch for now, it will be better to make a generic soft S=
+TP for all switches without
+>> HW offloading. For example ksz9477 is doing SW based STP in similar way=
+.
+>
+> How about we discuss first about what your switch is not doing properly?
+> Have you debugged more than just watching the bridge change port states?
+> As Andrew said, a port needs to accept and send link-local frames
+> regardless of the STP state. In the BLOCKING state it must send no other
+> frames and have address learning disabled. Is this what's happening, is
+> the switch forwarding frames towards a BLOCKING port?
+
+The switch is not forwarding BPDU frame to the CPU port. So, the linux
+bridge will stack by cycling different state of the port where loop was
+detected.
+
+=2D-
+Regards,
+Oleksij
