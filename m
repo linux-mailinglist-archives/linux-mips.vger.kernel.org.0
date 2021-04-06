@@ -2,109 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8FE354FC5
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 11:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C270D35500A
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 11:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234076AbhDFJZh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Apr 2021 05:25:37 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34918 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233847AbhDFJZa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Apr 2021 05:25:30 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv8v4KGxgmMAEAA--.8923S2;
-        Tue, 06 Apr 2021 17:25:13 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH RFC] MIPS: Loongson64: Use _CACHE_UNCACHED instead of _CACHE_UNCACHED_ACCELERATED
-Date:   Tue,  6 Apr 2021 17:25:12 +0800
-Message-Id: <1617701112-14007-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxv8v4KGxgmMAEAA--.8923S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFWUJw4rCF17Ww4kKF4kJFb_yoW5Xry8pF
-        4jkwsxKr48KrykKF9rGry0gry5urn8AFW3GF13C3yDZasIqF1UWwn2qFW5Kr40vr1xtw10
-        vFZ29ry5Ka18uw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUUPl13UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S244889AbhDFJg4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Apr 2021 05:36:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54972 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241239AbhDFJgc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Apr 2021 05:36:32 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58EED6135D;
+        Tue,  6 Apr 2021 09:36:24 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lTi8E-005owA-4b; Tue, 06 Apr 2021 10:36:22 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 0/9] Cleaning up some of the irqdomain features
+Date:   Tue,  6 Apr 2021 10:35:48 +0100
+Message-Id: <20210406093557.1073423-1-maz@kernel.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org, daniel@zonque.org, robert.jarzmik@free.fr, haojian.zhuang@gmail.com, ysato@users.sourceforge.jp, dalias@libc.org, tsbogend@alpha.franken.de, mpe@ellerman.id.au, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Loongson64 processors have a writecombine issue that maybe failed to
-write back framebuffer used with ATI Radeon or AMD GPU at times, after
-commit 8a08e50cee66 ("drm: Permit video-buffers writecombine mapping
-for MIPS"), there exists some errors such as blurred screen and lockup,
-and so on.
+The irqdomain subsystem has grown quite a lot over the years, and some
+of its features are either oddly used or just pretty useless. Some
+other helpers expose internals that are likely to change soon.
 
-[   60.958721] radeon 0000:03:00.0: ring 0 stalled for more than 10079msec
-[   60.965315] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000112 last fence id 0x000000000000011d on ring 0)
-[   60.976525] radeon 0000:03:00.0: ring 3 stalled for more than 10086msec
-[   60.983156] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000374 last fence id 0x00000000000003a8 on ring 3)
+Here are the bits that I'm trying to get rid of:
 
-As discussed earlier [1], it might be better to disable writecombine
-on the CPU detection side because the root cause is unknown now.
+- irq_linear_revmap exposes the internals of the domains, and only
+  works for linear domains. The supposed speed improvement really
+  isn't an argument, as it gets in the way of more significant
+  optimisations. Reimplemented in terms of irq_find_mapping, which
+  always works, and will eventually go at some point.
 
-Actually, this patch is a temporary solution to just make it work well,
-it is not a proper and final solution, I hope someone will have a better
-solution to fix this issue in the future.
+- irq_create_strict_mappings is just a way to constraint the
+  allocation of irqdescs into a given range, which is better served by
+  creating a legacy irqdomain, and shows that the platform really
+  needs to catch up with the 21st century.
 
-[1] https://lore.kernel.org/patchwork/patch/1285542/
+- irq_create_identity mapping is just a variation on the above, with
+  irq==hwirq, although the way it is used is a gross hack in the SH
+  code that needs to go.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
+- irq_domain_add_legacy_isa is, as the names shows, a variation on
+  irq_domain_add_legacy with a reservation of 16 interrupts. This is
+  only used in the PPC code.
 
-Hi Thomas,
+The patches address all of the above, touching some of the ARM, PPC,
+and SH code that is affected. Another couple of patches address a MIPS
+platform that could use the generic code, and clean some of the
+comments in the irqdomain code.
 
-If you are OK with this change, could you please apply it
-to mips-next? Then, no need to do this change manually every
-time when update the mainline kernel.
+Unless anyone shouts, I'd like to take this into 5.13, as it is the
+basis of some further (and deeper) changes in the way irqdomains work.
 
- arch/mips/kernel/cpu-probe.c | 3 ---
- 1 file changed, 3 deletions(-)
+	M.
 
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index b718920..0ef240a 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1752,7 +1752,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 			set_isa(c, MIPS_CPU_ISA_M64R2);
- 			break;
- 		}
--		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_EXT |
- 				MIPS_ASE_LOONGSON_EXT2);
- 		break;
-@@ -1782,7 +1781,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 		 * register, we correct it here.
- 		 */
- 		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
--		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
- 			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
- 		c->ases &= ~MIPS_ASE_VZ; /* VZ of Loongson-3A2000/3000 is incomplete */
-@@ -1793,7 +1791,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 		set_elf_platform(cpu, "loongson3a");
- 		set_isa(c, MIPS_CPU_ISA_M64R2);
- 		decode_cpucfg(c);
--		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		break;
- 	default:
- 		panic("Unknown Loongson Processor ID!");
+Marc Zyngier (9):
+  irqdomain: Reimplement irq_linear_revmap() with irq_find_mapping()
+  ARM: PXA: Kill use of irq_create_strict_mappings()
+  irqchip/jcore-aic: Kill use of irq_create_strict_mappings()
+  sh: intc: Drop the use of irq_create_identity_mapping()
+  irqdomain: Kill
+    irq_create_strict_mappings()/irq_create_identity_mapping()
+  mips: netlogic: Use irq_domain_simple_ops for XLP PIC
+  irqdomain: Drop references to recusive irqdomain setup
+  powerpc: Convert irq_domain_add_legacy_isa use to
+    irq_domain_add_legacy
+  irqdomain: Kill irq_domain_add_legacy_isa
+
+ Documentation/core-api/irq/irq-domain.rst |  1 -
+ arch/arm/mach-pxa/pxa_cplds_irqs.c        | 24 +++++------
+ arch/mips/netlogic/common/irq.c           |  6 +--
+ arch/powerpc/include/asm/irq.h            |  4 +-
+ arch/powerpc/platforms/ps3/interrupt.c    |  4 +-
+ arch/powerpc/sysdev/i8259.c               |  3 +-
+ arch/powerpc/sysdev/mpic.c                |  2 +-
+ arch/powerpc/sysdev/tsi108_pci.c          |  3 +-
+ arch/powerpc/sysdev/xics/xics-common.c    |  2 +-
+ drivers/irqchip/irq-jcore-aic.c           |  4 +-
+ drivers/sh/intc/core.c                    | 50 ++++++++++-------------
+ include/linux/irqdomain.h                 | 42 ++++---------------
+ kernel/irq/irqdomain.c                    | 49 +++-------------------
+ 13 files changed, 59 insertions(+), 135 deletions(-)
+
 -- 
-2.1.0
+2.29.2
 
