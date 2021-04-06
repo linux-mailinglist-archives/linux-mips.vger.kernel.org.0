@@ -2,91 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 072D0354DCB
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 09:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8FE354FC5
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 11:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbhDFHYy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Apr 2021 03:24:54 -0400
-Received: from verein.lst.de ([213.95.11.211]:53241 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229539AbhDFHYx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Apr 2021 03:24:53 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 1C9C568B02; Tue,  6 Apr 2021 09:24:43 +0200 (CEST)
-Date:   Tue, 6 Apr 2021 09:24:43 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] MIPS: Remove get_fs/set_fs
-Message-ID: <20210406072443.GA7626@lst.de>
-References: <20210401125639.42963-1-tsbogend@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210401125639.42963-1-tsbogend@alpha.franken.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        id S234076AbhDFJZh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Apr 2021 05:25:37 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:34918 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233847AbhDFJZa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Apr 2021 05:25:30 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv8v4KGxgmMAEAA--.8923S2;
+        Tue, 06 Apr 2021 17:25:13 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH RFC] MIPS: Loongson64: Use _CACHE_UNCACHED instead of _CACHE_UNCACHED_ACCELERATED
+Date:   Tue,  6 Apr 2021 17:25:12 +0800
+Message-Id: <1617701112-14007-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxv8v4KGxgmMAEAA--.8923S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFWUJw4rCF17Ww4kKF4kJFb_yoW5Xry8pF
+        4jkwsxKr48KrykKF9rGry0gry5urn8AFW3GF13C3yDZasIqF1UWwn2qFW5Kr40vr1xtw10
+        vFZ29ry5Ka18uw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUUPl13UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Btw, there is a bunch of cleanups that would fit in nicely on top of
-this:
+Loongson64 processors have a writecombine issue that maybe failed to
+write back framebuffer used with ATI Radeon or AMD GPU at times, after
+commit 8a08e50cee66 ("drm: Permit video-buffers writecombine mapping
+for MIPS"), there exists some errors such as blurred screen and lockup,
+and so on.
 
- - remove the unused __invoke_copy_from function
- - fold __get_user_check into get_user as it is the only caller
- - fold __get_user_nocheck into __get_user as it is the only caller
- - fold __put_user_check into put_user as it is the only caller
- - fold __put_user_nocheck into __put_user as it is the only caller
- - implement get_user in terms of __get_user to document the difference
-   better and to remove __get_user_common
- - implement put_user in terms of __put_user to document the difference
-   better and to remove __get_user_common
- - remove __put_user_unknown/__get_user_unknown and replace them with
-   BUILD_BUG_ON()
+[   60.958721] radeon 0000:03:00.0: ring 0 stalled for more than 10079msec
+[   60.965315] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000112 last fence id 0x000000000000011d on ring 0)
+[   60.976525] radeon 0000:03:00.0: ring 3 stalled for more than 10086msec
+[   60.983156] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000374 last fence id 0x00000000000003a8 on ring 3)
 
+As discussed earlier [1], it might be better to disable writecombine
+on the CPU detection side because the root cause is unknown now.
 
-On Thu, Apr 01, 2021 at 02:56:33PM +0200, Thomas Bogendoerfer wrote:
-> This series replaces get_fs/set_fs and removes it from MIPS arch code.
-> 
-> Changes in v3:
-> - use get_user/get_kernel_nofault for helper functions
-> 
-> Changes in v2:
-> - added copy_from_kernel_nofault_allowed() for !EVA to restrict
->   access of __get/__put_kernel_nofault
-> - replaced __get_data macro by helper functions
-> - removed leftover set_fs calls in ftrace.c
-> - further cleanup uaccess.h
-> 
-> Thomas Bogendoerfer (4):
->   MIPS: kernel: Remove not needed set_fs calls
->   MIPS: uaccess: Added __get/__put_kernel_nofault
->   MIPS: uaccess: Remove get_fs/set_fs call sites
->   MIPS: Remove get_fs/set_fs
-> 
->  arch/mips/Kconfig                   |   1 -
->  arch/mips/include/asm/processor.h   |   4 -
->  arch/mips/include/asm/thread_info.h |   6 -
->  arch/mips/include/asm/uaccess.h     | 436 +++++++++++-----------------
->  arch/mips/kernel/access-helper.h    |  18 ++
->  arch/mips/kernel/asm-offsets.c      |   1 -
->  arch/mips/kernel/ftrace.c           |   8 -
->  arch/mips/kernel/process.c          |   2 -
->  arch/mips/kernel/scall32-o32.S      |   4 +-
->  arch/mips/kernel/traps.c            | 105 +++----
->  arch/mips/kernel/unaligned.c        | 199 +++++--------
->  arch/mips/lib/memcpy.S              |  28 +-
->  arch/mips/lib/memset.S              |   3 -
->  arch/mips/lib/strncpy_user.S        |  48 +--
->  arch/mips/lib/strnlen_user.S        |  44 +--
->  arch/mips/mm/Makefile               |   4 +
->  arch/mips/mm/maccess.c              |  10 +
->  17 files changed, 357 insertions(+), 564 deletions(-)
->  create mode 100644 arch/mips/kernel/access-helper.h
->  create mode 100644 arch/mips/mm/maccess.c
-> 
-> -- 
-> 2.29.2
----end quoted text---
+Actually, this patch is a temporary solution to just make it work well,
+it is not a proper and final solution, I hope someone will have a better
+solution to fix this issue in the future.
+
+[1] https://lore.kernel.org/patchwork/patch/1285542/
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+
+Hi Thomas,
+
+If you are OK with this change, could you please apply it
+to mips-next? Then, no need to do this change manually every
+time when update the mainline kernel.
+
+ arch/mips/kernel/cpu-probe.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index b718920..0ef240a 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1752,7 +1752,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 			set_isa(c, MIPS_CPU_ISA_M64R2);
+ 			break;
+ 		}
+-		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_EXT |
+ 				MIPS_ASE_LOONGSON_EXT2);
+ 		break;
+@@ -1782,7 +1781,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 		 * register, we correct it here.
+ 		 */
+ 		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
+-		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+ 			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
+ 		c->ases &= ~MIPS_ASE_VZ; /* VZ of Loongson-3A2000/3000 is incomplete */
+@@ -1793,7 +1791,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 		set_elf_platform(cpu, "loongson3a");
+ 		set_isa(c, MIPS_CPU_ISA_M64R2);
+ 		decode_cpucfg(c);
+-		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		break;
+ 	default:
+ 		panic("Unknown Loongson Processor ID!");
+-- 
+2.1.0
+
