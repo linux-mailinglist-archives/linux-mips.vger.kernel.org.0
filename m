@@ -2,156 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D173355966
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 18:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEE83559BA
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 18:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346526AbhDFQmm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Apr 2021 12:42:42 -0400
-Received: from rcdn-iport-4.cisco.com ([173.37.86.75]:63769 "EHLO
-        rcdn-iport-4.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346527AbhDFQmi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Apr 2021 12:42:38 -0400
+        id S234519AbhDFQ4Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Apr 2021 12:56:24 -0400
+Received: from alln-iport-5.cisco.com ([173.37.142.92]:48647 "EHLO
+        alln-iport-5.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232598AbhDFQ4X (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Apr 2021 12:56:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=3115; q=dns/txt; s=iport;
-  t=1617727351; x=1618936951;
+  d=cisco.com; i=@cisco.com; l=2543; q=dns/txt; s=iport;
+  t=1617728176; x=1618937776;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=50Y5J3ymEIV3Iw/tW/yMYxTzDSV1S32YCccq6b0npb0=;
-  b=O+l2WdgJHdqjz7CRsbSw3rpMz4eEj6h8Kr20AQHywZ/aSW09LiIA36ew
-   xeHaV3IcjhsdurAAHMLXWbWwqqyzraSJ+ABZR47PewZ/KTaECjElElR69
-   wUJCycTZupqKgElo3zL6cVgC5yKXYISYjcHxXbrLJ+n4nUZ45xBjIB9c/
-   A=;
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3ApIoZVqjAH57WgZJThgTPBhL7W3BQX6B13D?=
- =?us-ascii?q?Abvn1ZSRFFG/GwvcrGppsm/DXzjyscX2xltNCbIa+bQW7d85kd2/h1AZ6JWg?=
- =?us-ascii?q?76tGy0aLx45Yz5zDH6XwH4/OhR1aBvGpIObOHYJ158kMr8/U2EA88tqeP3kp?=
- =?us-ascii?q?yAqO/Cwx5WJz1CRLpn625CZzqzMkozfwVeAIp8KZz03LshmxOFWVA6Kvu2HW?=
- =?us-ascii?q?MEWe+rnaypqLvDbQQdDxAqrCmi5AnI1JfAHxKV3ggTXlp0qN9IzUH/nwP0/a?=
- =?us-ascii?q?mluf2goyW960bo859UlNH9o+EsOOWwjKEuRgnEu0KBeJlmH4aPpikyp/uirG?=
- =?us-ascii?q?w3icDWrw07Vv4DjU/5TyWSvQbn3RXm3XII7XLvoGXo+UfLkIjeWC8wDdZHiM?=
- =?us-ascii?q?ZiVibhr2AkvN16zctwrhuki6Y=3D?=
+   mime-version:in-reply-to;
+  bh=cZx99TFaCLts0bYspySXDfTAZA7sX1ryp1fo4EAJaBw=;
+  b=R4llpUe0760jIGN8ajhuGiyQ7AjZYDFP/5B615OEasNtvWFmppzuIAW3
+   VrXjn6ragzVpRW3qx6K7svEY9uYFl6mkjVVBmPY7xNyWJyQ+e3/gxLyR4
+   wdkyvt9igNCdF816s3S5UUiZ40gU303G8bibEWdCEFcS/weFez4fK01RN
+   g=;
+X-IPAS-Result: =?us-ascii?q?A0AWAgAIkmxgmIMNJK1aHAEBAQEBAQcBARIBAQQEAQFAg?=
+ =?us-ascii?q?VKDeAE5lkYDkAwWilqBaAsBAQENAQE0BAEBhFACgXYCJTgTAgMBAQEDAgMBA?=
+ =?us-ascii?q?QEBAQUBAQECAQYEFAEBAQEBAQEBaIVdhkUBBTo/EAsSBhUZPA0OBoMEgwirV?=
+ =?us-ascii?q?HWBNIEBiB+BRCKBF41NJxyBSUKENT6DeYEGhTgEggRCAS0Qg3GQQo1gnCmDF?=
+ =?us-ascii?q?YEmm0cyEKRhLbgRAgQGBQIWgWshgVszGggbFYMlTxkOjjiOUCEDZwIGCgEBA?=
+ =?us-ascii?q?wmNRAEB?=
+IronPort-HdrOrdr: A9a23:az4voqCHQftEAsTlHekR55DYdL4zR+YMi2QD/UoZc3NoW+afkN
+ 2jm+le+B/vkTAKWGwhn9foAtjkfVr385lp7Y4NeYqzRQWOghrLEKhO5ZbvqgeLJwTQ7ehYvJ
+ 0MT4FfD5nKAUF+nYLG5mCDYrId6f2m1IztuuvE1XdqSmhRGsJdxiN0EBySHEEzZCQuP/sEPa
+ GR7MZGuDasEE5/Bq+GL0IIUOTZq9rAmIiOW347LiQ64wqDhy7A0tDHOiWfty1zbxp/hZE/7G
+ PCjwv1ooKkvv3T8G6760bjq7JLhdDm1txPQPapt/FQADDthgG0Db4RPIG/gA==
 X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0AKAABBjmxg/4sNJK1aGgEBAQEBAQE?=
- =?us-ascii?q?BAQEDAQEBARIBAQEBAgIBAQEBQIE+BQEBAQELAYIqgU0BOTGMZokuA5AMFop?=
- =?us-ascii?q?GgXwLAQEBDQEBNAQBAYEWAYM0AwICgXYCJTQJDgIDAQEMAQEFAQEBAgEGBHE?=
- =?us-ascii?q?ThV2GRAEBAQMBMgFGBQsLGC48GwYThVghq051gTSBAYgfgUQUDoEXAY1MJxy?=
- =?us-ascii?q?BSUKENT6KNwSBVRBigQ9NgWKROgaNUoEgmXWBFIMVgSabRzIQpGG4PgIEBgU?=
- =?us-ascii?q?CFoFUOoFZMxoIGxWDJFAZDo4rFo5HIQMvOAIGAQkBAQMJjUQBAQ?=
-X-IronPort-AV: E=Sophos;i="5.82,310,1613433600"; 
-   d="scan'208";a="857077664"
-Received: from alln-core-6.cisco.com ([173.36.13.139])
-  by rcdn-iport-4.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 06 Apr 2021 16:42:26 +0000
+X-IronPort-AV: E=Sophos;i="5.82,201,1613433600"; 
+   d="scan'208";a="693085054"
+Received: from alln-core-1.cisco.com ([173.36.13.131])
+  by alln-iport-5.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 06 Apr 2021 16:56:13 +0000
 Received: from zorba ([10.24.14.212])
-        by alln-core-6.cisco.com (8.15.2/8.15.2) with ESMTPS id 136GgOjZ008120
+        by alln-core-1.cisco.com (8.15.2/8.15.2) with ESMTPS id 136GuAm7015894
         (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 6 Apr 2021 16:42:26 GMT
-Date:   Tue, 6 Apr 2021 09:42:24 -0700
+        Tue, 6 Apr 2021 16:56:12 GMT
+Date:   Tue, 6 Apr 2021 09:56:10 -0700
 From:   Daniel Walker <danielwa@cisco.com>
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Will Deacon <will@kernel.org>, ob Herring <robh@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        xe-linux-external@cisco.com, Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] drivers: firmware: efi: libstub: enable generic
- commandline
-Message-ID: <20210406164224.GU2469518@zorba>
-References: <41021d66db2ab427c14255d2a24bb4517c8b58fd.1617126961.git.danielwa@cisco.com>
- <e5d98d566c38d6f8516b8d9d1fd603ec1f131037.1617126961.git.danielwa@cisco.com>
- <72fbd293-1d83-a558-4d7a-141576371864@csgroup.eu>
+Cc:     will@kernel.org, robh@kernel.org,
+        daniel@gimpelevich.san-francisco.ca.us, arnd@kernel.org,
+        akpm@linux-foundation.org, linux-arch@vger.kernel.org,
+        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        microblaze <monstr@monstr.eu>, linux-mips@vger.kernel.org,
+        nios2 <ley.foon.tan@intel.com>, openrisc@lists.librecores.org,
+        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v4 00/20] Implement GENERIC_CMDLINE
+Message-ID: <20210406165610.GV2469518@zorba>
+References: <cover.1617375802.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <72fbd293-1d83-a558-4d7a-141576371864@csgroup.eu>
-X-Auto-Response-Suppress: DR, OOF, AutoReply
+In-Reply-To: <cover.1617375802.git.christophe.leroy@csgroup.eu>
 X-Outbound-SMTP-Client: 10.24.14.212, [10.24.14.212]
-X-Outbound-Node: alln-core-6.cisco.com
+X-Outbound-Node: alln-core-1.cisco.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 02, 2021 at 07:36:53PM +0200, Christophe Leroy wrote:
+On Fri, Apr 02, 2021 at 03:18:01PM +0000, Christophe Leroy wrote:
+> The purpose of this series is to improve and enhance the
+> handling of kernel boot arguments.
 > 
+> Current situation is that most if not all architectures are using
+> similar options to do some manupulation on command line arguments:
+> - Prepend built-in arguments in front of bootloader provided arguments
+> - Append built-in arguments after bootloader provided arguments
+> - Replace bootloader provided arguments by built-in arguments
+> - Use built-in arguments when none is provided by bootloader.
 > 
-> Le 30/03/2021 à 19:57, Daniel Walker a écrit :
-> > This adds code to handle the generic command line changes.
-> > The efi code appears that it doesn't benefit as much from this design
-> > as it could.
-> > 
-> > For example, if you had a prepend command line with "nokaslr" then
-> > you might be helpful to re-enable it in the boot loader or dts,
-> > but there appears to be no way to re-enable kaslr or some of the
-> > other options.
-> > 
-> > Cc: xe-linux-external@cisco.com
-> > Signed-off-by: Daniel Walker <danielwa@cisco.com>
-> > ---
-> >   .../firmware/efi/libstub/efi-stub-helper.c    | 35 +++++++++++++++++++
-> >   drivers/firmware/efi/libstub/efi-stub.c       |  7 ++++
-> >   drivers/firmware/efi/libstub/efistub.h        |  1 +
-> >   drivers/firmware/efi/libstub/x86-stub.c       | 13 +++++--
-> >   4 files changed, 54 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
-> > index aa8da0a49829..c155837cedc9 100644
-> > --- a/drivers/firmware/efi/libstub/efi-stub-helper.c
-> > +++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
-> > @@ -13,6 +13,7 @@
-> >   #include <linux/efi.h>
-> >   #include <linux/kernel.h>
-> >   #include <linux/printk.h> /* For CONSOLE_LOGLEVEL_* */
-> > +#include <linux/cmdline.h>
-> >   #include <asm/efi.h>
-> >   #include <asm/setup.h>
-> > @@ -172,6 +173,40 @@ int efi_printk(const char *fmt, ...)
-> >   	return printed;
-> >   }
-> > +/**
-> > + * efi_handle_cmdline() - handle adding in building parts of the command line
-> > + * @cmdline:	kernel command line
-> > + *
-> > + * Add in the generic parts of the commandline and start the parsing of the
-> > + * command line.
-> > + *
-> > + * Return:	status code
-> > + */
-> > +efi_status_t efi_handle_cmdline(char const *cmdline)
-> > +{
-> > +	efi_status_t status;
-> > +
-> > +	status = efi_parse_options(CMDLINE_PREPEND);
-> > +	if (status != EFI_SUCCESS) {
-> > +		efi_err("Failed to parse options\n");
-> > +		return status;
-> > +	}
-> > +
-> > +	status = efi_parse_options(IS_ENABLED(CONFIG_CMDLINE_OVERRIDE) ? "" : cmdline);
-> > +	if (status != EFI_SUCCESS) {
-> > +		efi_err("Failed to parse options\n");
-> > +		return status;
-> > +	}
-> > +
-> > +	status = efi_parse_options(CMDLINE_APPEND);
-> > +	if (status != EFI_SUCCESS) {
-> > +		efi_err("Failed to parse options\n");
-> > +		return status;
-> > +	}
-> > +
-> > +	return EFI_SUCCESS;
-> > +}
+> On some architectures, all the options are possible. On other ones,
+> only a subset are available.
 > 
-> I think we can refactor to first build the final command line, then call
-> efi_parse_options() only once after that.
- 
-I tried this, like what you did in your v4 .. The issues are similar to the
-prom_init.c problems. The environment is delicate and requires careful
-programming to get it done correctly.
+> The purpose of this series is to refactor and enhance the
+> handling of kernel boot arguments so that every architecture can
+> benefit from all possibilities.
+> 
+> It is first focussed on powerpc but also extends the capability
+> for other arches.
+> 
+> The work has been focussed on minimising the churn in architectures
+> by keeping the most commonly used namings.
+> 
+> Main changes in V4:
+> - Included patch from Daniel to replace powerpc's strcpy() by strlcpy()
+> - Using strlcpy() instead of zeroing first char + strlcat() (idea taken frm Daniel's series)
+> - Reworked the convertion of EFI which was wrong in V3
+> - Added "too long" command line handling
+> - Changed cmdline macro into a function
+> - Done a few fixes in arch (NIOS2, SH, ARM)
+> - Taken comments into account (see individual responses for details)
+> - Tested on powerpc, build tested on ARM64, X86_64.
+> 
 
-> The big advantage of GENERIC_CMDLINE should be to not address anymore
-> CONFIG_CMDLINE_XXX options at all outside of linux/cmdline.h
- 
-I agree , but not I've found that it's not likely to get this all changed in a
-single series.
+Why submit your changes ? My changes have been around for almost 10 years, and
+are more widely used. Your changes are very new and unstable, but don't really
+solve the needs of people using my series.
+
+I've tried to work with you and I take comments from you, but yet you insist to
+submit your own series.
+
+I would suggest this isn't going to go anyplace unless we work together.
+
+I can't really support your changes because, honestly, your changes are really
+ugly and they just look more and more like my changes with every passing
+iteration .. As the maturity of your changes continue they will just become my
+change set.
+
+I've been thru every iteration of these changes, and I see those attempts in
+your changes. Everything different in your changes I've tried, and found not to
+be useful, then it falls away in later iterations.
+
+When you give me comments on something which I haven't tried I typically
+incorporate it.
 
 Daniel
