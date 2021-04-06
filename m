@@ -2,60 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4E93554CA
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 15:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754933556FC
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 16:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243580AbhDFNSr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Apr 2021 09:18:47 -0400
-Received: from elvis.franken.de ([193.175.24.41]:59069 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229720AbhDFNSr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Apr 2021 09:18:47 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lTlbK-0006qP-06; Tue, 06 Apr 2021 15:18:38 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 91B91C24D9; Tue,  6 Apr 2021 15:11:01 +0200 (CEST)
-Date:   Tue, 6 Apr 2021 15:11:01 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Cc:     John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH] MIPS: ralink: rt288x: select MIPS_AUTO_PFN_OFFSET
-Message-ID: <20210406131101.GH9505@alpha.franken.de>
-References: <20210307194030.8007-1-ilya.lipnitskiy@gmail.com>
- <20210404021126.1399920-1-ilya.lipnitskiy@gmail.com>
+        id S242032AbhDFOtm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Apr 2021 10:49:42 -0400
+Received: from out28-123.mail.aliyun.com ([115.124.28.123]:34194 "EHLO
+        out28-123.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239002AbhDFOtk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Apr 2021 10:49:40 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07439038|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0487646-0.00075957-0.950476;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.JvtGAVq_1617720563;
+Received: from 192.168.88.133(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.JvtGAVq_1617720563)
+          by smtp.aliyun-inc.com(10.147.43.95);
+          Tue, 06 Apr 2021 22:49:24 +0800
+Subject: Re: [PATCH] MIPS: Fix a longstanding error in div64.h
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>, stable@vger.kernel.org,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+References: <20210406112404.2671507-1-chenhuacai@loongson.cn>
+ <0338A250-3BF9-4B96-B9DE-61BE573CBB4C@goldelico.com>
+From:   Zhou Yanjie <zhouyu@wanyeetech.com>
+Message-ID: <3e27d0e0-4494-7a94-e0d7-046fb8898603@wanyeetech.com>
+Date:   Tue, 6 Apr 2021 22:49:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210404021126.1399920-1-ilya.lipnitskiy@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <0338A250-3BF9-4B96-B9DE-61BE573CBB4C@goldelico.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Apr 03, 2021 at 07:11:26PM -0700, Ilya Lipnitskiy wrote:
-> RT288X systems may have a non-zero ramstart causing problems with memory
-> reservations and boot hangs, as well as messages like:
->   Wasting 1048576 bytes for tracking 32768 unused pages
-> 
-> Both are alleviated by selecting MIPS_AUTO_PFN_OFFSET for such
-> platforms.
-> 
-> Tested on a Belkin F5D8235 v1 RT2880 device.
-> 
-> Link: https://lore.kernel.org/linux-mips/20180820233111.xww5232dxbuouf4n@pburton-laptop/
-> 
-> Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-> Cc: Mike Rapoport <rppt@kernel.org>
-> ---
->  arch/mips/ralink/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+Hi Nikolaus,
 
-applied to mips-next.
+On 2021/4/6 下午8:42, H. Nikolaus Schaller wrote:
+>> Am 06.04.2021 um 13:24 schrieb Huacai Chen <chenhuacai@kernel.org>:
+>>
+>> Only 32bit kernel need __div64_32(), but commit c21004cd5b4cb7d479514d4
+>> ("MIPS: Rewrite <asm/div64.h> to work with gcc 4.4.0.") makes it depend
+>> on 64bit kernel by mistake. This patch fix this longstanding error.
+>>
+>> Fixes: c21004cd5b4cb7d479514d4 ("MIPS: Rewrite <asm/div64.h> to work with gcc 4.4.0.")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>> ---
+>> arch/mips/include/asm/div64.h | 2 +-
+>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/mips/include/asm/div64.h b/arch/mips/include/asm/div64.h
+>> index dc5ea5736440..d199fe36eb46 100644
+>> --- a/arch/mips/include/asm/div64.h
+>> +++ b/arch/mips/include/asm/div64.h
+>> @@ -11,7 +11,7 @@
+>>
+>> #include <asm-generic/div64.h>
+>>
+>> -#if BITS_PER_LONG == 64
+>> +#if BITS_PER_LONG == 32
+>>
+>> #include <linux/types.h>
+> Hm.
+>
+> Ingenic jz4780/CI20 build attempt on top ov v5.12-rc6:
+>
+> In file included from ./include/linux/math64.h:7:0,
+>                   from ./include/linux/time.h:6,
+>                   from ./include/linux/compat.h:10,
+>                   from arch/mips/kernel/asm-offsets.c:12:
+> ./include/linux/math64.h: In function 'div_u64_rem':
+> ./arch/mips/include/asm/div64.h:29:11: error: invalid type argument of unary '*' (have 'long long unsigned int')
+>    __high = *__n >> 32;      \
+>             ^
+> ./include/asm-generic/div64.h:243:11: note: in expansion of macro '__div64_32'
+>     __rem = __div64_32(&(n), __base); \
+>             ^
+> ./include/linux/math64.h:91:15: note: in expansion of macro 'do_div'
+>    *remainder = do_div(dividend, divisor);
+>                 ^
+>
+> Or does it just reveal an unknown bug in my compiler?
 
-Thomas.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+I also get these:
+
+
+In file included from ./include/linux/math64.h:7:0,
+                  from ./include/linux/time.h:6,
+                  from ./include/linux/compat.h:10,
+                  from arch/mips/kernel/asm-offsets.c:12:
+./include/linux/math64.h: In function 'div_u64_rem':
+./arch/mips/include/asm/div64.h:29:11: error: invalid type argument of 
+unary '*' (have 'long long unsigned int')
+   __high = *__n >> 32;      \
+            ^
+./include/asm-generic/div64.h:243:11: note: in expansion of macro 
+'__div64_32'
+    __rem = __div64_32(&(n), __base); \
+            ^
+./include/linux/math64.h:91:15: note: in expansion of macro 'do_div'
+   *remainder = do_div(dividend, divisor);
+                ^
+./include/linux/math64.h: In function 'mul_u64_u32_div':
+./arch/mips/include/asm/div64.h:29:11: error: invalid type argument of 
+unary '*' (have 'long long unsigned int')
+   __high = *__n >> 32;      \
+            ^
+./include/asm-generic/div64.h:243:11: note: in expansion of macro 
+'__div64_32'
+    __rem = __div64_32(&(n), __base); \
+            ^
+./include/linux/math64.h:256:14: note: in expansion of macro 'do_div'
+   rl.l.high = do_div(rh.ll, divisor);
+               ^
+./arch/mips/include/asm/div64.h:29:11: error: invalid type argument of 
+unary '*' (have 'long long unsigned int')
+   __high = *__n >> 32;      \
+
+...
+
+
+So it seems not a compiler problem.
+
