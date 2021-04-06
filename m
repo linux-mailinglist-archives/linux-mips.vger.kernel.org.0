@@ -2,144 +2,188 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA813550ED
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 12:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6636A3551ED
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Apr 2021 13:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233086AbhDFKcd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 6 Apr 2021 06:32:33 -0400
-Received: from mail-vk1-f169.google.com ([209.85.221.169]:39891 "EHLO
-        mail-vk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233025AbhDFKcc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Apr 2021 06:32:32 -0400
-Received: by mail-vk1-f169.google.com with SMTP id c5so3067501vkm.6;
-        Tue, 06 Apr 2021 03:32:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Ad26/T6d/ZnNr0Tc5NnJUf1s5ObiAcmgTWkpXBwrq1s=;
-        b=YXwyiDAAm0rPSpsZg95ioR95mBA8TPbyquvhtOMdHdY6vVgh1e4CIsDPuarHmRBS3l
-         30fBawZq2JJK00v9NFUjXvpuk3UYcg79cEDhlT4R7bvXrVa6XgUD1jU59KI/1aTJvTIY
-         akDa4JJWAFA7/e3id8HBJOqE2S7nzWX02f0qH4LWGhHY8zQzzkJ6InyMRP+RMO7ypkKQ
-         bkcHQ1gvn9AvFvyx8csrgB7iGphxMXr9/8Ja703Qhu0M0pj0nFONJb2i01gZy0mMfmuF
-         2JEs7TBX1QeS0FVUFD2y2emiNoPygpIqSlGJfAe7zGpScrkMRw+/myEMCx0/Y2BHZ+wL
-         A0tw==
-X-Gm-Message-State: AOAM530DYT9VGjGJpYHOryw+SMIon5ADWHKZz7BjcQsw+jYtIITbDDc9
-        x8h0lRDCt4y/BBBbWEWhYiDr5sVwbtkqkKgJhYA=
-X-Google-Smtp-Source: ABdhPJy1swYAK/t2TkG9rGJSNoiYM20SgQO0c4AaA+qpOekp59c92sXbMIYRR9yEXm+63bCKT7TrhAbrySdgxepVyHQ=
-X-Received: by 2002:ac5:ce04:: with SMTP id j4mr15807523vki.1.1617705144686;
- Tue, 06 Apr 2021 03:32:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210406093557.1073423-1-maz@kernel.org> <20210406093557.1073423-5-maz@kernel.org>
-In-Reply-To: <20210406093557.1073423-5-maz@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Apr 2021 12:32:13 +0200
-Message-ID: <CAMuHMdU3vo1AWuDr69WK8-1w38+Q7KturAoL=cFpspZiYr2ssA@mail.gmail.com>
-Subject: Re: [PATCH 4/9] sh: intc: Drop the use of irq_create_identity_mapping()
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        id S245462AbhDFLVw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Apr 2021 07:21:52 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:50885 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242052AbhDFLVv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Apr 2021 07:21:51 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4FF4q85Bqdz9tyP3;
+        Tue,  6 Apr 2021 13:21:40 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id ovHssQ0hJG_S; Tue,  6 Apr 2021 13:21:40 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FF4q83pBqz9tyP2;
+        Tue,  6 Apr 2021 13:21:40 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CE3E18B79D;
+        Tue,  6 Apr 2021 13:21:41 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id kW7nKdTIea_k; Tue,  6 Apr 2021 13:21:41 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D72F98B79B;
+        Tue,  6 Apr 2021 13:21:40 +0200 (CEST)
+Subject: Re: [PATCH 1/9] irqdomain: Reimplement irq_linear_revmap() with
+ irq_find_mapping()
+To:     Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
         Rich Felker <dalias@libc.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Thomas Gleixner <tglx@linutronix.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>
+References: <20210406093557.1073423-1-maz@kernel.org>
+ <20210406093557.1073423-2-maz@kernel.org>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <15be426f-4429-ebeb-1b4a-8342bce391e5@csgroup.eu>
+Date:   Tue, 6 Apr 2021 13:21:33 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
+MIME-Version: 1.0
+In-Reply-To: <20210406093557.1073423-2-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Marc,
 
-On Tue, Apr 6, 2021 at 11:44 AM Marc Zyngier <maz@kernel.org> wrote:
-> Instead of playing games with using irq_create_identity_mapping()
-> and irq_domain_associate(), drop the use of the former and only
-> use the latter, together with the allocation of the irq_desc
-> as needed.
->
-> It doesn't make the code less awful, but at least the intent
-> is clearer.
->
+
+Le 06/04/2021 à 11:35, Marc Zyngier a écrit :
+> irq_linear_revmap() is supposed to be a fast path for domain
+> lookups, but it only exposes low-level details of the irqdomain
+> implementation, details which are better kept private.
+
+Can you elaborate with more details ?
+
+> 
+> The *overhead* between the two is only a function call and
+> a couple of tests, so it is likely that noone can show any
+> meaningful difference compared to the cost of taking an
+> interrupt.
+
+Do you have any measurement ?
+
+Can you make the "likely" a certitude ?
+
+> 
+> Reimplement irq_linear_revmap() with irq_find_mapping()
+> in order to preserve source code compatibility, and
+> rename the internal field for a measure.
+
+This is in complete contradiction with commit https://github.com/torvalds/linux/commit/d3dcb436
+
+At that time, irq_linear_revmap() was less complex than what irq_find_mapping() is today, and 
+nevertheless it was considered worth restoring in as a fast path. What has changed since then ?
+
+Can you also explain the reason for the renaming of "linear_revmap" into "revmap" ? What is that 
+"measure" ?
+
+> 
 > Signed-off-by: Marc Zyngier <maz@kernel.org>
-
-Thanks for your patch!
-
-> --- a/drivers/sh/intc/core.c
-> +++ b/drivers/sh/intc/core.c
-> @@ -179,6 +179,23 @@ static unsigned int __init save_reg(struct intc_desc_int *d,
->         return 0;
->  }
->
-> +static bool __init intc_map(struct irq_domain *domain, int irq)
-> +{
-> +       int res;
-
-warning: unused variable ‘res’ [-Wunused-variable]
-
+> ---
+>   include/linux/irqdomain.h | 22 +++++++++-------------
+>   kernel/irq/irqdomain.c    |  6 +++---
+>   2 files changed, 12 insertions(+), 16 deletions(-)
+> 
+> diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+> index 33cacc8af26d..b9600f24878a 100644
+> --- a/include/linux/irqdomain.h
+> +++ b/include/linux/irqdomain.h
+> @@ -154,9 +154,9 @@ struct irq_domain_chip_generic;
+>    * Revmap data, used internally by irq_domain
+>    * @revmap_direct_max_irq: The largest hwirq that can be set for controllers that
+>    *                         support direct mapping
+> - * @revmap_size: Size of the linear map table @linear_revmap[]
+> + * @revmap_size: Size of the linear map table @revmap[]
+>    * @revmap_tree: Radix map tree for hwirqs that don't fit in the linear map
+> - * @linear_revmap: Linear table of hwirq->virq reverse mappings
+> + * @revmap: Linear table of hwirq->virq reverse mappings
+>    */
+>   struct irq_domain {
+>   	struct list_head link;
+> @@ -180,7 +180,7 @@ struct irq_domain {
+>   	unsigned int revmap_size;
+>   	struct radix_tree_root revmap_tree;
+>   	struct mutex revmap_tree_mutex;
+> -	unsigned int linear_revmap[];
+> +	unsigned int revmap[];
+>   };
+>   
+>   /* Irq domain flags */
+> @@ -396,24 +396,20 @@ static inline unsigned int irq_create_mapping(struct irq_domain *host,
+>   	return irq_create_mapping_affinity(host, hwirq, NULL);
+>   }
+>   
+> -
+>   /**
+> - * irq_linear_revmap() - Find a linux irq from a hw irq number.
+> + * irq_find_mapping() - Find a linux irq from a hw irq number.
+>    * @domain: domain owning this hardware interrupt
+>    * @hwirq: hardware irq number in that domain space
+> - *
+> - * This is a fast path alternative to irq_find_mapping() that can be
+> - * called directly by irq controller code to save a handful of
+> - * instructions. It is always safe to call, but won't find irqs mapped
+> - * using the radix tree.
+>    */
+> +extern unsigned int irq_find_mapping(struct irq_domain *host,
+> +				     irq_hw_number_t hwirq);
 > +
-> +       if (!irq_to_desc(irq) && irq_alloc_desc_at(irq, NUMA_NO_NODE) != irq) {
-> +               pr_err("uname to allocate IRQ %d\n", irq);
-> +               return false;
-> +       }
+>   static inline unsigned int irq_linear_revmap(struct irq_domain *domain,
+>   					     irq_hw_number_t hwirq)
+>   {
+> -	return hwirq < domain->revmap_size ? domain->linear_revmap[hwirq] : 0;
+> +	return irq_find_mapping(domain, hwirq);
+>   }
+> -extern unsigned int irq_find_mapping(struct irq_domain *host,
+> -				     irq_hw_number_t hwirq);
 > +
-> +       if (irq_domain_associate(domain, irq, irq)) {
-> +               pr_err("domain association failure\n");
-> +               return false;
-> +       }
-> +
-> +       return true;
-> +}
-> +
->  int __init register_intc_controller(struct intc_desc *desc)
->  {
->         unsigned int i, k, smp;
-> @@ -316,19 +333,8 @@ int __init register_intc_controller(struct intc_desc *desc)
-
-warning: unused variable ‘res’ [-Wunused-variable]
-
->                 if (!vect->enum_id)
->                         continue;
->
-> -               res = irq_create_identity_mapping(d->domain, irq);
-
-
-> -               if (unlikely(res)) {
-> -                       if (res == -EEXIST) {
-> -                               res = irq_domain_associate(d->domain, irq, irq);
-> -                               if (unlikely(res)) {
-> -                                       pr_err("domain association failure\n");
-> -                                       continue;
-> -                               }
-> -                       } else {
-> -                               pr_err("can't identity map IRQ %d\n", irq);
-> -                               continue;
-> -                       }
-> -               }
-> +               if (!intc_map(d->domain, irq))
-> +                       continue;
->
->                 intc_irq_xlate_set(irq, vect->enum_id, d);
->                 intc_register_irq(desc, d, vect->enum_id, irq);
-
-Otherwise this seems to work fine on real hardware (landisk) and qemu
-(rts7751r2d).  I did verify that the new function intc_map() is called.
-
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>   extern unsigned int irq_create_direct_mapping(struct irq_domain *host);
+>   extern int irq_create_strict_mappings(struct irq_domain *domain,
+>   				      unsigned int irq_base,
+> diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+> index d10ab1d689d5..dfa716305ea9 100644
+> --- a/kernel/irq/irqdomain.c
+> +++ b/kernel/irq/irqdomain.c
+> @@ -486,7 +486,7 @@ static void irq_domain_clear_mapping(struct irq_domain *domain,
+>   				     irq_hw_number_t hwirq)
+>   {
+>   	if (hwirq < domain->revmap_size) {
+> -		domain->linear_revmap[hwirq] = 0;
+> +		domain->revmap[hwirq] = 0;
+>   	} else {
+>   		mutex_lock(&domain->revmap_tree_mutex);
+>   		radix_tree_delete(&domain->revmap_tree, hwirq);
+> @@ -499,7 +499,7 @@ static void irq_domain_set_mapping(struct irq_domain *domain,
+>   				   struct irq_data *irq_data)
+>   {
+>   	if (hwirq < domain->revmap_size) {
+> -		domain->linear_revmap[hwirq] = irq_data->irq;
+> +		domain->revmap[hwirq] = irq_data->irq;
+>   	} else {
+>   		mutex_lock(&domain->revmap_tree_mutex);
+>   		radix_tree_insert(&domain->revmap_tree, hwirq, irq_data);
+> @@ -920,7 +920,7 @@ unsigned int irq_find_mapping(struct irq_domain *domain,
+>   
+>   	/* Check if the hwirq is in the linear revmap. */
+>   	if (hwirq < domain->revmap_size)
+> -		return domain->linear_revmap[hwirq];
+> +		return domain->revmap[hwirq];
+>   
+>   	rcu_read_lock();
+>   	data = radix_tree_lookup(&domain->revmap_tree, hwirq);
+> 
