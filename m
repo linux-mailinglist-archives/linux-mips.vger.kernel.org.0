@@ -2,95 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E146A355F34
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 01:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BA635606A
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 02:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234550AbhDFXEC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Apr 2021 19:04:02 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55872 "EHLO mx2.suse.de"
+        id S233903AbhDGAlO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Apr 2021 20:41:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233379AbhDFXEC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Apr 2021 19:04:02 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9457EB01F;
-        Tue,  6 Apr 2021 23:03:52 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Fix new sparse warning
-Date:   Wed,  7 Apr 2021 01:03:48 +0200
-Message-Id: <20210406230348.130713-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
+        id S233744AbhDGAlO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Apr 2021 20:41:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D28461106;
+        Wed,  7 Apr 2021 00:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617756065;
+        bh=ClfmhSxWsk2cvFKRhp/WqP8w8St2XoJv2CR6bDgN1SM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bbApIkNrYoBTwLYLbw6W6N2X28kn8G9wOs9khtCxflccrxBwIiwndVbCU7lgxS2YX
+         FW+X6ky4GyeoCTaBICvrE3w5Ev2EupFK/fM28cGMbaqRbTXMPix4AKfP/hvZDwcpWH
+         6lS4SoYbgh50hiiVY8lpuClVWXv5KcfIo8JH2bRk9FKIhNxj43VjmtUa9J1KZrJXxR
+         +JNE6wpWP+njmqAIUlUE5c3cbOrUGdElOVlVk0ztZpAi1qroWIuUc2UC7XZd9rUwXK
+         P5nKguOgFXf9IGClBnlZMbUX97bLcoLQjUFlMk/ybP4HwiphMR440Huhdg7CGmvwEc
+         g96D0rdIMJwBQ==
+Received: by mail-il1-f172.google.com with SMTP id o15so10635607ilf.11;
+        Tue, 06 Apr 2021 17:41:05 -0700 (PDT)
+X-Gm-Message-State: AOAM532JFxWqZrwMI/GjYPY951rya/XfeD9CY0gsKPjxN8R1s11EyP+M
+        D/un5ZFhT3bspZkjInPyV1iSOhH1AU1dnZsk4kc=
+X-Google-Smtp-Source: ABdhPJypL60bLSiVBYRkgz6k+jGhpTouYi/kRkIhWLvBEzqbSvey65r0AwUlOKS60OJ1skP2UynKOKOa+EGod3SXbhE=
+X-Received: by 2002:a92:cb86:: with SMTP id z6mr718436ilo.35.1617756065098;
+ Tue, 06 Apr 2021 17:41:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210406112404.2671507-1-chenhuacai@loongson.cn> <20210406130629.GE9505@alpha.franken.de>
+In-Reply-To: <20210406130629.GE9505@alpha.franken.de>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 7 Apr 2021 08:40:53 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7-e_Nt-yEYo1d+fTMpVaqGYfY7Q29H-2F-4aPXBUMz-Q@mail.gmail.com>
+Message-ID: <CAAhV-H7-e_Nt-yEYo1d+fTMpVaqGYfY7Q29H-2F-4aPXBUMz-Q@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Fix a longstanding error in div64.h
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit 45deb5faeb9e ("MIPS: uaccess: Remove get_fs/set_fs call sites")
-caused a few new sparse warning, fix them.
+Hi, Thomas,
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/kernel/access-helper.h | 7 ++++---
- arch/mips/kernel/unaligned.c     | 6 +++---
- 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/arch/mips/kernel/access-helper.h b/arch/mips/kernel/access-helper.h
-index dd5b502813b8..590388031503 100644
---- a/arch/mips/kernel/access-helper.h
-+++ b/arch/mips/kernel/access-helper.h
-@@ -4,15 +4,16 @@
- 
- static inline int __get_addr(unsigned long *a, unsigned long *p, bool user)
- {
--	return user ? get_user(*a, p) : get_kernel_nofault(*a, p);
-+	return user ? get_user(*a, (unsigned long __user *)p) :
-+		      get_kernel_nofault(*a, p);
- }
- 
- static inline int __get_inst16(u16 *i, u16 *p, bool user)
- {
--	return user ? get_user(*i, p) : get_kernel_nofault(*i, p);
-+	return user ? get_user(*i, (u16 __user *)p) : get_kernel_nofault(*i, p);
- }
- 
- static inline int __get_inst32(u32 *i, u32 *p, bool user)
- {
--	return user ? get_user(*i, p) : get_kernel_nofault(*i, p);
-+	return user ? get_user(*i, (u32 __user *)p) : get_kernel_nofault(*i, p);
- }
-diff --git a/arch/mips/kernel/unaligned.c b/arch/mips/kernel/unaligned.c
-index 1f3b20a8c377..df4b708c04a9 100644
---- a/arch/mips/kernel/unaligned.c
-+++ b/arch/mips/kernel/unaligned.c
-@@ -109,7 +109,7 @@ static u32 unaligned_action;
- extern void show_registers(struct pt_regs *regs);
- 
- static void emulate_load_store_insn(struct pt_regs *regs,
--	void __user *addr, unsigned int __user *pc)
-+	void __user *addr, unsigned int *pc)
- {
- 	unsigned long origpc, orig31, value;
- 	union mips_instruction insn;
-@@ -1475,7 +1475,7 @@ static void emulate_load_store_MIPS16e(struct pt_regs *regs, void __user * addr)
- asmlinkage void do_ade(struct pt_regs *regs)
- {
- 	enum ctx_state prev_state;
--	unsigned int __user *pc;
-+	unsigned int *pc;
- 
- 	prev_state = exception_enter();
- 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS,
-@@ -1526,7 +1526,7 @@ asmlinkage void do_ade(struct pt_regs *regs)
- 
- 	if (unaligned_action == UNALIGNED_ACTION_SHOW)
- 		show_registers(regs);
--	pc = (unsigned int __user *)exception_epc(regs);
-+	pc = (unsigned int *)exception_epc(regs);
- 
- 	emulate_load_store_insn(regs, (void __user *)regs->cp0_badvaddr, pc);
- 
--- 
-2.29.2
+On Tue, Apr 6, 2021 at 9:18 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Tue, Apr 06, 2021 at 07:24:03PM +0800, Huacai Chen wrote:
+> > Only 32bit kernel need __div64_32(), but commit c21004cd5b4cb7d479514d4
+> > ("MIPS: Rewrite <asm/div64.h> to work with gcc 4.4.0.") makes it depend
+> > on 64bit kernel by mistake. This patch fix this longstanding error.
+> >
+> > Fixes: c21004cd5b4cb7d479514d4 ("MIPS: Rewrite <asm/div64.h> to work with gcc 4.4.0.")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  arch/mips/include/asm/div64.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/mips/include/asm/div64.h b/arch/mips/include/asm/div64.h
+> > index dc5ea5736440..d199fe36eb46 100644
+> > --- a/arch/mips/include/asm/div64.h
+> > +++ b/arch/mips/include/asm/div64.h
+> > @@ -11,7 +11,7 @@
+> >
+> >  #include <asm-generic/div64.h>
+> >
+> > -#if BITS_PER_LONG == 64
+> > +#if BITS_PER_LONG == 32
+>
+> are you sure this will make a difference ? asm-generic/div64.h checks
+> for __div64_32, which is not defined before including it here.
+Sorry for my carelessness, the #include should be after __div64_32,
+and there are other bugs in this file, I will send a new version.
 
+Huacai
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
