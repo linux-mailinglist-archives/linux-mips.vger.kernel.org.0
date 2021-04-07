@@ -2,119 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F30813573DC
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 20:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE438357436
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 20:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355079AbhDGSDt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Apr 2021 14:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S1355217AbhDGS0j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Apr 2021 14:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348379AbhDGSDt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 14:03:49 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53BBC06175F
-        for <linux-mips@vger.kernel.org>; Wed,  7 Apr 2021 11:03:38 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id z10so19611111qkz.13
-        for <linux-mips@vger.kernel.org>; Wed, 07 Apr 2021 11:03:38 -0700 (PDT)
+        with ESMTP id S1348515AbhDGS0h (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 14:26:37 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBD7C06175F;
+        Wed,  7 Apr 2021 11:26:27 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id p22so1720325wmc.3;
+        Wed, 07 Apr 2021 11:26:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=E7qDMlp+Kl/2efqWyQjBtNVcWaQNFkD10uOmOaV4wnE=;
-        b=mL142lxWpoGMt964mBfjH4VySqk9D6qhno904fW/+gYuc3HxhrTbQ/O4WQ4z45TRfe
-         mUHzLT5lWe4GfI662zmx9rXLSVkvi8ompkef92+FpEizuTDQkHnvRG2wcYaWYpNvufqh
-         ndE54pno9X8hooDGcUIXOR2aiCxml8ecT3TJNlzqBQXW8PVRbESlVLcVkAYj8HOejDXA
-         4J4vDFG9vN2socf30kP/mI40eQYABWVacgWEOyptx/6U8udoAwfo8WUBXzHexyWIXj1U
-         PCqIrRn8HK8LR2A5iyVW5Wgsp7KCoSWIpeUT6gXMn2pgAMzpaHWb7Qr0C0iYN0IpQbHQ
-         SPqw==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=U9FkdGonL0Lj6ZngrSyr56gWP7PTwMnm5uWJ2GRC1ZI=;
+        b=iu39AjMNT+uytFyYuXDEVcLJCViOftzd7/K9HBf2+1prHRG601APc0+iwRM4Ju95Jh
+         bODzEhoi80DGg1E6sGkAFF8k6hKi1yEajGuOm7cp+gmopa4KTf0+CVinRIlE+nu7agPJ
+         sZkS7GGqI5byEmpqY0+B/xy5IU5YEOg1TIrdT63PXJ6Vtr9veFqUhewPSWgj+Qvlkkrf
+         vS41JYS6hj5HahmbjCBH4J3ZODIMEWnIv+jxflIIaudiWHewGArsJtZ5S2L8fFZ7tWII
+         aIzQsecQqtEAC4V28LMqk4qt4nUx9yCje3v4Y+6QPgGfQtEtMp5h3FdubsJGB+CzpBbC
+         WzkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=E7qDMlp+Kl/2efqWyQjBtNVcWaQNFkD10uOmOaV4wnE=;
-        b=rQLT4pKqvInum8rpIaz4ZL0F30Nk28gdLWvt2ShrsxejhhP5E7WCvLPQoQbx9aLG4V
-         QBBPlbU87Mv/uSXfpZqX7i1xr9UZb9pQVSi2d4gdg4x8umvO062q6vWJK7OCFnh+r4HT
-         VDvFko+Kk/N9LOrmehFjKNh8E/mYzGBKADX2B19XtoTVLx0z5vLwDhWIoCJsoYizvmq9
-         +aanBmkLvPIF5aUmlc5/m21szm25LxiLV7A7QKvhDkrPMwsTrT1Ltj4H92Aak6sg8Hje
-         bl+CYiODn3iLRBQ9tYUSys/qGIglnzxVDb9c5SDHm7bzV7IkiAvLAx2b2YXHZamwi4ep
-         /5dg==
-X-Gm-Message-State: AOAM530afWKa+Kcjyvm00DZpXr6frOuYuPYF9t1vr7QmULDWWsuoDXS4
-        M7HJx73ra9P48LwwLkyqj1WMiuDVoDGZxaf0WDe7/5KOV+ujoFoayU4=
-X-Google-Smtp-Source: ABdhPJwn25Jc8C3JYO4/UNzNVsqh3MCm9Xt+iGUkLnK9jQWIA3c1T02aJCSbEUYhRqF1xPB8WtlsLLsoAGURwqCbVws=
-X-Received: by 2002:a37:6592:: with SMTP id z140mr4508154qkb.464.1617818618120;
- Wed, 07 Apr 2021 11:03:38 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=U9FkdGonL0Lj6ZngrSyr56gWP7PTwMnm5uWJ2GRC1ZI=;
+        b=oIiClxNIFIgmuOlJ4iw1/biMZwIW3epyHQSlpuUAqJIkgysIawAh4rUHqBLwCbUBMR
+         O7Rm+IcyjehTVGd8u2Y0MHpnAYxkAjxEjGOG+PD0UYEWMEacPOCFh/bojDBwN1aBNThq
+         xiyhTLPLVkpHhf9J78K0ATNyvrVciHQBZmkVHpFFOMDGRwd8WJS6h7cW84Z9kRhqC4Tj
+         +X+zv1auHu7xsJgf1Pa+ENpxeHBvgqTDjA2oopHS+0xcS1CxLsHFi1L5MtO/Z/6YA5EI
+         oZFGHOQRIczvlklkzq6Pjn5K6xFtpiCkIMMQVLYtHfB7NGGfLsFhO1TLK+30RqvA9Sop
+         cv3A==
+X-Gm-Message-State: AOAM53317n1ioGGPWIyFV30BiNI3Tqgs+RuDjChGs5X6DQW4LPBLF5Ad
+        9sBPVOCDNesiTC3bhP/jsMPxVNB4tdgGpA==
+X-Google-Smtp-Source: ABdhPJyynsH8EpUmOnpLJJ+xeyLzhaNWw5/netDJVytbmNKqi8ochqHpCxd9zJzJ2pteKs7vVXI2+w==
+X-Received: by 2002:a1c:4184:: with SMTP id o126mr4207110wma.40.1617819986159;
+        Wed, 07 Apr 2021 11:26:26 -0700 (PDT)
+Received: from debian (host-84-13-30-150.opaltelecom.net. [84.13.30.150])
+        by smtp.gmail.com with ESMTPSA id a3sm21577544wru.40.2021.04.07.11.26.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Apr 2021 11:26:25 -0700 (PDT)
+Date:   Wed, 7 Apr 2021 19:26:24 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: build failure of malta_qemu_32r6_defconfig
+Message-ID: <YG35ULOblq/gUZmh@debian>
 MIME-Version: 1.0
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Wed, 7 Apr 2021 20:03:26 +0200
-Message-ID: <CAM1=_QQK3two9faxKbiw+73TiRZA=y2Upxcmv_Eaeu2uKd-oCQ@mail.gmail.com>
-Subject: Completing eBPF JIT support for MIPS32
-To:     linux-mips@vger.kernel.org
-Cc:     paulburton@kernel.org, itugrok@yahoo.com, daniel@iogearbox.net,
-        bpf@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The MIPS64 architecture has had an eBPF JIT for quite some time, but
-the kernel still lacks eBPF JIT support for MIPS32. In 2019 there was
-an effort extend the MIPS64 JIT to also support 32-bit MIPS ISAs,
-716850ab104d ("MIPS: eBPF: Initial eBPF support for MIPS32
-architecture."), but the work was never completed. What would be
-needed to bring eBPF JIT support to MIPS32?
+Hi Thomas,
 
-According to Paul Burton, 36366e367ee9 ("MIPS: BPF: Restore MIPS32 cBPF JIT")
+I was building v5.10.28 with malta_qemu_32r6_defconfig and noticed that
+it fails to build, so tried next-20210407 to see if it has been fixed.
+But linux-next also has the issue with gcc-10.
 
-> The eBPF JIT has a number of problems on MIPS32:
->
-> - Most notably various code paths still result in emission of MIPS64
->   instructions which will cause reserved instruction exceptions & kernel
->   panics when run on MIPS32 CPUs.
->
-> - The eBPF JIT doesn't account for differences between the O32 ABI used
->   by MIPS32 kernels versus the N64 ABI used by MIPS64 kernels. Notably
->   arguments beyond the first 4 are passed on the stack in O32, and this
->   is entirely unhandled when JITing a BPF_CALL instruction. Stack space
->   must be reserved for arguments even if they all fit in registers, and
->   the callee is free to assume that stack space has been reserved for
->   its use - with the eBPF JIT this is not the case, so calling any
->   function can result in clobbering values on the stack & unpredictable
->   behaviour. Function arguments in eBPF are always 64-bit values which
->   is also entirely unhandled - the JIT still uses a single (32-bit)
->   register per argument. As a result all function arguments are always
->   passed incorrectly when JITing a BPF_CALL instruction, leading to
->   kernel crashes or strange behavior.
->
-> - The JIT attempts to bail our on use of ALU64 instructions or 64-bit
->   memory access instructions. The code doing this at the start of
->   build_one_insn() incorrectly checks whether BPF_OP() equals BPF_DW,
->   when it should really be checking BPF_SIZE() & only doing so when
->   BPF_CLASS() is one of BPF_{LD,LDX,ST,STX}. This results in false
->   positives that cause more bailouts than intended, and that in turns
->   hides some of the problems described above.
->
-> - The kernel's cBPF->eBPF translation makes heavy use of 64-bit eBPF
->   instructions that the MIPS32 eBPF JIT bails out on, leading to most
->   cBPF programs not being JITed at all.
+The error is:
 
-I can see two different ways to proceed from here.
+./arch/mips/include/asm/vdso/gettimeofday.h: In function '__vdso_clock_gettime':
+./arch/mips/include/asm/vdso/gettimeofday.h:103:2: error: the register 'lo' cannot be clobbered in 'asm' for the current target
+  103 |  asm volatile(
+      |  ^~~
+./arch/mips/include/asm/vdso/gettimeofday.h: In function '__vdso_gettimeofday':
+./arch/mips/include/asm/vdso/gettimeofday.h:33:2: error: the register 'lo' cannot be clobbered in 'asm' for the current target
+   33 |  asm volatile(
+      |  ^~~
+./arch/mips/include/asm/vdso/gettimeofday.h: In function '__vdso_clock_getres':
+./arch/mips/include/asm/vdso/gettimeofday.h:123:2: error: the register 'lo' cannot be clobbered in 'asm' for the current target
+  123 |  asm volatile(
+      |  ^~~
+./arch/mips/include/asm/vdso/gettimeofday.h: In function '__vdso_clock_gettime64':
+./arch/mips/include/asm/vdso/gettimeofday.h:57:2: error: the register 'lo' cannot be clobbered in 'asm' for the current target
+   57 |  asm volatile(
+      |  ^~~
 
-1) Continue the work on the 64-bit eBPF JIT and complete the MIPS32
-support there.
+Any idea how to fix this? Please ignore if it has been reported before.
 
-2) Use the 32-bit cBPF JIT as a fresh start for a new 32-bit eBPF JIT
-implementation.
 
-It depends of course on how much effort it would be to fix the
-remaining issues with the current eBPF JIT. On the other hand, since
-eBPF is a 64-bit architecture I would expect the bytecode to translate
-nicely to a 64-bit target, and that a 32-bit JIT might differ a lot.
-For other targets there are often separate 64-bit and 32-bit JIT
-implementations. I also think the JIT support for MIPS32 should make
-it possible to replace the cBPF JIT. That means it cannot fall back to
-use the interpreter as I understand the current (32-bit)
-implementation does to a large extent. Perhaps it would then be
-cleaner to let the 32-bit version be separate implementation.
-
-Any thoughts and suggestions? What do you think would be the best way forward?
-
-Thanks,
-Johan
+--
+Regards
+Sudip
