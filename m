@@ -2,129 +2,212 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A69483567DC
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 11:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC8A3569B8
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 12:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350078AbhDGJYM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Apr 2021 05:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350053AbhDGJYB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 05:24:01 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF48C061762;
-        Wed,  7 Apr 2021 02:22:35 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id d5-20020a17090a2a45b029014d934553c4so232586pjg.1;
-        Wed, 07 Apr 2021 02:22:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A+TWgw6kTqY++Fbxfd3CQDQjeBZ3Vc7fKTS3ggHgVhQ=;
-        b=M2sUfffeZ2hnL+c1iGiVTLrm9KwGVs9zUBidMXDJPkQF5lsN5BDOIcrhqnfODxY/fD
-         nZXGnLetK1FrrCoa4d6INNpkfrqfAcPNEybpLAyCAiLHKJ6dQCz7gy/Vc65+rVhnY4zj
-         KkCsK3DhNrR3lmJQcU0qYUAC5iECg6K+Kk3/+fU+HXcDNSNXv+ow/9IbyD9whB5+nqfp
-         IPcDW0GRVWiMTyktqaAWezW++jJBvWDnI1K3mkwelgoASi9WXf/R6ZA1T+okFpgckdJi
-         71csPTpml/BbU4obMaMCx54c7TeqxtwtYo9m8EGiDAlpp9s5UeArTeZDW+JagmrVAByi
-         pKCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=A+TWgw6kTqY++Fbxfd3CQDQjeBZ3Vc7fKTS3ggHgVhQ=;
-        b=lGlygL+AD1WEIMjNSHVswfLsAMIJbJbkMil0/0XFncW+NZtFlsfwCO+JP3jlDVqBXN
-         O3RsBV7KWQEi3iui5xlsCxOufAxSw4RIA7V0NfQs8FXWc53w/VkpdEBrL2MnIxEw2zy1
-         FhnZPjVGy3y83RUTFARXk9F28wJUfPiB4T94sKncsL/jScsAb6SaJT48N2+uJopMHMZl
-         fC2PTL89pCJLfuEBPaaBu9CEAYTWwpVlwj4trR7gej1Q7F+v2BijMFzDpWkA2NbNTvE9
-         NcETw5UU1Z8XnPvymSpLP/usCIi8WorXV3Pu+060xNoUUbQPDfq/Kjde9uhe89XSGFQP
-         rjLg==
-X-Gm-Message-State: AOAM533QFlQofmk6Gfvo7g+jvg55OEn/hVZHG54JilLN3kjocXAdT71/
-        uJbDQa4uu0wT0QqnjJWe7cEOJYPlgP4=
-X-Google-Smtp-Source: ABdhPJxyXF57a5wIABXH9FvJcrDrIOY1A7f0crYA5jYLabOno2oufKKoRKJXmTn3n1ZxhqCDovGFiw==
-X-Received: by 2002:a17:902:7c88:b029:e6:f006:f8e5 with SMTP id y8-20020a1709027c88b02900e6f006f8e5mr2281396pll.1.1617787355132;
-        Wed, 07 Apr 2021 02:22:35 -0700 (PDT)
-Received: from localhost.localdomain ([132.145.85.142])
-        by smtp.gmail.com with ESMTPSA id f14sm21849430pfk.92.2021.04.07.02.22.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Apr 2021 02:22:34 -0700 (PDT)
-Sender: Huacai Chen <chenhuacai@gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-X-Google-Original-From: Huacai Chen <chenhuacai@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>, stable@vger.kernel.org
-Subject: [PATCH V3] MIPS: Fix longstanding errors in div64.h
-Date:   Wed,  7 Apr 2021 17:23:07 +0800
-Message-Id: <20210407092307.3920801-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        id S236558AbhDGKbu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Apr 2021 06:31:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56571 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346819AbhDGKbt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 06:31:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617791499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nJSxvPf+2fQxpcou71SA/t4hQw4etrSkU0eumEfbqCc=;
+        b=OWh1PJaFA7Wu8da04SBF2WuWsiep0QyvMzG+IFAYt8oRmtkbOX3V3EyJ8l/d6eW1/0E9sw
+        tl9JmtGggd2C+nWrINFaPdNrU8WF33WEiXe+KNZ724vGt/Ysvwyiz9DMS4b/f4+33Ik/ty
+        UdAtqWZIr5tKF+vpDvcYc2YPZcHe0B8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-521-SMXER1lrNQy7RmmVKzJMWQ-1; Wed, 07 Apr 2021 06:31:35 -0400
+X-MC-Unique: SMXER1lrNQy7RmmVKzJMWQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2D4221006C82;
+        Wed,  7 Apr 2021 10:31:30 +0000 (UTC)
+Received: from [10.36.114.68] (ovpn-114-68.ams2.redhat.com [10.36.114.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 624C871284;
+        Wed,  7 Apr 2021 10:31:13 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     Jann Horn <jannh@google.com>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>
+References: <20210317110644.25343-1-david@redhat.com>
+ <20210317110644.25343-3-david@redhat.com>
+ <CAG48ez0BQ3Vd3nDLEvyiSU0XALgUQ=c-fAwcFVScUkgo_9qVuQ@mail.gmail.com>
+ <2bab28c7-08c0-7ff0-c70e-9bf94da05ce1@redhat.com>
+ <CAG48ez20rLRNPZj6hLHQ_PLT8H60kTac-uXRiLByD70Q7+qsdQ@mail.gmail.com>
+ <26227fc6-3e7b-4e69-f69d-4dc2a67ecfe8@redhat.com>
+ <54165ffe-dbf7-377a-a710-d15be4701f20@redhat.com>
+Organization: Red Hat GmbH
+Subject: Re: [PATCH v1 2/5] mm/madvise: introduce MADV_POPULATE_(READ|WRITE)
+ to prefault/prealloc memory
+Message-ID: <5f49b60c-957d-8cb4-de7a-7c855dc72942@redhat.com>
+Date:   Wed, 7 Apr 2021 12:31:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <54165ffe-dbf7-377a-a710-d15be4701f20@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There are four errors in div64.h caused by commit c21004cd5b4cb7d479514
-("MIPS: Rewrite <asm/div64.h> to work with gcc 4.4.0."):
+On 30.03.21 18:31, David Hildenbrand wrote:
+> On 30.03.21 18:30, David Hildenbrand wrote:
+>> On 30.03.21 18:21, Jann Horn wrote:
+>>> On Tue, Mar 30, 2021 at 5:01 PM David Hildenbrand <david@redhat.com> wrote:
+>>>>>> +long faultin_vma_page_range(struct vm_area_struct *vma, unsigned long start,
+>>>>>> +                           unsigned long end, bool write, int *locked)
+>>>>>> +{
+>>>>>> +       struct mm_struct *mm = vma->vm_mm;
+>>>>>> +       unsigned long nr_pages = (end - start) / PAGE_SIZE;
+>>>>>> +       int gup_flags;
+>>>>>> +
+>>>>>> +       VM_BUG_ON(!PAGE_ALIGNED(start));
+>>>>>> +       VM_BUG_ON(!PAGE_ALIGNED(end));
+>>>>>> +       VM_BUG_ON_VMA(start < vma->vm_start, vma);
+>>>>>> +       VM_BUG_ON_VMA(end > vma->vm_end, vma);
+>>>>>> +       mmap_assert_locked(mm);
+>>>>>> +
+>>>>>> +       /*
+>>>>>> +        * FOLL_HWPOISON: Return -EHWPOISON instead of -EFAULT when we hit
+>>>>>> +        *                a poisoned page.
+>>>>>> +        * FOLL_POPULATE: Always populate memory with VM_LOCKONFAULT.
+>>>>>> +        * !FOLL_FORCE: Require proper access permissions.
+>>>>>> +        */
+>>>>>> +       gup_flags = FOLL_TOUCH | FOLL_POPULATE | FOLL_MLOCK | FOLL_HWPOISON;
+>>>>>> +       if (write)
+>>>>>> +               gup_flags |= FOLL_WRITE;
+>>>>>> +
+>>>>>> +       /*
+>>>>>> +        * See check_vma_flags(): Will return -EFAULT on incompatible mappings
+>>>>>> +        * or with insufficient permissions.
+>>>>>> +        */
+>>>>>> +       return __get_user_pages(mm, start, nr_pages, gup_flags,
+>>>>>> +                               NULL, NULL, locked);
+>>>>>
+>>>>> You mentioned in the commit message that you don't want to actually
+>>>>> dirty all the file pages and force writeback; but doesn't
+>>>>> POPULATE_WRITE still do exactly that? In follow_page_pte(), if
+>>>>> FOLL_TOUCH and FOLL_WRITE are set, we mark the page as dirty:
+>>>>
+>>>> Well, I mention that POPULATE_READ explicitly doesn't do that. I
+>>>> primarily set it because populate_vma_page_range() also sets it.
+>>>>
+>>>> Is it safe to *not* set it? IOW, fault something writable into a page
+>>>> table (where the CPU could dirty it without additional page faults)
+>>>> without marking it accessed? For me, this made logically sense. Thus I
+>>>> also understood why populate_vma_page_range() set it.
+>>>
+>>> FOLL_TOUCH doesn't have anything to do with installing the PTE - it
+>>> essentially means "the caller of get_user_pages wants to read/write
+>>> the contents of the returned page, so please do the same things you
+>>> would do if userspace was accessing the page". So in particular, if
+>>> you look up a page via get_user_pages() with FOLL_WRITE|FOLL_TOUCH,
+>>> that tells the MM subsystem "I will be writing into this page directly
+>>> from the kernel, bypassing the userspace page tables, so please mark
+>>> it as dirty now so that it will be properly written back later". Part
+>>> of that is that it marks the page as recently used, which has an
+>>> effect on LRU pageout behavior, I think - as far as I understand, that
+>>> is why populate_vma_page_range() uses FOLL_TOUCH.
+>>>
+>>> If you look at __get_user_pages(), you can see that it is split up
+>>> into two major parts: faultin_page() for creating PTEs, and
+>>> follow_page_mask() for grabbing pages from PTEs. faultin_page()
+>>> ignores FOLL_TOUCH completely; only follow_page_mask() uses it.
+>>>
+>>> In a way I guess maybe you do want the "mark as recently accessed"
+>>> part that FOLL_TOUCH would give you without FOLL_WRITE? But I think
+>>> you very much don't want the dirtying that FOLL_TOUCH|FOLL_WRITE leads
+>>> to. Maybe the ideal approach would be to add a new FOLL flag to say "I
+>>> only want to mark as recently used, I don't want to dirty". Or maybe
+>>> it's enough to just leave out the FOLL_TOUCH entirely, I don't know.
+>>
+>> Any thoughts why populate_vma_page_range() does it?
+> 
+> Sorry, I missed the explanation above - thanks!
 
-1, Only 32bit kernel need __div64_32(), but the above commit makes it
-   depend on 64bit kernel by mistake.
+Looking into the details, adjusting the FOLL_TOUCH logic won't make too 
+much of a difference for MADV_POPULATE_WRITE I guess. AFAIKs, the 
+biggest impact of FOLL_TOUCH is actually with FOLL_FORCE - which we are 
+not using, but populate_vma_page_range() is.
 
-2, asm-generic/div64.h should be included after __div64_32() definition.
 
-3, __n should be initialized as *n before use (and "*__n >> 32" should
-   be "__n >> 32") in __div64_32() definition.
+If a page was not faulted in yet, 
+faultin_page(FOLL_WRITE)->handle_mm_fault(FAULT_FLAG_WRITE) will already 
+mark the PTE/PMD/... dirty and accessed. One example is 
+handle_pte_fault(). We will mark the page accessed again via FOLL_TOUCH, 
+which doesn't seem to be strictly required.
 
-4, linux/types.h should be included at the first place, otherwise BITS_
-   PER_LONG is not defined.
 
-Fixes: c21004cd5b4cb7d479514 ("MIPS: Rewrite <asm/div64.h> to work with gcc 4.4.0.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/mips/include/asm/div64.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+If the page was already faulted in, we have three cases:
 
-diff --git a/arch/mips/include/asm/div64.h b/arch/mips/include/asm/div64.h
-index dc5ea5736440..d827c13c3bc5 100644
---- a/arch/mips/include/asm/div64.h
-+++ b/arch/mips/include/asm/div64.h
-@@ -9,12 +9,10 @@
- #ifndef __ASM_DIV64_H
- #define __ASM_DIV64_H
- 
--#include <asm-generic/div64.h>
--
--#if BITS_PER_LONG == 64
--
- #include <linux/types.h>
- 
-+#if BITS_PER_LONG == 32
-+
- /*
-  * No traps on overflows for any of these...
-  */
-@@ -24,9 +22,9 @@
- 	unsigned long __cf, __tmp, __tmp2, __i;				\
- 	unsigned long __quot32, __mod32;				\
- 	unsigned long __high, __low;					\
--	unsigned long long __n;						\
-+	unsigned long long __n = *n;					\
- 									\
--	__high = *__n >> 32;						\
-+	__high = __n >> 32;						\
- 	__low = __n;							\
- 	__asm__(							\
- 	"	.set	push					\n"	\
-@@ -63,6 +61,8 @@
- 	__mod32;							\
- })
- 
--#endif /* BITS_PER_LONG == 64 */
-+#endif /* BITS_PER_LONG == 32 */
-+
-+#include <asm-generic/div64.h>
- 
- #endif /* __ASM_DIV64_H */
+1. Page faulted in writable. The page should already be dirty (otherwise 
+we would be in trouble I guess). We will mark it accessed.
+
+2. Page faulted in readable. handle_mm_fault() will fault it in writable 
+and set the page dirty.
+
+3. Page faulted in readable and we have FOLL_FORCE. We mark the page 
+dirty and accessed.
+
+
+So doing a MADV_POPULATE_WRITE, whereby we prefault page tables 
+writable, doesn't seem to fly without marking the pages dirty. That's 
+one reason why I included MADV_POPULATE_READ.
+
+We could
+
+a) Drop FOLL_TOUCH. We are not marking the page accessed, which would 
+mean it gets evicted rather earlier than later.
+
+b) Introduce FOLL_ACCESSED which won't do the dirtying. But then, the 
+pages are already dirty as explained above, so there isn't a real 
+observable change.
+
+c) Keep it as is: Mark the page accessed and dirty. As it's already 
+dirty, that does not seem to be a real issue.
+
+Am I missing something obvious? Thanks!
+
 -- 
-2.27.0
+Thanks,
+
+David / dhildenb
 
