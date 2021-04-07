@@ -2,33 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E55356DC7
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 15:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF85356DE4
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 15:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242114AbhDGNuC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Apr 2021 09:50:02 -0400
-Received: from angie.orcam.me.uk ([157.25.102.26]:38472 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbhDGNuC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 09:50:02 -0400
+        id S1343504AbhDGNwt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Apr 2021 09:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238334AbhDGNwt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 09:52:49 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C38E1C061756;
+        Wed,  7 Apr 2021 06:52:39 -0700 (PDT)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 74FCF92009C; Wed,  7 Apr 2021 15:49:51 +0200 (CEST)
+        id B5A6F92009C; Wed,  7 Apr 2021 15:52:38 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 7033092009B;
-        Wed,  7 Apr 2021 15:49:51 +0200 (CEST)
-Date:   Wed, 7 Apr 2021 15:49:51 +0200 (CEST)
+        by angie.orcam.me.uk (Postfix) with ESMTP id AEA7D92009B;
+        Wed,  7 Apr 2021 15:52:38 +0200 (CEST)
+Date:   Wed, 7 Apr 2021 15:52:38 +0200 (CEST)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
 To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Wei Li <liwei391@huawei.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH] MIPS: add support for buggy MT7621S core detection
-In-Reply-To: <CALCv0x0SwiOAWXk36vuFkspNSM16nS=wdMhm5ZNyOdFUia5zuw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2104071545330.65251@angie.orcam.me.uk>
-References: <20210403061912.1012509-1-ilya.lipnitskiy@gmail.com> <alpine.DEB.2.21.2104060311490.65251@angie.orcam.me.uk> <CALCv0x0SwiOAWXk36vuFkspNSM16nS=wdMhm5ZNyOdFUia5zuw@mail.gmail.com>
+cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        liwei391@huawei.com, nbd@nbd.name,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        yangtiezhu@loongson.cn
+Subject: Re: [PATCH v2] MIPS: add support for buggy MT7621S core detection
+In-Reply-To: <20210406042334.1318117-1-ilya.lipnitskiy@gmail.com>
+Message-ID: <alpine.DEB.2.21.2104071549560.65251@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2104060311490.65251@angie.orcam.me.uk> <20210406042334.1318117-1-ilya.lipnitskiy@gmail.com>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -38,18 +39,43 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Mon, 5 Apr 2021, Ilya Lipnitskiy wrote:
 
-> Thanks for the comments. Including asm/bugs.h in asm/mips-cps.h led to
-> some circular dependencies when I tried it, but I will try again based
-> on your feedback - indeed it would be much cleaner to have this logic
-> in mips_cps_numcores. The only wrinkle is that mips_cps_numcores may
-> return a different value on MT7621 after the cores have started due to
-> CPULAUNCH flags changing, but nobody calls mips_cps_numcores later
-> anyway, so it's a moot point today. I will clean up the change and
-> resend.
+> diff --git a/arch/mips/include/asm/mips-cps.h b/arch/mips/include/asm/mips-cps.h
+> index fd43d876892e..9f495ffef2b7 100644
+> --- a/arch/mips/include/asm/mips-cps.h
+> +++ b/arch/mips/include/asm/mips-cps.h
+> @@ -165,11 +167,29 @@ static inline uint64_t mips_cps_cluster_config(unsigned int cluster)
+>   */
+>  static inline unsigned int mips_cps_numcores(unsigned int cluster)
+>  {
+> +	struct cpulaunch *launch;
+> +	unsigned int ncores;
+> +
+>  	if (!mips_cm_present())
+>  		return 0;
+>  
+>  	/* Add one before masking to handle 0xff indicating no cores */
+> -	return (mips_cps_cluster_config(cluster) + 1) & CM_GCR_CONFIG_PCORES;
+> +	ncores = (mips_cps_cluster_config(cluster) + 1) & CM_GCR_CONFIG_PCORES;
+> +
+> +	if (IS_ENABLED(CONFIG_SOC_MT7621)) {
+> +		/*
+> +		 * Ralink MT7621S SoC is single core, but the GCR_CONFIG method
+> +		 * always reports 2 cores. Check the second core's LAUNCH_FREADY
+> +		 * flag to detect if the second core is missing. This method
+> +		 * only works before the core has been started.
+> +		 */
+> +		launch = (struct cpulaunch *)CKSEG0ADDR(CPULAUNCH);
+> +		launch += 2; /* MT7621 has 2 VPEs per core */
+> +		if (!(launch->flags & LAUNCH_FREADY))
+> +			ncores = 1;
+> +	}
+> +
+> +	return ncores;
+>  }
+>  
+>  /**
 
- Hmm, I don't know this system, but by the look of the code it queries 
-launch[2], which I gather refers to the VPE #0 of an inexistent core #1, 
-so why would the structure change given that there is no corresponding 
-silicon?
+ Much better to me, but please move the declaration of `launch' into the 
+conditional block, which is the only place that uses it.
 
   Maciej
