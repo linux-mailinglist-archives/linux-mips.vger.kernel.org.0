@@ -2,91 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AD535748B
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 20:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE46F357583
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Apr 2021 22:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbhDGSuP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Apr 2021 14:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
+        id S1349068AbhDGUIN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Apr 2021 16:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbhDGSuP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 14:50:15 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51618C06175F;
-        Wed,  7 Apr 2021 11:50:05 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id d10so17129063ils.5;
-        Wed, 07 Apr 2021 11:50:05 -0700 (PDT)
+        with ESMTP id S1355924AbhDGUIM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 16:08:12 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC60AC06175F;
+        Wed,  7 Apr 2021 13:08:01 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id t140so13863009pgb.13;
+        Wed, 07 Apr 2021 13:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b++me/vcCLJvw9varsX+G3RJRw7/X7m6AUetLZR2Nv4=;
-        b=YX7dKkmFBazLmKRGC/v+9j8yBdSShEwjnP86zVbw9sy8+c4XQrqLkF9ERA8d5tLetH
-         TAElcBhMdeuLalZfrtAe31xtk9HxeJ7m7Bh9RbS3i/qYVULYV7eW0d+SlTg+/B2wWN/d
-         RQxlXFIokmKthq3syT9yXNifBmqqWq1LJuXy5jreeuoTI7tgPqmaDRh3wuKm0z4yYDIH
-         eEpEZlfgiptwK7eg9eFNn7rV2w+38hyQApAUKuO/gSBOLneN2lYiP/cZWk5CN5tbzUyd
-         LVHs9TJzGhE70kMI0wfqZ8iU41+qssSRy/MK3wAXqH2qQJEw6OWfy3gGuVg0ohtNKZKJ
-         IWNw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9beUCmdHnVH4oDxMABfGZMKoJI0jBOWYhdg4Jzv5plY=;
+        b=Kekabc8cFdaew4zlLRFUDvnYEN/mSWJ+SoBFuuedrE5DTiBWsIpiZ7UDDEO8vGcX3e
+         35MZv7xoi+JWV8F4rXClk2jd3NrOSWdbp0BEd+IeoHcwOEpj8Zpnzt7YaKBLpjROZ/B6
+         wp7P7dP4NX5zCXZu3DPcyafNuysJdvOozu+3f1R9S3bVbx0WeycKgB4YSCVGCAEGBItD
+         fH2wq17QleV2mI0DY6PAkTQP1YcPlKvKayDvfJgkP7BcF9W3IDvRnjJxr23clHPlhUdQ
+         Nc/Spn8Mznlt5G1gL8jotsoEB6cnPHvASC41kHntZDceZS2gUSCReW27C3cX5hiC2PR5
+         0n+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b++me/vcCLJvw9varsX+G3RJRw7/X7m6AUetLZR2Nv4=;
-        b=GBxLsy3o8mN5OJVVmTS0m46Wtc0dKvrpU4GzfwtqBC9xpATzTH7+3JyrwxvHq6iKUr
-         va3C/fMV0jyLrXBEcK1GmYDCq8pSFQPabWkaoBPoQ3xAQP5F4BUAPJ8g4e2jWHK16SIi
-         fhAgmt/pNagEEuibfnVCR3rglsRKW+Ct44Ap7HLEl4CjJT0ISdaM3FpjGrsxJFcFLdqR
-         OWv0+uorCojHJA5axFPTDrx7njePlxzMo3QwVhlDdLRRbqkq8iA1GS+jjXbmkQlpJIrF
-         le0MEWGJnAafqoGtJqE2FSqcobC1YKrvW+2TPSQcIIJbWongbut4LvDZ0lF1+KQOZx6x
-         J8sQ==
-X-Gm-Message-State: AOAM5337uOAn7wCeCeyzM6OrZDHmmzEvjPeupAx2lbzp1qKTSLP21IFG
-        ug2s4eGfz2pZQiYUja7Jfnq/7CoGj8gTxfB/wnSy3dOyZbPm2A==
-X-Google-Smtp-Source: ABdhPJyjUWWhg6dDfjjHjtwtUT6QUGUcDE6AJntOIooI3RHxQWCTF9PLwhIQljzudlfLBnJ8qzGAhGyqEs/ShbxbdMM=
-X-Received: by 2002:a92:d689:: with SMTP id p9mr3798668iln.179.1617821404757;
- Wed, 07 Apr 2021 11:50:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210403061912.1012509-1-ilya.lipnitskiy@gmail.com>
- <alpine.DEB.2.21.2104060311490.65251@angie.orcam.me.uk> <CALCv0x0SwiOAWXk36vuFkspNSM16nS=wdMhm5ZNyOdFUia5zuw@mail.gmail.com>
- <alpine.DEB.2.21.2104071545330.65251@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2104071545330.65251@angie.orcam.me.uk>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9beUCmdHnVH4oDxMABfGZMKoJI0jBOWYhdg4Jzv5plY=;
+        b=AbWWVChMgFRdhODE3CTp5nG6OFlZovO1OvTXJp1Zn3EV8zHahhAKbgX2n4CUNNs6Th
+         jE4Z5hjbWmIVmLPQ68jwARsqAJHJ3olzVc0cxmnxwhHQKDOB/HSqOvChOT3ZI6J7AboX
+         T1XCAXSRVYv706/RxVCXW+C/Hzd0ANaw87VCWyqUU0vMFKgqcl4rzHCRlpuhAOCgaYIT
+         tckQNQMERhsMyJPNV4LIdTZqjtEjJeHT+YzoGHvEHO20MBnxjUviZhBsALit6gALu5He
+         xiVjbfzFDTJV1Jdb2HCgjrQP9z9jVy75P1fu2QhfZo58a7qZdPI91GMm6vjHm9MEbNbH
+         ndmg==
+X-Gm-Message-State: AOAM532fgtBBPoEFB0S83RR3En9L8XKSIklPPqSwPl7GYnCr5xfKew4w
+        2IPR2iunFYHIV6hEwUs8ye20jWCxhagA47EH
+X-Google-Smtp-Source: ABdhPJz5UeJaGZ0abUlKweGH8mMfqvbzpxlNLAHH3gDHjBFbSj3UGDIYnNS1uiatPM/3cNK0mgEthQ==
+X-Received: by 2002:a63:6a41:: with SMTP id f62mr4725348pgc.428.1617826081279;
+        Wed, 07 Apr 2021 13:08:01 -0700 (PDT)
+Received: from ilya-fury.lan ([2602:61:7344:f100::b87])
+        by smtp.gmail.com with ESMTPSA id l25sm24093566pgu.72.2021.04.07.13.08.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Apr 2021 13:08:00 -0700 (PDT)
 From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Date:   Wed, 7 Apr 2021 11:49:53 -0700
-Message-ID: <CALCv0x0wQ9DJUVEPXCgbBFQHjqNCfSYLFkU0Md2zjJ4XfydhXg@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: add support for buggy MT7621S core detection
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Wei Li <liwei391@huawei.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Felix Fietkau <nbd@nbd.name>
-Content-Type: text/plain; charset="UTF-8"
+To:     macro@orcam.me.uk
+Cc:     ilya.lipnitskiy@gmail.com, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, liwei391@huawei.com, nbd@nbd.name,
+        tsbogend@alpha.franken.de, yangtiezhu@loongson.cn
+Subject: [PATCH v3] MIPS: add support for buggy MT7621S core detection
+Date:   Wed,  7 Apr 2021 13:07:38 -0700
+Message-Id: <20210407200738.149207-1-ilya.lipnitskiy@gmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <alpine.DEB.2.21.2104071549560.65251@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2104071549560.65251@angie.orcam.me.uk>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 7, 2021 at 6:49 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> On Mon, 5 Apr 2021, Ilya Lipnitskiy wrote:
->
-> > Thanks for the comments. Including asm/bugs.h in asm/mips-cps.h led to
-> > some circular dependencies when I tried it, but I will try again based
-> > on your feedback - indeed it would be much cleaner to have this logic
-> > in mips_cps_numcores. The only wrinkle is that mips_cps_numcores may
-> > return a different value on MT7621 after the cores have started due to
-> > CPULAUNCH flags changing, but nobody calls mips_cps_numcores later
-> > anyway, so it's a moot point today. I will clean up the change and
-> > resend.
->
->  Hmm, I don't know this system, but by the look of the code it queries
-> launch[2], which I gather refers to the VPE #0 of an inexistent core #1,
-> so why would the structure change given that there is no corresponding
-> silicon?
-The structure would change only on the dual-core flavor of MT7621, the
-single-core would always report 1 core, but on the dual-core, if
-somebody were to call mips_cps_numcores after the second core had
-already started, mips_cps_numcores would return 1 instead of 2. I
-think it may be feasible to fix it by checking other flags, but there
-is no use case for that today, so I'd rather keep this hacky logic to
-a minimum.
+Most MT7621 SoCs have 2 cores, which is detected and supported properly
+by CPS.
 
-Ilya
+Unfortunately, MT7621 SoC has a less common S variant with only one core.
+On MT7621S, GCR_CONFIG still reports 2 cores, which leads to hangs when
+starting SMP. CPULAUNCH registers can be used in that case to detect the
+absence of the second core and override the GCR_CONFIG PCORES field.
+
+Rework a long-standing OpenWrt patch to override the value of
+mips_cps_numcores on single-core MT7621 systems.
+
+Tested on a dual-core MT7621 device (Ubiquiti ER-X) and a single-core
+MT7621 device (Netgear R6220).
+
+Original 4.14 OpenWrt patch:
+Link: https://git.openwrt.org/?p=openwrt/openwrt.git;a=commitdiff;h=4cdbc90a376dd0555201c1434a2081e055e9ceb7
+Current 5.10 OpenWrt patch:
+Link: https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/ramips/patches-5.10/320-mt7621-core-detect-hack.patch;h=c63f0f4c1ec742e24d8480e80553863744b58f6a;hb=10267e17299806f9885d086147878f6c492cb904
+
+Suggested-by: Felix Fietkau <nbd@nbd.name>
+Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+---
+ arch/mips/include/asm/mips-cps.h | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/include/asm/mips-cps.h b/arch/mips/include/asm/mips-cps.h
+index fd43d876892e..35fb8ee6dd33 100644
+--- a/arch/mips/include/asm/mips-cps.h
++++ b/arch/mips/include/asm/mips-cps.h
+@@ -10,6 +10,8 @@
+ #include <linux/io.h>
+ #include <linux/types.h>
+ 
++#include <asm/mips-boards/launch.h>
++
+ extern unsigned long __cps_access_bad_size(void)
+ 	__compiletime_error("Bad size for CPS accessor");
+ 
+@@ -165,11 +167,30 @@ static inline uint64_t mips_cps_cluster_config(unsigned int cluster)
+  */
+ static inline unsigned int mips_cps_numcores(unsigned int cluster)
+ {
++	unsigned int ncores;
++
+ 	if (!mips_cm_present())
+ 		return 0;
+ 
+ 	/* Add one before masking to handle 0xff indicating no cores */
+-	return (mips_cps_cluster_config(cluster) + 1) & CM_GCR_CONFIG_PCORES;
++	ncores = (mips_cps_cluster_config(cluster) + 1) & CM_GCR_CONFIG_PCORES;
++
++	if (IS_ENABLED(CONFIG_SOC_MT7621)) {
++		struct cpulaunch *launch;
++
++		/*
++		 * Ralink MT7621S SoC is single core, but the GCR_CONFIG method
++		 * always reports 2 cores. Check the second core's LAUNCH_FREADY
++		 * flag to detect if the second core is missing. This method
++		 * only works before the core has been started.
++		 */
++		launch = (struct cpulaunch *)CKSEG0ADDR(CPULAUNCH);
++		launch += 2; /* MT7621 has 2 VPEs per core */
++		if (!(launch->flags & LAUNCH_FREADY))
++			ncores = 1;
++	}
++
++	return ncores;
+ }
+ 
+ /**
+-- 
+2.31.1
+
