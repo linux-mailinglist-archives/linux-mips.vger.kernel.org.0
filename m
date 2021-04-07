@@ -2,87 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07529357782
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Apr 2021 00:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B75735781C
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Apr 2021 00:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbhDGWUl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Apr 2021 18:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbhDGWUj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 18:20:39 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4149EC061760;
-        Wed,  7 Apr 2021 15:20:29 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id g20so282069qkk.1;
-        Wed, 07 Apr 2021 15:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ner43B1c7JahH39vGo3hPzauiEoC0Ok0VtKiG5WaEkY=;
-        b=U16K0peTEaFDRZyiGqG5dTqKXCkKnJRPaNxJmbe3Q1Sg+u+XdBREmoPk9D4QGlPs5S
-         eTTzVZabqfO+GDt9sCXNTUNN7zPqDYAwEn/+f1DLP5YiPjdgVRptDaBiPpYpOQLEQWeE
-         t7lF2JbRy5iYwmiS/bJfdY9wv3rjHc1YWXsBlgjnAnXwVhZWzIfsGph7UJ6fQc4MSqkm
-         v1pgLQlSm4eycU9hOmk4BInbijaFF+2qzoygqyipg1Ovqc4qsO3VU+eZKFmfHpWgy+yM
-         cFlr/DFB9mOdGNdSs6D1jITwediB2I33I9gGyJAwfQTLgdHMu4BcSJ57rpvOpM6FRZsG
-         1NYQ==
+        id S229586AbhDGW72 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Apr 2021 18:59:28 -0400
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:38718 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbhDGW71 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Apr 2021 18:59:27 -0400
+Received: by mail-ot1-f51.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so444357otk.5;
+        Wed, 07 Apr 2021 15:59:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ner43B1c7JahH39vGo3hPzauiEoC0Ok0VtKiG5WaEkY=;
-        b=rr07hpEmqb+ycSn2B85K+8nn7P3PZ62+D1qRcsV5A/ct7b09ZHIKGNDxD+n/Hf+ddJ
-         TXzDxaSvSlhCj4s0bR9TmEES4Q+prd4LnxgciPyc+sqxldhQp0M/7gMA7XxcSFlKCuuN
-         q0hyUCPyE2pd5biNkE0fqJisYNrIvl1V2OeoemD3E3MJVCGMq41YcEEdpJdWfPdwqHvT
-         D4Y2AEph0XKC5+goebxkHSqc7yUiEflWzxOr5NmF0X180lDMDWhSJuFacYviwYBQyQDE
-         L0l6iwrTWNTmeWbroAw2D1y7+joTaxkWSeVOssNk8VQ+pER8VL5cQ5tcV2fvAh+4gA2Q
-         cMVQ==
-X-Gm-Message-State: AOAM530CBEC82hQzy/+fiRWoCCWEHr8N6s2ZKXdsZXiaJj+zJQCGa5SG
-        BfpGwEB0yftlleIKkYJcWcK+9WvwsZu6cFUCecw=
-X-Google-Smtp-Source: ABdhPJz5jXn36tzwk6U6Xoaraom6QWYRZFMN4zt+7Lp6WMX1nDkSss9M6Q8P/BhBfqfEksawLeaydMgAaq178wnCKMg=
-X-Received: by 2002:a05:620a:527:: with SMTP id h7mr5602337qkh.108.1617834028553;
- Wed, 07 Apr 2021 15:20:28 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QKXgCn18Rr1eqfdzx55WXMaeSuXNDv2BM9yLmUwClbs=;
+        b=VESw8pT467vjoArwrVyomMYyeqqbh4HIcU9XANCmWEapiO6jUMGMNQg4HmzTqMIcq+
+         JbH66117F9NvI+GF3qCNYrRRJM6R17bDeL7Bq0Uz6AkFQ3tIGHGRGbvTu6zoR9EqwCVX
+         /aGP9a9tnJaJugjAsxxJstg6UNElmfrq7Y6loluLCE2MtFTiqGgTsfE+LEjRe7DycIFW
+         CPxaNiYX/6gYQo7bYHmQIcMgz7sURjSAc0D5xHE7ghjVyxCSM0OHfG1O1rWQvM6S3WOC
+         L8JvDRcUufLAjgpDVVS+m3TUmxcSBF0TUqaQTviIGV4VPa9b195/1SqWSmQJ1WJVAwv/
+         HVBA==
+X-Gm-Message-State: AOAM532VwXR8f0YE4xX29CHNQdh6oESBow7mexcG7M/AzY40/NwauehC
+        bC61Q4Z4EmxTZ2RHRDOAkg==
+X-Google-Smtp-Source: ABdhPJyvr5jHBGk0riO06gjL1cJLFcP8LjEM1PludhoIvgfnmnAE6t/+wBnt/64MHZhkodj4W6TLdA==
+X-Received: by 2002:a05:6830:22c3:: with SMTP id q3mr4869906otc.56.1617836356986;
+        Wed, 07 Apr 2021 15:59:16 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id b22sm5786887ots.59.2021.04.07.15.59.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Apr 2021 15:59:16 -0700 (PDT)
+Received: (nullmailer pid 174484 invoked by uid 1000);
+        Wed, 07 Apr 2021 22:59:15 -0000
+Date:   Wed, 7 Apr 2021 17:59:15 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        X86 ML <x86@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        xe-linux-external@cisco.com,
+        Ruslan Ruslichenko <rruslich@cisco.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/8] CMDLINE: drivers: of: ifdef out cmdline section
+Message-ID: <20210407225915.GA147338@robh.at.kernel.org>
+References: <41021d66db2ab427c14255d2a24bb4517c8b58fd.1617126961.git.danielwa@cisco.com>
+ <0c4b839f023f87c451c8aa3c4f7a8d92729c2f02.1617126961.git.danielwa@cisco.com>
+ <CAL_Jsq+_gF9Cy7H6ic2q8dxnPf4+FsBa5pFYYRydJsEmDhnNhA@mail.gmail.com>
+ <20210330231717.GA2469518@zorba>
 MIME-Version: 1.0
-References: <1617087773-7183-1-git-send-email-wangqing@vivo.com> <1617087773-7183-5-git-send-email-wangqing@vivo.com>
-In-Reply-To: <1617087773-7183-5-git-send-email-wangqing@vivo.com>
-From:   Richard Weinberger <richard.weinberger@gmail.com>
-Date:   Thu, 8 Apr 2021 00:20:17 +0200
-Message-ID: <CAFLxGvy7vKJHAms-QAyhcUiv58GYQy+zy3AZ3hP_g+tmh-X4xg@mail.gmail.com>
-Subject: Re: [PATCH 4/6] fs/jffs2: Delete obsolete TODO file
-To:     Wang Qing <wangqing@vivo.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Luis de Bethencourt <luisbg@kernel.org>,
-        Salah Triki <salah.triki@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-mips@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-scsi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-hams@vger.kernel.org,
-        netdev@vger.kernel.org, linux-decnet-user@lists.sourceforge.net,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210330231717.GA2469518@zorba>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 9:07 AM Wang Qing <wangqing@vivo.com> wrote:
->
-> The TODO file here has not been updated for 14 years, and the function
-> development described in the file have been implemented or abandoned.
->
-> Its existence will mislead developers seeking to view outdated information.
+On Tue, Mar 30, 2021 at 04:17:53PM -0700, Daniel Walker wrote:
+> On Tue, Mar 30, 2021 at 02:49:13PM -0500, Rob Herring wrote:
+> > On Tue, Mar 30, 2021 at 12:57 PM Daniel Walker <danielwa@cisco.com> wrote:
+> > >
+> > > It looks like there's some seepage of cmdline stuff into
+> > > the generic device tree code. This conflicts with the
+> > > generic cmdline implementation so I remove it in the case
+> > > when that's enabled.
+> > >
+> > > Cc: xe-linux-external@cisco.com
+> > > Signed-off-by: Ruslan Ruslichenko <rruslich@cisco.com>
+> > > Signed-off-by: Daniel Walker <danielwa@cisco.com>
+> > > ---
+> > >  drivers/of/fdt.c | 14 ++++++++++++++
+> > >  1 file changed, 14 insertions(+)
+> > >
+> > > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> > > index dcc1dd96911a..d8805cd9717a 100644
+> > > --- a/drivers/of/fdt.c
+> > > +++ b/drivers/of/fdt.c
+> > > @@ -25,6 +25,7 @@
+> > >  #include <linux/serial_core.h>
+> > >  #include <linux/sysfs.h>
+> > >  #include <linux/random.h>
+> > > +#include <linux/cmdline.h>
+> > >
+> > >  #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
+> > >  #include <asm/page.h>
+> > > @@ -1050,6 +1051,18 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
+> > >
+> > >         /* Retrieve command line */
+> > >         p = of_get_flat_dt_prop(node, "bootargs", &l);
+> > > +
+> > > +#if defined(CONFIG_GENERIC_CMDLINE) && defined(CONFIG_GENERIC_CMDLINE_OF)
+> > 
+> > Moving in the wrong direction... This code already has too many
+> > #ifdef's. I like Christophe's version as it gets rid of all the code
+> > here.
+>  
+> It's temporary .. Notice CONFIG_GENERIC_CMDLINE_OF is only used on PowerPC. I
+> experienced doubling on arm64 when this was used (i.e. the append and prepend
+> was added twice).
+> 
+> I don't think there are any other users which can't be moved outside the device
+> tree code, but powerpc uses this function three times during boot up plus the
+> prom_init user. It's possible to use the generic command line in all four places,
+> but it become space inefficient.
 
-Did you check whether all items in this list are really outdated?
-Nobody shall ever blindly follow a TODO list without checking first which
-points are still valid or not.
-Removing that file does not magically solve the issues it describes.
+What's the 3rd use? I count kaslr code and in 
+early_init_dt_scan_chosen_ppc. Do we need to build the command line for 
+kaslr seed? Getting any build time value from the kernel is pointless.
 
--- 
-Thanks,
-//richard
+Rob
