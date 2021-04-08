@@ -2,56 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C9D358E88
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Apr 2021 22:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D509F358EDF
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Apr 2021 22:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbhDHUiR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Apr 2021 16:38:17 -0400
-Received: from elvis.franken.de ([193.175.24.41]:35356 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231676AbhDHUiR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 8 Apr 2021 16:38:17 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lUbPg-0007g1-00; Thu, 08 Apr 2021 22:38:04 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0AB84C24DB; Thu,  8 Apr 2021 22:37:45 +0200 (CEST)
-Date:   Thu, 8 Apr 2021 22:37:44 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: uaccess: Reduce number of nested macros
-Message-ID: <20210408203744.GA18538@alpha.franken.de>
-References: <20210408181437.19570-1-tsbogend@alpha.franken.de>
- <20210408194611.GA16189@lst.de>
+        id S232459AbhDHVAJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Apr 2021 17:00:09 -0400
+Received: from conuserg-09.nifty.com ([210.131.2.76]:46605 "EHLO
+        conuserg-09.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232416AbhDHVAI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Apr 2021 17:00:08 -0400
+Received: from localhost.localdomain (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-09.nifty.com with ESMTP id 138Kx46x002644;
+        Fri, 9 Apr 2021 05:59:04 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 138Kx46x002644
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1617915545;
+        bh=CMNsK6z9omY3K2WcWrv+g7O+FAyKXeHXo7JaGbnAshQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mCAELu1K9iNcHwzxPpkt2QeYzsGvXO3xtV9FO7Le8ftDrt50ftucQPKlGRH7qugRy
+         Ya3grKSZw2YFqHeSRjzjleVybuCxC+F+LDqxW2ODDfZDizTzeFFEkS6xgklZ8DNySf
+         sgjxmlZOGgylBtk14MT/msL3h5+0RgNqd1KhWiFHvZojROpII/2xzBmIKYk5FrMILE
+         JH+ze/FBtu+Utc1Sh1V3UapkGiwD83/r25JpRXNpVeB6q8+2OIyrktRiLXSQ5RNZ6Y
+         WT1cfD2EQCAGNfK7s+unVooFzVx+HATnyUBAB+3r8X2pMEEL5HCT32AGFF6izs7hFa
+         M6AzFOhU0pc5Q==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 0/2] linux/kconfig.h: move IF_ENABLED() out of <linux/kconfig.h>
+Date:   Fri,  9 Apr 2021 05:58:56 +0900
+Message-Id: <20210408205858.51751-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210408194611.GA16189@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 09:46:11PM +0200, Christoph Hellwig wrote:
-> > +#define put_user(x, ptr)						\
-> > +({									\
-> > +	__typeof__(*(ptr)) __user *__p = (ptr);				\
-> > +									\
-> > +	might_fault();							\
-> > +	access_ok(__p, sizeof(*__p)) ?					\
-> > +		__put_user((x), __p) :					\
-> > +		-EFAULT;						\
-> 
-> Why not merge this into a single line, which seems a little more
-> readable:
-> 
-> 	access_ok(__p, sizeof(*__p)) ? __put_user((x), __p) : -EFAULT;	\
 
-I just copied the riscv version ;-) I'll make it one line before applying.
+I insist on <linux/kconfig.h> having only minimal set of macros
+that are needed to evaluate CONFIG options.
 
-Thomas.
+Everytime somebody added an alien to <linux/kconfig.h>, I needed to
+kick it out.
+
+I did not notice 1b399bb04837183cecdc1b32ef1cfc7fcfa75d32 because
+I was not addressed by [1].
+
+[1]: https://lore.kernel.org/lkml/?q=kconfig.h%3A+Add+IF_ENABLED%28%29+macro
+
+I like Paul's idea, but if I had noticed the patch in time, I would
+have tried my best to persuade to implement it outside of <linux/kconfig.h>
+(Paul's initial patch was adding it to a new header instead of <linux/kconfig.h>)
+
+Before it is widely used, I want to fix it.
+
+In 2/2, I converted pm.h to allow driver cleanups.
+
+
+
+Masahiro Yamada (2):
+  linux/kconfig.h: replace IF_ENABLED() with PTR_IF() in
+    <linux/kernel.h>
+  pm: allow drivers to drop #ifdef and __maybe_unused from pm callbacks
+
+ drivers/pinctrl/pinctrl-ingenic.c | 20 ++++-----
+ include/linux/kconfig.h           |  6 ---
+ include/linux/kernel.h            |  2 +
+ include/linux/pm.h                | 67 +++++++++++--------------------
+ 4 files changed, 36 insertions(+), 59 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.27.0
+
