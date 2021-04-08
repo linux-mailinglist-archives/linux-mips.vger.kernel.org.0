@@ -2,263 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C72358BFB
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Apr 2021 20:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E2B358C1C
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Apr 2021 20:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbhDHSO4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Apr 2021 14:14:56 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37066 "EHLO mx2.suse.de"
+        id S232267AbhDHSXJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Apr 2021 14:23:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40052 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232267AbhDHSO4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 8 Apr 2021 14:14:56 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E0B44B17A;
-        Thu,  8 Apr 2021 18:14:42 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     hch@lst.de
-Subject: [PATCH] MIPS: uaccess: Reduce number of nested macros
-Date:   Thu,  8 Apr 2021 20:14:37 +0200
-Message-Id: <20210408181437.19570-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
+        id S231676AbhDHSXI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 8 Apr 2021 14:23:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2BB56610A7;
+        Thu,  8 Apr 2021 18:22:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617906177;
+        bh=O9i23Zz7sOX9JfpvtBrMns2I+XN+AjHRdTaX9tVGbRQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jXbv1x42aqQyogLYiUEk2qkXRoiU4C+aFDeR5EyEydxRlkwPhrPQw3gDU5pzSlAgh
+         pvQrIMyMraJbjPg5GxsDCbYCAT9anIgsVRDzUifVVQ7qPXFJLKzt1BpFo/Hj9YjWqw
+         OKQkih/IunJqbAz9tSclQhnlljeoKWAP463jBzesThRjQWi8OBYNA5Lbi4Qr1rETPg
+         OH79zTOLZYVqC5uTeMu2SHIX6Gfaw47Re6pR9SbGiMpxjY90wzwv5ldwziABBUlOeD
+         OZlvjxJ5K9y5r4cKLO8KIKEqZZupcTJp+GA26gVEpuQRiuaQOlHp1iW3WY2qlMguuh
+         8sarYjKr4Zhvw==
+Date:   Thu, 8 Apr 2021 11:22:53 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Simon Glass <sjg@chromium.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     u-boot@lists.denx.de, linux-mips@vger.kernel.org
+Subject: mkimage regression when building ARCH=mips defconfig Linux kernel
+Message-ID: <20210408182253.6m3j6lhmh3iflquz@archlinux-ax161>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Clean up macros even further after removal get_fs/set_fs.
+Hi Simon,
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/include/asm/uaccess.h | 157 +++++++++++++++-----------------
- 1 file changed, 71 insertions(+), 86 deletions(-)
+Apologies if this is not the proper way to report a regression, this is my first
+time interacting with the U-Boot community.
 
-diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
-index 91bc7fb7dca1..e0dedd47e4e6 100644
---- a/arch/mips/include/asm/uaccess.h
-+++ b/arch/mips/include/asm/uaccess.h
-@@ -102,8 +102,15 @@ static inline int __access_ok(const void __user *p, unsigned long size)
-  *
-  * Returns zero on success, or -EFAULT on error.
-  */
--#define put_user(x,ptr) \
--	__put_user_check((x), (ptr), sizeof(*(ptr)))
-+#define put_user(x, ptr)						\
-+({									\
-+	__typeof__(*(ptr)) __user *__p = (ptr);				\
-+									\
-+	might_fault();							\
-+	access_ok(__p, sizeof(*__p)) ?					\
-+		__put_user((x), __p) :					\
-+		-EFAULT;						\
-+})
- 
- /*
-  * get_user: - Get a simple variable from user space.
-@@ -123,8 +130,15 @@ static inline int __access_ok(const void __user *p, unsigned long size)
-  * Returns zero on success, or -EFAULT on error.
-  * On error, the variable @x is set to zero.
-  */
--#define get_user(x,ptr) \
--	__get_user_check((x), (ptr), sizeof(*(ptr)))
-+#define get_user(x, ptr)						\
-+({									\
-+	const __typeof__(*(ptr)) __user *__p = (ptr);			\
-+									\
-+	might_fault();							\
-+	access_ok(__p, sizeof(*__p)) ?					\
-+		__get_user((x), __p) :					\
-+		((x) = 0, -EFAULT);					\
-+})
- 
- /*
-  * __put_user: - Write a simple value into user space, with less checking.
-@@ -146,8 +160,32 @@ static inline int __access_ok(const void __user *p, unsigned long size)
-  *
-  * Returns zero on success, or -EFAULT on error.
-  */
--#define __put_user(x,ptr) \
--	__put_user_nocheck((x), (ptr), sizeof(*(ptr)))
-+#define __put_user(x, ptr)						\
-+({									\
-+	__typeof__(*(ptr)) __user *__pu_ptr = (ptr);			\
-+	__typeof__(*(ptr)) __pu_val = (x);				\
-+	int __pu_err = 0;						\
-+									\
-+	__chk_user_ptr(__pu_ptr);					\
-+	switch (sizeof(*__pu_ptr)) {					\
-+	case 1:								\
-+		__put_data_asm(user_sb, __pu_ptr);			\
-+		break;							\
-+	case 2:								\
-+		__put_data_asm(user_sh, __pu_ptr);			\
-+		break;							\
-+	case 4:								\
-+		__put_data_asm(user_sw, __pu_ptr);			\
-+		break;							\
-+	case 8:								\
-+		__PUT_DW(user_sd, __pu_ptr);				\
-+		break;							\
-+	default:							\
-+		BUILD_BUG();						\
-+	}								\
-+									\
-+	__pu_err;							\
-+})
- 
- /*
-  * __get_user: - Get a simple variable from user space, with less checking.
-@@ -170,8 +208,31 @@ static inline int __access_ok(const void __user *p, unsigned long size)
-  * Returns zero on success, or -EFAULT on error.
-  * On error, the variable @x is set to zero.
-  */
--#define __get_user(x,ptr) \
--	__get_user_nocheck((x), (ptr), sizeof(*(ptr)))
-+#define __get_user(x, ptr)						\
-+({									\
-+	const __typeof__(*(ptr)) __user *__gu_ptr = (ptr);		\
-+	int __gu_err = 0;						\
-+									\
-+	__chk_user_ptr(__gu_ptr);					\
-+	switch (sizeof(*__gu_ptr)) {					\
-+	case 1:								\
-+		__get_data_asm((x), user_lb, __gu_ptr);			\
-+		break;							\
-+	case 2:								\
-+		__get_data_asm((x), user_lh, __gu_ptr);			\
-+		break;							\
-+	case 4:								\
-+		__get_data_asm((x), user_lw, __gu_ptr);			\
-+		break;							\
-+	case 8:								\
-+		__GET_DW((x), user_ld, __gu_ptr);			\
-+		break;							\
-+	default:							\
-+		BUILD_BUG();						\
-+	}								\
-+									\
-+	__gu_err;							\
-+})
- 
- struct __large_struct { unsigned long buf[100]; };
- #define __m(x) (*(struct __large_struct __user *)(x))
-@@ -183,43 +244,6 @@ struct __large_struct { unsigned long buf[100]; };
- #define __GET_DW(val, insn, ptr) __get_data_asm(val, insn, ptr)
- #endif
- 
--extern void __get_user_unknown(void);
--
--#define __get_user_common(val, size, ptr)				\
--do {									\
--	switch (size) {							\
--	case 1: __get_data_asm(val, user_lb, ptr); break;		\
--	case 2: __get_data_asm(val, user_lh, ptr); break;		\
--	case 4: __get_data_asm(val, user_lw, ptr); break;		\
--	case 8: __GET_DW(val, user_ld, ptr); break;			\
--	default: __get_user_unknown(); break;				\
--	}								\
--} while (0)
--
--#define __get_user_nocheck(x, ptr, size)				\
--({									\
--	int __gu_err;							\
--									\
--	__chk_user_ptr(ptr);						\
--	__get_user_common((x), size, ptr);				\
--									\
--	__gu_err;							\
--})
--
--#define __get_user_check(x, ptr, size)					\
--({									\
--	int __gu_err = -EFAULT;						\
--	const __typeof__(*(ptr)) __user * __gu_ptr = (ptr);		\
--									\
--	might_fault();							\
--	if (likely(access_ok(__gu_ptr, size))) {			\
--		__get_user_common((x), size, __gu_ptr);			\
--	} else								\
--		(x) = 0;						\
--									\
--	__gu_err;							\
--})
--
- #define __get_data_asm(val, insn, addr)					\
- {									\
- 	long __gu_tmp;							\
-@@ -297,7 +321,7 @@ do {									\
- 			 (__force type *)(src));			\
- 		break;							\
- 	default:							\
--		__get_user_unknown();					\
-+		BUILD_BUG();						\
- 		break;							\
- 	}								\
- 	if (unlikely(__gu_err))						\
-@@ -315,43 +339,6 @@ do {									\
- #define __PUT_DW(insn, ptr) __put_data_asm(insn, ptr)
- #endif
- 
--#define __put_user_common(ptr, size)					\
--do {									\
--	switch (size) {							\
--	case 1: __put_data_asm(user_sb, ptr); break;			\
--	case 2: __put_data_asm(user_sh, ptr); break;			\
--	case 4: __put_data_asm(user_sw, ptr); break;			\
--	case 8: __PUT_DW(user_sd, ptr); break;				\
--	default: __put_user_unknown(); break;				\
--	}								\
--} while (0)
--
--#define __put_user_nocheck(x, ptr, size)				\
--({									\
--	__typeof__(*(ptr)) __pu_val;					\
--	int __pu_err = 0;						\
--									\
--	__pu_val = (x);							\
--	__chk_user_ptr(ptr);						\
--	__put_user_common(ptr, size);					\
--									\
--	__pu_err;							\
--})
--
--#define __put_user_check(x, ptr, size)					\
--({									\
--	__typeof__(*(ptr)) __user *__pu_addr = (ptr);			\
--	__typeof__(*(ptr)) __pu_val = (x);				\
--	int __pu_err = -EFAULT;						\
--									\
--	might_fault();							\
--	if (likely(access_ok(__pu_addr, size))) {			\
--		__put_user_common(__pu_addr, size);			\
--	}								\
--									\
--	__pu_err;							\
--})
--
- #define __put_data_asm(insn, ptr)					\
- {									\
- 	__asm__ __volatile__(						\
-@@ -390,8 +377,6 @@ do {									\
- 	  "i" (-EFAULT));						\
- }
- 
--extern void __put_user_unknown(void);
--
- #define __put_kernel_nofault(dst, src, type, err_label)			\
- do {									\
- 	type __pu_val;					\
-@@ -412,7 +397,7 @@ do {									\
- 		__PUT_DW(kernel_sd, (type *)(dst));			\
- 		break;							\
- 	default:							\
--		__put_user_unknown();					\
-+		BUILD_BUG();						\
- 		break;							\
- 	}								\
- 	if (unlikely(__pu_err))						\
--- 
-2.29.2
+My distribution updated the uboot-tools package to 2021.04, which broke my
+Linux kernel builds for ARCH=mips:
 
+$ make -skj"$(nproc)" ARCH=mips CROSS_COMPILE=mips-linux- defconfig all
+...
+/usr/bin/mkimage: verify_header failed for FIT Image support with exit code 1
+make[2]: *** [arch/mips/boot/Makefile:173: arch/mips/boot/vmlinux.gz.itb] Error 1
+...
+
+I bisected this down to your commit:
+
+3f04db891a353f4b127ed57279279f851c6b4917 is the first bad commit
+commit 3f04db891a353f4b127ed57279279f851c6b4917
+Author: Simon Glass <sjg@chromium.org>
+Date:   Mon Feb 15 17:08:12 2021 -0700
+
+    image: Check for unit addresses in FITs
+
+    Using unit addresses in a FIT is a security risk. Add a check for this
+    and disallow it.
+
+    CVE-2021-27138
+
+    Signed-off-by: Simon Glass <sjg@chromium.org>
+    Reported-by: Bruce Monroe <bruce.monroe@intel.com>
+    Reported-by: Arie Haenel <arie.haenel@intel.com>
+    Reported-by: Julien Lenoir <julien.lenoir@intel.com>
+
+ common/image-fit.c          | 56 +++++++++++++++++++++++++++++++++++++++++----
+ test/py/tests/test_vboot.py |  9 ++++----
+ 2 files changed, 57 insertions(+), 8 deletions(-)
+bisect run success
+
+$ git bisect log
+# bad: [e9c99db7787e3b5c2ef05701177c43ed1c023c27] Merge branch '2021-04-07-CI-improvements'
+# good: [c4fddedc48f336eabc4ce3f74940e6aa372de18c] Prepare v2021.01
+git bisect start 'e9c99db7787e3b5c2ef05701177c43ed1c023c27' 'v2021.01'
+# good: [b2c86f596cfb1ea9f7f5138f72f1c5c49e3ae3f1] arm: dts: r8a774a1: Import DTS queued for Linux 5.12-rc1
+git bisect good b2c86f596cfb1ea9f7f5138f72f1c5c49e3ae3f1
+# bad: [74f4929c2c73beb595faf7d5d9bb6a78d710c2fd] ddr: marvell: axp: fix array types have different bounds warning
+git bisect bad 74f4929c2c73beb595faf7d5d9bb6a78d710c2fd
+# bad: [cbe607b920bc0827d8fe379ed4f5ae4e2058513e] Merge tag 'xilinx-for-v2021.04-rc3' of https://gitlab.denx.de/u-boot/custodians/u-boot-microblaze
+git bisect bad cbe607b920bc0827d8fe379ed4f5ae4e2058513e
+# good: [d5f3aadacbc63df3b690d6fd9f0aa3f575b43356] test: Add tests for the 'evil' vboot attacks
+git bisect good d5f3aadacbc63df3b690d6fd9f0aa3f575b43356
+# bad: [a1a652e8016426e2d67148cab225cd5ec45189fb] Merge tag 'mmc-2021-2-19' of https://gitlab.denx.de/u-boot/custodians/u-boot-mmc
+git bisect bad a1a652e8016426e2d67148cab225cd5ec45189fb
+# bad: [aeedeae40733131467de72c68e639cf9d795e059] spl: fit: Replace #ifdef blocks with more readable constructs
+git bisect bad aeedeae40733131467de72c68e639cf9d795e059
+# bad: [eb5fd9e46c11ea41430d9c5bcc81d4583424216e] usb: kbd: destroy device after console is stopped
+git bisect bad eb5fd9e46c11ea41430d9c5bcc81d4583424216e
+# bad: [99cb2b996bd649d98069a95941beaaade0a4447a] stdio: Split out nulldev_register() and move it under #if
+git bisect bad 99cb2b996bd649d98069a95941beaaade0a4447a
+# bad: [3f04db891a353f4b127ed57279279f851c6b4917] image: Check for unit addresses in FITs
+git bisect bad 3f04db891a353f4b127ed57279279f851c6b4917
+# good: [6f3c2d8aa5e6cbd80b5e869bbbddecb66c329d01] image: Add an option to do a full check of the FIT
+git bisect good 6f3c2d8aa5e6cbd80b5e869bbbddecb66c329d01
+# good: [124c255731c76a2b09587378b2bcce561bcd3f2d] libfdt: Check for multiple/invalid root nodes
+git bisect good 124c255731c76a2b09587378b2bcce561bcd3f2d
+# first bad commit: [3f04db891a353f4b127ed57279279f851c6b4917] image: Check for unit addresses in FITs
+
+Is this an actual regression or is this now the expected behavior? I have added
+Thomas and the linux-mips mailing list to take a look and see if the Linux
+kernel needs to have its sources updated.
+
+Cheers,
+Nathan
