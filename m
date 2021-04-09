@@ -2,377 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB07D35A6F8
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 21:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C8E35A73F
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 21:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbhDITWE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Apr 2021 15:22:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42954 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234869AbhDITWD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 9 Apr 2021 15:22:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9465C61006;
-        Fri,  9 Apr 2021 19:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617996110;
-        bh=ju0bAWBhmE3CRmY8aKQfqsVXrmyQolpU0rEBF3/xxN8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M14eC3U+zuEODIEmQkroyYfXzyVqz5Kjs36nEXADi4phxtX+dpGLctHvpSn0uvILF
-         2fg/QlYfk5GdorKJpZlndL3obFlDwhipATk1PxG2IuVDenfZr+jHzWDJcO1gpJbxOB
-         seCtVeIDTZ1Pcjqe31Z2+nCxjZWbF4T4HnE4ct3RJTmaEmxC2tB57S18EywBPyh+EZ
-         Pb+oMXYmZi2M8c80g8pOv982/VIPgQCj8UM75bdyhUzkbHb1t7+/ioLJR5kRxTp+Ri
-         VKNT378fTSrgRPVnomfRNOk1FxbzWorXkh+n0FN+CHOfRLuu3dTd9eaY5p/rv1WTor
-         k7t96DsI7WfHQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Tom Rini <trini@konsulko.com>, Simon Glass <sjg@chromium.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] MIPS: generic: Update node names to avoid unit addresses
-Date:   Fri,  9 Apr 2021 12:21:28 -0700
-Message-Id: <20210409192128.3998606-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20210409174734.GJ1310@bill-the-cat>
+        id S234196AbhDITmf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Apr 2021 15:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234091AbhDITme (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Apr 2021 15:42:34 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A21C061765
+        for <linux-mips@vger.kernel.org>; Fri,  9 Apr 2021 12:42:21 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id g14so949664qtu.8
+        for <linux-mips@vger.kernel.org>; Fri, 09 Apr 2021 12:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=OFTSox0XE2cJ5i/WptJgwAzts8ZiaiuohDM7xn7cty8=;
+        b=QzAH9lGnFFR/geLOlo6UwmTeA+ENERKZCD53aFZL30TSNSc958Bm90CS+vkQ7A0j94
+         fCd0Gp49sHR5kBJLAiTWqq2wQxk25fbqypvBEEAln2uPLZtRCg13hbHc7TdrQUjB4nDn
+         On/K/dtcYBfWjp3yFgFFm2YYnAXyUrVP9dWjU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OFTSox0XE2cJ5i/WptJgwAzts8ZiaiuohDM7xn7cty8=;
+        b=fut01SX1FYyEfeETXntXRG43c3rt95sDw8aGr2ADjVKMG8s9DJPNH8bWw9G8ie2TYf
+         /hxesH//SmXnxJkrmwRqbOFu2eyWPaWovvdPqdqmA0vw6P8dJzfsrP0dMjNcaechrQQ/
+         x00q8zF2kegpSM7mURKb2VFHy3s08dHgBtwHxY5xQV568JDHeDdrIgwGnplVoj6qQb3o
+         tTFtkLrDQOQyRNDErObpENrYhuVYU+TyHwJsHs0AGgMSsEJQFMmcMvFNJgSxw440bHZH
+         6NK4bMyb4fF3kyjZTL8kuDhJrV0XIWWZSzFL8w5tOIAmlHJ1QBIJn5cpv53tiDHHhl/R
+         Ra1w==
+X-Gm-Message-State: AOAM530mY7gnUjyiq+JVsEVAwtjMy95tiK4jaYefuZDVrHygQUbv+BdO
+        9CqvogJV4pv6bJIB7ubCrRRsAg==
+X-Google-Smtp-Source: ABdhPJxzT4kyxdeN3XUBh/t6iPeWQS/mXIz5J2vliMosSIJvyhS7itIaZ3B61x1bhK74Hgkul5qdfg==
+X-Received: by 2002:ac8:6044:: with SMTP id k4mr14162915qtm.4.1617997340386;
+        Fri, 09 Apr 2021 12:42:20 -0700 (PDT)
+Received: from bill-the-cat (cpe-65-184-140-239.ec.res.rr.com. [65.184.140.239])
+        by smtp.gmail.com with ESMTPSA id s13sm2489647qtx.42.2021.04.09.12.42.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 09 Apr 2021 12:42:19 -0700 (PDT)
+Date:   Fri, 9 Apr 2021 15:41:47 -0400
+From:   Tom Rini <trini@konsulko.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Simon Glass <sjg@chromium.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: generic: Update node names to avoid unit addresses
+Message-ID: <20210409194147.GK1310@bill-the-cat>
 References: <20210409174734.GJ1310@bill-the-cat>
+ <20210409192128.3998606-1-nathan@kernel.org>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xzsJsQN6Lm/oxwnO"
+Content-Disposition: inline
+In-Reply-To: <20210409192128.3998606-1-nathan@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-With the latest mkimage from U-Boot 2021.04, the generic defconfigs no
-longer build, failing with:
 
-/usr/bin/mkimage: verify_header failed for FIT Image support with exit code 1
+--xzsJsQN6Lm/oxwnO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is expected after the linked U-Boot commits because '@' is
-forbidden in the node names due to the way that libfdt treats nodes with
-the same prefix but different unit addresses.
+On Fri, Apr 09, 2021 at 12:21:28PM -0700, Nathan Chancellor wrote:
 
-Switch the '@' in the node name to '-'. Drop the unit addresses from the
-hash and kernel child nodes because there is only one node so they do
-not need to have a number to differentiate them.
+> With the latest mkimage from U-Boot 2021.04, the generic defconfigs no
+> longer build, failing with:
+>=20
+> /usr/bin/mkimage: verify_header failed for FIT Image support with exit co=
+de 1
+>=20
+> This is expected after the linked U-Boot commits because '@' is
+> forbidden in the node names due to the way that libfdt treats nodes with
+> the same prefix but different unit addresses.
+>=20
+> Switch the '@' in the node name to '-'. Drop the unit addresses from the
+> hash and kernel child nodes because there is only one node so they do
+> not need to have a number to differentiate them.
+>=20
+> Cc: stable@vger.kernel.org
+> Link: https://source.denx.de/u-boot/u-boot/-/commit/79af75f7776fc20b0d7eb=
+6afe1e27c00fdb4b9b4
+> Link: https://source.denx.de/u-boot/u-boot/-/commit/3f04db891a353f4b127ed=
+57279279f851c6b4917
+> Suggested-by: Simon Glass <sjg@chromium.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Cc: stable@vger.kernel.org
-Link: https://source.denx.de/u-boot/u-boot/-/commit/79af75f7776fc20b0d7eb6afe1e27c00fdb4b9b4
-Link: https://source.denx.de/u-boot/u-boot/-/commit/3f04db891a353f4b127ed57279279f851c6b4917
-Suggested-by: Simon Glass <sjg@chromium.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/mips/generic/board-boston.its.S   | 10 +++++-----
- arch/mips/generic/board-jaguar2.its.S  | 16 ++++++++--------
- arch/mips/generic/board-luton.its.S    |  8 ++++----
- arch/mips/generic/board-ni169445.its.S | 10 +++++-----
- arch/mips/generic/board-ocelot.its.S   | 20 ++++++++++----------
- arch/mips/generic/board-serval.its.S   |  8 ++++----
- arch/mips/generic/board-xilfpga.its.S  | 10 +++++-----
- arch/mips/generic/vmlinux.its.S        | 10 +++++-----
- 8 files changed, 46 insertions(+), 46 deletions(-)
+Reviewed-by: Tom Rini <trini@konsulko.com>
 
-diff --git a/arch/mips/generic/board-boston.its.S b/arch/mips/generic/board-boston.its.S
-index a7f51f97b910..c45ad2759421 100644
---- a/arch/mips/generic/board-boston.its.S
-+++ b/arch/mips/generic/board-boston.its.S
-@@ -1,22 +1,22 @@
- / {
- 	images {
--		fdt@boston {
-+		fdt-boston {
- 			description = "img,boston Device Tree";
- 			data = /incbin/("boot/dts/img/boston.dtb");
- 			type = "flat_dt";
- 			arch = "mips";
- 			compression = "none";
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
- 	};
- 
- 	configurations {
--		conf@boston {
-+		conf-boston {
- 			description = "Boston Linux kernel";
--			kernel = "kernel@0";
--			fdt = "fdt@boston";
-+			kernel = "kernel";
-+			fdt = "fdt-boston";
- 		};
- 	};
- };
-diff --git a/arch/mips/generic/board-jaguar2.its.S b/arch/mips/generic/board-jaguar2.its.S
-index fb0e589eeff7..c2b8d479b26c 100644
---- a/arch/mips/generic/board-jaguar2.its.S
-+++ b/arch/mips/generic/board-jaguar2.its.S
-@@ -1,23 +1,23 @@
- /* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
- / {
- 	images {
--		fdt@jaguar2_pcb110 {
-+		fdt-jaguar2_pcb110 {
- 			description = "MSCC Jaguar2 PCB110 Device Tree";
- 			data = /incbin/("boot/dts/mscc/jaguar2_pcb110.dtb");
- 			type = "flat_dt";
- 			arch = "mips";
- 			compression = "none";
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
--		fdt@jaguar2_pcb111 {
-+		fdt-jaguar2_pcb111 {
- 			description = "MSCC Jaguar2 PCB111 Device Tree";
- 			data = /incbin/("boot/dts/mscc/jaguar2_pcb111.dtb");
- 			type = "flat_dt";
- 			arch = "mips";
- 			compression = "none";
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
-@@ -26,14 +26,14 @@
- 	configurations {
- 		pcb110 {
- 			description = "Jaguar2 Linux kernel";
--			kernel = "kernel@0";
--			fdt = "fdt@jaguar2_pcb110";
-+			kernel = "kernel";
-+			fdt = "fdt-jaguar2_pcb110";
- 			ramdisk = "ramdisk";
- 		};
- 		pcb111 {
- 			description = "Jaguar2 Linux kernel";
--			kernel = "kernel@0";
--			fdt = "fdt@jaguar2_pcb111";
-+			kernel = "kernel";
-+			fdt = "fdt-jaguar2_pcb111";
- 			ramdisk = "ramdisk";
- 		};
- 	};
-diff --git a/arch/mips/generic/board-luton.its.S b/arch/mips/generic/board-luton.its.S
-index 39a543f62f25..bd9837c9af97 100644
---- a/arch/mips/generic/board-luton.its.S
-+++ b/arch/mips/generic/board-luton.its.S
-@@ -1,13 +1,13 @@
- /* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
- / {
- 	images {
--		fdt@luton_pcb091 {
-+		fdt-luton_pcb091 {
- 			description = "MSCC Luton PCB091 Device Tree";
- 			data = /incbin/("boot/dts/mscc/luton_pcb091.dtb");
- 			type = "flat_dt";
- 			arch = "mips";
- 			compression = "none";
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
-@@ -16,8 +16,8 @@
- 	configurations {
- 		pcb091 {
- 			description = "Luton Linux kernel";
--			kernel = "kernel@0";
--			fdt = "fdt@luton_pcb091";
-+			kernel = "kernel";
-+			fdt = "fdt-luton_pcb091";
- 		};
- 	};
- };
-diff --git a/arch/mips/generic/board-ni169445.its.S b/arch/mips/generic/board-ni169445.its.S
-index e4cb4f95a8cc..0a2e8f7a8526 100644
---- a/arch/mips/generic/board-ni169445.its.S
-+++ b/arch/mips/generic/board-ni169445.its.S
-@@ -1,22 +1,22 @@
- / {
- 	images {
--		fdt@ni169445 {
-+		fdt-ni169445 {
- 			description = "NI 169445 device tree";
- 			data = /incbin/("boot/dts/ni/169445.dtb");
- 			type = "flat_dt";
- 			arch = "mips";
- 			compression = "none";
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
- 	};
- 
- 	configurations {
--		conf@ni169445 {
-+		conf-ni169445 {
- 			description = "NI 169445 Linux Kernel";
--			kernel = "kernel@0";
--			fdt = "fdt@ni169445";
-+			kernel = "kernel";
-+			fdt = "fdt-ni169445";
- 		};
- 	};
- };
-diff --git a/arch/mips/generic/board-ocelot.its.S b/arch/mips/generic/board-ocelot.its.S
-index 3da23988149a..8c7e3a1b68d3 100644
---- a/arch/mips/generic/board-ocelot.its.S
-+++ b/arch/mips/generic/board-ocelot.its.S
-@@ -1,40 +1,40 @@
- /* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
- / {
- 	images {
--		fdt@ocelot_pcb123 {
-+		fdt-ocelot_pcb123 {
- 			description = "MSCC Ocelot PCB123 Device Tree";
- 			data = /incbin/("boot/dts/mscc/ocelot_pcb123.dtb");
- 			type = "flat_dt";
- 			arch = "mips";
- 			compression = "none";
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
- 
--		fdt@ocelot_pcb120 {
-+		fdt-ocelot_pcb120 {
- 			description = "MSCC Ocelot PCB120 Device Tree";
- 			data = /incbin/("boot/dts/mscc/ocelot_pcb120.dtb");
- 			type = "flat_dt";
- 			arch = "mips";
- 			compression = "none";
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
- 	};
- 
- 	configurations {
--		conf@ocelot_pcb123 {
-+		conf-ocelot_pcb123 {
- 			description = "Ocelot Linux kernel";
--			kernel = "kernel@0";
--			fdt = "fdt@ocelot_pcb123";
-+			kernel = "kernel";
-+			fdt = "fdt-ocelot_pcb123";
- 		};
- 
--		conf@ocelot_pcb120 {
-+		conf-ocelot_pcb120 {
- 			description = "Ocelot Linux kernel";
--			kernel = "kernel@0";
--			fdt = "fdt@ocelot_pcb120";
-+			kernel = "kernel";
-+			fdt = "fdt-ocelot_pcb120";
- 		};
- 	};
- };
-diff --git a/arch/mips/generic/board-serval.its.S b/arch/mips/generic/board-serval.its.S
-index 4ea4fc9d757f..dde833efe980 100644
---- a/arch/mips/generic/board-serval.its.S
-+++ b/arch/mips/generic/board-serval.its.S
-@@ -1,13 +1,13 @@
- /* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
- / {
- 	images {
--		fdt@serval_pcb105 {
-+		fdt-serval_pcb105 {
- 			description = "MSCC Serval PCB105 Device Tree";
- 			data = /incbin/("boot/dts/mscc/serval_pcb105.dtb");
- 			type = "flat_dt";
- 			arch = "mips";
- 			compression = "none";
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
-@@ -16,8 +16,8 @@
- 	configurations {
- 		pcb105 {
- 			description = "Serval Linux kernel";
--			kernel = "kernel@0";
--			fdt = "fdt@serval_pcb105";
-+			kernel = "kernel";
-+			fdt = "fdt-serval_pcb105";
- 			ramdisk = "ramdisk";
- 		};
- 	};
-diff --git a/arch/mips/generic/board-xilfpga.its.S b/arch/mips/generic/board-xilfpga.its.S
-index a2e773d3f14f..08c1e900eb4e 100644
---- a/arch/mips/generic/board-xilfpga.its.S
-+++ b/arch/mips/generic/board-xilfpga.its.S
-@@ -1,22 +1,22 @@
- / {
- 	images {
--		fdt@xilfpga {
-+		fdt-xilfpga {
- 			description = "MIPSfpga (xilfpga) Device Tree";
- 			data = /incbin/("boot/dts/xilfpga/nexys4ddr.dtb");
- 			type = "flat_dt";
- 			arch = "mips";
- 			compression = "none";
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
- 	};
- 
- 	configurations {
--		conf@xilfpga {
-+		conf-xilfpga {
- 			description = "MIPSfpga Linux kernel";
--			kernel = "kernel@0";
--			fdt = "fdt@xilfpga";
-+			kernel = "kernel";
-+			fdt = "fdt-xilfpga";
- 		};
- 	};
- };
-diff --git a/arch/mips/generic/vmlinux.its.S b/arch/mips/generic/vmlinux.its.S
-index 1a08438fd893..3e254676540f 100644
---- a/arch/mips/generic/vmlinux.its.S
-+++ b/arch/mips/generic/vmlinux.its.S
-@@ -6,7 +6,7 @@
- 	#address-cells = <ADDR_CELLS>;
- 
- 	images {
--		kernel@0 {
-+		kernel {
- 			description = KERNEL_NAME;
- 			data = /incbin/(VMLINUX_BINARY);
- 			type = "kernel";
-@@ -15,18 +15,18 @@
- 			compression = VMLINUX_COMPRESSION;
- 			load = /bits/ ADDR_BITS <VMLINUX_LOAD_ADDRESS>;
- 			entry = /bits/ ADDR_BITS <VMLINUX_ENTRY_ADDRESS>;
--			hash@0 {
-+			hash {
- 				algo = "sha1";
- 			};
- 		};
- 	};
- 
- 	configurations {
--		default = "conf@default";
-+		default = "conf-default";
- 
--		conf@default {
-+		conf-default {
- 			description = "Generic Linux kernel";
--			kernel = "kernel@0";
-+			kernel = "kernel";
- 		};
- 	};
- };
+--=20
+Tom
 
-base-commit: e86e75596623e1ce5d784db8214687326712a8ae
--- 
-2.31.1.189.g2e36527f23
+--xzsJsQN6Lm/oxwnO
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEEGjx/cOCPqxcHgJu/FHw5/5Y0tywFAmBwrfgACgkQFHw5/5Y0
+tywsiQv8DJ4MGJ2Hg+DBmgGuc6jVnJx72/P02b4IvetoDvNTEcEMjHZ8ZxbQKhfM
+6squHGIFqLQfLLJ/DC0EzvmFckf250Akbf5pFvOzWVHTKVNwBNBT2X3hfzZu8h9k
+/j4LVtnkWbaYHInpBvf3WNW/UZdbAlhidlTjQs131JzgwND26W5zdN1xXrmFtujZ
+HQn85lzWfJ3HOjx0kuXlCJM8hnP94WYgm6um6MaQHFgyDNd/oggK1lti7zaULC+7
+la2V4YvcmlYhTbcUy5y1SO5va7Zad9hVNcQS5BqFWmgJ8dOXP7EjwPrYsqIYQn11
+mzNmd4H7N9QYKhbndnjFEO0xvWdenzgQW6DJJr2UrbcaLAcr+q9mkY3eaBo9Btyf
+mIBEdwUm5/3nSHqh71lXmZpAPbX/hYcKlbTm7cTz67MdLuypWuk6662DoQIFUnB2
+o0l4YHeJ4Fowca/jiJ8XiNMfb9XmnbYYVExRtE/ufjDftxVli46tUN270V1fMSCM
+P9a5xgN8
+=gfSn
+-----END PGP SIGNATURE-----
+
+--xzsJsQN6Lm/oxwnO--
