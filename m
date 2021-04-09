@@ -2,86 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD21359825
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 10:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA71A359912
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 11:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbhDIInP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Apr 2021 04:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S231402AbhDIJY6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Apr 2021 05:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbhDIInO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Apr 2021 04:43:14 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56D7C061760;
-        Fri,  9 Apr 2021 01:43:01 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id j18so8485442lfg.5;
-        Fri, 09 Apr 2021 01:43:01 -0700 (PDT)
+        with ESMTP id S230181AbhDIJYy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Apr 2021 05:24:54 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA48C061760;
+        Fri,  9 Apr 2021 02:24:40 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id w8so369770pfn.9;
+        Fri, 09 Apr 2021 02:24:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tVbQiCGoAumFz/ANTAd5bAwq76g2DUa9AH09IK05F58=;
-        b=T4zdaQh0FbPDXScDng3a+4QGjODZsa8K8Oeq5eWZsQPLuQguEeR2GTmvw23SH9gDsr
-         B7E2oakGIpfIUNrxozsAfr8Ljprd70jPTufvlWN9xD94dY8InQTrQcynhtC39DI7PI8E
-         b1OgR/YUpeXASZ/EneDIs8JhWY1Z89vP0rGoNzuc9TLVSKxqD3e2Y6O1R85gkpxe42XR
-         wZfKKqApBmP3MdKQOPqyijcrgqjrY7kGVOmYX6WPbz3+1W6DCH05MtcBLTQ2MqAW4DHl
-         YYFM1odNZNeVIpSVgK98NKnHcWILKif7u4WWZz+emx5558hgDZesaV+ZllwajvKrljCW
-         yKSw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eqDORfVYih3KdHWf8wh+CjrsEDSV3l8FMtBY017n5ac=;
+        b=FPkpy4xo3U7lSI+b72CXor5mLB4WB7xRgrIC0e0/E9Ur2Gf3DvbtTf+SqoeONPSEA5
+         bKXSuA0P7DABvV2z3CroS6el/a5QRlj0uMVckp+iIWTh6YigSod5lK5iSoUrJQvJpo3/
+         5ATuYBxcuoT1fE1ofiz7cc/IJFZ6QvovLQDLqvshPFFHUeyhbGUMfI0UoidpQ8oBXe9i
+         l+g4cYbzzH9Lvon0cSTFS6JsTf4jrnJ4LtPlfZwjkXB35EQK1/q9Em9WgELFFLbYoR8u
+         zcXJ/3ItrKMmHTar3w0mMyLRJI3vX+x1Ntm1lkfeRt2LQGGAXfoiVOM3xwptzAR+xZ8z
+         VwQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=tVbQiCGoAumFz/ANTAd5bAwq76g2DUa9AH09IK05F58=;
-        b=AKDcM1jbJae/AIrYFlXapB12P+s8TRVLFAgkcaqDgwDzLuq3+/UTKxd822so29dQH/
-         ix8pQznBlMCL4g12oQRiCyHHkPcgG+7dmnoUQAXJbPZSUlsqGGhQDT3U6xuLELp348Ha
-         c/hGByPwrL6Pp3s0BRKujEDsiEHDwig6+HbaRfAdo6bNsvlnJ844h/bso6AEYNWRizQ+
-         xO/Hmzs7rQuqdvbtnNec/TFOVs8DReSIViyGi6+QwV8GKaMibrqJjUQ5xk+aFYq6m2X8
-         OQJZMi13KJaXDTf+2c+yl6LzIpgSl1OaLcIG32XsjpfwiDTFgoQU0niRepE2/ZV1dG27
-         SLaA==
-X-Gm-Message-State: AOAM530kwho70l5JLwJfrv1bbjNlqDUhPEppeA81l4LdfE4mkEydDsT9
-        gDu4bgMsfeYHjpxHHMPP+Llr7LHASa4=
-X-Google-Smtp-Source: ABdhPJzpvR4y6canpCpm2ge2noKNVujShfe2KX5MgIvfxL7unuvX24jqm/EnaGR1KtEGFSqzJfkDDg==
-X-Received: by 2002:ac2:5de4:: with SMTP id z4mr9873109lfq.65.1617957780234;
-        Fri, 09 Apr 2021 01:43:00 -0700 (PDT)
-Received: from [192.168.1.100] ([178.176.79.13])
-        by smtp.gmail.com with ESMTPSA id c5sm200792lfk.141.2021.04.09.01.42.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Apr 2021 01:42:59 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: octeon: Add __raw_copy_[from|to|in]_user symbols
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-References: <20210408214846.50758-1-tsbogend@alpha.franken.de>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <1fa6ff61-25af-7d24-2d03-de03ec73e8f6@gmail.com>
-Date:   Fri, 9 Apr 2021 11:42:46 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eqDORfVYih3KdHWf8wh+CjrsEDSV3l8FMtBY017n5ac=;
+        b=UrdnLmC4wseX6/7y0Dc46G61bPUWdyapWcKX7BPdhEAyjbMMLL3KNfWTSvp1INlJZi
+         DgKa9jXKqe9+FfbaajNKboiFsQ8kjZx5hu7O7FT4qFdPM0zI/VS7NMg8BnLUVhiVTbOU
+         9leGPf2zcgp9funrZDzDkO38xteLR0gvMDCtYyflUMJ+nooDGPL5oUKtq4VvyEkaCpKO
+         Dt6wjALK0llEEWzytEaGZFWr9cUebEWMypENZ+Mrya7RZOALVAcbosigmEP0PvfrexSB
+         UPv1IR3z9iu1f/NVMsi8ctS7p4jOx9Gd4wGi47DNpOH4ofDyUwsdSQbz2luqM7TO80Ib
+         avkw==
+X-Gm-Message-State: AOAM532ZCwfUUO4zITA7/cQbgEDxbGaNaNz/UsEOiglkGNweZiKZVTCT
+        duI68V2IHJlyxM/4S4wcHE8Lmg8+NvF3n/4Ivq4=
+X-Google-Smtp-Source: ABdhPJyyVY6OveNJsRaLQ77/g3WxhETPEL2Tr0wIxsYjLWDeGaWxTKJuY8IwV2ZN2+DTEION8vYAHDLN6Gye3w+Yp9M=
+X-Received: by 2002:a63:3e4b:: with SMTP id l72mr12053286pga.203.1617960279766;
+ Fri, 09 Apr 2021 02:24:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210408214846.50758-1-tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210408205858.51751-1-masahiroy@kernel.org> <20210408205858.51751-2-masahiroy@kernel.org>
+In-Reply-To: <20210408205858.51751-2-masahiroy@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 9 Apr 2021 12:24:23 +0300
+Message-ID: <CAHp75VdZ67Tab2jOU0NSys_P1rU_GicJw_ADd1w9JY4rEG5g1w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] linux/kconfig.h: replace IF_ENABLED() with PTR_IF()
+ in <linux/kernel.h>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+On Fri, Apr 9, 2021 at 12:00 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> <linux/kconfig.h> is included from all the kernel-space source files,
+> including C, assembly, linker scripts. It is intended to contain minimal
 
-On 09.04.2021 0:48, Thomas Bogendoerfer wrote:
+a minimal
 
-> Cavium Octeon has it's own memcpy implementation and also need the change
+> set of macros to evaluate CONFIG options.
+>
+> IF_ENABLED() is an intruder here because (x ? y : z) is C code, which
+> should not be included from assembly files or linker scripts.
+>
+> Also, <linux/kconfig.h> is no longer self-contained because NULL is
+> defined in <linux/stddef.h>.
+>
+> Move IF_ENABLED() out to <linux/kernel.h> as PTR_IF().
+>
+> PTR_IF(IS_ENABLED(CONFIG_FOO), ...) is slightly longer than
+> IF_ENABLED(CONFIG_FOO, ...), but it is not a big deal because
+> sub-systems often define dedicated macros such as of_match_ptr(),
+> pm_ptr() etc. for common use-cases.
 
-    Its. :-)
+>  include/linux/kernel.h            |  2 ++
 
-> done in commit 04324f44cb69 ("MIPS: Remove get_fs/set_fs").
-> 
-> Fixes: 04324f44cb69 ("MIPS: Remove get_fs/set_fs")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-[...]
+Why kernel.h? Shouldn't it belong to a particular domain with a
+respective header file?
 
-MBR, Sergei
+Really what we have in the kernel.h right now is a complete train
+wreck of something.
+We have to define what exactly is kernel.h for?
+
+Arnd? Others? Shall we start a wider discussion on the topic?
+
+-- 
+With Best Regards,
+Andy Shevchenko
