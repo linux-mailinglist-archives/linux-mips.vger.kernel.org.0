@@ -2,323 +2,215 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7774359D2B
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 13:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C4B359DDF
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 13:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbhDILVK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Apr 2021 07:21:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:40758 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233852AbhDILVK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Apr 2021 07:21:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617967257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PD3Q7CnsV9MqbBn+Rr4TRlOA2dr68nSidgD5C8Dw+e8=;
-        b=O/UOgQW41J7EJwcNayZ9bp9RQ4rtZu7hI5GiM65Yrw9Q3Tw9koLENkHtF4V9wAx/dbVz6s
-        tMxvGfwnztvZOSIbst/8YZLpRV4m36LregBUm+iycIBdzzu76ie3gwa97EiIyhuLzQ3ZH5
-        UKggSe0e9eAXB/TeZtXKBP0ke0r2UkM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-558-ohRWwxMiOb2g9zARlvyeqQ-1; Fri, 09 Apr 2021 07:20:53 -0400
-X-MC-Unique: ohRWwxMiOb2g9zARlvyeqQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EBD7664157;
-        Fri,  9 Apr 2021 11:20:48 +0000 (UTC)
-Received: from t480s.redhat.com (ovpn-115-11.ams2.redhat.com [10.36.115.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0F4195D9E3;
-        Fri,  9 Apr 2021 11:20:35 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
+        id S233779AbhDILtl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Apr 2021 07:49:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50024 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232295AbhDILtj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 9 Apr 2021 07:49:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D3AB6115B;
+        Fri,  9 Apr 2021 11:49:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617968966;
+        bh=wSgw8vqxkTcKSyPgvD8ke8joz3MElmiOLTRjt10EyxQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r257Sg1OggCxGJg5bCTag7NFuCUtM6bBbQPGssOeudpQTueqANF9k8caCST6j+GGs
+         mhq+777ZkQwKVhOaru41hweVqSWj04b/XsU8h7+ydnyEF2kONVWjrmWmJI81FX2inh
+         1I5q5flBzM6rB5dvZupRSAfvTfk2iRV4KJ8C1mZTY2vPCzbW73c/T7i/07hy3SI8DF
+         8mRhhs2yT0V+iCISJxvGjQqPD7ppY2j6k1JTxquPWqltBrBwD9Eqf+usc+F86rClEv
+         1sWx6Xv2N6pfdBPoJd3B8urT8gi+vY7QJWCh4h6thPfMXLecWCPm/VUEaLlVYX5ru+
+         /QWkr+ISokV9Q==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 877D23C0C96; Fri,  9 Apr 2021 13:49:24 +0200 (CEST)
+Date:   Fri, 9 Apr 2021 13:49:24 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Wei Liu <wei.liu@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Eric Anholt <eric@anholt.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Peter Collingbourne <pcc@google.com>,
-        Suman Anna <s-anna@ti.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        dri-devel@lists.freedesktop.org, linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: [PATCH v3] drivers: introduce and use WANT_DMA_CMA for soft dependencies on DMA_CMA
-Date:   Fri,  9 Apr 2021 13:20:35 +0200
-Message-Id: <20210409112035.27221-1-david@redhat.com>
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Jason J. Herne" <jjherne@linux.ibm.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Joe Perches <joe@perches.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Wang Wenhu <wenhu.wang@vivo.com>,
+        Marek Czerski <ma.czerski@gmail.com>,
+        Hongbo Yao <yaohongbo@huawei.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-clk@vger.kernel.org, linux-edac@vger.kernel.org,
+        coresight@lists.linaro.org, linux-leds@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Alex Elder <elder@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Daniel Drake <dsd@laptop.org>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH v2 1/1] kernel.h: Split out panic and oops helpers
+Message-ID: <20210409114924.6dpefx26px7aeuaj@earth.universe>
+References: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="c2qg5eip4k7clkwy"
+Content-Disposition: inline
+In-Reply-To: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Random drivers should not override a user configuration of core knobs
-(e.g., CONFIG_DMA_CMA=n). Applicable drivers would like to use DMA_CMA,
-which depends on CMA, if possible; however, these drivers also have to
-tolerate if DMA_CMA is not available/functioning, for example, if no CMA
-area for DMA_CMA use has been setup via "cma=X". In the worst case, the
-driver cannot do it's job properly in some configurations.
 
-For example, commit 63f5677544b3 ("drm/etnaviv: select CMA and DMA_CMA if
-available") documents
-	While this is no build dependency, etnaviv will only work correctly
-	on most systems if CMA and DMA_CMA are enabled. Select both options
-	if available to avoid users ending up with a non-working GPU due to
-	a lacking kernel config.
-So etnaviv really wants to have DMA_CMA, however, can deal with some cases
-where it is not available.
+--c2qg5eip4k7clkwy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Let's introduce WANT_DMA_CMA and use it in most cases where drivers
-select CMA/DMA_CMA, or depend on DMA_CMA (in a wrong way via CMA because
-of recursive dependency issues).
+Hi,
 
-We'll assume that any driver that selects DRM_GEM_CMA_HELPER or
-DRM_KMS_CMA_HELPER would like to use DMA_CMA if possible.
+On Fri, Apr 09, 2021 at 01:02:50PM +0300, Andy Shevchenko wrote:
+> kernel.h is being used as a dump for all kinds of stuff for a long time.
+> Here is the attempt to start cleaning it up by splitting out panic and
+> oops helpers.
+>=20
+> There are several purposes of doing this:
+> - dropping dependency in bug.h
+> - dropping a loop by moving out panic_notifier.h
+> - unload kernel.h from something which has its own domain
+>=20
+> At the same time convert users tree-wide to use new headers, although
+> for the time being include new header back to kernel.h to avoid twisted
+> indirected includes for existing users.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: Corey Minyard <cminyard@mvista.com>
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Wei Liu <wei.liu@kernel.org>
+> Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+> v2:
+>  - fixed all errors with allmodconfig on x86_64 (Andrew)
+>  - checked with allyesconfig on x86_64
+>  - additionally grepped source code for panic notifier list usage
+>    and converted all users
+>  - elaborated commit message (Luis)
+>  - collected given tags (incl. Andrew's SoB, see below)
+>=20
+> I added Andrew's SoB since part of the fixes I took from him. Andrew,
+> feel free to amend or tell me how you want me to do.
+>=20
+> [...]
+>  drivers/power/reset/ltc2952-poweroff.c        |  1 +
+> [...]
 
-With this change, distributions can disable CONFIG_CMA or
-CONFIG_DMA_CMA, without it silently getting enabled again by random
-drivers. Also, we'll now automatically try to enabled both, CONFIG_CMA
-and CONFIG_DMA_CMA if they are unspecified and any driver is around that
-selects WANT_DMA_CMA -- also implicitly via DRM_GEM_CMA_HELPER or
-DRM_KMS_CMA_HELPER.
+Acked-by: Sebastian Reichel <sre@kernel.org>
 
-For example, if any driver selects WANT_DMA_CMA and we do a
-"make olddefconfig":
+-- Sebastian
 
-1. With "# CONFIG_CMA is not set" and no specification of
-   "CONFIG_DMA_CMA"
+--c2qg5eip4k7clkwy
+Content-Type: application/pgp-signature; name="signature.asc"
 
--> CONFIG_DMA_CMA won't be part of .config
+-----BEGIN PGP SIGNATURE-----
 
-2. With no specification of CONFIG_CMA or CONFIG_DMA_CMA
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBwPzkACgkQ2O7X88g7
++poVqw//cO5+glgFxA2CU4t3EHFTzSR2pExNCOensIzn/2YcvKlq6RBiaVlO87al
+zfq//z42WEWWRFkl4NeyjJx6ueQGo5Hk7qQiPRQhgt55UiQsizdAFXK4u97lVQ68
+7V2xDT3MlQ/vc+LG3vZBcSGMIoupHDqbYU2kF8xlBhdwuF1lr44NDxRTRsVErgor
+hlvEGYmwSTIg8aEkLt6Da/elDscG08MDU+vv6KLaSiruCN+RtgZGin9gv3Xu+KUi
+PhPU9ZOAfi6duIQdKmdXiAZ8Vlp/43yzeo80t/XUyiEy7Yq+qtsP6YXHlSWlPJnV
+Zz3ifkmNn7YFWd+iOeTe3oTfVIAtg4w/uX184urC+t242MBSeqEkHt7/1TJR2UAx
+8s9NtSaCLUPuFLPO9s8t6nP4kQ4HN3BoxMvgessqguLZtSg3n1Z4+ZE8veoYHQD3
+Vwz58nFLYkMxRB/pFq6dkXv6uPXTbreYkWuUFsDIao2+FVDkMp81DqE86K2li2d6
+/B6jSmObDmG/aryJn+hoHhCEJSfLnaszENAc0toFvCGYU9D5Com1A74gdztMgOvf
+CB4G04azFTgeTjX5JB6r7KXrcZ08bzspk/lo5H9fx+SLki6gFb88zNqBOLcnMM0d
+FZFNMmZ543wUtAsJSxqObtKeAcjitPcaURrh6sWiRuJkndGtmNY=
+=QA06
+-----END PGP SIGNATURE-----
 
-Contiguous Memory Allocator (CMA) [Y/n/?] (NEW)
-DMA Contiguous Memory Allocator (DMA_CMA) [Y/n/?] (NEW)
-
-3. With "# CONFIG_CMA is not set" and "# CONFIG_DMA_CMA is not set"
-
--> CONFIG_DMA_CMA will be removed from .config
-
-Note: drivers/remoteproc seems to be special; commit c51e882cd711
-("remoteproc/davinci: Update Kconfig to depend on DMA_CMA") explains that
-there is a real dependency to DMA_CMA for it to work; leave that dependency
-in place and don't convert it to a soft dependency.
-
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Joel Stanley <joel@jms.id.au>
-Cc: Andrew Jeffery <andrew@aj.id.au>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Russell King <linux+etnaviv@armlinux.org.uk>
-Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc: Paul Cercueil <paul@crapouillou.net>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mike Rapoport <rppt@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc: Eric Anholt <eric@anholt.net>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Cc: Peter Collingbourne <pcc@google.com>
-Cc: Suman Anna <s-anna@ti.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-aspeed@lists.ozlabs.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: etnaviv@lists.freedesktop.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-fbdev@vger.kernel.org
-Cc: iommu@lists.linux-foundation.org
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-
-Let's see if this approach is better for soft dependencies (and if we
-actually have some hard dependencies in there). This is the follow-up
-of
-  https://lkml.kernel.org/r/20210408092011.52763-1-david@redhat.com
-  https://lkml.kernel.org/r/20210408100523.63356-1-david@redhat.com
-
-I was wondering if it would make sense in some drivers to warn if either
-CONFIG_DMA_CMA is not available or if DRM_CMA has not been configured
-properly - just to give people a heads up that something might more likely
-go wrong; that would, however, be future work.
-
-v2 -> v3:
-- Don't use "imply" but instead use a new WANT_DMA_CMA and make the default
-  of CMA and DMA_CMA depend on it.
-- Also adjust ingenic, mcde, tve200; these sound like soft dependencies as
-  well (although DMA_CMA is really desired)
-
-v1 -> v2:
-- Fix DRM_CMA -> DMA_CMA
-
----
- drivers/gpu/drm/Kconfig         | 2 ++
- drivers/gpu/drm/aspeed/Kconfig  | 2 --
- drivers/gpu/drm/etnaviv/Kconfig | 3 +--
- drivers/gpu/drm/ingenic/Kconfig | 1 -
- drivers/gpu/drm/mcde/Kconfig    | 1 -
- drivers/gpu/drm/tve200/Kconfig  | 1 -
- drivers/video/fbdev/Kconfig     | 2 +-
- kernel/dma/Kconfig              | 7 +++++++
- mm/Kconfig                      | 1 +
- 9 files changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index 85b79a7fee63..6f9989adfa93 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -201,12 +201,14 @@ config DRM_TTM_HELPER
- config DRM_GEM_CMA_HELPER
- 	bool
- 	depends on DRM
-+	select WANT_DMA_CMA
- 	help
- 	  Choose this if you need the GEM CMA helper functions
- 
- config DRM_KMS_CMA_HELPER
- 	bool
- 	depends on DRM
-+	select WANT_DMA_CMA
- 	select DRM_GEM_CMA_HELPER
- 	help
- 	  Choose this if you need the KMS CMA helper functions
-diff --git a/drivers/gpu/drm/aspeed/Kconfig b/drivers/gpu/drm/aspeed/Kconfig
-index 5e95bcea43e9..e5ff33f85f21 100644
---- a/drivers/gpu/drm/aspeed/Kconfig
-+++ b/drivers/gpu/drm/aspeed/Kconfig
-@@ -6,8 +6,6 @@ config DRM_ASPEED_GFX
- 	depends on MMU
- 	select DRM_KMS_HELPER
- 	select DRM_KMS_CMA_HELPER
--	select DMA_CMA if HAVE_DMA_CONTIGUOUS
--	select CMA if HAVE_DMA_CONTIGUOUS
- 	select MFD_SYSCON
- 	help
- 	  Chose this option if you have an ASPEED AST2500 SOC Display
-diff --git a/drivers/gpu/drm/etnaviv/Kconfig b/drivers/gpu/drm/etnaviv/Kconfig
-index faa7fc68b009..a3e7649b44a7 100644
---- a/drivers/gpu/drm/etnaviv/Kconfig
-+++ b/drivers/gpu/drm/etnaviv/Kconfig
-@@ -9,8 +9,7 @@ config DRM_ETNAVIV
- 	select THERMAL if DRM_ETNAVIV_THERMAL
- 	select TMPFS
- 	select WANT_DEV_COREDUMP
--	select CMA if HAVE_DMA_CONTIGUOUS
--	select DMA_CMA if HAVE_DMA_CONTIGUOUS
-+	select WANT_DMA_CMA
- 	select DRM_SCHED
- 	help
- 	  DRM driver for Vivante GPUs.
-diff --git a/drivers/gpu/drm/ingenic/Kconfig b/drivers/gpu/drm/ingenic/Kconfig
-index 3b57f8be007c..156b11b7bbb8 100644
---- a/drivers/gpu/drm/ingenic/Kconfig
-+++ b/drivers/gpu/drm/ingenic/Kconfig
-@@ -2,7 +2,6 @@ config DRM_INGENIC
- 	tristate "DRM Support for Ingenic SoCs"
- 	depends on MIPS || COMPILE_TEST
- 	depends on DRM
--	depends on CMA
- 	depends on OF
- 	depends on COMMON_CLK
- 	select DRM_BRIDGE
-diff --git a/drivers/gpu/drm/mcde/Kconfig b/drivers/gpu/drm/mcde/Kconfig
-index 71c689b573c9..217d54c4babc 100644
---- a/drivers/gpu/drm/mcde/Kconfig
-+++ b/drivers/gpu/drm/mcde/Kconfig
-@@ -1,7 +1,6 @@
- config DRM_MCDE
- 	tristate "DRM Support for ST-Ericsson MCDE (Multichannel Display Engine)"
- 	depends on DRM
--	depends on CMA
- 	depends on ARM || COMPILE_TEST
- 	depends on OF
- 	depends on COMMON_CLK
-diff --git a/drivers/gpu/drm/tve200/Kconfig b/drivers/gpu/drm/tve200/Kconfig
-index e2d163c74ed6..d04b7322c770 100644
---- a/drivers/gpu/drm/tve200/Kconfig
-+++ b/drivers/gpu/drm/tve200/Kconfig
-@@ -2,7 +2,6 @@
- config DRM_TVE200
- 	tristate "DRM Support for Faraday TV Encoder TVE200"
- 	depends on DRM
--	depends on CMA
- 	depends on ARM || COMPILE_TEST
- 	depends on OF
- 	select DRM_BRIDGE
-diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
-index 4f02db65dede..e8acd4f77d41 100644
---- a/drivers/video/fbdev/Kconfig
-+++ b/drivers/video/fbdev/Kconfig
-@@ -2186,7 +2186,7 @@ config FB_HYPERV
- 	select FB_CFB_COPYAREA
- 	select FB_CFB_IMAGEBLIT
- 	select FB_DEFERRED_IO
--	select DMA_CMA if HAVE_DMA_CONTIGUOUS && CMA
-+	select WANT_DMA_CMA
- 	help
- 	  This framebuffer driver supports Microsoft Hyper-V Synthetic Video.
- 
-diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
-index 77b405508743..928f16d2461d 100644
---- a/kernel/dma/Kconfig
-+++ b/kernel/dma/Kconfig
-@@ -103,8 +103,15 @@ config DMA_DIRECT_REMAP
- 	select DMA_REMAP
- 	select DMA_COHERENT_POOL
- 
-+config WANT_DMA_CMA
-+	bool
-+	help
-+	  Drivers should "select" this option if they desire to use the
-+	  DMA_CMA mechanism.
-+
- config DMA_CMA
- 	bool "DMA Contiguous Memory Allocator"
-+	default y if WANT_DMA_CMA
- 	depends on HAVE_DMA_CONTIGUOUS && CMA
- 	help
- 	  This enables the Contiguous Memory Allocator which allows drivers
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 24c045b24b95..169598ee56b1 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -485,6 +485,7 @@ config FRONTSWAP
- 
- config CMA
- 	bool "Contiguous Memory Allocator"
-+	default y if WANT_DMA_CMA
- 	depends on MMU
- 	select MIGRATION
- 	select MEMORY_ISOLATION
--- 
-2.30.2
-
+--c2qg5eip4k7clkwy--
