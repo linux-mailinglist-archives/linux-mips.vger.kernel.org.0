@@ -2,163 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB2B35A00A
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 15:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571BF35A431
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 18:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233119AbhDINkV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Apr 2021 09:40:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45453 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231638AbhDINkU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Apr 2021 09:40:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617975606;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lsrzJwlfstULCCREnSPVP3WRVuSyvEw5HXvTFd2r4do=;
-        b=OMtcyd0Ey8henN7DdHOa64TG6+RcQ3yQtd9qJqu4fIbwhvuSElxbzysNjju/dUo5Tg7ydo
-        MlYxJSNpyADshpWO3/0QogVaZ3JdMf3ol84JxmiAetnJVVMvG4GV3wa3TtZ+fewuLtpPJ5
-        jJArafTsuWFRRzZd2bJyiA+Iiq6zuQ4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-143-3MzYaf2pNUSmKJKsGUehFg-1; Fri, 09 Apr 2021 09:40:02 -0400
-X-MC-Unique: 3MzYaf2pNUSmKJKsGUehFg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CB324C73AD;
-        Fri,  9 Apr 2021 13:39:57 +0000 (UTC)
-Received: from [10.36.115.11] (ovpn-115-11.ams2.redhat.com [10.36.115.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E60C619801;
-        Fri,  9 Apr 2021 13:39:48 +0000 (UTC)
-Subject: Re: [PATCH v3] drivers: introduce and use WANT_DMA_CMA for soft
- dependencies on DMA_CMA
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
+        id S233961AbhDIQ7g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Apr 2021 12:59:36 -0400
+Received: from mail-pl1-f172.google.com ([209.85.214.172]:33766 "EHLO
+        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233038AbhDIQ7e (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Apr 2021 12:59:34 -0400
+Received: by mail-pl1-f172.google.com with SMTP id p10so3070587pld.0;
+        Fri, 09 Apr 2021 09:59:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+9xha/pXNeFBGiuagKWknyCqPbUKuPA8GXpvrC9Jx0I=;
+        b=BxoSKw8xD3QUltwN7gsMzZ89xAodvTc81Ucn20t1I1o7Y+bOpFUbxjg4eKdu6F+2Nn
+         2fWjNzGRaRW+I+Ptq6VbQMGZBPxK8efxYaqZI5y+5VLBDxM84vy/eKNmYobLUyvgNVxg
+         MCOUPGybbTtvFRWiuo6R670DigT1q6XlgQmiMDXLv+TILPESw2gvcCaRm9KjT1ppqT8a
+         3/MktU3k7KoE+qiNJj6eCwHrwqx7b2shYmdwO/Nk9bGuKnMrmX5MMMYt26SQKc1sSbZ1
+         RKmLamiYfdrJpNh5JD7/g0dsy8gJ3fXYzRCnBM+MZxx6yAv9AWxVJH/scmFmICdf4Stv
+         966w==
+X-Gm-Message-State: AOAM5305g4CkeQT1F9gmV4rNZwwr8Vv4+4S20W54eUB70KSj82WxNzYp
+        iVhFaYawaj9NArMskz9q66EB0t3i3nvsYCbl
+X-Google-Smtp-Source: ABdhPJyt31k6gfvx2YDw8pTeEF+IvcLsHKSfe6iHcUQ8SO6kPgNHHt27ciTzVzsJlbESXuH5ZVRF6Q==
+X-Received: by 2002:a17:90a:6b08:: with SMTP id v8mr14057598pjj.131.1617987559528;
+        Fri, 09 Apr 2021 09:59:19 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id z23sm2795483pjh.45.2021.04.09.09.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Apr 2021 09:59:18 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 6D85340256; Fri,  9 Apr 2021 16:59:17 +0000 (UTC)
+Date:   Fri, 9 Apr 2021 16:59:17 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Wei Liu <wei.liu@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
         Mike Rapoport <rppt@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Eric Anholt <eric@anholt.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Peter Collingbourne <pcc@google.com>,
-        Suman Anna <s-anna@ti.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        The etnaviv authors <etnaviv@lists.freedesktop.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>
-References: <20210409112035.27221-1-david@redhat.com>
- <CAK8P3a31uKNcim0n99=yt3zjZ+LQSw4V4+8PS8daLsBdS0iSYg@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <53ec94ac-ffe3-d0bc-d081-3489fa03daa1@redhat.com>
-Date:   Fri, 9 Apr 2021 15:39:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Corey Minyard <cminyard@mvista.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Jason J. Herne" <jjherne@linux.ibm.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Joe Perches <joe@perches.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Wang Wenhu <wenhu.wang@vivo.com>,
+        Marek Czerski <ma.czerski@gmail.com>,
+        Hongbo Yao <yaohongbo@huawei.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-clk@vger.kernel.org, linux-edac@vger.kernel.org,
+        coresight@lists.linaro.org, linux-leds@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Alex Elder <elder@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Daniel Drake <dsd@laptop.org>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH v2 1/1] kernel.h: Split out panic and oops helpers
+Message-ID: <20210409165917.GH4332@42.do-not-panic.com>
+References: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a31uKNcim0n99=yt3zjZ+LQSw4V4+8PS8daLsBdS0iSYg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09.04.21 15:35, Arnd Bergmann wrote:
-> On Fri, Apr 9, 2021 at 1:21 PM David Hildenbrand <david@redhat.com> wrote:
->>
->> Random drivers should not override a user configuration of core knobs
->> (e.g., CONFIG_DMA_CMA=n). Applicable drivers would like to use DMA_CMA,
->> which depends on CMA, if possible; however, these drivers also have to
->> tolerate if DMA_CMA is not available/functioning, for example, if no CMA
->> area for DMA_CMA use has been setup via "cma=X". In the worst case, the
->> driver cannot do it's job properly in some configurations.
->>
->> For example, commit 63f5677544b3 ("drm/etnaviv: select CMA and DMA_CMA if
->> available") documents
->>          While this is no build dependency, etnaviv will only work correctly
->>          on most systems if CMA and DMA_CMA are enabled. Select both options
->>          if available to avoid users ending up with a non-working GPU due to
->>          a lacking kernel config.
->> So etnaviv really wants to have DMA_CMA, however, can deal with some cases
->> where it is not available.
->>
->> Let's introduce WANT_DMA_CMA and use it in most cases where drivers
->> select CMA/DMA_CMA, or depend on DMA_CMA (in a wrong way via CMA because
->> of recursive dependency issues).
->>
->> We'll assume that any driver that selects DRM_GEM_CMA_HELPER or
->> DRM_KMS_CMA_HELPER would like to use DMA_CMA if possible.
->>
->> With this change, distributions can disable CONFIG_CMA or
->> CONFIG_DMA_CMA, without it silently getting enabled again by random
->> drivers. Also, we'll now automatically try to enabled both, CONFIG_CMA
->> and CONFIG_DMA_CMA if they are unspecified and any driver is around that
->> selects WANT_DMA_CMA -- also implicitly via DRM_GEM_CMA_HELPER or
->> DRM_KMS_CMA_HELPER.
->>
->> For example, if any driver selects WANT_DMA_CMA and we do a
->> "make olddefconfig":
->>
->> 1. With "# CONFIG_CMA is not set" and no specification of
->>     "CONFIG_DMA_CMA"
->>
->> -> CONFIG_DMA_CMA won't be part of .config
->>
->> 2. With no specification of CONFIG_CMA or CONFIG_DMA_CMA
->>
->> Contiguous Memory Allocator (CMA) [Y/n/?] (NEW)
->> DMA Contiguous Memory Allocator (DMA_CMA) [Y/n/?] (NEW)
->>
->> 3. With "# CONFIG_CMA is not set" and "# CONFIG_DMA_CMA is not set"
->>
->> -> CONFIG_DMA_CMA will be removed from .config
->>
->> Note: drivers/remoteproc seems to be special; commit c51e882cd711
->> ("remoteproc/davinci: Update Kconfig to depend on DMA_CMA") explains that
->> there is a real dependency to DMA_CMA for it to work; leave that dependency
->> in place and don't convert it to a soft dependency.
+On Fri, Apr 09, 2021 at 01:02:50PM +0300, Andy Shevchenko wrote:
+> kernel.h is being used as a dump for all kinds of stuff for a long time.
+> Here is the attempt to start cleaning it up by splitting out panic and
+> oops helpers.
 > 
-> I don't think this dependency is fundamentally different from the others,
-> though davinci machines tend to have less memory than a lot of the
-> other machines, so it's more likely to fail without CMA.
+> There are several purposes of doing this:
+> - dropping dependency in bug.h
+> - dropping a loop by moving out panic_notifier.h
+> - unload kernel.h from something which has its own domain
 > 
-
-I was also unsure - and Lucas had similar thoughts. If you want, I can 
-send a v4 also taking care of this.
-
-Thanks!
-
-> Regardless of this,
+> At the same time convert users tree-wide to use new headers, although
+> for the time being include new header back to kernel.h to avoid twisted
+> indirected includes for existing users.
 > 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: Corey Minyard <cminyard@mvista.com>
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Wei Liu <wei.liu@kernel.org>
+> Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
--- 
-Thanks,
-
-David / dhildenb
-
+  Luis
