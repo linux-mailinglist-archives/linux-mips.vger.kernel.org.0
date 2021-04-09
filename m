@@ -2,121 +2,193 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C8E35A73F
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 21:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BD035A759
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Apr 2021 21:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234196AbhDITmf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Apr 2021 15:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234091AbhDITme (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Apr 2021 15:42:34 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A21C061765
-        for <linux-mips@vger.kernel.org>; Fri,  9 Apr 2021 12:42:21 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id g14so949664qtu.8
-        for <linux-mips@vger.kernel.org>; Fri, 09 Apr 2021 12:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OFTSox0XE2cJ5i/WptJgwAzts8ZiaiuohDM7xn7cty8=;
-        b=QzAH9lGnFFR/geLOlo6UwmTeA+ENERKZCD53aFZL30TSNSc958Bm90CS+vkQ7A0j94
-         fCd0Gp49sHR5kBJLAiTWqq2wQxk25fbqypvBEEAln2uPLZtRCg13hbHc7TdrQUjB4nDn
-         On/K/dtcYBfWjp3yFgFFm2YYnAXyUrVP9dWjU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OFTSox0XE2cJ5i/WptJgwAzts8ZiaiuohDM7xn7cty8=;
-        b=fut01SX1FYyEfeETXntXRG43c3rt95sDw8aGr2ADjVKMG8s9DJPNH8bWw9G8ie2TYf
-         /hxesH//SmXnxJkrmwRqbOFu2eyWPaWovvdPqdqmA0vw6P8dJzfsrP0dMjNcaechrQQ/
-         x00q8zF2kegpSM7mURKb2VFHy3s08dHgBtwHxY5xQV568JDHeDdrIgwGnplVoj6qQb3o
-         tTFtkLrDQOQyRNDErObpENrYhuVYU+TyHwJsHs0AGgMSsEJQFMmcMvFNJgSxw440bHZH
-         6NK4bMyb4fF3kyjZTL8kuDhJrV0XIWWZSzFL8w5tOIAmlHJ1QBIJn5cpv53tiDHHhl/R
-         Ra1w==
-X-Gm-Message-State: AOAM530mY7gnUjyiq+JVsEVAwtjMy95tiK4jaYefuZDVrHygQUbv+BdO
-        9CqvogJV4pv6bJIB7ubCrRRsAg==
-X-Google-Smtp-Source: ABdhPJxzT4kyxdeN3XUBh/t6iPeWQS/mXIz5J2vliMosSIJvyhS7itIaZ3B61x1bhK74Hgkul5qdfg==
-X-Received: by 2002:ac8:6044:: with SMTP id k4mr14162915qtm.4.1617997340386;
-        Fri, 09 Apr 2021 12:42:20 -0700 (PDT)
-Received: from bill-the-cat (cpe-65-184-140-239.ec.res.rr.com. [65.184.140.239])
-        by smtp.gmail.com with ESMTPSA id s13sm2489647qtx.42.2021.04.09.12.42.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 09 Apr 2021 12:42:19 -0700 (PDT)
-Date:   Fri, 9 Apr 2021 15:41:47 -0400
-From:   Tom Rini <trini@konsulko.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Paul Burton <paulburton@kernel.org>,
+        id S234402AbhDITqp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Apr 2021 15:46:45 -0400
+Received: from mout.gmx.net ([212.227.17.20]:39269 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233883AbhDITql (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 9 Apr 2021 15:46:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1617997367;
+        bh=iNspAAUXd0TGc9idWuqJezj9FgSbVIrdnHkC34OI6ys=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=ldsXgBGJ3GSKvmbTxvP1itO26Qt3rKVAXa7HCeRwn7x6vvwIVyKAuuWMT/9Mbs/eq
+         eUjUvdYyHT2oPnald/g3Raad9aGgTRMlgrGQZ1cKX9WKZtuOkezCA/ZBkxeKHYWicC
+         dFguhZZAb4murEW3qrRROxlPjGsI5cEXZ4497eEg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.181.63]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1My36N-1lmD5l41nT-00zVNp; Fri, 09
+ Apr 2021 21:42:47 +0200
+Subject: Re: [PATCH v2 1/1] kernel.h: Split out panic and oops helpers
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Simon Glass <sjg@chromium.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: generic: Update node names to avoid unit addresses
-Message-ID: <20210409194147.GK1310@bill-the-cat>
-References: <20210409174734.GJ1310@bill-the-cat>
- <20210409192128.3998606-1-nathan@kernel.org>
+        Alexander Lobakin <alobakin@pm.me>,
+        Wei Liu <wei.liu@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Jason J. Herne" <jjherne@linux.ibm.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Joe Perches <joe@perches.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Wang Wenhu <wenhu.wang@vivo.com>,
+        Marek Czerski <ma.czerski@gmail.com>,
+        Hongbo Yao <yaohongbo@huawei.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-clk@vger.kernel.org, linux-edac@vger.kernel.org,
+        coresight@lists.linaro.org, linux-leds@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Alex Elder <elder@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Daniel Drake <dsd@laptop.org>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
+From:   Helge Deller <deller@gmx.de>
+Message-ID: <cef5d4ba-9d91-7249-3ba4-c7f1c89ab119@gmx.de>
+Date:   Fri, 9 Apr 2021 21:41:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xzsJsQN6Lm/oxwnO"
-Content-Disposition: inline
-In-Reply-To: <20210409192128.3998606-1-nathan@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:A9ZHNG4WxpUBFm/OLrSjy4wmvepyAKfJ/9J0GMwZPVvou+WL0jt
+ juhLu46u1kS+URbP+8+Pw+p7oQ3JpIMBAMo3AEr85dJ6auKoY3YWnT5NDC8TMlGFgRljwyK
+ +Z8x/lMp3a1Sj6G+ejcETzf/1wuAwQ3HVr+B/sOgfO9g9aKIA+KstHHg98r0RbXaN5gO1f1
+ c2FCqtclGkoW83386bLAQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QTiAIr1d9DU=:ouDY+zoQbxd0AYwIoqdq7+
+ aGg5cjuhFxN4dPlhbUVe4gHa8V6O/ob8/GYNsz48eMGoWdTSBWNdigEx/P3CeG5ajt1K/D1wj
+ ZsuimGcNU/JIwDEC4hAa9wiKwplSRt9GyqnNpMymPpOincerI2QNIINtkESpmD/MQtIZKWIBd
+ LzLZQt5g5JHyD7KSRX3CSO3kxsUbUK397UnmPrlbBzZiG2Ki8L87whx1HhStGiOawVNU3NX1U
+ 1qJ/Q2KXhaSRyDrR5JobMbpVJ16dZyIPC+nB+S5uAuxAgE/sFmpim0FlFwngs3hHA1Ua7nKDx
+ vaviKH0ZdVtdmwFCmPWXldfwgaGRXmcVHieN8y3Cf4AES1arvvUXfDdU8TlIFPlMWolAfy75b
+ aF6Vq+x5W46hFMRh+gkaDVvXSN0IJLemCnzysIaYGHy5hfBua6u7o+npWjwJ1MLna90v6WJqp
+ qtsmLRv7qq9JD3rE3mLnbgCeyikpDMiwYezxJc5y085Nda4MocVjIUyHwfrItCcTJy+6nK+32
+ QtS5ysQPbZtg/0BLTkwmTgg1C9wyCqJwqSPkJHKs0fedY3Cg4AmlYSUFZ+l1+yWlahYNrwIjD
+ 1LvXS6jFdPgrwM0Bw5zEn5iTaVsN3Dpg/BK7RBEnkSXG2EhjbG0P5JyU6ZQFlyoWZsOBl1Dnp
+ 9RlHsz3O6/vJl501tNpFzFkE9v1fbjuJiCnsWIZVHwcbxwgsYWs1VvePFQoqRLQUoGWk7YlQ8
+ Mycnfd16TOkM/BTklN35/8ZoVz9X6VjMTLQhDSDUL5LeX75GwKdRnpVjwg+mpqmINujIEDZVj
+ bRIcfuM8kM4QXmEUEjmqZoVNDqdo0531mNm3kN19X3Wj5I9ywhlJarAEaPUOs1zKkdzPb4HdC
+ +5ul9M6a4WBWbT5U1mKmQOeT0D6MCEGVKv+v/aWQ+A07Sxs9cad/sxt/XXniiusfDTtv1wpHL
+ 48xz68wHDUi6JHhewqK39v9CUwOqs24U/FOrqR6QogsoMdeib8LB3HQXiJzJhPuxnfQKT5n0E
+ 2KocVJOLOCpFD00uImKyPG4urooQInY0CgXuaTbgwb2QXtNz/HWsnU7bcGH95t//ETUS0YST/
+ HIEC4Jt3JrZiU2K24JZ5uAUtc1tWcvMl+zNPO7uqbferwivk7BjAs0A1bkS3994pg0p9gu7e6
+ IGlScHPk65VIaL0560ZSSQDJOn/n987RThMli+dnKucI6xieqz82byl0Okk5UU49D7L5Y=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 4/9/21 12:02 PM, Andy Shevchenko wrote:
+> kernel.h is being used as a dump for all kinds of stuff for a long time.
+> Here is the attempt to start cleaning it up by splitting out panic and
+> oops helpers.
+>
+> There are several purposes of doing this:
+> - dropping dependency in bug.h
+> - dropping a loop by moving out panic_notifier.h
+> - unload kernel.h from something which has its own domain
+>
+> At the same time convert users tree-wide to use new headers, although
+> for the time being include new header back to kernel.h to avoid twisted
+> indirected includes for existing users.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: Corey Minyard <cminyard@mvista.com>
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Wei Liu <wei.liu@kernel.org>
+> Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 
---xzsJsQN6Lm/oxwnO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Helge Deller <deller@gmx.de> # parisc
 
-On Fri, Apr 09, 2021 at 12:21:28PM -0700, Nathan Chancellor wrote:
-
-> With the latest mkimage from U-Boot 2021.04, the generic defconfigs no
-> longer build, failing with:
->=20
-> /usr/bin/mkimage: verify_header failed for FIT Image support with exit co=
-de 1
->=20
-> This is expected after the linked U-Boot commits because '@' is
-> forbidden in the node names due to the way that libfdt treats nodes with
-> the same prefix but different unit addresses.
->=20
-> Switch the '@' in the node name to '-'. Drop the unit addresses from the
-> hash and kernel child nodes because there is only one node so they do
-> not need to have a number to differentiate them.
->=20
-> Cc: stable@vger.kernel.org
-> Link: https://source.denx.de/u-boot/u-boot/-/commit/79af75f7776fc20b0d7eb=
-6afe1e27c00fdb4b9b4
-> Link: https://source.denx.de/u-boot/u-boot/-/commit/3f04db891a353f4b127ed=
-57279279f851c6b4917
-> Suggested-by: Simon Glass <sjg@chromium.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-Reviewed-by: Tom Rini <trini@konsulko.com>
-
---=20
-Tom
-
---xzsJsQN6Lm/oxwnO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEEGjx/cOCPqxcHgJu/FHw5/5Y0tywFAmBwrfgACgkQFHw5/5Y0
-tywsiQv8DJ4MGJ2Hg+DBmgGuc6jVnJx72/P02b4IvetoDvNTEcEMjHZ8ZxbQKhfM
-6squHGIFqLQfLLJ/DC0EzvmFckf250Akbf5pFvOzWVHTKVNwBNBT2X3hfzZu8h9k
-/j4LVtnkWbaYHInpBvf3WNW/UZdbAlhidlTjQs131JzgwND26W5zdN1xXrmFtujZ
-HQn85lzWfJ3HOjx0kuXlCJM8hnP94WYgm6um6MaQHFgyDNd/oggK1lti7zaULC+7
-la2V4YvcmlYhTbcUy5y1SO5va7Zad9hVNcQS5BqFWmgJ8dOXP7EjwPrYsqIYQn11
-mzNmd4H7N9QYKhbndnjFEO0xvWdenzgQW6DJJr2UrbcaLAcr+q9mkY3eaBo9Btyf
-mIBEdwUm5/3nSHqh71lXmZpAPbX/hYcKlbTm7cTz67MdLuypWuk6662DoQIFUnB2
-o0l4YHeJ4Fowca/jiJ8XiNMfb9XmnbYYVExRtE/ufjDftxVli46tUN270V1fMSCM
-P9a5xgN8
-=gfSn
------END PGP SIGNATURE-----
-
---xzsJsQN6Lm/oxwnO--
+Helge
