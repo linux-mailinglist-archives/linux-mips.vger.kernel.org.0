@@ -2,63 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 313CF35B06B
-	for <lists+linux-mips@lfdr.de>; Sat, 10 Apr 2021 22:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4A535B080
+	for <lists+linux-mips@lfdr.de>; Sat, 10 Apr 2021 22:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235033AbhDJUbW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 10 Apr 2021 16:31:22 -0400
-Received: from mxout03.lancloud.ru ([45.84.86.113]:39374 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234548AbhDJUbT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 10 Apr 2021 16:31:19 -0400
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru F0046207521C
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v2 0/6] Stop calling devm_request_irq() with invalid IRQs
- in the I2C bus drivers
-From:   Sergey Shtylyov <s.shtylyov@omprussia.ru>
-To:     <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Michal Simek <michal.simek@xilinx.com>
-CC:     <linux-mips@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
-Organization: Open Mobile Platform, LLC
-Message-ID: <b27b3e14-d928-f44d-8b67-2d7645009f3c@omprussia.ru>
-Date:   Sat, 10 Apr 2021 23:31:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S234548AbhDJUxk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 10 Apr 2021 16:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234439AbhDJUxk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 10 Apr 2021 16:53:40 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A0FC06138A;
+        Sat, 10 Apr 2021 13:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=HTkpYNC2wTW6Zm43v2gmt2r8ARHTWf8+PnXOPO0doXI=; b=Ozahz+ujymLR6HRV/gUOZ0gS1P
+        BDxgLs4uWmYMJEQ30kO1xYpxSOZuU3h08C7SIYNtLc/oIaEOgoADxjaJUBMDXKILVtnjSouZO/lPQ
+        aNoJocoo0y+OakKVQFsGfNC6hCM05ztUqOsU3MOgwCGgy+1ypt/X4LiFKiLuwLF6p6spu4OyVf58l
+        N5OKNtz1OCrsxBpSOE3NlX8z2plRdlW/ReN3u5na5rvYaJXfHDHZUmcZ+kaml3vrQ2iuDTwWob/C3
+        MwFjTKUtdre3pEAuqIyXnRJCGrKsKCsCGWHfLX1nMevAlwYQof1vRaKjR1TB0qnKxtw8nmsW7AiZW
+        zeNaEQmQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lVKb2-0027v9-QT; Sat, 10 Apr 2021 20:52:57 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Subject: [PATCH 0/1] Fix struct page layout on 32-bit systems
+Date:   Sat, 10 Apr 2021 21:52:44 +0100
+Message-Id: <20210410205246.507048-1-willy@infradead.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1908.lancloud.ru (fd00:f066::208)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/10/21 11:11 PM, Sergey Shtylyov wrote:
+I'd really appreciate people testing this, particularly on
+arm32/mips32/ppc32 systems with a 64-bit dma_addr_t.
 
-> Here are 6 patches against the 'master' branch of Martin Petersen's 'scsi.git' repo.
-> The affected drivers call platform_get_irq() but largely ignore its result -- they
-> blithely pass the negative error codes to devm_request_irq() which expects *unsinged*
-> IRQ #s. Stop doing that by checking what exactly platform_get_irq() returns.
-> 
-> [1/6] i2c: cadence: add IRQ check
-> [2/6] i2c: emev2: add IRQ check
-> [3/6] i2c: jz4780: add IRQ check
-> [4/6] i2c: mlxbf: add IRQ check
-> [5/6] i2c: rcar: add IRQ check
+Matthew Wilcox (Oracle) (1):
+  mm: Fix struct page layout on 32-bit systems
 
-   Forgot to mention that the whole v2 patch set grew from this R-Car patch.
+ include/linux/mm_types.h | 38 ++++++++++++++++++++++++++------------
+ 1 file changed, 26 insertions(+), 12 deletions(-)
 
-> [6/6] i2c: sh7760: add IRQ check
+-- 
+2.30.2
 
-MBR, Sergey
