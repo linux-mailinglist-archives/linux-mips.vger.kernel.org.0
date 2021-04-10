@@ -2,94 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E26A835AB2F
-	for <lists+linux-mips@lfdr.de>; Sat, 10 Apr 2021 07:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263EC35AFBD
+	for <lists+linux-mips@lfdr.de>; Sat, 10 Apr 2021 20:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234343AbhDJFvX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 10 Apr 2021 01:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234289AbhDJFvV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 10 Apr 2021 01:51:21 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AC1C061762;
-        Fri,  9 Apr 2021 22:51:07 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id a4so7566619wrr.2;
-        Fri, 09 Apr 2021 22:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YLgnpTDzqgZbTH7wvh2LZzvbn10dMFxSc3peI6dJFkE=;
-        b=a+7Ki6wF0FvA3lPmHZs642eVYROpgvNG8HS/bWDY+d04pfyz0fEzXB4lOGOpf/lL6b
-         5WbHPgjXKkHvsCkKAY/O6pndBedbVKmg0KzBziP54pwXslNI4emiQDlM8mXuLtROccqK
-         oGxkd1ml9LjaBxyi/ood/+L7W7c0hZbvY99KGYdTfAc3BhRbLIatP4sPZyL1BB3Cr7QY
-         LXZB0Lc3IQ957/Gzo7G120+zPyjApDGJrOtyDOAYFx12daJgcCPBDC04C8EMPSsGa1fm
-         sYSmPjvEI9CLKEewPgZV+/3Y7VeJPzs88o2eqYUm1lm8oCuQMWU7ukSOLLYrQ4YY5lqj
-         Acew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YLgnpTDzqgZbTH7wvh2LZzvbn10dMFxSc3peI6dJFkE=;
-        b=qY4Vp9vDH5booOzv0Mo1mTGc0VVYDxi7FHWgQz2lCZ6ARucrOioswVZktazlmgzQJH
-         c+IBBD2tqrqGsqmhgnuPIEMD+W2H345LqdQ/SWcaTUkRS8UQEQeYVWyq+re/XW7k+yVK
-         NcTfaQu8AEl83XO/iySmapI+4Djjvwb+q0GV8QlAdJUC8n37k+rBB/sidDMVhGwaeNW1
-         9Up5QH7uQQJwkp3oGBs9Iqybyj1ET1b0g8/ee2Jc5iATwfMO7Z93UhGii3uTiahM1wWb
-         ZR44NMqmjD5vlJDNdL5d5uTH1KJLj3yYeOpKCFDIMdbDViMhRAz2xNz5dTHBu6ivJ7Cu
-         wGtw==
-X-Gm-Message-State: AOAM530/GtKRJcSUMH1B1xQre3PaxqxEyi6PQU/AzpDknsND66iLd+/H
-        0Pggrmam9tK8XfVpcoNa2DU=
-X-Google-Smtp-Source: ABdhPJwX43C1QI+A7YcF/1UW239rOdz1jJtlk+DT7GxdlBAbcDoDLs/yRAJKJXn6T6pjudkjEKnT2A==
-X-Received: by 2002:adf:fcca:: with SMTP id f10mr11954580wrs.148.1618033866338;
-        Fri, 09 Apr 2021 22:51:06 -0700 (PDT)
-Received: from localhost.localdomain (225.red-83-57-119.dynamicip.rima-tde.net. [83.57.119.225])
-        by smtp.gmail.com with ESMTPSA id o2sm6376518wmc.23.2021.04.09.22.51.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Apr 2021 22:51:06 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     sboyd@kernel.org
-Cc:     robh+dt@kernel.org, john@phrozen.org, tsbogend@alpha.franken.de,
-        gregkh@linuxfoundation.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        devel@driverdev.osuosl.org, neil@brown.name,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v13 4/4] MAINTAINERS: add MT7621 CLOCK maintainer
-Date:   Sat, 10 Apr 2021 07:50:59 +0200
-Message-Id: <20210410055059.13518-5-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210410055059.13518-1-sergio.paracuellos@gmail.com>
-References: <20210410055059.13518-1-sergio.paracuellos@gmail.com>
+        id S234948AbhDJSzJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 10 Apr 2021 14:55:09 -0400
+Received: from out28-169.mail.aliyun.com ([115.124.28.169]:38671 "EHLO
+        out28-169.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234831AbhDJSzJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 10 Apr 2021 14:55:09 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1156899|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0206022-0.000130036-0.979268;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.Jy13RN2_1618080886;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Jy13RN2_1618080886)
+          by smtp.aliyun-inc.com(10.147.42.241);
+          Sun, 11 Apr 2021 02:54:51 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linus.walleij@linaro.org, robh+dt@kernel.org, paul@crapouillou.net
+Cc:     linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        hns@goldelico.com, paul@boddie.org.uk, andy.shevchenko@gmail.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com
+Subject: [PATCH v4 00/11] Fix bugs and add support for new Ingenic SoCs.
+Date:   Sun, 11 Apr 2021 02:54:35 +0800
+Message-Id: <1618080886-32061-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Adding myself as maintainer for mt7621 clock driver.
+v1->v2:
+1.Split [1/3] in v1 to [1/6] [2/6] [3/6] [4/6] in v2.
+2.Fix the uninitialized warning.
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+v2->v3:
+Split [6/6] in v2 to [6/10] [7/10] [8/10] [9/10] [10/10] in v3.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4d68184d3f76..02986055fdbc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11484,6 +11484,12 @@ L:	linux-wireless@vger.kernel.org
- S:	Maintained
- F:	drivers/net/wireless/mediatek/mt7601u/
- 
-+MEDIATEK MT7621 CLOCK DRIVER
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/mediatek,mt7621-sysc.yaml
-+F:	drivers/clk/ralink/clk-mt7621.c
-+
- MEDIATEK MT7621/28/88 I2C DRIVER
- M:	Stefan Roese <sr@denx.de>
- L:	linux-i2c@vger.kernel.org
+v3->v4:
+1.Modify the format of comment.
+2.Split lcd pins into several groups.
+3.Drop "lcd-no-pins" which is pointless.
+4.Improve the structure of some functions.
+5.Adjust function names to avoid confusion.
+6.Use "lcd-special" and "lcd-generic" instead "lcd-xxbit-tft".
+7.Replace "lcd-rgb-xxx" with "lcd-tft-xxx" to avoid confusion.
+
+周琰杰 (Zhou Yanjie) (11):
+  pinctrl: Ingenic: Add missing pins to the JZ4770 MAC MII group.
+  pinctrl: Ingenic: Add support for read the pin configuration of X1830.
+  pinctrl: Ingenic: Adjust the sequence of X1830 SSI pin groups.
+  pinctrl: Ingenic: Improve LCD pins related code.
+  pinctrl: Ingenic: Reformat the code.
+  dt-bindings: pinctrl: Add bindings for new Ingenic SoCs.
+  pinctrl: Ingenic: Add pinctrl driver for JZ4730.
+  pinctrl: Ingenic: Add pinctrl driver for JZ4750.
+  pinctrl: Ingenic: Add pinctrl driver for JZ4755.
+  pinctrl: Ingenic: Add pinctrl driver for JZ4775.
+  pinctrl: Ingenic: Add pinctrl driver for X2000.
+
+ .../bindings/pinctrl/ingenic,pinctrl.yaml          |   23 +-
+ drivers/pinctrl/pinctrl-ingenic.c                  | 1538 ++++++++++++++++++--
+ 2 files changed, 1429 insertions(+), 132 deletions(-)
+
 -- 
-2.25.1
+2.7.4
 
