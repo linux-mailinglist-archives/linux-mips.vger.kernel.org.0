@@ -2,92 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB1E35C3BC
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Apr 2021 12:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCAA35C3EE
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Apr 2021 12:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbhDLKXD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Apr 2021 06:23:03 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:59925 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238366AbhDLKXA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 12 Apr 2021 06:23:00 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-128-DnwYs6UTM2mO74AA5I6jBQ-1; Mon, 12 Apr 2021 11:22:40 +0100
-X-MC-Unique: DnwYs6UTM2mO74AA5I6jBQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Mon, 12 Apr 2021 11:22:38 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.012; Mon, 12 Apr 2021 11:22:38 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>
-CC:     linux-arch <linux-arch@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Helge Deller <deller@gmx.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: RE: consolidate the flock uapi definitions
-Thread-Topic: consolidate the flock uapi definitions
-Thread-Index: AQHXL4M0xqfui6+bp0WfMrJF+xIqXKqwqyrg
-Date:   Mon, 12 Apr 2021 10:22:38 +0000
-Message-ID: <16c471554aa5424fbe2f6a4fd60bd662@AcuMS.aculab.com>
-References: <20210412085545.2595431-1-hch@lst.de>
- <CAK8P3a38qgkjkh4+fDKp4TufL+2_W-quZBFK9pJFf7wXP=84xQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a38qgkjkh4+fDKp4TufL+2_W-quZBFK9pJFf7wXP=84xQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+        id S239102AbhDLK1g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Apr 2021 06:27:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46252 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237753AbhDLK1Z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 12 Apr 2021 06:27:25 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C93BB6134F;
+        Mon, 12 Apr 2021 10:27:07 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lVtmb-006yxo-LA; Mon, 12 Apr 2021 11:27:05 +0100
+Date:   Mon, 12 Apr 2021 11:27:04 +0100
+Message-ID: <87czuzol1j.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 00/10] KVM: Consolidate and optimize MMU notifiers
+In-Reply-To: <9376b453-be3a-f8b7-d53a-7e54c25161ce@redhat.com>
+References: <20210402005658.3024832-1-seanjc@google.com>
+        <9376b453-be3a-f8b7-d53a-7e54c25161ce@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, seanjc@google.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, paulus@ozlabs.org, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org, bgardon@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAxMiBBcHJpbCAyMDIxIDExOjA0DQo+IA0KPiBP
-biBNb24sIEFwciAxMiwgMjAyMSBhdCAxMDo1NSBBTSBDaHJpc3RvcGggSGVsbHdpZyA8aGNoQGxz
-dC5kZT4gd3JvdGU6DQo+ID4NCj4gPiBIaSBhbGwsDQo+ID4NCj4gPiBjdXJyZW50bHkgd2UgZGVh
-bCB3aXRoIHRoZSBzbGlnaHQgZGlmZmVyZW50cyBpbiB0aGUgdmFyaW91cyBhcmNoaXRlY3R1cmUN
-Cj4gPiB2YXJpYW50cyBvZiB0aGUgZmxvY2sgYW5kIGZsb2NrNjQgc3R1Y3R1cmVzIGluIGEgdmVy
-eSBjcnVmdCB3YXkuICBUaGlzDQo+ID4gc2VyaWVzIHN3aXRjaGVzIHRvIGp1c3QgdXNlIHNtYWxs
-IGFyY2ggaG9va3MgYW5kIGRlZmluZSB0aGUgcmVzdCBpbg0KPiA+IGFzbS1nZW5lcmljIGFuZCBs
-aW51eC9jb21wYXQuaCBpbnN0ZWFkLg0KPiANCj4gTmljZSBjbGVhbnVwLiBJIGNhbiBtZXJnZSBp
-dCB0aHJvdWdoIHRoZSBhc20tZ2VuZXJpYyB0cmVlIGlmIHlvdSBsaWtlLA0KPiB0aG91Z2ggaXQn
-cyBhIGxpdHRsZSBsYXRlIGp1c3QgYWhlYWQgb2YgdGhlIG1lcmdlIHdpbmRvdy4NCj4gDQo+IEkg
-d291bGQgbm90IHdhbnQgdG8gY2hhbmdlIHRoZSBjb21wYXRfbG9mZl90IGRlZmluaXRpb24gdG8g
-Y29tcGF0X3M2NA0KPiB0byBhdm9pZCB0aGUgcGFkZGluZyBhdCB0aGlzIHRpbWUsIHRob3VnaCB0
-aGF0IG1pZ2h0IGJlIGEgdXNlZnVsIGNsZWFudXANCj4gZm9yIGEgZnV0dXJlIGN5Y2xlLg0KDQpJ
-cyB4ODYgdGhlIG9ubHkgYXJjaGl0ZWN0dXJlIHRoYXQgaGFzIDMyYml0IGFuZCA2NGJpdCB2YXJp
-YW50cyB3aGVyZQ0KdGhlIDMyYml0IHZhcmlhbnQgYWxpZ25zIDY0Yml0IGl0ZW1zIG9uIDMyYml0
-IGJvdW5kYXJpZXM/DQoNCkkndmUganVzdCBjaGVja2VkIE1JUFMgYW5kIEFSTSwgYW5kIEknbSBm
-YWlybHkgc3VyZSBzcGFyYyA2NGJpdA0KYWxpZ25zIHRoZW0uDQoNCkFyZSB0aGVyZSBhbnkgb3Ro
-ZXJzPw0KDQpNaWdodCBhbHNvIGJlIGludGVyZXN0aW5nIHRvIGNoZWNrIHdoZXRoZXIgY29tcGF0
-X2xvZmZfdCBnZXRzDQp1c2VkIGFueXdoZXJlIGVsc2UgLSB3aGVyZSB0aGUgeDY0LTY0IGNvbXBh
-dCBjb2RlIHdpbGwgZ2V0IGl0DQp3cm9uZy4NCg0KSVNUTSB0aGF0IGZpeGluZyBjb21wYXRfbG9m
-Zl90IHNob3VsZG4ndCBoYXZlIGFueSBmYWxsb3V0Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
-ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
-ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Fri, 02 Apr 2021 13:17:45 +0100,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
+> 
+> On 02/04/21 02:56, Sean Christopherson wrote:
+> > The end goal of this series is to optimize the MMU notifiers to take
+> > mmu_lock if and only if the notification is relevant to KVM, i.e. the hva
+> > range overlaps a memslot.   Large VMs (hundreds of vCPUs) are very
+> > sensitive to mmu_lock being taken for write at inopportune times, and
+> > such VMs also tend to be "static", e.g. backed by HugeTLB with minimal
+> > page shenanigans.  The vast majority of notifications for these VMs will
+> > be spurious (for KVM), and eliding mmu_lock for spurious notifications
+> > avoids an otherwise unacceptable disruption to the guest.
+> > 
+> > To get there without potentially degrading performance, e.g. due to
+> > multiple memslot lookups, especially on non-x86 where the use cases are
+> > largely unknown (from my perspective), first consolidate the MMU notifier
+> > logic by moving the hva->gfn lookups into common KVM.
+> > 
+> > Based on kvm/queue, commit 5f986f748438 ("KVM: x86: dump_vmcs should
+> > include the autoload/autostore MSR lists").
+> > 
+> > Well tested on Intel and AMD.  Compile tested for arm64, MIPS, PPC,
+> > PPC e500, and s390.  Absolutely needs to be tested for real on non-x86,
+> > I give it even odds that I introduced an off-by-one bug somewhere.
+> > 
+> > v2:
+> >   - Drop the patches that have already been pushed to kvm/queue.
+> >   - Drop two selftest changes that had snuck in via "git commit -a".
+> >   - Add a patch to assert that mmu_notifier_count is elevated when
+> >     .change_pte() runs. [Paolo]
+> >   - Split out moving KVM_MMU_(UN)LOCK() to __kvm_handle_hva_range() to a
+> >     separate patch.  Opted not to squash it with the introduction of the
+> >     common hva walkers (patch 02), as that prevented sharing code between
+> >     the old and new APIs. [Paolo]
+> >   - Tweak the comment in kvm_vm_destroy() above the smashing of the new
+> >     slots lock. [Paolo]
+> >   - Make mmu_notifier_slots_lock unconditional to avoid #ifdefs. [Paolo]
+> > 
+> > v1:
+> >   - https://lkml.kernel.org/r/20210326021957.1424875-1-seanjc@google.com
+> > 
+> > Sean Christopherson (10):
+> >    KVM: Assert that notifier count is elevated in .change_pte()
+> >    KVM: Move x86's MMU notifier memslot walkers to generic code
+> >    KVM: arm64: Convert to the gfn-based MMU notifier callbacks
+> >    KVM: MIPS/MMU: Convert to the gfn-based MMU notifier callbacks
+> >    KVM: PPC: Convert to the gfn-based MMU notifier callbacks
+> >    KVM: Kill off the old hva-based MMU notifier callbacks
+> >    KVM: Move MMU notifier's mmu_lock acquisition into common helper
+> >    KVM: Take mmu_lock when handling MMU notifier iff the hva hits a
+> >      memslot
+> >    KVM: Don't take mmu_lock for range invalidation unless necessary
+> >    KVM: x86/mmu: Allow yielding during MMU notifier unmap/zap, if
+> >      possible
+> > 
+> >   arch/arm64/kvm/mmu.c                   | 117 +++------
+> >   arch/mips/kvm/mmu.c                    |  97 ++------
+> >   arch/powerpc/include/asm/kvm_book3s.h  |  12 +-
+> >   arch/powerpc/include/asm/kvm_ppc.h     |   9 +-
+> >   arch/powerpc/kvm/book3s.c              |  18 +-
+> >   arch/powerpc/kvm/book3s.h              |  10 +-
+> >   arch/powerpc/kvm/book3s_64_mmu_hv.c    |  98 ++------
+> >   arch/powerpc/kvm/book3s_64_mmu_radix.c |  25 +-
+> >   arch/powerpc/kvm/book3s_hv.c           |  12 +-
+> >   arch/powerpc/kvm/book3s_pr.c           |  56 ++---
+> >   arch/powerpc/kvm/e500_mmu_host.c       |  27 +-
+> >   arch/x86/kvm/mmu/mmu.c                 | 127 ++++------
+> >   arch/x86/kvm/mmu/tdp_mmu.c             | 245 +++++++------------
+> >   arch/x86/kvm/mmu/tdp_mmu.h             |  14 +-
+> >   include/linux/kvm_host.h               |  22 +-
+> >   virt/kvm/kvm_main.c                    | 325 +++++++++++++++++++------
+> >   16 files changed, 552 insertions(+), 662 deletions(-)
+> > 
+> 
+> For MIPS, I am going to post a series that simplifies TLB flushing
+> further.  I applied it, and rebased this one on top, to
+> kvm/mmu-notifier-queue.
+> 
+> Architecture maintainers, please look at the branch and
+> review/test/ack your parts.
 
+I've given this a reasonably good beating on arm64 for both VHE and
+nVHE HW, and nothing caught fire, although I was left with a conflict
+in the x86 code after merging with linux/master.
+
+Feel free to add a
+
+Tested-by: Marc Zyngier <maz@kernel.org>
+
+for the arm64 side.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
