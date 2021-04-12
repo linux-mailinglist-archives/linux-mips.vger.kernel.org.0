@@ -2,104 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBA635C50C
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Apr 2021 13:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EFB35C632
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Apr 2021 14:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239642AbhDLL0g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Apr 2021 07:26:36 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:35015 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237626AbhDLL0g (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Apr 2021 07:26:36 -0400
-Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Movrq-1ltfTa2lXK-00qUJw; Mon, 12 Apr 2021 13:26:16 +0200
-Received: by mail-wr1-f45.google.com with SMTP id s7so12420841wru.6;
-        Mon, 12 Apr 2021 04:26:16 -0700 (PDT)
-X-Gm-Message-State: AOAM5323SZB/5C97kuwT92PB6TfwI9kQSSxviIBzSwo/OBKlNl/Zd+bz
-        TOrvQMXSUKuceqA2ASb3AYksfeR6qRF3vqSCovY=
-X-Google-Smtp-Source: ABdhPJy46sI91TDF91SxINRlLS3vYTwc1YeMRJCymXnpPG5ap8cTdjbAP71XB76ODq1s/TL2YmK09N0XG1Vr80EDjdY=
-X-Received: by 2002:adf:c70b:: with SMTP id k11mr31632710wrg.165.1618226776291;
- Mon, 12 Apr 2021 04:26:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210412085545.2595431-1-hch@lst.de> <20210412085545.2595431-6-hch@lst.de>
- <15be19af19174c7692dd795297884096@AcuMS.aculab.com> <5c3635a2b44a496b88d665e8686d9436@AcuMS.aculab.com>
-In-Reply-To: <5c3635a2b44a496b88d665e8686d9436@AcuMS.aculab.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 12 Apr 2021 13:26:00 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1JZ=JerasdkntzX_ApaCF7C29ZS1E31aPQATOts0ZiLw@mail.gmail.com>
-Message-ID: <CAK8P3a1JZ=JerasdkntzX_ApaCF7C29ZS1E31aPQATOts0ZiLw@mail.gmail.com>
-Subject: Re: [PATCH 5/5] compat: consolidate the compat_flock{,64} definition
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ry5qE36iTjjdSwzAcL8h8BXii7Lhlh98QV8EyNEqwW+LuSKlGh4
- 8NBpO+ZKGIKdQ6RR1HuFLLQggTJPjETQbl0Rt0gsezdbZs/2uY1hZmO25GbYsJOVCwi4MG0
- c+FdeGvY6HY6K4phyVjGP15zuM514kYs4+j448yQXSg2kYBIqo3YphmyjFVflKaW49pbLEi
- Jyz4TnRH0bzl7LDE7JPAQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:FHKdfwr0Mls=:H46YUUEUGTT9Qoa9VQtGun
- RuMFYLKVnW8xBofB+zmI0u56rIjfmCyL30LMEE2Fd6UzlCyJ4oBnBVGdVz+wQ9DDNk2yMxz+i
- /Gdshu4u0ewFe5o+i8GzjWPKK2sfIgIiq2afIuvL+SQzfpgLcD9ILbFi5AAuobdu/9ySvpoGv
- 04kcB2mwbfYu9yiwPK6tPtcaGEoax7pa/LfRLVIMv2xhQryRT7VZVE4bt8HpACEYKruO3hbXe
- bnQg6eNaHWgrKDp8nW1ixIyN3gQBPGq/QibUWg/9uwGtNiJBRtEQJ+VsGboPAcWYt8bGTuozb
- +uaafmgm5GfuSMh8YuRUyWZM34lMwjLSPEPRRSrxe0beVFTfJK7yHsb4H/H48BsKa/qxbpn/4
- rqMaj6WJU3rQSYwd766LtLoveS2Tjlue2aA6QeyLOid3HGt1p6iMNZ8Lh4YvUvIYGklumxGXd
- T9iZYLVuFIBbotcZ/lMEwEe48u8DHCBxO2tVP/9VZLRGk6LX5BkeeSpZG5a5hl97qwAXgl/FH
- wv2PjUEuyUj4ulnlvJ+WTmWmgCGo1XoOcAnvAOD1N8JBHueEyh924AaiOIloaHWVcHpK+Bp6A
- yKxwEO3ykjARw9Hv/iUAWjW/yBqj8nzTV7
+        id S239097AbhDLM2v (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Apr 2021 08:28:51 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:59210 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238414AbhDLM2u (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 12 Apr 2021 08:28:50 -0400
+Received: from loongson.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxzcjsPHRgCyoHAA--.9793S2;
+        Mon, 12 Apr 2021 20:28:28 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] MIPS: relocate: Add automatic relocation to CONFIG_RELOCATABLE
+Date:   Mon, 12 Apr 2021 20:28:09 +0800
+Message-Id: <1618230494-6207-1-git-send-email-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxzcjsPHRgCyoHAA--.9793S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrW8Zr1kCw43GryUtr18Xwb_yoWkGFbEgr
+        W2gry0qr4xXFW29FW5Aw4xX34akay3CFySk3WkXrWayFy3Ar13AF48G34UGr4vvwsYyFWk
+        ZF93Xr1kCanrAjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2xYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_Xr1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUyAsgUUUUU
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 12, 2021 at 12:54 PM David Laight <David.Laight@aculab.com> wrote:
-> From: David Laight > Sent: 12 April 2021 10:37
-> ...
-> > I'm guessing that compat_pid_t is 16 bits?
-> > So the native 32bit version has an unnamed 2 byte structure pad.
-> > The 'packed' removes this pad from the compat structure.
-> >
-> > AFAICT (apart from mips) the __ARCH_COMPAT_FLOCK_PAD is just
-> > adding an explicit pad for the implicit pad the compiler
-> > would generate because compat_pid_t is 16 bits.
->
-> I've just looked at the header.
-> compat_pid_t is 32 bits.
-> So Linux must have gained 32bit pids at some earlier time.
-> (Historically Unix pids were 16 bit - even on 32bit systems.)
->
-> Which makes the explicit pad in 'sparc' rather 'interesting'.
+1, To get the address the kernel is linked to, use PC-region(static) +
+   offset(dynamic) way. See detail at [PATCH v2 3/5]
+2, To deal with smp cpu in kernel entry, e.g. cavium-octeon platform,
+   move smp cpu handle later than jump to the address kernel linked to.
+   See detail at [PATCH v2 4/5]
 
-I saw it was there since the sparc kernel support got merged in
-linux-1.3, possibly copied from an older sunos version.
+Jinyang He (5):
+  MIPS: relocate: Only compile relocs when CONFIG_RELOCATABLE is enabled
+  MIPS: relocate: Use CONFIG_RANDOMIZE_BASE to enable kaslr
+  MIPS: Jump to kernel linked address by PC relative way
+  MIPS: cavium-octeon: Execute the smp handle after jumping to kernel
+    linked address
+  MIPS: relocate: Add support to auto relocate kernel
 
-> oh - compat_loff_t is only used in a couple of other places.
-> neither care in any way about the alignment.
-> (Provided get_user() doesn't fault on a 8n+4 aligned address.)
+ arch/mips/Makefile                                 |   2 +
+ arch/mips/cavium-octeon/smp.c                      |   9 +-
+ arch/mips/generic/init.c                           |   4 +-
+ arch/mips/include/asm/bootinfo.h                   |   4 +-
+ .../asm/mach-cavium-octeon/kernel-entry-init.h     |  24 ++-
+ arch/mips/kernel/Makefile                          |   2 +-
+ arch/mips/kernel/head.S                            | 185 ++++++++++++++++++++-
+ arch/mips/kernel/{relocate.c => kaslr.c}           |  15 --
+ 8 files changed, 214 insertions(+), 31 deletions(-)
+ rename arch/mips/kernel/{relocate.c => kaslr.c} (97%)
 
-Ah right, I also see that after this series it's only used in to other
-places:  compat_resume_swap_area, which could also lose the
-__packed annotation, and in the declaration of
-compat_sys_sendfile64, where it makes no difference.
+-- 
+2.1.0
 
-      Arnd
