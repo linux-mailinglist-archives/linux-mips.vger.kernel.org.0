@@ -2,118 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2F235C731
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Apr 2021 15:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2182C35C73C
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Apr 2021 15:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241758AbhDLNMM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Apr 2021 09:12:12 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:59399 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241756AbhDLNMH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 12 Apr 2021 09:12:07 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-107-jlA7rlBNM9W_p6yNzfFSUA-1; Mon, 12 Apr 2021 14:11:46 +0100
-X-MC-Unique: jlA7rlBNM9W_p6yNzfFSUA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Mon, 12 Apr 2021 14:11:45 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.012; Mon, 12 Apr 2021 14:11:45 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>
-CC:     Christoph Hellwig <hch@lst.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH 5/5] compat: consolidate the compat_flock{,64} definition
-Thread-Topic: [PATCH 5/5] compat: consolidate the compat_flock{,64} definition
-Thread-Index: AQHXL3nAXViKKuH90kqxIUkBtWSuL6qwmWXwgAATjVCAAACRAIAAKVLA
-Date:   Mon, 12 Apr 2021 13:11:45 +0000
-Message-ID: <0bef075082b244d2b7a5a140336a40d5@AcuMS.aculab.com>
-References: <20210412085545.2595431-1-hch@lst.de>
- <20210412085545.2595431-6-hch@lst.de>
- <15be19af19174c7692dd795297884096@AcuMS.aculab.com>
- <5c3635a2b44a496b88d665e8686d9436@AcuMS.aculab.com>
- <CAK8P3a1JZ=JerasdkntzX_ApaCF7C29ZS1E31aPQATOts0ZiLw@mail.gmail.com>
-In-Reply-To: <CAK8P3a1JZ=JerasdkntzX_ApaCF7C29ZS1E31aPQATOts0ZiLw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S240887AbhDLNMy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Apr 2021 09:12:54 -0400
+Received: from foss.arm.com ([217.140.110.172]:50288 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241498AbhDLNMu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 12 Apr 2021 09:12:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFAFD1063;
+        Mon, 12 Apr 2021 06:12:31 -0700 (PDT)
+Received: from [10.57.58.164] (unknown [10.57.58.164])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FDDA3F73B;
+        Mon, 12 Apr 2021 06:12:27 -0700 (PDT)
+Subject: Re: [PATCH v3] drivers: introduce and use WANT_DMA_CMA for soft
+ dependencies on DMA_CMA
+To:     David Hildenbrand <david@redhat.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Eric Anholt <eric@anholt.net>, Christoph Hellwig <hch@lst.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Joel Stanley <joel@jms.id.au>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        The etnaviv authors <etnaviv@lists.freedesktop.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Linux-MM <linux-mm@kvack.org>, Andrew Jeffery <andrew@aj.id.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>
+References: <20210409112035.27221-1-david@redhat.com>
+ <CAK8P3a31uKNcim0n99=yt3zjZ+LQSw4V4+8PS8daLsBdS0iSYg@mail.gmail.com>
+ <53ec94ac-ffe3-d0bc-d081-3489fa03daa1@redhat.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <34350446-0e0e-6947-40bd-fabdccdc835f@arm.com>
+Date:   Mon, 12 Apr 2021 14:12:20 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+In-Reply-To: <53ec94ac-ffe3-d0bc-d081-3489fa03daa1@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAxMiBBcHJpbCAyMDIxIDEyOjI2DQo+IA0KPiBP
-biBNb24sIEFwciAxMiwgMjAyMSBhdCAxMjo1NCBQTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxhaWdo
-dEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPiBGcm9tOiBEYXZpZCBMYWlnaHQgPiBTZW50OiAxMiBB
-cHJpbCAyMDIxIDEwOjM3DQo+ID4gLi4uDQo+ID4gPiBJJ20gZ3Vlc3NpbmcgdGhhdCBjb21wYXRf
-cGlkX3QgaXMgMTYgYml0cz8NCj4gPiA+IFNvIHRoZSBuYXRpdmUgMzJiaXQgdmVyc2lvbiBoYXMg
-YW4gdW5uYW1lZCAyIGJ5dGUgc3RydWN0dXJlIHBhZC4NCj4gPiA+IFRoZSAncGFja2VkJyByZW1v
-dmVzIHRoaXMgcGFkIGZyb20gdGhlIGNvbXBhdCBzdHJ1Y3R1cmUuDQo+ID4gPg0KPiA+ID4gQUZB
-SUNUIChhcGFydCBmcm9tIG1pcHMpIHRoZSBfX0FSQ0hfQ09NUEFUX0ZMT0NLX1BBRCBpcyBqdXN0
-DQo+ID4gPiBhZGRpbmcgYW4gZXhwbGljaXQgcGFkIGZvciB0aGUgaW1wbGljaXQgcGFkIHRoZSBj
-b21waWxlcg0KPiA+ID4gd291bGQgZ2VuZXJhdGUgYmVjYXVzZSBjb21wYXRfcGlkX3QgaXMgMTYg
-Yml0cy4NCj4gPg0KPiA+IEkndmUganVzdCBsb29rZWQgYXQgdGhlIGhlYWRlci4NCj4gPiBjb21w
-YXRfcGlkX3QgaXMgMzIgYml0cy4NCj4gPiBTbyBMaW51eCBtdXN0IGhhdmUgZ2FpbmVkIDMyYml0
-IHBpZHMgYXQgc29tZSBlYXJsaWVyIHRpbWUuDQo+ID4gKEhpc3RvcmljYWxseSBVbml4IHBpZHMg
-d2VyZSAxNiBiaXQgLSBldmVuIG9uIDMyYml0IHN5c3RlbXMuKQ0KPiA+DQo+ID4gV2hpY2ggbWFr
-ZXMgdGhlIGV4cGxpY2l0IHBhZCBpbiAnc3BhcmMnIHJhdGhlciAnaW50ZXJlc3RpbmcnLg0KPiAN
-Cj4gSSBzYXcgaXQgd2FzIHRoZXJlIHNpbmNlIHRoZSBzcGFyYyBrZXJuZWwgc3VwcG9ydCBnb3Qg
-bWVyZ2VkIGluDQo+IGxpbnV4LTEuMywgcG9zc2libHkgY29waWVkIGZyb20gYW4gb2xkZXIgc3Vu
-b3MgdmVyc2lvbi4NCg0KV2hpY2ggaGFkIGEgMTZiaXQgcGlkIHdoZW4gSSB1c2VkIGl0Lg0KU28g
-dGhpcyBpcyBhIGJ1ZyBpbiB0aGUgc3BhcmMgbWVyZ2UhDQoNClRoZSBleHBsaWNpdCAnc2hvcnQn
-IHBhZCBjb3VsZCBiZSByZW1vdmVkIGZyb20gdGhlIDY0Yml0IHZhcmlhbnQNCmJlY2F1c2UgdGhl
-cmUgYXJlIGFsd2F5cyA0IGJ5dGVzIG9mIHBhZCBhZnRlciBsX3BpZC4NCkJ1dCBpdCBkb2VzIGV4
-dGVuZCB0aGUgYXBwbGljYXRpb24gc3RydWN0dXJlIG9uIDMyYml0IHNwYXJjIHNvIG11c3QNCnJl
-bWFpbiBpbiB0aGUgdWFwaSBoZWFkZXIuDQpJdCBkb2Vzbid0IG5lZWQgdG8gYmUgaW4gdGhlICdj
-b21wYXQnIGRlZmluaXRpb24uDQoNCj4gPiBvaCAtIGNvbXBhdF9sb2ZmX3QgaXMgb25seSB1c2Vk
-IGluIGEgY291cGxlIG9mIG90aGVyIHBsYWNlcy4NCj4gPiBuZWl0aGVyIGNhcmUgaW4gYW55IHdh
-eSBhYm91dCB0aGUgYWxpZ25tZW50Lg0KPiA+IChQcm92aWRlZCBnZXRfdXNlcigpIGRvZXNuJ3Qg
-ZmF1bHQgb24gYSA4bis0IGFsaWduZWQgYWRkcmVzcy4pDQo+IA0KPiBBaCByaWdodCwgSSBhbHNv
-IHNlZSB0aGF0IGFmdGVyIHRoaXMgc2VyaWVzIGl0J3Mgb25seSB1c2VkIGluIHRvIG90aGVyDQo+
-IHBsYWNlczogIGNvbXBhdF9yZXN1bWVfc3dhcF9hcmVhLCB3aGljaCBjb3VsZCBhbHNvIGxvc2Ug
-dGhlDQo+IF9fcGFja2VkIGFubm90YXRpb24sDQoNClRoYXQgc3RydWN0dXJlIGp1c3QgZGVmaW5l
-cyAwIGFuZCA4LCB0aGUgc3RydWN0dXJlIHNpemUgZG9lc24ndA0KbWF0dGVyIGFuZCB0aGUgb2Zm
-c2V0cyBhcmUgJ3Bhc3NlZCB0bycgZ2V0X3VzZXIoKSBzbyBieXRlDQphY2Nlc3NlcyBhcmVuJ3Qg
-cGVyZm9ybWVkLg0KDQo+IGFuZCBpbiB0aGUgZGVjbGFyYXRpb24gb2YNCj4gY29tcGF0X3N5c19z
-ZW5kZmlsZTY0LCB3aGVyZSBpdCBtYWtlcyBubyBkaWZmZXJlbmNlLg0KDQpXaGljaCBzaG91bGQg
-cHJvYmFibHkgdXNlIGdldF91c2VyKCkgcmF0aGVyIHRoYW4gY29weV9mcm9tX3VzZXIoKS4NCg0K
-QWx0aG91Z2ggc29tZSBhcmNoaXRlY3R1cmVzIG1heSBuZWVkIGZhbGxiYWNrIGNvZGUgZm9yDQpt
-aXNhbGlnbmVkIGdldF91c2VyKCkgPw0KT3IgaXMgdGhlcmUgYSBnZW5lcmFsICdjb3Agb3V0JyB0
-aGF0IHN0cnVjdHVyZXMgcGFzc2VkIHRvIHRoZQ0Ka2VybmVsIGFyZSByZXF1aXJlZCB0byBiZSBj
-b3JyZWN0bHkgYWxpZ25lZC4NClRoZXkgc2hvdWxkIGJlIGFsaWduZWQgdW5sZXNzIHRoZSBrZXJu
-ZWwgaXMgJ3BsYXlpbmcgZ2FtZXMnDQpsaWtlIHJlYWRpbmcgJ3N0cnVjdCBwb2xsZmQnIGFzIGEg
-NjRiaXQgaXRlbS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
-QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
-aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On 2021-04-09 14:39, David Hildenbrand wrote:
+> On 09.04.21 15:35, Arnd Bergmann wrote:
+>> On Fri, Apr 9, 2021 at 1:21 PM David Hildenbrand <david@redhat.com> 
+>> wrote:
+>>>
+>>> Random drivers should not override a user configuration of core knobs
+>>> (e.g., CONFIG_DMA_CMA=n). Applicable drivers would like to use DMA_CMA,
+>>> which depends on CMA, if possible; however, these drivers also have to
+>>> tolerate if DMA_CMA is not available/functioning, for example, if no CMA
+>>> area for DMA_CMA use has been setup via "cma=X". In the worst case, the
+>>> driver cannot do it's job properly in some configurations.
+>>>
+>>> For example, commit 63f5677544b3 ("drm/etnaviv: select CMA and 
+>>> DMA_CMA if
+>>> available") documents
+>>>          While this is no build dependency, etnaviv will only work 
+>>> correctly
+>>>          on most systems if CMA and DMA_CMA are enabled. Select both 
+>>> options
+>>>          if available to avoid users ending up with a non-working GPU 
+>>> due to
+>>>          a lacking kernel config.
+>>> So etnaviv really wants to have DMA_CMA, however, can deal with some 
+>>> cases
+>>> where it is not available.
+>>>
+>>> Let's introduce WANT_DMA_CMA and use it in most cases where drivers
+>>> select CMA/DMA_CMA, or depend on DMA_CMA (in a wrong way via CMA because
+>>> of recursive dependency issues).
+>>>
+>>> We'll assume that any driver that selects DRM_GEM_CMA_HELPER or
+>>> DRM_KMS_CMA_HELPER would like to use DMA_CMA if possible.
+>>>
+>>> With this change, distributions can disable CONFIG_CMA or
+>>> CONFIG_DMA_CMA, without it silently getting enabled again by random
+>>> drivers. Also, we'll now automatically try to enabled both, CONFIG_CMA
+>>> and CONFIG_DMA_CMA if they are unspecified and any driver is around that
+>>> selects WANT_DMA_CMA -- also implicitly via DRM_GEM_CMA_HELPER or
+>>> DRM_KMS_CMA_HELPER.
+>>>
+>>> For example, if any driver selects WANT_DMA_CMA and we do a
+>>> "make olddefconfig":
+>>>
+>>> 1. With "# CONFIG_CMA is not set" and no specification of
+>>>     "CONFIG_DMA_CMA"
+>>>
+>>> -> CONFIG_DMA_CMA won't be part of .config
+>>>
+>>> 2. With no specification of CONFIG_CMA or CONFIG_DMA_CMA
+>>>
+>>> Contiguous Memory Allocator (CMA) [Y/n/?] (NEW)
+>>> DMA Contiguous Memory Allocator (DMA_CMA) [Y/n/?] (NEW)
+>>>
+>>> 3. With "# CONFIG_CMA is not set" and "# CONFIG_DMA_CMA is not set"
+>>>
+>>> -> CONFIG_DMA_CMA will be removed from .config
+>>>
+>>> Note: drivers/remoteproc seems to be special; commit c51e882cd711
+>>> ("remoteproc/davinci: Update Kconfig to depend on DMA_CMA") explains 
+>>> that
+>>> there is a real dependency to DMA_CMA for it to work; leave that 
+>>> dependency
+>>> in place and don't convert it to a soft dependency.
+>>
+>> I don't think this dependency is fundamentally different from the others,
+>> though davinci machines tend to have less memory than a lot of the
+>> other machines, so it's more likely to fail without CMA.
+>>
+> 
+> I was also unsure - and Lucas had similar thoughts. If you want, I can 
+> send a v4 also taking care of this.
 
+TBH I think it should all just be removed. DMA_CMA is effectively an 
+internal feature of the DMA API, and drivers which simply use the DMA 
+API shouldn't really be trying to assume *how* things might be allocated 
+at runtime - CMA is hardly the only way. Platform-level assumptions 
+about the presence or not of IOMMUs, memory carveouts, etc., and whether 
+it even matters - e.g. a device with a tiny LCD may only need display 
+buffers which still fit in a regular MAX_ORDER allocation - could go in 
+platform-specific configs, but I really don't think they belong at the 
+generic subsystem level.
+
+We already have various examples like I2S drivers that won't even probe 
+without a dmaengine provider being present, or host controller drivers 
+which are useless without their corresponding phy driver (and I'm 
+guessing you can probably also do higher-level things like include the 
+block layer but omit all filesystem drivers). I don't believe it's 
+Kconfig's job to try to guess whether a given configuration is *useful*, 
+only to enforce that's it's valid to build.
+
+Robin.
