@@ -2,47 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7C435D7EF
+	by mail.lfdr.de (Postfix) with ESMTP id 6A42D35D7F0
 	for <lists+linux-mips@lfdr.de>; Tue, 13 Apr 2021 08:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344996AbhDMGWc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1344998AbhDMGWc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Tue, 13 Apr 2021 02:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344983AbhDMGW3 (ORCPT
+        with ESMTP id S1344988AbhDMGW3 (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Apr 2021 02:22:29 -0400
 Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03670C061574;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6C4C061756;
         Mon, 12 Apr 2021 23:22:10 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id u7so5836112plr.6;
-        Mon, 12 Apr 2021 23:22:09 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d8so7634243plh.11;
+        Mon, 12 Apr 2021 23:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FzDdk9WeLMndWaHg27kx8Y0bv03vlpf64XRRJIexZMY=;
-        b=acaWyW4KuwBaMok4UBB3mMF/7fsG3Dm+1yBQ2PgYywhsKIOBLbJM/vmMz6WtDUyrNO
-         QE5kTrudQU4fJA4VTJ/esU59zGS5uYmQjVKYaSwjBbVO70BGWsoJDrvK3ba9K8LMwXKq
-         bny7hy/KCqZtQnhIWMSO5706uDUF0vn96MVircjvLl0ZnpJmnLHW6AkncxcR2OWhr28r
-         UYVC8LAhMNb2PsR4uGeHqP3gepPnshXEeirDgK7Ok87zBYzX4H+RBNtO4IiqA9Lpqa5J
-         Oz5a2H8QK7ogfqEKvRrbk/lxnMnhdluVbHfGIeYMILswZIz5V1/tlNSPS3kHA727Hotk
-         T/Vg==
+        bh=WdjBbv3W8zOpO+oAoTMTaxs43N139rhZL18fdEB0EnQ=;
+        b=D2yYBGSHV1ar0ltzK0Nq+lwi3hBMgls83vEBeh+MKJJG3BokCS5iDjiHuh94qxASU+
+         USAtJma2DuynLgwpcKNppc7AbOQk/GzjrGGdfYBbeDjzGY0VoE+PUX3fB7cLwEJSP/9d
+         gqYldt4Tv149+SzK0v6UTk7VWWelg6wbeUdOcwPFekzOkh4JJ7XI8gLKILTju38GeO+F
+         eo2kCBmCkEObvWhhdojbV+4q1OHMlnUesShGLPnfwHATWNX/zlDRL/gDHlb0qInU/86B
+         3ZCcmUbetqvtHDRCr0c4kCH8lDiNzY2YZNtlvUNLBr5CfiVG1CwyGpkKt+zdCoyoOTVq
+         9ciQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FzDdk9WeLMndWaHg27kx8Y0bv03vlpf64XRRJIexZMY=;
-        b=rGauQ7VIv3zpdR8L4hgwQLrI5sfmXmsKBhn0Or15EDOH0VVbC0Nfnf9ROwLjqwQe25
-         OR83hfHTtQNOoexJ7HnGMS1Om5nM5h+ZVv8KXi1b50LxB0/+XKWfNG392UaJW6Ngk5Hj
-         Kt/rSLkjDD5S2Be8woRDqG2x5g2LSEZhYFEfGkzpuMTDJSqlkjRucMRsipeHAjRUZtxu
-         o2dJSHWViCQ+Z3hA1jm0e/SM8aSoaQXdChT5/xpCU+ZFtDfHGB0Sxa/+jRqQF1C11ILb
-         yZSBUDwETiwuj49QLzgyrRv9ia25MH6ii1wIktlyou+Cpfxtu04DtmOmih7BxsVTbAoR
-         RC9Q==
-X-Gm-Message-State: AOAM530upSqoJSBqNVaHl+OlF7KhDQfExaBrvQXo3Ma41LfJ39oYgtPK
-        iFlctq+tJ6Bj++nzW+C9eYk=
-X-Google-Smtp-Source: ABdhPJxDyHtOlfdWoQKHS1hCF810J2AfDNrXfRXlyn3c3XsfpvjJT3I/1vnf8S81uOP6QmQYVWOEDw==
-X-Received: by 2002:a17:902:6b8c:b029:ea:f54f:c330 with SMTP id p12-20020a1709026b8cb02900eaf54fc330mr9502135plk.10.1618294929613;
-        Mon, 12 Apr 2021 23:22:09 -0700 (PDT)
+        bh=WdjBbv3W8zOpO+oAoTMTaxs43N139rhZL18fdEB0EnQ=;
+        b=mZlMPQCV3hGBegzPoOGDi5DtbrMZMfG1DEj/C//GzVH5c52TF7ZkumYzvvzekGyRbw
+         ZGyIkSXTC0+jLNoPuqNlkXicUfOj58sbv8tCQ5h2WGG2nqOvF2TV8jkUGl3gzT97QcS+
+         U5uujIDvIeeE/dIe2hp9w/Kxql72cP7XIH5F6A8VXLztEDQf92Tj2yDf2rZJ4211wImt
+         gndxQ6Ladp5dlyvoHjL6yiGDmj9UDBWACluTTr40q6lDNGnjxw3kNcmVx88lBs4rD/vR
+         wBly71pZmO1ZnKtPLYkWYA5Byf2psC3l3NUSmkdWBIygq1D4lqaWYK558wiIPl47QYLL
+         RssA==
+X-Gm-Message-State: AOAM531IreVEn7RqpQDAHJzeaqhsJ5iayzjW3zTcYgAaXrZRulUKQASW
+        HXHDpuALHAqoEnuNY32AUhg=
+X-Google-Smtp-Source: ABdhPJyuAZzzouB2S51KR//Ovy8FgwhC6NRgjMjWcEEEeeWmHeNQbXZfS6nX8SAnTwsn5MUhiHX6Ng==
+X-Received: by 2002:a17:902:d104:b029:eb:6d3:1436 with SMTP id w4-20020a170902d104b02900eb06d31436mr7254886plw.1.1618294930190;
+        Mon, 12 Apr 2021 23:22:10 -0700 (PDT)
 Received: from z640-arch.lan ([2602:61:7344:f100::678])
         by smtp.gmail.com with ESMTPSA id e190sm11453326pfe.3.2021.04.12.23.22.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
@@ -52,9 +52,9 @@ To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
         Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 7/8] MIPS: pci-legacy: remove busn_resource field
-Date:   Mon, 12 Apr 2021 23:21:45 -0700
-Message-Id: <20210413062146.389690-8-ilya.lipnitskiy@gmail.com>
+Subject: [PATCH 8/8] MIPS: pci-legacy: use generic pci_enable_resources
+Date:   Mon, 12 Apr 2021 23:21:46 -0700
+Message-Id: <20210413062146.389690-9-ilya.lipnitskiy@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210413062146.389690-1-ilya.lipnitskiy@gmail.com>
 References: <20210413062146.389690-1-ilya.lipnitskiy@gmail.com>
@@ -64,43 +64,75 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-No drivers set the busn_resource field in the pci_controller struct.
-Commit 7ee214b540d9 ("MIPS: PCI: Remove unused busn_offset") almost
-removed it over 3 years ago. Remove it for good to free up memory and
-eliminate messages like:
-  pci_bus 0000:00: root bus resource [??? 0x00000000 flags 0x0]
+Follow the reasoning from commit 842de40d93e0 ("PCI: add generic
+pci_enable_resources()"):
 
+  The only functional difference from the MIPS version is that the
+  generic one uses "!r->parent" to check for resource collisions
+  instead of "!r->start && r->end".
+
+That should have no effect on any pci-legacy driver.
+
+Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
 Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
 ---
- arch/mips/include/asm/pci.h | 1 -
- arch/mips/pci/pci-legacy.c  | 1 -
- 2 files changed, 2 deletions(-)
+ arch/mips/pci/pci-legacy.c | 40 ++------------------------------------
+ 1 file changed, 2 insertions(+), 38 deletions(-)
 
-diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
-index 6f48649201c5..9ffc8192adae 100644
---- a/arch/mips/include/asm/pci.h
-+++ b/arch/mips/include/asm/pci.h
-@@ -38,7 +38,6 @@ struct pci_controller {
- 	struct resource *io_resource;
- 	unsigned long io_offset;
- 	unsigned long io_map_base;
--	struct resource *busn_resource;
- 
- #ifndef CONFIG_PCI_DOMAINS_GENERIC
- 	unsigned int index;
 diff --git a/arch/mips/pci/pci-legacy.c b/arch/mips/pci/pci-legacy.c
-index ec3f52ade72d..78c22987bef0 100644
+index 78c22987bef0..c24226ea0a6e 100644
 --- a/arch/mips/pci/pci-legacy.c
 +++ b/arch/mips/pci/pci-legacy.c
-@@ -89,7 +89,6 @@ static void pcibios_scanbus(struct pci_controller *hose)
- 				hose->mem_resource, hose->mem_offset);
- 	pci_add_resource_offset(&resources,
- 				hose->io_resource, hose->io_offset);
--	pci_add_resource(&resources, hose->busn_resource);
- 	list_splice_init(&resources, &bridge->windows);
- 	bridge->dev.parent = NULL;
- 	bridge->sysdata = hose;
+@@ -241,47 +241,11 @@ static int __init pcibios_init(void)
+ 
+ subsys_initcall(pcibios_init);
+ 
+-static int pcibios_enable_resources(struct pci_dev *dev, int mask)
+-{
+-	u16 cmd, old_cmd;
+-	int idx;
+-	struct resource *r;
+-
+-	pci_read_config_word(dev, PCI_COMMAND, &cmd);
+-	old_cmd = cmd;
+-	for (idx=0; idx < PCI_NUM_RESOURCES; idx++) {
+-		/* Only set up the requested stuff */
+-		if (!(mask & (1<<idx)))
+-			continue;
+-
+-		r = &dev->resource[idx];
+-		if (!(r->flags & (IORESOURCE_IO | IORESOURCE_MEM)))
+-			continue;
+-		if ((idx == PCI_ROM_RESOURCE) &&
+-				(!(r->flags & IORESOURCE_ROM_ENABLE)))
+-			continue;
+-		if (!r->start && r->end) {
+-			pci_err(dev,
+-				"can't enable device: resource collisions\n");
+-			return -EINVAL;
+-		}
+-		if (r->flags & IORESOURCE_IO)
+-			cmd |= PCI_COMMAND_IO;
+-		if (r->flags & IORESOURCE_MEM)
+-			cmd |= PCI_COMMAND_MEMORY;
+-	}
+-	if (cmd != old_cmd) {
+-		pci_info(dev, "enabling device (%04x -> %04x)\n", old_cmd, cmd);
+-		pci_write_config_word(dev, PCI_COMMAND, cmd);
+-	}
+-	return 0;
+-}
+-
+ int pcibios_enable_device(struct pci_dev *dev, int mask)
+ {
+-	int err;
++	int err = pci_enable_resources(dev, mask);
+ 
+-	if ((err = pcibios_enable_resources(dev, mask)) < 0)
++	if (err < 0)
+ 		return err;
+ 
+ 	return pcibios_plat_dev_init(dev);
 -- 
 2.31.1
 
