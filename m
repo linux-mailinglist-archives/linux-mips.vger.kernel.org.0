@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2BF35D7E6
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Apr 2021 08:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4187A35D7E9
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Apr 2021 08:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244468AbhDMGW1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Apr 2021 02:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
+        id S1344984AbhDMGW3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Apr 2021 02:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344965AbhDMGW0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Apr 2021 02:22:26 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358BAC061756;
-        Mon, 12 Apr 2021 23:22:07 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id i4so7928205pjk.1;
+        with ESMTP id S1344970AbhDMGW1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Apr 2021 02:22:27 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025A8C061756;
+        Mon, 12 Apr 2021 23:22:08 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id c2so197383plz.0;
         Mon, 12 Apr 2021 23:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FtKBAsvc7cP/9k3yGtb2tbU5XcFAujb/4U8g9ZMjXlc=;
-        b=YZ3upqSWzBebTRthDEIPNBTcOnRSB9M7m5Ojkb4A3SuvRLMFSVJ+wfZG7i20LQmjcI
-         IYPrkiecnpC29BCtWvsim39EE6VcyQyyKOvY1/sETJ1ua/9Hci0diqRw2jKu6WDVpBof
-         0QE4++NYYlWSKBojOAUx7BDtls6bkyneAwpiYRJCWzraoxnzyD29saKVqosTKe4WKwSN
-         PWdwPNog+pqjiTKB0dO4Z0bno8L0IHQb3CktgqyxcXG6J0dK72uMF7RY64gjeWA5B6Uz
-         kxIB0USKLJnPB4o0fug6OWW4+8e4b2WB8ZXNfNGFK1tVxsgqw21e8G7anlZCD3N2780/
-         Zwgw==
+        bh=ZPldXdTQoOP+1TJTBeTgMS9EZqu+drw8h+OQ+VsC7Kw=;
+        b=tbCyq37jO+pUK6nJePNYIrHTLb9+rW9bvXJonzy8EIuP7igH3zsV0wQNrJo5I0UWX4
+         48KTryRD5uuvma/10NPfHuuVdJ8fTpRTWlwV1gT3QRowqXmH9ds96225zB4qNk5lUGQF
+         cDa2LfIE3b8W6eBfyrLb7S6tSGcy29QmCV20BDHD+qgT7K2VguNRsJYxCbXvHgseJT2/
+         9Q7pJRn4X+WSIcwsDdK/afgUGTUdVXXDe6QNIzePM1vinzpwjz7srDXs2yAo4JuGaQYQ
+         Oc7OFMAfA8182Iuh9e35ZsxoQIpRAXACA0tqa0RcKnBfDyxrMGSW3xoCKdXIoLDAyfhe
+         swtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FtKBAsvc7cP/9k3yGtb2tbU5XcFAujb/4U8g9ZMjXlc=;
-        b=eobuS5KMk52ImhcNHfKQN/3ktsNVlBnUUIYmSWA4WRHRrA2epqXwYwPg3kzXQsW8j9
-         lx5XTyWySZ1RRBie2pAnaQQZrDn/NiPp+m5Kg3FrwEYzQYES6wrfKe1J4df6Ah2m0WRw
-         /hIIFIYkdOx3oXhxHzAW+kAOsUDS9A8loul92hL02drzIDhhTq1H1ilV9LD4ng/2w5Q9
-         tO/YljMy0CcAU19/0iMvmF/YUbqz+zaVqj2bfv7BOIwFh5RrfdpDM7IwGIYJ79ywZKdT
-         GBJo7CU42q8eFh94ZFAkbcl6Q5D69X7e3UrNp/KHkq8dMisuilwe/ZyK12IbXEXTMf1j
-         sCmg==
-X-Gm-Message-State: AOAM530V4+kysyuz0ug6ZheXz3LRGOShaYQ/4M1FzZezWZUDuPSl1ihx
-        OhV6GqKTBab1kkwdqnDJVGw=
-X-Google-Smtp-Source: ABdhPJyQnC+BBsdjOUgQP6rlKPhZD8T0oolxh6oGOm9hXMhj2DlSHkqm2lh6UzRW4ns4pU53X9FfHg==
-X-Received: by 2002:a17:90a:e28b:: with SMTP id d11mr3198895pjz.53.1618294926838;
-        Mon, 12 Apr 2021 23:22:06 -0700 (PDT)
+        bh=ZPldXdTQoOP+1TJTBeTgMS9EZqu+drw8h+OQ+VsC7Kw=;
+        b=TnLyF5i4FuHbDyHdFstHN2S/eRJps1BM+ftnzTH43jgmxRqpWtWh5SzwwFjYFT7P2U
+         +5kcnBBJXCEg2fEFX01HsGfp2GWIF4cru08MKGJEqKsWLL3iVw3a1h5nRcbOR74nmGyU
+         rNgdDZHbvNLyKLZDEjXnsg6kPGaxbz48qbB3xz8A2tHkrg3qcDCh9kJxxvUUhgr3DUqX
+         5ejXzkLISVQ9aCkGQbtCtOBUvO8Wy5lzcM82poHh/t7HeGqcoz7K/X5FfnQ6fZGLJ00U
+         pczB6NG7tWi4DtdagrfqpJY6Cc8XH5hhTmy1qT2fIQJypoSGPfgU26khty8r4MYIcREQ
+         Pedg==
+X-Gm-Message-State: AOAM531oIsPbvR08iiHxc2HRussCle0/qaEkMEqvGUaDo9u6Pb+R1LU+
+        OxFNOZVi1Pl+rlGn25jl8+XMAZjl+l2YnrVZ
+X-Google-Smtp-Source: ABdhPJz+NBHqN5oWHzudEreZd5C8tLZPKwr9I5KlE0vVI/1thn51t0LZuoKO9sBno2ZNotKYh1yI8w==
+X-Received: by 2002:a17:90a:1b62:: with SMTP id q89mr3305346pjq.54.1618294927409;
+        Mon, 12 Apr 2021 23:22:07 -0700 (PDT)
 Received: from z640-arch.lan ([2602:61:7344:f100::678])
         by smtp.gmail.com with ESMTPSA id e190sm11453326pfe.3.2021.04.12.23.22.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 23:22:06 -0700 (PDT)
+        Mon, 12 Apr 2021 23:22:07 -0700 (PDT)
 From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Subject: [PATCH 2/8] MIPS: pci-rt2880: remove unneeded locks
-Date:   Mon, 12 Apr 2021 23:21:40 -0700
-Message-Id: <20210413062146.389690-3-ilya.lipnitskiy@gmail.com>
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>, trivial@kernel.org
+Subject: [PATCH 3/8] MIPS: pci-rt3883: trivial: remove unused variable
+Date:   Mon, 12 Apr 2021 23:21:41 -0700
+Message-Id: <20210413062146.389690-4-ilya.lipnitskiy@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210413062146.389690-1-ilya.lipnitskiy@gmail.com>
 References: <20210413062146.389690-1-ilya.lipnitskiy@gmail.com>
@@ -64,108 +64,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Mirror pci-rt3883 fix from commit e5067c718b3a ("MIPS: pci-rt3883:
-Remove odd locking in PCI config space access code"). pci-rt2880 shares
-the driver layout with pci-rt3883 and the same reasons apply.
+Fixes the following compiler warning:
+  warning: unused variable 'flags' [-Wunused-variable]
 
-Caller (generic PCI code) already does proper locking, so no need to add
-another one here. Local PCI read/write functions are never called
-simultaneously, also they do not require synchronization with the PCI
-controller ops, since they are used before the controller registration.
-
-Suggested-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Fixes: e5067c718b3a ("MIPS: pci-rt3883: Remove odd locking in PCI config space access code")
 Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Cc: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Cc: trivial@kernel.org
 ---
- arch/mips/pci/pci-rt2880.c | 13 -------------
- 1 file changed, 13 deletions(-)
+ arch/mips/pci/pci-rt3883.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/mips/pci/pci-rt2880.c b/arch/mips/pci/pci-rt2880.c
-index 19f7860fb28b..b4ee07cbcf2a 100644
---- a/arch/mips/pci/pci-rt2880.c
-+++ b/arch/mips/pci/pci-rt2880.c
-@@ -41,7 +41,6 @@
- #define RT2880_PCI_REG_ARBCTL		0x80
- 
- static void __iomem *rt2880_pci_base;
--static DEFINE_SPINLOCK(rt2880_pci_lock);
- 
- static u32 rt2880_pci_reg_read(u32 reg)
- {
-@@ -63,7 +62,6 @@ static inline u32 rt2880_pci_get_cfgaddr(unsigned int bus, unsigned int slot,
- static int rt2880_pci_config_read(struct pci_bus *bus, unsigned int devfn,
- 				  int where, int size, u32 *val)
- {
--	unsigned long flags;
- 	u32 address;
- 	u32 data;
- 	int busn = 0;
-@@ -74,10 +72,8 @@ static int rt2880_pci_config_read(struct pci_bus *bus, unsigned int devfn,
- 	address = rt2880_pci_get_cfgaddr(busn, PCI_SLOT(devfn), PCI_FUNC(devfn),
- 					 where);
- 
--	spin_lock_irqsave(&rt2880_pci_lock, flags);
- 	rt2880_pci_reg_write(address, RT2880_PCI_REG_CONFIG_ADDR);
- 	data = rt2880_pci_reg_read(RT2880_PCI_REG_CONFIG_DATA);
--	spin_unlock_irqrestore(&rt2880_pci_lock, flags);
- 
- 	switch (size) {
- 	case 1:
-@@ -97,7 +93,6 @@ static int rt2880_pci_config_read(struct pci_bus *bus, unsigned int devfn,
- static int rt2880_pci_config_write(struct pci_bus *bus, unsigned int devfn,
- 				   int where, int size, u32 val)
- {
--	unsigned long flags;
- 	u32 address;
- 	u32 data;
- 	int busn = 0;
-@@ -108,7 +103,6 @@ static int rt2880_pci_config_write(struct pci_bus *bus, unsigned int devfn,
- 	address = rt2880_pci_get_cfgaddr(busn, PCI_SLOT(devfn), PCI_FUNC(devfn),
- 					 where);
- 
--	spin_lock_irqsave(&rt2880_pci_lock, flags);
- 	rt2880_pci_reg_write(address, RT2880_PCI_REG_CONFIG_ADDR);
- 	data = rt2880_pci_reg_read(RT2880_PCI_REG_CONFIG_DATA);
- 
-@@ -127,7 +121,6 @@ static int rt2880_pci_config_write(struct pci_bus *bus, unsigned int devfn,
- 	}
- 
- 	rt2880_pci_reg_write(data, RT2880_PCI_REG_CONFIG_DATA);
--	spin_unlock_irqrestore(&rt2880_pci_lock, flags);
- 
- 	return PCIBIOS_SUCCESSFUL;
- }
-@@ -159,31 +152,25 @@ static struct pci_controller rt2880_pci_controller = {
- 
- static inline u32 rt2880_pci_read_u32(unsigned long reg)
+diff --git a/arch/mips/pci/pci-rt3883.c b/arch/mips/pci/pci-rt3883.c
+index 0ac6346026d0..e422f78db5bc 100644
+--- a/arch/mips/pci/pci-rt3883.c
++++ b/arch/mips/pci/pci-rt3883.c
+@@ -100,7 +100,6 @@ static u32 rt3883_pci_read_cfg32(struct rt3883_pci_controller *rpc,
+ 			       unsigned bus, unsigned slot,
+ 			       unsigned func, unsigned reg)
  {
 -	unsigned long flags;
  	u32 address;
  	u32 ret;
  
- 	address = rt2880_pci_get_cfgaddr(0, 0, 0, reg);
- 
--	spin_lock_irqsave(&rt2880_pci_lock, flags);
- 	rt2880_pci_reg_write(address, RT2880_PCI_REG_CONFIG_ADDR);
- 	ret = rt2880_pci_reg_read(RT2880_PCI_REG_CONFIG_DATA);
--	spin_unlock_irqrestore(&rt2880_pci_lock, flags);
- 
- 	return ret;
- }
- 
- static inline void rt2880_pci_write_u32(unsigned long reg, u32 val)
+@@ -116,7 +115,6 @@ static void rt3883_pci_write_cfg32(struct rt3883_pci_controller *rpc,
+ 				 unsigned bus, unsigned slot,
+ 				 unsigned func, unsigned reg, u32 val)
  {
 -	unsigned long flags;
  	u32 address;
  
- 	address = rt2880_pci_get_cfgaddr(0, 0, 0, reg);
+ 	address = rt3883_pci_get_cfgaddr(bus, slot, func, reg);
+@@ -229,7 +227,6 @@ static int rt3883_pci_config_read(struct pci_bus *bus, unsigned int devfn,
+ 				  int where, int size, u32 *val)
+ {
+ 	struct rt3883_pci_controller *rpc;
+-	unsigned long flags;
+ 	u32 address;
+ 	u32 data;
  
--	spin_lock_irqsave(&rt2880_pci_lock, flags);
- 	rt2880_pci_reg_write(address, RT2880_PCI_REG_CONFIG_ADDR);
- 	rt2880_pci_reg_write(val, RT2880_PCI_REG_CONFIG_DATA);
--	spin_unlock_irqrestore(&rt2880_pci_lock, flags);
- }
+@@ -263,7 +260,6 @@ static int rt3883_pci_config_write(struct pci_bus *bus, unsigned int devfn,
+ 				   int where, int size, u32 val)
+ {
+ 	struct rt3883_pci_controller *rpc;
+-	unsigned long flags;
+ 	u32 address;
+ 	u32 data;
  
- int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
 -- 
 2.31.1
 
