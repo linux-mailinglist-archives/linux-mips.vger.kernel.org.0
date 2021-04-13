@@ -2,51 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA1135D9E2
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Apr 2021 10:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45E135DA2B
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Apr 2021 10:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242725AbhDMIVc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 13 Apr 2021 04:21:32 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:56105 "EHLO
+        id S243181AbhDMIe4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 13 Apr 2021 04:34:56 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:23531 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242708AbhDMIVb (ORCPT
+        by vger.kernel.org with ESMTP id S243154AbhDMIey (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 13 Apr 2021 04:21:31 -0400
+        Tue, 13 Apr 2021 04:34:54 -0400
 Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-153-fsM8gFBuPMKJZMZap9THCQ-1; Tue, 13 Apr 2021 09:21:08 +0100
-X-MC-Unique: fsM8gFBuPMKJZMZap9THCQ-1
+ uk-mtapsc-5-bF6YM675PiCIR3nXuaRTwg-1; Tue, 13 Apr 2021 09:34:30 +0100
+X-MC-Unique: bF6YM675PiCIR3nXuaRTwg-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Tue, 13 Apr 2021 09:21:07 +0100
+ Server (TLS) id 15.0.1497.2; Tue, 13 Apr 2021 09:34:30 +0100
 Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
  AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.012; Tue, 13 Apr 2021 09:21:07 +0100
+ 15.00.1497.012; Tue, 13 Apr 2021 09:34:29 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Matthew Wilcox' <willy@infradead.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: RE: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
-Thread-Topic: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
-Thread-Index: AQHXL8kRwdfrgigLI0exh4xFUSZq9KqyF7dg
-Date:   Tue, 13 Apr 2021 08:21:07 +0000
-Message-ID: <e88c6b601ad644a88e3f758f53f1060c@AcuMS.aculab.com>
-References: <20210410205246.507048-1-willy@infradead.org>
- <20210410205246.507048-2-willy@infradead.org>
- <20210411114307.5087f958@carbon>
- <20210412182354.GN2531743@casper.infradead.org>
-In-Reply-To: <20210412182354.GN2531743@casper.infradead.org>
+To:     'Jinyang He' <hejinyang@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] MIPS: Fix strnlen_user access check
+Thread-Topic: [PATCH] MIPS: Fix strnlen_user access check
+Thread-Index: AQHXMAKOYikh9GetHkGcA/EmeWNB36qyHTfQ
+Date:   Tue, 13 Apr 2021 08:34:29 +0000
+Message-ID: <4e6c077c130c43d5b7e0fc84c979f8b4@AcuMS.aculab.com>
+References: <1618139092-4018-1-git-send-email-hejinyang@loongson.cn>
+ <cbe5e79b-ee6c-5c59-0051-28e4d1152666@loongson.cn>
+ <20210412142730.GA23146@alpha.franken.de>
+ <2fd31420-1f96-9165-23ea-fdccac1b522a@loongson.cn>
+In-Reply-To: <2fd31420-1f96-9165-23ea-fdccac1b522a@loongson.cn>
 Accept-Language: en-GB, en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
@@ -64,74 +55,90 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Matthew Wilcox <willy@infradead.org>
-> Sent: 12 April 2021 19:24
+From: Jinyang He
+> Sent: 13 April 2021 02:16
 > 
-> On Sun, Apr 11, 2021 at 11:43:07AM +0200, Jesper Dangaard Brouer wrote:
-> > Could you explain your intent here?
-> > I worry about @index.
+> > On Mon, Apr 12, 2021 at 11:02:19AM +0800, Tiezhu Yang wrote:
+> >> On 04/11/2021 07:04 PM, Jinyang He wrote:
+> >>> Commit 04324f44cb69 ("MIPS: Remove get_fs/set_fs") brought a problem for
+> >>> strnlen_user(). Jump out when checking access_ok() with condition that
+> >>> (s + strlen(s)) < __UA_LIMIT <= (s + n). The old __strnlen_user_asm()
+> >>> just checked (ua_limit & s) without checking (ua_limit & (s + n)).
+> >>> Therefore, find strlen form s to __UA_LIMIT - 1 in that condition.
+> >>>
+> >>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+> >>> ---
+> >>>    arch/mips/include/asm/uaccess.h | 11 +++++++++--
+> >>>    1 file changed, 9 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
+> >>> index 91bc7fb..85ba0c8 100644
+> >>> --- a/arch/mips/include/asm/uaccess.h
+> >>> +++ b/arch/mips/include/asm/uaccess.h
+> >>> @@ -630,8 +630,15 @@ static inline long strnlen_user(const char __user *s, long n)
+> >>>    {
+> >>>    	long res;
+> >>> -	if (!access_ok(s, n))
+> >>> -		return -0;
+> >>> +	if (unlikely(n <= 0))
+> >>> +		return 0;
+> >>> +
+> >>> +	if (!access_ok(s, n)) {
+> >>> +		if (!access_ok(s, 0))
+> >>> +			return 0;
+> >>> +
+> >>> +		n = __UA_LIMIT - (unsigned long)s - 1;
+> >>> +	}
+> >>>    	might_fault();
+> >>>    	__asm__ __volatile__(
+> >> The following simple changes are OK to fix this issue?
+> >>
+> >> diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
+> >> index 91bc7fb..eafc99b 100644
+> >> --- a/arch/mips/include/asm/uaccess.h
+> >> +++ b/arch/mips/include/asm/uaccess.h
+> >> @@ -630,8 +630,8 @@ static inline long strnlen_user(const char __user *s, long n)
+> >>   {
+> >>          long res;
+> >> -       if (!access_ok(s, n))
+> >> -               return -0;
+> >> +       if (!access_ok(s, 1))
+> >> +               return 0;
+> >>          might_fault();
+> >>          __asm__ __volatile__(
+> > that's the fix I'd like to apply. Could someone send it as a formal
+> > patch ? Thanks.
 > >
-> > As I mentioned in other thread[1] netstack use page_is_pfmemalloc()
-> > (code copy-pasted below signature) which imply that the member @index
-> > have to be kept intact. In above, I'm unsure @index is untouched.
+> > Thomas.
+> >
+> Hi, Thomas,
 > 
-> Well, I tried three different approaches.  Here's the one I hated the least.
+> Thank you for bringing me more thinking.
 > 
-> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> Date: Sat, 10 Apr 2021 16:12:06 -0400
-> Subject: [PATCH] mm: Fix struct page layout on 32-bit systems
+> I always think it is better to use access_ok(s, 0) on MIPS. I have been
+> curious about the difference between access_ok(s, 0) and access_ok(s, 1)
+> until I saw __access_ok() on RISCV at arch/riscv/include/asm/uaccess.h
 > 
-> 32-bit architectures which expect 8-byte alignment for 8-byte integers
-> and need 64-bit DMA addresses (arc, arm, mips, ppc) had their struct
-> page inadvertently expanded in 2019.  When the dma_addr_t was added,
-> it forced the alignment of the union to 8 bytes, which inserted a 4 byte
-> gap between 'flags' and the union.
-> 
-> We could fix this by telling the compiler to use a smaller alignment
-> for the dma_addr, but that seems a little fragile.  Instead, move the
-> 'flags' into the union.  That causes dma_addr to shift into the same
-> bits as 'mapping', which causes problems with page_mapping() called from
-> set_page_dirty() in the munmap path.  To avoid this, insert three words
-> of padding and use the same bits as ->index and ->private, neither of
-> which have to be cleared on free.
+> The __access_ok() is noted with `Ensure that the range [addr, addr+size)
+> is within the process's address space`. Does the range checked by
+> __access_ok() on MIPS is [addr, addr+size]. So if we want to use
+> access_ok(s, 1), should we modify __access_ok()? Or my misunderstanding?
 
-This all looks horribly fragile and is bound to get broken again.
-Are there two problems?
-1) The 'folio' structure needs to match 'rcu' part of the page
-   so that it can use the same rcu list to free items.
-2) Various uses of 'struct page' need to overlay fields to save space.
+ISTR that access_ok(xxx, 0) is unconditionally true on some architectures.
+The range checked should be [addr, addr+size).
+These are needed so that write(fd, random(), 0) doesn't ever fault.
 
-For (1) the rcu bit should probably be a named structure in an
-anonymous union - probably in both structures.
+> More importantly, the implementation of strnlen_user in lib/strnlen_user.c
+> is noted `we hit the address space limit, and we still had more characters
+> the caller would have wanted. That's 0.` Does it make sense? It is not
+> achieved on MIPS when hit __ua_limit, if only access_ok(s, 1) is used.
 
-For (2) is it worth explicitly defining the word number for each field?
-So you end up with something like:
-#define F(offset, member) struct { long _pad_##offset[offset]; member; }
-struct page [
-	union {
-		struct page_rcu;
-		unsigned long flags;
-		F(1, unsigned long xxx);
-		F(2, unsigned long yyy);
-	etc.
-
-
-		
-...
->  		struct {	/* page_pool used by netstack */
-> -			/**
-> -			 * @dma_addr: might require a 64-bit value even on
-> -			 * 32-bit architectures.
-> -			 */
-> -			dma_addr_t dma_addr;
-> +			unsigned long _pp_flags;
-> +			unsigned long pp_magic;
-> +			unsigned long xmi;
-> +			unsigned long _pp_mapping_pad;
-> +			dma_addr_t dma_addr;	/* might be one or two words */
->  		};
-
-Isn't that 6 words?
+There is the question of whether one call to access_ok(addr, 1) is
+sufficient for any code that does sequential accesses.
+It is if there is an unmapped page between the last valid user page
+and the first valid kernel page.
+IIRC x86 has such an unmapped page because 'horrid things' (tm) happen
+if the cpu prefetches across the user-kernel boundary.
 
 	David
 
