@@ -2,226 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B24435D040
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Apr 2021 20:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC56735D4B2
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Apr 2021 03:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235287AbhDLSYh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Apr 2021 14:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbhDLSYh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Apr 2021 14:24:37 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30363C061574;
-        Mon, 12 Apr 2021 11:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=djSd+P2nuqDFfB/9mLdQPbwoAlNn60FgiY/LPsvCEKc=; b=Wvk8Hyjsbg3T98nGoi7OKr8yII
-        5eC9VyxYVI7KymL749Vz/DrsJLq7orZiLaP2l9sv55pYQ8loJ4skAMQ7j4/oQOsXj6TNQPZlnRLxW
-        +PLlXP5pJT95owrhGgU+kQbom/gfMiREOlixdQequzZ8aP4D2tLKew4x5klJ1mxCnT14rqDqgBQbf
-        K/SVD5viM3hKW7ErpzwIdyDChv38HYXREMyF0gj4pUs7MXHtnj7oyw23bo1QF2GpG2srIHZakmX7S
-        Vlxfoot5VdeBFdbjlhLKlrutfkIGCJDftBRvPZ5E5V8+cFOiSWFZrVPgrfqumahwHkusIApkof9zK
-        3IN6MiNA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lW1E2-004jlZ-2K; Mon, 12 Apr 2021 18:24:03 +0000
-Date:   Mon, 12 Apr 2021 19:23:54 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
-Message-ID: <20210412182354.GN2531743@casper.infradead.org>
-References: <20210410205246.507048-1-willy@infradead.org>
- <20210410205246.507048-2-willy@infradead.org>
- <20210411114307.5087f958@carbon>
+        id S229492AbhDMBQK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Apr 2021 21:16:10 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:38862 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240327AbhDMBQK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 12 Apr 2021 21:16:10 -0400
+Received: from [10.130.0.55] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr+_E8HRg7lwHAA--.84S3;
+        Tue, 13 Apr 2021 09:15:48 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Fix strnlen_user access check
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+References: <1618139092-4018-1-git-send-email-hejinyang@loongson.cn>
+ <cbe5e79b-ee6c-5c59-0051-28e4d1152666@loongson.cn>
+ <20210412142730.GA23146@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <2fd31420-1f96-9165-23ea-fdccac1b522a@loongson.cn>
+Date:   Tue, 13 Apr 2021 09:15:48 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210411114307.5087f958@carbon>
+In-Reply-To: <20210412142730.GA23146@alpha.franken.de>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxr+_E8HRg7lwHAA--.84S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw4rWFW8Zw1kJrWrtryxXwb_yoW5Wr1rpa
+        95AF1kKFsYgry3Aa42y3yxXF15Gws8Kr4Yg34qkr1UZr4qvr13trWS9r1F9348JrsrAas2
+        gFW8Zrs8Wr1Yv3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        W8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xF
+        o4CEbIxvr21lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUbYFAPUUUUU==
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Apr 11, 2021 at 11:43:07AM +0200, Jesper Dangaard Brouer wrote:
-> Could you explain your intent here?
-> I worry about @index.
-> 
-> As I mentioned in other thread[1] netstack use page_is_pfmemalloc()
-> (code copy-pasted below signature) which imply that the member @index
-> have to be kept intact. In above, I'm unsure @index is untouched.
+On 04/12/2021 10:27 PM, Thomas Bogendoerfer wrote:
 
-Well, I tried three different approaches.  Here's the one I hated the least.
+> On Mon, Apr 12, 2021 at 11:02:19AM +0800, Tiezhu Yang wrote:
+>> On 04/11/2021 07:04 PM, Jinyang He wrote:
+>>> Commit 04324f44cb69 ("MIPS: Remove get_fs/set_fs") brought a problem for
+>>> strnlen_user(). Jump out when checking access_ok() with condition that
+>>> (s + strlen(s)) < __UA_LIMIT <= (s + n). The old __strnlen_user_asm()
+>>> just checked (ua_limit & s) without checking (ua_limit & (s + n)).
+>>> Therefore, find strlen form s to __UA_LIMIT - 1 in that condition.
+>>>
+>>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>>> ---
+>>>    arch/mips/include/asm/uaccess.h | 11 +++++++++--
+>>>    1 file changed, 9 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
+>>> index 91bc7fb..85ba0c8 100644
+>>> --- a/arch/mips/include/asm/uaccess.h
+>>> +++ b/arch/mips/include/asm/uaccess.h
+>>> @@ -630,8 +630,15 @@ static inline long strnlen_user(const char __user *s, long n)
+>>>    {
+>>>    	long res;
+>>> -	if (!access_ok(s, n))
+>>> -		return -0;
+>>> +	if (unlikely(n <= 0))
+>>> +		return 0;
+>>> +
+>>> +	if (!access_ok(s, n)) {
+>>> +		if (!access_ok(s, 0))
+>>> +			return 0;
+>>> +
+>>> +		n = __UA_LIMIT - (unsigned long)s - 1;
+>>> +	}
+>>>    	might_fault();
+>>>    	__asm__ __volatile__(
+>> The following simple changes are OK to fix this issue?
+>>
+>> diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
+>> index 91bc7fb..eafc99b 100644
+>> --- a/arch/mips/include/asm/uaccess.h
+>> +++ b/arch/mips/include/asm/uaccess.h
+>> @@ -630,8 +630,8 @@ static inline long strnlen_user(const char __user *s, long n)
+>>   {
+>>          long res;
+>> -       if (!access_ok(s, n))
+>> -               return -0;
+>> +       if (!access_ok(s, 1))
+>> +               return 0;
+>>          might_fault();
+>>          __asm__ __volatile__(
+> that's the fix I'd like to apply. Could someone send it as a formal
+> patch ? Thanks.
+>
+> Thomas.
+>
+Hi, Thomas,
 
-From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Date: Sat, 10 Apr 2021 16:12:06 -0400
-Subject: [PATCH] mm: Fix struct page layout on 32-bit systems
+Thank you for bringing me more thinking.
 
-32-bit architectures which expect 8-byte alignment for 8-byte integers
-and need 64-bit DMA addresses (arc, arm, mips, ppc) had their struct
-page inadvertently expanded in 2019.  When the dma_addr_t was added,
-it forced the alignment of the union to 8 bytes, which inserted a 4 byte
-gap between 'flags' and the union.
+I always think it is better to use access_ok(s, 0) on MIPS. I have been
+curious about the difference between access_ok(s, 0) and access_ok(s, 1)
+until I saw __access_ok() on RISCV at arch/riscv/include/asm/uaccess.h
 
-We could fix this by telling the compiler to use a smaller alignment
-for the dma_addr, but that seems a little fragile.  Instead, move the
-'flags' into the union.  That causes dma_addr to shift into the same
-bits as 'mapping', which causes problems with page_mapping() called from
-set_page_dirty() in the munmap path.  To avoid this, insert three words
-of padding and use the same bits as ->index and ->private, neither of
-which have to be cleared on free.
+The __access_ok() is noted with `Ensure that the range [addr, addr+size)
+is within the process's address space`. Does the range checked by
+__access_ok() on MIPS is [addr, addr+size]. So if we want to use
+access_ok(s, 1), should we modify __access_ok()? Or my misunderstanding?
 
-However, page->index is currently used to indicate page_is_pfmemalloc.
-Move that information to bit 1 of page->lru (aka compound_head).  This
-has the same properties; it will be overwritten by callers who do
-not care about pfmemalloc (as opposed to using a bit in page->flags).
+More importantly, the implementation of strnlen_user in lib/strnlen_user.c
+is noted `we hit the address space limit, and we still had more characters
+the caller would have wanted. That's 0.` Does it make sense? It is not
+achieved on MIPS when hit __ua_limit, if only access_ok(s, 1) is used.
 
-Fixes: c25fff7171be ("mm: add dma_addr_t to struct page")
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- include/linux/mm.h       | 12 +++++++-----
- include/linux/mm_types.h | 38 ++++++++++++++++++++++++++------------
- 2 files changed, 33 insertions(+), 17 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index b58c73e50da0..23cca0eaa9da 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1668,10 +1668,12 @@ struct address_space *page_mapping(struct page *page);
- static inline bool page_is_pfmemalloc(const struct page *page)
- {
- 	/*
--	 * Page index cannot be this large so this must be
--	 * a pfmemalloc page.
-+	 * This is not a tail page; compound_head of a head page is unused
-+	 * at return from the page allocator, and will be overwritten
-+	 * by callers who do not care whether the page came from the
-+	 * reserves.
- 	 */
--	return page->index == -1UL;
-+	return page->compound_head & 2;
- }
- 
- /*
-@@ -1680,12 +1682,12 @@ static inline bool page_is_pfmemalloc(const struct page *page)
-  */
- static inline void set_page_pfmemalloc(struct page *page)
- {
--	page->index = -1UL;
-+	page->compound_head = 2;
- }
- 
- static inline void clear_page_pfmemalloc(struct page *page)
- {
--	page->index = 0;
-+	page->compound_head = 0;
- }
- 
- /*
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 6613b26a8894..45c563e9b50e 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -68,16 +68,22 @@ struct mem_cgroup;
- #endif
- 
- struct page {
--	unsigned long flags;		/* Atomic flags, some possibly
--					 * updated asynchronously */
- 	/*
--	 * Five words (20/40 bytes) are available in this union.
--	 * WARNING: bit 0 of the first word is used for PageTail(). That
--	 * means the other users of this union MUST NOT use the bit to
-+	 * This union is six words (24 / 48 bytes) in size.
-+	 * The first word is reserved for atomic flags, often updated
-+	 * asynchronously.  Use the PageFoo() macros to access it.  Some
-+	 * of the flags can be reused for your own purposes, but the
-+	 * word as a whole often contains other information and overwriting
-+	 * it will cause functions like page_zone() and page_node() to stop
-+	 * working correctly.
-+	 *
-+	 * Bit 0 of the second word is used for PageTail(). That
-+	 * means the other users of this union MUST leave the bit zero to
- 	 * avoid collision and false-positive PageTail().
- 	 */
- 	union {
- 		struct {	/* Page cache and anonymous pages */
-+			unsigned long flags;
- 			/**
- 			 * @lru: Pageout list, eg. active_list protected by
- 			 * lruvec->lru_lock.  Sometimes used as a generic list
-@@ -96,13 +102,14 @@ struct page {
- 			unsigned long private;
- 		};
- 		struct {	/* page_pool used by netstack */
--			/**
--			 * @dma_addr: might require a 64-bit value even on
--			 * 32-bit architectures.
--			 */
--			dma_addr_t dma_addr;
-+			unsigned long _pp_flags;
-+			unsigned long pp_magic;
-+			unsigned long xmi;
-+			unsigned long _pp_mapping_pad;
-+			dma_addr_t dma_addr;	/* might be one or two words */
- 		};
- 		struct {	/* slab, slob and slub */
-+			unsigned long _slab_flags;
- 			union {
- 				struct list_head slab_list;
- 				struct {	/* Partial pages */
-@@ -130,6 +137,7 @@ struct page {
- 			};
- 		};
- 		struct {	/* Tail pages of compound page */
-+			unsigned long _t1_flags;
- 			unsigned long compound_head;	/* Bit zero is set */
- 
- 			/* First tail page only */
-@@ -139,12 +147,14 @@ struct page {
- 			unsigned int compound_nr; /* 1 << compound_order */
- 		};
- 		struct {	/* Second tail page of compound page */
-+			unsigned long _t2_flags;
- 			unsigned long _compound_pad_1;	/* compound_head */
- 			atomic_t hpage_pinned_refcount;
- 			/* For both global and memcg */
- 			struct list_head deferred_list;
- 		};
- 		struct {	/* Page table pages */
-+			unsigned long _pt_flags;
- 			unsigned long _pt_pad_1;	/* compound_head */
- 			pgtable_t pmd_huge_pte; /* protected by page->ptl */
- 			unsigned long _pt_pad_2;	/* mapping */
-@@ -159,6 +169,7 @@ struct page {
- #endif
- 		};
- 		struct {	/* ZONE_DEVICE pages */
-+			unsigned long _zd_flags;
- 			/** @pgmap: Points to the hosting device page map. */
- 			struct dev_pagemap *pgmap;
- 			void *zone_device_data;
-@@ -174,8 +185,11 @@ struct page {
- 			 */
- 		};
- 
--		/** @rcu_head: You can use this to free a page by RCU. */
--		struct rcu_head rcu_head;
-+		struct {
-+			unsigned long _rcu_flags;
-+			/** @rcu_head: You can use this to free a page by RCU. */
-+			struct rcu_head rcu_head;
-+		};
- 	};
- 
- 	union {		/* This union is 4 bytes in size. */
--- 
-2.30.2
+Thanks,
+Jinyang
 
