@@ -2,94 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A65E35DF03
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Apr 2021 14:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFA935DF65
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Apr 2021 14:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbhDMMh4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 13 Apr 2021 08:37:56 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:34273 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237594AbhDMMhz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 13 Apr 2021 08:37:55 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-54--zvhWPgkNZK9FoYlq-tgjA-1; Tue, 13 Apr 2021 13:37:26 +0100
-X-MC-Unique: -zvhWPgkNZK9FoYlq-tgjA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Tue, 13 Apr 2021 13:37:25 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.012; Tue, 13 Apr 2021 13:37:25 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Thomas Bogendoerfer' <tsbogend@alpha.franken.de>,
-        Jinyang He <hejinyang@loongson.cn>
-CC:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] MIPS: Fix strnlen_user access check
-Thread-Topic: [PATCH] MIPS: Fix strnlen_user access check
-Thread-Index: AQHXMFYxYikh9GetHkGcA/EmeWNB36qyYICA
-Date:   Tue, 13 Apr 2021 12:37:25 +0000
-Message-ID: <069e524dbad2412f9e74fd234f40fff5@AcuMS.aculab.com>
-References: <1618139092-4018-1-git-send-email-hejinyang@loongson.cn>
- <cbe5e79b-ee6c-5c59-0051-28e4d1152666@loongson.cn>
- <20210412142730.GA23146@alpha.franken.de>
- <2fd31420-1f96-9165-23ea-fdccac1b522a@loongson.cn>
- <20210413111438.GA9472@alpha.franken.de>
-In-Reply-To: <20210413111438.GA9472@alpha.franken.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1345056AbhDMMvF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Apr 2021 08:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241873AbhDMMu6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Apr 2021 08:50:58 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB378C061574;
+        Tue, 13 Apr 2021 05:50:38 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id z85-20020a4a49580000b02901e62808350bso1243148ooa.6;
+        Tue, 13 Apr 2021 05:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ln3ek0nTyB1P0KLSlLSuGmS+bf4MCQh1y2JkmxQe0zo=;
+        b=S/gDkLVKYwxDdlDyJ0aW7HwV95CVFhFpSC+Wzfp3jRuU5WhE8JFcstHYgGsbFsf9zy
+         dTc3IjCnU9AgS/TsCgALumH14dMf5uehYlGCyOxtN51pZOFiqLvFYo+e0o1VmLq5GN2U
+         Phr3dkEJwQCto/kHtqI/UD8wFdKmqTmSsHsqTXwki3p4Xul0JbUBTLaLqVSfGsg9yIFm
+         O5Ns8zILhdGDKUGK3Xa30MPN6u5UxSjGTUyKjuMiulyjJ6Ov4MjDS0pazCz3okoCl0FA
+         7o29zuYgrHAzROr0KpoStW0ei1fjvuiPIrOOV2I3ber6ZN8bO2B1N+tyx7ls56xnHjVk
+         xtdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ln3ek0nTyB1P0KLSlLSuGmS+bf4MCQh1y2JkmxQe0zo=;
+        b=MTcD8I1s3Zro+yoQEr+yffLj2v8lsqQs+A+quRSiPPeh6RM5s0CvmAV2a4SKOyxkKX
+         /fcV5MQfjcrheKHdWrC4z+nf22uks0yhbnpqz+oDytC97kWmD3Yw1UfYp1PWbL0qImsG
+         0U1Kbo3kUYXjiumYbWKU4MaaJOVlFnA8AQPqN3M/PR3tjsaO7lsrPCLattL0I/eSRlPV
+         +A0tZScdT2J2uU1OB8PnuZ8LM8Rfow+eNhemuKjOHAVkIw04gqlaKtoCm5ejIDj073fa
+         RbuzThLmavkf8lScZJOJ2vBYl6FKAUXU6lSLdSxdNC6XILfyb9oFobA50z/WlS63xlxV
+         Z1Fg==
+X-Gm-Message-State: AOAM533FAq3+PhSbPflvhyNhjsC66ICiyYnO7W5FJR8oDX66KBDVK9DX
+        +51WSX9jipzDiuSbE8pfQ0fAvQV0Mm0rmIVkfZ4JYJTboPo=
+X-Google-Smtp-Source: ABdhPJxujxpezD6rQDrnwUUcHfdAKDYUhPXbuU4DYaM2yBJ0qlZzrzBMuF9lOzCCF3G1v6+dFQkayFgeTnTxfjN45ew=
+X-Received: by 2002:a4a:b389:: with SMTP id p9mr26449894ooo.71.1618318237749;
+ Tue, 13 Apr 2021 05:50:37 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20210413062146.389690-1-ilya.lipnitskiy@gmail.com> <20210413062146.389690-4-ilya.lipnitskiy@gmail.com>
+In-Reply-To: <20210413062146.389690-4-ilya.lipnitskiy@gmail.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Tue, 13 Apr 2021 15:50:27 +0300
+Message-ID: <CAHNKnsRQ9nGUuHwqsY1_k+NUo6tGQnVsDqzTG3-57HBjW4M_8w@mail.gmail.com>
+Subject: Re: [PATCH 3/8] MIPS: pci-rt3883: trivial: remove unused variable
+To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>, trivial@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Sent: 13 April 2021 12:15
-...
-> > The __access_ok() is noted with `Ensure that the range [addr, addr+size)
-> > is within the process's address space`. Does the range checked by
-> > __access_ok() on MIPS is [addr, addr+size]. So if we want to use
-> > access_ok(s, 1), should we modify __access_ok()? Or my misunderstanding?
-> 
-> you are right, I'm going to apply
-> 
-> https://patchwork.kernel.org/project/linux-mips/patch/20190209194718.1294-1-paul.burton@mips.com/
-> 
-> to fix that.
+On Tue, Apr 13, 2021 at 9:22 AM Ilya Lipnitskiy
+<ilya.lipnitskiy@gmail.com> wrote:
+> Fixes the following compiler warning:
+>   warning: unused variable 'flags' [-Wunused-variable]
+>
+> Fixes: e5067c718b3a ("MIPS: pci-rt3883: Remove odd locking in PCI config space access code")
+> Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+> Cc: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+> Cc: trivial@kernel.org
 
-Isn't that still wrong?
-If an application does:
-	write(fd, (void *)0xffff0000, 0);
-it should return 0, not -1 and EFAULT/SIGSEGV.
+Yep, I overlooked these local variables. Thank you.
 
-There is also the question about why this makes any difference
-to the original problem of logging in via the graphical interface.
+Acked-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
 
-ISTM that it is very unlikely that the length passed to strnlen_user()
-is long enough to take potential buffer beyond the end of user
-address space.
-It might be that it is passing 'huge' to do strlen_user().
-But since the remove set_fs() changes are reported to have
-broken it, was it actually being called for a kernel buffer?
-
-There is more going on here.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+Sergey
