@@ -2,75 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B507C35F616
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 16:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0886135F7AC
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 17:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbhDNOWJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Apr 2021 10:22:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60892 "EHLO mail.kernel.org"
+        id S1352315AbhDNPaL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Apr 2021 11:30:11 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33114 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231770AbhDNOWI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Apr 2021 10:22:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EEC2660E09;
-        Wed, 14 Apr 2021 14:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618410107;
-        bh=YNNRj2u7BdAHG59JR6BW6NVLzaJPqdTTe1vruxvvEIA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VirPXHKVg7Yl9/9H/rjVIwdD5sFnOSy3vub+O2Q+1KqrtOGnHwF5T0l2GW7Q1gJQ5
-         uPAXicvZaGuSZNyy4guPJSH/h8IIAafz/o9Aa+6QeV+CrkNopFwQvtOjMMt75hFwQL
-         Vz02zlVeg6Rc3orHqG3oXU2zUG2W5pZX5hdhSIKHj9WZmic1KotQ4VxUs5UXFL5zfm
-         uoT3Fx9NmjUK6OpRIezGIbBrVmlAJ2eqCiD9Mt0cvjsjJpmriPTi5qrLD9rwAk5wwX
-         kL0Y/yljbaHpQ48SZLtUHk6z3RBIxAxkMArF2XK+3Is4vc3l2lTKAhlukNFhaOaDZx
-         Z5064ocdwT72w==
-Date:   Wed, 14 Apr 2021 15:21:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     paul@crapouillou.net, alsa-devel@alsa-project.org,
-        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, tiwai@suse.com
-Subject: Re: [PATCH] ASoC: codec: remove unused variable
-Message-ID: <20210414142125.GA13758@sirena.org.uk>
-References: <1618370677-4559-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+        id S1348290AbhDNPaK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 14 Apr 2021 11:30:10 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9F209AFF0;
+        Wed, 14 Apr 2021 15:29:47 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2 net-next 0/9] net: Korina improvements
+Date:   Wed, 14 Apr 2021 17:29:36 +0200
+Message-Id: <20210414152946.12517-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zYM0uCDKw75PZbzx"
-Content-Disposition: inline
-In-Reply-To: <1618370677-4559-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Cookie: Ginger snap.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+While converting Mikrotik RB532 support to use device tree I stumbled
+over the korina ethernet driver, which used way too many MIPS specific
+hacks. This series cleans this all up and adds support for device tree.
 
---zYM0uCDKw75PZbzx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes in v2:
+  - added device tree support to get rid of idt_cpu_freq
+  - fixed compile test on 64bit archs
+  - fixed descriptor current address handling by storing/using mapped
+    dma addresses (dma controller modifies current address)
 
-On Wed, Apr 14, 2021 at 11:24:37AM +0800, Jiapeng Chong wrote:
-> Fix the following gcc warning:
->=20
-> sound/soc/codecs/jz4760.c:201:6: warning: variable =E2=80=98ret=E2=80=99 =
-set but not
-> used [-Wunused-but-set-variable].
+Thomas Bogendoerfer (9):
+  net: korina: Fix MDIO functions
+  net: korina: Use devres functions
+  net: korina: Remove not needed cache flushes
+  net: korina: Remove nested helpers
+  net: korina: Use DMA API
+  net: korina: Only pass mac address via platform data
+  net: korina: Add support for device tree
+  net: korina: Get mdio input clock via common clock framework
+  net: korina: Make driver COMPILE_TESTable
 
-This doesn't apply against current code, please check and resend.
+ arch/mips/rb532/devices.c     |   5 +-
+ drivers/net/ethernet/Kconfig  |   3 +-
+ drivers/net/ethernet/korina.c | 603 ++++++++++++++++++++++++----------
+ 3 files changed, 439 insertions(+), 172 deletions(-)
 
---zYM0uCDKw75PZbzx
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.29.2
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmB2+mQACgkQJNaLcl1U
-h9C+yAf+JzMtHCR7yqmPgEcucV/uizpLuRZd0CNMXys5FR9O6YTwaGV4Vk5A+Zi/
-Yyt6vOGywVWmu0Yh5kKGN+ZmtcTKnbf2L7e5OlvfQd5s13rwYgOXCvLoo+aPHfcs
-Tc1JNo8jDJN2qlmxgIlKvN2TmBEqTNmCixRsG03EhpdJB1z41ltT4FSoUeJVC73q
-IuX9UVk8ikUEJdkNMdm3XukrWyewvFb9a7HZdq8HVn14Pv3arLKA/k3V82kPyYTI
-W8YEvu+VmCc3iPLvPEu3MgmsZjkHt4iGaBtOOKnCIOSfc5icSOaaZPV0vneJVRah
-/fQerNIlNwjuQDJCRCz4U/s7X7tuqw==
-=WYPm
------END PGP SIGNATURE-----
-
---zYM0uCDKw75PZbzx--
