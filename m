@@ -2,61 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE9035EB48
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 05:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19BE35EB44
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 05:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbhDNDNp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Apr 2021 23:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
+        id S233052AbhDNDNn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Apr 2021 23:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232975AbhDNDNh (ORCPT
+        with ESMTP id S232953AbhDNDNh (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Apr 2021 23:13:37 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2F9C061756;
-        Tue, 13 Apr 2021 20:12:50 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id u7so7509678plr.6;
-        Tue, 13 Apr 2021 20:12:50 -0700 (PDT)
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C57EC06175F;
+        Tue, 13 Apr 2021 20:12:51 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id o123so12788726pfb.4;
+        Tue, 13 Apr 2021 20:12:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uQGkHbExQKECAJaJryg6v9FWioWhZzgp18Ncbwe9/nk=;
-        b=DSdYpVxIQFFaGAWRAPF7d09a5+OXsr5y91RTFTyPn9d/MVKoD3Q2re2NstpocIvFSM
-         L1wR5KAsBwZ5H8uXwV6nLruz+gJrBWiuhfVv3qD+rIFm7A1o9Lkv2XLMtXD25qu92qkH
-         UykLiqoEcY1rqO8jNaW1ZSjeX8p2pnm9LBlrwEsrkpQgeAmWhACb4BfYfFqLg0s/1K+E
-         SrFdrUIUgapKAliNC6rCHn8eoA0ND2g78snUYHeyMZ+mhAmOXwg39kv/6r7MKfCp1Ub7
-         ut6A8OHsskkkeP1xWOe25LXbCNGYfu+MU7x5yXks8hTh97qHOpx2o3MbvpSALiFTKyyV
-         ZJ1Q==
+        bh=I49umDhAy7qrhKAAA8aKGdOxSjLinV+njhS2bMCqgfY=;
+        b=bhkXHTTqR/s8ug91Yn6OIvjfTBzExldD6y/nmhUcOGl4ldG87l65Wp2xO+jmmvQWzw
+         pwV9SGjcB8Z4JRBWaoMjBX5z2MTqPNTP9sWxcDsISNyjPeak35OVooZh5gphCyJjPXCp
+         lvuClb6b9GhyMJtrlYDWXmJTGAiOJ7LBbHhECfmeyUVr6AE693D9h61SkGXu+QnHivAl
+         lzWgr7XH/20abQPSatBAE31yB7V6ZAcnSCMAz1L/5TUdJhhBLDLe6W3G68cmS4N2zAuo
+         3Db6/gEr3yfyUVIVwDG5h5kRse5LNB1kIasLHoL87B+41/n9lgZ+UInlw3cpk1brTXSO
+         5qbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uQGkHbExQKECAJaJryg6v9FWioWhZzgp18Ncbwe9/nk=;
-        b=MO4EDZdXiL4dhFQ/skbIMTQ4cgNiax4inzr/j8XUUjoBRUcxjmqPzlB5Ae5V4BBgGU
-         T+6lwew1G2kUiEO+7f/qmBuXMnpjWPWCS6jFgXsYVK2rlL5ZFnnqdYL+yEGudkv8vPWo
-         1JnvgbBpqJEM73zBjenFKdl39WVpTBXAUecRTlCqyyUPGytlUGNR5jQTAStcSO7RVGnK
-         X57y9Ch4WGz/lUl9FKGhb4apL2B71nouGNgqdlX9eXBQ4JKXEZG9ebOvWgG3IM3jk/eA
-         5Xe6Knd2Dt6DHHzhEL17hs1FbWmOoddFB7mPaxu4knupwlGcfDbKdh6/VVcXQuHiMOi2
-         0Prw==
-X-Gm-Message-State: AOAM532OE4HSYLAAIDzkeNygD7CMEfajJ2JDOC/3UlIQY8JMuGw5nmjl
-        psCa9WlNvrGOydo0scpNrLY=
-X-Google-Smtp-Source: ABdhPJxuc0zmXzYGZ6XM6G0V+EkCOBbodJPKOHSQfMN/zwBGYbYaqhaDNYmCBnlLS4F/jS1JV090kA==
-X-Received: by 2002:a17:90b:3507:: with SMTP id ls7mr1057754pjb.172.1618369970530;
-        Tue, 13 Apr 2021 20:12:50 -0700 (PDT)
+        bh=I49umDhAy7qrhKAAA8aKGdOxSjLinV+njhS2bMCqgfY=;
+        b=crkgtbzcBo0UH7ReywHJeQmLFoXppGOWV5BRWC0t4LfLytfCfxgN3A7dh9VhQOsuAk
+         Am0RNb+LI+kGA4dZMxbHZ4TOUff3Z9DKkUtiohLlrLP6dIfNRYwyMlRCsRm59gfrBtFq
+         Y+ZhIHQv0frRA0fLMEzXQGdqrYbn8XlAmgHB1wJk382VMGaR6CG/Z9jFigbXmrp/koED
+         JTwIe3urH6nQ7dSAQXU5elJ2wGBDKV/tKHaFYbaML9yP7gQVqOQ0e7OSZ7Hr2t8P9hj+
+         9XSqgIQrgMaJ+NAiXxMhhoTsv0WO6xHZhpGq3nP07DEBzxFfNCtCk4w+auZwTgJy7/sg
+         2zmw==
+X-Gm-Message-State: AOAM532X+YK2hAySdLYkGhQO27I2WLg9tphcC4d+vBI67YEfd8926RmZ
+        B0xWo0kmX+FVvXXn8ndj9qg=
+X-Google-Smtp-Source: ABdhPJw9ED5YxT7WO7q0lRu/5avk8uwbp+MVNObH6Hg4mcHDJQVZCFIW4KP2A1DIN+tLLAOHGO0R4g==
+X-Received: by 2002:a63:130b:: with SMTP id i11mr15243105pgl.302.1618369971232;
+        Tue, 13 Apr 2021 20:12:51 -0700 (PDT)
 Received: from z640-arch.lan ([2602:61:7344:f100::678])
-        by smtp.gmail.com with ESMTPSA id d17sm13971605pfo.117.2021.04.13.20.12.49
+        by smtp.gmail.com with ESMTPSA id d17sm13971605pfo.117.2021.04.13.20.12.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 13 Apr 2021 20:12:50 -0700 (PDT)
 From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Tobias Wolf <dev-NTEO@vplace.de>, stable@vger.kernel.org
-Subject: [PATCH v2 1/8] MIPS: pci-rt2880: fix slot 0 configuration
-Date:   Tue, 13 Apr 2021 20:12:33 -0700
-Message-Id: <20210414031240.313852-2-ilya.lipnitskiy@gmail.com>
+Cc:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Subject: [PATCH v2 2/8] MIPS: pci-rt2880: remove unneeded locks
+Date:   Tue, 13 Apr 2021 20:12:34 -0700
+Message-Id: <20210414031240.313852-3-ilya.lipnitskiy@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210414031240.313852-1-ilya.lipnitskiy@gmail.com>
 References: <20210414031240.313852-1-ilya.lipnitskiy@gmail.com>
@@ -66,101 +64,106 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-pci_fixup_irqs() used to call pcibios_map_irq on every PCI device, which
-for RT2880 included bus 0 slot 0. After pci_fixup_irqs() got removed,
-only slots/funcs with devices attached would be called. While arguably
-the right thing, that left no chance for this driver to ever initialize
-slot 0, effectively bricking PCI and USB on RT2880 devices such as the
-Belkin F5D8235-4 v1.
+Mirror pci-rt3883 fix from commit e5067c718b3a ("MIPS: pci-rt3883:
+Remove odd locking in PCI config space access code"). pci-rt2880 shares
+the driver layout with pci-rt3883 and the same reasons apply.
 
-Slot 0 configuration needs to happen after PCI bus enumeration, but
-before any device at slot 0x11 (func 0 or 1) is talked to. That was
-determined empirically by testing on a Belkin F5D8235-4 v1 device. A
-minimal BAR 0 config write followed by read, then setting slot 0
-PCI_COMMAND to MASTER | IO | MEMORY is all that seems to be required for
-proper functionality.
+Caller (generic PCI code) already does proper locking, so no need to add
+another one here. Local PCI read/write functions are never called
+simultaneously, also they do not require synchronization with the PCI
+controller ops, since they are used before the controller registration.
 
-Tested by ensuring that full- and high-speed USB devices get enumerated
-on the Belkin F5D8235-4 v1 (with an out of tree DTS file from OpenWrt).
-
-Fixes: 04c81c7293df ("MIPS: PCI: Replace pci_fixup_irqs() call with host bridge IRQ mapping hooks")
+Suggested-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
 Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: Tobias Wolf <dev-NTEO@vplace.de>
-Cc: <stable@vger.kernel.org> # v4.14+
 ---
- arch/mips/pci/pci-rt2880.c | 37 ++++++++++++++++++++++++-------------
- 1 file changed, 24 insertions(+), 13 deletions(-)
+ arch/mips/pci/pci-rt2880.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
 diff --git a/arch/mips/pci/pci-rt2880.c b/arch/mips/pci/pci-rt2880.c
-index e1f12e398136..f1538d2be89e 100644
+index f1538d2be89e..e9dd01431f21 100644
 --- a/arch/mips/pci/pci-rt2880.c
 +++ b/arch/mips/pci/pci-rt2880.c
-@@ -180,7 +180,6 @@ static inline void rt2880_pci_write_u32(unsigned long reg, u32 val)
+@@ -41,7 +41,6 @@
+ #define RT2880_PCI_REG_ARBCTL		0x80
  
- int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+ static void __iomem *rt2880_pci_base;
+-static DEFINE_SPINLOCK(rt2880_pci_lock);
+ 
+ static u32 rt2880_pci_reg_read(u32 reg)
  {
--	u16 cmd;
- 	int irq = -1;
+@@ -63,17 +62,14 @@ static inline u32 rt2880_pci_get_cfgaddr(unsigned int bus, unsigned int slot,
+ static int rt2880_pci_config_read(struct pci_bus *bus, unsigned int devfn,
+ 				  int where, int size, u32 *val)
+ {
+-	unsigned long flags;
+ 	u32 address;
+ 	u32 data;
  
- 	if (dev->bus->number != 0)
-@@ -188,8 +187,6 @@ int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+ 	address = rt2880_pci_get_cfgaddr(bus->number, PCI_SLOT(devfn),
+ 					 PCI_FUNC(devfn), where);
  
- 	switch (PCI_SLOT(dev->devfn)) {
- 	case 0x00:
--		rt2880_pci_write_u32(PCI_BASE_ADDRESS_0, 0x08000000);
--		(void) rt2880_pci_read_u32(PCI_BASE_ADDRESS_0);
- 		break;
- 	case 0x11:
- 		irq = RT288X_CPU_IRQ_PCI;
-@@ -201,16 +198,6 @@ int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
- 		break;
+-	spin_lock_irqsave(&rt2880_pci_lock, flags);
+ 	rt2880_pci_reg_write(address, RT2880_PCI_REG_CONFIG_ADDR);
+ 	data = rt2880_pci_reg_read(RT2880_PCI_REG_CONFIG_DATA);
+-	spin_unlock_irqrestore(&rt2880_pci_lock, flags);
+ 
+ 	switch (size) {
+ 	case 1:
+@@ -93,14 +89,12 @@ static int rt2880_pci_config_read(struct pci_bus *bus, unsigned int devfn,
+ static int rt2880_pci_config_write(struct pci_bus *bus, unsigned int devfn,
+ 				   int where, int size, u32 val)
+ {
+-	unsigned long flags;
+ 	u32 address;
+ 	u32 data;
+ 
+ 	address = rt2880_pci_get_cfgaddr(bus->number, PCI_SLOT(devfn),
+ 					 PCI_FUNC(devfn), where);
+ 
+-	spin_lock_irqsave(&rt2880_pci_lock, flags);
+ 	rt2880_pci_reg_write(address, RT2880_PCI_REG_CONFIG_ADDR);
+ 	data = rt2880_pci_reg_read(RT2880_PCI_REG_CONFIG_DATA);
+ 
+@@ -119,7 +113,6 @@ static int rt2880_pci_config_write(struct pci_bus *bus, unsigned int devfn,
  	}
  
--	pci_write_config_byte((struct pci_dev *) dev,
--		PCI_CACHE_LINE_SIZE, 0x14);
--	pci_write_config_byte((struct pci_dev *) dev, PCI_LATENCY_TIMER, 0xFF);
--	pci_read_config_word((struct pci_dev *) dev, PCI_COMMAND, &cmd);
--	cmd |= PCI_COMMAND_MASTER | PCI_COMMAND_IO | PCI_COMMAND_MEMORY |
--		PCI_COMMAND_INVALIDATE | PCI_COMMAND_FAST_BACK |
--		PCI_COMMAND_SERR | PCI_COMMAND_WAIT | PCI_COMMAND_PARITY;
--	pci_write_config_word((struct pci_dev *) dev, PCI_COMMAND, cmd);
--	pci_write_config_byte((struct pci_dev *) dev, PCI_INTERRUPT_LINE,
--			      dev->irq);
- 	return irq;
+ 	rt2880_pci_reg_write(data, RT2880_PCI_REG_CONFIG_DATA);
+-	spin_unlock_irqrestore(&rt2880_pci_lock, flags);
+ 
+ 	return PCIBIOS_SUCCESSFUL;
  }
+@@ -151,31 +144,25 @@ static struct pci_controller rt2880_pci_controller = {
  
-@@ -251,6 +238,30 @@ static int rt288x_pci_probe(struct platform_device *pdev)
- 
- int pcibios_plat_dev_init(struct pci_dev *dev)
+ static inline u32 rt2880_pci_read_u32(unsigned long reg)
  {
-+	static bool slot0_init;
-+
-+	/*
-+	 * Nobody seems to initialize slot 0, but this platform requires it, so
-+	 * do it once when some other slot is being enabled. The PCI subsystem
-+	 * should configure other slots properly, so no need to do anything
-+	 * special for those.
-+	 */
-+	if (!slot0_init && dev->bus->number == 0) {
-+		u16 cmd;
-+		u32 bar0;
-+
-+		slot0_init = true;
-+
-+		pci_bus_write_config_dword(dev->bus, 0, PCI_BASE_ADDRESS_0,
-+					   0x08000000);
-+		pci_bus_read_config_dword(dev->bus, 0, PCI_BASE_ADDRESS_0,
-+					  &bar0);
-+
-+		pci_bus_read_config_word(dev->bus, 0, PCI_COMMAND, &cmd);
-+		cmd |= PCI_COMMAND_MASTER | PCI_COMMAND_IO | PCI_COMMAND_MEMORY;
-+		pci_bus_write_config_word(dev->bus, 0, PCI_COMMAND, cmd);
-+	}
-+
- 	return 0;
+-	unsigned long flags;
+ 	u32 address;
+ 	u32 ret;
+ 
+ 	address = rt2880_pci_get_cfgaddr(0, 0, 0, reg);
+ 
+-	spin_lock_irqsave(&rt2880_pci_lock, flags);
+ 	rt2880_pci_reg_write(address, RT2880_PCI_REG_CONFIG_ADDR);
+ 	ret = rt2880_pci_reg_read(RT2880_PCI_REG_CONFIG_DATA);
+-	spin_unlock_irqrestore(&rt2880_pci_lock, flags);
+ 
+ 	return ret;
  }
  
+ static inline void rt2880_pci_write_u32(unsigned long reg, u32 val)
+ {
+-	unsigned long flags;
+ 	u32 address;
+ 
+ 	address = rt2880_pci_get_cfgaddr(0, 0, 0, reg);
+ 
+-	spin_lock_irqsave(&rt2880_pci_lock, flags);
+ 	rt2880_pci_reg_write(address, RT2880_PCI_REG_CONFIG_ADDR);
+ 	rt2880_pci_reg_write(val, RT2880_PCI_REG_CONFIG_DATA);
+-	spin_unlock_irqrestore(&rt2880_pci_lock, flags);
+ }
+ 
+ int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
 -- 
 2.31.1
 
