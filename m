@@ -2,171 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D124035ECEC
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 08:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AD135ED37
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 08:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349069AbhDNGLP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Apr 2021 02:11:15 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:22095 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229840AbhDNGLP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Apr 2021 02:11:15 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4FKsXp6CPzzB09bD;
-        Wed, 14 Apr 2021 08:10:50 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id bgEX-Y99N3ka; Wed, 14 Apr 2021 08:10:50 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4FKsXp513xzB09bB;
-        Wed, 14 Apr 2021 08:10:50 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8F6CC8B7B6;
-        Wed, 14 Apr 2021 08:10:51 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 8t_hMitD6rsU; Wed, 14 Apr 2021 08:10:51 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 62A328B75F;
-        Wed, 14 Apr 2021 08:10:50 +0200 (CEST)
-Subject: Re: [PATCH] mm: Define ARCH_HAS_FIRST_USER_ADDRESS
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     linux-s390@vger.kernel.org, x86@kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        openrisc@lists.librecores.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-References: <1618368899-20311-1-git-send-email-anshuman.khandual@arm.com>
- <f29ba8e2-3071-c963-1e9f-e8c88526ed8d@csgroup.eu>
- <6d24d3cc-b2df-f0d7-f4bf-f505f679c77e@arm.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <ec7bbb30-dbbd-197b-4d65-eb3600fe6413@csgroup.eu>
-Date:   Wed, 14 Apr 2021 08:10:49 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
-MIME-Version: 1.0
-In-Reply-To: <6d24d3cc-b2df-f0d7-f4bf-f505f679c77e@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+        id S1347817AbhDNGZ3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Apr 2021 02:25:29 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:40146 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347804AbhDNGZZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 14 Apr 2021 02:25:25 -0400
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT8u8inZg+9sHAA--.14819S2;
+        Wed, 14 Apr 2021 14:25:01 +0800 (CST)
+From:   Youling Tang <tangyouling@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: pgtable: Add swp pte related macros definition and check
+Date:   Wed, 14 Apr 2021 14:25:00 +0800
+Message-Id: <1618381500-31258-1-git-send-email-tangyouling@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxT8u8inZg+9sHAA--.14819S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJw4kAr1rXFWxAFW5AryfCrg_yoW7JF13pw
+        nxCFZIqrWrAFWxKr4fJF1FqF1fZw4UGr17WFZI9w4DJa4jgas5JFW29r43JryvqFWvv343
+        u3yDtrn8urW3AFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_GF1l42xK
+        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bz1v-UUUUU=
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Add definitions for the bit masks/shifts/sizes, and implement
+MAX_SWAPFILES_CHECK() such that we fail to build if we are
+unable to properly encode the swp type field.
 
+Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+---
+ arch/mips/include/asm/pgtable-32.h | 32 ++++++++++++++++++++------------
+ arch/mips/include/asm/pgtable-64.h | 18 +++++++++++++++---
+ 2 files changed, 35 insertions(+), 15 deletions(-)
 
-Le 14/04/2021 à 07:59, Anshuman Khandual a écrit :
-> 
-> 
-> On 4/14/21 10:52 AM, Christophe Leroy wrote:
->>
->>
->> Le 14/04/2021 à 04:54, Anshuman Khandual a écrit :
->>> Currently most platforms define FIRST_USER_ADDRESS as 0UL duplicating the
->>> same code all over. Instead define a new option ARCH_HAS_FIRST_USER_ADDRESS
->>> for those platforms which would override generic default FIRST_USER_ADDRESS
->>> value 0UL. This makes it much cleaner with reduced code.
->>>
->>> Cc: linux-alpha@vger.kernel.org
->>> Cc: linux-snps-arc@lists.infradead.org
->>> Cc: linux-arm-kernel@lists.infradead.org
->>> Cc: linux-csky@vger.kernel.org
->>> Cc: linux-hexagon@vger.kernel.org
->>> Cc: linux-ia64@vger.kernel.org
->>> Cc: linux-m68k@lists.linux-m68k.org
->>> Cc: linux-mips@vger.kernel.org
->>> Cc: openrisc@lists.librecores.org
->>> Cc: linux-parisc@vger.kernel.org
->>> Cc: linuxppc-dev@lists.ozlabs.org
->>> Cc: linux-riscv@lists.infradead.org
->>> Cc: linux-s390@vger.kernel.org
->>> Cc: linux-sh@vger.kernel.org
->>> Cc: sparclinux@vger.kernel.org
->>> Cc: linux-um@lists.infradead.org
->>> Cc: linux-xtensa@linux-xtensa.org
->>> Cc: x86@kernel.org
->>> Cc: linux-mm@kvack.org
->>> Cc: linux-kernel@vger.kernel.org
->>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>> ---
->>>    arch/alpha/include/asm/pgtable.h             | 1 -
->>>    arch/arc/include/asm/pgtable.h               | 6 ------
->>>    arch/arm/Kconfig                             | 1 +
->>>    arch/arm64/include/asm/pgtable.h             | 2 --
->>>    arch/csky/include/asm/pgtable.h              | 1 -
->>>    arch/hexagon/include/asm/pgtable.h           | 3 ---
->>>    arch/ia64/include/asm/pgtable.h              | 1 -
->>>    arch/m68k/include/asm/pgtable_mm.h           | 1 -
->>>    arch/microblaze/include/asm/pgtable.h        | 2 --
->>>    arch/mips/include/asm/pgtable-32.h           | 1 -
->>>    arch/mips/include/asm/pgtable-64.h           | 1 -
->>>    arch/nds32/Kconfig                           | 1 +
->>>    arch/nios2/include/asm/pgtable.h             | 2 --
->>>    arch/openrisc/include/asm/pgtable.h          | 1 -
->>>    arch/parisc/include/asm/pgtable.h            | 2 --
->>>    arch/powerpc/include/asm/book3s/pgtable.h    | 1 -
->>>    arch/powerpc/include/asm/nohash/32/pgtable.h | 1 -
->>>    arch/powerpc/include/asm/nohash/64/pgtable.h | 2 --
->>>    arch/riscv/include/asm/pgtable.h             | 2 --
->>>    arch/s390/include/asm/pgtable.h              | 2 --
->>>    arch/sh/include/asm/pgtable.h                | 2 --
->>>    arch/sparc/include/asm/pgtable_32.h          | 1 -
->>>    arch/sparc/include/asm/pgtable_64.h          | 3 ---
->>>    arch/um/include/asm/pgtable-2level.h         | 1 -
->>>    arch/um/include/asm/pgtable-3level.h         | 1 -
->>>    arch/x86/include/asm/pgtable_types.h         | 2 --
->>>    arch/xtensa/include/asm/pgtable.h            | 1 -
->>>    include/linux/mm.h                           | 4 ++++
->>>    mm/Kconfig                                   | 4 ++++
->>>    29 files changed, 10 insertions(+), 43 deletions(-)
->>>
->>> diff --git a/include/linux/mm.h b/include/linux/mm.h
->>> index 8ba434287387..47098ccd715e 100644
->>> --- a/include/linux/mm.h
->>> +++ b/include/linux/mm.h
->>> @@ -46,6 +46,10 @@ extern int sysctl_page_lock_unfairness;
->>>      void init_mm_internals(void);
->>>    +#ifndef ARCH_HAS_FIRST_USER_ADDRESS
->>
->> I guess you didn't test it ..... :)
-> 
-> In fact I did :) Though just booted it on arm64 and cross compiled on
-> multiple others platforms.
-> 
->>
->> should be #ifndef CONFIG_ARCH_HAS_FIRST_USER_ADDRESS
-> 
-> Right, meant that instead.
-> 
->>
->>> +#define FIRST_USER_ADDRESS    0UL
->>> +#endif
->>
->> But why do we need a config option at all for that ?
->>
->> Why not just:
->>
->> #ifndef FIRST_USER_ADDRESS
->> #define FIRST_USER_ADDRESS    0UL
->> #endif
-> 
-> This sounds simpler. But just wondering, would not there be any possibility
-> of build problems due to compilation sequence between arch and generic code ?
-> 
+diff --git a/arch/mips/include/asm/pgtable-32.h b/arch/mips/include/asm/pgtable-32.h
+index 6c0532d..3ec12ce 100644
+--- a/arch/mips/include/asm/pgtable-32.h
++++ b/arch/mips/include/asm/pgtable-32.h
+@@ -201,9 +201,8 @@ static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
+ #if defined(CONFIG_CPU_R3K_TLB)
+ 
+ /* Swap entries must have VALID bit cleared. */
+-#define __swp_type(x)			(((x).val >> 10) & 0x1f)
+-#define __swp_offset(x)			((x).val >> 15)
+-#define __swp_entry(type,offset)	((swp_entry_t) { ((type) << 10) | ((offset) << 15) })
++#define __SWP_TYPE_SHIFT	10
++
+ #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) })
+ #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
+ 
+@@ -212,18 +211,16 @@ static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
+ #if defined(CONFIG_XPA)
+ 
+ /* Swap entries must have VALID and GLOBAL bits cleared. */
+-#define __swp_type(x)			(((x).val >> 4) & 0x1f)
+-#define __swp_offset(x)			 ((x).val >> 9)
+-#define __swp_entry(type,offset)	((swp_entry_t)  { ((type) << 4) | ((offset) << 9) })
++#define __SWP_TYPE_SHIFT	4
++
+ #define __pte_to_swp_entry(pte)		((swp_entry_t) { (pte).pte_high })
+ #define __swp_entry_to_pte(x)		((pte_t) { 0, (x).val })
+ 
+ #elif defined(CONFIG_PHYS_ADDR_T_64BIT) && defined(CONFIG_CPU_MIPS32)
+ 
+ /* Swap entries must have VALID and GLOBAL bits cleared. */
+-#define __swp_type(x)			(((x).val >> 2) & 0x1f)
+-#define __swp_offset(x)			 ((x).val >> 7)
+-#define __swp_entry(type, offset)	((swp_entry_t)  { ((type) << 2) | ((offset) << 7) })
++#define __SWP_TYPE_SHIFT	2
++
+ #define __pte_to_swp_entry(pte)		((swp_entry_t) { (pte).pte_high })
+ #define __swp_entry_to_pte(x)		((pte_t) { 0, (x).val })
+ 
+@@ -235,9 +232,8 @@ static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
+  *      _PAGE_GLOBAL at bit 6
+  *      _PAGE_VALID at bit 7
+  */
+-#define __swp_type(x)			(((x).val >> 8) & 0x1f)
+-#define __swp_offset(x)			 ((x).val >> 13)
+-#define __swp_entry(type,offset)	((swp_entry_t)	{ ((type) << 8) | ((offset) << 13) })
++#define __SWP_TYPE_SHIFT	8
++
+ #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) })
+ #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
+ 
+@@ -245,4 +241,16 @@ static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
+ 
+ #endif /* defined(CONFIG_CPU_R3K_TLB) */
+ 
++#define __SWP_TYPE_BITS		5
++#define __SWP_TYPE_MASK		((1UL << __SWP_TYPE_BITS) - 1)
++#define __SWP_OFFSET_SHIFT	(__SWP_TYPE_BITS + __SWP_TYPE_SHIFT)
++
++#define MAX_SWAPFILES_CHECK()	\
++	BUILD_BUG_ON(MAX_SWAPFILES_SHIFT > __SWP_TYPE_BITS)
++
++#define __swp_type(x)			(((x).val >> __SWP_TYPE_SHIFT) & __SWP_TYPE_MASK)
++#define __swp_offset(x)			((x).val >> __SWP_OFFSET_SHIFT)
++#define __swp_entry(type,offset)	((swp_entry_t) { ((type) << __SWP_TYPE_SHIFT) | \
++						((offset) << __SWP_OFFSET_SHIFT) })
++
+ #endif /* _ASM_PGTABLE_32_H */
+diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
+index 1e7d6ce..d064444 100644
+--- a/arch/mips/include/asm/pgtable-64.h
++++ b/arch/mips/include/asm/pgtable-64.h
+@@ -330,15 +330,27 @@ extern void pgd_init(unsigned long page);
+ extern void pud_init(unsigned long page, unsigned long pagetable);
+ extern void pmd_init(unsigned long page, unsigned long pagetable);
+ 
++#define __SWP_TYPE_SHIFT	16
++#define __SWP_TYPE_BITS		8
++#define __SWP_TYPE_MASK		((1UL << __SWP_TYPE_BITS) - 1)
++#define __SWP_OFFSET_SHIFT	(__SWP_TYPE_BITS + __SWP_TYPE_SHIFT)
++
++#define MAX_SWAPFILES_CHECK()	\
++	BUILD_BUG_ON(MAX_SWAPFILES_SHIFT > __SWP_TYPE_BITS)
++
+ /*
+  * Non-present pages:  high 40 bits are offset, next 8 bits type,
+  * low 16 bits zero.
+  */
+ static inline pte_t mk_swap_pte(unsigned long type, unsigned long offset)
+-{ pte_t pte; pte_val(pte) = (type << 16) | (offset << 24); return pte; }
++{
++	pte_t pte;
++	pte_val(pte) = (type << __SWP_TYPE_SHIFT) | (offset << __SWP_OFFSET_SHIFT);
++	return pte;
++}
+ 
+-#define __swp_type(x)		(((x).val >> 16) & 0xff)
+-#define __swp_offset(x)		((x).val >> 24)
++#define __swp_type(x)		(((x).val >> __SWP_TYPE_SHIFT) & __SWP_TYPE_MASK)
++#define __swp_offset(x)		((x).val >> __SWP_OFFSET_SHIFT)
+ #define __swp_entry(type, offset) ((swp_entry_t) { pte_val(mk_swap_pte((type), (offset))) })
+ #define __pte_to_swp_entry(pte) ((swp_entry_t) { pte_val(pte) })
+ #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
+-- 
+2.1.0
 
-For sure it has to be addresses carefully, but there are already a lot of stuff like that around 
-pgtables.h
-
-For instance, pte_offset_kernel() has a generic definition in linux/pgtables.h based on whether it 
-is already defined or not.
-
-Taking into account that FIRST_USER_ADDRESS is today in the architectures's asm/pgtables.h, I think 
-putting the fallback definition in linux/pgtable.h would do the trick.
