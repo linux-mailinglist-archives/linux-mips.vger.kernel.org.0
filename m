@@ -2,203 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD8B35FB63
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 21:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2740035FD03
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 23:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239060AbhDNTN7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Apr 2021 15:13:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46654 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234819AbhDNTN6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Apr 2021 15:13:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618427617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F6FTiB8UzDW4wKvTNKebl00UCwFSLpS/fkluHFZvJPI=;
-        b=S9mJL7hEjAMWTKJVlym4mKoamGPKsop/nXkDjMi5P0Bx+V08yd6d78Idatyqm4Y4OHA3Dx
-        zMJL548m96avqPmKqRP0DYUyq8qYJPqOOp5z3nOtqQrjG1OfLHPYY4Lk9AMlQWcpkI8Njd
-        RaXHyFxOvDK9gvhzTKQdM2F/R6/l2ZI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-390-dEgJCfFYO6qLSVsI6D4wlQ-1; Wed, 14 Apr 2021 15:13:32 -0400
-X-MC-Unique: dEgJCfFYO6qLSVsI6D4wlQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F38BC6D241;
-        Wed, 14 Apr 2021 19:13:30 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 666961000324;
-        Wed, 14 Apr 2021 19:13:23 +0000 (UTC)
-Date:   Wed, 14 Apr 2021 21:13:22 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, brouer@redhat.com
-Subject: Re: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
-Message-ID: <20210414211322.3799afd4@carbon>
-In-Reply-To: <20210414115052.GS2531743@casper.infradead.org>
-References: <20210410205246.507048-1-willy@infradead.org>
-        <20210410205246.507048-2-willy@infradead.org>
-        <20210411114307.5087f958@carbon>
-        <20210411103318.GC2531743@casper.infradead.org>
-        <20210412011532.GG2531743@casper.infradead.org>
-        <20210414101044.19da09df@carbon>
-        <20210414115052.GS2531743@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        id S231233AbhDNVLt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Apr 2021 17:11:49 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:38426 "EHLO
+        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229743AbhDNVL0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Apr 2021 17:11:26 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        by mail.monkeyblade.net (Postfix) with ESMTPSA id 74643500A2425;
+        Wed, 14 Apr 2021 14:11:01 -0700 (PDT)
+Date:   Wed, 14 Apr 2021 14:10:58 -0700 (PDT)
+Message-Id: <20210414.141058.340492716482572451.davem@davemloft.net>
+To:     tsbogend@alpha.franken.de
+Cc:     kuba@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 0/9] net: Korina improvements
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20210414152946.12517-1-tsbogend@alpha.franken.de>
+References: <20210414152946.12517-1-tsbogend@alpha.franken.de>
+X-Mailer: Mew version 6.8 on Emacs 27.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Wed, 14 Apr 2021 14:11:01 -0700 (PDT)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 14 Apr 2021 12:50:52 +0100
-Matthew Wilcox <willy@infradead.org> wrote:
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Date: Wed, 14 Apr 2021 17:29:36 +0200
 
-> > That said, I think we need to have a quicker fix for the immediate
-> > issue with 64-bit bit dma_addr on 32-bit arch and the misalignment hole
-> > it leaves[3] in struct page.  In[3] you mention ppc32, does it only
-> > happens on certain 32-bit archs? =20
->=20
-> AFAICT it happens on mips32, ppc32, arm32 and arc.  It doesn't happen
-> on x86-32 because dma_addr_t is 32-bit aligned.
+> While converting Mikrotik RB532 support to use device tree I stumbled
+> over the korina ethernet driver, which used way too many MIPS specific
+> hacks. This series cleans this all up and adds support for device tree.
+> 
+> Changes in v2:
+>   - added device tree support to get rid of idt_cpu_freq
+>   - fixed compile test on 64bit archs
+>   - fixed descriptor current address handling by storing/using mapped
+>     dma addresses (dma controller modifies current address)
 
-(If others want to reproduce).  First I could not reproduce on ARM32.
-Then I found out that enabling CONFIG_XEN on ARCH=3Darm was needed to
-cause the issue by enabling CONFIG_ARCH_DMA_ADDR_T_64BIT.
-
-Details below signature.
---=20
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
-
-=46rom file: arch/arm/Kconfig
-
-config XEN
-	bool "Xen guest support on ARM"
-	depends on ARM && AEABI && OF
-	depends on CPU_V7 && !CPU_V6
-	depends on !GENERIC_ATOMIC64
-	depends on MMU
-	select ARCH_DMA_ADDR_T_64BIT
-	select ARM_PSCI
-	select SWIOTLB
-	select SWIOTLB_XEN
-	select PARAVIRT
-	help
-	  Say Y if you want to run Linux in a Virtual Machine on Xen on ARM.
-
-My make compile command:
-
- export VERSION=3Dgcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf/
- export CROSS_COMPILE=3D"/home/${USER}/cross-compilers/${VERSION}/bin/arm-n=
-one-linux-gnueabihf-"
- make -j8 ARCH=3Darm CROSS_COMPILE=3D$CROSS_COMPILE
-
-Pahole output:
- $ pahole -C page mm/page_alloc.o
-
- struct page {
-        long unsigned int          flags;                /*     0     4 */
-
-        /* XXX 4 bytes hole, try to pack */
-
-        union {
-                struct {
-                        struct list_head lru;            /*     8     8 */
-                        struct address_space * mapping;  /*    16     4 */
-                        long unsigned int index;         /*    20     4 */
-                        long unsigned int private;       /*    24     4 */
-                };                                       /*     8    20 */
-                struct {
-                        dma_addr_t dma_addr;             /*     8     8 */
-                };                                       /*     8     8 */
-                struct {
-                        union {
-                                struct list_head slab_list; /*     8     8 =
-*/
-                                struct {
-                                        struct page * next; /*     8     4 =
-*/
-                                        short int pages; /*    12     2 */
-                                        short int pobjects; /*    14     2 =
-*/
-                                };                       /*     8     8 */
-                        };                               /*     8     8 */
-                        struct kmem_cache * slab_cache;  /*    16     4 */
-                        void *     freelist;             /*    20     4 */
-                        union {
-                                void * s_mem;            /*    24     4 */
-                                long unsigned int counters; /*    24     4 =
-*/
-                                struct {
-                                        unsigned int inuse:16; /*    24: 0 =
- 4 */
-                                        unsigned int objects:15; /*    24:1=
-6  4 */
-                                        unsigned int frozen:1; /*    24:31 =
- 4 */
-                                };                       /*    24     4 */
-                        };                               /*    24     4 */
-                };                                       /*     8    20 */
-                struct {
-                        long unsigned int compound_head; /*     8     4 */
-                        unsigned char compound_dtor;     /*    12     1 */
-                        unsigned char compound_order;    /*    13     1 */
-
-                        /* XXX 2 bytes hole, try to pack */
-
-                        atomic_t   compound_mapcount;    /*    16     4 */
-                        unsigned int compound_nr;        /*    20     4 */
-                };                                       /*     8    16 */
-                struct {
-                        long unsigned int _compound_pad_1; /*     8     4 */
-                        atomic_t   hpage_pinned_refcount; /*    12     4 */
-                        struct list_head deferred_list;  /*    16     8 */
-                };                                       /*     8    16 */
-                struct {
-                        long unsigned int _pt_pad_1;     /*     8     4 */
-                        pgtable_t  pmd_huge_pte;         /*    12     4 */
-                        long unsigned int _pt_pad_2;     /*    16     4 */
-                        union {
-                                struct mm_struct * pt_mm; /*    20     4 */
-                                atomic_t pt_frag_refcount; /*    20     4 */
-                        };                               /*    20     4 */
-                        spinlock_t ptl;                  /*    24     4 */
-                };                                       /*     8    20 */
-                struct {
-                        struct dev_pagemap * pgmap;      /*     8     4 */
-                        void *     zone_device_data;     /*    12     4 */
-                };                                       /*     8     8 */
-                struct callback_head callback_head __attribute__((__aligned=
-__(4))); /*     8     8 */
-        } __attribute__((__aligned__(8)));               /*     8    24 */
-        union {
-                atomic_t           _mapcount;            /*    32     4 */
-                unsigned int       page_type;            /*    32     4 */
-                unsigned int       active;               /*    32     4 */
-                int                units;                /*    32     4 */
-        };                                               /*    32     4 */
-        atomic_t                   _refcount;            /*    36     4 */
-
-        /* size: 40, cachelines: 1, members: 4 */
-        /* sum members: 36, holes: 1, sum holes: 4 */
-        /* forced alignments: 1, forced holes: 1, sum forced holes: 4 */
-        /* last cacheline: 40 bytes */
-} __attribute__((__aligned__(8)));
-
-
-
+The last patch causes compile failures.  Incorrect number of
+arguments to of_get_mac_address(), please fix this and resubmit,
+thanks.
