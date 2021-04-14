@@ -2,88 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E6635EF77
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 10:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B4D35F2DC
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 13:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349952AbhDNIXK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Apr 2021 04:23:10 -0400
-Received: from www.zeus03.de ([194.117.254.33]:47552 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348780AbhDNIXK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Apr 2021 04:23:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=2iL4tCIneCpn4SmM0M3Refp2Ot9p
-        z3eawuOR7oYf+eI=; b=TLEFk81N3oowj3OzJV2VJ5fURdhQSJB+AJORkw84d5Jq
-        elzQdi6pGg+S3zPzVdugiGpV33MEIj0ka2MB41ekcAwtr3X3+II7IsNhl+NxSf4V
-        8lLMIQryavEECIUEPBUnXmRtqkqeRa67c/byd66j0fEQWiCH+Cza5nhf/QGpePE=
-Received: (qmail 1266527 invoked from network); 14 Apr 2021 10:22:47 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Apr 2021 10:22:47 +0200
-X-UD-Smtp-Session: l3s3148p1@v4+kc+q/2rkgARa4RUbaAViwQhp+rF7q
-Date:   Wed, 14 Apr 2021 10:22:46 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Sergey Shtylyov <s.shtylyov@omprussia.ru>
-Cc:     linux-i2c@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/6] Stop calling devm_request_irq() with invalid IRQs
- in the I2C bus drivers
-Message-ID: <20210414082246.GK2180@ninjato>
-References: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
+        id S1343535AbhDNLwC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Apr 2021 07:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233595AbhDNLwC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Apr 2021 07:52:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02765C061574;
+        Wed, 14 Apr 2021 04:51:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6j2YFPpldChGlEhTkgAYG/8AUFiAqXWlLNjztkCHHPQ=; b=J5BS1O4q7ajQjzXd/LDJSC/n5W
+        nLaatbwhpGPw27uZHO96g6+/tyMJhvL6qzIDuTqVYDpLZWsiE1eH4gs+RGnwjwtZofj11rAp/QNXo
+        5zG9CPBgECBICOpGLmaKDiNFg88n/0HpOy3h47nUCcA+napEcZ6cGJeegmGXvIMAF1IlI0QKv3yBn
+        t6pmOrCaFDoZvjKu2kkCNcN34EEDw6FAeKgqXUk9Y5TV1rcrTtUeqHGfKDG51wcCgKv9JHy4zWIOT
+        ccnhwj9yHyFetqx/J/jBsogxkFb+x3kADp7eIqy6wSJt5ccTYHYk9f87uwXMNh3c7s66KKsbIgnZx
+        RoTlxVDw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lWe2m-0073tL-Rj; Wed, 14 Apr 2021 11:51:01 +0000
+Date:   Wed, 14 Apr 2021 12:50:52 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
+Message-ID: <20210414115052.GS2531743@casper.infradead.org>
+References: <20210410205246.507048-1-willy@infradead.org>
+ <20210410205246.507048-2-willy@infradead.org>
+ <20210411114307.5087f958@carbon>
+ <20210411103318.GC2531743@casper.infradead.org>
+ <20210412011532.GG2531743@casper.infradead.org>
+ <20210414101044.19da09df@carbon>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="asNXdz5DenlsLVVk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
+In-Reply-To: <20210414101044.19da09df@carbon>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, Apr 14, 2021 at 10:10:44AM +0200, Jesper Dangaard Brouer wrote:
+> Yes, indeed! - And very frustrating.  It's keeping me up at night.
+> I'm dreaming about 32 vs 64 bit data structures. My fitbit stats tell
+> me that I don't sleep well with these kind of dreams ;-)
 
---asNXdz5DenlsLVVk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Then you're going to love this ... even with the latest patch, there's
+still a problem.  Because dma_addr_t is still 64-bit aligned _as a type_,
+that forces the union to be 64-bit aligned (as we already knew and worked
+around), but what I'd forgotten is that forces the entirety of struct
+page to be 64-bit aligned.  Which means ...
 
-On Sat, Apr 10, 2021 at 11:11:59PM +0300, Sergey Shtylyov wrote:
-> Here are 6 patches against the 'master' branch of Martin Petersen's 'scsi=
-=2Egit' repo.
-> The affected drivers call platform_get_irq() but largely ignore its resul=
-t -- they
-> blithely pass the negative error codes to devm_request_irq() which expect=
-s *unsinged*
-> IRQ #s. Stop doing that by checking what exactly platform_get_irq() retur=
-ns.
->=20
-> [1/6] i2c: cadence: add IRQ check
-> [2/6] i2c: emev2: add IRQ check
-> [3/6] i2c: jz4780: add IRQ check
-> [4/6] i2c: mlxbf: add IRQ check
-> [5/6] i2c: rcar: add IRQ check
-> [6/6] i2c: sh7760: add IRQ check
+        /* size: 40, cachelines: 1, members: 4 */
+        /* padding: 4 */
+        /* forced alignments: 1 */
+        /* last cacheline: 40 bytes */
+} __attribute__((__aligned__(8)));
 
-Applied to for-next, thanks!
+.. that we still have a hole!  It's just moved from being at offset 4
+to being at offset 36.
 
+> That said, I think we need to have a quicker fix for the immediate
+> issue with 64-bit bit dma_addr on 32-bit arch and the misalignment hole
+> it leaves[3] in struct page.  In[3] you mention ppc32, does it only
+> happens on certain 32-bit archs?
 
---asNXdz5DenlsLVVk
-Content-Type: application/pgp-signature; name="signature.asc"
+AFAICT it happens on mips32, ppc32, arm32 and arc.  It doesn't happen
+on x86-32 because dma_addr_t is 32-bit aligned.
 
------BEGIN PGP SIGNATURE-----
+Doing this fixes it:
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2plIACgkQFA3kzBSg
-Kbboag//a5PtzuJjX3Zshqcl9BmZ7YilNzlFuZcyb0Blgkmt4cvUhpQksKHDYYqj
-8AbqAsUUxB7wfMuKZ6GGbdhgJ7ZsT/ryqQX8PHhID1Ij+bnjmogXblyQFt2eg2YV
-yNjE9PStiYJaBfsdsmTcOuflqZTwGgAYFAsEVemM9Ynec9IWciYkLbfzrbPIu4Zp
-bKYIMX+frmfN7xKRSTCdZhyOqjHEH3j1a2Gtv7wGkjWT/2jyZ4jBaBs9n/+NVffI
-WvMgKJW1eJy2hN8Z/LM3B9lddAjJRmlOP/O4XY6rL4kN1p58eS0vbIUJr3Dwdzie
-xP8+7h56wjGAH/Cf+52Rro71Y6E+UjlOAPsH4EMSCzD6Aec7ONl3ABAMuxIzTWYV
-Mjj/u8ofo91ZPxWeY0RM7tZNMYOh2R61mYC9d59U+RaqUR4nBrodL1Dtytb7DZ1D
-5VYLRXvWuvkYuF3QXFfNaRvP1nSOCvam4TZJpKiEhIW4LTcaAyLtOWGeI6Hi64FF
-teNWxwQMNPoy8jkS0V7NPJ2omfxXFzAvrljwTesDZ3dzoscNMzzc1fUjuw780jRD
-lm91j74IAuN+jMPqrrxf+Q8nj7wZBUFG39+Q8G9owfFvoDn7eqUCfv4xCogMlAf3
-SbyRbrs/lkRGisTck85c72/QlhsZImg5scDXymqhM5AahRLTpyo=
-=Q2Aq
------END PGP SIGNATURE-----
++++ b/include/linux/types.h
+@@ -140,7 +140,7 @@ typedef u64 blkcnt_t;
+  * so they don't care about the size of the actual bus addresses.
+  */
+ #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+-typedef u64 dma_addr_t;
++typedef u64 __attribute__((aligned(sizeof(void *)))) dma_addr_t;
+ #else
+ typedef u32 dma_addr_t;
+ #endif
 
---asNXdz5DenlsLVVk--
+> I'm seriously considering removing page_pool's support for doing/keeping
+> DMA-mappings on 32-bit arch's.  AFAIK only a single driver use this.
+
+... if you're going to do that, then we don't need to do this.
