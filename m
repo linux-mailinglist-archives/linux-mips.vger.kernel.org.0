@@ -2,159 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AD135ED37
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 08:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4069C35ED6E
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 08:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347817AbhDNGZ3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Apr 2021 02:25:29 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:40146 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1347804AbhDNGZZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Apr 2021 02:25:25 -0400
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT8u8inZg+9sHAA--.14819S2;
-        Wed, 14 Apr 2021 14:25:01 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: pgtable: Add swp pte related macros definition and check
-Date:   Wed, 14 Apr 2021 14:25:00 +0800
-Message-Id: <1618381500-31258-1-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9DxT8u8inZg+9sHAA--.14819S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJw4kAr1rXFWxAFW5AryfCrg_yoW7JF13pw
-        nxCFZIqrWrAFWxKr4fJF1FqF1fZw4UGr17WFZI9w4DJa4jgas5JFW29r43JryvqFWvv343
-        u3yDtrn8urW3AFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_GF1l42xK
-        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bz1v-UUUUU=
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+        id S232626AbhDNGpr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Apr 2021 02:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229899AbhDNGpq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Apr 2021 02:45:46 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DA2C061574;
+        Tue, 13 Apr 2021 23:45:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FKtJY5rm7z9sVb;
+        Wed, 14 Apr 2021 16:45:17 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1618382721;
+        bh=/jodwSXgSQIoA9PKAVNuVIZztq5p2I1zYdAcnFOt/QI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nviLuOh6vv6t0otwNWX8zUg4K7TpYLIfF2mKXNz4miCmYGBKYPii8JbbMGE50K389
+         /7gLpYYMyg8jf0tZMsL4WFsIoWGRC+VevBVJ7FoFLE9BeL9xdYWjBWs1jxxkf5wB9U
+         BdD2uV49k4hNwvFJ8ckGLENvxVWo34hc9mhVkNTtvkyCnDIE2hcoqGNJ3Z1CpQHuFR
+         WkIWVSg+uhV3LzZL47CHSmq/bnSPHp3RnaSFyarITSDS6Iey9YXTCG9e9F1PY5tY61
+         xiBKcf/NoOetBTlhz5BzDAFqr0YjKsYU6bE43A7pK++5PbMej109F3sMRxyE9m/ybS
+         Mv0hOdc6mGxFQ==
+Date:   Wed, 14 Apr 2021 16:45:15 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 1/5] uapi: remove the unused HAVE_ARCH_STRUCT_FLOCK64
+ define
+Message-ID: <20210414164515.7358054a@canb.auug.org.au>
+In-Reply-To: <CAK8P3a2MSJarPMfJ8RrSKDMXte3KQec=+GQ-LzV6HB7-Nm1FcQ@mail.gmail.com>
+References: <20210412085545.2595431-1-hch@lst.de>
+        <20210412085545.2595431-2-hch@lst.de>
+        <CAK8P3a2MSJarPMfJ8RrSKDMXte3KQec=+GQ-LzV6HB7-Nm1FcQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/OE1o8UymrAeVhdVEl6xjBsl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add definitions for the bit masks/shifts/sizes, and implement
-MAX_SWAPFILES_CHECK() such that we fail to build if we are
-unable to properly encode the swp type field.
+--Sig_/OE1o8UymrAeVhdVEl6xjBsl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
----
- arch/mips/include/asm/pgtable-32.h | 32 ++++++++++++++++++++------------
- arch/mips/include/asm/pgtable-64.h | 18 +++++++++++++++---
- 2 files changed, 35 insertions(+), 15 deletions(-)
+Hi Arnd,
 
-diff --git a/arch/mips/include/asm/pgtable-32.h b/arch/mips/include/asm/pgtable-32.h
-index 6c0532d..3ec12ce 100644
---- a/arch/mips/include/asm/pgtable-32.h
-+++ b/arch/mips/include/asm/pgtable-32.h
-@@ -201,9 +201,8 @@ static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
- #if defined(CONFIG_CPU_R3K_TLB)
- 
- /* Swap entries must have VALID bit cleared. */
--#define __swp_type(x)			(((x).val >> 10) & 0x1f)
--#define __swp_offset(x)			((x).val >> 15)
--#define __swp_entry(type,offset)	((swp_entry_t) { ((type) << 10) | ((offset) << 15) })
-+#define __SWP_TYPE_SHIFT	10
-+
- #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) })
- #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
- 
-@@ -212,18 +211,16 @@ static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
- #if defined(CONFIG_XPA)
- 
- /* Swap entries must have VALID and GLOBAL bits cleared. */
--#define __swp_type(x)			(((x).val >> 4) & 0x1f)
--#define __swp_offset(x)			 ((x).val >> 9)
--#define __swp_entry(type,offset)	((swp_entry_t)  { ((type) << 4) | ((offset) << 9) })
-+#define __SWP_TYPE_SHIFT	4
-+
- #define __pte_to_swp_entry(pte)		((swp_entry_t) { (pte).pte_high })
- #define __swp_entry_to_pte(x)		((pte_t) { 0, (x).val })
- 
- #elif defined(CONFIG_PHYS_ADDR_T_64BIT) && defined(CONFIG_CPU_MIPS32)
- 
- /* Swap entries must have VALID and GLOBAL bits cleared. */
--#define __swp_type(x)			(((x).val >> 2) & 0x1f)
--#define __swp_offset(x)			 ((x).val >> 7)
--#define __swp_entry(type, offset)	((swp_entry_t)  { ((type) << 2) | ((offset) << 7) })
-+#define __SWP_TYPE_SHIFT	2
-+
- #define __pte_to_swp_entry(pte)		((swp_entry_t) { (pte).pte_high })
- #define __swp_entry_to_pte(x)		((pte_t) { 0, (x).val })
- 
-@@ -235,9 +232,8 @@ static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
-  *      _PAGE_GLOBAL at bit 6
-  *      _PAGE_VALID at bit 7
-  */
--#define __swp_type(x)			(((x).val >> 8) & 0x1f)
--#define __swp_offset(x)			 ((x).val >> 13)
--#define __swp_entry(type,offset)	((swp_entry_t)	{ ((type) << 8) | ((offset) << 13) })
-+#define __SWP_TYPE_SHIFT	8
-+
- #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) })
- #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
- 
-@@ -245,4 +241,16 @@ static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
- 
- #endif /* defined(CONFIG_CPU_R3K_TLB) */
- 
-+#define __SWP_TYPE_BITS		5
-+#define __SWP_TYPE_MASK		((1UL << __SWP_TYPE_BITS) - 1)
-+#define __SWP_OFFSET_SHIFT	(__SWP_TYPE_BITS + __SWP_TYPE_SHIFT)
-+
-+#define MAX_SWAPFILES_CHECK()	\
-+	BUILD_BUG_ON(MAX_SWAPFILES_SHIFT > __SWP_TYPE_BITS)
-+
-+#define __swp_type(x)			(((x).val >> __SWP_TYPE_SHIFT) & __SWP_TYPE_MASK)
-+#define __swp_offset(x)			((x).val >> __SWP_OFFSET_SHIFT)
-+#define __swp_entry(type,offset)	((swp_entry_t) { ((type) << __SWP_TYPE_SHIFT) | \
-+						((offset) << __SWP_OFFSET_SHIFT) })
-+
- #endif /* _ASM_PGTABLE_32_H */
-diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-index 1e7d6ce..d064444 100644
---- a/arch/mips/include/asm/pgtable-64.h
-+++ b/arch/mips/include/asm/pgtable-64.h
-@@ -330,15 +330,27 @@ extern void pgd_init(unsigned long page);
- extern void pud_init(unsigned long page, unsigned long pagetable);
- extern void pmd_init(unsigned long page, unsigned long pagetable);
- 
-+#define __SWP_TYPE_SHIFT	16
-+#define __SWP_TYPE_BITS		8
-+#define __SWP_TYPE_MASK		((1UL << __SWP_TYPE_BITS) - 1)
-+#define __SWP_OFFSET_SHIFT	(__SWP_TYPE_BITS + __SWP_TYPE_SHIFT)
-+
-+#define MAX_SWAPFILES_CHECK()	\
-+	BUILD_BUG_ON(MAX_SWAPFILES_SHIFT > __SWP_TYPE_BITS)
-+
- /*
-  * Non-present pages:  high 40 bits are offset, next 8 bits type,
-  * low 16 bits zero.
-  */
- static inline pte_t mk_swap_pte(unsigned long type, unsigned long offset)
--{ pte_t pte; pte_val(pte) = (type << 16) | (offset << 24); return pte; }
-+{
-+	pte_t pte;
-+	pte_val(pte) = (type << __SWP_TYPE_SHIFT) | (offset << __SWP_OFFSET_SHIFT);
-+	return pte;
-+}
- 
--#define __swp_type(x)		(((x).val >> 16) & 0xff)
--#define __swp_offset(x)		((x).val >> 24)
-+#define __swp_type(x)		(((x).val >> __SWP_TYPE_SHIFT) & __SWP_TYPE_MASK)
-+#define __swp_offset(x)		((x).val >> __SWP_OFFSET_SHIFT)
- #define __swp_entry(type, offset) ((swp_entry_t) { pte_val(mk_swap_pte((type), (offset))) })
- #define __pte_to_swp_entry(pte) ((swp_entry_t) { pte_val(pte) })
- #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
--- 
-2.1.0
+On Mon, 12 Apr 2021 11:55:41 +0200 Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Apr 12, 2021 at 10:55 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > Signed-off-by: Christoph Hellwig <hch@lst.de> =20
+>=20
+> The patch looks good, but I'd like to see a description for each one.
+> How about:
+>=20
+> | The check was added when Stephen Rothwell created the file, but
+> | no architecture ever defined it.
 
+Actually it was used by the xtensa architecture until Dec, 2006.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/OE1o8UymrAeVhdVEl6xjBsl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB2j3sACgkQAVBC80lX
+0Gx4pggAkNW0y0/RLSwNvx8cwugIMwm76PePVHws/DSpK21w82ztk8XPzmrlHYlo
+MP4xnpeval236Udlgam+Jc+7defed018uxwQyX1zKt+a0seZO9HrNSBZk8FwT1ck
+rq+/vwVxpRmpXxh4wrHNZ9kEEB8siALYt1IhhjOMuPDEFZQhhRv+1GM11ZEb4TNm
+QXiVEOPdln45S2tKu+icyaVERYFY/6j5minprLhTWeY7Rg/+eoZwC6KtkvXpRqfl
+WsUS0axrNP124+5bOizsZyTaCeeLFwTQR18nvDu703iKPre8y4K3CEiM3YQddALr
+8OeaCYAcDp1LKDXR1UZZmal4VJxxdg==
+=76mG
+-----END PGP SIGNATURE-----
+
+--Sig_/OE1o8UymrAeVhdVEl6xjBsl--
