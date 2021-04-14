@@ -2,167 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DA035F356
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 14:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D0A35F561
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 15:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbhDNMSE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Apr 2021 08:18:04 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:48677 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231849AbhDNMSD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Apr 2021 08:18:03 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 10A6A5C019A;
-        Wed, 14 Apr 2021 08:17:42 -0400 (EDT)
-Received: from imap1 ([10.202.2.51])
-  by compute6.internal (MEProxy); Wed, 14 Apr 2021 08:17:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm1; bh=Ss1GKS6i3LrHc66hcrihc6wkJR56nSZ
-        Wv1oaboPv68A=; b=ENvQBfpsOmtjAQoSxPOxKhMjpNpEgHhJbbPCYbYhZKl0Z6F
-        tlzSp0kHVoGoLk7Gyy/P1ALOAL47Ws6AGfLINMgcMTw/bNMW5ty2CxFtq1XsBT0L
-        5Utc37boQ7RSSNnN9ovAfGV64N4b0uvOYzePLFT+s8LIbz4fk+HqrvPDLPsZUT9h
-        oklrbXcysfEynmLaLoBwTo+51+An9k6E+Pdmd1e7BsDy6sWOMvE2TvB3BJLEdVYi
-        57/em/TdvjVAmWpi0q35IeEL0Y3tYmXejlb2pPY8SJPmogNV6jYNWVXnEBjGbxqo
-        inXnye78BfzknXllNokN/EP0w0FPuCdA++xj9zw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Ss1GKS
-        6i3LrHc66hcrihc6wkJR56nSZWv1oaboPv68A=; b=QgUh3mrnwK8n0pOB6cIay4
-        x5SXl3qADIcpM+0hjclSWp0x4pNWEydRzCDxVC3dUCfWkzWypdZ9JpoM65F3liB8
-        Ogkyk5Ie4n7IID6U8iMpjNI9TsLkhTWl+t7YqqwLED6dQIyD4My18McjuGkiXHiV
-        3JinDPBwONfnY4p55LA9uKMoKnmIZO1D0ZjhS959G2YxlOKLFW/ivYElyRhY6dsh
-        YvUrvUT8IIdDcVIcoKSALG22O3u0PlH0M3YGocf5/e3lNjJuO0ePjn6yaOS0KDx9
-        8aNFwrdxwnA5TPBRFlPb7CyfrVXlnb75DsPudO5VAMLASiddD1j9IeSrAF4sXMPw
-        ==
-X-ME-Sender: <xms:ZN12YAGBSNqKyFNmNLDSmTGbIAJdr2N6DE3XDDGb3H5vE4_Lw0yPGQ>
-    <xme:ZN12YJXvpyclK8-T-_F94hvFH6nHEaW0Zf9qcseg92ZiATAWSLKWCNrjc1WAx7gXm
-    r34S-gGykZg2U3iSuo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudeluddghedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdflihgr
-    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeekleehtefhhefftddtleeiveefieehueduieefueegueei
-    leeitdeujeehheehudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:ZN12YKI4fc6UJiDzvioXjyOtT8xgU9mrQy_QTz2qC5yNChN7drWxag>
-    <xmx:ZN12YCEVbmI9sbdjnAR1L1SnHUTpJ4156oJ31SAo4Qo_d709o9QbKQ>
-    <xmx:ZN12YGVpiiTdkaxr9nuVO7yyRvn9dhiUsvIyAoAabDRhCIysLuIIgw>
-    <xmx:Zt12YDhesWDTOEFOh2uXVtoj3ZvLP3i2BlZaIG7J_nniVryACDku3g>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 344D91300062; Wed, 14 Apr 2021 08:17:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-273-g8500d2492d-fm-20210323.002-g8500d249
-Mime-Version: 1.0
-Message-Id: <3947384b-37dd-436a-8cda-2391e49a94d2@www.fastmail.com>
-In-Reply-To: <20210414012622.23610-1-zhangqing@loongson.cn>
-References: <20210414012622.23610-1-zhangqing@loongson.cn>
-Date:   Wed, 14 Apr 2021 20:17:20 +0800
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Qing Zhang" <zhangqing@loongson.cn>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Loongson64: Add Loongson-2K1000 reset support
-Content-Type: text/plain
+        id S1349085AbhDNNrd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Apr 2021 09:47:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53270 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348684AbhDNNrc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 14 Apr 2021 09:47:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B76E9611EE;
+        Wed, 14 Apr 2021 13:47:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618408031;
+        bh=mfIzprwlfl8gA6WjqilLB/e5g2WRcCToRYhdfla3psQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gnjzTAVr5QiF6z5cl0OWBs8b1nJGNVh5hQoZyKyniiqXH7CvDMhwEYxVYHZ4XMxvz
+         cEVAQiqshzmxWjZOzmTpol8Mw88odn+srobvl4NJEW1+BXmT1+Bs0VQaGVdhO0eSgu
+         jzHGTSApWmpe8LNawSCFIT9of9XAuj4vUwe+feN1KeIBc1XwmOsWlY2/fRrjY2tqsC
+         gzbCMrdj+F5IwkaLkCHlDH/i3U9eqeyUKGzLDs0UO2eeyEku03W9+HFSt8jSTiDzLM
+         f+072gX0geggdNLEjiJJaxkbIZSD9GtyLn7mKhrlLOOd+oVZRkL48T5GVTx0M7viZM
+         fm9xjfsBLbA7Q==
+Date:   Wed, 14 Apr 2021 16:46:59 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Tobias Wolf <dev-NTEO@vplace.de>,
+        Marcin Nowakowski <marcin.nowakowski@mips.com>,
+        linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: fix memory reservation for non-usermem setups
+Message-ID: <YHbyU3n+My/0+3g7@kernel.org>
+References: <20210307194030.8007-1-ilya.lipnitskiy@gmail.com>
+ <20210312151934.GA4209@alpha.franken.de>
+ <CALCv0x1AEZanNsVcNuUrbHuLyWYNegEVuye9Gso-Ou9xX8JEAg@mail.gmail.com>
+ <YFGip16ObFp/vOZS@kernel.org>
+ <CALCv0x3sGY8t_NCch7qa6KijoxwvFJJYQEZB5kOMuK35C=c3og@mail.gmail.com>
+ <20210406131043.GG9505@alpha.franken.de>
+ <CALCv0x3rZXK2KYM+twkd_3v2bzqrVAXaA2NnaP8AJh76NeME8w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCv0x3rZXK2KYM+twkd_3v2bzqrVAXaA2NnaP8AJh76NeME8w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On Wed, Apr 14, 2021, at 9:26 AM, Qing Zhang wrote:
-> Add power management register operations to support reboot and poweroff.
+On Mon, Apr 12, 2021 at 11:45:45PM -0700, Ilya Lipnitskiy wrote:
+> Hi Thomas,
 > 
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-
-No that's not what we intended to do.
-Please add a devicetree node for pm block.
-
-Thanks
-
-
-
-> ---
->  .../include/asm/mach-loongson64/loongson.h    |  8 ++++++
->  arch/mips/loongson64/reset.c                  | 28 ++++++++++++++++---
->  2 files changed, 32 insertions(+), 4 deletions(-)
+> On Tue, Apr 6, 2021 at 6:18 AM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > On Sat, Apr 03, 2021 at 07:02:13PM -0700, Ilya Lipnitskiy wrote:
+> > > Hi Mike,
+> > >
+> > > On Tue, Mar 16, 2021 at 11:33 PM Mike Rapoport <rppt@kernel.org> wrote:
+> > > >
+> > > > Hi Ilya,
+> > > >
+> > > > On Tue, Mar 16, 2021 at 10:10:09PM -0700, Ilya Lipnitskiy wrote:
+> > > > > Hi Thomas,
+> > > > >
+> > > > > On Fri, Mar 12, 2021 at 7:19 AM Thomas Bogendoerfer
+> > > > > <tsbogend@alpha.franken.de> wrote:
+> > > > > >
+> > > > > > On Sun, Mar 07, 2021 at 11:40:30AM -0800, Ilya Lipnitskiy wrote:
+> > > > > > > From: Tobias Wolf <dev-NTEO@vplace.de>
+> > > > > > >
+> > > > > > > Commit 67a3ba25aa95 ("MIPS: Fix incorrect mem=X@Y handling") introduced a new
+> > > > > > > issue for rt288x where "PHYS_OFFSET" is 0x0 but the calculated "ramstart" is
+> > > > > > > not. As the prerequisite of custom memory map has been removed, this results
+> > > > > > > in the full memory range of 0x0 - 0x8000000 to be marked as reserved for this
+> > > > > > > platform.
+> > > > > >
+> > > > > > and where is the problem here ?
+> > > > > Turns out this was already attempted to be upstreamed - not clear why
+> > > > > it wasn't merged. Context:
+> > > > > https://lore.kernel.org/linux-mips/6504517.U6H5IhoIOn@loki/
+> > > > >
+> > > > > I hope the thread above helps you understand the problem.
+> > > >
+> > > > The memory initialization was a bit different then. Do you still see the
+> > > > same problem?
+> > > Thanks for asking. I obtained a RT2880 device and gave it a try. It
+> > > hangs at boot without this patch, however selecting
+> >
+> > can you provide debug logs with memblock=debug for both good and bad
+> > kernels ? I'm curious what's the reason for failing allocation...
+>
+> Sorry for taking a while to respond. See attached.
+> FWIW, it seems these are the lines that stand out in hang.log:
+> [    0.000000] memblock_reserve: [0x00000000-0x07ffffff] setup_arch+0x214/0x5d8
+> [    0.000000] Wasting 1048576 bytes for tracking 32768 unused pages
+> ...
+> [    0.000000]  reserved[0x0]    [0x00000000-0x087137aa], 0x087137ab
+> bytes flags: 0x0
 > 
-> diff --git a/arch/mips/include/asm/mach-loongson64/loongson.h 
-> b/arch/mips/include/asm/mach-loongson64/loongson.h
-> index f7c3ab6d724e..9d254a7b438a 100644
-> --- a/arch/mips/include/asm/mach-loongson64/loongson.h
-> +++ b/arch/mips/include/asm/mach-loongson64/loongson.h
-> @@ -263,4 +263,12 @@ extern u64 loongson_freqctrl[MAX_PACKAGES];
->  #define LOONGSON_PCIMAP_WIN(WIN, ADDR)	\
->  	((((ADDR)>>26) & LOONGSON_PCIMAP_PCIMAP_LO0) << ((WIN)*6))
->  
-> +/* Loongson-2K1000 Power management related registers */
-> +#define	PM1_STS         0x0C /* Power Management1 Status Register */
-> +#define	PM1_CNT         0x14 /* Power Management 1 Control Register */
-> +#define	RST_CNT         0x30 /* Reset Control Register */
-> +#define	SLP_TYP		GENMASK(12, 10) /* Sleep Enable */
-> +#define	SLP_EN          BIT(13) /* Soft Off */
-> +#define	ACPI_OFF        0x7000
-> +
->  #endif /* __ASM_MACH_LOONGSON64_LOONGSON_H */
-> diff --git a/arch/mips/loongson64/reset.c b/arch/mips/loongson64/reset.c
-> index 3bb8a1ed9348..b4348bf50538 100644
-> --- a/arch/mips/loongson64/reset.c
-> +++ b/arch/mips/loongson64/reset.c
-> @@ -18,9 +18,16 @@
->  static void loongson_restart(char *command)
->  {
->  
-> -	void (*fw_restart)(void) = (void *)loongson_sysconf.restart_addr;
-> +	if ((read_c0_prid() & PRID_IMP_MASK) == PRID_IMP_LOONGSON_64R) {
-> +		unsigned long base;
->  
-> -	fw_restart();
-> +		base = CKSEG1ADDR(LOONGSON_REG_BASE) + ACPI_OFF;
-> +		writel(1, (void *)(base + RST_CNT));
-> +	} else {
-> +		void (*fw_restart)(void) = (void *)loongson_sysconf.restart_addr;
-> +
-> +		fw_restart();
-> +	}
->  	while (1) {
->  		if (cpu_wait)
->  			cpu_wait();
-> @@ -29,9 +36,22 @@ static void loongson_restart(char *command)
->  
->  static void loongson_poweroff(void)
->  {
-> -	void (*fw_poweroff)(void) = (void *)loongson_sysconf.poweroff_addr;
->  
-> -	fw_poweroff();
-> +	if ((read_c0_prid() & PRID_IMP_MASK) == PRID_IMP_LOONGSON_64R) {
-> +		unsigned long base;
-> +		unsigned int acpi_ctrl;
-> +
-> +		base = CKSEG1ADDR(LOONGSON_REG_BASE) + ACPI_OFF;
-> +		acpi_ctrl = readl((void *)(base + PM1_STS));
-> +		acpi_ctrl &= 0xffffffff;
-> +		writel(acpi_ctrl, (void *)(base + PM1_STS));
-> +		acpi_ctrl = SLP_EN | SLP_TYP;
-> +		writel(acpi_ctrl, (void *)(base + PM1_CNT));
-> +	} else {
-> +		void (*fw_poweroff)(void) = (void *)loongson_sysconf.poweroff_addr;
-> +
-> +		fw_poweroff();
-> +	}
->  	while (1) {
->  		if (cpu_wait)
->  			cpu_wait();
-> -- 
-> 2.31.0
-> 
-> 
+> Ilya
 
+> ---------------------------CONTINUTES-BOOTING-NORMALLY-----------------------
+
+> [    0.000000] MEMBLOCK configuration:
+> [    0.000000]  memory size = 0x02000000 reserved size = 0x0875a542
+> [    0.000000]  memory.cnt  = 0x1
+> [    0.000000]  memory[0x0]	[0x08000000-0x09ffffff], 0x02000000 bytes flags: 0x0
+> [    0.000000]  reserved.cnt  = 0x5
+> [    0.000000]  reserved[0x0]	[0x00000000-0x087137aa], 0x087137ab bytes flags: 0x0
+> [    0.000000]  reserved[0x1]	[0x087137b0-0x087137b3], 0x00000004 bytes flags: 0x0
+> [    0.000000]  reserved[0x2]	[0x087137c0-0x08715276], 0x00001ab7 bytes flags: 0x0
+> [    0.000000]  reserved[0x3]	[0x08715278-0x0871a533], 0x000052bc bytes flags: 0x0
+> [    0.000000]  reserved[0x4]	[0x0871a540-0x0875a55f], 0x00040020 bytes flags: 0x0
+
+...
+
+> [    0.000000] Memory: 25168K/32768K available (4299K kernel code, 575K rwdata, 952K rodata, 1204K init, 205K bss, 7600K reserved, 0K cma-reserved)
+> ----------------------------------------HANGS-FOREVER-HERE---------------------------------
+
+I'd say that with ARCH_PFN_OFFSET set to 0 and actual memory start address
+at 0x08000000 any attempt to do pfn_to_page()/page_to_pfn()/page_address()
+will give an incorrect result and will crash the system.
+
+No idea why the crash is silent, though :)
 
 -- 
-- Jiaxun
+Sincerely yours,
+Mike.
