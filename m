@@ -2,104 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 787FE35EEF1
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 10:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20ADE35EF40
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 10:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348323AbhDNH7l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Apr 2021 03:59:41 -0400
-Received: from elvis.franken.de ([193.175.24.41]:49467 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231868AbhDNH7k (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Apr 2021 03:59:40 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lWaQe-0000mp-00; Wed, 14 Apr 2021 09:59:16 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D2B0EC0311; Wed, 14 Apr 2021 09:59:00 +0200 (CEST)
-Date:   Wed, 14 Apr 2021 09:59:00 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Jinyang He <hejinyang@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Fix strnlen_user access check
-Message-ID: <20210414075900.GA6073@alpha.franken.de>
-References: <1618139092-4018-1-git-send-email-hejinyang@loongson.cn>
- <cbe5e79b-ee6c-5c59-0051-28e4d1152666@loongson.cn>
- <20210412142730.GA23146@alpha.franken.de>
- <2fd31420-1f96-9165-23ea-fdccac1b522a@loongson.cn>
- <20210413111438.GA9472@alpha.franken.de>
- <069e524dbad2412f9e74fd234f40fff5@AcuMS.aculab.com>
- <20210413151909.GA13549@alpha.franken.de>
- <c2d2980ede424038ac0e1e5184857407@AcuMS.aculab.com>
+        id S231897AbhDNILX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Apr 2021 04:11:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27345 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350025AbhDNILT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 14 Apr 2021 04:11:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618387858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EwYB5nz8yfF5tg561fCrH5gbdVVTxmjpf7rPCaT4AzE=;
+        b=VGZ8i1hPy7va5Wi5riAwrzaKM30fcXyJiug3eVoElCFdaUzSiu1D6doFSe5Jc2YYMssf3e
+        75XHVoiBL3m8gIevH9rSQsdN4FoKYEeor+zZKCZE/+CYYBkTzPplT2bBDecCbxPhkTiF8D
+        VsfXf32iu3XIn7KE8tRFeMOR+DACL70=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-595-uxPR0e8iMvqotYdo8VKEqQ-1; Wed, 14 Apr 2021 04:10:54 -0400
+X-MC-Unique: uxPR0e8iMvqotYdo8VKEqQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5E40087504F;
+        Wed, 14 Apr 2021 08:10:52 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C4FFE5D9CA;
+        Wed, 14 Apr 2021 08:10:45 +0000 (UTC)
+Date:   Wed, 14 Apr 2021 10:10:44 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, brouer@redhat.com
+Subject: Re: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
+Message-ID: <20210414101044.19da09df@carbon>
+In-Reply-To: <20210412011532.GG2531743@casper.infradead.org>
+References: <20210410205246.507048-1-willy@infradead.org>
+        <20210410205246.507048-2-willy@infradead.org>
+        <20210411114307.5087f958@carbon>
+        <20210411103318.GC2531743@casper.infradead.org>
+        <20210412011532.GG2531743@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2d2980ede424038ac0e1e5184857407@AcuMS.aculab.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 04:01:13PM +0000, David Laight wrote:
-> From: Thomas Bogendoerfer
-> > Sent: 13 April 2021 16:19
+On Mon, 12 Apr 2021 02:15:32 +0100
+Matthew Wilcox <willy@infradead.org> wrote:
+
+> On Sun, Apr 11, 2021 at 11:33:18AM +0100, Matthew Wilcox wrote:
+> > Basically, we have three aligned dwords here.  We can either alias with
+> > @flags and the first word of @lru, or the second word of @lru and @mapping,
+> > or @index and @private.  @flags is a non-starter.  If we use @mapping,
+> > then you have to set it to NULL before you free it, and I'm not sure
+> > how easy that will be for you.  If that's trivial, then we could use
+> > the layout:
 > > 
-> > On Tue, Apr 13, 2021 at 12:37:25PM +0000, David Laight wrote:
-> > > From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > > > Sent: 13 April 2021 12:15
-> > > ...
-> > > > > The __access_ok() is noted with `Ensure that the range [addr, addr+size)
-> > > > > is within the process's address space`. Does the range checked by
-> > > > > __access_ok() on MIPS is [addr, addr+size]. So if we want to use
-> > > > > access_ok(s, 1), should we modify __access_ok()? Or my misunderstanding?
-> > > >
-> > > > you are right, I'm going to apply
-> > > >
-> > > > https://patchwork.kernel.org/project/linux-mips/patch/20190209194718.1294-1-paul.burton@mips.com/
-> > > >
-> > > > to fix that.
-> > >
-> > > Isn't that still wrong?
-> > > If an application does:
-> > > 	write(fd, (void *)0xffff0000, 0);
-> > > it should return 0, not -1 and EFAULT/SIGSEGV.
-> > 
-> > WRITE(2)                   Linux Programmer's Manual                  WRITE(2)
-> > [...]
-> >        If  count  is  zero  and  fd refers to a regular file, then write() may
-> >        return a failure status if one of the errors below is detected.  If  no
-> >        errors  are  detected,  or  error detection is not performed, 0 will be
-> >        returned without causing any other effect.  If count  is  zero  and  fd
-> >        refers  to a file other than a regular file, the results are not speci-
-> >        fied.
-> > [...]
-> >        EFAULT buf is outside your accessible address space.
-> > 
-> > at least it's covered by the man page on my Linux system.
+> > 	unsigned long _pp_flags;
+> > 	unsigned long pp_magic;
+> > 	union {
+> > 		dma_addr_t dma_addr;    /* might be one or two words */
+> > 		unsigned long _pp_align[2];
+> > 	};
+> > 	unsigned long pp_pfmemalloc;
+> > 	unsigned long xmi;  
 > 
-> Something related definitely caused grief in the setsockopt() changes.
+> I forgot about the munmap path.  That calls zap_page_range() which calls
+> set_page_dirty() which calls page_mapping().  If we use page->mapping,
+> that's going to get interpreted as an address_space pointer.
 > 
-> > > There is also the question about why this makes any difference
-> > > to the original problem of logging in via the graphical interface.
-> > 
-> > kernel/module.c:        mod->args = strndup_user(uargs, ~0UL >> 1);
-> > 
-> > and strndup_user does a strnlen_user.
+> *sigh*.  Foiled at every turn.
+
+Yes, indeed! - And very frustrating.  It's keeping me up at night.
+I'm dreaming about 32 vs 64 bit data structures. My fitbit stats tell
+me that I don't sleep well with these kind of dreams ;-)
+
+> I'm kind of inclined towards using two (or more) bits for PageSlab as
+> we discussed here:
 > 
-> That call is just gross.
-> Why did it work before the removal of set_fs() etc.
+> https://lore.kernel.org/linux-mm/01000163efe179fe-d6270c58-eaba-482f-a6bd-334667250ef7-000000@email.amazonses.com/
+> 
+> so we have PageKAlloc that's true for PageSlab, PagePool, PageDMAPool,
+> PageVMalloc, PageFrag and maybe a few other kernel-internal allocations.
 
-strnlen_user just did the equivalent of access_ok(s, 0) and I copy&pasted
-the wrong access_ok() statement :-( 
+I actually like this idea a lot.  I also think it will solve or remove
+Matteo/Ilias'es[2] need to introduce the pp_magic signature.  Ilias do
+say[1] that page_pool pages could be used for TCP RX zerocopy, but I
+don't think we should "allow" that (meaning page_pool should drop the
+DMA-mapping and give up recycling).  I should argue why in that thread.
 
-> Or was there another change that affected strndup_user() ?
+That said, I think we need to have a quicker fix for the immediate
+issue with 64-bit bit dma_addr on 32-bit arch and the misalignment hole
+it leaves[3] in struct page.  In[3] you mention ppc32, does it only
+happens on certain 32-bit archs?
 
-no, just the change in strnlen_user.
+I'm seriously considering removing page_pool's support for doing/keeping
+DMA-mappings on 32-bit arch's.  AFAIK only a single driver use this.
 
-Thomas.
+> (see also here:)
+> https://lore.kernel.org/linux-mm/20180518194519.3820-18-willy@infradead.org/
 
+[1] https://lore.kernel.org/netdev/YHHuE7g73mZNrMV4@enceladus/
+[2] https://patchwork.kernel.org/project/netdevbpf/patch/20210409223801.104657-3-mcroce@linux.microsoft.com/
+[3] https://lore.kernel.org/linux-mm/20210410024313.GX2531743@casper.infradead.org/
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
+
