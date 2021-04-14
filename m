@@ -2,112 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5BF35F7AE
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 17:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA41F35F875
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Apr 2021 18:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352331AbhDNPaN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Apr 2021 11:30:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33224 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352323AbhDNPaM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Apr 2021 11:30:12 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C945BB038;
-        Wed, 14 Apr 2021 15:29:49 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 net-next 6/9] net: korina: Only pass mac address via platform data
-Date:   Wed, 14 Apr 2021 17:29:42 +0200
-Message-Id: <20210414152946.12517-7-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210414152946.12517-1-tsbogend@alpha.franken.de>
-References: <20210414152946.12517-1-tsbogend@alpha.franken.de>
+        id S1352518AbhDNPxS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 14 Apr 2021 11:53:18 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:23362 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352485AbhDNPwp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 14 Apr 2021 11:52:45 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-15-m9cXnC2KMlaJybEViQCuIg-1; Wed, 14 Apr 2021 16:52:18 +0100
+X-MC-Unique: m9cXnC2KMlaJybEViQCuIg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.2; Wed, 14 Apr 2021 16:52:16 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.012; Wed, 14 Apr 2021 16:52:16 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matthew Wilcox' <willy@infradead.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "Christoph Hellwig" <hch@lst.de>
+Subject: RE: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
+Thread-Topic: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
+Thread-Index: AQHXMSRrwdfrgigLI0exh4xFUSZq9Kq0J1eg
+Date:   Wed, 14 Apr 2021 15:52:16 +0000
+Message-ID: <7f6cee3dcf1749fbb7b54eaf129141e7@AcuMS.aculab.com>
+References: <20210410205246.507048-1-willy@infradead.org>
+ <20210410205246.507048-2-willy@infradead.org>
+ <20210411114307.5087f958@carbon>
+ <20210411103318.GC2531743@casper.infradead.org>
+ <20210412011532.GG2531743@casper.infradead.org>
+ <20210414101044.19da09df@carbon>
+ <20210414115052.GS2531743@casper.infradead.org>
+In-Reply-To: <20210414115052.GS2531743@casper.infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Get rid of access to struct korina_device by just passing the mac
-address via platform data and use drvdata for passing netdev to remove
-function.
+> Doing this fixes it:
+> 
+> +++ b/include/linux/types.h
+> @@ -140,7 +140,7 @@ typedef u64 blkcnt_t;
+>   * so they don't care about the size of the actual bus addresses.
+>   */
+>  #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> -typedef u64 dma_addr_t;
+> +typedef u64 __attribute__((aligned(sizeof(void *)))) dma_addr_t;
+>  #else
+>  typedef u32 dma_addr_t;
+>  #endif
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/rb532/devices.c     |  5 +++--
- drivers/net/ethernet/korina.c | 11 ++++++-----
- 2 files changed, 9 insertions(+), 7 deletions(-)
+I hate __packed so much I've been checking what it does!
 
-diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index dd34f1b32b79..5fc3c8ee4f31 100644
---- a/arch/mips/rb532/devices.c
-+++ b/arch/mips/rb532/devices.c
-@@ -105,6 +105,9 @@ static struct platform_device korina_dev0 = {
- 	.name = "korina",
- 	.resource = korina_dev0_res,
- 	.num_resources = ARRAY_SIZE(korina_dev0_res),
-+	.dev = {
-+		.platform_data = &korina_dev0_data.mac,
-+	}
- };
- 
- static struct resource cf_slot0_res[] = {
-@@ -299,8 +302,6 @@ static int __init plat_setup_devices(void)
- 	/* set the uart clock to the current cpu frequency */
- 	rb532_uart_res[0].uartclk = idt_cpu_freq;
- 
--	dev_set_drvdata(&korina_dev0.dev, &korina_dev0_data);
+If you add __packed to the dma_addr_t field inside the union
+then gcc (at least) removes the pad from before it, but also
+'remembers' the alignment that is enforced by other members
+of the structure.
+
+So you don't need the extra aligned(sizeof (void *)) since
+that is implicit.
+
+So in this case __packed probably has no side effects.
+(Unless a 32bit arch has instructions for a 64bit read
+that must not be on an 8n+4 boundary and the address is taken).
+
+It also doesn't affect 64bit - since the previous field
+forces 64bit alignment.
+
+	David
+
 -
- 	gpiod_add_lookup_table(&cf_slot0_gpio_table);
- 	return platform_add_devices(rb532_devs, ARRAY_SIZE(rb532_devs));
- }
-diff --git a/drivers/net/ethernet/korina.c b/drivers/net/ethernet/korina.c
-index 5e0fd9058701..69c8baa87a6e 100644
---- a/drivers/net/ethernet/korina.c
-+++ b/drivers/net/ethernet/korina.c
-@@ -1056,7 +1056,7 @@ static const struct net_device_ops korina_netdev_ops = {
- 
- static int korina_probe(struct platform_device *pdev)
- {
--	struct korina_device *bif = platform_get_drvdata(pdev);
-+	u8 *mac_addr = dev_get_platdata(&pdev->dev);
- 	struct korina_private *lp;
- 	struct net_device *dev;
- 	void __iomem *p;
-@@ -1069,8 +1069,7 @@ static int korina_probe(struct platform_device *pdev)
- 	SET_NETDEV_DEV(dev, &pdev->dev);
- 	lp = netdev_priv(dev);
- 
--	bif->dev = dev;
--	memcpy(dev->dev_addr, bif->mac, ETH_ALEN);
-+	memcpy(dev->dev_addr, mac_addr, ETH_ALEN);
- 
- 	lp->rx_irq = platform_get_irq_byname(pdev, "korina_rx");
- 	lp->tx_irq = platform_get_irq_byname(pdev, "korina_tx");
-@@ -1124,6 +1123,8 @@ static int korina_probe(struct platform_device *pdev)
- 	lp->mii_if.phy_id_mask = 0x1f;
- 	lp->mii_if.reg_num_mask = 0x1f;
- 
-+	platform_set_drvdata(pdev, dev);
-+
- 	rc = register_netdev(dev);
- 	if (rc < 0) {
- 		printk(KERN_ERR DRV_NAME
-@@ -1141,9 +1142,9 @@ static int korina_probe(struct platform_device *pdev)
- 
- static int korina_remove(struct platform_device *pdev)
- {
--	struct korina_device *bif = platform_get_drvdata(pdev);
-+	struct net_device *dev = platform_get_drvdata(pdev);
- 
--	unregister_netdev(bif->dev);
-+	unregister_netdev(dev);
- 
- 	return 0;
- }
--- 
-2.29.2
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
