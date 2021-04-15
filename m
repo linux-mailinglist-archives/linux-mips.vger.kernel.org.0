@@ -2,81 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E38D736052F
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Apr 2021 11:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83D13605EF
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Apr 2021 11:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbhDOJEH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Apr 2021 05:04:07 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:34484 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbhDOJEF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Apr 2021 05:04:05 -0400
-Received: from localhost (unknown [192.168.167.69])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 7CB8BC82DB;
-        Thu, 15 Apr 2021 17:03:24 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED: 0
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [124.126.19.250])
-        by smtp.263.net (postfix) whith ESMTP id P13171T139812371683072S1618477404344929_;
-        Thu, 15 Apr 2021 17:03:24 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <820a1f75bc7e53e62c16055c5e259f9c>
-X-RL-SENDER: zhaoxiao@uniontech.com
-X-SENDER: zhaoxiao@uniontech.com
-X-LOGIN-NAME: zhaoxiao@uniontech.com
-X-FST-TO: tsbogend@alpha.franken.de
-X-SENDER-IP: 124.126.19.250
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   zhaoxiao <zhaoxiao@uniontech.com>
-To:     tsbogend@alpha.franken.de
-Cc:     yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
-        viro@zeniv.linux.org.uk, paul@crapouillou.net,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhaoxiao <zhaoxiao@uniontech.com>
-Subject: [PATCH] MIPS: Makefile: Replace -pg with CC_FLAGS_FTRACE
-Date:   Thu, 15 Apr 2021 17:03:22 +0800
-Message-Id: <20210415090322.17519-1-zhaoxiao@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S232138AbhDOJgU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Apr 2021 05:36:20 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:60857 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232367AbhDOJgT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 15 Apr 2021 05:36:19 -0400
+X-Greylist: delayed 556 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Apr 2021 05:36:19 EDT
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id F103D10F3;
+        Thu, 15 Apr 2021 05:26:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 15 Apr 2021 05:26:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=PtaPMljBD2boZ8zdNUtTMi1M1Dx
+        Oz641bQ2OhBoGMjo=; b=qZJm9bq/q8pqEMr1PDT01gAsiPjumU/BRbuKfpekYpj
+        L2DrcagM3UtPSpGEOJw5YaUcMFU9PZYvgLxKCtg1dFp7u5CYxVJDLjzgHBEnD68B
+        a+xbxwkyg5Pvou6eHzz+TTFRWf+Ikc4/skKbyGDeVUnUlsMzVftQM3Dju9oJepjZ
+        bWn1Sq3R34YmpKSn/0cu6PpfvP8AO5MJHozjLPD7NslF4nnrD+RyS+c5yiWKczAj
+        agJ0b2b+dvoLeE+cfqu1d5pL1E3SjKLyk68qXIKO4srq+rwmH2orMWqdEk+69yTB
+        YLZIy0koG/H1+tAnTYTlWKoV5ASAhfyI9L/Vk/ezp7w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=PtaPMl
+        jBD2boZ8zdNUtTMi1M1DxOz641bQ2OhBoGMjo=; b=rdruuGFMfbwZsnv/OifYg6
+        eF1id0DgmV4ZuqeJ79qlIhTYgdyozjLarNrFq4lOc1Z+yTmv/ItRvPB4o/PZG/nj
+        VVTfAj4EAw1CTOtKMWkD/a0C/BcNG90N1hu1oegDHA0ECuETV8oRPzgYo8tiFMXe
+        /Bl9elVSYyZzl3osUDfmeWzZhKx5XCFvgJBvwg5aWYw0YqM3vjUPknRWfXC32H1J
+        T+C8gqEzp2WUvD4b+84KY/plhPLjbMapTKXeh0EQqQ0pqmfHw7YJ5ss5eT68U9ya
+        DZZD2LBtT5lb1leq6vHw3MQNoACTYO/LKmVkx9kiNgLNgqv4QAoDC3k6QeKbiCmw
+        ==
+X-ME-Sender: <xms:ywZ4YLVEyFbZdE7VindQd54P70eLLG1KZjhhVEbjn05WA6KRUsp4Gg>
+    <xme:ywZ4YH3UAM-_BraEqDdmPGpqsDRaos5L-ij__R0qkxs0wChUq2XKgOGnzVtmwbpEL
+    Xvwmq4BKwZyy_BfzIM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudelfedgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:ywZ4YCa0Ke0eotrSX1S8ssua1fQKjj3JefXX5Slst5mcRUmPisSRXg>
+    <xmx:ywZ4YKrhooip1bTHf-TtoaOk3xp1RAbhgkfFmohB0NJfWKDv9ZDbcA>
+    <xmx:ywZ4YOpwZNHX7a20ucRaRhiw4JnOmwFsL3Zkt8HFZK4q6fuWlUGzyg>
+    <xmx:zgZ4YGwMvDYgXzWoQomG1WFrp3MfFBgBN_jPYXQdp28hAcMgWDwhw66AdRE>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 23E0424005B;
+        Thu, 15 Apr 2021 05:26:35 -0400 (EDT)
+Date:   Thu, 15 Apr 2021 11:26:33 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Simon Ser <contact@emersion.fr>,
+        Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] drm/ingenic: Don't request full modeset if property
+ is not modified
+Message-ID: <20210415092633.4vkteqmqqxfgrjxz@gilmour>
+References: <20210329175046.214629-1-paul@crapouillou.net>
+ <20210329175046.214629-3-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="rbolhufisrxhasd4"
+Content-Disposition: inline
+In-Reply-To: <20210329175046.214629-3-paul@crapouillou.net>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In preparation for mips supporting ftrace built on other compiler
-options, let's have the mips Makefiles remove the $(CC_FLAGS_FTRACE)
-flags, whatever these may be, rather than assuming '-pg'.
 
-Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
----
- arch/mips/kernel/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+--rbolhufisrxhasd4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index b4a57f1de772..77b9ec938ad8 100644
---- a/arch/mips/kernel/Makefile
-+++ b/arch/mips/kernel/Makefile
-@@ -17,10 +17,10 @@ obj-y		+= cpu-probe.o
- endif
- 
- ifdef CONFIG_FUNCTION_TRACER
--CFLAGS_REMOVE_ftrace.o = -pg
--CFLAGS_REMOVE_early_printk.o = -pg
--CFLAGS_REMOVE_perf_event.o = -pg
--CFLAGS_REMOVE_perf_event_mipsxx.o = -pg
-+CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_early_printk.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_perf_event.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_perf_event_mipsxx.o = $(CC_FLAGS_FTRACE)
- endif
- 
- obj-$(CONFIG_CEVT_BCM1480)	+= cevt-bcm1480.o
--- 
-2.20.1
+Hi,
 
+On Mon, Mar 29, 2021 at 06:50:46PM +0100, Paul Cercueil wrote:
+> Avoid requesting a full modeset if the sharpness property is not
+> modified, because then we don't actually need it.
+>=20
+> Fixes: fc1acf317b01 ("drm/ingenic: Add support for the IPU")
+> Cc: <stable@vger.kernel.org> # 5.8+
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/gpu/drm/ingenic/ingenic-ipu.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-ipu.c b/drivers/gpu/drm/inge=
+nic/ingenic-ipu.c
+> index 3b1091e7c0cd..95b665c4a7b0 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-ipu.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-ipu.c
+> @@ -640,10 +640,12 @@ ingenic_ipu_plane_atomic_set_property(struct drm_pl=
+ane *plane,
+>  {
+>  	struct ingenic_ipu *ipu =3D plane_to_ingenic_ipu(plane);
+>  	struct drm_crtc_state *crtc_state;
+> +	bool mode_changed;
+> =20
+>  	if (property !=3D ipu->sharpness_prop)
+>  		return -EINVAL;
+> =20
+> +	mode_changed =3D val !=3D ipu->sharpness;
+>  	ipu->sharpness =3D val;
+> =20
+>  	if (state->crtc) {
+> @@ -651,7 +653,7 @@ ingenic_ipu_plane_atomic_set_property(struct drm_plan=
+e *plane,
+>  		if (WARN_ON(!crtc_state))
+>  			return -EINVAL;
+> =20
+> -		crtc_state->mode_changed =3D true;
+> +		crtc_state->mode_changed |=3D mode_changed;
+>  	}
 
+I'd just change the condition from
 
+if (state->crtc)
+
+to
+
+if (state->crtc && val !=3D ipu->sharpness)
+
+It's going to be easier to extend if you ever need to. Also, drivers
+usually do this in atomic_check, is there a specific reason to do it in
+atomic_set_property?
+
+Maxime
+
+--rbolhufisrxhasd4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYHgGyAAKCRDj7w1vZxhR
+xbrVAQD22j4BtDq6oO5iGWb7UdC+qPz36k0/YBh5BRbQ5qyf2gD+KYIoom5pUNBU
+kg6Yl77CjwRcM0x0V2Ylhu7QwgWEpwA=
+=U0dV
+-----END PGP SIGNATURE-----
+
+--rbolhufisrxhasd4--
