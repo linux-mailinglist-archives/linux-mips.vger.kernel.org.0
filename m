@@ -2,113 +2,242 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24590360F27
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Apr 2021 17:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A1C3611B6
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Apr 2021 20:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbhDOPlw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Apr 2021 11:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbhDOPlu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Apr 2021 11:41:50 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9756CC061760
-        for <linux-mips@vger.kernel.org>; Thu, 15 Apr 2021 08:41:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id c15so14816042wro.13
-        for <linux-mips@vger.kernel.org>; Thu, 15 Apr 2021 08:41:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qzCmIc5xh7d+ubWNy7gZo3UPfbkyUvg8kMmWmppBNes=;
-        b=BEj/1/8XPncnjRfRK8mLiZ1SoZ2+BwrE+a39LxPwB/MsIFJnzBAICQLZ2jiwGGbQov
-         4zqh7un0jhEP1iNaKM1PurWOo4uOYi/n2gtxwCVm76y8egSWq0m6KnadRWC5DH8hi34C
-         K41+UsN0jCiClEebcR9kPZsL0Lx6/VJV5Li9dNkP8mG/+bW6Uxqyyarpphfbe13+sVlb
-         FizX/3RV1YXqCKanusixVoY8OxsNOXFXCWpfkOB2NeLmRvAHXodqwMYxxCYasGQZQftV
-         OsBicx1g9iYrnNMRoDBiJ4p9GtlEji++P0zPJAhhkeDvxObWb1E6q5IO+XBq+ah9VkM2
-         b8CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qzCmIc5xh7d+ubWNy7gZo3UPfbkyUvg8kMmWmppBNes=;
-        b=A9+IxG8zi9mJKC3Uopgt18eDhzhVutiOp5l2ifIm42ZIU6tLSO7EehQMVFa7zG+11t
-         NQ8562tcOhTmrUhpac7B511xTESLZlEeWxO7fAmnvyYa82v6UaRYsi27GeIO+xdBKe8U
-         GjtWpNe1BzB16Q1fdtiTUYk3iXEwRmAaq/qLdfiRNdGvRTA8KJhIaEebGwhu0AgKY17m
-         22gl2xWa5DCP7WVMg1OzZVEIbvB6vqDdP/0bL4NGC6mEI+ZOrvE5l5CjRb3SI74f317x
-         gRh8oj3by+qTbp7oespRaQnRSxZNvYLPwmFrcQZQGv9072MQzlUNLxL7XXoyiDs9g/F/
-         XNjQ==
-X-Gm-Message-State: AOAM5322n9KguuCmVVtmNN95e9hdCVFCkiE0ZoIktA/0v3oGP95/mmaF
-        LdxwCA3abDv7iFV6RHhNtzi/FQ==
-X-Google-Smtp-Source: ABdhPJyLNMOWPYjLpplPAmINNkz2Fou+qVJXho8kWclmtHcejA/NRHvG9yzn7ifRTNHYBMXjICP1Nw==
-X-Received: by 2002:a05:6000:ca:: with SMTP id q10mr4272021wrx.104.1618501286182;
-        Thu, 15 Apr 2021 08:41:26 -0700 (PDT)
-Received: from [192.168.1.8] ([149.86.87.196])
-        by smtp.gmail.com with ESMTPSA id l14sm1920076wmq.4.2021.04.15.08.41.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Apr 2021 08:41:25 -0700 (PDT)
-Subject: Re: [PATCH bpf-next 1/2] bpf: Remove bpf_jit_enable=2 debugging mode
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Jianlin Lv <Jianlin.Lv@arm.com>, bpf@vger.kernel.org
-Cc:     corbet@lwn.net, ast@kernel.org, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        illusionist.neo@gmail.com, linux@armlinux.org.uk,
-        zlim.lnx@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        paulburton@kernel.org, tsbogend@alpha.franken.de,
-        naveen.n.rao@linux.ibm.com, sandipan@linux.ibm.com,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, iii@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, borntraeger@de.ibm.com, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com, udknight@gmail.com,
-        mchehab+huawei@kernel.org, dvyukov@google.com, maheshb@google.com,
-        horms@verge.net.au, nicolas.dichtel@6wind.com,
-        viro@zeniv.linux.org.uk, masahiroy@kernel.org,
-        keescook@chromium.org, tklauser@distanz.ch, grantseltzer@gmail.com,
-        irogers@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        iecedge@gmail.com
-References: <20210415093250.3391257-1-Jianlin.Lv@arm.com>
- <9c4a78d2-f73c-832a-e6e2-4b4daa729e07@iogearbox.net>
-From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <d3949501-8f7d-57c4-b3fe-bcc3b24c09d8@isovalent.com>
-Date:   Thu, 15 Apr 2021 16:41:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        id S234579AbhDOSJJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Apr 2021 14:09:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25019 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234542AbhDOSJH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 15 Apr 2021 14:09:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618510123;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CFSW/xx6h8VP0E9MM0SVm+J+UNt/2rTNWHWvDh7sIOU=;
+        b=QSYQT6m+6tAbDxoq57MEa4kiRgrkvLlZxUf/Hd1EM2K8EJ/+dTmdMtnnG5npdsT/Q9MZTd
+        ph0a47Sj7d2tJxJ1+JQDJtBwNHgDqtBXZdmeNIZr0MsQ5zSnAdemvb4A38+SvHShwA8+nW
+        4yQwHnl4RFTmtOnDNyFwtn+jKw+11AM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-287-OE96HVLmORK72ygKyf7eRg-1; Thu, 15 Apr 2021 14:08:39 -0400
+X-MC-Unique: OE96HVLmORK72ygKyf7eRg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 73FD610054F6;
+        Thu, 15 Apr 2021 18:08:37 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8013D13487;
+        Thu, 15 Apr 2021 18:08:33 +0000 (UTC)
+Date:   Thu, 15 Apr 2021 20:08:32 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Matthew Wilcox' <willy@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "Christoph Hellwig" <hch@lst.de>, brouer@redhat.com
+Subject: Re: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
+Message-ID: <20210415200832.32796445@carbon>
+In-Reply-To: <a50c3156fe8943ef964db4345344862f@AcuMS.aculab.com>
+References: <20210410205246.507048-1-willy@infradead.org>
+        <20210410205246.507048-2-willy@infradead.org>
+        <20210411114307.5087f958@carbon>
+        <20210411103318.GC2531743@casper.infradead.org>
+        <20210412011532.GG2531743@casper.infradead.org>
+        <20210414101044.19da09df@carbon>
+        <20210414115052.GS2531743@casper.infradead.org>
+        <20210414211322.3799afd4@carbon>
+        <20210414213556.GY2531743@casper.infradead.org>
+        <a50c3156fe8943ef964db4345344862f@AcuMS.aculab.com>
 MIME-Version: 1.0
-In-Reply-To: <9c4a78d2-f73c-832a-e6e2-4b4daa729e07@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-2021-04-15 16:37 UTC+0200 ~ Daniel Borkmann <daniel@iogearbox.net>
-> On 4/15/21 11:32 AM, Jianlin Lv wrote:
->> For debugging JITs, dumping the JITed image to kernel log is discouraged,
->> "bpftool prog dump jited" is much better way to examine JITed dumps.
->> This patch get rid of the code related to bpf_jit_enable=2 mode and
->> update the proc handler of bpf_jit_enable, also added auxiliary
->> information to explain how to use bpf_jit_disasm tool after this change.
->>
->> Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
+On Wed, 14 Apr 2021 21:56:39 +0000
+David Laight <David.Laight@ACULAB.COM> wrote:
 
-Hello,
+> From: Matthew Wilcox
+> > Sent: 14 April 2021 22:36
+> > 
+> > On Wed, Apr 14, 2021 at 09:13:22PM +0200, Jesper Dangaard Brouer wrote:  
+> > > (If others want to reproduce).  First I could not reproduce on ARM32.
+> > > Then I found out that enabling CONFIG_XEN on ARCH=arm was needed to
+> > > cause the issue by enabling CONFIG_ARCH_DMA_ADDR_T_64BIT.  
+> > 
+> > hmmm ... you should be able to provoke it by enabling ARM_LPAE,
+> > which selects PHYS_ADDR_T_64BIT, and
+> > 
+> > config ARCH_DMA_ADDR_T_64BIT
+> >         def_bool 64BIT || PHYS_ADDR_T_64BIT
+> >   
+> > >  struct page {
+> > >         long unsigned int          flags;                /*     0     4 */
+> > >
+> > >         /* XXX 4 bytes hole, try to pack */
+> > >
+> > >         union {
+> > >                 struct {
+> > >                         struct list_head lru;            /*     8     8 */
+> > >                         struct address_space * mapping;  /*    16     4 */
+> > >                         long unsigned int index;         /*    20     4 */
+> > >                         long unsigned int private;       /*    24     4 */
+> > >                 };                                       /*     8    20 */
+> > >                 struct {
+> > >                         dma_addr_t dma_addr  
+> 
+> Adding __packed here will remove the 4 byte hole before the union
+> and the compiler seems clever enough to know that anything following
+> a 'long' must also be 'long' aligned.
 
-For what it's worth, I have already seen people dump the JIT image in
-kernel logs in Qemu VMs running with just a busybox, not for kernel
-development, but in a context where buiding/using bpftool was not
-possible. Maybe not a common case, but still, removing the debugging
-mode will make that impossible. Is there a particular incentive to
-remove the feature?
+Played with __packed in below patch, and I can confirm it seems to work.
 
+> So you don't get anything horrid like byte accesses.
+> On 64bit dma_addr will remain 64bit aligned.
+> On arm32 dma_addr will be 32bit aligned - but forcing two 32bit access
+> won't make any difference.
+
+See below patch.  Where I swap32 the dma address to satisfy
+page->compound having bit zero cleared. (It is the simplest fix I could
+come up with).
+
+
+[PATCH] page_pool: handling 32-bit archs with 64-bit dma_addr_t
+
+From: Jesper Dangaard Brouer <brouer@redhat.com>
+
+Workaround for storing 64-bit DMA-addr on 32-bit machines in struct
+page.  The page->dma_addr share area with page->compound_head which
+use bit zero to mark compound pages. This is okay, as DMA-addr are
+aligned pointers which have bit zero cleared.
+
+In the 32-bit case, page->compound_head is 32-bit.  Thus, when
+dma_addr_t is 64-bit it will be located in top 32-bit.  Solve by
+swapping dma_addr 32-bit segments.
+
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+---
+ include/linux/mm_types.h |    2 +-
+ include/linux/types.h    |    1 +
+ include/net/page_pool.h  |   21 ++++++++++++++++++++-
+ net/core/page_pool.c     |    8 +++++---
+ 4 files changed, 27 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 6613b26a8894..27406e3b1e1b 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -100,7 +100,7 @@ struct page {
+ 			 * @dma_addr: might require a 64-bit value even on
+ 			 * 32-bit architectures.
+ 			 */
+-			dma_addr_t dma_addr;
++			dma_addr_t dma_addr __packed;
+ 		};
+ 		struct {	/* slab, slob and slub */
+ 			union {
+diff --git a/include/linux/types.h b/include/linux/types.h
+index ac825ad90e44..65fd5d630016 100644
+--- a/include/linux/types.h
++++ b/include/linux/types.h
+@@ -141,6 +141,7 @@ typedef u64 blkcnt_t;
+  */
+ #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+ typedef u64 dma_addr_t;
++//typedef u64 __attribute__((aligned(sizeof(void *)))) dma_addr_t;
+ #else
+ typedef u32 dma_addr_t;
+ #endif
+diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+index b5b195305346..c2329088665c 100644
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -196,9 +196,28 @@ static inline void page_pool_recycle_direct(struct page_pool *pool,
+ 	page_pool_put_full_page(pool, page, true);
+ }
+ 
++static inline
++dma_addr_t page_pool_dma_addr_read(dma_addr_t dma_addr)
++{
++	/* Workaround for storing 64-bit DMA-addr on 32-bit machines in struct
++	 * page.  The page->dma_addr share area with page->compound_head which
++	 * use bit zero to mark compound pages. This is okay, as DMA-addr are
++	 * aligned pointers which have bit zero cleared.
++	 *
++	 * In the 32-bit case, page->compound_head is 32-bit.  Thus, when
++	 * dma_addr_t is 64-bit it will be located in top 32-bit.  Solve by
++	 * swapping dma_addr 32-bit segments.
++	 */
++#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
++	if (sizeof(long unsigned int) == 4) /* 32-bit system */
++		dma_addr = (dma_addr << 32) | (dma_addr >> 32);
++#endif
++	return dma_addr;
++}
++
+ static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
+ {
+-	return page->dma_addr;
++	return page_pool_dma_addr_read(page->dma_addr);
+ }
+ 
+ static inline bool is_page_pool_compiled_in(void)
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index ad8b0707af04..813598ea23f6 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -174,8 +174,10 @@ static void page_pool_dma_sync_for_device(struct page_pool *pool,
+ 					  struct page *page,
+ 					  unsigned int dma_sync_size)
+ {
++	dma_addr_t dma = page_pool_dma_addr_read(page->dma_addr);
++
+ 	dma_sync_size = min(dma_sync_size, pool->p.max_len);
+-	dma_sync_single_range_for_device(pool->p.dev, page->dma_addr,
++	dma_sync_single_range_for_device(pool->p.dev, dma,
+ 					 pool->p.offset, dma_sync_size,
+ 					 pool->p.dma_dir);
+ }
+@@ -226,7 +228,7 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
+ 		put_page(page);
+ 		return NULL;
+ 	}
+-	page->dma_addr = dma;
++	page->dma_addr = page_pool_dma_addr_read(dma);
+ 
+ 	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
+ 		page_pool_dma_sync_for_device(pool, page, pool->p.max_len);
+@@ -294,7 +296,7 @@ void page_pool_release_page(struct page_pool *pool, struct page *page)
+ 		 */
+ 		goto skip_dma_unmap;
+ 
+-	dma = page->dma_addr;
++	dma = page_pool_dma_addr_read(page->dma_addr);
+ 
+ 	/* When page is unmapped, it cannot be returned our pool */
+ 	dma_unmap_page_attrs(pool->p.dev, dma,
+
+
+--
 Best regards,
-Quentin
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
+
