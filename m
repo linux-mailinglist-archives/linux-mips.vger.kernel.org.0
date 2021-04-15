@@ -2,255 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5191360716
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Apr 2021 12:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CD4360936
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Apr 2021 14:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbhDOK1W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Apr 2021 06:27:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47710 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231766AbhDOK1V (ORCPT
+        id S232635AbhDOMVn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Apr 2021 08:21:43 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55386 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230202AbhDOMVn (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 15 Apr 2021 06:27:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618482418;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8cpKb0ASp+K7zcTMzICSE9fwIk8Icc72x4Rwh+Gm6ZU=;
-        b=Uk9k7vgKRYy/wUVbHTHus80kG5QoiX0tCYucSSb3VUMHFKdnODyv8tn+FpnHTkl7SKTJuC
-        WPdExKHl7tvf6ismBOd91G1PMms0ibRLAHmzJNJn2CKmtAw2KVpPGDS9LZsLl0hNY7LKG1
-        T1dbp+GcP+vi3Qvq3FhQ9kWMFZpENjg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-402-XcY5pYPOM-usy0BTJjd9Lw-1; Thu, 15 Apr 2021 06:26:56 -0400
-X-MC-Unique: XcY5pYPOM-usy0BTJjd9Lw-1
-Received: by mail-wr1-f69.google.com with SMTP id k1-20020adfd2210000b02901040d1dbcaeso2525277wrh.17
-        for <linux-mips@vger.kernel.org>; Thu, 15 Apr 2021 03:26:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:organization:subject
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=8cpKb0ASp+K7zcTMzICSE9fwIk8Icc72x4Rwh+Gm6ZU=;
-        b=aHVJmqug+Ced0RXMjlsyk9X6qAAUCEdGvugiBoS1hwsywD61mfeVUxxJCsb8J62tWU
-         m7eN1NZz/CjqwoKHAjYc94l/3QFll6HsaI5RkH1523EOTyw/eu+YT73rsHfFmOmEN60C
-         OXuw2ZGHNxpju02mD9t8HBFNGJ9uzq+M1Z5URJvi29Rtgwb+6JCuJtEOXRbwp5X1R9Ty
-         MwG2tBttXL+MYIBNpdMOOuux4HEY55T9mkPhgWVhu6I7PUoP0JwYh6PSnAHJVXzuW5qr
-         dF5C59fnT+0RSnhZBD7bernGyAeQaPR3MfBAvUqPqWwdUYW7SqyHipLnXKh7GFVrQiQP
-         vnnQ==
-X-Gm-Message-State: AOAM533SrUlPNXD1ur+zanMYoRMOrv2b6Tu3qM4PxcC1Kzk3HfcWdlD6
-        aB0NVZNbOfCk4DT83Rrf9ygqFP02WJrLbYIh0mOT0JsBl51T71KwsuIPx40sLBo8mKAIfyN0WSy
-        5eOT1ipatRWJk7sVWWZQLzA==
-X-Received: by 2002:adf:f186:: with SMTP id h6mr2569752wro.89.1618482415083;
-        Thu, 15 Apr 2021 03:26:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwv7Q012I0Vz8MHqIPLa4Xkx+hS8m+nH/TPxEyn3JS7V7NiE9yOuvehr7qVZbxLbS4BFGfVVQ==
-X-Received: by 2002:adf:f186:: with SMTP id h6mr2569712wro.89.1618482414741;
-        Thu, 15 Apr 2021 03:26:54 -0700 (PDT)
-Received: from [192.168.3.132] (p5b0c6392.dip0.t-ipconnect.de. [91.12.99.146])
-        by smtp.gmail.com with ESMTPSA id z17sm2386902wro.1.2021.04.15.03.26.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Apr 2021 03:26:54 -0700 (PDT)
-From:   David Hildenbrand <david@redhat.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
+        Thu, 15 Apr 2021 08:21:43 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13FC3NUN037904;
+        Thu, 15 Apr 2021 08:20:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=BJ8vT+zdtijIJ63F5bRpUZcIpEAXyB7xSiiu0EiR3AE=;
+ b=lqnNjMkDdKOIVL9emzvdhra3fldjBHU/IOeopSt1uinqa1JfIVINDUkhZWf3dUdXLgXP
+ 5Cd6+opDn4W14eIXi+4RSA4lZ5lG/Hgm0myxACaCn9zTl4IBvaEZy6SawVvOsYN2McOZ
+ y3v7ks+qYtAC2WI3Iw33EKRu7KLiIMFvb2r+F9gZVdCIj3b6szJfmeeDjc9bCew+pryD
+ TVDPhVsS9q+bI0y9zNpLLvC8ZQ8Lcdy/WXGWjA0mUFjXprGZMClHofcNrwqSGEGZUsMz
+ 3EufkW6Zf/xnbygvhgrUBSbNDBu6xDoX8Xxp87yhHHzvn/KVh6CCXQIkYYv0sYXjZa/+ vg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37x88j2vgd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Apr 2021 08:20:55 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13FC5j7G060273;
+        Thu, 15 Apr 2021 08:20:55 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37x88j2vf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Apr 2021 08:20:55 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13FCCeu1011734;
+        Thu, 15 Apr 2021 12:20:53 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 37u3n8a33e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Apr 2021 12:20:53 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13FCKoQB39911756
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Apr 2021 12:20:50 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F12A052050;
+        Thu, 15 Apr 2021 12:20:49 +0000 (GMT)
+Received: from osiris (unknown [9.171.3.254])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 37F265204E;
+        Thu, 15 Apr 2021 12:20:49 +0000 (GMT)
+Date:   Thu, 15 Apr 2021 14:20:48 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>
-References: <20210317110644.25343-1-david@redhat.com>
- <20210317110644.25343-3-david@redhat.com>
- <CAG48ez0BQ3Vd3nDLEvyiSU0XALgUQ=c-fAwcFVScUkgo_9qVuQ@mail.gmail.com>
- <2bab28c7-08c0-7ff0-c70e-9bf94da05ce1@redhat.com>
- <CAG48ez20rLRNPZj6hLHQ_PLT8H60kTac-uXRiLByD70Q7+qsdQ@mail.gmail.com>
- <26227fc6-3e7b-4e69-f69d-4dc2a67ecfe8@redhat.com>
- <54165ffe-dbf7-377a-a710-d15be4701f20@redhat.com>
- <5f49b60c-957d-8cb4-de7a-7c855dc72942@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 2/5] mm/madvise: introduce MADV_POPULATE_(READ|WRITE)
- to prefault/prealloc memory
-Message-ID: <273f9c4b-2a1a-23e7-53b9-0da5441895b3@redhat.com>
-Date:   Thu, 15 Apr 2021 12:26:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: consolidate the flock uapi definitions
+Message-ID: <YHgvoCpqLrcbQETJ@osiris>
+References: <20210412085545.2595431-1-hch@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <5f49b60c-957d-8cb4-de7a-7c855dc72942@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210412085545.2595431-1-hch@lst.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GYiuXa6MwPoYPHEW5dNs6OA4IVhEE-Qd
+X-Proofpoint-ORIG-GUID: WIGbMGvshmA6lDf2tv4RGrRtJ4XbrxTC
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-15_04:2021-04-15,2021-04-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=762 clxscore=1011
+ mlxscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 malwarescore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104150081
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07.04.21 12:31, David Hildenbrand wrote:
-> On 30.03.21 18:31, David Hildenbrand wrote:
->> On 30.03.21 18:30, David Hildenbrand wrote:
->>> On 30.03.21 18:21, Jann Horn wrote:
->>>> On Tue, Mar 30, 2021 at 5:01 PM David Hildenbrand <david@redhat.com> wrote:
->>>>>>> +long faultin_vma_page_range(struct vm_area_struct *vma, unsigned long start,
->>>>>>> +                           unsigned long end, bool write, int *locked)
->>>>>>> +{
->>>>>>> +       struct mm_struct *mm = vma->vm_mm;
->>>>>>> +       unsigned long nr_pages = (end - start) / PAGE_SIZE;
->>>>>>> +       int gup_flags;
->>>>>>> +
->>>>>>> +       VM_BUG_ON(!PAGE_ALIGNED(start));
->>>>>>> +       VM_BUG_ON(!PAGE_ALIGNED(end));
->>>>>>> +       VM_BUG_ON_VMA(start < vma->vm_start, vma);
->>>>>>> +       VM_BUG_ON_VMA(end > vma->vm_end, vma);
->>>>>>> +       mmap_assert_locked(mm);
->>>>>>> +
->>>>>>> +       /*
->>>>>>> +        * FOLL_HWPOISON: Return -EHWPOISON instead of -EFAULT when we hit
->>>>>>> +        *                a poisoned page.
->>>>>>> +        * FOLL_POPULATE: Always populate memory with VM_LOCKONFAULT.
->>>>>>> +        * !FOLL_FORCE: Require proper access permissions.
->>>>>>> +        */
->>>>>>> +       gup_flags = FOLL_TOUCH | FOLL_POPULATE | FOLL_MLOCK | FOLL_HWPOISON;
->>>>>>> +       if (write)
->>>>>>> +               gup_flags |= FOLL_WRITE;
->>>>>>> +
->>>>>>> +       /*
->>>>>>> +        * See check_vma_flags(): Will return -EFAULT on incompatible mappings
->>>>>>> +        * or with insufficient permissions.
->>>>>>> +        */
->>>>>>> +       return __get_user_pages(mm, start, nr_pages, gup_flags,
->>>>>>> +                               NULL, NULL, locked);
->>>>>>
->>>>>> You mentioned in the commit message that you don't want to actually
->>>>>> dirty all the file pages and force writeback; but doesn't
->>>>>> POPULATE_WRITE still do exactly that? In follow_page_pte(), if
->>>>>> FOLL_TOUCH and FOLL_WRITE are set, we mark the page as dirty:
->>>>>
->>>>> Well, I mention that POPULATE_READ explicitly doesn't do that. I
->>>>> primarily set it because populate_vma_page_range() also sets it.
->>>>>
->>>>> Is it safe to *not* set it? IOW, fault something writable into a page
->>>>> table (where the CPU could dirty it without additional page faults)
->>>>> without marking it accessed? For me, this made logically sense. Thus I
->>>>> also understood why populate_vma_page_range() set it.
->>>>
->>>> FOLL_TOUCH doesn't have anything to do with installing the PTE - it
->>>> essentially means "the caller of get_user_pages wants to read/write
->>>> the contents of the returned page, so please do the same things you
->>>> would do if userspace was accessing the page". So in particular, if
->>>> you look up a page via get_user_pages() with FOLL_WRITE|FOLL_TOUCH,
->>>> that tells the MM subsystem "I will be writing into this page directly
->>>> from the kernel, bypassing the userspace page tables, so please mark
->>>> it as dirty now so that it will be properly written back later". Part
->>>> of that is that it marks the page as recently used, which has an
->>>> effect on LRU pageout behavior, I think - as far as I understand, that
->>>> is why populate_vma_page_range() uses FOLL_TOUCH.
->>>>
->>>> If you look at __get_user_pages(), you can see that it is split up
->>>> into two major parts: faultin_page() for creating PTEs, and
->>>> follow_page_mask() for grabbing pages from PTEs. faultin_page()
->>>> ignores FOLL_TOUCH completely; only follow_page_mask() uses it.
->>>>
->>>> In a way I guess maybe you do want the "mark as recently accessed"
->>>> part that FOLL_TOUCH would give you without FOLL_WRITE? But I think
->>>> you very much don't want the dirtying that FOLL_TOUCH|FOLL_WRITE leads
->>>> to. Maybe the ideal approach would be to add a new FOLL flag to say "I
->>>> only want to mark as recently used, I don't want to dirty". Or maybe
->>>> it's enough to just leave out the FOLL_TOUCH entirely, I don't know.
->>>
->>> Any thoughts why populate_vma_page_range() does it?
->>
->> Sorry, I missed the explanation above - thanks!
+On Mon, Apr 12, 2021 at 10:55:40AM +0200, Christoph Hellwig wrote:
+> Hi all,
 > 
-> Looking into the details, adjusting the FOLL_TOUCH logic won't make too
-> much of a difference for MADV_POPULATE_WRITE I guess. AFAIKs, the
-> biggest impact of FOLL_TOUCH is actually with FOLL_FORCE - which we are
-> not using, but populate_vma_page_range() is.
+> currently we deal with the slight differents in the various architecture
+> variants of the flock and flock64 stuctures in a very cruft way.  This
+> series switches to just use small arch hooks and define the rest in
+> asm-generic and linux/compat.h instead.
 > 
-> 
-> If a page was not faulted in yet,
-> faultin_page(FOLL_WRITE)->handle_mm_fault(FAULT_FLAG_WRITE) will already
-> mark the PTE/PMD/... dirty and accessed. One example is
-> handle_pte_fault(). We will mark the page accessed again via FOLL_TOUCH,
-> which doesn't seem to be strictly required.
-> 
-> 
-> If the page was already faulted in, we have three cases:
-> 
-> 1. Page faulted in writable. The page should already be dirty (otherwise
-> we would be in trouble I guess). We will mark it accessed.
-> 
-> 2. Page faulted in readable. handle_mm_fault() will fault it in writable
-> and set the page dirty.
-> 
-> 3. Page faulted in readable and we have FOLL_FORCE. We mark the page
-> dirty and accessed.
-> 
-> 
-> So doing a MADV_POPULATE_WRITE, whereby we prefault page tables
-> writable, doesn't seem to fly without marking the pages dirty. That's
-> one reason why I included MADV_POPULATE_READ.
-> 
-> We could
-> 
-> a) Drop FOLL_TOUCH. We are not marking the page accessed, which would
-> mean it gets evicted rather earlier than later.
-> 
-> b) Introduce FOLL_ACCESSED which won't do the dirtying. But then, the
-> pages are already dirty as explained above, so there isn't a real
-> observable change.
-> 
-> c) Keep it as is: Mark the page accessed and dirty. As it's already
-> dirty, that does not seem to be a real issue.
-> 
-> Am I missing something obvious? Thanks!
-> 
+> Diffstat:
+>  arch/arm64/include/asm/compat.h        |   20 --------------------
+>  arch/mips/include/asm/compat.h         |   23 ++---------------------
+>  arch/mips/include/uapi/asm/fcntl.h     |   28 +++-------------------------
+>  arch/parisc/include/asm/compat.h       |   16 ----------------
+>  arch/powerpc/include/asm/compat.h      |   20 --------------------
+>  arch/s390/include/asm/compat.h         |   20 --------------------
+>  arch/sparc/include/asm/compat.h        |   22 +---------------------
+>  arch/x86/include/asm/compat.h          |   24 +++---------------------
+>  include/linux/compat.h                 |   31 +++++++++++++++++++++++++++++++
+>  include/uapi/asm-generic/fcntl.h       |   21 +++++++--------------
+>  tools/include/uapi/asm-generic/fcntl.h |   21 +++++++--------------
+>  11 files changed, 54 insertions(+), 192 deletions(-)
 
-I did some more digging. I think there are cases for shared mappings 
-where we can have pte_write() but not pte_dirty().
-
-One example seems to be mm/memory.c:copy_present_pte() , used during fork.
-
-IIUC, this means that the child process can write to these pages, but 
-won't mark the PTEs dirty -- as there won't be a write fault. I'd assume 
-we'd need pte_mkclean(pte_wrprotect(pte)), but I'm fairly new to that code.
-
-(Similarly, we do an pte_mkold() without revoking any protection, 
-meaning we won't catch read accesses.)
-
-
-Maybe the logic here is that if the PTE was writable in some parent, it 
-was also dirty in some parent (at least in the one originally mapping it 
-writable). When evicting/writeback'ing file pages, we'll have go over 
-the rmap and zap all entries of any page tables either way; it's 
-sufficient if one PTE entry is dirty. I can spot that even 
-zap_pte_range() will sync the dirty flag back to the page.
-
-Am I right or is there some other magic going on? :)
-
--- 
-Thanks,
-
-David / dhildenb
-
+for the s390 bits:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
