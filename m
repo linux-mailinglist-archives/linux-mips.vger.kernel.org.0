@@ -2,112 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8619935FE1F
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Apr 2021 01:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1EA35FF28
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Apr 2021 03:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbhDNXHQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Apr 2021 19:07:16 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55830 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234328AbhDNXHP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Apr 2021 19:07:15 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id ECE47B114;
-        Wed, 14 Apr 2021 23:06:51 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v3 net-next 06/10] net: korina: Only pass mac address via platform data
-Date:   Thu, 15 Apr 2021 01:06:43 +0200
-Message-Id: <20210414230648.76129-7-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210414230648.76129-1-tsbogend@alpha.franken.de>
-References: <20210414230648.76129-1-tsbogend@alpha.franken.de>
+        id S229457AbhDOBPa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Apr 2021 21:15:30 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:49304 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229436AbhDOBP3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 14 Apr 2021 21:15:29 -0400
+Received: from [10.130.0.98] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxicmSk3dgUhwIAA--.15079S3;
+        Thu, 15 Apr 2021 09:14:58 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Loongson64: Add Loongson-2K1000 reset support
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <20210414012622.23610-1-zhangqing@loongson.cn>
+ <3947384b-37dd-436a-8cda-2391e49a94d2@www.fastmail.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+From:   zhangqing <zhangqing@loongson.cn>
+Message-ID: <daae5221-79e8-4787-8f92-61d0ec2cb46b@loongson.cn>
+Date:   Thu, 15 Apr 2021 09:14:58 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <3947384b-37dd-436a-8cda-2391e49a94d2@www.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9CxicmSk3dgUhwIAA--.15079S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYs7k0a2IF6F1UM7kC6x804xWl14x267AK
+        xVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
+        A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j
+        6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F
+        4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY
+        62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7V
+        C2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0
+        c2IEe2xFo4CEbIxvr21lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
+        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j
+        6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcS
+        sGvfC2KfnxnUUI43ZEXa7xRtJ5rUUUUUU==
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Get rid of access to struct korina_device by just passing the mac
-address via platform data and use drvdata for passing netdev to remove
-function.
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/rb532/devices.c     |  5 +++--
- drivers/net/ethernet/korina.c | 11 ++++++-----
- 2 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index dd34f1b32b79..5fc3c8ee4f31 100644
---- a/arch/mips/rb532/devices.c
-+++ b/arch/mips/rb532/devices.c
-@@ -105,6 +105,9 @@ static struct platform_device korina_dev0 = {
- 	.name = "korina",
- 	.resource = korina_dev0_res,
- 	.num_resources = ARRAY_SIZE(korina_dev0_res),
-+	.dev = {
-+		.platform_data = &korina_dev0_data.mac,
-+	}
- };
- 
- static struct resource cf_slot0_res[] = {
-@@ -299,8 +302,6 @@ static int __init plat_setup_devices(void)
- 	/* set the uart clock to the current cpu frequency */
- 	rb532_uart_res[0].uartclk = idt_cpu_freq;
- 
--	dev_set_drvdata(&korina_dev0.dev, &korina_dev0_data);
--
- 	gpiod_add_lookup_table(&cf_slot0_gpio_table);
- 	return platform_add_devices(rb532_devs, ARRAY_SIZE(rb532_devs));
- }
-diff --git a/drivers/net/ethernet/korina.c b/drivers/net/ethernet/korina.c
-index f00ffbbdfba7..1d7dead17ac3 100644
---- a/drivers/net/ethernet/korina.c
-+++ b/drivers/net/ethernet/korina.c
-@@ -1053,7 +1053,7 @@ static const struct net_device_ops korina_netdev_ops = {
- 
- static int korina_probe(struct platform_device *pdev)
- {
--	struct korina_device *bif = platform_get_drvdata(pdev);
-+	u8 *mac_addr = dev_get_platdata(&pdev->dev);
- 	struct korina_private *lp;
- 	struct net_device *dev;
- 	void __iomem *p;
-@@ -1066,8 +1066,7 @@ static int korina_probe(struct platform_device *pdev)
- 	SET_NETDEV_DEV(dev, &pdev->dev);
- 	lp = netdev_priv(dev);
- 
--	bif->dev = dev;
--	memcpy(dev->dev_addr, bif->mac, ETH_ALEN);
-+	memcpy(dev->dev_addr, mac_addr, ETH_ALEN);
- 
- 	lp->rx_irq = platform_get_irq_byname(pdev, "korina_rx");
- 	lp->tx_irq = platform_get_irq_byname(pdev, "korina_tx");
-@@ -1121,6 +1120,8 @@ static int korina_probe(struct platform_device *pdev)
- 	lp->mii_if.phy_id_mask = 0x1f;
- 	lp->mii_if.reg_num_mask = 0x1f;
- 
-+	platform_set_drvdata(pdev, dev);
-+
- 	rc = register_netdev(dev);
- 	if (rc < 0) {
- 		printk(KERN_ERR DRV_NAME
-@@ -1138,9 +1139,9 @@ static int korina_probe(struct platform_device *pdev)
- 
- static int korina_remove(struct platform_device *pdev)
- {
--	struct korina_device *bif = platform_get_drvdata(pdev);
-+	struct net_device *dev = platform_get_drvdata(pdev);
- 
--	unregister_netdev(bif->dev);
-+	unregister_netdev(dev);
- 
- 	return 0;
- }
--- 
-2.29.2
+On 04/14/2021 08:17 PM, Jiaxun Yang wrote:
+>
+> On Wed, Apr 14, 2021, at 9:26 AM, Qing Zhang wrote:
+>> Add power management register operations to support reboot and poweroff.
+>>
+>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> No that's not what we intended to do.
+> Please add a devicetree node for pm block.
+Hi, jiaxun
+
+Thanks for your reply, I will do it and send v2 .
+
+-Qing
 
