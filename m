@@ -2,72 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B129361A2A
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 09:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792F1361A80
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 09:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238935AbhDPG6W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Apr 2021 02:58:22 -0400
-Received: from elvis.franken.de ([193.175.24.41]:53206 "EHLO elvis.franken.de"
+        id S239539AbhDPHXd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Apr 2021 03:23:33 -0400
+Received: from elvis.franken.de ([193.175.24.41]:53271 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234691AbhDPG6W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 16 Apr 2021 02:58:22 -0400
+        id S239521AbhDPHXc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 16 Apr 2021 03:23:32 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lXIQM-0007bP-00; Fri, 16 Apr 2021 08:57:54 +0200
+        id 1lXIol-0007qW-01; Fri, 16 Apr 2021 09:23:07 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 36909C0489; Fri, 16 Apr 2021 08:54:42 +0200 (CEST)
-Date:   Fri, 16 Apr 2021 08:54:42 +0200
+        id DE657C04CD; Fri, 16 Apr 2021 09:22:01 +0200 (CEST)
+Date:   Fri, 16 Apr 2021 09:22:01 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 net-next 06/10] net: korina: Only pass mac address via
- platform data
-Message-ID: <20210416065442.GA5082@alpha.franken.de>
-References: <20210414230648.76129-1-tsbogend@alpha.franken.de>
- <20210414230648.76129-7-tsbogend@alpha.franken.de>
- <YHjMfOKyovyzTHOE@lunn.ch>
+To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Subject: Re: [PATCH v2 0/8] MIPS: fixes for PCI legacy drivers (rt2880,
+ rt3883)
+Message-ID: <20210416072201.GA5371@alpha.franken.de>
+References: <20210414031240.313852-1-ilya.lipnitskiy@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YHjMfOKyovyzTHOE@lunn.ch>
+In-Reply-To: <20210414031240.313852-1-ilya.lipnitskiy@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 16, 2021 at 01:30:04AM +0200, Andrew Lunn wrote:
-> On Thu, Apr 15, 2021 at 01:06:43AM +0200, Thomas Bogendoerfer wrote:
-> > Get rid of access to struct korina_device by just passing the mac
-> > address via platform data and use drvdata for passing netdev to remove
-> > function.
-> > 
-> > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > ---
-> >  arch/mips/rb532/devices.c     |  5 +++--
-> >  drivers/net/ethernet/korina.c | 11 ++++++-----
-> >  2 files changed, 9 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-> > index dd34f1b32b79..5fc3c8ee4f31 100644
-> > --- a/arch/mips/rb532/devices.c
-> > +++ b/arch/mips/rb532/devices.c
-> > @@ -105,6 +105,9 @@ static struct platform_device korina_dev0 = {
-> >  	.name = "korina",
-> >  	.resource = korina_dev0_res,
-> >  	.num_resources = ARRAY_SIZE(korina_dev0_res),
-> > +	.dev = {
-> > +		.platform_data = &korina_dev0_data.mac,
-> > +	}
+On Tue, Apr 13, 2021 at 08:12:32PM -0700, Ilya Lipnitskiy wrote:
+> One major fix for rt2880-pci in the first patch - fixes breakage that
+> existed since v4.14.
 > 
-> This is a bit unusual. Normally you define a structure in
-> include/linux/platform/data/koriana.h, and use that.
+> Other more minor fixes, cleanups, and improvements that either free up
+> memory, make dmesg messages clearer, or remove redundant dmesg output.
 > 
-> What about the name? "korina0" How is that passed?
+> v2:
+> - Do not use internal pci-rt2880 config read and write functions after
+>   the device has been registered with the PCI subsystem to avoid races.
+>   Use safe pci_bus_{read,write}_config_{d}word wrappers instead.
+> 
+> Ilya Lipnitskiy (8):
+>   MIPS: pci-rt2880: fix slot 0 configuration
+>   MIPS: pci-rt2880: remove unneeded locks
+>   MIPS: pci-rt3883: trivial: remove unused variable
+>   MIPS: pci-rt3883: more accurate DT error messages
+>   MIPS: pci-legacy: stop using of_pci_range_to_resource
+>   MIPS: pci-legacy: remove redundant info messages
+>   MIPS: pci-legacy: remove busn_resource field
+>   MIPS: pci-legacy: use generic pci_enable_resources
+> 
+>  arch/mips/include/asm/pci.h |  1 -
+>  arch/mips/pci/pci-legacy.c  | 57 ++++++-------------------------------
+>  arch/mips/pci/pci-rt2880.c  | 50 ++++++++++++++++----------------
+>  arch/mips/pci/pci-rt3883.c  | 10 ++-----
+>  4 files changed, 35 insertions(+), 83 deletions(-)
 
-this is just for transition purpose. My DT patches remove this struct
-completly.
+series applied to mips-next.
 
 Thomas.
 
