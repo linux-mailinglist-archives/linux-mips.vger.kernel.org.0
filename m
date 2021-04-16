@@ -2,70 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDDE361D2A
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 12:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F01A361D53
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 12:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239429AbhDPJWB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Apr 2021 05:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
+        id S241557AbhDPJaX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Apr 2021 05:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbhDPJWB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Apr 2021 05:22:01 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CF9C061574;
-        Fri, 16 Apr 2021 02:21:35 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id r20so30284708ljk.4;
-        Fri, 16 Apr 2021 02:21:35 -0700 (PDT)
+        with ESMTP id S229706AbhDPJaX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Apr 2021 05:30:23 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC3BC061574;
+        Fri, 16 Apr 2021 02:29:58 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id a25so17028693ljm.11;
+        Fri, 16 Apr 2021 02:29:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:references:from:organization:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NgU4ZuEkAIBv9K7zpQYRRLFhhJ9S9HowNQOSVq3Jw5k=;
-        b=UbcwO38qzC5kOQHMKWkzPMoJr9GFjobMkdepw1TJYElxaDTOLAHbM2yGvMCXWU4iJ6
-         rIoOnNngVjWu8FQT0xbFc+aQ+tASlwvlxO4HNgBfSF08NW2d6/PaiFnq5Oqd4CuJ1McF
-         Osks7KtDLjtUjDc68aNsdVOT6MD2Av/63ufzLBxT8aTRrEAsu7rMTRM5Z6T9RshsYeef
-         TWZ6iBNrgDqoQyTfmk5sqs1HZFAZNpFgIAUbOE0AwZzGbv4H+FmmmMWqGbahGdT9VIGR
-         v8rgHe+GJMMSRMf1Ai03QDn/4mJfmIw9BqPhaiKXynbTTwBgnbjmN1To1pLUDjZD2wyF
-         f85A==
+        bh=EOc1bwxC6MKPmosPl3ffeJ/6SfN279KUE69TnWHU0ss=;
+        b=s5d68P/PQl5vprP/ICd6OM3nrCK1H9PQTPwFWFnMZ8S48h0B55uZyi8ovtcvUNDxfu
+         1AjpibeFJmBpnA2DLI+sJEWJ2iHNWTVPxCLnX/oRt/M6kREzZ/K6D5XA6D4E+NnngVBc
+         YEESLi4tXRZvITaCJ05QjwFeD3owxRGadCMK5HDmWnsGFxtUv/Nczs475Ua15KD9pXrF
+         RYmSbV1EBFdo8Mq8nJ/KDaxjaPUxdOuJDSml7ijKexUxPs+OA+fhniNqebRnM+NKOng9
+         tUj+78sxsjlBBxrKYCP+5PyZO07v9rgm736axyUhkDpu/CzUGDIcNLhU0iVYCDq/n0nO
+         nACw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:organization
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=NgU4ZuEkAIBv9K7zpQYRRLFhhJ9S9HowNQOSVq3Jw5k=;
-        b=H2kyMzF2QFLjZh8KY+qTWHuK6cKjPP+Ohmd3dhrlgWMQZeljK0GolObSQLZ3w6F9hp
-         5v9L/Nlhn0QD6RzGVbS9MO8mUA7jyJQbwu8gdDeKos93V2oBn1PLx/PVHNX/04Sp0Fr3
-         ILAqYjljf87niutP2ikz1Evc/fdV4cPypQQfraOnk+s6WWZtgGF0PkVI6Nfmezpiwn3r
-         A+FevId0FO8rICR3N7IbOOk+20uMYp7nt9y9w1CcNnfE8vrpE72UESOrJzjsDFxjv59P
-         aY9V/nO3+IMdlrl949puJmyaq5HUypGsstMj3TLipIDNQdAYCSWfYLbUtmT9P+vAPEuh
-         zkfg==
-X-Gm-Message-State: AOAM5338xZbbPMhfy3Wel+83zh27jd6KwjiOIiT5dSAObNbYJh0qsM/M
-        JwsnNIW2cfX1l5zepUnIO9wANoa+4KU=
-X-Google-Smtp-Source: ABdhPJzMznfggoOJBbYFj1l91TtSbUPVN0puuSkCs01MkiFjjj47phZh12eigqaFekXyg6pXbZ9qEQ==
-X-Received: by 2002:a2e:a40e:: with SMTP id p14mr2005425ljn.254.1618564894238;
-        Fri, 16 Apr 2021 02:21:34 -0700 (PDT)
+        bh=EOc1bwxC6MKPmosPl3ffeJ/6SfN279KUE69TnWHU0ss=;
+        b=FwP0VpW+JRwG4jrpa8N0L7a5juaa6eKO1e9JphZSJ0TYnTj/8jrWgiDc6CJ9aNYsCU
+         bf1p45dinXbhTjq4qI2MAoAAQSIlwux4BbF3zfxOs/H0RxZrMyGRiSs8cpE+P6P2NOW7
+         +6/y6cd/IJYtJVgTrJ44azzyALZFTzqs9eIlkpZ8fzu3gG1VESmAj3Hwku7p6vBbbhdd
+         35pIulIEj9Krl34mb2Uy5qx729NVmZD7eOpqMb/eZOfg+chfHivSLGZXNTuyW+fBSeQE
+         S2MX2P7gQvEdDN6XpNlYA+VXB5bgsN5bhg7H0OxHkVIfWbcnFVxR6bXTzl690w+GZvsr
+         i3zg==
+X-Gm-Message-State: AOAM533cGHXxH1Ip0P4+pWuCdkN9Is5rI9p4e3dzIrmtV762feTrWXyI
+        7JoFuzg/pRbjBg4pSEwtstgqI1mTWNI=
+X-Google-Smtp-Source: ABdhPJwYr98g8ShAGDtcqQqP87agx0zpaoGCQFr1JAjL0nuzvb2W+q+fpddzBAVe6wmp/G8kXzSaBA==
+X-Received: by 2002:a2e:8559:: with SMTP id u25mr2057691ljj.282.1618565397056;
+        Fri, 16 Apr 2021 02:29:57 -0700 (PDT)
 Received: from [192.168.1.100] ([31.173.80.250])
-        by smtp.gmail.com with ESMTPSA id p12sm943355lfg.104.2021.04.16.02.21.33
+        by smtp.gmail.com with ESMTPSA id d15sm934021lfn.117.2021.04.16.02.29.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Apr 2021 02:21:33 -0700 (PDT)
-Subject: Re: [PATCH v4 net-next 07/10] net: korina: Add support for device
- tree
+        Fri, 16 Apr 2021 02:29:56 -0700 (PDT)
+Subject: Re: [PATCH v5 net-next 10/10] dt-bindings: net: korina: Add DT
+ bindings for IDT 79RC3243x SoCs
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
-References: <20210416084712.62561-1-tsbogend@alpha.franken.de>
- <20210416084712.62561-8-tsbogend@alpha.franken.de>
+References: <20210416085207.63181-1-tsbogend@alpha.franken.de>
+ <20210416085207.63181-11-tsbogend@alpha.franken.de>
 From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
 Organization: Brain-dead Software
-Message-ID: <82ea17c0-826b-7dae-8709-da721c4d0d6c@gmail.com>
-Date:   Fri, 16 Apr 2021 12:21:20 +0300
+Message-ID: <ca4d9975-c153-94c9-dec8-bf9416c76b45@gmail.com>
+Date:   Fri, 16 Apr 2021 12:29:46 +0300
 User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.9.1
 MIME-Version: 1.0
-In-Reply-To: <20210416084712.62561-8-tsbogend@alpha.franken.de>
+In-Reply-To: <20210416085207.63181-11-tsbogend@alpha.franken.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -73,46 +73,99 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+On 16.04.2021 11:52, Thomas Bogendoerfer wrote:
 
-On 16.04.2021 11:47, Thomas Bogendoerfer wrote:
-
-> If there is no mac address passed via platform data try to get it via > device tree and fall back to a random mac address, if all fail.
+> Add device tree bindings for ethernet controller integrated into
+> IDT 79RC3243x SoCs.
 > 
 > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > ---
->   drivers/net/ethernet/korina.c | 24 ++++++++++++++++++++++--
->   1 file changed, 22 insertions(+), 2 deletions(-)
+>   .../bindings/net/idt,3243x-emac.yaml          | 74 +++++++++++++++++++
+>   1 file changed, 74 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/net/idt,3243x-emac.yaml
 > 
-> diff --git a/drivers/net/ethernet/korina.c b/drivers/net/ethernet/korina.c
-> index d6dbbdd43d7c..cd078a5c679b 100644
-> --- a/drivers/net/ethernet/korina.c
-> +++ b/drivers/net/ethernet/korina.c
-> @@ -43,6 +43,8 @@
->   #include <linux/ioport.h>
->   #include <linux/iopoll.h>
->   #include <linux/in.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_net.h>
->   #include <linux/slab.h>
->   #include <linux/string.h>
->   #include <linux/delay.h>
-> @@ -1068,7 +1070,12 @@ static int korina_probe(struct platform_device *pdev)
->   	SET_NETDEV_DEV(dev, &pdev->dev);
->   	lp = netdev_priv(dev);
->   
-> -	memcpy(dev->dev_addr, mac_addr, ETH_ALEN);
-> +	if (mac_addr) {
-> +		ether_addr_copy(dev->dev_addr, mac_addr);
-> +	} else {
-> +		if (of_get_mac_address(pdev->dev.of_node, dev->dev_addr))
+> diff --git a/Documentation/devicetree/bindings/net/idt,3243x-emac.yaml b/Documentation/devicetree/bindings/net/idt,3243x-emac.yaml
+> new file mode 100644
+> index 000000000000..3697af5cb66f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/idt,3243x-emac.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/idt,3243x-emac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: IDT 79rc3243x Ethernet controller
+> +
+> +description: Ethernet controller integrated into IDT 79RC3243x family SoCs
+> +
+> +maintainers:
+> +  - Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> +
+> +allOf:
+> +  - $ref: ethernet-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: idt,3243x-emac
+> +
+> +  reg:
+> +    maxItems: 3
+> +
+> +  reg-names:
+> +    items:
+> +      - const: korina_regs
+> +      - const: korina_dma_rx
+> +      - const: korina_dma_tx
+> +
+> +  interrupts:
+> +    items:
+> +      - description: RX interrupt
+> +      - description: TX interrupt
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: korina_rx
+> +      - const: korina_tx
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: mdioclk
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - interrupt-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+> +    ethernet@60000 {
+> +        compatible = "idt,3243x-emac";
+> +
+> +        reg = <0x60000 0x10000>,
+> +              <0x40000 0x14>,
+> +              <0x40014 0x14>;
+> +        reg-names = "korina_regs",
+> +                    "korina_dma_rx",
+> +                    "korina_dma_tx";
+> +
+> +        interrupts-extended = <&rcpic3 0>, <&rcpic3 1>;
 
-    *else* *if* here, and no need for {} then? :-)
+    You use this prop, yet don't describe it?
 
-> +			eth_hw_addr_random(dev);
-> +	}
->   
->   	lp->rx_irq = platform_get_irq_byname(pdev, "korina_rx");
->   	lp->tx_irq = platform_get_irq_byname(pdev, "korina_tx");
-[...]
+> +        interrupt-names = "korina_rx", "korina_tx";
+> +
+> +        clocks = <&iclk>;
+> +        clock-names = "mdioclk";
+> +    };
+
 MBR, Sergei
