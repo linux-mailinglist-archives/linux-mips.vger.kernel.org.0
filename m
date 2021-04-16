@@ -2,100 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AAB361AA8
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 09:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FB3361C16
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 11:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239627AbhDPHdF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 16 Apr 2021 03:33:05 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:36733 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234997AbhDPHdE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 16 Apr 2021 03:33:04 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-212-Pz1ohOP9MbWLWc7zHXrlbA-1; Fri, 16 Apr 2021 08:32:36 +0100
-X-MC-Unique: Pz1ohOP9MbWLWc7zHXrlbA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Fri, 16 Apr 2021 08:32:35 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.012; Fri, 16 Apr 2021 08:32:35 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Matthew Wilcox' <willy@infradead.org>
-CC:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "Christoph Hellwig" <hch@lst.de>
-Subject: RE: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
-Thread-Topic: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
-Thread-Index: AQHXMXYmwdfrgigLI0exh4xFUSZq9Kq0jZ3ggAFYFFmAAC15oIAABLSAgACoXgA=
-Date:   Fri, 16 Apr 2021 07:32:35 +0000
-Message-ID: <f51e1aa98cb94880a236d58c75c20994@AcuMS.aculab.com>
-References: <20210411103318.GC2531743@casper.infradead.org>
- <20210412011532.GG2531743@casper.infradead.org>
- <20210414101044.19da09df@carbon>
- <20210414115052.GS2531743@casper.infradead.org>
- <20210414211322.3799afd4@carbon>
- <20210414213556.GY2531743@casper.infradead.org>
- <a50c3156fe8943ef964db4345344862f@AcuMS.aculab.com>
- <20210415200832.32796445@carbon>
- <20210415182155.GD2531743@casper.infradead.org>
- <5179a01a462f43d6951a65de2a299070@AcuMS.aculab.com>
- <20210415222211.GG2531743@casper.infradead.org>
-In-Reply-To: <20210415222211.GG2531743@casper.infradead.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S240868AbhDPIrl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Apr 2021 04:47:41 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45910 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240846AbhDPIrk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 16 Apr 2021 04:47:40 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 68C62AE86;
+        Fri, 16 Apr 2021 08:47:14 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v4 net-next 00/10] net: Korina improvements
+Date:   Fri, 16 Apr 2021 10:47:01 +0200
+Message-Id: <20210416084712.62561-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Matthew Wilcox <willy@infradead.org>
-> Sent: 15 April 2021 23:22
-> 
-> On Thu, Apr 15, 2021 at 09:11:56PM +0000, David Laight wrote:
-> > Isn't it possible to move the field down one long?
-> > This might require an explicit zero - but this is not a common
-> > code path - the extra write will be noise.
-> 
-> Then it overlaps page->mapping.  See emails passim.
+While converting Mikrotik RB532 support to use device tree I stumbled
+over the korina ethernet driver, which used way too many MIPS specific
+hacks. This series cleans this all up and adds support for device tree.
 
-The rules on overlaps make be wonder if every 'long'
-should be in its own union.
-The comments would need to say when each field is used.
-It would, at least, make these errors less common.
+Changes in v4:
+  - improve error returns in mdio_read further
+  - added clock name and improved clk handling
+  - fixed bindind errors
 
-That doesn't solve the 64bit dma_addr though.
+Changes in v3:
+  - use readl_poll_timeout_atomic in mdio_wait
+  - return -ETIMEDOUT, if mdio_wait failed
+  - added DT binding and changed name to idt,3243x-emac
+  - fixed usage of of_get_mac_address for net-next
 
-Actually rather that word-swapping dma_addr on 32bit BE
-could you swap over the two fields it overlays with.
-That might look messy in the .h, but it doesn't require
-an accessor function to do the swap - easily missed.
+Changes in v2:
+  - added device tree support to get rid of idt_cpu_freq
+  - fixed compile test on 64bit archs
+  - fixed descriptor current address handling by storing/using mapped
+    dma addresses (dma controller modifies current address)
 
-	David
+Thomas Bogendoerfer (10):
+  net: korina: Fix MDIO functions
+  net: korina: Use devres functions
+  net: korina: Remove not needed cache flushes
+  net: korina: Remove nested helpers
+  net: korina: Use DMA API
+  net: korina: Only pass mac address via platform data
+  net: korina: Add support for device tree
+  net: korina: Get mdio input clock via common clock framework
+  net: korina: Make driver COMPILE_TESTable
+  dt-bindings: net: korina: Add DT bindings for IDT 79RC3243x SoCs
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+ .../bindings/net/idt,3243x-emac.yaml          |  74 +++
+ arch/mips/rb532/devices.c                     |   5 +-
+ drivers/net/ethernet/Kconfig                  |   3 +-
+ drivers/net/ethernet/korina.c                 | 601 +++++++++++++-----
+ 4 files changed, 511 insertions(+), 172 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/idt,3243x-emac.yaml
+
+-- 
+2.29.2
 
