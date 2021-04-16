@@ -2,180 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F07362658
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 19:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B1D362855
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 21:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbhDPRJL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Apr 2021 13:09:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28771 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238812AbhDPRJE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 16 Apr 2021 13:09:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618592919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=04d/YP/XeREquXdVGX4E7+iWkSvKezEziIy7Br93wNo=;
-        b=EBTEYHFC05RVzbHV+IM21itH7EZJjPt3eex0ghXI2GKillFEQ0OzninC3yjJk/sTxFKIT6
-        alcn2OeUR9y9Pb5D0IYp2LiyKPB9W/Ogqs3UY6McONsyWYVwFHnkuWKAl3j25rdX8kRpQR
-        uuw8elh0SnDqUubr439k3eOhxSwYxDw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-154-t1CdtVGrNiG8scC-Sd9o6A-1; Fri, 16 Apr 2021 13:08:35 -0400
-X-MC-Unique: t1CdtVGrNiG8scC-Sd9o6A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B8AC1874998;
-        Fri, 16 Apr 2021 17:08:33 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E9675D749;
-        Fri, 16 Apr 2021 17:08:24 +0000 (UTC)
-Date:   Fri, 16 Apr 2021 19:08:23 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, brouer@redhat.com
-Subject: Re: [PATCH 1/1] mm: Fix struct page layout on 32-bit systems
-Message-ID: <20210416190823.3b3aace0@carbon>
-In-Reply-To: <20210416152755.GL2531743@casper.infradead.org>
-References: <20210410205246.507048-2-willy@infradead.org>
-        <20210411114307.5087f958@carbon>
-        <20210411103318.GC2531743@casper.infradead.org>
-        <20210412011532.GG2531743@casper.infradead.org>
-        <20210414101044.19da09df@carbon>
-        <20210414115052.GS2531743@casper.infradead.org>
-        <20210414211322.3799afd4@carbon>
-        <20210414213556.GY2531743@casper.infradead.org>
-        <a50c3156fe8943ef964db4345344862f@AcuMS.aculab.com>
-        <20210415200832.32796445@carbon>
-        <20210416152755.GL2531743@casper.infradead.org>
+        id S241117AbhDPTJN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Apr 2021 15:09:13 -0400
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:39528 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235715AbhDPTJL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Apr 2021 15:09:11 -0400
+Received: by mail-oi1-f179.google.com with SMTP id i81so28887326oif.6;
+        Fri, 16 Apr 2021 12:08:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HF8XZwHelC1eE92Jm6APeUSvsTsRauJXAU0FhgAgx64=;
+        b=Bk2o14WXuaDWGOOlvls5+5080HiuI5EPSonOISSU8rFgqZUu0+4GpL2HUyhgWkM14z
+         eDEjUgPasJqS1hjoFRvwtUCFxcg8wW0pc/VBIFaN2sAW9WXm4EharhtpoMkCBn4YYjNN
+         Q/4crzrgy0c/WF7f7F8iQCOHe9Q24dUykOjbDp6BgWxAmBSyc07AJs38SSP94k10H1cL
+         XZ2RkI/bAw558DfuokfRes5coS3fZvCUjHWb7m0SmKVl5SY+ZWrwPQWTjLEvej3U/4gb
+         Xl++trQKN8cn88aZcEwyf7bUDe0iqONaDB5awFhnCmifGHO3B9NGIUH0z3xZxbL4pLrl
+         W4+A==
+X-Gm-Message-State: AOAM530E4MSuRTPLDa+cc5aZkB12RLiXs3q7R4H57le1zjxpaMKqIfFa
+        nfGWN8mSOC3QEQm+88wbBRkI3ljMww==
+X-Google-Smtp-Source: ABdhPJzK/izyyFr+X2UOfyjfkqwvz/g8Ok0jBeZnIJYYvRQADzQZWNpRXbKx5Dh4lBHvgJuoaubNzw==
+X-Received: by 2002:aca:5fc2:: with SMTP id t185mr7949520oib.64.1618600126157;
+        Fri, 16 Apr 2021 12:08:46 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g84sm1595497oia.45.2021.04.16.12.08.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Apr 2021 12:08:45 -0700 (PDT)
+Received: (nullmailer pid 3772770 invoked by uid 1000);
+        Fri, 16 Apr 2021 19:08:44 -0000
+Date:   Fri, 16 Apr 2021 14:08:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 10/10] dt-bindings: net: korina: Add DT
+ bindings for IDT 79RC3243x SoCs
+Message-ID: <20210416190844.GA3770043@robh.at.kernel.org>
+References: <20210416085207.63181-1-tsbogend@alpha.franken.de>
+ <20210416085207.63181-11-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210416085207.63181-11-tsbogend@alpha.franken.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 16 Apr 2021 16:27:55 +0100
-Matthew Wilcox <willy@infradead.org> wrote:
-
-> On Thu, Apr 15, 2021 at 08:08:32PM +0200, Jesper Dangaard Brouer wrote:
-> > See below patch.  Where I swap32 the dma address to satisfy
-> > page->compound having bit zero cleared. (It is the simplest fix I could
-> > come up with).  
+On Fri, Apr 16, 2021 at 10:52:06AM +0200, Thomas Bogendoerfer wrote:
+> Add device tree bindings for ethernet controller integrated into
+> IDT 79RC3243x SoCs.
 > 
-> I think this is slightly simpler, and as a bonus code that assumes the
-> old layout won't compile.
-
-This is clever, I like it!  When reading the code one just have to
-remember 'unsigned long' size difference between 64-bit vs 32-bit.
-And I assume compiler can optimize the sizeof check out then doable.
-
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 6613b26a8894..5aacc1c10a45 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -97,10 +97,10 @@ struct page {
->  		};
->  		struct {	/* page_pool used by netstack */
->  			/**
-> -			 * @dma_addr: might require a 64-bit value even on
-> +			 * @dma_addr: might require a 64-bit value on
->  			 * 32-bit architectures.
->  			 */
-> -			dma_addr_t dma_addr;
-> +			unsigned long dma_addr[2];
->  		};
->  		struct {	/* slab, slob and slub */
->  			union {
-> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-> index b5b195305346..db7c7020746a 100644
-> --- a/include/net/page_pool.h
-> +++ b/include/net/page_pool.h
-> @@ -198,7 +198,17 @@ static inline void page_pool_recycle_direct(struct page_pool *pool,
->  
->  static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
->  {
-> -	return page->dma_addr;
-> +	dma_addr_t ret = page->dma_addr[0];
-> +	if (sizeof(dma_addr_t) > sizeof(unsigned long))
-> +		ret |= (dma_addr_t)page->dma_addr[1] << 32;
-> +	return ret;
-> +}
-> +
-> +static inline void page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
-> +{
-> +	page->dma_addr[0] = addr;
-> +	if (sizeof(dma_addr_t) > sizeof(unsigned long))
-> +		page->dma_addr[1] = addr >> 32;
->  }
->  
->  static inline bool is_page_pool_compiled_in(void)
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index ad8b0707af04..f014fd8c19a6 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -174,8 +174,10 @@ static void page_pool_dma_sync_for_device(struct page_pool *pool,
->  					  struct page *page,
->  					  unsigned int dma_sync_size)
->  {
-> +	dma_addr_t dma_addr = page_pool_get_dma_addr(page);
-> +
->  	dma_sync_size = min(dma_sync_size, pool->p.max_len);
-> -	dma_sync_single_range_for_device(pool->p.dev, page->dma_addr,
-> +	dma_sync_single_range_for_device(pool->p.dev, dma_addr,
->  					 pool->p.offset, dma_sync_size,
->  					 pool->p.dma_dir);
->  }
-> @@ -226,7 +228,7 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
->  		put_page(page);
->  		return NULL;
->  	}
-> -	page->dma_addr = dma;
-> +	page_pool_set_dma_addr(page, dma);
->  
->  	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
->  		page_pool_dma_sync_for_device(pool, page, pool->p.max_len);
-> @@ -294,13 +296,13 @@ void page_pool_release_page(struct page_pool *pool, struct page *page)
->  		 */
->  		goto skip_dma_unmap;
->  
-> -	dma = page->dma_addr;
-> +	dma = page_pool_get_dma_addr(page);
->  
-> -	/* When page is unmapped, it cannot be returned our pool */
-> +	/* When page is unmapped, it cannot be returned to our pool */
->  	dma_unmap_page_attrs(pool->p.dev, dma,
->  			     PAGE_SIZE << pool->p.order, pool->p.dma_dir,
->  			     DMA_ATTR_SKIP_CPU_SYNC);
-> -	page->dma_addr = 0;
-> +	page_pool_set_dma_addr(page, 0);
->  skip_dma_unmap:
->  	/* This may be the last page returned, releasing the pool, so
->  	 * it is not safe to reference pool afterwards.
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> ---
+>  .../bindings/net/idt,3243x-emac.yaml          | 74 +++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/idt,3243x-emac.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/net/idt,3243x-emac.yaml b/Documentation/devicetree/bindings/net/idt,3243x-emac.yaml
+> new file mode 100644
+> index 000000000000..3697af5cb66f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/idt,3243x-emac.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/idt,3243x-emac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: IDT 79rc3243x Ethernet controller
+> +
+> +description: Ethernet controller integrated into IDT 79RC3243x family SoCs
+> +
+> +maintainers:
+> +  - Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> +
+> +allOf:
+> +  - $ref: ethernet-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: idt,3243x-emac
+> +
+> +  reg:
+> +    maxItems: 3
+> +
+> +  reg-names:
+> +    items:
+> +      - const: korina_regs
+> +      - const: korina_dma_rx
+> +      - const: korina_dma_tx
 
+What's korina?
 
+In any case, just drop as it is redundant.
 
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+> +
+> +  interrupts:
+> +    items:
+> +      - description: RX interrupt
+> +      - description: TX interrupt
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: korina_rx
+> +      - const: korina_tx
 
+Just rx and tx.
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: mdioclk
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - interrupt-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+> +    ethernet@60000 {
+> +        compatible = "idt,3243x-emac";
+> +
+> +        reg = <0x60000 0x10000>,
+> +              <0x40000 0x14>,
+> +              <0x40014 0x14>;
+> +        reg-names = "korina_regs",
+> +                    "korina_dma_rx",
+> +                    "korina_dma_tx";
+> +
+> +        interrupts-extended = <&rcpic3 0>, <&rcpic3 1>;
+> +        interrupt-names = "korina_rx", "korina_tx";
+> +
+> +        clocks = <&iclk>;
+> +        clock-names = "mdioclk";
+> +    };
+> -- 
+> 2.29.2
+> 
